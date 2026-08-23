@@ -443,6 +443,13 @@ def translate(text):
             # one-byte short form 0x28+r, which answers to `pushw`. Offering
             # only `push <r>` therefore missed every 16-bit site.
             _u1 = _s1.upper()
+            if _u1 == "A":
+                # ⚠ `push A` is 0x14, a ONE-BYTE dedicated opcode, NOT the
+                # 0xC8+r family. Verified at six sites (0xEE525F, 0xEE5BF1,
+                # 0xEE5DD4, 0xF0F5AD, 0xF66C0F, 0xF66C18); v7 already carries 82
+                # `push_a` lines. Offered ALONGSIDE `push a` (c9 04), which is a
+                # legal alternative encoding -- the byte comparison chooses.
+                yield "push_a"
             if _u1 == "F":
                 yield "push_f"
             elif _u1 == "SR":
@@ -573,9 +580,21 @@ def translate(text):
         # blocking `and (0x3344),A` sites are these, not the 16-bit ones.
         if _mn9 in ("cp", "add", "sub", "and", "or", "xor") and _absa \
                 and re.match(r'^[A-Za-z]$', _b9):
+            # ⚠ OR's memory-destination mnemonic carries a DOUBLE d --
+            # `orddm8`, not `ordm8` -- while its _24 form keeps the single d.
+            # `or (0x328e),A` = c1 8e 32 e9 = `orddm8 (0x328e), a`; the
+            # single-d name is not a mnemonic and llvm-mc rejects it. Every
+            # other op in this family is single-d. Verified at eight sites.
+            # ⚠ Offer BOTH the bare and the parenthesised address. The verified
+            # site spelling is `orddm8 (0x328e), a` -- with parens -- while the
+            # sibling families take the bare form. One character of syntax, and
+            # the rule silently produces nothing without it.
+            _dm = "ordd" if _mn9 == "or" else _mn9 + "d"
             for _w in ("8", "16"):
-                yield f"{_mn9}dm{_w} {_absa.group(1)}, {_b9.lower()}"
+                yield f"{_dm}m{_w} {_absa.group(1)}, {_b9.lower()}"
+                yield f"{_dm}m{_w} ({_absa.group(1)}), {_b9.lower()}"
                 yield f"{_mn9}dm{_w}_24 {_absa.group(1)}, {_b9.lower()}"
+                yield f"{_mn9}dm{_w}_24 ({_absa.group(1)}), {_b9.lower()}"
         if _mn9 in ("cp", "add", "sub", "and", "or", "xor") and _absb \
                 and re.match(r'^[A-Za-z]$', _a9):
             for _w in ("8", "16"):
@@ -586,9 +605,22 @@ def translate(text):
                 yield f"{_mn9}da{_w} {_X16[_a9.upper()]}, {_absb.group(1)}"
                 yield f"{_mn9}da{_w}_24 {_X16[_a9.upper()]}, {_absb.group(1)}"
         if _mn9 in ("cp", "add", "sub", "and", "or", "xor") and _absa and _b9.upper() in _X16:
+            # Same double-d rule here; `orddm16 (0x328e), xwa` = d1 8e 32 e8.
+            _dm2 = "ordd" if _mn9 == "or" else _mn9 + "d"
             for _w in ("16", "32"):
-                yield f"{_mn9}dm{_w} {_absa.group(1)}, {_X16[_b9.upper()]}"
+                yield f"{_dm2}m{_w} {_absa.group(1)}, {_X16[_b9.upper()]}"
                 yield f"{_mn9}dm{_w}_24 {_absa.group(1)}, {_X16[_b9.upper()]}"
+
+        # `ldw (<abs>),(<abs>)` -- a MEMORY-TO-MEMORY move, the ldmm family.
+        # Verified: `ldw (0x2796),(0x2792)` = d1 92 27 19 96 27
+        #                                   = `ldmm16 0x2796, 0x2792`
+        #           `ld  (0x3910),(0x3911)` = c1 11 39 19 10 39
+        #                                   = `ldmm8 0x3910, 0x3911`
+        # ⚠ Note the operand ORDER matches the printed text but the BYTES put
+        # the source address first; do not "fix" the order by inspection.
+        if _mn9 in ("ld", "ldw") and _absa and _absb:
+            for _w in ("8", "16"):
+                yield f"ldmm{_w} {_absa.group(1)}, {_absb.group(1)}"
 
         # `cp <r>,(<abs>)` and `cp (<abs>),<r>` -- the two directions take
         # DIFFERENT mnemonic families, found by dumping the sites rather than
@@ -884,6 +916,17 @@ def encode(text):
 def _encode_uncached(text):
     r = subprocess.run([MC, "--triple=tlcs900", "--show-encoding"],
                        input=text, capture_output=True, text=True, timeout=30)
+    # ⚠ CHECK THE EXIT STATUS. llvm-mc can FAIL and still print an encoding:
+    #     $ echo 'or (0x328e),A' | llvm-mc -triple=tlcs900 --show-encoding
+    #     error: byte/word direct memory load not encodable
+    #     ... ; encoding: [0xe9]
+    #     $ echo $?  ->  1
+    # Parsing stdout regardless returned that 1-byte fragment as a valid
+    # encoding. Only the LENGTH comparison downstream kept it from being
+    # selected, and a fragment that happened to match the right length would
+    # have been accepted. Found by an adversarial verifier, 2026-08-23.
+    if r.returncode != 0:
+        return None
     m = ENC_RE.search(r.stdout)
     if not m:
         return None
