@@ -303,3 +303,75 @@ the `.LSW` disk format, and the power-down/restore path.
 which records them as directly dumped; the persistence range is quoted from the
 splash findings. What is NOT established is the 26-byte block's own field layout,
 or which block index corresponds to which panel control.
+
+---
+
+## Where the query descriptors come from: a RAM hash table (2026-08-23)
+
+The correction above leaves "where do query descriptors live" open. The code
+immediately before the dispatch answers it
+(`v7/maincpu/boot/interrupt_vector_trampolines.s:30-66`):
+
+```asm
+	ld   XBC,0x000007ff
+	call 0xff0435              ; hash the key -> HL, with modulus 0x7FF in XBC
+	ld   IX,HL
+.Lc_fccce0:
+	ld   BC,IX
+	extz XBC
+	sll  XBC, 0x03             ; bucket index x 8
+	ld   XWA,0x00034100        ; TABLE BASE, in work RAM
+	add  XWA,XBC
+	ld   XDE,(XWA)             ; entry +0x00 = the KEY
+	cp   XDE,0x00ffffff        ; 0x00FFFFFF = EMPTY slot
+	jr   nz, .Lc_fcccb4
+.Lc_fcccb4:
+	cp   XIZ,XDE               ; XIZ = the key being searched for
+	jr   z, .Lc_fcccbf
+	...
+.Lc_fcccbf:
+	ld   XWA,(XWA+0x04)        ; entry +0x04 = POINTER TO THE DESCRIPTOR
+	ld   (XSP+0x06),XWA        ; -> becomes the dispatch's argument
+.Lc_fccccb:
+	inc  1,HL                  ; LINEAR PROBE
+	cp   HL,0x07ff
+	jr   ugt, .Lc_fcccf8       ; ran off the end -> give up
+	ld   WA,IX
+	inc  3,WA                  ; step 3
+	extz XWA
+	div  WA,0x07ff             ; wrap modulo 0x7FF
+	ld   IX,QWA
+```
+
+### The structure
+
+| property | value |
+|---|---|
+| base | `0x00034100`, work RAM |
+| buckets | `0x7FF` = 2047 |
+| entry size | **8 bytes** (`sll XBC,0x03`) |
+| table size | 2047 x 8 = 16,376 B |
+| entry `+0x00` | u32 key; `0x00FFFFFF` means EMPTY |
+| entry `+0x04` | u32 pointer to a **query descriptor** |
+| lookup | hash via the routine at `0x00FF0435` with modulus `0x7FF` |
+| collision | linear probe with **step 3**, wrapping `div WA,0x07ff`, giving up after `HL > 0x7FF` |
+
+So the full path is:
+
+```
+key (XIZ) --hash--> bucket --probe--> entry --+0x04--> query descriptor
+                                                          |
+                                          +0x0C = mode 0..6
+                                                          |
+                                    handler --+0x04--> panel-memory block
+                                                          |
+                                      ((block[+0x05] ^ +0x0A) & +0x06) >> +0x09
+```
+
+⚠ A probe step of 3 against a modulus of `0x7FF` (2047 = 23 x 89) is coprime, so
+the probe sequence does visit every bucket — worth stating because a badly chosen
+step would make the table silently lossy, and that would be a firmware property
+worth knowing rather than an artefact of my reading.
+
+⚠ NOT established: what the KEY is (which quantity is hashed), the hash function
+at `0x00FF0435`, and who populates the table. Those are the next steps.
