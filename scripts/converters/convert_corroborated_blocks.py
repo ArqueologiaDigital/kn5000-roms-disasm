@@ -611,6 +611,28 @@ def translate(text):
                 yield f"{_dm2}m{_w} {_absa.group(1)}, {_X16[_b9.upper()]}"
                 yield f"{_mn9}dm{_w}_24 {_absa.group(1)}, {_X16[_b9.upper()]}"
 
+        # `ld <r>,(<XRR>+<d8>)` -- register-indexed LOAD with displacement.
+        # ⚠ THE OPERAND ORDER IS (addr, disp, data) -- address register FIRST,
+        # data register LAST -- the reverse of the printed text. Verified:
+        #     ld WA,(XWA+0x02) = 98 02 20 = ld16_src_rid8 xwa, 0x02, wa
+        #     ld A,(XIX+0x20)  = 8c 20 21 = ld8_src_rid8  xix, 0x20, a
+        # Base 0x88 for 8-bit data, 0x98 for 16-bit, plus the address register
+        # code; suffix 0x20 plus the data register code.
+        if _mn9 == "ld" and re.match(r'^[A-Za-z]{1,3}$', _a9) \
+                and re.match(r'^\([A-Za-z]{2,3}\+0x[0-9a-fA-F]+\)$', _b9):
+            _m5 = re.match(r'^\(([A-Za-z]{2,3})\+(0x[0-9a-fA-F]+)\)$', _b9)
+            for _pre in ("ld8_src_rid8", "ld16_src_rid8", "ldl_src_rid8"):
+                yield f"{_pre} {_m5.group(1).lower()}, {_m5.group(2)}, {_a9.lower()}"
+
+        # `sla <n>,<REG>` -- the printed operands are REVERSED relative to the
+        # spelling: `sla 0x00,XIZ` = ee ec 00 = `sla xiz, 0`. The tree's own
+        # sources already write it register-first (`sla xhl, 8`).
+        if _mn9 in ("sla", "sra", "srl", "sll", "rlc", "rrc", "rl", "rr") \
+                and re.match(r'^0x[0-9a-fA-F]+$', _a9) \
+                and re.match(r'^[A-Za-z]{1,3}$', _b9):
+            yield f"{_mn9} {_b9.lower()}, {int(_a9, 16)}"
+            yield f"{_mn9} {_b9.lower()}, {_a9}"
+
         # `ldw (<abs>),(<abs>)` -- a MEMORY-TO-MEMORY move, the ldmm family.
         # Verified: `ldw (0x2796),(0x2792)` = d1 92 27 19 96 27
         #                                   = `ldmm16 0x2796, 0x2792`
