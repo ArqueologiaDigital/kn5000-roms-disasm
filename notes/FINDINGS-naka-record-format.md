@@ -220,3 +220,47 @@ bytes, so they are not required to be meaningful in every record.
 ⚠ STILL NOT ESTABLISHED: what the state blocks at `0x00EE1160` *are*, and how a
 record's TYPE (its `naka_header` byte) relates to its MODE (`+0x0C`). Those are
 different fields and nothing read so far connects them.
+
+### What the state blocks ARE: the live panel memory (2026-08-23)
+
+The mode-1/3/4/5/6 handlers all index `0x00EE1160` to get a state block. Reading
+that table:
+
+```
+ [ 0] 0x0000F9B6    [ 1] 0x0000F9D0    [ 2] 0x0000F9EA   ...   [22] 0x0000FBF2
+```
+
+**23 consecutive entries, stride exactly 0x1A = 26 bytes**, spanning
+`0x00F9B6..0x00FBF2` (598 B), followed by `0xFD62`, `0xFD7C`, `0xFC0C` and then
+zeros.
+
+These are LOW addresses — work DRAM, not ROM. And the range is not arbitrary.
+`docs/kn-disk-file-formats.md` records the `.LSW` panel-memory layout, verified
+in an earlier pass:
+
+> writes 0xE40 in four parts (32-byte header from `0xF980`, **TLV block 0 from
+> `0xF9A0`**, **TLV block 1 from `0xFD60`**, and 0x800 from `0x1E7800`)
+
+and `kn7000_mame/notes/FINDINGS-kn5000-splash-restored.md` records that
+`DRAM[0xF980..0xFFEE]` is copied to the IC21 battery-backed SRAM at power-down.
+
+So:
+
+| state-block entry | lands in | offset into it |
+|---|---|---|
+| `0xF9B6` … `0xFBF2` (23 blocks) | **`.LSW` TLV block 0** (from `0xF9A0`) | +0x16 |
+| `0xFD62`, `0xFD7C` | **`.LSW` TLV block 1** (from `0xFD60`) | +0x02 |
+
+**The NAKA widget query descriptors read the live panel memory** — the same bytes
+the instrument writes into a `.LSW` file and preserves across a power cycle in
+battery-backed SRAM. A widget asking "what should I display" is reading persisted
+instrument state through a 26-byte-strided block array.
+
+That ties three separate investigations together: the NAKA record format (here),
+the `.LSW` disk format, and the power-down/restore path.
+
+⚠ VERIFIED, not inferred: the table contents are read from the ROM at
+`0x00EE1160`; the `.LSW` part offsets are quoted from the disk-format document,
+which records them as directly dumped; the persistence range is quoted from the
+splash findings. What is NOT established is the 26-byte block's own field layout,
+or which block index corresponds to which panel control.
