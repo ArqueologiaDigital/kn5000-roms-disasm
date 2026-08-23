@@ -393,6 +393,36 @@ def translate(text):
             for _m in ("ldio", "ldwio"):
                 yield f"{_m} {_addr}, {_b8}"
 
+    # ⚠ ONE-OPERAND forms live OUTSIDE the two-operand guard below. Placing them
+    # inside `if ... parts0[1].count(",") == 1` meant they never ran: `push A`
+    # has no comma, so that block is skipped for it entirely.
+    #
+    # `push <REG>` is THREE encodings behind one printed text, the same shape as
+    # `inc n,REG`. Verified against llvm-mc:
+    #     push a          c9 04       (0xC8+r, 0x04)   8-bit
+    #     push wa         d8 04       (0xD8+r, 0x04)   16-bit
+    #     push xwa        38          (0x38+r)         32-bit, one byte
+    #     pushw_erp 0xe0  d7 e0 04                     ERP-byte form
+    # The ERP form is why a plain `push A` can fail to match the ROM.
+    #
+    # `pushw (<mem>)` -> `pushm <mem>` is census rule E (+673 B measured):
+    #     pushw (XSP+0x28) = 9f 28 04 = pushm (xsp + 0x28)
+    #     pushw (XIY)      = 95 04    = pushm (xiy)
+    if len(parts0) == 2 and parts0[1].count(",") == 0:
+        _s1 = parts0[1].strip()
+        _mn1 = parts0[0].lower()
+        if _mn1 == "push" and re.match(r'^[A-Za-z]{1,3}$', _s1):
+            yield f"push {_s1.lower()}"
+            if _s1.upper() in REG_BYTE:
+                yield f"pushw_erp 0x{REG_BYTE[_s1.upper()]:02x}"
+        if _mn1 in ("pushw", "push") and _s1.startswith("(") and _s1.endswith(")"):
+            _in1 = _s1[1:-1]
+            _m4 = re.match(r'^([A-Za-z]{2,3})\+(0x[0-9a-fA-F]+)$', _in1)
+            if _m4:
+                yield f"pushm ({_m4.group(1).lower()} + {_m4.group(2)})"
+            elif re.match(r'^[A-Za-z]{2,3}$', _in1):
+                yield f"pushm ({_in1.lower()})"
+
     # Wave-2 spelling families, each verified at every site in the ROMs by a
     # probe under tools/spelling-probes/ with a negative control. Offering the
     # whole family and letting the byte comparison choose is equivalent to the

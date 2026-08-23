@@ -1442,7 +1442,59 @@ DrawFunc_Init_PushFontAndDraw:
 	.byte 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04, 0x1e, 0x8d
 	.byte 0xed, 0x5e, 0xf3, 0xfd, 0x0c, 0x01, 0x37, 0x0e
 DrawFunc_Init_Variant1:
-	.incbin "includes/romslices/v7_transplant_DrawFunc_Init_Variant1.bin"
+	.incbin "includes/romslices/v7_transplant_DrawFunc_Init_Variant1_head.bin"
+	lda xsp, (xsp - 0x010c)
+	push XIZ
+	ld XIZ,XWA
+	ld XIY,Str_No_0xE42
+	lda xix, (xsp + 0x0108)
+	lds bc, 4
+	ldirw
+	ld IX,(XIZ+0x02)
+	extz XIX
+	ld DE,(XIZ+0x07)
+	ld L,(XIZ+0x09)
+	extz HL
+	lda xbc, (xsp + 0x0104)
+	ld WA,DE
+	extz XWA
+	div WA,0x0028
+	ld (XBC+0x02),WA
+	muls WA,0x0028
+	sub DE,WA
+	sll DE, 0x03
+	ld (XBC),DE
+	lda xbc, (xsp + 0x04)
+	cps hl, 2
+	jr z, .Lc_fb1e46
+	cps hl, 1
+	jr nz, .Lc_fb1e4f
+	pushm (xix)
+	ld XWA,Str_No_0xE4A
+	jr t, .Lc_fb1e56
+.Lc_fb1e46:
+	pushm (xix)
+	ld XWA,Str_No_0xE4E
+	jr t, .Lc_fb1e56
+.Lc_fb1e4f:
+	pushm (xix)
+	ld XWA,Str_No_0xE52
+.Lc_fb1e56:
+	push XWA
+	push XBC
+	call 0xff0295
+	lda xsp, (xsp + 0x0a)
+	ld A,(XIZ+0x06)
+	and A,0x3f
+	extz WA
+	sla WA, 0x02
+	lda_24 xbc, (Str_No_0xCEE)
+	ldl_dri xhl, 0x07, 0xe4, 0xe0
+	lda xwa, (xsp + 0x0108)
+	lda xbc, (xsp + 0x0104)
+	lda xde, (xsp + 0x04)
+	push XHL
+	.incbin "includes/romslices/v7_transplant_DrawFunc_Init_Variant1_tail.bin"
 ColorBlit_WithPaletteSave:
 	dec 8, xsp
 	pushw_erp 0xfa
