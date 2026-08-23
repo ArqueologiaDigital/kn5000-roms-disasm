@@ -7,6 +7,39 @@ after a day spent testing the claim rather than repeating it.
 Read this before believing any single number elsewhere in the repository: several figures that
 stood for months were wrong, and are corrected in the history rather than quietly replaced.
 
+## What would unblock each remaining item (2026-08-23)
+
+Written because "not done" is not actionable on its own. Every open item is in exactly one of
+three classes, and only the first is work anyone can do by reading these ROMs harder.
+
+**A. STILL ANALYSABLE from the dumped ROMs — real work, available now**
+
+| item | size | what it needs |
+|---|---|---|
+| 305 blocking labels, unsettled | part of ~2,1xx B | decide per range whether the DECODE is mis-framed; the clustering evidence says most are, so the honest gain is small. `v7_label_guard_subjects.py` |
+| entry in neither a `.byte` run nor a located `.incbin` | 26 ranges | extend the placement logic; the `.incbin` case was solved this way once already |
+| truncated at unspelled forms | 869 B | per-form spelling probes; the method is established (`tools/spelling-probes/`), the yield per form is now small |
+| L2 name aptness, decidable classes | — | more classes like `l2_name_vs_return_value.py`: names that DECLARE something checkable |
+
+**B. BLOCKED ON A PHYSICAL INSTRUMENT — cannot be closed by analysis**
+
+* what the control panel puts on the wire (needs a logic analyser on a real KN5000)
+* the four L5 items named in `kn5000-control-panel-panel-side.md`
+* whether the `0x30`/`0xC0` `.LSW` gaps carry anything — PROVEN unreadable by this firmware
+  (the importer never seeks), so only a capture on the machine that WROTE the disks can say
+
+**C. BLOCKED ON A MISSING ARTEFACT — needs a disk or dump nobody here has**
+
+* what `"M4"`/`"M6"`/`"NN"` are as products: no string in any of the seven images ties them to a model
+* `.LSW` tag `0x9A`: searched over the WHOLE parameter-id space (not a narrow window) and no
+  descriptor exists in any revision. Absence is established, meaning is not.
+* NOTE2's extra bytes in the factory styles: authored on other equipment before the disks were written
+
+⚠ **L2 aptness in general is in NONE of these classes and never will be.** A name that asserts
+nothing checkable — `FileIO_ReadHeader`, which builds a path and reads no header — cannot be
+falsified by any script, only by a human reading the routine. The decidable classes are worth
+extending; the general problem is not a measurement gap, it is a category error to treat as one.
+
 ## The scorecard
 
 | level | status | evidence |
