@@ -949,3 +949,94 @@ unnamed region the reported owner is the last named thing before it, so the
 counts are indicative for the small groups. The large ones (`0x028` at 28 of 43,
 `0x02D` at 14 of 42) are dominated by a single named caller and do not depend on
 that assumption.
+
+---
+
+## ⚠ CORRECTION + ANSWER: who populates the table (2026-08-23)
+
+I wrote: *"No site reached through this base writes an entry. So the table is not
+populated by anything that names `0x00034100` as a literal."* **That is wrong.**
+I classified all 7 real sites by the instruction BEFORE them, which is the `x8`
+bucket scaling and is identical for a lookup and an insert. The site at
+`0x00FCE765` is the insert, and it names the base as a literal like the others.
+
+### The registration routine — `0x00FCE715`
+
+`register(key in XWA, descriptor pointer in XBC)`:
+
+```asm
+fce715:  dec 6,XSP / push XIZ
+fce718:  ld (XSP+0x06),XBC        ; save the descriptor pointer
+fce71b:  ld XIZ,XWA               ; XIZ = key
+         ... the SAME base-513 hash, then mod 0x7FF, then x8 ...
+fce764:  ld XBC,0x00034100
+fce76b:  ld XDE,(XBC)
+fce76d:  cp XDE,0x00ffffff        ; empty slot?
+fce773:  jr NZ, <probe>
+fce775:  ld (XBC),XIZ             ; key      -> entry +0x00
+fce777:  ld XWA,(XSP+0x06)
+fce77a:  ld (XBC+0x04),XWA        ; pointer  -> entry +0x04
+fce77d:  ld HL,0                  ; 0 = inserted
+fce783:  cp XIZ,XDE               ; on the probe path: already present?
+```
+
+### The table initialiser — `0x00FCE6D5`
+
+```asm
+fce6d5:  lda XBC,0x034100
+fce6dc:  lda XDE,XBC+0x3ff8       ; end;  0x3FF8 = 16,376 = 2047 x 8
+fce6e1:  ld XIY,0x00edba3c        ; 8-byte template
+fce6e8:  ld BC,4 / ldirw          ; copy 4 words into the slot
+fce6ee:  cp XWA,XDE / jr C        ; for every slot
+```
+
+The template at `0x00EDBA3C` is `ff ff ff 00 00 00 00 00` — `entry+0x00 =
+0x00FFFFFF`, the empty marker, and `entry+0x04 = 0`. **This independently
+confirms 2047 buckets of 8 bytes**, which had been derived from `sll 0x03` and
+`mod 0x7FF`.
+
+### The population loop — `0x00FCE6F3`
+
+```asm
+fce6f4:  ld XIZ,0
+fce6f8:  sll 0x02,XBC             ; index x 4
+fce6fb:  ld XWA,0x00ee01a0        ; DESCRIPTOR LIST
+fce702:  ld XBC,(XWA)             ; -> a descriptor
+fce704:  ld XWA,(XBC)             ; its FIRST u32 is its KEY
+fce706:  calr 0xfce715            ; register(key, descriptor)
+```
+
+So the descriptors live in ROM, listed at `0x00EE01A0`, and each **begins with
+its own 32-bit key**:
+
+```
+ [0] 0x00EDBA44  key 0x0      [4] 0x00EDBAE4  key 0x5
+ [1] 0x00EDBAAE  key 0x1      [5] 0x00EDBAF6  key 0xC0
+ [2] 0x00EDBAC0  key 0x3      [6] 0x00EDBB08  key 0xC1
+ [3] 0x00EDBAD2  key 0x4      [7] 0x00EDBB1A  key 0x100
+```
+
+`0xC0` and `0x100` are both in the 82 keys recovered independently from the call
+sites — the registered set and the requested set agree.
+
+### The descriptor's full layout falls out
+
+Consecutive descriptors are **18 bytes apart** (`0xEDBAC0 - 0xEDBAAE = 0x12`), and
+the field offsets already measured run to `+0x0D`, which 18 bytes accommodates.
+With `+0x00` now known to be the key:
+
+| offset | width | meaning |
+|---|---|---|
+| `+0x00` | u32 | **the key** — `(subsystem << 8) \| index` |
+| `+0x04` | u8 | panel-memory block selector (into `0x00EE1160`) |
+| `+0x05` | u8 | offset within that block |
+| `+0x06` | u8 | AND mask |
+| `+0x07`, `+0x08` | u8 | RESOLVE-only, compared with the caller's argument |
+| `+0x09` | u8 | right shift, low nibble |
+| `+0x0A` | u8 | XOR operand |
+| `+0x0B` | u8 | secondary selector |
+| `+0x0C` | u8 | READ mode, 0..6 |
+| `+0x0D` | u8 | RESOLVE mode, 0..8 |
+
+⚠ The first descriptor spans `0x6A` bytes to the next, not `0x12`, so 18 is the
+common stride and not a proven invariant.
