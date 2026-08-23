@@ -102,6 +102,8 @@ naka_sequencer_channels   0x1500   18/64  resolve   mod2 50%  mod3 33%  mod4 27%
 gui_display_struct_data   0x0b00   97/384 resolve   mod2 65%  mod3 44%  mod4 48%
 ```
 
+Prover: `tools/spelling-probes/region_pointer_stride_test.py`.
+
 Chance is 50% / 33% / 25%. The first three are AT chance — scattered, not
 strided, so the record-array reading is not supported for them either. The
 fourth is not: 48% at one residue mod 4 against 25% chance says
