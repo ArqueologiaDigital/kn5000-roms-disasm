@@ -363,6 +363,27 @@ recognised faster next time.
    the same message a genuinely broken range produces. Rejections concentrated in one bucket
    deserve the same suspicion as acceptances that never fail. **Of every refusal category, ask:
    could anything in this bucket ever pass?**
+20. **The fixpoint nobody iterated.** Reachability analysis was written as a single pass: scan the
+   already-disassembled CODE territory for `call`/`jp`/`jrl`, emit the targets, stop. But every
+   range the converter accepts and byte-matches is newly-proven code, and the branches *inside* it
+   name further addresses that are code by exactly the same argument. Feeding that back and
+   iterating took the entry set from 687 to 1,209 in ten rounds -- a 76% expansion that had been
+   sitting there since the analysis was written, invisible because the scan's output looked like
+   an answer rather than a first approximation. **When an analysis derives facts of the same kind
+   it consumes, it is a fixpoint. Ask how many times it was run.**
+     * The discipline that keeps this honest: harvest only from ranges that pass every structural
+       gate. A mis-framed decode's "branches" may be data bytes that happen to read as `jr`, and
+       propagating those would grow the set with garbage that the byte gate cannot catch, because
+       nothing about a wrong entry point makes the *bytes* differ. Here 254 destinations seen only
+       in refused ranges were withheld for exactly that reason, and counted separately so the
+       withholding is visible rather than silent.
+21. **The constant that matched nothing.** A probe asked how many branch destinations land in
+   `.byte` territory and printed a confident zero. The territory encoding is `1 = CODE`,
+   `2 = .byte`, `3 = incbin`; the probe tested against `DATA = 0`, which matches nothing, so the
+   filter discarded every candidate. The true answer was 266. This is anti-pattern 10 wearing
+   different clothes -- a check that cannot fail versus a filter that cannot pass -- and the same
+   remedy finds both: **before believing a zero, prove the code path can produce a non-zero.**
+   Print the histogram of whatever you are filtering on. A named constant is not a verified one.
 
 ## 6. Definition of done
 
