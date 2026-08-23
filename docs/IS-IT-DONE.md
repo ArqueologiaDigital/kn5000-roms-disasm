@@ -75,6 +75,16 @@ census written before the fix existed -- which is the kind of agreement that mak
 Call targets still awaiting conversion: 1,118 -> 786, and the closure has now reached a true
 fixpoint (a round gaining 0 bytes), so what remains is NOT waiting on more rounds.
 
+⚠ **THE TWO LARGEST BLOCKERS ARE ONE DEFECT (2026-08-23).** The label guard and the -0x41A
+displacement looked independent and are not: of the labels sitting inside a range but not on a
+decoded instruction boundary, **304 are in the displaced set and 41 are not -- 88%**. So in almost
+all cases the decode is RIGHT and the label is 0x41A too high, which is why it lands
+mid-instruction. The guard was refusing correctly; it just could not say which side was wrong.
+Two consequences: repairing the displacement should clear most of that bucket, and the 41
+non-displaced cases are a separate smaller problem sitting OUTSIDE the displaced region
+(`WidgetParam_Config_004` at 0x00EE646E and friends) that must not be swept into the same fix.
+Prover: `scripts/analysis/v7_guard_vs_displacement.py`.
+
 ⚠ WHAT REMAINS, MEASURED (2026-08-22 end of day). "Fixpoint reached" is not "finished":
 
     2,053 B  29 ranges  a label inside the range is NOT on a decoded instruction boundary.
