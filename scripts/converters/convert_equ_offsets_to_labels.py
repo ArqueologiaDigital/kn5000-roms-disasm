@@ -94,15 +94,25 @@ def main():
         ok = True
         for i in sorted(bucket, reverse=True):
             st, en, sind, sinc, sk, cnt = slices[i]
-            items = sorted(bucket[i])
-            parts = [f'{sind}.incbin "{sinc}", 0x{sk:X}, 0x{items[0][0]-sk:X}']
-            for j, (o, nm, ln) in enumerate(items):
-                end = items[j + 1][0] if j + 1 < len(items) else sk + cnt
+            # ⚠ GROUP BY OFFSET. Two names may alias one address -- legitimate,
+            # and it happens 3 times in NakaData_TechniChordStrings (0x671c,
+            # 0x7a30, 0x8d44). Sorting flat made `end` equal `o` for the second
+            # of each pair, tripping the `end <= o` guard and discarding all 845
+            # conversions in that file. Emit every alias at the position, then
+            # advance to the NEXT DISTINCT offset.
+            byoff = {}
+            for o, nm, ln in bucket[i]:
+                byoff.setdefault(o, []).append((nm, ln))
+            keys = sorted(byoff)
+            parts = [f'{sind}.incbin "{sinc}", 0x{sk:X}, 0x{keys[0]-sk:X}']
+            for j, o in enumerate(keys):
+                end = keys[j + 1] if j + 1 < len(keys) else sk + cnt
                 if end <= o:
                     ok = False; break
-                parts.append(f"{nm}:")
+                for nm, ln in byoff[o]:
+                    parts.append(f"{nm}:")
+                    used.add(ln)
                 parts.append(f'{sind}.incbin "{sinc}", 0x{o:X}, 0x{end-o:X}')
-                used.add(ln)
             if not ok:
                 break
             new_txt = new_txt[:st] + "\n".join(parts) + new_txt[en:]
