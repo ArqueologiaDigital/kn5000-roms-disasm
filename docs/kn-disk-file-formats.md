@@ -634,9 +634,46 @@ the other measurements it now has a complete PROFILE and no identity:
 * **zero code references** to its address (10 byte-matches, all disassembled: 9
   coincidences and one numeric argument to a formatting routine)
 
-⚠ TENSION, not resolved: the subscriber finding above says `0x9A` has a live
-subscriber accepting payload offsets 4..19 and classifying through
-`0x00EE8EA2`. That is a different mechanism from this dispatch table, so both
+### The "subscriber" read at last, and it does NOT touch `0x9A`'s payload
+
+`0x00EE8EA2` has 18 operand-level references, all `lda XIX,0xee8ea2`, in one
+module at `0x00FDE920`. Reading it:
+
+```asm
+	add  WA,WA
+	lda  XIX,0xee8cd4          ; u16 MASK table, indexed x2
+	ld   WA,(XIX+WA)
+	and  WA,(0xf290)           ; availability check against RAM 0xF290
+	jr   Z, ...                ;   not available -> return 0xFF
+	ld   A,E
+	lda  XIX,0xf1a0            ; <-- reads RAM 0x00F1A0 + index
+	ld   A,(XWA)
+	lda  XIX,0xee8ea2          ; classify that byte
+	ld   A,(XIX+WA)
+	lda  XIX,0xc186            ; index RAM 0x00C186 by the class
+	ld   A,(XWA)
+```
+
+So it is a **parameter availability-and-value lookup**: mask-test an enable word,
+read a byte from `0xF1A0`, map it through `0xEE8EA2`, use the result to index
+`0xC186`.
+
+⚠ **It reads `0x00F1A0`, NOT the tag payload at `0xFFA4`.** So the code does not
+connect this routine to tag `0x9A` at all. The earlier note describes it as
+`0x9A`'s subscriber "indexing RAM 0x00F1A0" -- that RAM address is right, but
+nothing here shows `0x9A`'s payload reaching `0xF1A0`. **The tension is resolved
+in the direction of LESS knowledge, not more: `0x9A` has no established
+subscriber either.**
+
+### A confirmed L2 misnomer, cross-validated by this code
+
+`scripts/analysis/l2_name_vs_structure.py` flagged `SystemConfig_PointerTable_0x56`
+at `0x00EE8CD4` as "claims POINTERS, 0% in range". This routine shows why: it is
+a **u16 MASK table**, indexed `x2` and ANDed against an enable word. The name is
+wrong, and a structural check and a code read agree independently.
+
+⚠ SUPERSEDED TENSION: the earlier text said `0x9A` has a live subscriber
+accepting payload offsets 4..19 and classifying through `0x00EE8EA2`. That is a different mechanism from this dispatch table, so both
 can hold -- generic in the tag dispatch, specific in the subscriber -- but until
 someone reads that subscriber against this table, the two descriptions are not
 reconciled and should not be summarised as one.
