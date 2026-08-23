@@ -524,6 +524,69 @@ def implausible(texts):
     return None
 
 
+CUT_SINGLE_LABEL_ONLY = False
+cut_ranges = [0, 0]
+
+
+def _cut_at_first_blocking_label(idx, t, span, insns, texts, addr2name, bl):
+    """VARIANT 1: retry a range truncated to end at or before the label that
+    blocked it.
+
+    Returns True if the truncated range was written.
+
+    Finds the labels the block index places strictly inside [t, t+span) that do
+    not coincide with a decoded instruction start -- the exact condition that
+    makes rewrite() return None without recording a reason -- then re-offers the
+    prefix of instructions ending at or before the earliest such label.
+
+    Nothing at or past a blocking label is converted, so no label definition
+    moves, vanishes or appears, and every `.long <symbol>` keeps its value.
+    """
+    # Mirror rewrite()'s own guard exactly: idx[path] is (lines, blocks); a
+    # block bk is (label, addr, line_index, ?, bytes); the blocking labels are
+    # those of TOUCHED blocks, excluding the first block's own address, that
+    # fall inside [t, t+span) without coinciding with a decoded instruction.
+    blocking = []
+    insn_addrs = {a for a, _n, _x in insns}
+    for _path, (_lines, blocks) in idx.items():
+        touched = [bk for bk in blocks if bk[1] < t + span and bk[1] + len(bk[4]) > t]
+        if not touched:
+            continue
+        touched.sort(key=lambda bk: bk[2])
+        first = touched[0]
+        for bk in touched:
+            la = bk[1]
+            if not bk[0]:
+                continue
+            if la != first[1] and t <= la < t + span and la not in insn_addrs:
+                blocking.append(la)
+    blocking.sort()
+    if not blocking:
+        return False
+    if CUT_SINGLE_LABEL_ONLY and len(blocking) > 1:
+        return False
+    cut = blocking[0]
+    keep = [i for i, (a, n, _x) in enumerate(insns) if a + n <= cut]
+    if len(keep) < 3:
+        return False
+    k = len(keep)
+    new_insns = insns[:k]
+    new_span = sum(n for _a, n, _x in new_insns)
+    if new_span == span:
+        return False
+    ok = rewrite(idx, t, new_span, new_insns, texts[:k], addr2name,
+                 {a: l for a, l in (bl or {}).items() if a < t + new_span})
+    if not ok:
+        return 0
+    cut_ranges[1] += new_span
+    # Return the KEPT span, not True. main() credited the full `span` before
+    # calling, and only `new_span` bytes actually became CODE -- the converter
+    # documents that its byte total must equal l1_territory_map.py's CODE gain,
+    # and crediting the whole span breaks exactly that invariant (measured:
+    # 3,222 reported vs 1,609 real).
+    return new_span
+
+
 def rewrite(idx, t, span, insns, texts, addr2name, branch_labels=None):
     branch_labels = branch_labels or {}
     """Replace the source lines covering [t, t+span) with instruction lines.
@@ -952,6 +1015,27 @@ def main():
                 _before = sum(REFUSED.values())
                 if dry or rewrite({path: idx[path]}, t, span, insns, texts, addr2name, bl):
                     wrote_here += 1
+                elif (not dry) and (_cut_span := _cut_at_first_blocking_label(
+                        {path: idx[path]}, t, span, insns, texts, addr2name, bl)):
+                    # VARIANT 1 (see tools/spelling-probes/README-label-guard-split.md):
+                    # rewrite() refused because a labelled `.byte` block starts
+                    # strictly inside the range at an address the decode does not
+                    # treat as an instruction start. Rather than drop the whole
+                    # range, CUT it so it ends at or before that label. The cut
+                    # converts nothing at or past any blocking label, so no label
+                    # is added, moved or deleted and no `.long <symbol>` value can
+                    # change -- which is why this is safe where moving a label was
+                    # not (see the 981-repair retraction in docs/IS-IT-DONE.md).
+                    #
+                    # ⚠ The residual hazard is NOT the labels, it is MIS-FRAMING:
+                    # a decode that disagrees with the sources at a label may be
+                    # wrong before the label too, and the byte gate cannot see that
+                    # (spec anti-pattern 13). Ranges with several blocking labels
+                    # are the suspect ones; --cut-single-label-only restricts to
+                    # the ranges with exactly one.
+                    wrote_here += 1
+                    cut_ranges[0] += 1
+                    byte_path[1] -= (span - _cut_span)   # credit only what converted
                 elif sum(REFUSED.values()) == _before:
                     byte_path[0] -= 1; byte_path[1] -= span
                     # rewrite() declined without recording a reason. Nearly all of
