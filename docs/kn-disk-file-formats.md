@@ -678,7 +678,45 @@ can hold -- generic in the tag dispatch, specific in the subscriber -- but until
 someone reads that subscriber against this table, the two descriptions are not
 reconciled and should not be summarised as one.
 
-**Still unidentified, stated plainly:** `0x9A` is touched by nothing but the generic init walk.
+### ✅ `0x9A` IS A SCHEMA SLOT THAT IS NEVER WRITTEN (2026-08-23)
+
+Scanning the full documented `0xE40` panel window in all **19 real panel
+memories** carried by the demo presets:
+
+| | |
+|---|---|
+| files containing tag `0x9A` with its declared `len = 26` | **0 / 19** |
+| files containing `0x9A` followed by ANY plausible length (1..64) | **1 / 19**, and that one declares 64 — a coincidental byte pair |
+| CONTROL: tag `0x78` | **19 / 19** |
+| CONTROL: tag `0x71` | **19 / 19** |
+| CONTROL: tag `0x43` | **19 / 19** |
+
+The controls are what make the negative usable: tags that are really there are
+found in every single file, so the search is capable of finding `0x9A` and does
+not.
+
+Together with everything else measured, the profile is complete and consistent:
+
+* **allocated in the schema** — it has a tag→address entry (`0xFFA4`) and a
+  declared length (26, from its own header in the factory image);
+* **never populated** — absent from 19 real panel memories;
+* **no tag-specific handler** in v7, v9 or v10 (`0x00EDAA64` gives it the default);
+* **no code references** to its address (10 byte-matches, all disassembled: 9
+  coincidences, one numeric argument);
+* **no established subscriber** — the routine previously credited to it reads RAM
+  `0x00F1A0`, never `0xFFA4`;
+* **factory default 26 zero bytes**, in a populated neighbourhood.
+
+**So the answer to "what does `0x9A` hold" is: nothing. It is a reserved slot —
+sized, addressed and zero-initialised, and written by no code path and no
+instrument in any artefact available here.** That is a positive finding, not a
+gap, and it is the strongest statement the evidence supports.
+
+⚠ What could still overturn it: a `.LSW` written by a KN5000 with an option
+fitted that these demo presets do not exercise. The claim is "unused across every
+dumped artefact", not "unusable".
+
+⚠ SUPERSEDED: the line below predates this and said the identity was unknown.
 `0x68 0x43 0x71 0x44 0x45 0x46` have known shapes but no distinguishing routine. Which effect
 `0x61/0x65/0x66` drive is unsettled, and the C-family's index-space meaning is [INFERENCE].
 
