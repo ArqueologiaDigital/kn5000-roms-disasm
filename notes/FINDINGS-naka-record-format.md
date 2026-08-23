@@ -450,3 +450,57 @@ entirely. And 513 = 0x201, chosen because `x*513` is one shift and one add.
 
 ⚠ STILL NOT established: what the key VALUE means (which quantity callers pass),
 and who populates the table.
+
+---
+
+## A SECOND dispatch on the same descriptor: `+0x0D`, nine modes (2026-08-23)
+
+Searching the ROM for the table base `0x00034100` gives 10 sites, and one of them
+(`0x00FCCA90`) is a second routine over the same hash table — same 2047 buckets,
+same 8-byte entries, same `0x00FFFFFF` empty sentinel, same step-3 probe, same
+`+0x04` descriptor fetch. It then dispatches on a DIFFERENT field:
+
+```asm
+fccad0:  cp  (XSP+0x0a),0x0005      ; a mode argument from the caller
+fccad5:  jr  Z, ...
+fccad7:  ld  C,(XWA+0x0d)           ; <-- FIELD +0x0D
+fccada:  cp  C,0x09
+fccadd:  jr  NC, ...                ; bounded 0..8  -> NINE handlers
+fccae1:  sla 0x02,BC
+fccae4:  lda XDE,0xee10ec           ; second dispatch table
+fccaf1:  ld  DE,(XSP+0x0a)          ; args passed through
+fccaee:  ld  BC,(XSP+0x0c)
+fccaf6:  call T,XHL
+fccaf8:  ld  XBC,XHL                ; handler returns a POINTER
+fccafa:  cp  (XBC),0xffff           ;   +0x00 == 0xFFFF means invalid
+fccb00:  ld  WA,(XBC+0x02)          ;   +0x02 is the value
+```
+
+### The two tables are adjacent, and so are their handlers
+
+| table | address | entries | handler range |
+|---|---|---:|---|
+| `+0x0C` dispatch | `0x00EE10D0` | 7 | `0x00FCD1EC` … `0x00FCD395` |
+| `+0x0D` dispatch | `0x00EE10EC` | 9 | `0x00FCD396` … `0x00FCD9E4`+ |
+
+`0xEE10EC - 0xEE10D0 = 0x1C = 7 x 4`, so the second table begins exactly where
+the first ends; and `+0x0D` handler 0 starts at `0x00FCD396`, exactly where
+`+0x0C` handler 6 finishes. **One 16-handler module in two families**, which is
+strong corroboration that both tables were read at their true extents rather than
+guessed — the boundaries meet with no gap and no overlap.
+
+### What this means for the descriptor
+
+The query descriptor carries **two independent operation selectors**:
+
+| field | domain | family |
+|---|---:|---|
+| `+0x0C` | 0..6 | READ — returns a value in `HL`, `0xFFFF` for "none" |
+| `+0x0D` | 0..8 | RESOLVE — returns a POINTER to a 4-byte cell (`+0x00` u16 validity, `+0x02` u16 value), taking two caller arguments |
+
+⚠ ESTABLISHED: the two dispatches exist, their domains, their table addresses and
+extents, their handler ranges, and the return convention of each.
+
+⚠ NOT ESTABLISHED: the semantics of the nine `+0x0D` handlers (only the dispatch
+was read, not the bodies), what the `(XSP+0x0a) == 5` special case does, and what
+the two caller arguments are.
