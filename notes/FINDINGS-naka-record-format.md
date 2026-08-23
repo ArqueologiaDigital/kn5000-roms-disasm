@@ -635,3 +635,67 @@ That leaves exactly three possibilities, and they are testable:
 
 ⚠ NOT ANSWERED. What is established is that the answer is not "a literal write
 somewhere in the ROM", which was the cheap hypothesis and is now excluded.
+
+---
+
+## The RESOLVE family: the return cell, and two more descriptor fields (2026-08-23)
+
+### Handler 0 (`0x00FCD396`) — the empty case, and it names the return cell
+
+```asm
+	ld   XIY,0x00edba2c        ; ROM template
+	ld   XIX,0x00009638        ; RAM scratch cell
+	ld   BC,6
+	ldirw                      ; copy 6 WORDS = 12 bytes
+	lda  XHL,0x9638
+	ld   (XHL),0xffff          ; mark +0x00 INVALID
+	ret
+```
+
+So the RESOLVE family returns a pointer to a **12-byte cell at RAM `0x00009638`**,
+seeded from a ROM template at `0x00EDBA2C`, whose `+0x00` is the validity word.
+That matches the caller's convention exactly — `cp (XBC),0xffff` then
+`ld WA,(XBC+0x02)` — and confirms the cell is 12 bytes rather than the 4 the
+caller's two accesses alone would suggest.
+
+Handler 0 is the RESOLVE counterpart of READ mode 0: both are the "nothing here"
+answer, one returning `0xFFFF` directly and the other returning a cell marked
+invalid.
+
+### Handler 1 (`0x00FCD3AD`) — two fields the READ family never touches
+
+```asm
+	lda  XWA,XDE+0x04
+	ld   A,(XWA)               ; +0x04  block selector, into 0x00EE1160  (as READ)
+	ld   XHL,(XHL+WA)
+	or   XHL,XHL
+	jrl  Z, ...                ; null block -> the empty path
+	ld   A,(XDE+0x07)          ; <-- +0x07, NEW
+	ld   IXL,A
+	cp   IX,BC                 ;     compared against the CALLER's argument
+	jr   LE, ...
+	ld   A,(XDE+0x08)          ; <-- +0x08, NEW
+```
+
+`+0x04` carries the same meaning as in the READ family — the panel-memory block
+selector. `+0x07` and `+0x08` are **used only by RESOLVE**, and both are compared
+against the caller-supplied value in `BC`, which is the shape of a RANGE test.
+
+### Updated field table
+
+| field | READ (`+0x0C`) | RESOLVE (`+0x0D`) |
+|---|---|---|
+| `+0x04` | block selector | block selector (same) |
+| `+0x05` | offset in block | — |
+| `+0x06` | AND mask | — |
+| `+0x07` | — | **bound, compared with the caller's argument** |
+| `+0x08` | — | **second bound** |
+| `+0x09` | shift (low nibble) | — |
+| `+0x0A` | XOR operand | — |
+| `+0x0B` | secondary selector | — |
+| `+0x0C` | **mode 0..6** | — |
+| `+0x0D` | — | **mode 0..8** |
+
+⚠ `+0x07`/`+0x08` as a RANGE is INFERENCE from `cp IX,BC ; jr LE` — a comparison
+against a caller value is consistent with a bound but also with a match test.
+Seven of the nine RESOLVE handlers are still unread.
