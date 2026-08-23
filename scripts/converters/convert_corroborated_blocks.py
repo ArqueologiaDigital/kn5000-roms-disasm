@@ -472,6 +472,23 @@ def translate(text):
             if _bs is not None and _ix is not None:
                 for _m in ("stb_dri", "stw_dri", "stl_dri"):
                     yield f"{_m} {_b9.lower()}, 0x07, 0x{_bs:02x}, 0x{_ix:02x}"
+        # `cp <r>,(<abs>)` and `cp (<abs>),<r>` -- the two directions take
+        # DIFFERENT mnemonic families, found by dumping the sites rather than
+        # reasoning:
+        #     cp A,(0x0d57)  = c1 57 0d f1 = cpda8 a, 0x0d57
+        #     cp (0x0d57),A  = c1 57 0d f9 = cpdm8 0x0d57, a
+        # `da` is register-vs-memory, `dm` is memory-vs-register, and they
+        # differ only in the final opcode byte (f1 vs f9). Width and address
+        # size are invisible in the printed text, so offer the family.
+        if _mn9 == "cp" and _absb and re.match(r'^[A-Za-z]{1,3}$', _a9):
+            for _w in ("8", "16", "32"):
+                yield f"cpda{_w} {_a9.lower()}, {_absb.group(1)}"
+                yield f"cpda{_w}_24 {_a9.lower()}, {_absb.group(1)}"
+        if _mn9 == "cp" and _absa and re.match(r'^[A-Za-z]{1,3}$', _b9):
+            for _w in ("8", "16", "32"):
+                yield f"cpdm{_w} {_absa.group(1)}, {_b9.lower()}"
+                yield f"cpdm{_w}_24 {_absa.group(1)}, {_b9.lower()}"
+
         # `inc|dec <n>,(<abs>)` -- census rule G, +785 B measured. Width and
         # address size are both invisible in the printed text, so offer the
         # family and let the ROM bytes choose:
