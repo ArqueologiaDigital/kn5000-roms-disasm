@@ -37,6 +37,7 @@ EmbeddedPtrTable_v10_naka_sequencer_channels_000D00:
 	.long 0x00000000
 	.long 0xFFFFFFFF
 	.long 0xFFFF0009
+MidiPart_ConfigNameTable:
 	.long MidiParam_PanelCfgTable
 	.long Midi_PartToChMappingTable
 	.long PartName6_Right1
@@ -154,6 +155,7 @@ EmbeddedPtrTable_v10_naka_sequencer_channels_001500:
 	.long 0xF0D200EB
 	.long 0x00040003
 	.long 0x00020000
+Naka_DrawbarReg_Table:
 	.long NakaColor_Palette2
 	.long NakaColor_Palette1
 	.long NakaColor_Palette6
@@ -219,5 +221,3 @@ Palette_8bit_RGBA_2_Data:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x488
 
 ; External label offsets within the binary blob above.
-	.equ MidiPart_ConfigNameTable, NakaData_SeqChannels + 0x0d5c
-	.equ Naka_DrawbarReg_Table, NakaData_SeqChannels + 0x1510

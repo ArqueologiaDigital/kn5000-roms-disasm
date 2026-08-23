@@ -1264,6 +1264,7 @@ EmbeddedPtrTable_v9_naka_widget_names_charmap_004C00:
 	.long 0x6C756166
 	.long 0x6F4E0074
 	.long 0xFF00656E
+IconBitmapNamePtrTable:
 	.long NakaInst_trash_bmp
 	.long 0x00EB2AAE
 	.long 0x00EB2AA6
@@ -1668,4 +1669,3 @@ Naka_FileManagerEntry:
 	.equ IconName_i1, NakaData_WidgetNames + 0x4c12
 	.equ IconName_i0, NakaData_WidgetNames + 0x4c16
 	.equ IconName_Default, NakaData_WidgetNames + 0x4c1a
-	.equ IconBitmapNamePtrTable, NakaData_WidgetNames + 0x4c28

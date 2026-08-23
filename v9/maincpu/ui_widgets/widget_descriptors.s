@@ -442,6 +442,7 @@ EmbeddedPtrTable_v9_naka_widget_descriptors_024400:
 	.long RevEqOnOffFunc
 	.long 0x00000000
 	.long NakaInst_TtMdmenu
+Naka_UIStringRef_Table:
 	.long NakaInst_TtMdRealMsg
 	.long NakaInst_MdPcgModeFunc
 	.long NakaInst_MdDrumTypeFunc
@@ -823,4 +824,3 @@ NakaData_Block007:
 	.equ DspParamName_83_INTENSITY, NakaData_WidgetDescriptors + 0x01be7	; slot 83 "INTENSITY"
 	.equ DspParamName_84_EXCITE, NakaData_WidgetDescriptors + 0x01bf8	; slot 84 "EXCITE"
 	.equ DspParamName_85_Blank, NakaData_WidgetDescriptors + 0x01c09	; slot 85 "(spare)"
-	.equ Naka_UIStringRef_Table, NakaData_WidgetDescriptors + 0x244a8

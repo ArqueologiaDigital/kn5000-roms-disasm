@@ -36,6 +36,7 @@ EmbeddedPtrTable_v10_naka_technichord_strings_01AB00:
 	.long CheckPasswordOk
 	.long CheckPasswordNo
 	.long 0x00000000
+PtrTbl_DiskFuncNames:
 	.long Str_InsertOptionText
 	.long Str_TypePriorityText
 	.long Str_JumpInsertFunc
@@ -53,6 +54,7 @@ EmbeddedPtrTable_v10_naka_technichord_strings_01AB00:
 	.long Str_DiskSure
 	.long Str_FormatText
 	.long Str_DeleteText
+Data_DiskFuncPtrTbl_EA0B12:
 	.long Str_SaveText
 	.long Str_DeleteYes
 	.long Str_DeleteNo
@@ -66,6 +68,7 @@ EmbeddedPtrTable_v10_naka_technichord_strings_01AB00:
 	.long Str_CheckPasswordOk
 	.long Str_CheckPasswordNo
 	.long Data_PasswordSep_EA0B46
+Data_PasswordSep_EA0B46:
 	.long 0x6843FF00
 	.long 0x506B6365
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AC00, 0x87E
@@ -799,10 +802,7 @@ EmbeddedPtrTable_v10_naka_technichord_strings_01AB00:
 	.equ Str_AllOption_EA0980, NakaData_TechniChordStrings + 0x1aa32
 	.equ Str_AllOption_EA09B2, NakaData_TechniChordStrings + 0x1aa64
 	.equ Data_SaveLoadMenuTable, NakaData_TechniChordStrings + 0x1aaa2
-	.equ PtrTbl_DiskFuncNames, NakaData_TechniChordStrings + 0x1ab80
 	.equ Data_DiskFuncPtrTbl_EA0B00, NakaData_TechniChordStrings + 0x1abb2
-	.equ Data_DiskFuncPtrTbl_EA0B12, NakaData_TechniChordStrings + 0x1abc4
-	.equ Data_PasswordSep_EA0B46, NakaData_TechniChordStrings + 0x1abf8
 	.equ Str_CheckPasswordNo, NakaData_TechniChordStrings + 0x1abfa
 	.equ Str_CheckPasswordOk, NakaData_TechniChordStrings + 0x1ac0a
 	.equ Str_CheckPasswordText, NakaData_TechniChordStrings + 0x1ac1a
