@@ -30,6 +30,13 @@ because the file is the artefact and only the directive is our description of it
 TWO INDEPENDENT QUALIFICATION PATHS. A table is accepted if EITHER holds:
 
   P1 SYMBOL  >= 90% of words hit an exact ELF symbol address (null 1.79%).
+  P4 RESOLVE-DOMINANT  >=10x the 1.9% symbol-resolution null among non-null
+     words, regardless of the in-range fraction. Landing in ROM range is WEAK
+     evidence (that range is a sixth of the u32 space); hitting a defined symbol
+     is strong. `naka_sequencer_channels` 0x000d00 resolves 95.2% -- 50x the
+     null -- and was rejected only because its in-range figure was 95.2% against
+     a 98% floor, i.e. the weak test was vetoing the strong one.
+
   P3 NON-NULL   >=98% of the NON-ZERO words land in ROM range, and they resolve
      far above the 1.9% null. A zero is an EMPTY SLOT, not a failed pointer;
      counting nulls against the table is how a region the sources themselves
@@ -210,13 +217,15 @@ def main():
             p2 = sh >= MIN_STRUCT
             st = nonnull_stats(words, syms)
             p3 = bool(st and st[0] >= MIN_NONNULL and st[1] >= MIN_P3_RESOLVE)
-            if not (p1 or p2 or p3):
+            p4 = bool(st and st[1] >= 0.19)      # 10x the 1.9% null
+            if not (p1 or p2 or p3 or p4):
                 skipped += 1
                 continue
             why = ("P1 symbol" if p1 else
                    f"P2 structure {100*sh:.0f}%" if p2 else
                    f"P3 non-null {100*st[0]:.0f}% in range, {100*st[1]:.0f}% resolve, "
-                   f"{st[3]} nulls")
+                   f"{st[3]} nulls" if p3 else
+                   f"P4 resolve {100*st[1]:.0f}% = {st[1]/0.019:.0f}x null")
             lines = []
             for w in words:
                 lines.append(f"\t.long {syms[w]}" if w in syms
