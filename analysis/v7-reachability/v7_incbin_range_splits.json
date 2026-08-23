@@ -780,6 +780,26 @@
    "slice_bytes": 1085,
    "source": "v7/maincpu/display/scoop_display.s",
    "first": "ldb W, 0xff ; pushw de ; xor DE,DE ; cpdm16 0x0d5a, xde"
+  },
+  {
+   "entry": "0xEFAE59",
+   "bytes": 179,
+   "instructions": 52,
+   "slice": "includes/romslices/v7_transplant_MemConfig_Handler_1.bin",
+   "slice_addr": "0xEFADCE",
+   "slice_bytes": 731,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "call 0xefc68a ; push XIX ; ld XIX,0x00000c9e ; ldw_dri iy, 0x07, 0xf0, 0xf8"
+  },
+  {
+   "entry": "0xEFA6EC",
+   "bytes": 73,
+   "instructions": 24,
+   "slice": "includes/romslices/v7_transplant_PortConfig_DataTable_A.bin",
+   "slice_addr": "0xEFA6D4",
+   "slice_bytes": 97,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "call 0xefc68a ; srl XIZ, 0x01 ; push XIX ; ld XIX,0x0000f1a0"
   }
  ]
 }
