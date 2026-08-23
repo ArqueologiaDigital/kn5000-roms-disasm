@@ -650,6 +650,56 @@
    "slice_bytes": 525,
    "source": "v7/maincpu/boot/interrupt_vector_trampolines.s",
    "first": "dec 6,XSP ; push XIZ ; ldw (XSP+0x04), 0xffff ; ld XIZ,XWA"
+  },
+  {
+   "entry": "0xF0F291",
+   "bytes": 94,
+   "instructions": 28,
+   "slice": "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_tail.bin",
+   "slice_addr": "0xF0F291",
+   "slice_bytes": 543,
+   "source": "v7/maincpu/audio/sound_editor_ui.s",
+   "first": "stda16 (0x06cc), ix ; stda16 (0x06d0), ix ; stda16 (0x06ce), iy ; subdi16 (0x06ce), 0x0005"
+  },
+  {
+   "entry": "0xEFA160",
+   "bytes": 122,
+   "instructions": 31,
+   "slice": "includes/romslices/v7_transplant_ScoopParam_ValueTable.bin",
+   "slice_addr": "0xEF9F83",
+   "slice_bytes": 881,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "stdi8 (0x3678), 0x04 ; stdi8 (0x3679), 0x00 ; stdi8 (0x367a), 0x01 ; call 0xefa749"
+  },
+  {
+   "entry": "0xEFABD2",
+   "bytes": 18,
+   "instructions": 5,
+   "slice": "includes/romslices/v7_transplant_MemoryConfig_Handler_Table_tail.bin",
+   "slice_addr": "0xEFABD2",
+   "slice_bytes": 338,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ld XIY,0x00efac6c ; ld XIX,0x00000d8f ; ldb A, 0xb0 ; ld (XIX),A"
+  },
+  {
+   "entry": "0xEFB9E9",
+   "bytes": 31,
+   "instructions": 10,
+   "slice": "includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid1.bin",
+   "slice_addr": "0xEFB945",
+   "slice_bytes": 950,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "xor A,A ; call 0xefd08d ; call 0xefc375 ; cp A,0x84"
+  },
+  {
+   "entry": "0xEFBA1F",
+   "bytes": 29,
+   "instructions": 19,
+   "slice": "includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid1_tail.bin",
+   "slice_addr": "0xEFBA08",
+   "slice_bytes": 755,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "push XWA ; push XHL ; push XBC ; push XDE"
   }
  ]
 }

@@ -4796,7 +4796,36 @@ SeMenu_ShowConfirmDialog_Data:
 	adddi16 (0x06d2), 0x000e
 	call SeMenu_NameEditor_ChangeCase_Data
 	ret
-	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_tail.bin"
+	stda16 (0x06cc), ix
+	stda16 (0x06d0), ix
+	stda16 (0x06ce), iy
+	subdi16 (0x06ce), 0x0005
+	stda16 (0x06d2), iy
+	subdi16 (0x06d2), 0x0001
+	pushw ix
+	pushw iy
+	call SeMenu_NameEditor_InsertChar
+	popw iy
+	popw ix
+	stda16 (0x06cc), ix
+	stda16 (0x06ce), iy
+	stda16 (0x06d0), ix
+	adddi16 (0x06d0), 0x001c
+	stda16 (0x06d2), iy
+	adddi16 (0x06d2), 0x000c
+	pushw ix
+	pushw iy
+	call SeMenu_NameEditor_ChangeCase_Data
+	popw iy
+	popw ix
+	ldb C, 0x05
+	ld XIZ,SeMenu_ShowConfirmDialog_Data_0x3F4
+.Lc_f0f2e0:
+	ld HL,(XIZ)
+	ld DE,(XIZ+0x02)
+	add XIZ,0x00000004
+	stda16 (0x06cc), ix
+	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_tail_tail.bin"
 SeMenu_WaveformSelect_Init:
 	.long SeBitmap_EnvCurve5
 	.long SeBitmap_EnvCurve4
