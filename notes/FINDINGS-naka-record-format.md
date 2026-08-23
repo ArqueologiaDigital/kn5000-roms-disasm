@@ -1040,3 +1040,46 @@ With `+0x00` now known to be the key:
 
 ⚠ The first descriptor spans `0x6A` bytes to the next, not `0x12`, so 18 is the
 common stride and not a proven invariant.
+
+---
+
+## ✅ INDEPENDENT CONFIRMATION: the handlers already had names, displaced by 0x41A
+
+The 16 dispatch handlers documented above were read from the code, with no names
+attached — the ROM's symbol table has nothing at `0x00FCD1EC..0x00FCD9E4`.
+
+Separately, `check_0x41A_contradiction.py` found 126 v7 symbols whose only 32-bit
+ROM pointer sits at `address - 0x41A`. Listing them
+(`tools/spelling-probes/list_0x41A_suspects.py`) puts their candidate addresses
+exactly on these handlers, and **the names describe what the code does**:
+
+| candidate | behaviour established from the code alone | displaced name |
+|---|---|---|
+| `0xFCD1EC` | READ mode 0 — `ld HL,0xffff ; ret`, the "no result" stub | `SndParam_ReturnNotFound` |
+| `0xFCD1F0` | READ mode 1 — `((block[+0x05] ^ +0x0A) & +0x06) >> +0x09` | `SndParam_ReadRegField` |
+| `0xFCD22E` | READ mode 2 — selects a block through a second table | `SndParam_ReadRegWithLUT` |
+| `0xFCD272` | READ mode 3 — mode 1's extraction via `XBC` | `SndParam_CompareRegField` |
+| `0xFCD2D5` | READ mode 4 — reads a **u16**, membership-tests it | `SndParam_ReadRegWord` |
+| `0xFCD31A` | READ mode 5 — mode 1 guarded by a bit test | `SndParam_ReadRegBitfield` |
+| `0xFCD373` | READ mode 6 — u16 at `block+0x08` masked to 9 bits | `SndParam_ReadRegAddress` |
+| `0xFCD396` | RESOLVE 0 — copies a 12-byte template, marks it invalid | `SndParam_ResetDefaultTable` |
+
+`SndParam_ReturnNotFound` on the stub I described as "the no-result answer",
+`SndParam_ReadRegWithLUT` on the one that indexes a second table, and
+`SndParam_ResetDefaultTable` on the one that reseeds a template and marks it
+invalid — three names landing on three behaviours derived without them.
+
+**Two independent routes agree**: reading the instructions, and following pointers
+the firmware dereferences. Neither used the other. That confirms
+
+1. the handler semantics documented above, and
+2. that these 126 names are displaced by exactly `+0x41A`,
+
+and it means this subsystem is **not** an unnamed block of code — it is a named
+one whose names are in the wrong place.
+
+⚠ STILL NOT MOVED. 981 label repairs on weaker evidence were reverted earlier in
+this project, and the failure mode of a wrong move is silent. The queue with
+per-name evidence is `tools/spelling-probes/list_0x41A_suspects.py`; 61 of the
+126 candidates open with a frame prologue, which ranks them but does not decide
+them.
