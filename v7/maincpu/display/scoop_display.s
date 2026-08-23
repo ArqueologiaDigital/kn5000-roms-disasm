@@ -4557,7 +4557,63 @@ MemConfig_Handler_0:
 	jp MemConfig_Handler_0_0x24
 	ret
 MemConfig_Handler_1:
-	.incbin "includes/romslices/v7_transplant_MemConfig_Handler_1.bin"
+	.incbin "includes/romslices/v7_transplant_MemConfig_Handler_1_head.bin"
+	call VoiceSlot_ComputeWordIndex
+	push XIX
+	ld XIX,0x00000c9e
+	ldw_dri iy, 0x07, 0xf0, 0xf8
+	pop XIX
+	cp IY,0xffff
+	jrl nz, .Lc_efae74
+	jp MemConfig_Handler_1_0x13D
+.Lc_efae74:
+	srl IZ, 0x01
+	push XIX
+	ld XIX,0x00000cbe
+	ldb_dri a, 0x07, 0xf0, 0xf8
+	pop XIX
+	xor W,W
+	inc 1,WA
+	cp WA,0x00ff
+	jrl ule, .Lc_efaee4
+	push XIX
+	ld XIX,0x0000f218
+	stib_ind 0x07, 0xf0, 0xf8, 0x05
+	sla IZ, 0x01
+	ld XIX,0x00000c9e
+	ldw_dri iy, 0x07, 0xf0, 0xf8
+	pop XIX
+	call VoiceSlot_UpdateCurrentPointer
+	ldda32 xhl, (0x10fd)
+	ld IY,(XHL+0x03)
+	push XIX
+	ld XIX,0x0000f1f8
+	stw_dri iy, 0x07, 0xf0, 0xf8
+	pop XIX
+	cp IY,0xffff
+	jrl z, .Lc_efaf0b
+	call VoiceSlot_UpdateCurrentPointer
+	ldda32 xhl, (0x10fd)
+	ld IY,(XHL+0x03)
+	cp IY,0xffff
+	jrl z, .Lc_efaf0b
+	ldw_d16 wa, (0x286d)
+	call VoiceSlot_FinalRetZ_0x1B2
+	jp MemConfig_Handler_1_0x13D
+.Lc_efaee4:
+	push XIX
+	ld XIX,0x0000f218
+	stb_dri a, 0x07, 0xf0, 0xf8
+	sla IZ, 0x01
+	ld XIX,0x00000c9e
+	ldw_dri iy, 0x07, 0xf0, 0xf8
+	ld XIX,0x0000f1f8
+	stw_dri iy, 0x07, 0xf0, 0xf8
+	pop XIX
+	jp MemConfig_Handler_1_0xF8
+.Lc_efaf0b:
+	ret
+	.incbin "includes/romslices/v7_transplant_MemConfig_Handler_1_tail.bin"
 MemConfig_Handler_3:
 	.byte 0x1d, 0xc8, 0xb0, 0xef, 0x1d, 0x55, 0xb1, 0xef
 	.byte 0x1d, 0xeb, 0xb0, 0xef, 0x1d, 0x73, 0xb5, 0xef
