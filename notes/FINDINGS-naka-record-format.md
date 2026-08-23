@@ -699,3 +699,61 @@ against the caller-supplied value in `BC`, which is the shape of a RANGE test.
 ⚠ `+0x07`/`+0x08` as a RANGE is INFERENCE from `cp IX,BC ; jr LE` — a comparison
 against a caller value is consistent with a bound but also with a match test.
 Seven of the nine RESOLVE handlers are still unread.
+
+---
+
+## ⚠ QUALIFICATION: the header signature is too narrow, and the census undercounts
+
+Trying to find where the 12 "variable-length" types carry their length produced
+**0 of 22** — no byte or u16 position predicts the observed length. A uniform
+negative is exactly what this project's spec says to distrust, so the search was
+self-tested against a synthetic type with a length planted at `+0x05`: it finds
+it exactly. **The method works, so the negative is real GIVEN the lengths I fed
+it — which puts the fault in the length measurement.**
+
+Looking at the type-`0x2E` records whose distance-to-next-header exceeds the
+modal 26, the excess begins with:
+
+```
+0xE1868E  +26:  26 00 64 01 ...
+0xE286AE  +26:  01 00 68 01 ...
+0xE83634  +26:  0a 00 61 01 ...
+0xEA1808  +26:  05 00 65 01 ...
+```
+
+`XX 00 **64** 01`, `XX 00 **68** 01`, `XX 00 **61** 01`, `XX 00 **65** 01` — the
+same shape as `naka_header` but with a THIRD BYTE that is not `0x60`. My scan
+looks for `XX 00 60 01` only, so it steps over these and reports one long record
+where there are two.
+
+### How much of the variance this explains — measured, not assumed
+
+For every record longer than its type's modal length, is there a header-shaped
+word (`?? 00 ?? 01`) at exactly the modal offset?
+
+| | |
+|---|---:|
+| over-long records tested | 761 |
+| header-shaped word exactly at the modal length | **168 (22%)** |
+| not | 593 (78%) |
+| CONTROL: random ROM offsets that are header-shaped | **0.85%** |
+
+22% against a 0.85% control is a 26x enrichment — those 168 are real missed
+headers, not coincidence. **But 78% are not explained this way**, so a narrow
+signature is a genuine defect and not the whole story.
+
+⚠ `XX 00 ?? 01` cannot simply replace the signature: it matches 8,594 times in
+the blob spans with all 256 third-byte values present, so most of those are
+noise. The third byte is doing something — `0x60` is 85x the uniform baseline —
+but which values are valid headers is NOT established.
+
+### What this qualifies
+
+* **The 2,857-header census is a LOWER BOUND.** At least 168 records were merged
+  into their neighbours.
+* **The 10 pinned lengths stand** — they are modal over large populations and a
+  missed header only ever makes a record look longer, never shorter.
+* **The 12 "variable-length" types are partly an artefact** of the narrow
+  signature. How much is unknown; 22% of the over-long cases are explained.
+* The field layouts stand: they were computed only from records at exactly the
+  modal length, which excludes every merged pair by construction.
