@@ -502,13 +502,20 @@ def translate(text):
         #                        = stiw_ind 0x07, 0xf0, 0xf8, 0xff, 0xff
         # 0x07 is the mode byte for a 16-bit index register; the sub-opcode
         # (00 byte / 02 word) is invisible in the printed text, so offer both.
-        if _mn9 == "ld" and re.match(r'^\([A-Za-z]{2,3}\+[A-Za-z]{1,3}\)$', _a9) \
+        if _mn9 in ("ld", "cp") and re.match(r'^\([A-Za-z]{2,3}\+[A-Za-z]{1,3}\)$', _a9) \
                 and re.match(r'^0x[0-9a-fA-F]+$', _b9):
             _rr2 = re.match(r'^\(([A-Za-z]{2,3})\+([A-Za-z]{1,3})\)$', _a9)
             _bs3 = _RIDX.get(_rr2.group(1).upper())
             _ix3 = _RIDX.get(_rr2.group(2).upper())
             if _bs3 is not None and _ix3 is not None:
                 _v = int(_b9, 16)
+                # `cp (base+index),imm` uses the SAME three-address-byte shape
+                # with prefix 0xC3 and sub-opcode 0x3F. That instruction did not
+                # exist in the backend and was added as `cpib_ind`.
+                if _mn9 == "cp":
+                    for _mode in (0x07, 0x03):
+                        yield (f"cpib_ind 0x{_mode:02x}, 0x{_bs3:02x}, "
+                               f"0x{_ix3:02x}, 0x{_v & 0xff:02x}")
                 for _mode in (0x07, 0x03):
                     yield (f"stib_ind 0x{_mode:02x}, 0x{_bs3:02x}, 0x{_ix3:02x}, "
                            f"0x{_v & 0xff:02x}")

@@ -7,12 +7,13 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 1b9432474daa
-Date: 2026-08-22
-Subject: [TLCS900] Fix two silently-wrong sub-opcodes in the F3 memory forms
+Commit: bcf152d1fe00
+Date: 2026-08-23
+Subject: [TLCS900] Add cpib_ind, the register-indexed compare with an immediate
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 1b9432474daa  [TLCS900] Fix two silently-wrong sub-opcodes in the F3 memory forms
 #   Commit: cb165c5cdc4b  [TLCS900] Add ERP-byte LD short-immediate and LD register forms
 #   Commit: f7a3cb91e999  [TLCS900] Add register-indexed LOAD forms (ldb/ldw/ldl_dri)
 #   Commit: 6c3c6d755ba2  [TLCS900] Accept `scc` for the encodable SCC forms
@@ -122,3 +123,24 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # fails loudly at assembly time, a wrong sub-opcode assembles and lies.
 #
 # Verified with a full `make clean-all && make all` on this pin: 9/9 at 100.00%.
+
+# UPDATE 6 (2026-08-23): bcf152d1fe00 adds cpib_ind, the register-indexed
+# compare with an immediate. The STORE direction existed (STIB_DRI, 0xF3 prefix,
+# sub-opcode 0x00); the COMPARE direction had no mnemonic, so `cp (XIX+IZ),0x0c`
+# -- c3 07 f0 f8 3f 0c in v7 -- could not be written in any spelling. CP8mi
+# covers `cp (r+d),imm` through MEMri and collapses to the bare core `3f 0c`.
+#
+# ⚠ OpSize is pinned to 8-bit. The emitter adjusts the prefix by size for any
+# Opcode < 0xF0 (C3/D3/E3); STIB_DRI escapes that only because 0xF3 >= 0xF0, so
+# copying its shape emitted 0xE3. Same mechanism as the st_rrw/st_rrl defect
+# fixed in UPDATE 5 -- I had documented it that morning and still needed the
+# encoding to catch me.
+#
+# Session tally, final: FOUR genuinely missing forms added (ldb/ldw/ldl_dri,
+# LDS_ERPB, LD_ERPB_RR, cpib_ind), TWO silent misencodings fixed, and SEVEN
+# claims of "the backend cannot do this" that were spellings not tried -- plus
+# one that was a converter lookup table holding 32 of 256 register bytes. The
+# suspicion is wrong far more often than it is right; one llvm-mc call settles it.
+#
+# Verified: all six rebuilt ROMs byte-identical via
+# scripts/analysis/assert_byte_identical.py (NOT a rounded percentage).
