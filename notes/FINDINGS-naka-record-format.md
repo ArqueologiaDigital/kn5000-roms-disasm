@@ -314,7 +314,7 @@ immediately before the dispatch answers it
 
 ```asm
 	ld   XBC,0x000007ff
-	call 0xff0435              ; hash the key -> HL, with modulus 0x7FF in XBC
+	call 0xff0435              ; XWA mod XBC -> HL   (a MODULO, not a hash)
 	ld   IX,HL
 .Lc_fccce0:
 	ld   BC,IX
@@ -353,7 +353,7 @@ immediately before the dispatch answers it
 | table size | 2047 x 8 = 16,376 B |
 | entry `+0x00` | u32 key; `0x00FFFFFF` means EMPTY |
 | entry `+0x04` | u32 pointer to a **query descriptor** |
-| lookup | hash via the routine at `0x00FF0435` with modulus `0x7FF` |
+| lookup | `bucket = key mod 0x7FF` — see the correction below |
 | collision | linear probe with **step 3**, wrapping `div WA,0x07ff`, giving up after `HL > 0x7FF` |
 
 So the full path is:
@@ -373,5 +373,35 @@ the probe sequence does visit every bucket — worth stating because a badly cho
 step would make the table silently lossy, and that would be a firmware property
 worth knowing rather than an artefact of my reading.
 
-⚠ NOT established: what the KEY is (which quantity is hashed), the hash function
-at `0x00FF0435`, and who populates the table. Those are the next steps.
+### `0x00FF0435` is a 32-bit divide helper, not a hash
+
+⚠ CORRECTION. I described this as "hash via the routine at `0x00FF0435`". It is
+a general **32-bit division** routine:
+
+```asm
+ff0435:  calr 0xff043b        ; the divide core
+ff0438:  ld XHL,XDE           ; return the REMAINDER
+ff043a:  ret
+ff043b:  cp XBC,0x00000001    ; divisor == 1  -> shortcut
+ff0441:  jr Z, ...
+ff0443:  jr C, ...            ; divisor == 0  -> error path
+ff0445:  cp XWA,XBC
+ff0447:  jr ULE, ...          ; dividend <= divisor -> shortcut
+ff0449:  cp QBC,0             ; 64-bit path when the high half is set
+ff044c:  jr NZ, ...
+ff0450:  div XWA,BC
+ff0458:  ld HL,WA             ;   HL = QUOTIENT
+ff045a:  ld DE,QWA            ;   DE = REMAINDER
+```
+
+The core returns quotient in `HL` and remainder in `DE`; the `0xFF0435` wrapper
+then does `ld XHL,XDE`, so **it returns `XWA mod XBC`**. With `XBC = 0x7FF` the
+call computes `key mod 2047` — the bucket index is a plain modulo, and there is
+no hash function in this path at all.
+
+That also makes `0x00FF0435` a reusable library routine worth naming: 32-bit
+modulo, with shortcut paths for divisor 1, divisor 0, dividend <= divisor, and a
+64-bit dividend.
+
+⚠ STILL NOT established: what the KEY is (which quantity is reduced mod 2047),
+and who populates the table.
