@@ -1730,9 +1730,12 @@ UIState_DispatchHandler:
 UIState_CallDecHandler:
 	call VoiceSlot_TableSetup_0x56D
 UIState_CheckValueChanged:
-	.byte 0xd1, 0x7e, 0x36, 0x20, 0xd1, 0xe8, 0x0e, 0xf0
-	.byte 0x7e, 0x0c, 0x00, 0x1d, 0x73, 0x5c, 0xef, 0x1d
-	.byte 0xa5, 0x5c, 0xef, 0x1b, 0xd6, 0x6e, 0xef
+	ldw_d16 wa, (0x367e)
+	cpda16 xwa, 0x0ee8
+	jrl nz, UIState_UpdateAllRegions
+	call Display_UpdateRegion8
+	call Display_UpdateRegion10
+	jp UIState_Dispatch_Ret
 UIState_UpdateAllRegions:
 	call UIState_UpdateMultiRegions
 UIState_Dispatch_Ret:

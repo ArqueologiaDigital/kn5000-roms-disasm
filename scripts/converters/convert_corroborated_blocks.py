@@ -472,6 +472,25 @@ def translate(text):
             if _bs is not None and _ix is not None:
                 for _m in ("stb_dri", "stw_dri", "stl_dri"):
                     yield f"{_m} {_b9.lower()}, 0x07, 0x{_bs:02x}, 0x{_ix:02x}"
+        # ⚠ A 16-BIT REGISTER IS SPELLED WITH ITS 32-BIT NAME in the direct-
+        # address ALU forms. unidasm prints `cp WA,(0x0ee8)` for `d1 e8 0e f0`,
+        # and the spelling that emits those bytes is `cpda16 XWA, 0x0ee8` --
+        # the `16` names the ADDRESS width, the operand class is GPR, and the
+        # register code is the same. Writing `wa` fails with "invalid operand"
+        # and looks exactly like a missing backend form; it is not one. This is
+        # the same trap as `lda`/`stb_dri` earlier: the printed register name is
+        # not the name you must write.
+        # Covers cp/add/sub/and/or/xor in both directions, ~20 instances.
+        _X16 = {"WA": "xwa", "BC": "xbc", "DE": "xde", "HL": "xhl"}
+        if _mn9 in ("cp", "add", "sub", "and", "or", "xor") and _absb and _a9.upper() in _X16:
+            for _w in ("16", "32"):
+                yield f"{_mn9}da{_w} {_X16[_a9.upper()]}, {_absb.group(1)}"
+                yield f"{_mn9}da{_w}_24 {_X16[_a9.upper()]}, {_absb.group(1)}"
+        if _mn9 in ("cp", "add", "sub", "and", "or", "xor") and _absa and _b9.upper() in _X16:
+            for _w in ("16", "32"):
+                yield f"{_mn9}dm{_w} {_absa.group(1)}, {_X16[_b9.upper()]}"
+                yield f"{_mn9}dm{_w}_24 {_absa.group(1)}, {_X16[_b9.upper()]}"
+
         # `cp <r>,(<abs>)` and `cp (<abs>),<r>` -- the two directions take
         # DIFFERENT mnemonic families, found by dumping the sites rather than
         # reasoning:
