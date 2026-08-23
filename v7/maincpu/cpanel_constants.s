@@ -175,6 +175,40 @@
 .equ CPANEL_CMD_INIT_FINAL,       0x1e	; param 0x80: final initialization
 ;
 ; Panel detection / ping commands:
+
+; =============================================================================
+; !! THE LEFT/RIGHT LABELS ON THE COMMAND CONSTANTS BELOW ARE INVERTED
+; =============================================================================
+; The `_LEFT` names (0x20, 0x25, 0x2b) address the RIGHT panel, and the `_RIGHT`
+; names (0xe0, 0xe2, 0xeb) address the LEFT one. Evidence, from
+; docs/kn5000-control-panel-panel-side.md section 2.6 -- it does not depend on
+; pressing anything:
+;
+;   * index 6 must be able to read 0x0f (four bits), and the service manual's
+;     Flash Memory Update combo is PM1+PM2+PM3+PM4 -- four buttons. So index 6
+;     is on the panel carrying the Panel Memory buttons.
+;   * index 22 must be able to read 0x38 (three bits), and the Factory Reset
+;     combo is the three leftmost RHYTHM GROUP buttons. So index 22 is on the
+;     rhythm/style panel.
+;   => indices 0..15 are the RIGHT panel, 16..31 the LEFT.
+;
+;   `CPanel_PollStartup` sends only `20 0b` and then reads index 11, so a
+;   command with bit 6 CLEAR is answered by the 0..15 half -- the right panel.
+;   The names below say the opposite.
+;
+; They are annotated rather than renamed because they are referenced elsewhere;
+; renaming is a separate change with its own gate. The LED row map further down
+; agrees with the corrected reading (0x00+ rows carry PM1..PM8, 0xc0+ rows carry
+; the rhythm-group and composer LEDs).
+;
+; !! PROVENANCE OF THE BUTTON AND LED BIT MAPS BELOW: only those four
+; (index, mask) pairs are pinned by these ROMs. Every other bit-to-button and
+; row-to-LED assignment came from OBSERVING THE INSTRUMENT -- pressing buttons
+; and running an LED sweep -- not from the firmware. Cite it that way; it is
+; hardware testimony, and it is why section 3.6 of the panel-side document lists
+; this as underivable from the ROMs.
+; =============================================================================
+
 .equ CPANEL_CMD_PING_LEFT,        0x20	; param 0x00: test left panel communication
 .equ CPANEL_CMD_PING_RIGHT,       0xe0	; param 0x00: test right panel communication
 ;
