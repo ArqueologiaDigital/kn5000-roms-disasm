@@ -415,6 +415,23 @@ recognised faster next time.
        share of those offsets are genuine boundaries that SHOULD pass. It measured the wrong thing
        and had to be replaced with one that is wrong by construction.
 
+
+24. **The control measured on the wrong population.** A chance rate is only a chance rate for the
+   population it was sampled from. Asking how often the 3-byte `naka_header` signature occurs at
+   RANDOM OFFSETS ACROSS THE WHOLE ROM gives 0.185%, which predicts ~1,670 accidental hits inside
+   902,979 B of blob span -- more than half of the 2,857 found, enough to make a record-format
+   table worthless. But the blob spans are not ROM-typical bytes. Shuffling **the spans
+   themselves** -- byte frequency preserved, structure destroyed -- gives **13**. The estimate was
+   an order of magnitude out, in the direction that would have destroyed a real finding.
+     * A second, independent check said the same without any sampling: accidental hits carry a
+       uniform type byte, so they would spread across ~256 values a few at a time. Only 94 type
+       values occur at all, and the entire tail of 49 types with <=8 hits accounts for 156 hits
+       against 2,701 in the types above it. **When a control and the data's own shape disagree by
+       10x, the control is usually sampling something else.**
+     * Note the asymmetry with anti-patterns 1 and 10: those are checks too weak to fail. This is
+       a control too PESSIMISTIC, which is just as damaging -- it discards true findings and looks
+       rigorous doing it.
+
 ## 6. Definition of done
 
 A ROM image is DONE when all of the following are true, each backed by a committed measurement:
