@@ -35150,6 +35150,7 @@ IntTx0_SendHoldByte 00FCEDE9
 IntTx0_FlagBit1Branch 00FCEDF0
 IntTx0_FlagBit2Branch 00FCEE01
 IntTx0_DequeueAndSend 00FCEE12
+Continue_ClearPositionAndSetSrc1 00FCEE13
 IntTx0_CheckQueueEmpty 00FCEE20
 Continue_Return 00FCEE27
 AltClk_DisabledClockPath 00FCEE28
@@ -35158,6 +35159,7 @@ INTRX0_HANDLER 00FCEE39
 MIDI_RX_BYTE_DISPATCHER 00FCEE6D
 RxDisp_StatusByte 00FCEE8E
 AltClk_NoMatchReturn 00FCEE9E
+AltClk_ContinueArmTx 00FCEEAB
 RxDisp_ClearSysExState 00FCEEBA
 RxDisp_SysExError 00FCEEC6
 RxDisp_DataByteDispatch 00FCEED2
@@ -35202,13 +35204,11 @@ StartTiming_Src1Adjust 00FCF1E3
 StartTiming_Src2Adjust 00FCF1F2
 StartTiming_ClearAndReturn 00FCF201
 Continue_SetRunning 00FCF207
-Continue_ClearPositionAndSetSrc1 00FCF22D
 AltClk_StopSrc1Queue 00FCF272
 AltClk_StopSrc3Snapshot 00FCF284
 AltClk_Return 00FCF2A1
 AltClk_NoSrcFlagPath 00FCF2A2
 AltClk_StartArmTx 00FCF2B9
-AltClk_ContinueArmTx 00FCF2C5
 AltClk_Src3DisabledReturn 00FCF2D7
 MIDI_QUEUE_TRACK_EVENT 00FCF2D8
 QueueTrack_FifoWriteOrClear 00FCF300
@@ -35652,6 +35652,7 @@ MidiChan_DequeueVoiceEntry 00FD5A45
 MidiChan_NibbleLookup_Data 00FD5A59
 MIDI_ReadChannelParam 00FD5A83
 MidiChan_ParamDispatch 00FD5AA5
+MidiSeq_ScanSlot4_Loop 00FD5AD2
 SeqData_ReadFieldByIndex 00FD5AFF
 SeqData_FieldDispatch 00FD5B21
 MidiSeq_AssignVoiceSlots 00FD5BA0
@@ -35679,7 +35680,6 @@ MidiSeq_Slot3_WriteParams 00FD5E49
 MidiSeq_Slot7_NextEntry 00FD5E51
 MidiSeq_Slot8_WriteParams 00FD5E61
 MidiSeq_Slot3_StorePtr 00FD5EDC
-MidiSeq_ScanSlot4_Loop 00FD5EEC
 MidiSeq_ScanSlot9_Loop 00FD5F04
 MidiSeq_Slot3_NextEntry 00FD5F10
 MidiSeq_Slot4_CheckMatch 00FD5F16
@@ -35826,6 +35826,7 @@ MidiPkt_ArpSecondLoop 00FD7323
 MidiPkt_ArpSecondLoopNext 00FD734A
 MidiPkt_ArpPopReturn 00FD7352
 MidiPkt_ArpConfigChain_Data 00FD7356
+MidiTable_CheckSpecialSlot 00FD737C
 MidiPkt_RetStub_B 00FD763E
 MidiPkt_ArpConfigChain_Data_0x34C 00FD76A2
 MidiPkt_ArpChordHandler 00FD76F2
@@ -35836,7 +35837,6 @@ ArpChord_FinalizePass 00FD7732
 ArpChord_ClearBitAndReturn 00FD7739
 MidiTable_DispatchHelper 00FD773E
 MidiTable_FlushArpNotes 00FD7778
-MidiTable_CheckSpecialSlot 00FD7796
 MidiTable_UseDefaultBuf 00FD77A4
 MidiTable_CallFlush 00FD77AB
 MidiPkt_InitSingleField_Data 00FD77B0
@@ -36267,6 +36267,7 @@ SwbtWr_QueuePostEvent_Done 00FDB05A
 SwbtWr_TrailingBytecode 00FDB05B
 PreLswLoad 00FDB07D
 PostLswLoad 00FDB084
+MidiSeq_SendMultiByte_PC2NextByte 00FDB0C5
 MidiSeq_SendMultiByte_SerialCountInit 00FDB0D4
 PreLswSave 00FDB0D7
 PostLswSave 00FDB0D8
@@ -36301,7 +36302,6 @@ MidiSeq_SendMultiByteWithTiming 00FDB481
 MidiSeq_SendMultiByte_CompIface 00FDB497
 MidiSeq_SendMultiByte_PC2CountInit 00FDB4AA
 MidiSeq_SendMultiByte_PC2SendLoop 00FDB4B2
-MidiSeq_SendMultiByte_PC2NextByte 00FDB4DF
 MidiSeq_SendMultiByte_SerialNextByte 00FDB518
 MidiSeq_SendMultiByte_Exit 00FDB525
 SeqBuf_DspSysEx_ReadAndForward_Loop 00FDB530
@@ -36678,6 +36678,7 @@ AudioInit_Pan_CheckMode1 00FDF56F
 AudioInit_Pan_CheckMode1b 00FDF57C
 AudioInit_Pan_SetStereoRight 00FDF583
 AudioInit_Pan_CheckTypeED 00FDF58A
+AudioInit_VoiceCompare_LayerChanged 00FDF599
 AudioInit_Pan_TypeED_Left 00FDF5A6
 AudioInit_VoiceCompare_LayerNext 00FDF5A9
 AudioInit_Pan_DefaultCenter 00FDF5AD
@@ -36691,6 +36692,7 @@ AudioInit_Pan_Reverb_TypeED_Left 00FDF60B
 AudioInit_Pan_Reverb_Center 00FDF612
 AudioInit_VoiceCompare_SetBit3 00FDF616
 AudioInit_Pan_Reverb_CopyFromMain 00FDF619
+AudioInit_VoiceCompare_BuildCmd 00FDF61C
 AudioInit_Pan_Done 00FDF61F
 AudioInit_CheckStereoMode 00FDF626
 AudioInit_Stereo_CheckBit1 00FDF63C
@@ -36721,9 +36723,7 @@ AudioInit_CompareVoiceConfig 00FDF8C5
 AudioInit_VoiceCompare_BothFF 00FDF90F
 AudioInit_PartConfig_CheckCarry 00FDF91F
 AudioInit_VoiceCompare_LayerLoop 00FDF94A
-AudioInit_VoiceCompare_LayerChanged 00FDF9B3
 AudioInit_VoiceCompare_NotBothFF 00FDF9CE
-AudioInit_VoiceCompare_BuildCmd 00FDFA36
 AudioInit_VoiceCompare_QueueCmd 00FDFA3E
 AudioInit_VoiceCompare_PanCheck 00FDFA50
 AudioInit_ChannelMap_Loop 00FDFA88
@@ -36802,6 +36802,7 @@ AccNoteOn_EmitVoiceLoop_Check 00FE0453
 AccNoteOn_MergeLayer1 00FE049A
 AccNoteOn_MergeLayer2 00FE04CD
 AccNoteOn_MergeLayer3 00FE0500
+RhythmMidi_CC_PostProcess 00FE052E
 AccNoteOn_CheckSpecialChannel 00FE0539
 AccNoteOn_SpecialMergeAndAdd 00FE056E
 AccNoteOn_SpecialDirectAdd 00FE0598
@@ -36830,7 +36831,6 @@ RhythmMidi_CC7D_PartNext 00FE08C1
 RhythmMidi_CC_Default 00FE08CB
 RhythmMidi_CC_Standard 00FE0913
 RhythmMidi_CC_UpdateOutput 00FE0933
-RhythmMidi_CC_PostProcess 00FE0948
 RhythmMidi_CC_PostLoop 00FE0950
 NoteMap_ProcessMerge_SpecialPath 00FE0978
 RhythmMidi_CC_PostNext 00FE098D
@@ -37010,6 +37010,7 @@ FinalizeCount_LoadParam 00FE1FF5
 FinalizeCount_LoadParam2 00FE1FFC
 NoteMap_EncodeCC_Recheck 00FE204C
 FinalizeCount_LoadReg 00FE2050
+EncodeControlChange_LoadParam 00FE206B
 FinalizeCount_AdvanceSlot 00FE20B5
 Voice_BuildProgramNotify 00FE20BB
 VoiceNotify_SendAllNotesOff 00FE20EA
@@ -37035,7 +37036,6 @@ ParseEventLoop_ReadAlt2 00FE2401
 ParseEventLoop_ReadAlt3 00FE2419
 ParseEventLoop_CheckIdx 00FE242D
 NoteMap_EncodeControlChange 00FE246F
-EncodeControlChange_LoadParam 00FE2485
 EncodeControlChange_CheckIdx 00FE24A6
 EncodeControlChange_LoadIdx 00FE2538
 EncodeControlChange_AdvanceSlot 00FE2598
@@ -37101,6 +37101,7 @@ LookupAllocAndSetCha_LoadFromStack 00FE2FAD
 LookupAllocAndSetCha_LoadFromStack2 00FE2FD9
 NoteMap_PopRetFA_StoreAE2 00FE3005
 NoteMap_UpdateEntry 00FE300E
+AllocVoice_Done_LoadParam 00FE300F
 NoteMap_FallbackAllocEmit 00FE3061
 NoteMap_AllocVoiceEntry_Continue 00FE306C
 UpdateEntry_EmitLoop 00FE3073
@@ -37126,7 +37127,6 @@ PopRetFA_StoreAE3_Prologue 00FE33B7
 Voice_SetParam_Return 00FE33DF
 PopRetFA_StoreAE3_LoadIter 00FE33F0
 NoteMap_AllocVoice_Done 00FE3416
-AllocVoice_Done_LoadParam 00FE3429
 AllocVoice_Done_TryAlloc 00FE345B
 AllocVoice_Done_LoadIter 00FE3474
 NoteMap_ProcessNoteOff_Done 00FE34A6
@@ -37319,6 +37319,7 @@ SynthVoice_Return 00FE5873
 WriteChannelDelay_Lo_LoadParam 00FE5874
 NoteMap_MergeEntries 00FE5877
 MergeEntries_FilterLoop 00FE5897
+WriteChannelDelay_Lo_AdjustIdx 00FE58F0
 MergeEntries_NextEntry 00FE58F4
 MergeEntries_CheckCount 00FE58F6
 WriteChannelDelay_Lo_LoadIdx 00FE58FE
@@ -37353,7 +37354,6 @@ CheckNegative_AdjustIdx 00FE5C64
 ApplyTransposeWithEn_LoadParam 00FE5C74
 ApplyTransposeWithEn_LoadParam2 00FE5C7E
 Synth_WriteChannelDelay_Loop 00FE5C86
-WriteChannelDelay_Lo_AdjustIdx 00FE5D0A
 WriteChannelDelay_Lo_AdjustIdx2 00FE5D1F
 InitChannelState_Che_NextIter 00FE5D4A
 WriteChannelDelay_Lo_LoadParam3 00FE5D6B
@@ -37848,6 +37848,7 @@ InitPartAllocState_Block3 00FE9CF1
 InitPartAllocState_Epilogue 00FE9CF4
 InitPartAllocState_Block4 00FE9CF7
 InitPartAllocState_TestBit242 00FE9D12
+VoiceSlot_CheckAndApply_LoadReg 00FE9D33
 InitPartAllocState_Increment 00FE9D96
 InitPartAllocState_Return 00FE9DA4
 InitPartAllocState_OrBits 00FE9DA5
@@ -37888,7 +37889,6 @@ SndParam_Init 00FEA01C
 VoiceSlot_CheckAndApply_Data_0x91 00FEA025
 VoiceSlot_CheckAndApply_Data_0xBA 00FEA04E
 VoiceSlot_CheckAndApply_Data_0x189 00FEA11D
-VoiceSlot_CheckAndApply_LoadReg 00FEA14D
 VoiceSlot_CheckAndApply_Data2 00FEA15F
 VoiceSlot_CheckAndApply_Prologue 00FEA2D3
 VoiceSlot_CheckAndApply_Compare 00FEA2ED
@@ -38077,6 +38077,7 @@ PlayModeStateMachine_DoPlayMode2 00FEBFFB
 SeqFile_SkipTrackPad_Init 00FEC013
 PlayModeStateMachine_Block4 00FEC014
 PlayModeStateMachine_TestBit22 00FEC03A
+SeqFile_ReadTrackLength 00FEC03E
 PlayModeStateMachine_Block5 00FEC04B
 PlayModeStateMachine_Prologue 00FEC050
 SeqFile_Epilogue 00FEC064
@@ -38131,7 +38132,6 @@ SeekRecord_PopReturn_Epilogue 00FEC435
 SeekRecord_PopReturn_Data 00FEC43A
 SeqFile_SkipTrackPad_Loop 00FEC43D
 SeqFile_SkipTrackPad_Next 00FEC44A
-SeqFile_ReadTrackLength 00FEC458
 SeqFile_AccumulateLength 00FEC478
 SeqInit_SetDefaultMode 00FEC497
 SeqInit_ConfigureBanks 00FEC49C
@@ -38237,6 +38237,7 @@ SeqPlay_CheckStatusByte 00FECB86
 SeqPlay_ReadRemainingBytes 00FECBA3
 SeqPlay_ReadByte_Loop 00FECBAD
 SeqPlay_StoreByte 00FECBBD
+Epilogue_InitVal 00FECC09
 SeqPlay_CheckSysExMarker 00FECC1B
 SeqVoice_InitZeroPath 00FECC4B
 SeqPlay_CopyToMidiBuffer 00FECC51
@@ -38279,7 +38280,6 @@ RecordReadOK_LoadReg6 00FECF5E
 Dispatch_InitVal2 00FED000
 Epilogue_LoadReg 00FED002
 Dispatch_Data 00FED007
-Epilogue_InitVal 00FED023
 Epilogue_LoadIter 00FED02B
 Epilogue_Block 00FED041
 Epilogue_Prologue2 00FED051
@@ -38374,6 +38374,7 @@ StoreAndAdvance_LoopBody 00FEDBA9
 ToneGen_NotifyChangeComplete_Return 00FEDBB3
 NotifyChangeComplete_Prologue 00FEDBB8
 StoreAndAdvance_InitVal2 00FEDBC8
+StoreAndAdvance_RestoreReg 00FEDBCA
 NotifyChangeComplete_Prologue2 00FEDBDB
 NotifyChangeComplete_DoGetCurre 00FEDBEE
 NotifyChangeComplete_SetWord 00FEDC00
@@ -38395,6 +38396,7 @@ InitTrackSlots_LoopCheck 00FEDCED
 SndParam_ApplyMaskClamp 00FEDCEE
 InitTrackSlots_LoadDRAM 00FEDD03
 InitTrackSlots_IncDRAM 00FEDD25
+ApplyMaskClamp_Compare 00FEDD27
 InitTrackSlots_InitVal 00FEDD29
 InitTrackSlots_Return 00FEDD2B
 RingBuffer_ReadByte 00FEDD2C
@@ -38452,7 +38454,6 @@ StoreAndAdvance_Prologue 00FEDFB1
 ApplyProgramChangeAs_Return 00FEDFC8
 ApplyProgramChangeAs_LoadDRAM2 00FEDFC9
 StoreAndAdvance_LoopCheck 00FEDFD1
-StoreAndAdvance_RestoreReg 00FEDFE4
 StoreAndAdvance_Prologue2 00FEDFE8
 StoreAndAdvance_Block 00FEDFF8
 StoreAndAdvance_LoadParam 00FEE00C
@@ -38479,7 +38480,6 @@ CharMap_ActivePreamb_Prologue2 00FEE0F2
 SndParam_InitBufferConverge 00FEE0FA
 ComputeVoiceIndex_Epilogue 00FEE120
 ApplyMaskClamp_LoadParam 00FEE133
-ApplyMaskClamp_Compare 00FEE141
 ApplyMaskClamp_LoadParam2 00FEE154
 ApplyMaskClamp_LoadParam3 00FEE162
 LookupOscEnvelope_LoadDRAM2 00FEE172
@@ -38500,6 +38500,7 @@ StoreDRAMInit_Block 00FEE22A
 StoreDRAMInit_Block2 00FEE23A
 StoreDRAMInit_LoadParam2 00FEE247
 StoreDRAMInit_LoadDRAM 00FEE253
+SndParam_LookupAndDispatch 00FEE255
 StoreDRAMInit_Block3 00FEE275
 StoreDRAMInit_Block4 00FEE280
 SndParam_DispatchProcessParam 00FEE2B5
@@ -38546,7 +38547,6 @@ SndParam_ApplyVoiceValue 00FEE5AF
 SndParam_SetDefaultKeyOff 00FEE5DE
 SndParam_LookupFromPointerTable 00FEE608
 SndParam_CompactLookupStub 00FEE65E
-SndParam_LookupAndDispatch 00FEE66F
 SndParam_ApplyMaskAndCheck 00FEE6AE
 Param_SignExtendRetu_Data_0x264 00FEE6B0
 SndParam_StoreResult 00FEE706
@@ -39102,6 +39102,7 @@ Sprintf_ESci_PadRightLoop 00FF1D68
 Sprintf_ESci_Return 00FF1D72
 Sprintf_FormatGGeneral 00FF1D76
 Sprintf_GGen_ClearArrays 00FF1D9B
+Sprintf_InsertCarry_ClampLoop 00FF1DC8
 Sprintf_GGen_CheckLongDouble 00FF1DD4
 Sprintf_GGen_LoadDigits 00FF1DDE
 Sprintf_GGen_CheckSign 00FF1E00
@@ -39156,7 +39157,6 @@ Sprintf_Normalize_ExtractDigit 00FF2190
 Sprintf_Normalize_Done 00FF21C8
 Sprintf_InsertCarry 00FF21CA
 Sprintf_InsertCarry_Clamp 00FF21E0
-Sprintf_InsertCarry_ClampLoop 00FF21E2
 Sprintf_InsertCarry_Check 00FF21E4
 Sprintf_InsertCarry_Propagate 00FF21F1
 Sprintf_InsertCarry_PropCheck 00FF2204
