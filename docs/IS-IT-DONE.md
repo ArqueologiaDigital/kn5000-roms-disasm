@@ -38,7 +38,16 @@ three classes, and only the first is work anyone can do by reading these ROMs ha
 **C. BLOCKED ON A MISSING ARTEFACT — needs a disk or dump nobody here has**
 
 * what `"M4"`/`"M6"`/`"NN"` are as products: no string in any of the seven images ties them to a model
-* ⚠ **UPDATED 2026-08-23 — `0x9A` now has a measured SHAPE, though still no identity.** The `.LSW`
+* ✅ **RESOLVED 2026-08-23 — `0x9A` is a schema slot that is NEVER WRITTEN.** Scanning the full
+  `0xE40` panel window in the **19 real panel memories** carried by the decompressed demo presets:
+  **0/19** contain it at its declared `len = 26`; **1/19** contains the byte followed by any
+  plausible length, declaring 64 — a coincidental pair. **Controls: tags `0x78`, `0x71`, `0x43`
+  each appear 19/19**, so the search finds tags that are there. With no tag-specific handler in any
+  revision (`0x00EDAA64`), no code references, no subscriber (the routine credited to it reads RAM
+  `0x00F1A0`, never `0xFFA4`), and a 26-zero-byte factory default, the answer is: it holds nothing.
+  Allocated, sized, addressed, written by nothing. ⚠ Claimed as "unused across every dumped
+  artefact", not "unusable".
+* ⚠ **SUPERSEDED — `0x9A` shape measurement.** The `.LSW`
   record container is `<tag u8><len u8><payload>`, verified on the factory default image: 74 of 77
   header tags match their table index and the 3 exceptions are aliases whose headers carry one of
   their own aliases, so the rule holds 100%. Tag `0x9A` declares **`len = 26`**, distinct from the
