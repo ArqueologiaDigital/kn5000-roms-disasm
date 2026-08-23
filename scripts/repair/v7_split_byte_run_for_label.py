@@ -157,6 +157,16 @@ def main():
                             oldline = ('shared', j); break
                     if oldline is None:
                         break                      # cannot find it: leave alone
+                    # ⚠ THE OLD DEFINITION AND THE SPLIT MAY BE THE SAME LINE, or
+                    # a line another label in this batch already claimed. Writing
+                    # both edits then loses one of them and the BYTE STREAM
+                    # changes: a 1,951-label run produced 578 wrong bytes in v7
+                    # (gate 8/9) while an 18-label run was clean, because the
+                    # collision is rare. Refuse the label instead -- a skipped
+                    # repair costs nothing, a corrupted run costs the tree.
+                    if (oldline[1] == i or oldline[1] in edits or oldline[1] in drop
+                            or i in drop):
+                        break
                     if oldline[0] == 'whole':
                         drop.add(oldline[1])
                     else:
@@ -167,6 +177,8 @@ def main():
                             drop.add(j)
                         else:
                             edits[j] = ('\t' + rest.lstrip()) if not rest.startswith((' ', '\t')) else rest
+                    if i in edits:
+                        break
                     edits[i] = new
                     done += 1
                     break
