@@ -278,15 +278,58 @@ def rom_u32_index(rom):
 
 
 # ---------------------------------- 3. would a cut at the first blocking label help?
-def trial_cut(mod, case):
+def shrink_cut(mod, case, k):
+    """Pull the cut back until every kept branch has a name it can be given.
+
+    A forward `jr`/`jrl`/`calr`/`djnz` whose target lies past the cut is the only
+    thing the cut itself creates: inside the full range that target got a local
+    `.Lc_` label, and past the cut it needs an ELF symbol that usually does not
+    exist.  Dropping the branch INSTRUCTION -- i.e. cutting before it -- removes
+    the problem without naming anything.  This is the converter's own truncation
+    logic (main() already truncates at an unspellable instruction); the only new
+    part is the reason for cutting.
+    """
+    insns, t, a2n = case["insns"], case["entry"], case["addr2name"]
+    while k >= 3:
+        end = t + sum(n for _a, n, _x in insns[:k])
+        bad = None
+        for i in range(k):
+            m = mod.BRANCH_RE.match(insns[i][2].strip())
+            if not m:
+                continue
+            tgt = int(m.group(3), 16)
+            if not (t <= tgt < end) and tgt not in a2n:
+                bad = i
+                break
+        if bad is None:
+            return k
+        k = bad
+    return k
+
+
+def trial_cut(mod, case, reresolve, shrink=False):
     """Hand the real rewrite() the range TRUNCATED at its first blocking label.
 
     Kept instructions are those that END AT OR BEFORE that label, so the cut is
-    valid under both readings of the conflict.  No label is added, moved or
-    dropped, and the byte count is preserved by rewrite()'s own invariant, which
-    still runs here.  Returns (verdict, kept_instructions, kept_bytes, detail).
+    valid under both readings of the conflict, and it adds, moves and drops NO
+    label.  Two variants, because they are two different code changes and must be
+    priced apart:
+
+      reresolve=False  keep the texts the converter already produced.  A branch in
+                       the kept prefix that targets an address PAST the cut then
+                       names a `.Lc_` label that is no longer emitted -- an
+                       undefined symbol at link time -- so the cut is abandoned.
+                       This is main()'s own rule for its existing truncation path.
+      reresolve=True   re-run the converter's own resolve_branches() on the
+                       truncated range.  A target past the cut is now OUTSIDE the
+                       range and can take an ELF symbol name instead, exactly as
+                       any other external branch does; only a target with no name
+                       at all still refuses.  Each re-spelled branch is length-
+                       checked against the ROM bytes the way main() checks it.
+
+    Returns (verdict, kept_insns, kept_bytes, detail).
     """
-    t, span = case["entry"], case["span"]
+    t = case["entry"]
     la = min(a for a, _n in case["off"])
     insns, texts = case["insns"], case["texts"]
     k = 0
@@ -295,11 +338,29 @@ def trial_cut(mod, case):
             k += 1
         else:
             break
+    if shrink:
+        k = shrink_cut(mod, case, k)
     span2 = sum(n for _a, n, _x in insns[:k])
     if k < 3:
-        return "NO-PREFIX", k, span2, f"only {k} instruction(s) end at or before 0x{la:06X}"
-    insns2, texts2 = insns[:k], texts[:k]
+        # main()'s own floor: a decode of fewer than 3 instructions is not
+        # accepted as a range in the first place ("decoded fewer than 3
+        # instructions"), so a cut cannot produce one either.
+        return "NO-PREFIX", k, span2, (f"only {k} instruction(s) survive the cut at "
+                                       f"0x{la:06X}")
+    insns2, texts2 = insns[:k], list(texts[:k])
     br2 = {a: l for a, l in case["br"].items() if t <= a < t + span2}
+    if reresolve:
+        rb = mod.resolve_branches(insns2, t, span2, case["addr2name"])
+        if rb is None:
+            return "UNNAMEABLE-BRANCH", k, span2, "resolve_branches() cannot name a target"
+        bt, br2 = rb
+        for i, (_a, n, _x) in enumerate(insns2):
+            if bt[i] is None:
+                continue
+            e = mod.cc.encode(bt[i])
+            if e is None or len(e) != n:
+                return "BRANCH-LENGTH", k, span2, f"{bt[i]!r} is not {n} byte(s)"
+            texts2[i] = bt[i]
     live = set(br2.values())
     orphan = [x for x in texts2 if x and ".Lc_" in x and x.rsplit(None, 1)[-1] not in live]
     if orphan:
@@ -318,6 +379,31 @@ def trial_cut(mod, case):
     if res is not None:
         return "ACCEPTED", k, span2, os.path.relpath(res, REPO)
     return "STILL-REFUSED", k, span2, (moved[0] if moved else "silent again")
+
+
+def ptr_operand_names(tree):
+    """Every identifier used as an operand of a `.long`-family directive in `tree`.
+
+    This is the address-baking form: `.long Foo` puts Foo's address into the ROM's
+    bytes, so MOVING Foo changes bytes and the byte gate catches it (spec
+    anti-pattern 15).  Collected WITHOUT a name filter so its size doubles as the
+    positive control -- a rule that finds tens of thousands of names here and none
+    among the blocking labels is a rule that was capable of firing.
+    """
+    names = set()
+    root = os.path.join(REPO, tree)
+    for dirpath, _d, files in os.walk(root):
+        for fn in sorted(files):
+            if not fn.endswith(".s"):
+                continue
+            with _real_open(os.path.join(dirpath, fn), "rb") as fh:
+                text = fh.read().decode("latin-1")
+            for line in text.split("\n"):
+                m = LABEL_DEF.match(line)
+                rest = line[m.end():] if m else line
+                if PTR_DIRECTIVE.match(rest):
+                    names.update(WORD.findall(rest.split(";")[0].split("#")[0]))
+    return names
 
 
 def tree_state():
@@ -380,12 +466,21 @@ def main():
     r7, p7, d7, n7 = tree_refs("v7/maincpu", set(names))
     r9, p9, _d9, n9 = tree_refs("v9/maincpu", set(names))
     r10, p10, _d10, n10 = tree_refs("v10/maincpu", set(names))
+    long7 = ptr_operand_names("v7/maincpu")
     ptr, null = rom_u32_index(rom)
-    tj = os.path.join(REPO, "analysis/v7-reachability/v7_branch_closure_targets.json")
-    if not os.path.exists(tj):
-        tj = os.path.join(REPO, "analysis/v7-reachability/v7_call_targets.json")
-    with _real_open(tj) as fh:
-        tset = {int(x, 16) if isinstance(x, str) else x for x in json.load(fh)["targets"]}
+    allsyms = mod.cc.elf_syms("rebuilt_ROMs/kn5000_v7_program.llvm.elf")
+    base_hit = sum(1 for a in allsyms if a in ptr) / float(max(len(allsyms), 1))
+    symnames = set(allsyms.values())
+    long_syms = symnames & long7
+    base_long = len(long_syms) / float(max(len(symnames), 1))
+    def targets_of(rel):
+        f = os.path.join(REPO, rel)
+        if not os.path.exists(f):
+            return set()
+        with _real_open(f) as fh:
+            return {int(x, 16) if isinstance(x, str) else x for x in json.load(fh)["targets"]}
+    seed = targets_of("analysis/v7-reachability/v7_call_targets.json")
+    tset = targets_of("analysis/v7-reachability/v7_branch_closure_targets.json") or seed
 
     def addr_evidence(n):
         """v7-side evidence that this label's ADDRESS is an instruction boundary."""
@@ -393,8 +488,8 @@ def main():
         e = []
         if a in ptr:
             e.append("u32")
-        if p7[n]:
-            e.append(f".long*{p7[n]}")
+        if n in long7:
+            e.append(".long")
         if a in tset:
             e.append("entry")
         return e
@@ -421,9 +516,29 @@ def main():
     print(f"    labels with address evidence : {na}/{len(names)}")
     print(f"    NULL for the u32 test        : {100*null:.2f}% of ALL in-band addresses "
           f"appear as a u32 in this ROM")
+    print(f"    BASE RATE, all {len(allsyms):,} v7 text symbols: {100*base_hit:.2f}% are pointed at "
+          f"by a u32  <- the test fires")
     hit = sum(1 for n in names if addrs[n] in ptr)
+    exp = null * len(names)
     print(f"    observed u32 hit rate        : {hit}/{len(names)} = "
-          f"{100.0*hit/max(len(names),1):.2f}%   (compare with the null on the line above)")
+          f"{100.0*hit/max(len(names),1):.2f}%   (expected under the null: {exp:.1f})")
+    print(f"    ⚠ POWER: with {len(names)} labels and a {100*null:.2f}% null, "
+          f"a count of 0 or 1 is what")
+    print(f"      chance alone produces.  Read it as 'no label in this bucket is a KNOWN")
+    print(f"      pointer target', NOT as 'proven not to be'.")
+    print(f"    control for the `.long` test : {len(long_syms):,} of the {len(symnames):,} v7 text")
+    print(f"      symbols appear as a `.long`-family operand in v7/maincpu "
+          f"({100*base_long:.2f}%), so the")
+    print(f"      rule fires; {sum(1 for n in names if n in long7)} of the {len(names)} "
+          f"blocking labels are among them.")
+    print(f"    ⚠ WHICH NULL?  Against the uniform-address null ({100*null:.2f}%) the expected")
+    print(f"      count is {null*len(names):.1f} and 0 proves little.  Against the base rate for")
+    print(f"      v7 symbols GENERALLY ({100*base_hit:.1f}% u32 / {100*base_long:.1f}% `.long`) the "
+          f"expected counts are")
+    print(f"      {base_hit*len(names):.0f} and {base_long*len(names):.0f}, and 0 is a real "
+          f"signal -- these labels are not the kind of")
+    print(f"      label a pointer table points at.  The true reference class for an INTERIOR")
+    print(f"      label is somewhere between the two, so state the window, not a p-value.")
     nn = sum(1 for n in names if name_evidence(n))
     print(f"  NAME evidence (v7/v9/v10 references -- says the label must not be DELETED,")
     print(f"  says NOTHING about whether its v7 address is an instruction boundary, because")
@@ -441,57 +556,101 @@ def main():
                              verdict="S2-FALL-THROUGH", kept=0, kept_bytes=0,
                              detail="rewrite() found no covering block", addr_ev=[], name_ev=[]))
             continue
-        verdict, kept, kept_bytes, detail = trial_cut(mod, c)
+        verdict, kept, kept_bytes, detail = trial_cut(mod, c, reresolve=False)
+        v2, k2, kb2, d2 = trial_cut(mod, c, reresolve=True)
+        v3, k3, kb3, d3 = trial_cut(mod, c, reresolve=True, shrink=True)
         ln = [n for _a, n in c["off"]]
         rows.append(dict(entry=c["entry"], span=c["span"], labels=ln, verdict=verdict,
                          kept=kept, kept_bytes=kept_bytes, detail=detail,
+                         verdict_rr=v2, kept_rr=k2, kept_bytes_rr=kb2, detail_rr=d2,
+                         verdict_sh=v3, kept_sh=k3, kept_bytes_sh=kb3, detail_sh=d3,
+                         nlab=len(ln), seed=c["entry"] in seed,
                          addr_ev=sorted({e for n in ln for e in addr_evidence(n)}),
                          name_ev=sorted({e.split("*")[0] for n in ln for e in name_evidence(n)})))
 
     print("\n### 4. per range: the labels, the evidence, and what a cut at the first one keeps")
-    print(f"{'entry':>9} {'B':>5} {'keep':>5} {'verdict':<14} {'addr-ev':<18} "
-          f"{'name-ev':<12} labels")
+    print("  'cut' = cut only.  'cut+rr' = cut, then re-run the converter's own")
+    print("  (a third variant, 'cut+rr+shrink', is in section 5 only, to keep this table")
+    print("  readable.)")
+    print("  resolve_branches() so a branch target past the cut takes an ELF symbol name")
+    print("  instead of a `.Lc_` label that is no longer emitted.  Two DIFFERENT code")
+    print("  changes; they are counted apart in section 5.")
+    print(f"\n{'entry':>9} {'B':>5} {'cut B':>6} {'cut':<14} {'cut+rr B':>8} {'cut+rr':<14} "
+          f"{'addr-ev':<8} {'name-ev':<11} labels")
     for r in rows:
-        print(f"0x{r['entry']:06X} {r['span']:5} {r['kept_bytes']:5} {r['verdict']:<14} "
-              f"{','.join(r['addr_ev']) or '-':<18} {','.join(r['name_ev']) or '-':<12} "
-              f"{', '.join(r['labels'])[:60]}")
+        print(f"0x{r['entry']:06X} {r['span']:5} {r['kept_bytes']:6} {r['verdict']:<14} "
+              f"{r['kept_bytes_rr']:8} {r['verdict_rr']:<14} "
+              f"{','.join(r['addr_ev']) or '-':<8} {','.join(r['name_ev']) or '-':<11} "
+              f"{', '.join(r['labels'])[:52]}")
 
     # ---- 5. the split, reported per cause, never summed --------------------
-    def tot(pred):
+    def tot(pred, key="kept_bytes"):
         sel = [r for r in rows if pred(r)]
-        return len(sel), sum(r["span"] for r in sel), sum(r["kept_bytes"] for r in sel)
+        return len(sel), sum(r["span"] for r in sel), sum(r[key] for r in sel)
 
     print("\n### 5. THE CAUSE SPLIT.  Counts and bytes are per cause and are NOT added up.")
-    print("  Column 'range B' is the bytes the refusal currently withholds; column 'prefix B'")
-    print("  is the bytes a cut at the first blocking label would convert -- only the second")
-    print("  is a recoverable number, and only for the rows marked (b).")
-    print(f"\n  {'cause':<46} {'ranges':>6} {'range B':>8} {'prefix B':>9}")
-    order = [
-        ("(b) whole range dropped for a label near its end", lambda r: r["verdict"] == "ACCEPTED"),
-        ("(a) nothing convertible before the first label", lambda r: r["verdict"] == "NO-PREFIX"),
-        ("(a) cut would orphan an internal branch label", lambda r: r["verdict"] == "ORPHAN-BRANCH"),
-        ("(?) cut still refused, for a NAMED reason", lambda r: r["verdict"] == "STILL-REFUSED"),
-        ("(?) cut raised an exception", lambda r: r["verdict"] == "EXCEPTION"),
-        ("(?) S2 fall-through, not the label guard", lambda r: r["verdict"] == "S2-FALL-THROUGH"),
-    ]
-    for label, pred in order:
-        n, b, k = tot(pred)
-        if n:
-            print(f"  {label:<46} {n:6} {b:8,} {k:9,}")
-    acc = [r for r in rows if r["verdict"] == "ACCEPTED"]
+    print("  'range B' is what the refusal currently withholds.  'prefix B' is what the cut")
+    print("  would actually convert.  ONLY 'prefix B' on a (b) row is a recoverable number:")
+    print("  the rest of each range stays `.byte` under this proposal, by design.")
+    for tag, vk, bk in (("CUT ONLY", "verdict", "kept_bytes"),
+                        ("CUT + RE-RESOLVED BRANCHES", "verdict_rr", "kept_bytes_rr"),
+                        ("CUT + RE-RESOLVED + PULLED BACK BEFORE AN UNNAMEABLE BRANCH",
+                         "verdict_sh", "kept_bytes_sh")):
+        print(f"\n  --- {tag}")
+        print(f"  {'cause':<50} {'ranges':>6} {'range B':>8} {'prefix B':>9}")
+        order = [
+            ("(b) whole range dropped for a label near its end", "ACCEPTED"),
+            ("(a) nothing convertible before the first label", "NO-PREFIX"),
+            ("(a) a branch target past the cut cannot be named", "UNNAMEABLE-BRANCH"),
+            ("(b2) cut orphans an internal branch label", "ORPHAN-BRANCH"),
+            ("(?) re-spelled branch is not the original length", "BRANCH-LENGTH"),
+            ("(?) cut still refused, for a NAMED reason", "STILL-REFUSED"),
+            ("(?) cut raised an exception", "EXCEPTION"),
+            ("(?) S2, not the label guard", "S2-FALL-THROUGH"),
+        ]
+        for label, want in order:
+            n, b, k = tot(lambda r, w=want, v=vk: r[v] == w, bk)
+            if n:
+                print(f"  {label:<50} {n:6} {b:8,} {k:9,}")
+        acc = [r for r in rows if r[vk] == "ACCEPTED"]
+        if acc:
+            print(f"  => gain IF acted on: {len(acc)} range(s) / {sum(r[bk] for r in acc):,} bytes"
+                  f"  (NOT the {sum(r['span'] for r in acc):,} B they span, "
+                  f"NOT the {obs_b:,} B bucket)")
+        for label, want in order:
+            det = [r for r in rows if r[vk] == want and want.startswith(("STILL", "EXCEPT",
+                                                                        "BRANCH-L"))]
+            for r in det:
+                print(f"     0x{r['entry']:06X}  {want}: {r['detail_rr' if vk.endswith('rr') else 'detail']}")
+
+    print("\n  ⚠ The three variants are three DIFFERENT code changes, in increasing order")
+    print("    of how much converter behaviour they alter.  Their gains are alternatives,")
+    print("    not addends: variant 3 already includes what variants 1 and 2 recover.")
+    kd = collections.Counter(r["kept"] for r in rows if r["verdict"] == "NO-PREFIX")
+    print(f"\n  the (a) NO-PREFIX rows, by how many instructions DO end before the label:")
+    print(f"    {dict(sorted(kd.items()))}   (main() will not accept a range under 3)")
+    # HOW LIKELY IS THE DECODE ITSELF WRONG?  A range with several off-boundary
+    # labels is evidence the framing is wrong FROM THE ENTRY, and then the prefix
+    # a cut keeps is wrong too.  One label near the end is not that.
+    acc3 = [r for r in rows if r["verdict_sh"] == "ACCEPTED"]
+    lc = collections.Counter(r["nlab"] for r in acc3)
+    print(f"\n  MIS-FRAMING RISK on the rows variant 3 would convert ({len(acc3)} of them):")
+    print(f"    blocking labels per range          : {dict(sorted(lc.items()))}")
+    print(f"    entry is a SEED call target (found in already-decoded code, not only in")
+    print(f"    the branch closure): {sum(1 for r in acc3 if r['seed'])}/{len(acc3)}")
+    print(f"    ⚠ Several off-boundary labels in one range says the decode disagrees with the")
+    print(f"      sources REPEATEDLY, and then the kept prefix is suspect as well -- the byte")
+    print(f"      gate cannot see a mis-framed decode (spec anti-pattern 13).  Ranges with a")
+    print(f"      single blocking label are the safe subset:")
+    one = [r for r in acc3 if r["nlab"] == 1]
+    print(f"      {len(one)} range(s), {sum(r['kept_bytes_sh'] for r in one):,} prefix bytes.")
     haz = [r for r in rows if r["addr_ev"]]
-    print(f"\n  CROSS-CUTTING, not part of the partition above:")
+    print(f"\n  CROSS-CUTTING, not part of either partition above:")
     print(f"    ranges holding >=1 label with ADDRESS evidence : {len(haz)} "
           f"({sum(r['span'] for r in haz):,} B)")
-    print(f"      ...of those, the cut is still ACCEPTED       : "
-          f"{sum(1 for r in haz if r['verdict'] == 'ACCEPTED')}")
-    print(f"    a cut converts NOTHING past any blocking label, so it neither moves, deletes")
-    print(f"    nor adds a label; the labels above keep their addresses whichever way this goes.")
-    if acc:
-        print(f"\n  If and only if the (b) rows are acted on, the gain is "
-              f"{len(acc)} range(s) / {sum(r['kept_bytes'] for r in acc):,} bytes,")
-        print(f"  NOT the {sum(r['span'] for r in acc):,} bytes those ranges span and NOT the "
-              f"{obs_b:,} bytes of the bucket.")
+    print(f"    A cut converts NOTHING at or past any blocking label, so no label is moved,")
+    print(f"    deleted or added and no `.long <symbol>` value changes.  That is why the")
+    print(f"    address evidence, however it comes out, does not gate the (b) rows.")
     if "--json" in sys.argv:
         out = sys.argv[sys.argv.index("--json") + 1]
         with _real_open(out, "w") as fh:
