@@ -114,7 +114,7 @@ write-mode open is an unexplained oddity recorded in a comment at the call site.
 misnomers**, which is not the same as none: an unknown number of plausible-but-wrong names remain
 and no mechanical check can find them; 88.9/84.9/99.9/97.7% on subcpu/boot/table_data/hdae5000. |
 | **L3** field meanings | **PARTIAL** (container firmware-proven; types/ranges from ROM; five field groups attributed to the routines that write them) | every event status in both event formats decoded. Open: NOTE2's extra bytes AS THEY APPEAR IN THE CORPUS, and the `.LSW` 24-slot payload. |
-| **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. ~~Panel-side behaviour is not, and cannot be.~~ **RETRACTED** -- most of it IS derivable, see `docs/kn5000-control-panel-panel-side.md`; four things genuinely need hardware. |
+| **L5** protocols reimplementable | **PARTIAL** | SLIDE4K/8K, the style container, the sequencer/SMF subsystem and the control-panel link are specified, three with executable tests. ~~Panel-side behaviour is not, and cannot be.~~ **RETRACTED** -- most of it IS derivable, see `docs/kn5000-control-panel-panel-side.md`; **six** things genuinely need hardware (§3.1–§3.5, §3.7 — the summary said "four" and undercounted its own §3; §3.6 turned out to be a PROVENANCE case, already answered from hardware observation and now cited in `*/maincpu/cpanel_constants.s`). `docs/kn5000-panel-capture-plan.md` says what to capture and what each capture must SHOW to count. |
 | **L6** evidence re-derivable | **PASS** | every quoted number has a committed producer; ten claims were retracted this session rather than left standing. |
 
 ## v7 territory, as of 2026-08-22
@@ -359,6 +359,31 @@ that v7 addresses are not in it.
 `EmptyRoutine_03` for v7 gave addresses whose ROM bytes did not match the blobs at all; the
 symptom was noted, worked around by searching the ROM for the bytes, and NOT diagnosed. The
 addresses were v10's.
+
+⚠ **THESE TWO CLAIMS READ AS A CONTRADICTION AND ARE NOT ONE — RESOLVED 2026-08-23.**
+The retraction above says the ROM's pointer tables vindicate the labels' CURRENT addresses; the
+paragraph below says 153 names are on the wrong routine by that same `0x41A`. Tested directly
+against the evidence the retraction itself calls decisive — a pointer the firmware dereferences —
+over the 1,043 symbols in the six named families:
+
+| | count | share |
+|---|---:|---:|
+| address appears as a 32-bit ROM word at its CURRENT address | **534** | 51.2% |
+| appears ONLY at `address - 0x41A` | **126** | 12.1% |
+| appears at BOTH | 2 | 0.2% |
+| CONTROL: a random ROM-range address appears as a word | 9 | 0.9% |
+
+Only 2 symbols hit both, so the shifted hits are not incidental co-occurrence, and 12.1% against a
+0.9% control is 13x — not noise either. **The two claims are about DISJOINT populations.** The
+retraction is right that the DETECTOR was wrong (it flagged 981 on a cross-revision heuristic); the
+finding below is right that a much smaller set is genuinely misplaced. The real figure as the tree
+stands is **126**, and they are identifiable one by one rather than as a bulk correction.
+Prover: `tools/spelling-probes/check_0x41A_contradiction.py`.
+
+⚠ Worth a look for whoever takes this up: the suspect names cluster at `0xFCD6xx`
+(`SndParam_ReadRegField`, `SndParam_ReadRegWithLUT`, `SndParam_CompareRegField`, …), which is
+inside the RESOLVE handler block `0x00FCD396..0x00FCD9E4` documented in
+`notes/FINDINGS-naka-record-format.md`. Those handlers are currently unnamed.
 
 ⚠ A second, worse consequence, found by the pointer-table pass: **153 v7 names sit on the wrong
 routine**, 152 of them off by exactly 1050 (0x41A), across `SndParam_*`, `MidiPkt_*`, `UIState_*`,
