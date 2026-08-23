@@ -432,6 +432,22 @@ recognised faster next time.
        a control too PESSIMISTIC, which is just as damaging -- it discards true findings and looks
        rigorous doing it.
 
+25. **The byte-pattern search that finds itself.** Searching a 2 MB ROM for a 3- or 4-byte constant
+   returns hits at a rate the constant's rarity does not justify, because instruction streams are
+   dense and a value can straddle an instruction boundary. Three times in one day:
+     * twelve "pointers" to `ToneGen_ParamTable` — every one was the addressing-byte pattern
+       `07 e4 e0` of `ld (XBC+WA),imm`;
+     * accidental `XX 00 60 01` `naka_header` signatures — a whole-ROM chance rate of 0.185%,
+       which over the blob spans predicted more accidental hits than real ones (and was itself
+       wrong, see anti-pattern 24);
+     * three of ten references to the hash-table base `0x00034100` — at `0xF033B0` the bytes
+       `00 41 03 00` straddle the boundary between `ld XWA,0x00000022` and `ld XBC,0x01460003`.
+   **A byte match is a candidate, not a reference. Disassemble the instruction that contains it
+   before counting it.** The cost is a minute; the cost of not doing it is a confident wrong map of
+   who uses what — and in the third case it would have sent the search for the table's populator to
+   a routine that never touches the table.
+
+
 ## 6. Definition of done
 
 A ROM image is DONE when all of the following are true, each backed by a committed measurement:
