@@ -391,11 +391,22 @@ with something sharper and true:
 > **L5, control-panel link:** the KN5000 side is specified. The panel side is specified for
 > framing, clock mastership, line arbitration, the complete inbound message space, the array and
 > encoder semantics, the flow-control limits, and the acceptance test behind every command the
-> KN5000 issues (`kn5000-control-panel-panel-side.md`). Four things are known to be
-> underivable from these ROMs and are located rather than merely missing: the panel's clock rate,
-> the meaning of the command parameter byte, the panel's own timing, and its error recovery — the
-> last because the KN5000 never exercises it. A captured trace would close the first two; the
-> others need the panel MCU's own firmware.
+> KN5000 issues (`kn5000-control-panel-panel-side.md`). **Seven** things are known to be
+> underivable from these ROMs and are located rather than merely missing — §3.1–§3.7: the panel's
+> clock rate as master, the meaning of the command parameter byte, **which frame it actually
+> replies with**, its own scan/debounce/latency timing, its error recovery (the KN5000 never
+> exercises it), **the physical identity of most button and LED bits**, and **what it does with an
+> LED write**. A captured trace would close the clock rate, the parameter byte and the reply
+> frames; the timing, error recovery and LED behaviour need the panel MCU's own firmware.
+>
+> ⚠ **This paragraph said "four" until 2026-08-23 and undercounted its own §3**, omitting §3.3,
+> §3.6 and §3.7. Each of those is blocked for a stated reason — the firmware holds no table of
+> expected replies, the ROM pins only four `(index, mask)` pairs, and the KN5000 never reads an
+> LED write back — so they belong in the list. `IS-IT-DONE.md` inherited the same undercount.
+>
+> ⚠ §3.6 is a PROVENANCE case rather than an open question: the button and LED tables in
+> `cpanel_constants.s` are populated, but from pressing buttons on the instrument and from an LED
+> sweep, not from these ROMs. What is missing is the citation, not the data.
 
 **For the L5 executable test.** The spec asks for a reader written from the document alone and
 checked against an artefact. For this protocol there is no artefact: no capture exists, so there
