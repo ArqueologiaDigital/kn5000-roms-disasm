@@ -16,7 +16,7 @@ three classes, and only the first is work anyone can do by reading these ROMs ha
 
 | item | size | what it needs |
 |---|---|---|
-| 305 blocking labels, unsettled | part of ~2,1xx B | decide per range whether the DECODE is mis-framed; the clustering evidence says most are, so the honest gain is small. `v7_label_guard_subjects.py` |
+| 305 blocking labels — **PARTLY RESOLVED 2026-08-23** | 1,357 B left (was 4,747) | The bucket was measured to be ONE guard (55/55): a labelled `.byte` block starting strictly inside the range off any instruction boundary. **Cutting the range to end at or before that label** converts nothing at or past it, so no label moves and no `.long <symbol>` changes — the exact property the 981-repair retraction turned on. Shipped: **+1,609 B**, gated by `assert_byte_identical.py`, `no_label_was_dropped.py` (0 lost / 0 added) and the plausibility screen. ⚠ **Residual risk that no gate here can see:** 56% of blocked ranges carry MORE than one off-boundary label, some 7–11, which reads as a mis-framed decode rather than misplaced labels — and then the kept prefix is suspect too. `CUT_SINGLE_LABEL_ONLY` restricts to the single-label subset. `tools/spelling-probes/label_guard_split.py`, `cut_range_label_multiplicity.py` |
 | entry in neither a `.byte` run nor a located `.incbin` | 26 ranges | extend the placement logic; the `.incbin` case was solved this way once already |
 | truncated at unspelled forms | 869 B | per-form spelling probes; the method is established (`tools/spelling-probes/`), the yield per form is now small |
 | L2 name aptness, decidable classes | — | more classes like `l2_name_vs_return_value.py`: names that DECLARE something checkable |
