@@ -757,3 +757,46 @@ but which values are valid headers is NOT established.
   signature. How much is unknown; 22% of the over-long cases are explained.
 * The field layouts stand: they were computed only from records at exactly the
   modal length, which excludes every merged pair by construction.
+
+### Which third-byte values are valid — and why the signature still must NOT be broadened
+
+The 168 headers confirmed BY POSITION (sitting exactly at a modal record
+boundary, 26x above the 0.85% control) cannot be frequency artefacts, so their
+third bytes are a clean sample of the valid set:
+
+| third byte | count |
+|---|---:|
+| `0x65` | 48 |
+| `0x68` | 39 |
+| `0x61` | 30 |
+| `0x67` | 23 |
+| `0x64` | 19 |
+| `0x63` | 7 |
+| `0x60` | 2 |
+
+**Seven values, all inside `0x60..0x68`** (only `0x62` and `0x66` absent). Not the
+256 the loose pattern suggested. So valid headers really do carry a third byte
+other than `0x60`.
+
+⚠ **BUT SCANNING FOR THEM BY VALUE MAKES THINGS WORSE, and the numbers say so:**
+
+| scan | headers | types with a consistent length |
+|---|---:|---:|
+| third byte `0x60` only | 2,857 | 25 / 47 (53%) |
+| third byte `0x60..0x68` | 3,338 (+481) | 26 / 64 (41%) |
+| CONTROL: third byte `0x20..0x28` (also 9 values) | **601** | — |
+
+The control is the decisive column. A nine-value window elsewhere in the byte
+space yields 601 hits from noise alone, so the +481 gained by broadening to
+`0x60..0x68` is **at or below what noise supplies**. And length consistency drops
+from 53% of types to 41%: the broadened scan is manufacturing boundaries.
+
+**Both statements hold at once.** Real headers with third bytes `0x61`–`0x68`
+exist — 168 of them are proven by position. And a value-based scan for those
+bytes cannot find them without importing more noise than signal. The signature
+must stay `0x60` for census purposes, and non-`0x60` headers must be recovered
+POSITIONALLY, by looking exactly where a record boundary is expected.
+
+That is why the earlier qualification says the census is a lower bound rather
+than trying to fix it: the fix that suggests itself is measurably worse than the
+undercount.
