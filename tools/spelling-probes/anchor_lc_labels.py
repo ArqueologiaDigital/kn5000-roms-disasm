@@ -52,7 +52,7 @@ for f in sorted(glob.glob("v7/maincpu/**/*.s", recursive=True)):
             continue
         T = int(name[4:], 16)
         cands = sorted(((T - a, n) for n, a in good.items()
-                        if n in pos and 0 < T - a <= 512), key=lambda t: t[0])
+                        if n in pos and 0 < T - a <= 8192), key=lambda t: t[0])
         done = False
         for dist, anch in cands:
             k = pos[anch]; off = 0; hit = None
