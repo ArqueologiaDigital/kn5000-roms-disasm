@@ -537,8 +537,8 @@ Stacking all 23 blocks:
 | `+0x15` | CONST | `0x00` |
 | `+0x16` | FLAG | `0x00` x21, `0x01` x2 |
 | `+0x17` | CONST | `0x00` |
-| `+0x18` | VARY | **23 distinct across 23 blocks — UNIQUE per block** |
-| `+0x19` | CONST | `0x18` |
+| ~~`+0x18`~~ | — | **NOT A FIELD — the NEXT record's tag byte** (see correction) |
+| ~~`+0x19`~~ | — | **NOT A FIELD — the NEXT record's length byte** (`0x18` = 24) |
 
 **CONTROL: 18/26 constant positions under the true framing, 0/26 over 23
 randomly-placed 26-byte windows in the same image.** The framing is right.
@@ -551,6 +551,44 @@ constant across all 23 blocks is constant *in the factory image*; runtime may
 write it. So CONST here means "not used to distinguish parts at the default",
 which is weaker than "never varies". Positions that ALREADY vary in the defaults
 (`+0x00`, `+0x03`, `+0x04`, `+0x0D`, `+0x18`) are certainly per-part fields.
+
+### ⚠ CORRECTION: the record is 24 bytes, not 26 — and `.LSW` is `<tag><len><payload>`
+
+The tag→address table at `0x00EDAE64` has **4-byte** entries (I first read it at
+stride 2, which halves every index; the document's `0xFFA4` at index `0x9A` is
+right and my `0xFFFF` was the artefact). Read correctly, **tags `0x00`–`0x16`,
+23 consecutive tags, point exactly at the 23 state blocks** — so the NAKA state
+blocks ARE `.LSW` TLV records, addressed by tag.
+
+Checking the two bytes BEFORE each payload settles the container format:
+
+```
+tag 0x00 @0xF9B6  header "00 18"      tag 0x9A @0xFFA4  header "9a 1a"
+tag 0x01 @0xF9D0  header "01 18"
+```
+
+**74 of the 77 populated tags carry `<tag:u8><len:u8>` immediately before their
+payload.** So a `.LSW` record is:
+
+```
+<tag u8> <len u8> <payload len bytes>
+```
+
+and the per-part stride of 26 is `2 + 24`. **The per-part payload is 24 bytes,
+`+0x00`..`+0x17` — my stacked window of 26 ran two bytes past the record.** That
+is exactly why `+0x18` came out "unique across all 23 blocks" and `+0x19`
+constant `0x18`: they are the NEXT record's tag and length. Block 0's `+0x18` is
+`0x01`, which is block 1's tag — the "identity field" I proposed was the
+neighbour's header.
+
+The genuine per-part index is `+0x0D`, which reads 0,1,2,… inside the payload and
+survives the correction.
+
+⚠ Tag `0x9A` declares `len = 0x1A = 26`, NOT 24 — a different shape from the
+per-part records, and consistent with the earlier finding that its subscriber
+accepts payload offsets 4..19 while its schema declares 0..3 and 20..25, tiling
+exactly 26. Its factory default is 26 zero bytes, while the surrounding region is
+populated, so the zeros are specific to it rather than an empty area.
 
 ⚠ INFERENCE, flagged as such: `0x80` at `+0x0A` and four times at `+0x11`–`+0x14`
 is the usual encoding for a neutral level/pan, which would make these a mix
