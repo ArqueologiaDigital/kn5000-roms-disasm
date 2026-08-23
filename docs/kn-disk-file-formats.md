@@ -613,6 +613,34 @@ That is the fourth time in one session that a byte-pattern search over this ROM 
 false references (see spec anti-pattern 25). Here it matters in the safe direction: had the hit been
 believed, `0x9A` would have been reported as "referenced by the preset-send path", which it is not.
 
+### `0x9A` has NO tag-specific handler, in any dumped revision (2026-08-23)
+
+`0x00EDAA64` holds a **tag -> handler table**: 256 consecutive u32, every one a
+ROM code address, sitting `0x400` below the tag -> address table at `0x00EDAE64`.
+**86 tags have a handler of their own; 170 share a default.**
+
+| revision | table | default | tag `0x9A` |
+|---|---|---|---|
+| v7 | `0x00EDAA64` | `0x00FC8E02` x170 | `0x00FC8E02` — **DEFAULT** |
+| v9 | `0x00EDAA64` | `0x00FC95CD` x170 | `0x00FC95CD` — **DEFAULT** |
+| v10 | `0x00EDAA64` | `0x00FC95CD` x170 | `0x00FC95CD` — **DEFAULT** |
+
+So across every dumped firmware, `0x9A` is dispatched generically. Together with
+the other measurements it now has a complete PROFILE and no identity:
+
+* container `<tag><len><payload>`, **`len = 26`** (from its own header)
+* payload at `0xFFA4`, **factory default 26 zero bytes** in a populated area
+* **no tag-specific handler** in v7, v9 or v10
+* **zero code references** to its address (10 byte-matches, all disassembled: 9
+  coincidences and one numeric argument to a formatting routine)
+
+⚠ TENSION, not resolved: the subscriber finding above says `0x9A` has a live
+subscriber accepting payload offsets 4..19 and classifying through
+`0x00EE8EA2`. That is a different mechanism from this dispatch table, so both
+can hold -- generic in the tag dispatch, specific in the subscriber -- but until
+someone reads that subscriber against this table, the two descriptions are not
+reconciled and should not be summarised as one.
+
 **Still unidentified, stated plainly:** `0x9A` is touched by nothing but the generic init walk.
 `0x68 0x43 0x71 0x44 0x45 0x46` have known shapes but no distinguishing routine. Which effect
 `0x61/0x65/0x66` drive is unsettled, and the C-family's index-space meaning is [INFERENCE].
