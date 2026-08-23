@@ -12,6 +12,14 @@
 # already converted stop being candidates, so the total falls while the newly
 # discovered set grows -- 808 -> 690 with 34 new, in the first closure round.
 #
+# ⚠ THE GATE USED TO BE READ WRONG, AND THAT IS WORTH KNOWING. This line was
+#     [ "$(make all | grep -c 'Similarity: 100.00%')" != "9" ]
+# and `Similarity: 100.00%` is a PREFIX of `Similarity: 100.00%  (22 incorrect
+# bytes)`. The percentage is rounded to two decimals -- up to 104 bytes in a
+# 2 MB ROM -- so the closure driver would have accepted a round that corrupted
+# the tree. It now calls assert_byte_identical.py, which compares bytes and
+# exits non-zero. See docs/DISASSEMBLY-COMPLETENESS-SPEC.md anti-pattern 15.
+#
 # ⚠ THE GATE IS NOT OPTIONAL AND IS NOT SUFFICIENT. It catches duplicate
 # labels, undefined symbols and length shifts. It CANNOT catch a range decoded
 # from the wrong offset, because the assembler faithfully reproduces whatever
@@ -42,7 +50,8 @@ for round in $(seq 1 "$MAX"); do
         | grep -E "ranges decode|rewrote|refused|lost to truncation" | sed 's/^/    /'
 
     if ! make clean-all >/dev/null 2>&1 || \
-       [ "$(make all 2>&1 | grep -c 'Similarity: 100.00%')" != "9" ]; then
+       ! make all >/dev/null 2>&1 || \
+       ! python3 scripts/analysis/assert_byte_identical.py >/dev/null 2>&1; then
         echo "    GATE FAILED -- reverting this round"
         git checkout v7/
         exit 1
