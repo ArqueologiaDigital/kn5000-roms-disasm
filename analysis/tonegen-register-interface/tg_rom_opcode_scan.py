@@ -18,7 +18,8 @@ THE BYTE PATTERNS (TLCS-900/H, 32-bit direct addressing = the 0xF2 prefix)
     F2 02 00 10 50            ld  (0x100002), WA        data port    <- WA
     F2 02 00 10 02 lo hi      ldw (0x100002), #imm16    data port    <- imm
     D8 C8 lo hi               add WA, #imm16            the register BANK
-    F2 00 00 10 20 ..         ld  WA, (0x100000)        the status read
+    D2 00 00 10 2r            ld  rr, (0x100000)        the status read (word size,
+                                                        0xD2 prefix, not 0xF2)
 
 A write is only counted when the address-latch store is followed, within a short
 window, by a store to the data port -- the two halves are always emitted as one
@@ -122,7 +123,7 @@ def main():
     reads = []
     i = 0
     while i < len(d) - 5:
-        if d[i:i + 4] == b"\xf2\x00\x00\x10" and d[i + 4] in (0x20, 0x21, 0x22, 0x23):
+        if d[i:i + 4] == b"\xd2\x00\x00\x10" and 0x20 <= d[i + 4] <= 0x27:
             reads.append(dict(off=i, addr=addr_of(i), op=d[i + 4]))
         i += 1
 
