@@ -536,17 +536,28 @@ def translate(text):
         # WA/BC/DE/HL share register codes with A/C/E/L, which is why the
         # substitution works at all.
         #
-        # ⚠ NOT IMPLEMENTED, and recorded so the next pass does not rediscover
-        # it: the 16-BIT register-register mul/div have NO mnemonic. The
-        # backend has mul8rr/div8rr and the ERP forms, but nothing for
-        #     div XIX,WA  = d8 54   (0xD8+rs, 0x50+rd)
-        #     mul XWA,IY  = dd 40   (0xD8+rs, 0x40+rd)
-        # Adding them mirrors MUL8rr/DIV8rr with GR16 operand classes and
-        # OpSize16; ~6 sites in v7.
+        # ⚠ RETRACTED: I recorded here that the 16-bit register-register mul/div
+        # "have NO mnemonic" and called it a genuine backend gap. FALSE. They
+        # answer to plain `mul`/`div` with GPR operands, so the printed 16-bit
+        # names take their 32-BIT spellings:
+        #     div XIX,WA = d8 54 = div xix, xwa
+        #     mul XWA,IY = dd 40 = mul xwa, xiy
+        # I searched for the mnemonic string "mul16rr" and missed MUL16rr at
+        # line 1523, whose mnemonic is "mul". Adding a duplicate def failed the
+        # build with "def already exists" -- the eighth time this session that a
+        # suspected missing form was a spelling I had not tried, against four
+        # real ones. Same naming trap as cpda16.
         _HALF = {"WA": "a", "BC": "c", "DE": "e", "HL": "l"}
         if _mn9 in ("mul", "muls", "div", "divs") and _a9.upper() in _HALF \
                 and re.match(r'^[A-Za-z]$', _b9):
             yield f"{_mn9}8rr {_HALF[_a9.upper()]}, {_b9.lower()}"
+        # 16-bit: plain mul/div, both operands spelled with their 32-bit names.
+        _X32 = {"WA": "xwa", "BC": "xbc", "DE": "xde", "HL": "xhl",
+                "IX": "xix", "IY": "xiy", "IZ": "xiz", "SP": "xsp"}
+        if _mn9 in ("mul", "muls", "div", "divs") \
+                and _a9.upper().lstrip("X") in _X32 and _b9.upper().lstrip("X") in _X32:
+            yield (f"{_mn9} {_X32[_a9.upper().lstrip('X')]}, "
+                   f"{_X32[_b9.upper().lstrip('X')]}")
 
         # ⚠ A 16-BIT REGISTER IS SPELLED WITH ITS 32-BIT NAME in the direct-
         # address ALU forms. unidasm prints `cp WA,(0x0ee8)` for `d1 e8 0e f0`,
