@@ -528,6 +528,19 @@ def translate(text):
             _rn, _dp = _m2.group(1).upper(), int(_m2.group(2), 16)
             _R32 = {"XWA": 0xE0, "XBC": 0xE4, "XDE": 0xE8, "XHL": 0xEC,
                     "XIX": 0xF0, "XIY": 0xF4, "XIZ": 0xF8, "XSP": 0xFC}
+            # ⚠ THE ZERO-DISPLACEMENT SENTINEL (census rule F, +799 B).
+            # `ld (XIZ+0x00),0x90` in the ROM is `be 00 00 90` -- base 0xB8+r
+            # with a SIXTEEN-BIT displacement of zero, which unidasm prints
+            # collapsed as `+0x00`. Writing `ld (xiz+0x00), 0x90` gets the
+            # THREE-byte 0xB0+r form instead, and never matches.
+            # TLCS900MCCodeEmitter.cpp carries a sentinel for exactly this: a
+            # displacement of 256 means "force the wide form with displacement
+            # 0". So `ld (xiz+0x100), 0x90` emits `be 00 00 90`.
+            # ⚠ An earlier pass called this hole unspellable and had to retract
+            # it -- the sentinel was added for this converter and then not used.
+            if _dp == 0:
+                yield f"ld ({_rn.lower()}+0x100), {_b9}"
+                yield f"ldw ({_rn.lower()}+0x100), {_b9}"
             yield f"ld ({_rn.lower()}+{_m2.group(2)}), {_b9}"
             yield f"ldw ({_rn.lower()}+{_m2.group(2)}), {_b9}"
             if _rn in _R32:
