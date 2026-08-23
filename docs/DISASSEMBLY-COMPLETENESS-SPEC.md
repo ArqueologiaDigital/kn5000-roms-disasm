@@ -343,7 +343,21 @@ recognised faster next time.
    collapsed to `+0x00`. Reasoning from the mnemonic cannot recover them; six bytes settle it in
    seconds. Across this work the instinct "the backend is missing something" was wrong roughly
    twice as often as it was right.
-18. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
+18. **A failure that does not propagate.** Twice on 2026-08-22/23, in different disguises, a
+   command reported success while the thing it ran had failed:
+     * `make all 2>&1 | grep -c "Similarity: 100.00%"` -- the grep matched
+       `Similarity: 100.00%  (22 incorrect bytes)` too, because that string is a PREFIX. Fourteen
+       run logs carry the pattern; 981 bad label repairs were committed behind it.
+     * `ninja llvm-mc | tail -2 && <test>` -- a pipeline's exit status is the LAST stage's, so
+       `tail` succeeding let `&&` proceed after the build had failed. The test then ran against a
+       22-minute-old binary, and its "unrecognized mnemonic" was read as evidence about a def
+       that had never been compiled.
+   Both look exactly like the command working. **Check the exit status of the thing you care
+   about, not of the pipeline you wrapped it in** -- `set -o pipefail`, or run the build and the
+   test as separate steps and read the build's own status. And when a result surprises you, verify
+   the tool that produced it actually ran: `stat` the binary, look for the build line, print the
+   count you expected to change.
+19. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
    faking it. A converter's re-check compared symbolic branches against a LINK-TIME PLACEHOLDER,
    so 361 ranges / 18,412 bytes -- seven times the entire remaining backlog -- were refused with
    the same message a genuinely broken range produces. Rejections concentrated in one bucket
