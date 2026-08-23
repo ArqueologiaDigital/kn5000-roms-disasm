@@ -384,6 +384,18 @@ recognised faster next time.
    different clothes -- a check that cannot fail versus a filter that cannot pass -- and the same
    remedy finds both: **before believing a zero, prove the code path can produce a non-zero.**
    Print the histogram of whatever you are filtering on. A named constant is not a verified one.
+22. **The average that hides the exception.** The binary-include audit classifies each blob as a
+   whole, so a structured region that is a small fraction of a large file cannot move the file's
+   statistics. `naka_widget_descriptors.bin` (150,888 B) passed as OPAQUE -- "earns no better
+   format on this evidence" -- while the comment printed directly above its own `.incbin` line
+   documents four tables inside it, one of them 128 x u32 with 128/128 words landing in the ROM
+   address range. A windowed re-scan found 45 such regions / 25,344 B across 391 blobs. **When a
+   verdict is computed over a whole object, ask what fraction of that object could be wrong
+   without changing the verdict.** For a 150 KB blob judged by byte statistics, the answer was
+   "several kilobytes", which is to say the check had no power where it was most needed.
+     * The correction has a milder form of the same defect and says so: the windowed scan aligns
+       its windows, so the very table that motivated it (blob offset 0x1c1a) is not among the 45 it
+       reports. A bound that is knowably loose must be published as a bound, not as a count.
 
 ## 6. Definition of done
 
