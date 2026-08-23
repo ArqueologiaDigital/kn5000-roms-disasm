@@ -460,6 +460,50 @@ seven floppies, 0 violations**, byte-0 value sets disjoint between slots.
 identifiers -- 0x4002/0x4004/0x4006 are tag 0x60 payload+1 bits 7/6/5 for slots 1/2/4, and 0x4140 is
 tag 0x43 +0 bit 7 for slot 3.
 
+### The record container: `<tag><len><payload>` (measured 2026-08-23)
+
+The tag→address table at `0x00EDAE64` has **4-byte entries**, one per tag index,
+each holding the address of a record's PAYLOAD in panel DRAM. 77 tags are
+populated, covering 74 distinct addresses.
+
+Reading the two bytes immediately BEFORE each payload gives the container:
+
+```
+<tag u8> <len u8> <payload: len bytes>
+```
+
+| check | result |
+|---|---|
+| header tag byte == table index | **74 / 77** |
+| the 3 exceptions | **aliases**, not a format variant |
+
+The three are `0xD0`/`0xD5` → `0xFF1A`, `0xD3`/`0xD6` → `0xFF56`, `0xD7`/`0xD8` →
+`0xFF7E`: two tag indices naming the same record. In all three the header carries
+one of its own aliases, so **every record's header tag matches a table index that
+points at it — the rule holds 100% once aliasing is accounted for.**
+
+Consequences worth having:
+
+* **Tags `0x00`–`0x16` are the 23 per-part records**, `len = 0x18` = 24, at
+  `0xF9B6` + 26·N. The stride of 26 is `2 + 24`, header included.
+* These are exactly the blocks the NAKA widget query handlers read through the
+  table at `0x00EE1160` — see `notes/FINDINGS-naka-record-format.md`. **The
+  widget state queries read `.LSW` records by tag.**
+* **Tag `0x9A` declares `len = 0x1A` = 26**, a different shape from the per-part
+  records — and that matches the independently-derived split recorded below,
+  where its subscriber accepts payload offsets 4..19 and the schema declares
+  0..3 and 20..25, tiling exactly 26.
+* Tag `0x9A`'s factory default is **26 zero bytes**, while the bytes around it are
+  populated, so the zeros are specific to the record and not an empty area.
+
+⚠ The factory default image at `0x00EDB3DC` is what makes this measurable from a
+ROM dump at all: the records live in DRAM, but that image is their initial
+content and it satisfies the loader's own `"HK"` signature check.
+
+⚠ An earlier reading of this table at stride 2 gave `0xFFFF` for index `0x9A` and
+appeared to contradict the `0xFFA4` recorded below. The stride was wrong — at 2
+bytes every index is halved. `0xFFA4` is correct.
+
 ### Tag 0x9A: "touched by nothing" was half wrong
 
 The earlier pass reported 0x9A as untouched. **Refuted in part**: it has a live subscriber written
