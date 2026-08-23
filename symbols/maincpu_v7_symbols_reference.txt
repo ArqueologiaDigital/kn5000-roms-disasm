@@ -35618,6 +35618,7 @@ MidiSysEx_SendAllPartChannels 00FD5826
 MidiSysEx_SendPartChanLoop 00FD583D
 MidiSeq_ScanSlot1_Loop 00FD5855
 MidiSysEx_SendPartChan_Done 00FD587F
+MidiSeq_Slot1_WriteParams 00FD5883
 MidiPkt_SendControlPair 00FD58A3
 MidiStream_RefreshDisplay 00FD58B4
 MidiStream_ApplyPendingCC 00FD58C9
@@ -35638,6 +35639,7 @@ MidiChan_SendFieldParam4_2 00FD59C6
 MidiChan_CheckHighBit 00FD59CC
 MidiChan_AppendAndContinue 00FD59DD
 MidiChan_SendFieldParam6 00FD59E2
+MidiSeq_Slot2_StorePtr 00FD59EB
 MidiSeq_ScanSlot3_Loop 00FD59FB
 MidiChan_SendFieldParam3 00FD59FE
 MidiChan_WriteAndSetFlag 00FD5A02
@@ -35662,7 +35664,6 @@ MidiSeq_Slot0_StorePtr 00FD5C53
 MidiSeq_Slot0_NextEntry 00FD5C5B
 MidiSeq_PrepSlot1 00FD5C65
 MidiSeq_Slot1_CheckMatch 00FD5C93
-MidiSeq_Slot1_WriteParams 00FD5C9D
 MidiSeq_Slot1_StorePtr 00FD5D2F
 MidiSeq_ScanSlot2_Loop 00FD5D3F
 MidiSeq_Slot6_StorePtr 00FD5D47
@@ -35672,7 +35673,6 @@ MidiSeq_Slot2_CheckMatch 00FD5D69
 MidiSeq_Slot2_WriteParams 00FD5D73
 MidiSeq_Slot6_NextEntry 00FD5D7B
 MidiSeq_Slot7_WriteParams 00FD5D8B
-MidiSeq_Slot2_StorePtr 00FD5E05
 MidiSeq_Slot2_NextEntry 00FD5E39
 MidiSeq_Slot3_CheckMatch 00FD5E3F
 MidiSeq_Slot3_WriteParams 00FD5E49
