@@ -601,6 +601,18 @@ are five 24-byte DSP/effect slots; `0x48` style+tempo; `0x80` sequencer/MIDI clo
 offset **+0x0C is the MIDI channel**, from flash default blobs that set 0..15 for tags 0x00..0x0F
 and 0xC0 ("none") for the drum parts.
 
+**Re-verified 2026-08-23 with disassembly, and the negative got stronger.** A byte search for
+`0xFFA4` (the record's address, from the 4-byte-stride tag table) returns 10 hits. Disassembling a
+window around each shows **nine are byte coincidences** and the single operand-level hit —
+`push 0xffa4` at `0x00F777A7`, inside `PcgOutCheck_SendPreset1` — is a **numeric argument**, not an
+address: the callee `0x00FF0295` treats its FIRST pushed argument as an output buffer
+(`ld (XWA),0x00`) and the pushes are values being formatted. So **zero of ten are a reference to
+the record.**
+
+That is the fourth time in one session that a byte-pattern search over this ROM produced plausible
+false references (see spec anti-pattern 25). Here it matters in the safe direction: had the hit been
+believed, `0x9A` would have been reported as "referenced by the preset-send path", which it is not.
+
 **Still unidentified, stated plainly:** `0x9A` is touched by nothing but the generic init walk.
 `0x68 0x43 0x71 0x44 0x45 0x46` have known shapes but no distinguishing routine. Which effect
 `0x61/0x65/0x66` drive is unsettled, and the C-family's index-space meaning is [INFERENCE].
