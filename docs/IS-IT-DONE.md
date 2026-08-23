@@ -275,6 +275,19 @@ stack-frame prologue**. Two properties make this the right criterion where conte
   not, and a block decoded from the wrong offset produces garbage that still round-trips
   byte-exactly. The build gate cannot catch that; this criterion cannot make the mistake.
 
+⚠ **AMENDED 2026-08-23 -- it was run ONCE, and it is a fixpoint.** The scan reads call targets out
+of the CODE territory *as the sources currently stand*. But every range the converter then accepts
+and byte-matches becomes CODE, and the branches inside it name further addresses that are code by
+the identical argument. Nothing fed that back. Iterating to convergence takes the entry set from
+687 to **1,209 in ten rounds (+522, a 76% expansion)** -- `scripts/analysis/v7_branch_closure.py`.
+The paragraph above is right about *why* reachability is the correct criterion and wrong to imply
+the scan's output is the answer; it is the first approximation of one.
+
+The iteration is only sound because destinations are harvested exclusively from ranges passing every
+structural gate: a mis-framed decode's "branches" can be data bytes that read as `jr`, and a wrong
+entry point produces no byte difference for the gate to catch. 254 destinations seen only in refused
+ranges are withheld and counted separately. This is anti-pattern 20 in the spec.
+
 By contrast, v9-content corroboration converted 536 bytes in total and will not go much further: it
 requires a block's exact bytes to appear in another revision at a code location, and most v7 code
 simply differs.
