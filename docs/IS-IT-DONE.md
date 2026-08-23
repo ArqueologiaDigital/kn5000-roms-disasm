@@ -87,7 +87,19 @@ Prover: `scripts/analysis/v7_guard_vs_displacement.py`.
 
 ⚠ WHAT REMAINS, MEASURED (2026-08-22 end of day). "Fixpoint reached" is not "finished":
 
-    2,053 B  29 ranges  a label inside the range is NOT on a decoded instruction boundary.
+    ~2,1xx B 30 ranges  a label inside the range is NOT on a decoded instruction boundary.
+                        ⚠ TWO EXPLANATIONS HAVE NOW BEEN OFFERED AND BOTH WITHDRAWN: first
+                        "needs a converter that preserves labels" (wrong -- it is a framing
+                        disagreement, not a mechanism gap), then "88% are displaced by 0x41A"
+                        (wrong -- the ROM's pointer tables contradict the detector, 11 of 11;
+                        see the retraction banner above). The current evidence, from
+                        `v7_label_guard_subjects.py`: of 313 distinct blocking labels, 8 are
+                        referenced by values in the ROM and are `WidgetParam_Config_*` RECORDS
+                        that pointer tables index -- for those the converter is decoding DATA as
+                        code and the guard is refusing CORRECTLY. The other 305 are unsettled,
+                        and being unreferenced does not make them dead
+                        (`v7_unreferenced_labels_are_live.py`). ⚠ Do NOT read this bucket as
+                        "ranges waiting to be unlocked"; some of it is the guard working.
                         ⚠ I first wrote that this "needs a converter that preserves a label
                         across a rewrite". That is wrong, and the guard's own comment says why:
                         a label off an instruction boundary means THE DECODE AND THE EXISTING
