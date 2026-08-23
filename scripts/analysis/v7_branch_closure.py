@@ -19,9 +19,26 @@ counted separately.
 Destinations already in CODE territory are dropped -- they are expressed
 already. Only destinations still carried as `.byte` are new work.
 
+⚠ WHERE THE CONFIDENCE ACTUALLY COMES FROM -- measured 2026-08-23, and it is not
+where I first said it was. The structural gates barely discriminate: an offset
+placed STRICTLY INSIDE an instruction still passes all of them 67.5% of the time
+(`tools/spelling-probes/adv_closure_false_entry_rate.py`), which is *higher* than
+the rate for the closure's own entries. The reason is that TLCS-900
+self-synchronises -- 387 of 400 wrong entries re-join the true instruction stream,
+74% within 5 bytes (`tools/spelling-probes/adv_resync_distance.py`) -- so a wrong
+entry prepends a couple of bad instructions to an otherwise correct decode, and
+every gate sees a well-formed function.
+
+So passing the gates is NEARLY UNINFORMATIVE about entry-point correctness, and
+the byte-match gate is blind to it by construction (the bytes are the same bytes).
+What justifies these entries is PROVENANCE, exactly as for call targets: a branch
+instruction inside verified code targets this address, which makes it an
+instruction boundary by construction. The gates remove the grossly broken cases;
+they do not establish correctness, and this docstring previously implied they did.
+
 ⚠ This does NOT make the entries correct by itself. It makes them CANDIDATES
 with an argument. The byte-match gate (`scripts/analysis/assert_byte_identical.py`)
-remains the thing that decides whether a conversion is right.
+catches byte damage, never a wrong-but-plausible framing.
 
 ⚠ Territory encoding is 1 = CODE, 2 = `.byte`, 3 = incbin. An earlier probe of
 mine used 0 for DATA, matched nothing, and reported a confident zero.
