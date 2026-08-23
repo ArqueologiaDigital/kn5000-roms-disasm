@@ -594,3 +594,44 @@ populated, so the zeros are specific to it rather than an empty area.
 is the usual encoding for a neutral level/pan, which would make these a mix
 section. Nothing here measures that — it is a hypothesis for whoever reads the
 code that writes these offsets.
+
+---
+
+## Who populates the hash table: narrowed, not answered (2026-08-23)
+
+A byte search for the table base `0x00034100` returns 10 sites. Disassembling
+the instruction at each shows **only 7 are real**:
+
+| site | preceding instruction | verdict |
+|---|---|---|
+| `0xFCCAB9`, `0xFCCBE7`, `0xFCCCE8`, `0xFCCF77`, `0xFCD087`, `0xFCD1AF` | `sll 0x03,XBC` | REAL — the x8 bucket scaling |
+| `0xFCE765` | `sll 0x03,XWA` | REAL |
+| `0xF033B0` | `ld B,0x00` | **coincidence** |
+| `0xF1A0DA` | `ld (XBC),0x00` | **coincidence** |
+| `0xF2A847` | `pop SP` | **coincidence** |
+
+`0xF033B0` is the clearest: `ld XWA,0x00000022` ends with a `00` and
+`ld XBC,0x01460003` begins `41 03 00`, so the four bytes `00 41 03 00` appear
+across the instruction boundary. That is the third time today a byte-pattern
+search produced plausible false hits in this ROM — the others being the twelve
+fake pointers to `ToneGen_ParamTable` and the accidental `naka_header`
+signatures. **A 4-byte constant is not rare enough to be believed unaligned.**
+
+### What the narrowing gives
+
+All 7 real references are in ONE module (`0xFCCAB9`..`0xFCE765`) and every one is
+preceded by the x8 scaling, i.e. every one is a LOOKUP. **No site reached through
+this base writes an entry.** So the table is not populated by anything that names
+`0x00034100` as a literal.
+
+That leaves exactly three possibilities, and they are testable:
+
+1. a routine holds the base in a register computed elsewhere (the same
+   register-not-literal gap already documented for `.LSW` queue posts, where 75
+   of 131 sites pass the tag in a register);
+2. the table is filled by a bulk RAM initialiser that does not know it is a hash
+   table;
+3. it is never populated in ROM and is built from disk/panel data at runtime.
+
+⚠ NOT ANSWERED. What is established is that the answer is not "a literal write
+somewhere in the ROM", which was the cheap hypothesis and is now excluded.
