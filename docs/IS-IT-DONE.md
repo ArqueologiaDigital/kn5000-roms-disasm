@@ -98,8 +98,14 @@ Prover: `scripts/analysis/v7_guard_vs_displacement.py`.
                         that pointer tables index -- for those the converter is decoding DATA as
                         code and the guard is refusing CORRECTLY. The other 305 are unsettled,
                         and being unreferenced does not make them dead
-                        (`v7_unreferenced_labels_are_live.py`). ⚠ Do NOT read this bucket as
-                        "ranges waiting to be unlocked"; some of it is the guard working.
+                        (`v7_unreferenced_labels_are_live.py`). A second signal points the same
+                        way: the off-boundary labels CLUSTER -- 201 of 313 sit in a range where
+                        3+ labels are off-boundary, one range has 11. Eleven independently
+                        misplaced labels in one routine is not credible; a MIS-FRAMED DECODE
+                        that disagrees with all of them is. ⚠ Do NOT read this bucket as "ranges
+                        waiting to be unlocked" -- on this evidence most of it is the guard
+                        working, and the honest recoverable residue is much smaller than the raw
+                        byte count I quoted all session.
                         ⚠ I first wrote that this "needs a converter that preserves a label
                         across a rewrite". That is wrong, and the guard's own comment says why:
                         a label off an instruction boundary means THE DECODE AND THE EXISTING

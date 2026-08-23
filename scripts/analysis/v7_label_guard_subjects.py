@@ -29,8 +29,16 @@ WHAT THE EVIDENCE NOW SAYS
     `v7_unreferenced_labels_are_live.py`). This script separates the cases; it
     does not settle the second group.
 
-⚠ Do not read "the guard refuses N ranges" as "N ranges are waiting". At least
-some of them are the guard doing exactly its job.
+A SECOND, STRONGER SIGNAL points the same way: the off-boundary labels CLUSTER.
+201 of the 313 sit in a range where THREE OR MORE labels are off-boundary, and
+one range has eleven. Eleven independently misplaced labels inside one routine is
+not credible; a mis-framed DECODE that disagrees with all of them is. So for most
+of this bucket the converter is starting from the wrong offset, and the guard is
+the only thing noticing.
+
+⚠ Do not read "the guard refuses N ranges" as "N ranges are waiting". On this
+evidence most of it is the guard doing exactly its job, and the honest residue is
+much smaller than the raw count suggests.
 
 Run:  python3 scripts/analysis/v7_label_guard_subjects.py
 """
