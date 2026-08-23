@@ -15,7 +15,7 @@ stood for months were wrong, and are corrected in the history rather than quietl
 | **§3** binary includes justified | **PASS** (restored on a check that can fail) | `audit_incbin_legitimacy.py` no longer stops at the path-prefix categories. It runs the structure triage and exits non-zero on any blob still holding pointer-table structure, enforcing PTR_TABLE only -- the one class that survives the byte-shuffle control. **Proven able to fail:** against the pre-conversion tree (`056a9a1^`, in a worktree) it exits 1 and names `UIState_HandlerTable_*`, `Naka_*_Table` and the rest, while the old category test passes on that same tree. 8,084 B were converted to `.long <symbol>`; three blobs are exempted BY NAME, each with the reason it scores as a table without being one. |
 | **L4** assets round-trip | **PASS** | seven converters in `scripts/build/`, each `verify` asserting ROUND TRIP EXACT. |
 | **L1** every byte classified | **PASS** | `l1_territory_map.py v7 v9 v10` -- flattens each source tree through llvm-mc and assigns every byte to CODE/DATA/PADDING; all three totals equal their rebuilt ROM to the byte. ASSET is folded into DATA here (llvm-mc expands `.incbin`); its separate justification is the §3 row. |
-| **L2** semantic names | **PARTIAL** — revision defect FIXED, aptness still open | The v10-only reference is repaired: `l2_symbol_reference.py` now emits `maincpu_v7`/`maincpu_v9`/`maincpu_v10` references, each checked against ITS OWN ELF at 100.0%, and the un-suffixed file carries a header saying it is v10 and must not be used for v7/v9 addresses or renames. Verified against the ROM, not just the ELF: `free_X`, `Boot_ReadFDCStatus`, `EmptyRoutine_03` and `Voice_InitBankTables_SlotLoop` all have blobs matching the ROM at the v7 file's addresses and at NONE of the shared file's — and those addresses equal the ones independently found this morning by searching the ROM for the bytes. STILL OPEN: name aptness for names that declare nothing checkable, and the 153 v7 names known to sit on the wrong routine. |
+| **L2** semantic names | **PARTIAL** — revision defect FIXED; the "displaced labels" finding is RETRACTED | The v10-only reference is repaired: `l2_symbol_reference.py` now emits `maincpu_v7`/`maincpu_v9`/`maincpu_v10` references, each checked against ITS OWN ELF at 100.0%, and the un-suffixed file carries a header saying it is v10 and must not be used for v7/v9 addresses or renames. Verified against the ROM, not just the ELF: `free_X`, `Boot_ReadFDCStatus`, `EmptyRoutine_03` and `Voice_InitBankTables_SlotLoop` all have blobs matching the ROM at the v7 file's addresses and at NONE of the shared file's — and those addresses equal the ones independently found this morning by searching the ROM for the bytes. STILL OPEN: name aptness for names that declare nothing checkable, and the 153 v7 names known to sit on the wrong routine. |
 session was misleading. Broken down by `l2_positional_breakdown.py`:
 
 | | count | assessment |
@@ -293,6 +293,29 @@ now `.long <symbol>` lines, so there is nothing left to cross-check. To reproduc
 The measurement stands; what changed is that the evidence now needs a build of an older commit to
 re-derive, and a figure whose reproduction takes a 15-minute build should say so rather than look
 like a one-liner.
+
+⚠⚠ **EVERYTHING IN THIS SUBSECTION ABOUT "DISPLACED LABELS" IS RETRACTED (2026-08-23).**
+
+The detector behind it (`v7_label_displacement.py`) compares v7 bytes against the same-named
+routine in **v9** -- a heuristic across two DIFFERENT programs. The ROM's own pointer tables point
+at those labels' ORIGINAL addresses, and of the labels a pointer table can check, **11 of 11
+contradict the detector**: every word that broke shows `ROM - built = exactly 0x41A`. A name shared
+across revisions is a hypothesis; a pointer the firmware dereferences is evidence.
+
+981 label "repairs" built on it were committed and have been REVERTED (`8998d1b`); all six rebuilt
+ROMs are byte-identical again, verified by `scripts/analysis/assert_byte_identical.py` rather than
+by a percentage.
+
+⚠ HOW IT GOT PAST THE GATE, which matters more than the finding: the check was
+`grep -c "Similarity: 100.00%"`, and that string is a PREFIX of
+`Similarity: 100.00%  (22 incorrect bytes)`. The percentage is rounded to two decimals -- up to 104
+bytes in a 2 MB ROM. Fourteen run logs carry the pattern. The corruption was printed the whole
+time. See spec anti-patterns 15 and 16.
+
+The text below is kept as written, because the reasoning is a useful record of how a plausible
+measurement went wrong -- but NONE of its conclusions should be acted on.
+
+---
 
 ⚠ THE 153 NAMES ARE A SOURCE DEFECT, NOT A GENERATION DEFECT -- confirmed by bytes 2026-08-23.
 `FileData_AllocLoadAndParse` is the clean test case. The v7 reference (correctly generated from
