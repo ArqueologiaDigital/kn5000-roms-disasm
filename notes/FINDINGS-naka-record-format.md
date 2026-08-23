@@ -504,3 +504,55 @@ extents, their handler ranges, and the return convention of each.
 ⚠ NOT ESTABLISHED: the semantics of the nine `+0x0D` handlers (only the dispatch
 was read, not the bodies), what the `(XSP+0x0a) == 5` special case does, and what
 the two caller arguments are.
+
+---
+
+## The 26-byte panel-state block layout (2026-08-23)
+
+The blocks live in RAM, which a ROM dump cannot show — but the ROM carries the
+FACTORY DEFAULT panel image at `0x00EDB3DC`, verified here by its signature
+`5A 5A 00 00 48 4B` (the same check `.LSW` loading applies, per
+`docs/kn-disk-file-formats.md`). That image is the initial content of `0xF980`
+onward, so block N sits at `0x00EDB3DC + 0x36 + 26*N`.
+
+Stacking all 23 blocks:
+
+| offset | class | value / note |
+|---|---|---|
+| `+0x00` | VARY | 7 values |
+| `+0x01`–`+0x02` | CONST | `0x00` |
+| `+0x03` | VARY | 4 values |
+| `+0x04` | VARY | 6 values |
+| `+0x05`–`+0x06` | CONST | `0x00` |
+| `+0x07` | CONST | **`0x5A`** — a per-block marker |
+| `+0x08` | FLAG | `0x40` x21, `0x50`, `0x30` |
+| `+0x09` | CONST | `0x40` |
+| `+0x0A` | CONST | `0x80` |
+| `+0x0B` | CONST | `0x02` |
+| `+0x0C` | FLAG | `0x02` x12, `0x00` x9, `0x38` x2 |
+| `+0x0D` | VARY | **22 distinct across 23 blocks** — near-unique |
+| `+0x0E` | CONST | `0x80` |
+| `+0x0F`–`+0x10` | CONST | `0x00` |
+| `+0x11`–`+0x14` | CONST | **`0x80 0x80 0x80 0x80`** — four neutral-valued bytes |
+| `+0x15` | CONST | `0x00` |
+| `+0x16` | FLAG | `0x00` x21, `0x01` x2 |
+| `+0x17` | CONST | `0x00` |
+| `+0x18` | VARY | **23 distinct across 23 blocks — UNIQUE per block** |
+| `+0x19` | CONST | `0x18` |
+
+**CONTROL: 18/26 constant positions under the true framing, 0/26 over 23
+randomly-placed 26-byte windows in the same image.** The framing is right.
+
+`+0x18` is unique per block and `+0x0D` nearly so, which makes them the block's
+identity fields — consistent with the 23 blocks being 23 PARTS.
+
+⚠ EVIDENTIAL LIMIT, and it is a real one: these are DEFAULT values. A position
+constant across all 23 blocks is constant *in the factory image*; runtime may
+write it. So CONST here means "not used to distinguish parts at the default",
+which is weaker than "never varies". Positions that ALREADY vary in the defaults
+(`+0x00`, `+0x03`, `+0x04`, `+0x0D`, `+0x18`) are certainly per-part fields.
+
+⚠ INFERENCE, flagged as such: `0x80` at `+0x0A` and four times at `+0x11`–`+0x14`
+is the usual encoding for a neutral level/pan, which would make these a mix
+section. Nothing here measures that — it is a hypothesis for whoever reads the
+code that writes these offsets.
