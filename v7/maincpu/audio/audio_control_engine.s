@@ -6406,5 +6406,10 @@ MidiStream_CmdPedalDone:
 ; === end v7 block ===
 ; === v7-specific block: MidiStream_HandleRunningStatus (919 bytes) ===
 MidiStream_HandleRunningStatus:
-	.incbin "includes/romslices/v7_block_midistream_handlerunningstatus.bin"
+	.incbin "includes/romslices/v7_block_midistream_handlerunningstatus_head.bin"
+	ld HL,(XSP+0x04)
+	pop XIZ
+	lda xsp, (xsp + 0x0a)
+	ret
+	.incbin "includes/romslices/v7_block_midistream_handlerunningstatus_tail.bin"
 ; === end v7 block ===

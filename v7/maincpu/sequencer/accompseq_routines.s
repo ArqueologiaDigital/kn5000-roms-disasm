@@ -252,7 +252,13 @@ AccompSeq_AdvanceDone:
 	ret
 
 AccompSeq_VRAMHelperData:
-	.incbin "includes/romslices/v7_transplant_AccompSeq_VRAMHelperData.bin"
+	.incbin "includes/romslices/v7_transplant_AccompSeq_VRAMHelperData_head.bin"
+	ldw_d16 wa, (0x7da6)
+	and XWA,0x00000fff
+	sla xwa, 8
+	add XWA,0x001e8b00
+	ld XIY,XWA
+	ret
 ResolveVRAMAddressForVoice:
 	cpdi8 (0x7d89), 0x80
 	jr c, AccompSeq_ResolveVRAMFallback

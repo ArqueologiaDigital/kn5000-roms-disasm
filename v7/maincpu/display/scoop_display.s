@@ -4125,7 +4125,17 @@ ScoopParam_ValueTable:
 	stda16 (0x0d51), wa
 	ldb_d8 c, (0x0eee)
 	dec 1,C
-	.incbin "includes/romslices/v7_transplant_ScoopParam_ValueTable_tail.bin"
+	.incbin "includes/romslices/v7_transplant_ScoopParam_ValueTable_tail_head.bin"
+	call 0xefa77d
+	call 0xefa79a
+	bitda 3, (0x0d53)
+	jrl z, .Lc_efa2ef
+	call PortConfig_SetupBytecode_0x34
+	cpdi8 (0x0d65), 0x00
+	jrl nz, .Lc_efa2ef
+.Lc_efa2ef:
+	jp 0xefa2f3
+	ret
 Interrupt_ModeGuardCheck:
 	cpdi8 (3567), 18
 	jrl z, Interrupt_NullRet

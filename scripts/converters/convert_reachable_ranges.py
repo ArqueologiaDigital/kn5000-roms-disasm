@@ -739,8 +739,13 @@ def main():
         "spans", os.path.join(REPO, "scripts/analysis/v7_undisassembled_spans.py"))
     spans = importlib.util.module_from_spec(spec); spec.loader.exec_module(spans)
     terr = spans.territory(spans.runs("v7/maincpu/kn5000_v7_program.s", "v7/maincpu"))
-    targets = json.load(open(os.path.join(
-        REPO, "analysis/v7-reachability/v7_call_targets.json")))["targets"]
+    # Prefer the transitive closure over branch destinations when it exists:
+    # `v7_call_targets.json` is one iteration (call/jp/jrl found in the sources
+    # as they stand), and every accepted range proves further code via its own
+    # branches. See scripts/analysis/v7_branch_closure.py.
+    _closure = os.path.join(REPO, "analysis/v7-reachability/v7_branch_closure_targets.json")
+    _seed = os.path.join(REPO, "analysis/v7-reachability/v7_call_targets.json")
+    targets = json.load(open(_closure if os.path.exists(_closure) else _seed))["targets"]
     syms = cc.elf_syms("rebuilt_ROMs/kn5000_v7_program.llvm.elf")
     addr2name = dict(syms)
 

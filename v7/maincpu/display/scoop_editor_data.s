@@ -312,7 +312,357 @@ Scoop_SoundEditorData:
 .Lc_f04ffd:
 	inc 4,XSP
 	ret
-	.incbin "includes/romslices/v7_block_scoop_soundeditordata_mid2.bin"
+	.incbin "includes/romslices/v7_block_scoop_soundeditordata_mid2_head.bin"
+	lda xsp, (xsp - 0x16)
+	ld (XSP+0x10),E
+	ld (XSP+0x12),C
+	ld (XSP+0x14),A
+	lda xwa, (xsp + 0x0e)
+	call SeMenu_ValidatePartNumber
+	lda xwa, (xsp + 0x0c)
+	call SeMenu_LoadObjEntries
+	lda XBC, (XSP)
+	lds wa, 2
+	call SeMenu_LoadPartParam
+	lda XBC, (XSP)
+	ld (XBC+0x06),0xff
+	ld (XBC+0x07),0x00
+	ld (XBC+0x08),0x7f
+	ld (XBC+0x09),0x00
+	ld A,(XSP+0x14)
+	extz WA
+	lda xbc, (xbc + 0x0a)
+	call SeMenu_SetupPartDisplay_End_0x219
+	cp (XSP+0x0c),0x00
+	jr nz, .Lc_f0505c
+	ldb C, 0x4d
+	jr t, .Lc_f05075
+.Lc_f0505c:
+	ld A,(XSP+0x0e)
+	dec 1,A
+	extz WA
+	muls WA,0x0015
+	extz XWA
+	lda xwa, (xwa + 0x10)
+	lda xwa, (xwa + 0x11)
+	ld C,A
+	ld (XSP+0x0e),0x00
+.Lc_f05075:
+	ld A,(XSP+0x10)
+	extz WA
+	ld E,(XSP+0x0e)
+	extz DE
+	extz BC
+	pushw bc
+	lda xbc, (xsp + 0x02)
+	push XBC
+	lds bc, 2
+	call SeMenu_TransferPartValues_EndData_0x169
+	ld A,(XSP+0x12)
+	extz WA
+	call SeMenu_SetupPartDisplay_End_0x1F6
+	lda xsp, (xsp + 0x16)
+	ret
+	.incbin "includes/romslices/v7_block_scoop_soundeditordata_mid2_mid1.bin"
+	lda xsp, (xsp - 0x16)
+	ld (XSP+0x10),E
+	ld (XSP+0x12),C
+	ld (XSP+0x14),A
+	lda xwa, (xsp + 0x0e)
+	call SeMenu_ValidatePartNumber
+	lda xwa, (xsp + 0x0c)
+	call SeMenu_LoadObjEntries
+	lda XBC, (XSP)
+	lds wa, 3
+	call SeMenu_LoadPartParam
+	lda XBC, (XSP)
+	ld (XBC+0x06),0x7f
+	ld (XBC+0x07),0x00
+	ld (XBC+0x08),0x05
+	ld (XBC+0x09),0x00
+	ld A,(XSP+0x14)
+	extz WA
+	lda xbc, (xbc + 0x0a)
+	call SeMenu_SetupPartDisplay_End_0x219
+	cp (XSP+0x0c),0x00
+	jr nz, .Lc_f050f5
+	ldb C, 0x4e
+	jr t, .Lc_f0510e
+.Lc_f050f5:
+	ld A,(XSP+0x0e)
+	dec 1,A
+	extz WA
+	muls WA,0x0015
+	extz XWA
+	lda xwa, (xwa + 0x10)
+	lda xwa, (xwa + 0x12)
+	ld C,A
+	ld (XSP+0x0e),0x00
+.Lc_f0510e:
+	ld A,(XSP+0x10)
+	extz WA
+	ld E,(XSP+0x0e)
+	extz DE
+	extz BC
+	pushw bc
+	lda xbc, (xsp + 0x02)
+	push XBC
+	lds bc, 3
+	call SeMenu_TransferPartValues_EndData_0x169
+	ld A,(XSP+0x12)
+	extz WA
+	call SeMenu_SetupPartDisplay_End_0x1F6
+	lda xsp, (xsp + 0x16)
+	ret
+	.incbin "includes/romslices/v7_block_scoop_soundeditordata_mid2_mid2.bin"
+	lda xsp, (xsp - 0x16)
+	ld (XSP+0x10),E
+	ld (XSP+0x12),C
+	ld (XSP+0x14),A
+	lda xwa, (xsp + 0x0e)
+	call SeMenu_ValidatePartNumber
+	lda xwa, (xsp + 0x0c)
+	call SeMenu_LoadObjEntries
+	lda XBC, (XSP)
+	lds wa, 1
+	call SeMenu_LoadPartParam
+	lda XBC, (XSP)
+	ld (XBC+0x06),0x3f
+	ld (XBC+0x07),0x00
+	ld (XBC+0x08),0x32
+	ld (XBC+0x09),0x00
+	ld A,(XSP+0x14)
+	extz WA
+	lda xbc, (xbc + 0x0a)
+	call SeMenu_SetupPartDisplay_End_0x219
+	cp (XSP+0x0c),0x00
+	jr nz, .Lc_f05185
+	ldb C, 0x37
+	jr t, .Lc_f0519e
+.Lc_f05185:
+	ld A,(XSP+0x0e)
+	dec 1,A
+	extz WA
+	muls WA,0x0015
+	extz XWA
+	lda xwa, (xwa + 0x10)
+	lda xwa, (xwa + 0x10)
+	ld C,A
+	ld (XSP+0x0e),0x00
+.Lc_f0519e:
+	ld A,(XSP+0x10)
+	extz WA
+	ld E,(XSP+0x0e)
+	extz DE
+	extz BC
+	pushw bc
+	lda xbc, (xsp + 0x02)
+	push XBC
+	lds bc, 1
+	call SeMenu_TransferPartValues_EndData_0x169
+	ld A,(XSP+0x12)
+	extz WA
+	call SeMenu_SetupPartDisplay_End_0x1F6
+	lda xsp, (xsp + 0x16)
+	ret
+	.incbin "includes/romslices/v7_block_scoop_soundeditordata_mid2_mid3.bin"
+	lda xsp, (xsp - 0x16)
+	ld (XSP+0x10),E
+	ld (XSP+0x12),C
+	ld (XSP+0x14),A
+	lda xwa, (xsp + 0x0e)
+	call SeMenu_ValidatePartNumber
+	lda xwa, (xsp + 0x0c)
+	call SeMenu_LoadObjEntries
+	lda XBC, (XSP)
+	lds wa, 0
+	call SeMenu_LoadPartParam
+	lda XBC, (XSP)
+	ld (XBC+0x06),0x07
+	ld (XBC+0x07),0x05
+	ld (XBC+0x08),0x06
+	ld (XBC+0x09),0x00
+	ld A,(XSP+0x14)
+	extz WA
+	lda xbc, (xbc + 0x0a)
+	call SeMenu_SetupPartDisplay_End_0x219
+	cp (XSP+0x0c),0x00
+	jr nz, .Lc_f05215
+	ldb C, 0x36
+	jr t, .Lc_f0522e
+.Lc_f05215:
+	ld A,(XSP+0x0e)
+	dec 1,A
+	extz WA
+	muls WA,0x0015
+	extz XWA
+	lda xwa, (xwa + 0x10)
+	lda xwa, (xwa + 0x0f)
+	ld C,A
+	ld (XSP+0x0e),0x00
+.Lc_f0522e:
+	ld A,(XSP+0x10)
+	extz WA
+	ld E,(XSP+0x0e)
+	extz DE
+	extz BC
+	pushw bc
+	lda xbc, (xsp + 0x02)
+	push XBC
+	lds bc, 0
+	call SeMenu_TransferPartValues_EndData_0x169
+	ld A,(XSP+0x12)
+	extz WA
+	call SeMenu_SetupPartDisplay_End_0x1F6
+	lda xsp, (xsp + 0x16)
+	ret
+	lda xsp, (xsp - 0x12)
+	ld (XSP+0x10),A
+	lda xwa, (xsp + 0x0e)
+	call SeMenu_ValidatePartNumber
+	lda xwa, (xsp + 0x0c)
+	call SeMenu_LoadObjEntries
+	lda XBC, (XSP)
+	lds wa, 5
+	call SeMenu_LoadPartParam
+	lda XBC, (XSP)
+	ld (XBC+0x06),0x01
+	ld (XBC+0x07),0x07
+	ld (XBC+0x08),0x01
+	ld (XBC+0x09),0x00
+	ld E,(XSP+0x10)
+	res 0x07,E
+	lda xwa, (xbc + 0x0a)
+	cps e, 0
+	jr nz, .Lc_f05292
+	ld (XWA),0x01
+	jr t, .Lc_f05295
+.Lc_f05292:
+	ld (XWA),0xff
+.Lc_f05295:
+	cp (XSP+0x0c),0x00
+	jr nz, .Lc_f0529f
+	ldb A, 0x50
+	jr t, .Lc_f052b6
+.Lc_f0529f:
+	ld A,(XSP+0x0e)
+	dec 1,A
+	extz WA
+	muls WA,0x0015
+	extz XWA
+	lda xwa, (xwa + 0x10)
+	lda xwa, (xwa + 0x14)
+	ld (XSP+0x0e),0x00
+.Lc_f052b6:
+	ld E,(XSP+0x0e)
+	extz DE
+	extz WA
+	pushw wa
+	push XBC
+	ldw WA, 0x0030
+	lds bc, 5
+	call SeMenu_TransferPartValues_EndData_0x169
+	cps l, 1
+	call_24 z, (SeMenu_ApplyPartEdit_Data2_0x19BD)
+	lds wa, 6
+	call SeMenu_SetupPartDisplay_End_0x1F6
+	lda xsp, (xsp + 0x12)
+	ret
+	lda xsp, (xsp - 0x12)
+	ld (XSP+0x10),A
+	lda xwa, (xsp + 0x0e)
+	call SeMenu_ValidatePartNumber
+	lda xwa, (xsp + 0x0c)
+	call SeMenu_LoadObjEntries
+	lda XBC, (XSP)
+	lds wa, 4
+	call SeMenu_LoadPartParam
+	lda XBC, (XSP)
+	ld (XBC+0x06),0x7f
+	ld (XBC+0x07),0x00
+	ld (XBC+0x08),0x7f
+	ld (XBC+0x09),0x00
+	ld A,(XSP+0x10)
+	extz WA
+	lda xbc, (xbc + 0x0a)
+	call SeMenu_SetupPartDisplay_End_0x219
+	cp (XSP+0x0c),0x00
+	jr nz, .Lc_f0531d
+	ldb A, 0x4f
+	jr t, .Lc_f05334
+.Lc_f0531d:
+	ld A,(XSP+0x0e)
+	dec 1,A
+	extz WA
+	muls WA,0x0015
+	extz XWA
+	lda xwa, (xwa + 0x10)
+	lda xwa, (xwa + 0x13)
+	ld (XSP+0x0e),0x00
+.Lc_f05334:
+	ld E,(XSP+0x0e)
+	extz DE
+	extz WA
+	pushw wa
+	lda xwa, (xsp + 0x02)
+	push XWA
+	ldw WA, 0x0030
+	lds bc, 4
+	call SeMenu_TransferPartValues_EndData_0x169
+	cps l, 1
+	call_24 z, (SeMenu_ApplyPartEdit_Data2_0x19BD)
+	lds wa, 7
+	call SeMenu_SetupPartDisplay_End_0x1F6
+	lda xsp, (xsp + 0x12)
+	ret
+	lda xsp, (xsp - 0x12)
+	ld (XSP+0x10),A
+	lda xwa, (xsp + 0x0e)
+	call SeMenu_ValidatePartNumber
+	lda xwa, (xsp + 0x0c)
+	call SeMenu_LoadObjEntries
+	lda XBC, (XSP)
+	lds wa, 5
+	call SeMenu_LoadPartParam
+	lda XBC, (XSP)
+	ld (XBC+0x06),0x7f
+	ld (XBC+0x07),0x00
+	ld (XBC+0x08),0x0d
+	ld (XBC+0x09),0x00
+	ld A,(XSP+0x10)
+	extz WA
+	lda xbc, (xbc + 0x0a)
+	call SeMenu_SetupPartDisplay_End_0x219
+	cp (XSP+0x0c),0x00
+	jr nz, .Lc_f0539e
+	ldb A, 0x50
+	jr t, .Lc_f053b5
+.Lc_f0539e:
+	ld A,(XSP+0x0e)
+	dec 1,A
+	extz WA
+	muls WA,0x0015
+	extz XWA
+	lda xwa, (xwa + 0x10)
+	lda xwa, (xwa + 0x14)
+	ld (XSP+0x0e),0x00
+.Lc_f053b5:
+	ld E,(XSP+0x0e)
+	extz DE
+	extz WA
+	pushw wa
+	lda xwa, (xsp + 0x02)
+	push XWA
+	ldw WA, 0x0030
+	lds bc, 5
+	call SeMenu_TransferPartValues_EndData_0x169
+	cps l, 1
+	call_24 z, (SeMenu_ApplyPartEdit_Data2_0x19BD)
+	ldw WA, 0x0008
+	call SeMenu_SetupPartDisplay_End_0x1F6
+	lda xsp, (xsp + 0x12)
+	ret
+	.incbin "includes/romslices/v7_block_scoop_soundeditordata_mid2_tail.bin"
 	push XSP
 	nop
 	jr nz, .Lc_f05401

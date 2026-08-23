@@ -7,7 +7,10 @@
 ; =============================================================================
 
 FDemo_DisplayResourceData:
-	.incbin "includes/romslices/v7_transplant_FDemo_DisplayResourceData_head.bin"
+	.incbin "includes/romslices/v7_transplant_FDemo_DisplayResourceData_head_head.bin"
+	lda_24 xwa, (0x0ab000)
+	stl_da (0x025b7e), xwa
+	ret
 	lda_24 xhl, (0x0ab000)
 	lda_24 xbc, (0x0fd800)
 	sub XBC,XHL

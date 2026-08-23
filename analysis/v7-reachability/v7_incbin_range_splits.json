@@ -830,6 +830,216 @@
    "slice_bytes": 72,
    "source": "v7/maincpu/display/scoop_display.s",
    "first": "cps c, 0 ; jrl z, .Lc_ef870f ; pushw bc ; call 0xefc33f"
+  },
+  {
+   "entry": "0xF5D5F6",
+   "bytes": 40,
+   "instructions": 15,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "extz DE ; sla de, 2 ; extz BC ; sla bc, 5"
+  },
+  {
+   "entry": "0xF5D61E",
+   "bytes": 43,
+   "instructions": 16,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "extz DE ; sla de, 2 ; extz BC ; sla bc, 5"
+  },
+  {
+   "entry": "0xF5D996",
+   "bytes": 23,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "resda 1, (0x3263) ; resda 3, (0xfc5f) ; pushw 0x0000 ; ldw WA, 0x0048"
+  },
+  {
+   "entry": "0xF5D9AD",
+   "bytes": 23,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "resda 0, (0x3263) ; resda 2, (0xfc5f) ; pushw 0x0000 ; ldw WA, 0x0048"
+  },
+  {
+   "entry": "0xF5D9C4",
+   "bytes": 23,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "resda 2, (0x3263) ; resda 2, (0xfc60) ; pushw 0x0000 ; ldw WA, 0x0048"
+  },
+  {
+   "entry": "0xF5D9DB",
+   "bytes": 23,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "resda 0, (0x3261) ; resda 4, (0xfc5f) ; pushw 0x0000 ; ldw WA, 0x0048"
+  },
+  {
+   "entry": "0xF5D9F2",
+   "bytes": 23,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "resda 1, (0x3261) ; resda 5, (0xfc5f) ; pushw 0x0000 ; ldw WA, 0x0048"
+  },
+  {
+   "entry": "0xF5DA09",
+   "bytes": 23,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "resda 0, (0x325f) ; resda 6, (0xfc5f) ; pushw 0x0000 ; ldw WA, 0x0048"
+  },
+  {
+   "entry": "0xF5DA20",
+   "bytes": 23,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head.bin",
+   "slice_addr": "0xF5D4C1",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/sequencer/accompaniment_engine.s",
+   "first": "resda 1, (0x325f) ; resda 7, (0xfc5f) ; pushw 0x0000 ; ldw WA, 0x0048"
+  },
+  {
+   "entry": "0xF6DB29",
+   "bytes": 22,
+   "instructions": 6,
+   "slice": "includes/romslices/v7_transplant_AccompSeq_VRAMHelperData.bin",
+   "slice_addr": "0xF6DB16",
+   "slice_bytes": 41,
+   "source": "v7/maincpu/sequencer/accompseq_routines.s",
+   "first": "ldw_d16 wa, (0x7da6) ; and XWA,0x00000fff ; sla xwa, 8 ; add XWA,0x001e8b00"
+  },
+  {
+   "entry": "0xFCCB20",
+   "bytes": 8,
+   "instructions": 4,
+   "slice": "includes/romslices/v7_block_midistream_handlerunningstatus.bin",
+   "slice_addr": "0xFCC699",
+   "slice_bytes": 1444,
+   "source": "v7/maincpu/audio/audio_control_engine.s",
+   "first": "ld HL,(XSP+0x04) ; pop XIZ ; lda xsp, (xsp + 0x0a) ; ret"
+  },
+  {
+   "entry": "0xF861C1",
+   "bytes": 11,
+   "instructions": 3,
+   "slice": "includes/romslices/v7_transplant_FDemo_DisplayResourceData_head.bin",
+   "slice_addr": "0xF8609C",
+   "slice_bytes": 304,
+   "source": "v7/maincpu/demo/file_demo_proc.s",
+   "first": "lda_24 xwa, (0x0ab000) ; stl_da (0x025b7e), xwa ; ret"
+  },
+  {
+   "entry": "0xFDA5A0",
+   "bytes": 13,
+   "instructions": 6,
+   "slice": "includes/romslices/v7_block_midipkt_sysexbulktransfer_data.bin",
+   "slice_addr": "0xFDA56A",
+   "slice_bytes": 547,
+   "source": "v7/maincpu/midi/midipkt_routines.s",
+   "first": "ldw HL, 0xd8f0 ; ld E,C ; extz DE ; add DE,DE"
+  },
+  {
+   "entry": "0xEFA2D4",
+   "bytes": 32,
+   "instructions": 9,
+   "slice": "includes/romslices/v7_transplant_ScoopParam_ValueTable_tail.bin",
+   "slice_addr": "0xEFA1DA",
+   "slice_bytes": 282,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "call 0xefa77d ; call 0xefa79a ; bitda 3, (0x0d53) ; jrl z, .Lc_efa2ef"
+  },
+  {
+   "entry": "0xF05012",
+   "bytes": 135,
+   "instructions": 48,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata_mid2.bin",
+   "slice_addr": "0xF05000",
+   "slice_bytes": 1006,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "lda xsp, (xsp - 0x16) ; ld (XSP+0x10),E ; ld (XSP+0x12),C ; ld (XSP+0x14),A"
+  },
+  {
+   "entry": "0xF050AB",
+   "bytes": 135,
+   "instructions": 48,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata_mid2.bin",
+   "slice_addr": "0xF05000",
+   "slice_bytes": 1006,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "lda xsp, (xsp - 0x16) ; ld (XSP+0x10),E ; ld (XSP+0x12),C ; ld (XSP+0x14),A"
+  },
+  {
+   "entry": "0xF0513B",
+   "bytes": 135,
+   "instructions": 48,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata_mid2.bin",
+   "slice_addr": "0xF05000",
+   "slice_bytes": 1006,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "lda xsp, (xsp - 0x16) ; ld (XSP+0x10),E ; ld (XSP+0x12),C ; ld (XSP+0x14),A"
+  },
+  {
+   "entry": "0xF051CB",
+   "bytes": 135,
+   "instructions": 48,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata_mid2.bin",
+   "slice_addr": "0xF05000",
+   "slice_bytes": 1006,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "lda xsp, (xsp - 0x16) ; ld (XSP+0x10),E ; ld (XSP+0x12),C ; ld (XSP+0x14),A"
+  },
+  {
+   "entry": "0xF05252",
+   "bytes": 135,
+   "instructions": 48,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata_mid2.bin",
+   "slice_addr": "0xF05000",
+   "slice_bytes": 1006,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "lda xsp, (xsp - 0x12) ; ld (XSP+0x10),A ; lda xwa, (xsp + 0x0e) ; call 0xf06a10"
+  },
+  {
+   "entry": "0xF052D9",
+   "bytes": 129,
+   "instructions": 45,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata_mid2.bin",
+   "slice_addr": "0xF05000",
+   "slice_bytes": 1006,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "lda xsp, (xsp - 0x12) ; ld (XSP+0x10),A ; lda xwa, (xsp + 0x0e) ; call 0xf06a10"
+  },
+  {
+   "entry": "0xF0535A",
+   "bytes": 130,
+   "instructions": 45,
+   "slice": "includes/romslices/v7_block_scoop_soundeditordata_mid2.bin",
+   "slice_addr": "0xF05000",
+   "slice_bytes": 1006,
+   "source": "v7/maincpu/display/scoop_editor_data.s",
+   "first": "lda xsp, (xsp - 0x12) ; ld (XSP+0x10),A ; lda xwa, (xsp + 0x0e) ; call 0xf06a10"
   }
  ]
 }
