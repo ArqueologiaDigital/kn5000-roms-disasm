@@ -13,7 +13,13 @@ number nobody can check.
 | `which.py` | WHICH ranges does a proposed rule newly accept? Names them, so "5 more ranges" can be checked for being real code rather than table data. | `python3 which.py` |
 
 ⚠ These import the live converter and cache `unidasm` decodes of all 687 call
-targets in `decodes.pkl` (regenerable by deleting it). They do NOT modify the
+targets in `decodes.pkl`, built on first use by `_decodes.py` -- any probe here
+can be run standalone and in any order, and deleting the pickle forces a rebuild
+(minutes). ⚠ The first committed `census.py` loaded that pickle without being
+able to build it, so it raised `FileNotFoundError` for anyone who ran it before
+`enum_sites.py`: the cache had only ever existed in a scratch directory.
+Committing a probe is not the same as committing a probe that runs -- check by
+running it from a clean tree. They do NOT modify the
 repo — `measure.py` monkey-patches `cc.translate` in memory.
 
 ## What they established
