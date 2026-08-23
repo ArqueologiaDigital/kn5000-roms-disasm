@@ -1253,17 +1253,22 @@ IconName_i7:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BFA, 0x4
 IconName_i6:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BFE, 0x2
-EmbeddedPtrTable_v9_naka_widget_names_charmap_004C00:
-	.long 0x3569FF00
-	.long 0x3469FF00
-	.long 0x3369FF00
-	.long 0x3269FF00
-	.long 0x3169FF00
-	.long 0x3069FF00
-	.long 0x6544FF00
-	.long 0x6C756166
-	.long 0x6F4E0074
-	.long 0xFF00656E
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C00, 0x2
+IconName_i5:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C02, 0x4
+IconName_i4:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C06, 0x4
+IconName_i3:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C0A, 0x4
+IconName_i2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C0E, 0x4
+IconName_i1:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C12, 0x4
+IconName_i0:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C16, 0x4
+IconName_Default:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C1A, 0xE
+EmbeddedPtrTable_v9_naka_widget_names_charmap_004C28:
 IconBitmapNamePtrTable:
 	.long NakaInst_trash_bmp
 	.long 0x00EB2AAE
@@ -1662,10 +1667,3 @@ Naka_FileManagerEntry:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5674, 0x1A
 
 ; External label offsets within the binary blob above.
-	.equ IconName_i5, NakaData_WidgetNames + 0x4c02
-	.equ IconName_i4, NakaData_WidgetNames + 0x4c06
-	.equ IconName_i3, NakaData_WidgetNames + 0x4c0a
-	.equ IconName_i2, NakaData_WidgetNames + 0x4c0e
-	.equ IconName_i1, NakaData_WidgetNames + 0x4c12
-	.equ IconName_i0, NakaData_WidgetNames + 0x4c16
-	.equ IconName_Default, NakaData_WidgetNames + 0x4c1a
