@@ -2,7 +2,9 @@
 ; Technichord Part Settings screen widgets (221 widgets, 17024 bytes)
 ; Source: maincpu/ui_widgets/naka_technichord_part.c (C struct with named fields)
 NakaInst_TECHNI_CHORD:
-	.incbin "includes/generated/naka_technichord_part.bin", 0x0, 0x3E00
+	.incbin "includes/generated/naka_technichord_part.bin", 0x0, 0x1132
+Naka_KeyScaling_NavTrail:
+	.incbin "includes/generated/naka_technichord_part.bin", 0x1132, 0x2CCE
 EmbeddedPtrTable_v7_naka_technichord_part_003E00:
 	.long 0x00E85CB4
 	.long 0x00E85CB2
@@ -71,4 +73,3 @@ EmbeddedPtrTable_v7_naka_technichord_part_003E00:
 	.incbin "includes/generated/naka_technichord_part.bin", 0x3F00, 0x380
 
 ; External label offsets within the binary blob above.
-	.equ Naka_KeyScaling_NavTrail, NakaInst_TECHNI_CHORD + 0x1132

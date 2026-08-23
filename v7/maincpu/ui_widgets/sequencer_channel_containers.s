@@ -2,7 +2,17 @@
 ; Sequencer Channel Containers + Drawbar/Mixer Data (13 widgets, 7936 bytes)
 ; Source: maincpu/ui_widgets/naka_sequencer_channels.c (C struct with named fields)
 NakaData_SeqChannels:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0, 0xD00
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x0, 0x6A0
+Naka_DrawbarOrgan_Screens:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0x108
+SeqCh_FeatureDemoCallbackData:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x7A8, 0xE0
+SeqCh_SystemHandlerData:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x888, 0x3C0
+MixerPart_NamePtrTable:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0xC48, 0x84
+Naka_DrawbarControl_Table:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0xCCC, 0x34
 EmbeddedPtrTable_v7_naka_sequencer_channels_000D00:
 	.long NakaInst_PART_14
 	.long NakaInst_PART_15
@@ -132,7 +142,13 @@ EmbeddedPtrTable_v7_naka_sequencer_channels_000D00:
 	.long TrackName6_Unassigned_08
 	.long TrackName6_Unassigned_07
 	.long TrackName6_Unassigned_06
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF00, 0x600
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF00, 0x48
+Naka_DrawbarSlider_Resources:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0x390
+Naka_DrawbarDisplay_Table1:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
+Naka_DrawbarDisplay_Table2:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1358, 0x1A8
 EmbeddedPtrTable_v7_naka_sequencer_channels_001500:
 	.long 0x2E8200EB
 	.long 0xF0D200EB
@@ -198,17 +214,10 @@ EmbeddedPtrTable_v7_naka_sequencer_channels_001500:
 	.long 0x00ED0212
 	.long 0x00ED0212
 	.long NoteNameStr_Table_1
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x8D6
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x478
+Palette_8bit_RGBA_2_Data:
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x45E
 
 ; External label offsets within the binary blob above.
-	.equ Naka_DrawbarOrgan_Screens, NakaData_SeqChannels + 0x06a0
-	.equ SeqCh_FeatureDemoCallbackData, NakaData_SeqChannels + 0x07a8
-	.equ SeqCh_SystemHandlerData, NakaData_SeqChannels + 0x0888
-	.equ MixerPart_NamePtrTable, NakaData_SeqChannels + 0x0c48
-	.equ Naka_DrawbarControl_Table, NakaData_SeqChannels + 0x0ccc
 	.equ MidiPart_ConfigNameTable, NakaData_SeqChannels + 0x0d5c
-	.equ Naka_DrawbarSlider_Resources, NakaData_SeqChannels + 0x0f48
-	.equ Naka_DrawbarDisplay_Table1, NakaData_SeqChannels + 0x12d8
-	.equ Naka_DrawbarDisplay_Table2, NakaData_SeqChannels + 0x1358
 	.equ Naka_DrawbarReg_Table, NakaData_SeqChannels + 0x1510
-	.equ Palette_8bit_RGBA_2_Data, NakaData_SeqChannels + 0x1a78

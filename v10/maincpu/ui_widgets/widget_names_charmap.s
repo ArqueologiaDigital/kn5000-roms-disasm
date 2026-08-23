@@ -2,7 +2,789 @@
 ; Widget Name Strings & Character Map Data (2 widgets, 22158 bytes)
 ; Source: maincpu/ui_widgets/naka_widget_names_charmap.c (raw byte array)
 NakaData_WidgetNames:
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0, 0x4500
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x0, 0x628
+NakaInst_CHARA5W:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x628, 0x8
+NakaInst_CHARA2W:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x630, 0x8
+NakaInst_CHARA1W:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x638, 0x8
+NakaInst_CHARA6:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x640, 0x8
+NakaInst_CHARA1P:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x648, 0x8
+NakaInst_CHARA5:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x650, 0x8
+NakaInst_CHARA4:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x658, 0x8
+NakaInst_CHARA3:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x660, 0x8
+NakaInst_CHARA2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x668, 0x8
+NakaInst_CHARA1:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x670, 0x8
+NakaInst_CharaList_Pad:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x678, 0x2
+NakaInst_chara5w_fnt:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x67A, 0xC
+NakaInst_chara2w_fnt:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x686, 0xC
+NakaInst_chara1w_fnt:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x692, 0xC
+NakaInst_ara6_fnt:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x69E, 0x24E4
+WidgetName_InitPtrTable:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B82, 0x16
+WidgetName_PtrBlock_A:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B98, 0x18
+WidgetName_PtrBlock_B1:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2BB0, 0x1
+WidgetName_PtrBlock_B2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2BB1, 0x9
+WidgetName_PtrBlock_C:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2BBA, 0x27
+WidgetName_PtrBlock_D:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2BE1, 0x27
+WidgetName_PtrBlock_E:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C08, 0x24
+WidgetName_PtrBlock_F1:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C2C, 0x3
+WidgetName_PtrBlock_F2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C2F, 0x5
+WidgetName_PtrBlock_G:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C34, 0x14
+WidgetName_PtrBlock_H:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C48, 0xC
+WidgetName_PtrBlock_I1:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C54, 0x2
+WidgetName_PtrBlock_I2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C56, 0xF
+Data_WidgetNamesCharMapBlock:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C65, 0x3
+WidgetCharMap_DataEntry1:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C68, 0x3
+WidgetName_PtrBlock_K:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C6B, 0x12
+WidgetName_PtrBlock_L:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C7D, 0x22
+WidgetName_PtrBlock_M1:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2C9F, 0x5
+WidgetName_PtrBlock_M2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2CA4, 0x27
+WidgetName_PtrBlock_N1:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2CCB, 0x4
+WidgetCharMap_DataEntry2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2CCF, 0x87
+WidgetName_PtrBlock_O:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2D56, 0x3B0
+NakaInst_FuncNames_Terminator:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3106, 0x2
+NakaInst_DrawBitmapSP2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3108, 0xE
+NakaInst_MainDeleteEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3116, 0x10
+NakaInst_MainDeleteSpecificEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3126, 0x18
+NakaInst_DrawFunc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x313E, 0xA
+NakaInst_SetRootParam:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3148, 0xE
+NakaInst_SetRootEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3156, 0xE
+NakaInst_InitDrawTask:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3164, 0xE
+NakaInst_RefreshSwEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3172, 0x10
+NakaInst_LcdOn:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3182, 0x6
+NakaInst_LcdOff:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3188, 0x8
+NakaInst_DrawBitmapFile:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3190, 0x10
+NakaInst_VwUserBitmapByNameProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x31A0, 0x18
+NakaInst_ApDeliveryEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x31B8, 0x10
+Str_RefreshApTask:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x31C8, 0xE
+NakaInst_WakeUpApTask:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x31D6, 0xE
+Str_SleepApTask:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x31E4, 0xC
+NakaInst_WakeUpMainTask:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x31F0, 0x10
+NakaInst_SleepMainTask:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3200, 0xE
+NakaInst_DeleteEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x320E, 0xC
+NakaInst_DeleteSpecificEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x321A, 0x14
+NakaInst_FuncCall:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x322E, 0xA
+NakaInst_IvIntWelcomeProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3238, 0x12
+NakaInst_SetWallColor:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x324A, 0xE
+NakaInst_SetWallPaper:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3258, 0xE
+NakaInst_InitPaletteRGB:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3266, 0x10
+NakaInst_SetPaletteRGB:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3276, 0xE
+NakaInst_DrawBitmapFast:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3284, 0x10
+Str_DrawBitmapSPFast:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3294, 0x12
+Str_GetNamingWindowID:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x32A6, 0x12
+Str_IvScreenProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x32B8, 0xE
+Str_CaptureLcd:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x32C6, 0xC
+Str_VwUserBitmapProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x32D2, 0x12
+Str_DrawBitmapSP:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x32E4, 0xE
+Str_GetPartSelect:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x32F2, 0xE
+Str_TrChordBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3300, 0x10
+Str_TrTransposeBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3310, 0x14
+Str_AcLanguageTextProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3324, 0x14
+Str_PsTextBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3338, 0xE
+Str_IvShowHideProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3346, 0x10
+Str_SetNotDrawFlag:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3356, 0x10
+Str_ConvertStringsEx:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3366, 0x12
+Str_SetVariFlag:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3378, 0xC
+Str_IvIntEasySetProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3384, 0x12
+Str_IvIntVariProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3396, 0xE
+Str_IvIntCompleteProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x33A4, 0x12
+Str_IvIntErrorProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x33B6, 0x10
+Str_IvIntReminderProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x33C6, 0x12
+Str_CheckNotDrawFlag:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x33D8, 0x12
+Str_SetInterruptTime:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x33EA, 0x12
+Str_IvInterruptProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x33FC, 0x10
+Str_IntTimeIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x340C, 0xE
+Str_DbMemoryDumpProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x341A, 0x12
+Str_IvExitWindowProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x342C, 0x12
+Str_IvTrackSwitchProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x343E, 0x12
+Str_GetDirmdFlag:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3450, 0xE
+Str_DirmdEmulator:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x345E, 0xE
+Str_IvDirmdScreenProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x346C, 0x12
+Str_AcTrackSwitchProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x347E, 0x12
+Str_PsTrackSwitchProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3490, 0x12
+Str_DbDebugMenuProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x34A2, 0x10
+Str_AcGridBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x34B2, 0xE
+Str_AcListBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x34C0, 0xE
+Str_PsGridBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x34CE, 0xE
+Str_PsListBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x34DC, 0xE
+Str_GetDialFocus:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x34EA, 0xE
+Str_SetDialFocus:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x34F8, 0xE
+Str_IvCatchEventProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3506, 0x12
+Str_AcStrRadioBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3518, 0x12
+Str_PsRadioBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x352A, 0x10
+Str_AcRamBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x353A, 0xE
+Str_AcIndexToggleProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3548, 0x12
+Str_IvNamingProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x355A, 0xE
+Str_PsCursorBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3568, 0x10
+Str_AcNamingWindowProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3578, 0x14
+Str_IvFixWinProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x358C, 0xE
+Str_GetBoxCenter:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x359A, 0xE
+Str_DrawStringReverse:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x35A8, 0x12
+Str_IvExitScreenProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x35BA, 0x12
+Str_IvExitModeProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x35CC, 0x10
+Str_IvExitProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x35DC, 0xC
+Str_GetFocusParam:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x35E8, 0xE
+Str_GetFocusEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x35F6, 0xE
+Str_GetFocusObject:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3604, 0x10
+Str_SetRootObject:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3614, 0xE
+Str_SetAutoInc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3622, 0xC
+Str_SetAutoIncDefault:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x362E, 0x12
+Str_GetRootParam:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3640, 0xE
+Str_GetRootEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x364E, 0xE
+Str_GetRootObject:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x365C, 0xE
+Str_KillApTimer:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x366A, 0xC
+Str_ResetApTimer:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3676, 0xE
+Str_SetApTimer:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3684, 0xC
+Str_ApTimer:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3690, 0x8
+Str_InitializeTimer:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3698, 0x10
+Str_DbMemoProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x36A8, 0xC
+Str_PsWideToggleProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x36B4, 0x12
+Str_AcFuncToggleProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x36C6, 0x12
+Str_MainBitGet:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x36D8, 0xC
+Str_MainBitPut:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x36E4, 0xC
+Str_AcBitEditBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x36F0, 0x12
+Str_VwEditSwBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3702, 0x10
+Str_VwMenuBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3712, 0xE
+Str_AcMixerVolProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3720, 0x10
+Str_AcPmemNameProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3730, 0x10
+Str_AcRhythmNameProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3740, 0x12
+Str_AcSoundNameProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3752, 0x10
+Str_GetWallPaletteRGB:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3762, 0x12
+Str_ChangeWallPalette:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3774, 0x12
+Str_SetDialDown:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3786, 0xC
+Str_SetDialUp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3792, 0xA
+Str_SetDialEnable:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x379C, 0xE
+Str_IvMainEditSwProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x37AA, 0x12
+Str_IvPageControlProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x37BC, 0x12
+Str_PsInvisibleBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x37CE, 0x14
+Str_PsToggleBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x37E2, 0x10
+Str_AcWindowPageProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x37F2, 0x12
+Str_PsPageBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3804, 0xE
+Str_AcFuncEditSwProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3812, 0x12
+Str_AcIndexEditSwProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3824, 0x12
+Str_PsWideESBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3836, 0x10
+Str_PsEditSwBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3846, 0x10
+Str_AcTitleMenuProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3856, 0x10
+Str_PsMenuBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3866, 0xE
+Str_AcRamEditBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3874, 0x12
+Str_AcLswEditBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3886, 0x12
+Str_AcNumEditBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3898, 0x12
+Str_AcOnOffBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x38AA, 0x10
+Str_PsTblEditBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x38BA, 0x12
+Str_PsNumEditBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x38CC, 0x12
+Str_PsEditBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x38DE, 0xE
+Str_AcTempoBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x38EC, 0x10
+Str_AcLswBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x38FC, 0xE
+Str_PsParaBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x390A, 0xE
+Str_VwBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3918, 0xA
+Str_TextBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3922, 0xC
+Str_LineProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x392E, 0xA
+Str_IconProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3938, 0xA
+Str_BitmapProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3942, 0xC
+Str_LabelProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x394E, 0xA
+Str_StringBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3958, 0xE
+Str_WindowProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3966, 0xC
+Str_GroupBoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3972, 0xE
+Str_TitleEditProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3980, 0xE
+Str_ModeEditProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x398E, 0xE
+Str_MainRamGet:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x399C, 0xC
+Str_MainRamAdd:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x39A8, 0xC
+Str_MainRamPut:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x39B4, 0xC
+Str_ResetLswFilter:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x39C0, 0x10
+Str_SetLswFilter:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x39D0, 0xE
+Str_MainLswPartGet:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x39DE, 0x10
+Str_MainLswGet:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x39EE, 0xC
+Str_MainLswPartAdd:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x39FA, 0x10
+Str_MainLswAdd:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A0A, 0xC
+Str_MainLswPartPut:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A16, 0x10
+Str_MainLswPut:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A26, 0xC
+Str_DrawEditSw:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A32, 0xC
+Str_EditSwProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A3E, 0xC
+Str_DrawTitleBar:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A4A, 0xE
+Str_TtlScreenProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A58, 0xE
+Str_DrawDesignFrame:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A66, 0x10
+Str_GetClientFrame2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A76, 0x10
+Str_GetClientFrame:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A86, 0x10
+Str_FrameProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3A96, 0xA
+Str_GetEditSwPoint:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3AA0, 0x10
+Str_ScreenProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3AB0, 0xC
+Str_BoxRightCheck:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3ABC, 0xE
+Str_BoxLeftCheck:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3ACA, 0xE
+Str_GetFrameColor:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3AD8, 0xE
+Str_DrawDesignBox:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3AE6, 0xE
+Str_GetClientBox2:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3AF4, 0xE
+Str_GetClientBox:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B02, 0xE
+Str_BoxProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B10, 0x8
+Str_SetBox:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B18, 0x8
+Str_GetBox:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B20, 0x8
+Str_GetViewInstance:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B28, 0x10
+Str_GetLinkView:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B38, 0xC
+Str_SetSuperView:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B44, 0xE
+Str_Unlink:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B52, 0x8
+Str_Link:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B5A, 0x6
+Str_SubView:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B60, 0x8
+Str_SuperView:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B68, 0xA
+Str_PrevView:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B72, 0xA
+Str_NextView:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B7C, 0xA
+Str_GetMovable:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B86, 0xC
+Str_SetMovable:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B92, 0xC
+Str_GetVisible:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3B9E, 0xC
+Str_SetVisible:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3BAA, 0xC
+Str_GetChange:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3BB6, 0xA
+Str_SetChange:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3BC0, 0xA
+Str_GetConst:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3BCA, 0xA
+Str_SetConst:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3BD4, 0xA
+Str_ViewableProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3BDE, 0xE
+Str_GetTitleOld:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3BEC, 0xC
+Str_GetTitleNow:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3BF8, 0xC
+Str_UnregisteredTitle:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C04, 0x12
+Str_RegisterTitle:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C16, 0xE
+Str_TitleProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C24, 0xA
+Str_GetModeOld:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C2E, 0xC
+Str_GetModeNow:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C3A, 0xC
+Str_UnregisteredMode:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C46, 0x12
+Str_RegisterMode:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C58, 0xE
+Str_ModeProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C66, 0xA
+Str_MainFuncCall:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C70, 0xE
+Str_ApFuncCall:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C7E, 0xC
+Str_MainFunctionProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C8A, 0x12
+Str_ApFunctionProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3C9C, 0x10
+Str_FunctionProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3CAC, 0xE
+Str_TrackIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3CBA, 0xC
+Str_PartIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3CC6, 0xC
+Str_UserIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3CD2, 0xC
+Str_MainFuncIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3CDE, 0x10
+Str_ApFuncIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3CEE, 0xE
+Str_BitmapIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3CFC, 0xE
+Str_FrameIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D0A, 0xC
+Str_LineModeIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D16, 0x10
+Str_EditSwStyleIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D26, 0x12
+Str_EditSwIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D38, 0xE
+Str_AlignmentIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D46, 0x10
+Str_FontIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D56, 0xC
+Str_IconIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D62, 0xC
+Str_TitleIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D6E, 0xC
+Str_ModeIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D7A, 0xC
+Str_BorderIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D86, 0xE
+Str_ColorIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3D94, 0xC
+Str_ViewFlagProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3DA0, 0xE
+Str_ViewIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3DAE, 0xC
+Str_ConstFlagProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3DBA, 0xE
+Str_NameProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3DC8, 0xA
+Str_StringProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3DD2, 0xC
+Str_PointYProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3DDE, 0xC
+Str_PointXProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3DEA, 0xC
+Str_POINTWProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3DF6, 0xC
+Str_RectY2Proc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E02, 0xC
+Str_RectX2Proc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E0E, 0xC
+Str_RectY1Proc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E1A, 0xC
+Str_RectX1Proc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E26, 0xC
+Str_RECTWProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E32, 0xA
+Str_EventIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E3C, 0xC
+Str_WindowIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E48, 0xE
+Str_ScreenIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E56, 0xE
+Str_ClassIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E64, 0xC
+Str_pStringProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E70, 0xC
+Str_pPropProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E7C, 0xA
+Str_pProcProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E86, 0xA
+Str_pFuncProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E90, 0xA
+Str_ObjectIDProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3E9A, 0xE
+Str_pUlongProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3EA8, 0xC
+Str_pSlongProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3EB4, 0xC
+Str_pUcharProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3EC0, 0xC
+Str_pScharProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3ECC, 0xC
+Str_pUwordProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3ED8, 0xC
+Str_pSwordProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3EE4, 0xC
+Str_pBoolProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3EF0, 0xA
+Str_boolProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3EFA, 0xA
+Str_ulongProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F04, 0xA
+Str_slongProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F0E, 0xA
+Str_scharProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F18, 0xA
+Str_ucharProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F22, 0xA
+Str_uwordProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F2C, 0xA
+Str_swordProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F36, 0xA
+Str_SupportClassProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F40, 0x12
+Str_ClassProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F52, 0xA
+Str_WordwrapStrings:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F5C, 0x10
+Str_CalcTotalWidth:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F6C, 0x10
+Str_ConvertStrings:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F7C, 0x10
+Str_GetCenteredDelta:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F8C, 0x12
+Str_GetCharDescent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3F9E, 0x10
+Str_GetCharHeight:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3FAE, 0xE
+Str_GetFrameSPSize:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3FBC, 0x10
+Str_ResNameProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3FCC, 0xC
+Str_ResStringProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3FD8, 0xE
+Str_ResMethodProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3FE6, 0xE
+Str_ResEventProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x3FF4, 0xE
+Str_ResFontProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4002, 0xC
+Str_ResIconProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x400E, 0xC
+Str_ResFrameProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x401A, 0xE
+Str_ResBitmapProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4028, 0xE
+Str_ResourceProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4036, 0xE
+Str_ApPostEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4044, 0xC
+Str_MainGetEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4050, 0xE
+Str_MainPostEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x405E, 0xE
+Str_MainSendEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x406C, 0xE
+Str_MainDispatchEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x407A, 0x12
+Str_SetCurrentTarget:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x408C, 0x12
+Str_GetCurrentTarget:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x409E, 0x12
+Str_GetEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x40B0, 0xA
+Str_PostEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x40BA, 0xA
+Str_SendEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x40C4, 0xA
+Str_DispatchEvent:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x40CE, 0xE
+Str_InitializeEventQueue:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x40DC, 0x16
+Str_CheckViewObject:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x40F2, 0x10
+Str_CountObject:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4102, 0xC
+Str_UnRegisterObject:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x410E, 0x12
+Str_RegisterObject:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4120, 0x10
+Str_RegisterObjectTable:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4130, 0x14
+Str_InitializeObjectTable:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4144, 0x16
+Str_InheritedProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x415A, 0xE
+Str_ObjectProc:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4168, 0xC
+Str_DrawStringAlignment:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4174, 0x14
+Str_DrawStringRightJustify:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4188, 0x18
+Str_DrawStringLeftJustify:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x41A0, 0x16
+Str_DrawStringCentered:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x41B6, 0x14
+Str_DrawString:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x41CA, 0xC
+Str_DrawFrameSP:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x41D6, 0xC
+Str_DrawIcons:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x41E2, 0xA
+Str_DrawBitmap:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x41EC, 0xC
+Str_DrawWall:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x41F8, 0xA
+Str_MovePixels:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4202, 0xC
+Str_DrawFrameEx:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x420E, 0xC
+Str_DrawFrame:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x421A, 0xA
+Str_DrawBox:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4224, 0x8
+Str_DrawLineEx:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x422C, 0xC
+Str_DrawLine:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4238, 0xA
+Str_ModifyPixelEx:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4242, 0xE
+Str_ModifyPixel:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4250, 0xC
+Str_ReadPixel:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x425C, 0xA
+Str_SetChangeRect:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4266, 0xE
+Str_SetNeedUpdate:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4274, 0xE
+Str_UpdateScreen:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4282, 0xE
+Str_InitializeGraphics:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4290, 0x14
+Str_InitializeUser31:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x42A4, 0x12
+Str_InitializeUser30:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x42B6, 0x12
+Str_InitializeUser29:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x42C8, 0x12
+Str_InitializeUser28:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x42DA, 0x12
+Str_InitializeUser27:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x42EC, 0x12
+Str_InitializeUser26:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x42FE, 0x12
+Str_InitializeUser25:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4310, 0x12
+Str_InitializeUser24:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4322, 0x12
+Str_InitializeUser23:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4334, 0x12
+Str_InitializeUser22:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4346, 0x12
+Str_InitializeUser21:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4358, 0x12
+Str_InitializeUser20:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x436A, 0x12
+Str_InitializeUser19:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x437C, 0x12
+Str_InitializeUser18:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x438E, 0x12
+Str_InitializeUser17:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x43A0, 0x12
+Str_InitializeUser16:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x43B2, 0x12
+Str_InitializeUser15:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x43C4, 0x12
+Str_InitializeUser14:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x43D6, 0x12
+Str_InitializeUser13:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x43E8, 0x12
+Str_InitializeUser12:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x43FA, 0x12
+Str_InitializeNaka:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x440C, 0x10
+Str_InitializeKSS:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x441C, 0xE
+Str_InitializeHama:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x442A, 0x10
+Str_InitializeKubo:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x443A, 0x10
+Str_InitializeYoko:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x444A, 0x10
+Str_InitializeScoop:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x445A, 0x10
+Str_InitializeCheap:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x446A, 0x10
+Str_InitializeSuna:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x447A, 0x10
+Str_InitializeEast:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x448A, 0x10
+Str_InitializeToshi:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x449A, 0x10
+Str_InitializeMurai:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44AA, 0x10
+Str_InitializeRoot:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44BA, 0x16
+IconNamePtrTable:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44D0, 0x30
 EmbeddedPtrTable_v10_naka_widget_names_charmap_004500:
 	.long IconName_i11
 	.long IconName_i12
@@ -132,7 +914,345 @@ EmbeddedPtrTable_v10_naka_widget_names_charmap_004500:
 	.long IconName_i136
 	.long IconName_i137
 	.long IconName_i138
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4700, 0x500
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4700, 0x1CC
+IconName_Empty:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48CC, 0x2
+IconName_i173:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48CE, 0x6
+IconName_i172:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48D4, 0x6
+IconName_i171:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48DA, 0x6
+IconName_i170:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48E0, 0x6
+IconName_i169:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48E6, 0x6
+IconName_i168:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48EC, 0x6
+IconName_i167:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48F2, 0x6
+IconName_i166:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48F8, 0x6
+IconName_i165:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x48FE, 0x6
+IconName_i164:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4904, 0x6
+IconName_i163:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x490A, 0x6
+IconName_i162:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4910, 0x6
+IconName_i161:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4916, 0x6
+IconName_i160:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x491C, 0x6
+IconName_i159:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4922, 0x6
+IconName_i158:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4928, 0x6
+IconName_i157:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x492E, 0x6
+IconName_i156:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4934, 0x6
+IconName_i155:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x493A, 0x6
+IconName_i154:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4940, 0x6
+IconName_i153:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4946, 0x6
+IconName_i152:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x494C, 0x6
+IconName_i151:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4952, 0x6
+IconName_i150:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4958, 0x6
+IconName_i149:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x495E, 0x6
+IconName_i148:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4964, 0x6
+IconName_i147:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x496A, 0x6
+IconName_i146:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4970, 0x6
+IconName_i145:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4976, 0x6
+IconName_i144:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x497C, 0x6
+IconName_i143:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4982, 0x6
+IconName_i142:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4988, 0x6
+IconName_i141:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x498E, 0x6
+IconName_i140:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4994, 0x6
+IconName_i139:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x499A, 0x6
+IconName_i138:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49A0, 0x6
+IconName_i137:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49A6, 0x6
+IconName_i136:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49AC, 0x6
+IconName_i135:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49B2, 0x6
+IconName_i134:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49B8, 0x6
+IconName_i133:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49BE, 0x6
+IconName_i132:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49C4, 0x6
+IconName_i131:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49CA, 0x6
+IconName_i130:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49D0, 0x6
+IconName_i129:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49D6, 0x6
+IconName_i128:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49DC, 0x6
+IconName_i127:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49E2, 0x6
+IconName_i126:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49E8, 0x6
+IconName_i125:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49EE, 0x6
+IconName_i124:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49F4, 0x6
+IconName_i123:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x49FA, 0x6
+IconName_i122:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A00, 0x6
+IconName_i121:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A06, 0x6
+IconName_i120:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A0C, 0x6
+IconName_i119:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A12, 0x6
+IconName_i118:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A18, 0x6
+IconName_i117:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A1E, 0x6
+IconName_i116:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A24, 0x6
+IconName_i115:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A2A, 0x6
+IconName_i114:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A30, 0x6
+IconName_i113:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A36, 0x6
+IconName_i112:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A3C, 0x6
+IconName_i111:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A42, 0x6
+IconName_i110:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A48, 0x6
+IconName_i109:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A4E, 0x6
+IconName_i108:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A54, 0x6
+IconName_i107:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A5A, 0x6
+IconName_i106:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A60, 0x6
+IconName_i105:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A66, 0x6
+IconName_i104:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A6C, 0x6
+IconName_i103:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A72, 0x6
+IconName_i102:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A78, 0x6
+IconName_i101:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A7E, 0x6
+IconName_i100:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A84, 0x6
+IconName_i99:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A8A, 0x4
+IconName_i98:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A8E, 0x4
+IconName_i97:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A92, 0x4
+IconName_i96:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A96, 0x4
+IconName_i95:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A9A, 0x4
+IconName_i94:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4A9E, 0x4
+IconName_i93:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AA2, 0x4
+IconName_i92:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AA6, 0x4
+IconName_i91:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AAA, 0x4
+IconName_i90:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AAE, 0x4
+IconName_i89:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AB2, 0x4
+IconName_i88:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AB6, 0x4
+IconName_i87:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4ABA, 0x4
+IconName_i86:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4ABE, 0x4
+IconName_i85:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AC2, 0x4
+IconName_i84:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AC6, 0x4
+IconName_i83:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4ACA, 0x4
+IconName_i82:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4ACE, 0x4
+IconName_i81:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AD2, 0x4
+IconName_i80:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AD6, 0x4
+IconName_i79:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4ADA, 0x4
+IconName_i78:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4ADE, 0x4
+IconName_i77:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AE2, 0x4
+IconName_i76:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AE6, 0x4
+IconName_i75:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AEA, 0x4
+IconName_i74:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AEE, 0x4
+IconName_i73:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AF2, 0x4
+IconName_i72:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AF6, 0x4
+IconName_i71:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AFA, 0x4
+IconName_i70:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4AFE, 0x4
+IconName_i69:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B02, 0x4
+IconName_i68:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B06, 0x4
+IconName_i67:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B0A, 0x4
+IconName_i66:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B0E, 0x4
+IconName_i65:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B12, 0x4
+IconName_i64:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B16, 0x4
+IconName_i63:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B1A, 0x4
+IconName_i62:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B1E, 0x4
+IconName_i61:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B22, 0x4
+IconName_i60:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B26, 0x4
+IconName_i59:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B2A, 0x4
+IconName_i58:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B2E, 0x4
+IconName_i57:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B32, 0x4
+IconName_i56:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B36, 0x4
+IconName_i55:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B3A, 0x4
+IconName_i54:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B3E, 0x4
+IconName_i53:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B42, 0x4
+IconName_i52:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B46, 0x4
+IconName_i51:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B4A, 0x4
+IconName_i50:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B4E, 0x4
+IconName_i49:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B52, 0x4
+IconName_i48:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B56, 0x4
+IconName_i47:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B5A, 0x4
+IconName_i46:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B5E, 0x4
+IconName_i45:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B62, 0x4
+IconName_i44:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B66, 0x4
+IconName_i43:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B6A, 0x4
+IconName_i42:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B6E, 0x4
+IconName_i41:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B72, 0x4
+IconName_i40:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B76, 0x4
+IconName_i39:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B7A, 0x4
+IconName_i38:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B7E, 0x4
+IconName_i37:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B82, 0x4
+IconName_i36:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B86, 0x4
+IconName_i35:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B8A, 0x4
+IconName_i34:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B8E, 0x4
+IconName_i33:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B92, 0x4
+IconName_i32:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B96, 0x4
+IconName_i31:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B9A, 0x4
+IconName_i30:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4B9E, 0x4
+IconName_i29:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BA2, 0x4
+IconName_i28:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BA6, 0x4
+IconName_i27:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BAA, 0x4
+IconName_i26:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BAE, 0x4
+IconName_i25:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BB2, 0x4
+IconName_i24:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BB6, 0x4
+IconName_i23:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BBA, 0x4
+IconName_i22:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BBE, 0x4
+IconName_i21:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BC2, 0x4
+IconName_i20:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BC6, 0x4
+IconName_i19:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BCA, 0x4
+IconName_i18:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BCE, 0x4
+IconName_i17:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BD2, 0x4
+IconName_i16:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BD6, 0x4
+IconName_i15:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BDA, 0x4
+IconName_i14:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BDE, 0x4
+IconName_i13:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BE2, 0x4
+IconName_i12:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BE6, 0x4
+IconName_i11:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BEA, 0x4
+IconName_i10:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BEE, 0x4
+IconName_i9:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BF2, 0x4
+IconName_i8:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BF6, 0x4
+IconName_i7:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BFA, 0x4
+IconName_i6:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4BFE, 0x2
 EmbeddedPtrTable_v10_naka_widget_names_charmap_004C00:
 	.long 0x3569FF00
 	.long 0x3469FF00
@@ -326,569 +1446,221 @@ EmbeddedPtrTable_v10_naka_widget_names_charmap_004C00:
 	.long 0x00000000
 	.long 0x00000000
 	.long 0x00000000
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4F00, 0x78E
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4F00, 0x128
+IconBitmapName_Empty:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5028, 0x2
+IconBitmapName_i173:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x502A, 0xA
+IconBitmapName_i172:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5034, 0xA
+IconBitmapName_i171:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x503E, 0xA
+IconBitmapName_i170:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5048, 0xA
+IconBitmapName_i169:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5052, 0xA
+IconBitmapName_i168:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x505C, 0xA
+IconBitmapName_i167:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5066, 0xA
+IconBitmapName_i166:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5070, 0xA
+IconBitmapName_i165:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x507A, 0xA
+IconBitmapName_i164:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5084, 0xA
+IconBitmapName_i163:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x508E, 0xA
+IconBitmapName_i162:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5098, 0xA
+IconBitmapName_i161:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50A2, 0xA
+IconBitmapName_i160:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50AC, 0xA
+IconBitmapName_i159:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50B6, 0xA
+IconBitmapName_i158:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50C0, 0xA
+IconBitmapName_i157:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50CA, 0xA
+IconBitmapName_i156:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50D4, 0xA
+IconBitmapName_i155:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50DE, 0xA
+IconBitmapName_i154:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50E8, 0xA
+IconBitmapName_i153:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50F2, 0xA
+IconBitmapName_i152:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x50FC, 0xA
+IconBitmapName_i151:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5106, 0xA
+IconBitmapName_i150:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5110, 0xA
+IconBitmapName_i149:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x511A, 0xA
+IconBitmapName_i148:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5124, 0xA
+IconBitmapName_i147:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x512E, 0xA
+IconBitmapName_i146:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5138, 0xA
+IconBitmapName_i145:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5142, 0xA
+IconBitmapName_i144:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x514C, 0xA
+IconBitmapName_i143:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5156, 0xA
+IconBitmapName_i142:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5160, 0xA
+IconBitmapName_i141:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x516A, 0xA
+IconBitmapName_i140:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5174, 0xA
+IconBitmapName_i139:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x517E, 0xA
+IconBitmapName_i138:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5188, 0xA
+IconBitmapName_i137:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5192, 0xA
+IconBitmapName_i136:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x519C, 0xA
+IconBitmapName_i135:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51A6, 0xA
+IconBitmapName_i134:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51B0, 0xA
+IconBitmapName_i133:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51BA, 0xA
+IconBitmapName_i132:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51C4, 0xA
+IconBitmapName_i131:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51CE, 0xA
+IconBitmapName_i130:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51D8, 0xA
+IconBitmapName_i129:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51E2, 0xA
+IconBitmapName_i128:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51EC, 0xA
+IconBitmapName_i127:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x51F6, 0xA
+IconBitmapName_i126:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5200, 0xA
+IconBitmapName_i125:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x520A, 0xA
+IconBitmapName_i124:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5214, 0xA
+IconBitmapName_i123:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x521E, 0xA
+IconBitmapName_i122:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5228, 0xA
+IconBitmapName_i121:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5232, 0xA
+IconBitmapName_i120:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x523C, 0xA
+IconBitmapName_i119:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5246, 0xA
+IconBitmapName_i118:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5250, 0xA
+IconBitmapName_i117:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x525A, 0xA
+IconBitmapName_i116:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5264, 0xA
+IconBitmapName_i115:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x526E, 0xA
+IconBitmapName_i114:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5278, 0xA
+IconBitmapName_i113:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5282, 0xA
+IconBitmapName_i112:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x528C, 0xA
+IconBitmapName_i111:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5296, 0xA
+IconBitmapName_i110:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52A0, 0xA
+IconBitmapName_i109:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52AA, 0xA
+IconBitmapName_i108:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52B4, 0xA
+IconBitmapName_i107o:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52BE, 0xA
+IconBitmapName_i106:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52C8, 0xA
+IconBitmapName_i105:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52D2, 0xA
+IconBitmapName_i104:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52DC, 0xA
+IconBitmapName_i103:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52E6, 0xA
+IconBitmapName_i102:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52F0, 0xA
+IconBitmapName_i101:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x52FA, 0xA
+IconBitmapName_i100:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5304, 0xA
+IconBitmapName_i99:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x530E, 0x8
+IconBitmapName_i98:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5316, 0x8
+IconBitmapName_i97:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x531E, 0x12
+IconBitmapName_i95:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5330, 0x8
+IconBitmapName_i94:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5338, 0x8
+IconBitmapName_i93o:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5340, 0xA
+IconBitmapName_i92o:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x534A, 0xA
+IconBitmapName_i91o:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5354, 0xA
+IconBitmapName_i90o:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x535E, 0xA
+IconBitmapName_i89:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5368, 0x8
+IconBitmapName_i88:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5370, 0x8
+NakaInst_i87_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5378, 0x8
+NakaInst_i86_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5380, 0x8
+NakaInst_i85_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5388, 0x8
+NakaInst_i84o_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5390, 0xA
+NakaInst_i83_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x539A, 0x8
+NakaInst_i82_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53A2, 0x8
+NakaInst_i81_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53AA, 0x8
+NakaInst_i80_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53B2, 0x8
+NakaInst_i79_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53BA, 0x8
+NakaInst_i78_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53C2, 0x8
+NakaInst_i77_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53CA, 0x8
+NakaInst_i76_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53D2, 0x8
+NakaInst_i75_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53DA, 0x8
+NakaInst_i74o_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53E2, 0xA
+NakaInst_i73o_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53EC, 0xA
+NakaInst_i72_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53F6, 0x8
+NakaInst_i71_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x53FE, 0x8
+NakaInst_0_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5406, 0x242
+NakaInst_trash_bmp:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5648, 0x2C
+Naka_FileManagerEntry:
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5674, 0x1A
 
 ; External label offsets within the binary blob above.
-	.equ NakaInst_CHARA5W, NakaData_WidgetNames + 0x0628
-	.equ NakaInst_CHARA2W, NakaData_WidgetNames + 0x0630
-	.equ NakaInst_CHARA1W, NakaData_WidgetNames + 0x0638
-	.equ NakaInst_CHARA6, NakaData_WidgetNames + 0x0640
-	.equ NakaInst_CHARA1P, NakaData_WidgetNames + 0x0648
-	.equ NakaInst_CHARA5, NakaData_WidgetNames + 0x0650
-	.equ NakaInst_CHARA4, NakaData_WidgetNames + 0x0658
-	.equ NakaInst_CHARA3, NakaData_WidgetNames + 0x0660
-	.equ NakaInst_CHARA2, NakaData_WidgetNames + 0x0668
-	.equ NakaInst_CHARA1, NakaData_WidgetNames + 0x0670
-	.equ NakaInst_CharaList_Pad, NakaData_WidgetNames + 0x0678
-	.equ NakaInst_chara5w_fnt, NakaData_WidgetNames + 0x067a
-	.equ NakaInst_chara2w_fnt, NakaData_WidgetNames + 0x0686
-	.equ NakaInst_chara1w_fnt, NakaData_WidgetNames + 0x0692
-	.equ NakaInst_ara6_fnt, NakaData_WidgetNames + 0x069e
-	.equ WidgetName_InitPtrTable, NakaData_WidgetNames + 0x2b82
-	.equ WidgetName_PtrBlock_A, NakaData_WidgetNames + 0x2b98
-	.equ WidgetName_PtrBlock_B1, NakaData_WidgetNames + 0x2bb0
-	.equ WidgetName_PtrBlock_B2, NakaData_WidgetNames + 0x2bb1
-	.equ WidgetName_PtrBlock_C, NakaData_WidgetNames + 0x2bba
-	.equ WidgetName_PtrBlock_D, NakaData_WidgetNames + 0x2be1
-	.equ WidgetName_PtrBlock_E, NakaData_WidgetNames + 0x2c08
-	.equ WidgetName_PtrBlock_F1, NakaData_WidgetNames + 0x2c2c
-	.equ WidgetName_PtrBlock_F2, NakaData_WidgetNames + 0x2c2f
-	.equ WidgetName_PtrBlock_G, NakaData_WidgetNames + 0x2c34
-	.equ WidgetName_PtrBlock_H, NakaData_WidgetNames + 0x2c48
-	.equ WidgetName_PtrBlock_I1, NakaData_WidgetNames + 0x2c54
-	.equ WidgetName_PtrBlock_I2, NakaData_WidgetNames + 0x2c56
-	.equ Data_WidgetNamesCharMapBlock, NakaData_WidgetNames + 0x2c65
-	.equ WidgetCharMap_DataEntry1, NakaData_WidgetNames + 0x2c68
-	.equ WidgetName_PtrBlock_K, NakaData_WidgetNames + 0x2c6b
-	.equ WidgetName_PtrBlock_L, NakaData_WidgetNames + 0x2c7d
-	.equ WidgetName_PtrBlock_M1, NakaData_WidgetNames + 0x2c9f
-	.equ WidgetName_PtrBlock_M2, NakaData_WidgetNames + 0x2ca4
-	.equ WidgetName_PtrBlock_N1, NakaData_WidgetNames + 0x2ccb
-	.equ WidgetCharMap_DataEntry2, NakaData_WidgetNames + 0x2ccf
-	.equ WidgetName_PtrBlock_O, NakaData_WidgetNames + 0x2d56
-	.equ NakaInst_FuncNames_Terminator, NakaData_WidgetNames + 0x3106
-	.equ NakaInst_DrawBitmapSP2, NakaData_WidgetNames + 0x3108
-	.equ NakaInst_MainDeleteEvent, NakaData_WidgetNames + 0x3116
-	.equ NakaInst_MainDeleteSpecificEvent, NakaData_WidgetNames + 0x3126
-	.equ NakaInst_DrawFunc, NakaData_WidgetNames + 0x313e
-	.equ NakaInst_SetRootParam, NakaData_WidgetNames + 0x3148
-	.equ NakaInst_SetRootEvent, NakaData_WidgetNames + 0x3156
-	.equ NakaInst_InitDrawTask, NakaData_WidgetNames + 0x3164
-	.equ NakaInst_RefreshSwEvent, NakaData_WidgetNames + 0x3172
-	.equ NakaInst_LcdOn, NakaData_WidgetNames + 0x3182
-	.equ NakaInst_LcdOff, NakaData_WidgetNames + 0x3188
-	.equ NakaInst_DrawBitmapFile, NakaData_WidgetNames + 0x3190
-	.equ NakaInst_VwUserBitmapByNameProc, NakaData_WidgetNames + 0x31a0
-	.equ NakaInst_ApDeliveryEvent, NakaData_WidgetNames + 0x31b8
-	.equ Str_RefreshApTask, NakaData_WidgetNames + 0x31c8
-	.equ NakaInst_WakeUpApTask, NakaData_WidgetNames + 0x31d6
-	.equ Str_SleepApTask, NakaData_WidgetNames + 0x31e4
-	.equ NakaInst_WakeUpMainTask, NakaData_WidgetNames + 0x31f0
-	.equ NakaInst_SleepMainTask, NakaData_WidgetNames + 0x3200
-	.equ NakaInst_DeleteEvent, NakaData_WidgetNames + 0x320e
-	.equ NakaInst_DeleteSpecificEvent, NakaData_WidgetNames + 0x321a
-	.equ NakaInst_FuncCall, NakaData_WidgetNames + 0x322e
-	.equ NakaInst_IvIntWelcomeProc, NakaData_WidgetNames + 0x3238
-	.equ NakaInst_SetWallColor, NakaData_WidgetNames + 0x324a
-	.equ NakaInst_SetWallPaper, NakaData_WidgetNames + 0x3258
-	.equ NakaInst_InitPaletteRGB, NakaData_WidgetNames + 0x3266
-	.equ NakaInst_SetPaletteRGB, NakaData_WidgetNames + 0x3276
-	.equ NakaInst_DrawBitmapFast, NakaData_WidgetNames + 0x3284
-	.equ Str_DrawBitmapSPFast, NakaData_WidgetNames + 0x3294
-	.equ Str_GetNamingWindowID, NakaData_WidgetNames + 0x32a6
-	.equ Str_IvScreenProc, NakaData_WidgetNames + 0x32b8
-	.equ Str_CaptureLcd, NakaData_WidgetNames + 0x32c6
-	.equ Str_VwUserBitmapProc, NakaData_WidgetNames + 0x32d2
-	.equ Str_DrawBitmapSP, NakaData_WidgetNames + 0x32e4
-	.equ Str_GetPartSelect, NakaData_WidgetNames + 0x32f2
-	.equ Str_TrChordBoxProc, NakaData_WidgetNames + 0x3300
-	.equ Str_TrTransposeBoxProc, NakaData_WidgetNames + 0x3310
-	.equ Str_AcLanguageTextProc, NakaData_WidgetNames + 0x3324
-	.equ Str_PsTextBoxProc, NakaData_WidgetNames + 0x3338
-	.equ Str_IvShowHideProc, NakaData_WidgetNames + 0x3346
-	.equ Str_SetNotDrawFlag, NakaData_WidgetNames + 0x3356
-	.equ Str_ConvertStringsEx, NakaData_WidgetNames + 0x3366
-	.equ Str_SetVariFlag, NakaData_WidgetNames + 0x3378
-	.equ Str_IvIntEasySetProc, NakaData_WidgetNames + 0x3384
-	.equ Str_IvIntVariProc, NakaData_WidgetNames + 0x3396
-	.equ Str_IvIntCompleteProc, NakaData_WidgetNames + 0x33a4
-	.equ Str_IvIntErrorProc, NakaData_WidgetNames + 0x33b6
-	.equ Str_IvIntReminderProc, NakaData_WidgetNames + 0x33c6
-	.equ Str_CheckNotDrawFlag, NakaData_WidgetNames + 0x33d8
-	.equ Str_SetInterruptTime, NakaData_WidgetNames + 0x33ea
-	.equ Str_IvInterruptProc, NakaData_WidgetNames + 0x33fc
-	.equ Str_IntTimeIDProc, NakaData_WidgetNames + 0x340c
-	.equ Str_DbMemoryDumpProc, NakaData_WidgetNames + 0x341a
-	.equ Str_IvExitWindowProc, NakaData_WidgetNames + 0x342c
-	.equ Str_IvTrackSwitchProc, NakaData_WidgetNames + 0x343e
-	.equ Str_GetDirmdFlag, NakaData_WidgetNames + 0x3450
-	.equ Str_DirmdEmulator, NakaData_WidgetNames + 0x345e
-	.equ Str_IvDirmdScreenProc, NakaData_WidgetNames + 0x346c
-	.equ Str_AcTrackSwitchProc, NakaData_WidgetNames + 0x347e
-	.equ Str_PsTrackSwitchProc, NakaData_WidgetNames + 0x3490
-	.equ Str_DbDebugMenuProc, NakaData_WidgetNames + 0x34a2
-	.equ Str_AcGridBoxProc, NakaData_WidgetNames + 0x34b2
-	.equ Str_AcListBoxProc, NakaData_WidgetNames + 0x34c0
-	.equ Str_PsGridBoxProc, NakaData_WidgetNames + 0x34ce
-	.equ Str_PsListBoxProc, NakaData_WidgetNames + 0x34dc
-	.equ Str_GetDialFocus, NakaData_WidgetNames + 0x34ea
-	.equ Str_SetDialFocus, NakaData_WidgetNames + 0x34f8
-	.equ Str_IvCatchEventProc, NakaData_WidgetNames + 0x3506
-	.equ Str_AcStrRadioBoxProc, NakaData_WidgetNames + 0x3518
-	.equ Str_PsRadioBoxProc, NakaData_WidgetNames + 0x352a
-	.equ Str_AcRamBoxProc, NakaData_WidgetNames + 0x353a
-	.equ Str_AcIndexToggleProc, NakaData_WidgetNames + 0x3548
-	.equ Str_IvNamingProc, NakaData_WidgetNames + 0x355a
-	.equ Str_PsCursorBoxProc, NakaData_WidgetNames + 0x3568
-	.equ Str_AcNamingWindowProc, NakaData_WidgetNames + 0x3578
-	.equ Str_IvFixWinProc, NakaData_WidgetNames + 0x358c
-	.equ Str_GetBoxCenter, NakaData_WidgetNames + 0x359a
-	.equ Str_DrawStringReverse, NakaData_WidgetNames + 0x35a8
-	.equ Str_IvExitScreenProc, NakaData_WidgetNames + 0x35ba
-	.equ Str_IvExitModeProc, NakaData_WidgetNames + 0x35cc
-	.equ Str_IvExitProc, NakaData_WidgetNames + 0x35dc
-	.equ Str_GetFocusParam, NakaData_WidgetNames + 0x35e8
-	.equ Str_GetFocusEvent, NakaData_WidgetNames + 0x35f6
-	.equ Str_GetFocusObject, NakaData_WidgetNames + 0x3604
-	.equ Str_SetRootObject, NakaData_WidgetNames + 0x3614
-	.equ Str_SetAutoInc, NakaData_WidgetNames + 0x3622
-	.equ Str_SetAutoIncDefault, NakaData_WidgetNames + 0x362e
-	.equ Str_GetRootParam, NakaData_WidgetNames + 0x3640
-	.equ Str_GetRootEvent, NakaData_WidgetNames + 0x364e
-	.equ Str_GetRootObject, NakaData_WidgetNames + 0x365c
-	.equ Str_KillApTimer, NakaData_WidgetNames + 0x366a
-	.equ Str_ResetApTimer, NakaData_WidgetNames + 0x3676
-	.equ Str_SetApTimer, NakaData_WidgetNames + 0x3684
-	.equ Str_ApTimer, NakaData_WidgetNames + 0x3690
-	.equ Str_InitializeTimer, NakaData_WidgetNames + 0x3698
-	.equ Str_DbMemoProc, NakaData_WidgetNames + 0x36a8
-	.equ Str_PsWideToggleProc, NakaData_WidgetNames + 0x36b4
-	.equ Str_AcFuncToggleProc, NakaData_WidgetNames + 0x36c6
-	.equ Str_MainBitGet, NakaData_WidgetNames + 0x36d8
-	.equ Str_MainBitPut, NakaData_WidgetNames + 0x36e4
-	.equ Str_AcBitEditBoxProc, NakaData_WidgetNames + 0x36f0
-	.equ Str_VwEditSwBoxProc, NakaData_WidgetNames + 0x3702
-	.equ Str_VwMenuBoxProc, NakaData_WidgetNames + 0x3712
-	.equ Str_AcMixerVolProc, NakaData_WidgetNames + 0x3720
-	.equ Str_AcPmemNameProc, NakaData_WidgetNames + 0x3730
-	.equ Str_AcRhythmNameProc, NakaData_WidgetNames + 0x3740
-	.equ Str_AcSoundNameProc, NakaData_WidgetNames + 0x3752
-	.equ Str_GetWallPaletteRGB, NakaData_WidgetNames + 0x3762
-	.equ Str_ChangeWallPalette, NakaData_WidgetNames + 0x3774
-	.equ Str_SetDialDown, NakaData_WidgetNames + 0x3786
-	.equ Str_SetDialUp, NakaData_WidgetNames + 0x3792
-	.equ Str_SetDialEnable, NakaData_WidgetNames + 0x379c
-	.equ Str_IvMainEditSwProc, NakaData_WidgetNames + 0x37aa
-	.equ Str_IvPageControlProc, NakaData_WidgetNames + 0x37bc
-	.equ Str_PsInvisibleBoxProc, NakaData_WidgetNames + 0x37ce
-	.equ Str_PsToggleBoxProc, NakaData_WidgetNames + 0x37e2
-	.equ Str_AcWindowPageProc, NakaData_WidgetNames + 0x37f2
-	.equ Str_PsPageBoxProc, NakaData_WidgetNames + 0x3804
-	.equ Str_AcFuncEditSwProc, NakaData_WidgetNames + 0x3812
-	.equ Str_AcIndexEditSwProc, NakaData_WidgetNames + 0x3824
-	.equ Str_PsWideESBoxProc, NakaData_WidgetNames + 0x3836
-	.equ Str_PsEditSwBoxProc, NakaData_WidgetNames + 0x3846
-	.equ Str_AcTitleMenuProc, NakaData_WidgetNames + 0x3856
-	.equ Str_PsMenuBoxProc, NakaData_WidgetNames + 0x3866
-	.equ Str_AcRamEditBoxProc, NakaData_WidgetNames + 0x3874
-	.equ Str_AcLswEditBoxProc, NakaData_WidgetNames + 0x3886
-	.equ Str_AcNumEditBoxProc, NakaData_WidgetNames + 0x3898
-	.equ Str_AcOnOffBoxProc, NakaData_WidgetNames + 0x38aa
-	.equ Str_PsTblEditBoxProc, NakaData_WidgetNames + 0x38ba
-	.equ Str_PsNumEditBoxProc, NakaData_WidgetNames + 0x38cc
-	.equ Str_PsEditBoxProc, NakaData_WidgetNames + 0x38de
-	.equ Str_AcTempoBoxProc, NakaData_WidgetNames + 0x38ec
-	.equ Str_AcLswBoxProc, NakaData_WidgetNames + 0x38fc
-	.equ Str_PsParaBoxProc, NakaData_WidgetNames + 0x390a
-	.equ Str_VwBoxProc, NakaData_WidgetNames + 0x3918
-	.equ Str_TextBoxProc, NakaData_WidgetNames + 0x3922
-	.equ Str_LineProc, NakaData_WidgetNames + 0x392e
-	.equ Str_IconProc, NakaData_WidgetNames + 0x3938
-	.equ Str_BitmapProc, NakaData_WidgetNames + 0x3942
-	.equ Str_LabelProc, NakaData_WidgetNames + 0x394e
-	.equ Str_StringBoxProc, NakaData_WidgetNames + 0x3958
-	.equ Str_WindowProc, NakaData_WidgetNames + 0x3966
-	.equ Str_GroupBoxProc, NakaData_WidgetNames + 0x3972
-	.equ Str_TitleEditProc, NakaData_WidgetNames + 0x3980
-	.equ Str_ModeEditProc, NakaData_WidgetNames + 0x398e
-	.equ Str_MainRamGet, NakaData_WidgetNames + 0x399c
-	.equ Str_MainRamAdd, NakaData_WidgetNames + 0x39a8
-	.equ Str_MainRamPut, NakaData_WidgetNames + 0x39b4
-	.equ Str_ResetLswFilter, NakaData_WidgetNames + 0x39c0
-	.equ Str_SetLswFilter, NakaData_WidgetNames + 0x39d0
-	.equ Str_MainLswPartGet, NakaData_WidgetNames + 0x39de
-	.equ Str_MainLswGet, NakaData_WidgetNames + 0x39ee
-	.equ Str_MainLswPartAdd, NakaData_WidgetNames + 0x39fa
-	.equ Str_MainLswAdd, NakaData_WidgetNames + 0x3a0a
-	.equ Str_MainLswPartPut, NakaData_WidgetNames + 0x3a16
-	.equ Str_MainLswPut, NakaData_WidgetNames + 0x3a26
-	.equ Str_DrawEditSw, NakaData_WidgetNames + 0x3a32
-	.equ Str_EditSwProc, NakaData_WidgetNames + 0x3a3e
-	.equ Str_DrawTitleBar, NakaData_WidgetNames + 0x3a4a
-	.equ Str_TtlScreenProc, NakaData_WidgetNames + 0x3a58
-	.equ Str_DrawDesignFrame, NakaData_WidgetNames + 0x3a66
-	.equ Str_GetClientFrame2, NakaData_WidgetNames + 0x3a76
-	.equ Str_GetClientFrame, NakaData_WidgetNames + 0x3a86
-	.equ Str_FrameProc, NakaData_WidgetNames + 0x3a96
-	.equ Str_GetEditSwPoint, NakaData_WidgetNames + 0x3aa0
-	.equ Str_ScreenProc, NakaData_WidgetNames + 0x3ab0
-	.equ Str_BoxRightCheck, NakaData_WidgetNames + 0x3abc
-	.equ Str_BoxLeftCheck, NakaData_WidgetNames + 0x3aca
-	.equ Str_GetFrameColor, NakaData_WidgetNames + 0x3ad8
-	.equ Str_DrawDesignBox, NakaData_WidgetNames + 0x3ae6
-	.equ Str_GetClientBox2, NakaData_WidgetNames + 0x3af4
-	.equ Str_GetClientBox, NakaData_WidgetNames + 0x3b02
-	.equ Str_BoxProc, NakaData_WidgetNames + 0x3b10
-	.equ Str_SetBox, NakaData_WidgetNames + 0x3b18
-	.equ Str_GetBox, NakaData_WidgetNames + 0x3b20
-	.equ Str_GetViewInstance, NakaData_WidgetNames + 0x3b28
-	.equ Str_GetLinkView, NakaData_WidgetNames + 0x3b38
-	.equ Str_SetSuperView, NakaData_WidgetNames + 0x3b44
-	.equ Str_Unlink, NakaData_WidgetNames + 0x3b52
-	.equ Str_Link, NakaData_WidgetNames + 0x3b5a
-	.equ Str_SubView, NakaData_WidgetNames + 0x3b60
-	.equ Str_SuperView, NakaData_WidgetNames + 0x3b68
-	.equ Str_PrevView, NakaData_WidgetNames + 0x3b72
-	.equ Str_NextView, NakaData_WidgetNames + 0x3b7c
-	.equ Str_GetMovable, NakaData_WidgetNames + 0x3b86
-	.equ Str_SetMovable, NakaData_WidgetNames + 0x3b92
-	.equ Str_GetVisible, NakaData_WidgetNames + 0x3b9e
-	.equ Str_SetVisible, NakaData_WidgetNames + 0x3baa
-	.equ Str_GetChange, NakaData_WidgetNames + 0x3bb6
-	.equ Str_SetChange, NakaData_WidgetNames + 0x3bc0
-	.equ Str_GetConst, NakaData_WidgetNames + 0x3bca
-	.equ Str_SetConst, NakaData_WidgetNames + 0x3bd4
-	.equ Str_ViewableProc, NakaData_WidgetNames + 0x3bde
-	.equ Str_GetTitleOld, NakaData_WidgetNames + 0x3bec
-	.equ Str_GetTitleNow, NakaData_WidgetNames + 0x3bf8
-	.equ Str_UnregisteredTitle, NakaData_WidgetNames + 0x3c04
-	.equ Str_RegisterTitle, NakaData_WidgetNames + 0x3c16
-	.equ Str_TitleProc, NakaData_WidgetNames + 0x3c24
-	.equ Str_GetModeOld, NakaData_WidgetNames + 0x3c2e
-	.equ Str_GetModeNow, NakaData_WidgetNames + 0x3c3a
-	.equ Str_UnregisteredMode, NakaData_WidgetNames + 0x3c46
-	.equ Str_RegisterMode, NakaData_WidgetNames + 0x3c58
-	.equ Str_ModeProc, NakaData_WidgetNames + 0x3c66
-	.equ Str_MainFuncCall, NakaData_WidgetNames + 0x3c70
-	.equ Str_ApFuncCall, NakaData_WidgetNames + 0x3c7e
-	.equ Str_MainFunctionProc, NakaData_WidgetNames + 0x3c8a
-	.equ Str_ApFunctionProc, NakaData_WidgetNames + 0x3c9c
-	.equ Str_FunctionProc, NakaData_WidgetNames + 0x3cac
-	.equ Str_TrackIDProc, NakaData_WidgetNames + 0x3cba
-	.equ Str_PartIDProc, NakaData_WidgetNames + 0x3cc6
-	.equ Str_UserIDProc, NakaData_WidgetNames + 0x3cd2
-	.equ Str_MainFuncIDProc, NakaData_WidgetNames + 0x3cde
-	.equ Str_ApFuncIDProc, NakaData_WidgetNames + 0x3cee
-	.equ Str_BitmapIDProc, NakaData_WidgetNames + 0x3cfc
-	.equ Str_FrameIDProc, NakaData_WidgetNames + 0x3d0a
-	.equ Str_LineModeIDProc, NakaData_WidgetNames + 0x3d16
-	.equ Str_EditSwStyleIDProc, NakaData_WidgetNames + 0x3d26
-	.equ Str_EditSwIDProc, NakaData_WidgetNames + 0x3d38
-	.equ Str_AlignmentIDProc, NakaData_WidgetNames + 0x3d46
-	.equ Str_FontIDProc, NakaData_WidgetNames + 0x3d56
-	.equ Str_IconIDProc, NakaData_WidgetNames + 0x3d62
-	.equ Str_TitleIDProc, NakaData_WidgetNames + 0x3d6e
-	.equ Str_ModeIDProc, NakaData_WidgetNames + 0x3d7a
-	.equ Str_BorderIDProc, NakaData_WidgetNames + 0x3d86
-	.equ Str_ColorIDProc, NakaData_WidgetNames + 0x3d94
-	.equ Str_ViewFlagProc, NakaData_WidgetNames + 0x3da0
-	.equ Str_ViewIDProc, NakaData_WidgetNames + 0x3dae
-	.equ Str_ConstFlagProc, NakaData_WidgetNames + 0x3dba
-	.equ Str_NameProc, NakaData_WidgetNames + 0x3dc8
-	.equ Str_StringProc, NakaData_WidgetNames + 0x3dd2
-	.equ Str_PointYProc, NakaData_WidgetNames + 0x3dde
-	.equ Str_PointXProc, NakaData_WidgetNames + 0x3dea
-	.equ Str_POINTWProc, NakaData_WidgetNames + 0x3df6
-	.equ Str_RectY2Proc, NakaData_WidgetNames + 0x3e02
-	.equ Str_RectX2Proc, NakaData_WidgetNames + 0x3e0e
-	.equ Str_RectY1Proc, NakaData_WidgetNames + 0x3e1a
-	.equ Str_RectX1Proc, NakaData_WidgetNames + 0x3e26
-	.equ Str_RECTWProc, NakaData_WidgetNames + 0x3e32
-	.equ Str_EventIDProc, NakaData_WidgetNames + 0x3e3c
-	.equ Str_WindowIDProc, NakaData_WidgetNames + 0x3e48
-	.equ Str_ScreenIDProc, NakaData_WidgetNames + 0x3e56
-	.equ Str_ClassIDProc, NakaData_WidgetNames + 0x3e64
-	.equ Str_pStringProc, NakaData_WidgetNames + 0x3e70
-	.equ Str_pPropProc, NakaData_WidgetNames + 0x3e7c
-	.equ Str_pProcProc, NakaData_WidgetNames + 0x3e86
-	.equ Str_pFuncProc, NakaData_WidgetNames + 0x3e90
-	.equ Str_ObjectIDProc, NakaData_WidgetNames + 0x3e9a
-	.equ Str_pUlongProc, NakaData_WidgetNames + 0x3ea8
-	.equ Str_pSlongProc, NakaData_WidgetNames + 0x3eb4
-	.equ Str_pUcharProc, NakaData_WidgetNames + 0x3ec0
-	.equ Str_pScharProc, NakaData_WidgetNames + 0x3ecc
-	.equ Str_pUwordProc, NakaData_WidgetNames + 0x3ed8
-	.equ Str_pSwordProc, NakaData_WidgetNames + 0x3ee4
-	.equ Str_pBoolProc, NakaData_WidgetNames + 0x3ef0
-	.equ Str_boolProc, NakaData_WidgetNames + 0x3efa
-	.equ Str_ulongProc, NakaData_WidgetNames + 0x3f04
-	.equ Str_slongProc, NakaData_WidgetNames + 0x3f0e
-	.equ Str_scharProc, NakaData_WidgetNames + 0x3f18
-	.equ Str_ucharProc, NakaData_WidgetNames + 0x3f22
-	.equ Str_uwordProc, NakaData_WidgetNames + 0x3f2c
-	.equ Str_swordProc, NakaData_WidgetNames + 0x3f36
-	.equ Str_SupportClassProc, NakaData_WidgetNames + 0x3f40
-	.equ Str_ClassProc, NakaData_WidgetNames + 0x3f52
-	.equ Str_WordwrapStrings, NakaData_WidgetNames + 0x3f5c
-	.equ Str_CalcTotalWidth, NakaData_WidgetNames + 0x3f6c
-	.equ Str_ConvertStrings, NakaData_WidgetNames + 0x3f7c
-	.equ Str_GetCenteredDelta, NakaData_WidgetNames + 0x3f8c
-	.equ Str_GetCharDescent, NakaData_WidgetNames + 0x3f9e
-	.equ Str_GetCharHeight, NakaData_WidgetNames + 0x3fae
-	.equ Str_GetFrameSPSize, NakaData_WidgetNames + 0x3fbc
-	.equ Str_ResNameProc, NakaData_WidgetNames + 0x3fcc
-	.equ Str_ResStringProc, NakaData_WidgetNames + 0x3fd8
-	.equ Str_ResMethodProc, NakaData_WidgetNames + 0x3fe6
-	.equ Str_ResEventProc, NakaData_WidgetNames + 0x3ff4
-	.equ Str_ResFontProc, NakaData_WidgetNames + 0x4002
-	.equ Str_ResIconProc, NakaData_WidgetNames + 0x400e
-	.equ Str_ResFrameProc, NakaData_WidgetNames + 0x401a
-	.equ Str_ResBitmapProc, NakaData_WidgetNames + 0x4028
-	.equ Str_ResourceProc, NakaData_WidgetNames + 0x4036
-	.equ Str_ApPostEvent, NakaData_WidgetNames + 0x4044
-	.equ Str_MainGetEvent, NakaData_WidgetNames + 0x4050
-	.equ Str_MainPostEvent, NakaData_WidgetNames + 0x405e
-	.equ Str_MainSendEvent, NakaData_WidgetNames + 0x406c
-	.equ Str_MainDispatchEvent, NakaData_WidgetNames + 0x407a
-	.equ Str_SetCurrentTarget, NakaData_WidgetNames + 0x408c
-	.equ Str_GetCurrentTarget, NakaData_WidgetNames + 0x409e
-	.equ Str_GetEvent, NakaData_WidgetNames + 0x40b0
-	.equ Str_PostEvent, NakaData_WidgetNames + 0x40ba
-	.equ Str_SendEvent, NakaData_WidgetNames + 0x40c4
-	.equ Str_DispatchEvent, NakaData_WidgetNames + 0x40ce
-	.equ Str_InitializeEventQueue, NakaData_WidgetNames + 0x40dc
-	.equ Str_CheckViewObject, NakaData_WidgetNames + 0x40f2
-	.equ Str_CountObject, NakaData_WidgetNames + 0x4102
-	.equ Str_UnRegisterObject, NakaData_WidgetNames + 0x410e
-	.equ Str_RegisterObject, NakaData_WidgetNames + 0x4120
-	.equ Str_RegisterObjectTable, NakaData_WidgetNames + 0x4130
-	.equ Str_InitializeObjectTable, NakaData_WidgetNames + 0x4144
-	.equ Str_InheritedProc, NakaData_WidgetNames + 0x415a
-	.equ Str_ObjectProc, NakaData_WidgetNames + 0x4168
-	.equ Str_DrawStringAlignment, NakaData_WidgetNames + 0x4174
-	.equ Str_DrawStringRightJustify, NakaData_WidgetNames + 0x4188
-	.equ Str_DrawStringLeftJustify, NakaData_WidgetNames + 0x41a0
-	.equ Str_DrawStringCentered, NakaData_WidgetNames + 0x41b6
-	.equ Str_DrawString, NakaData_WidgetNames + 0x41ca
-	.equ Str_DrawFrameSP, NakaData_WidgetNames + 0x41d6
-	.equ Str_DrawIcons, NakaData_WidgetNames + 0x41e2
-	.equ Str_DrawBitmap, NakaData_WidgetNames + 0x41ec
-	.equ Str_DrawWall, NakaData_WidgetNames + 0x41f8
-	.equ Str_MovePixels, NakaData_WidgetNames + 0x4202
-	.equ Str_DrawFrameEx, NakaData_WidgetNames + 0x420e
-	.equ Str_DrawFrame, NakaData_WidgetNames + 0x421a
-	.equ Str_DrawBox, NakaData_WidgetNames + 0x4224
-	.equ Str_DrawLineEx, NakaData_WidgetNames + 0x422c
-	.equ Str_DrawLine, NakaData_WidgetNames + 0x4238
-	.equ Str_ModifyPixelEx, NakaData_WidgetNames + 0x4242
-	.equ Str_ModifyPixel, NakaData_WidgetNames + 0x4250
-	.equ Str_ReadPixel, NakaData_WidgetNames + 0x425c
-	.equ Str_SetChangeRect, NakaData_WidgetNames + 0x4266
-	.equ Str_SetNeedUpdate, NakaData_WidgetNames + 0x4274
-	.equ Str_UpdateScreen, NakaData_WidgetNames + 0x4282
-	.equ Str_InitializeGraphics, NakaData_WidgetNames + 0x4290
-	.equ Str_InitializeUser31, NakaData_WidgetNames + 0x42a4
-	.equ Str_InitializeUser30, NakaData_WidgetNames + 0x42b6
-	.equ Str_InitializeUser29, NakaData_WidgetNames + 0x42c8
-	.equ Str_InitializeUser28, NakaData_WidgetNames + 0x42da
-	.equ Str_InitializeUser27, NakaData_WidgetNames + 0x42ec
-	.equ Str_InitializeUser26, NakaData_WidgetNames + 0x42fe
-	.equ Str_InitializeUser25, NakaData_WidgetNames + 0x4310
-	.equ Str_InitializeUser24, NakaData_WidgetNames + 0x4322
-	.equ Str_InitializeUser23, NakaData_WidgetNames + 0x4334
-	.equ Str_InitializeUser22, NakaData_WidgetNames + 0x4346
-	.equ Str_InitializeUser21, NakaData_WidgetNames + 0x4358
-	.equ Str_InitializeUser20, NakaData_WidgetNames + 0x436a
-	.equ Str_InitializeUser19, NakaData_WidgetNames + 0x437c
-	.equ Str_InitializeUser18, NakaData_WidgetNames + 0x438e
-	.equ Str_InitializeUser17, NakaData_WidgetNames + 0x43a0
-	.equ Str_InitializeUser16, NakaData_WidgetNames + 0x43b2
-	.equ Str_InitializeUser15, NakaData_WidgetNames + 0x43c4
-	.equ Str_InitializeUser14, NakaData_WidgetNames + 0x43d6
-	.equ Str_InitializeUser13, NakaData_WidgetNames + 0x43e8
-	.equ Str_InitializeUser12, NakaData_WidgetNames + 0x43fa
-	.equ Str_InitializeNaka, NakaData_WidgetNames + 0x440c
-	.equ Str_InitializeKSS, NakaData_WidgetNames + 0x441c
-	.equ Str_InitializeHama, NakaData_WidgetNames + 0x442a
-	.equ Str_InitializeKubo, NakaData_WidgetNames + 0x443a
-	.equ Str_InitializeYoko, NakaData_WidgetNames + 0x444a
-	.equ Str_InitializeScoop, NakaData_WidgetNames + 0x445a
-	.equ Str_InitializeCheap, NakaData_WidgetNames + 0x446a
-	.equ Str_InitializeSuna, NakaData_WidgetNames + 0x447a
-	.equ Str_InitializeEast, NakaData_WidgetNames + 0x448a
-	.equ Str_InitializeToshi, NakaData_WidgetNames + 0x449a
-	.equ Str_InitializeMurai, NakaData_WidgetNames + 0x44aa
-	.equ Str_InitializeRoot, NakaData_WidgetNames + 0x44ba
-	.equ IconNamePtrTable, NakaData_WidgetNames + 0x44d0
-	.equ IconName_Empty, NakaData_WidgetNames + 0x48cc
-	.equ IconName_i173, NakaData_WidgetNames + 0x48ce
-	.equ IconName_i172, NakaData_WidgetNames + 0x48d4
-	.equ IconName_i171, NakaData_WidgetNames + 0x48da
-	.equ IconName_i170, NakaData_WidgetNames + 0x48e0
-	.equ IconName_i169, NakaData_WidgetNames + 0x48e6
-	.equ IconName_i168, NakaData_WidgetNames + 0x48ec
-	.equ IconName_i167, NakaData_WidgetNames + 0x48f2
-	.equ IconName_i166, NakaData_WidgetNames + 0x48f8
-	.equ IconName_i165, NakaData_WidgetNames + 0x48fe
-	.equ IconName_i164, NakaData_WidgetNames + 0x4904
-	.equ IconName_i163, NakaData_WidgetNames + 0x490a
-	.equ IconName_i162, NakaData_WidgetNames + 0x4910
-	.equ IconName_i161, NakaData_WidgetNames + 0x4916
-	.equ IconName_i160, NakaData_WidgetNames + 0x491c
-	.equ IconName_i159, NakaData_WidgetNames + 0x4922
-	.equ IconName_i158, NakaData_WidgetNames + 0x4928
-	.equ IconName_i157, NakaData_WidgetNames + 0x492e
-	.equ IconName_i156, NakaData_WidgetNames + 0x4934
-	.equ IconName_i155, NakaData_WidgetNames + 0x493a
-	.equ IconName_i154, NakaData_WidgetNames + 0x4940
-	.equ IconName_i153, NakaData_WidgetNames + 0x4946
-	.equ IconName_i152, NakaData_WidgetNames + 0x494c
-	.equ IconName_i151, NakaData_WidgetNames + 0x4952
-	.equ IconName_i150, NakaData_WidgetNames + 0x4958
-	.equ IconName_i149, NakaData_WidgetNames + 0x495e
-	.equ IconName_i148, NakaData_WidgetNames + 0x4964
-	.equ IconName_i147, NakaData_WidgetNames + 0x496a
-	.equ IconName_i146, NakaData_WidgetNames + 0x4970
-	.equ IconName_i145, NakaData_WidgetNames + 0x4976
-	.equ IconName_i144, NakaData_WidgetNames + 0x497c
-	.equ IconName_i143, NakaData_WidgetNames + 0x4982
-	.equ IconName_i142, NakaData_WidgetNames + 0x4988
-	.equ IconName_i141, NakaData_WidgetNames + 0x498e
-	.equ IconName_i140, NakaData_WidgetNames + 0x4994
-	.equ IconName_i139, NakaData_WidgetNames + 0x499a
-	.equ IconName_i138, NakaData_WidgetNames + 0x49a0
-	.equ IconName_i137, NakaData_WidgetNames + 0x49a6
-	.equ IconName_i136, NakaData_WidgetNames + 0x49ac
-	.equ IconName_i135, NakaData_WidgetNames + 0x49b2
-	.equ IconName_i134, NakaData_WidgetNames + 0x49b8
-	.equ IconName_i133, NakaData_WidgetNames + 0x49be
-	.equ IconName_i132, NakaData_WidgetNames + 0x49c4
-	.equ IconName_i131, NakaData_WidgetNames + 0x49ca
-	.equ IconName_i130, NakaData_WidgetNames + 0x49d0
-	.equ IconName_i129, NakaData_WidgetNames + 0x49d6
-	.equ IconName_i128, NakaData_WidgetNames + 0x49dc
-	.equ IconName_i127, NakaData_WidgetNames + 0x49e2
-	.equ IconName_i126, NakaData_WidgetNames + 0x49e8
-	.equ IconName_i125, NakaData_WidgetNames + 0x49ee
-	.equ IconName_i124, NakaData_WidgetNames + 0x49f4
-	.equ IconName_i123, NakaData_WidgetNames + 0x49fa
-	.equ IconName_i122, NakaData_WidgetNames + 0x4a00
-	.equ IconName_i121, NakaData_WidgetNames + 0x4a06
-	.equ IconName_i120, NakaData_WidgetNames + 0x4a0c
-	.equ IconName_i119, NakaData_WidgetNames + 0x4a12
-	.equ IconName_i118, NakaData_WidgetNames + 0x4a18
-	.equ IconName_i117, NakaData_WidgetNames + 0x4a1e
-	.equ IconName_i116, NakaData_WidgetNames + 0x4a24
-	.equ IconName_i115, NakaData_WidgetNames + 0x4a2a
-	.equ IconName_i114, NakaData_WidgetNames + 0x4a30
-	.equ IconName_i113, NakaData_WidgetNames + 0x4a36
-	.equ IconName_i112, NakaData_WidgetNames + 0x4a3c
-	.equ IconName_i111, NakaData_WidgetNames + 0x4a42
-	.equ IconName_i110, NakaData_WidgetNames + 0x4a48
-	.equ IconName_i109, NakaData_WidgetNames + 0x4a4e
-	.equ IconName_i108, NakaData_WidgetNames + 0x4a54
-	.equ IconName_i107, NakaData_WidgetNames + 0x4a5a
-	.equ IconName_i106, NakaData_WidgetNames + 0x4a60
-	.equ IconName_i105, NakaData_WidgetNames + 0x4a66
-	.equ IconName_i104, NakaData_WidgetNames + 0x4a6c
-	.equ IconName_i103, NakaData_WidgetNames + 0x4a72
-	.equ IconName_i102, NakaData_WidgetNames + 0x4a78
-	.equ IconName_i101, NakaData_WidgetNames + 0x4a7e
-	.equ IconName_i100, NakaData_WidgetNames + 0x4a84
-	.equ IconName_i99, NakaData_WidgetNames + 0x4a8a
-	.equ IconName_i98, NakaData_WidgetNames + 0x4a8e
-	.equ IconName_i97, NakaData_WidgetNames + 0x4a92
-	.equ IconName_i96, NakaData_WidgetNames + 0x4a96
-	.equ IconName_i95, NakaData_WidgetNames + 0x4a9a
-	.equ IconName_i94, NakaData_WidgetNames + 0x4a9e
-	.equ IconName_i93, NakaData_WidgetNames + 0x4aa2
-	.equ IconName_i92, NakaData_WidgetNames + 0x4aa6
-	.equ IconName_i91, NakaData_WidgetNames + 0x4aaa
-	.equ IconName_i90, NakaData_WidgetNames + 0x4aae
-	.equ IconName_i89, NakaData_WidgetNames + 0x4ab2
-	.equ IconName_i88, NakaData_WidgetNames + 0x4ab6
-	.equ IconName_i87, NakaData_WidgetNames + 0x4aba
-	.equ IconName_i86, NakaData_WidgetNames + 0x4abe
-	.equ IconName_i85, NakaData_WidgetNames + 0x4ac2
-	.equ IconName_i84, NakaData_WidgetNames + 0x4ac6
-	.equ IconName_i83, NakaData_WidgetNames + 0x4aca
-	.equ IconName_i82, NakaData_WidgetNames + 0x4ace
-	.equ IconName_i81, NakaData_WidgetNames + 0x4ad2
-	.equ IconName_i80, NakaData_WidgetNames + 0x4ad6
-	.equ IconName_i79, NakaData_WidgetNames + 0x4ada
-	.equ IconName_i78, NakaData_WidgetNames + 0x4ade
-	.equ IconName_i77, NakaData_WidgetNames + 0x4ae2
-	.equ IconName_i76, NakaData_WidgetNames + 0x4ae6
-	.equ IconName_i75, NakaData_WidgetNames + 0x4aea
-	.equ IconName_i74, NakaData_WidgetNames + 0x4aee
-	.equ IconName_i73, NakaData_WidgetNames + 0x4af2
-	.equ IconName_i72, NakaData_WidgetNames + 0x4af6
-	.equ IconName_i71, NakaData_WidgetNames + 0x4afa
-	.equ IconName_i70, NakaData_WidgetNames + 0x4afe
-	.equ IconName_i69, NakaData_WidgetNames + 0x4b02
-	.equ IconName_i68, NakaData_WidgetNames + 0x4b06
-	.equ IconName_i67, NakaData_WidgetNames + 0x4b0a
-	.equ IconName_i66, NakaData_WidgetNames + 0x4b0e
-	.equ IconName_i65, NakaData_WidgetNames + 0x4b12
-	.equ IconName_i64, NakaData_WidgetNames + 0x4b16
-	.equ IconName_i63, NakaData_WidgetNames + 0x4b1a
-	.equ IconName_i62, NakaData_WidgetNames + 0x4b1e
-	.equ IconName_i61, NakaData_WidgetNames + 0x4b22
-	.equ IconName_i60, NakaData_WidgetNames + 0x4b26
-	.equ IconName_i59, NakaData_WidgetNames + 0x4b2a
-	.equ IconName_i58, NakaData_WidgetNames + 0x4b2e
-	.equ IconName_i57, NakaData_WidgetNames + 0x4b32
-	.equ IconName_i56, NakaData_WidgetNames + 0x4b36
-	.equ IconName_i55, NakaData_WidgetNames + 0x4b3a
-	.equ IconName_i54, NakaData_WidgetNames + 0x4b3e
-	.equ IconName_i53, NakaData_WidgetNames + 0x4b42
-	.equ IconName_i52, NakaData_WidgetNames + 0x4b46
-	.equ IconName_i51, NakaData_WidgetNames + 0x4b4a
-	.equ IconName_i50, NakaData_WidgetNames + 0x4b4e
-	.equ IconName_i49, NakaData_WidgetNames + 0x4b52
-	.equ IconName_i48, NakaData_WidgetNames + 0x4b56
-	.equ IconName_i47, NakaData_WidgetNames + 0x4b5a
-	.equ IconName_i46, NakaData_WidgetNames + 0x4b5e
-	.equ IconName_i45, NakaData_WidgetNames + 0x4b62
-	.equ IconName_i44, NakaData_WidgetNames + 0x4b66
-	.equ IconName_i43, NakaData_WidgetNames + 0x4b6a
-	.equ IconName_i42, NakaData_WidgetNames + 0x4b6e
-	.equ IconName_i41, NakaData_WidgetNames + 0x4b72
-	.equ IconName_i40, NakaData_WidgetNames + 0x4b76
-	.equ IconName_i39, NakaData_WidgetNames + 0x4b7a
-	.equ IconName_i38, NakaData_WidgetNames + 0x4b7e
-	.equ IconName_i37, NakaData_WidgetNames + 0x4b82
-	.equ IconName_i36, NakaData_WidgetNames + 0x4b86
-	.equ IconName_i35, NakaData_WidgetNames + 0x4b8a
-	.equ IconName_i34, NakaData_WidgetNames + 0x4b8e
-	.equ IconName_i33, NakaData_WidgetNames + 0x4b92
-	.equ IconName_i32, NakaData_WidgetNames + 0x4b96
-	.equ IconName_i31, NakaData_WidgetNames + 0x4b9a
-	.equ IconName_i30, NakaData_WidgetNames + 0x4b9e
-	.equ IconName_i29, NakaData_WidgetNames + 0x4ba2
-	.equ IconName_i28, NakaData_WidgetNames + 0x4ba6
-	.equ IconName_i27, NakaData_WidgetNames + 0x4baa
-	.equ IconName_i26, NakaData_WidgetNames + 0x4bae
-	.equ IconName_i25, NakaData_WidgetNames + 0x4bb2
-	.equ IconName_i24, NakaData_WidgetNames + 0x4bb6
-	.equ IconName_i23, NakaData_WidgetNames + 0x4bba
-	.equ IconName_i22, NakaData_WidgetNames + 0x4bbe
-	.equ IconName_i21, NakaData_WidgetNames + 0x4bc2
-	.equ IconName_i20, NakaData_WidgetNames + 0x4bc6
-	.equ IconName_i19, NakaData_WidgetNames + 0x4bca
-	.equ IconName_i18, NakaData_WidgetNames + 0x4bce
-	.equ IconName_i17, NakaData_WidgetNames + 0x4bd2
-	.equ IconName_i16, NakaData_WidgetNames + 0x4bd6
-	.equ IconName_i15, NakaData_WidgetNames + 0x4bda
-	.equ IconName_i14, NakaData_WidgetNames + 0x4bde
-	.equ IconName_i13, NakaData_WidgetNames + 0x4be2
-	.equ IconName_i12, NakaData_WidgetNames + 0x4be6
-	.equ IconName_i11, NakaData_WidgetNames + 0x4bea
-	.equ IconName_i10, NakaData_WidgetNames + 0x4bee
-	.equ IconName_i9, NakaData_WidgetNames + 0x4bf2
-	.equ IconName_i8, NakaData_WidgetNames + 0x4bf6
-	.equ IconName_i7, NakaData_WidgetNames + 0x4bfa
-	.equ IconName_i6, NakaData_WidgetNames + 0x4bfe
 	.equ IconName_i5, NakaData_WidgetNames + 0x4c02
 	.equ IconName_i4, NakaData_WidgetNames + 0x4c06
 	.equ IconName_i3, NakaData_WidgetNames + 0x4c0a
@@ -897,109 +1669,3 @@ EmbeddedPtrTable_v10_naka_widget_names_charmap_004C00:
 	.equ IconName_i0, NakaData_WidgetNames + 0x4c16
 	.equ IconName_Default, NakaData_WidgetNames + 0x4c1a
 	.equ IconBitmapNamePtrTable, NakaData_WidgetNames + 0x4c28
-	.equ IconBitmapName_Empty, NakaData_WidgetNames + 0x5028
-	.equ IconBitmapName_i173, NakaData_WidgetNames + 0x502a
-	.equ IconBitmapName_i172, NakaData_WidgetNames + 0x5034
-	.equ IconBitmapName_i171, NakaData_WidgetNames + 0x503e
-	.equ IconBitmapName_i170, NakaData_WidgetNames + 0x5048
-	.equ IconBitmapName_i169, NakaData_WidgetNames + 0x5052
-	.equ IconBitmapName_i168, NakaData_WidgetNames + 0x505c
-	.equ IconBitmapName_i167, NakaData_WidgetNames + 0x5066
-	.equ IconBitmapName_i166, NakaData_WidgetNames + 0x5070
-	.equ IconBitmapName_i165, NakaData_WidgetNames + 0x507a
-	.equ IconBitmapName_i164, NakaData_WidgetNames + 0x5084
-	.equ IconBitmapName_i163, NakaData_WidgetNames + 0x508e
-	.equ IconBitmapName_i162, NakaData_WidgetNames + 0x5098
-	.equ IconBitmapName_i161, NakaData_WidgetNames + 0x50a2
-	.equ IconBitmapName_i160, NakaData_WidgetNames + 0x50ac
-	.equ IconBitmapName_i159, NakaData_WidgetNames + 0x50b6
-	.equ IconBitmapName_i158, NakaData_WidgetNames + 0x50c0
-	.equ IconBitmapName_i157, NakaData_WidgetNames + 0x50ca
-	.equ IconBitmapName_i156, NakaData_WidgetNames + 0x50d4
-	.equ IconBitmapName_i155, NakaData_WidgetNames + 0x50de
-	.equ IconBitmapName_i154, NakaData_WidgetNames + 0x50e8
-	.equ IconBitmapName_i153, NakaData_WidgetNames + 0x50f2
-	.equ IconBitmapName_i152, NakaData_WidgetNames + 0x50fc
-	.equ IconBitmapName_i151, NakaData_WidgetNames + 0x5106
-	.equ IconBitmapName_i150, NakaData_WidgetNames + 0x5110
-	.equ IconBitmapName_i149, NakaData_WidgetNames + 0x511a
-	.equ IconBitmapName_i148, NakaData_WidgetNames + 0x5124
-	.equ IconBitmapName_i147, NakaData_WidgetNames + 0x512e
-	.equ IconBitmapName_i146, NakaData_WidgetNames + 0x5138
-	.equ IconBitmapName_i145, NakaData_WidgetNames + 0x5142
-	.equ IconBitmapName_i144, NakaData_WidgetNames + 0x514c
-	.equ IconBitmapName_i143, NakaData_WidgetNames + 0x5156
-	.equ IconBitmapName_i142, NakaData_WidgetNames + 0x5160
-	.equ IconBitmapName_i141, NakaData_WidgetNames + 0x516a
-	.equ IconBitmapName_i140, NakaData_WidgetNames + 0x5174
-	.equ IconBitmapName_i139, NakaData_WidgetNames + 0x517e
-	.equ IconBitmapName_i138, NakaData_WidgetNames + 0x5188
-	.equ IconBitmapName_i137, NakaData_WidgetNames + 0x5192
-	.equ IconBitmapName_i136, NakaData_WidgetNames + 0x519c
-	.equ IconBitmapName_i135, NakaData_WidgetNames + 0x51a6
-	.equ IconBitmapName_i134, NakaData_WidgetNames + 0x51b0
-	.equ IconBitmapName_i133, NakaData_WidgetNames + 0x51ba
-	.equ IconBitmapName_i132, NakaData_WidgetNames + 0x51c4
-	.equ IconBitmapName_i131, NakaData_WidgetNames + 0x51ce
-	.equ IconBitmapName_i130, NakaData_WidgetNames + 0x51d8
-	.equ IconBitmapName_i129, NakaData_WidgetNames + 0x51e2
-	.equ IconBitmapName_i128, NakaData_WidgetNames + 0x51ec
-	.equ IconBitmapName_i127, NakaData_WidgetNames + 0x51f6
-	.equ IconBitmapName_i126, NakaData_WidgetNames + 0x5200
-	.equ IconBitmapName_i125, NakaData_WidgetNames + 0x520a
-	.equ IconBitmapName_i124, NakaData_WidgetNames + 0x5214
-	.equ IconBitmapName_i123, NakaData_WidgetNames + 0x521e
-	.equ IconBitmapName_i122, NakaData_WidgetNames + 0x5228
-	.equ IconBitmapName_i121, NakaData_WidgetNames + 0x5232
-	.equ IconBitmapName_i120, NakaData_WidgetNames + 0x523c
-	.equ IconBitmapName_i119, NakaData_WidgetNames + 0x5246
-	.equ IconBitmapName_i118, NakaData_WidgetNames + 0x5250
-	.equ IconBitmapName_i117, NakaData_WidgetNames + 0x525a
-	.equ IconBitmapName_i116, NakaData_WidgetNames + 0x5264
-	.equ IconBitmapName_i115, NakaData_WidgetNames + 0x526e
-	.equ IconBitmapName_i114, NakaData_WidgetNames + 0x5278
-	.equ IconBitmapName_i113, NakaData_WidgetNames + 0x5282
-	.equ IconBitmapName_i112, NakaData_WidgetNames + 0x528c
-	.equ IconBitmapName_i111, NakaData_WidgetNames + 0x5296
-	.equ IconBitmapName_i110, NakaData_WidgetNames + 0x52a0
-	.equ IconBitmapName_i109, NakaData_WidgetNames + 0x52aa
-	.equ IconBitmapName_i108, NakaData_WidgetNames + 0x52b4
-	.equ IconBitmapName_i107o, NakaData_WidgetNames + 0x52be
-	.equ IconBitmapName_i106, NakaData_WidgetNames + 0x52c8
-	.equ IconBitmapName_i105, NakaData_WidgetNames + 0x52d2
-	.equ IconBitmapName_i104, NakaData_WidgetNames + 0x52dc
-	.equ IconBitmapName_i103, NakaData_WidgetNames + 0x52e6
-	.equ IconBitmapName_i102, NakaData_WidgetNames + 0x52f0
-	.equ IconBitmapName_i101, NakaData_WidgetNames + 0x52fa
-	.equ IconBitmapName_i100, NakaData_WidgetNames + 0x5304
-	.equ IconBitmapName_i99, NakaData_WidgetNames + 0x530e
-	.equ IconBitmapName_i98, NakaData_WidgetNames + 0x5316
-	.equ IconBitmapName_i97, NakaData_WidgetNames + 0x531e
-	.equ IconBitmapName_i95, NakaData_WidgetNames + 0x5330
-	.equ IconBitmapName_i94, NakaData_WidgetNames + 0x5338
-	.equ IconBitmapName_i93o, NakaData_WidgetNames + 0x5340
-	.equ IconBitmapName_i92o, NakaData_WidgetNames + 0x534a
-	.equ IconBitmapName_i91o, NakaData_WidgetNames + 0x5354
-	.equ IconBitmapName_i90o, NakaData_WidgetNames + 0x535e
-	.equ IconBitmapName_i89, NakaData_WidgetNames + 0x5368
-	.equ IconBitmapName_i88, NakaData_WidgetNames + 0x5370
-	.equ NakaInst_i87_bmp, NakaData_WidgetNames + 0x5378
-	.equ NakaInst_i86_bmp, NakaData_WidgetNames + 0x5380
-	.equ NakaInst_i85_bmp, NakaData_WidgetNames + 0x5388
-	.equ NakaInst_i84o_bmp, NakaData_WidgetNames + 0x5390
-	.equ NakaInst_i83_bmp, NakaData_WidgetNames + 0x539a
-	.equ NakaInst_i82_bmp, NakaData_WidgetNames + 0x53a2
-	.equ NakaInst_i81_bmp, NakaData_WidgetNames + 0x53aa
-	.equ NakaInst_i80_bmp, NakaData_WidgetNames + 0x53b2
-	.equ NakaInst_i79_bmp, NakaData_WidgetNames + 0x53ba
-	.equ NakaInst_i78_bmp, NakaData_WidgetNames + 0x53c2
-	.equ NakaInst_i77_bmp, NakaData_WidgetNames + 0x53ca
-	.equ NakaInst_i76_bmp, NakaData_WidgetNames + 0x53d2
-	.equ NakaInst_i75_bmp, NakaData_WidgetNames + 0x53da
-	.equ NakaInst_i74o_bmp, NakaData_WidgetNames + 0x53e2
-	.equ NakaInst_i73o_bmp, NakaData_WidgetNames + 0x53ec
-	.equ NakaInst_i72_bmp, NakaData_WidgetNames + 0x53f6
-	.equ NakaInst_i71_bmp, NakaData_WidgetNames + 0x53fe
-	.equ NakaInst_0_bmp, NakaData_WidgetNames + 0x5406
-	.equ NakaInst_trash_bmp, NakaData_WidgetNames + 0x5648
-	.equ Naka_FileManagerEntry, NakaData_WidgetNames + 0x5674

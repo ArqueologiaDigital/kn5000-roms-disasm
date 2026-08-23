@@ -2,7 +2,13 @@
 ; NAKA Widget Pointer Tables Part 1 (13 widgets, 12878 bytes)
 ; Source: maincpu/ui_widgets/naka_widget_tables_1.c (C struct with named fields)
 NakaData_WidgetTables1:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x0, 0x1000
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x0, 0x18
+NakaHdr_Perf2MeasureBoxData:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x18, 0x1A
+NakaHdr_Perf2FileListData:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x32, 0x28
+NakaWidgetPtrTbl_SmfDp:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x5A, 0xFA6
 EmbeddedPtrTable_v7_naka_widget_tables_1_001000:
 	.long SqSngNameTtlFunc
 	.long SqTrAsTtlFunc
@@ -68,25 +74,38 @@ EmbeddedPtrTable_v7_naka_widget_tables_1_001000:
 	.long 0x726F7953
 	.long 0x614E0069
 	.long 0x6547656D
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1100, 0x214E
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1100, 0x163C
+MedleyDisp_Blank:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x273C, 0x2C
+PlayModeStr_Play:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2768, 0x20
+PlayModeStr_Pause:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2788, 0x8C8
+NakaDesc_FuncTtlNo_B:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3050, 0x1C
+NakaDesc_Empty_C:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x306C, 0x6
+NakaDesc_Empty_D:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3072, 0x6
+NakaDesc_FuncIndex:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3078, 0x22
+NakaDesc_Mode:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x309A, 0x10
+NakaDesc_ColorFontPageFunc:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30AA, 0x42
+NakaDesc_Empty_E:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30EC, 0x6
+NakaDesc_Empty_F:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30F2, 0x6
+NakaDesc_Empty_G:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30F8, 0x6
+NakaDesc_Empty_H:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30FE, 0x6
+NakaDesc_Empty_I:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3104, 0x6
+NakaDesc_StyleFunc:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x310A, 0x1A
+NakaDesc_Empty_J:
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3124, 0x12A
 
 ; External label offsets within the binary blob above.
-	.equ NakaHdr_Perf2MeasureBoxData, NakaData_WidgetTables1 + 0x0018
-	.equ NakaHdr_Perf2FileListData, NakaData_WidgetTables1 + 0x0032
-	.equ NakaWidgetPtrTbl_SmfDp, NakaData_WidgetTables1 + 0x005a
-	.equ MedleyDisp_Blank, NakaData_WidgetTables1 + 0x273c
-	.equ PlayModeStr_Play, NakaData_WidgetTables1 + 0x2768
-	.equ PlayModeStr_Pause, NakaData_WidgetTables1 + 0x2788
-	.equ NakaDesc_FuncTtlNo_B, NakaData_WidgetTables1 + 0x3050
-	.equ NakaDesc_Empty_C, NakaData_WidgetTables1 + 0x306c
-	.equ NakaDesc_Empty_D, NakaData_WidgetTables1 + 0x3072
-	.equ NakaDesc_FuncIndex, NakaData_WidgetTables1 + 0x3078
-	.equ NakaDesc_Mode, NakaData_WidgetTables1 + 0x309a
-	.equ NakaDesc_ColorFontPageFunc, NakaData_WidgetTables1 + 0x30aa
-	.equ NakaDesc_Empty_E, NakaData_WidgetTables1 + 0x30ec
-	.equ NakaDesc_Empty_F, NakaData_WidgetTables1 + 0x30f2
-	.equ NakaDesc_Empty_G, NakaData_WidgetTables1 + 0x30f8
-	.equ NakaDesc_Empty_H, NakaData_WidgetTables1 + 0x30fe
-	.equ NakaDesc_Empty_I, NakaData_WidgetTables1 + 0x3104
-	.equ NakaDesc_StyleFunc, NakaData_WidgetTables1 + 0x310a
-	.equ NakaDesc_Empty_J, NakaData_WidgetTables1 + 0x3124

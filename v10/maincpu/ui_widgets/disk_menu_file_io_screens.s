@@ -2,7 +2,87 @@
 ; Disk Menu & File I/O screen widgets (382 widgets, 30944 bytes)
 ; Source: maincpu/ui_widgets/naka_disk_menu_file_io.c (C struct with named fields)
 NakaInst_IvWaitWinCtlProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x0, 0x5F00
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x0, 0x12
+NakaInst_IvIndexSwDelayProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x12, 0x14
+NakaInst_AcRotStrBoxProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x26, 0x10
+NakaInst_IvIndexSwCtrlProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x36, 0x12
+NakaInst_ArrowProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x48, 0xA
+NakaInst_VwScreenTitleProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x52, 0x12
+NakaInst_IvOneShotTimerProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x64, 0x14
+NakaInst_AcMonoIndexToggleProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x78, 0x16
+NakaInst_AcFileSfxBoxProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x8E, 0x12
+NakaInst_AcParaStrBoxProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xA0, 0x12
+NakaInst_AcTtlJgBoxProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xB2, 0x10
+NakaInst_PsWindowToggleProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xC2, 0x14
+NakaInst_PsFileNameBoxProc:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xD6, 0x8D8
+Str_DISKNAME:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x9AE, 0x6C8
+Str_LOAD:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x1076, 0x1F8
+Str_COMP:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x126E, 0x70
+Str_CUSTOM:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x12DE, 0x28
+Str_MIDI:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x1306, 0xD0
+Str_RHYTHM_CUSTOM:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x13D6, 0x80
+Str_COMPOSER:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x1456, 0x130
+Str_LOAD_2952:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x1586, 0x50
+Str_SINGLE_LOAD:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x15D6, 0x484
+Str_PREV:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x1A5A, 0xE8
+Str_DISK:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x1B42, 0x2C
+Str_LOAD_AS:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x1B6E, 0xC20
+Str_SOUND_MEMORY:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x278E, 0x58
+Str_SEQUENCER:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x27E6, 0x178
+Str_PERFORM:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x295E, 0x50
+Str_BACKUP:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x29AE, 0x50
+Str_PNL:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x29FE, 0x1A0
+Str_COMP_3F6A:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x2B9E, 0x70
+Str_CUSTOM_3FDA:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x2C0E, 0x28
+Str_MIDI_4002:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x2C36, 0x80
+Str_ALL_OFF:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x2CB6, 0x150
+Str_SAVE:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x2E06, 0x188
+Str_NEXT:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x2F8E, 0x62
+Str_OFF:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x2FF0, 0xE6
+Str_SAVE_44A2:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x30D6, 0x278
+Str_PREV_471A:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x334E, 0x1F9C
+Str_DISKINSERTOPTION:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x52EA, 0x50
+Str_FILETYPEPRIORITY:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x533A, 0xBC6
 EmbeddedPtrTable_v10_naka_disk_menu_file_io_005F00:
 	.long 0x00EA754A
 	.long 0x00EA7548
@@ -68,47 +148,8 @@ EmbeddedPtrTable_v10_naka_disk_menu_file_io_005F00:
 	.long 0x00EA747E
 	.long 0x00EA747C
 	.long 0x00EA747A
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6000, 0x18E0
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6000, 0xA34
+NakaInst_WaitWinCtlSmf:
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6A34, 0xEAC
 
 ; External label offsets within the binary blob above.
-	.equ NakaInst_IvIndexSwDelayProc, NakaInst_IvWaitWinCtlProc + 0x0012
-	.equ NakaInst_AcRotStrBoxProc, NakaInst_IvWaitWinCtlProc + 0x0026
-	.equ NakaInst_IvIndexSwCtrlProc, NakaInst_IvWaitWinCtlProc + 0x0036
-	.equ NakaInst_ArrowProc, NakaInst_IvWaitWinCtlProc + 0x0048
-	.equ NakaInst_VwScreenTitleProc, NakaInst_IvWaitWinCtlProc + 0x0052
-	.equ NakaInst_IvOneShotTimerProc, NakaInst_IvWaitWinCtlProc + 0x0064
-	.equ NakaInst_AcMonoIndexToggleProc, NakaInst_IvWaitWinCtlProc + 0x0078
-	.equ NakaInst_AcFileSfxBoxProc, NakaInst_IvWaitWinCtlProc + 0x008e
-	.equ NakaInst_AcParaStrBoxProc, NakaInst_IvWaitWinCtlProc + 0x00a0
-	.equ NakaInst_AcTtlJgBoxProc, NakaInst_IvWaitWinCtlProc + 0x00b2
-	.equ NakaInst_PsWindowToggleProc, NakaInst_IvWaitWinCtlProc + 0x00c2
-	.equ NakaInst_PsFileNameBoxProc, NakaInst_IvWaitWinCtlProc + 0x00d6
-	.equ Str_DISKNAME, NakaInst_IvWaitWinCtlProc + 0x09ae
-	.equ Str_LOAD, NakaInst_IvWaitWinCtlProc + 0x1076
-	.equ Str_COMP, NakaInst_IvWaitWinCtlProc + 0x126e
-	.equ Str_CUSTOM, NakaInst_IvWaitWinCtlProc + 0x12de
-	.equ Str_MIDI, NakaInst_IvWaitWinCtlProc + 0x1306
-	.equ Str_RHYTHM_CUSTOM, NakaInst_IvWaitWinCtlProc + 0x13d6
-	.equ Str_COMPOSER, NakaInst_IvWaitWinCtlProc + 0x1456
-	.equ Str_LOAD_2952, NakaInst_IvWaitWinCtlProc + 0x1586
-	.equ Str_SINGLE_LOAD, NakaInst_IvWaitWinCtlProc + 0x15d6
-	.equ Str_PREV, NakaInst_IvWaitWinCtlProc + 0x1a5a
-	.equ Str_DISK, NakaInst_IvWaitWinCtlProc + 0x1b42
-	.equ Str_LOAD_AS, NakaInst_IvWaitWinCtlProc + 0x1b6e
-	.equ Str_SOUND_MEMORY, NakaInst_IvWaitWinCtlProc + 0x278e
-	.equ Str_SEQUENCER, NakaInst_IvWaitWinCtlProc + 0x27e6
-	.equ Str_PERFORM, NakaInst_IvWaitWinCtlProc + 0x295e
-	.equ Str_BACKUP, NakaInst_IvWaitWinCtlProc + 0x29ae
-	.equ Str_PNL, NakaInst_IvWaitWinCtlProc + 0x29fe
-	.equ Str_COMP_3F6A, NakaInst_IvWaitWinCtlProc + 0x2b9e
-	.equ Str_CUSTOM_3FDA, NakaInst_IvWaitWinCtlProc + 0x2c0e
-	.equ Str_MIDI_4002, NakaInst_IvWaitWinCtlProc + 0x2c36
-	.equ Str_ALL_OFF, NakaInst_IvWaitWinCtlProc + 0x2cb6
-	.equ Str_SAVE, NakaInst_IvWaitWinCtlProc + 0x2e06
-	.equ Str_NEXT, NakaInst_IvWaitWinCtlProc + 0x2f8e
-	.equ Str_OFF, NakaInst_IvWaitWinCtlProc + 0x2ff0
-	.equ Str_SAVE_44A2, NakaInst_IvWaitWinCtlProc + 0x30d6
-	.equ Str_PREV_471A, NakaInst_IvWaitWinCtlProc + 0x334e
-	.equ Str_DISKINSERTOPTION, NakaInst_IvWaitWinCtlProc + 0x52ea
-	.equ Str_FILETYPEPRIORITY, NakaInst_IvWaitWinCtlProc + 0x533a
-	.equ NakaInst_WaitWinCtlSmf, NakaInst_IvWaitWinCtlProc + 0x6a34

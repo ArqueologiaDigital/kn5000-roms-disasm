@@ -2,7 +2,9 @@
 ; Effects & Sequencer screen widgets (555 widgets, 36540 bytes)
 ; Source: maincpu/ui_widgets/naka_effects_seq.c (C struct with named fields)
 Naka_ReverbScreen_EmptyStr:
-	.incbin "includes/generated/naka_effects_seq.bin", 0, 0x6700
+	.incbin "includes/generated/naka_effects_seq.bin", 0x0, 0x5BF2
+NakaInst_FADE_IN_OUT_SETTING:
+	.incbin "includes/generated/naka_effects_seq.bin", 0x5BF2, 0xB0E
 EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2841C
 	.long 0x00E28444
@@ -644,13 +646,18 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2E588
 	.long 0x00E2E5AC
 	.long 0x00E2E5D6
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7100, 0x1DBC
+	.incbin "includes/generated/naka_effects_seq.bin", 0x7100, 0x101C
+Naka_Help_563_E300C0:
+	.incbin "includes/generated/naka_effects_seq.bin", 0x811C, 0x7
+Naka_Help_564_E300C7:
+	.incbin "includes/generated/naka_effects_seq.bin", 0x8123, 0x5
+Naka_Help_565_E300CC:
+	.incbin "includes/generated/naka_effects_seq.bin", 0x8128, 0x17
+Naka_Help_566_E300E3:
+	.incbin "includes/generated/naka_effects_seq.bin", 0x813F, 0x9
+Naka_Help_567_E300EC:
+	.incbin "includes/generated/naka_effects_seq.bin", 0x8148, 0x27
+Naka_Help_569_E30113:
+	.incbin "includes/generated/naka_effects_seq.bin", 0x816F, 0xD4D
 
 ; External label offsets within the binary blob above.
-	.equ NakaInst_FADE_IN_OUT_SETTING, Naka_ReverbScreen_EmptyStr + 0x5bf2
-	.equ Naka_Help_563_E300C0, Naka_ReverbScreen_EmptyStr + 0x811c
-	.equ Naka_Help_564_E300C7, Naka_ReverbScreen_EmptyStr + 0x8123
-	.equ Naka_Help_565_E300CC, Naka_ReverbScreen_EmptyStr + 0x8128
-	.equ Naka_Help_566_E300E3, Naka_ReverbScreen_EmptyStr + 0x813f
-	.equ Naka_Help_567_E300EC, Naka_ReverbScreen_EmptyStr + 0x8148
-	.equ Naka_Help_569_E30113, Naka_ReverbScreen_EmptyStr + 0x816f
