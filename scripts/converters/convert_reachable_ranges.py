@@ -402,7 +402,22 @@ def rewrite_incbin(site, rows, addr2name, used, dry=False):
 
 
 def decode_range(rom, terr, start, limit=16384):
-    """Decode from `start` until a terminator or until reaching CODE territory."""
+    """Decode from `start` until a terminator or until reaching CODE territory.
+
+    ⚠ `limit` bounds the SPAN handed to unidasm, not the decode. A range that
+    comes back at exactly 16,384 bytes therefore means an entire undisassembled
+    run decoded with no terminator and no `db` -- which is what a runaway decode
+    through data looks like, not what a routine looks like. Two such ranges exist
+    (0xE400ED and 0xE600ED).
+    ⚠ Those interact with the `ends_at_code` acceptance path in main(), which
+    accepts a decode that never found a terminator PROVIDED it consumed exactly
+    the whole run. When the run is longer than the limit the length check saves
+    us (16,384 != run length, so it is refused); when a run is shorter and fully
+    consumed, the range is accepted on the strength of "it tiles" alone. That is
+    defensible -- the surrounding sources really do continue as instructions --
+    but it is the weakest acceptance rule here, and the plausibility screen
+    (anti-pattern 13) is what stands behind it.
+    """
     off = start - BASE
     end = off
     while end < len(terr) and terr[end] == 2 and end - off < limit:
