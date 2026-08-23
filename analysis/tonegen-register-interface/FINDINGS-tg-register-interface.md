@@ -338,3 +338,58 @@ Two facts bear on doing that without the ROM:
   `entry = word & 0x0FFF` reading the second one picks a different directory entry on every
   note. Unresolved — see the "WHAT +0x040 SELECTS" header.
 * Whether a recording's tuning origin is recoverable from the wave ROM parameter records.
+
+---
+
+## Direct answer to the question that prompted this (2026-08-23)
+
+> *"we were a bit unsure about how to deal with an initialisation of a large block
+> of data that we were copying directly from ROM, which sounded like crossing chip
+> boundaries."*
+
+**It is not a chip-boundary crossing, and the fix is not to stop reading the
+block — it is to read it where the hardware actually puts it.**
+
+Two separate things were conflated, and separating them resolves the worry:
+
+1. **The 320 KB tone database IS legitimately in the sub-CPU's address space.**
+   `SubCPU_Send_Payload` (`v7/maincpu/kn5000_v7_program.s:313`) ships main-bus
+   `0x830000..0x87FFFF` to sub-CPU `0x050000..0x09FFFF` over the real inter-CPU
+   link during boot, and `DSP_System_Init` sets
+   `ToneDB_RelBase = ToneDB_RootPtr = 0x050000`. So the sub-CPU reads that data
+   because the firmware really transferred it to the sub-CPU.
+   VERIFIED: `tonedb_root_check.py` — every ToneDB pointer field lands inside the
+   transferred 0x50000-byte block (0 outside), and the SET descriptor array
+   divides exactly to **487** entries, the count the driver logs.
+
+   ⇒ An implementation should source it from the **post-transfer sub-CPU
+   region**, not by reaching into the main program ROM. Same bytes, honest path,
+   and it stops working if the transfer is ever modelled differently — which is
+   the property you want.
+
+2. **The TG chip (IC303) never receives that block at all.** The main CPU has
+   **no window on IC303**: 0 bus accesses to `0x100000`/`0x100002` in v7, v9 or
+   v10 (the textual hits are `cp xiz, 0x100000`, the DRAM top bound). The
+   register interface is sub-CPU only, and the largest ROM-sourced upload
+   anywhere in the firmware is **68 bytes** (`DSP_Config_Init`, a 34-word
+   default-voice template). The database is read to COMPUTE 22 pitch words, and
+   only those words are written to registers.
+
+   ⇒ This is the same dissolution recorded for the KN7000/KN6000 as
+   "BLOCKER 2 — dissolved, not reversed": the firmware computes and publishes.
+
+### The one genuine gap, stated as a gap
+
+`reg 0x400 = (note << 8) + 0x80 + C(recording) + 2*fine + detune`. The **sum** is
+in the register traffic; the **split** is not, and the split is the only thing
+the ROM walk contributes. Two leads that avoid the main-CPU ROM entirely:
+`ToneGen_SetupPolyVoice` (0x0355AD) writes `(note << 8) | 0x80` with **C = 0**,
+a ROM-free absolute-note calibration point; and `C` is a property of the
+recording, owned by IC304-307 on IC303's own bus. Whether the wave-ROM parameter
+records carry a root note is **[OPEN]**.
+
+### Emulator gap found on the way
+
+`0x100004` is read by the boot ROM's liveness probe and is **not mapped** in
+`kn5000.cpp` (which maps `0x100000`, `0x100002`, `0x110000` only). Unrelated to
+the question, but it is a real hole in the modelled interface.
