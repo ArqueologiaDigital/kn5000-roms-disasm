@@ -150,17 +150,24 @@ pointers at all.
 
 | blob base | named offsets |
 |---|---:|
-| `NakaData_TechniChordStrings` | 2,544 |
-| `NakaData_StyleBitmaps` | 2,229 |
-| `NakaData_WidgetNames` | 2,022 |
-| `NakaData_WidgetDescriptors` | 1,197 |
-| `NakaData_WidgetTables2` | 1,128 |
-| `NakaBoxData_PsSongSelBox` | 819 |
-| … 23 bases in all | **11,394** |
+| `NakaData_TechniChordStrings` | 848 |
+| `NakaData_StyleBitmaps` | 743 |
+| `NakaData_WidgetNames` | 674 |
+| `NakaData_WidgetTables2` | 376 |
+| `NakaData_WidgetDescriptors` | 309 |
+| `NakaBoxData_PsSongSelBox` | 273 |
+| … 24 bases in all | **3,709** |
+
+⚠ **CORRECTED. I first published 11,394 across 23 bases — exactly 3x too high.**
+The same `.equ` declarations exist in v7, v9 and v10, and the one-liner that
+produced the figure counted all three revisions as distinct names. The per-blob
+number quoted above it (674 for `NakaData_WidgetNames`) was always right, because
+that one came from parsing a single v7 file. Prover:
+`scripts/analysis/l3_named_offsets_into_blobs.py`, which dedups per base.
 
 **This changes what the L3/§3 scorecard should say in BOTH directions.** The
 binary-include audit calls these blobs OPAQUE and "earning no better format on
-this evidence" — while the sources next to them carry 11,394 names for their
+this evidence" — while the sources next to them carry 3,709 names for their
 interiors. The audit is not measuring the documentation that exists; it reads
 bytes and nothing else.
 
@@ -170,7 +177,7 @@ knowledge lives in `.equ` constants beside the include rather than as labels
 positioned in it — and an `.equ` naming an offset IS a human-readable structure
 description, so this is a weaker deficiency than "an undocumented blob".
 
-⚠ Do not read this as licence to convert. The 11,394 offsets are the correct
+⚠ Do not read this as licence to convert. The 3,709 offsets are the correct
 BOUNDARIES to use for any future splitting — far better founded than my
 window scan, which is aligned to 0x100 and knows nothing about records — but
 splitting on them is a separate job with its own gate.
