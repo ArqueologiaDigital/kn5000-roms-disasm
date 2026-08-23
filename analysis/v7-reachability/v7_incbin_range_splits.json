@@ -640,6 +640,16 @@
    "slice_bytes": 3381,
    "source": "v7/maincpu/extensions/extension_init.s",
    "first": "lda xsp, (xsp - 0x0e) ; lda XBC, (XSP) ; ld XWA,0x01600004 ; ld (XBC),XWA"
+  },
+  {
+   "entry": "0xFCCC66",
+   "bytes": 192,
+   "instructions": 70,
+   "slice": "includes/romslices/v7_block_interrupt_vector_trampolines.bin",
+   "slice_addr": "0xFCCC3D",
+   "slice_bytes": 525,
+   "source": "v7/maincpu/boot/interrupt_vector_trampolines.s",
+   "first": "dec 6,XSP ; push XIZ ; ldw (XSP+0x04), 0xffff ; ld XIZ,XWA"
   }
  ]
 }

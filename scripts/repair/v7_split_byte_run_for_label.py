@@ -115,81 +115,110 @@ def main():
     done = 0
     for f, rows in byfile.items():
         lines = open(f, 'rb').read().decode('latin1').splitlines(True)
-        edits = {}                      # line index -> replacement text
-        drop = set()
+        edits, drop, claimed, file_done = {}, set(), set(), 0
+
+        # ⚠ CLAIM EVERY LINE A LABEL TOUCHES, BOTH LINES, BEFORE COMMITTING IT.
+        #
+        # Earlier versions checked for conflicts as they went -- "is the split
+        # line already dropped?" -- but `drop` keeps GROWING, so a later label
+        # could drop a line an earlier label had already split. The guard passed
+        # at the moment it ran and was false by the end of the file. Two rounds
+        # of ~580 wrong bytes came from this family, and each fix I made was for
+        # a real but different collision.
+        #
+        # A label touches exactly two lines: where its definition is now, and
+        # where the split happens. Reserve both up front, and skip the label if
+        # either is spoken for. Order stops mattering.
         for (_, n, a, t, ba, st, en) in rows:
-            # walk the run's .byte lines to find the one holding t
             addr = ba
-            for i in range(st, en + 1):
-                m = BYTE.match(lines[i])
+            for i2 in range(st, en + 1):
+                _l = LAB.match(lines[i2])
+                m = BYTE.match(lines[i2][_l.end():] if _l else lines[i2])
                 if not m:
                     continue
                 vals = [v.strip() for v in m.group(2).split(',') if v.strip()]
-                if addr <= t < addr + len(vals):
-                    off = t - addr
-                    ind = m.group(1)
-                    if i in edits:
-                        break               # one split per line, keep it simple
-                    if i == st and off == 0:
-                        break               # label would duplicate the run's own
-                    head = vals[:off]
-                    tail = vals[off:]
-                    new = ''
-                    if head:
-                        new += f"{ind}.byte {', '.join(head)}\n"
-                    new += f"{n}:\n"
-                    new += f"{ind}.byte {', '.join(tail)}\n"
-                    # ⚠ THE OLD DEFINITION MUST GO, AND IT IS NOT ALWAYS ALONE.
-                    # The first version searched for a line equal to `Name:` and
-                    # dropped it. A label sharing its line with a directive --
-                    # `Name:\t.byte ...` -- does not match, so nothing was
-                    # removed and the label ended up defined TWICE. The gate
-                    # caught it at once ("symbol 'X' is already defined", 0/9),
-                    # which is the one advantage a split has over a plain label
-                    # move: it touches the byte stream, so the strongest check in
-                    # the project can actually see it.
-                    oldline = None
-                    for j, ln in enumerate(lines):
-                        if ln.strip() == n + ':':
-                            oldline = ('whole', j); break
-                        lm = LAB.match(ln)
-                        if lm and lm.group(1) == n:
-                            oldline = ('shared', j); break
-                    if oldline is None:
-                        break                      # cannot find it: leave alone
-                    # ⚠ THE OLD DEFINITION AND THE SPLIT MAY BE THE SAME LINE, or
-                    # a line another label in this batch already claimed. Writing
-                    # both edits then loses one of them and the BYTE STREAM
-                    # changes: a 1,951-label run produced 578 wrong bytes in v7
-                    # (gate 8/9) while an 18-label run was clean, because the
-                    # collision is rare. Refuse the label instead -- a skipped
-                    # repair costs nothing, a corrupted run costs the tree.
-                    if (oldline[1] == i or oldline[1] in edits or oldline[1] in drop
-                            or i in drop):
-                        break
-                    if oldline[0] == 'whole':
-                        drop.add(oldline[1])
-                    else:
-                        # strip just the label off the front, keep the directive
-                        j = oldline[1]
-                        rest = lines[j][LAB.match(lines[j]).end():]
-                        if not rest.strip():
-                            drop.add(j)
-                        else:
-                            edits[j] = ('\t' + rest.lstrip()) if not rest.startswith((' ', '\t')) else rest
-                    if i in edits:
-                        break
-                    edits[i] = new
-                    done += 1
+                if not (addr <= t < addr + len(vals)):
+                    addr += len(vals)
+                    continue
+                off = t - addr
+                if off == 0 and _l:
+                    break                       # a label is already here
+                oldj = None
+                for j2, ln in enumerate(lines):
+                    if ln.strip() == n + ':':
+                        oldj = ('whole', j2); break
+                    lm = LAB.match(ln)
+                    if lm and lm.group(1) == n:
+                        oldj = ('shared', j2); break
+                if oldj is None or i2 in claimed or oldj[1] in claimed:
                     break
-                addr += len(vals)
-        if not edits:
-            continue
+                claimed.add(i2); claimed.add(oldj[1])
+                ind = m.group(1)
+                head, tail = vals[:off], vals[off:]
+                rep = (_l.group(1) + ':\n') if _l else ''
+                if head:
+                    rep += f"{ind}.byte {', '.join(head)}\n"
+                rep += f"{n}:\n"
+                rep += f"{ind}.byte {', '.join(tail)}\n"
+                edits[i2] = rep
+                if oldj[0] == 'whole':
+                    drop.add(oldj[1])
+                else:
+                    rest = lines[oldj[1]][LAB.match(lines[oldj[1]]).end():]
+                    edits[oldj[1]] = rest if rest.strip() else ''
+                    if not rest.strip():
+                        drop.add(oldj[1]); edits.pop(oldj[1], None)
+                done += 1; file_done += 1
+                break
+
         out = []
-        for i, ln in enumerate(lines):
-            if i in drop:
+        for i2, ln in enumerate(lines):
+            if i2 in drop:
                 continue
-            out.append(edits.get(i, ln))
+            out.append(edits.get(i2, ln))
+
+        # PROVE BYTE-NEUTRALITY BEFORE WRITING. The invariant is checkable, so
+        # check it rather than reason about which collisions remain.
+        def payload(ls):
+            # ⚠ THE ELEMENTS ARE NOT ALWAYS ONE LINE. A replacement is a
+            # MULTI-LINE string ("head\nLabel:\ntail\n") held in a single list
+            # slot, and `BYTE.match` only ever sees its first line -- so an
+            # 8-byte split counted as 2 and the check reported 6 bytes lost.
+            #
+            # This verifier then REFUSED four correct batches in a row while I
+            # hunted for the edit bug it was reporting. The invariant was right;
+            # its implementation quietly disagreed with its own input format.
+            # A checker is code too, and a check that fails is not automatically
+            # evidence about the thing being checked.
+            # ⚠ CHECK EVERY CONTENT LINE, NOT JUST `.byte`.
+            #
+            # This compared only the `.byte` payload. It therefore PASSED while
+            # the build failed with 630 wrong bytes, because the damage was a
+            # dropped INSTRUCTION line (`ld wa, (xsp+16)`) -- invisible to a
+            # check that looks at `.byte` and nothing else. A necessary
+            # invariant is not a sufficient one, and the gap is exactly the part
+            # of the file the check ignores.
+            #
+            # Now: every line that emits anything, with labels stripped (a label
+            # emits no bytes and is the one thing this tool is allowed to move).
+            outb = []
+            for chunk in ls:
+                for ln in chunk.splitlines():
+                    _l = LAB.match(ln)
+                    body = (ln[_l.end():] if _l else ln).strip()
+                    if not body or body.startswith((';', '#')):
+                        continue
+                    mm = BYTE.match(ln[_l.end():] if _l else ln)
+                    if mm:
+                        outb += [v.strip() for v in mm.group(2).split(',') if v.strip()]
+                    else:
+                        outb.append(body)          # instruction / directive text
+            return outb
+        if payload(out) != payload(lines):
+            print(f"  ⚠ REFUSED {os.path.basename(f)}: payload "
+                  f"{len(payload(lines))} -> {len(payload(out))}; left untouched")
+            done -= file_done
+            continue
         open(f, 'wb').write(''.join(out).encode('latin1'))
     print(f"  SPLIT+PLACED {done} label(s)")
     return 0

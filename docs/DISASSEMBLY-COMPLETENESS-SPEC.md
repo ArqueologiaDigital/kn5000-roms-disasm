@@ -302,7 +302,28 @@ recognised faster next time.
    **A producer must distinguish "measured, and the answer is zero" from "could not measure".**
    When a fix removes the conditions its own evidence depended on, record the commit and the
    command needed to re-derive it, next to the number.
-15. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
+15. **A ROUNDED PASS IS NOT A PASS.** ⚠ THE MOST EXPENSIVE ERROR OF 2026-08-22/23, because it
+   disabled the check everything else in this document leans on. `compare_roms.py` prints
+   `Similarity: 100.00%` to two decimals -- in a 2,097,152-byte ROM that is **up to 104 differing
+   bytes**. It does append `(N incorrect bytes)`, but the gate was written as
+   `grep -c "Similarity: 100.00%"`, which MATCHES THAT LINE, because it is a prefix.
+     * Every "gate 9/9" reported that day was that prefix match. 14 run logs contain
+       `Similarity: 100.00%  (N incorrect bytes)`.
+     * 981 label "repairs" were committed on a 9/9 that was really 22 wrong bytes in v7. The
+       corruption was printed the whole time; the check read past it.
+     * It also produced a false theory. Believing label moves were byte-neutral, I concluded the
+       byte gate was "structurally blind" to them and built a two-verifier argument on that. Moving
+       a label DOES change bytes -- through `.long <symbol>` entries in pointer tables -- and the
+       gate was catching it.
+   **Assert identity, never a formatted percentage.** `scripts/analysis/assert_byte_identical.py`
+   compares bytes and exits non-zero; a percentage is for humans reading a report.
+16. **The ROM outranks a cross-revision heuristic.** The same episode: a detector compared v7 bytes
+   against the same-named routine in v9 and declared 3,474 labels displaced by 0x41A. The ROM's own
+   pointer tables point at those labels' ORIGINAL addresses -- and of the moved labels that a
+   pointer table can check, **11 of 11 contradicted the detector**. A name shared across two
+   different programs is a hypothesis; a pointer the firmware dereferences is evidence. Check a
+   claim about placement against the pointers before acting on it.
+17. **The gate that cannot pass.** The mirror of anti-pattern 1, and it hides work rather than
    faking it. A converter's re-check compared symbolic branches against a LINK-TIME PLACEHOLDER,
    so 361 ranges / 18,412 bytes -- seven times the entire remaining backlog -- were refused with
    the same message a genuinely broken range produces. Rejections concentrated in one bucket
