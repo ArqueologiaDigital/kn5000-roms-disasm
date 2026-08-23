@@ -18,6 +18,8 @@ CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "decodes.pkl")
 decodes = pickle.load(open(CACHE, "rb"))
 crr.decode_range = lambda rom, terr, start, limit=16384: decodes.get(start, [])
 
+if len(sys.argv) < 2 or sys.argv[1] not in ("baseline", "patched"):
+    sys.exit("usage: measure.py baseline|patched   (see README.md)")
 if sys.argv[1] == "patched":
     _orig = cc.translate
     def translate(x):
