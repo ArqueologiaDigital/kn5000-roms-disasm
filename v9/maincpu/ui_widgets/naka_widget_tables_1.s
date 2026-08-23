@@ -69,11 +69,7 @@ EmbeddedPtrTable_v9_naka_widget_tables_1_001000:
 	.long 0x00E25150
 	.long 0x00E25144
 	.long 0x00E25142
-	.long 0x7041FF00
-	.long 0x79616C50
-	.long 0x726F7953
-	.long 0x614E0069
-	.long 0x6547656D
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x10EC, 0x14
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1100, 0x163C
 MedleyDisp_Blank:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x273C, 0x2C

@@ -35,8 +35,7 @@ EmbeddedPtrTable_v7_naka_sequencer_channels_000D00:
 	.long 0xFFFFFFFF
 	.long 0xFFFF0002
 	.long 0x00000000
-	.long 0xFFFFFFFF
-	.long 0xFFFF0009
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0xD54, 0x8
 MidiPart_ConfigNameTable:
 	.long MidiParam_PanelCfgTable
 	.long Midi_PartToChMappingTable
@@ -150,11 +149,7 @@ Naka_DrawbarDisplay_Table1:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
 Naka_DrawbarDisplay_Table2:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1358, 0x1A8
-EmbeddedPtrTable_v7_naka_sequencer_channels_001500:
-	.long 0x2E8200EB
-	.long 0xF0D200EB
-	.long 0x00040003
-	.long 0x00020000
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1500, 0x10
 Naka_DrawbarReg_Table:
 	.long NakaColor_Palette2
 	.long NakaColor_Palette1
