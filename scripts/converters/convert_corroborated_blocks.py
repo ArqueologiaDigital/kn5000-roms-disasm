@@ -189,6 +189,20 @@ SHIFTS = ("sla", "sra", "srl", "sll", "rl", "rr", "rlc", "rrc")
 # gap in the backend. They are not missing; they are spelled differently. Do not
 # reintroduce that claim without assembling one first.
 REG_BYTE = {}
+
+# ⚠ THE BANKED REGISTERS, derived by probing unidasm rather than transcribed.
+# For each bank 0..3 the sixteen names sit at bank*0x10; bank 3 was dumped as
+#   0x30 RA3  0x31 RW3  0x32 QA3  0x33 QW3  0x34 RC3  0x35 RB3  0x36 QC3
+#   0x37 QB3  0x38 RE3  0x39 RD3  0x3a QE3  0x3b QD3  0x3c RL3  0x3d RH3
+#   0x3e QL3  0x3f QH3
+# REG_BYTE previously held 32 of the 256 entries, so `ld RL3,A` (c7 3c 99)
+# had no spelling for want of one table row.
+_BANKED = ["RA", "RW", "QA", "QW", "RC", "RB", "QC", "QB",
+           "RE", "RD", "QE", "QD", "RL", "RH", "QL", "QH"]
+for _bank in range(4):
+    for _k, _nm in enumerate(_BANKED):
+        REG_BYTE[f"{_nm}{_bank}"] = _bank * 0x10 + _k
+
 for _i, _n in enumerate(
         "A W QA QW C B QC QB E D QE QD L H QL QH "
         "IXL IXH QIXL QIXH IYL IYH QIYL QIYH "
@@ -472,6 +486,14 @@ def translate(text):
             if _bs is not None and _ix is not None:
                 for _m in ("stb_dri", "stw_dri", "stl_dri"):
                     yield f"{_m} {_b9.lower()}, 0x07, 0x{_bs:02x}, 0x{_ix:02x}"
+        # `ld <banked>,<r8>` -> `ldb_erp <r8>, 0x<bankbyte>`.
+        #     ld RL3,A = c7 3c 99 = ldb_erp a, 0x3c
+        # The ERP byte names the destination bank register; the printed text
+        # puts it first, the spelling puts it second.
+        if _mn9 == "ld" and _a9.upper() in REG_BYTE and re.match(r'^[A-Za-z]{1,3}$', _b9):
+            for _pre in ("ldb_erp", "ldw_erp"):
+                yield f"{_pre} {_b9.lower()}, 0x{REG_BYTE[_a9.upper()]:02x}"
+
         # `ld (<base>+<index>),<imm>` -- register-indexed store of an immediate.
         # Verified against dumped ROM bytes:
         #     ld (XIX+IZ),0x05   = f3 07 f0 f8 00 05
