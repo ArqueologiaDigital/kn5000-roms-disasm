@@ -457,6 +457,25 @@ def translate(text):
             if _bs is not None and _ix is not None:
                 for _m in ("stb_dri", "stw_dri", "stl_dri"):
                     yield f"{_m} {_b9.lower()}, 0x07, 0x{_bs:02x}, 0x{_ix:02x}"
+        # `inc|dec <n>,(<abs>)` -- census rule G, +785 B measured. Width and
+        # address size are both invisible in the printed text, so offer the
+        # family and let the ROM bytes choose:
+        #     dec 1,(0x0de7) = c1 e7 0d 69 = decdi8 1, 0x0de7
+        #     the 16-bit width takes prefix d1, and _24 a 24-bit address.
+        #
+        # ⚠ `decdd8` is NOT a synonym for `decdi8`. It assembles happily and
+        # emits f1 e7 0d 69, which unidasm reads back as `db` -- an INVALID
+        # encoding. Getting the width wrong is the probe's negative control:
+        # 391 wrong in v7. This is why the family is offered rather than picked.
+        if _mn9 in ("inc", "dec", "incw", "decw") and _absb \
+                and re.match(r'^(0x[0-9a-fA-F]+|\d+)$', _a9):
+            _base = "inc" if _mn9.startswith("inc") else "dec"
+            _addr = _absb.group(1)
+            _w16 = _mn9.endswith("w")
+            for _sfx in (("di16", "di8") if _w16 else ("di8", "di16")):
+                yield f"{_base}{_sfx} {_a9}, {_addr}"
+                yield f"{_base}{_sfx}_24 {_a9}, {_addr}"
+
         # `ld (<XRR>+<disp>),<imm>` -- ONE printed shape, FOUR encodings
         # (tools/spelling-probes/README-ld_ri_imm.md). The text drops everything
         # that separates them: byte vs word store, the sign of the displacement,

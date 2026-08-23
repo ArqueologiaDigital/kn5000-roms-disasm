@@ -3195,7 +3195,87 @@ DMA_StoreFlagAndReturn:
 
 
 VoiceSlot_TableSetup:
-	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head.bin"
+	bitda 0, (0x0dd3)
+	jrl z, .Lc_ef900f
+	jp VoiceSlot_TableSetup_0xF
+.Lc_ef900f:
+	jp VoiceSlot_TableSetup_0x106
+	anddi8 (0x0dd3), 0xfe
+	call AccPedal_CheckBitAndUpdate
+	call VoiceState_DataBlock2_0x472
+	xor A,A
+	call VoiceSlot_SaveState
+	call VoiceSlot_TableSetup_0x107
+	stdi8 (0x0dcf), 0x01
+	call ToneParam_HandlerTable_BC_0x57C
+	call VoiceState_DataBlock2_0xAD
+	cps w, 0
+	jrl nz, .Lc_ef904e
+	call VoiceSlot_ReadCurrentParams
+	cp A,0x81
+	jrl nz, .Lc_ef906a
+	decdi8 1, 0x0de7
+	jp VoiceSlot_TableSetup_0x66
+.Lc_ef904e:
+	call VoiceSlot_ReadCurrentParams
+	cp A,0x81
+	jrl nz, .Lc_ef906a
+	call VoiceSlot_DispatchRet
+	call VoiceSlot_ReadCurrentParams
+	cp A,0x81
+	jrl nz, .Lc_ef906a
+	decdi8 1, 0x0de7
+.Lc_ef906a:
+	ldb_d8 a, (0x0eee)
+	dec 1,A
+	xor W,W
+	ld HL,WA
+	push XIX
+	ld XIX,0x00000cbe
+	ldb_dri a, 0x07, 0xf0, 0xec
+	stb_d8 (0x0dec), a
+	sla HL, 0x01
+	ld XIX,0x00000c9e
+	ldw_dri wa, 0x07, 0xf0, 0xec
+	stda16 (0x0de8), wa
+	pop XIX
+	ldb_d8 c, (0x0de7)
+	xor B,B
+	stdi8 (0x0dcf), 0x00
+	call ToneParam_HandlerTable_BC_0x57C
+	ldb_d8 a, (0x0eee)
+	dec 1,A
+	xor W,W
+	ld HL,WA
+	push XIX
+	ld XIX,0x00000cbe
+	ldb_dri a, 0x07, 0xf0, 0xec
+	stb_d8 (0x0ded), a
+	sla HL, 0x01
+	ld XIX,0x00000c9e
+	ldw_dri wa, 0x07, 0xf0, 0xec
+	stda16 (0x0dea), wa
+	pop XIX
+	call VoiceSlot_TableSetup_0x12C
+	call DisplayStr_StyleSectionNames_0x69
+	call Display_UpdateRegion5
+	ldw_d16 wa, (0x367e)
+	cp WA,0x03e8
+	jrl c, .Lc_ef90e9
+	ldw WA, 0x03e8
+.Lc_ef90e9:
+	stda16 (0x0e4e), wa
+	xor A,A
+	call VoiceSlot_RestoreState
+	call VoiceSlot_TableSetup_0x2E0
+	call VoiceSlot_TableSetup_0x40F
+	call Display_UpdateRegion1
+	bitda 0, (0x0f57)
+	jrl nz, .Lc_ef910a
+	call Display_UpdateRegion4
+.Lc_ef910a:
+	ret
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail.bin"
 	ordi8 (0xe31c), 0x08
 	call AccPedal_CheckBitAndUpdate
 .Lc_ef9545:
