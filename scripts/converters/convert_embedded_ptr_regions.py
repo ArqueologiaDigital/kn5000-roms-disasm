@@ -63,6 +63,9 @@ concatenation compared byte-for-byte against the blob region. Then the usual
 
 Run:  python3 scripts/converters/convert_embedded_ptr_regions.py [--apply]
       (default is a dry run that writes nothing)
+      python3 scripts/converters/convert_embedded_ptr_regions.py --controls
+      re-measures BOTH nulls quoted above, so the enrichment figures that
+      justify P1 and P2 are reproducible rather than asserted.
 """
 import argparse, glob, importlib.util, os, pathlib, re, struct, sys
 
@@ -107,7 +110,41 @@ def rev_of(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--controls", action="store_true",
+                    help="measure the P1 and P2 nulls and exit")
     a = ap.parse_args()
+
+    if a.controls:
+        import random
+        rng = random.Random(5)
+        N = 200000
+        # P2 null: how often does a RANDOM ROM offset carry the record
+        # signature? This is the number that makes 82% mean something.
+        hit = 0
+        for _ in range(N):
+            o = rng.randrange(0, len(ROM) - 4)
+            if tuple(ROM[o + 1:o + 4]) == NAKA_SIG:
+                hit += 1
+        print(f"  P2 null  (random ROM offset carries {NAKA_SIG}) : "
+              f"{100*hit/N:.3f}%   n={N:,}")
+        # P1 null: how often does a uniform ROM-range address hit a symbol?
+        v7 = SYMS.get("v7", {})
+        hit2 = sum(1 for _ in range(N)
+                   if rng.randrange(0xE00000, 0x1000000) in v7)
+        print(f"  P1 null  (uniform ROM address hits a v7 symbol): "
+              f"{100*hit2/N:.3f}%   n={N:,}  over {len(v7):,} symbols")
+        # And the measured region, for the enrichment ratio.
+        f = REPO / "v7/maincpu/includes/generated/naka_effects_seq.bin"
+        if f.exists():
+            b = open(f, "rb").read()
+            w = [struct.unpack("<I", b[i:i + 4])[0] for i in range(0x6700, 0x7100, 4)]
+            sh = struct_hits(w)
+            print(f"\n  naka_effects_seq 0x006700: {100*sh:.0f}% of {len(w)} targets "
+                  f"carry it  ->  enrichment {sh/max(1e-9,hit/N):.0f}x over the null")
+            print(f"  words hitting a v7 symbol: "
+                  f"{sum(1 for x in w if x in v7)}/{len(w)}"
+                  f"   (P1 is blind here: the targets are blob interiors)")
+        return 0
 
     # one .incbin site per (revision, basename)
     sites = {}
