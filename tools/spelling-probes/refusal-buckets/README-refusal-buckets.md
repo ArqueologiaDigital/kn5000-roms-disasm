@@ -22,19 +22,21 @@ READ-ONLY. `--apply` is never invoked. `crr.main()` is called once, with
 counts and **assert** they equal this script's membership; that assertion is the
 part that can fail.
 
-## The answer, measured 2026-08-23 at `c8e9ec4`
+## The answer, measured 2026-08-23
 
-Provenance, because every input here moves (see below):
-`v7_call_targets.json` 659 entries sha256 `baed0688c44d04ce`,
-ROM sha256 `e7ae0cb76d5111dd`.
+Provenance, because **every input here moves** (see the last section):
+targets `v7_call_targets.json` 649 entries sha256 `59b778d7688450c8`,
+ROM sha256 `e7ae0cb76d5111dd`,
+territory map at git `74eec5d`, CODE 621,920 B / DATA 1,408,480 B,
+fingerprint `edacad0f805f17ec`. `classify.py` prints all of that in its header.
 
-**B1 — "decoded fewer than 3 instructions", 169 ranges**
+**B1 — "decoded fewer than 3 instructions", 170 ranges**
 
 | cause | hyp | ranges | bytes decoded | bytes past the stop |
 |---|---|---|---|---|
-| C-SHORT-STUB — 1-2 instructions ending in an UNCONDITIONAL `ret`/`reti`/`retd` | (c) | 35 | 92 | 23,587 |
-| D-COND-RET-STOP — stopped at a CONDITIONAL `ret <cc>`, which does not end a routine | (d) | 20 | 120 | 5,035 |
-| D-TILES-INTO-CODE — the decode consumes the whole run and abuts real code | (d) | 40 | 202 | 0 |
+| C-SHORT-STUB — 1-2 instructions ending in an UNCONDITIONAL `ret`/`reti`/`retd` | (c) | 35 | 92 | 23,277 |
+| D-COND-RET-STOP — stopped at a CONDITIONAL `ret <cc>`, which does not end a routine | (d) | 20 | 120 | 4,625 |
+| D-TILES-INTO-CODE — the decode consumes the whole run and abuts real code | (d) | 41 | 210 | 0 |
 | D-OVERRUN — last instruction runs 1-4 B past the run boundary | (d) | 9 | 43 | 0 |
 | D-TRUNCATED-BUFFER — 1-4 B left at the boundary, too few to finish an instruction | (d) | 25 | 5 | 36 |
 | B-UNDECODABLE — mid-run `db`, and llvm-mc refuses the same bytes | (b) | 40 | 57 | 88,487 |
@@ -76,7 +78,7 @@ are reserved slots in the TLCS-900/H map.
   terminator with no data-shape flag: `FDC_STATUS_COPY` = `ld (0x8988),(0x898a) ;
   ret`, `FDC_Send_Command` = `ld (0x110008),A ; ret`, `Boot_ReadFDCStatus` =
   `ld L,(0x8dce) ; ret`. 2 more end in a terminator but carry a flag.
-* **38 ranges / 199 B** are 1-2 instructions that tile their run exactly and abut
+* **39 ranges / 207 B** are 1-2 instructions that tile their run exactly and abut
   code — the converter's own `ends_at_code` rule would take them at 3.
 * **20 ranges / 120 B look like (c) and are NOT.** They stop at a *conditional*
   `ret <cc>`, after which execution continues. `decode_range` matches
@@ -100,7 +102,7 @@ prints `db` instead — 48/48 of those decode cleanly when given 64 real ROM byt
 ### Hypothesis (b) — not code
 
 141 B-UNDECODABLE + 1 B-LLVM-DECODER-BUG + 2 B-RUNAWAY. The positive evidence is
-the `ptrtable` column: **44 of the 329 refused ranges** sit on (or one byte
+the `ptrtable` column: **44 of the 330 refused ranges** sit on (or one byte
 inside) a run of little-endian `.long` ROM addresses. `0xED77ED` is one byte
 before `00ED3598, 00ED35BE, 00ED35EC, 00ED3618`; `0xED32F3` one byte before
 `00ED340C, 00ED33FA, 00ED33E8, ...`. Both are branch/call "targets" that landed
@@ -108,9 +110,9 @@ mid-entry in a pointer table.
 
 ## Controls, and one that FAILED
 
-* `ptrtable` — 44/329 measured, **0/329** on the same ranges with their own first
-  64 bytes shuffled, **2/617** on CODE-territory addresses. Separates.
-* `ascii` — 4/329 measured against **3/329** shuffled. **Does not separate**, so
+* `ptrtable` — 44/330 measured, **0/330** on the same ranges with their own first
+  64 bytes shuffled, **2/618** on CODE-territory addresses. Separates.
+* `ascii` — 4/330 measured against **1/330** shuffled. **Does not separate**, so
   no conclusion here rests on it. The column is kept visible rather than deleted,
   because a rule that fails its control has to be seen to be distrusted.
 
@@ -133,12 +135,28 @@ not have exposed a loose pointer rule; a byte-shuffle of the real ranges can.
 
 ## ⚠ Every input to this moves, and it moved twice while this was written
 
-`v7_branch_closure_targets.json` went 1,131 → 1,109 entries in ten minutes; then
-an `--apply` round landed and `v7_call_targets.json` went 687 → 659, taking
-bucket B1 from **200 ranges to 169** with no script changing. The 200/160 figures
-that prompted this investigation therefore describe a tree that no longer exists;
-re-deriving them needs a worktree at the older commit and a full build of it
-(anti-pattern 14).
+Observed, in one afternoon, with no script of mine changing:
+
+| when | targets file | B1 |
+|---|---|---|
+| the question as posed | `v7_call_targets.json` 687 | **200** |
+| after an `--apply` round | 659, sha `baed0688c44d04ce` | **169** |
+| ~20 min later, SAME targets sha | 659, sha `baed0688c44d04ce` | **182** |
+| at the numbers above | 649, sha `59b778d7688450c8` | **170** |
+
+`v7_branch_closure_targets.json` moved 1,131 → 1,109 → 1,077 over the same
+period. Note the third row: **the targets sha256 was identical and the answer
+still changed**, because the territory map is derived from `v7/maincpu/*.s` and
+an `--apply` round had rewritten those. Stamping only the targets file would
+have looked like provenance and provided none — which is why the header prints
+the territory fingerprint too, and why the caches are keyed on it.
+
+The 200/160 figures that prompted this investigation therefore describe a tree
+that no longer exists; re-deriving them needs a worktree at the older commit and
+a full build of it (anti-pattern 14). What did NOT move across all four states:
+hypothesis (a) = 0, C-SHORT-STUB = 35, D-COND-RET-STOP = 20, D-OVERRUN = 42,
+D-TRUNCATED-BUFFER = 48, B-UNDECODABLE = 141. Only D-TILES-INTO-CODE tracks the
+shrinking `.byte` runs directly, 40 → 53 → 41.
 
 So: `classify.py` prints the targets file's sha256 and entry count, the ROM's
 sha256 and both decoder paths in its header, and `_cache.py` fingerprints both
