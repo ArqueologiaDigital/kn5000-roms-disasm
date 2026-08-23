@@ -700,6 +700,56 @@
    "slice_bytes": 755,
    "source": "v7/maincpu/display/scoop_display.s",
    "first": "push XWA ; push XHL ; push XBC ; push XDE"
+  },
+  {
+   "entry": "0xFB1DF4",
+   "bytes": 142,
+   "instructions": 48,
+   "slice": "includes/romslices/v7_transplant_DrawFunc_Init_Variant1.bin",
+   "slice_addr": "0xFB1CEC",
+   "slice_bytes": 978,
+   "source": "v7/maincpu/display/graphics_text_vga.s",
+   "first": "lda xsp, (xsp - 0x010c) ; push XIZ ; ld XIZ,XWA ; ld XIY,0x00eab158"
+  },
+  {
+   "entry": "0xEF9004",
+   "bytes": 263,
+   "instructions": 75,
+   "slice": "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head.bin",
+   "slice_addr": "0xEF9004",
+   "slice_bytes": 1336,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "bitda 0, (0x0dd3) ; jrl z, .Lc_ef900f ; jp 0xef9013 ; jp 0xef910a"
+  },
+  {
+   "entry": "0xEF910B",
+   "bytes": 37,
+   "instructions": 13,
+   "slice": "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail.bin",
+   "slice_addr": "0xEF910B",
+   "slice_bytes": 1073,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ldb_d8 c, (0x0d5c) ; ldb_d8 a, (0x0d5d) ; cps a, 4 ; jrl ugt, .Lc_ef911c"
+  },
+  {
+   "entry": "0xEF92E4",
+   "bytes": 21,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail.bin",
+   "slice_addr": "0xEF910B",
+   "slice_bytes": 1073,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ldb_d8 l, (0x0d60) ; dec 1,L ; ld H,L ; sla L, 0x01"
+  },
+  {
+   "entry": "0xEF9413",
+   "bytes": 21,
+   "instructions": 8,
+   "slice": "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail.bin",
+   "slice_addr": "0xEF910B",
+   "slice_bytes": 1073,
+   "source": "v7/maincpu/display/scoop_display.s",
+   "first": "ldb_d8 l, (0x0d60) ; dec 1,L ; ld H,L ; sla L, 0x01"
   }
  ]
 }

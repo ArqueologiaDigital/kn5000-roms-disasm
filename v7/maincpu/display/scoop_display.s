@@ -3275,7 +3275,40 @@ VoiceSlot_TableSetup:
 	call Display_UpdateRegion4
 .Lc_ef910a:
 	ret
-	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail.bin"
+	ldb_d8 c, (0x0d5c)
+	ldb_d8 a, (0x0d5d)
+	cps a, 4
+	jrl ugt, .Lc_ef911c
+	jp VoiceSlot_TableSetup_0x127
+.Lc_ef911c:
+	sub A,0x04
+	cps c, 3
+	jrl ugt, .Lc_ef9128
+	jp VoiceSlot_TableSetup_0x127
+.Lc_ef9128:
+	sub C,0x04
+	inc 1,C
+	xor B,B
+	ret
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail_mid0.bin"
+	ldb_d8 l, (0x0d60)
+	dec 1,L
+	ld H,L
+	sla L, 0x01
+	add L,H
+	xor H,H
+	push XDE
+	ld XDE,0x0000f250
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail_mid1.bin"
+	ldb_d8 l, (0x0d60)
+	dec 1,L
+	ld H,L
+	sla L, 0x01
+	add L,H
+	xor H,H
+	push XDE
+	ld XDE,0x0000f250
+	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail_tail.bin"
 	ordi8 (0xe31c), 0x08
 	call AccPedal_CheckBitAndUpdate
 .Lc_ef9545:
