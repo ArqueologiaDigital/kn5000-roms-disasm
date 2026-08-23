@@ -4302,7 +4302,32 @@ PortConfig_Handler_0:
 	.byte 0xd4, 0xa6, 0xef, 0x00, 0xc3, 0x03, 0xec, 0xe0
 	.byte 0x21, 0xf1, 0x65, 0x0d, 0x41, 0x0e
 PortConfig_DataTable_A:
-	.incbin "includes/romslices/v7_transplant_PortConfig_DataTable_A.bin"
+	.incbin "includes/romslices/v7_transplant_PortConfig_DataTable_A_head.bin"
+	call VoiceSlot_ComputeWordIndex
+	srl XIZ, 0x01
+	push XIX
+	ld XIX,0x0000f1a0
+	ldb_dri a, 0x07, 0xf0, 0xf8
+	pop XIX
+	cp A,0x0f
+	jrl z, .Lc_efa734
+	cp A,0x10
+	jrl z, .Lc_efa734
+	and A,0x1f
+	ld L,A
+	xor H,H
+	sla HL, 0x02
+	ld XHL,PortConfig_DataTable_B
+	ldb_dri a, 0x03, 0xec, 0xe0
+	cp A,0xff
+	jrl z, .Lc_efa734
+	stb_d8 (0x8c9e), a
+	ld E,A
+	ldb D, 0xff
+	ldw WA, 0x1090
+	call SysInit_BytecodeBlock_0x3DB
+.Lc_efa734:
+	ret
 PortConfig_DataTable_B:
 	nop
 	push	sr

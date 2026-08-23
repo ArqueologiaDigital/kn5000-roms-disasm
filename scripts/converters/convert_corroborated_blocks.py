@@ -362,8 +362,15 @@ def translate(text):
             _base = _RIDX.get(_rr.group(1).upper())
             _index = _RIDX.get(_rr.group(2).upper())
             if _base is not None and _index is not None:
+                # ⚠ THE MODE BYTE DEPENDS ON THE INDEX REGISTER'S WIDTH.
+                # 0x07 selects a 16-bit index (HL, IX...), 0x03 an 8-bit one
+                # (A, C...). Offering only 0x07 left every 8-bit-indexed site
+                # unspellable -- `ld A,(XHL+A)` needs `c3 03 ec e0 21`, not
+                # `c3 07 ec e0 21`. Both are offered; the bytes choose.
                 for pre in ("ldb_dri", "ldw_dri", "ldl_dri"):
-                    yield f"{pre} {_a5.lower()}, 0x07, 0x{_base:02x}, 0x{_index:02x}"
+                    for _md in (0x07, 0x03):
+                        yield (f"{pre} {_a5.lower()}, 0x{_md:02x}, "
+                               f"0x{_base:02x}, 0x{_index:02x}")
 
     # `ld <REG>,<N>` with N in 0..7 is the TLCS-900 THREE-BIT short immediate,
     # and it wears three different mnemonics depending on the prefix byte:
@@ -532,6 +539,18 @@ def translate(text):
         # not the name you must write.
         # Covers cp/add/sub/and/or/xor in both directions, ~20 instances.
         _X16 = {"WA": "xwa", "BC": "xbc", "DE": "xde", "HL": "xhl"}
+        # 8-bit registers take the da8/dm8 family with their own name -- the
+        # blocking `and (0x3344),A` sites are these, not the 16-bit ones.
+        if _mn9 in ("cp", "add", "sub", "and", "or", "xor") and _absa \
+                and re.match(r'^[A-Za-z]$', _b9):
+            for _w in ("8", "16"):
+                yield f"{_mn9}dm{_w} {_absa.group(1)}, {_b9.lower()}"
+                yield f"{_mn9}dm{_w}_24 {_absa.group(1)}, {_b9.lower()}"
+        if _mn9 in ("cp", "add", "sub", "and", "or", "xor") and _absb \
+                and re.match(r'^[A-Za-z]$', _a9):
+            for _w in ("8", "16"):
+                yield f"{_mn9}da{_w} {_a9.lower()}, {_absb.group(1)}"
+                yield f"{_mn9}da{_w}_24 {_a9.lower()}, {_absb.group(1)}"
         if _mn9 in ("cp", "add", "sub", "and", "or", "xor") and _absb and _a9.upper() in _X16:
             for _w in ("16", "32"):
                 yield f"{_mn9}da{_w} {_X16[_a9.upper()]}, {_absb.group(1)}"
