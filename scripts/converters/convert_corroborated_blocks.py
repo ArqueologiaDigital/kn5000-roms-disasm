@@ -529,6 +529,25 @@ def translate(text):
                     yield (f"stiw_ind 0x{_mode:02x}, 0x{_bs3:02x}, 0x{_ix3:02x}, "
                            f"0x{_v & 0xff:02x}, 0x{(_v >> 8) & 0xff:02x}")
 
+        # `mul <pair>,<r8>` -- the printed text names the 16-bit DESTINATION
+        # PAIR, the spelling names its 8-bit half, and the operands are in the
+        # opposite order:
+        #     mul WA,W = c8 41 = mul8rr a, w      (C8+src, 0x40+dst)
+        # WA/BC/DE/HL share register codes with A/C/E/L, which is why the
+        # substitution works at all.
+        #
+        # ⚠ NOT IMPLEMENTED, and recorded so the next pass does not rediscover
+        # it: the 16-BIT register-register mul/div have NO mnemonic. The
+        # backend has mul8rr/div8rr and the ERP forms, but nothing for
+        #     div XIX,WA  = d8 54   (0xD8+rs, 0x50+rd)
+        #     mul XWA,IY  = dd 40   (0xD8+rs, 0x40+rd)
+        # Adding them mirrors MUL8rr/DIV8rr with GR16 operand classes and
+        # OpSize16; ~6 sites in v7.
+        _HALF = {"WA": "a", "BC": "c", "DE": "e", "HL": "l"}
+        if _mn9 in ("mul", "muls", "div", "divs") and _a9.upper() in _HALF \
+                and re.match(r'^[A-Za-z]$', _b9):
+            yield f"{_mn9}8rr {_HALF[_a9.upper()]}, {_b9.lower()}"
+
         # ⚠ A 16-BIT REGISTER IS SPELLED WITH ITS 32-BIT NAME in the direct-
         # address ALU forms. unidasm prints `cp WA,(0x0ee8)` for `d1 e8 0e f0`,
         # and the spelling that emits those bytes is `cpda16 XWA, 0x0ee8` --
