@@ -875,3 +875,47 @@ descriptor — the RESOLVE family also carries a 12-byte return cell and two cal
 arguments. The table above counts only accesses whose base is the register the
 handler received the descriptor in; the `XBC` accesses are noted where they occur
 but not attributed to the descriptor.
+
+---
+
+## What the hash KEY is: a structured parameter ID (2026-08-23)
+
+The lookup routine's entry is `0x00FCCC66`, called from **343 sites**. At **298**
+of them the instruction immediately before is `ld XWA,imm32` — the key is a
+compile-time constant, not a computed value. **82 distinct keys**, spanning
+`0x0000C0` to `0x02880B`.
+
+Sorted, the structure is obvious:
+
+```
+     C0     100  102  103  104        300  301  302       400  401
+   2100 2101   2181 2182 2183 2184    2200 2203 2205 2280
+   2880 2886 2888 288A 288C 288E 2890
+   2A00 2A01 2A10 2A11 2A12
+   2D00 … 2D13   (18 of the 20 in 0x00..0x13)
+   4002 4003 4004 4006  4080 40C0 40C1 40E0  4100 4141 4142 4180 4181
+   4200 4202 4281        5000 5001 5002
+  28000 28001 28002  28080 28081 28083  28100 28101 28102 28103
+  28800 28801 2880B
+```
+
+**The key is `(group << 8) | index`**, with 16 distinct group values and 1–18
+indices each — a parameter-ID space, not an address or a hash of a name. 69 keys
+fit in 16 bits; 13 carry an extra bit at `0x20000`.
+
+### A property of the firmware worth recording
+
+The hash consumes only bits 0..15 (see the key schedule above — `srl XHL,0x00`
+and the two byte extractions never reach bits 16..31), while the entry
+comparison `cp XIZ,XDE` uses all 32. So two keys differing ONLY above bit 15
+would land in the same bucket and be separated only by the probe.
+
+**Measured: zero pairs of the 82 keys share their low 16 bits.** The 13 keys with
+the `0x20000` bit have no 16-bit counterpart. So the collision the hash design
+permits does not occur in practice — which is a fact about this key set, not a
+guarantee the design provides.
+
+⚠ NOT established: what the groups MEAN. `0x2D` has 18 indices and is the
+largest; `0x28` steps by 2 (`0x2880, 2886, 2888, …, 2890`) rather than by 1,
+which suggests its index is itself scaled. Naming the groups needs the call
+sites' surrounding code, not the key values.
