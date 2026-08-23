@@ -36495,6 +36495,7 @@ DSPCfg_WriteAllSlots_Clamped_CheckCount 00FDC8DB
 DSPCfg_WriteAllSlots_Combined 00FDC8ED
 DSPCfg_WriteAllSlots_Combined_Done 00FDC919
 DSPCfg_Data_ParamDispatch 00FDC920
+DSPCfg_ApplyParamStructFull 00FDC9E8
 DSPCfg_Data_ParamDispatch_0x1C9 00FDCAE9
 DSPCfg_CheckParamTableEntry 00FDCBB5
 DSPCfg_CheckParamTableEntry_NotFound 00FDCBCF
@@ -36517,7 +36518,7 @@ DSPCfg_ApplyParamStruct_WriteSkip2Byte 00FDCDD4
 DSPCfg_ApplyParamStruct_WriteAdvancePtr 00FDCDDD
 DSPCfg_ApplyParamStruct_WritePackNext 00FDCDE6
 DSPCfg_ApplyParamStruct_Return 00FDCDFA
-DSPCfg_ApplyParamStructFull 00FDCE02
+DSPCfg_EventType36_StoreTail 00FDCE4A
 DSPCfg_ApplyParamStructFull_RangeCheck 00FDCEC7
 DspConfig_EventDispatch 00FDCEE6
 AssSwb_SwapEntriesAndDispatch 00FDCEFC
@@ -36527,15 +36528,14 @@ DSPCfg_EventType32 00FDD163
 DSPCfg_EventType34 00FDD194
 DSPCfg_EventType35 00FDD1B5
 DSPCfg_EventType36 00FDD245
-DSPCfg_EventType36_StoreTail 00FDD264
 DSPCfg_EventType40 00FDD309
+DSPCfg_Epilogue 00FDD340
 DSPCfg_EventType42 00FDD3AB
 DSPCfg_EventType44 00FDD478
 DSPCfg_EventType46 00FDD548
 DSPCfg_EventType10to1B 00FDD5C8
 DSPCfg_EventType50 00FDD601
 DSPCfg_EventType51 00FDD6A9
-DSPCfg_Epilogue 00FDD75A
 DSPCfg_ReturnValueTable 00FDD762
 ScreenGroup_ReInit 00FDD777
 ScreenGroup_Dispatch 00FDD78F
@@ -36643,6 +36643,7 @@ AudioInit_SelectPriority 00FDF13B
 AudioInit_Priority_Mode2 00FDF177
 AudioInit_Priority_Mode4 00FDF197
 AudioInit_Priority_Mode8 00FDF1B7
+AudioInit_Pan_Reverb_CheckMode1b 00FDF1C7
 AudioInit_Priority_Mode10 00FDF1D7
 AudioInit_Priority_Default 00FDF1F7
 AudioInit_CheckMIDIStatus 00FDF217
@@ -36683,7 +36684,6 @@ AudioInit_Pan_CheckReverbChannel 00FDF5B2
 AudioInit_Pan_Reverb_CheckMode0 00FDF5C6
 AudioInit_Pan_Reverb_Left 00FDF5CD
 AudioInit_Pan_Reverb_CheckMode1 00FDF5D4
-AudioInit_Pan_Reverb_CheckMode1b 00FDF5E1
 AudioInit_Pan_Reverb_Right 00FDF5E8
 AudioInit_Pan_Reverb_CheckTypeED 00FDF5EF
 AudioInit_Pan_Reverb_TypeED_Left 00FDF60B
@@ -36715,6 +36715,7 @@ AudioInit_ComparePanState 00FDF898
 AudioInit_PartCompare_Return 00FDF8C3
 AudioInit_CompareVoiceConfig 00FDF8C5
 AudioInit_VoiceCompare_BothFF 00FDF90F
+AudioInit_PartConfig_CheckCarry 00FDF91F
 AudioInit_VoiceCompare_LayerLoop 00FDF94A
 AudioInit_VoiceCompare_LayerChanged 00FDF9B3
 AudioInit_VoiceCompare_LayerNext 00FDF9C3
@@ -36744,7 +36745,6 @@ AudioInit_ComparePartConfig 00FDFC6E
 AudioInit_PartConfig_Loop 00FDFC78
 AudioInit_PartConfig_SameVoice 00FDFCC5
 AudioInit_PartConfig_NotReverb 00FDFD2A
-AudioInit_PartConfig_CheckCarry 00FDFD39
 AudioInit_PartConfig_Next 00FDFD7E
 AudioInit_PartConfig_Return 00FDFD87
 AudioInit_CompareChannelConfig 00FDFD89
