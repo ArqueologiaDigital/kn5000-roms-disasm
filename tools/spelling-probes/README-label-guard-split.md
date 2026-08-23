@@ -179,3 +179,34 @@ Do NOT act on the 1,228 B figure alone. The staged proposal, safest first:
 
 If the 11 single-label ranges (427 B) pass 1–3 and the multi-label ones do not, that is
 the answer, and it is a smaller number than the bucket. Report it as such.
+
+## Side finding: `--dry-run` cannot see this bucket, and reports it as a GAIN
+
+The converter's docstring says `--dry-run` "does everything `--apply` does EXCEPT
+write: same placement, same refusal tally". It does not. The apply loop reads
+
+```python
+if dry or rewrite({path: idx[path]}, t, span, insns, texts, addr2name, bl):
+```
+
+and Python short-circuits, so under `--dry-run` **`rewrite()` is never called at all**.
+Every refusal `rewrite()` produces — this bucket included — is therefore absent from a
+dry run, and each of those ranges is counted as converted instead. Measured on the same
+tree, minutes apart:
+
+```
+$ python3 scripts/converters/convert_reachable_ranges.py --dry-run --no-incbin
+converted 55 range(s), 4,747 bytes  (.byte runs 55/4,747, .incbin slices 0/0)
+rewrote 8 file(s)
+   refused   72  entry is in no indexed .byte block and in no located .incbin
+
+$ python3 tools/spelling-probes/label_guard_split.py --fast
+ranges reaching rewrite() at all: 55 (0 applied)
+refused 55  rewrite declined silently ...   4,747 bytes
+```
+
+The 55 ranges / 4,747 bytes the dry run calls **converted** are exactly the 55 / 4,747
+a real `--apply` **refuses**, and "rewrote 8 file(s)" describes a run that would rewrite
+none. This is the same family as spec anti-pattern 18: it looks exactly like the command
+working. Nothing here relies on `--dry-run`; the numbers above come from the real
+`--apply` path with writes intercepted.
