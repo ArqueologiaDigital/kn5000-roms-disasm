@@ -46,6 +46,21 @@ _cc = importlib.util.spec_from_file_location(
 cc = importlib.util.module_from_spec(_cc); _cc.loader.exec_module(cc)
 
 TERMINATORS = ("ret", "reti", "retd")
+# ⚠ A CONDITIONAL `ret` DOES NOT END A ROUTINE. TERMINATORS is matched on the
+# mnemonic alone, so `ret Z` truncated a decode exactly as a bare `ret` does --
+# 20 ranges stopped two instructions into a longer routine. It is the same
+# mistake UNCOND_JUMP was written to prevent for `jr`, made on the other side of
+# the same test. `T` is the always-true condition, which unidasm prints and
+# llvm-mc omits, so `ret T` IS unconditional.
+_ALWAYS = ("", "t")
+
+
+def _is_unconditional_terminator(text):
+    parts = text.split(None, 1)
+    if parts[0].lower() not in TERMINATORS:
+        return False
+    cc = (parts[1].strip().lower() if len(parts) > 1 else "")
+    return cc in _ALWAYS
 # An UNCONDITIONAL jump ends a routine just as a `ret` does -- it is a tail call
 # or a jump to a continuation, and nothing after it is reached by falling
 # through. Requiring `ret` alone refused 167 ranges for a reason about the
@@ -435,8 +450,18 @@ def decode_range(rom, terr, start, limit=16384):
     end = off
     while end < len(terr) and terr[end] == 2 and end - off < limit:
         end += 1
+    # ⚠ FEED REAL ROM BYTES PAST THE RUN. unidasm ZERO-PADS past the end of its
+    # input file, so an instruction straddling `end` was being built partly from
+    # bytes that are not in the ROM: at 0xFD5021 the decode ended
+    # `call 0x00afa2` where the ROM actually holds `call 0x00FDAFA2`. That
+    # produced 90 ranges disagreeing with the sources about a boundary by 1-4
+    # bytes, and 48 of 48 tested decode cleanly once given real trailing bytes.
+    # The pad is discarded below -- only instructions STARTING before `end` are
+    # kept -- so this changes what the last instruction decodes to, never how
+    # much territory the range claims.
+    PAD = 16
     tmp = os.path.join(_SCRATCH, "_range.bin")
-    open(tmp, "wb").write(rom[off:end])
+    open(tmp, "wb").write(rom[off:min(end + PAD, len(rom))])
     out = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900", "-basepc", hex(start)],
                          capture_output=True, text=True, timeout=120).stdout
     insns = []
@@ -445,10 +470,12 @@ def decode_range(rom, terr, start, limit=16384):
         if not m:
             continue
         addr, raw_hex, text = int(m.group(1), 16), m.group(2).split(), m.group(3).strip()
+        if addr - start >= end - off:
+            break                     # into the pad: not this range's territory
         if text.split()[0].lower() == "db":
             break                     # unidasm declined: stop, do not guess
         insns.append((addr, len(raw_hex), text))
-        if text.split()[0].lower() in TERMINATORS:
+        if _is_unconditional_terminator(text):
             break
     return insns
 
@@ -840,7 +867,7 @@ def main():
             _run += 1
         ends_at_code = sum(n for _, n, _ in insns) == _run
         _last = insns[-1][2].strip()
-        if (_last.split()[0].lower() not in TERMINATORS
+        if (not _is_unconditional_terminator(_last)
                 and not UNCOND_JUMP.match(_last) and not ends_at_code):
             skipped += 1; skip("no `ret`, and does not end at a code boundary"); continue
         span = sum(n for _, n, _ in insns)
