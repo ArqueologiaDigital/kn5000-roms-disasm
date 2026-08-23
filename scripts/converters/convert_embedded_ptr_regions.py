@@ -200,6 +200,7 @@ def main():
             sites.setdefault((rev, os.path.basename(m.group(2))), []).append(f)
 
     done = skipped = 0
+    no_slice = already = 0
     tot_bytes = tot_named = tot_words = 0
     for f in tri.blobs():
         b = open(f, "rb").read()
@@ -240,6 +241,10 @@ def main():
             if not (p1 or p2 or p3 or p4 or p5):
                 skipped += 1
                 continue
+            # ⚠ From here the region QUALIFIES. Anything below is a mechanical
+            # failure to place it, which the old code also counted as "below the
+            # resolve floor" -- conflating "not a pointer table" with "already
+            # converted", and reporting a wrong reason for six regions.
             why = ("P1 symbol" if p1 else
                    f"P2 structure {100*sh:.0f}%" if p2 else
                    f"P3 non-null {100*st[0]:.0f}% in range, {100*st[1]:.0f}% resolve, "
@@ -290,7 +295,10 @@ def main():
                     m = cand; sl_skip, sl_count = sk, cnt
                     break
             if m is None:
-                skipped += 1
+                # No slice covers it. Either it is already converted (the
+                # bytes are now .long, so no .incbin spans them) or the region
+                # straddles two slices.
+                already += 1
                 continue
             ind, inc = m.group(1), m.group(2)
             new = []
@@ -316,7 +324,9 @@ def main():
     if tot_words:
         print(f"  words resolved to a SYMBOL           : {tot_named}/{tot_words}"
               f"  ({100*tot_named//tot_words}%)")
-    print(f"  regions below the {int(100*MIN_RESOLVE)}% resolve floor  : {skipped}")
+    print(f"  regions qualifying on NO path        : {skipped}")
+    print(f"  qualifying but not placeable         : {already}"
+          f"   (already converted, or straddling two slices)")
     if not a.apply:
         print("\n  dry run -- nothing written. Re-run with --apply.")
     return 0

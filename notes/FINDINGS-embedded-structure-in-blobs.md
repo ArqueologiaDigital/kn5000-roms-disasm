@@ -183,3 +183,44 @@ description, so this is a weaker deficiency than "an undocumented blob".
 BOUNDARIES to use for any future splitting — far better founded than my
 window scan, which is aligned to 0x100 and knows nothing about records — but
 splitting on them is a separate job with its own gate.
+
+---
+
+## Final state of the embedded pointer-table conversion (2026-08-23)
+
+**33 regions / 22,272 B converted** to `.long`, all six ROMs byte-identical.
+Five qualification paths, each added because a previous floor was wrong on its
+own terms rather than to admit more regions:
+
+| path | criterion | why it exists |
+|---|---|---|
+| P1 | ≥90% of words resolve to a symbol | the original |
+| P2 | ≥60% of targets carry the `naka_header` signature | P1 is blind to tables whose targets are blob INTERIORS, which have no symbols by construction |
+| P3 | ≥98% of NON-NULL words in ROM range | a null is an EMPTY SLOT, not a failed pointer; counting nulls against a table was simply wrong |
+| P4 | resolve ≥10× the 1.9% null, regardless of in-range | the weak criterion was vetoing the strong one |
+| P5 | every non-null word in ROM range, ≥32 words | ROM range is 1 in 2,048 of the u32 space and the measured null is 5.51%, so 100% over 32+ words is decisive alone |
+
+⚠ Two counters were also conflated: "below the resolve floor" counted both
+regions that qualify on no path AND regions that qualify but cannot be placed
+(already converted). That reported 45 remaining when the true figure was 12.
+
+### The four regions deliberately NOT converted
+
+| blob | region | in-range | resolve | nulls |
+|---|---|---:|---:|---:|
+| `naka_disk_menu_file_io` | `0x006500` | 98.4% | 0.0% | 0 |
+| `naka_effects_seq` | `0x008600` | 87.3% | 15.9% | 1 |
+| `naka_widget_tables_2` | `0x026400` | 82.5% | 11.1% | 1 |
+| `naka_style_bitmaps` | `0x018800` | 85.5% | 0.0% | 2 |
+
+Against the measured 5.51% in-range null these are 15–18×, so they certainly
+CONTAIN addresses. But 2–18% of their words fall OUTSIDE ROM range and are not
+null, which a flat pointer table cannot explain. **They are mixed structures —
+record arrays, or tables with non-pointer fields.** Emitting every word as
+`.long` would describe the non-pointer words wrongly while keeping the bytes
+identical, so no gate in this project would object.
+
+This is the same judgement made earlier for the 30-region set, and it survives
+four rounds of the floors being loosened for good reasons. **What would settle
+them is the `.equ` named offsets bounding each sub-structure, or reading the code
+that indexes them — not a sixth threshold.**
