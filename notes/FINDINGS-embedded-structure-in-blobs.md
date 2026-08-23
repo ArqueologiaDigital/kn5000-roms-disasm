@@ -274,3 +274,38 @@ them (their `.incbin` sits under `NakaInst_IvWaitWinCtlProc` and
 `Naka_ReverbScreen_EmptyStr`, which are not blob-base labels), so this argument
 does not cover those two. They remain unexplained rather than explained-and-
 declined.
+
+---
+
+## The `.equ`-into-blob work is closed: 3,709 -> 2 (2026-08-23)
+
+Every named offset into an `.incbin` blob is now a positioned LABEL rather than a
+constant in a distant list. **11,007 names across 42 blobs**, byte-identical
+throughout, 0 labels lost.
+
+Four separate blockers, each of which reported the whole population as
+unconvertible rather than skipping anything:
+
+| blocker | what it hid |
+|---|---|
+| required a bare single `.incbin` | every blob became unreachable once its first region was split |
+| flat sort over offsets | 3 ALIASED offsets (two names, one address) made `end == o`, discarding all 845 conversions in that file |
+| took only the FIRST base label per file | `ToneKit_NullParams` — 119 offsets with a bare `.incbin` under it — was never considered; the file WAS processed, for the wrong base |
+| `grep` skipping 40 of 508 `.s` files as binary | made the third invisible: grep said the symbol did not exist while Python found 160 |
+
+### The two that remain, and why the `.equ` form is right for them
+
+```
+.equ Data_DiskFuncPtrTbl_EA0B00, NakaData_TechniChordStrings + 0x1abb2
+.equ Str_CheckPasswordNo,        NakaData_TechniChordStrings + 0x1abfa
+```
+
+Both fall inside `PtrTbl_DiskFuncNames`, a hand-written pointer table of
+`.long Str_*` entries that predates this work — and at offsets that are NOT
+4-aligned to it (`0x1ABB2` is `+0x32` from `0x1AB80`). Turning them into labels
+would mean splitting an existing `.long` into `.byte`s, destroying a symbolic
+entry to position a name.
+
+**A named offset into the interior of a symbolic table is exactly what `.equ` is
+for.** These two are not a residue to be cleared; they are the correct form. The
+count is 2, not 0, and it should stay 2.
