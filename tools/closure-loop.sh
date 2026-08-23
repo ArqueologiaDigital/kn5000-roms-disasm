@@ -23,6 +23,7 @@ for i in $(seq 1 "$MAX"); do
   python3 scripts/analysis/v7_branch_closure.py --dump 2>&1 | tail -3
   OUT=$(python3 scripts/converters/convert_reachable_ranges.py --apply 2>&1)
   echo "$OUT" | grep -E "^converted" || echo "converted 0"
+  # the gate rebuilds itself now; do NOT pass --no-build here
   if ! python3 scripts/analysis/assert_byte_identical.py >/dev/null 2>&1; then
     echo "BYTE GATE FAILED in round $i -- stopping, tree left for inspection"; exit 1
   fi

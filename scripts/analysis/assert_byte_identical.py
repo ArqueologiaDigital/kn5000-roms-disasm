@@ -20,7 +20,21 @@ the entire time; the check was reading past it.
 This script does the only thing that settles it -- compares the bytes -- and
 exits non-zero if any pair differs. Use it as the gate, not a grep.
 
-Run:  make all && python3 scripts/analysis/assert_byte_identical.py
+Run:  python3 scripts/analysis/assert_byte_identical.py       (rebuilds first)
+      python3 scripts/analysis/assert_byte_identical.py --no-build
+
+⚠⚠ THIS SCRIPT NOW REBUILDS BEFORE COMPARING, AND THAT IS THE POINT.
+Until 2026-08-23 it only compared `rebuilt_ROMs/` against `original_ROMs/` and
+left the rebuild to the caller ("make all && python3 ..."). Run alone it reports
+PASS on whatever happens to be on disk. It was run alone -- by hand and by
+tools/closure-loop.sh, which had no `make` step -- across 106 commits while the
+rebuilt ROMs were three hours old and the tree DID NOT COMPILE. Every PASS in
+that window was vacuous, and two build-breaking defects and a 136,782-byte v7
+divergence went unnoticed.
+
+A gate whose precondition is supplied by the caller is a gate that will be run
+without it. `--no-build` exists for the case where the caller genuinely has just
+built, and it prints a warning so the choice is visible.
 """
 import glob, os, sys
 
@@ -35,6 +49,20 @@ PAIRS = [
 
 
 def main():
+
+    # REBUILD FIRST -- see the docstring. A stale rebuilt_ROMs/ makes this
+    # script report PASS on artefacts that no longer correspond to the sources.
+    if "--no-build" in sys.argv:
+        print("  !! --no-build: comparing whatever is on disk, NOT rebuilding")
+    else:
+        import subprocess as _sp
+        print("  building (make all) ...")
+        r = _sp.run(["make", "all"], cwd=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), capture_output=True, text=True)
+        if r.returncode != 0:
+            tail = "\n".join((r.stdout + r.stderr).strip().splitlines()[-6:])
+            print("  BUILD FAILED -- the comparison below would be meaningless:")
+            print(tail)
+            sys.exit(2)
     bad = 0
     for stem, built in PAIRS:
         o = os.path.join("original_ROMs", stem + ".rom")
