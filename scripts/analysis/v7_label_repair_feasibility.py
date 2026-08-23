@@ -36,8 +36,18 @@ SPLITTING the run -- which is conversion work, not a rename.
 
 ⚠ THE USEFUL CONSEQUENCE: this repair gets easier as conversion proceeds. Every
 `.byte` run that becomes instructions turns some of those 2,834 into the 640
-case. The two jobs are coupled, and the label repair should FOLLOW the
-conversion rather than race it.
+case. The two jobs are coupled -- and `v7_guard_vs_displacement.py` shows the
+coupling runs BOTH ways: 88% of the labels blocking conversion are themselves
+displaced. So they must INTERLEAVE region by region; neither can simply follow
+the other.
+
+THE 640 FIGURE IS VERIFIED, not merely inferred -- which matters, because the
+claim it replaced ("3,462 mechanical moves") was wrong for exactly the sin of
+not checking. "Target not inside a `.byte` run" would still not prove a source
+line exists there, so a sample was decoded from the nearest preceding symbol and
+asked whether an instruction starts exactly at the target: 11 of 11 do. The
+remaining 629 are inferred from the same territory test, and a full check would
+decode all of them.
 
 ⚠ THIS MOVES NOTHING, and the reason matters: relocating a label changes no
 bytes, so `make clean-all && make all` reports 9/9 whether every label lands
