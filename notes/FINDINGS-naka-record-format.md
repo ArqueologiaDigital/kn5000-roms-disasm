@@ -828,3 +828,50 @@ from 25/47 types to 29/50.
 MODAL length, so a type whose modal value is itself inflated by merged records
 cannot be repaired this way, and a record short enough to hide a sibling within
 the modal span is invisible to it.
+
+### All nine RESOLVE handlers: field usage (2026-08-23)
+
+Extracting every `(reg+0xNN)` access in each handler's byte range:
+
+| handler | address | descriptor fields touched |
+|---|---|---|
+| 0 | `0xFCD396` | none — the empty case (copies a 12-byte template, marks it invalid) |
+| 1 | `0xFCD3AD` | `+0x04`, `+0x07`, `+0x08` |
+| 2 | `0xFCD4A2` | `+0x05`, `+0x07`, `+0x08`, `+0x09`, `+0x0A` |
+| 3 | `0xFCD578` | `+0x05` |
+| 4 | `0xFCD5CA` | `+0x05`, `+0x09`, `+0x0A`, `+0x0B` |
+| 5 | `0xFCD6B5` | `+0x07`, `+0x08`, `+0x0B` |
+| 6 | `0xFCD774` | `+0x04`, `+0x07` |
+| 7 | `0xFCD89D` | `+0x05`, `+0x07`, `+0x08`, `+0x09`, `+0x0A`, `+0x0B` |
+| 8 | `0xFCD9E4` | none via a base-register displacement |
+
+### ⚠ This CORRECTS the two-family field table above
+
+I wrote that `+0x05`, `+0x06`, `+0x09` and `+0x0A` belong to the READ family and
+that RESOLVE adds `+0x07`/`+0x08`. The first half is wrong: **RESOLVE handlers
+use `+0x05`, `+0x09`, `+0x0A` and `+0x0B` too.** The corrected picture is that
+the descriptor is far more UNIFORM than the two-family split suggested:
+
+| field | READ (`+0x0C`) | RESOLVE (`+0x0D`) |
+|---|---|---|
+| `+0x04` | yes | yes (1, 6) |
+| `+0x05` | yes | yes (2, 3, 4, 7) |
+| `+0x06` | yes | yes (4, via `XBC`) |
+| `+0x07` | — | **yes — RESOLVE only** (1, 2, 5, 6, 7) |
+| `+0x08` | — | **yes — RESOLVE only** (1, 2, 5, 7) |
+| `+0x09` | yes | yes (2, 4, 7) |
+| `+0x0A` | yes | yes (2, 4, 7) |
+| `+0x0B` | yes | yes (4, 5, 7) |
+| `+0x0C` | mode 0..6 | — |
+| `+0x0D` | — | mode 0..8 |
+
+Only `+0x07` and `+0x08` are genuinely family-specific. Everything else is one
+descriptor read two ways, which is a better account of why one structure carries
+two mode selectors.
+
+⚠ BASE-REGISTER AMBIGUITY, stated rather than assumed away: handlers 2 and 4
+access offsets through `XBC` as well as `XDE`, and `XBC` is not proven to hold the
+descriptor — the RESOLVE family also carries a 12-byte return cell and two caller
+arguments. The table above counts only accesses whose base is the register the
+handler received the descriptor in; the `XBC` accesses are noted where they occur
+but not attributed to the descriptor.
