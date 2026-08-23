@@ -71,3 +71,49 @@ NOT established: that converting them is straightforward. Each blob is
 `.incbin`'d as one unit and other modules index into it by offset, so splitting
 one means re-expressing those offsets. The converter already splits `.incbin`
 slices, so the machinery exists; the work is per-blob and is not done here.
+
+---
+
+## The 30 regions NOT converted, and why (2026-08-23)
+
+After the P1 (symbol) and P2 (record signature) paths converted 12,288 B, thirty
+regions / 13,056 B remain. They are **not** left out for lack of evidence that
+they hold addresses — they hold addresses:
+
+| blob | region | P1 resolve | vs null (1.879%) |
+|---|---|---:|---:|
+| `gui_display_struct_data.bin` | 0x000b00 | 25.3% | 13× |
+| `naka_widget_names_charmap.bin` | 0x004c00 | 54.7% | 29× |
+| `naka_widget_tables_1.bin` | 0x001000 | 40.6% | 22× |
+| `naka_sequencer_channels.bin` | 0x001500 | 28.1% | 15× |
+
+They are left out because "holds addresses" does not establish "is a flat table
+OF addresses". A RECORD ARRAY carrying one pointer per N words produces exactly
+these fractions — a 2-word record with one pointer resolves at ~50%, a 4-word
+record at ~25% — and emitting every word as `.long` would describe the
+non-pointer fields wrongly while staying byte-identical, so no gate would object.
+
+TEST: are the resolving words at a regular stride, as a record array requires?
+
+```
+naka_widget_names_charmap 0x4c00  105/192 resolve   mod2 50%  mod3 34%  mod4 26%
+naka_widget_tables_1      0x1000   26/64  resolve   mod2 50%  mod3 34%  mod4 26%
+naka_sequencer_channels   0x1500   18/64  resolve   mod2 50%  mod3 33%  mod4 27%
+gui_display_struct_data   0x0b00   97/384 resolve   mod2 65%  mod3 44%  mod4 48%
+```
+
+Chance is 50% / 33% / 25%. The first three are AT chance — scattered, not
+strided, so the record-array reading is not supported for them either. The
+fourth is not: 48% at one residue mod 4 against 25% chance says
+`gui_display_struct_data` is partly strided, i.e. genuinely record-like.
+
+So the test did not resolve the question; it only showed the two readings are
+not separable by stride alone for three of the four. **Both readings remain
+open, and the honest state is unconverted.** What would settle it: find the code
+that INDEXES each region and read its stride off the addressing arithmetic —
+`.incbin` offsets are reached by known index expressions elsewhere in the
+sources, and that is a fact about this ROM rather than a statistic.
+
+⚠ Note the asymmetry that makes this worth resisting: converting them would
+raise the "structure exposed" figure by 13,056 B and pass every gate in the
+project. Nothing here can punish a wrong description, only a wrong byte.

@@ -154,7 +154,10 @@ def main():
             txt = open(f, encoding="latin1").read()
         except OSError:
             continue
-        for m in re.finditer(r'^(\s*)\.incbin\s+"([^"]+)"\s*$', txt, re.M):
+        # ⚠ Accept `.incbin "f"` AND `.incbin "f", skip, count`. Matching only
+        # the bare form meant a blob became unreachable the moment its FIRST
+        # region was converted -- 4,608 B across 12 blobs sat behind that.
+        for m in re.finditer(r'^(\s*)\.incbin\s+"([^"]+)"(\s*,[^\n]*)?$', txt, re.M):
             sites.setdefault((rev, os.path.basename(m.group(2))), []).append(f)
 
     done = skipped = 0
@@ -217,18 +220,32 @@ def main():
                 continue
             src = where[0]
             txt = open(src, encoding="latin1").read()
-            pat = re.compile(r'^([ \t]*)\.incbin\s+"([^"]*' + re.escape(base) + r')"[ \t]*$', re.M)
-            m = pat.search(txt)
-            if not m:
+            end4 = s + 4 * len(words)
+            # Find the .incbin SLICE that actually covers [s, end4) -- the file
+            # may already carry several slices of this blob from an earlier pass.
+            pat = re.compile(
+                r'^([ \t]*)\.incbin\s+"([^"]*' + re.escape(base) + r')"'
+                r'(?:[ \t]*,[ \t]*(0x[0-9A-Fa-f]+|\d+)[ \t]*,[ \t]*(0x[0-9A-Fa-f]+|\d+))?'
+                r'[ \t]*$', re.M)
+            m = None
+            for cand in pat.finditer(txt):
+                sk = int(cand.group(3), 0) if cand.group(3) else 0
+                cnt = int(cand.group(4), 0) if cand.group(4) else len(b) - sk
+                if sk <= s and end4 <= sk + cnt:
+                    m = cand; sl_skip, sl_count = sk, cnt
+                    break
+            if m is None:
                 skipped += 1
                 continue
             ind, inc = m.group(1), m.group(2)
-            end4 = s + 4 * len(words)
-            new = [f'{ind}.incbin "{inc}", 0, 0x{s:X}',
-                   f'EmbeddedPtrTable_{rev}_{base.replace(".bin","")}_{s:06X}:']
+            new = []
+            if s > sl_skip:                       # bytes before the table
+                new.append(f'{ind}.incbin "{inc}", 0x{sl_skip:X}, 0x{s-sl_skip:X}')
+            new.append(f'EmbeddedPtrTable_{rev}_{base.replace(".bin","")}_{s:06X}:')
             new += lines
-            if end4 < len(b):
-                new.append(f'{ind}.incbin "{inc}", 0x{end4:X}, 0x{len(b)-end4:X}')
+            if end4 < sl_skip + sl_count:         # bytes after it
+                new.append(f'{ind}.incbin "{inc}", 0x{end4:X}, '
+                           f'0x{sl_skip+sl_count-end4:X}')
             print(f"  {base:40} 0x{s:06x}-0x{end4:06x} {len(words):4}w "
                   f"{named:4} named ({100*named//len(words):3}%)  [{why}]")
             tot_bytes += end4 - s; tot_named += named; tot_words += len(words)
