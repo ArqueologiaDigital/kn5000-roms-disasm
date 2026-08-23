@@ -32,9 +32,14 @@ cause of a refusal here -- the spelling loop has not run yet. The analogous
 blocker is the DISASSEMBLER: `decode_range()` stops at the first line unidasm
 prints as `db`. So the taxonomy is built on the stop:
 
-  C-SHORT-STUB          the decode ENDED IN A TERMINATOR (`ret`/`reti`/`retd`)
-                        after one or two instructions. Nothing is wrong with
-                        these; the `< 3` threshold is the whole objection.
+  C-SHORT-STUB          the decode ended in an UNCONDITIONAL `ret`/`reti`/
+                        `retd` after one or two instructions. Nothing is wrong
+                        with these; the `< 3` threshold is the whole objection.
+  D-COND-RET-STOP       the decode ended in a CONDITIONAL `ret <cc>`, which is
+                        not the end of a routine at all -- execution continues
+                        at the next instruction. `decode_range` stops on the
+                        MNEMONIC, so `ret Z` truncates a decode exactly as a
+                        bare `ret` does. These look like (c) and are (d).
   D-TILES-INTO-CODE     the decode consumed the entire undisassembled run and
                         ends exactly where already-disassembled code begins --
                         the converter's own `ends_at_code` rule, which `< 3`
@@ -44,16 +49,32 @@ prints as `db`. So the taxonomy is built on the stop:
                         back holding N+1 or N+2 bytes of "instructions", built
                         partly from bytes that were never in the buffer.
   D-TRUNCATED-BUFFER    unidasm printed `db` for the last bytes of the buffer,
-                        and the SAME BYTES decode cleanly when it is given the
-                        following ROM bytes as well. The `db` is an artefact of
-                        the buffer ending, not a property of the bytes.
-  A-DECODER-GAP         unidasm printed `db` mid-run, but llvm-mc's independent
-                        TLCS-900 disassembler decodes those bytes. A hole in
-                        MAME's table -- actionable, and the only genuinely
-                        "the tool cannot express this" cause in these buckets.
+                        and the SAME BYTES decode cleanly once it is given the
+                        following ROM bytes too (VERIFIED per range, counted in
+                        the report). The `db` is an artefact of the buffer
+                        ending, not a property of the bytes.
+  A-DECODER-GAP         unidasm printed `db` mid-run, llvm-mc's independent
+                        TLCS-900 disassembler decodes those bytes, AND llvm-mc's
+                        own assembler turns that text back into the same bytes.
+                        A hole in MAME's table -- the only genuinely "the tool
+                        cannot express this" cause available in these buckets.
+  B-LLVM-DECODER-BUG    unidasm printed `db`, llvm-mc's disassembler printed
+                        something, and llvm-mc's ASSEMBLER rejects its own
+                        output. Not a MAME gap: an over-permissive decode. The
+                        round trip is what separates this from A-DECODER-GAP,
+                        and without it this probe reported an actionable
+                        "missing form" that does not exist (anti-pattern 11).
   B-UNDECODABLE         unidasm printed `db` mid-run and llvm-mc refuses the
                         same bytes too. TWO INDEPENDENT DECODERS agree there is
                         no instruction there.
+
+⚠ D-OVERRUN and D-TRUNCATED-BUFFER are the same phenomenon twice: an
+instruction that STRADDLES the end of the undisassembled run. unidasm
+zero-pads past the end of its input file, so it sometimes prints that
+instruction (built partly from bytes that are not the ROM's) and sometimes
+prints `db`. Either way the decode and the SOURCES DISAGREE about where an
+instruction boundary is, and the `next terr` column says what the sources put
+immediately after the run.
   B-RUNAWAY             the decode ran to the converter's 16,384-byte cap with
                         no terminator and no `db` -- the shape its own docstring
                         names as "a runaway decode through data".
@@ -63,7 +84,10 @@ cause, because the cause is a fact about the decode and the shape is an
 inference about the bytes:
 
   ascii       >= 8 consecutive printable bytes starting within the first 4
-  ptrtable    >= 3 of the first 4 little-endian u32 words land in 0xE00000..0xFFFFFF
+  ptrtable    >= 3 of 4 consecutive little-endian u32 words land in
+              0xE00000..0xFFFFFF, testing all FOUR PHASES (t-3 .. t) -- a
+              target one byte inside a pointer table is exactly the shape a
+              mis-derived entry point has, and a phase-0-only rule misses it
   implausible the converter's OWN plausibility screen (`swi`/`normal`/`max`/
               `halt`/`ldio`/`ldwio`/`retd` > 0xff) fires on the decoded text
 
@@ -85,8 +109,12 @@ WHAT THIS CANNOT DISTINGUISH -- stated up front:
     happen to decode with a 0x0E in them, is not decidable from the decode --
     which is anti-pattern 13 restated. The `implausible` and `ascii` columns are
     the only counter-evidence offered.
-  * A-DECODER-GAP proves the two decoders DISAGREE. Which one is right is a
-    question for the Toshiba manual, not for this script.
+  * A-DECODER-GAP proves the two decoders disagree AND that llvm-mc is
+    self-consistent about the bytes. It does NOT prove llvm-mc is right; only
+    the Toshiba manual settles that.
+  * `next terr` reports what the SOURCES say follows the run. It cannot say
+    which side of a straddling instruction is wrong -- the entry point, or the
+    existing disassembly's boundary.
 """
 import collections, hashlib, importlib.util, json, os, random, re, subprocess, sys, tempfile
 
@@ -220,6 +248,49 @@ def llvm_refuses(addr, nbytes=16):
     return _LLVM_MEMO[addr]
 
 
+_UNI_MEMO = {}
+_UNI_LINE = re.compile(r'^([0-9a-f]+):\s+((?:[0-9a-f]{2} )+)\s*(.*)$')
+_UNI_SCRATCH = tempfile.mkdtemp(prefix="kn5000_retry_")
+
+
+def unidasm_retry(addr, nbytes=64):
+    """Does unidasm decode the byte at `addr` when it is NOT starved of input?
+
+    `decode_range()` hands unidasm only the undisassembled run, and unidasm
+    zero-pads past the end of that file. This re-runs it on 64 real ROM bytes,
+    which is the check behind D-TRUNCATED-BUFFER: same bytes, more of them.
+    Returns (decoded_ok, text).
+    """
+    if addr in _UNI_MEMO:
+        return _UNI_MEMO[addr]
+    off = addr - crr.BASE
+    tmp = os.path.join(_UNI_SCRATCH, "r.bin")
+    open(tmp, "wb").write(rom[off:off + nbytes])
+    txt = subprocess.run([crr.UNIDASM, tmp, "-arch", "tlcs900", "-basepc", hex(addr)],
+                         capture_output=True, text=True, timeout=60).stdout
+    first = ""
+    for ln in txt.split("\n"):
+        m = _UNI_LINE.match(ln)
+        if m:
+            first = m.group(3).strip(); break
+    _UNI_MEMO[addr] = (not first.lower().startswith("db"), first)
+    return _UNI_MEMO[addr]
+
+
+def llvm_roundtrips(addr, text, nbytes):
+    """Does llvm-mc's ASSEMBLER turn its own disassembly back into these bytes?
+
+    ⚠ Anti-pattern 11 in reverse. `e8 33` at 0xED32F3 disassembles under llvm-mc
+    as `bit 13, xwa`, and llvm-mc's assembler rejects that text outright -- so
+    reporting it as "a form MAME cannot decode" would have invented an
+    actionable spelling gap out of a decoder bug. Nothing is called a gap
+    without this round trip.
+    """
+    want = rom[addr - crr.BASE: addr - crr.BASE + nbytes]
+    got = cc.encode(text)
+    return got is not None and want.startswith(got)
+
+
 # --------------------------------------------------- data-shape evidence
 def ascii_run(buf, off, window=4):
     """Longest printable-ASCII run beginning within `window` bytes of `off`."""
@@ -232,14 +303,22 @@ def ascii_run(buf, off, window=4):
     return best
 
 
-def ptr_words(buf, off, n=4):
-    """How many of the first `n` little-endian u32 words land in the ROM window."""
-    hits = 0
-    for i in range(n):
-        w = int.from_bytes(buf[off + 4 * i: off + 4 * i + 4], "little")
-        if 0xE00000 <= w <= 0xFFFFFF:
-            hits += 1
-    return hits
+def ptr_words(buf, off, n=4, phases=4):
+    """Best count, over all `phases` alignments, of u32 words in the ROM window.
+
+    Phase matters: 0xED32F3 is one byte inside a table of `.long` ROM addresses,
+    and at phase 0 it scores 0 while at phase 3 it scores 4.
+    """
+    best = 0
+    for p in range(phases):
+        base = off - p
+        if base < 0:
+            continue
+        hits = sum(1 for i in range(n)
+                   if 0xE00000 <= int.from_bytes(buf[base + 4*i: base + 4*i + 4],
+                                                 "little") <= 0xFFFFFF)
+        best = max(best, hits)
+    return best
 
 
 def shape(t):
@@ -258,22 +337,38 @@ for bucket, members in (("B1", b1), ("B2", b2)):
         ins = decodes[t]
         span = sum(n for _, n, _ in ins)
         reason, i = stop_of(t)
+        # ⚠ A CONDITIONAL `ret` IS NOT A TERMINATOR. `TERMINATORS` is matched on
+        # the mnemonic alone, so `ret NZ` -- after which execution continues at
+        # the next instruction -- ends the decode exactly as a bare `ret` does.
+        # That is the same mistake `UNCOND_JUMP` was written to avoid for `jr`.
+        _p = (ins[-1][2].strip().split() if ins else [])
+        cond_ret = (len(_p) > 1 and _p[0].lower() == "ret"
+                    and _p[1].lower().rstrip(",") != "t")
         stop_off = span                      # bytes consumed before the stop
-        blocked_byte, gap_text = "", ""
+        blocked_byte, gap_text, confirmed = "", "", ""
         if reason == "db":
             a, n, _x = raws[t]["lines"][i]
             stop_off = a - t
             blocked_byte = rom[a - crr.BASE: a - crr.BASE + n].hex()
+            uni_ok, uni_text = unidasm_retry(a)
             if stop_off + n >= bufl:
-                cause = "D-TRUNCATED-BUFFER"
+                # starved input, not a property of the bytes -- but VERIFY it
+                cause = "D-TRUNCATED-BUFFER" if uni_ok else "B-UNDECODABLE"
+                confirmed = uni_text if uni_ok else ""
+            elif uni_ok:
+                # unidasm decodes the same bytes with more input, yet stopped
+                # mid-run: that would mean the run boundary, not the bytes.
+                cause = "D-TRUNCATED-BUFFER"; confirmed = uni_text
             else:
                 ref, first = llvm_refuses(a)
                 if ref:
                     cause = "B-UNDECODABLE"
-                else:
+                elif llvm_roundtrips(a, first, n):
                     cause = "A-DECODER-GAP"; gap_text = first
+                else:
+                    cause = "B-LLVM-DECODER-BUG"; gap_text = first
         elif reason == "terminator":
-            cause = "C-SHORT-STUB"
+            cause = "D-COND-RET-STOP" if cond_ret else "C-SHORT-STUB"
         else:
             if span > bufl:
                 cause = "D-OVERRUN"
@@ -282,17 +377,24 @@ for bucket, members in (("B1", b1), ("B2", b2)):
             else:
                 cause = "D-TILES-INTO-CODE"
         sh = shape(t)
+        _n = t - crr.BASE + rf
+        nxt = {0: "unmapped", 1: "CODE", 2: "DATA", 3: "PADDING"}.get(
+            terr[_n] if _n < len(terr) else 0, "?")
         rows.append({"bucket": bucket, "target": t, "cause": cause,
                      "n_insns": len(ins), "span": span, "run": rf,
-                     "after_stop": max(0, rf - stop_off),
+                     "after_stop": max(0, rf - stop_off), "next_terr": nxt,
+                     "cond_ret": cond_ret,
                      "blocked": blocked_byte, "gap_text": gap_text,
+                     "confirmed": confirmed,
                      "sym": addr2name.get(t, ""), **sh,
                      "text": " ; ".join(x for _a, _n, x in ins[:4])})
 
-ORDER = ["C-SHORT-STUB", "D-TILES-INTO-CODE", "D-OVERRUN", "D-TRUNCATED-BUFFER",
-         "A-DECODER-GAP", "B-UNDECODABLE", "B-RUNAWAY"]
+ORDER = ["C-SHORT-STUB", "D-COND-RET-STOP", "D-TILES-INTO-CODE", "D-OVERRUN",
+         "D-TRUNCATED-BUFFER",
+         "A-DECODER-GAP", "B-LLVM-DECODER-BUG", "B-UNDECODABLE", "B-RUNAWAY"]
 HYP = {"A-DECODER-GAP": "(a)", "B-UNDECODABLE": "(b)", "B-RUNAWAY": "(b)",
-       "C-SHORT-STUB": "(c)", "D-TILES-INTO-CODE": "(d)", "D-OVERRUN": "(d)",
+       "B-LLVM-DECODER-BUG": "(b)", "C-SHORT-STUB": "(c)",
+       "D-COND-RET-STOP": "(d)", "D-TILES-INTO-CODE": "(d)", "D-OVERRUN": "(d)",
        "D-TRUNCATED-BUFFER": "(d)"}
 
 for bucket, label, total in (("B1", "decoded fewer than 3 instructions", len(b1)),
@@ -307,9 +409,11 @@ for bucket, label, total in (("B1", "decoded fewer than 3 instructions", len(b1)
         na = sum(1 for r in sel if r["ascii"])
         np_ = sum(1 for r in sel if r["ptrtable"])
         ni = sum(1 for r in sel if r["implausible"])
+        nx = collections.Counter(r["next_terr"] for r in sel)
         print(f"  {cause:<20} {HYP[cause]:<4} {len(sel):>6} "
               f"{sum(r['span'] for r in sel):>14,} {sum(r['after_stop'] for r in sel):>16,}"
-              f"   ascii {na}  ptrtable {np_}  implausible {ni}")
+              f"   ascii {na} ptr {np_} implaus {ni} | next "
+              + " ".join(f"{k}:{v}" for k, v in nx.most_common()))
     print(f"  {'-'*20} {'':4} {'-'*6} {'-'*14} {'-'*16}")
     sel = [r for r in rows if r["bucket"] == bucket]
     print(f"  {'TOTAL':<20} {'':<4} {len(sel):>6} {sum(r['span'] for r in sel):>14,}"
@@ -324,16 +428,25 @@ print("\n⚠ 'bytes decoded' and 'bytes past stop' measure DIFFERENT things and 
 print(f"\n{'='*78}\nHYPOTHESIS (a): forms the DECODER cannot spell\n{'='*78}")
 gaps = [r for r in rows if r["cause"] == "A-DECODER-GAP"]
 if not gaps:
-    print("  NONE. Every mid-run `db` in both buckets is refused by llvm-mc's")
-    print("  TLCS-900 disassembler as well, so no range in either bucket is held")
+    print("  NONE. Every mid-run `db` in both buckets is either refused by")
+    print("  llvm-mc's TLCS-900 disassembler as well, or decoded by it into text")
+    print("  its own assembler will not accept. No range in either bucket is held")
     print("  up by a hole in MAME's opcode table.")
+    bug = [r for r in rows if r["cause"] == "B-LLVM-DECODER-BUG"]
+    if bug:
+        print(f"\n  {len(bug)} range(s) reached the round-trip gate and failed it --")
+        print("  i.e. would have been reported as an actionable gap without it:")
+        for r in bug:
+            print(f"    0x{r['target']:06X}  bytes {r['blocked']:<8} llvm-mc reads "
+                  f"`{r['gap_text']}`, which llvm-mc will not assemble")
 else:
     agg = collections.defaultdict(lambda: [0, 0, 0, ""])
     for r in gaps:
         k = r["blocked"]
         agg[k][0] += 1; agg[k][1] += r["span"]; agg[k][2] += r["after_stop"]
         agg[k][3] = agg[k][3] or r["gap_text"]
-    print(f"  {'bytes':<12} {'ranges':>6} {'decoded':>9} {'past stop':>10}   llvm-mc says")
+    print(f"  {'bytes':<12} {'ranges':>6} {'decoded':>9} {'past stop':>10}   llvm-mc says"
+        f" (round-trips to the same bytes)")
     for k, v in sorted(agg.items(), key=lambda kv: -kv[1][2]):
         print(f"  {k:<12} {v[0]:>6} {v[1]:>9,} {v[2]:>10,}   {v[3]}")
 
@@ -350,24 +463,72 @@ for k, v in sorted(und.items(), key=lambda kv: -kv[1][2])[:12]:
     print(f"  {k:<12} {v[0]:>6} {v[1]:>9,} {v[2]:>10,}")
 
 # --------------------------------------------------- (c): the < 3 threshold
+print(f"\n{'='*78}\nHYPOTHESIS (d): the decode does not TILE the run\n{'='*78}")
+print("  D-OVERRUN and D-TRUNCATED-BUFFER both mean: decoding straight from the")
+print("  entry to the end of the undisassembled run, the instruction stream does")
+print("  not land exactly on the boundary the sources put there. `decode_range`")
+print("  stops only at `ret`/`reti`/`retd`, so a single run can carry several")
+print("  routines and the mismatch may originate anywhere inside it -- this is a")
+print("  disagreement about framing, and it does NOT say which side is wrong.")
+ov = [r for r in rows if r["cause"] == "D-OVERRUN"]
+tb = [r for r in rows if r["cause"] == "D-TRUNCATED-BUFFER"]
+h = collections.Counter(r["span"] - min(r["run"], 16384) for r in ov)
+print(f"\n  {len(ov)} D-OVERRUN: bytes the decode runs PAST the boundary")
+for k in sorted(h):
+    print(f"      +{k} byte(s): {h[k]:4} ranges")
+h2 = collections.Counter(r["run"] - (r["run"] - r["after_stop"]) for r in tb)
+print(f"\n  {len(tb)} D-TRUNCATED-BUFFER: bytes left OVER at the boundary,"
+      f" too few to finish\n      the instruction that starts there")
+for k in sorted(h2):
+    print(f"      {k} byte(s) left: {h2[k]:4} ranges")
+print(f"\n  Runs whose decode tiles PERFECTLY are not here at all -- they are the"
+      f"\n  D-TILES-INTO-CODE rows above, which the `< 3` threshold refuses"
+      f" anyway.")
+tb = [r for r in rows if r["cause"] == "D-TRUNCATED-BUFFER"]
+print(f"\n  D-TRUNCATED-BUFFER verification: {sum(1 for r in tb if r['confirmed'])}"
+      f" of {len(tb)} confirmed by re-running unidasm on 64 real ROM bytes at the")
+print(f"  same address -- the `db` disappears when the input is not starved.")
+
 print(f"\n{'='*78}\nHYPOTHESIS (c): ranges rejected only by the `< 3` threshold\n{'='*78}")
 stubs = [r for r in rows if r["cause"] == "C-SHORT-STUB"]
 tiles = [r for r in rows if r["cause"] == "D-TILES-INTO-CODE"]
-for name, sel in (("end in a terminator (`ret`/`reti`/`retd`)", stubs),
+for name, sel in (("end in an unconditional terminator", stubs),
                   ("tile exactly into already-disassembled code", tiles)):
     print(f"\n  {len(sel)} ranges {name}:")
     by = collections.Counter(r["n_insns"] for r in sel)
     for n in sorted(by):
-        s = [r for r in sel if r["n_insns"] == n]
-        clean = [r for r in s if not r["implausible"] and not r["ascii"]]
-        print(f"    {n} instruction(s): {by[n]:4} ranges, {sum(r['span'] for r in s):5,} B"
+        g = [r for r in sel if r["n_insns"] == n]
+        clean = [r for r in g if not r["implausible"] and not r["ascii"]]
+        print(f"    {n} instruction(s): {by[n]:4} ranges, {sum(r['span'] for r in g):5,} B"
               f"   -- {len(clean)} with no data-shape flag")
+
+# ⚠ THE `< 3` THRESHOLD IS NOT THE ONLY THING HOLDING THESE.
+cond = [r for r in rows if r["cause"] == "D-COND-RET-STOP"]
+print(f"\n  {len(cond)} further ranges, {sum(r['span'] for r in cond):,} B, stop at a"
+      f" CONDITIONAL `ret <cc>`.")
+print("    They are counted as D-COND-RET-STOP, not here: a conditional return")
+print("    does not end a routine, so the code continues past the stop and the")
+print("    `< 3` threshold is not what is holding them. Raising the threshold")
+print("    would convert two instructions of a longer routine and stop there.")
+
+uncond = stubs
+clean = [r for r in uncond
+         if not r["implausible"] and not r["ascii"] and not r["ptrtable"]]
 print(f"\n  ARGUABLY-ARBITRARY REJECTIONS, the answer to the question as posed:")
-clean_stubs = [r for r in stubs if not r["implausible"] and not r["ascii"] and not r["ptrtable"]]
-print(f"    {len(clean_stubs)} ranges / {sum(r['span'] for r in clean_stubs):,} B are 1-2"
-      f" instructions ending in a terminator with NO data-shape flag.")
-print(f"    {len(stubs) - len(clean_stubs)} more end in a terminator but DO carry one"
-      f" (listed by --dump).")
+print(f"    {len(clean)} ranges / {sum(r['span'] for r in clean):,} B are 1-2 instructions"
+      f" ending in an UNCONDITIONAL")
+print(f"    terminator with no data-shape flag -- rejected by the threshold alone.")
+print(f"    {len(uncond) - len(clean)} more end in an unconditional terminator but carry"
+      f" a flag (see --dump).")
+tclean = [r for r in tiles
+          if not r["implausible"] and not r["ascii"] and not r["ptrtable"]]
+print(f"    {len(tclean)} ranges / {sum(r['span'] for r in tclean):,} B are 1-2 instructions"
+      f" that TILE the run exactly")
+print(f"    and abut code, with no data-shape flag -- these would pass the")
+print(f"    converter's own `ends_at_code` rule if they had one more instruction.")
+print(f"\n  Examples of the unconditional group, so the claim is checkable:")
+for r in sorted(clean, key=lambda r: -r["span"])[:6]:
+    print(f"    0x{r['target']:06X}  {r['span']} B  {r['sym'] or '(unnamed)':<38} {r['text']}")
 
 # --------------------------------------------------- controls
 print(f"\n{'='*78}\nCONTROLS for the two data-shape rules\n{'='*78}")
@@ -395,9 +556,17 @@ print(f"\n  control 2 -- the {len(rows)} refused ranges with their own first 64 
 print(f"               SHUFFLED (same byte distribution, no arrangement):")
 print(f"      ascii     {shuf_a:4} / {len(rows)}  ({100*shuf_a/len(rows):.2f}%)")
 print(f"      ptrtable  {shuf_p:4} / {len(rows)}  ({100*shuf_p/len(rows):.2f}%)")
+m_a = sum(1 for r in rows if r["ascii"])
+m_p = sum(1 for r in rows if r["ptrtable"])
 print(f"\n  measured, unshuffled, over the same {len(rows)} ranges:")
-print(f"      ascii     {sum(1 for r in rows if r['ascii']):4}")
-print(f"      ptrtable  {sum(1 for r in rows if r['ptrtable']):4}")
+print(f"      ascii     {m_a:4}")
+print(f"      ptrtable  {m_p:4}")
+print(f"\n  READ THIS BEFORE USING THE COLUMNS. `ptrtable` separates: {m_p} measured")
+print(f"  against {shuf_p} shuffled and {fp_p} in {len(code_addrs)} CODE-territory samples.")
+print(f"  `ascii` DOES NOT: {m_a} measured against {shuf_a} shuffled is not a signal,")
+print(f"  so no conclusion in this report rests on the ascii column. It is kept")
+print(f"  because a column that fails its control has to be visible to be")
+print(f"  distrusted -- deleting it would leave the impression it was never tried.")
 
 # --------------------------------------------------- worked examples
 print(f"\n{'='*78}\nONE WORKED EXAMPLE PER CAUSE -- check these by hand\n{'='*78}")
@@ -405,7 +574,12 @@ for cause in ORDER:
     sel = [r for r in rows if r["cause"] == cause]
     if not sel:
         continue
-    r = max(sel, key=lambda r: r["after_stop"] + r["span"])
+    # prefer a range with NO data-shape flag: the point of an example is to be
+    # representative of the cause, not to showcase its most doubtful member
+    _pref = [x for x in sel if not (x["ascii"] or x["ptrtable"] or x["implausible"])]
+    # rank by (has an ELF name, bytes decoded): a named range with real content
+    # is what a reviewer can most cheaply check against the sources
+    r = max(_pref or sel, key=lambda x: (bool(x["sym"]), x["span"]))
     print(f"\n{cause}  {HYP[cause]}   ({len(sel)} ranges)")
     print(f"  0x{r['target']:06X}  {r['sym'] or '(no ELF symbol)'}"
           f"   bucket {r['bucket']}  run {r['run']} B  decoded {r['span']} B"
@@ -416,10 +590,15 @@ for cause in ORDER:
         print(f"    {a:06x}: {rom[a-crr.BASE:a-crr.BASE+n].hex(' '):<12} {x}")
     if len(decodes[r["target"]]) > 10:
         print(f"    ... {len(decodes[r['target']]) - 10} more decoded instructions")
+    print(f"    run ends at 0x{r['target']+r['run']:06X}, where the sources have "
+          f"{r['next_terr']}")
     if r["blocked"]:
-        print(f"    -- unidasm prints `db` for {r['blocked']}"
-              + (f", llvm-mc reads it as `{r['gap_text']}`" if r["gap_text"] else
-                 ", and llvm-mc refuses it too"))
+        note = ", and llvm-mc refuses it too"
+        if r["gap_text"]:
+            note = f", llvm-mc reads it as `{r['gap_text']}`"
+        elif r["confirmed"]:
+            note = f"; given 64 ROM bytes instead it decodes as `{r['confirmed']}`"
+        print(f"    -- unidasm prints `db` for {r['blocked']}{note}")
     flags = [k for k in ("ascii", "ptrtable") if r[k]]
     if r["implausible"]:
         flags.append(f"implausible:{r['implausible']}")
@@ -431,10 +610,12 @@ if DO_SPELLING:
     print("  For every range in both buckets, try the converter's own spelling")
     print("  loop on the prefix it decoded. A range that no spelling covers would")
     print("  be refused by a LATER bucket even if these two gates were relaxed.")
-    unspellable = collections.Counter()
-    n_clean = 0
+    unspellable = {"all": collections.Counter(), "code-shaped": collections.Counter()}
+    n_clean = {"all": 0, "code-shaped": 0}
+    n_tot = {"all": 0, "code-shaped": 0}
     for r in rows:
         t = r["target"]
+        groups = ["all"] + (["code-shaped"] if HYP[r["cause"]] in ("(c)", "(d)") else [])
         want = rom[t - crr.BASE: t - crr.BASE + r["span"]]
         pos, ok = 0, True
         for _a, n, x in decodes[t]:
@@ -445,20 +626,29 @@ if DO_SPELLING:
                        list(cc.translate(x)) + [cc.canonical(x)]):
                 mn = x.split()[0]
                 rest = x.split(None, 1)[1] if len(x.split(None, 1)) > 1 else ""
-                unspellable[mn + " " + re.sub(r'0x[0-9a-fA-F]+', 'imm',
-                                              re.sub(r'\b[A-Z]{1,4}\b', 'r', rest))] += 1
+                key = mn + " " + re.sub(r'0x[0-9a-fA-F]+', 'imm',
+                                        re.sub(r'\b[A-Z]{1,4}\b', 'r', rest))
+                for g in groups:
+                    unspellable[g][key] += 1
                 ok = False
-        n_clean += ok
-    print(f"\n  {n_clean} of {len(rows)} refused ranges are FULLY SPELLABLE as decoded;")
-    print(f"  {len(rows)-n_clean} contain at least one instruction no spelling matches.")
-    print(f"\n  forms, by instances:")
-    for k, v in unspellable.most_common(15):
-        print(f"    {v:5}  {k}")
+        for g in groups:
+            n_tot[g] += 1; n_clean[g] += ok
+    print("\n  ⚠ Counted over ALL refused ranges this is a polluted number: most of")
+    print("    the instances come from ranges two decoders say are not code, where")
+    print("    'no spelling matches' is the expected answer. The second block is")
+    print("    restricted to the (c)/(d) ranges -- the ones with a case for being")
+    print("    code -- and is the only one worth acting on.")
+    for g in ("all", "code-shaped"):
+        print(f"\n  [{g}]  {n_clean[g]} of {n_tot[g]} ranges are FULLY SPELLABLE as decoded;"
+              f" {n_tot[g]-n_clean[g]} are not.")
+        for k, v in unspellable[g].most_common(12):
+            print(f"    {v:5}  {k}")
 
 if DUMP:
     with open(DUMP, "w") as f:
         cols = ["bucket", "target", "cause", "n_insns", "span", "run", "after_stop",
-                "blocked", "gap_text", "ascii", "ptrtable", "implausible", "sym", "text"]
+                "next_terr", "cond_ret", "blocked", "gap_text", "confirmed",
+                "ascii", "ptrtable", "implausible", "sym", "text"]
         f.write("\t".join(cols) + "\n")
         for r in sorted(rows, key=lambda r: (r["bucket"], r["cause"], r["target"])):
             f.write("\t".join(f"0x{r[c]:06X}" if c == "target" else str(r[c])

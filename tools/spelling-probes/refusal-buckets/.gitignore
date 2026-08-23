@@ -1,0 +1,10 @@
+# Decode caches. Regenerable in ~20 s (seed) / ~40 s (closure), fingerprinted
+# against the ROM and the territory map, and DISCARDED automatically when the
+# tree moves -- so keeping them in git only preserves stale answers.
+#
+# ⚠ Both were swept into the repo by a parallel session's blanket `git add`
+# before this file existed (commits d6bca6b, c8e9ec4), and .gitignore has no
+# effect on an already-tracked path. Whoever owns those commits should
+# `git rm --cached` them; until then they will show as modified after every run.
+decodes.pkl
+raw_listings.pkl
