@@ -27,6 +27,25 @@ METHOD -- split the DIRECTIVE, never the file:
 it, so the blob FILE stays byte-for-byte the dump it was -- which matters,
 because the file is the artefact and only the directive is our description of it.
 
+TWO INDEPENDENT QUALIFICATION PATHS. A table is accepted if EITHER holds:
+
+  P1 SYMBOL  >= 90% of words hit an exact ELF symbol address (null 1.79%).
+  P2 STRUCTURE  >= 60% of targets carry a recognised RECORD SIGNATURE in the
+     ROM -- currently `XX 00 60 01`, what this tree's own `naka_header` macro
+     emits (null 0.165%, measured over random ROM offsets).
+
+⚠ P2 EXISTS BECAUSE P1 IS STRUCTURALLY BLIND TO A WHOLE CLASS. The largest
+region in the set, `naka_effects_seq.bin` 0x006700 (2,560 B), scores 0% on P1 --
+not because it is not a pointer table, but because its targets are INTERIOR
+addresses of other `.incbin` blobs, and a blob interior has no symbol by
+construction. It scores 82% on P2 against a 0.165% null, a ~500x enrichment. A
+floor on symbol resolution alone would have excluded the clearest table here
+forever, and would have looked principled doing it.
+
+When P2 qualifies a region, its words are emitted as numeric `.long 0x00ABCDEF`:
+byte-identical, explicitly an address table rather than a byte soup, and honest
+about the fact that no symbol exists to name.
+
 ⚠ RESOLUTION DISCIPLINE, inherited from convert_v7_ptr_tables.py: only an EXACT
 hit on a symbol address counts. "Inside a symbol" is not evidence -- 38,988
 symbols over 2 MB put most random addresses shortly after some symbol, so a rule
@@ -49,7 +68,21 @@ import argparse, glob, importlib.util, os, pathlib, re, struct, sys
 
 REPO = pathlib.Path("/home/fsanches/compartilhado/kn5000-roms-disasm")
 os.chdir(REPO); sys.path.insert(0, str(REPO))
-MIN_RESOLVE = 0.90
+MIN_RESOLVE = 0.90          # P1 floor
+MIN_STRUCT = 0.60           # P2 floor
+NAKA_SIG = (0x00, 0x60, 0x01)   # bytes 1..3 of `naka_header <type>`
+ROM = open("original_ROMs/kn5000_v7_program.rom", "rb").read()
+BASE = 0xE00000
+
+
+def struct_hits(words):
+    """Fraction of targets carrying the naka_header record signature."""
+    n = 0
+    for w in words:
+        o = w - BASE
+        if 0 <= o < len(ROM) - 3 and tuple(ROM[o + 1:o + 4]) == NAKA_SIG:
+            n += 1
+    return n / max(1, len(words))
 
 _s = importlib.util.spec_from_file_location(
     "cc", REPO / "scripts/converters/convert_corroborated_blocks.py")
@@ -111,9 +144,13 @@ def main():
             if not words:
                 continue
             named = sum(1 for w in words if w in syms)
-            if named / len(words) < MIN_RESOLVE:
+            p1 = named / len(words) >= MIN_RESOLVE
+            sh = struct_hits(words)
+            p2 = sh >= MIN_STRUCT
+            if not (p1 or p2):
                 skipped += 1
                 continue
+            why = "P1 symbol" if p1 else f"P2 structure {100*sh:.0f}%"
             lines = []
             for w in words:
                 lines.append(f"\t.long {syms[w]}" if w in syms
@@ -155,8 +192,8 @@ def main():
             new += lines
             if end4 < len(b):
                 new.append(f'{ind}.incbin "{inc}", 0x{end4:X}, 0x{len(b)-end4:X}')
-            print(f"  {base:44} 0x{s:06x}-0x{end4:06x}  "
-                  f"{len(words):4} words, {named} named ({100*named//len(words)}%)")
+            print(f"  {base:40} 0x{s:06x}-0x{end4:06x} {len(words):4}w "
+                  f"{named:4} named ({100*named//len(words):3}%)  [{why}]")
             tot_bytes += end4 - s; tot_named += named; tot_words += len(words)
             done += 1
             if a.apply:
