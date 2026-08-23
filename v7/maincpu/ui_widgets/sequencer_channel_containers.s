@@ -132,7 +132,73 @@ EmbeddedPtrTable_v7_naka_sequencer_channels_000D00:
 	.long TrackName6_Unassigned_08
 	.long TrackName6_Unassigned_07
 	.long TrackName6_Unassigned_06
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF00, 0xFD6
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF00, 0x600
+EmbeddedPtrTable_v7_naka_sequencer_channels_001500:
+	.long 0x2E8200EB
+	.long 0xF0D200EB
+	.long 0x00040003
+	.long 0x00020000
+	.long NakaColor_Palette2
+	.long NakaColor_Palette1
+	.long NakaColor_Palette6
+	.long NakaColor_Palette5
+	.long NakaColor_Palette4
+	.long NakaColor_Palette3
+	.long NakaColor_Palette10
+	.long NakaColor_Palette9
+	.long NakaColor_Palette8
+	.long NakaColor_Palette7
+	.long NakaColor_PaletteBlank
+	.long NakaColor_PaletteBlank
+	.long SeqChan_Map_2ch
+	.long SeqChan_Map_4ch
+	.long SeqChan_Map_6ch
+	.long SeqChan_Map_8ch
+	.long SeqChan_Map_10ch
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED029C
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long 0x00ED0212
+	.long NoteNameStr_Table_1
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x8D6
 
 ; External label offsets within the binary blob above.
 	.equ Naka_DrawbarOrgan_Screens, NakaData_SeqChannels + 0x06a0

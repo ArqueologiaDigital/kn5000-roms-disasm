@@ -214,7 +214,13 @@ def main():
             continue
         base = os.path.basename(str(f))
         where = sites.get((rev, base), [])
-        if len(where) != 1:
+        # ⚠ NOT `len(where) != 1`. Splitting a blob leaves it with SEVERAL
+        # .incbin directives, so requiring exactly one made every blob
+        # unreachable the moment its first region was converted -- which is why
+        # six regions that qualify on P4/P5 sat unconverted while the dry run
+        # reported them "below the resolve floor". The requirement is one FILE
+        # holding the directives, not one directive.
+        if len({os.path.abspath(x) for x in where}) != 1:
             continue
         for s, e, kind in scan.scan(b):
             if kind != "PTR_TABLE" or e - s < 256:
