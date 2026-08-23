@@ -7,7 +7,6 @@ NakaDbg_LowerCaseChars:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x37C, 0x4
 NakaDbg_LowerCaseChars2:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x380, 0x960
-Palette_8bit_RGBA:
 	.incbin "includes/generated/naka_debug_naming.bin", 0xCE0, 0x400
 NakaColor_Palette1:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x10E0, 0x400

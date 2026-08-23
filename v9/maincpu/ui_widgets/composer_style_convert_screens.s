@@ -3,7 +3,6 @@
 ; Source: maincpu/ui_widgets/naka_composer_style.c (C struct with named fields)
 NakaStr_PaintArrowProc_Empty:
 	.incbin "includes/generated/naka_composer_style.bin", 0, 0x1668
-Str_TEMPO:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1668, 0x852
 NakaLabel_PatternCopy_MemoryLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x1EBA, 0x28
@@ -141,7 +140,6 @@ NakaNode_CustomCopy_RootOuter:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2AEA, 0x36
 NakaLabel_CustomCopy_FromLabel:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2B20, 0x20
-Str_FROM:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2B40, 0x6
 Naka0x11_CustomCopy_FromFrame:
 	.incbin "includes/generated/naka_composer_style.bin", 0x2B46, 0x1C

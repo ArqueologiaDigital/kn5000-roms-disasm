@@ -127,7 +127,6 @@ NakaWidget_PdDpFileList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x9F6, 0x34
 NakaWidget_PdDpOrchSelector:
 	.incbin "includes/generated/naka_direct_play.bin", 0xA2A, 0x2C
-Str_ORCH:
 	.incbin "includes/generated/naka_direct_play.bin", 0xA56, 0xC
 NakaWidget_PdDpMixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0xA62, 0x38
@@ -227,7 +226,6 @@ NakaWidget_PdMdlyOffOnList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x1246, 0x34
 NakaWidget_PdMdlyRT2Sel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x127A, 0x2C
-NakaStr_PdMdlyOrcha:
 	.incbin "includes/generated/naka_direct_play.bin", 0x12A6, 0xC
 NakaWidget_PdMdlyMixer:
 	.incbin "includes/generated/naka_direct_play.bin", 0x12B2, 0x38
@@ -457,7 +455,6 @@ NakaWidget_NamingDisplayMode:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2562, 0x2C
 NakaWidget_NamingOrchRow:
 	.incbin "includes/generated/naka_direct_play.bin", 0x258E, 0x40
-Str_AFTER_TOUCH_SETTING:
 	.incbin "includes/generated/naka_direct_play.bin", 0x25CE, 0x14
 NakaWidget_AftTouchDuration:
 	.incbin "includes/generated/naka_direct_play.bin", 0x25E2, 0x2A
@@ -511,15 +508,12 @@ NakaWidget_Perf2Strings:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2B22, 0x3E
 NakaWidget_Perf2Gamelan:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2B60, 0x36
-NakaStr_Gamelan:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2B96, 0x46
 NakaWidget_Perf2Guitar:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2BDC, 0x3C
 NakaWidget_Perf2SaxBrass:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2C18, 0x36
-Str_SaxBrass:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2C4E, 0x40
-NakaStr_Organ:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2C8E, 0x6
 NakaWidget_Perf2StyleSel:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2C94, 0x36
@@ -533,13 +527,9 @@ NakaWidget_Perf2FileList:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2D54, 0x5C
 NakaWidget_Perf3HokieDance:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2DB0, 0x36
-Str_HokieDance:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2DE6, 0x42
-Str_GospelRevival:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2E28, 0x46
-Str_OrganCombo:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2E6E, 0x42
-Str_BigBandMid:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2EB0, 0x54
 NakaWidget_Perf3ModernBluegrass:
 	.incbin "includes/generated/naka_direct_play.bin", 0x2F04, 0x48
