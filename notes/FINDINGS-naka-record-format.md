@@ -800,3 +800,31 @@ POSITIONALLY, by looking exactly where a record boundary is expected.
 That is why the earlier qualification says the census is a lower bound rather
 than trying to fix it: the fix that suggests itself is measurably worse than the
 undercount.
+
+### Positional recovery works, and the control proves it is position doing the work
+
+`scripts/analysis/l3_naka_positional_headers.py` accepts a non-`0x60` header ONLY
+at the one offset where a sibling is predicted — the type's modal record length —
+and only if its third byte is one of the seven position-derived values. It
+iterates, since splitting one record can expose another boundary.
+
+| method | headers added | types with a consistent length |
+|---|---:|---:|
+| value scan `0x60..0x68` | +481 | 53% → **41%** (worse) |
+| **positional recovery at the modal boundary** | **+127** | 53% → **58%** (better) |
+| CONTROL: same procedure at modal **+3** | **+0** | — |
+| CONTROL: same procedure at modal **−3** | **+0** | — |
+
+**Both controls recover nothing at all.** Moving the acceptance offset three
+bytes in either direction takes the yield from 127 to zero, so the recovery is
+keyed on the predicted boundary and not on the byte pattern being common. That is
+the discrimination the value-based scan could not achieve, and it is why the same
+seven third-byte values succeed here and fail there.
+
+Census after recovery: **2,971 headers** (from 2,857), with length consistency up
+from 25/47 types to 29/50.
+
+⚠ Still a lower bound. Recovery only fires where a record exceeds its type's
+MODAL length, so a type whose modal value is itself inflated by merged records
+cannot be repaired this way, and a record short enough to hide a sibling within
+the modal span is invisible to it.
