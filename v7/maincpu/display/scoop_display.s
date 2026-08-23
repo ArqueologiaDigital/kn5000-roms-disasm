@@ -2885,7 +2885,124 @@ ToneParam_HandlerTable_BC:
 .Lc_ef843e:
 	popw de
 	ret
-	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail_tail.bin"
+	push XWA
+	push XHL
+	push XBC
+	push XDE
+	push XIX
+	push XIY
+	push XIZ
+	ldb A, 0x01
+	call VoiceSlot_SaveState
+	xor A,A
+	stb_d8 (0x0e43), a
+.Lc_ef8453:
+	call VoiceSlot_ReadCurrentParams
+	cp A,0x81
+	jrl nz, .Lc_ef848b
+	incdi8 1, 0x0e43
+	call VoiceSlot_DispatchRet
+	cp W,0xff
+	jrl z, .Lc_ef849e
+	ldb_d8 a, (0x0e43)
+	cpda8 a, (0x0e41)
+	jrl c, .Lc_ef8453
+	xor B,B
+	ldb_d8 c, (0x0e40)
+	subda8 c, (0x0e41)
+.Lc_ef8480:
+	call SysInit_BytecodeBlock_0xFF
+	djnz16 bc, .Lc_ef8480
+	jp ToneParam_HandlerTable_BC_0x2F8
+.Lc_ef848b:
+	and A,0xf0
+	cp A,0xc0
+	jrl z, .Lc_ef849e
+	call VoiceSlot_DispatchRet
+	cp W,0xff
+	jrl nz, .Lc_ef8453
+.Lc_ef849e:
+	ldb A, 0x01
+	call VoiceSlot_RestoreState
+	pop XIZ
+	pop XIY
+	pop XIX
+	pop XDE
+	pop XBC
+	pop XHL
+	pop XWA
+	ret
+	push XWA
+	push XHL
+	push XBC
+	push XDE
+	push XIX
+	push XIY
+	push XIZ
+	ldb A, 0x01
+	call VoiceSlot_SaveState
+	xor A,A
+	stb_d8 (0x0e43), a
+.Lc_ef84bf:
+	call VoiceSlot_FlagCheck
+	cp A,0x82
+	jrl z, .Lc_ef8549
+	call VoiceSlot_ReadCurrentParams
+	cp A,0x84
+	jrl z, .Lc_ef8549
+	cp A,0x81
+	jrl z, .Lc_ef84f0
+	and A,0xf0
+	cp A,0xc0
+	jrl z, .Lc_ef8549
+	call VoiceSlot_DispatchRet
+	cp W,0xff
+	jrl z, .Lc_ef8549
+	jp ToneParam_HandlerTable_BC_0x36A
+.Lc_ef84f0:
+	incdi8 1, 0x0e43
+	call MemConfig_Handler_5_0xE4
+	ldb_d8 a, (0x0e41)
+	subda8 a, (0x0e40)
+	cpda8 a, (0x0e43)
+	jrl ugt, .Lc_ef84bf
+	xor B,B
+	ldb_d8 c, (0x0e40)
+.Lc_ef850d:
+	call VoiceSlot_ReadCurrentParams
+	cp A,0x82
+	jrl z, .Lc_ef8549
+	cp A,0x84
+	jrl z, .Lc_ef8549
+	cp A,0x81
+	jrl nz, .Lc_ef8536
+	pushw bc
+	call VoiceSlot_DispatchRet
+	popw bc
+	cp W,0xff
+	jrl z, .Lc_ef8549
+	djnz16 bc, .Lc_ef850d
+	jp ToneParam_HandlerTable_BC_0x364
+.Lc_ef8536:
+	and A,0xf0
+	cp A,0xc0
+	jrl z, .Lc_ef8549
+	pushw bc
+	call VoiceSlot_DispatchRet
+	popw bc
+	jp ToneParam_HandlerTable_BC_0x3B8
+.Lc_ef8549:
+	ldb A, 0x01
+	call VoiceSlot_RestoreState
+	pop XIZ
+	pop XIY
+	pop XIX
+	pop XDE
+	pop XBC
+	pop XHL
+	pop XWA
+	ret
+	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail_tail_tail.bin"
 	xor A,A
 	call VoiceSlot_SaveState
 	call VoiceSlot_DispatchRet
@@ -2924,7 +3041,36 @@ ToneParam_HandlerTable_BC:
 	call Display_UpdateRegion3
 	call Display_UpdateRegion2
 	ret
-	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_tail.bin"
+	cps c, 0
+	jrl z, .Lc_ef870f
+.Lc_ef86d6:
+	pushw bc
+	call VoiceSlot_ReadCurrentParams
+	cp A,0x82
+	jrl z, .Lc_ef8715
+	cp A,0x84
+	jrl z, .Lc_ef8715
+	cpdi8 (0x0dcf), 0x00
+	jrl z, .Lc_ef86f7
+	call VoiceSlot_CompareAndBranch_0x7
+	jp ToneParam_HandlerTable_BC_0x5A6
+.Lc_ef86f7:
+	call VoiceSlot_DispatchRet
+	cp W,0xff
+	jrl z, .Lc_ef8717
+	call VoiceSlot_ReadCurrentParams
+	popw bc
+	cp A,0x81
+	jrl nz, .Lc_ef86d6
+	djnz16 bc, .Lc_ef86d6
+.Lc_ef870f:
+	ldb W, 0x00
+	jp ToneParam_HandlerTable_BC_0x5C3
+.Lc_ef8715:
+	ldb W, 0x00
+.Lc_ef8717:
+	popw bc
+	ret
 ToneEvt_Handler_Mode9:
 	bit	7, w
 	jrl	nz, 8

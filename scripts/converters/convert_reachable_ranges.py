@@ -59,8 +59,17 @@ TERMINATORS = ("ret", "reti", "retd")
 # 842 bare `jp`, against thousands of conditional `jr z,` / `jr nz,`.
 UNCOND_JUMP = re.compile(r'^(?:jp\s+(?!(?:z|nz|c|nc|t|f|lt|ge|le|gt|ult|uge|ule|ugt|ov|nov|mi|pl)\s*,)'
                          r'|(?:jr|jrl)\s+t\s*,)', re.I)
-BRANCHES = ("jr", "jrl", "calr")
-BRANCH_RE = re.compile(r'^(jr|jrl|calr)\s+(?:(\w+),\s*)?0x([0-9a-fA-F]+)$', re.I)
+BRANCHES = ("jr", "jrl", "calr", "djnz")
+BRANCH_RE = re.compile(r'^(jr|jrl|calr|djnz)\s+(?:(\w+),\s*)?0x([0-9a-fA-F]+)$', re.I)
+# ⚠ `djnz` is a BRANCH whose first operand is a REGISTER, not a condition, and
+# whose mnemonic carries the register width: `djnz BC,0xef8480` = d9 1c f9 =
+# `djnz16 bc, <label>`, and `djnz C,0xf0f9af` = cb 1c ac = `djnz8 c, <label>`.
+# Treating it as an ordinary branch emits `djnz bc, <label>`, which llvm-mc does
+# not accept, so the width has to be chosen from the register.
+# ⚠ Verifying these needed assembling to an OBJECT FILE and reading .text --
+# `--show-encoding` prints only the `A` fixup placeholder for a symbolic branch,
+# so it cannot confirm the bytes. (tools/spelling-probes/class-a-sweep/)
+DJNZ_W16 = {"WA", "BC", "DE", "HL", "IX", "IY", "IZ", "SP"}
 
 
 def resolve_branches(insns, t, span, addr2name):
@@ -97,7 +106,11 @@ def resolve_branches(insns, t, span, addr2name):
             name = addr2name[tgt]
         else:
             return None                        # no way to name it
-        texts.append(f"{mn} {cc_.lower()}, {name}" if cc_ else f"{mn} {name}")
+        if mn == "djnz" and cc_:
+            _w = "16" if cc_.upper() in DJNZ_W16 else "8"
+            texts.append(f"djnz{_w} {cc_.lower()}, {name}")
+        else:
+            texts.append(f"{mn} {cc_.lower()}, {name}" if cc_ else f"{mn} {name}")
     return texts, needed
 
 
