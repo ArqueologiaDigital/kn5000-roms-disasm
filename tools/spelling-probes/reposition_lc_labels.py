@@ -103,6 +103,34 @@ for f in sorted(glob.glob("v7/maincpu/**/*.s", recursive=True)):
             del out[i]
             out[jj:jj+1] = rep
             moved += 1
+        elif d < 0:                       # label is EARLY: walk FORWARD -d bytes
+            need, j, cut = -d, i + 1, None
+            while j < len(out) and need > 0:
+                m = BYTE.match(out[j])
+                if m:
+                    vals = re.findall(r'0x[0-9a-fA-F]{2}', m.group(1))
+                    if len(vals) >= need:
+                        cut = (j, need); need = 0; break
+                    need -= len(vals); j += 1
+                elif re.match(r'^\w+:$', out[j]) or not out[j].strip() \
+                        or out[j].strip().startswith(";"):
+                    j += 1
+                else:
+                    w = insn_width(out[j])
+                    if w is None or w > need:
+                        break
+                    need -= w; j += 1
+            if need or cut is None:
+                refused += 1; continue
+            jj, k = cut
+            m = BYTE.match(out[jj]); vals = re.findall(r'0x[0-9a-fA-F]{2}', m.group(1))
+            rep = []
+            if k: rep.append("\t.byte " + ", ".join(vals[:k]))
+            rep.append(n + ":")
+            if k < len(vals): rep.append("\t.byte " + ", ".join(vals[k:]))
+            out[jj:jj+1] = rep
+            del out[i]
+            moved += 1
         else:
             refused += 1
     open(f, "w", encoding="latin1").write("\n".join(out))

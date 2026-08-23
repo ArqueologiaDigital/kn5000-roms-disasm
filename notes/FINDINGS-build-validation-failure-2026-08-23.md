@@ -75,3 +75,54 @@ written the same morning it was then committed at scale.
    210 low, so one symbol or one blob boundary moved by 210 bytes.
 2. Re-gate every v7 conversion from this session once v7 rebuilds clean, and
    correct the byte counts in `IS-IT-DONE.md` to whatever survives.
+
+---
+
+## v7 recovery: 136,782 -> 42,329, and exactly what is left
+
+### The technique that made the error measurable
+
+`.Lc_` labels are TEMPORARY symbols: llvm-mc never puts them in the symbol table,
+so nothing could see where they actually landed. Renaming `.Lc_` -> `LcX_` makes
+them ordinary symbols, and then
+
+* the ELF gives each label's **actual** address, and
+* the label's own name gives its **intended** address.
+
+The error becomes exact. 523 labels, 47 wrong, deltas from -12 to +6,892.
+`tools/spelling-probes/reposition_lc_labels.py` does the rename/build/measure/
+move cycle; it sizes instruction lines by assembling them rather than giving up
+at the first one, which is how the earlier attempt mis-placed a label by 542
+bytes.
+
+### Why a handful of labels cost six figures
+
+A mis-placed branch target forces llvm-mc to relax `jr` (2 bytes) to `jrl` (3),
+the block grows, and **every symbol after it shifts**. One label moved took
+70,848 -> 42,078. The divergence was never 136,782 independent wrong bytes; it
+was a handful of length errors and their cascade.
+
+### What remains
+
+Six shift points, cumulative +5:
+
+| address | shift | cause |
+|---|---|---|
+| `0xFD0A3A` -> `0xFD0A76` | -3, then back | localised to 60 bytes; sizing the romslice at 50 instead of 47 made it WORSE, so the obvious reading is wrong and it is unexplained |
+| `0xFE7680` | +2 | `.Lc_fe7680` is 2,932 bytes late |
+| `0xFE99C2` | +2 | `.Lc_fe99a2` is 4,199 bytes late |
+| `0xFEB976` | +1 | `.Lc_feb9ef` is 5,595 bytes late |
+
+Those three cascade from `0xFE7680` to the ROM end and are most of the 42,329.
+They cannot be walked into place -- the path crosses instruction lines the walker
+can size but which would put the label mid-instruction -- and anchoring on the
+nearest named symbol also fails for the same reason.
+
+**The right fix for those three is not to move the label but to REVERT the
+converted range that contains the branch**, back to a romslice. A range whose
+branch target cannot be placed should never have been converted; that is what
+the converter should have done, and it removes both the branch and the label.
+
+31 further labels are mis-placed by -12..-7 and contribute wrong displacement
+BYTES but no length change, so they are cosmetic against the byte gate until the
+shifts are gone.
