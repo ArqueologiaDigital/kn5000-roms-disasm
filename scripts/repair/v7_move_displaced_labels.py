@@ -42,7 +42,11 @@ Run:  python3 scripts/repair/v7_move_displaced_labels.py [--files N] [--apply N]
 symbol file, so without it you are grading a stale copy.
 """
 import bisect, importlib.util, os, re, sys
-BASE, DISP, W = 0xE00000, 0x41A, 32
+BASE, DISP = 0xE00000, 0x41A
+# ⚠ MUST MATCH scripts/analysis/v7_label_displacement.py, which defaults to 24.
+# Selecting on 32 while the detector reports on 24 made a correct 5-label batch
+# look like a 3-label one. Override together or not at all.
+W = int(sys.argv[sys.argv.index('--window') + 1]) if '--window' in sys.argv else 24
 LO, HI = 0x00FCCE4A, 0x00FFFE80
 LAB = re.compile(r'^([A-Za-z_][\w]*):')
 
@@ -75,7 +79,12 @@ for n in set(s7) & set(s9):
     ref = rom9[o9:o9 + W]
     at = sum(1 for x, y in zip(rom7[o7:o7 + W], ref) if x == y)
     tr = sum(1 for x, y in zip(rom7[o7 - DISP:o7 - DISP + W], ref) if x == y)
-    if at <= 8 and tr >= 28: displaced[n] = a7
+    # ⚠ THRESHOLDS MUST SCALE WITH THE WINDOW. These were absolute (8 and 28),
+    # sized for a 32-byte window. Setting W=24 to match the detector then made
+    # `tr >= 28` unsatisfiable, and the script cheerfully reported ZERO displaced
+    # labels -- a clean, confident, impossible answer. The detector states them
+    # as FRACTIONS (0.55 / 0.85) precisely so they survive a window change.
+    if at <= 0.34 * W and tr >= 0.87 * W: displaced[n] = a7
 
 a2n = cc.elf_syms("rebuilt_ROMs/kn5000_v7_program.llvm.elf")
 n2a = {v: k for k, v in a2n.items()}
@@ -129,16 +138,30 @@ if '--apply' in sys.argv:
     byfile = {}
     for mv in sorted(moves, key=lambda r: (r[0], -r[4]))[:k]:
         byfile.setdefault(mv[0], []).append(mv)
+    # ⚠ REBUILD IN ONE PASS. Deleting a line and inserting elsewhere shifts every
+    # index after it, so a second move in the same file addressed a stale line and
+    # was skipped by the `!= n + ':'` guard: asking for 200 moves performed 22.
+    # The guard was right to refuse -- the indices really were wrong -- but the
+    # fix is to stop invalidating them. Collect the edits against the ORIGINAL
+    # numbering, then emit the file once: drop the lines being moved, and attach
+    # each label above its target line.
     done = 0
     for f, mvs in byfile.items():
         lines = open(f, 'rb').read().decode('latin1').splitlines(True)
-        for (_, n, a, tgt, li, ti) in sorted(mvs, key=lambda r: -r[4]):
-            if lines[li].strip() != n + ':': continue
-            del lines[li]
-            ins = ti if ti < li else ti - 1
-            lines.insert(ins, n + ':\n')
+        drop, add = set(), {}
+        for (_, n, a, tgt, li, ti) in mvs:
+            if lines[li].strip() != n + ':' or li in drop or ti in add:
+                continue
+            drop.add(li)
+            add[ti] = n + ':\n'
             done += 1
-        open(f, 'wb').write(''.join(lines).encode('latin1'))
+        out = []
+        for i, ln in enumerate(lines):
+            if i in add:
+                out.append(add[i])
+            if i not in drop:
+                out.append(ln)
+        open(f, 'wb').write(''.join(out).encode('latin1'))
     print(f"  MOVED {done} label(s)")
 else:
     for f, n, a, tgt, li, ti in moves[:10]:
