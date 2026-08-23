@@ -117,3 +117,60 @@ sources, and that is a fact about this ROM rather than a statistic.
 ⚠ Note the asymmetry that makes this worth resisting: converting them would
 raise the "structure exposed" figure by 13,056 B and pass every gate in the
 project. Nothing here can punish a wrong description, only a wrong byte.
+
+---
+
+## The blobs are far better documented than the audit believes (2026-08-23)
+
+Chasing the stride question for `naka_widget_names_charmap` 0x004c00 turned up
+the thing that actually decides it. The sources declare, for that blob alone,
+**674 named offsets** of the form
+
+```asm
+	.equ NakaInst_CHARA5W, NakaData_WidgetNames + 0x0628
+	.equ NakaInst_CHARA2W, NakaData_WidgetNames + 0x0630
+	.equ IconName_i5,      NakaData_WidgetNames + 0x4C02
+	.equ IconBitmapNamePtrTable, NakaData_WidgetNames + 0x4C28
+```
+
+Eight of them fall inside the 768-byte region in question. That settles the
+stride question by naming: the region is **heterogeneous** — `IconName_i5..i0`
+and `IconName_Default` at stride 4 starting at +0x4C02, then a table the sources
+already call `IconBitmapNamePtrTable` at +0x4C28. It is not a flat pointer
+table, which is why the P1 fraction sat at 54.7% and why converting it wholesale
+would have been wrong.
+
+⚠ CORRECTION to a guess made an hour earlier: I read the +0x4C02 offsets as
+evidence that my u32 window was misaligned by 2. It is not — reading from
+0x4C00 and from 0x4C28 give the SAME 105 hits, because both are 4-aligned. The
++0x4C02 entries are simply at a different alignment class and are not u32 ROM
+pointers at all.
+
+### The general figure
+
+| blob base | named offsets |
+|---|---:|
+| `NakaData_TechniChordStrings` | 2,544 |
+| `NakaData_StyleBitmaps` | 2,229 |
+| `NakaData_WidgetNames` | 2,022 |
+| `NakaData_WidgetDescriptors` | 1,197 |
+| `NakaData_WidgetTables2` | 1,128 |
+| `NakaBoxData_PsSongSelBox` | 819 |
+| … 23 bases in all | **11,394** |
+
+**This changes what the L3/§3 scorecard should say in BOTH directions.** The
+binary-include audit calls these blobs OPAQUE and "earning no better format on
+this evidence" — while the sources next to them carry 11,394 names for their
+interiors. The audit is not measuring the documentation that exists; it reads
+bytes and nothing else.
+
+So: "are all data structures understood?" for these blobs is much closer to YES
+than the OPAQUE verdict implies. What is missing is not knowledge, it is that the
+knowledge lives in `.equ` constants beside the include rather than as labels
+positioned in it — and an `.equ` naming an offset IS a human-readable structure
+description, so this is a weaker deficiency than "an undocumented blob".
+
+⚠ Do not read this as licence to convert. The 11,394 offsets are the correct
+BOUNDARIES to use for any future splitting — far better founded than my
+window scan, which is aligned to 0x100 and knows nothing about records — but
+splitting on them is a separate job with its own gate.
