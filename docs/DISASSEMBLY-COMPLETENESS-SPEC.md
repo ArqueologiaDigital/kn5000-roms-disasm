@@ -396,6 +396,24 @@ recognised faster next time.
      * The correction has a milder form of the same defect and says so: the windowed scan aligns
        its windows, so the very table that motivated it (blob offset 0x1c1a) is not among the 45 it
        reports. A bound that is knowably loose must be published as a bound, not as a count.
+23. **The check the subject can satisfy while being wrong.** Reachability's entry points are gated
+   on structure -- at least 3 instructions, ends in a terminator, every instruction spellable, no
+   implausible opcodes. Measured against a control that is WRONG BY CONSTRUCTION (an offset placed
+   strictly inside an instruction), those gates pass **67.5%** of known-bad entries, slightly more
+   than they pass real ones. The mechanism is the ISA: TLCS-900 self-synchronises, and 387 of 400
+   wrong entries re-join the true instruction stream, 74% of them within 5 bytes. A wrong entry
+   therefore prepends a couple of bad instructions to an otherwise correct function, and every
+   structural check sees something well-formed. The byte gate is blind by construction -- the bytes
+   are the same bytes.
+     * The lesson is not "the gates are useless" (they remove the grossly broken cases) but **know
+       which of your checks carries the confidence.** Here it is not the gates, it is PROVENANCE: a
+       branch inside already-verified code makes its target an instruction boundary by
+       construction. I had written that the gates made the closure sound; they do not, and the
+       docstring is corrected.
+     * And a control is only as good as its known-badness. The first control here was random
+       offsets in `.byte` territory -- but that territory is mostly undisassembled CODE, so a large
+       share of those offsets are genuine boundaries that SHOULD pass. It measured the wrong thing
+       and had to be replaced with one that is wrong by construction.
 
 ## 6. Definition of done
 
