@@ -26,7 +26,12 @@ three classes, and only the first is work anyone can do by reading these ROMs ha
 **B. BLOCKED ON A PHYSICAL INSTRUMENT — cannot be closed by analysis**
 
 * what the control panel puts on the wire (needs a logic analyser on a real KN5000)
-* the four L5 items named in `kn5000-control-panel-panel-side.md`
+* the **seven** L5 items named in `kn5000-control-panel-panel-side.md` §3 — ⚠ this line said
+  "four" until 2026-08-23; the document lists §3.1–§3.7: the panel's clock rate as master, the
+  meaning of the command parameter byte, which frame it replies with, its scan/debounce/latency
+  timing, its error handling, the physical identity of most button and LED bits, and what it does
+  with an LED write. Each entry states what the firmware would look like if the answer were in the
+  ROM, which is what keeps the list from being "things nobody looked for".
 * whether the `0x30`/`0xC0` `.LSW` gaps carry anything — PROVEN unreadable by this firmware
   (the importer never seeks), so only a capture on the machine that WROTE the disks can say
 
