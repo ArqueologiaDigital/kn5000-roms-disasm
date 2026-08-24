@@ -45,7 +45,11 @@ import sys
 
 REPOS = ["/home/fsanches/compartilhado/kn5000-roms-disasm",
          "/home/fsanches/compartilhado/KN7000",
-         "/home/fsanches/compartilhado/kn7000_mame"]
+         "/home/fsanches/compartilhado/kn7000_mame",
+         "/home/fsanches/compartilhado/technics_roms"]  # added 2026-08-24: a script
+         # committed HERE was still being reported as uncommitted, because the repo
+         # holding it was not in this list. An incomplete corpus is the same defect as
+         # the flat os.listdir() -- it can only ever under-report coverage.
 EXT = ('.py', '.sh', '.lua')
 THRESHOLD = 0.80
 
