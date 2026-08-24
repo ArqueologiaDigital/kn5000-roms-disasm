@@ -29,6 +29,11 @@ Result 2026-08-23, over 54 scratch scripts vs 1,221 committed:
     no committed counterpart   : 46
 Run with --null to reproduce the calibration figures above.
 
+⚠ Walks the scratch dir RECURSIVELY. The first version of this script used os.listdir()
+and so skipped every subdirectory -- which hid 12+ probes under adv/ and adv-ldmm/ and
+made a sweep look complete when it was not. A census that silently ignores part of its
+population is the same defect as a criterion that cannot fail.
+
 Run:  python3 match_scratch_to_committed.py <scratch-dir> [--null]
 """
 
@@ -92,8 +97,14 @@ def main():
         null(comm)
         return
     strong, weak = [], []
-    for f in sorted(x for x in os.listdir(scratch_dir) if x.endswith(EXT)):
-        src = open(os.path.join(scratch_dir, f), encoding='utf-8', errors='replace').read()
+    scratch = []
+    for root, _, files in os.walk(scratch_dir):      # RECURSIVE -- see note below
+        for x in sorted(files):
+            if x.endswith(EXT):
+                scratch.append(os.path.join(root, x))
+    for full in sorted(scratch):
+        f = os.path.relpath(full, scratch_dir)
+        src = open(full, encoding='utf-8', errors='replace').read()
         cands = []
         for p, c in comm.items():
             if abs(len(c) - len(src)) / max(len(src), 1) > 2:

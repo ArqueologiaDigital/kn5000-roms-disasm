@@ -40,10 +40,30 @@ discarded. Real `ratio()` scored 0 of 328 unrelated pairs above 0.80 (median 0.0
     python3 match_scratch_to_committed.py <scratch-dir>          # the census
     python3 match_scratch_to_committed.py <scratch-dir> --null   # the calibration
 
+## ⚠ Correction 2026-08-24: the first sweep was flat, and missed 16 scripts
+
+`match_scratch_to_committed.py` originally used `os.listdir()`, so it never looked inside
+subdirectories. Everything under `adv/`, `adv-ldmm/`, `ldmm-sp-agent/`, `probe/` and
+`verify/` was invisible to it, and the "40 archived, everything else covered" result was
+wrong for the same reason the header-count test elsewhere was wrong: **a census that
+silently ignores part of its population cannot report a shortfall.**
+
+Fixed to `os.walk()`. Re-run over 98 scripts (not 54): 22 have no committed counterpart, of
+which 6 are the KN7000/MAME ones with verified equivalents in
+`KN7000/tools/rom-record-review/` and 16 are archived here. The `ldmm-sp-agent/` set is the
+one that mattered — its numbers are quoted in the already-committed
+`tools/spelling-probes/README-adversarial-ldmm-and-ldsp-recheck.md`, so those figures had a
+published claim and no runnable evidence.
+
 ## Contents
 
 | script | first docstring / comment line |
 |---|---|
+| `adv-ldmm/showrange.py` | — |
+| `adv/checks.py` | negative 16-bit displacements? |
+| `adv/dump.py` | — |
+| `adv/refused.py` | — |
+| `adv/show_blocked.py` | — |
 | `align.py` | Content-align each refused v7 range onto v9/v10 and read off THEIR framing. |
 | `align2.py` | Content-align each refused v7 range onto v9/v10 and read off THEIR framing. |
 | `bound.py` | — |
@@ -69,10 +89,21 @@ discarded. Real `ratio()` scored 0 of 328 unrelated pairs above 0.80 (median 0.0
 | `fixlc.py` | Define the .Lc_ labels that are referenced but never emitted. |
 | `flatten.py` | Instruction-start map for a whole source tree, by flattening it through llvm-mc. |
 | `frame.py` | A self-check a MIS-FRAMED decode cannot fake: does the stack frame balance? |
+| `ldmm-sp-agent/lsp_find.py` | Every SITE of the forms `ldw (imm),(imm)` and `ld r,imm`, with ROM bytes. |
+| `ldmm-sp-agent/lsp_find_ld.py` | Every SITE of the forms `ldw (imm),(imm)` and `ld r,imm`, with ROM bytes. |
+| `ldmm-sp-agent/lsp_marginal.py` | MARGINAL BYTES for the two assigned forms, by the converter's own accounting. |
+| `ldmm-sp-agent/lsp_marginal_honest.py` | Per-range accounting for the ranges that hold the two assigned forms, INCLUDING the plausibility screen that convert_reachable_ranges.py actually runs. |
+| `ldmm-sp-agent/lsp_marginal_ldwonly.py` | Per-range accounting for the ranges that hold the two assigned forms, INCLUDING the plausibility screen that convert_reachable_ranges.py actually runs. |
+| `ldmm-sp-agent/lsp_sweep.py` | WHOLE-IMAGE sweep of the two rules, with a negative control. |
+| `ldmm-sp-agent/lsp_verify.py` | PROPOSED SPELLINGS for the two assigned blocking forms, checked against the ROM. |
+| `ldmm-sp-agent/lsp_verify2.py` | PROPOSED SPELLINGS for the two assigned blocking forms, checked against the ROM. |
+| `match_scratch_to_committed.py` | Which session-scratch scripts already have a committed counterpart? |
 | `measure.py` | Measure what the two proposed spellings are worth, WITHOUT editing any source. |
 | `mydjnz.py` | assemble to object, extract .text bytes |
 | `null.py` | NULL for the drift figure. |
 | `place3.py` | Place three badly-misplaced labels by anchoring on a NEARBY named symbol. |
+| `probe/sim_asm_addressed_index.py` | MEASURE the proposed rule: address every `.byte` run with the ASSEMBLER. |
+| `probe/still_unaddressed.py` | — |
 | `replace_lc.py` | Move my mis-placed .Lc_ labels to the addresses their names encode. |
 | `replay.py` | INDEPENDENT patched replay. Monkey-patches in memory only; touches no file. |
 | `run_census.py` | — |
@@ -83,4 +114,5 @@ discarded. Real `ratio()` scored 0 of 328 unrelated pairs above 0.80 (median 0.0
 | `unnamed.py` | How many of the 170 'a branch target cannot be named' skips would be named if the blocking labels sat on the instruction boundary they drifted off? |
 | `v9cross.py` | Cross-check every blocking label against v9/v10, where the same name IS code. |
 | `verify.py` | For every site of `push r` / `or (imm),r`: does the CURRENT converter spell it? If not, does the PROPOSED spelling assemble to the ROM bytes exactly? |
-| `verify_ldmm.py` | PROPOSED RULE for `ldw (imm),(imm)` / `ld (imm),(imm)`: offer the ldmm family and let the ROM bytes choose. Verifies each candidate against the ROM bytes dumped at the site, exactly as convert_reachable_ranges.py would. |
+| `verify/census.py` | — |
+| `verify_ldmm.py` | PROPOSED RULE for `ldw (imm),(imm)` / `ld (imm),(imm)`: offer the ldmm family and let the ROM bytes choose. Verifies each candidate against the ROM bytes dumped at the site, exactly as convert_reachab |
