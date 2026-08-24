@@ -1,0 +1,21 @@
+# LLVM Toolchain Version -- Technics SX-WSA1R disassembly
+
+# This file records the exact LLVM source used to build the toolchain
+# (llvm-mc, ld.lld, llvm-objcopy) that reproduces the ROM binaries.
+#
+# STRICT POLICY (inherited from ../kn5000-roms-disasm): this commit is immutable
+# once used. No amend/rebase/force-push. Further LLVM changes must be new
+# commits on top, appended below.
+
+Branch: tlcs900_backend
+Commit: bcf152d1fe00
+Date: 2026-08-23
+Subject: [TLCS900] Add cpib_ind, the register-indexed compare with an immediate
+Repository: /home/fsanches/compartilhado/llvm-project
+
+# The WSA1's two processors are Toshiba TMP95C061 (TLCS-900/H), the same family
+# as the KN5000's TMP94C241, so the same backend assembles both trees. Any form
+# this tree needs and the backend lacks is a backend commit, not a .byte run --
+# and per the sibling tree's tally, the suspicion "the backend cannot do this"
+# was wrong seven times out of eleven. Try to assemble one line before reporting
+# a gap.
