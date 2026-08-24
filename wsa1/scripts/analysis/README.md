@@ -120,3 +120,27 @@ both a periodic byte pattern in a wave/table region decoding as
 `ld XWA,0x000280xx` every 0x40 bytes; `0x00010201` in prom_a (F3F979 and every
 0x40 after) is the same artefact; prom_c's `0x007A0000` sites (FD3562, FD9E4D)
 sit in a run of `normal` / `halt` / `lddr` garbage.
+
+## `kn5000_shared_runs.py`
+**"Which WSA1 byte runs also occur in the KN5000 sub-CPU payload, and are they code?"**
+
+    python3 scripts/analysis/kn5000_shared_runs.py
+
+Result 2026-08-24: **32,795 B kept, 291,802 B rejected as low-entropy fill, shuffle null
+0 B** (signal/null 32,795x). The entropy guard is the whole script -- without it the
+"shared" mass is nine parts erase-fill and padding. **prom_c holds 28,916 of the 32,795**,
+which is the structural finding: the KN5000 sub-CPU is *its* tone-generator controller, so
+WSA1 CPU 2 and the KN5000 sub-CPU are the same design.
+
+## `transplant_kn5000_labels.py`
+**"Which KN5000 sub-CPU routine names apply to WSA1 addresses, by byte identity?"**
+
+    python3 scripts/analysis/transplant_kn5000_labels.py
+
+Writes `notes/kn5000-label-transplant.md`. Result 2026-08-24: **8 proposals** backed by
+runs of 70-513 bytes -- `EGEnv_ValueCurve_Simple`, `EGEnv_BaseCurve_A`,
+`DSP_EffParam_Copy_V4/V5`, and four DSP/voice jump tables.
+
+⚠ Byte identity establishes the code is the same, not that the surrounding machine is.
+And the byte gate is blind to a wrong NAME -- it only sees bytes -- so nothing here is
+self-checking the way the build is. Proposals, not renames.
