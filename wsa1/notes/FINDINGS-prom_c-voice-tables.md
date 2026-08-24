@@ -1,0 +1,139 @@
+# prom_c's data tables, and what the KN5000 sub-CPU can and cannot tell us about them
+
+Scope: `prom_c` (IC28, CPU 2's boot ROM and sound engine), addresses `0xFDD2AB-0xFDF7DF` and
+`0xFCC53F-0xFCD0F6`. Everything here is reproducible from
+`notes/gen_prom_c_tables.py` (`--verify` / `--zone2`) and `notes/prom_c_kn5000_xref.py`.
+
+## What is established
+
+**12,525 bytes of prom_c are data tables with known boundaries**, laid out in two zones:
+
+| zone | range | bytes | objects | sibling-backed |
+|---|---|---:|---:|---:|
+| 1 | `0xFDD2AB-0xFDF7DF` | 9,525 | 43 | 36 byte-identical |
+| 2 | `0xFCC53F-0xFCD0F6` | 3,000 | 15 | 5 byte-identical |
+
+The boundaries do not rest on one argument. Three independent things agree:
+
+1. **Byte identity at the sibling's stated sizes.** 41 of the 58 objects are byte-identical,
+   over their whole length, to a named table in the KN5000 sub-CPU payload, at exactly the size
+   `../kn5000-roms-disasm/v142/subcpu/subcpu_data_tables.s` states.
+2. **The chain closes.** Zone 1's 43 tables laid end to end from `0xFDD2AB` reach `0xFDF7DF`
+   exactly, with no gap and no overlap, and 94 bytes of zero fill follow. Zone 2's 15 objects
+   likewise close on `0xFCD0F6`. One wrong size anywhere would desynchronise every table after
+   it and the identity checks would collapse. They do not.
+3. **prom_c's own code.** 39 of zone 1's 43 start addresses, and 9 of zone 2's 15, occur in
+   this image as a literal 32-bit address operand — `add XBC,0x00FDD3AB`, `ld BC,(0xFDE695)`,
+   `add XWA,0x00FCCD71`. That is the WSA1 firmware agreeing with the boundary, with no reference
+   to the sibling project at all.
+
+### ⚠ What that does NOT establish
+
+Byte identity establishes that the **data** is the same. It does not establish that the WSA1
+routine reading a table does what the KN5000 routine of that name does. Only three readers have
+actually been disassembled here (below); every other name in `prom_c/wsa1_prom_c.s` is carried
+over on byte identity alone and its header says so.
+
+## The four findings worth keeping
+
+### 1. The key-bend curves are the KN5000's, narrowed from 16 bits to 8
+
+`0xFDD3AB` and `0xFDD42B` are 128-byte signed curves. Each is, **entry for entry, all 128 of
+them**, the low byte of one of the KN5000's 128-entry *s16* tables:
+
+| WSA1 | KN5000 | match |
+|---|---|---|
+| `0xFDD3AB` | `Voice_KeyBend_Type41_Table` (`subcpu_data_tables.s:966`) | 128/128 |
+| `0xFDD42B` | `Voice_KeyBend_Type42_Table` (`subcpu_data_tables.s:989`) | 128/128 |
+
+That is not reachable by chance: the KN5000 curves span −50…+168, so their low bytes only form a
+smooth sequence if the underlying curve really is the same one.
+
+The **stride** and the **signedness** come from prom_c's own code at `0xFA8016`:
+
+```
+    ld BC,DE / sra 0x08,BC          ; index = pitch accumulator >> 8
+    exts XBC / add XBC,0x00FDD3AB   ; curve 0
+    ld A,(XBC) / exts WA            ; SIGNED byte
+    add DE,WA                       ; into the pitch accumulator
+  ...
+    add XBC,0x00000080              ; +0x80 -> curve 1 at 0xFDD42B
+    add XBC,0x00FDD3AB
+```
+
+so the tables are 0x80 apart and read signed. Two more 128-byte curves follow at `0xFDD4AB` and
+`0xFDD52B` with **no KN5000 counterpart at all** — same flat-bottom shape, but a non-smooth body
+that reads like measured per-key tuning rather than a generated curve.
+
+⚠ **Stated as observed, not explained.** The KN5000 curve rises to +168; eight bits cannot hold
+that and prom_c sign-extends, so the top of the WSA1 curve reads back as −88 where the KN5000
+reads +168. Whether the WSA1 never indexes that far, or this is a narrowing bug, is NOT
+ESTABLISHED — it needs the caller of `0xFA8016` traced.
+
+### 2. The WSA1 has TWELVE DSP algorithm types where the KN5000 has fourteen
+
+`DSP_AlgoDescriptor_Records` at `0xFDF4F1` is 468 bytes = 12 × 39. Nothing was assumed: the run
+that is byte-identical to the sibling ends **78 bytes early**, 78 = 2 × 39, and the next table
+starts exactly there. The sibling records that its own types 12 and 13 are all-zero
+(`subcpu_data_tables.s:2084`) — those are the two that are gone.
+
+The same arithmetic shows up as an **alignment step** earlier in the zone: between
+`Voice_KeyShiftRamp_Steps` and `Voice_CC_VolumeCurve` the WSA1-to-KN5000 offset moves by exactly
+0x80, because the KN5000's 128-byte `Voice_AltNoteMap_Curve` has no counterpart in the WSA1
+image. The WSA1 inserts its own 128-byte objects in two other places (a 0…100 compression ramp
+at `0xFDF0A3`, an exponential 0x00…0x80 curve at `0xFDF760`) and a 20-byte u16 bit-mask array at
+`0xFDE695`.
+
+### 3. The touch curves are re-tuned, and the table SELF-DESCRIBES
+
+`ToneGen_VelCurve_ModeParams` at `0xFCC5FC` is 10 records × 3 bytes
+`{gain/128, output level at the pivot, black-key trim}`. Two things fix the shape without any
+appeal to the sibling: the first column steps `0x00, 0x10, … 0x90`, so the record size and the
+row count are readable off the data; and the address is referenced three times from
+`0xF9962D / 0xF9966F / 0xF99698`.
+
+The values differ from the KN5000's — the WSA1's pivot outputs are 208, 199, 190, 181, 171, 162,
+153, 144, 134, 125 against the KN5000's 208, 199, 189, 180, 171, 161, 152, 143, 134, 130. Same
+structure, different instrument.
+
+### 4. Two mixer-gain curves, and the consumer proves their shape
+
+`0xFCCB71` and `0xFCCD71` are each 128 × u32, strictly monotonic, and **both end exactly on
+`0x7FFFFF00` = digital full scale**. The routine at `0xFA30B8` reads both, four instructions
+apart, with `ld WA,0x0004 / muls XWA,index / add XWA,base / ld XWA,(XWA)` — proving the element
+size — and applies `sra 0x0f` to one of them, which is exactly the `>> 15` the sibling documents
+for its byte-identical copy of the narrow curve (`subcpu_data_tables.s:2926`). The wide curve at
+`0xFCCB71` matches none of the KN5000's five u32 ladders (best 32/512 bytes) and is WSA1-only.
+
+`DSP_EQ_FreqHz_Table` (`0xFCCA82`) decodes as little-endian f32 into exactly the ISO
+third-octave series 40, 50, 63 … 12500, 16000 Hz, and `DSP_EQ_Q_Table` (`0xFCCAEE`) into
+0.1…0.9 by 0.1, 1.0…4.0 by 0.5, then 5…20 by 1. A wrong base or a wrong element size turns both
+into denormal garbage, so the decode is its own proof.
+
+## What was deliberately left as `.incbin`, and why
+
+* **`0xFCC81A-0xFCCA81`, 616 bytes.** An IEEE-754 constant pool — doubles are visible by eye
+  (`00 00 00 00 00 00 4C 40` is 56.0) — but the element boundaries are not established:
+  decoding it as f64 from the best-looking alignment yields round numbers for only 7 of 76
+  candidates, so the pool is not uniformly 8-byte strided. The KN5000's pool of the same kind
+  (`subcpu_data_tables.s:2695`) does not match, so the sibling cannot supply the stride either.
+  Guessing one would produce a table of nonsense that the byte gate would happily accept.
+* **`0xFCD0F7` onward, the length-prefixed packet pool.** Framing CONFIRMED for the first four
+  records: a 16-bit big-endian length followed by that many bytes walks
+  `0xFCD0F7 → 0xFCD0FE → 0xFCD105 → 0xFCD10C → 0xFCD119`, and every one of those landing points
+  is a pointer target in the table at `0xFCC576`. The walk then desynchronises at `0xFCD119`
+  (its length field says 11, but the next pointer target is 24 bytes on), so the framing is not
+  fully established and the pool is left as bytes rather than mis-split.
+* **Three bytes at `0xFCCB6E`** (`00 01 00`). The address is referenced three times so it is a
+  real object, but three bytes is too little to infer a shape from.
+
+## What the next pass needs
+
+* Trace the caller of `0xFA8016` and find out how a voice selects among the four key-bend curves
+  — that also settles the sign-extension question above.
+* The descriptor-string pool at `0xFCCF71` (44 NUL-terminated strings over `{b,w,v,s,h,c,B}`
+  paired with digit strings) is loaded in pairs by the record table at `0xFDBFE9`. Decoding one
+  record by hand would name the whole structure. `b`/`w` as byte/word is the obvious reading;
+  nothing yet proves it.
+* `0x00F2F3` is read as a 32-bit value on every serial interrupt (see
+  `notes/FINDINGS-prom_c-serial-midi.md`). Finding what writes it would name it.

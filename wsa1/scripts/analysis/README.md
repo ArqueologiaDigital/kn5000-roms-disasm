@@ -136,11 +136,38 @@ WSA1 CPU 2 and the KN5000 sub-CPU are the same design.
 **"Which KN5000 sub-CPU routine names apply to WSA1 addresses, by byte identity?"**
 
     python3 scripts/analysis/transplant_kn5000_labels.py
+    python3 scripts/analysis/transplant_kn5000_labels.py --selftest
 
-Writes `notes/kn5000-label-transplant.md`. Result 2026-08-24: **8 proposals** backed by
-runs of 70-513 bytes -- `EGEnv_ValueCurve_Simple`, `EGEnv_BaseCurve_A`,
-`DSP_EffParam_Copy_V4/V5`, and four DSP/voice jump tables.
+Writes `notes/kn5000-label-transplant-generated.md` (generated; do not hand-edit).
+
+⚠ **RETRACTION 2026-08-24.** An earlier version of this entry advertised **8 proposals**
+including `EGEnv_ValueCurve_Simple`, `EGEnv_BaseCurve_A` and `DSP_EffParam_Copy_V4/V5`.
+**All eight named the wrong object.** The script matched against
+`original_ROMs/kn5000_subprogram_v142.rom`, which the sibling Makefile (lines 635-641)
+builds as `full[0:256] + full[60416:]` -- so every offset past the first 256 bytes was
+short by 60160 = 0xEB00. `EGEnv_ValueCurve_Simple` landed inside the keybed *touch* curve.
+The names were thematically plausible, which is why eye-checking did not catch them.
+
+Two changes so it cannot recur: the splice is out of the pipeline (it now matches the
+ELF's own unspliced image, where `addr = 0x400 + offset` holds everywhere, so there is no
+correction constant to get wrong), and **every proposal is byte-verified at emission** and
+dropped if the bytes disagree. The original failure would now emit zero rows, not eight
+wrong ones. `--selftest` demonstrates the splice relation directly.
+
+Result after the fix: **105 proposals, 0 dropped** -- e.g. `Voice_DepthMirror_Table`,
+`PitchBend_ScaleCoeff_Table`, `EGEnv_BaseCurve_A/B`, `DSP_AlgoChannel_SelectorRecords`.
 
 ⚠ Byte identity establishes the code is the same, not that the surrounding machine is.
-And the byte gate is blind to a wrong NAME -- it only sees bytes -- so nothing here is
-self-checking the way the build is. Proposals, not renames.
+The byte gate is blind to names, so nothing here is self-checking the way the build is.
+Proposals, not renames.
+
+## `source_coverage.py`
+**"How much of each image is real assembly, and how much is still `.incbin`?"**
+
+    python3 scripts/analysis/source_coverage.py [--markdown]
+
+Feeds the README status table. It is a script because the hand-typed table went stale
+within one commit and no lane owned it.
+
+⚠ It measures **territory, not understanding** -- a `.byte` run counts as converted while
+telling you nothing. A floor on effort, never a claim about documentation quality.

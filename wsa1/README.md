@@ -53,48 +53,21 @@ misreported downstream.
 
 ## Status
 
-**Converted to real assembly so far** (everything else is still `.incbin`, so it
-builds byte-exact by construction and asserts nothing):
+**Converted: 604,523 of 2,097,152 bytes (28.8%).** Regenerate this table with
+`python3 scripts/analysis/source_coverage.py` -- do not retype it; it has been wrong before.
 
-| where | bytes | what |
-|---|---|---|
-| `prom_a` 0xF826A9-0xF827C7 | 287 | `RESET` — the entire CPU 1 boot path, from the watchdog disarm to the jump into prom_b |
-| `prom_a` 0xFFFF00-0xFFFFFF | 256 | interrupt vector table (33 entries), RET padding, build tag |
-| `prom_c` 0xFFF000-0xFFF0E4 | 229 | `RESET` plus the interrupt trampoline block |
-| `prom_c` 0xFFF0E5-0xFFFFFF | 3867 | RET padding, vector table, the fc configuration byte, build tag — i.e. the whole 4 KiB tail |
+| source | image | converted | still `.incbin` | `.incbin` spans |
+|---|---|---:|---:|---:|
+| `prom_a/` | `wsa1_prom_a.ic12` | 4,278 | 520,010 | 14 |
+| `prom_b/` | `wsa1_prom_b.ic13` | 59,586 | 464,702 | 136 |
+| `prom_c/` | `wsa1_prom_c.ic28` | 16,371 | 507,917 | 12 |
+| `prom_d/` | `wsa1_prom_d.bin` | 524,288 | 0 | 0 |
 
-4639 bytes of 2 MiB. Small, but it is the part every other claim hangs off: the
-memory map and the system clock are both read out of these two blocks.
+The gate is green at every commit; see the top of this file. Conversion is incremental and
+reachability-driven, not linear, so a low percentage on an image does not mean nothing is
+known about it -- `notes/` carries the structural findings.
 
-`include/tmp95c061_sfr.inc` holds the register equates, each with the MAME line
-that names it and, where a field meaning is asserted at all, where that meaning
-comes from.
-
-`prom_b` and `prom_d` are still one `.incbin` each. prom_b's obvious next slice
-is its 3388-slot linker thunk region at file 0x40000-0x434F4, where every entry
-is self-checking against the routine it names.
-
-## What is established, and what is not
-
-Two findings documents, both written to be checkable rather than believed:
-
-* **`notes/FINDINGS-memory-map.md`** — both processors' maps, with the ROM
-  address of every establishing write, and an explicit list of every range that
-  is *not* established. The window sizes are no longer imported from the sibling
-  project's self-graded-unproven reconstruction: they come from
-  `scripts/analysis/mamr_reading_elimination.py`, which enumerates eight
-  candidate readings of MSAR/MAMR and kills six of them using this machine's own
-  firmware. What survives: 32 KB per MAMR unit, higher-numbered chip select
-  wins. What is still open: whether MSAR's base is truncated to the window,
-  which changes exactly one row (CPU 1's CS0).
-* **`notes/FINDINGS-system-clock.md`** — `fc = 28,000,000 Hz`, from three
-  levers of unequal strength. The strongest is that prom_c's byte at `0xFFFFEF`
-  is fc in MHz: the firmware's own baud rule makes 31250 come out for *any*
-  value of it provided `fc = 1e6 x M`, and it is 0x1C. The tolerance window and
-  the second independent estimate (the sequencer's `5*fc = 140,000,000`) are
-  both in there, along with why the MIDI divisor alone cannot choose between
-  28 MHz and the 24 MHz oscillator that is also in this machine's parts list.
-
-`notes/system-clock.md` is superseded and says so.
-
-Territory is converted incrementally, gate green at every step.
+⚠ This section was stale for one commit (it still claimed 4,639 bytes and "prom_b and
+prom_d are still one .incbin each" after four agents had converted 604,523 bytes). Three of
+the four lanes noticed and none edited it, because it was outside every lane. Hence the
+script: the number is now derived from the sources, not maintained by hand.
