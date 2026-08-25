@@ -69,8 +69,19 @@ THE RESIDUE, AS OF 2026-08-25 (693 citations, 669 resolved, 24 not)
         `ld L,(XDE+HL)` that CONSUMES the table.  The address load, at 0xF7CD6F,
         is cited in the same header and resolves OK-ref.
   So 24 is the expected floor. A twenty-fifth row is a new claim to check, not
-  noise -- and an OFF-BY row of any kind is never expected: there are ZERO in both
-  modes as of 2026-08-25.
+  noise -- and an OFF-BY row of any kind is never expected.
+
+  ⚠⚠ THIS PARAGRAPH USED TO END "there are ZERO in both modes as of 2026-08-25",
+  AND THAT WAS FALSE ABOUT ITS OWN TREE.  The default mode had zero; --evidence
+  had FOURTEEN, every one of them a font header citing the first immediate byte of
+  a `ld XIY/XIX,imm32` instead of its opcode.  The sentence was written after
+  running only the default mode.  The lesson is the tool's, not the lane's: A MODE
+  THAT WAS NOT RUN PROVES NOTHING, and the mode that catches the defect this script
+  exists for is --evidence.  The fourteen are corrected as of 2026-08-25 (round 2
+  audit finding F2), together with four more citations this script cannot reach --
+  0xF10702/0xF110EC/0xF1172C (off by TWO) and 0xF110FB (off by one), which live on
+  table and prose lines and are checked instead by notes/prom_b_screen_arrays.py.
+  Both modes are zero now; --evidence is the one that has to be re-run to say so.
 
   With --evidence the residue is much larger and MEANS LESS: an `Evidence:` line
   cites the instructions that SUPPORT a claim, and most of them have no reason to
@@ -81,6 +92,7 @@ RUN
   make -C .. all      (or scripts/analysis/assert_byte_identical.py -- this needs the ELF)
   python3 notes/prom_b_audit_callsites.py
   python3 notes/prom_b_audit_callsites.py --quiet    # only rows that did not check out
+  python3 notes/prom_b_audit_callsites.py --evidence  # ★ the OFF-BY hunt; MUST be 0
   python3 notes/prom_b_audit_callsites.py --selftest
 Exit status is non-zero only for --selftest failures; the audit itself always
 exits 0, because a miss can be legitimate.

@@ -345,7 +345,19 @@ problem or is an accident of the build is **not established**.
 * **Any caller at all.** §6. Until one exists, the `HL` argument of the text
   services still has no established meaning — it is multiplied by `BC` once into
   `IZ` and never used again.
-* `0xF25590`'s cell count (§1) and the 1200-byte `0x0E` run after it.
+* ~~`0xF25590`'s cell count (§1) and the 1200-byte `0x0E` run after it.~~
+  ✅ **CLOSED 2026-08-25 from prom_b's side: 128 cells.** The last non-zero
+  byte of the whole font region is `0xF26D7C`, and `0xF25590 + 128 x 48 =
+  0xF26D90` puts it inside cell **127** — the last cell is non-blank, which is
+  the test the count has to pass — while the defined codes are exactly the
+  contiguous printable range `0x21`-`0x7F`, i.e. a 7-bit page. ⚠ The rival
+  reading, 180 cells (the extent up to the `0x0E` run, which also divides by
+  48), is rejected: base and pad start are both multiples of 48, so that
+  division is exact for arithmetic reasons and carries no information. The
+  `0x0E` run is 1,200 bytes of inter-block pad and the 2,496 bytes before it
+  are zero. All twelve tables are now assembly in `prom_b/wsa1_prom_b.s`;
+  re-derive with `python3 notes/gen_prom_b_fonts.py --selftest` (46 checks)
+  and read `notes/FINDINGS-prom_b-fonts-and-dsp-value-lists.md` §1.
 * Code `0x15` of the half-width katakana face (§4.1), and code `0x66` of the
   katakana face (§4.2).
 * The fonts are in prom_b, so their bytes belong to that image's lane; this note

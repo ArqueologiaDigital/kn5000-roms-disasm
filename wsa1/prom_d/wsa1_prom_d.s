@@ -6,15 +6,65 @@
 ;
 ; Reference designator not legible in the manual scan; this image is
 ; wsa1_os_v2.ic21 of the redistributed v2 firmware set, so IC21 is the likely
-; designator and is NOT asserted here.  DATA ONLY -- all 64 words at file offset
-; 0x7FF00 are 0xFFFFFFFF, so it is not a boot image and nothing in it executes.
+; designator and is NOT asserted here.  DATA ONLY -- 60 of the 64 words at file
+; offset 0x7FF00 are 0xFFFFFFFF and the remaining four, at 0x7FFF0, are the build
+; tag quoted below, so it is not a boot image and nothing in it executes.
+; ⚠ CORRECTED 2026-08-25 (round-1 audit F5): this sentence used to say ALL 64,
+; which its own next paragraph then contradicted by quoting the tag.  60, checked
+; by `python3 notes/prom_d_base_checks.py`.  ⚠ prom_d/prom_d.ld carries the same
+; wrong sentence and is another lane's file.
 ;
-; BASE: **NOT ESTABLISHED.**  ORIGIN 0 in prom_d/prom_d.ld is a build
-; convenience and asserts nothing; the leading hypothesis (the 512 KiB flash at
-; 0xE80000 on CPU 2's bus) and the one link it is still missing are set out in
-; full in that file.  Every offset in this source is therefore FILE-RELATIVE,
-; which is also how the image itself addresses its contents: it holds no
-; absolute pointers, only 0-based offsets.
+; BASE: ~~**NOT ESTABLISHED**~~ -- ★★ **CORRECTED 2026-08-25.  IT IS 0x00F00000
+; ON CPU 2's BUS**, and the 0xE80000 hypothesis this paragraph used to carry is
+; SUPERSEDED.  Two independent findings say so:
+;
+;   1. `VersionScreen_Show` (prom_a 0xF82A28) reads eleven bytes from REMOTE
+;      0x00F7FFF0 and shows them under the label `WSA-D:`; this image's last
+;      sixteen bytes are the build tag `wsad_54.ssf` at file offset 0x7FFF0.
+;      0x00F7FFF0 - 0x7FFF0 = 0x00F00000.
+;      notes/FINDINGS-memory-map.md §5, notes/FINDINGS-prom_a-boot-and-version-screen.md §1.
+;   2. prom_c INSTALLS that base and then indexes this image with it:
+;      `ExtBoard_ProbeAndInstallBases` (prom_c 0xFB051E/0xFB0523) stores
+;      0x00F00000 into RAM 0x00D7ED, and `Voice_SelectKeyZone_Reg0040`
+;      (prom_c 0xFA81AC-0xFA81F1) relocates THREE nested 32-bit fields of a
+;      voice's tone object against it -- a 128-byte key map indexed by the played
+;      note, a byte array behind it, and a record array whose first word it sends
+;      to the tone device's register `chan + 0x0040`.  The alternative base it
+;      offers, RAM 0x00D80D, is 0x00C00000 -- the expansion board -- or 0 when
+;      none is fitted.  notes/FINDINGS-prom_c-dev10c-register-meanings.md §4b,
+;      `python3 notes/prom_c_dev10c_meaning_checks.py` section 16.
+;
+; That is exactly the "base plus 0-based offset" scheme this image uses: it holds
+; NO absolute pointers, only 0-based offsets, so every offset in this source is
+; FILE-RELATIVE and a run-time address is `0x00F00000 + offset`.
+;
+;   3. ★★ THE 0xE80000 READING IS NOT MERELY SUPERSEDED, IT IS REFUTED, and so is
+;      the "two halves of one larger part" alternative notes/FINDINGS-memory-map.md
+;      §5 left open.  prom_c's own flash driver bounds that part: Flash_SectorErase
+;      holds the device base 0x00E80000 (`ld XBC,0x00E80000`, 0xFC864B) and selects
+;      its TOP boot-block map by testing the requested 64 KiB sector against
+;      0x00EF0000 (`cp XIX,0x00EF0000`, 0xFC86CF), erasing the four sub-sectors at
+;      device offsets 0x70000, 0x78000, 0x7A000 and 0x7C000.  The last of those
+;      covers 0x7C000-0x7FFFF, so the FIRMWARE'S OWN MODEL of that device ends at
+;      0x00E80000 + 0x7FFFF = 0x00EFFFFF -- below this image's base.  A 1 MiB part
+;      holding prom_d as its upper half would put its top boot block at 0x00F70000
+;      and that compare would read 0x00F70000.  Corroborated by the device codes the
+;      probe accepts, 0x2223 and 0x22AB, which are 4 Mbit = 512 KiB parts
+;      (notes/FINDINGS-prom_c-flash.md §2).  `python3 notes/prom_d_base_checks.py`
+;      section 2.
+;
+; ⚠ TWO THINGS THIS DOES NOT SETTLE, and neither is asserted:
+;   * prom_d/prom_d.ld still reads "BASE -- NOT ESTABLISHED" and argues for 0xE80000
+;     from that same sector-erase routine.  ★ The argument does not survive point 3
+;     above: the routine proves a 512 KiB device BASED at 0xE80000, which is a
+;     statement about THAT part, not about this image.  The .ld is another lane's
+;     file; whoever touches it should bring it in line with
+;     notes/FINDINGS-memory-map.md §5 and delete the "all 64 words" sentence it
+;     shares with this header.  ORIGIN 0 stays correct as a build convenience either
+;     way, because the image is addressed by 0-based offsets.
+;   * that any SPECIFIC structure below is one of the arrays prom_c walks.  The
+;     RAM objects holding the offsets have no traced loader, so the tie is to the
+;     ADDRESSING SCHEME and the base, not yet to a named region of this file.
 ;
 ; ------------------------------------------------------------------------------
 ; WHAT THIS IMAGE IS

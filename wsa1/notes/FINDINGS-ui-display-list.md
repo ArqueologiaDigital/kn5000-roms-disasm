@@ -31,6 +31,16 @@ python3 notes/prom_b_dl_operand_tables.py --exact            # the 13 gaps
 
 ---
 
+**A third entry point, found 2026-08-25.** Not every interpreter-B record is
+reached by an `ld XIY / ld XIX / call` pair. `DisplayListB_RunOne_Stack`
+(`0xF3183D`, thunk `T_F42E0C`) takes ONE pointer on the stack, sets
+`XIX = XIY+1`, and so draws exactly one record — which is how the 176 records
+of `0xF157A8-0xF17558` are addressed, at a uniform **15-byte stride** with
+`0xFF` padding. The call-site scan in
+`scripts/analysis/prom_b_display_lists.py` is blind to them, which is why that
+range showed `proven 0` in `notes/prom_b_span_frontier.py` while being solid
+display-list data. See `notes/FINDINGS-prom_b-fonts-and-dsp-value-lists.md` §2.
+
 **Also from these records:** they name a RAM address each, so they double as an
 index from a firmware variable to the screen that shows it —
 `FINDINGS-prom_b-ui-variable-index.md`, tool `notes/prom_b_var_screens.py`.

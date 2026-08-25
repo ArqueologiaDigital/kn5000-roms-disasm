@@ -390,9 +390,24 @@ That is consistent with prom_b being the low half of a contiguous 1 MiB image.
 > for the ASCII `"sf"`, which `wsad_54.ssf` has and `wsac_230\x02ssf` does not).
 >
 > ⚠ The tone-data reads at remote banks `0xE8`-`0xEC` are `0x80000` **below**
-> that. Either prom_d is a different part from the tone flash, or the two windows
+> that. ~~Either prom_d is a different part from the tone flash, or the two windows
 > are the two halves of one larger part with prom_d as the upper half. **This
-> evidence does not choose between them and neither reading is asserted.**
+> evidence does not choose between them and neither reading is asserted.**~~
+>
+> ★★ **CHOSEN 2026-08-25 (round 2), and it is the FIRST reading: a DIFFERENT PART.**
+> The "two halves of one larger part" alternative is refuted by prom_c's own flash
+> driver. `Flash_SectorErase` holds the device base `0x00E80000` (`ld XBC,0x00E80000`,
+> `0xFC864B`) and picks its TOP boot-block map by testing the requested 64 KiB sector
+> against `0x00EF0000` (`cp XIX,0x00EF0000`, `0xFC86CF`), then erases sub-sectors at
+> device offsets `0x70000`, `0x78000`, `0x7A000`, `0x7C000` — the last covering
+> `0x7C000-0x7FFFF`. So the firmware's own model of that part ends at
+> `0x00E80000 + 0x7FFFF = 0x00EFFFFF`, **below** prom_d's base; a 1 MiB part with
+> prom_d as its upper half would put its top boot block at `0x00F70000` and that
+> compare would read `0x00F70000`. Corroborated by the two device codes the probe
+> accepts, `0x2223` and `0x22AB`, which are 4 Mbit = 512 KiB parts (§2 and
+> `FINDINGS-prom_c-flash.md` §2). Checked from the ROM bytes by
+> `python3 notes/prom_d_base_checks.py` (12 checks, FAILURES: 0).
+> ⚠ Still not asserted: which part prom_d is, or that prom_d is a flash at all.
 >
 > Full argument and 11 independent checks:
 > `notes/FINDINGS-prom_a-boot-and-version-screen.md` §1,
@@ -425,10 +440,26 @@ does *not* match the observed bank list; it matches the *device*, which is
 larger than the part of it prom_a happens to reference.
 
 **~~Still missing:~~ SUPPLIED 2026-08-25** — see the correction at the head of
-this section. What is *still* missing is narrower: nothing indexes prom_d's
+this section. ~~What is *still* missing is narrower: nothing indexes prom_d's
 44-entry offset header or its 274-entry pointer directory, so the tie is to the
-image, not to its internal structures. prom_d's linker script keeps ORIGIN 0 as
+image, not to its internal structures.~~ prom_d's linker script keeps ORIGIN 0 as
 a build convenience.
+
+> ★★ **NARROWED FURTHER 2026-08-25 (round 7).** Something in prom_c now *does*
+> index this image with 0-based offsets, at the base this section establishes.
+> `ExtBoard_ProbeAndInstallBases` (prom_c `0xFB051E`/`0xFB0523`) stores
+> **`0x00F00000`** into RAM `0x00D7ED`, and `Voice_SelectKeyZone_Reg0040`
+> (`0xFA81AC`-`0xFA81F1`) relocates **three** nested 32-bit fields of a voice's
+> tone object against it — a 128-byte key map indexed by the played note, a byte
+> array behind it, and a record array whose first word it sends to the tone
+> device's register `chan + 0x0040`. The alternative base, `0x00D80D`, is
+> `0x00C00000`, the expansion board, or 0 when none is fitted. So prom_d's
+> *"every value is a 0-based file offset"* and prom_c's *"base + offset against
+> 0x00F00000"* are the same scheme meeting at the same address.
+> ⚠ Still NOT proven: that a *specific* prom_d structure is one of those arrays.
+> The offsets live in RAM objects whose loader is not traced.
+> `notes/FINDINGS-prom_c-dev10c-register-meanings.md` §4b;
+> `python3 notes/prom_c_dev10c_meaning_checks.py` section 16.
 
 ---
 

@@ -12,50 +12,122 @@ one of these or from a script in `scripts/analysis/`.
 nothing about a name or a comment. These scripts are what a name or a comment is
 allowed to rest on.
 
-⚠⚠ **EVERY SCRIPT LISTED HERE IS UNTRACKED** (added 2026-08-25). The prom_b lane
-is not permitted to `git commit`, so these files exist only in the working tree.
-Until someone commits them, the sentence above — "every number quoted comes from
-one of these" — is true of a tree that a single `git clean -fd` would destroy,
-and the numbers would then be unreproducible. **Committing `notes/*.py` is the
-first thing the owner of this tree should do.** Nothing else in this lane can fix
-it. Files concerned:
-`prom_b_dl_length_audit.py`, `gen_prom_b_display_lists_v2.py`,
-`prom_b_dl_operand_tables.py`, `gen_prom_b_dl_operand_tables.py`,
-`prom_b_dispatch_tables.py`, `prom_b_f7d_tables.py`, `llvm_roundtrip_force.py`,
-`prom_b_default_slot_census.py`, `prom_b_call_graph.py`,
-`prom_b_blink_rate.py`, `prom_b_param_edit_pair.py`,
-`prom_b_module_trace.py`, `gen_prom_b_blockstore_module.py`,
-`prom_b_var_screens.py`, `prom_b_bank_index_census.py`,
-`prom_b_module_frontier.py`, `gen_prom_b_songstore_module.py`,
-`prom_b_songstore_checks.py`, and (added 2026-08-25, round 2)
-`prom_b_audit_callsites.py`, `gen_prom_b_f5bbe7_module.py`,
-`gen_prom_b_f44018_module.py`, `prom_b_round2_frontier_delta.py`, and (added
-2026-08-25, round 3) `gen_prom_b_f47800_module.py`,
-`prom_b_round3_frontier_delta.py`, and (added 2026-08-25, round 4)
-`prom_b_f65000_trace.py`, `prom_b_f65000_layout.py`,
-`gen_prom_b_f65000_module.py`, `prom_b_f65000_header_audit.py`,
-`prom_b_f65000_frontier_delta.py`, `prom_b_sc1_serial_regs.py`, and (added
-2026-08-25, round 5) `prom_b_f0ea9f_layout.py`,
-`gen_prom_b_f0ea9f_module.py`, `gen_prom_b_effect_tables.py`,
-`prom_b_dlb_record_arrays.py`, `prom_b_round5_frontier_delta.py`,
-`prom_b_round5_citations.py`, `prom_b_f0ea9f_header_audit.py`, and (added
-2026-08-25, round 6) `prom_b_instr_census.py`, `prom_b_span_frontier.py`,
-`prom_b_f6d002_layout.py`, `gen_prom_b_f6d002_module.py`,
-`prom_b_smf_reader.py`, `prom_b_round6_frontier_delta.py`,
-`prom_b_round6_citations.py`, `prom_b_f6d002_touches.py`, and the round-6
-audit-response file `prom_b-round2-audit-responses.md`.
+✅ **THE SCRIPTS ARE NOW TRACKED** (checked 2026-08-25, round 7). This section
+used to open "⚠⚠ EVERY SCRIPT LISTED HERE IS UNTRACKED ... a tree that a single
+`git clean -fd` would destroy", and listed some forty files by name. That was
+true when it was written and is no longer: `git ls-files notes/` returns 208
+files and every script the old list named — `prom_b_dl_length_audit.py`,
+`gen_prom_b_display_lists_v2.py`, `prom_b_audit_callsites.py`,
+`prom_b_round5_frontier_delta.py` and the rest — comes back TRACKED. The lane
+still may not commit, so anything added in the CURRENT round is untracked until
+the tree's owner commits it; as of round 9 that is round 8's
+`notes/gen_prom_b_fonts.py`, `notes/gen_prom_b_dsp_value_lists.py`,
+`notes/prom_b_screen_arrays.py`, `notes/prom_b_dl_stack_sites.py`,
+`notes/gen_prom_b_f58000_module.py`, `notes/prom_b_diskmenu_entrypoint.py`
+**plus round 9's `notes/prom_b_message_module.py`,
+`notes/gen_prom_b_message_module.py`, `notes/prom_b_dl_call_shapes.py`,
+`notes/prom_b_anchored_tiler.py`, `notes/gen_prom_b_anchored_module.py` and
+`notes/prom_b_filefield_checks.py`**. Re-check with
+`git status --porcelain notes/`.
 
-Round 6 also **changed** two earlier files: `prom_b_f0ea9f_layout.py`
-(`proven_call_sites()` now excludes a call site INSIDE the block being framed —
-see `prom_b-round2-audit-responses.md`, without which no generator in this lane
-can reproduce its own output once its block is spliced in) and
-`gen_prom_b_effect_tables.py` (rejects unknown flags).
+## `prom_b_dl_call_shapes.py` (round 9) — ★ READ THIS BEFORE PICKING A SPAN
+**"How many display lists does the committed scanner NOT see?"** It knows one
+call shape out of four. This enumerates all four and prints how many bytes that
+are still `.incbin` each one names — 6,879 as of round 9, plus 48 lists in
+prom_a for that lane.
 
-Round 5 also **changed** two round-4 files: `prom_b_f65000_layout.py` (its
-`accept()` now requires a flow-end tail, and `--null --rev REV` pins the null
-corpus to a revision) and `gen_prom_b_f65000_module.py` (LAYOUT re-derived, four
-runs demoted to `.byte`, banner corrected). The 0xF65000 block in the `.s` was
-regenerated from it and re-gated.
+    python3 notes/prom_b_dl_call_shapes.py            # the census
+    python3 notes/prom_b_dl_call_shapes.py --new      # only what is still .incbin
+    python3 notes/prom_b_dl_call_shapes.py --sites    # every site, with its verdict
+    python3 notes/prom_b_dl_call_shapes.py --selftest # 13 checks, incl. the LAST
+                                                      # site of each shape
+
+Its shape-1 scan is asserted to reproduce `scripts/analysis/prom_b_display_lists.py`'s
+`call_sites()` exactly, so any difference in the totals is the new shapes and
+nothing else. ⚠ It is a byte-level scan: the framing walk is the filter, and
+shape 3 (one record, no end pointer) has no framing check at all.
+
+## `prom_b_anchored_tiler.py` + `gen_prom_b_anchored_module.py` (round 9)
+**"Tile a display-list MODULE into records and operand tables."** The method
+that closed round 9's two spans, written down once so the next module is not
+hand-work: anchors from every call shape, record runs where the framing walk
+lands exactly, and tables where a record's own pointer and width field say so.
+
+    python3 notes/prom_b_anchored_tiler.py 0xF0C800 0xF0D061
+    python3 notes/prom_b_anchored_tiler.py 0xF0C800 0xF0D79C --count
+    python3 notes/prom_b_anchored_tiler.py --selftest   # 10 checks
+    python3 notes/gen_prom_b_anchored_module.py 0xF0C800 0xF0D061
+
+⚠⚠ Two things it refuses to do, both of which caught a draft: it never takes an
+entry count from a record's AND mask (a mask bounds the INDEX — trusting one
+produced a 1,536-byte "table" where the anchors say 304), and it emits nothing
+for an interval no anchor bounds (`--count` shows the unanchored 4,004-byte
+module at 0xF0C800 admits 25,692,504 tilings). Its self-test re-derives both
+modules round 9 converted by hand and compares them object by object.
+
+## `prom_b_message_module.py` + `gen_prom_b_message_module.py` (round 9)
+**The 0xF2BE35-0xF317FF span, 18,694 substantive bytes — CLOSED.** The layout
+script derives every object's extent and kind from the ROM (the pair tables in
+prom_a, the interpreter-attribution length rule, and prom_a's four `ldir`
+setups) and asserts that they tile the range with no hole; the generator renders
+what it derives, using each interpreter's own field layout.
+
+    python3 notes/prom_b_message_module.py              # the layout, object by object
+    python3 notes/prom_b_message_module.py --selftest   # 76 checks, 0 failures
+    python3 notes/gen_prom_b_message_module.py          # the assembly in the .s
+
+Write-up: `FINDINGS-prom_b-message-and-service-module.md`.
+
+## `prom_b_filefield_checks.py` (round 9)
+**"Is prom_a 0xFF76B5 a FILENAME FORMAT or a SCREEN FIELD?"** A screen field —
+this re-derives the round-2 audit's finding F1 and the correction that replaced
+the claim in `FINDINGS-prom_b-disk-and-file-menus.md`. 22 checks.
+
+    python3 notes/prom_b_filefield_checks.py
+
+## `gen_prom_b_fonts.py`
+**"What is in 0xF1B400-0xF27BFF, and how many cells has the last font table?"**
+Emits the twelve character generators as assembly — one `.byte` line per glyph
+cell, addressed, code-numbered, blank cells marked — and refuses to emit until
+it has re-derived every structural claim it rests on.
+
+    python3 notes/gen_prom_b_fonts.py --selftest     # 46 checks
+    python3 notes/gen_prom_b_fonts.py --asm
+
+Its one new number is the twelfth table's cell count, **128**, which
+`FINDINGS-fonts.md` §8 listed as open: the last non-zero byte of the whole font
+region (0xF26D7C) falls inside cell 127, and the defined codes are exactly the
+contiguous printable range 0x21-0x7F. ⚠ It states, and rejects, the rival
+180-cell reading — base and pad start are both multiples of 48, so the "exact
+division" that reading rests on is exact for arithmetic reasons and carries no
+information.
+
+## `gen_prom_b_dsp_value_lists.py`
+**"What are the 7,601 bytes at 0xF157A8, and how is a record reached?"** 18
+arrays of interpreter-B display-list records, each followed immediately by the
+string table its records index; the 35 objects tile the range with no gap and no
+overlap.
+
+    python3 notes/gen_prom_b_dsp_value_lists.py --selftest    # 87 checks
+    python3 notes/gen_prom_b_dsp_value_lists.py --asm
+
+The structural point is the **15-byte stride**: `DisplayListB_RunOne_Stack`
+(0xF3183D) sets XIX = XIY+1, so interpreter B draws exactly ONE record, records
+are addressed individually as `base + 15*line`, and every record shorter than 15
+bytes is padded with 0xFF — which the walk asserts byte for byte.
+⚠ Entry counts come from each table's EXTENT, never from its record's mask:
+0xF15A7C's mask allows 32 and the table is 27.
+
+## `prom_b_screen_arrays.py`
+**"Is 0xF131E4 one 128-entry dispatch table, or four parallel 32-entry arrays?"**
+Four arrays. Each base has exactly one reference in the whole three-image set;
+each array's rows 0 and 31 hold its own default; and the only indexer of
+0xF131E4 cannot produce an index above 0x1E.
+
+    python3 notes/prom_b_screen_arrays.py            # 22 checks
+
+Written because `prom_b/wsa1_prom_b.s` carried the range as one table headed
+"the entries are ENTRY POINTS", and entries 64..95 point at display-list DATA.
 
 ## `prom_b_span_frontier.py` (round 6)
 **"Which `.incbin` SPAN should be converted next?"** `prom_b_module_frontier.py`
@@ -900,3 +972,49 @@ is visible rather than implied. Four assertions, non-zero exit on failure.
 prescaler tap 0b10, which nothing in this tree has established, and MAME's
 `tmp95c061` prescaler is documented as 16x slow so it cannot supply it.
 
+## `prom_b_dl_stack_sites.py` (round 8)
+**"Which display lists are entered with their arguments ON THE STACK?"**
+`scripts/analysis/prom_b_display_lists.py` knows one shape,
+`ld XIY / ld XIX / call 0xF417F0`, and **zero** sites of that shape point into
+0xF58000-0xF59C5A. Every list there is entered through a stack veneer — prom_a
+0xFF75D3 / 0xFF75EF, or prom_b's `DisplayList_Run_Stack` / `DisplayListB_Run_Stack`
+through `lda XIX,T_F42E00` + `jp (XIX)`.
+
+    python3 notes/prom_b_dl_stack_sites.py             # sites and spans
+    python3 notes/prom_b_dl_stack_sites.py --global    # ... and what it finds elsewhere
+    python3 notes/prom_b_dl_stack_sites.py --selftest  # 23 checks
+
+109 confirmed sites, 61 spans, **0 unresolved push pairs**, all 61 frame. The
+census is anchored on the CALL, not on the operand pattern: the pattern finds 33
+sites and the call finds 35, because two have a `cps / jr Z` between the last
+push and the call. The A/B split is cross-checked against the two interpreters'
+opcode bounds rather than asserted, and **every site address is checked to START
+an instruction in `prom_a/wsa1_prom_a.s`** — the defect the round-1 audit's F2
+was about, which this round's own first draft committed eleven more times.
+
+## `gen_prom_b_f58000_module.py` (round 8)
+**"What is the 10,929-byte `.incbin` at 0xF57D4F?"** The DISK and FILE menus:
+12 display lists (431 records), 16 runs entered one record at a time (45
+records), 18 operand and string tables, 3 objects of unclaimed bytes, and two
+pads.
+
+    python3 notes/gen_prom_b_f58000_module.py --map        # the segment map
+    python3 notes/gen_prom_b_f58000_module.py --asm        # the assembly
+    python3 notes/gen_prom_b_f58000_module.py --selftest   # 73 checks
+
+The check that cannot lie is that the emitted directives are **reassembled with
+this tree's own llvm-mc and compared to the ROM's 10,929 bytes**. ⚠ Table entry
+counts come from the EXTENT, never from the naming record's AND mask: measured
+over all eighteen the mask disagrees ten times.
+
+## `prom_b_diskmenu_entrypoint.py` (round 8)
+**"What draws the DISK menu, and can it be followed back to a button?"**
+Backwards from the display list to prom_a 0xFF42CD (which nothing calls), to the
+single thunk that names it, to entry **96** of a 256-entry table at prom_a
+0xF86EC1 — and it stops there, because what indexes that table is inside prom_a's
+`.incbin`.
+
+    python3 notes/prom_b_diskmenu_entrypoint.py        # 13 checks
+
+Narrows gap V of `kn7000_mame/notes/WSA1-EMULATION-DISASM-GAPS.md` from a
+subsystem to one table lookup. It does **not** close it.

@@ -2874,3 +2874,694 @@
 ; Evidence: the two readers, the two bounds, the shape run and its null control.
 ; Unknown:  what the third table is for, and what the stray byte is.
 ; ---------------------------------------------------------------------
+
+@@DATA 0xFE69BF 0xFE6BBF DiskImage_HardDisk_BootSector
+; ==============================================================================
+; 0xFE69BF-0xFE7732 -- THE DISK FORMAT MODULE, and four filesystem templates
+; ==============================================================================
+;
+; Converted 2026-08-25.  Chosen because `notes/prom_a_xref.py 0xF42D38` puts
+; SIXTEEN of the seventeen call sites of the FDC request veneer inside
+; 0xFE6E84-0xFE7732 -- the largest concentration of disk traffic anywhere in
+; either image -- and because two emulation gaps (T, the drive-motor line, and
+; V, "how does a user reach Fdc_Request at all") name this module as the place
+; to look.  See notes/FINDINGS-prom_a-disk-format.md.
+;
+; The module is in two halves.  0xFE69BF-0xFE6E3A is DATA: a complete x86 FAT16
+; boot sector and a complete x86 master boot record, for a FIXED DISK, followed
+; by 123 bytes whose framing is not established.  0xFE6E84-0xFE7732 is CODE:
+; the routine that builds a floppy filesystem image in RAM and the routine that
+; writes it to a freshly formatted disk, in a 720 KB and a 1.44 MB variant.
+;
+; ---------------------------------------------------------------------
+; DiskImage_HardDisk_BootSector -- 512 bytes, a DOS FAT16 boot sector
+;
+; Evidence, and it is arithmetic rather than resemblance.  Every field of the
+; standard BIOS Parameter Block is present, in its standard place, and the
+; four independent size statements AGREE:
+;
+;   +0x00  EB 3C 90              x86 JMP SHORT +0x3C / NOP -- the FAT entry
+;   +0x03  " EMID2.0"            OEM name, 8 bytes
+;   +0x0B  512                   bytes per sector
+;   +0x0D  8                     sectors per cluster
+;   +0x0E  1                     reserved sectors
+;   +0x10  2                     number of FATs
+;   +0x11  512                   root directory entries
+;   +0x13  0                     total sectors, 16-bit field (0 => use +0x20)
+;   +0x15  0xF8                  media descriptor -- 0xF8 is FIXED DISK
+;   +0x16  250                   sectors per FAT
+;   +0x18  60                    sectors per track
+;   +0x1A  15                    heads
+;   +0x1C  60                    hidden sectors
+;   +0x20  511140                total sectors, 32-bit field
+;   +0x24  0x80                  BIOS drive number -- 0x80 is the FIRST HARD DISK
+;   +0x26  0x29                  extended boot signature
+;   +0x27  EF 0F 20 1B           volume serial number
+;   +0x2B  11 spaces             volume label
+;   +0x36  "FAT16   "            filesystem type
+;   +0x3E  x86 boot code, with the strings "Non-System disk or disk error",
+;          "This is Technics HDD." and the CR/LF pairs around them
+;   +0x1FE 55 AA                 boot signature
+;
+; ★ THE ARITHMETIC CHECK, which is what makes this a decode and not a guess:
+;   511140 + 60 hidden = 511200 = 568 x 15 x 60 EXACTLY -- a whole number of
+;   cylinders on the geometry the same sector states.  Capacity 511200 x 512 =
+;   261,734,400 bytes, i.e. a ~250 MiB hard disk.  And the partition entry in
+;   the master boot record below repeats BOTH numbers independently.
+;
+; ★ SO THIS NAMES UNIT 1.  `Fdc_Request`'s unit field selects a second storage
+;   back end at 0x7E0008 whose PART is unknown (emulation gap J).  A FAT16 boot
+;   sector for a fixed disk, a matching MBR, and the string "This is Technics
+;   HDD." are the first thing in either image to say what the second unit IS.
+;   Stated as strong evidence, NOT as proof: see Unknown below.
+;
+; Unknown:  ⚠ NO CONSUMER IS LOCATED.  Two searches were run and both are
+;          empty -- `notes/prom_a_xref.py 0xFE69BF` (and 0xFE6BBF, 0xFE6DBF),
+;          and a raw scan of prom_a AND prom_b for the three little-endian
+;          address bytes.  So nothing in this tree copies these 1024 bytes
+;          anywhere, and whether the firmware can format a hard disk at all is
+;          NOT established by this data.  What IS established is that the ROM
+;          carries the images.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFE6BBF 0xFE6DBF DiskImage_HardDisk_MBR
+; ---------------------------------------------------------------------
+; DiskImage_HardDisk_MBR -- 512 bytes, a DOS master boot record
+;
+; Evidence: the standard layout, and a partition entry that agrees field for
+; field with the boot sector above.
+;
+;   +0x000  x86 boot code: CLI / XOR AX,AX / MOV SS,AX / MOV SP,0x7C00 and the
+;           0x0000:0x0600 relocation -- the textbook MBR preamble.  Strings
+;           "Invalid partition table", "Error loading operating system",
+;           "Missing operating system".
+;   +0x1BE  partition entry 1:
+;             boot flag  0x00   not bootable
+;             start CHS  head 1, sector 1, cylinder 0
+;             type       0x06   FAT16 over 32 MB
+;             end CHS    head 14, sector 60, cylinder 567
+;             LBA start  60         == the boot sector's hidden-sector count
+;             sectors    511140     == the boot sector's total-sectors-32
+;   +0x1CE  entries 2, 3 and 4: sixteen zero bytes each, i.e. unused
+;   +0x1FE  55 AA
+;
+; ★ THE CROSS-CHECK: end CHS says cylinder 567, head 14, sector 60, i.e. the
+;   last sector of a 568 x 15 x 60 disk counting cylinders and heads from 0 and
+;   sectors from 1 -- the same geometry the BPB states, arrived at through a
+;   different encoding (the two high cylinder bits live in the sector byte).
+;
+; Unknown:  the same one as the boot sector -- no consumer located.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFE6DBF 0xFE6E3A Table_FE6DBF
+; ---------------------------------------------------------------------
+; Table_FE6DBF -- 123 bytes, framing NOT established
+;
+; Emitted as `.byte`, and that is the claim: 123 is odd, so the block is not a
+; whole number of 16-bit words however it is aligned, and no reader is located.
+;
+; What can be SAID rather than claimed: read as 16-bit little-endian words from
+; the SECOND byte, the first six are 0, 94, 188, 282, 376, 469 -- five
+; differences of 94, 94, 94, 94, 93.  That is the shape of a cumulative offset
+; table, and it is also the shape of the four FDC jump tables that begin 74
+; bytes later at 0xFE6E3A (16-bit byte offsets added to a base the READER
+; supplies).  No base is located, so the observation is recorded and not used.
+;
+; Unknown:  everything except its extent.  It ends where the FDC jump tables
+;          begin, which is a boundary, not a meaning.
+; ---------------------------------------------------------------------
+
+@@NAME 0xFE7200 Disk_FormatSelectedMedia
+; ---------------------------------------------------------------------
+; Disk_FormatSelectedMedia -- format the disk, at whichever of the two densities
+;                             the (0x21E7) flag byte selects
+;
+; Called from: no absolute reference located (`notes/prom_a_xref.py 0xFE7200`
+;          is empty); reached by `calr` from inside this module or from code
+;          still `.incbin`.  Recorded as a searched negative.
+; Inputs:  bit 6 of the RAM byte (0x21E7).
+; Outputs: (0x2243) := the error code the FDC layer returned, in A.
+; Evidence: the body is six instructions --
+;            `ld C,(0x21E7) / and C,0x40 / jr Z,+10`
+;            set:   calr DiskImage_Build1440K ; calr Disk_Format1440K
+;            clear: calr DiskImage_Build720K  ; calr Disk_Format720K
+;            both:  ld H,A / ld (0x2243),H / ret
+;          -- so one bit picks the whole density, image builder and writer
+;          together, and the two arms differ in nothing else.
+; Unknown:  what sets bit 6 of (0x21E7), and therefore which UI control chooses
+;          the density.  ⚠ This is the near half of emulation gap V.
+; ---------------------------------------------------------------------
+
+@@NAME 0xFE7222 Disk_Format720K
+; ---------------------------------------------------------------------
+; Disk_Format720K -- FORMAT a 720 KB floppy and write the filesystem onto it
+;
+; Called from: `calr` at 0xFE7217, inside Disk_FormatSelectedMedia, and nowhere
+;          else that `notes/prom_a_ringbuf_map.all_refs()` finds.
+; Inputs:  the RAM buffer at 0x60A080, already filled by DiskImage_Build720K.
+; Outputs: A = 0 on success, else the FDC layer's error code; the request block
+;          at RAM 0x17C0 is left holding the last request.
+; Evidence: SEVEN requests, each built as a 16-byte block at 0x17C0 in the
+;          field order Fdc_Request's own header gives (+0 op, +2 unit, +4 head,
+;          +6 track or media, +8 first sector, +0x0A count, +0x0C buffer) and
+;          each passed to the veneer 0xF42D38 -> 0xFE3018 -> Fdc_Request, with
+;          `cp A,0 / jr NZ` abandoning the sequence on the first error:
+;
+;    #  op  unit head trk/media sec cnt buffer      what
+;    1   0    0    0    0xE0     1   1  0           reset + identify media
+;    2   5    0    0    0        1   1  0           FORMAT DISK
+;    3   4    0    0    0        1   1  0x60A080    write boot sector
+;    4   4    0    0    0        2   3  0x60A280    write FAT 1
+;    5   4    0    0    0        5   3  0x60A280    write FAT 2, same source
+;    6   3    0    0    0x4F     9   1  0x60A080    verify read, last track
+;    7   3    0    0    0        9   1  0x60A080    verify read, track 0
+;
+; ★ WHY "720 KB" IS A DECODE AND NOT A GUESS -- three independent statements
+;   agree:
+;   1. media descriptor 0xE0; `Fdc_MediaTypeJumpTable` (0xFE6E3A) indexes on
+;      `& 0x0F`, so 0xE0 selects geometry 0, which
+;      notes/FINDINGS-prom_a-fdc.md sec.4 reads off the ROM's own immediates as
+;      512 bytes x 9 sectors;
+;   2. the verify reads ask for SECTOR 9 on tracks 0x4F (79) and 0 -- the last
+;      sector of a 9-sector track, and track 79 is the last of 80;
+;   3. the boot sector this writes (BootSector_Floppy720K, 0xFE76B2) states
+;      1440 total sectors, 9 per track, 2 heads, media 0xF9, 3 sectors per FAT
+;      -- and requests 4 and 5 write exactly 3 sectors each, at 2 and at 5,
+;      which is where two 3-sector FATs land after a 1-sector boot record.
+;   Nothing here is inferred from the routine's position or from resemblance.
+; Unknown:  why the head field is 0 for every request when the geometry has two
+;          heads -- the FDC layer's own operation 5 arm may walk heads itself;
+;          that is not checked here.
+; ---------------------------------------------------------------------
+
+@@NAME 0xFE7401 Disk_Format1440K
+; ---------------------------------------------------------------------
+; Disk_Format1440K -- FORMAT a 1.44 MB floppy and write the filesystem onto it
+;
+; Called from: `calr` at 0xFE720D, inside Disk_FormatSelectedMedia, and nowhere
+;          else that `notes/prom_a_ringbuf_map.all_refs()` finds.
+; Inputs:  the RAM buffer at 0x60A080, already filled by DiskImage_Build1440K.
+; Outputs: A = 0 on success, else the FDC layer's error code.
+; Evidence: NINE requests, same shape as Disk_Format720K, same abandon-on-error:
+;
+;    #  op  unit head trk/media sec cnt buffer      what
+;    1   0    0    0    0xC3     1   1  0           reset + identify media
+;    2   5    0    0    0        1   1  0           FORMAT DISK
+;    3   4    0    0    0        1   1  0x60A080    write boot sector
+;    4   4    0    0    0        2   5  0x60A280    write FAT 1, first 5
+;    5   4    0    0    0        7   4  0x60A480    write FAT 1, last 4
+;    6   4    0    0    0       11   5  0x60A280    write FAT 2, first 5
+;    7   4    0    0    0       16   4  0x60A480    write FAT 2, last 4
+;    8   3    0    0    0x4F    18   1  0x60A080    verify read, last track
+;    9   3    0    0    0        9   1  0x60A080    verify read, track 0
+;
+; ★ WHY "1.44 MB", by the same three-way agreement:
+;   1. media descriptor 0xC3, and 0xC3 & 0x0F = 3 selects geometry 3, which
+;      FINDINGS-prom_a-fdc.md sec.4 reads as 512 bytes x 18 sectors;
+;   2. the first verify read asks for SECTOR 18 of track 79;
+;   3. BootSector_Floppy1440K (0xFE76F2) states 2880 total sectors, 18 per
+;      track, 2 heads, media 0xF0, 9 sectors per FAT -- and requests 4+5 write
+;      5+4 = 9 sectors starting at 2, requests 6+7 another 9 starting at 11,
+;      which is exactly two 9-sector FATs after a 1-sector boot record.
+; Unknown:  requests 5 and 7 take their source 512 bytes further into the image
+;          than requests 4 and 6 end, so the second half of each FAT is written
+;          from an overlapping slice.  Harmless -- the whole area past the
+;          3-byte FAT ID is zero -- but it is not obviously intentional and is
+;          recorded rather than explained.
+; ---------------------------------------------------------------------
+
+@@NAME 0xFE75CA DiskImage_Build720K
+; ---------------------------------------------------------------------
+; DiskImage_Build720K -- assemble the 720 KB filesystem image in RAM at 0x60A080
+;
+; Called from: `calr` at 0xFE7214, inside Disk_FormatSelectedMedia.
+; Inputs:  none; both sources are ROM literals.
+; Outputs: RAM 0x60A080-0x60A27F = the boot sector, 0x60A280-0x60AA7F = the FAT
+;          area.  XIX, HL and XIZ restored.
+; Evidence: two identical loops.  Each copies 0x20 bytes from a ROM template a
+;          byte at a time and then stores 0x00 until a byte count is reached:
+;          template BootSector_Floppy720K (0xFE76B2) to a count of 0x200, then
+;          template FatId_Floppy720K (0xFE76D2) to a count of 0x800, continuing
+;          in the same buffer.  The counts are the literals in the two
+;          `cp HL,0x0200` / `cp HL,0x0800` tests.
+; Unknown:  the FAT area is filled to 0x800 = 2048 bytes but only 3 sectors
+;          (1536) are ever written from it; the surplus is never used.
+; ---------------------------------------------------------------------
+
+@@NAME 0xFE763E DiskImage_Build1440K
+; ---------------------------------------------------------------------
+; DiskImage_Build1440K -- assemble the 1.44 MB filesystem image at RAM 0x60A080
+;
+; Called from: `calr` at 0xFE720A, inside Disk_FormatSelectedMedia.
+; Inputs:  none.
+; Outputs: RAM 0x60A080-0x60A27F = the boot sector, 0x60A280-0x60AE7F = the FAT
+;          area.
+; Evidence: the same two loops as DiskImage_Build720K with three literals
+;          changed -- templates BootSector_Floppy1440K (0xFE76F2) and
+;          FatId_Floppy1440K (0xFE7712), and a second count of 0xC00 instead of
+;          0x800.  Byte for byte the two routines differ ONLY in those three
+;          immediates and in nothing else; that was read off the listing, not
+;          assumed from the shape.
+; Unknown:  as above -- 0xC00 = 3072 bytes is filled where 9 sectors (4608) are
+;          written, so requests 5 and 7 of Disk_Format1440K read past the
+;          filled area into whatever else is at 0x60AE80.  Recorded, not
+;          explained.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFE76B2 0xFE76D2 BootSector_Floppy720K
+; ---------------------------------------------------------------------
+; BootSector_Floppy720K -- 32 bytes: the head of a DOS FAT12 boot sector
+;
+; Copied to RAM 0x60A080 by DiskImage_Build720K, which then zero-fills to 512.
+;
+;   +0x00  EB 1C 90        x86 JMP SHORT +0x1C / NOP
+;   +0x03  "Technics"      OEM name  ★ the machine signs its own disks
+;   +0x0B  512             bytes per sector
+;   +0x0D  2               sectors per cluster
+;   +0x0E  1               reserved sectors
+;   +0x10  2               number of FATs
+;   +0x11  112             root directory entries
+;   +0x13  1440            total sectors
+;   +0x15  0xF9            media descriptor -- 3.5" 720 KB, double density
+;   +0x16  3               sectors per FAT
+;   +0x18  9               sectors per track
+;   +0x1A  2               heads
+;   +0x1C  0               hidden sectors (16-bit form)
+;   +0x1E  EB FE           x86 JMP $ -- an unbootable one-instruction stub
+;
+; ★ ARITHMETIC CHECK: 1440 = 80 x 2 x 9 exactly, and 1440 x 512 = 737,280 =
+;   720 KiB.  The media byte 0xF9 is the IBM value for that geometry, and
+;   Disk_Format720K's verify read asks for sector 9 of track 79 -- the last
+;   sector this BPB describes.  Four statements, one geometry.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFE76D2 0xFE76F2 FatId_Floppy720K
+; ---------------------------------------------------------------------
+; FatId_Floppy720K -- 32 bytes: F9 FF FF, then 29 zero bytes
+;
+; Copied to the start of the FAT area by DiskImage_Build720K, which zero-fills
+; the rest.  F9 FF FF is the FAT12 identifier triple for media descriptor 0xF9:
+; entry 0 = media byte with the top nibble set, entry 1 = end-of-chain.  It
+; matches BootSector_Floppy720K's +0x15 byte exactly, which is the check.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFE76F2 0xFE7712 BootSector_Floppy1440K
+; ---------------------------------------------------------------------
+; BootSector_Floppy1440K -- 32 bytes: the head of a DOS FAT12 boot sector
+;
+; Copied to RAM 0x60A080 by DiskImage_Build1440K.  Identical in layout to
+; BootSector_Floppy720K, and it differs in exactly six fields:
+;
+;   +0x0D  1               sectors per cluster   (was 2)
+;   +0x11  224             root directory entries (was 112)
+;   +0x13  2880            total sectors          (was 1440)
+;   +0x15  0xF0            media descriptor -- 3.5" 1.44 MB, high density
+;   +0x16  9               sectors per FAT        (was 3)
+;   +0x18  18              sectors per track      (was 9)
+;
+; ★ ARITHMETIC CHECK: 2880 = 80 x 2 x 18 exactly, 2880 x 512 = 1,474,560 =
+;   1.44 MB in the marketing sense, and Disk_Format1440K's verify read asks for
+;   sector 18 of track 79.  The OEM name is again "Technics".
+; ---------------------------------------------------------------------
+
+@@DATA 0xFE7712 0xFE7732 FatId_Floppy1440K
+; ---------------------------------------------------------------------
+; FatId_Floppy1440K -- 32 bytes: F0 FF FF, then 29 zero bytes
+;
+; The FAT12 identifier triple for media descriptor 0xF0, matching
+; BootSector_Floppy1440K's +0x15 byte.  Copied by DiskImage_Build1440K.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF3800 0xFF3880 Dispatch_FF3800
+; ==============================================================================
+; 0xFF3800-0xFF7C65 -- A UI SCREEN MODULE, and its fourteen dispatch tables
+; ==============================================================================
+;
+; Converted 2026-08-25.  Chosen because `notes/prom_a_module_frontier.py` ranks
+; the directory run T_F423A0-T_F42428 first in prom_a -- 35 slots over a
+; contiguous 10,578-byte unconverted extent -- and it lands here.
+;
+; WHAT THE MODULE IS, with the evidence and with what is NOT claimed.
+; 0xFF42EE is one of the 111 sites of the model-variant strap `(0x0000C4)`, and
+; it is the one `kn7000_mame/notes/WSA1-EMULATION-DISASM-GAPS.md` already
+; disassembled from the emulation side: it chooses between display list
+; 0xF580B0 (MIDI FILE LOAD / MIDI FILE SAVE / LOAD SINGLE SOUND / LOAD SINGLE
+; COMBI.) and 0xF58127 (only the last two).  That is the DISK MENU.  So this
+; module owns the screen the disk functions live on -- which is exactly where
+; emulation gap V said to look.  ⚠ What is NOT claimed is which of the fourteen
+; tables below is the disk menu's: the tables are indexed by an argument, and
+; nothing here ties an index to a legend.
+;
+; THE SHAPE, which is the same in all fourteen readers and is why they can be
+; tabulated at all.  Each reader is
+;
+;     link XIZ,0 / push HL
+;     ld H,(XIZ+0x08)            ; the control index
+;     cp H,0x20 / jr NC, out     ; <- THE BOUND: 32 entries per row
+;     [ cp (0x2229),#n / jr NC, out ]   ; <- optional: n rows
+;     push (XIZ+0x0A)            ; the argument passed to the handler
+;     C = 4 * (32*(0x2229) + H)
+;     add XBC, <table base> / ld XBC,(XBC)
+;     push <return address> / jp (XBC)
+;
+; so every table's BASE and every table's ENTRY COUNT are literals in its own
+; reader.  That is how the counts below were established -- not by a shape run,
+; and not by where the next table starts.  `(0x2229)` is a page/mode byte.
+;
+; ★ AND THE TABLES TILE 0xFF3800-0xFF42B1 EXACTLY, with no gap and no overlap,
+; which is the independent check on all fourteen counts at once:
+;
+;   0xFF3800  32          reader 0xFF431C     0xFF4041    2         0xFF672D
+;   0xFF3880  32          reader 0xFF4596     0xFF4049    2 x 32    0xFF68D8
+;   0xFF3900  32          reader 0xFF4995     0xFF4149    2         0xFF6DB7
+;   0xFF3980  32          reader 0xFF522F     0xFF4151    2 x 32    0xFF6F21
+;   0xFF3A00   6          reader 0xFF548A     0xFF4251   16 ptrs    0xFF70B6
+;   0xFF3A18  text, 17 B                      0xFF4291   text, 16 B
+;   0xFF3A29  6 x 32      reader 0xFF572E     0xFF42A1   text, 4x4  0xFF744E
+;   0xFF3D29   4          reader 0xFF5C3E
+;   0xFF3D39  6 x 32      readers 0xFF5ED1 (rows 0-4), 0xFF6550 (row 4),
+;                                 0xFF66AA (row 5)
+;   0xFF4039  4 words     reader 0xFF6789
+;
+; ★ THE DEFAULT ENTRY IS 0xFF42B1, AND 0xFF42B1 IS A BARE `ret`.  Of the 654
+; slots in the twelve pointer tables, 459 -- seventy per cent -- are that one
+; address, and only 112 distinct targets appear in all of them together.  So
+; most of the matrix is "this control does nothing on this page" and the live
+; handlers are the sparse exceptions.  104 of the 112 targets are inside this
+; module; the other eight are the prom_b directory slots 0xF42F84-0xF42FA0.
+; Per-table counts: notes/prom_a_uiscreen_checks.py.
+;
+; Every handler is `sub_XXXXXX`.  Nothing in this module names a control.
+;
+; ---------------------------------------------------------------------
+; Dispatch_FF3800 -- 32 handler pointers, indexed by the control number
+;
+; Read by: 0xFF431C.  ENTRY COUNT 32, from that reader's own `cp H,0x20 /
+;          jr NC` at 0xFF4324 -- an index of 32 or more returns without
+;          touching the table.
+; ★ LAST-ENTRY TEST: entry 31 is at 0xFF387C and the word at 0xFF3880 is the
+;          first entry of the NEXT table, which has its own reader and its own
+;          bound; the run cannot be extended without colliding with it.
+; Evidence: the reader's `add XBC,0x00FF3800 / ld XBC,(XBC) / push <retaddr> /
+;          jp (XBC)` -- these are called, not jumped to.
+; Unknown:  what the control index means.  ⚠ Not one entry is tied to a legend.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF3880 0xFF3900 Dispatch_FF3880
+; ---------------------------------------------------------------------
+; Dispatch_FF3880 -- 32 handler pointers.  Read by 0xFF4596, whose bound is the
+; same `cp H,0x20 / jr NC` at 0xFF459E.  As Dispatch_FF3800 in every other way.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF3900 0xFF3980 Dispatch_FF3900
+; ---------------------------------------------------------------------
+; Dispatch_FF3900 -- 32 handler pointers.  Read by 0xFF4995 (`cp H,0x20` at
+; 0xFF499D).
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF3980 0xFF3A00 Dispatch_FF3980
+; ---------------------------------------------------------------------
+; Dispatch_FF3980 -- 32 handler pointers.  Read by 0xFF522F (`cp H,0x20` at
+; 0xFF5237).
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF3A00 0xFF3A18 Dispatch_FF3A00
+; ---------------------------------------------------------------------
+; Dispatch_FF3A00 -- SIX handler pointers, indexed by the page byte (0x2229)
+;
+; Read by: 0xFF548A.  ENTRY COUNT 6, from `cp (0x2229),0x06 / jr NC` at
+;          0xFF548A itself -- and the six entries are all distinct, which the
+;          32-entry tables' entries are not.
+; ★ LAST-ENTRY TEST: 6 x 4 = 24 bytes ends at 0xFF3A18, which is where the
+;          16-character text field begins; a seventh entry would read
+;          "??  " as an address.
+; Evidence: this table is indexed by the PAGE and not by the control -- the
+;          reader multiplies (0x2229) by 4 and nothing else.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFF3A18 0xFF3A29 Text_FF3A18
+; ---------------------------------------------------------------------
+; Text_FF3A18 -- 17 bytes: "??" then 14 spaces then a NUL
+;
+; A 16-character display field with a NUL terminator.  Named by `lda_24` at
+; 0xFF5628 and 0xFF5677 -- two sites, both inside this module, and it is passed
+; as a pointer rather than indexed.
+; ⚠ It is what makes the table region UNALIGNED: 17 is odd, so every table
+; after it sits at an odd offset from 0xFF3800.  Any tool that assumes a single
+; aligned array here is wrong, and one did before this header was written.
+; Unknown:  which field shows "??", though a two-character unknown-value
+;          placeholder is the obvious reading and is not claimed.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF3A29 0xFF3D29 Dispatch_FF3A29
+; ---------------------------------------------------------------------
+; Dispatch_FF3A29 -- a 6 x 32 handler MATRIX: page (0x2229) by control index
+;
+; Read by: 0xFF572E.  ENTRY COUNT 192, from TWO bounds in that reader --
+;          `cp H,0x20 / jr NC` at 0xFF5736 and `cp (0x2229),0x06 / jr NC` at
+;          0xFF573B -- and the index it forms is `((0x2229) << 5) + H`, so the
+;          row stride is 32 and there are 6 rows.
+; ★ LAST-ENTRY TEST: 6 x 32 x 4 = 768 bytes ends at 0xFF3D29, which is the base
+;          the reader at 0xFF5C4D names for the NEXT table.
+; 129 of the 192 slots are the default 0xFF42B1.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF3D29 0xFF3D39 Dispatch_FF3D29
+; ---------------------------------------------------------------------
+; Dispatch_FF3D29 -- FOUR handler pointers, indexed by the page byte (0x2229)
+;
+; Read by: 0xFF5C3E.  ENTRY COUNT 4, from `cp (0x2229),0x03 / jr UGT` --
+;          note UGT, not NC: this bound admits 3, so it is four entries and not
+;          three.  All four are distinct.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF3D39 0xFF4039 Dispatch_FF3D39
+; ---------------------------------------------------------------------
+; Dispatch_FF3D39 -- a 6 x 32 handler MATRIX with THREE readers
+;
+; Read by: 0xFF5ED1 for rows 0-4 (`cp H,0x20` at 0xFF5ED9, `cp (0x2229),0x05 /
+;          jr NC` at 0xFF5EDE), and by two readers that address a single row
+;          directly and have only the 32-entry bound:
+;            0xFF6550 -> base 0xFF3F39 = 0xFF3D39 + 4 x 128, i.e. ROW 4;
+;            0xFF66AA -> base 0xFF3FB9 = 0xFF3D39 + 5 x 128, i.e. ROW 5.
+;          So the matrix is SIX rows even though its matrix reader reaches
+;          five, and row 5 exists only because a dedicated reader names it.
+; ★ LAST-ENTRY TEST: 6 x 32 x 4 = 768 bytes ends at 0xFF4039, which is the base
+;          the readers at 0xFF6789 and six other sites name for the next table.
+; 159 of the 192 slots are the default.
+; Unknown:  why row 4 has both a matrix reader and a dedicated one.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFF4039 0xFF4041 Table_FF4039
+; ---------------------------------------------------------------------
+; Table_FF4039 -- FOUR 16-bit values: 0x0008, 0x0009, 0x0028, 0x0029
+;
+; Emitted as `.byte` because the framing is 16-bit, not 32-bit, and this file's
+; `.long` renderer would misstate it.
+; Read by: eight sites, the clearest being 0xFF6789 `ld C,2 / mul (0x2736),3 /
+;          extz XBC / add XBC,0x00FF4039 / ld BC,(XBC)` -- a 16-bit load at a
+;          stride of 2, indexed by (0x2736).
+; ⚠ ENTRY COUNT 4 is from the EXTENT (8 bytes between two tables whose bases
+;          are both named by readers), NOT from a bound: no reader here bounds
+;          (0x2736).  That is weaker than every other count in this module and
+;          is stated as such.
+; Unknown:  what the four values are.  They are two consecutive pairs 8 apart
+;          in the low nibble, which is a pattern and not a meaning.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF4041 0xFF4049 Dispatch_FF4041
+; ---------------------------------------------------------------------
+; Dispatch_FF4041 -- TWO handler pointers, indexed by the page byte (0x2229)
+; Read by: 0xFF672D.  ENTRY COUNT 2, from `cp (0x2229),0x02 / jr NC`.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF4049 0xFF4149 Dispatch_FF4049
+; ---------------------------------------------------------------------
+; Dispatch_FF4049 -- a 2 x 32 handler matrix: page by control index
+;
+; Read by: 0xFF68D8, which forms `((0x2229) << 5) + H` exactly as the other
+;          matrix readers do but carries NO bound of its own.
+; ★ ENTRY COUNT 64 rests on two things and both are named: the extent between
+;          this base and the next reader-named base (0xFF4149) is 256 bytes =
+;          64 entries; and the sibling table Dispatch_FF4041, which is indexed
+;          by the SAME page byte, is bounded at 2 by its own reader -- so two
+;          rows is what the page byte can address.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF4149 0xFF4151 Dispatch_FF4149
+; ---------------------------------------------------------------------
+; Dispatch_FF4149 -- TWO handler pointers, indexed by the page byte (0x2229)
+; Read by: 0xFF6DB7.  ENTRY COUNT 2, from `cp (0x2229),0x02 / jr NC`.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF4151 0xFF4251 Dispatch_FF4151
+; ---------------------------------------------------------------------
+; Dispatch_FF4151 -- a 2 x 32 handler matrix.  Read by 0xFF6F21, and the entry
+; count rests on the same two things as Dispatch_FF4049's: the 256-byte extent
+; to the next reader-named base, and the bound of 2 that its sibling
+; Dispatch_FF4149 carries on the same page byte.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFF4251 0xFF4291 PtrTable_FF4251
+; ---------------------------------------------------------------------
+; PtrTable_FF4251 -- SIXTEEN 32-bit RAM addresses
+;
+;   0x000076AF 0x000076EF 0x0000772F 0x0000776F 0x000077AF 0x000077EF
+;   0x0000782F 0x0000786F 0x000078EF 0x0000792F 0x0000796F 0x000079AF
+;   0x000079EF 0x00007A2F 0x00007A6F 0x00007AAF
+;
+; These are RAM pointers, not code: the whole run is below 0x8000 and the step
+; is 0x40 between neighbours -- except between entries 7 and 8, where it is
+; 0x80.  Sixteen records of 64 bytes with one 64-byte hole.
+; Read by: 0xFF70B6 and 0xFF70E2, both `lda_24 xix,(0xFF4251) / ld XBC,(XIX)`
+;          walking forward.
+; ENTRY COUNT 16, from the reader's own bound: 0xFF70B6 walks the table with
+;          `inc 4,XIX / inc 1,HL / cp HL,0x0010 / jr LT` at 0xFF70CB-0xFF70D3,
+;          and 16 x 4 = 64 bytes ends exactly at the text field 0xFF4291.
+; ★ WHAT THE READER DOES also says what the pointers point AT: it loads the
+;          BYTE at each pointer and stores it at RAM 0x26B2 + i, i = 0..15 --
+;          so this is sixteen scattered one-byte variables mirrored into a
+;          16-byte shadow.  Its sibling 0xFF70E2 walks the same table and
+;          compares each byte against the same shadow, writing back on a
+;          difference: a change detector.
+; Unknown:  what the sixteen variables are.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFF4291 0xFF42A1 Text_FF4291
+; ---------------------------------------------------------------------
+; Text_FF4291 -- 16 spaces
+;
+; Passed by `lda_24` at 0xFF71A5, 0xFF72D9 and 0xFF73DC, in each case pushed
+; with the two literals 0x10 and 0x06 -- a 16-character blank field.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFF42A1 0xFF42B1 Text_FF42A1
+; ---------------------------------------------------------------------
+; Text_FF42A1 -- FOUR four-character labels: "U1 -" "U2 -" "UD1-" "UD2-"
+;
+; Read by: 0xFF744E, `ld C,4 / mul (0x2728),3 / extz XBC / add XBC,0x00FF42A1 /
+;          push XBC` -- stride 4, indexed by (0x2728).  Four labels fill the 16
+;          bytes to 0xFF42B1, where the module's code begins.
+; ⚠ WHAT "U1" AND "UD1" STAND FOR IS NOT ESTABLISHED.  They are four literal
+;          strings and the tree's rule is not to invent an expansion.
+;
+; ★ AND THE VERY NEXT BYTE, 0xFF42B1, IS THE TABLES' DEFAULT HANDLER: a bare
+;   `ret`, named by 459 of the 654 slots above.  It gets no label of its own
+;   because this generator labels only call/jp/calr targets and every one of
+;   those 459 references is a 32-bit POINTER, not an instruction -- so the
+;   handler that runs most often in this module is the one line in it with no
+;   name.  Recorded here rather than left to be rediscovered.
+; ---------------------------------------------------------------------
+
+
+@@AT 0xFEF746
+
+; ==============================================================================
+; 0xFEF746-0xFF3800 -- the SCREEN-DRAW module: 56 inline DISPLAY LISTS,
+; 13 tables, and 3,956 bytes of the code that runs them
+; ==============================================================================
+;
+; Converted 2026-08-25 by notes/gen_prom_a_screens.py.  11,044 substantive bytes
+; and a 5,526-byte 0x0E pad; it closes the LAST large `.incbin` in the upper half
+; of prom_a.
+;
+; ★ WHY THIS SPAN COULD BE FRAMED AT ALL.  Almost every routine here is the same
+;   four instructions:
+;
+;       ld (0x2540),<layer>          ; which display layer
+;       ld XIY,<list start>
+;       ld XIX,<list end>
+;       call 0xF417F0                ; DisplayList_Run  (or 0xF417F4, the
+;       ret                          ;                   second interpreter)
+;       <the display list itself, inline, immediately after the `ret`>
+;
+;   so code and data alternate every few bytes and a linear decode is worthless.
+;   But the call site names BOTH ENDS of every list in immediates, and a display
+;   list is self-checking: each record is `+0 opcode, +1 LENGTH OF THE WHOLE
+;   RECORD` and the interpreter advances by that byte
+;   (notes/FINDINGS-ui-display-list.md).  So the split is read off the ROM:
+;
+;     TEST 1  walking the length bytes from <start> must land EXACTLY on <end>.
+;             It does for 56 of 56 spans.  (prom_b's 244 spans came in at 243.)
+;     TEST 2  with those 56 spans and the 13 tables below removed, a linear
+;             disassembly of everything that is left produces ZERO undecodable
+;             bytes.  Guess one table boundary wrong and the decode
+;             desynchronises and prints `db`, so this test can fail.
+;
+;   Both are re-run by `python3 notes/gen_prom_a_screens.py --check`, which
+;   REFUSES to emit the region if either fails.
+;
+; ★ WHAT THE SCREENS ARE.  The text is in the lists, so this module is where a
+;   large part of the machine's UI vocabulary lives: SEQUENCER / REALTIME /
+;   EDIT, MASTER / REC0RD (sic, with a zero) / TRACK / ASSIGN, STEP, MEDLEY,
+;   S0NG (also with a zero) / SELECT, AFTER T0UCH, NOTE EDIT, DRUM EDIT,
+;   KIT:, and two help panels that read "Press up/down button under screen
+;   corresponding track that want edit."  The five biggest lists --
+;   0xFF0E2B, 0xFF0F11, 0xFF10E0, 0xFF1332 and 0xFF158A, 230 to 600 bytes each
+;   -- are whole screens; the 51 small ones are single boxes and rules.
+;
+; ★ TWENTY-TWO `bit 0,(0x601F70)` tests sit in this module -- the byte pattern
+;   F2 70 1F 60 C8, counted over the span -- and most of them pick a different
+;   display list either way; ScreenDrawPtrs_FEF9FA / ScreenDrawPtrs_FEFA2A are
+;   two whole pointer tables selected by the same bit.  Whatever that bit is, it
+;   switches the machine between two screen layouts.  It is NOT established
+;   here what it means.
+;
+; ⚠ WHAT IS NOT ESTABLISHED.  Which screen each list belongs to; what
+;   (0x601F00), (0x601F3A), (0x601F53), (0x601F70) and (0x601F75) are; and what
+;   Data_FF17E2 is.  Every routine is `sub_XXXXXX` except the three that the
+;   kit-category legend pins.
+;
+; ⚠ 5 bytes of the 3,956 code bytes are emitted as `.byte` with unidasm's text
+;   in a trailing comment: 0xFF0162, 0xFF016E, 0xFF017B, 0xFF0181 and 0xFF01F5.
+;   They decode but this toolchain cannot spell them back
+;   (notes/llvm-mc-tlcs900-spellings.md).  They are instructions, not data.
+
+@@NAME 0xFF03E9 KitCategoryLegend_SelectBase
+; ---------------------------------------------------------------------
+; KitCategoryLegend_SelectBase -- XIY := the legend table for the selected part
+; Called from: 0xFF03DE (`calr`), inside the routine that then issues SWI7
+;          service 0x17 with BC = 6.
+; Inputs:  (0x601F00), the selected part; the byte table at RAM 0x00603422;
+;          RecordPtrs_RAM76A2 (0xFEB330) and the 64-byte records it points at.
+; Outputs: XIY = one of five bases -- 0xFF0485 (type 0x20, the GM drum-kit
+;          legends), 0xFF079D (0x28, "user1 "), 0xFF07AB (0x29, "user2 "),
+;          0xFF07B9 (0x30, "ext   "), or 0xFF047F (six spaces) for anything
+;          else.  A, WA, XIX, XIY clobbered.
+; Evidence: `ld XIX,0x00603422 / ld A,(0x601F00) / ld A,(XIX+A) /
+;          ld XIY,0x00FEB330 / sll 2,WA / ld XIX,(XIY+A) / ld A,(XIX+0x01)`
+;          then the five-way compare.  ★ That is the SAME five-way switch on
+;          the SAME +0x01 type byte that 0xFEB2E3 uses to pick a drum-NAME
+;          block, so the legend table and the name table are indexed by one
+;          object.
+; Unknown:  what types 0x28/0x29/0x30 mean beyond their own legends.
+; ---------------------------------------------------------------------
+
+@@NAME 0xFF043C KitCategoryLegend_Index
+; ---------------------------------------------------------------------
+; KitCategoryLegend_Index -- HL := the index into that legend table
+; Called from: 0xFF03CE (`calr`), immediately before the coordinates are set.
+; Inputs:  the same chain as KitCategoryLegend_SelectBase.
+; Outputs: HL = the record's +0x00 byte when the type is 0x20, and 0 for types
+;          0x28, 0x29, 0x30 and for anything else -- which is why those three
+;          bases each need only their own single 6-character entry.
+; Evidence: `ld A,(XIX+0x00) / xor HL,HL / ld L,A / ret` on the 0x20 arm,
+;          `xor HL,HL / ret` on the others.
+; Unknown:  nothing here.
+; ---------------------------------------------------------------------
+
+@@NAME 0xFF03C2 Screen_DrawKitCategoryLegend
+; ---------------------------------------------------------------------
+; Screen_DrawKitCategoryLegend -- draw the 6-character kit legend at x=0xD5
+; Called from: 0xFF03BE (`calr`), the tail of the routine at 0xFF03B3.
+; Inputs:  bit 0 of (0x601F70) -- if it is CLEAR the routine draws nothing.
+; Outputs: six characters on the display, and SWI7 service 0x17 called with
+;          (0x2530) = 0x00D5, (0x2532) = 0x0006, XIY = the base, HL = the
+;          index, BC = 6.
+; Evidence: the literal coordinate stores at 0xFF03D1 and 0xFF03D7, the two
+;          `calr`s to KitCategoryLegend_Index and _SelectBase, and
+;          `ld BC,0x0006 / ld A,0x17 / swi 7` at 0xFF03E2-0xFF03E7.
+;          ★ BC is the entry WIDTH: it is the same register the whole module
+;          uses for it, 1 for Digits_FEF999 and 6 here.
+; Unknown:  which screen this is drawn on.
+; ---------------------------------------------------------------------

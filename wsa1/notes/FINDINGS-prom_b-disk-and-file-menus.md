@@ -1,0 +1,295 @@
+# The disk and file menus, and the third way a display list is entered
+
+**Where.** `prom_b/wsa1_prom_b.s`, `0xF57D4F-0xF5A7FF` (10,929 bytes) — the last
+large `.incbin` between INTT2's handler and the SC1 link module.
+
+**Reproduce.** Three committed scripts, all with a `--selftest`:
+
+```
+python3 notes/prom_b_dl_stack_sites.py --selftest        # 23 checks — the call-site census
+python3 notes/gen_prom_b_f58000_module.py --selftest     # 73 checks — the emitter
+python3 notes/prom_b_diskmenu_entrypoint.py              # 13 checks — what draws the disk menu
+python3 scripts/analysis/assert_byte_identical.py        # the gate
+```
+
+Converted this round: **+7,291 substantive bytes** and 3,638 bytes of disclosed
+pad, taking prom_b from 292,087 to **299,378** substantive
+(`scripts/analysis/source_coverage.py`).
+
+---
+
+## 1. Why 7 KB of user interface stayed invisible for six rounds
+
+`scripts/analysis/prom_b_display_lists.py` finds a display list by one
+instruction shape:
+
+```
+ld XIY,<start>   (45 ..)     ld XIX,<end>   (44 ..)     call 0xF417F0 / 0xF417F4
+```
+
+**Not one list in this module is entered that way.** The count of register-form
+call sites whose start lies in `0xF58000-0xF59C5A` is **zero**. That is why
+`notes/prom_b_span_frontier.py` reported this span with `proven 0`, and why six
+rounds of display-list work walked past it.
+
+Every entry here is a **stack veneer**. The image has six:
+
+| veneer | frame | calls | interpreter |
+|---|---|---|---|
+| prom_b `0xF31800` `DisplayList_Run_Stack` | `(XIZ+8)`, `(XIZ+0xC)` | `0xF31A09` | A |
+| prom_b `0xF31814` `DisplayListB_Run_Stack` | same | `0xF31AF0` | B |
+| prom_b `0xF31828` / `0xF3183D` | `(XIZ+8)` only | one record | A / B |
+| prom_a `0xFF75D3` | `(XIZ+8)`, `(XIZ+0xC)`, `(XIZ+0x10)` | `0xF417F0` | A |
+| prom_a `0xFF75EF` | `(XIZ+8)`, `(XIZ+0xC)` | `0xF417F4` | B |
+
+`0xFF75D3` also does `ld DE,(XIZ+0x10) / ld (0x2540),E` — **the same variable**
+the register-form call sites set with `ld (0x2540),0x00` immediately before
+calling. That is what ties the two conventions together: they are the same call
+with different argument passing, not two different mechanisms.
+
+Callers push in one order and three shapes:
+
+```
+pushw <flag>                          ; interpreter A only
+lda XBC,<end>   / push XBC
+lda XWA,<start> / push XWA            ; last push  =>  lowest slot  =>  (XIZ+8)
+  1.  call 0xFF75D3                                     35 call instructions
+  2.  lda XIY,<return> / push XIY / jp (XIX)            97 sites
+  3.  jr / jrl into one of the above                    (shares them)
+```
+
+Shape 2 is a call through a **cached function pointer**: `lda XIX,<veneer>` once
+per routine, then a hand-built return address and `jp (XIX)`. Exactly three
+values are ever cached in XIX ahead of that shape — `0xFF75D3` (40 uses),
+`T_F42E00` = `DisplayList_Run_Stack` (38) and `T_F42E04` =
+`DisplayListB_Run_Stack` (19).
+
+> ★ **That answers a header this tree already carried.**
+> `DisplayList_Run_Stack`'s own comment says *"Called from: through the thunk
+> table; not yet traced to a specific caller."* It has 38 traced callers, all in
+> prom_a, all of shape 2.
+
+**The census is anchored on the CALL, not on the operand pattern.** Scanning for
+the four-instruction operand shape finds 33 sites; scanning for `call <veneer>`
+finds 35, because two sites (`0xFF4C68`, `0xFF4F04`) have a `cps H,0x00 / jr Z`
+wedged between the last push and the call. The span set is the same either way —
+the *site count* is not, and a count is what gets published.
+
+**Result: 109 confirmed sites naming 61 distinct `(start, end, interpreter)`
+triples, 0 unresolved push pairs, and all 61 FRAME** — the record length bytes
+walked from `start` land exactly on `end`.
+
+### The A/B attribution is checked, not asserted
+
+| | |
+|---|---|
+| spans run by interpreter A | 50 |
+| spans run by interpreter B | 11 |
+| records claimed by both | **0** |
+| highest opcode in an A span | **0x23** (A's bound is 0x24) |
+| highest opcode in a B span | **0x08** (B's bound is 0x0F) |
+| A spans holding an opcode ≥ 0x0F, so B could not dispatch them at all | **19 of 50** |
+
+### A fourth and fifth shape, found while doing this and left open
+
+`prom_a 0xFF7668`, `0xFF7623`, `0xFF763F` and `0xFF7656` take **one** pointer on
+the stack and jump straight into a single interpreter-B *handler* — `T_F41800`
+→ `0xF31BA1` (op 00), `T_F41820`/`T_F4181C` → `0xF31B57` (ops 03/08),
+`T_F417F8` → `0xF31B21` (op 02). Together with `T_F42E08`/`T_F42E0C` they give
+**25 single-record entry points into this module**, and they are what run the
+orphan records that sit between the framed spans. Each such record's header
+names its own sites.
+⚠ This file's census covers the two-ended veneers plus these five one-record
+ones. **It does not claim to be a census of every entry shape in the image** —
+these were found from one region's call sites, and a veneer used nowhere near
+`0xF58000` would not appear here.
+
+---
+
+## 2. What is in it — the answer gap V asked for
+
+`kn7000_mame/notes/WSA1-EMULATION-DISASM-GAPS.md` gap V says the disk path "is
+not one press away; it needs either a menu sequence, or a chord", and sends the
+reader to "whichever display list in prom_b carries the disk menu". It is here:
+
+| address | what |
+|---|---|
+| `0xF58000` | **the DISK menu**: `DISK`, `DISK L0AD`, `DISK SAVE`, `MIDI FILE`, `DIRECT PLAY`, `FL0PPY DISK`, `F0RMAT` |
+| `0xF580B0` / `0xF58127` / `0xF58162` | the three lists prom_a `0xFF42EE` picks between on the model-variant strap `(0x0000C4)` |
+| `0xF585AD` | ten SAVE/LOAD **content types**: ALL, SEQUENCER, COMBINATION, SOUND, PANEL, MIDI SETTING, SOUND RE-MAP, COMBI RE-MAP, DRUM MAP, blank |
+| `0xF58625` | their **file extensions**: `.ALL .SEQ .CMB .SND .PNL .MDS .SRM .CRM .DRM` |
+| `0xF5864D` | nine spaces — the "no extension" constant for content index 9 |
+| `0xF59857` | `.MID` |
+| `0xF587B2` | a 37-character name-entry alphabet `_A-Z0-9` |
+| `0xF58947` | the DISK SAVE **PASSWORD** screen |
+| `0xF58A41` | `MIDI FILE SAVE : FILE SELECTION`, with `SAVE` and `DEL` |
+| `0xF59128` | `USER 1` / `USER 2` / `USER1 DRUM` / `USER2 DRUM` |
+| `0xF595CD` | 100 numbered slot labels ` 01:` … `100:` |
+| `0xF59904` | `COMPOSER LOAD` |
+
+⚠⚠ **RETRACTED 2026-08-25 — this was a SCREEN FIELD, not a file format.**
+Until this round the paragraph here read:
+
+> ★ The filename format is readable off one prom_a routine. `0xFF76DA` does
+> `ld BC,0x0004 / ld XIY,0x00F58625 / add IX,0x0006`, i.e. four extension bytes
+> appended at offset 6 of a six-character name … So a saved file is
+> `NNNNNN.XXX`-shaped with a fixed 6+4 layout … **For the emulation lane that is
+> a directly usable fact about what a real WSA1 floppy contains.**
+
+The round-2 audit found it and the audit is right. **Nothing on that path touches
+a sector.** The helper both arms call, `sub_FF76FE` (`prom_a` `0xFF76FE`), is
+`stdi8 (0x2540),0x00 / ldb a,0x06 / swi 7`, and SWI7 service `0x06` is
+`LCD_Svc_06_DrawText8x14` (`SWI7_ServiceTable[6]` = `0xF8F039`). Its own loop
+does `inc 1,IX` per glyph, so `IX` is a **text cursor**: the `add IX,0x0006` at
+`0xFF76E2` steps the cursor six CELLS, because `sub_FF76FE` pushes and pops `XIX`
+and therefore hands `IX` back unchanged. The routine draws a six-cell name field
+and a four-cell extension field next to it. Two corroborations that it is a
+screen field: the index-9 arm at `0xFF76ED` draws **nine** cells
+(`ldw bc,0x09`), not the 6+4 = 10 a filename would need; and prom_a's own disk
+work documents real FAT12 boot sectors and formatters, where an on-disk name is
+8.3 inside a 32-byte directory entry.
+
+**What survives, re-read from ROM.** The nine extensions at `0xF58625`
+(`.ALL .SEQ .CMB .SND .PNL .MDS .SRM .CRM .DRM`) and the blank run at `0xF5864D`
+are exactly as tabulated above. The extension table's **row stride is 4 and the
+row index is the content index**, and that is now proved rather than assumed:
+`LCD_Svc_06_DrawText8x14` computes `IZ = HL * BC` before its loop and reads each
+glyph from `(XIY + IZ)`, so a caller passing `XIY = 0xF58625`, `HL = content
+index`, `BC = 4` selects row `index` of a 4-byte table. Counting from the base,
+row 9 is `0xF58649` and is four spaces; the nine-space constant at `0xF5864D`
+begins immediately after it, and `0xF58649 + 4 = 0xF5864D` — the thirteen spaces
+at `0xF58649-0xF58655` are a blank row plus that constant, not one object.
+
+**Also established, and it is a RAM record, not a disk record:** the caller
+`sub_FF76B5` reads its content code from offset `+6` of the record `XIY` points
+at (`inc 6,XIY`, then `sub_FF4936`, then `and L,0x0F`), and draws six characters
+from offset `+0`. So *some* six-character name with a type nibble six bytes after
+it exists in memory. **What that record IS, and whether it is ever written to a
+disk in that shape, is NOT established here.**
+
+Every byte quoted in this correction is re-read from the ROM by
+`python3 notes/prom_b_filefield_checks.py` — 22 checks, 0 failures.
+
+★ **For the emulation lane:** the previous sentence promised a fact about what a
+real WSA1 floppy contains and did not have one. Do not lay out a disk image from
+this note. What it does give the driver lane is the *screen*: a save/load file
+field is 6 + 4 cells wide, and its extension comes from a nine-entry table
+whose tenth row is blank.
+
+### `L0AD` is not a typo in this note
+
+Many of these labels spell capital **O** with character code **0x30**, the digit
+zero — `DISK L0AD`, `FL0PPY DISK`, `F0RMAT`, `L0AD 0PTI0N`, `S0UND GR0UP:`,
+`FR0M S0NG NUMBER`. The module uses **both** codes — 67
+occurrences of 0x30 and 71 of 0x4F inside its printable runs, and the *same
+phrase* appears both ways: `MIDI FILE SAVE : FILE SELECTION` at `0xF58A66` and
+`MIDI FILE SAVE : FILE SELECTI0N` at `0xF59226`. It makes no difference on
+screen, and the reason is a byte fact: **`Font_Svc06_8x14` cell
+0x30 and cell 0x4F are the same fourteen bytes** (both checked in
+`gen_prom_b_f58000_module.py --selftest`). Recorded because anyone grepping this
+source for `LOAD`, `SOUND` or `SELECTION` will miss half of them.
+
+---
+
+## 3. What draws the disk menu, followed backwards until the evidence stops
+
+`python3 notes/prom_b_diskmenu_entrypoint.py`, 13 checks:
+
+```
+prom_a 0xFF42CD   pushes 0x00F580B0 / 0x00F58014, calls 0xFF75D3.
+                  A routine start: the byte before it is 0x0E = ret.
+   ^  NOTHING CALLS IT.  Zero `call` and zero `calr` sites in any of the three
+      images; none of the 654 slots of prom_a's dispatch matrix holds it.
+prom_b T_F42264 = `jp 0xFF42CD`, and it is the ONLY place in 1.5 MiB where the
+      address 0xFF42CD is spelled at all.
+   ^
+prom_a 0xF86EC1 — 256 words of 4 bytes.  175 are prom_b directory slots; the
+      other 81 all hold 0x00F872C1, which is the byte immediately after the
+      table.  ENTRY 96 IS T_F42264.
+   ^
+   ⚠ WHAT INDEXES THAT TABLE IS NOT ESTABLISHED.  It is in prom_a, inside an
+   `.incbin`, and this lane may not edit prom_a.
+```
+
+**So the disk menu is screen 96 of a 256-screen table, and gap V is now one
+table lookup wide instead of a subsystem wide.** That is a narrowing, not a
+closure: nothing here says which panel event produces the index 96.
+
+The 256 is not a guess. The table runs `0xF86EC1-0xF872C0` = 0x400 bytes, and
+**both ends are fixed by something other than the count**: the four bytes below
+it read `0x01010101`, which is not an address in this map, and the 81 unused
+slots point at the first byte past the table. ⚠ It is **not 4-byte aligned**,
+which is why an alignment-assuming scan misses it. Three of the 175 directory
+slots it names (`0xF406C4`, `0xF406CC`, `0xF406DC`) are pointer slots rather
+than `jp` thunks; that is recorded, not explained.
+
+**→ prom_a lane / emulation lane:** `0xF86EC1` is a 1,024-byte object inside
+prom_a's `.incbin` and it is worth converting on its own.
+
+---
+
+## 4. How the non-list bytes are graded
+
+| kind | count | what makes it more than `.byte` |
+|---|---:|---|
+| `dl` display lists | 12 spans, **431 records** | both ends are operands of a located call site; the walk frames exactly |
+| `recs` orphan runs | 16 runs, **45 records** | either named by a one-push single-record site (with the sites listed) or framing exactly from the end of one proven object to the start of the next |
+| `rows` tables | **18** | width from the *handler* of the record that points at the table; count from the **extent**, never from the record's AND mask |
+| `raw` | 3 objects, **118 bytes** | structure **not** claimed; each says so at its label |
+
+⚠ **The mask is not the count, and in this module it is usually wrong.** The
+record at `0xF58798` allows 64 entries and the table at `0xF5881F` holds 37; the
+one at `0xF5953B` allows 16 and `0xF5975D` holds 30; the one at `0xF593F3`
+allows 4 and `0xF59414` holds 7; the one at `0xF58402` allows 16 and `0xF585AD`
+holds 10. Measured over all eighteen — `gen_prom_b_f58000_module.py --selftest`
+— **the mask disagrees with the extent for ten**, agrees for six, and two tables
+(`0xF58625`, `0xF595CD`) have no naming record at all and are proven another way:
+the first by its prom_a reader, the second because its hundredth row literally
+reads `100:`. Every count here divides its extent exactly and the extent runs to
+the next object something else names.
+
+### One boundary refined
+
+`FINDINGS-prom_b-sc1-link.md` §1 says *"2,982 bytes of `0x00` end at
+`0xF5A800`"*. That remains exactly true of the **run of zero bytes**. But its
+first byte, `0xF59C5A`, is the **last operand byte of the display-list record at
+`0xF59C53`** — opcode 0x0E, handler `0xF31A9F`, three words, so eight bytes
+declared and eight bytes read. The module therefore ends at `0xF59C5B` and the
+**pad is 2,981**. Both statements describe the same bytes; the source and both
+notes now say so.
+
+---
+
+## 5. Round-1 audit finding F2 — fixed, and how the same defect was caught again here
+
+F2 reported 18 citations naming the address of an **operand** rather than of the
+instruction that owns it. All 18 are corrected:
+
+* the 14 the tool reaches (`prom_b_audit_callsites.py --evidence` reported
+  `OFF-BY-1 14`; it now reports none) — twelve font-table `Evidence:` lines plus
+  the summary table at `wsa1_prom_b.s`, and their generator
+  `notes/gen_prom_b_fonts.py`;
+* the four it cannot: `0xF10702`→`0xF10700`, `0xF110EC`→`0xF110EA`,
+  `0xF1172C`→`0xF1172A` (off by **two**, the opcode `e9 c8` of
+  `add XBC,imm32`) and `0xF110FB`→`0xF110FA` (off by one, `f2` of
+  `lda XBC,imm24`).
+
+`notes/prom_b_screen_arrays.py` now **proves** the pairing instead of tabulating
+it: it asserts the bytes between the instruction and the operand equal the
+recorded opcode, so a wrong instruction address fails the script (22 checks).
+
+`prom_b_audit_callsites.py`'s docstring used to end *"an OFF-BY row of any kind
+is never expected: there are ZERO in both modes"*. That sentence was written
+after running only the default mode, and was false about its own tree. It is
+replaced by the record of what happened, and by the run line the sentence should
+have rested on. **A mode that was not run proves nothing.**
+
+★ **And it happened again in this round's own first draft.** Eleven prom_a
+addresses quoted in the new segment headers came from a raw byte scan, which
+finds the *operand*: `0xFF577F` for the instruction at `0xFF577E`, and ten more.
+Both new scripts now carry a check that every prom_a address they print or quote
+**starts an instruction in `prom_a/wsa1_prom_a.s`** (109 site addresses, 66
+quoted addresses, 0 failures). Correcting them also **corrected a claim**: the
+six sites that spell `0xF587B2` are `lda XBC,0xf587b2`, i.e. the END operand of
+the list that stops there — so the name-entry alphabet has **no located reader**,
+and the header now says that instead of calling them readers.

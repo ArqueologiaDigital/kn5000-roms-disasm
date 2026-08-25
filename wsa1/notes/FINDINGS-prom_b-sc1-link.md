@@ -33,6 +33,10 @@ Three independent arguments give the same block, `0xF5A800-0xF5B44D` code plus
 `0xF5B44E-0xF5B7FF` fill:
 
 1. **Fill.** 2,982 bytes of `0x00` end at `0xF5A800`; 946 bytes of `0x0E`
+   ⚠ *Refined 2026-08-25:* the run of zeros really is 2,982 long, but its first
+   byte (`0xF59C5A`) is the last operand byte of the display-list record at
+   `0xF59C53` in the module below, so the PAD is 2,981. Both readings describe
+   the same bytes; see `FINDINGS-prom_b-disk-and-file-menus.md`.
    (`ret`, this image's fill convention) run to `0xF5B7FF`. 3,150 + 946 = 4,096:
    **the module is exactly one 4 KiB block.**
 2. **The thunk table.** Slots `T_F40F00`-`T_F40F24` are one run bracketed by

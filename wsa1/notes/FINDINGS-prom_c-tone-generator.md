@@ -19,6 +19,21 @@ Everything below is reproducible from `notes/prom_c_tg_regmap.py`
 `notes/prom_c_xrefs.py`.  The gate
 (`python3 scripts/analysis/assert_byte_identical.py`) certifies the source.
 
+> ★★ **AMENDED 2026-08-25 (round 7): FOUR REGISTERS NOW HAVE A MEANING.**  This note's
+> "not one register's meaning" survives for seventeen of the twenty-two per-channel registers and
+> is **retracted for four**: `chan + 0x0400` is the PITCH in units of 1/256 semitone,
+> `chan + 0x0080` is the OUTPUT LEVEL (bits 11..0 logarithmic, 256 counts per octave; bits 14..12
+> an unnamed 3-bit field; bit 15 the gate this note's §5 describes), `chan + 0x0040` carries the
+> first word of the key-zone record the played note selects, and `chan + 0x0800` / `chan + 0x0840`
+> have `0xFF80` / `0xFF00` as their quiescent pair.  Full argument and the assertions:
+> `notes/FINDINGS-prom_c-dev10c-register-meanings.md`, `notes/prom_c_dev10c_meaning_checks.py`.
+>
+> ⚠ **The `Dev10C_` prefix is deliberately NOT changed back to `TG_`.**  §0 sets the condition for
+> that as *"the day a converted routine turns a note number into a CHANNEL argument"* — i.e.
+> channel ALLOCATION — and round 7 did not show that.  What it showed is that a converted routine
+> turns a note number into a per-channel register VALUE, which is a different statement.  The
+> allocation step is still not in evidence in this image, so the prefix still states the address.
+
 > **What this note does NOT establish.**  Not one register's *meaning*.  No part number, no
 > "this is the pitch register" — **and, since round 4, not the device's ROLE either.**  What
 > follows is the register file's shape, its channel count, its reset values and which struct
@@ -384,8 +399,9 @@ its internal pointers relocated.  ~~**Left for a later pass**~~ **DONE 2026-08-2
   (RAM 0x005D23, stride 187) and the voice record (RAM 0x003BCF, stride 0x44).
   Full account, including the first register value written out as a formula:
   **`notes/FINDINGS-prom_c-dev10c-producers.md`**.
-  ⚠ Still true, and the reason this is "half-closed": not one register's MEANING is
-  established.
+  ⚠ Half-closed no longer: **four registers were named in round 7** — `0x0400` pitch,
+  `0x0080` output level, `0x0040` the key-zone word, and `0x0800`/`0x0840`'s quiescent pair.
+  Seventeen still have no meaning.  `notes/FINDINGS-prom_c-dev10c-register-meanings.md`.
 * `0xFA68FC` is the only READ of 0x0010C000 located so far.  What it reads back
   (register number is a byte from 0x0087CF, multiplied by 2 afterwards) would name at least one
   register.

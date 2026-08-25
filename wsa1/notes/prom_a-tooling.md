@@ -868,3 +868,234 @@ trusts no remembered baseline: it measures the AFTER state live, measures what
 the four ranges account for from the ROM and the prom_b directory, and requires
 `AFTER + retired == ` the round-2-end figures the audit independently verified
 (475 slots / 424 targets / 284,578 bytes). All three reconcile exactly.
+
+---
+
+# Five more, added 2026-08-25 (wave 6), in `notes/`
+
+Same rule: each answers one question, says so in its own docstring, and exits
+non-zero if a check fails.
+
+## `notes/prom_a_fdc_operation_census.py`
+
+**"Which of `Fdc_Request`'s twelve operations does this firmware ever ASK FOR?"**
+It enumerates every located path into the request layer — 8 absolute call sites,
+plus the two published veneers and their references — and reads the operation
+word out of the instruction stream at each. 23 sites, operations `{0,3,4,5,10,11}`,
+**never 6 and never 7**, which is what emulation gap T needed to know before
+asking what PA bit 3 drives. It also re-derives, from the raw images, that
+`ld (PA),A` occurs exactly twice in prom_a and prom_b together.
+
+⚠ It carries a per-register clean/dirty flag, and that is not decoration: an
+offset in `m_ld_mi16 MDI+r0, 0, …` is an offset **from a pointer**, and at
+0xFE3861 that pointer has already had `add XWA,0x0000000A` done to it. The first
+version of this script reported operation 0xFFFF there.
+
+## `notes/prom_a_disk_format_checks.py`
+
+**"Do the 46 quantified claims of the disk-format module still hold?"** BPB
+fields, MBR partition entry, four filesystem templates, and both format
+routines' whole request tables — every number re-derived from the ROM image
+rather than from the source text. Backs
+`notes/FINDINGS-prom_a-disk-format.md`.
+
+## `notes/prom_a_uiscreen_checks.py`
+
+**"Do the fourteen dispatch tables of 0xFF3800-0xFF42B1 still add up?"** 49
+checks: every base is named by a reader, every entry count comes from a bound in
+that same reader, **the tables tile the range exactly** (one independent check on
+all fourteen counts at once), and the slot statistics — 654 slots, 459 of them
+the default `ret`, 112 distinct targets.
+
+## `notes/gen_prom_a_drumnames.py`
+
+**"How do I put 17,430 bytes of name table in the source so a reader can SEE
+it?"** Emits 0xFEB330-0xFEF746 as two `.long` tables and 1,677 `.ascii` lines,
+one per 10-character name, each with its block and index. It refuses if any name
+is not exactly ten printable ASCII bytes, or if the three regions do not tile.
+
+## `notes/prom_a_drumnames_checks.py`
+
+**"Is the 13 × 129 × 10 framing real, and who names which block?"** 35 checks.
+The load-bearing one is that all 130 block pointers are `0xFEB5C4 + 1290·k`
+exactly — framing evidence from a *different* table than the one being framed.
+It also runs the searched negative for name blocks 7-12 rather than asserting
+it, and pins the five arms of the record-type dispatcher at 0xFEB2F5.
+
+## `notes/gen_prom_a_splash.py` and `notes/prom_a_splash_checks.py`
+
+**"The last 32 KiB of prom_a is 78% zeros with sparse bit patterns — what is
+it?"** Three 320 × 240 one-bit images. The generator emits them as `.byte` with
+the panel COLUMN and ROW RANGE on every line and an **ASCII-art preview of each
+image in its header**, so the source shows the picture; it refuses unless images
+0 and 1 have zero bits in common with equal popcounts, and unless the tail is
+uniform `0x0E`. The checker (24 checks) re-derives the geometry from the
+CALLERS' immediates rather than from the data, and pins the complementary-dither
+claim three ways.
+
+⚠ Its section 5 is worth reading before writing any "nothing else references
+this" check over image data: a bare three-byte address scan returns 61 hits here
+of which 58 are pixels. The scan has to be instruction-shaped.
+
+---
+
+# Round-2 audit follow-up, 2026-08-25
+
+## `notes/prom_a_audit_callsites.py --evidence` — the half of the citations nothing checked
+
+Round-2 audit F3: *"the 654 dispatch slots, the three bitmaps, the 17 KB name
+table, the boot sector and the MBR carry `Read by:` / `Evidence:` citations that
+**no tool in this tree checks**"*, and only 4 of that round's ~35 new labels
+appeared in the default run at all — because the default run reads `Called
+from:` blocks and nothing else.
+
+`--evidence` takes **every** `0xXXXXXX` in **every** header field except `Called
+from:` — 2,965 of them — and asks one objective question: *is it an instruction
+boundary of this source?* No mnemonic matching and no guessing what the prose
+meant; the source's address comments are what the byte gate re-derives, so
+"0xABCDEF is not a boundary but 0xABCDEE is" is a fact about the ROM.
+
+**The classification, and why it has this many buckets.** A first draft reported
+**93 OFF-BY-N** and was almost entirely wrong, in four separate ways that are
+worth naming because each is a way a checker can lie:
+
+| bucket | what it means | first draft got it wrong by |
+|---|---|---|
+| `RANGE-END` | the second address of `0xA-0xB` | calling an INCLUSIVE last byte an off-by-N. 191 rows. |
+| `START-INSIDE-N` | the first address of `0xA-0xB`, not a boundary | same, at the other end; legitimate for a **byte**-identity claim |
+| `DATA` / `IN-DATA` | lands on / inside an emitted `.byte`/`.long`/`.ascii` | not mapping directive lines at all: 571 citations came back "no source line covers this address" when the source covers them fine |
+| `ACK-*` | the paragraph SAYS the address is not a boundary | counting *"0xFC61C4 is not an instruction — it is the second byte of …"* as a defect, i.e. counting the tree being RIGHT |
+| `no line` | outside anything the source emits | — |
+| `INCBIN` | still unconverted, so the source cannot say | — |
+| `OFF-BY-N` | inside an instruction, and the header does not say so | **this is the defect** |
+
+Three traps inside the ACK detection, each of which cost a false positive:
+a keyword that straddles a line break never matched until the leading `; ` was
+stripped **and the whitespace collapsed** (this file indents continuations
+deeply, so `third<23 spaces>byte` matched nothing); a range written with the word
+`to` instead of a dash was not a range; and a citation written as a full 32-bit
+literal (`0x00FB7048`) is a data WORD being quoted, not a claim that an
+instruction starts there.
+
+**Result on the tree as it stands: `OFF-BY-N 0`.** Two real defects were found
+and fixed on the way, both the tree's named recurring shape — a citation on the
+first byte of a 32-bit operand instead of on its opcode:
+
+* `sub_F95C2D`'s header: *"names 0xF95D15 at 0xF95A07"* → the instruction is
+  `add XBC,0x00F95D15` at **0xF95A05**;
+* `BitMask32_Table_FC64C6`'s header: *"named as a 32-bit immediate by the reader
+  at 0xFC5BE8"* → `add XBC,0x00FC65C6` at **0xFC5BE7**.
+
+`--selftest` now covers the mode with a negative control: 0xF95A05 must classify
+`INSTR` and 0xF95A07 must classify `OFF-BY-2`, so the classifier can fail.
+
+**What is still open and is a list to READ, not a pass:** `END-INSIDE-N 31`,
+`START-INSIDE-N 4`, `no line 156`, `IN-DATA 52`, `INCBIN 77`.
+
+```
+python3 notes/prom_a_audit_callsites.py --evidence
+python3 notes/prom_a_audit_callsites.py --evidence --quiet
+python3 notes/prom_a_audit_callsites.py --selftest
+```
+
+## `notes/prom_a_pa3_census.py` — emulation gap T, and the retraction it carries
+
+**"What does the firmware DO with CPU 1's PA bit 3?"** 19 checks, 0 failures.
+Written because `notes/prom_a_fdc_operation_census.py` scanned for ONE encoding
+(`f0 1e 41` = `ld (PA),A`), found two, and the notes turned that into *"nothing
+in this firmware ever changes it … gap T is a hardware question"*. There are two
+more writers — `res 3,(0x1E)` and `set 3,(0x1E)` — reached by 15 `calr` sites.
+
+It scans all four memory-operand groups `{C0,D0,E0,F0} 1E`, filters byte hits
+against the converted source's own instruction boundaries, and then measures the
+things a polarity claim needs: which bit, which direction waits afterwards,
+where the call sites sit inside their routines, and whether the asserting side
+reaches `Fdc_Request`. Findings: `notes/FINDINGS-prom_a-gap-T-pa3.md`.
+
+★ The general rule it exists to enforce: **a completeness claim must be scanned
+for at the granularity it is made.** "The only `ld (PA),A`" and "the only writers
+of PA bit 3" are different claims and need different scans.
+
+```
+python3 notes/prom_a_pa3_census.py
+python3 notes/prom_a_pa3_census.py --quiet
+```
+
+## `notes/gen_prom_a_screens.py` — the SCREEN-DRAW module, and a split the ROM proves
+
+**"Where does the code stop and the data start, in a module that alternates
+between them every few bytes?"** Emits prom_a 0xFEF746-0xFF3800 — 11,044
+substantive bytes, 56 inline display lists, 13 tables — and REFUSES to emit
+anything unless two tests pass:
+
+1. **the length walk**: walking each display list's record-length bytes from the
+   call site's `start` immediate must land exactly on its `end` immediate.
+   56 of 56.
+2. **zero undecodable bytes** in the 3,956 bytes left once the lists and tables
+   are removed. This one can fail, and did, every time a table boundary was
+   wrong; the last four `db` bytes are what located `NoteNames`, `OctaveNames`,
+   `TickLabels` and `CoordTable_FF00D1`.
+
+`--check` also runs the General MIDI alignment test for the kit-category
+legends **with its negative control** (7/7 at the right index, 0/7 at ±1) and a
+last-entry test (entry 120 = `SE    `). It exits non-zero on any failure.
+
+```
+python3 notes/gen_prom_a_screens.py --check
+python3 notes/gen_prom_a_screens.py 0xFEF746 0xFF3800 > /tmp/region.s
+python3 prom_a/insert_region.py 0xFEF746 0xFF3800 /tmp/region.s
+python3 scripts/analysis/assert_byte_identical.py
+```
+
+Headers and semantic names come from `notes/prom_a_block_headers.txt` through
+`gen_prom_a_block.load_headers`, so the generator reproduces the inserted text
+line for line and the two cannot drift. Findings:
+`notes/FINDINGS-prom_a-screen-module.md`.
+
+## Round 3 additions (2026-08-25)
+
+### `notes/prom_a_span_survey.py`
+
+**"What SHAPE is a still-`.incbin` span of prom_a, before anyone converts it?"**
+
+```
+python3 notes/prom_a_span_survey.py 0xF96018 0xF99021
+python3 notes/prom_a_span_survey.py --all --fast     # every remaining span
+```
+
+Pointer-shaped runs, in-span `ld R,imm32` table bases, ASCII runs, 0x0E pad runs,
+the absolute-`call` histogram, and a chunked linear decode whose unspellable rows
+are reported as CLUSTERS — a cluster locates a table.
+⚠ Read its `chunked()` docstring before quoting the decode number: the first two
+versions of that number were tool artefacts (1,131 and 3,066 where the honest
+figure was ~40), and the surviving number is still an upper bound until the
+span's tables are declared.
+
+### `notes/prom_a_dl_stack_map.py`
+
+**"What is inside 0xFA1404-0xFA53FF, the biggest `.incbin` left?"**
+The display lists there are entered through the STACK VENEERS that
+`notes/prom_b_dl_stack_sites.py` documents, which is why the register-form scan
+in `gen_prom_a_screens.py` finds none of them. 368 idioms, 368 frame, 67 lists in
+that span. Also extracts the tables the op-0x02 records declare (base, count,
+stride), and warns about the column-structured ones that must not be split.
+
+### `notes/prom_a_round3_checks.py`
+
+Every number the round-3 header corrections quote: the `KitCategoryLegends`
+retraction, the `TickLabels` divisor rule and last-entry test, the `OctaveNames`
+octave arithmetic, the legend-duplicate immediate scan, and the SWI7 table's
+symbols. `--selftest` fires 3 negative controls.
+
+### `notes/prom_a_portb_and_blockdev_census.py`
+
+Gap T/U: every Port B access that is an instruction (9 of 104 byte-pattern hits),
+with the delay after each. Gap V: the 64 directory slots into prom_a's
+block-device half and their call sites.
+
+### The three module generators
+
+`gen_prom_a_fe8000_module.py`, `gen_prom_a_f90989_module.py` and
+`gen_prom_a_f8a000_module.py` — each emits one whole `.incbin` span, each has a
+`--check` that refuses if its framing test fails, and each carries the exact
+`insert_region.py` command in its docstring.

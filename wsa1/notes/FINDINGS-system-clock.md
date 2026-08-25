@@ -200,14 +200,51 @@ TREG5 ticks per beat,
     =>  TREG5 = 24 * 28 * D_T1 / 768 * A ,   TREG1 = 0x1C = 28 (0xF826F4)
     T01MOD = 0x0D (0xF826EB) -> timer 1 clock select 3
 
+⚠⚠ **RETRACTED 2026-08-25. LEVER B CANNOT ADJUDICATE THE TAP SCALE.**
+
+This section used to print the table below and conclude "the ROM itself picks the
+tmp94c241 scale":
+
 | assumed scale | predicted constant | firmware uses 1750 |
 |---|---|---|
 | tmp94c241: select 3 = φT256, D_T1 = 2048 | **1792**·A | firmware 1750·A, 2.3% off |
 | tmp95c061: select 3 = `>>15`, D_T1 = 32768 | **28672**·A | 16.4× off |
 
-So the ROM itself picks the tmp94c241 scale. (1750 is exactly the constant for a
-nominal 500 Hz timer-1 tick; the true rate at 28 MHz is
-28e6/2048/28 = 488.28 Hz. That is the whole of the 2.3%.)
+**The second row is wrong and the conclusion does not follow.** Let φT1 = fc/K.
+Timer 1 runs on φT256 = fc/256K and timer 4 on φT1 = fc/K, so
+
+    24·A·TREG1·(256K/fc) = 96·TREG5·(K/fc)   =>   TREG5 = 64·TREG1·A = 1792·A
+
+and **K cancels**. 1792·A is the prediction under K = 8 *and* under K = 128 — the
+ratio this lever measures is φT256/φT1, which is 256 on either scale. The "28672"
+came from pairing THIS part's φT256 with the SIBLING TMP94C241's φT1, i.e. mixing
+two devices' scales inside one equation.
+
+What the 1750 does still say, and it is worth keeping: the ratio is 256, and the
+2.3% shortfall from 1792 is the programmer rounding a 488.28 Hz tick to a nominal
+500 Hz — 1750 = (fc/K)/(4·500) with fc/K = 3.5 MHz.
+
+**WHAT REPLACES IT, and it is stronger.** The sequencer tempo divide. The firmware
+computes `TREG5 = C/(64·BPM)` from a per-machine 32-bit constant, and equating
+against `BPM = 60·fc/(96·K·TREG5)` gives `C = 40·fc/K`. Three machines, three
+clocks, two CPU variants, K = 8 exactly with no rounding:
+
+| machine | CPU | fc | C | address |
+|---|---|---|---|---|
+| SX-WSA1R | TMP95C061 | 28 MHz | 140,000,000 | prom_a `0xFAA378` |
+| SX-KN1500 | TMP95C061 | 24 MHz | 120,000,000 | IC15 `0xFA6D85` |
+| SX-KN5000 | TMP94C241 | 16 MHz | 80,000,000 | v10 `0xFCA34F` |
+
+The three routines are instruction-for-instruction identical. ★ The KN5000 row is
+what kills the circularity this file worried about elsewhere — that the TMP94C241
+tap constants were written by this project — because that machine's clock is a
+board fact (8 MHz crystal plus a documented internal doubler), so its firmware
+confirms fc/8 independently of any MAME source.
+
+Reproducer: `kn7000_mame/notes/wsa1-probes/tlcs900_prescaler_scale.py`, 42/42 checks.
+Later corroborated by the TMP95C061 databook itself, found 2026-08-25.
+
+The retraction is also carried in `kn7000_mame/src/mame/matsushita/wsa1.cpp`.
 
 ⚠ A second correction: an earlier pass listed "MAME does not implement 16-bit
 timers 4-7 at all" as a gap. False for the file it leans on —

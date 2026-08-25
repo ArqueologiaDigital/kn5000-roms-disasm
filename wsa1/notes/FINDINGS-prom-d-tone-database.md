@@ -29,9 +29,25 @@ The build gate compares bytes. It is blind to a wrong label and a wrong comment,
 and this document leans hard on a cross-reference. So, before anything else:
 
 * **No WSA1 instruction that reads any of these structures has been found.**
-  prom_d's base address is not established either (`prom_d/prom_d.ld`). Every
+  ~~prom_d's base address is not established either (`prom_d/prom_d.ld`).~~ Every
   *name* below is transplanted from the KN5000 slot at the same offset. They are
   hypotheses with a stated basis, not derivations.
+
+  > ★★ **CORRECTED 2026-08-25.** The base IS established: **`0x00F00000` on CPU 2's
+  > bus** (`notes/FINDINGS-memory-map.md` §5, from prom_a's remote read of the build
+  > tag at `0x00F7FFF0`). And round 7 supplies a CONSUMER of this image's addressing
+  > scheme, though not yet of a named structure in it: prom_c's
+  > `ExtBoard_ProbeAndInstallBases` stores `0x00F00000` into RAM `0x00D7ED`
+  > (`0xFB051E`/`0xFB0523`) and `Voice_SelectKeyZone_Reg0040` relocates three nested
+  > 32-bit **0-based offsets** of a voice's tone object against it, ending in a
+  > 128-byte key map indexed by the played note and a record array whose first word
+  > goes to the tone device's register `chan + 0x0040`
+  > (`notes/FINDINGS-prom_c-dev10c-register-meanings.md` §4b,
+  > `python3 notes/prom_c_dev10c_meaning_checks.py` section 16).
+  > ⚠ The first bullet still stands as written: no instruction has been tied to a
+  > structure NAMED BELOW. The tie is to the scheme and the base.
+  > ⚠ `prom_d/prom_d.ld` still says "BASE -- NOT ESTABLISHED" with the superseded
+  > `0xE80000` hypothesis. It is stale; another lane owns that file.
 * **No field meaning is established anywhere in this image.** What is measured is
   shape: entry counts, strides, which spans divide exactly, which populations
   share modal bytes above a null. A stride is a fact about the format, not a name
@@ -409,9 +425,11 @@ because they pin which array each map can possibly address:
 The payload's last byte is at **0x50B08**. From 0x50B09 to 0x7FFEF the image is
 one unbroken 0xFF run of 0x2F4E7 bytes, then the 16-byte build tag
 `wsad_54.ssf` + five NULs. That erased-flash shape is the strongest single
-argument in `prom_d/prom_d.ld` for reading this image as the 512 KiB flash at
-0xE80000 on CPU 2's bus — an argument that is still one byte-level link short of
-proof, and prom_d's `ORIGIN` stays 0 until that link exists.
+argument in `prom_d/prom_d.ld` for reading this image as a FLASH device rather
+than a mask ROM. ⚠ **That file's `0xE80000` placement is superseded**: the base is
+`0x00F00000` (`notes/FINDINGS-memory-map.md` §5). "Erased flash" survives; "at
+0xE80000" does not. prom_d's `ORIGIN` correctly stays 0 either way, because this
+image is addressed by 0-based offsets and holds no absolute pointers.
 
 ---
 

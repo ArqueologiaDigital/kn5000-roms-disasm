@@ -1,5 +1,50 @@
 # Gap A, half-closed: 21 of the 22 0x0010C000 words have a LOCATED producer
 
+> ★★ **THE COUNTS IN THIS FILE ARE UNDER-COUNTS -- CORRECTED 2026-08-25 (round 3).**  The
+> scan behind section 2 cannot see three classes of write, and misses **17 sites**:
+> absolute read-modify-write (`ordm16_24`, 3 sites), a based store after an interior label
+> (7), and a store made through a struct POINTER handed to a callee (7).  The true figure is
+> **87 write sites over the same 21 of 22 words** -- word 0 still has no producer.  Two
+> consequences matter downstream:
+>
+> * **"Eleven of the 22 words have exactly two write sites" is now SIX** -- `0x0080`,
+>   `0x00C0`, `0x0180`, `0x09C0`, `0x0A00`, `0x0A40`.  `0x0500`, `0x0900`, `0x0940`,
+>   `0x0980` and `0x04C0` leave that list.  Section 4's shortest-path reasoning is scoped by
+>   those counts.
+> * **Register `0x0040 + chan` has a producer that is not in this file's table at all**:
+>   `Word_AddTickLow3` (`0xFC369F`) adds `(tick & 7)` to staging word 1 through a pointer
+>   `VoiceRegs_Stage_D` hands it (`lda XBC,0x00d75e / inc 2,XBC` at `0xFB2EED`), so the
+>   register the played note selects is jittered in its low three bits on the D path only.
+>
+> Every figure re-derived, with the corrected table, by
+> **`python3 notes/prom_c_staging_producer_audit.py --selftest`** (3 negative controls).
+> ⚠ The scan's own docstring says "any write through a base this script cannot follow is
+> COUNTED AND REPORTED, never dropped"; its `unfollowed` list is built and never appended
+> to.  That sentence is the reason the gap went unnoticed and is asserted false by the
+> audit's section 1.
+
+> ★★ **SUPERSEDED IN PART, 2026-08-25 (round 3).**  Two more registers are named and a
+> third has the sibling's name with a calibration behind it: the KN5000 sub-CPU stages **the
+> same 22 registers in the same order**, and `0x0100`/`0x0140` are established here as a
+> PAIR with a 7-bit field clamped to 36..120.  See
+> **`notes/FINDINGS-prom_c-dev10c-sibling-register-map.md`** and
+> `python3 notes/prom_c_reg0100_0140_checks.py --selftest`.
+
+> ★★ **SUPERSEDED IN PART, 2026-08-25 (round 7).**  Section 0's first bullet — *"No register's
+> meaning.  Not one."* — is **no longer true for four of them**, and section 4's next-pass list
+> is done for two of its three items.  `0x0400 + chan` is the PITCH (1/256 semitone),
+> `0x0080 + chan` is the OUTPUT LEVEL (log2, 256 counts per octave), `0x0040 + chan` is the word
+> the played note selects out of a key-zone record, and `0x0800`/`0x0840 + chan` have their
+> quiescent value.  See **`notes/FINDINGS-prom_c-dev10c-register-meanings.md`** and
+> `python3 notes/prom_c_dev10c_meaning_checks.py`.  Everything else in this file stands: the
+> producer index, the 70 write sites, and the other seventeen registers' meanings still being
+> unknown.
+>
+> ⚠ Round 7 took a route this file did not rank: **not** the two-producer registers, but the MIDI
+> CONTROLLER DISPATCHER, whose 26 arms carry the standard controller numbers and so give a name
+> to the part-record fields that the register producers read.  Section 4's item 1 —
+> `0x0180 + chan`, the register the firmware reads back — is **still open**.
+
 ⚠ **CORRECTED 2026-08-25 (wave-5 audit, finding 16).**  This file's title used to read
 *"every 0x0010C000 register now has a named PRODUCER"*.  Two things were wrong with it and
 both matter downstream:
@@ -26,6 +71,24 @@ python3 notes/prom_c_dev10c_field_sources.py --verify   # assertions, exit != 0 
 python3 notes/prom_c_dev10c_field_sources.py --sites    # every write, with its address
 python3 notes/prom_c_dev10c_field_sources.py --dev104   # the 0x00104000 packer's 19 writes
 ```
+
+
+### Names the producer table below now has (round 7)
+
+The `sub_XXXXXX` labels in section 2 are still the addresses this pass indexed; nine of them
+have since been named in `prom_c/wsa1_prom_c.s`.  The mapping, so the table stays followable:
+
+| here | now |
+|---|---|
+| `sub_FA7467` | `KeyZone_Stage_Reg0040_Stride8` |
+| `sub_FA74AB` | `KeyZone_Stage_Reg0040_Stride6A` |
+| `sub_FA74ED` | `KeyZone_Stage_Reg0040_Stride6B` |
+| `sub_FA752F` | `KeyZone_Stage_Reg0040_Stride4` |
+| `sub_FA819A__FA8231` | inside `Voice_SelectKeyZone_Reg0040` |
+| `sub_FA7D6A__FA7E1A` | inside `Voice_StageLevel_Reg0080` |
+| `sub_FA8347__FA8398` | inside `Voice_StagePitch_Reg0400_AB` |
+| `sub_FA83CC__FA841D` | inside `Voice_StagePitch_Reg0400_CD` |
+| `sub_FC4D85` | unchanged — still an address |
 
 ---
 
@@ -223,6 +286,13 @@ Full account and the closed forms: `notes/FINDINGS-prom_c-tail-data-zone.md` §4
 ---
 
 ## 4. What the next pass should do
+
+> ⚠ **Item 3 is DONE (round 3, in part) and the counts this section reasons from are the
+> under-counts corrected at the head of this file.**  The four `KeyZone_Stage_Reg0040_*`
+> walkers were named in round 7; round 3 adds the fifth producer of that register,
+> `Word_AddTickLow3`.  Item 1 -- the two producers of `0x0180` -- is still open on the READ
+> side; its WRITE side is decoded in
+> `notes/FINDINGS-prom_c-dev10c-sibling-register-map.md` §4.
 
 1. Read `sub_FA96F7__FA9801` and `sub_FA9C60__FA9F06` — the only two producers of the one
    register the firmware READS BACK (`0x0180 + channel`, gap F).  Two routines, one
