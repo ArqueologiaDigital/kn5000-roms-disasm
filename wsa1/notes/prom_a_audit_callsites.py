@@ -104,6 +104,21 @@ def le(addr, n):
     return int.from_bytes(img[o:o + n], "little")
 
 
+TARGET = re.compile(r'0x([0-9a-f]{6})\b')
+THUNK_LO, THUNK_HI = 0xF40000, 0xF44018
+
+
+def xfer_target(text):
+    """The printed target of a transfer instruction, or None."""
+    if not text:
+        return None
+    body = text.split(":", 1)[1] if ":" in text else text
+    if not XFER.search(body):
+        return None
+    m = TARGET.search(body)
+    return int(m.group(1), 16) if m else None
+
+
 def classify(at, ra):
     """Why does the cited address `at` not decode to a transfer to `ra`?
 
@@ -112,6 +127,15 @@ def classify(at, ra):
                 a pointer-table or vector-table entry, legitimately cited
       THUNK     that word is an address whose instruction transfers to `ra` --
                 the citation is a table slot one indirection away
+      VIA-DIR   the instruction here calls a prom_b DIRECTORY slot whose own
+                `jp` lands on `ra`.  This is how nearly every cross-module call
+                in the machine is spelled, so it is a CORRECT citation, not a
+                defect -- added 2026-08-25 after round-2 audit F9 showed the
+                tool was reporting ~30 of them as unresolved
+      VIA-JP    the instruction here transfers to some other address whose own
+                instruction transfers to `ra` -- a two-hop veneer, also correct
+      RAM SLOT  the citation is a RAM address (0x600000-0x6FFFFF): a runtime
+                function-pointer slot, outside both ROM images by construction
       OFF BY n  the instruction that transfers to `ra` starts n bytes EARLIER;
                 this is the defect this script exists for
       ??        none of the above: read the header
@@ -123,6 +147,14 @@ def classify(at, ra):
         w = (le(at, n) or 0) & 0xFFFFFF
         if w and w != ra and reaches(dis1(w), ra):
             return "THUNK", "-> 0x%06X, which transfers to 0x%06X" % (w, ra)
+    t = xfer_target(dis1(at))
+    if t is not None and t != ra:
+        if THUNK_LO <= t < THUNK_HI and reaches(dis1(t), ra):
+            return "VIA-DIR", "-> directory slot T_%06X -> 0x%06X" % (t, ra)
+        if reaches(dis1(t), ra):
+            return "VIA-JP", "-> 0x%06X -> 0x%06X" % (t, ra)
+    if which(at) is None and 0x600000 <= at < 0x700000:
+        return "RAM SLOT", "runtime function-pointer slot in RAM"
     for d in (1, 2):
         if reaches(dis1(at - d), ra):
             return "OFF BY %d" % d, "the instruction is at 0x%06X" % (at - d)
@@ -250,6 +282,13 @@ def main():
     off = sum(v for k, v in tally.items() if k.startswith("OFF BY"))
     print("%d citation(s) are one or two bytes PAST the instruction -- the defect "
           "this script exists for" % off)
+    # ★ Round-2 audit F9: prom_a used to report only the OFF-BY-N line and stay
+    # silent about the citations that do not resolve at all.  State both.
+    unres = tally.get("??", 0)
+    print("%d citation(s) DO NOT RESOLVE (`??`) -- %.1f%% of the %d checked.  Each "
+          "is a header to read, not automatically a defect, but the number belongs "
+          "in every report that quotes the OFF-BY-N line."
+          % (unres, 100.0 * unres / n if n else 0.0, n))
     return 0
 
 

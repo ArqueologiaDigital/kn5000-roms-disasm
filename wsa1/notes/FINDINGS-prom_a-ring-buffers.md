@@ -281,6 +281,18 @@ the task consumes one signal per iteration.
   literal fails instead of passing forever. ⚠ What the six controls **are** is
   not established.
 
+  **Updated 2026-08-25.** `T_F405F0`'s target, prom_a `0xF89800`, is now
+  converted and named: it is the **continuous-control normaliser**, a 32-slot
+  dispatcher over `W` with eight response-curve tables, and its carry result
+  means "the cooked value changed" — see `notes/FINDINGS-prom_a-control-normaliser.md`.
+  Two corrections to the sentence above, both from
+  `notes/prom_a_ctrl_checks.py`: there are **eight** call sites of `T_F405F0` in
+  this module, not six (`0xF8DC63 0xF8DC96 0xF8DCC9 0xF8DCFC 0xF8DD54 0xF8DD69
+  0xF8DDC3 0xF8DDD8`), passing `W = 0,1,2,3,4,5,4,5`; and the two extra ones are
+  inside a **byte-identical duplicate** — `0xF8DDBC-0xF8DDE5` equals
+  `0xF8DD4D-0xF8DD76`. Six channels, eight sites, two of the routines emitted
+  twice. What the controls are is still not established.
+
 ---
 
 ## 6. `0xFE0000-0xFE54B5`: 21,686 bytes converted and NOT named

@@ -31,7 +31,179 @@ it. Files concerned:
 `prom_b_audit_callsites.py`, `gen_prom_b_f5bbe7_module.py`,
 `gen_prom_b_f44018_module.py`, `prom_b_round2_frontier_delta.py`, and (added
 2026-08-25, round 3) `gen_prom_b_f47800_module.py`,
-`prom_b_round3_frontier_delta.py`.
+`prom_b_round3_frontier_delta.py`, and (added 2026-08-25, round 4)
+`prom_b_f65000_trace.py`, `prom_b_f65000_layout.py`,
+`gen_prom_b_f65000_module.py`, `prom_b_f65000_header_audit.py`,
+`prom_b_f65000_frontier_delta.py`, `prom_b_sc1_serial_regs.py`, and (added
+2026-08-25, round 5) `prom_b_f0ea9f_layout.py`,
+`gen_prom_b_f0ea9f_module.py`, `gen_prom_b_effect_tables.py`,
+`prom_b_dlb_record_arrays.py`, `prom_b_round5_frontier_delta.py`,
+`prom_b_round5_citations.py`, `prom_b_f0ea9f_header_audit.py`, and (added
+2026-08-25, round 6) `prom_b_instr_census.py`, `prom_b_span_frontier.py`,
+`prom_b_f6d002_layout.py`, `gen_prom_b_f6d002_module.py`,
+`prom_b_smf_reader.py`, `prom_b_round6_frontier_delta.py`,
+`prom_b_round6_citations.py`, `prom_b_f6d002_touches.py`, and the round-6
+audit-response file `prom_b-round2-audit-responses.md`.
+
+Round 6 also **changed** two earlier files: `prom_b_f0ea9f_layout.py`
+(`proven_call_sites()` now excludes a call site INSIDE the block being framed —
+see `prom_b-round2-audit-responses.md`, without which no generator in this lane
+can reproduce its own output once its block is spliced in) and
+`gen_prom_b_effect_tables.py` (rejects unknown flags).
+
+Round 5 also **changed** two round-4 files: `prom_b_f65000_layout.py` (its
+`accept()` now requires a flow-end tail, and `--null --rev REV` pins the null
+corpus to a revision) and `gen_prom_b_f65000_module.py` (LAYOUT re-derived, four
+runs demoted to `.byte`, banner corrected). The 0xF65000 block in the `.s` was
+regenerated from it and re-gated.
+
+## `prom_b_span_frontier.py` (round 6)
+**"Which `.incbin` SPAN should be converted next?"** `prom_b_module_frontier.py`
+ranks THUNK RUNS and is blind to a module entered by DIRECT CALL. This ranks the
+spans by how many DISTINCT addresses inside them an ALREADY-TRANSCRIBED
+instruction calls or jumps to.
+
+    python3 notes/prom_b_span_frontier.py            # ranked by bytes
+    python3 notes/prom_b_span_frontier.py --by proven
+    python3 notes/prom_b_span_frontier.py --selftest
+
+It is what chose round 6's span: 76 proven targets against the thunk frontier's
+thirteenth place.
+
+## `prom_b_instr_census.py` (round 6)
+**"How many INSTRUCTIONS are in a converted block — as against BYTES?"** The
+round-2 audit's finding F2 was a byte total worn as an instruction count. This
+walks every `code` segment of a block's frozen LAYOUT and cross-checks the decoded
+starts against the `.s`'s own `; ADDR` comments; the two sets must be EQUAL.
+
+    python3 notes/prom_b_instr_census.py --last      # every known block
+    python3 notes/prom_b_instr_census.py --module f0ea9f --last
+
+⚠ It counts a `.byte`-emitted instruction as an instruction, which a line-shape
+split does not: 392 of the 0xF0EA9F block's 5,067 are of that kind.
+
+## `prom_b_f6d002_layout.py` + `gen_prom_b_f6d002_module.py` (round 6)
+**The 0xF6D002-0xF77FFF span, 44,189 substantive bytes.** The layout module is
+`prom_b_f0ea9f_layout.py` with LO/HI changed and NOTHING else — round 5's rule set
+transferring to a new module unchanged is round 6's methodological result. It also
+re-implements `--provenance` to walk instruction BOUNDARIES rather than every code
+byte, which is the difference between a report that finishes and one that does not.
+
+    python3 notes/prom_b_f6d002_layout.py --all
+    python3 notes/prom_b_f6d002_layout.py --provenance
+    python3 notes/gen_prom_b_f6d002_module.py --checks   # REFUSES to emit on fail
+
+⚠ The emitter's BYTEMAP block had to be rewritten: `build()` paints adjacent byte
+maps one colour, so six of this block's fourteen byte-map segments hold 2 or 4
+maps, and round 5's "the N non-0xFF bytes ascend strictly, 0xAA to 0xBB" would be
+false for them. The check caught it before a line was emitted.
+
+## `prom_b_f6d002_touches.py` (round 6)
+**"What does the round-6 block touch, and what does it demonstrably NOT
+touch?"** Two negative claims, both checked over the transcription rather than
+the raw bytes: zero operands name the panel change-mask shadow 0x2B20-0x2B3F
+(which is why round 6 does not close emulation gap O), and every absolute operand
+that is neither RAM nor an address in the images lies in CPU 1 work DRAM.
+
+    python3 notes/prom_b_f6d002_touches.py
+    python3 notes/prom_b_f6d002_touches.py --list
+    python3 notes/prom_b_f6d002_touches.py --top
+
+It refuses to report a vacuous zero: if the block is not converted it says so and
+exits non-zero.
+
+## `prom_b_smf_reader.py` (round 6)
+**"Is 0xF6F530 a Standard MIDI File reader?"** Yes, and this is the evidence: 40
+checks, every instruction re-decoded from the ROM — the `MThd`/`MTrk` tags at
+0xF6F528, the 1,024-byte window at 0x60A700-0x60AAFF with its cursor in (0x1088),
+the six header bytes as big-endian pairs in (0x1078)-(0x107D), and all three of the
+specification's own rejections (SMPTE division, division 0, format > 1).
+
+    python3 notes/prom_b_smf_reader.py --list
+
+It also states what is NOT established: where the bytes come from, and whose
+buffer 0x60A700 is.
+
+## `prom_b_f0ea9f_layout.py` (round 5)
+**"Which bytes of 0xF0EA9F-0xF13D33 are code — and WHY is each one code?"**
+It is `prom_b_f65000_layout.py` plus four corrections, each with its own null.
+
+    python3 notes/prom_b_f0ea9f_layout.py --all           # layout + tables + provenance
+    python3 notes/prom_b_f0ea9f_layout.py --null-accept   # the 13.9% one
+    python3 notes/prom_b_f0ea9f_layout.py --null-stride   # 0 of 33 proven tables
+    python3 notes/prom_b_f0ea9f_layout.py --null-ptr      # content rules on proven code
+    python3 notes/prom_b_f0ea9f_layout.py --provenance    # grade every code segment
+
+⚠⚠ **`--null-accept` is the one to read.** Round 4's rule for promoting an
+unreached run to code accepts **13.9%** of record-aligned chunks of PROVEN
+display-list data (39,329 bytes) as code. Requiring the decode to end in a flow
+end takes that to 1 of 1,884. That correction is retro-active: it moved four
+runs (76 bytes) of the already-emitted 0xF65000 module from instructions to
+`.byte`, `0xF6A475` (40 bytes, a lookup table) among them. See
+`FINDINGS-prom_b-f0ea9f-module.md` §2.4.
+
+## `gen_prom_b_f0ea9f_module.py` (round 5)
+**"…and what is the assembly for it?"** Reuses `gen_prom_b_f65000_module.py`'s
+emitter helpers by swapping that module's globals, so there is one copy of the
+transcription/label/reference machinery, not two.
+
+    python3 notes/gen_prom_b_f0ea9f_module.py --checks
+    python3 notes/gen_prom_b_f0ea9f_module.py --tables    # every table, with its KIND
+
+## `gen_prom_b_effect_tables.py` (round 5)
+**"What does the WSA1's DSP effect section offer?"** 0xF147AC is 128 entries of
+16 characters; **56 are real effect names and 72 are the `----------`
+placeholder.** 0xF15024 is the parameter labels.
+
+    python3 notes/gen_prom_b_effect_tables.py --checks   # 13 checks
+    python3 notes/gen_prom_b_effect_tables.py --names    # the 56, with slot numbers
+    python3 notes/gen_prom_b_effect_tables.py --stride   # why the stride is 16
+
+"Nothing reads it" is a CHECK here, not a shrug: it decodes backwards from every
+4-byte window in prom_a+prom_b that spells the address and asserts that none is
+an instruction operand.
+
+## `prom_b_dlb_record_arrays.py` (round 5)
+**"How can the region above 0xF13D34 be framed at all?"** Not by
+`prom_b_display_lists.py` — those lists have no `ld XIY,start / ld XIX,end` call
+site. They are arrays of interpreter-B records, pushed ONE AT A TIME
+(`push XBC / call 0xf42e0c` = `DisplayListB_RunOne_Stack`).
+
+    python3 notes/prom_b_dlb_record_arrays.py
+
+0xF157A8 walks as 16 records and 0xF15820 as 8, both ending at 0xF15898, and the
+bases differ by 8 × 15 — two entry points into one array. That is the round-6
+framing rule.
+
+## `prom_b_f0ea9f_header_audit.py` (round 5)
+**"Do the emitted headers agree with the rows under them?"** Same job as
+`prom_b_f65000_header_audit.py`, but it reads `prom_b/wsa1_prom_b.s` itself, so
+it also catches a splice that dropped or duplicated an object.
+
+    python3 notes/prom_b_f0ea9f_header_audit.py
+    python3 notes/prom_b_f0ea9f_header_audit.py --last
+
+`--last` names the block's final data object, so "the audit passed" cannot mean
+"the audit stopped early".
+
+## `prom_b_round5_citations.py` (round 5)
+**"Does every instruction QUOTED in round 5's findings note actually decode
+there?"** The tree's standing defect list includes "~20 call sites cited one byte
+past the instruction", and the first draft of that note did exactly that
+(`0xF105F0` for an instruction at `0xF1060F`).
+
+    python3 notes/prom_b_round5_citations.py --list
+
+It PARSES the note's own fenced code blocks, so the note and the checker cannot
+drift apart, and it fails loudly if it finds no citations at all rather than
+passing vacuously.
+
+## `prom_b_round5_frontier_delta.py` (round 5)
+**"Did round 5 retire exactly the two runs it claims?"** Same shape as
+`prom_b_f65000_frontier_delta.py`: BEFORE is reconstructed from the file's own
+current `.incbin` set plus the converted range.
+
+    python3 notes/prom_b_round5_frontier_delta.py
 
 Round 3 makes it worse again in the same way: **21,962 substantive bytes** of
 `prom_b/wsa1_prom_b.s` (0xF47800-0xF4EFFF) were emitted by
@@ -614,3 +786,117 @@ anything — a check that breaks on success. It now carries a `LATER` list holdi
 round 3's span, adds it back before doing round 2's arithmetic, and goes on
 asserting the state round 2 actually left behind. **A round 4 adds its own span
 to both files' `LATER` lists.**
+
+## `prom_b_f65000_trace.py`
+**"Which bytes of prom_b 0xF65000-0xF6F000 are CODE?"** `prom_b_module_trace.py`
+reaches only **44.7%** of it, because the block dispatches through POINTER
+TABLES and a recursive descent cannot follow one. This alternates descent with a
+scan of the unreached runs for two table shapes, to a fixpoint.
+
+    python3 notes/prom_b_f65000_trace.py                 # the residue
+    python3 notes/prom_b_f65000_trace.py --tables        # the tables it followed
+    python3 notes/prom_b_f65000_trace.py --anchor        # per-run criteria
+    python3 notes/prom_b_f65000_trace.py --discriminate  # do the criteria WORK?
+    python3 notes/prom_b_f65000_trace.py --accept        # the fixpoint
+
+⚠ **`--discriminate` is the important one, and it is a REFUTATION.** It grades
+the 98 unreached runs by two candidate code tests. "A linear decode from the run
+start lands exactly on the next proven instruction boundary" passes **89 of 98**
+— including 12 of 12 pointer tables and 3 of 3 strings. It cannot fail and it is
+not used. `selfconsistent()` (decode consumes the run exactly · no undefined
+opcode · every relative branch hits an instruction boundary) passes 57, rejects
+every pointer table and every string, and accepts all 19 padding runs. The dead
+criterion is kept in the file, named and labelled, so nobody re-invents it.
+
+## `prom_b_f65000_layout.py`
+**"Which bytes of 0xF65000-0xF6D001 are code, which are tables, which are
+padding?"** Five CONTENT rules run first and become BARRIERS the code walk may
+not enter, then the descent fills in the rest.
+
+    python3 notes/prom_b_f65000_layout.py             # the LAYOUT
+    python3 notes/prom_b_f65000_layout.py --null      # the calibration
+    python3 notes/prom_b_f65000_layout.py --barrier   # what the barrier buys
+    python3 notes/prom_b_f65000_layout.py --conflicts # must be zero
+    python3 notes/prom_b_f65000_layout.py --residue   # what no rule matched
+    python3 notes/prom_b_f65000_layout.py --python    # the LAYOUT literal
+
+The NULL is the point. Every rule is run over **every maximal run of proven
+instruction text in `prom_b/wsa1_prom_b.s`** — 2,948 runs, 54,814 bytes, all of
+it byte-gate-proven code — and a rule that fires there is a false positive. All
+five fire zero times. `--null` also prints the two ASCII thresholds that were
+REJECTED (7 false positives at 8 bytes, 3 at 10), so the choice of 20 reads as a
+measurement. ⚠ Its cost is real: the 9-byte `VOLUME = ` at 0xF67DC6 is not
+promoted and stays inside a `.byte` run.
+
+`--barrier` answers "is the barrier cosmetic?" — no: without it the same descent
+claims 676 bytes that a content rule frames, including whole 32-entry pointer
+tables at 0xF6828B and 0xF685C1.
+
+## `gen_prom_b_f65000_module.py`
+**"…and what is the assembly for 0xF65000-0xF6D001?"** The emitter whose output
+is in the `.s`.
+
+    python3 notes/gen_prom_b_f65000_module.py
+    python3 notes/gen_prom_b_f65000_module.py --layout
+    python3 notes/gen_prom_b_f65000_module.py --checks   # refuses to emit on fail
+    python3 notes/gen_prom_b_f65000_module.py --tables
+    python3 notes/gen_prom_b_f65000_module.py --stats    # the 603 table entries
+
+Its strongest check is that the LAYOUT literal **equals what
+`prom_b_f65000_layout.py` derives, segment for segment**, so the table in the
+file is a record of a measurement rather than a typed guess. Every number in the
+banner is computed at emit time, including the segment counts, the heaviest
+operands and the barrier figures.
+
+## `prom_b_f65000_header_audit.py`
+**"Do the numbers in the emitted headers agree with the rows under them?"**
+
+    python3 notes/prom_b_f65000_header_audit.py
+    python3 notes/prom_b_f65000_header_audit.py --last
+
+⚠ It exists because of a real defect. The first draft of the emitter subtracted
+the IMAGE-WIDE default thunk slot `0x00F42C70` when it meant the MODULE's own
+`ret` stub `0x00F675CB`, and printed the wrong "distinct other targets" count in
+**every one** of the 31 dispatch-table headers. Gate-clean. This re-reads the
+`.long` / `.byte` / `.ascii` rows and the ROM and re-checks each header's own
+arithmetic, plus every `T_xxxxxx` a routine header names (the slot must really
+hold `jp <that address>`) and every in-module caller it lists. 356 objects, 0
+failures. Tested on the last element with `--last`.
+
+⚠ Its own first draft was wrong too, in the same family: the body collector ran
+past the blank line after a data object and swallowed the `.byte` demotion rows
+of the code below, reporting a 32-byte index map as 35. Both the fix and the
+reason are in the file.
+
+## `prom_b_f65000_frontier_delta.py`
+**"Did round 4 retire exactly the four thunk runs it claims?"** Yes — and the
+BEFORE figure is reconstructed from the file's own current `.incbin` set plus the
+converted range, so it stays checkable instead of being a number copied out of a
+session log.
+
+    python3 notes/prom_b_f65000_frontier_delta.py
+    python3 notes/prom_b_f65000_frontier_delta.py --runs
+
+⚠ Its run TOTALS are not `prom_b_module_frontier.py`'s (19→15 against 20→16):
+the tool groups a run across a leading non-`jp` slot and this does not. The four
+run NAMES are identical in both, and the docstring says so.
+
+## `prom_b_sc1_serial_regs.py`
+**"What is CPU 1's SC1 actually programmed with?"** The twelve BR1CR immediates
+are `0x22` ×4, `0x24` ×5, `0x28` ×3 — one prescaler tap, three divisors — and
+SC1MOD is written whole exactly once, with **0x00**, which is I/O-interface
+(clocked synchronous) mode, not a UART.
+
+    python3 notes/prom_b_sc1_serial_regs.py
+    python3 notes/prom_b_sc1_serial_regs.py --sites
+
+Closes entries **E.1** and **E.2** of
+`kn7000_mame/notes/WSA1-EMULATION-DISASM-GAPS.md`. It reads the PROVEN
+transcription, not the raw bytes, because `08 57 nn` occurs inside data as
+readily as inside code; and it prints how many instruction lines of each image
+are transcribed, so the bound ("a write inside an `.incbin` is invisible here")
+is visible rather than implied. Four assertions, non-zero exit on failure.
+⚠ It does **not** give an absolute bit rate: that needs the divide ratio of
+prescaler tap 0b10, which nothing in this tree has established, and MAME's
+`tmp95c061` prescaler is documented as 16x slow so it cannot supply it.
+

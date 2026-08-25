@@ -368,10 +368,24 @@ its internal pointers relocated.  ~~**Left for a later pass**~~ **DONE 2026-08-2
 
 ## 10. What the next pass needs
 
-* `0xFA8347`, `0xFA83CC`, ~~`0xFB713A`~~, `0xFB77EF`'s callers and `0xFB7A58`'s callers are
-  what FILL the staging struct.  (`0xFB713A` is converted as of 2026-08-25 and turns out to be
-  a CONSUMER of the struct, not a filler: it moves struct words 1..21 into the device.)  Until one of them is converted, every register's meaning stays
-  unknown — the drivers only move words.
+* ~~`0xFA8347`, `0xFA83CC`, `0xFB713A`, `0xFB77EF`'s callers and `0xFB7A58`'s callers are
+  what FILL the staging struct.  Until one of them is converted, every register's meaning
+  stays unknown — the drivers only move words.~~
+  **DONE 2026-08-25 (wave 5).**  All of them are converted, and the fillers are now
+  ENUMERATED PER REGISTER: `python3 notes/prom_c_dev10c_field_sources.py` prints, for each
+  of the 22 staged words and therefore for each 0x0010C000 per-channel register, every
+  routine that writes it — 70 write sites over 21 of the 22 words, in both the absolute
+  and the based addressing forms.  Word 0 has no writer and `Dev10C_WriteAllChanRegs`
+  reads no word 0 either, which is two independent readings agreeing.
+  ★ The twin device is different in kind: `0x00D7A2`, the 0x00104000 struct, is filled by
+  ONE routine, `sub_FC4DBD`, which writes 19 offsets 0x00..0x24 through its pointer
+  argument — exactly the span `Dev104_WriteAllChanRegs` reads — out of a "current object"
+  pointer block at RAM 0x00E082-0x00E08D that four small routines set from the part record
+  (RAM 0x005D23, stride 187) and the voice record (RAM 0x003BCF, stride 0x44).
+  Full account, including the first register value written out as a formula:
+  **`notes/FINDINGS-prom_c-dev10c-producers.md`**.
+  ⚠ Still true, and the reason this is "half-closed": not one register's MEANING is
+  established.
 * `0xFA68FC` is the only READ of 0x0010C000 located so far.  What it reads back
   (register number is a byte from 0x0087CF, multiplied by 2 afterwards) would name at least one
   register.

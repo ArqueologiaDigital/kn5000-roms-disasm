@@ -604,3 +604,267 @@ The BYTE columns of `source_coverage.py` are unaffected — they are parsed from
 the directives' operands, not from the substring count — so every coverage figure
 in this tree stands. It is the span COUNT that is wrong, and the fix is one line
 in a file this lane must not edit.
+---
+
+## Added 2026-08-25 with the FLOPPY DISK CONTROLLER module
+
+These four live in `notes/` (the round that added them was scoped to
+`prom_a/wsa1_prom_a.s` and `notes/`).
+
+### `notes/prom_a_fdc_checks.py`
+
+**"Do the 138 quantified claims of the FDC module still hold against the ROM?"**
+
+```
+python3 notes/prom_a_fdc_checks.py        # non-zero exit on any failure
+python3 notes/prom_a_fdc_checks.py -v     # print every check
+```
+
+It re-derives, from ROM bytes: the four jump tables' entry counts (from the four
+`cp` bounds in their own indexers) and their exact tiling of
+`0xFE6E3A-0xFE6E83`; the opcode validator's 32-value acceptance truth table,
+**and compares it against MAME's `upd765_family_device::check_command()` parsed
+out of `../mame/src/devices/machine/upd765.cpp`**; the 30 immediates of the
+three disk geometries and the capacities they imply; the ST0/ST1/ST3 bit →
+error-code map; the per-opcode parameter arms of the command-phase encoder; and
+that every routine name really is at the address its header claims.
+It is the artefact behind `notes/FINDINGS-prom_a-fdc.md` — run it before quoting
+anything from that note.
+
+### `notes/prom_a_fdc_callgraph.py`
+
+**"Inside `0xFE54B6-0xFE68F2`, which routine calls which — and which converted
+code outside calls in?"**
+
+```
+python3 notes/prom_a_fdc_callgraph.py
+python3 notes/prom_a_fdc_callgraph.py 0xFE5E84
+python3 notes/prom_a_fdc_callgraph.py --edges
+```
+
+`notes/prom_a_xref.py` cannot see intra-module calls at all — they are
+PC-relative `calr` — so every "Called from:" line in that module would otherwise
+have been written by eye. This is instruction-anchored on both sides: inside the
+module from unidasm over round-trip-verified bytes, outside it from the source's
+own trailing byte comments (`; FEXXXX 1e lo hi` is a `calr`). Its counts ARE
+call-site counts, unlike `prom_a_xref.py`'s upper bounds.
+
+### `notes/prom_a_unit1_backend_check.py`
+
+**"Does unit 1 of the block-device layer really talk to the `0x7E0000` device?"**
+
+```
+python3 notes/prom_a_unit1_backend_check.py
+```
+
+Takes the transitive closure from each of the seven unit-1 arms of
+`Fdc_Request` and reports which of the four `0x7E0000` accessors it reaches; also
+censuses every `add Xrr,0x007E0000` in prom_a + prom_b and classifies out the
+one byte-window hit that is data, not that instruction. This is what closes the
+identity half of emulation gap J.
+
+### `notes/gen_prom_a_fdc_module.py`
+
+**"What text goes into `prom_a/wsa1_prom_a.s` for the FDC module?"**
+
+```
+python3 notes/gen_prom_a_fdc_module.py --out-dir /tmp/frag
+python3 prom_a/insert_region.py 0xFE54EC 0xFE594C /tmp/frag/fdc_span1.s
+python3 prom_a/insert_region.py 0xFE5A41 0xFE6851 /tmp/frag/fdc_span2.s
+python3 prom_a/insert_region.py 0xFE6E3A 0xFE6E84 /tmp/frag/fdc_tables.s
+python3 scripts/analysis/assert_byte_identical.py
+```
+
+The instruction text comes from `prom_a/roundtrip.py --block`, so it cannot break
+the gate; this only adds names and comments. The one thing worth copying: the
+`{CALLED}` placeholder in every header is filled in by
+`prom_a_fdc_callgraph.py`, so the call-site lines are computed, not typed. ⚠ Use
+`.short` for 16-bit data — `.word` is FOUR bytes in this assembler, and the
+first draft of the jump tables overflowed the ROM region by exactly 74 bytes.
+
+## Added 2026-08-25 with the CONTROL NORMALISER and the gap-C census
+
+### `notes/prom_a_codemap.py`
+
+**"Which bytes of a prom_a range are reachable CODE, and which are DATA?"**
+
+```
+python3 notes/prom_a_codemap.py 0xF89800 0xF8A000 0xF898AD 0xF898E0 ...
+```
+
+Recursive descent from seeds — every prom_b thunk slot landing in the range, a
+leading `jp abs` entry directory, plus anything named on the command line — over
+the phase-merged decode table of `scripts/analysis/trace_code.py`, with an
+on-demand decode for the addresses that table misses. Everything reached is
+CODE; the rest is reported as a DATA candidate.
+
+⚠ **Why it exists.** `prom_a/roundtrip.py` will round-trip a data table
+byte-exactly and print it as tidy instructions, and the **byte gate cannot tell**
+— the bytes are right and only the meaning is wrong. Run this first on any
+module that is not uniformly code. Read the data runs before believing them: a
+run that disassembles as sane code is a missing seed, not a table (that is how
+the 32-entry handler table at `0xF89825` was found).
+
+### `notes/prom_a_ctrl_checks.py`
+
+**"Do the 125 quantified claims of the control normaliser still hold?"** The ten
+`(raw, curve, cooked, idle)` tuples are *parsed back out of each handler's own
+bytes* — the store, the compare, the `ld XIX,imm32` and the idle arm's `ld A,#`
+— rather than compared against a list. Four claims in the first draft were wrong
+and this is what caught them: an entry count of 22 that was 21, a slot with two
+`imm32` loads and not one, "every difference is +1" when 19 of 40 are −1, and
+"six call sites" when there are eight.
+
+### `notes/gen_prom_a_ctrl_module.py`
+
+**"What text goes into the source for 0xF89800-0xF89FFF?"** Same shape as the FDC
+generator. Two things worth copying: the 34-entry handler table is emitted
+**symbolically** (`.long Ctrl_Ch0_Normalise`), so a wrong label breaks the byte
+gate instead of a comment lying; and the `.fill` is emitted only after checking
+every byte of the pad.
+
+### `notes/prom_a_p7_link_census.py`
+
+**"Every site in CPU 1's ROMs that moves or reads P7 bit 1, the link's
+receiver-busy line."** All three bit operations for all eight bits of P7, over
+prom_a *and* prom_b, plus the whole-register `ldio P7,#` form. It is the artefact
+behind `notes/FINDINGS-prom_a-link-receiver-busy.md`, which answers emulation
+gap C: 3 sites clear the line, 6 set it, 1 tests it, prom_b touches it nowhere,
+and every one of the ten is inside converted assembly so the counts are exact.
+
+### `notes/prom_a_module_frontier.py`  (new, wave 5 round 2)
+
+**"Which whole thunk MODULE should prom_a convert next?"** The prom_a twin of
+`notes/prom_b_module_frontier.py`. `prom_a_call_graph.py` ranks individual
+SLOTS, which is the wrong unit of work: one span of source closes one `.incbin`,
+so what matters is how many bytes of *contiguous* still-`.incbin` target range a
+whole run of consecutive directory slots publishes. `--spans` prints the
+`.incbin` ledger largest-first; `--at` explodes one run; `--selftest` asserts
+only things that survive a conversion, and cross-checks its own `.incbin` total
+against `scripts/analysis/source_coverage.py` — an earlier draft compared that
+total against itself, which is a check that cannot fail.
+
+This is the tool that chose round 2's two targets: the run `T_F408E4-T_F40910`
+(third by extent, and the one holding emulation gap D's `0xFB24D3`) and
+`T_F41F54-T_F421A8` (first by extent, 145 unconverted slots).
+
+### `notes/prom_a_header_depth.py`  (new, wave 5 round 2)
+
+**"Which routine headers are INCOMPLETE, field by field?"** The round-1 audit
+(F5) caught a report claiming "53 with a full Name / Called from / Inputs /
+Outputs / Evidence / Unknown header" when 17 were full. This prints the truth
+for any label prefix — `--missing` for the incomplete ones, `--orphans` for
+labels with no header at all — so a round quotes a number it measured. A field
+counts only when it starts its own line: a field mentioned inside another
+field's prose does not help a reader find it.
+
+### `notes/prom_a_fb2000_checks.py`  (new, wave 5 round 2)
+
+**"Do the 81 quantified claims of the 0xFB2000 span still hold?"** The four
+module pads (both ends of each), the seven inline jump tables (bound
+instruction, entry count, last-entry test, targets in range), the remote-flash
+reader's arithmetic (`H = 0x1F`, stride `0x2000`, 32 blocks = `0x40000`), the
+205-byte MIDI-file block field by field, the 332 six-byte records at `0xFB82A2`,
+the 106 directory slots, and the labels the findings note quotes. It also
+re-runs one **searched negative**: that nothing in prom_a or prom_b names
+`0xFB248A`, which is why that routine has a header but no label.
+
+### `notes/prom_a_linear_decode_check.py --offenders`  (extended, round 2)
+
+The "call/calr into a NON-boundary address from a site that IS an instruction"
+row is the check's sharpest signal, and a count alone cannot be acted on.
+`--offenders` names each one. That listing is what found the 2,566-byte record
+table at `0xFB82A0`: two "instructions" at `0xFB846A` and `0xFB8770` calling
+addresses that are not boundaries, both of them bytes inside the table. The byte
+gate cannot see such a region, because the bytes are still the bytes.
+
+### `notes/prom_a_byte_checks.py` — the SPAN-BANNER check (added round 2)
+
+Two failure modes of the `; 0xAAAAAA-0xBBBBBB -- not yet converted` banners, both
+invisible to the byte gate and both present in the file when round 2 started:
+
+* a banner whose `.incbin` was **split** under it by `prom_a/insert_region.py` —
+  one still read `0xF827C8-0xFFFEFF` over a 1,335-byte directive;
+* a banner whose range was **converted**, leaving the banner sitting directly
+  above the very code it says is not there — `0xF85904-0xF85C88` and
+  `0xFE5A41-0xFE6850`, the second of which is the FDC module.
+
+The check re-derives each banner's range from the directive beneath it and fails
+if a banner has no directive at all. Both defects are fixed and the check now
+guards them.
+
+---
+
+# Six more, added 2026-08-25 (wave 5 round 3), in `notes/`
+
+Same rule: each answers one question and says so in its own docstring.
+
+## `notes/prom_a_converted_callers.py`
+
+**"Of the byte-pattern candidates `prom_a_xref.py` reports, which are real
+instructions in code that has left `.incbin`, and what does each do just
+before?"** Exact for converted code, because the source rebuilds the ROM
+byte-identically. Written to settle round-2 audit **F1**, which claimed the
+`0xFB2000` module was "the only converted caller of `Link_WaitBlockDone`" — there
+are 21, in nine regions, and eight of them are not remote-flash reads.
+`--checks` is 16 assertions, C3/C4 spelled out on the LAST site.
+
+## `notes/prom_a_ring_slots.py`
+
+**"Which prom_b directory slot publishes each `Ring*_Get` veneer?"** Round-2
+audit **F9**: all fifteen `Ring*` group headers cited `0xF41CD0`, which is
+`jp 0xF842DF` — `Ring608A0A_Get`'s slot and nobody else's. Derives the slot for
+each veneer from the ROM. 33 checks, including that `Ring601850_Copy_Get` has
+**no** slot at all.
+
+## `notes/prom_a_ptr_tables.py`
+
+**"Where is a run of LE32 pointers that a linear decode would eat?"** The gap
+`prom_a_linear_decode_check.py` cannot see: a pointer table nobody CALLS into
+produces 0 offenders and is emitted as plausible instructions. `--null` runs the
+same detector over 24 KiB of prom_a that is already converted **code** (0.85 % at
+MIN=6); `--checks` adds a negative control and two positive ones. **Read the null
+before believing a hit, and do not lower MIN without re-running it.**
+
+## `notes/prom_a_boot_checks.py`
+
+90 checks over `0xF80000-0xF826A8` and `0xF827C8-0xF82CFE`. Section 7 is the
+emulation-gap-D tie, checked from four independent places: the two remote `src`
+literals, the display list's ASCII labels, the four value records' pointer pairs,
+and the four ROM images' own last sixteen bytes.
+
+## `notes/prom_a_uiblock_checks.py`
+
+109 checks over `0xF92C62-0xF96017` and `0xF99021-0xFA1403`: the 22 pointer
+tables, their bounds and last-entry tests, the "no device" claim, the panel
+shadow census, and — section 4 — a **global** cross-reference check that decodes
+the bytes of all 91,912 converted instructions and requires every `call`/`calr`/
+`jp` into either span to land on a converted instruction. `4c` is its negative
+control.
+
+## Additions to existing tools
+
+* `notes/prom_a_audit_callsites.py` learned three classifications it was missing
+  (round-2 audit **F9**): `VIA-DIR` (the citation calls a prom_b directory slot
+  whose own `jp` lands on the routine — how nearly every cross-module call in
+  this machine is spelled), `VIA-JP` (a two-hop veneer) and `RAM SLOT`. That
+  moved 30 rows out of `??`. **It now also prints the unresolved count and its
+  percentage on its own line**, so a report cannot quote the clean OFF-BY-N
+  figure and stay silent about the rest.
+* `notes/prom_a_fb2000_checks.py` gained L1–L5: the whole-span linear-decode
+  verdict is `NOT self-consistent`, and every one of the 74 offenders is inside
+  data the source declares. Round-2 audit **F12**.
+* `notes/prom_a_fcf000_checks.py` gained S1–S7: the module's three parts sum to
+  its own stated size, and the code block is 59,752 bytes in 23,585 instructions.
+  Round-2 audit **F3**.
+
+## `notes/prom_a_round3_frontier_delta.py`
+
+**"Did the frontier fall by exactly what round 3's four ranges account for?"**
+Round-2 audit **F8** caught a report quoting a BEFORE column that did not come
+from the command it cited, and **F15** recorded that every round's delta was
+measured against an uncommitted worktree that no longer exists. This script
+trusts no remembered baseline: it measures the AFTER state live, measures what
+the four ranges account for from the ROM and the prom_b directory, and requires
+`AFTER + retired == ` the round-2-end figures the audit independently verified
+(475 slots / 424 targets / 284,578 bytes). All three reconcile exactly.

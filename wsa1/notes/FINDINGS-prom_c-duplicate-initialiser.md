@@ -4,6 +4,14 @@
 > now `Dev10C_` / `Dev104_`, because the tone-generator role those prefixes asserted is an
 > unproven inference.  See `notes/FINDINGS-prom_c-tone-generator.md` §0.  Nothing else changed.
 
+> **⚠ CORRECTED in round 3 of the conversion (2026-08-25): `0xFE0A6D` IS NOT AN OBJECT
+> BOUNDARY.**  It is where the byte-for-byte identity with copy B begins, and that is 92 bytes
+> before the end of a 256-entry cosine table (`MathTable_Cos_S16_256`, `0xFE08C9-0xFE0AC8`)
+> whose exclusive end `0xFE0AC9` is cited by `add XIY,0x00FE0AC9` at `0xFC4239`.  So copy B
+> opens with that table's tail.  Everything this note says about the EXTENT and the
+> DIFFERENCES is unaffected; what changes is that "copy A starts here" must not be read as
+> "an object starts here".  See `notes/FINDINGS-prom_c-tail-data-zone.md`.
+
 **Image:** `prom_c` (IC28, CPU 2, base 0xF80000).
 **Region:** `0xFE0A6D-0xFE21E5`, plus 118,298 bytes of filler behind it.
 
@@ -54,7 +62,7 @@ the end of copy B is ambiguous by exactly one byte.
 
 ## 2. ★ The missing object is the 0x00104000 reset image, and its size checks out twice
 
-`0xFE133B` is the source of `MemCopyWords(0xFE133B, 0x00D91F, 0x26)` at 0xFB8163 inside
+`0xFE133B` is the source of `MemCopyWords(0xFE133B, 0x00D91F, 0x26)` at 0xFB8162 inside
 `Dev10C_ResetAllChannels`, and `0x00D91F` is the struct that routine then hands to
 `Dev104_WriteAllChanRegs` for each of the 64 channels.
 
@@ -98,17 +106,31 @@ the machine uses, or why there are two.
 
 `--refs` searches every 24-bit little-endian address inside each copy across the whole 512 KiB
 image and classifies each hit by the bytes **around** it — an `ld <X..>,#imm32` (`0x40|r` in
-front, `0x00` behind), one of the four direct-address prefixes `0xC2/0xD2/0xE2/0xF2`, or a
-`call`/`jp` (`0x1D`/`0x1B`). Anything else straddles an instruction boundary.
+front, `0x00` behind), an `add <X..>,#imm32` (`0xE8-0xEF 0xC8` in front, `0x00` behind), an
+`lda <X..>,addr24` (`0xF2` in front, `0x30-0x37` behind), one of the four direct-address
+prefixes `0xC2/0xD2/0xE2/0xF2`, or a `call`/`jp` (`0x1D`/`0x1B`). Anything else straddles an
+instruction boundary.
 
 ```
-copy A   98 coincidences, 54 hits in an address-operand position
+copy A   55 coincidences, 97 hits in an address-operand position
 copy B   17 coincidences,  1 hit  in an address-operand position
 ```
 
-And the one surviving hit for copy B is not a reference either: it is at `0xFE05DC`, inside the
-descending 16-bit table at `0xFE05B0` (`... e7 ff | e2 ff | 18 fe | 68 fc | d4 fa ...`), where
-the bytes `e2 ff 18 fe` are the boundary between two table **entries**.
+⚠ **CORRECTED 2026-08-25.** Copy A's row used to read `98 coincidences, 54 hits`, and the
+`add`/`lda` shapes were missing from the classifier. That omission is what produced round 2's
+claim — quoted in `prom_c/wsa1_prom_c.s` — that there is *"no address-operand citation into the
+first 1,787 bytes of copy A (0xFE0A6D-0xFE1167; the earliest is 0xFE1168)"*. There are **eight**,
+and the first of them, `0xFE0AC9`, is the exclusive end of a 256-entry cosine table that starts
+at `0xFE08C9` — so **copy A's start is 92 bytes inside that table, and is a boundary of the
+duplication, not of an object**. See `notes/prom_c_tail_census.py --corrections` and
+`notes/FINDINGS-prom_c-tail-data-zone.md`.
+
+Copy B's row is **unchanged** by the correction, so this section's conclusion stands. And the
+one surviving hit for copy B is not a reference either: it is at `0xFE05DC`, inside
+`Curve_FE05C9` (`... e7 ff | e2 ff | 18 fe | 68 fc | d4 fa ...`), where the bytes
+`e2 ff 18 fe` are the boundary between two table **entries**. A second census with a wider
+exclusion — `notes/prom_c_tail_census.py --copyb`, which discards sites anywhere in the tail
+data zone — reports **zero** hits for copy B.
 
 ⚠ The search is for literals only. A pointer already in RAM, or an address computed at run
 time, would be invisible. This is **"no literal reference"**, not "unreachable".

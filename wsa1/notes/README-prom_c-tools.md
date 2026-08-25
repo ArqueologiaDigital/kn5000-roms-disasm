@@ -624,3 +624,190 @@ caller tally. Two of its rows are retractions kept as assertions, so the old cla
 back.
 
 ---
+
+## Wave 5 (2026-08-25)
+
+### `gen_prom_c_preset_bank.py`
+**"What is the 98,304-byte region at 0xF80000, and what proves its geometry?"**
+
+```
+python3 notes/gen_prom_c_preset_bank.py --verify   # asserts every claim, exit != 0 on failure
+python3 notes/gen_prom_c_preset_bank.py --names    # 16 category names, 129 record names
+python3 notes/gen_prom_c_preset_bank.py --census   # per-chunk, per-byte value census
+python3 notes/gen_prom_c_preset_bank.py --refs     # the pointer search, classified
+python3 notes/gen_prom_c_preset_bank.py --apply    # splice the assembly into the source
+```
+
+A PRESET BANK: magic `ZZZZ`, 16 category names, 129 fixed 704-byte records.  The geometry is
+carried by four independent facts (tiling onto the pad boundary, an `0xFF/0xFF` end marker
+inside every record, the header's own stride and counts, and a layout identical in all 129) —
+`--verify` re-proves each.  ⚠ `--refs` is a *negative*: it classifies all 21 candidate
+pointers against the disassembly and **none is a real instruction operand**, so no consumer of
+this region is known.  See `notes/FINDINGS-prom_c-preset-bank.md`.
+
+### `gen_prom_c_f64_pool.py`
+**"What are the 4,801 bytes at 0xFCB27E, and who reads each constant?"**
+
+```
+python3 notes/gen_prom_c_f64_pool.py --verify   # boundaries, decode, consumer attribution
+python3 notes/gen_prom_c_f64_pool.py --table    # the 77 doubles with their loading routines
+python3 notes/gen_prom_c_f64_pool.py --apply
+```
+
+77 IEEE-754 doubles, one float32 1.0, and the head of the boot RAM image.  Every constant is
+attributed to the routine that loads it, from the 149 24-bit operand sites that carry a pool
+half; the 23 entries with no site of their own are shown to be the interiors of seven
+coefficient ARRAYS, which is checked rather than asserted.  ⚠ No routine is renamed on the
+strength of a constant set — the gap is stated in
+`notes/FINDINGS-prom_c-f64-pool.md` §4.
+
+### `prom_c_dev10c_field_sources.py`
+**"Which routine computes the value of each 0x0010C000 register?"**  (emulation gap A)
+
+```
+python3 notes/prom_c_dev10c_field_sources.py            # the per-register table
+python3 notes/prom_c_dev10c_field_sources.py --verify
+python3 notes/prom_c_dev10c_field_sources.py --sites    # every write, with its address
+python3 notes/prom_c_dev10c_field_sources.py --dev104   # the 0x00104000 packer's 19 writes
+```
+
+Joins `prom_c_tg_chanmap.py`'s staged-word → register-block map to every write into the
+staging struct at RAM `0x00D75E`, in both the absolute and the based addressing forms: 70
+sites over 21 of the 22 words.  ⚠ It names PRODUCERS, never meanings.  Its cross-check is
+that the one word with no writer is the one the device writer never reads.  See
+`notes/FINDINGS-prom_c-dev10c-producers.md`.
+
+### `gen_prom_c_p7stream_pool.py`
+**"What is the 65,972-byte pool at 0xFCD0F7, and how is it framed?"**  (wave 5 round 2)
+
+```
+python3 notes/gen_prom_c_p7stream_pool.py --verify    # framing, tiling, counts; exit != 0 on fail
+python3 notes/gen_prom_c_p7stream_pool.py --census    # objects, opcodes, interpreter-clean split
+python3 notes/gen_prom_c_p7stream_pool.py --emit PATH # the assembly fragment
+```
+
+A relocatable byte-code container: a 4-bit opcode and a 12-bit length in the same two header
+bytes, which is why round 3's 16-bit reading desynchronised after four records.  Derives the
+whole object list from the ROM — no address is hardcoded except the region bounds — and
+proves the framing four independent ways, the strongest being that the interpreter's
+opcode-4 arm consumes exactly one payload byte and all 266 opcode-4 records have length 3.
+⚠ It names no stream's meaning and no destination chip.  See
+`notes/FINDINGS-prom_c-p7-byte-stream-pool.md`.
+
+### `prom_c_dsp_port.py`
+**"By which port do CPU 2's microcode bytes leave, and what answers READY?"**  (gap G)
+
+```
+python3 notes/prom_c_dsp_port.py            # the census
+python3 notes/prom_c_dsp_port.py --diff     # the three byte writers, byte for byte
+python3 notes/prom_c_dsp_port.py --verify   # assertions; exit != 0 on failure
+```
+
+Answer: **port P7 (SFR 0x13), written whole**, with P5.4/P5.5/P2.7 as three destination
+strobes, PB.5 as data-valid, P5.3 as a command/data qualifier, PB.6 as an enable and P9.3 as
+the ready input — the eighteen poll sites gap G counts, 6/6/6 across the three writers.
+⚠ This ADVANCES gap G, it does not close it: the question "what answers READY" is answered
+only as far as "the thing that consumes a P7 byte", and **which chip that is, is not
+established**.  Gap G's second half is LOCATED, not answered: `bit 0,(P9)` occurs exactly
+once in prom_c and its only effect is one flag bit beside the flash/wave bank map — that is
+what the firmware DOES with the pin, not what the pin IS.  Byte-window scan, so its ZEROES are exact
+and every hit reported lands in converted assembly.
+
+### `prom_c_pool_frontier_delta.py`
+**"What did converting the pool do to `prom_c_frontier.py`, and can that tool still rank?"**
+
+```
+python3 notes/prom_c_pool_frontier_delta.py
+```
+
+Imports the frontier tool and runs its own code against the before and after span lists:
+132 → 49 targets, 111 gone and **28 new ones invented by linearly decoding the pool's data**.
+All 49 surviving from-sites are inside established DATA regions, so the answer to the second
+half of the question is **no** — rank prom_c by its `.incbin` list instead.
+
+## Round 3 of the conversion (2026-08-25) — the tail data zone
+
+### `prom_c_tail_census.py`
+**"Which addresses in the tail data zone does prom_c's code cite, and what did the old
+classifier miss?"**
+
+```
+python3 notes/prom_c_tail_census.py                 # 70 targets, 133 sites
+python3 notes/prom_c_tail_census.py --sites         # each citing site and its shape
+python3 notes/prom_c_tail_census.py --copyb         # the "nothing reaches copy B" claim
+python3 notes/prom_c_tail_census.py --corrections   # old classifier vs this one
+python3 notes/prom_c_tail_census.py --selftest      # exit != 0 if a stated number moved
+```
+
+The tail zone is data, so `prom_c_frontier.py` cannot rank it and a linear decode of it is
+noise; the only thing that fixes an object boundary there is prom_c's own code citing the
+object's first byte. ★ It exists because `prom_c_dup_image.py --refs` did not know the
+`add <X..>,#imm32` (`e9 c8 <addr24> 00`) or `lda <X..>,addr24` shapes — the shapes the
+compiler uses for every indexed table read — and round 2 concluded from its silence that
+`0xFE0A6D-0xFE1167` held no citation. It holds eight. `--corrections` prints them.
+`prom_c_dup_image.py`'s classifier is now fixed too; its copy-A row moved from
+`98 coincidences, 54 hits` to `55 coincidences, 97 hits`, and copy B's did not move.
+
+### `gen_prom_c_tail_tables.py`
+**"What is in 0xFDF7E0-0xFE21E5, and what is the assembly for it?"**
+
+```
+python3 notes/gen_prom_c_tail_tables.py --verify   # tiling, closed forms, copy B
+python3 notes/gen_prom_c_tail_tables.py --census   # objects, sizes, citations
+python3 notes/gen_prom_c_tail_tables.py --emit     # the 10,389-byte fragment
+```
+
+101 objects over three regions. `--verify` asserts that they tile with no gap or overlap,
+that every object start is a cited address (the five exceptions are the four strings a
+pointer table points at and one unreferenced repeat), that no citation lands inside an
+object, and that fourteen tables match a closed form **over every entry** — including the
+five 256-entry math tables (sin, cos, atan, log2, exp2), the four `LinCoef` ramps and the
+512-entry 8-bit sine. It also re-derives the copy-A/copy-B relation (41 differing bytes) and
+checks that every mirrored name is a real label in `prom_c/wsa1_prom_c.s`.
+⚠ It names no role for a table it has only a shape for. See
+`notes/FINDINGS-prom_c-tail-data-zone.md`.
+
+### `gen_prom_c_fp_pool.py`
+**"Where do the elements of the 616-byte floating-point pool at 0xFCC81A start?"**
+
+```
+python3 notes/gen_prom_c_fp_pool.py --verify
+python3 notes/gen_prom_c_fp_pool.py --emit
+```
+
+This pool was a deliberate `.incbin` — an 8-byte grid over it produces denormals. It is not
+on a grid: two of its 78 elements are four bytes wide and shift everything after them. No
+stride is guessed. All 154 four-byte slots are cited by literal-addressed loads, and a double
+is recognised by the instruction pair that pushes it high half first, six bytes apart. 76
+doubles + 2 longs = 616 bytes; 48 of the 76 are exact integers; **44100, 1/44100, 1/220500 and
+1/441000 are among the values**.
+
+### `prom_c_round3_frontier_delta.py`
+**"What did round 3 convert, and did the `.incbin` list fall by exactly that?"**
+
+```
+python3 notes/prom_c_round3_frontier_delta.py --selftest
+```
+
+prom_c has no reachability frontier left to rank by, so its frontier IS the `.incbin` list:
+**5 spans / 11,005 bytes before, 0 / 0 after**, against 11,005 bytes emitted in four regions.
+⚠ The BEFORE column is *recorded* in the script, not derived: round 2's state was never
+committed, so a delta against `HEAD` would measure rounds 2 and 3 together (that figure is
+printed separately, for context).
+
+### `prom_c_phantom_callsites.py`
+**"Which `Called from:` addresses in prom_c's headers are inside DATA?"**
+
+```
+python3 notes/prom_c_phantom_callsites.py --selftest
+```
+
+The headers' call-site lists come from an image-wide byte scan for `1D <addr24>` and
+`1E <disp16>`, and prom_c is a quarter data by area. **Eleven citations landed in data** — ten
+in the preset bank, one in the f64 coefficient pool — and the preset-bank ten settle it
+between them: they fall at four repeating offsets *inside a 704-byte preset record*
+(`0x021`, `0x02D`, `0x041`, `0x061`), five of them at `0x041` in records 121 and 123–126. A
+call site does not repeat at a data structure's stride. All eleven headers now read
+**NO LOCATED CALLER**; the live scan is empty and `--selftest` asserts it stays empty.
+The largest casualty is `sub_F9BE3A`, the 8,573-byte double-precision routine, which two notes
+described as *"called once from 0xF95B01"*.

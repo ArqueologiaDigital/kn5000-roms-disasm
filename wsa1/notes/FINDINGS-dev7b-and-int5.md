@@ -1,5 +1,23 @@
 # The CS0 device at 0x7B0004/0x7B0005, and the INT5 handler that reads it
 
+> ## ★★ SUPERSEDED IN ONE RESPECT, 2026-08-25: THE DEVICE IS NOW NAMED
+> The section "⚠ What the device IS has not been established" below is
+> **WITHDRAWN**. Converting the 4,720 bytes underneath these accessors
+> (prom_a `0xFE54EC-0xFE594B` and `0xFE5A41-0xFE6850`) identified it as a
+> **uPD765-family floppy disk controller**: `0x7B0004` read is the Main Status
+> Register, `0x7B0005` is the Data Register, and `0x7A0000` is the same data
+> register on the DMA-acknowledged decode. The decisive evidence is that the
+> driver's own opcode validator accepts 15 of the 32 five-bit opcode values and
+> rejects the other 17, and that truth table is exactly MAME's uPD765 command
+> decoder's. See **`notes/FINDINGS-prom_a-fdc.md`**, checked by
+> `notes/prom_a_fdc_checks.py`.
+>
+> Everything else in this note stands, and two of its statements are now
+> explained rather than corrected: the "ten direction codes" are uPD765 command
+> opcodes, and the `0x08` that INT5 writes to the data register is SENSE
+> INTERRUPT STATUS. The three routines listed below as "still `.incbin`" are all
+> converted now.
+
 **Established 2026-08-24 while converting prom_a `0xFE54B6-0xFE54EB` and
 `0xFE6851-0xFE68F2`.** `notes/FINDINGS-memory-map.md` already listed the two
 addresses as "byte registers" with three example instructions. This is what the
@@ -58,20 +76,32 @@ It saves all seven long registers, then:
 5. repeats from 2 until `(0x605A51) == 0x80`;
 6. writes 0 to `(0x605A50)` and returns with RETI.
 
-## ⚠ What the device IS has not been established
+## ~~⚠ What the device IS has not been established~~ — WITHDRAWN 2026-08-25
 
-Nothing in the firmware names it, no string is near it, and no databook is in
-these trees. What can be said is only the shape: a two-register byte-wide
-peripheral on CS0 with a ready/more status pair and a packet framing whose
-terminator is `0x80` in the second buffer byte. **Do not name it.** In
-particular this note does not claim it is a floppy controller, a panel scanner,
-or anything else.
+**The text below was true of the evidence this note had, and is kept so the
+retraction is legible.** It reasoned from the five accessors and the INT5
+handler alone, which really do not identify anything; the identification came
+from the driver underneath them, which was `.incbin` when this was written.
 
-Two routines that would settle a lot are still `.incbin`:
+> ~~Nothing in the firmware names it, no string is near it, and no databook is in
+> these trees. What can be said is only the shape: a two-register byte-wide
+> peripheral on CS0 with a ready/more status pair and a packet framing whose
+> terminator is `0x80` in the second buffer byte. **Do not name it.** In
+> particular this note does not claim it is a floppy controller, a panel scanner,
+> or anything else.~~
 
-* `0xFE5A41` — a status classifier that masks with `0xE0` and compares against
-  `0x80` and `0xC0`;
-* `0xFE5B5E` — where the received packet is actually consumed.
+What that packet framing actually is: INT5 is the FDC's **result-phase**
+interrupt. The bytes it collects into `0x605A51..` are ST0, ST1, ST2, C, H, R, N
+— and the `0x80` terminator is ST0's IC field reading "invalid command", which
+is how the post-reset drain of SENSE INTERRUPT STATUS ends.
+
+~~Two routines that would settle a lot are still `.incbin`:~~ **Both converted
+2026-08-25, and they did settle it:**
+
+* `0xFE5A41` is `Fdc_WaitRqm` — it waits for `MSR & (RQM|DIO|EXM)` to be `0x80`
+  or `0xC0`;
+* `0xFE5B5E` is `Fdc_ClassifyResultStatus` — it decodes ST0's IC field and then
+  ST0 bits 3 and 4 and all six defined ST1 bits.
 
 ## The other handler in the same block — and it turned out NOT to be unrelated
 
@@ -117,8 +147,8 @@ handler re-arms micro-DMA channel 0 to be driven by INT7.
   |---|---|---|
   | `0xFE59BB` | `ld XHL,0x007A0000` → `DMAS0` | micro-DMA, device → RAM |
   | `0xFE59DA` | `ld XHL,0x007A0000` → `DMAD0` | micro-DMA, RAM → device |
-  | `0xFE680F` | `ld C,(0x7A0000)` | programmed I/O read, still `.incbin` |
-  | `0xFE682B` | `ld (0x7A0000),C` | programmed I/O write, still `.incbin` |
+  | `0xFE680F` | `ld C,(0x7A0000)` | programmed I/O read — converted 2026-08-25, inside `Fdc_ServiceDataByte` |
+  | `0xFE682B` | `ld (0x7A0000),C` | programmed I/O write — same routine |
 
   Two paths to **one** address is the strongest single argument that `0x7A0000`
   is a data register and not a range. ⚠ The DMA path walks `(0x605A3C)` and the
@@ -145,19 +175,23 @@ device -> RAM : 0xDD 0xD9 0xD1 0x4A 0x42 0xCC 0xC6
 anything else : return, with DMAC0 already written
 ```
 
-⚠ **What those ten codes mean is not established.** They are recorded as the ten
-literals the ROM compares against, in ROM order, and nothing here claims they
-belong to a standard command set. `notes/prom_a_byte_checks.py` **parses** the
+~~⚠ **What those ten codes mean is not established.**~~ **ESTABLISHED
+2026-08-25: they are uPD765 command opcodes**, and the split is exactly the
+direction each command moves data — `0x4D` FORMAT TRACK, `0xC9` WRITE DELETED
+DATA, `0xC5` WRITE DATA out; `0xDD`/`0xD9`/`0xD1` the three SCANs, `0x4A`
+READ ID, `0x42` READ TRACK, `0xCC` READ DELETED DATA, `0xC6` READ DATA in.
+`(0x605A18)`, the byte this chain reads, is the FDC command byte.
+`notes/prom_a_fdc_checks.py` asserts that all ten are in the driver's own
+accepted-opcode set. The old caveat, kept because it was right at the time:
+they are recorded as the ten literals the ROM compares against, in ROM order. `notes/prom_a_byte_checks.py` **parses** the
 chain out of the ROM rather than repeating this list, so a miscount fails.
 
 ## Still `.incbin`, and still the two that would settle the most
 
-* `0xFE5A41` — a near-twin of `Dev7B_WaitStatus_8x_Cx`, masking with `0xE0`
-  instead of clearing bit 4;
-* `0xFE5B5E` — where the received packet is actually consumed;
-* `0xFE5E84` — called with a small integer from several timeout paths in this
-  block (`Dev7B_WaitStatus_8x_Cx` passes 2); looks like an error reporter, not
-  named.
+~~* `0xFE5A41` … `0xFE5B5E` … `0xFE5E84` …~~ **All three converted 2026-08-25**:
+`Fdc_WaitRqm`, `Fdc_ClassifyResultStatus` and `Fdc_SetError` — which is indeed
+the error reporter, and keeps the first code raised. Its code list is in
+`notes/FINDINGS-prom_a-fdc.md` §7.
 
 ## The tick counter these timeouts run on
 

@@ -153,6 +153,13 @@ only indirectly, and the frontier tool cannot rank them. The two large ones are
 census, or the pointer tables that reach them. That is the next round's first problem, not a
 conversion task.
 
+★ **UPDATE 2026-08-25: both are done, and the prescription above is what worked.** The preset
+bank went in wave 5 round 1 (`notes/FINDINGS-prom_c-preset-bank.md`) and `0xFCD0F7-0xFDD2AA` in
+round 2 (`notes/FINDINGS-prom_c-p7-byte-stream-pool.md`) — the latter by exactly the "pointer
+tables that reach them" route: every 32-bit pointer into the region, plus the `lda rr,#imm24`
+literals, seeded a walk of its interpreter's own length field. prom_c now has 11,005 bytes of
+`.incbin` left in 5 spans.
+
 ## 6. ⚠ A leak in a tool this lane does not own
 
 `scripts/analysis/llvm_roundtrip.py:81` does `d = tempfile.mkdtemp()` and never removes it.

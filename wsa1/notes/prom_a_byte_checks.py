@@ -14,6 +14,7 @@ file, is named after it, and fails loudly.
     python3 notes/prom_a_byte_checks.py -v       # print each check
 """
 import os
+import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1664,6 +1665,40 @@ check("refused module: ASCII lives at 0xFC2135 -- 'Combi Group Name' then "
       a(0xFC2135, 32) == b"Combi Group NameEXT Silent Group")
 
 # The COUNT is printed rather than written into a header: this file's own
+# --- span banners vs the .incbin under them (added wave 5 round 2) ----------
+# `; 0xAAAAAA-0xBBBBBB -- not yet converted` banners go STALE silently:
+# prom_a/insert_region.py splits the directive beneath one and cannot know the
+# banner exists.  One had been wrong since the first insertion -- it still named
+# 0xF827C8-0xFFFEFF over a 1,335-byte directive.  The byte gate cannot see this.
+_BAN = re.compile(r"^; (0x[0-9A-F]{6})-(0x[0-9A-F]{6}) -- not yet converted\s*$")
+_INC = re.compile(r'^\t\.incbin "original_ROMs/wsa1_prom_a\.ic12", '
+                  r'(0x[0-9A-Fa-f]+), (0x[0-9A-Fa-f]+)\s*$')
+_lines = _SRC.split("\n")
+_seen = 0
+for _i, _l in enumerate(_lines):
+    _m = _BAN.match(_l)
+    if not _m:
+        continue
+    for _j in range(_i + 1, min(_i + 16, len(_lines))):
+        _mm = _INC.match(_lines[_j])
+        if _mm:
+            _lo = 0xF80000 + int(_mm.group(1), 16)
+            _hi = _lo + int(_mm.group(2), 16) - 1
+            _seen += 1
+            check("span banner on line %d names the range of the .incbin under "
+                  "it" % (_i + 1),
+                  (int(_m.group(1), 16), int(_m.group(2), 16)) == (_lo, _hi),
+                  "banner %s-%s vs 0x%06X-0x%06X"
+                  % (_m.group(1), _m.group(2), _lo, _hi))
+            break
+# A banner with NO `.incbin` under it is the other failure mode: the range was
+# converted and the banner was left behind, claiming the code is not there.  Two
+# of those existed (0xF85904-0xF85C88 and 0xFE5A41-0xFE6850) and are why this
+# check counts rather than just compares ranges.
+_total = sum(1 for _l in _lines if _BAN.match(_l))
+check("every `not yet converted` banner has an .incbin under it",
+      _seen == _total, "%d of %d" % (_seen, _total))
+
 # docstring said "133 checks" and prom_a's banner said "232" while the number
 # that actually ran was 231.  A count nobody re-derives is a claim that rots.
 print("%d checks ran" % len(RAN))

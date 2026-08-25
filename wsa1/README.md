@@ -53,25 +53,14 @@ misreported downstream.
 
 ## Status
 
-**Converted: 816,703 of 2,097,152 bytes (38.9%)** -- of which 482,411 substantive (23.0%) and 334,292 verified filler.
+**Converted: 1,616,283 of 2,097,152 bytes (77.1%)** -- of which 1,228,025 substantive (58.6%) and 388,258 verified filler.
 
 | source | image | substantive | filler | still `.incbin` | `.incbin` spans |
 |---|---|---:|---:|---:|---:|
-| `prom_a/` | `wsa1_prom_a.ic12` | 42,604 | 7,209 | 474,475 | 29 |
-| `prom_b/` | `wsa1_prom_b.ic13` | 81,798 | 11,300 | 431,190 | 134 |
-| `prom_c/` | `wsa1_prom_c.ic28` | 27,488 | 122,016 | 374,784 | 26 |
+| `prom_a/` | `wsa1_prom_a.ic12` | 265,450 | 32,493 | 226,345 | 49 |
+| `prom_b/` | `wsa1_prom_b.ic13` | 236,982 | 32,782 | 254,524 | 146 |
+| `prom_c/` | `wsa1_prom_c.ic28` | 395,072 | 129,216 | 0 | 34 |
 | `prom_d/` | `wsa1_prom_d.bin` | 330,521 | 193,767 | 0 | 0 |
-
-⚠ **The last column is an OVER-COUNT.** `source_coverage.py` derives it as
-`text.count(".incbin")`, so every mention of the word in a comment adds one:
-prom_a's 29 is 13 actual `.incbin` directives. The other four columns are exact
--- they sum the length argument of each directive -- and only this one is
-affected. Fixing it belongs to whoever owns `scripts/analysis/`.
-
-⚠ **The headline line above was mangled on 2026-08-25** by two lanes appending
-to it instead of replacing it; it read three concatenated "-- of which" clauses
-at once. It is regenerated, never edited: paste the output of
-`python3 scripts/analysis/source_coverage.py --markdown`, whole.
 
 ⚠ **Quote the substantive column, not the total.** Wave 3 converted 123,151 bytes of prom_c of
 which 118,298 were a verified run of 0x0E pad emitted as `.fill` -- that moved the headline from

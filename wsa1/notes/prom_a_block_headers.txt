@@ -1672,3 +1672,1205 @@
 ;          as nothing.  See the ⚠ in the module header: the code start after it
 ;          is not pinned.
 ; ---------------------------------------------------------------------
+
+@@AT 0xFB2000
+
+; ==============================================================================
+; 0xFB2000-0xFBFFFF -- FOUR MODULES: the remote-flash reader, the SMF layer,
+;                      and two more the directory publishes but does not name
+; ==============================================================================
+;
+; ⚠ READ THIS BEFORE QUOTING A COVERAGE FIGURE.  Like 0xFE0000-0xFE54B5, most of
+; this span is real assembly whose instruction boundaries are certified and whose
+; MEANING is mostly not established: most labels are `sub_XXXXXX`, which is an
+; ADDRESS, not a claim.  What IS established is written out below, routine by
+; routine, and everything else is deliberately unnamed.
+;
+; WHY THIS SPAN.  `python3 notes/prom_a_module_frontier.py` ranks the thunk RUN
+; T_F408E4-T_F40910 third in prom_a by contiguous unconverted extent (12 slots,
+; 23,200 bytes, reference upper bound 10), and that run's targets are all in
+; 0xFB2022-0xFB7AC2.  ★ And it is where emulation gap D lives: the caller the
+; gaps file names, `0xFB24D3`, is inside it.
+;
+; MODULE BOUNDARIES, from the ROM's own 0x0E padding.  Each module ends in a run
+; of 0x0E (RET) that reaches the next 0x400/0x800 boundary:
+;
+;   0xFB2000-0xFB8CA5   code + tables, pad 0xFB8CA6-0xFB8FFF   (858)
+;   0xFB9000-0xFBA235   code + tables, pad 0xFBA236-0xFBABFF  (2506)
+;   0xFBAC00-0xFBB42D   code,          pad 0xFBB42E-0xFBB7FF   (978)
+;   0xFBB800-0xFBFFD3   code,          pad 0xFBFFD4-0xFBFFFF    (44)
+;
+; ⚠ WHAT PINS EACH START, one by one -- this paragraph said "0xFB2000, 0xFB9000
+; and 0xFBB800 each open with `jp` veneers", and only the first of the three
+; does:
+;   0xFB2000  opens with a block of `jp`/`ret` veneers (`jp 0xFB2018` at
+;             0xFB2000, `jp 0xFB201D` at 0xFB200C), the shape the linker gives a
+;             module's published entries, and 0xFB2022 is a directory target;
+;   0xFBAC00  and 0xFBB800 are themselves DIRECTORY TARGETS, so the linker names
+;             them; both open directly on a routine prologue;
+;   0xFB9000  is neither: it opens on a `push XIZ / ld XIZ,XSP` prologue and
+;             nothing names it.  What pins it is only the pad that ends the
+;             previous module at 0xFB8FFF.  Recorded as the weakest of the four.
+;
+; ★ WHAT THE LINEAR DECODE IS CERTIFIED BY.  `python3
+; notes/prom_a_linear_decode_check.py 0xFB2000 0xFB82A0 --offenders` and the same
+; on the other code spans:
+;   * 0 undecodable `db` bytes once the tables below are excluded;
+;   * the end of every span is an instruction boundary of a decode that runs PAST
+;     it;
+;   * ALL 106 prom_b directory slots that point into 0xFB2000-0xFBFFFF land
+;     exactly on an instruction boundary of that decode, 0 off-boundary;
+;   * 0 call/calr from an instruction inside the span to an address that is not a
+;     boundary.
+;   ⚠ That last row is what FOUND the record tables at 0xFB82A0: before they were
+;   declared as data it read 2, and both offending "sites" (0xFB846A, 0xFB8770)
+;   were bytes inside the table that happen to spell `calr`.  The check is
+;   therefore one that can fail, and did.
+;   ⚠ None of this establishes where a span STARTS -- see the same caveat on the
+;   0xFE0000 block.  The starts here are pinned by the pads and the veneers.
+;
+; ★★ EMULATION GAP D, ANSWERED AS FAR AS THE ROM CAN ANSWER IT.  The gaps file
+; asks: "Does any instruction in prom_a/prom_b index prom_d's 44-entry offset
+; header at file 0x000000, or its 274-entry pointer directory at file 0x000B80,
+; with an address that comes back over the link from CPU 2's flash?"
+;
+; The answer this module gives is NO, and it says why: the firmware never indexes
+; the remote image at all.  It STREAMS it, in fixed 8 KiB blocks, through one
+; staging buffer:
+;
+;     Remote_E80000_Read32Blocks (0xFB24EC)
+;         XIX  = 0x00E80000, H = 0x1F
+;      loop:   Link_RemoteRead(src = XIX, count = 0x2000, dst = 0x60A000)
+;              consume the block, XIX += 0x2000, until H reaches 0
+;      then    one more Link_RemoteRead of the same shape
+;
+;   31 blocks in the loop plus one after it is 32 x 0x2000 = 0x40000 bytes, so
+;   the range read is remote 0xE80000-0xEBFFFF -- 256 KiB, HALF the size of the
+;   prom_d image.  Recorded as measured; what the other half of prom_d is, or
+;   whether it is reached by some other path, is NOT established here.
+;
+;   ⚠ WHICH STACK SLOT IS WHICH is not established by this module.  What is
+;   established here is the three literals and the ORDER they are pushed in:
+;   (0x60A000) then 0x2000 then XIX.  Naming them dst/count/src comes from
+;   INTTC3_LinkDmaDone's decode of the 0xE1/0xE2 pair (see the 0xF8E54F block)
+;   and from the gaps file's own reading of 0xFB24D3; 0xF8E0FE itself is still
+;   `.incbin`.
+;
+;   The two link entries it uses are prom_b directory slots and both resolve
+;   into prom_a's already-converted link block:
+;       T_F40EF0 -> 0xF8E0FE  the remote-read packet builder (gap D names it)
+;       T_F4123C -> 0xF8E66D  Link_WaitBlockDone, which is what releases P7 bit 1
+;   ⚠ CORRECTED 2026-08-25 (round-2 audit F1).  This header used to say the
+;   ~1 s deadline loop at 0xF8E671 is entered "from HERE, and from the sibling
+;   at 0xFB248A, and from nowhere else that is converted", and concluded that
+;   "a machine that never runs a remote-flash read never reaches that release
+;   path at all".  BOTH ARE FALSE.  notes/prom_a_converted_callers.py 0xF4123C
+;   (16/16 checks) lists FIFTEEN converted call sites in five separate regions:
+;       0xFAABFB  0xFB24D7 0xFB256E 0xFB26D2 0xFB2769  0xFB6FD1
+;       0xFC00BE 0xFC0188 0xFC1C62 0xFC20DF 0xFC219D
+;       0xFE29EB 0xFE2A73 0xFE2B86 0xFE2BC6
+;   Fourteen of them do queue a link packet first -- nine with `call 0xf40ef0`
+;   as the immediately preceding call, two with it two calls back in the same
+;   block (0xFB2560, 0xFB275B), three one call deeper inside sub_FC1C77 /
+;   sub_FC2112 / sub_FC21D0.  The fifteenth, 0xFB6FD1, reaches the wait after
+;   `call sub_FB7E9A` (which is a bare `ret` at 0xFB7E9A) and `calr sub_FB7025`,
+;   and neither of those touches 0xF40EF0 -- so what it is waiting on is NOT
+;   established.
+;   And the SOURCE handed to the builder is not always remote flash: the eight
+;   literal bases the checks pin are 0x00F80300 (prom_a's OWN ROM, at 0xFAABF1
+;   and inside sub_FC1C77), 0x00C00000 (at 0xFC00AE), 0x00E80000, 0x00EC0000
+;   and 0x00EC0300.  The release path is on the LINK BLOCK TRANSFER in general,
+;   not on remote flash specifically.
+;
+; ⚠ WHAT IS NOT ESTABLISHED: what the blocks CONTAIN (the routines that consume
+; them, 0xFB7649 and 0xFB6FB2, are converted here but unnamed), and why the
+; single-block sibling passes count = 0x0000.
+;
+; ★ AND THE SMF LAYER.  0xFBA169 carries the ASCII "MThd" and "MTrk" -- the two
+; chunk magics of a Standard MIDI File -- so the 0xFB9000 module is a MIDI-file
+; reader or writer.  Nothing here says which; see that table's own header.
+;
+; Routines whose meaning is not established are `sub_XXXXXX` on purpose.
+; ==============================================================================
+
+@@NAME 0xFB24EC Remote_E80000_Read32Blocks
+
+; ---------------------------------------------------------------------
+; Remote_E80000_Read32Blocks -- stream remote 0xE80000-0xEBFFFF through 0x60A000
+;
+; Called from: no absolute reference (`python3 notes/prom_a_xref.py 0xFB24EC`);
+;          same searched negative as its sibling above.
+; Inputs:  the same (0x60FCD8) guard; (0x60FCE0) and (0x60FCF8), the module's
+;          two pointer variables.
+; Outputs: 32 blocks of 0x2000 bytes fetched from remote 0xE80000 upward into
+;          RAM 0x60A000, each one handed to 0xFB7649 and then to 0xFB6FB2 before
+;          the next is fetched; a 12-byte display list from prom_b 0xF4FF1C; and
+;          0xFB6F6B on a link timeout.  H, XIX, XBC and WA clobbered.
+; Evidence: `ld XIX,0x00E80000` at 0xFB251F, `ldb h,0x1F` at 0xFB2524,
+;          `add XIX,0x00002000` at 0xFB2548 and `dec 1,H / cps h,0x00 / jr nz`
+;          at 0xFB2546-0xFB2554 -- 31 iterations -- plus ONE more block at
+;          0xFB2556-0xFB2560 after the loop.  32 x 0x2000 = 0x40000.
+; Unknown:  what the blocks are FOR.  0xFB7649 and 0xFB6FB2 are converted in this
+;          module and are still `sub_`; nothing here says whether the stream is
+;          being written to disk, checksummed, or copied into another memory.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFB2081 0xFB2099 JumpTable_FB2081
+
+; ---------------------------------------------------------------------
+; JumpTable_FB2081 -- 6 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `sll bc,0x02 / add XBC,0x00FB2081 / ld XBC,(XBC) / jp (XBC)`
+;          at 0xFB2074-0xFB207F.
+; ENTRY COUNT 6, from the ROM's own bound: `cps bc,0x05 / jr ugt` at
+;          0xFB2070 admits indices 0..5.  ★ LAST-ENTRY TEST: entry 5 is
+;          0x00FB20B7 and 0xFB2081 + 6*4 = 0xFB2099, which is entry 0's own
+;          target -- the table tiles exactly up to the code it dispatches to.
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFB3517 0xFB3533 JumpTable_FB3517
+
+; ---------------------------------------------------------------------
+; JumpTable_FB3517 -- 7 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `add XWA,0x00FB3517 / ld XWA,(XWA) / jp (XWA)` at
+;          0xFB350D-0xFB3515.
+; ENTRY COUNT 7: `dec 1,WA / cps wa,0x06 / jr ugt` at 0xFB3504 admits 0..6, so
+;          the index is 1-based in the caller.  ★ LAST-ENTRY TEST: entry 6 is
+;          0x00FB3551 and 0xFB3517 + 7*4 = 0xFB3533 = entry 0's target.
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFB42D1 0xFB42ED JumpTable_FB42D1
+
+; ---------------------------------------------------------------------
+; JumpTable_FB42D1 -- 7 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `add XWA,0x00FB42D1 / ld XWA,(XWA) / jp (XWA)` at
+;          0xFB42C7-0xFB42CF.
+; ENTRY COUNT 7: `dec 1,WA / cps wa,0x06 / jr ugt` at 0xFB42BE.  ★ LAST-ENTRY
+;          TEST: entry 6 is 0x00FB430B and 0xFB42D1 + 7*4 = 0xFB42ED = entry 0's
+;          target.  ⚠ This dispatcher and JumpTable_FB3517's have the SAME shape
+;          and the same bound; nothing here says the two are copies.
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFB6240 0xFB6280 JumpTable_FB6240
+
+; ---------------------------------------------------------------------
+; JumpTable_FB6240 -- 16 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `add XBC,0x00FB6240 / ld XBC,(XBC) / jp (XBC)` at
+;          0xFB6236-0xFB623E.
+; ENTRY COUNT 16: `cp BC,0x000F / jrl ugt` at 0xFB622C admits 0..15.
+;          ★ LAST-ENTRY TEST: 0xFB6240 + 16*4 = 0xFB6280 = entry 0's target, and
+;          the sixteen targets run 0x00FB6280..0x00FB62CB stepping by exactly 5
+;          bytes -- sixteen five-byte arms, which is what a `jp` plus a two-byte
+;          operand costs.
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFB62F6 0xFB6336 JumpTable_FB62F6
+
+; ---------------------------------------------------------------------
+; JumpTable_FB62F6 -- 16 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `add XBC,0x00FB62F6 / ld XBC,(XBC) / jp (XBC)` at
+;          0xFB62EC-0xFB62F4.
+; ENTRY COUNT 16: `cp BC,0x000F / jrl ugt` at 0xFB62E2.  ★ LAST-ENTRY TEST:
+;          0xFB62F6 + 16*4 = 0xFB6336 = entry 0's target.
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFB82A0 0xFB8CA6 RecordTables_FB82A0
+
+; ---------------------------------------------------------------------
+; RecordTables_FB82A0 -- 2,566 bytes of DATA at the end of the 0xFB2000 module
+;
+; ★ THIS BLOCK IS WHY THE DECODE CHECK EXISTS.  Linearly disassembled it looks
+; like plausible code, and it round-trips byte-exactly -- the byte gate cannot
+; see the difference.  What sees it is
+; `notes/prom_a_linear_decode_check.py 0xFB2000 0xFB8CA6 --offenders`: two
+; instructions inside the module, at 0xFB846A and 0xFB8770, "call" addresses that
+; are not instruction boundaries, and both of those bytes are inside this block.
+;
+; THE FRAMING, re-derived by notes/prom_a_fb2000_checks.py:
+;   0xFB82A0    2 bytes, 0xFB 0x00, that fit no record;
+;   0xFB82A2  332 SIX-BYTE RECORDS `[u16][u32]`, tiling EXACTLY to 0xFB8A69
+;             (332 x 6 = 1,992 = 0xFB8A6A - 0xFB82A2).  ★ THE ENTRY COUNT COMES
+;             FROM THE DATA'S OWN RULE -- every record's u32 is an address inside
+;             this module -- and the stop is confirmed by a SECOND, independent
+;             signal: the first record whose u32 leaves the module is exactly
+;             where a byte ramp starts.  The first records are
+;             (0x00FE, 0x00FB8296) (0x0EFF, 0x00FB7048) (0x0000, 0x00FB82A2);
+;             the stretch at 0xFB83B6 has its u16 counting 0,1,2,... against a
+;             fixed 0x00FB83AA pointer;
+;   0xFB8A6A  a byte ramp 00 01 01 02 03 03 04 05 ... and then values in the
+;             printable range that are not text;
+;   0xFB8AAD onward, records that each hold THREE module pointers -- 0x00FB3C6F
+;             or 0x00FB3C70, one of 0x00FB3533/0x00FB3534, and 0x00FB3949 --
+;             among small fields.  ⚠ The stride is NOT established: the
+;             pointer triples recur about every 0x21 bytes but not exactly.
+; ⚠ SO ONLY THE FIRST ARRAY'S FRAMING IS ESTABLISHED, and the block is emitted as
+; `.byte`, which is this tree's honest default.  Do not promote any of it to
+; `.long`/`.short` without a reader that names that array's base and bound: no
+; reader of any of these tables has been found.
+; START AND END: the byte before, 0xFB829F, is the last of `retd 8`, the epilogue
+; of the routine above; the byte after, 0xFB8CA6, is the first of the module's
+; 858-byte 0x0E pad.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFBA169 0xFBA236 MidiFile_Tables_FBA169
+
+; ---------------------------------------------------------------------
+; MidiFile_Tables_FBA169 -- 205 bytes of DATA: the SMF chunk magics and two
+;                           parallel tables
+;
+; ★ "MThd" AND "MTrk", the two chunk types of a Standard MIDI File, are the
+; eight ASCII bytes at 0xFBA169-0xFBA170.  That makes the 0xFB9000 module an SMF
+; reader or writer; NOTHING HERE SAYS WHICH, and no note in this tree has
+; claimed either.  (Three other printable-looking runs exist in
+; 0xFAD800-0xFBFFFF -- 0xFB8A7C, 0xFB8A93 and 0xFBDA01 -- and all three are
+; numeric tables whose values happen to land in the ASCII range, not text.)
+;
+; THE WHOLE BLOCK, byte for byte, 205 bytes:
+;   0xFBA169   4   "MThd"
+;   0xFBA16D   4   "MTrk"
+;   0xFBA171   2   0x7E 0x7F
+;   0xFBA173   1   0x09
+;   0xFBA174  16   0x00..0x0F in order
+;   0xFBA184   1   0x20
+;   0xFBA185  16   0x00..0x08, 0x0A..0x0F, 0x09  -- the SAME sixteen values,
+;                  with 9 moved to the end
+;   0xFBA195  64   sixteen LE32 words: 0x000076AF 0x000076EF 0x0000772F
+;                  0x0000776F 0x000077AF 0x000077EF 0x0000782F 0x0000786F
+;                  0x000078EF 0x0000792F 0x0000796F 0x000079AF 0x000079EF
+;                  0x00007A2F 0x00007A6F 0x00007AAF -- RAM addresses stepping
+;                  by 0x40 EXCEPT between entries 7 and 8, where the step is
+;                  0x80 and 0x000078AF is skipped
+;   0xFBA1D5  16   0x00..0x0F in order
+;   0xFBA1E5   1   0x20
+;   0xFBA1E6  16   0x00..0x0F in order
+;   0xFBA1F6  64   the SAME sixteen LE32 words again, byte for byte
+;
+; ⚠ SO THE TWO HALVES ARE NOT COPIES: the second has no leading 0x09 and its
+; second ramp is in order where the first's is not.  A reading in which the
+; permuted ramp and the skipped address belong together -- sixteen 0x40-byte RAM
+; records with entry 9 relocated -- fits every byte, and is NOT claimed here
+; because no reader of either table has been found.  Emitted as `.byte`.
+; START AND END: 0xFBA168 is the last byte of `retd 8`; 0xFBA236 is the first of
+; the module's 2,506-byte 0x0E pad.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFBD25F 0xFBD277 JumpTable_FBD25F
+
+; ---------------------------------------------------------------------
+; JumpTable_FBD25F -- 6 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `add XWA,0x00FBD25F / ld XWA,(XWA) / jp (XWA)` at
+;          0xFBD255-0xFBD25D.
+; ENTRY COUNT 6: `cps wa,0x05 / jrl ugt` at 0xFBD24D.  ★ LAST-ENTRY TEST: entry
+;          5 is 0x00FBD2E8 and 0xFBD25F + 6*4 = 0xFBD277 = entry 0's target.
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFBD320 0xFBD338 JumpTable_FBD320
+
+; ---------------------------------------------------------------------
+; JumpTable_FBD320 -- 6 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `add XWA,0x00FBD320 / ld XWA,(XWA) / jp (XWA)` at
+;          0xFBD316-0xFBD31E.
+; ENTRY COUNT 6: `cps wa,0x05 / jrl ugt` at 0xFBD30E.  ★ LAST-ENTRY TEST: entry
+;          5 is 0x00FBD37E and 0xFBD320 + 6*4 = 0xFBD338 = entry 0's target.
+;          ⚠ These are the two bytes the linear decode reports as `db`
+;          (0xFBD321, 0xFBD329): a table that even the disassembler cannot spell.
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFCF000 0xFCF044 DispatchTable_FCF000
+
+; ==============================================================================
+; 0xFCF000-0xFDE70E -- the 0xFCF000 module: a 17-entry dispatch table, 3,427
+;                      bytes of tables including a 96-character SET, and 60 KB
+;                      of code
+; ==============================================================================
+;
+; ⚠ READ THIS BEFORE QUOTING A COVERAGE FIGURE.  Almost every label below is
+; `sub_XXXXXX`, which is an ADDRESS and not a claim.  This span was converted
+; because it is the largest contiguous run in prom_a that decodes cleanly, not
+; because its meaning is known -- the same trade the 0xFE0000 block records.
+;
+; WHY THIS SPAN.  `python3 notes/prom_a_module_frontier.py` ranks the thunk run
+; T_F41F54-T_F421A8 FIRST in prom_a: 150 slots, 145 of them unconverted, 59,752
+; bytes of contiguous target range, and the second-ranked run T_F42320-T_F42380
+; lands in the same `.incbin`.
+;
+; ★ WHAT THE LINEAR DECODE IS CERTIFIED BY, and it is a check that can fail:
+; `python3 notes/prom_a_linear_decode_check.py 0xFCFDA7 0xFDE70F --offenders`
+;   * the module's 179 prom_b directory slots name 178 DISTINCT targets (two
+;     slots share 0xFDE1DD).  The check tests the 177 that lie inside
+;     [0xFCFDA7, 0xFDE70F) and ALL 177 land exactly on an instruction boundary of
+;     ONE decode that starts at 0xFCFDA7 -- 0 off-boundary; the 178th is
+;     0xFDE70F itself, the span's end, checked separately as a boundary.
+;     ★ The FIRST target, 0xFCFDA7, is what pins the start of the code: the byte
+;     before it, 0xFCFDA6, is the top byte of the last pointer in the table
+;     block, so the module's data and its code meet there;
+;   * 0 call/calr from an instruction inside the span to an address that is not a
+;     boundary;
+;   * 0xFDE70F is an instruction boundary of a decode that runs PAST it;
+;   * the only undecodable byte, 0xFD70E1, is inside JumpTable_FD70C5, declared
+;     as data below.
+;
+; ★★ WHY THE SPAN STOPS AT 0xFDE70F AND NOT AT 0xFDFFFF.  0xFDE70F is the LAST
+; directory target in the `.incbin`, and beyond it the decode cannot be trusted:
+; * running the same check to 0xFE0000 FAILS -- 0xFE0000 is not a boundary of a
+;   decode from 0xFCFDA7, and eight `call` sites in 0xFDFEE9-0xFDFF7A name
+;   addresses (0xFD61E9, 0xFD6FEE, 0xFD763E) that are 1-2 bytes past one;
+; * exhaustively: of the 128 possible decode starts in 0xFDFF80-0xFDFFFF, only
+;   0xFDFFFD and 0xFDFFFF produce a decode in which 0xFE0000 is a boundary.  So
+;   the last bytes of the `.incbin` carry something a linear decode cannot frame,
+;   and 0xFDE70F-0xFDFFFF (6,385 bytes) is deliberately LEFT `.incbin`.
+;   Converting it would have put invented instructions in this file, which the
+;   byte gate cannot see.
+;
+; THE MODULE'S SHAPE
+;   0xFCF000  17 LE32 dispatch entries (this table)
+;   0xFCF044  3,427 bytes of tables -- see ModuleTables_FCF044 below
+;   0xFCFDA7  code, to 0xFDE70E
+;
+; ---------------------------------------------------------------------
+; DispatchTable_FCF000 -- 17 LE32 code addresses
+;
+; Read by: ONE site, `add XBC,0x00FCF000 / ld XBC,(XBC)` at 0xFCFE1D-0xFCFE23,
+;          followed by `lda XIY,(0xFCFE2D) / push XIY / jp (XBC)` -- a computed
+;          CALL: the return address is pushed by hand before the jump.
+; ENTRY COUNT 17, and ⚠ IT IS NOT BOUND-DERIVED.  The reader computes its index
+;          with a multiply and NO compare, so unlike every other table in this
+;          image the ROM does not state the count.  17 is taken from the DATA:
+;          word 17, at 0xFCF044, is 0x00000000 -- not an address -- and the bytes
+;          after it are a monotone ramp, i.e. a different table.  ★ LAST-ENTRY
+;          TEST: entry 16 is 0x00FD6C93 and entry 0 is 0x00FCFE42, the first
+;          instruction after the dispatcher's own block.  Recorded as WEAKER
+;          evidence than a bound; do not quote it as if the ROM checked it.
+; Evidence: three of the seventeen entries hold the same address, 0x00FD6C93 --
+;          the shape of a default arm -- and the other fourteen are distinct and
+;          ascending.
+; Unknown:  what the seventeen operations are.
+; ---------------------------------------------------------------------
+
+@@DATA 0xFCF044 0xFCFDA7 ModuleTables_FCF044
+
+; ---------------------------------------------------------------------
+; ModuleTables_FCF044 -- 3,427 bytes of DATA between the dispatch table and the
+;                        module's first instruction
+;
+; Emitted as `.byte`: only the parts listed here are framed, and the block as a
+; whole is not.  ⚠ Do not promote any of it to `.long`/`.short` without a reader.
+;
+; WHAT IS READABLE IN IT:
+;   0xFCF044  16 bytes, the ramp 00 00 00 00 00 02 04 06 08 0C 0E 10 12 14 16 18
+;   0xFCF054  13 bytes  00 00 00 61 00 80 00 9F 00 BE 00 00 00
+;   0xFCF061  ★ 96 ASCII characters, and this is the module's CHARACTER SET:
+;             ' ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+;             then '!"#$%&\'()+-*/=,.@:;?\^_`|~' then 0x7F then '<>[]{}'.
+;             It is NOT in ASCII order, so it is an index-to-glyph map: character
+;             0 is a space, 1 is 'A', 27 is 'a', 53 is '0'.
+;   0xFCF0C1  34 bytes of 0x00
+;   0xFCF0E3  a byte table beginning 3F 40 41 42 43 44 45 46 47 4A 48 4D 49 4E 4B
+;             -- values in the range of the set above, i.e. the inverse map
+;   0xFCFD80  a run of 4-byte values whose low three bytes are addresses in
+;             0x00FD____.  ⚠ THE ALIGNMENT IS NOT ESTABLISHED: read from
+;             0xFCFDA2 backwards in 4-byte steps the words are not addresses, so
+;             the run is offset from the block's own 4-byte grid and nothing
+;             names its base.
+; Unknown:  everything else, and what reads any of it.  This block is not
+;          referenced by any `add Xrr,imm32` in prom_a or prom_b other than the
+;          two named above for the tables that bracket it.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFD70C5 0xFD70E5 JumpTable_FD70C5
+
+; ---------------------------------------------------------------------
+; JumpTable_FD70C5 -- 8 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `sll bc,0x02 / add XBC,0x00FD70C5 / ld XBC,(XBC) / jp (XBC)`
+;          at 0xFD70B8-0xFD70C3.
+; ENTRY COUNT 8, from the ROM's own bound: `dec 2,BC / cps bc,0x07 / jr ugt` at
+;          0xFD70B2 admits 0..7 after the index has had 2 subtracted from it.
+;          ★ LAST-ENTRY TEST: 0xFD70C5 + 8*4 = 0xFD70E5, and 0xFD70E5 is ENTRY 3
+;          of this very table -- the table tiles exactly up to code it dispatches
+;          into.  (This is the one place in the span where unidasm gives up: the
+;          two bytes at 0xFD70E1 are entry 7 and cannot be spelled as an
+;          instruction.)
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFD710A 0xFD712A JumpTable_FD710A
+
+; ---------------------------------------------------------------------
+; JumpTable_FD710A -- 8 LE32 code addresses, an INLINE jump table
+;
+; Read by: ONE site, `add XBC,0x00FD710A / ld XBC,(XBC) / jp (XBC)` at
+;          0xFD7100-0xFD7108.
+; ENTRY COUNT 8: `dec 2,BC / cps bc,0x07 / jr ugt` at 0xFD70F7, the same shape as
+;          JumpTable_FD70C5's.  ★ LAST-ENTRY TEST: 0xFD710A + 8*4 = 0xFD712A =
+;          entry 0's target.  ⚠ The two tables share six of their eight targets;
+;          nothing here says one is a copy of the other.
+; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
+;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
+;          index, not a guess at where the values stop looking like
+;          addresses; the LAST-ENTRY TEST above is what makes the two agree.
+; Unknown:  what the arms DO.  A jump table names its targets, not its
+;          operations.
+; ---------------------------------------------------------------------
+
+@@AT 0xF80000
+; ==============================================================================
+; 0xF80000-0xF826A8 -- THE BOOT BLOCK: the UI blink veneers, and the
+; MODULE-INITIALISATION DIRECTORY the whole machine is brought up by
+; ==============================================================================
+;
+; Converted 2026-08-25 (wave 5 round 3).  It is the LAST large span of prom_a
+; that had never been decoded at all, and it is where the machine starts: the
+; RESET vector lands at 0xFFF081 -> ... -> 0xF826A9, four bytes above the end of
+; this block, and the directory this block ends with is what that code walks.
+;
+; Two things in it are established, and the rest is deliberately `sub_XXXXXX`.
+;
+; ★★ 1. THE MODULE-INITIALISATION DIRECTORY, 0xF82641-0xF826A8.
+;   26 LE32 words: 25 addresses inside prom_b's directory 0xF40000-0xF44018,
+;   then 0xFFFFFFFF.  The walker is at 0xF82846-0xF8286F, twelve instructions:
+;
+;       XHL = 0x00F82641
+;   loop: XIX = (XHL+)              ; next directory entry
+;       if XIX == 0xFFFFFFFF: done  ; the terminator
+;       XIX = (XIX)                 ; the module's PHASE VECTOR base
+;       if XIX == 0x0E0E0E0E: skip  ; four RET bytes = module absent
+;       XIX = XIX + WA              ; WA = the PHASE, 0x00/04/08/0C/10
+;       call (XIX)
+;
+;   So each directory word points at a prom_b word that holds the module's own
+;   phase-vector base, and each module publishes FIVE entry points four bytes
+;   apart.  Five callers set WA and fall into the walker -- 0xF82832 (WA=0x00),
+;   0xF82836 (0x04), 0xF8283A (0x08), 0xF8283E (0x0C), 0xF82842 (0x10) -- so the
+;   boot is FIVE PASSES over the same 25 modules, not one pass over 125 routines.
+; Evidence: the walker's own instructions, plus the first entry read straight
+;   out of prom_b: (0x00F40000) = 0x00F82010, and 0xF82010 in THIS block is six
+;   consecutive `jp` slots (0xF825D4, 0xF8262F, 0xF82628, 0xF8262F x3) -- a phase
+;   vector, in the image the directory says it is in.  Re-derived by
+;   notes/prom_a_boot_checks.py, which reads all 26 words and all 25 vectors.
+; Unknown: what each phase MEANS.  The five are named Phase0..Phase4 by their
+;   offset and by nothing else; no routine here says "this one is the RAM clear".
+;
+; ★ 2. FIVE BLINK-ARGUMENT TABLES, one idiom, 0xF8024D 0xF80754 0xF80AAD
+;   0xF80E12 0xF81344.  Each is read by the SAME twelve-byte shape:
+;
+;       bit 1,(0x2075) / jr Z,out        ; UI enabled?
+;       cp (0x2267),0x0F / jr Z,out
+;       xor XWA,XWA / ld A,(<var>) / sla 0x02,XWA
+;       ld XIY,<table> / ld XIY,(XIY+WA)
+;       push XIY / call 0xF42E20        ; -> prom_b Blink_Command
+;
+;   so the tables hold LE32 pointers into prom_b's display-list region and the
+;   index is a one-byte UI variable.  The five variables are (0x0DE5), (0x0DED),
+;   (0x0DBC), (0x0DDA) and (0x0C0F) in that order.
+; Evidence: the eight sites of `ld XIY,imm32 / ld XIY,(XIY+WA)` in the whole of
+;   prom_a are censused by notes/prom_a_boot_checks.py; five are here and their
+;   tables are these five.  T_F42E20 -> prom_b 0xF0E9CF is `Blink_Command`
+;   (notes/FINDINGS-prom_b-field-blink.md), which takes one pushed pointer.
+; ENTRY COUNTS 5, 6, 7, 7 and 3, and how they are established: read LE32 words
+;   from the base until one is neither 0 nor an address inside 0xF00000-0xFFFFFF.
+;   ★ LAST-ENTRY TEST: in every one of the five the first REJECTED word begins
+;   `1D 80 2E F4` or `F1 40 25 00` -- `call 0xF42E80` / `ld (0x2540),0x00` -- i.e.
+;   exactly where the linear decode resynchronises on real code.  One entry more
+;   or fewer moves that boundary off an instruction.  Asserted in
+;   notes/prom_a_boot_checks.py.
+; ⚠ NOT ESTABLISHED: what the five variables select between, and why entries
+;   0 and 1 of four of the tables are NULL.
+;
+; The rest of the block is 123 `sub_XXXXXX` routines of the same family -- test a
+; UI flag, push a prom_b display-list address, call a T_F417xx/T_F42Exx
+; interpreter entry -- and they are `sub_XXXXXX` because nothing here says WHICH
+; screen.  Nine labels in the span are semantic, and all nine are data.
+; ==============================================================================
+
+@@LONG 0xF8024D 0xF80261 BlinkArgPtrs_F8024D
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F8024D -- 5 LE32 pointers into prom_b's display-list region
+;
+; Read by: ONE site, `ld XIY,0x00F8024D / ld XIY,(XIY+WA)` at 0xF8023B-0xF80244.
+; Inputs:  WA = (0x0DE5) * 4  (`ld A,(0x0de5) / sla 0x02,XWA` at 0xF8022F).
+; Outputs: the selected pointer is pushed and handed to prom_b's Blink_Command
+;          (`call 0xf42e20`, T_F42E20 -> 0xF0E9CF).
+; ENTRY COUNT 5: words 0..4 are 0, 0, 0x00F3B388, 0x00F3B392, 0x00F3B39C; word 5
+;          is 0xF42E801D, which is the `call 0xF42E80` the code resumes with.
+;          ★ LAST-ENTRY TEST: 0xF8024D + 5*4 = 0xF80261 = that instruction.
+; Evidence: the reader shape above; the three non-null entries all point inside
+;          prom_b 0xF01800-0xF3E15B, the display-list region of
+;          notes/FINDINGS-ui-display-list.md, and each opens on a plausible
+;          (opcode, length) header.  notes/prom_a_boot_checks.py.
+; Unknown:  what (0x0DE5) selects; why entries 0 and 1 are NULL.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF80754 0xF8076C BlinkArgPtrs_F80754
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F80754 -- 6 LE32 pointers, same idiom
+;
+; Read by: `ld XIY,0x00F80754 / ld XIY,(XIY+WA)` at 0xF80742-0xF8074B.
+; Inputs:  WA = (0x0DED) * 4.
+; ENTRY COUNT 6: 0, 0, 0x00F3B03C, 0x00F3B050, 0x00F3B032, 0x00F3B046; word 6
+;          is `call 0xF42E80`.  ★ 0xF80754 + 6*4 = 0xF8076C = that instruction.
+; Evidence / Unknown: as BlinkArgPtrs_F8024D.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF80AAD 0xF80AC9 BlinkArgPtrs_F80AAD
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F80AAD -- 7 LE32 pointers, same idiom
+;
+; Read by: `ld XIY,0x00F80AAD / ld XIY,(XIY+WA)` at 0xF80A96-0xF80A9F.
+; Inputs:  WA = (0x0DBC) * 4.
+; ENTRY COUNT 7: 0, 0, 0x00F3BD25, 0x00F3BD2F, 0, 0x00F3BD39, 0; word 7 is
+;          `call 0xF42E80`.  ★ 0xF80AAD + 7*4 = 0xF80AC9 = that instruction.
+;          Note this table has THREE null entries, two of them interior, so the
+;          count cannot be taken as "until the first null".
+; Evidence / Unknown: as BlinkArgPtrs_F8024D.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF80E12 0xF80E2E BlinkArgPtrs_F80E12
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F80E12 -- 7 LE32 pointers, same idiom
+;
+; Read by: `ld XIY,0x00F80E12 / ld XIY,(XIY+WA)` at 0xF80DFB-0xF80E04.
+; Inputs:  WA = (0x0DDA) * 4.
+; ENTRY COUNT 7: 0, 0, 0x00F3BF15, 0x00F3BF1F, 0, 0x00F3BF29, 0; word 7 is
+;          `call 0xF42E80`.  ★ 0xF80E12 + 7*4 = 0xF80E2E = that instruction.
+; Evidence / Unknown: as BlinkArgPtrs_F8024D.  ⚠ This table and
+;          BlinkArgPtrs_F80AAD have the SAME null pattern and their targets are
+;          0x1F0 apart entry for entry, which is consistent with two screens
+;          built from one template -- recorded as an observation, not decoded.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF81344 0xF81350 BlinkArgPtrs_F81344
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F81344 -- 3 LE32 pointers, same idiom
+;
+; Read by: `ld XIY,0x00F81344 / ld XIY,(XIY+WA)` at 0xF81332-0xF8133B.
+; Inputs:  WA = (0x0C0F) * 4.
+; ENTRY COUNT 3: 0, 0x00F3C778, 0x00F3C782; word 3 is `ld (0x2540),0x00`.
+;          ★ TWO INDEPENDENT LAST-ENTRY TESTS here, which the other four tables
+;          do not have: 0xF81344 + 3*4 = 0xF81350, and 0xF81350 is separately a
+;          `call` target from THREE converted sites -- 0xF810E8, 0xF811C2 and
+;          0xF811FA.  A four-entry reading would put those calls two bytes inside
+;          an instruction; that is exactly the offender row
+;          notes/prom_a_linear_decode_check.py reported for this span.
+; Evidence / Unknown: as BlinkArgPtrs_F8024D.
+; ---------------------------------------------------------------------
+
+@@DATA 0xF81768 0xF8178D CharSet_F81768
+; ---------------------------------------------------------------------
+; CharSet_F81768 -- 37 ASCII bytes: '_', 'A'..'Z', '0'..'9'
+;
+; Contents: 5F 41 42 ... 5A 30 31 ... 39, in that order, no terminator.
+; Read by:  NOT ESTABLISHED.  No converted site names 0xF81768, and the routine
+;          that uses it is presumably one of the still-`.incbin` neighbours; the
+;          bytes are declared as data because a linear decode eats them (eight
+;          `db` at 0xF81778-0xF8177F) and because the sequence is unambiguous.
+; Evidence: the byte values themselves, checked one by one in
+;          notes/prom_a_boot_checks.py (it asserts the exact 37-byte string and
+;          that 0xF81767 and 0xF8178D are both instruction boundaries).
+; Unknown:  what selects a character from it.  37 = 1 + 26 + 10 is the alphabet
+;          a file-name or label entry field would offer, but nothing here says so.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF82000 0xF82010 Data_F82000
+; ---------------------------------------------------------------------
+; Data_F82000 -- four LE32 words, every one 0x00000080
+;
+; Read by: 0xF8202C `ld XWA,0x00F82000 / push XWA / push 0x0001 / call 0xF42DC8`.
+; Unknown:  everything else.  Four equal words are not a table this tree can
+;          frame from one call site, and 0x80 is not identified.  Declared as
+;          data only because a linear decode prints `db` on all four.
+; Evidence: the four words, read out of the ROM by notes/prom_a_boot_checks.py.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF82641 0xF826A9 ModuleInitDirectory_F82641
+; ---------------------------------------------------------------------
+; ModuleInitDirectory_F82641 -- ★★ the 25 modules the machine boots, and their
+; 0xFFFFFFFF terminator
+;
+; Read by: ONE site, the walker at 0xF82846-0xF8286F (`ld XHL,0x00F82641 /
+;          ld XIX,(XHL+) / cp XIX,0xFFFFFFFF / ...`).
+; Inputs:  WA = the phase, 0x00/0x04/0x08/0x0C/0x10, set by the five entry
+;          points 0xF82832/36/3A/3E/42.
+; Layout:  one LE32 per module, each an address in prom_b's directory
+;          0xF40000-0xF44018.  The word AT that address is the module's phase
+;          vector base; the walker skips a module whose vector base reads
+;          0x0E0E0E0E (four RET bytes = the slot is pad).
+; ENTRY COUNT 26 (25 modules + terminator), and how it is established: the
+;          walker's own `cp XIX,0xFFFFFFFF`, and the ROM has exactly one
+;          0xFFFFFFFF word in the run -- at 0xF826A5.  ★ LAST-ENTRY TEST:
+;          0xF82641 + 26*4 = 0xF826A9, which is where this `.incbin` span ended
+;          and where the already-converted RESET tail begins (`ld (0x6E),0x04`).
+;          A 25th or 27th word would put that boundary inside an instruction.
+; Evidence: the walker, plus all 25 pointers dereferenced in prom_b by
+;          notes/prom_a_boot_checks.py: every one is inside 0xF40000-0xF44018,
+;          every vector base it names is inside prom_a or prom_b, and the FIRST
+;          (0x00F40000 -> 0x00F82010) lands on the six `jp` slots at 0xF82010 in
+;          this very block.
+; Unknown:  which module is which.  The 25 are recorded by ADDRESS only.
+; ---------------------------------------------------------------------
+
+@@AT 0xF827C8
+; ==============================================================================
+; 0xF827C8-0xF82CFE -- ★★★ THE POWER-ON BLOCK: variant strap, expansion-board
+; identification, the three service chords, and the ROM VERSION SCREEN that
+; NAMES prom_d
+; ==============================================================================
+;
+; Converted 2026-08-25 (wave 5 round 3).  This 1,335-byte span was the last
+; unconverted piece of the reset path, and it answers or advances four entries
+; on the emulator's request list
+; (kn7000_mame/notes/WSA1-EMULATION-DISASM-GAPS.md).
+;
+; ★★★ GAP D -- CLOSED, and by a label the machine itself prints.
+;   VersionScreen_Show (0xF82A28) makes TWO remote reads over the link, using the
+;   same (dst, count, src) argument shape as the remote-flash module:
+;       dst RAM 0x2640, count 11, src remote 0x00FFFFF0
+;       dst RAM 0x264C, count 11, src remote 0x00F7FFF0
+;   and then draws a screen whose three labels are the ASCII "WSA-A:", "WSA-C:"
+;   and "WSA-D:" (inside VersionScreen_DisplayLists below).  The three value
+;   records point at, in order, 0x00FFFFF5 -- prom_a's OWN tag, read locally --
+;   0x00002645 and 0x00002651, i.e. each buffer + 5.
+;   The four ROM images in hand end like this:
+;       prom_a 0xFFFFF0  "wsaa_822\x02ssf"
+;       prom_c 0xFFFFF0  "wsac_230\x02ssf"
+;       prom_d 0x07FFF0  "wsad_54.ssf"
+;   so remote 0x00FFFFF0 is prom_c and remote 0x00F7FFF0 is prom_d at CPU 2
+;   base 0x00F00000.  The tie is not just the string: the firmware CARRIES A
+;   SPECIAL CASE FOR prom_d'S ONE-BYTE-SHORTER TAG.  `cp (XIX+0x15),0x6673` at
+;   0xF82A93 tests the SECOND buffer's bytes +9/+10 for the ASCII "sf", and only
+;   `wsad_54.ssf` has "sf" there -- `wsac_230\x02ss` has "ss" -- and when it
+;   matches, 0xF82A9A-0xF82AA3 shifts the version field right by one and pads
+;   with a space.  A firmware that did not expect prom_d's exact tag could not
+;   contain that branch.
+;   ⚠ What this does NOT say: it does not identify the flash at 0xE80000, and it
+;   does not say prom_d is that flash.  It says prom_d is the image CPU 2 reads
+;   at 0x00F00000-0x00F7FFFF.  notes/FINDINGS-memory-map.md sec.5 should be read
+;   against that.
+;
+; ★★ GAP C -- the count in every note that quotes it CHANGES here.  This block
+;   contains TWO more converted `call 0xF4123C` (Link_WaitBlockDone) sites,
+;   0xF828A8 and 0xF82A45/0xF82A6C, neither of them a remote-FLASH read: one
+;   reads 10 bytes from remote 0x00C00000, the others read 11 bytes from the two
+;   ROM tails.  Re-run notes/prom_a_converted_callers.py 0xF4123C after this
+;   block lands; the honest sentence is "any link block transfer", not "a
+;   remote-flash read".
+;
+; ★★ GAP O -- the three power-on chords, and the VARIANT STRAP that picks
+;   between their two forms.  Variant_SetFromPB0 (0xF82882) is four
+;   instructions: `ld A,0x01 / bit 0,(PB) / jr NZ / ld A,0x02` then
+;   `ld (0xC4),A`.  So (0x00C4) -- the model-variant flag the emulator's variant
+;   survey went looking for -- is 1 when PORT B BIT 0 reads HIGH and 2 when it
+;   reads LOW, and it is set once, here, on the reset path.  Each of the three
+;   chord tests then opens `cp (0xC4),0x01` and takes a different panel shadow
+;   byte for each variant:
+;       FACTORY CLEAR   0xF828D9  variant 1 -> (0x2B38) == 0x07 exactly
+;                                 variant 2 -> (0x2B38) & 0x03 == 0x03
+;       ROM VERSION     0xF8294C  variant 1 -> (0x2B32) & 0x07 == 0x07
+;                                 variant 2 -> (0x2B30) & 0x70 == 0x70
+;       third chord     0xF82A04  variant 1 -> (0x2B3A) & 0xE0 == 0xE0
+;                                 variant 2 -> (0x2B33) & 0xE0 == 0xE0
+;   All six are re-read from the ROM by notes/prom_a_boot_checks.py.
+;
+; ★ AND THE EXPANSION BOARD.  ExtBoard_Identify (0xF8288F) reads 10 bytes from
+;   remote 0x00C00000 into RAM 0x2640 and compares them with the ASCII
+;   "WSA1 EXTBD" at 0xF828C7; on a match it writes 0x5A to (0x00C5), otherwise
+;   (0x00C5) stays 0.  So (0x00C5) is the expansion-board-present flag and
+;   0x00C00000 is the board's window -- which is the same base the two
+;   already-converted 0xFC00xx callers of the packet builder use.
+;
+; Routines whose meaning is not established are `sub_XXXXXX` on purpose.
+; ==============================================================================
+
+@@DATA 0xF828C7 0xF828D1 ExtBoardMagic_F828C7
+; ---------------------------------------------------------------------
+; ExtBoardMagic_F828C7 -- the 10 ASCII bytes "WSA1 EXTBD"
+;
+; Read by: ONE site, the compare loop at 0xF828AC-0xF828C2 (`ld C,0x0A /
+;          ld XIX,0x00002640 / ld XIY,0x00F828C7 / ld A,(XIX+) / cp A,(XIY+) /
+;          jr NZ / djnz C`).
+; Inputs:  RAM 0x2640, which the ten instructions above it fill from remote
+;          0x00C00000 over the link.
+; Outputs: (0x00C5) = 0x5A on a full 10-byte match; untouched (0) otherwise.
+; ENTRY COUNT 10 bytes, from the loop's own `ld C,0x0A` -- not from counting
+;          printable characters.  ★ LAST-ENTRY TEST: 0xF828C7 + 10 = 0xF828D1,
+;          which is `cp (0x7FCA),0x5AA5`, the next instruction and a `calr`
+;          target from 0xF827E5.  An 11-byte reading puts that call one byte
+;          inside an instruction -- it is the single offender
+;          notes/prom_a_linear_decode_check.py reported for this span.
+; Evidence: the bytes, asserted verbatim in notes/prom_a_boot_checks.py.
+; ---------------------------------------------------------------------
+
+@@DATA 0xF829F4 0xF82A04 LedNibblePatterns_F829F4
+; ---------------------------------------------------------------------
+; LedNibblePatterns_F829F4 -- 16 bytes: one panel-LED bit pattern per nibble
+;
+; Read by: TWO sites, both `ld XIY,0x00F829F4 / ld A,(XIY+C)` -- 0xF829AE with
+;          C = (0xFFFFF8) & 0x0F and 0xF829D2 with C = (0x2648) & 0x0F.  Those
+;          two bytes are the ninth byte of prom_a's OWN tag and the ninth byte
+;          of the tag read from remote 0x00FFFFF0 (prom_c), i.e. the revision
+;          nibble of each ROM.  The byte then goes to `call 0xF40678` with
+;          W = 0 for the first and W = 1 for the second -- two LED wires -- and
+;          on variant 2 (`cp (0xC4),0x01` false) it is first `srl 0x04,A`,
+;          moving the pattern into the LOW nibble.
+; ENTRY COUNT 16, from the reader's own `and C,0x0F` -- 0x0F is the largest
+;          index it can produce, so 16 entries.  Not counted by eye.
+;          ★ LAST-ENTRY TEST: 0xF829F4 + 16 = 0xF82A04, which is
+;          `cp (0xC4),0x01`, the first instruction of the third chord test and a
+;          `calr` target from 0xF82813.  Fifteen or seventeen entries land at
+;          0xF82A03 or 0xF82A05, neither of which is an instruction boundary.
+; ★ THE TABLE IS A FORMULA, not an arbitrary map:
+;          entry[n] == 0x80 | (bitreverse4(n) << 3)
+;          for all sixteen n -- bit 7 is a constant marker and n's four bits are
+;          emitted in reverse order into bits 6,5,4,3.  Asserted for every entry
+;          by notes/prom_a_boot_checks.py, which computes the formula rather
+;          than storing the table.
+; Evidence: the two readers, the mask, and the formula check above.
+; Unknown:  which physical LEDs wires 0 and 1 light.  That is emulation gap O
+;          and this table does not answer it; what it does give the panel lane
+;          is the exact bit ORDER the firmware expects on a wire.
+; ---------------------------------------------------------------------
+
+@@DATA 0xF82B03 0xF82BB0 VersionScreen_DisplayLists
+; ---------------------------------------------------------------------
+; VersionScreen_DisplayLists -- ★★★ the ROM VERSION screen, 173 bytes of
+; display-list records, and the three labels that name prom_a, prom_c and prom_d
+;
+; Read by: THREE sites, all in VersionScreen_Show:
+;          0xF82AB5-0xF82AC1  (start 0xF82B03, end 0xF82B6C) -> T_F42E00
+;          0xF82AD0-0xF82AE8  (start 0xF82B6C, end 0xF82B9F) -> T_F42E04
+;          0xF82ADC-0xF82AE8  (start 0xF82B7D, end 0xF82BB0) -> T_F42E04
+;          T_F42E00 -> prom_b 0xF31800 and T_F42E04 -> 0xF31814 are the two
+;          display-list draw entries (notes/FINDINGS-ui-display-list.md).
+; Layout:  the (opcode, length) record format of that note.  The ASCII in it,
+;          in order: "ROM VERSION", "WSA-A:", "WSA-C:", "WSA-D:",
+;          "Software Group".
+; ★ The four 17-byte value records at 0xF82B6C, 0xF82B7D, 0xF82B8E and 0xF82B9F
+;   each carry TWO LE32 pointers, and they are what tie the screen to the ROMs:
+;       0xF82B6C  0x00002640, 0x00FFFFF5   <- prom_a's own tag + 5
+;       0xF82B7D  0x00002640, 0x00002645   <- the 0xFFFFF0 buffer + 5 = prom_c
+;       0xF82B8E  0x0000264C, 0x00002651   <- the 0xF7FFF0 buffer + 5 = prom_d
+;       0xF82B9F  0x00002640, 0x00FFFFF5
+;   and their y coordinates 0x5E, 0x73, 0x88 are the SAME three values the
+;   "WSA-A:"/"WSA-C:"/"WSA-D:" label records carry.  +5 is the offset of the
+;   version digits in a "wsaX_NNN" tag.
+; ENTRY COUNT: not a table, a byte-coded list; the extent 0xF82B03-0xF82BAF is
+;          fixed by the three (start, end) pairs the reader itself pushes, whose
+;          union is exactly [0xF82B03, 0xF82BB0).  ★ LAST-ENTRY TEST: 0xF82BB0
+;          is the END operand of the third call, and the byte after it begins the
+;          glyph block below.
+; Evidence: the two pointer pairs and the three y coordinates, all re-read from
+;          the ROM by notes/prom_a_boot_checks.py, together with the four ROM
+;          tail strings.
+; Unknown:  the record opcodes are not re-decoded here; prom_b's interpreter
+;          notes own that.
+; ---------------------------------------------------------------------
+
+@@DATA 0xF82BB0 0xF82C80 VersionScreen_Glyphs
+; ---------------------------------------------------------------------
+; VersionScreen_Glyphs -- 208 bytes of bitmap that the version screen's last
+; display list points into
+;
+; Read by: NOT ESTABLISHED as a table.  0xF82BB0 is the end operand of the third
+;          draw call above, and 0xF82C80 is a `calr` target from 0xF827D5, so
+;          the extent is pinned at both ends by instructions; what is between is
+;          declared data because a linear decode of it produces nothing that
+;          resembles a routine (no prologue, no `ret`, 26 `db` bytes).
+; Evidence: the two boundary instructions, asserted in
+;          notes/prom_a_boot_checks.py.
+; Unknown:  everything about the content.  It opens `FF FF 8C 0C 0C 0C 0C 0C 0C
+;          1E C0 C0 40 3C 66 C3 FF C0 66 3C`, which reads as 8-pixel-wide glyph
+;          rows, but this tree has not decoded the format and does not claim it.
+; ---------------------------------------------------------------------
+
+@@AT 0xF99021
+; ==============================================================================
+; 0xF99021-0xFA1403 -- ★ THE UI SCREEN BLOCK: 34,787 bytes that draw screens and
+; touch no device at all
+; ==============================================================================
+;
+; Converted 2026-08-25 (wave 5 round 3).  The frontier tool
+; (notes/prom_a_module_frontier.py) ranked five of its runs in the top twelve --
+; T_F41910-T_F419C4 (46 slots), T_F42670-T_F426BC (20), T_F434C0-T_F434D4 (6),
+; T_F41640-T_F41768 (75) and T_F43400-T_F43420 (9) -- and they all land here.
+; 132 prom_b directory slots point into it, and ALL 132 land on an instruction
+; boundary of one linear decode from 0xF99021 (which is itself a directory
+; target, so the START of the decode is pinned by the directory and not by the
+; decode).  0 call/calr from an instruction in the span reaches a non-boundary.
+; Re-run: `python3 notes/prom_a_linear_decode_check.py 0xF99021 0xFA1404
+; --offenders`.
+;
+; ★ WHAT IT IS.  Screen-drawing code, and nothing else.  Counting the thunk
+; calls in the converted text: T_F42C78 x61, T_F42E04 x43, T_F42E00 x43,
+; T_F42E0C x38, T_F42E84 x32, T_F42E08 x28 -- the display-list draw entries
+; (T_F42E00 -> prom_b 0xF31800 and T_F42E04 -> 0xF31814 are the two
+; interpreters of notes/FINDINGS-ui-display-list.md).  ★ AND IT TOUCHES NO
+; DEVICE: the only operand anywhere in the span in 0x600000-0x7FFFFF is the RAM
+; staging buffer 0x60A000.  So nothing here can answer an emulation gap, and the
+; block is taken for coverage and for the frontier, which is stated rather than
+; dressed up.
+;
+; ★ FIFTEEN POINTER TABLES, and how they were found.  A linear decode of this
+; span reports 0 offenders -- because nothing CALLS into a pointer table -- and
+; would have emitted 1,920 bytes of them as plausible-looking instructions.
+; notes/prom_a_ptr_tables.py finds them by shape instead (runs of >= 6
+; consecutive `lo mid hi 00` words in 0xF00000-0xFFFFFF), and its NULL CONTROL
+; over 24 KiB of prom_a that is already converted CODE is 5 runs / 208 bytes,
+; i.e. 0.85%.  Thirteen of the fifteen also have a reader whose own `cp BC,n`
+; gives the entry count, and in ALL THIRTEEN the count from the bound and the
+; count from the detector agree exactly.  That mutual confirmation is the
+; evidence; neither alone would be.
+;
+; Routines are `sub_XXXXXX`: the strings are in prom_b's display lists, so
+; tying a veneer here to a screen needs the other side.
+; ==============================================================================
+
+@@DATA 0xF99121 0xF993C5 PtrTable_F99121
+; ---------------------------------------------------------------------
+; PtrTable_F99121 -- 169 LE32 pointers, 676 bytes
+;
+; Read by: ONE located reader, and it does NOT index from the base.  0xF990F9
+;          is `add XBC,0x00F99321 / ld XBC,(XBC)` and 0xF99108 is
+;          `inc 4,XWA / add XWA,0x00F99321 / ld XWA,(XWA)`, so it reads a
+;          CONSECUTIVE PAIR from 0xF99321 -- entry 128 of this run -- and hands
+;          (start, end) to T_F42E04, the display-list interpreter.  What indexes
+;          entries 0..127 is NOT ESTABLISHED.
+; Extent:  0xF99121-0xF993C4.  Both ends are pinned by something other than the
+;          run: 0xF99120 is a `ret` that ends the routine above, and the four
+;          bytes at 0xF993C5 are 0x0E0E0E0E, the start of a 58-byte RET pad.
+; ENTRY COUNT 169, from notes/prom_a_ptr_tables.py (MIN=6, null 0.85% over
+;          24 KiB of known code) -- NOT from a reader's bound, because no reader
+;          bound was found.  ★ SELF-CONSISTENCY: the run's last three entries,
+;          at 0xF993B9/0xF993BD/0xF993C1, all hold 0x00F99121 -- the run's own
+;          base.  A table whose tail points at its own head is not a chance
+;          alignment of code bytes.
+; Evidence: the shape run plus its null; the one reader; the two pinned ends;
+;          the self-reference.  Asserted in notes/prom_a_uiblock_checks.py.
+; Unknown:  what the entries mean.  They are addresses in prom_b's display-list
+;          region 0xF01800-0xF3E15B and in prom_a.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF99870 0xF999F0 DisplayListPtrs_F99870
+; ---------------------------------------------------------------------
+; DisplayListPtrs_F99870 -- 96 LE32 pointers = THREE 32-entry tables end to end
+;
+; Read by: TWO located sites, both the same three instructions --
+;          0xF99835 `ld XIX,0x00F99870 / ld E,(0x2740) / call T_F41B0C` and
+;          0xF9984C `ld XIX,0x00F998F0 / ld E,(0x2740) / call T_F41B0C`.
+;          0xF99970, the third 32-entry block, has no located reader.
+; ENTRY COUNT 32 per table, and it is NOT a guess: T_F41B0C resolves to prom_a
+;          0xF8BDF8, whose FIRST instruction is `cp HL,0x001F / jr ugt` -- 0x1F
+;          is the last index it lets through, so 32 entries.  (T_F41B08 ->
+;          0xF8BDC5 opens with the same two instructions.)  3 x 32 = 96 is
+;          exactly the run notes/prom_a_ptr_tables.py measures, 0xF99870-0xF999EF.
+;          ★ LAST-ENTRY TEST: the word at 0xF999F0 is 0x0C210023, not
+;          pointer-shaped, and it is where the decode resumes.
+; Evidence: the two readers, the callee's own bound, and the shape run; the
+;          three agree.  notes/prom_a_uiblock_checks.py.
+; Unknown:  what (0x2740) selects, and what the third block is for.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF99F96 0xF9A016 JumpTable_F99F96
+; ---------------------------------------------------------------------
+; JumpTable_F99F96 -- 32 LE32 branch targets
+;
+; Read by: ONE site, `cp BC,0x001F / jrl UGT,0xF9A047 / sll 0x02,BC /
+;          add XBC,0x00F99F96 / ld XBC,(XBC) / jp T,XBC` at 0xF99F82-0xF99F95.
+; ENTRY COUNT 32, from the reader's own `cp BC,0x001F`.  ★ LAST-ENTRY TEST:
+;          0xF99F96 + 32*4 = 0xF9A016, and 0xF9A016 is the MINIMUM value any
+;          entry holds -- the table abuts its own first arm.  31 or 33 entries
+;          break that.  Re-derived by notes/prom_a_jumptables.py.
+; Evidence: the reader shape, the bound, and the abutment above.
+; Unknown:  the selector.  Six distinct arms among the 32 slots.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9A2A7 0xF9A327 JumpTable_F9A2A7
+; ---------------------------------------------------------------------
+; JumpTable_F9A2A7 -- 32 LE32 branch targets, same reader shape
+;
+; Read by: `cp BC,0x001F / ... / add XBC,0x00F9A2A7 / ld XBC,(XBC) / jp T,XBC`
+;          at 0xF9A293-0xF9A2A6.  Default arm 0xF9A346.
+; ENTRY COUNT 32 from that `cp`.  ★ LAST-ENTRY TEST: base + 128 = 0xF9A327 =
+;          the minimum entry value.  Four distinct arms.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9A3C7 0xF9A3DF JumpTable_F9A3C7
+; ---------------------------------------------------------------------
+; JumpTable_F9A3C7 -- 6 LE32 branch targets
+;
+; Read by: `ld BC,(0x2720) / extz BC / extz XBC / cp BC,5 / jr UGT,0xF9A414 /
+;          sll 0x02,BC / add XBC,0x00F9A3C7 / ld XBC,(XBC) / jp T,XBC` at
+;          0xF9A3AE-0xF9A3C6.
+; Inputs:  the selector is the RAM byte (0x2720).
+; ENTRY COUNT 6, from `cp BC,5` -- 5 is the last index allowed.  ★ LAST-ENTRY
+;          TEST: 0xF9A3C7 + 6*4 = 0xF9A3DF = the minimum entry value.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9A78E 0xF9A80E JumpTable_F9A78E
+; ---------------------------------------------------------------------
+; JumpTable_F9A78E -- 32 LE32 branch targets, same reader shape
+;
+; Read by: `cp BC,0x001F / ... / add XBC,0x00F9A78E` at 0xF9A77A-0xF9A78D.
+; ENTRY COUNT 32 from that `cp`.  ★ base + 128 = 0xF9A80E = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9AA89 0xF9AB09 JumpTable_F9AA89
+; ---------------------------------------------------------------------
+; JumpTable_F9AA89 -- 32 LE32 branch targets, same reader shape
+;
+; Read by: `cp BC,0x001F / ... / add XBC,0x00F9AA89` at 0xF9AA75-0xF9AA88.
+; ENTRY COUNT 32 from that `cp`.  ★ base + 128 = 0xF9AB09 = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9AB84 0xF9ABA4 JumpTable_F9AB84
+; ---------------------------------------------------------------------
+; JumpTable_F9AB84 -- 8 LE32 branch targets
+;
+; Read by: `ld BC,(0x2720) / extz / cp BC,7 / jrl UGT,0xF9ABEB / sll 0x02,BC /
+;          add XBC,0x00F9AB84 / ld XBC,(XBC) / jp T,XBC` at 0xF9AB6A-0xF9AB83.
+; Inputs:  the same selector (0x2720) as JumpTable_F9A3C7.
+; ENTRY COUNT 8, from `cp BC,7`.  ★ base + 32 = 0xF9ABA4 = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9B098 0xF9B118 JumpTable_F9B098
+; ---------------------------------------------------------------------
+; JumpTable_F9B098 -- 32 LE32 branch targets, same reader shape
+;
+; Read by: `cp BC,0x001F / ... / add XBC,0x00F9B098` at 0xF9B084-0xF9B097.
+; ENTRY COUNT 32 from that `cp`.  ★ base + 128 = 0xF9B118 = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.  This is the last of the five
+;          32-entry tables notes/prom_a_jumptables.py finds in the span.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9D966 0xF9D986 JumpTable_F9D966
+; ---------------------------------------------------------------------
+; JumpTable_F9D966 -- 8 LE32 branch targets
+;
+; Read by: `ld BC,(0x269A) / extz / cp BC,7 / jrl UGT,0xF9DA0A / sll 0x02,BC /
+;          add XBC,0x00F9D966 / ld XBC,(XBC) / jp T,XBC` at 0xF9D94C-0xF9D965.
+; Inputs:  the selector is the RAM byte (0x269A).
+; ENTRY COUNT 8, from `cp BC,7`.  ★ base + 32 = 0xF9D986 = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9DBE6 0xF9DC06 JumpTable_F9DBE6
+; ---------------------------------------------------------------------
+; JumpTable_F9DBE6 -- 8 LE32 branch targets
+;
+; Read by: `ld BC,(0x269A) / extz / cp BC,7 / jrl UGT,0xF9DC8A / sll 0x02,BC /
+;          add XBC,0x00F9DBE6 / ld XBC,(XBC) / jp T,XBC` at 0xF9DBCC-0xF9DBE5.
+; Inputs:  the same selector (0x269A) as JumpTable_F9D966.
+; ENTRY COUNT 8, from `cp BC,7`.  ★ base + 32 = 0xF9DC06 = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9EC58 0xF9EC74 JumpTable_F9EC58
+; ---------------------------------------------------------------------
+; JumpTable_F9EC58 -- 7 LE32 branch targets
+;
+; Read by: `ld BC,(0x26A5) / extz / cp BC,6 / jr UGT,0xF9ECBC / sll 0x02,BC /
+;          add XBC,0x00F9EC58 / ld XBC,(XBC) / jp T,XBC` at 0xF9EC3F-0xF9EC57.
+; Inputs:  the selector is the RAM byte (0x26A5).
+; ENTRY COUNT 7, from `cp BC,6`.  ★ base + 28 = 0xF9EC74 = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFA08BF 0xFA08D7 JumpTable_FA08BF
+; ---------------------------------------------------------------------
+; JumpTable_FA08BF -- 6 LE32 branch targets
+;
+; Read by: `ld C,(0x26A7) / and C,0x07 / extz / cp BC,5 / jrl UGT,0xFA098D /
+;          sll 0x02,BC / add XBC,0x00FA08BF / ld XBC,(XBC) / jp T,XBC` at
+;          0xFA08A2-0xFA08BE.
+; Inputs:  the selector is (0x26A7) & 7.  ⚠ The mask allows 0..7 and the bound
+;          allows 0..5, so the bound is the tighter of the two and is what the
+;          count comes from.
+; ENTRY COUNT 6, from `cp BC,5`.  ★ base + 24 = 0xFA08D7 = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFA09BD 0xFA09D5 JumpTable_FA09BD
+; ---------------------------------------------------------------------
+; JumpTable_FA09BD -- 6 LE32 branch targets, same shape as JumpTable_FA08BF
+;
+; Read by: the `cp BC,5 / ... / add XBC,0x00FA09BD` reader at 0xFA09A0-0xFA09BC.
+; ENTRY COUNT 6, from that `cp`.  ★ base + 24 = 0xFA09D5 = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@LONG 0xFA0B13 0xFA0B2B JumpTable_FA0B13
+; ---------------------------------------------------------------------
+; JumpTable_FA0B13 -- 6 LE32 branch targets
+;
+; Read by: the `cp BC,5 / ... / add XBC,0x00FA0B13` reader at 0xFA0AF6-0xFA0B12.
+; ENTRY COUNT 6, from that `cp`.  ★ base + 24 = 0xFA0B2B = the minimum entry.
+; Evidence / Unknown: as JumpTable_F99F96.
+; ---------------------------------------------------------------------
+
+@@AT 0xF92C62
+; ==============================================================================
+; 0xF92C62-0xF96017 -- more UI screen code, and SEVEN more pointer tables
+; ==============================================================================
+;
+; Converted 2026-08-25 (wave 5 round 3), for the same reasons and with the same
+; caveats as the 0xF99021 block above: it is what the frontier ranks, it draws
+; screens, and it answers no emulation gap.
+;
+; Decode certification (`python3 notes/prom_a_linear_decode_check.py 0xF92C62
+; 0xF96018 --offenders`): 0 call/calr from an instruction in the span to a
+; non-boundary, 0 phantom ones either, and 0xF96018 -- the span's end -- is an
+; instruction boundary of a decode that runs past it.  0xF92C62 is itself a
+; prom_b directory target, so the decode's START is pinned by the directory.
+;
+; The seven tables are found the same way, by notes/prom_a_ptr_tables.py, and
+; four of the seven are 32-entry tables handed to T_F41B08 -> prom_a 0xF8BDC5,
+; whose first instruction is `cp HL,0x001F / jr ugt`.  So their count comes from
+; the CALLEE's bound, not from the run length -- and the two agree in all four.
+; ==============================================================================
+
+@@LONG 0xF92C66 0xF92CE6 DisplayListPtrs_F92C66
+; ---------------------------------------------------------------------
+; DisplayListPtrs_F92C66 -- 32 LE32 pointers
+;
+; Read by: ONE site, 0xF92C58 `ld XIX,0x00F92C66 / call T_F41B08`.
+; ENTRY COUNT 32: T_F41B08 resolves to prom_a 0xF8BDC5, whose first instruction
+;          is `cp HL,0x001F / jr ugt` -- 0x1F is the last index it lets through.
+;          ★ LAST-ENTRY TEST: 0xF92C66 + 32*4 = 0xF92CE6, the word there is
+;          0x2673F10E (not pointer-shaped), and 0xF92CE6 is where the decode
+;          resumes.  It is also the minimum value any entry holds.
+; Evidence: the reader, the callee's own bound, and the shape run measured by
+;          notes/prom_a_ptr_tables.py; all three agree.
+; Unknown:  what the 32 slots select between.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF93444 0xF93460 PtrTable_F93444
+; ---------------------------------------------------------------------
+; PtrTable_F93444 -- 7 LE32 pointers, each to a BYTE array
+;
+; Read by: 0xF9341A `ld XIY,0x00F93444 / ld XIY,(XIY+HL)` -- and then
+;          `ld A,(XIY+HL)` at 0xF93428, so the selected entry is the base of a
+;          byte array, not a branch target.  The index is
+;          `(0x2670) / E` widened and x4 (`div WA,E / ld L,W / xor H,H /
+;          sla 0x02,HL`).  A second site, 0xF93EAB, names the same base.
+; ENTRY COUNT 7, from notes/prom_a_ptr_tables.py -- NOT from a bound; the
+;          divide gives no compile-time limit.  ★ LAST-ENTRY TEST: the word at
+;          0xF93460 is 0x00030000, which is not pointer-shaped, and 0xF93460 is
+;          where the decode resumes.
+; Evidence: the two readers and the shape run with its null control.
+; Unknown:  everything the arrays contain.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF93557 0xF935D7 DisplayListPtrs_F93557
+; ---------------------------------------------------------------------
+; DisplayListPtrs_F93557 -- 32 LE32 pointers, same shape as DisplayListPtrs_F92C66
+;
+; Read by: 0xF93549 `ld XIX,0x00F93557 / call T_F41B08`.
+; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF935D7,
+;          where the word is 0x013EC6C0 -- not pointer-shaped.
+; Evidence / Unknown: as DisplayListPtrs_F92C66.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF93839 0xF938B9 DisplayListPtrs_F93839
+; ---------------------------------------------------------------------
+; DisplayListPtrs_F93839 -- 32 LE32 pointers, same shape
+;
+; Read by: 0xF9382B `ld XIX,0x00F93839 / call T_F41B08`.
+; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF938B9,
+;          where the word is 0xCE2673F1 -- not pointer-shaped.
+; Evidence / Unknown: as DisplayListPtrs_F92C66.
+; ---------------------------------------------------------------------
+
+@@LONG 0xF9408E 0xF9410E DisplayListPtrs_F9408E
+; ---------------------------------------------------------------------
+; DisplayListPtrs_F9408E -- 32 LE32 pointers, same shape
+;
+; Read by: 0xF94080 `ld XIX,0x00F9408E / call T_F41B08`.
+; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF9410E,
+;          where the word is 0x0E00011E -- not pointer-shaped.
+; Evidence / Unknown: as DisplayListPtrs_F92C66.
+; ---------------------------------------------------------------------
+
+@@DATA 0xF95C95 0xF95E82 PtrTables_F95C95
+; ---------------------------------------------------------------------
+; PtrTables_F95C95 -- 493 bytes holding THREE pointer tables and one stray byte
+;
+; Emitted as `.byte`, not `.long`, and that is the claim: the region is NOT a
+; whole number of 32-bit words (493 = 128 + 128 + 1 + 236) and the third table
+; is offset by ONE byte from the second.  A `.long` rendering would have to
+; invent an alignment the ROM does not have.
+;
+;   0xF95C95-0xF95D14   32 LE32 pointers.  Read by 0xF958B4
+;                       `mul XBC,(XIZ+0x08) / add XBC,0x00F95C95 /
+;                       ld XBC,(XBC) / ... / jp T,XBC`, bounded by that
+;                       routine's own `cp (XIZ+0x08),0x001F / jr UGT` at
+;                       0xF95896 -- 32 entries.
+;   0xF95D15-0xF95D94   32 more.  Read by the sibling routine at 0xF958C9,
+;                       which names 0xF95D15 at 0xF95A07.
+;   0xF95D95            ONE byte, 0x00, that belongs to neither.
+;   0xF95D96-0xF95E81   59 LE32 pointers.  NO reader located.
+;
+; ENTRY COUNTS: 32 and 32 from the two readers' own bounds; 59 from
+;          notes/prom_a_ptr_tables.py's shape run, with no bound to check it
+;          against -- stated as the weaker of the three.
+; ★ LAST-ENTRY TEST for the region as a whole: the word at 0xF95E82 is
+;          0x0E0E0E0E, the start of a RET pad, so the run cannot be extended.
+; Evidence: the two readers, the two bounds, the shape run and its null control.
+; Unknown:  what the third table is for, and what the stray byte is.
+; ---------------------------------------------------------------------

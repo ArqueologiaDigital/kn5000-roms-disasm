@@ -173,12 +173,16 @@ into denormal garbage, so the decode is its own proof.
   candidates, so the pool is not uniformly 8-byte strided. The KN5000's pool of the same kind
   (`subcpu_data_tables.s:2695`) does not match, so the sibling cannot supply the stride either.
   Guessing one would produce a table of nonsense that the byte gate would happily accept.
-* **`0xFCD0F7` onward, the length-prefixed packet pool.** Framing CONFIRMED for the first four
-  records: a 16-bit big-endian length followed by that many bytes walks
-  `0xFCD0F7 → 0xFCD0FE → 0xFCD105 → 0xFCD10C → 0xFCD119`, and every one of those landing points
-  is a pointer target in the table at `0xFCC576`. The walk then desynchronises at `0xFCD119`
-  (its length field says 11, but the next pointer target is 24 bytes on), so the framing is not
-  fully established and the pool is left as bytes rather than mis-split.
+* ~~**`0xFCD0F7` onward, the length-prefixed packet pool.**~~ **CONVERTED 2026-08-25 — and the
+  "desynchronisation" was an error in the walk, not a property of the data.** The first byte is
+  not the high half of a 16-bit length: its top nibble is an OPCODE and only its low nibble
+  belongs to the length. Read that way the walk never desynchronises, and the whole 65,972-byte
+  region tiles into 297 byte-code streams, 6 data tables and 4 directory objects with no gap and
+  no overlap. See `notes/FINDINGS-prom_c-p7-byte-stream-pool.md` and
+  `notes/gen_prom_c_p7stream_pool.py --verify`.
+  ⚠ The old paragraph is kept here, struck through, because "framing CONFIRMED for the first
+  four records" was true and still misled: four records are exactly as many as a wrong framing
+  can get right when the opcode of all four happens to be zero.
 * **Three bytes at `0xFCCB6E`** (`00 01 00`). The address is referenced three times so it is a
   real object, but three bytes is too little to infer a shape from.
 

@@ -88,6 +88,7 @@ def run(lo, hi, quiet=False):
     off = [t for t in slots if t not in bounds]
 
     refs = MAP.all_refs()
+    del BAD[:]
     site_ok = site_bad = outside = 0
     for t, ss in refs.items():
         if not (lo <= t < hi) or t in bounds:
@@ -99,6 +100,7 @@ def run(lo, hi, quiet=False):
                 outside += 1
             elif at in bounds:
                 site_bad += 1
+                BAD.append((at, t))
             else:
                 site_ok += 1
 
@@ -117,10 +119,20 @@ def run(lo, hi, quiet=False):
         print("  call/calr into a NON-boundary address:")
         print("     from a site that IS an instruction here : %d   <-- must be 0"
               % site_bad)
+        # --offenders: WHICH ones.  A count alone cannot be acted on -- the whole
+        # point of this row is that each offender is either an embedded table
+        # (declare it as data and re-run) or a decode that is wrong there.
+        if "--offenders" in sys.argv:
+            for at, t in sorted(BAD):
+                print("        site 0x%06X calls 0x%06X, which is not a boundary"
+                      % (at, t))
         print("     from a site that is NOT (phantom)       : %d" % site_ok)
         print("     from outside the span (unverifiable)    : %d" % outside)
         print("  VERDICT: %s" % ("self-consistent" if ok else "NOT self-consistent"))
     return ok
+
+
+BAD = []
 
 
 def main():

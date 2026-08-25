@@ -171,10 +171,10 @@ enabling).
 | 0x617800-0x67FFFF | | CS3 | **NOT ESTABLISHED** beyond the heap's start | |
 | 0x680000-0x78FFFF | | CS0 | **NOT ESTABLISHED — no device is referenced here** | a byte census of prom_a+prom_b over the `C2/D2/E2/F2 + lo,mid,hi` mem24 forms and the `0x40-0x47` imm32 loads finds 64 + 108 raw hits in this span, every one of them a scattered singleton inside data (the largest, `0x72F2D2` ×26, is a repeating `f2 d2 f2 72` pattern in prom_a at 0xF54C98+). Contrast 0x790000-0x7FFFFF in prom_a: 0x790000 ×73, 0x790001 ×21, 0x7C0000 ×8, 0x7F0000 ×5, 0x7A0000 ×4, 0x7B0004 ×3, 0x7B0005 ×2 — the shape a real device makes |
 | 0x790000 / 0x790001 | 2 B | CS0 | display-controller-shaped port. 0x790000 read = status, busy in **bit 6**; written = data. 0x790001 = command, also read for data | `0xF8ECF4 bit 6,(0x790000)` / `0xF8ECFB ld (0x790001),0x46` / `0xF8ED0D ld (0x790000),A`. Command bytes 0x42/0x43/0x46/0x4C. **Part identity UNVERIFIED** — those four match SED1330 MWRITE/MREAD/CSRW/CSRDIR, but the status port is on the wrong side for that part |
-| 0x7A0000 | 1 B | CS0 | **the DMA data port of the 0x7B0004/5 device.** Two paths to this one address: programmed I/O through the pointer at (0x605A3E), and **micro-DMA channel 0** through the pointer at (0x605A3C), armed on **INT7**. `Dev7A_Dma_DeviceToRam` sets DMAS0 = 0x7A0000 fixed / DMAD0 = RAM walking / DMAM0 = 0x00; `Dev7A_Dma_RamToDevice` is the mirror with DMAM0 = 0x08 (mode meanings: `../mame/src/devices/cpu/tlcs900/tmp95c061.cpp:368-372` and `:398-402`). All four references in prom_a+prom_b name 0x7A0000 exactly — `notes/FINDINGS-dev7b-and-int5.md`, re-censused by `notes/prom_a_byte_checks.py`. Added 2026-08-25 | `0xFE59BB`/`0xFE59DA` (DMA, converted) · `0xFE680F ld C,(0x7A0000)` / `0xFE682B ld (0x7A0000),C` (PIO) |
-| 0x7B0004 / 0x7B0005 | 2 B | CS0 | **control/status** and **data** of an unidentified byte-wide device. Reached through exactly FIVE accessors, all in prom_a `0xFE54B6-0xFE54EB` and all converted; `INT5_Dev7B_Receive` (`0xFE6866`) is the only consumer. Status bit 7 = a byte is ready, bit 6 = more follow. ⚠ what the device is remains unknown — `notes/FINDINGS-dev7b-and-int5.md` | `0xFE54B6 ld L,(0x7B0004)`, `0xFE54BC ld L,(0x7B0005)`, `0xFE54C5 ld (0x7B0004),A` |
+| 0x7A0000 | 1 B | CS0 | **the FLOPPY DISK CONTROLLER's data register on the DMA-acknowledged decode** (established 2026-08-25, `notes/FINDINGS-prom_a-fdc.md`). Two paths to this one address: programmed I/O through the pointer at (0x605A3E), and **micro-DMA channel 0** through the pointer at (0x605A3C), armed on **INT7**. `Dev7A_Dma_DeviceToRam` sets DMAS0 = 0x7A0000 fixed / DMAD0 = RAM walking / DMAM0 = 0x00; `Dev7A_Dma_RamToDevice` is the mirror with DMAM0 = 0x08 (mode meanings: `../mame/src/devices/cpu/tlcs900/tmp95c061.cpp:368-372` and `:398-402`). All four references in prom_a+prom_b name 0x7A0000 exactly — `notes/FINDINGS-dev7b-and-int5.md`, re-censused by `notes/prom_a_byte_checks.py`. Added 2026-08-25 | `0xFE59BB`/`0xFE59DA` (DMA, converted) · `0xFE680F ld C,(0x7A0000)` / `0xFE682B ld (0x7A0000),C` (PIO) |
+| 0x7B0004 / 0x7B0005 | 2 B | CS0 | **Main Status Register** (read) / **control register** (write) and **Data Register** of a **uPD765-family FLOPPY DISK CONTROLLER** — established 2026-08-25, `notes/FINDINGS-prom_a-fdc.md`; the driver is prom_a 0xFE54EC-0xFE6850. Reached through exactly FIVE accessors, all in prom_a `0xFE54B6-0xFE54EB` and all converted; `INT5_Dev7B_Receive` (`0xFE6866`) is the only consumer. Status bit 7 = MSR_RQM, bit 6 = MSR_DIO, bit 5 = MSR_EXM, bit 4 = MSR_CB, bits 3-0 = drive busy. ⚠ which bit of the WRITE side does what is still not established — `notes/FINDINGS-prom_a-fdc.md`, `notes/FINDINGS-dev7b-and-int5.md` | `0xFE54B6 ld L,(0x7B0004)`, `0xFE54BC ld L,(0x7B0005)`, `0xFE54C5 ld (0x7B0004),A` |
 | 0x7C0000 | 1 B | CS0 | **inter-processor link port** — §3 | `0xF8E12B ld XBC,0x007C0000` / `ld (XBC),0xE2` |
-| 0x7E0008-0x7E0017 | | CS0 | 16-bit port. The accessor at `0xFE4CE0` builds the address as `0x7E0000 + ((n & 7) \| 0x08)` or `\| 0x10` and does `ld HL,(XWA)` | in the **only** traced caller (0xFE50A0) both arguments are 0, so the index is the constant 0x08 for all 256 iterations — that site behaves as a **FIFO at 0x7E0008**. "Two banks of eight registers" is read off the index construction alone, not off any sweep |
+| 0x7E0008-0x7E0017 | | CS0 | 16-bit port, **the SECOND STORAGE UNIT of the same block-device layer that drives the floppy** (established 2026-08-25: all seven unit-1 arms of `Fdc_Request` reach its accessors — `notes/prom_a_unit1_backend_check.py`, `notes/FINDINGS-prom_a-fdc.md` §6). FOUR accessors, `0xFE4C73` write byte, `0xFE4C99` write word, `0xFE4CBF` read byte, `0xFE4CE0` read word, each building `0x7E0000 + ((n & 7) \| 0x08)` or `\| 0x10`; those four are the only `add Xrr,0x007E0000` instructions in prom_a+prom_b | in the **only** traced caller (0xFE50A0) both arguments are 0, so the index is the constant 0x08 for all 256 iterations — that site behaves as a **FIFO at 0x7E0008**. "Two banks of eight registers" is read off the index construction alone, not off any sweep |
 | 0x7F0000 / 0x7F0002 | | CS0 | address-register + data-register pair; 8 writes per slot, slot = `(n<<5) \| 0x10` | `0xF8319A ld XIX,0x007F0000` / `0xF831A8 ld (XIX),W` / `0xF831AA ld (XIX+0x02),A` |
 | 0xE00000-0xEFFFFF | 1 MiB | CS2 | **NOT ESTABLISHED** — CPU 1 never references it | |
 | 0xF00000-0xF7FFFF | 512 KiB | CS2 | **prom_b** — CONFIRMED, §4 | |
@@ -374,9 +374,31 @@ That is consistent with prom_b being the low half of a contiguous 1 MiB image.
 
 ---
 
-## 5. prom_d — strongly supported as the 0xE80000 flash image, one link short
+## 5. prom_d — TIED TO AN INSTRUCTION 2026-08-25, and its base is 0xF00000
 
-Not "leading candidate" and not "unverified"; the evidence moved.
+> ★★★ **CORRECTED 2026-08-25 (wave 5 round 3).** This section was titled
+> *"strongly supported as the **0xE80000** flash image, one link short"* and ended
+> **"Still missing: a byte-level tie between a specific prom_d structure and a
+> specific instruction."** That tie now exists, and it moves the base.
+>
+> `VersionScreen_Show` (prom_a `0xF82A28`) reads **11 bytes from remote
+> `0x00F7FFF0`** into RAM `0x264C` and displays them under the ASCII label
+> **`WSA-D:`**. prom_d's last sixteen bytes are `wsad_54.ssf`, at file offset
+> `0x7FFF0` — so remote `0x00F7FFF0` is prom_d and its base is **`0x00F00000`**,
+> not `0xE80000`. The firmware even carries a branch shaped for prom_d's
+> one-byte-shorter tag (`cp (XIX+0x15),0x6673` at `0xF82A93` tests bytes +9/+10
+> for the ASCII `"sf"`, which `wsad_54.ssf` has and `wsac_230\x02ssf` does not).
+>
+> ⚠ The tone-data reads at remote banks `0xE8`-`0xEC` are `0x80000` **below**
+> that. Either prom_d is a different part from the tone flash, or the two windows
+> are the two halves of one larger part with prom_d as the upper half. **This
+> evidence does not choose between them and neither reading is asserted.**
+>
+> Full argument and 11 independent checks:
+> `notes/FINDINGS-prom_a-boot-and-version-screen.md` §1,
+> `python3 notes/prom_a_boot_checks.py`.
+
+The evidence that stood before the tie, unchanged:
 
 * prom_d is **exactly 0x80000 bytes**, exactly the span §2 proves for the flash.
 * Its content ends at 0x50B08. From **0x50B09 to 0x7FFEF it is one unbroken
@@ -402,9 +424,11 @@ while prom_d's largest header offset 0x050AFA is in bank 0xED. The offset table
 does *not* match the observed bank list; it matches the *device*, which is
 larger than the part of it prom_a happens to reference.
 
-**Still missing:** a byte-level tie between a specific prom_d structure and a
-specific instruction. Until that exists this is "strongly supported", not
-proven, and prom_d's linker script keeps ORIGIN 0 as a build convenience.
+**~~Still missing:~~ SUPPLIED 2026-08-25** — see the correction at the head of
+this section. What is *still* missing is narrower: nothing indexes prom_d's
+44-entry offset header or its 274-entry pointer directory, so the tie is to the
+image, not to its internal structures. prom_d's linker script keeps ORIGIN 0 as
+a build convenience.
 
 ---
 
@@ -418,9 +442,13 @@ proven, and prom_d's linker script keeps ORIGIN 0 as a build convenience.
 * **CPU 1 0x610000-0x67FFFF, 0x680000-0x78FFFF, 0xE00000-0xEFFFFF, and the whole
   BEXCS space** — nothing referenced.
 * **CPU 2 0x010080-0x01FFFF, 0x110000-0x13FFFF, 0xC00040-0xDFFFFF,
-  0xE00004-0xE7FFFF, 0xF00000-0xF7FFFF** — nothing referenced.
-* **The identity of every CS0 device on CPU 1** (0x790000/1, 0x7A0000,
-  0x7B0004/5, 0x7E0008, 0x7F0000) **and on CPU 2** (0x104000, 0x108000,
+  0xE00004-0xE7FFFF** — nothing referenced. ⚠ **`0xF00000-0xF7FFFF` was on this
+  list and has been REMOVED (2026-08-25):** no prom_c instruction names it, but
+  CPU 1 reads `0x00F7FFF0` over the link from prom_a `0xF82A5F`, and that is
+  prom_d — §5.
+* **The identity of the remaining CS0 devices on CPU 1** (0x790000/1,
+  0x7F0000 — 0x7A0000, 0x7B0004/5 and 0x7E0008 were identified 2026-08-25,
+  `notes/FINDINGS-prom_a-fdc.md`) **and on CPU 2** (0x104000, 0x108000,
   0x10C000). Register interfaces are described; part numbers are not.
 * **Whether CPU 1's 0x7F0000 and CPU 2's 0xE00000 are one dual-ported chip or
   two instances.** The driver shape is byte-identical; that is all.

@@ -138,12 +138,28 @@ def classify(site):
       * `0xC2/0xD2/0xE2/0xF2  <addr24>  <op>` -- the direct-address memory prefixes, the same
                                       twelve spellings notes/prom_c_xrefs.py searches;
       * `0x1D/0x1B  <addr24>  <hi>` -- `call`/`jp` to an absolute address.
+      * `0xE8-0xEF  0xC8  <addr24>  0x00` -- `add <X..>,#imm32`, the shape the compiler
+                                      emits for EVERY indexed table read in this image;
+      * `0xF2  <addr24>  0x30-0x37` -- `lda <X..>,addr24`.
     Anything else is a byte coincidence spanning an instruction boundary.  Returning the shape
-    rather than a yes/no keeps the reason visible in the output."""
+    rather than a yes/no keeps the reason visible in the output.
+
+    ⚠ CORRECTED 2026-08-25.  The last two shapes were MISSING, and their absence is what led
+    round 2 to write that "the reference census finds no address-operand citation into the
+    first 1,787 bytes of copy A (0xFE0A6D-0xFE1167; the earliest is 0xFE1168)".  There are
+    eight, and the first of them proves that the cosine table at 0xFE08C9 runs THROUGH
+    0xFE0A6D, i.e. that A_START is a boundary of the DUPLICATION and not of an object.
+    notes/prom_c_tail_census.py --corrections prints the difference; notes/
+    gen_prom_c_tail_tables.py converts what the corrected census made convertible."""
     p1 = IMG[site - BASE - 1]
+    p2 = IMG[site - BASE - 2]
     nxt = IMG[site - BASE + 3]
     if 0x40 <= p1 <= 0x47 and nxt == 0x00:
         return "ld #imm32"
+    if p1 == 0xC8 and 0xE8 <= p2 <= 0xEF and nxt == 0x00:
+        return "add <X..>,#imm32"          # ⚠ ADDED 2026-08-25 -- see the docstring
+    if p1 == 0xF2 and 0x30 <= nxt <= 0x37:
+        return "lda <X..>,addr24"
     if p1 in (0xC2, 0xD2, 0xE2, 0xF2):
         return "direct-address prefix 0x%02X" % p1
     if p1 in (0x1D, 0x1B):

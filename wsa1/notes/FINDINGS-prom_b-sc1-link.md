@@ -310,3 +310,94 @@ ownership, and the header now says so.
 `(b & 0x0F) + 2` **bytes**. Different expressions over the same nibble, in
 different units. ⚠ This tree has **not** reconciled them; do not assume the two
 codecs are inverses of one another.
+
+## Round 4 (2026-08-25) — the serial registers' actual contents
+
+This answers items **E.1** and **E.2** of
+`kn7000_mame/notes/WSA1-EMULATION-DISASM-GAPS.md`, which asked what immediate the
+twelve BR1CR writes carry and whether SC1 is a UART at all. §"A census gap worth
+fixing everywhere" above established the instruction FORM and explicitly did not
+give the values; here they are, read off the proven transcription rather than off
+a byte scan:
+
+⚠ **CORRECTED 2026-08-25 (round-1 audit finding 1): this is a REPLICATION, not a
+closure.** This section was written against the 13-entry version of the gaps file
+(`kn7000_mame` commit `26aa1c6`, 09:20). The driver lane closed gap E the same
+day in `1a96510` (12:09), before this was finished, and its §E sub-answers 1 and
+2 give the *same* values from the *other* side of the machine: BR1CR `0x22`×4 /
+`0x24`×5 / `0x28`×3, one prescaler tap, and `SC1MOD = 0x00` at `0xF5A8AF` =
+I/O-interface mode. Two lanes reading different evidence — a transcription census
+here, the driver's own SC1 model there — landed on bit-identical answers and
+neither knew of the other. That is worth more than a duplicate "closed", and it
+is the only honest headline for this section.
+
+    python3 notes/prom_b_sc1_serial_regs.py
+    python3 notes/prom_b_sc1_serial_regs.py --sites
+
+| register | whole-byte writes | bit operations |
+|---|---|---|
+| SC1MOD (0x56) | **one**: `ld (0x56),0x00` at 0xF5A8AF | 7, all on bit 5 (`or 0x20` ×1, `and 0xDF` ×6) |
+| BR1CR (0x57) | **twelve**: `0x22` ×4, `0x24` ×5, `0x28` ×3 | none |
+| SC1CR (0x55) | one: `ld (0x55),0x01` at 0xF5A8B5 | 17, on bits 0 and 1 |
+| SC1BUF (0x54) | — | — (11 `ld (0x54),A` stores, 2 `ld A,(0x54)` loads) |
+
+### E.2 — SC1 is **NOT** a UART
+
+`SCxMOD` on this part is
+`| 7 TB8 | 6 CTSE | 5 RXE | 4 WU | 3 SM1 | 2 SM0 | 1 SC1 | 0 SC0 |`, with
+SM = 0 I/O interface (clocked synchronous) / 1 seven-bit UART / 2 eight-bit UART
+/ 3 nine-bit UART.
+
+⚠ That layout is **not** taken from a datasheet nobody in this tree has. It is
+pinned on this machine: `FINDINGS-system-clock.md` reads CPU 2's
+`ldio SC0MOD,0x29` at 0xF991B3 as "8-bit UART, baud-rate generator", and that
+reading is what makes MIDI come out at 31,250 baud with fc = 28 MHz — a figure
+lever B of that note reaches independently of the UART. Under this layout 0x29
+gives SM = 2 and SC = 1, exactly that. Under the competing layout (SM at bits
+2-1, SC at bits 4-3) the same byte would configure an I/O-interface port and MIDI
+would not work. The same field split is what
+`kn7000_mame/src/devices/cpu/tlcs900/tmp94c241_serial.cpp` uses on the sibling
+part (`mode = (m_serial_mode >> 2) & 3`).
+
+So **SC1MOD = 0x00 ⇒ SM = 0: I/O INTERFACE MODE**, i.e. clocked synchronous with
+a separate clock line — not an asynchronous UART. SC = 0 selects the
+timer-output trigger rather than the baud-rate generator. RXE (bit 5) starts
+clear, and the seven bit operations are receive-enable toggles: the module turns
+its receiver **on at one site and off at six**, which is what half duplex looks
+like from the software side and is consistent with the peer-request line INT6
+this note already describes.
+
+`SC1CR = 0x01` sets **IOC = 1, i.e. SCLK is an INPUT**: at reset the peer
+supplies the clock. The 17 later bit operations move bit 0 (IOC) and bit 1
+(SCLKS, clock edge) — the module switches between sourcing and receiving the
+clock as the direction turns.
+
+### E.1 — the twelve BR1CR immediates
+
+`BRxCR` is `| 7 – | 6 ADDE | 5 CK1 | 4 CK0 | 3..0 divisor N |`. All twelve writes
+carry ADDE = 0 and **the same prescaler tap, CK = 0b10**; only the divisor
+changes:
+
+| value | sites | N |
+|---|---|---|
+| 0x22 | 0xF5A8B2 0xF5AD92 0xF5ADF7 0xF5B386 | 2 |
+| 0x24 | 0xF5ACEF 0xF5AD23 0xF5AD49 0xF5AD78 0xF5AEC9 | 4 |
+| 0x28 | 0xF5ABD9 0xF5AE93 0xF5B030 | 8 |
+
+So the link runs at **three rates in the ratio 4 : 2 : 1**, selected per
+operation, off one prescaler tap.
+
+⚠ **The absolute bit rate is still not established, and this note does not give
+one.** It needs the divide ratio of tap 0b10 for this part. The only figure the
+tree has is the *other* tap: `FINDINGS-system-clock.md` shows BR0CR with CK = 0b00
+and N = 14 producing 31,250 baud at fc = 28 MHz with the UART's ×16
+oversampling, which pins tap 00 = fc/4 and nothing else. MAME's own `tmp95c061`
+prescaler cannot be used as the authority — `WSA1-EMULATION-DISASM-GAPS.md`
+appendix item 2 records that its taps are 16× slow. What would settle it: a
+TMP95C061 databook, or a measurement on the real machine.
+
+`prom_b_sc1_serial_regs.py` asserts all four of the load-bearing facts (twelve
+BR1CR writes; one tap across all twelve; SC1MOD written whole exactly once; that
+value's SM field = 0) and exits non-zero if any fails, so a later change that
+breaks one is visible.
+
