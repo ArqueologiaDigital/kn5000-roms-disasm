@@ -74,8 +74,17 @@ head. The 32-bit immediate `0x00603500` occurs **67 times** in prom_a+prom_b
 (counted by the generator), so the directory is shared, not private to this
 module.
 
-⚠ **How many entries the directory has is NOT established.** `(0x0C90)` bounds a
-loop over them at `0xF62D3C` and nothing here fixes its value.
+⚠ ~~**How many entries the directory has is NOT established.**~~ **ESTABLISHED
+2026-08-25: 17.** `BStore_FreeList_Init` (prom_b `0xF7A428`, converted in
+`FINDINGS-prom_b-song-store.md`) clears the array with
+`ld XHL,0x00603500 / ld BC,0x0011 / ld (XHL),0x00 / ld (XHL+0x01),0xFFFF /
+add XHL,0x00000003 / djnz BC` — 17 entries of 3 bytes, 51 bytes,
+`0x603500-0x603532` — and `BStore_AppendBytes` (`0xF7A7A8`) indexes the same
+array 1-based from `(0x1008)`. Re-read by
+`python3 notes/prom_b_songstore_checks.py --arrays`.
+⚠ That is the **initialised** extent. `(0x0C90)`, which bounds a loop over the
+directory at `0xF62D3C`, is a separate runtime number and is still unknown; and
+nothing says whether 17 is 16 + 1 of anything.
 
 ### 3. A 3 KiB workspace at `0x00603400`, banked to `0x00610000 + n*0xC00`
 
@@ -190,3 +199,13 @@ T_F40C54 x18 0xF4D0DB   T_F42884 x17 0xF7A402   T_F42CA8 x15 0xF5553F
 `BStore_AllocChain` calls at `0xF63A18` for each block of a new chain, and it
 returns failure in `W`. It is the natural next conversion: it closes the one
 routine this module depends on and does not contain.
+
+✅ **DONE, 2026-08-25.** `0xF7A400-0xF7CFFF` is converted — the allocator
+(`BStore_AllocBlock`, `BStore_FreeChain`, `BStore_FreeList_Init`,
+`BStore_AppendBytes`) together with the 132-slot command module above it. See
+`FINDINGS-prom_b-song-store.md`. Two claims elsewhere were corrected by it: the
+directory's entry count (above) and the saved-cursor count in
+`FINDINGS-memory-map.md` (16 → 17). It also carries the "what is this FOR"
+question further: the ten banks are the ten SONGS, by the assignment chain
+`ld A,(0x360a) / ld (0x0e02),A / inc 1,A / ld (0x12f6),A` at `0xF7AA35`.
+The frontier fell 502 → 364, exactly the 138 slots the two runs own.

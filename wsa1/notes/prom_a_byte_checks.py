@@ -1210,14 +1210,458 @@ check("DSP_WriteChannelRegs_FromTable is ALSO published, at 0xF42DE0",
 
 # --- ROUND 3: the banner's `.fill` claim (round-1 audit F1) ------------------
 import re as _re
+sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 _SRC = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
 _FILLS = [(int(m.group(1), 0), int(m.group(2)))
           for m in _re.finditer(r"^\t\.fill\s+(0x[0-9A-Fa-f]+|\d+)\s*,\s*(\d+)\s*,",
                                 _SRC, _re.M)]
-check("prom_a has exactly ONE .fill and it is 108 bytes of 0x0E padding",
-      len(_FILLS) == 1 and _FILLS[0][0] * _FILLS[0][1] == 108
-      and list(a(0xFFFF84, 108)) == [0x0E] * 108,
-      str(_FILLS))
+# ⚠ This check used to read "prom_a has exactly ONE .fill and it is 108 bytes".
+# That stopped being true on 2026-08-25, when four verified 0x0E pad runs came
+# in with the ring-buffer and callback-queue modules -- and a hand-kept list of
+# the new addresses would rot the same way.  So the ADDRESSES are now read out
+# of the source too: every `.fill` in prom_a is introduced by a comment naming
+# the range it covers, and this check re-derives that range and tests the ROM.
+# The claim it enforces is therefore "every .fill says what range it pads, and
+# that range really is uniform 0x0E, and its length really is the .fill's".
+_FILL_CLAIMS = []
+for _m in _re.finditer(r"^;\s*(0x[0-9A-Fa-f]{6})-(0x[0-9A-Fa-f]{6})\s*--\s*"
+                       r"(\d+)\s*bytes of 0x0E.*?\n(?:^;.*\n)*?"
+                       r"^\t\.fill\s+(0x[0-9A-Fa-f]+|\d+)\s*,\s*(\d+)\s*,\s*"
+                       r"(0x[0-9A-Fa-f]+|\d+)\s*$",
+                       _SRC, _re.M):
+    _FILL_CLAIMS.append((int(_m.group(1), 16), int(_m.group(2), 16),
+                         int(_m.group(3)), int(_m.group(4), 0),
+                         int(_m.group(5)), int(_m.group(6), 0)))
+check("every .fill with a stated range: the range is uniform 0x0E, its length "
+      "matches, and the fill value is 0x0E",
+      _FILL_CLAIMS and all(
+          hi - lo + 1 == n and n == cnt * sz and val == 0x0E
+          and set(a(lo, n)) == {0x0E}
+          for lo, hi, n, cnt, sz, val in _FILL_CLAIMS),
+      str(_FILL_CLAIMS))
+check("every .fill in prom_a is one of those -- none is undocumented",
+      len(_FILLS) == len(_FILL_CLAIMS) + 1,      # +1: the 108 bytes at 0xFFFF84
+      "%d .fill, %d claimed" % (len(_FILLS), len(_FILL_CLAIMS)))
+check("the original 108-byte pad at 0xFFFF84 is still uniform 0x0E",
+      set(a(0xFFFF84, 108)) == {0x0E})
+check("prom_a's .fill total equals what source_coverage.py calls filler",
+      sum(c * s2 for c, s2 in _FILLS) ==
+      __import__("importlib").import_module("source_coverage").measure("a")[3])
+
+# --- ROUND 4: the callback queue, the ASCII field, and the analogue scan -----
+# Every sentence these back is in a header written on 2026-08-25.  The pattern
+# is the tree's: a claim about a NUMBER or an IDENTITY is re-derived here, never
+# quoted.
+
+# Task2_CallbackDispatcher's "Called from: NOT called -- it is a TASK ENTRY".
+_REC = 0xF85E8A                      # EntryPoint_Records, one-based (kernel note)
+check("EntryPoint_Records[2].PC is the prom_b thunk 0xF42E88",
+      int.from_bytes(a(_REC + 1 * 12, 4), "little") == 0xF42E88)
+check("... and that thunk's body is `jp 0xF8DA00`",
+      b(0xF42E88, 1) == b"\x1b"
+      and int.from_bytes(b(0xF42E89, 3), "little") == 0xF8DA00)
+check("task 2's record gives it stack 0x0060E980 and priority 3",
+      int.from_bytes(a(_REC + 12 + 4, 4), "little") == 0x0060E980
+      and int.from_bytes(a(_REC + 12 + 10, 2), "little") == 3)
+
+# The five kernel slots CallbackQueue_ResetAndRestartTask2's header names.
+for _slot, _tgt, _what in ((0xF42D6C, 0xF857D9, "Kernel_StartTask"),
+                           (0xF42D88, 0xF859AE, "Kernel_SemaSignal"),
+                           (0xF42D90, 0xF85A96, "Kernel_SemaWait"),
+                           (0xF42DA8, 0xF85E5E, "the state-0 writer"),
+                           (0xF42DD8, 0xF85AEF, "Kernel_SemaTryWait")):
+    check("slot T_%06X is `jp 0x%06X` (%s)" % (_slot, _tgt, _what),
+          b(_slot, 1) == b"\x1b"
+          and int.from_bytes(b(_slot + 1, 3), "little") == _tgt)
+
+# The queue's geometry, read off its own instructions rather than described.
+check("CallbackQueue_Post wraps with minc4 mask 0x01FC -- 4-byte elements, "
+      "0x200 bytes, 128 entries",
+      a(0xF8DA33, 4) == bytes([0xDD, 0x3A, 0xFC, 0x01]))
+check("CallbackQueue_Init seeds the free count with 0x01FF = capacity - 1",
+      int.from_bytes(a(0xF8DA80, 2), "little") == 0x01FF)
+check("Post refuses below 5 free bytes (4 for the element, 1 the ring never "
+      "uses)", a(0xF8DA24, 2) == bytes([0xD8, 0xDD]))
+check("all three queue routines address the ring at 0x00600416",
+      all(int.from_bytes(a(at, 4), "little") == 0x00600416
+          for at in (0xF8DA1B, 0xF8DA4A, 0xF8DA71)))
+check("★ a ten-byte control block puts the queue at 0x60040C, exactly where "
+      "ring 0x60000C's 0x400 bytes of data end",
+      0x600416 - 10 == 0x60000C + 0x400)
+
+# AsciiField_Clear's one store, and the sign byte the parser tests.
+check("AsciiField_Clear stores 0x2020202B -- '+' then three spaces",
+      int.from_bytes(a(0xF8BC7A, 4), "little") == 0x2020202B)
+check("AsciiField_ToSignedValue tests the sign cell for 0x2B ('+')",
+      a(0xF8BC6A, 5) == bytes([0xC1, 0x20, 0x28, 0x3F, 0x2B]))
+check("AsciiDigits3_ToValue's three scales are x100, x10 and x1",
+      a(0xF8BC2E, 3) == bytes([0xCB, 0x08, 0x64])
+      and a(0xF8BC47, 3) == bytes([0xCB, 0x08, 0x0A]))
+
+# SignedNibbleDelta_Table: contents, both ends, and the last entry.
+_TBL = list(a(0xF8BDA5, 32))
+check("SignedNibbleDelta_Table is 0x00..0x0F then 0x00,0xFF..0xF1",
+      _TBL == list(range(16)) + [0x00] + [(0x100 - k) & 0xFF for k in range(1, 16)])
+check("its base is the address the reader loads at 0xF8BD80",
+      int.from_bytes(a(0xF8BD81, 4), "little") == 0x00F8BDA5)
+check("LAST-ENTRY TEST: entry 31 is 0xF1 = -15, entry 30 is 0xF2",
+      _TBL[31] == 0xF1 and _TBL[30] == 0xF2)
+check("base + 32 = 0xF8BDC5, which is the target of directory slot T_F41B08",
+      0xF8BDA5 + 32 == 0xF8BDC5
+      and int.from_bytes(b(0xF41B09, 3), "little") == 0xF8BDC5)
+
+# The six analogue channels: the ADREG index, the state pair and the channel
+# number step together.  PARSED, not listed -- a changed literal fails here.
+_ADSCAN = [(0xF8DC3E, 0x60, 0x28E0, 0), (0xF8DC71, 0x62, 0x28E2, 1),
+           (0xF8DCA4, 0x64, 0x28E4, 2), (0xF8DCD7, 0x66, 0x28E6, 3)]
+for _at, _adreg, _state, _ch in _ADSCAN:
+    ok = (a(_at, 3) == bytes([0xD0, _adreg, 0x20])                  # ld WA,(ADREGn)
+          and a(_at + 3, 3) == bytes([0xD8, 0xEF, 0x08])            # srl 8,WA
+          and int.from_bytes(a(_at + 7, 2), "little") == _state     # ld W,(state)
+          and int.from_bytes(a(_at + 11, 2), "little") == _state + 1)
+    # the channel number handed to the reporting thunk
+    ok = ok and a(_at + 0x23, 2) == bytes([0x20, _ch])
+    check("analogue channel %d: ADREG at 0x%02X, state pair 0x%04X/0x%04X, "
+          "reported as channel %d" % (_ch, _adreg, _state, _state + 1, _ch), ok)
+check("the two SOFT channels 4 and 5 read (0x600000) and (0x600001)",
+      int.from_bytes(a(0xF8DD4E, 3), "little") == 0x600000
+      and int.from_bytes(a(0xF8DD63, 3), "little") == 0x600001
+      and a(0xF8DD52, 2) == bytes([0x20, 0x04])
+      and a(0xF8DD67, 2) == bytes([0x20, 0x05]))
+check("AnalogScan_InitSoftChannels parks both of them at 0x80",
+      a(0xF8DC18, 2) == bytes([0x21, 0x80])
+      and int.from_bytes(a(0xF8DC1B, 3), "little") == 0x600000
+      and int.from_bytes(a(0xF8DC20, 3), "little") == 0x600001)
+check("all six channels report through the same slot, T_F405F0 -> 0xF89800",
+      b(0xF405F0, 1) == b"\x1b"
+      and int.from_bytes(b(0xF405F1, 3), "little") == 0xF89800)
+check("the hysteresis filter's two thresholds are 2 and 6",
+      a(0xF8DD14, 2) == bytes([0xC9, 0xDA])
+      and a(0xF8DD18, 2) == bytes([0xC9, 0xDE]))
+
+# --- "SeqBuf twins": the RETRACTION of the one-byte claim, re-derived ---------
+# prom_a/wsa1_prom_a.s (SeqBuf_AppendEvent's header) and
+# notes/FINDINGS-prom_a-ring-buffers.md §3 said 0xFA570C was "a NEAR-TWIN ...
+# differing by ONE BYTE".  Round-2 audit F1.  Every number in the replacement
+# text is re-derived here, so the retraction cannot rot back.
+_TW_A, _TW_B, _TW_N = 0xF830C6, 0xFA570C, 90
+_da, _db = a(_TW_A, _TW_N), a(_TW_B, _TW_N)
+_ndiff = sum(1 for x, y in zip(_da, _db) if x != y)
+_pref = 0
+for _x, _y in zip(_da, _db):
+    if _x != _y:
+        break
+    _pref += 1
+check("SeqBuf twins: 75 of the 90 positional bytes DIFFER (not one)",
+      _ndiff == 75, "got %d" % _ndiff)
+check("SeqBuf twins: the common prefix is 4 bytes -- f0 aa c8 and the `jr NZ` opcode",
+      _pref == 4 and _da[:4] == bytes([0xF0, 0xAA, 0xC8, 0x6E])
+      and _da[4] != _db[4], "prefix %d" % _pref)
+check("SeqBuf twins: 0xF830C6 uses XIY (0x9D/0x45), 0xFA570C uses XIX (0x9C/0x44)",
+      a(0xF830D5, 1) == b"\x45" and a(0xF830DA, 1) == b"\x9d"
+      and a(0xFA571D, 1) == b"\x44" and a(0xFA5722, 1) == b"\x9c")
+check("SeqBuf twins: 0xF830C6 brackets with push/pop XIY (0x3D/0x5D), "
+      "0xFA570C with push SR / ei 0x06 .. pop SR (0x02 06 06 .. 0x03)",
+      a(0xF830D4, 1) == b"\x3d" and a(0xF830FD, 1) == b"\x5d"
+      and a(0xFA571A, 3) == bytes([0x02, 0x06, 0x06]) and a(0xFA5740, 1) == b"\x03")
+check("SeqBuf twins: 0xF830C6 does `decw 1,(XIY+0xfe)` TWICE; 0xFA570C does "
+      "`decw 2,(XIX+0xfe)` ONCE -- both net -2",
+      a(0xF830E2, 3) == bytes([0x9D, 0xFE, 0x69])
+      and a(0xF830F5, 3) == bytes([0x9D, 0xFE, 0x69])
+      and a(0xFA573D, 3) == bytes([0x9C, 0xFE, 0x6A])
+      and A.count(bytes([0x9C, 0xFE, 0x6A]), 0xFA570C - 0xF80000,
+                  0xFA5763 - 0xF80000) == 1)
+check("SeqBuf twins: the write cursor goes to the SAME cell 0x600A10 -- "
+      "absolute in one, (XIX+0xfc) in the other",
+      a(0xF830F8, 5) == bytes([0xF2, 0x10, 0x0A, 0x60, 0x53])
+      and a(0xFA573A, 3) == bytes([0xBC, 0xFC, 0x53])
+      and 0x600A14 - 4 == 0x600A10)
+check("SeqBuf twins: the guards read DIFFERENT cells -- 0x600A12 (free count) "
+      "and 0x600A0C (read cursor)",
+      a(0xF830CB, 7) == bytes([0xD2, 0x12, 0x0A, 0x60, 0x3F, 0x02, 0x00])
+      and a(0xFA5711, 7) == bytes([0xD2, 0x0C, 0x0A, 0x60, 0x3F, 0x02, 0x00]))
+check("SeqBuf twins: 0x600A12 is ring 0x600A14's free count (base-2) and "
+      "0x600A0C is its read cursor (base-8)",
+      0x600A14 - 2 == 0x600A12 and 0x600A14 - 8 == 0x600A0C)
+check("SeqBuf twins: 0xF830C6's trace path loads (0x93) TWICE, the second dead; "
+      "0xFA570C's loads it once",
+      a(0xF8310D, 3) == bytes([0xC0, 0x93, 0x21])
+      and a(0xF83117, 3) == bytes([0xC0, 0x93, 0x21])
+      and a(0xF8311C, 3) == bytes([0xF0, 0xAC, 0x53])          # next store is HL
+      and A.count(bytes([0xC0, 0x93, 0x21]), 0xFA5746 - 0xF80000,
+                  0xFA5763 - 0xF80000) == 1)
+check("SeqBuf twins: LAST-INSTRUCTION TEST -- both end in `ret` (0x0E) at "
+      "0xF8311F and 0xFA5762, and the byte after each is not a `ret`",
+      a(0xF8311F, 1) == b"\x0e" and a(0xFA5762, 1) == b"\x0e"
+      and a(0xF83120, 1) != b"\x0e" and a(0xFA5763, 1) != b"\x0e")
+
+# =============================================================================
+# ROUND 2 -- the 0xFAA000 module (0x60F0xx message layer) and the 0xFC5400 one.
+# Every quantified sentence in prom_a/wsa1_prom_a.s's headers for those two
+# spans is re-derived here.  Sources: notes/prom_a_block_headers.txt.
+# =============================================================================
+
+def _le32(at):
+    return int.from_bytes(a(at, 4), "little")
+
+
+def _refs_abs(lo, hi):
+    """Absolute `call`/`jp` literals in prom_a+prom_b naming [lo,hi).
+
+    ⚠ Opcode-anchored at every byte offset, so this is an UPPER BOUND on the
+    sites and an EXACT statement about absence.  Both uses below are of the
+    second kind or are comparisons between two ranges scanned the same way."""
+    out = []
+    for img, base in ((A, 0xF80000), (B, 0xF00000)):
+        for i in range(len(img) - 3):
+            if img[i] in (0x1D, 0x1B):
+                t = img[i + 1] | img[i + 2] << 8 | img[i + 3] << 16
+                if lo <= t < hi:
+                    out.append((base + i, t))
+    return out
+
+
+def _dir_targets():
+    """{addr} of every `jp nnn` slot of the prom_b routine directory."""
+    out = set()
+    for o in range(0x40000, 0x44018, 4):
+        s = B[o:o + 4]
+        if s[0] == 0x1B and 0xF0 <= s[3] <= 0xFF:
+            out.add(s[1] | s[2] << 8 | s[3] << 16)
+    return out
+
+
+_DIR = _dir_targets()
+
+# --- "stale veneer copy": 0xFAA018-0xFAA3FF against 0xFAA418-0xFAA7FF --------
+_d = [k for k in range(0x3E8) if a(0xFAA018 + k, 1) != a(0xFAA418 + k, 1)]
+check("stale veneer copy: the two 1000-byte blocks differ in exactly 10 bytes",
+      len(_d) == 10, "got %d at %s" % (len(_d), [hex(x) for x in _d]))
+_PAIRS = [(0xFAA029, 0xFAA429, 0xFAADC2, 0xFAB658),
+          (0xFAA046, 0xFAA446, 0xFAAE41, 0xFAB6D7),
+          (0xFAA06D, 0xFAA46D, 0xFAAEE3, 0xFAB779),
+          (0xFAA08A, 0xFAA48A, 0xFAAE92, 0xFAB728)]
+for _s, _l, _st, _lv in _PAIRS:
+    ok = (a(_s, 1) == b"\x1d" and a(_l, 1) == b"\x1d"
+          and int.from_bytes(a(_s + 1, 3), "little") == _st
+          and int.from_bytes(a(_l + 1, 3), "little") == _lv
+          and _lv - _st == 0x896)
+    check("stale veneer copy: 0x%06X calls 0x%06X where 0x%06X calls 0x%06X, "
+          "delta 0x896" % (_s, _st, _l, _lv), ok)
+check("stale veneer copy: all four LIVE targets are published directory slots",
+      all(_lv in _DIR for _, _, _, _lv in _PAIRS))
+check("stale veneer copy: NONE of the four stale targets is",
+      not any(_st in _DIR for _, _, _st, _ in _PAIRS))
+check("stale veneer copy: all four live targets start with a push (0x2B/0x3C)",
+      all(a(_lv, 1)[0] in (0x2B, 0x3C) for _, _, _, _lv in _PAIRS))
+# three of the four stale targets are two bytes INSIDE a longer instruction;
+# pinned by the enclosing instruction's own bytes rather than by a decoder.
+check("stale veneer copy: 0xFAADC2 is +2 inside `ld (0x60f080),0xba` at 0xFAADC0",
+      a(0xFAADC0, 6) == bytes([0xF2, 0x80, 0xF0, 0x60, 0x00, 0xBA]))
+check("stale veneer copy: 0xFAAE41 is +2 inside `ld (XIZ+0xf2),XIY` at 0xFAAE3F",
+      a(0xFAAE3F, 3) == bytes([0xBE, 0xF2, 0x65]))
+check("stale veneer copy: 0xFAAE92 is +2 inside `ld XBC,(XIZ+0xf2)` at 0xFAAE90",
+      a(0xFAAE90, 3) == bytes([0xAE, 0xF2, 0x21]))
+_INT = [(0xFAA3BB, 0xFAA26A, 0xFAA7BB, 0xFAA66A), (0xFAA3DB, 0xFAA204, 0xFAA7DB, 0xFAA604)]
+for _s, _st, _l, _lv in _INT:
+    check("stale veneer copy: the INTERNAL call 0x%06X->0x%06X relocates by "
+          "0x400, not 0x896" % (_s, _st),
+          int.from_bytes(a(_s + 1, 3), "little") == _st
+          and int.from_bytes(a(_l + 1, 3), "little") == _lv
+          and _lv - _st == 0x400)
+check("stale veneer copy: ZERO directory slots point into 0xFAA000-0xFAA417",
+      not any(0xFAA000 <= t < 0xFAA418 for t in _DIR))
+_st_refs = _refs_abs(0xFAA000, 0xFAA418)
+_lv_refs = _refs_abs(0xFAA418, 0xFAA830)
+check("stale veneer copy: exactly 2 absolute call/jp literals name it, and both "
+      "sites are inside it; the live block has 37",
+      len(_st_refs) == 2 and all(0xFAA000 <= s < 0xFAA418 for s, _ in _st_refs)
+      and len(_lv_refs) == 37,
+      "stale %d live %d" % (len(_st_refs), len(_lv_refs)))
+check("stale veneer copy: both blocks open with five `jp nnn` slots then a `ret`",
+      all(a(0xFAA000 + 4 * k, 1) == b"\x1b" for k in range(5))
+      and a(0xFAA014, 1) == b"\x0e"
+      and all(a(0xFAA400 + 4 * k, 1) == b"\x1b" for k in range(5))
+      and a(0xFAA414, 1) == b"\x0e")
+
+# --- module extents: both were cut at a 0x0E pad run, so check the runs ------
+for _lo, _hi, _n in ((0xFA9E72, 0xFAA000, 398), (0xFAD485, 0xFAD801, 892),
+                     (0xFC52F8, 0xFC5400, 264), (0xFC6844, 0xFC7000, 1980)):
+    check("module boundary: 0x%06X-0x%06X is %d bytes of 0x0E, and the byte "
+          "either side is not" % (_lo, _hi, _n),
+          set(a(_lo, _hi - _lo)) == {0x0E} and _hi - _lo == _n
+          and a(_lo - 1, 1) != b"\x0e")
+check("module boundary: 0xFAD800 is a published directory target (the next "
+      "module's first byte)", 0xFAD800 in _DIR)
+
+# --- the four inline jump tables of the 0xFAA000 module ----------------------
+# base, entries, the reader's `cp BC,n` site, n, and the first byte after
+# The reader sits immediately before the table and is fixed-shape:
+#   tb-10  E9 C8 <tb as LE32>   add XBC,imm32
+#   tb-4   A1 21                ld XBC,(XBC)
+#   tb-2   B1 D8                jp T,XBC
+# and the entry count comes from a `cp BC,imm16` (D9 CF) a few bytes earlier.
+_JT = [(0xFAB8B4, 12), (0xFABF4A, 12), (0xFAC326, 13), (0xFAC3BF, 13),
+       (0xFC59DB, 10)]
+for _tb, _n in _JT:
+    shape = (a(_tb - 10, 2) == bytes([0xE9, 0xC8])
+             and int.from_bytes(a(_tb - 8, 4), "little") == _tb
+             and a(_tb - 4, 2) == bytes([0xA1, 0x21])
+             and a(_tb - 2, 2) == bytes([0xB1, 0xD8]))
+    cp = None
+    for back in range(_tb - 12, _tb - 34, -1):
+        if a(back, 2) == bytes([0xD9, 0xCF]):
+            cp = back
+            break
+    imm = int.from_bytes(a(cp + 2, 2), "little") if cp else None
+    check("JumpTable_%06X: the reader is `add XBC,0x%06X / ld XBC,(XBC) / "
+          "jp T,XBC` in the 10 bytes before it" % (_tb, _tb), shape)
+    check("JumpTable_%06X: %d entries == the reader's OWN `cp BC,0x%04X` + 1"
+          % (_tb, _n, imm if imm is not None else 0),
+          cp is not None and imm + 1 == _n, "cp at %s imm %s" % (cp, imm))
+    check("JumpTable_%06X: every entry is an address inside prom_a" % _tb,
+          all(0xF80000 <= _le32(_tb + 4 * k) <= 0xFFFFFF for k in range(_n)))
+check("JumpTable_FAC326: LAST-ENTRY TEST -- base + 13*4 = 0xFAC35A and the "
+      "bytes there are `lda XIY,0x24f4`",
+      0xFAC326 + 52 == 0xFAC35A and a(0xFAC35A, 4) == bytes([0xF1, 0xF4, 0x24, 0x35]))
+check("JumpTable_FAC3BF: LAST-ENTRY TEST -- base + 13*4 = 0xFAC3F3 and the "
+      "bytes there are `ld XIX,(0x60f280)`",
+      0xFAC3BF + 52 == 0xFAC3F3
+      and a(0xFAC3F3, 5) == bytes([0xE2, 0x80, 0xF2, 0x60, 0x24]))
+
+# --- Dispatch_By_60F080 and its tail -----------------------------------------
+_DT = [_le32(0xFAC8EA + 4 * k) for k in range(256)]
+check("Dispatch_By_60F080: the reader is `ld C,4 / mul BC,(0x60f080)` at 0xFAB847",
+      a(0xFAB847, 2) == bytes([0x23, 0x04])
+      and a(0xFAB849, 5) == bytes([0xC2, 0x80, 0xF0, 0x60, 0x43]))
+check("Dispatch_By_60F080: the reader pushes 0xFAB860 as the handler's return "
+      "address before `jp T,XBC`",
+      a(0xFAB858, 5) == bytes([0xF2, 0x60, 0xB8, 0xFA, 0x35])
+      and a(0xFAB85D, 3) == bytes([0x3D, 0xB1, 0xD8]))
+check("Dispatch_By_60F080: 256 entries, all inside prom_a",
+      all(0xF80000 <= x <= 0xFFFFFF for x in _DT))
+check("Dispatch_By_60F080: 25 distinct values, 168 of them the default 0xFAC845",
+      len(set(_DT)) == 25 and _DT.count(0x00FAC845) == 168,
+      "distinct %d default %d" % (len(set(_DT)), _DT.count(0x00FAC845)))
+check("Dispatch_By_60F080: the default 0xFAC845 is a bare `ret` (0x0E)",
+      a(0xFAC845, 1) == b"\x0e")
+check("Dispatch_By_60F080: the 24 real handlers all lie in 0xFAB894-0xFABE0D",
+      min(x for x in _DT if x != 0x00FAC845) == 0xFAB894
+      and max(x for x in _DT if x != 0x00FAC845) == 0xFABE0D)
+check("Dispatch_By_60F080: LAST-ENTRY TEST -- index 255 is at 0xFACCE6, and the "
+      "64 words after it are ALL the default",
+      0xFAC8EA + 4 * 255 == 0xFACCE6
+      and set(_le32(0xFACCEA + 4 * k) for k in range(64)) == {0x00FAC845})
+
+# --- Lookup32_By_Arg8 --------------------------------------------------------
+_LK = [_le32(0xFACDEA + 4 * k) for k in range(256)]
+check("Lookup32_By_Arg8: its reader at 0xFAC8AA is `ld C,4 / mul BC,(XIZ+0x08) "
+      "/ add XBC,0x00FACDEA / ld XBC,(XBC) / ld XIY,XBC`",
+      a(0xFAC8AE, 2) == bytes([0x23, 0x04])
+      and a(0xFAC8B0, 3) == bytes([0x8E, 0x08, 0x43])
+      and a(0xFAC8B5, 6) == bytes([0xE9, 0xC8, 0xEA, 0xCD, 0xFA, 0x00])
+      and a(0xFAC8BB, 4) == bytes([0xA1, 0x21, 0xE9, 0x8D]))
+check("Lookup32_By_Arg8: 78 distinct values, 179 of them 0xFFFFFFFF",
+      len(set(_LK)) == 78 and _LK.count(0xFFFFFFFF) == 179,
+      "distinct %d ff %d" % (len(set(_LK)), _LK.count(0xFFFFFFFF)))
+check("Lookup32_By_Arg8: every non-0xFFFFFFFF value is in 0x7622-0x7F5A",
+      min(x for x in _LK if x != 0xFFFFFFFF) == 0x7622
+      and max(x for x in _LK if x != 0xFFFFFFFF) == 0x7F5A)
+check("Lookup32_By_Arg8: LAST-ENTRY TEST -- 0xFACDEA + 256*4 = 0xFAD1EA and "
+      "the 32 bytes there are 0x00..0x1F",
+      0xFACDEA + 1024 == 0xFAD1EA
+      and list(a(0xFAD1EA, 32)) == list(range(32)))
+# the 24 calr sites into 0xFAC8AA -- resolved, not grepped
+_calr = [0xF80000 + i for i in range(len(A) - 2)
+         if A[i] == 0x1E and 0xF80000 + i + 3
+         + int.from_bytes(A[i + 1:i + 3], "little", signed=True) == 0xFAC8AA]
+check("Lookup32_By_Arg8: exactly 24 `calr` sites reach 0xFAC8AA, first 0xFAA8BB, "
+      "last 0xFAC7D3",
+      len(_calr) == 24 and _calr[0] == 0xFAA8BB and _calr[-1] == 0xFAC7D3,
+      "%d %s" % (len(_calr), [hex(x) for x in _calr[:3]]))
+
+# --- the constant tables, both copies ----------------------------------------
+for _at, _tag in ((0xFAD20A, "BitMask32_Table"),
+                  (0xFC64C6, "BitMask32_Table_FC64C6")):
+    check("%s: 32 LE32 entries, entry k == 1 << k, entry 31 == 0x80000000" % _tag,
+          [_le32(_at + 4 * k) for k in range(32)] == [1 << k for k in range(32)])
+check("the two BitMask32 tables are byte-identical, 128 bytes",
+      a(0xFAD20A, 128) == a(0xFC64C6, 128))
+check("BitMask32_Table: 11 `lda` readers, 2 spelling it XBC (op 0x31) and 9 XWA "
+      "(op 0x30), all in 0xFAC176-0xFAC265",
+      [0xF80000 + i - 1 for i in range(len(A) - 4)
+       if A[i:i + 3] == bytes([0x0A, 0xD2, 0xFA]) and A[i - 1] == 0xF2
+       and A[i + 3] in (0x30, 0x31)] == [0xFAC176, 0xFAC18F, 0xFAC1A8, 0xFAC1C1,
+                                         0xFAC1DA, 0xFAC1F3, 0xFAC20C, 0xFAC225,
+                                         0xFAC23E, 0xFAC257, 0xFAC265])
+
+# --- the 0xFAD28A group and its duplicate tail -------------------------------
+check("PtrTable_FAD28A: 64 LE32 entries, every one inside prom_b (0xF00000-0xF7FFFF)",
+      all(0xF00000 <= _le32(0xFAD28A + 4 * k) < 0xF80000 for k in range(64))
+      and (0xFAD38A - 0xFAD28A) // 4 == 64)
+check("PtrTable_FAD28A: its END is named by another reader -- `add XBC,0x00FAD38A` "
+      "at 0xFAAFCE and 0xFAB031",
+      a(0xFAAFCE, 6) == bytes([0xE9, 0xC8, 0x8A, 0xD3, 0xFA, 0x00])
+      and a(0xFAB031, 6) == bytes([0xE9, 0xC8, 0x8A, 0xD3, 0xFA, 0x00]))
+check("ByteTable_FAD38A: 13 bytes 78 60 61 62 63 92 79 7A 98 99 80 91 93",
+      a(0xFAD38A, 13) == bytes([0x78, 0x60, 0x61, 0x62, 0x63, 0x92, 0x79, 0x7A,
+                                0x98, 0x99, 0x80, 0x91, 0x93]))
+check("PtrTable_FAD397: 13 LE32 entries, all inside prom_b, and its end 0xFAD3CB "
+      "is named by `add XBC,0x00FAD3CB` at 0xFAB670",
+      all(0xF00000 <= _le32(0xFAD397 + 4 * k) < 0xF80000 for k in range(13))
+      and (0xFAD3CB - 0xFAD397) // 4 == 13
+      and a(0xFAB670, 6) == bytes([0xE9, 0xC8, 0xCB, 0xD3, 0xFA, 0x00]))
+check("Bytes_0F_FAD3CB: 32 bytes, every one 0x0F, and the byte after is 0x00",
+      set(a(0xFAD3CB, 32)) == {0x0F} and a(0xFAD3EB, 1) == b"\x00")
+check("DuplicateTail_FAD3EB: 154 bytes identical to 0xFAD351-0xFAD3EA, and the "
+      "match is MAXIMAL in both directions",
+      a(0xFAD3EB, 154) == a(0xFAD351, 154)
+      and a(0xFAD3EB + 154, 1) != a(0xFAD351 + 154, 1)
+      and a(0xFAD3EB - 1, 1) != a(0xFAD351 - 1, 1))
+check("DuplicateTail_FAD3EB: nothing in prom_a or prom_b names any of "
+      "0xFAD3EB/0xFAD3EC/0xFAD424/0xFAD431/0xFAD465",
+      not any(bytes([t & 0xFF, (t >> 8) & 0xFF, (t >> 16) & 0xFF]) in img
+              for t in (0xFAD3EB, 0xFAD3EC, 0xFAD424, 0xFAD431, 0xFAD465)
+              for img in (A, B)))
+check("Bytes_00_to_1F (0xFAD1EA) is named by NOTHING in either image",
+      bytes([0xEA, 0xD1, 0xFA]) not in A and bytes([0xEA, 0xD1, 0xFA]) not in B)
+
+# --- the 0xFC5400 module's tables --------------------------------------------
+check("Bytes_00_to_1F_FC64A5: 0x00..0x1F then a single 0xFF",
+      list(a(0xFC64A5, 32)) == list(range(32)) and a(0xFC64C5, 1) == b"\xff")
+_D32 = [_le32(0xFC6546 + 4 * k) for k in range(32)]
+check("Dispatch32_FC6546: 32 entries, 7 distinct, all in 0xFC5B26-0xFC5C6C",
+      len(set(_D32)) == 7 and min(_D32) == 0xFC5B26 and max(_D32) == 0xFC5C6C,
+      "distinct %d" % len(set(_D32)))
+check("Dispatch32_FC6546: LAST-ENTRY TEST -- 0xFC6546 + 32*4 = 0xFC65C6 and the "
+      "bytes there are 00 01 02 03",
+      0xFC6546 + 128 == 0xFC65C6 and a(0xFC65C6, 4) == bytes([0, 1, 2, 3]))
+check("Bytes_00_to_1F_x3_FC65C6: three identical 32-byte identity runs",
+      all(list(a(0xFC65C6 + 32 * j, 32)) == list(range(32)) for j in range(3))
+      and a(0xFC6626, 4) == bytes([0xA2, 0x76, 0x00, 0x00]))
+check("MixedTables_FC6626 is named by NOTHING: not 0xFC6626, 0xFC6800 or 0xFC6816",
+      not any(bytes([t & 0xFF, (t >> 8) & 0xFF, (t >> 16) & 0xFF]) in img
+              for t in (0xFC6626, 0xFC6816) for img in (A, B)))
+
+# --- the module this round REFUSED (FINDINGS-prom_a-message-module.md §5) ----
+_REC = True
+for _k in range(32):
+    _r = a(0xFC0890 + 8 * _k, 8)
+    _REC = _REC and (int.from_bytes(_r[0:4], "little") == 0x600 + 8 * _k
+                     and int.from_bytes(_r[4:6], "little") == 1 << (_k & 15)
+                     and _r[6] == _k and _r[7] == 0x0E)
+check("refused module: 0xFC0890 is 32 records {LE32 0x600+8k, LE16 1<<(k&15), "
+      "byte k, 0x0E}", _REC)
+check("refused module: LAST-ENTRY TEST -- record 31 ends at 0xFC0990 and the "
+      "bytes there are not another record",
+      0xFC0890 + 32 * 8 == 0xFC0990 and a(0xFC0997, 1) != b"\x0e")
+check("refused module: the five in-veneer off-boundary slots are inside "
+      "5-byte `ld XIZ/XIY,imm32` instructions of 0xFC0410-0xFC0470",
+      a(0xFC0425, 1) == b"\x45" and a(0xFC0450, 1) == b"\x46"
+      and a(0xFC043C, 1) == b"\x1e")
+check("refused module: ASCII lives at 0xFC2135 -- 'Combi Group Name' then "
+      "'EXT Silent Group'",
+      a(0xFC2135, 32) == b"Combi Group NameEXT Silent Group")
 
 # The COUNT is printed rather than written into a header: this file's own
 # docstring said "133 checks" and prom_a's banner said "232" while the number

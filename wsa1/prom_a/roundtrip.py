@@ -264,6 +264,128 @@ def native_candidate(u, bs):
     return None
 
 
+# The register-indexed operand `(R32+R16)`.  dasm900.cpp:1543-1584: prefix
+# 0xC3/0xD3/0xE3/0xF3, sub-mode byte 0x07, base and index register-address
+# bytes, operation byte.  The prelude's mx_* macros emit exactly that; this
+# turns unidasm's text back into a call of one.
+XPFX = {0xC3: "MXB", 0xD3: "MXW", 0xE3: "MXL", 0xF3: "MXD"}
+# s_allreg32 (base) and s_allreg16 (index) carry the same numbers here
+RA = {0xE0: "ra_WA", 0xE4: "ra_BC", 0xE8: "ra_DE", 0xEC: "ra_HL",
+      0xF0: "ra_IX", 0xF4: "ra_IY", 0xF8: "ra_IZ", 0xFC: "ra_SP"}
+
+
+def indexed_candidate(u, bs):
+    """`ld A,(XHL+IX)` and friends -- the register-INDEXED memory operand."""
+    import re as _re
+    if len(bs) not in (5, 6) or bs[0] not in XPFX or bs[1] != 0x07:
+        return None
+    if bs[2] not in RA or bs[3] not in RA:
+        return None
+    pfx = XPFX[bs[0]]
+    base, idx = RA[bs[2]], RA[bs[3]]
+    # the operand as unidasm prints it, e.g. "(XHL+IX)"
+    g = _re.match(r"^(ld|ldw) (.+)$", u)
+    if not g:
+        return None
+    mem = "(X%s+%s)" % (base[3:], idx[3:])   # s_allreg32 name is X-prefixed
+    dst, _, src = g.group(2).partition(",")
+    if dst == mem and _re.match(r"^0x[0-9a-f]{2}$", src) and len(bs) == 6 and bs[4] == 0x00:
+        return "mx_ld_mi8 %s, %s, %s, %s" % (pfx, base, idx, src)
+    if len(bs) != 5:
+        return None
+    if src == mem and _ri(dst) is not None:
+        return "mx_ld_rm %s, %s, %s, r%d" % (pfx, base, idx, _ri(dst))
+    if dst == mem and _ri(src) is not None:
+        mac = ("mx_st_mr8" if src in REG8 else
+               "mx_st_mr16" if src in REG16 else "mx_st_mr32")
+        return "%s %s, %s, %s, r%d" % (mac, pfx, base, idx, _ri(src))
+    return None
+
+
+# s_allreg8 (dasm900.cpp:1349), sub-mode 0x03: an 8-bit index register
+RB = {0xE0: "rb_A", 0xE1: "rb_W", 0xE4: "rb_C", 0xE5: "rb_B",
+      0xE8: "rb_E", 0xE9: "rb_D", 0xEC: "rb_L", 0xED: "rb_H"}
+
+
+def indexed8_candidate(u, bs):
+    """`ld L,(XHL+W)`, `ld XIX,(XIX+L)` -- the same operand with an 8-bit index."""
+    import re as _re
+    if len(bs) != 5 or bs[0] not in XPFX or bs[1] != 0x03:
+        return None
+    if bs[2] not in RA or bs[3] not in RB:
+        return None
+    pfx, base, idx = XPFX[bs[0]], RA[bs[2]], RB[bs[3]]
+    mem = "(X%s+%s)" % (base[3:], idx[3:])
+    g = _re.match(r"^(ld|ldw) ([^,]+),(.+)$", u)
+    if not g:
+        return None
+    dst, src = g.group(2), g.group(3)
+    if src == mem and _ri(dst) is not None and bs[4] == 0x20 + _ri(dst):
+        return "mx8_ld_rm %s, %s, %s, r%d" % (pfx, base, idx, _ri(dst))
+    if dst == mem and _ri(src) is not None:
+        for op, mac in ((0x40, "mx8_st_mr8"), (0x50, "mx8_st_mr16"),
+                        (0x60, "mx8_st_mr32")):
+            if bs[4] == op + _ri(src):
+                return "%s %s, %s, %s, r%d" % (mac, pfx, base, idx, _ri(src))
+    return None
+
+
+COND = ["F", "LT", "LE", "ULE", "PE/OV", "M/MI", "Z", "C",
+        "T", "GE", "GT", "UGT", "PO/NOV", "P/PL", "NZ", "NC"]  # dasm900.cpp:1348
+
+
+def indexed_misc_candidate(u, bs):
+    """`lda XIZ,XBC+WA` and `jp T,XIX+WA` -- mnemonic_f0's 0x30 and 0xD0 rows
+    reached through the register-indexed operand.  ⚠ unidasm prints THIS operand
+    without the brackets it uses everywhere else, hence the second spelling."""
+    import re as _re
+    if len(bs) != 5 or bs[0] not in XPFX or bs[1] != 0x07:
+        return None
+    if bs[2] not in RA or bs[3] not in RA:
+        return None
+    pfx, base, idx = XPFX[bs[0]], RA[bs[2]], RA[bs[3]]
+    mem = "X%s+%s" % (base[3:], idx[3:])
+    g = _re.match(r"^lda ([A-Z][A-Z0-9]*),(.+)$", u)
+    if g and g.group(2) == mem and g.group(1) in REG32 \
+            and bs[4] == 0x30 + REG32.index(g.group(1)):
+        return "mx_lda32 %s, %s, %s, r%d" % (pfx, base, idx,
+                                             REG32.index(g.group(1)))
+    g = _re.match(r"^jp ([A-Z/]+),(.+)$", u)
+    if g and g.group(2) == mem and g.group(1) in COND \
+            and bs[4] == 0xD0 + COND.index(g.group(1)):
+        return "mx_jp_cc %s, %s, %s, %d" % (pfx, base, idx,
+                                            COND.index(g.group(1)))
+    return None
+
+
+ALU_RM = {0xC0: "mx_and_rm", 0xE0: "mx_or_rm"}     # op 0x??+r, R <- R op (mem)
+ALU_MR = {0xE8: "mx_or_mr"}                        # op 0x??+r, (mem) <- ... R
+
+
+def indexed_alu_candidate(u, bs):
+    """`and A,(XHL+DE)`, `or C,(XHL+DE)`, `or (XIX+IZ),E` -- the same operand,
+    the ALU rows of mnemonic_c0 (dasm900.cpp:679)."""
+    import re as _re
+    if len(bs) != 5 or bs[0] not in XPFX or bs[1] != 0x07:
+        return None
+    if bs[2] not in RA or bs[3] not in RA:
+        return None
+    pfx, base, idx = XPFX[bs[0]], RA[bs[2]], RA[bs[3]]
+    mem = "(X%s+%s)" % (base[3:], idx[3:])
+    g = _re.match(r"^(and|or|xor|add|sub|cp) ([^,]+),(.+)$", u)
+    if not g:
+        return None
+    dst, src = g.group(2), g.group(3)
+    op = bs[4] & 0xF8
+    if src == mem and op in ALU_RM and _ri(dst) is not None \
+            and bs[4] == op + _ri(dst):
+        return "%s %s, %s, %s, r%d" % (ALU_RM[op], pfx, base, idx, _ri(dst))
+    if dst == mem and op in ALU_MR and _ri(src) is not None \
+            and bs[4] == op + _ri(src):
+        return "%s %s, %s, %s, r%d" % (ALU_MR[op], pfx, base, idx, _ri(src))
+    return None
+
+
 def macro_candidate(u, bs):
     """unidasm text + raw bytes -> a macro call, or None."""
     if not bs:
@@ -283,6 +405,8 @@ def macro_candidate(u, bs):
         for pat, mac in ((r"(?:push|pushw) " + A, "m_push"),):
             g = m(pat)
             if g:
+                if bs[-1] == 0x06:
+                    mac = "m_pushw"
                 return "%s %s, %s" % (mac, p, a(g.group(1)))
         g = m(r"(?:ld|ldw) " + R + "," + A)
         if g and _ri(g.group(1)) is not None:
@@ -301,10 +425,22 @@ def macro_candidate(u, bs):
                 w16 = len(g.group(2)) > 4
                 mac2 = mac[:-1] + ("16" if w16 else "8")
                 return "%s %s, %s, %s" % (mac2, p, a(g.group(1)), g.group(2))
-        for op, mac in (("mul", "m_mul"), ("muls", "m_muls")):
+        # ⚠ The destination of mul/muls/div/divs prints from TWO different MAME
+        # tables: s_mulreg16 (dasm900.cpp:1348, "WA"/"BC"/"DE"/"HL" at the ODD
+        # indices) for the byte-operand prefixes, and s_reg32 for the word ones,
+        # where `muls XWA,(XSP+0x08)` is a 16x16->32 multiply.  Both spell the
+        # same operation byte, so both have to be accepted here; taking only the
+        # first left ten `.byte` lines in the 0xFE0000 module.
+        for op, mac in (("mul", "m_mul"), ("muls", "m_muls"),
+                        ("div", "m_div"), ("divs", "m_divs")):
             g = m(op + " " + R + "," + A)
-            if g and g.group(1) in MULREG16:
-                return "%s %s, %s, %d" % (mac, p, a(g.group(2)), MULREG16[g.group(1)])
+            if g:
+                if g.group(1) in MULREG16:
+                    return "%s %s, %s, %d" % (mac, p, a(g.group(2)),
+                                              MULREG16[g.group(1)])
+                if g.group(1) in REG32:
+                    return "%s %s, %s, %d" % (mac, p, a(g.group(2)),
+                                              REG32.index(g.group(1)))
         for op, mac in (("inc", "m_inc"), ("dec", "m_dec"),
                         ("incw", "m_inc"), ("decw", "m_dec")):
             g = m(op + " " + N + "," + A)
@@ -350,7 +486,8 @@ def macro_candidate(u, bs):
         return "%s %s, %s, %s" % (mac, p, a(g.group(1)), g.group(2))
     g = m(r"(?:pop|popw) " + A)
     if g:
-        return "m_pop %s, %s" % (p, a(g.group(1)))
+        return "%s %s, %s" % ("m_popw" if bs[-1] == 0x06 else "m_pop",
+                              p, a(g.group(1)))
     for op, mac in (("stcf", "m_stcf"), ("res", "m_res"), ("set", "m_set"),
                     ("chg", "m_chg"), ("bit", "m_bit")):
         g = m(op + " " + N + "," + A)
@@ -384,6 +521,10 @@ def convert(start, end):
     # (c) macro
     cand_c_txt = [(native_candidate(cand_a[i], rows[i][1])
                    or ldc_candidate(cand_a[i], rows[i][1])
+                   or indexed_candidate(cand_a[i], rows[i][1])
+                   or indexed_alu_candidate(cand_a[i], rows[i][1])
+                   or indexed8_candidate(cand_a[i], rows[i][1])
+                   or indexed_misc_candidate(cand_a[i], rows[i][1])
                    or macro_candidate(cand_a[i], rows[i][1])) if cand_a[i] else None
                   for i in need]
     enc_c = [assemble_emitted(t, prelude) if t else None for t in cand_c_txt]

@@ -120,6 +120,33 @@ in `notes/llvm-mc-tlcs900-spellings.md`.
 otherwise the same design, so whichever way it is resolved should be resolved in
 both, and the `di` mnemonic should be removed from both trees.
 
+### ✅ CLOSED 2026-08-25 — and this paragraph was the thing left undone
+
+Round-2 audit F8: *the request above was carried out, and the note that asked
+for it was not updated* — which is the tree's own rule about correcting the old
+text in the same commit, broken by the note that states the rule's occasion.
+Measured now, in the working tree:
+
+| | `di` instruction lines | `ei 0` instruction lines |
+|---|---:|---:|
+| `prom_a/wsa1_prom_a.s` | 0 | 11 (spelled `ei 0x00`) |
+| `prom_c/wsa1_prom_c.s` | 0 | 23 (spelled `ei 0`) |
+
+```
+grep -cP '^\t(di|DI)\b'  prom_a/wsa1_prom_a.s prom_c/wsa1_prom_c.s
+grep -oP '^\s+ei[ \t]+\S+' prom_c/wsa1_prom_c.s | sort | uniq -c
+```
+
+prom_a never had one; prom_c's eighteen (plus the five the same round added)
+are gone. **So the "should be removed from both trees" above is DONE, not
+pending, and nobody should act on it again.** What remains is prose, in prom_c
+only, and it belongs to that lane: `prom_c/wsa1_prom_c.s` still uses the word
+`di` in comment lines — ``grep -c '`di`' prom_c/wsa1_prom_c.s`` returns **13**
+as this is written, and that file is another lane's, so the figure moves. Each
+of those now sits next to its own correction: the audit's own example, the
+`EntryPoint_Records` header at what is now line 390, carries an explicit
+*CORRECTED 2026-08-25 (round-2 audit F8)* line.
+
 ## 3. `DSP_Init_Channels` (`0xF85F0F`) — a transplanted name, byte-backed
 
 Zeroes an 8-byte buffer, pushes it to all four channels, then sets register

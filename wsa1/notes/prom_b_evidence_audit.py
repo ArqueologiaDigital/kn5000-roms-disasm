@@ -27,7 +27,17 @@ RUN
     python3 notes/prom_b_evidence_audit.py             # summary + unbacked list
     python3 notes/prom_b_evidence_audit.py --all       # every label, graded
     python3 notes/prom_b_evidence_audit.py --since HEAD  # only labels not in git HEAD
+    python3 notes/prom_b_evidence_audit.py --scopes    # BOTH scopes, side by side
     python3 notes/prom_b_evidence_audit.py --selftest
+
+⚠ THE TWO SCOPES ARE NOT THE SAME NUMBER, AND ROUND 2 QUOTED THE NARROW ONE
+    Round-2 audit finding F10: this lane's headline "zero unbacked" is true of
+    `--since HEAD` and NOT of `--all`.  `--since HEAD` is a set difference by
+    label NAME against `git show HEAD:prom_b/wsa1_prom_b.s`, and the generated
+    modules emit mostly `sub_XXXXXX`, which is not a semantic label at all -- so
+    a round that converts 34,777 bytes can still add only a few dozen names.
+    `--scopes` prints both figures from one command precisely so a report cannot
+    quote one and read as the other.
 """
 import os
 import re
@@ -136,6 +146,20 @@ def main():
         for f in fails:
             print("SELF-CHECK FAILED: " + f)
         return 1 if fails else 0
+
+    if "--scopes" in argv:
+        old = since_head()
+        for tag, rs in (("image-wide  (--all)", rows),
+                        ("new since HEAD", [r for r in rows if r[1] not in old])):
+            k = {"BACKED": 0, "GROUP": 0, "SECTION": 0, "UNBACKED": 0}
+            for _, _, g in rs:
+                k[g] += 1
+            print("%-22s %4d labels   BACKED %3d  GROUP %3d  SECTION %3d  "
+                  "UNBACKED %3d" % (tag, len(rs), k["BACKED"], k["GROUP"],
+                                    k["SECTION"], k["UNBACKED"]))
+        print("(HEAD itself has %d semantic labels; the worktree has %d.)"
+              % (len(old), len(rows)))
+        return 0
 
     n = {"BACKED": 0, "GROUP": 0, "SECTION": 0, "UNBACKED": 0}
     for _, _, g in rows:

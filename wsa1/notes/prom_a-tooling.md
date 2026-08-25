@@ -239,8 +239,17 @@ python3 notes/prom_a_evidence_census.py --selftest # asserts known-good cases
 
 ⚠ It is a KEYWORD test, not a judgement: a header that argues its case in prose
 without the word is reported as a gap, and a header with the word and a bad
-argument passes. Read the ones it prints. Result 2026-08-25: **176 headed, 0
-without an Evidence line**; 180 internal.
+argument passes. Read the ones it prints.
+
+⚠ **AND IT IS A FIGURE ABOUT HEADED LABELS ONLY** — round-2 audit F10. A report
+that writes "N labels, 0 without an Evidence line" without that word is claiming
+something the script never measured: the internal labels are deliberately
+excluded and there are more of them than of headed ones. Always quote the pair.
+After round 3 (2026-08-25): **259 headed, 0 without an Evidence line; 327
+internal**. The four gaps this round produced were all data headers that argued
+their case as "ENTRY COUNT = 32, established rather than counted"; they were
+given explicit `Evidence:` lines rather than an exemption, because the point of
+the keyword is that a reader can find the argument.
 
 ## `notes/prom_a_addr_census.py` — every spelling, not one
 
@@ -294,3 +303,304 @@ prom_d  0 at floor 8
 
 prom_b and prom_d share **nothing** with the sibling at an 8-byte floor, so the
 prom_a and prom_c hits are not what a scan of this shape returns by default.
+
+---
+
+# Five more, added 2026-08-25 (round 4), in `notes/`
+
+Same rule: each answers one question and says so in its own docstring.
+
+## `notes/prom_a_call_graph.py` — the frontier tool prom_a did not have
+
+**"Which prom_a routines are published through the prom_b directory, heavily
+referenced, and still `.incbin`?"** `notes/prom_b_call_graph.py` computes exactly
+this ranking and then discards every prom_a answer — its rows loop carries
+`if not (B_BASE <= tgt < A_BASE): continue   # prom_a target, other lane` — so
+this lane had been choosing targets by eye. This is the mirror of it, sharing its
+method so the two numbers are comparable.
+
+```
+python3 notes/prom_a_call_graph.py               # top unconverted targets
+python3 notes/prom_a_call_graph.py --modules     # whole directory modules, ranked
+python3 notes/prom_a_call_graph.py --module 0xF41CD0
+```
+
+`--modules` is the one to drive a round from: it groups runs of consecutive
+directory slots and sorts by TOTAL references, because the module is the unit
+worth converting and a 2 KB span reached by 126 slots is not the same target as
+one reached by 3. ⚠ Reference counts are opcode-anchored upper bounds; they rank
+slots and are never call counts.
+
+## `notes/prom_a_ringbuf_map.py` — the ring library, read out of the ROM
+
+**"What is 0xF84000-0xF84C6B, and how many ring buffers does CPU 1 own?"** It
+matches the 25 class routines against exact byte templates, walks the 15 instance
+groups, and cross-checks that every veneer of an instance names one object and
+one capacity. 22 self-checks, including the RAM tiling that is the strongest
+evidence for the field layout, and the searched negatives the headers rest on.
+Its `all_refs()` — absolute `call`/`jp` plus PC-relative `calr`/`jr`/`jrl` over
+both images — is reused by the two generators below.
+
+```
+python3 notes/prom_a_ringbuf_map.py
+python3 notes/prom_a_ringbuf_map.py --veneers
+python3 notes/prom_a_ringbuf_map.py --refs
+```
+
+## `notes/prom_a_linear_decode_check.py` — may this span be converted linearly?
+
+**"Is a linear disassembly of this span self-consistent, or is there data in
+it?"** Three tests: no undecodable bytes; the end is an instruction boundary of a
+decode run PAST it; every directory entry into the span lands on a boundary, and
+no in-span `call`/`calr` reaches an address that is not one.
+
+```
+python3 notes/prom_a_linear_decode_check.py 0xFE0000 0xFE54B6
+python3 notes/prom_a_linear_decode_check.py --selftest
+```
+
+★ **Two things the selftest exists to keep visible.** The end test as first
+written cut the file at the end address and checked the decode finished there —
+which it always does, because unidasm cannot run off the bytes it is given. It
+had already been written into a routine header before the control was run. And
+the three tests do **not** pin the START of a span: re-running them one byte late
+passes. `0xF86000-0xF8969B` is the negative control that really does fail.
+
+## `notes/gen_prom_a_ringbuf_module.py` and `notes/gen_prom_a_block.py`
+
+**"What source text goes into `prom_a/wsa1_prom_a.s` for this span?"** The first
+is specific to the ring module, whose meaning is established; the second is the
+general form, for spans where some routines are understood and most are not. Both
+take every instruction from `prom_a/roundtrip.py`, so neither can break the gate;
+what they add is labels, headers (from `notes/prom_a_ringbuf_headers.txt` and
+`notes/prom_a_block_headers.txt`) and `.fill`/`.byte` regions.
+
+```
+python3 notes/gen_prom_a_block.py 0xF8BC00 0xF8C000 > /tmp/region.s
+python3 prom_a/insert_region.py 0xF8BC00 0xF8C000 /tmp/region.s
+python3 scripts/analysis/assert_byte_identical.py
+```
+
+⚠ Both REFUSE rather than guess: a `.fill` is emitted only if every byte of the
+run really is `0x0E`, and a labelled block only if re-assembling it reproduces
+the ROM. `gen_prom_a_block.py` also gives the first byte of a pad run back to the
+code before it — `0x0E` is `RET`, so a naive run scan swallows the last routine's
+own return, which it did on `0xF83215`, `0xF8BF21`, `0xF8DAB9` and `0xF8DDE5`.
+
+## Correction to the section above: `(rr+r)` is no longer a `.byte` case
+
+The "Cross-reference" section further up lists three shapes `llvm-mc` cannot
+encode. **The register-indexed `(rr+r)` operand is not one of them any more.**
+The macro prelude gained `MXB`/`MXW`/`MXL`/`MXD`, the `ra_*`/`rb_*`
+register-address constants and eleven `mx_*`/`mx8_*` operation macros, all cited
+to `dasm900.cpp:1543-1584` and `:1349-1405`, and `roundtrip.py` gained four
+recognisers. 44 existing `.byte` lines in `prom_a/wsa1_prom_a.s` became named
+macro calls in one pass. Still `.byte`: the shift-by-a-register forms and the
+register-direct `s_allreg8` operand (`ld A,IZL`).
+
+⚠ One of those recognisers had a real bug worth recording: `mul`/`muls` accepted
+only MAME's `s_mulreg16` spelling of the destination, so the ten
+`muls XWA,(XSP+0x08)`-shaped instructions — whose destination prints from
+`s_reg32` because a word operand makes it a 16x16->32 multiply — were silently
+left as `.byte`. The same operation byte, two MAME tables.
+
+---
+
+# Three more, added 2026-08-25 (round 5), in `notes/`
+
+Same rule: each answers one question and says so in its own docstring.
+
+## `notes/prom_a_audit_callsites.py` — the tool prom_a did not have
+
+**"Does every address a prom_a `Called from:` line names actually START a
+transfer to that routine — and if not, WHICH nearby address does?"** The round-2
+audit's closing paragraph: *"three of the four worst findings are address and
+identity claims in prose that no committed script reads. prom_c has the one tool
+that closes that hole and prom_c is the image whose new citations came through
+at 148-for-149. prom_a and prom_b have no such tool, and both shipped defects of
+exactly the kind it detects."* This is prom_a's.
+
+It is the mirror of `notes/prom_c_audit_callsites.py`, with three differences
+that matter:
+
+* it disassembles in **prom_a or prom_b**, chosen by range, because prom_a
+  routines are called from both;
+* a row that is not a call is **classified**, not just printed — `POINTER` (the
+  32-bit word *at* the citation is the routine address: a vector- or
+  pointer-table entry, legitimately cited), `THUNK` (that word is an address
+  whose instruction transfers to the routine), `CALL-ALT` (it reaches a
+  *different label of the same routine* — an alternate entry, which the prom_c
+  tool reports as a false positive), or `OFF BY 1`/`OFF BY 2`, which is the
+  defect it exists for;
+* ⚠ **it knows nothing about any header's claim.** F2's checker hard-coded the
+  +1 values it was supposed to catch and therefore could never fail; the
+  `--selftest` here asserts that a real call site cited ONE BYTE LATE is
+  rejected, and that the `-1` re-decode diagnoses it.
+
+```
+python3 notes/prom_a_audit_callsites.py
+python3 notes/prom_a_audit_callsites.py --quiet     # only rows that are not CALL
+python3 notes/prom_a_audit_callsites.py --selftest
+```
+
+Result 2026-08-25, after this round's headers: **301 cited sites — 179 CALL,
+9 CALL-ALT, 37 POINTER, 8 THUNK, 68 unclassified, and ZERO off by one or two.**
+The 68 are a list to READ: most are module bases (`T_F41CD0`), RAM addresses, or
+addresses a header cites in a *searched-negative* sentence ("0xF830C5 is the
+`ret` before, so it is not reached by fall-through").
+
+## `notes/prom_a_jumptables.py` — the data a linear decode walks into
+
+**"Where are prom_a's inline computed-jump tables, and how many entries has
+each?"** They are why `prom_a_linear_decode_check.py` fails on a whole module:
+the LE32 target table is emitted immediately after the `jp T,XBC` that reads it,
+so a linear decode runs straight into it. The script finds the reader by its
+shape (`add XBC,imm32` whose immediate is the address of the NEXT byte, then
+`ld XBC,(XBC)`, then `jp T,XBC`) and takes each **entry count from the reader's
+own `cp BC,n`** — the same discipline the prom_b lane uses for its dispatch
+tables, and never a count by eye.
+
+```
+python3 notes/prom_a_jumptables.py                    # whole image
+python3 notes/prom_a_jumptables.py 0xFAA000 0xFAC8E6  # one span
+python3 notes/prom_a_jumptables.py --data             # @@DATA/@@LONG stanzas
+python3 notes/prom_a_jumptables.py --selftest
+```
+
+**13 in the image**, 1044 bytes of `.long`. The selftest asserts one of them
+(`0xFAC326`, 13 entries) *and its two negative controls*: 12 or 14 entries do
+not land where the decode resynchronises.
+
+## `notes/prom_a_frontier_delta.py` — slots are not targets
+
+**"How many prom_a directory SLOTS — and how many DISTINCT TARGETS — are still
+`.incbin`, for a named revision of the source?"** `prom_a_call_graph.py` prints
+"top N of M" where M counts **slots**, and a round report quoted that M as a
+count of *targets*. Round-2 audit F10. This prints both, from any git revision,
+so a before/after pair is measured rather than remembered; `--vs-worktree` adds
+the newly converted ranges and how many targets each retired, with a self-check
+that every retired target lies in one of them, and `--by-block` repeats the
+split at the finer per-block granularity a findings table uses.
+
+```
+python3 notes/prom_a_frontier_delta.py --rev HEAD --vs-worktree --by-block
+```
+
+## Changes to `notes/gen_prom_a_block.py`
+
+* **`@@LONG lo hi Name`** beside `@@DATA`: emits one `.long` per 4-byte
+  little-endian word with its index in a trailing comment, and REFUSES if the
+  span is not a whole number of words. Use it only where the 4-byte framing is
+  established by a reader; `.byte` stays the honest default.
+* **A pass-1/pass-2 split, and a refusal.** The generator used to substitute
+  `call sub_FAAE92` for `call 0xfaae92` on the strength of an opcode-anchored
+  reference scan alone — for an address that is two bytes inside another
+  instruction and therefore never gets a line. `ld.lld: error: undefined symbol`
+  was the lucky outcome; the unlucky one is a label that lands somewhere
+  plausible. It now decodes every code sub-region first, keeps only labels that
+  a line will actually define, prints the dropped ones on stderr, and refuses to
+  print at all if any `sub_XXXXXX` is referenced and never defined.
+* **`.byte` fallbacks keep unidasm's text.** This file's own documentation says
+  every `.byte` "carries unidasm's own text in a trailing comment"; the
+  generator dropped it, and 14 lines of the 0xFAA000 module would have shipped
+  as five hex bytes with no mnemonic. They now read
+  `.byte 0xe2, 0x84, ... ; FAC198  e2 84 f2 60 ed   or (0x60f284),XIY`.
+
+---
+
+# Three more, added 2026-08-25 (round 3), in `notes/`
+
+Same rule: each answers one question and says so in its own docstring. All three
+print their own check count as their LAST line; that is the only figure to quote,
+because this file has already been wrong about a hard-coded one.
+
+## `notes/prom_a_div_runtime_check.py`
+
+**"Where exactly do prom_a's 64-bit divide runtime and the KN5000 sub-CPU's
+agree, and which KN5000 symbol name belongs at which prom_a address?"** It exists
+because the round-2 audit's F4 and F5 were both address claims about that one
+block: the header gave the divergence as the run's LAST identical byte, and it
+placed the string `FP_UnsignedDiv_ShiftLoop` — a real KN5000 symbol, llvm-nm
+0x3DCBB — 17 bytes past the 0xFE699A the block's own anchor maps it to, with
+nothing saying a rename had happened.
+
+It walks both ROMs forward and backward from the anchor pair rather than trusting
+either header, and it found a fact neither tree had: there are **two** identical
+runs, 170 bytes at 0xFE68F2-0xFE699B and 23 more at 0xFE69A8-0xFE69BE, so the
+images differ in exactly one 12-byte window.
+
+```
+python3 notes/prom_a_div_runtime_check.py --selftest    # 27 checks, 3 controls
+```
+
+⚠ One control is worth keeping: `--selftest` asserts that the retracted claim
+("the images diverge at the run's last byte") is REFUTED by the bytes. And the
+corrected header deliberately does not quote the defective sentence verbatim,
+because `notes/round2_audit_probes.py` searches the source for its exact text and
+a quotation would keep that search failing for ever.
+
+## `notes/prom_a_fc0000_module_check.py` and `notes/prom_a_fc8000_module_check.py`
+
+**"Is every quantified sentence in this module's headers still true?"** — one per
+module converted in round 3, 0xFC0000-0xFC2FFF and 0xFC8000-0xFCEFFF. Each is
+named after the sentence it backs, reads the ROMs rather than the listing, and
+re-decodes span by span (through `prom_a_linear_decode_check.decode`) so the
+declared data regions never desynchronise the disassembler.
+
+```
+python3 notes/prom_a_fc0000_module_check.py --selftest   # 128 checks, 3 controls
+python3 notes/prom_a_fc8000_module_check.py --selftest   #  77 checks, 4 controls
+```
+
+What they are for, beyond re-checking numbers:
+
+* the ten handler-table declarations behind the 131-entry count are **parsed out
+  of the decode**, not typed in, so an eleventh caller or a changed literal fails
+  instead of passing for ever;
+* every "no site names X" sentence is stated as **what the search returned**, not
+  as a bare negative — 0xFC11E2's single hit is a `jrl` displacement computed
+  from bytes inside the table's own last entry, and 0xFCC1FB's is a `calr` at an
+  address that is the second byte of another instruction. Both are recorded as
+  opcode coincidences rather than dropped;
+* section 10 of the 0xFC0000 checker measures **the module this round did NOT
+  take** — the longest `0x0E` run in 0xF86000-0xF8969A (4 bytes), the extent that
+  follows from it (13,979), the 408 undecodable bytes in 12 clusters and the 24
+  slots — so "left for next round" is a measurement rather than an excuse.
+
+They caught real defects in headers written minutes earlier, and those are worth
+naming because they are the kinds this tree keeps making: a slot cited as
+`T_F413B4` that is actually `T_F413D0`; a module-total reference bound (52)
+quoted as one entry's; `MIDI_PostSendWork` given prom_a 0xF8590F when it is at
+0xFA590F; "24 published targets are a bare `ret`" when it is 34; "12 times in a
+row" when it is 20.
+
+
+---
+
+# A defect in a SHARED tool, recorded because nobody owns it
+
+`scripts/analysis/source_coverage.py:52` counts `.incbin` spans with
+`text.count(".incbin")`, a SUBSTRING count over the whole file, so every mention
+of the word in a comment inflates it. Round-2 audit F8 flagged it in all three
+lanes and it is still there; `scripts/` belongs to another lane and this round
+did not touch it. Measured 2026-08-25, after round 3:
+
+| image | raw substring count | real `.incbin` directives |
+|---|---|---|
+| prom_a | 36 | **17** |
+| prom_b | 140 | **124** |
+| prom_c | 45 | **15** |
+
+```
+python3 - <<'EOF'
+import re
+for img in ('prom_a/wsa1_prom_a.s','prom_b/wsa1_prom_b.s','prom_c/wsa1_prom_c.s'):
+    t = open(img).read()
+    print(img, t.count('.incbin'), len(re.findall(r'^\s*\.incbin\b', t, re.M)))
+EOF
+```
+
+The BYTE columns of `source_coverage.py` are unaffected — they are parsed from
+the directives' operands, not from the substring count — so every coverage figure
+in this tree stands. It is the span COUNT that is wrong, and the fix is one line
+in a file this lane must not edit.

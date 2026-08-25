@@ -1,0 +1,342 @@
+@@MODULE
+
+; ==============================================================================
+; 0xF830C6-0xF855FF -- the sequencer event append, the 0x7F0000 slot driver, and
+; CPU 1's BYTE RING-BUFFER LIBRARY
+; ==============================================================================
+;
+; This whole span was one `.incbin` until 2026-08-25.  It is three things:
+;
+;   0xF830C6-0xF83215   336  three routines that belong with the 0xF82Cxx
+;                            interrupt block above: the sequencer event append,
+;                            the alternate INTTR4 tail, and the driver for the
+;                            0x7F0000 address/data register pair
+;   0xF83216-0xF83FFF  3562  0x0E pad
+;   0xF84000-0xF84C6B  3180  the ring-buffer CLASS (25 routines) and its
+;                            INSTANCE BANK (15 groups of 11 veneers)
+;   0xF84C6C-0xF855FF  2452  0x0E pad
+;
+; Why this span and not another: notes/prom_a_call_graph.py --modules ranks the
+; prom_b directory module T_F41CD0-T_F41EC4 (126 slots, reference upper bound
+; 245) as the largest heavily-referenced prom_a module still unconverted, and
+; all 126 of its slots land in 0xF842DF-0xF84BBC.
+;
+; The structural facts below are all re-derived from the ROM by
+; `python3 notes/prom_a_ringbuf_map.py`, which prints its own check list; the
+; assembly is emitted by `python3 notes/gen_prom_a_ringbuf_module.py`.
+; Prose: notes/FINDINGS-prom_a-ring-buffers.md.
+
+@@SEQBUF
+; ---------------------------------------------------------------------
+; SeqBuf_AppendEvent -- push <caller's byte><current tick> into the event ring
+;
+; Called from: NOTHING NAMES IT.  notes/prom_a_ringbuf_map.py resolves every
+;          absolute `call`/`jp` and every PC-relative `calr`/`jr`/`jrl` in
+;          prom_a + prom_b and finds no site whose target is 0xF830C6, and no
+;          prom_b directory slot points here either.  0xF830C5 is the `ret` of
+;          PowerFail_Checksum512, so it is not reached by fall-through.  Either
+;          it is called through a pointer held in a register or it is dead; this
+;          tree has NOT established which.
+; Inputs:  A = the event byte.  (0x93) = the current tick, appended after it.
+;          (0xAA) bit 0 selects the trace path, exactly as in
+;          SeqBuf_AppendMarker above.
+; Outputs: two bytes appended to the 512-byte ring at 0x600A14 and its write
+;          index and free count updated; or, on the trace path, two bytes
+;          appended to the linear array at 0x00AE.  (0xAC) is the trace index
+;          and is reset to 0 on the ring path.
+; Evidence: it is the SAME BUFFER as SeqBuf_AppendMarker -- `ld XIY,0x00600A14`
+;          at 0xF830D5, the write index at (XIY-4) = (0x600A10), the free count
+;          at (XIY-2) = (0x600A12) and `minc1_16 hl,0x01ff`, the modular
+;          increment that fixes the ring at 512 bytes.  What distinguishes this
+;          routine from the marker one is that it stores TWO bytes, the
+;          caller's A and then `ld A,(0x93)`, and decrements the free count
+;          twice.
+;          0x600A14 is also ring 5 of the instance bank below, and that
+;          independently gives it capacity 0x200: every one of its nine
+;          published veneers calls a 0x200-capacity class routine
+;          (notes/prom_a_ringbuf_map.py, check "every instance names ONE
+;          capacity").
+; ★ Note:  0xFA570C is a NEAR-TWIN of this routine and the two differ, in the
+;          guard, by ONE BYTE.  Both do `cp (0x600A__),0x0002 / jr C,drop`
+;          before appending two bytes; this one reads 0x600A12, which is the
+;          free-space count that the class's own Put tests, and 0xFA5711 reads
+;          0x600A0C, which is the ring's READ cursor.  Both then decrement the
+;          free count by two.  The byte difference is a fact; which was intended
+;          is not established here, and nothing in the ROM says.
+; ---------------------------------------------------------------------
+
+@@ALTTAIL
+; ---------------------------------------------------------------------
+; INTTR4_SequencerTick_Alt -- the alternate tail of the sequencer tick handler
+;
+; Called from: exactly one site, the `jp 0xF83120` at 0xF82EBF, taken when
+;          (0x7F32) bit 2 is set.  Re-derived by notes/prom_a_ringbuf_map.py's
+;          check "0xF83120 is named exactly once".  It does not return: the
+;          `jrl 0xF82FFA` at 0xF8316E rejoins the handler's common exit.
+; Inputs:  the transport state bytes (0x94) (0x95) (0x96) and their tick
+;          counters (0x8B) (0x8D) (0x93).
+; Outputs: each running transport's tick advanced by one, modulo 4; two of the
+;          three state bytes forced to 6 under a condition.
+; Evidence: the three arms are byte-identical in shape and differ only in which
+;          pair of addresses they name -- (0x96)/(0x93), (0x95)/(0x8D),
+;          (0x94)/(0x8B) -- which is what makes them three transports rather
+;          than three unrelated tests.  The same three state bytes and the same
+;          three counters are what the converted INTTR4 block above uses, and
+;          `xor A,0x03 / and A,0x03 / jr Z` before `inc 1,(counter)` is a
+;          modulo-4 guard, not a comparison against a constant.
+; Unknown: what (0x7F32) bit 2 selects, and therefore why there are two tails.
+;          The header of the block above already records that the bit "swaps the
+;          whole handler out"; this is the half it swaps in.  The value 6 is
+;          also unexplained.
+; ---------------------------------------------------------------------
+
+@@SLOTDRV
+; ---------------------------------------------------------------------
+; Dev7F_WriteSlot8_Slot0 .. _Slot3, and Dev7F_WriteSlot8 -- the driver for the
+; 0x7F0000 address/data register pair
+;
+; Called from: the four entries are prom_b directory slots T_F40004, T_F40008,
+;          T_F4000C and T_F40010 (notes/prom_a_xref.py on each).  The common
+;          body 0xF83197 is named by five PC-relative `calr` sites and nothing
+;          else -- 0xF8318F, and the four inside sub_F831B3 -- re-derived by
+;          notes/prom_a_ringbuf_map.py.
+; Inputs:  XHL = an eight-byte block in memory.  W = the slot number, supplied
+;          by whichever of the four entry stubs was called.
+; Outputs: eight bytes written to the device, one per register.
+; Evidence: this is the device notes/FINDINGS-memory-map.md already lists at
+;          0x7F0000/0x7F0002 as an "address-register + data-register pair, 8
+;          writes per slot, slot = (n<<5) | 0x10" -- and it cites THESE
+;          instructions, `0xF8319A ld XIX,0x007F0000`, `0xF831A8 ld (XIX),W`,
+;          `0xF831AA ld (XIX+0x02),A`, from a byte census taken while the
+;          routine itself was still .incbin.  The arithmetic is `sll 0x05,W`
+;          (slot times 32), `or W,0x10` (the block's base offset inside the
+;          slot) and `inc 1,W` once per iteration, with `ldw bc,0x0008`
+;          iterations; the data comes from `ld A,(XHL+)`, a post-incrementing
+;          byte read.
+;          The four stubs are the same five instructions with a different `ld
+;          W,n` and a `jr` into the shared TAIL at 0xF8318F -- the `calr` into
+;          the body plus the four pops -- which is what makes them four entries
+;          of one routine and not four routines.  Slot 3's stub falls into that
+;          tail instead of jumping to it.
+; Unknown: what the device is.  FINDINGS-memory-map.md records that CPU 2 drives
+;          0xE00000 with a byte-identical shape and that whether the two are one
+;          dual-ported chip is open.
+; ---------------------------------------------------------------------
+
+@@SUB_F831B3
+; ---------------------------------------------------------------------
+; sub_F831B3 -- writes a fixed pattern to all four 0x7F0000 slots
+;
+; NAMED sub_XXXXXX ON PURPOSE.  What it writes is plain; what that MEANS is not,
+; and this tree prefers an address label with a stated gap to a plausible guess.
+;
+; Called from: one site, `call 0xF831B3` at prom_a 0xF825E1 -- inside the boot
+;          block at 0xF80000-0xF826A8, which is still .incbin, so the calling
+;          context is not established.
+; Inputs:  none.
+; Outputs: four eight-byte blocks written through Dev7F_WriteSlot8, one per
+;          slot, followed by four 32-bit writes to the device.
+; Evidence: `ld WA,0x0005` and four `pushw wa` build the eight-byte source block
+;          on the stack; the four `calr Dev7F_WriteSlot8` calls set W to 0, 1, 2
+;          and 3 in turn.  The second phase is a four-iteration loop
+;          (`ldw bc,0x0004`) whose register index starts at 0x1F and advances by
+;          0x20 (`add W,0x20`), which is the same `(n<<5)|0x10` slot stride the
+;          block driver uses, at offset 0x0F inside the slot.
+; Unknown: ★ the four `ld XHL,XSP / add XHL,8|6|4|2` sources OVERLAP each other
+;          and reach ABOVE the four words this routine pushed.  Read literally,
+;          slot 0 is written from XSP+8..XSP+15 and slot 3 from XSP+2..XSP+9,
+;          so only the last two slots see the pushed 0x0005 words at all and the
+;          first read runs into this routine's own return address.  That is what
+;          the bytes say; whether it is a firmware defect or a calling
+;          convention this tree has not reconstructed is NOT established, and no
+;          claim either way belongs in a name.  The value 0x0005, and the
+;          32-bit pattern the second phase assembles out of QW/QA, are also
+;          unexplained.
+; ---------------------------------------------------------------------
+
+@@CLASS
+
+; ==============================================================================
+; 0xF84000-0xF842DE -- the BYTE RING-BUFFER CLASS: five operations, five sizes
+; ==============================================================================
+;
+; Twenty-five routines that are five operations emitted once per ring capacity.
+; Every one of them takes the ring in XHL and nothing else, and every one of
+; them is a fixed byte template whose ONLY variable field is the wrap mask of
+; its `minc1_16` (or, for Init, the seed of the free count).
+;
+; THE OBJECT.  XHL points at the ring's DATA.  The five control words sit BELOW
+; that pointer, at negative 8-bit displacements:
+;
+;   (XHL-10)  scan cursor        \  the non-consuming reader
+;   (XHL-6)   scan limit         /
+;   (XHL-8)   read  cursor       \  the consuming reader
+;   (XHL-4)   write cursor       /  and the writer
+;   (XHL-2)   FREE BYTES remaining
+;   (XHL+0) .. (XHL+capacity-1)  the data
+;
+; Evidence for each field, in the routines below:
+;   -4  is the WRITE cursor: Put stores A at (XHL + (XHL-4)) and advances it.
+;   -8  is the READ cursor:  Get loads A from (XHL + (XHL-8)) and advances it;
+;       the IsEmpty veneer in every instance compares -8 against -4 directly.
+;   -2  is FREE SPACE IN BYTES, not an occupancy: Init seeds it with
+;       capacity-1, Put refuses when it is zero and decrements it, Get
+;       increments it, and neither scan family touches it.  The seed being
+;       capacity-1 and not capacity is why one slot of the ring is never used.
+;   -10 is a SECOND cursor with its own limit at -6: the two scan families read
+;       through it and never touch -2, so a scan does not consume.
+;
+; ★ TEN OF THE TWENTY-FIVE ARE DEAD.  The instance bank below uses only the
+; 0x100, 0x200 and 0x400 capacities; the ten routines for 0x80 and 0x1000 have
+; no reference anywhere in prom_a or prom_b, by absolute call/jp or by any
+; PC-relative displacement.  Both statements are checks in
+; notes/prom_a_ringbuf_map.py, and they are what a library emitted whole by a
+; linker looks like.
+;
+; ★ AND NOTHING OUTSIDE THE BANK CALLS ANY OF THEM.  The class is reached only
+; through the 165 veneers at 0xF842DF-0xF84C6B; also a check.
+
+@@CLASS_Get
+; ---------------------------------------------------------------------
+; Ring_Get_0080 .. Ring_Get_1000 -- consuming read, one byte
+;
+; Called from: the instance bank's per-ring Get veneer, and nothing else.
+; Inputs:  XHL = the ring.
+; Outputs: WA = the byte read, W forced to 0 first so the result is a clean
+;          0x00nn; WA = 0xFFFF when the ring is empty.  The read cursor is
+;          advanced modulo the capacity and the free count incremented.
+; Evidence: the empty test is `cp (XHL-8),(XHL-4)` -- read cursor against write
+;          cursor -- and the byte is fetched with the register-indexed operand
+;          `ld A,(XHL+IX)` after `ld IX,(XHL-8)`, so the cursor really is an
+;          index into the data at XHL and not a pointer.
+; The five, and the wrap mask that gives each its capacity:
+%TABLE%
+; ---------------------------------------------------------------------
+
+@@CLASS_Scan
+; ---------------------------------------------------------------------
+; Ring_Scan_0080 .. Ring_Scan_1000 -- NON-consuming read against the scan limit
+;
+; Called from: the instance bank's per-ring Scan veneer, and nothing else.
+; Inputs:  XHL = the ring.
+; Outputs: WA = the byte, or 0xFFFF when the scan cursor has reached the scan
+;          limit.  (XHL-10) advanced modulo the capacity.
+; Evidence: identical to Ring_Get except for the two words it names -- (XHL-10)
+;          against (XHL-6) instead of (XHL-8) against (XHL-4) -- and for the
+;          missing `incw 1,(XHL-2)`: this family never touches the free count,
+;          which is what makes it non-consuming.  The templates are matched byte
+;          for byte by notes/prom_a_ringbuf_map.py, with the cursor pair as the
+;          only substituted field.
+; Unknown: nothing in this module writes the scan limit at (XHL-6) except Init,
+;          which zeroes it.  Its producer is outside the module.
+; The five:
+%TABLE%
+; ---------------------------------------------------------------------
+
+@@CLASS_ScanToPut
+; ---------------------------------------------------------------------
+; Ring_ScanToPut_0080 .. _1000 -- non-consuming read against the WRITE cursor
+;
+; Called from: the instance bank's per-ring ScanToPut veneer, and nothing else.
+; Inputs:  XHL = the ring.
+; Outputs: WA = the byte, or 0xFFFF when the scan cursor has caught up with the
+;          write cursor.  (XHL-10) advanced modulo the capacity.
+; Evidence: the third cursor pairing, and the only difference from Ring_Scan is
+;          the second operand of the comparison: (XHL-4), the write cursor,
+;          instead of (XHL-6).  So the ring offers a look-ahead reader that can
+;          run either to a limit somebody else sets or all the way to live data.
+; The five:
+%TABLE%
+; ---------------------------------------------------------------------
+
+@@CLASS_Put
+; ---------------------------------------------------------------------
+; Ring_Put_0080 .. Ring_Put_1000 -- append one byte
+;
+; Called from: the instance bank's per-ring Put and PutBlock veneers, and
+;          nothing else.
+; Inputs:  XHL = the ring; A = the byte.
+; Outputs: WA = the free count AFTER the store, or 0xFFFF when the ring was
+;          full and nothing was written.  A full ring DROPS; it does not wrap
+;          over live data.
+; Evidence: the guard is `cp (XHL-2),0x0000` before anything else, and the
+;          store is the register-indexed `ld (XHL+IX),A` with `ld IX,(XHL-4)`.
+;          `decw 1,(XHL-2)` immediately after the cursor update is the exact
+;          inverse of Ring_Get's `incw 1,(XHL-2)`, which is what makes the two
+;          families one pair over one field.
+; The five:
+%TABLE%
+; ---------------------------------------------------------------------
+
+@@CLASS_Init
+; ---------------------------------------------------------------------
+; Ring_Init_0080 .. Ring_Init_1000 -- reset a ring to empty
+;
+; Called from: the instance bank's per-ring Init veneer, and nothing else.
+; Inputs:  XHL = the ring.
+; Outputs: all four cursors zeroed and the free count seeded with capacity-1.
+; Evidence: five stores, in the order -10, -8, -4, -6, -2, the first four with
+;          the immediate 0x0000.  The seed is the ONLY variable field, and it is
+;          capacity-1 for every one of the five -- checked against each family's
+;          own `minc1_16` mask by notes/prom_a_ringbuf_map.py ("Init's
+;          free-space seed is capacity-1 for every capacity").  That is also the
+;          evidence that (XHL-2) counts FREE bytes and not stored ones.
+; The five:
+%TABLE%
+; ---------------------------------------------------------------------
+
+@@BANK
+
+; ==============================================================================
+; 0xF842DF-0xF84C6B -- the INSTANCE BANK: 15 groups of 11 veneers
+; ==============================================================================
+;
+; One group per ring object.  Every group is the same eleven routines in the
+; same order and is exactly 163 bytes long; nine of the eleven are published
+; through the prom_b directory and two are a bare `ret`.
+;
+;   1  Get         push IX/XHL, lda XHL,<ring>, call the class Get, pop, ret
+;   2  Put         one stack argument, the byte
+;   3  PutBlock    two stack arguments, a count and a pointer; Put in a djnz loop
+;   4  IsEmpty     compares the ring's -4 and -8 directly; WA = 0 or 0xFFFF
+;   5  Init
+;   6  ScanRewind  (ring-10) := (ring-8)   -- rewind the scan to the read cursor
+;   7  Scan
+;   8  ret
+;   9  ScanToPut
+;  10  ret
+;  11  GetCommit   (ring-8) := (ring-6)    -- move the read cursor to the limit
+;
+; The 6/11 pair is what makes the two extra cursors a TRANSACTION: rewind the
+; scan to where reading stopped, look ahead without consuming, then either
+; commit up to the limit or leave the read cursor where it was.  ⚠ that is a
+; reading of the two assignments and of which fields the scan families compare;
+; nothing in the ROM names it, and the writer of the scan limit at (ring-6) is
+; not in this module.
+;
+; The fourteen distinct rings, their capacities, and the RAM they occupy are in
+; notes/FINDINGS-prom_a-ring-buffers.md; the table there is printed by
+; `python3 notes/prom_a_ringbuf_map.py`, not typed.  ★ Eleven of the fourteen
+; TILE 0x600800-0x601E6E end to end with no gap and no overlap under the
+; "control block ten bytes below the pointer, data `capacity` bytes above it"
+; reading -- which is the strongest single piece of evidence that the layout is
+; what the class says it is, since nothing forces a linker to place them so.
+
+@@GROUP
+; ---------------------------------------------------------------------
+; %LABEL% and its group -- the eleven veneers of ring %OBJ%
+;
+; Called from: the prom_b directory, module T_F41CD0-T_F41EC4; this group owns
+;          the nine slots listed by `python3 notes/prom_a_call_graph.py
+;          --module 0xF41CD0`.%DUP%
+; Inputs / Outputs: as the class routine each veneer calls; see the five class
+;          headers above.
+; Evidence: every veneer of this group loads the SAME object address with
+;          `lda XHL,%OBJ%` and calls a class routine of the SAME capacity
+;          %CAP% -- that agreement across nine independent instructions is what
+;          establishes the capacity, and it is check "every instance names ONE
+;          capacity" in notes/prom_a_ringbuf_map.py.  The ring therefore
+;          occupies %CTRL%-%END%: ten bytes of control block below the pointer,
+;          %CAP% bytes of data at and above it.
+; Extent:  %LO%-%HI%, 163 bytes, the same length as every other group.
+; ---------------------------------------------------------------------

@@ -152,8 +152,15 @@ def main():
         rows.append((cnt.get(slot, 0), slot, tgt))
     rows.sort(reverse=True)
 
-    print("UNCONVERTED prom_b thunk targets, by reference upper bound (top %d of %d)"
-          % (min(n, len(rows)), len(rows)))
+    # ⚠ STATE THE UNIT.  `rows` is one row per SLOT, and two slots can name the
+    #    same routine, so len(rows) is a SLOT count and not a target count.  This
+    #    header said "targets" until 2026-08-25, and the difference is not
+    #    academic: converting 0xF44018-0xF477FF retired 64 slots resolving to 62
+    #    distinct targets, and a reconciliation done in the wrong unit is off by
+    #    two with nothing to show why.
+    ntgt = len(set(t for _, _, t in rows))
+    print("UNCONVERTED prom_b thunk SLOTS, by reference upper bound (top %d of %d "
+          "slots, %d distinct targets)" % (min(n, len(rows)), len(rows), ntgt))
     print("   %-12s %5s  %-10s" % ("slot", "refs", "target"))
     for k, slot, tgt in rows[:n]:
         print("   T_%06X   x%-4d  0x%06X" % (slot, k, tgt))
