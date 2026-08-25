@@ -156,8 +156,11 @@ appears in several headers below.
 equal`, `eight entries`, `three entries`, `nine bytes` — are they still true?"**
 
 The byte gate proves the source rebuilds the ROM and is **blind to what a comment
-claims**; this is the complement. **133 checks** (48 after round 1, 85 more added
-in round 2), each named after the sentence it backs, each failing loudly:
+claims**; this is the complement. Each check is named after the sentence it backs and
+fails loudly. ⚠ **Do not quote a count from here** — this line said "133
+checks", prom_a's banner said "232", and the number that actually ran on
+2026-08-25 was **231**. The script prints its own count as its first line of
+output; that is the only figure to quote. Some of what it pins:
 
 * the CS0 device at `0x7B0004/5` really is reached through exactly five
   accessors, all inside prom_a `0xFE54B6-0xFE54EB`;
@@ -213,6 +216,31 @@ negative that a script cannot reproduce should not be in a header.
 
 Run it with the byte gate, not instead of it. Neither one catches what the other
 does.
+
+## `notes/prom_a_evidence_census.py` — which names have no stated evidence
+
+**"Which prom_a labels carry a semantic NAME but no `Evidence:` line above
+them?"** The round-1 audit counted 25 of 84 and noted the raw count over-states
+it, because a routine's INTERNAL labels were never meant to carry one. This
+script separates the two cases, so the number in a report is a number about
+headers:
+
+* **HEADED** — the label is introduced by its own `; ---- … ; ----` block whose
+  first lines name it. These must say `Evidence`.
+* **INTERNAL** — the label sits inside an earlier headed routine with no header
+  of its own. Reported separately, never counted as a gap.
+
+```
+python3 notes/prom_a_evidence_census.py            # summary + the gaps
+python3 notes/prom_a_evidence_census.py --all      # every headed label
+python3 notes/prom_a_evidence_census.py --internal # the internal ones too
+python3 notes/prom_a_evidence_census.py --selftest # asserts known-good cases
+```
+
+⚠ It is a KEYWORD test, not a judgement: a header that argues its case in prose
+without the word is reported as a gap, and a header with the word and a bad
+argument passes. Read the ones it prints. Result 2026-08-25: **176 headed, 0
+without an Evidence line**; 180 internal.
 
 ## `notes/prom_a_addr_census.py` — every spelling, not one
 

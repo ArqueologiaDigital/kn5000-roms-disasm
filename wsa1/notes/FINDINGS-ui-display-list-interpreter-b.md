@@ -229,6 +229,15 @@ are still `.incbin`**. That, plus the un-merged walk seeing both members of
 partially overlapping pairs, is the whole gap between 4,011 merged records and
 4,097 un-merged.
 
+## The records are also a RAM-variable index
+
+Every interpreter-B record carries a 16-bit RAM address at `+2`, so the 494 of
+them are a reverse index from a firmware variable to the screen that prints it.
+`notes/prom_b_var_screens.py` builds it: 92 distinct variables in five
+neighbourhoods, 55 distinct tables, and an eight-element array of 0x40-byte
+records at `0x0076A0` found by nothing but the spacing of four displayed fields.
+Write-up: `FINDINGS-prom_b-ui-variable-index.md`.
+
 ## Reproduce everything above
 
 ```

@@ -163,11 +163,12 @@ enabling).
 | 0x000080-0x0051FF | 20.4 KiB | CS1 | static RAM, cleared at boot | `0xF8278A ldw BC,0x1460` / `ld XIX,0x80` / `ld (XIX+),XWA` / `djnz16` → 0x1460 × 4 bytes. A **lower bound**, not the chip size |
 | 0x005200-0x3FFFFF | — | CS1 | **NOT ESTABLISHED**. Nothing fixes the chip's size | |
 | 0x600000-0x6033FF | 13 KiB | CS3 | work DRAM, cleared at boot | `0xF8279A ld XBC,0xD00` / `ld XIX,0x600000` |
-| **0x603400-0x603FFF** | **3 KiB** | CS3 | work DRAM, **deliberately NOT cleared** and live | the clear loops skip it; prom_b reads it at `0xF440A5 ld XHL,0x00603400`. A preserved region across a warm restart |
+| **0x603400-0x603FFF** | **3 KiB** | CS3 | work DRAM, **deliberately NOT cleared** and live — and now IDENTIFIED: it is the BLOCK STORE's working copy of one of ten banks, `ldir`'d to and from `0x610000 + n*0xC00` by `0xF64BE3` / `0xF64B3D` with n = `(0x360A)`. Its `+0x22` is a 16-byte array, `+0x7E`/`+0xA0` are 16 saved cursors, `+0xBA` is the free-block count. See `FINDINGS-prom_b-block-store.md` | the clear loops skip it; prom_b reads it at `0xF440A5 ld XHL,0x00603400`. A preserved region across a warm restart |
 | 0x604000-0x60FFFF | 48 KiB | CS3 | work DRAM, cleared at boot | `0xF827AF ld XBC,0x3000` / `ld XIX,0x604000` |
 | 0x60EB80 | | CS3 | initial stack pointer | `0xF85606 ld XSP,0x0060EB80`, the first instruction after the jump into prom_b's thunk table |
-| 0x617800 + n·0x100 | | CS3 | a 256-byte-record array | `0xF61F5B add XHL,0x00617800` then `ld (XHL+IX),0x81`; the inverse at `0xF5E2F4 sub XHL,0x00617800` then `srl 8` |
-| 0x610000-0x67FFFF | | CS3 | **NOT ESTABLISHED** beyond ≈0x617800 | |
+| 0x617800 + n·0x100 | | CS3 | a 256-byte-record array — now IDENTIFIED as the BLOCK STORE's HEAP. Each record is `+0 flags (bit 7 = allocated)`, `+1..2 previous block`, `+3..4 next block (0xFFFF = end)`, `+5..0xFF payload`; the chains are named by a 3-byte directory at `0x00603500`. `0x617800` is the value of `(0x3604)`, forced by the inverse arithmetic cited in the next column against `BStore_SeekBlock`'s `(0x126E) = (0x3604) + (n-1)*0x100`. See `FINDINGS-prom_b-block-store.md` | `0xF61F5B add XHL,0x00617800` then `ld (XHL+IX),0x81`; the inverse at `0xF5E2F4 sub XHL,0x00617800` then `srl 8` |
+| 0x610000-0x6177FF | 30 KiB | CS3 | **ten 3 KiB banks** of the `0x603400` workspace, `0x610000 + n*0xC00` for n = 0..9. prom_a bounds n: `0xF8143F cp A,0` refuses to decrement below 0 and `0xF814D2 cp A,0x09` refuses to increment past 9. `0x610000 + 10*0xC00 = 0x617800`, so the ten banks abut the block heap with no slack — ⚠ consistency between two derivations, not proof they are one object | `0xF64BE3` / `0xF64B3D`, read as instructions.  The same `sla 0x0B` + `sla 0x0A` index shape occurs at **48** sites in prom_a+prom_b — 8 in prom_a, 40 in prom_b — counted by `python3 notes/prom_b_bank_index_census.py`, which reports it as an upper bound because it is a byte window, not a decode |
+| 0x617800-0x67FFFF | | CS3 | **NOT ESTABLISHED** beyond the heap's start | |
 | 0x680000-0x78FFFF | | CS0 | **NOT ESTABLISHED — no device is referenced here** | a byte census of prom_a+prom_b over the `C2/D2/E2/F2 + lo,mid,hi` mem24 forms and the `0x40-0x47` imm32 loads finds 64 + 108 raw hits in this span, every one of them a scattered singleton inside data (the largest, `0x72F2D2` ×26, is a repeating `f2 d2 f2 72` pattern in prom_a at 0xF54C98+). Contrast 0x790000-0x7FFFFF in prom_a: 0x790000 ×73, 0x790001 ×21, 0x7C0000 ×8, 0x7F0000 ×5, 0x7A0000 ×4, 0x7B0004 ×3, 0x7B0005 ×2 — the shape a real device makes |
 | 0x790000 / 0x790001 | 2 B | CS0 | display-controller-shaped port. 0x790000 read = status, busy in **bit 6**; written = data. 0x790001 = command, also read for data | `0xF8ECF4 bit 6,(0x790000)` / `0xF8ECFB ld (0x790001),0x46` / `0xF8ED0D ld (0x790000),A`. Command bytes 0x42/0x43/0x46/0x4C. **Part identity UNVERIFIED** — those four match SED1330 MWRITE/MREAD/CSRW/CSRDIR, but the status port is on the wrong side for that part |
 | 0x7A0000 | 1 B | CS0 | **the DMA data port of the 0x7B0004/5 device.** Two paths to this one address: programmed I/O through the pointer at (0x605A3E), and **micro-DMA channel 0** through the pointer at (0x605A3C), armed on **INT7**. `Dev7A_Dma_DeviceToRam` sets DMAS0 = 0x7A0000 fixed / DMAD0 = RAM walking / DMAM0 = 0x00; `Dev7A_Dma_RamToDevice` is the mirror with DMAM0 = 0x08 (mode meanings: `../mame/src/devices/cpu/tlcs900/tmp95c061.cpp:368-372` and `:398-402`). All four references in prom_a+prom_b name 0x7A0000 exactly — `notes/FINDINGS-dev7b-and-int5.md`, re-censused by `notes/prom_a_byte_checks.py`. Added 2026-08-25 | `0xFE59BB`/`0xFE59DA` (DMA, converted) · `0xFE680F ld C,(0x7A0000)` / `0xFE682B ld (0x7A0000),C` (PIO) |
@@ -239,11 +240,11 @@ effective span is 0xC00000-0xDFFFFF), CS3 0x000000-0x01FFFF.
 | 0x000000-0x00007F | 128 B | — | internal I/O | |
 | 0x000080-0x01007F | 64 KiB | CS3 | work DRAM, cleared at boot | `0xFFF085 ld XBC,0x8000` / `lda XIX,0x80` / `ld (XIX+),WA` → 0x8000 × 2 bytes. A lower bound |
 | 0x00FFF0 | | CS3 | initial stack pointer | `0xFFF006 ld XSP,0x0000FFF0`. Moved down to 0x00FA00 at the main entry (`0xF9816B`) |
-| 0x010080-0x01FFFF | | CS3 | **NOT ESTABLISHED** | |
+| 0x010000-0x01FFFF | 64 KiB | CS3 | **the FLASH STAGING BUFFER** — one whole flash sector, held in RAM. `Flash_ReadSectorToBuffer` copies a sector into it with one `LDIRW`, `Flash_ProgramSectorFromBuffer` burns it back, and `Flash_ProgramSlice1K` burns one 1 KiB slice of it; the block writers address it as `flash address − 0x00E70000`, which is `0x00010000 + (address − 0x00E80000)`. ⚠ It shadows only the FIRST 64 KiB of the flash. ⚠ It also overlaps the last 0x80 bytes of the boot DRAM clear, whose extent is a lower bound | `0xFC8903`, `0xFC8945`, `0xFC89B3` all `ld XIX,0x00010000`; `0xFC87AE`, `0xFC881B`, `0xFC8851` all `sub XBC,0x00E70000`. All six asserted from the ROM by `notes/prom_c_flash_driver_check.py`; the driver is converted at `prom_c/wsa1_prom_c.s` 0xFC856C-0xFC89C4 |
 | 0x100000 | 1 B | CS0 | **inter-processor link port** — §3 | `0xF999F9 ld XBC,0x00100000` / `ld (XBC),A` |
-| 0x104000 (+0 / +2) | | CS0 | 16-bit address/data register pair | `0xFB7802 ld XBC,0x00104000` / `ld (XBC),DE` |
-| 0x108000 | | CS0 | same shape. **Three** sites, not five: 0xF9914D, 0xF99776, 0xF998C6 | |
-| 0x10C000 (+0 addr / +2 data / +4 readback) | | CS0 | 16-bit address/data device, nop-padded for bus timing. **102 references — by far CPU 2's busiest device**; a flat table hides that | `0xFA667E ld XIX,0x0010C000`; `0xFAC12D ld (XBC),DE` / `0xFAC132 ld (XBC+0x02),0xFF00` followed by five `nop`; `0xFA690A ld HL,(XBC)` with XBC = +4 |
+| 0x104000 (+0 sel / +2 data) | | CS0 | 16-bit address/data register pair, **64 channels x 19 parameter registers**, numbered `block*0x40 + channel`. Role NOT established — see `notes/FINDINGS-prom_c-tone-generator.md` §0 for the tone-generator inference and why the labels say `Dev104_` and not `TG2_` | `0xFB7802 ld XBC,0x00104000` / `ld (XBC),DE`; the whole per-channel map from `Dev104_WriteAllChanRegs` 0xFB77EF, checked by `notes/prom_c_tg_regmap.py --dev104` (FAILURES: 0) |
+| 0x108000 (+0 event / +2 status) | | CS0 | **KEY-SCAN PORT** — the 61-key keybed. +2 read is a status word whose bit 0 gates a read; +0 read is one 16-bit key event, low byte = bit 7 note-on and bits 6..0 key number, high byte = the touch measurement. ⚠ **NOT** the "+0 address / +2 data" shape of the rows above and below: at init `Dev108000_Preload_80toBF` writes +2 **first** (0x0080+i) and +0 **second** (0x8000), the opposite order, and every other access is a bare read | 3 literal sites at +0 (0xF9914D, 0xF99776, 0xF998C6) and **2 at +2** (0xF99146, 0xF99762) — `notes/prom_c_xrefs.py 0x00108000 --no-window --classify` and the same for 0x00108002. Meaning: `KeyScan_ReadEvent` 0xF9973D, whose two bytes are pushed straight into `ToneGen_VelocityFromTouch`; see `notes/FINDINGS-prom_c-keyboard-and-touch.md` |
+| 0x10C000 (+0 sel / +2 data / +4 readback) | | CS0 | 16-bit address/data device, nop-padded for bus timing. **102 references — by far CPU 2's busiest device**; a flat table hides that. **64 channels x ~22 parameter registers**, `block*0x40 + channel`, with three per-channel gate registers pulsed bit-15 set→clear. Role NOT established — labels say `Dev10C_`; see `notes/FINDINGS-prom_c-tone-generator.md` §0 | `0xFA667E ld XIX,0x0010C000`; `0xFAC12D ld (XBC),DE` / `0xFAC132 ld (XBC+0x02),0xFF00` followed by five `nop`; `0xFA690A ld HL,(XBC)` with XBC = +4 |
 | 0x110000-0x13FFFF | | CS0 | **NOT ESTABLISHED** | |
 | 0xC00000 + 0x18, +0x31 | | CS1 | **expansion board.** Header fields read at +0x18 and +0x31; the signature it is checked against, `"WSA1 EXTBD"`, is in prom_c **twice**, at file 0x6129E and 0x61EC9 | `0xFB6B6E ld XIX,0x00C00000` / `ld C,(XIX+0x31)` / `ld C,(XIX+0x18)` |
 | 0xC00040-0xDFFFFF | | CS1 | **NOT ESTABLISHED** | |
@@ -251,6 +252,8 @@ effective span is 0xC00000-0xDFFFFF), CS3 0x000000-0x01FFFF.
 | **0xE80000-0xEFFFFF** | **512 KiB** | CS2 | **FLASH — size ESTABLISHED** | see below |
 | 0xE00004-0xE7FFFF, 0xF00000-0xF7FFFF | | CS2 | **NOT ESTABLISHED** | |
 | 0xF80000-0xFFFFFF | 512 KiB | CS2 | **prom_c** | reset vector at 0xFFFF00 |
+
+> ⚠ **Correction (round 4).** The 0x108000 row previously read *"same shape. **Three** sites, not five: 0xF9914D, 0xF99776, 0xF998C6"*, with an empty evidence column — "same shape" meaning the address/data register pair of the rows either side. Not one of those three sites is a select/data pair: all three are bare 16-bit accesses to +0. The three-site count was also a census of the +0 literal only and could not see the +2 literal at 0xF99762, which is where the status read lives. The device's role was established in the same round that left this row standing.
 
 CPU 2 makes **no** runtime change to the CS or DRAM controller. (`0xF84AC5`,
 `0xF88A0B`, `0xF952C5`, `0xFCD2FB` are all data; verified by disassembling
@@ -281,6 +284,20 @@ Which of the two geometries is used is selected by
 `0xFC8694 cp (0x00E29D),0x22AB` — a 16-bit device-ID compare. A `0x22xx`
 word-mode ID with a bottom/top boot pair is **Am29F400B/T-class**; that is an
 inference from published ID tables, with **no datasheet in these trees**.
+
+> **Round 4.** The whole driver is now converted — `prom_c/wsa1_prom_c.s`
+> 0xFC856C-0xFC89C4, 16 routines — and every number in the two paragraphs above is
+> re-derived from the ROM bytes by
+> `python3 notes/prom_c_flash_driver_check.py` (not from unidasm's text), so this
+> section is reproducible rather than hand-read. Two things it adds:
+> **where `(0x00E29D)` comes from** — `Flash_ReadDeviceId` (0xFC859E) issues a real
+> JEDEC autoselect (`AA / 55 / 0x90`), reads the manufacturer word at base+0 into
+> `(0x00E29F)` and the device word at base+2, accepts manufacturer **1 or 4** and
+> device **0x2223 or 0x22AB**, and returns 0xFFFF otherwise;
+> `Flash_ProbeAndStoreDeviceId` (0xFC88A0) runs it once from MAIN at 0xF98B85 and
+> stores the result. So the geometry is chosen from what the silicon answered at
+> boot. And **what the flash is written by**: see
+> `notes/FINDINGS-prom_c-flash.md`.
 
 ---
 

@@ -148,6 +148,33 @@ first. (The 0xF98B20 range in this pass was transcribed by hand against
 `scripts/analysis/dis.sh` before that wrapper existed; the byte gate certifies it either
 way.)
 
+### ⚠⚠ `di` is misnamed in the backend, and it inverts the meaning of a listing
+
+`di` assembles to the byte pair `06 00`, which the TLCS-900 decodes as **`EI 0`**, and `EI 0`
+**enables** every maskable interrupt.
+
+* `op_EI` writes the immediate into SR bits 6..4 —
+  `m_sr.b.h = (m_sr.b.h & 0x8f) | ((imm & 0x07) << 4)`
+  (`mame/src/devices/cpu/tlcs900/900tbl.hxx:2073-2078`).
+* `tlcs900_check_irqs` then scans interrupt priorities from
+  `std::max(1, (m_sr.b.h & 0x70) >> 4)` up to 6
+  (`mame/src/devices/cpu/tlcs900/tmp95c061.cpp:536-545`). A level of **0** therefore accepts
+  every maskable interrupt; a level of **7** accepts none, because the loop body never runs.
+* Reset leaves the field at 7 — `m_sr.d = 0xf800`, commented "iff set to 111"
+  (`tlcs900.cpp:213-220`) — so the CPU boots with interrupts off and the firmware's first
+  `di` is what turns them **on**.
+
+The real disable is `ei 0x07`, which is what `IRQ_NMI` executes immediately before its
+infinite spin.
+
+⚠ **Two headers in `prom_c/wsa1_prom_c.s` had this backwards** (`DSP_ChannelRefresh_Loop`
+"starts by disabling interrupts (`di`, MAME's `ei 0x00`) and never re-enables them", and
+`Serial0_Init` "runs with interrupts off around the register writes: `ei 6` before and `di`
+… at the end"). Both were corrected on 2026-08-25 and now carry the citations. The bytes were
+never wrong; only the reading — the byte gate cannot see a mistake of this kind. The pattern
+`ei 6` … `di` that appears throughout the link code is a GUARD, not a release: `ei 6` blocks
+almost everything and `di` (= `EI 0`) lets it back in.
+
 ### ⚠ `ldmi16` is misnamed in the backend
 
 `TLCS900InstrInfo.td:192` defines sub-opcode `0x14` as `MemStoreImmInst … i16imm:$val` and

@@ -114,3 +114,214 @@ draft of the INTTC3 header quoted a range that stopped short of the two sites in
 
 Every number in the `INT0_HANDLER__cmd_*` and `INTTC3_HANDLER__state*` headers, and in
 `notes/FINDINGS-prom_c-link-receive.md`, comes from this script.
+
+---
+
+# Added by round 3 (2026-08-25)
+
+Six more, same discipline: each answers one question, prints its own limits, and is named in the
+source header of anything it produced a number for.
+
+## `prom_c_frontier.py`
+**"Which UNCONVERTED addresses does the already-converted code call?"** — reachability instead
+of linear address order.
+
+```
+python3 notes/prom_c_frontier.py --spans
+python3 notes/prom_c_frontier.py
+```
+
+It parses the `.incbin` directives out of `prom_c/wsa1_prom_c.s`, disassembles the converted
+spans, and lists every literal `call`/`calr`/`jp`/`jrl`/`jr` target that lands outside them,
+most-called first, with the address of each caller.
+
+⚠ A linear disassembly of a span that embeds data produces phantom targets — the hits inside
+0xFCC7xx and 0xFDDxxx in the default output are exactly that. The caller addresses are printed
+so a phantom is visible. Re-run after every edit; "unconverted" is a property of the source
+file, not of the ROM.
+
+## `prom_c_listing_prep.py`
+**"Turn `llvm_roundtrip_autoforce.py` output into this file's house style."**
+
+```
+python3 notes/llvm_roundtrip_autoforce.py c 0xF9973D 0x481 --quiet > /tmp/blk.s
+python3 notes/prom_c_listing_prep.py /tmp/blk.s --prefix KL > /tmp/blk.pretty.s
+```
+
+`.byte` runs become `extpfxN` (or a named spelling from
+`notes/prom_c-llvm-mc-spellings.md`), raw branch displacements become labels taken from
+unidasm's own rendering, `calr` becomes the constant-folded `(target - next)` idiom, internal
+I/O addresses become their `.equ` names, and decimals become hex. **It changes spelling only.**
+
+## `prom_c_verify_fragment.py`
+**"Does this fragment rebuild exactly the ROM bytes it claims to?"**
+
+```
+python3 notes/prom_c_verify_fragment.py c 0xF9973D /tmp/blk.pretty.s
+```
+
+The byte gate is whole-image and tells you which ROM differs at which offset; this assembles ONE
+fragment and names the first differing byte with both contexts. Run it **before** the gate, not
+instead of it. Every block round 3 inserted was cleared by this first.
+
+## `prom_c_prom_a_routine_diff.py`
+**"Are these two routines the SAME routine compiled for the two CPUs, or just similar?"**
+
+```
+python3 notes/prom_c_prom_a_routine_diff.py 0xF99A40 0xF8E0FE 0x83
+```
+
+`prom_c_prom_a_shared_runs.py` measures BYTE identity and is the wrong tool when every port
+address, handshake pin and work-RAM address differs: it reports **8 bytes** for a pair of
+routines that are in fact the same **47 instructions**. This aligns them instruction by
+instruction and separates *different mnemonic* (structural) from *same mnemonic, different
+operand* (a substituted address), printing every difference in full.
+
+⚠ It compares unidasm's TEXT.
+
+## `prom_c_tg_chanmap.py`
+**"Every port write one routine makes to a register-pair device, in order, with where its value
+came from."**
+
+```
+python3 notes/prom_c_tg_chanmap.py 0xFB713A 0x1F2 --pairs
+python3 notes/prom_c_tg_chanmap.py 0xFB713A 0x1F2 --groups
+python3 notes/prom_c_tg_chanmap.py 0xFB77EF 0x1B0 --dev 0x00104000 --groups
+python3 notes/prom_c_tg_chanmap.py --selftest
+```
+
+`prom_c_tg_regmap.py` matches the small fixed-shape accessors and printed 27 sites it could not
+match; most of them are inside `Dev10C_WriteAllChanRegs`, which is not an accessor at all. This
+walks one routine, follows the +0 and +2 pointers through their frame slots, tracks what each
+16-bit register holds, and preserves across a `calr` **exactly the registers the callee pushes
+and pops** — read off the callee, not assumed. It reports the stream in execution order and
+never zips two lists, which is the mistake `FINDINGS-prom_c-tone-generator.md` §3 had to
+retract. `--selftest` asserts the LAST select and the LAST data write.
+
+It was cross-checked against an independently derived result before being trusted: run on
+`Dev104_WriteAllChanRegs` it reproduces `prom_c_tg_regmap.py --dev104`'s nineteen blocks 0..0x12
+and the trailing block-0 write.
+
+## `prom_c_dup_image.py`
+**"prom_c carries its initialiser image twice. Where exactly, how do the copies differ, and does
+anything use the second one?"**
+
+```
+python3 notes/prom_c_dup_image.py --extent
+python3 notes/prom_c_dup_image.py --diff
+python3 notes/prom_c_dup_image.py --refs
+python3 notes/prom_c_dup_image.py --fill
+python3 notes/prom_c_dup_image.py --selftest
+```
+
+`--extent` walks the identity outward and reports **both** alignment deltas rather than
+splitting the region on one of them; `--diff` decodes every differing byte and shows that 40 of
+the 41 are pointers relocated by exactly the delta; `--refs` classifies each literal hit by the
+bytes around it and **counts** the coincidences it discards instead of dropping them silently;
+`--fill` checks the 118,298-byte tail over every byte. Every figure in
+`notes/FINDINGS-prom_c-duplicate-initialiser.md` comes from it.
+
+## `prom_c_audit_callsites.py`  *(round 3, self-audit)*
+**"Does every address a `Called from:` line names actually START a call to that routine?"**
+
+```
+python3 notes/prom_c_audit_callsites.py
+python3 notes/prom_c_audit_callsites.py --quiet     # only the rows that did not check out
+```
+
+This tree's history includes *"call sites cited one byte past the instruction, ~20 times,
+systematically"*, and the cause is structural: `prom_c_xrefs.py` prints the address of the
+LITERAL it matched, while the instruction that owns the literal begins one or two bytes
+earlier. Copying the tool's address into a header is therefore wrong **by default**, and the
+byte gate cannot see it.
+
+The script parses every `; Called from:` block out of `prom_c/wsa1_prom_c.s`, takes each
+routine's own address from the `; ADDR` comment on its first instruction line, disassembles ONE
+instruction at every cited address, and checks it is a transfer to that routine.
+
+⚠ **Read the output; it is not a pass/fail.** A header legitimately names a pointer-table entry
+(`Link_Ch0_AppendToRing` is reached through `Handler_PtrTable_FCC53F`, not by a `call`), a
+descriptor argument, or the routine that *contains* the call rather than the call itself. As of
+2026-08-25 it reports **178 cited sites, 150 decoding to a real transfer and 28 flagged**, and
+every one of the 28 was read and is one of those legitimate cases.
+
+---
+
+# Added by round 4 (2026-08-25)
+
+## `prom_c_flash_driver_check.py`
+**"Does the flash driver at 0xFC856C-0xFC89C4 really issue the command sequence, the sector
+map, the buffer address and the loop counts its headers claim?"**
+
+```
+python3 notes/prom_c_flash_driver_check.py     # prints every check, exits non-zero on failure
+```
+
+It reads `original_ROMs/wsa1_prom_c.ic28` and matches **bytes**, not unidasm's text, so nothing
+it asserts depends on the disassembler. Every quantified claim in
+`notes/FINDINGS-prom_c-flash.md`, in the 0xFC856C block comment and in the sixteen routine
+headers below it comes from here: the two JEDEC unlock addresses, all 21 immediate command
+bytes, the four device/manufacturer literals, both boot-block sector maps (offsets, sizes,
+their mirror relation and the 7 × 64 KiB that makes 512 KiB), the 0x00010000 staging buffer,
+the `− 0x00E70000` window arithmetic, the 1 << 10 slice scale, and the three loop counts.
+
+⚠ The one thing it cannot do byte-only is the *register width* of `djnz`, which is a property
+of the prefix byte — so it checks the prefix byte itself (0xCA = the 8-bit B, 0xD9 = the 16-bit
+BC) and cites where that mapping is defined in MAME. That is the check that found the one real
+oddity in the block: `Flash_SectorBlankCheck` loads `BC = 0x4000` and then counts with `B`, so
+it inspects 256 bytes and not 64 KiB.
+
+## `prom_c_prom_a_shared_runs.py --window` *(new mode)*
+**"How similar are these two routines as raw bytes — all of it, not just the run through one
+address?"**
+
+```
+python3 notes/prom_c_prom_a_shared_runs.py --window 0xF99A40 0xF8E0FE 0x83
+```
+
+`--at` measures the ONE maximal run that passes through the address you give it, which for a
+pair of routines is usually the leading prologue. Reporting that as if it were the maximum is
+a mistake this tree shipped once — `Link_SendCmdE2_MemRead`'s header said *"an identical run of
+only EIGHT bytes"*; 8 is the leading run, the longest is 23 and 109 of 131 bytes are equal.
+`--window` prints every equal run, the longest, and the total, and `--selftest` now asserts all
+three of those figures alongside the 98-byte micro-DMA run it already checked.
+
+## `prom_c_coverage_split.py`
+**"How much of prom_c's 'converted' figure is `.fill` padding?"**
+
+```
+python3 notes/prom_c_coverage_split.py
+```
+
+`scripts/analysis/source_coverage.py` counts a `.fill` directive as converted bytes and says so
+nowhere. For prom_c that is 23.3 of its 28.0 percentage points — one directive covering the
+0x0E padding run at 0xFE21E6-0xFFEFFF. The real figure, the bytes someone had to read, is
+**4.7%**. Quote both or neither.
+
+⚠ prom_c only, because `scripts/analysis/` belongs to another lane. The same defect inflates
+prom_a and prom_b; adding a `.fill` column to the shared tool's table is left to whoever
+integrates.
+
+## `prom_c_header_audit.py`
+**"Which semantic labels have no evidence in the comment block above them?"**
+
+```
+python3 notes/prom_c_header_audit.py            # summary + the tier-C list
+python3 notes/prom_c_header_audit.py --tier B   # the one-word fixes
+python3 notes/prom_c_header_audit.py --all
+```
+
+The round-1 audit measured "semantic labels with no line containing 'Evidence'" by hand and got
+44 of 92 for one round's additions — a number nobody could re-derive, and one that over-states
+the problem because many labels sit under a shared block comment that argues its case without
+using the word. This makes it reproducible and splits the two cases: **tier A** the header says
+"Evidence"; **tier B** it cites a tool, a `0xXXXXXX` address or another label but not by that
+keyword; **tier C** it asserts a name and backs it with nothing.
+
+As of round 4: **110 A / 112 B / 0 C** over 222 labels. Working through tier C is what found the
+write-order defect corrected in `Dev104_SetChanRegs_01C0_0200_0240`,
+`Dev104_SetChanRegs_0140_to_0240` and `Dev104_WriteChanReg0`.
+
+⚠ Tier B is not a pass, and tier A is not proof — the keyword is only a keyword. This measures
+whether a citation is *present*, never whether it is *true*; `prom_c_audit_callsites.py` is the
+tool that checks truth, and only for `Called from:` lines.

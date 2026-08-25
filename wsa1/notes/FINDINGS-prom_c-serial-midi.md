@@ -139,3 +139,104 @@ bits 4, 5 and 3 of `0x007ED1`, one pair each. Those six sites plus `INTT1_HANDLE
 `set` instructions are ALL fourteen references to `0x007ED1` in prom_c
 (`python3 notes/prom_c_xrefs.py 0x007ED1 --no-window`), which leaves a real gap: ⚠ INTT1
 also sets bits **6 and 7**, and nothing that names `0x007ED1` outright ever reads them.
+
+---
+
+# Round 3 (2026-08-25): the queue runtime, and active sensing in both directions
+
+`0xF992A7-0xF99597` is converted — nine routines, 753 bytes — and it closes this note's two
+standing gaps ("the layout of the descriptor at `0x00F2FB` and the body of `0xF993D4`").
+
+## The ring-queue descriptor is 22 bytes, and the size is fixed three ways
+
+```
++0x00  u32  first slot
++0x04  u32  LAST slot          (the wrap test is `cursor == +0x04 -> cursor = +0x00`)
++0x08  u32  read cursor
++0x0C  u32  write cursor
++0x10  u32  a SECOND read cursor, used only by Queue_Peek_Cursor2
++0x14  u16  FREE-slot count    (0 = full; put decrements, get increments)
+```
+
+1. The receive descriptor is `0x00F2FB` and the transmit one — read off
+   `MIDI_Tx_PutByte` — is `0x00F311`. **`0x00F311 - 0x00F2FB = 0x16 = 22`.**
+2. Both are inside the boot RAM image, so their power-on contents can be read out of the ROM:
+
+   ```
+   python3 notes/prom_c_ram_image.py 0x00F2FB:22 0x00F311:22
+   ```
+
+   | | first | last | cursors | free |
+   |---|---|---|---|---:|
+   | RX `0x00F2FB` | `0x00007EDA` | `0x000082D9` | all three `0x00007EDA` | `0x03FF` = 1023 |
+   | TX `0x00F311` | `0x000082DA` | `0x000084D9` | all three `0x000082DA` | `0x01FF` = 511 |
+
+   1024-byte and 512-byte buffers, each with one slot held back.
+3. **The three RAM objects meet end to end.** `0x82D9 + 1 = 0x82DA` (the TX buffer starts where
+   the RX buffer ends) and `0x84D9 + 1 = 0x0084DA`, which is the per-note velocity trim table
+   (`notes/FINDINGS-prom_c-keyboard-and-touch.md`). No gaps, no overlap.
+
+Six routines walk it: `Queue_Put` / `Queue_Put_IrqGuarded`, `Queue_Get` /
+`Queue_Get_IrqGuarded`, `Queue_Peek_Cursor2` and `Queue_FreeSlots`. The guarded and unguarded
+pairs differ **only** by two inserted two-byte instructions (`06 06` and `06 00`) around the
+free-count update, plus the two branch displacements that had to move with them — aligned byte
+by byte, not eyeballed.
+
+⚠ `Queue_Put_IrqGuarded` and `Queue_Peek_Cursor2` have **no caller found**. The second read
+cursor at +0x10 exists in the struct, in the boot image and in that one routine, and nowhere
+else that has been located.
+
+## ★★ Active sensing, and three MIDI bytes that were "unexplained"
+
+`MIDI_Watchdogs_And_TransportSwitch` (`0xF994E4`) is the last call in `MAIN`'s loop body. It
+does three unrelated jobs:
+
+| trigger | action |
+|---|---|
+| `tick - (0x007ED2) > 0x87` (135 ticks since the last byte reached SC0BUF) | re-stamp and `MIDI_Tx_PutByte(0xFE)` |
+| `(0x00F2F8) != 0` and `tick - (0x007ED6) > 0xA5` (165 ticks since the last byte was received) | clear the flag and send the byte at `0xFCC5C2` on link channel 6 |
+| P8 bit 2 changes state | send the byte at `0xFCC5C4` (low) or `0xFCC5C3` (high), and record the state in `0x00F328` |
+
+`0x00F2F8` is set by `INTRX0_HANDLER` on a received `0xFE` and by nothing else; `0x007ED6` is
+that handler's receive timestamp. (⚠ `prom_c_xrefs.py 0x00F2F8` reports **four** hits; the one
+at `0xFBE149` is a coincidence — `e1 f8 f2` there is the tail of `calr 0xFBDA2C` plus the next
+instruction's prefix. Three real sites remain: the handler's write, and the test and clear
+here.) So the transmitter emits `0xFE` on a timer and the receiver
+flags it and times it out — **that is the MIDI active-sensing protocol**, both halves.
+
+★ And it decodes the last three bytes of `unexplained_FCC5BE`, which the zone-2 header lists as
+`ff fa fb 4d 00 80 00` with only the `4d 00` and `80 00` accounted for:
+
+```
+0xFCC5C2 = 0xFF   MIDI System Reset  -- sent on the receive-side active-sensing timeout
+0xFCC5C3 = 0xFA   MIDI Start         -- sent when P8 bit 2 goes HIGH
+0xFCC5C4 = 0xFB   MIDI Continue      -- sent when P8 bit 2 goes LOW
+```
+
+They are single bytes with addresses because `Link_SendBuffer` takes a pointer and a length,
+and each is sent with length 1.
+
+⚠ What P8 bit 2 is wired to is NOT established. `res 2,(P8)` immediately before reading it is
+the shape of driving a line and sampling it, but P8CR's bit layout is not decoded anywhere in
+this tree.
+
+⚠ `Link_Ch2_ForwardBytes` writes a THIRD value, `0xFF`, into `0x00F328` when CPU 1 sends the
+byte `0xFA` on link channel 2. Since `0xFF` is neither 0 nor 1, the next P8 transition in either
+direction will send a message. All five literal-addressed sites of `0x00F328` are accounted for.
+
+## ⚠ A timing inference, labelled as one
+
+This note's `0x00F2F3` section and `notes/FINDINGS-prom_c-scheduler.md` both say the tick RATE
+is not established. It still is not. But **if** the `0xFE` is MIDI active sensing, the standard
+requires it at intervals of at most 300 ms, so 135 ticks would be at most 300 ms — a tick of
+about 2.2 ms or less — and the 165-tick receive timeout is 22% longer than the send interval,
+which is the margin an active-sensing receiver needs. That is an argument from the MIDI
+specification, not from this ROM. It is written down so a later measurement can contradict it.
+
+## ★ And one more consumer of the MIDI port
+
+`MIDI_Tx_PutByte`'s three callers are `MIDI_Tx_SendUntilFF`, the active-sensing arm above, and
+**`Link_Ch2_ForwardBytes`** — so a byte CPU 1 sends on link channel 2 goes straight out of the
+MIDI OUT port, with `0xFA` intercepted on the way. The `0xF992C6` that
+`notes/FINDINGS-prom_c-link-receive.md` could only call "the per-byte sink of channel 2" is the
+MIDI transmitter.

@@ -1,8 +1,20 @@
 # CPU 1's 33 interrupt vectors, and where every one of them ends up
 
-**Established 2026-08-24.** Regenerate the whole table with
-`python3 notes/vector_map.py` (`--unconverted` for what is still `.incbin`).
-Nothing below is typed by hand.
+**Established 2026-08-24. Completed 2026-08-25.** Regenerate the whole table
+with `python3 notes/vector_map.py` (`--unconverted` for what is still
+`.incbin`). Nothing below is typed by hand.
+
+## ✅ ALL 33 SLOTS ARE NOW CONVERTED
+
+`python3 notes/vector_map.py --unconverted` prints its header and no rows. The
+last four — INT6, INTT2, INTRX1 and INTTX1 — landed in prom_b and were converted
+by the prom_b lane on 2026-08-25; three of them turned out to be handlers of one
+device and are written up in `FINDINGS-prom_b-sc1-link.md`.
+
+⚠ `notes/vector_map.py` was changed in the same pass: it used to read only
+`prom_a/wsa1_prom_a.s` and printed "in prom_b -- not this lane" for any target
+below `0xF80000`. It now reads both sources. If you have that phrase in an older
+copy of this file, it is stale, not a disagreement.
 
 ## Why 33
 
@@ -50,12 +62,12 @@ slot  name            vector      chain
 0x28  INT0            0xF40EDC  0xF8E47F                 INT0_LinkByte
 0x2C  INT4            0xF82D08                           converted, inside another routine
 0x30  INT5            0xF42D28  0xFE3008 -> 0xFE6866     INT5_Dev7B_Receive
-0x34  INT6            0xF40F0C  0xF5AC0A                 in prom_b -- not this lane
+0x34  INT6            0xF40F0C  0xF5AC0A                 INT6_SC1_PeerRequest
 0x38  INT7            0xF82D09                           IRQ_UnusedVector_Hang
 0x3C  (reserved)      0xF82D09                           IRQ_UnusedVector_Hang
 0x40  INTT0           0xF82D09                           IRQ_UnusedVector_Hang
 0x44  INTT1           0xF82D0B                           INTT1_Tick
-0x48  INTT2           0xF40EE0  0xF57D45                 in prom_b -- not this lane
+0x48  INTT2           0xF40EE0  0xF57D45                 INTT2_Reti
 0x4C  INTT3           0xF42D64  0xF85600                 INTT3_KernelTick
 0x50  INTTR4          0xF82EA2                           INTTR4_SequencerTick
 0x54  INTTR5          0xF82D09                           IRQ_UnusedVector_Hang
@@ -63,8 +75,8 @@ slot  name            vector      chain
 0x5C  INTTR7          0xF82D09                           IRQ_UnusedVector_Hang
 0x60  INTRX0          0xF40714  0xFA5496                 MIDI_RX_Byte
 0x64  INTTX0          0xF40718  0xFA542F                 MIDI_TX_Ready
-0x68  INTRX1          0xF40F10  0xF5ACBB                 in prom_b -- not this lane
-0x6C  INTTX1          0xF40F14  0xF5AC93                 in prom_b -- not this lane
+0x68  INTRX1          0xF40F10  0xF5ACBB                 INTRX1_SC1_Dispatch
+0x6C  INTTX1          0xF40F14  0xF5AC93                 INTTX1_SC1_Dispatch
 0x70  INTAD           0xF82D09                           IRQ_UnusedVector_Hang
 0x74  INTTC0          0xF42D30  0xFE3010 -> 0xFE6851     INTTC0_uDMA0Done
 0x78  INTTC1          0xF82D09                           IRQ_UnusedVector_Hang
@@ -107,10 +119,21 @@ slot  name            vector      chain
   the whole state space, which this argument never had.
 * **INTTR5 hangs even though the tempo code writes TREG5.** Recorded because a
   reader expects that slot to matter.
-* **Every prom_a-side handler is now converted.** The four that are not are
-  `INT6`, `INTT2`, `INTRX1` and `INTTX1`, and all four land in prom_b.
-  `INTT2`'s target, prom_b `0xF57D45`, is a bare `reti` — consistent with timer 2
-  existing only to pace micro-DMA channel 2, which absorbs the interrupt.
+* **~~Every prom_a-side handler is now converted. The four that are not are
+  INT6, INTT2, INTRX1 and INTTX1~~ — superseded 2026-08-25: those four are
+  converted too, so the table is closed.** What survives from the old bullet:
+  `INTT2`'s target, prom_b `0xF57D45`, is a bare `reti`, which is consistent
+  with timer 2 existing only to pace micro-DMA channel 2. ⚠ That remains a
+  *reading*, not a result: converting the byte proves the handler does nothing,
+  not why. What the conversion did add is where the byte sits — between the
+  `ret` of `Clear_600780_98` and the nine zero bytes that routine uses as an
+  `ldir` source, so a linear read of the area shows no handler at all.
+* **Three vectors, one device.** `INT6`, `INTRX1` and `INTTX1` are all handlers
+  of the serial-channel-1 driver at `0xF5A800-0xF5B7FF`, and the two serial ones
+  are byte-identical 40-byte routines bar a single displacement byte. INT6 is
+  the peer's request line: the driver arms it (INTE67 = `0x85`, level 5) only
+  while it is idle and masks it (`0x8F`, level 7) for the length of a transfer.
+  See `FINDINGS-prom_b-sc1-link.md`.
 
 ## Three handlers do not RETI
 

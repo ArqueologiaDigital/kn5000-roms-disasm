@@ -103,6 +103,15 @@ it has not been found, and the third column is not decoded.  The neighbouring `I
 jumps to `0xF9831C`, which pushes seven register pairs and jumps again — the shape of a
 context switch — but that code is not converted and nothing here connects the two.
 
+> ⚠ **2026-08-25 weakened the "initial stack pointer" reading a little.**  `0x0000FFF0` appears
+> as a 32-bit literal in exactly three places in prom_c: here, in `RESET`'s
+> `ld XSP,0x0000FFF0`, and at ROM `0xFCC81A`, where it is the base of the **key-state bitmap**
+> (`notes/FINDINGS-prom_c-keyboard-and-touch.md`).  `RESET` moves the stack down to
+> `0x0000FA00` at 0xF9816B before `MAIN` runs, and the bitmap is not built until `MAIN`'s init
+> chain reaches 0xF997FA, so the two uses do not collide in time — but the same value having a
+> second, unrelated job means the reading now rests only on the first record matching `RESET`,
+> not on the value being distinctive.
+
 ## Reproduce
 
 ```

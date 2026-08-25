@@ -126,9 +126,12 @@ out = ToneGen_Velocity_Output_Curve[v]        ; 0xFCC71A, non-decreasing 1..127
 * **The output is a 7-bit velocity**: the output curve spans 1..127 over all 256 entries and
   never reaches 0 or 128.
 
-⚠ Still open: what fills the signed per-note table at `0x0084DA` (it is work DRAM and lies
-*outside* the boot RAM image), and the physical unit of the touch argument — "travel time" is
-inferred from the input curve running downward, not read off a register.
+~~⚠ Still open: what fills the signed per-note table at `0x0084DA`~~ **CLOSED 2026-08-25** —
+`NoteTrim_BuildFromCalibration` (0xF997FA, now converted) is the only writer, and it derives
+all 61 entries from a checksummed 62-byte calibration block through a 51-byte signed curve at
+ROM `0xFCC5C9`. See `notes/FINDINGS-prom_c-keyboard-and-touch.md`. Still open: the physical
+unit of the touch argument — "travel time" is inferred from the input curve running downward,
+not read off a register.
 
 ### 3a. The original observation, unchanged
 
@@ -158,7 +161,13 @@ into denormal garbage, so the decode is its own proof.
 
 ## What was deliberately left as `.incbin`, and why
 
-* **`0xFCC81A-0xFCCA81`, 616 bytes.** An IEEE-754 constant pool — doubles are visible by eye
+* **`0xFCC81A-0xFCCA81`, 616 bytes.** ⚠ **CORRECTION 2026-08-25: its first four bytes are NOT
+  a float.** `0xFCC81A` holds `f0 ff 00 00` = the 32-bit constant `0x0000FFF0`, and the only
+  three references to `0xFCC81A` in the image are the same instruction — `add XBC,(0xFCC81A)`
+  at 0xF998AA, 0xF99910 and 0xF99930 — adding it to an index of 0..7. It is the base of the
+  key-state bitmap at work DRAM `0x0000FFF0-0x0000FFF7`
+  (`notes/FINDINGS-prom_c-keyboard-and-touch.md`). The remaining 612 bytes still look like an
+  IEEE-754 constant pool — doubles are visible by eye
   (`00 00 00 00 00 00 4C 40` is 56.0) — but the element boundaries are not established:
   decoding it as f64 from the best-looking alignment yields round numbers for only 7 of 76
   candidates, so the pool is not uniformly 8-byte strided. The KN5000's pool of the same kind
@@ -195,9 +204,17 @@ table cannot be. The names have been left alone; the mechanism has been recorded
 * ~~`0x00F2F3` is read as a 32-bit value on every serial interrupt. Finding what writes it
   would name it.~~ **DONE 2026-08-24**: it is incremented by `INTT1_HANDLER` and by nothing
   else — a timer-1 tick counter. See `notes/FINDINGS-prom_c-serial-midi.md`.
-* New, from the touch-path conversion: find what writes the signed per-note table at
-  `0x0084DA`. It is the only term of the velocity formula whose origin is unknown, and it is
-  outside the boot RAM image, so something computes it.
-* `0xF997FA`, `0xF9997E`, `0xF98510`, `0xF98A75` and `0xF98CB9` are the unconverted routines
-  `MAIN` calls every pass. `0xF9997E` is the highest-value of them: it takes
-  (pointer, length, small constant) and is the link path to CPU 1.
+* ~~New, from the touch-path conversion: find what writes the signed per-note table at
+  `0x0084DA`.~~ **DONE 2026-08-25.** `NoteTrim_BuildFromCalibration` at `0xF997FA`, called once
+  from MAIN's boot chain, writes all 61 entries as
+  `trim[n] = ToneGen_VelCurve_Trim51[clamp(cal[n] - 0x4B, 0, 50)]` — the 51-byte signed
+  table this zone already names — and `cal[]` is a checksummed 62-byte block validated by the
+  magic `0x5AA5`. The clamp's bound 0x32 gives 51 entries, confirming from the CODE the size
+  the object chain gave from the DATA. Full derivation in `notes/FINDINGS-prom_c-keyboard-and-touch.md`.
+* ~~`0xF997FA`, `0xF9997E`, `0xF98510`, `0xF98A75` and `0xF98CB9` are the unconverted routines
+  `MAIN` calls every pass.~~ **PARTLY DONE 2026-08-25**: `0xF997FA` and `0xF9997E` are
+  converted. `0xF9997E` is `Link_SendBlock` — it splits a buffer into 32-byte packets and
+  hands each to `Link_SendChunk`, which builds the header byte
+  `(channel << 5) | (len - 1)` by hand and moves the payload with micro-DMA channel 2. See
+  `notes/FINDINGS-prom_c-link-transmit.md`. Still unconverted: `0xF98510`, `0xF98A75`,
+  `0xF98CB9` (the last of which is what calls the key scanner, twice).

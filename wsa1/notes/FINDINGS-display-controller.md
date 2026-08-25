@@ -146,9 +146,12 @@ the service number with `0x3F` and indexes `SWI7_ServiceTable` at `0xF8E9C6`.
   at.
 * Every live service either touches `0x790000/0x790001` directly or opens with
   the shared setup call at `0xF8EE93`.
-* **23 of the 34 are converted and named** as of 2026-08-24. Re-derive the list
-  with `python3 notes/swi7_service_table.py`, which also prints the eleven still
-  `.incbin` (`0x0E 0x0F 0x10 0x11 0x12 0x14 0x15 0x17 0x1B 0x1C 0x1E`):
+* **All 34 are converted and named** as of 2026-08-25 — the eleven the
+  2026-08-24 version of this line listed as still `.incbin`
+  (`0x0E 0x0F 0x10 0x11 0x12 0x14 0x15 0x17 0x1B 0x1C 0x1E`) have since been
+  done. Re-derive the list with `python3 notes/swi7_service_table.py`, which
+  reads the table out of the ROM and decides "converted" from the `.incbin`
+  chain rather than from any list kept by hand:
 
   | service | what it is |
   |---|---|
@@ -156,12 +159,26 @@ the service number with `0x3F` and indexes `SWI7_ServiceTable` at `0xF8E9C6`.
   | `0x01` / `0x02` | a solid **horizontal** / **vertical** run of pixels |
   | `0x03` / `0x04` | **blit** a rectangle column-major / read one back |
   | `0x05` | **fill** a rectangle, with OVLAY MX forced to 1 |
-  | `0x06 0x07 0x08 0x16 0x19 0x1A 0x1D 0x1F 0x20 0x21` | the **text** services, one per font — `FINDINGS-fonts.md` |
+  | `0x06 0x07 0x08 0x20 0x21` | **text**, byte-aligned, one per Latin face |
+  | `0x16 0x19 0x1A 0x1D 0x1F` | **text** in the five Japanese faces — half-width katakana, katakana, kanji set A, hiragana, kanji set B (`FINDINGS-fonts.md`) |
+  | `0x17` / `0x1C` | **text, proportional** — 6 and 11 pixels apart, starting at any pixel column, through a shift-and-merge staging buffer.  Two more faces, `0xF1E470` and `0xF1EAB0` |
   | `0x09` | a rectangle **outline** = `0x01` twice + `0x02` twice |
   | `0x0A` / `0x22` | `0x09` plus a two- / one-pixel **drop shadow** |
   | `0x0B` | plot a point |
   | `0x0C` / `0x0D` | which layers are on / which blink |
+  | `0x0E` | clear a run of byte-columns |
+  | `0x0F` / `0x10` | re-issue SYSTEM SET for a **two-** / **three-layer** panel |
+  | `0x11` / `0x12` | a **dithered** horizontal / dashed vertical run |
   | `0x13` | `0x09` built from the **patterned** line pair `0x11`/`0x12` |
+  | `0x14` | fill a rectangle with a **pattern** |
+  | `0x15` | a **dashed** line |
+  | `0x1B` | erase a rectangle |
+  | `0x1E` | **scroll** the current layer |
+
+  ⚠ That is **twelve** text services across **twelve** faces, not the ten this
+  note and `FINDINGS-fonts.md` used to say: the two proportional ones were
+  missed because the census that produced "ten" searched a fixed 0x40-byte
+  window and they load their font base about 0x50 bytes in.
 
 Two RAM bytes worth knowing:
 
@@ -230,14 +247,60 @@ All of it is CS1 static RAM, all 16-bit unless said otherwise:
 | `(0x255C) (0x255E) (0x2560) (0x2562)` | the four coordinates saved across a shadowed box | services `0x0A`, `0x22` |
 | `(0xC6)` bit 0 | "the panel is dark, do not poll BUSY" | service `0x0C` |
 
+## ★ The layer count no longer rests on the table alone
+
+**2026-08-25.** The third open item below used to read *"Nothing yet writes
+`(0x2540)`. Finding that writer names the three layers."* The writers are now
+counted, and they settle the count even though they do not settle the names.
+
+`python3 notes/lcd_layer_census.py` censuses every access to `(0x2540)` in both
+images:
+
+| access | sites | prom_a | prom_b |
+|---|---:|---:|---:|
+| `ld (0x2540),#imm` | **764** | 436 | 328 |
+| `ld (0x2540),r` | 7 | 2 | 5 |
+| `ld r,(0x2540)` | 7 | 2 | 5 |
+| `lda r,0x2540` (take the address) | 6 | 4 | 2 |
+
+★ **Over those 764 immediate writes the value is 0 at 499 sites, 1 at 180 and 2
+at 85 — never 3, never anything else.** Three layers, from the code that selects
+them rather than from the observation that a fourth table entry would overlap a
+service's first instruction.
+
+⚠ That is a byte-pattern census and cannot tell code from data. It does not need
+to: coincidental matches would spread the immediate over `0..255`, and this one
+never exceeds 2 in 764 tries. And exactly one of the sites falls inside source
+this tree has converted — `0xF8EEBD`, the first instruction of
+`LCD_Svc_05_FillRect`, spelled `stdi8 (0x2540), 0x01` — so at least one hit is
+confirmed to be a real instruction at a real boundary, by the byte gate itself.
+
+★ That one site is a finding of its own: **service `0x05` forces layer 1 before
+doing anything else**, so a filled rectangle always lands in SAD2 = `0x2600`
+whatever the caller had selected.
+
+⚠ **The layers are still not NAMED.** Knowing the values are 0, 1, 2, and that
+layer 0 is chosen three times as often as layer 2, does not say which is menu,
+which is keyboard graphics and which is an overlay.
+
+## Who calls the services
+
+`python3 notes/swi7_call_sites.py` censuses `ldb a,nn` + `swi 7` — the
+three bytes `21 nn ff`. Six of the seven Latin text services have literal call
+sites (`0x06` 18, `0x20` 21, `0x17` 5, `0x08` 4, `0x07` 3, `0x21` 3) and so do
+`0x0C` (57), `0x10` (15), `0x05` (11) and others; **none of the five Japanese
+text services has one**. The census measures its own noise floor — 7 of 188 hits
+land on slots that are dead — and that asymmetry is far outside it. See
+`FINDINGS-fonts.md` §6 for what it does and does not mean.
+
+⚠ Those are call SITES, not converted callers, so the `HL` argument of the text
+services still has no established meaning.
+
 ## What to do next here
 
-* Convert the SYSTEM-SET-issuing services `0x0F` and `0x10` — a firmware that
-  re-runs SYSTEM SET at runtime is switching panel modes, and that will say
-  something about the product.
-* Services `0x11` and `0x12` and their two dither tables at `0xF8FE52` /
-  `0xF8FE5B`. The tables are `0xCC` shifted and `0xCC` rotated right by
-  X mod 8; converting the pair turns "patterned" from a reading into a fact.
-* Nothing yet writes `(0x2540)`. Finding that writer names the three layers.
-* Nothing yet CALLS any of the 23 converted services. Until something does, the
-  `HL` argument of the text services has no established meaning.
+* **Name the three layers.** It needs a converted caller, and the callers are in
+  prom_b.
+* Convert one of the 18 `0x06` call sites, which would fix the `HL` argument for
+  the whole text family at once.
+* The seven `ld (0x2540),r` sites are the interesting ones: they select a layer
+  computed at run time, so whatever feeds them is the layer policy.

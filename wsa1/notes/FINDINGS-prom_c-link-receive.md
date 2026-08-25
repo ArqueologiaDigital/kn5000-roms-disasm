@@ -182,9 +182,35 @@ last 0xFC575B — both ends checked.
 * **0xF99E5F-0xF99FC0 is the consumer** of every flag in §3 and is still `.incbin`. It reads
   the 0xE2 packet (`0x008520` +0/+4/+8), calls into 0xFC85xx-0xFC89xx, and polls
   `uDMA3_GetCount`. Converting it should name the flags.
-* **The region below INT0_HANDLER, up to 0xF99BBD, is the transmit half**: micro-DMA channel 2
-  is armed at 0xF99A26 / 0xF99AA4 / 0xF99B81 / 0xF99BA4, `set 7,(0x00852B)` is at 0xF99AAE, and
-  the header byte is built at 0xF99AEC (`or H,0xE0`, quoted in
-  `notes/FINDINGS-memory-map.md` §3). Converting it would pin the command *meanings* from the
-  sending side, which is the one thing §2 still refuses to state.
-* The four class handlers 0xF98D9A / 0xF98DE6 / 0xF98FD6 / 0xF9901B.
+* ~~**The region below INT0_HANDLER, up to 0xF99BBD, is the transmit half**~~
+  **DONE 2026-08-25** — converted, and the header byte `(channel << 5) | (len - 1)` is now
+  read off the *sender* (`Link_SendChunk` at 0xF999BE) instead of inferred. See
+  `notes/FINDINGS-prom_c-link-transmit.md`.
+* ~~The four class handlers 0xF98D9A / 0xF98DE6 / 0xF98FD6 / 0xF9901B.~~ **DONE 2026-08-25.**
+
+## ★ The channel map, both directions (added 2026-08-25)
+
+The four `Handler_PtrTable_FCC53F` arms are converted, so the receive side of the channel index
+is no longer a shape:
+
+| channel | CPU 2 RECEIVES | CPU 2 SENDS |
+|---|---|---|
+| 0 | `Link_Ch0_AppendToRing` — bytes into a 4096-byte ring at `0x00E2F1`, whose end (`0x00F2F1`) is the next documented variable | — |
+| 1 | `Link_Ch1_WriteParamBlock` — 16 sub-commands 0x80..0x8F writing four ≤26-byte parameter blocks at `0x00007E7E`, `0x00007E98`, `0x00007EB2`, `0x00007ECD`, each with a bit in `0x007ECC` | — |
+| 2 | `Link_Ch2_ForwardBytes` — byte stream into `0xF992C6`, with the byte `0xFA` intercepted into `(0x00F328) = 0xFF` | — |
+| 3 | `Link_Ch3_SetTouchControl` — a 2-byte packet: `0x80` sets the touch-curve mode, `0x90` the touch offset | — |
+| 4-7 | `Link_ChannelHandler_Ignore` (0xF9993D) — a bare `ret` | 5 = key events as MIDI note-on triples, 6 = raw MIDI-in bytes |
+
+⚠ Channels 5 and 6 are the two CPU 2 sends on and they are among the four it discards on
+receive, which is what a one-way assignment looks like. Nothing states that as a rule.
+
+★ `Link_Ch3_SetTouchControl` answers a question two converted routines had left open:
+`ToneGen_SetVelCurveMode` and `ToneGen_SetVelOffset` both said "Called from: not traced" and
+"Unknown: which UI control feeds it". Neither is fed on this processor — **CPU 1 sets them over
+the link**. See `notes/FINDINGS-prom_c-keyboard-and-touch.md`.
+
+⚠ **A retraction from the same session.** The first version of the `0xF9993D` header in
+`prom_c/wsa1_prom_c.s` called it "a lone `ret` … nothing in prom_c references it
+(notes/prom_c_xrefs.py 0xF9993D: no literal, no calr)". The tool had not been run; running it
+finds **four** ABS32 references, which are entries 4-7 of `Handler_PtrTable_FCC53F` — a fact
+the table's own header in the same file already stated. The byte gate passed either way.

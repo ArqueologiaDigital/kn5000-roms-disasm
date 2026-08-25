@@ -14,19 +14,26 @@ slots and MAME does not name them.
 A slot is followed while the target is `1B lo mid hi` (`jp nnn`), to a depth of
 4.  Everything printed is a byte read plus that one rule.
 
-"Converted" is decided from the .incbin chain in prom_a/wsa1_prom_a.s, so an
-address inside a converted routine but without a label of its own is reported as
-such rather than as unknown.
+"Converted" is decided from the .incbin chain in prom_a/wsa1_prom_a.s AND
+prom_b/wsa1_prom_b.s, so an address inside a converted routine but without a
+label of its own is reported as such rather than as unknown.
+
+⚠ Updated 2026-08-25 (prom_b lane, round 1).  This script used to read only
+prom_a/wsa1_prom_a.s and printed "in prom_b -- not this lane" for any target
+below 0xF80000, which was true of four slots -- INT6, INTT2, INTRX1 and INTTX1.
+All four are now converted, so the script reads BOTH sources and the phrase is
+gone.  Nothing else changed.
 
     python3 notes/vector_map.py
-    python3 notes/vector_map.py --unconverted   # only prom_a targets still .incbin
+    python3 notes/vector_map.py --unconverted   # targets still inside an .incbin
 """
 import os
 import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+SRCS = [(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "wsa1_prom_a.ic12", 0xF80000),
+        (os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), "wsa1_prom_b.ic13", 0xF00000)]
 IMGS = [(0xF00000, 0xF80000, os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")),
         (0xF80000, 0x1000000, os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"))]
 VECTORS = 0xFFFF00
@@ -50,8 +57,15 @@ def rd(addr, n):
 
 def symbols():
     """address -> label, for every `; ADDRESS bytes` comment that a label owns."""
+    out = {}
+    for src, _, _ in SRCS:
+        out.update(_symbols(src))
+    return out
+
+
+def _symbols(src):
     out, pend = {}, []
-    for line in open(SRC):
+    for line in open(src):
         st = line.strip()
         if st.endswith(":") and not st.startswith(".") and " " not in st:
             pend.append(st[:-1])
@@ -66,21 +80,22 @@ def symbols():
 
 
 def still_incbin():
-    """The prom_a file ranges the source has NOT converted, from the .incbin chain."""
-    rx = re.compile(r'\.incbin "original_ROMs/wsa1_prom_a\.ic12", (0x[0-9A-Fa-f]+), '
-                    r'(0x[0-9A-Fa-f]+)')
+    """Every file range either source has NOT converted, from the .incbin chains."""
     spans = []
-    for line in open(SRC):
-        m = rx.search(line)
-        if m:
-            off, ln = int(m.group(1), 16), int(m.group(2), 16)
-            spans.append((0xF80000 + off, 0xF80000 + off + ln))
+    for src, rom, base in SRCS:
+        rx = re.compile(r'\.incbin "original_ROMs/%s", (0x[0-9A-Fa-f]+), '
+                        r'(0x[0-9A-Fa-f]+)' % rom.replace(".", r"\."))
+        for line in open(src):
+            m = rx.search(line)
+            if m:
+                off, ln = int(m.group(1), 16), int(m.group(2), 16)
+                spans.append((base + off, base + off + ln))
     return spans
 
 
 def converted(addr, spans):
-    if not (0xF80000 <= addr < 0x1000000):
-        return None                      # not prom_a; this lane says nothing
+    if not (0xF00000 <= addr < 0x1000000):
+        return None                      # outside CPU 1's two images
     return not any(lo <= addr < hi for lo, hi in spans)
 
 

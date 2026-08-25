@@ -31,6 +31,10 @@ python3 notes/prom_b_dl_operand_tables.py --exact            # the 13 gaps
 
 ---
 
+**Also from these records:** they name a RAM address each, so they double as an
+index from a firmware variable to the screen that shows it —
+`FINDINGS-prom_b-ui-variable-index.md`, tool `notes/prom_b_var_screens.py`.
+
 ## The record format
 
 ```

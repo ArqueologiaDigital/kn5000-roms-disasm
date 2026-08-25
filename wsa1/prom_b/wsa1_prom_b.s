@@ -42,6 +42,13 @@
 ;                      IndexedParam_SetBit, which resolve their target through
 ;                      IndexedTable_GetPtr and journal every change
 ;   0xF5B8B6-0xF5BAB7  two selector dispatchers and their 48-entry tables
+;   0xF62C00-0xF64FFF  THE BLOCK STORE -- a heap of chained 256-byte blocks,
+;                      the 3-byte directory at 0x00603500 that names their
+;                      chains, and the 3 KiB workspace at 0x00603400 that is
+;                      banked to 0x00610000 + n*0xC00.  49 thunk slots point
+;                      into it, including the two most-referenced unconverted
+;                      targets in the image.  Three data islands inside it are
+;                      emitted as .byte; 1,008 bytes of 0x0E tail as .fill.
 ;   0xF78000-0xF78028  the two interpreter-B record templates and the eight-space
 ;                      blank the blink engine erases with
 ;   0xF7D000-0xF7E2D7  a stub/veneer block and 32 tables of 32 routine pointers
@@ -2160,8 +2167,32 @@ DL_F02FB2:
 	.short 0x0006
 	.short 0x002E
 
-; --- 0xF02FD9-0xF02FE2: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002FD9, 0x00000A
+; ------------------------------------------------------------------
+; 0xF02FD9-0xF02FE2 -- 1 display-list record, 10 bytes -- interpreter A
+;   entered at: 0xF02FD9   ends used: 0xF02FE3
+;
+; This was listed above only as an END ("ends used: 0xF02FD9" for DL_F02FB2).
+; It is also a START.
+; Evidence: UiPaint_Solo loads `ld XIY,0x00F02FD9` at 0xF5BAD9 and
+;   `ld XIX,0x00F02FE3` at 0xF5BADE, then calls DisplayList_Run through thunk
+;   T_F417F0 at 0xF5BAF4 -- exactly the (start, end) pair this block spans.  So
+;   the entry point is READ OFF THE CODE, not inferred from the byte pattern,
+;   and the record's own length byte (0x0A at 0xF02FDA) closes it on 0xF02FE3.
+;   Both facts are asserted by `python3 notes/prom_b_f5b800_checks.py`.
+;
+; ★ It is the DRAW half of a draw/erase pair.  Its four operand words --
+;   0x0008, 0x0021, 0x0028, 0x002C -- are BYTE-FOR-BYTE the same four words as
+;   DL_F02FE3's op-0x1B record ten bytes further on, and UiPaint_Solo runs
+;   exactly one of the two: op 0x05 on layer 0 when (0x27A2) is non-zero, op
+;   0x1B on layer 1 when it is zero.  Same rectangle, two different ops, two
+;   different layers.
+; ------------------------------------------------------------------
+DL_F02FD9:
+	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
+	.short 0x0008
+	.short 0x0021
+	.short 0x0028
+	.short 0x002C
 
 ; ------------------------------------------------------------------
 ; 0xF02FE3-0xF02FF6 -- 2 display-list records, 20 bytes -- interpreter A
@@ -25426,8 +25457,2231 @@ IndexedParam_SetBit:
 	.byte 0xEE, 0x0D	; F5553C  unlk XIZ   [llvm-mc cannot encode this]
 	ret	; F5553E  ret
 
-; --- 0xF5553F-0xF5B8B5: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x05553F, 0x006377
+; --- 0xF5553F-0xF57D1D: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x05553F, 0x0027DF
+
+; ==============================================================================
+; 0xF57D1E-0xF57D4E -- INTT2's HANDLER, AND THE ROUTINE IT IS WEDGED INTO
+; ==============================================================================
+;
+; This closes the last of the four CPU-1 interrupt vectors that
+; notes/FINDINGS-interrupt-vectors.md listed as "in prom_b -- not this lane".
+; ------------------------------------------------------------------------------
+
+; ---------------------------------------------------------------------
+; Clear_600780_98 -- zero 0x600780-0x6007E1 in two steps that abut exactly
+;
+; Called from: prom_b 0xF57C21, by `calr`.  Scanning both images at every byte
+;          offset for the three call/jump shapes that can name this address --
+;          `1D`/`1B` with a 24-bit operand and `1E` with a 16-bit displacement
+;          that resolves here -- finds that one site and no other.
+; Inputs:  none
+; Outputs: 0x600780-0x6007E1 (98 bytes) set to zero.  XIY, XIX, XBC and WA are
+;          clobbered.
+; Evidence: the `ldir` copies NINE bytes from 0xF57D46, and the nine bytes at
+;          0xF57D46 are all 0x00 -- so the copy is a memset with a ROM-resident
+;          zero constant.  The store loop before it clears 0x59 = 89 bytes from
+;          0x600780, and 0x600780 + 89 = 0x6007D9, exactly where the `ldir`
+;          starts.  Two mechanisms, one contiguous 98-byte region.
+; Unknown: what lives at 0x600780.  Nothing else converted in this tree names
+;          that address.
+; ---------------------------------------------------------------------
+Clear_600780_98:
+	lda_24	xiy, (16088390)	; F57D1E  lda XIY,0xf57d46
+	lda_24	xix, (6293465)	; F57D23  lda XIX,0x6007d9
+	ld	xbc, 9	; F57D28  ld XBC,0x00000009
+	.byte 0x85, 0x11	; F57D2D  ldir   [llvm-mc cannot encode this]
+	ld	xbc, 89	; F57D2F  ld XBC,0x00000059
+	lda_24	xix, (6293376)	; F57D34  lda XIX,0x600780
+	xor	wa, wa	; F57D39  xor WA,WA
+	lda_dpi	xbc, 240	; F57D3B  ld (XIX+),A
+	sub	bc, 1	; F57D3E  sub BC,0x0001
+	jr	nz, -9	; F57D42  jr NZ,0xf57d3b
+	ret	; F57D44  ret
+
+; ---------------------------------------------------------------------
+; INTT2_Reti -- 8-bit timer 2 interrupt: acknowledge and return, one byte
+;
+; Called from: vector slot 0x48.  prom_a file 0x7FF48 reads `E0 0E F4 00`, i.e.
+;          0xFFFF48 holds 0x00F40EE0; prom_b file 0x40EE0 reads `1B 45 7D F5`,
+;          i.e. thunk T_F40EE0 is `jp 0xF57D45`; and prom_b file 0x57D45 is the
+;          single byte 0x07, RETI.  Every link re-read from the images here.
+; Inputs:  none
+; Outputs: none
+; Evidence: one byte.  There is nothing else to say about the code -- what is
+;          worth saying is where it SITS: between the `ret` that ends
+;          Clear_600780_98 and the nine zero bytes that routine copies from.
+;          The handler is a byte of slack in another routine's data, which is
+;          why a linear read of this area does not look like a handler at all.
+; Notes:   notes/FINDINGS-interrupt-vectors.md reads this as timer 2 existing
+;          only to pace micro-DMA channel 2, which absorbs the interrupt.  This
+;          conversion neither confirms nor refutes that; it establishes only
+;          that the vector is a bare RETI.
+; ---------------------------------------------------------------------
+INTT2_Reti:
+	reti	; F57D45  reti
+
+; ---------------------------------------------------------------------
+; Zero9 -- the nine-byte zero source the `ldir` above copies from
+;
+; Called from: nothing CALLS it; it is read as data by the `ldir` at 0xF57D2D.
+; Inputs:  none        Outputs: none
+; Evidence: 0xF57D1E `lda XIY,0xf57d46` / 0xF57D23 `lda XIX,0x6007d9` /
+;          0xF57D28 `ld XBC,0x00000009` / 0xF57D2D `ldir`.  The count is the
+;          LITERAL 9, so the extent is forced, not inferred from where the
+;          zeros stop -- though they do stop there too: 0xF57D4F is 0x3F.
+;          They are DATA, not the nine NOPs a linear disassembly shows.
+; Why the name of the routine says 98: the loop right after this one
+;          (0xF57D2F-0xF57D44) clears 0x59 = 89 bytes at 0x600780, and this
+;          `ldir` writes 9 more at 0x600780 + 0x59 = 0x6007D9.  89 + 9 = 98,
+;          and the two runs abut, so the pair clears 0x600780..0x6007E1.
+; Unknown: what the 98-byte block at 0x600780 holds.  Nothing here says.
+; ---------------------------------------------------------------------
+Zero9:
+	.fill	9, 1, 0x00	; F57D46-F57D4E  ldir source for Clear_600780_98
+
+; --- 0xF57D4F-0xF5A7FF: not converted (0xF59C5A-0xF5A7FF is 2,982 bytes
+;     of 0x00 fill, the boundary the SC1 module below sits above) ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x057D4F, 0x002AB1
+
+; ==============================================================================
+; 0xF5A800-0xF5B7FF -- SERIAL CHANNEL 1: ONE 4 KiB MODULE, THREE INTERRUPT VECTORS
+; ==============================================================================
+;
+; This block closes three of the four CPU-1 interrupt vectors that
+; notes/FINDINGS-interrupt-vectors.md still listed as "in prom_b -- not this
+; lane": INT6 (slot 0x34), INTRX1 (slot 0x68) and INTTX1 (slot 0x6C).  All three
+; are handlers of the SAME peripheral, and that is the point of converting it as
+; one unit.
+;
+; WHERE THE BOUNDARIES COME FROM -- three independent arguments that agree
+;   1. Fill.  A 2,982-byte run of 0x00 ends at 0xF5A800 and a 946-byte run of
+;      0x0E (`ret`, the fill convention this image uses everywhere) runs from
+;      0xF5B44E to 0xF5B7FF.  Code 3,150 + fill 946 = 4,096: the module occupies
+;      exactly one 4 KiB block.
+;   2. The thunk table.  Slots T_F40F00..T_F40F24 are one run bracketed by
+;      `0E 0E 0E 0E` fill at T_F40EFC and T_F40F28, and EVERY one of their ten
+;      targets is inside 0xF5A800-0xF5B44D.  The first slot is a POINTER (not a
+;      `jp`) and it names 0xF5A800, the six-`jp` vtable below -- the shape
+;      notes/FINDINGS-prom_b-thunk-table.md records for 23 of the table's 26
+;      pointer slots.  Reproduce: `python3 notes/prom_b_thunk_modules.py`.
+;   3. Peripheral ownership.  Every instruction in either of CPU 1's ROMs that
+;      names SC1BUF (0x54) or SC1CR (0x55) through any of the twelve
+;      prefix-group address spellings is inside this block -- 13 and 17 of them.
+;      Reproduce: `python3 notes/prom_b_sc1_census.py --selftest`.
+;
+; ⚠ WHAT IS AT THE OTHER END OF THE LINK IS NOT ESTABLISHED.  No string, no
+; databook and no schematic in these trees names it.  Everything below is named
+; after the on-chip peripheral it drives (SC1) or positionally.  The findings
+; note lists the one hypothesis the data suggests, as a hypothesis.
+;
+; THE SFRs THIS MODULE TOUCHES (register names: MAME's tmp95c061_syms[],
+; ../mame/src/devices/cpu/tlcs900/tmp95c061.cpp:1359-1391)
+;
+;   0x0D P5     bit 3 only, cleared/set around two of the interrupt exits
+;   0x18 P8     bit 5 driven low and read back as an input (9 sites)
+;   0x1A P8CR   19 sites, always written from the shadow at (0x2A86)
+;   0x1B P8FC   14 sites, always written from the shadow at (0x2A87)
+;   0x1F PB     bit 4 read as an input in the two "is the peer ready" tests
+;   0x48 T5MOD  one site, 0x02, in the open path
+;   0x54 SC1BUF 13   0x55 SC1CR 18   0x56 SC1MOD 8   0x57 BR1CR 12
+;   0x58 ODE    one site, `and (0x58),0xFD`
+;   0x72 INTE67 18 sites   0x78 INTES1 20 sites
+;
+; ⚠ TWELVE of those BR1CR writes and TWENTY of those INTES1 writes are spelled
+; `ld (n8),#8` (opcode 0x08), which notes/prom_a_addr_census.py does not scan --
+; run that script on 0x57 and it reports NO baud-rate programming anywhere in
+; the machine.  notes/prom_b_sc1_census.py adds the two missing spellings.
+;
+; HOW THE INTERRUPTS ARE ENABLED AND DISABLED -- by LEVEL, not by a mask bit
+; MAME's int_reg_w (tmp95c061.cpp:1275-1279) keeps bit 7 / bit 3 of an INTE
+; register when a 1 is written there and clears the request flag when a 0 is,
+; and tlcs900_check_irqs (:521-546) reads the level out of bits 6-4 (for the
+; bit-7 half) and bits 2-0 (for the bit-3 half) and only ever dispatches levels
+; 1..6.  So, for this module:
+;   INTE67 = 0x85  ->  INT6 level 5, request flag kept        = INT6 ARMED
+;   INTE67 = 0x8F  ->  INT6 level 7                           = INT6 OFF
+;   INTES1 = 0x50  ->  INTTX1 level 5, INTRX1 level 0         = TRANSMIT
+;   INTES1 = 0x05  ->  INTTX1 level 0, INTRX1 level 5         = RECEIVE
+;   INTES1 = 0x55  ->  both level 5                           = BOTH
+;   INTES1 = 0xFF  ->  both level 7                           = BOTH OFF
+; The link is HALF DUPLEX and the driver flips those two constants at every turn
+; of the conversation.  (INTES1's vector split: tmp95c061_irq_vector_map[] at
+; tmp95c061.cpp:328-329.)
+;
+; THE RAM STATE, AND WHY EACH EXTENT IS EXACT
+;   0x2A80  b   state; used as a BYTE OFFSET into SC1_StateTable, so it steps
+;               by 4 (`inc 4,(0x2A80)` / `dec 4,(0x2A80)`)
+;   0x2A81  b   bytes still expected in the message being received
+;   0x2A82  b   busy/direction flags: bit 0 rx active, bit 1 tx active,
+;               bit 2 set by SC1_Service_SetBit2 and cleared by ...ClearBit2,
+;               bit 4 tested once in the receive decoder
+;   0x2A83  b   compared against 1, 2 and 3 in SC1_ConfigurePort only
+;   0x2A84  b   sticky error/event bits: 0 rx-ring-full, 1 tx aborted,
+;               2 abort, 3 decoder gave up, 6 INT6 while busy, 7 interrupt in an
+;               impossible state
+;   0x2A85  b   result byte of SC1_Cmd_E0_ReadStatus
+;   0x2A86  b   shadow of P8CR   (the register is write-only to this driver:
+;   0x2A87  b   shadow of P8FC    every write to 0x1A/0x1B is `ld A,(shadow)`)
+;   0x2A88  b   last three bytes handed to the inbound queue, kept for the
+;   0x2A89  b   foreground; written only by SC1_RxOp0_ThreeByte and SC1_RxOp2
+;   0x2A8A  b
+;   0x2A8B  b   retry counter of SC1_WaitTxDrain, 0xC8 = 200
+;   0x2A8E  w   snapshot of (0x80) taken by the three tick waits
+;   0x2A90  w   rx ring READ index      0x2A92  w  rx ring WRITE index
+;   0x2A94      rx ring, 76 bytes.  0x4C is the wrap constant at four sites and
+;               is the modulus of SC1_RxRing_Next; 0x2A94 + 0x4C = 0x2AE0, the
+;               next object referenced -- the extent ABUTS.
+;   0x2AE0  w   tx ring READ index      0x2AE2  w  tx ring WRITE index
+;   0x2AE4      tx ring, 60 bytes.  0x3C is the wrap constant at four sites and
+;               the modulus of SC1_TxRing_Next; 0x2AE4 + 0x3C = 0x2B20 -- abuts.
+;   0x2B20      32 bytes: one previous value per group index.  The index is
+;               `b & 0x4F`, less 0x30 when bit 6 is set, i.e. 0..0x1F, and
+;               0x2B20 + 0x20 = 0x2B40 -- abuts.
+;   0x2B40      inbound message queue, and 0x2BA0 the outbound one.  Each is a
+;               ten-byte descriptor followed by its storage:
+;                 +0 low index  +2 high index  +4 index A  +6 index B  +8 count
+;               SC1_ConfigurePort writes low=0x0A, high=0x5F, A=B=0x0A,
+;               count=0x56 to both, and 0x5F - 0x0A + 1 = 0x56: the count is
+;               initialised to the RING SIZE, so +8 is the FREE count.  The
+;               indices are offsets from the descriptor base, so the storage is
+;               0x2B4A-0x2B9F and 0x2BAA-0x2BFF -- 86 bytes each, and the first
+;               abuts the second exactly.
+;
+; TIMING.  (0x80) is the 32-bit tick counter INTT1_Tick increments; prom_a's
+; INTT1_Tick header records that, and notes/FINDINGS-system-clock.md derives
+; 488.28 Hz for timer 1.  The three tick waits below therefore wait
+; 2, 6 and 51 ticks = 4.1 ms, 12.3 ms and 104.4 ms.  The five SPIN delays are
+; iteration counts (2, 6, 10, 100, 500) and are NOT converted to time here --
+; nothing in this tree measures this loop's cycle count.
+;
+; ⚠ NOT ESTABLISHED: what the command bytes mean (0xDD, 0xDE, 0xDF, 0xE0, 0xE2,
+; 0xE3, 0xEF are the seven literals the module ever sends as a first byte), what
+; (0x2A83) selects, and what prom_a 0xF89800 -- the module's only external call,
+; through thunk 0xF405F0 -- does with the byte it is passed.
+; ------------------------------------------------------------------------------
+; ---------------------------------------------------------------------
+; SC1_Vtable -- the module's six-entry object table
+;
+; Called from: nothing calls it; thunk slot T_F40F00 holds its ADDRESS
+;          (`00 A8 F5 00`), which is the only occurrence of that word in either
+;          image.  Whatever reads the 26 pointer slots of the thunk table reads
+;          this.
+; Inputs:  none
+; Outputs: none
+; Evidence: six consecutive `jp nnn` slots, then 0xF5A818 which is a `calr` --
+;          the same "pointer names a group of six thunks" shape
+;          notes/FINDINGS-prom_b-thunk-table.md measures for 23 of the 26.
+; Unknown: what the six slots MEAN.  Four of them (1, 2, 4 and 5) jump to the
+;          same bare `ret`, and slot 3 to a different bare `ret`, so only slot 0
+;          does anything at all -- which is why no slot is given a role name.
+; ---------------------------------------------------------------------
+SC1_Vtable:
+	jp	16099352	; F5A800  jp 0xf5a818
+	jp	16099407	; F5A804  jp 0xf5a84f
+	jp	16099407	; F5A808  jp 0xf5a84f
+	jp	16099377	; F5A80C  jp 0xf5a831
+	jp	16099407	; F5A810  jp 0xf5a84f
+	jp	16099407	; F5A814  jp 0xf5a84f
+; ---------------------------------------------------------------------
+; SC1_Vtable_0_Open -- bring the link up
+;
+; Called from: SC1_Vtable slot 0
+; Inputs:  none
+; Outputs: the port, the SFRs and the whole RAM state block, initialised
+; Evidence: three 51-tick waits, then SC1_ConfigurePort, then two 6-tick waits,
+;          then SC1_Cmd_E3_E2_E3 and SC1_Service_ClearBit2.  That is a power-on
+;          sequence and nothing else in the module calls SC1_ConfigurePort.
+; Unknown: why the opening delay is 3 x 104 ms.
+; ---------------------------------------------------------------------
+SC1_Vtable_0_Open:
+	calr	629	; F5A818  calr 0xf5aa90
+	calr	626	; F5A81B  calr 0xf5aa90
+	calr	623	; F5A81E  calr 0xf5aa90
+	calr	44	; F5A821  calr 0xf5a850
+	calr	594	; F5A824  calr 0xf5aa79
+	calr	591	; F5A827  calr 0xf5aa79
+	calr	684	; F5A82A  calr 0xf5aad9
+	calr	2103	; F5A82D  calr 0xf5b067
+	ret	; F5A830  ret
+; ---------------------------------------------------------------------
+; SC1_Vtable_3_Ret / SC1_Vtable_Unused_Ret -- the vtable's two bare returns
+;
+; Called from: SC1_Vtable_3_Ret (0xF5A831) by slot 3 only (`jp 0xF5A831` at
+;          0xF5A80C).  SC1_Vtable_Unused_Ret (0xF5A84F) by slots 1, 2, 4 and 5
+;          (`jp 0xF5A84F` at 0xF5A804, 0xF5A808, 0xF5A810, 0xF5A814).
+; Inputs:  none.   Outputs: none -- each is a single `ret`.
+; Evidence: the six `jp` targets read straight out of SC1_Vtable above; the
+;          counts 1 and 4 are those six jumps less the one to
+;          SC1_Vtable_0_Open.  Two distinct `ret` addresses, not one, which is
+;          why slot 3 gets its own name.
+; Why the names are POSITIONAL: nothing here says what operation slot 3 or the
+;          four unused slots stand for.  The vtable header records that only
+;          slot 0 does anything at all.  Naming these after a role would be
+;          inventing one.
+; Unknown: whether the two `ret`s are distinct on purpose or are what a
+;          compiler emitted for two empty methods.
+; ---------------------------------------------------------------------
+SC1_Vtable_3_Ret:
+	ret	; F5A831  ret
+; ---------------------------------------------------------------------
+; SC1_Service / SC1_TxFlush / SC1_Entry_F40F18_Ret / SC1_Entry_F40F1C /
+; SC1_Entry_F40F20 / SC1_Entry_F40F24 -- the module's public entry points
+;
+; Called from: the thunk slots T_F40F04, T_F40F08, T_F40F18, T_F40F1C,
+;          T_F40F20 and T_F40F24 respectively.  Scanning both images at every
+;          byte offset for `1D`/`1B` with each slot as operand finds:
+;            T_F40F04 x1  (prom_a 0xF82048)
+;            T_F40F08 x6  (prom_a 0xF82158, 0xF8217E, 0xF829EF, 0xF8C423,
+;                          0xF8C8A5, 0xF95681)
+;            T_F40F18 x1  (prom_a 0xF82991)
+;            T_F40F1C x3  (prom_a 0xF99AB9, 0xFE01C1, 0xFF795D)
+;            T_F40F20 x1  (prom_a 0xF94DFC)
+;            T_F40F24 x0
+;          Those are opcode-anchored UPPER BOUNDS, not call counts, for the
+;          reason notes/FINDINGS-prom_b-thunk-table.md gives.
+; Inputs:  none of the six takes a register argument
+; Outputs: SC1_Entry_F40F20 returns the status byte in A
+; Evidence: each is a `calr` to one body and a `ret`, except T_F40F18's, which
+;          is a bare `ret`, and T_F40F1C's, which saves XIX/XIZ/XHL/XDE first.
+; Unknown: the roles.  SC1_Service is named for what it does (it runs the
+;          receive decoder), SC1_TxFlush likewise; the other four keep
+;          positional names because nothing establishes what they are FOR.
+; ---------------------------------------------------------------------
+SC1_Service:
+	calr	2098	; F5A832  calr 0xf5b067
+	ret	; F5A835  ret
+SC1_TxFlush:
+	calr	1977	; F5A836  calr 0xf5aff2
+	ret	; F5A839  ret
+SC1_Entry_F40F18_Ret:
+	ret	; F5A83A  ret
+SC1_Entry_F40F1C:
+	push	xix	; F5A83B  push XIX
+	push	xiz	; F5A83C  push XIZ
+	push	xhl	; F5A83D  push XHL
+	push	xde	; F5A83E  push XDE
+	calr	744	; F5A83F  calr 0xf5ab2a
+	pop	xde	; F5A842  pop XDE
+	pop	xhl	; F5A843  pop XHL
+	pop	xiz	; F5A844  pop XIZ
+	pop	xix	; F5A845  pop XIX
+	ret	; F5A846  ret
+SC1_Entry_F40F20:
+	calr	607	; F5A847  calr 0xf5aaa9
+	ret	; F5A84A  ret
+SC1_Entry_F40F24:
+	calr	2812	; F5A84B  calr 0xf5b34a
+	ret	; F5A84E  ret
+; ---------------------------------------------------------------------
+; SC1_Vtable_Unused_Ret -- see the header on SC1_Vtable_3_Ret above
+;
+; Called from: SC1_Vtable slots 1, 2, 4 and 5 (`jp 0xF5A84F` at 0xF5A804,
+;          0xF5A808, 0xF5A810 and 0xF5A814).
+; Evidence: those four `jp` targets, read out of SC1_Vtable itself.  The full
+;          argument, and why the name is positional rather than a role, is in
+;          the SC1_Vtable_3_Ret header.
+; ---------------------------------------------------------------------
+SC1_Vtable_Unused_Ret:
+	ret	; F5A84F  ret
+; ---------------------------------------------------------------------
+; SC1_ConfigurePort -- program port 8, SC1 and both message queues
+;
+; Called from: SC1_Vtable_0_Open (0xF5A821), the only caller
+; Inputs:  none
+; Outputs: SC1MOD=0x00, BR1CR=0x22, SC1CR=0x01, INTES1=0xFF, INTE67=0x8F,
+;          T5MOD=0x02, P8CR/P8FC set from freshly computed shadows, the two
+;          queue descriptors at 0x2B40 and 0x2BA0 initialised, and four
+;          two-byte commands sent by SC1_SendWord_Polled with interrupts still
+;          masked: (0xDF,0xD2), (0xDF,0x1A), (0xDD,0x03), (0xDE,0x80).
+; Evidence: the register numbers are MAME's names for this part; the queue
+;          descriptor layout is argued in the module banner above.
+; Unknown: every one of the four command words.  They are recorded as the
+;          literals the ROM sends, in ROM order, and nothing here claims they
+;          belong to a documented command set.
+; ---------------------------------------------------------------------
+SC1_ConfigurePort:
+	ld	xhl, 11168	; F5A850  ld XHL,0x00002ba0
+	.byte 0xBB, 0x00, 0x02, 0x0A, 0x00	; F5A855  ld (XHL+0x00),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x02, 0x02, 0x5F, 0x00	; F5A85A  ld (XHL+0x02),0x005f   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x04, 0x02, 0x0A, 0x00	; F5A85F  ld (XHL+0x04),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x06, 0x02, 0x0A, 0x00	; F5A864  ld (XHL+0x06),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x08, 0x02, 0x56, 0x00	; F5A869  ld (XHL+0x08),0x0056   [llvm-mc cannot encode this]
+	ld	xhl, 11072	; F5A86E  ld XHL,0x00002b40
+	.byte 0xBB, 0x00, 0x02, 0x0A, 0x00	; F5A873  ld (XHL+0x00),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x02, 0x02, 0x5F, 0x00	; F5A878  ld (XHL+0x02),0x005f   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x04, 0x02, 0x0A, 0x00	; F5A87D  ld (XHL+0x04),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x06, 0x02, 0x0A, 0x00	; F5A882  ld (XHL+0x06),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x08, 0x02, 0x56, 0x00	; F5A887  ld (XHL+0x08),0x0056   [llvm-mc cannot encode this]
+	ldb	a, 1	; F5A88C  ld A,0x01
+	and	a, 215	; F5A88E  and A,0xd7
+	stb_d8	(10887), a	; F5A891  ld (0x2a87),A
+	st_dd8b	a, 27	; F5A895  ld (0x1b),A
+	ldb	a, 1	; F5A898  ld A,0x01
+	or	a, 8	; F5A89A  or A,0x08
+	and	a, 199	; F5A89D  and A,0xc7
+	stb_d8	(10886), a	; F5A8A0  ld (0x2a86),A
+	st_dd8b	a, 26	; F5A8A4  ld (0x1a),A
+	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5A8A7  and (0x18),0xdf   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x58, 0x3C, 0xFD	; F5A8AB  and (0x58),0xfd   [llvm-mc cannot encode this]
+	ldio	86, 0	; F5A8AF  ld (0x56),0x00
+	ldio	87, 34	; F5A8B2  ld (0x57),0x22
+	ldio	85, 1	; F5A8B5  ld (0x55),0x01
+	ldio	120, 255	; F5A8B8  ld (0x78),0xff
+	ldio	114, 143	; F5A8BB  ld (0x72),0x8f
+	ldio	72, 2	; F5A8BE  ld (0x48),0x02
+	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x08	; F5A8C1  or (0x2a82),0x08   [llvm-mc cannot encode this]
+	stdi8	(10881), 0	; F5A8C6  ld (0x2a81),0x00
+	stdi8	(10883), 2	; F5A8CB  ld (0x2a83),0x02
+	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFC	; F5A8D0  and (0x2a82),0xfc   [llvm-mc cannot encode this]
+	stdi16	(10976), 0	; F5A8D5  ld (0x2ae0),0x0000
+	stdi16	(10978), 0	; F5A8DB  ld (0x2ae2),0x0000
+	stdi16	(10896), 0	; F5A8E1  ld (0x2a90),0x0000
+	stdi16	(10898), 0	; F5A8E7  ld (0x2a92),0x0000
+	ldb	a, 223	; F5A8ED  ld A,0xdf
+	ldb	w, 210	; F5A8EF  ld W,0xd2
+	calr	704	; F5A8F1  calr 0xf5abb4
+	calr	363	; F5A8F4  calr 0xf5aa62
+	stdi16	(10976), 0	; F5A8F7  ld (0x2ae0),0x0000
+	calr	354	; F5A8FD  calr 0xf5aa62
+	ldb	a, 223	; F5A900  ld A,0xdf
+	ldb	w, 26	; F5A902  ld W,0x1a
+	calr	685	; F5A904  calr 0xf5abb4
+	calr	344	; F5A907  calr 0xf5aa62
+	stdi16	(10976), 0	; F5A90A  ld (0x2ae0),0x0000
+	calr	335	; F5A910  calr 0xf5aa62
+	ldb	a, 221	; F5A913  ld A,0xdd
+	ldb	w, 3	; F5A915  ld W,0x03
+	calr	666	; F5A917  calr 0xf5abb4
+	calr	325	; F5A91A  calr 0xf5aa62
+	stdi16	(10976), 0	; F5A91D  ld (0x2ae0),0x0000
+	calr	304	; F5A923  calr 0xf5aa56
+	calr	313	; F5A926  calr 0xf5aa62
+	calr	310	; F5A929  calr 0xf5aa62
+	ldb	a, 222	; F5A92C  ld A,0xde
+	ldb	w, 128	; F5A92E  ld W,0x80
+	calr	641	; F5A930  calr 0xf5abb4
+	calr	300	; F5A933  calr 0xf5aa62
+	stdi16	(10976), 0	; F5A936  ld (0x2ae0),0x0000
+	calr	279	; F5A93C  calr 0xf5aa56
+	calr	288	; F5A93F  calr 0xf5aa62
+	ei	6	; F5A942  ei 0x06
+	ldio	120, 85	; F5A944  ld (0x78),0x55
+	ldio	114, 133	; F5A947  ld (0x72),0x85
+	stdi16	(10896), 0	; F5A94A  ld (0x2a90),0x0000
+	stdi16	(10898), 0	; F5A950  ld (0x2a92),0x0000
+	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5A956  and (0x56),0xdf   [llvm-mc cannot encode this]
+	di	; F5A95A  ei 0x00
+	ret	; F5A95C  ret
+; ---------------------------------------------------------------------
+; SC1_SendWord_Polled -- shift two bytes out with the interrupts still off
+;
+; Called from: SC1_ConfigurePort (four times).  The dead tail also reaches its
+;          body at 0xF5A9B2, one byte inside the `calr` at 0xF5A9B0 -- see
+;          SC1_DeadTail.
+; Inputs:  WA = the two bytes, A first
+; Outputs: both bytes written to SC1BUF; P8CR/P8FC and their shadows left with
+;          bits 3 and 5 clear
+; Evidence: it stores WA at 0x2AE4, walks (0x2AE0) over it and writes each byte
+;          to SC1BUF, with SC1_Spin100 either side of each -- there is no
+;          interrupt in the path, which is what makes it the OPEN-time sender.
+; Unknown: what the (0x2A83) 1/2/3 comparisons in the middle select.
+; ---------------------------------------------------------------------
+SC1_SendWord_Polled:
+	stda16	(10980), wa	; F5A95D  ld (0x2ae4),WA
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5A961  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5A966  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5A96A  ld (0x1b),A
+	ldio	120, 255	; F5A96D  ld (0x78),0xff
+	ldio	114, 143	; F5A970  ld (0x72),0x8f
+	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5A973  and (0x18),0xdf   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x20	; F5A977  or (0x2a86),0x20   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5A97C  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5A980  ld (0x1a),A
+	calr	196	; F5A983  calr 0xf5aa4a
+	.byte 0xC1, 0x83, 0x2A, 0x3F, 0x01	; F5A986  cp (0x2a83),0x01   [llvm-mc cannot encode this]
+	jr	z, 23	; F5A98B  jr Z,0xf5a9a4
+	calr	186	; F5A98D  calr 0xf5aa4a
+	.byte 0xC1, 0x83, 0x2A, 0x3F, 0x02	; F5A990  cp (0x2a83),0x02   [llvm-mc cannot encode this]
+	jr	z, 13	; F5A995  jr Z,0xf5a9a4
+	calr	176	; F5A997  calr 0xf5aa4a
+	.byte 0xC1, 0x83, 0x2A, 0x3F, 0x03	; F5A99A  cp (0x2a83),0x03   [llvm-mc cannot encode this]
+	jr	z, 3	; F5A99F  jr Z,0xf5a9a4
+	calr	166	; F5A9A1  calr 0xf5aa4a
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xDF	; F5A9A4  and (0x2a86),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5A9A9  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5A9AD  ld (0x1a),A
+	calr	151	; F5A9B0  calr 0xf5aa4a
+	calr	148	; F5A9B3  calr 0xf5aa4a
+	.byte 0xC1, 0x87, 0x2A, 0x3E, 0x28	; F5A9B6  or (0x2a87),0x28   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5A9BB  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5A9BF  ld (0x1b),A
+	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x28	; F5A9C2  or (0x2a86),0x28   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5A9C7  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5A9CB  ld (0x1a),A
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5A9CE  and (0x55),0xfe   [llvm-mc cannot encode this]
+	ldio	120, 255	; F5A9D2  ld (0x78),0xff
+	ld	xiy, 10980	; F5A9D5  ld XIY,0x00002ae4
+	.byte 0xD1, 0xE0, 0x2A, 0x85	; F5A9DA  add IY,(0x2ae0)   [llvm-mc cannot encode this]
+	ld	a, (xiy)	; F5A9DE  ld A,(XIY)
+	incdi16	1, (10976)	; F5A9E0  incw 1,(0x2ae0)
+	st_dd8b	a, 84	; F5A9E4  ld (0x54),A
+	calr	96	; F5A9E7  calr 0xf5aa4a
+	calr	93	; F5A9EA  calr 0xf5aa4a
+	ld	xiy, 10980	; F5A9ED  ld XIY,0x00002ae4
+	.byte 0xD1, 0xE0, 0x2A, 0x85	; F5A9F2  add IY,(0x2ae0)   [llvm-mc cannot encode this]
+	ld	a, (xiy)	; F5A9F6  ld A,(XIY)
+	incdi16	1, (10976)	; F5A9F8  incw 1,(0x2ae0)
+	st_dd8b	a, 84	; F5A9FC  ld (0x54),A
+	calr	72	; F5A9FF  calr 0xf5aa4a
+	calr	69	; F5AA02  calr 0xf5aa4a
+	.byte 0xC0, 0x55, 0x3E, 0x01	; F5AA05  or (0x55),0x01   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x55, 0x3C, 0xFD	; F5AA09  and (0x55),0xfd   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xD7	; F5AA0D  and (0x2a86),0xd7   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AA12  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AA16  ld (0x1a),A
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xD7	; F5AA19  and (0x2a87),0xd7   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5AA1E  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5AA22  ld (0x1b),A
+	ret	; F5AA25  ret
+; ---------------------------------------------------------------------
+; SC1_Spin2 / SC1_Spin6 / SC1_Spin10 / SC1_Spin100 / SC1_Spin500 -- busy waits
+;
+; Called from: throughout the module (SC1_Spin100 x10, SC1_Spin500 x3,
+;          SC1_Spin10 x3, SC1_Spin6 x2, SC1_Spin2 x0)
+; Inputs:  none
+; Outputs: none; WA is clobbered
+; Evidence: five copies of `ld WA,n / dec 1,WA / cp WA,0 / jr Z / jr` twelve
+;          bytes apart, with n = 2, 6, 10, 100 and 500.
+; Unknown: how long any of them takes.  These are ITERATION counts; no cycle
+;          count for this loop exists in this tree, so they are deliberately
+;          NOT converted to microseconds.
+; ---------------------------------------------------------------------
+SC1_Spin2:
+	ldw	wa, 2	; F5AA26  ld WA,0x0002
+	dec	1, wa	; F5AA29  dec 1,WA
+	cps	wa, 0	; F5AA2B  cp WA,0
+	jr	z, 2	; F5AA2D  jr Z,0xf5aa31
+	jr	-8	; F5AA2F  jr T,0xf5aa29
+	ret	; F5AA31  ret
+SC1_Spin6:
+	ldw	wa, 6	; F5AA32  ld WA,0x0006
+	dec	1, wa	; F5AA35  dec 1,WA
+	cps	wa, 0	; F5AA37  cp WA,0
+	jr	z, 2	; F5AA39  jr Z,0xf5aa3d
+	jr	-8	; F5AA3B  jr T,0xf5aa35
+	ret	; F5AA3D  ret
+SC1_Spin10:
+	ldw	wa, 10	; F5AA3E  ld WA,0x000a
+	dec	1, wa	; F5AA41  dec 1,WA
+	cps	wa, 0	; F5AA43  cp WA,0
+	jr	z, 2	; F5AA45  jr Z,0xf5aa49
+	jr	-8	; F5AA47  jr T,0xf5aa41
+	ret	; F5AA49  ret
+SC1_Spin100:
+	ldw	wa, 100	; F5AA4A  ld WA,0x0064
+	dec	1, wa	; F5AA4D  dec 1,WA
+	cps	wa, 0	; F5AA4F  cp WA,0
+	jr	z, 2	; F5AA51  jr Z,0xf5aa55
+	jr	-8	; F5AA53  jr T,0xf5aa4d
+	ret	; F5AA55  ret
+SC1_Spin500:
+	ldw	wa, 500	; F5AA56  ld WA,0x01f4
+	dec	1, wa	; F5AA59  dec 1,WA
+	cps	wa, 0	; F5AA5B  cp WA,0
+	jr	z, 2	; F5AA5D  jr Z,0xf5aa61
+	jr	-8	; F5AA5F  jr T,0xf5aa59
+	ret	; F5AA61  ret
+; ---------------------------------------------------------------------
+; SC1_WaitTicks2 / SC1_WaitTicks6 / SC1_WaitTicks51 -- real-time waits
+;
+; Called from: SC1_WaitTicks6 x14, SC1_WaitTicks2 x9, SC1_WaitTicks51 x3
+; Inputs:  none
+; Outputs: (0x2A8E) = the tick value at entry
+; Evidence: each snapshots the low 16 bits of (0x80) into (0x2A8E) and spins
+;          until |now - snapshot| reaches 2, 6 or 0x33.  (0x80) is the tick
+;          counter INTT1_Tick increments -- prom_a's INTT1_Tick header states
+;          it, and prom_a 0xF82D11 `add (0x80),XHL` is the only writer in the
+;          two images that this tree has converted.
+; Notes:   at the 488.28 Hz notes/FINDINGS-system-clock.md derives for timer 1
+;          those are 4.1 ms, 12.3 ms and 104.4 ms.
+; Unknown: the `neg WA` arm means the wait also fires on a backwards
+;          difference, so a wrap of the low half shortens it once every 65,536
+;          ticks (~2.2 minutes).  Recorded as observed, not as intent.
+; ---------------------------------------------------------------------
+SC1_WaitTicks2:
+	.byte 0xD0, 0x80, 0x20	; F5AA62  ld WA,(0x80)   [llvm-mc cannot encode this]
+	stda16	(10894), wa	; F5AA65  ld (0x2a8e),WA
+	.byte 0xD0, 0x80, 0x20	; F5AA69  ld WA,(0x80)   [llvm-mc cannot encode this]
+	.byte 0xD1, 0x8E, 0x2A, 0xA0	; F5AA6C  sub WA,(0x2a8e)   [llvm-mc cannot encode this]
+	jr	nc, 2	; F5AA70  jr NC,0xf5aa74
+	neg	wa	; F5AA72  neg WA
+	cps	wa, 2	; F5AA74  cp WA,2
+	jr	lt, -15	; F5AA76  jr LT,0xf5aa69
+	ret	; F5AA78  ret
+SC1_WaitTicks6:
+	.byte 0xD0, 0x80, 0x20	; F5AA79  ld WA,(0x80)   [llvm-mc cannot encode this]
+	stda16	(10894), wa	; F5AA7C  ld (0x2a8e),WA
+	.byte 0xD0, 0x80, 0x20	; F5AA80  ld WA,(0x80)   [llvm-mc cannot encode this]
+	.byte 0xD1, 0x8E, 0x2A, 0xA0	; F5AA83  sub WA,(0x2a8e)   [llvm-mc cannot encode this]
+	jr	nc, 2	; F5AA87  jr NC,0xf5aa8b
+	neg	wa	; F5AA89  neg WA
+	cps	wa, 6	; F5AA8B  cp WA,6
+	jr	lt, -15	; F5AA8D  jr LT,0xf5aa80
+	ret	; F5AA8F  ret
+SC1_WaitTicks51:
+	.byte 0xD0, 0x80, 0x20	; F5AA90  ld WA,(0x80)   [llvm-mc cannot encode this]
+	stda16	(10894), wa	; F5AA93  ld (0x2a8e),WA
+	.byte 0xD0, 0x80, 0x20	; F5AA97  ld WA,(0x80)   [llvm-mc cannot encode this]
+	.byte 0xD1, 0x8E, 0x2A, 0xA0	; F5AA9A  sub WA,(0x2a8e)   [llvm-mc cannot encode this]
+	jr	nc, 2	; F5AA9E  jr NC,0xf5aaa2
+	neg	wa	; F5AAA0  neg WA
+	cp	wa, 51	; F5AAA2  cp WA,0x0033
+	jr	lt, -17	; F5AAA6  jr LT,0xf5aa97
+	ret	; F5AAA8  ret
+; ---------------------------------------------------------------------
+; SC1_Cmd_E0_ReadStatus -- send (0xE0,0x00), wait, report
+;
+; Called from: SC1_Entry_F40F20 (0xF5A847), i.e. thunk T_F40F20
+; Inputs:  none
+; Outputs: A = (0x2A85): 0x00, or 0x08 if the rx write index moved while the
+;          command was outstanding
+; Evidence: clears (0x2A85), drains the transmitter, zeroes both rx indices,
+;          sends (0xE0,0x00) through SC1_StartWordTx, waits 6 ticks, and sets
+;          bit 3 of (0x2A85) if (0x2A92) is no longer zero.
+; Unknown: what 0xE0 asks for.  "ReadStatus" describes the SHAPE -- a command
+;          whose only result is whether a reply arrived -- not a decoded
+;          command set.
+; ---------------------------------------------------------------------
+SC1_Cmd_E0_ReadStatus:
+	stdi8	(10885), 0	; F5AAA9  ld (0x2a85),0x00
+	calr	195	; F5AAAE  calr 0xf5ab74
+	stdi16	(10896), 0	; F5AAB1  ld (0x2a90),0x0000
+	stdi16	(10898), 0	; F5AAB7  ld (0x2a92),0x0000
+	ldb	a, 224	; F5AABD  ld A,0xe0
+	ldb	w, 0	; F5AABF  ld W,0x00
+	calr	240	; F5AAC1  calr 0xf5abb4
+	calr	65458	; F5AAC4  calr 0xf5aa79
+	.byte 0xD1, 0x92, 0x2A, 0x3F, 0x00, 0x00	; F5AAC7  cp (0x2a92),0x0000   [llvm-mc cannot encode this]
+	jr	z, 5	; F5AACD  jr Z,0xf5aad4
+	.byte 0xC1, 0x85, 0x2A, 0x3E, 0x08	; F5AACF  or (0x2a85),0x08   [llvm-mc cannot encode this]
+	ldb_d8	a, (10885)	; F5AAD4  ld A,(0x2a85)
+	ret	; F5AAD8  ret
+; ---------------------------------------------------------------------
+; SC1_Cmd_E3_E2_E3 -- the four-command sequence the open path runs
+;
+; Called from: SC1_Vtable_0_Open (0xF5A82A)
+; Inputs:  none
+; Outputs: the inbound queue descriptor at 0x2B40 reset (+4 = +6 = 0x0A,
+;          +8 = 0x56), (0x2A90) copied to (0x2A92) under `ei 6`, and then
+;          (0xE3,0x00), (0xE2,0x08) and (0xE3,0x10) sent, each preceded by
+;          SC1_WaitTxDrain and followed by two 6-tick waits
+; Evidence: the literals are read straight off the four `ld A,#`/`ld W,#` pairs.
+; Unknown: all three commands.  SC1_Cmd_EF below has the same shape with
+;          (0xEF,0x00) and ends by calling SC1_Service_SetBit2.
+; ---------------------------------------------------------------------
+SC1_Cmd_E3_E2_E3:
+	ld	xhl, 11072	; F5AAD9  ld XHL,0x00002b40
+	.byte 0xBB, 0x04, 0x02, 0x0A, 0x00	; F5AADE  ld (XHL+0x04),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x06, 0x02, 0x0A, 0x00	; F5AAE3  ld (XHL+0x06),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x08, 0x02, 0x56, 0x00	; F5AAE8  ld (XHL+0x08),0x0056   [llvm-mc cannot encode this]
+	ei	6	; F5AAED  ei 0x06
+	ldw_d16	wa, (10896)	; F5AAEF  ld WA,(0x2a90)
+	stda16	(10898), wa	; F5AAF3  ld (0x2a92),WA
+	di	; F5AAF7  ei 0x00
+	calr	120	; F5AAF9  calr 0xf5ab74
+	ldb	a, 227	; F5AAFC  ld A,0xe3
+	ldb	w, 0	; F5AAFE  ld W,0x00
+	calr	177	; F5AB00  calr 0xf5abb4
+	calr	65395	; F5AB03  calr 0xf5aa79
+	calr	65392	; F5AB06  calr 0xf5aa79
+	calr	104	; F5AB09  calr 0xf5ab74
+	ldb	a, 226	; F5AB0C  ld A,0xe2
+	ldb	w, 8	; F5AB0E  ld W,0x08
+	calr	161	; F5AB10  calr 0xf5abb4
+	calr	65379	; F5AB13  calr 0xf5aa79
+	calr	65376	; F5AB16  calr 0xf5aa79
+	calr	88	; F5AB19  calr 0xf5ab74
+	ldb	a, 227	; F5AB1C  ld A,0xe3
+	ldb	w, 16	; F5AB1E  ld W,0x10
+	calr	145	; F5AB20  calr 0xf5abb4
+	calr	65363	; F5AB23  calr 0xf5aa79
+	calr	65360	; F5AB26  calr 0xf5aa79
+	ret	; F5AB29  ret
+SC1_Cmd_EF:
+	ld	xhl, 11072	; F5AB2A  ld XHL,0x00002b40
+	.byte 0xBB, 0x04, 0x02, 0x0A, 0x00	; F5AB2F  ld (XHL+0x04),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x06, 0x02, 0x0A, 0x00	; F5AB34  ld (XHL+0x06),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x08, 0x02, 0x56, 0x00	; F5AB39  ld (XHL+0x08),0x0056   [llvm-mc cannot encode this]
+	ei	6	; F5AB3E  ei 0x06
+	ldw_d16	wa, (10896)	; F5AB40  ld WA,(0x2a90)
+	stda16	(10898), wa	; F5AB44  ld (0x2a92),WA
+	di	; F5AB48  ei 0x00
+	calr	39	; F5AB4A  calr 0xf5ab74
+	ldb	a, 239	; F5AB4D  ld A,0xef
+	ldb	w, 0	; F5AB4F  ld W,0x00
+	calr	96	; F5AB51  calr 0xf5abb4
+	calr	65314	; F5AB54  calr 0xf5aa79
+	calr	65311	; F5AB57  calr 0xf5aa79
+	calr	65308	; F5AB5A  calr 0xf5aa79
+	calr	1280	; F5AB5D  calr 0xf5b060
+	calr	17	; F5AB60  calr 0xf5ab74
+	ldb	a, 227	; F5AB63  ld A,0xe3
+	ldb	w, 16	; F5AB65  ld W,0x10
+	calr	74	; F5AB67  calr 0xf5abb4
+	calr	65292	; F5AB6A  calr 0xf5aa79
+	calr	65289	; F5AB6D  calr 0xf5aa79
+	calr	1261	; F5AB70  calr 0xf5b060
+	ret	; F5AB73  ret
+; ---------------------------------------------------------------------
+; SC1_WaitTxDrain -- wait for the peer, or give up after 200 tries
+;
+; Called from: SC1_Cmd_E0_ReadStatus, SC1_Cmd_E3_E2_E3 (x3), SC1_Cmd_EF (x2)
+; Inputs:  the tx ring indices
+; Outputs: returns with interrupts unmasked either way
+; Evidence: (0x2A8B) = 0xC8 = 200; each pass tests P8 bit 5, then PB bit 4, then
+;          (0x2A82) bits 1 and 0, and only if all four say idle does it compare
+;          the two tx indices for equality.  A pass that does not finish costs
+;          one SC1_Spin500 and one decrement.
+; Notes:   the same four-way test opens SC1_TxFlush_Body, which is what makes
+;          "P8 bit 5 high AND PB bit 4 low AND neither busy flag set" this
+;          module's definition of "the line is free".
+; Unknown: which physical signal P8.5 and PB.4 are.  SC1's pins are on port 8
+;          on this part, but no databook in these trees names them, so the
+;          reading "P8.5 is the serial clock" is NOT asserted.
+; ---------------------------------------------------------------------
+SC1_WaitTxDrain:
+	stdi8	(10891), 200	; F5AB74  ld (0x2a8b),0xc8
+	ei	6	; F5AB79  ei 0x06
+	bit_dd8	5, 24	; F5AB7B  bit 5,(0x18)
+	jr	z, 21	; F5AB7E  jr Z,0xf5ab95
+	bit_dd8	4, 31	; F5AB80  bit 4,(0x1f)
+	jr	nz, 16	; F5AB83  jr NZ,0xf5ab95
+	.byte 0xF1, 0x82, 0x2A, 0xC9	; F5AB85  bit 1,(0x2a82)   [llvm-mc cannot encode this]
+	jrl	nz, 1233	; F5AB89  jrl NZ,0xf5b05d
+	.byte 0xF1, 0x82, 0x2A, 0xC8	; F5AB8C  bit 0,(0x2a82)   [llvm-mc cannot encode this]
+	jrl	nz, 1226	; F5AB90  jrl NZ,0xf5b05d
+	jr	18	; F5AB93  jr T,0xf5aba7
+	decdi8	1, (10891)	; F5AB95  dec 1,(0x2a8b)
+	.byte 0xC1, 0x8B, 0x2A, 0x3F, 0x00	; F5AB99  cp (0x2a8b),0x00   [llvm-mc cannot encode this]
+	jr	z, 17	; F5AB9E  jr Z,0xf5abb1
+	di	; F5ABA0  ei 0x00
+	calr	65201	; F5ABA2  calr 0xf5aa56
+	jr	-46	; F5ABA5  jr T,0xf5ab79
+	ldw_d16	wa, (10978)	; F5ABA7  ld WA,(0x2ae2)
+	.byte 0xD1, 0xE0, 0x2A, 0xF0	; F5ABAB  cp WA,(0x2ae0)   [llvm-mc cannot encode this]
+	jr	nz, -28	; F5ABAF  jr NZ,0xf5ab95
+	di	; F5ABB1  ei 0x00
+	ret	; F5ABB3  ret
+; ---------------------------------------------------------------------
+; SC1_StartWordTx -- put two bytes in the tx ring and start the transmitter
+;
+; Called from: SC1_ConfigurePort (x4), SC1_Cmd_E0_ReadStatus, SC1_Cmd_E3_E2_E3
+;          (x3), SC1_Cmd_EF (x2)
+; Inputs:  WA = the two bytes
+; Outputs: tx ring = {A, W}, (0x2AE0)=0, (0x2AE2)=2, (0x2A82) bit 1 set,
+;          state = 0x04, INT6 off, BR1CR=0x28, P8FC bit 5 cleared, P8 bit 5
+;          driven low, P8CR bit 5 set, SC1MOD RXE cleared, SC1CR bit 0 cleared,
+;          INTES1 = 0x50 (transmit interrupt only), and A written to SC1BUF
+; Evidence: every line above is one instruction of this routine, in order.
+; Notes:   writing SC1BUF is what starts the transfer; from here the state
+;          machine runs in INTTX1_SC1_Dispatch.
+; ---------------------------------------------------------------------
+SC1_StartWordTx:
+	ei	6	; F5ABB4  ei 0x06
+	stdi16	(10976), 0	; F5ABB6  ld (0x2ae0),0x0000
+	stdi16	(10978), 0	; F5ABBC  ld (0x2ae2),0x0000
+	stda16	(10980), wa	; F5ABC2  ld (0x2ae4),WA
+	.byte 0xD1, 0xE2, 0x2A, 0x38, 0x02, 0x00	; F5ABC6  add (0x2ae2),0x0002   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x02	; F5ABCC  or (0x2a82),0x02   [llvm-mc cannot encode this]
+	stdi8	(10880), 4	; F5ABD1  ld (0x2a80),0x04
+	ldio	114, 143	; F5ABD6  ld (0x72),0x8f
+	ldio	87, 40	; F5ABD9  ld (0x57),0x28
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5ABDC  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5ABE1  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5ABE5  ld (0x1b),A
+	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5ABE8  and (0x18),0xdf   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x20	; F5ABEC  or (0x2a86),0x20   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5ABF1  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5ABF5  ld (0x1a),A
+	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5ABF8  and (0x56),0xdf   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5ABFC  and (0x55),0xfe   [llvm-mc cannot encode this]
+	ldio	120, 80	; F5AC00  ld (0x78),0x50
+	st_dd8b	a, 84	; F5AC03  ld (0x54),A
+	di	; F5AC06  ei 0x00
+	nop	; F5AC08  nop
+	ret	; F5AC09  ret
+; ---------------------------------------------------------------------
+; INT6_SC1_PeerRequest -- external interrupt 6: the peer wants the link
+;
+; Called from: vector slot 0x34 (0xFFFF34 holds 0x00F40F0C) via thunk T_F40F0C
+;          -> 0xF5AC0A.  Verified byte by byte: prom_a file 0x7FF34 reads
+;          `0C 0F F4 00` and prom_b file 0x40F0C reads `1B 0A AC F5`.
+; Inputs:  (0x2A81) -- zero means no message is in progress
+; Outputs: idle path: P8CR bits 4-5 cleared, SC1CR bit 0 set and bit 1 cleared,
+;          INTE67=0x85, INTES1=0x05 (receive only), SC1MOD RXE set,
+;          state = 0x20, (0x2A82) bit 0 set.  Busy path: the rx WRITE index is
+;          stepped BACK one (wrapping at 0x4C), (0x2A84) bit 6 set, (0x2A82)
+;          bit 1 cleared.
+; Evidence: this is the only handler in the module that is not reached through
+;          SC1_StateTable, and the only one that turns RXE on from nothing.
+; Notes:   INTE67 is written 0x85 here and 0x8F in SC1_StartWordTx: the module
+;          arms INT6 exactly while it is willing to be interrupted, which is
+;          what makes INT6 the peer's REQUEST line rather than a data signal.
+; Unknown: which pin drives INT6.
+; ---------------------------------------------------------------------
+INT6_SC1_PeerRequest:
+	push	xwa	; F5AC0A  push XWA
+	.byte 0xC1, 0x81, 0x2A, 0x3F, 0x00	; F5AC0B  cp (0x2a81),0x00   [llvm-mc cannot encode this]
+	jr	nz, 42	; F5AC10  jr NZ,0xf5ac3c
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xCF	; F5AC12  and (0x2a86),0xcf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AC17  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AC1B  ld (0x1a),A
+	.byte 0xC0, 0x55, 0x3E, 0x01	; F5AC1E  or (0x55),0x01   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x55, 0x3C, 0xFD	; F5AC22  and (0x55),0xfd   [llvm-mc cannot encode this]
+	ldio	114, 133	; F5AC26  ld (0x72),0x85
+	ldio	120, 5	; F5AC29  ld (0x78),0x05
+	.byte 0xC0, 0x56, 0x3E, 0x20	; F5AC2C  or (0x56),0x20   [llvm-mc cannot encode this]
+	stdi8	(10880), 32	; F5AC30  ld (0x2a80),0x20
+	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x01	; F5AC35  or (0x2a82),0x01   [llvm-mc cannot encode this]
+	jr	28	; F5AC3A  jr T,0xf5ac58
+	.byte 0xD1, 0x92, 0x2A, 0x3F, 0x00, 0x00	; F5AC3C  cp (0x2a92),0x0000   [llvm-mc cannot encode this]
+	jr	nz, 6	; F5AC42  jr NZ,0xf5ac4a
+	stdi16	(10898), 76	; F5AC44  ld (0x2a92),0x004c
+	decdi16	1, (10898)	; F5AC4A  decw 1,(0x2a92)
+	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x40	; F5AC4E  or (0x2a84),0x40   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFD	; F5AC53  and (0x2a82),0xfd   [llvm-mc cannot encode this]
+; ---------------------------------------------------------------------
+; SC1_Irq_Exit_1 / SC1_Irq_Exit_1_Delayed -- INT6's exit stubs
+;
+; Called from: SC1_Irq_Exit_1 twice over -- by the `jr T,0xF5AC58` at 0xF5AC3A
+;          (the idle path) AND by fall-through from 0xF5AC53, the last
+;          instruction of the busy path.  SC1_Irq_Exit_1_Delayed: BY NOTHING.
+; Inputs:  the stacked XWA.   Outputs: returns from the interrupt.
+; Evidence: `python3 notes/prom_b_sc1_states.py --exits` counts, for each stub,
+;          the branches whose printed target is its address and the 32- and
+;          24-bit little-endian occurrences of that address in prom_a+prom_b.
+;          For 0xF5AC58 that is 1 branch; for 0xF5AC5A it is 0, 0 and 0.  A
+;          byte scan can only OVER-count, so zero is a real zero.  `--selftest`
+;          asserts both, and would fail if a reference ever appeared.
+; ⚠ SC1_Irq_Exit_1_Delayed IS UNREACHABLE in this firmware.  It cannot be
+;          entered by fall-through either: 0xF5AC59 is a `reti`.  The name says
+;          what it WOULD do -- clear P5 bit 3, call SC1_Spin10 (0xF5AA3E), set
+;          the bit again, then pop and RETI -- not that it happens.
+; Why the names: `_1` is the number of registers popped (one, XWA), which is
+;          how it differs from the three-register stubs after the two serial
+;          dispatchers.  `_Delayed` is the P5-bit-3-plus-spin wrapper.
+; Unknown: what P5 bit 3 drives, and why three such stubs were assembled and
+;          then never branched to.
+; ---------------------------------------------------------------------
+SC1_Irq_Exit_1:
+	pop	xwa	; F5AC58  pop XWA
+	reti	; F5AC59  reti
+SC1_Irq_Exit_1_Delayed:
+	.byte 0xC0, 0x0D, 0x3C, 0xF7	; F5AC5A  and (0x0d),0xf7   [llvm-mc cannot encode this]
+	calr	64989	; F5AC5E  calr 0xf5aa3e
+	.byte 0xC0, 0x0D, 0x3E, 0x08	; F5AC61  or (0x0d),0x08   [llvm-mc cannot encode this]
+	pop	xwa	; F5AC65  pop XWA
+	reti	; F5AC66  reti
+; ---------------------------------------------------------------------
+; SC1_StateTable -- the 11-entry jump table both serial-1 vectors dispatch on
+;
+; Called from: read by INTTX1_SC1_Dispatch (0xF5AC9E) and INTRX1_SC1_Dispatch
+;          (0xF5ACC6), and by nothing else.  The 32-bit literal 0x00F5AC67
+;          occurs exactly TWICE in prom_a+prom_b, at file positions 0xF5ACA0
+;          and 0xF5ACC8 -- the operand fields of those two instructions.
+;          (Counted at every byte offset by addr_sites(); a byte scan can only
+;          over-count, so two is an upper bound that happens to be exact.)
+; Inputs:  (0x2A80), used UNSHIFTED as a byte offset -- so the legal values are
+;          0x00, 0x04 ... 0x28 and nothing between.
+; Outputs: the pointer at that offset, jumped to with `jp XHL`.
+; Evidence: `python3 notes/prom_b_sc1_states.py` reads all 11 pointers out of
+;          the ROM and resolves each to the label the .s puts at that address.
+;          ENTRY COUNT: 11, and the bound is ABUTMENT -- the byte after the
+;          last entry, 0xF5AC93, is INTTX1_SC1_Dispatch, which vector slot 0x6C
+;          reaches through thunk T_F40F14.  LAST-ENTRY TEST: entry [10] is at
+;          0xF5AC8F, holds 0x00F5AFD3, and is state 0x28; `--selftest` asserts
+;          exactly that, plus that entries [0], [7] and [10] are ONE target.
+;          Nine distinct targets for eleven slots.
+; ⚠ THE DISPATCH IS UNCHECKED.  `python3 notes/prom_b_sc1_states.py --dispatch`
+;          lists every instruction between the state load and the `jp XHL` in
+;          both handlers and finds no compare and no branch.  A state byte
+;          above 0x28 would index past this table into the dispatcher's own
+;          code.  Nothing in the module prevents that; three of the eleven
+;          slots pointing at SC1_State_Unexpected is the only guard there is.
+; Unknown: why eleven slots when only nine targets exist, and whether the
+;          designer intended 0x28 as the last legal state or merely the last
+;          one this firmware writes.
+; ---------------------------------------------------------------------
+SC1_StateTable:
+	.long	0x00F5AFD3	; F5AC67  [ 0] state/op 0x00 -> 0xF5AFD3
+	.long	0x00F5ACE3	; F5AC6B  [ 1] state/op 0x04 -> 0xF5ACE3
+	.long	0x00F5AD92	; F5AC6F  [ 2] state/op 0x08 -> 0xF5AD92
+	.long	0x00F5AD2E	; F5AC73  [ 3] state/op 0x0C -> 0xF5AD2E
+	.long	0x00F5ADF7	; F5AC77  [ 4] state/op 0x10 -> 0xF5ADF7
+	.long	0x00F5AD5D	; F5AC7B  [ 5] state/op 0x14 -> 0xF5AD5D
+	.long	0x00F5AE5C	; F5AC7F  [ 6] state/op 0x18 -> 0xF5AE5C
+	.long	0x00F5AFD3	; F5AC83  [ 7] state/op 0x1C -> 0xF5AFD3
+	.long	0x00F5AED4	; F5AC87  [ 8] state/op 0x20 -> 0xF5AED4
+	.long	0x00F5AF51	; F5AC8B  [ 9] state/op 0x24 -> 0xF5AF51
+	.long	0x00F5AFD3	; F5AC8F  [10] state/op 0x28 -> 0xF5AFD3
+; ---------------------------------------------------------------------
+; INTTX1_SC1_Dispatch / INTRX1_SC1_Dispatch -- the two serial-1 vectors
+;
+; Called from: vector slot 0x6C (0xFFFF6C -> T_F40F14 -> 0xF5AC93) and slot
+;          0x68 (0xFFFF68 -> T_F40F10 -> 0xF5ACBB).  Both chains verified byte
+;          by byte in the ROM images.
+; Inputs:  (0x2A80), the state byte
+; Outputs: whatever the dispatched state handler does
+; Evidence: the two handlers are FORTY BYTES EACH and differ in exactly ONE
+;          byte: the low half of the `calr` displacement at +0x1E (0x7F in the
+;          transmit handler, 0x57 in the receive one).  Both displacements
+;          resolve to the same target, 0xF5AA32 (SC1_Spin6), so the two
+;          handlers are behaviourally identical -- they are two copies of one
+;          routine, not two routines.  Counted and diffed by
+;          `python3 notes/prom_b_sc1_census.py --selftest`.
+; Notes:   the dispatch is
+;              L = (0x2A80); H = 0; XHL = 0xF5AC67 + XHL; XHL = (XHL); jp XHL
+;          with NO shift, so the state byte is a byte offset and legal values
+;          are 0x00, 0x04, ... 0x28.
+;          Each handler is followed by TWO exit stubs -- but only the first of
+;          each pair is used.  See the header on the exit stubs below: the
+;          three `..._Delayed` stubs have no branch, no 32-bit pointer and no
+;          24-bit pointer anywhere in prom_a+prom_b, and none is fallen into
+;          (each is preceded by a `reti`).  Measured by
+;          `python3 notes/prom_b_sc1_states.py --exits`.
+; Unknown: why the module carries two identical copies instead of pointing both
+;          vectors at one.
+; ---------------------------------------------------------------------
+INTTX1_SC1_Dispatch:
+	push	xwa	; F5AC93  push XWA
+	push	xhl	; F5AC94  push XHL
+	push	xiy	; F5AC95  push XIY
+	ldb_d8	l, (10880)	; F5AC96  ld L,(0x2a80)
+	xor	h, h	; F5AC9A  xor H,H
+	extz	xhl	; F5AC9C  extz XHL
+	add	xhl, 16100455	; F5AC9E  add XHL,0x00f5ac67
+	ld	xhl, (xhl)	; F5ACA4  ld XHL,(XHL)
+	jp	(xhl)	; F5ACA6  jp T,XHL
+; ---------------------------------------------------------------------
+; SC1_Irq_Exit_3 / _3_Delayed / _3b / _3b_Delayed -- the dispatchers' exit stubs
+;
+; Called from: SC1_Irq_Exit_3 (0xF5ACA8) by NINE branches, all from state
+;          handlers: 0xF5AD0C 0xF5AD2B 0xF5AD5A 0xF5AD8F 0xF5ADF4 0xF5AE52
+;          0xF5AE59 0xF5AEA8 0xF5AED1.  SC1_Irq_Exit_3b (0xF5ACD0) by FOUR:
+;          0xF5AF4E 0xF5AFB3 0xF5AFD0 0xF5AFD8.  The two `_Delayed` stubs
+;          (0xF5ACAC, 0xF5ACD4): BY NOTHING -- no branch, no 32-bit pointer,
+;          no 24-bit pointer, and no fall-through (0xF5ACAB and 0xF5ACD3 are
+;          both `reti`).
+; Inputs:  the stacked XIY, XHL, XWA.   Outputs: returns from the interrupt.
+; Evidence: all four counts come from `python3 notes/prom_b_sc1_states.py
+;          --exits`, which reads each branch's RESOLVED target out of the
+;          verified transcription rather than doing displacement arithmetic of
+;          its own, and scans both ROM images at every byte offset for the
+;          addresses as pointers.  `--selftest` asserts the nine, and asserts
+;          that the two `_Delayed` stubs stay at zero.
+; ⚠ Two of these four are UNREACHABLE, for the same reason and with the same
+;          evidence as SC1_Irq_Exit_1_Delayed above.  Three dead exit stubs in
+;          one module is a pattern, not an accident, but this tree does not
+;          establish what it means.
+; Why `_3` and `_3b`: the two are byte-identical four-instruction stubs at
+;          different addresses -- one per dispatcher copy -- so `b` is a
+;          POSITIONAL suffix, not a role.  It exists because INTTX1 and INTRX1
+;          are two copies of one routine (see the header above) and each copy
+;          brought its own exits.
+; Unknown: why the module carries dead exit stubs at all.
+; ---------------------------------------------------------------------
+SC1_Irq_Exit_3:
+	pop	xiy	; F5ACA8  pop XIY
+	pop	xhl	; F5ACA9  pop XHL
+	pop	xwa	; F5ACAA  pop XWA
+	reti	; F5ACAB  reti
+; ---------------------------------------------------------------------
+; SC1_Irq_Exit_3_Delayed -- covered by the SC1_Irq_Exit_3 header above
+; Evidence: `python3 notes/prom_b_sc1_states.py --exits` -- 0 branches, 0
+;          32-bit pointers, 0 24-bit pointers, and 0xF5ACAB above it is a
+;          `reti`, so no fall-through either.  UNREACHABLE.
+; ---------------------------------------------------------------------
+SC1_Irq_Exit_3_Delayed:
+	.byte 0xC0, 0x0D, 0x3C, 0xF7	; F5ACAC  and (0x0d),0xf7   [llvm-mc cannot encode this]
+	calr	64895	; F5ACB0  calr 0xf5aa32
+	.byte 0xC0, 0x0D, 0x3E, 0x08	; F5ACB3  or (0x0d),0x08   [llvm-mc cannot encode this]
+	pop	xiy	; F5ACB7  pop XIY
+	pop	xhl	; F5ACB8  pop XHL
+	pop	xwa	; F5ACB9  pop XWA
+	reti	; F5ACBA  reti
+; ---------------------------------------------------------------------
+; INTRX1_SC1_Dispatch -- the second of the two identical serial-1 dispatchers
+;
+; The full argument for BOTH dispatchers is in the INTTX1_SC1_Dispatch header
+; above; this stub exists only because the exit-stub header now sits between
+; the two and a reader arriving here would otherwise see the wrong header.
+; Called from: vector slot 0x68 (0xFFFF68 -> T_F40F10 -> 0xF5ACBB).
+; Evidence: the two preambles' first 0x14 bytes are IDENTICAL and the handlers
+;          differ in exactly one byte over 40 -- both printed by
+;          `python3 notes/prom_b_sc1_states.py --dispatch` and asserted by
+;          `python3 notes/prom_b_sc1_census.py --selftest` section C.
+; ---------------------------------------------------------------------
+INTRX1_SC1_Dispatch:
+	push	xwa	; F5ACBB  push XWA
+	push	xhl	; F5ACBC  push XHL
+	push	xiy	; F5ACBD  push XIY
+	ldb_d8	l, (10880)	; F5ACBE  ld L,(0x2a80)
+	xor	h, h	; F5ACC2  xor H,H
+	extz	xhl	; F5ACC4  extz XHL
+	add	xhl, 16100455	; F5ACC6  add XHL,0x00f5ac67
+	ld	xhl, (xhl)	; F5ACCC  ld XHL,(XHL)
+	jp	(xhl)	; F5ACCE  jp T,XHL
+; ---------------------------------------------------------------------
+; SC1_Irq_Exit_3b -- covered by the SC1_Irq_Exit_3 header above
+; Called from: FOUR branches -- 0xF5AF4E, 0xF5AFB3, 0xF5AFD0, 0xF5AFD8.
+; Evidence: `python3 notes/prom_b_sc1_states.py --exits`.  DIFFED, not assumed:
+;          0xF5ACA8 and 0xF5ACD0 are 4 bytes each and ZERO of the 4 differ
+;          (`5D 5B 58 07` both).  So `b` is a POSITIONAL suffix -- one exit per
+;          dispatcher copy -- and not a role.  `--selftest` asserts the zero.
+; Footnote, and it mirrors the dispatchers exactly: the two `_Delayed` stubs
+;          are 15 bytes each and differ in EXACTLY ONE byte, offset 5, the low
+;          half of the `calr` displacement (0x7F vs 0x57).  Both resolve to the
+;          same target, 0xF5AA32 = SC1_Spin6.  Same one-byte relocation
+;          artefact as INTTX1 vs INTRX1; both copies are equally unreachable.
+; ---------------------------------------------------------------------
+SC1_Irq_Exit_3b:
+	pop	xiy	; F5ACD0  pop XIY
+	pop	xhl	; F5ACD1  pop XHL
+	pop	xwa	; F5ACD2  pop XWA
+	reti	; F5ACD3  reti
+; ---------------------------------------------------------------------
+; SC1_Irq_Exit_3b_Delayed -- covered by the SC1_Irq_Exit_3 header above
+; Evidence: same measurement, same result: 0 / 0 / 0, and 0xF5ACD3 is a `reti`.
+;          UNREACHABLE.
+; ---------------------------------------------------------------------
+SC1_Irq_Exit_3b_Delayed:
+	.byte 0xC0, 0x0D, 0x3C, 0xF7	; F5ACD4  and (0x0d),0xf7   [llvm-mc cannot encode this]
+	calr	64855	; F5ACD8  calr 0xf5aa32
+	.byte 0xC0, 0x0D, 0x3E, 0x08	; F5ACDB  or (0x0d),0x08   [llvm-mc cannot encode this]
+	pop	xiy	; F5ACDF  pop XIY
+	pop	xhl	; F5ACE0  pop XHL
+	pop	xwa	; F5ACE1  pop XWA
+	reti	; F5ACE2  reti
+; ---------------------------------------------------------------------
+; The state handlers -- SC1_StateTable entries, reached by `jp XHL`
+;
+; Called from: INTTX1_SC1_Dispatch / INTRX1_SC1_Dispatch only
+; Inputs:  the RAM state block; SC1BUF on the receive states
+; Outputs: each ends by jumping to one of the exit stubs, having usually done
+;          `inc 4,(0x2A80)` (advance) or `dec 4,(0x2A80)` (retreat)
+; Evidence: every entry of SC1_StateTable lands on one of these, and no other
+;          code jumps to any of them.  The index -> address -> label mapping
+;          below is produced by `python3 notes/prom_b_sc1_states.py`, whose
+;          `--selftest` asserts the entry count, the abutment bound, the
+;          last entry (state 0x28 at 0xF5AC8F) and that every target resolves
+;          to a label in this file.
+; ⚠ The state values 0x00, 0x04 and 0x20 are the only ones written as
+;          IMMEDIATES anywhere in the module (`--writes` lists all seven such
+;          stores); every other state is reached by `inc 4,(0x2A80)` or
+;          `dec 4,(0x2A80)`.  Do NOT read that as "all eleven states occur":
+;          nothing here executes the firmware.
+; Notes:   the states, by table index:
+;          index / state byte / handler ADDRESS / the label this file gives it.
+;          The whole column is emitted by `python3 notes/prom_b_sc1_states.py`
+;          -- it resolves each of the 11 table pointers to the label the .s
+;          puts at that address, so the mapping below is read, not typed:
+;            [0]  0x00  0xF5AFD3  SC1_State_Unexpected
+;                       idle: an interrupt here is an error
+;            [1]  0x04  0xF5ACE3  SC1_State04_TxByte1
+;                       first transmit byte gone; sets P8CR/P8FC bits, sends
+;                       nothing new unless P8 bit 5 says the peer took it
+;            [2]  0x08  0xF5AD92  SC1_State08_TxFromRing
+;                       transmit from the ring, wrapping at 0x3C, and set
+;                       (0x2A81) from the byte just sent: 2 normally, or
+;                       (b & 0x0F) + 3 when (b & 0x3F) >= 0x30
+;            [3]  0x0C  0xF5AD2E  SC1_State0C
+;                       hand the pins back and send one byte.  Named
+;                       POSITIONALLY: what distinguishes it from [1] and [5] is
+;                       one SC1BUF write and which P8CR/P8FC bits are cleared,
+;                       and that is not enough to name a role.
+;            [4]  0x10  0xF5ADF7  SC1_State10_TxFromRing
+;                       same as [2] but decrements (0x2A81) and RETREATS the
+;                       state by 4 until only one byte is left
+;            [5]  0x14  0xF5AD5D  SC1_State14
+;                       as [3] with an extra SC1BUF write.  Also POSITIONAL.
+;            [6]  0x18  0xF5AE5C  SC1_State18_TxDone
+;                       transmit finished: if two or more bytes are still queued
+;                       start another word, otherwise idle and re-arm INT6
+;            [7]  0x1C  0xF5AFD3  SC1_State_Unexpected  (same target as [0])
+;            [8]  0x20  0xF5AED4  SC1_State20_RxFirstByte
+;                       FIRST RECEIVED BYTE: store it at the rx write index,
+;                       set (0x2A84) bit 0 if fewer than three slots are free,
+;                       advance the index mod 0x4C, and set (0x2A81) to 2 or
+;                       (b & 0x0F) + 3 exactly as state 0x08 does
+;            [9]  0x24  0xF5AF51  SC1_State24_RxNextByte
+;                       SUBSEQUENT BYTES: same store, decrement (0x2A81), and
+;                       when it reaches 1 idle the link and re-arm INT6
+;            [10] 0x28  0xF5AFD3  SC1_State_Unexpected  (same target as [0])
+; Unknown: the difference between the [1]/[3]/[5] group is one SC1BUF write and
+;          which of P8CR/P8FC bits 3 and 5 are cleared; what that means at the
+;          pins is not established.
+; ---------------------------------------------------------------------
+SC1_State04_TxByte1:
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xDF	; F5ACE3  and (0x2a86),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5ACE8  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5ACEC  ld (0x1a),A
+	ldio	87, 36	; F5ACEF  ld (0x57),0x24
+	ldio	114, 143	; F5ACF2  ld (0x72),0x8f
+	ldio	120, 80	; F5ACF5  ld (0x78),0x50
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5ACF8  and (0x55),0xfe   [llvm-mc cannot encode this]
+	st_dd8b	a, 84	; F5ACFC  ld (0x54),A
+	incdi8	4, (10880)	; F5ACFF  inc 4,(0x2a80)
+	mul	a, 1	; F5AD03  mul A,0x01
+	mul	a, 1	; F5AD06  mul A,0x01
+	bit_dd8	5, 24	; F5AD09  bit 5,(0x18)
+	jr	nz, -102	; F5AD0C  jr NZ,0xf5aca8
+	stdi8	(10881), 0	; F5AD0E  ld (0x2a81),0x00
+	stdi8	(10880), 0	; F5AD13  ld (0x2a80),0x00
+	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x02	; F5AD18  or (0x2a84),0x02   [llvm-mc cannot encode this]
+	ldio	114, 133	; F5AD1D  ld (0x72),0x85
+	ldio	120, 255	; F5AD20  ld (0x78),0xff
+	ldio	87, 36	; F5AD23  ld (0x57),0x24
+	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFD	; F5AD26  and (0x2a82),0xfd   [llvm-mc cannot encode this]
+	jrl	-134	; F5AD2B  jrl T,0xf5aca8
+SC1_State0C:
+	calr	64781	; F5AD2E  calr 0xf5aa3e
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xD7	; F5AD31  and (0x2a86),0xd7   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AD36  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AD3A  ld (0x1a),A
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xD7	; F5AD3D  and (0x2a87),0xd7   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5AD42  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5AD46  ld (0x1b),A
+	ldio	87, 36	; F5AD49  ld (0x57),0x24
+	ldio	120, 80	; F5AD4C  ld (0x78),0x50
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5AD4F  and (0x55),0xfe   [llvm-mc cannot encode this]
+	st_dd8b	a, 84	; F5AD53  ld (0x54),A
+	incdi8	4, (10880)	; F5AD56  inc 4,(0x2a80)
+	jrl	-181	; F5AD5A  jrl T,0xf5aca8
+SC1_State14:
+	calr	64734	; F5AD5D  calr 0xf5aa3e
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xD7	; F5AD60  and (0x2a86),0xd7   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AD65  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AD69  ld (0x1a),A
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xD7	; F5AD6C  and (0x2a87),0xd7   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5AD71  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5AD75  ld (0x1b),A
+	ldio	87, 36	; F5AD78  ld (0x57),0x24
+	st_dd8b	a, 84	; F5AD7B  ld (0x54),A
+	ldio	114, 133	; F5AD7E  ld (0x72),0x85
+	ldio	120, 80	; F5AD81  ld (0x78),0x50
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5AD84  and (0x55),0xfe   [llvm-mc cannot encode this]
+	st_dd8b	a, 84	; F5AD88  ld (0x54),A
+	incdi8	4, (10880)	; F5AD8B  inc 4,(0x2a80)
+	jrl	-234	; F5AD8F  jrl T,0xf5aca8
+SC1_State08_TxFromRing:
+	ldio	87, 34	; F5AD92  ld (0x57),0x22
+	.byte 0xC1, 0x87, 0x2A, 0x3E, 0x28	; F5AD95  or (0x2a87),0x28   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5AD9A  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5AD9E  ld (0x1b),A
+	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x28	; F5ADA1  or (0x2a86),0x28   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5ADA6  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5ADAA  ld (0x1a),A
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5ADAD  and (0x55),0xfe   [llvm-mc cannot encode this]
+	ldio	114, 133	; F5ADB1  ld (0x72),0x85
+	ldio	120, 80	; F5ADB4  ld (0x78),0x50
+	ld	xiy, 10980	; F5ADB7  ld XIY,0x00002ae4
+	.byte 0xD1, 0xE0, 0x2A, 0x85	; F5ADBC  add IY,(0x2ae0)   [llvm-mc cannot encode this]
+	ld	a, (xiy)	; F5ADC0  ld A,(XIY)
+	st_dd8b	a, 84	; F5ADC2  ld (0x54),A
+	incdi16	1, (10976)	; F5ADC5  incw 1,(0x2ae0)
+	.byte 0xD1, 0xE0, 0x2A, 0x3F, 0x3C, 0x00	; F5ADC9  cp (0x2ae0),0x003c   [llvm-mc cannot encode this]
+	jr	c, 6	; F5ADCF  jr C,0xf5add7
+	stdi16	(10976), 0	; F5ADD1  ld (0x2ae0),0x0000
+	stdi8	(10881), 2	; F5ADD7  ld (0x2a81),0x02
+	ld	a, (xiy)	; F5ADDC  ld A,(XIY)
+	and	a, 63	; F5ADDE  and A,0x3f
+	cp	a, 48	; F5ADE1  cp A,0x30
+	jr	c, 10	; F5ADE4  jr C,0xf5adf0
+	and	a, 15	; F5ADE6  and A,0x0f
+	add	a, 3	; F5ADE9  add A,0x03
+	stb_d8	(10881), a	; F5ADEC  ld (0x2a81),A
+	incdi8	4, (10880)	; F5ADF0  inc 4,(0x2a80)
+	jrl	-335	; F5ADF4  jrl T,0xf5aca8
+SC1_State10_TxFromRing:
+	ldio	87, 34	; F5ADF7  ld (0x57),0x22
+	.byte 0xC1, 0x87, 0x2A, 0x3E, 0x28	; F5ADFA  or (0x2a87),0x28   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5ADFF  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5AE03  ld (0x1b),A
+	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x28	; F5AE06  or (0x2a86),0x28   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AE0B  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AE0F  ld (0x1a),A
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5AE12  and (0x55),0xfe   [llvm-mc cannot encode this]
+	ldio	114, 133	; F5AE16  ld (0x72),0x85
+	ldio	120, 80	; F5AE19  ld (0x78),0x50
+	ld	xiy, 10980	; F5AE1C  ld XIY,0x00002ae4
+	.byte 0xD1, 0xE0, 0x2A, 0x85	; F5AE21  add IY,(0x2ae0)   [llvm-mc cannot encode this]
+	ld	a, (xiy)	; F5AE25  ld A,(XIY)
+	st_dd8b	a, 84	; F5AE27  ld (0x54),A
+	incdi16	1, (10976)	; F5AE2A  incw 1,(0x2ae0)
+	.byte 0xD1, 0xE0, 0x2A, 0x3F, 0x3C, 0x00	; F5AE2E  cp (0x2ae0),0x003c   [llvm-mc cannot encode this]
+	jr	c, 6	; F5AE34  jr C,0xf5ae3c
+	stdi16	(10976), 0	; F5AE36  ld (0x2ae0),0x0000
+	decdi8	1, (10881)	; F5AE3C  dec 1,(0x2a81)
+	.byte 0xC1, 0x81, 0x2A, 0x3F, 0x01	; F5AE40  cp (0x2a81),0x01   [llvm-mc cannot encode this]
+	jr	z, 14	; F5AE45  jr Z,0xf5ae55
+	.byte 0xC1, 0x81, 0x2A, 0x3F, 0x00	; F5AE47  cp (0x2a81),0x00   [llvm-mc cannot encode this]
+	jr	z, 7	; F5AE4C  jr Z,0xf5ae55
+	decdi8	4, (10880)	; F5AE4E  dec 4,(0x2a80)
+	jrl	-429	; F5AE52  jrl T,0xf5aca8
+	incdi8	4, (10880)	; F5AE55  inc 4,(0x2a80)
+	jrl	-436	; F5AE59  jrl T,0xf5aca8
+SC1_State18_TxDone:
+	stdi8	(10881), 0	; F5AE5C  ld (0x2a81),0x00
+	stdi8	(10880), 0	; F5AE61  ld (0x2a80),0x00
+	ldw_d16	wa, (10978)	; F5AE66  ld WA,(0x2ae2)
+	.byte 0xD1, 0xE0, 0x2A, 0xA0	; F5AE6A  sub WA,(0x2ae0)   [llvm-mc cannot encode this]
+	cps	wa, 2	; F5AE6E  cp WA,2
+	jr	c, 57	; F5AE70  jr C,0xf5aeab
+	stdi8	(10880), 4	; F5AE72  ld (0x2a80),0x04
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5AE77  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5AE7C  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5AE80  ld (0x1b),A
+	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5AE83  and (0x18),0xdf   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x20	; F5AE87  or (0x2a86),0x20   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AE8C  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AE90  ld (0x1a),A
+	ldio	87, 40	; F5AE93  ld (0x57),0x28
+	ldio	114, 143	; F5AE96  ld (0x72),0x8f
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5AE99  and (0x55),0xfe   [llvm-mc cannot encode this]
+	ldio	120, 80	; F5AE9D  ld (0x78),0x50
+	st_dd8b	a, 84	; F5AEA0  ld (0x54),A
+	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x02	; F5AEA3  or (0x2a82),0x02   [llvm-mc cannot encode this]
+	jrl	-515	; F5AEA8  jrl T,0xf5aca8
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xDF	; F5AEAB  and (0x2a86),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AEB0  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AEB4  ld (0x1a),A
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5AEB7  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5AEBC  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5AEC0  ld (0x1b),A
+	ldio	114, 133	; F5AEC3  ld (0x72),0x85
+	ldio	120, 255	; F5AEC6  ld (0x78),0xff
+	ldio	87, 36	; F5AEC9  ld (0x57),0x24
+	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFD	; F5AECC  and (0x2a82),0xfd   [llvm-mc cannot encode this]
+	jrl	-556	; F5AED1  jrl T,0xf5aca8
+SC1_State20_RxFirstByte:
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xCF	; F5AED4  and (0x2a86),0xcf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AED9  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AEDD  ld (0x1a),A
+	.byte 0xC0, 0x55, 0x3E, 0x01	; F5AEE0  or (0x55),0x01   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x55, 0x3C, 0xFD	; F5AEE4  and (0x55),0xfd   [llvm-mc cannot encode this]
+	ldio	114, 133	; F5AEE8  ld (0x72),0x85
+	ldio	120, 5	; F5AEEB  ld (0x78),0x05
+	ld_sd8b	a, 84	; F5AEEE  ld A,(0x54)
+	ld	xiy, 10900	; F5AEF1  ld XIY,0x00002a94
+	.byte 0xD1, 0x92, 0x2A, 0x85	; F5AEF6  add IY,(0x2a92)   [llvm-mc cannot encode this]
+	ld	(xiy), a	; F5AEFA  ld (XIY),A
+	ldw_d16	hl, (10898)	; F5AEFC  ld HL,(0x2a92)
+	.byte 0xD1, 0x90, 0x2A, 0xA3	; F5AF00  sub HL,(0x2a90)   [llvm-mc cannot encode this]
+	jr	nc, 6	; F5AF04  jr NC,0xf5af0c
+	neg	hl	; F5AF06  neg HL
+	ld	iy, hl	; F5AF08  ld IY,HL
+	jr	5	; F5AF0A  jr T,0xf5af11
+	ldw	iy, 76	; F5AF0C  ld IY,0x004c
+	sub	iy, hl	; F5AF0F  sub IY,HL
+	cps	iy, 3	; F5AF11  cp IY,3
+	jr	nc, 7	; F5AF13  jr NC,0xf5af1c
+	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x01	; F5AF15  or (0x2a84),0x01   [llvm-mc cannot encode this]
+	jr	23	; F5AF1A  jr T,0xf5af33
+	.byte 0xC1, 0x84, 0x2A, 0x3C, 0xFE	; F5AF1C  and (0x2a84),0xfe   [llvm-mc cannot encode this]
+	incdi16	1, (10898)	; F5AF21  incw 1,(0x2a92)
+	.byte 0xD1, 0x92, 0x2A, 0x3F, 0x4C, 0x00	; F5AF25  cp (0x2a92),0x004c   [llvm-mc cannot encode this]
+	jr	c, 6	; F5AF2B  jr C,0xf5af33
+	stdi16	(10898), 0	; F5AF2D  ld (0x2a92),0x0000
+	stdi8	(10881), 2	; F5AF33  ld (0x2a81),0x02
+	and	a, 63	; F5AF38  and A,0x3f
+	cp	a, 48	; F5AF3B  cp A,0x30
+	jr	c, 10	; F5AF3E  jr C,0xf5af4a
+	and	a, 15	; F5AF40  and A,0x0f
+	add	a, 3	; F5AF43  add A,0x03
+	stb_d8	(10881), a	; F5AF46  ld (0x2a81),A
+	incdi8	4, (10880)	; F5AF4A  inc 4,(0x2a80)
+	jrl	-641	; F5AF4E  jrl T,0xf5acd0
+SC1_State24_RxNextByte:
+	ld_sd8b	a, 84	; F5AF51  ld A,(0x54)
+	ld	xiy, 10900	; F5AF54  ld XIY,0x00002a94
+	.byte 0xD1, 0x92, 0x2A, 0x85	; F5AF59  add IY,(0x2a92)   [llvm-mc cannot encode this]
+	ld	(xiy), a	; F5AF5D  ld (XIY),A
+	.byte 0xF1, 0x84, 0x2A, 0xC8	; F5AF5F  bit 0,(0x2a84)   [llvm-mc cannot encode this]
+	jr	nz, 18	; F5AF63  jr NZ,0xf5af77
+	incdi16	1, (10898)	; F5AF65  incw 1,(0x2a92)
+	.byte 0xD1, 0x92, 0x2A, 0x3F, 0x4C, 0x00	; F5AF69  cp (0x2a92),0x004c   [llvm-mc cannot encode this]
+	jr	c, 6	; F5AF6F  jr C,0xf5af77
+	stdi16	(10898), 0	; F5AF71  ld (0x2a92),0x0000
+	decdi8	1, (10881)	; F5AF77  dec 1,(0x2a81)
+	.byte 0xC1, 0x81, 0x2A, 0x3F, 0x01	; F5AF7B  cp (0x2a81),0x01   [llvm-mc cannot encode this]
+	jr	nz, 52	; F5AF80  jr NZ,0xf5afb6
+	stdi8	(10881), 0	; F5AF82  ld (0x2a81),0x00
+	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFE	; F5AF87  and (0x2a82),0xfe   [llvm-mc cannot encode this]
+	stdi8	(10880), 0	; F5AF8C  ld (0x2a80),0x00
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xCF	; F5AF91  and (0x2a86),0xcf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AF96  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AF9A  ld (0x1a),A
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5AF9D  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5AFA2  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5AFA6  ld (0x1b),A
+	ldio	114, 133	; F5AFA9  ld (0x72),0x85
+	ldio	120, 5	; F5AFAC  ld (0x78),0x05
+	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5AFAF  and (0x56),0xdf   [llvm-mc cannot encode this]
+	jrl	-742	; F5AFB3  jrl T,0xf5acd0
+	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xCF	; F5AFB6  and (0x2a86),0xcf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5AFBB  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5AFBF  ld (0x1a),A
+	.byte 0xC0, 0x55, 0x3E, 0x01	; F5AFC2  or (0x55),0x01   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x55, 0x3C, 0xFD	; F5AFC6  and (0x55),0xfd   [llvm-mc cannot encode this]
+	ldio	114, 133	; F5AFCA  ld (0x72),0x85
+	ldio	120, 5	; F5AFCD  ld (0x78),0x05
+	jrl	-771	; F5AFD0  jrl T,0xf5acd0
+; ---------------------------------------------------------------------
+; SC1_State_Unexpected -- an INTRX1/INTTX1 arrived in a state that has no work
+;
+; Called from: SC1_StateTable entries [0], [7] and [10] -- states 0x00, 0x1C
+;          and 0x28.  Three of the eleven entries hold this same address.
+; Inputs:  none
+; Outputs: (0x2A84) bit 7 set, then the delayed exit stub
+; Evidence: `or (0x2A84),0x80` and a jump, five bytes in total.
+; ---------------------------------------------------------------------
+SC1_State_Unexpected:
+	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x80	; F5AFD3  or (0x2a84),0x80   [llvm-mc cannot encode this]
+	jrl	-779	; F5AFD8  jrl T,0xf5acd0
+; ---------------------------------------------------------------------
+; SC1_AbortToIdle -- clear both busy flags, disable the receiver, RETI
+;
+; Called from: NOTHING in this module, and no `1D`/`1B` operand in either image
+;          names it.  It is not in SC1_StateTable either.
+; Inputs:  none
+; Outputs: (0x2A82) bits 0-1 cleared, (0x2A84) bit 2 set, SC1MOD RXE cleared,
+;          INTES1 = 0x0F, INTE67 = 0x8F, then RETI
+; Evidence: it ends in RETI, so it was written as an interrupt handler; nothing
+;          points at it.
+; Unknown: whether it is dead or reached by something this tree has not
+;          converted.  Left with a positional name for that reason.
+; ---------------------------------------------------------------------
+SC1_AbortToIdle:
+	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFC	; F5AFDB  and (0x2a82),0xfc   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x04	; F5AFE0  or (0x2a84),0x04   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5AFE5  and (0x56),0xdf   [llvm-mc cannot encode this]
+	ldio	120, 15	; F5AFE9  ld (0x78),0x0f
+	ldio	114, 143	; F5AFEC  ld (0x72),0x8f
+	jr	0	; F5AFEF  jr T,0xf5aff1
+	reti	; F5AFF1  reti
+; ---------------------------------------------------------------------
+; SC1_TxFlush_Body -- encode the outbound queue and start a transfer if idle
+;
+; Called from: SC1_TxFlush (0xF5A836), i.e. thunk T_F40F08, the module's
+;          busiest public entry (6 call sites in prom_a)
+; Inputs:  the outbound queue at 0x2BA0 and the tx ring
+; Outputs: on success the same register writes SC1_StartWordTx makes, with the
+;          first byte taken from the tx ring rather than from WA
+; Evidence: it calls SC1_TxEncode first, then repeats SC1_WaitTxDrain's
+;          four-way idle test, then requires at least two bytes in the tx ring
+;          (computed with the same wrap-at-0x3C arithmetic), and only then
+;          arms the transmitter.
+; ---------------------------------------------------------------------
+SC1_TxFlush_Body:
+	calr	590	; F5AFF2  calr 0xf5b243
+	ei	6	; F5AFF5  ei 0x06
+	bit_dd8	5, 24	; F5AFF7  bit 5,(0x18)
+	jr	z, 97	; F5AFFA  jr Z,0xf5b05d
+	bit_dd8	4, 31	; F5AFFC  bit 4,(0x1f)
+	jr	nz, 92	; F5AFFF  jr NZ,0xf5b05d
+	.byte 0xF1, 0x82, 0x2A, 0xC9	; F5B001  bit 1,(0x2a82)   [llvm-mc cannot encode this]
+	jr	nz, 86	; F5B005  jr NZ,0xf5b05d
+	.byte 0xF1, 0x82, 0x2A, 0xC8	; F5B007  bit 0,(0x2a82)   [llvm-mc cannot encode this]
+	jr	nz, 80	; F5B00B  jr NZ,0xf5b05d
+	ldw_d16	wa, (10978)	; F5B00D  ld WA,(0x2ae2)
+	.byte 0xD1, 0xE0, 0x2A, 0xA0	; F5B011  sub WA,(0x2ae0)   [llvm-mc cannot encode this]
+	jr	nc, 8	; F5B015  jr NC,0xf5b01f
+	neg	wa	; F5B017  neg WA
+	ex8	a, w	; F5B019  ex A,W
+	ldb	a, 60	; F5B01B  ld A,0x3c
+	sub	a, w	; F5B01D  sub A,W
+	cps	a, 2	; F5B01F  cp A,2
+	jr	c, 58	; F5B021  jr C,0xf5b05d
+	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x02	; F5B023  or (0x2a82),0x02   [llvm-mc cannot encode this]
+	stdi8	(10880), 4	; F5B028  ld (0x2a80),0x04
+	ldio	114, 143	; F5B02D  ld (0x72),0x8f
+	ldio	87, 40	; F5B030  ld (0x57),0x28
+	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5B033  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	ldb_d8	a, (10887)	; F5B038  ld A,(0x2a87)
+	st_dd8b	a, 27	; F5B03C  ld (0x1b),A
+	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5B03F  and (0x18),0xdf   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x20	; F5B043  or (0x2a86),0x20   [llvm-mc cannot encode this]
+	ldb_d8	a, (10886)	; F5B048  ld A,(0x2a86)
+	st_dd8b	a, 26	; F5B04C  ld (0x1a),A
+	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5B04F  and (0x56),0xdf   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5B053  and (0x55),0xfe   [llvm-mc cannot encode this]
+	ldio	120, 80	; F5B057  ld (0x78),0x50
+	st_dd8b	a, 84	; F5B05A  ld (0x54),A
+; ---------------------------------------------------------------------
+; SC1_TxFlush_Exit -- `ei 0x00 / ret`, a SHARED epilogue
+;
+; Called from: SEVEN branches, and they are NOT all from SC1_TxFlush_Body:
+;          0xF5AFFA 0xF5AFFF 0xF5B005 0xF5B00B 0xF5B021  (SC1_TxFlush_Body)
+;          0xF5AB89 0xF5AB90                             (SC1_WaitTxDrain)
+;          plus fall-through from 0xF5B05A, the last instruction of
+;          SC1_TxFlush_Body.
+; Inputs:  none.   Outputs: interrupts masked to level 0, then `ret`.
+; Evidence: `python3 notes/prom_b_sc1_states.py --branches 0xF5B05D` lists all
+;          seven, resolved targets read out of the verified transcription.
+; ⚠ THE NAME UNDERSTATES IT.  It is called TxFlush_Exit because it sits at the
+;          end of SC1_TxFlush_Body, not because that routine owns it: two of
+;          the seven branches come from SC1_WaitTxDrain, which uses this as its
+;          own return path.  Read the name as POSITIONAL.
+; Unknown: whether sharing the epilogue is deliberate or a compiler's tail
+;          merge.  Nothing here decides that.
+; ---------------------------------------------------------------------
+SC1_TxFlush_Exit:
+	di	; F5B05D  ei 0x00
+	ret	; F5B05F  ret
+; ---------------------------------------------------------------------
+; SC1_Service_SetBit2 / SC1_Service_ClearBit2 / SC1_RxDecode -- drain the rx
+; ring into the inbound message queue
+;
+; Called from: SC1_Service (thunk T_F40F04) enters at SC1_Service_ClearBit2;
+;          SC1_Cmd_EF enters at SC1_Service_SetBit2 (twice).  The two differ in
+;          one instruction -- `or (0x2A82),0x04` versus `and (0x2A82),0xFB` --
+;          and then fall into the same body.
+; Inputs:  rx ring 0x2A94 with indices (0x2A90) read and (0x2A92) write; the
+;          inbound queue descriptor at 0x2B40
+; Outputs: decoded records appended to the inbound queue; (0x2A90) advanced
+; Evidence: the loop stops when the queue has fewer than 4 free slots
+;          (`cp (XIZ+8),0x0004`) or fewer than 2 bytes are pending, and
+;          dispatches on `(byte & 0x38) >> 1` through SC1_RxOpTable.
+; ---------------------------------------------------------------------
+SC1_Service_SetBit2:
+	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x04	; F5B060  or (0x2a82),0x04   [llvm-mc cannot encode this]
+	jr	5	; F5B065  jr T,0xf5b06c
+SC1_Service_ClearBit2:
+	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFB	; F5B067  and (0x2a82),0xfb   [llvm-mc cannot encode this]
+SC1_RxDecode:
+	ld	xiz, 11072	; F5B06C  ld XIZ,0x00002b40
+	ld	ix, (xiz+4)	; F5B071  ld IX,(XIZ+0x04)
+	ld	xde, 10900	; F5B074  ld XDE,0x00002a94
+	ldw_d16	iy, (10896)	; F5B079  ld IY,(0x2a90)
+; ---------------------------------------------------------------------
+; SC1_RxDecode_Loop -- top of the receive decoder's loop
+;
+; Called from: four `jrl T,0xF5B07D` at 0xF5B129, 0xF5B176, 0xF5B223 and
+;          0xF5B23F -- the tail of each of the four RxOp handlers -- plus
+;          fall-through from SC1_RxDecode's four-instruction setup.
+; Inputs:  XIZ = 0x2B40 (queue descriptor), XDE = 0x2A94 (rx ring), IY = the
+;          ring read index, IX = the queue write index.
+; Outputs: dispatches through SC1_RxOpTable, or falls out to SC1_RxDecode_Ret.
+; Evidence: the four branch sites are listed by `python3
+;          notes/prom_b_sc1_states.py --branches 0xF5B07D`.  That every RxOp
+;          handler ends by returning here is what makes this a LOOP TOP rather
+;          than a label: the four are the only ways back in.
+; The two guards, in order: `cp (XIZ+0x08),0x0004 / jrl C` -- stop if the queue
+;          has fewer than 4 free slots; then the wrap-at-0x4C difference of the
+;          two ring indices `cp A,2 / jrl C` -- stop if fewer than 2 bytes are
+;          pending.  Both exit to SC1_RxDecode_Ret.
+; Unknown: nothing about the ENCODING of the dispatched byte beyond the mask
+;          and shift; what op 2 versus op 6 means on the wire is not here.
+; ---------------------------------------------------------------------
+SC1_RxDecode_Loop:
+	.byte 0x9E, 0x08, 0x3F, 0x04, 0x00	; F5B07D  cp (XIZ+0x08),0x0004   [llvm-mc cannot encode this]
+	jrl	c, 445	; F5B082  jrl C,0xf5b242
+	ldw_d16	wa, (10898)	; F5B085  ld WA,(0x2a92)
+	.byte 0xD1, 0x90, 0x2A, 0xA0	; F5B089  sub WA,(0x2a90)   [llvm-mc cannot encode this]
+	jr	nc, 8	; F5B08D  jr NC,0xf5b097
+	neg	wa	; F5B08F  neg WA
+	ex8	a, w	; F5B091  ex A,W
+	ldb	a, 76	; F5B093  ld A,0x4c
+	sub	a, w	; F5B095  sub A,W
+	cps	a, 2	; F5B097  cp A,2
+	jrl	c, 422	; F5B099  jrl C,0xf5b242
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x27	; F5B09C  ld L,(XDE+IY)   [llvm-mc cannot encode this]
+	and	l, 56	; F5B0A1  and L,0x38
+	srl	l, 1	; F5B0A4  srl 0x01,L
+	xor	h, h	; F5B0A7  xor H,H
+	extz	xhl	; F5B0A9  extz XHL
+	add	xhl, 16101557	; F5B0AB  add XHL,0x00f5b0b5
+	ld	xhl, (xhl)	; F5B0B1  ld XHL,(XHL)
+	jp	(xhl)	; F5B0B3  jp T,XHL
+SC1_RxOpTable:
+	.long	0x00F5B0D5	; F5B0B5  [ 0] state/op 0x00 -> 0xF5B0D5
+	.long	0x00F5B0D5	; F5B0B9  [ 1] state/op 0x04 -> 0xF5B0D5
+	.long	0x00F5B12C	; F5B0BD  [ 2] state/op 0x08 -> 0xF5B12C
+	.long	0x00F5B226	; F5B0C1  [ 3] state/op 0x0C -> 0xF5B226
+	.long	0x00F5B226	; F5B0C5  [ 4] state/op 0x10 -> 0xF5B226
+	.long	0x00F5B226	; F5B0C9  [ 5] state/op 0x14 -> 0xF5B226
+	.long	0x00F5B179	; F5B0CD  [ 6] state/op 0x18 -> 0xF5B179
+	.long	0x00F5B179	; F5B0D1  [ 7] state/op 0x1C -> 0xF5B179
+; ---------------------------------------------------------------------
+; SC1_RxOp0_ThreeByte -- the two-byte-in, three-byte-out decoder
+;
+; Called from: SC1_RxOpTable entries [0] and [1]
+; Inputs:  two bytes from the rx ring
+; Outputs: three bytes appended to the inbound queue: the two received bytes,
+;          then the XOR of the second byte with the previous value stored for
+;          this index; the table at 0x2B20 is updated to the new value by the
+;          same `ex (XHL),A` that reads the old one.  The free count drops by 3.
+;          The three bytes are also mirrored to (0x2A88)/(0x2A89)/(0x2A8A).
+; Evidence: `and W,0x4F`, `bit 6,W`, `sub W,0x30`, `add L,W` is the index
+;          computation; it yields 0..0x1F, which is exactly the 32-byte extent
+;          0x2B20-0x2B3F that abuts the next object.
+; Notes:   emitting old XOR new alongside the new value is a CHANGE MASK: the
+;          consumer is told which bits of this group moved.
+; Unknown: what the groups are.  A change mask over 32 groups of 8 bits is the
+;          shape of a scanner, and this module is half-duplex with a request
+;          line -- but nothing here names what is scanned, so nothing does.
+; ---------------------------------------------------------------------
+SC1_RxOp0_ThreeByte:
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x20	; F5B0D5  ld W,(XDE+IY)   [llvm-mc cannot encode this]
+	calr	575	; F5B0DA  calr 0xf5b31c
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x40	; F5B0DD  ld (XIZ+IX),W   [llvm-mc cannot encode this]
+	calr	591	; F5B0E2  calr 0xf5b334
+	stb_d8	(10888), w	; F5B0E5  ld (0x2a88),W
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F5B0E9  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	calr	555	; F5B0EE  calr 0xf5b31c
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x41	; F5B0F1  ld (XIZ+IX),A   [llvm-mc cannot encode this]
+	calr	571	; F5B0F6  calr 0xf5b334
+	stb_d8	(10889), a	; F5B0F9  ld (0x2a89),A
+	and	w, 79	; F5B0FD  and W,0x4f
+	ld	xhl, 11040	; F5B100  ld XHL,0x00002b20
+	bit	6, w	; F5B105  bit 0x06,W
+	jr	z, 3	; F5B108  jr Z,0xf5b10d
+	sub	w, 48	; F5B10A  sub W,0x30
+	add	l, w	; F5B10D  add L,W
+	.byte 0x83, 0x31	; F5B10F  ex (XHL),A   [llvm-mc cannot encode this]
+	.byte 0x83, 0xD1	; F5B111  xor A,(XHL)   [llvm-mc cannot encode this]
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x41	; F5B113  ld (XIZ+IX),A   [llvm-mc cannot encode this]
+	calr	537	; F5B118  calr 0xf5b334
+	stb_d8	(10890), a	; F5B11B  ld (0x2a8a),A
+	ld	(xiz+4), ix	; F5B11F  ld (XIZ+0x04),IX
+	decm	3, (xiz+8)	; F5B122  decw 3,(XIZ+0x08)
+	stda16	(10896), iy	; F5B125  ld (0x2a90),IY
+	jrl	-175	; F5B129  jrl T,0xf5b07d
+; ---------------------------------------------------------------------
+; SC1_RxOp2 -- receive op 2: two bytes in, two or three out, filtered
+;
+; Called from: SC1_RxOpTable entry [2] only (key 0x08).  The table's index is
+;          `(byte & 0x38) >> 1`, so this is the handler for header bytes whose
+;          bits 5..3 are 0b010.
+; Inputs:  two bytes from the rx ring; XIZ/IX the inbound queue.
+; Outputs: the first byte always appended and mirrored to (0x2A88).  The second
+;          is mirrored to (0x2A89) and then offered to the module's ONLY
+;          external call, `call 0xF405F0` at 0xF5B14C, and the CARRY it returns
+;          picks the path.  Precisely, because the two differ in a way a
+;          summary hides:
+;            carry SET (0xF5B157) -- append the second byte, then append a
+;              0xFF, mirror the second to (0x2A8A), commit the write index with
+;              `ld (XIZ+0x04),IX` and drop the free count by 3.
+;            carry CLEAR (0xF5B152) -- `calr SC1_Queue_Prev` steps IX back over
+;              the FIRST byte, which was already stored at 0xF5B134, and the
+;              code jumps straight to 0xF5B172.  So (XIZ+0x04) is never
+;              updated and (XIZ+0x08) is never decremented: the byte is
+;              physically in the ring's storage but OUTSIDE the committed
+;              index, i.e. the record is DROPPED and will be overwritten.
+;          Either way (0x2A90) advances past both received bytes.
+; Evidence: the two paths are the `jr C,0xF5B157` at 0xF5B150 and the
+;          `calr 0xF5B33F` (SC1_Queue_Prev) at 0xF5B152; the table entry is
+;          read out of the ROM by `python3 notes/prom_b_sc1_states.py
+;          --tables`, which resolves every pointer to the label at its address.
+; Compare with SC1_RxOp0_ThreeByte: identical up to 0xF5B148, then op 0 does
+;          the 0x2B20 change-mask XOR while op 2 asks 0xF405F0 instead.
+; Unknown: what prom_a 0xF89800 (thunk 0xF405F0) decides.  Until that is read,
+;          "filtered" describes the SHAPE of the control flow and nothing more.
+; ---------------------------------------------------------------------
+SC1_RxOp2:
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x20	; F5B12C  ld W,(XDE+IY)   [llvm-mc cannot encode this]
+	calr	488	; F5B131  calr 0xf5b31c
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x40	; F5B134  ld (XIZ+IX),W   [llvm-mc cannot encode this]
+	calr	504	; F5B139  calr 0xf5b334
+	stb_d8	(10888), w	; F5B13C  ld (0x2a88),W
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F5B140  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	calr	468	; F5B145  calr 0xf5b31c
+	stb_d8	(10889), a	; F5B148  ld (0x2a89),A
+	call	15992304	; F5B14C  call 0xf405f0
+	jr	c, 5	; F5B150  jr C,0xf5b157
+	calr	490	; F5B152  calr 0xf5b33f
+	jr	27	; F5B155  jr T,0xf5b172
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x41	; F5B157  ld (XIZ+IX),A   [llvm-mc cannot encode this]
+	calr	469	; F5B15C  calr 0xf5b334
+	stb_d8	(10890), a	; F5B15F  ld (0x2a8a),A
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x00, 0xFF	; F5B163  ld (XIZ+IX),0xff   [llvm-mc cannot encode this]
+	calr	456	; F5B169  calr 0xf5b334
+	ld	(xiz+4), ix	; F5B16C  ld (XIZ+0x04),IX
+	decm	3, (xiz+8)	; F5B16F  decw 3,(XIZ+0x08)
+	stda16	(10896), iy	; F5B172  ld (0x2a90),IY
+	jrl	-252	; F5B176  jrl T,0xf5b07d
+; ---------------------------------------------------------------------
+; SC1_RxOp6_Run -- a run of (n+1) items in one message
+;
+; Called from: SC1_RxOpTable entries [6] and [7]
+; Inputs:  the run header byte; B = (b & 0x0F) + 1 items, and the decoder first
+;          checks that (b & 0x0F) + 3 bytes are actually pending
+; Outputs: up to three bytes appended per item, the last of which is 0xFF when
+;          the item is not eligible for the XOR path
+; Evidence: the loop counter is B and the tail `dec 1,B / cp B,0 / jr NZ` walks
+;          back to 0xF5B1BF; the `call 0xF405F0` inside it is the module's only
+;          call out, and its carry result selects between appending the byte
+;          and rewinding the queue index by one with SC1_Queue_Prev.
+; Unknown: prom_a 0xF89800, the target of thunk 0xF405F0.
+; ---------------------------------------------------------------------
+SC1_RxOp6_Run:
+	ld	w, a	; F5B179  ld W,A
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F5B17B  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	ld	c, a	; F5B180  ld C,A
+	and	a, 15	; F5B182  and A,0x0f
+	inc	1, a	; F5B185  inc 1,A
+	ld	b, a	; F5B187  ld B,A
+	add	a, 2	; F5B189  add A,0x02
+	cp	w, a	; F5B18C  cp W,A
+	jrl	c, 177	; F5B18E  jrl C,0xf5b242
+	calr	392	; F5B191  calr 0xf5b31c
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F5B194  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	calr	384	; F5B199  calr 0xf5b31c
+	and	a, 31	; F5B19C  and A,0x1f
+	and	c, 192	; F5B19F  and C,0xc0
+	or	c, a	; F5B1A2  or C,A
+	ld	w, c	; F5B1A4  ld W,C
+	bit	4, w	; F5B1A6  bit 0x04,W
+	jr	nz, 20	; F5B1A9  jr NZ,0xf5b1bf
+	and	c, 64	; F5B1AB  and C,0x40
+	ld	xhl, 11040	; F5B1AE  ld XHL,0x00002b20
+	bit	6, c	; F5B1B3  bit 0x06,C
+	jr	z, 3	; F5B1B6  jr Z,0xf5b1bb
+	sub	c, 48	; F5B1B8  sub C,0x30
+	or	a, c	; F5B1BB  or A,C
+	add	l, a	; F5B1BD  add L,A
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x40	; F5B1BF  ld (XIZ+IX),W   [llvm-mc cannot encode this]
+	calr	365	; F5B1C4  calr 0xf5b334
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F5B1C7  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	calr	333	; F5B1CC  calr 0xf5b31c
+	bit	4, w	; F5B1CF  bit 0x04,W
+	jr	z, 8	; F5B1D2  jr Z,0xf5b1dc
+	ld	c, w	; F5B1D4  ld C,W
+	call	15992304	; F5B1D6  call 0xf405f0
+	ld	w, c	; F5B1DA  ld W,C
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x41	; F5B1DC  ld (XIZ+IX),A   [llvm-mc cannot encode this]
+	calr	336	; F5B1E1  calr 0xf5b334
+	bit	4, w	; F5B1E4  bit 0x04,W
+	jr	nz, 24	; F5B1E7  jr NZ,0xf5b201
+	.byte 0x83, 0x31	; F5B1E9  ex (XHL),A   [llvm-mc cannot encode this]
+	.byte 0x83, 0xD1	; F5B1EB  xor A,(XHL)   [llvm-mc cannot encode this]
+	inc	1, hl	; F5B1ED  inc 1,HL
+	.byte 0xF1, 0x82, 0x2A, 0xCC	; F5B1EF  bit 4,(0x2a82)   [llvm-mc cannot encode this]
+	jr	z, 14	; F5B1F3  jr Z,0xf5b203
+	cps	a, 0	; F5B1F5  cp A,0
+	jr	nz, 10	; F5B1F7  jr NZ,0xf5b203
+	calr	323	; F5B1F9  calr 0xf5b33f
+	calr	320	; F5B1FC  calr 0xf5b33f
+	jr	22	; F5B1FF  jr T,0xf5b217
+	ldb	a, 255	; F5B201  ld A,0xff
+	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x41	; F5B203  ld (XIZ+IX),A   [llvm-mc cannot encode this]
+	calr	297	; F5B208  calr 0xf5b334
+	ld	(xiz+4), ix	; F5B20B  ld (XIZ+0x04),IX
+	decm	1, (xiz+8)	; F5B20E  decw 1,(XIZ+0x08)
+	decm	1, (xiz+8)	; F5B211  decw 1,(XIZ+0x08)
+	decm	1, (xiz+8)	; F5B214  decw 1,(XIZ+0x08)
+	stda16	(10896), iy	; F5B217  ld (0x2a90),IY
+	inc	1, w	; F5B21B  inc 1,W
+	dec	1, b	; F5B21D  dec 1,B
+	cps	b, 0	; F5B21F  cp B,0
+	jr	nz, -100	; F5B221  jr NZ,0xf5b1bf
+	jrl	-425	; F5B223  jrl T,0xf5b07d
+; ---------------------------------------------------------------------
+; SC1_RxOp3_Discard -- receive ops 3, 4 and 5: consume two bytes, emit nothing
+;
+; Called from: SC1_RxOpTable entries [3], [4] and [5] (keys 0x0C, 0x10, 0x14) --
+;          three of the eight slots share this one address.
+; Inputs:  two bytes from the rx ring.
+; Outputs: the ring read index (0x2A90) advanced past both, (0x2A84) bit 3 SET,
+;          and NOTHING appended to the inbound queue.  Then back to
+;          SC1_RxDecode_Loop.
+; Evidence: the body is exactly two `ld A,(XDE+IY)` + `calr SC1_RxRing_Next`
+;          pairs, then `ld (0x2A90),IY`, then `or (0x2A84),0x08`, then the
+;          jump back -- no queue store and no `decw (XIZ+0x08)` anywhere in it.
+;          The three table entries are read out of the ROM by `python3
+;          notes/prom_b_sc1_states.py --tables`.
+; Why the name: (0x2A84) is the module's sticky error/event byte, and the
+;          banner's RAM map already reads bit 3 as "decoder gave up".  Setting
+;          that bit while dropping the bytes is what "discard" names.
+; Unknown: whether ops 3, 4 and 5 are three distinct wire meanings that this
+;          firmware simply does not implement, or one meaning with slack.
+; ---------------------------------------------------------------------
+SC1_RxOp3_Discard:
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F5B226  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	calr	238	; F5B22B  calr 0xf5b31c
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F5B22E  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	calr	230	; F5B233  calr 0xf5b31c
+	stda16	(10896), iy	; F5B236  ld (0x2a90),IY
+	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x08	; F5B23A  or (0x2a84),0x08   [llvm-mc cannot encode this]
+	jrl	-453	; F5B23F  jrl T,0xf5b07d
+; ---------------------------------------------------------------------
+; SC1_RxDecode_Ret -- the receive decoder's only exit
+;
+; Called from: three `jrl C` at 0xF5B082, 0xF5B099 and 0xF5B18E.  The first two
+;          are SC1_RxDecode_Loop's two guards (queue nearly full; fewer than
+;          two bytes pending); the third is SC1_RxOp6_Run's check that the
+;          whole run has arrived.
+; Inputs:  none.   Outputs: a bare `ret`.
+; Evidence: `python3 notes/prom_b_sc1_states.py --branches 0xF5B242`.  Three
+;          branches, no fall-through -- 0xF5B23F above it is an unconditional
+;          `jrl` back to the loop top.
+; ---------------------------------------------------------------------
+SC1_RxDecode_Ret:
+	ret	; F5B242  ret
+; ---------------------------------------------------------------------
+; SC1_TxEncode -- move the outbound queue into the tx ring
+;
+; Called from: SC1_TxFlush_Body (0xF5AFF2), the only caller
+; Inputs:  outbound queue descriptor at 0x2BA0; tx ring indices
+; Outputs: bytes appended to the tx ring at 0x2AE4, wrapping at 0x3C
+; Evidence: it stops when the queue's two indices agree and its count is
+;          non-zero, or when fewer than three tx-ring slots are free, and
+;          dispatches on `(byte & 0x30) >> 2` through SC1_TxOpTable -- the
+;          transmit-side mirror of SC1_RxDecode.
+; ---------------------------------------------------------------------
+SC1_TxEncode:
+	ldw_d16	iy, (10978)	; F5B243  ld IY,(0x2ae2)
+	ld	xde, 10980	; F5B247  ld XDE,0x00002ae4
+	ld	xiz, 11168	; F5B24C  ld XIZ,0x00002ba0
+	ld	ix, (xiz+6)	; F5B251  ld IX,(XIZ+0x06)
+; ---------------------------------------------------------------------
+; SC1_TxEncode_Loop -- top of the transmit encoder's loop
+;
+; Called from: two `jrl T,0xF5B254` at 0xF5B2D6 and 0xF5B318, the tails of the
+;          two TxOp handlers, plus fall-through from SC1_TxEncode's setup.
+; Inputs:  XIZ = 0x2BA0 (outbound queue descriptor), XDE = 0x2AE4 (tx ring),
+;          IY = ring write index, IX = queue read index.
+; Outputs: dispatches through SC1_TxOpTable, or exits to SC1_TxEncode_Ret.
+; Evidence: the two branch sites, from `python3 notes/prom_b_sc1_states.py
+;          --branches 0xF5B254`.  This is the exact mirror of
+;          SC1_RxDecode_Loop, with the wrap constant 0x3C instead of 0x4C and
+;          the free-slot threshold 3 instead of 4.
+; The two guards: queue empty -- `cp WA,(XIZ+0x06)` equal AND count non-zero;
+;          and fewer than three free tx-ring slots -- `cp HL,3 / jrl C`.
+; ---------------------------------------------------------------------
+SC1_TxEncode_Loop:
+	ld	wa, (xiz+4)	; F5B254  ld WA,(XIZ+0x04)
+	.byte 0x9E, 0x06, 0xF0	; F5B257  cp WA,(XIZ+0x06)   [llvm-mc cannot encode this]
+	jr	nz, 8	; F5B25A  jr NZ,0xf5b264
+	.byte 0x9E, 0x08, 0x3F, 0x00, 0x00	; F5B25C  cp (XIZ+0x08),0x0000   [llvm-mc cannot encode this]
+	jrl	nz, 183	; F5B261  jrl NZ,0xf5b31b
+	ldw_d16	wa, (10978)	; F5B264  ld WA,(0x2ae2)
+	.byte 0xD1, 0xE0, 0x2A, 0xA0	; F5B268  sub WA,(0x2ae0)   [llvm-mc cannot encode this]
+	jr	nc, 6	; F5B26C  jr NC,0xf5b274
+	neg	wa	; F5B26E  neg WA
+	ld	hl, wa	; F5B270  ld HL,WA
+	jr	5	; F5B272  jr T,0xf5b279
+	ldw	hl, 60	; F5B274  ld HL,0x003c
+	sub	hl, wa	; F5B277  sub HL,WA
+	cps	hl, 3	; F5B279  cp HL,3
+	jrl	c, 157	; F5B27B  jrl C,0xf5b31b
+	.byte 0xC3, 0x07, 0xF8, 0xF0, 0x21	; F5B27E  ld A,(XIZ+IX)   [llvm-mc cannot encode this]
+	and	a, 48	; F5B283  and A,0x30
+	srl	a, 2	; F5B286  srl 0x02,A
+	ld	l, a	; F5B289  ld L,A
+	xor	h, h	; F5B28B  xor H,H
+	extz	xhl	; F5B28D  extz XHL
+	add	xhl, 16102041	; F5B28F  add XHL,0x00f5b299
+	ld	xhl, (xhl)	; F5B295  ld XHL,(XHL)
+	jp	(xhl)	; F5B297  jp T,XHL
+SC1_TxOpTable:
+	.long	0x00F5B2A9	; F5B299  [ 0] state/op 0x00 -> 0xF5B2A9
+	.long	0x00F5B2A9	; F5B29D  [ 1] state/op 0x04 -> 0xF5B2A9
+	.long	0x00F5B2A9	; F5B2A1  [ 2] state/op 0x08 -> 0xF5B2A9
+	.long	0x00F5B2D9	; F5B2A5  [ 3] state/op 0x0C -> 0xF5B2D9
+; ---------------------------------------------------------------------
+; SC1_TxOp0_TwoByte -- transmit ops 0, 1 and 2: copy two bytes to the tx ring
+;
+; Called from: SC1_TxOpTable entries [0], [1] and [2] (keys 0x00, 0x04, 0x08).
+;          The index is `(byte & 0x30) >> 2`, so the table has only FOUR slots
+;          and three of them land here.
+; Inputs:  XIZ/IX the outbound queue; XDE/IY the tx ring.
+; Outputs: two bytes appended to the ring, the queue read index advanced twice
+;          (SC1_Queue_Next), the queue free count incremented TWICE, and
+;          (0x2AE2) updated.  Then back to SC1_TxEncode_Loop.
+; Evidence: two `ld (XDE+IY),..` + `calr SC1_TxRing_Next` pairs and exactly two
+;          `incw 1,(XIZ+0x08)`; the three table entries are read out of the ROM
+;          by `python3 notes/prom_b_sc1_states.py --tables`.
+; Unknown: why ops 0, 1 and 2 are not distinguished on the transmit side when
+;          the receive side gives 0/1, 2, and 3/4/5 different handlers.
+; ---------------------------------------------------------------------
+SC1_TxOp0_TwoByte:
+	.byte 0xC3, 0x07, 0xF8, 0xF0, 0x21	; F5B2A9  ld A,(XIZ+IX)   [llvm-mc cannot encode this]
+	calr	131	; F5B2AE  calr 0xf5b334
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0x41	; F5B2B1  ld (XDE+IY),A   [llvm-mc cannot encode this]
+	calr	111	; F5B2B6  calr 0xf5b328
+	.byte 0xC3, 0x07, 0xF8, 0xF0, 0x20	; F5B2B9  ld W,(XIZ+IX)   [llvm-mc cannot encode this]
+	calr	115	; F5B2BE  calr 0xf5b334
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0x40	; F5B2C1  ld (XDE+IY),W   [llvm-mc cannot encode this]
+	calr	95	; F5B2C6  calr 0xf5b328
+	ld	(xiz+6), ix	; F5B2C9  ld (XIZ+0x06),IX
+	incm	1, (xiz+8)	; F5B2CC  incw 1,(XIZ+0x08)
+	incm	1, (xiz+8)	; F5B2CF  incw 1,(XIZ+0x08)
+	stda16	(10978), iy	; F5B2D2  ld (0x2ae2),IY
+	jrl	-133	; F5B2D6  jrl T,0xf5b254
+; ---------------------------------------------------------------------
+; SC1_TxOp3_Run -- transmit op 3: a header byte plus (n & 0x0F) + 2 more
+;
+; Called from: SC1_TxOpTable entry [3] (key 0x0C) only.
+; Inputs:  XIZ/IX the outbound queue; XDE/IY the tx ring.
+; Outputs: the header byte and then B = (header & 0x0F) + 2 further bytes
+;          copied to the ring, the queue free count incremented once per byte,
+;          (0x2AE2) updated each time round.  Then back to SC1_TxEncode_Loop.
+; Evidence: `and A,0x0F / add A,0x02 / ld B,A` at 0xF5B2E3-0xF5B2E9 is the
+;          count; the tail `dec 1,B / cp B,0 / jr NZ,0xF5B2F8` walks back into
+;          the body, not to its start, so the header byte is emitted once.
+; ⚠ The +2 here is NOT the +3 the RECEIVE side uses.  SC1_RxOp6_Run computes
+;          `(b & 0x0F) + 1` items and checks `(b & 0x0F) + 3` bytes pending;
+;          this emits `(b & 0x0F) + 2` bytes after the header.  Whether those
+;          agree on the wire is NOT established here -- they are different
+;          expressions over the same nibble and this tree has not reconciled
+;          them.  Do not assume the codecs are inverses.
+; Unknown: the wire meaning of the run encoding.
+; ---------------------------------------------------------------------
+SC1_TxOp3_Run:
+	.byte 0xC3, 0x07, 0xF8, 0xF0, 0x21	; F5B2D9  ld A,(XIZ+IX)   [llvm-mc cannot encode this]
+	calr	83	; F5B2DE  calr 0xf5b334
+	ld	c, a	; F5B2E1  ld C,A
+	and	a, 15	; F5B2E3  and A,0x0f
+	add	a, 2	; F5B2E6  add A,0x02
+	ld	b, a	; F5B2E9  ld B,A
+	ld	a, c	; F5B2EB  ld A,C
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0x41	; F5B2ED  ld (XDE+IY),A   [llvm-mc cannot encode this]
+	calr	51	; F5B2F2  calr 0xf5b328
+	incm	1, (xiz+8)	; F5B2F5  incw 1,(XIZ+0x08)
+	.byte 0xC3, 0x07, 0xF8, 0xF0, 0x21	; F5B2F8  ld A,(XIZ+IX)   [llvm-mc cannot encode this]
+	calr	52	; F5B2FD  calr 0xf5b334
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0x41	; F5B300  ld (XDE+IY),A   [llvm-mc cannot encode this]
+	calr	32	; F5B305  calr 0xf5b328
+	ld	(xiz+6), ix	; F5B308  ld (XIZ+0x06),IX
+	incm	1, (xiz+8)	; F5B30B  incw 1,(XIZ+0x08)
+	stda16	(10978), iy	; F5B30E  ld (0x2ae2),IY
+	dec	1, b	; F5B312  dec 1,B
+	cps	b, 0	; F5B314  cp B,0
+	jr	nz, -32	; F5B316  jr NZ,0xf5b2f8
+	jrl	-199	; F5B318  jrl T,0xf5b254
+; ---------------------------------------------------------------------
+; SC1_TxEncode_Ret -- the transmit encoder's only exit
+;
+; Called from: two `jrl` at 0xF5B261 (queue empty) and 0xF5B27B (fewer than
+;          three free tx-ring slots) -- SC1_TxEncode_Loop's two guards.
+; Inputs:  none.   Outputs: a bare `ret`.
+; Evidence: `python3 notes/prom_b_sc1_states.py --branches 0xF5B31B`.  No
+;          fall-through: 0xF5B318 above it is an unconditional `jrl`.
+; ---------------------------------------------------------------------
+SC1_TxEncode_Ret:
+	ret	; F5B31B  ret
+; ---------------------------------------------------------------------
+; SC1_RxRing_Next / SC1_TxRing_Next / SC1_Queue_Next / SC1_Queue_Prev
+;
+; Called from: SC1_RxRing_Next x9, SC1_TxRing_Next x4, SC1_Queue_Next x13,
+;          SC1_Queue_Prev x3 -- all from the two codecs
+; Inputs:  IY (the ring routines) or IX and XIZ (the queue routines)
+; Outputs: the index advanced or retreated, wrapped
+; Evidence: SC1_RxRing_Next wraps at 0x004C and SC1_TxRing_Next at 0x003C.
+;          Those two constants are the INDEPENDENT confirmation of the two ring
+;          sizes quoted in the module banner: the inline wrap tests in the state
+;          handlers use the same two numbers, and 0x2A94+0x4C and 0x2AE4+0x3C
+;          both land exactly on the next object.
+;          The queue routines take their bounds from the descriptor -- low at
+;          (XIZ+0x00), high at (XIZ+0x02) -- which is what makes those two
+;          fields the ring's limits rather than anything else.
+; ---------------------------------------------------------------------
+SC1_RxRing_Next:
+	inc	1, iy	; F5B31C  inc 1,IY
+	cp	iy, 76	; F5B31E  cp IY,0x004c
+	jr	c, 3	; F5B322  jr C,0xf5b327
+	ldw	iy, 0	; F5B324  ld IY,0x0000
+	ret	; F5B327  ret
+SC1_TxRing_Next:
+	inc	1, iy	; F5B328  inc 1,IY
+	cp	iy, 60	; F5B32A  cp IY,0x003c
+	jr	c, 3	; F5B32E  jr C,0xf5b333
+	ldw	iy, 0	; F5B330  ld IY,0x0000
+	ret	; F5B333  ret
+SC1_Queue_Next:
+	inc	1, ix	; F5B334  inc 1,IX
+	.byte 0x9E, 0x02, 0xF4	; F5B336  cp IX,(XIZ+0x02)   [llvm-mc cannot encode this]
+	jr	ule, 3	; F5B339  jr ULE,0xf5b33e
+	.byte 0x9E, 0x00, 0x24	; F5B33B  ld IX,(XIZ+0x00)   [llvm-mc cannot encode this]
+	ret	; F5B33E  ret
+SC1_Queue_Prev:
+	dec	1, ix	; F5B33F  dec 1,IX
+	.byte 0x9E, 0x00, 0xF4	; F5B341  cp IX,(XIZ+0x00)   [llvm-mc cannot encode this]
+	jr	nc, 3	; F5B344  jr NC,0xf5b349
+	ld	ix, (xiz+2)	; F5B346  ld IX,(XIZ+0x02)
+	ret	; F5B349  ret
+; ---------------------------------------------------------------------
+; SC1_Entry_F40F24_Body_Ret -- the single `ret` that makes the dead tail dead
+;
+; Called from: ONE site, `calr 0xF5B34A` at 0xF5A84B, which is the body of
+;          SC1_Entry_F40F24 -- the module's sixth public entry, thunk T_F40F24.
+; Inputs:  none.   Outputs: returns immediately.
+; Evidence: `python3 notes/prom_b_sc1_states.py --branches 0xF5B34A` finds that
+;          one `calr` and nothing else; `python3 notes/prom_b_sc1_census.py
+;          --selftest` section E asserts the byte at 0xF5B34A is 0x0E, a bare
+;          `ret`.  This label is the hinge of the SC1_DeadTail argument in the
+;          header immediately below: the entry point calls HERE, and here
+;          returns, so nothing below 0xF5B34A is entered from it.
+; Unknown: what the 259 bytes after it were meant to do.  See SC1_DeadTail.
+; ---------------------------------------------------------------------
+SC1_Entry_F40F24_Body_Ret:
+	ret	; F5B34A  ret
+; ---------------------------------------------------------------------
+; SC1_DeadTail -- 259 bytes that nothing in this tree can reach
+;
+; Called from: nothing.  Thunk T_F40F24 -> SC1_Entry_F40F24 -> `calr 0xF5B34A`,
+;          and 0xF5B34A is a single 0x0E: a bare `ret`.  So the module's sixth
+;          public entry point returns immediately and never enters the body
+;          below it.  T_F40F24 itself has no caller in either image.
+; Inputs:  n/a
+; Outputs: n/a
+; Evidence, and it is worth stating precisely, because "dead" is a strong word:
+;   1. 0xF5B350-0xF5B365 is BYTE-IDENTICAL to 0xF5B334-0xF5B349, the live
+;      SC1_Queue_Next / SC1_Queue_Prev pair -- 22 bytes, all 22 equal.
+;   2. TWENTY `calr` displacements in this region resolve to SIX distinct
+;      addresses -- 0xF5A9B2, 0xF5AA9B, 0xF5AAA7, 0xF5AAB3, 0xF5AB21 and
+;      0xF5B07E -- and not one of the six is an instruction boundary of the
+;      live code (0xF5B07E is one byte inside the instruction at 0xF5B07D).
+;      Section G of `python3 notes/prom_b_sc1_census.py --selftest` enumerates
+;      all twenty rather than repeating this list.
+;   3. Three of those targets are 0x0C apart -- 0xF5AA9B, 0xF5AAA7, 0xF5AAB3 --
+;      which is exactly the spacing of the five spin-delay routines, and exactly
+;      0x75 above SC1_Spin2, SC1_Spin6 and SC1_Spin10.
+;   Read together: a copy of an earlier build of this module that was kept in
+;   the image and never re-relocated, with a `ret` planted in front of it.
+; Unknown: ⚠ that reading is NOT established.  0x75 does not carry the other
+;   three targets onto anything, so a single uniform shift does not explain all
+;   of them.  What is established is only (1), (2) and the unreachability.
+;   The bytes are transcribed exactly and the labels here are positional.
+; ---------------------------------------------------------------------
+SC1_DeadTail:
+	pop	sr	; F5B34B  pop SR
+	ldw	iy, 0	; F5B34C  ld IY,0x0000
+	ret	; F5B34F  ret
+	inc	1, ix	; F5B350  inc 1,IX
+	.byte 0x9E, 0x02, 0xF4	; F5B352  cp IX,(XIZ+0x02)   [llvm-mc cannot encode this]
+	jr	ule, 3	; F5B355  jr ULE,0xf5b35a
+	.byte 0x9E, 0x00, 0x24	; F5B357  ld IX,(XIZ+0x00)   [llvm-mc cannot encode this]
+	ret	; F5B35A  ret
+	dec	1, ix	; F5B35B  dec 1,IX
+	.byte 0x9E, 0x00, 0xF4	; F5B35D  cp IX,(XIZ+0x00)   [llvm-mc cannot encode this]
+	jr	nc, 3	; F5B360  jr NC,0xf5b365
+	ld	ix, (xiz+2)	; F5B362  ld IX,(XIZ+0x02)
+	ret	; F5B365  ret
+	ret	; F5B366  ret
+	ldb	a, 0	; F5B367  ld A,0x00
+	and	a, 215	; F5B369  and A,0xd7
+	stb_d8	(10887), a	; F5B36C  ld (0x2a87),A
+	st_dd8b	a, 27	; F5B370  ld (0x1b),A
+	ldb	a, 0	; F5B373  ld A,0x00
+	or	a, 8	; F5B375  or A,0x08
+	and	a, 223	; F5B378  and A,0xdf
+	stb_d8	(10886), a	; F5B37B  ld (0x2a86),A
+	st_dd8b	a, 26	; F5B37F  ld (0x1a),A
+	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5B382  and (0x18),0xdf   [llvm-mc cannot encode this]
+	ldio	87, 34	; F5B386  ld (0x57),0x22
+	stdi16	(10976), 0	; F5B389  ld (0x2ae0),0x0000
+	stdi16	(10978), 0	; F5B38F  ld (0x2ae2),0x0000
+	calr	134	; F5B395  calr 0xf5b41e
+	calr	63256	; F5B398  calr 0xf5aab3
+	calr	128	; F5B39B  calr 0xf5b41e
+	calr	63250	; F5B39E  calr 0xf5aab3
+	calr	122	; F5B3A1  calr 0xf5b41e
+	calr	63244	; F5B3A4  calr 0xf5aab3
+	calr	140	; F5B3A7  calr 0xf5b436
+	calr	63226	; F5B3AA  calr 0xf5aaa7
+	calr	63223	; F5B3AD  calr 0xf5aaa7
+	calr	63220	; F5B3B0  calr 0xf5aaa7
+	ldb	a, 221	; F5B3B3  ld A,0xdd
+	ldb	w, 3	; F5B3B5  ld W,0x03
+	stda16	(10980), wa	; F5B3B7  ld (0x2ae4),WA
+	calr	62964	; F5B3BB  calr 0xf5a9b2
+	calr	63194	; F5B3BE  calr 0xf5aa9b
+	stdi16	(10976), 0	; F5B3C1  ld (0x2ae0),0x0000
+	calr	63197	; F5B3C7  calr 0xf5aaa7
+	calr	63194	; F5B3CA  calr 0xf5aaa7
+	calr	63191	; F5B3CD  calr 0xf5aaa7
+	calr	63188	; F5B3D0  calr 0xf5aaa7
+	ei	7	; F5B3D3  ei 0x07
+	ldio	120, 85	; F5B3D5  ld (0x78),0x55
+	ldio	114, 5	; F5B3D8  ld (0x72),0x05
+	stdi16	(10896), 0	; F5B3DB  ld (0x2a90),0x0000
+	stdi16	(10898), 0	; F5B3E1  ld (0x2a92),0x0000
+	ld	xhl, 11072	; F5B3E7  ld XHL,0x00002b40
+	.byte 0xBB, 0x00, 0x02, 0x0A, 0x00	; F5B3EC  ld (XHL+0x00),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x02, 0x02, 0x5F, 0x00	; F5B3F1  ld (XHL+0x02),0x005f   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x04, 0x02, 0x0A, 0x00	; F5B3F6  ld (XHL+0x04),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x06, 0x02, 0x0A, 0x00	; F5B3FB  ld (XHL+0x06),0x000a   [llvm-mc cannot encode this]
+	.byte 0xBB, 0x08, 0x02, 0x56, 0x00	; F5B400  ld (XHL+0x08),0x0056   [llvm-mc cannot encode this]
+	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5B405  and (0x56),0xdf   [llvm-mc cannot encode this]
+	di	; F5B409  ei 0x00
+	stdi16	(10976), 0	; F5B40B  ld (0x2ae0),0x0000
+	stdi16	(10978), 0	; F5B411  ld (0x2ae2),0x0000
+	calr	63239	; F5B417  calr 0xf5ab21
+	calr	64609	; F5B41A  calr 0xf5b07e
+	ret	; F5B41D  ret
+	ldb	a, 223	; F5B41E  ld A,0xdf
+	ldb	w, 210	; F5B420  ld W,0xd2
+	stda16	(10980), wa	; F5B422  ld (0x2ae4),WA
+	calr	62857	; F5B426  calr 0xf5a9b2
+	calr	63087	; F5B429  calr 0xf5aa9b
+	stdi16	(10976), 0	; F5B42C  ld (0x2ae0),0x0000
+	calr	63090	; F5B432  calr 0xf5aaa7
+	ret	; F5B435  ret
+	ldb	a, 223	; F5B436  ld A,0xdf
+	ldb	w, 26	; F5B438  ld W,0x1a
+	stda16	(10980), wa	; F5B43A  ld (0x2ae4),WA
+	calr	62833	; F5B43E  calr 0xf5a9b2
+	calr	63063	; F5B441  calr 0xf5aa9b
+	stdi16	(10976), 0	; F5B444  ld (0x2ae0),0x0000
+	calr	63066	; F5B44A  calr 0xf5aaa7
+	ret	; F5B44D  ret
+	.fill	946, 1, 0x0E	; F5B44E-F5B7FF  ret padding to the 4 KiB boundary
+
+
+; ==============================================================================
+; 0xF5B800-0xF5B8B5 -- FOUR STACK-ARGUMENT VENEERS: ONE TEXT COPY, ONE QUEUE
+;                      PUSH, AND THE TWO LINE-DRAW WRAPPERS
+; ==============================================================================
+;
+; 182 bytes, four thunk entry points, sitting immediately below the selector
+; dispatchers at 0xF5B8B6 and immediately above the SC1 module's 0x0E padding.
+; Every one of the four takes its arguments off the CALLER'S STACK through the
+; `push XIZ / ld XIZ,XSP` frame the rest of prom_b uses, so (XIZ+0x08) is the
+; first 16-bit argument, (XIZ+0x0A) the second, and so on.
+;
+; The four, and their opcode-anchored reference upper bounds:
+;   0xF5B800  T_F43330  x8   copy a 13-byte label into the RAM text buffer
+;   0xF5B81C  T_F41EEC  x1   push two records onto the list at 0x2030
+;   0xF5B84C  T_F41EE4  x23  SWI7 service 0x00 -- draw a solid line
+;   0xF5B881  T_F41EE8  x9   SWI7 service 0x15 -- draw a dashed line
+; ⚠ Those counts are BYTE-SCAN UPPER BOUNDS on `1D`/`1B` + slot address across
+; prom_a+prom_b, not instruction-anchored call counts.  They rank; they do not
+; prove.  That is the same caveat notes/prom_b_call_graph.py states.  What IS
+; exact: the four counts total 41, of which 39 are in prom_a and 2 in prom_b
+; (both prom_b ones are on T_F43330), and the two line wrappers account for 32
+; of the 41 on their own.  Emitted by `python3 notes/prom_b_f5b800_checks.py`.
+;
+; ★ THIS BLOCK ANSWERS AN OPEN QUESTION RECORDED IN prom_a.
+; prom_a/wsa1_prom_a.s's header on SWI7 service 0x00 says, verbatim:
+;     "⚠ NOT ESTABLISHED: who calls service 0x00 and how it sets
+;      (0x2530)-(0x2536)"
+; 0xF5B84C is the answer to both halves: it is a C-callable veneer that copies
+; four 16-bit stack arguments into (0x2530), (0x2532), (0x2534) and (0x2536) --
+; in that order, so X0, Y0, X1, Y1 as prom_a's own analysis assigns them --
+; forces the layer byte (0x2540) to 0, and issues the service.  0xF5B881 is the
+; same veneer for the dashed variant.  (prom_a is another lane's file and is not
+; edited from here; its header still carries the question.)
+; ==============================================================================
+
+; ---------------------------------------------------------------------
+; UiText_CopyLabel13_To_22F0 -- copy one 13-byte label into the RAM text buffer
+;
+; Called from: thunk slot T_F43330; 8 opcode-anchored references, 6 in prom_a
+;          and 2 in prom_b.  UPPER BOUND, not a call count.
+; Inputs:  A = label index.  Only bits 0-5 are used.
+; Outputs: 13 bytes at 0x000022F0 overwritten; XIY, XIX, BC clobbered.
+; Evidence: `extz XWA / extz WA / and A,0x3F / mul A,0x0D /
+;          ld XIY,0x00F33022 / add XIY,XWA / ld XIX,0x000022F0 /
+;          ld BC,0x000D / ldir`.  The stride and the copy length are the SAME
+;          literal 13, and the base is the 32-bit literal 0xF33022.
+;
+; ★ THE `and A,0x3F` IS AN INDEPENDENT BOUND ON A TABLE THIS TREE HAD ONLY
+;   BOUNDED BY ABUTMENT.  notes/FINDINGS-prom_b-ui-variable-index.md records
+;   0xF33022 as a 13-byte-wide table of 64 entries, with the count established
+;   by "0xF33022 + 64*13 = 0xF33362, where a well-formed interpreter-A record
+;   starts".  That is abutment.  This routine masks the index to 0..0x3F before
+;   multiplying, so the CODE cannot address a 65th entry -- a second,
+;   independent reason for 64, from a different image region.  The two agree.
+;   Checked here: 0xF33022 + 64*13 = 0xF33362 exactly; entry 0 is
+;   '-------------', entry 49 is 'REV DYNAMIC  ' and entry 63 -- the LAST -- is
+;   the right-aligned '           63', all three re-read from the ROM.
+;
+; ★ AND THE DESTINATION IS ONE OF THE 13 RAM TABLES THE VARIABLE INDEX FOUND.
+;   0x0022F0 appears in `python3 notes/prom_b_var_screens.py --tables` at three
+;   entry widths, and one of them is w13 -- the same 13.  So this is the writer
+;   of a buffer that display-list interpreter B reads back at that width.
+;   Which record reads it is NOT traced here.
+; Unknown: who chooses the index, and whether the two other widths at 0x22F0
+;          (w2 and w16) mean the buffer is shared or the index is coarse.
+; ---------------------------------------------------------------------
+UiText_CopyLabel13_To_22F0:		; <- T_F43330
+	extz	xwa	; F5B800  extz XWA
+	extz	wa	; F5B802  extz WA
+	and	a, 63	; F5B804  and A,0x3f
+	mul	a, 13	; F5B807  mul A,0x0d
+	ld	xiy, 15937570	; F5B80A  ld XIY,0x00f33022
+	add	xiy, xwa	; F5B80F  add XIY,XWA
+	ld	xix, 8944	; F5B811  ld XIX,0x000022f0
+	ldw	bc, 13	; F5B816  ld BC,0x000d
+	.byte 0x85, 0x11	; F5B819  ldir   [llvm-mc cannot encode this]
+	ret	; F5B81B  ret
+; ---------------------------------------------------------------------
+; sub_F5B81C -- push TWO records onto the list at 0x2030, via thunk T_F40F40
+;
+; NAMED sub_XXXXXX ON PURPOSE.  What the records MEAN is not established, and
+; the tree's rule is that a stated gap beats a plausible guess.  The mechanism
+; below is measured; the meaning is not.
+;
+; Called from: thunk slot T_F41EEC; ONE opcode-anchored reference, in prom_a.
+; Inputs:  three 16-bit stack arguments -- (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C).
+; Outputs: two calls to T_F40F40, each with XDE = 0 and a packed XWA:
+;            call 1:  W = 0x3F              A = low byte of (XIZ+0x08)
+;            call 2:  W = L of (XIZ+0x0C)   A = low byte of (XIZ+0x0A)
+;          All registers restored.
+; Evidence: `ld E,0 / ld D,0` before each call is the DE=0; `ld WA,(XIZ+0x08) /
+;          ld W,0x3F` loads the 16-bit argument and then OVERWRITES its high
+;          half, which is what makes W a separate field rather than the
+;          argument's top byte; the second call does the same with
+;          `ld HL,(XIZ+0x0C) / ld W,L`.  The `push XIZ / call / pop XIZ` around
+;          the first call and not the second says the callee clobbers XIZ.
+; What T_F40F40 is: it jumps to prom_a 0xF86AC7, which is in prom_a's
+;          `.incbin` -- UNCONVERTED, another lane's territory.  Disassembled
+;          from the thunk target (so the instruction boundary is certain, not
+;          guessed), it walks 0x2030 in steps of 4 looking for a 0xFF marker,
+;          refuses the write when the pointer passes 0x206B, and otherwise
+;          stores `ld (XHL),DE`, `ld (XHL+0x02),WA`, `ld (XHL+0x04),0xFF`.
+;          So: a 4-byte record {DE, WA}, appended to a 0xFF-terminated list of
+;          at most fifteen slots, 0x2030-0x206B.
+; ⚠ That last paragraph is read out of ANOTHER IMAGE'S UNCONVERTED BYTES.  It
+;          is evidence for the shape of the call, not a conversion of 0xF86AC7,
+;          and it must be re-checked when prom_a's lane reaches that address.
+; Unknown: everything about meaning -- what the list at 0x2030 is consumed by,
+;          why 0x3F is a constant field in the first record, and why the only
+;          caller is a single site in prom_a.
+; ---------------------------------------------------------------------
+sub_F5B81C:		; <- T_F41EEC
+	push	xiz	; F5B81C  push XIZ
+	ld	xiz, xsp	; F5B81D  ld XIZ,XSP
+	push	xwa	; F5B81F  push XWA
+	push	xbc	; F5B820  push XBC
+	push	xde	; F5B821  push XDE
+	push	xhl	; F5B822  push XHL
+	push	xix	; F5B823  push XIX
+	push	xiy	; F5B824  push XIY
+	ldb	e, 0	; F5B825  ld E,0x00
+	ldb	d, 0	; F5B827  ld D,0x00
+	ld	wa, (xiz+8)	; F5B829  ld WA,(XIZ+0x08)
+	ldb	w, 63	; F5B82C  ld W,0x3f
+	push	xiz	; F5B82E  push XIZ
+	call	15994688	; F5B82F  call 0xf40f40
+	pop	xiz	; F5B833  pop XIZ
+	ldb	e, 0	; F5B834  ld E,0x00
+	ldb	d, 0	; F5B836  ld D,0x00
+	ld	wa, (xiz+10)	; F5B838  ld WA,(XIZ+0x0a)
+	ld	hl, (xiz+12)	; F5B83B  ld HL,(XIZ+0x0c)
+	ld	w, l	; F5B83E  ld W,L
+	call	15994688	; F5B840  call 0xf40f40
+	pop	xiy	; F5B844  pop XIY
+	pop	xix	; F5B845  pop XIX
+	pop	xhl	; F5B846  pop XHL
+	pop	xde	; F5B847  pop XDE
+	pop	xbc	; F5B848  pop XBC
+	pop	xwa	; F5B849  pop XWA
+	pop	xiz	; F5B84A  pop XIZ
+	ret	; F5B84B  ret
+; ---------------------------------------------------------------------
+; Gfx_DrawLine_Solid -- SWI7 service 0x00 with its four coordinates
+;
+; Called from: thunk slot T_F41EE4; 23 opcode-anchored references, ALL of them
+;          in prom_a, none in prom_b.  Upper bound, not a call count -- but it
+;          is the largest count of the four routines in this block.
+; Inputs:  four 16-bit stack arguments: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C),
+;          (XIZ+0x0E).
+; Outputs: (0x2530) (0x2532) (0x2534) (0x2536) = those four, in order;
+;          (0x2540) = 0 as a BYTE; then `ld A,0x00 / swi 7`.  All registers
+;          restored.
+; Evidence: the four `ld WA,(XIZ+n) / ld (0x25xx),WA` pairs, then the 5-byte
+;          `ld (0x2540),0x00` (opcode 0x00, an 8-bit immediate store -- NOT a
+;          16-bit one, despite the two 0x00 bytes in `F1 40 25 00 00`), then
+;          A = 0 and the trap.
+; What service 0x00 is: prom_a's SWI7_ServiceTable slot 0x00 holds 0x00F8EAC7,
+;          which prom_a converts and documents as the LINE DRAW, and prom_a's
+;          own header assigns (0x2530)/(0x2534) as X and (0x2532)/(0x2536) as Y
+;          from the dx/dy subtraction inside the service.  So the argument order
+;          here is X0, Y0, X1, Y1.  Reproduce the slot lookup with
+;          `python3 notes/swi7_service_table.py`.
+; ★ This closes prom_a's "NOT ESTABLISHED: who calls service 0x00 and how it
+;          sets (0x2530)-(0x2536)".  See the block banner above.
+; Unknown: what (0x2540) selects.  prom_a's header reads it as the layer; this
+;          veneer only ever writes 0, so nothing HERE distinguishes "layer 0"
+;          from "the field this caller does not use".
+; ---------------------------------------------------------------------
+Gfx_DrawLine_Solid:		; <- T_F41EE4
+	push	xiz	; F5B84C  push XIZ
+	ld	xiz, xsp	; F5B84D  ld XIZ,XSP
+	push	xwa	; F5B84F  push XWA
+	push	xbc	; F5B850  push XBC
+	push	xde	; F5B851  push XDE
+	push	xhl	; F5B852  push XHL
+	push	xix	; F5B853  push XIX
+	push	xiy	; F5B854  push XIY
+	ld	wa, (xiz+8)	; F5B855  ld WA,(XIZ+0x08)
+	stda16	(9520), wa	; F5B858  ld (0x2530),WA
+	ld	wa, (xiz+10)	; F5B85C  ld WA,(XIZ+0x0a)
+	stda16	(9522), wa	; F5B85F  ld (0x2532),WA
+	ld	wa, (xiz+12)	; F5B863  ld WA,(XIZ+0x0c)
+	stda16	(9524), wa	; F5B866  ld (0x2534),WA
+	ld	wa, (xiz+14)	; F5B86A  ld WA,(XIZ+0x0e)
+	stda16	(9526), wa	; F5B86D  ld (0x2536),WA
+	stdi8	(9536), 0	; F5B871  ld (0x2540),0x00
+	ldb	a, 0	; F5B876  ld A,0x00
+	swi	7	; F5B878  swi 7
+	pop	xiy	; F5B879  pop XIY
+	pop	xix	; F5B87A  pop XIX
+	pop	xhl	; F5B87B  pop XHL
+	pop	xde	; F5B87C  pop XDE
+	pop	xbc	; F5B87D  pop XBC
+	pop	xwa	; F5B87E  pop XWA
+	pop	xiz	; F5B87F  pop XIZ
+	ret	; F5B880  ret
+; ---------------------------------------------------------------------
+; Gfx_DrawLine_Dashed -- the same veneer, for SWI7 service 0x15
+;
+; Called from: thunk slot T_F41EE8; 9 opcode-anchored references, all in prom_a.
+; Inputs / Outputs: identical to Gfx_DrawLine_Solid above.
+; Evidence, and it is a BYTE DIFF rather than a reading: 0xF5B84C and 0xF5B881
+;          are 53 bytes each and differ in EXACTLY ONE byte -- offset 43, the
+;          service number, 0x00 against 0x15.  52 of 53 identical.  So this is
+;          not "similar to" the solid veneer, it IS the solid veneer with a
+;          different service number, and every claim made about the argument
+;          layout there carries over unchanged.
+; What service 0x15 is: prom_a's SWI7_ServiceTable slot 0x15 holds 0x00F900B0,
+;          which prom_a converts as `LCD_Svc_15_DrawLineDashed` -- "the line
+;          draw, two pixels on, two off".  That is where the name comes from;
+;          nothing in prom_b says "dashed".
+; Unknown: the same (0x2540) question as above.
+; ---------------------------------------------------------------------
+Gfx_DrawLine_Dashed:		; <- T_F41EE8
+	push	xiz	; F5B881  push XIZ
+	ld	xiz, xsp	; F5B882  ld XIZ,XSP
+	push	xwa	; F5B884  push XWA
+	push	xbc	; F5B885  push XBC
+	push	xde	; F5B886  push XDE
+	push	xhl	; F5B887  push XHL
+	push	xix	; F5B888  push XIX
+	push	xiy	; F5B889  push XIY
+	ld	wa, (xiz+8)	; F5B88A  ld WA,(XIZ+0x08)
+	stda16	(9520), wa	; F5B88D  ld (0x2530),WA
+	ld	wa, (xiz+10)	; F5B891  ld WA,(XIZ+0x0a)
+	stda16	(9522), wa	; F5B894  ld (0x2532),WA
+	ld	wa, (xiz+12)	; F5B898  ld WA,(XIZ+0x0c)
+	stda16	(9524), wa	; F5B89B  ld (0x2534),WA
+	ld	wa, (xiz+14)	; F5B89F  ld WA,(XIZ+0x0e)
+	stda16	(9526), wa	; F5B8A2  ld (0x2536),WA
+	stdi8	(9536), 0	; F5B8A6  ld (0x2540),0x00
+	ldb	a, 21	; F5B8AB  ld A,0x15
+	swi	7	; F5B8AD  swi 7
+	pop	xiy	; F5B8AE  pop XIY
+	pop	xix	; F5B8AF  pop XIX
+	pop	xhl	; F5B8B0  pop XHL
+	pop	xde	; F5B8B1  pop XDE
+	pop	xbc	; F5B8B2  pop XBC
+	pop	xwa	; F5B8B3  pop XWA
+	pop	xiz	; F5B8B4  pop XIZ
+	ret	; F5B8B5  ret
 
 
 ; ==============================================================================
@@ -25664,8 +27918,3475 @@ DispatchTable_F5B9F8:
 	.long 0x00F5BF17	; [0xAE]   (default `ret`)  <- also selector 0xCE
 	.long 0x00F5BF17	; [0xAF]   (default `ret`)  <- also selector 0xCF
 
-; --- 0xF5BAB8-0xF77FFF: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x05BAB8, 0x01C548
+; --- 0xF5BAB8-0xF62BFF: not converted ---
+
+; ==============================================================================
+; 0xF5BAB8-0xF5BBE6 -- TWO SCREEN PAINTERS AND A THIRD SWI7 VENEER
+; ==============================================================================
+;
+; 303 bytes, three thunk entry points, continuing straight on from the selector
+; dispatchers above.  The first two are UI painters: they set the layer byte
+; (0x2540) and hand (start, end) pairs to DisplayList_Run through thunk
+; T_F417F0, which carries the HIGHEST reference count of any annotated slot in
+; the table -- 392, rank 1 of the 818 slots that carry a count -- and is
+; labelled `THE UI ENGINE` where it is defined.  (Ranked by re-reading the
+; counts already written into this file's own thunk-table listing.  ⚠ Watch the
+; regex when you redo it: `0x31A09` on that same line contains a literal `x31`,
+; so a naive `x(\d+)` scan reads THAT as the count and produces a completely
+; different -- and wrong -- ranking.  It is the LAST `x<digits>` token on the
+; line.  I made exactly that mistake once while checking this sentence.)
+; The third is the
+; same 53-byte SWI7 veneer already converted twice at 0xF5B84C and 0xF5B881.
+;
+; Reference upper bounds (byte scan of `1D`/`1B` + slot, so a RANK not a count):
+;   0xF5BAB8  T_F41ED8  x1   prom_a
+;   0xF5BB00  T_F41EDC  x0   -- NO reference in either image; see its header
+;   0xF5BBB2  T_F41EE0  x7   prom_a
+;
+; ★ (0x2540) IS A LAYER SELECTOR, AND THIS BLOCK IS WHERE THAT BECOMES VISIBLE
+; IN prom_b.  The three veneers converted above only ever write 0 to it, so
+; nothing there could distinguish "the layer field" from "a field this caller
+; does not use" -- their headers say exactly that.  The painters here write
+; BOTH 0 and 1 (`ld (0x2540),0x00` at 0xF5BABF, 0xF5BB0E, 0xF5BB25 and
+; `ld (0x2540),0x01` at 0xF5BAE5, 0xF5BB8E), and they switch value between two
+; display lists that draw at the SAME coordinates.  That is a second, prom_b
+; -side reason for prom_a's reading of (0x2540) as the layer, arrived at
+; independently of prom_a's own.
+; ⚠ Still not established: how many layers there are, or which one is on top.
+; Only the values 0 and 1 are ever written anywhere in this block.
+; ==============================================================================
+
+; ---------------------------------------------------------------------
+; UiPaint_Solo -- paint the "SOLO" panel, then one of two state overlays
+;
+; Called from: thunk slot T_F41ED8; ONE opcode-anchored reference, in prom_a.
+; Inputs:  (0x27A2), a byte, tested against 0.  No register arguments -- this
+;          routine takes none off the stack (it never builds an XIZ frame).
+; Outputs: two display lists painted; (0x2540) left at 0 or 1; all seven
+;          register pairs restored.
+; What it does, in order:
+;   1. (0x2540) = 0, then DisplayList_Run(0xF02FB2, 0xF02FD9) -- that is
+;      DL_F02FB2, converted above, whose first record is `op 06` with the
+;      literal `.ascii "SOLO"` in it, followed by three coordinate records.
+;   2. if (0x27A2) != 0:  DisplayList_Run(0xF02FD9, 0xF02FE3), still layer 0.
+;      if (0x27A2) == 0:  (0x2540) = 1, then
+;                         DisplayList_Run(0xF02FE3, 0xF02FED).
+; Evidence: every one of those six addresses is a 32-bit literal in the
+;          instruction stream (`ld XIY,0x00F02FB2` at 0xF5BAC4 and so on), and
+;          each pair is (start, end) because that is the argument convention of
+;          DisplayList_Run, which T_F417F0 names.  The branch is
+;          `cp (0x27A2),0x00 / jr Z,0xF5BAE5`.
+; ★ The two overlays draw the SAME RECTANGLE with different ops on different
+;          layers: DL_F02FD9 is `op 05` with operands 0x0008, 0x0021, 0x0028,
+;          0x002C, and DL_F02FE3 is `op 1B` with those four words byte for
+;          byte.  So the (0x27A2) branch is a two-state indicator, not two
+;          unrelated drawings.
+; Why the name: the only human-readable thing this routine paints
+;          unconditionally is the string "SOLO" inside DL_F02FB2.  The name is
+;          taken from that literal and from nothing else.
+; Unknown: what (0x27A2) holds -- nothing in this block writes it.  What ops
+;          0x05 and 0x1B do differs by interpreter-A handler, both 0xF31A75.
+; ---------------------------------------------------------------------
+UiPaint_Solo:		; <- T_F41ED8
+	push	xwa	; F5BAB8  push XWA
+	push	xbc	; F5BAB9  push XBC
+	push	xde	; F5BABA  push XDE
+	push	xhl	; F5BABB  push XHL
+	push	xix	; F5BABC  push XIX
+	push	xiy	; F5BABD  push XIY
+	push	xiz	; F5BABE  push XIZ
+	stdi8	(9536), 0	; F5BABF  ld (0x2540),0x00
+	ld	xiy, 15740850	; F5BAC4  ld XIY,0x00f02fb2
+	ld	xix, 15740889	; F5BAC9  ld XIX,0x00f02fd9
+	call	15996912	; F5BACE  call 0xf417f0
+	.byte 0xC1, 0xA2, 0x27, 0x3F, 0x00	; F5BAD2  cp (0x27a2),0x00   [llvm-mc cannot encode this]
+	jr	z, 12	; F5BAD7  jr Z,0xf5bae5
+	ld	xiy, 15740889	; F5BAD9  ld XIY,0x00f02fd9
+	ld	xix, 15740899	; F5BADE  ld XIX,0x00f02fe3
+	jr	15	; F5BAE3  jr T,0xf5baf4
+	stdi8	(9536), 1	; F5BAE5  ld (0x2540),0x01
+	ld	xiy, 15740899	; F5BAEA  ld XIY,0x00f02fe3
+	ld	xix, 15740909	; F5BAEF  ld XIX,0x00f02fed
+	call	15996912	; F5BAF4  call 0xf417f0
+	pop	xiz	; F5BAF8  pop XIZ
+	pop	xiy	; F5BAF9  pop XIY
+	pop	xix	; F5BAFA  pop XIX
+	pop	xhl	; F5BAFB  pop XHL
+	pop	xde	; F5BAFC  pop XDE
+	pop	xbc	; F5BAFD  pop XBC
+	pop	xwa	; F5BAFE  pop XWA
+	ret	; F5BAFF  ret
+; ---------------------------------------------------------------------
+; UiPaint_Ordinals -- paint two or four list rows, each from one of two tables
+;
+; Called from: thunk slot T_F41EDC -- and NOTHING references that slot.  The
+;          byte scan for `1D`/`1B` + 0xF41EDC finds 0 hits in prom_a and 0 in
+;          prom_b.  Since that scan runs at every byte offset and can only
+;          OVER-count, zero is a real zero: nothing this tree can see calls it.
+;          It is still reachable in principle -- the thunk table has 26 POINTER
+;          slots whose consumers read groups of slots by address rather than by
+;          name (notes/FINDINGS-prom_b-thunk-table.md) -- so this is "no
+;          reference found", not "dead".  Do not upgrade that without evidence.
+; Inputs:  (0x27F5), a byte, tested against 1; (0x27A4), a byte used as a BIT
+;          MASK, one bit per row.
+; Outputs: a header list, two or four row lists, and a footer list painted.
+; What it does:
+;   1. if (0x27F5) == 1: (0x2540)=0, DisplayList_Run(0xF02F22, 0xF02F2C), C=2
+;      else:             (0x2540)=0, DisplayList_Run(0xF02F22, 0xF02F36), C=4
+;      -- the same start, a different end, so the second form runs a LONGER
+;      prefix of the same record stream.
+;   2. loop C times, C counting DOWN via `djnz C`:
+;        W = (0x27A4);  A = C*2 - 1;  srl A,W
+;        carry SET  -> table at 0xF02F52   carry CLEAR -> table at 0xF02F9A
+;        BC = C * 4;  XIY = table[BC];  BC += 4;  XIX = table[BC]
+;        DisplayList_Run(XIY, XIX)
+;   3. (0x2540) = 1, DisplayList_Run(0xF02FED, 0xF02FF7), then a second call
+;      through thunk T_F4181C with XIY = 0xF02FF7.
+; Evidence for the bit tested: `ld W,(0x27A4)` / `ld A,C` / `sla 0x01,A` /
+;          `dec 1,A` / `srl A,W` at 0xF5BB3A-0xF5BB45.  In MAME's model
+;          `{ M_SRL, O_A, O_R }` (../mame/src/devices/cpu/tlcs900/dasm900.cpp:843)
+;          makes A the COUNT and W the value, and `srl8` (900tbl.hxx:1085-1090)
+;          sets CF from bit 0 before each of `count` shifts, so the surviving
+;          CF is bit (count-1) of the ORIGINAL W.  count = 2C-1, so the bit
+;          tested is bit 2C-2: rows C = 1, 2, 3, 4 test bits 0, 2, 4 and 6.
+;          ⚠ That is MAME's model of the part, not a databook. The odd bits of
+;          (0x27A4) are never tested here, which is a consequence of the
+;          reading and is offered as a check on it, not as separate evidence.
+;
+; ★ THE TWO TABLES ARE 6-ENTRY ARRAYS OF 32-BIT DISPLAY-LIST POINTERS AND THEY
+;   TERMINATE THEMSELVES.  Read out of the ROM:
+;     0xF02F52: F02F22 F02F36 F02F3D F02F44 F02F4B F02F52
+;     0xF02F9A: F02F6A F02F6A F02F76 F02F82 F02F8E F02F9A
+;   Each LAST entry is the table's OWN base address, which is also the byte
+;   after the final list -- so entry k and entry k+1 bracket list k, and the
+;   sixth entry closes the fifth without needing a count.  The loop only ever
+;   uses indices 1..5: BC = C*4 with C counting DOWN from 4 (or from 2), so the
+;   STARTS are entries 1..4 and the ENDS are entries 2..5.  Entry 0 is not used
+;   at all -- not as a start and not as an end.  That is why 0xF02F9A's entries
+;   0 and 1 can both hold 0xF02F6A without ambiguity.
+;   Both tables are 24 bytes and sit at 0xF02F52-0xF02F69 and
+;   0xF02F9A-0xF02FB1, both still `.incbin` -- they are NOT converted by this
+;   change and the addresses above are read from the image, not from a label.
+; ★ The 0xF02F52 table's four rows are the literal strings "1st", "2nd", "3rd"
+;   and "4th": 0xF02F36 is `20 07 91 0B 31 73 74`, i.e. op 0x20, 7 bytes, one
+;   operand word 0x0B91, then the ASCII. The other three are the same shape.
+;   That is where the name comes from. The 0xF02F9A table's four rows are
+;   `03 0C` records carrying a 32-bit POINTER each (0xF0191A, 0xF01938,
+;   0xF01956, 0xF01974) -- a different, indirect form of the same row.
+; Unknown: what (0x27F5) and (0x27A4) mean; what the 0xF019xx targets are; and
+;          what thunk T_F4181C does with 0xF02FF7 after the last paint.
+; ---------------------------------------------------------------------
+UiPaint_Ordinals:		; <- T_F41EDC
+	push	xwa	; F5BB00  push XWA
+	push	xbc	; F5BB01  push XBC
+	push	xde	; F5BB02  push XDE
+	push	xhl	; F5BB03  push XHL
+	push	xix	; F5BB04  push XIX
+	push	xiy	; F5BB05  push XIY
+	push	xiz	; F5BB06  push XIZ
+	.byte 0xC1, 0xF5, 0x27, 0x3F, 0x01	; F5BB07  cp (0x27f5),0x01   [llvm-mc cannot encode this]
+	jr	nz, 23	; F5BB0C  jr NZ,0xf5bb25
+	stdi8	(9536), 0	; F5BB0E  ld (0x2540),0x00
+	ld	xiy, 15740706	; F5BB13  ld XIY,0x00f02f22
+	ld	xix, 15740716	; F5BB18  ld XIX,0x00f02f2c
+	call	15996912	; F5BB1D  call 0xf417f0
+	ldb	c, 2	; F5BB21  ld C,0x02
+	jr	21	; F5BB23  jr T,0xf5bb3a
+	stdi8	(9536), 0	; F5BB25  ld (0x2540),0x00
+	ld	xiy, 15740706	; F5BB2A  ld XIY,0x00f02f22
+	ld	xix, 15740726	; F5BB2F  ld XIX,0x00f02f36
+	call	15996912	; F5BB34  call 0xf417f0
+	ldb	c, 4	; F5BB38  ld C,0x04
+	ldb_d8	w, (10148)	; F5BB3A  ld W,(0x27a4)
+	ld	a, c	; F5BB3E  ld A,C
+	sla	a, 1	; F5BB40  sla 0x01,A
+	dec	1, a	; F5BB43  dec 1,A
+	.byte 0xC8, 0xFF	; F5BB45  srl A,W   [llvm-mc cannot encode this]
+	jr	c, 34	; F5BB47  jr C,0xf5bb6b
+	push	c	; F5BB49  push C
+	xor	b, b	; F5BB4B  xor B,B
+	sla	bc, 2	; F5BB4D  sla 0x02,BC
+	ld	xiz, 15740826	; F5BB50  ld XIZ,0x00f02f9a
+	.byte 0xE3, 0x07, 0xF8, 0xE4, 0x25	; F5BB55  ld XIY,(XIZ+BC)   [llvm-mc cannot encode this]
+	add	bc, 4	; F5BB5A  add BC,0x0004
+	.byte 0xE3, 0x07, 0xF8, 0xE4, 0x24	; F5BB5E  ld XIX,(XIZ+BC)   [llvm-mc cannot encode this]
+	call	15996912	; F5BB63  call 0xf417f0
+	pop	c	; F5BB67  pop C
+	jr	32	; F5BB69  jr T,0xf5bb8b
+	push	c	; F5BB6B  push C
+	xor	b, b	; F5BB6D  xor B,B
+	sla	bc, 2	; F5BB6F  sla 0x02,BC
+	ld	xiz, 15740754	; F5BB72  ld XIZ,0x00f02f52
+	.byte 0xE3, 0x07, 0xF8, 0xE4, 0x25	; F5BB77  ld XIY,(XIZ+BC)   [llvm-mc cannot encode this]
+	add	bc, 4	; F5BB7C  add BC,0x0004
+	.byte 0xE3, 0x07, 0xF8, 0xE4, 0x24	; F5BB80  ld XIX,(XIZ+BC)   [llvm-mc cannot encode this]
+	call	15996912	; F5BB85  call 0xf417f0
+	pop	c	; F5BB89  pop C
+	djnz8	c, -84	; F5BB8B  djnz C,0xf5bb3a
+	stdi8	(9536), 1	; F5BB8E  ld (0x2540),0x01
+	ld	xiy, 15740909	; F5BB93  ld XIY,0x00f02fed
+	ld	xix, 15740919	; F5BB98  ld XIX,0x00f02ff7
+	call	15996912	; F5BB9D  call 0xf417f0
+	ld	xiy, 15740919	; F5BBA1  ld XIY,0x00f02ff7
+	call	15996956	; F5BBA6  call 0xf4181c
+	pop	xiz	; F5BBAA  pop XIZ
+	pop	xiy	; F5BBAB  pop XIY
+	pop	xix	; F5BBAC  pop XIX
+	pop	xhl	; F5BBAD  pop XHL
+	pop	xde	; F5BBAE  pop XDE
+	pop	xbc	; F5BBAF  pop XBC
+	pop	xwa	; F5BBB0  pop XWA
+	ret	; F5BBB1  ret
+; ---------------------------------------------------------------------
+; Gfx_EraseRect -- SWI7 service 0x1B with its four coordinates
+;
+; Called from: thunk slot T_F41EE0; 7 opcode-anchored references, all in prom_a.
+; Inputs:  four 16-bit stack arguments at (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C),
+;          (XIZ+0x0E) -- X0, Y0, X1, Y1.
+; Outputs: (0x2530) (0x2532) (0x2534) (0x2536) = those four; (0x2540) = 0;
+;          `ld A,0x1B / swi 7`.  All registers restored.
+; Evidence, as a BYTE DIFF rather than a reading: this routine and
+;          Gfx_DrawLine_Solid at 0xF5B84C are 53 bytes each and differ in
+;          EXACTLY ONE byte -- offset 43, the service number, 0x00 against
+;          0x1B.  52 of 53 identical.  So it is the same veneer with a
+;          different service, and the argument layout established there
+;          carries over unchanged.  Counted by
+;          `python3 notes/prom_b_f5b800_checks.py`.
+; What service 0x1B is: prom_a's SWI7_ServiceTable slot 0x1B holds 0x00F8F8BD,
+;          which prom_a converts as `LCD_Svc_1B_EraseRect` -- "clear the box
+;          between (X0,Y0) and (X1,Y1)".  That is where the name comes from;
+;          nothing in prom_b says "erase".
+; Unknown: nothing beyond what prom_a's own service header leaves open.
+; ---------------------------------------------------------------------
+Gfx_EraseRect:		; <- T_F41EE0
+	push	xiz	; F5BBB2  push XIZ
+	ld	xiz, xsp	; F5BBB3  ld XIZ,XSP
+	push	xwa	; F5BBB5  push XWA
+	push	xbc	; F5BBB6  push XBC
+	push	xde	; F5BBB7  push XDE
+	push	xhl	; F5BBB8  push XHL
+	push	xix	; F5BBB9  push XIX
+	push	xiy	; F5BBBA  push XIY
+	ld	wa, (xiz+8)	; F5BBBB  ld WA,(XIZ+0x08)
+	stda16	(9520), wa	; F5BBBE  ld (0x2530),WA
+	ld	wa, (xiz+10)	; F5BBC2  ld WA,(XIZ+0x0a)
+	stda16	(9522), wa	; F5BBC5  ld (0x2532),WA
+	ld	wa, (xiz+12)	; F5BBC9  ld WA,(XIZ+0x0c)
+	stda16	(9524), wa	; F5BBCC  ld (0x2534),WA
+	ld	wa, (xiz+14)	; F5BBD0  ld WA,(XIZ+0x0e)
+	stda16	(9526), wa	; F5BBD3  ld (0x2536),WA
+	stdi8	(9536), 0	; F5BBD7  ld (0x2540),0x00
+	ldb	a, 27	; F5BBDC  ld A,0x1b
+	swi	7	; F5BBDE  swi 7
+	pop	xiy	; F5BBDF  pop XIY
+	pop	xix	; F5BBE0  pop XIX
+	pop	xhl	; F5BBE1  pop XHL
+	pop	xde	; F5BBE2  pop XDE
+	pop	xbc	; F5BBE3  pop XBC
+	pop	xwa	; F5BBE4  pop XWA
+	pop	xiz	; F5BBE5  pop XIZ
+	ret	; F5BBE6  ret
+
+; --- 0xF5BBE7-0xF62BFF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x05BBE7, 0x007019
+
+; ==============================================================================
+; 0xF62C00-0xF64FFF -- THE BLOCK STORE
+;   a chained 256-byte record heap, its 3-byte directory, and the banked 3 KiB
+;   workspace that both live in
+; ==============================================================================
+;
+; WHY THIS BLOCK.  notes/prom_b_call_graph.py ranks unconverted prom_b thunk
+; targets by an opcode-anchored reference upper bound.  The top two in the whole
+; image are BOTH in this module -- T_F4279C -> 0xF635C9 (x43) and
+; T_F427BC -> 0xF63BAE (x42) -- and 49 thunk slots, the contiguous run
+; T_F42770-T_F42830, point into it.  None of it was converted before.
+;
+; EXTENT.  0xF62C00-0xF64C0F is code and data; 0xF64C10-0xF64FFF is 1008 bytes
+; of 0x0E (`ret`) padding to the 4 KiB boundary, where the next module starts.
+; The module is preceded by 2,347 bytes of the same padding (0xF622D5-0xF62BFF).
+;
+; WHAT IT MANAGES -- three objects, all established from the bytes:
+;
+;  1. A HEAP OF 256-BYTE BLOCKS based at (0x3604), (0x3608) of them.
+;         +0        flags; bit 7 set = allocated
+;         +1..+2    PREVIOUS block number, 16-bit
+;         +3..+4    NEXT block number, 16-bit; 0xFFFF terminates the chain
+;         +5..+0xFF payload, 251 bytes
+;     The 5 is not a guess: BStore_AllocChain computes the capacity as
+;     `ld HL,0x0100 / sub HL,0x0005` (0xF639B8) and BStore_CursorAdvance
+;     restarts the offset at exactly 5 when it steps into a new block.
+;     (0x3604) = 0x00617800 -- forced by the INVERSE arithmetic that two other
+;     prom_b modules spell with a literal (0xF5E2F0, 0xF61F1C); see the header
+;     on BStore_SeekBlock.
+;
+;  2. A DIRECTORY of 3-byte entries at 0x00603500.
+;         +0        flags; bit 7 set = entry in use
+;         +1..+2    head block number, 16-bit; 0xFFFF = empty
+;     Read off BStore_OpenChain, which is the only routine here that touches it.
+;
+;  3. A 3 KiB WORKSPACE at 0x00603400-0x00603FFF, banked into
+;     0x00610000 + n*0xC00 with n = (0x360A).
+;     notes/FINDINGS-memory-map.md already recorded 0x603400-0x603FFF as the one
+;     3 KiB hole prom_a's two boot clear loops deliberately skip.  This module is
+;     what the hole is for.  prom_a bounds n to 0..9 (0xF8143F `cp A,0` on the
+;     way down, 0xF814D2 `cp A,0x09` on the way up), so there are TEN banks --
+;     and 0x610000 + 10*0xC00 = 0x617800, the heap base.  The two regions abut
+;     with no slack.  That is consistency between two independently derived
+;     constants, not proof that they were laid out together.
+;     Fields of the workspace this module names: +0x1E (a copy of (0x360C)),
+;     +0x22 (16 bytes, values 0x00-0x1F with 0x20 meaning empty), +0x7E (16-bit
+;     saved cursor block numbers), +0xA0 (saved cursor byte offsets), +0xB8,
+;     +0xBA (the free-block count), +0xC6, +0xD4, +0xD7.
+;
+; THE CURSOR is the pair ((0x126E) = block address, IY = byte offset), with
+; (0x345C) carrying the block number.  BStore_CursorAdvance is the only thing
+; that moves it across a block boundary.
+;
+; THE PAYLOAD IS A TAGGED BYTE STREAM.  The tag values this module compares
+; against, with the number of comparison sites for each (census emitted by the
+; generator, not typed):
+;     0x80 x1   0x81 x9   0x82 x11   0x84 x6   0x85 x2   0x86 x2   0x87 x2
+; 0x82 and 0x84 are what BStore_ValidateSavedCursor requires a saved cursor to
+; be pointing at.
+; ⚠ What the tags MEAN is not established.  0x81 is counted (a delimiter of
+; something) and 0x82 stops a forward walk with error 8; that is all the bytes
+; say.
+;
+; ERROR CODES, in (0x0D4A).  The table below is the complete census of
+; `ld (0x0D4A),imm` in this module: every code, how many sites write it, and
+; where.  It is emitted by the generator from the proven transcription, so the
+; counts cannot drift from the bytes.
+;
+;     0x00  35 sites: 0xF62CFE 0xF62DC9 0xF6306A 0xF6349F 0xF63679 0xF63731 ...
+;           cleared on entry to a routine -- no error
+;     0x01   2 sites: 0xF638C1 0xF638DE
+;           directory entry number is 0 (0xF638C1), or its bit 7 is clear
+;           (0xF638DE)
+;     0x02   1 site : 0xF638F9
+;           the directory head block number is 0xFFFF -- the chain is empty
+;     0x05   4 sites: 0xF639F1 0xF63A2F 0xF64655 0xF647C4
+;           more blocks needed than (0x6034BA) reports free (0xF639F1), or the
+;           allocator at thunk T_F42884 returned failure (0xF63A2F).  The two
+;           further sites are not read
+;     0x06   1 site : 0xF6350A
+;           the tag byte at the cursor is 0x84 (`cp (XHL+IY),0x84` at
+;           0xF63502)
+;     0x07   1 site : 0xF63587
+;           the tag byte at the cursor is 0x82 (`cp (XHL+IY),0x82` at
+;           0xF6357F)
+;     0x08   2 sites: 0xF62DA0 0xF635DE
+;           tag 0x82 reached while walking forward (0xF62D9B).  The second
+;           site, 0xF635DE, is UNREACHABLE -- see the header on
+;           BStore_CursorAdvance
+;     0x0A   7 sites: 0xF62CC7 0xF63351 0xF633C2 0xF634E1 0xF6352C 0xF635EB ...
+;           block number greater than (0x0CA4), the block count
+;     0x0B  13 sites: 0xF62CAB 0xF62CDF 0xF62CF8 0xF6301E 0xF63055 0xF632CD ...
+;           the block's bit 7 is clear, or the tag at the cursor is not one of
+;           the values the caller expected
+; ⚠ These are the values this module WRITES.  Nothing here shows that no other
+; module writes (0x0D4A), and BStore_ErrorToStatusByte indexes a 72-entry table
+; with it, which would allow codes up to 0x47.
+;
+; ⚠ WHAT THIS MODULE IS FOR is NOT established.  The obvious reading -- that a
+; directory of chained byte streams with delimiter tags, in the one RAM region
+; that survives a warm restart, is the sequencer's song memory -- is a reading.
+; What supports it is only circumstantial: (0x126E), the cursor, sits in the same
+; 0x12xx page as (0x12F6) and (0x12FC), which interpreter-B display-list records
+; draw on the screen whose interpreter-A text reads "SEQUENCER PLAY", "S0NG",
+; "CYCLE:", "MEASURE = " and "TIME SIG.= "
+; (`python3 notes/prom_b_var_screens.py --var 0x12F6`).  Adjacency in a RAM page
+; is not evidence about a routine, so the names below say "BStore", not "Song".
+;
+; REPRODUCE THIS WHOLE BLOCK:
+;     python3 notes/gen_prom_b_blockstore_module.py
+; Its code runs come from notes/llvm_roundtrip_autoforce.py, which proves the
+; listing rebuilds the range byte for byte before printing it; its three data
+; islands are the runs notes/prom_b_module_trace.py never reaches by following
+; control flow from the module's own entry points; and every caller list and
+; every count in a header below is computed by the generator, not typed.
+; ==============================================================================
+
+; --------------------------------------------------------------------------
+; BStore_Veneers -- three long-branch veneers
+;
+; Called from:
+;   thunk slots T_F42800
+;   (both lists are emitted by this script, not typed)
+; Evidence: three unconditional branches and nothing else -- `jr T,0xF62C66`,
+;   `jrl T,0xF64A7A`, `jrl T,0xF64A9F`.
+; Unknown: why the module needs veneers at all when the thunk table could
+;   name the three targets directly.
+; --------------------------------------------------------------------------
+BStore_Veneers:		; <- T_F42800
+	jr	100	; F62C00  jr T,0xf62c66
+sub_F62C02:
+	jrl	7797	; F62C02  jrl T,0xf64a7a
+sub_F62C05:		; <- T_F42828
+	jrl	7831	; F62C05  jrl T,0xf64a9f
+
+; --------------------------------------------------------------------------
+; BStore_StubTable -- 28 `calr <routine> / ret` entry stubs
+;
+; Called from:
+;   thunk slots T_F427E4
+;   (both lists are emitted by this script, not typed)
+; Layout, counted by this script from the transcription's own instruction
+;   boundaries: 26 stubs of 4 bytes, 1 stub of 5 bytes, 1 stub of 9 bytes.
+;   The table runs 0xF62C08-0xF62C7D, 118 bytes, and abuts
+;   BStore_ValidateSavedCursor at 0xF62C7E.
+;   It is NOT a fixed stride, and anything that assumes one walks off the
+;   table -- notes/prom_b_module_trace.py did exactly that.  The two odd
+;   ones, with the size this script MEASURED for each:
+;     0xF62C28 is 9 bytes -- it also does `ld (0x0E02),0x00`
+;     0xF62C31 is 5 bytes -- it also does `push WA`
+; Entry points: 7 of the 28 stubs have their own thunk slot and 0 are
+;   called from inside the module; the remaining 21 are entered from
+;   outside by address.
+; Evidence: every `calr` target in the table is also an entry point that
+;   something else reaches.
+; --------------------------------------------------------------------------
+BStore_StubTable:		; <- T_F427E4
+	calr	243	; F62C08  calr 0xf62cfe
+	ret	; F62C0B  ret
+sub_F62C0C:		; <- T_F427E8
+	calr	442	; F62C0C  calr 0xf62dc9
+	ret	; F62C0F  ret
+sub_F62C10:		; <- T_F427EC
+	calr	1111	; F62C10  calr 0xf6306a
+	ret	; F62C13  ret
+sub_F62C14:		; <- T_F427F0
+	calr	2614	; F62C14  calr 0xf6364d
+	ret	; F62C17  ret
+sub_F62C18:		; <- T_F427F4
+	calr	2862	; F62C18  calr 0xf63749
+	ret	; F62C1B  ret
+sub_F62C1C:		; <- T_F427F8
+	calr	3228	; F62C1C  calr 0xf638bb
+	ret	; F62C1F  ret
+sub_F62C20:		; <- T_F427FC
+	calr	4034	; F62C20  calr 0xf63be5
+	ret	; F62C23  ret
+	calr	2466	; F62C24  calr 0xf635c9
+	ret	; F62C27  ret
+	calr	3630	; F62C28  calr 0xf63a59
+	stdi8	(3586), 0	; F62C2B  ld (0x0e02),0x00
+	ret	; F62C30  ret
+	calr	74	; F62C31  calr 0xf62c7e
+	pushw	wa	; F62C34  push WA
+	ret	; F62C35  ret
+	calr	1758	; F62C36  calr 0xf63317
+	ret	; F62C39  ret
+	calr	1862	; F62C3A  calr 0xf63383
+	ret	; F62C3D  ret
+	calr	1972	; F62C3E  calr 0xf633f5
+	ret	; F62C41  ret
+	calr	2023	; F62C42  calr 0xf6342c
+	ret	; F62C45  ret
+	calr	2112	; F62C46  calr 0xf63489
+	ret	; F62C49  ret
+	calr	2243	; F62C4A  calr 0xf63510
+	ret	; F62C4D  ret
+	calr	2285	; F62C4E  calr 0xf6353e
+	ret	; F62C51  ret
+	calr	2489	; F62C52  calr 0xf6360e
+	ret	; F62C55  ret
+	calr	3275	; F62C56  calr 0xf63924
+	ret	; F62C59  ret
+	calr	3371	; F62C5A  calr 0xf63988
+	ret	; F62C5D  ret
+	calr	3935	; F62C5E  calr 0xf63bc0
+	ret	; F62C61  ret
+	calr	3997	; F62C62  calr 0xf63c02
+	ret	; F62C65  ret
+	calr	4056	; F62C66  calr 0xf63c41
+	ret	; F62C69  ret
+	calr	6334	; F62C6A  calr 0xf6452b
+	ret	; F62C6D  ret
+	calr	6435	; F62C6E  calr 0xf64594
+	ret	; F62C71  ret
+	calr	6649	; F62C72  calr 0xf6466e
+	ret	; F62C75  ret
+	calr	7012	; F62C76  calr 0xf647dd
+	ret	; F62C79  ret
+	calr	7099	; F62C7A  calr 0xf64838
+	ret	; F62C7D  ret
+
+; --------------------------------------------------------------------------
+; BStore_ValidateSavedCursor -- is entry n's saved cursor still valid?
+;
+; Called from:
+;   thunk slots T_F42770
+;   4 call sites inside the module:
+;     0xF62C31 0xF6453C 0xF645B1 0xF64695
+;   (both lists are emitted by this script, not typed)
+; Inputs:  A = entry number, 1-based.
+; Outputs: (0x0D4A) = 0 on success, else an error code; on success
+;   (0x345C) = the cursor's block number and (0x126E) = that block's address.
+; What it does: L = A-1; C = the byte at 0x006034A0[L]; requires 5 <= C <= 0xFF;
+;   WA = the 16-bit word at 0x0060347E[L*2]; requires WA <= (0x0CA4) (the block
+;   count); seeks that block; requires its bit 7 set; requires the payload byte
+;   at offset C to be tag 0x82 or 0x84.
+; Evidence: 0xF62C96 `ld XDE,0x006034A0`, 0xF62CB6 `ld XDE,0x0060347E`,
+;   0xF62CA1 `cp BC,5`, 0xF62CC1 `cp WA,(0x0CA4)`, 0xF62CDB `bit 7,(XHL)`,
+;   0xF62CE8/0xF62CF0 `cp (XHL+IY),0x82` / `0x84`.  The pair (word at +0x7E,
+;   byte at +0xA0) is a CURSOR because BStore_SaveCursor writes exactly that
+;   pair from the live block number and offset.
+; Unknown: 5 as the lower bound on C is the 5-byte block header, but the
+;   UPPER bound is odd: BC was cleared with `xor BC,BC` before the byte was
+;   loaded into C, so `cp BC,0x00FF` can never fail.  Dead as written.
+; --------------------------------------------------------------------------
+BStore_ValidateSavedCursor:		; <- T_F42770
+	pushw	wa	; F62C7E  push WA
+	calr	3129	; F62C7F  calr 0xf638bb
+	popw	wa	; F62C82  pop WA
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62C83  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62C88  jr Z,0xf62c8d
+	jrl	112	; F62C8A  jrl T,0xf62cfd
+	xor	hl, hl	; F62C8D  xor HL,HL
+	dec	1, a	; F62C8F  dec 1,A
+	ld	l, a	; F62C91  ld L,A
+	xor	bc, bc	; F62C93  xor BC,BC
+	push	xde	; F62C95  push XDE
+	ld	xde, 6304928	; F62C96  ld XDE,0x006034a0
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x23	; F62C9B  ld C,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F62CA0  pop XDE
+	cps	bc, 5	; F62CA1  cp BC,5
+	jr	c, 6	; F62CA3  jr C,0xf62cab
+	cp	bc, 255	; F62CA5  cp BC,0x00ff
+	jr	ule, 7	; F62CA9  jr ULE,0xf62cb2
+	stdi8	(3402), 11	; F62CAB  ld (0x0d4a),0x0b
+	jr	75	; F62CB0  jr T,0xf62cfd
+	sla	hl, 1	; F62CB2  sla 0x01,HL
+	push	xde	; F62CB5  push XDE
+	ld	xde, 6304894	; F62CB6  ld XDE,0x0060347e
+	.byte 0xD3, 0x07, 0xE8, 0xEC, 0x20	; F62CBB  ld WA,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F62CC0  pop XDE
+	.byte 0xD1, 0xA4, 0x0C, 0xF0	; F62CC1  cp WA,(0x0ca4)   [llvm-mc cannot encode this]
+	jr	ule, 7	; F62CC5  jr ULE,0xf62cce
+	stdi8	(3402), 10	; F62CC7  ld (0x0d4a),0x0a
+	jr	47	; F62CCC  jr T,0xf62cfd
+	stda16	(13404), wa	; F62CCE  ld (0x345c),WA
+	ld	hl, wa	; F62CD2  ld HL,WA
+	calr	3799	; F62CD4  calr 0xf63bae
+	ldda32	xhl, (4718)	; F62CD7  ld XHL,(0x126e)
+	.byte 0xB3, 0xCF	; F62CDB  bit 7,(XHL)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F62CDD  jr NZ,0xf62ce6
+	stdi8	(3402), 11	; F62CDF  ld (0x0d4a),0x0b
+	jr	23	; F62CE4  jr T,0xf62cfd
+	ld	iy, bc	; F62CE6  ld IY,BC
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x82	; F62CE8  cp (XHL+IY),0x82   [llvm-mc cannot encode this]
+	jr	z, 13	; F62CEE  jr Z,0xf62cfd
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x84	; F62CF0  cp (XHL+IY),0x84   [llvm-mc cannot encode this]
+	jr	z, 5	; F62CF6  jr Z,0xf62cfd
+	stdi8	(3402), 11	; F62CF8  ld (0x0d4a),0x0b
+	ret	; F62CFD  ret
+sub_F62CFE:		; <- T_F42774
+	stdi8	(3402), 0	; F62CFE  ld (0x0d4a),0x00
+	stb_d8	(3357), w	; F62D03  ld (0x0d1d),W
+	calr	2993	; F62D07  calr 0xf638bb
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62D0A  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62D0F  jr Z,0xf62d14
+	jrl	119	; F62D11  jrl T,0xf62d8b
+	ldw	iy, 5	; F62D14  ld IY,0x0005
+	push	xiz	; F62D17  push XIZ
+	ldda32	xiz, (4718)	; F62D18  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F62D1C  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F62D1F  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F62D20  push XDE3   [llvm-mc cannot encode this]
+	push	xhl	; F62D23  push XHL
+	push	xiy	; F62D24  push XIY
+	calr	2341	; F62D25  calr 0xf6364d
+	pop	xiy	; F62D28  pop XIY
+	pop	xhl	; F62D29  pop XHL
+	.byte 0xE7, 0x38, 0x05	; F62D2A  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F62D2D  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F62D2E  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F62D31  ld (0x126e),XIZ
+	pop	xiz	; F62D35  pop XIZ
+	xor	de, de	; F62D36  xor DE,DE
+	inc	1, de	; F62D38  inc 1,DE
+	xor	xix, xix	; F62D3A  xor XIX,XIX
+	.byte 0xD1, 0x90, 0x0C, 0xF2	; F62D3C  cp DE,(0x0c90)   [llvm-mc cannot encode this]
+	jr	nz, 6	; F62D40  jr NZ,0xf62d48
+	ldb_d8	a, (3356)	; F62D42  ld A,(0x0d1c)
+	jr	67	; F62D46  jr T,0xf62d8b
+	ldb_d8	b, (3356)	; F62D48  ld B,(0x0d1c)
+	call	16133516	; F62D4C  call 0xf62d8c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62D50  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 2	; F62D55  jr Z,0xf62d59
+	jr	50	; F62D57  jr T,0xf62d8b
+	stda16	(3528), ix	; F62D59  ld (0x0dc8),IX
+	inc	1, de	; F62D5D  inc 1,DE
+	push	xiz	; F62D5F  push XIZ
+	ldda32	xiz, (4718)	; F62D60  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F62D64  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F62D67  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F62D68  push XDE3   [llvm-mc cannot encode this]
+	push	xhl	; F62D6B  push XHL
+	pushw	de	; F62D6C  push DE
+	push	xiy	; F62D6D  push XIY
+	push	xix	; F62D6E  push XIX
+	calr	2519	; F62D6F  calr 0xf63749
+	pop	xix	; F62D72  pop XIX
+	pop	xiy	; F62D73  pop XIY
+	popw	de	; F62D74  pop DE
+	pop	xhl	; F62D75  pop XHL
+	.byte 0xE7, 0x38, 0x05	; F62D76  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F62D79  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F62D7A  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F62D7D  ld (0x126e),XIZ
+	pop	xiz	; F62D81  pop XIZ
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62D82  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 2	; F62D87  jr NZ,0xf62d8b
+	jr	-79	; F62D89  jr T,0xf62d3c
+	ret	; F62D8B  ret
+
+; --------------------------------------------------------------------------
+; BStore_CountMarkersForward -- walk forward over B tag-0x81 markers
+;
+; Called from:
+;   1 call site inside the module:
+;     0xF62D4C
+;   (both lists are emitted by this script, not typed)
+; Inputs:  B = how many 0x81 markers to pass, IY = the byte offset in the
+;   current block, (0x126E) = the current block.
+; Outputs: IX += C (the markers actually passed); (0x0D4A) = 8 if tag 0x82 was
+;   found first.
+; Evidence: 0xF62D9B `cp A,0x82` -> `ld (0x0D4A),0x08`, 0xF62DA7 `cp A,0x81`
+;   -> `inc 1,C`; both arms call BStore_CursorAdvance.
+; Unknown: what a 0x81 marker delimits.
+; --------------------------------------------------------------------------
+BStore_CountMarkersForward:
+	xor	c, c	; F62D8C  xor C,C
+	cp	c, b	; F62D8E  cp C,B
+	jr	z, 50	; F62D90  jr Z,0xf62dc4
+	ldda32	xhl, (4718)	; F62D92  ld XHL,(0x126e)
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x21	; F62D96  ld A,(XHL+IY)   [llvm-mc cannot encode this]
+	cp	a, 130	; F62D9B  cp A,0x82
+	jr	nz, 7	; F62D9E  jr NZ,0xf62da7
+	stdi8	(3402), 8	; F62DA0  ld (0x0d4a),0x08
+	jr	29	; F62DA5  jr T,0xf62dc4
+	cp	a, 129	; F62DA7  cp A,0x81
+	jr	z, 12	; F62DAA  jr Z,0xf62db8
+	calr	2074	; F62DAC  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62DAF  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -36	; F62DB4  jr Z,0xf62d92
+	jr	12	; F62DB6  jr T,0xf62dc4
+	inc	1, c	; F62DB8  inc 1,C
+	calr	2060	; F62DBA  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62DBD  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -54	; F62DC2  jr Z,0xf62d8e
+	xor	b, b	; F62DC4  xor B,B
+	add	ix, bc	; F62DC6  add IX,BC
+	ret	; F62DC8  ret
+sub_F62DC9:		; <- T_F42778
+	stdi8	(3402), 0	; F62DC9  ld (0x0d4a),0x00
+	ldw_d16	hl, (3169)	; F62DCE  ld HL,(0x0c61)
+	calr	3545	; F62DD2  calr 0xf63bae
+	push	xwa	; F62DD5  push XWA
+	ldda32	xwa, (4718)	; F62DD6  ld XWA,(0x126e)
+	stda32	(3171), xwa	; F62DDA  ld (0x0c63),XWA
+	ldw_d16	hl, (3159)	; F62DDE  ld HL,(0x0c57)
+	calr	3529	; F62DE2  calr 0xf63bae
+	ldda32	xwa, (4718)	; F62DE5  ld XWA,(0x126e)
+	stda32	(3161), xwa	; F62DE9  ld (0x0c59),XWA
+	pop	xwa	; F62DED  pop XWA
+	.byte 0xD1, 0x61, 0x0C, 0xF2	; F62DEE  cp DE,(0x0c61)   [llvm-mc cannot encode this]
+	jr	nz, 33	; F62DF2  jr NZ,0xf62e15
+	ldw	iy, 256	; F62DF4  ld IY,0x0100
+	.byte 0xD1, 0x67, 0x0C, 0xA5	; F62DF7  sub IY,(0x0c67)   [llvm-mc cannot encode this]
+	stda16	(3226), iy	; F62DFB  ld (0x0c9a),IY
+	ldw_d16	iy, (3175)	; F62DFF  ld IY,(0x0c67)
+	ldw	ix, 256	; F62E03  ld IX,0x0100
+	.byte 0xD1, 0x5D, 0x0C, 0xA4	; F62E06  sub IX,(0x0c5d)   [llvm-mc cannot encode this]
+	stda16	(3228), ix	; F62E0A  ld (0x0c9c),IX
+	ldw_d16	ix, (3165)	; F62E0E  ld IX,(0x0c5d)
+	jrl	423	; F62E12  jrl T,0xf62fbc
+	ldw_d16	wa, (3165)	; F62E15  ld WA,(0x0c5d)
+	.byte 0xD1, 0x67, 0x0C, 0xF0	; F62E19  cp WA,(0x0c67)   [llvm-mc cannot encode this]
+	jr	c, 4	; F62E1D  jr C,0xf62e23
+	jr	z, 4	; F62E1F  jr Z,0xf62e25
+	jr	ugt, 5	; F62E21  jr UGT,0xf62e28
+	jr	6	; F62E23  jr T,0xf62e2b
+	jrl	140	; F62E25  jrl T,0xf62eb4
+	jrl	247	; F62E28  jrl T,0xf62f22
+	ldw	wa, 256	; F62E2B  ld WA,0x0100
+	.byte 0xD1, 0x5D, 0x0C, 0xA0	; F62E2E  sub WA,(0x0c5d)   [llvm-mc cannot encode this]
+	ldw	bc, 256	; F62E32  ld BC,0x0100
+	.byte 0xD1, 0x67, 0x0C, 0xA1	; F62E35  sub BC,(0x0c67)   [llvm-mc cannot encode this]
+	sub	wa, bc	; F62E39  sub WA,BC
+	stda16	(3222), wa	; F62E3B  ld (0x0c96),WA
+	ldw	bc, 256	; F62E3F  ld BC,0x0100
+	sub	bc, 5	; F62E42  sub BC,0x0005
+	sub	bc, wa	; F62E46  sub BC,WA
+	stda16	(3224), bc	; F62E48  ld (0x0c98),BC
+	ldw_d16	iy, (3175)	; F62E4C  ld IY,(0x0c67)
+	ldw_d16	ix, (3165)	; F62E50  ld IX,(0x0c5d)
+	ldw	bc, 256	; F62E54  ld BC,0x0100
+	.byte 0xD1, 0x67, 0x0C, 0xA1	; F62E57  sub BC,(0x0c67)   [llvm-mc cannot encode this]
+	calr	3426	; F62E5B  calr 0xf63bc0
+	call	16134193	; F62E5E  call 0xf63031
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62E62  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62E67  jr Z,0xf62e6c
+	jrl	397	; F62E69  jrl T,0xf62ff9
+	.byte 0xD1, 0x61, 0x0C, 0xF2	; F62E6C  cp DE,(0x0c61)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F62E70  jr NZ,0xf62e74
+	jr	42	; F62E72  jr T,0xf62e9e
+	ldw_d16	bc, (3222)	; F62E74  ld BC,(0x0c96)
+	calr	3397	; F62E78  calr 0xf63bc0
+	call	16134138	; F62E7B  call 0xf62ffa
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62E7F  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62E84  jr Z,0xf62e89
+	jrl	368	; F62E86  jrl T,0xf62ff9
+	ldw_d16	bc, (3224)	; F62E89  ld BC,(0x0c98)
+	calr	3376	; F62E8D  calr 0xf63bc0
+	call	16134193	; F62E90  call 0xf63031
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62E94  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -47	; F62E99  jr Z,0xf62e6c
+	jrl	347	; F62E9B  jrl T,0xf62ff9
+	ldw_d16	wa, (3222)	; F62E9E  ld WA,(0x0c96)
+	stda16	(3228), wa	; F62EA2  ld (0x0c9c),WA
+	ldw	bc, 256	; F62EA6  ld BC,0x0100
+	sub	bc, 5	; F62EA9  sub BC,0x0005
+	stda16	(3226), bc	; F62EAD  ld (0x0c9a),BC
+	jrl	264	; F62EB1  jrl T,0xf62fbc
+	ldw	bc, 256	; F62EB4  ld BC,0x0100
+	.byte 0xD1, 0x67, 0x0C, 0xA1	; F62EB7  sub BC,(0x0c67)   [llvm-mc cannot encode this]
+	ldw_d16	iy, (3175)	; F62EBB  ld IY,(0x0c67)
+	ldw_d16	ix, (3165)	; F62EBF  ld IX,(0x0c5d)
+	calr	3322	; F62EC3  calr 0xf63bc0
+	call	16134193	; F62EC6  call 0xf63031
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62ECA  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62ECF  jr Z,0xf62ed4
+	jrl	293	; F62ED1  jrl T,0xf62ff9
+	call	16134138	; F62ED4  call 0xf62ffa
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62ED8  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62EDD  jr Z,0xf62ee2
+	jrl	279	; F62EDF  jrl T,0xf62ff9
+	.byte 0xD1, 0x61, 0x0C, 0xF2	; F62EE2  cp DE,(0x0c61)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F62EE6  jr NZ,0xf62eea
+	jr	38	; F62EE8  jr T,0xf62f10
+	ldw	bc, 256	; F62EEA  ld BC,0x0100
+	sub	bc, 5	; F62EED  sub BC,0x0005
+	calr	3276	; F62EF1  calr 0xf63bc0
+	call	16134193	; F62EF4  call 0xf63031
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62EF8  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62EFD  jr Z,0xf62f02
+	jrl	247	; F62EFF  jrl T,0xf62ff9
+	call	16134138	; F62F02  call 0xf62ffa
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62F06  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -43	; F62F0B  jr Z,0xf62ee2
+	jrl	233	; F62F0D  jrl T,0xf62ff9
+	ldw	bc, 256	; F62F10  ld BC,0x0100
+	sub	bc, 5	; F62F13  sub BC,0x0005
+	stda16	(3228), bc	; F62F17  ld (0x0c9c),BC
+	stda16	(3226), bc	; F62F1B  ld (0x0c9a),BC
+	jrl	154	; F62F1F  jrl T,0xf62fbc
+	ldw	wa, 256	; F62F22  ld WA,0x0100
+	.byte 0xD1, 0x67, 0x0C, 0xA0	; F62F25  sub WA,(0x0c67)   [llvm-mc cannot encode this]
+	ldw	bc, 256	; F62F29  ld BC,0x0100
+	.byte 0xD1, 0x5D, 0x0C, 0xA1	; F62F2C  sub BC,(0x0c5d)   [llvm-mc cannot encode this]
+	sub	wa, bc	; F62F30  sub WA,BC
+	stda16	(3222), wa	; F62F32  ld (0x0c96),WA
+	ldw	bc, 256	; F62F36  ld BC,0x0100
+	sub	bc, 5	; F62F39  sub BC,0x0005
+	sub	bc, wa	; F62F3D  sub BC,WA
+	stda16	(3224), bc	; F62F3F  ld (0x0c98),BC
+	ldw_d16	iy, (3175)	; F62F43  ld IY,(0x0c67)
+	ldw_d16	ix, (3165)	; F62F47  ld IX,(0x0c5d)
+	ldw	bc, 256	; F62F4B  ld BC,0x0100
+	.byte 0xD1, 0x5D, 0x0C, 0xA1	; F62F4E  sub BC,(0x0c5d)   [llvm-mc cannot encode this]
+	calr	3179	; F62F52  calr 0xf63bc0
+	call	16134138	; F62F55  call 0xf62ffa
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62F59  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62F5E  jr Z,0xf62f63
+	jrl	150	; F62F60  jrl T,0xf62ff9
+	ldw_d16	bc, (3222)	; F62F63  ld BC,(0x0c96)
+	calr	3158	; F62F67  calr 0xf63bc0
+	call	16134193	; F62F6A  call 0xf63031
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62F6E  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62F73  jr Z,0xf62f78
+	jrl	129	; F62F75  jrl T,0xf62ff9
+	.byte 0xD1, 0x61, 0x0C, 0xF2	; F62F78  cp DE,(0x0c61)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F62F7C  jr NZ,0xf62f80
+	jr	41	; F62F7E  jr T,0xf62fa9
+	ldw_d16	bc, (3224)	; F62F80  ld BC,(0x0c98)
+	calr	3129	; F62F84  calr 0xf63bc0
+	call	16134138	; F62F87  call 0xf62ffa
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62F8B  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F62F90  jr Z,0xf62f95
+	jrl	100	; F62F92  jrl T,0xf62ff9
+	ldw_d16	bc, (3222)	; F62F95  ld BC,(0x0c96)
+	calr	3108	; F62F99  calr 0xf63bc0
+	call	16134193	; F62F9C  call 0xf63031
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62FA0  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -47	; F62FA5  jr Z,0xf62f78
+	jr	80	; F62FA7  jr T,0xf62ff9
+	ldw_d16	wa, (3224)	; F62FA9  ld WA,(0x0c98)
+	stda16	(3228), wa	; F62FAD  ld (0x0c9c),WA
+	ldw	wa, 256	; F62FB1  ld WA,0x0100
+	sub	wa, 5	; F62FB4  sub WA,0x0005
+	stda16	(3226), wa	; F62FB8  ld (0x0c9a),WA
+	ldw	wa, 255	; F62FBC  ld WA,0x00ff
+	.byte 0xD1, 0x6B, 0x0C, 0xA0	; F62FBF  sub WA,(0x0c6b)   [llvm-mc cannot encode this]
+	ldw_d16	bc, (3226)	; F62FC3  ld BC,(0x0c9a)
+	sub	bc, wa	; F62FC7  sub BC,WA
+	stda16	(3232), bc	; F62FC9  ld (0x0ca0),BC
+	.byte 0xD1, 0x9C, 0x0C, 0xF9	; F62FCD  cp (0x0c9c),BC   [llvm-mc cannot encode this]
+	jr	nc, 2	; F62FD1  jr NC,0xf62fd5
+	jr	5	; F62FD3  jr T,0xf62fda
+	calr	3048	; F62FD5  calr 0xf63bc0
+	jr	31	; F62FD8  jr T,0xf62ff9
+	ldw_d16	bc, (3228)	; F62FDA  ld BC,(0x0c9c)
+	calr	3039	; F62FDE  calr 0xf63bc0
+	call	16134138	; F62FE1  call 0xf62ffa
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F62FE5  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 2	; F62FEA  jr Z,0xf62fee
+	jr	11	; F62FEC  jr T,0xf62ff9
+	ldw_d16	bc, (3232)	; F62FEE  ld BC,(0x0ca0)
+	.byte 0xD1, 0x9C, 0x0C, 0xA1	; F62FF2  sub BC,(0x0c9c)   [llvm-mc cannot encode this]
+	calr	3015	; F62FF6  calr 0xf63bc0
+	ret	; F62FF9  ret
+sub_F62FFA:
+	xor	xix, xix	; F62FFA  xor XIX,XIX
+	ldda32	xix, (3161)	; F62FFC  ld XIX,(0x0c59)
+	stda32	(4718), xix	; F63000  ld (0x126e),XIX
+	ld	wa, (xix+3)	; F63004  ld WA,(XIX+0x03)
+	stda16	(3159), wa	; F63007  ld (0x0c57),WA
+	extz	xwa	; F6300B  extz XWA
+	dec	1, xwa	; F6300D  dec 1,XWA
+	sla	xwa, 8	; F6300F  sla 0x08,XWA
+	addda32	xwa, (13828)	; F63012  add XWA,(0x3604)
+	stda32	(4718), xwa	; F63016  ld (0x126e),XWA
+	.byte 0xB0, 0xCF	; F6301A  bit 7,(XWA)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F6301C  jr NZ,0xf63025
+	stdi8	(3402), 11	; F6301E  ld (0x0d4a),0x0b
+	jr	11	; F63023  jr T,0xf63030
+	ldda32	xwa, (4718)	; F63025  ld XWA,(0x126e)
+	stda32	(3161), xwa	; F63029  ld (0x0c59),XWA
+	ldw	ix, 5	; F6302D  ld IX,0x0005
+	ret	; F63030  ret
+sub_F63031:
+	xor	iy, iy	; F63031  xor IY,IY
+	ldda32	xiy, (3171)	; F63033  ld XIY,(0x0c63)
+	stda32	(3238), xiy	; F63037  ld (0x0ca6),XIY
+	ld	wa, (xiy+3)	; F6303B  ld WA,(XIY+0x03)
+	stda16	(3169), wa	; F6303E  ld (0x0c61),WA
+	extz	xwa	; F63042  extz XWA
+	dec	1, xwa	; F63044  dec 1,XWA
+	sla	xwa, 8	; F63046  sla 0x08,XWA
+	addda32	xwa, (13828)	; F63049  add XWA,(0x3604)
+	stda32	(4718), xwa	; F6304D  ld (0x126e),XWA
+	.byte 0xB0, 0xCF	; F63051  bit 7,(XWA)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F63053  jr NZ,0xf6305c
+	stdi8	(3402), 11	; F63055  ld (0x0d4a),0x0b
+	jr	13	; F6305A  jr T,0xf63069
+	push	xwa	; F6305C  push XWA
+	ldda32	xwa, (4718)	; F6305D  ld XWA,(0x126e)
+	stda32	(3171), xwa	; F63061  ld (0x0c63),XWA
+	pop	xwa	; F63065  pop XWA
+	ldw	iy, 5	; F63066  ld IY,0x0005
+	ret	; F63069  ret
+sub_F6306A:		; <- T_F4277C
+	stdi8	(3402), 0	; F6306A  ld (0x0d4a),0x00
+	ldw_d16	hl, (3169)	; F6306F  ld HL,(0x0c61)
+	calr	2872	; F63073  calr 0xf63bae
+	ldda32	xwa, (4718)	; F63076  ld XWA,(0x126e)
+	stda32	(3171), xwa	; F6307A  ld (0x0c63),XWA
+	ldw_d16	hl, (3159)	; F6307E  ld HL,(0x0c57)
+	calr	2857	; F63082  calr 0xf63bae
+	ldda32	xwa, (4718)	; F63085  ld XWA,(0x126e)
+	stda32	(3161), xwa	; F63089  ld (0x0c59),XWA
+	.byte 0xD1, 0x61, 0x0C, 0xF2	; F6308D  cp DE,(0x0c61)   [llvm-mc cannot encode this]
+	jr	nz, 39	; F63091  jr NZ,0xf630ba
+	ldw_d16	iy, (3175)	; F63093  ld IY,(0x0c67)
+	sub	iy, 5	; F63097  sub IY,0x0005
+	inc	1, iy	; F6309B  inc 1,IY
+	stda16	(3226), iy	; F6309D  ld (0x0c9a),IY
+	ldw_d16	iy, (3175)	; F630A1  ld IY,(0x0c67)
+	ldw_d16	ix, (3165)	; F630A5  ld IX,(0x0c5d)
+	sub	ix, 5	; F630A9  sub IX,0x0005
+	inc	1, ix	; F630AD  inc 1,IX
+	stda16	(3228), ix	; F630AF  ld (0x0c9c),IX
+	ldw_d16	ix, (3165)	; F630B3  ld IX,(0x0c5d)
+	jrl	393	; F630B7  jrl T,0xf63243
+	ldw_d16	wa, (3165)	; F630BA  ld WA,(0x0c5d)
+	.byte 0xD1, 0x67, 0x0C, 0xF0	; F630BE  cp WA,(0x0c67)   [llvm-mc cannot encode this]
+	jr	ugt, 4	; F630C2  jr UGT,0xf630c8
+	jr	z, 4	; F630C4  jr Z,0xf630ca
+	jr	5	; F630C6  jr T,0xf630cd
+	jr	6	; F630C8  jr T,0xf630d0
+	jrl	126	; F630CA  jrl T,0xf6314b
+	jrl	229	; F630CD  jrl T,0xf631b5
+	.byte 0xD1, 0x67, 0x0C, 0xA0	; F630D0  sub WA,(0x0c67)   [llvm-mc cannot encode this]
+	stda16	(3222), wa	; F630D4  ld (0x0c96),WA
+	ldw	bc, 256	; F630D8  ld BC,0x0100
+	sub	bc, 5	; F630DB  sub BC,0x0005
+	sub	bc, wa	; F630DF  sub BC,WA
+	stda16	(3224), bc	; F630E1  ld (0x0c98),BC
+	ldw_d16	iy, (3175)	; F630E5  ld IY,(0x0c67)
+	ldw_d16	ix, (3165)	; F630E9  ld IX,(0x0c5d)
+	ldw_d16	bc, (3175)	; F630ED  ld BC,(0x0c67)
+	sub	bc, 5	; F630F1  sub BC,0x0005
+	inc	1, bc	; F630F5  inc 1,BC
+	calr	390	; F630F7  calr 0xf63280
+	call	16134825	; F630FA  call 0xf632a9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F630FE  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 377	; F63103  jrl NZ,0xf6327f
+	.byte 0xD1, 0x61, 0x0C, 0xF2	; F63106  cp DE,(0x0c61)   [llvm-mc cannot encode this]
+	jrl	z, 40	; F6310A  jrl Z,0xf63135
+	ldw_d16	bc, (3222)	; F6310D  ld BC,(0x0c96)
+	calr	364	; F63111  calr 0xf63280
+	call	16134880	; F63114  call 0xf632e0
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63118  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 351	; F6311D  jrl NZ,0xf6327f
+	ldw_d16	bc, (3224)	; F63120  ld BC,(0x0c98)
+	calr	345	; F63124  calr 0xf63280
+	call	16134825	; F63127  call 0xf632a9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6312B  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -44	; F63130  jr Z,0xf63106
+	jrl	330	; F63132  jrl T,0xf6327f
+	ldw_d16	wa, (3222)	; F63135  ld WA,(0x0c96)
+	stda16	(3228), wa	; F63139  ld (0x0c9c),WA
+	ldw	bc, 256	; F6313D  ld BC,0x0100
+	sub	bc, 5	; F63140  sub BC,0x0005
+	stda16	(3226), bc	; F63144  ld (0x0c9a),BC
+	jrl	248	; F63148  jrl T,0xf63243
+	ldw_d16	bc, (3175)	; F6314B  ld BC,(0x0c67)
+	sub	bc, 5	; F6314F  sub BC,0x0005
+	inc	1, bc	; F63153  inc 1,BC
+	ldw_d16	iy, (3175)	; F63155  ld IY,(0x0c67)
+	ldw_d16	ix, (3165)	; F63159  ld IX,(0x0c5d)
+	calr	288	; F6315D  calr 0xf63280
+	call	16134880	; F63160  call 0xf632e0
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63164  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 275	; F63169  jrl NZ,0xf6327f
+	call	16134825	; F6316C  call 0xf632a9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63170  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 263	; F63175  jrl NZ,0xf6327f
+	.byte 0xD1, 0x61, 0x0C, 0xF2	; F63178  cp DE,(0x0c61)   [llvm-mc cannot encode this]
+	jrl	z, 36	; F6317C  jrl Z,0xf631a3
+	ldw	bc, 256	; F6317F  ld BC,0x0100
+	sub	bc, 5	; F63182  sub BC,0x0005
+	calr	247	; F63186  calr 0xf63280
+	call	16134880	; F63189  call 0xf632e0
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6318D  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 234	; F63192  jrl NZ,0xf6327f
+	call	16134825	; F63195  call 0xf632a9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63199  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -40	; F6319E  jr Z,0xf63178
+	jrl	220	; F631A0  jrl T,0xf6327f
+	ldw	bc, 256	; F631A3  ld BC,0x0100
+	sub	bc, 5	; F631A6  sub BC,0x0005
+	stda16	(3228), bc	; F631AA  ld (0x0c9c),BC
+	stda16	(3226), bc	; F631AE  ld (0x0c9a),BC
+	jrl	142	; F631B2  jrl T,0xf63243
+	ldw_d16	wa, (3175)	; F631B5  ld WA,(0x0c67)
+	.byte 0xD1, 0x5D, 0x0C, 0xA0	; F631B9  sub WA,(0x0c5d)   [llvm-mc cannot encode this]
+	stda16	(3222), wa	; F631BD  ld (0x0c96),WA
+	ldw	bc, 256	; F631C1  ld BC,0x0100
+	sub	bc, 5	; F631C4  sub BC,0x0005
+	sub	bc, wa	; F631C8  sub BC,WA
+	stda16	(3224), bc	; F631CA  ld (0x0c98),BC
+	ldw_d16	iy, (3175)	; F631CE  ld IY,(0x0c67)
+	ldw_d16	ix, (3165)	; F631D2  ld IX,(0x0c5d)
+	ldw_d16	bc, (3165)	; F631D6  ld BC,(0x0c5d)
+	sub	bc, 5	; F631DA  sub BC,0x0005
+	inc	1, bc	; F631DE  inc 1,BC
+	calr	157	; F631E0  calr 0xf63280
+	call	16134880	; F631E3  call 0xf632e0
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F631E7  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 144	; F631EC  jrl NZ,0xf6327f
+	ldw_d16	bc, (3222)	; F631EF  ld BC,(0x0c96)
+	calr	138	; F631F3  calr 0xf63280
+	call	16134825	; F631F6  call 0xf632a9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F631FA  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 125	; F631FF  jrl NZ,0xf6327f
+	.byte 0xD1, 0x61, 0x0C, 0xF2	; F63202  cp DE,(0x0c61)   [llvm-mc cannot encode this]
+	jrl	z, 39	; F63206  jrl Z,0xf63230
+	ldw_d16	bc, (3224)	; F63209  ld BC,(0x0c98)
+	calr	112	; F6320D  calr 0xf63280
+	call	16134880	; F63210  call 0xf632e0
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63214  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 99	; F63219  jrl NZ,0xf6327f
+	ldw_d16	bc, (3222)	; F6321C  ld BC,(0x0c96)
+	calr	93	; F63220  calr 0xf63280
+	call	16134825	; F63223  call 0xf632a9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63227  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -44	; F6322C  jr Z,0xf63202
+	jr	79	; F6322E  jr T,0xf6327f
+	ldw_d16	wa, (3224)	; F63230  ld WA,(0x0c98)
+	stda16	(3228), wa	; F63234  ld (0x0c9c),WA
+	ldw	wa, 256	; F63238  ld WA,0x0100
+	sub	wa, 5	; F6323B  sub WA,0x0005
+	stda16	(3226), wa	; F6323F  ld (0x0c9a),WA
+	ldw_d16	wa, (3179)	; F63243  ld WA,(0x0c6b)
+	sub	wa, 5	; F63247  sub WA,0x0005
+	ldw_d16	bc, (3226)	; F6324B  ld BC,(0x0c9a)
+	sub	bc, wa	; F6324F  sub BC,WA
+	stda16	(3232), bc	; F63251  ld (0x0ca0),BC
+	.byte 0xD1, 0x9C, 0x0C, 0xF9	; F63255  cp (0x0c9c),BC   [llvm-mc cannot encode this]
+	jr	nc, 2	; F63259  jr NC,0xf6325d
+	jr	5	; F6325B  jr T,0xf63262
+	calr	32	; F6325D  calr 0xf63280
+	jr	29	; F63260  jr T,0xf6327f
+	ldw_d16	bc, (3228)	; F63262  ld BC,(0x0c9c)
+	calr	23	; F63266  calr 0xf63280
+	call	16134880	; F63269  call 0xf632e0
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6326D  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 11	; F63272  jr NZ,0xf6327f
+	ldw_d16	bc, (3232)	; F63274  ld BC,(0x0ca0)
+	.byte 0xD1, 0x9C, 0x0C, 0xA1	; F63278  sub BC,(0x0c9c)   [llvm-mc cannot encode this]
+	calr	1	; F6327C  calr 0xf63280
+	ret	; F6327F  ret
+sub_F63280:
+	pushw	wa	; F63280  push WA
+	push	xde	; F63281  push XDE
+	push	xhl	; F63282  push XHL
+	cps	bc, 0	; F63283  cp BC,0
+	jr	z, 30	; F63285  jr Z,0xf632a5
+	ldda32	xhl, (3171)	; F63287  ld XHL,(0x0c63)
+	ldda32	xde, (3161)	; F6328B  ld XDE,(0x0c59)
+	extz	xiy	; F6328F  extz XIY
+	extz	xix	; F63291  extz XIX
+	add	xhl, xiy	; F63293  add XHL,XIY
+	add	xde, xix	; F63295  add XDE,XIX
+	.byte 0x83, 0x13	; F63297  lddr   [llvm-mc cannot encode this]
+	subda32	xhl, (3171)	; F63299  sub XHL,(0x0c63)
+	subda32	xde, (3161)	; F6329D  sub XDE,(0x0c59)
+	ld	iy, hl	; F632A1  ld IY,HL
+	ld	ix, de	; F632A3  ld IX,DE
+	pop	xhl	; F632A5  pop XHL
+	pop	xde	; F632A6  pop XDE
+	popw	wa	; F632A7  pop WA
+	ret	; F632A8  ret
+sub_F632A9:
+	xor	iy, iy	; F632A9  xor IY,IY
+	ldda32	xiy, (3171)	; F632AB  ld XIY,(0x0c63)
+	stda32	(4718), xiy	; F632AF  ld (0x126e),XIY
+	ld	wa, (xiy+1)	; F632B3  ld WA,(XIY+0x01)
+	stda16	(3169), wa	; F632B6  ld (0x0c61),WA
+	extz	xwa	; F632BA  extz XWA
+	dec	1, xwa	; F632BC  dec 1,XWA
+	sla	xwa, 8	; F632BE  sla 0x08,XWA
+	addda32	xwa, (13828)	; F632C1  add XWA,(0x3604)
+	stda32	(4718), xwa	; F632C5  ld (0x126e),XWA
+	.byte 0xB0, 0xCF	; F632C9  bit 7,(XWA)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F632CB  jr NZ,0xf632d4
+	stdi8	(3402), 11	; F632CD  ld (0x0d4a),0x0b
+	jr	11	; F632D2  jr T,0xf632df
+	ldda32	xwa, (4718)	; F632D4  ld XWA,(0x126e)
+	stda32	(3171), xwa	; F632D8  ld (0x0c63),XWA
+	ldw	iy, 255	; F632DC  ld IY,0x00ff
+	ret	; F632DF  ret
+sub_F632E0:
+	xor	ix, ix	; F632E0  xor IX,IX
+	ldda32	xix, (3161)	; F632E2  ld XIX,(0x0c59)
+	stda32	(4718), xix	; F632E6  ld (0x126e),XIX
+	ld	wa, (xix+1)	; F632EA  ld WA,(XIX+0x01)
+	stda16	(3159), wa	; F632ED  ld (0x0c57),WA
+	extz	xwa	; F632F1  extz XWA
+	dec	1, xwa	; F632F3  dec 1,XWA
+	sla	xwa, 8	; F632F5  sla 0x08,XWA
+	addda32	xwa, (13828)	; F632F8  add XWA,(0x3604)
+	stda32	(4718), xwa	; F632FC  ld (0x126e),XWA
+	.byte 0xB0, 0xCF	; F63300  bit 7,(XWA)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F63302  jr NZ,0xf6330b
+	stdi8	(3402), 11	; F63304  ld (0x0d4a),0x0b
+	jr	11	; F63309  jr T,0xf63316
+	ldda32	xwa, (4718)	; F6330B  ld XWA,(0x126e)
+	stda32	(3161), xwa	; F6330F  ld (0x0c59),XWA
+	ldw	ix, 255	; F63313  ld IX,0x00ff
+	ret	; F63316  ret
+sub_F63317:		; <- T_F42780
+	ldw	wa, 256	; F63317  ld WA,0x0100
+	.byte 0xD1, 0xEA, 0x0C, 0xA0	; F6331A  sub WA,(0x0cea)   [llvm-mc cannot encode this]
+	.byte 0xD1, 0xAE, 0x0C, 0xF0	; F6331E  cp WA,(0x0cae)   [llvm-mc cannot encode this]
+	jr	ugt, 2	; F63322  jr UGT,0xf63326
+	jr	10	; F63324  jr T,0xf63330
+	ldw_d16	wa, (3246)	; F63326  ld WA,(0x0cae)
+	.byte 0xD1, 0xEA, 0x0C, 0x88	; F6332A  add (0x0cea),WA   [llvm-mc cannot encode this]
+	jr	82	; F6332E  jr T,0xf63382
+	ldw_d16	de, (3246)	; F63330  ld DE,(0x0cae)
+	sub	de, wa	; F63334  sub DE,WA
+	ldw	wa, 256	; F63336  ld WA,0x0100
+	sub	wa, 5	; F63339  sub WA,0x0005
+	ldw_d16	hl, (3304)	; F6333D  ld HL,(0x0ce8)
+	calr	2154	; F63341  calr 0xf63bae
+	ldda32	xhl, (4718)	; F63344  ld XHL,(0x126e)
+	ld	bc, (xhl+3)	; F63348  ld BC,(XHL+0x03)
+	.byte 0xD1, 0xA4, 0x0C, 0xF1	; F6334B  cp BC,(0x0ca4)   [llvm-mc cannot encode this]
+	jr	ule, 7	; F6334F  jr ULE,0xf63358
+	stdi8	(3402), 10	; F63351  ld (0x0d4a),0x0a
+	jr	42	; F63356  jr T,0xf63382
+	stda16	(3304), bc	; F63358  ld (0x0ce8),BC
+	ld	hl, bc	; F6335C  ld HL,BC
+	calr	2125	; F6335E  calr 0xf63bae
+	ldda32	xhl, (4718)	; F63361  ld XHL,(0x126e)
+	.byte 0xB3, 0xCF	; F63365  bit 7,(XHL)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F63367  jr NZ,0xf63370
+	stdi8	(3402), 11	; F63369  ld (0x0d4a),0x0b
+	jr	18	; F6336E  jr T,0xf63382
+	cp	de, wa	; F63370  cp DE,WA
+	jr	ugt, 2	; F63372  jr UGT,0xf63376
+	jr	4	; F63374  jr T,0xf6337a
+	sub	de, wa	; F63376  sub DE,WA
+	jr	-54	; F63378  jr T,0xf63344
+	add	de, 5	; F6337A  add DE,0x0005
+	stda16	(3306), de	; F6337E  ld (0x0cea),DE
+	ret	; F63382  ret
+sub_F63383:		; <- T_F42784
+	ldw_d16	wa, (3306)	; F63383  ld WA,(0x0cea)
+	sub	wa, 4	; F63387  sub WA,0x0004
+	.byte 0xD1, 0xAE, 0x0C, 0xF0	; F6338B  cp WA,(0x0cae)   [llvm-mc cannot encode this]
+	jr	ugt, 2	; F6338F  jr UGT,0xf63393
+	jr	14	; F63391  jr T,0xf633a1
+	.byte 0xD1, 0xAE, 0x0C, 0xA0	; F63393  sub WA,(0x0cae)   [llvm-mc cannot encode this]
+	add	wa, 4	; F63397  add WA,0x0004
+	stda16	(3306), wa	; F6339B  ld (0x0cea),WA
+	jr	83	; F6339F  jr T,0xf633f4
+	ldw_d16	de, (3246)	; F633A1  ld DE,(0x0cae)
+	sub	de, wa	; F633A5  sub DE,WA
+	ldw	wa, 256	; F633A7  ld WA,0x0100
+	sub	wa, 5	; F633AA  sub WA,0x0005
+	ldw_d16	hl, (3304)	; F633AE  ld HL,(0x0ce8)
+	calr	2041	; F633B2  calr 0xf63bae
+	ldda32	xhl, (4718)	; F633B5  ld XHL,(0x126e)
+	ld	bc, (xhl+1)	; F633B9  ld BC,(XHL+0x01)
+	.byte 0xD1, 0xA4, 0x0C, 0xF1	; F633BC  cp BC,(0x0ca4)   [llvm-mc cannot encode this]
+	jr	ule, 7	; F633C0  jr ULE,0xf633c9
+	stdi8	(3402), 10	; F633C2  ld (0x0d4a),0x0a
+	jr	43	; F633C7  jr T,0xf633f4
+	stda16	(3304), bc	; F633C9  ld (0x0ce8),BC
+	ld	hl, bc	; F633CD  ld HL,BC
+	calr	2012	; F633CF  calr 0xf63bae
+	ldda32	xhl, (4718)	; F633D2  ld XHL,(0x126e)
+	.byte 0xB3, 0xCF	; F633D6  bit 7,(XHL)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F633D8  jr NZ,0xf633e1
+	stdi8	(3402), 11	; F633DA  ld (0x0d4a),0x0b
+	jr	19	; F633DF  jr T,0xf633f4
+	cp	de, wa	; F633E1  cp DE,WA
+	jr	ugt, 2	; F633E3  jr UGT,0xf633e7
+	jr	4	; F633E5  jr T,0xf633eb
+	sub	de, wa	; F633E7  sub DE,WA
+	jr	-54	; F633E9  jr T,0xf633b5
+	ldw	wa, 255	; F633EB  ld WA,0x00ff
+	sub	wa, de	; F633EE  sub WA,DE
+	stda16	(3306), wa	; F633F0  ld (0x0cea),WA
+	ret	; F633F4  ret
+sub_F633F5:		; <- T_F42788
+	ldda32	xhl, (4718)	; F633F5  ld XHL,(0x126e)
+	.byte 0xC3, 0x07, 0xEC, 0xF0, 0x21	; F633F9  ld A,(XHL+IX)   [llvm-mc cannot encode this]
+	ret	; F633FE  ret
+sub_F633FF:		; <- T_F42810
+	ld	xiy, 16135245	; F633FF  ld XIY,0x00f6344d
+	calr	42	; F63404  calr 0xf63431
+	ret	; F63407  ret
+sub_F63408:		; <- T_F42814
+	ld	xiy, 16135257	; F63408  ld XIY,0x00f63459
+	calr	33	; F6340D  calr 0xf63431
+	ret	; F63410  ret
+sub_F63411:		; <- T_F42818
+	ld	xiy, 16135269	; F63411  ld XIY,0x00f63465
+	calr	24	; F63416  calr 0xf63431
+	ret	; F63419  ret
+sub_F6341A:		; <- T_F4281C
+	ld	xiy, 16135281	; F6341A  ld XIY,0x00f63471
+	calr	15	; F6341F  calr 0xf63431
+	ret	; F63422  ret
+sub_F63423:		; <- T_F42820
+	ld	xiy, 16135293	; F63423  ld XIY,0x00f6347d
+	calr	6	; F63428  calr 0xf63431
+	ret	; F6342B  ret
+
+; --------------------------------------------------------------------------
+; BStore_ErrorToStatusByte -- (0x2880) = ErrorStatusTable[(0x0D4A)]
+;
+; Called from:
+;   thunk slots T_F4278C
+;   1 call site inside the module:
+;     0xF62C42
+;   (both lists are emitted by this script, not typed)
+; Evidence: the whole routine is five instructions -- 0xF6342C
+;   `ld XIY,0x00F63441`, `xor HL,HL`, `ld L,(0x0D4A)`, `ld A,(XIY+HL)`,
+;   `ld (0x2880),A`.  It is the only site in prom_a+prom_b that spells
+;   0x00F63441.
+; Unknown: what (0x2880) is consumed by.  No interpreter-B display-list record
+;   names it (notes/prom_b_var_screens.py --var 0x2880 prints nothing).
+; --------------------------------------------------------------------------
+BStore_ErrorToStatusByte:		; <- T_F4278C
+	ld	xiy, 16135233	; F6342C  ld XIY,0x00f63441
+	xor	hl, hl	; F63431  xor HL,HL
+	ldb_d8	l, (3402)	; F63433  ld L,(0x0d4a)
+	.byte 0xC3, 0x07, 0xF4, 0xEC, 0x21	; F63437  ld A,(XIY+HL)   [llvm-mc cannot encode this]
+	stb_d8	(10368), a	; F6343C  ld (0x2880),A
+	ret	; F63440  ret
+
+; --- BStore_ErrorStatusTable: 72 bytes at 0xF63441 ---
+;     indexed by the error code (0x0D4A); the byte it yields is stored to
+;     (0x2880).  Read by BStore_ErrorToStatusByte (0xF6342C), the only site in
+;     prom_a+prom_b that names 0x00F63441.  Extent is abutment: the next byte,
+;     0xF63489, is thunk T_F42790's target.  72 bytes lay out as 6 rows of 12
+;     with only four distinct non-0xFF values (0x23 at row+0 and row+7, 0x0F
+;     at row+5, and row+9 taking 0xFF,0xFF,0x35,0x1D,0x1C,0x1B).  What the
+;     value MEANS is not established.
+;     Evidence: the bytes above, re-asserted by assert_data_islands() in
+;     notes/gen_prom_b_blockstore_module.py before this text can be emitted.
+;     The literal 0x00F63441 appears 1 time in CPU 1's two ROMs, counted by
+;     addr_sites() at EVERY byte offset: prom_b 0xF6342D.  Those are the
+;     addresses of the LITERAL, which is one or more bytes PAST the start of
+;     the instruction carrying it -- the instruction addresses in the
+;     paragraph above are not the same numbers and are not meant to be.
+BStore_ErrorStatusTable:
+	.byte	0x23, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0x23, 0xFF, 0xFF, 0xFF, 0xFF	; +0x00
+	.byte	0x23, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0x23, 0xFF, 0xFF, 0xFF, 0xFF	; +0x0C
+	.byte	0x23, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0x23, 0xFF, 0x35, 0xFF, 0xFF	; +0x18
+	.byte	0x23, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0x23, 0xFF, 0x1D, 0xFF, 0xFF	; +0x24
+	.byte	0x23, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0x23, 0xFF, 0x1C, 0xFF, 0xFF	; +0x30
+	.byte	0x23, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0x23, 0xFF, 0x1B, 0xFF, 0xFF	; +0x3C
+sub_F63489:		; <- T_F42790
+	pushw	wa	; F63489  push WA
+	calr	1070	; F6348A  calr 0xf638bb
+	popw	wa	; F6348D  pop WA
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6348E  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 18	; F63493  jr Z,0xf634a7
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x01	; F63495  cp (0x0d4a),0x01   [llvm-mc cannot encode this]
+	jr	z, 3	; F6349A  jr Z,0xf6349f
+	jrl	112	; F6349C  jrl T,0xf6350f
+	stdi8	(3402), 0	; F6349F  ld (0x0d4a),0x00
+	jrl	104	; F634A4  jrl T,0xf6350f
+	xor	hl, hl	; F634A7  xor HL,HL
+	dec	1, a	; F634A9  dec 1,A
+	ld	l, a	; F634AB  ld L,A
+	xor	bc, bc	; F634AD  xor BC,BC
+	push	xix	; F634AF  push XIX
+	ld	xix, 6304928	; F634B0  ld XIX,0x006034a0
+	.byte 0xC3, 0x07, 0xF0, 0xEC, 0x23	; F634B5  ld C,(XIX+HL)   [llvm-mc cannot encode this]
+	pop	xix	; F634BA  pop XIX
+	cps	bc, 5	; F634BB  cp BC,5
+	jr	c, 6	; F634BD  jr C,0xf634c5
+	cp	bc, 255	; F634BF  cp BC,0x00ff
+	jr	ule, 7	; F634C3  jr ULE,0xf634cc
+	stdi8	(3402), 11	; F634C5  ld (0x0d4a),0x0b
+	jr	67	; F634CA  jr T,0xf6350f
+	sla	hl, 1	; F634CC  sla 0x01,HL
+	push	xix	; F634CF  push XIX
+	ld	xix, 6304894	; F634D0  ld XIX,0x0060347e
+	.byte 0xD3, 0x07, 0xF0, 0xEC, 0x20	; F634D5  ld WA,(XIX+HL)   [llvm-mc cannot encode this]
+	pop	xix	; F634DA  pop XIX
+	.byte 0xD1, 0xA4, 0x0C, 0xF0	; F634DB  cp WA,(0x0ca4)   [llvm-mc cannot encode this]
+	jr	ule, 7	; F634DF  jr ULE,0xf634e8
+	stdi8	(3402), 10	; F634E1  ld (0x0d4a),0x0a
+	jr	39	; F634E6  jr T,0xf6350f
+	stda16	(13404), wa	; F634E8  ld (0x345c),WA
+	ld	hl, wa	; F634EC  ld HL,WA
+	calr	1725	; F634EE  calr 0xf63bae
+	ldda32	xhl, (4718)	; F634F1  ld XHL,(0x126e)
+	.byte 0xB3, 0xCF	; F634F5  bit 7,(XHL)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F634F7  jr NZ,0xf63500
+	stdi8	(3402), 11	; F634F9  ld (0x0d4a),0x0b
+	jr	15	; F634FE  jr T,0xf6350f
+	ld	iy, bc	; F63500  ld IY,BC
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x84	; F63502  cp (XHL+IY),0x84   [llvm-mc cannot encode this]
+	jr	nz, 5	; F63508  jr NZ,0xf6350f
+	stdi8	(3402), 6	; F6350A  ld (0x0d4a),0x06
+	ret	; F6350F  ret
+sub_F63510:		; <- T_F42794
+	ld	hl, wa	; F63510  ld HL,WA
+	calr	1689	; F63512  calr 0xf63bae
+	ldda32	xhl, (4718)	; F63515  ld XHL,(0x126e)
+	ld	wa, (xhl+3)	; F63519  ld WA,(XHL+0x03)
+	stda16	(13404), wa	; F6351C  ld (0x345c),WA
+	cp	wa, 65535	; F63520  cp WA,0xffff
+	jr	z, 23	; F63524  jr Z,0xf6353d
+	.byte 0xD1, 0xA4, 0x0C, 0xF0	; F63526  cp WA,(0x0ca4)   [llvm-mc cannot encode this]
+	jr	ule, 7	; F6352A  jr ULE,0xf63533
+	stdi8	(3402), 10	; F6352C  ld (0x0d4a),0x0a
+	jr	10	; F63531  jr T,0xf6353d
+	ld	iy, wa	; F63533  ld IY,WA
+	ldw_d16	wa, (3236)	; F63535  ld WA,(0x0ca4)
+	call	16001160	; F63539  call 0xf42888
+	ret	; F6353D  ret
+sub_F6353E:		; <- T_F42798
+	xor	de, de	; F6353E  xor DE,DE
+	xor	c, c	; F63540  xor C,C
+	xor	wa, wa	; F63542  xor WA,WA
+	stdi16	(3246), 1	; F63544  ld (0x0cae),0x0001
+	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFD	; F6354A  and (0x0c8a),0xfd   [llvm-mc cannot encode this]
+	calr	1628	; F6354F  calr 0xf63bae
+	.byte 0xD1, 0x77, 0x0C, 0xF2	; F63552  cp DE,(0x0c77)   [llvm-mc cannot encode this]
+	jrl	z, 111	; F63556  jrl Z,0xf635c8
+	xor	bc, bc	; F63559  xor BC,BC
+	.byte 0xC1, 0x1C, 0x0D, 0xF3	; F6355B  cp C,(0x0d1c)   [llvm-mc cannot encode this]
+	jr	z, 58	; F6355F  jr Z,0xf6359b
+	.byte 0xF1, 0x8A, 0x0C, 0xC9	; F63561  bit 1,(0x0c8a)   [llvm-mc cannot encode this]
+	jr	z, 15	; F63565  jr Z,0xf63576
+	incdi16	1, (3246)	; F63567  incw 1,(0x0cae)
+	calr	91	; F6356B  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6356E  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 82	; F63573  jrl NZ,0xf635c8
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x02	; F63576  or (0x0c8a),0x02   [llvm-mc cannot encode this]
+	ldda32	xhl, (4718)	; F6357B  ld XHL,(0x126e)
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x82	; F6357F  cp (XHL+IY),0x82   [llvm-mc cannot encode this]
+	jr	nz, 8	; F63585  jr NZ,0xf6358f
+	stdi8	(3402), 7	; F63587  ld (0x0d4a),0x07
+	jrl	57	; F6358C  jrl T,0xf635c8
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x81	; F6358F  cp (XHL+IY),0x81   [llvm-mc cannot encode this]
+	jr	nz, -54	; F63595  jr NZ,0xf63561
+	inc	1, c	; F63597  inc 1,C
+	jr	-64	; F63599  jr T,0xf6355b
+	inc	1, de	; F6359B  inc 1,DE
+	push	xiz	; F6359D  push XIZ
+	ldda32	xiz, (4718)	; F6359E  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F635A2  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F635A5  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F635A6  push XDE3   [llvm-mc cannot encode this]
+	push	xhl	; F635A9  push XHL
+	pushw	de	; F635AA  push DE
+	push	xiy	; F635AB  push XIY
+	push	xix	; F635AC  push XIX
+	calr	409	; F635AD  calr 0xf63749
+	pop	xix	; F635B0  pop XIX
+	pop	xiy	; F635B1  pop XIY
+	popw	de	; F635B2  pop DE
+	pop	xhl	; F635B3  pop XHL
+	.byte 0xE7, 0x38, 0x05	; F635B4  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F635B7  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F635B8  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F635BB  ld (0x126e),XIZ
+	pop	xiz	; F635BF  pop XIZ
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F635C0  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	z, -118	; F635C5  jrl Z,0xf63552
+	ret	; F635C8  ret
+
+; --------------------------------------------------------------------------
+; BStore_CursorAdvance -- ++cursor, following the chain at a block end
+;
+; Called from:
+;   thunk slots T_F4279C
+;   15 call sites inside the module:
+;     0xF62C24 0xF62DAC 0xF62DBA 0xF6356B 0xF636B2 0xF636D9 0xF636E4 0xF6371E
+;     0xF63796 0xF637B9 0xF637CB 0xF6380B 0xF63857 0xF63872 0xF649C9
+;   (both lists are emitted by this script, not typed)
+; Inputs:  IY = byte offset in the current block, (0x126E) = block address.
+; Outputs: IY, (0x126E), (0x345C) advanced; (0x0D4A) = 0, or 0x0A / 0x0B.
+; What it does: `inc 1,IY`; while IY is still <= 0xFF it returns; otherwise it
+;   reads the 16-bit NEXT-block number at header offset +3, range-checks it
+;   against (0x0CA4), seeks it, checks bit 7 of the new block's byte 0, and
+;   restarts the offset at 5.
+; Evidence: 0xF635CB `cp IY,0x00FF`, 0xF635D5 `ld WA,(XHL+0x03)`,
+;   0xF635E5 `cp WA,(0x0CA4)`, 0xF635FF `bit 7,(XHL)`, 0xF6360A `ld IY,0x0005`.
+;   The constant 5 is the same 5 that BStore_AllocChain subtracts from 0x100
+;   (0xF639BB `sub HL,0x0005`) to get the payload capacity of a block.
+; Unknown: 0xF635D8 `cp WA,0xFFFF / jr ULE` is a comparison that can never
+;   fail on a 16-bit register, so the `ld (0x0D4A),0x08` at 0xF635DE is
+;   UNREACHABLE.  Error 8 is still produced -- by BStore_CountMarkersForward
+;   and 0xF62DA0 -- so the code is dead, not the code path.
+; --------------------------------------------------------------------------
+BStore_CursorAdvance:		; <- T_F4279C
+	inc	1, iy	; F635C9  inc 1,IY
+	cp	iy, 255	; F635CB  cp IY,0x00ff
+	jr	le, 60	; F635CF  jr LE,0xf6360d
+	ldda32	xhl, (4718)	; F635D1  ld XHL,(0x126e)
+	ld	wa, (xhl+3)	; F635D5  ld WA,(XHL+0x03)
+	cp	wa, 65535	; F635D8  cp WA,0xffff
+	jr	ule, 7	; F635DC  jr ULE,0xf635e5
+	stdi8	(3402), 8	; F635DE  ld (0x0d4a),0x08
+	jr	40	; F635E3  jr T,0xf6360d
+	.byte 0xD1, 0xA4, 0x0C, 0xF0	; F635E5  cp WA,(0x0ca4)   [llvm-mc cannot encode this]
+	jr	ule, 7	; F635E9  jr ULE,0xf635f2
+	stdi8	(3402), 10	; F635EB  ld (0x0d4a),0x0a
+	jr	27	; F635F0  jr T,0xf6360d
+	stda16	(13404), wa	; F635F2  ld (0x345c),WA
+	ld	hl, wa	; F635F6  ld HL,WA
+	calr	1459	; F635F8  calr 0xf63bae
+	ldda32	xhl, (4718)	; F635FB  ld XHL,(0x126e)
+	.byte 0xB3, 0xCF	; F635FF  bit 7,(XHL)   [llvm-mc cannot encode this]
+	jr	nz, 7	; F63601  jr NZ,0xf6360a
+	stdi8	(3402), 11	; F63603  ld (0x0d4a),0x0b
+	jr	3	; F63608  jr T,0xf6360d
+	ldw	iy, 5	; F6360A  ld IY,0x0005
+	ret	; F6360D  ret
+sub_F6360E:		; <- T_F427A0
+	xor	w, w	; F6360E  xor W,W
+	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F63610  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	xor	hl, hl	; F63615  xor HL,HL
+	.byte 0xF1, 0x8A, 0x0C, 0xCE	; F63617  bit 6,(0x0c8a)   [llvm-mc cannot encode this]
+	jr	nz, 3	; F6361B  jr NZ,0xf63620
+	nop	; F6361D  nop
+	nop	; F6361E  nop
+	nop	; F6361F  nop
+	.byte 0xC1, 0xA3, 0x0C, 0xF7	; F63620  cp L,(0x0ca3)   [llvm-mc cannot encode this]
+	jr	ule, 2	; F63624  jr ULE,0xf63628
+	jr	36	; F63626  jr T,0xf6364c
+	push	xix	; F63628  push XIX
+	ld	xix, 6304802	; F63629  ld XIX,0x00603422
+	.byte 0xC3, 0x07, 0xF0, 0xEC, 0x3F, 0x20	; F6362E  cp (XIX+HL),0x20   [llvm-mc cannot encode this]
+	pop	xix	; F63634  pop XIX
+	jr	nz, 17	; F63635  jr NZ,0xf63648
+	.byte 0xF1, 0x0E, 0x36, 0xC8	; F63637  bit 0,(0x360e)   [llvm-mc cannot encode this]
+	jr	z, 15	; F6363B  jr Z,0xf6364c
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F6363D  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	ld	w, l	; F63642  ld W,L
+	inc	1, w	; F63644  inc 1,W
+	jr	4	; F63646  jr T,0xf6364c
+	inc	1, l	; F63648  inc 1,L
+	jr	-44	; F6364A  jr T,0xf63620
+	ret	; F6364C  ret
+sub_F6364D:		; <- T_F427A4
+	.byte 0xD1, 0x5C, 0x34, 0x04	; F6364D  pushw (0x345c)   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xDF	; F63651  and (0x0c8a),0xdf   [llvm-mc cannot encode this]
+	ldb_da	a, (6304983)	; F63656  ld A,(0x6034d7)
+	stb_d8	(3356), a	; F6365B  ld (0x0d1c),A
+	.byte 0xF1, 0x8A, 0x0C, 0xCA	; F6365F  bit 2,(0x0c8a)   [llvm-mc cannot encode this]
+	jrl	z, 222	; F63663  jrl Z,0xf63744
+	ldb_d8	a, (3357)	; F63666  ld A,(0x0d1d)
+	calr	590	; F6366A  calr 0xf638bb
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6366D  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 13	; F63672  jr Z,0xf63681
+	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F63674  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	stdi8	(3402), 0	; F63679  ld (0x0d4a),0x00
+	jrl	195	; F6367E  jrl T,0xf63744
+	xor	hl, hl	; F63681  xor HL,HL
+	push	xwa	; F63683  push XWA
+	ldda32	xwa, (4718)	; F63684  ld XWA,(0x126e)
+	stda32	(3308), xwa	; F63688  ld (0x0cec),XWA
+	pop	xwa	; F6368C  pop XWA
+	ldw	iy, 5	; F6368D  ld IY,0x0005
+	ldda32	xhl, (4718)	; F63690  ld XHL,(0x126e)
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x21	; F63694  ld A,(XHL+IY)   [llvm-mc cannot encode this]
+	ld	w, a	; F63699  ld W,A
+	cp	w, 135	; F6369B  cp W,0x87
+	jr	z, 31	; F6369E  jr Z,0xf636bf
+	cp	w, 130	; F636A0  cp W,0x82
+	jrl	z, 139	; F636A3  jrl Z,0xf63731
+	cp	w, 132	; F636A6  cp W,0x84
+	jrl	z, 133	; F636A9  jrl Z,0xf63731
+	cp	w, 129	; F636AC  cp W,0x81
+	jrl	z, 121	; F636AF  jrl Z,0xf6372b
+	calr	65300	; F636B2  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F636B5  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -44	; F636BA  jr Z,0xf63690
+	jrl	114	; F636BC  jrl T,0xf63731
+	ld	a, w	; F636BF  ld A,W
+	ld	hl, wa	; F636C1  ld HL,WA
+	rrc	a	; F636C3  rrc 0x01,A
+	and	wa, 128	; F636C6  and WA,0x0080
+	stda16	(3340), wa	; F636CA  ld (0x0d0c),WA
+	and	hl, 2	; F636CE  and HL,0x0002
+	.byte 0xCF, 0xE9, 0x02	; F636D2  rrc 0x02,L   [llvm-mc cannot encode this]
+	stda16	(3342), hl	; F636D5  ld (0x0d0e),HL
+	calr	65261	; F636D9  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F636DC  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 77	; F636E1  jrl NZ,0xf63731
+	calr	65250	; F636E4  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F636E7  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 66	; F636EC  jrl NZ,0xf63731
+	ldw_d16	wa, (3340)	; F636EF  ld WA,(0x0d0c)
+	ldda32	xhl, (4718)	; F636F3  ld XHL,(0x126e)
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x21	; F636F7  ld A,(XHL+IY)   [llvm-mc cannot encode this]
+	push	xiz	; F636FC  push XIZ
+	ldda32	xiz, (4718)	; F636FD  ld XIZ,(0x126e)
+	.byte 0xE7, 0x30, 0x9E	; F63701  ld XWA3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F63704  pop XIZ
+	.byte 0xE7, 0x30, 0x04	; F63705  push XWA3   [llvm-mc cannot encode this]
+	push	xiy	; F63708  push XIY
+	push	xhl	; F63709  push XHL
+	pop	xhl	; F6370A  pop XHL
+	pop	xiy	; F6370B  pop XIY
+	.byte 0xE7, 0x30, 0x05	; F6370C  pop XWA3   [llvm-mc cannot encode this]
+	push	xiz	; F6370F  push XIZ
+	.byte 0xE7, 0x30, 0x8E	; F63710  ld XIZ,XWA3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F63713  ld (0x126e),XIZ
+	pop	xiz	; F63717  pop XIZ
+	inc	1, a	; F63718  inc 1,A
+	stb_d8	(3356), a	; F6371A  ld (0x0d1c),A
+	calr	65192	; F6371E  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63721  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 9	; F63726  jr NZ,0xf63731
+	jrl	-155	; F63728  jrl T,0xf63690
+	call	16136235	; F6372B  call 0xf6382b
+	jr	19	; F6372F  jr T,0xf63744
+	stdi8	(3402), 0	; F63731  ld (0x0d4a),0x00
+	ldb_da	a, (6304983)	; F63736  ld A,(0x6034d7)
+	stb_d8	(3356), a	; F6373B  ld (0x0d1c),A
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F6373F  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x5C, 0x34, 0x06	; F63744  popw (0x345c)   [llvm-mc cannot encode this]
+	ret	; F63748  ret
+sub_F63749:		; <- T_F427A8
+	.byte 0xD1, 0x5C, 0x34, 0x04	; F63749  pushw (0x345c)   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x8A, 0x0C, 0xCA	; F6374D  bit 2,(0x0c8a)   [llvm-mc cannot encode this]
+	jrl	z, 205	; F63751  jrl Z,0xf63821
+	.byte 0xF1, 0x8A, 0x0C, 0xCD	; F63754  bit 5,(0x0c8a)   [llvm-mc cannot encode this]
+	jrl	nz, 198	; F63758  jrl NZ,0xf63821
+	xor	hl, hl	; F6375B  xor HL,HL
+	ldda32	xhl, (3312)	; F6375D  ld XHL,(0x0cf0)
+	stda32	(4718), xhl	; F63761  ld (0x126e),XHL
+	ldw_d16	iy, (3316)	; F63765  ld IY,(0x0cf4)
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x21	; F63769  ld A,(XHL+IY)   [llvm-mc cannot encode this]
+	ld	w, a	; F6376E  ld W,A
+	cp	w, 135	; F63770  cp W,0x87
+	jr	z, 51	; F63773  jr Z,0xf637a8
+	cp	w, 130	; F63775  cp W,0x82
+	jr	nz, 8	; F63778  jr NZ,0xf63782
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F6377A  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	jrl	159	; F6377F  jrl T,0xf63821
+	cp	w, 132	; F63782  cp W,0x84
+	jr	nz, 9	; F63785  jr NZ,0xf63790
+	ldw	iy, 5	; F63787  ld IY,0x0005
+	ldda32	xhl, (3308)	; F6378A  ld XHL,(0x0cec)
+	jr	-39	; F6378E  jr T,0xf63769
+	cp	w, 129	; F63790  cp W,0x81
+	jrl	z, 135	; F63793  jrl Z,0xf6381d
+	calr	65072	; F63796  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63799  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -55	; F6379E  jr Z,0xf63769
+	stdi8	(3402), 0	; F637A0  ld (0x0d4a),0x00
+	jrl	121	; F637A5  jrl T,0xf63821
+	ld	l, w	; F637A8  ld L,W
+	xor	l, l	; F637AA  xor L,L
+	ld	a, w	; F637AC  ld A,W
+	rrc	a	; F637AE  rrc 0x01,A
+	and	wa, 128	; F637B1  and WA,0x0080
+	stda16	(3340), wa	; F637B5  ld (0x0d0c),WA
+	calr	65037	; F637B9  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F637BC  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 8	; F637C1  jr Z,0xf637cb
+	stdi8	(3402), 0	; F637C3  ld (0x0d4a),0x00
+	jrl	86	; F637C8  jrl T,0xf63821
+	calr	65019	; F637CB  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F637CE  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 7	; F637D3  jr Z,0xf637dc
+	stdi8	(3402), 0	; F637D5  ld (0x0d4a),0x00
+	jr	69	; F637DA  jr T,0xf63821
+	ldw_d16	wa, (3340)	; F637DC  ld WA,(0x0d0c)
+	ldda32	xhl, (4718)	; F637E0  ld XHL,(0x126e)
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x21	; F637E4  ld A,(XHL+IY)   [llvm-mc cannot encode this]
+	push	xiz	; F637E9  push XIZ
+	ldda32	xiz, (4718)	; F637EA  ld XIZ,(0x126e)
+	.byte 0xE7, 0x3C, 0x9E	; F637EE  ld XHL3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F637F1  pop XIZ
+	.byte 0xE7, 0x3C, 0x04	; F637F2  push XHL3   [llvm-mc cannot encode this]
+	push	xiy	; F637F5  push XIY
+	push	xhl	; F637F6  push XHL
+	pop	xhl	; F637F7  pop XHL
+	pop	xiy	; F637F8  pop XIY
+	.byte 0xE7, 0x3C, 0x05	; F637F9  pop XHL3   [llvm-mc cannot encode this]
+	push	xiz	; F637FC  push XIZ
+	.byte 0xE7, 0x3C, 0x8E	; F637FD  ld XIZ,XHL3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F63800  ld (0x126e),XIZ
+	pop	xiz	; F63804  pop XIZ
+	inc	1, a	; F63805  inc 1,A
+	stb_d8	(3356), a	; F63807  ld (0x0d1c),A
+	calr	64955	; F6380B  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6380E  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	z, -173	; F63813  jrl Z,0xf63769
+	stdi8	(3402), 0	; F63816  ld (0x0d4a),0x00
+	jr	4	; F6381B  jr T,0xf63821
+	call	16136235	; F6381D  call 0xf6382b
+	.byte 0xF1, 0x5C, 0x34, 0x06	; F63821  popw (0x345c)   [llvm-mc cannot encode this]
+	stdi8	(3402), 0	; F63825  ld (0x0d4a),0x00
+	ret	; F6382A  ret
+sub_F6382B:
+	xor	bc, bc	; F6382B  xor BC,BC
+	cpdm8	(3356), c	; F6382D  cp (0x0d1c),C
+	jr	z, 75	; F63831  jr Z,0xf6387e
+	ldda32	xhl, (4718)	; F63833  ld XHL,(0x126e)
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x82	; F63837  cp (XHL+IY),0x82   [llvm-mc cannot encode this]
+	jr	nz, 8	; F6383D  jr NZ,0xf63847
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F6383F  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	jrl	115	; F63844  jrl T,0xf638ba
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x81	; F63847  cp (XHL+IY),0x81   [llvm-mc cannot encode this]
+	jr	z, 33	; F6384D  jr Z,0xf63870
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x84	; F6384F  cp (XHL+IY),0x84   [llvm-mc cannot encode this]
+	jr	z, 12	; F63855  jr Z,0xf63863
+	calr	64879	; F63857  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6385A  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 79	; F6385F  jr NZ,0xf638b0
+	jr	-54	; F63861  jr T,0xf6382d
+	ldw	iy, 5	; F63863  ld IY,0x0005
+	ldda32	xhl, (3308)	; F63866  ld XHL,(0x0cec)
+	stda32	(4718), xhl	; F6386A  ld (0x126e),XHL
+	jr	-67	; F6386E  jr T,0xf6382d
+	inc	1, c	; F63870  inc 1,C
+	calr	64852	; F63872  calr 0xf635c9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63875  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 52	; F6387A  jr NZ,0xf638b0
+	jr	-81	; F6387C  jr T,0xf6382d
+	ldda32	xhl, (4718)	; F6387E  ld XHL,(0x126e)
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x82	; F63882  cp (XHL+IY),0x82   [llvm-mc cannot encode this]
+	jr	nz, 7	; F63888  jr NZ,0xf63891
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F6388A  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	jr	41	; F6388F  jr T,0xf638ba
+	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3F, 0x84	; F63891  cp (XHL+IY),0x84   [llvm-mc cannot encode this]
+	jr	nz, 7	; F63897  jr NZ,0xf638a0
+	ldw	iy, 5	; F63899  ld IY,0x0005
+	ldda32	xhl, (3308)	; F6389C  ld XHL,(0x0cec)
+	stda16	(3316), iy	; F638A0  ld (0x0cf4),IY
+	push	xwa	; F638A4  push XWA
+	ldda32	xwa, (4718)	; F638A5  ld XWA,(0x126e)
+	stda32	(3312), xwa	; F638A9  ld (0x0cf0),XWA
+	pop	xwa	; F638AD  pop XWA
+	jr	10	; F638AE  jr T,0xf638ba
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F638B0  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	stdi8	(3402), 0	; F638B5  ld (0x0d4a),0x00
+	ret	; F638BA  ret
+
+; --------------------------------------------------------------------------
+; BStore_OpenChain -- directory lookup: entry n -> cursor at its head
+;
+; Called from:
+;   thunk slots T_F427AC
+;   5 call sites inside the module:
+;     0xF62C1C 0xF62C7F 0xF62D07 0xF6348A 0xF6366A
+;   (both lists are emitted by this script, not typed)
+; Inputs:  A = entry number, 1-based.
+; Outputs: (0x345C) = head block number, (0x126E) = its address, (0x0D4A) = 0
+;   or 0x01 / 0x02 / 0x0A / 0x0B.
+; THE DIRECTORY, and this routine is where its shape is read off:
+;   base 0x00603500, stride 3 (`muls WA,0x0003` at 0xF638CA),
+;   +0 flags -- bit 7 set means the entry is in use (`bit 7,(XDE+IY)`),
+;   +1..+2 the 16-bit head BLOCK NUMBER, 0xFFFF meaning empty
+;          (`inc 1,IY` then `ld WA,(XDE+IY)`, then `cp WA,0xFFFF`).
+; Evidence: 0xF638D1 and 0xF638E8 both `ld XDE,0x00603500`.  The 32-bit immediate
+;   0x00603500 occurs 67 times in prom_a+prom_b, counted here.
+;   So this directory is not private to this module.
+; Unknown: how many directory entries there are.  (0x0C90) bounds a loop over
+;   them at 0xF62D3C, but nothing here fixes its value.
+; --------------------------------------------------------------------------
+BStore_OpenChain:		; <- T_F427AC
+	xor	w, w	; F638BB  xor W,W
+	cps	a, 0	; F638BD  cp A,0
+	jr	nz, 7	; F638BF  jr NZ,0xf638c8
+	stdi8	(3402), 1	; F638C1  ld (0x0d4a),0x01
+	jr	91	; F638C6  jr T,0xf63923
+	dec	1, a	; F638C8  dec 1,A
+	muls	wa, 3	; F638CA  muls WA,0x0003
+	ld	iy, wa	; F638CE  ld IY,WA
+	push	xde	; F638D0  push XDE
+	ld	xde, 6305024	; F638D1  ld XDE,0x00603500
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0xCF	; F638D6  bit 7,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F638DB  pop XDE
+	jr	nz, 7	; F638DC  jr NZ,0xf638e5
+	stdi8	(3402), 1	; F638DE  ld (0x0d4a),0x01
+	jr	62	; F638E3  jr T,0xf63923
+	inc	1, iy	; F638E5  inc 1,IY
+	push	xde	; F638E7  push XDE
+	ld	xde, 6305024	; F638E8  ld XDE,0x00603500
+	.byte 0xD3, 0x07, 0xE8, 0xF4, 0x20	; F638ED  ld WA,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F638F2  pop XDE
+	cp	wa, 65535	; F638F3  cp WA,0xffff
+	jr	nz, 7	; F638F7  jr NZ,0xf63900
+	stdi8	(3402), 2	; F638F9  ld (0x0d4a),0x02
+	jr	35	; F638FE  jr T,0xf63923
+	.byte 0xD1, 0xA4, 0x0C, 0xF0	; F63900  cp WA,(0x0ca4)   [llvm-mc cannot encode this]
+	jr	ule, 7	; F63904  jr ULE,0xf6390d
+	stdi8	(3402), 10	; F63906  ld (0x0d4a),0x0a
+	jr	22	; F6390B  jr T,0xf63923
+	stda16	(13404), wa	; F6390D  ld (0x345c),WA
+	ld	hl, wa	; F63911  ld HL,WA
+	calr	664	; F63913  calr 0xf63bae
+	ldda32	xhl, (4718)	; F63916  ld XHL,(0x126e)
+	.byte 0xB3, 0xCF	; F6391A  bit 7,(XHL)   [llvm-mc cannot encode this]
+	jr	nz, 5	; F6391C  jr NZ,0xf63923
+	stdi8	(3402), 11	; F6391E  ld (0x0d4a),0x0b
+	ret	; F63923  ret
+
+; --------------------------------------------------------------------------
+; BStore_SaveCursor -- store entry n's cursor, in RAM and in its bank
+;
+; Called from:
+;   thunk slots T_F427B0
+;   4 call sites inside the module:
+;     0xF62C56 0xF63F81 0xF64524 0xF648EE
+;   (both lists are emitted by this script, not typed)
+; Inputs:  (0x0D1A) = entry number 1-based; IX = the byte offset; (0x0C57) =
+;   the block number.
+; What it does: writes the offset byte to 0x006034A0[n-1] and the block-number
+;   word to 0x0060347E[(n-1)*2], and then writes the SAME two values into the
+;   saved copy of the workspace at 0x00610000 + (0x360A)*0xC00 + 0xA0 / + 0x7E.
+; Evidence: 0xF6392E and 0xF6393F name the two RAM arrays; 0xF6394E
+;   `ld XIZ,0x00610000` with `sla 0x0B,XWA` + `sla 0x0A,XBC` (i.e. n*0x800 +
+;   n*0x400 = n*0xC00) and then the same two offsets 0xA0 and 0x7E as literals.
+;   This routine is why the (+0x7E word, +0xA0 byte) pair is called a cursor:
+;   it is written here from a live block number and offset, and read back by
+;   BStore_ValidateSavedCursor.
+; --------------------------------------------------------------------------
+BStore_SaveCursor:		; <- T_F427B0
+	push	xde	; F63924  push XDE
+	push	xiz	; F63925  push XIZ
+	ldw_d16	hl, (3354)	; F63926  ld HL,(0x0d1a)
+	dec	1, hl	; F6392A  dec 1,HL
+	ld	wa, ix	; F6392C  ld WA,IX
+	ld	xde, 6304928	; F6392E  ld XDE,0x006034a0
+	.byte 0xF3, 0x07, 0xE8, 0xEC, 0x41	; F63933  ld (XDE+HL),A   [llvm-mc cannot encode this]
+	sla	hl, 1	; F63938  sla 0x01,HL
+	ldw_d16	wa, (3159)	; F6393B  ld WA,(0x0c57)
+	ld	xde, 6304894	; F6393F  ld XDE,0x0060347e
+	.byte 0xF3, 0x07, 0xE8, 0xEC, 0x50	; F63944  ld (XDE+HL),WA   [llvm-mc cannot encode this]
+	push	xbc	; F63949  push XBC
+	xor	xbc, xbc	; F6394A  xor XBC,XBC
+	xor	xwa, xwa	; F6394C  xor XWA,XWA
+	ld	xiz, 6356992	; F6394E  ld XIZ,0x00610000
+	ldb_d8	a, (13834)	; F63953  ld A,(0x360a)
+	ld	c, a	; F63957  ld C,A
+	sla	xwa, 11	; F63959  sla 0x0b,XWA
+	sla	xbc, 10	; F6395C  sla 0x0a,XBC
+	add	xwa, xbc	; F6395F  add XWA,XBC
+	pop	xbc	; F63961  pop XBC
+	add	xiz, xwa	; F63962  add XIZ,XWA
+	ld	xde, 160	; F63964  ld XDE,0x000000a0
+	add	xde, xiz	; F63969  add XDE,XIZ
+	ld	wa, ix	; F6396B  ld WA,IX
+	.byte 0xF3, 0x07, 0xE8, 0xEC, 0x41	; F6396D  ld (XDE+HL),A   [llvm-mc cannot encode this]
+	sla	hl, 1	; F63972  sla 0x01,HL
+	ld	xde, 126	; F63975  ld XDE,0x0000007e
+	add	xde, xiz	; F6397A  add XDE,XIZ
+	ldw_d16	wa, (3159)	; F6397C  ld WA,(0x0c57)
+	.byte 0xF3, 0x07, 0xE8, 0xEC, 0x50	; F63980  ld (XDE+HL),WA   [llvm-mc cannot encode this]
+	pop	xiz	; F63985  pop XIZ
+	pop	xde	; F63986  pop XDE
+	ret	; F63987  ret
+
+; --------------------------------------------------------------------------
+; BStore_AllocChain -- allocate a chain long enough for N bytes
+;
+; Called from:
+;   thunk slots T_F427B4
+;   2 call sites inside the module:
+;     0xF62C5A 0xF648B2
+;   (both lists are emitted by this script, not typed)
+; Inputs:  (0x0CAE) = byte count wanted, (0x0CC6) = bytes already in the last
+;   block, (0x0CC0) = the block to link the new chain onto.
+; Outputs: (0x0CAC) = blocks allocated, (0x0D08) = bytes free in the last one,
+;   (0x0CC2) = the last block's address, (0x0D4A) = 0 or 0x05.
+; THE BLOCK CAPACITY, and this is where it is read off: 0xF639B8-0xF639BB
+;   `ld HL,0x0100 / sub HL,0x0005` and then `div XWA,HL` -- 0x100 bytes per
+;   block, 5 of them header, 251 payload.  The same `0x100 - 5` appears at
+;   0xF62E3F-0xF62E42.
+; THE BLOCK HEADER's two link fields are written here:
+;   0xF63A3A `ld (XHL+0x03),IX`      -- the NEXT block number,
+;   0xF63A46 `ld (XHL+0x03),0xFFFF`  -- end of chain,
+;   0xF63A4B `ld (XHL+0x01),DE`      -- the PREVIOUS block number.
+;   So the chain is DOUBLY linked and 0xFFFF is the terminator, which is the
+;   same 0xFFFF BStore_OpenChain tests the directory head against.
+; Evidence: also 0xF639EA `cp WA,(0x6034BA)` -> error 5, which is what makes
+;   the workspace word at +0xBA the free-block count.
+; Unknown: the allocator itself is not here -- 0xF63A18 calls thunk T_F42884
+;   -> 0xF7A402, in another module.
+; --------------------------------------------------------------------------
+BStore_AllocChain:		; <- T_F427B4
+	ldw	wa, 255	; F63988  ld WA,0x00ff
+	.byte 0xD1, 0xC6, 0x0C, 0xA0	; F6398B  sub WA,(0x0cc6)   [llvm-mc cannot encode this]
+	.byte 0xD1, 0xAE, 0x0C, 0xF8	; F6398F  cp (0x0cae),WA   [llvm-mc cannot encode this]
+	jr	ugt, 25	; F63993  jr UGT,0xf639ae
+	stdi16	(3244), 0	; F63995  ld (0x0cac),0x0000
+	ldw_d16	wa, (3270)	; F6399B  ld WA,(0x0cc6)
+	.byte 0xD1, 0xAE, 0x0C, 0x80	; F6399F  add WA,(0x0cae)   [llvm-mc cannot encode this]
+	stda16	(3336), wa	; F639A3  ld (0x0d08),WA
+	ldw_d16	de, (3264)	; F639A7  ld DE,(0x0cc0)
+	jrl	170	; F639AB  jrl T,0xf63a58
+	ldw_d16	de, (3246)	; F639AE  ld DE,(0x0cae)
+	sub	de, wa	; F639B2  sub DE,WA
+	stda16	(3346), de	; F639B4  ld (0x0d12),DE
+	ldw	hl, 256	; F639B8  ld HL,0x0100
+	sub	hl, 5	; F639BB  sub HL,0x0005
+	add	de, hl	; F639BF  add DE,HL
+	dec	1, de	; F639C1  dec 1,DE
+	ld	wa, de	; F639C3  ld WA,DE
+	xor	de, de	; F639C5  xor DE,DE
+	ld	qwa, de	; F639C7  ld QWA,DE
+	div	xwa, xhl	; F639CA  div XWA,HL
+	ld	de, qwa	; F639CC  ld DE,QWA
+	stda16	(3244), wa	; F639CF  ld (0x0cac),WA
+	mul	xwa, xhl	; F639D3  mul XWA,HL
+	ld	de, qwa	; F639D5  ld DE,QWA
+	.byte 0xD1, 0x12, 0x0D, 0xA0	; F639D8  sub WA,(0x0d12)   [llvm-mc cannot encode this]
+	sub	hl, wa	; F639DC  sub HL,WA
+	add	hl, 4	; F639DE  add HL,0x0004
+	stda16	(3336), hl	; F639E2  ld (0x0d08),HL
+	ldw_d16	wa, (3244)	; F639E6  ld WA,(0x0cac)
+	.byte 0xD2, 0xBA, 0x34, 0x60, 0xF0	; F639EA  cp WA,(0x6034ba)   [llvm-mc cannot encode this]
+	jr	ule, 7	; F639EF  jr ULE,0xf639f8
+	stdi8	(3402), 5	; F639F1  ld (0x0d4a),0x05
+	jr	96	; F639F6  jr T,0xf63a58
+	ldw_d16	de, (3264)	; F639F8  ld DE,(0x0cc0)
+	xor	bc, bc	; F639FC  xor BC,BC
+	ld	hl, de	; F639FE  ld HL,DE
+	calr	427	; F63A00  calr 0xf63bae
+	.byte 0xD1, 0xAC, 0x0C, 0xF1	; F63A03  cp BC,(0x0cac)   [llvm-mc cannot encode this]
+	jr	nc, 79	; F63A07  jr NC,0xf63a58
+	push	xiz	; F63A09  push XIZ
+	ldda32	xiz, (4718)	; F63A0A  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F63A0E  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F63A11  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F63A12  push XDE3   [llvm-mc cannot encode this]
+	push	xhl	; F63A15  push XHL
+	pushw	bc	; F63A16  push BC
+	pushw	de	; F63A17  push DE
+	call	16001156	; F63A18  call 0xf42884
+	popw	de	; F63A1C  pop DE
+	popw	bc	; F63A1D  pop BC
+	pop	xhl	; F63A1E  pop XHL
+	.byte 0xE7, 0x38, 0x05	; F63A1F  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F63A22  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F63A23  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F63A26  ld (0x126e),XIZ
+	pop	xiz	; F63A2A  pop XIZ
+	cps	w, 0	; F63A2B  cp W,0
+	jr	z, 7	; F63A2D  jr Z,0xf63a36
+	stdi8	(3402), 5	; F63A2F  ld (0x0d4a),0x05
+	jr	34	; F63A34  jr T,0xf63a58
+	ldda32	xhl, (4718)	; F63A36  ld XHL,(0x126e)
+	ld	(xhl+3), ix	; F63A3A  ld (XHL+0x03),IX
+	ld	hl, ix	; F63A3D  ld HL,IX
+	calr	364	; F63A3F  calr 0xf63bae
+	ldda32	xhl, (4718)	; F63A42  ld XHL,(0x126e)
+	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F63A46  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
+	ld	(xhl+1), de	; F63A4B  ld (XHL+0x01),DE
+	stda32	(3266), xhl	; F63A4E  ld (0x0cc2),XHL
+	ld	de, ix	; F63A52  ld DE,IX
+	inc	1, bc	; F63A54  inc 1,BC
+	jr	-85	; F63A56  jr T,0xf63a03
+	ret	; F63A58  ret
+sub_F63A59:		; <- T_F427B8
+	stib_da	(6304856), 0	; F63A59  ld (0x603458),0x00
+	stdi16	(3518), 0	; F63A5F  ld (0x0dbe),0x0000
+	stib_da	(6304857), 1	; F63A65  ld (0x603459),0x01
+	stib_da	(6304858), 2	; F63A6B  ld (0x60345a),0x02
+	stib_da	(6304859), 3	; F63A71  ld (0x60345b),0x03
+	stib_da	(6304860), 1	; F63A77  ld (0x60345c),0x01
+	stiw_da	(6304861), 1	; F63A7D  ld (0x60345d),0x0001
+	stiw_da	(6304863), 1	; F63A84  ld (0x60345f),0x0001
+	stib_da	(6304865), 1	; F63A8B  ld (0x603461),0x01
+	stiw_da	(6304866), 1	; F63A91  ld (0x603462),0x0001
+	stiw_da	(6304868), 1	; F63A98  ld (0x603464),0x0001
+	stib_da	(6304870), 0	; F63A9F  ld (0x603466),0x00
+	stib_da	(6304871), 1	; F63AA5  ld (0x603467),0x01
+	stiw_da	(6304872), 1	; F63AAB  ld (0x603468),0x0001
+	stiw_da	(6304874), 1	; F63AB2  ld (0x60346a),0x0001
+	stib_da	(6304876), 1	; F63AB9  ld (0x60346c),0x01
+	stiw_da	(6304877), 1	; F63ABF  ld (0x60346d),0x0001
+	stdi8	(3607), 0	; F63AC6  ld (0x0e17),0x00
+	stib_da	(6304879), 1	; F63ACB  ld (0x60346f),0x01
+	stiw_da	(6304880), 1	; F63AD1  ld (0x603470),0x0001
+	stiw_da	(6304882), 1	; F63AD8  ld (0x603472),0x0001
+	stib_da	(6304884), 1	; F63ADF  ld (0x603474),0x01
+	stiw_da	(6304885), 1	; F63AE5  ld (0x603475),0x0001
+	stdi8	(3606), 0	; F63AEC  ld (0x0e16),0x00
+	stib_da	(6304945), 1	; F63AF1  ld (0x6034b1),0x01
+	stiw_da	(6304946), 1	; F63AF7  ld (0x6034b2),0x0001
+	stiw_da	(6304948), 1	; F63AFE  ld (0x6034b4),0x0001
+	stib_da	(6304950), 0	; F63B05  ld (0x6034b6),0x00
+	stib_da	(6304951), 0	; F63B0B  ld (0x6034b7),0x00
+	stib_da	(6304956), 0	; F63B11  ld (0x6034bc),0x00
+	stib_da	(6304957), 0	; F63B17  ld (0x6034bd),0x00
+	stib_da	(6304887), 0	; F63B1D  ld (0x603477),0x00
+	stiw_da	(6304888), 1	; F63B23  ld (0x603478),0x0001
+	stiw_da	(6304890), 1	; F63B2A  ld (0x60347a),0x0001
+	stib_da	(6304892), 2	; F63B31  ld (0x60347c),0x02
+	stdi8	(3125), 0	; F63B37  ld (0x0c35),0x00
+	stdi8	(3588), 100	; F63B3C  ld (0x0e04),0x64
+	stdi8	(3589), 100	; F63B41  ld (0x0e05),0x64
+	ldw	wa, 1	; F63B46  ld WA,0x0001
+	stb_d8	(3566), a	; F63B49  ld (0x0dee),A
+	stda16	(3568), wa	; F63B4D  ld (0x0df0),WA
+	stda16	(3570), wa	; F63B51  ld (0x0df2),WA
+	stda16	(3584), wa	; F63B55  ld (0x0e00),WA
+	xor	a, a	; F63B59  xor A,A
+	stb_d8	(3572), a	; F63B5B  ld (0x0df4),A
+	stb_d8	(3573), a	; F63B5F  ld (0x0df5),A
+	ldw_d16	wa, (3570)	; F63B63  ld WA,(0x0df2)
+	.byte 0xD1, 0xF0, 0x0D, 0xA0	; F63B67  sub WA,(0x0df0)   [llvm-mc cannot encode this]
+	inc	1, wa	; F63B6B  inc 1,WA
+	stda16	(4766), wa	; F63B6D  ld (0x129e),WA
+	ldw	wa, 1	; F63B71  ld WA,0x0001
+	stb_d8	(3575), a	; F63B74  ld (0x0df7),A
+	stda16	(3576), wa	; F63B78  ld (0x0df8),WA
+	stda16	(3578), wa	; F63B7C  ld (0x0dfa),WA
+	xor	a, a	; F63B80  xor A,A
+	stb_d8	(3580), a	; F63B82  ld (0x0dfc),A
+	ldw_d16	wa, (3578)	; F63B86  ld WA,(0x0dfa)
+	.byte 0xD1, 0xF8, 0x0D, 0xA0	; F63B8A  sub WA,(0x0df8)   [llvm-mc cannot encode this]
+	inc	1, wa	; F63B8E  inc 1,WA
+	stda16	(3584), wa	; F63B90  ld (0x0e00),WA
+	ldw	wa, 1	; F63B94  ld WA,0x0001
+	stb_d8	(3558), a	; F63B97  ld (0x0de6),A
+	stda16	(3560), wa	; F63B9B  ld (0x0de8),WA
+	stda16	(3562), wa	; F63B9F  ld (0x0dea),WA
+	stda16	(3590), wa	; F63BA3  ld (0x0e06),WA
+	xor	a, a	; F63BA7  xor A,A
+	stb_d8	(3564), a	; F63BA9  ld (0x0dec),A
+	ret	; F63BAD  ret
+
+; --------------------------------------------------------------------------
+; BStore_SeekBlock -- point the cursor at block n
+;
+; Called from:
+;   thunk slots T_F427BC
+;   17 call sites inside the module:
+;     0xF62CD4 0xF62DD2 0xF62DE2 0xF63073 0xF63082 0xF63341 0xF6335E 0xF633B2
+;     0xF633CF 0xF634EE 0xF63512 0xF6354F 0xF635F8 0xF63913 0xF63A00 0xF63A3F
+;     0xF64A41
+;   (both lists are emitted by this script, not typed)
+; Inputs:  HL = block number, 1-based.   Outputs: (0x126E) = its address.
+; What it does: (0x126E) = (0x3604) + (HL-1) * 0x100.
+; Evidence: the four instructions `dec 1,HL / extz XHL / sla 0x08,XHL /
+;   add XHL,(0x3604)`.
+; AND (0x3604) IS 0x00617800.  That is not read off here -- it is forced by
+;   the INVERSE, which two other prom_b modules spell with a literal:
+;     0xF5E2F0  ld XHL,(0x126E) / sub XHL,0x00617800 / srl 0x08,XHL / inc 1,HL
+;     0xF61F1C  ld XHL,(0x0E1F) / ld (0x126E),XHL / sub XHL,0x00617800 /
+;               sra 0x08,XHL / inc 1,HL
+;   Both recover a 1-based block number from (0x126E); composing either with
+;   this routine gives n back if and only if (0x3604) = 0x00617800.
+;   notes/FINDINGS-memory-map.md already had `0x617800 + n*0x100 -- a 256-byte
+;   record array' from 0xF61F5B; this identifies the array.
+; --------------------------------------------------------------------------
+BStore_SeekBlock:		; <- T_F427BC
+	dec	1, hl	; F63BAE  dec 1,HL
+	extz	xhl	; F63BB0  extz XHL
+	sla	xhl, 8	; F63BB2  sla 0x08,XHL
+	addda32	xhl, (13828)	; F63BB5  add XHL,(0x3604)
+	stda32	(4718), xhl	; F63BB9  ld (0x126e),XHL
+	xor	xhl, xhl	; F63BBD  xor XHL,XHL
+	ret	; F63BBF  ret
+
+; --------------------------------------------------------------------------
+; BStore_CopyAcrossBlocks -- ldir between two blocks, by block number
+;
+; Called from:
+;   thunk slots T_F427C0
+;   13 call sites inside the module:
+;     0xF62C5E 0xF62E5B 0xF62E78 0xF62E8D 0xF62EC3 0xF62EF1 0xF62F52 0xF62F67
+;     0xF62F84 0xF62F99 0xF62FD5 0xF62FDE 0xF62FF6
+;   (both lists are emitted by this script, not typed)
+; Inputs:  BC = byte count; IX = offset in the destination block; IY = offset
+;   in the source block; (0x0C59) = destination block address, (0x0C63) =
+;   source block address.  Returns at once when BC = 0.
+; Evidence: `extz XIX / extz XIY / add XIY,XHL / add XIX,XDE / ldir` with
+;   XHL = (0x0C63) and XDE = (0x0C59), then both bases subtracted again so the
+;   caller's offsets survive.  TLCS-900 `ldir` copies (XIX)+ <- (XIY)+ --
+;   ../mame/src/devices/cpu/tlcs900/900tbl.hxx:2483 writes through p1 and reads
+;   p2, and :5437-5438 set p1 = reg(op-1) = XIX and p2 = reg(op) = XIY for the
+;   0x85 prefix.  So (0x0C59) is the DESTINATION.
+;   0xF62DC9 sets them: (0x0C63) from block (0x0C61), (0x0C59) from block
+;   (0x0C57).
+; --------------------------------------------------------------------------
+BStore_CopyAcrossBlocks:		; <- T_F427C0
+	pushw	wa	; F63BC0  push WA
+	push	xde	; F63BC1  push XDE
+	push	xhl	; F63BC2  push XHL
+	cps	bc, 0	; F63BC3  cp BC,0
+	jr	z, 26	; F63BC5  jr Z,0xf63be1
+	ldda32	xhl, (3171)	; F63BC7  ld XHL,(0x0c63)
+	ldda32	xde, (3161)	; F63BCB  ld XDE,(0x0c59)
+	extz	xix	; F63BCF  extz XIX
+	extz	xiy	; F63BD1  extz XIY
+	add	xiy, xhl	; F63BD3  add XIY,XHL
+	add	xix, xde	; F63BD5  add XIX,XDE
+	.byte 0x85, 0x11	; F63BD7  ldir   [llvm-mc cannot encode this]
+	subda32	xiy, (3171)	; F63BD9  sub XIY,(0x0c63)
+	subda32	xix, (3161)	; F63BDD  sub XIX,(0x0c59)
+	pop	xhl	; F63BE1  pop XHL
+	pop	xde	; F63BE2  pop XDE
+	popw	wa	; F63BE3  pop WA
+	ret	; F63BE4  ret
+
+; --------------------------------------------------------------------------
+; BStore_LoadGeometry -- copy the store's geometry into the 0x0Cxx page
+;
+; Called from:
+;   thunk slots T_F427C4
+;   3 call sites inside the module:
+;     0xF62C20 0xF63C10 0xF63C46
+;   (both lists are emitted by this script, not typed)
+; What it does: (0x0CA2) = 0x11; (0x0CA4) = (0x3608) (the block COUNT);
+;   (0x0CA6) = (0x3604) (the block store BASE); (0x0CA3) = 0x10.
+; Evidence: six instructions, all immediates or direct moves.
+;   (0x0CA4) being the block count is what makes the `cp WA,(0x0CA4)` bounds
+;   checks in BStore_CursorAdvance and BStore_OpenChain range checks.
+; Unknown: what 0x11 and 0x10 are.  0x10 is used as a loop bound over the
+;   16-byte array at 0x00603422 (0xF63620 `cp L,(0x0CA3)`), so 0x10 = 16
+;   entries there; 0x11 has no established use.
+; --------------------------------------------------------------------------
+BStore_LoadGeometry:		; <- T_F427C4
+	push	xiy	; F63BE5  push XIY
+	stdi8	(3234), 17	; F63BE6  ld (0x0ca2),0x11
+	ldw_d16	iy, (13832)	; F63BEB  ld IY,(0x3608)
+	stda16	(3236), iy	; F63BEF  ld (0x0ca4),IY
+	ldda32	xiy, (13828)	; F63BF3  ld XIY,(0x3604)
+	stda32	(3238), xiy	; F63BF7  ld (0x0ca6),XIY
+	stdi8	(3235), 16	; F63BFB  ld (0x0ca3),0x10
+	pop	xiy	; F63C00  pop XIY
+	ret	; F63C01  ret
+sub_F63C02:		; <- T_F427C8
+	nop	; F63C02  nop
+	nop	; F63C03  nop
+	nop	; F63C04  nop
+	ret	; F63C05  ret
+sub_F63C06:		; <- T_F4280C
+	stdi8	(3402), 0	; F63C06  ld (0x0d4a),0x00
+	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F63C0B  and (0x0d45),0xfc   [llvm-mc cannot encode this]
+	calr	65490	; F63C10  calr 0xf63be5
+	ldb_d8	a, (3203)	; F63C13  ld A,(0x0c83)
+	cp	a, 16	; F63C17  cp A,0x10
+	jr	ugt, 27	; F63C1A  jr UGT,0xf63c37
+	cps	a, 0	; F63C1C  cp A,0
+	jr	c, 23	; F63C1E  jr C,0xf63c37
+	xor	hl, hl	; F63C20  xor HL,HL
+	ldb_d8	l, (3184)	; F63C22  ld L,(0x0c70)
+	dec	1, l	; F63C26  dec 1,L
+	ldb_d8	l, (3185)	; F63C28  ld L,(0x0c71)
+	dec	1, l	; F63C2C  dec 1,L
+	ldb_d8	a, (3203)	; F63C2E  ld A,(0x0c83)
+	inc	1, a	; F63C32  inc 1,A
+	calr	169	; F63C34  calr 0xf63ce0
+	call	15993372	; F63C37  call 0xf40a1c
+	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F63C3B  and (0x0d45),0xfc   [llvm-mc cannot encode this]
+	ret	; F63C40  ret
+sub_F63C41:		; <- T_F427CC
+	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F63C41  and (0x0d45),0xfc   [llvm-mc cannot encode this]
+	calr	65436	; F63C46  calr 0xf63be5
+	ldb_d8	a, (3203)	; F63C49  ld A,(0x0c83)
+	cp	a, 16	; F63C4D  cp A,0x10
+	jr	ugt, 100	; F63C50  jr UGT,0xf63cb6
+	ldb_d8	a, (3078)	; F63C52  ld A,(0x0c06)
+	cp	a, 31	; F63C56  cp A,0x1f
+	jr	ugt, 91	; F63C59  jr UGT,0xf63cb6
+	stdi8	(3402), 0	; F63C5B  ld (0x0d4a),0x00
+	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F63C60  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	xor	hl, hl	; F63C65  xor HL,HL
+	ldb_d8	l, (3203)	; F63C67  ld L,(0x0c83)
+	push	xde	; F63C6B  push XDE
+	ld	xde, 6304802	; F63C6C  ld XDE,0x00603422
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x21	; F63C71  ld A,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F63C76  pop XDE
+	.byte 0xC1, 0x06, 0x0C, 0xF1	; F63C77  cp A,(0x0c06)   [llvm-mc cannot encode this]
+	jr	z, 57	; F63C7B  jr Z,0xf63cb6
+	ldb_d8	l, (3203)	; F63C7D  ld L,(0x0c83)
+	xor	h, h	; F63C81  xor H,H
+	push	xde	; F63C83  push XDE
+	ld	xde, 6304802	; F63C84  ld XDE,0x00603422
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x27	; F63C89  ld L,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F63C8E  pop XDE
+	xor	h, h	; F63C8F  xor H,H
+	push	xde	; F63C91  push XDE
+	ld	xde, 16137408	; F63C92  ld XDE,0x00f63cc0
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x27	; F63C97  ld L,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F63C9C  pop XDE
+	cp	l, 255	; F63C9D  cp L,0xff
+	jr	z, 20	; F63CA0  jr Z,0xf63cb6
+	stb_d8	(3396), l	; F63CA2  ld (0x0d44),L
+	ldb_d8	a, (3203)	; F63CA6  ld A,(0x0c83)
+	inc	1, a	; F63CAA  inc 1,A
+	pushw	wa	; F63CAC  push WA
+	call	15993312	; F63CAD  call 0xf409e0
+	popw	wa	; F63CB1  pop WA
+	call	16137440	; F63CB2  call 0xf63ce0
+	call	15993372	; F63CB6  call 0xf40a1c
+	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F63CBA  and (0x0d45),0xfc   [llvm-mc cannot encode this]
+	ret	; F63CBF  ret
+
+; --- BStore_Map32: 32 bytes at 0xF63CC0 ---
+;     32 bytes, the identity map 0x00..0x1F.  Read as `ld L,(0x00F63CC0+L)` at
+;     0xF63C97 and 0xF64040, in both cases with L already fetched from the
+;     16-byte array at 0x00603422, and in both cases the result is tested
+;     against 0xFF and the operation skipped when it matches.  No entry IS
+;     0xFF, so in this firmware the map skips nothing; that is a fact about
+;     these 32 bytes, not a claim about the design.
+;     Evidence: the bytes above, re-asserted by assert_data_islands() in
+;     notes/gen_prom_b_blockstore_module.py before this text can be emitted.
+;     The literal 0x00F63CC0 appears 2 times in CPU 1's two ROMs, counted by
+;     addr_sites() at EVERY byte offset: prom_b 0xF63C93, 0xF6403C.  Those are
+;     the addresses of the LITERAL, which is one or more bytes PAST the start
+;     of the instruction carrying it -- the instruction addresses in the
+;     paragraph above are not the same numbers and are not meant to be.
+BStore_Map32:
+	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; +0x00
+	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F	; +0x10
+sub_F63CE0:
+	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F63CE0  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	xor	w, w	; F63CE5  xor W,W
+	stdi8	(3402), 0	; F63CE7  ld (0x0d4a),0x00
+	stda16	(3354), wa	; F63CEC  ld (0x0d1a),WA
+	stdi16	(3216), 1	; F63CF0  ld (0x0c90),0x0001
+	calr	61445	; F63CF6  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63CF9  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 3	; F63CFE  jr Z,0xf63d03
+	jrl	644	; F63D00  jrl T,0xf63f87
+	push	xhl	; F63D03  push XHL
+	ldda32	xhl, (4718)	; F63D04  ld XHL,(0x126e)
+	stda32	(3254), xhl	; F63D08  ld (0x0cb6),XHL
+	pop	xhl	; F63D0C  pop XHL
+	stda16	(3258), iy	; F63D0D  ld (0x0cba),IY
+	ldw_d16	wa, (13404)	; F63D11  ld WA,(0x345c)
+	stda16	(3252), wa	; F63D15  ld (0x0cb4),WA
+	stda16	(3262), iy	; F63D19  ld (0x0cbe),IY
+	stda16	(3260), wa	; F63D1D  ld (0x0cbc),WA
+	ld	ix, iy	; F63D21  ld IX,IY
+	push	xde	; F63D23  push XDE
+	ldda32	xde, (4718)	; F63D24  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F63D28  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F63D2D  pop XDE
+	cp	a, 130	; F63D2E  cp A,0x82
+	jrl	z, 570	; F63D31  jrl Z,0xf63f6e
+	cp	a, 129	; F63D34  cp A,0x81
+	jr	z, 74	; F63D37  jr Z,0xf63d83
+	cp	a, 128	; F63D39  cp A,0x80
+	jr	z, 69	; F63D3C  jr Z,0xf63d83
+	cp	a, 210	; F63D3E  cp A,0xd2
+	jr	z, 58	; F63D41  jr Z,0xf63d7d
+	cp	a, 209	; F63D43  cp A,0xd1
+	jr	z, 53	; F63D46  jr Z,0xf63d7d
+	cp	a, 133	; F63D48  cp A,0x85
+	jr	z, 54	; F63D4B  jr Z,0xf63d83
+	cp	a, 134	; F63D4D  cp A,0x86
+	jr	z, 49	; F63D50  jr Z,0xf63d83
+	cp	a, 211	; F63D52  cp A,0xd3
+	jr	z, 44	; F63D55  jr Z,0xf63d83
+	stb_d8	(4696), a	; F63D57  ld (0x1258),A
+	ldb	w, 240	; F63D5B  ld W,0xf0
+	and	w, a	; F63D5D  and W,A
+	cp	w, 144	; F63D5F  cp W,0x90
+	jr	z, 31	; F63D62  jr Z,0xf63d83
+	cp	w, 192	; F63D64  cp W,0xc0
+	jr	z, 88	; F63D67  jr Z,0xf63dc1
+	cp	w, 176	; F63D69  cp W,0xb0
+	jrl	z, 219	; F63D6C  jrl Z,0xf63e4a
+	call	16000780	; F63D6F  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63D73  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -87	; F63D78  jr Z,0xf63d23
+	jrl	522	; F63D7A  jrl T,0xf63f87
+	.byte 0xF1, 0x45, 0x0D, 0xC8	; F63D7D  bit 0,(0x0d45)   [llvm-mc cannot encode this]
+	jr	nz, -20	; F63D81  jr NZ,0xf63d6f
+	push	xhl	; F63D83  push XHL
+	ldda32	xhl, (3254)	; F63D84  ld XHL,(0x0cb6)
+	.byte 0xF3, 0x07, 0xEC, 0xF0, 0x41	; F63D88  ld (XHL+IX),A   [llvm-mc cannot encode this]
+	pop	xhl	; F63D8D  pop XHL
+	call	16000784	; F63D8E  call 0xf42710
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63D92  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 493	; F63D97  jrl NZ,0xf63f87
+	call	16000780	; F63D9A  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63D9E  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 481	; F63DA3  jrl NZ,0xf63f87
+	push	xde	; F63DA6  push XDE
+	ldda32	xde, (4718)	; F63DA7  ld XDE,(0x126e)
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0xCF	; F63DAB  bit 7,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F63DB0  pop XDE
+	jrl	nz, -145	; F63DB1  jrl NZ,0xf63d23
+	push	xde	; F63DB4  push XDE
+	ldda32	xde, (4718)	; F63DB5  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F63DB9  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F63DBE  pop XDE
+	jr	-62	; F63DBF  jr T,0xf63d83
+	.byte 0xC7, 0x3C, 0x99	; F63DC1  ld RL3,A   [llvm-mc cannot encode this]
+	ldb_d8	a, (3397)	; F63DC4  ld A,(0x0d45)
+	and	a, 3	; F63DC8  and A,0x03
+	.byte 0xC7, 0x3C, 0x89	; F63DCB  ld A,RL3   [llvm-mc cannot encode this]
+	jr	nz, -97	; F63DCE  jr NZ,0xf63d6f
+	push	xiz	; F63DD0  push XIZ
+	ldda32	xiz, (4718)	; F63DD1  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F63DD5  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F63DD8  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F63DD9  push XDE3   [llvm-mc cannot encode this]
+	pushw	wa	; F63DDC  push WA
+	push	xiy	; F63DDD  push XIY
+	.byte 0xD1, 0xBC, 0x0C, 0x04	; F63DDE  pushw (0x0cbc)   [llvm-mc cannot encode this]
+	calr	823	; F63DE2  calr 0xf6411c
+	.byte 0xF1, 0xBC, 0x0C, 0x06	; F63DE5  popw (0x0cbc)   [llvm-mc cannot encode this]
+	pop	xiy	; F63DE9  pop XIY
+	popw	wa	; F63DEA  pop WA
+	.byte 0xE7, 0x38, 0x05	; F63DEB  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F63DEE  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F63DEF  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F63DF2  ld (0x126e),XIZ
+	pop	xiz	; F63DF6  pop XIZ
+	cps	l, 0	; F63DF7  cp L,0
+	jrl	nz, -141	; F63DF9  jrl NZ,0xf63d6f
+	xor	c, c	; F63DFC  xor C,C
+	cps	c, 2	; F63DFE  cp C,2
+	jr	nz, 4	; F63E00  jr NZ,0xf63e06
+	ldb_d8	a, (3396)	; F63E02  ld A,(0x0d44)
+	push	xhl	; F63E06  push XHL
+	ldda32	xhl, (3254)	; F63E07  ld XHL,(0x0cb6)
+	.byte 0xF3, 0x07, 0xEC, 0xF0, 0x41	; F63E0B  ld (XHL+IX),A   [llvm-mc cannot encode this]
+	pop	xhl	; F63E10  pop XHL
+	pushw	bc	; F63E11  push BC
+	call	16000784	; F63E12  call 0xf42710
+	popw	bc	; F63E16  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63E17  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 360	; F63E1C  jrl NZ,0xf63f87
+	pushw	bc	; F63E1F  push BC
+	call	16000780	; F63E20  call 0xf4270c
+	popw	bc	; F63E24  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63E25  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 346	; F63E2A  jrl NZ,0xf63f87
+	inc	1, c	; F63E2D  inc 1,C
+	push	xde	; F63E2F  push XDE
+	ldda32	xde, (4718)	; F63E30  ld XDE,(0x126e)
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0xCF	; F63E34  bit 7,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F63E39  pop XDE
+	jrl	nz, -282	; F63E3A  jrl NZ,0xf63d23
+	push	xde	; F63E3D  push XDE
+	ldda32	xde, (4718)	; F63E3E  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F63E42  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F63E47  pop XDE
+	jr	-76	; F63E48  jr T,0xf63dfe
+	stb_d8	(3401), a	; F63E4A  ld (0x0d49),A
+	.byte 0xC1, 0x49, 0x0D, 0x3C, 0x02	; F63E4E  and (0x0d49),0x02   [llvm-mc cannot encode this]
+	.byte 0xC7, 0x3C, 0xAE	; F63E53  ld RL3,6   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x49, 0x0D, 0x7C	; F63E56  sla (0x0d49)   [llvm-mc cannot encode this]
+	.byte 0xC7, 0x3C, 0x1C, 0xF8	; F63E5A  djnz RL3,0xf63e56   [llvm-mc cannot encode this]
+	push	xiz	; F63E5E  push XIZ
+	ldda32	xiz, (4718)	; F63E5F  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F63E63  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F63E66  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F63E67  push XDE3   [llvm-mc cannot encode this]
+	pushw	wa	; F63E6A  push WA
+	push	xiy	; F63E6B  push XIY
+	.byte 0xD1, 0xBC, 0x0C, 0x04	; F63E6C  pushw (0x0cbc)   [llvm-mc cannot encode this]
+	calr	277	; F63E70  calr 0xf63f88
+	.byte 0xF1, 0xBC, 0x0C, 0x06	; F63E73  popw (0x0cbc)   [llvm-mc cannot encode this]
+	pop	xiy	; F63E77  pop XIY
+	popw	wa	; F63E78  pop WA
+	.byte 0xE7, 0x38, 0x05	; F63E79  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F63E7C  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F63E7D  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F63E80  ld (0x126e),XIZ
+	pop	xiz	; F63E84  pop XIZ
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63E85  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 250	; F63E8A  jrl NZ,0xf63f87
+	.byte 0xF1, 0x46, 0x0D, 0xC8	; F63E8D  bit 0,(0x0d46)   [llvm-mc cannot encode this]
+	jr	nz, 10	; F63E91  jr NZ,0xf63e9d
+	.byte 0xF1, 0x46, 0x0D, 0xCA	; F63E93  bit 2,(0x0d46)   [llvm-mc cannot encode this]
+	jrl	nz, -279	; F63E97  jrl NZ,0xf63d83
+	jrl	-302	; F63E9A  jrl T,0xf63d6f
+	xor	c, c	; F63E9D  xor C,C
+	cps	c, 0	; F63E9F  cp C,0
+	jr	nz, 3	; F63EA1  jr NZ,0xf63ea6
+	jrl	133	; F63EA3  jrl T,0xf63f2b
+	cps	c, 2	; F63EA6  cp C,2
+	jr	nz, 104	; F63EA8  jr NZ,0xf63f12
+	ldb_d8	a, (3396)	; F63EAA  ld A,(0x0d44)
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB5	; F63EAE  cp (0x1258),0xb5   [llvm-mc cannot encode this]
+	jr	z, 44	; F63EB3  jr Z,0xf63ee1
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBC	; F63EB5  cp (0x1258),0xbc   [llvm-mc cannot encode this]
+	jr	z, 44	; F63EBA  jr Z,0xf63ee8
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBD	; F63EBC  cp (0x1258),0xbd   [llvm-mc cannot encode this]
+	jr	z, 44	; F63EC1  jr Z,0xf63eef
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB8	; F63EC3  cp (0x1258),0xb8   [llvm-mc cannot encode this]
+	jr	z, 44	; F63EC8  jr Z,0xf63ef6
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB9	; F63ECA  cp (0x1258),0xb9   [llvm-mc cannot encode this]
+	jr	z, 44	; F63ECF  jr Z,0xf63efd
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBA	; F63ED1  cp (0x1258),0xba   [llvm-mc cannot encode this]
+	jr	z, 44	; F63ED6  jr Z,0xf63f04
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBB	; F63ED8  cp (0x1258),0xbb   [llvm-mc cannot encode this]
+	jr	z, 44	; F63EDD  jr Z,0xf63f0b
+	jr	74	; F63EDF  jr T,0xf63f2b
+	ldb	a, 181	; F63EE1  ld A,0xb5
+	and	a, 127	; F63EE3  and A,0x7f
+	jr	67	; F63EE6  jr T,0xf63f2b
+	ldb	a, 188	; F63EE8  ld A,0xbc
+	and	a, 127	; F63EEA  and A,0x7f
+	jr	60	; F63EED  jr T,0xf63f2b
+	ldb	a, 189	; F63EEF  ld A,0xbd
+	and	a, 127	; F63EF1  and A,0x7f
+	jr	53	; F63EF4  jr T,0xf63f2b
+	ldb	a, 184	; F63EF6  ld A,0xb8
+	and	a, 127	; F63EF8  and A,0x7f
+	jr	46	; F63EFB  jr T,0xf63f2b
+	ldb	a, 185	; F63EFD  ld A,0xb9
+	and	a, 127	; F63EFF  and A,0x7f
+	jr	39	; F63F02  jr T,0xf63f2b
+	ldb	a, 186	; F63F04  ld A,0xba
+	and	a, 127	; F63F06  and A,0x7f
+	jr	32	; F63F09  jr T,0xf63f2b
+	ldb	a, 187	; F63F0B  ld A,0xbb
+	and	a, 127	; F63F0D  and A,0x7f
+	jr	25	; F63F10  jr T,0xf63f2b
+	cps	c, 3	; F63F12  cp C,3
+	jr	nz, 6	; F63F14  jr NZ,0xf63f1c
+	ldb_d8	a, (3537)	; F63F16  ld A,(0x0dd1)
+	jr	15	; F63F1A  jr T,0xf63f2b
+	cps	c, 4	; F63F1C  cp C,4
+	jr	nz, 11	; F63F1E  jr NZ,0xf63f2b
+	.byte 0xC1, 0xD0, 0x0D, 0x3F, 0xFF	; F63F20  cp (0x0dd0),0xff   [llvm-mc cannot encode this]
+	jr	z, 4	; F63F25  jr Z,0xf63f2b
+	ldb_d8	a, (3536)	; F63F27  ld A,(0x0dd0)
+	push	xhl	; F63F2B  push XHL
+	ldda32	xhl, (3254)	; F63F2C  ld XHL,(0x0cb6)
+	.byte 0xF3, 0x07, 0xEC, 0xF0, 0x41	; F63F30  ld (XHL+IX),A   [llvm-mc cannot encode this]
+	pop	xhl	; F63F35  pop XHL
+	pushw	bc	; F63F36  push BC
+	call	16000784	; F63F37  call 0xf42710
+	popw	bc	; F63F3B  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63F3C  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 68	; F63F41  jr NZ,0xf63f87
+	pushw	bc	; F63F43  push BC
+	call	16000780	; F63F44  call 0xf4270c
+	popw	bc	; F63F48  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63F49  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 55	; F63F4E  jr NZ,0xf63f87
+	inc	1, c	; F63F50  inc 1,C
+	push	xde	; F63F52  push XDE
+	ldda32	xde, (4718)	; F63F53  ld XDE,(0x126e)
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0xCF	; F63F57  bit 7,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F63F5C  pop XDE
+	jrl	nz, -573	; F63F5D  jrl NZ,0xf63d23
+	push	xde	; F63F60  push XDE
+	ldda32	xde, (4718)	; F63F61  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F63F65  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F63F6A  pop XDE
+	jrl	-207	; F63F6B  jrl T,0xf63e9f
+	push	xhl	; F63F6E  push XHL
+	ldda32	xhl, (3254)	; F63F6F  ld XHL,(0x0cb6)
+	.byte 0xF3, 0x07, 0xEC, 0xF0, 0x41	; F63F73  ld (XHL+IX),A   [llvm-mc cannot encode this]
+	pop	xhl	; F63F78  pop XHL
+	ldw_d16	wa, (3252)	; F63F79  ld WA,(0x0cb4)
+	stda16	(3159), wa	; F63F7D  ld (0x0c57),WA
+	calr	63904	; F63F81  calr 0xf63924
+	calr	62857	; F63F84  calr 0xf63510
+	ret	; F63F87  ret
+sub_F63F88:
+	ldb_d8	a, (3078)	; F63F88  ld A,(0x0c06)
+	stb_d8	(3508), a	; F63F8C  ld (0x0db4),A
+sub_F63F90:
+	call	16000780	; F63F90  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63F94  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 383	; F63F99  jrl NZ,0xf6411b
+	call	16000780	; F63F9C  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F63FA0  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 371	; F63FA5  jrl NZ,0xf6411b
+	stdi8	(3536), 255	; F63FA8  ld (0x0dd0),0xff
+	push	xde	; F63FAD  push XDE
+	ldda32	xde, (4718)	; F63FAE  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F63FB2  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F63FB7  pop XDE
+	and	a, 127	; F63FB8  and A,0x7f
+	cp	a, 72	; F63FBB  cp A,0x48
+	jrl	z, 218	; F63FBE  jrl Z,0xf6409b
+	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFB	; F63FC1  and (0x0d46),0xfb   [llvm-mc cannot encode this]
+	ldb_d8	l, (3078)	; F63FC6  ld L,(0x0c06)
+	ldb_d8	l, (3078)	; F63FCA  ld L,(0x0c06)
+	push	xde	; F63FCE  push XDE
+	ld	e, a	; F63FCF  ld E,A
+	ldb_d8	d, (4696)	; F63FD1  ld D,(0x1258)
+	and	d, 4	; F63FD5  and D,0x04
+	sla	d, 5	; F63FD8  sla 0x05,D
+	or	e, d	; F63FDB  or E,D
+	stb_d8	(4696), e	; F63FDD  ld (0x1258),E
+	ld	a, e	; F63FE1  ld A,E
+	pop	xde	; F63FE3  pop XDE
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB5	; F63FE4  cp (0x1258),0xb5   [llvm-mc cannot encode this]
+	jr	z, 42	; F63FE9  jr Z,0xf64015
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBC	; F63FEB  cp (0x1258),0xbc   [llvm-mc cannot encode this]
+	jr	z, 35	; F63FF0  jr Z,0xf64015
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBD	; F63FF2  cp (0x1258),0xbd   [llvm-mc cannot encode this]
+	jr	z, 28	; F63FF7  jr Z,0xf64015
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB8	; F63FF9  cp (0x1258),0xb8   [llvm-mc cannot encode this]
+	jr	z, 21	; F63FFE  jr Z,0xf64015
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB9	; F64000  cp (0x1258),0xb9   [llvm-mc cannot encode this]
+	jr	z, 14	; F64005  jr Z,0xf64015
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBA	; F64007  cp (0x1258),0xba   [llvm-mc cannot encode this]
+	jr	z, 7	; F6400C  jr Z,0xf64015
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBB	; F6400E  cp (0x1258),0xbb   [llvm-mc cannot encode this]
+	jr	nz, 35	; F64013  jr NZ,0xf64038
+	xor	hl, hl	; F64015  xor HL,HL
+	ldb_d8	l, (3203)	; F64017  ld L,(0x0c83)
+	push	xde	; F6401B  push XDE
+	ld	xde, 6304802	; F6401C  ld XDE,0x00603422
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x27	; F64021  ld L,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F64026  pop XDE
+	stb_d8	(3537), l	; F64027  ld (0x0dd1),L
+	.byte 0xC1, 0x46, 0x0D, 0x3E, 0x01	; F6402B  or (0x0d46),0x01   [llvm-mc cannot encode this]
+	.byte 0xC1, 0xD2, 0x0D, 0x3C, 0xFE	; F64030  and (0x0dd2),0xfe   [llvm-mc cannot encode this]
+	jrl	227	; F64035  jrl T,0xf6411b
+	xor	h, h	; F64038  xor H,H
+	push	xde	; F6403A  push XDE
+	ld	xde, 16137408	; F6403B  ld XDE,0x00f63cc0
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x27	; F64040  ld L,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F64045  pop XDE
+	cp	a, l	; F64046  cp A,L
+	jr	nz, 70	; F64048  jr NZ,0xf64090
+	call	16000780	; F6404A  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6404E  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 197	; F64053  jrl NZ,0xf6411b
+	push	xde	; F64056  push XDE
+	ldda32	xde, (4718)	; F64057  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F6405B  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F64060  pop XDE
+	cps	a, 3	; F64061  cp A,3
+	jr	c, 43	; F64063  jr C,0xf64090
+	cp	a, 11	; F64065  cp A,0x0b
+	jr	ugt, 38	; F64068  jr UGT,0xf64090
+	.byte 0xC7, 0x3C, 0x99	; F6406A  ld RL3,A   [llvm-mc cannot encode this]
+	ldb_d8	a, (3397)	; F6406D  ld A,(0x0d45)
+	and	a, 3	; F64071  and A,0x03
+	.byte 0xC7, 0x3C, 0x89	; F64074  ld A,RL3   [llvm-mc cannot encode this]
+	jr	z, 6	; F64077  jr Z,0xf6407f
+	ldb	c, 3	; F64079  ld C,0x03
+	cp	a, c	; F6407B  cp A,C
+	jr	nz, 17	; F6407D  jr NZ,0xf64090
+	.byte 0xC1, 0x46, 0x0D, 0x3E, 0x01	; F6407F  or (0x0d46),0x01   [llvm-mc cannot encode this]
+	.byte 0xC1, 0xD2, 0x0D, 0x3C, 0xFE	; F64084  and (0x0dd2),0xfe   [llvm-mc cannot encode this]
+	stb_d8	(3537), a	; F64089  ld (0x0dd1),A
+	jrl	139	; F6408D  jrl T,0xf6411b
+	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFA	; F64090  and (0x0d46),0xfa   [llvm-mc cannot encode this]
+	jrl	131	; F64095  jrl T,0xf6411b
+	jrl	128	; F64098  jrl T,0xf6411b
+	call	16000780	; F6409B  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6409F  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 116	; F640A4  jrl NZ,0xf6411b
+	push	xde	; F640A7  push XDE
+	ldda32	xde, (4718)	; F640A8  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F640AC  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F640B1  pop XDE
+	cps	a, 5	; F640B2  cp A,5
+	jr	nz, 70	; F640B4  jr NZ,0xf640fc
+	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFE	; F640B6  and (0x0d46),0xfe   [llvm-mc cannot encode this]
+	call	16000780	; F640BB  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F640BF  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 85	; F640C4  jr NZ,0xf6411b
+	call	16000780	; F640C6  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F640CA  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 74	; F640CF  jr NZ,0xf6411b
+	push	xde	; F640D1  push XDE
+	ldda32	xde, (4718)	; F640D2  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F640D6  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F640DB  pop XDE
+	and	a, 127	; F640DC  and A,0x7f
+	orda8	a, (3401)	; F640DF  or A,(0x0d49)
+	.byte 0xC7, 0x3C, 0x99	; F640E3  ld RL3,A   [llvm-mc cannot encode this]
+	and	a, 252	; F640E6  and A,0xfc
+	.byte 0xC7, 0x3C, 0x89	; F640E9  ld A,RL3   [llvm-mc cannot encode this]
+	jr	nz, 7	; F640EC  jr NZ,0xf640f5
+	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFB	; F640EE  and (0x0d46),0xfb   [llvm-mc cannot encode this]
+	jr	38	; F640F3  jr T,0xf6411b
+	.byte 0xC1, 0x46, 0x0D, 0x3E, 0x04	; F640F5  or (0x0d46),0x04   [llvm-mc cannot encode this]
+	jr	31	; F640FA  jr T,0xf6411b
+	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFB	; F640FC  and (0x0d46),0xfb   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x06, 0x0C, 0x3F, 0x0F	; F64101  cp (0x0c06),0x0f   [llvm-mc cannot encode this]
+	jr	nz, -120	; F64106  jr NZ,0xf64090
+	push	xde	; F64108  push XDE
+	ldda32	xde, (4718)	; F64109  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F6410D  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F64112  pop XDE
+	cps	a, 3	; F64113  cp A,3
+	jrl	nz, -136	; F64115  jrl NZ,0xf64090
+	jrl	-156	; F64118  jrl T,0xf6407f
+	ret	; F6411B  ret
+sub_F6411C:
+	xor	hl, hl	; F6411C  xor HL,HL
+	call	16000780	; F6411E  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64122  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 52	; F64127  jr NZ,0xf6415d
+	call	16000780	; F64129  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6412D  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 41	; F64132  jr NZ,0xf6415d
+	push	xde	; F64134  push XDE
+	ldda32	xde, (4718)	; F64135  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F64139  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F6413E  pop XDE
+	call	16000780	; F6413F  call 0xf4270c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64143  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 19	; F64148  jr NZ,0xf6415d
+	push	xde	; F6414A  push XDE
+	ldda32	xde, (4718)	; F6414B  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F6414F  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F64154  pop XDE
+	xor	l, l	; F64155  xor L,L
+	cps	a, 0	; F64157  cp A,0
+	jr	ule, 2	; F64159  jr ULE,0xf6415d
+	ldb	l, 1	; F6415B  ld L,0x01
+	ret	; F6415D  ret
+
+; --- BStore_Table_F6415E: 48 bytes at 0xF6415E ---
+;     48 bytes.  NO site in prom_a or prom_b spells the address 0x00F6415E, so
+;     what reads it is unknown and its extent rests only on abutment: 0xF6418E
+;     is thunk T_F42804's target and 0xF6415D is the `ret` of the routine
+;     above.  It reads as two 24-byte rows, each `07 08 09 FF FF FF FF` / `00
+;     01 02 FF FF FF FF` twice, six 0xFF, then `90 FF` and a repeated byte
+;     (0x51 / 0x50).  Structure NOT established.
+;     Evidence: the bytes above, re-asserted by assert_data_islands() in
+;     notes/gen_prom_b_blockstore_module.py before this text can be emitted.
+;     The literal 0x00F6415E appears 0 times in CPU 1's two ROMs, counted by
+;     addr_sites() at EVERY byte offset: nowhere.  Those are the addresses of
+;     the LITERAL, which is one or more bytes PAST the start of the
+;     instruction carrying it -- the instruction addresses in the paragraph
+;     above are not the same numbers and are not meant to be.
+BStore_Table_F6415E:
+	.byte	0x07, 0x08, 0x09, 0xFF, 0xFF, 0xFF, 0xFF, 0x07, 0x08, 0x09, 0xFF, 0xFF	; +0x00
+	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x90, 0xFF, 0x51, 0x51	; +0x0C
+	.byte	0x00, 0x01, 0x02, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x01, 0x02, 0xFF, 0xFF	; +0x18
+	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x90, 0xFF, 0x50, 0x50	; +0x24
+sub_F6418E:		; <- T_F42804
+	stdi8	(3402), 0	; F6418E  ld (0x0d4a),0x00
+	ldb_d8	w, (3357)	; F64193  ld W,(0x0d1d)
+	ldb_d8	a, (3185)	; F64197  ld A,(0x0c71)
+	push	xde	; F6419B  push XDE
+	push	xhl	; F6419C  push XHL
+	xor	hl, hl	; F6419D  xor HL,HL
+	ld	xde, 6304802	; F6419F  ld XDE,0x00603422
+	ldb_d8	l, (3184)	; F641A4  ld L,(0x0c70)
+	dec	1, l	; F641A8  dec 1,L
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x27	; F641AA  ld L,(XDE+HL)   [llvm-mc cannot encode this]
+	stb_d8	(3078), l	; F641AF  ld (0x0c06),L
+	pop	xhl	; F641B3  pop XHL
+	pop	xde	; F641B4  pop XDE
+	ldw_d16	de, (3189)	; F641B5  ld DE,(0x0c75)
+	stda16	(3216), de	; F641B9  ld (0x0c90),DE
+	calr	60222	; F641BD  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F641C0  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 866	; F641C5  jrl NZ,0xf6452a
+	push	xhl	; F641C8  push XHL
+	ldda32	xhl, (4718)	; F641C9  ld XHL,(0x126e)
+	stda32	(3254), xhl	; F641CD  ld (0x0cb6),XHL
+	pop	xhl	; F641D1  pop XHL
+	stda16	(3258), iy	; F641D2  ld (0x0cba),IY
+	ldw_d16	wa, (13404)	; F641D6  ld WA,(0x345c)
+	stda16	(3252), wa	; F641DA  ld (0x0cb4),WA
+	stda16	(3262), iy	; F641DE  ld (0x0cbe),IY
+	stda16	(3260), wa	; F641E2  ld (0x0cbc),WA
+	ld	ix, iy	; F641E6  ld IX,IY
+	xor	de, de	; F641E8  xor DE,DE
+	.byte 0xD1, 0x77, 0x0C, 0xF2	; F641EA  cp DE,(0x0c77)   [llvm-mc cannot encode this]
+	jrl	z, 730	; F641EE  jrl Z,0xf644cb
+	xor	c, c	; F641F1  xor C,C
+	.byte 0xC1, 0x1C, 0x0D, 0xF3	; F641F3  cp C,(0x0d1c)   [llvm-mc cannot encode this]
+	jrl	z, 681	; F641F7  jrl Z,0xf644a3
+	push	xde	; F641FA  push XDE
+	ldda32	xde, (4718)	; F641FB  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F641FF  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F64204  pop XDE
+	stb_d8	(4696), a	; F64205  ld (0x1258),A
+	cp	a, 130	; F64209  cp A,0x82
+	jrl	z, 700	; F6420C  jrl Z,0xf644cb
+	cp	a, 129	; F6420F  cp A,0x81
+	jrl	z, 606	; F64212  jrl Z,0xf64473
+	cp	a, 210	; F64215  cp A,0xd2
+	jr	z, 53	; F64218  jr Z,0xf6424f
+	cp	a, 209	; F6421A  cp A,0xd1
+	jr	z, 48	; F6421D  jr Z,0xf6424f
+	cp	a, 133	; F6421F  cp A,0x85
+	jr	z, 49	; F64222  jr Z,0xf64255
+	cp	a, 134	; F64224  cp A,0x86
+	jr	z, 44	; F64227  jr Z,0xf64255
+	ldb	w, 240	; F64229  ld W,0xf0
+	and	w, a	; F6422B  and W,A
+	cp	w, 144	; F6422D  cp W,0x90
+	jr	z, 35	; F64230  jr Z,0xf64255
+	cp	w, 176	; F64232  cp W,0xb0
+	jrl	z, 252	; F64235  jrl Z,0xf64334
+	cp	w, 192	; F64238  cp W,0xc0
+	jr	z, 94	; F6423B  jr Z,0xf6429b
+	pushw	bc	; F6423D  push BC
+	pushw	de	; F6423E  push DE
+	call	16000780	; F6423F  call 0xf4270c
+	popw	de	; F64243  pop DE
+	popw	bc	; F64244  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64245  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -82	; F6424A  jr Z,0xf641fa
+	jrl	731	; F6424C  jrl T,0xf6452a
+	.byte 0xF1, 0x45, 0x0D, 0xC8	; F6424F  bit 0,(0x0d45)   [llvm-mc cannot encode this]
+	jr	nz, -24	; F64253  jr NZ,0xf6423d
+	push	xhl	; F64255  push XHL
+	ldda32	xhl, (3254)	; F64256  ld XHL,(0x0cb6)
+	.byte 0xF3, 0x07, 0xEC, 0xF0, 0x41	; F6425A  ld (XHL+IX),A   [llvm-mc cannot encode this]
+	pop	xhl	; F6425F  pop XHL
+	pushw	bc	; F64260  push BC
+	pushw	de	; F64261  push DE
+	call	16000784	; F64262  call 0xf42710
+	popw	de	; F64266  pop DE
+	popw	bc	; F64267  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64268  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 698	; F6426D  jrl NZ,0xf6452a
+	pushw	bc	; F64270  push BC
+	pushw	de	; F64271  push DE
+	call	16000780	; F64272  call 0xf4270c
+	popw	de	; F64276  pop DE
+	popw	bc	; F64277  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64278  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 682	; F6427D  jrl NZ,0xf6452a
+	push	xde	; F64280  push XDE
+	ldda32	xde, (4718)	; F64281  ld XDE,(0x126e)
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0xCF	; F64285  bit 7,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F6428A  pop XDE
+	jrl	nz, -148	; F6428B  jrl NZ,0xf641fa
+	push	xde	; F6428E  push XDE
+	ldda32	xde, (4718)	; F6428F  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F64293  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F64298  pop XDE
+	jr	-70	; F64299  jr T,0xf64255
+	.byte 0xC7, 0x3C, 0x99	; F6429B  ld RL3,A   [llvm-mc cannot encode this]
+	ldb_d8	a, (3397)	; F6429E  ld A,(0x0d45)
+	and	a, 3	; F642A2  and A,0x03
+	.byte 0xC7, 0x3C, 0x89	; F642A5  ld A,RL3   [llvm-mc cannot encode this]
+	jr	nz, -109	; F642A8  jr NZ,0xf6423d
+	push	xiz	; F642AA  push XIZ
+	ldda32	xiz, (4718)	; F642AB  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F642AF  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F642B2  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F642B3  push XDE3   [llvm-mc cannot encode this]
+	pushw	wa	; F642B6  push WA
+	pushw	bc	; F642B7  push BC
+	pushw	de	; F642B8  push DE
+	push	xiy	; F642B9  push XIY
+	.byte 0xD1, 0xBC, 0x0C, 0x04	; F642BA  pushw (0x0cbc)   [llvm-mc cannot encode this]
+	calr	65115	; F642BE  calr 0xf6411c
+	.byte 0xF1, 0xBC, 0x0C, 0x06	; F642C1  popw (0x0cbc)   [llvm-mc cannot encode this]
+	pop	xiy	; F642C5  pop XIY
+	popw	de	; F642C6  pop DE
+	popw	bc	; F642C7  pop BC
+	popw	wa	; F642C8  pop WA
+	.byte 0xE7, 0x38, 0x05	; F642C9  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F642CC  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F642CD  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F642D0  ld (0x126e),XIZ
+	pop	xiz	; F642D4  pop XIZ
+	cps	l, 0	; F642D5  cp L,0
+	jrl	nz, -157	; F642D7  jrl NZ,0xf6423d
+	stdi8	(3400), 0	; F642DA  ld (0x0d48),0x00
+	.byte 0xC1, 0x48, 0x0D, 0x3F, 0x02	; F642DF  cp (0x0d48),0x02   [llvm-mc cannot encode this]
+	jr	nz, 4	; F642E4  jr NZ,0xf642ea
+	ldb_d8	a, (3396)	; F642E6  ld A,(0x0d44)
+	push	xhl	; F642EA  push XHL
+	ldda32	xhl, (3254)	; F642EB  ld XHL,(0x0cb6)
+	.byte 0xF3, 0x07, 0xEC, 0xF0, 0x41	; F642EF  ld (XHL+IX),A   [llvm-mc cannot encode this]
+	pop	xhl	; F642F4  pop XHL
+	pushw	bc	; F642F5  push BC
+	pushw	de	; F642F6  push DE
+	call	16000784	; F642F7  call 0xf42710
+	popw	de	; F642FB  pop DE
+	popw	bc	; F642FC  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F642FD  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, -894	; F64302  jrl NZ,0xf63f87
+	pushw	bc	; F64305  push BC
+	pushw	de	; F64306  push DE
+	call	16000780	; F64307  call 0xf4270c
+	popw	de	; F6430B  pop DE
+	popw	bc	; F6430C  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6430D  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, -910	; F64312  jrl NZ,0xf63f87
+	incdi8	1, (3400)	; F64315  inc 1,(0x0d48)
+	push	xde	; F64319  push XDE
+	ldda32	xde, (4718)	; F6431A  ld XDE,(0x126e)
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0xCF	; F6431E  bit 7,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F64323  pop XDE
+	jrl	nz, -301	; F64324  jrl NZ,0xf641fa
+	push	xde	; F64327  push XDE
+	ldda32	xde, (4718)	; F64328  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F6432C  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F64331  pop XDE
+	jr	-85	; F64332  jr T,0xf642df
+	stb_d8	(3401), a	; F64334  ld (0x0d49),A
+	.byte 0xC1, 0x49, 0x0D, 0x3C, 0x02	; F64338  and (0x0d49),0x02   [llvm-mc cannot encode this]
+	.byte 0xC7, 0x3C, 0xAE	; F6433D  ld RL3,6   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x49, 0x0D, 0x7C	; F64340  sla (0x0d49)   [llvm-mc cannot encode this]
+	.byte 0xC7, 0x3C, 0x1C, 0xF8	; F64344  djnz RL3,0xf64340   [llvm-mc cannot encode this]
+	push	xiz	; F64348  push XIZ
+	ldda32	xiz, (4718)	; F64349  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F6434D  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F64350  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F64351  push XDE3   [llvm-mc cannot encode this]
+	pushw	wa	; F64354  push WA
+	pushw	bc	; F64355  push BC
+	pushw	de	; F64356  push DE
+	push	xiy	; F64357  push XIY
+	.byte 0xD1, 0xBC, 0x0C, 0x04	; F64358  pushw (0x0cbc)   [llvm-mc cannot encode this]
+	calr	64561	; F6435C  calr 0xf63f90
+	.byte 0xF1, 0xBC, 0x0C, 0x06	; F6435F  popw (0x0cbc)   [llvm-mc cannot encode this]
+	pop	xiy	; F64363  pop XIY
+	popw	de	; F64364  pop DE
+	popw	bc	; F64365  pop BC
+	popw	wa	; F64366  pop WA
+	.byte 0xE7, 0x38, 0x05	; F64367  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F6436A  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F6436B  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F6436E  ld (0x126e),XIZ
+	pop	xiz	; F64372  pop XIZ
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64373  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, -1012	; F64378  jrl NZ,0xf63f87
+	.byte 0xF1, 0x46, 0x0D, 0xC8	; F6437B  bit 0,(0x0d46)   [llvm-mc cannot encode this]
+	jr	nz, 10	; F6437F  jr NZ,0xf6438b
+	.byte 0xF1, 0x46, 0x0D, 0xCA	; F64381  bit 2,(0x0d46)   [llvm-mc cannot encode this]
+	jrl	nz, -307	; F64385  jrl NZ,0xf64255
+	jrl	-334	; F64388  jrl T,0xf6423d
+	stdi8	(3399), 0	; F6438B  ld (0x0d47),0x00
+	.byte 0xC1, 0x47, 0x0D, 0x3F, 0x00	; F64390  cp (0x0d47),0x00   [llvm-mc cannot encode this]
+	jr	nz, 3	; F64395  jr NZ,0xf6439a
+	jrl	142	; F64397  jrl T,0xf64428
+	.byte 0xC1, 0x47, 0x0D, 0x3F, 0x02	; F6439A  cp (0x0d47),0x02   [llvm-mc cannot encode this]
+	jr	nz, 104	; F6439F  jr NZ,0xf64409
+	ldb_d8	a, (3396)	; F643A1  ld A,(0x0d44)
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB5	; F643A5  cp (0x1258),0xb5   [llvm-mc cannot encode this]
+	jr	z, 44	; F643AA  jr Z,0xf643d8
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBC	; F643AC  cp (0x1258),0xbc   [llvm-mc cannot encode this]
+	jr	z, 44	; F643B1  jr Z,0xf643df
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBD	; F643B3  cp (0x1258),0xbd   [llvm-mc cannot encode this]
+	jr	z, 44	; F643B8  jr Z,0xf643e6
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB8	; F643BA  cp (0x1258),0xb8   [llvm-mc cannot encode this]
+	jr	z, 44	; F643BF  jr Z,0xf643ed
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xB9	; F643C1  cp (0x1258),0xb9   [llvm-mc cannot encode this]
+	jr	z, 44	; F643C6  jr Z,0xf643f4
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBA	; F643C8  cp (0x1258),0xba   [llvm-mc cannot encode this]
+	jr	z, 44	; F643CD  jr Z,0xf643fb
+	.byte 0xC1, 0x58, 0x12, 0x3F, 0xBB	; F643CF  cp (0x1258),0xbb   [llvm-mc cannot encode this]
+	jr	z, 44	; F643D4  jr Z,0xf64402
+	jr	80	; F643D6  jr T,0xf64428
+	ldb	a, 181	; F643D8  ld A,0xb5
+	and	a, 127	; F643DA  and A,0x7f
+	jr	73	; F643DD  jr T,0xf64428
+	ldb	a, 188	; F643DF  ld A,0xbc
+	and	a, 127	; F643E1  and A,0x7f
+	jr	66	; F643E4  jr T,0xf64428
+	ldb	a, 189	; F643E6  ld A,0xbd
+	and	a, 127	; F643E8  and A,0x7f
+	jr	59	; F643EB  jr T,0xf64428
+	ldb	a, 184	; F643ED  ld A,0xb8
+	and	a, 127	; F643EF  and A,0x7f
+	jr	52	; F643F2  jr T,0xf64428
+	ldb	a, 185	; F643F4  ld A,0xb9
+	and	a, 127	; F643F6  and A,0x7f
+	jr	45	; F643F9  jr T,0xf64428
+	ldb	a, 186	; F643FB  ld A,0xba
+	and	a, 127	; F643FD  and A,0x7f
+	jr	38	; F64400  jr T,0xf64428
+	ldb	a, 187	; F64402  ld A,0xbb
+	and	a, 127	; F64404  and A,0x7f
+	jr	31	; F64407  jr T,0xf64428
+	.byte 0xC1, 0x47, 0x0D, 0x3F, 0x03	; F64409  cp (0x0d47),0x03   [llvm-mc cannot encode this]
+	jr	nz, 6	; F6440E  jr NZ,0xf64416
+	ldb_d8	a, (3537)	; F64410  ld A,(0x0dd1)
+	jr	18	; F64414  jr T,0xf64428
+	.byte 0xC1, 0x47, 0x0D, 0x3F, 0x04	; F64416  cp (0x0d47),0x04   [llvm-mc cannot encode this]
+	jr	nz, 11	; F6441B  jr NZ,0xf64428
+	.byte 0xC1, 0xD0, 0x0D, 0x3F, 0xFF	; F6441D  cp (0x0dd0),0xff   [llvm-mc cannot encode this]
+	jr	z, 4	; F64422  jr Z,0xf64428
+	ldb_d8	a, (3536)	; F64424  ld A,(0x0dd0)
+	push	xhl	; F64428  push XHL
+	ldda32	xhl, (3254)	; F64429  ld XHL,(0x0cb6)
+	.byte 0xF3, 0x07, 0xEC, 0xF0, 0x41	; F6442D  ld (XHL+IX),A   [llvm-mc cannot encode this]
+	pop	xhl	; F64432  pop XHL
+	pushw	bc	; F64433  push BC
+	pushw	de	; F64434  push DE
+	call	16000784	; F64435  call 0xf42710
+	popw	de	; F64439  pop DE
+	popw	bc	; F6443A  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6443B  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 231	; F64440  jrl NZ,0xf6452a
+	pushw	bc	; F64443  push BC
+	pushw	de	; F64444  push DE
+	call	16000780	; F64445  call 0xf4270c
+	popw	de	; F64449  pop DE
+	popw	bc	; F6444A  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6444B  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, -1228	; F64450  jrl NZ,0xf63f87
+	incdi8	1, (3399)	; F64453  inc 1,(0x0d47)
+	push	xde	; F64457  push XDE
+	ldda32	xde, (4718)	; F64458  ld XDE,(0x126e)
+	.byte 0xF3, 0x07, 0xE8, 0xF4, 0xCF	; F6445C  bit 7,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F64461  pop XDE
+	jrl	nz, -619	; F64462  jrl NZ,0xf641fa
+	push	xde	; F64465  push XDE
+	ldda32	xde, (4718)	; F64466  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F6446A  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F6446F  pop XDE
+	jrl	-227	; F64470  jrl T,0xf64390
+	push	xhl	; F64473  push XHL
+	ldda32	xhl, (3254)	; F64474  ld XHL,(0x0cb6)
+	.byte 0xF3, 0x07, 0xEC, 0xF0, 0x41	; F64478  ld (XHL+IX),A   [llvm-mc cannot encode this]
+	pop	xhl	; F6447D  pop XHL
+	pushw	bc	; F6447E  push BC
+	pushw	de	; F6447F  push DE
+	call	16000784	; F64480  call 0xf42710
+	popw	de	; F64484  pop DE
+	popw	bc	; F64485  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64486  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 156	; F6448B  jrl NZ,0xf6452a
+	pushw	bc	; F6448E  push BC
+	pushw	de	; F6448F  push DE
+	call	16000780	; F64490  call 0xf4270c
+	popw	de	; F64494  pop DE
+	popw	bc	; F64495  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64496  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 140	; F6449B  jrl NZ,0xf6452a
+	inc	1, c	; F6449E  inc 1,C
+	jrl	-688	; F644A0  jrl T,0xf641f3
+	inc	1, de	; F644A3  inc 1,DE
+	push	xiz	; F644A5  push XIZ
+	ldda32	xiz, (4718)	; F644A6  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F644AA  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F644AD  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F644AE  push XDE3   [llvm-mc cannot encode this]
+	push	xhl	; F644B1  push XHL
+	pushw	de	; F644B2  push DE
+	push	xiy	; F644B3  push XIY
+	push	xix	; F644B4  push XIX
+	calr	62097	; F644B5  calr 0xf63749
+	pop	xix	; F644B8  pop XIX
+	pop	xiy	; F644B9  pop XIY
+	popw	de	; F644BA  pop DE
+	pop	xhl	; F644BB  pop XHL
+	.byte 0xE7, 0x38, 0x05	; F644BC  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F644BF  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F644C0  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F644C3  ld (0x126e),XIZ
+	pop	xiz	; F644C7  pop XIZ
+	jrl	-737	; F644C8  jrl T,0xf641ea
+	stda16	(3262), iy	; F644CB  ld (0x0cbe),IY
+	stda16	(3258), ix	; F644CF  ld (0x0cba),IX
+	ldw_d16	wa, (3260)	; F644D3  ld WA,(0x0cbc)
+	stda16	(3169), wa	; F644D7  ld (0x0c61),WA
+	ldw_d16	wa, (3262)	; F644DB  ld WA,(0x0cbe)
+	stda16	(3175), wa	; F644DF  ld (0x0c67),WA
+	ldw_d16	wa, (3252)	; F644E3  ld WA,(0x0cb4)
+	stda16	(3159), wa	; F644E7  ld (0x0c57),WA
+	ldw_d16	wa, (3258)	; F644EB  ld WA,(0x0cba)
+	stda16	(3165), wa	; F644EF  ld (0x0c5d),WA
+	xor	hl, hl	; F644F3  xor HL,HL
+	ldb_d8	l, (3185)	; F644F5  ld L,(0x0c71)
+	dec	1, hl	; F644F9  dec 1,HL
+	xor	wa, wa	; F644FB  xor WA,WA
+	ld	xde, 6304928	; F644FD  ld XDE,0x006034a0
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x21	; F64502  ld A,(XDE+HL)   [llvm-mc cannot encode this]
+	stda16	(3179), wa	; F64507  ld (0x0c6b),WA
+	sla	hl, 1	; F6450B  sla 0x01,HL
+	ld	xde, 6304894	; F6450E  ld XDE,0x0060347e
+	.byte 0xD3, 0x07, 0xE8, 0xEC, 0x22	; F64513  ld DE,(XDE+HL)   [llvm-mc cannot encode this]
+	calr	59566	; F64518  calr 0xf62dc9
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6451B  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 8	; F64520  jr NZ,0xf6452a
+	dec	1, ix	; F64522  dec 1,IX
+	calr	62461	; F64524  calr 0xf63924
+	calr	61414	; F64527  calr 0xf63510
+	ret	; F6452A  ret
+sub_F6452B:		; <- T_F427D0
+	stdi8	(3402), 0	; F6452B  ld (0x0d4a),0x00
+	ldb	a, 1	; F64530  ld A,0x01
+	.byte 0xC1, 0xA2, 0x0C, 0xF1	; F64532  cp A,(0x0ca2)   [llvm-mc cannot encode this]
+	jr	ugt, 91	; F64536  jr UGT,0xf64593
+	stb_d8	(3214), a	; F64538  ld (0x0c8e),A
+	calr	59199	; F6453C  calr 0xf62c7e
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6453F  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 23	; F64544  jr Z,0xf6455d
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x01	; F64546  cp (0x0d4a),0x01   [llvm-mc cannot encode this]
+	jr	z, 9	; F6454B  jr Z,0xf64556
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x08	; F6454D  cp (0x0d4a),0x08   [llvm-mc cannot encode this]
+	jr	z, 2	; F64552  jr Z,0xf64556
+	jr	61	; F64554  jr T,0xf64593
+	stdi8	(3402), 0	; F64556  ld (0x0d4a),0x00
+	jr	46	; F6455B  jr T,0xf6458b
+	calr	61614	; F6455D  calr 0xf6360e
+	ldw_d16	hl, (3187)	; F64560  ld HL,(0x0c73)
+	stda16	(3216), hl	; F64564  ld (0x0c90),HL
+	ldb_d8	a, (3214)	; F64568  ld A,(0x0c8e)
+	calr	59279	; F6456C  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6456F  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 21	; F64574  jr Z,0xf6458b
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x01	; F64576  cp (0x0d4a),0x01   [llvm-mc cannot encode this]
+	jr	z, 9	; F6457B  jr Z,0xf64586
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x08	; F6457D  cp (0x0d4a),0x08   [llvm-mc cannot encode this]
+	jr	z, 2	; F64582  jr Z,0xf64586
+	jr	13	; F64584  jr T,0xf64593
+	stdi8	(3402), 0	; F64586  ld (0x0d4a),0x00
+	ldb_d8	a, (3214)	; F6458B  ld A,(0x0c8e)
+	inc	1, a	; F6458F  inc 1,A
+	jr	-97	; F64591  jr T,0xf64532
+	ret	; F64593  ret
+sub_F64594:		; <- T_F427D4
+	ldw_da	wa, (6304954)	; F64594  ld WA,(0x6034ba)
+	stda16	(3392), wa	; F64599  ld (0x0d40),WA
+	stdi8	(3402), 0	; F6459D  ld (0x0d4a),0x00
+	ldb	a, 1	; F645A2  ld A,0x01
+	.byte 0xC1, 0xA2, 0x0C, 0xF1	; F645A4  cp A,(0x0ca2)   [llvm-mc cannot encode this]
+	jr	ule, 3	; F645A8  jr ULE,0xf645ad
+	jrl	192	; F645AA  jrl T,0xf6466d
+	stb_d8	(3214), a	; F645AD  ld (0x0c8e),A
+	calr	59082	; F645B1  calr 0xf62c7e
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F645B4  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 25	; F645B9  jr Z,0xf645d4
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x01	; F645BB  cp (0x0d4a),0x01   [llvm-mc cannot encode this]
+	jr	z, 10	; F645C0  jr Z,0xf645cc
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x08	; F645C2  cp (0x0d4a),0x08   [llvm-mc cannot encode this]
+	jr	z, 3	; F645C7  jr Z,0xf645cc
+	jrl	161	; F645C9  jrl T,0xf6466d
+	stdi8	(3402), 0	; F645CC  ld (0x0d4a),0x00
+	jrl	144	; F645D1  jrl T,0xf64664
+	calr	61495	; F645D4  calr 0xf6360e
+	ldw_d16	hl, (3189)	; F645D7  ld HL,(0x0c75)
+	stda16	(3216), hl	; F645DB  ld (0x0c90),HL
+	ldb_d8	a, (3214)	; F645DF  ld A,(0x0c8e)
+	calr	59160	; F645E3  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F645E6  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 23	; F645EB  jr Z,0xf64604
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x01	; F645ED  cp (0x0d4a),0x01   [llvm-mc cannot encode this]
+	jr	z, 9	; F645F2  jr Z,0xf645fd
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x08	; F645F4  cp (0x0d4a),0x08   [llvm-mc cannot encode this]
+	jr	z, 2	; F645F9  jr Z,0xf645fd
+	jr	112	; F645FB  jr T,0xf6466d
+	stdi8	(3402), 0	; F645FD  ld (0x0d4a),0x00
+	jr	96	; F64602  jr T,0xf64664
+	ldw_d16	wa, (3187)	; F64604  ld WA,(0x0c73)
+	stda16	(3216), wa	; F64608  ld (0x0c90),WA
+	ldb_d8	w, (3357)	; F6460C  ld W,(0x0d1d)
+	ldb_d8	a, (3214)	; F64610  ld A,(0x0c8e)
+	calr	59111	; F64614  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64617  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F6461C  jr Z,0xf6462c
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x08	; F6461E  cp (0x0d4a),0x08   [llvm-mc cannot encode this]
+	jr	nz, 72	; F64623  jr NZ,0xf6466d
+	stdi8	(3402), 0	; F64625  ld (0x0d4a),0x00
+	jr	56	; F6462A  jr T,0xf64664
+	ldw_d16	hl, (13404)	; F6462C  ld HL,(0x345c)
+	calr	61195	; F64630  calr 0xf6353e
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64633  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F64638  jr Z,0xf64648
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x07	; F6463A  cp (0x0d4a),0x07   [llvm-mc cannot encode this]
+	jr	z, 2	; F6463F  jr Z,0xf64643
+	jr	42	; F64641  jr T,0xf6466d
+	stdi8	(3402), 0	; F64643  ld (0x0d4a),0x00
+	calr	402	; F64648  calr 0xf647dd
+	ldw_d16	wa, (3392)	; F6464B  ld WA,(0x0d40)
+	.byte 0xD1, 0x3E, 0x0D, 0xF0	; F6464F  cp WA,(0x0d3e)   [llvm-mc cannot encode this]
+	jr	nc, 7	; F64653  jr NC,0xf6465c
+	stdi8	(3402), 5	; F64655  ld (0x0d4a),0x05
+	jr	17	; F6465A  jr T,0xf6466d
+	.byte 0xD1, 0x3E, 0x0D, 0xA0	; F6465C  sub WA,(0x0d3e)   [llvm-mc cannot encode this]
+	stda16	(3392), wa	; F64660  ld (0x0d40),WA
+	ldb_d8	a, (3214)	; F64664  ld A,(0x0c8e)
+	inc	1, a	; F64668  inc 1,A
+	jrl	-201	; F6466A  jrl T,0xf645a4
+	ret	; F6466D  ret
+sub_F6466E:		; <- T_F427D8
+	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xF7	; F6466E  and (0x0c8a),0xf7   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xEF	; F64673  and (0x0c8a),0xef   [llvm-mc cannot encode this]
+	ldw_da	wa, (6304954)	; F64678  ld WA,(0x6034ba)
+	stda16	(3392), wa	; F6467D  ld (0x0d40),WA
+	stdi8	(3402), 0	; F64681  ld (0x0d4a),0x00
+	ldb	a, 1	; F64686  ld A,0x01
+	.byte 0xC1, 0xA2, 0x0C, 0xF1	; F64688  cp A,(0x0ca2)   [llvm-mc cannot encode this]
+	jr	ule, 3	; F6468C  jr ULE,0xf64691
+	jrl	331	; F6468E  jrl T,0xf647dc
+	stb_d8	(3214), a	; F64691  ld (0x0c8e),A
+	calr	58854	; F64695  calr 0xf62c7e
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64698  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 25	; F6469D  jr Z,0xf646b8
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x01	; F6469F  cp (0x0d4a),0x01   [llvm-mc cannot encode this]
+	jr	z, 10	; F646A4  jr Z,0xf646b0
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x08	; F646A6  cp (0x0d4a),0x08   [llvm-mc cannot encode this]
+	jr	z, 3	; F646AB  jr Z,0xf646b0
+	jrl	300	; F646AD  jrl T,0xf647dc
+	stdi8	(3402), 0	; F646B0  ld (0x0d4a),0x00
+	jrl	283	; F646B5  jrl T,0xf647d3
+	calr	61267	; F646B8  calr 0xf6360e
+	ldw_d16	hl, (3189)	; F646BB  ld HL,(0x0c75)
+	stda16	(3216), hl	; F646BF  ld (0x0c90),HL
+	ldb_d8	a, (3214)	; F646C3  ld A,(0x0c8e)
+	calr	58932	; F646C7  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F646CA  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 43	; F646CF  jr Z,0xf646fc
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x01	; F646D1  cp (0x0d4a),0x01   [llvm-mc cannot encode this]
+	jr	z, 28	; F646D6  jr Z,0xf646f4
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x08	; F646D8  cp (0x0d4a),0x08   [llvm-mc cannot encode this]
+	jr	z, 3	; F646DD  jr Z,0xf646e2
+	jrl	250	; F646DF  jrl T,0xf647dc
+	ldw_d16	wa, (3187)	; F646E2  ld WA,(0x0c73)
+	.byte 0xD1, 0x75, 0x0C, 0xF0	; F646E6  cp WA,(0x0c75)   [llvm-mc cannot encode this]
+	jrl	ugt, 239	; F646EA  jrl UGT,0xf647dc
+	stdi8	(3402), 0	; F646ED  ld (0x0d4a),0x00
+	jr	8	; F646F2  jr T,0xf646fc
+	stdi8	(3402), 0	; F646F4  ld (0x0d4a),0x00
+	jrl	215	; F646F9  jrl T,0xf647d3
+	ldw_d16	hl, (13404)	; F646FC  ld HL,(0x345c)
+	calr	60987	; F64700  calr 0xf6353e
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64703  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 20	; F64708  jr Z,0xf6471e
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x07	; F6470A  cp (0x0d4a),0x07   [llvm-mc cannot encode this]
+	jr	z, 3	; F6470F  jr Z,0xf64714
+	jrl	200	; F64711  jrl T,0xf647dc
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x10	; F64714  or (0x0c8a),0x10   [llvm-mc cannot encode this]
+	stdi8	(3402), 0	; F64719  ld (0x0d4a),0x00
+	ldw_d16	wa, (3246)	; F6471E  ld WA,(0x0cae)
+	stda16	(3394), wa	; F64722  ld (0x0d42),WA
+	ldw_d16	wa, (3187)	; F64726  ld WA,(0x0c73)
+	stda16	(3216), wa	; F6472A  ld (0x0c90),WA
+	ldb_d8	w, (3357)	; F6472E  ld W,(0x0d1d)
+	ldb_d8	a, (3214)	; F64732  ld A,(0x0c8e)
+	calr	58821	; F64736  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64739  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 16	; F6473E  jr Z,0xf64750
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x08	; F64740  cp (0x0d4a),0x08   [llvm-mc cannot encode this]
+	jrl	nz, 148	; F64745  jrl NZ,0xf647dc
+	stdi8	(3402), 0	; F64748  ld (0x0d4a),0x00
+	jrl	131	; F6474D  jrl T,0xf647d3
+	ldw_d16	hl, (13404)	; F64750  ld HL,(0x345c)
+	calr	60903	; F64754  calr 0xf6353e
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64757  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, 20	; F6475C  jr Z,0xf64772
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x07	; F6475E  cp (0x0d4a),0x07   [llvm-mc cannot encode this]
+	jr	z, 3	; F64763  jr Z,0xf64768
+	jrl	116	; F64765  jrl T,0xf647dc
+	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x08	; F64768  or (0x0c8a),0x08   [llvm-mc cannot encode this]
+	stdi8	(3402), 0	; F6476D  ld (0x0d4a),0x00
+	ldw_d16	wa, (3394)	; F64772  ld WA,(0x0d42)
+	.byte 0xD1, 0xAE, 0x0C, 0xF0	; F64776  cp WA,(0x0cae)   [llvm-mc cannot encode this]
+	jr	ugt, 4	; F6477A  jr UGT,0xf64780
+	jr	c, 37	; F6477C  jr C,0xf647a3
+	jr	z, 83	; F6477E  jr Z,0xf647d3
+	.byte 0xD1, 0xAE, 0x0C, 0xA0	; F64780  sub WA,(0x0cae)   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x8A, 0x0C, 0xCC	; F64784  bit 4,(0x0c8a)   [llvm-mc cannot encode this]
+	jr	z, 8	; F64788  jr Z,0xf64792
+	.byte 0xF1, 0x8A, 0x0C, 0xCB	; F6478A  bit 3,(0x0c8a)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F6478E  jr NZ,0xf64792
+	dec	1, wa	; F64790  dec 1,WA
+	stda16	(3246), wa	; F64792  ld (0x0cae),WA
+	calr	159	; F64796  calr 0xf64838
+	ldw_d16	wa, (3390)	; F64799  ld WA,(0x0d3e)
+	.byte 0xD1, 0x40, 0x0D, 0x88	; F6479D  add (0x0d40),WA   [llvm-mc cannot encode this]
+	jr	48	; F647A1  jr T,0xf647d3
+	.byte 0xD1, 0xAE, 0x0C, 0xA8	; F647A3  sub (0x0cae),WA   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x8A, 0x0C, 0xCC	; F647A7  bit 4,(0x0c8a)   [llvm-mc cannot encode this]
+	jr	z, 10	; F647AB  jr Z,0xf647b7
+	.byte 0xF1, 0x8A, 0x0C, 0xCB	; F647AD  bit 3,(0x0c8a)   [llvm-mc cannot encode this]
+	jr	nz, 4	; F647B1  jr NZ,0xf647b7
+	incdi16	1, (3246)	; F647B3  incw 1,(0x0cae)
+	calr	35	; F647B7  calr 0xf647dd
+	ldw_d16	wa, (3392)	; F647BA  ld WA,(0x0d40)
+	.byte 0xD1, 0x3E, 0x0D, 0xF0	; F647BE  cp WA,(0x0d3e)   [llvm-mc cannot encode this]
+	jr	nc, 7	; F647C2  jr NC,0xf647cb
+	stdi8	(3402), 5	; F647C4  ld (0x0d4a),0x05
+	jr	17	; F647C9  jr T,0xf647dc
+	.byte 0xD1, 0x3E, 0x0D, 0xA0	; F647CB  sub WA,(0x0d3e)   [llvm-mc cannot encode this]
+	stda16	(3392), wa	; F647CF  ld (0x0d40),WA
+	ldb_d8	a, (3214)	; F647D3  ld A,(0x0c8e)
+	inc	1, a	; F647D7  inc 1,A
+	jrl	-340	; F647D9  jrl T,0xf64688
+	ret	; F647DC  ret
+sub_F647DD:		; <- T_F427DC
+	xor	hl, hl	; F647DD  xor HL,HL
+	ldb_d8	l, (3214)	; F647DF  ld L,(0x0c8e)
+	dec	1, hl	; F647E3  dec 1,HL
+	push	xde	; F647E5  push XDE
+	ld	xde, 6304802	; F647E6  ld XDE,0x00603422
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x3F, 0x20	; F647EB  cp (XDE+HL),0x20   [llvm-mc cannot encode this]
+	pop	xde	; F647F1  pop XDE
+	jr	nz, 6	; F647F2  jr NZ,0xf647fa
+	.byte 0xD1, 0xAE, 0x0C, 0x38, 0x0A, 0x00	; F647F4  add (0x0cae),0x000a   [llvm-mc cannot encode this]
+	xor	wa, wa	; F647FA  xor WA,WA
+	ldw	wa, 255	; F647FC  ld WA,0x00ff
+	push	xde	; F647FF  push XDE
+	ld	xde, 6304928	; F64800  ld XDE,0x006034a0
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0xA1	; F64805  sub A,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F6480A  pop XDE
+	.byte 0xD1, 0xAE, 0x0C, 0xF8	; F6480B  cp (0x0cae),WA   [llvm-mc cannot encode this]
+	jr	ugt, 5	; F6480F  jr UGT,0xf64816
+	ldw	wa, 0	; F64811  ld WA,0x0000
+	jr	29	; F64814  jr T,0xf64833
+	ldw_d16	de, (3246)	; F64816  ld DE,(0x0cae)
+	sub	de, wa	; F6481A  sub DE,WA
+	ldw	wa, 256	; F6481C  ld WA,0x0100
+	sub	wa, 5	; F6481F  sub WA,0x0005
+	ld	hl, wa	; F64823  ld HL,WA
+	add	wa, de	; F64825  add WA,DE
+	dec	1, wa	; F64827  dec 1,WA
+	xor	de, de	; F64829  xor DE,DE
+	ld	qwa, de	; F6482B  ld QWA,DE
+	div	xwa, xhl	; F6482E  div XWA,HL
+	ld	de, qwa	; F64830  ld DE,QWA
+	stda16	(3390), wa	; F64833  ld (0x0d3e),WA
+	ret	; F64837  ret
+sub_F64838:		; <- T_F427E0
+	xor	hl, hl	; F64838  xor HL,HL
+	ldb_d8	l, (3214)	; F6483A  ld L,(0x0c8e)
+	dec	1, hl	; F6483E  dec 1,HL
+	xor	wa, wa	; F64840  xor WA,WA
+	push	xde	; F64842  push XDE
+	ld	xde, 6304928	; F64843  ld XDE,0x006034a0
+	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x21	; F64848  ld A,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F6484D  pop XDE
+	sub	wa, 5	; F6484E  sub WA,0x0005
+	.byte 0xD1, 0xAE, 0x0C, 0xF8	; F64852  cp (0x0cae),WA   [llvm-mc cannot encode this]
+	jr	ugt, 5	; F64856  jr UGT,0xf6485d
+	ldw	wa, 0	; F64858  ld WA,0x0000
+	jr	27	; F6485B  jr T,0xf64878
+	ldw_d16	de, (3246)	; F6485D  ld DE,(0x0cae)
+	sub	de, wa	; F64861  sub DE,WA
+	ldw	hl, 256	; F64863  ld HL,0x0100
+	sub	hl, 5	; F64866  sub HL,0x0005
+	ld	wa, de	; F6486A  ld WA,DE
+	xor	de, de	; F6486C  xor DE,DE
+	ld	qwa, de	; F6486E  ld QWA,DE
+	div	xwa, xhl	; F64871  div XWA,HL
+	ld	de, qwa	; F64873  ld DE,QWA
+	inc	1, wa	; F64876  inc 1,WA
+	stda16	(3390), wa	; F64878  ld (0x0d3e),WA
+	ret	; F6487C  ret
+sub_F6487D:		; <- T_F42808
+	stdi8	(3402), 0	; F6487D  ld (0x0d4a),0x00
+	calr	109	; F64882  calr 0xf648f2
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64885  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 101	; F6488A  jr NZ,0xf648f1
+	ldw_d16	wa, (3189)	; F6488C  ld WA,(0x0c75)
+	sub	wa, de	; F64890  sub WA,DE
+	dec	1, wa	; F64892  dec 1,WA
+	stda16	(3404), wa	; F64894  ld (0x0d4c),WA
+	calr	242	; F64898  calr 0xf6498d
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6489B  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 79	; F648A0  jr NZ,0xf648f1
+	ldw_d16	wa, (3276)	; F648A2  ld WA,(0x0ccc)
+	stda16	(3264), wa	; F648A6  ld (0x0cc0),WA
+	ldw_d16	wa, (3278)	; F648AA  ld WA,(0x0cce)
+	stda16	(3270), wa	; F648AE  ld (0x0cc6),WA
+	calr	61651	; F648B2  calr 0xf63988
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F648B5  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 53	; F648BA  jr NZ,0xf648f1
+	stda16	(3300), de	; F648BC  ld (0x0ce4),DE
+	ldw_d16	wa, (3336)	; F648C0  ld WA,(0x0d08)
+	stda16	(3302), wa	; F648C4  ld (0x0ce6),WA
+	calr	361	; F648C8  calr 0xf64a34
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F648CB  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 31	; F648D0  jr NZ,0xf648f1
+	xor	wa, wa	; F648D2  xor WA,WA
+	ldb_d8	a, (3215)	; F648D4  ld A,(0x0c8f)
+	stda16	(3354), wa	; F648D8  ld (0x0d1a),WA
+	ld	ix, iy	; F648DC  ld IX,IY
+	stda16	(3278), iy	; F648DE  ld (0x0cce),IY
+	ldw_d16	wa, (3260)	; F648E2  ld WA,(0x0cbc)
+	stda16	(3159), wa	; F648E6  ld (0x0c57),WA
+	stda16	(3276), wa	; F648EA  ld (0x0ccc),WA
+	calr	61491	; F648EE  calr 0xf63924
+	ret	; F648F1  ret
+sub_F648F2:
+	stdi8	(3402), 0	; F648F2  ld (0x0d4a),0x00
+	calr	60692	; F648F7  calr 0xf6360e
+	ldb_d8	a, (3215)	; F648FA  ld A,(0x0c8f)
+	stdi16	(3216), 1	; F648FE  ld (0x0c90),0x0001
+	calr	58359	; F64904  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64907  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 125	; F6490C  jrl NZ,0xf6498c
+	stda16	(3262), iy	; F6490F  ld (0x0cbe),IY
+	ldw_d16	wa, (13404)	; F64913  ld WA,(0x345c)
+	stda16	(3260), wa	; F64917  ld (0x0cbc),WA
+	xor	de, de	; F6491B  xor DE,DE
+	xor	c, c	; F6491D  xor C,C
+	.byte 0xC1, 0x1C, 0x0D, 0xF3	; F6491F  cp C,(0x0d1c)   [llvm-mc cannot encode this]
+	jr	z, 57	; F64923  jr Z,0xf6495e
+	push	xde	; F64925  push XDE
+	ldda32	xde, (4718)	; F64926  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F6492A  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F6492F  pop XDE
+	cp	a, 130	; F64930  cp A,0x82
+	jr	z, 85	; F64933  jr Z,0xf6498a
+	cp	a, 129	; F64935  cp A,0x81
+	jr	nz, 19	; F64938  jr NZ,0xf6494d
+	inc	1, c	; F6493A  inc 1,C
+	pushw	de	; F6493C  push DE
+	pushw	bc	; F6493D  push BC
+	call	16000780	; F6493E  call 0xf4270c
+	popw	bc	; F64942  pop BC
+	popw	de	; F64943  pop DE
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64944  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 65	; F64949  jr NZ,0xf6498c
+	jr	-46	; F6494B  jr T,0xf6491f
+	pushw	de	; F6494D  push DE
+	pushw	bc	; F6494E  push BC
+	call	16000780	; F6494F  call 0xf4270c
+	popw	bc	; F64953  pop BC
+	popw	de	; F64954  pop DE
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64955  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 48	; F6495A  jr NZ,0xf6498c
+	jr	-57	; F6495C  jr T,0xf64925
+	push	xiz	; F6495E  push XIZ
+	ldda32	xiz, (4718)	; F6495F  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F64963  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F64966  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F64967  push XDE3   [llvm-mc cannot encode this]
+	pushw	de	; F6496A  push DE
+	pushw	bc	; F6496B  push BC
+	push	xiy	; F6496C  push XIY
+	calr	60889	; F6496D  calr 0xf63749
+	pop	xiy	; F64970  pop XIY
+	popw	bc	; F64971  pop BC
+	popw	de	; F64972  pop DE
+	.byte 0xE7, 0x38, 0x05	; F64973  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F64976  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F64977  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F6497A  ld (0x126e),XIZ
+	pop	xiz	; F6497E  pop XIZ
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F6497F  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 6	; F64984  jr NZ,0xf6498c
+	inc	1, de	; F64986  inc 1,DE
+	jr	-109	; F64988  jr T,0xf6491d
+	inc	1, de	; F6498A  inc 1,DE
+	ret	; F6498C  ret
+sub_F6498D:
+	stdi8	(3402), 0	; F6498D  ld (0x0d4a),0x00
+	ldb_d8	w, (3357)	; F64992  ld W,(0x0d1d)
+	ldb_d8	a, (3215)	; F64996  ld A,(0x0c8f)
+	stda16	(3216), de	; F6499A  ld (0x0c90),DE
+	calr	58205	; F6499E  calr 0xf62cfe
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F649A1  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 138	; F649A6  jrl NZ,0xf64a33
+	xor	bc, bc	; F649A9  xor BC,BC
+	stdi16	(3246), 0	; F649AB  ld (0x0cae),0x0000
+	push	xde	; F649B1  push XDE
+	ldda32	xde, (4718)	; F649B2  ld XDE,(0x126e)
+	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F649B6  ld A,(XDE+IY)   [llvm-mc cannot encode this]
+	pop	xde	; F649BB  pop XDE
+	cp	a, 130	; F649BC  cp A,0x82
+	jr	z, 21	; F649BF  jr Z,0xf649d6
+	cp	a, 129	; F649C1  cp A,0x81
+	jr	nz, 2	; F649C4  jr NZ,0xf649c8
+	inc	1, c	; F649C6  inc 1,C
+	pushw	bc	; F649C8  push BC
+	calr	60413	; F649C9  calr 0xf635c9
+	popw	bc	; F649CC  pop BC
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F649CD  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 95	; F649D2  jr NZ,0xf64a33
+	jr	-37	; F649D4  jr T,0xf649b1
+	ldb_d8	a, (3356)	; F649D6  ld A,(0x0d1c)
+	sub	a, c	; F649DA  sub A,C
+	xor	w, w	; F649DC  xor W,W
+	stda16	(3246), wa	; F649DE  ld (0x0cae),WA
+	nop	; F649E2  nop
+	nop	; F649E3  nop
+	nop	; F649E4  nop
+	nop	; F649E5  nop
+	nop	; F649E6  nop
+	nop	; F649E7  nop
+	nop	; F649E8  nop
+	nop	; F649E9  nop
+	nop	; F649EA  nop
+	nop	; F649EB  nop
+	nop	; F649EC  nop
+	nop	; F649ED  nop
+	nop	; F649EE  nop
+	xor	de, de	; F649EF  xor DE,DE
+	.byte 0xD1, 0x4C, 0x0D, 0xF2	; F649F1  cp DE,(0x0d4c)   [llvm-mc cannot encode this]
+	jr	z, 56	; F649F5  jr Z,0xf64a2f
+	push	xiz	; F649F7  push XIZ
+	ldda32	xiz, (4718)	; F649F8  ld XIZ,(0x126e)
+	.byte 0xE7, 0x38, 0x9E	; F649FC  ld XDE3,XIZ   [llvm-mc cannot encode this]
+	pop	xiz	; F649FF  pop XIZ
+	.byte 0xE7, 0x38, 0x04	; F64A00  push XDE3   [llvm-mc cannot encode this]
+	push	xhl	; F64A03  push XHL
+	pushw	de	; F64A04  push DE
+	push	xiy	; F64A05  push XIY
+	push	xix	; F64A06  push XIX
+	calr	60735	; F64A07  calr 0xf63749
+	pop	xix	; F64A0A  pop XIX
+	pop	xiy	; F64A0B  pop XIY
+	popw	de	; F64A0C  pop DE
+	pop	xhl	; F64A0D  pop XHL
+	.byte 0xE7, 0x38, 0x05	; F64A0E  pop XDE3   [llvm-mc cannot encode this]
+	push	xiz	; F64A11  push XIZ
+	.byte 0xE7, 0x38, 0x8E	; F64A12  ld XIZ,XDE3   [llvm-mc cannot encode this]
+	stda32	(4718), xiz	; F64A15  ld (0x126e),XIZ
+	pop	xiz	; F64A19  pop XIZ
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64A1A  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	nz, 18	; F64A1F  jr NZ,0xf64a33
+	inc	1, de	; F64A21  inc 1,DE
+	xor	wa, wa	; F64A23  xor WA,WA
+	ldb_d8	a, (3356)	; F64A25  ld A,(0x0d1c)
+	.byte 0xD1, 0xAE, 0x0C, 0x88	; F64A29  add (0x0cae),WA   [llvm-mc cannot encode this]
+	jr	-62	; F64A2D  jr T,0xf649f1
+	incdi16	1, (3246)	; F64A2F  incw 1,(0x0cae)
+	ret	; F64A33  ret
+sub_F64A34:
+	stdi8	(3402), 0	; F64A34  ld (0x0d4a),0x00
+	ldw_d16	hl, (3276)	; F64A39  ld HL,(0x0ccc)
+	stda16	(3260), hl	; F64A3D  ld (0x0cbc),HL
+	calr	61802	; F64A41  calr 0xf63bae
+	ldw_d16	iy, (3278)	; F64A44  ld IY,(0x0cce)
+	decdi16	1, (3246)	; F64A48  decw 1,(0x0cae)
+	xor	de, de	; F64A4C  xor DE,DE
+	.byte 0xD1, 0xAE, 0x0C, 0xFA	; F64A4E  cp (0x0cae),DE   [llvm-mc cannot encode this]
+	jr	z, 27	; F64A52  jr Z,0xf64a6f
+	ldda32	xhl, (4718)	; F64A54  ld XHL,(0x126e)
+	.byte 0xF3, 0x07, 0xEC, 0xF4, 0x00, 0x81	; F64A58  ld (XHL+IY),0x81   [llvm-mc cannot encode this]
+	inc	1, de	; F64A5E  inc 1,DE
+	pushw	de	; F64A60  push DE
+	call	16000780	; F64A61  call 0xf4270c
+	popw	de	; F64A65  pop DE
+	.byte 0xC1, 0x4A, 0x0D, 0x3F, 0x00	; F64A66  cp (0x0d4a),0x00   [llvm-mc cannot encode this]
+	jr	z, -31	; F64A6B  jr Z,0xf64a4e
+	jr	10	; F64A6D  jr T,0xf64a79
+	ldda32	xhl, (4718)	; F64A6F  ld XHL,(0x126e)
+	.byte 0xF3, 0x07, 0xEC, 0xF4, 0x00, 0x82	; F64A73  ld (XHL+IY),0x82   [llvm-mc cannot encode this]
+	ret	; F64A79  ret
+sub_F64A7A:		; <- T_F42824
+	stdi16	(3106), 1	; F64A7A  ld (0x0c22),0x0001
+	stdi16	(3112), 1	; F64A80  ld (0x0c28),0x0001
+	stdi16	(3116), 1	; F64A86  ld (0x0c2c),0x0001
+	stdi16	(3122), 1	; F64A8C  ld (0x0c32),0x0001
+	stdi16	(3544), 1	; F64A92  ld (0x0dd8),0x0001
+	stdi16	(3550), 1	; F64A98  ld (0x0dde),0x0001
+	ret	; F64A9E  ret
+	ldb_d8	a, (8314)	; F64A9F  ld A,(0x207a)
+	cp	a, 69	; F64AA3  cp A,0x45
+	jr	z, 15	; F64AA6  jr Z,0xf64ab7
+	cp	a, 13	; F64AA8  cp A,0x0d
+	jr	z, 10	; F64AAB  jr Z,0xf64ab7
+	cp	a, 19	; F64AAD  cp A,0x13
+	jr	z, 5	; F64AB0  jr Z,0xf64ab7
+	cp	a, 73	; F64AB2  cp A,0x49
+	jr	nz, 8	; F64AB5  jr NZ,0xf64abf
+	stdi8	(4684), 0	; F64AB7  ld (0x124c),0x00
+	jrl	91	; F64ABC  jrl T,0xf64b1a
+	ldb_d8	a, (8376)	; F64ABF  ld A,(0x20b8)
+	cps	a, 3	; F64AC3  cp A,3
+	jr	nz, 83	; F64AC5  jr NZ,0xf64b1a
+	ldb_d8	a, (8377)	; F64AC7  ld A,(0x20b9)
+	ldb_d8	w, (8378)	; F64ACB  ld W,(0x20ba)
+	cp	w, 255	; F64ACF  cp W,0xff
+	jr	z, 70	; F64AD2  jr Z,0xf64b1a
+	bit	2, w	; F64AD4  bit 0x02,W
+	jr	nz, 2	; F64AD7  jr NZ,0xf64adb
+	jr	63	; F64AD9  jr T,0xf64b1a
+	.byte 0xF1, 0x4C, 0x12, 0xC8	; F64ADB  bit 0,(0x124c)   [llvm-mc cannot encode this]
+	jr	z, 7	; F64ADF  jr Z,0xf64ae8
+	.byte 0xC1, 0x4C, 0x12, 0x3C, 0xFE	; F64AE1  and (0x124c),0xfe   [llvm-mc cannot encode this]
+	jr	50	; F64AE6  jr T,0xf64b1a
+	and	a, w	; F64AE8  and A,W
+	and	a, 4	; F64AEA  and A,0x04
+	bit	2, a	; F64AED  bit 0x02,A
+	jr	z, 21	; F64AF0  jr Z,0xf64b07
+	call	15993376	; F64AF2  call 0xf40a20
+	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F64AF6  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	call	15994036	; F64AFB  call 0xf40cb4
+	stib_da	(6304966), 255	; F64AFF  ld (0x6034c6),0xff
+	jr	19	; F64B05  jr T,0xf64b1a
+	call	15993376	; F64B07  call 0xf40a20
+	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F64B0B  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	call	15994036	; F64B10  call 0xf40cb4
+	stib_da	(6304966), 0	; F64B14  ld (0x6034c6),0x00
+	ret	; F64B1A  ret
+sub_F64B1B:		; <- T_F4282C
+	ldw_da	wa, (6304952)	; F64B1B  ld WA,(0x6034b8)
+	stda16	(3627), wa	; F64B20  ld (0x0e2b),WA
+	ldw_da	wa, (6304954)	; F64B24  ld WA,(0x6034ba)
+	stda16	(3629), wa	; F64B29  ld (0x0e2d),WA
+	calr	13	; F64B2D  calr 0xf64b3d
+	calr	71	; F64B30  calr 0xf64b7a
+	call	15993544	; F64B33  call 0xf40ac8
+	.byte 0xC1, 0x0B, 0x36, 0x3C, 0xFE	; F64B37  and (0x360b),0xfe   [llvm-mc cannot encode this]
+	ret	; F64B3C  ret
+
+; --------------------------------------------------------------------------
+; BStore_Workspace_LoadFromBank -- 0x603400 <- bank (0x360A)
+;
+; Called from:
+;   2 call sites inside the module:
+;     0xF64B2D 0xF64BDF
+;   (both lists are emitted by this script, not typed)
+; What it does: `ldir` of 0x0C00 bytes from 0x00610000 + (0x360A)*0xC00 to
+;   0x00603400, then (0x360C) = the long at 0x0060341E.
+; Evidence: 0xF64B4E `ld XIY,0x00610000` (source), 0xF64B54 `ld XIX,0x00603400`
+;   (destination -- see the ldir direction citation on BStore_CopyAcrossBlocks),
+;   `ld BC,0x0C00`; the index is `sla 0x0B` + `sla 0x0A` of (0x360A), i.e.
+;   n*0x800 + n*0x400 = n*0xC00.
+; WHAT THIS SAYS ABOUT THE MEMORY MAP.  0x603400-0x603FFF is exactly the 3 KiB
+;   that notes/FINDINGS-memory-map.md records as `work DRAM, deliberately NOT
+;   cleared and live' -- the one hole in prom_a's two boot clear loops.  This
+;   routine and its mirror are what that hole is for.  prom_a bounds (0x360A):
+;   0xF8143F `cp A,0` refuses to decrement below 0 and 0xF814D2 `cp A,0x09`
+;   refuses to increment past 9, so n is 0..9 -- TEN banks.  Ten banks of 0xC00
+;   starting at 0x610000 end at 0x617800, which is the block store's base.
+;   Two independently derived constants abut with no slack.
+; Unknown: that abutment is consistency, not proof that the two regions were
+;   laid out as one.
+; --------------------------------------------------------------------------
+BStore_Workspace_LoadFromBank:
+	xor	xwa, xwa	; F64B3D  xor XWA,XWA
+	ldb_d8	a, (13834)	; F64B3F  ld A,(0x360a)
+	ld	xix, xwa	; F64B43  ld XIX,XWA
+	sla	xwa, 11	; F64B45  sla 0x0b,XWA
+	sla	xix, 10	; F64B48  sla 0x0a,XIX
+	add	xwa, xix	; F64B4B  add XWA,XIX
+	ld	xiy, 6356992	; F64B4D  ld XIY,0x00610000
+	add	xiy, xwa	; F64B52  add XIY,XWA
+	ld	xix, 6304768	; F64B54  ld XIX,0x00603400
+	ldw	bc, 3072	; F64B59  ld BC,0x0c00
+	.byte 0x85, 0x11	; F64B5C  ldir   [llvm-mc cannot encode this]
+	ldl_da	xwa, (6304798)	; F64B5E  ld XWA,(0x60341e)
+	stda32	(13836), xwa	; F64B63  ld (0x360c),XWA
+	ldw_d16	wa, (3627)	; F64B67  ld WA,(0x0e2b)
+	stw_da	(6304952), wa	; F64B6B  ld (0x6034b8),WA
+	ldw_d16	wa, (3629)	; F64B70  ld WA,(0x0e2d)
+	stw_da	(6304954), wa	; F64B74  ld (0x6034ba),WA
+	ret	; F64B79  ret
+sub_F64B7A:
+	.byte 0xC2, 0xC6, 0x34, 0x60, 0x3F, 0xFF	; F64B7A  cp (0x6034c6),0xff   [llvm-mc cannot encode this]
+	jr	z, 15	; F64B80  jr Z,0xf64b91
+	.byte 0xF1, 0x4D, 0x7F, 0xCA	; F64B82  bit 2,(0x7f4d)   [llvm-mc cannot encode this]
+	jr	z, 41	; F64B86  jr Z,0xf64bb1
+	.byte 0xC1, 0x4D, 0x7F, 0x3C, 0xFB	; F64B88  and (0x7f4d),0xfb   [llvm-mc cannot encode this]
+	xor	a, a	; F64B8D  xor A,A
+	jr	13	; F64B8F  jr T,0xf64b9e
+	.byte 0xF1, 0x4D, 0x7F, 0xCA	; F64B91  bit 2,(0x7f4d)   [llvm-mc cannot encode this]
+	jr	nz, 26	; F64B95  jr NZ,0xf64bb1
+	.byte 0xC1, 0x4D, 0x7F, 0x3E, 0x04	; F64B97  or (0x7f4d),0x04   [llvm-mc cannot encode this]
+	ldb	a, 4	; F64B9C  ld A,0x04
+	stdi8	(4684), 1	; F64B9E  ld (0x124c),0x01
+	ldb	e, 145	; F64BA3  ld E,0x91
+	ldb	d, 3	; F64BA5  ld D,0x03
+	ldb	w, 4	; F64BA7  ld W,0x04
+	call	15994680	; F64BA9  call 0xf40f38
+	call	15990808	; F64BAD  call 0xf40018
+	call	15995320	; F64BB1  call 0xf411b8
+	ret	; F64BB5  ret
+sub_F64BB6:		; <- T_F42830
+	ldw_da	wa, (6304952)	; F64BB6  ld WA,(0x6034b8)
+	stda16	(3627), wa	; F64BBB  ld (0x0e2b),WA
+	ldw_da	wa, (6304954)	; F64BBF  ld WA,(0x6034ba)
+	stda16	(3629), wa	; F64BC4  ld (0x0e2d),WA
+	ldb_d8	a, (13834)	; F64BC8  ld A,(0x360a)
+	pushw	wa	; F64BCC  push WA
+	cps	a, 0	; F64BCD  cp A,0
+	jr	z, 9	; F64BCF  jr Z,0xf64bda
+	dec	1, a	; F64BD1  dec 1,A
+	stb_d8	(13834), a	; F64BD3  ld (0x360a),A
+	calr	9	; F64BD7  calr 0xf64be3
+	popw	wa	; F64BDA  pop WA
+	stb_d8	(13834), a	; F64BDB  ld (0x360a),A
+	calr	65371	; F64BDF  calr 0xf64b3d
+	ret	; F64BE2  ret
+
+; --------------------------------------------------------------------------
+; BStore_Workspace_SaveToBank -- bank (0x360A) <- 0x603400
+;
+; Called from:
+;   1 call site inside the module:
+;     0xF64BD7
+;   (both lists are emitted by this script, not typed)
+; What it does: the exact mirror of BStore_Workspace_LoadFromBank, and it
+;   first writes (0x360C) out to 0x0060341E so the reload can restore it.
+; Evidence: 0xF64BE3 `ld XWA,(0x360C)` / `ld (0x0060341E),XWA`, then
+;   `ld XIX,0x00610000` (destination) and `ld XIY,0x00603400` (source) --
+;   the two registers swapped relative to the load.
+; --------------------------------------------------------------------------
+BStore_Workspace_SaveToBank:
+	ldda32	xwa, (13836)	; F64BE3  ld XWA,(0x360c)
+	stl_da	(6304798), xwa	; F64BE7  ld (0x60341e),XWA
+	ld	xix, 6356992	; F64BEC  ld XIX,0x00610000
+	xor	xwa, xwa	; F64BF1  xor XWA,XWA
+	xor	xhl, xhl	; F64BF3  xor XHL,XHL
+	ldb_d8	l, (13834)	; F64BF5  ld L,(0x360a)
+	ld	a, l	; F64BF9  ld A,L
+	sla	xhl, 11	; F64BFB  sla 0x0b,XHL
+	sla	xwa, 10	; F64BFE  sla 0x0a,XWA
+	add	xhl, xwa	; F64C01  add XHL,XWA
+	add	xix, xhl	; F64C03  add XIX,XHL
+	ld	xiy, 6304768	; F64C05  ld XIY,0x00603400
+	ldw	bc, 3072	; F64C0A  ld BC,0x0c00
+	.byte 0x85, 0x11	; F64C0D  ldir   [llvm-mc cannot encode this]
+	ret	; F64C0F  ret
+	.fill	1008, 1, 0x0E	; F64C10-F64FFF  ret padding
+
+; --- 0xF65000-0xF77FFF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x065000, 0x013000
 
 ; ------------------------------------------------------------------
 ; DLB_RecordTemplate_Op02 / DLB_RecordTemplate_Op07 -- the two interpreter-B

@@ -232,14 +232,47 @@ links. So the ROM table is not a byte image of the RAM array, whatever else it
 is. If some routine builds the array *from* the records it has not been found —
 and it would have to name `0xF85E8A`, which nothing does.
 
+#### ★ RESOLVED 2026-08-25 — and the search above is *why* it took a round
+
+`Kernel_StartTask` (`0xF857D9`, converted 2026-08-25) is the routine that
+builds a RAM node from a ROM record. The lead was right about everything except
+its own search: **it does not name `0xF85E8A`.** It names
+
+```
+0xF857E9   add XHL,0xfff85e7e      ; low 24 bits = 0xF85E7E = 0xF85E8A - 12
+```
+
+because the whole kernel is indexed **1-based**. The same bias is in the TCB
+address the lead itself quotes — `0x02F4 + A*12` is `0x0300 + (A-1)*12` — and in
+`0x032C + n*4`, `0x0360 + A*4` and `0x0370 + A*4`. `Kernel_InitRam` settles it
+from the other side: it writes **four** TCBs starting at `0x0300` with stride 12,
+so they occupy `0x0300`-`0x032F` and the first queue head at `0x0330` follows
+immediately. The `+8` in "`0x0324 + 8 = 0x032C`" is not a gap in the layout; it
+is `12 - 4` seen through the bias.
+
+So a search for "who names `0xF85E8A`" could not have found the answer, and the
+lead's closing sentence should be read as a warning about the search rather than
+about the ROM. The corrected figures and every address above are re-derived by
+`notes/prom_a_byte_checks.py`.
+
+And the two questions the lead's ⚠ raised are answered together: the ROM table is
+**not** a byte image of the RAM array, and nothing copies it — `Kernel_StartTask`
+reads four fields out of the record and writes three *different* fields into the
+node, plus a stack frame at a third address entirely. See
+`FINDINGS-prom_a-kernel-lifecycle.md`.
+
 ## 6. What this round left
 
 * `0xF85904`-`0xF85C88` and `0xF85D1C`-`0xF85E89`: the rest of the kernel,
   including the **post** side of the message queues (something must move a task
   off `0x0360 + n*4` and write `0` to node+9; `0xF85E5B` does the latter — see
   the lead above).
-* Whatever *selects* an entry point. Until that is found, "task" describes the
-  shape of these routines; it is not a claim about how the system starts.
+* ~~Whatever *selects* an entry point.~~ **Answered 2026-08-25.** `Kernel_Start`
+  (`0xF856EC`) calls `Kernel_StartTask` twice, with `A = 1` and `A = 3` — records
+  0 and 2, i.e. the `0xF4005C` thunk at level 3 and `DSP_RefreshTask` at level 1.
+  Those are the only two tasks the boot path starts;
+  `EntryPoint_Records[1]` and `[3]` are started by something else, or not at all,
+  and that is still open.
 * `0xF85C89`'s and `0xF85877`'s callers beyond the ones found here — all three
   converted queue routines are published through prom_b thunks (`0xF42DCC`,
   `0xF42D74`, `0xF42D78`), so their real users are in prom_b and are another

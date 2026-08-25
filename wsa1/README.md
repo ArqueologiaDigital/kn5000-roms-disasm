@@ -53,15 +53,20 @@ misreported downstream.
 
 ## Status
 
-**Converted: 604,523 of 2,097,152 bytes (28.8%).** Regenerate this table with
-`python3 scripts/analysis/source_coverage.py` -- do not retype it; it has been wrong before.
+**Converted: 767,558 of 2,097,152 bytes (36.6%)** -- of which 441,308 substantive (21.0%) and 326,250 verified filler.
 
-| source | image | converted | still `.incbin` | `.incbin` spans |
-|---|---|---:|---:|---:|
-| `prom_a/` | `wsa1_prom_a.ic12` | 4,278 | 520,010 | 14 |
-| `prom_b/` | `wsa1_prom_b.ic13` | 59,586 | 464,702 | 136 |
-| `prom_c/` | `wsa1_prom_c.ic28` | 16,371 | 507,917 | 12 |
-| `prom_d/` | `wsa1_prom_d.bin` | 524,288 | 0 | 0 |
+| source | image | substantive | filler | still `.incbin` | `.incbin` spans |
+|---|---|---:|---:|---:|---:|
+| `prom_a/` | `wsa1_prom_a.ic12` | 14,778 | 108 | 509,402 | 24 |
+| `prom_b/` | `wsa1_prom_b.ic13` | 71,475 | 10,359 | 442,454 | 131 |
+| `prom_c/` | `wsa1_prom_c.ic28` | 24,534 | 122,016 | 377,738 | 26 |
+| `prom_d/` | `wsa1_prom_d.bin` | 330,521 | 193,767 | 0 | 0 |
+
+⚠ **Quote the substantive column, not the total.** Wave 3 converted 123,151 bytes of prom_c of
+which 118,298 were a verified run of 0x0E pad emitted as `.fill` -- that moved the headline from
+4.3% to 27.7% while adding under 5 KB of decoded content. The pad is real and checked rather than
+sampled, so it belongs in the source, but a number that treats it as equal to decoded code
+flatters. Regenerate with `python3 scripts/analysis/source_coverage.py`; never retype it.
 
 The gate is green at every commit; see the top of this file. Conversion is incremental and
 reachability-driven, not linear, so a low percentage on an image does not mean nothing is

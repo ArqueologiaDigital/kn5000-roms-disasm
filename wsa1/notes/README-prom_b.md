@@ -23,7 +23,9 @@ it. Files concerned:
 `prom_b_dl_operand_tables.py`, `gen_prom_b_dl_operand_tables.py`,
 `prom_b_dispatch_tables.py`, `prom_b_f7d_tables.py`, `llvm_roundtrip_force.py`,
 `prom_b_default_slot_census.py`, `prom_b_call_graph.py`,
-`prom_b_blink_rate.py`, `prom_b_param_edit_pair.py`.
+`prom_b_blink_rate.py`, `prom_b_param_edit_pair.py`,
+`prom_b_module_trace.py`, `gen_prom_b_blockstore_module.py`,
+`prom_b_var_screens.py`, `prom_b_bank_index_census.py`.
 
 ⚠ **One correction this lane could NOT apply.** The audit of 2026-08-24 flagged
 `scripts/analysis/prom_b_display_lists.py`'s docstring for carrying "243 of 244"
@@ -144,6 +146,70 @@ Counts the 4-byte spelling at EVERY byte offset (not only 4-aligned ones) and
 reports the maximal stride-4 run separately from the total, so the two can never
 be conflated again. Exits non-zero if a self-check fails.
 
+## `prom_b_module_trace.py`
+**"Which bytes of a module are CODE, and which are DATA?"** Recursive descent
+inside one address range, seeded from the thunk table's own `jp` targets.
+
+    python3 notes/prom_b_module_trace.py 0xF62C00 0xF64C10
+    python3 notes/prom_b_module_trace.py 0xF62C00 0xF64C10 --entries
+    python3 notes/prom_b_module_trace.py --selftest
+
+Written 2026-08-25 because a linear sweep cannot find a data island: it
+resynchronises afterwards and the only symptom is that a KNOWN entry point stops
+being on an instruction boundary. prom_b `0xF63441` does exactly that — the
+linear decode steps over `0xF63489`, which is thunk `T_F42790`'s target. ⚠ It
+also showed that `scripts/analysis/trace_code.py`'s 32-phase decode table is
+**not** complete: neither `0xF63489` nor `0xF63CE0` has an entry in it, because
+the phase sweeps resynchronise long before they reach that module. This script
+therefore decodes on demand from the address itself, and `--selftest` asserts
+the `0xF63441` result.
+
+## `gen_prom_b_blockstore_module.py`
+**"…and what is the assembly for the block-store module at 0xF62C00?"** This is
+the emitter whose output is in the .s.
+
+    python3 notes/gen_prom_b_blockstore_module.py
+    python3 notes/gen_prom_b_blockstore_module.py --layout
+
+Code runs go through `llvm_roundtrip_autoforce.py`; the three data islands are
+`.byte` with their patterns re-asserted at emit time
+(`assert_data_islands()` — a wrong description stops the emit); the 1,008-byte
+`0x0E` tail is `.fill`. **Every count in every header it writes is computed by
+the script**: the per-routine caller lists, the stub-table census, the
+`(0x0D4A)` error-code census and the tag-comparison census. The first draft
+under-counted `BStore_CursorAdvance` at 11 sites instead of 15 because the
+caller map was built one segment at a time and `dict.update` replaced instead of
+merging; it is now a separate pass over all segments.
+
+## `prom_b_bank_index_census.py`
+**"How many sites compute the `0x610000 + n*0xC00` bank index?"** 48 — 8 in
+prom_a, 40 in prom_b — reported as an upper bound because it is a byte window,
+not a decode.
+
+    python3 notes/prom_b_bank_index_census.py
+
+Written because the memory-map row for `0x610000-0x6177FF` first carried a
+hand-typed list of four sites.
+
+## `prom_b_var_screens.py`
+**"Which SCREEN shows a given RAM variable, and what words sit next to it?"**
+A reverse index from a 16-bit RAM address to the interpreter-B display-list
+records that draw it, plus the interpreter-A text drawn by the same routine.
+
+    python3 notes/prom_b_var_screens.py --census
+    python3 notes/prom_b_var_screens.py --var 0x12F6
+    python3 notes/prom_b_var_screens.py --table 0xF03241
+    python3 notes/prom_b_var_screens.py --site 0xF62C00-0xF65000
+
+Interpreter B reads a RAM address out of every record it runs (`IX=(XIY+2)`
+inside `DisplayListB_ExtractField`), so the display lists ARE that index. The
+"near:" lines are proximity in the CODE (a window, default 0x200 bytes, around
+the B call site) and the script says so — evidence for a name, not a proof of
+one. Self-checks: its B-record count must equal the 494 that
+`prom_b_dl_length_audit.py` reports, every field is re-read from the ROM, and
+the worked example from `FINDINGS-ui-display-list-interpreter-b.md` (record
+`0xF0302A` → table `0xF03241`, width 8, mask 0x3F) must come back out.
+
 ## `llvm_roundtrip_force.py`
 **"What does this range say, in a form the gate will accept, when
 `scripts/analysis/llvm_roundtrip.py` cannot converge?"**
@@ -159,3 +225,96 @@ this. This wrapper reuses the committed script's own unidasm, spelling cache and
 assemble-and-compare, adds `--force ADDR,...`, and on a width mismatch demotes
 every instruction that does not individually round-trip. A listing it prints has
 still been proven byte-for-byte against the ROM before printing.
+
+## `prom_b_sc1_states.py`
+**"How does the SC1 module's state machine dispatch, which of its labels does
+anything reach, and what is in its three jump tables?"**
+
+    python3 notes/prom_b_sc1_states.py             # SC1_StateTable, mapped
+    python3 notes/prom_b_sc1_states.py --tables    # all three dispatch tables
+    python3 notes/prom_b_sc1_states.py --exits     # the six exit stubs
+    python3 notes/prom_b_sc1_states.py --dispatch  # is there a bounds check?
+    python3 notes/prom_b_sc1_states.py --writes    # who writes (0x2A80)
+    python3 notes/prom_b_sc1_states.py --branches 0xF5B05D 0xF5B242
+    python3 notes/prom_b_sc1_states.py --selftest
+
+Written to close round-1 audit finding **F16**: 25 `SC1_*` labels rested only on
+the module's section banner, and the group header above the state handlers
+described entries "[0]".."[10]" in prose without ever saying which LABEL was
+which entry. This resolves every table pointer to the label the `.s` puts at
+that address, so those headers are read rather than typed.
+
+It reads each branch's **resolved** target out of the transcription's own
+comment rather than redoing displacement arithmetic, and scans both of CPU 1's
+ROMs at every byte offset for pointer references — a scan that can only
+over-count, so a zero is a real zero. That is what makes "three exit stubs are
+unreachable" (see `FINDINGS-prom_b-sc1-link.md`) a measurement.
+
+⚠ Its `reachable()` figure is a **deliberately weak** criterion and both the
+docstring and the printout say so: the module has `inc 4` *and* `dec 4` on the
+state byte, so the closure is the whole table range no matter what the code
+does. It shows only that no table slot is stranded outside the range.
+
+`--selftest` asserts the entry count, the abutment bound, the last entry
+(state 0x28 at 0xF5AC8F), that entries [0]/[7]/[10] are one target, that every
+target resolves to a label, that the three `_Delayed` stubs stay at zero
+references while the three live ones stay non-zero, that `SC1_Irq_Exit_3` has
+its nine branches, and the two twin byte-diff counts (0 of 4, and 1 of 15).
+
+## `prom_b_evidence_audit.py`
+**"Which prom_b semantic labels are not backed by an Evidence line, and is the
+raw grep count honest?"**
+
+    python3 notes/prom_b_evidence_audit.py --since HEAD
+    python3 notes/prom_b_evidence_audit.py --all
+    python3 notes/prom_b_evidence_audit.py --selftest
+
+Round-1 finding F16 reported "prom_b 50/89" by grepping for the word
+"Evidence" in the comment block directly above each label, and flagged in the
+same breath that the number over-states the problem. It does. This grades into
+four buckets instead of two — BACKED (own Evidence line), GROUP (no header of
+its own, but the nearest preceding header names this label *and* carries an
+Evidence line), SECTION (only the `; ===` banner does — weak, because the
+banner is not about this label), UNBACKED (none) — so the honest figure can be
+quoted. Of the 89 labels new since `HEAD` the split was **39 / 21 / 25 / 4**,
+i.e. 29 owed evidence, not 50. After round 2: **62 / 27 / 0 / 0**.
+
+⚠ It grades COMMENTS, not truth. A label can be BACKED by an Evidence line that
+is wrong; that is what the gate cannot see and what reading the code catches.
+Its `--selftest` checks that the grader discriminates at all (a grader that
+returned one bucket for everything would pass a keyword grep and is rejected
+here).
+
+## `prom_b_f5b800_checks.py`
+**"Is every number in the 0xF5B800-0xF5B8B5 and 0xF5BAB8-0xF5BBE6 headers
+actually true of the ROM?"**
+
+    python3 notes/prom_b_f5b800_checks.py
+
+The byte gate proves the LISTING rebuilds the ROM and is blind to every claim in
+a comment, so this is those two blocks' substitute: 69 PASS/FAIL rows covering
+the seven thunk slots and their reference splits (41 references across the first
+four, 39 prom_a / 2 prom_b; 1 / 0 / 7 across the next three), the 0xF33022 label
+table (mask, stride, size and the LAST entry, index 63), the ONE-byte difference
+between each pair of SWI7 veneers (53 bytes, offset 43 only, three times over),
+the four SWI7 slot lookups, the shape of prom_a 0xF86AC7, both values written to
+the layer byte (0x2540), the draw/erase pair at 0xF02FD9 / 0xF02FE3, and the two
+self-terminating 6-entry display-list pointer tables including their LAST
+entries. Exits non-zero if any row fails.
+
+⚠ It catches real errors — the banner first said "32 of the 41 references are in
+prom_a" when the sum is 39, and this script is what found it. Verified
+falsifiable: perturbing the last-entry string, the differing-byte offset and the
+prom_a count each produce a FAIL and a non-zero exit.
+
+Every bound it checks is derived from the ROM's own bytes, never from two typed
+constants — earlier drafts compared `0x3F` with `63`, recomputed `2C-1`, and
+compared a table's last entry with its own base twice over. All three are
+round-1 audit finding **F13**'s cannot-fail defect and all three were replaced
+with checks that read the image: the mask byte, the four mnemonics as the
+verified transcription spells them, and the last record's own length byte. Do
+not reintroduce them.
+
+Verified falsifiable a second time after the 0xF5BAB8 section was added:
+perturbing the T_F417F0 reference count, the `sla` operand and the last-record
+length each produce a FAIL and a non-zero exit.

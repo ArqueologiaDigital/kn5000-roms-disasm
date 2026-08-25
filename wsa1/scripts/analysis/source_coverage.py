@@ -15,6 +15,13 @@ remaining bytes.
 counts as converted while telling you nothing. Coverage is a floor on effort, never a claim
 about documentation quality -- for that, read notes/ and the routine headers.
 
+⚠⚠ AND FILLER IS NOT PROGRESS. Wave 3 converted 123,151 bytes of prom_c of which 118,298
+were a verified run of 0x0E pad emitted as .fill -- a 96% filler fraction that moved the
+headline from 4.3% to 27.7% while adding ~4.8 KB of actual content. The bytes are real and
+the .fill is checked rather than sampled, so it belongs in the source; but a single number
+that treats it as equal to decoded code is a number that flatters. So this script now
+reports SUBSTANTIVE and FILLER separately, and the substantive column is the one to quote.
+
 Run:  python3 scripts/analysis/source_coverage.py [--markdown]
 """
 import os
@@ -34,23 +41,37 @@ def measure(key):
               re.finditer(r'\.incbin\s+"[^"]+",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)', text))
     whole = re.findall(r'\.incbin\s+"[^"]+"\s*$', text, re.M)
     inc += SIZE * len(whole)
-    return SIZE - inc, inc, text.count(".incbin")
+    # .fill count, size, value  -- padding emitted wholesale, not decoded content
+    fill = 0
+    for m in re.finditer(r'\.fill\s+([0-9]+|0x[0-9A-Fa-f]+)\s*,\s*([0-9]+)', text):
+        n = int(m.group(1), 0)
+        fill += n * int(m.group(2), 0)
+    for m in re.finditer(r'\.fill\s+([0-9]+|0x[0-9A-Fa-f]+)\s*$', text, re.M):
+        fill += int(m.group(1), 0)
+    conv = SIZE - inc
+    return conv, inc, text.count(".incbin"), fill
 
 
 def main():
     md = "--markdown" in sys.argv
     rows = [(k, fn) + measure(k) for k, fn in IMAGES]
     total = sum(r[2] for r in rows)
+    total_fill = sum(r[5] for r in rows)
+    total_sub = total - total_fill
     if md:
-        print(f"**Converted: {total:,} of {SIZE*4:,} bytes ({100.0*total/(SIZE*4):.1f}%).**\n")
-        print("| source | image | converted | still `.incbin` | `.incbin` spans |")
-        print("|---|---|---:|---:|---:|")
-        for k, fn, conv, inc, n in rows:
-            print(f"| `prom_{k}/` | `{fn}` | {conv:,} | {inc:,} | {n} |")
+        print(f"**Converted: {total:,} of {SIZE*4:,} bytes ({100.0*total/(SIZE*4):.1f}%)** "
+              f"-- of which {total_sub:,} substantive ({100.0*total_sub/(SIZE*4):.1f}%) "
+              f"and {total_fill:,} verified filler.\n")
+        print("| source | image | substantive | filler | still `.incbin` | `.incbin` spans |")
+        print("|---|---|---:|---:|---:|---:|")
+        for k, fn, conv, inc, n, fill in rows:
+            print(f"| `prom_{k}/` | `{fn}` | {conv - fill:,} | {fill:,} | {inc:,} | {n} |")
     else:
-        for k, fn, conv, inc, n in rows:
-            print(f"  prom_{k}  {conv:8,} converted  {inc:8,} incbin  {n:4d} spans   ({100.0*conv/SIZE:5.1f}%)")
-        print(f"  TOTAL   {total:8,} of {SIZE*4:,}  ({100.0*total/(SIZE*4):.1f}%)")
+        for k, fn, conv, inc, n, fill in rows:
+            print(f"  prom_{k}  {conv - fill:8,} substantive  {fill:8,} filler  "
+                  f"{inc:8,} incbin  ({100.0*(conv-fill)/SIZE:5.1f}% / {100.0*conv/SIZE:5.1f}% incl. filler)")
+        print(f"  TOTAL   {total_sub:,} substantive + {total_fill:,} filler = {total:,} of {SIZE*4:,}")
+        print(f"          {100.0*total_sub/(SIZE*4):.1f}% substantive, {100.0*total/(SIZE*4):.1f}% incl. filler")
 
 
 if __name__ == "__main__":

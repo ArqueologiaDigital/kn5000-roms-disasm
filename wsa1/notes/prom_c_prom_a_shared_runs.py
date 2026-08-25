@@ -18,6 +18,18 @@ MODES
   --at C_ADDR A_ADDR      maximal identical run through this pair of addresses, extended
                           BOTH ways, printed with the first differing byte on each side
   --runs [--minrun N]     every maximal identical run of >= N bytes, longest first
+  --window C_ADDR A_ADDR LEN
+                          the two LEN-byte windows compared position by position: EVERY
+                          equal run inside them, the LONGEST of those runs, and the total
+                          number of equal bytes.  Use this, not --at, whenever the question
+                          is "how similar are these two routines as raw bytes"; --at only
+                          measures the ONE run that passes through the address you gave it,
+                          which for a pair of routines is usually the leading prologue and
+                          is not the longest.  Reporting a leading run as if it were the
+                          maximum understates byte similarity, and this tree shipped exactly
+                          that mistake once (Link_SendCmdE2_MemRead, "an identical run of
+                          only EIGHT bytes"; the leading run is 8, the longest is 23, and
+                          109 of 131 bytes are equal).
 
   Addresses are CPU addresses; both images are based at 0xF80000 in their own space.
 
@@ -58,6 +70,7 @@ def run_at(a, c, ao, co):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--at", nargs=2, metavar=("C_ADDR", "A_ADDR"))
+    ap.add_argument("--window", nargs=3, metavar=("C_ADDR", "A_ADDR", "LEN"))
     ap.add_argument("--runs", action="store_true")
     ap.add_argument("--minrun", type=int, default=32)
     ap.add_argument("--selftest", action="store_true")
@@ -82,6 +95,33 @@ def main():
         print(f"    bytes: {c[cstart:cstart + n].hex(' ')}")
         return 0
 
+    if o.window:
+        caddr = int(o.window[0], 0)
+        aaddr = int(o.window[1], 0)
+        ln = int(o.window[2], 0)
+        co = caddr - BASE
+        ao = aaddr - BASE
+        runs = []
+        i = 0
+        while i < ln:
+            if c[co + i] == a[ao + i]:
+                j = i
+                while j < ln and c[co + j] == a[ao + j]:
+                    j += 1
+                runs.append((i, j - i))
+                i = j
+            else:
+                i += 1
+        total = sum(n for _, n in runs)
+        print(f"  window: prom_c 0x{caddr:06X} vs prom_a 0x{aaddr:06X}, {ln} bytes, "
+              f"compared position by position (no realignment)")
+        print("  equal runs (offset,len): " + " ".join(f"({o_},{n})" for o_, n in runs))
+        print(f"  leading run: {runs[0][1] if runs and runs[0][0] == 0 else 0}")
+        print(f"  LONGEST equal run: {max((n for _, n in runs), default=0)} of {ln}")
+        print(f"  total equal bytes: {total} of {ln}"
+              f"  ({100.0 * total / ln:.0f}%)")
+        return 0
+
     if o.selftest:
         astart, cstart, n = run_at(a, c, 0xF8E6C9 - BASE, 0xF9A01F - BASE)
         ok = (n == 98 and BASE + astart == 0xF8E698 and BASE + cstart == 0xF99FEE)
@@ -89,6 +129,28 @@ def main():
               f"prom_a start 0x{BASE + astart:06X}, prom_c start 0x{BASE + cstart:06X}")
         print(f"  maximal (differs one byte before and one byte after): "
               f"{a[astart - 1] != c[cstart - 1]} / {a[astart + n] != c[cstart + n]}")
+        # --window's own check, on the pair whose figure this tree once got wrong:
+        # Link_SendCmdE2_MemRead (prom_c 0xF99A40) vs prom_a 0xF8E0FE, 0x83 bytes.
+        co = 0xF99A40 - BASE
+        ao = 0xF8E0FE - BASE
+        ln = 0x83
+        wruns = []
+        i = 0
+        while i < ln:
+            if c[co + i] == a[ao + i]:
+                j = i
+                while j < ln and c[co + j] == a[ao + j]:
+                    j += 1
+                wruns.append((i, j - i))
+                i = j
+            else:
+                i += 1
+        lead = wruns[0][1] if wruns and wruns[0][0] == 0 else 0
+        longest = max((n2 for _, n2 in wruns), default=0)
+        tot = sum(n2 for _, n2 in wruns)
+        print(f"  window 0xF99A40/0xF8E0FE/0x83: leading {lead}, longest {longest}, "
+              f"equal {tot} of {ln}")
+        ok = ok and lead == 8 and longest == 23 and tot == 109
         print("  SELFTEST " + ("PASS" if ok else "FAIL"))
         return 0 if ok else 1
 
