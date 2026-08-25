@@ -20,10 +20,31 @@
 ;
 ; STATUS: partially converted.  Converted so far, as real assembly:
 ;   0xF01800-0xF3E15B  129 spans of UI DISPLAY-LIST data (39,329 bytes) -- the
-;                      machine's screen text and layout, in records
-;   0xF31800-0xF32708  the display-list INTERPRETER, its handler tables, its
-;                      quantiser, its 29 value glyphs and 3 fixed bitmaps
+;                      machine's screen text and layout, in records.  Each record
+;                      is rendered with the field layout of the interpreter that
+;                      RUNS it; there are two, and they do not share a layout.
+;                      13 of the gaps between the spans (999 bytes) hold the
+;                      operand tables those records point at, and are decoded
+;                      here too -- including the 64 eight-character resonator
+;                      names at 0xF03241.
+;   0xF0E800-0xF0EA9E  the FIELD-BLINK ENGINE -- 16 labels: 11 routines, 4
+;                      dispatch arms reached only by `jp`, and a 12-entry
+;                      command table.  Blinks at 1.27 Hz; the whole clock chain
+;                      is re-derived by notes/prom_b_blink_rate.py.  The two
+;                      display-list record TEMPLATES it patches on the stack are
+;                      at 0xF78000, below.
+;   0xF31800-0xF32708  BOTH display-list interpreters, their handler tables, the
+;                      quantiser, 29 value glyphs and 3 fixed bitmaps
 ;   0xF40000-0xF44017  the THUNK TABLE -- the image's routine directory
+;   0xF55000-0xF5535A  nine parameter-edit primitives and table accessors, four
+;                      of them named by top-ranked thunk slots
+;   0xF5535B-0xF5553E  two more of the same family: IndexedParam_AdjustField and
+;                      IndexedParam_SetBit, which resolve their target through
+;                      IndexedTable_GetPtr and journal every change
+;   0xF5B8B6-0xF5BAB7  two selector dispatchers and their 48-entry tables
+;   0xF78000-0xF78028  the two interpreter-B record templates and the eight-space
+;                      blank the blink engine erases with
+;   0xF7D000-0xF7E2D7  a stub/veneer block and 32 tables of 32 routine pointers
 ; Everything else is still .incbin, so it builds byte-exact by construction and
 ; asserts nothing.  The gate (scripts/analysis/assert_byte_identical.py) must
 ; print PASS after every edit.
@@ -41,36 +62,55 @@ wsa1_prom_b:
 ;
 ; The WSA1 has no string table.  Every string it shows -- "SOUND EDIT",
 ; "TONE LAYER", "DSP EFFECT", "CONTROLLER", "AMPLITUDE" -- lives inside a
-; byte-coded DISPLAY LIST, executed by the interpreter at 0xF31A09 (converted
-; below, together with the whole argument for this decode).
+; byte-coded DISPLAY LIST, executed by one of TWO interpreters, both converted
+; below in 0xF31800-0xF32708.
 ;
-; RECORD:   +0  opcode, bounds-checked against 0x24
+; RECORD:   +0  opcode
 ;           +1  length of the WHOLE record in bytes; the loop advances by it
-;           +2  operands, and for the text opcodes a run of characters
+;           +2  operands, and for interpreter A's text opcodes a run of characters
 ;
-; Call sites pass BOTH ends -- `ld XIY,<start>` / `ld XIX,<end>` / `call
-; 0xF417F0` -- so a list is self-checking: walking its length bytes from <start>
-; must land exactly on <end>.  It does for the large majority of prom_b lists (see the
-; correction in notes/FINDINGS-ui-display-list.md: the '243 of 244' figure quoted here
-; until 2026-08-24 is not reproduced by the committed script), and most
-; opcode whose handler reads a fixed number of operands has exactly the matching
-; length byte in all ~4,400 records.  ONLY spans that survive that walk are
-; emitted as records here; the five that do not are left as .incbin and named in
-; notes/FINDINGS-ui-display-list.md.
+;   interpreter A  0xF31A09, opcode bound 0x24, handler table 0xF31D21 (36 slots)
+;                  draws what the RECORD says: fixed text, boxes, bitmaps.
+;   interpreter B  0xF31AF0, opcode bound 0x0F, handler table 0xF31DB1 (15 slots)
+;                  draws what a VARIABLE says: every one of its handlers opens by
+;                  extracting a bit-field from a 16-bit RAM address named in the
+;                  record (+2 address, +4 mask, +5 shift).
 ;
-; Each record below is emitted as: the two header bytes, then the operand fields
-; the record's handler actually reads (at its width -- .short is 16-bit here,
-; .word would be 32), then the characters.  Payload bytes below 0x20 are emitted
-; as .byte: they are almost certainly custom glyphs in the same font, but that is
-; NOT established -- only that the text handler hands them to the character
-; service alongside the ASCII.
+; The two share the (opcode, length) header and NOTHING else -- not the opcode
+; space, not the handler table, not the field layout.  A record is attributed to
+; an interpreter by the call site that reaches it: `ld XIY,<start>` /
+; `ld XIX,<end>` / `call 0xF417F0` (A) or `call 0xF417F4` (B).  Each record below
+; is rendered with THAT interpreter's field layout, and B records are marked
+; `B op NN` in their header comment.
+;
+; ⚠ CORRECTED 2026-08-24.  Until this pass every record here was rendered with
+; interpreter A's layout, including the 494 that only interpreter B ever runs.
+; That is exactly where the "341 records violate the length rule" figure came
+; from: judged by A's layout, 353 of B's 494 records disagree -- because they are
+; not A's records.  Judged by the OWNING interpreter, the exception count is
+; ZERO on both sides: 3,603 A records and 494 B records, first and last of each
+; class tested.  Reproduce with
+;     python3 notes/prom_b_dl_length_audit.py --edges
+; Its implied lengths are read off each handler's own instructions, one line per
+; handler, in that script's docstring.
+;
+; FRAMING, per call site and UN-MERGED: 243 of 244 interpreter-A sites and 158 of
+; 162 interpreter-B sites walk their length bytes exactly onto the end address
+; the caller passes.  The five that do not are all genuine instruction sequences,
+; not artefacts of the byte-level call-site scan; they are dissected in
+; notes/FINDINGS-ui-display-list-interpreter-b.md.
+;
+; ⚠ The span list below is the MERGED one, which is why it holds 4,011 records
+; and the un-merged walk finds 4,097.  Merging joins a good site to a bad one at
+; 0xF286F9-0xF28750, and the four good records at 0xF286F9 are lost with it; they
+; are still .incbin.
 ;
 ; `DL_<addr>` labels mark the addresses call sites actually pass as a list start.
-; Generated by scripts/analysis/prom_b_display_lists.py.
+; Generated by notes/gen_prom_b_display_lists_v2.py.
 ;
 
 ; ------------------------------------------------------------------
-; 0xF01800-0xF01919 -- 35 display-list records, 282 bytes
+; 0xF01800-0xF01919 -- 35 display-list records, 282 bytes -- interpreter A
 ;   entered at: 0xF01800, 0xF01873
 ;   ends used:  0xF01873, 0xF0191A
 ; ------------------------------------------------------------------
@@ -198,7 +238,7 @@ DL_F01873:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00191A, 0x000558
 
 ; ------------------------------------------------------------------
-; 0xF01E72-0xF02294 -- 111 display-list records, 1059 bytes
+; 0xF01E72-0xF02294 -- 111 display-list records, 1059 bytes -- interpreter A
 ;   entered at: 0xF01E72, 0xF01F96, 0xF02064, 0xF020AA, 0xF021E4
 ;   ends used:  0xF01F96, 0xF0203E, 0xF02064, 0xF020AA, 0xF021E4, 0xF02295
 ; ------------------------------------------------------------------
@@ -671,7 +711,7 @@ DL_F021E4:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002295, 0x000062
 
 ; ------------------------------------------------------------------
-; 0xF022F7-0xF02F35 -- 335 display-list records, 3135 bytes
+; 0xF022F7-0xF02F35 -- 335 display-list records, 3135 bytes -- interpreter A
 ;   entered at: 0xF022F7, 0xF02329, 0xF0245F, 0xF02469, 0xF02671, 0xF027AF, 0xF02942, 0xF02A46, 0xF02B47, 0xF02D08, 0xF02DFB, 0xF02EF9, 0xF02F22
 ;   ends used:  0xF02329, 0xF0245F, 0xF02469, 0xF02671, 0xF027AF, 0xF02942, 0xF02A46, 0xF02B47, 0xF02D08, 0xF02DFB, 0xF02F22, 0xF02F2C, 0xF02F36
 ; ------------------------------------------------------------------
@@ -2095,7 +2135,7 @@ DL_F02F22:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002F36, 0x00007C
 
 ; ------------------------------------------------------------------
-; 0xF02FB2-0xF02FD8 -- 4 display-list records, 39 bytes
+; 0xF02FB2-0xF02FD8 -- 4 display-list records, 39 bytes -- interpreter A
 ;   entered at: 0xF02FB2
 ;   ends used:  0xF02FD9
 ; ------------------------------------------------------------------
@@ -2124,7 +2164,7 @@ DL_F02FB2:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002FD9, 0x00000A
 
 ; ------------------------------------------------------------------
-; 0xF02FE3-0xF02FF6 -- 2 display-list records, 20 bytes
+; 0xF02FE3-0xF02FF6 -- 2 display-list records, 20 bytes -- interpreter A
 ;   entered at: 0xF02FE3, 0xF02FED
 ;   ends used:  0xF02FED, 0xF02FF7
 ; ------------------------------------------------------------------
@@ -2145,110 +2185,137 @@ DL_F02FED:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002FF7, 0x000033
 
 ; ------------------------------------------------------------------
-; 0xF0302A-0xF03106 -- 15 display-list records, 221 bytes
+; 0xF0302A-0xF03106 -- 15 display-list records, 221 bytes -- interpreter B
 ;   entered at: 0xF0302A, 0xF0306E, 0xF030E6
 ;   ends used:  0xF0304C, 0xF030AA, 0xF03107
 ; ------------------------------------------------------------------
 DL_F0302A:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x2808
-	.ascii "?"
-	.byte 0x00, 0x17	; character codes below 0x20
-	.ascii "A2"
-	.byte 0xF0, 0x00, 0x08, 0x00, 0xC1, 0x00	; character codes below 0x20
-	.ascii "T"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x2809
-	.ascii "?"
-	.byte 0x00, 0x17	; character codes below 0x20
-	.ascii "A2"
-	.byte 0xF0, 0x00, 0x08, 0x00, 0xC1, 0x00	; character codes below 0x20
-	.ascii "y"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x280A
-	.ascii "?"
-	.byte 0x00, 0x17	; character codes below 0x20
-	.ascii "A2"
-	.byte 0xF0, 0x00, 0x08, 0x00, 0xC1, 0x00, 0x9E, 0x00	; character codes below 0x20
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x280B
-	.ascii "?"
-	.byte 0x00, 0x17	; character codes below 0x20
-	.ascii "A2"
-	.byte 0xF0, 0x00, 0x08, 0x00, 0xC1, 0x00, 0xC3, 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2808	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F03241	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x00C1	; +0x0D -> (0x2530)
+	.short 0x0054	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2809	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F03241	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x00C1	; +0x0D -> (0x2530)
+	.short 0x0079	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x280A	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F03241	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x00C1	; +0x0D -> (0x2530)
+	.short 0x009E	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x280B	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F03241	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x00C1	; +0x0D -> (0x2530)
+	.short 0x00C3	; +0x0F -> (0x2532)
 DL_F0306E:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x000F
-	.short 0xBD06
-	.short 0xF04C
-	.byte 0x00, 0x01, 0x00, 0x97, 0x0B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF006
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0x99, 0x0B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AF
-	.short 0x000F
-	.short 0xBD06
-	.short 0xF04C
-	.byte 0x00, 0x01, 0x00, 0x5F, 0x11	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0x0006
-	.short 0x0023
-	.byte 0x00, 0x0D, 0x00, 0x61, 0x11	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B0
-	.short 0x000F
-	.short 0xBD06
-	.short 0xF04C
-	.byte 0x00, 0x01, 0x00, 0x27, 0x17	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0x1006
-	.short 0x0023
-	.byte 0x00, 0x0D, 0x00, 0x29, 0x17	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x000F
-	.short 0xBD06
-	.short 0xF04C
-	.byte 0x00, 0x01, 0x00, 0xEF, 0x1C	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0x2006
-	.short 0x0023
-	.byte 0x00, 0x0D, 0x00, 0xF1, 0x1C	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0B97	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x0B99	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x115F	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00002300	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1161	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1727	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00002310	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1729	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1CEF	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00002320	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1CF1	; +0x0D -> IX
 DL_F030E6:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0xC905
-	.short 0xF031
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0xF105
-	.short 0xF031
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0x1905
-	.short 0xF032
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F031C9	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F031F1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F03219	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF03107-0xF03168: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003107, 0x000062
 
 ; ------------------------------------------------------------------
-; 0xF03169-0xF03172 -- 1 display-list records, 10 bytes
+; 0xF03169-0xF03172 -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF03169
 ;   ends used:  0xF03173
 ; ------------------------------------------------------------------
@@ -2263,7 +2330,7 @@ DL_F03169:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003173, 0x00004C
 
 ; ------------------------------------------------------------------
-; 0xF031BF-0xF031C8 -- 1 display-list records, 10 bytes
+; 0xF031BF-0xF031C8 -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF031BF
 ;   ends used:  0xF031C9
 ; ------------------------------------------------------------------
@@ -2274,156 +2341,322 @@ DL_F031BF:
 	.short 0x00FB
 	.short 0x00CE
 
-; --- 0xF031C9-0xF03440: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0031C9, 0x000278
+; ==================================================================
+; 0xF031C9-0xF03440 -- display-list OPERAND TABLES (632 bytes, 4 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F031C9 -- 5 entries of 8 bytes
+; Referenced by: display-list record 0xF030E6
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           5 entries is the EXTENT (40 bytes / 8), not the (mask >> shift) + 1
+;           = 16 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F031C9:
+	.short 0x000F, 0x0048, 0x0029, 0x0055	; [0]
+	.short 0x000F, 0x0048, 0x0029, 0x0055	; [1]
+	.short 0x000F, 0x006D, 0x0029, 0x007A	; [2]
+	.short 0x000F, 0x0092, 0x0029, 0x009F	; [3]
+	.short 0x000F, 0x00B7, 0x0029, 0x00C4	; [4]
+; ------------------------------------------------------------------
+; DLTable_F031F1 -- 5 entries of 8 bytes
+; Referenced by: display-list record 0xF030F1
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           5 entries is the EXTENT (40 bytes / 8), not the (mask >> shift) + 1
+;           = 16 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F031F1:
+	.short 0x0036, 0x0046, 0x00B3, 0x0057	; [0]
+	.short 0x0036, 0x0046, 0x00B3, 0x0057	; [1]
+	.short 0x0036, 0x006B, 0x00B3, 0x007C	; [2]
+	.short 0x0036, 0x0090, 0x00B3, 0x00A1	; [3]
+	.short 0x0036, 0x00B5, 0x00B3, 0x00C6	; [4]
+; ------------------------------------------------------------------
+; DLTable_F03219 -- 5 entries of 8 bytes
+; Referenced by: display-list record 0xF030FC
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           5 entries is the EXTENT (40 bytes / 8), not the (mask >> shift) + 1
+;           = 16 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F03219:
+	.short 0x00BB, 0x0041, 0x00F8, 0x005C	; [0]
+	.short 0x00BB, 0x0041, 0x00F8, 0x005C	; [1]
+	.short 0x00BB, 0x0066, 0x00F8, 0x0081	; [2]
+	.short 0x00BB, 0x008B, 0x00F8, 0x00A6	; [3]
+	.short 0x00BB, 0x00B0, 0x00F8, 0x00CB	; [4]
+; ------------------------------------------------------------------
+; DLTable_F03241 -- 64 entries of 8 characters
+; Referenced by: display-list records 0xF0302A, 0xF0303B, 0xF0304C, 0xF0305D
+; Evidence: the record's +7 pointer lands here and its +0x0B word is 8, so the
+;           entries are 8 bytes wide (handler 0xF31B21/0xF31B39 loads the
+;           extracted bit-field into HL as the index).
+;           64 entries is the EXTENT (512 bytes / 8), not the (mask >> shift) + 1
+;           = 64 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F03241:
+	.ascii "ORIGINAL"	; [0]
+	.ascii " STRING "	; [1]
+	.ascii "CYLINDER"	; [2]
+	.ascii "  CONE  "	; [3]
+	.ascii " FLARE  "	; [4]
+	.ascii "PLATE L "	; [5]
+	.ascii "PLATE H "	; [6]
+	.ascii " MEMB L "	; [7]
+	.ascii " MEMB H "	; [8]
+	.ascii "THROUGH "	; [9]
+	.ascii " MELLOW "	; [10]
+	.ascii "  MUTE  "	; [11]
+	.ascii " BRIGHT "	; [12]
+	.ascii "  MOVE  "	; [13]
+	.ascii " RANDOM "	; [14]
+	.ascii " OCTAVE "	; [15]
+	.ascii "HARMONIC"	; [16]
+	.ascii " METAL  "	; [17]
+	.ascii " BOTTLE "	; [18]
+	.ascii " MELLOW "	; [19]
+	.ascii "  MUTE  "	; [20]
+	.ascii " BRIGHT "	; [21]
+	.ascii "  MOVE  "	; [22]
+	.ascii " RANDOM "	; [23]
+	.ascii " OCTAVE "	; [24]
+	.ascii "  SOFT  "	; [25]
+	.ascii " MELLOW "	; [26]
+	.ascii "  MUTE  "	; [27]
+	.ascii " BRIGHT "	; [28]
+	.ascii "  MOVE  "	; [29]
+	.ascii " RANDOM "	; [30]
+	.ascii " OCTAVE "	; [31]
+	.ascii " MELLOW "	; [32]
+	.ascii "  MUTE  "	; [33]
+	.ascii " BRIGHT "	; [34]
+	.ascii "  MOVE  "	; [35]
+	.ascii " RANDOM "	; [36]
+	.ascii " OCTAVE "	; [37]
+	.ascii " WOOD L "	; [38]
+	.ascii " WOOD H "	; [39]
+	.ascii "METAL L "	; [40]
+	.ascii "METAL H "	; [41]
+	.ascii " MUTE L "	; [42]
+	.ascii " MUTE H "	; [43]
+	.ascii "BRIGHT L"	; [44]
+	.ascii "BRIGHT H"	; [45]
+	.ascii " MOVE L "	; [46]
+	.ascii " MOVE H "	; [47]
+	.ascii "RANDOM L"	; [48]
+	.ascii "RANDOM H"	; [49]
+	.ascii "SMALL L "	; [50]
+	.ascii "SMALL H "	; [51]
+	.ascii "LARGE L "	; [52]
+	.ascii "LARGE H "	; [53]
+	.ascii " MUTE L "	; [54]
+	.ascii " MUTE H "	; [55]
+	.ascii " SLAP L "	; [56]
+	.ascii " SLAP H "	; [57]
+	.ascii " MOVE L "	; [58]
+	.ascii " MOVE H "	; [59]
+	.ascii "RANDOM L"	; [60]
+	.ascii "RANDOM H"	; [61]
+	.ascii "SPECIAL1"	; [62]
+	.ascii "SPECIAL2"	; [63]
 
 ; ------------------------------------------------------------------
-; 0xF03441-0xF03477 -- 5 display-list records, 55 bytes
+; 0xF03441-0xF03477 -- 5 display-list records, 55 bytes -- interpreter B
 ;   entered at: 0xF03441, 0xF03455
 ;   ends used:  0xF0346E, 0xF03478
 ; ------------------------------------------------------------------
 DL_F03441:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x003F
-	.short 0x3620
-	.short 0x0212
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x000F
-	.short 0x3920
-	.short 0x0112
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1236	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1239	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F03455:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x0780
-	.short 0x7820
-	.short 0xF034
-	.byte 0x00, 0x04, 0x00, 0xE6, 0x16	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x8E20
-	.short 0x0314
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x0E20
-	.short 0x031C
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F03478	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x16E6	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x148E	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1C0E	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 
 ; --- 0xF03478-0xF03497: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003478, 0x000020
 
 ; ------------------------------------------------------------------
-; 0xF03498-0xF034C5 -- 4 display-list records, 46 bytes
+; 0xF03498-0xF034C5 -- 4 display-list records, 46 bytes -- interpreter B
 ;   entered at: 0xF03498, 0xF034AD
 ;   ends used:  0xF034C6
 ; ------------------------------------------------------------------
 DL_F03498:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x00FF
-	.short 0x9D20
-	.short 0x0218
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x9620
-	.short 0x0211
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x189D	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1196	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F034AD:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x9E20
-	.short 0x0213
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x0780
-	.short 0xD220
-	.short 0xF034
-	.byte 0x00, 0x03, 0x00, 0xCD, 0x15	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x139E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F034D2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x15CD	; +0x0D -> IX
 
 ; --- 0xF034C6-0xF034DD: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0034C6, 0x000018
 
 ; ------------------------------------------------------------------
-; 0xF034DE-0xF0355C -- 11 display-list records, 127 bytes
+; 0xF034DE-0xF0355C -- 11 display-list records, 127 bytes -- interpreter B
 ;   entered at: 0xF034DE, 0xF034E8, 0xF03522
 ;   ends used:  0xF03502, 0xF0353C, 0xF0355D
 ; ------------------------------------------------------------------
 DL_F034DE:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x6620
-	.short 0x0318
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1866	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F034E8:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B0
-	.short 0x00FF
-	.short 0x6B20
-	.short 0x0318
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x0780
-	.short 0xD820
-	.short 0xF034
-	.byte 0x00, 0x03, 0x00, 0x7A, 0x18	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x00FF
-	.short 0x7020
-	.short 0x0218
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x00FF
-	.short 0x7420
-	.short 0x0318
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x007F
-	.short 0x3E20
-	.short 0x031D
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x186B	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x187A	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1870	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1874	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D3E	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F03522:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x00FF
-	.short 0x4320
-	.short 0x031D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x0780
-	.short 0xD820
-	.short 0xF034
-	.byte 0x00, 0x03, 0x00, 0x52, 0x1D	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x00FF
-	.short 0x4820
-	.short 0x021D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x00FF
-	.short 0x4C20
-	.short 0x031D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000127A6
-	.short 0xAA05
-	.short 0xF035
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D43	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1D52	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D48	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D4C	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F035AA	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF0355D-0xF03580: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00355D, 0x000024
 
 ; ------------------------------------------------------------------
-; 0xF03581-0xF035A9 -- 4 display-list records, 41 bytes
+; 0xF03581-0xF035A9 -- 4 display-list records, 41 bytes -- interpreter A (3 records) and B (1)
 ;   entered at: 0xF03581, 0xF03595, 0xF0359F
 ;   ends used:  0xF03595, 0xF0359F, 0xF035AA
 ; ------------------------------------------------------------------
@@ -2445,142 +2678,209 @@ DL_F03595:
 	.short 0x0131
 	.short 0x00E4
 DL_F0359F:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000127A6
-	.short 0xBA05
-	.short 0xF035
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F035BA	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF035AA-0xF035C9: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0035AA, 0x000020
+; ==================================================================
+; 0xF035AA-0xF035C9 -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F035AA -- 2 entries of 8 bytes
+; Referenced by: display-list records 0xF03552, 0xF0360C, 0xF036B7
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F035AA:
+	.short 0x0029, 0x0093, 0x0133, 0x00AE	; [0]
+	.short 0x0029, 0x00B2, 0x0133, 0x00CD	; [1]
+; ------------------------------------------------------------------
+; DLTable_F035BA -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF0359F
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F035BA:
+	.short 0x0029, 0x00B2, 0x0133, 0x00CD	; [0]
+	.short 0x0029, 0x0093, 0x0133, 0x00AE	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF035CA-0xF03616 -- 7 display-list records, 77 bytes
+; 0xF035CA-0xF03616 -- 7 display-list records, 77 bytes -- interpreter B
 ;   entered at: 0xF035CA
 ;   ends used:  0xF03617
 ; ------------------------------------------------------------------
 DL_F035CA:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x00FF
-	.short 0x6620
-	.short 0x0218
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x00FF
-	.short 0x6C20
-	.short 0x0218
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x00FF
-	.short 0x5120
-	.short 0x031D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x00FF
-	.short 0x3E20
-	.short 0x021D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x00FF
-	.short 0x4420
-	.short 0x021D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x00FF
-	.short 0x4B20
-	.short 0x021D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000127A6
-	.short 0xAA05
-	.short 0xF035
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1866	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x186C	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D51	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D3E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D44	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D4B	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F035AA	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF03617-0xF03632: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003617, 0x00001C
 
 ; ------------------------------------------------------------------
-; 0xF03633-0xF036C1 -- 11 display-list records, 143 bytes
+; 0xF03633-0xF036C1 -- 11 display-list records, 143 bytes -- interpreter B
 ;   entered at: 0xF03633, 0xF036A3
 ;   ends used:  0xF036C2
 ; ------------------------------------------------------------------
 DL_F03633:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x00FF
-	.short 0x6B20
-	.short 0x0218
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x70, 0x18	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x75, 0x18	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x7A, 0x18	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B0
-	.short 0x00FF
-	.short 0x4320
-	.short 0x021D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x48, 0x1D	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x4D, 0x1D	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AF
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x52, 0x1D	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x186B	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1870	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1875	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x187A	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D43	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1D48	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1D4D	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1D52	; +0x0D -> IX
 DL_F036A3:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x0780
-	.short 0x6720
-	.short 0x0118
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x0780
-	.short 0x3F20
-	.short 0x011D
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000127A6
-	.short 0xAA05
-	.short 0xF035
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1867	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1D3F	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F035AA	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF036C2-0xF03891: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0036C2, 0x0001D0
 
 ; ------------------------------------------------------------------
-; 0xF03892-0xF039EC -- 41 display-list records, 347 bytes
+; 0xF03892-0xF039EC -- 41 display-list records, 347 bytes -- interpreter A
 ;   entered at: 0xF03892, 0xF039A9, 0xF039D9
 ;   ends used:  0xF03943, 0xF039A9, 0xF039D9, 0xF039E3, 0xF039ED
 ; ------------------------------------------------------------------
@@ -2743,7 +3043,7 @@ DL_F039D9:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0039ED, 0x0002A8
 
 ; ------------------------------------------------------------------
-; 0xF03C95-0xF03D49 -- 18 display-list records, 181 bytes
+; 0xF03C95-0xF03D49 -- 18 display-list records, 181 bytes -- interpreter A
 ;   entered at: 0xF03C95
 ;   ends used:  0xF03D4A
 ; ------------------------------------------------------------------
@@ -2836,7 +3136,7 @@ DL_F03C95:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003D4A, 0x00001E
 
 ; ------------------------------------------------------------------
-; 0xF03D68-0xF03F76 -- 58 display-list records, 527 bytes
+; 0xF03D68-0xF03F76 -- 58 display-list records, 527 bytes -- interpreter A
 ;   entered at: 0xF03D68, 0xF03F31
 ;   ends used:  0xF03F31, 0xF03F77
 ; ------------------------------------------------------------------
@@ -3087,7 +3387,7 @@ DL_F03F31:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003F77, 0x0000B7
 
 ; ------------------------------------------------------------------
-; 0xF0402E-0xF04041 -- 2 display-list records, 20 bytes
+; 0xF0402E-0xF04041 -- 2 display-list records, 20 bytes -- interpreter A
 ;   entered at: 0xF0402E, 0xF04038
 ;   ends used:  0xF04038, 0xF04042
 ; ------------------------------------------------------------------
@@ -3108,7 +3408,7 @@ DL_F04038:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004042, 0x00013C
 
 ; ------------------------------------------------------------------
-; 0xF0417E-0xF04573 -- 115 display-list records, 1014 bytes
+; 0xF0417E-0xF04573 -- 115 display-list records, 1014 bytes -- interpreter A
 ;   entered at: 0xF0417E, 0xF0426B, 0xF04344, 0xF04358, 0xF04415, 0xF04560
 ;   ends used:  0xF0426B, 0xF04323, 0xF04344, 0xF04358, 0xF04370, 0xF04415, 0xF04560, 0xF04574
 ; ------------------------------------------------------------------
@@ -3583,7 +3883,7 @@ DL_F04560:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004574, 0x0000FE
 
 ; ------------------------------------------------------------------
-; 0xF04672-0xF04CBC -- 172 display-list records, 1611 bytes
+; 0xF04672-0xF04CBC -- 172 display-list records, 1611 bytes -- interpreter A
 ;   entered at: 0xF04672, 0xF0467D, 0xF047CA, 0xF047DF, 0xF047F3, 0xF04889, 0xF0489D, 0xF048B2, 0xF049BC, 0xF049D3, 0xF049DD, 0xF049F3, 0xF049FD, 0xF04B1F, 0xF04B6C, 0xF04CA9
 ;   ends used:  0xF0467D, 0xF047CA, 0xF047DF, 0xF047F3, 0xF04889, 0xF0489D, 0xF048B2, 0xF049BC, 0xF049D3, 0xF049E7, 0xF049F3, 0xF049FD, 0xF04B1F, 0xF04B6C, 0xF04CA9, 0xF04CBD
 ; ------------------------------------------------------------------
@@ -4292,11 +4592,66 @@ DL_F04CA9:
 	.short 0x00CE
 	.short 0x00E9
 
-; --- 0xF04CBD-0xF04CDD: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004CBD, 0x000021
+; ==================================================================
+; 0xF04CBD-0xF04CDD -- display-list OPERAND TABLES (33 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F04CBD -- 25 entries of 1 characters
+; Referenced by: display-list records 0xF0306E, 0xF0308C, 0xF030AA, 0xF030C8, 0xF33549, 0xF33B09, 0xF33B27, 0xF33B45, 0xF33B63
+; Evidence: the record's +7 pointer lands here and its +0x0B word is 1, so the
+;           entries are 1 bytes wide (handler 0xF31B21/0xF31B39 loads the
+;           extracted bit-field into HL as the index).
+;           25 entries is the EXTENT (25 bytes / 1), not the (mask >> shift) + 1
+;           = 128 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F04CBD:
+	.ascii "A"	; [0]
+	.ascii "B"	; [1]
+	.ascii "C"	; [2]
+	.ascii "D"	; [3]
+	.ascii "E"	; [4]
+	.ascii "F"	; [5]
+	.ascii "G"	; [6]
+	.ascii "H"	; [7]
+	.ascii "I"	; [8]
+	.ascii "J"	; [9]
+	.ascii "K"	; [10]
+	.ascii "L"	; [11]
+	.ascii "M"	; [12]
+	.ascii "N"	; [13]
+	.ascii "O"	; [14]
+	.ascii "P"	; [15]
+	.ascii "Q"	; [16]
+	.ascii "R"	; [17]
+	.ascii "S"	; [18]
+	.ascii "U"	; [19]
+	.ascii "V"	; [20]
+	.ascii "W"	; [21]
+	.ascii "X"	; [22]
+	.ascii "Y"	; [23]
+	.ascii "Z"	; [24]
+; ------------------------------------------------------------------
+; DLTable_F04CD6 -- 2 entries of 4 characters
+; Referenced by: display-list record 0xF04D85
+; Evidence: the record's +7 pointer lands here and its +0x0B word is 4, so the
+;           entries are 4 bytes wide (handler 0xF31B21/0xF31B39 loads the
+;           extracted bit-field into HL as the index).
+;           2 entries is the EXTENT (8 bytes / 4), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F04CD6:
+	.ascii "LOW "	; [0]
+	.ascii "HIGH"	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF04CDE-0xF04CE7 -- 1 display-list records, 10 bytes
+; 0xF04CDE-0xF04CE7 -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF04CDE
 ;   ends used:  0xF04CE8
 ; ------------------------------------------------------------------
@@ -4311,208 +4666,263 @@ DL_F04CDE:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004CE8, 0x00005B
 
 ; ------------------------------------------------------------------
-; 0xF04D43-0xF04DA2 -- 7 display-list records, 96 bytes
+; 0xF04D43-0xF04DA2 -- 7 display-list records, 96 bytes -- interpreter B
 ;   entered at: 0xF04D43, 0xF04D85
 ;   ends used:  0xF04DA3
 ; ------------------------------------------------------------------
 DL_F04D43:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x05E0
-	.short 0x9820
-	.short 0x0122
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x003F
-	.short 0x9420
-	.short 0x0222
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0xF820
-	.short 0xF05C
-	.byte 0x00, 0x05, 0x00, 0x89, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x0007
-	.short 0xB720
-	.short 0xF04D
-	.byte 0x00, 0x02, 0x00, 0x8F, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0xF820
-	.short 0xF05C
-	.byte 0x00, 0x05, 0x00, 0xA5, 0x22	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2298	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2294	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05CF8	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x2289	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04DB7	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x228F	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05CF8	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x22A5	; +0x0D -> IX
 DL_F04D85:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x0780
-	.short 0xD620
-	.short 0xF04C
-	.byte 0x00, 0x04, 0x00, 0xA0, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x007F
-	.short 0xD520
-	.short 0xF04D
-	.byte 0x00, 0x03, 0x00, 0xAA, 0x22	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04CD6	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x22A0	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04DD5	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22AA	; +0x0D -> IX
 
 ; --- 0xF04DA3-0xF04DFE: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004DA3, 0x00005C
 
 ; ------------------------------------------------------------------
-; 0xF04DFF-0xF04E31 -- 4 display-list records, 51 bytes
+; 0xF04DFF-0xF04E31 -- 4 display-list records, 51 bytes -- interpreter B
 ;   entered at: 0xF04DFF
 ;   ends used:  0xF04E32
 ; ------------------------------------------------------------------
 DL_F04DFF:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x05E0
-	.short 0xA220
-	.short 0x0122
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x003F
-	.short 0x9E20
-	.short 0x0222
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0xF820
-	.short 0xF05C
-	.byte 0x00, 0x05, 0x00, 0x92, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x0007
-	.short 0xC320
-	.short 0xF04D
-	.byte 0x00, 0x03, 0x00, 0x98, 0x22	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A2	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x229E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05CF8	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x2292	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04DC3	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x2298	; +0x0D -> IX
 
 ; --- 0xF04E32-0xF04E41: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004E32, 0x000010
 
 ; ------------------------------------------------------------------
-; 0xF04E42-0xF04E92 -- 6 display-list records, 81 bytes
+; 0xF04E42-0xF04E92 -- 6 display-list records, 81 bytes -- interpreter B
 ;   entered at: 0xF04E42
 ;   ends used:  0xF04E93
 ; ------------------------------------------------------------------
 DL_F04E42:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x05E0
-	.short 0xA720
-	.short 0x0122
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x003F
-	.short 0xA320
-	.short 0x0222
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0xF820
-	.short 0xF05C
-	.byte 0x00, 0x05, 0x00, 0x8C, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x0007
-	.short 0xB720
-	.short 0xF04D
-	.byte 0x00, 0x02, 0x00, 0x92, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0xF820
-	.short 0xF05C
-	.byte 0x00, 0x05, 0x00, 0x98, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x0007
-	.short 0xB720
-	.short 0xF04D
-	.byte 0x00, 0x02, 0x00, 0x9E, 0x22	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A7	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A3	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05CF8	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x228C	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04DB7	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x2292	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05CF8	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x2298	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04DB7	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x229E	; +0x0D -> IX
 
 ; --- 0xF04E93-0xF04EAA: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004E93, 0x000018
 
 ; ------------------------------------------------------------------
-; 0xF04EAB-0xF04F1F -- 11 display-list records, 117 bytes
+; 0xF04EAB-0xF04F1F -- 11 display-list records, 117 bytes -- interpreter B
 ;   entered at: 0xF04EAB
 ;   ends used:  0xF04F20
 ; ------------------------------------------------------------------
 DL_F04EAB:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x00FF
-	.short 0xE220
-	.short 0x031D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B0
-	.short 0x00FF
-	.short 0xEC20
-	.short 0x031D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x00FF
-	.short 0xF720
-	.short 0x031D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x6120
-	.short 0x0322
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x00FF
-	.short 0x6520
-	.short 0x0322
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x007F
-	.short 0x6A20
-	.short 0x0322
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x00FF
-	.short 0x6F20
-	.short 0x0322
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x007F
-	.short 0x7420
-	.short 0x0322
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x00FF
-	.short 0x7920
-	.short 0x0322
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AF
-	.short 0x007F
-	.short 0x7F20
-	.short 0x0322
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000127A6
-	.short 0x2205
-	.short 0xF04F
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1DE2	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1DEC	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1DF7	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2261	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2265	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x226A	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x226F	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2274	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2279	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x227F	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F04F22	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF04F20-0xF04F31: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004F20, 0x000012
 
 ; ------------------------------------------------------------------
-; 0xF04F32-0xF04F45 -- 2 display-list records, 20 bytes
+; 0xF04F32-0xF04F45 -- 2 display-list records, 20 bytes -- interpreter A
 ;   entered at: 0xF04F32
 ;   ends used:  0xF04F46
 ; ------------------------------------------------------------------
@@ -4532,338 +4942,433 @@ DL_F04F32:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004F46, 0x00002C
 
 ; ------------------------------------------------------------------
-; 0xF04F72-0xF04FFC -- 13 display-list records, 139 bytes
+; 0xF04F72-0xF04FFC -- 13 display-list records, 139 bytes -- interpreter B
 ;   entered at: 0xF04F72
 ;   ends used:  0xF04FFD
 ; ------------------------------------------------------------------
 DL_F04F72:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x5120
-	.short 0x030D
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x5120
-	.short 0x0312
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x7920
-	.short 0x0317
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0x7920
-	.short 0x031C
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x00FF
-	.short 0x5720
-	.short 0x020D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x00FF
-	.short 0x5720
-	.short 0x0212
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x00FF
-	.short 0x7F20
-	.short 0x0217
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x00FF
-	.short 0x7F20
-	.short 0x021C
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AF
-	.short 0x05E0
-	.short 0x5D20
-	.short 0x020D
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B0
-	.short 0x05E0
-	.short 0x5D20
-	.short 0x0212
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x05E0
-	.short 0x8520
-	.short 0x0217
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B2
-	.short 0x05E0
-	.short 0x8520
-	.short 0x021C
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0x3B05
-	.short 0xF050
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D51	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1251	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1779	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1C79	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D57	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1257	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x177F	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1C7F	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D5D	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x125D	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1785	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1C85	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F0503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF04FFD-0xF05062: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004FFD, 0x000066
 
 ; ------------------------------------------------------------------
-; 0xF05063-0xF0509A -- 4 display-list records, 56 bytes
+; 0xF05063-0xF0509A -- 4 display-list records, 56 bytes -- interpreter B
 ;   entered at: 0xF05063
 ;   ends used:  0xF0509B
 ; ------------------------------------------------------------------
 DL_F05063:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x00FF
-	.short 0x9320
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x98, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x9D, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0xA2, 0x22	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2293	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x2298	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x229D	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22A2	; +0x0D -> IX
 
 ; --- 0xF0509B-0xF050AA: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00509B, 0x000010
 
 ; ------------------------------------------------------------------
-; 0xF050AB-0xF050F0 -- 7 display-list records, 70 bytes
+; 0xF050AB-0xF050F0 -- 7 display-list records, 70 bytes -- interpreter B
 ;   entered at: 0xF050AB
 ;   ends used:  0xF050F1
 ; ------------------------------------------------------------------
 DL_F050AB:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x007F
-	.short 0x6120
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x6520
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x6A20
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x6F20
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0x7420
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x007F
-	.short 0x7920
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x007F
-	.short 0x7F20
-	.short 0x0322
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2261	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2265	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x226A	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x226F	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2274	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2279	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x227F	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 
 ; --- 0xF050F1-0xF0510C: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0050F1, 0x00001C
 
 ; ------------------------------------------------------------------
-; 0xF0510D-0xF05181 -- 9 display-list records, 117 bytes
+; 0xF0510D-0xF05181 -- 9 display-list records, 117 bytes -- interpreter B
 ;   entered at: 0xF0510D
 ;   ends used:  0xF05182
 ; ------------------------------------------------------------------
 DL_F0510D:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x00FF
-	.short 0xA620
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x00FF
-	.short 0xAC20
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x9C, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x97, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0xA1, 0x22	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x00FF
-	.short 0x8920
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x00FF
-	.short 0x8E20
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x00FF
-	.short 0x9220
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x27AF
-	.byte 0x03, 0x00, 0x17, 0x82	; character codes below 0x20
-	.ascii "Q"
-	.byte 0xF0, 0x00, 0x08, 0x00, 0x9D, 0x00	; character codes below 0x20
-	.ascii ">"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A6	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22AC	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x229C	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x2297	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22A1	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2289	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x228E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2292	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F05182	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x009D	; +0x0D -> (0x2530)
+	.short 0x003E	; +0x0F -> (0x2532)
 
 ; --- 0xF05182-0xF051C1: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005182, 0x000040
 
 ; ------------------------------------------------------------------
-; 0xF051C2-0xF05285 -- 16 display-list records, 196 bytes
+; 0xF051C2-0xF05285 -- 16 display-list records, 196 bytes -- interpreter B
 ;   entered at: 0xF051C2
 ;   ends used:  0xF05286
 ; ------------------------------------------------------------------
 DL_F051C2:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x00FF
-	.short 0x4E20
-	.short 0x020D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x00FF
-	.short 0x5220
-	.short 0x030D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x0007
-	.short 0xFE20
-	.short 0xF052
-	.byte 0x00, 0x04, 0x00, 0x58, 0x0D	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x00FF
-	.short 0x4E20
-	.short 0x0212
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x00FF
-	.short 0x5220
-	.short 0x0312
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x0007
-	.short 0xFE20
-	.short 0xF052
-	.byte 0x00, 0x04, 0x00, 0x58, 0x12	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x00FF
-	.short 0x4E20
-	.short 0x0217
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x00FF
-	.short 0x5220
-	.short 0x0317
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AF
-	.short 0x0007
-	.short 0xFE20
-	.short 0xF052
-	.byte 0x00, 0x04, 0x00, 0x58, 0x17	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B0
-	.short 0x00FF
-	.short 0x4E20
-	.short 0x021C
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x00FF
-	.short 0x5220
-	.short 0x031C
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B2
-	.short 0x0007
-	.short 0xFE20
-	.short 0xF052
-	.byte 0x00, 0x04, 0x00, 0x58, 0x1C	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B6
-	.short 0x000F
-	.short 0x8620
-	.short 0xF052
-	.byte 0x00, 0x08, 0x00, 0x5F, 0x17	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27B5
-	.short 0x000F
-	.short 0xA220
-	.short 0x011D
-	.byte 0x08	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000727A6
-	.short 0x1E05
-	.short 0xF053
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27B3
-	.short 0x4605
-	.short 0xF053
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D4E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D52	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F052FE	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x0D58	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x124E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1252	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F052FE	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x1258	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x174E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1752	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F052FE	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x1758	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1C4E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1C52	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F052FE	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x1C58	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B6	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05286	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x175F	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27B5	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1DA2	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count
+	.byte 0x08	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F0531E	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27B3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F05346	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF05286-0xF0535D: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005286, 0x0000D8
 
 ; ------------------------------------------------------------------
-; 0xF0535E-0xF05371 -- 2 display-list records, 20 bytes
+; 0xF0535E-0xF05371 -- 2 display-list records, 20 bytes -- interpreter A
 ;   entered at: 0xF0535E, 0xF05368
 ;   ends used:  0xF05368, 0xF05372
 ; ------------------------------------------------------------------
@@ -4884,55 +5389,68 @@ DL_F05368:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005372, 0x000044
 
 ; ------------------------------------------------------------------
-; 0xF053B6-0xF05406 -- 7 display-list records, 81 bytes
+; 0xF053B6-0xF05406 -- 7 display-list records, 81 bytes -- interpreter B
 ;   entered at: 0xF053B6, 0xF053E3
 ;   ends used:  0xF053CF, 0xF053FC, 0xF05407
 ; ------------------------------------------------------------------
 DL_F053B6:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x06C0
-	.short 0x6920
-	.short 0xF054
-	.byte 0x00, 0x03, 0x00, 0x94, 0x22	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x001F
-	.short 0x9820
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x9D20
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0xA120
-	.short 0x0322
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0xC0	; +0x04 AND mask
+	.byte 0x06	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F05469	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x2294	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2298	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x229D	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A1	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F053E3:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x003F
-	.short 0xA620
-	.short 0x0222
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x0780
-	.short 0xD220
-	.short 0xF034
-	.byte 0x00, 0x03, 0x00, 0xAB, 0x22	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000727A6
-	.short 0x7505
-	.short 0xF054
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A6	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F034D2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22AB	; +0x0D -> IX
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F05475	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF05407-0xF0549C: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005407, 0x000096
 
 ; ------------------------------------------------------------------
-; 0xF0549D-0xF054B0 -- 2 display-list records, 20 bytes
+; 0xF0549D-0xF054B0 -- 2 display-list records, 20 bytes -- interpreter A
 ;   entered at: 0xF0549D, 0xF054A7
 ;   ends used:  0xF054A7, 0xF054B1
 ; ------------------------------------------------------------------
@@ -4953,7 +5471,7 @@ DL_F054A7:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0054B1, 0x00003C
 
 ; ------------------------------------------------------------------
-; 0xF054ED-0xF0550A -- 3 display-list records, 30 bytes
+; 0xF054ED-0xF0550A -- 3 display-list records, 30 bytes -- interpreter A
 ;   entered at: 0xF054ED, 0xF054F7, 0xF05501
 ;   ends used:  0xF054F7, 0xF05501, 0xF0550B
 ; ------------------------------------------------------------------
@@ -4980,7 +5498,7 @@ DL_F05501:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00550B, 0x000140
 
 ; ------------------------------------------------------------------
-; 0xF0564B-0xF0574C -- 28 display-list records, 258 bytes
+; 0xF0564B-0xF0574C -- 28 display-list records, 258 bytes -- interpreter A
 ;   entered at: 0xF0564B
 ;   ends used:  0xF05740, 0xF0574D
 ; ------------------------------------------------------------------
@@ -5102,46 +5620,56 @@ DL_F0564B:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00574D, 0x000073
 
 ; ------------------------------------------------------------------
-; 0xF057C0-0xF05800 -- 5 display-list records, 65 bytes
+; 0xF057C0-0xF05800 -- 5 display-list records, 65 bytes -- interpreter B
 ;   entered at: 0xF057C0, 0xF057E3
 ;   ends used:  0xF057E3, 0xF05801
 ; ------------------------------------------------------------------
 DL_F057C0:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x0003
-	.short 0x7707
-	.short 0x0113
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x00FF
-	.short 0x7907
-	.short 0x0313
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF007
-	.short 0x0022
-	.byte 0x00, 0x10, 0x00, 0x69, 0x0E	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1377	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1379	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x0010	; +0x0B -> BC: bytes per entry
+	.short 0x0E69	; +0x0D -> IX
 DL_F057E3:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x00FF
-	.short 0x0107
-	.short 0xF058
-	.byte 0x00, 0x09, 0x00, 0x73, 0x13	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF007
-	.short 0x0022
-	.byte 0x00, 0x10, 0x00, 0x69, 0x0E	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F05801	; +0x07 -> XIY: string table
+	.short 0x0009	; +0x0B -> BC: bytes per entry
+	.short 0x1373	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x0010	; +0x0B -> BC: bytes per entry
+	.short 0x0E69	; +0x0D -> IX
 
 ; --- 0xF05801-0xF0582D: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005801, 0x00002D
 
 ; ------------------------------------------------------------------
-; 0xF0582E-0xF05AB3 -- 51 display-list records, 646 bytes
+; 0xF0582E-0xF05AB3 -- 51 display-list records, 646 bytes -- interpreter A (45 records) and B (6)
 ;   entered at: 0xF0582E, 0xF05850, 0xF0587C, 0xF05A2E, 0xF05A38, 0xF05A42, 0xF05A4C, 0xF05A68, 0xF05A84, 0xF05AA0, 0xF05AAA
 ;   ends used:  0xF05850, 0xF05A2E, 0xF05A38, 0xF05A42, 0xF05A4C, 0xF05A68, 0xF05A84, 0xF05AA0, 0xF05AB4
 ; ------------------------------------------------------------------
@@ -5321,50 +5849,53 @@ DL_F05A42:
 	.short 0x006C
 	.short 0x0051
 DL_F05A4C:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x0000
-	.byte 0x00, 0x00, 0x1C, 0xF0	; character codes below 0x20
-	.ascii "\""
-	.byte 0x00, 0x00, 0x10, 0x00	; character codes below 0x20
-	.ascii "Q"
-	.byte 0x00	; character codes below 0x20
-	.ascii "?"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A6
-	.short 0xB405
-	.short 0xF05A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x0010	; +0x0B -> BC: bytes per entry
+	.short 0x0051	; +0x0D -> (0x2530)
+	.short 0x003F	; +0x0F -> (0x2532)
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F05A68:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x0000
-	.byte 0x00, 0x00, 0x1C, 0xF0	; character codes below 0x20
-	.ascii "\""
-	.byte 0x00, 0x00, 0x0D, 0x00	; character codes below 0x20
-	.ascii "Q"
-	.byte 0x00	; character codes below 0x20
-	.ascii "?"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A6
-	.short 0xB405
-	.short 0xF05A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x0051	; +0x0D -> (0x2530)
+	.short 0x003F	; +0x0F -> (0x2532)
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F05A84:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x0000
-	.byte 0x00, 0x00, 0x1C, 0xF0	; character codes below 0x20
-	.ascii "\""
-	.byte 0x00, 0x00, 0x02, 0x00	; character codes below 0x20
-	.ascii "Q"
-	.byte 0x00	; character codes below 0x20
-	.ascii "?"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A6
-	.short 0xB405
-	.short 0xF05A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x0051	; +0x0D -> (0x2530)
+	.short 0x003F	; +0x0F -> (0x2532)
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F05AA0:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0051
@@ -5382,7 +5913,7 @@ DL_F05AAA:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005AB4, 0x0004C4
 
 ; ------------------------------------------------------------------
-; 0xF05F78-0xF06561 -- 156 display-list records, 1514 bytes
+; 0xF05F78-0xF06561 -- 156 display-list records, 1514 bytes -- interpreter A (147 records) and B (9)
 ;   entered at: 0xF05F78, 0xF06048, 0xF060DA, 0xF060E4, 0xF06154, 0xF06224, 0xF06481, 0xF06495, 0xF064A9, 0xF064C6, 0xF064E5, 0xF064F9, 0xF06517, 0xF06544
 ;   ends used:  0xF06048, 0xF060DA, 0xF060E4, 0xF06154, 0xF06224, 0xF06481, 0xF06495, 0xF064A9, 0xF064C6, 0xF064E5, 0xF06517, 0xF06535, 0xF06562
 ; ------------------------------------------------------------------
@@ -6031,91 +6562,113 @@ DL_F064C6:
 	.short 0x00B5
 	.short 0x0060
 DL_F064E5:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x007F
-	.short 0x8D20
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x9720
-	.short 0x0322
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x228D	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2297	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F064F9:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x000F
-	.short 0x9806
-	.short 0xF065
-	.byte 0x00, 0x04, 0x00, 0x48, 0x16	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x000F
-	.short 0xD820
-	.short 0xF034
-	.byte 0x00, 0x03, 0x00, 0x9D, 0x22	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F06598	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x1648	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x229D	; +0x0D -> IX
 DL_F06517:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x000F
-	.short 0x9806
-	.short 0xF065
-	.byte 0x00, 0x04, 0x00, 0xB8, 0x19	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x000F
-	.short 0x9820
-	.short 0xF065
-	.byte 0x00, 0x04, 0x00, 0xA2, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x000F
-	.short 0xD820
-	.short 0xF034
-	.byte 0x00, 0x03, 0x00, 0x92, 0x22	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F06598	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x19B8	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F06598	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x22A2	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x2292	; +0x0D -> IX
 DL_F06544:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B0
-	.short 0x0003
-	.short 0x4E20
-	.short 0xF32A
-	.byte 0x00, 0x03, 0x00, 0xA8, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B0
-	.short 0x020C
-	.short 0x4E20
-	.short 0xF32A
-	.byte 0x00, 0x03, 0x00, 0xAC, 0x22	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A4E	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22A8	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0x0C	; +0x04 AND mask
+	.byte 0x02	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A4E	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22AC	; +0x0D -> IX
 
 ; --- 0xF06562-0xF06575: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x006562, 0x000014
 
 ; ------------------------------------------------------------------
-; 0xF06576-0xF06597 -- 2 display-list records, 34 bytes
+; 0xF06576-0xF06597 -- 2 display-list records, 34 bytes -- interpreter B
 ;   entered at: 0xF06576
 ;   ends used:  0xF06587, 0xF06598
 ; ------------------------------------------------------------------
 DL_F06576:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x27AC
-	.byte 0x0F, 0x00, 0x17, 0x98	; character codes below 0x20
-	.ascii "e"
-	.byte 0xF0, 0x00, 0x04, 0x00, 0xBE, 0x00	; character codes below 0x20
-	.ascii "D"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x27AC
-	.byte 0xF0, 0x04, 0x17, 0x98	; character codes below 0x20
-	.ascii "e"
-	.byte 0xF0, 0x00, 0x04, 0x00, 0xBE, 0x00	; character codes below 0x20
-	.ascii "]"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F06598	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x00BE	; +0x0D -> (0x2530)
+	.short 0x0044	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0xF0	; +0x04 AND mask
+	.byte 0x04	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F06598	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x00BE	; +0x0D -> (0x2530)
+	.short 0x005D	; +0x0F -> (0x2532)
 
 ; --- 0xF06598-0xF065DF: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x006598, 0x000048
 
 ; ------------------------------------------------------------------
-; 0xF065E0-0xF067A5 -- 50 display-list records, 454 bytes
+; 0xF065E0-0xF067A5 -- 50 display-list records, 454 bytes -- interpreter A
 ;   entered at: 0xF065E0, 0xF06601
 ;   ends used:  0xF06601, 0xF067A6
 ; ------------------------------------------------------------------
@@ -6335,7 +6888,7 @@ DL_F06601:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0067A6, 0x006FF6
 
 ; ------------------------------------------------------------------
-; 0xF0D79C-0xF0D7E1 -- 5 display-list records, 70 bytes
+; 0xF0D79C-0xF0D7E1 -- 5 display-list records, 70 bytes -- interpreter A
 ;   entered at: 0xF0D79C, 0xF0D7A7
 ;   ends used:  0xF0D7D5, 0xF0D7E2
 ; ------------------------------------------------------------------
@@ -6363,7 +6916,7 @@ DL_F0D7A7:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D7E2, 0x0001BA
 
 ; ------------------------------------------------------------------
-; 0xF0D99C-0xF0D9A3 -- 1 display-list records, 8 bytes
+; 0xF0D99C-0xF0D9A3 -- 1 display-list records, 8 bytes -- interpreter A
 ;   entered at: 0xF0D99C
 ;   ends used:  0xF0D9A4
 ; ------------------------------------------------------------------
@@ -6377,7 +6930,7 @@ DL_F0D99C:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D9A4, 0x00003E
 
 ; ------------------------------------------------------------------
-; 0xF0D9E2-0xF0DA92 -- 18 display-list records, 177 bytes
+; 0xF0D9E2-0xF0DA92 -- 18 display-list records, 177 bytes -- interpreter A
 ;   entered at: 0xF0D9E2, 0xF0DA73
 ;   ends used:  0xF0DA73, 0xF0DA93
 ; ------------------------------------------------------------------
@@ -6460,7 +7013,7 @@ DL_F0DA73:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00DA93, 0x00000F
 
 ; ------------------------------------------------------------------
-; 0xF0DAA2-0xF0DB17 -- 13 display-list records, 118 bytes
+; 0xF0DAA2-0xF0DB17 -- 13 display-list records, 118 bytes -- interpreter A
 ;   entered at: 0xF0DAA2
 ;   ends used:  0xF0DB18
 ; ------------------------------------------------------------------
@@ -6519,11 +7072,567 @@ DL_F0DAA2:
 	.short 0x010E
 	.short 0x00D2
 
-; --- 0xF0DB18-0xF27BFF: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00DB18, 0x01A0E8
+; --- 0xF0DB18-0xF0E7FF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00DB18, 0x000CE8
+
+; =============================================================================
+; 0xF0E800-0xF0EA9E -- THE FIELD-BLINK ENGINE
+; =============================================================================
+;
+; Five consecutive thunk slots T_F42E20/24/28/2C/30 name five consecutive
+; routines starting at 0xF0E800, and the byte before 0xF0E800 is the last of a
+; long run of 0x0E (`ret`) fill -- so this is one linker input file, exported in
+; address order, with a hard lower boundary.  Reference upper bounds:
+;   T_F42E20 x41 -> 0xF0E9CF   T_F42E24 x85 -> 0xF0E82B (the 2nd busiest
+;   T_F42E28 x21 -> 0xF0E800     prom_b-targeting slot that was still .incbin)
+;   T_F42E2C x1  -> 0xF0E83A   T_F42E30 x2  -> 0xF0E835
+; (python3 notes/prom_b_call_graph.py -- opcode-anchored, an upper bound that
+; RANKS slots; never quote one as a call count.)
+;
+; WHAT IT DOES, and why "blink" is a measurement and not a guess:
+;   0xF0E83A is called once per rota clear of bit 7 of (0x88).  It advances a
+;   counter (0x28D1), masks it with 7, and
+;       at phase 0  draws the live text with argument 1
+;       at phase 4  draws it again with argument 0, which substitutes the ROM
+;                   constant at 0xF78020 -- eight ASCII spaces (20 20 20 20 20
+;                   20 20 20 00) -- for the text pointer.
+;   Draw the text, then erase it with spaces, forever, 50% duty.  That is a
+;   blink, and the rate falls where a UI blink falls: 1.27 Hz, 0.39 s on and
+;   0.39 s off.  Every link of that clock chain is re-read from the ROM by
+;       python3 notes/prom_b_blink_rate.py
+;   (28 MHz / 2048 / TREG1 28 = 488.28 Hz INTT1; (0x86) counts 0,1,2 so the rota
+;   advances every 3rd tick; one of 16 rota slots clears bit 7 of (0x88); the
+;   main loop's `tset 7,(0x88)` at prom_a 0xF82182 calls the tick once per
+;   clear; the tick's own counter has 8 phases.)
+;   ⚠ The last link assumes the main loop iterates faster than 10.17 Hz, which
+;   is NOT established here -- so 1.27 Hz is an UPPER bound on the rate.
+;
+; HOW IT DRAWS: not by calling a text service directly.  0xF0E926 and 0xF0E978
+; each COPY A DISPLAY-LIST RECORD TEMPLATE OUT OF ROM INTO A STACK FRAME, patch
+; four or five of its fields with live values, and run the one record through
+; interpreter B (`call 0xF3183D` = DisplayListB_RunOne_Stack, thunk T_F42E0C).
+; The templates are at 0xF78000 and 0xF7800F, converted below:
+;     0xF78000: 02 0F 00 00 00 00 20 C0 28 00 00 03 00 00 00
+;     0xF7800F: 07 0F 00 00 00 00 20 C0 28 00 00 03 00 00 00 00 00
+; Their OPCODES identify them: 0x02 and 0x07, the two interpreter-B opcodes
+; whose handlers -- DLB_Handler_StringTable (0xF31B21) and
+; DLB_Handler_StringTable2 (0xF31B39), both converted above -- imply record
+; lengths of 15 and 17, exactly the two `ldir` counts (0x0F, 0x11).  ⚠ The second record's own length
+; BYTE says 15, not 17 -- see DLB_RecordTemplate_Op07's header for why that is
+; inert rather than a defect.  The record layout is the one already documented
+; on the static op-02 records above:
+;     +0 opcode  +1 length  +2..3 source variable  +4 AND mask  +5 shift
+;     +6 swi 7 function  +7..A -> XIY string table  +B..C bytes per entry
+;     +D..E -> IX   (op 07 only: +F..10, a second word)
+; The template leaves +2/+4/+5 zero, so the extracted index is always 0 and the
+; record renders entry 0 of whatever +7 points at.  In other words +7 is a
+; pointer to the text, and 0xF78020 is the eight-space blank that erases it.
+;
+; THE CONTROL BLOCK, 0x28C8-0x28D3 in CS1 static RAM.  Every field below is
+; named by the ROM instruction that reads or writes it, nothing else:
+;   (0x28C8) -> (0x2540) for the duration of the draw.  (0x2540) is the LCD
+;              layer selector -- LCD_LayerBasePtr_Table in prom_a indexes 0..2
+;              by it -- so this is which layer the field is drawn into.
+;   (0x28C9) -> the record's +6, the swi 7 function.  0x17 and 0x1C are the two
+;              values that select the 17-byte op-07 template; everything else
+;              gets the 15-byte op-02 one.
+;   (0x28CA) -> op-02's +0x0D word.
+;   (0x28CC) -> op-07's +0x0D word;  (0x28CE) -> op-07's +0x0F word.
+;   (0x28D0) -> +0x0B, bytes per entry (loaded as a word then `extz`'d, so only
+;              the byte at 0x28D0 reaches the record).
+;   (0x28D1)   the 8-phase blink counter.
+;   (0x28D2)   blink state: 0 = stopped, 2 = blinking (the only value 0xF0E83A
+;              proceeds on), 1 = a third state the command arms set.  What 1
+;              means is NOT established.
+;   (0x28D3)   0 => draw inline, non-0 => post the draw to the ring buffer.
+;              Written by 0xF0E9CF from a stack-address comparison; see there.
+;   (0x28C0)   the template's default +7 pointer, i.e. where the text lives.
+;              Nothing in THIS module writes it.
+;
+; ⚠ NOT ESTABLISHED: which on-screen field this is (a cursor? a value being
+; edited?); what (0x2823) and (0x2820) hold, though the constants they are
+; compared with -- 0x20 and 0x2D -- are ASCII space and '-'; what state 1 means;
+; and what bit 1 of (0x2075) is called in the rest of the firmware.
+; =============================================================================
+
+; ---------------------------------------------------------------------
+; Blink_SetEnable -- turn field-blinking on or off, and reset it on a change
+; Called from: thunk T_F42E28 (x21, an upper bound)
+; Inputs:  (XIZ+8) = a boolean; non-zero enables
+; Outputs: bit 1 of (0x2075) := the boolean.  If and only if the bit CHANGED,
+;          calls Blink_Stop, which zeroes (0x28D2).
+; Evidence: the two arms are the two transitions -- `and (XIX),0xfd` when the
+;          bit was set and the argument is 0, `or (XIX),0x02` when the bit was
+;          clear and the argument is not; both then fall into `calr 0xF0E82B`,
+;          and both "no change" paths jump past it.  Blink_Tick reads the same
+;          bit (`ld C,(0x2075) / and C,0x02 / jrl Z,<exit>`), which is what
+;          makes bit 1 the blink enable rather than an unrelated flag.
+;          (0x2075) is a shared flag byte: bit 3 is set by Dispatch_Code80 at
+;          0xF5B9EB, converted below.
+; Unknown:  what bit 1 is called elsewhere; the other six bits.
+; ---------------------------------------------------------------------
+Blink_SetEnable:
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F0E800  link XIZ,0x0000   [llvm-mc cannot encode this]
+	push	xix	; F0E804  push XIX
+	lda_d16	xix, (8309)	; F0E805  lda XIX,0x2075
+	ld	c, (xix)	; F0E809  ld C,(XIX)
+	and	c, 2	; F0E80B  and C,0x02
+	jr	z, 11	; F0E80E  jr Z,0xf0e81b
+	.byte 0x8E, 0x08, 0x3F, 0x00	; F0E810  cp (XIZ+0x08),0x00   [llvm-mc cannot encode this]
+	jr	nz, 17	; F0E814  jr NZ,0xf0e827
+	.byte 0x84, 0x3C, 0xFD	; F0E816  and (XIX),0xfd   [llvm-mc cannot encode this]
+	jr	9	; F0E819  jr T,0xf0e824
+	.byte 0x8E, 0x08, 0x3F, 0x00	; F0E81B  cp (XIZ+0x08),0x00   [llvm-mc cannot encode this]
+	jr	z, 6	; F0E81F  jr Z,0xf0e827
+	.byte 0x84, 0x3E, 0x02	; F0E821  or (XIX),0x02   [llvm-mc cannot encode this]
+	calr	4	; F0E824  calr 0xf0e82b
+	pop	xix	; F0E827  pop XIX
+	.byte 0xEE, 0x0D	; F0E828  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F0E82A  ret
+
+; ---------------------------------------------------------------------
+; Blink_Stop -- stop the blink
+; Called from: thunk T_F42E24 (x85 -- the busiest prom_b-targeting slot that was
+;          still unconverted), and from Blink_SetEnable at 0xF0E824
+; Inputs:  none
+; Outputs: (0x28D2) := 0, which is the value Blink_Tick refuses to run on;
+;          plus whatever 0xF8BC78 does
+; Evidence: two instructions and a `ret`.  The name is from its one side effect
+;          and from Blink_Tick's gate on the same byte.
+; Unknown:  what prom_a 0xF8BC78 (reached through thunk T_F432F8) does; it is
+;          not converted in this tree.  Because it runs FIRST, "stop" describes
+;          this routine's own effect only.
+; ---------------------------------------------------------------------
+Blink_Stop:
+	call	16003832	; F0E82B  call 0xf432f8
+	stdi8	(10450), 0	; F0E82F  ld (0x28d2),0x00
+	ret	; F0E834  ret
+
+; ---------------------------------------------------------------------
+; Blink_GetState -- read the blink state byte
+; Called from: thunk T_F42E30 (x2): prom_a 0xFA0D22 and prom_a 0xFBD003
+; Inputs:  none
+; Outputs: A = (0x28D2)
+; Evidence: `ld A,(0x28d2) / ret`, five bytes.
+; ---------------------------------------------------------------------
+Blink_GetState:
+	ldb_d8	a, (10450)	; F0E835  ld A,(0x28d2)
+	ret	; F0E839  ret
+
+; ---------------------------------------------------------------------
+; Blink_Tick -- one blink phase; draws at phase 0 and blanks at phase 4
+; Called from: thunk T_F42E2C (x1): prom_a 0xF8218B, inside the main loop's
+;          `tset 7,(0x88) / jr NZ` arm, so it runs once per rota clear of that
+;          bit -- 10.17 times a second (notes/prom_b_blink_rate.py)
+; Inputs:  (0x2075) bit 1, (0x28D2), (0x28D3), (0x28C9), (0x28D1)
+; Outputs: (0x28D1)++ always; on phases 0 and 4, one display-list record is run
+;          (or posted to the ring buffer)
+; Evidence: `inc 1,(0x28d1)` then two arms, `and C,0x07 / jr NZ` (phase 0) and
+;          `and C,0x07 / cp C,4 / jr NZ` (phase 4), pushing 1 and 0
+;          respectively.  Argument 1 keeps the record's +7 text pointer;
+;          argument 0 replaces it with 0xF78020, eight spaces.  Draw / erase /
+;          draw / erase.
+; Notes:   the gate is `ld BC,(0x28d2) / extz BC / cp BC,0 / cp BC,1 / cp BC,2`.
+;          The load IS 16-bit -- prefix 0xD1 selects mnemonic_d0, whose opcodes
+;          0x20-0x27 are `M_LD, O_C16, O_M`
+;          (mame/src/devices/cpu/tlcs900/dasm900.cpp:846) -- but `extz BC`
+;          immediately zeroes the high byte
+;          (`*m_p1_reg16 &= 0x00ff`, mame/.../900tbl.hxx:2135), so only the byte
+;          at 0x28D2 is tested and (0x28D3) does NOT contaminate it.  Only the
+;          value 2 continues.
+;          Which template is used is chosen by (0x28C9): 0x17 or 0x1C take the
+;          op-07 renderer at 0xF0E978, anything else the op-02 one at 0xF0E926.
+;          When (0x28D3) is 0 the renderer is called inline; otherwise the
+;          address of one of the four trampolines below is pushed and handed to
+;          thunk T_F42E84 (prom_a 0xF8DA16, the 128-slot ring-buffer enqueue)
+;          followed by T_F42DC0 (prom_a 0xF859AB), and the six pushed bytes are
+;          released with `inc 6,XSP`.
+; Unknown:  why phase 4 and not phase 1 -- 50% duty is the effect, intent is not
+;          established.  What 0x17 and 0x1C are as swi 7 functions.
+; ---------------------------------------------------------------------
+Blink_Tick:
+	push	xix	; F0E83A  push XIX
+	lda_d16	xix, (10451)	; F0E83B  lda XIX,0x28d3
+	incdi8	1, (10449)	; F0E83F  inc 1,(0x28d1)
+	ldb_d8	c, (8309)	; F0E843  ld C,(0x2075)
+	and	c, 2	; F0E847  and C,0x02
+	jrl	z, 183	; F0E84A  jrl Z,0xf0e904
+	ldw_d16	bc, (10450)	; F0E84D  ld BC,(0x28d2)
+	extz	bc	; F0E851  extz BC
+	cps	bc, 0	; F0E853  cp BC,0
+	jrl	z, 172	; F0E855  jrl Z,0xf0e904
+	cps	bc, 1	; F0E858  cp BC,1
+	jrl	z, 167	; F0E85A  jrl Z,0xf0e904
+	cps	bc, 2	; F0E85D  cp BC,2
+	jr	z, 3	; F0E85F  jr Z,0xf0e864
+	jrl	160	; F0E861  jrl T,0xf0e904
+	ldb_d8	c, (10449)	; F0E864  ld C,(0x28d1)
+	and	c, 7	; F0E868  and C,0x07
+	jr	nz, 70	; F0E86B  jr NZ,0xf0e8b3
+	.byte 0xC1, 0xC9, 0x28, 0x3F, 0x17	; F0E86D  cp (0x28c9),0x17   [llvm-mc cannot encode this]
+	jr	z, 7	; F0E872  jr Z,0xf0e87b
+	.byte 0xC1, 0xC9, 0x28, 0x3F, 0x1C	; F0E874  cp (0x28c9),0x1c   [llvm-mc cannot encode this]
+	jr	nz, 22	; F0E879  jr NZ,0xf0e891
+	ld	c, (xix)	; F0E87B  ld C,(XIX)
+	cps	c, 0	; F0E87D  cp C,0
+	jr	nz, 8	; F0E87F  jr NZ,0xf0e889
+	pushw	1	; F0E881  push 0x0001
+	calr	241	; F0E884  calr 0xf0e978
+	jr	20	; F0E887  jr T,0xf0e89d
+	lda_24	xbc, (15788310)	; F0E889  lda XBC,0xf0e916
+	push	xbc	; F0E88E  push XBC
+	jr	21	; F0E88F  jr T,0xf0e8a6
+	ld	c, (xix)	; F0E891  ld C,(XIX)
+	cps	c, 0	; F0E893  cp C,0
+	jr	nz, 9	; F0E895  jr NZ,0xf0e8a0
+	pushw	1	; F0E897  push 0x0001
+	calr	137	; F0E89A  calr 0xf0e926
+	popw	bc	; F0E89D  pop BC
+	jr	19	; F0E89E  jr T,0xf0e8b3
+	lda_24	xbc, (15788294)	; F0E8A0  lda XBC,0xf0e906
+	push	xbc	; F0E8A5  push XBC
+	call	16002692	; F0E8A6  call 0xf42e84
+	pushw	1	; F0E8AA  push 0x0001
+	call	16002496	; F0E8AD  call 0xf42dc0
+	inc	6, xsp	; F0E8B1  inc 6,XSP
+	ldb_d8	c, (10449)	; F0E8B3  ld C,(0x28d1)
+	and	c, 7	; F0E8B7  and C,0x07
+	cps	c, 4	; F0E8BA  cp C,4
+	jr	nz, 70	; F0E8BC  jr NZ,0xf0e904
+	.byte 0xC1, 0xC9, 0x28, 0x3F, 0x17	; F0E8BE  cp (0x28c9),0x17   [llvm-mc cannot encode this]
+	jr	z, 7	; F0E8C3  jr Z,0xf0e8cc
+	.byte 0xC1, 0xC9, 0x28, 0x3F, 0x1C	; F0E8C5  cp (0x28c9),0x1c   [llvm-mc cannot encode this]
+	jr	nz, 22	; F0E8CA  jr NZ,0xf0e8e2
+	ld	c, (xix)	; F0E8CC  ld C,(XIX)
+	cps	c, 0	; F0E8CE  cp C,0
+	jr	nz, 8	; F0E8D0  jr NZ,0xf0e8da
+	pushw	0	; F0E8D2  push 0x0000
+	calr	160	; F0E8D5  calr 0xf0e978
+	jr	20	; F0E8D8  jr T,0xf0e8ee
+	lda_24	xbc, (15788318)	; F0E8DA  lda XBC,0xf0e91e
+	push	xbc	; F0E8DF  push XBC
+	jr	21	; F0E8E0  jr T,0xf0e8f7
+	ld	c, (xix)	; F0E8E2  ld C,(XIX)
+	cps	c, 0	; F0E8E4  cp C,0
+	jr	nz, 9	; F0E8E6  jr NZ,0xf0e8f1
+	pushw	0	; F0E8E8  push 0x0000
+	calr	56	; F0E8EB  calr 0xf0e926
+	popw	bc	; F0E8EE  pop BC
+	jr	19	; F0E8EF  jr T,0xf0e904
+	lda_24	xbc, (15788302)	; F0E8F1  lda XBC,0xf0e90e
+	push	xbc	; F0E8F6  push XBC
+	call	16002692	; F0E8F7  call 0xf42e84
+	pushw	1	; F0E8FB  push 0x0001
+	call	16002496	; F0E8FE  call 0xf42dc0
+	inc	6, xsp	; F0E902  inc 6,XSP
+	pop	xix	; F0E904  pop XIX
+	ret	; F0E905  ret
+
+; ---------------------------------------------------------------------
+; Blink_Deferred_* -- four 8-byte trampolines, one per (renderer, argument) pair
+; Called from: never directly.  Their ADDRESSES are loaded with `lda XBC` in
+;          Blink_Tick and pushed to the ring-buffer enqueue T_F42E84, so
+;          whatever drains that ring calls them later.
+; Inputs:  none (each supplies its own immediate argument)
+; Outputs: as the renderer it wraps
+; Evidence: each is exactly `push <imm> / calr <renderer> / pop BC / ret`, and
+;          the four immediates and targets are the four combinations Blink_Tick
+;          needs: {1,0} x {0xF0E926, 0xF0E978}.  Blink_Tick loads 0xF0E916 and
+;          0xF0E906 on the phase-0 (draw) path and 0xF0E91E and 0xF0E90E on the
+;          phase-4 (blank) path, matching the immediates below.
+; ---------------------------------------------------------------------
+Blink_Deferred_Op02_Draw:
+	pushw	1	; F0E906  push 0x0001
+	calr	26	; F0E909  calr 0xf0e926
+	popw	bc	; F0E90C  pop BC
+	ret	; F0E90D  ret
+Blink_Deferred_Op02_Blank:
+	pushw	0	; F0E90E  push 0x0000
+	calr	18	; F0E911  calr 0xf0e926
+	popw	bc	; F0E914  pop BC
+	ret	; F0E915  ret
+Blink_Deferred_Op07_Draw:
+	pushw	1	; F0E916  push 0x0001
+	calr	92	; F0E919  calr 0xf0e978
+	popw	bc	; F0E91C  pop BC
+	ret	; F0E91D  ret
+Blink_Deferred_Op07_Blank:
+	pushw	0	; F0E91E  push 0x0000
+	calr	84	; F0E921  calr 0xf0e978
+	popw	bc	; F0E924  pop BC
+	ret	; F0E925  ret
+
+; ---------------------------------------------------------------------
+; Blink_DrawField_Op02 -- run one patched interpreter-B op-02 record
+; Called from: Blink_Tick, four sites, all verified by decoding the `calr`
+;          displacement: INLINE at 0xF0E89A (phase 0, draw) and 0xF0E8EB
+;          (phase 4, blank), and through the trampolines at 0xF0E909 and
+;          0xF0E911 when the draw is deferred to the ring buffer
+; Inputs:  (XIZ+8) = 1 to draw the text, 0 to draw the blank;
+;          (0x28C8), (0x28C9), (0x28CA), (0x28D0)
+; Outputs: one display-list record executed by interpreter B; (0x2540) saved in
+;          H and restored afterwards
+; Evidence: `link XIZ,-15 / ldir BC=0x0F from DLB_RecordTemplate_Op02` -- and
+;          prom_b 0xF78000 reads `02 0F ...`, i.e. opcode 0x02, length 15, the
+;          length interpreter B's op-02 handler DLB_Handler_StringTable implies.
+;          It then writes the record's documented fields: +6 := (0x28C9) (swi 7
+;          function), +0x0D := (0x28CA), +0x0B := (0x28D0), and +7 := 0xF78020
+;          (eight spaces) when the argument is 0.  Finally `push XIX / call
+;          0xF3183D` -- DisplayListB_RunOne_Stack, converted above.
+; Unknown:  nothing is written to +2/+4/+5, so the extracted index stays 0 and
+;          the record always renders entry 0.  Whether the author intended the
+;          record as a one-entry table or as a plain string is not established.
+; ---------------------------------------------------------------------
+Blink_DrawField_Op02:
+	.byte 0xEE, 0x0C, 0xF1, 0xFF	; F0E926  link XIZ,0xfff1   [llvm-mc cannot encode this]
+	pushw	hl	; F0E92A  push HL
+	push	xix	; F0E92B  push XIX
+	lda	xix, (xiz-15)	; F0E92C  lda XIX,XIZ+0xf1
+	push	xix	; F0E92F  push XIX
+	ldw	bc, 15	; F0E930  ld BC,0x000f
+	lda_24	xiy, (16220160)	; F0E933  lda XIY,0xf78000
+	lda	xix, (xiz-15)	; F0E938  lda XIX,XIZ+0xf1
+	.byte 0x85, 0x11	; F0E93B  ldir   [llvm-mc cannot encode this]
+	pop	xix	; F0E93D  pop XIX
+	ldb_d8	h, (9536)	; F0E93E  ld H,(0x2540)
+	.byte 0xC1, 0xC8, 0x28, 0x19, 0x40, 0x25	; F0E942  ld (0x2540),(0x28c8)   [llvm-mc cannot encode this]
+	.byte 0xBC, 0x06, 0x14, 0xC9, 0x28	; F0E948  ld (XIX+0x06),(0x28c9)   [llvm-mc cannot encode this]
+	.byte 0xBC, 0x0D, 0x16, 0xCA, 0x28	; F0E94D  ldw (XIX+0x0d),(0x28ca)   [llvm-mc cannot encode this]
+	ldw_d16	bc, (10448)	; F0E952  ld BC,(0x28d0)
+	extz	bc	; F0E956  extz BC
+	ld	(xix+11), bc	; F0E958  ld (XIX+0x0b),BC
+	.byte 0x8E, 0x08, 0x3F, 0x00	; F0E95B  cp (XIZ+0x08),0x00   [llvm-mc cannot encode this]
+	jr	nz, 8	; F0E95F  jr NZ,0xf0e969
+	lda_24	xbc, (16220192)	; F0E961  lda XBC,0xf78020
+	ld	(xix+7), xbc	; F0E966  ld (XIX+0x07),XBC
+	push	xix	; F0E969  push XIX
+	call	15931453	; F0E96A  call 0xf3183d
+	stb_d8	(9536), h	; F0E96E  ld (0x2540),H
+	pop	xbc	; F0E972  pop XBC
+	pop	xix	; F0E973  pop XIX
+	popw	hl	; F0E974  pop HL
+	.byte 0xEE, 0x0D	; F0E975  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F0E977  ret
+
+; ---------------------------------------------------------------------
+; Blink_DrawField_Op07 -- the same, for the 17-byte op-07 record
+; Called from: Blink_Tick, four sites: INLINE at 0xF0E884 (phase 0, draw) and
+;          0xF0E8D5 (phase 4, blank), and through the trampolines at 0xF0E919
+;          and 0xF0E921 when the draw is deferred
+; Inputs:  (XIZ+8) = 1 to draw, 0 to blank; (0x28C8), (0x28C9), (0x28CC),
+;          (0x28CE), (0x28D0)
+; Outputs: as Blink_DrawField_Op02
+; Evidence: identical shape with `link XIZ,-17 / ldir BC=0x11 from 0xF7800F`,
+;          and 0xF7800F reads `07 0F ...` -- opcode 0x07, whose handler 0xF31B39
+;          implies a 17-byte record, which is the ldir count.  (The record's own
+;          length byte says 15; see DLB_RecordTemplate_Op07 for why nothing
+;          reads it.)  The one structural difference from the op-02 renderer is
+;          the extra field: `ldw (XIX+0x0f),(0x28ce)`, which is exactly the word
+;          op 07 has and op 02 does not.
+; Unknown:  as above; plus why (0x28CC) and not (0x28CA) feeds +0x0D here.
+; ---------------------------------------------------------------------
+Blink_DrawField_Op07:
+	.byte 0xEE, 0x0C, 0xEF, 0xFF	; F0E978  link XIZ,0xffef   [llvm-mc cannot encode this]
+	pushw	hl	; F0E97C  push HL
+	push	xix	; F0E97D  push XIX
+	lda	xix, (xiz-17)	; F0E97E  lda XIX,XIZ+0xef
+	push	xix	; F0E981  push XIX
+	ldw	bc, 17	; F0E982  ld BC,0x0011
+	lda_24	xiy, (16220175)	; F0E985  lda XIY,0xf7800f
+	lda	xix, (xiz-17)	; F0E98A  lda XIX,XIZ+0xef
+	.byte 0x85, 0x11	; F0E98D  ldir   [llvm-mc cannot encode this]
+	pop	xix	; F0E98F  pop XIX
+	ldb_d8	h, (9536)	; F0E990  ld H,(0x2540)
+	.byte 0xC1, 0xC8, 0x28, 0x19, 0x40, 0x25	; F0E994  ld (0x2540),(0x28c8)   [llvm-mc cannot encode this]
+	.byte 0xBC, 0x06, 0x14, 0xC9, 0x28	; F0E99A  ld (XIX+0x06),(0x28c9)   [llvm-mc cannot encode this]
+	.byte 0xBC, 0x0D, 0x16, 0xCC, 0x28	; F0E99F  ldw (XIX+0x0d),(0x28cc)   [llvm-mc cannot encode this]
+	.byte 0xBC, 0x0F, 0x16, 0xCE, 0x28	; F0E9A4  ldw (XIX+0x0f),(0x28ce)   [llvm-mc cannot encode this]
+	ldw_d16	bc, (10448)	; F0E9A9  ld BC,(0x28d0)
+	extz	bc	; F0E9AD  extz BC
+	ld	(xix+11), bc	; F0E9AF  ld (XIX+0x0b),BC
+	.byte 0x8E, 0x08, 0x3F, 0x00	; F0E9B2  cp (XIZ+0x08),0x00   [llvm-mc cannot encode this]
+	jr	nz, 8	; F0E9B6  jr NZ,0xf0e9c0
+	lda_24	xbc, (16220192)	; F0E9B8  lda XBC,0xf78020
+	ld	(xix+7), xbc	; F0E9BD  ld (XIX+0x07),XBC
+	push	xix	; F0E9C0  push XIX
+	call	15931453	; F0E9C1  call 0xf3183d
+	stb_d8	(9536), h	; F0E9C5  ld (0x2540),H
+	pop	xbc	; F0E9C9  pop XBC
+	pop	xix	; F0E9CA  pop XIX
+	popw	hl	; F0E9CB  pop HL
+	.byte 0xEE, 0x0D	; F0E9CC  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F0E9CE  ret
+
+; ---------------------------------------------------------------------
+; Blink_Command -- 12-way command dispatch that sets the blink state
+; Called from: thunk T_F42E20 (x41, an upper bound)
+; Inputs:  (XIZ+8) = a pointer; the byte at *(XIZ+8) is the command, 0x00-0x0B
+; Outputs: (0x28C8) := (0x2540) (the current LCD layer is captured for the
+;          renderers); (0x28D3) := 1 or 0; XIX := 0x28D2 for the arms; then a
+;          jump through Blink_Command_Table
+; Evidence: `ld A,(XBC) / extz / cp WA,0x000b / jrl UGT,<exit> / sll 2,WA /
+;          add XWA,0x00F0EA14 / ld XWA,(XWA) / jp XWA`.  The bound 0x0B fixes
+;          the table at 12 entries and 0xF0EA14 + 12*4 = 0xF0EA44 is the lowest
+;          address any entry holds, so nothing is left over between the table
+;          and the first arm.
+; Notes:   (0x28D3) is set by comparing a frame address (`lda XWA,XIZ+0xfe`)
+;          with the constant 0x0060E800: at or above it the byte stays 1, below
+;          it becomes 0.  The boot stack pointer is 0x0060EB80 (prom_a 0xF85606,
+;          notes/FINDINGS-memory-map.md), so the constant is 0x380 = 896 bytes
+;          into that stack.  Blink_Tick uses the result to choose between
+;          calling the renderer inline and posting it to the ring buffer.
+; Unknown:  ⚠ WHAT THE TEST MEANS is not established -- "deep frame vs shallow
+;          frame", "task stack vs interrupt stack" and "recursion guard" all fit
+;          the same three instructions and this tree cannot tell them apart.
+;          Also unknown: what the 12 commands are.  Only their SHAPE is decoded
+;          below, from the four distinct arms the table names.
+; ---------------------------------------------------------------------
+Blink_Command:
+	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0E9CF  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	push	xix	; F0E9D3  push XIX
+	lda_d16	xix, (10450)	; F0E9D4  lda XIX,0x28d2
+	ld	xbc, 6350848	; F0E9D8  ld XBC,0x0060e800
+	ld	(xiz-6), xbc	; F0E9DD  ld (XIZ+0xfa),XBC
+	stdi8	(10451), 1	; F0E9E0  ld (0x28d3),0x01
+	lda	xwa, (xiz-2)	; F0E9E5  lda XWA,XIZ+0xfe
+	cp	xwa, xbc	; F0E9E8  cp XWA,XBC
+	jr	nc, 5	; F0E9EA  jr NC,0xf0e9f1
+	stdi8	(10451), 0	; F0E9EC  ld (0x28d3),0x00
+	.byte 0xC1, 0x40, 0x25, 0x19, 0xC8, 0x28	; F0E9F1  ld (0x28c8),(0x2540)   [llvm-mc cannot encode this]
+	ld	xbc, (xiz+8)	; F0E9F7  ld XBC,(XIZ+0x08)
+	ld	a, (xbc)	; F0E9FA  ld A,(XBC)
+	extz	wa	; F0E9FC  extz WA
+	extz	xwa	; F0E9FE  extz XWA
+	cp	wa, 11	; F0EA00  cp WA,0x000b
+	jrl	ugt, 148	; F0EA04  jrl UGT,0xf0ea9b
+	sll	wa, 2	; F0EA07  sll 0x02,WA
+	add	xwa, 15788564	; F0EA0A  add XWA,0x00f0ea14
+	ld	xwa, (xwa)	; F0EA10  ld XWA,(XWA)
+	jp	(xwa)	; F0EA12  jp T,XWA
 
 ; ------------------------------------------------------------------
-; 0xF27C00-0xF283A6 -- 200 display-list records, 1959 bytes
+; Blink_Command_Table -- 12 x LE32 code pointer
+; Read by:  Blink_Command 0xF0EA0A (`add XWA,0x00f0ea14`), indexed by the
+;           command byte * 4.
+; Count:    12, and it is bounded twice.  (a) `cp WA,0x000b / jrl UGT` rejects
+;           anything above 0x0B, so at most 12 entries can ever be read.
+;           (b) 0xF0EA14 + 12*4 = 0xF0EA44, which is the LOWEST address any of
+;           the twelve entries holds -- the table abuts its own first arm with
+;           nothing in between, so it cannot be longer either.
+;           Verified for the LAST entry as well as the first: entry [11] is
+;           0xF0EA75, an arm, and the four bytes at 0xF0EA44 are the arm's first
+;           instruction (`ld C,(0x2823)`), not a thirteenth pointer.
+; Layout:   only four distinct targets appear; the repetition IS the command map.
+; Note:     the twelve entries are emitted as SYMBOLS, not as literals, so the
+;           build gate itself proves each pointer equals the address its named
+;           arm actually sits at -- a wrong label would change the bytes.
+; ------------------------------------------------------------------
+Blink_Command_Table:
+	.long Blink_CmdArm_SetState			; [ 0] 0xF0EA64
+	.long Blink_CmdArm_Ret				; [ 1] 0xF0EA9B
+	.long Blink_CmdArm_SetState_Then_F0EC4A		; [ 2] 0xF0EA44
+	.long Blink_CmdArm_Ret				; [ 3] 0xF0EA9B
+	.long Blink_CmdArm_Ret				; [ 4] 0xF0EA9B
+	.long Blink_CmdArm_SetState_DashTest		; [ 5] 0xF0EA75
+	.long Blink_CmdArm_SetState			; [ 6] 0xF0EA64
+	.long Blink_CmdArm_SetState_Then_F0EC4A		; [ 7] 0xF0EA44
+	.long Blink_CmdArm_Ret				; [ 8] 0xF0EA9B
+	.long Blink_CmdArm_SetState			; [ 9] 0xF0EA64
+	.long Blink_CmdArm_SetState			; [10] 0xF0EA64
+	.long Blink_CmdArm_SetState_DashTest		; [11] 0xF0EA75
+
+; ---------------------------------------------------------------------
+; Blink_CmdArm_SetState_Then_F0EC4A -- commands 2 and 7
+; Called from: Blink_Command_Table entries [2] and [7]
+; Inputs:  XIX = 0x28D2 (set by Blink_Command); (0x2823); (XIZ+8)
+; Outputs: (0x28D2) := 2 when (0x2823) != 0x20; := 1 when (0x2823) == 0x20 and
+;          (0x28D2) was 0; unchanged otherwise.  Then calls 0xF0EC4A with the
+;          command pointer.
+; Evidence: the writes are literal (`ld (XIX),0x02` / `ld (XIX),0x01`) and XIX
+;          is 0x28D2 by construction.  2 is the value Blink_Tick runs on, so
+;          "(0x2823) is not 0x20" is what starts the blink.
+; Unknown:  what (0x2823) is.  0x20 is ASCII space and this module is about
+;          text, but that reading is NOT asserted.  0xF0EC4A is not converted.
+; ---------------------------------------------------------------------
+Blink_CmdArm_SetState_Then_F0EC4A:
+	ldb_d8	c, (10275)	; F0EA44  ld C,(0x2823)
+	cp	c, 32	; F0EA48  cp C,0x20
+	jr	z, 5	; F0EA4B  jr Z,0xf0ea52
+	ld	(xix), 2	; F0EA4D  ld (XIX),0x02
+	jr	9	; F0EA50  jr T,0xf0ea5b
+	ld	c, (xix)	; F0EA52  ld C,(XIX)
+	cps	c, 0	; F0EA54  cp C,0
+	jr	nz, 3	; F0EA56  jr NZ,0xf0ea5b
+	ld	(xix), 1	; F0EA58  ld (XIX),0x01
+	ld	xbc, (xiz+8)	; F0EA5B  ld XBC,(XIZ+0x08)
+	push	xbc	; F0EA5E  push XBC
+	calr	488	; F0EA5F  calr 0xf0ec4a
+	jr	54	; F0EA62  jr T,0xf0ea9a
+
+; ---------------------------------------------------------------------
+; Blink_CmdArm_SetState -- commands 0, 6, 9 and 10
+; Called from: Blink_Command_Table entries [0], [6], [9], [10]
+; Inputs/Outputs: as the arm above, minus the 0xF0EC4A call; the tail it falls
+;          into calls 0xF0EA9F instead
+; Evidence: same two literal writes through the same XIX; the only difference is
+;          the shared tail at 0xF0EA93.
+; Unknown:  0xF0EA9F is not converted this round.
+; ---------------------------------------------------------------------
+Blink_CmdArm_SetState:
+	ldb_d8	c, (10275)	; F0EA64  ld C,(0x2823)
+	cp	c, 32	; F0EA68  cp C,0x20
+	jr	nz, 24	; F0EA6B  jr NZ,0xf0ea85
+	ld	c, (xix)	; F0EA6D  ld C,(XIX)
+	cps	c, 0	; F0EA6F  cp C,0
+	jr	nz, 32	; F0EA71  jr NZ,0xf0ea93
+	jr	27	; F0EA73  jr T,0xf0ea90
+
+; ---------------------------------------------------------------------
+; Blink_CmdArm_SetState_DashTest -- commands 5 and 11
+; Called from: Blink_Command_Table entries [5] and [11]
+; Inputs:  XIX = 0x28D2; (0x2823); (0x2820)
+; Outputs: as Blink_CmdArm_SetState, except that when (0x2823) == 0x20 a second
+;          test decides: (0x2820) == 0x2D also gives state 2; only when both
+;          fail does the state-1 path run.
+; Evidence: `cp (0x2820),0x2d / jr NZ` inserted between the space test and the
+;          shared tail; nothing else differs from the arm above.
+; Unknown:  what (0x2820) is.  0x2D is ASCII '-'; not asserted.
+; ---------------------------------------------------------------------
+Blink_CmdArm_SetState_DashTest:
+	ldb_d8	c, (10275)	; F0EA75  ld C,(0x2823)
+	cp	c, 32	; F0EA79  cp C,0x20
+	jr	nz, 7	; F0EA7C  jr NZ,0xf0ea85
+	.byte 0xC1, 0x20, 0x28, 0x3F, 0x2D	; F0EA7E  cp (0x2820),0x2d   [llvm-mc cannot encode this]
+	jr	nz, 5	; F0EA83  jr NZ,0xf0ea8a
+	ld	(xix), 2	; F0EA85  ld (XIX),0x02
+	jr	9	; F0EA88  jr T,0xf0ea93
+	ld	c, (xix)	; F0EA8A  ld C,(XIX)
+	cps	c, 0	; F0EA8C  cp C,0
+	jr	nz, 3	; F0EA8E  jr NZ,0xf0ea93
+	ld	(xix), 1	; F0EA90  ld (XIX),0x01
+	ld	xbc, (xiz+8)	; F0EA93  ld XBC,(XIZ+0x08)
+	push	xbc	; F0EA96  push XBC
+	calr	5	; F0EA97  calr 0xf0ea9f
+	pop	xiy	; F0EA9A  pop XIY
+
+; ---------------------------------------------------------------------
+; Blink_CmdArm_Ret -- commands 1, 3, 4 and 8, and the out-of-range exit
+; Called from: Blink_Command_Table entries [1], [3], [4], [8], and by the
+;          `jrl UGT,0xF0EA9B` that rejects a command byte above 0x0B
+; Outputs: none beyond the (0x28C8)/(0x28D3) writes Blink_Command already made
+; Evidence: it is Blink_Command's own epilogue -- `pop XIX / unlk XIZ / ret`.
+;          Four of the twelve commands do nothing but reach it.
+; ---------------------------------------------------------------------
+Blink_CmdArm_Ret:
+	pop	xix	; F0EA9B  pop XIX
+	.byte 0xEE, 0x0D	; F0EA9C  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F0EA9E  ret
+
+; --- 0xF0EA9F-0xF27BFF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00EA9F, 0x019161
+
+; ------------------------------------------------------------------
+; 0xF27C00-0xF283A6 -- 200 display-list records, 1959 bytes -- interpreter A
 ;   entered at: 0xF27C00, 0xF28064, 0xF2808C, 0xF28331, 0xF2833B, 0xF2834F, 0xF28373, 0xF2837D
 ;   ends used:  0xF28064, 0xF2808C, 0xF28331, 0xF2833B, 0xF28345, 0xF2834F, 0xF28373, 0xF2837D, 0xF283A7
 ; ------------------------------------------------------------------
@@ -7486,7 +8595,7 @@ DL_F2837D:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0283A7, 0x00045B
 
 ; ------------------------------------------------------------------
-; 0xF28802-0xF2882A -- 4 display-list records, 41 bytes
+; 0xF28802-0xF2882A -- 4 display-list records, 41 bytes -- interpreter A (3 records) and B (1)
 ;   entered at: 0xF28802, 0xF2880C, 0xF28816, 0xF28820
 ;   ends used:  0xF2880C, 0xF28816, 0xF28820, 0xF2882B
 ; ------------------------------------------------------------------
@@ -7509,92 +8618,107 @@ DL_F28816:
 	.short 0x0114
 	.short 0x00A6
 DL_F28820:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x003F2640
-	.short 0x2B05
-	.short 0xF288
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F2882B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF2882B-0xF2885A: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02882B, 0x000030
 
 ; ------------------------------------------------------------------
-; 0xF2885B-0xF28865 -- 1 display-list records, 11 bytes
+; 0xF2885B-0xF28865 -- 1 display-list records, 11 bytes -- interpreter B
 ;   entered at: 0xF2885B
 ;   ends used:  0xF28866
 ; ------------------------------------------------------------------
 DL_F2885B:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x003F2640
-	.short 0x6605
-	.short 0xF288
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F28866	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF28866-0xF28895: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x028866, 0x000030
 
 ; ------------------------------------------------------------------
-; 0xF28896-0xF288A0 -- 1 display-list records, 11 bytes
+; 0xF28896-0xF288A0 -- 1 display-list records, 11 bytes -- interpreter B
 ;   entered at: 0xF28896
 ;   ends used:  0xF288A1
 ; ------------------------------------------------------------------
 DL_F28896:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x003F2640
-	.short 0xA105
-	.short 0xF288
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F288A1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF288A1-0xF288D0: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0288A1, 0x000030
 
 ; ------------------------------------------------------------------
-; 0xF288D1-0xF296D5 -- 363 display-list records, 3589 bytes
+; 0xF288D1-0xF296D5 -- 363 display-list records, 3589 bytes -- interpreter A (357 records) and B (6)
 ;   entered at: 0xF288D1, 0xF288E0, 0xF288EF, 0xF288FE, 0xF2890D, 0xF2891C, 0xF2892B, 0xF28930, 0xF28938, 0xF28DF3, 0xF28E1B, 0xF29121, 0xF29135, 0xF29672, 0xF2967C, 0xF29686, 0xF296AE, 0xF296B8, 0xF296C2, 0xF296CC
 ;   ends used:  0xF288E0, 0xF288EF, 0xF288FE, 0xF2890D, 0xF2891C, 0xF2892B, 0xF28930, 0xF28938, 0xF28DF3, 0xF28E1B, 0xF29121, 0xF29135, 0xF29672, 0xF2967C, 0xF29686, 0xF296AE, 0xF296B8, 0xF296C2, 0xF296CC, 0xF296D6
 ; ------------------------------------------------------------------
 DL_F288D1:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x0000
-	.short 0xF006
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0xEE, 0x17	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x17EE	; +0x0D -> IX
 DL_F288E0:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x0000
-	.short 0xF006
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0xCE, 0x14	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x14CE	; +0x0D -> IX
 DL_F288EF:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x0000
-	.short 0xF006
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0xFD, 0x17	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x17FD	; +0x0D -> IX
 DL_F288FE:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x0000
-	.short 0xF006
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0xDD, 0x14	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x14DD	; +0x0D -> IX
 DL_F2890D:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x0000
-	.short 0xF006
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0x7F, 0x19	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x197F	; +0x0D -> IX
 DL_F2891C:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x0000
-	.short 0xF006
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0x5F, 0x16	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x165F	; +0x0D -> IX
 DL_F2892B:
 	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x1E
@@ -9310,426 +10434,770 @@ DL_F296CC:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0296D6, 0x00008F
 
 ; ------------------------------------------------------------------
-; 0xF29765-0xF2979F -- 4 display-list records, 59 bytes
+; 0xF29765-0xF2979F -- 4 display-list records, 59 bytes -- interpreter B
 ;   entered at: 0xF29765, 0xF29783
 ;   ends used:  0xF29783, 0xF297A0
 ; ------------------------------------------------------------------
 DL_F29765:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0xA006
-	.short 0xF297
-	.byte 0x00, 0x03, 0x00, 0x6D, 0x0F	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2642
-	.short 0x0000
-	.short 0x6106
-	.short 0x0026
-	.byte 0x00, 0x03, 0x00, 0x71, 0x0F	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0F6D	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00002661	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0F71	; +0x0D -> IX
 DL_F29783:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x76DF
-	.byte 0xFF, 0x00, 0x17, 0xA0, 0x97, 0xF2, 0x00, 0x03, 0x00, 0x0C, 0x00	; character codes below 0x20
-	.ascii "0"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0x0C17
-	.short 0x3A00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x76DF	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x000C	; +0x0D -> (0x2530)
+	.short 0x0030	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x000C	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 
 ; --- 0xF297A0-0xF29862: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0297A0, 0x0000C3
 
 ; ------------------------------------------------------------------
-; 0xF29863-0xF29943 -- 16 display-list records, 225 bytes
+; 0xF29863-0xF29943 -- 16 display-list records, 225 bytes -- interpreter B
 ;   entered at: 0xF29863, 0xF29880, 0xF2989D, 0xF298BA, 0xF298D7, 0xF298F4, 0xF29911, 0xF2992E
 ;   ends used:  0xF29880, 0xF2989D, 0xF298BA, 0xF298D7, 0xF298F4, 0xF29911, 0xF2992E, 0xF29944
 ; ------------------------------------------------------------------
 DL_F29863:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x771F
-	.byte 0x7F, 0x00, 0x17, 0xA0, 0x97, 0xF2, 0x00, 0x03, 0x00	; character codes below 0x20
-	.ascii "4"
-	.byte 0x00	; character codes below 0x20
-	.ascii "0"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0x3417
-	.short 0x3A00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x771F	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0034	; +0x0D -> (0x2530)
+	.short 0x0030	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0034	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29880:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x775F
-	.byte 0x7F, 0x00, 0x17, 0xA0, 0x97, 0xF2, 0x00, 0x03, 0x00	; character codes below 0x20
-	.ascii "\\"
-	.byte 0x00	; character codes below 0x20
-	.ascii "0"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0x5C17
-	.short 0x3A00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x775F	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x005C	; +0x0D -> (0x2530)
+	.short 0x0030	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x005C	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F2989D:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x779F
-	.byte 0x7F, 0x00, 0x17, 0xA0, 0x97, 0xF2, 0x00, 0x03, 0x00, 0x84, 0x00	; character codes below 0x20
-	.ascii "0"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0x8417
-	.short 0x3A00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x779F	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0084	; +0x0D -> (0x2530)
+	.short 0x0030	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0084	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F298BA:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x77DF
-	.byte 0x7F, 0x00, 0x17, 0xA0, 0x97, 0xF2, 0x00, 0x03, 0x00, 0xAC, 0x00	; character codes below 0x20
-	.ascii "0"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0xAC17
-	.short 0x3A00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x77DF	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x00AC	; +0x0D -> (0x2530)
+	.short 0x0030	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00AC	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F298D7:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x781F
-	.byte 0x7F, 0x00, 0x17, 0xA0, 0x97, 0xF2, 0x00, 0x03, 0x00, 0xD4, 0x00	; character codes below 0x20
-	.ascii "0"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0xD417
-	.short 0x3A00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x781F	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x00D4	; +0x0D -> (0x2530)
+	.short 0x0030	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00D4	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F298F4:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x785F
-	.byte 0x7F, 0x00, 0x17, 0xA0, 0x97, 0xF2, 0x00, 0x03, 0x00, 0xFC, 0x00	; character codes below 0x20
-	.ascii "0"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0xFC17
-	.short 0x3A00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x785F	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x00FC	; +0x0D -> (0x2530)
+	.short 0x0030	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00FC	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29911:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x789F
-	.byte 0x7F, 0x00, 0x17, 0xA0, 0x97, 0xF2, 0x00, 0x03, 0x00	; character codes below 0x20
-	.ascii "$"
-	.byte 0x01	; character codes below 0x20
-	.ascii "0"
-	.byte 0x00	; character codes below 0x20
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x00FF
-	.short 0x2417
-	.short 0x3A01
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x789F	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F297A0	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0124	; +0x0D -> (0x2530)
+	.short 0x0030	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0124	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F2992E:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x052076AF
-	.short 0x441B
-	.short 0xF299
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x052076AF
-	.short 0x5405
-	.short 0xF299
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x76AF	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F29944	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x76AF	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F29954	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF29944-0xF29963: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x029944, 0x000020
+; ==================================================================
+; 0xF29944-0xF29963 -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F29944 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF2992E
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29944:
+	.short 0x000C, 0x005E, 0x001A, 0x0064	; [0]
+	.short 0x000C, 0x0056, 0x001A, 0x005C	; [1]
+; ------------------------------------------------------------------
+; DLTable_F29954 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29939
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29954:
+	.short 0x000C, 0x0056, 0x001A, 0x005C	; [0]
+	.short 0x000C, 0x005E, 0x001A, 0x0064	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF29964-0xF29979 -- 2 display-list records, 22 bytes
+; 0xF29964-0xF29979 -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF29964
 ;   ends used:  0xF2997A
 ; ------------------------------------------------------------------
 DL_F29964:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x052076EF
-	.short 0x7A1B
-	.short 0xF299
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x052076EF
-	.short 0x8A05
-	.short 0xF299
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x76EF	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F2997A	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x76EF	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F2998A	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF2997A-0xF29999: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02997A, 0x000020
+; ==================================================================
+; 0xF2997A-0xF29999 -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F2997A -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29964
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F2997A:
+	.short 0x0036, 0x005E, 0x0044, 0x0064	; [0]
+	.short 0x0036, 0x0056, 0x0044, 0x005C	; [1]
+; ------------------------------------------------------------------
+; DLTable_F2998A -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF2996F
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F2998A:
+	.short 0x0036, 0x0056, 0x0044, 0x005C	; [0]
+	.short 0x0036, 0x005E, 0x0044, 0x0064	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF2999A-0xF299AF -- 2 display-list records, 22 bytes
+; 0xF2999A-0xF299AF -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF2999A
 ;   ends used:  0xF299B0
 ; ------------------------------------------------------------------
 DL_F2999A:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x0520772F
-	.short 0xB01B
-	.short 0xF299
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x0520772F
-	.short 0xC005
-	.short 0xF299
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x772F	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F299B0	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x772F	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F299C0	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF299B0-0xF299CF: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0299B0, 0x000020
+; ==================================================================
+; 0xF299B0-0xF299CF -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F299B0 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF2999A
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F299B0:
+	.short 0x005D, 0x005E, 0x006B, 0x0064	; [0]
+	.short 0x005D, 0x0056, 0x006B, 0x005C	; [1]
+; ------------------------------------------------------------------
+; DLTable_F299C0 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF299A5
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F299C0:
+	.short 0x005D, 0x0056, 0x006B, 0x005C	; [0]
+	.short 0x005D, 0x005E, 0x006B, 0x0064	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF299D0-0xF299E5 -- 2 display-list records, 22 bytes
+; 0xF299D0-0xF299E5 -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF299D0
 ;   ends used:  0xF299E6
 ; ------------------------------------------------------------------
 DL_F299D0:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x0520776F
-	.short 0xE61B
-	.short 0xF299
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x0520776F
-	.short 0xF605
-	.short 0xF299
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x776F	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F299E6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x776F	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F299F6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF299E6-0xF29A05: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0299E6, 0x000020
+; ==================================================================
+; 0xF299E6-0xF29A05 -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F299E6 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF299D0
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F299E6:
+	.short 0x0086, 0x005E, 0x0094, 0x0064	; [0]
+	.short 0x0086, 0x0056, 0x0094, 0x005C	; [1]
+; ------------------------------------------------------------------
+; DLTable_F299F6 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF299DB
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F299F6:
+	.short 0x0086, 0x0056, 0x0094, 0x005C	; [0]
+	.short 0x0086, 0x005E, 0x0094, 0x0064	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF29A06-0xF29A1B -- 2 display-list records, 22 bytes
+; 0xF29A06-0xF29A1B -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF29A06
 ;   ends used:  0xF29A1C
 ; ------------------------------------------------------------------
 DL_F29A06:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x052077AF
-	.short 0x1C1B
-	.short 0xF29A
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x052077AF
-	.short 0x2C05
-	.short 0xF29A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x77AF	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F29A1C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x77AF	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F29A2C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF29A1C-0xF29A3B: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x029A1C, 0x000020
+; ==================================================================
+; 0xF29A1C-0xF29A3B -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F29A1C -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29A06
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29A1C:
+	.short 0x00AE, 0x005E, 0x00BC, 0x0064	; [0]
+	.short 0x00AE, 0x0056, 0x00BC, 0x005C	; [1]
+; ------------------------------------------------------------------
+; DLTable_F29A2C -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29A11
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29A2C:
+	.short 0x00AE, 0x0056, 0x00BC, 0x005C	; [0]
+	.short 0x00AE, 0x005E, 0x00BC, 0x0064	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF29A3C-0xF29A51 -- 2 display-list records, 22 bytes
+; 0xF29A3C-0xF29A51 -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF29A3C
 ;   ends used:  0xF29A52
 ; ------------------------------------------------------------------
 DL_F29A3C:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x052077EF
-	.short 0x521B
-	.short 0xF29A
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x052077EF
-	.short 0x6205
-	.short 0xF29A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x77EF	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F29A52	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x77EF	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F29A62	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF29A52-0xF29A71: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x029A52, 0x000020
+; ==================================================================
+; 0xF29A52-0xF29A71 -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F29A52 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29A3C
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29A52:
+	.short 0x00D6, 0x005E, 0x00E4, 0x0064	; [0]
+	.short 0x00D6, 0x0056, 0x00E4, 0x005C	; [1]
+; ------------------------------------------------------------------
+; DLTable_F29A62 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29A47
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29A62:
+	.short 0x00D6, 0x0056, 0x00E4, 0x005C	; [0]
+	.short 0x00D6, 0x005E, 0x00E4, 0x0064	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF29A72-0xF29A87 -- 2 display-list records, 22 bytes
+; 0xF29A72-0xF29A87 -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF29A72
 ;   ends used:  0xF29A88
 ; ------------------------------------------------------------------
 DL_F29A72:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x0520782F
-	.short 0x881B
-	.short 0xF29A
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x0520782F
-	.short 0x9805
-	.short 0xF29A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x782F	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F29A88	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x782F	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F29A98	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF29A88-0xF29AA7: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x029A88, 0x000020
+; ==================================================================
+; 0xF29A88-0xF29AA7 -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F29A88 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29A72
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29A88:
+	.short 0x00FE, 0x005E, 0x010C, 0x0064	; [0]
+	.short 0x00FE, 0x0056, 0x010C, 0x005C	; [1]
+; ------------------------------------------------------------------
+; DLTable_F29A98 -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29A7D
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29A98:
+	.short 0x00FE, 0x0056, 0x010C, 0x005C	; [0]
+	.short 0x00FE, 0x005E, 0x010C, 0x0064	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF29AA8-0xF29ABD -- 2 display-list records, 22 bytes
+; 0xF29AA8-0xF29ABD -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF29AA8
 ;   ends used:  0xF29ABE
 ; ------------------------------------------------------------------
 DL_F29AA8:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x0520786F
-	.short 0xBE1B
-	.short 0xF29A
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x0520786F
-	.short 0xCE05
-	.short 0xF29A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x786F	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F29ABE	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x786F	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F29ACE	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF29ABE-0xF29ADD: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x029ABE, 0x000020
+; ==================================================================
+; 0xF29ABE-0xF29ADD -- display-list OPERAND TABLES (32 bytes, 2 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F29ABE -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29AA8
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29ABE:
+	.short 0x0126, 0x005E, 0x0134, 0x0064	; [0]
+	.short 0x0126, 0x0056, 0x0134, 0x005C	; [1]
+; ------------------------------------------------------------------
+; DLTable_F29ACE -- 2 entries of 8 bytes
+; Referenced by: display-list record 0xF29AB3
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           2 entries is the EXTENT (16 bytes / 8), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F29ACE:
+	.short 0x0126, 0x0056, 0x0134, 0x005C	; [0]
+	.short 0x0126, 0x005E, 0x0134, 0x0064	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF29ADE-0xF29BC5 -- 16 display-list records, 232 bytes
+; 0xF29ADE-0xF29BC5 -- 16 display-list records, 232 bytes -- interpreter B
 ;   entered at: 0xF29ADE, 0xF29AEF, 0xF29B00, 0xF29B11, 0xF29B22, 0xF29B33, 0xF29B44, 0xF29B55, 0xF29B66, 0xF29B72, 0xF29B7E, 0xF29B8A, 0xF29B96, 0xF29BA2, 0xF29BAE, 0xF29BBA
 ;   ends used:  0xF29AEF, 0xF29B00, 0xF29B11, 0xF29B22, 0xF29B33, 0xF29B44, 0xF29B55, 0xF29B66, 0xF29B72, 0xF29B7E, 0xF29B8A, 0xF29B96, 0xF29BA2, 0xF29BAE, 0xF29BBA, 0xF29BC6
 ; ------------------------------------------------------------------
 DL_F29ADE:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x76AA
-	.byte 0x7F, 0x00, 0x17	; character codes below 0x20
-	.ascii "\""
-	.byte 0x85, 0xF2, 0x00, 0x03, 0x00, 0x0A, 0x00	; character codes below 0x20
-	.ascii "{"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x76AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x000A	; +0x0D -> (0x2530)
+	.short 0x007B	; +0x0F -> (0x2532)
 DL_F29AEF:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x76EA
-	.byte 0x7F, 0x00, 0x17	; character codes below 0x20
-	.ascii "\""
-	.byte 0x85, 0xF2, 0x00, 0x03, 0x00	; character codes below 0x20
-	.ascii "2"
-	.byte 0x00	; character codes below 0x20
-	.ascii "{"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x76EA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0032	; +0x0D -> (0x2530)
+	.short 0x007B	; +0x0F -> (0x2532)
 DL_F29B00:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x772A
-	.byte 0x7F, 0x00, 0x17	; character codes below 0x20
-	.ascii "\""
-	.byte 0x85, 0xF2, 0x00, 0x03, 0x00	; character codes below 0x20
-	.ascii "Z"
-	.byte 0x00	; character codes below 0x20
-	.ascii "{"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x772A	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x005A	; +0x0D -> (0x2530)
+	.short 0x007B	; +0x0F -> (0x2532)
 DL_F29B11:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x776A
-	.byte 0x7F, 0x00, 0x17	; character codes below 0x20
-	.ascii "\""
-	.byte 0x85, 0xF2, 0x00, 0x03, 0x00, 0x82, 0x00	; character codes below 0x20
-	.ascii "{"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x776A	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0082	; +0x0D -> (0x2530)
+	.short 0x007B	; +0x0F -> (0x2532)
 DL_F29B22:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x77AA
-	.byte 0x7F, 0x00, 0x17	; character codes below 0x20
-	.ascii "\""
-	.byte 0x85, 0xF2, 0x00, 0x03, 0x00, 0xAA, 0x00	; character codes below 0x20
-	.ascii "{"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x77AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x00AA	; +0x0D -> (0x2530)
+	.short 0x007B	; +0x0F -> (0x2532)
 DL_F29B33:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x77EA
-	.byte 0x7F, 0x00, 0x17	; character codes below 0x20
-	.ascii "\""
-	.byte 0x85, 0xF2, 0x00, 0x03, 0x00, 0xD2, 0x00	; character codes below 0x20
-	.ascii "{"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x77EA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x00D2	; +0x0D -> (0x2530)
+	.short 0x007B	; +0x0F -> (0x2532)
 DL_F29B44:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x782A
-	.byte 0x7F, 0x00, 0x17	; character codes below 0x20
-	.ascii "\""
-	.byte 0x85, 0xF2, 0x00, 0x03, 0x00, 0xFA, 0x00	; character codes below 0x20
-	.ascii "{"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x782A	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x00FA	; +0x0D -> (0x2530)
+	.short 0x007B	; +0x0F -> (0x2532)
 DL_F29B55:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x786A
-	.byte 0x7F, 0x00, 0x17	; character codes below 0x20
-	.ascii "\""
-	.byte 0x85, 0xF2, 0x00, 0x03, 0x00	; character codes below 0x20
-	.ascii "\""
-	.byte 0x01	; character codes below 0x20
-	.ascii "{"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x786A	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0122	; +0x0D -> (0x2530)
+	.short 0x007B	; +0x0F -> (0x2532)
 DL_F29B66:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x76A5
-	.short 0x007F
-	.short 0x0A17
-	.short 0xA700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x76A5	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x000A	; +0x07 -> (0x2530)
+	.short 0x00A7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29B72:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x76E5
-	.short 0x007F
-	.short 0x3217
-	.short 0xA700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x76E5	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0032	; +0x07 -> (0x2530)
+	.short 0x00A7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29B7E:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x7725
-	.short 0x007F
-	.short 0x5A17
-	.short 0xA700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x7725	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x005A	; +0x07 -> (0x2530)
+	.short 0x00A7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29B8A:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x7765
-	.short 0x007F
-	.short 0x8217
-	.short 0xA700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x7765	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0082	; +0x07 -> (0x2530)
+	.short 0x00A7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29B96:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x77A5
-	.short 0x007F
-	.short 0xAA17
-	.short 0xA700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x77A5	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00AA	; +0x07 -> (0x2530)
+	.short 0x00A7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29BA2:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x77E5
-	.short 0x007F
-	.short 0xD217
-	.short 0xA700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x77E5	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00D2	; +0x07 -> (0x2530)
+	.short 0x00A7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29BAE:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x7825
-	.short 0x007F
-	.short 0xFA17
-	.short 0xA700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x7825	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00FA	; +0x07 -> (0x2530)
+	.short 0x00A7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F29BBA:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x7865
-	.short 0x007F
-	.short 0x2217
-	.short 0xA701
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x7865	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0122	; +0x07 -> (0x2530)
+	.short 0x00A7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 
 ; --- 0xF29BC6-0xF2ADD1: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x029BC6, 0x00120C
 
 ; ------------------------------------------------------------------
-; 0xF2ADD2-0xF2AF80 -- 48 display-list records, 431 bytes
+; 0xF2ADD2-0xF2AF80 -- 48 display-list records, 431 bytes -- interpreter A
 ;   entered at: 0xF2ADD2
 ;   ends used:  0xF2AF81
 ; ------------------------------------------------------------------
@@ -9935,7 +11403,7 @@ DL_F2ADD2:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02AF81, 0x0001AF
 
 ; ------------------------------------------------------------------
-; 0xF2B130-0xF2B2E2 -- 50 display-list records, 435 bytes
+; 0xF2B130-0xF2B2E2 -- 50 display-list records, 435 bytes -- interpreter A
 ;   entered at: 0xF2B130
 ;   ends used:  0xF2B2E3
 ; ------------------------------------------------------------------
@@ -10149,27 +11617,29 @@ DL_F2B130:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02B2E3, 0x000096
 
 ; ------------------------------------------------------------------
-; 0xF2B379-0xF2B38E -- 2 display-list records, 22 bytes
+; 0xF2B379-0xF2B38E -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF2B379
 ;   ends used:  0xF2B38F
 ; ------------------------------------------------------------------
 DL_F2B379:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F2674
-	.short 0x8F1B
-	.short 0xF2B3
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F216A
-	.short 0x8F05
-	.short 0xF2B3
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2674	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F2B38F	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x216A	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F2B38F	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF2B38F-0xF2B573: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02B38F, 0x0001E5
 
 ; ------------------------------------------------------------------
-; 0xF2B574-0xF2B8F8 -- 98 display-list records, 901 bytes
+; 0xF2B574-0xF2B8F8 -- 98 display-list records, 901 bytes -- interpreter A
 ;   entered at: 0xF2B574, 0xF2B736
 ;   ends used:  0xF2B736, 0xF2B8F9
 ; ------------------------------------------------------------------
@@ -10622,7 +12092,7 @@ DL_F2B736:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02B8F9, 0x000113
 
 ; ------------------------------------------------------------------
-; 0xF2BA0C-0xF2BB0C -- 26 display-list records, 257 bytes
+; 0xF2BA0C-0xF2BB0C -- 26 display-list records, 257 bytes -- interpreter A (25 records) and B (1)
 ;   entered at: 0xF2BA0C, 0xF2BA16, 0xF2BA20, 0xF2BA50, 0xF2BA5A, 0xF2BA64, 0xF2BA73, 0xF2BB03
 ;   ends used:  0xF2BA16, 0xF2BA20, 0xF2BA50, 0xF2BA5A, 0xF2BA64, 0xF2BA73, 0xF2BAD3, 0xF2BB03, 0xF2BB0D
 ; ------------------------------------------------------------------
@@ -10675,12 +12145,14 @@ DL_F2BA5A:
 	.short 0x0079
 	.short 0x00EC
 DL_F2BA64:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2640
-	.short 0x0000
-	.short 0x6106
-	.short 0x0026
-	.byte 0x00, 0x02, 0x00, 0x66, 0x01	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00002661	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x0166	; +0x0D -> IX
 DL_F2BA73:
 	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
 	.short 0x2351
@@ -10762,7 +12234,7 @@ DL_F2BB03:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02BB0D, 0x00020B
 
 ; ------------------------------------------------------------------
-; 0xF2BD18-0xF2BE34 -- 30 display-list records, 285 bytes
+; 0xF2BD18-0xF2BE34 -- 30 display-list records, 285 bytes -- interpreter A (28 records) and B (2)
 ;   entered at: 0xF2BD18, 0xF2BD48, 0xF2BD52, 0xF2BD66, 0xF2BD96, 0xF2BDA0, 0xF2BDB4, 0xF2BDC3, 0xF2BDD2, 0xF2BDF5
 ;   ends used:  0xF2BD48, 0xF2BD52, 0xF2BD66, 0xF2BD96, 0xF2BDA0, 0xF2BDB4, 0xF2BDC3, 0xF2BDD2, 0xF2BDF5, 0xF2BE35
 ; ------------------------------------------------------------------
@@ -10849,19 +12321,23 @@ DL_F2BDA0:
 	.short 0x00A1
 	.short 0x00EC
 DL_F2BDB4:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2642
-	.short 0x0000
-	.short 0x6106
-	.short 0x0026
-	.byte 0x00, 0x03, 0x00, 0x12, 0x1D	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00002661	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1D12	; +0x0D -> IX
 DL_F2BDC3:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2642
-	.short 0x0000
-	.short 0x6106
-	.short 0x0026
-	.byte 0x00, 0x03, 0x00, 0x16, 0x1D	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00002661	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1D16	; +0x0D -> IX
 DL_F2BDD2:
 	.byte 0x06, 0x05	; op 06, 5 bytes -> handler 0xF31A3A
 	.short 0x1D15
@@ -10947,12 +12423,16 @@ DL_F2BDF5:
 ; 0x23-0x3F are all 0xF8EAC6, which is a single 0x0E = `ret`.  So the service
 ; has 35 live functions numbered 0x00-0x22 -- and the display-list bound 0x24
 ; is exactly one past the last of them.  Three independent numbers agreeing
-; ⚠ CORRECTED 2026-08-24.  Of the three numbers this paragraph called independent, only
+; ⚠ CORRECTED 2026-08-24.  Of the three numbers this paragraph called independent,
 ; TWO hold: the 0x24 bound and the 36-entry handler table, both read directly off
-; `cp L,0x24` at 0xF31A0F.  The third (0x23 = first dead service slot) is wrong -- 0x18
-; is -- and the 'zero exceptions' leg is wrong too (341 of 4,011 records violate it).
-; The DECODE stands on the two that hold; the licence to call it fact does not.  Was:
-; this decode is stated as fact rather than as a reading.
+; `cp L,0x24` at 0xF31A0F.  The third (0x23 = first dead service slot) is wrong --
+; 0x18 is.  The 'zero exceptions' leg, also disputed that day, HOLDS after all:
+; the 341 apparent violations are interpreter-B records that had been measured
+; against interpreter A's layout, and judged by the interpreter that runs them
+; the exception count is zero on both sides (3,603 A records, 494 B records).
+; See notes/FINDINGS-ui-display-list-interpreter-b.md and reproduce with
+; `python3 notes/prom_b_dl_length_audit.py --edges`.
+; The DECODE stands; the licence to call it fact rather than a reading does not.
 ;
 ; SERVICE FUNCTIONS IDENTIFIED SO FAR, and how:
 ;   fn 0x03  draw bitmap.  IX = position, BC = width in BYTES, HL = height in
@@ -11312,8 +12792,16 @@ hex_shift_pairs:
 ;          advance XIY by the length byte at (XIY+1).
 ;          Advancing by a length field is what makes every list self-checking:
 ;          walking it from the call site's start address lands exactly on the
-;          call site's end address in the large majority of prom_b lists (the '243 of 244' figure
-;          is not reproduced by the committed script -- see notes/FINDINGS-ui-display-list.md).
+;          call site's end address.  UN-MERGED, per call site, that holds for 243
+;          of this interpreter's 244 prom_b sites and 158 of interpreter B's 162.
+;          Both figures INCLUDING THEIR DENOMINATORS are printed by
+;          `python3 notes/prom_b_dl_length_audit.py` ("A 243 of 244, B 158 of
+;          162"); before 2026-08-25 the script printed only the numerators and
+;          the denominators here were the reader's own addition.
+;          ⚠ That script is UNTRACKED -- this lane may not commit -- so the
+;          figure is reproducible only while the working tree survives.
+;          The five sites that fail are dissected in
+;          notes/FINDINGS-ui-display-list-interpreter-b.md.
 ; ---------------------------------------------------------------------
 DisplayList_Run:
 	cp	xix, xiy	; F31A09  cp XIX,XIY
@@ -11522,38 +13010,74 @@ DisplayListB_Run:
 ;
 ; WHAT MAKES INTERPRETER B DIFFERENT.  Interpreter A draws what the record says.
 ; Interpreter B draws what a VARIABLE says: every one of these handlers opens
-; with `calr DisplayListB_ExtractField`, which reads a byte out of memory at an
-; address the record carries, masks it and shifts it.  So these lists are the
-; live parameter readouts, and interpreter A's are the static furniture.
+; with `calr DisplayListB_ExtractField` (or its sign-extending twin at 0xF31CE4),
+; which reads a byte out of memory at an address the record carries, masks it and
+; shifts it.  So these lists are the live parameter readouts, and interpreter A's
+; are the static furniture.
 ;
-; RECORD LAYOUT, read straight off the handlers (each field is named by the
-; instruction that consumes it, not by guesswork):
+; RECORD LAYOUT, read straight off the handlers -- each field is named by the
+; instruction that consumes it, and the per-opcode length below is the highest
+; byte the handler touches, plus one:
 ;
 ;   +0   opcode, bounds-checked against 0x0F
 ;   +1   length of the whole record
 ;   +2   16-bit ADDRESS of the source variable   (`ld IX,(XIY+2)` / `ld A,(IX)`)
 ;   +4   AND mask, one byte                      (`ld W,(XIY+4)` / `and A,W`)
 ;   +5   right-shift count, low 3 bits           (`and C,0x07` / `srl A,C`)
-;   +6   the `swi 7` function number              (`ld A,(XIY+6)` -- in 8 of the
-;                                                 handlers; interpreter A puts
-;                                                 this at +0 instead)
-;   +7   32-bit pointer -- a bitmap, or the base of an array the extracted value
-;        indexes                                  (`ld XIY,(XIY+7)`)
-;   +11  -> BC                                    (`ld BC,(XIY+0x0b)`)
-;   +13  -> IX, or -> (0x2530)
-;   +15  -> (0x2532)
+;   +6   the `swi 7` function number             (`ld A,(XIY+6)` -- every handler
+;                                                 but opcode 01, which hard-codes
+;                                                 0x0A; interpreter A puts this
+;                                                 at +0 instead)
+;   +7   and beyond: per handler, see each one's header.
 ;
-; Two handlers show the array case outright: 0xF31B57 does `sla 3,HL` and adds
-; the result to the +7 pointer, then reads four 16-bit words from it into
-; (0x2530..0x2536) -- an array of 8-byte records indexed by the extracted field.
-; 0xF31B86 does `mul HL,6` on the same pointer -- an array of 6-byte records.
+;   opcode  handler     length   what the +7 field is
+;   ------  ----------  ------   ---------------------------------------------
+;   00 06   0xF31BA1      10     word -> IX; +9 digit count; buffer 0x2661..3
+;   01      0xF31C9E      12     (no +7 pointer; +6/+8/+0x0A are three words)
+;   02      0xF31B21      15     long -> string table, +0x0B = entry width
+;   03 08   0xF31B57      11     long -> array of 8-byte entries
+;   04      0xF31B86      11     long -> array of 6-byte entries
+;   05      0xF31BD7      11     word -> IX; +0x0A sign flag; buffer 0x2660
+;   07      0xF31B39      17     long -> string table, +0x0B = entry width
+;   09 0A   0xF31C14      12     word -> (0x2530); +9 -> (0x2532)
+;   0B      0xF31C56      13     word -> (0x2530); +0x0C sign flag
+;   0C 0D 0E 0xF31D20      2     bare `ret`
 ;
-; ⚠ NOT ESTABLISHED: what the individual opcodes mean, which variables the +2
-; addresses are, and whether every record uses every field.  The lists driven by
-; this interpreter are therefore still .incbin; this layout is what the next pass
-; should test them against.
+; EVERY interpreter-B record in the image obeys that table, with no exceptions,
+; and so does every interpreter-A record obey A's.  Sharper still: each of B's
+; eleven live opcodes has exactly ONE record length across the whole image --
+;   op 00 x74 len 10   op 02 x183 len 15   op 03 x67 len 11   op 04 x3  len 11
+;   op 05 x62 len 11   op 06 x32  len 10   op 07 x30 len 17   op 08 x5  len 11
+;   op 09 x27 len 12   op 0A x3   len 12   op 0B x8  len 13
+; -- 494 records, no opcode with two lengths.  This is the correction of the
+; "341 records violate the length rule" figure: those 341 were B records measured
+; against A's layout.  Reproduce:
+;     python3 notes/prom_b_dl_length_audit.py --edges
+;
+; The lists themselves are emitted as records above and below this block, each
+; rendered with its own interpreter's layout; B records are marked `B op NN`.
+;
+; ⚠ STILL NOT ESTABLISHED: which RAM variables the +2 addresses are, and what
+; each `swi 7` function draws.
 ; ---------------------------------------------------------------------
-sub_F31B21:
+; DLB_Handler_StringTable -- interpreter B opcode 02: draw entry [value] of a
+;                            string table
+; Called from: DisplayListB_HandlerTable slot 0x02 (0xF31DB1+8)
+; Inputs:  XIY = the record, 15 bytes:
+;            +2 word source-variable address, +4 mask, +5 shift  (ExtractField)
+;            +6 swi 7 function, +7 long -> XIY, +0x0B -> BC, +0x0D -> IX
+; Outputs: issues `swi 7` with HL = the extracted bit-field = the entry index
+; Evidence: `ld XIY,(XIY+7)` re-points XIY at the table and `ld BC,(XIY+0x0B)`
+;           is the entry width; the record at 0xF03455 carries BC = 4 and points
+;           at 0xF03478, which reads "FIX MOVE" -- two four-character entries,
+;           and its mask 0x80 with shift 7 admits exactly the indices 0 and 1.
+;           Highest record byte touched is +0x0E; all 183 interpreter-B op-02
+;           records in the image are 15 bytes (notes/prom_b_dl_length_audit.py).
+;           The `cp (XIY),0x07 / jr Z` at 0xF31B24 is dead when the handler is
+;           reached through the table, because slot 0x07 holds 0xF31B39.
+; Unknown:  which variables the +2 addresses are.
+; ---------------------------------------------------------------------
+DLB_Handler_StringTable:
 	calr	417	; F31B21  calr 0xf31cc5
 	.byte 0x85, 0x3F, 0x07	; F31B24  cp (XIY),0x07   [llvm-mc cannot encode this]
 	jr	z, 19	; F31B27  jr Z,0xf31b3c
@@ -11564,6 +13088,28 @@ sub_F31B21:
 	ld	xiy, (xiy+7)	; F31B34  ld XIY,(XIY+0x07)
 	swi	7	; F31B37  swi 7
 	ret	; F31B38  ret
+; ---------------------------------------------------------------------
+; DLB_Handler_StringTable2 -- interpreter B opcode 07: draw entry [value] of a
+;                             string table, with two extra words
+; Called from: DisplayListB_HandlerTable slot 0x07 (0xF31DB1+0x1C).  Slot 0x02's
+;              handler (0xF31B21) jumps INTO this one at 0xF31B3C when the record
+;              it is running has opcode 0x07 -- which cannot happen through the
+;              table, so 0xF31B21's `cp (XIY),0x07` is dead for table entry.
+; Inputs:  XIY = the record.  Record is 17 bytes:
+;            +2 word source-variable address, +4 mask, +5 shift  (ExtractField)
+;            +6 swi 7 function, +7 long -> XIY, +0x0B -> BC,
+;            +0x0D -> (0x2530), +0x0F -> (0x2532)
+; Outputs: issues `swi 7` with HL = the extracted bit-field
+; Evidence: the six loads listed above are the whole routine; the highest record
+;           byte any of them touches is +0x10, and all 30 interpreter-B op-07
+;           records are exactly 17 bytes (notes/prom_b_dl_length_audit.py).
+;           BC is the entry WIDTH: the record at 0xF0302A carries BC = 8 and its
+;           +7 points at 0xF03241, which holds 64 eight-character names
+;           ("ORIGINAL", " STRING ", "CYLINDER", ...) ending exactly on the next
+;           display list at 0xF03441.
+; Unknown:  which variables the +2 addresses are.
+; ---------------------------------------------------------------------
+DLB_Handler_StringTable2:
 	calr	393	; F31B39  calr 0xf31cc5
 	ld	hl, wa	; F31B3C  ld HL,WA
 	ld	a, (xiy+6)	; F31B3E  ld A,(XIY+0x06)
@@ -11575,6 +13121,23 @@ sub_F31B21:
 	ld	xiy, (xiy+7)	; F31B52  ld XIY,(XIY+0x07)
 	swi	7	; F31B55  swi 7
 	ret	; F31B56  ret
+; ---------------------------------------------------------------------
+; DLB_Handler_Array8 -- interpreter B opcodes 03 and 08: four words of
+;                       entry[value] of an array of 8-byte entries
+; Called from: DisplayListB_HandlerTable slots 0x03 and 0x08
+; Inputs:  XIY = the record, 11 bytes: +2/+4/+5 the field, +6 the swi 7
+;          function, +7 a 32-bit array base
+; Outputs: (0x2530),(0x2532),(0x2534),(0x2536) = the entry's four 16-bit words;
+;          then `swi 7`
+; Evidence: `sla 3,HL` on the extracted value before `add XIX,XHL` is what fixes
+;           the entry size at 8; the four `ld BC,(XIX+n)` at n = 0, 2, 4, 6 are
+;           what fixes it at four words.  Highest record byte touched is +0x0A,
+;           and all 67 op-03 and all 5 op-08 interpreter-B records are 11 bytes.
+; Unknown:  what service (XIY+6) does with the four words.  0x05 is the value
+;           seen most often and is the same service interpreter A's
+;           DLHandler_4Words feeds.
+; ---------------------------------------------------------------------
+DLB_Handler_Array8:
 	calr	363	; F31B57  calr 0xf31cc5
 	ld	hl, wa	; F31B5A  ld HL,WA
 	sla	hl, 3	; F31B5C  sla 0x03,HL
@@ -11592,6 +13155,16 @@ sub_F31B21:
 	stda16	(9526), bc	; F31B80  ld (0x2536),BC
 	swi	7	; F31B84  swi 7
 	ret	; F31B85  ret
+; ---------------------------------------------------------------------
+; DLB_Handler_Array6 -- interpreter B opcode 04: entry[value] of an array of
+;                       6-byte entries, into IY/BC/HL
+; Called from: DisplayListB_HandlerTable slot 0x04
+; Inputs:  XIY = the record, 11 bytes, same field layout as DLB_Handler_Array8
+; Outputs: IY = (entry+0), BC = (entry+2), HL = (entry+4); then `swi 7`
+; Evidence: `mul HL,6` fixes the entry size at 6; the three loads fix the shape.
+;           All 3 interpreter-B op-04 records are 11 bytes.
+; ---------------------------------------------------------------------
+DLB_Handler_Array6:
 	calr	316	; F31B86  calr 0xf31cc5
 	ld	hl, wa	; F31B89  ld HL,WA
 	mul	hl, 6	; F31B8B  mul HL,0x0006
@@ -11603,6 +13176,24 @@ sub_F31B21:
 	ld	iy, (xix)	; F31B9D  ld IY,(XIX)
 	swi	7	; F31B9F  swi 7
 	ret	; F31BA0  ret
+; ---------------------------------------------------------------------
+; DLB_Handler_Decimal -- interpreter B opcodes 00 and 06: draw the field as
+;                        decimal digits
+; Called from: DisplayListB_HandlerTable slots 0x00 and 0x06
+; Inputs:  XIY = the record, 10 bytes: +2/+4/+5 the field, +6 the swi 7
+;          function, +7 word -> IX, +9 digit count
+; Outputs: `swi 7` with XIY pointing into the digit buffer at 0x2660
+; Evidence: for opcode 6 the value is read as a 16-bit word straight from the
+;           +2 address instead of through ExtractField (`ld IX,(XIY+2) / extz
+;           XIX / ld WA,(XIX)`).  Either way it then calls thunk T_F41AF0 ->
+;           prom_a 0xF8BCAF, which is a decimal converter: 0xF8BCD7 repeatedly
+;           subtracts 100 and 10 and leaves three digits at 0x2661, 0x2662,
+;           0x2663, and 0xF8BCAF blanks the leading ones with 0x20 (' ').
+;           The +9 count then picks the starting digit: 3 -> 0x2661, 2 -> 0x2662,
+;           anything else -> 0x2663.
+; Unknown:  what `swi 7` function (XIY+6) is.
+; ---------------------------------------------------------------------
+DLB_Handler_Decimal:
 	ld	a, (xiy)	; F31BA1  ld A,(XIY)
 	cps	a, 6	; F31BA3  cp A,6
 	jr	nz, 9	; F31BA5  jr NZ,0xf31bb0
@@ -11626,6 +13217,21 @@ sub_F31B21:
 	inc	1, iy	; F31BD3  inc 1,IY
 	swi	7	; F31BD5  swi 7
 	ret	; F31BD6  ret
+; ---------------------------------------------------------------------
+; DLB_Handler_DecimalSigned -- interpreter B opcode 05: the same, signed
+; Called from: DisplayListB_HandlerTable slot 0x05
+; Inputs:  XIY = the record, 11 bytes; +0x0A is the sign flag
+; Outputs: `swi 7` with XIY pointing into the buffer at 0x2660, one character
+;          earlier than the unsigned form
+; Evidence: it uses DisplayListB_ExtractFieldSigned (0xF31CE4), which after the
+;           mask and shift reads (XIY+0x0A) and sign-extends WA unless that
+;           byte's bit 7 is set; and thunk T_F41AF8 -> prom_a 0xF8BCC9, which is
+;           0xF8BD41 followed by the same 0xF8BCAF -- i.e. a sign step in front
+;           of the decimal conversion.  The buffer base here is 0x2660, one byte
+;           below the unsigned handler's 0x2661, and BC is incremented, so the
+;           extra character is the sign.
+; ---------------------------------------------------------------------
+DLB_Handler_DecimalSigned:
 	calr	266	; F31BD7  calr 0xf31ce4
 	call	15997688	; F31BDA  call 0xf41af8
 	ld	ix, (xiy+7)	; F31BDE  ld IX,(XIY+0x07)
@@ -11652,6 +13258,18 @@ sub_F31B21:
 	popw	wa	; F31C11  pop WA
 	swi	7	; F31C12  swi 7
 	ret	; F31C13  ret
+; ---------------------------------------------------------------------
+; DLB_Handler_Decimal2Words -- interpreter B opcodes 09 and 0A: decimal, with
+;                              two extra words
+; Called from: DisplayListB_HandlerTable slots 0x09 and 0x0A
+; Inputs:  XIY = the record, 12 bytes: field, +6 function, +7 -> (0x2530),
+;          +9 -> (0x2532), +0x0B digit count
+; Outputs: as DLB_Handler_Decimal
+; Evidence: opcode 0x0A takes the same direct 16-bit read that opcode 0x06 takes
+;           in DLB_Handler_Decimal (`cp A,0x0A` instead of `cp A,6`); the rest is
+;           the unsigned decimal path with two more words stored.
+; ---------------------------------------------------------------------
+DLB_Handler_Decimal2Words:
 	ld	a, (xiy)	; F31C14  ld A,(XIY)
 	cp	a, 10	; F31C16  cp A,0x0a
 	jr	nz, 9	; F31C19  jr NZ,0xf31c24
@@ -11678,6 +13296,17 @@ sub_F31B21:
 	inc	1, iy	; F31C52  inc 1,IY
 	swi	7	; F31C54  swi 7
 	ret	; F31C55  ret
+; ---------------------------------------------------------------------
+; DLB_Handler_DecimalSigned2Words -- interpreter B opcode 0B: signed decimal,
+;                                    two extra words
+; Called from: DisplayListB_HandlerTable slot 0x0B
+; Inputs:  XIY = the record, 13 bytes; +0x0C is the sign flag
+; Evidence: DisplayListB_ExtractFieldSigned reads its sign flag from (XIY+0x0C)
+;           rather than (XIY+0x0A) exactly when the opcode is 0x0B -- that is the
+;           `cp (XIY),0x0B` at 0xF31D02 -- which is why this record is 13 bytes
+;           and opcode 05's is 11.  All 8 interpreter-B op-0B records are 13.
+; ---------------------------------------------------------------------
+DLB_Handler_DecimalSigned2Words:
 	calr	139	; F31C56  calr 0xf31ce4
 	call	15997688	; F31C59  call 0xf41af8
 	ld	ix, (xiy+7)	; F31C5D  ld IX,(XIY+0x07)
@@ -11707,6 +13336,19 @@ sub_F31B21:
 	popw	wa	; F31C9B  pop WA
 	swi	7	; F31C9C  swi 7
 	ret	; F31C9D  ret
+; ---------------------------------------------------------------------
+; DLB_Handler_CentredSpan -- interpreter B opcode 01: four words, one of them
+;                            offset by half the field value
+; Called from: DisplayListB_HandlerTable slot 0x01
+; Inputs:  XIY = the record, 12 bytes: +2/+4/+5 the field, +6 -> (0x2530),
+;          +8 -> (0x2534), +0x0A -> (0x2536)
+; Outputs: (0x2532) = (XIY+0x0A) - value/2; `swi 7` with A hard-coded to 0x0A
+; Evidence: `srl 1,WA / sub HL,WA` on the copy of (XIY+0x0A) is the only
+;           arithmetic; `ld A,0x0A` immediately before `swi 7` is why this
+;           handler is the one interpreter-B opcode with no +6 function byte.
+; Unknown:  what service 0x0A draws.
+; ---------------------------------------------------------------------
+DLB_Handler_CentredSpan:
 	calr	36	; F31C9E  calr 0xf31cc5
 	ld	hl, (xiy+10)	; F31CA1  ld HL,(XIY+0x0a)
 	stda16	(9526), hl	; F31CA4  ld (0x2536),HL
@@ -11729,8 +13371,8 @@ sub_F31B21:
 ; Inputs:  XIY = the record
 ; Outputs: WA = ((byte at the 16-bit address in (XIY+2)) & (XIY+4)) >> ((XIY+5) & 7)
 ; Notes:   this routine is the whole difference between the two interpreters.
-;          The duplicate at 0xF31CE4 is the same six steps followed by an
-;          opcode-0x0B test, i.e. an inlined copy, not a separate service.
+;          0xF31CE4 below is a SECOND copy with a tail; both are entered by
+;          `calr`, so they are two routines, not one with a fall-through.
 ; ---------------------------------------------------------------------
 DisplayListB_ExtractField:
 	ld	ix, (xiy+2)	; F31CC5  ld IX,(XIY+0x02)
@@ -11747,6 +13389,22 @@ DisplayListB_ExtractField:
 	.byte 0xCB, 0xFF	; F31CDF  srl A,C   [llvm-mc cannot encode this]
 	ex8	a, c	; F31CE1  ex A,C
 	ret	; F31CE3  ret
+
+; ---------------------------------------------------------------------
+; DisplayListB_ExtractFieldSigned -- the same field read, then sign-extended
+;                                    under the control of a flag byte
+; Called from: handlers 0xF31BD7 (opcode 05) and 0xF31C56 (opcode 0B), by `calr`
+; Inputs:  XIY = the record
+; Outputs: WA = the field, sign-extended to 16 bits unless bit 7 of the flag byte
+;          is set, in which case W is cleared and the field stays unsigned
+; Evidence: 0xF31CC5..0xF31CE3 repeated verbatim, then `cp (XIY),0x0B` picks the
+;           flag byte's offset -- +0x0C for opcode 0x0B, +0x0A for everything
+;           else -- `ld E,(XIY+E)` fetches it, `bit 7,E` tests it, and the two
+;           arms are `xor W,W` (stay unsigned) and `exts WA` (sign-extend).
+;           That offset choice is exactly why op-0B records are 13 bytes and
+;           op-05 records are 11.
+; ---------------------------------------------------------------------
+DisplayListB_ExtractFieldSigned:
 	ld	ix, (xiy+2)	; F31CE4  ld IX,(XIY+0x02)
 	extz	xix	; F31CE7  extz XIX
 	ld	a, (xix)	; F31CE9  ld A,(XIX)
@@ -12094,97 +13752,123 @@ ValueGlyph_Bitmaps:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032709, 0x0001D3
 
 ; ------------------------------------------------------------------
-; 0xF328DC-0xF32991 -- 14 display-list records, 182 bytes
+; 0xF328DC-0xF32991 -- 14 display-list records, 182 bytes -- interpreter B
 ;   entered at: 0xF328DC, 0xF3294B, 0xF32987
 ;   ends used:  0xF32918, 0xF3294B, 0xF32987, 0xF32992
 ; ------------------------------------------------------------------
 DL_F328DC:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x0003
-	.short 0x5A20
-	.short 0xF32A
-	.byte 0x00, 0x07, 0x00, 0x4F, 0x0D	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x020C
-	.short 0x5A20
-	.short 0xF32A
-	.byte 0x00, 0x07, 0x00, 0x77, 0x12	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x0430
-	.short 0x5A20
-	.short 0xF32A
-	.byte 0x00, 0x07, 0x00, 0x4F, 0x17	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x06C0
-	.short 0x5A20
-	.short 0xF32A
-	.byte 0x00, 0x07, 0x00, 0x4F, 0x1C	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x003F
-	.short 0x5920
-	.short 0x020D
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x003F
-	.short 0x8120
-	.short 0x0212
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x003F
-	.short 0x5920
-	.short 0x0217
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x003F
-	.short 0x5920
-	.short 0x021C
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0x8705
-	.short 0xF32A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A5A	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x0D4F	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x0C	; +0x04 AND mask
+	.byte 0x02	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A5A	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x1277	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x30	; +0x04 AND mask
+	.byte 0x04	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A5A	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x174F	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0xC0	; +0x04 AND mask
+	.byte 0x06	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A5A	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x1C4F	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D59	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1281	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1759	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1C59	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F32A87	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F3294B:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x0003
-	.short 0x4E06
-	.short 0xF32A
-	.byte 0x00, 0x03, 0x00, 0x52, 0x0D	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x020C
-	.short 0x4E06
-	.short 0xF32A
-	.byte 0x00, 0x03, 0x00, 0x7A, 0x12	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x0430
-	.short 0x4E06
-	.short 0xF32A
-	.byte 0x00, 0x03, 0x00, 0x52, 0x17	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x06C0
-	.short 0x4E06
-	.short 0xF32A
-	.byte 0x00, 0x03, 0x00, 0x52, 0x1C	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F32A4E	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0D52	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0x0C	; +0x04 AND mask
+	.byte 0x02	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F32A4E	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x127A	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0x30	; +0x04 AND mask
+	.byte 0x04	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F32A4E	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1752	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0xC0	; +0x04 AND mask
+	.byte 0x06	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F32A4E	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1C52	; +0x0D -> IX
 DL_F32987:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0xAF05
-	.short 0xF32A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F32AAF	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF32992-0xF32A7C: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032992, 0x0000EB
 
 ; ------------------------------------------------------------------
-; 0xF32A7D-0xF32A86 -- 1 display-list records, 10 bytes
+; 0xF32A7D-0xF32A86 -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF32A7D
 ;   ends used:  0xF32A87
 ; ------------------------------------------------------------------
@@ -12199,46 +13883,55 @@ DL_F32A7D:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032A87, 0x000050
 
 ; ------------------------------------------------------------------
-; 0xF32AD7-0xF32B1D -- 5 display-list records, 71 bytes
+; 0xF32AD7-0xF32B1D -- 5 display-list records, 71 bytes -- interpreter B
 ;   entered at: 0xF32AD7
 ;   ends used:  0xF32B1E
 ; ------------------------------------------------------------------
 DL_F32AD7:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x92, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x98, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x9D, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0xA2, 0x22	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0x3C05
-	.short 0xF32B
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x2292	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x2298	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x229D	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22A2	; +0x0D -> IX
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F32B3C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF32B1E-0xF32B31: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032B1E, 0x000014
 
 ; ------------------------------------------------------------------
-; 0xF32B32-0xF32B3B -- 1 display-list records, 10 bytes
+; 0xF32B32-0xF32B3B -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF32B32
 ;   ends used:  0xF32B3C
 ; ------------------------------------------------------------------
@@ -12253,95 +13946,118 @@ DL_F32B32:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032B3C, 0x000028
 
 ; ------------------------------------------------------------------
-; 0xF32B64-0xF32B96 -- 5 display-list records, 51 bytes
+; 0xF32B64-0xF32B96 -- 5 display-list records, 51 bytes -- interpreter B
 ;   entered at: 0xF32B64
 ;   ends used:  0xF32B97
 ; ------------------------------------------------------------------
 DL_F32B64:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x9120
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x9720
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x9D20
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0xA220
-	.short 0x0322
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0x3C05
-	.short 0xF32B
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2291	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2297	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x229D	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A2	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F32B3C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF32B97-0xF32BAA: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032B97, 0x000014
 
 ; ------------------------------------------------------------------
-; 0xF32BAB-0xF32C01 -- 7 display-list records, 87 bytes
+; 0xF32BAB-0xF32C01 -- 7 display-list records, 87 bytes -- interpreter B
 ;   entered at: 0xF32BAB
 ;   ends used:  0xF32C02
 ; ------------------------------------------------------------------
 DL_F32BAB:
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x00FF
-	.short 0xA620
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x00FF
-	.short 0xAC20
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x6006
-	.short 0xF05B
-	.byte 0x00, 0x03, 0x00, 0x9D, 0x22	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x00FF
-	.short 0x8D20
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x00FF
-	.short 0x9220
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x00FF
-	.short 0x9720
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x27AF
-	.byte 0x03, 0x00, 0x17, 0x82	; character codes below 0x20
-	.ascii "Q"
-	.byte 0xF0, 0x00, 0x08, 0x00, 0x9D, 0x00	; character codes below 0x20
-	.ascii ">"
-	.byte 0x00	; character codes below 0x20
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A6	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22AC	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x229D	; +0x0D -> IX
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x228D	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2292	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2297	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F05182	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x009D	; +0x0D -> (0x2530)
+	.short 0x003E	; +0x0F -> (0x2532)
 
 ; --- 0xF32C02-0xF32C29: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032C02, 0x000028
 
 ; ------------------------------------------------------------------
-; 0xF32C2A-0xF32FE5 -- 104 display-list records, 956 bytes
+; 0xF32C2A-0xF32FE5 -- 104 display-list records, 956 bytes -- interpreter A (92 records) and B (12)
 ;   entered at: 0xF32C2A, 0xF32D03, 0xF32D2C, 0xF32E71, 0xF32F43, 0xF32FA0, 0xF32FC8
 ;   ends used:  0xF32CC8, 0xF32D03, 0xF32D2C, 0xF32E71, 0xF32F43, 0xF32FA0, 0xF32FC8, 0xF32FE6
 ; ------------------------------------------------------------------
@@ -12729,82 +14445,103 @@ DL_F32E71:
 	.byte 0x2D
 	.short 0x19F3
 DL_F32F43:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0xBA, 0x0B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x5A, 0x11	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0xD1, 0x0B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x71, 0x11	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000727A6
-	.short 0x9405
-	.short 0xF333
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000727B4
-	.short 0xBC05
-	.short 0xF333
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000727B5
-	.short 0xEC05
-	.short 0xF333
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x0BBA	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x115A	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x0BD1	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1171	; +0x0D -> IX
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F33394	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27B4	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F333BC	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27B5	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F333EC	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F32FA0:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x007F
-	.short 0x9820
-	.short 0x0322
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B2
-	.short 0x0003
-	.short 0x1620
-	.short 0xF330
-	.byte 0x00, 0x03, 0x00, 0x9F, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B2
-	.short 0x020C
-	.short 0x1620
-	.short 0xF330
-	.byte 0x00, 0x03, 0x00, 0xA3, 0x22	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2298	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33016	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x229F	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.byte 0x0C	; +0x04 AND mask
+	.byte 0x02	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33016	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22A3	; +0x0D -> IX
 DL_F32FC8:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B2
-	.short 0x0430
-	.short 0x1620
-	.short 0xF330
-	.byte 0x00, 0x03, 0x00, 0xA7, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B2
-	.short 0x06C0
-	.short 0x1620
-	.short 0xF330
-	.byte 0x00, 0x03, 0x00, 0xAB, 0x22	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.byte 0x30	; +0x04 AND mask
+	.byte 0x04	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33016	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22A7	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.byte 0xC0	; +0x04 AND mask
+	.byte 0x06	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33016	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22AB	; +0x0D -> IX
 
 ; --- 0xF32FE6-0xF33361: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032FE6, 0x00037C
 
 ; ------------------------------------------------------------------
-; 0xF33362-0xF33393 -- 5 display-list records, 50 bytes
+; 0xF33362-0xF33393 -- 5 display-list records, 50 bytes -- interpreter A
 ;   entered at: 0xF33362, 0xF3338A
 ;   ends used:  0xF3338A, 0xF33394
 ; ------------------------------------------------------------------
@@ -12840,76 +14577,95 @@ DL_F3338A:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033394, 0x000088
 
 ; ------------------------------------------------------------------
-; 0xF3341C-0xF334AD -- 10 display-list records, 146 bytes
+; 0xF3341C-0xF334AD -- 10 display-list records, 146 bytes -- interpreter B
 ;   entered at: 0xF3341C
 ;   ends used:  0xF334AE
 ; ------------------------------------------------------------------
 DL_F3341C:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x4A, 0x06	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x4A, 0x0B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x58, 0x0B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x9A, 0x10	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0xA8, 0x10	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x12, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x20, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0x9A, 0x15	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AF
-	.short 0x003F
-	.short 0x2220
-	.short 0xF330
-	.byte 0x00, 0x0D, 0x00, 0xA8, 0x15	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A6
-	.short 0xAE05
-	.short 0xF334
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x064A	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x0B4A	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x0B58	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x109A	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x10A8	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1B12	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1B20	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x159A	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F33022	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x15A8	; +0x0D -> IX
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F334AE	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF334AE-0xF334FD: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0334AE, 0x000050
 
 ; ------------------------------------------------------------------
-; 0xF334FE-0xF33507 -- 1 display-list records, 10 bytes
+; 0xF334FE-0xF33507 -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF334FE
 ;   ends used:  0xF33508
 ; ------------------------------------------------------------------
@@ -12924,38 +14680,44 @@ DL_F334FE:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033508, 0x000030
 
 ; ------------------------------------------------------------------
-; 0xF33538-0xF3356A -- 3 display-list records, 51 bytes
+; 0xF33538-0xF3356A -- 3 display-list records, 51 bytes -- interpreter B
 ;   entered at: 0xF33538
 ;   ends used:  0xF3356B
 ; ------------------------------------------------------------------
 DL_F33538:
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x27A6
-	.byte 0x7F, 0x00, 0x1C	; character codes below 0x20
-	.ascii "`["
-	.byte 0xF0, 0x00, 0x03, 0x00	; character codes below 0x20
-	.ascii " "
-	.byte 0x00, 0xD6, 0x00	; character codes below 0x20
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x27A7
-	.byte 0x7F, 0x00, 0x1C, 0xBD	; character codes below 0x20
-	.ascii "L"
-	.byte 0xF0, 0x00, 0x01, 0x00	; character codes below 0x20
-	.ascii "X"
-	.byte 0x00, 0xD6, 0x00	; character codes below 0x20
-	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
-	.short 0x0000
-	.byte 0x00, 0x00, 0x1C, 0xF0	; character codes below 0x20
-	.ascii "\""
-	.byte 0x00, 0x00, 0x0D, 0x00	; character codes below 0x20
-	.ascii "p"
-	.byte 0x00, 0xD6, 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0020	; +0x0D -> (0x2530)
+	.short 0x00D6	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0058	; +0x0D -> (0x2530)
+	.short 0x00D6	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x0070	; +0x0D -> (0x2530)
+	.short 0x00D6	; +0x0F -> (0x2532)
 
 ; --- 0xF3356B-0xF33572: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03356B, 0x000008
 
 ; ------------------------------------------------------------------
-; 0xF33573-0xF3380D -- 69 display-list records, 667 bytes
+; 0xF33573-0xF3380D -- 69 display-list records, 667 bytes -- interpreter A (58 records) and B (11)
 ;   entered at: 0xF33573, 0xF336CE, 0xF33796
 ;   ends used:  0xF336CE, 0xF33796, 0xF337EF, 0xF3380E
 ; ------------------------------------------------------------------
@@ -13197,72 +14959,93 @@ DL_F336CE:
 	.short 0x0132
 	.short 0x0034
 DL_F33796:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x0780
-	.short 0xD820
-	.short 0xF034
-	.byte 0x00, 0x03, 0x00, 0x7F, 0x22	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x8420
-	.short 0x0322
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x00FF
-	.short 0x5920
-	.short 0x020D
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x00FF
-	.short 0x5920
-	.short 0x0212
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x05E0
-	.short 0x5F20
-	.short 0x010D
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x05E0
-	.short 0x5F20
-	.short 0x0112
-	.byte 0x03	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x003F
-	.short 0x4F20
-	.short 0x020D
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AF
-	.short 0x003F
-	.short 0x4F20
-	.short 0x0212
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x5320
-	.short 0x030D
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x5320
-	.short 0x0312
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0x4005
-	.short 0xF338
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x227F	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2284	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D59	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1259	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D5F	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0xE0	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x125F	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count
+	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D4F	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x124F	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x0D53	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x1253	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F33840	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3380E-0xF33835: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03380E, 0x000028
 
 ; ------------------------------------------------------------------
-; 0xF33836-0xF3383F -- 1 display-list records, 10 bytes
+; 0xF33836-0xF3383F -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF33836
 ;   ends used:  0xF33840
 ; ------------------------------------------------------------------
@@ -13277,69 +15060,87 @@ DL_F33836:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033840, 0x000018
 
 ; ------------------------------------------------------------------
-; 0xF33858-0xF338A4 -- 7 display-list records, 77 bytes
+; 0xF33858-0xF338A4 -- 7 display-list records, 77 bytes -- interpreter B
 ;   entered at: 0xF33858
 ;   ends used:  0xF338A5
 ; ------------------------------------------------------------------
 DL_F33858:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27A6
-	.short 0x0520
-	.short 0xD220
-	.short 0xF034
-	.byte 0x00, 0x03, 0x00, 0x70, 0x1D	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0x6120
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0x6520
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A9
-	.short 0x007F
-	.short 0x6A20
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AA
-	.short 0x007F
-	.short 0x6F20
-	.short 0x0322
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AD
-	.short 0x00FF
-	.short 0x8020
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x00FF
-	.short 0x8420
-	.short 0x0222
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F034D2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1D70	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2261	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2265	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x226A	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x226F	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2280	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2284	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 
 ; --- 0xF338A5-0xF338C8: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0338A5, 0x000024
 
 ; ------------------------------------------------------------------
-; 0xF338C9-0xF3391D -- 8 display-list records, 85 bytes
+; 0xF338C9-0xF3391D -- 8 display-list records, 85 bytes -- interpreter A (2 records) and B (6)
 ;   entered at: 0xF338C9, 0xF338DD, 0xF338EB, 0xF338F6
 ;   ends used:  0xF338DD, 0xF338EB, 0xF338F6, 0xF3391E
 ; ------------------------------------------------------------------
 DL_F338C9:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x007F
-	.short 0x7420
-	.short 0x0322
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27AC
-	.short 0x007F
-	.short 0x7A20
-	.short 0x0322
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x2274	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x227A	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F338DD:
 	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
 	.short 0x2274
@@ -13348,35 +15149,42 @@ DL_F338DD:
 	.short 0x227A
 	.ascii " --"
 DL_F338EB:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A6
-	.short 0x4905
-	.short 0xF33A
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F33A49	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F338F6:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x003F
-	.short 0x4D20
-	.short 0xF057
-	.byte 0x00, 0x02, 0x00, 0xA0, 0x12	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF020
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0xA2, 0x12	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x27A7
-	.short 0x007F
-	.short 0xB420
-	.short 0x0312
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F0574D	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x12A0	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x12A2	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x12B4	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 
 ; --- 0xF3391E-0xF339B3: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03391E, 0x000096
 
 ; ------------------------------------------------------------------
-; 0xF339B4-0xF339BB -- 1 display-list records, 8 bytes
+; 0xF339B4-0xF339BB -- 1 display-list records, 8 bytes -- interpreter A
 ;   entered at: 0xF339B4
 ;   ends used:  0xF339BC
 ; ------------------------------------------------------------------
@@ -13389,7 +15197,7 @@ DL_F339B4:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0339BC, 0x000083
 
 ; ------------------------------------------------------------------
-; 0xF33A3F-0xF33A48 -- 1 display-list records, 10 bytes
+; 0xF33A3F-0xF33A48 -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF33A3F
 ;   ends used:  0xF33A49
 ; ------------------------------------------------------------------
@@ -13404,128 +15212,193 @@ DL_F33A3F:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033A49, 0x000028
 
 ; ------------------------------------------------------------------
-; 0xF33A71-0xF33B8B -- 21 display-list records, 283 bytes
+; 0xF33A71-0xF33B8B -- 21 display-list records, 283 bytes -- interpreter B
 ;   entered at: 0xF33A71, 0xF33B09, 0xF33B81
 ;   ends used:  0xF33ABD, 0xF33B45, 0xF33B8C
 ; ------------------------------------------------------------------
 DL_F33A71:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x27A8
-	.short 0x007F
-	.short 0xB417
-	.short 0x5700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
-	.byte 0x0B, 0x0D	; op 0B, 13 bytes -> handler 0xF31AAC
-	.short 0x27A9
-	.short 0x00FF
-	.byte 0x17, 0xD2, 0x00, 0x57, 0x00, 0x02, 0x00	; operand bytes the handler does not read
-	.byte 0x0B, 0x0D	; op 0B, 13 bytes -> handler 0xF31AAC
-	.short 0x27AA
-	.short 0x00FF
-	.byte 0x17, 0xEA, 0x00, 0x57, 0x00, 0x03, 0x00	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x27AB
-	.short 0x007F
-	.short 0xB417
-	.short 0x7700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
-	.byte 0x0B, 0x0D	; op 0B, 13 bytes -> handler 0xF31AAC
-	.short 0x27AC
-	.short 0x00FF
-	.byte 0x17, 0xD2, 0x00, 0x77, 0x00, 0x02, 0x00	; operand bytes the handler does not read
-	.byte 0x0B, 0x0D	; op 0B, 13 bytes -> handler 0xF31AAC
-	.short 0x27AD
-	.short 0x00FF
-	.byte 0x17, 0xEA, 0x00, 0x77, 0x00, 0x03, 0x00	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x27AE
-	.short 0x007F
-	.short 0xB417
-	.short 0x9700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
-	.byte 0x0B, 0x0D	; op 0B, 13 bytes -> handler 0xF31AAC
-	.short 0x27AF
-	.short 0x00FF
-	.byte 0x17, 0xD2, 0x00, 0x97, 0x00, 0x02, 0x00	; operand bytes the handler does not read
-	.byte 0x0B, 0x0D	; op 0B, 13 bytes -> handler 0xF31AAC
-	.short 0x27B0
-	.short 0x00FF
-	.byte 0x17, 0xEA, 0x00, 0x97, 0x00, 0x03, 0x00	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x27B1
-	.short 0x007F
-	.short 0xB417
-	.short 0xB700
-	.byte 0x00, 0x03	; operand bytes the handler does not read
-	.byte 0x0B, 0x0D	; op 0B, 13 bytes -> handler 0xF31AAC
-	.short 0x27B2
-	.short 0x00FF
-	.byte 0x17, 0xD2, 0x00, 0xB7, 0x00, 0x02, 0x00	; operand bytes the handler does not read
-	.byte 0x0B, 0x0D	; op 0B, 13 bytes -> handler 0xF31AAC
-	.short 0x27B3
-	.short 0x00FF
-	.byte 0x17, 0xEA, 0x00, 0xB7, 0x00, 0x03, 0x00	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00B4	; +0x07 -> (0x2530)
+	.short 0x0057	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00D2	; +0x07 -> (0x2530)
+	.short 0x0057	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00EA	; +0x07 -> (0x2530)
+	.short 0x0057	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00B4	; +0x07 -> (0x2530)
+	.short 0x0077	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00D2	; +0x07 -> (0x2530)
+	.short 0x0077	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00EA	; +0x07 -> (0x2530)
+	.short 0x0077	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00B4	; +0x07 -> (0x2530)
+	.short 0x0097	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00D2	; +0x07 -> (0x2530)
+	.short 0x0097	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00EA	; +0x07 -> (0x2530)
+	.short 0x0097	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00B4	; +0x07 -> (0x2530)
+	.short 0x00B7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00D2	; +0x07 -> (0x2530)
+	.short 0x00B7	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x27B3	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00EA	; +0x07 -> (0x2530)
+	.short 0x00B7	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 DL_F33B09:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B4
-	.short 0x003F
-	.short 0xBD20
-	.short 0xF04C
-	.byte 0x00, 0x01, 0x00, 0x4E, 0x0D	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF020
-	.short 0x0022
-	.byte 0x00, 0x0D, 0x00, 0x50, 0x0D	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B5
-	.short 0x003F
-	.short 0xBD20
-	.short 0xF04C
-	.byte 0x00, 0x01, 0x00, 0x4E, 0x12	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0x0020
-	.short 0x0023
-	.byte 0x00, 0x0D, 0x00, 0x50, 0x12	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B6
-	.short 0x003F
-	.short 0xBD20
-	.short 0xF04C
-	.byte 0x00, 0x01, 0x00, 0x4E, 0x17	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0x1020
-	.short 0x0023
-	.byte 0x00, 0x0D, 0x00, 0x50, 0x17	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x27B7
-	.short 0x003F
-	.short 0xBD20
-	.short 0xF04C
-	.byte 0x00, 0x01, 0x00, 0x4E, 0x1C	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0x2020
-	.short 0x0023
-	.byte 0x00, 0x0D, 0x00, 0x50, 0x1C	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B4	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0D4E	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x000022F0	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x0D50	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B5	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x124E	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00002300	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1250	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B6	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x174E	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00002310	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1750	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27B7	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F04CBD	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1C4E	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00002320	; +0x07 -> XIY: string table
+	.short 0x000D	; +0x0B -> BC: bytes per entry
+	.short 0x1C50	; +0x0D -> IX
 DL_F33B81:
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F27A3
-	.short 0xE805
-	.short 0xF04C
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F04CE8	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF33B8C-0xF33BD7: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033B8C, 0x00004C
 
 ; ------------------------------------------------------------------
-; 0xF33BD8-0xF33F00 -- 96 display-list records, 809 bytes
+; 0xF33BD8-0xF33F00 -- 96 display-list records, 809 bytes -- interpreter A
 ;   entered at: 0xF33BD8
 ;   ends used:  0xF33F01
 ; ------------------------------------------------------------------
@@ -13926,7 +15799,7 @@ DL_F33BD8:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033F01, 0x0002B5
 
 ; ------------------------------------------------------------------
-; 0xF341B6-0xF34255 -- 16 display-list records, 160 bytes
+; 0xF341B6-0xF34255 -- 16 display-list records, 160 bytes -- interpreter A
 ;   entered at: 0xF341B6
 ;   ends used:  0xF34256
 ; ------------------------------------------------------------------
@@ -14016,55 +15889,71 @@ DL_F341B6:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034256, 0x00010B
 
 ; ------------------------------------------------------------------
-; 0xF34361-0xF343B5 -- 7 display-list records, 85 bytes
+; 0xF34361-0xF343B5 -- 7 display-list records, 85 bytes -- interpreter B
 ;   entered at: 0xF34361, 0xF3437F, 0xF343A2
 ;   ends used:  0xF3438E, 0xF343AC, 0xF343B6
 ; ------------------------------------------------------------------
 DL_F34361:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2648
-	.short 0x00FF
-	.short 0xB620
-	.short 0xF343
-	.byte 0x00, 0x03, 0x00, 0x73, 0x05	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2647
-	.short 0x00FF
-	.short 0xBB20
-	.short 0xF349
-	.byte 0x00, 0x03, 0x00, 0xB3, 0x0B	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2648	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F343B6	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0573	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2647	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F349BB	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0BB3	; +0x0D -> IX
 DL_F3437F:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1309
-	.short 0x00FF
-	.short 0xC107
-	.short 0xF349
-	.byte 0x00, 0x03, 0x00, 0x2C, 0x0B	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x264B
-	.short 0x00FF
-	.short 0x3C20
-	.short 0x0201
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2644
-	.byte 0xFF, 0x00, 0x07	; character codes below 0x20
-	.ascii ">"
-	.byte 0x05, 0x03	; character codes below 0x20
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1309	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F349C1	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0B2C	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x264B	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x013C	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2644	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x053E	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F343A2:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x2646
-	.short 0x00FF
-	.short 0x8707
-	.short 0x0108
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2649
-	.byte 0xFF, 0x00, 0x07, 0xC5, 0x0E, 0x03	; character codes below 0x20
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2646	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0887	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2649	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0EC5	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 
 ; --- 0xF343B6-0xF343BB: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0343B6, 0x000006
 
 ; ------------------------------------------------------------------
-; 0xF343BC-0xF34967 -- 170 display-list records, 1452 bytes
+; 0xF343BC-0xF34967 -- 170 display-list records, 1452 bytes -- interpreter A
 ;   entered at: 0xF343BC, 0xF34681
 ;   ends used:  0xF34681, 0xF34968
 ; ------------------------------------------------------------------
@@ -14761,50 +16650,62 @@ DL_F34681:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034968, 0x000008
 
 ; ------------------------------------------------------------------
-; 0xF34970-0xF349BA -- 6 display-list records, 75 bytes
+; 0xF34970-0xF349BA -- 6 display-list records, 75 bytes -- interpreter B
 ;   entered at: 0xF34970
 ;   ends used:  0xF349BB
 ; ------------------------------------------------------------------
 DL_F34970:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2647
-	.short 0x00FF
-	.short 0xBB20
-	.short 0xF349
-	.byte 0x00, 0x03, 0x00, 0x73, 0x05	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1309
-	.short 0x00FF
-	.short 0xC120
-	.short 0xF349
-	.byte 0x00, 0x03, 0x00, 0xA3, 0x11	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0x4C06
-	.short 0x0026
-	.byte 0x00, 0x06, 0x00, 0x60, 0x01	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x264B
-	.short 0x00FF
-	.short 0x5D20
-	.short 0x0201
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2644
-	.byte 0x7F, 0x00, 0x07	; character codes below 0x20
-	.ascii "V"
-	.byte 0x06, 0x03	; character codes below 0x20
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x2646
-	.short 0x00FF
-	.short 0xDF07
-	.short 0x010A
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2647	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F349BB	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0573	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1309	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F349C1	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x11A3	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x0000264C	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0160	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x264B	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x015D	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2644	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0656	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2646	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0ADF	; +0x07 -> IX
+	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 
 ; --- 0xF349BB-0xF349C6: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0349BB, 0x00000C
 
 ; ------------------------------------------------------------------
-; 0xF349C7-0xF34C6D -- 79 display-list records, 679 bytes
+; 0xF349C7-0xF34C6D -- 79 display-list records, 679 bytes -- interpreter A
 ;   entered at: 0xF349C7
 ;   ends used:  0xF34C6E
 ; ------------------------------------------------------------------
@@ -15139,113 +17040,145 @@ DL_F349C7:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034C6E, 0x00012A
 
 ; ------------------------------------------------------------------
-; 0xF34D98-0xF34E87 -- 16 display-list records, 240 bytes
+; 0xF34D98-0xF34E87 -- 16 display-list records, 240 bytes -- interpreter B
 ;   entered at: 0xF34D98
 ;   ends used:  0xF34E88
 ; ------------------------------------------------------------------
 DL_F34D98:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0x59, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F7
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0x5E, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F8
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0x63, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F9
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0x68, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FA
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0x6D, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0x72, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FC
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0x77, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FD
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0x7C, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FE
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0xB1, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FF
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0xB6, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1300
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0xBB, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1301
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0xC0, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1302
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0xC5, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1303
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0xCA, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1304
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0xCF, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1305
-	.short 0x00FF
-	.short 0x8806
-	.short 0xF34E
-	.byte 0x00, 0x03, 0x00, 0xD4, 0x22	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B59	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B5E	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B63	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B68	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B6D	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B72	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B77	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B7C	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22B1	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22B6	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1300	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22BB	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1301	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22C0	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1302	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22C5	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1303	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22CA	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1304	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22CF	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1305	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F34E88	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22D4	; +0x0D -> IX
 
 ; --- 0xF34E88-0xF34EE7: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034E88, 0x000060
 
 ; ------------------------------------------------------------------
-; 0xF34EE8-0xF35034 -- 39 display-list records, 333 bytes
+; 0xF34EE8-0xF35034 -- 39 display-list records, 333 bytes -- interpreter A (33 records) and B (6)
 ;   entered at: 0xF34EE8, 0xF34FF2
 ;   ends used:  0xF34FF2, 0xF35001, 0xF35035
 ; ------------------------------------------------------------------
@@ -15370,37 +17303,53 @@ DL_F34EE8:
 	.short 0x0133
 	.short 0x00CB
 DL_F34FF2:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2647
-	.short 0x00FF
-	.short 0x3507
-	.short 0xF350
-	.byte 0x00, 0x03, 0x00, 0xED, 0x0B	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2644
-	.byte 0xFF, 0x00, 0x07, 0xB8, 0x05, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2652
-	.byte 0xFF, 0x00, 0x07, 0x10, 0x12, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2654
-	.byte 0xFF, 0x00, 0x07, 0x00, 0x18, 0x03	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x00FF12F6
-	.short 0x3B05
-	.short 0xF350
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
-	.short 0x12F6
-	.byte 0xFF, 0x00, 0x1B	; character codes below 0x20
-	.ascii ";P"
-	.byte 0xF3, 0x00	; character codes below 0x20
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2647	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F35035	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0BED	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2644	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x05B8	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2652	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1210	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2654	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1800	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF35035-0xF3505A: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x035035, 0x000026
 
 ; ------------------------------------------------------------------
-; 0xF3505B-0xF351F8 -- 48 display-list records, 414 bytes
+; 0xF3505B-0xF351F8 -- 48 display-list records, 414 bytes -- interpreter A (41 records) and B (7)
 ;   entered at: 0xF3505B, 0xF351A7
 ;   ends used:  0xF351A7, 0xF351F9
 ; ------------------------------------------------------------------
@@ -15557,43 +17506,61 @@ DL_F3505B:
 	.short 0x003C
 	.short 0x00CF
 DL_F351A7:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2647
-	.short 0x00FF
-	.short 0x3507
-	.short 0xF350
-	.byte 0x00, 0x03, 0x00, 0xED, 0x0B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x2648
-	.short 0x0001
-	.short 0xB620
-	.short 0xF343
-	.byte 0x00, 0x03, 0x00, 0x73, 0x05	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2644
-	.byte 0xFF, 0x00, 0x07, 0xB8, 0x05, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2656
-	.byte 0xFF, 0x00, 0x07, 0x10, 0x12, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2658
-	.byte 0xFF, 0x00, 0x07, 0x00, 0x18, 0x03	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x00FF12F6
-	.short 0x3B05
-	.short 0xF350
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
-	.short 0x12F6
-	.byte 0xFF, 0x00, 0x1B	; character codes below 0x20
-	.ascii ";P"
-	.byte 0xF3, 0x00	; character codes below 0x20
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2647	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F35035	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0BED	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2648	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F343B6	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0573	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2644	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x05B8	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2656	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1210	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2658	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1800	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF351F9-0xF35207: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0351F9, 0x00000F
 
 ; ------------------------------------------------------------------
-; 0xF35208-0xF3533B -- 29 display-list records, 308 bytes
+; 0xF35208-0xF3533B -- 29 display-list records, 308 bytes -- interpreter A (23 records) and B (6)
 ;   entered at: 0xF35208, 0xF352F9
 ;   ends used:  0xF352F9, 0xF35308, 0xF3533C
 ; ------------------------------------------------------------------
@@ -15687,37 +17654,53 @@ DL_F35208:
 	.short 0x0133
 	.short 0x007A
 DL_F352F9:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1308
-	.short 0x00FF
-	.short 0x3C07
-	.short 0xF353
-	.byte 0x00, 0x03, 0x00, 0xC3, 0x0B	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2644
-	.byte 0xFF, 0x00, 0x07, 0xB8, 0x05, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2652
-	.byte 0xFF, 0x00, 0x07, 0x10, 0x12, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x2654
-	.byte 0xFF, 0x00, 0x07, 0x00, 0x18, 0x03	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x00FF12F6
-	.short 0x3B05
-	.short 0xF350
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
-	.short 0x12F6
-	.byte 0xFF, 0x00, 0x1B	; character codes below 0x20
-	.ascii ";P"
-	.byte 0xF3, 0x00	; character codes below 0x20
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1308	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3533C	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0BC3	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2644	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x05B8	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2652	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1210	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2654	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1800	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3533C-0xF35341: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03533C, 0x000006
 
 ; ------------------------------------------------------------------
-; 0xF35342-0xF353AA -- 11 display-list records, 105 bytes
+; 0xF35342-0xF353AA -- 11 display-list records, 105 bytes -- interpreter A (10 records) and B (1)
 ;   entered at: 0xF35342, 0xF3539F
 ;   ends used:  0xF3539F, 0xF353AB
 ; ------------------------------------------------------------------
@@ -15764,18 +17747,20 @@ DL_F35342:
 	.short 0x0133
 	.short 0x00C8
 DL_F3539F:
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x2652
-	.short 0x00FF
-	.short 0x861C
-	.short 0xA600
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2652	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.short 0x0086	; +0x07 -> (0x2530)
+	.short 0x00A6	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 
 ; --- 0xF353AB-0xF3934B: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0353AB, 0x003FA1
 
 ; ------------------------------------------------------------------
-; 0xF3934C-0xF394E2 -- 48 display-list records, 407 bytes
+; 0xF3934C-0xF394E2 -- 48 display-list records, 407 bytes -- interpreter A
 ;   entered at: 0xF3934C
 ;   ends used:  0xF394E3
 ; ------------------------------------------------------------------
@@ -15993,7 +17978,7 @@ DL_F3934C:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0394E3, 0x00006E
 
 ; ------------------------------------------------------------------
-; 0xF39551-0xF39558 -- 1 display-list records, 8 bytes
+; 0xF39551-0xF39558 -- 1 display-list records, 8 bytes -- interpreter A
 ;   entered at: 0xF39551
 ;   ends used:  0xF39559
 ; ------------------------------------------------------------------
@@ -16007,7 +17992,7 @@ DL_F39551:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x039559, 0x0001D4
 
 ; ------------------------------------------------------------------
-; 0xF3972D-0xF39736 -- 1 display-list records, 10 bytes
+; 0xF3972D-0xF39736 -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF3972D
 ;   ends used:  0xF39737
 ; ------------------------------------------------------------------
@@ -16022,7 +18007,7 @@ DL_F3972D:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x039737, 0x00011D
 
 ; ------------------------------------------------------------------
-; 0xF39854-0xF39879 -- 4 display-list records, 38 bytes
+; 0xF39854-0xF39879 -- 4 display-list records, 38 bytes -- interpreter A
 ;   entered at: 0xF39854, 0xF39870
 ;   ends used:  0xF39870, 0xF3987A
 ; ------------------------------------------------------------------
@@ -16052,41 +18037,49 @@ DL_F39870:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03987A, 0x000114
 
 ; ------------------------------------------------------------------
-; 0xF3998E-0xF399C0 -- 4 display-list records, 51 bytes
+; 0xF3998E-0xF399C0 -- 4 display-list records, 51 bytes -- interpreter B
 ;   entered at: 0xF3998E
 ;   ends used:  0xF399C1
 ; ------------------------------------------------------------------
 DL_F3998E:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF708
-	.short 0x0012
-	.byte 0x00, 0x06, 0x00, 0x80, 0x0D	; operand bytes the handler does not read
-	.byte 0x0A, 0x0C	; op 0A, 12 bytes -> handler 0xF31A75
-	.short 0x12FE
-	.short 0x00FF
-	.short 0xF817
-	.short 0x4900
-	.byte 0x00, 0x03	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0x5D1C
-	.short 0x5600
-	.byte 0x00, 0x02	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x12FD
-	.short 0x00FF
-	.short 0xEE1C
-	.short 0x5600
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x08	; +0x06 swi 7 function
+	.long 0x000012F7	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0D80	; +0x0D -> IX
+	.byte 0x0A, 0x0C	; B op 0A, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00F8	; +0x07 -> (0x2530)
+	.short 0x0049	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.short 0x005D	; +0x07 -> (0x2530)
+	.short 0x0056	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.short 0x00EE	; +0x07 -> (0x2530)
+	.short 0x0056	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 
 ; --- 0xF399C1-0xF399D4: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0399C1, 0x000014
 
 ; ------------------------------------------------------------------
-; 0xF399D5-0xF3A0A4 -- 202 display-list records, 1744 bytes
+; 0xF399D5-0xF3A0A4 -- 202 display-list records, 1744 bytes -- interpreter A (198 records) and B (4)
 ;   entered at: 0xF399D5, 0xF39A73, 0xF39A7D, 0xF39BF8, 0xF39C02, 0xF39C35, 0xF39D3E, 0xF39E87, 0xF39F8A
 ;   ends used:  0xF39A73, 0xF39A7D, 0xF39BF8, 0xF39C02, 0xF39C35, 0xF39D3E, 0xF39E87, 0xF39F8A, 0xF3A0A5
 ; ------------------------------------------------------------------
@@ -16346,30 +18339,38 @@ DL_F39BF8:
 	.short 0x010C
 	.short 0x0051
 DL_F39C02:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF708
-	.short 0x0012
-	.byte 0x00, 0x06, 0x00, 0x1D, 0x09	; operand bytes the handler does not read
-	.byte 0x0A, 0x0C	; op 0A, 12 bytes -> handler 0xF31A75
-	.short 0x12FE
-	.short 0x00FF
-	.short 0xE217
-	.short 0x2C00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0x481C
-	.short 0x3A00
-	.byte 0x00, 0x02	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x12FD
-	.short 0x00FF
-	.short 0xD81C
-	.short 0x3A00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x08	; +0x06 swi 7 function
+	.long 0x000012F7	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x091D	; +0x0D -> IX
+	.byte 0x0A, 0x0C	; B op 0A, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00E2	; +0x07 -> (0x2530)
+	.short 0x002C	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.short 0x0048	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.short 0x00D8	; +0x07 -> (0x2530)
+	.short 0x003A	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 DL_F39C35:
 	.byte 0x1C, 0x0B	; op 1C, 11 bytes -> handler 0xF31A52
 	.short 0x0079
@@ -16847,7 +18848,7 @@ DL_F39F8A:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A0A5, 0x00002C
 
 ; ------------------------------------------------------------------
-; 0xF3A0D1-0xF3A0D8 -- 1 display-list records, 8 bytes
+; 0xF3A0D1-0xF3A0D8 -- 1 display-list records, 8 bytes -- interpreter A
 ;   entered at: 0xF3A0D1
 ;   ends used:  0xF3A0D9
 ; ------------------------------------------------------------------
@@ -16861,107 +18862,139 @@ DL_F3A0D1:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A0D9, 0x0000F6
 
 ; ------------------------------------------------------------------
-; 0xF3A1CF-0xF3A432 -- 54 display-list records, 612 bytes
+; 0xF3A1CF-0xF3A432 -- 54 display-list records, 612 bytes -- interpreter A (37 records) and B (17)
 ;   entered at: 0xF3A1CF, 0xF3A2BF, 0xF3A40D, 0xF3A417, 0xF3A41F, 0xF3A429
 ;   ends used:  0xF3A2BF, 0xF3A40D, 0xF3A417, 0xF3A41F, 0xF3A429, 0xF3A433
 ; ------------------------------------------------------------------
 DL_F3A1CF:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0x59, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F7
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0x5E, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F8
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0x63, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F9
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0x68, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FA
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0x6D, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0x72, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FC
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0x77, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FD
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0x7C, 0x1B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FE
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0xB1, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FF
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0xB6, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1300
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0xBB, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1301
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0xC0, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1302
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0xC5, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1303
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0xCA, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1304
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0xCF, 0x22	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1305
-	.short 0x00FF
-	.short 0xA206
-	.short 0xF395
-	.byte 0x00, 0x03, 0x00, 0xD4, 0x22	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B59	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B5E	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B63	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B68	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B6D	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B72	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B77	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1B7C	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22B1	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22B6	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1300	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22BB	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1301	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22C0	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1302	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22C5	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1303	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22CA	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1304	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22CF	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1305	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22D4	; +0x0D -> IX
 DL_F3A2BF:
 	.byte 0x1C, 0x0B	; op 1C, 11 bytes -> handler 0xF31A52
 	.short 0x0030
@@ -17101,17 +19134,19 @@ DL_F3A41F:
 	.short 0x15BC
 	.ascii "  ALL "
 DL_F3A429:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12F7
-	.short 0x00FF
-	.short 0xC006
-	.short 0x0215
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.short 0x15C0	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 
 ; --- 0xF3A433-0xF3A460: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A433, 0x00002E
 
 ; ------------------------------------------------------------------
-; 0xF3A461-0xF3A589 -- 31 display-list records, 297 bytes
+; 0xF3A461-0xF3A589 -- 31 display-list records, 297 bytes -- interpreter A (27 records) and B (4)
 ;   entered at: 0xF3A461, 0xF3A47F, 0xF3A526, 0xF3A561
 ;   ends used:  0xF3A47F, 0xF3A526, 0xF3A561, 0xF3A57F, 0xF3A58A
 ; ------------------------------------------------------------------
@@ -17227,32 +19262,61 @@ DL_F3A526:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3A561:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0x1607
-	.short 0x020C
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12F7
-	.short 0x00FF
-	.short 0x2E07
-	.short 0x0217
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12F8
-	.short 0x00FF
-	.short 0xC907
-	.short 0x0211
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000312F9
-	.short 0x8A05
-	.short 0xF3A5
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0C16	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x172E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x11C9	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3A58A	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
-; --- 0xF3A58A-0xF3A5A9: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A58A, 0x000020
+; ==================================================================
+; 0xF3A58A-0xF3A5A9 -- display-list OPERAND TABLES (32 bytes, 1 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F3A58A -- 4 entries of 8 bytes
+; Referenced by: display-list record 0xF3A57F
+; Evidence: the record's +7 pointer lands here and its handler scales the
+;           extracted bit-field by 8 before adding it (0xF31B57 `sla 3,HL`,
+;           0xF31B86 `mul HL,6`).
+;           4 entries is the EXTENT (32 bytes / 8), not the (mask >> shift) + 1
+;           = 4 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F3A58A:
+	.short 0x0000, 0x0000, 0x0001, 0x0001	; [0]
+	.short 0x0016, 0x0040, 0x008A, 0x0064	; [1]
+	.short 0x0016, 0x0087, 0x008A, 0x00AB	; [2]
+	.short 0x00B1, 0x0064, 0x0126, 0x0088	; [3]
 
 ; ------------------------------------------------------------------
-; 0xF3A5AA-0xF3A6D8 -- 31 display-list records, 303 bytes
+; 0xF3A5AA-0xF3A6D8 -- 31 display-list records, 303 bytes -- interpreter A (27 records) and B (4)
 ;   entered at: 0xF3A5AA, 0xF3A5E9, 0xF3A66E, 0xF3A6AB
 ;   ends used:  0xF3A5E9, 0xF3A66E, 0xF3A6AB, 0xF3A6CE, 0xF3A6D9
 ; ------------------------------------------------------------------
@@ -17364,31 +19428,40 @@ DL_F3A66E:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3A6AB:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x001F
-	.short 0x2F07
-	.short 0xF3A7
-	.byte 0x00, 0x06, 0x00, 0x1C, 0x0C	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F7
-	.byte 0xFF, 0x00, 0x07, 0xBC, 0x11, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F9
-	.byte 0xFF, 0x00, 0x07	; character codes below 0x20
-	.ascii "\\"
-	.byte 0x17, 0x03	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000312FB
-	.short 0xD905
-	.short 0xF3A6
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0C1C	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x11BC	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x175C	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3A6D9	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3A6D9-0xF3A7D9: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A6D9, 0x000101
 
 ; ------------------------------------------------------------------
-; 0xF3A7DA-0xF3AA16 -- 57 display-list records, 573 bytes
+; 0xF3A7DA-0xF3AA16 -- 57 display-list records, 573 bytes -- interpreter A (52 records) and B (5)
 ;   entered at: 0xF3A7DA, 0xF3A8F5, 0xF3A99D, 0xF3A9DA
 ;   ends used:  0xF3A8F5, 0xF3A99D, 0xF3A9DA, 0xF3AA0C, 0xF3AA17
 ; ------------------------------------------------------------------
@@ -17621,35 +19694,48 @@ DL_F3A99D:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3A9DA:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x001F
-	.short 0x2F07
-	.short 0xF3A7
-	.byte 0x00, 0x06, 0x00, 0x7C, 0x06	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x0003
-	.short 0x3F07
-	.short 0xF3AA
-	.byte 0x00, 0x07, 0x00, 0xAC, 0x17	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F7
-	.byte 0xFF, 0x00, 0x07, 0x1C, 0x0C, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F9
-	.byte 0xFF, 0x00, 0x07, 0xBC, 0x11, 0x03	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000712FC
-	.short 0x1705
-	.short 0xF3AA
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x067C	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3AA3F	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x17AC	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0C1C	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x11BC	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3AA17	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3AA17-0xF3AA53: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03AA17, 0x00003D
 
 ; ------------------------------------------------------------------
-; 0xF3AA54-0xF3AB73 -- 27 display-list records, 288 bytes
+; 0xF3AA54-0xF3AB73 -- 27 display-list records, 288 bytes -- interpreter A (22 records) and B (5)
 ;   entered at: 0xF3AA54, 0xF3AB3B
 ;   ends used:  0xF3AAFE, 0xF3AB3B, 0xF3AB69, 0xF3AB74
 ; ------------------------------------------------------------------
@@ -17738,37 +19824,48 @@ DL_F3AA54:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3AB3B:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x001F
-	.short 0xF907
-	.short 0xF3A6
-	.byte 0x00, 0x03, 0x00, 0xA4, 0x06	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F7
-	.byte 0x00, 0x00, 0x07	; character codes below 0x20
-	.ascii "D"
-	.byte 0x0C, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F9
-	.byte 0x00, 0x00, 0x07, 0xE4, 0x11, 0x03	; character codes below 0x20
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x00FF
-	.short 0xAC07
-	.short 0x0317
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000712FC
-	.short 0x7405
-	.short 0xF3AB
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x06A4	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0C44	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x11E4	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x17AC	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3AB74	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3AB74-0xF3AB9B: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03AB74, 0x000028
 
 ; ------------------------------------------------------------------
-; 0xF3AB9C-0xF3AD41 -- 45 display-list records, 422 bytes
+; 0xF3AB9C-0xF3AD41 -- 45 display-list records, 422 bytes -- interpreter A (38 records) and B (7)
 ;   entered at: 0xF3AB9C, 0xF3ABDB, 0xF3ACB3, 0xF3ACF0
 ;   ends used:  0xF3ABDB, 0xF3ACB3, 0xF3ACF0, 0xF3AD37, 0xF3AD42
 ; ------------------------------------------------------------------
@@ -17919,46 +20016,63 @@ DL_F3ACB3:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3ACF0:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x001F
-	.short 0xF907
-	.short 0xF3A6
-	.byte 0x00, 0x03, 0x00, 0x51, 0x06	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x00FF
-	.short 0x7A07
-	.short 0xF3AD
-	.byte 0x00, 0x02, 0x00, 0x51, 0x17	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F7
-	.byte 0x00, 0x00, 0x07, 0xF1, 0x0B, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F9
-	.byte 0x00, 0x00, 0x07, 0x91, 0x11, 0x03	; character codes below 0x20
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12FC
-	.short 0x007F
-	.short 0x6007
-	.short 0x0306
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x12FD
-	.short 0x00FF
-	.short 0xFF07
-	.short 0x030B
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000712FE
-	.short 0x4205
-	.short 0xF3AD
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0651	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3AD7A	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x1751	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0BF1	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1191	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0660	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0BFF	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3AD42	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3AD42-0xF3AD87: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03AD42, 0x000046
 
 ; ------------------------------------------------------------------
-; 0xF3AD88-0xF3B064 -- 61 display-list records, 733 bytes
+; 0xF3AD88-0xF3B064 -- 61 display-list records, 733 bytes -- interpreter A (51 records) and B (10)
 ;   entered at: 0xF3AD88, 0xF3AEAF, 0xF3AFAF, 0xF3AFE7
 ;   ends used:  0xF3AEAF, 0xF3AFAF, 0xF3AFE7, 0xF3B05A, 0xF3B065
 ; ------------------------------------------------------------------
@@ -18156,63 +20270,86 @@ DL_F3AFAF:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3AFE7:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x001F
-	.short 0xF907
-	.short 0xF3A6
-	.byte 0x00, 0x03, 0x00, 0x79, 0x0B	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F7
-	.short 0x00FF
-	.short 0x9507
-	.short 0xF3B0
-	.byte 0x00, 0x02, 0x00, 0x9B, 0x0C	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F8
-	.short 0x00FF
-	.short 0xAD07
-	.short 0xF3B0
-	.byte 0x00, 0x02, 0x00, 0x9D, 0x0C	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F9
-	.short 0x00FF
-	.short 0x9507
-	.short 0xF3B0
-	.byte 0x00, 0x02, 0x00, 0xDB, 0x12	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FA
-	.short 0x00FF
-	.short 0xAD07
-	.short 0xF3B0
-	.byte 0x00, 0x02, 0x00, 0xDD, 0x12	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x007F
-	.short 0xA107
-	.short 0x030C
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12FC
-	.byte 0x00, 0x00, 0x07, 0xB9, 0x11, 0x03	; character codes below 0x20
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12FE
-	.short 0x007F
-	.short 0xE107
-	.short 0x0312
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12FF
-	.byte 0x00, 0x00, 0x07, 0xF9, 0x17, 0x03	; character codes below 0x20
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x00071301
-	.short 0x6505
-	.short 0xF3B0
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0B79	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3B095	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x0C9B	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3B0AD	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x0C9D	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3B095	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x12DB	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FA	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3B0AD	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x12DD	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0CA1	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x11B9	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x12E1	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x17F9	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x1301	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3B065	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3B065-0xF3B0C2: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B065, 0x00005E
 
 ; ------------------------------------------------------------------
-; 0xF3B0C3-0xF3B21B -- 35 display-list records, 345 bytes
+; 0xF3B0C3-0xF3B21B -- 35 display-list records, 345 bytes -- interpreter A (30 records) and B (5)
 ;   entered at: 0xF3B0C3, 0xF3B102, 0xF3B1E3
 ;   ends used:  0xF3B102, 0xF3B1A6, 0xF3B1E3, 0xF3B211, 0xF3B21C
 ; ------------------------------------------------------------------
@@ -18334,37 +20471,48 @@ DL_F3B102:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3B1E3:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0xF907
-	.short 0xF3A6
-	.byte 0x00, 0x03, 0x00, 0xA4, 0x06	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F7
-	.byte 0x00, 0x00, 0x07	; character codes below 0x20
-	.ascii "D"
-	.byte 0x0C, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F9
-	.byte 0x00, 0x00, 0x07, 0xE4, 0x11, 0x03	; character codes below 0x20
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x00FF
-	.short 0x8407
-	.short 0x0317
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000712FC
-	.short 0x1C05
-	.short 0xF3B2
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x06A4	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0C44	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x11E4	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1784	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3B21C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3B21C-0xF3B243: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B21C, 0x000028
 
 ; ------------------------------------------------------------------
-; 0xF3B244-0xF3B3B1 -- 33 display-list records, 366 bytes
+; 0xF3B244-0xF3B3B1 -- 33 display-list records, 366 bytes -- interpreter A (28 records) and B (5)
 ;   entered at: 0xF3B244, 0xF3B26C, 0xF3B294, 0xF3B33C, 0xF3B379
 ;   ends used:  0xF3B26C, 0xF3B294, 0xF3B33C, 0xF3B379, 0xF3B3A7, 0xF3B3B2
 ; ------------------------------------------------------------------
@@ -18480,37 +20628,48 @@ DL_F3B33C:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3B379:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0xF907
-	.short 0xF3A6
-	.byte 0x00, 0x03, 0x00, 0xA4, 0x06	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F7
-	.byte 0x00, 0x00, 0x07	; character codes below 0x20
-	.ascii "D"
-	.byte 0x0C, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F9
-	.byte 0x00, 0x00, 0x07, 0xE4, 0x11, 0x03	; character codes below 0x20
-	.byte 0x05, 0x0B	; op 05, 11 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x00FF
-	.short 0x8407
-	.short 0x0217
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000712FC
-	.short 0xB205
-	.short 0xF3B3
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x06A4	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0C44	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x11E4	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1784	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count
+	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3B3B2	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3B3B2-0xF3B7C2: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B3B2, 0x000411
 
 ; ------------------------------------------------------------------
-; 0xF3B7C3-0xF3B7CC -- 1 display-list records, 10 bytes
+; 0xF3B7C3-0xF3B7CC -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF3B7C3
 ;   ends used:  0xF3B7CD
 ; ------------------------------------------------------------------
@@ -18525,7 +20684,7 @@ DL_F3B7C3:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B7CD, 0x0001D0
 
 ; ------------------------------------------------------------------
-; 0xF3B99D-0xF3BB96 -- 40 display-list records, 506 bytes
+; 0xF3B99D-0xF3BB96 -- 40 display-list records, 506 bytes -- interpreter A (36 records) and B (4)
 ;   entered at: 0xF3B99D, 0xF3BA91, 0xF3BAB9, 0xF3BB7E, 0xF3BB8D
 ;   ends used:  0xF3BA91, 0xF3BAB9, 0xF3BB7E, 0xF3BB8D, 0xF3BB97
 ; ------------------------------------------------------------------
@@ -18609,23 +20768,29 @@ DL_F3B99D:
 	.short 0x00D0
 	.short 0x0044
 DL_F3BA91:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F7
-	.short 0x00FF
-	.short 0x0207
-	.short 0xF396
-	.byte 0x00, 0x07, 0x00, 0x56, 0x12	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F8
-	.short 0x00FF
-	.short 0x0207
-	.short 0xF396
-	.byte 0x00, 0x07, 0x00, 0x5E, 0x12	; operand bytes the handler does not read
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0x4E07
-	.short 0x0212
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F39602	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x1256	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F39602	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x125E	; +0x0D -> IX
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x124E	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F3BAB9:
 	.byte 0x1C, 0x19	; op 1C, 25 bytes -> handler 0xF31A52
 	.short 0x0048
@@ -18681,12 +20846,14 @@ DL_F3BAB9:
 	.short 0x0132
 	.short 0x00A0
 DL_F3BB7E:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x0001
-	.short 0x9707
-	.short 0xF3BB
-	.byte 0x00, 0x07, 0x00, 0x67, 0x14	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3BB97	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x1467	; +0x0D -> IX
 DL_F3BB8D:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x00B8
@@ -18694,11 +20861,31 @@ DL_F3BB8D:
 	.short 0x00F8
 	.short 0x008A
 
-; --- 0xF3BB97-0xF3BBA4: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03BB97, 0x00000E
+; ==================================================================
+; 0xF3BB97-0xF3BBA4 -- display-list OPERAND TABLES (14 bytes, 1 objects)
+; ==================================================================
+;
+; Every object here is named by a display-list record that points at it, and
+; its SIZE is proven by tiling: the objects start at the first byte of this
+; gap, each extent is a whole number of entries, and the last object's
+; handler-implied size ends exactly on the first byte of the next display
+; list.  Reproduce with `python3 notes/prom_b_dl_operand_tables.py --exact`.
+;
+; ------------------------------------------------------------------
+; DLTable_F3BB97 -- 2 entries of 7 characters
+; Referenced by: display-list record 0xF3BB7E
+; Evidence: the record's +7 pointer lands here and its +0x0B word is 7, so the
+;           entries are 7 bytes wide (handler 0xF31B21/0xF31B39 loads the
+;           extracted bit-field into HL as the index).
+;           2 entries is the EXTENT (14 bytes / 7), not the (mask >> shift) + 1
+;           = 2 the record would allow.
+; ------------------------------------------------------------------
+DLTable_F3BB97:
+	.ascii "DISABLE"	; [0]
+	.ascii "ENABLE "	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF3BBA5-0xF3BD57 -- 47 display-list records, 435 bytes
+; 0xF3BBA5-0xF3BD57 -- 47 display-list records, 435 bytes -- interpreter A (40 records) and B (7)
 ;   entered at: 0xF3BBA5, 0xF3BC93, 0xF3BCCB, 0xF3BD07
 ;   ends used:  0xF3BC93, 0xF3BCCB, 0xF3BD07, 0xF3BD4D, 0xF3BD58
 ; ------------------------------------------------------------------
@@ -18860,45 +21047,62 @@ DL_F3BCCB:
 	.short 0x008A
 	.short 0x00AA
 DL_F3BD07:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x001F
-	.short 0x2F07
-	.short 0xF3A7
-	.byte 0x00, 0x06, 0x00, 0x89, 0x0C	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x001F
-	.short 0x2F07
-	.short 0xF3A7
-	.byte 0x00, 0x06, 0x00, 0x9E, 0x0C	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F7
-	.byte 0x00, 0x00, 0x07	; character codes below 0x20
-	.ascii "y"
-	.byte 0x12, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F9
-	.byte 0x00, 0x00, 0x07, 0x91, 0x18, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12FC
-	.byte 0x00, 0x00, 0x07, 0x8E, 0x12, 0x03	; character codes below 0x20
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12FE
-	.short 0x00FF
-	.short 0x6807
-	.short 0x0317
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000712FF
-	.short 0x5805
-	.short 0xF3BD
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0C89	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0C9E	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1279	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1891	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x128E	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1768	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3BD58	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3BD58-0xF3BD8F: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03BD58, 0x000038
 
 ; ------------------------------------------------------------------
-; 0xF3BD90-0xF3BF47 -- 49 display-list records, 440 bytes
+; 0xF3BD90-0xF3BF47 -- 49 display-list records, 440 bytes -- interpreter A (42 records) and B (7)
 ;   entered at: 0xF3BD90, 0xF3BDCF, 0xF3BEBF, 0xF3BEF7
 ;   ends used:  0xF3BDCF, 0xF3BEBF, 0xF3BEF7, 0xF3BF3D, 0xF3BF48
 ; ------------------------------------------------------------------
@@ -19062,47 +21266,62 @@ DL_F3BEBF:
 	.short 0x00C4
 	.short 0x00E0
 DL_F3BEF7:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x001F
-	.short 0x2F07
-	.short 0xF3A7
-	.byte 0x00, 0x06, 0x00, 0x89, 0x0C	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x12FB
-	.short 0x001F
-	.short 0x2F07
-	.short 0xF3A7
-	.byte 0x00, 0x06, 0x00, 0x9E, 0x0C	; operand bytes the handler does not read
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F7
-	.byte 0x00, 0x00, 0x07	; character codes below 0x20
-	.ascii "y"
-	.byte 0x12, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12F9
-	.byte 0x00, 0x00, 0x07	; character codes below 0x20
-	.ascii "i"
-	.byte 0x18, 0x03	; character codes below 0x20
-	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
-	.short 0x12FC
-	.byte 0x00, 0x00, 0x07, 0x8E, 0x12, 0x03	; character codes below 0x20
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12FE
-	.short 0x00FF
-	.short 0x6807
-	.short 0x0317
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000712FF
-	.short 0x4805
-	.short 0xF3BF
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0C89	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0C9E	; +0x0D -> IX
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1279	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1869	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x128E	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1768	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3BF48	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3BF48-0xF3BF7F: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03BF48, 0x000038
 
 ; ------------------------------------------------------------------
-; 0xF3BF80-0xF3C198 -- 49 display-list records, 537 bytes
+; 0xF3BF80-0xF3C198 -- 49 display-list records, 537 bytes -- interpreter A (45 records) and B (4)
 ;   entered at: 0xF3BF80, 0xF3BFF8, 0xF3C133, 0xF3C145, 0xF3C15D, 0xF3C16C, 0xF3C17B
 ;   ends used:  0xF3BFF8, 0xF3C133, 0xF3C145, 0xF3C15D, 0xF3C16C, 0xF3C17B, 0xF3C199
 ; ------------------------------------------------------------------
@@ -19300,38 +21519,46 @@ DL_F3C145:
 	.short 0x1350
 	.ascii "  ALL   "
 DL_F3C15D:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF807
-	.short 0x0012
-	.byte 0x00, 0x06, 0x00, 0xA0, 0x0D	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x000012F8	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0DA0	; +0x0D -> IX
 DL_F3C16C:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xFE07
-	.short 0x0012
-	.byte 0x00, 0x06, 0x00, 0xB1, 0x0D	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x000012FE	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0DB1	; +0x0D -> IX
 DL_F3C17B:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1304
-	.short 0x007F
-	.short 0xA107
-	.short 0xF3A7
-	.byte 0x00, 0x03, 0x00, 0x44, 0x13	; operand bytes the handler does not read
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1305
-	.short 0x00FF
-	.short 0xA107
-	.short 0xF3A7
-	.byte 0x00, 0x03, 0x00, 0x55, 0x13	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1304	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A7A1	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1344	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1305	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3A7A1	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x1355	; +0x0D -> IX
 
 ; --- 0xF3C199-0xF3C1AC: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C199, 0x000014
 
 ; ------------------------------------------------------------------
-; 0xF3C1AD-0xF3C350 -- 41 display-list records, 420 bytes
+; 0xF3C1AD-0xF3C350 -- 41 display-list records, 420 bytes -- interpreter A (37 records) and B (4)
 ;   entered at: 0xF3C1AD, 0xF3C31E
 ;   ends used:  0xF3C31E, 0xF3C351
 ; ------------------------------------------------------------------
@@ -19479,54 +21706,66 @@ DL_F3C1AD:
 	.short 0x013C
 	.short 0x00BF
 DL_F3C31E:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x0000
-	.short 0x0000
-	.short 0xF608
-	.short 0x0012
-	.byte 0x00, 0x06, 0x00, 0x98, 0x09	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x12FC
-	.short 0x00FF
-	.short 0x5C1C
-	.short 0x3D00
-	.byte 0x00, 0x02	; operand bytes the handler does not read
-	.byte 0x0A, 0x0C	; op 0A, 12 bytes -> handler 0xF31A75
-	.short 0x12FD
-	.short 0x00FF
-	.short 0xF817
-	.short 0x3000
-	.byte 0x00, 0x03	; operand bytes the handler does not read
-	.byte 0x09, 0x0C	; op 09, 12 bytes -> handler 0xF31A75
-	.short 0x12FF
-	.short 0x00FF
-	.short 0xF01C
-	.short 0x3D00
-	.byte 0x00, 0x03	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x0000	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x08	; +0x06 swi 7 function
+	.long 0x000012F6	; +0x07 -> XIY: string table
+	.short 0x0006	; +0x0B -> BC: bytes per entry
+	.short 0x0998	; +0x0D -> IX
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.short 0x005C	; +0x07 -> (0x2530)
+	.short 0x003D	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x0A, 0x0C	; B op 0A, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00F8	; +0x07 -> (0x2530)
+	.short 0x0030	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1C	; +0x06 swi 7 function
+	.short 0x00F0	; +0x07 -> (0x2530)
+	.short 0x003D	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
 
 ; --- 0xF3C351-0xF3C366: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C351, 0x000016
 
 ; ------------------------------------------------------------------
-; 0xF3C367-0xF3C37C -- 2 display-list records, 22 bytes
+; 0xF3C367-0xF3C37C -- 2 display-list records, 22 bytes -- interpreter B
 ;   entered at: 0xF3C367
 ;   ends used:  0xF3C372, 0xF3C37D
 ; ------------------------------------------------------------------
 DL_F3C367:
-	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
-	.short 0x1301
-	.byte 0x0F, 0x00, 0x1B	; character codes below 0x20
-	.ascii "}"
-	.byte 0xC3, 0xF3, 0x00	; character codes below 0x20
-	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
-	.short 0x1302
-	.byte 0xFF, 0x00, 0x1B, 0xAD, 0xC3, 0xF3, 0x00	; character codes below 0x20
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x1301	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F3C37D	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x1302	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F3C3AD	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3C37D-0xF3C4D4: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C37D, 0x000158
 
 ; ------------------------------------------------------------------
-; 0xF3C4D5-0xF3C53E -- 7 display-list records, 106 bytes
+; 0xF3C4D5-0xF3C53E -- 7 display-list records, 106 bytes -- interpreter A (6 records) and B (1)
 ;   entered at: 0xF3C4D5, 0xF3C530
 ;   ends used:  0xF3C530, 0xF3C53F
 ; ------------------------------------------------------------------
@@ -19553,18 +21792,20 @@ DL_F3C4D5:
 	.short 0x0122
 	.short 0x00E9
 DL_F3C530:
-	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
-	.short 0x1307
-	.short 0x007F
-	.short 0x3F06
-	.short 0xF3C5
-	.byte 0x00, 0x07, 0x00, 0x6D, 0x18	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1307	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3C53F	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x186D	; +0x0D -> IX
 
 ; --- 0xF3C53F-0xF3C561: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C53F, 0x000023
 
 ; ------------------------------------------------------------------
-; 0xF3C562-0xF3C6B2 -- 37 display-list records, 337 bytes
+; 0xF3C562-0xF3C6B2 -- 37 display-list records, 337 bytes -- interpreter A
 ;   entered at: 0xF3C562
 ;   ends used:  0xF3C6B3
 ; ------------------------------------------------------------------
@@ -19721,7 +21962,7 @@ DL_F3C562:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C6B3, 0x00006E
 
 ; ------------------------------------------------------------------
-; 0xF3C721-0xF3C7AC -- 15 display-list records, 140 bytes
+; 0xF3C721-0xF3C7AC -- 15 display-list records, 140 bytes -- interpreter A (10 records) and B (5)
 ;   entered at: 0xF3C721, 0xF3C778
 ;   ends used:  0xF3C778, 0xF3C78C, 0xF3C7AD
 ; ------------------------------------------------------------------
@@ -19769,37 +22010,44 @@ DL_F3C721:
 	.short 0x006D
 	.short 0x00D1
 DL_F3C778:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12FE
-	.short 0x00FF
-	.short 0x1A07
-	.short 0x030C
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x1300
-	.short 0x00FF
-	.short 0x2207
-	.short 0x0318
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F1302
-	.short 0xE305
-	.short 0xF3C7
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F1303
-	.short 0xFB05
-	.short 0xF3C7
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
-	.long 0x000F1304
-	.short 0x1305
-	.short 0xF3C8
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x0C1A	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x1300	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x1822	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x1302	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3C7E3	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x1303	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3C7FB	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x1304	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3C813	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3C7AD-0xF3C7C2: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C7AD, 0x000016
 
 ; ------------------------------------------------------------------
-; 0xF3C7C3-0xF3C7CC -- 1 display-list records, 10 bytes
+; 0xF3C7C3-0xF3C7CC -- 1 display-list records, 10 bytes -- interpreter A
 ;   entered at: 0xF3C7C3
 ;   ends used:  0xF3C7CD
 ; ------------------------------------------------------------------
@@ -19814,7 +22062,7 @@ DL_F3C7C3:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C7CD, 0x00009E
 
 ; ------------------------------------------------------------------
-; 0xF3C86B-0xF3C872 -- 1 display-list records, 8 bytes
+; 0xF3C86B-0xF3C872 -- 1 display-list records, 8 bytes -- interpreter A
 ;   entered at: 0xF3C86B
 ;   ends used:  0xF3C873
 ; ------------------------------------------------------------------
@@ -19828,16 +22076,18 @@ DL_F3C86B:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C873, 0x00002A
 
 ; ------------------------------------------------------------------
-; 0xF3C89D-0xF3C946 -- 9 display-list records, 170 bytes
+; 0xF3C89D-0xF3C946 -- 9 display-list records, 170 bytes -- interpreter A (8 records) and B (1)
 ;   entered at: 0xF3C89D, 0xF3C8A7
 ;   ends used:  0xF3C8A7, 0xF3C947
 ; ------------------------------------------------------------------
 DL_F3C89D:
-	.byte 0x00, 0x0A	; op 00, 10 bytes -> handler 0xF31A75
-	.short 0x12F6
-	.short 0x00FF
-	.short 0xDD07
-	.short 0x0305
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.short 0x05DD	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F3C8A7:
 	.byte 0x1C, 0x11	; op 1C, 17 bytes -> handler 0xF31A52
 	.short 0x0044
@@ -19871,7 +22121,7 @@ DL_F3C8A7:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C947, 0x0006CF
 
 ; ------------------------------------------------------------------
-; 0xF3D016-0xF3D088 -- 13 display-list records, 115 bytes
+; 0xF3D016-0xF3D088 -- 13 display-list records, 115 bytes -- interpreter A
 ;   entered at: 0xF3D016
 ;   ends used:  0xF3D089
 ; ------------------------------------------------------------------
@@ -19930,7 +22180,7 @@ DL_F3D016:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03D089, 0x0009E6
 
 ; ------------------------------------------------------------------
-; 0xF3DA6F-0xF3DA76 -- 1 display-list records, 8 bytes
+; 0xF3DA6F-0xF3DA76 -- 1 display-list records, 8 bytes -- interpreter A
 ;   entered at: 0xF3DA6F
 ;   ends used:  0xF3DA77
 ; ------------------------------------------------------------------
@@ -19944,32 +22194,35 @@ DL_F3DA6F:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03DA77, 0x000189
 
 ; ------------------------------------------------------------------
-; 0xF3DC00-0xF3DC20 -- 3 display-list records, 33 bytes
+; 0xF3DC00-0xF3DC20 -- 3 display-list records, 33 bytes -- interpreter B
 ;   entered at: 0xF3DC00
 ;   ends used:  0xF3DC21
 ; ------------------------------------------------------------------
 DL_F3DC00:
-	.byte 0x04, 0x0B	; op 04, 11 bytes -> handler 0xF31ABE
-	.long 0x00FF2640
-	.short 0x210E
-	.short 0xF3DC
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x04, 0x0B	; op 04, 11 bytes -> handler 0xF31ABE
-	.long 0x00FF2641
-	.short 0x3F0E
-	.short 0xF3DC
-	.byte 0x00	; operand bytes the handler does not read
-	.byte 0x04, 0x0B	; op 04, 11 bytes -> handler 0xF31ABE
-	.long 0x00FF2642
-	.short 0x5D0E
-	.short 0xF3DC
-	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x0E	; +0x06 swi 7 function
+	.long 0x00F3DC21	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
+	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
+	.short 0x2641	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x0E	; +0x06 swi 7 function
+	.long 0x00F3DC3F	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
+	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x0E	; +0x06 swi 7 function
+	.long 0x00F3DC5D	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 
 ; --- 0xF3DC21-0xF3DE25: not converted ---
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03DC21, 0x000205
 
 ; ------------------------------------------------------------------
-; 0xF3DE26-0xF3DEB1 -- 14 display-list records, 140 bytes
+; 0xF3DE26-0xF3DEB1 -- 14 display-list records, 140 bytes -- interpreter A
 ;   entered at: 0xF3DE26
 ;   ends used:  0xF3DEB2
 ; ------------------------------------------------------------------
@@ -20049,7 +22302,7 @@ DL_F3DE26:
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03DEB2, 0x0001BC
 
 ; ------------------------------------------------------------------
-; 0xF3E06E-0xF3E15B -- 17 display-list records, 238 bytes
+; 0xF3E06E-0xF3E15B -- 17 display-list records, 238 bytes -- interpreter A
 ;   entered at: 0xF3E06E
 ;   ends used:  0xF3E15C
 ; ------------------------------------------------------------------
@@ -21963,11 +24216,16 @@ T_F42C28:	jp 0xF663D7  ; -> prom_b 0x663D7   x1
 T_F42C2C:	jp 0xF6645A  ; -> prom_b 0x6645A   x1
 	.fill 0x40, 1, 0x0E  ; 0xF42C30: 64 x ret
 T_F42C70:	jp 0xF55018  ; -> prom_b 0x55018   never CALLED, but the 4 bytes
-				; `70 2C F4 00` occur 397 times in prom_a+prom_b,
-				; 222 of them in one dense run at prom_a
-				; 0x216B4 -- i.e. it is the DEFAULT entry that
-				; fills a large pointer table.  What that table
-				; is has not been traced.
+				; `70 2C F4 00` occur 397 times in prom_a+prom_b
+				; -- 222 in prom_a, 175 in prom_b -- so it is a
+				; DEFAULT entry filling pointer tables.
+				; ⚠ CORRECTED 2026-08-25: this used to add "222 of
+				; them in one dense run at prom_a 0x216B4".  222 is
+				; prom_a's TOTAL; 0x216B4 is only its first
+				; occurrence.  The longest stride-4 run is 10 in
+				; prom_a and 17 in prom_b, and the run at 0x216B4
+				; is 6 (notes/prom_b_default_slot_census.py).
+				; Which tables these are has not been traced.
 T_F42C74:	jp 0xF55019  ; -> prom_b 0x55019   x28
 T_F42C78:	jp 0xF550A6  ; -> prom_b 0x550A6   x77
 T_F42C7C:	jp 0xF5517B  ; -> prom_b 0x5517B   x8
@@ -22327,8 +24585,2607 @@ T_F4400C:	jp 0xF440C4  ; -> prom_b 0x440C4
 T_F44010:	jp 0xF44095  ; -> prom_b 0x44095
 	.fill 0x4, 1, 0x0E  ; 0xF44014: 4 x ret
 
+; --- 0xF44018-0xF54FFF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x044018, 0x010FE8
+
 ; ==============================================================================
-; 0xF44018-0xF7FFFF -- not yet converted
+; 0xF55000-0xF5535A -- PARAMETER-EDIT PRIMITIVES AND TWO TABLE ACCESSORS
 ; ==============================================================================
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x044018, 0x03BFE8
+;
+; A linker section: 65 bytes of 0x0E (`ret`) fill end at 0xF54FFF, then 25 bytes
+; of 4-byte `0E 00 00 00` slot fill, then nine routines, the last of which ends
+; on a `ret` at 0xF5535A with the next `link XIZ` at 0xF5535B.
+;
+; Four of the nine are named by thunk slots that the census ranks near the top of
+; the whole table (`python3 scripts/analysis/prom_b_thunk_table.py --census`):
+;   T_F42C90 -> 0xF5533C  119 opcode-anchored references
+;   T_F42C78 -> 0xF550A6   77
+;   T_F42C8C -> 0xF55321   45
+;   T_F42C70 -> 0xF55018  never called, but its 4-byte slot ADDRESS (`70 2C F4
+;                         00`) occurs 397 times in prom_a+prom_b, 222 of them in
+;                         one run at prom_a 0x216B4.  This block settles what it
+;                         is: 0xF55018 is a single byte 0x0E -- a bare `ret`.
+;                         The pointer table it fills is filled with a NO-OP.
+;
+; ⚠ The subsystem these belong to is NOT established.  Each header below says
+; what its routine does to memory and nothing more.
+; ==============================================================================
+
+; --- 0xF55000-0xF55018: fill.  Six 4-byte slots of `0E 00 00 00` and one more
+;     `0E`, the same `ret`-in-every-slot convention the thunk table uses. -----
+	.byte 0x0E, 0x00, 0x00, 0x00
+	.byte 0x0E, 0x00, 0x00, 0x00
+	.byte 0x0E, 0x00, 0x00, 0x00
+	.byte 0x0E, 0x00, 0x00, 0x00
+	.byte 0x0E, 0x00, 0x00, 0x00
+	.byte 0x0E, 0x00, 0x00, 0x00
+; ---------------------------------------------------------------------
+; Stub_Ret_F55018 -- the do-nothing entry the thunk table's most-spelled slot
+;                    points at
+; Called from: thunk T_F42C70 (0xF42C70).  That slot is never the operand of a
+;              call or jp; its 32-bit ADDRESS appears 397 times as data.
+; Inputs:  none.  Outputs: none.
+; Evidence: the byte at 0xF55018 is 0x0E, which is RET
+;           (mame/src/devices/cpu/tlcs900/dasm900.cpp:1267, M_RET at opcode 0x0E).
+; Unknown:  which table those 397 words belong to.
+; ---------------------------------------------------------------------
+Stub_Ret_F55018:
+	ret	; F55018  ret
+
+; ---------------------------------------------------------------------
+; sub_F55019 -- normalise a selector index and rebuild the flag byte (0x28B0)
+; Called from: not yet traced to a specific caller
+; Inputs:  (XIZ+8) = 16-bit index, (XIZ+0x0A) = 16-bit flags
+; Outputs: A = the adjusted index; (0x28B1) = the original index;
+;          (0x28B0) = a freshly built flag byte
+; Evidence: `cp HL,0x1F / jrl UGT` rejects an index above 0x1F without touching
+;           anything; then (0x28B0) is cleared and set bit by bit --
+;             bit 0 <- bit 7 of the second argument
+;             bit 1 <- (0x208C) AND the 32-bit word at 0xF55755 + 4*(0x28B1)
+;             bit 2 <- index in 0x11..0x19, and the index has 0x11 subtracted
+;             bit 5 <- index == 0x1B and (0x2267) == 0x0F
+;           an index >= 0x1A additionally has 9 subtracted.
+; Unknown:  what the index enumerates, what 0x208C and 0x2267 hold, and what the
+;           32-bit mask table at 0xF55755 is.  That table is NOT converted here:
+;           nothing bounds its length.
+; ---------------------------------------------------------------------
+sub_F55019:
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F55019  link XIZ,0x0000   [llvm-mc cannot encode this]
+	pushw	hl	; F5501D  push HL
+	push	xix	; F5501E  push XIX
+	lda_d16	xix, (10416)	; F5501F  lda XIX,0x28b0
+	ld	hl, (xiz+8)	; F55023  ld HL,(XIZ+0x08)
+	cp	hl, 31	; F55026  cp HL,0x001f
+	jrl	ugt, 116	; F5502A  jrl UGT,0xf550a1
+	stb_d8	(10417), l	; F5502D  ld (0x28b1),L
+	ld	(xix), 0	; F55031  ld (XIX),0x00
+	ld	bc, (xiz+10)	; F55034  ld BC,(XIZ+0x0a)
+	and	bc, 128	; F55037  and BC,0x0080
+	jr	z, 5	; F5503B  jr Z,0xf55042
+	ld	(xix), 1	; F5503D  ld (XIX),0x01
+	jr	3	; F55040  jr T,0xf55045
+	ld	(xix), 0	; F55042  ld (XIX),0x00
+	ldb	c, 4	; F55045  ld C,0x04
+	.byte 0xC1, 0xB1, 0x28, 0x43	; F55047  mul BC,(0x28b1)   [llvm-mc cannot encode this]
+	extz	xbc	; F5504B  extz XBC
+	add	xbc, 16078677	; F5504D  add XBC,0x00f55755
+	ld	xbc, (xbc)	; F55053  ld XBC,(XBC)
+	.byte 0xE1, 0x8C, 0x20, 0xC1	; F55055  and XBC,(0x208c)   [llvm-mc cannot encode this]
+	jr	z, 3	; F55059  jr Z,0xf5505e
+	.byte 0x84, 0x3E, 0x02	; F5505B  or (XIX),0x02   [llvm-mc cannot encode this]
+	.byte 0xC1, 0xB1, 0x28, 0x3F, 0x11	; F5505E  cp (0x28b1),0x11   [llvm-mc cannot encode this]
+	jr	c, 21	; F55063  jr C,0xf5507a
+	.byte 0xC1, 0xB1, 0x28, 0x3F, 0x19	; F55065  cp (0x28b1),0x19   [llvm-mc cannot encode this]
+	jr	ugt, 14	; F5506A  jr UGT,0xf5507a
+	.byte 0x84, 0x3E, 0x04	; F5506C  or (XIX),0x04   [llvm-mc cannot encode this]
+	ldw_d16	hl, (10417)	; F5506F  ld HL,(0x28b1)
+	extz	hl	; F55073  extz HL
+	ldw	bc, 17	; F55075  ld BC,0x0011
+	sub	hl, bc	; F55078  sub HL,BC
+	.byte 0xC1, 0xB1, 0x28, 0x3F, 0x1A	; F5507A  cp (0x28b1),0x1a   [llvm-mc cannot encode this]
+	jr	c, 11	; F5507F  jr C,0xf5508c
+	ldw_d16	hl, (10417)	; F55081  ld HL,(0x28b1)
+	extz	hl	; F55085  extz HL
+	ldw	bc, 9	; F55087  ld BC,0x0009
+	sub	hl, bc	; F5508A  sub HL,BC
+	.byte 0xC1, 0xB1, 0x28, 0x3F, 0x1B	; F5508C  cp (0x28b1),0x1b   [llvm-mc cannot encode this]
+	jr	nz, 10	; F55091  jr NZ,0xf5509d
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F55093  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	nz, 3	; F55098  jr NZ,0xf5509d
+	.byte 0x84, 0x3E, 0x20	; F5509A  or (XIX),0x20   [llvm-mc cannot encode this]
+	ld	c, l	; F5509D  ld C,L
+	ld	a, c	; F5509F  ld A,C
+	pop	xix	; F550A1  pop XIX
+	popw	hl	; F550A2  pop HL
+	.byte 0xEE, 0x0D	; F550A3  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F550A5  ret
+
+; ---------------------------------------------------------------------
+; sub_F550A6 -- read a bit-field through an 8-byte descriptor and range-check it
+; Called from: thunk T_F42C78 (0xF42C78), 77 opcode-anchored references
+; Inputs:  (XIZ+8) = 32-bit pointer to the source byte,
+;          (XIZ+0x0C) = 32-bit pointer to an 8-byte descriptor
+; Outputs: register results; (0x28B0) is XORed with descriptor byte +7 and bit 3
+;          of (0x2075) is set
+; Evidence: `ld E,(XBC)` reads the source byte, `and D,E` masks it with
+;           descriptor +1, then a loop shifts D right and counts in L until L
+;           reaches descriptor +2 -- i.e. it normalises the field.  Descriptor
+;           +3/+4 are the clamp bounds, +5/+6 are alternative step values chosen
+;           by bits of (0x2075) and (0x28B0), +7 is the flag XOR mask.
+;           The routine does not only READ: after the adjust it writes the field
+;           back (`and (XBC),H / or A,D / ld (XBC),A` at 0xF55161) and returns
+;           A = 1, or returns A = 0 unchanged when `cp H,D` at 0xF5513D finds
+;           the value did not move.
+; ⚠ CORRECTED 2026-08-25.  This header used to end "0xF5535B, just past this
+;           block, is the same routine with the two pointer arguments swapped."
+;           Both halves are wrong.  0xF5535B's first argument is an INDEX, not a
+;           pointer -- it resolves the target through IndexedTable_GetPtr and
+;           then adds descriptor +0 -- and it journals every change to
+;           List2030_Append4 or Queue2C00_Append4, which this routine does not
+;           do at all.  What the two really share is the 100-byte ADJUST CORE,
+;           identical in 99 of 100 bytes (the one difference is a frame
+;           displacement).  Measured by notes/prom_b_param_edit_pair.py; the
+;           converted routine is IndexedParam_AdjustField below.
+; Unknown:  what the descriptor describes.
+; ---------------------------------------------------------------------
+sub_F550A6:
+	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F550A6  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	pushw	hl	; F550AA  push HL
+	pushw	de	; F550AB  push DE
+	push	xix	; F550AC  push XIX
+	ld	xix, (xiz+12)	; F550AD  ld XIX,(XIZ+0x0c)
+	ld	c, (xix+7)	; F550B0  ld C,(XIX+0x07)
+	xordm8	(10416), c	; F550B3  xor (0x28b0),C
+	.byte 0xF1, 0x75, 0x20, 0xBB	; F550B7  set 3,(0x2075)   [llvm-mc cannot encode this]
+	ld	xbc, (xiz+8)	; F550BB  ld XBC,(XIZ+0x08)
+	ld	e, (xbc)	; F550BE  ld E,(XBC)
+	ld	a, (xix+1)	; F550C0  ld A,(XIX+0x01)
+	ld	d, a	; F550C3  ld D,A
+	and	d, e	; F550C5  and D,E
+	ldb	l, 0	; F550C7  ld L,0x00
+	ld	h, (xix+2)	; F550C9  ld H,(XIX+0x02)
+	cp	l, h	; F550CC  cp L,H
+	jr	nc, 11	; F550CE  jr NC,0xf550db
+	ld	c, d	; F550D0  ld C,D
+	srl	c, 1	; F550D2  srl 0x01,C
+	ld	d, c	; F550D5  ld D,C
+	inc	1, l	; F550D7  inc 1,L
+	jr	-15	; F550D9  jr T,0xf550cc
+	ld	h, d	; F550DB  ld H,D
+	ldb_d8	c, (10416)	; F550DD  ld C,(0x28b0)
+	and	c, 4	; F550E1  and C,0x04
+	jr	z, 5	; F550E4  jr Z,0xf550eb
+	ld	l, (xix+6)	; F550E6  ld L,(XIX+0x06)
+	jr	14	; F550E9  jr T,0xf550f9
+	ldb	l, 1	; F550EB  ld L,0x01
+	ldb_d8	c, (8309)	; F550ED  ld C,(0x2075)
+	and	c, 4	; F550F1  and C,0x04
+	jr	z, 3	; F550F4  jr Z,0xf550f9
+	ld	l, (xix+5)	; F550F6  ld L,(XIX+0x05)
+	ldb_d8	c, (10416)	; F550F9  ld C,(0x28b0)
+	and	c, 1	; F550FD  and C,0x01
+	jr	z, 29	; F55100  jr Z,0xf5511f
+	ld	e, (xix+4)	; F55102  ld E,(XIX+0x04)
+	ld	c, e	; F55105  ld C,E
+	add	c, l	; F55107  add C,L
+	ld	(xiz-2), c	; F55109  ld (XIZ+0xfe),C
+	cp	h, c	; F5510C  cp H,C
+	jr	c, 10	; F5510E  jr C,0xf5511a
+	cp	c, e	; F55110  cp C,E
+	jr	ule, 6	; F55112  jr ULE,0xf5511a
+	ld	a, l	; F55114  ld A,L
+	sub	h, a	; F55116  sub H,A
+	jr	35	; F55118  jr T,0xf5513d
+	ld	h, (xix+4)	; F5511A  ld H,(XIX+0x04)
+	jr	30	; F5511D  jr T,0xf5513d
+	ld	c, (xix+3)	; F5511F  ld C,(XIX+0x03)
+	ld	(xiz-1), c	; F55122  ld (XIZ+0xff),C
+	ld	e, c	; F55125  ld E,C
+	sub	c, l	; F55127  sub C,L
+	ld	e, c	; F55129  ld E,C
+	cp	h, c	; F5512B  cp H,C
+	jr	ugt, 11	; F5512D  jr UGT,0xf5513a
+	.byte 0x8E, 0xFF, 0xF3	; F5512F  cp C,(XIZ+0xff)   [llvm-mc cannot encode this]
+	jr	nc, 6	; F55132  jr NC,0xf5513a
+	ld	c, l	; F55134  ld C,L
+	add	h, c	; F55136  add H,C
+	jr	3	; F55138  jr T,0xf5513d
+	ld	h, (xix+3)	; F5513A  ld H,(XIX+0x03)
+	cp	h, d	; F5513D  cp H,D
+	jr	z, 50	; F5513F  jr Z,0xf55173
+	ldb	l, 0	; F55141  ld L,0x00
+	ld	d, (xix+2)	; F55143  ld D,(XIX+0x02)
+	cp	l, d	; F55146  cp L,D
+	jr	nc, 10	; F55148  jr NC,0xf55154
+	ld	c, h	; F5514A  ld C,H
+	add	c, h	; F5514C  add C,H
+	ld	h, c	; F5514E  ld H,C
+	inc	1, l	; F55150  inc 1,L
+	jr	-14	; F55152  jr T,0xf55146
+	ld	l, (xix+1)	; F55154  ld L,(XIX+0x01)
+	ld	d, l	; F55157  ld D,L
+	and	d, h	; F55159  and D,H
+	ld	c, l	; F5515B  ld C,L
+	cpl	c	; F5515D  cpl C
+	ld	h, c	; F5515F  ld H,C
+	ld	xbc, (xiz+8)	; F55161  ld XBC,(XIZ+0x08)
+	and	(xbc), h	; F55164  and (XBC),H
+	ld	xbc, (xiz+8)	; F55166  ld XBC,(XIZ+0x08)
+	ld	a, (xbc)	; F55169  ld A,(XBC)
+	or	a, d	; F5516B  or A,D
+	ld	(xbc), a	; F5516D  ld (XBC),A
+	ldb	a, 1	; F5516F  ld A,0x01
+	jr	2	; F55171  jr T,0xf55175
+	sub	a, a	; F55173  sub A,A
+	pop	xix	; F55175  pop XIX
+	popw	de	; F55176  pop DE
+	popw	hl	; F55177  pop HL
+	.byte 0xEE, 0x0D	; F55178  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5517A  ret
+
+; ---------------------------------------------------------------------
+; sub_F5517B -- set, clear or toggle a masked bit group in one byte
+; Called from: not yet traced to a specific caller
+; Inputs:  (XIZ+8) = 32-bit pointer to the target byte,
+;          (XIZ+0x0C) = 32-bit pointer to a descriptor whose +1 is the mask and
+;          whose +2 is XORed into (0x28B0) first
+; Outputs: A = 1 if the byte changed, 0 if it did not; the byte is updated
+; Evidence: after the XOR into (0x28B0), bit 0 of (0x28B0) selects between two
+;           edits of L = (XIX): with the bit set, `and A,L` then `cpl A / and
+;           L,A` clears the mask; with it clear, `or L,A` sets it.  The result is
+;           compared with the original `cp H,L` and only written back on a
+;           difference, which is also what the 1/0 return reports.
+; Unknown:  what the byte is.
+; ---------------------------------------------------------------------
+sub_F5517B:
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F5517B  link XIZ,0x0000   [llvm-mc cannot encode this]
+	pushw	hl	; F5517F  push HL
+	pushw	de	; F55180  push DE
+	push	xix	; F55181  push XIX
+	ld	xix, (xiz+8)	; F55182  ld XIX,(XIZ+0x08)
+	ld	xbc, (xiz+12)	; F55185  ld XBC,(XIZ+0x0c)
+	ld	a, (xbc+2)	; F55188  ld A,(XBC+0x02)
+	xordm8	(10416), a	; F5518B  xor (0x28b0),A
+	ld	l, (xix)	; F5518F  ld L,(XIX)
+	ldb_d8	a, (10416)	; F55191  ld A,(0x28b0)
+	and	a, 1	; F55195  and A,0x01
+	jr	z, 17	; F55198  jr Z,0xf551ab
+	ld	h, (xbc+1)	; F5519A  ld H,(XBC+0x01)
+	ld	a, h	; F5519D  ld A,H
+	and	a, l	; F5519F  and A,L
+	jr	z, 24	; F551A1  jr Z,0xf551bb
+	ld	a, h	; F551A3  ld A,H
+	cpl	a	; F551A5  cpl A
+	and	l, a	; F551A7  and L,A
+	jr	16	; F551A9  jr T,0xf551bb
+	ld	xbc, (xiz+12)	; F551AB  ld XBC,(XIZ+0x0c)
+	ld	h, (xbc+1)	; F551AE  ld H,(XBC+0x01)
+	ld	a, h	; F551B1  ld A,H
+	and	a, l	; F551B3  and A,L
+	jr	nz, 4	; F551B5  jr NZ,0xf551bb
+	ld	a, h	; F551B7  ld A,H
+	or	l, a	; F551B9  or L,A
+	ld	h, (xix)	; F551BB  ld H,(XIX)
+	cp	h, l	; F551BD  cp H,L
+	jr	z, 30	; F551BF  jr Z,0xf551df
+	ld	xbc, (xiz+12)	; F551C1  ld XBC,(XIZ+0x0c)
+	ld	d, (xbc+1)	; F551C4  ld D,(XBC+0x01)
+	ld	e, d	; F551C7  ld E,D
+	and	e, l	; F551C9  and E,L
+	ld	c, d	; F551CB  ld C,D
+	cpl	c	; F551CD  cpl C
+	ld	l, c	; F551CF  ld L,C
+	and	l, h	; F551D1  and L,H
+	ld	(xix), l	; F551D3  ld (XIX),L
+	ld	c, e	; F551D5  ld C,E
+	or	c, l	; F551D7  or C,L
+	ld	(xix), c	; F551D9  ld (XIX),C
+	ldb	a, 1	; F551DB  ld A,0x01
+	jr	2	; F551DD  jr T,0xf551e1
+	sub	a, a	; F551DF  sub A,A
+	pop	xix	; F551E1  pop XIX
+	popw	de	; F551E2  pop DE
+	popw	hl	; F551E3  pop HL
+	.byte 0xEE, 0x0D	; F551E4  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F551E6  ret
+
+; ---------------------------------------------------------------------
+; sub_F551E7 -- clamp a 16-bit value to a descriptor's two bounds
+; Called from: not yet traced to a specific caller
+; Inputs:  (XIZ+8) = 32-bit pointer to the 16-bit value,
+;          (XIZ+0x0C) = 32-bit pointer to a descriptor; +3 and +4 are the bounds,
+;          +7 is XORed into (0x28B0) first
+; Outputs: A = 1 if the value was already inside the bounds, 0 if it was clamped
+;          and written back
+; Evidence: `ld IX,(XWA)` reads the value, `cp IX,WA / jr NC` against descriptor
+;           +4 and `cp DE,WA / jr ULE` against descriptor +3 each replace DE with
+;           the bound; `cp DE,IX` then decides between writing DE back and
+;           returning 1.
+; Unknown:  what the value is.
+; ---------------------------------------------------------------------
+sub_F551E7:
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F551E7  link XIZ,0x0000   [llvm-mc cannot encode this]
+	pushw	hl	; F551EB  push HL
+	pushw	de	; F551EC  push DE
+	pushw	ix	; F551ED  push IX
+	ld	xbc, (xiz+12)	; F551EE  ld XBC,(XIZ+0x0c)
+	ld	a, (xbc+7)	; F551F1  ld A,(XBC+0x07)
+	xordm8	(10416), a	; F551F4  xor (0x28b0),A
+	ld	xwa, (xiz+8)	; F551F8  ld XWA,(XIZ+0x08)
+	ld	ix, (xwa)	; F551FB  ld IX,(XWA)
+	ld	de, ix	; F551FD  ld DE,IX
+	ld	a, (xbc+4)	; F551FF  ld A,(XBC+0x04)
+	extz	wa	; F55202  extz WA
+	ld	hl, wa	; F55204  ld HL,WA
+	cp	ix, wa	; F55206  cp IX,WA
+	jr	nc, 2	; F55208  jr NC,0xf5520c
+	ld	de, wa	; F5520A  ld DE,WA
+	ld	xbc, (xiz+12)	; F5520C  ld XBC,(XIZ+0x0c)
+	ld	a, (xbc+3)	; F5520F  ld A,(XBC+0x03)
+	extz	wa	; F55212  extz WA
+	ld	hl, wa	; F55214  ld HL,WA
+	cp	de, wa	; F55216  cp DE,WA
+	jr	ule, 2	; F55218  jr ULE,0xf5521c
+	ld	de, wa	; F5521A  ld DE,WA
+	cp	de, ix	; F5521C  cp DE,IX
+	jr	z, 9	; F5521E  jr Z,0xf55229
+	ld	xbc, (xiz+8)	; F55220  ld XBC,(XIZ+0x08)
+	ld	(xbc), de	; F55223  ld (XBC),DE
+	sub	a, a	; F55225  sub A,A
+	jr	2	; F55227  jr T,0xf5522b
+	ldb	a, 1	; F55229  ld A,0x01
+	popw	ix	; F5522B  pop IX
+	popw	de	; F5522C  pop DE
+	popw	hl	; F5522D  pop HL
+	.byte 0xEE, 0x0D	; F5522E  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F55230  ret
+
+; ---------------------------------------------------------------------
+; Queue2C00_Append4 -- append a 4-byte record to the queue at 0x2C00
+; Called from: not yet traced to a specific caller
+; Inputs:  four bytes, one per 16-bit stack slot: (XIZ+8), (XIZ+0x0A),
+;          (XIZ+0x0C), (XIZ+0x0E)
+; Outputs: the record is stored at 0x2C00 + (0x60F000), 0xFF is written one byte
+;          past it, and (0x60F000) is advanced by 4.  Nothing happens once
+;          (0x60F000) reaches 0x01FC.
+; Evidence: `lda XIX,0x60F000 / ld BC,(XIX) / cp BC,0x01FC / jr NC,<exit>`, then
+;           `ld BC,0x2C00 / add BC,HL` forms the write address, four
+;           `ld (XBC+n),A` stores, `ld (XBC+4),0xFF`, `incw 4,(XIX)`.
+;           0x01FC / 4 = 127 records.
+; Unknown:  what reads the queue, and what the four bytes mean.
+; ---------------------------------------------------------------------
+Queue2C00_Append4:
+	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F55231  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	pushw	hl	; F55235  push HL
+	push	xix	; F55236  push XIX
+	lda_24	xix, (6352896)	; F55237  lda XIX,0x60f000
+	ld	bc, (xix)	; F5523C  ld BC,(XIX)
+	cp	bc, 508	; F5523E  cp BC,0x01fc
+	jr	nc, 53	; F55242  jr NC,0xf55279
+	ld	hl, (xix)	; F55244  ld HL,(XIX)
+	ldw	bc, 11264	; F55246  ld BC,0x2c00
+	add	bc, hl	; F55249  add BC,HL
+	extz	xbc	; F5524B  extz XBC
+	ld	(xiz-4), xbc	; F5524D  ld (XIZ+0xfc),XBC
+	ld	a, (xiz+8)	; F55250  ld A,(XIZ+0x08)
+	ld	(xbc), a	; F55253  ld (XBC),A
+	ld	xbc, (xiz-4)	; F55255  ld XBC,(XIZ+0xfc)
+	ld	a, (xiz+10)	; F55258  ld A,(XIZ+0x0a)
+	ld	(xbc+1), a	; F5525B  ld (XBC+0x01),A
+	ld	xbc, (xiz-4)	; F5525E  ld XBC,(XIZ+0xfc)
+	ld	a, (xiz+12)	; F55261  ld A,(XIZ+0x0c)
+	ld	(xbc+2), a	; F55264  ld (XBC+0x02),A
+	ld	xbc, (xiz-4)	; F55267  ld XBC,(XIZ+0xfc)
+	ld	a, (xiz+14)	; F5526A  ld A,(XIZ+0x0e)
+	ld	(xbc+3), a	; F5526D  ld (XBC+0x03),A
+	ld	xbc, (xiz-4)	; F55270  ld XBC,(XIZ+0xfc)
+	ld	(xbc+4), 255	; F55273  ld (XBC+0x04),0xff
+	incm	4, (xix)	; F55277  incw 4,(XIX)
+	pop	xix	; F55279  pop XIX
+	popw	hl	; F5527A  pop HL
+	.byte 0xEE, 0x0D	; F5527B  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5527D  ret
+
+; ---------------------------------------------------------------------
+; Queue2E00_Append4 -- the same, for the queue at 0x2E00, gated on the first
+; Called from: not yet traced to a specific caller
+; Inputs:  as Queue2C00_Append4
+; Outputs: record at 0x2E00 + (0x60F004), 0xFF one past, (0x60F004) += 4
+; Evidence: byte for byte the same routine with 0x2C00 -> 0x2E00 and 0x60F000 ->
+;           0x60F004, EXCEPT that the capacity test is still on (0x60F000):
+;           `cp (0x60F000),0x00FC / jr NC,<exit>`.  So this queue is only written
+;           while the FIRST queue is less than 0xFC (63 records) deep.
+; Unknown:  why the two queues are coupled this way.
+; ---------------------------------------------------------------------
+Queue2E00_Append4:
+	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F5527E  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	pushw	hl	; F55282  push HL
+	push	xix	; F55283  push XIX
+	.byte 0xD2, 0x00, 0xF0, 0x60, 0x3F, 0xFC, 0x00	; F55284  cp (0x60f000),0x00fc   [llvm-mc cannot encode this]
+	jr	nc, 58	; F5528B  jr NC,0xf552c7
+	lda_24	xix, (6352900)	; F5528D  lda XIX,0x60f004
+	ld	hl, (xix)	; F55292  ld HL,(XIX)
+	ldw	bc, 11776	; F55294  ld BC,0x2e00
+	add	bc, hl	; F55297  add BC,HL
+	extz	xbc	; F55299  extz XBC
+	ld	(xiz-4), xbc	; F5529B  ld (XIZ+0xfc),XBC
+	ld	a, (xiz+8)	; F5529E  ld A,(XIZ+0x08)
+	ld	(xbc), a	; F552A1  ld (XBC),A
+	ld	xbc, (xiz-4)	; F552A3  ld XBC,(XIZ+0xfc)
+	ld	a, (xiz+10)	; F552A6  ld A,(XIZ+0x0a)
+	ld	(xbc+1), a	; F552A9  ld (XBC+0x01),A
+	ld	xbc, (xiz-4)	; F552AC  ld XBC,(XIZ+0xfc)
+	ld	a, (xiz+12)	; F552AF  ld A,(XIZ+0x0c)
+	ld	(xbc+2), a	; F552B2  ld (XBC+0x02),A
+	ld	xbc, (xiz-4)	; F552B5  ld XBC,(XIZ+0xfc)
+	ld	a, (xiz+14)	; F552B8  ld A,(XIZ+0x0e)
+	ld	(xbc+3), a	; F552BB  ld (XBC+0x03),A
+	ld	xbc, (xiz-4)	; F552BE  ld XBC,(XIZ+0xfc)
+	ld	(xbc+4), 255	; F552C1  ld (XBC+0x04),0xff
+	incm	4, (xix)	; F552C5  incw 4,(XIX)
+	pop	xix	; F552C7  pop XIX
+	popw	hl	; F552C8  pop HL
+	.byte 0xEE, 0x0D	; F552C9  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F552CB  ret
+
+; ---------------------------------------------------------------------
+; List2030_Append4 -- append a 4-byte record to the 0xFF-terminated list at
+;                     0x2030, which ends at 0x206C
+; Called from: not yet traced to a specific caller
+; Inputs:  four bytes in (XIZ+8), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
+; Outputs: the record replaces the 0xFF terminator, and a new 0xFF follows it
+; Evidence: `lda XIX,0x2030 / lda XBC,0x206C`, then a scan `ld C,(XIX) /
+;           cp C,0xFF / jr Z / inc 4,XIX` walks the list in 4-byte steps to its
+;           terminator; `cp XWA,XBC / jr NC,<exit>` refuses to write at or past
+;           0x206C.  (0x206C - 0x2030) / 4 = 15 slots.
+; Unknown:  what the list is for.
+; ---------------------------------------------------------------------
+List2030_Append4:
+	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F552CC  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	push	xix	; F552D0  push XIX
+	lda_d16	xix, (8240)	; F552D1  lda XIX,0x2030
+	lda_d16	xbc, (8300)	; F552D5  lda XBC,0x206c
+	ld	(xiz-4), xbc	; F552D9  ld (XIZ+0xfc),XBC
+	ld	c, (xix)	; F552DC  ld C,(XIX)
+	cp	c, 255	; F552DE  cp C,0xff
+	jr	z, 4	; F552E1  jr Z,0xf552e7
+	inc	4, xix	; F552E3  inc 4,XIX
+	jr	-11	; F552E5  jr T,0xf552dc
+	ld	xbc, (xiz-4)	; F552E7  ld XBC,(XIZ+0xfc)
+	ld	(xiz-8), xbc	; F552EA  ld (XIZ+0xf8),XBC
+	ld	xwa, xix	; F552ED  ld XWA,XIX
+	cp	xwa, xbc	; F552EF  cp XWA,XBC
+	jr	nc, 42	; F552F1  jr NC,0xf5531d
+	ld	c, (xiz+8)	; F552F3  ld C,(XIZ+0x08)
+	ld	(xix), c	; F552F6  ld (XIX),C
+	ld	xbc, xix	; F552F8  ld XBC,XIX
+	inc	1, xbc	; F552FA  inc 1,XBC
+	ld	(xiz-8), xbc	; F552FC  ld (XIZ+0xf8),XBC
+	ld	a, (xiz+10)	; F552FF  ld A,(XIZ+0x0a)
+	ld	(xbc), a	; F55302  ld (XBC),A
+	ld	xbc, (xiz-8)	; F55304  ld XBC,(XIZ+0xf8)
+	ld	a, (xiz+12)	; F55307  ld A,(XIZ+0x0c)
+	ld	(xbc+1), a	; F5530A  ld (XBC+0x01),A
+	ld	xbc, (xiz-8)	; F5530D  ld XBC,(XIZ+0xf8)
+	ld	a, (xiz+14)	; F55310  ld A,(XIZ+0x0e)
+	ld	(xbc+2), a	; F55313  ld (XBC+0x02),A
+	ld	xbc, (xiz-8)	; F55316  ld XBC,(XIZ+0xf8)
+	ld	(xbc+3), 255	; F55319  ld (XBC+0x03),0xff
+	pop	xix	; F5531D  pop XIX
+	.byte 0xEE, 0x0D	; F5531E  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F55320  ret
+
+; ---------------------------------------------------------------------
+; IndexedTable_GetPtr -- pointer n of the table whose base is the word at
+;                        0x60F018
+; Called from: thunk T_F42C8C (0xF42C8C), 45 opcode-anchored references
+; Inputs:  (XIZ+8) = 16-bit index
+; Outputs: XIY = the 32-bit pointer at base + 4*index
+; Evidence: `ld XIX,(0x60F018)` loads the base from RAM, `ld C,4 / mul BC,(XIZ+8)
+;           / extz XBC / add XBC,XIX / ld XWA,(XBC) / ld XIY,XWA`.
+; Unknown:  what the table holds and who writes 0x60F018.
+; ---------------------------------------------------------------------
+IndexedTable_GetPtr:
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F55321  link XIZ,0x0000   [llvm-mc cannot encode this]
+	push	xix	; F55325  push XIX
+	ldl_da	xix, (6352920)	; F55326  ld XIX,(0x60f018)
+	ldb	c, 4	; F5532B  ld C,0x04
+	.byte 0x8E, 0x08, 0x43	; F5532D  mul BC,(XIZ+0x08)   [llvm-mc cannot encode this]
+	extz	xbc	; F55330  extz XBC
+	add	xbc, xix	; F55332  add XBC,XIX
+	ld	xwa, (xbc)	; F55334  ld XWA,(XBC)
+	ld	xiy, xwa	; F55336  ld XIY,XWA
+	pop	xix	; F55338  pop XIX
+	.byte 0xEE, 0x0D	; F55339  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5533B  ret
+
+; ---------------------------------------------------------------------
+; IndexedTable_GetByte -- byte m of pointer n of the same table
+; Called from: thunk T_F42C90 (0xF42C90), 119 opcode-anchored references -- the
+;              third-busiest prom_b-resident slot in the thunk table
+; Inputs:  (XIZ+8) = table index, (XIZ+0x0A) = byte offset
+; Outputs: A = the byte; XIX = the entry pointer; XIY = the byte's address
+; Evidence: it pushes a 32-bit argument built as `push 0x00 / push (XIZ+8)`,
+;           calls IndexedTable_GetPtr, then `ld BC,(XIZ+0x0A) / extz / add
+;           XIY,XBC / ld A,(XIY)`.
+; Unknown:  as above.
+; ---------------------------------------------------------------------
+IndexedTable_GetByte:
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F5533C  link XIZ,0x0000   [llvm-mc cannot encode this]
+	push	xix	; F55340  push XIX
+	push	0	; F55341  push 0x00
+	.byte 0x8E, 0x08, 0x04	; F55343  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	calr	65496	; F55346  calr 0xf55321
+	ld	xix, xiy	; F55349  ld XIX,XIY
+	ld	bc, (xiz+10)	; F5534B  ld BC,(XIZ+0x0a)
+	extz	bc	; F5534E  extz BC
+	extz	xbc	; F55350  extz XBC
+	add	xiy, xbc	; F55352  add XIY,XBC
+	ld	a, (xiy)	; F55354  ld A,(XIY)
+	popw	bc	; F55356  pop BC
+	pop	xix	; F55357  pop XIX
+	.byte 0xEE, 0x0D	; F55358  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5535A  ret
+
+
+; ---------------------------------------------------------------------
+; IndexedParam_AdjustField -- step one packed parameter field up or down,
+;                             clamp it, write it back and journal the change
+; Called from: thunk T_F42C94 (0xF42C94), 23 opcode-anchored references
+;          (an upper bound that ranks slots; not a call count)
+; Inputs:  (XIZ+0x08) = a 16-bit INDEX -- not a pointer;
+;          (XIZ+0x0A) = 32-bit pointer to the 8-byte descriptor already
+;          documented on sub_F550A6 above:
+;              +0 byte offset into the object   +1 field mask
+;              +2 right-shift count             +3 upper bound
+;              +4 lower bound                   +5 step when (0x2075) bit 2
+;              +6 step when (0x28B0) bit 2      +7 XORed into (0x28B0) on entry
+;          plus (0x28B0) bits 0/2/3/4 and (0x2075) bit 2.
+; Outputs: the field in the target byte is replaced; a 4-byte record is appended
+;          to one of the two journals; bit 3 of (0x2075) is set; (0x28B0) is
+;          XORed with descriptor +7.  Nothing is written if the value did not
+;          change (`cp H,D / jr Z` at 0xF55413 jumps straight to the epilogue).
+; Evidence: the object is resolved, not passed: `push 0x00 / push (XIZ+0x08) /
+;          calr 0xF55321` is IndexedTable_GetPtr, and descriptor +0 is then
+;          added to the pointer it returns (`ld C,(XIX) / extz / add XIY,XBC`).
+;          The adjust core is BYTE-IDENTICAL to sub_F550A6's: 0xF553B1..0xF55414
+;          equals 0xF550DB..0xF5513E in 99 of 100 bytes, the single difference
+;          being a frame displacement at 0xF553E0 (0xF9 = -7) versus 0xF5510A
+;          (0xFE = -2), which is just the two routines' different frame sizes.
+;          (Measured by notes/prom_b_param_edit_pair.py.)
+;          The journals are the already-converted appenders: 0xF552CC =
+;          List2030_Append4 when bit 3 of (0x28B0) is set, otherwise the
+;          in-place write-back followed by 0xF55231 = Queue2C00_Append4.
+;          Both are handed the same four-slot frame those routines read --
+;          index, descriptor +0, the NEW field value, descriptor +1 -- eight
+;          bytes, released by the `inc 0,XSP`.  An immediate of 0 there means
+;          EIGHT, not zero: MAME's op_INCLIR is
+;          `*m_p2_reg32 += m_imm1.b.l ? m_imm1.b.l : 8`
+;          (mame/src/devices/cpu/tlcs900/900tbl.hxx).  Counting the pushes
+;          confirms it -- 2+1+1+2+1+1 = 8 bytes.
+; Notes:   bit 0 of (0x28B0) picks the direction: clear takes the +3 bound and
+;          `add H,C`, set takes the +4 bound and `sub H,A`.  Each branch has two
+;          guards, one against crossing the bound and one against the bound
+;          arithmetic itself wrapping, and both land on `ld H,(XIX+3 or +4)`.
+;          Bit 4 of (0x28B0) adds 0x20 to the index before the lookup.
+; Unknown:  what the objects in the 0x60F018 table are, so what parameter this
+;          edits; what (0x28B0)'s bits are called; why bit 3 substitutes the
+;          0x2030 list for the write-back instead of doing both.
+; ---------------------------------------------------------------------
+IndexedParam_AdjustField:
+	.byte 0xEE, 0x0C, 0xF5, 0xFF	; F5535B  link XIZ,0xfff5   [llvm-mc cannot encode this]
+	pushw	hl	; F5535F  push HL
+	pushw	de	; F55360  push DE
+	push	xix	; F55361  push XIX
+	ld	xix, (xiz+10)	; F55362  ld XIX,(XIZ+0x0a)
+	.byte 0xF1, 0x75, 0x20, 0xBB	; F55365  set 3,(0x2075)   [llvm-mc cannot encode this]
+	ld	c, (xix+7)	; F55369  ld C,(XIX+0x07)
+	xordm8	(10416), c	; F5536C  xor (0x28b0),C
+	ldb_d8	c, (10416)	; F55370  ld C,(0x28b0)
+	and	c, 16	; F55374  and C,0x10
+	jr	z, 4	; F55377  jr Z,0xf5537d
+	.byte 0x8E, 0x08, 0x38, 0x20	; F55379  add (XIZ+0x08),0x20   [llvm-mc cannot encode this]
+	push	0	; F5537D  push 0x00
+	.byte 0x8E, 0x08, 0x04	; F5537F  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	calr	65436	; F55382  calr 0xf55321
+	ld	(xiz-11), xiy	; F55385  ld (XIZ+0xf5),XIY
+	ld	c, (xix)	; F55388  ld C,(XIX)
+	extz	bc	; F5538A  extz BC
+	extz	xbc	; F5538C  extz XBC
+	add	xiy, xbc	; F5538E  add XIY,XBC
+	ld	(xiz-6), xiy	; F55390  ld (XIZ+0xfa),XIY
+	ld	e, (xiy)	; F55393  ld E,(XIY)
+	ld	c, (xix+1)	; F55395  ld C,(XIX+0x01)
+	ld	d, c	; F55398  ld D,C
+	and	d, e	; F5539A  and D,E
+	ldb	l, 0	; F5539C  ld L,0x00
+	ld	h, (xix+2)	; F5539E  ld H,(XIX+0x02)
+	popw	bc	; F553A1  pop BC
+	cp	l, h	; F553A2  cp L,H
+	jr	nc, 11	; F553A4  jr NC,0xf553b1
+	ld	c, d	; F553A6  ld C,D
+	srl	c, 1	; F553A8  srl 0x01,C
+	ld	d, c	; F553AB  ld D,C
+	inc	1, l	; F553AD  inc 1,L
+	jr	-15	; F553AF  jr T,0xf553a2
+	ld	h, d	; F553B1  ld H,D
+	ldb_d8	c, (10416)	; F553B3  ld C,(0x28b0)
+	and	c, 4	; F553B7  and C,0x04
+	jr	z, 5	; F553BA  jr Z,0xf553c1
+	ld	l, (xix+6)	; F553BC  ld L,(XIX+0x06)
+	jr	14	; F553BF  jr T,0xf553cf
+	ldb	l, 1	; F553C1  ld L,0x01
+	ldb_d8	c, (8309)	; F553C3  ld C,(0x2075)
+	and	c, 4	; F553C7  and C,0x04
+	jr	z, 3	; F553CA  jr Z,0xf553cf
+	ld	l, (xix+5)	; F553CC  ld L,(XIX+0x05)
+	ldb_d8	c, (10416)	; F553CF  ld C,(0x28b0)
+	and	c, 1	; F553D3  and C,0x01
+	jr	z, 29	; F553D6  jr Z,0xf553f5
+	ld	e, (xix+4)	; F553D8  ld E,(XIX+0x04)
+	ld	c, e	; F553DB  ld C,E
+	add	c, l	; F553DD  add C,L
+	ld	(xiz-7), c	; F553DF  ld (XIZ+0xf9),C
+	cp	h, c	; F553E2  cp H,C
+	jr	c, 10	; F553E4  jr C,0xf553f0
+	cp	c, e	; F553E6  cp C,E
+	jr	ule, 6	; F553E8  jr ULE,0xf553f0
+	ld	a, l	; F553EA  ld A,L
+	sub	h, a	; F553EC  sub H,A
+	jr	35	; F553EE  jr T,0xf55413
+	ld	h, (xix+4)	; F553F0  ld H,(XIX+0x04)
+	jr	30	; F553F3  jr T,0xf55413
+	ld	c, (xix+3)	; F553F5  ld C,(XIX+0x03)
+	ld	(xiz-1), c	; F553F8  ld (XIZ+0xff),C
+	ld	e, c	; F553FB  ld E,C
+	sub	c, l	; F553FD  sub C,L
+	ld	e, c	; F553FF  ld E,C
+	cp	h, c	; F55401  cp H,C
+	jr	ugt, 11	; F55403  jr UGT,0xf55410
+	.byte 0x8E, 0xFF, 0xF3	; F55405  cp C,(XIZ+0xff)   [llvm-mc cannot encode this]
+	jr	nc, 6	; F55408  jr NC,0xf55410
+	ld	c, l	; F5540A  ld C,L
+	add	h, c	; F5540C  add H,C
+	jr	3	; F5540E  jr T,0xf55413
+	ld	h, (xix+3)	; F55410  ld H,(XIX+0x03)
+	cp	h, d	; F55413  cp H,D
+	jr	z, 94	; F55415  jr Z,0xf55475
+	ldb	l, 0	; F55417  ld L,0x00
+	ld	d, (xix+2)	; F55419  ld D,(XIX+0x02)
+	cp	l, d	; F5541C  cp L,D
+	jr	nc, 10	; F5541E  jr NC,0xf5542a
+	ld	c, h	; F55420  ld C,H
+	add	c, h	; F55422  add C,H
+	ld	h, c	; F55424  ld H,C
+	inc	1, l	; F55426  inc 1,L
+	jr	-14	; F55428  jr T,0xf5541c
+	ld	l, (xix+1)	; F5542A  ld L,(XIX+0x01)
+	ld	c, l	; F5542D  ld C,L
+	and	h, c	; F5542F  and H,C
+	ldb_d8	a, (10416)	; F55431  ld A,(0x28b0)
+	and	a, 8	; F55435  and A,0x08
+	jr	z, 18	; F55438  jr Z,0xf5544c
+	pushw	bc	; F5543A  push BC
+	push	0	; F5543B  push 0x00
+	push	h	; F5543D  push H
+	ld	c, (xix)	; F5543F  ld C,(XIX)
+	pushw	bc	; F55441  push BC
+	push	0	; F55442  push 0x00
+	.byte 0x8E, 0x08, 0x04	; F55444  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	calr	65154	; F55447  calr 0xf552cc
+	jr	39	; F5544A  jr T,0xf55473
+	ld	c, l	; F5544C  ld C,L
+	cpl	c	; F5544E  cpl C
+	ld	l, c	; F55450  ld L,C
+	ld	xbc, (xiz-6)	; F55452  ld XBC,(XIZ+0xfa)
+	and	(xbc), l	; F55455  and (XBC),L
+	ld	xbc, (xiz-6)	; F55457  ld XBC,(XIZ+0xfa)
+	ld	a, (xbc)	; F5545A  ld A,(XBC)
+	or	a, h	; F5545C  or A,H
+	ld	(xbc), a	; F5545E  ld (XBC),A
+	ld	c, (xix+1)	; F55460  ld C,(XIX+0x01)
+	pushw	bc	; F55463  push BC
+	push	0	; F55464  push 0x00
+	push	h	; F55466  push H
+	ld	c, (xix)	; F55468  ld C,(XIX)
+	pushw	bc	; F5546A  push BC
+	push	0	; F5546B  push 0x00
+	.byte 0x8E, 0x08, 0x04	; F5546D  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	calr	64958	; F55470  calr 0xf55231
+	inc	8, xsp	; F55473  inc 0,XSP
+	pop	xix	; F55475  pop XIX
+	popw	de	; F55476  pop DE
+	popw	hl	; F55477  pop HL
+	.byte 0xEE, 0x0D	; F55478  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5547A  ret
+
+; ---------------------------------------------------------------------
+; IndexedParam_SetBit -- set or clear one flag field of an indexed object and
+;                        journal the change
+; Called from: thunk T_F42C98 (0xF42C98), 35 opcode-anchored references -- the
+;          busiest of this group
+; Inputs:  (XIZ+0x08) = the 16-bit index; (XIZ+0x0A) = the 8-byte descriptor.
+;          Only +0 (byte offset), +1 (mask) and +2 (XORed into (0x28B0)) are
+;          used -- there is no shift, no bound and no step, because there is no
+;          arithmetic.
+; Outputs: the masked bits of the target byte are forced on or off; a journal
+;          record is appended; nothing happens if the byte did not change
+;          (`ld L,(XBC) / cp L,D / jr Z` at 0xF554DA).
+; Evidence: the same `calr 0xF55321` + descriptor-+0 resolution as
+;          IndexedParam_AdjustField, then two mirrored arms selected by bit 0 of
+;          (0x28B0): the set arm tests `and C,D / jr NZ` and `or D,C`, the clear
+;          arm tests `and C,D / jr Z` and `cpl C / and D,C`.  Each arm first
+;          checks whether the bits are already in the wanted state, which is why
+;          this is "force to a state", not "toggle".
+;          The POLARITY matches IndexedParam_AdjustField's: bit 0 of (0x28B0)
+;          CLEAR reaches the arm at 0xF554CA that SETS the bits, and bit 0 SET
+;          reaches 0xF554B9, which clears them -- the same sense in which bit 0
+;          clear means "up" and set means "down" for the numeric editor.
+;          ⚠ Note the descriptor byte XORed into (0x28B0) here is +2
+;          (`ld C,(XIX+0x02)` at 0xF55488), NOT the +7 that sub_F550A6 and
+;          IndexedParam_AdjustField use.  Read from the bytes, not assumed.
+; Notes:   the bit-3 (0x28B0) path calls List2030_Append4 TWICE, once with the
+;          value D and once with 0x0000, and releases 16 bytes with two
+;          `inc 0,XSP`.  The other path writes the byte and appends one
+;          Queue2C00_Append4 record.  Some argument slots carry register residue
+;          in their high byte (e.g. (0x28B0)&8 rides along in W at 0xF554F0);
+;          that is harmless because the appenders read only the low byte of each
+;          16-bit slot, as their own headers record.
+; Unknown:  the same three gaps as the routine above.
+; ---------------------------------------------------------------------
+IndexedParam_SetBit:
+	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F5547B  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	pushw	hl	; F5547F  push HL
+	pushw	de	; F55480  push DE
+	push	xix	; F55481  push XIX
+	ld	xix, (xiz+10)	; F55482  ld XIX,(XIZ+0x0a)
+	ld	e, (xiz+8)	; F55485  ld E,(XIZ+0x08)
+	ld	c, (xix+2)	; F55488  ld C,(XIX+0x02)
+	xordm8	(10416), c	; F5548B  xor (0x28b0),C
+	ldb_d8	c, (10416)	; F5548F  ld C,(0x28b0)
+	and	c, 16	; F55493  and C,0x10
+	jr	z, 3	; F55496  jr Z,0xf5549b
+	add	e, 32	; F55498  add E,0x20
+	pushw	de	; F5549B  push DE
+	calr	65154	; F5549C  calr 0xf55321
+	ld	(xiz-8), xiy	; F5549F  ld (XIZ+0xf8),XIY
+	ld	c, (xix)	; F554A2  ld C,(XIX)
+	extz	bc	; F554A4  extz BC
+	extz	xbc	; F554A6  extz XBC
+	add	xiy, xbc	; F554A8  add XIY,XBC
+	ld	(xiz-4), xiy	; F554AA  ld (XIZ+0xfc),XIY
+	ld	d, (xiy)	; F554AD  ld D,(XIY)
+	ldb_d8	c, (10416)	; F554AF  ld C,(0x28b0)
+	and	c, 1	; F554B3  and C,0x01
+	popw	wa	; F554B6  pop WA
+	jr	z, 17	; F554B7  jr Z,0xf554ca
+	ld	h, (xix+1)	; F554B9  ld H,(XIX+0x01)
+	ld	c, h	; F554BC  ld C,H
+	and	c, d	; F554BE  and C,D
+	jr	z, 21	; F554C0  jr Z,0xf554d7
+	ld	c, h	; F554C2  ld C,H
+	cpl	c	; F554C4  cpl C
+	and	d, c	; F554C6  and D,C
+	jr	13	; F554C8  jr T,0xf554d7
+	ld	h, (xix+1)	; F554CA  ld H,(XIX+0x01)
+	ld	c, h	; F554CD  ld C,H
+	and	c, d	; F554CF  and C,D
+	jr	nz, 4	; F554D1  jr NZ,0xf554d7
+	ld	c, h	; F554D3  ld C,H
+	or	d, c	; F554D5  or D,C
+	ld	xbc, (xiz-4)	; F554D7  ld XBC,(XIZ+0xfc)
+	ld	l, (xbc)	; F554DA  ld L,(XBC)
+	cp	l, d	; F554DC  cp L,D
+	jr	z, 89	; F554DE  jr Z,0xf55539
+	ld	h, (xix+1)	; F554E0  ld H,(XIX+0x01)
+	ld	a, h	; F554E3  ld A,H
+	and	d, a	; F554E5  and D,A
+	ldb_d8	w, (10416)	; F554E7  ld W,(0x28b0)
+	and	w, 8	; F554EB  and W,0x08
+	jr	z, 32	; F554EE  jr Z,0xf55510
+	pushw	wa	; F554F0  push WA
+	push	0	; F554F1  push 0x00
+	push	d	; F554F3  push D
+	ld	a, (xix)	; F554F5  ld A,(XIX)
+	pushw	wa	; F554F7  push WA
+	pushw	de	; F554F8  push DE
+	calr	64976	; F554F9  calr 0xf552cc
+	ld	c, (xix+1)	; F554FC  ld C,(XIX+0x01)
+	pushw	bc	; F554FF  push BC
+	pushw	0	; F55500  push 0x0000
+	ld	c, (xix)	; F55503  ld C,(XIX)
+	pushw	bc	; F55505  push BC
+	pushw	de	; F55506  push DE
+	calr	64962	; F55507  calr 0xf552cc
+	inc	8, xsp	; F5550A  inc 0,XSP
+	inc	8, xsp	; F5550C  inc 0,XSP
+	jr	41	; F5550E  jr T,0xf55539
+	ld	c, h	; F55510  ld C,H
+	cpl	c	; F55512  cpl C
+	ld	h, c	; F55514  ld H,C
+	and	h, l	; F55516  and H,L
+	ld	xbc, (xiz-4)	; F55518  ld XBC,(XIZ+0xfc)
+	ld	(xbc), h	; F5551B  ld (XBC),H
+	ld	c, d	; F5551D  ld C,D
+	or	c, h	; F5551F  or C,H
+	ld	h, c	; F55521  ld H,C
+	ld	xbc, (xiz-4)	; F55523  ld XBC,(XIZ+0xfc)
+	ld	(xbc), h	; F55526  ld (XBC),H
+	ld	c, (xix+1)	; F55528  ld C,(XIX+0x01)
+	pushw	bc	; F5552B  push BC
+	push	0	; F5552C  push 0x00
+	push	d	; F5552E  push D
+	ld	c, (xix)	; F55530  ld C,(XIX)
+	pushw	bc	; F55532  push BC
+	pushw	de	; F55533  push DE
+	calr	64762	; F55534  calr 0xf55231
+	inc	8, xsp	; F55537  inc 0,XSP
+	pop	xix	; F55539  pop XIX
+	popw	de	; F5553A  pop DE
+	popw	hl	; F5553B  pop HL
+	.byte 0xEE, 0x0D	; F5553C  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5553E  ret
+
+; --- 0xF5553F-0xF5B8B5: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x05553F, 0x006377
+
+
+; ==============================================================================
+; 0xF5B8B6-0xF5BAB7 -- TWO SELECTOR DISPATCHERS AND THEIR 48-ENTRY TABLES
+; ==============================================================================
+;
+; Both are reached through the thunk table and are among the busiest slots in it:
+; T_F41ED0 -> 0xF5B8B6 (opcode-anchored upper bound 39 references) and
+; T_F41ED4 -> 0xF5B9B8 (109), ranked by
+; `python3 scripts/analysis/prom_b_thunk_table.py --census`.
+;
+; Both take a 16-bit selector on the stack and index a table of 32-bit routine
+; pointers with it:
+;
+;     code = (XIZ+8)
+;     if code >= 0xC0:  entry = table_hi[code - 0xC0]
+;     else:             entry = table_lo[code - 0x80]
+;     call entry
+;
+; and `table_hi` is `table_lo + 0x80`, so codes 0xC0.. land on the SAME entries as
+; codes 0xA0.., 16 of them, before running off the end of the table.
+;
+; TABLE SIZE IS PROVEN BY ABUTMENT, not by the 0xC0 bound:
+;   0xF5B8F8 + 48*4 = 0xF5B9B8, exactly the `push XIZ` that starts the second
+;                     dispatcher;
+;   0xF5B9F8 + 48*4 = 0xF5BAB8, exactly a `push XWA/XBC/XDE/XHL/XIX/XIY/XIZ`
+;                     register-save prologue.
+;   All 96 entries are 0x00F00000-0x00FFFFFF; the first word past each table is
+;   not (0x3B3A3938 and 0x5B5C5D5E -- both are push/pop opcode runs).
+; Reproduce every line of that with
+;     python3 notes/prom_b_dispatch_tables.py
+;
+; 0xF5BF17 is a bare `ret` (byte 0x0E): it is the DEFAULT entry, and it fills 6
+; slots of the first table and 7 of the second.  41 of the first table's 48
+; entries and 35 of the second's are distinct.
+;
+; ⚠ WHAT THE SELECTOR MEANS IS NOT ESTABLISHED.  It is a 16-bit value >= 0x80
+; passed by the caller; nothing here says whether it is a screen id, a panel
+; event or a message opcode.  The name below describes the mechanism only.
+; ==============================================================================
+
+; ---------------------------------------------------------------------
+; Dispatch_Code80_Bracketed -- run selector table entry, bracketed by two
+;                              display service calls
+; Called from: thunk T_F41ED0 (0xF41ED0), 39 opcode-anchored references
+; Inputs:  (XIZ+8) = 16-bit selector, >= 0x80
+; Outputs: whatever the selected routine does; all registers restored
+; Evidence: the `sub HL,0xC0 / ld XIY,0x00F5B978` and `sub HL,0x80 /
+;           ld XIY,0x00F5B8F8` pair, then `sla 2,HL`, `ld XIY,(XIY+HL)`,
+;           `call XIY`.  The bracket is `call 0xF5BF18` before and
+;           `call 0xF5BF21` after; 0xF5BF18 is `ld C,0 / ld A,0x0C / swi 7 /
+;           ld A,0x10 / swi 7` and 0xF5BF21 is `ld C,7 / ld A,0x0C / swi 7` --
+;           the same services 0x0C (argument in C, 0 or 7 seen) and 0x10 that
+;           sub_F31852 and sub_F31863 in the interpreter block issue.
+; Unknown:  what the selector enumerates; what services 0x0C and 0x10 do.
+; ---------------------------------------------------------------------
+Dispatch_Code80_Bracketed:
+	push	xiz	; F5B8B6  push XIZ
+	ld	xiz, xsp	; F5B8B7  ld XIZ,XSP
+	push	xwa	; F5B8B9  push XWA
+	push	xbc	; F5B8BA  push XBC
+	push	xde	; F5B8BB  push XDE
+	push	xhl	; F5B8BC  push XHL
+	push	xix	; F5B8BD  push XIX
+	push	xiy	; F5B8BE  push XIY
+	ld	hl, (xiz+8)	; F5B8BF  ld HL,(XIZ+0x08)
+	cp	hl, 192	; F5B8C2  cp HL,0x00c0
+	jr	c, 11	; F5B8C6  jr C,0xf5b8d3
+	sub	hl, 192	; F5B8C8  sub HL,0x00c0
+	ld	xiy, 16103800	; F5B8CC  ld XIY,0x00f5b978
+	jr	9	; F5B8D1  jr T,0xf5b8dc
+	sub	hl, 128	; F5B8D3  sub HL,0x0080
+	ld	xiy, 16103672	; F5B8D7  ld XIY,0x00f5b8f8
+	sla	hl, 2	; F5B8DC  sla 0x02,HL
+	.byte 0xE3, 0x07, 0xF4, 0xEC, 0x25	; F5B8DF  ld XIY,(XIY+HL)   [llvm-mc cannot encode this]
+	push	xiy	; F5B8E4  push XIY
+	call	16105240	; F5B8E5  call 0xf5bf18
+	pop	xiy	; F5B8E9  pop XIY
+	call	(xiy)	; F5B8EA  call T,XIY
+	call	16105249	; F5B8EC  call 0xf5bf21
+	pop	xiy	; F5B8F0  pop XIY
+	pop	xix	; F5B8F1  pop XIX
+	pop	xhl	; F5B8F2  pop XHL
+	pop	xde	; F5B8F3  pop XDE
+	pop	xbc	; F5B8F4  pop XBC
+	pop	xwa	; F5B8F5  pop XWA
+	pop	xiz	; F5B8F6  pop XIZ
+	ret	; F5B8F7  ret
+
+; --- 0xF5B8F8: 48 entries, one per selector 0x80..0xAF.  Ends exactly on the
+;     next routine's first byte.  Entries for 0xC0.. re-use 0xA0.. ------------
+DispatchTable_F5B8F8:
+	.long 0x00F5BF27	; [0x80]
+	.long 0x00F5BF17	; [0x81]   (default `ret`)
+	.long 0x00F5C2A8	; [0x82]
+	.long 0x00F5D40E	; [0x83]
+	.long 0x00F5D4C3	; [0x84]
+	.long 0x00F5D519	; [0x85]
+	.long 0x00F5C06C	; [0x86]
+	.long 0x00F5C4D1	; [0x87]
+	.long 0x00F5D55F	; [0x88]
+	.long 0x00F5D57A	; [0x89]
+	.long 0x00F5C513	; [0x8A]
+	.long 0x00F5C6BE	; [0x8B]
+	.long 0x00F5C749	; [0x8C]
+	.long 0x00F5C79E	; [0x8D]
+	.long 0x00F5C876	; [0x8E]
+	.long 0x00F5D622	; [0x8F]
+	.long 0x00F5C8CB	; [0x90]
+	.long 0x00F5C983	; [0x91]
+	.long 0x00F5C9CE	; [0x92]
+	.long 0x00F5CA19	; [0x93]
+	.long 0x00F5CA64	; [0x94]
+	.long 0x00F5CAA1	; [0x95]
+	.long 0x00F5D583	; [0x96]
+	.long 0x00F5CACB	; [0x97]
+	.long 0x00F5D5C4	; [0x98]
+	.long 0x00F5D619	; [0x99]
+	.long 0x00F099F5	; [0x9A]
+	.long 0x00F0985C	; [0x9B]
+	.long 0x00F5BF17	; [0x9C]   (default `ret`)
+	.long 0x00F09B9B	; [0x9D]
+	.long 0x00F5D14E	; [0x9E]
+	.long 0x00F5D1E8	; [0x9F]
+	.long 0x00F5BFC7	; [0xA0]  <- also selector 0xC0
+	.long 0x00F5C2A8	; [0xA1]  <- also selector 0xC1
+	.long 0x00F5C06C	; [0xA2]  <- also selector 0xC2
+	.long 0x00F5C09E	; [0xA3]  <- also selector 0xC3
+	.long 0x00F5C0D4	; [0xA4]  <- also selector 0xC4
+	.long 0x00F5C10A	; [0xA5]  <- also selector 0xC5
+	.long 0x00F5C172	; [0xA6]  <- also selector 0xC6
+	.long 0x00F5C1AC	; [0xA7]  <- also selector 0xC7
+	.long 0x00F5C210	; [0xA8]  <- also selector 0xC8
+	.long 0x00F5BF17	; [0xA9]   (default `ret`)  <- also selector 0xC9
+	.long 0x00F5D29A	; [0xAA]  <- also selector 0xCA
+	.long 0x00F5D29B	; [0xAB]  <- also selector 0xCB
+	.long 0x00F5BF17	; [0xAC]   (default `ret`)  <- also selector 0xCC
+	.long 0x00F09800	; [0xAD]  <- also selector 0xCD
+	.long 0x00F5BF17	; [0xAE]   (default `ret`)  <- also selector 0xCE
+	.long 0x00F5BF17	; [0xAF]   (default `ret`)  <- also selector 0xCF
+
+; ---------------------------------------------------------------------
+; Dispatch_Code80 -- the same selector table mechanism, no display bracket
+; Called from: thunk T_F41ED4 (0xF41ED4), 109 opcode-anchored references -- the
+;              busiest prom_b-resident slot in the thunk table after the two
+;              display-list interpreters
+; Inputs:  (XIZ+8) = 16-bit selector >= 0x80; (XIZ+0x0A) = a byte loaded into A
+;          and left there for the selected routine
+; Outputs: sets bit 3 of (0x2075) after the call; all registers restored
+; Evidence: identical index arithmetic against 0xF5B9F8 / 0xF5BA78; the extra
+;           `ld A,(XIZ+0x0A)` at 0xF5B9C4 is the only argument difference, and
+;           `or (0x2075),0x08` at 0xF5B9EB is the only side effect.
+; Unknown:  what the selector enumerates; what bit 3 of 0x2075 means.
+; ---------------------------------------------------------------------
+Dispatch_Code80:
+	push	xiz	; F5B9B8  push XIZ
+	ld	xiz, xsp	; F5B9B9  ld XIZ,XSP
+	push	xwa	; F5B9BB  push XWA
+	push	xbc	; F5B9BC  push XBC
+	push	xde	; F5B9BD  push XDE
+	push	xhl	; F5B9BE  push XHL
+	push	xix	; F5B9BF  push XIX
+	push	xiy	; F5B9C0  push XIY
+	ld	hl, (xiz+8)	; F5B9C1  ld HL,(XIZ+0x08)
+	ld	a, (xiz+10)	; F5B9C4  ld A,(XIZ+0x0a)
+	cp	hl, 192	; F5B9C7  cp HL,0x00c0
+	jr	c, 11	; F5B9CB  jr C,0xf5b9d8
+	sub	hl, 192	; F5B9CD  sub HL,0x00c0
+	ld	xiy, 16104056	; F5B9D1  ld XIY,0x00f5ba78
+	jr	9	; F5B9D6  jr T,0xf5b9e1
+	sub	hl, 128	; F5B9D8  sub HL,0x0080
+	ld	xiy, 16103928	; F5B9DC  ld XIY,0x00f5b9f8
+	sla	hl, 2	; F5B9E1  sla 0x02,HL
+	.byte 0xE3, 0x07, 0xF4, 0xEC, 0x25	; F5B9E4  ld XIY,(XIY+HL)   [llvm-mc cannot encode this]
+	call	(xiy)	; F5B9E9  call T,XIY
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F5B9EB  or (0x2075),0x08   [llvm-mc cannot encode this]
+	pop	xiy	; F5B9F0  pop XIY
+	pop	xix	; F5B9F1  pop XIX
+	pop	xhl	; F5B9F2  pop XHL
+	pop	xde	; F5B9F3  pop XDE
+	pop	xbc	; F5B9F4  pop XBC
+	pop	xwa	; F5B9F5  pop XWA
+	pop	xiz	; F5B9F6  pop XIZ
+	ret	; F5B9F7  ret
+
+; --- 0xF5B9F8: 48 entries, one per selector 0x80..0xAF ---------------------
+DispatchTable_F5B9F8:
+	.long 0x00F09CA9	; [0x80]
+	.long 0x00F5BF17	; [0x81]   (default `ret`)
+	.long 0x00F5CE65	; [0x82]
+	.long 0x00F5D62B	; [0x83]
+	.long 0x00F5D6AC	; [0x84]
+	.long 0x00F5D6D4	; [0x85]
+	.long 0x00F5CC3D	; [0x86]
+	.long 0x00F5CEB2	; [0x87]
+	.long 0x00F5D126	; [0x88]
+	.long 0x00F5D6FC	; [0x89]
+	.long 0x00F5CEF6	; [0x8A]
+	.long 0x00F5CFD7	; [0x8B]
+	.long 0x00F5D05B	; [0x8C]
+	.long 0x00F5D06A	; [0x8D]
+	.long 0x00F5D09F	; [0x8E]
+	.long 0x00F5CEF6	; [0x8F]
+	.long 0x00F5D0AE	; [0x90]
+	.long 0x00F5D0D1	; [0x91]
+	.long 0x00F5D0F9	; [0x92]
+	.long 0x00F5D108	; [0x93]
+	.long 0x00F5D117	; [0x94]
+	.long 0x00F5BF17	; [0x95]   (default `ret`)
+	.long 0x00F5D05B	; [0x96]
+	.long 0x00F5D126	; [0x97]
+	.long 0x00F5D6FC	; [0x98]
+	.long 0x00F5CEF6	; [0x99]
+	.long 0x00F09AA5	; [0x9A]
+	.long 0x00F09961	; [0x9B]
+	.long 0x00F5BF17	; [0x9C]   (default `ret`)
+	.long 0x00F09C08	; [0x9D]
+	.long 0x00F5D2E9	; [0x9E]
+	.long 0x00F5D313	; [0x9F]
+	.long 0x00F5CB1E	; [0xA0]  <- also selector 0xC0
+	.long 0x00F5CE65	; [0xA1]  <- also selector 0xC1
+	.long 0x00F5CC3D	; [0xA2]  <- also selector 0xC2
+	.long 0x00F5CCF6	; [0xA3]  <- also selector 0xC3
+	.long 0x00F5CD1E	; [0xA4]  <- also selector 0xC4
+	.long 0x00F5CD46	; [0xA5]  <- also selector 0xC5
+	.long 0x00F5CDA8	; [0xA6]  <- also selector 0xC6
+	.long 0x00F5CDD4	; [0xA7]  <- also selector 0xC7
+	.long 0x00F5CE00	; [0xA8]  <- also selector 0xC8
+	.long 0x00F5BF17	; [0xA9]   (default `ret`)  <- also selector 0xC9
+	.long 0x00F5D40D	; [0xAA]  <- also selector 0xCA
+	.long 0x00F5D2D5	; [0xAB]  <- also selector 0xCB
+	.long 0x00F5BF17	; [0xAC]   (default `ret`)  <- also selector 0xCC
+	.long 0x00F098FB	; [0xAD]  <- also selector 0xCD
+	.long 0x00F5BF17	; [0xAE]   (default `ret`)  <- also selector 0xCE
+	.long 0x00F5BF17	; [0xAF]   (default `ret`)  <- also selector 0xCF
+
+; --- 0xF5BAB8-0xF77FFF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x05BAB8, 0x01C548
+
+; ------------------------------------------------------------------
+; DLB_RecordTemplate_Op02 / DLB_RecordTemplate_Op07 -- the two interpreter-B
+; display-list records the field-blink engine copies to the stack and patches
+;
+; Read by:  prom_b 0xF0E933 (`lda XIY,0xf78000`, then `ldir` BC = 0x0F) and
+;           prom_b 0xF0E985 (`lda XIY,0xf7800f`, then `ldir` BC = 0x11).
+;           Nothing else in prom_a or prom_b loads either address.
+; Layout:   interpreter B's record, the same layout the static op-02 records
+;           above carry (+0 opcode, +1 total length, +2..3 source variable,
+;           +4 AND mask, +5 shift, +6 swi 7 function, +7 32-bit table pointer,
+;           +0x0B bytes per entry, +0x0D word; op 07 adds a second word at +0x0F).
+; Extent:   15 and 17 bytes, from the `ldir` counts the copier uses (0x0F at
+;           0xF0E930, 0x11 at 0xF0E982) and from the fields interpreter B's own
+;           handlers touch (0xF31B21 -> 15, 0xF31B39 -> 17; the per-handler
+;           table is in notes/prom_b_dl_length_audit.py's docstring).
+;           15 + 17 = 32, so the pair ends exactly on DLB_BlankField_8.
+;
+; ⚠ THE SECOND TEMPLATE'S OWN LENGTH BYTE DISAGREES, AND IT DOES NOT MATTER.
+;           0xF78010 is 0x0F = 15, not the 17 the record actually occupies.  A
+;           first draft of this header claimed "three ways agree" and wrote 0x11
+;           there; the build gate rejected it, which is the only reason the
+;           claim is not still sitting here looking plausible.
+;           Why it is harmless: these records are never FRAMED.  The copier
+;           calls DisplayListB_RunOne_Stack (0xF3183D), which sets the end
+;           pointer to XIY + 1, so interpreter B's `cp XIX,XIY / jr ULE` lets
+;           exactly one record run and then exits.  The length byte is used only
+;           to advance XIY past the record, and any value >= 1 ends the loop.
+;           Nothing walks from this record to a next one, so nothing reads it.
+;           This is also NOT a counterexample to "494 interpreter-B records, 0
+;           disagree": that audit walks records reachable from
+;           `ld XIY,imm32 / ld XIX,imm32 / call 0xF417F0|0xF417F4` call sites,
+;           and these two are reached by neither -- they are copied, not run in
+;           place.
+; Note:     fields +2, +4 and +5 are zero and the copier never patches them, so
+;           the extracted index is always 0 and the record renders entry 0.
+; ------------------------------------------------------------------
+DLB_RecordTemplate_Op02:
+	.byte 0x02, 0x0F	; +0 opcode 0x02 -> DLB_Handler_StringTable ; +1 len 15
+	.short 0x0000		; +0x02 source variable, 16-bit address (never patched)
+	.byte 0x00		; +0x04 AND mask (never patched)
+	.byte 0x00		; +0x05 right shift, low 3 bits (never patched)
+	.byte 0x20		; +0x06 swi 7 function -- patched from (0x28C9)
+	.long 0x000028C0	; +0x07 -> XIY: the text.  Replaced with
+				;          DLB_BlankField_8 when the argument is 0
+	.short 0x0003		; +0x0B -> BC: bytes per entry -- patched from (0x28D0)
+	.short 0x0000		; +0x0D -> IX -- patched from (0x28CA)
+
+DLB_RecordTemplate_Op07:
+	.byte 0x07, 0x0F	; +0 opcode 0x07 -> DLB_Handler_StringTable2
+				; +1 length 15 -- WRONG for a 17-byte record; see
+				;    the header.  Never read: run-one framing.
+	; NOTE the two `.byte 0x02, 0x0F` / `0x07, 0x0F` pairs are NOT a typo
+	; repeated: op 02 really is 15 bytes long, op 07 really is 17.
+	.short 0x0000		; +0x02 source variable, 16-bit address (never patched)
+	.byte 0x00		; +0x04 AND mask (never patched)
+	.byte 0x00		; +0x05 right shift, low 3 bits (never patched)
+	.byte 0x20		; +0x06 swi 7 function -- patched from (0x28C9)
+	.long 0x000028C0	; +0x07 -> XIY: the text, as above
+	.short 0x0003		; +0x0B -> BC: bytes per entry -- patched from (0x28D0)
+	.short 0x0000		; +0x0D -> IX -- patched from (0x28CC)
+	.short 0x0000		; +0x0F -> the second word -- patched from (0x28CE)
+
+; ------------------------------------------------------------------
+; DLB_BlankField_8 -- the eight spaces the blink engine draws to erase the field
+; Read by:  prom_b 0xF0E961 and 0xF0E9B8 (`lda XBC,0xf78020`), each guarded by
+;           `cp (XIZ+0x08),0x00 / jr NZ` -- i.e. taken only when the caller
+;           asked for the BLANK half of the blink.  The address is then stored
+;           into the copied record's +7 field, replacing the text pointer.
+; Extent:   the run of 0x20 bytes starts at 0xF78020 and ends at 0xF78027; the
+;           byte at 0xF78028 is 0x00.  ⚠ That is a measurement of the RUN, not
+;           of the object: how many of these bytes are actually drawn is set at
+;           run time by the record's +0x0B field, which the copier patches from
+;           (0x28D0), and this tree cannot read (0x28D0) statically.  Eight is
+;           therefore an upper bound on the blank width, not the width.
+; ------------------------------------------------------------------
+DLB_BlankField_8:
+	.ascii "        "	; 0xF78020-0xF78027, eight ASCII spaces
+	.byte 0x00		; 0xF78028
+
+; --- 0xF78029-0xF7CFFF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x078029, 0x004FD7
+
+; ==============================================================================
+; 0xF7D000-0xF7E2D7 -- A STUB BLOCK AND 32 TABLES OF 32 ROUTINE POINTERS
+; ==============================================================================
+;
+; 728 bytes of stubs, then 4,096 bytes that are exactly 32 tables of 32 32-bit
+; routine pointers.  Two of the thunk table's busier slots name entries 0 and 2
+; of the veneer table: T_F431B0 -> 0xF7D000 (53 opcode-anchored references) and
+; T_F431B4 -> 0xF7D006 (57).  So the WSA1's routine directory reaches prom_a
+; 0xF81ACB and 0xF81C15 through TWO levels of veneer.
+;
+; THE STUBS come in three shapes, and nothing else:
+;   * 0xF7D000-0xF7D017: eight `jrl T,nnn` long-branch veneers, 3 bytes each,
+;     every one into prom_a 0xF81ACB-0xF81E7E.  A linker branch island.
+;   * `calr`/`call <routine>` followed by `ret` -- a one-line forwarder.
+;   * `ld XIX,<one of the 32 tables>` (sometimes choosing between two on
+;     `cp (0x207E),0x00` or `cp (0x0C10),0x00`), then `call 0xF41B08`, then `ret`.
+;
+; WHY THE TABLES ARE 32 ENTRIES.  T_F41B08 -> prom_a 0xF8BDC5, which is
+;     cp HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L /
+;     ld XIX,(XIX+L) / call XIX
+; -- a bounds-checked call of entry HL of the table in XIX, with the index masked
+; to 5 bits.  32 entries, 4 bytes each, 128 bytes per table.
+;
+; WHY THERE ARE EXACTLY 32 TABLES.  Three independent counts agree:
+;   * scanning 0xF7D2D8 upward in 128-byte blocks, the first 32 blocks are
+;     entirely 0x00F00000-0x00FFFFFF words and the 33rd (0xF7E2D8) is not --
+;     its first word is 0x2100230E, and the bytes there disassemble as code;
+;   * the stub block contains exactly 32 `ld XIX,imm32` instructions, and their
+;     32 immediates are exactly the 32 table bases, each named once;
+;   * the highest of those immediates is 0xF7E258 = 0xF7D2D8 + 31*0x80, the last
+;     table, and 0xF7E258 + 0x80 = 0xF7E2D8 is where the block ends.
+;
+; ⚠ NOT ESTABLISHED: what the 32 tables enumerate, what the index HL is, and what
+; (0x207E) and (0x0C10) select.  The names below are positional.
+; ==============================================================================
+
+; ---------------------------------------------------------------------
+; StubBlock_F7D000 -- long-branch veneers and one-line forwarders
+; Called from: thunks T_F431B0 (0xF7D000, x53) and T_F431B4 (0xF7D006, x57);
+;              the rest not yet traced to a specific caller
+; Inputs:  pass-through; the table stubs additionally expect HL = the index that
+;          prom_a 0xF8BDC5 bounds-checks against 0x1F
+; Outputs: pass-through
+; Evidence: every instruction in these 728 bytes is one of `jrl`, `calr`, `call`,
+;           `ret`, `ld XIX,imm32`, `cp (mem),0x00`, `jr Z` and one `ld BC,HL`.
+;           Round-tripped through llvm-mc by notes/llvm_roundtrip_force.py:
+;           260 instructions, 246 encoded, 14 left as .byte.
+; Unknown:  what any individual stub selects.
+; ---------------------------------------------------------------------
+StubBlock_F7D000:
+	jrl	19144	; F7D000  jrl T,0xf81acb
+	jrl	19406	; F7D003  jrl T,0xf81bd4
+	jrl	19468	; F7D006  jrl T,0xf81c15
+	jrl	20080	; F7D009  jrl T,0xf81e7c
+	jrl	19762	; F7D00C  jrl T,0xf81d41
+	jrl	19489	; F7D00F  jrl T,0xf81c33
+	jrl	19579	; F7D012  jrl T,0xf81c90
+	jrl	20070	; F7D015  jrl T,0xf81e7e
+	calr	6486	; F7D018  calr 0xf7e971
+	ret	; F7D01B  ret
+	calr	6493	; F7D01C  calr 0xf7e97c
+	ret	; F7D01F  ret
+	call	16256826	; F7D020  call 0xf80f3a
+	ret	; F7D024  ret
+	call	16256847	; F7D025  call 0xf80f4f
+	ret	; F7D029  ret
+	calr	6490	; F7D02A  calr 0xf7e987
+	ret	; F7D02D  ret
+	calr	6550	; F7D02E  calr 0xf7e9c7
+	ret	; F7D031  ret
+	ld	xix, 16241368	; F7D032  ld XIX,0x00f7d2d8
+	.byte 0xC1, 0x10, 0x0C, 0x3F, 0x00	; F7D037  cp (0x0c10),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D03C  jr Z,0xf7d043
+	ld	xix, 16241496	; F7D03E  ld XIX,0x00f7d358
+	call	15997704	; F7D043  call 0xf41b08
+	ret	; F7D047  ret
+	calr	6666	; F7D048  calr 0xf7ea55
+	ret	; F7D04B  ret
+	calr	6785	; F7D04C  calr 0xf7ead0
+	ret	; F7D04F  ret
+	calr	7045	; F7D050  calr 0xf7ebd8
+	ret	; F7D053  ret
+	ld	xix, 16241624	; F7D054  ld XIX,0x00f7d3d8
+	call	15997704	; F7D059  call 0xf41b08
+	ret	; F7D05D  ret
+	calr	7183	; F7D05E  calr 0xf7ec70
+	ret	; F7D061  ret
+	calr	7180	; F7D062  calr 0xf7ec71
+	ret	; F7D065  ret
+	calr	7313	; F7D066  calr 0xf7ecfa
+	ret	; F7D069  ret
+	ld	xix, 16241752	; F7D06A  ld XIX,0x00f7d458
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D06F  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D074  jr Z,0xf7d07b
+	ld	xix, 16241880	; F7D076  ld XIX,0x00f7d4d8
+	call	15997704	; F7D07B  call 0xf41b08
+	ret	; F7D07F  ret
+	calr	7556	; F7D080  calr 0xf7ee07
+	ret	; F7D083  ret
+	calr	5049	; F7D084  calr 0xf7e440
+	ret	; F7D087  ret
+	calr	5230	; F7D088  calr 0xf7e4f9
+	ret	; F7D08B  ret
+	ld	xix, 16242008	; F7D08C  ld XIX,0x00f7d558
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D091  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D096  jr Z,0xf7d09d
+	ld	xix, 16242136	; F7D098  ld XIX,0x00f7d5d8
+	call	15997704	; F7D09D  call 0xf41b08
+	ret	; F7D0A1  ret
+	calr	5467	; F7D0A2  calr 0xf7e600
+	ret	; F7D0A5  ret
+	calr	5464	; F7D0A6  calr 0xf7e601
+	ret	; F7D0A9  ret
+	calr	5581	; F7D0AA  calr 0xf7e67a
+	ret	; F7D0AD  ret
+	ld	xix, 16242264	; F7D0AE  ld XIX,0x00f7d658
+	call	15997704	; F7D0B3  call 0xf41b08
+	ret	; F7D0B7  ret
+	calr	5812	; F7D0B8  calr 0xf7e76f
+	ret	; F7D0BB  ret
+	call	16248328	; F7D0BC  call 0xf7ee08
+	ret	; F7D0C0  ret
+	call	16248470	; F7D0C1  call 0xf7ee96
+	ret	; F7D0C5  ret
+	ld	xix, 16242392	; F7D0C6  ld XIX,0x00f7d6d8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D0CB  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D0D0  jr Z,0xf7d0d7
+	ld	xix, 16242520	; F7D0D2  ld XIX,0x00f7d758
+	call	15997704	; F7D0D7  call 0xf41b08
+	ret	; F7D0DB  ret
+	ret	; F7D0DC  ret
+	call	16248700	; F7D0DD  call 0xf7ef7c
+	ret	; F7D0E1  ret
+	call	16248881	; F7D0E2  call 0xf7f031
+	ret	; F7D0E6  ret
+	ld	xix, 16242648	; F7D0E7  ld XIX,0x00f7d7d8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D0EC  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D0F1  jr Z,0xf7d0f8
+	ld	xix, 16242776	; F7D0F3  ld XIX,0x00f7d858
+	call	15997704	; F7D0F8  call 0xf41b08
+	ret	; F7D0FC  ret
+	ret	; F7D0FD  ret
+	call	16249428	; F7D0FE  call 0xf7f254
+	ret	; F7D102  ret
+	call	16249557	; F7D103  call 0xf7f2d5
+	ret	; F7D107  ret
+	ld	xix, 16242904	; F7D108  ld XIX,0x00f7d8d8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D10D  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D112  jr Z,0xf7d119
+	ld	xix, 16243032	; F7D114  ld XIX,0x00f7d958
+	call	15997704	; F7D119  call 0xf41b08
+	ret	; F7D11D  ret
+	ret	; F7D11E  ret
+	call	16250166	; F7D11F  call 0xf7f536
+	ret	; F7D123  ret
+	call	16250200	; F7D124  call 0xf7f558
+	ret	; F7D128  ret
+	call	16250201	; F7D129  call 0xf7f559
+	ret	; F7D12D  ret
+	ret	; F7D12E  ret
+	call	16250242	; F7D12F  call 0xf7f582
+	ret	; F7D133  ret
+	call	16250371	; F7D134  call 0xf7f603
+	ret	; F7D138  ret
+	ld	xix, 16243160	; F7D139  ld XIX,0x00f7d9d8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D13E  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D143  jr Z,0xf7d14a
+	ld	xix, 16243288	; F7D145  ld XIX,0x00f7da58
+	call	15997704	; F7D14A  call 0xf41b08
+	ret	; F7D14E  ret
+	ret	; F7D14F  ret
+	call	16251049	; F7D150  call 0xf7f8a9
+	ret	; F7D154  ret
+	call	16251215	; F7D155  call 0xf7f94f
+	ret	; F7D159  ret
+	ld	xix, 16243416	; F7D15A  ld XIX,0x00f7dad8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D15F  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D164  jr Z,0xf7d16b
+	ld	xix, 16243544	; F7D166  ld XIX,0x00f7db58
+	call	15997704	; F7D16B  call 0xf41b08
+	ret	; F7D16F  ret
+	ret	; F7D170  ret
+	call	16251896	; F7D171  call 0xf7fbf8
+	ret	; F7D175  ret
+	call	16252057	; F7D176  call 0xf7fc99
+	ret	; F7D17A  ret
+	ld	xix, 16243672	; F7D17B  ld XIX,0x00f7dbd8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D180  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D185  jr Z,0xf7d18c
+	ld	xix, 16243800	; F7D187  ld XIX,0x00f7dc58
+	call	15997704	; F7D18C  call 0xf41b08
+	ret	; F7D190  ret
+	ret	; F7D191  ret
+	call	16245749	; F7D192  call 0xf7e3f5
+	ret	; F7D196  ret
+	call	16245823	; F7D197  call 0xf7e43f
+	ret	; F7D19B  ret
+	cp	hl, 15	; F7D19C  cp HL,0x000f
+	jr	z, 36	; F7D1A0  jr Z,0xf7d1c6
+	cp	hl, 10	; F7D1A2  cp HL,0x000a
+	jr	z, 6	; F7D1A6  jr Z,0xf7d1ae
+	cp	hl, 11	; F7D1A8  cp HL,0x000b
+	jr	nz, 37	; F7D1AC  jr NZ,0xf7d1d3
+	ld	bc, hl	; F7D1AE  ld BC,HL
+	call	16002028	; F7D1B0  call 0xf42bec
+	call	16245808	; F7D1B4  call 0xf7e430
+	ldb_d8	a, (32706)	; F7D1B8  ld A,(0x7fc2)
+	stb_d8	(4854), a	; F7D1BC  ld (0x12f6),A
+	call	16245793	; F7D1C0  call 0xf7e421
+	jr	13	; F7D1C4  jr T,0xf7d1d3
+	bit	7, w	; F7D1C6  bit 0x07,W
+	jr	nz, 8	; F7D1C9  jr NZ,0xf7d1d3
+	stdi16	(8304), 32772	; F7D1CB  ld (0x2070),0x8004
+	jr	0	; F7D1D1  jr T,0xf7d1d3
+	ret	; F7D1D3  ret
+	ret	; F7D1D4  ret
+	call	16252711	; F7D1D5  call 0xf7ff27
+	ret	; F7D1D9  ret
+	call	16252872	; F7D1DA  call 0xf7ffc8
+	ret	; F7D1DE  ret
+	ld	xix, 16243928	; F7D1DF  ld XIX,0x00f7dcd8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D1E4  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D1E9  jr Z,0xf7d1f0
+	ld	xix, 16244056	; F7D1EB  ld XIX,0x00f7dd58
+	call	15997704	; F7D1F0  call 0xf41b08
+	ret	; F7D1F4  ret
+	ret	; F7D1F5  ret
+	call	16253537	; F7D1F6  call 0xf80261
+	ret	; F7D1FA  ret
+	call	16253896	; F7D1FB  call 0xf803c8
+	ret	; F7D1FF  ret
+	ld	xix, 16244184	; F7D200  ld XIX,0x00f7ddd8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D205  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D20A  jr Z,0xf7d211
+	ld	xix, 16244312	; F7D20C  ld XIX,0x00f7de58
+	call	15997704	; F7D211  call 0xf41b08
+	ret	; F7D215  ret
+	ret	; F7D216  ret
+	call	16254009	; F7D217  call 0xf80439
+	ret	; F7D21B  ret
+	call	16254188	; F7D21C  call 0xf804ec
+	ret	; F7D220  ret
+	ld	xix, 16244440	; F7D221  ld XIX,0x00f7ded8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D226  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D22B  jr Z,0xf7d232
+	ld	xix, 16244568	; F7D22D  ld XIX,0x00f7df58
+	call	15997704	; F7D232  call 0xf41b08
+	ret	; F7D236  ret
+	ret	; F7D237  ret
+	call	16254828	; F7D238  call 0xf8076c
+	ret	; F7D23C  ret
+	call	16254985	; F7D23D  call 0xf80809
+	ret	; F7D241  ret
+	ld	xix, 16244696	; F7D242  ld XIX,0x00f7dfd8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D247  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D24C  jr Z,0xf7d253
+	ld	xix, 16244824	; F7D24E  ld XIX,0x00f7e058
+	call	15997704	; F7D253  call 0xf41b08
+	ret	; F7D257  ret
+	ret	; F7D258  ret
+	call	16255689	; F7D259  call 0xf80ac9
+	ret	; F7D25D  ret
+	call	16255846	; F7D25E  call 0xf80b66
+	ret	; F7D262  ret
+	ld	xix, 16244952	; F7D263  ld XIX,0x00f7e0d8
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7D268  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F7D26D  jr Z,0xf7d274
+	ld	xix, 16245080	; F7D26F  ld XIX,0x00f7e158
+	call	15997704	; F7D274  call 0xf41b08
+	ret	; F7D278  ret
+	ret	; F7D279  ret
+	call	16256558	; F7D27A  call 0xf80e2e
+	ret	; F7D27E  ret
+	call	16256687	; F7D27F  call 0xf80eaf
+	ret	; F7D283  ret
+	call	16256692	; F7D284  call 0xf80eb4
+	ret	; F7D288  ret
+	ret	; F7D289  ret
+	call	16256858	; F7D28A  call 0xf80f5a
+	ret	; F7D28E  ret
+	call	16256960	; F7D28F  call 0xf80fc0
+	ret	; F7D293  ret
+	ld	xix, 16245208	; F7D294  ld XIX,0x00f7e1d8
+	call	15997704	; F7D299  call 0xf41b08
+	ret	; F7D29D  ret
+	ret	; F7D29E  ret
+	call	16257096	; F7D29F  call 0xf81048
+	ret	; F7D2A3  ret
+	call	16257264	; F7D2A4  call 0xf810f0
+	ret	; F7D2A8  ret
+	ld	xix, 16245336	; F7D2A9  ld XIX,0x00f7e258
+	call	15997704	; F7D2AE  call 0xf41b08
+	ret	; F7D2B2  ret
+	ret	; F7D2B3  ret
+	call	16257054	; F7D2B4  call 0xf8101e
+	ret	; F7D2B8  ret
+	call	16257081	; F7D2B9  call 0xf81039
+	ret	; F7D2BD  ret
+	ld	bc, hl	; F7D2BE  ld BC,HL
+	call	16002760	; F7D2C0  call 0xf42ec8
+	ret	; F7D2C4  ret
+	ret	; F7D2C5  ret
+	call	16257054	; F7D2C6  call 0xf8101e
+	ret	; F7D2CA  ret
+	call	16257081	; F7D2CB  call 0xf81039
+	ret	; F7D2CF  ret
+	ld	bc, hl	; F7D2D0  ld BC,HL
+	call	16002760	; F7D2D2  call 0xf42ec8
+	ret	; F7D2D6  ret
+	ret	; F7D2D7  ret
+
+; ==================================================================
+; 0xF7D2D8-0xF7E2D7 -- the 32 tables, 32 entries each
+; ==================================================================
+; Reproduce all three counts with
+;     python3 notes/prom_b_f7d_tables.py
+
+; --- table  0 of 32: 10 distinct targets; named by the `ld XIX` at 0xF7D032
+Table_F7D2D8:
+	.long 0x00F7E9C7	; [ 0]
+	.long 0x00F7E9C7	; [ 1]
+	.long 0x00F7E9C7	; [ 2]
+	.long 0x00F7E9C7	; [ 3]
+	.long 0x00F7E9C7	; [ 4]
+	.long 0x00F7E9C7	; [ 5]
+	.long 0x00F7E9C7	; [ 6]
+	.long 0x00F7E9C7	; [ 7]
+	.long 0x00F7E9C8	; [ 8]
+	.long 0x00F7E9DC	; [ 9]
+	.long 0x00F7E9F0	; [10]
+	.long 0x00F7EA04	; [11]
+	.long 0x00F7EA18	; [12]
+	.long 0x00F7EA2C	; [13]
+	.long 0x00F7EA2C	; [14]
+	.long 0x00F7EA2D	; [15]
+	.long 0x00F7EA3B	; [16]
+	.long 0x00F7EA54	; [17]
+	.long 0x00F7EA54	; [18]
+	.long 0x00F7EA54	; [19]
+	.long 0x00F7EA54	; [20]
+	.long 0x00F7EA54	; [21]
+	.long 0x00F7EA54	; [22]
+	.long 0x00F7EA54	; [23]
+	.long 0x00F7EA54	; [24]
+	.long 0x00F7EA3B	; [25]
+	.long 0x00F7EA54	; [26]
+	.long 0x00F7EA54	; [27]
+	.long 0x00F7EA54	; [28]
+	.long 0x00F7EA54	; [29]
+	.long 0x00F7EA54	; [30]
+	.long 0x00F7EA54	; [31]
+
+; --- table  1 of 32: 10 distinct targets; named by the `ld XIX` at 0xF7D03E
+Table_F7D358:
+	.long 0x00F7EA56	; [ 0]
+	.long 0x00F7EA56	; [ 1]
+	.long 0x00F7EA56	; [ 2]
+	.long 0x00F7EA56	; [ 3]
+	.long 0x00F7EA56	; [ 4]
+	.long 0x00F7EA56	; [ 5]
+	.long 0x00F7EA56	; [ 6]
+	.long 0x00F7EA56	; [ 7]
+	.long 0x00F7EA57	; [ 8]
+	.long 0x00F7EA6B	; [ 9]
+	.long 0x00F7EA79	; [10]
+	.long 0x00F7EA8D	; [11]
+	.long 0x00F7EA9B	; [12]
+	.long 0x00F7EAA3	; [13]
+	.long 0x00F7EAA3	; [14]
+	.long 0x00F7EAA4	; [15]
+	.long 0x00F7EAB6	; [16]
+	.long 0x00F7EACF	; [17]
+	.long 0x00F7EACF	; [18]
+	.long 0x00F7EACF	; [19]
+	.long 0x00F7EACF	; [20]
+	.long 0x00F7EACF	; [21]
+	.long 0x00F7EACF	; [22]
+	.long 0x00F7EACF	; [23]
+	.long 0x00F7EACF	; [24]
+	.long 0x00F7EAB6	; [25]
+	.long 0x00F7EACF	; [26]
+	.long 0x00F7EACF	; [27]
+	.long 0x00F7EACF	; [28]
+	.long 0x00F7EACF	; [29]
+	.long 0x00F7EACF	; [30]
+	.long 0x00F7EACF	; [31]
+
+; --- table  2 of 32: 9 distinct targets; named by the `ld XIX` at 0xF7D054
+Table_F7D3D8:
+	.long 0x00F7EBDD	; [ 0]
+	.long 0x00F7EBDD	; [ 1]
+	.long 0x00F7EBDE	; [ 2]
+	.long 0x00F7EC10	; [ 3]
+	.long 0x00F7EC42	; [ 4]
+	.long 0x00F7EC42	; [ 5]
+	.long 0x00F7EC42	; [ 6]
+	.long 0x00F7EC42	; [ 7]
+	.long 0x00F7EC42	; [ 8]
+	.long 0x00F7EC42	; [ 9]
+	.long 0x00F7EC42	; [10]
+	.long 0x00F7EC43	; [11]
+	.long 0x00F7EC54	; [12]
+	.long 0x00F7EC60	; [13]
+	.long 0x00F7EC60	; [14]
+	.long 0x00F7EC61	; [15]
+	.long 0x00F7EC6F	; [16]
+	.long 0x00F7EC6F	; [17]
+	.long 0x00F7EC6F	; [18]
+	.long 0x00F7EBDE	; [19]
+	.long 0x00F7EC10	; [20]
+	.long 0x00F7EC6F	; [21]
+	.long 0x00F7EC6F	; [22]
+	.long 0x00F7EC6F	; [23]
+	.long 0x00F7EC6F	; [24]
+	.long 0x00F7EC6F	; [25]
+	.long 0x00F7EC6F	; [26]
+	.long 0x00F7EC6F	; [27]
+	.long 0x00F7EC6F	; [28]
+	.long 0x00F7EC6F	; [29]
+	.long 0x00F7EC6F	; [30]
+	.long 0x00F7EC6F	; [31]
+
+; --- table  3 of 32: 13 distinct targets; named by the `ld XIX` at 0xF7D06A
+Table_F7D458:
+	.long 0x00F7ECFF	; [ 0]
+	.long 0x00F7ED18	; [ 1]
+	.long 0x00F7ED31	; [ 2]
+	.long 0x00F7ED4A	; [ 3]
+	.long 0x00F7ED63	; [ 4]
+	.long 0x00F7ED7C	; [ 5]
+	.long 0x00F7ED95	; [ 6]
+	.long 0x00F7EDAE	; [ 7]
+	.long 0x00F7EDC7	; [ 8]
+	.long 0x00F7EDC8	; [ 9]
+	.long 0x00F7EDD2	; [10]
+	.long 0x00F7EDD2	; [11]
+	.long 0x00F7EDD2	; [12]
+	.long 0x00F7EDD2	; [13]
+	.long 0x00F7EDD2	; [14]
+	.long 0x00F7EDD3	; [15]
+	.long 0x00F7EDE1	; [16]
+	.long 0x00F7ECFF	; [17]
+	.long 0x00F7ED18	; [18]
+	.long 0x00F7ED31	; [19]
+	.long 0x00F7ED4A	; [20]
+	.long 0x00F7ED63	; [21]
+	.long 0x00F7ED7C	; [22]
+	.long 0x00F7ED95	; [23]
+	.long 0x00F7EDAE	; [24]
+	.long 0x00F7EDE1	; [25]
+	.long 0x00F7EDE1	; [26]
+	.long 0x00F7EDE1	; [27]
+	.long 0x00F7EDE1	; [28]
+	.long 0x00F7EDE1	; [29]
+	.long 0x00F7EDE1	; [30]
+	.long 0x00F7EDE1	; [31]
+
+; --- table  4 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D076
+Table_F7D4D8:
+	.long 0x00F7EDE2	; [ 0]
+	.long 0x00F7EDE2	; [ 1]
+	.long 0x00F7EDE2	; [ 2]
+	.long 0x00F7EDE2	; [ 3]
+	.long 0x00F7EDE2	; [ 4]
+	.long 0x00F7EDE2	; [ 5]
+	.long 0x00F7EDE2	; [ 6]
+	.long 0x00F7EDE2	; [ 7]
+	.long 0x00F7EDE2	; [ 8]
+	.long 0x00F7EDE3	; [ 9]
+	.long 0x00F7EDF2	; [10]
+	.long 0x00F7EDFC	; [11]
+	.long 0x00F7EDFC	; [12]
+	.long 0x00F7EDFC	; [13]
+	.long 0x00F7EDFC	; [14]
+	.long 0x00F7EDFD	; [15]
+	.long 0x00F7EE07	; [16]
+	.long 0x00F7EE07	; [17]
+	.long 0x00F7EE07	; [18]
+	.long 0x00F7EE07	; [19]
+	.long 0x00F7EE07	; [20]
+	.long 0x00F7EE07	; [21]
+	.long 0x00F7EE07	; [22]
+	.long 0x00F7EE07	; [23]
+	.long 0x00F7EE07	; [24]
+	.long 0x00F7EE07	; [25]
+	.long 0x00F7EE07	; [26]
+	.long 0x00F7EE07	; [27]
+	.long 0x00F7EE07	; [28]
+	.long 0x00F7EE07	; [29]
+	.long 0x00F7EE07	; [30]
+	.long 0x00F7EE07	; [31]
+
+; --- table  5 of 32: 15 distinct targets; named by the `ld XIX` at 0xF7D08C
+Table_F7D558:
+	.long 0x00F7E508	; [ 0]
+	.long 0x00F7E509	; [ 1]
+	.long 0x00F7E509	; [ 2]
+	.long 0x00F7E50A	; [ 3]
+	.long 0x00F7E52A	; [ 4]
+	.long 0x00F7E535	; [ 5]
+	.long 0x00F7E536	; [ 6]
+	.long 0x00F7E546	; [ 7]
+	.long 0x00F7E547	; [ 8]
+	.long 0x00F7E563	; [ 9]
+	.long 0x00F7E581	; [10]
+	.long 0x00F7E5A5	; [11]
+	.long 0x00F7E5BA	; [12]
+	.long 0x00F7E5C4	; [13]
+	.long 0x00F7E5C4	; [14]
+	.long 0x00F7E5C5	; [15]
+	.long 0x00F7E5D3	; [16]
+	.long 0x00F7E5D3	; [17]
+	.long 0x00F7E5D3	; [18]
+	.long 0x00F7E5D3	; [19]
+	.long 0x00F7E50A	; [20]
+	.long 0x00F7E52A	; [21]
+	.long 0x00F7E535	; [22]
+	.long 0x00F7E536	; [23]
+	.long 0x00F7E5D3	; [24]
+	.long 0x00F7E5D3	; [25]
+	.long 0x00F7E5D3	; [26]
+	.long 0x00F7E5D3	; [27]
+	.long 0x00F7E5D3	; [28]
+	.long 0x00F7E5D3	; [29]
+	.long 0x00F7E5D3	; [30]
+	.long 0x00F7E5D3	; [31]
+
+; --- table  6 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D098
+Table_F7D5D8:
+	.long 0x00F7E5D4	; [ 0]
+	.long 0x00F7E5D4	; [ 1]
+	.long 0x00F7E5D4	; [ 2]
+	.long 0x00F7E5D4	; [ 3]
+	.long 0x00F7E5D4	; [ 4]
+	.long 0x00F7E5D4	; [ 5]
+	.long 0x00F7E5D4	; [ 6]
+	.long 0x00F7E5D4	; [ 7]
+	.long 0x00F7E5D4	; [ 8]
+	.long 0x00F7E5D5	; [ 9]
+	.long 0x00F7E5E6	; [10]
+	.long 0x00F7E5F2	; [11]
+	.long 0x00F7E5F2	; [12]
+	.long 0x00F7E5F2	; [13]
+	.long 0x00F7E5F2	; [14]
+	.long 0x00F7E5F3	; [15]
+	.long 0x00F7E5FF	; [16]
+	.long 0x00F7E5FF	; [17]
+	.long 0x00F7E5FF	; [18]
+	.long 0x00F7E5FF	; [19]
+	.long 0x00F7E5FF	; [20]
+	.long 0x00F7E5FF	; [21]
+	.long 0x00F7E5FF	; [22]
+	.long 0x00F7E5FF	; [23]
+	.long 0x00F7E5FF	; [24]
+	.long 0x00F7E5FF	; [25]
+	.long 0x00F7E5FF	; [26]
+	.long 0x00F7E5FF	; [27]
+	.long 0x00F7E5FF	; [28]
+	.long 0x00F7E5FF	; [29]
+	.long 0x00F7E5FF	; [30]
+	.long 0x00F7E5FF	; [31]
+
+; --- table  7 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D0AE
+Table_F7D658:
+	.long 0x00F7E687	; [ 0]
+	.long 0x00F7E68F	; [ 1]
+	.long 0x00F7E6A0	; [ 2]
+	.long 0x00F7E6B1	; [ 3]
+	.long 0x00F7E6B9	; [ 4]
+	.long 0x00F7E6C1	; [ 5]
+	.long 0x00F7E6CD	; [ 6]
+	.long 0x00F7E6D5	; [ 7]
+	.long 0x00F7E6DD	; [ 8]
+	.long 0x00F7E6FE	; [ 9]
+	.long 0x00F7E71F	; [10]
+	.long 0x00F7E740	; [11]
+	.long 0x00F7E748	; [12]
+	.long 0x00F7E750	; [13]
+	.long 0x00F7E758	; [14]
+	.long 0x00F7E760	; [15]
+	.long 0x00F7E76E	; [16]
+	.long 0x00F7E76E	; [17]
+	.long 0x00F7E76E	; [18]
+	.long 0x00F7E76E	; [19]
+	.long 0x00F7E76E	; [20]
+	.long 0x00F7E76E	; [21]
+	.long 0x00F7E76E	; [22]
+	.long 0x00F7E76E	; [23]
+	.long 0x00F7E76E	; [24]
+	.long 0x00F7E76E	; [25]
+	.long 0x00F7E76E	; [26]
+	.long 0x00F7E76E	; [27]
+	.long 0x00F7E76E	; [28]
+	.long 0x00F7E76E	; [29]
+	.long 0x00F7E76E	; [30]
+	.long 0x00F7E76E	; [31]
+
+; --- table  8 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0C6
+Table_F7D6D8:
+	.long 0x00F7EE9B	; [ 0]
+	.long 0x00F7EE9C	; [ 1]
+	.long 0x00F7EE9D	; [ 2]
+	.long 0x00F7EE9E	; [ 3]
+	.long 0x00F7EE9F	; [ 4]
+	.long 0x00F7EECA	; [ 5]
+	.long 0x00F7EECB	; [ 6]
+	.long 0x00F7EECC	; [ 7]
+	.long 0x00F7EECC	; [ 8]
+	.long 0x00F7EECD	; [ 9]
+	.long 0x00F7EF02	; [10]
+	.long 0x00F7EF1E	; [11]
+	.long 0x00F7EF3A	; [12]
+	.long 0x00F7EF3B	; [13]
+	.long 0x00F7EF3C	; [14]
+	.long 0x00F7EF3D	; [15]
+	.long 0x00F7EF4B	; [16]
+	.long 0x00F7EF4B	; [17]
+	.long 0x00F7EF4B	; [18]
+	.long 0x00F7EF4B	; [19]
+	.long 0x00F7EF4B	; [20]
+	.long 0x00F7EF4B	; [21]
+	.long 0x00F7EF4B	; [22]
+	.long 0x00F7EF4B	; [23]
+	.long 0x00F7EF4B	; [24]
+	.long 0x00F7EF4B	; [25]
+	.long 0x00F7EF4B	; [26]
+	.long 0x00F7EF4B	; [27]
+	.long 0x00F7EF4B	; [28]
+	.long 0x00F7EF4B	; [29]
+	.long 0x00F7EF4B	; [30]
+	.long 0x00F7EF4B	; [31]
+
+; --- table  9 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0D2
+Table_F7D758:
+	.long 0x00F7EF4C	; [ 0]
+	.long 0x00F7EF4D	; [ 1]
+	.long 0x00F7EF4E	; [ 2]
+	.long 0x00F7EF4F	; [ 3]
+	.long 0x00F7EF50	; [ 4]
+	.long 0x00F7EF51	; [ 5]
+	.long 0x00F7EF52	; [ 6]
+	.long 0x00F7EF53	; [ 7]
+	.long 0x00F7EF53	; [ 8]
+	.long 0x00F7EF54	; [ 9]
+	.long 0x00F7EF63	; [10]
+	.long 0x00F7EF64	; [11]
+	.long 0x00F7EF6E	; [12]
+	.long 0x00F7EF6F	; [13]
+	.long 0x00F7EF70	; [14]
+	.long 0x00F7EF71	; [15]
+	.long 0x00F7EF7B	; [16]
+	.long 0x00F7EF7B	; [17]
+	.long 0x00F7EF7B	; [18]
+	.long 0x00F7EF7B	; [19]
+	.long 0x00F7EF7B	; [20]
+	.long 0x00F7EF7B	; [21]
+	.long 0x00F7EF7B	; [22]
+	.long 0x00F7EF7B	; [23]
+	.long 0x00F7EF7B	; [24]
+	.long 0x00F7EF7B	; [25]
+	.long 0x00F7EF7B	; [26]
+	.long 0x00F7EF7B	; [27]
+	.long 0x00F7EF7B	; [28]
+	.long 0x00F7EF7B	; [29]
+	.long 0x00F7EF7B	; [30]
+	.long 0x00F7EF7B	; [31]
+
+; --- table 10 of 32: 20 distinct targets; named by the `ld XIX` at 0xF7D0E7
+Table_F7D7D8:
+	.long 0x00F7F036	; [ 0]
+	.long 0x00F7F037	; [ 1]
+	.long 0x00F7F038	; [ 2]
+	.long 0x00F7F039	; [ 3]
+	.long 0x00F7F03A	; [ 4]
+	.long 0x00F7F061	; [ 5]
+	.long 0x00F7F062	; [ 6]
+	.long 0x00F7F063	; [ 7]
+	.long 0x00F7F063	; [ 8]
+	.long 0x00F7F064	; [ 9]
+	.long 0x00F7F088	; [10]
+	.long 0x00F7F0B3	; [11]
+	.long 0x00F7F0D5	; [12]
+	.long 0x00F7F0D6	; [13]
+	.long 0x00F7F0D7	; [14]
+	.long 0x00F7F0D8	; [15]
+	.long 0x00F7F0E6	; [16]
+	.long 0x00F7F0E6	; [17]
+	.long 0x00F7F0E6	; [18]
+	.long 0x00F7F0E6	; [19]
+	.long 0x00F7F0E6	; [20]
+	.long 0x00F7F0E7	; [21]
+	.long 0x00F7F10E	; [22]
+	.long 0x00F7F10E	; [23]
+	.long 0x00F7F10E	; [24]
+	.long 0x00F7F10E	; [25]
+	.long 0x00F7F10E	; [26]
+	.long 0x00F7F10F	; [27]
+	.long 0x00F7F113	; [28]
+	.long 0x00F7F113	; [29]
+	.long 0x00F7F113	; [30]
+	.long 0x00F7F113	; [31]
+
+; --- table 11 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0F3
+Table_F7D858:
+	.long 0x00F7F205	; [ 0]
+	.long 0x00F7F206	; [ 1]
+	.long 0x00F7F207	; [ 2]
+	.long 0x00F7F208	; [ 3]
+	.long 0x00F7F209	; [ 4]
+	.long 0x00F7F20A	; [ 5]
+	.long 0x00F7F20B	; [ 6]
+	.long 0x00F7F20C	; [ 7]
+	.long 0x00F7F20D	; [ 8]
+	.long 0x00F7F20D	; [ 9]
+	.long 0x00F7F20E	; [10]
+	.long 0x00F7F21D	; [11]
+	.long 0x00F7F229	; [12]
+	.long 0x00F7F22A	; [13]
+	.long 0x00F7F22B	; [14]
+	.long 0x00F7F22C	; [15]
+	.long 0x00F7F236	; [16]
+	.long 0x00F7F236	; [17]
+	.long 0x00F7F236	; [18]
+	.long 0x00F7F236	; [19]
+	.long 0x00F7F236	; [20]
+	.long 0x00F7F236	; [21]
+	.long 0x00F7F236	; [22]
+	.long 0x00F7F236	; [23]
+	.long 0x00F7F236	; [24]
+	.long 0x00F7F236	; [25]
+	.long 0x00F7F236	; [26]
+	.long 0x00F7F236	; [27]
+	.long 0x00F7F236	; [28]
+	.long 0x00F7F236	; [29]
+	.long 0x00F7F236	; [30]
+	.long 0x00F7F236	; [31]
+
+; --- table 12 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D108
+Table_F7D8D8:
+	.long 0x00F7F2DA	; [ 0]
+	.long 0x00F7F2DB	; [ 1]
+	.long 0x00F7F2DC	; [ 2]
+	.long 0x00F7F2DD	; [ 3]
+	.long 0x00F7F2DE	; [ 4]
+	.long 0x00F7F305	; [ 5]
+	.long 0x00F7F306	; [ 6]
+	.long 0x00F7F307	; [ 7]
+	.long 0x00F7F308	; [ 8]
+	.long 0x00F7F34A	; [ 9]
+	.long 0x00F7F375	; [10]
+	.long 0x00F7F3AE	; [11]
+	.long 0x00F7F3D0	; [12]
+	.long 0x00F7F3D1	; [13]
+	.long 0x00F7F3D2	; [14]
+	.long 0x00F7F3D3	; [15]
+	.long 0x00F7F3E1	; [16]
+	.long 0x00F7F3E1	; [17]
+	.long 0x00F7F3E1	; [18]
+	.long 0x00F7F3E1	; [19]
+	.long 0x00F7F3E1	; [20]
+	.long 0x00F7F3E2	; [21]
+	.long 0x00F7F409	; [22]
+	.long 0x00F7F409	; [23]
+	.long 0x00F7F409	; [24]
+	.long 0x00F7F409	; [25]
+	.long 0x00F7F409	; [26]
+	.long 0x00F7F40A	; [27]
+	.long 0x00F7F40E	; [28]
+	.long 0x00F7F40E	; [29]
+	.long 0x00F7F40E	; [30]
+	.long 0x00F7F40E	; [31]
+
+; --- table 13 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D114
+Table_F7D958:
+	.long 0x00F7F40F	; [ 0]
+	.long 0x00F7F410	; [ 1]
+	.long 0x00F7F411	; [ 2]
+	.long 0x00F7F412	; [ 3]
+	.long 0x00F7F413	; [ 4]
+	.long 0x00F7F414	; [ 5]
+	.long 0x00F7F415	; [ 6]
+	.long 0x00F7F416	; [ 7]
+	.long 0x00F7F417	; [ 8]
+	.long 0x00F7F418	; [ 9]
+	.long 0x00F7F427	; [10]
+	.long 0x00F7F431	; [11]
+	.long 0x00F7F432	; [12]
+	.long 0x00F7F433	; [13]
+	.long 0x00F7F434	; [14]
+	.long 0x00F7F435	; [15]
+	.long 0x00F7F43F	; [16]
+	.long 0x00F7F43F	; [17]
+	.long 0x00F7F43F	; [18]
+	.long 0x00F7F43F	; [19]
+	.long 0x00F7F43F	; [20]
+	.long 0x00F7F43F	; [21]
+	.long 0x00F7F43F	; [22]
+	.long 0x00F7F43F	; [23]
+	.long 0x00F7F43F	; [24]
+	.long 0x00F7F43F	; [25]
+	.long 0x00F7F43F	; [26]
+	.long 0x00F7F43F	; [27]
+	.long 0x00F7F43F	; [28]
+	.long 0x00F7F43F	; [29]
+	.long 0x00F7F43F	; [30]
+	.long 0x00F7F43F	; [31]
+
+; --- table 14 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D139
+Table_F7D9D8:
+	.long 0x00F7F608	; [ 0]
+	.long 0x00F7F609	; [ 1]
+	.long 0x00F7F60A	; [ 2]
+	.long 0x00F7F60B	; [ 3]
+	.long 0x00F7F60C	; [ 4]
+	.long 0x00F7F633	; [ 5]
+	.long 0x00F7F634	; [ 6]
+	.long 0x00F7F635	; [ 7]
+	.long 0x00F7F636	; [ 8]
+	.long 0x00F7F688	; [ 9]
+	.long 0x00F7F6BA	; [10]
+	.long 0x00F7F6FC	; [11]
+	.long 0x00F7F71E	; [12]
+	.long 0x00F7F71F	; [13]
+	.long 0x00F7F720	; [14]
+	.long 0x00F7F721	; [15]
+	.long 0x00F7F74D	; [16]
+	.long 0x00F7F74D	; [17]
+	.long 0x00F7F74D	; [18]
+	.long 0x00F7F74D	; [19]
+	.long 0x00F7F74D	; [20]
+	.long 0x00F7F74E	; [21]
+	.long 0x00F7F775	; [22]
+	.long 0x00F7F775	; [23]
+	.long 0x00F7F775	; [24]
+	.long 0x00F7F775	; [25]
+	.long 0x00F7F775	; [26]
+	.long 0x00F7F776	; [27]
+	.long 0x00F7F77A	; [28]
+	.long 0x00F7F77A	; [29]
+	.long 0x00F7F77A	; [30]
+	.long 0x00F7F77A	; [31]
+
+; --- table 15 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D145
+Table_F7DA58:
+	.long 0x00F7F77B	; [ 0]
+	.long 0x00F7F77C	; [ 1]
+	.long 0x00F7F77D	; [ 2]
+	.long 0x00F7F77E	; [ 3]
+	.long 0x00F7F77F	; [ 4]
+	.long 0x00F7F780	; [ 5]
+	.long 0x00F7F781	; [ 6]
+	.long 0x00F7F782	; [ 7]
+	.long 0x00F7F783	; [ 8]
+	.long 0x00F7F783	; [ 9]
+	.long 0x00F7F784	; [10]
+	.long 0x00F7F793	; [11]
+	.long 0x00F7F79D	; [12]
+	.long 0x00F7F79E	; [13]
+	.long 0x00F7F79F	; [14]
+	.long 0x00F7F7A0	; [15]
+	.long 0x00F7F7AA	; [16]
+	.long 0x00F7F7AA	; [17]
+	.long 0x00F7F7AA	; [18]
+	.long 0x00F7F7AA	; [19]
+	.long 0x00F7F7AA	; [20]
+	.long 0x00F7F7AA	; [21]
+	.long 0x00F7F7AA	; [22]
+	.long 0x00F7F7AA	; [23]
+	.long 0x00F7F7AA	; [24]
+	.long 0x00F7F7AA	; [25]
+	.long 0x00F7F7AA	; [26]
+	.long 0x00F7F7AA	; [27]
+	.long 0x00F7F7AA	; [28]
+	.long 0x00F7F7AA	; [29]
+	.long 0x00F7F7AA	; [30]
+	.long 0x00F7F7AA	; [31]
+
+; --- table 16 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D15A
+Table_F7DAD8:
+	.long 0x00F7F954	; [ 0]
+	.long 0x00F7F955	; [ 1]
+	.long 0x00F7F956	; [ 2]
+	.long 0x00F7F957	; [ 3]
+	.long 0x00F7F958	; [ 4]
+	.long 0x00F7F97F	; [ 5]
+	.long 0x00F7F980	; [ 6]
+	.long 0x00F7F981	; [ 7]
+	.long 0x00F7F982	; [ 8]
+	.long 0x00F7F9BC	; [ 9]
+	.long 0x00F7F9DF	; [10]
+	.long 0x00F7FA15	; [11]
+	.long 0x00F7FA31	; [12]
+	.long 0x00F7FA32	; [13]
+	.long 0x00F7FA33	; [14]
+	.long 0x00F7FA34	; [15]
+	.long 0x00F7FA42	; [16]
+	.long 0x00F7FA42	; [17]
+	.long 0x00F7FA42	; [18]
+	.long 0x00F7FA42	; [19]
+	.long 0x00F7FA42	; [20]
+	.long 0x00F7FA43	; [21]
+	.long 0x00F7FA6A	; [22]
+	.long 0x00F7FA6A	; [23]
+	.long 0x00F7FA6A	; [24]
+	.long 0x00F7FA6A	; [25]
+	.long 0x00F7FA6A	; [26]
+	.long 0x00F7FA6B	; [27]
+	.long 0x00F7FA6F	; [28]
+	.long 0x00F7FA6F	; [29]
+	.long 0x00F7FA6F	; [30]
+	.long 0x00F7FA6F	; [31]
+
+; --- table 17 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D166
+Table_F7DB58:
+	.long 0x00F7FA70	; [ 0]
+	.long 0x00F7FA71	; [ 1]
+	.long 0x00F7FA72	; [ 2]
+	.long 0x00F7FA73	; [ 3]
+	.long 0x00F7FA74	; [ 4]
+	.long 0x00F7FA75	; [ 5]
+	.long 0x00F7FA76	; [ 6]
+	.long 0x00F7FA77	; [ 7]
+	.long 0x00F7FA78	; [ 8]
+	.long 0x00F7FA79	; [ 9]
+	.long 0x00F7FA88	; [10]
+	.long 0x00F7FA92	; [11]
+	.long 0x00F7FA93	; [12]
+	.long 0x00F7FA94	; [13]
+	.long 0x00F7FA95	; [14]
+	.long 0x00F7FA96	; [15]
+	.long 0x00F7FAA0	; [16]
+	.long 0x00F7FAA0	; [17]
+	.long 0x00F7FAA0	; [18]
+	.long 0x00F7FAA0	; [19]
+	.long 0x00F7FAA0	; [20]
+	.long 0x00F7FAA0	; [21]
+	.long 0x00F7FAA0	; [22]
+	.long 0x00F7FAA0	; [23]
+	.long 0x00F7FAA0	; [24]
+	.long 0x00F7FAA0	; [25]
+	.long 0x00F7FAA0	; [26]
+	.long 0x00F7FAA0	; [27]
+	.long 0x00F7FAA0	; [28]
+	.long 0x00F7FAA0	; [29]
+	.long 0x00F7FAA0	; [30]
+	.long 0x00F7FAA0	; [31]
+
+; --- table 18 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D17B
+Table_F7DBD8:
+	.long 0x00F7FC9E	; [ 0]
+	.long 0x00F7FC9F	; [ 1]
+	.long 0x00F7FCA0	; [ 2]
+	.long 0x00F7FCA1	; [ 3]
+	.long 0x00F7FCA2	; [ 4]
+	.long 0x00F7FCC9	; [ 5]
+	.long 0x00F7FCCA	; [ 6]
+	.long 0x00F7FCCB	; [ 7]
+	.long 0x00F7FCCC	; [ 8]
+	.long 0x00F7FD06	; [ 9]
+	.long 0x00F7FD29	; [10]
+	.long 0x00F7FD5C	; [11]
+	.long 0x00F7FD78	; [12]
+	.long 0x00F7FD79	; [13]
+	.long 0x00F7FD7A	; [14]
+	.long 0x00F7FD7B	; [15]
+	.long 0x00F7FD89	; [16]
+	.long 0x00F7FD89	; [17]
+	.long 0x00F7FD89	; [18]
+	.long 0x00F7FD89	; [19]
+	.long 0x00F7FD89	; [20]
+	.long 0x00F7FD8A	; [21]
+	.long 0x00F7FDB1	; [22]
+	.long 0x00F7FDB1	; [23]
+	.long 0x00F7FDB1	; [24]
+	.long 0x00F7FDB1	; [25]
+	.long 0x00F7FDB1	; [26]
+	.long 0x00F7FDB2	; [27]
+	.long 0x00F7FDB6	; [28]
+	.long 0x00F7FDB6	; [29]
+	.long 0x00F7FDB6	; [30]
+	.long 0x00F7FDB6	; [31]
+
+; --- table 19 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D187
+Table_F7DC58:
+	.long 0x00F7FDB7	; [ 0]
+	.long 0x00F7FDB8	; [ 1]
+	.long 0x00F7FDB9	; [ 2]
+	.long 0x00F7FDBA	; [ 3]
+	.long 0x00F7FDBB	; [ 4]
+	.long 0x00F7FDBC	; [ 5]
+	.long 0x00F7FDBD	; [ 6]
+	.long 0x00F7FDBE	; [ 7]
+	.long 0x00F7FDBF	; [ 8]
+	.long 0x00F7FDC0	; [ 9]
+	.long 0x00F7FDCF	; [10]
+	.long 0x00F7FDD9	; [11]
+	.long 0x00F7FDDA	; [12]
+	.long 0x00F7FDDB	; [13]
+	.long 0x00F7FDDC	; [14]
+	.long 0x00F7FDDD	; [15]
+	.long 0x00F7FDE7	; [16]
+	.long 0x00F7FDE7	; [17]
+	.long 0x00F7FDE7	; [18]
+	.long 0x00F7FDE7	; [19]
+	.long 0x00F7FDE7	; [20]
+	.long 0x00F7FDE7	; [21]
+	.long 0x00F7FDE7	; [22]
+	.long 0x00F7FDE7	; [23]
+	.long 0x00F7FDE7	; [24]
+	.long 0x00F7FDE7	; [25]
+	.long 0x00F7FDE7	; [26]
+	.long 0x00F7FDE7	; [27]
+	.long 0x00F7FDE7	; [28]
+	.long 0x00F7FDE7	; [29]
+	.long 0x00F7FDE7	; [30]
+	.long 0x00F7FDE7	; [31]
+
+; --- table 20 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D1DF
+Table_F7DCD8:
+	.long 0x00F7FFCD	; [ 0]
+	.long 0x00F7FFCE	; [ 1]
+	.long 0x00F7FFCF	; [ 2]
+	.long 0x00F7FFD0	; [ 3]
+	.long 0x00F7FFD1	; [ 4]
+	.long 0x00F7FFF8	; [ 5]
+	.long 0x00F7FFF9	; [ 6]
+	.long 0x00F7FFFA	; [ 7]
+	.long 0x00F7FFFB	; [ 8]
+	.long 0x00F8003A	; [ 9]
+	.long 0x00F80059	; [10]
+	.long 0x00F8009D	; [11]
+	.long 0x00F800BE	; [12]
+	.long 0x00F800BF	; [13]
+	.long 0x00F800C0	; [14]
+	.long 0x00F800C1	; [15]
+	.long 0x00F800CF	; [16]
+	.long 0x00F800CF	; [17]
+	.long 0x00F800CF	; [18]
+	.long 0x00F800CF	; [19]
+	.long 0x00F800CF	; [20]
+	.long 0x00F800D0	; [21]
+	.long 0x00F800F7	; [22]
+	.long 0x00F800F7	; [23]
+	.long 0x00F800F7	; [24]
+	.long 0x00F800F7	; [25]
+	.long 0x00F800F7	; [26]
+	.long 0x00F800F8	; [27]
+	.long 0x00F800FC	; [28]
+	.long 0x00F800FC	; [29]
+	.long 0x00F800FC	; [30]
+	.long 0x00F800FC	; [31]
+
+; --- table 21 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D1EB
+Table_F7DD58:
+	.long 0x00F800FD	; [ 0]
+	.long 0x00F800FE	; [ 1]
+	.long 0x00F800FF	; [ 2]
+	.long 0x00F80100	; [ 3]
+	.long 0x00F80101	; [ 4]
+	.long 0x00F80102	; [ 5]
+	.long 0x00F80103	; [ 6]
+	.long 0x00F80104	; [ 7]
+	.long 0x00F80105	; [ 8]
+	.long 0x00F80106	; [ 9]
+	.long 0x00F80107	; [10]
+	.long 0x00F80116	; [11]
+	.long 0x00F80120	; [12]
+	.long 0x00F80121	; [13]
+	.long 0x00F80122	; [14]
+	.long 0x00F80123	; [15]
+	.long 0x00F8012D	; [16]
+	.long 0x00F8012D	; [17]
+	.long 0x00F8012D	; [18]
+	.long 0x00F8012D	; [19]
+	.long 0x00F8012D	; [20]
+	.long 0x00F8012D	; [21]
+	.long 0x00F8012D	; [22]
+	.long 0x00F8012D	; [23]
+	.long 0x00F8012D	; [24]
+	.long 0x00F8012D	; [25]
+	.long 0x00F8012D	; [26]
+	.long 0x00F8012D	; [27]
+	.long 0x00F8012D	; [28]
+	.long 0x00F8012D	; [29]
+	.long 0x00F8012D	; [30]
+	.long 0x00F8012D	; [31]
+
+; --- table 22 of 32: 13 distinct targets; named by the `ld XIX` at 0xF7D200
+Table_F7DDD8:
+	.long 0x00F803C9	; [ 0]
+	.long 0x00F803D2	; [ 1]
+	.long 0x00F803DB	; [ 2]
+	.long 0x00F803E4	; [ 3]
+	.long 0x00F803ED	; [ 4]
+	.long 0x00F803F6	; [ 5]
+	.long 0x00F803FF	; [ 6]
+	.long 0x00F80408	; [ 7]
+	.long 0x00F80411	; [ 8]
+	.long 0x00F80412	; [ 9]
+	.long 0x00F80417	; [10]
+	.long 0x00F80417	; [11]
+	.long 0x00F80417	; [12]
+	.long 0x00F80417	; [13]
+	.long 0x00F80417	; [14]
+	.long 0x00F80418	; [15]
+	.long 0x00F80426	; [16]
+	.long 0x00F803C9	; [17]
+	.long 0x00F803D2	; [18]
+	.long 0x00F803DB	; [19]
+	.long 0x00F803E4	; [20]
+	.long 0x00F803ED	; [21]
+	.long 0x00F803F6	; [22]
+	.long 0x00F803FF	; [23]
+	.long 0x00F80408	; [24]
+	.long 0x00F80426	; [25]
+	.long 0x00F80426	; [26]
+	.long 0x00F80426	; [27]
+	.long 0x00F80426	; [28]
+	.long 0x00F80426	; [29]
+	.long 0x00F80426	; [30]
+	.long 0x00F80426	; [31]
+
+; --- table 23 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D20C
+Table_F7DE58:
+	.long 0x00F80427	; [ 0]
+	.long 0x00F80427	; [ 1]
+	.long 0x00F80427	; [ 2]
+	.long 0x00F80427	; [ 3]
+	.long 0x00F80427	; [ 4]
+	.long 0x00F80427	; [ 5]
+	.long 0x00F80427	; [ 6]
+	.long 0x00F80427	; [ 7]
+	.long 0x00F80427	; [ 8]
+	.long 0x00F80428	; [ 9]
+	.long 0x00F8042D	; [10]
+	.long 0x00F80432	; [11]
+	.long 0x00F80432	; [12]
+	.long 0x00F80432	; [13]
+	.long 0x00F80432	; [14]
+	.long 0x00F80433	; [15]
+	.long 0x00F80438	; [16]
+	.long 0x00F80438	; [17]
+	.long 0x00F80438	; [18]
+	.long 0x00F80438	; [19]
+	.long 0x00F80438	; [20]
+	.long 0x00F80438	; [21]
+	.long 0x00F80438	; [22]
+	.long 0x00F80438	; [23]
+	.long 0x00F80438	; [24]
+	.long 0x00F80438	; [25]
+	.long 0x00F80438	; [26]
+	.long 0x00F80438	; [27]
+	.long 0x00F80438	; [28]
+	.long 0x00F80438	; [29]
+	.long 0x00F80438	; [30]
+	.long 0x00F80438	; [31]
+
+; --- table 24 of 32: 20 distinct targets; named by the `ld XIX` at 0xF7D221
+Table_F7DED8:
+	.long 0x00F804F1	; [ 0]
+	.long 0x00F804F2	; [ 1]
+	.long 0x00F804F3	; [ 2]
+	.long 0x00F804F4	; [ 3]
+	.long 0x00F804F5	; [ 4]
+	.long 0x00F8051C	; [ 5]
+	.long 0x00F8051D	; [ 6]
+	.long 0x00F8051E	; [ 7]
+	.long 0x00F8051E	; [ 8]
+	.long 0x00F8051F	; [ 9]
+	.long 0x00F80569	; [10]
+	.long 0x00F80595	; [11]
+	.long 0x00F805CF	; [12]
+	.long 0x00F805D0	; [13]
+	.long 0x00F805D1	; [14]
+	.long 0x00F805D2	; [15]
+	.long 0x00F805E0	; [16]
+	.long 0x00F805E0	; [17]
+	.long 0x00F805E0	; [18]
+	.long 0x00F805E0	; [19]
+	.long 0x00F805E0	; [20]
+	.long 0x00F805E1	; [21]
+	.long 0x00F80608	; [22]
+	.long 0x00F80608	; [23]
+	.long 0x00F80608	; [24]
+	.long 0x00F80608	; [25]
+	.long 0x00F80608	; [26]
+	.long 0x00F80609	; [27]
+	.long 0x00F8060D	; [28]
+	.long 0x00F8060D	; [29]
+	.long 0x00F8060D	; [30]
+	.long 0x00F8060D	; [31]
+
+; --- table 25 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D22D
+Table_F7DF58:
+	.long 0x00F8060E	; [ 0]
+	.long 0x00F8060E	; [ 1]
+	.long 0x00F8060E	; [ 2]
+	.long 0x00F8060E	; [ 3]
+	.long 0x00F8060E	; [ 4]
+	.long 0x00F8060E	; [ 5]
+	.long 0x00F8060E	; [ 6]
+	.long 0x00F8060E	; [ 7]
+	.long 0x00F8060E	; [ 8]
+	.long 0x00F8060E	; [ 9]
+	.long 0x00F8060E	; [10]
+	.long 0x00F8060F	; [11]
+	.long 0x00F80619	; [12]
+	.long 0x00F80623	; [13]
+	.long 0x00F80623	; [14]
+	.long 0x00F80624	; [15]
+	.long 0x00F80629	; [16]
+	.long 0x00F80629	; [17]
+	.long 0x00F80629	; [18]
+	.long 0x00F80629	; [19]
+	.long 0x00F80629	; [20]
+	.long 0x00F80629	; [21]
+	.long 0x00F80629	; [22]
+	.long 0x00F80629	; [23]
+	.long 0x00F80629	; [24]
+	.long 0x00F80629	; [25]
+	.long 0x00F80629	; [26]
+	.long 0x00F80629	; [27]
+	.long 0x00F80629	; [28]
+	.long 0x00F80629	; [29]
+	.long 0x00F80629	; [30]
+	.long 0x00F80629	; [31]
+
+; --- table 26 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D242
+Table_F7DFD8:
+	.long 0x00F8080E	; [ 0]
+	.long 0x00F8080F	; [ 1]
+	.long 0x00F80810	; [ 2]
+	.long 0x00F80811	; [ 3]
+	.long 0x00F80812	; [ 4]
+	.long 0x00F8084C	; [ 5]
+	.long 0x00F8084D	; [ 6]
+	.long 0x00F8084E	; [ 7]
+	.long 0x00F8084F	; [ 8]
+	.long 0x00F8085C	; [ 9]
+	.long 0x00F808B1	; [10]
+	.long 0x00F808E6	; [11]
+	.long 0x00F8091B	; [12]
+	.long 0x00F8091C	; [13]
+	.long 0x00F8091D	; [14]
+	.long 0x00F8091E	; [15]
+	.long 0x00F8092C	; [16]
+	.long 0x00F8092C	; [17]
+	.long 0x00F8092C	; [18]
+	.long 0x00F8092C	; [19]
+	.long 0x00F8092C	; [20]
+	.long 0x00F8092D	; [21]
+	.long 0x00F80967	; [22]
+	.long 0x00F80967	; [23]
+	.long 0x00F80967	; [24]
+	.long 0x00F80967	; [25]
+	.long 0x00F80967	; [26]
+	.long 0x00F80968	; [27]
+	.long 0x00F8096C	; [28]
+	.long 0x00F8096C	; [29]
+	.long 0x00F8096C	; [30]
+	.long 0x00F8096C	; [31]
+
+; --- table 27 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D24E
+Table_F7E058:
+	.long 0x00F8096D	; [ 0]
+	.long 0x00F8096E	; [ 1]
+	.long 0x00F8096F	; [ 2]
+	.long 0x00F80970	; [ 3]
+	.long 0x00F80971	; [ 4]
+	.long 0x00F80972	; [ 5]
+	.long 0x00F80973	; [ 6]
+	.long 0x00F80974	; [ 7]
+	.long 0x00F80975	; [ 8]
+	.long 0x00F80984	; [ 9]
+	.long 0x00F80985	; [10]
+	.long 0x00F80985	; [11]
+	.long 0x00F80986	; [12]
+	.long 0x00F80990	; [13]
+	.long 0x00F80991	; [14]
+	.long 0x00F80992	; [15]
+	.long 0x00F8099C	; [16]
+	.long 0x00F8099C	; [17]
+	.long 0x00F8099C	; [18]
+	.long 0x00F8099C	; [19]
+	.long 0x00F8099C	; [20]
+	.long 0x00F8099C	; [21]
+	.long 0x00F8099C	; [22]
+	.long 0x00F8099C	; [23]
+	.long 0x00F8099C	; [24]
+	.long 0x00F8099C	; [25]
+	.long 0x00F8099C	; [26]
+	.long 0x00F8099C	; [27]
+	.long 0x00F8099C	; [28]
+	.long 0x00F8099C	; [29]
+	.long 0x00F8099C	; [30]
+	.long 0x00F8099C	; [31]
+
+; --- table 28 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D263
+Table_F7E0D8:
+	.long 0x00F80B6B	; [ 0]
+	.long 0x00F80B6C	; [ 1]
+	.long 0x00F80B6D	; [ 2]
+	.long 0x00F80B6E	; [ 3]
+	.long 0x00F80B6F	; [ 4]
+	.long 0x00F80BA9	; [ 5]
+	.long 0x00F80BAA	; [ 6]
+	.long 0x00F80BAB	; [ 7]
+	.long 0x00F80BAC	; [ 8]
+	.long 0x00F80BB9	; [ 9]
+	.long 0x00F80C0E	; [10]
+	.long 0x00F80C43	; [11]
+	.long 0x00F80C78	; [12]
+	.long 0x00F80C79	; [13]
+	.long 0x00F80C7A	; [14]
+	.long 0x00F80C7B	; [15]
+	.long 0x00F80C89	; [16]
+	.long 0x00F80C89	; [17]
+	.long 0x00F80C89	; [18]
+	.long 0x00F80C89	; [19]
+	.long 0x00F80C89	; [20]
+	.long 0x00F80C8A	; [21]
+	.long 0x00F80CC4	; [22]
+	.long 0x00F80CC4	; [23]
+	.long 0x00F80CC4	; [24]
+	.long 0x00F80CC4	; [25]
+	.long 0x00F80CC4	; [26]
+	.long 0x00F80CC5	; [27]
+	.long 0x00F80CC9	; [28]
+	.long 0x00F80CC9	; [29]
+	.long 0x00F80CC9	; [30]
+	.long 0x00F80CC9	; [31]
+
+; --- table 29 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D26F
+Table_F7E158:
+	.long 0x00F80CCA	; [ 0]
+	.long 0x00F80CCB	; [ 1]
+	.long 0x00F80CCC	; [ 2]
+	.long 0x00F80CCD	; [ 3]
+	.long 0x00F80CCE	; [ 4]
+	.long 0x00F80CCF	; [ 5]
+	.long 0x00F80CD0	; [ 6]
+	.long 0x00F80CD1	; [ 7]
+	.long 0x00F80CD2	; [ 8]
+	.long 0x00F80CE1	; [ 9]
+	.long 0x00F80CE2	; [10]
+	.long 0x00F80CE3	; [11]
+	.long 0x00F80CE4	; [12]
+	.long 0x00F80CEE	; [13]
+	.long 0x00F80CEF	; [14]
+	.long 0x00F80CF0	; [15]
+	.long 0x00F80CFA	; [16]
+	.long 0x00F80CFA	; [17]
+	.long 0x00F80CFA	; [18]
+	.long 0x00F80CFA	; [19]
+	.long 0x00F80CFA	; [20]
+	.long 0x00F80CFA	; [21]
+	.long 0x00F80CFA	; [22]
+	.long 0x00F80CFA	; [23]
+	.long 0x00F80CFA	; [24]
+	.long 0x00F80CFA	; [25]
+	.long 0x00F80CFA	; [26]
+	.long 0x00F80CFA	; [27]
+	.long 0x00F80CFA	; [28]
+	.long 0x00F80CFA	; [29]
+	.long 0x00F80CFA	; [30]
+	.long 0x00F80CFA	; [31]
+
+; --- table 30 of 32: 12 distinct targets; named by the `ld XIX` at 0xF7D294
+Table_F7E1D8:
+	.long 0x00F80FC5	; [ 0]
+	.long 0x00F80FCE	; [ 1]
+	.long 0x00F80FD7	; [ 2]
+	.long 0x00F80FE0	; [ 3]
+	.long 0x00F80FE9	; [ 4]
+	.long 0x00F80FF2	; [ 5]
+	.long 0x00F80FFB	; [ 6]
+	.long 0x00F81004	; [ 7]
+	.long 0x00F8100D	; [ 8]
+	.long 0x00F8100E	; [ 9]
+	.long 0x00F8100E	; [10]
+	.long 0x00F8100E	; [11]
+	.long 0x00F8100E	; [12]
+	.long 0x00F8100E	; [13]
+	.long 0x00F8100E	; [14]
+	.long 0x00F8100F	; [15]
+	.long 0x00F8101D	; [16]
+	.long 0x00F80FC5	; [17]
+	.long 0x00F80FCE	; [18]
+	.long 0x00F80FD7	; [19]
+	.long 0x00F80FE0	; [20]
+	.long 0x00F80FE9	; [21]
+	.long 0x00F80FF2	; [22]
+	.long 0x00F80FFB	; [23]
+	.long 0x00F81004	; [24]
+	.long 0x00F8101D	; [25]
+	.long 0x00F8101D	; [26]
+	.long 0x00F8101D	; [27]
+	.long 0x00F8101D	; [28]
+	.long 0x00F8101D	; [29]
+	.long 0x00F8101D	; [30]
+	.long 0x00F8101D	; [31]
+
+; --- table 31 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D2A9
+Table_F7E258:
+	.long 0x00F81101	; [ 0]
+	.long 0x00F81102	; [ 1]
+	.long 0x00F8111E	; [ 2]
+	.long 0x00F81136	; [ 3]
+	.long 0x00F81137	; [ 4]
+	.long 0x00F81165	; [ 5]
+	.long 0x00F81166	; [ 6]
+	.long 0x00F81185	; [ 7]
+	.long 0x00F8119D	; [ 8]
+	.long 0x00F8119E	; [ 9]
+	.long 0x00F811E2	; [10]
+	.long 0x00F811FF	; [11]
+	.long 0x00F81230	; [12]
+	.long 0x00F81230	; [13]
+	.long 0x00F81230	; [14]
+	.long 0x00F81224	; [15]
+	.long 0x00F81230	; [16]
+	.long 0x00F81230	; [17]
+	.long 0x00F81102	; [18]
+	.long 0x00F8111E	; [19]
+	.long 0x00F81136	; [20]
+	.long 0x00F81137	; [21]
+	.long 0x00F81230	; [22]
+	.long 0x00F81166	; [23]
+	.long 0x00F81185	; [24]
+	.long 0x00F81230	; [25]
+	.long 0x00F81230	; [26]
+	.long 0x00F81231	; [27]
+	.long 0x00F81235	; [28]
+	.long 0x00F81235	; [29]
+	.long 0x00F81235	; [30]
+	.long 0x00F81235	; [31]
+
+; --- 0xF7E2D8-0xF7FFFF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x07E2D8, 0x001D28
 end:

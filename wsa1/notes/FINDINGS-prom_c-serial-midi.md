@@ -54,9 +54,59 @@ two addresses are presumably ring-buffer descriptors — **presumably**; neither
 `0xF9942F` has been traced.
 
 Both handlers copy the 32-bit value at `0x00F2F3` into adjacent destinations (`0x007ED6` on
-receive, `0x007ED2` on transmit) on every non-error interrupt. What `0x00F2F3` counts is NOT
-ESTABLISHED; being read as a 32-bit value on every serial interrupt is what a free-running
-timestamp would look like.
+receive, `0x007ED2` on transmit) on every non-error interrupt.
+
+## ✅ ANSWERED, 2026-08-24: `0x00F2F3` counts INTT1 interrupts
+
+This note used to close with *"What `0x00F2F3` counts is NOT ESTABLISHED; being read as a
+32-bit value on every serial interrupt is what a free-running timestamp would look like."*
+It is a free-running timestamp, and the thing that runs it is **timer 1**.
+
+`INTT1_HANDLER` at `0xF99063` — now converted in `prom_c/wsa1_prom_c.s` — begins
+
+```
+	sub	xbc, xbc
+	inc	1, xbc
+	addl_da	0x00F2F3, xbc		; 0x00F2F3 += 1
+```
+
+and a census of every literal-addressed reference to it in prom_c shows this is the **only
+one of twenty-one that writes it**; the other twenty are `ld reg,(0x00F2F3)` or
+`pushw (0x00F2F3)`. Reproduce:
+
+```
+python3 notes/prom_c_xrefs.py 0x00F2F3 --no-window --classify
+```
+
+which ends with `TOTAL literal-addressed sites: 21`.
+
+> **⚠ CORRECTION, round 2 — this figure was NINETEEN and was wrong.** The census behind it
+> searched the 24-bit-direct spelling of the address only. TLCS-900 spells a direct memory
+> operand as `prefix = 0xC0 | (size << 4) | width`, where *width* 0/1/2 selects a 1-, 2- or
+> 3-byte address field — **twelve spellings of one address, not one**. `0x00F2F3` fits in 16
+> bits, so the `0xD1` (word, 16-bit-address) form encodes it too, and two sites use it:
+>
+> ```
+> f99fc2: d1 f3 f2 23   ld HL,(0xf2f3)
+> f99fcd: d1 f3 f2 21   ld BC,(0xf2f3)
+> ```
+>
+> Both are inside `Link_WaitDeviceIdle_500` (`0xF99FC1`, converted in round 2) and both are
+> **reads**, so the load-bearing conclusion — one writer, therefore this address counts INTT1
+> interrupts — survives; only the number was wrong. `notes/prom_c_xrefs.py` now sweeps all
+> twelve spellings and prints the total, and its docstring carries the encoding rule.
+> Re-censused with the fixed tool, the other addresses this tree quotes counts for —
+> `0x007ED1` (14), `0x00F32A` (3), `0x00F32B` (2) — are **unchanged**, because those are only
+> ever spelled 24-bit.
+
+Its boot value is **0** (`notes/FINDINGS-prom_c-ram-image.md`), so it really does count from
+reset. ⚠ Two limits remain: no search here can see a write through a **pointer register**;
+and the timer-1 **rate** is still unknown, because `Timer1_SetPeriodAndStart` (`0xF990FA`)
+writes TREG1 but nothing located so far writes T01MOD. So the two serial handlers stamp each
+byte with a monotonic tick count whose *unit* is not established.
+
+One thing the tick number does buy immediately: `sub_F9915C`'s guard `cp XBC,0x000000FA`
+means "250 ticks after reset", not "250 of something else".
 
 ## The other three handlers converted in this pass
 
@@ -73,8 +123,19 @@ same way and also special-cases 0xE1/0xE2/0xE3 — but it is **not** byte-identi
 and it dispatches with a chain of compares rather than a table. The command numbers agreeing
 across the two machines is suggestive; it is not proof that they mean the same thing.
 
-## Vectors still not converted
+## Vectors still not converted — none, as of 2026-08-24
 
-`INT4` (0x2C → `0xF995C2`), `INTT1` (0x44 → `0xF99063`, a 6-way jump table at `0xF990C8`) and
-`INTT3` (0x4C → `0xF98165`) are still inside `.incbin`. `INTT1` is the obvious next one: its
-dispatch table is already located and its body is a run of `set n,(0x007ED1)` bit-setters.
+The previous version of this section said `INT4`, `INTT1` and `INTT3` were still inside
+`.incbin` and picked `INTT1` as the obvious next one. All three are now converted:
+
+| vector | handler | what it turned out to be |
+|---|---|---|
+| `INT4` 0x2C | `0xF995C2` | a bare `RETI`, like `INTT2`. Nothing in the converted code arms a micro-DMA channel on it, so unlike `INTT2` there is no explanation for why it is armed. |
+| `INTT1` 0x44 | `0xF99063` | the tick counter above, plus a **six-phase** work schedule posted into `0x007ED1`. The 6-way table at `0xF990C8` was correctly located; the count is fixed twice over, by `cps bc,5 / jr ugt` and by the table's 24 bytes ending exactly on the next instruction. |
+| `INTT3` 0x4C | `0xF98165` | two instructions — increment `0x000090`, then `jrl 0xF9831C`, which is where the `reti` lives. Timer 3 is started by `Timer3_Init` at `0xF98B6D` with TREG3 = 0x2E. |
+
+**And the consumer of the schedule is converted too.** `MAIN` at `0xF98B7D` test-and-clears
+bits 4, 5 and 3 of `0x007ED1`, one pair each. Those six sites plus `INTT1_HANDLER`'s eight
+`set` instructions are ALL fourteen references to `0x007ED1` in prom_c
+(`python3 notes/prom_c_xrefs.py 0x007ED1 --no-window`), which leaves a real gap: ⚠ INTT1
+also sets bits **6 and 7**, and nothing that names `0x007ED1` outright ever reads them.

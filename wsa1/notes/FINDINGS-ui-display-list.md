@@ -10,11 +10,24 @@ interpreter at `0xF31A09` in prom_b.
 
 | range | bytes | what |
 |---|---:|---|
-| `0xF31800-0xF32708` | 3,849 | the interpreter, its two handler tables, its quantiser, 29 value glyphs and 3 fixed bitmaps |
+| `0xF31800-0xF32708` | 3,849 | both interpreters, their two handler tables, the quantiser, 29 value glyphs and 3 fixed bitmaps |
 | 129 spans in `0xF01800-0xF3E15B` | 39,329 | the display lists themselves, as records |
+| 13 gaps between those spans | 999 | the operand tables the records point at (added 2026-08-24) |
+
+⚠ There are **two** interpreters, not one. `0xF31A09` (bound `0x24`, table
+`0xF31D21`) draws what the record says; `0xF31AF0` (bound `0x0F`, table
+`0xF31DB1`) draws what a live variable says. They share the `(opcode, length)`
+header and nothing else, and until 2026-08-24 every record here was rendered with
+the first one's field layout — including the 494 that only the second ever runs.
+That is now fixed, and it is what resolved the "341 length-rule violations".
+Read `FINDINGS-ui-display-list-interpreter-b.md` next.
 
 **Reproduce:**
-`python3 scripts/analysis/prom_b_display_lists.py --summary`
+```
+python3 scripts/analysis/prom_b_display_lists.py --summary   # merged spans
+python3 notes/prom_b_dl_length_audit.py --edges              # per interpreter
+python3 notes/prom_b_dl_operand_tables.py --exact            # the 13 gaps
+```
 
 ---
 
@@ -52,24 +65,43 @@ references); `T_F417F4`, the second interpreter, is second (269).
 ## Four independent checks, all of which pass
 
 1. **Framing.** Walking the length bytes from a call site's start address must
-   land *exactly* on that call site's end address. It does for the large majority (⚠ the figure **243 of 244** quoted here until 2026-08-24
-   is reproduced by no committed artefact: `prom_b_display_lists.py --summary` prints
-   129 framed / 5 not framed over 134 merged spans, and un-merged distinct (start,end)
-   pairs give 401/406. The conclusion survives; the number was not derived by the script
-   that is cited for it.) It lands exactly for
-   prom_b lists.
+   land *exactly* on that call site's end address.
+   ✅ **RESTORED 2026-08-24.** The figure **243 of 244** is correct after all: it
+   is the count for INTERPRETER A's call sites, walked UN-MERGED.
+   `python3 notes/prom_b_dl_length_audit.py` prints
+   `sites in prom_b that FRAME: A 243 of 244, B 158 of 162 ... that do NOT frame: 5`.
+
+   ⚠ **CORRECTED 2026-08-25, twice over.** (a) This paragraph called
+   `prom_b_dl_length_audit.py` "a committed script". It is **not committed** —
+   the prom_b lane is forbidden to commit, so it is an untracked working-tree
+   file, and every figure resting on it is one `git clean` from unreproducible.
+   (b) The denominators **244** and **162** used to be the reader's own addition
+   of `243 + 1` and `158 + 4`; the script printed only the numerators. It now
+   prints both denominators itself, so the sentence above quotes its output
+   verbatim. The `129 framed / 5 not framed` the
+   committed summary prints is the same thing after merging overlapping sites
+   into spans, which is why the two disagree. The five sites that do not frame
+   are dissected in `FINDINGS-ui-display-list-interpreter-b.md`, and one of them
+   (`0xF3B651`) turns out not to be a defect at all.
 2. **Operand counts.** The handler table at `0xF31D21` has 36 entries — exactly
-   the `0x24` bound. Each handler reads a fixed number of operand bytes. Every
-   opcode whose handler implies a fixed record length has exactly that length
-   byte in the great majority of records -- but **NOT without exception**.
-   ⚠ CORRECTED 2026-08-24: an audit re-ran the check and found **341 of 4,011 walked
-   records violate it**, across 7 opcodes (op02 x175, op03 x63, op05 x62, op09 x27,
-   op0B x8, op0A x3, op04 x3). The sharpest class is 66 records where the handler reads
-   PAST the declared length: handler 0xF31ABE reads (XIY+0x02)..(XIY+0x0B), 12 bytes,
-   yet 63 op-03 and 3 op-04 records declare length 11. op 0x0B always declares 13
-   against an implied 6. The record framing still walks correctly, so the DECODE stands;
-   what does not stand is 'zero exceptions', and the committed script never implemented
-   this check at all -- main() only runs walk().
+   the `0x24` bound. Each handler reads a fixed number of operand bytes, and
+   every record carries exactly the matching length byte — **with zero
+   exceptions**, once each record is judged by the interpreter that runs it.
+   ⚠ CORRECTED 2026-08-24, then RESOLVED the same day. An audit found **341 of
+   4,011 walked records violating** the rule (op02 x175, op03 x63, op05 x62,
+   op09 x27, op0B x8, op0A x3, op04 x3), including 66 that appeared to be read
+   PAST their declared length. **Every one of them is an interpreter-B record
+   measured against interpreter A's field layout.** There are two interpreters;
+   they share the `(opcode, length)` header and nothing else. Judged by the
+   owning interpreter: 3,603 A records, 0 exceptions; 494 B records, 0
+   exceptions; 0 records reached by both. The 66 "reads past the end" were
+   interpreter-B op-03/op-04 records, whose handlers `0xF31B57`/`0xF31B86` touch
+   `+0x0A` and therefore imply 11 — exactly their declared length. `op 0B`
+   declares 13 because interpreter B's signed field extractor reads its sign flag
+   from `(XIY+0x0C)` for that one opcode. Argument and reproduction command:
+   `FINDINGS-ui-display-list-interpreter-b.md`.
+   ⚠ The committed script still does not implement this check — its `main()` only
+   runs `walk()`. The check lives in `notes/prom_b_dl_length_audit.py`.
 3. **The opcode is the system-call number.** Handler `0xF31A3A` does
    `ld A,(XIY)` then `swi 7`. prom_a's SWI7 vector (`0xFFFF1C`) is `0x00F400A4`
    = thunk `T_F400A4` in this image → prom_a `0xF8E9A5`, which masks `A` with
@@ -183,20 +215,37 @@ the result to the `+7` pointer, then reads four 16-bit words from it into
 `(0x2530..0x2536)` — an array of 8-byte records indexed by the extracted field.
 `0xF31B86` does `mul HL,6` on the same pointer — an array of 6-byte records.
 
-⚠ **Not established:** what the individual opcodes mean, which variables the
-`+2` addresses are, and whether every record uses every field. Interpreter B's
-lists are therefore still `.incbin`; this layout is what the next pass should
-test them against.
+✅ **UPDATED 2026-08-24.** Interpreter B's lists are no longer `.incbin`, and no
+longer rendered with interpreter A's layout: every record is attributed to its
+interpreter and emitted with that interpreter's fields. The per-opcode field map
+and implied length for all ten of B's handlers is in
+`FINDINGS-ui-display-list-interpreter-b.md`. The summary is that B draws one of
+three things — a decimal number via the converter at prom_a `0xF8BCD7`, the n-th
+entry of a string table, or the n-th entry of a 6- or 8-byte parameter array.
+
+⚠ Still **not established:** which RAM variables the `+2` addresses are, and what
+each `swi 7` function draws.
 
 ## What was left alone, and why
 
-Five prom_b spans fail the framing check and stay `.incbin`:
-`0xF286B8-0xF286E4`, `0xF286F9-0xF28750`, `0xF287C1-0xF287CB`,
-`0xF29710-0xF2972E`, `0xF3B3DA-0xF3B6D3`. Four of the five are entered only
-through `T_F417F4`, i.e. they belong to the second interpreter. `0xF287C1` is
-ten bytes reading `2F 00 84 00 99 00 8F 00 36 00` — five 16-bit words, out of
-range for either opcode space; the call site that names it may be a false
-positive of the byte-level scan.
+⚠ **CORRECTED 2026-08-24.** The five ranges listed here until then
+(`0xF286B8-0xF286E4`, `0xF286F9-0xF28750`, `0xF287C1-0xF287CB`,
+`0xF29710-0xF2972E`, `0xF3B3DA-0xF3B6D3`) were MERGED spans, so three of them
+name many more bytes than the call site that actually fails. The five failing
+CALL SITES are `0xF286B8-0xF286E4` (B), `0xF28724-0xF28750` (B),
+`0xF287C1-0xF287CB` (A), `0xF29710-0xF2972E` (B) and `0xF3B651-0xF3B65B` (B).
+
+All five are genuine `ld XIY,imm32 / ld XIX,imm32 / call` triples at instruction
+boundaries — each was disassembled in context — so "the call site that names it
+may be a false positive of the byte-level scan" is **withdrawn**. `0xF3B651`
+runs correctly on the real interpreter: its single record over-declares its
+length by one byte and the loop's `cp XIX,XIY / jr ULE` absorbs that. The other
+four start inside data that a neighbouring, correctly framing record points at.
+See `FINDINGS-ui-display-list-interpreter-b.md`.
+
+Merging costs one real span: sites `0xF286F9-0xF28725` (frames, 4 records) and
+`0xF28724-0xF28750` (does not) merge into a span that does not, so four good
+records at `0xF286F9` are still `.incbin`.
 
 The display lists in **prom_a** (54 merged spans, 5,140 bytes, from `0xFC40B4` to `0xFF17E2`) are
 in another agent's image and were not touched. They use the same interpreter and

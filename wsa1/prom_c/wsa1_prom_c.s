@@ -16,12 +16,38 @@
 ; side, 0x7C0000 on CPU 1's).  See notes/FINDINGS-memory-map.md.
 ;
 ; STATUS: partially converted.  Converted so far, as real assembly / decoded data:
+;   0xF98000-0xF980E9  the four channel-register writers for the device at
+;                      0x00E00000.  Two of them are byte-identical to the KN5000
+;                      sub-CPU's, and the ONE byte that differs is the peripheral
+;                      base address
+;   0xF980EA-0xF9810D  EntryPoint_Records -- three {entry, stack, ?} records
+;   0xF98112-0xF9816A  the endless DSP refresh entry point, and INTT3
+;   0xF98B20-0xF98CB8  ★ CPU 2's MAIN LOOP and its four helpers.  This is what
+;                      consumes the work bits INTT1 posts
+;   0xF989EF-0xF98A0A  RamImage_Copy -- the 4,312-byte boot copy that gives every
+;                      CPU-2 variable a known default (notes/FINDINGS-prom_c-ram-image.md)
+;                      -- and ADC_Init
+;   0xF99063-0xF990F9  INTT1 -- the tick counter and the six-phase scheduler
+;   0xF990FA-0xF991FE  timer 1, the 0x108000 preload, the UART init (this is the
+;                      routine notes/FINDINGS-system-clock.md argues from), and
+;                      the MIDI receive dequeue
 ;   0xF991FF-0xF992A6  INTRX0 / INTTX0 -- the serial-channel-0 handlers.  SC0 is
 ;                      the MIDI port; the argument is in the headers there and in
 ;                      notes/FINDINGS-prom_c-serial-midi.md
-;   0xF99BBE-0xF99C11  INT0 -- the CPU-1 link command dispatcher + its jump table
-;   0xF99CFE-0xF99D6E  INTTC2 / INTTC3 -- micro-DMA completion + its jump table
+;   0xF99598-0xF9973C  ★ the TOUCH-to-VELOCITY path -- the consumer that proves
+;                      the zone-2 touch tables' record size, row count, pivot,
+;                      divisor and black-key column -- plus INT4 and two setters
+;   0xF99BBE-0xF99CFD  ★ INT0 -- the CPU-1 link command dispatcher, its jump
+;                      table AND all seven command arms
+;   0xF99CFE-0xF99E5D  ★ INTTC2 / INTTC3 -- micro-DMA completion, the 9-entry
+;                      state table AND all nine state arms.  Together with the
+;                      INT0 arms this is the whole receive half of the
+;                      inter-processor link state machine
 ;   0xF99E5E           INTT2 -- a one-instruction handler
+;   0xF99FC1-0xF9A04F  Link_WaitBlockDone, the seven micro-DMA control-register
+;                      helpers and the compiler's block move.  The last eight are
+;                      byte-identical to prom_a's, which is where their names
+;                      come from
 ;   0xFCC53F-0xFCD0F6  touch / EQ / mixer-gain / descriptor-string zone, 15
 ;                      objects, 3,000 bytes (616 of them a deliberate .incbin)
 ;   0xFDD2AB-0xFDF7DF  the voice / DSP data-table zone -- 43 tables, 9,525 bytes,
@@ -51,10 +77,1138 @@
 	.include "include/tmp95c061_sfr.inc"
 
 ; ==============================================================================
-; 0xF80000-0xFCC53E -- not yet converted
+; 0xF80000-0xF97FFF -- not yet converted
 ; ==============================================================================
 wsa1_prom_c:
-	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x000000, 0x0191FF
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x000000, 0x018000
+
+; ==============================================================================
+; 0xF98000-0xF980E9 -- the channel-register writers for the device at 0x00E00000
+; ==============================================================================
+;
+; Four routines, 234 bytes, all four of them drivers for the SAME two-register
+; port.  They are the only converted code in this image that touches it.
+;
+; ★ THE PORT, READ OFF THIS CODE ALONE.  0x00E00000 is an ADDRESS/DATA PAIR:
+; +0 takes a register number, +2 takes that register's value.  The proof is the
+; loop at 0xF9805E, which writes A to (XBC), a byte to (XBC+0x02), and then
+; INCREMENTS A once per data byte -- there is no reading of that in which +0 is
+; anything but a register selector.  DSP_WriteChannelRegs_Inner says the same
+; thing eight times unrolled.
+;
+; ★ EACH CHANNEL OWNS 32 REGISTERS, AND ITS DATA BLOCK IS AT +0x10.  Both writers
+; compute the first register number the same way:
+;       sll 0x05,A      ; channel * 0x20
+;       set 0x04,A      ; + 0x10
+; so channel n's eight data bytes land in registers n*0x20+0x10 .. n*0x20+0x17.
+; DSP_ChannelRegs_Init then writes n*0x20+0x1F as well -- the last register of
+; each channel's window -- with the constant 0x01.  There are FOUR channels: each
+; of the three routines that walks them is unrolled or counted 0,1,2,3.
+;
+; ⚠ WHAT THE DEVICE IS, IS NOT ESTABLISHED HERE.  notes/FINDINGS-memory-map.md
+; already records 0x00E00000 as an address/data pair of unknown identity and
+; cites 0xF98057 for it.  The name "DSP" below is the SIBLING PROJECT'S name for
+; the device its own byte-identical code drives at ITS base address, and it is
+; used here only because two of these four routines are byte-identical to that
+; project's and it would be perverse to call the same bytes something else.  It
+; is a borrowed name, not a WSA1 finding.
+;
+; ★★ AND THE BORROWING HAS A LIMIT WORTH RECORDING.  The WSA1 register file is at
+; 0x00E00000; the KN5000 sub-CPU's is at 0x00130000.  In
+; DSP_WriteChannelRegs_Inner that is the ONLY difference in the whole 81-byte
+; routine -- 80 of 81 bytes are identical and the one that differs is a byte of
+; the base-address literal:
+;
+;   $ python3 notes/prom_c_sibling_map.py --addr 0xF98099 --len 81 --diff 0x1FD27
+;     80 of 81 bytes identical; 1 differ
+;       +0x00F  WSA1 0xF980A8 = 0xE0   KN5000 0x1FD36 = 0x13
+;
+; A header that had copied the sibling's comment across without running that
+; would have written 0x130000 -- a peripheral address that does not exist on this
+; machine -- into this tree, and the byte gate would never have noticed.
+;
+; --------------------------------------------------------------------------
+; DSP_ChannelRegs_Init -- zero all four channels' data registers, then arm them.
+;
+; Called from: 0xF98B95 (`call 0xF98000`), inside the power-on init chain that
+;              also calls 0xFB0504, 0xFC88A0, 0xFC8B9C, 0xF9993E, 0xF9919F and
+;              then reads the fc byte at 0xFFFFEF (0xF98BA0) -- i.e. this runs
+;              once at boot.  Found with notes/prom_c_xrefs.py 0xF98000.
+; Inputs:  none.
+; Outputs: registers n*0x20+0x10 .. +0x17 = 0 and register n*0x20+0x1F = 0x01,
+;          for n = 0..3, in the device at 0x00E00000.
+; Evidence: the eight zero bytes come from `xor xwa,xwa` stored twice into the
+;          8-byte stack buffer at (XIZ-8), whose address is then passed to
+;          DSP_ChannelRegs_Write8 four times with channel = 0,1,2,3.  The final
+;          loop writes XWA = 0x0101001F as a 32-bit store to the port with A
+;          stepping 0x1F, 0x3F, 0x5F, 0x7F.
+; Unknown:  what register 0x1F does.  Also: the 32-bit store puts the register
+;          number in BOTH byte +0 and byte +1 (`ld w,a` immediately before it)
+;          and 0x01 in both +2 and +3.  Whether +1 and +3 are the high halves of
+;          16-bit registers or ignored mirrors is NOT ESTABLISHED.
+; Sibling:  the same routine, instruction for instruction, is
+;          DSP_Init_Channels at KN5000 0x1FC95
+;          (../kn5000-roms-disasm/v142/subcpu/kn5000_subprogram_v142.s:396).
+;          ⚠ It is NOT byte-identical and must not be quoted as if it were: the
+;          KN5000 fills its buffer with the test pattern 0x5A5A5A5A where this
+;          one fills it with zero, which makes it five bytes longer and shifts
+;          everything after; and it passes the channel number in BC and the
+;          buffer pointer in XWA where this one passes both on the stack.  Run
+;          `notes/prom_c_sibling_map.py --addr 0xF98000 --len 0x4A --diff 0x1FC95`
+;          to see that only 12 of 74 bytes line up.
+; --------------------------------------------------------------------------
+DSP_ChannelRegs_Init:
+	link32	0xEE, 0x0C, 0xF8, 0xFF	; frame: 8 bytes of channel data
+	xor	xwa, xwa
+	ld	(xiz-8), xwa		; buffer[0..3] = 0
+	ld	(xiz-4), xwa		; buffer[4..7] = 0
+	lda	xiy, (xiz-8)		; XIY = &buffer
+	push	xiy
+	pushw	0x0000			; channel 0
+	calr	(0xF9804A - 0xF98016)	; DSP_ChannelRegs_Write8
+	push	xiy
+	pushw	0x0001			; channel 1
+	calr	(0xF9804A - 0xF9801D)
+	push	xiy
+	pushw	0x0002			; channel 2
+	calr	(0xF9804A - 0xF98024)
+	push	xiy
+	pushw	0x0003			; channel 3
+	calr	(0xF9804A - 0xF9802B)
+	add	xsp, 0x18		; drop 4 x (pointer + channel word)
+	ld	xbc, 0x00E00000		; the register port
+	ld	xwa, 0x0101001F		; A = register 0x1F, data 0x01
+	ldb	d, 0x04			; four channels
+DSP_ChannelRegs_Init__loop:
+	ld	w, a
+	ld	(xbc), xwa		; +0 = reg number, +2 = 0x01
+	add	a, 0x20			; next channel's window
+	djnz8	d, DSP_ChannelRegs_Init__loop
+	unlk32	xiz
+	ret
+
+; --------------------------------------------------------------------------
+; DSP_ChannelRegs_Write8 -- write 8 bytes into one channel's data registers.
+;
+; Called from: DSP_ChannelRegs_Init (four calr sites, 0xF98013/1A/21/28) and
+;              from 0xF98130, 0xF9813F, 0xF9814E, 0xF9815D, which are the four
+;              calls inside DSP_ChannelRefresh_Loop (0xF98118, converted below --
+;              an interrupt-disabled endless loop that is the third entry in
+;              EntryPoint_Records).  notes/prom_c_xrefs.py 0xF9804A.
+; Inputs:  (XSP+4) = channel number 0..3, (XSP+6) = pointer to 8 bytes.
+;          Caller-cleaned: every call site drops 6 bytes afterwards.
+; Outputs: registers channel*0x20+0x10 .. +0x17 of the device at 0x00E00000.
+; Evidence: `sll 0x05,A` + `set 0x04,A` on the stacked channel number forms the
+;          base register; `ldb_spi e,0xF4` is `ld E,(XIY+)`, a post-incrementing
+;          byte fetch, and D = 8 counts the loop.
+; Unknown:  nothing about the loop; what the eight registers mean is not
+;          determined by this routine.
+; Sibling:  corresponds to DSP_Write_Channel at KN5000 0x1FCDE
+;          (kn5000_subprogram_v142.s:439), which has the same body but takes its
+;          arguments in registers.  NOT byte-identical -- see the diff quoted in
+;          the block comment above.
+; --------------------------------------------------------------------------
+DSP_ChannelRegs_Write8:
+	ld	a, (xsp+4)		; channel number
+	ld	xiy, (xsp+6)		; source pointer
+	pushw	de
+	sll	a, 5			; channel * 0x20
+	set	4, a			; + 0x10 -> first data register
+	ld	xbc, 0x00E00000
+	ldb	d, 0x08			; eight registers
+DSP_ChannelRegs_Write8__loop:
+	ld	(xbc), a		; select register A
+	ldb_spi	e, 0xF4			; ld E,(XIY+)
+	ld	(xbc+2), e		; write its value
+	inc	1, a
+	djnz8	d, DSP_ChannelRegs_Write8__loop
+	popw	de
+	ret
+
+; --------------------------------------------------------------------------
+; DSP_WriteAllChannelRegs -- write the caller's registers into all four channels.
+;
+; Called from: NOT TRACED.  notes/prom_c_xrefs.py finds no absolute literal and
+;              no calr displacement anywhere in prom_c that reaches 0xF9806D, and
+;              that tool does not search the short PC-relative forms, so this is
+;              "not found", not "unreferenced".
+; Inputs:  XBC and XDE hold four of the eight bytes for channel 1; the previous
+;          register bank's QBC/QDE hold the other four (the inner routine reads
+;          them).  XIZ, XWA/XHL and XIX/XIY supply channels 0, 2 and 3.
+; Outputs: 32 registers -- eight in each of channels 0..3.
+; Evidence: ★ BYTE-IDENTICAL, all 44 bytes, to the KN5000 sub-CPU routine of this
+;          name at 0x1FCFB (kn5000_subprogram_v142.s:462).  Checked with
+;          `python3 notes/prom_c_sibling_map.py --sym DSP_WriteAllChannelRegs`,
+;          which reports the same 44 bytes at prom_a 0xF85F7C as well -- BOTH
+;          WSA1 processors carry this routine.
+;          Structure independent of the sibling: four calls to 0xF98099, each
+;          preceded by `pushw n` for n = 1,0,2,3, and `inc 8,xsp` at the end
+;          drops exactly those four words.
+; Unknown:  why the channel order is 1,0,2,3 rather than 0,1,2,3.  The sibling
+;          has the same order, so it is not a WSA1 quirk.
+; --------------------------------------------------------------------------
+DSP_WriteAllChannelRegs:
+	push	xbc
+	push	xde
+	pushw	0x0001			; channel 1 first
+	calr	(0xF98099 - 0xF98075)	; DSP_WriteChannelRegs_Inner
+	ld	xbc, (xsp+10)		; the XBC pushed on entry
+	ld	xde, xiz
+	pushw	0x0000			; channel 0
+	calr	(0xF98099 - 0xF98080)
+	ld	xbc, xwa
+	ld	xde, xhl
+	pushw	0x0002			; channel 2
+	calr	(0xF98099 - 0xF9808A)
+	ld	xbc, xix
+	ld	xde, xiy
+	pushw	0x0003			; channel 3
+	calr	(0xF98099 - 0xF98094)
+	inc	8, xsp			; drop the four channel words
+	pop	xde
+	pop	xbc
+	ret
+
+; --------------------------------------------------------------------------
+; DSP_WriteChannelRegs_Inner -- write eight registers of ONE channel, unrolled.
+;
+; Called from: DSP_WriteAllChannelRegs, four calr sites (0xF98072/7D/87/91).
+; Inputs:  (XSP+12) = channel number 0..3 (pushed by the caller).
+;          Data: C, B, then QBC's C and B from the previous register bank, then
+;          E, D, then QDE's C and B.  Eight bytes, in that order.
+; Outputs: registers channel*0x20+0x10 .. +0x17 of the device at 0x00E00000.
+; Evidence: ★ 80 of its 81 bytes are identical to the KN5000 sub-CPU's
+;          DSP_WriteChannelRegs_Inner at 0x1FD27 (kn5000_subprogram_v142.s:492).
+;          The single differing byte is 0xF980A8, inside the base-address
+;          literal: 0x00E00000 here, 0x00130000 there.  Reproduce with
+;          `python3 notes/prom_c_sibling_map.py --addr 0xF98099 --len 81 --diff 0x1FD27`.
+;          The address/data structure is independently visible here: eight
+;          (write A to +0, write a byte to +2, inc A) triples.
+; Unknown:  what the eight registers hold.  `ld bc,qbc` and `ld bc,qde` reach the
+;          PREVIOUS register bank, so two of the eight bytes come from whatever
+;          the caller of DSP_WriteAllChannelRegs had in QBC/QDE -- and that
+;          caller has not been found (see above), so the data's origin is open.
+; --------------------------------------------------------------------------
+DSP_WriteChannelRegs_Inner:
+	push	xiy
+	pushw	wa
+	pushw	bc
+	ld	a, (xsp+12)		; channel number
+	sll	a, 5			; * 0x20
+	set	4, a			; + 0x10
+	ld	xiy, 0x00E00000		; ⚠ KN5000 has 0x00130000 here -- the one byte
+	ld	(xiy), a		; register +0x10
+	ld	(xiy+2), c
+	inc	1, a
+	ld	(xiy), a		; +0x11
+	ld	(xiy+2), b
+	inc	1, a
+	ld	(xiy), a		; +0x12
+	ld	bc, qbc			; previous register bank
+	ld	(xiy+2), c
+	inc	1, a
+	ld	(xiy), a		; +0x13
+	ld	(xiy+2), b
+	inc	1, a
+	ld	(xiy), a		; +0x14
+	ld	(xiy+2), e
+	inc	1, a
+	ld	(xiy), a		; +0x15
+	ld	(xiy+2), d
+	inc	1, a
+	ld	(xiy), a		; +0x16
+	ld	bc, qde			; previous register bank
+	ld	(xiy+2), c
+	inc	1, a
+	ld	(xiy), a		; +0x17
+	ld	(xiy+2), b
+	popw	bc
+	popw	wa
+	pop	xiy
+	ret
+
+; ----------------------------------------------------------------------------
+; EntryPoint_Records -- 0xF980EA..0xF9810D  (36 bytes)
+;
+; THREE 12-byte records, {code address, low-RAM address, constant}.  The shape is
+; not asserted from the shape alone -- each column is checked:
+;
+;   * column 1 holds 0x00F98B7D, 0x00FA54DB and 0x00F98118.  The first is MAIN,
+;     converted below, and the third is the top of DSP_ChannelRefresh_Loop at 0xF98118
+;     (`di` then `link XIZ,0xfffc`).  Both are real entry points; neither is the
+;     middle of an instruction.
+;   * column 2 holds 0x0000FFF0, 0x0000F980 and 0x0000F480 -- three descending
+;     addresses in the top of CPU 2's work DRAM.  0x0000FFF0 is EXACTLY the value
+;     RESET installs in XSP (`ld XSP,0x0000FFF0`, in the boot block at the bottom
+;     of this file).
+;   * column 3 holds 0x00028800, 0x00028800 and 0x00018800 -- the same low half
+;     throughout, and a high half of 2, 2, 1.
+;
+; So the natural reading is {entry point, initial stack pointer, something}.
+; ⚠ IT IS ONLY A READING.  Nothing in prom_c refers to 0xF980EA -- neither a
+; literal nor a calr displacement (notes/prom_c_xrefs.py) -- so the consumer that
+; would settle it has not been found, and the third column is not decoded at all.
+; The record COUNT is three because the word after the third record, 0x01010001,
+; is not a code address in this image and the run of plausible records stops
+; there; that is an argument from the data, and a weaker one than a bound check.
+; ----------------------------------------------------------------------------
+EntryPoint_Records:
+	.long	0x00F98B7D, 0x0000FFF0, 0x00028800	; MAIN
+	.long	0x00FA54DB, 0x0000F980, 0x00028800
+	.long	0x00F98118, 0x0000F480, 0x00018800	; DSP_ChannelRefresh_Loop
+
+; ==============================================================================
+; 0xF9810E-0xF98111 -- not yet converted
+; ==============================================================================
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x01810E, 0x000004
+
+; ==============================================================================
+; 0xF98112-0xF9816A -- the DSP refresh entry point, and INTT3
+; ==============================================================================
+; --------------------------------------------------------------------------
+; sub_F98112 -- calls 0xF983DC with A = 2.  NOT NAMED: 0xF983DC is unconverted.
+;
+; Called from: not found.
+; Inputs:  none.  Outputs: whatever 0xF983DC does with A = 2.
+; Evidence: three instructions, no memory touched.  It is listed only because it
+;          is the piece of code between the entry-point table and the refresh
+;          loop, and leaving a three-instruction routine inside an .incbin while
+;          converting both its neighbours would hide a boundary.
+; Unknown:  everything else.
+; --------------------------------------------------------------------------
+sub_F98112:
+	ldb	a, 2
+	calr	(0xF983DC - 0xF98117)
+	ret
+
+
+; --------------------------------------------------------------------------
+; DSP_ChannelRefresh_Loop -- reload all four channel-register blocks, for ever.
+;
+; Called from: NOTHING calls it.  Its address, 0xF98118, is the code field of the
+;              THIRD record of EntryPoint_Records at 0xF980EA (converted above),
+;              paired there with the stack pointer 0x0000F480.  That is the only
+;              reference to it in prom_c.
+; Inputs:  four buffers in work DRAM: 0x00006612 (used TWICE, for channels 0 and
+;          2), 0x00000100 (channel 1) and 0x00000108 (channel 3).
+; Outputs: it never returns.  Each pass calls 0xF985F8 with the argument 3, then
+;          DSP_ChannelRegs_Write8 four times.
+; Evidence: the loop is closed by an unconditional `jr` to 0xF9811E, which is
+;          INSIDE the frame the `link32` at 0xF9811A opened -- so the frame is
+;          built once and the loop runs below it, which is what an entry point
+;          looks like and not what a subroutine looks like.  It also starts by
+;          disabling interrupts (`di`, MAME's `ei 0x00`) and never re-enables
+;          them.
+;          The four calls are DSP_ChannelRegs_Write8 (0xF9804A), converted above:
+;          each is `push pointer / pushw channel / call / inc 6,xsp`, matching
+;          that routine's stack arguments exactly.
+; Unknown:  ⚠ what this is FOR.  An interrupt-disabled endless loop that
+;          rewrites the same 32 registers from fixed buffers is what a bench test
+;          or a fallback mode looks like; nothing here says which, and the
+;          machinery that would choose this entry point over MAIN has not been
+;          found.  Reusing 0x6612 for channels 0 and 2 is recorded as observed.
+; --------------------------------------------------------------------------
+DSP_ChannelRefresh_Loop:
+	di
+	link32	0xEE, 0x0C, 0xFC, 0xFF
+DSP_ChannelRefresh_Loop__top:
+	pushw	0x0003
+	call	0xF985F8
+	inc	2, xsp
+	ldw	iy, 0x6612
+	extz	xiy
+	push	xiy
+	pushw	0x0000
+	call	0xF9804A
+	inc	6, xsp
+	ld	xiy, 0x00000100
+	push	xiy
+	pushw	0x0001
+	call	0xF9804A
+	inc	6, xsp
+	ldw	iy, 0x6612
+	extz	xiy
+	push	xiy
+	pushw	0x0002
+	call	0xF9804A
+	inc	6, xsp
+	ld	xiy, 0x00000108
+	push	xiy
+	pushw	0x0003
+	call	0xF9804A
+	inc	6, xsp
+	jr	DSP_ChannelRefresh_Loop__top
+
+
+; --------------------------------------------------------------------------
+; INTT3_HANDLER -- timer-3 ISR: bump a counter, then jump into the shared tail.
+;
+; Called from: vector table offset 0x4C (INTT3), which holds 0x00F98165 directly
+;              -- one of the four vectors (with INT4, INTRX0 and INTTX0) that do
+;              not go through the trampoline block at 0xFFF0A2.
+; Inputs:  none.
+; Outputs: the byte at 0x000090 is incremented; control passes to 0xF9831C.
+; Evidence: two instructions and no `reti`.  The `jrl` target at 0xF9831C DOES
+;          end in `reti` on one path (0xF98325, after `ldc WA,<control reg>` and
+;          `cp WA,1`) and on the other pushes seven register pairs and `jrl`s
+;          away again -- so the return from interrupt is delegated, and this
+;          handler is the head of something larger that is NOT converted here.
+;          Timer 3 is the one Timer3_Init programs (TREG3 = 0x2E), so this fires
+;          at a fixed rate from shortly after boot.
+; Unknown:  ⚠ what 0x000090 counts, and what 0xF9831C decides.  The `ldc`
+;          instruction there reads a CPU control register that MAME's
+;          disassembler prints as `unknown`, so even the test is not readable
+;          without a databook.  Naming this handler after a guess at the tail
+;          would be exactly the mistake this tree has already had to retract, so
+;          it keeps the vector's name and nothing more.
+; --------------------------------------------------------------------------
+INTT3_HANDLER:
+	extpfx3	0xC0, 0x90, 0x61
+	jrl	(0xF9831C - 0xF9816B)
+
+; ==============================================================================
+; 0xF9816B-0xF989EE -- not yet converted
+; ==============================================================================
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x01816B, 0x000884
+
+; ==============================================================================
+; 0xF989EF-0xF98A0A -- the boot RAM image, and the A/D mode register
+; ==============================================================================
+; --------------------------------------------------------------------------
+; RamImage_Copy -- install CPU 2's variable block from ROM.
+;
+; Called from: RESET, `call 0xF989EF`, as its last act before jumping to the main
+;              entry.  Only site (notes/prom_c_xrefs.py 0xF989EF).
+; Inputs:  none.
+; Outputs: ★ RAM 0x00E2DF-0x00F3B6 = ROM 0xFCB4EA-0xFCC5C1.  4,312 bytes.
+; Evidence: the three loads are the three operands of the `ldir` that follows:
+;          XIY = source, XIX = destination, BC = count.  That XIX is the
+;          DESTINATION and XIY the SOURCE is not a convention picked here -- MAME
+;          decodes the 0x85 prefix by setting the LDIR destination pointer from
+;          `opcode - 1` and the source from the opcode, giving XIX and XIY
+;          (mame/src/devices/cpu/tlcs900/900tbl.hxx:5435-5437, op_LDIR at :2495).
+;          `ld XBC,0x000010D8` puts 0x10D8 = 4312 in BC, which is what op_LDIR
+;          counts down.
+;          ⚠ THIS CORRECTS THE RESET LISTING, which said "0xD8-byte table".
+;          Consequences, and the boot value of every variable in the window, are
+;          in notes/FINDINGS-prom_c-ram-image.md; `python3
+;          notes/prom_c_ram_image.py` re-reads these four instructions and
+;          refuses to print anything if they are not exactly these bytes.
+; Unknown:  whether the last 131 bytes of the source -- which overlap the data
+;          zone's first four objects at 0xFCC53F -- are meant as part of the image
+;          or are an overrun.  Two of the corresponding RAM addresses are written
+;          at runtime (0xFA561C, 0xFA2DD4), which argues for "meant"; the note
+;          leaves it open.
+; --------------------------------------------------------------------------
+RamImage_Copy:
+	lda_24	xiy, 0x00FCB4EA
+	lda_24	xix, 0x00E2DF
+	ld	xbc, 0x000010D8
+	extpfx2	0x85, 0x11
+	ret
+	.byte	0x0E
+
+; --------------------------------------------------------------------------
+; ADC_Init -- write 0x3F to the A/D mode register.
+;
+; Called from: 0xF98B9D (`calr 0xF98A02`), in MAIN's init chain.
+; Inputs:  none.  Outputs: ADMOD = 0x3F.
+; Evidence: 0x6D is ADMOD in include/tmp95c061_sfr.inc, whose names come from
+;          MAME's symbol table for this exact part.  The routine does nothing
+;          else.
+; Unknown:  ⚠ what 0x3F selects.  MAME does not decode ADMOD and no databook is
+;          available in these trees, so the value is recorded, not read.  What
+;          the A/D converter is wired to on this board is likewise unknown --
+;          the INTAD vector (0x70) points at IRQ_UNUSED, so whatever it measures
+;          is polled, not interrupt-driven.
+; --------------------------------------------------------------------------
+ADC_Init:
+	ldw	bc, ADMOD
+	exts	xbc
+	ld	(xbc), 0x3F
+	ret
+
+; ==============================================================================
+; 0xF98A0B-0xF98B1F -- not yet converted
+; ==============================================================================
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x018A0B, 0x000115
+
+; ==============================================================================
+; 0xF98B20-0xF98CB8 -- CPU 2's MAIN LOOP and the four helpers in front of it
+; ==============================================================================
+;
+; This is the routine everything else in this image hangs off: the power-on init
+; chain, then a loop that never returns.  It is also the CONSUMER of the work byte
+; the INTT1 scheduler posts into -- which is what makes the scheduler at 0xF99063
+; readable at all.
+;
+; ★ THE LOOP BODY, in order, all of it visible below:
+;     1. drain the MIDI receive queue into a 32-byte frame buffer at (XIZ-42),
+;        stopping on the 0xFFFF empty sentinel or at 32 bytes;
+;     2. if anything was received, hand the buffer to 0xF9997E with the length
+;        and the constant 6 -- the same routine, and the same argument shape, that
+;        the 0xF98CB9 helper calls with the constant 5;
+;     3. test-and-clear bit 4 of 0x007ED1, and on it step a counter at 0x00E2DF
+;        with period 14, decrement a countdown at 0x00F2F1, and act on the latch
+;        at 0x007ECC.  ⚠ The period is 14, not 13: the counter is incremented
+;        and STORED first, and the comparison `cp HL,0x000c` is against the value
+;        BEFORE the increment, so 13 is reached and only then cleared;
+;     4. test-and-clear bit 5, and on it call 0xF98A75;
+;     5. test-and-clear bit 3, and on it call sub_F9915C;
+;     6. call 0xF98CB9, then 0xFB060A and 0xF994E4;
+;     7. `jrl` back to step 1.  Unconditionally -- the `unlk32`/`ret` after it
+;        cannot be reached.
+;
+; ★ THE SCHEDULER'S BITS ARE CONSUMED HERE AND NOWHERE ELSE.  Together with the
+; eight `set` instructions in INTT1_HANDLER these six sites are ALL fourteen
+; references to 0x007ED1 in prom_c
+; (`python3 notes/prom_c_xrefs.py 0x007ED1 --no-window`).  Each of the three is a
+; matched test/clear pair on bits 4, 5 and 3 -- and INTT1 also sets bits 6 and 7,
+; which nothing here reads.  That asymmetry is recorded in the INTT1 header and is
+; still unexplained.
+;
+; ⚠ The three bit tests are written as `and C,mask / srl n,C / cps C,0`, i.e. the
+; bit is isolated, shifted down to bit 0 and compared -- not `bit`.  Nothing turns
+; on that; it is noted because it is what makes the mask and the shift agree and
+; therefore what makes the bit NUMBER unambiguous.
+;
+; --------------------------------------------------------------------------
+; Link_SendBuffer -- forward (length, tag, pointer) to the link sender 0xF9997E.
+;
+; Called from: THIRTEEN sites -- 0xF98AC6 and 0xF98B18 (calr), plus eleven
+;              `call`s at 0xF9953D, 0xF99567, 0xF99589, 0xFC1FBC, 0xFC2064,
+;              0xFC2155, 0xFC2246, 0xFC237D, 0xFC2425, 0xFC24EB and 0xFC25F5.
+;              `python3 notes/prom_c_xrefs.py 0xF98B20 --no-window`.
+; Inputs:  (XIZ+0x08) byte, (XIZ+0x0a) word, (XIZ+0x0c) long -- passed straight
+;          through, in that order, to 0xF9997E.
+; Outputs: whatever 0xF9997E does.
+; Evidence: the whole body is three pushes and a call; `inc 8,xsp` afterwards
+;          drops exactly the eight bytes pushed.  MAIN and the helper at 0xF98CB9
+;          call 0xF9997E directly with the same three-argument shape and the
+;          constants 6 and 5 in the middle slot, which is how the argument order
+;          is read.
+; Unknown:  0xF9997E itself is not converted, so what the middle constant selects
+;          is not established.  notes/FINDINGS-memory-map.md records the link
+;          protocol's header byte as `(channel << 5) | (len - 1)`, which would
+;          make a small constant a CHANNEL -- offered as a lead, not a finding.
+; --------------------------------------------------------------------------
+Link_SendBuffer:
+	link32	0xEE, 0x0C, 0x00, 0x00
+	ld	xbc, (xiz+12)
+	push	xbc
+	extpfx3	0x9E, 0x0A, 0x04
+	push	0x00
+	extpfx3	0x8E, 0x08, 0x04
+	call	0xF9997E
+	inc	8, xsp
+	unlk32	xiz
+	ret
+
+
+; --------------------------------------------------------------------------
+; Delay_CountdownArg_Z -- spin until the caller's counter argument is exactly 0.
+;
+; Called from: 0xF98B66 (calr, from Serial0_SendByte_Blocking with 200) and
+;              0xF9AB31, 0xFA3136, 0xFA337A (call).
+; Inputs:  (XIZ+8), a 16-bit stack argument, decremented in place.
+; Outputs: none but the burnt time.
+; Evidence: identical to Delay_CountdownArg at 0xF995C3 EXCEPT for the exit
+;          condition -- `jr z` here against `jr le` there.  The test is on the
+;          value BEFORE the decrement either way, so an argument of -1 counts all
+;          the way down through 0xFFFE ... 0x0000 here, up to 65,535 passes,
+;          where `jr le` exits at once.  Two spellings of the same idea, and the
+;          difference is why they are two labels and not one.
+; Unknown:  the time per pass; no cycle counts are available in these trees.
+; --------------------------------------------------------------------------
+Delay_CountdownArg_Z:
+	link32	0xEE, 0x0C, 0xFE, 0xFF
+	pushw	hl
+Delay_CountdownArg_Z__loop:
+	ld	hl, (xiz+8)
+	ld	bc, hl
+	dec	1, bc
+	ld	(xiz-2), bc
+	ld	(xiz+8), bc
+	cps	hl, 0
+	jr	z, Delay_CountdownArg_Z__done
+	jr	Delay_CountdownArg_Z__loop
+Delay_CountdownArg_Z__done:
+	popw	hl
+	unlk32	xiz
+	ret
+
+
+; --------------------------------------------------------------------------
+; Serial0_SendByte_Blocking -- push one byte straight into SC0BUF, then wait.
+;
+; Called from: not found (no literal reference, no calr displacement).
+; Inputs:  (XIZ+8), the byte to send.
+; Outputs: SC0BUF = that byte, followed by a fixed delay of 200 counts.
+; Evidence: `ld BC,0x0050 / exts XBC / ld (XBC),A` writes SC0BUF, the transmit
+;          register of the channel notes/FINDINGS-prom_c-serial-midi.md
+;          identifies as the MIDI port.  The `pushw 0x00C8 / calr` afterwards is
+;          Delay_CountdownArg_Z with 200.
+; Unknown:  ⚠ why this exists at all.  The normal MIDI transmit path is
+;          interrupt-driven (INTTX0_HANDLER drains a queue into SC0BUF).  A
+;          blocking single-byte writer with a hand-timed delay is what an early
+;          boot or a diagnostic uses; with no caller found, which of those it is
+;          is NOT ESTABLISHED.
+; --------------------------------------------------------------------------
+Serial0_SendByte_Blocking:
+	link32	0xEE, 0x0C, 0x00, 0x00
+	ldw	bc, SC0BUF
+	exts	xbc
+	ld	a, (xiz+8)
+	ld	(xbc), a
+	pushw	0x00C8
+	calr	(0xF98B39 - 0xF98B69)
+	popw	bc
+	unlk32	xiz
+	ret
+
+
+; --------------------------------------------------------------------------
+; Timer3_Init -- stop timer 3, program it, enable its interrupt, start it.
+;
+; Called from: 0xF98BAB (`calr 0xF98B6D`), in MAIN's init chain, immediately
+;              after Timer1_SetPeriodAndStart.
+; Inputs:  none.
+; Outputs: TRUN bit 3 cleared, T23MOD = 0x0E, TREG3 = 0x2E, INTET32 = 0x20,
+;          TRUN bit 3 set.
+; Evidence: the SFR numbers are TRUN 0x20, T23MOD 0x28, TREG3 0x27, INTET32 0x74
+;          in include/tmp95c061_sfr.inc.  Stopping the timer, writing its mode
+;          and period, enabling its interrupt and starting it -- in that order --
+;          is the only reading these five instructions admit.
+;          The interrupt it enables has somewhere to go: the vector table's INTT3
+;          slot (0x4C) holds 0x00F98165 directly.
+; Unknown:  ⚠ the field layouts of T23MOD and INTET32 -- no databook is available
+;          in these trees and MAME does not decode them, so 0x0E and 0x20 are
+;          recorded as values.  Timer 3's period is 0x2E = 46 COUNTS; the count
+;          rate depends on the T23MOD field this pass cannot decode, so the INTT3
+;          rate is NOT ESTABLISHED.
+; --------------------------------------------------------------------------
+Timer3_Init:
+	res_dd8	3, TRUN
+	ldio	T23MOD, 0x0E
+	ldio	TREG3, 0x2E
+	ldio	INTET32, 0x20
+	set_dd8	3, TRUN
+	ret
+
+
+; --------------------------------------------------------------------------
+; MAIN -- CPU 2's initialisation chain and its endless main loop.
+;
+; Called from: NOTHING calls it.  Its address is the first 32-bit word of the
+;              three-record table at 0xF980EA (converted above), and that is the
+;              only reference to 0xF98B7D in prom_c.
+; Inputs:  none.
+; Outputs: it never returns.
+; Evidence: the init chain is EIGHT calls in a row before it even reads the fc
+;          byte, and four more after it, and four of the twelve are already
+;          identified elsewhere in this file -- 0xF9919F is Serial0_Init,
+;          0xF98000 is DSP_ChannelRegs_Init, 0xF98B6D is Timer3_Init, and
+;          0xF990FA is Timer1_SetPeriodAndStart, called here with the fc byte
+;          read from 0xFFFFEF two instructions earlier.  The loop is closed by
+;          `jrl MAIN__loop` with no condition.
+; Unknown:  0xFB0504, 0xFC88A0, 0xFC8B9C, 0xF9993E, 0xF997FA, 0xF98A02,
+;          0xFA3127, 0xFB0A0D, 0xF99E5F, 0xFB05EC, 0xF98510, 0xF98A75, 0xF98CB9,
+;          0xFB060A and 0xF994E4 are all unconverted.  So the SHAPE of the loop
+;          is established and most of the WORK it schedules is not.
+;          The frame temporaries are named by offset only: (XIZ-2) is the MIDI
+;          byte count, (XIZ-42) the 32-byte MIDI frame buffer, (XIZ-54) and
+;          (XIZ-56) are written and not read in this routine.
+; --------------------------------------------------------------------------
+MAIN:
+	link32	0xEE, 0x0C, 0xC8, 0xFF
+	call	0xFB0504
+	call	0xFC88A0
+	call	0xFC8B9C
+	call	0xF9993E
+	call	0xF9919F
+	call	0xF98000
+	call	0xF997FA
+	calr	(0xF98A02 - 0xF98BA0)
+	ldw_da	bc, 0x00FFFFEF
+	extz	bc
+	pushw	bc
+	calr	(0xF990FA - 0xF98BAB)
+	calr	(0xF98B6D - 0xF98BAE)
+	call	0xFA3127
+	call	0xFB0A0D
+	popw	bc
+	di
+	ld	(xiz-45), 0
+	ld	(xiz-46), 0
+MAIN__loop:
+	ldw	(xiz-2), 0x0000
+MAIN__midi_drain:
+	call	0xF991F4
+	ld	hl, wa
+	ld	(xiz-54), wa
+	cp	hl, 0xffff
+	jr	z, MAIN__midi_done
+	ld	ix, (xiz-2)
+	exts	xix
+	ld	xbc, xix
+	add	xbc, xiz
+	ld	(xbc-42), a
+	incm	1, (xiz-2)
+	cpw	(xiz-2), 0x0020
+	jr	nz, MAIN__midi_more
+	jr	MAIN__midi_done
+MAIN__midi_more:
+	jr	MAIN__midi_drain
+MAIN__midi_done:
+	cpw	(xiz-2), 0x0000
+	jr	z, MAIN__bit4
+	lda	xbc, (xiz-42)
+	push	xbc
+	extpfx3	0x9E, 0xFE, 0x04
+	pushw	0x0006
+	call	0xF9997E
+	inc	8, xsp
+MAIN__bit4:
+	ldb_da	c, 0x007ED1
+	and	c, 0x10
+	srl	c, 4
+	cps	c, 0
+	jr	z, MAIN__bit5
+	resda_24 4, 0x007ED1
+	call	0xF99E5F
+	call	0xFB05EC
+	ldw_da	hl, 0x00E2DF
+	ld	bc, hl
+	inc	1, bc
+	ld	(xiz-56), bc
+	stw_da	0x00E2DF, bc
+	cp	hl, 0x000c
+	jr	le, MAIN__no_wrap
+	stiw_da	0x00E2DF, 0x0000
+MAIN__no_wrap:
+	cpw_da	0x00F2F1, 0x0000
+	jr	z, MAIN__timer_expired
+	decdi16_24 1, 0x00F2F1
+	jr	MAIN__bit5
+MAIN__timer_expired:
+	ei	6
+	cpib_da	0x007ECC, 0x00
+	jr	z, MAIN__reenable
+	di
+	stib_da	0x007ECC, 0x00
+	stiw_da	0x00F2F1, 0x000A
+	pushw	0x0002
+	call	0xF98510
+	popw	bc
+MAIN__reenable:
+	di
+MAIN__bit5:
+	ldb_da	c, 0x007ED1
+	and	c, 0x20
+	srl	c, 5
+	cps	c, 0
+	jr	z, MAIN__bit3
+	resda_24 5, 0x007ED1
+	calr	(0xF98A75 - 0xF98C8A)
+MAIN__bit3:
+	ldb_da	c, 0x007ED1
+	and	c, 0x08
+	srl	c, 3
+	cps	c, 0
+	jr	z, MAIN__tail
+	resda_24 3, 0x007ED1
+	calr	(0xF9915C - 0xF98CA1)
+MAIN__tail:
+	calr	(0xF98CB9 - 0xF98CA4)
+	lda_24	xbc, 0x00E2EB
+	push	xbc
+	call	0xFB060A
+	call	0xF994E4
+	pop	xiy
+	jrl	MAIN__loop
+	unlk32	xiz
+	ret
+
+; ==============================================================================
+; 0xF98CB9-0xF99062 -- not yet converted
+; ==============================================================================
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x018CB9, 0x0003AA
+
+; ==============================================================================
+; 0xF99063-0xF990F9 -- INTT1, the six-phase scheduler tick
+; ==============================================================================
+; --------------------------------------------------------------------------
+; INTT1_HANDLER -- timer-1 ISR: bump the tick counter and post the next phase's
+;             work bits.
+;
+; Called from: vector table offset 0x44 (INTT1) -> 0x00FFF0BC (IRQ_INTT1), which
+;              is `jp 0xF99063`.  See VECTORS at the bottom of this file.
+; Inputs:  the phase counter, a byte at 0x00E2E3 (work DRAM -- 0x000080-0x01007F
+;          is CPU 2's DRAM window, notes/FINDINGS-memory-map.md).
+; Outputs: (a) the 32-bit word at 0x00F2F3 is incremented by ONE;
+;          (b) bits are SET in the work-request byte at 0x007ED1, which bits
+;              depending on the phase;
+;          (c) the phase counter advances 0 -> 1 -> ... -> 5 -> 0.
+; Evidence: ★★ THIS ANSWERS AN OPEN QUESTION.
+;          notes/FINDINGS-prom_c-serial-midi.md records that both serial handlers
+;          read 0x00F2F3 as a 32-bit value on every interrupt and that what it
+;          counts was NOT ESTABLISHED.  It counts INTT1 interrupts.  The three
+;          instructions at 0xF99069 are `sub xbc,xbc` / `inc 1,xbc` /
+;          `add (0x00F2F3),xbc` -- a read-modify-write of +1 -- and a census of
+;          every literal-addressed reference to it in prom_c shows this is the
+;          only one of TWENTY-ONE that writes it; the other twenty are
+;          `ld reg,(0x00F2F3)` or `pushw (0x00F2F3)`.  Reproduce:
+;              python3 notes/prom_c_xrefs.py 0x00F2F3 --no-window --classify
+;          (prints "TOTAL literal-addressed sites: 21").
+;          ⚠ CORRECTION, round 2.  This header previously said NINETEEN, from a
+;          census that searched the 24-bit-direct spelling only.  0x00F2F3 also
+;          fits in 16 bits, and the CPU has a shorter 16-bit-direct form (prefix
+;          0xD1 instead of 0xD2); two sites use it and were invisible:
+;              f99fc2: d1 f3 f2 23   ld HL,(0xf2f3)
+;              f99fcd: d1 f3 f2 21   ld BC,(0xf2f3)
+;          both inside the routine at 0xF99FC1, both READS -- so the count
+;          was wrong but the conclusion was not.  prom_c_xrefs.py now sweeps all
+;          twelve direct-address spellings (4 operand-size prefixes x 3 address
+;          widths) and prints the total; its docstring documents the encoding.
+;          Re-censused with the fixed tool, 0x007ED1 (14), 0x00F32A (3) and
+;          0x00F32B (2) are unchanged -- those addresses are only ever spelled
+;          24-bit -- so no other header in this file inherits the error.
+;          ⚠ Still unsearchable: a write through a POINTER REGISTER.  Read the
+;          number as "no other literal-addressed writer", which is what it proves.
+;          The phase count is SIX, fixed two independent ways: the guard
+;          `cps bc,5 / jr ugt` rejects anything above 5, and the jump table's six
+;          4-byte entries end exactly on 0xF990E0, the first instruction after
+;          it.  The wrap is `inc` then `cp ...,0x06` then reset to 0.
+; Unknown:  ⚠ what the six phases are for, and what consumes bits 6 and 7.
+;          The main loop at 0xF98C06 tests and clears bits 4, 5 and 3 -- and only
+;          those three.  `python3 notes/prom_c_xrefs.py 0x007ED1 --no-window`
+;          finds fourteen references in prom_c: the eight `set` instructions in
+;          this handler and six in the main loop, three test/clear pairs.  So
+;          bits 6 and 7 are SET here and read by NOTHING that names 0x007ED1
+;          outright.  Stated as observed; a pointer-based read would be invisible
+;          to that scan.
+;          The timer-1 period is not established here either, so the tick rate is
+;          unknown -- only that everything downstream is paced by it.
+;
+; The phase-to-bit schedule, read straight off the six blocks below:
+;
+;     phase 0   set bit 7, set bit 4
+;     phase 1   set bit 6
+;     phase 2   set bit 5
+;     phase 3   set bit 7, set bit 3
+;     phase 4   set bit 6
+;     phase 5   set bit 5
+;
+; so bits 7/6/5 repeat with period THREE and bits 4 and 3 alternate with period
+; six -- one 3-tick job triple, plus two jobs that each run once per six ticks on
+; opposite halves of the cycle.
+; --------------------------------------------------------------------------
+INTT1_HANDLER:
+	push	xbc
+	pushw	wa
+	link32	0xEE, 0x0C, 0xFE, 0xFF
+	sub	xbc, xbc
+	inc	1, xbc
+	addl_da	0x00F2F3, xbc
+	ldw_da	wa, 0x00E2E3
+	extz	wa
+	ld	(xiz-2), wa
+	jr	INTT1_HANDLER__dispatch
+INTT1_HANDLER__phase0:
+	setda_24 7, 0x007ED1
+	setda_24 4, 0x007ED1
+	jr	INTT1_HANDLER__advance
+INTT1_HANDLER__phase1:
+	setda_24 6, 0x007ED1
+	jr	INTT1_HANDLER__advance
+INTT1_HANDLER__phase2:
+	setda_24 5, 0x007ED1
+	jr	INTT1_HANDLER__advance
+INTT1_HANDLER__phase3:
+	setda_24 7, 0x007ED1
+	setda_24 3, 0x007ED1
+	jr	INTT1_HANDLER__advance
+INTT1_HANDLER__phase4:
+	setda_24 6, 0x007ED1
+	jr	INTT1_HANDLER__advance
+INTT1_HANDLER__phase5:
+	setda_24 5, 0x007ED1
+	jr	INTT1_HANDLER__advance
+INTT1_HANDLER__dispatch:
+	sub	xbc, xbc
+	ld	bc, (xiz-2)
+	cps	bc, 5
+	jr	ugt, INTT1_HANDLER__advance
+	sll	bc, 2
+	add	xbc, 0x00F990C8
+	ld	xbc, (xbc)
+	jp	(xbc)
+INTT1_PHASE_TABLE:
+	.long	0x00F9907E
+	.long	0x00F9908A
+	.long	0x00F99091
+	.long	0x00F99098
+	.long	0x00F990A4
+	.long	0x00F990AB
+INTT1_HANDLER__advance:
+	incdi8_24 1, 0x00E2E3
+	cpib_da	0x00E2E3, 0x06
+	jr	nc, INTT1_HANDLER__wrap
+	jr	INTT1_HANDLER__exit
+INTT1_HANDLER__wrap:
+	stib_da	0x00E2E3, 0x00
+INTT1_HANDLER__exit:
+	unlk32	xiz
+	popw	wa
+	pop	xbc
+	reti
+
+; ==============================================================================
+; 0xF990FA-0xF991FE -- timer 1, the 0x108000 preload, the UART init, MIDI dequeue
+; ==============================================================================
+; --------------------------------------------------------------------------
+; Timer1_SetPeriodAndStart -- load TREG1 from the caller and (re)start timer 1.
+;
+; Called from: 0xF98BA8 (`calr 0xF990FA`), and from nowhere else that
+;              notes/prom_c_xrefs.py can see.  The three instructions in front of
+;              that call are
+;                  ld BC,(0xFFFFEF) / extz BC / push BC
+;              so ★ THE ARGUMENT IS THE fc CONFIGURATION BYTE, 0x1C = 28.
+;              TREG1 is therefore loaded with fc IN MHz -- the same trick
+;              notes/FINDINGS-system-clock.md documents for the UART, where
+;              BR0CR is also computed from that byte so that the bit rate comes
+;              out fc-independent.  Two unrelated peripherals scaled off the same
+;              byte is what makes "0xFFFFEF is fc" more than an interpretation.
+; Inputs:  (XIZ+8), a 16-bit stack argument; only its low byte reaches TREG1.
+; Outputs: TRUN bit 1 cleared then set (timer 1 stopped and restarted), TREG1 =
+;          the argument, INTET10 = 0x33.
+; Evidence: TRUN is 0x20, TREG1 is 0x23 and INTET10 is 0x73 in
+;          include/tmp95c061_sfr.inc, whose names come from MAME's symbol table
+;          for this exact part.  `and (XBC),0xFD` on TRUN clears bit 1 and
+;          `or (XBC),0x02` sets it, which is timer 1's run bit.
+; Unknown:  ⚠ the timer-1 CLOCK SOURCE.  This routine does not write T01MOD, and
+;          no write to it has been located, so TREG1 = 28 cannot be turned into a
+;          tick period here.  The INTT1 rate -- which paces the whole six-phase
+;          scheduler at 0xF99063 -- is therefore NOT ESTABLISHED.
+;          The 0x33 in INTET10 is recorded as a value, not decoded: no TMP95C061
+;          databook is available in these trees and MAME does not decode the
+;          interrupt-level registers (see the header of the SFR include).
+; --------------------------------------------------------------------------
+Timer1_SetPeriodAndStart:
+	link32	0xEE, 0x0C, 0x00, 0x00
+	push	xix
+	ld	xbc, TRUN
+	extpfx3	0x81, 0x3C, 0xFD
+	ld	xix, TREG1
+	ld	c, (xiz+8)
+	ld	(xix), c
+	ld	xbc, TRUN
+	extpfx3	0x81, 0x3E, 0x02
+	ld	xbc, INTET10
+	ld	(xbc), 0x33
+	pop	xix
+	unlk32	xiz
+	ret
+
+
+; --------------------------------------------------------------------------
+; Dev108000_Preload_80toBF -- write 64 values into the device port at 0x108000.
+;
+; Called from: RESET at 0xFFF081, and from IRQ_NMI at 0xFFF0AE -- the two places
+;              `call 0xF99125` appears (notes/prom_c_xrefs.py 0xF99125).
+; Inputs:  none.
+; Outputs: 64 write pairs to the 0x108000 port: the 16-bit value 0x0080 + i goes
+;          to +2 and the constant 0x8000 goes to +0, for i = 0x00..0x3F.
+; Evidence: ★ THIS CORRECTS A COMMENT ALREADY IN THIS FILE.  The RESET listing
+;          below described 0xF99125 as "a counted delay (loops to 0x40)".  It
+;          does loop to 0x40, and it is not a delay: the loop body loads
+;          XBC = 0x00108002 and stores HL, then loads XBC = 0x00108000 and stores
+;          0x8000.  0x108000 is one of CPU 2's three address/data device ports
+;          (notes/FINDINGS-memory-map.md, which already lists this very site).
+; Unknown:  ⚠ which register 0x8000 is, and what the 64 ascending values are.
+;          Note also that the ORDER here is value-to-+2 first and 0x8000-to-+0
+;          second, the opposite of the address-then-data order the 0xE00000 and
+;          0x10C000 drivers use.  So either +0 is a commit/trigger on this device
+;          or the port convention differs; NOT ESTABLISHED which.
+;          ⚠ And a behavioural oddity worth flagging: NMI runs this and then
+;          spins forever (IRQ_NMI__hang).  Whatever the sweep does, on NMI it is
+;          the last thing this processor ever does.
+; --------------------------------------------------------------------------
+Dev108000_Preload_80toBF:
+	link32	0xEE, 0x0C, 0xFF, 0xFF
+	pushw	hl
+	ld	(xiz-1), 0
+Dev108000_Preload_80toBF__test:
+	cp	(xiz-1), 0x40
+	jr	nc, Dev108000_Preload_80toBF__done
+	jr	Dev108000_Preload_80toBF__body
+Dev108000_Preload_80toBF__next:
+	incm8	1, (xiz-1)
+	jr	Dev108000_Preload_80toBF__test
+Dev108000_Preload_80toBF__body:
+	ld	bc, (xiz-1)
+	extz	bc
+	ld	hl, bc
+	add	hl, 0x0080
+	ld	xbc, 0x00108002
+	ld	(xbc), hl
+	ld	xbc, 0x00108000
+	extpfx4	0xB1, 0x02, 0x00, 0x80
+	jr	Dev108000_Preload_80toBF__next
+Dev108000_Preload_80toBF__done:
+	popw	hl
+	unlk32	xiz
+	ret
+
+
+; --------------------------------------------------------------------------
+; sub_F9915C -- the job the scheduler's phase-3 bit posts.  NOT NAMED: what it
+;             decides is not established, only how it decides it.
+;
+; Called from: 0xF98C9E (`calr 0xF9915C`), reached only when bit 3 of the work
+;              byte 0x007ED1 is set -- and INTT1_HANDLER sets bit 3 on phase 3,
+;              once every six ticks.  So this is a scheduled poll, not a
+;              one-shot.
+; Inputs:  the tick counter 0x00F2F3; a countdown byte at 0x00E2E4; bit 0 of the
+;          byte at 0x0000FFF8 (work DRAM).
+; Outputs: 0x00F35F = 1 if that bit is set, 2 if it is clear; bit 7 of 0x007ECC
+;          set either way; 0x00E2E4 decremented.
+; Evidence: two guards, both early-outs: `cp XBC,0x000000FA` on the tick counter
+;          means nothing happens until 250 INTT1 ticks have elapsed since reset,
+;          and `cp (0x00E2E4),0x00` means it only runs while that counter is
+;          non-zero.  0x00E2E4's boot value is 1 (see
+;          notes/FINDINGS-prom_c-ram-image.md), so ★ THIS BODY RUNS EXACTLY ONCE
+;          PER POWER-UP, on the first phase-3 tick after tick 250.  That is a
+;          power-on sample of one input, latched into a two-valued result.
+;          Bit 7 of 0x007ECC is what the main loop tests at 0xF98C52 before
+;          calling 0xF98510 -- so the latch is consumed.
+; Unknown:  ⚠ what the byte at 0x0000FFF8 is, and hence what is being sampled.
+;          It is work DRAM, so something else must write it; that writer has not
+;          been found.  Naming this routine before that is known would be a
+;          guess, so it keeps its address.
+; --------------------------------------------------------------------------
+sub_F9915C:
+	ldl_da	xbc, 0x00F2F3
+	cp	xbc, 0x000000FA
+	jr	nc, sub_F9915C__armed
+	jr	sub_F9915C__exit
+sub_F9915C__armed:
+	cpib_da	0x00E2E4, 0x00
+	jr	nz, sub_F9915C__counting
+	jr	sub_F9915C__exit
+sub_F9915C__counting:
+	decdi8_24 1, 0x00E2E4
+	ldw	bc, 0xFFF8
+	extz	xbc
+	ld	a, (xbc)
+	and	a, 1
+	jr	z, sub_F9915C__bit0_clear
+	stib_da	0x00F35F, 1
+	setda_24 7, 0x007ECC
+	jr	sub_F9915C__exit
+sub_F9915C__bit0_clear:
+	stib_da	0x00F35F, 2
+	setda_24 7, 0x007ECC
+sub_F9915C__exit:
+	ret
+
+
+; --------------------------------------------------------------------------
+; Serial0_Init -- configure serial channel 0 (the MIDI port) and its interrupts.
+;
+; Called from: 0xF98B91 (`call 0xF9919F`), in the power-on init chain.
+; Inputs:  the fc byte at 0xFFFFEF; the INTES0 shadow byte at 0x00F2F7.
+; Outputs: TRUN = 0x80, BR0CR = (fc >> 1) & 0x0F, SC0CR = 0, SC0MOD = 0x29,
+;          0x00F2F9 = 2, and INTES0 = (old shadow & 0x88) | 0x55.
+; Evidence: ★ THIS IS THE ROUTINE notes/FINDINGS-system-clock.md ARGUES FROM, now
+;          in source.  `ld C,(0xFFFFEF) / srl 0x01,C / and C,0x0F / ld (BR0CR),C`
+;          is exactly the rule that note states: BR0CR = (M >> 1) & 0x0F.  With
+;          the baud generator's fc/4 tap and the UART's own divide-by-16 the bit
+;          rate is fc / (32*M), which is 31250 -- the MIDI rate -- for any fc as
+;          long as fc = 1,000,000 * M.  M = 0x1C, so fc = 28 MHz.
+;          The INTES0 value is built in two steps on the shadow byte and only
+;          then written to the register at 0x77: `and 0x8F / or 0x50` sets the
+;          upper field to 5 and `and 0xF8 / or 0x05` sets the lower field to 5,
+;          so both of channel 0's interrupts get the same setting.  That the two
+;          fields are INTTX0 and INTRX0 follows from the register's name in
+;          include/tmp95c061_sfr.inc; the numeric meaning of 5 is NOT decoded
+;          here for the same reason as in Timer1_SetPeriodAndStart.
+;          It runs with interrupts off around the register writes: `ei 6` before
+;          and `di` (`ei 0x00`) at the end.
+; Unknown:  what 0x00F2F9 = 2 means.  INTTX0_HANDLER writes the same value when
+;          its queue runs dry, so "transmitter idle" is the reading offered in
+;          notes/FINDINGS-prom_c-serial-midi.md; it is still not established.
+;          Why SC0MOD is 0x29 here and 0x09 in the boot block is also open.
+; --------------------------------------------------------------------------
+Serial0_Init:
+	ldio	TRUN, 0x80
+	ldb_da	c, 0x00FFFFEF
+	srl	c, 1
+	and	c, 0x0F
+	st_dd8b	c, BR0CR
+	ldio	SC0CR, 0x00
+	ldio	SC0MOD, 0x29
+	ei	6
+	stiw_da	0x00F2F9, 0x0002
+	ldb_da	c, 0x00F2F7
+	and	c, 0x8F
+	or	c, 0x50
+	stb_da	0x00F2F7, c
+	and	c, 0xF8
+	or	c, 0x05
+	stb_da	0x00F2F7, c
+	ldw	bc, INTES0
+	exts	xbc
+	ldb_da	a, 0x00F2F7
+	ld	(xbc), a
+	di
+	ret
+
+
+; --------------------------------------------------------------------------
+; sub_F991E9 -- a queue operation on the MIDI RECEIVE descriptor.  Which one is
+;             not established.
+;
+; Called from: not found -- no literal reference and no calr displacement in
+;              prom_c reaches 0xF991E9.
+; Inputs:  none; it supplies the descriptor address 0x00F2FB itself.
+; Outputs: whatever 0xF994D7 returns.
+; Evidence: byte for byte the same three-instruction wrapper as MIDI_Rx_Dequeue
+;          below, on the SAME descriptor, differing only in the routine called
+;          (0xF994D7 instead of 0xF993D4).  0x00F2FB is the descriptor
+;          INTRX0_HANDLER pushes when it enqueues a received byte.
+; Unknown:  what 0xF994D7 does.  A pair of wrappers over one descriptor is what
+;          "peek" and "pop" look like, but neither callee has been converted, so
+;          that is a shape and not a finding.
+; --------------------------------------------------------------------------
+sub_F991E9:
+	lda_24	xbc, 0x00F2FB
+	push	xbc
+	calr	(0xF994D7 - 0xF991F2)
+	pop	xiy
+	ret
+
+
+; --------------------------------------------------------------------------
+; MIDI_Rx_Dequeue -- take the next byte from the MIDI receive queue.
+;
+; Called from: 0xF98BC6 and 0xF98D52, both `call 0xF991F4`.
+; Inputs:  none; the descriptor address 0x00F2FB is supplied here.
+; Outputs: WA = the byte, or 0xFFFF when the queue is empty.
+; Evidence: the caller at 0xF98BC6 is the main loop's MIDI drain: it calls this,
+;          copies WA to HL, and `cp HL,0xFFFF / jr Z` leaves the loop -- so
+;          0xFFFF is the empty sentinel, and every other value is a byte it
+;          stores into a 32-entry buffer before going round again (it also stops
+;          at 0x20 entries).  The descriptor is the same 0x00F2FB the receive ISR
+;          enqueues into, which is what makes this the RECEIVE side.
+; Unknown:  the layout of the descriptor at 0x00F2FB and the body of 0xF993D4.
+; --------------------------------------------------------------------------
+MIDI_Rx_Dequeue:
+	lda_24	xbc, 0x00F2FB
+	push	xbc
+	calr	(0xF993D4 - 0xF991FD)
+	pop	xiy
+	ret
 
 ; ==============================================================================
 ; 0xF991FF-0xF992A6 -- the serial-channel-0 interrupt handlers (MIDI)
@@ -188,7 +1342,360 @@ INTTX0_HANDLER__exit:
 	pop xbc
 	reti
 
-	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x0192A7, 0x0917
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x0192A7, 0x0002F1
+
+; ==============================================================================
+; 0xF99598-0xF9973C -- the TOUCH-to-VELOCITY path, and its two setters
+; ==============================================================================
+;
+; This is the consumer of the touch tables in zone 2 -- the routine that turns a
+; key strike into the velocity byte the tone generator is given.  It is worth more
+; than the tables' names: it fixes their record size, their row count, their pivot
+; and their divisor, and it settles what the third column of
+; ToneGen_VelCurve_ModeParams is, all from prom_c's own arithmetic.
+;
+; ★ THE WHOLE TRANSFER FUNCTION, read off 0xF995FF-0xF99728:
+;
+;     v  = ToneGen_Velocity_Input_Curve[touch]              ; 0xFCC61A, 256 bytes
+;     v -= 77                                               ; u16 at 0xFCC5C5
+;     v += (signed) NoteTrim[note]                          ; RAM table at 0x0084DA
+;     v  = ModeParams[mode].gain * v / 128                  ; u16 at 0xFCC5C7
+;     v += ModeParams[mode].pivot
+;     if note is a BLACK key:  v -= ModeParams[mode].trim
+;     v += (0x00F32B - 0x50)                                ; the offset control
+;     clamp v to 0..255
+;     out = ToneGen_Velocity_Output_Curve[v]                ; 0xFCC71A
+;
+; ★ THE TWO CONSTANTS COME OUT OF A BLOCK THIS TREE HAD LABELLED "unexplained".
+; The header of `unexplained_FCC5BE` in this file calls its last bytes
+; `ff fa fb 4d 00 80 00` unidentified.  Four of them are not: the u16 at 0xFCC5C5
+; is 0x004D = 77 and the u16 at 0xFCC5C7 is 0x0080 = 128, and they are the pivot
+; subtrahend and the fixed-point divisor of the formula above.  77 is the value of
+; the input curve at index 144, and it is the ONLY index where the curve is 77 --
+; so the pivot is a single point, and at it the bracket is zero and the output is
+; ModeParams[mode].pivot whatever the gain is.  That is exactly what the zone-2
+; header already calls that column ("output level at the pivot"), now with the
+; pivot located.  (Checked by reading the ROM; the curve is monotonically
+; decreasing, 255 at index 0..8 down to 0 at 254..255.)
+;
+; ★ AND THE "BLACK-KEY TRIM" COLUMN IS PROVEN, NOT ASSUMED.  The zone-2 header
+; describes ModeParams' third byte as "trim subtracted for the black keys" on the
+; strength of the sibling project.  Here is the WSA1 proof, and it is airtight:
+; the note number is divided by 12 (`div c,12` at 0xF9961A), the REMAINDER is
+; kept, one is subtracted, values above 9 skip the trim, and the surviving 0..9
+; index a ten-entry jump table which sends
+;
+;     index 0 2 5 7 9   (pitch class 1 3 6 8 10)  ->  0xF9968B, subtract trim
+;     index 1 3 4 6 8   (pitch class 2 4 5 7 9)   ->  0xF996A7, do nothing
+;
+; Pitch classes 1, 3, 6, 8, 10 are C#, D#, F#, G# and A#: the five black keys of
+; the octave, all of them and nothing else.  Classes 0 and 11 (C and B) fall out
+; through the bound check instead, which is the detail that makes this read
+; rather than a pattern-match: the two white keys at the ends of the run are
+; excluded by a DIFFERENT mechanism from the eight in the middle, and both
+; mechanisms have to agree for the black-key set to come out whole.
+; ⚠ The note is offset by 0x24 = 36 before it is stored (0xF995EC), and 36 is a
+; whole number of octaves, so the remainder is unaffected.  That is what makes
+; the pitch-class reading safe rather than lucky.
+;
+; ★ TEN ROWS, from a setter that rejects an eleventh.  ToneGen_SetVelCurveMode
+; below refuses any mode above 9 before storing it at 0x00F32A, and the record
+; stride is 3 (`ld a,3 / mul wa,(0x00F32A)`).  10 x 3 = 30 bytes, which is exactly
+; the size the zone-2 chain gives ToneGen_VelCurve_ModeParams.  Three independent
+; facts, one answer.
+;
+; ★ THE OUTPUT IS A 7-BIT VELOCITY.  ToneGen_Velocity_Output_Curve (0xFCC71A) is
+; non-decreasing over all 256 entries and spans 1..127 -- never 0, never above
+; 127.  The input curve is non-increasing over all 256 entries and spans 255..0.
+; So a LARGER argument means a SOFTER note, which is what a key-contact travel
+; TIME looks like and not what a velocity looks like; and the result is a
+; MIDI-range velocity that can never be a note-off by accident.  (Both curves
+; checked entry by entry over their full 256 bytes, directly from the ROM.)
+;
+; ⚠ NOT ESTABLISHED.  What fills the signed per-note table at 0x0084DA (work
+; DRAM) -- it is read here and written somewhere not yet converted, so the
+; per-note component of the touch response has an untraced origin.  Neither is
+; the physical meaning of the (XIZ+0x08) argument: "travel time" is inferred from
+; the curve's direction, not read off a hardware register.
+;
+; --------------------------------------------------------------------------
+; ToneGen_SetVelCurveMode -- store the touch-curve mode, rejecting anything > 9.
+;
+; Called from: not traced.
+; Inputs:  (XIZ+8), a 16-bit stack argument.
+; Outputs: 0x00F32A = the argument, if it is 0..9; otherwise nothing at all
+;          (the store is jumped over, the old mode stands).
+; Evidence: the only write to 0x00F32A in prom_c; the other two references
+;          (0xF99623, 0xF9968E) are the `mul` that indexes
+;          ToneGen_VelCurve_ModeParams by it.  `python3 notes/prom_c_xrefs.py
+;          0x00F32A --no-window --classify`.
+; Unknown:  which UI control feeds it.
+; --------------------------------------------------------------------------
+ToneGen_SetVelCurveMode:
+	link32	0xEE, 0x0C, 0x00, 0x00
+	cp	(xiz+8), 0x09
+	jr	ugt, ToneGen_SetVelCurveMode__reject
+	ld	c, (xiz+8)
+	stb_da	0x00F32A, c
+ToneGen_SetVelCurveMode__reject:
+	unlk32	xiz
+	ret
+
+; --------------------------------------------------------------------------
+; ToneGen_SetVelOffset -- store the touch OFFSET control, rejecting anything > 0x7F.
+;
+; Called from: not traced.
+; Inputs:  (XIZ+8), a 16-bit stack argument.
+; Outputs: 0x00F32B = the argument, if it is 0x00..0x7F.
+; Evidence: same shape as ToneGen_SetVelCurveMode, one address along.  It is the
+;          only write to 0x00F32B in prom_c; the only other reference is
+;          0xF996EC in ToneGen_VelocityFromTouch, which reads it and subtracts
+;          0x50 -- so the stored 0..127 is a control centred on 0x50, giving a
+;          velocity offset of -80..+47.
+; Unknown:  which UI control feeds it, and why the range is asymmetric about the
+;          centre it is then given.
+; --------------------------------------------------------------------------
+ToneGen_SetVelOffset:
+	link32	0xEE, 0x0C, 0x00, 0x00
+	cp	(xiz+8), 0x7F
+	jr	ugt, ToneGen_SetVelOffset__reject
+	ld	c, (xiz+8)
+	stb_da	0x00F32B, c
+ToneGen_SetVelOffset__reject:
+	unlk32	xiz
+	ret
+
+; --------------------------------------------------------------------------
+; INT4_HANDLER -- INT4: a single RETI.
+;
+; Called from: vector table offset 0x2C (INT4), which holds 0x00F995C2 directly.
+;              Four vectors point straight at a handler instead of going through
+;              the trampoline block at 0xFFF0A2 -- INT4, INTT3, INTRX0 and
+;              INTTX0.  See VECTORS at the bottom.
+; Inputs:  none.  Outputs: none.
+; Evidence: the byte at 0xF995C2 is 0x07 and the byte before it is the 0x0E `ret`
+;          that ends ToneGen_SetVelOffset, so this is a whole one-instruction
+;          routine and not the tail of the routine above it.
+; Unknown:  ⚠ why INT4 is armed at all.  INTT2 (0xF99E5E) is the same shape and
+;          the note there explains it -- a micro-DMA channel needs its interrupt
+;          taken and dismissed for the transfer to be paced.  Nothing in the
+;          converted code arms a micro-DMA channel on INT4, so the same
+;          explanation is AVAILABLE here but is NOT evidenced.  It may equally be
+;          an edge-triggered input that must be acknowledged and ignored.
+; --------------------------------------------------------------------------
+INT4_HANDLER:
+	reti
+
+; --------------------------------------------------------------------------
+; Delay_CountdownArg -- spin until the caller's counter argument reaches zero.
+;
+; Called from: not traced (notes/prom_c_xrefs.py finds no literal reference and
+;              no calr displacement reaching 0xF995C3).
+; Inputs:  (XIZ+8), a SIGNED 16-bit count, passed on the stack.
+; Outputs: none, except that it writes the decremented value back over its own
+;          stack argument every pass.
+; Evidence: the loop body reads (XIZ+8), decrements it, stores it back to both
+;          (XIZ+8) and a frame temporary, and re-reads it next pass; `cps hl,0`
+;          with `jr le` on the value BEFORE the decrement is the only exit.  It
+;          touches no memory outside its own frame and no peripheral, so burning
+;          time is all it can be doing.
+; Unknown:  how long one pass takes -- no cycle counts are available in these
+;          trees, so the delay cannot be converted to microseconds.
+; --------------------------------------------------------------------------
+Delay_CountdownArg:
+	link32	0xEE, 0x0C, 0xFE, 0xFF
+	pushw	hl
+Delay_CountdownArg__loop:
+	ld	hl, (xiz+8)
+	ld	bc, hl
+	dec	1, bc
+	ld	(xiz-2), bc
+	ld	(xiz+8), bc
+	cps	hl, 0
+	jr	le, Delay_CountdownArg__done
+	jr	Delay_CountdownArg__loop
+Delay_CountdownArg__done:
+	popw	hl
+	unlk32	xiz
+	ret
+
+; --------------------------------------------------------------------------
+; ToneGen_VelocityFromTouch -- turn a key strike into a velocity byte.
+;
+; Called from: 0xF997C8 and 0xF997E9, both `calr 0xF995DF`, from the two arms of
+;              one routine at 0xF9979F.  Found with
+;              `python3 notes/prom_c_xrefs.py 0xF995DF --no-window`, then
+;              confirmed by disassembling both sites: each pushes the same four
+;              arguments in the same order.
+; Inputs:  (XIZ+0x08) u16  the touch measurement, index into
+;                          ToneGen_Velocity_Input_Curve.
+;          (XIZ+0x0a) u16  bit 7 = note ON, bits 6..0 = note number.
+;          (XIZ+0x0c) ptr  receives (note & 0x7F) + 0x24, written before anything
+;                          else and written even on note-off.
+;          (XIZ+0x10) ptr  receives the velocity byte, or 0 on note-off.
+;          Globals: mode at 0x00F32A, offset at 0x00F32B, per-note trim table at
+;          0x0084DA in work DRAM.
+; Outputs: *(XIZ+0x10) = velocity 1..127, or 0.  *(XIZ+0x0c) = transposed note.
+; Evidence: the full transfer function, the two constants, the black-key set, the
+;          ten-row table size and the 7-bit output range are all derived in the
+;          block comment above this routine; each step names the instruction it
+;          comes from.
+; Unknown:  the origin of the 0x0084DA table; the physical unit of the touch
+;          argument; and why the note is transposed by 36 semitones on the way
+;          out (36 is three octaves, so it does not disturb the pitch class the
+;          black-key test uses -- but what the consumer of (XIZ+0x0c) wants with
+;          the shift is not established).
+; --------------------------------------------------------------------------
+ToneGen_VelocityFromTouch:
+	link32	0xEE, 0x0C, 0xF2, 0xFF
+	pushw	hl
+	pushw	de
+	push	xix
+	ld	c, (xiz+10)
+	res	7, c
+	add	c, 36
+	ld	h, c
+	ld	xbc, (xiz+12)
+	ld	(xbc), h
+	ld	c, (xiz+10)
+	and	c, 128
+	jrl	z, ToneGen_VelocityFromTouch__note_off
+	ld	bc, (xiz+8)
+	extz	bc
+	extz	xbc
+	add	xbc, 0x00FCC61A
+	ld	a, (xbc)
+	ld	(xiz-1), a
+	ld	xbc, (xiz+12)
+	ld	w, (xbc)
+	ld	c, w
+	extz	bc
+	div	c, 12
+	ld	(xiz-7), b
+	ldb	a, 3
+	extpfx5	0xC2, 0x2A, 0xF3, 0x00, 0x41
+	extz	xwa
+	ld	xix, xwa
+	add	xwa, 0x00FCC5FC
+	ld	c, (xwa)
+	extz	bc
+	ld	hl, bc
+	ld	wa, (xiz-1)
+	extz	wa
+	ld	de, wa
+	subda16_24 de, 0x00FCC5C5
+	ld	a, (xiz+10)
+	res	7, a
+	extz	wa
+	extz	xwa
+	add	xwa, 0x000084DA
+	ld	w, (xwa)
+	ld	a, w
+	exts	wa
+	add	wa, de
+	muls	xbc, xwa
+	exts	xbc
+	extpfx5	0xD2, 0xC7, 0xC5, 0xFC, 0x59
+	exts	xbc
+	ld	(xiz-14), xbc
+	ld	xwa, xix
+	inc	1, xwa
+	add	xwa, 0x00FCC5FC
+	ld	w, (xwa)
+	ldb_erp	w, 0xF4
+	extz	iy
+	extz	xiy
+	add	xbc, xiy
+	ld	(xiz-6), xbc
+	ld	wa, (xiz-7)
+	extz	wa
+	ld	(xiz-10), wa
+	jr	ToneGen_VelocityFromTouch__pitchclass
+ToneGen_VelocityFromTouch__black_key:
+	ldb	c, 3
+	extpfx5	0xC2, 0x2A, 0xF3, 0x00, 0x43
+	extz	xbc
+	inc	2, xbc
+	add	xbc, 0x00FCC5FC
+	ld	a, (xbc)
+	extz	wa
+	extz	xwa
+	sub	(xiz-6), xwa
+	jr	ToneGen_VelocityFromTouch__offset
+ToneGen_VelocityFromTouch__white_key:
+	jr	ToneGen_VelocityFromTouch__offset
+ToneGen_VelocityFromTouch__pitchclass:
+	sub	xbc, xbc
+	ld	bc, (xiz-10)
+	dec	1, bc
+	cp	bc, 0x0009
+	jr	ugt, ToneGen_VelocityFromTouch__white_key
+	sll	bc, 2
+	add	xbc, 0x00F996C3
+	ld	xbc, (xbc)
+	jp	(xbc)
+; ----------------------------------------------------------------------------
+; ToneGen_BlackKeyTrim_Table -- 0xF996C3..0xF996EA  (40 bytes)
+;
+; TEN 32-bit jump targets, indexed by (note mod 12) - 1.  The count is fixed
+; twice over: `cp bc,0x0009 / jr ugt` rejects anything above 9, and ten 4-byte
+; entries from 0xF996C3 end exactly on 0xF996EB, which is the next instruction
+; the routine executes.  The LAST entry was checked as well as the first --
+; 0xF996E7 holds 8b 96 f9 00 = 0xF9968B, the apply-trim arm, which is what pitch
+; class 10 (A#) has to be.
+; Only two distinct targets appear:
+;     0xF9968B  subtract ModeParams[mode].trim   (entries 0,2,5,7,9)
+;     0xF996A7  fall through, no trim            (entries 1,3,4,6,8)
+; ----------------------------------------------------------------------------
+ToneGen_BlackKeyTrim_Table:
+	.long	0x00F9968B
+	.long	0x00F996A7
+	.long	0x00F9968B
+	.long	0x00F996A7
+	.long	0x00F996A7
+	.long	0x00F9968B
+	.long	0x00F996A7
+	.long	0x00F9968B
+	.long	0x00F996A7
+	.long	0x00F9968B
+ToneGen_VelocityFromTouch__offset:
+	ldw_da	bc, 0x00F32B
+	extz	bc
+	extz	xbc
+	sub	xbc, 80
+	add	(xiz-6), xbc
+	ld	xbc, (xiz-6)
+	cp	xbc, 255
+	jr	le, ToneGen_VelocityFromTouch__no_clip_hi
+	ld	xwa, 255
+	ld	(xiz-6), xwa
+ToneGen_VelocityFromTouch__no_clip_hi:
+	ld	xbc, (xiz-6)
+	cp	xbc, 0
+	jr	ge, ToneGen_VelocityFromTouch__no_clip_lo
+	sub	xwa, xwa
+	ld	(xiz-6), xwa
+ToneGen_VelocityFromTouch__no_clip_lo:
+	lda_24	xbc, 0x00FCC71A
+	extpfx3	0xAE, 0xFA, 0x81
+	ld	a, (xbc)
+	ld	xbc, (xiz+16)
+	ld	(xbc), a
+	jr	ToneGen_VelocityFromTouch__exit
+ToneGen_VelocityFromTouch__note_off:
+	ld	xbc, (xiz+16)
+	ld	(xbc), 0
+ToneGen_VelocityFromTouch__exit:
+	pop	xix
+	popw	de
+	popw	hl
+	unlk32	xiz
+	ret
+
+; ==============================================================================
+; 0xF9973D-0xF99BBD -- not yet converted
+; ==============================================================================
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x01973D, 0x000481
 
 ; ==============================================================================
 ; 0xF99BBE-0xF99C11 -- INT0, the inter-processor command dispatcher
@@ -202,12 +1709,17 @@ INTTX0_HANDLER__exit:
 ; Inputs:  the byte at 0x00100000, the CS0 inter-processor link port (see
 ;          notes/FINDINGS-memory-map.md); PA bit 2.
 ; Outputs: saves the command byte at 0x008518, then jumps through the table
-;          below.  If PA bit 2 is set it leaves at once via 0xF99CF8.
+;          below.  If PA bit 2 is set it leaves at once via
+;          INT0_HANDLER__return (0xF99CF8).
 ; Notes:   ★ THE COMMAND RANGE IS READ OFF THE CODE, not assumed:
 ;              sub bc,0x00E1 / cps bc,6 / jrl ugt -> out of range
 ;          so the seven dispatched commands are 0xE1..0xE7 and anything else
-;          goes to 0xF99CCF.  0x00100000 is the address RESET programmes CS0 to
-;          select, and prom_a's side of the same link is at 0x7C0000.
+;          goes to INT0_HANDLER__cmd_E6_or_other (0xF99CCF) -- which is also
+;          table entry 5, i.e. command 0xE6's own arm.  0x00100000 is the address
+;          RESET programmes CS0 to select, and prom_a's side of the same link is
+;          at 0x7C0000.  ★ Round 2 converted all seven arms; their header, just
+;          below the table, carries the command -> {state, count, buffer} map and
+;          the script that derives it.
 ;          ⚠ The KN5000 sub-CPU's INT0 handler (../kn5000-roms-disasm/v142/subcpu/
 ;          kn5000_subprogram_v142.s:2429) reads its link port the same way and
 ;          also special-cases 0xE1/0xE2/0xE3 -- but it is NOT byte-identical to
@@ -238,13 +1750,205 @@ INT0_HANDLER:
 	ld xbc, (xbc)
 	jp (xbc)
 INT0_HANDLER__jumptable:
-	; 7 x u32, indexed by (command - 0xE1).  Every target is inside prom_c.
+	; 7 x u32, indexed by (command - 0xE1).  Every target is inside prom_c, and
+	; every one of them is a label defined immediately below.  Note entry 5:
+	; command 0xE6 shares INT0_HANDLER__cmd_E6_or_other with the out-of-range path.
 	;         0xE1         0xE2         0xE3         0xE4
 	.long 0x00F99C12, 0x00F99C32, 0x00F99C52, 0x00F99C72
 	;         0xE5         0xE6         0xE7
 	.long 0x00F99C91, 0x00F99CCF, 0x00F99CB0
 
-	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x019C12, 0x00EC
+
+; ==============================================================================
+; 0xF99C12-0xF99CFD -- INT0's seven command arms and their shared epilogue
+; ==============================================================================
+; --------------------------------------------------------------------------
+; INT0_HANDLER__cmd_E1 ... __cmd_E7 / __cmd_E6_or_other -- arm micro-DMA channel
+;             3 to receive this command's payload, then hand INT0 to the DMA
+;             engine so the payload bytes never reach the CPU.
+;
+; Called from: nothing calls these; they are jumped to.  All seven entries of
+;          INT0_HANDLER__jumptable (0xF99BF6, converted above) land here, the
+;          table being indexed by (command - 0xE1).  Six entries point at an arm
+;          of their own; entry index 5 -- command 0xE6 -- points at
+;          INT0_HANDLER__cmd_E6_or_other (0xF99CCF), which is ALSO the target of
+;          the out-of-range `jrl ugt` at 0xF99BE9, so that one arm takes 0xE6 and
+;          every byte outside 0xE1..0xE7.  (BC is zero-extended from the byte
+;          before `sub bc,0x00E1`, so bytes below 0xE1 wrap to a large unsigned
+;          value and take the same unsigned-greater-than exit as bytes above
+;          0xE7.)
+; Inputs:  XIX = 0xF9A01F, loaded by INT0_HANDLER at 0xF99BC3 -- that address is
+;          uDMA3_SetDest, converted in this file at 0xF9A01F.  The command byte
+;          INT0_HANDLER saved at 0x008518.
+; Outputs: DMAD3 = this arm's buffer, DMAC3 = its transfer count, DMA3V = 0x0A,
+;          (0x00F32D) = a transfer state, PA bit 1 cleared.  Every arm leaves
+;          through INT0_HANDLER__drop_args, which drops the 6 argument bytes and
+;          pops the five registers INT0_HANDLER pushed.
+; Evidence: each arm is a FIXED seven-instruction shape, so the table below is
+;          decoded from the bytes rather than read off:
+;              python3 notes/prom_c_link_state_machine.py --selftest
+;          prints it and re-proves every field, including the LAST row (0xE7 ->
+;          0xF99CB0, state 8) and that the word after the 7-entry jump table
+;          (0x00F32DF2) is not a pointer.  It reports "arms matching the fixed
+;          shape: 6 of 7" -- the seventh is different BY DESIGN, see below.
+;
+;          command   arm       state   count   buffer     resume
+;            0xE1   0xF99C12     2       6     0x008568   0xF99C29
+;            0xE2   0xF99C32     3      10     0x008520   0xF99C49
+;            0xE3   0xF99C52     5       4     0x00852D   0xF99C69
+;            0xE4   0xF99C72     6       6     0x008568   0xF99C89
+;            0xE5   0xF99C91     7       4     0x008531   0xF99CA8
+;            0xE7   0xF99CB0     8       6     0x008568   0xF99CC7
+;            0xE6 / any other byte:
+;                   0xF99CCF     1   (cmd & 0x1F) + 1   0x008548   0xF99CF0
+;
+;          ★ THE SEVENTH ARM IS THE INTERESTING ONE.  Its transfer count is not a
+;          constant: it is the low five bits of the command byte plus one.  So the
+;          link protocol is not "seven commands" -- it is six special commands
+;          plus a general length-prefixed message whose header byte carries the
+;          length in its low 5 bits.  The top 3 bits are then used as a class
+;          index by INTTC3_HANDLER__state1_generic (0xF99D6F, below).  That is
+;          exactly the header byte notes/FINDINGS-memory-map.md section 3 reports
+;          from CPU 1's side, `(channel << 5) | (len - 1)`.
+;
+;          `ldio DMA3V, 0x0A`: DMA3V is SFR 0x7F (include/tmp95c061_sfr.inc) and
+;          the TMP95C061 triggers micro-DMA on `(DMAnV & 0x1f) << 2`
+;          (mame/src/devices/cpu/tlcs900/tmp95c061.cpp:353); 0x0A << 2 = 0x28,
+;          which the same file's vector map (:322-347) gives as INT0.  So after
+;          this write the SAME interrupt that ran this handler is consumed by the
+;          DMA engine, one byte per interrupt, and does not reach the CPU again
+;          until INTTC3 (the transfer-complete interrupt) re-points it.
+;          The other half of that channel is programmed ONCE, at 0xF99966-0xF99977:
+;          DMAS3 := 0x00100000 (the inter-processor link port,
+;          notes/FINDINGS-memory-map.md) and DMAM3 := 0x00, and mode 0x00 is
+;          "byte transfer, DESTINATION incremented" (tmp95c061.cpp:366-371) --
+;          i.e. read the fixed port, write successive buffer bytes.  "Once" is
+;          measured, not assumed:
+;              python3 notes/prom_c_link_state_machine.py --dma
+;          censuses every `ldc CRn,r` / `ldc r,CRn` in prom_c naming a micro-DMA
+;          control register and finds DMAS3 written at exactly one instruction
+;          (0xF9A015) and DMAM3 at exactly one (0xF9A01B), both inside
+;          uDMA3_SetSource -- which itself has exactly one call site, 0xF99974.
+;          The same census shows EVERY non-spurious micro-DMA register access in
+;          the image is inside the helper block 0xF99FF8-0xF9A037.  (⚠ its
+;          CR-0x00 rows are byte-pattern noise and are printed as such.)
+;          PA is SFR 0x1E.  prom_a's side of the same link does all of this with
+;          P7 instead of PA: the notes block above INT0_LinkByte (0xF8E47F) in
+;          prom_a/wsa1_prom_a.s records bit 2 tested on entry and bit 1 cleared
+;          once the DMA is armed, which is exactly the
+;          `bit_dd8 2, PA` at 0xF99BC8 and the `res_dd8 1, PA` in every arm here.
+; Unknown:  ⚠ what the commands MEAN.  Only their payload sizes, their landing
+;          buffers and their follow-up states are established.  prom_a's header
+;          for the same protocol says the same thing and adds "do not name them";
+;          that discipline is kept here.
+;          ⚠ why 0xE6 shares the generic arm.  It is a table entry like the rest,
+;          and it points at the general path; nothing here says whether that is
+;          deliberate or the compiler folding an identical body.
+; --------------------------------------------------------------------------
+; ------------------------- command 0xE1 -------------------------------
+INT0_HANDLER__cmd_E1:
+	stib_da 0x00F32D, 0x02                     ; F99C12  f2 2d f3 00 00 02   transfer state := 2
+	pushw 0x0006                               ; F99C18  0b 06 00   arg2: DMAC3 := 6 transfers
+	lda_24 xbc, 0x008568                       ; F99C1B  f2 68 85 00 31
+	push xbc                                   ; F99C20  39   arg1: DMAD3 := 0x008568
+	lda_24 xiy, 0x00F99C29                     ; F99C21  f2 29 9c f9 35
+	push xiy                                   ; F99C26  3d   return address for the tail-jump call
+	jp (xix)                                   ; F99C27  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
+INT0_HANDLER__cmd_E1_armed:
+	ldio DMA3V, 0x0A                           ; F99C29  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	res_dd8 1, PA                              ; F99C2C  f0 1e b1   drop the handshake line
+	jrl t, (0x00F99CF6 - 0x00F99C32)           ; F99C2F  78 c4 00   -> INT0_HANDLER__drop_args
+; ------------------------- command 0xE2 -------------------------------
+INT0_HANDLER__cmd_E2:
+	stib_da 0x00F32D, 0x03                     ; F99C32  f2 2d f3 00 00 03   transfer state := 3
+	pushw 0x000A                               ; F99C38  0b 0a 00   arg2: DMAC3 := 10 transfers
+	lda_24 xbc, 0x008520                       ; F99C3B  f2 20 85 00 31
+	push xbc                                   ; F99C40  39   arg1: DMAD3 := 0x008520
+	lda_24 xiy, 0x00F99C49                     ; F99C41  f2 49 9c f9 35
+	push xiy                                   ; F99C46  3d   return address for the tail-jump call
+	jp (xix)                                   ; F99C47  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
+INT0_HANDLER__cmd_E2_armed:
+	ldio DMA3V, 0x0A                           ; F99C49  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	res_dd8 1, PA                              ; F99C4C  f0 1e b1   drop the handshake line
+	jrl t, (0x00F99CF6 - 0x00F99C52)           ; F99C4F  78 a4 00   -> INT0_HANDLER__drop_args
+; ------------------------- command 0xE3 -------------------------------
+INT0_HANDLER__cmd_E3:
+	stib_da 0x00F32D, 0x05                     ; F99C52  f2 2d f3 00 00 05   transfer state := 5
+	pushw 0x0004                               ; F99C58  0b 04 00   arg2: DMAC3 := 4 transfers
+	lda_24 xbc, 0x00852D                       ; F99C5B  f2 2d 85 00 31
+	push xbc                                   ; F99C60  39   arg1: DMAD3 := 0x00852D
+	lda_24 xiy, 0x00F99C69                     ; F99C61  f2 69 9c f9 35
+	push xiy                                   ; F99C66  3d   return address for the tail-jump call
+	jp (xix)                                   ; F99C67  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
+INT0_HANDLER__cmd_E3_armed:
+	ldio DMA3V, 0x0A                           ; F99C69  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	res_dd8 1, PA                              ; F99C6C  f0 1e b1   drop the handshake line
+	jrl t, (0x00F99CF6 - 0x00F99C72)           ; F99C6F  78 84 00   -> INT0_HANDLER__drop_args
+; ------------------------- command 0xE4 -------------------------------
+INT0_HANDLER__cmd_E4:
+	stib_da 0x00F32D, 0x06                     ; F99C72  f2 2d f3 00 00 06   transfer state := 6
+	pushw 0x0006                               ; F99C78  0b 06 00   arg2: DMAC3 := 6 transfers
+	lda_24 xbc, 0x008568                       ; F99C7B  f2 68 85 00 31
+	push xbc                                   ; F99C80  39   arg1: DMAD3 := 0x008568
+	lda_24 xiy, 0x00F99C89                     ; F99C81  f2 89 9c f9 35
+	push xiy                                   ; F99C86  3d   return address for the tail-jump call
+	jp (xix)                                   ; F99C87  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
+INT0_HANDLER__cmd_E4_armed:
+	ldio DMA3V, 0x0A                           ; F99C89  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	res_dd8 1, PA                              ; F99C8C  f0 1e b1   drop the handshake line
+	jr INT0_HANDLER__drop_args                 ; F99C8F  68 65
+; ------------------------- command 0xE5 -------------------------------
+INT0_HANDLER__cmd_E5:
+	stib_da 0x00F32D, 0x07                     ; F99C91  f2 2d f3 00 00 07   transfer state := 7
+	pushw 0x0004                               ; F99C97  0b 04 00   arg2: DMAC3 := 4 transfers
+	lda_24 xbc, 0x008531                       ; F99C9A  f2 31 85 00 31
+	push xbc                                   ; F99C9F  39   arg1: DMAD3 := 0x008531
+	lda_24 xiy, 0x00F99CA8                     ; F99CA0  f2 a8 9c f9 35
+	push xiy                                   ; F99CA5  3d   return address for the tail-jump call
+	jp (xix)                                   ; F99CA6  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
+INT0_HANDLER__cmd_E5_armed:
+	ldio DMA3V, 0x0A                           ; F99CA8  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	res_dd8 1, PA                              ; F99CAB  f0 1e b1   drop the handshake line
+	jr INT0_HANDLER__drop_args                 ; F99CAE  68 46
+; ------------------------- command 0xE7 -------------------------------
+INT0_HANDLER__cmd_E7:
+	stib_da 0x00F32D, 0x08                     ; F99CB0  f2 2d f3 00 00 08   transfer state := 8
+	pushw 0x0006                               ; F99CB6  0b 06 00   arg2: DMAC3 := 6 transfers
+	lda_24 xbc, 0x008568                       ; F99CB9  f2 68 85 00 31
+	push xbc                                   ; F99CBE  39   arg1: DMAD3 := 0x008568
+	lda_24 xiy, 0x00F99CC7                     ; F99CBF  f2 c7 9c f9 35
+	push xiy                                   ; F99CC4  3d   return address for the tail-jump call
+	jp (xix)                                   ; F99CC5  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
+INT0_HANDLER__cmd_E7_armed:
+	ldio DMA3V, 0x0A                           ; F99CC7  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
+	res_dd8 1, PA                              ; F99CCA  f0 1e b1   drop the handshake line
+	jr INT0_HANDLER__drop_args                 ; F99CCD  68 27
+; --------------- command 0xE6 AND every unlisted byte -----------------
+INT0_HANDLER__cmd_E6_or_other:
+	stib_da 0x00F32D, 0x01                     ; F99CCF  f2 2d f3 00 00 01   transfer state := 1
+	ldb_da c, 0x008518                         ; F99CD5  c2 18 85 00 23   the command byte INT0_HANDLER saved
+	and c, 0x1f                                ; F99CDA  cb cc 1f   low 5 bits ...
+	extz bc                                    ; F99CDD  d9 12
+	inc 1, bc                                  ; F99CDF  d9 61   ... + 1 = the payload length
+	pushw bc                                   ; F99CE1  29   arg2: DMAC3 := that many transfers
+	lda_24 xbc, 0x008548                       ; F99CE2  f2 48 85 00 31
+	push xbc                                   ; F99CE7  39   arg1: DMAD3 := 0x008548
+	lda_24 xiy, 0x00F99CF0                     ; F99CE8  f2 f0 9c f9 35
+	push xiy                                   ; F99CED  3d
+	jp (xix)                                   ; F99CEE  b4 d8   XIX = uDMA3_SetDest (0xF9A01F)
+INT0_HANDLER__cmd_E6_armed:
+	ldio DMA3V, 0x0A                           ; F99CF0  08 7f 0a
+	res_dd8 1, PA                              ; F99CF3  f0 1e b1
+
+INT0_HANDLER__drop_args:
+	inc 6, xsp                                 ; F99CF6  ef 66   drop the 6 bytes of arguments -- caller-cleaned
+INT0_HANDLER__return:
+	pop xix                                    ; F99CF8  5c
+	popw hl                                    ; F99CF9  4b
+	pop xiy                                    ; F99CFA  5d
+	popw wa                                    ; F99CFB  48
+	pop xbc                                    ; F99CFC  59
+	reti                                       ; F99CFD  07
 
 ; ==============================================================================
 ; 0xF99CFE-0xF99D6E -- the micro-DMA completion handlers
@@ -280,7 +1984,10 @@ INTTC2_HANDLER__done:
 ;
 ; Called from: vector table offset 0x80 (INTTC3) -> 0x00FFF0C4 -> `jp 0xF99D20`.
 ; Inputs:  the 16-bit state at 0x00F32D.
-; Outputs: jumps through the table below; state 0 or > 9 falls out to 0xF99E56.
+; Outputs: jumps through the table below; state 0 or > 9 falls out to
+;          INTTC3_HANDLER__return (0xF99E56).  ★ Round 2 converted all nine
+;          arms; their header, just below the table, says which link command
+;          reaches which arm and what each one posts.
 ; Notes:   ★ The state range is read off the code: `dec 1,bc` then `cp bc,0x0008`
 ;          with an UNSIGNED greater-than exit, so the accepted states are 1..9 and
 ;          the table has exactly 9 entries -- which is also exactly the space
@@ -307,13 +2014,210 @@ INTTC3_HANDLER:
 	ld xbc, (xbc)
 	jp (xbc)
 INTTC3_HANDLER__jumptable:
-	; 9 x u32, indexed by (state - 1).  Every target is inside prom_c and the
-	; first of them, 0xF99D6F, is the byte immediately after this table.
+	; 9 x u32, indexed by (state - 1).  Every target is inside prom_c, is a label
+	; defined immediately below, and the first of them, 0xF99D6F, is the byte
+	; immediately after this table.
 	.long 0x00F99D6F, 0x00F99DAC, 0x00F99DB5, 0x00F99DCC
 	.long 0x00F99DDD, 0x00F99DED, 0x00F99E11, 0x00F99E21
 	.long 0x00F99E43
 
-	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x019D6F, 0x00EF
+
+; ==============================================================================
+; 0xF99D6F-0xF99E5D -- INTTC3's nine state arms and their shared epilogue
+; ==============================================================================
+; --------------------------------------------------------------------------
+; INTTC3_HANDLER__state1_generic ... __state9 -- one arm per transfer state:
+;             finish the transfer that just completed, and either post a flag for
+;             the service task or arm the NEXT transfer.
+;
+; Called from: nothing calls these; INTTC3_HANDLER (0xF99D20, converted above)
+;          jumps through INTTC3_HANDLER__jumptable (0xF99D4B) indexed by
+;          (state - 1), the state being the 16-bit variable at 0x00F32D that the
+;          INT0 arms wrote.
+; Inputs:  XIX = 0x008568, loaded by INTTC3_HANDLER at 0xF99D24 -- that is the
+;          buffer commands 0xE1/0xE4/0xE7 transfer their six descriptor bytes
+;          into, and states 2/6/8 read it back as {u32 destination, u16 count}.
+;          The command byte at 0x008518 (state 1 only).
+; Outputs: (0x00F32D) := 0 on every terminating arm; PA bit 1 raised again; and
+;          one of: a flag bit in 0x00852A/0x00852B/0x00852C, a further micro-DMA
+;          transfer armed, or the counter at 0x008535 incremented.
+; Evidence: the 9-entry table and which command reaches which arm are decoded
+;          from the ROM by
+;              python3 notes/prom_c_link_state_machine.py --selftest
+;          which prints the state -> handler mapping, checks the LAST entry
+;          (state 9 -> 0xF99E43) as well as the first, and shows the word after
+;          the table (0x008548F2) is not a pointer.  The same run censuses the
+;          state variable completely: over all twelve direct-address spellings
+;          0x00F32D has EIGHTEEN literal-addressed references in prom_c --
+;          SEVENTEEN immediate byte writes, covering exactly the values 0..9 and
+;          all inside 0xF99C12-0xF99FDC, and ONE read, the `ldw_da bc, 0x00F32D`
+;          at 0xF99D2C in INTTC3_HANDLER itself.  That is what makes "states 4
+;          and 9 are entered from INTTC3, not from an INT0 command" a measurement
+;          rather than an impression: 0xF99E07 writes 4 and 0xF99E3B writes 9,
+;          and no INT0 arm writes either.  (A write through a pointer register
+;          would still be invisible -- see the INTT1_HANDLER header.)
+;
+;          ★ THIS CLOSES THE Handler_PtrTable_FCC53F QUESTION.  That table's
+;          header (below, at 0xFCC53F) said "nothing in prom_c references
+;          0xFCC53F as a literal ... what dispatches through it is not traced".
+;          Both halves are now answered, and the reason the literal search failed
+;          is that the dispatcher does not use the ROM address at all: RESET
+;          copies ROM 0xFCB4EA.. to RAM 0x00E2DF (notes/prom_c_ram_image.py), and
+;          0xFCC53F - 0xFCB4EA = 0x1055, so the table's RAM copy is at
+;          0x00E2DF + 0x1055 = 0x00F334.  `add xbc, 0x0000F334` at 0xF99D91 is
+;          that address.  The index is (command byte >> 5) * 4, i.e. the message
+;          class in the top three bits, 0..7 -- which is exactly why the table has
+;          eight entries.  Reproduce the RAM address and the boot contents with
+;              python3 notes/prom_c_ram_image.py 0x00F334:32
+;          which prints the eight pointers 0xF98D9A, 0xF98DE6, 0xF98FD6, 0xF9901B
+;          and then 0xF9993D four times.
+;
+;          ★ AND IT CONFIRMS THE 0xE2 PACKET LAYOUT FROM THE RECEIVING SIDE.
+;          notes/FINDINGS-memory-map.md section 3 derives, from prom_a alone, that
+;          command 0xE2 carries a 10-byte packet laid out {+0 remote address u32,
+;          +4 local destination u32, +8 length u16}.  Here the 0xE2 arm transfers
+;          exactly 10 bytes to 0x008520, and the routine at 0xF99E5F that state 3
+;          wakes reads 0x008524 (u32), 0x008528 (u16) and 0x008520 (u32) in that
+;          order and passes them as three arguments.  Two independent images, one
+;          layout.
+;
+;          The three flag bytes these arms post to are each fully censused by
+;              python3 notes/prom_c_link_state_machine.py --flags
+;          (all twelve direct spellings).  0x00852A/B/C have SEVENTEEN sites
+;          between them, spanning 0xF99AAE-0xF99FE5 -- note that the top of that
+;          span is inside Link_WaitBlockDone, NOT inside this block:
+;            0x00852A -- 3 sites.  set 7 HERE (state 3, 0xF99DC4); bit 7 tested at
+;                        0xF99E67 and cleared at 0xF99E6E, both in the routine at
+;                        0xF99E5F.  A one-bit "0xE2 packet ready" handshake.
+;            0x00852B -- 4 sites.  set 7 at 0xF99AAE, immediately after micro-DMA
+;                        channel 2 is armed and TRUN bit 2 set (an OUTGOING
+;                        transfer starting); cleared HERE by state 4 (0xF99DD2)
+;                        and by Link_WaitBlockDone's timeout path (0xF99FE5),
+;                        which is also its only reader (0xF99FC6).
+;            0x00852C -- 10 sites.  bits 7/6/5 set HERE by states 5/7/9
+;                        (0xF99DE3, 0xF99E17, 0xF99E49) and each tested and
+;                        cleared by the routine at 0xF99E5F (0xF99E92/0xF99E99,
+;                        0xF99ECD/0xF99ED4, 0xF99F06/0xF99F0D); bit 5 is also set
+;                        at 0xF99F48.  A three-bit work-request byte.
+;          0x008535, incremented by state 9 (0xF99E4E), has 5 sites: cleared at
+;          0xF99951 and 0xF99EA6, compared against C at 0xF99F3F and 0xF99F65.
+;          It IS read.  Adding it and 0x008519 to the census gives 23 sites over
+;          0xF99951-0xF99FE5, which is the whole link subsystem.
+; Unknown:  ⚠ WHAT the three flags MEAN -- which link exchange each one belongs to
+;          is not established, only which code sets and clears it.
+;          ⚠ why states 6 and 8 force the destination into 0x010000-0x01FFFF with
+;          `and 0xFFFF` + `add 0x00010000` while state 2 uses the descriptor's
+;          full 32-bit address.  Per notes/FINDINGS-memory-map.md that range is
+;          CS3, the same chip select as the work DRAM, but its upper half is
+;          listed there as NOT ESTABLISHED.
+;          ⚠ 0x008519 := 0xFF (state 3) is the ONLY literal-addressed reference
+;          to 0x008519 in the whole image -- written once, never read.  Either a
+;          pointer-based reader exists (invisible to any literal census) or it is
+;          dead.  Stated as measured; not called dead.
+; --------------------------------------------------------------------------
+; ---- state 1: a generic length-prefixed message; dispatch on the top 3 bits ----
+INTTC3_HANDLER__state1_generic:
+	lda_24 xbc, 0x008548                       ; F99D6F  f2 48 85 00 31
+	push xbc                                   ; F99D74  39   arg2 (XSP+6): the buffer the payload landed in
+	ldb_da a, 0x008518                         ; F99D75  c2 18 85 00 21   the command byte INT0_HANDLER saved
+	and a, 0x1f                                ; F99D7A  c9 cc 1f
+	extz wa                                    ; F99D7D  d8 12
+	inc 1, wa                                  ; F99D7F  d8 61
+	pushw wa                                   ; F99D81  28   arg1 (XSP+4): (cmd & 0x1F) + 1 = payload length
+	ldb_da w, 0x008518                         ; F99D82  c2 18 85 00 20
+	srl w, 5                                   ; F99D87  c8 ef 05   the top 3 bits = the message class, 0..7
+	ld c, w                                    ; F99D8A  c8 8b
+	mul c, 4                                   ; F99D8C  cb 08 04   x 4: these are 32-bit pointers
+	extz xbc                                   ; F99D8F  e9 12
+	add xbc, 0x0000F334                        ; F99D91  e9 c8 34 f3 00 00   the RAM copy of Handler_PtrTable_FCC53F
+	ld xbc, (xbc)                              ; F99D97  a1 21
+	lda_24 xiy, 0x00F99DA1                     ; F99D99  f2 a1 9d f9 35
+	push xiy                                   ; F99D9E  3d   return address for the tail-jump call
+	jp (xbc)                                   ; F99D9F  b1 d8   call the class handler
+INTTC3_HANDLER__state1_done:
+	stib_da 0x00F32D, 0x00                     ; F99DA1  f2 2d f3 00 00 00   transfer state := idle
+	set_dd8 1, PA                              ; F99DA7  f0 1e b9   raise the handshake line again
+	jr INTTC3_HANDLER__drop_args               ; F99DAA  68 61
+
+; ---- state 2: the 0xE1 descriptor has landed -- arm the payload transfer ----
+INTTC3_HANDLER__state2_block:
+	ld bc, (xix+4)                             ; F99DAC  9c 04 21   descriptor +4: the 16-bit count
+	pushw bc                                   ; F99DAF  29
+	ld xbc, (xix)                              ; F99DB0  a4 21   descriptor +0: the 32-bit destination
+	push xbc                                   ; F99DB2  39
+	jr INTTC3_HANDLER__arm_payload             ; F99DB3  68 4b
+
+; ---- state 3: the 0xE2 packet has landed -- hand it to the service task ----
+INTTC3_HANDLER__state3_packet:
+	stib_da 0x008519, 0xff                     ; F99DB5  f2 19 85 00 00 ff
+	stib_da 0x00F32D, 0x00                     ; F99DBB  f2 2d f3 00 00 00   transfer state := idle
+	set_dd8 1, PA                              ; F99DC1  f0 1e b9
+	setda_24 7, 0x00852A                       ; F99DC4  f2 2a 85 00 bf   post 'packet ready' to the service task at 0xF99E5F
+	jrl t, (0x00F99E56 - 0x00F99DCC)           ; F99DC9  78 8a 00   -> INTTC3_HANDLER__return
+
+; ---- state 4: a payload transfer finished ----
+INTTC3_HANDLER__state4_blockdone:
+	stib_da 0x00F32D, 0x00                     ; F99DCC  f2 2d f3 00 00 00   transfer state := idle
+	resda_24 7, 0x00852B                       ; F99DD2  f2 2b 85 00 b7   release Link_WaitBlockDone (0xF99FC1)
+	set_dd8 1, PA                              ; F99DD7  f0 1e b9
+	jrl t, (0x00F99E56 - 0x00F99DDD)           ; F99DDA  78 79 00   -> INTTC3_HANDLER__return
+
+; ---- state 5: the 0xE3 payload has landed ----
+INTTC3_HANDLER__state5:
+	stib_da 0x00F32D, 0x00                     ; F99DDD  f2 2d f3 00 00 00
+	setda_24 7, 0x00852C                       ; F99DE3  f2 2c 85 00 bf
+	set_dd8 1, PA                              ; F99DE8  f0 1e b9
+	jr INTTC3_HANDLER__return                  ; F99DEB  68 69
+
+; ---- state 6: the 0xE4 descriptor has landed -- same, but banked ----
+INTTC3_HANDLER__state6_block_banked:
+	ld bc, (xix+4)                             ; F99DED  9c 04 21   descriptor +4: the 16-bit count
+	pushw bc                                   ; F99DF0  29
+	ld xbc, (xix)                              ; F99DF1  a4 21   descriptor +0: the destination
+	and xbc, 0x0000FFFF                        ; F99DF3  e9 cc ff ff 00 00
+	add xbc, 0x00010000                        ; F99DF9  e9 c8 00 00 01 00   forced into 0x010000-0x01FFFF
+	push xbc                                   ; F99DFF  39
+INTTC3_HANDLER__arm_payload:
+	call 0x00F9A01F                            ; F99E00  1d 1f a0 f9   uDMA3_SetDest: DMAD3 := dest, DMAC3 := count
+	ldio DMA3V, 0x0A                           ; F99E04  08 7f 0a   re-point INT0 at the DMA engine
+	stib_da 0x00F32D, 0x04                     ; F99E07  f2 2d f3 00 00 04   transfer state := 4 (payload in flight)
+INTTC3_HANDLER__drop_args:
+	inc 6, xsp                                 ; F99E0D  ef 66   drop the 6 bytes of arguments -- caller-cleaned
+	jr INTTC3_HANDLER__return                  ; F99E0F  68 45
+
+; ---- state 7: the 0xE5 payload has landed ----
+INTTC3_HANDLER__state7:
+	stib_da 0x00F32D, 0x00                     ; F99E11  f2 2d f3 00 00 00
+	setda_24 6, 0x00852C                       ; F99E17  f2 2c 85 00 be
+	set_dd8 1, PA                              ; F99E1C  f0 1e b9
+	jr INTTC3_HANDLER__return                  ; F99E1F  68 35
+
+; ---- state 8: the 0xE7 descriptor has landed -- banked, then state 9 ----
+INTTC3_HANDLER__state8_block_banked:
+	ld bc, (xix+4)                             ; F99E21  9c 04 21
+	pushw bc                                   ; F99E24  29
+	ld xbc, (xix)                              ; F99E25  a4 21
+	and xbc, 0x0000FFFF                        ; F99E27  e9 cc ff ff 00 00
+	add xbc, 0x00010000                        ; F99E2D  e9 c8 00 00 01 00
+	push xbc                                   ; F99E33  39
+	call 0x00F9A01F                            ; F99E34  1d 1f a0 f9   uDMA3_SetDest
+	ldio DMA3V, 0x0A                           ; F99E38  08 7f 0a
+	stib_da 0x00F32D, 0x09                     ; F99E3B  f2 2d f3 00 00 09   transfer state := 9, NOT 4
+	jr INTTC3_HANDLER__drop_args               ; F99E41  68 ca
+
+; ---- state 9: the 0xE7 payload has landed ----
+INTTC3_HANDLER__state9:
+	stib_da 0x00F32D, 0x00                     ; F99E43  f2 2d f3 00 00 00
+	setda_24 5, 0x00852C                       ; F99E49  f2 2c 85 00 bd
+	incdi8_24 1, 0x008535                      ; F99E4E  c2 35 85 00 61   a counter, incremented only here
+	set_dd8 1, PA                              ; F99E53  f0 1e b9
+INTTC3_HANDLER__return:
+	popw_erp 0xE2                              ; F99E56  d7 e2 05   pop QWA -- matches the pushw_erp in the prologue
+	pop xix                                    ; F99E59  5c
+	pop xiy                                    ; F99E5A  5d
+	popw wa                                    ; F99E5B  48
+	pop xbc                                    ; F99E5C  59
+	reti                                       ; F99E5D  07
 
 ; --------------------------------------------------------------------------
 ; INTT2_HANDLER -- timer 2 interrupt: acknowledge and return, nothing else.
@@ -330,7 +2234,188 @@ INTTC3_HANDLER__jumptable:
 INTT2_HANDLER:
 	reti
 
-	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x019E5F, 0x0326E0
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x019E5F, 0x000162
+
+; ==============================================================================
+; 0xF99FC1-0xF9A04F -- the link wait, and the micro-DMA / block-move runtime
+; ==============================================================================
+; --------------------------------------------------------------------------
+; Link_WaitBlockDone -- block until the outstanding link transfer finishes, or
+;             500 ticks pass; abort it if they do.
+;
+; Called from: not yet traced.  notes/prom_c_xrefs.py 0xF99FC1 finds no absolute
+;          literal and no calr displacement, and short PC-relative forms are not
+;          searched, so this is "not found", not "nothing calls it".
+; Inputs:  bit 7 of (0x00852B); the INTT1 tick counter at 0x00F2F3, read as 16
+;          bits.
+; Outputs: WA = 0 if the flag cleared in time, 0xFFFF if it did not.  On timeout
+;          it also aborts: DMA3V := 0, (0x00F32D) := 0, PA bit 1 raised, bit 7 of
+;          (0x00852B) cleared, and the counter at 0x00F333 incremented.  HL saved.
+; Evidence: this is prom_a's Link_WaitBlockDone (0xF8E66D in
+;          prom_a/wsa1_prom_a.s) rewritten for CPU 2's addresses.  The two
+;          routines are the SAME FIFTEEN INSTRUCTIONS in the same order with the
+;          same opcodes -- push HL / load tick / poll flag / re-load tick /
+;          subtract / cp 0x01F4 / loop / DMAnV:=0 / state:=0 / set port bit 1 /
+;          clear flag / bump a counter / WA:=0xFFFF / else WA:=0 / pop HL / ret --
+;          and only the operand addresses differ:
+;
+;              role                     prom_a          prom_c
+;              tick counter             (0x0080)        (0x00F2F3)
+;              outstanding flag         (0x00008A) b7   (0x00852B) b7
+;              transfer state           (0x6007DA)      (0x00F32D)
+;              handshake port           P7 (0x13) b1    PA (0x1E) b1
+;              timeout counter          (0x6007E1)      (0x00F333)
+;              timeout                  0x01F4 = 500    0x01F4 = 500
+;
+;          They are NOT byte-identical -- the embedded addresses see to that.
+;          The maximal identical run through this neighbourhood starts only at the
+;          `ldw wa, 0xffff` and runs 98 bytes into the helper block below:
+;              python3 notes/prom_c_prom_a_shared_runs.py --at 0xF9A01F 0xF8E6C9
+;          The clearing side is pinned independently: INTTC3_HANDLER__state4_blockdone
+;          (0xF99DCC, converted above) is the only `res 7,(0x00852B)` besides the
+;          timeout path here, and it runs when a payload transfer completes.
+;
+;          ★ The two reads of the tick counter here are the two sites that the
+;          round-1 census of 0x00F2F3 MISSED, because they use the 16-bit-direct
+;          spelling (prefix 0xD1) instead of the 24-bit one (0xD2).  prom_a's
+;          counterpart makes the point twice over: its tick counter lives at
+;          0x0080, so the SAME instruction is spelled with the 8-bit-direct prefix
+;          0xD0 there.  See the correction in the INTT1_HANDLER header above.
+; Unknown:  ⚠ which of the flag's setters a given caller is waiting on, and what
+;          reads the timeout counter at 0x00F333 -- prom_a's header records the
+;          same two gaps for its own copy.
+; --------------------------------------------------------------------------
+; uDMA2_SetDest / uDMA2_SetSource / uDMA3_SetSource / uDMA3_SetDest /
+; uDMA2_GetCount / uDMA3_GetCount / uDMA3_GetDest -- one micro-DMA control
+;             register each, from the stack.
+;
+; Called from: uDMA2_SetDest 0xF9996C; uDMA2_SetSource 0xF99A26, 0xF99AA4,
+;          0xF99B81, 0xF99BA4; uDMA3_SetSource 0xF99974; uDMA3_SetDest 0xF99E00
+;          and 0xF99E34, plus the tail-jump from all seven INT0 arms (XIX is
+;          loaded with 0xF9A01F at 0xF99BC3); uDMA3_GetCount 0xF99F73, 0xF99F8C.
+;          uDMA2_GetCount and uDMA3_GetDest: no literal reference found.
+;          (Byte census of the 24-bit literal with the `1D` call opcode in front.)
+; Inputs:  (XSP+4) = a 32-bit address; (XSP+8) = the second argument, which is
+;          NOT the same thing in all four setters -- read straight off the bodies:
+;              uDMA2_SetDest     DMAD2 0x18      DMAM2 0x2A   mode byte
+;              uDMA2_SetSource   DMAS2 0x08      DMAC2 0x28   transfer count
+;              uDMA3_SetSource   DMAS3 0x0C      DMAM3 0x2E   mode byte
+;              uDMA3_SetDest     DMAD3 0x1C      DMAC3 0x2C   transfer count
+;          ⚠ the mode byte rides with the SOURCE setter on channel 3 and with the
+;          DEST setter on channel 2.  prom_a's block header at 0xF8E6A2 records
+;          the same crossing and the round-1 audit finding (F8) that an earlier
+;          version of it got backwards.
+; Outputs: the named control register.  BC/XBC clobbered.  Callers drop the
+;          arguments themselves.
+; Evidence: ★ NAMES CARRIED FROM prom_a BY BYTE IDENTITY, not by resemblance.
+;          All eight routines here, 0xF99FF8-0xF9A04F, are byte-for-byte
+;          prom_a 0xF8E6A2-0xF8E6F9 -- the same C runtime compiled into both
+;          EPROMs -- and prom_a names all eight in its own 0xF8E6A2-0xF8E6F9
+;          block header.  Measured, not assumed:
+;              python3 notes/prom_c_prom_a_shared_runs.py --selftest
+;          reports the maximal identical run through this block as 98 bytes,
+;          prom_c 0xF99FEE <-> prom_a 0xF8E698, differing one byte before and one
+;          byte after -- so the run COVERS all eight routines and stops outside
+;          them.  The control-register numbers are MAME's table for this exact
+;          part, mame/src/devices/cpu/tlcs900/tmp95c061.cpp:1394-1398:
+;          DMAS2 0x08, DMAC2 0x28, DMAD2 0x18, DMAM2 0x2A, DMAS3 0x0C,
+;          DMAC3 0x2C, DMAD3 0x1C, DMAM3 0x2E -- which is why the `.equ`s below
+;          are equates and not guesses.
+; Unknown:  nothing about these seven; each writes or reads one register and rets.
+; --------------------------------------------------------------------------
+; MemCopyWords -- copy (XSP+0x10) BYTES from (XSP+0x08) to (XSP+0x0C)
+;
+; Called from: 66 call sites in prom_c -- a byte census of `1D 38 A0 F9`
+;          (call + the 24-bit literal), first 0xFB1DE7, last 0xFC575B.  Both ends
+;          checked, not just the first.  This is the compiler's block move.
+; Inputs:  (XSP+0x08) source, (XSP+0x0C) destination, (XSP+0x10) byte count.
+; Outputs: the copy; BC, XIY, XIX clobbered (XIX saved and restored).
+; Evidence: byte-identical to prom_a's MemCopyWords (0xF8E6E2 in
+;          prom_a/wsa1_prom_a.s), inside the same 98-byte run measured above.
+;          The odd-length handling is visible: `bit 0,bc` then one `LDI` before
+;          `srl bc,1` + `LDIRW`, so an odd count moves one byte and then
+;          (count-1)/2 words.
+; Unknown:  nothing.
+; --------------------------------------------------------------------------
+	.equ CR_DMAS2, 0x08	; mame/src/devices/cpu/tlcs900/tmp95c061.cpp:1394-1398
+	.equ CR_DMAC2, 0x28
+	.equ CR_DMAD2, 0x18
+	.equ CR_DMAM2, 0x2A
+	.equ CR_DMAS3, 0x0C
+	.equ CR_DMAC3, 0x2C
+	.equ CR_DMAD3, 0x1C
+	.equ CR_DMAM3, 0x2E
+Link_WaitBlockDone:
+	pushw hl                                   ; F99FC1  2b
+	ldw_d16 hl, 0xF2F3                         ; F99FC2  d1 f3 f2 23   HL := the INTT1 tick count at entry (low 16 bits)
+Link_WaitBlockDone__poll:
+	bitda_24 7, 0x00852B                       ; F99FC6  f2 2b 85 00 cf   still outstanding?
+	jr z, Link_WaitBlockDone__ok               ; F99FCB  66 27
+	ldw_d16 bc, 0xF2F3                         ; F99FCD  d1 f3 f2 21
+	sub bc, hl                                 ; F99FD1  db a1
+	cp bc, 0x01f4                              ; F99FD3  d9 cf f4 01   500 ticks
+	jr le, Link_WaitBlockDone__poll            ; F99FD7  62 ed
+	ldio DMA3V, 0x00                           ; F99FD9  08 7f 00   timed out: stop INT0 feeding the DMA engine
+	stib_da 0x00F32D, 0x00                     ; F99FDC  f2 2d f3 00 00 00   transfer state := idle
+	set_dd8 1, PA                              ; F99FE2  f0 1e b9   raise the handshake line
+	resda_24 7, 0x00852B                       ; F99FE5  f2 2b 85 00 b7   clear the outstanding flag ourselves
+	incdi8_24 1, 0x00F333                      ; F99FEA  c2 33 f3 00 61   the timeout counter
+	ldw wa, 0xffff                             ; F99FEF  30 ff ff   return -1
+	jr Link_WaitBlockDone__ret                 ; F99FF2  68 02
+Link_WaitBlockDone__ok:
+	sub wa, wa                                 ; F99FF4  d8 a0   return 0
+Link_WaitBlockDone__ret:
+	popw hl                                    ; F99FF6  4b
+	ret                                        ; F99FF7  0e
+
+uDMA2_SetDest:
+	ld xbc, (xsp+4)                            ; F99FF8  af 04 21
+	ldc_cr32 xbc, CR_DMAD2                     ; F99FFB  e9 2e 18
+	ld c, (xsp+8)                              ; F99FFE  8f 08 23
+	ldc_cr8 c, CR_DMAM2                        ; F9A001  cb 2e 2a
+	ret                                        ; F9A004  0e
+uDMA2_SetSource:
+	ld xbc, (xsp+4)                            ; F9A005  af 04 21
+	ldc_cr32 xbc, CR_DMAS2                     ; F9A008  e9 2e 08
+	ld bc, (xsp+8)                             ; F9A00B  9f 08 21
+	ldc_cr16 bc, CR_DMAC2                      ; F9A00E  d9 2e 28
+	ret                                        ; F9A011  0e
+uDMA3_SetSource:
+	ld xbc, (xsp+4)                            ; F9A012  af 04 21
+	ldc_cr32 xbc, CR_DMAS3                     ; F9A015  e9 2e 0c
+	ld c, (xsp+8)                              ; F9A018  8f 08 23
+	ldc_cr8 c, CR_DMAM3                        ; F9A01B  cb 2e 2e
+	ret                                        ; F9A01E  0e
+uDMA3_SetDest:
+	ld xbc, (xsp+4)                            ; F9A01F  af 04 21
+	ldc_cr32 xbc, CR_DMAD3                     ; F9A022  e9 2e 1c
+	ld bc, (xsp+8)                             ; F9A025  9f 08 21
+	ldc_cr16 bc, CR_DMAC3                      ; F9A028  d9 2e 2c
+	ret                                        ; F9A02B  0e
+uDMA2_GetCount:
+	ldc_16_cr wa, CR_DMAC2                     ; F9A02C  d8 2f 28
+	ret                                        ; F9A02F  0e
+uDMA3_GetCount:
+	ldc_16_cr wa, CR_DMAC3                     ; F9A030  d8 2f 2c
+	ret                                        ; F9A033  0e
+uDMA3_GetDest:
+	ldc_32_cr xiy, CR_DMAD3                    ; F9A034  ed 2f 1c
+	ret                                        ; F9A037  0e
+MemCopyWords:
+	push xix                                   ; F9A038  3c
+	ld bc, (xsp+16)                            ; F9A039  9f 10 21   arg3: byte count
+	ld xiy, (xsp+8)                            ; F9A03C  af 08 25   arg1: source   (LDI/LDIRW read (XIY+))
+	ld xix, (xsp+12)                           ; F9A03F  af 0c 24   arg2: dest     (LDI/LDIRW write (XIX+))
+	bit 0, bc                                  ; F9A042  d9 33 00
+	jr z, MemCopyWords__words                  ; F9A045  66 02   odd count: move the leading byte first
+	ldi85                                      ; F9A047  85 10
+MemCopyWords__words:
+	srl bc, 1                                  ; F9A049  d9 ef 01   the rest as 16-bit words
+	ldirw                                      ; F9A04C  95 11
+	pop xix                                    ; F9A04E  5c
+	ret                                        ; F9A04F  0e
+
+	.incbin "original_ROMs/wsa1_prom_c.ic28", 0x01A050, 0x0324EF
 
 ; ============================================================================
 ; 0xFCC53F-0xFCD0F6 -- touch / EQ / mixer-gain / descriptor-string zone
@@ -356,9 +2441,20 @@ INTT2_HANDLER:
 ; `push HL` prologue -- this compiler's function entry -- while the remaining
 ; four are all the SAME address, 0xF9993D, whose first byte is 0x0E = RET.
 ; A handler table with four real arms and four do-nothing stubs.
-; ⚠ NOT ESTABLISHED: nothing in prom_c references 0xFCC53F as a literal, so the
-; START of this table is inferred from the pointer values lining up, not proven.
-; What dispatches through it is not traced.
+;
+; ★ ROUND 2: THE TWO OPEN QUESTIONS ARE ANSWERED, and the reason a literal search
+; found nothing is that the dispatcher never uses the ROM address.  RESET copies
+; ROM 0xFCB4EA.. to RAM 0x00E2DF (notes/prom_c_ram_image.py re-derives the copy
+; from the instruction bytes), and 0xFCC53F - 0xFCB4EA = 0x1055, so this table's
+; RAM copy begins at 0x00E2DF + 0x1055 = 0x00F334.  That address appears as an
+; instruction operand at 0xF99D91, `add xbc, 0x0000F334`, inside
+; INTTC3_HANDLER__state1_generic (0xF99D6F, converted in this file): it indexes
+; the table with (link command byte >> 5) * 4 and jumps through it.  So the START
+; is proven by an operand after all, the dispatcher is traced, and the entry count
+; of EIGHT is exactly the range of a 3-bit index.
+;     python3 notes/prom_c_ram_image.py 0x00F334:32     # the boot contents
+;     python3 notes/prom_c_link_state_machine.py        # the dispatcher
+; ⚠ Still not established: what the four real class handlers DO.
 ; ----------------------------------------------------------------------------
 Handler_PtrTable_FCC53F:
 	.long	0x00f98d9a, 0x00f98de6, 0x00f98fd6, 0x00f9901b
@@ -409,7 +2505,27 @@ Packet_PtrTable_FCC576:
 ; unexplained_FCC5BE -- 0xFCC5BE..0xFCC5C8  (11 bytes)
 ;
 ; 11 bytes between the pointer table and the first touch curve.  Four zeros then
-; ff fa fb 4d 00 80 00.  Not identified.
+; ff fa fb 4d 00 80 00.
+;
+; ★ FOUR OF THE ELEVEN ARE NOW EXPLAINED (2026-08-24).  The u16 at 0xFCC5C5 is
+; 0x004D = 77 and the u16 at 0xFCC5C7 is 0x0080 = 128, and
+; ToneGen_VelocityFromTouch (0xF995DF, converted above) reads both:
+;       ld DE,(curve output) / sub DE,(0xFCC5C5)      ; subtract 77
+;       muls XBC,WA / divs XBC,(0xFCC5C7)             ; times gain, over 128
+; 77 is the PIVOT of the touch transfer function -- the input-curve value at
+; which the bracket goes to zero and the output equals
+; ToneGen_VelCurve_ModeParams[mode].pivot whatever the gain is -- and 128 is the
+; fixed-point divisor that makes that record's first column read as gain/128,
+; which is exactly how the header below already describes it.
+; The input curve holds 77 at index 144 and at NO other index, so the pivot is a
+; single point on the curve.
+;
+; ⚠ Still unexplained: the four leading zeros and the bytes ff fa fb at
+; 0xFCC5C2-0xFCC5C4.  Note also that the first FOUR bytes of this object (the
+; zeros) are inside the boot RAM image copied to 0x00F3B3, and that RAM address
+; IS written at runtime (0xFA2DD4) -- see notes/FINDINGS-prom_c-ram-image.md.
+; So this object is not homogeneous: its head is a RAM initialiser and its tail
+; is two constants read in place.
 ; ----------------------------------------------------------------------------
 unexplained_FCC5BE:
 	.byte	0x00, 0x00, 0x00, 0x00, 0xff, 0xfa, 0xfb, 0x4d, 0x00, 0x80, 0x00
@@ -2190,7 +4306,10 @@ RESET:
 	ldio SC0CR,0x00
 	ldio SC0MOD,0x09	; 8-bit UART, baud-rate generator; unlike CPU 1
 				; the receiver is not enabled here
-	call 0xF99125		; a counted delay (loops to 0x40)
+	call 0xF99125		; ⚠ NOT a delay.  Earlier text here called it "a counted
+				; delay (loops to 0x40)".  It is
+				; Dev108000_Preload_80toBF, converted above: 64
+				; write pairs into the device port at 0x108000.
 
 	; --- clear work DRAM, 0x000080-0x01007F --------------------------------
 	; 0x8000 stores of 2 bytes = 64 KiB starting just above the internal I/O
@@ -2204,8 +4323,14 @@ RESET__clear_dram:
 	sub XBC,0x00000001
 	jr NZ,RESET__clear_dram
 
-	call 0xF989EF		; copies a 0xD8-byte table from 0xFCB4EA to
-				; 0x00E2DF
+	call 0xF989EF		; ⚠ 0x10D8 bytes, not 0xD8 -- earlier text here said
+				; 0xD8.  `ld XBC,0x000010D8` sets BC = 4312 and
+				; `ldir` copies that many bytes from 0xFCB4EA to
+				; 0x00E2DF.  This is the RAM IMAGE: it initialises
+				; 0x00E2DF-0x00F3B6, which is where the tick
+				; counter, the scheduler phase and the touch
+				; controls all live.  See
+				; notes/FINDINGS-prom_c-ram-image.md.
 	jp 0xF9816B		; main entry: `ld XSP,0x0000FA00`, then the
 				; main loop.  Note it moves the stack down from
 				; the 0xFFF0 the boot block used.
@@ -2236,7 +4361,9 @@ IRQ_INT0:				; vector 0x28
 IRQ_INTT2:				; vector 0x48
 	jp 0xF99E5E		; -> INTT2_HANDLER, converted above
 IRQ_INTT1:				; vector 0x44
-	jp 0xF99063
+	jp 0xF99063		; -> INTT1_HANDLER, converted above: the tick
+				; counter at 0x00F2F3 and the six-phase work
+				; schedule in 0x007ED1
 IRQ_INTTC2:				; vector 0x7C
 	jp 0xF99CFE		; -> INTTC2_HANDLER, converted above
 IRQ_INTTC3:				; vector 0x80
@@ -2294,19 +4421,22 @@ VECTORS:
 	.long 0x00FFF0AC	; 0x20  NMI         -> IRQ_NMI
 	.long 0x00FFF0A2	; 0x24  INTWD       -> IRQ_WATCHDOG_REBOOT
 	.long 0x00FFF0B4	; 0x28  INT0        -> IRQ_INT0
-	.long 0x00F995C2	; 0x2C  INT4
+	.long 0x00F995C2	; 0x2C  INT4        -> INT4_HANDLER, a bare RETI,
+				;                      converted above
 	.long 0x00FFF0A8	; 0x30  INT5
 	.long 0x00FFF0A8	; 0x34  INT6
 	.long 0x00FFF0A8	; 0x38  INT7
 	.long 0x00FFF0A8	; 0x3C  (reserved; MAME skips this slot)
 	.long 0x00FFF0A8	; 0x40  INTT0
-	.long 0x00FFF0BC	; 0x44  INTT1       -> IRQ_INTT1
+	.long 0x00FFF0BC	; 0x44  INTT1       -> IRQ_INTT1 -> INTT1_HANDLER
 	.long 0x00FFF0B8	; 0x48  INTT2       -> IRQ_INTT2.  This is the
 				;                      interrupt CPU 2's micro-DMA
 				;                      channel 2 is armed on at
 				;                      0xF99A2A (DMA2V = 0x12,
 				;                      0x12<<2 = 0x48).
-	.long 0x00F98165	; 0x4C  INTT3
+	.long 0x00F98165	; 0x4C  INTT3       -> INTT3_HANDLER, converted
+				;                      above.  Timer 3 is started
+				;                      by Timer3_Init (0xF98B6D)
 	.long 0x00FFF0A8	; 0x50  INTTR4
 	.long 0x00FFF0A8	; 0x54  INTTR5
 	.long 0x00FFF0A8	; 0x58  INTTR6

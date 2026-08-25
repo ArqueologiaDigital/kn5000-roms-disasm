@@ -80,6 +80,74 @@ one-shot check.
 | `be fe 14 51 00` | ld (XIZ+0xfe),(0x0051) | `ldmi16 (xiz-2), SC0CR` — see below |
 | `8e ff 04` | push (XIZ+0xff) | `extpfx3 0x8E, 0xFF, 0x04` — no byte-sized `pushm` exists |
 
+## Spellings added 2026-08-24 (the interrupt-handler / main-loop pass)
+
+| bytes | unidasm says | llvm-mc spelling |
+|---|---|---|
+| `f2 d1 7e 00 bf` | set 7,(0x007ed1) | `setda_24 7, 0x007ED1` |
+| `f2 d1 7e 00 b4` | res 4,(0x007ed1) | `resda_24 4, 0x007ED1` |
+| `e2 f3 f2 00 89` | add (0x00f2f3),XBC | `addl_da 0x00F2F3, xbc` |
+| `d2 e3 e2 00 20` | ld WA,(0x00e2e3) | `ldw_da wa, 0x00E2E3` |
+| `f2 df e2 00 51` | ld (0x00e2df),BC | `stw_da 0x00E2DF, bc` |
+| `d2 f1 f2 00 3f 00 00` | cp (0x00f2f1),0x0000 | `cpw_da 0x00F2F1, 0x0000` |
+| `d2 f1 f2 00 69` | decw 1,(0x00f2f1) | `decdi16_24 1, 0x00F2F1` |
+| `c2 e4 e2 00 69` | dec 1,(0x00e2e4) | `decdi8_24 1, 0x00E2E4` |
+| `c2 e3 e2 00 61` | inc 1,(0x00e2e3) | `incdi8_24 1, 0x00E2E3` |
+| `d2 c5 c5 fc a2` | sub DE,(0xfcc5c5) | `subda16_24 de, 0x00FCC5C5` |
+| `8e 08 3f 09` | cp (XIZ+0x08),0x09 | `cp (xiz+8), 0x09` |
+| `9e fe 3f 20 00` | cp (XIZ+0xfe),0x0020 | `cpw (xiz-2), 0x0020` |
+| `be fe 02 00 00` | ld (XIZ+0xfe),0x0000 | `ldw (xiz-2), 0x0000` |
+| `9e fe 61` | incw 1,(XIZ+0xfe) | `incm 1, (xiz-2)` — **not** `incm16` |
+| `b9 d6 41` | ld (XBC+0xd6),A | `ld (xbc-42), a` |
+| `f0 20 bb` / `f0 20 b3` | set/res 3,(0x20) | `set_dd8 3, TRUN` / `res_dd8 3, TRUN` |
+| `08 28 0e` | ld (0x28),0x0e | `ldio T23MOD, 0x0E` |
+| `f0 53 43` | ld (0x53),C | `st_dd8b c, BR0CR` |
+| `c7 f4 98` | ld IYL,W | `ldb_erp w, 0xF4` |
+| `06 00` | ei 0x00 | `di` |
+| `ef 60` | inc 0,XSP | `inc 8, xsp` — 8 encodes as 0 |
+| `85 11` | ldir | `extpfx2 0x85, 0x11` — see below |
+
+### ⚠ `ldir` assembles to the WRONG PREFIX
+
+`ldir` on its own emits `80 11`, not `85 11`. The prefix byte selects the pointer pair, and
+MAME decodes `0x85` as destination `XIX`, source `XIY`
+(`mame/src/devices/cpu/tlcs900/900tbl.hxx:5435-5437`), which is the pair the WSA1's boot copy
+uses. `80` would be a different pair entirely. The byte gate catches it, but only if you look
+at *which* byte differs — the listing still says `ldir` either way.
+
+### `extpfxN` is the general escape hatch, and it beats `.byte`
+
+`llvm/lib/Target/TLCS900/TLCS900InstrInfo.td:5255-5305` defines `extpfx2` … `extpfx10`, which
+emit their operands as raw bytes. Anything the backend cannot model should use these rather
+than `.byte`, because they keep ONE source line per ONE instruction — a `.byte` run silently
+loses the instruction boundary, and boundaries are what make a listing checkable. Used in this
+pass for:
+
+| bytes | unidasm says | spelling |
+|---|---|---|
+| `c2 2a f3 00 41` | mul WA,(0x00f32a) | `extpfx5 0xC2, 0x2A, 0xF3, 0x00, 0x41` |
+| `d2 c7 c5 fc 59` | divs XBC,(0xfcc5c7) | `extpfx5 0xD2, 0xC7, 0xC5, 0xFC, 0x59` |
+| `ae fa 81` | add XBC,(XIZ+0xfa) | `extpfx3 0xAE, 0xFA, 0x81` |
+| `9e fe 04` | push (XIZ+0xfe) | `extpfx3 0x9E, 0xFE, 0x04` |
+| `81 3c fd` / `81 3e 02` | and/or (XBC),imm | `extpfx3 0x81, 0x3C, 0xFD` / `0x81, 0x3E, 0x02` |
+| `b1 02 00 80` | ld (XBC),0x8000 | `extpfx4 0xB1, 0x02, 0x00, 0x80` |
+| `c0 90 61` | inc 1,(0x90) | `extpfx3 0xC0, 0x90, 0x61` |
+
+### ⚠ `scripts/analysis/llvm_roundtrip.py` cannot converge on some ranges
+
+It prints `cannot converge at byte 0` and exits 4 for `0xF98B20+0x199` and
+`0xF98BED+0x40`. The cause is an instruction whose LLVM spelling assembles to a **different
+length**: the script's demote-and-retry picks the victim by cumulative byte offset, which
+only works when the lengths agree, so on a length change it blames instruction 0 for ever.
+`9e fe 04` (`push (XIZ+0xfe)`) is one such.
+
+**Another lane hit the same defect and fixed it**: `notes/llvm_roundtrip_force.py` reuses the
+committed script's own functions and adds a fallback that demotes every instruction whose own
+bytes do not round-trip individually, so it converges where the original gives up. Use that
+first. (The 0xF98B20 range in this pass was transcribed by hand against
+`scripts/analysis/dis.sh` before that wrapper existed; the byte gate certifies it either
+way.)
+
 ### ⚠ `ldmi16` is misnamed in the backend
 
 `TLCS900InstrInfo.td:192` defines sub-opcode `0x14` as `MemStoreImmInst … i16imm:$val` and

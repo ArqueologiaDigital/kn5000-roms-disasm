@@ -84,7 +84,53 @@ image. The WSA1 inserts its own 128-byte objects in two other places (a 0…100 
 at `0xFDF0A3`, an exponential 0x00…0x80 curve at `0xFDF760`) and a 20-byte u16 bit-mask array at
 `0xFDE695`.
 
-### 3. The touch curves are re-tuned, and the table SELF-DESCRIBES
+### 3. The touch curves are re-tuned, the table SELF-DESCRIBES, and (2026-08-24) the CONSUMER is now converted
+
+★ **Update.** When this section was written, the touch tables' record layout rested on the
+first column's arithmetic progression and on the sibling project. The routine that reads
+them, `ToneGen_VelocityFromTouch` at `0xF995DF`, is now converted in
+`prom_c/wsa1_prom_c.s`, and it settles every open question in this section from prom_c's own
+instructions:
+
+```
+v  = ToneGen_Velocity_Input_Curve[touch]      ; 0xFCC61A, 256 bytes, non-increasing 255..0
+v -= 77                                       ; the u16 at 0xFCC5C5
+v += (signed) NoteTrim[note]                  ; a RAM table at 0x0084DA
+v  = ModeParams[mode].gain * v / 128          ; the u16 at 0xFCC5C7
+v += ModeParams[mode].pivot
+if note is a BLACK key:  v -= ModeParams[mode].trim
+v += (0x00F32B - 0x50)                        ; the offset control
+clamp 0..255
+out = ToneGen_Velocity_Output_Curve[v]        ; 0xFCC71A, non-decreasing 1..127
+```
+
+* **Record size 3 and row count 10** — `ld A,3 / mul WA,(0x00F32A)` gives the stride, and the
+  setter at `0xF99598` refuses any mode above 9 before storing it. 10 x 3 = 30 bytes, the
+  size the zone-2 chain already gave the table. Three independent facts, one answer.
+* **The third column really is a BLACK-KEY trim.** The note number is divided by 12, the
+  remainder minus one indexes a ten-entry jump table at `0xF996C3`, and the entries that
+  apply the trim are exactly indices 0, 2, 5, 7, 9 — pitch classes 1, 3, 6, 8, 10, i.e.
+  C#, D#, F#, G#, A#. Classes 0 and 11 fall out through the bound check instead, so the two
+  white keys at the ends of the run are excluded by a *different* mechanism from the eight in
+  the middle and both have to agree. The note is offset by 0x24 = 36 = three octaves before
+  the remainder is taken, which does not disturb the pitch class.
+* **Two of `unexplained_FCC5BE`'s bytes are no longer unexplained**: `0xFCC5C5` = 77 is the
+  pivot subtrahend and `0xFCC5C7` = 128 is the divisor. 77 occurs at exactly one index of the
+  input curve (144), so the pivot is a single point, and at it the output is
+  `ModeParams[mode].pivot` regardless of gain — which is what the "output level at the pivot"
+  column *means*.
+* **The offset control is centred**, and the RAM image proves it: `0x00F32B` is read as
+  `value - 0x50` and its boot value is exactly `0x50`
+  (`notes/FINDINGS-prom_c-ram-image.md`). The touch mode's default is 6, inside the 0..9 the
+  setter enforces.
+* **The output is a 7-bit velocity**: the output curve spans 1..127 over all 256 entries and
+  never reaches 0 or 128.
+
+⚠ Still open: what fills the signed per-note table at `0x0084DA` (it is work DRAM and lies
+*outside* the boot RAM image), and the physical unit of the touch argument — "travel time" is
+inferred from the input curve running downward, not read off a register.
+
+### 3a. The original observation, unchanged
 
 `ToneGen_VelCurve_ModeParams` at `0xFCC5FC` is 10 records × 3 bytes
 `{gain/128, output level at the pivot, black-key trim}`. Two things fix the shape without any
@@ -127,6 +173,17 @@ into denormal garbage, so the decode is its own proof.
 * **Three bytes at `0xFCCB6E`** (`00 01 00`). The address is referenced three times so it is a
   real object, but three bytes is too little to infer a shape from.
 
+## Where zone 2 came from (2026-08-24)
+
+The first 131 bytes of zone 2 — `Handler_PtrTable_FCC53F`, `unexplained_FCC55F`,
+`Packet_PtrTable_FCC576` and the four leading zeros of `unexplained_FCC5BE` — are the TAIL OF
+THE BOOT RAM IMAGE. `RESET` copies ROM `0xFCB4EA-0xFCC5C1` to RAM `0x00E2DF-0x00F3B6`
+(`notes/FINDINGS-prom_c-ram-image.md`). That **explains** the "⚠ NOT ESTABLISHED: nothing in
+prom_c references 0xFCC53F as a literal" flag in the zone-2 headers: nothing reads those
+objects in place, because they are used from their RAM copies at `0x00F334`, `0x00F354`,
+`0x00F36B` and `0x00F3B3` — two of which are demonstrably WRITTEN at runtime, which a ROM
+table cannot be. The names have been left alone; the mechanism has been recorded.
+
 ## What the next pass needs
 
 * Trace the caller of `0xFA8016` and find out how a voice selects among the four key-bend curves
@@ -135,5 +192,12 @@ into denormal garbage, so the decode is its own proof.
   paired with digit strings) is loaded in pairs by the record table at `0xFDBFE9`. Decoding one
   record by hand would name the whole structure. `b`/`w` as byte/word is the obvious reading;
   nothing yet proves it.
-* `0x00F2F3` is read as a 32-bit value on every serial interrupt (see
-  `notes/FINDINGS-prom_c-serial-midi.md`). Finding what writes it would name it.
+* ~~`0x00F2F3` is read as a 32-bit value on every serial interrupt. Finding what writes it
+  would name it.~~ **DONE 2026-08-24**: it is incremented by `INTT1_HANDLER` and by nothing
+  else — a timer-1 tick counter. See `notes/FINDINGS-prom_c-serial-midi.md`.
+* New, from the touch-path conversion: find what writes the signed per-note table at
+  `0x0084DA`. It is the only term of the velocity formula whose origin is unknown, and it is
+  outside the boot RAM image, so something computes it.
+* `0xF997FA`, `0xF9997E`, `0xF98510`, `0xF98A75` and `0xF98CB9` are the unconverted routines
+  `MAIN` calls every pass. `0xF9997E` is the highest-value of them: it takes
+  (pointer, length, small constant) and is the link path to CPU 1.

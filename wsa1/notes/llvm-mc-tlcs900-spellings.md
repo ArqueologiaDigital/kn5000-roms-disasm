@@ -15,6 +15,42 @@ re-checked on every build by the gate.
 | `.fill n, 1, 0x0E` | n | used for the `ret` padding both prom_a and prom_c already use |
 | `.incbin "f", skip, count` | count | |
 
+## ⚠⚠ `di` IS A LIE ON THIS TARGET — it assembles to `EI 0`, which ENABLES everything
+
+Found 2026-08-25 while converting prom_a `0xF85EC8`.
+
+```
+$ printf '.text\ndi\nei 0x00\nei 0x06\nei 0x07\n' > /tmp/ei.s
+$ llvm-mc -triple=tlcs900 -filetype=obj -o /tmp/ei.o /tmp/ei.s
+$ llvm-objcopy -O binary /tmp/ei.o /tmp/ei.bin && xxd /tmp/ei.bin
+00000000: 0600 0600 0606 0607
+           di  ei 0 ei 6 ei 7
+```
+
+`di` and `ei 0x00` are the **same two bytes**. On the TMP95C061 the `EI` operand
+is the interrupt **mask level** written into SR bits 6-4 (MAME `op_EI`,
+`../mame/src/devices/cpu/tlcs900/900tbl.hxx:2073-2078`), and dispatch is blocked
+only while that field is 7 (`tmp95c061.cpp:481`), with `:538` scanning priority
+levels upward from it. So:
+
+* `EI 0` = accept **every** interrupt — this is EI;
+* `EI 7` = accept none — **this** is DI, and it is what the part resets to
+  ("iff set to 111", `tlcs900.cpp:218-219`).
+
+llvm-mc's `di` therefore emits the *opposite* of what it says. It round-trips and
+the byte gate is perfectly happy, which is what makes it dangerous: the bytes are
+right and only the reader is wrong.
+
+**The firmware itself is the independent check.** prom_a `Kernel_Idle`
+(`0xF85711`) executes `06 00` and then spins for ever — an idle loop cannot run
+with interrupts off — and `Kernel_ServiceSoftTimers` brackets its list walk with
+`06 00` … `06 06`, i.e. the critical section is the one that *raises* the number.
+
+Write `ei 0x00` and never `di`. One header in the tree
+(`prom_c/wsa1_prom_c.s`, `DSP_ChannelRefresh_Loop`) reads `06 00` as "starts by
+disabling interrupts … and never re-enables them"; that reading is backwards, and
+it is flagged rather than edited only because prom_c is another lane's file.
+
 ## Instruction spellings
 
 * Absolute jumps and calls take the **target address**:

@@ -41,8 +41,11 @@ Spread over the 1 MiB image, by 64 KB bank:
 0xF9:253 0xFA:119 0xFB:107 0xFC:201 0xFD:178 0xFE:91  0xFF:47
 ```
 
-(No target in bank `0xF2` — that bank is display-list data, see
-`FINDINGS-ui-display-list.md`.)
+(No target in bank `0xF2`. ⚠ This used to add "that bank is display-list data";
+corrected 2026-08-24 — the census measures thunk TARGETS, and bank `0xF2` also
+holds **six of the ten character generators** the SWI7 text services load as
+data by an immediate address, which no thunk census can see. See
+`FINDINGS-ui-display-list.md` and `FINDINGS-fonts.md`.)
 
 ## The 26 pointer slots
 
@@ -74,13 +77,18 @@ data. The numbers rank slots; they are not exact call counts.
 | `T_F417F4` | 269 | `0xF31AF0` | `DisplayListB_Run`, the second interpreter. Converted. |
 | `T_F42E84` | 188 | prom_a `0xF8DA16` | enqueue one 32-bit word on the ring buffer at `0x600416` (write index `+0xFC`, free count `+0xFE`, `minc4 0x01FC` wrap ⇒ 128 slots, returns `0xFFFF` when fewer than 5 free, runs under `ei 6`) |
 | `T_F42E80` | 141 | prom_a `0xF8DA83` | a fixed sequence of six calls through other slots with `A` = 4/2. Not identified. |
-| `T_F42C90` | 119 | `0xF5533C` | not identified |
-| `T_F41ED4` | 109 | `0xF5B9B8` | not identified |
+| `T_F42C90` | 119 | `0xF5533C` | **`IndexedTable_GetByte`** — byte *m* of pointer *n* of the table whose base is the 32-bit word at `0x60F018`. Converted. |
+| `T_F41ED4` | 109 | `0xF5B9B8` | **`Dispatch_Code80`** — indexes a 48-entry table of routine pointers with a 16-bit selector ≥ 0x80. Converted. |
 | `T_F42E0C` | 107 | `0xF3183D` | `DisplayListB_RunOne_Stack`. Converted. |
 | `T_F42E04` | 104 | `0xF31814` | `DisplayListB_Run_Stack`. Converted. |
 | `T_F42D88` | 98 | prom_a `0xF859AE` | `A` selects a 4-byte descriptor at `0x0338 + A*4` and a saturating byte counter at `0x035B + A`, under `ei 6`; an empty descriptor is self-referential. A kernel object operation — **which** one is not established. |
 | `T_F42DC0` | 98 | prom_a `0xF859AB` | the same routine entered 3 bytes earlier, which first does `ld A,(XSP+4)` — the stack-argument form |
 | `T_F42E24` | 85 | `0xF0E82B` | not identified |
+| `T_F42C78` | 77 | `0xF550A6` | reads a bit-field through an 8-byte descriptor and range-checks it. Converted. |
+| `T_F431B4` | 57 | `0xF7D006` | the third slot of an eight-entry `jrl` long-branch veneer table at `0xF7D000`, into prom_a `0xF81C15`. Not converted. |
+| `T_F431B0` | 53 | `0xF7D000` | the first slot of that same veneer table, into prom_a `0xF81ACB` |
+| `T_F42C8C` | 45 | `0xF55321` | **`IndexedTable_GetPtr`** — pointer *n* of the `0x60F018` table. Converted. |
+| `T_F41ED0` | 39 | `0xF5B8B6` | **`Dispatch_Code80_Bracketed`** — the same 48-entry dispatch, with the call bracketed by `swi 7` functions `0x0C`/`0x10`. Converted. |
 | `T_F42E00` | 85 | `0xF31800` | `DisplayList_Run_Stack`. Converted. |
 
 ### One slot worth naming separately
@@ -91,9 +99,37 @@ indexes a 64-entry table at prom_a `0xF8E9C6`. That is the machine's system-call
 interface; see `FINDINGS-ui-display-list.md`.
 
 `T_F42C70` (`jp 0xF55018`) is never *called*, but its 4-byte address spelling
-`70 2C F4 00` occurs 397 times in prom_a+prom_b, 222 of them in one dense run at
-prom_a `0x216B4`. It is the **default entry that fills a large pointer table**.
-What that table is has not been traced.
+`70 2C F4 00` occurs **397 times** in prom_a+prom_b — 222 in prom_a, 175 in
+prom_b. It is a **default entry that fills pointer tables**.
+
+⚠ **CORRECTED 2026-08-25.** This sentence used to read "222 of them in one dense
+run at prom_a `0x216B4`". That joined two different measurements by hand: **222
+is prom_a's total**, and `0x216B4` is merely prom_a's *first* occurrence. The
+occurrences are scattered, not one run.
+`python3 notes/prom_b_default_slot_census.py` measures both quantities apart:
+
+```
+prom_a  222 occurrences, file 0x216B4..0x21E45
+   longest stride-4 run: 10 entries, starting at file 0x21DED
+   run starting at the first occurrence (0x216B4): 6 entries
+prom_b  175 occurrences, file 0x131E4..0x542A0
+   longest stride-4 run: 17 entries, starting at file 0x1B331
+```
+
+So it fills **many** table stretches, the longest of them 10 slots in prom_a and
+17 in prom_b — never 222. The neighbourhood is genuinely a table of 32-bit ROM
+pointers (`0x216A4` reads `0x00F9C3A5, 0x00F9C40D, 0x00F9C40D, 0x00F9C4BD` and
+then six defaults), but ⚠ these tables are **not 4-aligned in the image**: only
+67 of prom_a's 222 occurrences and 15 of prom_b's 175 sit at a 4-aligned offset.
+Which tables these are has not been traced — but **what the entry does now is**:
+prom_b `0xF55018` is a single byte `0x0E`, a bare `ret`. The default is a no-op,
+and it sits at the tail of a run of `0E 00 00 00` four-byte slots
+(`0xF55000-0xF55018`) that uses the same fill convention as this table.
+Converted, with a header, in `prom_b/wsa1_prom_b.s`.
+
+The same `0xF5BF17` idiom appears inside the two 48-entry dispatch tables:
+a bare `ret` fills 6 of the first table's slots and 7 of the second's
+(`python3 notes/prom_b_dispatch_tables.py`).
 
 ## What is NOT established
 
