@@ -111,8 +111,17 @@ banner first). `notes/README-prom_c-tools.md` and `notes/prom_a-tooling.md` inde
 `notes/WSA1-EMULATION-DISASM-GAPS.md` (mirrored here from the overlay) is a ranked request list from
 the MAME driver, ~95 entries. Prefer targets that answer it. Top open items: **gap A** — *name* the
 `0x10C000` registers (21 of 22 have a located producer, none is named; which block is pitch, which a
-sample address, which a level), **gap T** (drive motor — now a hardware question: the firmware never
-writes PA bit 3 at all), **gap O**.
+sample address, which a level), **gap T** — ⚠ this line USED TO SAY "now a hardware question: the
+firmware never writes PA bit 3 at all", and that is **RETRACTED**. The firmware writes PA at
+**five** instructions, all in prom_a, and bit 3 is the only bit it changes after RESET: `res
+3,(PA)` at 0xFE18EF followed by a 307 ms settle (so the line is ACTIVE LOW), `set 3,(PA)` at
+0xFE18F7, two `ld (PA),A` at 0xFE660D/0xFE6631, and RESET's own `ldio PA,0xF9`. The earlier census
+searched for one spelling of the operation. See `notes/FINDINGS-prom_a-gap-T-pa3.md`, re-derived by
+`notes/prom_a_pa3_census.py` (19 checks) and by
+`notes/wave7-verify-probes/wave7_pa_write_census.py` (18 checks, and it states its denominator:
+zero unadjudicated candidates in prom_a's unconverted bytes, three in prom_b's, none addressing bit
+3). What the pin is WIRED to remains a hardware question; whether the firmware drives it does not.
+**gap O**.
 
 The driver lives in `../kn7000_mame/src/mame/matsushita/wsa1.cpp`. It boots **both** variants to a
 real `SOUND MODE` UI, has a working keybed, HLE control panel, EEPROM, floppy controller and four
