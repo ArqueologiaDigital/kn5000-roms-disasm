@@ -54,6 +54,7 @@ pass 2 scans the raw ROM over exactly those ranges. prom_a yields **zero** candi
 **three**, and they are adjudicated in the docstring rather than waved away: `0xF3A0C1` is inside a
 stride-5 LE16 table (`0x1720 0x1725 0x172A …`) and 0 of 38 trial decode starts land on it;
 `0xF0B984` would be a word `cp`, a read; `0xF53DFF` would be `chg 0,(PA)` — **bit 0, not bit 3**.
+The 38-start convergence numbers are reproduced by `--adjudicate`, not asserted.
 So even if both remaining candidates are real instructions, gap T's answer is unchanged, and the
 bit-3 census is complete over both 512 KiB images.
 

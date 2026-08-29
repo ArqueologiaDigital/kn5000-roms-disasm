@@ -15,8 +15,9 @@ QUESTION IT ANSWERS
   3,216 + 2,595 + 0 = 5,811, where 0xFA5AEB-0xFAA000's give 16,799 and T_F43350
   alone (8,886) outranks anything here.  It was picked because it is prom_a's
   LARGEST remaining .incbin (18,432 B), which is a perfectly good reason and is
-  what WAVE7-BRIEFING.md actually says.  This line used to claim the frontier
-  ranked it
+  what WAVE7-BRIEFING.md actually says.  Reproduce the ranking with
+  `python3 notes/wave7_frontier_table.py --sums`.  This line used to claim the
+  frontier ranked it
   into it -- T_F40850-T_F4089C (20 slots, 2,595 B, ref bound 35),
   T_F41F10-T_F41F3C (12 slots, 3,216 B, 17) and T_F40840 (1 slot) = 33
   directory slots, all of which converting the span retires.

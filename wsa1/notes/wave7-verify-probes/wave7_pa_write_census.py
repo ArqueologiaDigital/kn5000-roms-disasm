@@ -64,6 +64,9 @@ WHAT "COMPLETE" MEANS HERE, AND WHY THE RAW SCAN EXISTS
 
 RUN
     python3 notes/wave7-verify-probes/wave7_pa_write_census.py
+    python3 notes/wave7-verify-probes/wave7_pa_write_census.py --adjudicate # the 38-start
+                                                                # convergence test on prom_b's
+                                                                # three raw candidates
     python3 notes/wave7-verify-probes/wave7_pa_write_census.py --selftest   # 18 checks
 """
 import os
@@ -189,6 +192,49 @@ def raw_candidates(inc, base, ranges):
     return sorted(out)
 
 
+def converge(addr, base, inc, starts=38):
+    """How many of `starts` trial decode starts put an INSTRUCTION BOUNDARY on addr?
+
+    A raw byte match proves nothing about alignment.  TLCS-900 is variable-length
+    and unidasm resynchronises, so decoding from many different offsets before the
+    candidate and asking how often the decoder lands exactly on it is a cheap,
+    honest alignment probe: 0 of 38 means the bytes are almost certainly data.
+    It is EVIDENCE, not proof -- a low score is not a disproof of code, which is
+    why the docstring's adjudication also states what each candidate would MEAN
+    if it were code."""
+    import subprocess
+    import tempfile
+    uni = os.path.expanduser("~/compartilhado/kn7000_mame_build/unidasm")
+    rom = open(os.path.join(ROOT, "original_ROMs", inc), "rb").read()
+    land = 0
+    d = tempfile.mkdtemp()
+    tmp = os.path.join(d, "c.bin")
+    for back in range(2, 2 + starts):
+        s = addr - back
+        open(tmp, "wb").write(rom[s - base:s - base + 80])
+        out = subprocess.run([uni, tmp, "-arch", "tlcs900", "-basepc", hex(s)],
+                             capture_output=True, text=True).stdout
+        if any(l.strip().startswith("%06x:" % addr) for l in out.splitlines()):
+            land += 1
+    return land, starts
+
+
+def adjudicate():
+    """Run the convergence test on prom_b's three raw candidates and print the
+    numbers the docstring quotes, so they are reproducible rather than asserted."""
+    for tag, srcf, inc, base in IMAGES:
+        if tag != "prom_b":
+            continue
+        ranges = incbin_ranges(srcf, inc, base)
+        for addr, name, bs, bit in raw_candidates(inc, base, ranges):
+            land, starts = converge(addr, base, inc)
+            print("0x%06X  %-7s %s  bit=%s  -> %d of %d trial starts land on it"
+                  % (addr, name, bs, "none" if bit is None else bit, land, starts))
+    print("\n0 of 38 is the signature of data.  See the ADJUDICATED block in this")
+    print("file's docstring for what each candidate would mean if it were code --")
+    print("and note that NONE of them addresses bit 3, which is what gap T turns on.")
+
+
 def run(verbose=True):
     totals = {}
     for tag, srcf, inc, base in IMAGES:
@@ -285,6 +331,9 @@ def selftest():
 
 
 if __name__ == "__main__":
+    if "--adjudicate" in sys.argv:
+        adjudicate()
+        sys.exit(0)
     if "--selftest" in sys.argv:
         sys.exit(selftest())
     run()

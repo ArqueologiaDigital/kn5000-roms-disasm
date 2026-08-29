@@ -27,6 +27,9 @@ WHAT IT DOES NOT DO
 RUN
     python3 notes/wave7_frontier_table.py            # both images, with thunk runs
     python3 notes/wave7_frontier_table.py --brief    # spans only, no subprocess
+    python3 notes/wave7_frontier_table.py --sums     # spans ranked by SUMMED thunk
+                                                     # extent, which is NOT the same
+                                                     # ranking as by span size
     python3 notes/wave7_frontier_table.py --selftest # 16 checks, incl. the LAST
                                                      # span of each image
 """
@@ -85,6 +88,38 @@ def meaning_counts():
         subs.update(rx_sub.findall(text))
         ev += text.count("Evidence:")
     return len(subs), ev
+
+
+def summed(base_only=None):
+    """Rank spans by the SUM of the contiguous unconverted extents of the thunk runs
+    that point into them.
+
+    QUESTION: "is the biggest .incbin also the one the most call-target weight
+    points into?"  It is NOT, and that matters: prom_a's largest remaining span
+    (0xFAD800, 18,432 B) sums to 5,811, while 0xFA5AEB (17,685 B) sums to 16,799
+    -- T_F43350 alone is 8,886.  A wave-7 lane's docstring claimed the frontier
+    ranked 0xFAD800 top; it does not, and this mode is why that is now checkable
+    instead of arguable.  Both are legitimate reasons to pick a span; they are
+    different reasons and should not be confused for each other."""
+    for image in IMAGES:
+        d, _s, _i, base, tool = image
+        if tool is None:
+            continue
+        if base_only and d != base_only:
+            continue
+        sp = spans(image)
+        runs = thunk_runs(tool)
+        rows = []
+        for off, ln in sp:
+            lo, hi = base + off, base + off + ln
+            inside = [r for r in runs if r[5] >= lo and r[6] < hi]
+            rows.append((sum(r[3] for r in inside), ln, lo, hi, len(inside)))
+        rows.sort(reverse=True)
+        print("=== %s: spans by SUMMED thunk extent (not by size) ===" % d)
+        for tot, ln, lo, hi, n in rows[:8]:
+            print("    0x%06X-0x%06X  summed extent %7s   span %8s bytes   %d runs"
+                  % (lo, hi, format(tot, ","), format(ln, ","), n))
+        print()
 
 
 def report(brief=False):
@@ -159,4 +194,7 @@ def selftest():
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(selftest())
+    if "--sums" in sys.argv:
+        summed()
+        sys.exit(0)
     report(brief="--brief" in sys.argv)
