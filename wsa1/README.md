@@ -53,12 +53,12 @@ misreported downstream.
 
 ## Status
 
-**Converted: 1,867,225 of 2,097,152 bytes (89.0%)** -- of which 1,454,888 substantive (69.4%) and 412,337 verified filler.
+**Converted: 1,922,183 of 2,097,152 bytes (91.7%)** -- of which 1,501,152 substantive (71.6%) and 421,031 verified filler.
 
 | source | image | substantive | filler | still `.incbin` | `.incbin` spans |
 |---|---|---:|---:|---:|---:|
-| `prom_a/` | `wsa1_prom_a.ic12` | 409,078 | 44,742 | 70,468 | 11 |
-| `prom_b/` | `wsa1_prom_b.ic13` | 320,217 | 44,612 | 159,459 | 124 |
+| `prom_a/` | `wsa1_prom_a.ic12` | 419,726 | 48,437 | 56,125 | 10 |
+| `prom_b/` | `wsa1_prom_b.ic13` | 355,833 | 49,611 | 118,844 | 122 |
 | `prom_c/` | `wsa1_prom_c.ic28` | 395,072 | 129,216 | 0 | 0 |
 | `prom_d/` | `wsa1_prom_d.bin` | 330,521 | 193,767 | 0 | 0 |
 

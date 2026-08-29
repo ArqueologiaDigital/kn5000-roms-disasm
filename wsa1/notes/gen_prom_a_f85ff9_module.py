@@ -336,11 +336,7 @@ def structure():
     if LABELS:
         return
     segs, dirs = layout()
-    rows, named, calls, jumps = census(segs)
-
-    def sites(v):
-        s = sorted(named.get(v, set()) | calls.get(v, set()) | jumps.get(v, set()))
-        return ", ".join("0x%06X" % x for x in s) or "NOTHING FOUND"
+    census(segs)
 
     # ============================================================== the head
     N(0xF86000, "PanelTask_EntryVectors",
@@ -375,6 +371,9 @@ def structure():
     N(0xF8605C, "sub_F8605C",
       "sub_F8605C -- runs the three screen-transition steps and nothing else",
       "",
+      "Evidence: NOTHING names this address.  Checked two ways: the census over",
+      "         every decoded operand of every code segment in this span, and",
+      "         far_calls() over both ROM images at every byte offset.",
       "Called from: NOTHING.  No absolute or relative reference to 0xF8605C",
       "         exists in either image (checked by the census over every decoded",
       "         operand of this span, and by far_calls over both ROM images).",
@@ -404,6 +403,8 @@ def structure():
       "PanelState_TakePendingHoldTime",
       "",
       "Called from: NOTHING; no reference to 0xF86093 exists in either image.",
+      "Evidence: same two-way census as sub_F8605C.  It is a label only because",
+      "         the layout's descent reached the byte; nothing published it.",
       "Unknown:  whether it is a routine at all or the tail of the one above.")
     N(0xF86094, "PanelState_TakePendingHoldTime",
       "PanelState_TakePendingHoldTime -- move (0x209A) into (0x2073) if set",
@@ -459,7 +460,10 @@ def structure():
       "",
       "Called from: PanelTask_Step 0xF8608C (`calr`), and nothing else.",
       "Outputs: calls PanelButton_Dispatch, then `and (0x2071),0xF6` (clears",
-      "         bits 0 and 3).")
+      "         bits 0 and 3).",
+      "Evidence: `bit 0x03,A` at 0xF8611F and `bit 0x00,A` at 0xF86124 are the",
+      "         only two bits tested, and 0xF6 is their complement -- so this",
+      "         routine owns exactly the two bits PanelState_RunRequests spares.")
     N(0xF86132, "PanelButton_Dispatch",
       "PanelButton_Dispatch -- auto-repeat sweep, or the one pending button",
       "",
@@ -485,7 +489,10 @@ def structure():
       "PanelButton_DispatchCurrent -- route the button code in (0x2082)",
       "",
       "Called from: PanelButton_Dispatch 0xF86158, PanelButton_SweepHeld 0xF86196.",
-      "Inputs:  (0x2082): bits 0-4 the button index, bit 7 a flag.")
+      "Inputs:  (0x2082): bits 0-4 the button index, bit 7 a flag.",
+      "Evidence: the split is PanelButton_Route's own, `and L,0x1f` at 0xF861AE",
+      "         and `and W,0x80` at 0xF861B3; (0x2082) is written by",
+      "         PanelButton_SweepHeld 0xF8618F and PanelButton_Accept 0xF86710.")
     N(0xF861AC, "PanelButton_Route",
       "PanelButton_Route -- special-case three buttons, else call the screen's",
       "                     Button method",
@@ -543,7 +550,9 @@ def structure():
       "Called from: PanelState_RunRequests 0xF8610F (`calr`), and nothing else.",
       "Guard:   bit 1 of (0x2071).",
       "Body:    PanelMode_Normalise, then PanelMode_ToScreenId, then (0x2073) = 0;",
-      "         if (0x207C) == (0x207D) then `or (0x2072),0x10` (redraw).")
+      "         if (0x207C) == (0x207D) then `or (0x2072),0x10` (redraw).",
+      "Evidence: `bit 0x01,A` at 0xF8631C is the guard, and bit 1 is one of the",
+      "         four PanelState_RunRequests clears with `and (0x2071),0x09`.")
     N(0xF86344, "PanelMode_Normalise",
       "PanelMode_Normalise -- derive (0x2078) from (0x2076) and (0x2070)",
       "",
@@ -559,6 +568,8 @@ def structure():
       "PanelMode_ToScreenId -- (0x207C) := PanelMode_ToScreenIdMap[(0x2078)]",
       "",
       "Called from: PanelScreen_ApplyModeChange 0xF8632A (`calr`), and nothing else.",
+      "Evidence: `ld XHL,0x00f86ea1` at 0xF86388 is the only instruction in",
+      "         either image that names PanelMode_ToScreenIdMap.",
       "⚠ Evidence AGAINST the round-1 dossier: this reader has NO bound at all --",
       "         `xor XWA,XWA / ld A,(0x2078) / add XHL,XWA / ld A,(XHL)`.  The",
       "         32-entry extent of the map rests only on the code at 0xF86EC1",
@@ -569,7 +580,10 @@ def structure():
       "Called from: PanelState_RunRequests 0xF86112 (`calr`), and nothing else.",
       "Guard:   bit 0 of (0x2095) or bit 4 of (0x2075) clear, then bit 7 of (0x2071).",
       "Differs from PanelScreen_ApplyHomeRequest only in leaving (0x2083) alone",
-      "and in zeroing (0x2073) instead of loading it with 0x70.")
+      "and in zeroing (0x2073) instead of loading it with 0x70.",
+      "Evidence: `bit 0x07,A` at 0xF863AC is the guard -- bit 7 of (0x2071), the",
+      "         same bit PanelState_CheckHomeAllowed tests at 0xF86B1F on the",
+      "         high half of the 16-bit load from (0x2070).")
     N(0xF863D3, "PanelState_UpdateFlags2092",
       "PanelState_UpdateFlags2092 -- fold `(0x2073) is running` into (0x2092)",
       "",
@@ -583,7 +597,9 @@ def structure():
       "PanelState_Update207A -- (0x207A) := (0x207C) unless the mode is unchanged",
       "                         and bit 0 of (0x2092) is set",
       "",
-      "Called from: PanelTask_Step 0xF86078 (`calr`), and nothing else.")
+      "Called from: PanelTask_Step 0xF86078 (`calr`), and nothing else.",
+      "Evidence: `bit 0x00,A` at 0xF86405 on (0x2092), the bit",
+      "         PanelState_UpdateFlags2092 writes from (0x2073).")
     N(0xF86413, "PanelState_ClearOnChange",
       "PanelState_ClearOnChange -- drop held-button state when an id changes",
       "",
@@ -615,12 +631,16 @@ def structure():
       "Called from: PanelScreen_RunLeave 0xF86499 and 0xF864B4 (`calr`).",
       "Inputs:  L = a screen id; the guard is `cp L,0xdf` at 0xF864C9.",
       "Outputs: nothing when L > 0xDF; else PanelScreen_ResolveMethod with",
-      "         XIY = 0xF86F41 and BC = 4, then `call XWA`.")
+      "         XIY = 0xF86F41 and BC = 4, then `call XWA`.",
+      "Evidence: `ld XIY,0x00f86f41` at 0xF864CE and `ld BC,0x0004` at 0xF864D3",
+      "         -- table view B, method offset 4.")
     N(0xF864E5, "PanelScreen_CallLeave_A",
       "PanelScreen_CallLeave_A -- vtable[L].Leave, table view A (base 0xF86EC1)",
       "",
       "Called from: PanelScreen_RunLeave 0xF864C3 (`calr`), and nothing else.",
-      "Inputs:  L = a mode index; the guard is `cp L,0x2f` at 0xF864E7.")
+      "Inputs:  L = a mode index; the guard is `cp L,0x2f` at 0xF864E7.",
+      "Evidence: `ld XIY,0x00f86ec1` at 0xF864EC and `ld BC,0x0004` at 0xF864F1",
+      "         -- table view A, method offset 4.")
     N(0xF864FA, "PanelScreen_RunEnter",
       "PanelScreen_RunEnter -- call the Enter method of every id that changed",
       "",
@@ -634,13 +654,17 @@ def structure():
       "PanelScreen_CallEnter_A -- vtable[L].Enter, table view A (base 0xF86EC1)",
       "",
       "Called from: PanelScreen_RunEnter 0xF86506 (`calr`), and nothing else.",
-      "Inputs:  L = a mode index; the guard is `cp L,0x2f` at 0xF8651B.")
+      "Inputs:  L = a mode index; the guard is `cp L,0x2f` at 0xF8651B.",
+      "Evidence: `ld XIY,0x00f86ec1` at 0xF86520 and `ld BC,0x0000` at 0xF86525",
+      "         -- table view A, method offset 0.")
     N(0xF8652E, "PanelScreen_CallEnter_B",
       "PanelScreen_CallEnter_B -- vtable[L].Enter, table view B (base 0xF86F41)",
       "",
       "Called from: PanelScreen_RunEnter 0xF86515 and PanelScreen_RunRedraw",
       "         0xF86597 (`calr`).",
-      "Inputs:  L = a screen id; the guard is `cp L,0xdf` at 0xF86530.")
+      "Inputs:  L = a screen id; the guard is `cp L,0xdf` at 0xF86530.",
+      "Evidence: `ld XIY,0x00f86f41` at 0xF86535 and `ld BC,0x0000` at 0xF8653A",
+      "         -- table view B, method offset 0.")
     N(0xF86543, "PanelScreen_ResolveMethod",
       "PanelScreen_ResolveMethod -- XWA := vtable_table[HL] + BC, remembered in",
       "                             (0x20B4)",
@@ -662,7 +686,10 @@ def structure():
       "⚠ Note:  0xF86570 RELOADS A from (0x2071) after the `and A,0xe2` at",
       "         0xF8656D, so the `jr NZ` two instructions later tests the AND,",
       "         not the reload; the value STORED to (0x2072) is the unmasked",
-      "         byte.  Written out because it reads like a bug and is not one.")
+      "         byte.  Written out because it reads like a bug and is not one.",
+      "Evidence: `bit 4,(0x2095)` at 0xF86553 and `bit 4,(0x2071)` at 0xF86559",
+      "         are the two tested bits; `and A,0xe2` at 0xF8656D is the quiet",
+      "         test; `and A,0xef` at 0xF8657A clears the same bit 4 again.")
     N(0xF86582, "PanelScreen_RunRedraw",
       "PanelScreen_RunRedraw -- re-Enter the current screen when bit 4 of (0x2072)",
       "",
@@ -696,7 +723,11 @@ def structure():
       "         (L & H) must be set.",
       "Outputs: `xor (0x2075),0x10`, then either `or (0x2075),0x80` or",
       "         (0x2073) = 1, and `or (0x2134),0x2000`.",
-      "Unknown:  which physical control raises code 3.")
+      "Evidence: the guard is `cp A,3` at 0xF865C8 on (0x20B8), which",
+      "         UiEventList_Run loads from the record's byte +1.",
+      "Unknown:  which physical control raises code 3.  Nothing in any of the",
+      "         366 lists of the three class tables points at this address, so",
+      "         the only published way in is the thunk slot.")
     N(0xF86609, "PanelButton_Accept",
       "PanelButton_Accept -- fold one button event into the (0x2088) bitmap",
       "",
@@ -716,6 +747,11 @@ def structure():
       "         (0x2082) = code (| 0x80 when bit 0 of (0x20B9)) and",
       "         `or (0x2071),0x01`, which is what makes PanelButton_RunPending",
       "         route it on the next PanelTask_Step.",
+      "Evidence: the two mask tables are read four instructions apart, at",
+      "         0xF86659 (PanelButton_BitMask32) and 0xF86696",
+      "         (PanelButton_InterlockMask32), both indexed by the SAME `BC =",
+      "         code * 4` formed at 0xF86654-0xF86656.  That shared index is",
+      "         what makes the two tables one per-button record split in two.",
       "⚠ Correction: (0x2084) is a THIRD 32-bit bitmap, not the high half of a",
       "         64-bit word with (0x2088)/(0x208C).  0xF866C3 sets the mask there",
       "         and 0xF866D3 clears it there, both independently of (0x208C).")
@@ -729,7 +765,10 @@ def structure():
       "         (E & D) == 0.",
       "Outputs: (0x2070) = E | 0x80 and (0x2071) = 0x02 -- i.e. the requested",
       "         screen id plus request bit 1, the bit PanelState_RunRequests",
-      "         hands to PanelScreen_ApplyModeChange.")
+      "         hands to PanelScreen_ApplyModeChange.",
+      "Evidence: `ld (0x2070),E` at 0xF86829 and `ld (0x2071),0x02` at 0xF8682D",
+      "         write the id and the flag byte as two separate stores to the",
+      "         same pair PanelState_Init writes as one 16-bit 0x40AA.")
     N(0xF86833, "PanelEvent_Code21_Dial",
       "PanelEvent_Code21_Dial -- apply one rotary-encoder delta",
       "",
@@ -792,7 +831,8 @@ def structure():
       "sub_F8691B -- a single `ret` between PanelTimers_Step and",
       "PanelTimer_Repeat20AB",
       "",
-      "Called from: NOTHING; no reference to 0xF8691B exists in either image.")
+      "Called from: NOTHING; no reference to 0xF8691B exists in either image.",
+      "Evidence: same two-way census as sub_F8605C.")
     N(0xF8691C, "PanelTimer_Repeat20AB",
       "PanelTimer_Repeat20AB -- count (0x20AB) down; at zero bump (0x207E)",
       "",
@@ -877,7 +917,11 @@ def structure():
       "         same base 0x2C00, same cursor (0x60F000), same 4-byte record,",
       "         same 0xFF one past, same `+= 4`.  It is NOT a byte copy: it takes",
       "         its four bytes as 16-bit stack slots and is 77 bytes against this",
-      "         routine's 34, so the name is shared by STRUCTURE, not by a diff.")
+      "         routine's 34, so the name is shared by STRUCTURE, not by a diff.",
+      "Evidence: `ld XHL,0x00002c00` at 0xF86A89, `add HL,(0x60f000)` at",
+      "         0xF86A8E, `ld (XHL),DE` / `ld (XHL+0x02),WA` /",
+      "         `ld (XHL+0x04),0xff` at 0xF86A93-0xF86A98, `add (0x60f000),0x04`",
+      "         at 0xF86A9C.")
     N(0xF86AA3, "Queue2E00_AppendRegs",
       "Queue2E00_AppendRegs -- append {E, D, A, W} to the PENDING list at 0x2E00",
       "",
@@ -894,7 +938,11 @@ def structure():
       "Sibling:  prom_b's Queue2E00_Append4 (0xF5527E) and prom_a's own",
       "         sub_FE7100 are two more C-compiled twins of the same structure;",
       "         prom_b's bounds the OTHER cursor (0x60F000) at 0x00FC, which none",
-      "         of the three hand-written ones do.")
+      "         of the three hand-written ones do.",
+      "Evidence: `ld XHL,0x00002e00` at 0xF86AAC and `add HL,(0x60f004)` at",
+      "         0xF86AB1, against 0x2C00 / (0x60F000) twenty-two bytes earlier --",
+      "         the two routines are the same code with the two constants",
+      "         swapped and the compare widened.")
     N(0xF86AC7, "List2030_AppendRegs",
       "List2030_AppendRegs -- append {E, D, A, W} to the fixed list at 0x2030",
       "",
@@ -911,7 +959,9 @@ def structure():
       "         through its own 192-entry table at 0xFAE3A2).  Three independent",
       "         consumers, each with its own class range.",
       "Sibling:  prom_b's List2030_Append4 at 0xF552CC -- same base, same 0x206C",
-      "         ceiling, same scan-for-0xFF; again a structural match, not a diff.")
+      "         ceiling, same scan-for-0xFF; again a structural match, not a diff.",
+      "Evidence: `ld XHL,0x00002030` at 0xF86AC7, `cp (XHL),0xff` at 0xF86ACC,",
+      "         `add HL,0x0004` at 0xF86AD1, `cp XHL,0x0000206b` at 0xF86AD7.")
     N(0xF86AE9, "PanelState_CheckHomeAllowed",
       "PanelState_CheckHomeAllowed -- veto the pending home jump on two screens",
       "",
@@ -944,7 +994,9 @@ def structure():
     N(0xF86B6F, "EditStep_UseCurveA",
       "EditStep_UseCurveA -- (0x20CE) := EditStep_CurveA[W & 0x7F]",
       "",
-      "Called from: thunk slot T_F40F6C (`jp 0x00F86B6F`); no proven call site.")
+      "Called from: thunk slot T_F40F6C (`jp 0x00F86B6F`); no proven call site.",
+      "Evidence: `ld XIY,0x00f86ba0` at 0xF86B71, then `jr T,0xf86b8d` into the",
+      "         shared tail -- so the only thing this entry decides is the base.")
     N(0xF86B7F, "EditStep_UseCurveC",
       "EditStep_UseCurveC -- (0x20CE) := EditStep_CurveC[W & 0x7F]",
       "",
@@ -952,7 +1004,8 @@ def structure():
       "⚠ 0xF86B78 (`ld XIY,0x00F86BA8`) and 0xF86B88 (`ld XIY,0x00F86BB8`) are",
       "         UNREACHABLE: 0xF86B76 and 0xF86B86 are `jr T,0xF86B8D`, which",
       "         jumps straight over them.  Curves B and D are therefore named by",
-      "         dead code and by nothing else.  Check C3.")
+      "         dead code and by nothing else.  Check C3.",
+      "Evidence: `ld XIY,0x00f86bb0` at 0xF86B81, then `jr T,0xf86b8d`.")
     N(0xF86B8D, "EditStep_Lookup",
       "EditStep_Lookup -- the shared tail: (0x20CE) := (XIY + (W & 0x7F))",
       "",
@@ -960,7 +1013,10 @@ def structure():
       "⚠ The index mask is 0x7F, so an index of 8..127 reads PAST the 8-byte",
       "         curve it was given.  Nothing in this span bounds W, so what the",
       "         curves' real extent is rests on the 8-byte spacing of the four",
-      "         bases alone.  Stated as a gap rather than papered over.")
+      "         bases alone.  Stated as a gap rather than papered over.",
+      "Evidence: `and L,0x7f` at 0xF86B91, `ld L,(XIY+HL)` at 0xF86B94,",
+      "         `ld (0x20ce),HL` at 0xF86B99 -- the cell EditValue_ApplyStep",
+      "         adds at 0xF86B4C.")
 
     # ======================================== the press-and-hold event handlers
     N(0xF86BC0, "PanelEvent_Code01_ArmHold",
@@ -981,6 +1037,8 @@ def structure():
       "Body:    `ld L,(0x20b9) / ld H,(0x20ba) / ld A,(0x20b8) / ret`.  Thirteen",
       "         bytes, no effect.  PanelEvent_ReadPayload_F86C01 is byte-for-byte",
       "         the same routine at a different address.",
+      "Evidence: the whole body decodes as three loads and a `ret`, 13 bytes,",
+      "         with no store and no branch.",
       "Unknown:  whether these two are stubs left in place or handlers whose body",
       "         was removed.  The register loads are dead either way.")
     N(0xF86C01, "PanelEvent_ReadPayload_F86C01",
@@ -1003,7 +1061,10 @@ def structure():
       "         jump rather than causing one, unless something outside this span",
       "         rewrites the table entry.  prom_a 0xFF4795 also compares (0x2096)",
       "         with 7, so the index is used elsewhere; nothing decoded so far",
-      "         explains the 0xFFFF.")
+      "         explains the 0xFFFF.",
+      "Evidence: `cp A,0x20` at 0xF86C1A is the guard; `ld (0x2096),0x0007` at",
+      "         0xF86C34 and `ld (0x20a7),0x30` at 0xF86C3A are the arm; the",
+      "         cancel path is `ld (0x2096),0x0000` at 0xF86C4E.")
     N(0xF86C59, "PanelEvent_NoOp_T40F88",
       "PanelEvent_NoOp_T40F88 -- one `ret`, published as thunk slot T_F40F88",
       "",
@@ -1014,9 +1075,13 @@ def structure():
       "         published entry points that all do nothing -- which is why they",
       "         are three labels and not one.")
     N(0xF86C5A, "PanelEvent_NoOp_T40F8C",
-      "PanelEvent_NoOp_T40F8C -- one `ret`, published as thunk slot T_F40F8C")
+      "PanelEvent_NoOp_T40F8C -- one `ret`, published as thunk slot T_F40F8C",
+      "",
+      "Evidence: prom_b 0xF40F8C holds `jp 0x00F86C5A` and ROM[0xF86C5A] is 0x0E.")
     N(0xF86C5B, "PanelEvent_NoOp_T40F94",
-      "PanelEvent_NoOp_T40F94 -- one `ret`, published as thunk slot T_F40F94")
+      "PanelEvent_NoOp_T40F94 -- one `ret`, published as thunk slot T_F40F94",
+      "",
+      "Evidence: prom_b 0xF40F94 holds `jp 0x00F86C5B` and ROM[0xF86C5B] is 0x0E.")
     N(0xF86C5C, "PanelHold_Tick",
       "PanelHold_Tick -- count (0x20A7) down and, at zero, request a screen",
       "",
@@ -1046,7 +1111,9 @@ def structure():
       "         on the `ret` at 0xF872C9.",
       "★ Evidence for the whole vtable reading: this object is laid out so that",
       "         BOTH +0, +4 AND +8 reach that `ret`.  Nothing else explains four",
-      "         branches to the same target four bytes apart.  Check V3.")
+      "         branches to the same target four bytes apart.  Check V3.",
+      "Evidence: ROM[0xF872C1..0xF872C9] = 68 06 68 04 68 02 68 00 0E, and 81 of",
+      "         the 256 entries of PanelScreen_VtableTable hold 0x00F872C1.")
 
     # ================================================== the data objects
     N(0xF8671A, "PanelButton_BitMask32",
@@ -1075,6 +1142,9 @@ def structure():
       "★ LAST-ENTRY TEST: entries 8..31 are all zero -- so 24 of the 32 buttons",
       "         can never be interlocked -- and entry 7 is 0x01000000 = 1<<24 =",
       "         1<<(7+17).  Check B2.",
+      "Evidence: `and XDE,(0x2252)` at 0xF8669F and `and XDE,(0x2256)` at",
+      "         0xF866A7, each followed by a `jr NZ` to the path that pops and",
+      "         returns WITHOUT touching (0x2088) -- so a hit vetoes the press.",
       "Unknown:  what (0x2252)/(0x2256) hold.  The bit space is NOT the button",
       "         index space of the table above; it is offset by 17.")
     N(0xF868DB, "PanelDial_DeltaToStepIndex",
@@ -1089,7 +1159,11 @@ def structure():
       "         0-2 index PanelDial_StepSizes, so the first 17 entries are",
       "         negative and the last 15 positive -- the index the reader forms",
       "         is delta + 0x10, which puts zero delta at entry 16 (0x80 =",
-      "         negative, step 0).")
+      "         negative, step 0).",
+      "Evidence: the consumer is PanelDial_ApplyStep, which uses bit 7 of the",
+      "         fetched byte as the direction (`bit 0x07,D` at 0xF868A7) and its",
+      "         low three bits as the PanelDial_StepSizes index (`and A,0x07` at",
+      "         0xF86890) -- so the encoding of the table IS the consumer's.")
     N(0xF868FB, "PanelDial_StepSizes",
       "PanelDial_StepSizes -- 8 bytes: 0, 1, 4, 10, 20, 50, 70, 100 (decimal)",
       "",
@@ -1097,7 +1171,10 @@ def structure():
       "         at 0xF86890 -- which is what fixes the count at 8.  ⚠ The round-1",
       "         dossier said this base had no reader bound either.",
       "★ LAST-ENTRY TEST: entry 7 is 0x64 = 100, and 0xF86903 (the byte after) is",
-      "         PanelTimers_Step, a thunk-published entry point.")
+      "         PanelTimers_Step, a thunk-published entry point.",
+      "Evidence: the values are added to or subtracted from (0x7EE2) at 0xF868BD",
+      "         and 0xF868B0, between the 0x0028 and 0x012C limits -- a step of",
+      "         100 on a range of 260 only makes sense as an acceleration ladder.")
     N(0xF86C8C, "PanelHold_ScreenRequest",
       "PanelHold_ScreenRequest -- 17 LE16 words: {screen id, 0x40} or 0xFFFF",
       "",
@@ -1112,7 +1189,10 @@ def structure():
       "⚠ ENTRY COUNT 17 IS UNPINNED.  Nothing bounds (0x2096); the count rests",
       "         only on the table ending where PanelMode_To2076's code begins at",
       "         0xF86CAE.  The three writers inside this span use indices 0, 2 and",
-      "         7, and prom_a 0xFF4795 compares (0x2096) with 7.")
+      "         7, and prom_a 0xFF4795 compares (0x2096) with 7.",
+      "Evidence: `ld XHL,0x00f86c8c` at 0xF86C73 is the only instruction in",
+      "         either image that names this base, and `ld WA,(XHL+WA)` at",
+      "         0xF86C78 is what makes the stride 2.")
     N(0xF86CC9, "PanelHome_ScreenIds",
       "PanelHome_ScreenIds -- 2 bytes: 0xA1, 0xA0",
       "",
@@ -1120,6 +1200,9 @@ def structure():
       "         at 0xF86B24-0xF86B33 (PanelState_CheckHomeAllowed).",
       "ENTRY COUNT 2, pinned twice: the literal `ld XBC,0x00000002` IS the loop",
       "         count, and 0xF86CCB begins the 438-byte 0x00 pad.",
+      "Evidence: `ld XIX,0x00f86cc9` at 0xF86B24 is the only instruction in",
+      "         either image that names this base; `cp A,(XIX+)` at 0xF86B2E",
+      "         with `djnz BC` at 0xF86B33 is what makes it a 2-entry scan.",
       "Note:    0xAA -- the id PanelState_Init installs as the home screen -- is",
       "         NOT one of these two.")
     N(0xF86E81, "PanelMode_To2076Map",
@@ -1130,7 +1213,10 @@ def structure():
       "Contents: 01 01 02 03 03 03 03 03 08 09 0A 0B 0C 0D 0E 0F 10 01 12 13 14",
       "         15 16 17 01 01 01 01 01 01 01 01 -- every value is <= 0x17, i.e.",
       "         inside the map's own index range, so it is idempotent-ish and the",
-      "         unused tail (entries 24..31) all fall back to 1.")
+      "         unused tail (entries 24..31) all fall back to 1.",
+      "Evidence: `ld XIY,0x00f86e81` at 0xF86CBB is the only instruction in",
+      "         either image that names this base, and `cp L,0x1f` three",
+      "         instructions earlier is what bounds the index.")
     N(0xF86EA1, "PanelMode_ToScreenIdMap",
       "PanelMode_ToScreenIdMap -- 32 bytes, (0x2078) -> a screen id for (0x207C)",
       "",
@@ -1146,7 +1232,11 @@ def structure():
       "         (0x2076) and READS (0x2078), and this reader reads (0x2078) too.",
       "         They share an input; they are not chained.  Check M2.",
       "Consistency: every entry is <= 0xDF, the bound PanelScreen_CallEnter_B",
-      "         applies to (0x207C) -- check M3.")
+      "         applies to (0x207C) -- check M3.",
+      "Evidence: `ld XHL,0x00f86ea1` at 0xF86388 is the only instruction in",
+      "         either image that names this base, and 0xF86397 stores the",
+      "         fetched byte to (0x207C) -- which is what makes the values",
+      "         screen ids rather than anything else.")
     N(0xF86EC1, "PanelScreen_VtableTable",
       "PanelScreen_VtableTable -- 256 LE32 pointers, one screen object each",
       "",
@@ -1169,7 +1259,11 @@ def structure():
       "         +4 from PanelScreen_CallLeave_A/B (`ld BC,0x0004`), called with",
       "            the id that just STOPPED being current;",
       "         +8 from PanelButton_Route 0xF8621E (`add XBC,0x00000008`), called",
-      "            with the CURRENT id and a button index on the stack.")
+      "            with the CURRENT id and a button index on the stack.",
+      "Evidence: the +0/+4 pairing is not an assumption -- `ld BC,0x0000` is",
+      "         reached only from the two CURRENT-id detectors (0xF86500,",
+      "         0xF8650F) and `ld BC,0x0004` only from the two PREVIOUS-id ones",
+      "         (0xF86493, 0xF864BD).  Check V6.")
     N(0xF86F41, "PanelScreen_VtableTable_ViewB",
       "PanelScreen_VtableTable_ViewB -- entry 32 of the table above, used as a",
       "                                 second base",
@@ -1178,7 +1272,10 @@ def structure():
       "         at 0xF86215.  0xF86F41 = 0xF86EC1 + 0x80 = entry 32 exactly.",
       "So screen ids 0..0xDF read here are table entries 32..255, and mode",
       "indices 0..0x2F read at PanelScreen_VtableTable are entries 0..47: the two",
-      "views OVERLAP on entries 32..47, 11 of which are live (check V5).")
+      "views OVERLAP on entries 32..47, 11 of which are live (check V5).",
+      "Evidence: 0xF86F41 - 0xF86EC1 = 0x80 = 32 * 4 exactly, and the two bounds",
+      "         (0x2F from this base's parent, 0xDF from this one) reach entries",
+      "         47 and 255 -- the last entry of the 256-entry table.")
     N(0xF87E81, "UiEventPassA_TailList")
     N(0xF88E91, "UiEventPassB_TailList")
     N(0xF89671, "UiEventPassC_TailList")
@@ -1194,7 +1291,11 @@ def structure():
           "Entries: %s (%d), then the 0xFFFF terminator."
           % (", ".join("0x%06X" % v for v in ents) or "none", len(ents)),
           "ENTRY COUNT: the terminator IS the count; the bytes after it are the",
-          "         0x00 pad that runs to the next object.")
+          "         0x00 pad that runs to the next object.",
+          "Evidence: `ld XIY,0x00%06X` at 0x%06X, four bytes before"
+          " `ld (0x20C4),XIY`;" % (tl, entry + 9),
+          "         UiEventList_Run reads (0x20C4) at 0xF86A6A and stops on",
+          "         `cp (XIX),0xffff`.")
 
     # ---------------------------------------------------- the three class tables
     for tag, entry, ct, tl, rl, th in PASSES:
@@ -1213,7 +1314,11 @@ def structure():
           "         trailing empty list -- and the SAME 121 ids do so in all",
           "         THREE tables (check L2).  The distinct heads tile the list",
           "         area exactly, in ascending order, with no byte left over",
-          "         (check L3).")
+          "         (check L3).",
+          "Evidence: `ld XIY,0x00%06X` at 0x%06X, four bytes before"
+          " `ld (0x20C0),XIY`;" % (ct, entry),
+          "         UiEventList_Run reads (0x20C0) at 0xF869EF and indexes it",
+          "         with `sla 0x02,HL` at 0xF86A00.")
 
     # ------------------------------------------------------------ the list heads
     #
@@ -1652,7 +1757,7 @@ def selftest():
                      (0x300 // 4), CLASS_N)
     push_rows = [t for a, _b, t in RT.unidasm_range(0xF86A23, 0xF86A3D)]
     bad += check("I3 pushes at 0xF86A23-0xF86A3C: RAM cells",
-                 sum(1 for t in push_rows if t.startswith("push (0x")), 5)
+                 sum(1 for t in push_rows if t.startswith("pushw (0x")), 5)
     bad += check("I3 ...registers", sum(1 for t in push_rows
                                         if re.match(r"push X[A-Z]{2}$", t)), 6)
     bad += check("I3 ...ELEVEN IN TOTAL, not eleven PLUS five", len(push_rows), 11)
@@ -1703,6 +1808,14 @@ def selftest():
     bad += check("P1 re-derived from the ROM",
                  pass_fields(),
                  [(t, e, ct, tl, rl) for t, e, ct, tl, rl, _th in PASSES])
+    # the two citation ADDRESSES the generated headers quote are computed, so
+    # they get the same decode test as every hand-written citation
+    bad += check("P2 the class-table load is AT the entry point",
+                 [dis1(e) for _t, e, _ct, _tl, _rl, _th in PASSES],
+                 ["ld XIY,0x00%06x" % ct for _t, _e, ct, _tl, _rl, _th in PASSES])
+    bad += check("P3 the tail-list load is at entry+9",
+                 [dis1(e + 9) for _t, e, _ct, _tl, _rl, _th in PASSES],
+                 ["ld XIY,0x00%06x" % tl for _t, _e, _ct, tl, _rl, _th in PASSES])
 
     print("S. every citation decodes AT the address cited")
     citations = sorted(set(
@@ -1727,12 +1840,14 @@ def selftest():
                  dis1(0xF8620B), "cp C,0xdf")
 
     print("T. the thunk run's proven call sites")
-    sites = L.hot_thunk_callsites()
-    run = {s: v for s, v in sites.items() if 0xF40F34 <= s <= 0xF40F50}
+    _run, _slots, hits = L.hot_thunk_callsites()
+    run = {s: v for s, v in hits.items() if 0xF40F34 <= s <= 0xF40F50}
     bad += check("T1 run T_F40F34-T_F40F50 total (round 1 said 88)",
                  sum(len(v) for v in run.values()), 89)
     bad += check("T1 ...T_F40F3C alone (round 1 said 58)",
                  len(run.get(0xF40F3C, [])), 59)
+    bad += check("T1 ...and the whole run T_F40F34-T_F40F94, the LAST slot "
+                 "included", sum(len(v) for v in hits.values()), 95)
 
     print("V. the screen vtables")
     vals = [w32(0xF86EC1 + 4 * i) for i in range(256)]
@@ -1770,26 +1885,46 @@ def selftest():
 
 
 def show_sites():
-    """Every address this file cites as a naming or call site, with the OPCODE
-    test on the cited byte.  A citation that landed on an operand shows up as a
-    byte that cannot start an address-naming instruction."""
+    """Every address this file cites as a naming, call or branch site, with the
+    two tests that catch lane a2's round-1 bug.
+
+    TEST 1 (the strong one): the site is an INSTRUCTION BOUNDARY of the layout's
+    own decode of the code segments.  A citation that landed on an operand is not
+    a boundary.
+    TEST 2 (weaker, printed for the address-naming sites only): the byte at the
+    site is an opcode that CAN carry a 24-bit immediate.  It is weak because an
+    operand byte can coincide with such an opcode -- three of round 1's citations
+    passed it and were still wrong."""
     segs, _dirs = layout()
     structure()
     rows, named, calls, jumps = census(segs)
-    print("%-10s %-6s %-30s %s" % ("target", "byte", "instruction at the site",
+    starts = set()
+    for kind, a, n in segs:
+        if kind == "code":
+            for x, _bs, _t in RT.unidasm_range(a, a + n):
+                starts.add(x)
+    print("%-30s %-6s %-34s %s" % ("target", "byte", "instruction at the site",
                                    "site"))
-    bad = 0
+    notbound = notop = 0
     for t in sorted(set(named) | set(calls) | set(jumps)):
-        for s in sorted(named.get(t, set()) | calls.get(t, set()) | jumps.get(t, set())):
+        for s in sorted(named.get(t, set()) | calls.get(t, set())
+                        | jumps.get(t, set())):
             b = by(s)
-            flag = "" if b in NAMING_OPCODES else "   <- NOT a naming opcode"
-            if b not in NAMING_OPCODES:
-                bad += 1
-            print("%-10s 0x%02X   %-30s 0x%06X%s"
+            flag = ""
+            if s not in starts:
+                flag += "   <- NOT AN INSTRUCTION BOUNDARY"
+                notbound += 1
+            if s in named.get(t, set()) or s in calls.get(t, set()):
+                if b not in NAMING_OPCODES:
+                    flag += "   <- not an address-naming opcode"
+                    notop += 1
+            print("%-30s 0x%02X   %-34s 0x%06X%s"
                   % (LABELS.get(t, "0x%06X" % t), b, dis1(s) or "?", s, flag))
-    print("\n%d cited sites whose first byte cannot start an address-naming "
-          "instruction" % bad)
-    return 0
+    print("\n%d cited sites that are NOT an instruction boundary (this is the "
+          "test that matters)" % notbound)
+    print("%d address-naming sites whose first byte cannot carry a 24-bit "
+          "immediate" % notop)
+    return 1 if notbound else 0
 
 
 def main():

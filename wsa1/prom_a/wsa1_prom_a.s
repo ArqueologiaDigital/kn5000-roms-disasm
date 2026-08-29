@@ -3816,7 +3816,7 @@ Data_F82000:
 	.long 0x00000080                                 ; F8200C  [  3]
 	jp sub_F825D4                                        ; F82010  1b d4 25 f8
 	jp sub_F8262F                                        ; F82014  1b 2f 26 f8
-	jp sub_F82628                                        ; F82018  1b 28 26 f8
+	jp Var7FC1_Clear                                        ; F82018  1b 28 26 f8
 	jp sub_F8262F                                        ; F8201C  1b 2f 26 f8
 	jp sub_F8262F                                        ; F82020  1b 2f 26 f8
 	jp sub_F8262F                                        ; F82024  1b 2f 26 f8
@@ -4459,7 +4459,20 @@ sub_F825D4:
 	stdi8 (0x2e00), 0xff                                 ; F8261D  f1 00 2e 00 ff
 	stdi8 (0x2000), 0xff                                 ; F82622  f1 00 20 00 ff
 	ret                                                  ; F82627  0e
-sub_F82628:
+; ---------------------------------------------------------------------
+; Var7FC1_Clear -- (0x7FC1) = 0
+;
+; A single-cell accessor of the C-compiled half of prom_a: 2
+; instructions, 0xF82628 to 0xF8262D, with no branch.
+; Called from: 1 proven call sites, first a 0xF82018.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x7FC1.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x7FC1) holds.
+; ---------------------------------------------------------------------
+Var7FC1_Clear:
 	stdi8 (0x7fc1), 0x00                                 ; F82628  f1 c1 7f 00 00
 	ret                                                  ; F8262D  0e
 sub_F8262E:
@@ -10574,6 +10587,9 @@ PanelState_Init:   ; entry: calr from 0xF86018
 ; ---------------------------------------------------------------------
 ; sub_F8605C -- runs the three screen-transition steps and nothing else
 ;
+; Evidence: NOTHING names this address.  Checked two ways: the census over
+;          every decoded operand of every code segment in this span, and
+;          far_calls() over both ROM images at every byte offset.
 ; Called from: NOTHING.  No absolute or relative reference to 0xF8605C
 ;          exists in either image (checked by the census over every decoded
 ;          operand of this span, and by far_calls over both ROM images).
@@ -10629,6 +10645,8 @@ PanelTask_Step:   ; entry: calr from 0xF8601C, prom_b directory slot T_F40F34
 ; PanelState_TakePendingHoldTime
 ;
 ; Called from: NOTHING; no reference to 0xF86093 exists in either image.
+; Evidence: same two-way census as sub_F8605C.  It is a label only because
+;          the layout's descent reached the byte; nothing published it.
 ; Unknown:  whether it is a routine at all or the tail of the one above.
 ; ---------------------------------------------------------------------
 sub_F86093:
@@ -10747,6 +10765,9 @@ PanelState_RunRequests:   ; entry: calr from 0xF8606F
 ; Called from: PanelTask_Step 0xF8608C (`calr`), and nothing else.
 ; Outputs: calls PanelButton_Dispatch, then `and (0x2071),0xF6` (clears
 ;          bits 0 and 3).
+; Evidence: `bit 0x03,A` at 0xF8611F and `bit 0x00,A` at 0xF86124 are the
+;          only two bits tested, and 0xF6 is their complement -- so this
+;          routine owns exactly the two bits PanelState_RunRequests spares.
 ; ---------------------------------------------------------------------
 .LF8611B:
 PanelButton_RunPending:   ; entry: calr from 0xF8608C
@@ -10844,6 +10865,9 @@ PanelButton_SweepHeld:   ; entry: calr from 0xF86144
 ;
 ; Called from: PanelButton_Dispatch 0xF86158, PanelButton_SweepHeld 0xF86196.
 ; Inputs:  (0x2082): bits 0-4 the button index, bit 7 a flag.
+; Evidence: the split is PanelButton_Route's own, `and L,0x1f` at 0xF861AE
+;          and `and W,0x80` at 0xF861B3; (0x2082) is written by
+;          PanelButton_SweepHeld 0xF8618F and PanelButton_Accept 0xF86710.
 ; ---------------------------------------------------------------------
 .LF861A4:
 PanelButton_DispatchCurrent:   ; entry: calr from 0xF86158, 0xF86196
@@ -11066,6 +11090,8 @@ PanelScreen_ApplyHomeRequest:   ; entry: calr from 0xF8610C
 ; Guard:   bit 1 of (0x2071).
 ; Body:    PanelMode_Normalise, then PanelMode_ToScreenId, then (0x2073) = 0;
 ;          if (0x207C) == (0x207D) then `or (0x2072),0x10` (redraw).
+; Evidence: `bit 0x01,A` at 0xF8631C is the guard, and bit 1 is one of the
+;          four PanelState_RunRequests clears with `and (0x2071),0x09`.
 ; ---------------------------------------------------------------------
 .LF86318:
 PanelScreen_ApplyModeChange:   ; entry: calr from 0xF8610F
@@ -11132,6 +11158,8 @@ PanelMode_Normalise:   ; entry: calr from 0xF86327
 ; PanelMode_ToScreenId -- (0x207C) := PanelMode_ToScreenIdMap[(0x2078)]
 ;
 ; Called from: PanelScreen_ApplyModeChange 0xF8632A (`calr`), and nothing else.
+; Evidence: `ld XHL,0x00f86ea1` at 0xF86388 is the only instruction in
+;          either image that names PanelMode_ToScreenIdMap.
 ; ⚠ Evidence AGAINST the round-1 dossier: this reader has NO bound at all --
 ;          `xor XWA,XWA / ld A,(0x2078) / add XHL,XWA / ld A,(XHL)`.  The
 ;          32-entry extent of the map rests only on the code at 0xF86EC1
@@ -11154,6 +11182,9 @@ PanelMode_ToScreenId:   ; entry: calr from 0xF8632A
 ; Guard:   bit 0 of (0x2095) or bit 4 of (0x2075) clear, then bit 7 of (0x2071).
 ; Differs from PanelScreen_ApplyHomeRequest only in leaving (0x2083) alone
 ; and in zeroing (0x2073) instead of loading it with 0x70.
+; Evidence: `bit 0x07,A` at 0xF863AC is the guard -- bit 7 of (0x2071), the
+;          same bit PanelState_CheckHomeAllowed tests at 0xF86B1F on the
+;          high half of the 16-bit load from (0x2070).
 ; ---------------------------------------------------------------------
 .LF8639C:
 PanelScreen_ApplyHomeForce:   ; entry: calr from 0xF86112
@@ -11212,6 +11243,8 @@ PanelState_UpdateFlags2092:   ; entry: calr from 0xF86075
 ;                          and bit 0 of (0x2092) is set
 ;
 ; Called from: PanelTask_Step 0xF86078 (`calr`), and nothing else.
+; Evidence: `bit 0x00,A` at 0xF86405 on (0x2092), the bit
+;          PanelState_UpdateFlags2092 writes from (0x2073).
 ; ---------------------------------------------------------------------
 .LF863F5:
 PanelState_Update207A:   ; entry: calr from 0xF86078
@@ -11327,6 +11360,8 @@ PanelScreen_RunLeave:   ; entry: calr from 0xF8605C, 0xF8607E
 ; Inputs:  L = a screen id; the guard is `cp L,0xdf` at 0xF864C9.
 ; Outputs: nothing when L > 0xDF; else PanelScreen_ResolveMethod with
 ;          XIY = 0xF86F41 and BC = 4, then `call XWA`.
+; Evidence: `ld XIY,0x00f86f41` at 0xF864CE and `ld BC,0x0004` at 0xF864D3
+;          -- table view B, method offset 4.
 ; ---------------------------------------------------------------------
 .LF864C7:
 PanelScreen_CallLeave_B:   ; entry: calr from 0xF86499, 0xF864B4
@@ -11347,6 +11382,8 @@ PanelScreen_CallLeave_B:   ; entry: calr from 0xF86499, 0xF864B4
 ;
 ; Called from: PanelScreen_RunLeave 0xF864C3 (`calr`), and nothing else.
 ; Inputs:  L = a mode index; the guard is `cp L,0x2f` at 0xF864E7.
+; Evidence: `ld XIY,0x00f86ec1` at 0xF864EC and `ld BC,0x0004` at 0xF864F1
+;          -- table view A, method offset 4.
 ; ---------------------------------------------------------------------
 .LF864E5:
 PanelScreen_CallLeave_A:   ; entry: calr from 0xF864C3
@@ -11391,6 +11428,8 @@ PanelScreen_RunEnter:   ; entry: calr from 0xF8605F, 0xF86081
 ;
 ; Called from: PanelScreen_RunEnter 0xF86506 (`calr`), and nothing else.
 ; Inputs:  L = a mode index; the guard is `cp L,0x2f` at 0xF8651B.
+; Evidence: `ld XIY,0x00f86ec1` at 0xF86520 and `ld BC,0x0000` at 0xF86525
+;          -- table view A, method offset 0.
 ; ---------------------------------------------------------------------
 .LF86519:
 PanelScreen_CallEnter_A:   ; entry: calr from 0xF86506
@@ -11410,6 +11449,8 @@ PanelScreen_CallEnter_A:   ; entry: calr from 0xF86506
 ; Called from: PanelScreen_RunEnter 0xF86515 and PanelScreen_RunRedraw
 ;          0xF86597 (`calr`).
 ; Inputs:  L = a screen id; the guard is `cp L,0xdf` at 0xF86530.
+; Evidence: `ld XIY,0x00f86f41` at 0xF86535 and `ld BC,0x0000` at 0xF8653A
+;          -- table view B, method offset 0.
 ; ---------------------------------------------------------------------
 .LF8652E:
 PanelScreen_CallEnter_B:   ; entry: calr from 0xF86515, 0xF86597
@@ -11456,6 +11497,9 @@ PanelScreen_ResolveMethod:   ; entry: calr from 0xF864D6, 0xF864F4, 0xF86528, 0x
 ;          0xF8656D, so the `jr NZ` two instructions later tests the AND,
 ;          not the reload; the value STORED to (0x2072) is the unmasked
 ;          byte.  Written out because it reads like a bug and is not one.
+; Evidence: `bit 4,(0x2095)` at 0xF86553 and `bit 4,(0x2071)` at 0xF86559
+;          are the two tested bits; `and A,0xe2` at 0xF8656D is the quiet
+;          test; `and A,0xef` at 0xF8657A clears the same bit 4 again.
 ; ---------------------------------------------------------------------
 .LF86553:
 PanelState_Sync2095:   ; entry: calr from 0xF86069
@@ -11543,7 +11587,11 @@ UiEvent_RouteByCode:   ; entry: prom_b directory slot T_F40F58
 ;          (L & H) must be set.
 ; Outputs: `xor (0x2075),0x10`, then either `or (0x2075),0x80` or
 ;          (0x2073) = 1, and `or (0x2134),0x2000`.
-; Unknown:  which physical control raises code 3.
+; Evidence: the guard is `cp A,3` at 0xF865C8 on (0x20B8), which
+;          UiEventList_Run loads from the record's byte +1.
+; Unknown:  which physical control raises code 3.  Nothing in any of the
+;          366 lists of the three class tables points at this address, so
+;          the only published way in is the thunk slot.
 ; ---------------------------------------------------------------------
 PanelEvent_Code03:   ; entry: prom_b directory slot T_F40F90
 	ldb_d8 l, (0x20b9)                            ; F865BC  c1 b9 20 27   ld L,(0x20b9)
@@ -11594,6 +11642,11 @@ PanelEvent_Code03:   ; entry: prom_b directory slot T_F40F90
 ;          (0x2082) = code (| 0x80 when bit 0 of (0x20B9)) and
 ;          `or (0x2071),0x01`, which is what makes PanelButton_RunPending
 ;          route it on the next PanelTask_Step.
+; Evidence: the two mask tables are read four instructions apart, at
+;          0xF86659 (PanelButton_BitMask32) and 0xF86696
+;          (PanelButton_InterlockMask32), both indexed by the SAME `BC =
+;          code * 4` formed at 0xF86654-0xF86656.  That shared index is
+;          what makes the two tables one per-button record split in two.
 ; ⚠ Correction: (0x2084) is a THIRD 32-bit bitmap, not the high half of a
 ;          64-bit word with (0x2088)/(0x208C).  0xF866C3 sets the mask there
 ;          and 0xF866D3 clears it there, both independently of (0x208C).
@@ -11763,6 +11816,9 @@ PanelButton_BitMask32:
 ; ★ LAST-ENTRY TEST: entries 8..31 are all zero -- so 24 of the 32 buttons
 ;          can never be interlocked -- and entry 7 is 0x01000000 = 1<<24 =
 ;          1<<(7+17).  Check B2.
+; Evidence: `and XDE,(0x2252)` at 0xF8669F and `and XDE,(0x2256)` at
+;          0xF866A7, each followed by a `jr NZ` to the path that pops and
+;          returns WITHOUT touching (0x2088) -- so a hit vetoes the press.
 ; Unknown:  what (0x2252)/(0x2256) hold.  The bit space is NOT the button
 ;          index space of the table above; it is offset by 17.
 ; ---------------------------------------------------------------------
@@ -11809,6 +11865,9 @@ PanelButton_InterlockMask32:
 ; Outputs: (0x2070) = E | 0x80 and (0x2071) = 0x02 -- i.e. the requested
 ;          screen id plus request bit 1, the bit PanelState_RunRequests
 ;          hands to PanelScreen_ApplyModeChange.
+; Evidence: `ld (0x2070),E` at 0xF86829 and `ld (0x2071),0x02` at 0xF8682D
+;          write the id and the flag byte as two separate stores to the
+;          same pair PanelState_Init writes as one 16-bit 0x40AA.
 ; ---------------------------------------------------------------------
 PanelEvent_Code20_SetScreen:   ; entry: calr from 0xF865AE
 	ldb_d8 e, (0x20b9)                            ; F8681A  c1 b9 20 25   ld E,(0x20b9)
@@ -11969,6 +12028,10 @@ PanelDial_PostClass7A:   ; entry: calr from 0xF861DC, 0xF8686A
 ;          negative and the last 15 positive -- the index the reader forms
 ;          is delta + 0x10, which puts zero delta at entry 16 (0x80 =
 ;          negative, step 0).
+; Evidence: the consumer is PanelDial_ApplyStep, which uses bit 7 of the
+;          fetched byte as the direction (`bit 0x07,D` at 0xF868A7) and its
+;          low three bits as the PanelDial_StepSizes index (`and A,0x07` at
+;          0xF86890) -- so the encoding of the table IS the consumer's.
 ; ---------------------------------------------------------------------
 PanelDial_DeltaToStepIndex:
 	.byte 0x87, 0x87, 0x87, 0x87, 0x87, 0x86, 0x86, 0x86, 0x85, 0x85, 0x85, 0x84, 0x84, 0x83, 0x82, 0x81   ; F868DB
@@ -11984,6 +12047,9 @@ PanelDial_DeltaToStepIndex:
 ;          dossier said this base had no reader bound either.
 ; ★ LAST-ENTRY TEST: entry 7 is 0x64 = 100, and 0xF86903 (the byte after) is
 ;          PanelTimers_Step, a thunk-published entry point.
+; Evidence: the values are added to or subtracted from (0x7EE2) at 0xF868BD
+;          and 0xF868B0, between the 0x0028 and 0x012C limits -- a step of
+;          100 on a range of 260 only makes sense as an acceleration ladder.
 ; ---------------------------------------------------------------------
 PanelDial_StepSizes:
 	.byte 0x00, 0x01, 0x04, 0x0a, 0x14, 0x32, 0x46, 0x64   ; F868FB
@@ -12015,6 +12081,7 @@ PanelTimers_Step:   ; entry: prom_b directory slot T_F40F44
 ; PanelTimer_Repeat20AB
 ;
 ; Called from: NOTHING; no reference to 0xF8691B exists in either image.
+; Evidence: same two-way census as sub_F8605C.
 ; ---------------------------------------------------------------------
 sub_F8691B:
 	ret                                           ; F8691B  0e
@@ -12263,6 +12330,10 @@ UiEventList_Run:   ; entry: calr from 0xF86999, 0xF869B8, 0xF869D7
 ;          same 0xFF one past, same `+= 4`.  It is NOT a byte copy: it takes
 ;          its four bytes as 16-bit stack slots and is 77 bytes against this
 ;          routine's 34, so the name is shared by STRUCTURE, not by a diff.
+; Evidence: `ld XHL,0x00002c00` at 0xF86A89, `add HL,(0x60f000)` at
+;          0xF86A8E, `ld (XHL),DE` / `ld (XHL+0x02),WA` /
+;          `ld (XHL+0x04),0xff` at 0xF86A93-0xF86A98, `add (0x60f000),0x04`
+;          at 0xF86A9C.
 ; ---------------------------------------------------------------------
 Queue2C00_AppendRegs:   ; entry: prom_b directory slot T_F40F38
 	m_cp_mi8 MB24, 0x60f000, 0xfb                 ; F86A81  c2 00 f0 60 3f fb   cp (0x60f000),0xfb
@@ -12293,6 +12364,10 @@ Queue2C00_AppendRegs:   ; entry: prom_b directory slot T_F40F38
 ;          sub_FE7100 are two more C-compiled twins of the same structure;
 ;          prom_b's bounds the OTHER cursor (0x60F000) at 0x00FC, which none
 ;          of the three hand-written ones do.
+; Evidence: `ld XHL,0x00002e00` at 0xF86AAC and `add HL,(0x60f004)` at
+;          0xF86AB1, against 0x2C00 / (0x60F000) twenty-two bytes earlier --
+;          the two routines are the same code with the two constants
+;          swapped and the compare widened.
 ; ---------------------------------------------------------------------
 Queue2E00_AppendRegs:   ; entry: prom_b directory slot T_F40F3C
 	m_cp_mi16 MW24, 0x60f004, 0x00fb              ; F86AA3  d2 04 f0 60 3f fb 00   cp (0x60f004),0x00fb
@@ -12323,6 +12398,8 @@ Queue2E00_AppendRegs:   ; entry: prom_b directory slot T_F40F3C
 ;          consumers, each with its own class range.
 ; Sibling:  prom_b's List2030_Append4 at 0xF552CC -- same base, same 0x206C
 ;          ceiling, same scan-for-0xFF; again a structural match, not a diff.
+; Evidence: `ld XHL,0x00002030` at 0xF86AC7, `cp (XHL),0xff` at 0xF86ACC,
+;          `add HL,0x0004` at 0xF86AD1, `cp XHL,0x0000206b` at 0xF86AD7.
 ; ---------------------------------------------------------------------
 List2030_AppendRegs:   ; entry: calr from 0xF8625A, 0xF868D7, prom_b directory slot T_F40F40
 	ld XHL,0x00002030                             ; F86AC7  43 30 20 00 00
@@ -12431,6 +12508,8 @@ EditValue_ApplyStep:   ; entry: prom_b directory slot T_F40F68
 ; EditStep_UseCurveA -- (0x20CE) := EditStep_CurveA[W & 0x7F]
 ;
 ; Called from: thunk slot T_F40F6C (`jp 0x00F86B6F`); no proven call site.
+; Evidence: `ld XIY,0x00f86ba0` at 0xF86B71, then `jr T,0xf86b8d` into the
+;          shared tail -- so the only thing this entry decides is the base.
 ; ---------------------------------------------------------------------
 EditStep_UseCurveA:   ; entry: prom_b directory slot T_F40F6C
 	push XIY                                      ; F86B6F  3d
@@ -12448,6 +12527,7 @@ EditStep_UseCurveA:   ; entry: prom_b directory slot T_F40F6C
 ;          UNREACHABLE: 0xF86B76 and 0xF86B86 are `jr T,0xF86B8D`, which
 ;          jumps straight over them.  Curves B and D are therefore named by
 ;          dead code and by nothing else.  Check C3.
+; Evidence: `ld XIY,0x00f86bb0` at 0xF86B81, then `jr T,0xf86b8d`.
 ; ---------------------------------------------------------------------
 EditStep_UseCurveC:   ; entry: prom_b directory slot T_F40F70
 	push XIY                                      ; F86B7F  3d
@@ -12466,6 +12546,9 @@ EditStep_UseCurveC:   ; entry: prom_b directory slot T_F40F70
 ;          curve it was given.  Nothing in this span bounds W, so what the
 ;          curves' real extent is rests on the 8-byte spacing of the four
 ;          bases alone.  Stated as a gap rather than papered over.
+; Evidence: `and L,0x7f` at 0xF86B91, `ld L,(XIY+HL)` at 0xF86B94,
+;          `ld (0x20ce),HL` at 0xF86B99 -- the cell EditValue_ApplyStep
+;          adds at 0xF86B4C.
 ; ---------------------------------------------------------------------
 EditStep_Lookup:
 	xor HL,HL                                     ; F86B8D  db d3
@@ -12529,6 +12612,8 @@ PanelEvent_Code01_ArmHold:   ; entry: prom_b directory slot T_F40F7C
 ; Body:    `ld L,(0x20b9) / ld H,(0x20ba) / ld A,(0x20b8) / ret`.  Thirteen
 ;          bytes, no effect.  PanelEvent_ReadPayload_F86C01 is byte-for-byte
 ;          the same routine at a different address.
+; Evidence: the whole body decodes as three loads and a `ret`, 13 bytes,
+;          with no store and no branch.
 ; Unknown:  whether these two are stubs left in place or handlers whose body
 ;          was removed.  The register loads are dead either way.
 ; ---------------------------------------------------------------------
@@ -12566,6 +12651,9 @@ PanelEvent_ReadPayload_F86C01:   ; entry: prom_b directory slot T_F40F80
 ;          rewrites the table entry.  prom_a 0xFF4795 also compares (0x2096)
 ;          with 7, so the index is used elsewhere; nothing decoded so far
 ;          explains the 0xFFFF.
+; Evidence: `cp A,0x20` at 0xF86C1A is the guard; `ld (0x2096),0x0007` at
+;          0xF86C34 and `ld (0x20a7),0x30` at 0xF86C3A are the arm; the
+;          cancel path is `ld (0x2096),0x0000` at 0xF86C4E.
 ; ---------------------------------------------------------------------
 PanelEvent_Code20_ArmHold:   ; entry: prom_b directory slot T_F40F84
 	ldb_d8 l, (0x20b9)                            ; F86C0E  c1 b9 20 27   ld L,(0x20b9)
@@ -12610,12 +12698,16 @@ PanelEvent_NoOp_T40F88:   ; entry: prom_b directory slot T_F40F88
 
 ; ---------------------------------------------------------------------
 ; PanelEvent_NoOp_T40F8C -- one `ret`, published as thunk slot T_F40F8C
+;
+; Evidence: prom_b 0xF40F8C holds `jp 0x00F86C5A` and ROM[0xF86C5A] is 0x0E.
 ; ---------------------------------------------------------------------
 PanelEvent_NoOp_T40F8C:   ; entry: prom_b directory slot T_F40F8C
 	ret                                           ; F86C5A  0e
 
 ; ---------------------------------------------------------------------
 ; PanelEvent_NoOp_T40F94 -- one `ret`, published as thunk slot T_F40F94
+;
+; Evidence: prom_b 0xF40F94 holds `jp 0x00F86C5B` and ROM[0xF86C5B] is 0x0E.
 ; ---------------------------------------------------------------------
 PanelEvent_NoOp_T40F94:   ; entry: prom_b directory slot T_F40F94
 	ret                                           ; F86C5B  0e
@@ -12668,6 +12760,9 @@ PanelHold_Tick:   ; entry: prom_b directory slot T_F40F74
 ;          only on the table ending where PanelMode_To2076's code begins at
 ;          0xF86CAE.  The three writers inside this span use indices 0, 2 and
 ;          7, and prom_a 0xFF4795 compares (0x2096) with 7.
+; Evidence: `ld XHL,0x00f86c8c` at 0xF86C73 is the only instruction in
+;          either image that names this base, and `ld WA,(XHL+WA)` at
+;          0xF86C78 is what makes the stride 2.
 ; ---------------------------------------------------------------------
 PanelHold_ScreenRequest:
 	.byte 0x01, 0x40                                    ; F86C8C  [ 0]  0x4001  screen 0x01, request flags 0x40
@@ -12718,6 +12813,9 @@ PanelMode_To2076:   ; entry: calr from 0xF86072
 ;          at 0xF86B24-0xF86B33 (PanelState_CheckHomeAllowed).
 ; ENTRY COUNT 2, pinned twice: the literal `ld XBC,0x00000002` IS the loop
 ;          count, and 0xF86CCB begins the 438-byte 0x00 pad.
+; Evidence: `ld XIX,0x00f86cc9` at 0xF86B24 is the only instruction in
+;          either image that names this base; `cp A,(XIX+)` at 0xF86B2E
+;          with `djnz BC` at 0xF86B33 is what makes it a 2-entry scan.
 ; Note:    0xAA -- the id PanelState_Init installs as the home screen -- is
 ;          NOT one of these two.
 ; ---------------------------------------------------------------------
@@ -12738,6 +12836,9 @@ PanelHome_ScreenIds:
 ;          15 16 17 01 01 01 01 01 01 01 01 -- every value is <= 0x17, i.e.
 ;          inside the map's own index range, so it is idempotent-ish and the
 ;          unused tail (entries 24..31) all fall back to 1.
+; Evidence: `ld XIY,0x00f86e81` at 0xF86CBB is the only instruction in
+;          either image that names this base, and `cp L,0x1f` three
+;          instructions earlier is what bounds the index.
 ; ---------------------------------------------------------------------
 PanelMode_To2076Map:
 	.byte 0x01, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f   ; F86E81
@@ -12761,6 +12862,10 @@ PanelMode_To2076Map:
 ;          They share an input; they are not chained.  Check M2.
 ; Consistency: every entry is <= 0xDF, the bound PanelScreen_CallEnter_B
 ;          applies to (0x207C) -- check M3.
+; Evidence: `ld XHL,0x00f86ea1` at 0xF86388 is the only instruction in
+;          either image that names this base, and 0xF86397 stores the
+;          fetched byte to (0x207C) -- which is what makes the values
+;          screen ids rather than anything else.
 ; ---------------------------------------------------------------------
 PanelMode_ToScreenIdMap:
 	.byte 0x01, 0x01, 0x02, 0x04, 0x05, 0x06, 0x0f, 0x1a, 0x12, 0xb0, 0x60, 0x59, 0x33, 0x55, 0x5e, 0x02   ; F86EA1
@@ -12791,6 +12896,10 @@ PanelMode_ToScreenIdMap:
 ;             the id that just STOPPED being current;
 ;          +8 from PanelButton_Route 0xF8621E (`add XBC,0x00000008`), called
 ;             with the CURRENT id and a button index on the stack.
+; Evidence: the +0/+4 pairing is not an assumption -- `ld BC,0x0000` is
+;          reached only from the two CURRENT-id detectors (0xF86500,
+;          0xF8650F) and `ld BC,0x0004` only from the two PREVIOUS-id ones
+;          (0xF86493, 0xF864BD).  Check V6.
 ; ---------------------------------------------------------------------
 PanelScreen_VtableTable:
 	.long 0x00F872C1                            ; F86EC1  [0]   -> PanelScreen_NullVtable
@@ -12835,6 +12944,9 @@ PanelScreen_VtableTable:
 ; So screen ids 0..0xDF read here are table entries 32..255, and mode
 ; indices 0..0x2F read at PanelScreen_VtableTable are entries 0..47: the two
 ; views OVERLAP on entries 32..47, 11 of which are live (check V5).
+; Evidence: 0xF86F41 - 0xF86EC1 = 0x80 = 32 * 4 exactly, and the two bounds
+;          (0x2F from this base's parent, 0xDF from this one) reach entries
+;          47 and 255 -- the last entry of the 256-entry table.
 ; ---------------------------------------------------------------------
 PanelScreen_VtableTable_ViewB:
 	.long 0x00F872C1                            ; F86F41  [0]   -> PanelScreen_NullVtable
@@ -13073,6 +13185,8 @@ PanelScreen_VtableTable_ViewB:
 ; ★ Evidence for the whole vtable reading: this object is laid out so that
 ;          BOTH +0, +4 AND +8 reach that `ret`.  Nothing else explains four
 ;          branches to the same target four bytes apart.  Check V3.
+; Evidence: ROM[0xF872C1..0xF872C9] = 68 06 68 04 68 02 68 00 0E, and 81 of
+;          the 256 entries of PanelScreen_VtableTable hold 0x00F872C1.
 ; ---------------------------------------------------------------------
 PanelScreen_NullVtable:
 	jr .LF872C9                                   ; F872C1  68 06
@@ -13100,6 +13214,9 @@ PanelScreen_NullVtable:
 ;          THREE tables (check L2).  The distinct heads tile the list
 ;          area exactly, in ascending order, with no byte left over
 ;          (check L3).
+; Evidence: `ld XIY,0x00F87681` at 0xF8697E, four bytes before `ld (0x20C0),XIY`;
+;          UiEventList_Run reads (0x20C0) at 0xF869EF and indexes it
+;          with `sla 0x02,HL` at 0xF86A00.
 ; ---------------------------------------------------------------------
 UiEventClass_ListTable_A:
 	.long 0x00F87982                            ; F87681  [0]   -> UiListA_Class00
@@ -13299,7 +13416,6 @@ UiEventClass_ListTable_A:
 	.byte 0xff   ; F87981
 
 ; --- 0xF87982-0xF87B71  handler lists (496 bytes) ---
-
 ; ---------------------------------------------------------------------
 ; UiEventLists_A -- the 122 handler lists of pass A, tiling 0xF87982-0xF87B71
 ;
@@ -13314,6 +13430,7 @@ UiEventClass_ListTable_A:
 ;          overlap, every one ends in 0xFFFFFFFF, and the last one ends
 ;          exactly at the area's end (checks L3, L5).
 ; ---------------------------------------------------------------------
+; Evidence: UiEventClass_ListTable_A[0x00], the LE32 at 0xF87681, holds 0xF87982.  GENERATED name.
 UiListA_Class00:
 	.long 0xFFFFFFFF                            ; F87982  [0]   end of list
 ; Evidence: UiEventClass_ListTable_A[0x01], the LE32 at 0xF87685, holds 0xF87986.  GENERATED name.
@@ -13609,6 +13726,10 @@ UiListA_Class90:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_A[0x91].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_A[0x91], the LE32 at 0xF878C5,
+;          holds 0xF87B02.  The list ENDS at 0xF87B0A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListA_Class91:
 	.long 0x00F408F0                            ; F87B02  [0]   -> 0xF408F0
@@ -13627,6 +13748,10 @@ UiListA_Class93:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_A[0x98].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_A[0x98], the LE32 at 0xF878E1,
+;          holds 0xF87B12.  The list ENDS at 0xF87B1A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListA_Class98:
 	.long 0x00F40244                            ; F87B12  [0]   -> 0xF40244
@@ -13706,6 +13831,8 @@ UiListA_ClassBD:
 ;          Check L2 asserts the set is the same in all three tables.
 ; Position: it is the LAST object in the area, and its 4 bytes are what
 ;          make the tiling reach 0xF87B72 exactly.
+; Evidence: 71 of the 192 LE32 entries of UiEventClass_ListTable_A hold
+;          0xF87B6E, and the word there is the 0xFFFFFFFF terminator.
 ; ---------------------------------------------------------------------
 UiListA_Shared:
 	.long 0xFFFFFFFF                            ; F87B6E  [0]   end of list
@@ -13724,6 +13851,9 @@ UiListA_Shared:
 ; Entries: none (0), then the 0xFFFF terminator.
 ; ENTRY COUNT: the terminator IS the count; the bytes after it are the
 ;          0x00 pad that runs to the next object.
+; Evidence: `ld XIY,0x00F87E81` at 0xF86987, four bytes before `ld (0x20C4),XIY`;
+;          UiEventList_Run reads (0x20C4) at 0xF86A6A and stops on
+;          `cp (XIX),0xffff`.
 ; ---------------------------------------------------------------------
 UiEventPassA_TailList:
 	.long 0xFFFFFFFF                            ; F87E81  [0]   end of list
@@ -13746,6 +13876,9 @@ UiEventPassA_TailList:
 ;          THREE tables (check L2).  The distinct heads tile the list
 ;          area exactly, in ascending order, with no byte left over
 ;          (check L3).
+; Evidence: `ld XIY,0x00F87E91` at 0xF8699D, four bytes before `ld (0x20C0),XIY`;
+;          UiEventList_Run reads (0x20C0) at 0xF869EF and indexes it
+;          with `sla 0x02,HL` at 0xF86A00.
 ; ---------------------------------------------------------------------
 UiEventClass_ListTable_B:
 	.long 0x00F88192                            ; F87E91  [0]   -> UiListB_Class00
@@ -13945,6 +14078,20 @@ UiEventClass_ListTable_B:
 	.byte 0xff   ; F88191
 
 ; --- 0xF88192-0xF88D09  handler lists (2936 bytes) ---
+; ---------------------------------------------------------------------
+; UiEventLists_B -- the 122 handler lists of pass B, tiling 0xF88192-0xF88D09
+;
+; Each list is LE32 routine addresses terminated by 0xFFFFFFFF.  7 of
+; the 122 are EMPTY (the terminator and nothing else); 115 carry handlers.
+; ⚠ The labels below are GENERATED: each is named after the LOWEST class
+; id whose UiEventClass_ListTable_B entry points at it, and says nothing
+; about what the list DOES.  UiListB_Shared is the empty list the 71
+; classes without their own head share.
+; Evidence: the heads are the table's own values -- nothing here is
+;          framed by content.  They tile the area with no gap and no
+;          overlap, every one ends in 0xFFFFFFFF, and the last one ends
+;          exactly at the area's end (checks L3, L5).
+; ---------------------------------------------------------------------
 
 ; ---------------------------------------------------------------------
 ; UiListB_Class00 -- 10 handler(s) for event class 0x00 in pass B
@@ -13953,6 +14100,10 @@ UiEventClass_ListTable_B:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x00].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x00], the LE32 at 0xF87E91,
+;          holds 0xF88192.  The list ENDS at 0xF881BE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class00:
 	.long 0x00F41070                            ; F88192  [0]   -> 0xF41070
@@ -13974,6 +14125,10 @@ UiListB_Class00:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x01].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x01], the LE32 at 0xF87E95,
+;          holds 0xF881BE.  The list ENDS at 0xF881E2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class01:
 	.long 0x00F41074                            ; F881BE  [0]   -> 0xF41074
@@ -13993,6 +14148,10 @@ UiListB_Class01:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x02].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x02], the LE32 at 0xF87E99,
+;          holds 0xF881E2.  The list ENDS at 0xF88206 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class02:
 	.long 0x00F41078                            ; F881E2  [0]   -> 0xF41078
@@ -14012,6 +14171,10 @@ UiListB_Class02:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x03].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x03], the LE32 at 0xF87E9D,
+;          holds 0xF88206.  The list ENDS at 0xF8822A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class03:
 	.long 0x00F4107C                            ; F88206  [0]   -> 0xF4107C
@@ -14031,6 +14194,10 @@ UiListB_Class03:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x04].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x04], the LE32 at 0xF87EA1,
+;          holds 0xF8822A.  The list ENDS at 0xF8824E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class04:
 	.long 0x00F41080                            ; F8822A  [0]   -> 0xF41080
@@ -14050,6 +14217,10 @@ UiListB_Class04:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x05].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x05], the LE32 at 0xF87EA5,
+;          holds 0xF8824E.  The list ENDS at 0xF88272 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class05:
 	.long 0x00F41084                            ; F8824E  [0]   -> 0xF41084
@@ -14069,6 +14240,10 @@ UiListB_Class05:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x06].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x06], the LE32 at 0xF87EA9,
+;          holds 0xF88272.  The list ENDS at 0xF88296 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class06:
 	.long 0x00F41088                            ; F88272  [0]   -> 0xF41088
@@ -14088,6 +14263,10 @@ UiListB_Class06:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x07].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x07], the LE32 at 0xF87EAD,
+;          holds 0xF88296.  The list ENDS at 0xF882BA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class07:
 	.long 0x00F4108C                            ; F88296  [0]   -> 0xF4108C
@@ -14107,6 +14286,10 @@ UiListB_Class07:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x08].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x08], the LE32 at 0xF87EB1,
+;          holds 0xF882BA.  The list ENDS at 0xF882DE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class08:
 	.long 0x00F41090                            ; F882BA  [0]   -> 0xF41090
@@ -14126,6 +14309,10 @@ UiListB_Class08:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x09].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x09], the LE32 at 0xF87EB5,
+;          holds 0xF882DE.  The list ENDS at 0xF88302 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class09:
 	.long 0x00F41094                            ; F882DE  [0]   -> 0xF41094
@@ -14145,6 +14332,10 @@ UiListB_Class09:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x0A].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x0A], the LE32 at 0xF87EB9,
+;          holds 0xF88302.  The list ENDS at 0xF88326 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0A:
 	.long 0x00F41098                            ; F88302  [0]   -> 0xF41098
@@ -14164,6 +14355,10 @@ UiListB_Class0A:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x0B].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x0B], the LE32 at 0xF87EBD,
+;          holds 0xF88326.  The list ENDS at 0xF8834A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0B:
 	.long 0x00F4109C                            ; F88326  [0]   -> 0xF4109C
@@ -14183,6 +14378,10 @@ UiListB_Class0B:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x0C].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x0C], the LE32 at 0xF87EC1,
+;          holds 0xF8834A.  The list ENDS at 0xF8836E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0C:
 	.long 0x00F410A0                            ; F8834A  [0]   -> 0xF410A0
@@ -14202,6 +14401,10 @@ UiListB_Class0C:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x0D].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x0D], the LE32 at 0xF87EC5,
+;          holds 0xF8836E.  The list ENDS at 0xF88392 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0D:
 	.long 0x00F410A4                            ; F8836E  [0]   -> 0xF410A4
@@ -14221,6 +14424,10 @@ UiListB_Class0D:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x0E].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x0E], the LE32 at 0xF87EC9,
+;          holds 0xF88392.  The list ENDS at 0xF883B6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0E:
 	.long 0x00F410A8                            ; F88392  [0]   -> 0xF410A8
@@ -14240,6 +14447,10 @@ UiListB_Class0E:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x0F].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x0F], the LE32 at 0xF87ECD,
+;          holds 0xF883B6.  The list ENDS at 0xF883DA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0F:
 	.long 0x00F410AC                            ; F883B6  [0]   -> 0xF410AC
@@ -14259,6 +14470,10 @@ UiListB_Class0F:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x10].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x10], the LE32 at 0xF87ED1,
+;          holds 0xF883DA.  The list ENDS at 0xF883FE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class10:
 	.long 0x00F410B0                            ; F883DA  [0]   -> 0xF410B0
@@ -14278,6 +14493,10 @@ UiListB_Class10:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x11].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x11], the LE32 at 0xF87ED5,
+;          holds 0xF883FE.  The list ENDS at 0xF88422 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class11:
 	.long 0x00F410B4                            ; F883FE  [0]   -> 0xF410B4
@@ -14297,6 +14516,10 @@ UiListB_Class11:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x12].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x12], the LE32 at 0xF87ED9,
+;          holds 0xF88422.  The list ENDS at 0xF88446 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class12:
 	.long 0x00F410B8                            ; F88422  [0]   -> 0xF410B8
@@ -14316,6 +14539,10 @@ UiListB_Class12:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x13].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x13], the LE32 at 0xF87EDD,
+;          holds 0xF88446.  The list ENDS at 0xF8846A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class13:
 	.long 0x00F410BC                            ; F88446  [0]   -> 0xF410BC
@@ -14335,6 +14562,10 @@ UiListB_Class13:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x14].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x14], the LE32 at 0xF87EE1,
+;          holds 0xF8846A.  The list ENDS at 0xF8848E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class14:
 	.long 0x00F410C0                            ; F8846A  [0]   -> 0xF410C0
@@ -14354,6 +14585,10 @@ UiListB_Class14:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x15].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x15], the LE32 at 0xF87EE5,
+;          holds 0xF8848E.  The list ENDS at 0xF884B2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class15:
 	.long 0x00F410C4                            ; F8848E  [0]   -> 0xF410C4
@@ -14373,6 +14608,10 @@ UiListB_Class15:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x16].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x16], the LE32 at 0xF87EE9,
+;          holds 0xF884B2.  The list ENDS at 0xF884D6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class16:
 	.long 0x00F410C8                            ; F884B2  [0]   -> 0xF410C8
@@ -14392,6 +14631,10 @@ UiListB_Class16:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x17].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x17], the LE32 at 0xF87EED,
+;          holds 0xF884D6.  The list ENDS at 0xF884FA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class17:
 	.long 0x00F410CC                            ; F884D6  [0]   -> 0xF410CC
@@ -14411,6 +14654,10 @@ UiListB_Class17:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x18].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x18], the LE32 at 0xF87EF1,
+;          holds 0xF884FA.  The list ENDS at 0xF8851E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class18:
 	.long 0x00F410D0                            ; F884FA  [0]   -> 0xF410D0
@@ -14430,6 +14677,10 @@ UiListB_Class18:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x19].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x19], the LE32 at 0xF87EF5,
+;          holds 0xF8851E.  The list ENDS at 0xF88542 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class19:
 	.long 0x00F410D4                            ; F8851E  [0]   -> 0xF410D4
@@ -14449,6 +14700,10 @@ UiListB_Class19:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x1A].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x1A], the LE32 at 0xF87EF9,
+;          holds 0xF88542.  The list ENDS at 0xF88566 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1A:
 	.long 0x00F410D8                            ; F88542  [0]   -> 0xF410D8
@@ -14468,6 +14723,10 @@ UiListB_Class1A:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x1B].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x1B], the LE32 at 0xF87EFD,
+;          holds 0xF88566.  The list ENDS at 0xF8858A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1B:
 	.long 0x00F410DC                            ; F88566  [0]   -> 0xF410DC
@@ -14487,6 +14746,10 @@ UiListB_Class1B:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x1C].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x1C], the LE32 at 0xF87F01,
+;          holds 0xF8858A.  The list ENDS at 0xF885AE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1C:
 	.long 0x00F410E0                            ; F8858A  [0]   -> 0xF410E0
@@ -14506,6 +14769,10 @@ UiListB_Class1C:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x1D].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x1D], the LE32 at 0xF87F05,
+;          holds 0xF885AE.  The list ENDS at 0xF885D2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1D:
 	.long 0x00F410E4                            ; F885AE  [0]   -> 0xF410E4
@@ -14525,6 +14792,10 @@ UiListB_Class1D:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x1E].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x1E], the LE32 at 0xF87F09,
+;          holds 0xF885D2.  The list ENDS at 0xF885F6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1E:
 	.long 0x00F410E8                            ; F885D2  [0]   -> 0xF410E8
@@ -14544,6 +14815,10 @@ UiListB_Class1E:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x1F].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x1F], the LE32 at 0xF87F0D,
+;          holds 0xF885F6.  The list ENDS at 0xF8861A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1F:
 	.long 0x00F410EC                            ; F885F6  [0]   -> 0xF410EC
@@ -14563,6 +14838,10 @@ UiListB_Class1F:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x20].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x20], the LE32 at 0xF87F11,
+;          holds 0xF8861A.  The list ENDS at 0xF88646 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class20:
 	.long 0x00F42470                            ; F8861A  [0]   -> 0xF42470
@@ -14584,6 +14863,10 @@ UiListB_Class20:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x21].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x21], the LE32 at 0xF87F15,
+;          holds 0xF88646.  The list ENDS at 0xF8866A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class21:
 	.long 0x00F42474                            ; F88646  [0]   -> 0xF42474
@@ -14603,6 +14886,10 @@ UiListB_Class21:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x22].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x22], the LE32 at 0xF87F19,
+;          holds 0xF8866A.  The list ENDS at 0xF8868E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class22:
 	.long 0x00F42478                            ; F8866A  [0]   -> 0xF42478
@@ -14622,6 +14909,10 @@ UiListB_Class22:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x23].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x23], the LE32 at 0xF87F1D,
+;          holds 0xF8868E.  The list ENDS at 0xF886B2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class23:
 	.long 0x00F4247C                            ; F8868E  [0]   -> 0xF4247C
@@ -14641,6 +14932,10 @@ UiListB_Class23:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x24].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x24], the LE32 at 0xF87F21,
+;          holds 0xF886B2.  The list ENDS at 0xF886D6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class24:
 	.long 0x00F42480                            ; F886B2  [0]   -> 0xF42480
@@ -14660,6 +14955,10 @@ UiListB_Class24:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x25].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x25], the LE32 at 0xF87F25,
+;          holds 0xF886D6.  The list ENDS at 0xF886FA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class25:
 	.long 0x00F42484                            ; F886D6  [0]   -> 0xF42484
@@ -14679,6 +14978,10 @@ UiListB_Class25:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x26].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x26], the LE32 at 0xF87F29,
+;          holds 0xF886FA.  The list ENDS at 0xF8871E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class26:
 	.long 0x00F42488                            ; F886FA  [0]   -> 0xF42488
@@ -14698,6 +15001,10 @@ UiListB_Class26:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x27].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x27], the LE32 at 0xF87F2D,
+;          holds 0xF8871E.  The list ENDS at 0xF88742 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class27:
 	.long 0x00F4248C                            ; F8871E  [0]   -> 0xF4248C
@@ -14717,6 +15024,10 @@ UiListB_Class27:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x28].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x28], the LE32 at 0xF87F31,
+;          holds 0xF88742.  The list ENDS at 0xF88766 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class28:
 	.long 0x00F42490                            ; F88742  [0]   -> 0xF42490
@@ -14736,6 +15047,10 @@ UiListB_Class28:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x29].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x29], the LE32 at 0xF87F35,
+;          holds 0xF88766.  The list ENDS at 0xF8878A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class29:
 	.long 0x00F42494                            ; F88766  [0]   -> 0xF42494
@@ -14755,6 +15070,10 @@ UiListB_Class29:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x2A].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x2A], the LE32 at 0xF87F39,
+;          holds 0xF8878A.  The list ENDS at 0xF887AE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2A:
 	.long 0x00F42498                            ; F8878A  [0]   -> 0xF42498
@@ -14774,6 +15093,10 @@ UiListB_Class2A:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x2B].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x2B], the LE32 at 0xF87F3D,
+;          holds 0xF887AE.  The list ENDS at 0xF887D2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2B:
 	.long 0x00F4249C                            ; F887AE  [0]   -> 0xF4249C
@@ -14793,6 +15116,10 @@ UiListB_Class2B:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x2C].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x2C], the LE32 at 0xF87F41,
+;          holds 0xF887D2.  The list ENDS at 0xF887F6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2C:
 	.long 0x00F424A0                            ; F887D2  [0]   -> 0xF424A0
@@ -14812,6 +15139,10 @@ UiListB_Class2C:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x2D].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x2D], the LE32 at 0xF87F45,
+;          holds 0xF887F6.  The list ENDS at 0xF8881A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2D:
 	.long 0x00F424A4                            ; F887F6  [0]   -> 0xF424A4
@@ -14831,6 +15162,10 @@ UiListB_Class2D:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x2E].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x2E], the LE32 at 0xF87F49,
+;          holds 0xF8881A.  The list ENDS at 0xF8883E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2E:
 	.long 0x00F424A8                            ; F8881A  [0]   -> 0xF424A8
@@ -14850,6 +15185,10 @@ UiListB_Class2E:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x2F].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x2F], the LE32 at 0xF87F4D,
+;          holds 0xF8883E.  The list ENDS at 0xF88862 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2F:
 	.long 0x00F424AC                            ; F8883E  [0]   -> 0xF424AC
@@ -14869,6 +15208,10 @@ UiListB_Class2F:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x30].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x30], the LE32 at 0xF87F51,
+;          holds 0xF88862.  The list ENDS at 0xF88886 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class30:
 	.long 0x00F424B0                            ; F88862  [0]   -> 0xF424B0
@@ -14888,6 +15231,10 @@ UiListB_Class30:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x31].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x31], the LE32 at 0xF87F55,
+;          holds 0xF88886.  The list ENDS at 0xF888AA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class31:
 	.long 0x00F424B4                            ; F88886  [0]   -> 0xF424B4
@@ -14907,6 +15254,10 @@ UiListB_Class31:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x32].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x32], the LE32 at 0xF87F59,
+;          holds 0xF888AA.  The list ENDS at 0xF888CE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class32:
 	.long 0x00F424B8                            ; F888AA  [0]   -> 0xF424B8
@@ -14926,6 +15277,10 @@ UiListB_Class32:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x33].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x33], the LE32 at 0xF87F5D,
+;          holds 0xF888CE.  The list ENDS at 0xF888F2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class33:
 	.long 0x00F424BC                            ; F888CE  [0]   -> 0xF424BC
@@ -14945,6 +15300,10 @@ UiListB_Class33:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x34].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x34], the LE32 at 0xF87F61,
+;          holds 0xF888F2.  The list ENDS at 0xF88916 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class34:
 	.long 0x00F424C0                            ; F888F2  [0]   -> 0xF424C0
@@ -14964,6 +15323,10 @@ UiListB_Class34:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x35].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x35], the LE32 at 0xF87F65,
+;          holds 0xF88916.  The list ENDS at 0xF8893A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class35:
 	.long 0x00F424C4                            ; F88916  [0]   -> 0xF424C4
@@ -14983,6 +15346,10 @@ UiListB_Class35:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x36].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x36], the LE32 at 0xF87F69,
+;          holds 0xF8893A.  The list ENDS at 0xF8895E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class36:
 	.long 0x00F424C8                            ; F8893A  [0]   -> 0xF424C8
@@ -15002,6 +15369,10 @@ UiListB_Class36:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x37].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x37], the LE32 at 0xF87F6D,
+;          holds 0xF8895E.  The list ENDS at 0xF88982 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class37:
 	.long 0x00F424CC                            ; F8895E  [0]   -> 0xF424CC
@@ -15021,6 +15392,10 @@ UiListB_Class37:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x38].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x38], the LE32 at 0xF87F71,
+;          holds 0xF88982.  The list ENDS at 0xF889A6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class38:
 	.long 0x00F424D0                            ; F88982  [0]   -> 0xF424D0
@@ -15040,6 +15415,10 @@ UiListB_Class38:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x39].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x39], the LE32 at 0xF87F75,
+;          holds 0xF889A6.  The list ENDS at 0xF889CA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class39:
 	.long 0x00F424D4                            ; F889A6  [0]   -> 0xF424D4
@@ -15059,6 +15438,10 @@ UiListB_Class39:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x3A].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x3A], the LE32 at 0xF87F79,
+;          holds 0xF889CA.  The list ENDS at 0xF889EE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3A:
 	.long 0x00F424D8                            ; F889CA  [0]   -> 0xF424D8
@@ -15078,6 +15461,10 @@ UiListB_Class3A:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x3B].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x3B], the LE32 at 0xF87F7D,
+;          holds 0xF889EE.  The list ENDS at 0xF88A12 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3B:
 	.long 0x00F424DC                            ; F889EE  [0]   -> 0xF424DC
@@ -15097,6 +15484,10 @@ UiListB_Class3B:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x3C].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x3C], the LE32 at 0xF87F81,
+;          holds 0xF88A12.  The list ENDS at 0xF88A36 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3C:
 	.long 0x00F424E0                            ; F88A12  [0]   -> 0xF424E0
@@ -15116,6 +15507,10 @@ UiListB_Class3C:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x3D].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x3D], the LE32 at 0xF87F85,
+;          holds 0xF88A36.  The list ENDS at 0xF88A5A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3D:
 	.long 0x00F424E4                            ; F88A36  [0]   -> 0xF424E4
@@ -15135,6 +15530,10 @@ UiListB_Class3D:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x3E].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x3E], the LE32 at 0xF87F89,
+;          holds 0xF88A5A.  The list ENDS at 0xF88A7E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3E:
 	.long 0x00F424E8                            ; F88A5A  [0]   -> 0xF424E8
@@ -15154,6 +15553,10 @@ UiListB_Class3E:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x3F].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x3F], the LE32 at 0xF87F8D,
+;          holds 0xF88A7E.  The list ENDS at 0xF88AA2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3F:
 	.long 0x00F424EC                            ; F88A7E  [0]   -> 0xF424EC
@@ -15173,6 +15576,10 @@ UiListB_Class3F:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x40].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x40], the LE32 at 0xF87F91,
+;          holds 0xF88AA2.  The list ENDS at 0xF88AAE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class40:
 	.long 0x00F410F0                            ; F88AA2  [0]   -> 0xF410F0
@@ -15186,6 +15593,10 @@ UiListB_Class40:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x41].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x41], the LE32 at 0xF87F95,
+;          holds 0xF88AAE.  The list ENDS at 0xF88AB6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class41:
 	.long 0x00F410F4                            ; F88AAE  [0]   -> 0xF410F4
@@ -15198,6 +15609,10 @@ UiListB_Class41:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x42].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x42], the LE32 at 0xF87F99,
+;          holds 0xF88AB6.  The list ENDS at 0xF88ABE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class42:
 	.long 0x00F410F8                            ; F88AB6  [0]   -> 0xF410F8
@@ -15210,6 +15625,10 @@ UiListB_Class42:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x48].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x48], the LE32 at 0xF87FB1,
+;          holds 0xF88ABE.  The list ENDS at 0xF88ACA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class48:
 	.long 0x00F410FC                            ; F88ABE  [0]   -> 0xF410FC
@@ -15223,6 +15642,10 @@ UiListB_Class48:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x50].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x50], the LE32 at 0xF87FD1,
+;          holds 0xF88ACA.  The list ENDS at 0xF88AD2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class50:
 	.long 0x00F41100                            ; F88ACA  [0]   -> 0xF41100
@@ -15235,6 +15658,10 @@ UiListB_Class50:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x51].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x51], the LE32 at 0xF87FD5,
+;          holds 0xF88AD2.  The list ENDS at 0xF88ADA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class51:
 	.long 0x00F41104                            ; F88AD2  [0]   -> 0xF41104
@@ -15247,6 +15674,10 @@ UiListB_Class51:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x52].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x52], the LE32 at 0xF87FD9,
+;          holds 0xF88ADA.  The list ENDS at 0xF88AE2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class52:
 	.long 0x00F41108                            ; F88ADA  [0]   -> 0xF41108
@@ -15259,6 +15690,10 @@ UiListB_Class52:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x53].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x53], the LE32 at 0xF87FDD,
+;          holds 0xF88AE2.  The list ENDS at 0xF88AEA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class53:
 	.long 0x00F4110C                            ; F88AE2  [0]   -> 0xF4110C
@@ -15271,6 +15706,10 @@ UiListB_Class53:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x54].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x54], the LE32 at 0xF87FE1,
+;          holds 0xF88AEA.  The list ENDS at 0xF88AF2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class54:
 	.long 0x00F41174                            ; F88AEA  [0]   -> 0xF41174
@@ -15283,6 +15722,10 @@ UiListB_Class54:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x60].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x60], the LE32 at 0xF88011,
+;          holds 0xF88AF2.  The list ENDS at 0xF88AFE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class60:
 	.long 0x00F41110                            ; F88AF2  [0]   -> 0xF41110
@@ -15296,6 +15739,10 @@ UiListB_Class60:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x61].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x61], the LE32 at 0xF88015,
+;          holds 0xF88AFE.  The list ENDS at 0xF88B0A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class61:
 	.long 0x00F41114                            ; F88AFE  [0]   -> 0xF41114
@@ -15309,6 +15756,10 @@ UiListB_Class61:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x62].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x62], the LE32 at 0xF88019,
+;          holds 0xF88B0A.  The list ENDS at 0xF88B16 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class62:
 	.long 0x00F41118                            ; F88B0A  [0]   -> 0xF41118
@@ -15322,6 +15773,10 @@ UiListB_Class62:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x63].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x63], the LE32 at 0xF8801D,
+;          holds 0xF88B16.  The list ENDS at 0xF88B22 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class63:
 	.long 0x00F4111C                            ; F88B16  [0]   -> 0xF4111C
@@ -15344,6 +15799,10 @@ UiListB_Class66:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x68].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x68], the LE32 at 0xF88031,
+;          holds 0xF88B2E.  The list ENDS at 0xF88B36 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class68:
 	.long 0x00F41120                            ; F88B2E  [0]   -> 0xF41120
@@ -15356,6 +15815,10 @@ UiListB_Class68:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x69].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x69], the LE32 at 0xF88035,
+;          holds 0xF88B36.  The list ENDS at 0xF88B3E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class69:
 	.long 0x00F41124                            ; F88B36  [0]   -> 0xF41124
@@ -15368,6 +15831,10 @@ UiListB_Class69:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x6A].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x6A], the LE32 at 0xF88039,
+;          holds 0xF88B3E.  The list ENDS at 0xF88B46 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class6A:
 	.long 0x00F41128                            ; F88B3E  [0]   -> 0xF41128
@@ -15380,6 +15847,10 @@ UiListB_Class6A:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x6B].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x6B], the LE32 at 0xF8803D,
+;          holds 0xF88B46.  The list ENDS at 0xF88B4E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class6B:
 	.long 0x00F4112C                            ; F88B46  [0]   -> 0xF4112C
@@ -15401,6 +15872,10 @@ UiListB_Class6E:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x70].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x70], the LE32 at 0xF88051,
+;          holds 0xF88B5A.  The list ENDS at 0xF88B6A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class70:
 	.long 0x00F41130                            ; F88B5A  [0]   -> 0xF41130
@@ -15415,6 +15890,10 @@ UiListB_Class70:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x71].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x71], the LE32 at 0xF88055,
+;          holds 0xF88B6A.  The list ENDS at 0xF88B76 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class71:
 	.long 0x00F41134                            ; F88B6A  [0]   -> 0xF41134
@@ -15428,6 +15907,10 @@ UiListB_Class71:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x72].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x72], the LE32 at 0xF88059,
+;          holds 0xF88B76.  The list ENDS at 0xF88B7E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class72:
 	.long 0x00F41138                            ; F88B76  [0]   -> 0xF41138
@@ -15440,6 +15923,10 @@ UiListB_Class72:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x78].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x78], the LE32 at 0xF88071,
+;          holds 0xF88B7E.  The list ENDS at 0xF88B86 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class78:
 	.long 0x00F4113C                            ; F88B7E  [0]   -> 0xF4113C
@@ -15452,6 +15939,10 @@ UiListB_Class78:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x79].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x79], the LE32 at 0xF88075,
+;          holds 0xF88B86.  The list ENDS at 0xF88B9A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class79:
 	.long 0x00F41140                            ; F88B86  [0]   -> 0xF41140
@@ -15467,6 +15958,10 @@ UiListB_Class79:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x7A].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x7A], the LE32 at 0xF88079,
+;          holds 0xF88B9A.  The list ENDS at 0xF88BA6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class7A:
 	.long 0x00F41144                            ; F88B9A  [0]   -> 0xF41144
@@ -15480,6 +15975,10 @@ UiListB_Class7A:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x80].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x80], the LE32 at 0xF88091,
+;          holds 0xF88BA6.  The list ENDS at 0xF88BBE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class80:
 	.long 0x00F41148                            ; F88BA6  [0]   -> 0xF41148
@@ -15496,6 +15995,10 @@ UiListB_Class80:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x81].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x81], the LE32 at 0xF88095,
+;          holds 0xF88BBE.  The list ENDS at 0xF88BC6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class81:
 	.long 0x00F4114C                            ; F88BBE  [0]   -> 0xF4114C
@@ -15508,6 +16011,10 @@ UiListB_Class81:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x90].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x90], the LE32 at 0xF880D1,
+;          holds 0xF88BC6.  The list ENDS at 0xF88BDA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class90:
 	.long 0x00F41150                            ; F88BC6  [0]   -> 0xF41150
@@ -15523,6 +16030,10 @@ UiListB_Class90:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x91].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x91], the LE32 at 0xF880D5,
+;          holds 0xF88BDA.  The list ENDS at 0xF88BF2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class91:
 	.long 0x00F408F4                            ; F88BDA  [0]   -> 0xF408F4
@@ -15539,6 +16050,10 @@ UiListB_Class91:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x92].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x92], the LE32 at 0xF880D9,
+;          holds 0xF88BF2.  The list ENDS at 0xF88BFA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class92:
 	.long 0x00F41158                            ; F88BF2  [0]   -> 0xF41158
@@ -15551,6 +16066,10 @@ UiListB_Class92:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x93].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x93], the LE32 at 0xF880DD,
+;          holds 0xF88BFA.  The list ENDS at 0xF88C06 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class93:
 	.long 0x00F4115C                            ; F88BFA  [0]   -> 0xF4115C
@@ -15564,6 +16083,10 @@ UiListB_Class93:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x98].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x98], the LE32 at 0xF880F1,
+;          holds 0xF88C06.  The list ENDS at 0xF88C1A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class98:
 	.long 0x00F41160                            ; F88C06  [0]   -> 0xF41160
@@ -15579,6 +16102,10 @@ UiListB_Class98:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x99].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x99], the LE32 at 0xF880F5,
+;          holds 0xF88C1A.  The list ENDS at 0xF88C22 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class99:
 	.long 0x00F41164                            ; F88C1A  [0]   -> 0xF41164
@@ -15591,6 +16118,10 @@ UiListB_Class99:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0x9A].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0x9A], the LE32 at 0xF880F9,
+;          holds 0xF88C22.  The list ENDS at 0xF88C2A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class9A:
 	.long 0x00F41168                            ; F88C22  [0]   -> 0xF41168
@@ -15603,6 +16134,10 @@ UiListB_Class9A:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xA8].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xA8], the LE32 at 0xF88131,
+;          holds 0xF88C2A.  The list ENDS at 0xF88C4E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassA8:
 	.long 0x00F4116C                            ; F88C2A  [0]   -> 0xF4116C
@@ -15622,6 +16157,10 @@ UiListB_ClassA8:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xA9].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xA9], the LE32 at 0xF88135,
+;          holds 0xF88C4E.  The list ENDS at 0xF88C56 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassA9:
 	.long 0x00F41170                            ; F88C4E  [0]   -> 0xF41170
@@ -15634,6 +16173,10 @@ UiListB_ClassA9:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xAC].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xAC], the LE32 at 0xF88141,
+;          holds 0xF88C56.  The list ENDS at 0xF88C5E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassAC:
 	.long 0x00F41178                            ; F88C56  [0]   -> 0xF41178
@@ -15646,6 +16189,10 @@ UiListB_ClassAC:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xAD].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xAD], the LE32 at 0xF88145,
+;          holds 0xF88C5E.  The list ENDS at 0xF88C66 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassAD:
 	.long 0x00F4117C                            ; F88C5E  [0]   -> 0xF4117C
@@ -15658,6 +16205,10 @@ UiListB_ClassAD:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xAE].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xAE], the LE32 at 0xF88149,
+;          holds 0xF88C66.  The list ENDS at 0xF88C6E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassAE:
 	.long 0x00F41180                            ; F88C66  [0]   -> 0xF41180
@@ -15670,6 +16221,10 @@ UiListB_ClassAE:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB0].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB0], the LE32 at 0xF88151,
+;          holds 0xF88C6E.  The list ENDS at 0xF88C76 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB0:
 	.long 0x00F424F0                            ; F88C6E  [0]   -> 0xF424F0
@@ -15682,6 +16237,10 @@ UiListB_ClassB0:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB1].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB1], the LE32 at 0xF88155,
+;          holds 0xF88C76.  The list ENDS at 0xF88C7E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB1:
 	.long 0x00F424F4                            ; F88C76  [0]   -> 0xF424F4
@@ -15694,6 +16253,10 @@ UiListB_ClassB1:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB2].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB2], the LE32 at 0xF88159,
+;          holds 0xF88C7E.  The list ENDS at 0xF88C8A because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB2:
 	.long 0x00F424F8                            ; F88C7E  [0]   -> 0xF424F8
@@ -15707,6 +16270,10 @@ UiListB_ClassB2:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB3].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB3], the LE32 at 0xF8815D,
+;          holds 0xF88C8A.  The list ENDS at 0xF88C96 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB3:
 	.long 0x00F424FC                            ; F88C8A  [0]   -> 0xF424FC
@@ -15720,6 +16287,10 @@ UiListB_ClassB3:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB4].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB4], the LE32 at 0xF88161,
+;          holds 0xF88C96.  The list ENDS at 0xF88CA2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB4:
 	.long 0x00F42500                            ; F88C96  [0]   -> 0xF42500
@@ -15733,6 +16304,10 @@ UiListB_ClassB4:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB5].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB5], the LE32 at 0xF88165,
+;          holds 0xF88CA2.  The list ENDS at 0xF88CAE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB5:
 	.long 0x00F42504                            ; F88CA2  [0]   -> 0xF42504
@@ -15746,6 +16321,10 @@ UiListB_ClassB5:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB6].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB6], the LE32 at 0xF88169,
+;          holds 0xF88CAE.  The list ENDS at 0xF88CB6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB6:
 	.long 0x00F42508                            ; F88CAE  [0]   -> 0xF42508
@@ -15758,6 +16337,10 @@ UiListB_ClassB6:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB7].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB7], the LE32 at 0xF8816D,
+;          holds 0xF88CB6.  The list ENDS at 0xF88CBE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB7:
 	.long 0x00F4250C                            ; F88CB6  [0]   -> 0xF4250C
@@ -15770,6 +16353,10 @@ UiListB_ClassB7:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB8].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB8], the LE32 at 0xF88171,
+;          holds 0xF88CBE.  The list ENDS at 0xF88CCA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB8:
 	.long 0x00F42510                            ; F88CBE  [0]   -> 0xF42510
@@ -15783,6 +16370,10 @@ UiListB_ClassB8:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xB9].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xB9], the LE32 at 0xF88175,
+;          holds 0xF88CCA.  The list ENDS at 0xF88CD6 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB9:
 	.long 0x00F42514                            ; F88CCA  [0]   -> 0xF42514
@@ -15796,6 +16387,10 @@ UiListB_ClassB9:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xBA].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xBA], the LE32 at 0xF88179,
+;          holds 0xF88CD6.  The list ENDS at 0xF88CE2 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassBA:
 	.long 0x00F42518                            ; F88CD6  [0]   -> 0xF42518
@@ -15809,6 +16404,10 @@ UiListB_ClassBA:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xBB].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xBB], the LE32 at 0xF8817D,
+;          holds 0xF88CE2.  The list ENDS at 0xF88CEE because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassBB:
 	.long 0x00F4251C                            ; F88CE2  [0]   -> 0xF4251C
@@ -15822,6 +16421,10 @@ UiListB_ClassBB:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xBC].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xBC], the LE32 at 0xF88181,
+;          holds 0xF88CEE.  The list ENDS at 0xF88CFA because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassBC:
 	.long 0x00F42520                            ; F88CEE  [0]   -> 0xF42520
@@ -15835,6 +16438,10 @@ UiListB_ClassBC:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_B[0xBD].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_B[0xBD], the LE32 at 0xF88185,
+;          holds 0xF88CFA.  The list ENDS at 0xF88D06 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassBD:
 	.long 0x00F42524                            ; F88CFA  [0]   -> 0xF42524
@@ -15852,6 +16459,8 @@ UiListB_ClassBD:
 ;          Check L2 asserts the set is the same in all three tables.
 ; Position: it is the LAST object in the area, and its 4 bytes are what
 ;          make the tiling reach 0xF88D0A exactly.
+; Evidence: 71 of the 192 LE32 entries of UiEventClass_ListTable_B hold
+;          0xF88D06, and the word there is the 0xFFFFFFFF terminator.
 ; ---------------------------------------------------------------------
 UiListB_Shared:
 	.long 0xFFFFFFFF                            ; F88D06  [0]   end of list
@@ -15870,6 +16479,9 @@ UiListB_Shared:
 ; Entries: 0xF40FB4, 0xF411B4, 0xF40290, 0xF40758, 0xF42E60, 0xF418CC (6), then the 0xFFFF terminator.
 ; ENTRY COUNT: the terminator IS the count; the bytes after it are the
 ;          0x00 pad that runs to the next object.
+; Evidence: `ld XIY,0x00F88E91` at 0xF869A6, four bytes before `ld (0x20C4),XIY`;
+;          UiEventList_Run reads (0x20C4) at 0xF86A6A and stops on
+;          `cp (XIX),0xffff`.
 ; ---------------------------------------------------------------------
 UiEventPassB_TailList:
 	.long 0x00F40FB4                            ; F88E91  [0]   -> 0xF40FB4
@@ -15898,6 +16510,9 @@ UiEventPassB_TailList:
 ;          THREE tables (check L2).  The distinct heads tile the list
 ;          area exactly, in ascending order, with no byte left over
 ;          (check L3).
+; Evidence: `ld XIY,0x00F88EC1` at 0xF869BC, four bytes before `ld (0x20C0),XIY`;
+;          UiEventList_Run reads (0x20C0) at 0xF869EF and indexes it
+;          with `sla 0x02,HL` at 0xF86A00.
 ; ---------------------------------------------------------------------
 UiEventClass_ListTable_C:
 	.long 0x00F891C2                            ; F88EC1  [0]   -> UiListC_Class00
@@ -16097,7 +16712,6 @@ UiEventClass_ListTable_C:
 	.byte 0xff   ; F891C1
 
 ; --- 0xF891C2-0xF893B5  handler lists (500 bytes) ---
-
 ; ---------------------------------------------------------------------
 ; UiEventLists_C -- the 122 handler lists of pass C, tiling 0xF891C2-0xF893B5
 ;
@@ -16112,6 +16726,7 @@ UiEventClass_ListTable_C:
 ;          overlap, every one ends in 0xFFFFFFFF, and the last one ends
 ;          exactly at the area's end (checks L3, L5).
 ; ---------------------------------------------------------------------
+; Evidence: UiEventClass_ListTable_C[0x00], the LE32 at 0xF88EC1, holds 0xF891C2.  GENERATED name.
 UiListC_Class00:
 	.long 0xFFFFFFFF                            ; F891C2  [0]   end of list
 ; Evidence: UiEventClass_ListTable_C[0x01], the LE32 at 0xF88EC5, holds 0xF891C6.  GENERATED name.
@@ -16425,6 +17040,10 @@ UiListC_Class9A:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_C[0xA8].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_C[0xA8], the LE32 at 0xF89161,
+;          holds 0xF8935A.  The list ENDS at 0xF89362 because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListC_ClassA8:
 	.long 0x00F415AC                            ; F8935A  [0]   -> 0xF415AC
@@ -16437,6 +17056,10 @@ UiListC_ClassA8:
 ; Read by: UiEventList_Run 0xF86A03, after UiEventClass_ListTable_C[0xA9].
 ; Payload the handlers see: (0x20B8)/(0x20B9) = the record's bytes
 ;          +1 and +2, (0x20BA) = byte +3, (0x20BB) = the class.
+; Evidence: UiEventClass_ListTable_C[0xA9], the LE32 at 0xF89165,
+;          holds 0xF89362.  The list ENDS at 0xF8936E because the next
+;          head in the table is there.  The NAME is generated from
+;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListC_ClassA9:
 	.long 0x00F8659B                            ; F89362  [0]   -> UiEvent_RouteByCode
@@ -16505,6 +17128,8 @@ UiListC_ClassBD:
 ;          Check L2 asserts the set is the same in all three tables.
 ; Position: it is the LAST object in the area, and its 4 bytes are what
 ;          make the tiling reach 0xF893B6 exactly.
+; Evidence: 71 of the 192 LE32 entries of UiEventClass_ListTable_C hold
+;          0xF893B2, and the word there is the 0xFFFFFFFF terminator.
 ; ---------------------------------------------------------------------
 UiListC_Shared:
 	.long 0xFFFFFFFF                            ; F893B2  [0]   end of list
@@ -16523,6 +17148,9 @@ UiListC_Shared:
 ; Entries: none (0), then the 0xFFFF terminator.
 ; ENTRY COUNT: the terminator IS the count; the bytes after it are the
 ;          0x00 pad that runs to the next object.
+; Evidence: `ld XIY,0x00F89671` at 0xF869C5, four bytes before `ld (0x20C4),XIY`;
+;          UiEventList_Run reads (0x20C4) at 0xF86A6A and stops on
+;          `cp (XIX),0xffff`.
 ; ---------------------------------------------------------------------
 UiEventPassC_TailList:
 	.long 0xFFFFFFFF                            ; F89671  [0]   end of list
@@ -61845,7 +62473,25 @@ DuplicateTail_FAD3EB:
 	jr .LFADB41
 .LFADB90:
 	ret
-sub_FADB91:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class00to1F -- the 0xFAD800 module's handler for event classes
+;                        0x00-0x1F of the RAM 0x2030 list
+;
+; Called from: `call XIY` at 0xFADB87, after 0xFADB64 fetched the handler
+;          from Evt2030_ClassHandlers.  All 32 of that table's entries
+;          0x00..0x1F hold 0x00FADB91 -- check N1.
+; Inputs:  C = the record's byte +0 (the class), B = byte +1, E = byte +2,
+;          D = byte +3; the same four bytes List2030_AppendRegs (prom_a
+;          0xF86AC7) stores, and the same payload UiEventList_Run hands to
+;          the pass-C handlers as (0x20B8)/(0x20B9)/(0x20BA).
+; Body:    L = B; refuse if L > 0x0B; jump through the 12-entry table at
+;          0x00FADBA9 (`cp L,0x0b` at 0xFADB95, `ld XIX,0x00fadba9` at
+;          0xFADB9D).
+; Evidence: two independent pins on the 12 -- the `cp L,0x0b` bound and
+;          the table's 48-byte extent, which ends where the first arm
+;          (0xFADBD9) begins.
+; ---------------------------------------------------------------------
+Evt2030_Class00to1F:   ; entry: pointer-table entry
 	extz HL
 	ld L,B
 	cp L,0x0b
@@ -61855,19 +62501,27 @@ sub_FADB91:   ; entry: pointer-table entry
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADBA9-0xFADBD9  pointer table (48 bytes) ---
-	.long 0x00FAE2E2   ; -> sub_FAE2E2   ; FADBA9
-	.long 0x00FADBD9   ; -> sub_FADBD9   ; FADBAD
-	.long 0x00FADBD9   ; -> sub_FADBD9   ; FADBB1
-	.long 0x00FADC20   ; -> sub_FADC20   ; FADBB5
-	.long 0x00FADC42   ; -> sub_FADC42   ; FADBB9
-	.long 0x00FADC7E   ; -> sub_FADC7E   ; FADBBD
-	.long 0x00FADC7E   ; -> sub_FADC7E   ; FADBC1
-	.long 0x00FADC7E   ; -> sub_FADC7E   ; FADBC5
-	.long 0x00FADC7E   ; -> sub_FADC7E   ; FADBC9
-	.long 0x00FADC7E   ; -> sub_FADC7E   ; FADBCD
-	.long 0x00FADC7E   ; -> sub_FADC7E   ; FADBD1
-	.long 0x00FADC7E   ; -> sub_FADC7E   ; FADBD5
-sub_FADBD9:   ; entry: pointer-table entry
+	.long 0x00FAE2E2   ; -> Evt2030_Class00to1F_Op00   ; FADBA9
+	.long 0x00FADBD9   ; -> Evt2030_Class00to1F_Op01   ; FADBAD
+	.long 0x00FADBD9   ; -> Evt2030_Class00to1F_Op01   ; FADBB1
+	.long 0x00FADC20   ; -> Evt2030_Class00to1F_Op03   ; FADBB5
+	.long 0x00FADC42   ; -> Evt2030_Class00to1F_Op04   ; FADBB9
+	.long 0x00FADC7E   ; -> Evt2030_Class00to1F_Op05   ; FADBBD
+	.long 0x00FADC7E   ; -> Evt2030_Class00to1F_Op05   ; FADBC1
+	.long 0x00FADC7E   ; -> Evt2030_Class00to1F_Op05   ; FADBC5
+	.long 0x00FADC7E   ; -> Evt2030_Class00to1F_Op05   ; FADBC9
+	.long 0x00FADC7E   ; -> Evt2030_Class00to1F_Op05   ; FADBCD
+	.long 0x00FADC7E   ; -> Evt2030_Class00to1F_Op05   ; FADBD1
+	.long 0x00FADC7E   ; -> Evt2030_Class00to1F_Op05   ; FADBD5
+; ---------------------------------------------------------------------
+; Evt2030_Class00to1F_Op01 -- operations 0x01 and 0x02: do nothing
+;
+; Called from: `jp XIX` at 0xFADBA7; indices 1 AND 2 of the table at
+;          0x00FADBA9 both hold 0x00FADBD9 -- check N2.  Named after the
+;          LOWER index because a label can only have one name.
+; Body:    one `ret`.
+; ---------------------------------------------------------------------
+Evt2030_Class00to1F_Op01:   ; entry: pointer-table entry
 	ret
 sub_FADBDA:   ; entry: pointer-table entry
 	cp C,0x48
@@ -61892,7 +62546,18 @@ sub_FADBDA:   ; entry: pointer-table entry
 	call 0xf407cc
 .LFADC1F:
 	ret
-sub_FADC20:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class00to1F_Op03 -- operation 0x03 of event classes 0x00-0x1F
+;
+; Called from: `jp XIX` at 0xFADBA7; table index 3 -- check N2.
+; Body:    HL = C * 4; XIX = ((0x60F018))[HL]; E = (XIX + B) & 0x7F;
+;          D = 0x7F; `call T_F407CC`.
+; Evidence: (0x60F018) is the table base prom_b's IndexedTable_GetPtr
+;          (0xF55321) reads, and prom_a's byte-identical twin of that
+;          routine is at 0xFB77D8 -- so the class byte C indexes a table
+;          of per-class records and B is the offset inside one.
+; ---------------------------------------------------------------------
+Evt2030_Class00to1F_Op03:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
@@ -61904,7 +62569,14 @@ sub_FADC20:   ; entry: pointer-table entry
 	ldb d, 0x7f
 	call 0xf407cc
 	ret
-sub_FADC42:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class00to1F_Op04 -- operation 0x04 of event classes 0x00-0x1F
+;
+; Called from: `jp XIX` at 0xFADBA7; table index 4 -- check N2.
+; Body:    masks DE with 0x4848, consults bit 1 of (0x60F020), and only
+;          then does the same record fetch as Op03.
+; ---------------------------------------------------------------------
+Evt2030_Class00to1F_Op04:   ; entry: pointer-table entry
 	and DE,0x4848
 	and E,D
 	bit 0x03,D
@@ -61927,7 +62599,16 @@ sub_FADC42:   ; entry: pointer-table entry
 	call 0xf407cc
 .LFADC7D:
 	ret
-sub_FADC7E:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class00to1F_Op05 -- operations 0x05 through 0x0B
+;
+; Called from: `jp XIX` at 0xFADBA7; SEVEN indices, 5..0x0B, of the table
+;          at 0x00FADBA9 hold 0x00FADC7E -- check N2.  Named after the
+;          lowest.
+; Body:    returns at once when D == 0; otherwise the same record fetch as
+;          Op03, with no masking.
+; ---------------------------------------------------------------------
+Evt2030_Class00to1F_Op05:   ; entry: pointer-table entry
 	cps d, 0x00
 	jr z, .LFADC9E
 	extz HL
@@ -61940,7 +62621,18 @@ sub_FADC7E:   ; entry: pointer-table entry
 	call 0xf407cc
 .LFADC9E:
 	ret
-sub_FADC9F:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class20to3F -- the same, for event classes 0x20-0x3F
+;
+; Called from: `call XIY` at 0xFADB87; all 32 entries 0x20..0x3F of
+;          Evt2030_ClassHandlers hold 0x00FADC9F -- check N1.
+; Body:    L = B - 0x18; refuse if B < 0x18 or L > 2; jump through the
+;          3-entry table at 0x00FADCBE.
+; Evidence: `cp L,0x18` at 0xFADCA3, `sub L,0x18` at 0xFADCA8, `cp L,2` at
+;          0xFADCAB -- so this class's operation byte runs 0x18..0x1A, not
+;          from zero.  The table's 12-byte extent agrees: 3 entries.
+; ---------------------------------------------------------------------
+Evt2030_Class20to3F:   ; entry: pointer-table entry
 	extz HL
 	ld L,B
 	cp L,0x18
@@ -61953,21 +62645,39 @@ sub_FADC9F:   ; entry: pointer-table entry
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADCBE-0xFADCCA  pointer table (12 bytes) ---
-	.long 0x00FADCCB   ; -> sub_FADCCB   ; FADCBE
-	.long 0x00FADCCF   ; -> sub_FADCCF   ; FADCC2
-	.long 0x00FADCDA   ; -> sub_FADCDA   ; FADCC6
+	.long 0x00FADCCB   ; -> Evt2030_Class20to3F_Op18   ; FADCBE
+	.long 0x00FADCCF   ; -> Evt2030_Class20to3F_Op19   ; FADCC2
+	.long 0x00FADCDA   ; -> Evt2030_Class20to3F_Op1A   ; FADCC6
 	ret
-sub_FADCCB:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class20to3F_Op18 -- operation 0x18 of event classes 0x20-0x3F
+;
+; Called from: `jp XIX` at 0xFADCBC; index 0 of the 3-entry table at
+;          0x00FADCBE, which its reader indexes with B - 0x18 -- check N3.
+; ---------------------------------------------------------------------
+Evt2030_Class20to3F_Op18:   ; entry: pointer-table entry
 	calr .LFADCE5
 	ret
-sub_FADCCF:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class20to3F_Op19 -- operation 0x19 of event classes 0x20-0x3F
+;
+; Called from: `jp XIX` at 0xFADCBC; index 1 of the table at 0x00FADCBE
+;          -- check N3.
+; ---------------------------------------------------------------------
+Evt2030_Class20to3F_Op19:   ; entry: pointer-table entry
 	and E,D
 	and E,0x3f
 	jr z, .LFADCD9
 	calr .LFADCE5
 .LFADCD9:
 	ret
-sub_FADCDA:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class20to3F_Op1A -- operation 0x1A of event classes 0x20-0x3F
+;
+; Called from: `jp XIX` at 0xFADCBC; index 2 of the table at 0x00FADCBE
+;          -- check N3.
+; ---------------------------------------------------------------------
+Evt2030_Class20to3F_Op1A:   ; entry: pointer-table entry
 	and E,D
 	and E,0x3f
 	jr z, .LFADCE4
@@ -62056,7 +62766,7 @@ sub_FADCDA:   ; entry: pointer-table entry
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADD77-0xFADD87  pointer table (16 bytes) ---
-	.long 0x00FAE2E2   ; -> sub_FAE2E2   ; FADD77
+	.long 0x00FAE2E2   ; -> Evt2030_Class00to1F_Op00   ; FADD77
 	.long 0x00FADD87   ; -> sub_FADD87   ; FADD7B
 	.long 0x00FADD87   ; -> sub_FADD87   ; FADD7F
 	.long 0x00FADD88   ; -> sub_FADD88   ; FADD83
@@ -62079,7 +62789,18 @@ sub_FADDA8:   ; entry: pointer-table entry
 	ret
 sub_FADDA9:   ; entry: pointer-table entry
 	ret
-sub_FADDAA:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class98 -- the 0xFAD800 module's handler for event class 0x98
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0x98] is the
+;          only entry holding 0x00FADDAA -- check N1.
+; Evidence: 0x98 is one of the thirteen class ids ByteTable_FAD38A lists
+;          (0xFAD38A, read at 0xFAAFCE and 0xFAB031) and one of the 121
+;          that own a handler list in all three of the
+;          UiEventClass_ListTable_A/B/C tables at 0xF87681 / 0xF87E91 /
+;          0xF88EC1.
+; ---------------------------------------------------------------------
+Evt2030_Class98:   ; entry: pointer-table entry
 	extz HL
 	ld L,B
 	cps l, 0x01
@@ -62142,37 +62863,191 @@ sub_FADE2F:   ; entry: pointer-table entry
 .LFADE55:
 sub_FADE55:   ; entry: pointer-table entry
 	ret
-sub_FADE56:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassB1_Fwd -- event class 0xB1: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB1]
+;          is the only entry holding 0x00FADE56 -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassB1_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE5B:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassB2_Fwd -- event class 0xB2: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB2]
+;          is the only entry holding 0x00FADE5B -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassB2_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE60:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassB3_Fwd -- event class 0xB3: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB3]
+;          is the only entry holding 0x00FADE60 -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassB3_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE65:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassB4_Fwd -- event class 0xB4: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB4]
+;          is the only entry holding 0x00FADE65 -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassB4_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE6A:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassB5_Fwd -- event class 0xB5: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB5]
+;          is the only entry holding 0x00FADE6A -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassB5_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE6F:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassB8_Fwd -- event class 0xB8: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB8]
+;          is the only entry holding 0x00FADE6F -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassB8_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE74:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassB9_Fwd -- event class 0xB9: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB9]
+;          is the only entry holding 0x00FADE74 -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassB9_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE79:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassBA_Fwd -- event class 0xBA: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xBA]
+;          is the only entry holding 0x00FADE79 -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassBA_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE7E:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassBB_Fwd -- event class 0xBB: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xBB]
+;          is the only entry holding 0x00FADE7E -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassBB_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE83:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassBC_Fwd -- event class 0xBC: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xBC]
+;          is the only entry holding 0x00FADE83 -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassBC_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
-sub_FADE88:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_ClassBD_Fwd -- event class 0xBD: hand the record straight
+;                         to T_F407CC (prom_a 0xFAA5FE)
+;
+; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xBD]
+;          is the only entry holding 0x00FADE88 -- check N5.
+; Body:    `call 0xf407cc / ret`, five bytes.  ELEVEN of these sit in a
+;          row at 0xFADE56-0xFADE8C, one per class in {0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD},
+;          all byte-identical to each other -- check N5.  They are
+;          eleven labels and not one because the ROM publishes eleven
+;          distinct addresses.
+; Evidence: registers are untouched, so C/B/E/D reach 0xFAA5FE exactly
+;          as UiEventList-style payload.
+; ---------------------------------------------------------------------
+Evt2030_ClassBD_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
 	cp A,0x48
@@ -62548,7 +63423,13 @@ sub_FAE2D5:   ; entry: pointer-table entry
 	ret
 	calr 0xfc2c
 	ret
-sub_FAE2E2:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class00to1F_Op00 -- operation 0x00 of event classes 0x00-0x1F
+;
+; Called from: `jp XIX` at 0xFADBA7; the table at 0x00FADBA9 holds
+;          0x00FAE2E2 at index 0 and nowhere else -- check N2.
+; ---------------------------------------------------------------------
+Evt2030_Class00to1F_Op00:   ; entry: pointer-table entry
 	incdi8 0x01, (0x1965)
 	m_bit 0, MD16, 0x1965
 	jr z, .LFAE2F7
@@ -62626,70 +63507,70 @@ sub_FAE36C:   ; entry: pointer-table entry
 ; --- 0xFAE3A1-0xFAE3A2  align (1 bytes) ---
 	.byte 0x00   ; FAE3A1
 ; --- 0xFAE3A2-0xFAE6A2  pointer table (768 bytes) ---
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3A2
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3A6
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3AA
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3AE
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3B2
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3B6
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3BA
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3BE
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3C2
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3C6
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3CA
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3CE
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3D2
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3D6
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3DA
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3DE
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3E2
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3E6
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3EA
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3EE
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3F2
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3F6
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3FA
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE3FE
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE402
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE406
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE40A
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE40E
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE412
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE416
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE41A
-	.long 0x00FADB91   ; -> sub_FADB91   ; FAE41E
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE422
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE426
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE42A
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE42E
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE432
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE436
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE43A
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE43E
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE442
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE446
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE44A
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE44E
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE452
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE456
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE45A
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE45E
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE462
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE466
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE46A
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE46E
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE472
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE476
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE47A
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE47E
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE482
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE486
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE48A
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE48E
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE492
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE496
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE49A
-	.long 0x00FADC9F   ; -> sub_FADC9F   ; FAE49E
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3A2
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3A6
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3AA
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3AE
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3B2
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3B6
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3BA
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3BE
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3C2
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3C6
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3CA
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3CE
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3D2
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3D6
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3DA
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3DE
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3E2
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3E6
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3EA
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3EE
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3F2
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3F6
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3FA
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3FE
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE402
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE406
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE40A
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE40E
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE412
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE416
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE41A
+	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE41E
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE422
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE426
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE42A
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE42E
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE432
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE436
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE43A
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE43E
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE442
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE446
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE44A
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE44E
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE452
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE456
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE45A
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE45E
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE462
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE466
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE46A
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE46E
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE472
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE476
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE47A
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE47E
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE482
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE486
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE48A
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE48E
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE492
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE496
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE49A
+	.long 0x00FADC9F   ; -> Evt2030_Class20to3F   ; FAE49E
 	.long 0xFFFFFFFF   ; empty slot   ; FAE4A2
 	.long 0xFFFFFFFF   ; empty slot   ; FAE4A6
 	.long 0xFFFFFFFF   ; empty slot   ; FAE4AA
@@ -62778,7 +63659,7 @@ sub_FAE36C:   ; entry: pointer-table entry
 	.long 0xFFFFFFFF   ; empty slot   ; FAE5F6
 	.long 0xFFFFFFFF   ; empty slot   ; FAE5FA
 	.long 0xFFFFFFFF   ; empty slot   ; FAE5FE
-	.long 0x00FADDAA   ; -> sub_FADDAA   ; FAE602
+	.long 0x00FADDAA   ; -> Evt2030_Class98   ; FAE602
 	.long 0xFFFFFFFF   ; empty slot   ; FAE606
 	.long 0xFFFFFFFF   ; empty slot   ; FAE60A
 	.long 0xFFFFFFFF   ; empty slot   ; FAE60E
@@ -62803,19 +63684,19 @@ sub_FAE36C:   ; entry: pointer-table entry
 	.long 0xFFFFFFFF   ; empty slot   ; FAE65A
 	.long 0xFFFFFFFF   ; empty slot   ; FAE65E
 	.long 0xFFFFFFFF   ; empty slot   ; FAE662
-	.long 0x00FADE56   ; -> sub_FADE56   ; FAE666
-	.long 0x00FADE5B   ; -> sub_FADE5B   ; FAE66A
-	.long 0x00FADE60   ; -> sub_FADE60   ; FAE66E
-	.long 0x00FADE65   ; -> sub_FADE65   ; FAE672
-	.long 0x00FADE6A   ; -> sub_FADE6A   ; FAE676
+	.long 0x00FADE56   ; -> Evt2030_ClassB1_Fwd   ; FAE666
+	.long 0x00FADE5B   ; -> Evt2030_ClassB2_Fwd   ; FAE66A
+	.long 0x00FADE60   ; -> Evt2030_ClassB3_Fwd   ; FAE66E
+	.long 0x00FADE65   ; -> Evt2030_ClassB4_Fwd   ; FAE672
+	.long 0x00FADE6A   ; -> Evt2030_ClassB5_Fwd   ; FAE676
 	.long 0xFFFFFFFF   ; empty slot   ; FAE67A
 	.long 0xFFFFFFFF   ; empty slot   ; FAE67E
-	.long 0x00FADE6F   ; -> sub_FADE6F   ; FAE682
-	.long 0x00FADE74   ; -> sub_FADE74   ; FAE686
-	.long 0x00FADE79   ; -> sub_FADE79   ; FAE68A
-	.long 0x00FADE7E   ; -> sub_FADE7E   ; FAE68E
-	.long 0x00FADE83   ; -> sub_FADE83   ; FAE692
-	.long 0x00FADE88   ; -> sub_FADE88   ; FAE696
+	.long 0x00FADE6F   ; -> Evt2030_ClassB8_Fwd   ; FAE682
+	.long 0x00FADE74   ; -> Evt2030_ClassB9_Fwd   ; FAE686
+	.long 0x00FADE79   ; -> Evt2030_ClassBA_Fwd   ; FAE68A
+	.long 0x00FADE7E   ; -> Evt2030_ClassBB_Fwd   ; FAE68E
+	.long 0x00FADE83   ; -> Evt2030_ClassBC_Fwd   ; FAE692
+	.long 0x00FADE88   ; -> Evt2030_ClassBD_Fwd   ; FAE696
 	.long 0xFFFFFFFF   ; empty slot   ; FAE69A
 	.long 0xFFFFFFFF   ; empty slot   ; FAE69E
 ; --- 0xFAE6A2-0xFAE7C0  zero pad (286 bytes) ---
@@ -74798,7 +75679,22 @@ sub_FB77C7:
 	jr lt, .LFB77CB                                      ; FB77D4  61 f5
 	popw hl                                              ; FB77D6  4b
 	ret                                                  ; FB77D7  0e
-sub_FB77D8:
+; ---------------------------------------------------------------------
+; IndexedTable_GetPtr -- pointer n of the table whose base is the 32-bit
+;                        word at RAM 0x60F018
+;
+; Called from: 3 proven sites in prom_a.
+; Inputs:  (XIZ+8) = a 16-bit index.  Outputs: XIY = base[index].
+; ★ BORROWED NAME, WITH THE DIFF: prom_b 0xF55321 carries this name
+;          already, and the two routines are the same 27 bytes with
+;          **0 differing** -- ROM_A[0xFB77D8..0xFB77F2] ==
+;          ROM_B[0xF55321..0xF5533B].  Check N4 recomputes both the length
+;          and the differing count; a borrowed name with no diff behind it
+;          is exactly what this tree's rules forbid.
+; Unknown:  what the table holds and who writes (0x60F018) -- prom_b's
+;          header says the same, and this rename does not change that.
+; ---------------------------------------------------------------------
+IndexedTable_GetPtr:
 	link XIZ,0x0000                                      ; FB77D8  ee 0c 00 00
 	push XIX                                             ; FB77DC  3c
 	ldl_da xix, (0x60f018)                               ; FB77DD  e2 18 f0 60 24
@@ -74849,7 +75745,7 @@ sub_FB782B:
 	ld A,(XIX)                                           ; FB783F  84 21
 	extz WA                                              ; FB7841  d8 12
 	pushw wa                                             ; FB7843  28
-	calr sub_FB77D8                                      ; FB7844  1e 91 ff
+	calr IndexedTable_GetPtr                                      ; FB7844  1e 91 ff
 	ld (xiz-12), xiy                                     ; FB7847  be f4 65
 	ld (xiz-4), xiy                                      ; FB784A  be fc 65
 	ld xbc, (xiz-12)                                     ; FB784D  ae f4 21
@@ -74898,7 +75794,7 @@ sub_FB7890:
 	ld A,(XIX)                                           ; FB78A4  84 21
 	extz WA                                              ; FB78A6  d8 12
 	pushw wa                                             ; FB78A8  28
-	calr sub_FB77D8                                      ; FB78A9  1e 2c ff
+	calr IndexedTable_GetPtr                                      ; FB78A9  1e 2c ff
 	ld (xiz-12), xiy                                     ; FB78AC  be f4 65
 	ld (xiz-4), xiy                                      ; FB78AF  be fc 65
 	ld xbc, (xiz-12)                                     ; FB78B2  ae f4 21
@@ -74966,7 +75862,7 @@ sub_FB791C:
 	ld A,(XIX)                                           ; FB7930  84 21
 	extz WA                                              ; FB7932  d8 12
 	pushw wa                                             ; FB7934  28
-	calr sub_FB77D8                                      ; FB7935  1e a0 fe
+	calr IndexedTable_GetPtr                                      ; FB7935  1e a0 fe
 	ld (xiz-12), xiy                                     ; FB7938  be f4 65
 	ld (xiz-4), xiy                                      ; FB793B  be fc 65
 	ld xbc, (xiz-12)                                     ; FB793E  ae f4 21
@@ -86300,7 +87196,20 @@ sub_FBFEB9:
 	call 0xf42dc0                                        ; FBFECE  1d c0 2d f4
 	inc 6,XSP                                            ; FBFED2  ef 66
 	ret                                                  ; FBFED4  0e
-sub_FBFED5:
+; ---------------------------------------------------------------------
+; Var2075_ClrBit7 -- clear bit 7 of (0x2075)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 2
+; instructions, 0xFBFED5 to 0xFBFED9, with no branch.
+; Called from: 1 proven call sites, first a 0xFBC5C1.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2075.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Note:     (0x2075) is the panel mode-flag byte PanelButton_Route and PanelButton_Accept test bit by bit (prom_a 0xF861B6 onward).
+; ---------------------------------------------------------------------
+Var2075_ClrBit7:
 	m_res 7, MD16, 0x2075                                ; FBFED5  f1 75 20 b7
 	ret                                                  ; FBFED9  0e
 sub_FBFEDA:
@@ -99681,7 +100590,7 @@ sub_FCFDA7:
 	jr z, .LFCFDFC                                       ; FCFDCE  66 2c
 	lda xbc, (xiz-6)                                     ; FCFDD0  be fa 31
 	push XBC                                             ; FCFDD3  39
-	call sub_FDAC1F                                      ; FCFDD4  1d 1f ac fd
+	call Var27A0_Get                                      ; FCFDD4  1d 1f ac fd
 	pop XIY                                              ; FCFDD8  5d
 	ld c, (xiz-4)                                        ; FCFDD9  8e fc 23
 	m_cp_rm MBD+r6, 0xfa, r3                             ; FCFDDC  8e fa f3
@@ -99693,7 +100602,7 @@ sub_FCFDA7:
 .LFCFDEB:
 	lda xbc, (xiz-8)                                     ; FCFDEB  be f8 31
 	push XBC                                             ; FCFDEE  39
-	call sub_FDAC3D                                      ; FCFDEF  1d 3d ac fd
+	call Var27A1_Get                                      ; FCFDEF  1d 3d ac fd
 	pop XIY                                              ; FCFDF3  5d
 	ld c, (xiz-2)                                        ; FCFDF4  8e fe 23
 	m_cp_rm MBD+r6, 0xf8, r3                             ; FCFDF7  8e f8 f3
@@ -99702,11 +100611,11 @@ sub_FCFDA7:
 	ld bc, (xiz-4)                                       ; FCFDFC  9e fc 21
 	extz BC                                              ; FCFDFF  d9 12
 	pushw bc                                             ; FCFE01  29
-	call sub_FDAC2F                                      ; FCFE02  1d 2f ac fd
+	call Var27A0_Set                                      ; FCFE02  1d 2f ac fd
 	ld bc, (xiz-2)                                       ; FCFE06  9e fe 21
 	extz BC                                              ; FCFE09  d9 12
 	pushw bc                                             ; FCFE0B  29
-	call sub_FDAC4D                                      ; FCFE0C  1d 4d ac fd
+	call Var27A1_Set                                      ; FCFE0C  1d 4d ac fd
 	ld bc, (xiz-2)                                       ; FCFE10  9e fe 21
 	extz BC                                              ; FCFE13  d9 12
 	pushw bc                                             ; FCFE15  29
@@ -99718,7 +100627,7 @@ sub_FCFDA7:
 	lda_24 xiy, (0xfcfe2d)                               ; FCFE25  f2 2d fe fc 35
 	push XIY                                             ; FCFE2A  3d
 	jp (xbc)                                             ; FCFE2B  b1 d8
-	call sub_FD60B9                                      ; FCFE2D  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FCFE2D  1d b9 60 fd
 	inc 6,XSP                                            ; FCFE31  ef 66
 	cps a, 0x00                                          ; FCFE33  c9 d8
 	jr nz, .LFCFE3F                                      ; FCFE35  6e 08
@@ -99732,7 +100641,7 @@ sub_FCFDA7:
 	pushw hl                                             ; FCFE46  2b
 	lda xbc, (xiz-2)                                     ; FCFE47  be fe 31
 	push XBC                                             ; FCFE4A  39
-	call sub_FDA0CA                                      ; FCFE4B  1d ca a0 fd
+	call Var27F5_Get                                      ; FCFE4B  1d ca a0 fd
 	pop XIY                                              ; FCFE4F  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FCFE50  8e fe 3f 00
 	jr z, .LFCFE9D                                       ; FCFE54  66 47
@@ -99741,7 +100650,7 @@ sub_FCFDA7:
 	lda xbc, (xiz-4)                                     ; FCFE5C  be fc 31
 	push XBC                                             ; FCFE5F  39
 	pushw 0x00                                           ; FCFE60  0b 00 00
-	call sub_FD6C7B                                      ; FCFE63  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FCFE63  1d 7b 6c fd
 	ld bc, (xiz-4)                                       ; FCFE67  9e fc 21
 	extz BC                                              ; FCFE6A  d9 12
 	pushw bc                                             ; FCFE6C  29
@@ -99774,14 +100683,14 @@ sub_FCFDA7:
 	pushw hl                                             ; FCFEA5  2b
 	lda xbc, (xiz-2)                                     ; FCFEA6  be fe 31
 	push XBC                                             ; FCFEA9  39
-	call sub_FDA0CA                                      ; FCFEAA  1d ca a0 fd
+	call Var27F5_Get                                      ; FCFEAA  1d ca a0 fd
 	pop XIY                                              ; FCFEAE  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FCFEAF  8e fe 3f 00
 	jrl z, .LFCFF42                                      ; FCFEB3  76 8c 00
 	lda xbc, (xiz-4)                                     ; FCFEB6  be fc 31
 	push XBC                                             ; FCFEB9  39
 	pushw 0x00                                           ; FCFEBA  0b 00 00
-	call sub_FD6C7B                                      ; FCFEBD  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FCFEBD  1d 7b 6c fd
 	lda xbc, (xiz-6)                                     ; FCFEC1  be fa 31
 	push XBC                                             ; FCFEC4  39
 	ld wa, (xiz-4)                                       ; FCFEC5  9e fc 20
@@ -99791,7 +100700,7 @@ sub_FCFDA7:
 	call sub_FDA05E                                      ; FCFECE  1d 5e a0 fd
 	lda xbc, (xiz-8)                                     ; FCFED2  be f8 31
 	push XBC                                             ; FCFED5  39
-	call sub_FD9D5C                                      ; FCFED6  1d 5c 9d fd
+	call Var27F4_Get                                      ; FCFED6  1d 5c 9d fd
 	ld C,(XIZ+0x08)                                      ; FCFEDA  8e 08 23
 	res 0x07,C                                           ; FCFEDD  cb 30 07
 	add XSP,0x00000012                                   ; FCFEE0  ef c8 12 00 00 00
@@ -99839,14 +100748,14 @@ sub_FCFDA7:
 	link XIZ,0xfff8                                      ; FCFF46  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FCFF4A  be fe 31
 	push XBC                                             ; FCFF4D  39
-	call sub_FDA0CA                                      ; FCFF4E  1d ca a0 fd
+	call Var27F5_Get                                      ; FCFF4E  1d ca a0 fd
 	pop XIY                                              ; FCFF52  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FCFF53  8e fe 3f 00
 	jrl z, .LFCFFC7                                      ; FCFF57  76 6d 00
 	lda xbc, (xiz-4)                                     ; FCFF5A  be fc 31
 	push XBC                                             ; FCFF5D  39
 	pushw 0x00                                           ; FCFF5E  0b 00 00
-	call sub_FD6C7B                                      ; FCFF61  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FCFF61  1d 7b 6c fd
 	lda xbc, (xiz-6)                                     ; FCFF65  be fa 31
 	push XBC                                             ; FCFF68  39
 	ld wa, (xiz-4)                                       ; FCFF69  9e fc 20
@@ -99855,7 +100764,7 @@ sub_FCFDA7:
 	call sub_FD9D16                                      ; FCFF6F  1d 16 9d fd
 	lda xbc, (xiz-8)                                     ; FCFF73  be f8 31
 	push XBC                                             ; FCFF76  39
-	call sub_FD9D3E                                      ; FCFF77  1d 3e 9d fd
+	call Var27F2_GetW                                      ; FCFF77  1d 3e 9d fd
 	ld C,(XIZ+0x08)                                      ; FCFF7B  8e 08 23
 	res 0x07,C                                           ; FCFF7E  cb 30 07
 	inc 0,XSP                                            ; FCFF81  ef 60
@@ -99897,14 +100806,14 @@ sub_FCFDA7:
 	lda xix, (xiz-16)                                    ; FCFFD1  be f0 34
 	lda xbc, (xiz-2)                                     ; FCFFD4  be fe 31
 	push XBC                                             ; FCFFD7  39
-	call sub_FDA0CA                                      ; FCFFD8  1d ca a0 fd
+	call Var27F5_Get                                      ; FCFFD8  1d ca a0 fd
 	pop XIY                                              ; FCFFDC  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FCFFDD  8e fe 3f 00
 	jrl z, .LFD0065                                      ; FCFFE1  76 81 00
 	lda xbc, (xiz-4)                                     ; FCFFE4  be fc 31
 	push XBC                                             ; FCFFE7  39
 	pushw 0x00                                           ; FCFFE8  0b 00 00
-	call sub_FD6C7B                                      ; FCFFEB  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FCFFEB  1d 7b 6c fd
 	ld h, (xiz-4)                                        ; FCFFEF  8e fc 26
 	inc 2,H                                              ; FCFFF2  ce 62
 	push XIX                                             ; FCFFF4  3c
@@ -99912,7 +100821,7 @@ sub_FCFDA7:
 	extz BC                                              ; FCFFF7  d9 12
 	ld DE,BC                                             ; FCFFF9  d9 8a
 	pushw bc                                             ; FCFFFB  29
-	call sub_FD6C7B                                      ; FCFFFC  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FCFFFC  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD0000  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD0004  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD0008  bc 08 00 7f
@@ -99966,14 +100875,14 @@ sub_FCFDA7:
 	lda xix, (xiz-16)                                    ; FD0072  be f0 34
 	lda xbc, (xiz-2)                                     ; FD0075  be fe 31
 	push XBC                                             ; FD0078  39
-	call sub_FDA0CA                                      ; FD0079  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0079  1d ca a0 fd
 	pop XIY                                              ; FD007D  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD007E  8e fe 3f 00
 	jr z, .LFD00EF                                       ; FD0082  66 6b
 	lda xbc, (xiz-4)                                     ; FD0084  be fc 31
 	push XBC                                             ; FD0087  39
 	pushw 0x00                                           ; FD0088  0b 00 00
-	call sub_FD6C7B                                      ; FD008B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD008B  1d 7b 6c fd
 	ld h, (xiz-4)                                        ; FD008F  8e fc 26
 	inc 4,H                                              ; FD0092  ce 64
 	push XIX                                             ; FD0094  3c
@@ -99981,7 +100890,7 @@ sub_FCFDA7:
 	extz BC                                              ; FD0097  d9 12
 	ld DE,BC                                             ; FD0099  d9 8a
 	pushw bc                                             ; FD009B  29
-	call sub_FD6C7B                                      ; FD009C  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD009C  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD00A0  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD00A4  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD00A8  bc 08 00 32
@@ -100023,14 +100932,14 @@ sub_FCFDA7:
 	lda xix, (xiz-16)                                    ; FD00FC  be f0 34
 	lda xbc, (xiz-2)                                     ; FD00FF  be fe 31
 	push XBC                                             ; FD0102  39
-	call sub_FDA0CA                                      ; FD0103  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0103  1d ca a0 fd
 	pop XIY                                              ; FD0107  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD0108  8e fe 3f 00
 	jr z, .LFD0177                                       ; FD010C  66 69
 	lda xbc, (xiz-4)                                     ; FD010E  be fc 31
 	push XBC                                             ; FD0111  39
 	pushw 0x00                                           ; FD0112  0b 00 00
-	call sub_FD6C7B                                      ; FD0115  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0115  1d 7b 6c fd
 	ld h, (xiz-4)                                        ; FD0119  8e fc 26
 	inc 6,H                                              ; FD011C  ce 66
 	push XIX                                             ; FD011E  3c
@@ -100038,7 +100947,7 @@ sub_FCFDA7:
 	extz BC                                              ; FD0121  d9 12
 	ld DE,BC                                             ; FD0123  d9 8a
 	pushw bc                                             ; FD0125  29
-	call sub_FD6C7B                                      ; FD0126  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0126  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD012A  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD012E  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD0132  bc 08 00 32
@@ -100078,14 +100987,14 @@ sub_FCFDA7:
 	push XIX                                             ; FD0183  3c
 	lda xbc, (xiz-2)                                     ; FD0184  be fe 31
 	push XBC                                             ; FD0187  39
-	call sub_FDA0CA                                      ; FD0188  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0188  1d ca a0 fd
 	pop XIY                                              ; FD018C  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD018D  8e fe 3f 00
 	jrl z, .LFD0261                                      ; FD0191  76 cd 00
 	lda xbc, (xiz-4)                                     ; FD0194  be fc 31
 	push XBC                                             ; FD0197  39
 	pushw 0x00                                           ; FD0198  0b 00 00
-	call sub_FD6C7B                                      ; FD019B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD019B  1d 7b 6c fd
 	ld h, (xiz-4)                                        ; FD019F  8e fc 26
 	inc 0,H                                              ; FD01A2  ce 60
 	lda xbc, (xiz-6)                                     ; FD01A4  be fa 31
@@ -100101,7 +101010,7 @@ sub_FCFDA7:
 	ld A,H                                               ; FD01BC  ce 89
 	extz WA                                              ; FD01BE  d8 12
 	pushw wa                                             ; FD01C0  28
-	call sub_FD6C7B                                      ; FD01C1  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD01C1  1d 7b 6c fd
 	add XSP,0x00000012                                   ; FD01C5  ef c8 12 00 00 00
 	cps l, 0x00                                          ; FD01CB  cf d8
 	jr nz, .LFD01E8                                      ; FD01CD  6e 19
@@ -100134,7 +101043,7 @@ sub_FCFDA7:
 	ld C,H                                               ; FD0210  ce 8b
 	extz BC                                              ; FD0212  d9 12
 	pushw bc                                             ; FD0214  29
-	call sub_FD6C65                                      ; FD0215  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD0215  1d 65 6c fd
 	pushw 0x7f                                           ; FD0219  0b 7f 00
 	lda xbc, (xiz-8)                                     ; FD021C  be f8 31
 	push XBC                                             ; FD021F  39
@@ -100172,13 +101081,13 @@ sub_FCFDA7:
 	lda xix, (xiz-14)                                    ; FD026C  be f2 34
 	lda xbc, (xiz-2)                                     ; FD026F  be fe 31
 	push XBC                                             ; FD0272  39
-	call sub_FDA0CA                                      ; FD0273  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0273  1d ca a0 fd
 	pop XIY                                              ; FD0277  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD0278  8e fe 3f 00
 	jr z, .LFD02C7                                       ; FD027C  66 49
 	push XIX                                             ; FD027E  3c
 	pushw 0x0b                                           ; FD027F  0b 0b 00
-	call sub_FD6C7B                                      ; FD0282  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0282  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD0286  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD028A  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD028E  bc 08 00 7f
@@ -100207,7 +101116,7 @@ sub_FCFDA7:
 	pushw hl                                             ; FD02CF  2b
 	lda xbc, (xiz-2)                                     ; FD02D0  be fe 31
 	push XBC                                             ; FD02D3  39
-	call sub_FDA0CA                                      ; FD02D4  1d ca a0 fd
+	call Var27F5_Get                                      ; FD02D4  1d ca a0 fd
 	pop XIY                                              ; FD02D8  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD02D9  8e fe 3f 00
 	jr nz, .LFD0300                                      ; FD02DD  6e 21
@@ -100217,12 +101126,12 @@ sub_FCFDA7:
 	pushw 0x9d                                           ; FD02E8  0b 9d 00
 	jr .LFD02F8                                          ; FD02EB  68 0b
 .LFD02ED:
-	call sub_FDA341                                      ; FD02ED  1d 41 a3 fd
+	call Var27FE_Set                                      ; FD02ED  1d 41 a3 fd
 	popw bc                                              ; FD02F1  49
 	pushw 0x00                                           ; FD02F2  0b 00 00
 	pushw 0x9e                                           ; FD02F5  0b 9e 00
 .LFD02F8:
-	call sub_FD608B                                      ; FD02F8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD02F8  1d 8b 60 fd
 	pop XIY                                              ; FD02FC  5d
 	jrl .LFD0370                                         ; FD02FD  78 70 00
 .LFD0300:
@@ -100230,10 +101139,10 @@ sub_FCFDA7:
 	jr nz, .LFD032E                                      ; FD0304  6e 28
 	lda xbc, (xiz-4)                                     ; FD0306  be fc 31
 	push XBC                                             ; FD0309  39
-	call sub_FDA0F6                                      ; FD030A  1d f6 a0 fd
+	call Var27F7_GetW                                      ; FD030A  1d f6 a0 fd
 	lda xbc, (xiz-6)                                     ; FD030E  be fa 31
 	push XBC                                             ; FD0311  39
-	call sub_FDA114                                      ; FD0312  1d 14 a1 fd
+	call Var27F9_GetW                                      ; FD0312  1d 14 a1 fd
 	ld bc, (xiz-6)                                       ; FD0316  9e fa 21
 	dec 1,BC                                             ; FD0319  d9 69
 	inc 0,XSP                                            ; FD031B  ef 60
@@ -100250,7 +101159,7 @@ sub_FCFDA7:
 	jr nz, .LFD0353                                      ; FD0337  6e 1a
 	lda xbc, (xiz-8)                                     ; FD0339  be f8 31
 	push XBC                                             ; FD033C  39
-	call sub_FDA142                                      ; FD033D  1d 42 a1 fd
+	call Var27FC_Get                                      ; FD033D  1d 42 a1 fd
 	pop XIY                                              ; FD0341  5d
 	m_cp_mi8 MBD+r6, 0xf8, 0x7f                          ; FD0342  8e f8 3f 7f
 	jr nc, .LFD0370                                      ; FD0346  6f 28
@@ -100264,12 +101173,12 @@ sub_FCFDA7:
 	extz BC                                              ; FD0355  d9 12
 	pushw bc                                             ; FD0357  29
 .LFD0358:
-	call sub_FDA152                                      ; FD0358  1d 52 a1 fd
+	call Var27FC_Set                                      ; FD0358  1d 52 a1 fd
 .LFD035C:
 	popw bc                                              ; FD035C  49
 	pushw 0x01                                           ; FD035D  0b 01 00
 	pushw 0x80                                           ; FD0360  0b 80 00
-	call sub_FD608B                                      ; FD0363  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0363  1d 8b 60 fd
 	pushw 0x01                                           ; FD0367  0b 01 00
 	call sub_FDA467                                      ; FD036A  1d 67 a4 fd
 	inc 6,XSP                                            ; FD036E  ef 66
@@ -100281,7 +101190,7 @@ sub_FCFDA7:
 	pushw hl                                             ; FD0378  2b
 	lda xbc, (xiz-2)                                     ; FD0379  be fe 31
 	push XBC                                             ; FD037C  39
-	call sub_FDA0CA                                      ; FD037D  1d ca a0 fd
+	call Var27F5_Get                                      ; FD037D  1d ca a0 fd
 	pop XIY                                              ; FD0381  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD0382  8e fe 3f 00
 	jr nz, .LFD03A1                                      ; FD0386  6e 19
@@ -100293,7 +101202,7 @@ sub_FCFDA7:
 .LFD0396:
 	pushw 0xc0                                           ; FD0396  0b c0 00
 .LFD0399:
-	call sub_FD608B                                      ; FD0399  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0399  1d 8b 60 fd
 	pop XIY                                              ; FD039D  5d
 	jrl .LFD0405                                         ; FD039E  78 64 00
 .LFD03A1:
@@ -100301,7 +101210,7 @@ sub_FCFDA7:
 	jr nz, .LFD03C3                                      ; FD03A5  6e 1c
 	lda xbc, (xiz-4)                                     ; FD03A7  be fc 31
 	push XBC                                             ; FD03AA  39
-	call sub_FDA0F6                                      ; FD03AB  1d f6 a0 fd
+	call Var27F7_GetW                                      ; FD03AB  1d f6 a0 fd
 	pop XIY                                              ; FD03AF  5d
 	m_cp_mi16 MWD+r6, 0xfc, 0x0000                       ; FD03B0  9e fc 3f 00 00
 	jr z, .LFD0405                                       ; FD03B5  66 4e
@@ -100316,7 +101225,7 @@ sub_FCFDA7:
 	jr nz, .LFD03E8                                      ; FD03CC  6e 1a
 	lda xbc, (xiz-6)                                     ; FD03CE  be fa 31
 	push XBC                                             ; FD03D1  39
-	call sub_FDA142                                      ; FD03D2  1d 42 a1 fd
+	call Var27FC_Get                                      ; FD03D2  1d 42 a1 fd
 	pop XIY                                              ; FD03D6  5d
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD03D7  8e fa 3f 00
 	jr z, .LFD0405                                       ; FD03DB  66 28
@@ -100330,12 +101239,12 @@ sub_FCFDA7:
 	extz BC                                              ; FD03EA  d9 12
 	pushw bc                                             ; FD03EC  29
 .LFD03ED:
-	call sub_FDA152                                      ; FD03ED  1d 52 a1 fd
+	call Var27FC_Set                                      ; FD03ED  1d 52 a1 fd
 .LFD03F1:
 	popw bc                                              ; FD03F1  49
 	pushw 0x01                                           ; FD03F2  0b 01 00
 	pushw 0x80                                           ; FD03F5  0b 80 00
-	call sub_FD608B                                      ; FD03F8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD03F8  1d 8b 60 fd
 	pushw 0x01                                           ; FD03FC  0b 01 00
 	call sub_FDA467                                      ; FD03FF  1d 67 a4 fd
 	inc 6,XSP                                            ; FD0403  ef 66
@@ -100346,7 +101255,7 @@ sub_FCFDA7:
 	link XIZ,0xfffc                                      ; FD0409  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD040D  be fe 31
 	push XBC                                             ; FD0410  39
-	call sub_FDA0CA                                      ; FD0411  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0411  1d ca a0 fd
 	pop XIY                                              ; FD0415  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD0416  8e fe 3f 00
 	jr nz, .LFD0434                                      ; FD041A  6e 18
@@ -100358,7 +101267,7 @@ sub_FCFDA7:
 .LFD042A:
 	pushw 0x8b                                           ; FD042A  0b 8b 00
 .LFD042D:
-	call sub_FD608B                                      ; FD042D  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD042D  1d 8b 60 fd
 	pop XIY                                              ; FD0431  5d
 	jr .LFD046C                                          ; FD0432  68 38
 .LFD0434:
@@ -100367,13 +101276,13 @@ sub_FCFDA7:
 	lda xbc, (xiz-4)                                     ; FD043A  be fc 31
 	push XBC                                             ; FD043D  39
 	pushw 0x00                                           ; FD043E  0b 00 00
-	call sub_FD6C7B                                      ; FD0441  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0441  1d 7b 6c fd
 	inc 6,XSP                                            ; FD0445  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x01                          ; FD0447  8e fc 3f 01
 	jr z, .LFD046C                                       ; FD044B  66 1f
 	pushw 0x01                                           ; FD044D  0b 01 00
 	pushw 0x00                                           ; FD0450  0b 00 00
-	call sub_FD6C65                                      ; FD0453  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD0453  1d 65 6c fd
 	pushw 0x01                                           ; FD0457  0b 01 00
 	call sub_FD6B2E                                      ; FD045A  1d 2e 6b fd
 	pushw 0x00                                           ; FD045E  0b 00 00
@@ -100387,7 +101296,7 @@ sub_FCFDA7:
 	link XIZ,0xfffc                                      ; FD046F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0473  be fe 31
 	push XBC                                             ; FD0476  39
-	call sub_FDA0CA                                      ; FD0477  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0477  1d ca a0 fd
 	pop XIY                                              ; FD047B  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD047C  8e fe 3f 00
 	jr nz, .LFD049A                                      ; FD0480  6e 18
@@ -100399,7 +101308,7 @@ sub_FCFDA7:
 .LFD0490:
 	pushw 0x87                                           ; FD0490  0b 87 00
 .LFD0493:
-	call sub_FD608B                                      ; FD0493  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0493  1d 8b 60 fd
 	pop XIY                                              ; FD0497  5d
 	jr .LFD04D2                                          ; FD0498  68 38
 .LFD049A:
@@ -100408,13 +101317,13 @@ sub_FCFDA7:
 	lda xbc, (xiz-4)                                     ; FD04A0  be fc 31
 	push XBC                                             ; FD04A3  39
 	pushw 0x00                                           ; FD04A4  0b 00 00
-	call sub_FD6C7B                                      ; FD04A7  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD04A7  1d 7b 6c fd
 	inc 6,XSP                                            ; FD04AB  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x02                          ; FD04AD  8e fc 3f 02
 	jr z, .LFD04D2                                       ; FD04B1  66 1f
 	pushw 0x02                                           ; FD04B3  0b 02 00
 	pushw 0x00                                           ; FD04B6  0b 00 00
-	call sub_FD6C65                                      ; FD04B9  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD04B9  1d 65 6c fd
 	pushw 0x02                                           ; FD04BD  0b 02 00
 	call sub_FD6B2E                                      ; FD04C0  1d 2e 6b fd
 	pushw 0x00                                           ; FD04C4  0b 00 00
@@ -100428,7 +101337,7 @@ sub_FCFDA7:
 	link XIZ,0xfffe                                      ; FD04D5  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD04D9  be fe 31
 	push XBC                                             ; FD04DC  39
-	call sub_FDA0CA                                      ; FD04DD  1d ca a0 fd
+	call Var27F5_Get                                      ; FD04DD  1d ca a0 fd
 	pop XIY                                              ; FD04E1  5d
 	cp (XIZ+0x08),0x00                                   ; FD04E2  8e 08 3f 00
 	jr nz, .LFD0500                                      ; FD04E6  6e 18
@@ -100449,12 +101358,12 @@ sub_FCFDA7:
 	pushw 0x90                                           ; FD0509  0b 90 00
 	jr .LFD0519                                          ; FD050C  68 0b
 .LFD050E:
-	call sub_FDA341                                      ; FD050E  1d 41 a3 fd
+	call Var27FE_Set                                      ; FD050E  1d 41 a3 fd
 	popw bc                                              ; FD0512  49
 	pushw 0x00                                           ; FD0513  0b 00 00
 	pushw 0x9e                                           ; FD0516  0b 9e 00
 .LFD0519:
-	call sub_FD608B                                      ; FD0519  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0519  1d 8b 60 fd
 	pop XIY                                              ; FD051D  5d
 .LFD051E:
 	unlk XIZ                                             ; FD051E  ee 0d
@@ -100463,7 +101372,7 @@ sub_FCFDA7:
 	cp (XIZ+0x08),0x00                                   ; FD0525  8e 08 3f 00
 	jr nz, .LFD053A                                      ; FD0529  6e 0f
 	pushw 0x00                                           ; FD052B  0b 00 00
-	call sub_FD7705                                      ; FD052E  1d 05 77 fd
+	call Var27DA_Set                                      ; FD052E  1d 05 77 fd
 	pushw 0x01                                           ; FD0532  0b 01 00
 	call sub_FD60F2                                      ; FD0535  1d f2 60 fd
 	pop XIY                                              ; FD0539  5d
@@ -100494,7 +101403,7 @@ sub_FD053D:
 	lda_24 xiy, (0xfd057a)                               ; FD0572  f2 7a 05 fd 35
 	push XIY                                             ; FD0577  3d
 	jp (xbc)                                             ; FD0578  b1 d8
-	call sub_FD60B9                                      ; FD057A  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD057A  1d b9 60 fd
 	popw bc                                              ; FD057E  49
 	cps a, 0x00                                          ; FD057F  c9 d8
 	jr nz, .LFD058B                                      ; FD0581  6e 08
@@ -100522,7 +101431,7 @@ sub_FD058E:
 	jr z, .LFD05C7                                       ; FD05B4  66 11
 	lda xbc, (xiz-6)                                     ; FD05B6  be fa 31
 	push XBC                                             ; FD05B9  39
-	call sub_FDAC1F                                      ; FD05BA  1d 1f ac fd
+	call Var27A0_Get                                      ; FD05BA  1d 1f ac fd
 	pop XIY                                              ; FD05BE  5d
 	ld c, (xiz-4)                                        ; FD05BF  8e fc 23
 	m_cp_rm MBD+r6, 0xfa, r3                             ; FD05C2  8e fa f3
@@ -100531,7 +101440,7 @@ sub_FD058E:
 	ld bc, (xiz-4)                                       ; FD05C7  9e fc 21
 	extz BC                                              ; FD05CA  d9 12
 	pushw bc                                             ; FD05CC  29
-	call sub_FDAC2F                                      ; FD05CD  1d 2f ac fd
+	call Var27A0_Set                                      ; FD05CD  1d 2f ac fd
 	ld bc, (xiz-2)                                       ; FD05D1  9e fe 21
 	extz BC                                              ; FD05D4  d9 12
 	pushw bc                                             ; FD05D6  29
@@ -100543,7 +101452,7 @@ sub_FD058E:
 	lda_24 xiy, (0xfd05ee)                               ; FD05E6  f2 ee 05 fd 35
 	push XIY                                             ; FD05EB  3d
 	jp (xbc)                                             ; FD05EC  b1 d8
-	call sub_FD60B9                                      ; FD05EE  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD05EE  1d b9 60 fd
 	pop XIY                                              ; FD05F2  5d
 	cps a, 0x00                                          ; FD05F3  c9 d8
 	jr nz, .LFD05FF                                      ; FD05F5  6e 08
@@ -100561,9 +101470,9 @@ sub_FD058E:
 	call sub_FD8803                                      ; FD060F  1d 03 88 fd
 	pushw 0x01                                           ; FD0613  0b 01 00
 	pushw 0xcd                                           ; FD0616  0b cd 00
-	call sub_FD608B                                      ; FD0619  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0619  1d 8b 60 fd
 	pushw 0x00                                           ; FD061D  0b 00 00
-	call sub_FDABE3                                      ; FD0620  1d e3 ab fd
+	call Var2811_Set                                      ; FD0620  1d e3 ab fd
 	inc 0,XSP                                            ; FD0624  ef 60
 	inc 2,XSP                                            ; FD0626  ef 62
 	unlk XIZ                                             ; FD0628  ee 0d
@@ -100597,7 +101506,7 @@ sub_FD058E:
 	link XIZ,0xfffe                                      ; FD0667  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD066B  be fe 31
 	push XBC                                             ; FD066E  39
-	call sub_FDA0CA                                      ; FD066F  1d ca a0 fd
+	call Var27F5_Get                                      ; FD066F  1d ca a0 fd
 	pop XIY                                              ; FD0673  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD0674  8e fe 3f 00
 	jr nz, .LFD0688                                      ; FD0678  6e 0e
@@ -100613,7 +101522,7 @@ sub_FD058E:
 	link XIZ,0xfffe                                      ; FD068B  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD068F  be fe 31
 	push XBC                                             ; FD0692  39
-	call sub_FDA0CA                                      ; FD0693  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0693  1d ca a0 fd
 	pop XIY                                              ; FD0697  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD0698  8e fe 3f 00
 	jr nz, .LFD06AC                                      ; FD069C  6e 0e
@@ -100631,7 +101540,7 @@ sub_FD058E:
 	lda xbc, (xiz-2)                                     ; FD06B4  be fe 31
 	push XBC                                             ; FD06B7  39
 	pushw 0x00                                           ; FD06B8  0b 00 00
-	call sub_FD6C7B                                      ; FD06BB  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD06BB  1d 7b 6c fd
 	inc 6,XSP                                            ; FD06BF  ef 66
 	cp (XIZ+0x08),0x00                                   ; FD06C1  8e 08 3f 00
 	jr nz, .LFD06D3                                      ; FD06C5  6e 0c
@@ -100657,9 +101566,9 @@ sub_FD058E:
 	call 0xf4344c                                        ; FD06EE  1d 4c 34 f4
 	pushw 0x01                                           ; FD06F2  0b 01 00
 	pushw 0xcd                                           ; FD06F5  0b cd 00
-	call sub_FD608B                                      ; FD06F8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD06F8  1d 8b 60 fd
 	pushw 0x01                                           ; FD06FC  0b 01 00
-	call sub_FDABE3                                      ; FD06FF  1d e3 ab fd
+	call Var2811_Set                                      ; FD06FF  1d e3 ab fd
 	inc 0,XSP                                            ; FD0703  ef 60
 	inc 4,XSP                                            ; FD0705  ef 64
 .LFD0707:
@@ -100671,7 +101580,7 @@ sub_FD058E:
 	lda xbc, (xiz-2)                                     ; FD0710  be fe 31
 	push XBC                                             ; FD0713  39
 	pushw 0x00                                           ; FD0714  0b 00 00
-	call sub_FD6C7B                                      ; FD0717  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0717  1d 7b 6c fd
 	inc 6,XSP                                            ; FD071B  ef 66
 	cp (XIZ+0x08),0x00                                   ; FD071D  8e 08 3f 00
 	jr nz, .LFD072F                                      ; FD0721  6e 0c
@@ -100697,9 +101606,9 @@ sub_FD058E:
 	call 0xf4344c                                        ; FD074A  1d 4c 34 f4
 	pushw 0x01                                           ; FD074E  0b 01 00
 	pushw 0xcd                                           ; FD0751  0b cd 00
-	call sub_FD608B                                      ; FD0754  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0754  1d 8b 60 fd
 	pushw 0x01                                           ; FD0758  0b 01 00
-	call sub_FDABE3                                      ; FD075B  1d e3 ab fd
+	call Var2811_Set                                      ; FD075B  1d e3 ab fd
 	inc 0,XSP                                            ; FD075F  ef 60
 	inc 4,XSP                                            ; FD0761  ef 64
 .LFD0763:
@@ -100711,7 +101620,7 @@ sub_FD058E:
 	pushw de                                             ; FD076C  2a
 	lda xbc, (xiz-2)                                     ; FD076D  be fe 31
 	push XBC                                             ; FD0770  39
-	call sub_FDA0CA                                      ; FD0771  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0771  1d ca a0 fd
 	pop XIY                                              ; FD0775  5d
 	cp (XIZ+0x08),0x00                                   ; FD0776  8e 08 3f 00
 	jr nz, .LFD078E                                      ; FD077A  6e 12
@@ -100748,7 +101657,7 @@ sub_FD058E:
 	ld A,D                                               ; FD07B7  cc 89
 	extz WA                                              ; FD07B9  d8 12
 	pushw wa                                             ; FD07BB  28
-	call sub_FD6C7B                                      ; FD07BC  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD07BC  1d 7b 6c fd
 	ldb h, 0x00                                          ; FD07C0  26 00
 	inc 0,XSP                                            ; FD07C2  ef 60
 	inc 4,XSP                                            ; FD07C4  ef 64
@@ -100795,12 +101704,12 @@ sub_FD058E:
 	ld C,D                                               ; FD081C  cc 8b
 	extz BC                                              ; FD081E  d9 12
 	pushw bc                                             ; FD0820  29
-	call sub_FD6C65                                      ; FD0821  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD0821  1d 65 6c fd
 	pushw 0x01                                           ; FD0825  0b 01 00
 	pushw 0xcd                                           ; FD0828  0b cd 00
-	call sub_FD608B                                      ; FD082B  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD082B  1d 8b 60 fd
 	pushw 0x01                                           ; FD082F  0b 01 00
-	call sub_FDABE3                                      ; FD0832  1d e3 ab fd
+	call Var2811_Set                                      ; FD0832  1d e3 ab fd
 	inc 0,XSP                                            ; FD0836  ef 60
 	inc 2,XSP                                            ; FD0838  ef 62
 	popw de                                              ; FD083A  4a
@@ -100812,7 +101721,7 @@ sub_FD058E:
 	jr nz, .LFD0854                                      ; FD0847  6e 0b
 	pushw 0x00                                           ; FD0849  0b 00 00
 	pushw 0x9b                                           ; FD084C  0b 9b 00
-	call sub_FD608B                                      ; FD084F  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD084F  1d 8b 60 fd
 	pop XIY                                              ; FD0853  5d
 .LFD0854:
 	unlk XIZ                                             ; FD0854  ee 0d
@@ -100820,7 +101729,7 @@ sub_FD058E:
 	link XIZ,0xfffe                                      ; FD0857  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD085B  be fe 31
 	push XBC                                             ; FD085E  39
-	call sub_FDA0CA                                      ; FD085F  1d ca a0 fd
+	call Var27F5_Get                                      ; FD085F  1d ca a0 fd
 	pop XIY                                              ; FD0863  5d
 	cp (XIZ+0x08),0x00                                   ; FD0864  8e 08 3f 00
 	jr nz, .LFD0880                                      ; FD0868  6e 16
@@ -100832,7 +101741,7 @@ sub_FD058E:
 .LFD0878:
 	pushw 0xcb                                           ; FD0878  0b cb 00
 .LFD087B:
-	call sub_FD608B                                      ; FD087B  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD087B  1d 8b 60 fd
 	pop XIY                                              ; FD087F  5d
 .LFD0880:
 	unlk XIZ                                             ; FD0880  ee 0d
@@ -100845,7 +101754,7 @@ sub_FD058E:
 	call sub_FD8803                                      ; FD0890  1d 03 88 fd
 	pushw 0x01                                           ; FD0894  0b 01 00
 	pushw 0x9b                                           ; FD0897  0b 9b 00
-	call sub_FD608B                                      ; FD089A  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD089A  1d 8b 60 fd
 	inc 0,XSP                                            ; FD089E  ef 60
 	unlk XIZ                                             ; FD08A0  ee 0d
 	ret                                                  ; FD08A2  0e
@@ -100878,7 +101787,7 @@ sub_FD058E:
 	link XIZ,0xfffe                                      ; FD08DF  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD08E3  be fe 31
 	push XBC                                             ; FD08E6  39
-	call sub_FDA0CA                                      ; FD08E7  1d ca a0 fd
+	call Var27F5_Get                                      ; FD08E7  1d ca a0 fd
 	pop XIY                                              ; FD08EB  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD08EC  8e fe 3f 00
 	jr nz, .LFD0900                                      ; FD08F0  6e 0e
@@ -100894,7 +101803,7 @@ sub_FD058E:
 	link XIZ,0xfffe                                      ; FD0903  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0907  be fe 31
 	push XBC                                             ; FD090A  39
-	call sub_FDA0CA                                      ; FD090B  1d ca a0 fd
+	call Var27F5_Get                                      ; FD090B  1d ca a0 fd
 	pop XIY                                              ; FD090F  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD0910  8e fe 3f 00
 	jr nz, .LFD0924                                      ; FD0914  6e 0e
@@ -100913,7 +101822,7 @@ sub_FD058E:
 	lda xbc, (xiz-2)                                     ; FD0931  be fe 31
 	push XBC                                             ; FD0934  39
 	pushw 0x00                                           ; FD0935  0b 00 00
-	call sub_FD6C7B                                      ; FD0938  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0938  1d 7b 6c fd
 	inc 6,XSP                                            ; FD093C  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD093E  8e fe 3f 01
 	jr z, .LFD095A                                       ; FD0942  66 16
@@ -100922,7 +101831,7 @@ sub_FD058E:
 	call sub_FD7159                                      ; FD094A  1d 59 71 fd
 	pushw 0x01                                           ; FD094E  0b 01 00
 	pushw 0x9b                                           ; FD0951  0b 9b 00
-	call sub_FD608B                                      ; FD0954  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0954  1d 8b 60 fd
 	inc 0,XSP                                            ; FD0958  ef 60
 .LFD095A:
 	unlk XIZ                                             ; FD095A  ee 0d
@@ -100931,7 +101840,7 @@ sub_FD058E:
 	lda xbc, (xiz-2)                                     ; FD0961  be fe 31
 	push XBC                                             ; FD0964  39
 	pushw 0x00                                           ; FD0965  0b 00 00
-	call sub_FD6C7B                                      ; FD0968  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0968  1d 7b 6c fd
 	inc 6,XSP                                            ; FD096C  ef 66
 	cp (XIZ+0x08),0x00                                   ; FD096E  8e 08 3f 00
 	jr nz, .LFD097F                                      ; FD0972  6e 0b
@@ -100948,7 +101857,7 @@ sub_FD058E:
 	call sub_FD7159                                      ; FD098B  1d 59 71 fd
 	pushw 0x01                                           ; FD098F  0b 01 00
 	pushw 0x9b                                           ; FD0992  0b 9b 00
-	call sub_FD608B                                      ; FD0995  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0995  1d 8b 60 fd
 	inc 0,XSP                                            ; FD0999  ef 60
 .LFD099B:
 	unlk XIZ                                             ; FD099B  ee 0d
@@ -100957,7 +101866,7 @@ sub_FD058E:
 	lda xbc, (xiz-2)                                     ; FD09A2  be fe 31
 	push XBC                                             ; FD09A5  39
 	pushw 0x00                                           ; FD09A6  0b 00 00
-	call sub_FD6C7B                                      ; FD09A9  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD09A9  1d 7b 6c fd
 	inc 6,XSP                                            ; FD09AD  ef 66
 	cp (XIZ+0x08),0x00                                   ; FD09AF  8e 08 3f 00
 	jr nz, .LFD09C0                                      ; FD09B3  6e 0b
@@ -100974,7 +101883,7 @@ sub_FD058E:
 	call sub_FD7159                                      ; FD09CC  1d 59 71 fd
 	pushw 0x01                                           ; FD09D0  0b 01 00
 	pushw 0x9b                                           ; FD09D3  0b 9b 00
-	call sub_FD608B                                      ; FD09D6  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD09D6  1d 8b 60 fd
 	inc 0,XSP                                            ; FD09DA  ef 60
 .LFD09DC:
 	unlk XIZ                                             ; FD09DC  ee 0d
@@ -100983,7 +101892,7 @@ sub_FD058E:
 	lda xbc, (xiz-2)                                     ; FD09E3  be fe 31
 	push XBC                                             ; FD09E6  39
 	pushw 0x00                                           ; FD09E7  0b 00 00
-	call sub_FD6C7B                                      ; FD09EA  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD09EA  1d 7b 6c fd
 	inc 6,XSP                                            ; FD09EE  ef 66
 	cp (XIZ+0x08),0x00                                   ; FD09F0  8e 08 3f 00
 	jr nz, .LFD0A01                                      ; FD09F4  6e 0b
@@ -101000,7 +101909,7 @@ sub_FD058E:
 	call sub_FD7159                                      ; FD0A0D  1d 59 71 fd
 	pushw 0x01                                           ; FD0A11  0b 01 00
 	pushw 0x9b                                           ; FD0A14  0b 9b 00
-	call sub_FD608B                                      ; FD0A17  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0A17  1d 8b 60 fd
 	inc 0,XSP                                            ; FD0A1B  ef 60
 .LFD0A1D:
 	unlk XIZ                                             ; FD0A1D  ee 0d
@@ -101009,7 +101918,7 @@ sub_FD058E:
 	lda xbc, (xiz-2)                                     ; FD0A24  be fe 31
 	push XBC                                             ; FD0A27  39
 	pushw 0x00                                           ; FD0A28  0b 00 00
-	call sub_FD6C7B                                      ; FD0A2B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0A2B  1d 7b 6c fd
 	inc 6,XSP                                            ; FD0A2F  ef 66
 	cp (XIZ+0x08),0x00                                   ; FD0A31  8e 08 3f 00
 	jr nz, .LFD0A42                                      ; FD0A35  6e 0b
@@ -101026,7 +101935,7 @@ sub_FD058E:
 	call sub_FD7159                                      ; FD0A4E  1d 59 71 fd
 	pushw 0x01                                           ; FD0A52  0b 01 00
 	pushw 0x9b                                           ; FD0A55  0b 9b 00
-	call sub_FD608B                                      ; FD0A58  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0A58  1d 8b 60 fd
 	inc 0,XSP                                            ; FD0A5C  ef 60
 .LFD0A5E:
 	unlk XIZ                                             ; FD0A5E  ee 0d
@@ -101036,7 +101945,7 @@ sub_FD058E:
 	jr z, .LFD0A76                                       ; FD0A69  66 0b
 	pushw 0x00                                           ; FD0A6B  0b 00 00
 	pushw 0xcd                                           ; FD0A6E  0b cd 00
-	call sub_FD608B                                      ; FD0A71  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0A71  1d 8b 60 fd
 	pop XIY                                              ; FD0A75  5d
 .LFD0A76:
 	unlk XIZ                                             ; FD0A76  ee 0d
@@ -101044,7 +101953,7 @@ sub_FD058E:
 	link XIZ,0xfffe                                      ; FD0A79  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0A7D  be fe 31
 	push XBC                                             ; FD0A80  39
-	call sub_FDA0CA                                      ; FD0A81  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0A81  1d ca a0 fd
 	pop XIY                                              ; FD0A85  5d
 	cp (XIZ+0x08),0x00                                   ; FD0A86  8e 08 3f 00
 	jr nz, .LFD0AA2                                      ; FD0A8A  6e 16
@@ -101056,7 +101965,7 @@ sub_FD058E:
 .LFD0A9A:
 	pushw 0xcb                                           ; FD0A9A  0b cb 00
 .LFD0A9D:
-	call sub_FD608B                                      ; FD0A9D  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0A9D  1d 8b 60 fd
 	pop XIY                                              ; FD0AA1  5d
 .LFD0AA2:
 	unlk XIZ                                             ; FD0AA2  ee 0d
@@ -101085,7 +101994,7 @@ sub_FD0AA5:
 	lda_24 xiy, (0xfd0ae2)                               ; FD0ADA  f2 e2 0a fd 35
 	push XIY                                             ; FD0ADF  3d
 	jp (xbc)                                             ; FD0AE0  b1 d8
-	call sub_FD60B9                                      ; FD0AE2  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD0AE2  1d b9 60 fd
 	popw bc                                              ; FD0AE6  49
 	cps a, 0x00                                          ; FD0AE7  c9 d8
 	jr nz, .LFD0AF3                                      ; FD0AE9  6e 08
@@ -101119,7 +102028,7 @@ sub_FD0AF6:
 	lda_24 xiy, (0xfd0b33)                               ; FD0B2B  f2 33 0b fd 35
 	push XIY                                             ; FD0B30  3d
 	jp (xbc)                                             ; FD0B31  b1 d8
-	call sub_FD60B9                                      ; FD0B33  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD0B33  1d b9 60 fd
 	popw bc                                              ; FD0B37  49
 	cps a, 0x00                                          ; FD0B38  c9 d8
 	jr nz, .LFD0B44                                      ; FD0B3A  6e 08
@@ -101157,7 +102066,7 @@ sub_FD0B47:
 	jp (xbc)                                             ; FD0B89  b1 d8
 	pushw 0x00                                           ; FD0B8B  0b 00 00
 	call sub_FDAC5B                                      ; FD0B8E  1d 5b ac fd
-	call sub_FD60B9                                      ; FD0B92  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD0B92  1d b9 60 fd
 	inc 6,XSP                                            ; FD0B96  ef 66
 	cps a, 0x00                                          ; FD0B98  c9 d8
 	jr nz, .LFD0BA4                                      ; FD0B9A  6e 08
@@ -101195,7 +102104,7 @@ sub_FD0BA7:
 	jp (xbc)                                             ; FD0BE9  b1 d8
 	pushw 0x00                                           ; FD0BEB  0b 00 00
 	call sub_FDAC5B                                      ; FD0BEE  1d 5b ac fd
-	call sub_FD60B9                                      ; FD0BF2  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD0BF2  1d b9 60 fd
 	inc 6,XSP                                            ; FD0BF6  ef 66
 	cps a, 0x00                                          ; FD0BF8  c9 d8
 	jr nz, .LFD0C04                                      ; FD0BFA  6e 08
@@ -101229,7 +102138,7 @@ sub_FD0C07:
 	lda_24 xiy, (0xfd0c44)                               ; FD0C3C  f2 44 0c fd 35
 	push XIY                                             ; FD0C41  3d
 	jp (xbc)                                             ; FD0C42  b1 d8
-	call sub_FD60B9                                      ; FD0C44  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD0C44  1d b9 60 fd
 	popw bc                                              ; FD0C48  49
 	cps a, 0x00                                          ; FD0C49  c9 d8
 	jr nz, .LFD0C55                                      ; FD0C4B  6e 08
@@ -101244,7 +102153,7 @@ sub_FD0C07:
 	lda xbc, (xiz-2)                                     ; FD0C5D  be fe 31
 	push XBC                                             ; FD0C60  39
 	pushw 0x00                                           ; FD0C61  0b 00 00
-	call sub_FD6C7B                                      ; FD0C64  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0C64  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD0C68  be fc 31
 	push XBC                                             ; FD0C6B  39
 	ld wa, (xiz-2)                                       ; FD0C6C  9e fe 20
@@ -101254,7 +102163,7 @@ sub_FD0C07:
 	call sub_FDA05E                                      ; FD0C75  1d 5e a0 fd
 	lda xbc, (xiz-6)                                     ; FD0C79  be fa 31
 	push XBC                                             ; FD0C7C  39
-	call sub_FD9D5C                                      ; FD0C7D  1d 5c 9d fd
+	call Var27F4_Get                                      ; FD0C7D  1d 5c 9d fd
 	ld C,(XIZ+0x08)                                      ; FD0C81  8e 08 23
 	res 0x07,C                                           ; FD0C84  cb 30 07
 	add XSP,0x00000012                                   ; FD0C87  ef c8 12 00 00 00
@@ -101303,7 +102212,7 @@ sub_FD0C07:
 	lda xbc, (xiz-2)                                     ; FD0CF1  be fe 31
 	push XBC                                             ; FD0CF4  39
 	pushw 0x00                                           ; FD0CF5  0b 00 00
-	call sub_FD6C7B                                      ; FD0CF8  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0CF8  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD0CFC  be fc 31
 	push XBC                                             ; FD0CFF  39
 	ld wa, (xiz-2)                                       ; FD0D00  9e fe 20
@@ -101312,7 +102221,7 @@ sub_FD0C07:
 	call sub_FD9D16                                      ; FD0D06  1d 16 9d fd
 	lda xbc, (xiz-6)                                     ; FD0D0A  be fa 31
 	push XBC                                             ; FD0D0D  39
-	call sub_FD9D3E                                      ; FD0D0E  1d 3e 9d fd
+	call Var27F2_GetW                                      ; FD0D0E  1d 3e 9d fd
 	ld C,(XIZ+0x08)                                      ; FD0D12  8e 08 23
 	res 0x07,C                                           ; FD0D15  cb 30 07
 	inc 0,XSP                                            ; FD0D18  ef 60
@@ -101355,10 +102264,10 @@ sub_FD0C07:
 	lda xbc, (xiz-2)                                     ; FD0D6B  be fe 31
 	push XBC                                             ; FD0D6E  39
 	pushw 0x00                                           ; FD0D6F  0b 00 00
-	call sub_FD6C7B                                      ; FD0D72  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0D72  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD0D76  be fc 31
 	push XBC                                             ; FD0D79  39
-	call sub_FDA0CA                                      ; FD0D7A  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0D7A  1d ca a0 fd
 	ldb c, 0x03                                          ; FD0D7E  23 03
 	m_mul MBD+r6, 0xfe, 3                                ; FD0D80  8e fe 43
 	ld D,C                                               ; FD0D83  cb 8c
@@ -101387,7 +102296,7 @@ sub_FD0C07:
 	extz BC                                              ; FD0DB1  d9 12
 	ld (xiz-18), bc                                      ; FD0DB3  be ee 51
 	pushw bc                                             ; FD0DB6  29
-	call sub_FD6C7B                                      ; FD0DB7  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0DB7  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD0DBB  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD0DBF  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD0DC3  bc 08 00 7f
@@ -101436,13 +102345,13 @@ sub_FD0C07:
 	lda xbc, (xiz-2)                                     ; FD0E25  be fe 31
 	push XBC                                             ; FD0E28  39
 	pushw 0x00                                           ; FD0E29  0b 00 00
-	call sub_FD6C7B                                      ; FD0E2C  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0E2C  1d 7b 6c fd
 	ldb c, 0x03                                          ; FD0E30  23 03
 	m_mul MBD+r6, 0xfe, 3                                ; FD0E32  8e fe 43
 	ld L,C                                               ; FD0E35  cb 8f
 	lda xbc, (xiz-4)                                     ; FD0E37  be fc 31
 	push XBC                                             ; FD0E3A  39
-	call sub_FDA0CA                                      ; FD0E3B  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0E3B  1d ca a0 fd
 	ldb h, 0x04                                          ; FD0E3F  26 04
 	inc 0,XSP                                            ; FD0E41  ef 60
 	inc 2,XSP                                            ; FD0E43  ef 62
@@ -101463,7 +102372,7 @@ sub_FD0E49:
 	ld C,L                                               ; FD0E62  cf 8b
 	extz BC                                              ; FD0E64  d9 12
 	pushw bc                                             ; FD0E66  29
-	call sub_FD6C7B                                      ; FD0E67  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0E67  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD0E6B  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD0E6F  bc 07 00 00
 	inc 6,XSP                                            ; FD0E73  ef 66
@@ -101510,7 +102419,7 @@ sub_FD0E49:
 	lda xbc, (xiz-2)                                     ; FD0ED4  be fe 31
 	push XBC                                             ; FD0ED7  39
 	pushw 0x00                                           ; FD0ED8  0b 00 00
-	call sub_FD6C7B                                      ; FD0EDB  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0EDB  1d 7b 6c fd
 	ldb c, 0x03                                          ; FD0EDF  23 03
 	m_mul MBD+r6, 0xfe, 3                                ; FD0EE1  8e fe 43
 	ld L,C                                               ; FD0EE4  cb 8f
@@ -101518,7 +102427,7 @@ sub_FD0E49:
 	ld L,C                                               ; FD0EE8  cb 8f
 	lda xbc, (xiz-4)                                     ; FD0EEA  be fc 31
 	push XBC                                             ; FD0EED  39
-	call sub_FDA0CA                                      ; FD0EEE  1d ca a0 fd
+	call Var27F5_Get                                      ; FD0EEE  1d ca a0 fd
 	ldb h, 0x05                                          ; FD0EF2  26 05
 	inc 0,XSP                                            ; FD0EF4  ef 60
 	inc 2,XSP                                            ; FD0EF6  ef 62
@@ -101538,7 +102447,7 @@ sub_FD0E49:
 	extz BC                                              ; FD0F15  d9 12
 	ld DE,BC                                             ; FD0F17  d9 8a
 	pushw bc                                             ; FD0F19  29
-	call sub_FD6C7B                                      ; FD0F1A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD0F1A  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD0F1E  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD0F22  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD0F26  bc 08 00 7f
@@ -101580,7 +102489,7 @@ sub_FD0E49:
 	jr nz, .LFD0F90                                      ; FD0F81  6e 0d
 	pushw 0x00                                           ; FD0F83  0b 00 00
 	pushw 0x86                                           ; FD0F86  0b 86 00
-	call sub_FD608B                                      ; FD0F89  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0F89  1d 8b 60 fd
 	pop XIY                                              ; FD0F8D  5d
 	jr .LFD0F9F                                          ; FD0F8E  68 0f
 .LFD0F90:
@@ -101597,7 +102506,7 @@ sub_FD0E49:
 	jr nz, .LFD0FB9                                      ; FD0FAA  6e 0d
 	pushw 0x00                                           ; FD0FAC  0b 00 00
 	pushw 0xc3                                           ; FD0FAF  0b c3 00
-	call sub_FD608B                                      ; FD0FB2  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0FB2  1d 8b 60 fd
 	pop XIY                                              ; FD0FB6  5d
 	jr .LFD0FC8                                          ; FD0FB7  68 0f
 .LFD0FB9:
@@ -101614,7 +102523,7 @@ sub_FD0E49:
 	jr nz, .LFD0FE2                                      ; FD0FD3  6e 0d
 	pushw 0x00                                           ; FD0FD5  0b 00 00
 	pushw 0xc5                                           ; FD0FD8  0b c5 00
-	call sub_FD608B                                      ; FD0FDB  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD0FDB  1d 8b 60 fd
 	pop XIY                                              ; FD0FDF  5d
 	jr .LFD0FF1                                          ; FD0FE0  68 0f
 .LFD0FE2:
@@ -101642,7 +102551,7 @@ sub_FD0E49:
 	jr nz, .LFD1025                                      ; FD1018  6e 0b
 	pushw 0x00                                           ; FD101A  0b 00 00
 	pushw 0xc0                                           ; FD101D  0b c0 00
-	call sub_FD608B                                      ; FD1020  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1020  1d 8b 60 fd
 	pop XIY                                              ; FD1024  5d
 .LFD1025:
 	unlk XIZ                                             ; FD1025  ee 0d
@@ -101758,12 +102667,12 @@ sub_FD0E49:
 	extz BC                                              ; FD1127  d9 12
 	inc 1,BC                                             ; FD1129  d9 61
 	pushw bc                                             ; FD112B  29
-	call sub_FD6C65                                      ; FD112C  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD112C  1d 65 6c fd
 	ld bc, (xiz-6)                                       ; FD1130  9e fa 21
 	extz BC                                              ; FD1133  d9 12
 	pushw bc                                             ; FD1135  29
 	pushw 0x01                                           ; FD1136  0b 01 00
-	call sub_FD6C65                                      ; FD1139  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1139  1d 65 6c fd
 	pushw 0x01                                           ; FD113D  0b 01 00
 	pushw 0x83                                           ; FD1140  0b 83 00
 	call 0xf41ed4                                        ; FD1143  1d d4 1e f4
@@ -101783,7 +102692,7 @@ sub_FD0E49:
 	lda xbc, (xiz-2)                                     ; FD1163  be fe 31
 	push XBC                                             ; FD1166  39
 	pushw 0x10                                           ; FD1167  0b 10 00
-	call sub_FD6C7B                                      ; FD116A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD116A  1d 7b 6c fd
 	inc 6,XSP                                            ; FD116E  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD1170  8e fe 3f 00
 	jr nz, .LFD11D1                                      ; FD1174  6e 5b
@@ -101797,7 +102706,7 @@ sub_FD0E49:
 	extz BC                                              ; FD1186  d9 12
 	ld DE,BC                                             ; FD1188  d9 8a
 	pushw bc                                             ; FD118A  29
-	call sub_FD6C7B                                      ; FD118B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD118B  1d 7b 6c fd
 	ld (XIX+0x06),0x3f                                   ; FD118F  bc 06 00 3f
 	ld (XIX+0x07),0x00                                   ; FD1193  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD1197  bc 08 00 32
@@ -101832,7 +102741,7 @@ sub_FD0E49:
 	lda xbc, (xiz-2)                                     ; FD11DD  be fe 31
 	push XBC                                             ; FD11E0  39
 	pushw 0x10                                           ; FD11E1  0b 10 00
-	call sub_FD6C7B                                      ; FD11E4  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD11E4  1d 7b 6c fd
 	inc 6,XSP                                            ; FD11E8  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD11EA  8e fe 3f 01
 	jrl nz, .LFD12AB                                     ; FD11EE  7e ba 00
@@ -101854,7 +102763,7 @@ sub_FD0E49:
 	ld A,H                                               ; FD1216  ce 89
 	extz WA                                              ; FD1218  d8 12
 	pushw wa                                             ; FD121A  28
-	call sub_FD6C7B                                      ; FD121B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD121B  1d 7b 6c fd
 	inc 0,XSP                                            ; FD121F  ef 60
 sub_FD1221:
 	inc 0,XSP                                            ; FD1221  ef 60
@@ -101889,7 +102798,7 @@ sub_FD1221:
 	ld C,H                                               ; FD1267  ce 8b
 	extz BC                                              ; FD1269  d9 12
 	pushw bc                                             ; FD126B  29
-	call sub_FD6C65                                      ; FD126C  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD126C  1d 65 6c fd
 	pushw 0x7f                                           ; FD1270  0b 7f 00
 	lda xbc, (xiz-8)                                     ; FD1273  be f8 31
 	push XBC                                             ; FD1276  39
@@ -101922,16 +102831,16 @@ sub_FD1221:
 	lda xbc, (xiz-2)                                     ; FD12BA  be fe 31
 	push XBC                                             ; FD12BD  39
 	pushw 0x10                                           ; FD12BE  0b 10 00
-	call sub_FD6C7B                                      ; FD12C1  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD12C1  1d 7b 6c fd
 	inc 6,XSP                                            ; FD12C5  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD12C7  8e fe 3f 01
 	jr nz, .LFD12E9                                      ; FD12CB  6e 1c
 	pushw 0x00                                           ; FD12CD  0b 00 00
 	pushw 0x10                                           ; FD12D0  0b 10 00
-	call sub_FD6C65                                      ; FD12D3  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD12D3  1d 65 6c fd
 	pushw 0x00                                           ; FD12D7  0b 00 00
 	pushw 0x83                                           ; FD12DA  0b 83 00
-	call sub_FD608B                                      ; FD12DD  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD12DD  1d 8b 60 fd
 	inc 0,XSP                                            ; FD12E1  ef 60
 	jr .LFD12E9                                          ; FD12E3  68 04
 .LFD12E5:
@@ -101944,7 +102853,7 @@ sub_FD1221:
 	jr nz, .LFD1303                                      ; FD12F4  6e 0d
 	pushw 0x00                                           ; FD12F6  0b 00 00
 	pushw 0x84                                           ; FD12F9  0b 84 00
-	call sub_FD608B                                      ; FD12FC  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD12FC  1d 8b 60 fd
 	pop XIY                                              ; FD1300  5d
 	jr .LFD1312                                          ; FD1301  68 0f
 .LFD1303:
@@ -101961,7 +102870,7 @@ sub_FD1221:
 	jr nz, .LFD132C                                      ; FD131D  6e 0d
 	pushw 0x00                                           ; FD131F  0b 00 00
 	pushw 0x85                                           ; FD1322  0b 85 00
-	call sub_FD608B                                      ; FD1325  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1325  1d 8b 60 fd
 	pop XIY                                              ; FD1329  5d
 	jr .LFD133B                                          ; FD132A  68 0f
 .LFD132C:
@@ -101979,16 +102888,16 @@ sub_FD1221:
 	lda xbc, (xiz-2)                                     ; FD1348  be fe 31
 	push XBC                                             ; FD134B  39
 	pushw 0x10                                           ; FD134C  0b 10 00
-	call sub_FD6C7B                                      ; FD134F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD134F  1d 7b 6c fd
 	inc 6,XSP                                            ; FD1353  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD1355  8e fe 3f 00
 	jr nz, .LFD1382                                      ; FD1359  6e 27
 	pushw 0x01                                           ; FD135B  0b 01 00
 	pushw 0x10                                           ; FD135E  0b 10 00
-	call sub_FD6C65                                      ; FD1361  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1361  1d 65 6c fd
 	pushw 0x00                                           ; FD1365  0b 00 00
 	pushw 0x83                                           ; FD1368  0b 83 00
-	call sub_FD608B                                      ; FD136B  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD136B  1d 8b 60 fd
 	inc 0,XSP                                            ; FD136F  ef 60
 	jr .LFD1382                                          ; FD1371  68 0f
 .LFD1373:
@@ -102018,7 +102927,7 @@ sub_FD1221:
 	call sub_FD69E0                                      ; FD13AE  1d e0 69 fd
 	pushw 0x00                                           ; FD13B2  0b 00 00
 	pushw 0x80                                           ; FD13B5  0b 80 00
-	call sub_FD608B                                      ; FD13B8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD13B8  1d 8b 60 fd
 	inc 6,XSP                                            ; FD13BC  ef 66
 .LFD13BE:
 	unlk XIZ                                             ; FD13BE  ee 0d
@@ -102027,7 +102936,7 @@ sub_FD1221:
 	lda xbc, (xiz-2)                                     ; FD13C5  be fe 31
 	push XBC                                             ; FD13C8  39
 	pushw 0x01                                           ; FD13C9  0b 01 00
-	call sub_FD6C7B                                      ; FD13CC  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD13CC  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD13D0  be fe b7
 	ld bc, (xiz-2)                                       ; FD13D3  9e fe 21
 	extz BC                                              ; FD13D6  d9 12
@@ -102048,7 +102957,7 @@ sub_FD1221:
 	lda xbc, (xiz-6)                                     ; FD13F9  be fa 31
 	push XBC                                             ; FD13FC  39
 	pushw 0x02                                           ; FD13FD  0b 02 00
-	call sub_FD6C7B                                      ; FD1400  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1400  1d 7b 6c fd
 	pushw 0x7f                                           ; FD1404  0b 7f 00
 	lda xbc, (xiz-6)                                     ; FD1407  be fa 31
 	push XBC                                             ; FD140A  39
@@ -102207,7 +103116,7 @@ sub_FD1221:
 	lda xbc, (xiz-2)                                     ; FD1597  be fe 31
 	push XBC                                             ; FD159A  39
 	pushw 0x03                                           ; FD159B  0b 03 00
-	call sub_FD6C7B                                      ; FD159E  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD159E  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD15A2  be fe b7
 	pushw 0x7f                                           ; FD15A5  0b 7f 00
 	ld bc, (xiz-2)                                       ; FD15A8  9e fe 21
@@ -102228,7 +103137,7 @@ sub_FD1221:
 	lda xbc, (xiz-6)                                     ; FD15CB  be fa 31
 	push XBC                                             ; FD15CE  39
 	pushw 0x04                                           ; FD15CF  0b 04 00
-	call sub_FD6C7B                                      ; FD15D2  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD15D2  1d 7b 6c fd
 	pushw 0x7f                                           ; FD15D6  0b 7f 00
 	lda xbc, (xiz-6)                                     ; FD15D9  be fa 31
 	push XBC                                             ; FD15DC  39
@@ -102258,10 +103167,10 @@ sub_FD1221:
 	jr nz, .LFD1637                                      ; FD161D  6e 18
 	pushw 0x00                                           ; FD161F  0b 00 00
 	pushw 0x10                                           ; FD1622  0b 10 00
-	call sub_FD6C65                                      ; FD1625  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1625  1d 65 6c fd
 	pushw 0x00                                           ; FD1629  0b 00 00
 	pushw 0x83                                           ; FD162C  0b 83 00
-	call sub_FD608B                                      ; FD162F  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD162F  1d 8b 60 fd
 	inc 0,XSP                                            ; FD1633  ef 60
 	jr .LFD163B                                          ; FD1635  68 04
 .LFD1637:
@@ -102279,7 +103188,7 @@ sub_FD1221:
 	jr z, .LFD165F                                       ; FD1652  66 0b
 	pushw 0x01                                           ; FD1654  0b 01 00
 	pushw 0x84                                           ; FD1657  0b 84 00
-	call sub_FD608B                                      ; FD165A  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD165A  1d 8b 60 fd
 	pop XIY                                              ; FD165E  5d
 .LFD165F:
 	unlk XIZ                                             ; FD165F  ee 0d
@@ -102299,7 +103208,7 @@ sub_FD1221:
 	pushw 0x01                                           ; FD1680  0b 01 00
 	pushw 0x84                                           ; FD1683  0b 84 00
 .LFD1686:
-	call sub_FD608B                                      ; FD1686  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1686  1d 8b 60 fd
 	pop XIY                                              ; FD168A  5d
 .LFD168B:
 	unlk XIZ                                             ; FD168B  ee 0d
@@ -102318,12 +103227,12 @@ sub_FD1221:
 .LFD16AC:
 	pushw 0x01                                           ; FD16AC  0b 01 00
 	pushw 0x10                                           ; FD16AF  0b 10 00
-	call sub_FD6C65                                      ; FD16B2  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD16B2  1d 65 6c fd
 	pop XIY                                              ; FD16B6  5d
 	pushw 0x00                                           ; FD16B7  0b 00 00
 	pushw 0x83                                           ; FD16BA  0b 83 00
 .LFD16BD:
-	call sub_FD608B                                      ; FD16BD  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD16BD  1d 8b 60 fd
 	pop XIY                                              ; FD16C1  5d
 .LFD16C2:
 	unlk XIZ                                             ; FD16C2  ee 0d
@@ -102338,7 +103247,7 @@ sub_FD1221:
 	jr z, .LFD16E6                                       ; FD16D9  66 0b
 	pushw 0x01                                           ; FD16DB  0b 01 00
 	pushw 0x84                                           ; FD16DE  0b 84 00
-	call sub_FD608B                                      ; FD16E1  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD16E1  1d 8b 60 fd
 	pop XIY                                              ; FD16E5  5d
 .LFD16E6:
 	unlk XIZ                                             ; FD16E6  ee 0d
@@ -102350,7 +103259,7 @@ sub_FD1221:
 	call sub_FD69E0                                      ; FD16F6  1d e0 69 fd
 	pushw 0x00                                           ; FD16FA  0b 00 00
 	pushw 0x80                                           ; FD16FD  0b 80 00
-	call sub_FD608B                                      ; FD1700  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1700  1d 8b 60 fd
 	inc 6,XSP                                            ; FD1704  ef 66
 .LFD1706:
 	unlk XIZ                                             ; FD1706  ee 0d
@@ -102361,14 +103270,14 @@ sub_FD1221:
 	lda xbc, (xiz-2)                                     ; FD1711  be fe 31
 	push XBC                                             ; FD1714  39
 	pushw 0x01                                           ; FD1715  0b 01 00
-	call sub_FD6C7B                                      ; FD1718  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1718  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD171C  be fe b7
 	lda xbc, (xiz-4)                                     ; FD171F  be fc 31
 	push XBC                                             ; FD1722  39
 	call sub_FD6B4D                                      ; FD1723  1d 4d 6b fd
 	push XIX                                             ; FD1727  3c
 	pushw 0x02                                           ; FD1728  0b 02 00
-	call sub_FD6C7B                                      ; FD172B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD172B  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD172F  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD1733  bc 07 00 00
 	ld c, (xiz-2)                                        ; FD1737  8e fe 23
@@ -102413,11 +103322,11 @@ sub_FD173D:
 	lda xbc, (xiz-2)                                     ; FD1798  be fe 31
 	push XBC                                             ; FD179B  39
 	pushw 0x02                                           ; FD179C  0b 02 00
-	call sub_FD6C7B                                      ; FD179F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD179F  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD17A3  be fc 31
 	push XBC                                             ; FD17A6  39
 	pushw 0x03                                           ; FD17A7  0b 03 00
-	call sub_FD6C7B                                      ; FD17AA  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD17AA  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD17AE  be fe b7
 sub_FD17B1:
 	m_res 7, MDD+r6, 0xfc                                ; FD17B1  be fc b7
@@ -102426,7 +103335,7 @@ sub_FD17B1:
 	call sub_FD6B4D                                      ; FD17B8  1d 4d 6b fd
 	push XIX                                             ; FD17BC  3c
 	pushw 0x01                                           ; FD17BD  0b 01 00
-	call sub_FD6C7B                                      ; FD17C0  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD17C0  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD17C4  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD17C8  bc 07 00 00
 	ld c, (xiz-4)                                        ; FD17CC  8e fc 23
@@ -102471,11 +103380,11 @@ sub_FD17B1:
 	lda xbc, (xiz-2)                                     ; FD182F  be fe 31
 	push XBC                                             ; FD1832  39
 	pushw 0x01                                           ; FD1833  0b 01 00
-	call sub_FD6C7B                                      ; FD1836  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1836  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD183A  be fc 31
 	push XBC                                             ; FD183D  39
 	pushw 0x04                                           ; FD183E  0b 04 00
-	call sub_FD6C7B                                      ; FD1841  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1841  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD1845  be fe b7
 	m_res 7, MDD+r6, 0xfc                                ; FD1848  be fc b7
 	lda xbc, (xiz-6)                                     ; FD184B  be fa 31
@@ -102483,7 +103392,7 @@ sub_FD17B1:
 	call sub_FD6B4D                                      ; FD184F  1d 4d 6b fd
 	push XIX                                             ; FD1853  3c
 	pushw 0x03                                           ; FD1854  0b 03 00
-	call sub_FD6C7B                                      ; FD1857  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1857  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD185B  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD185F  bc 07 00 00
 	ld c, (xiz-4)                                        ; FD1863  8e fc 23
@@ -102528,14 +103437,14 @@ sub_FD17B1:
 	lda xbc, (xiz-2)                                     ; FD18C6  be fe 31
 	push XBC                                             ; FD18C9  39
 	pushw 0x03                                           ; FD18CA  0b 03 00
-	call sub_FD6C7B                                      ; FD18CD  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD18CD  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD18D1  be fe b7
 	lda xbc, (xiz-4)                                     ; FD18D4  be fc 31
 	push XBC                                             ; FD18D7  39
 	call sub_FD6B4D                                      ; FD18D8  1d 4d 6b fd
 	push XIX                                             ; FD18DC  3c
 	pushw 0x04                                           ; FD18DD  0b 04 00
-	call sub_FD6C7B                                      ; FD18E0  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD18E0  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD18E4  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD18E8  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD18EC  bc 08 00 7f
@@ -102578,10 +103487,10 @@ sub_FD17B1:
 	jr nz, .LFD1967                                      ; FD194D  6e 18
 	pushw 0x00                                           ; FD194F  0b 00 00
 	pushw 0x10                                           ; FD1952  0b 10 00
-	call sub_FD6C65                                      ; FD1955  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1955  1d 65 6c fd
 	pushw 0x00                                           ; FD1959  0b 00 00
 	pushw 0x83                                           ; FD195C  0b 83 00
-	call sub_FD608B                                      ; FD195F  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD195F  1d 8b 60 fd
 	inc 0,XSP                                            ; FD1963  ef 60
 	jr .LFD196B                                          ; FD1965  68 04
 .LFD1967:
@@ -102604,7 +103513,7 @@ sub_FD17B1:
 	pushw 0x01                                           ; FD198C  0b 01 00
 	pushw 0x85                                           ; FD198F  0b 85 00
 .LFD1992:
-	call sub_FD608B                                      ; FD1992  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1992  1d 8b 60 fd
 	pop XIY                                              ; FD1996  5d
 .LFD1997:
 	unlk XIZ                                             ; FD1997  ee 0d
@@ -102619,7 +103528,7 @@ sub_FD17B1:
 	jr z, .LFD19BB                                       ; FD19AE  66 0b
 	pushw 0x01                                           ; FD19B0  0b 01 00
 	pushw 0x85                                           ; FD19B3  0b 85 00
-	call sub_FD608B                                      ; FD19B6  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD19B6  1d 8b 60 fd
 	pop XIY                                              ; FD19BA  5d
 .LFD19BB:
 	unlk XIZ                                             ; FD19BB  ee 0d
@@ -102638,12 +103547,12 @@ sub_FD17B1:
 .LFD19DC:
 	pushw 0x01                                           ; FD19DC  0b 01 00
 	pushw 0x10                                           ; FD19DF  0b 10 00
-	call sub_FD6C65                                      ; FD19E2  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD19E2  1d 65 6c fd
 	pop XIY                                              ; FD19E6  5d
 	pushw 0x00                                           ; FD19E7  0b 00 00
 	pushw 0x83                                           ; FD19EA  0b 83 00
 .LFD19ED:
-	call sub_FD608B                                      ; FD19ED  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD19ED  1d 8b 60 fd
 	pop XIY                                              ; FD19F1  5d
 .LFD19F2:
 	unlk XIZ                                             ; FD19F2  ee 0d
@@ -102658,7 +103567,7 @@ sub_FD17B1:
 	jr z, .LFD1A16                                       ; FD1A09  66 0b
 	pushw 0x01                                           ; FD1A0B  0b 01 00
 	pushw 0x85                                           ; FD1A0E  0b 85 00
-	call sub_FD608B                                      ; FD1A11  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1A11  1d 8b 60 fd
 	pop XIY                                              ; FD1A15  5d
 .LFD1A16:
 	unlk XIZ                                             ; FD1A16  ee 0d
@@ -102670,7 +103579,7 @@ sub_FD17B1:
 	call sub_FD69E0                                      ; FD1A26  1d e0 69 fd
 	pushw 0x00                                           ; FD1A2A  0b 00 00
 	pushw 0x80                                           ; FD1A2D  0b 80 00
-	call sub_FD608B                                      ; FD1A30  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1A30  1d 8b 60 fd
 	inc 6,XSP                                            ; FD1A34  ef 66
 .LFD1A36:
 	unlk XIZ                                             ; FD1A36  ee 0d
@@ -102682,7 +103591,7 @@ sub_FD17B1:
 	lda xbc, (xiz-2)                                     ; FD1A44  be fe 31
 	push XBC                                             ; FD1A47  39
 	pushw 0x00                                           ; FD1A48  0b 00 00
-	call sub_FD6C7B                                      ; FD1A4B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1A4B  1d 7b 6c fd
 	inc 6,XSP                                            ; FD1A4F  ef 66
 	cps h, 0x00                                          ; FD1A51  ce d8
 	jr nz, .LFD1A60                                      ; FD1A53  6e 0b
@@ -102698,7 +103607,7 @@ sub_FD17B1:
 	ld wa, (xiz-2)                                       ; FD1A6A  9e fe 20
 	extz WA                                              ; FD1A6D  d8 12
 	pushw wa                                             ; FD1A6F  28
-	call sub_FD6C7B                                      ; FD1A70  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1A70  1d 7b 6c fd
 	inc 6,XSP                                            ; FD1A74  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x7f                          ; FD1A76  8e fc 3f 7f
 	jr z, .LFD1A98                                       ; FD1A7A  66 1c
@@ -102708,7 +103617,7 @@ sub_FD17B1:
 	extz BC                                              ; FD1A82  d9 12
 	pushw bc                                             ; FD1A84  29
 	pushw 0x00                                           ; FD1A85  0b 00 00
-	call sub_FD6C65                                      ; FD1A88  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1A88  1d 65 6c fd
 	pushw 0x00                                           ; FD1A8C  0b 00 00
 	pushw 0x86                                           ; FD1A8F  0b 86 00
 	call 0xf41ed4                                        ; FD1A92  1d d4 1e f4
@@ -102723,7 +103632,7 @@ sub_FD17B1:
 	push XBC                                             ; FD1AA4  39
 sub_FD1AA5:
 	pushw 0x00                                           ; FD1AA5  0b 00 00
-	call sub_FD6C7B                                      ; FD1AA8  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1AA8  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD1AAC  be fc 31
 	push XBC                                             ; FD1AAF  39
 	call sub_FD6B4D                                      ; FD1AB0  1d 4d 6b fd
@@ -102736,7 +103645,7 @@ sub_FD1AA5:
 	call sub_FDA05E                                      ; FD1AC1  1d 5e a0 fd
 	lda xbc, (xiz-8)                                     ; FD1AC5  be f8 31
 	push XBC                                             ; FD1AC8  39
-	call sub_FD9D5C                                      ; FD1AC9  1d 5c 9d fd
+	call Var27F4_Get                                      ; FD1AC9  1d 5c 9d fd
 	ld C,(XIZ+0x08)                                      ; FD1ACD  8e 08 23
 	res 0x07,C                                           ; FD1AD0  cb 30 07
 	add XSP,0x00000016                                   ; FD1AD3  ef c8 16 00 00 00
@@ -102791,7 +103700,7 @@ sub_FD1AA5:
 	lda xbc, (xiz-2)                                     ; FD1B49  be fe 31
 	push XBC                                             ; FD1B4C  39
 	pushw 0x00                                           ; FD1B4D  0b 00 00
-	call sub_FD6C7B                                      ; FD1B50  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1B50  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD1B54  be fc 31
 	push XBC                                             ; FD1B57  39
 	call sub_FD6B4D                                      ; FD1B58  1d 4d 6b fd
@@ -102803,7 +103712,7 @@ sub_FD1AA5:
 	call sub_FD9D16                                      ; FD1B66  1d 16 9d fd
 	lda xbc, (xiz-8)                                     ; FD1B6A  be f8 31
 	push XBC                                             ; FD1B6D  39
-	call sub_FD9D3E                                      ; FD1B6E  1d 3e 9d fd
+	call Var27F2_GetW                                      ; FD1B6E  1d 3e 9d fd
 	ld C,(XIZ+0x08)                                      ; FD1B72  8e 08 23
 	res 0x07,C                                           ; FD1B75  cb 30 07
 	add XSP,0x00000014                                   ; FD1B78  ef c8 14 00 00 00
@@ -102850,7 +103759,7 @@ sub_FD1AA5:
 	lda xbc, (xiz-6)                                     ; FD1BD6  be fa 31
 	push XBC                                             ; FD1BD9  39
 	pushw 0x00                                           ; FD1BDA  0b 00 00
-	call sub_FD6C7B                                      ; FD1BDD  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1BDD  1d 7b 6c fd
 	inc 6,XSP                                            ; FD1BE1  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x04                          ; FD1BE3  8e fa 3f 04
 	jrl z, .LFD1F37                                      ; FD1BE7  76 4d 03
@@ -102859,38 +103768,38 @@ sub_FD1AA5:
 	inc 1,XBC                                            ; FD1BF1  e9 61
 	push XBC                                             ; FD1BF3  39
 	pushw 0x01                                           ; FD1BF4  0b 01 00
-	call sub_FD6C7B                                      ; FD1BF7  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1BF7  1d 7b 6c fd
 	lda xbc, (xiz-28)                                    ; FD1BFB  be e4 31
 	inc 2,XBC                                            ; FD1BFE  e9 62
 	push XBC                                             ; FD1C00  39
 	pushw 0x04                                           ; FD1C01  0b 04 00
-	call sub_FD6C7B                                      ; FD1C04  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1C04  1d 7b 6c fd
 	lda xbc, (xiz-28)                                    ; FD1C08  be e4 31
 	inc 3,XBC                                            ; FD1C0B  e9 63
 	push XBC                                             ; FD1C0D  39
 	pushw 0x02                                           ; FD1C0E  0b 02 00
-	call sub_FD6C7B                                      ; FD1C11  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1C11  1d 7b 6c fd
 	lda xbc, (xiz-28)                                    ; FD1C15  be e4 31
 	inc 4,XBC                                            ; FD1C18  e9 64
 	push XBC                                             ; FD1C1A  39
 	pushw 0x05                                           ; FD1C1B  0b 05 00
-	call sub_FD6C7B                                      ; FD1C1E  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1C1E  1d 7b 6c fd
 	lda xbc, (xiz-28)                                    ; FD1C22  be e4 31
 	inc 5,XBC                                            ; FD1C25  e9 65
 	push XBC                                             ; FD1C27  39
 	pushw 0x03                                           ; FD1C28  0b 03 00
-	call sub_FD6C7B                                      ; FD1C2B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1C2B  1d 7b 6c fd
 	lda xbc, (xiz-28)                                    ; FD1C2F  be e4 31
 	inc 6,XBC                                            ; FD1C32  e9 66
 	push XBC                                             ; FD1C34  39
 sub_FD1C35:
 	pushw 0x06                                           ; FD1C35  0b 06 00
-	call sub_FD6C7B                                      ; FD1C38  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1C38  1d 7b 6c fd
 	lda xbc, (xiz-28)                                    ; FD1C3C  be e4 31
 	inc 7,XBC                                            ; FD1C3F  e9 67
 	push XBC                                             ; FD1C41  39
 	pushw 0x07                                           ; FD1C42  0b 07 00
-	call sub_FD6C7B                                      ; FD1C45  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1C45  1d 7b 6c fd
 	ld H,(XIZ+0x08)                                      ; FD1C49  8e 08 26
 	res 0x07,H                                           ; FD1C4C  ce 30 07
 	ld c, (xiz-6)                                        ; FD1C4F  8e fa 23
@@ -103120,40 +104029,40 @@ sub_FD1C35:
 	extz BC                                              ; FD1E3E  d9 12
 	pushw bc                                             ; FD1E40  29
 	pushw 0x01                                           ; FD1E41  0b 01 00
-	call sub_FD6C65                                      ; FD1E44  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1E44  1d 65 6c fd
 	ld c, (xiz-26)                                       ; FD1E48  8e e6 23
 	extz BC                                              ; FD1E4B  d9 12
 	pushw bc                                             ; FD1E4D  29
 	pushw 0x04                                           ; FD1E4E  0b 04 00
-	call sub_FD6C65                                      ; FD1E51  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1E51  1d 65 6c fd
 	ld c, (xiz-25)                                       ; FD1E55  8e e7 23
 	extz BC                                              ; FD1E58  d9 12
 	pushw bc                                             ; FD1E5A  29
 	pushw 0x02                                           ; FD1E5B  0b 02 00
-	call sub_FD6C65                                      ; FD1E5E  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1E5E  1d 65 6c fd
 	ld c, (xiz-24)                                       ; FD1E62  8e e8 23
 	extz BC                                              ; FD1E65  d9 12
 	pushw bc                                             ; FD1E67  29
 	pushw 0x05                                           ; FD1E68  0b 05 00
-	call sub_FD6C65                                      ; FD1E6B  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1E6B  1d 65 6c fd
 	ld c, (xiz-23)                                       ; FD1E6F  8e e9 23
 	extz BC                                              ; FD1E72  d9 12
 	pushw bc                                             ; FD1E74  29
 	pushw 0x03                                           ; FD1E75  0b 03 00
-	call sub_FD6C65                                      ; FD1E78  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1E78  1d 65 6c fd
 	ld c, (xiz-22)                                       ; FD1E7C  8e ea 23
 	extz BC                                              ; FD1E7F  d9 12
 	pushw bc                                             ; FD1E81  29
 	pushw 0x06                                           ; FD1E82  0b 06 00
-	call sub_FD6C65                                      ; FD1E85  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1E85  1d 65 6c fd
 	ld c, (xiz-21)                                       ; FD1E89  8e eb 23
 	extz BC                                              ; FD1E8C  d9 12
 	pushw bc                                             ; FD1E8E  29
 	pushw 0x07                                           ; FD1E8F  0b 07 00
-	call sub_FD6C65                                      ; FD1E92  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD1E92  1d 65 6c fd
 	lda xbc, (xiz-16)                                    ; FD1E96  be f0 31
 	push XBC                                             ; FD1E99  39
-	call sub_FDA0CA                                      ; FD1E9A  1d ca a0 fd
+	call Var27F5_Get                                      ; FD1E9A  1d ca a0 fd
 	add XSP,0x00000020                                   ; FD1E9E  ef c8 20 00 00 00
 	lda xbc, (xiz-18)                                    ; FD1EA4  be ee 31
 	push XBC                                             ; FD1EA7  39
@@ -103168,7 +104077,7 @@ sub_FD1C35:
 	ld hl, (xiz-14)                                      ; FD1EBB  9e f2 23
 	extz HL                                              ; FD1EBE  db 12
 	pushw hl                                             ; FD1EC0  2b
-	call sub_FD6C7B                                      ; FD1EC1  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1EC1  1d 7b 6c fd
 	pushw 0x7f                                           ; FD1EC5  0b 7f 00
 	lda xbc, (xiz-13)                                    ; FD1EC8  be f3 31
 	push XBC                                             ; FD1ECB  39
@@ -103195,7 +104104,7 @@ sub_FD1C35:
 	ld hl, (xiz-14)                                      ; FD1EF7  9e f2 23
 	extz HL                                              ; FD1EFA  db 12
 	pushw hl                                             ; FD1EFC  2b
-	call sub_FD6C7B                                      ; FD1EFD  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD1EFD  1d 7b 6c fd
 	pushw 0x7f                                           ; FD1F01  0b 7f 00
 	lda xbc, (xiz-13)                                    ; FD1F04  be f3 31
 	push XBC                                             ; FD1F07  39
@@ -103229,7 +104138,7 @@ sub_FD1C35:
 	jr nz, .LFD1F54                                      ; FD1F45  6e 0d
 	pushw 0x00                                           ; FD1F47  0b 00 00
 	pushw 0x82                                           ; FD1F4A  0b 82 00
-	call sub_FD608B                                      ; FD1F4D  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1F4D  1d 8b 60 fd
 	pop XIY                                              ; FD1F51  5d
 	jr .LFD1F58                                          ; FD1F52  68 04
 .LFD1F54:
@@ -103247,7 +104156,7 @@ sub_FD1C35:
 	jr z, .LFD1F7C                                       ; FD1F6F  66 0b
 	pushw 0x01                                           ; FD1F71  0b 01 00
 	pushw 0x86                                           ; FD1F74  0b 86 00
-	call sub_FD608B                                      ; FD1F77  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1F77  1d 8b 60 fd
 	pop XIY                                              ; FD1F7B  5d
 .LFD1F7C:
 	unlk XIZ                                             ; FD1F7C  ee 0d
@@ -103267,7 +104176,7 @@ sub_FD1C35:
 	pushw 0x01                                           ; FD1F9D  0b 01 00
 	pushw 0x86                                           ; FD1FA0  0b 86 00
 .LFD1FA3:
-	call sub_FD608B                                      ; FD1FA3  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1FA3  1d 8b 60 fd
 	pop XIY                                              ; FD1FA7  5d
 .LFD1FA8:
 	unlk XIZ                                             ; FD1FA8  ee 0d
@@ -103287,7 +104196,7 @@ sub_FD1C35:
 	pushw 0x01                                           ; FD1FC9  0b 01 00
 	pushw 0x86                                           ; FD1FCC  0b 86 00
 .LFD1FCF:
-	call sub_FD608B                                      ; FD1FCF  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1FCF  1d 8b 60 fd
 	pop XIY                                              ; FD1FD3  5d
 .LFD1FD4:
 	unlk XIZ                                             ; FD1FD4  ee 0d
@@ -103302,7 +104211,7 @@ sub_FD1C35:
 	jr z, .LFD1FF8                                       ; FD1FEB  66 0b
 	pushw 0x01                                           ; FD1FED  0b 01 00
 	pushw 0x86                                           ; FD1FF0  0b 86 00
-	call sub_FD608B                                      ; FD1FF3  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD1FF3  1d 8b 60 fd
 	pop XIY                                              ; FD1FF7  5d
 .LFD1FF8:
 	unlk XIZ                                             ; FD1FF8  ee 0d
@@ -103312,7 +104221,7 @@ sub_FD1C35:
 	jr nz, .LFD2010                                      ; FD2003  6e 0b
 	pushw 0x00                                           ; FD2005  0b 00 00
 	pushw 0xc0                                           ; FD2008  0b c0 00
-	call sub_FD608B                                      ; FD200B  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD200B  1d 8b 60 fd
 	pop XIY                                              ; FD200F  5d
 .LFD2010:
 	unlk XIZ                                             ; FD2010  ee 0d
@@ -103325,13 +104234,13 @@ sub_FD2014:
 	push XIX                                             ; FD201A  3c
 	lda xbc, (xiz-2)                                     ; FD201B  be fe 31
 	push XBC                                             ; FD201E  39
-	call sub_FDA8DA                                      ; FD201F  1d da a8 fd
+	call Var2810_Get                                      ; FD201F  1d da a8 fd
 	pop XIY                                              ; FD2023  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD2024  8e fe 3f 01
 	jr nz, .LFD207A                                      ; FD2028  6e 50
 	lda xbc, (xiz-4)                                     ; FD202A  be fc 31
 	push XBC                                             ; FD202D  39
-	call sub_FDA89E                                      ; FD202E  1d 9e a8 fd
+	call Var280C_GetW                                      ; FD202E  1d 9e a8 fd
 	jr .LFD2050                                          ; FD2032  68 1c
 .LFD2034:
 	call 0xf41cd0                                        ; FD2034  1d d0 1c f4
@@ -103357,21 +104266,21 @@ sub_FD2014:
 	m_cp_rm MWD+r6, 0xfc, r1                             ; FD205F  9e fc f1
 	jrl ugt, .LFD2270                                    ; FD2062  7b 0b 02
 	pushw 0x00                                           ; FD2065  0b 00 00
-	call sub_FDA890                                      ; FD2068  1d 90 a8 fd
+	call Var280C_SetW                                      ; FD2068  1d 90 a8 fd
 	pushw 0x00                                           ; FD206C  0b 00 00
-	call sub_FDA8CC                                      ; FD206F  1d cc a8 fd
+	call Var2810_Set                                      ; FD206F  1d cc a8 fd
 	call 0xf4341c                                        ; FD2073  1d 1c 34 f4
 	jrl .LFD246B                                         ; FD2077  78 f1 03
 .LFD207A:
 	lda xbc, (xiz-2)                                     ; FD207A  be fe 31
 	push XBC                                             ; FD207D  39
-	call sub_FDAC01                                      ; FD207E  1d 01 ac fd
+	call Var2812_Get                                      ; FD207E  1d 01 ac fd
 	pop XIY                                              ; FD2082  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD2083  8e fe 3f 01
 	jr nz, .LFD20D8                                      ; FD2087  6e 4f
 	lda xbc, (xiz-4)                                     ; FD2089  be fc 31
 	push XBC                                             ; FD208C  39
-	call sub_FDA89E                                      ; FD208D  1d 9e a8 fd
+	call Var280C_GetW                                      ; FD208D  1d 9e a8 fd
 	call 0xf41260                                        ; FD2091  1d 60 12 f4
 	ld (xiz-10), xiy                                     ; FD2095  be f6 65
 	pop XIY                                              ; FD2098  5d
@@ -103396,9 +104305,9 @@ sub_FD2014:
 	m_cp_rm MWD+r6, 0xfc, r1                             ; FD20C0  9e fc f1
 	jrl ugt, .LFD2270                                    ; FD20C3  7b aa 01
 	pushw 0x00                                           ; FD20C6  0b 00 00
-	call sub_FDA890                                      ; FD20C9  1d 90 a8 fd
+	call Var280C_SetW                                      ; FD20C9  1d 90 a8 fd
 	pushw 0x00                                           ; FD20CD  0b 00 00
-	call sub_FDAC11                                      ; FD20D0  1d 11 ac fd
+	call Var2812_Set                                      ; FD20D0  1d 11 ac fd
 	pop XIY                                              ; FD20D4  5d
 	jrl .LFD2477                                         ; FD20D5  78 9f 03
 .LFD20D8:
@@ -103446,7 +104355,7 @@ sub_FD2014:
 	lda xbc, (xiz-12)                                    ; FD2137  be f4 31
 	push XBC                                             ; FD213A  39
 	pushw 0x05                                           ; FD213B  0b 05 00
-	call sub_FD6C7B                                      ; FD213E  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD213E  1d 7b 6c fd
 	pushw 0x9d                                           ; FD2142  0b 9d 00
 	ld bc, (xiz-12)                                      ; FD2145  9e f4 21
 	extz BC                                              ; FD2148  d9 12
@@ -103521,7 +104430,7 @@ sub_FD21E9:
 .LFD21FC:
 	pushw 0x01                                           ; FD21FC  0b 01 00
 .LFD21FF:
-	call sub_FDA4D2                                      ; FD21FF  1d d2 a4 fd
+	call Var2806_Set                                      ; FD21FF  1d d2 a4 fd
 .LFD2203:
 	popw bc                                              ; FD2203  49
 	jrl .LFD24FE                                         ; FD2204  78 f7 02
@@ -103542,11 +104451,11 @@ sub_FD21E9:
 	m_add_rm MWD+r6, 0xf2, r4                            ; FD222B  9e f2 84
 	ld (xiz-4), ix                                       ; FD222E  be fc 54
 	pushw ix                                             ; FD2231  2c
-	call sub_FDA8AE                                      ; FD2232  1d ae a8 fd
+	call Var280E_SetW                                      ; FD2232  1d ae a8 fd
 	pushw 0x00                                           ; FD2236  0b 00 00
-	call sub_FDA890                                      ; FD2239  1d 90 a8 fd
+	call Var280C_SetW                                      ; FD2239  1d 90 a8 fd
 	pushw 0x01                                           ; FD223D  0b 01 00
-	call sub_FDA8CC                                      ; FD2240  1d cc a8 fd
+	call Var2810_Set                                      ; FD2240  1d cc a8 fd
 	m_ld_mi16 MDD+r6, 0xfc, 0x0000                       ; FD2244  be fc 02 00 00
 	ldw hl, 0x06                                         ; FD2249  33 06 00
 	inc 6,XSP                                            ; FD224C  ef 66
@@ -103568,7 +104477,7 @@ sub_FD21E9:
 	jr c, .LFD2250                                       ; FD226E  67 e0
 .LFD2270:
 	m_push MWD+r6, 0xfc                                  ; FD2270  9e fc 04
-	call sub_FDA890                                      ; FD2273  1d 90 a8 fd
+	call Var280C_SetW                                      ; FD2273  1d 90 a8 fd
 	jr .LFD2203                                          ; FD2277  68 8a
 .LFD2279:
 	cp H,0x09                                            ; FD2279  ce cf 09
@@ -103724,9 +104633,9 @@ sub_FD21E9:
 	ld IX,BC                                             ; FD2412  d9 8c
 	ld (xiz-6), bc                                       ; FD2414  be fa 51
 	pushw ix                                             ; FD2417  2c
-	call sub_FDA8AE                                      ; FD2418  1d ae a8 fd
+	call Var280E_SetW                                      ; FD2418  1d ae a8 fd
 	pushw 0x00                                           ; FD241C  0b 00 00
-	call sub_FDA890                                      ; FD241F  1d 90 a8 fd
+	call Var280C_SetW                                      ; FD241F  1d 90 a8 fd
 	call 0xf41260                                        ; FD2423  1d 60 12 f4
 	ld (xiz-10), xiy                                     ; FD2427  be f6 65
 	m_ld_mi16 MDD+r6, 0xfc, 0x0000                       ; FD242A  be fc 02 00 00
@@ -103751,15 +104660,15 @@ sub_FD21E9:
 	m_cp_rm MWD+r6, 0xfc, r1                             ; FD2458  9e fc f1
 	jr ule, .LFD246F                                     ; FD245B  63 12
 	m_push MWD+r6, 0xfc                                  ; FD245D  9e fc 04
-	call sub_FDA890                                      ; FD2460  1d 90 a8 fd
+	call Var280C_SetW                                      ; FD2460  1d 90 a8 fd
 	pushw 0x01                                           ; FD2464  0b 01 00
-	call sub_FDAC11                                      ; FD2467  1d 11 ac fd
+	call Var2812_Set                                      ; FD2467  1d 11 ac fd
 .LFD246B:
 	pop XIY                                              ; FD246B  5d
 	jrl .LFD24FE                                         ; FD246C  78 8f 00
 .LFD246F:
 	pushw 0x00                                           ; FD246F  0b 00 00
-	call sub_FDA890                                      ; FD2472  1d 90 a8 fd
+	call Var280C_SetW                                      ; FD2472  1d 90 a8 fd
 	popw bc                                              ; FD2476  49
 .LFD2477:
 	call 0xf41264                                        ; FD2477  1d 64 12 f4
@@ -103826,14 +104735,14 @@ sub_FD2512:
 	lda xbc, (xiz-2)                                     ; FD2516  be fe 31
 	push XBC                                             ; FD2519  39
 	pushw 0x00                                           ; FD251A  0b 00 00
-	call sub_FD6C7B                                      ; FD251D  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD251D  1d 7b 6c fd
 	ld bc, (xiz-2)                                       ; FD2521  9e fe 21
 	extz BC                                              ; FD2524  d9 12
 	pushw bc                                             ; FD2526  29
 	call sub_FD9EB7                                      ; FD2527  1d b7 9e fd
 	lda xbc, (xiz-4)                                     ; FD252B  be fc 31
 	push XBC                                             ; FD252E  39
-	call sub_FD60C9                                      ; FD252F  1d c9 60 fd
+	call Var207C_Get                                      ; FD252F  1d c9 60 fd
 	inc 0,XSP                                            ; FD2533  ef 60
 	inc 4,XSP                                            ; FD2535  ef 64
 	m_cp_mi8 MBD+r6, 0xfc, 0x82                          ; FD2537  8e fc 3f 82
@@ -103862,14 +104771,14 @@ sub_FD2569:
 	lda xbc, (xiz-2)                                     ; FD256D  be fe 31
 	push XBC                                             ; FD2570  39
 	pushw 0x00                                           ; FD2571  0b 00 00
-	call sub_FD6C7B                                      ; FD2574  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2574  1d 7b 6c fd
 	ld bc, (xiz-2)                                       ; FD2578  9e fe 21
 	extz BC                                              ; FD257B  d9 12
 	pushw bc                                             ; FD257D  29
 	call sub_FD9F9D                                      ; FD257E  1d 9d 9f fd
 	lda xbc, (xiz-4)                                     ; FD2582  be fc 31
 	push XBC                                             ; FD2585  39
-	call sub_FD60C9                                      ; FD2586  1d c9 60 fd
+	call Var207C_Get                                      ; FD2586  1d c9 60 fd
 	ld bc, (xiz-2)                                       ; FD258A  9e fe 21
 	extz BC                                              ; FD258D  d9 12
 	inc 7,BC                                             ; FD258F  d9 67
@@ -103912,7 +104821,7 @@ sub_FD25E0:
 	call sub_FD7782                                      ; FD25EE  1d 82 77 fd
 	lda xbc, (xiz-2)                                     ; FD25F2  be fe 31
 	push XBC                                             ; FD25F5  39
-	call sub_FD60C9                                      ; FD25F6  1d c9 60 fd
+	call Var207C_Get                                      ; FD25F6  1d c9 60 fd
 	inc 0,XSP                                            ; FD25FA  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x9d                          ; FD25FC  8e fe 3f 9d
 	jr nz, .LFD260F                                      ; FD2600  6e 0d
@@ -103928,12 +104837,12 @@ sub_FD25E0:
 	jr nz, .LFD2621                                      ; FD2617  6e 08
 .LFD2619:
 	pushw 0x00                                           ; FD2619  0b 00 00
-	call sub_FDA792                                      ; FD261C  1d 92 a7 fd
+	call Var2805_Set                                      ; FD261C  1d 92 a7 fd
 	popw bc                                              ; FD2620  49
 .LFD2621:
 	lda xbc, (xiz-4)                                     ; FD2621  be fc 31
 	push XBC                                             ; FD2624  39
-	call sub_FDA84E                                      ; FD2625  1d 4e a8 fd
+	call Var2807_Get                                      ; FD2625  1d 4e a8 fd
 	ld h, (xiz-4)                                        ; FD2629  8e fc 26
 	and H,0x01                                           ; FD262C  ce cc 01
 	ld C,(XIX)                                           ; FD262F  84 23
@@ -103945,7 +104854,7 @@ sub_FD25E0:
 	ld C,E                                               ; FD263E  cd 8b
 	extz BC                                              ; FD2640  d9 12
 	pushw bc                                             ; FD2642  29
-	call sub_FDA840                                      ; FD2643  1d 40 a8 fd
+	call Var2807_Set                                      ; FD2643  1d 40 a8 fd
 	inc 6,XSP                                            ; FD2647  ef 66
 	cps l, 0x07                                          ; FD2649  cf df
 	jr nz, .LFD2656                                      ; FD264B  6e 09
@@ -103975,7 +104884,7 @@ sub_FD25E0:
 	jr .LFD268D                                          ; FD2681  68 0a
 .LFD2683:
 	pushw 0x00                                           ; FD2683  0b 00 00
-	call sub_FDA792                                      ; FD2686  1d 92 a7 fd
+	call Var2805_Set                                      ; FD2686  1d 92 a7 fd
 .LFD268A:
 	popw bc                                              ; FD268A  49
 	jr .LFD26CD                                          ; FD268B  68 40
@@ -103988,7 +104897,7 @@ sub_FD25E0:
 	m_cp_mi8 MBD+r6, 0xfe, 0xcd                          ; FD269A  8e fe 3f cd
 	jr nz, .LFD26A8                                      ; FD269E  6e 08
 	pushw 0x00                                           ; FD26A0  0b 00 00
-	call sub_FDABE3                                      ; FD26A3  1d e3 ab fd
+	call Var2811_Set                                      ; FD26A3  1d e3 ab fd
 	popw bc                                              ; FD26A7  49
 .LFD26A8:
 	m_cp_mi8 MBD+r6, 0xfe, 0x90                          ; FD26A8  8e fe 3f 90
@@ -103997,14 +104906,14 @@ sub_FD25E0:
 	jr ugt, .LFD26BF                                     ; FD26B2  6b 0b
 	pushw 0x00                                           ; FD26B4  0b 00 00
 	pushw 0x90                                           ; FD26B7  0b 90 00
-	call sub_FD608B                                      ; FD26BA  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD26BA  1d 8b 60 fd
 	pop XIY                                              ; FD26BE  5d
 .LFD26BF:
 	pushw 0x01                                           ; FD26BF  0b 01 00
 	ld bc, (xiz-2)                                       ; FD26C2  9e fe 21
 	extz BC                                              ; FD26C5  d9 12
 	pushw bc                                             ; FD26C7  29
-	call sub_FD608B                                      ; FD26C8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD26C8  1d 8b 60 fd
 	pop XIY                                              ; FD26CC  5d
 .LFD26CD:
 	pop XIX                                              ; FD26CD  5c
@@ -104020,7 +104929,7 @@ sub_FD26D3:
 	lda xbc, (xiz-2)                                     ; FD26DC  be fe 31
 	push XBC                                             ; FD26DF  39
 	pushw 0x00                                           ; FD26E0  0b 00 00
-	call sub_FD6C7B                                      ; FD26E3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD26E3  1d 7b 6c fd
 	push XIX                                             ; FD26E7  3c
 	call sub_FD7744                                      ; FD26E8  1d 44 77 fd
 	ld C,(XIX)                                           ; FD26EC  84 23
@@ -104032,7 +104941,7 @@ sub_FD26D3:
 	ld bc, (xiz-2)                                       ; FD26F8  9e fe 21
 	extz BC                                              ; FD26FB  d9 12
 	pushw bc                                             ; FD26FD  29
-	call sub_FDA85E                                      ; FD26FE  1d 5e a8 fd
+	call Arr2808_Set1                                      ; FD26FE  1d 5e a8 fd
 	inc 0,XSP                                            ; FD2702  ef 60
 	inc 6,XSP                                            ; FD2704  ef 66
 	cps h, 0x00                                          ; FD2706  ce d8
@@ -104051,7 +104960,7 @@ sub_FD26D3:
 	extz BC                                              ; FD2722  d9 12
 	inc 1,BC                                             ; FD2724  d9 61
 	pushw bc                                             ; FD2726  29
-	call sub_FD6C65                                      ; FD2727  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD2727  1d 65 6c fd
 	ld bc, (xiz-2)                                       ; FD272B  9e fe 21
 	extz BC                                              ; FD272E  d9 12
 	inc 1,BC                                             ; FD2730  d9 61
@@ -104092,7 +105001,7 @@ sub_FD2751:
 	lda_24 xiy, (0xfd278e)                               ; FD2786  f2 8e 27 fd 35
 	push XIY                                             ; FD278B  3d
 	jp (xbc)                                             ; FD278C  b1 d8
-	call sub_FD60B9                                      ; FD278E  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD278E  1d b9 60 fd
 	popw bc                                              ; FD2792  49
 	cps a, 0x00                                          ; FD2793  c9 d8
 	jr nz, .LFD279F                                      ; FD2795  6e 08
@@ -104163,7 +105072,7 @@ sub_FD27F2:
 	jp (xbc)                                             ; FD2834  b1 d8
 	pushw 0x00                                           ; FD2836  0b 00 00
 	call sub_FDAC5B                                      ; FD2839  1d 5b ac fd
-	call sub_FD60B9                                      ; FD283D  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD283D  1d b9 60 fd
 	inc 6,XSP                                            ; FD2841  ef 66
 	cps a, 0x00                                          ; FD2843  c9 d8
 	jr nz, .LFD284F                                      ; FD2845  6e 08
@@ -104202,7 +105111,7 @@ sub_FD2864:
 	jp (xbc)                                             ; FD2894  b1 d8
 	pushw 0x00                                           ; FD2896  0b 00 00
 	call sub_FDAC5B                                      ; FD2899  1d 5b ac fd
-	call sub_FD60B9                                      ; FD289D  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD289D  1d b9 60 fd
 	inc 6,XSP                                            ; FD28A1  ef 66
 	cps a, 0x00                                          ; FD28A3  c9 d8
 	jr nz, .LFD28AF                                      ; FD28A5  6e 08
@@ -104236,7 +105145,7 @@ sub_FD28B2:
 	lda_24 xiy, (0xfd28ef)                               ; FD28E7  f2 ef 28 fd 35
 	push XIY                                             ; FD28EC  3d
 	jp (xbc)                                             ; FD28ED  b1 d8
-	call sub_FD60B9                                      ; FD28EF  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD28EF  1d b9 60 fd
 	popw bc                                              ; FD28F3  49
 	cps a, 0x00                                          ; FD28F4  c9 d8
 	jr nz, .LFD2900                                      ; FD28F6  6e 08
@@ -104254,7 +105163,7 @@ sub_FD28F8:
 	lda xix, (xiz-16)                                    ; FD290A  be f0 34
 	lda xbc, (xiz-2)                                     ; FD290D  be fe 31
 	push XBC                                             ; FD2910  39
-	call sub_FDA0CA                                      ; FD2911  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2911  1d ca a0 fd
 	pop XIY                                              ; FD2915  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD2916  8e fe 3f 00
 	jr z, .LFD2984                                       ; FD291A  66 68
@@ -104268,7 +105177,7 @@ sub_FD28F8:
 	extz BC                                              ; FD292C  d9 12
 	ld DE,BC                                             ; FD292E  d9 8a
 	pushw bc                                             ; FD2930  29
-	call sub_FD6C7B                                      ; FD2931  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2931  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD2935  ec 89
 	add XBC,0x0000000a                                   ; FD2937  e9 c8 0a 00 00 00
 	push XBC                                             ; FD293D  39
@@ -104310,7 +105219,7 @@ sub_FD28F8:
 	lda xix, (xiz-16)                                    ; FD2991  be f0 34
 	lda xbc, (xiz-2)                                     ; FD2994  be fe 31
 	push XBC                                             ; FD2997  39
-	call sub_FDA0CA                                      ; FD2998  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2998  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FD299C  be fc 31
 	push XBC                                             ; FD299F  39
 	call sub_FD6B4D                                      ; FD29A0  1d 4d 6b fd
@@ -104339,7 +105248,7 @@ sub_FD28F8:
 	extz BC                                              ; FD29D1  d9 12
 	ld (xiz-18), bc                                      ; FD29D3  be ee 51
 	pushw bc                                             ; FD29D6  29
-	call sub_FD6C7B                                      ; FD29D7  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD29D7  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD29DB  ec 89
 	add XBC,0x0000000a                                   ; FD29DD  e9 c8 0a 00 00 00
 	push XBC                                             ; FD29E3  39
@@ -104388,7 +105297,7 @@ sub_FD28F8:
 	lda xix, (xiz-16)                                    ; FD2A43  be f0 34
 	lda xbc, (xiz-2)                                     ; FD2A46  be fe 31
 	push XBC                                             ; FD2A49  39
-	call sub_FDA0CA                                      ; FD2A4A  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2A4A  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FD2A4E  be fc 31
 	push XBC                                             ; FD2A51  39
 	call sub_FD6B4D                                      ; FD2A52  1d 4d 6b fd
@@ -104417,7 +105326,7 @@ sub_FD28F8:
 	extz BC                                              ; FD2A85  d9 12
 	ld DE,BC                                             ; FD2A87  d9 8a
 	pushw bc                                             ; FD2A89  29
-	call sub_FD6C7B                                      ; FD2A8A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2A8A  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD2A8E  ec 89
 	add XBC,0x0000000a                                   ; FD2A90  e9 c8 0a 00 00 00
 	push XBC                                             ; FD2A96  39
@@ -104454,7 +105363,7 @@ sub_FD28F8:
 	lda xix, (xiz-16)                                    ; FD2ADF  be f0 34
 	lda xbc, (xiz-2)                                     ; FD2AE2  be fe 31
 	push XBC                                             ; FD2AE5  39
-	call sub_FDA0CA                                      ; FD2AE6  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2AE6  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FD2AEA  be fc 31
 	push XBC                                             ; FD2AED  39
 	call sub_FD6B4D                                      ; FD2AEE  1d 4d 6b fd
@@ -104484,7 +105393,7 @@ sub_FD28F8:
 sub_FD2B23:
 	ld DE,BC                                             ; FD2B23  d9 8a
 	pushw bc                                             ; FD2B25  29
-	call sub_FD6C7B                                      ; FD2B26  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2B26  1d 7b 6c fd
 	ld (XIX+0x06),0x07                                   ; FD2B2A  bc 06 00 07
 	ld (XIX+0x07),0x05                                   ; FD2B2E  bc 07 00 05
 	ld (XIX+0x08),0x06                                   ; FD2B32  bc 08 00 06
@@ -104519,13 +105428,13 @@ sub_FD2B23:
 	lda xix, (xiz-14)                                    ; FD2B79  be f2 34
 	lda xbc, (xiz-2)                                     ; FD2B7C  be fe 31
 	push XBC                                             ; FD2B7F  39
-	call sub_FDA0CA                                      ; FD2B80  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2B80  1d ca a0 fd
 	pop XIY                                              ; FD2B84  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD2B85  8e fe 3f 00
 	jr z, .LFD2BD4                                       ; FD2B89  66 49
 	push XIX                                             ; FD2B8B  3c
 	pushw 0x01                                           ; FD2B8C  0b 01 00
-	call sub_FD6C7B                                      ; FD2B8F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2B8F  1d 7b 6c fd
 	ld (XIX+0x06),0x01                                   ; FD2B93  bc 06 00 01
 	ld (XIX+0x07),0x07                                   ; FD2B97  bc 07 00 07
 	ld (XIX+0x08),0x01                                   ; FD2B9B  bc 08 00 01
@@ -104555,13 +105464,13 @@ sub_FD2B23:
 	lda xix, (xiz-14)                                    ; FD2BDD  be f2 34
 	lda xbc, (xiz-2)                                     ; FD2BE0  be fe 31
 	push XBC                                             ; FD2BE3  39
-	call sub_FDA0CA                                      ; FD2BE4  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2BE4  1d ca a0 fd
 	pop XIY                                              ; FD2BE8  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD2BE9  8e fe 3f 00
 	jr z, .LFD2C38                                       ; FD2BED  66 49
 	push XIX                                             ; FD2BEF  3c
 	pushw 0x01                                           ; FD2BF0  0b 01 00
-	call sub_FD6C7B                                      ; FD2BF3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2BF3  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD2BF7  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD2BFB  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD2BFF  bc 08 00 7f
@@ -104591,7 +105500,7 @@ sub_FD2B23:
 	jr nz, .LFD2C53                                      ; FD2C44  6e 0d
 	pushw 0x00                                           ; FD2C46  0b 00 00
 	pushw 0x8d                                           ; FD2C49  0b 8d 00
-	call sub_FD608B                                      ; FD2C4C  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD2C4C  1d 8b 60 fd
 	pop XIY                                              ; FD2C50  5d
 	jr .LFD2C57                                          ; FD2C51  68 04
 .LFD2C53:
@@ -104613,7 +105522,7 @@ sub_FD2B23:
 	link XIZ,0xfffe                                      ; FD2C76  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2C7A  be fe 31
 	push XBC                                             ; FD2C7D  39
-	call sub_FDA0CA                                      ; FD2C7E  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2C7E  1d ca a0 fd
 	pop XIY                                              ; FD2C82  5d
 	cp (XIZ+0x08),0x00                                   ; FD2C83  8e 08 3f 00
 	jr nz, .LFD2C9C                                      ; FD2C87  6e 13
@@ -104621,7 +105530,7 @@ sub_FD2B23:
 	jr z, .LFD2CAB                                       ; FD2C8D  66 1c
 	pushw 0x00                                           ; FD2C8F  0b 00 00
 	pushw 0x8f                                           ; FD2C92  0b 8f 00
-	call sub_FD608B                                      ; FD2C95  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD2C95  1d 8b 60 fd
 	pop XIY                                              ; FD2C99  5d
 	jr .LFD2CAB                                          ; FD2C9A  68 0f
 .LFD2C9C:
@@ -104636,7 +105545,7 @@ sub_FD2B23:
 	link XIZ,0xfffe                                      ; FD2CAE  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2CB2  be fe 31
 	push XBC                                             ; FD2CB5  39
-	call sub_FDA0CA                                      ; FD2CB6  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2CB6  1d ca a0 fd
 	pop XIY                                              ; FD2CBA  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD2CBB  8e fe 3f 01
 	jr z, .LFD2CD6                                       ; FD2CBF  66 15
@@ -104653,7 +105562,7 @@ sub_FD2B23:
 	link XIZ,0xfffe                                      ; FD2CD9  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2CDD  be fe 31
 	push XBC                                             ; FD2CE0  39
-	call sub_FDA0CA                                      ; FD2CE1  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2CE1  1d ca a0 fd
 	pop XIY                                              ; FD2CE5  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD2CE6  8e fe 3f 01
 	jr z, .LFD2D01                                       ; FD2CEA  66 15
@@ -104670,7 +105579,7 @@ sub_FD2B23:
 	link XIZ,0xfffe                                      ; FD2D04  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2D08  be fe 31
 	push XBC                                             ; FD2D0B  39
-	call sub_FDA0CA                                      ; FD2D0C  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2D0C  1d ca a0 fd
 	pop XIY                                              ; FD2D10  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD2D11  8e fe 3f 01
 	jr z, .LFD2D28                                       ; FD2D15  66 11
@@ -104678,7 +105587,7 @@ sub_FD2B23:
 	jr nz, .LFD2D28                                      ; FD2D1B  6e 0b
 	pushw 0x00                                           ; FD2D1D  0b 00 00
 	pushw 0x8c                                           ; FD2D20  0b 8c 00
-	call sub_FD608B                                      ; FD2D23  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD2D23  1d 8b 60 fd
 	pop XIY                                              ; FD2D27  5d
 .LFD2D28:
 	unlk XIZ                                             ; FD2D28  ee 0d
@@ -104690,7 +105599,7 @@ sub_FD2B23:
 	call sub_FD69E0                                      ; FD2D38  1d e0 69 fd
 	lda xbc, (xiz-2)                                     ; FD2D3C  be fe 31
 	push XBC                                             ; FD2D3F  39
-	call sub_FDA0CA                                      ; FD2D40  1d ca a0 fd
+	call Var27F5_Get                                      ; FD2D40  1d ca a0 fd
 	inc 6,XSP                                            ; FD2D44  ef 66
 	pushw 0x00                                           ; FD2D46  0b 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD2D49  8e fe 3f 00
@@ -104700,7 +105609,7 @@ sub_FD2B23:
 .LFD2D54:
 	pushw 0xcb                                           ; FD2D54  0b cb 00
 .LFD2D57:
-	call sub_FD608B                                      ; FD2D57  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD2D57  1d 8b 60 fd
 	pop XIY                                              ; FD2D5B  5d
 .LFD2D5C:
 	unlk XIZ                                             ; FD2D5C  ee 0d
@@ -104713,7 +105622,7 @@ sub_FD2B23:
 	call sub_FD6B4D                                      ; FD2D6B  1d 4d 6b fd
 	push XIX                                             ; FD2D6F  3c
 	pushw 0x03                                           ; FD2D70  0b 03 00
-	call sub_FD6C7B                                      ; FD2D73  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2D73  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD2D77  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD2D7B  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD2D7F  bc 08 00 32
@@ -104739,12 +105648,12 @@ sub_FD2B23:
 	lda xbc, (xiz-4)                                     ; FD2DB8  be fc 31
 	push XBC                                             ; FD2DBB  39
 	pushw 0x03                                           ; FD2DBC  0b 03 00
-	call sub_FD6C7B                                      ; FD2DBF  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2DBF  1d 7b 6c fd
 	ld bc, (xiz-4)                                       ; FD2DC3  9e fc 21
 	extz BC                                              ; FD2DC6  d9 12
 	pushw bc                                             ; FD2DC8  29
 	pushw 0x0a                                           ; FD2DC9  0b 0a 00
-	call sub_FD6C65                                      ; FD2DCC  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD2DCC  1d 65 6c fd
 	pushw 0x00                                           ; FD2DD0  0b 00 00
 	pushw 0x00                                           ; FD2DD3  0b 00 00
 	call sub_FD946B                                      ; FD2DD6  1d 6b 94 fd
@@ -104761,7 +105670,7 @@ sub_FD2B23:
 	lda xbc, (xiz-2)                                     ; FD2DEE  be fe 31
 	push XBC                                             ; FD2DF1  39
 	pushw 0x00                                           ; FD2DF2  0b 00 00
-	call sub_FD6C7B                                      ; FD2DF5  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2DF5  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD2DF9  be fe b7
 	ld bc, (xiz-2)                                       ; FD2DFC  9e fe 21
 	extz BC                                              ; FD2DFF  d9 12
@@ -104782,7 +105691,7 @@ sub_FD2B23:
 	lda xbc, (xiz-6)                                     ; FD2E22  be fa 31
 	push XBC                                             ; FD2E25  39
 	pushw 0x01                                           ; FD2E26  0b 01 00
-	call sub_FD6C7B                                      ; FD2E29  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2E29  1d 7b 6c fd
 	pushw 0x7f                                           ; FD2E2D  0b 7f 00
 	lda xbc, (xiz-6)                                     ; FD2E30  be fa 31
 	push XBC                                             ; FD2E33  39
@@ -104870,7 +105779,7 @@ sub_FD2B23:
 	lda xbc, (xiz-2)                                     ; FD2F0C  be fe 31
 	push XBC                                             ; FD2F0F  39
 	pushw 0x00                                           ; FD2F10  0b 00 00
-	call sub_FD6C7B                                      ; FD2F13  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2F13  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD2F17  be fe b7
 	pushw 0x7f                                           ; FD2F1A  0b 7f 00
 	ld bc, (xiz-2)                                       ; FD2F1D  9e fe 21
@@ -104891,7 +105800,7 @@ sub_FD2B23:
 	lda xbc, (xiz-6)                                     ; FD2F40  be fa 31
 	push XBC                                             ; FD2F43  39
 	pushw 0x02                                           ; FD2F44  0b 02 00
-	call sub_FD6C7B                                      ; FD2F47  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD2F47  1d 7b 6c fd
 	pushw 0x7f                                           ; FD2F4B  0b 7f 00
 	lda xbc, (xiz-6)                                     ; FD2F4E  be fa 31
 	push XBC                                             ; FD2F51  39
@@ -104918,7 +105827,7 @@ sub_FD2B23:
 	jr nz, .LFD2F9B                                      ; FD2F8C  6e 0d
 	pushw 0x00                                           ; FD2F8E  0b 00 00
 	pushw 0x8d                                           ; FD2F91  0b 8d 00
-	call sub_FD608B                                      ; FD2F94  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD2F94  1d 8b 60 fd
 	pop XIY                                              ; FD2F98  5d
 	jr .LFD2F9F                                          ; FD2F99  68 04
 .LFD2F9B:
@@ -104936,7 +105845,7 @@ sub_FD2B23:
 	jr z, .LFD2FC3                                       ; FD2FB6  66 0b
 	pushw 0x01                                           ; FD2FB8  0b 01 00
 	pushw 0x8c                                           ; FD2FBB  0b 8c 00
-	call sub_FD608B                                      ; FD2FBE  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD2FBE  1d 8b 60 fd
 	pop XIY                                              ; FD2FC2  5d
 .LFD2FC3:
 	unlk XIZ                                             ; FD2FC3  ee 0d
@@ -104956,7 +105865,7 @@ sub_FD2B23:
 	pushw 0x01                                           ; FD2FE4  0b 01 00
 	pushw 0x8c                                           ; FD2FE7  0b 8c 00
 .LFD2FEA:
-	call sub_FD608B                                      ; FD2FEA  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD2FEA  1d 8b 60 fd
 	pop XIY                                              ; FD2FEE  5d
 .LFD2FEF:
 	unlk XIZ                                             ; FD2FEF  ee 0d
@@ -104971,7 +105880,7 @@ sub_FD2B23:
 	jr z, .LFD3013                                       ; FD3006  66 0b
 	pushw 0x01                                           ; FD3008  0b 01 00
 	pushw 0x8c                                           ; FD300B  0b 8c 00
-	call sub_FD608B                                      ; FD300E  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD300E  1d 8b 60 fd
 	pop XIY                                              ; FD3012  5d
 .LFD3013:
 	unlk XIZ                                             ; FD3013  ee 0d
@@ -104987,7 +105896,7 @@ sub_FD3023:
 	jr z, .LFD3037                                       ; FD302A  66 0b
 	pushw 0x01                                           ; FD302C  0b 01 00
 	pushw 0x8c                                           ; FD302F  0b 8c 00
-	call sub_FD608B                                      ; FD3032  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3032  1d 8b 60 fd
 	pop XIY                                              ; FD3036  5d
 .LFD3037:
 	unlk XIZ                                             ; FD3037  ee 0d
@@ -104997,7 +105906,7 @@ sub_FD3023:
 	jr z, .LFD304F                                       ; FD3042  66 0b
 	pushw 0x00                                           ; FD3044  0b 00 00
 	pushw 0x8b                                           ; FD3047  0b 8b 00
-	call sub_FD608B                                      ; FD304A  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD304A  1d 8b 60 fd
 	pop XIY                                              ; FD304E  5d
 .LFD304F:
 	unlk XIZ                                             ; FD304F  ee 0d
@@ -105009,7 +105918,7 @@ sub_FD3023:
 	call sub_FD69E0                                      ; FD305F  1d e0 69 fd
 	pushw 0x00                                           ; FD3063  0b 00 00
 	pushw 0x80                                           ; FD3066  0b 80 00
-	call sub_FD608B                                      ; FD3069  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3069  1d 8b 60 fd
 	inc 6,XSP                                            ; FD306D  ef 66
 .LFD306F:
 	unlk XIZ                                             ; FD306F  ee 0d
@@ -105023,7 +105932,7 @@ sub_FD3023:
 	call sub_FD6B4D                                      ; FD307F  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD3083  be fc 31
 	push XBC                                             ; FD3086  39
-	call sub_FDA0CA                                      ; FD3087  1d ca a0 fd
+	call Var27F5_Get                                      ; FD3087  1d ca a0 fd
 	ldb l, 0x01                                          ; FD308B  27 01
 	inc 0,XSP                                            ; FD308D  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD308F  8e fc 3f 00
@@ -105034,7 +105943,7 @@ sub_FD3023:
 	ld C,L                                               ; FD3098  cf 8b
 	extz BC                                              ; FD309A  d9 12
 	pushw bc                                             ; FD309C  29
-	call sub_FD6C7B                                      ; FD309D  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD309D  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD30A1  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD30A5  bc 07 00 00
 	ld (XIX+0x08),0x64                                   ; FD30A9  bc 08 00 64
@@ -105091,7 +106000,7 @@ sub_FD3023:
 	call sub_FD6B4D                                      ; FD311F  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD3123  be fc 31
 	push XBC                                             ; FD3126  39
-	call sub_FDA0CA                                      ; FD3127  1d ca a0 fd
+	call Var27F5_Get                                      ; FD3127  1d ca a0 fd
 	ldb l, 0x02                                          ; FD312B  27 02
 	inc 0,XSP                                            ; FD312D  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD312F  8e fc 3f 00
@@ -105106,7 +106015,7 @@ sub_FD3023:
 	ld C,L                                               ; FD3148  cf 8b
 	extz BC                                              ; FD314A  d9 12
 	pushw bc                                             ; FD314C  29
-	call sub_FD6C7B                                      ; FD314D  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD314D  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD3151  ec 89
 	add XBC,0x0000000a                                   ; FD3153  e9 c8 0a 00 00 00
 	push XBC                                             ; FD3159  39
@@ -105160,7 +106069,7 @@ sub_FD3191:
 	call sub_FD6B4D                                      ; FD31BF  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD31C3  be fc 31
 	push XBC                                             ; FD31C6  39
-	call sub_FDA0CA                                      ; FD31C7  1d ca a0 fd
+	call Var27F5_Get                                      ; FD31C7  1d ca a0 fd
 	ldb l, 0x03                                          ; FD31CB  27 03
 	inc 0,XSP                                            ; FD31CD  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD31CF  8e fc 3f 00
@@ -105175,7 +106084,7 @@ sub_FD3191:
 	ld C,L                                               ; FD31E8  cf 8b
 	extz BC                                              ; FD31EA  d9 12
 	pushw bc                                             ; FD31EC  29
-	call sub_FD6C7B                                      ; FD31ED  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD31ED  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD31F1  ec 89
 	add XBC,0x0000000a                                   ; FD31F3  e9 c8 0a 00 00 00
 	push XBC                                             ; FD31F9  39
@@ -105228,7 +106137,7 @@ sub_FD3191:
 	call sub_FD6B4D                                      ; FD325F  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD3263  be fc 31
 	push XBC                                             ; FD3266  39
-	call sub_FDA0CA                                      ; FD3267  1d ca a0 fd
+	call Var27F5_Get                                      ; FD3267  1d ca a0 fd
 	ldb l, 0x04                                          ; FD326B  27 04
 	inc 0,XSP                                            ; FD326D  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD326F  8e fc 3f 00
@@ -105243,7 +106152,7 @@ sub_FD3191:
 	ld C,L                                               ; FD3288  cf 8b
 	extz BC                                              ; FD328A  d9 12
 	pushw bc                                             ; FD328C  29
-	call sub_FD6C7B                                      ; FD328D  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD328D  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD3291  ec 89
 	add XBC,0x0000000a                                   ; FD3293  e9 c8 0a 00 00 00
 	push XBC                                             ; FD3299  39
@@ -105296,7 +106205,7 @@ sub_FD3191:
 	call sub_FD6B4D                                      ; FD32FF  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD3303  be fc 31
 	push XBC                                             ; FD3306  39
-	call sub_FDA0CA                                      ; FD3307  1d ca a0 fd
+	call Var27F5_Get                                      ; FD3307  1d ca a0 fd
 	inc 0,XSP                                            ; FD330B  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD330D  8e fc 3f 00
 	jr nz, .LFD3317                                      ; FD3311  6e 04
@@ -105306,7 +106215,7 @@ sub_FD3191:
 	lda xbc, (xiz-6)                                     ; FD3317  be fa 31
 	push XBC                                             ; FD331A  39
 	pushw 0x00                                           ; FD331B  0b 00 00
-	call sub_FD6C7B                                      ; FD331E  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD331E  1d 7b 6c fd
 	ld c, (xiz-6)                                        ; FD3322  8e fa 23
 	and C,0x20                                           ; FD3325  cb cc 20
 	inc 6,XSP                                            ; FD3328  ef 66
@@ -105321,7 +106230,7 @@ sub_FD3191:
 	ld C,L                                               ; FD3340  cf 8b
 	extz BC                                              ; FD3342  d9 12
 	pushw bc                                             ; FD3344  29
-	call sub_FD6C7B                                      ; FD3345  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3345  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD3349  ec 89
 	add XBC,0x0000000a                                   ; FD334B  e9 c8 0a 00 00 00
 	push XBC                                             ; FD3351  39
@@ -105375,7 +106284,7 @@ sub_FD3191:
 	call sub_FD6B4D                                      ; FD33B7  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD33BB  be fc 31
 	push XBC                                             ; FD33BE  39
-	call sub_FDA0CA                                      ; FD33BF  1d ca a0 fd
+	call Var27F5_Get                                      ; FD33BF  1d ca a0 fd
 	inc 0,XSP                                            ; FD33C3  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD33C5  8e fc 3f 00
 	jr nz, .LFD33CF                                      ; FD33C9  6e 04
@@ -105385,7 +106294,7 @@ sub_FD3191:
 	lda xbc, (xiz-6)                                     ; FD33CF  be fa 31
 	push XBC                                             ; FD33D2  39
 	pushw 0x00                                           ; FD33D3  0b 00 00
-	call sub_FD6C7B                                      ; FD33D6  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD33D6  1d 7b 6c fd
 	ld c, (xiz-6)                                        ; FD33DA  8e fa 23
 	and C,0x20                                           ; FD33DD  cb cc 20
 	inc 6,XSP                                            ; FD33E0  ef 66
@@ -105400,7 +106309,7 @@ sub_FD3191:
 	ld C,L                                               ; FD33F8  cf 8b
 	extz BC                                              ; FD33FA  d9 12
 	pushw bc                                             ; FD33FC  29
-	call sub_FD6C7B                                      ; FD33FD  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD33FD  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD3401  ec 89
 	add XBC,0x0000000a                                   ; FD3403  e9 c8 0a 00 00 00
 	push XBC                                             ; FD3409  39
@@ -105452,7 +106361,7 @@ sub_FD3191:
 	lda xix, (xiz-16)                                    ; FD346D  be f0 34
 	lda xbc, (xiz-2)                                     ; FD3470  be fe 31
 	push XBC                                             ; FD3473  39
-	call sub_FDA0CA                                      ; FD3474  1d ca a0 fd
+	call Var27F5_Get                                      ; FD3474  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FD3478  be fc 31
 	push XBC                                             ; FD347B  39
 	call sub_FD6B4D                                      ; FD347C  1d 4d 6b fd
@@ -105488,7 +106397,7 @@ sub_FD3191:
 	extz BC                                              ; FD34CE  d9 12
 	ld (xiz-18), bc                                      ; FD34D0  be ee 51
 	pushw bc                                             ; FD34D3  29
-	call sub_FD6C7B                                      ; FD34D4  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD34D4  1d 7b 6c fd
 	ld XBC,XIX                                           ; FD34D8  ec 89
 	add XBC,0x0000000a                                   ; FD34DA  e9 c8 0a 00 00 00
 	push XBC                                             ; FD34E0  39
@@ -105524,7 +106433,7 @@ sub_FD3191:
 	lda xix, (xiz-16)                                    ; FD3523  be f0 34
 	lda xbc, (xiz-2)                                     ; FD3526  be fe 31
 	push XBC                                             ; FD3529  39
-	call sub_FDA0CA                                      ; FD352A  1d ca a0 fd
+	call Var27F5_Get                                      ; FD352A  1d ca a0 fd
 	pop XIY                                              ; FD352E  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD352F  8e fe 3f 00
 	jr z, .LFD359A                                       ; FD3533  66 65
@@ -105533,7 +106442,7 @@ sub_FD3191:
 	call sub_FD6B4D                                      ; FD3539  1d 4d 6b fd
 	push XIX                                             ; FD353D  3c
 	pushw 0x08                                           ; FD353E  0b 08 00
-	call sub_FD6C7B                                      ; FD3541  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3541  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD3545  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD3549  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD354D  bc 08 00 32
@@ -105588,7 +106497,7 @@ sub_FD3191:
 	pushw 0x01                                           ; FD35CD  0b 01 00
 	pushw 0x8d                                           ; FD35D0  0b 8d 00
 .LFD35D3:
-	call sub_FD608B                                      ; FD35D3  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD35D3  1d 8b 60 fd
 	pop XIY                                              ; FD35D7  5d
 .LFD35D8:
 	unlk XIZ                                             ; FD35D8  ee 0d
@@ -105596,7 +106505,7 @@ sub_FD3191:
 	link XIZ,0xfffe                                      ; FD35DB  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD35DF  be fe 31
 	push XBC                                             ; FD35E2  39
-	call sub_FDA0CA                                      ; FD35E3  1d ca a0 fd
+	call Var27F5_Get                                      ; FD35E3  1d ca a0 fd
 	pop XIY                                              ; FD35E7  5d
 	cp (XIZ+0x08),0x00                                   ; FD35E8  8e 08 3f 00
 	jr nz, .LFD35FC                                      ; FD35EC  6e 0e
@@ -105614,7 +106523,7 @@ sub_FD3191:
 	pushw 0x01                                           ; FD3608  0b 01 00
 	pushw 0x8d                                           ; FD360B  0b 8d 00
 .LFD360E:
-	call sub_FD608B                                      ; FD360E  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD360E  1d 8b 60 fd
 	pop XIY                                              ; FD3612  5d
 .LFD3613:
 	unlk XIZ                                             ; FD3613  ee 0d
@@ -105622,7 +106531,7 @@ sub_FD3191:
 	link XIZ,0xfffe                                      ; FD3616  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD361A  be fe 31
 	push XBC                                             ; FD361D  39
-	call sub_FDA0CA                                      ; FD361E  1d ca a0 fd
+	call Var27F5_Get                                      ; FD361E  1d ca a0 fd
 	pop XIY                                              ; FD3622  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD3623  8e fe 3f 01
 	jr z, .LFD3646                                       ; FD3627  66 1d
@@ -105635,7 +106544,7 @@ sub_FD3191:
 	jr z, .LFD3646                                       ; FD3639  66 0b
 	pushw 0x01                                           ; FD363B  0b 01 00
 	pushw 0x8d                                           ; FD363E  0b 8d 00
-	call sub_FD608B                                      ; FD3641  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3641  1d 8b 60 fd
 	pop XIY                                              ; FD3645  5d
 .LFD3646:
 	unlk XIZ                                             ; FD3646  ee 0d
@@ -105643,7 +106552,7 @@ sub_FD3191:
 	link XIZ,0xfffc                                      ; FD3649  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD364D  be fe 31
 	push XBC                                             ; FD3650  39
-	call sub_FDA0CA                                      ; FD3651  1d ca a0 fd
+	call Var27F5_Get                                      ; FD3651  1d ca a0 fd
 	pop XIY                                              ; FD3655  5d
 	cp (XIZ+0x08),0x00                                   ; FD3656  8e 08 3f 00
 	jrl z, .LFD36CB                                      ; FD365A  76 6e 00
@@ -105656,14 +106565,14 @@ sub_FD3191:
 	jr z, .LFD36CB                                       ; FD366D  66 5c
 	pushw 0x01                                           ; FD366F  0b 01 00
 	pushw 0x8d                                           ; FD3672  0b 8d 00
-	call sub_FD608B                                      ; FD3675  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3675  1d 8b 60 fd
 	pop XIY                                              ; FD3679  5d
 	jr .LFD36CB                                          ; FD367A  68 4f
 .LFD367C:
 	lda xbc, (xiz-4)                                     ; FD367C  be fc 31
 	push XBC                                             ; FD367F  39
 	pushw 0x00                                           ; FD3680  0b 00 00
-	call sub_FD6C7B                                      ; FD3683  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3683  1d 7b 6c fd
 	ld c, (xiz-4)                                        ; FD3687  8e fc 23
 	and C,0x20                                           ; FD368A  cb cc 20
 	inc 6,XSP                                            ; FD368D  ef 66
@@ -105677,7 +106586,7 @@ sub_FD3191:
 	extz BC                                              ; FD369C  d9 12
 	pushw bc                                             ; FD369E  29
 	pushw 0x00                                           ; FD369F  0b 00 00
-	call sub_FD6C65                                      ; FD36A2  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD36A2  1d 65 6c fd
 	pushw 0x00                                           ; FD36A6  0b 00 00
 	pushw 0x8d                                           ; FD36A9  0b 8d 00
 	call 0xf41ed4                                        ; FD36AC  1d d4 1e f4
@@ -105695,7 +106604,7 @@ sub_FD3191:
 	link XIZ,0xfffe                                      ; FD36CE  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD36D2  be fe 31
 	push XBC                                             ; FD36D5  39
-	call sub_FDA0CA                                      ; FD36D6  1d ca a0 fd
+	call Var27F5_Get                                      ; FD36D6  1d ca a0 fd
 	pop XIY                                              ; FD36DA  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD36DB  8e fe 3f 01
 	jr z, .LFD36F2                                       ; FD36DF  66 11
@@ -105703,7 +106612,7 @@ sub_FD3191:
 	jr nz, .LFD36F2                                      ; FD36E5  6e 0b
 	pushw 0x00                                           ; FD36E7  0b 00 00
 	pushw 0x8e                                           ; FD36EA  0b 8e 00
-	call sub_FD608B                                      ; FD36ED  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD36ED  1d 8b 60 fd
 	pop XIY                                              ; FD36F1  5d
 .LFD36F2:
 	unlk XIZ                                             ; FD36F2  ee 0d
@@ -105715,7 +106624,7 @@ sub_FD3191:
 	call sub_FD69E0                                      ; FD3702  1d e0 69 fd
 	lda xbc, (xiz-2)                                     ; FD3706  be fe 31
 	push XBC                                             ; FD3709  39
-	call sub_FDA0CA                                      ; FD370A  1d ca a0 fd
+	call Var27F5_Get                                      ; FD370A  1d ca a0 fd
 	inc 6,XSP                                            ; FD370E  ef 66
 	pushw 0x00                                           ; FD3710  0b 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD3713  8e fe 3f 00
@@ -105725,7 +106634,7 @@ sub_FD3191:
 .LFD371E:
 	pushw 0xcb                                           ; FD371E  0b cb 00
 .LFD3721:
-	call sub_FD608B                                      ; FD3721  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3721  1d 8b 60 fd
 	pop XIY                                              ; FD3725  5d
 .LFD3726:
 	unlk XIZ                                             ; FD3726  ee 0d
@@ -105738,7 +106647,7 @@ sub_FD3191:
 	call sub_FD6B4D                                      ; FD3735  1d 4d 6b fd
 	push XIX                                             ; FD3739  3c
 	pushw 0x05                                           ; FD373A  0b 05 00
-	call sub_FD6C7B                                      ; FD373D  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD373D  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD3741  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD3745  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD3749  bc 08 00 32
@@ -105761,25 +106670,25 @@ sub_FD3191:
 	lda xbc, (xiz-4)                                     ; FD3778  be fc 31
 	push XBC                                             ; FD377B  39
 	pushw 0x05                                           ; FD377C  0b 05 00
-	call sub_FD6C7B                                      ; FD377F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD377F  1d 7b 6c fd
 	ld bc, (xiz-4)                                       ; FD3783  9e fc 21
 	extz BC                                              ; FD3786  d9 12
 	pushw bc                                             ; FD3788  29
 	pushw 0x0a                                           ; FD3789  0b 0a 00
-	call sub_FD6C65                                      ; FD378C  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD378C  1d 65 6c fd
 	pushw 0x00                                           ; FD3790  0b 00 00
 	pushw 0x02                                           ; FD3793  0b 02 00
 	call sub_FD946B                                      ; FD3796  1d 6b 94 fd
 	lda xbc, (xiz-4)                                     ; FD379A  be fc 31
 	push XBC                                             ; FD379D  39
 	pushw 0x09                                           ; FD379E  0b 09 00
-	call sub_FD6C7B                                      ; FD37A1  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD37A1  1d 7b 6c fd
 	add XSP,0x00000030                                   ; FD37A5  ef c8 30 00 00 00
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD37AB  8e fc 3f 00
 	jr z, .LFD37C7                                       ; FD37AF  66 16
 	pushw 0x00                                           ; FD37B1  0b 00 00
 	pushw 0x09                                           ; FD37B4  0b 09 00
-	call sub_FD6C65                                      ; FD37B7  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD37B7  1d 65 6c fd
 	pushw 0x09                                           ; FD37BB  0b 09 00
 	pushw 0x8e                                           ; FD37BE  0b 8e 00
 	call 0xf41ed4                                        ; FD37C1  1d d4 1e f4
@@ -105799,7 +106708,7 @@ sub_FD3191:
 	call sub_FD6B4D                                      ; FD37DF  1d 4d 6b fd
 	push XIX                                             ; FD37E3  3c
 	pushw 0x06                                           ; FD37E4  0b 06 00
-	call sub_FD6C7B                                      ; FD37E7  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD37E7  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD37EB  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD37EF  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD37F3  bc 08 00 32
@@ -105822,25 +106731,25 @@ sub_FD3191:
 	lda xbc, (xiz-4)                                     ; FD3822  be fc 31
 	push XBC                                             ; FD3825  39
 	pushw 0x06                                           ; FD3826  0b 06 00
-	call sub_FD6C7B                                      ; FD3829  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3829  1d 7b 6c fd
 	ld bc, (xiz-4)                                       ; FD382D  9e fc 21
 	extz BC                                              ; FD3830  d9 12
 	pushw bc                                             ; FD3832  29
 	pushw 0x0a                                           ; FD3833  0b 0a 00
-	call sub_FD6C65                                      ; FD3836  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD3836  1d 65 6c fd
 	pushw 0x00                                           ; FD383A  0b 00 00
 	pushw 0x02                                           ; FD383D  0b 02 00
 	call sub_FD946B                                      ; FD3840  1d 6b 94 fd
 	lda xbc, (xiz-4)                                     ; FD3844  be fc 31
 	push XBC                                             ; FD3847  39
 	pushw 0x09                                           ; FD3848  0b 09 00
-	call sub_FD6C7B                                      ; FD384B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD384B  1d 7b 6c fd
 	add XSP,0x00000030                                   ; FD384F  ef c8 30 00 00 00
 	m_cp_mi8 MBD+r6, 0xfc, 0x01                          ; FD3855  8e fc 3f 01
 	jr z, .LFD3871                                       ; FD3859  66 16
 	pushw 0x01                                           ; FD385B  0b 01 00
 	pushw 0x09                                           ; FD385E  0b 09 00
-	call sub_FD6C65                                      ; FD3861  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD3861  1d 65 6c fd
 	pushw 0x09                                           ; FD3865  0b 09 00
 	pushw 0x8e                                           ; FD3868  0b 8e 00
 	call 0xf41ed4                                        ; FD386B  1d d4 1e f4
@@ -105860,7 +106769,7 @@ sub_FD3191:
 	call sub_FD6B4D                                      ; FD3889  1d 4d 6b fd
 	push XIX                                             ; FD388D  3c
 	pushw 0x07                                           ; FD388E  0b 07 00
-	call sub_FD6C7B                                      ; FD3891  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3891  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD3895  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD3899  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD389D  bc 08 00 32
@@ -105883,25 +106792,25 @@ sub_FD3191:
 	lda xbc, (xiz-4)                                     ; FD38CC  be fc 31
 	push XBC                                             ; FD38CF  39
 	pushw 0x07                                           ; FD38D0  0b 07 00
-	call sub_FD6C7B                                      ; FD38D3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD38D3  1d 7b 6c fd
 	ld bc, (xiz-4)                                       ; FD38D7  9e fc 21
 	extz BC                                              ; FD38DA  d9 12
 	pushw bc                                             ; FD38DC  29
 	pushw 0x0a                                           ; FD38DD  0b 0a 00
-	call sub_FD6C65                                      ; FD38E0  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD38E0  1d 65 6c fd
 	pushw 0x00                                           ; FD38E4  0b 00 00
 	pushw 0x02                                           ; FD38E7  0b 02 00
 	call sub_FD946B                                      ; FD38EA  1d 6b 94 fd
 	lda xbc, (xiz-4)                                     ; FD38EE  be fc 31
 	push XBC                                             ; FD38F1  39
 	pushw 0x09                                           ; FD38F2  0b 09 00
-	call sub_FD6C7B                                      ; FD38F5  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD38F5  1d 7b 6c fd
 	add XSP,0x00000030                                   ; FD38F9  ef c8 30 00 00 00
 	m_cp_mi8 MBD+r6, 0xfc, 0x02                          ; FD38FF  8e fc 3f 02
 	jr z, .LFD391B                                       ; FD3903  66 16
 	pushw 0x02                                           ; FD3905  0b 02 00
 	pushw 0x09                                           ; FD3908  0b 09 00
-	call sub_FD6C65                                      ; FD390B  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD390B  1d 65 6c fd
 	pushw 0x09                                           ; FD390F  0b 09 00
 	pushw 0x8e                                           ; FD3912  0b 8e 00
 	call 0xf41ed4                                        ; FD3915  1d d4 1e f4
@@ -105918,7 +106827,7 @@ sub_FD3191:
 sub_FD392E:
 	push XBC                                             ; FD392E  39
 	pushw 0x02                                           ; FD392F  0b 02 00
-	call sub_FD6C7B                                      ; FD3932  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3932  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD3936  be fe b7
 	ld bc, (xiz-2)                                       ; FD3939  9e fe 21
 	extz BC                                              ; FD393C  d9 12
@@ -105940,7 +106849,7 @@ sub_FD3955:
 	lda xbc, (xiz-6)                                     ; FD395F  be fa 31
 	push XBC                                             ; FD3962  39
 	pushw 0x03                                           ; FD3963  0b 03 00
-	call sub_FD6C7B                                      ; FD3966  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3966  1d 7b 6c fd
 	pushw 0x7f                                           ; FD396A  0b 7f 00
 	lda xbc, (xiz-6)                                     ; FD396D  be fa 31
 	push XBC                                             ; FD3970  39
@@ -106029,7 +106938,7 @@ sub_FD3A40:
 	lda xbc, (xiz-2)                                     ; FD3A49  be fe 31
 	push XBC                                             ; FD3A4C  39
 	pushw 0x02                                           ; FD3A4D  0b 02 00
-	call sub_FD6C7B                                      ; FD3A50  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3A50  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD3A54  be fe b7
 	pushw 0x7f                                           ; FD3A57  0b 7f 00
 	ld bc, (xiz-2)                                       ; FD3A5A  9e fe 21
@@ -106050,7 +106959,7 @@ sub_FD3A40:
 	lda xbc, (xiz-6)                                     ; FD3A7D  be fa 31
 	push XBC                                             ; FD3A80  39
 	pushw 0x04                                           ; FD3A81  0b 04 00
-	call sub_FD6C7B                                      ; FD3A84  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3A84  1d 7b 6c fd
 	pushw 0x7f                                           ; FD3A88  0b 7f 00
 	lda xbc, (xiz-6)                                     ; FD3A8B  be fa 31
 	push XBC                                             ; FD3A8E  39
@@ -106080,7 +106989,7 @@ sub_FD3A40:
 	call sub_FD6B4D                                      ; FD3ACD  1d 4d 6b fd
 	push XIX                                             ; FD3AD1  3c
 	pushw 0x00                                           ; FD3AD2  0b 00 00
-	call sub_FD6C7B                                      ; FD3AD5  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3AD5  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD3AD9  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD3ADD  bc 07 00 00
 sub_FD3AE1:
@@ -106115,7 +107024,7 @@ sub_FD3AE1:
 	call sub_FD6B4D                                      ; FD3B2D  1d 4d 6b fd
 	push XIX                                             ; FD3B31  3c
 	pushw 0x01                                           ; FD3B32  0b 01 00
-	call sub_FD6C7B                                      ; FD3B35  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3B35  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD3B39  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD3B3D  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD3B41  bc 08 00 32
@@ -106163,7 +107072,7 @@ sub_FD3AE1:
 	pushw 0x01                                           ; FD3BB0  0b 01 00
 	pushw 0x8e                                           ; FD3BB3  0b 8e 00
 .LFD3BB6:
-	call sub_FD608B                                      ; FD3BB6  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3BB6  1d 8b 60 fd
 	pop XIY                                              ; FD3BBA  5d
 .LFD3BBB:
 	unlk XIZ                                             ; FD3BBB  ee 0d
@@ -106183,7 +107092,7 @@ sub_FD3AE1:
 	pushw 0x01                                           ; FD3BDC  0b 01 00
 	pushw 0x8e                                           ; FD3BDF  0b 8e 00
 .LFD3BE2:
-	call sub_FD608B                                      ; FD3BE2  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3BE2  1d 8b 60 fd
 	pop XIY                                              ; FD3BE6  5d
 .LFD3BE7:
 	unlk XIZ                                             ; FD3BE7  ee 0d
@@ -106198,7 +107107,7 @@ sub_FD3AE1:
 	jr Z,.LFD3C0B                                        ; FD3BFE  66 0b
 	pushw 0x01                                           ; FD3C00  0b 01 00
 	pushw 0x8e                                           ; FD3C03  0b 8e 00
-	call sub_FD608B                                      ; FD3C06  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3C06  1d 8b 60 fd
 	pop XIY                                              ; FD3C0A  5d
 .LFD3C0B:
 	unlk XIZ                                             ; FD3C0B  ee 0d
@@ -106213,7 +107122,7 @@ sub_FD3AE1:
 	jr z, .LFD3C2F                                       ; FD3C22  66 0b
 	pushw 0x01                                           ; FD3C24  0b 01 00
 	pushw 0x8e                                           ; FD3C27  0b 8e 00
-	call sub_FD608B                                      ; FD3C2A  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3C2A  1d 8b 60 fd
 	pop XIY                                              ; FD3C2E  5d
 .LFD3C2F:
 	unlk XIZ                                             ; FD3C2F  ee 0d
@@ -106223,7 +107132,7 @@ sub_FD3AE1:
 	jr z, .LFD3C47                                       ; FD3C3A  66 0b
 	pushw 0x00                                           ; FD3C3C  0b 00 00
 	pushw 0x8d                                           ; FD3C3F  0b 8d 00
-	call sub_FD608B                                      ; FD3C42  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3C42  1d 8b 60 fd
 	pop XIY                                              ; FD3C46  5d
 .LFD3C47:
 	unlk XIZ                                             ; FD3C47  ee 0d
@@ -106235,7 +107144,7 @@ sub_FD3AE1:
 	call sub_FD69E0                                      ; FD3C57  1d e0 69 fd
 	pushw 0x00                                           ; FD3C5B  0b 00 00
 	pushw 0x80                                           ; FD3C5E  0b 80 00
-	call sub_FD608B                                      ; FD3C61  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3C61  1d 8b 60 fd
 	inc 6,XSP                                            ; FD3C65  ef 66
 .LFD3C67:
 	unlk XIZ                                             ; FD3C67  ee 0d
@@ -106309,7 +107218,7 @@ sub_FD3C94:
 	jr nz, .LFD3D14                                      ; FD3D05  6e 0d
 	pushw 0x00                                           ; FD3D07  0b 00 00
 	pushw 0x8d                                           ; FD3D0A  0b 8d 00
-	call sub_FD608B                                      ; FD3D0D  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3D0D  1d 8b 60 fd
 	pop XIY                                              ; FD3D11  5d
 	jr .LFD3D18                                          ; FD3D12  68 04
 .LFD3D14:
@@ -106322,7 +107231,7 @@ sub_FD3C94:
 	jr nz, .LFD3D31                                      ; FD3D23  6e 0c
 	pushw 0x00                                           ; FD3D25  0b 00 00
 	pushw 0x8b                                           ; FD3D28  0b 8b 00
-	call sub_FD608B                                      ; FD3D2B  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3D2B  1d 8b 60 fd
 	jr .LFD3D3B                                          ; FD3D2F  68 0a
 .LFD3D31:
 	pushw 0x01                                           ; FD3D31  0b 01 00
@@ -106369,7 +107278,7 @@ sub_FD3C94:
 	call sub_FD69E0                                      ; FD3D94  1d e0 69 fd
 	pushw 0x00                                           ; FD3D98  0b 00 00
 	pushw 0x80                                           ; FD3D9B  0b 80 00
-	call sub_FD608B                                      ; FD3D9E  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD3D9E  1d 8b 60 fd
 	inc 6,XSP                                            ; FD3DA2  ef 66
 .LFD3DA4:
 	unlk XIZ                                             ; FD3DA4  ee 0d
@@ -106398,7 +107307,7 @@ sub_FD3DA7:
 	lda_24 xiy, (0xfd3de4)                               ; FD3DDC  f2 e4 3d fd 35
 	push XIY                                             ; FD3DE1  3d
 	jp (xbc)                                             ; FD3DE2  b1 d8
-	call sub_FD60B9                                      ; FD3DE4  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD3DE4  1d b9 60 fd
 	popw bc                                              ; FD3DE8  49
 	cps a, 0x00                                          ; FD3DE9  c9 d8
 	jr nz, .LFD3DF5                                      ; FD3DEB  6e 08
@@ -106436,7 +107345,7 @@ sub_FD3DFA:
 	lda_24 xiy, (0xfd3e37)                               ; FD3E2F  f2 37 3e fd 35
 	push XIY                                             ; FD3E34  3d
 	jp (xbc)                                             ; FD3E35  b1 d8
-	call sub_FD60B9                                      ; FD3E37  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD3E37  1d b9 60 fd
 	popw bc                                              ; FD3E3B  49
 	cps a, 0x00                                          ; FD3E3C  c9 d8
 	jr nz, .LFD3E48                                      ; FD3E3E  6e 08
@@ -106470,7 +107379,7 @@ sub_FD3E4B:
 	lda_24 xiy, (0xfd3e88)                               ; FD3E80  f2 88 3e fd 35
 	push XIY                                             ; FD3E85  3d
 	jp (xbc)                                             ; FD3E86  b1 d8
-	call sub_FD60B9                                      ; FD3E88  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD3E88  1d b9 60 fd
 	popw bc                                              ; FD3E8C  49
 	cps a, 0x00                                          ; FD3E8D  c9 d8
 	jr nz, .LFD3E99                                      ; FD3E8F  6e 08
@@ -106504,7 +107413,7 @@ sub_FD3E9C:
 	lda_24 xiy, (0xfd3ed9)                               ; FD3ED1  f2 d9 3e fd 35
 	push XIY                                             ; FD3ED6  3d
 	jp (xbc)                                             ; FD3ED7  b1 d8
-	call sub_FD60B9                                      ; FD3ED9  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD3ED9  1d b9 60 fd
 	popw bc                                              ; FD3EDD  49
 	cps a, 0x00                                          ; FD3EDE  c9 d8
 	jr nz, .LFD3EEA                                      ; FD3EE0  6e 08
@@ -106538,7 +107447,7 @@ sub_FD3EED:
 	lda_24 xiy, (0xfd3f2a)                               ; FD3F22  f2 2a 3f fd 35
 	push XIY                                             ; FD3F27  3d
 	jp (xbc)                                             ; FD3F28  b1 d8
-	call sub_FD60B9                                      ; FD3F2A  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD3F2A  1d b9 60 fd
 	popw bc                                              ; FD3F2E  49
 	cps a, 0x00                                          ; FD3F2F  c9 d8
 	jr nz, .LFD3F3B                                      ; FD3F31  6e 08
@@ -106572,7 +107481,7 @@ sub_FD3F3E:
 	lda_24 xiy, (0xfd3f7b)                               ; FD3F73  f2 7b 3f fd 35
 	push XIY                                             ; FD3F78  3d
 	jp (xbc)                                             ; FD3F79  b1 d8
-	call sub_FD60B9                                      ; FD3F7B  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD3F7B  1d b9 60 fd
 	popw bc                                              ; FD3F7F  49
 	cps a, 0x00                                          ; FD3F80  c9 d8
 	jr nz, .LFD3F8C                                      ; FD3F82  6e 08
@@ -106606,7 +107515,7 @@ sub_FD3F8F:
 	lda_24 xiy, (0xfd3fcc)                               ; FD3FC4  f2 cc 3f fd 35
 	push XIY                                             ; FD3FC9  3d
 	jp (xbc)                                             ; FD3FCA  b1 d8
-	call sub_FD60B9                                      ; FD3FCC  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FD3FCC  1d b9 60 fd
 	popw bc                                              ; FD3FD0  49
 	cps a, 0x00                                          ; FD3FD1  c9 d8
 	jr nz, .LFD3FDD                                      ; FD3FD3  6e 08
@@ -106621,7 +107530,7 @@ sub_FD3F8F:
 	lda xbc, (xiz-2)                                     ; FD3FE5  be fe 31
 	push XBC                                             ; FD3FE8  39
 	pushw 0x00                                           ; FD3FE9  0b 00 00
-	call sub_FD6C7B                                      ; FD3FEC  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD3FEC  1d 7b 6c fd
 	ld H,(XIZ+0x08)                                      ; FD3FF0  8e 08 26
 	res 0x07,H                                           ; FD3FF3  ce 30 07
 	ld bc, (xiz-2)                                       ; FD3FF6  9e fe 21
@@ -106661,7 +107570,7 @@ sub_FD400D:
 	lda xbc, (xiz-2)                                     ; FD403E  be fe 31
 	push XBC                                             ; FD4041  39
 	pushw 0x00                                           ; FD4042  0b 00 00
-	call sub_FD6C7B                                      ; FD4045  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4045  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD4049  be fc 31
 	push XBC                                             ; FD404C  39
 	ld wa, (xiz-2)                                       ; FD404D  9e fe 20
@@ -106671,7 +107580,7 @@ sub_FD400D:
 	call sub_FDA05E                                      ; FD4056  1d 5e a0 fd
 	lda xbc, (xiz-6)                                     ; FD405A  be fa 31
 	push XBC                                             ; FD405D  39
-	call sub_FD9D5C                                      ; FD405E  1d 5c 9d fd
+	call Var27F4_Get                                      ; FD405E  1d 5c 9d fd
 	ld C,(XIZ+0x08)                                      ; FD4062  8e 08 23
 	res 0x07,C                                           ; FD4065  cb 30 07
 	add XSP,0x00000012                                   ; FD4068  ef c8 12 00 00 00
@@ -106723,7 +107632,7 @@ sub_FD40B6:
 	lda xbc, (xiz-2)                                     ; FD40D8  be fe 31
 	push XBC                                             ; FD40DB  39
 	pushw 0x00                                           ; FD40DC  0b 00 00
-	call sub_FD6C7B                                      ; FD40DF  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD40DF  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD40E3  be fc 31
 	push XBC                                             ; FD40E6  39
 	ld wa, (xiz-2)                                       ; FD40E7  9e fe 20
@@ -106732,7 +107641,7 @@ sub_FD40B6:
 	call sub_FD9D16                                      ; FD40ED  1d 16 9d fd
 	lda xbc, (xiz-6)                                     ; FD40F1  be fa 31
 	push XBC                                             ; FD40F4  39
-	call sub_FD9D3E                                      ; FD40F5  1d 3e 9d fd
+	call Var27F2_GetW                                      ; FD40F5  1d 3e 9d fd
 	ld C,(XIZ+0x08)                                      ; FD40F9  8e 08 23
 	res 0x07,C                                           ; FD40FC  cb 30 07
 	inc 0,XSP                                            ; FD40FF  ef 60
@@ -106777,13 +107686,13 @@ sub_FD40B6:
 	lda xbc, (xiz-2)                                     ; FD4158  be fe 31
 	push XBC                                             ; FD415B  39
 	pushw 0x00                                           ; FD415C  0b 00 00
-	call sub_FD6C7B                                      ; FD415F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD415F  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD4163  be fc 31
 	push XBC                                             ; FD4166  39
 	ld wa, (xiz-2)                                       ; FD4167  9e fe 20
 	extz WA                                              ; FD416A  d8 12
 	pushw wa                                             ; FD416C  28
-	call sub_FDA876                                      ; FD416D  1d 76 a8 fd
+	call Arr2808_Get1                                      ; FD416D  1d 76 a8 fd
 	ld c, (xiz-4)                                        ; FD4171  8e fc 23
 	ld (XIX),C                                           ; FD4174  b4 43
 	ld (XIX+0x06),0x3f                                   ; FD4176  bc 06 00 3f
@@ -106804,7 +107713,7 @@ sub_FD40B6:
 	jrl nz, .LFD4225                                     ; FD41A6  7e 7c 00
 	lda xbc, (xiz-6)                                     ; FD41A9  be fa 31
 	push XBC                                             ; FD41AC  39
-	call sub_FDA0CA                                      ; FD41AD  1d ca a0 fd
+	call Var27F5_Get                                      ; FD41AD  1d ca a0 fd
 	pop XIY                                              ; FD41B1  5d
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD41B2  8e fa 3f 00
 	jr nz, .LFD41E8                                      ; FD41B6  6e 30
@@ -106864,13 +107773,13 @@ sub_FD40B6:
 	push XIX                                             ; FD4231  3c
 	lda xbc, (xiz-2)                                     ; FD4232  be fe 31
 	push XBC                                             ; FD4235  39
-	call sub_FDA0CA                                      ; FD4236  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4236  1d ca a0 fd
 	ld H,(XIZ+0x08)                                      ; FD423A  8e 08 26
 	res 0x07,H                                           ; FD423D  ce 30 07
 	lda xbc, (xiz-4)                                     ; FD4240  be fc 31
 	push XBC                                             ; FD4243  39
 	pushw 0x06                                           ; FD4244  0b 06 00
-	call sub_FD6C7B                                      ; FD4247  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4247  1d 7b 6c fd
 	inc 0,XSP                                            ; FD424B  ef 60
 	inc 2,XSP                                            ; FD424D  ef 62
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD424F  8e fe 3f 00
@@ -106903,7 +107812,7 @@ sub_FD40B6:
 	extz BC                                              ; FD428D  d9 12
 	pushw bc                                             ; FD428F  29
 	pushw 0x06                                           ; FD4290  0b 06 00
-	call sub_FD6C65                                      ; FD4293  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4293  1d 65 6c fd
 	ldb h, 0x00                                          ; FD4297  26 00
 	ldw de, 0x01                                         ; FD4299  32 01 00
 	pop XIY                                              ; FD429C  5d
@@ -106918,7 +107827,7 @@ sub_FD42A5:
 	push XBC                                             ; FD42AD  39
 	ld (xiz-12), de                                      ; FD42AE  be f4 52
 	m_push MWD+r6, 0xf4                                  ; FD42B1  9e f4 04
-	call sub_FDA876                                      ; FD42B4  1d 76 a8 fd
+	call Arr2808_Get1                                      ; FD42B4  1d 76 a8 fd
 	ld XBC,XIX                                           ; FD42B8  ec 89
 	add XBC,XIZ                                          ; FD42BA  ee 81
 	m_and_mi8 MBD+r1, 0xf6, 0x3f                         ; FD42BC  89 f6 3c 3f
@@ -106975,7 +107884,7 @@ sub_FD42A5:
 	pushw wa                                             ; FD4330  28
 	ld (xiz-16), ix                                      ; FD4331  be f0 54
 	m_push MWD+r6, 0xf0                                  ; FD4334  9e f0 04
-	call sub_FD6C65                                      ; FD4337  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4337  1d 65 6c fd
 	pushw 0xc0                                           ; FD433B  0b c0 00
 	lda xbc, (xiz-10)                                    ; FD433E  be f6 31
 	m_add_rm MLD+r6, 0xf2, r1                            ; FD4341  ae f2 81
@@ -107009,7 +107918,7 @@ sub_FD42A5:
 	pushw wa                                             ; FD437F  28
 	ld (xiz-16), de                                      ; FD4380  be f0 52
 	m_push MWD+r6, 0xf0                                  ; FD4383  9e f0 04
-	call sub_FD6C65                                      ; FD4386  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4386  1d 65 6c fd
 	pushw 0xc0                                           ; FD438A  0b c0 00
 	lda xbc, (xiz-10)                                    ; FD438D  be f6 31
 	m_add_rm MLD+r6, 0xf2, r1                            ; FD4390  ae f2 81
@@ -107042,7 +107951,7 @@ sub_FD42A5:
 	jr nz, .LFD43DD                                      ; FD43CE  6e 0d
 	pushw 0x00                                           ; FD43D0  0b 00 00
 	pushw 0x82                                           ; FD43D3  0b 82 00
-	call sub_FD608B                                      ; FD43D6  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD43D6  1d 8b 60 fd
 	pop XIY                                              ; FD43DA  5d
 	jr .LFD43E1                                          ; FD43DB  68 04
 .LFD43DD:
@@ -107055,7 +107964,7 @@ sub_FD42A5:
 	cp (XIZ+0x08),0x00                                   ; FD43EB  8e 08 3f 00
 	jr nz, .LFD43FB                                      ; FD43EF  6e 0a
 	pushw 0x86                                           ; FD43F1  0b 86 00
-	call sub_FD608B                                      ; FD43F4  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD43F4  1d 8b 60 fd
 	pop XIY                                              ; FD43F8  5d
 	jr .LFD4407                                          ; FD43F9  68 0c
 .LFD43FB:
@@ -107071,7 +107980,7 @@ sub_FD42A5:
 	cp (XIZ+0x08),0x00                                   ; FD4411  8e 08 3f 00
 	jr nz, .LFD4421                                      ; FD4415  6e 0a
 	pushw 0xc3                                           ; FD4417  0b c3 00
-	call sub_FD608B                                      ; FD441A  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD441A  1d 8b 60 fd
 	pop XIY                                              ; FD441E  5d
 	jr .LFD442D                                          ; FD441F  68 0c
 .LFD4421:
@@ -107087,13 +107996,13 @@ sub_FD42A5:
 	jr nz, .LFD4447                                      ; FD4438  6e 0d
 	pushw 0x00                                           ; FD443A  0b 00 00
 	pushw 0xc5                                           ; FD443D  0b c5 00
-	call sub_FD608B                                      ; FD4440  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4440  1d 8b 60 fd
 	pop XIY                                              ; FD4444  5d
 	jr .LFD4465                                          ; FD4445  68 1e
 .LFD4447:
 	lda xbc, (xiz-2)                                     ; FD4447  be fe 31
 	push XBC                                             ; FD444A  39
-	call sub_FDA0CA                                      ; FD444B  1d ca a0 fd
+	call Var27F5_Get                                      ; FD444B  1d ca a0 fd
 	pop XIY                                              ; FD444F  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4450  8e fe 3f 00
 	jr nz, .LFD4465                                      ; FD4454  6e 0f
@@ -107110,7 +108019,7 @@ sub_FD42A5:
 	jr z, .LFD4490                                       ; FD4470  66 1e
 	lda xbc, (xiz-2)                                     ; FD4472  be fe 31
 	push XBC                                             ; FD4475  39
-	call sub_FDA0CA                                      ; FD4476  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4476  1d ca a0 fd
 	pop XIY                                              ; FD447A  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD447B  8e fe 3f 00
 	jr nz, .LFD4490                                      ; FD447F  6e 0f
@@ -107129,7 +108038,7 @@ sub_FD42A5:
 	call sub_FD69E0                                      ; FD44A0  1d e0 69 fd
 	lda xbc, (xiz-2)                                     ; FD44A4  be fe 31
 	push XBC                                             ; FD44A7  39
-	call sub_FDA0CA                                      ; FD44A8  1d ca a0 fd
+	call Var27F5_Get                                      ; FD44A8  1d ca a0 fd
 	inc 6,XSP                                            ; FD44AC  ef 66
 	pushw 0x00                                           ; FD44AE  0b 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD44B1  8e fe 3f 00
@@ -107139,7 +108048,7 @@ sub_FD42A5:
 .LFD44BC:
 	pushw 0xcb                                           ; FD44BC  0b cb 00
 .LFD44BF:
-	call sub_FD608B                                      ; FD44BF  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD44BF  1d 8b 60 fd
 	pop XIY                                              ; FD44C3  5d
 .LFD44C4:
 	unlk XIZ                                             ; FD44C4  ee 0d
@@ -107151,7 +108060,7 @@ sub_FD42A5:
 	lda xbc, (xiz-16)                                    ; FD44CE  be f0 31
 	push XBC                                             ; FD44D1  39
 	pushw 0x00                                           ; FD44D2  0b 00 00
-	call sub_FD6C7B                                      ; FD44D5  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD44D5  1d 7b 6c fd
 	ld (xiz-10), 0xff                                    ; FD44D9  be f6 00 ff
 	ld (xiz-9), 0x00                                     ; FD44DD  be f7 00 00
 	ld (xiz-8), 0xfa                                     ; FD44E1  be f8 00 fa
@@ -107175,10 +108084,10 @@ sub_FD42A5:
 	extz BC                                              ; FD450F  d9 12
 	pushw bc                                             ; FD4511  29
 	pushw 0x00                                           ; FD4512  0b 00 00
-	call sub_FD6C65                                      ; FD4515  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4515  1d 65 6c fd
 	lda xbc, (xiz-2)                                     ; FD4519  be fe 31
 	push XBC                                             ; FD451C  39
-	call sub_FDA0CA                                      ; FD451D  1d ca a0 fd
+	call Var27F5_Get                                      ; FD451D  1d ca a0 fd
 	inc 0,XSP                                            ; FD4521  ef 60
 	lda xbc, (xiz-4)                                     ; FD4523  be fc 31
 	push XBC                                             ; FD4526  39
@@ -107220,10 +108129,10 @@ sub_FD42A5:
 	extz BC                                              ; FD4578  d9 12
 	pushw bc                                             ; FD457A  29
 	pushw 0x04                                           ; FD457B  0b 04 00
-	call sub_FD6C65                                      ; FD457E  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD457E  1d 65 6c fd
 	pushw de                                             ; FD4582  2a
 	pushw 0x05                                           ; FD4583  0b 05 00
-	call sub_FD6C65                                      ; FD4586  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4586  1d 65 6c fd
 	pushw 0x04                                           ; FD458A  0b 04 00
 	pushw 0xc3                                           ; FD458D  0b c3 00
 	call 0xf41ed4                                        ; FD4590  1d d4 1e f4
@@ -107246,7 +108155,7 @@ sub_FD42A5:
 	lda xix, (xiz-16)                                    ; FD45B5  be f0 34
 	lda xbc, (xiz-2)                                     ; FD45B8  be fe 31
 	push XBC                                             ; FD45BB  39
-	call sub_FDA0CA                                      ; FD45BC  1d ca a0 fd
+	call Var27F5_Get                                      ; FD45BC  1d ca a0 fd
 	pop XIY                                              ; FD45C0  5d
 	lda xbc, (xiz-4)                                     ; FD45C1  be fc 31
 	push XBC                                             ; FD45C4  39
@@ -107260,7 +108169,7 @@ sub_FD42A5:
 	pop XIY                                              ; FD45D5  5d
 	push XIX                                             ; FD45D6  3c
 	pushw 0x01                                           ; FD45D7  0b 01 00
-	call sub_FD6C7B                                      ; FD45DA  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD45DA  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD45DE  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD45E2  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD45E6  bc 08 00 7f
@@ -107291,7 +108200,7 @@ sub_FD42A5:
 	lda xix, (xiz-16)                                    ; FD462B  be f0 34
 	lda xbc, (xiz-2)                                     ; FD462E  be fe 31
 	push XBC                                             ; FD4631  39
-	call sub_FDA0CA                                      ; FD4632  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4632  1d ca a0 fd
 	pop XIY                                              ; FD4636  5d
 	lda xbc, (xiz-4)                                     ; FD4637  be fc 31
 	push XBC                                             ; FD463A  39
@@ -107305,7 +108214,7 @@ sub_FD42A5:
 	pop XIY                                              ; FD464B  5d
 	push XIX                                             ; FD464C  3c
 	pushw 0x01                                           ; FD464D  0b 01 00
-	call sub_FD6C7B                                      ; FD4650  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4650  1d 7b 6c fd
 	ld (XIX+0x06),0x01                                   ; FD4654  bc 06 00 01
 	ld (XIX+0x07),0x07                                   ; FD4658  bc 07 00 07
 	ld (XIX+0x08),0x01                                   ; FD465C  bc 08 00 01
@@ -107337,7 +108246,7 @@ sub_FD469B:
 	lda xix, (xiz-16)                                    ; FD46A1  be f0 34
 	lda xbc, (xiz-2)                                     ; FD46A4  be fe 31
 	push XBC                                             ; FD46A7  39
-	call sub_FDA0CA                                      ; FD46A8  1d ca a0 fd
+	call Var27F5_Get                                      ; FD46A8  1d ca a0 fd
 	pop XIY                                              ; FD46AC  5d
 	lda xbc, (xiz-4)                                     ; FD46AD  be fc 31
 	push XBC                                             ; FD46B0  39
@@ -107351,7 +108260,7 @@ sub_FD469B:
 	pop XIY                                              ; FD46C1  5d
 	push XIX                                             ; FD46C2  3c
 	pushw 0x02                                           ; FD46C3  0b 02 00
-	call sub_FD6C7B                                      ; FD46C6  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD46C6  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD46CA  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD46CE  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD46D2  bc 08 00 7f
@@ -107382,7 +108291,7 @@ sub_FD469B:
 	jr nz, .LFD4729                                      ; FD471A  6e 0d
 	pushw 0x00                                           ; FD471C  0b 00 00
 	pushw 0x82                                           ; FD471F  0b 82 00
-	call sub_FD608B                                      ; FD4722  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4722  1d 8b 60 fd
 	pop XIY                                              ; FD4726  5d
 	jr .LFD472D                                          ; FD4727  68 04
 .LFD4729:
@@ -107405,7 +108314,7 @@ sub_FD469B:
 	pushw 0x01                                           ; FD474E  0b 01 00
 	pushw 0xc3                                           ; FD4751  0b c3 00
 .LFD4754:
-	call sub_FD608B                                      ; FD4754  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4754  1d 8b 60 fd
 	pop XIY                                              ; FD4758  5d
 .LFD4759:
 	unlk XIZ                                             ; FD4759  ee 0d
@@ -107420,7 +108329,7 @@ sub_FD469B:
 	jr z, .LFD477D                                       ; FD4770  66 0b
 	pushw 0x01                                           ; FD4772  0b 01 00
 	pushw 0xc3                                           ; FD4775  0b c3 00
-	call sub_FD608B                                      ; FD4778  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4778  1d 8b 60 fd
 	pop XIY                                              ; FD477C  5d
 .LFD477D:
 	unlk XIZ                                             ; FD477D  ee 0d
@@ -107440,7 +108349,7 @@ sub_FD469B:
 	pushw 0x01                                           ; FD479E  0b 01 00
 	pushw 0xc3                                           ; FD47A1  0b c3 00
 .LFD47A4:
-	call sub_FD608B                                      ; FD47A4  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD47A4  1d 8b 60 fd
 	pop XIY                                              ; FD47A8  5d
 .LFD47A9:
 	unlk XIZ                                             ; FD47A9  ee 0d
@@ -107455,7 +108364,7 @@ sub_FD469B:
 	jr z, .LFD47CD                                       ; FD47C0  66 0b
 	pushw 0x01                                           ; FD47C2  0b 01 00
 	pushw 0xc3                                           ; FD47C5  0b c3 00
-	call sub_FD608B                                      ; FD47C8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD47C8  1d 8b 60 fd
 	pop XIY                                              ; FD47CC  5d
 .LFD47CD:
 	unlk XIZ                                             ; FD47CD  ee 0d
@@ -107465,7 +108374,7 @@ sub_FD469B:
 	jr nz, .LFD47E5                                      ; FD47D8  6e 0b
 	pushw 0x00                                           ; FD47DA  0b 00 00
 	pushw 0xc4                                           ; FD47DD  0b c4 00
-	call sub_FD608B                                      ; FD47E0  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD47E0  1d 8b 60 fd
 	pop XIY                                              ; FD47E4  5d
 .LFD47E5:
 	unlk XIZ                                             ; FD47E5  ee 0d
@@ -107475,7 +108384,7 @@ sub_FD469B:
 	jr nz, .LFD47FD                                      ; FD47F0  6e 0b
 	pushw 0x00                                           ; FD47F2  0b 00 00
 	pushw 0xc0                                           ; FD47F5  0b c0 00
-	call sub_FD608B                                      ; FD47F8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD47F8  1d 8b 60 fd
 	pop XIY                                              ; FD47FC  5d
 .LFD47FD:
 	unlk XIZ                                             ; FD47FD  ee 0d
@@ -107485,7 +108394,7 @@ sub_FD469B:
 	lda xix, (xiz-16)                                    ; FD4805  be f0 34
 	lda xbc, (xiz-2)                                     ; FD4808  be fe 31
 	push XBC                                             ; FD480B  39
-	call sub_FDA0CA                                      ; FD480C  1d ca a0 fd
+	call Var27F5_Get                                      ; FD480C  1d ca a0 fd
 	pop XIY                                              ; FD4810  5d
 	lda xbc, (xiz-4)                                     ; FD4811  be fc 31
 	push XBC                                             ; FD4814  39
@@ -107499,7 +108408,7 @@ sub_FD469B:
 	pop XIY                                              ; FD4825  5d
 	push XIX                                             ; FD4826  3c
 	pushw 0x01                                           ; FD4827  0b 01 00
-	call sub_FD6C7B                                      ; FD482A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD482A  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD482E  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD4832  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD4836  bc 08 00 32
@@ -107530,7 +108439,7 @@ sub_FD469B:
 	lda xix, (xiz-16)                                    ; FD487B  be f0 34
 	lda xbc, (xiz-2)                                     ; FD487E  be fe 31
 	push XBC                                             ; FD4881  39
-	call sub_FDA0CA                                      ; FD4882  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4882  1d ca a0 fd
 	pop XIY                                              ; FD4886  5d
 	lda xbc, (xiz-4)                                     ; FD4887  be fc 31
 	push XBC                                             ; FD488A  39
@@ -107544,7 +108453,7 @@ sub_FD469B:
 	pop XIY                                              ; FD489B  5d
 	push XIX                                             ; FD489C  3c
 	pushw 0x02                                           ; FD489D  0b 02 00
-	call sub_FD6C7B                                      ; FD48A0  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD48A0  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD48A4  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD48A8  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD48AC  bc 08 00 32
@@ -107575,7 +108484,7 @@ sub_FD469B:
 	lda xix, (xiz-16)                                    ; FD48F1  be f0 34
 	lda xbc, (xiz-2)                                     ; FD48F4  be fe 31
 	push XBC                                             ; FD48F7  39
-	call sub_FDA0CA                                      ; FD48F8  1d ca a0 fd
+	call Var27F5_Get                                      ; FD48F8  1d ca a0 fd
 	pop XIY                                              ; FD48FC  5d
 	lda xbc, (xiz-4)                                     ; FD48FD  be fc 31
 	push XBC                                             ; FD4900  39
@@ -107589,7 +108498,7 @@ sub_FD469B:
 	pop XIY                                              ; FD4911  5d
 	push XIX                                             ; FD4912  3c
 	pushw 0x02                                           ; FD4913  0b 02 00
-	call sub_FD6C7B                                      ; FD4916  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4916  1d 7b 6c fd
 	ld (XIX+0x06),0x01                                   ; FD491A  bc 06 00 01
 	ld (XIX+0x07),0x07                                   ; FD491E  bc 07 00 07
 	ld (XIX+0x08),0x01                                   ; FD4922  bc 08 00 01
@@ -107620,7 +108529,7 @@ sub_FD469B:
 	lda xix, (xiz-16)                                    ; FD4967  be f0 34
 	lda xbc, (xiz-2)                                     ; FD496A  be fe 31
 	push XBC                                             ; FD496D  39
-	call sub_FDA0CA                                      ; FD496E  1d ca a0 fd
+	call Var27F5_Get                                      ; FD496E  1d ca a0 fd
 	pop XIY                                              ; FD4972  5d
 	lda xbc, (xiz-4)                                     ; FD4973  be fc 31
 	push XBC                                             ; FD4976  39
@@ -107634,7 +108543,7 @@ sub_FD469B:
 	pop XIY                                              ; FD4987  5d
 	push XIX                                             ; FD4988  3c
 	pushw 0x00                                           ; FD4989  0b 00 00
-	call sub_FD6C7B                                      ; FD498C  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD498C  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD4990  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD4994  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD4998  bc 08 00 32
@@ -107665,7 +108574,7 @@ sub_FD469B:
 	jr nz, .LFD49EF                                      ; FD49E0  6e 0d
 	pushw 0x00                                           ; FD49E2  0b 00 00
 	pushw 0x82                                           ; FD49E5  0b 82 00
-	call sub_FD608B                                      ; FD49E8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD49E8  1d 8b 60 fd
 	pop XIY                                              ; FD49EC  5d
 	jr .LFD49F3                                          ; FD49ED  68 04
 .LFD49EF:
@@ -107688,7 +108597,7 @@ sub_FD469B:
 	pushw 0x01                                           ; FD4A14  0b 01 00
 	pushw 0xc4                                           ; FD4A17  0b c4 00
 .LFD4A1A:
-	call sub_FD608B                                      ; FD4A1A  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4A1A  1d 8b 60 fd
 	pop XIY                                              ; FD4A1E  5d
 .LFD4A1F:
 	unlk XIZ                                             ; FD4A1F  ee 0d
@@ -107703,7 +108612,7 @@ sub_FD469B:
 	jr z, .LFD4A43                                       ; FD4A36  66 0b
 	pushw 0x01                                           ; FD4A38  0b 01 00
 	pushw 0xc4                                           ; FD4A3B  0b c4 00
-	call sub_FD608B                                      ; FD4A3E  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4A3E  1d 8b 60 fd
 	pop XIY                                              ; FD4A42  5d
 .LFD4A43:
 	unlk XIZ                                             ; FD4A43  ee 0d
@@ -107723,7 +108632,7 @@ sub_FD469B:
 	pushw 0x01                                           ; FD4A64  0b 01 00
 	pushw 0xc4                                           ; FD4A67  0b c4 00
 .LFD4A6A:
-	call sub_FD608B                                      ; FD4A6A  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4A6A  1d 8b 60 fd
 	pop XIY                                              ; FD4A6E  5d
 .LFD4A6F:
 	unlk XIZ                                             ; FD4A6F  ee 0d
@@ -107738,7 +108647,7 @@ sub_FD469B:
 	jr z, .LFD4A93                                       ; FD4A86  66 0b
 	pushw 0x01                                           ; FD4A88  0b 01 00
 	pushw 0xc4                                           ; FD4A8B  0b c4 00
-	call sub_FD608B                                      ; FD4A8E  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4A8E  1d 8b 60 fd
 	pop XIY                                              ; FD4A92  5d
 .LFD4A93:
 	unlk XIZ                                             ; FD4A93  ee 0d
@@ -107748,7 +108657,7 @@ sub_FD469B:
 	jr z, .LFD4AAB                                       ; FD4A9E  66 0b
 	pushw 0x00                                           ; FD4AA0  0b 00 00
 	pushw 0xc3                                           ; FD4AA3  0b c3 00
-	call sub_FD608B                                      ; FD4AA6  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4AA6  1d 8b 60 fd
 	pop XIY                                              ; FD4AAA  5d
 .LFD4AAB:
 	unlk XIZ                                             ; FD4AAB  ee 0d
@@ -107758,7 +108667,7 @@ sub_FD469B:
 	jr nz, .LFD4AC3                                      ; FD4AB6  6e 0b
 	pushw 0x00                                           ; FD4AB8  0b 00 00
 	pushw 0xc0                                           ; FD4ABB  0b c0 00
-	call sub_FD608B                                      ; FD4ABE  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD4ABE  1d 8b 60 fd
 	pop XIY                                              ; FD4AC2  5d
 .LFD4AC3:
 	unlk XIZ                                             ; FD4AC3  ee 0d
@@ -107770,7 +108679,7 @@ sub_FD469B:
 	lda xix, (xiz-18)                                    ; FD4ACD  be ee 34
 	lda xbc, (xiz-2)                                     ; FD4AD0  be fe 31
 	push XBC                                             ; FD4AD3  39
-	call sub_FDA0CA                                      ; FD4AD4  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4AD4  1d ca a0 fd
 	pop XIY                                              ; FD4AD8  5d
 	lda xbc, (xiz-4)                                     ; FD4AD9  be fc 31
 	push XBC                                             ; FD4ADC  39
@@ -107785,7 +108694,7 @@ sub_FD469B:
 	lda xbc, (xiz-6)                                     ; FD4AEE  be fa 31
 	push XBC                                             ; FD4AF1  39
 	pushw 0x00                                           ; FD4AF2  0b 00 00
-	call sub_FD6C7B                                      ; FD4AF5  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4AF5  1d 7b 6c fd
 	inc 6,XSP                                            ; FD4AF9  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD4AFB  8e fa 3f 00
 	jr nz, .LFD4B0B                                      ; FD4AFF  6e 0a
@@ -107805,7 +108714,7 @@ sub_FD469B:
 	extz BC                                              ; FD4B16  d9 12
 	ld (xiz-20), bc                                      ; FD4B18  be ec 51
 	pushw bc                                             ; FD4B1B  29
-	call sub_FD6C7B                                      ; FD4B1C  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4B1C  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD4B20  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD4B24  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD4B28  bc 08 00 7f
@@ -107830,7 +108739,7 @@ sub_FD469B:
 	lda xbc, (xiz-2)                                     ; FD4B59  be fe 31
 	push XBC                                             ; FD4B5C  39
 	pushw 0x0f                                           ; FD4B5D  0b 0f 00
-	call sub_FD6C7B                                      ; FD4B60  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4B60  1d 7b 6c fd
 	add XSP,0x0000001e                                   ; FD4B64  ef c8 1e 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4B6A  8e fe 3f 00
 	jr nz, .LFD4B96                                      ; FD4B6E  6e 26
@@ -107839,7 +108748,7 @@ sub_FD469B:
 	extz BC                                              ; FD4B73  d9 12
 	ld DE,BC                                             ; FD4B75  d9 8a
 	pushw bc                                             ; FD4B77  29
-	call sub_FD6C7B                                      ; FD4B78  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4B78  1d 7b 6c fd
 	push XIX                                             ; FD4B7C  3c
 	ld C,L                                               ; FD4B7D  cf 8b
 	extz BC                                              ; FD4B7F  d9 12
@@ -107867,7 +108776,7 @@ sub_FD469B:
 	lda xix, (xiz-22)                                    ; FD4BAB  be ea 34
 	lda xbc, (xiz-2)                                     ; FD4BAE  be fe 31
 	push XBC                                             ; FD4BB1  39
-	call sub_FDA0CA                                      ; FD4BB2  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4BB2  1d ca a0 fd
 	pop XIY                                              ; FD4BB6  5d
 	lda xbc, (xiz-4)                                     ; FD4BB7  be fc 31
 	push XBC                                             ; FD4BBA  39
@@ -107882,7 +108791,7 @@ sub_FD469B:
 	lda xbc, (xiz-6)                                     ; FD4BCC  be fa 31
 	push XBC                                             ; FD4BCF  39
 	pushw 0x00                                           ; FD4BD0  0b 00 00
-	call sub_FD6C7B                                      ; FD4BD3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4BD3  1d 7b 6c fd
 	inc 6,XSP                                            ; FD4BD7  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD4BD9  8e fa 3f 00
 	jr nz, .LFD4BF5                                      ; FD4BDD  6e 16
@@ -107906,7 +108815,7 @@ sub_FD469B:
 	extz BC                                              ; FD4C0C  d9 12
 	ld DE,BC                                             ; FD4C0E  d9 8a
 	pushw bc                                             ; FD4C10  29
-	call sub_FD6C7B                                      ; FD4C11  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4C11  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD4C15  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD4C19  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD4C1D  bc 08 00 7f
@@ -107931,7 +108840,7 @@ sub_FD469B:
 	extz WA                                              ; FD4C4E  d8 12
 	pushw wa                                             ; FD4C50  28
 	pushw de                                             ; FD4C51  2a
-	call sub_FD6C65                                      ; FD4C52  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4C52  1d 65 6c fd
 	pop XIY                                              ; FD4C56  5d
 	pushw 0x7f                                           ; FD4C57  0b 7f 00
 	ld xbc, (xiz-26)                                     ; FD4C5A  ae e6 21
@@ -107959,7 +108868,7 @@ sub_FD469B:
 	ld C,L                                               ; FD4C8A  cf 8b
 	extz BC                                              ; FD4C8C  d9 12
 	pushw bc                                             ; FD4C8E  29
-	call sub_FD6C65                                      ; FD4C8F  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4C8F  1d 65 6c fd
 	ld C,H                                               ; FD4C93  ce 8b
 	extz BC                                              ; FD4C95  d9 12
 	pushw bc                                             ; FD4C97  29
@@ -107970,7 +108879,7 @@ sub_FD469B:
 	lda xbc, (xiz-10)                                    ; FD4CA1  be f6 31
 	push XBC                                             ; FD4CA4  39
 	pushw 0x0f                                           ; FD4CA5  0b 0f 00
-	call sub_FD6C7B                                      ; FD4CA8  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4CA8  1d 7b 6c fd
 	inc 6,XSP                                            ; FD4CAC  ef 66
 	m_cp_mi8 MBD+r6, 0xf6, 0x00                          ; FD4CAE  8e f6 3f 00
 	jrl nz, .LFD4D2B                                     ; FD4CB2  7e 76 00
@@ -107979,7 +108888,7 @@ sub_FD469B:
 	extz HL                                              ; FD4CB9  db 12
 sub_FD4CBB:
 	pushw hl                                             ; FD4CBB  2b
-	call sub_FD6C7B                                      ; FD4CBC  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4CBC  1d 7b 6c fd
 	push XIX                                             ; FD4CC0  3c
 	call sub_FD6CE1                                      ; FD4CC1  1d e1 6c fd
 	inc 0,XSP                                            ; FD4CC5  ef 60
@@ -107993,7 +108902,7 @@ sub_FD4CBB:
 	extz WA                                              ; FD4CD6  d8 12
 	pushw wa                                             ; FD4CD8  28
 	pushw hl                                             ; FD4CD9  2b
-	call sub_FD6C65                                      ; FD4CDA  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4CDA  1d 65 6c fd
 	pop XIY                                              ; FD4CDE  5d
 	pushw 0x7f                                           ; FD4CDF  0b 7f 00
 	ld xbc, (xiz-26)                                     ; FD4CE2  ae e6 21
@@ -108021,7 +108930,7 @@ sub_FD4CBB:
 	ld bc, (xiz-8)                                       ; FD4D12  9e f8 21
 	extz BC                                              ; FD4D15  d9 12
 	pushw bc                                             ; FD4D17  29
-	call sub_FD6C65                                      ; FD4D18  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD4D18  1d 65 6c fd
 	ld bc, (xiz-7)                                       ; FD4D1C  9e f9 21
 	extz BC                                              ; FD4D1F  d9 12
 	pushw bc                                             ; FD4D21  29
@@ -108044,7 +108953,7 @@ sub_FD4CBB:
 	lda xix, (xiz-18)                                    ; FD4D40  be ee 34
 	lda xbc, (xiz-2)                                     ; FD4D43  be fe 31
 	push XBC                                             ; FD4D46  39
-	call sub_FDA0CA                                      ; FD4D47  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4D47  1d ca a0 fd
 	pop XIY                                              ; FD4D4B  5d
 	lda xbc, (xiz-4)                                     ; FD4D4C  be fc 31
 	push XBC                                             ; FD4D4F  39
@@ -108059,7 +108968,7 @@ sub_FD4CBB:
 	lda xbc, (xiz-6)                                     ; FD4D61  be fa 31
 	push XBC                                             ; FD4D64  39
 	pushw 0x00                                           ; FD4D65  0b 00 00
-	call sub_FD6C7B                                      ; FD4D68  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4D68  1d 7b 6c fd
 	inc 6,XSP                                            ; FD4D6C  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD4D6E  8e fa 3f 00
 	jr nz, .LFD4D7E                                      ; FD4D72  6e 0a
@@ -108079,7 +108988,7 @@ sub_FD4CBB:
 	extz BC                                              ; FD4D89  d9 12
 	ld (xiz-20), bc                                      ; FD4D8B  be ec 51
 	pushw bc                                             ; FD4D8E  29
-	call sub_FD6C7B                                      ; FD4D8F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4D8F  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD4D93  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD4D97  bc 07 00 00
 	ld (XIX+0x08),0x3c                                   ; FD4D9B  bc 08 00 3c
@@ -108104,7 +109013,7 @@ sub_FD4CBB:
 	lda xbc, (xiz-2)                                     ; FD4DCC  be fe 31
 	push XBC                                             ; FD4DCF  39
 	pushw 0x0f                                           ; FD4DD0  0b 0f 00
-	call sub_FD6C7B                                      ; FD4DD3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4DD3  1d 7b 6c fd
 	add XSP,0x0000001e                                   ; FD4DD7  ef c8 1e 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4DDD  8e fe 3f 00
 	jr nz, .LFD4E0C                                      ; FD4DE1  6e 29
@@ -108113,7 +109022,7 @@ sub_FD4CBB:
 	extz BC                                              ; FD4DE6  d9 12
 	ld (xiz-20), bc                                      ; FD4DE8  be ec 51
 	pushw bc                                             ; FD4DEB  29
-	call sub_FD6C7B                                      ; FD4DEC  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4DEC  1d 7b 6c fd
 	push XIX                                             ; FD4DF0  3c
 	ld C,L                                               ; FD4DF1  cf 8b
 	extz BC                                              ; FD4DF3  d9 12
@@ -108141,7 +109050,7 @@ sub_FD4CBB:
 	lda xix, (xiz-18)                                    ; FD4E21  be ee 34
 	lda xbc, (xiz-2)                                     ; FD4E24  be fe 31
 	push XBC                                             ; FD4E27  39
-	call sub_FDA0CA                                      ; FD4E28  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4E28  1d ca a0 fd
 	pop XIY                                              ; FD4E2C  5d
 	lda xbc, (xiz-4)                                     ; FD4E2D  be fc 31
 	push XBC                                             ; FD4E30  39
@@ -108156,7 +109065,7 @@ sub_FD4CBB:
 	lda xbc, (xiz-6)                                     ; FD4E42  be fa 31
 	push XBC                                             ; FD4E45  39
 	pushw 0x00                                           ; FD4E46  0b 00 00
-	call sub_FD6C7B                                      ; FD4E49  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4E49  1d 7b 6c fd
 	inc 6,XSP                                            ; FD4E4D  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD4E4F  8e fa 3f 00
 	jr nz, .LFD4E5F                                      ; FD4E53  6e 0a
@@ -108176,7 +109085,7 @@ sub_FD4CBB:
 	extz BC                                              ; FD4E6A  d9 12
 	ld (xiz-20), bc                                      ; FD4E6C  be ec 51
 	pushw bc                                             ; FD4E6F  29
-	call sub_FD6C7B                                      ; FD4E70  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4E70  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD4E74  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD4E78  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD4E7C  bc 08 00 7f
@@ -108201,7 +109110,7 @@ sub_FD4CBB:
 	lda xbc, (xiz-2)                                     ; FD4EAD  be fe 31
 	push XBC                                             ; FD4EB0  39
 	pushw 0x0f                                           ; FD4EB1  0b 0f 00
-	call sub_FD6C7B                                      ; FD4EB4  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4EB4  1d 7b 6c fd
 	add XSP,0x0000001e                                   ; FD4EB8  ef c8 1e 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4EBE  8e fe 3f 00
 	jr nz, .LFD4EED                                      ; FD4EC2  6e 29
@@ -108210,7 +109119,7 @@ sub_FD4CBB:
 	extz BC                                              ; FD4EC7  d9 12
 	ld (xiz-20), bc                                      ; FD4EC9  be ec 51
 	pushw bc                                             ; FD4ECC  29
-	call sub_FD6C7B                                      ; FD4ECD  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4ECD  1d 7b 6c fd
 	push XIX                                             ; FD4ED1  3c
 	ld C,L                                               ; FD4ED2  cf 8b
 	extz BC                                              ; FD4ED4  d9 12
@@ -108238,7 +109147,7 @@ sub_FD4CBB:
 	lda xix, (xiz-18)                                    ; FD4F02  be ee 34
 	lda xbc, (xiz-2)                                     ; FD4F05  be fe 31
 	push XBC                                             ; FD4F08  39
-	call sub_FDA0CA                                      ; FD4F09  1d ca a0 fd
+	call Var27F5_Get                                      ; FD4F09  1d ca a0 fd
 	pop XIY                                              ; FD4F0D  5d
 	lda xbc, (xiz-4)                                     ; FD4F0E  be fc 31
 	push XBC                                             ; FD4F11  39
@@ -108253,7 +109162,7 @@ sub_FD4CBB:
 	lda xbc, (xiz-6)                                     ; FD4F23  be fa 31
 	push XBC                                             ; FD4F26  39
 	pushw 0x00                                           ; FD4F27  0b 00 00
-	call sub_FD6C7B                                      ; FD4F2A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4F2A  1d 7b 6c fd
 	inc 6,XSP                                            ; FD4F2E  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD4F30  8e fa 3f 00
 	jr nz, .LFD4F40                                      ; FD4F34  6e 0a
@@ -108273,7 +109182,7 @@ sub_FD4CBB:
 	extz BC                                              ; FD4F4B  d9 12
 	ld (xiz-20), bc                                      ; FD4F4D  be ec 51
 	pushw bc                                             ; FD4F50  29
-	call sub_FD6C7B                                      ; FD4F51  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4F51  1d 7b 6c fd
 	ld (XIX+0x06),0x01                                   ; FD4F55  bc 06 00 01
 	ld (XIX+0x07),0x07                                   ; FD4F59  bc 07 00 07
 	ld (XIX+0x08),0x01                                   ; FD4F5D  bc 08 00 01
@@ -108298,7 +109207,7 @@ sub_FD4CBB:
 	lda xbc, (xiz-2)                                     ; FD4F8E  be fe 31
 	push XBC                                             ; FD4F91  39
 	pushw 0x0f                                           ; FD4F92  0b 0f 00
-	call sub_FD6C7B                                      ; FD4F95  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4F95  1d 7b 6c fd
 	add XSP,0x0000001e                                   ; FD4F99  ef c8 1e 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4F9F  8e fe 3f 00
 	jr nz, .LFD4FCE                                      ; FD4FA3  6e 29
@@ -108307,7 +109216,7 @@ sub_FD4CBB:
 	extz BC                                              ; FD4FA8  d9 12
 	ld (xiz-20), bc                                      ; FD4FAA  be ec 51
 	pushw bc                                             ; FD4FAD  29
-	call sub_FD6C7B                                      ; FD4FAE  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4FAE  1d 7b 6c fd
 	push XIX                                             ; FD4FB2  3c
 	ld C,L                                               ; FD4FB3  cf 8b
 	extz BC                                              ; FD4FB5  d9 12
@@ -108335,7 +109244,7 @@ sub_FD4FE0:
 	lda xbc, (xiz-2)                                     ; FD4FE4  be fe 31
 	push XBC                                             ; FD4FE7  39
 	pushw 0x0f                                           ; FD4FE8  0b 0f 00
-	call sub_FD6C7B                                      ; FD4FEB  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD4FEB  1d 7b 6c fd
 	inc 6,XSP                                            ; FD4FEF  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4FF1  8e fe 3f 00
 	jr nz, .LFD4FFD                                      ; FD4FF5  6e 06
@@ -108348,7 +109257,7 @@ sub_FD4FE0:
 	extz BC                                              ; FD5004  d9 12
 	pushw bc                                             ; FD5006  29
 	pushw 0x0f                                           ; FD5007  0b 0f 00
-	call sub_FD6C65                                      ; FD500A  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD500A  1d 65 6c fd
 	pushw 0x00                                           ; FD500E  0b 00 00
 	pushw 0xc5                                           ; FD5011  0b c5 00
 	call 0xf41ed4                                        ; FD5014  1d d4 1e f4
@@ -108360,7 +109269,7 @@ sub_FD4FE0:
 	jr nz, .LFD5034                                      ; FD5025  6e 0d
 	pushw 0x00                                           ; FD5027  0b 00 00
 	pushw 0x82                                           ; FD502A  0b 82 00
-	call sub_FD608B                                      ; FD502D  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD502D  1d 8b 60 fd
 	pop XIY                                              ; FD5031  5d
 	jr .LFD5038                                          ; FD5032  68 04
 .LFD5034:
@@ -108383,7 +109292,7 @@ sub_FD4FE0:
 	pushw 0x01                                           ; FD5059  0b 01 00
 	pushw 0xc5                                           ; FD505C  0b c5 00
 .LFD505F:
-	call sub_FD608B                                      ; FD505F  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD505F  1d 8b 60 fd
 	pop XIY                                              ; FD5063  5d
 .LFD5064:
 	unlk XIZ                                             ; FD5064  ee 0d
@@ -108403,7 +109312,7 @@ sub_FD4FE0:
 	pushw 0x01                                           ; FD5085  0b 01 00
 	pushw 0xc5                                           ; FD5088  0b c5 00
 .LFD508B:
-	call sub_FD608B                                      ; FD508B  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD508B  1d 8b 60 fd
 	pop XIY                                              ; FD508F  5d
 .LFD5090:
 	unlk XIZ                                             ; FD5090  ee 0d
@@ -108423,7 +109332,7 @@ sub_FD4FE0:
 	jr z, .LFD50BD                                       ; FD50B0  66 0b
 	pushw 0x01                                           ; FD50B2  0b 01 00
 	pushw 0xc5                                           ; FD50B5  0b c5 00
-	call sub_FD608B                                      ; FD50B8  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD50B8  1d 8b 60 fd
 	pop XIY                                              ; FD50BC  5d
 .LFD50BD:
 	unlk XIZ                                             ; FD50BD  ee 0d
@@ -108433,7 +109342,7 @@ sub_FD50C0:
 	lda xbc, (xiz-2)                                     ; FD50C4  be fe 31
 	push XBC                                             ; FD50C7  39
 	pushw 0x00                                           ; FD50C8  0b 00 00
-	call sub_FD6C7B                                      ; FD50CB  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD50CB  1d 7b 6c fd
 	inc 6,XSP                                            ; FD50CF  ef 66
 	ld c, (xiz-2)                                        ; FD50D1  8e fe 23
 	cp C,(XIZ+0x08)                                      ; FD50D4  8e 08 f3
@@ -108441,19 +109350,19 @@ sub_FD50C0:
 	lda xbc, (xiz-4)                                     ; FD50D9  be fc 31
 	push XBC                                             ; FD50DC  39
 	pushw 0x0f                                           ; FD50DD  0b 0f 00
-	call sub_FD6C7B                                      ; FD50E0  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD50E0  1d 7b 6c fd
 	inc 6,XSP                                            ; FD50E4  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x01                          ; FD50E6  8e fc 3f 01
 	jr z, .LFD5111                                       ; FD50EA  66 25
 .LFD50EC:
 	pushw 0x01                                           ; FD50EC  0b 01 00
 	pushw 0x0f                                           ; FD50EF  0b 0f 00
-	call sub_FD6C65                                      ; FD50F2  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD50F2  1d 65 6c fd
 	ld BC,(XIZ+0x08)                                     ; FD50F6  9e 08 21
 	extz BC                                              ; FD50F9  d9 12
 	pushw bc                                             ; FD50FB  29
 	pushw 0x00                                           ; FD50FC  0b 00 00
-	call sub_FD6C65                                      ; FD50FF  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD50FF  1d 65 6c fd
 	pushw 0x00                                           ; FD5103  0b 00 00
 	pushw 0xc5                                           ; FD5106  0b c5 00
 	call 0xf41ed4                                        ; FD5109  1d d4 1e f4
@@ -108477,7 +109386,7 @@ sub_FD50C0:
 	jr z, .LFD513E                                       ; FD5131  66 0b
 	pushw 0x01                                           ; FD5133  0b 01 00
 	pushw 0xc5                                           ; FD5136  0b c5 00
-	call sub_FD608B                                      ; FD5139  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5139  1d 8b 60 fd
 	pop XIY                                              ; FD513D  5d
 .LFD513E:
 	unlk XIZ                                             ; FD513E  ee 0d
@@ -108487,7 +109396,7 @@ sub_FD50C0:
 	jr nz, .LFD5156                                      ; FD5149  6e 0b
 	pushw 0x00                                           ; FD514B  0b 00 00
 	pushw 0xc6                                           ; FD514E  0b c6 00
-	call sub_FD608B                                      ; FD5151  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5151  1d 8b 60 fd
 	pop XIY                                              ; FD5155  5d
 .LFD5156:
 	unlk XIZ                                             ; FD5156  ee 0d
@@ -108497,7 +109406,7 @@ sub_FD50C0:
 	jr nz, .LFD516E                                      ; FD5161  6e 0b
 	pushw 0x00                                           ; FD5163  0b 00 00
 	pushw 0xc0                                           ; FD5166  0b c0 00
-	call sub_FD608B                                      ; FD5169  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5169  1d 8b 60 fd
 	pop XIY                                              ; FD516D  5d
 .LFD516E:
 	unlk XIZ                                             ; FD516E  ee 0d
@@ -108509,7 +109418,7 @@ sub_FD50C0:
 	lda xix, (xiz-18)                                    ; FD5178  be ee 34
 	lda xbc, (xiz-2)                                     ; FD517B  be fe 31
 	push XBC                                             ; FD517E  39
-	call sub_FDA0CA                                      ; FD517F  1d ca a0 fd
+	call Var27F5_Get                                      ; FD517F  1d ca a0 fd
 	pop XIY                                              ; FD5183  5d
 	lda xbc, (xiz-4)                                     ; FD5184  be fc 31
 	push XBC                                             ; FD5187  39
@@ -108524,7 +109433,7 @@ sub_FD50C0:
 	lda xbc, (xiz-6)                                     ; FD5199  be fa 31
 	push XBC                                             ; FD519C  39
 	pushw 0x00                                           ; FD519D  0b 00 00
-	call sub_FD6C7B                                      ; FD51A0  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD51A0  1d 7b 6c fd
 	inc 6,XSP                                            ; FD51A4  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD51A6  8e fa 3f 00
 	jr nz, .LFD51B6                                      ; FD51AA  6e 0a
@@ -108544,7 +109453,7 @@ sub_FD50C0:
 	extz BC                                              ; FD51C1  d9 12
 	ld (xiz-20), bc                                      ; FD51C3  be ec 51
 	pushw bc                                             ; FD51C6  29
-	call sub_FD6C7B                                      ; FD51C7  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD51C7  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD51CB  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD51CF  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD51D3  bc 08 00 32
@@ -108569,7 +109478,7 @@ sub_FD50C0:
 	lda xbc, (xiz-2)                                     ; FD5204  be fe 31
 	push XBC                                             ; FD5207  39
 	pushw 0x0f                                           ; FD5208  0b 0f 00
-	call sub_FD6C7B                                      ; FD520B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD520B  1d 7b 6c fd
 	add XSP,0x0000001e                                   ; FD520F  ef c8 1e 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD5215  8e fe 3f 00
 	jr nz, .LFD5244                                      ; FD5219  6e 29
@@ -108578,7 +109487,7 @@ sub_FD50C0:
 	extz BC                                              ; FD521E  d9 12
 	ld (xiz-20), bc                                      ; FD5220  be ec 51
 	pushw bc                                             ; FD5223  29
-	call sub_FD6C7B                                      ; FD5224  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5224  1d 7b 6c fd
 	push XIX                                             ; FD5228  3c
 	ld C,L                                               ; FD5229  cf 8b
 	extz BC                                              ; FD522B  d9 12
@@ -108606,7 +109515,7 @@ sub_FD50C0:
 	lda xix, (xiz-18)                                    ; FD5259  be ee 34
 	lda xbc, (xiz-2)                                     ; FD525C  be fe 31
 	push XBC                                             ; FD525F  39
-	call sub_FDA0CA                                      ; FD5260  1d ca a0 fd
+	call Var27F5_Get                                      ; FD5260  1d ca a0 fd
 	pop XIY                                              ; FD5264  5d
 	lda xbc, (xiz-4)                                     ; FD5265  be fc 31
 	push XBC                                             ; FD5268  39
@@ -108621,7 +109530,7 @@ sub_FD50C0:
 	lda xbc, (xiz-6)                                     ; FD527A  be fa 31
 	push XBC                                             ; FD527D  39
 	pushw 0x00                                           ; FD527E  0b 00 00
-	call sub_FD6C7B                                      ; FD5281  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5281  1d 7b 6c fd
 	inc 6,XSP                                            ; FD5285  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD5287  8e fa 3f 00
 	jr nz, .LFD5297                                      ; FD528B  6e 0a
@@ -108641,7 +109550,7 @@ sub_FD50C0:
 	extz BC                                              ; FD52A2  d9 12
 	ld (xiz-20), bc                                      ; FD52A4  be ec 51
 	pushw bc                                             ; FD52A7  29
-	call sub_FD6C7B                                      ; FD52A8  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD52A8  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD52AC  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD52B0  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD52B4  bc 08 00 32
@@ -108666,7 +109575,7 @@ sub_FD50C0:
 	lda xbc, (xiz-2)                                     ; FD52E5  be fe 31
 	push XBC                                             ; FD52E8  39
 	pushw 0x0f                                           ; FD52E9  0b 0f 00
-	call sub_FD6C7B                                      ; FD52EC  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD52EC  1d 7b 6c fd
 	add XSP,0x0000001e                                   ; FD52F0  ef c8 1e 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD52F6  8e fe 3f 00
 	jr nz, .LFD5325                                      ; FD52FA  6e 29
@@ -108675,7 +109584,7 @@ sub_FD50C0:
 	extz BC                                              ; FD52FF  d9 12
 	ld (xiz-20), bc                                      ; FD5301  be ec 51
 	pushw bc                                             ; FD5304  29
-	call sub_FD6C7B                                      ; FD5305  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5305  1d 7b 6c fd
 	push XIX                                             ; FD5309  3c
 	ld C,L                                               ; FD530A  cf 8b
 	extz BC                                              ; FD530C  d9 12
@@ -108701,7 +109610,7 @@ sub_FD50C0:
 	lda xix, (xiz-18)                                    ; FD5338  be ee 34
 	lda xbc, (xiz-2)                                     ; FD533B  be fe 31
 	push XBC                                             ; FD533E  39
-	call sub_FDA0CA                                      ; FD533F  1d ca a0 fd
+	call Var27F5_Get                                      ; FD533F  1d ca a0 fd
 	pop XIY                                              ; FD5343  5d
 	lda xbc, (xiz-4)                                     ; FD5344  be fc 31
 	push XBC                                             ; FD5347  39
@@ -108716,14 +109625,14 @@ sub_FD50C0:
 	lda xbc, (xiz-6)                                     ; FD5359  be fa 31
 	push XBC                                             ; FD535C  39
 	pushw 0x00                                           ; FD535D  0b 00 00
-	call sub_FD6C7B                                      ; FD5360  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5360  1d 7b 6c fd
 	inc 6,XSP                                            ; FD5364  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD5366  8e fa 3f 00
 	jr nz, .LFD537F                                      ; FD536A  6e 13
 	lda xbc, (xiz-2)                                     ; FD536C  be fe 31
 	push XBC                                             ; FD536F  39
 	pushw 0x0f                                           ; FD5370  0b 0f 00
-	call sub_FD6C7B                                      ; FD5373  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5373  1d 7b 6c fd
 sub_FD5377:
 	inc 6,XSP                                            ; FD5377  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD5379  8e fe 3f 01
@@ -108731,7 +109640,7 @@ sub_FD5377:
 .LFD537F:
 	push XIX                                             ; FD537F  3c
 	pushw 0x06                                           ; FD5380  0b 06 00
-	call sub_FD6C7B                                      ; FD5383  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5383  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD5387  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD538B  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD538F  bc 08 00 32
@@ -108763,7 +109672,7 @@ sub_FD5377:
 	lda xix, (xiz-18)                                    ; FD53D4  be ee 34
 	lda xbc, (xiz-2)                                     ; FD53D7  be fe 31
 	push XBC                                             ; FD53DA  39
-	call sub_FDA0CA                                      ; FD53DB  1d ca a0 fd
+	call Var27F5_Get                                      ; FD53DB  1d ca a0 fd
 	pop XIY                                              ; FD53DF  5d
 	lda xbc, (xiz-4)                                     ; FD53E0  be fc 31
 	push XBC                                             ; FD53E3  39
@@ -108778,21 +109687,21 @@ sub_FD5377:
 	lda xbc, (xiz-6)                                     ; FD53F5  be fa 31
 	push XBC                                             ; FD53F8  39
 	pushw 0x00                                           ; FD53F9  0b 00 00
-	call sub_FD6C7B                                      ; FD53FC  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD53FC  1d 7b 6c fd
 	inc 6,XSP                                            ; FD5400  ef 66
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD5402  8e fa 3f 00
 	jr nz, .LFD541B                                      ; FD5406  6e 13
 	lda xbc, (xiz-2)                                     ; FD5408  be fe 31
 	push XBC                                             ; FD540B  39
 	pushw 0x0f                                           ; FD540C  0b 0f 00
-	call sub_FD6C7B                                      ; FD540F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD540F  1d 7b 6c fd
 	inc 6,XSP                                            ; FD5413  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD5415  8e fe 3f 01
 	jr z, .LFD5467                                       ; FD5419  66 4c
 .LFD541B:
 	push XIX                                             ; FD541B  3c
 	pushw 0x03                                           ; FD541C  0b 03 00
-	call sub_FD6C7B                                      ; FD541F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD541F  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD5423  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD5427  bc 07 00 00
 	ld (XIX+0x08),0x64                                   ; FD542B  bc 08 00 64
@@ -108826,7 +109735,7 @@ sub_FD5377:
 	jr nz, sub_FD5486                                    ; FD5477  6e 0d
 	pushw 0x00                                           ; FD5479  0b 00 00
 	pushw 0x82                                           ; FD547C  0b 82 00
-	call sub_FD608B                                      ; FD547F  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD547F  1d 8b 60 fd
 	pop XIY                                              ; FD5483  5d
 	jr .LFD548A                                          ; FD5484  68 04
 sub_FD5486:
@@ -108849,7 +109758,7 @@ sub_FD5486:
 	pushw 0x01                                           ; FD54AB  0b 01 00
 	pushw 0xc6                                           ; FD54AE  0b c6 00
 .LFD54B1:
-	call sub_FD608B                                      ; FD54B1  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD54B1  1d 8b 60 fd
 	pop XIY                                              ; FD54B5  5d
 .LFD54B6:
 	unlk XIZ                                             ; FD54B6  ee 0d
@@ -108869,7 +109778,7 @@ sub_FD5486:
 	pushw 0x01                                           ; FD54D7  0b 01 00
 	pushw 0xc6                                           ; FD54DA  0b c6 00
 .LFD54DD:
-	call sub_FD608B                                      ; FD54DD  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD54DD  1d 8b 60 fd
 	pop XIY                                              ; FD54E1  5d
 .LFD54E2:
 	unlk XIZ                                             ; FD54E2  ee 0d
@@ -108889,7 +109798,7 @@ sub_FD5486:
 	jr z, .LFD550F                                       ; FD5502  66 0b
 	pushw 0x01                                           ; FD5504  0b 01 00
 	pushw 0xc6                                           ; FD5507  0b c6 00
-	call sub_FD608B                                      ; FD550A  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD550A  1d 8b 60 fd
 	pop XIY                                              ; FD550E  5d
 .LFD550F:
 	unlk XIZ                                             ; FD550F  ee 0d
@@ -108909,7 +109818,7 @@ sub_FD5486:
 	jr z, .LFD553C                                       ; FD552F  66 0b
 	pushw 0x01                                           ; FD5531  0b 01 00
 	pushw 0xc6                                           ; FD5534  0b c6 00
-	call sub_FD608B                                      ; FD5537  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5537  1d 8b 60 fd
 	pop XIY                                              ; FD553B  5d
 .LFD553C:
 	unlk XIZ                                             ; FD553C  ee 0d
@@ -108923,7 +109832,7 @@ sub_FD5486:
 .LFD5551:
 	pushw 0xc7                                           ; FD5551  0b c7 00
 .LFD5554:
-	call sub_FD608B                                      ; FD5554  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5554  1d 8b 60 fd
 	pop XBC                                              ; FD5558  59
 	unlk XIZ                                             ; FD5559  ee 0d
 	ret                                                  ; FD555B  0e
@@ -108932,7 +109841,7 @@ sub_FD5486:
 	jr nz, .LFD5571                                      ; FD5564  6e 0b
 	pushw 0x00                                           ; FD5566  0b 00 00
 	pushw 0xc0                                           ; FD5569  0b c0 00
-	call sub_FD608B                                      ; FD556C  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD556C  1d 8b 60 fd
 	pop XIY                                              ; FD5570  5d
 .LFD5571:
 	unlk XIZ                                             ; FD5571  ee 0d
@@ -108944,7 +109853,7 @@ sub_FD5486:
 	lda xix, (xiz-18)                                    ; FD557B  be ee 34
 	lda xbc, (xiz-2)                                     ; FD557E  be fe 31
 	push XBC                                             ; FD5581  39
-	call sub_FDA0CA                                      ; FD5582  1d ca a0 fd
+	call Var27F5_Get                                      ; FD5582  1d ca a0 fd
 	pop XIY                                              ; FD5586  5d
 	lda xbc, (xiz-2)                                     ; FD5587  be fe 31
 	push XBC                                             ; FD558A  39
@@ -108959,7 +109868,7 @@ sub_FD5486:
 	lda xbc, (xiz-4)                                     ; FD559C  be fc 31
 	push XBC                                             ; FD559F  39
 	pushw 0x00                                           ; FD55A0  0b 00 00
-	call sub_FD6C7B                                      ; FD55A3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD55A3  1d 7b 6c fd
 	inc 6,XSP                                            ; FD55A7  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD55A9  8e fc 3f 00
 	jr nz, .LFD55B9                                      ; FD55AD  6e 0a
@@ -108979,7 +109888,7 @@ sub_FD5486:
 	extz BC                                              ; FD55C4  d9 12
 	ld (xiz-20), bc                                      ; FD55C6  be ec 51
 	pushw bc                                             ; FD55C9  29
-	call sub_FD6C7B                                      ; FD55CA  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD55CA  1d 7b 6c fd
 	ld (XIX+0x06),0x01                                   ; FD55CE  bc 06 00 01
 	ld (XIX+0x07),0x07                                   ; FD55D2  bc 07 00 07
 	ld (XIX+0x08),0x01                                   ; FD55D6  bc 08 00 01
@@ -109004,7 +109913,7 @@ sub_FD5486:
 	lda xbc, (xiz-6)                                     ; FD5607  be fa 31
 	push XBC                                             ; FD560A  39
 	pushw 0x0f                                           ; FD560B  0b 0f 00
-	call sub_FD6C7B                                      ; FD560E  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD560E  1d 7b 6c fd
 	add XSP,0x0000001e                                   ; FD5612  ef c8 1e 00 00 00
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD5618  8e fa 3f 00
 	jr nz, .LFD5647                                      ; FD561C  6e 29
@@ -109013,7 +109922,7 @@ sub_FD5486:
 	extz BC                                              ; FD5621  d9 12
 	ld (xiz-20), bc                                      ; FD5623  be ec 51
 	pushw bc                                             ; FD5626  29
-	call sub_FD6C7B                                      ; FD5627  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5627  1d 7b 6c fd
 	push XIX                                             ; FD562B  3c
 	ld C,L                                               ; FD562C  cf 8b
 	extz BC                                              ; FD562E  d9 12
@@ -109041,7 +109950,7 @@ sub_FD5486:
 	lda xix, (xiz-18)                                    ; FD565C  be ee 34
 	lda xbc, (xiz-2)                                     ; FD565F  be fe 31
 	push XBC                                             ; FD5662  39
-	call sub_FDA0CA                                      ; FD5663  1d ca a0 fd
+	call Var27F5_Get                                      ; FD5663  1d ca a0 fd
 	pop XIY                                              ; FD5667  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD5668  8e fe 3f 01
 	jrl z, .LFD572C                                      ; FD566C  76 bd 00
@@ -109051,7 +109960,7 @@ sub_FD5486:
 	lda xbc, (xiz-6)                                     ; FD5677  be fa 31
 	push XBC                                             ; FD567A  39
 	pushw 0x00                                           ; FD567B  0b 00 00
-	call sub_FD6C7B                                      ; FD567E  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD567E  1d 7b 6c fd
 	inc 0,XSP                                            ; FD5682  ef 60
 	inc 2,XSP                                            ; FD5684  ef 62
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD5686  8e fa 3f 00
@@ -109072,7 +109981,7 @@ sub_FD5486:
 	extz BC                                              ; FD56A1  d9 12
 	ld (xiz-20), bc                                      ; FD56A3  be ec 51
 	pushw bc                                             ; FD56A6  29
-	call sub_FD6C7B                                      ; FD56A7  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD56A7  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD56AB  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD56AF  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD56B3  bc 08 00 32
@@ -109097,7 +110006,7 @@ sub_FD5486:
 	lda xbc, (xiz-2)                                     ; FD56E4  be fe 31
 	push XBC                                             ; FD56E7  39
 	pushw 0x0f                                           ; FD56E8  0b 0f 00
-	call sub_FD6C7B                                      ; FD56EB  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD56EB  1d 7b 6c fd
 	add XSP,0x0000001e                                   ; FD56EF  ef c8 1e 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD56F5  8e fe 3f 00
 	jr nz, .LFD5724                                      ; FD56F9  6e 29
@@ -109106,7 +110015,7 @@ sub_FD5486:
 	extz BC                                              ; FD56FE  d9 12
 	ld (xiz-20), bc                                      ; FD5700  be ec 51
 	pushw bc                                             ; FD5703  29
-	call sub_FD6C7B                                      ; FD5704  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5704  1d 7b 6c fd
 	push XIX                                             ; FD5708  3c
 	ld C,L                                               ; FD5709  cf 8b
 	extz BC                                              ; FD570B  d9 12
@@ -109135,7 +110044,7 @@ sub_FD5486:
 	lda_24 xix, (0xfd6c7b)                               ; FD5739  f2 7b 6c fd 34
 	lda xbc, (xiz-2)                                     ; FD573E  be fe 31
 	push XBC                                             ; FD5741  39
-	call sub_FDA0CA                                      ; FD5742  1d ca a0 fd
+	call Var27F5_Get                                      ; FD5742  1d ca a0 fd
 	pop XIY                                              ; FD5746  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD5747  8e fe 3f 01
 	jrl z, .LFD587D                                      ; FD574B  76 2f 01
@@ -109281,7 +110190,7 @@ sub_FD5486:
 	lda_24 xix, (0xfd6c7b)                               ; FD588A  f2 7b 6c fd 34
 	lda xbc, (xiz-2)                                     ; FD588F  be fe 31
 	push XBC                                             ; FD5892  39
-	call sub_FDA0CA                                      ; FD5893  1d ca a0 fd
+	call Var27F5_Get                                      ; FD5893  1d ca a0 fd
 	pop XIY                                              ; FD5897  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD5898  8e fe 3f 01
 	jrl z, .LFD5A08                                      ; FD589C  76 69 01
@@ -109449,7 +110358,7 @@ sub_FD5486:
 	lda_24 xix, (0xfd6c7b)                               ; FD5A15  f2 7b 6c fd 34
 	lda xbc, (xiz-2)                                     ; FD5A1A  be fe 31
 	push XBC                                             ; FD5A1D  39
-	call sub_FDA0CA                                      ; FD5A1E  1d ca a0 fd
+	call Var27F5_Get                                      ; FD5A1E  1d ca a0 fd
 	pop XIY                                              ; FD5A22  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD5A23  8e fe 3f 01
 	jrl z, .LFD5B59                                      ; FD5A27  76 2f 01
@@ -109595,7 +110504,7 @@ sub_FD5486:
 	jr nz, .LFD5B7A                                      ; FD5B6B  6e 0d
 	pushw 0x00                                           ; FD5B6D  0b 00 00
 	pushw 0x82                                           ; FD5B70  0b 82 00
-	call sub_FD608B                                      ; FD5B73  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5B73  1d 8b 60 fd
 	pop XIY                                              ; FD5B77  5d
 	jr .LFD5B7E                                          ; FD5B78  68 04
 .LFD5B7A:
@@ -109618,7 +110527,7 @@ sub_FD5486:
 	pushw 0x01                                           ; FD5B9F  0b 01 00
 	pushw 0xc7                                           ; FD5BA2  0b c7 00
 .LFD5BA5:
-	call sub_FD608B                                      ; FD5BA5  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5BA5  1d 8b 60 fd
 	pop XIY                                              ; FD5BA9  5d
 .LFD5BAA:
 	unlk XIZ                                             ; FD5BAA  ee 0d
@@ -109638,7 +110547,7 @@ sub_FD5486:
 	pushw 0x01                                           ; FD5BCB  0b 01 00
 	pushw 0xc7                                           ; FD5BCE  0b c7 00
 .LFD5BD1:
-	call sub_FD608B                                      ; FD5BD1  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5BD1  1d 8b 60 fd
 	pop XIY                                              ; FD5BD5  5d
 .LFD5BD6:
 	unlk XIZ                                             ; FD5BD6  ee 0d
@@ -109658,7 +110567,7 @@ sub_FD5486:
 	jr z, .LFD5C03                                       ; FD5BF6  66 0b
 	pushw 0x01                                           ; FD5BF8  0b 01 00
 	pushw 0xc7                                           ; FD5BFB  0b c7 00
-	call sub_FD608B                                      ; FD5BFE  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5BFE  1d 8b 60 fd
 	pop XIY                                              ; FD5C02  5d
 .LFD5C03:
 	unlk XIZ                                             ; FD5C03  ee 0d
@@ -109678,7 +110587,7 @@ sub_FD5486:
 	jr z, .LFD5C30                                       ; FD5C23  66 0b
 	pushw 0x01                                           ; FD5C25  0b 01 00
 	pushw 0xc7                                           ; FD5C28  0b c7 00
-	call sub_FD608B                                      ; FD5C2B  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5C2B  1d 8b 60 fd
 	pop XIY                                              ; FD5C2F  5d
 .LFD5C30:
 	unlk XIZ                                             ; FD5C30  ee 0d
@@ -109688,7 +110597,7 @@ sub_FD5486:
 	jr z, .LFD5C48                                       ; FD5C3B  66 0b
 	pushw 0x00                                           ; FD5C3D  0b 00 00
 	pushw 0xc6                                           ; FD5C40  0b c6 00
-	call sub_FD608B                                      ; FD5C43  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5C43  1d 8b 60 fd
 	pop XIY                                              ; FD5C47  5d
 .LFD5C48:
 	unlk XIZ                                             ; FD5C48  ee 0d
@@ -109698,7 +110607,7 @@ sub_FD5486:
 	jr nz, .LFD5C60                                      ; FD5C53  6e 0b
 	pushw 0x00                                           ; FD5C55  0b 00 00
 	pushw 0xc0                                           ; FD5C58  0b c0 00
-	call sub_FD608B                                      ; FD5C5B  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD5C5B  1d 8b 60 fd
 	pop XIY                                              ; FD5C5F  5d
 .LFD5C60:
 	unlk XIZ                                             ; FD5C60  ee 0d
@@ -109708,7 +110617,7 @@ sub_FD5486:
 	lda xix, (xiz-12)                                    ; FD5C68  be f4 34
 	push XIX                                             ; FD5C6B  3c
 	pushw 0x00                                           ; FD5C6C  0b 00 00
-	call sub_FD6C7B                                      ; FD5C6F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5C6F  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD5C73  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD5C77  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD5C7B  bc 08 00 7f
@@ -109736,7 +110645,7 @@ sub_FD5486:
 	lda xbc, (xiz-2)                                     ; FD5CBC  be fe 31
 	push XBC                                             ; FD5CBF  39
 	pushw 0x05                                           ; FD5CC0  0b 05 00
-	call sub_FD6C7B                                      ; FD5CC3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5CC3  1d 7b 6c fd
 	inc 6,XSP                                            ; FD5CC7  ef 66
 	cp (XIZ+0x08),0x00                                   ; FD5CC9  8e 08 3f 00
 	jr nz, .LFD5CDB                                      ; FD5CCD  6e 0c
@@ -109753,7 +110662,7 @@ sub_FD5486:
 	extz BC                                              ; FD5CE8  d9 12
 	pushw bc                                             ; FD5CEA  29
 	pushw 0x05                                           ; FD5CEB  0b 05 00
-	call sub_FD6C65                                      ; FD5CEE  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD5CEE  1d 65 6c fd
 	calr sub_FD5E06                                      ; FD5CF2  1e 11 01
 	pushw 0x03                                           ; FD5CF5  0b 03 00
 	call sub_FD7C01                                      ; FD5CF8  1d 01 7c fd
@@ -109766,7 +110675,7 @@ sub_FD5486:
 	lda xix, (xiz-12)                                    ; FD5D06  be f4 34
 	push XIX                                             ; FD5D09  3c
 	pushw 0x01                                           ; FD5D0A  0b 01 00
-	call sub_FD6C7B                                      ; FD5D0D  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5D0D  1d 7b 6c fd
 	ld (XIX+0x06),0x7f                                   ; FD5D11  bc 06 00 7f
 	ld (XIX+0x07),0x00                                   ; FD5D15  bc 07 00 00
 	ld (XIX+0x08),0x7f                                   ; FD5D19  bc 08 00 7f
@@ -109794,7 +110703,7 @@ sub_FD5486:
 	lda xbc, (xiz-2)                                     ; FD5D5A  be fe 31
 	push XBC                                             ; FD5D5D  39
 	pushw 0x02                                           ; FD5D5E  0b 02 00
-	call sub_FD6C7B                                      ; FD5D61  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5D61  1d 7b 6c fd
 	ld C,(XIZ+0x08)                                      ; FD5D65  8e 08 23
 	res 0x07,C                                           ; FD5D68  cb 30 07
 	inc 6,XSP                                            ; FD5D6B  ef 66
@@ -109813,7 +110722,7 @@ sub_FD5486:
 	extz BC                                              ; FD5D8A  d9 12
 	pushw bc                                             ; FD5D8C  29
 	pushw 0x02                                           ; FD5D8D  0b 02 00
-	call sub_FD6C65                                      ; FD5D90  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD5D90  1d 65 6c fd
 	calr sub_FD5E06                                      ; FD5D94  1e 6f 00
 	pushw 0x05                                           ; FD5D97  0b 05 00
 	call sub_FD7C01                                      ; FD5D9A  1d 01 7c fd
@@ -109825,7 +110734,7 @@ sub_FD5486:
 	lda xbc, (xiz-2)                                     ; FD5DA7  be fe 31
 	push XBC                                             ; FD5DAA  39
 	pushw 0x03                                           ; FD5DAB  0b 03 00
-	call sub_FD6C7B                                      ; FD5DAE  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5DAE  1d 7b 6c fd
 	ld C,(XIZ+0x08)                                      ; FD5DB2  8e 08 23
 	res 0x07,C                                           ; FD5DB5  cb 30 07
 	inc 6,XSP                                            ; FD5DB8  ef 66
@@ -109854,7 +110763,7 @@ sub_FD5486:
 	extz BC                                              ; FD5DED  d9 12
 	pushw bc                                             ; FD5DEF  29
 	pushw 0x03                                           ; FD5DF0  0b 03 00
-	call sub_FD6C65                                      ; FD5DF3  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD5DF3  1d 65 6c fd
 	calr sub_FD5E06                                      ; FD5DF7  1e 0c 00
 	pushw 0x06                                           ; FD5DFA  0b 06 00
 	call sub_FD7C01                                      ; FD5DFD  1d 01 7c fd
@@ -109869,15 +110778,15 @@ sub_FD5E06:
 	lda xbc, (xiz-2)                                     ; FD5E10  be fe 31
 	push XBC                                             ; FD5E13  39
 	pushw 0x02                                           ; FD5E14  0b 02 00
-	call sub_FD6C7B                                      ; FD5E17  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5E17  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD5E1B  be fc 31
 	push XBC                                             ; FD5E1E  39
 	pushw 0x03                                           ; FD5E1F  0b 03 00
-	call sub_FD6C7B                                      ; FD5E22  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5E22  1d 7b 6c fd
 	lda xbc, (xiz-6)                                     ; FD5E26  be fa 31
 	push XBC                                             ; FD5E29  39
 	pushw 0x05                                           ; FD5E2A  0b 05 00
-	call sub_FD6C7B                                      ; FD5E2D  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5E2D  1d 7b 6c fd
 	add XSP,0x00000012                                   ; FD5E31  ef c8 12 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD5E37  8e fe 3f 00
 	jr z, .LFD5E52                                       ; FD5E3B  66 15
@@ -109892,7 +110801,7 @@ sub_FD5E06:
 	lda xbc, (xiz-8)                                     ; FD5E52  be f8 31
 	push XBC                                             ; FD5E55  39
 	pushw 0x07                                           ; FD5E56  0b 07 00
-	call sub_FD6C7B                                      ; FD5E59  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5E59  1d 7b 6c fd
 	inc 6,XSP                                            ; FD5E5D  ef 66
 	m_cp_mi8 MBD+r6, 0xf8, 0x00                          ; FD5E5F  8e f8 3f 00
 	jr z, .LFD5E84                                       ; FD5E63  66 1f
@@ -109997,7 +110906,7 @@ sub_FD5F52:
 	ld E,(XIZ+0x0a)                                      ; FD5F59  8e 0a 25
 	lda xbc, (xiz-2)                                     ; FD5F5C  be fe 31
 	push XBC                                             ; FD5F5F  39
-	call sub_FDA0CA                                      ; FD5F60  1d ca a0 fd
+	call Var27F5_Get                                      ; FD5F60  1d ca a0 fd
 	pop XIY                                              ; FD5F64  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD5F65  8e fe 3f 00
 	jrl z, .LFD603D                                      ; FD5F69  76 d1 00
@@ -110026,7 +110935,7 @@ sub_FD5F52:
 	ld A,H                                               ; FD5F99  ce 89
 	extz WA                                              ; FD5F9B  d8 12
 	pushw wa                                             ; FD5F9D  28
-	call sub_FD6C7B                                      ; FD5F9E  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FD5F9E  1d 7b 6c fd
 	inc 0,XSP                                            ; FD5FA2  ef 60
 	inc 4,XSP                                            ; FD5FA4  ef 64
 	m_cp_mi8 MBD+r6, 0xf8, 0x00                          ; FD5FA6  8e f8 3f 00
@@ -110060,7 +110969,7 @@ sub_FD5F52:
 	ld C,H                                               ; FD5FF0  ce 8b
 	extz BC                                              ; FD5FF2  d9 12
 	pushw bc                                             ; FD5FF4  29
-	call sub_FD6C65                                      ; FD5FF5  1d 65 6c fd
+	call Arr27A6_Set                                      ; FD5FF5  1d 65 6c fd
 	pushw 0x7f                                           ; FD5FF9  0b 7f 00
 	lda xbc, (xiz-6)                                     ; FD5FFC  be fa 31
 	push XBC                                             ; FD5FFF  39
@@ -110110,7 +111019,7 @@ sub_FD5F52:
 	call sub_FD69E0                                      ; FD6064  1d e0 69 fd
 	lda xbc, (xiz-2)                                     ; FD6068  be fe 31
 	push XBC                                             ; FD606B  39
-	call sub_FDA0CA                                      ; FD606C  1d ca a0 fd
+	call Var27F5_Get                                      ; FD606C  1d ca a0 fd
 	inc 6,XSP                                            ; FD6070  ef 66
 	pushw 0x00                                           ; FD6072  0b 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD6075  8e fe 3f 00
@@ -110120,12 +111029,34 @@ sub_FD5F52:
 .LFD6080:
 	pushw 0xcb                                           ; FD6080  0b cb 00
 .LFD6083:
-	call sub_FD608B                                      ; FD6083  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FD6083  1d 8b 60 fd
 	pop XIY                                              ; FD6087  5d
 .LFD6088:
 	unlk XIZ                                             ; FD6088  ee 0d
 	ret                                                  ; FD608A  0e
-sub_FD608B:
+; ---------------------------------------------------------------------
+; PanelScreen_PostRequest -- ask the panel task to change screen
+;
+; Called from: 125 proven call sites, the most of any routine this file
+;          names by mechanism rather than by template.
+; Inputs:  arg1 (XIZ+8) = a screen id, arg2 (XIZ+0x0A) = a mode byte.
+; Body:    arg2 == 0 -> the 16-bit word (0x2070) := arg1 + 0x8000, which
+;          puts arg1 in (0x2070) and 0x80 in (0x2071);
+;          arg2 != 0 -> `set 4,(0x2071)` instead.
+;          Either way Var27DF_Set(arg2) follows.
+; ★ Evidence: (0x2070)/(0x2071) are the requested-screen id and its flag
+;          byte -- prom_a 0xF86055 writes the pair as one 16-bit 0x40AA,
+;          PanelHold_ScreenRequest's live entries are all 0x40NN, and
+;          PanelHold_Tick stores a whole WORD there (0xF86C82).  0x80 is
+;          bit 7, which is exactly the bit PanelScreen_ApplyHomeForce
+;          tests at 0xF863AC; 0x10 is bit 4.  So both arms of this routine
+;          raise a request the panel task already has a handler for.
+;          All five citations decode at the address given -- check Q1.
+; Unknown:  what distinguishes the two arms, i.e. what arg2 means.  It is
+;          also handed to Var27DF_Set, so (0x27DF) is the other half of
+;          the answer.
+; ---------------------------------------------------------------------
+PanelScreen_PostRequest:
 	link XIZ,0x0000                                      ; FD608B  ee 0c 00 00
 	push XIX                                             ; FD608F  3c
 	cp (XIZ+0x0a),0x00                                   ; FD6090  8e 0a 3f 00
@@ -110142,12 +111073,24 @@ sub_FD608B:
 	ld BC,(XIZ+0x0a)                                     ; FD60AB  9e 0a 21
 	extz BC                                              ; FD60AE  d9 12
 	pushw bc                                             ; FD60B0  29
-	calr sub_FD6104                                      ; FD60B1  1e 50 00
+	calr Var27DF_Set                                      ; FD60B1  1e 50 00
 	popw bc                                              ; FD60B4  49
 	pop XIX                                              ; FD60B5  5c
 	unlk XIZ                                             ; FD60B6  ee 0d
 	ret                                                  ; FD60B8  0e
-sub_FD60B9:
+; ---------------------------------------------------------------------
+; PanelScreen_RequestPending -- 1 if any of (0x2071) bits 7, 6, 4 is set
+;
+; Called from: 28 proven call sites.
+; Body:    `ld C,(0x2071) / and C,0xd0` -> A = 1 when non-zero, else 0.
+; Evidence: 0xD0 is bits 7, 6 and 4 -- exactly the three request bits the
+;          panel task acts on: bit 7 PanelScreen_ApplyHomeForce (0xF863AC),
+;          bit 6 PanelScreen_ApplyHomeRequest (0xF862A6), bit 4 the bit
+;          PanelState_Sync2095 moves in and out of (0x2095) (0xF86559).
+;          Bits 2, 1, 3 and 0 -- the other four consumers -- are NOT in the
+;          mask, which is what makes the name specific.  Check Q2.
+; ---------------------------------------------------------------------
+PanelScreen_RequestPending:
 	ldb_d8 c, (0x2071)                                   ; FD60B9  c1 71 20 23
 	and C,0xd0                                           ; FD60BD  cb cc d0
 	jr z, .LFD60C6                                       ; FD60C0  66 04
@@ -110157,14 +111100,37 @@ sub_FD60B9:
 	sub A,A                                              ; FD60C6  c9 a1
 .LFD60C8:
 	ret                                                  ; FD60C8  0e
-sub_FD60C9:
+; ---------------------------------------------------------------------
+; Var207C_Get -- *(u8 *)arg1 = (0x207C)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD60C9 to 0xFD60D8, with no branch.
+; Called from: 13 proven call sites, first a 0xFD252F, a 0xFD2586, a 0xFD25F6, a 0xFD69F5, +9 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x207C.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Note:     (0x207C) is the CURRENT screen id -- see PanelScreen_VtableTable and PanelScreen_CallEnter_B (prom_a 0xF86EC1, 0xF8652E).
+; ---------------------------------------------------------------------
+Var207C_Get:
 	link XIZ,0x0000                                      ; FD60C9  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD60CD  ae 08 21
 	ldb_d8 a, (0x207c)                                   ; FD60D0  c1 7c 20 21
 	ld (XBC),A                                           ; FD60D4  b1 41
 	unlk XIZ                                             ; FD60D6  ee 0d
 	ret                                                  ; FD60D8  0e
-sub_FD60D9:
+; ---------------------------------------------------------------------
+; PanelScreen_PostRequestBit6 -- the same, raising bit 6 instead
+;
+; Called from: 2 proven call sites.
+; Body:    (0x2880) := arg2; (0x2070) := arg1; `set 6,(0x2071)`.
+; Evidence: bit 6 is the bit PanelScreen_ApplyHomeRequest tests at
+;          0xF862A6, and 0x40 is the high byte of every live entry of
+;          PanelHold_ScreenRequest.  Check Q3.
+; Unknown:  what (0x2880) is for.
+; ---------------------------------------------------------------------
+PanelScreen_PostRequestBit6:
 	link XIZ,0x0000                                      ; FD60D9  ee 0c 00 00
 	ld C,(XIZ+0x0a)                                      ; FD60DD  8e 0a 23
 	stb_d8 (0x2880), c                                   ; FD60E0  f1 80 28 43
@@ -110180,20 +111146,59 @@ sub_FD60F2:
 	m_set 1, MD16, 0x2071                                ; FD60FD  f1 71 20 b9
 	unlk XIZ                                             ; FD6101  ee 0d
 	ret                                                  ; FD6103  0e
-sub_FD6104:
+; ---------------------------------------------------------------------
+; Var27DF_Set -- (0x27DF) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFD6104 to 0xFD6111, with no branch.
+; Called from: 3 proven call sites, first a 0xFD60B1, a 0xFDAC9D, a 0xFDBBFB.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27DF.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27DF) holds.
+; ---------------------------------------------------------------------
+Var27DF_Set:
 	link XIZ,0x0000                                      ; FD6104  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FD6108  8e 08 23
 	stb_d8 (0x27df), c                                   ; FD610B  f1 df 27 43
 	unlk XIZ                                             ; FD610F  ee 0d
 	ret                                                  ; FD6111  0e
-sub_FD6112:
+; ---------------------------------------------------------------------
+; Var27DF_Get -- *(u8 *)arg1 = (0x27DF)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD6112 to 0xFD6121, with no branch.
+; Called from: 8 proven call sites, first a 0xFDADA8, a 0xFDAF1D, a 0xFDB63E, a 0xFDB66D, +4 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27DF.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27DF) holds.
+; ---------------------------------------------------------------------
+Var27DF_Get:
 	link XIZ,0x0000                                      ; FD6112  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD6116  ae 08 21
 	ldb_d8 a, (0x27df)                                   ; FD6119  c1 df 27 21
 	ld (XBC),A                                           ; FD611D  b1 41
 	unlk XIZ                                             ; FD611F  ee 0d
 	ret                                                  ; FD6121  0e
-sub_FD6122:
+; ---------------------------------------------------------------------
+; Var2250_Get -- *(u8 *)arg1 = (0x2250)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD6122 to 0xFD6131, with no branch.
+; Called from: 18 proven call sites, first a 0xFD618B, a 0xFD61F0, a 0xFD62DD, a 0xFD633F, +14 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2250.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2250) holds.
+; ---------------------------------------------------------------------
+Var2250_Get:
 	link XIZ,0x0000                                      ; FD6122  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD6126  ae 08 21
 	ldb_d8 a, (0x2250)                                   ; FD6129  c1 50 22 21
@@ -110243,7 +111248,7 @@ sub_FD616A:
 	jr c, .LFD6175                                       ; FD6185  67 ee
 	lda xbc, (xiz-2)                                     ; FD6187  be fe 31
 	push XBC                                             ; FD618A  39
-	calr sub_FD6122                                      ; FD618B  1e 94 ff
+	calr Var2250_Get                                      ; FD618B  1e 94 ff
 	ld (XIX),0x80                                        ; FD618E  b4 00 80
 	ldb c, 0x80                                          ; FD6191  23 80
 	set 0x03,C                                           ; FD6193  cb 31 03
@@ -110289,7 +111294,7 @@ sub_FD61CF:
 	jr c, .LFD61DA                                       ; FD61EA  67 ee
 	lda xbc, (xiz-2)                                     ; FD61EC  be fe 31
 	push XBC                                             ; FD61EF  39
-	calr sub_FD6122                                      ; FD61F0  1e 2f ff
+	calr Var2250_Get                                      ; FD61F0  1e 2f ff
 	ld (XIX),0x80                                        ; FD61F3  b4 00 80
 	ld c, (xiz-2)                                        ; FD61F6  8e fe 23
 	ld (XIX+0x01),C                                      ; FD61F9  bc 01 43
@@ -110402,7 +111407,7 @@ sub_FD62B4:
 	jr c, .LFD62C7                                       ; FD62D7  67 ee
 	lda xbc, (xiz-4)                                     ; FD62D9  be fc 31
 	push XBC                                             ; FD62DC  39
-	calr sub_FD6122                                      ; FD62DD  1e 42 fe
+	calr Var2250_Get                                      ; FD62DD  1e 42 fe
 	ld (XIX),0x80                                        ; FD62E0  b4 00 80
 	ld c, (xiz-4)                                        ; FD62E3  8e fc 23
 	ld (XIX+0x01),C                                      ; FD62E6  bc 01 43
@@ -110448,7 +111453,7 @@ sub_FD6316:
 	jr c, .LFD6329                                       ; FD6339  67 ee
 	lda xbc, (xiz-4)                                     ; FD633B  be fc 31
 	push XBC                                             ; FD633E  39
-	calr sub_FD6122                                      ; FD633F  1e e0 fd
+	calr Var2250_Get                                      ; FD633F  1e e0 fd
 	ld (XIX),0x80                                        ; FD6342  b4 00 80
 	ld c, (xiz-4)                                        ; FD6345  8e fc 23
 	ld (XIX+0x01),C                                      ; FD6348  bc 01 43
@@ -110497,7 +111502,7 @@ sub_FD638B:
 	jr c, .LFD6396                                       ; FD63A6  67 ee
 	lda xbc, (xiz-2)                                     ; FD63A8  be fe 31
 	push XBC                                             ; FD63AB  39
-	calr sub_FD6122                                      ; FD63AC  1e 73 fd
+	calr Var2250_Get                                      ; FD63AC  1e 73 fd
 	ld (XIX),0x80                                        ; FD63AF  b4 00 80
 	ld c, (xiz-2)                                        ; FD63B2  8e fe 23
 	ld (XIX+0x01),C                                      ; FD63B5  bc 01 43
@@ -110533,7 +111538,7 @@ sub_FD63D7:
 	jr c, .LFD63E5                                       ; FD63F5  67 ee
 	lda xbc, (xiz-2)                                     ; FD63F7  be fe 31
 	push XBC                                             ; FD63FA  39
-	calr sub_FD6122                                      ; FD63FB  1e 24 fd
+	calr Var2250_Get                                      ; FD63FB  1e 24 fd
 	ld C,(XIZ+0x0a)                                      ; FD63FE  8e 0a 23
 	ld (XIX+0x02),C                                      ; FD6401  bc 02 43
 	pop XIY                                              ; FD6404  5d
@@ -110587,7 +111592,7 @@ sub_FD644D:
 	jr c, .LFD6452                                       ; FD6462  67 ee
 	lda xbc, (xiz-2)                                     ; FD6464  be fe 31
 	push XBC                                             ; FD6467  39
-	calr sub_FD6122                                      ; FD6468  1e b7 fc
+	calr Var2250_Get                                      ; FD6468  1e b7 fc
 	ld (XIX),0x80                                        ; FD646B  b4 00 80
 	ld c, (xiz-2)                                        ; FD646E  8e fe 23
 	ld (XIX+0x01),C                                      ; FD6471  bc 01 43
@@ -110681,7 +111686,7 @@ sub_FD6513:
 	jr c, .LFD651E                                       ; FD652E  67 ee
 	lda xbc, (xiz-2)                                     ; FD6530  be fe 31
 	push XBC                                             ; FD6533  39
-	calr sub_FD6122                                      ; FD6534  1e eb fb
+	calr Var2250_Get                                      ; FD6534  1e eb fb
 	ld (XIX),0x80                                        ; FD6537  b4 00 80
 	ld c, (xiz-2)                                        ; FD653A  8e fe 23
 	ld (XIX+0x01),C                                      ; FD653D  bc 01 43
@@ -110718,7 +111723,7 @@ sub_FD655D:
 	jr c, .LFD6570                                       ; FD6580  67 ee
 	lda xbc, (xiz-4)                                     ; FD6582  be fc 31
 	push XBC                                             ; FD6585  39
-	calr sub_FD6122                                      ; FD6586  1e 99 fb
+	calr Var2250_Get                                      ; FD6586  1e 99 fb
 	ld BC,(XIZ+0x0a)                                     ; FD6589  9e 0a 21
 	srl bc, 0x08                                         ; FD658C  d9 ef 08
 	ld (xiz-8), c                                        ; FD658F  be f8 43
@@ -110772,7 +111777,7 @@ sub_FD65D8:
 	jr c, .LFD65E6                                       ; FD65F6  67 ee
 	lda xbc, (xiz-4)                                     ; FD65F8  be fc 31
 	push XBC                                             ; FD65FB  39
-	calr sub_FD6122                                      ; FD65FC  1e 23 fb
+	calr Var2250_Get                                      ; FD65FC  1e 23 fb
 	ld BC,(XIZ+0x0c)                                     ; FD65FF  9e 0c 21
 	srl bc, 0x08                                         ; FD6602  d9 ef 08
 	ld (xiz-8), c                                        ; FD6605  be f8 43
@@ -110829,7 +111834,7 @@ sub_FD6669:
 	jr c, .LFD6667                                       ; FD6677  67 ee
 	lda xbc, (xiz-2)                                     ; FD6679  be fe 31
 	push XBC                                             ; FD667C  39
-	calr sub_FD6122                                      ; FD667D  1e a2 fa
+	calr Var2250_Get                                      ; FD667D  1e a2 fa
 	ld (XIX),0x88                                        ; FD6680  b4 00 88
 	ld c, (xiz-2)                                        ; FD6683  8e fe 23
 	ld (XIX+0x01),C                                      ; FD6686  bc 01 43
@@ -110862,7 +111867,7 @@ sub_FD66A6:
 	jr c, .LFD66B1                                       ; FD66C1  67 ee
 	lda xbc, (xiz-2)                                     ; FD66C3  be fe 31
 	push XBC                                             ; FD66C6  39
-	calr sub_FD6122                                      ; FD66C7  1e 58 fa
+	calr Var2250_Get                                      ; FD66C7  1e 58 fa
 	ld BC,(XIZ+0x08)                                     ; FD66CA  9e 08 21
 	srl bc, 0x08                                         ; FD66CD  d9 ef 08
 	ld (xiz-6), c                                        ; FD66D0  be fa 43
@@ -110903,7 +111908,7 @@ sub_FD6704:
 	jr c, .LFD6712                                       ; FD6722  67 ee
 	lda xbc, (xiz-2)                                     ; FD6724  be fe 31
 	push XBC                                             ; FD6727  39
-	calr sub_FD6122                                      ; FD6728  1e f7 f9
+	calr Var2250_Get                                      ; FD6728  1e f7 f9
 	ld BC,(XIZ+0x0a)                                     ; FD672B  9e 0a 21
 	srl bc, 0x08                                         ; FD672E  d9 ef 08
 	ld (XIX+0x02),C                                      ; FD6731  bc 02 43
@@ -110960,7 +111965,7 @@ sub_FD677F:
 	jr c, .LFD678A                                       ; FD679A  67 ee
 	lda xbc, (xiz-2)                                     ; FD679C  be fe 31
 	push XBC                                             ; FD679F  39
-	calr sub_FD6122                                      ; FD67A0  1e 7f f9
+	calr Var2250_Get                                      ; FD67A0  1e 7f f9
 	ld (XIX),0x88                                        ; FD67A3  b4 00 88
 	ld c, (xiz-2)                                        ; FD67A6  8e fe 23
 	ld (XIX+0x01),C                                      ; FD67A9  bc 01 43
@@ -110993,7 +111998,7 @@ sub_FD67C9:
 	jr c, .LFD67D4                                       ; FD67E4  67 ee
 	lda xbc, (xiz-2)                                     ; FD67E6  be fe 31
 	push XBC                                             ; FD67E9  39
-	calr sub_FD6122                                      ; FD67EA  1e 35 f9
+	calr Var2250_Get                                      ; FD67EA  1e 35 f9
 	ld (XIX),0x88                                        ; FD67ED  b4 00 88
 	ld c, (xiz-2)                                        ; FD67F0  8e fe 23
 	ld (XIX+0x01),C                                      ; FD67F3  bc 01 43
@@ -111231,7 +112236,7 @@ sub_FD69E0:
 	calr 0x36d9                                          ; FD69EE  1e d9 36
 	lda xbc, (xiz-4)                                     ; FD69F1  be fc 31
 	push XBC                                             ; FD69F4  39
-	calr sub_FD60C9                                      ; FD69F5  1e d1 f6
+	calr Var207C_Get                                      ; FD69F5  1e d1 f6
 	inc 0,XSP                                            ; FD69F8  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD69FA  8e fe 3f 00
 	jr NZ,.LFD6A0E                                       ; FD69FE  6e 0e
@@ -111247,7 +112252,7 @@ sub_FD69E0:
 	lda xbc, (xiz-6)                                     ; FD6A14  be fa 31
 	push XBC                                             ; FD6A17  39
 	pushw 0x00                                           ; FD6A18  0b 00 00
-	calr sub_FD6C7B                                      ; FD6A1B  1e 5d 02
+	calr Arr27A6_Get                                      ; FD6A1B  1e 5d 02
 	inc 6,XSP                                            ; FD6A1E  ef 66
 	jr .LFD6A2A                                          ; FD6A20  68 08
 .LFD6A22:
@@ -111258,7 +112263,7 @@ sub_FD69E0:
 .LFD6A2A:
 	lda xbc, (xiz-8)                                     ; FD6A2A  be f8 31
 	push XBC                                             ; FD6A2D  39
-	calr sub_FD6B1E                                      ; FD6A2E  1e ed 00
+	calr Var27A2_Get                                      ; FD6A2E  1e ed 00
 	pop XIY                                              ; FD6A31  5d
 	m_cp_mi8 MBD+r6, 0xf8, 0x00                          ; FD6A32  8e f8 3f 00
 	jrl z, .LFD6B01                                      ; FD6A36  76 c8 00
@@ -111370,7 +112375,20 @@ sub_FD6B07:
 .LFD6B1B:
 	unlk XIZ                                             ; FD6B1B  ee 0d
 	ret                                                  ; FD6B1D  0e
-sub_FD6B1E:
+; ---------------------------------------------------------------------
+; Var27A2_Get -- *(u8 *)arg1 = (0x27A2)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD6B1E to 0xFD6B2D, with no branch.
+; Called from: 3 proven call sites, first a 0xFD6A2E, a 0xFD6E98, a 0xFDACE3.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27A2.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27A2) holds.
+; ---------------------------------------------------------------------
+Var27A2_Get:
 	link XIZ,0x0000                                      ; FD6B1E  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD6B22  ae 08 21
 	ldb_d8 a, (0x27a2)                                   ; FD6B25  c1 a2 27 21
@@ -111441,7 +112459,20 @@ sub_FD6B4D:
 	popw hl                                              ; FD6BA4  4b
 	unlk XIZ                                             ; FD6BA5  ee 0d
 	ret                                                  ; FD6BA7  0e
-sub_FD6BA8:
+; ---------------------------------------------------------------------
+; Var27A4_Set -- (0x27A4) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFD6BA8 to 0xFD6BB5, with no branch.
+; Called from: 4 proven call sites, first a 0xFDAE5E, a 0xFDB11D, a 0xFDD384, a 0xFDD4A0.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27A4.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27A4) holds.
+; ---------------------------------------------------------------------
+Var27A4_Set:
 	link XIZ,0x0000                                      ; FD6BA8  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FD6BAC  8e 08 23
 	stb_d8 (0x27a4), c                                   ; FD6BAF  f1 a4 27 43
@@ -111534,7 +112565,20 @@ sub_FD6C34:
 	popw hl                                              ; FD6C61  4b
 	unlk XIZ                                             ; FD6C62  ee 0d
 	ret                                                  ; FD6C64  0e
-sub_FD6C65:
+; ---------------------------------------------------------------------
+; Arr27A6_Set -- ((u8 *)0x27A6)[arg1] = (u8)arg2
+;
+; A single-cell accessor of the C-compiled half of prom_a: 8
+; instructions, 0xFD6C65 to 0xFD6C7A, with no branch.
+; Called from: 166 proven call sites, first a 0xFD0215, a 0xFD0453, a 0xFD04B9, a 0xFD0821, +162 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27A6.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27A6) holds.
+; ---------------------------------------------------------------------
+Arr27A6_Set:
 	link XIZ,0x0000                                      ; FD6C65  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD6C69  9e 08 21
 	extz BC                                              ; FD6C6C  d9 12
@@ -111543,7 +112587,20 @@ sub_FD6C65:
 	ld (XBC+0x27a6),A                                    ; FD6C73  f3 e5 a6 27 41
 	unlk XIZ                                             ; FD6C78  ee 0d
 	ret                                                  ; FD6C7A  0e
-sub_FD6C7B:
+; ---------------------------------------------------------------------
+; Arr27A6_Get -- *(u8 *)arg2 = ((u8 *)0x27A6)[arg1]
+;
+; A single-cell accessor of the C-compiled half of prom_a: 9
+; instructions, 0xFD6C7B to 0xFD6C92, with no branch.
+; Called from: 313 proven call sites, first a 0xFCFE63, a 0xFCFEBD, a 0xFCFF61, a 0xFCFFEB, +309 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27A6.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27A6) holds.
+; ---------------------------------------------------------------------
+Arr27A6_Get:
 	link XIZ,0x0000                                      ; FD6C7B  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD6C7F  9e 08 21
 	extz BC                                              ; FD6C82  d9 12
@@ -111825,7 +112882,7 @@ sub_FD6E90:
 	link XIZ,0xfffe                                      ; FD6E90  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD6E94  be fe 31
 	push XBC                                             ; FD6E97  39
-	calr sub_FD6B1E                                      ; FD6E98  1e 83 fc
+	calr Var27A2_Get                                      ; FD6E98  1e 83 fc
 	pop XIY                                              ; FD6E9B  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD6E9C  8e fe 3f 00
 	jr z, .LFD6EB0                                       ; FD6EA0  66 0e
@@ -112228,7 +113285,7 @@ sub_FD71B9:
 	lda xix, (xiz-18)                                    ; FD71BF  be ee 34
 	lda xbc, (xiz-2)                                     ; FD71C2  be fe 31
 	push XBC                                             ; FD71C5  39
-	calr sub_FDA0CA                                      ; FD71C6  1e 01 2f
+	calr Var27F5_Get                                      ; FD71C6  1e 01 2f
 	lda xbc, (xiz-6)                                     ; FD71C9  be fa 31
 	push XBC                                             ; FD71CC  39
 	pushw 0x0b                                           ; FD71CD  0b 0b 00
@@ -112473,7 +113530,7 @@ sub_FD724B:
 	calr 0xf894                                          ; FD73CE  1e 94 f8
 	lda xbc, (xiz-14)                                    ; FD73D1  be f2 31
 	push XBC                                             ; FD73D4  39
-	calr sub_FDA0CA                                      ; FD73D5  1e f2 2c
+	calr Var27F5_Get                                      ; FD73D5  1e f2 2c
 	inc 0,XSP                                            ; FD73D8  ef 60
 	inc 4,XSP                                            ; FD73DA  ef 64
 	m_cp_mi8 MBD+r6, 0xf2, 0x00                          ; FD73DC  8e f2 3f 00
@@ -112538,7 +113595,7 @@ sub_FD7435:
 .LFD744D:
 	lda xbc, (xiz-2)                                     ; FD744D  be fe 31
 	push XBC                                             ; FD7450  39
-	calr sub_FDA0CA                                      ; FD7451  1e 76 2c
+	calr Var27F5_Get                                      ; FD7451  1e 76 2c
 	ld C,(XIX+0x07)                                      ; FD7454  8c 07 23
 	extz BC                                              ; FD7457  d9 12
 	pushw bc                                             ; FD7459  29
@@ -112717,7 +113774,7 @@ sub_FD759A:
 	jrl ugt, .LFD7676                                    ; FD75AA  7b c9 00
 	lda xbc, (xiz-2)                                     ; FD75AD  be fe 31
 	push XBC                                             ; FD75B0  39
-	calr sub_FDA0CA                                      ; FD75B1  1e 16 2b
+	calr Var27F5_Get                                      ; FD75B1  1e 16 2b
 	lda xbc, (xiz-4)                                     ; FD75B4  be fc 31
 	push XBC                                             ; FD75B7  39
 	pushw 0x0d                                           ; FD75B8  0b 0d 00
@@ -112815,7 +113872,20 @@ sub_FD7626:
 	popw hl                                              ; FD7677  4b
 	unlk XIZ                                             ; FD7678  ee 0d
 	ret                                                  ; FD767A  0e
-sub_FD767B:
+; ---------------------------------------------------------------------
+; Arr27D6_Set1 -- ((u8 *)0x27D6)[arg1 - 1] = (u8)arg2
+;
+; A single-cell accessor of the C-compiled half of prom_a: 9
+; instructions, 0xFD767B to 0xFD7692, with no branch.
+; Called from: 1 proven call sites, first a 0xFDD545.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27D6.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27D6) holds.
+; ---------------------------------------------------------------------
+Arr27D6_Set1:
 	link XIZ,0x0000                                      ; FD767B  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD767F  9e 08 21
 	extz BC                                              ; FD7682  d9 12
@@ -112873,20 +113943,59 @@ sub_FD76BF:
 	pop XIX                                              ; FD76F1  5c
 	unlk XIZ                                             ; FD76F2  ee 0d
 	ret                                                  ; FD76F4  0e
-sub_FD76F5:
+; ---------------------------------------------------------------------
+; Var27DA_Get -- *(u8 *)arg1 = (0x27DA)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD76F5 to 0xFD7704, with no branch.
+; Called from: 33 proven call sites, first a 0xFDA260, a 0xFDAD54, a 0xFDAE2C, a 0xFDAF15, +29 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27DA.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27DA) holds.
+; ---------------------------------------------------------------------
+Var27DA_Get:
 	link XIZ,0x0000                                      ; FD76F5  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD76F9  ae 08 21
 	ldb_d8 a, (0x27da)                                   ; FD76FC  c1 da 27 21
 	ld (XBC),A                                           ; FD7700  b1 41
 	unlk XIZ                                             ; FD7702  ee 0d
 	ret                                                  ; FD7704  0e
-sub_FD7705:
+; ---------------------------------------------------------------------
+; Var27DA_Set -- (0x27DA) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFD7705 to 0xFD7712, with no branch.
+; Called from: 121 proven call sites, first a 0xFD052E, a 0xFDA2A5, a 0xFDA308, a 0xFDAD79, +117 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27DA.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27DA) holds.
+; ---------------------------------------------------------------------
+Var27DA_Set:
 	link XIZ,0x0000                                      ; FD7705  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FD7709  8e 08 23
 	stb_d8 (0x27da), c                                   ; FD770C  f1 da 27 43
 	unlk XIZ                                             ; FD7710  ee 0d
 	ret                                                  ; FD7712  0e
-sub_FD7713:
+; ---------------------------------------------------------------------
+; Var27DB_Clear -- (0x27DB) = 0
+;
+; A single-cell accessor of the C-compiled half of prom_a: 2
+; instructions, 0xFD7713 to 0xFD7718, with no branch.
+; Called from: 82 proven call sites, first a 0xFDA26A, a 0xFDA30B, a 0xFDAEB5, a 0xFDAEF5, +78 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27DB.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27DB) holds.
+; ---------------------------------------------------------------------
+Var27DB_Clear:
 	stdi8 (0x27db), 0x00                                 ; FD7713  f1 db 27 00 00
 	ret                                                  ; FD7718  0e
 sub_FD7719:
@@ -112902,7 +114011,20 @@ sub_FD7719:
 	stb_d8 (0x27db), c                                   ; FD772D  f1 db 27 43
 	unlk XIZ                                             ; FD7731  ee 0d
 	ret                                                  ; FD7733  0e
-sub_FD7734:
+; ---------------------------------------------------------------------
+; Var27DB_Get -- *(u8 *)arg1 = (0x27DB)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD7734 to 0xFD7743, with no branch.
+; Called from: 38 proven call sites, first a 0xFDAEC3, a 0xFDB0E6, a 0xFDB2D1, a 0xFDB3F8, +34 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27DB.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27DB) holds.
+; ---------------------------------------------------------------------
+Var27DB_Get:
 	link XIZ,0x0000                                      ; FD7734  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD7738  ae 08 21
 	ldb_d8 a, (0x27db)                                   ; FD773B  c1 db 27 21
@@ -113160,13 +114282,13 @@ sub_FD7905:
 	ld DE,(XIZ+0x08)                                     ; FD790F  9e 08 22
 	lda xbc, (xiz-2)                                     ; FD7912  be fe 31
 	push XBC                                             ; FD7915  39
-	calr sub_FDA7A0                                      ; FD7916  1e 87 2e
+	calr Var2805_Get                                      ; FD7916  1e 87 2e
 	pop XIY                                              ; FD7919  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD791A  8e fe 3f 00
 	jrl nz, .LFD79CF                                     ; FD791E  7e ae 00
 	lda xbc, (xiz-4)                                     ; FD7921  be fc 31
 	push XBC                                             ; FD7924  39
-	calr sub_FDA84E                                      ; FD7925  1e 26 2f
+	calr Var2807_Get                                      ; FD7925  1e 26 2f
 	ld h, (xiz-4)                                        ; FD7928  8e fc 26
 	and H,0x01                                           ; FD792B  ce cc 01
 	ld l, (xiz-4)                                        ; FD792E  8e fc 27
@@ -113230,7 +114352,7 @@ sub_FD7905:
 	pushw 0x09                                           ; FD79B7  0b 09 00
 	calr 0xea8a                                          ; FD79BA  1e 8a ea
 	pushw 0x01                                           ; FD79BD  0b 01 00
-	calr sub_FDA792                                      ; FD79C0  1e cf 2d
+	calr Var2805_Set                                      ; FD79C0  1e cf 2d
 	inc 6,XSP                                            ; FD79C3  ef 66
 	jr .LFD79CF                                          ; FD79C5  68 08
 .LFD79C7:
@@ -113312,7 +114434,7 @@ sub_FD7A24:
 .LFD7A5D:
 	lda xbc, (xiz-4)                                     ; FD7A5D  be fc 31
 	push XBC                                             ; FD7A60  39
-	calr sub_FDA0CA                                      ; FD7A61  1e 66 26
+	calr Var27F5_Get                                      ; FD7A61  1e 66 26
 	pop XIY                                              ; FD7A64  5d
 	m_cp_mi8 MBD+r6, 0xfc, 0x01                          ; FD7A65  8e fc 3f 01
 	jr nz, .LFD7AA1                                      ; FD7A69  6e 36
@@ -113324,7 +114446,7 @@ sub_FD7A24:
 .LFD7A7A:
 	lda xbc, (xiz-6)                                     ; FD7A7A  be fa 31
 	push XBC                                             ; FD7A7D  39
-	calr sub_FDA0BA                                      ; FD7A7E  1e 39 26
+	calr Var27F6_Get                                      ; FD7A7E  1e 39 26
 	pop XIY                                              ; FD7A81  5d
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD7A82  8e fa 3f 00
 	jr nz, .LFD7A93                                      ; FD7A86  6e 0b
@@ -113347,7 +114469,7 @@ sub_FD7A24:
 .LFD7AAB:
 	lda xbc, (xiz-6)                                     ; FD7AAB  be fa 31
 	push XBC                                             ; FD7AAE  39
-	calr sub_FDA0BA                                      ; FD7AAF  1e 08 26
+	calr Var27F6_Get                                      ; FD7AAF  1e 08 26
 	pop XIY                                              ; FD7AB2  5d
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD7AB3  8e fa 3f 00
 	jr nz, .LFD7AD2                                      ; FD7AB7  6e 19
@@ -113360,7 +114482,7 @@ sub_FD7A24:
 	ld C,(XIX)                                           ; FD7AC3  84 23
 	stb_d8 (0x27e9), c                                   ; FD7AC5  f1 e9 27 43
 	pushw 0x01                                           ; FD7AC9  0b 01 00
-	calr sub_FDA0AC                                      ; FD7ACC  1e dd 25
+	calr Var27F6_Set                                      ; FD7ACC  1e dd 25
 	popw bc                                              ; FD7ACF  49
 	jr .LFD7AD8                                          ; FD7AD0  68 06
 .LFD7AD2:
@@ -113432,14 +114554,40 @@ sub_FD7B3E:
 	popw hl                                              ; FD7B67  4b
 	unlk XIZ                                             ; FD7B68  ee 0d
 	ret                                                  ; FD7B6A  0e
-sub_FD7B6B:
+; ---------------------------------------------------------------------
+; Var27E9_Get -- *(u8 *)arg1 = (0x27E9)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD7B6B to 0xFD7B7A, with no branch.
+; Called from: 2 proven call sites, first a 0xFDCE1A, a 0xFDCE94.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27E9.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27E9) holds.
+; ---------------------------------------------------------------------
+Var27E9_Get:
 	link XIZ,0x0000                                      ; FD7B6B  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD7B6F  ae 08 21
 	ldb_d8 a, (0x27e9)                                   ; FD7B72  c1 e9 27 21
 	ld (XBC),A                                           ; FD7B76  b1 41
 	unlk XIZ                                             ; FD7B78  ee 0d
 	ret                                                  ; FD7B7A  0e
-sub_FD7B7B:
+; ---------------------------------------------------------------------
+; Var27E9_Set -- (0x27E9) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFD7B7B to 0xFD7B88, with no branch.
+; Called from: 0 proven call sites -- none.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27E9.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27E9) holds.
+; ---------------------------------------------------------------------
+Var27E9_Set:
 	link XIZ,0x0000                                      ; FD7B7B  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FD7B7F  8e 08 23
 	stb_d8 (0x27e9), c                                   ; FD7B82  f1 e9 27 43
@@ -113592,7 +114740,7 @@ sub_FD7CB5:
 	pushw de                                             ; FD7CBA  2a
 	lda xbc, (xiz-2)                                     ; FD7CBB  be fe 31
 	push XBC                                             ; FD7CBE  39
-	calr sub_FDA0CA                                      ; FD7CBF  1e 08 24
+	calr Var27F5_Get                                      ; FD7CBF  1e 08 24
 	ldb e, 0x02                                          ; FD7CC2  25 02
 	pop XIY                                              ; FD7CC4  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD7CC5  8e fe 3f 00
@@ -113651,7 +114799,7 @@ sub_FD7D18:
 	ld L,(XIZ+0x08)                                      ; FD7D22  8e 08 27
 	lda xbc, (xiz-2)                                     ; FD7D25  be fe 31
 	push XBC                                             ; FD7D28  39
-	calr sub_FDA0CA                                      ; FD7D29  1e 9e 23
+	calr Var27F5_Get                                      ; FD7D29  1e 9e 23
 	pop XIY                                              ; FD7D2C  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD7D2D  8e fe 3f 00
 	jr nz, .LFD7D40                                      ; FD7D31  6e 0d
@@ -114837,7 +115985,7 @@ sub_FD8803:
 .LFD8830:
 	lda xbc, (xiz-6)                                     ; FD8830  be fa 31
 	push XBC                                             ; FD8833  39
-	calr sub_FDA0CA                                      ; FD8834  1e 93 18
+	calr Var27F5_Get                                      ; FD8834  1e 93 18
 	lda xbc, (xiz-4)                                     ; FD8837  be fc 31
 	push XBC                                             ; FD883A  39
 	pushw 0x00                                           ; FD883B  0b 00 00
@@ -115090,7 +116238,7 @@ sub_FD89FA:
 	calr 0xe22e                                          ; FD8A4A  1e 2e e2
 	lda xbc, (xiz-10)                                    ; FD8A4D  be f6 31
 	push XBC                                             ; FD8A50  39
-	calr sub_FDA0CA                                      ; FD8A51  1e 76 16
+	calr Var27F5_Get                                      ; FD8A51  1e 76 16
 	add XSP,0x0000002a                                   ; FD8A54  ef c8 2a 00 00 00
 	lda xbc, (xiz-8)                                     ; FD8A5A  be f8 31
 	push XBC                                             ; FD8A5D  39
@@ -117159,7 +118307,20 @@ sub_FD9D16:
 	stda16 (0x27f2), bc                                  ; FD9D37  f1 f2 27 51
 	unlk XIZ                                             ; FD9D3B  ee 0d
 	ret                                                  ; FD9D3D  0e
-sub_FD9D3E:
+; ---------------------------------------------------------------------
+; Var27F2_GetW -- *(u16 *)arg1 = (0x27F2)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD9D3E to 0xFD9D4D, with no branch.
+; Called from: 4 proven call sites, first a 0xFCFF77, a 0xFD0D0E, a 0xFD1B6E, a 0xFD40F5.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27F2.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27F2) holds.
+; ---------------------------------------------------------------------
+Var27F2_GetW:
 	link XIZ,0x0000                                      ; FD9D3E  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD9D42  ae 08 21
 	ldw_d16 wa, (0x27f2)                                 ; FD9D45  d1 f2 27 20
@@ -117171,7 +118332,20 @@ sub_FD9D3E:
 	stb_d8 (0x27f4), c                                   ; FD9D55  f1 f4 27 43
 	unlk XIZ                                             ; FD9D59  ee 0d
 	ret                                                  ; FD9D5B  0e
-sub_FD9D5C:
+; ---------------------------------------------------------------------
+; Var27F4_Get -- *(u8 *)arg1 = (0x27F4)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFD9D5C to 0xFD9D6B, with no branch.
+; Called from: 4 proven call sites, first a 0xFCFED6, a 0xFD0C7D, a 0xFD1AC9, a 0xFD405E.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27F4.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27F4) holds.
+; ---------------------------------------------------------------------
+Var27F4_Get:
 	link XIZ,0x0000                                      ; FD9D5C  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FD9D60  ae 08 21
 	ldb_d8 a, (0x27f4)                                   ; FD9D63  c1 f4 27 21
@@ -117562,27 +118736,79 @@ sub_FDA05E:
 	popw hl                                              ; FDA0A8  4b
 	unlk XIZ                                             ; FDA0A9  ee 0d
 	ret                                                  ; FDA0AB  0e
-sub_FDA0AC:
+; ---------------------------------------------------------------------
+; Var27F6_Set -- (0x27F6) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA0AC to 0xFDA0B9, with no branch.
+; Called from: 4 proven call sites, first a 0xFD7ACC, a 0xFDAC96, a 0xFDACC4, a 0xFDCE8C.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27F6.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27F6) holds.
+; ---------------------------------------------------------------------
+Var27F6_Set:
 	link XIZ,0x0000                                      ; FDA0AC  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA0B0  8e 08 23
 	stb_d8 (0x27f6), c                                   ; FDA0B3  f1 f6 27 43
 	unlk XIZ                                             ; FDA0B7  ee 0d
 	ret                                                  ; FDA0B9  0e
-sub_FDA0BA:
+; ---------------------------------------------------------------------
+; Var27F6_Get -- *(u8 *)arg1 = (0x27F6)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA0BA to 0xFDA0C9, with no branch.
+; Called from: 3 proven call sites, first a 0xFD7A7E, a 0xFD7AAF, a 0xFDD007.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27F6.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27F6) holds.
+; ---------------------------------------------------------------------
+Var27F6_Get:
 	link XIZ,0x0000                                      ; FDA0BA  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA0BE  ae 08 21
 	ldb_d8 a, (0x27f6)                                   ; FDA0C1  c1 f6 27 21
 	ld (XBC),A                                           ; FDA0C5  b1 41
 	unlk XIZ                                             ; FDA0C7  ee 0d
 	ret                                                  ; FDA0C9  0e
-sub_FDA0CA:
+; ---------------------------------------------------------------------
+; Var27F5_Get -- *(u8 *)arg1 = (0x27F5)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA0CA to 0xFDA0D9, with no branch.
+; Called from: 117 proven call sites, first a 0xFCFE4B, a 0xFCFEAA, a 0xFCFF4E, a 0xFCFFD8, +113 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27F5.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27F5) holds.
+; ---------------------------------------------------------------------
+Var27F5_Get:
 	link XIZ,0x0000                                      ; FDA0CA  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA0CE  ae 08 21
 	ldb_d8 a, (0x27f5)                                   ; FDA0D1  c1 f5 27 21
 	ld (XBC),A                                           ; FDA0D5  b1 41
 	unlk XIZ                                             ; FDA0D7  ee 0d
 	ret                                                  ; FDA0D9  0e
-sub_FDA0DA:
+; ---------------------------------------------------------------------
+; Var27F5_Set -- (0x27F5) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA0DA to 0xFDA0E7, with no branch.
+; Called from: 3 proven call sites, first a 0xFDAD99, a 0xFDADC9, a 0xFDADE3.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27F5.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27F5) holds.
+; ---------------------------------------------------------------------
+Var27F5_Set:
 	link XIZ,0x0000                                      ; FDA0DA  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA0DE  8e 08 23
 	stb_d8 (0x27f5), c                                   ; FDA0E1  f1 f5 27 43
@@ -117593,7 +118819,20 @@ sub_FDA0DA:
 	stda16 (0x27f7), bc                                  ; FDA0EF  f1 f7 27 51
 	unlk XIZ                                             ; FDA0F3  ee 0d
 	ret                                                  ; FDA0F5  0e
-sub_FDA0F6:
+; ---------------------------------------------------------------------
+; Var27F7_GetW -- *(u16 *)arg1 = (0x27F7)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA0F6 to 0xFDA105, with no branch.
+; Called from: 2 proven call sites, first a 0xFD030A, a 0xFD03AB.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27F7.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27F7) holds.
+; ---------------------------------------------------------------------
+Var27F7_GetW:
 	link XIZ,0x0000                                      ; FDA0F6  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA0FA  ae 08 21
 	ldw_d16 wa, (0x27f7)                                 ; FDA0FD  d1 f7 27 20
@@ -117605,34 +118844,99 @@ sub_FDA0F6:
 	stda16 (0x27f9), bc                                  ; FDA10D  f1 f9 27 51
 	unlk XIZ                                             ; FDA111  ee 0d
 	ret                                                  ; FDA113  0e
-sub_FDA114:
+; ---------------------------------------------------------------------
+; Var27F9_GetW -- *(u16 *)arg1 = (0x27F9)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA114 to 0xFDA123, with no branch.
+; Called from: 1 proven call sites, first a 0xFD0312.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27F9.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27F9) holds.
+; ---------------------------------------------------------------------
+Var27F9_GetW:
 	link XIZ,0x0000                                      ; FDA114  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA118  ae 08 21
 	ldw_d16 wa, (0x27f9)                                 ; FDA11B  d1 f9 27 20
 	ld (XBC),WA                                          ; FDA11F  b1 50
 	unlk XIZ                                             ; FDA121  ee 0d
 	ret                                                  ; FDA123  0e
-sub_FDA124:
+; ---------------------------------------------------------------------
+; Var27FB_Get -- *(u8 *)arg1 = (0x27FB)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA124 to 0xFDA133, with no branch.
+; Called from: 1 proven call sites, first a 0xFDA168.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27FB.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27FB) holds.
+; ---------------------------------------------------------------------
+Var27FB_Get:
 	link XIZ,0x0000                                      ; FDA124  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA128  ae 08 21
 	ldb_d8 a, (0x27fb)                                   ; FDA12B  c1 fb 27 21
 	ld (XBC),A                                           ; FDA12F  b1 41
 	unlk XIZ                                             ; FDA131  ee 0d
 	ret                                                  ; FDA133  0e
-sub_FDA134:
+; ---------------------------------------------------------------------
+; Var27FB_Set -- (0x27FB) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA134 to 0xFDA141, with no branch.
+; Called from: 2 proven call sites, first a 0xFDA184, a 0xFDAC6E.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27FB.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27FB) holds.
+; ---------------------------------------------------------------------
+Var27FB_Set:
 	link XIZ,0x0000                                      ; FDA134  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA138  8e 08 23
 	stb_d8 (0x27fb), c                                   ; FDA13B  f1 fb 27 43
 	unlk XIZ                                             ; FDA13F  ee 0d
 	ret                                                  ; FDA141  0e
-sub_FDA142:
+; ---------------------------------------------------------------------
+; Var27FC_Get -- *(u8 *)arg1 = (0x27FC)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA142 to 0xFDA151, with no branch.
+; Called from: 6 proven call sites, first a 0xFD033D, a 0xFD03D2, a 0xFDA18D, a 0xFDB19C, +2 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27FC.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27FC) holds.
+; ---------------------------------------------------------------------
+Var27FC_Get:
 	link XIZ,0x0000                                      ; FDA142  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA146  ae 08 21
 	ldb_d8 a, (0x27fc)                                   ; FDA149  c1 fc 27 21
 	ld (XBC),A                                           ; FDA14D  b1 41
 	unlk XIZ                                             ; FDA14F  ee 0d
 	ret                                                  ; FDA151  0e
-sub_FDA152:
+; ---------------------------------------------------------------------
+; Var27FC_Set -- (0x27FC) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA152 to 0xFDA15F, with no branch.
+; Called from: 3 proven call sites, first a 0xFD0358, a 0xFD03ED, a 0xFDA17E.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27FC.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27FC) holds.
+; ---------------------------------------------------------------------
+Var27FC_Set:
 	link XIZ,0x0000                                      ; FDA152  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA156  8e 08 23
 	stb_d8 (0x27fc), c                                   ; FDA159  f1 fc 27 43
@@ -117642,7 +118946,7 @@ sub_FDA160:
 	link XIZ,0xfffe                                      ; FDA160  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FDA164  be fe 31
 	push XBC                                             ; FDA167  39
-	calr sub_FDA124                                      ; FDA168  1e b9 ff
+	calr Var27FB_Get                                      ; FDA168  1e b9 ff
 	pop XIY                                              ; FDA16B  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDA16C  8e fe 3f 00
 	jr nz, .LFDA189                                      ; FDA170  6e 17
@@ -117651,15 +118955,15 @@ sub_FDA160:
 	ldw bc, 0x24                                         ; FDA178  31 24 00
 	extz BC                                              ; FDA17B  d9 12
 	pushw bc                                             ; FDA17D  29
-	calr sub_FDA152                                      ; FDA17E  1e d1 ff
+	calr Var27FC_Set                                      ; FDA17E  1e d1 ff
 	pushw 0x01                                           ; FDA181  0b 01 00
-	calr sub_FDA134                                      ; FDA184  1e ad ff
+	calr Var27FB_Set                                      ; FDA184  1e ad ff
 	jr .LFDA190                                          ; FDA187  68 07
 .LFDA189:
 	ld XBC,(XIZ+0x08)                                    ; FDA189  ae 08 21
 	push XBC                                             ; FDA18C  39
 sub_FDA18D:
-	calr sub_FDA142                                      ; FDA18D  1e b2 ff
+	calr Var27FC_Get                                      ; FDA18D  1e b2 ff
 .LFDA190:
 	pop XIY                                              ; FDA190  5d
 	unlk XIZ                                             ; FDA191  ee 0d
@@ -117761,11 +119065,11 @@ sub_FDA252:
 	lda_24 xix, (0xfd7734)                               ; FDA257  f2 34 77 fd 34
 	lda xbc, (xiz-2)                                     ; FDA25C  be fe 31
 	push XBC                                             ; FDA25F  39
-	calr sub_FD76F5                                      ; FDA260  1e 92 d4
+	calr Var27DA_Get                                      ; FDA260  1e 92 d4
 	pop XIY                                              ; FDA263  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDA264  8e fe 3f 00
 	jr nz, .LFDA2AF                                      ; FDA268  6e 45
-	calr sub_FD7713                                      ; FDA26A  1e a6 d4
+	calr Var27DB_Clear                                      ; FDA26A  1e a6 d4
 	lda xbc, (xiz-4)                                     ; FDA26D  be fc 31
 	push XBC                                             ; FDA270  39
 	calr 0xbe55                                          ; FDA271  1e 55 be
@@ -117790,7 +119094,7 @@ sub_FDA282:
 	pushw 0x00                                           ; FDA29C  0b 00 00
 	calr 0xc135                                          ; FDA29F  1e 35 c1
 	pushw 0x01                                           ; FDA2A2  0b 01 00
-	calr sub_FD7705                                      ; FDA2A5  1e 5d d4
+	calr Var27DA_Set                                      ; FDA2A5  1e 5d d4
 	inc 0,XSP                                            ; FDA2A8  ef 60
 	inc 0,XSP                                            ; FDA2AA  ef 60
 	jrl .LFDA32D                                         ; FDA2AC  78 7e 00
@@ -117833,8 +119137,8 @@ sub_FDA282:
 	jr .LFDA32D                                          ; FDA303  68 28
 .LFDA305:
 	pushw 0x00                                           ; FDA305  0b 00 00
-	calr sub_FD7705                                      ; FDA308  1e fa d3
-	calr sub_FD7713                                      ; FDA30B  1e 05 d4
+	calr Var27DA_Set                                      ; FDA308  1e fa d3
+	calr Var27DB_Clear                                      ; FDA30B  1e 05 d4
 	lda xbc, (xiz-4)                                     ; FDA30E  be fc 31
 	push XBC                                             ; FDA311  39
 	calr 0xbdb4                                          ; FDA312  1e b4 bd
@@ -117852,14 +119156,40 @@ sub_FDA282:
 	pop XIX                                              ; FDA32D  5c
 	unlk XIZ                                             ; FDA32E  ee 0d
 	ret                                                  ; FDA330  0e
-sub_FDA331:
+; ---------------------------------------------------------------------
+; Var27FE_Get -- *(u8 *)arg1 = (0x27FE)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA331 to 0xFDA340, with no branch.
+; Called from: 2 proven call sites, first a 0xFDCE01, a 0xFDD0EB.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27FE.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27FE) holds.
+; ---------------------------------------------------------------------
+Var27FE_Get:
 	link XIZ,0x0000                                      ; FDA331  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA335  ae 08 21
 	ldb_d8 a, (0x27fe)                                   ; FDA338  c1 fe 27 21
 	ld (XBC),A                                           ; FDA33C  b1 41
 	unlk XIZ                                             ; FDA33E  ee 0d
 	ret                                                  ; FDA340  0e
-sub_FDA341:
+; ---------------------------------------------------------------------
+; Var27FE_Set -- (0x27FE) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA341 to 0xFDA34E, with no branch.
+; Called from: 4 proven call sites, first a 0xFD02ED, a 0xFD050E, a 0xFDCE7E, a 0xFDD113.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27FE.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27FE) holds.
+; ---------------------------------------------------------------------
+Var27FE_Set:
 	link XIZ,0x0000                                      ; FDA341  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA345  8e 08 23
 	stb_d8 (0x27fe), c                                   ; FDA348  f1 fe 27 43
@@ -118026,7 +119356,20 @@ sub_FDA48C:
 	unlk XIZ                                             ; FDA4A1  ee 0d
 sub_FDA4A3:
 	ret                                                  ; FDA4A3  0e
-sub_FDA4A4:
+; ---------------------------------------------------------------------
+; Arr2800_Get1 -- *(u8 *)arg2 = ((u8 *)0x2800)[arg1 - 1]
+;
+; A single-cell accessor of the C-compiled half of prom_a: 10
+; instructions, 0xFDA4A4 to 0xFDA4BD, with no branch.
+; Called from: 12 proven call sites, first a 0xFD6A66, a 0xFD6A8A, a 0xFDB738, a 0xFDB74C, +8 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2800.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2800) holds.
+; ---------------------------------------------------------------------
+Arr2800_Get1:
 	link XIZ,0x0000                                      ; FDA4A4  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FDA4A8  9e 08 21
 	extz BC                                              ; FDA4AB  d9 12
@@ -118037,7 +119380,20 @@ sub_FDA4A4:
 	ld (XBC),A                                           ; FDA4B9  b1 41
 	unlk XIZ                                             ; FDA4BB  ee 0d
 	ret                                                  ; FDA4BD  0e
-sub_FDA4BE:
+; ---------------------------------------------------------------------
+; Var7634_GetViaH -- *(u8 *)arg1 = (0x7634)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 9
+; instructions, 0xFDA4BE to 0xFDA4D1, with no branch.
+; Called from: 1 proven call sites, first a 0xFDE0EC.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x7634.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x7634) holds.
+; ---------------------------------------------------------------------
+Var7634_GetViaH:
 	link XIZ,0x0000                                      ; FDA4BE  ee 0c 00 00
 	pushw hl                                             ; FDA4C2  2b
 	ldb_d8 c, (0x7634)                                   ; FDA4C3  c1 34 76 23
@@ -118047,20 +119403,59 @@ sub_FDA4BE:
 	popw hl                                              ; FDA4CE  4b
 	unlk XIZ                                             ; FDA4CF  ee 0d
 	ret                                                  ; FDA4D1  0e
-sub_FDA4D2:
+; ---------------------------------------------------------------------
+; Var2806_Set -- (0x2806) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA4D2 to 0xFDA4DF, with no branch.
+; Called from: 5 proven call sites, first a 0xFD21FF, a 0xFD62A8, a 0xFDAC8B, a 0xFDCE38, +1 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2806.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2806) holds.
+; ---------------------------------------------------------------------
+Var2806_Set:
 	link XIZ,0x0000                                      ; FDA4D2  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA4D6  8e 08 23
 	stb_d8 (0x2806), c                                   ; FDA4D9  f1 06 28 43
 	unlk XIZ                                             ; FDA4DD  ee 0d
 	ret                                                  ; FDA4DF  0e
-sub_FDA4E0:
+; ---------------------------------------------------------------------
+; Var2806_Get -- *(u8 *)arg1 = (0x2806)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA4E0 to 0xFDA4EF, with no branch.
+; Called from: 1 proven call sites, first a 0xFDCE47.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2806.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2806) holds.
+; ---------------------------------------------------------------------
+Var2806_Get:
 	link XIZ,0x0000                                      ; FDA4E0  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA4E4  ae 08 21
 	ldb_d8 a, (0x2806)                                   ; FDA4E7  c1 06 28 21
 	ld (XBC),A                                           ; FDA4EB  b1 41
 	unlk XIZ                                             ; FDA4ED  ee 0d
 	ret                                                  ; FDA4EF  0e
-sub_FDA4F0:
+; ---------------------------------------------------------------------
+; Var78B7_GetViaH -- *(u8 *)arg1 = (0x78B7)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 9
+; instructions, 0xFDA4F0 to 0xFDA503, with no branch.
+; Called from: 2 proven call sites, first a 0xFDA923, a 0xFDE109.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x78B7.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x78B7) holds.
+; ---------------------------------------------------------------------
+Var78B7_GetViaH:
 	link XIZ,0x0000                                      ; FDA4F0  ee 0c 00 00
 	pushw hl                                             ; FDA4F4  2b
 	ldb_d8 c, (0x78b7)                                   ; FDA4F5  c1 b7 78 23
@@ -118209,7 +119604,7 @@ sub_FDA5F5:
 	jr c, .LFDA5E3                                       ; FDA60B  67 d6
 	lda xbc, (xiz-2)                                     ; FDA60D  be fe 31
 	push XBC                                             ; FDA610  39
-	calr sub_FDA0CA                                      ; FDA611  1e b6 fa
+	calr Var27F5_Get                                      ; FDA611  1e b6 fa
 	pop XIY                                              ; FDA614  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDA615  8e fe 3f 00
 	jrl nz, .LFDA67E                                     ; FDA619  7e 62 00
@@ -118408,13 +119803,39 @@ sub_FDA777:
 	ld (XBC),A                                           ; FDA78D  b1 41
 	unlk XIZ                                             ; FDA78F  ee 0d
 	ret                                                  ; FDA791  0e
-sub_FDA792:
+; ---------------------------------------------------------------------
+; Var2805_Set -- (0x2805) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA792 to 0xFDA79F, with no branch.
+; Called from: 36 proven call sites, first a 0xFD261C, a 0xFD2686, a 0xFD79C0, a 0xFDACB2, +32 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2805.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2805) holds.
+; ---------------------------------------------------------------------
+Var2805_Set:
 	link XIZ,0x0000                                      ; FDA792  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA796  8e 08 23
 	stb_d8 (0x2805), c                                   ; FDA799  f1 05 28 43
 	unlk XIZ                                             ; FDA79D  ee 0d
 	ret                                                  ; FDA79F  0e
-sub_FDA7A0:
+; ---------------------------------------------------------------------
+; Var2805_Get -- *(u8 *)arg1 = (0x2805)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA7A0 to 0xFDA7AF, with no branch.
+; Called from: 2 proven call sites, first a 0xFD7916, a 0xFDBBEC.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2805.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2805) holds.
+; ---------------------------------------------------------------------
+Var2805_Get:
 	link XIZ,0x0000                                      ; FDA7A0  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA7A4  ae 08 21
 	ldb_d8 a, (0x2805)                                   ; FDA7A7  c1 05 28 21
@@ -118483,20 +119904,59 @@ sub_FDA829:
 .LFDA83D:
 	unlk XIZ                                             ; FDA83D  ee 0d
 	ret                                                  ; FDA83F  0e
-sub_FDA840:
+; ---------------------------------------------------------------------
+; Var2807_Set -- (0x2807) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA840 to 0xFDA84D, with no branch.
+; Called from: 2 proven call sites, first a 0xFD2643, a 0xFDACA4.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2807.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2807) holds.
+; ---------------------------------------------------------------------
+Var2807_Set:
 	link XIZ,0x0000                                      ; FDA840  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA844  8e 08 23
 	stb_d8 (0x2807), c                                   ; FDA847  f1 07 28 43
 	unlk XIZ                                             ; FDA84B  ee 0d
 	ret                                                  ; FDA84D  0e
-sub_FDA84E:
+; ---------------------------------------------------------------------
+; Var2807_Get -- *(u8 *)arg1 = (0x2807)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA84E to 0xFDA85D, with no branch.
+; Called from: 6 proven call sites, first a 0xFD2625, a 0xFD7925, a 0xFDAD20, a 0xFDB728, +2 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2807.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2807) holds.
+; ---------------------------------------------------------------------
+Var2807_Get:
 	link XIZ,0x0000                                      ; FDA84E  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA852  ae 08 21
 	ldb_d8 a, (0x2807)                                   ; FDA855  c1 07 28 21
 	ld (XBC),A                                           ; FDA859  b1 41
 	unlk XIZ                                             ; FDA85B  ee 0d
 	ret                                                  ; FDA85D  0e
-sub_FDA85E:
+; ---------------------------------------------------------------------
+; Arr2808_Set1 -- ((u8 *)0x2808)[arg1 - 1] = (u8)arg2
+;
+; A single-cell accessor of the C-compiled half of prom_a: 9
+; instructions, 0xFDA85E to 0xFDA875, with no branch.
+; Called from: 2 proven call sites, first a 0xFD26FE, a 0xFDD6A9.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2808.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2808) holds.
+; ---------------------------------------------------------------------
+Arr2808_Set1:
 	link XIZ,0x0000                                      ; FDA85E  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FDA862  9e 08 21
 	extz BC                                              ; FDA865  d9 12
@@ -118506,7 +119966,20 @@ sub_FDA85E:
 	ld (XBC+0x2808),A                                    ; FDA86E  f3 e5 08 28 41
 	unlk XIZ                                             ; FDA873  ee 0d
 	ret                                                  ; FDA875  0e
-sub_FDA876:
+; ---------------------------------------------------------------------
+; Arr2808_Get1 -- *(u8 *)arg2 = ((u8 *)0x2808)[arg1 - 1]
+;
+; A single-cell accessor of the C-compiled half of prom_a: 10
+; instructions, 0xFDA876 to 0xFDA88F, with no branch.
+; Called from: 2 proven call sites, first a 0xFD416D, a 0xFD42B4.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2808.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2808) holds.
+; ---------------------------------------------------------------------
+Arr2808_Get1:
 	link XIZ,0x0000                                      ; FDA876  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FDA87A  9e 08 21
 	extz BC                                              ; FDA87D  d9 12
@@ -118517,20 +119990,59 @@ sub_FDA876:
 	ld (XBC),A                                           ; FDA88B  b1 41
 	unlk XIZ                                             ; FDA88D  ee 0d
 	ret                                                  ; FDA88F  0e
-sub_FDA890:
+; ---------------------------------------------------------------------
+; Var280C_SetW -- (0x280C) = (u16)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA890 to 0xFDA89D, with no branch.
+; Called from: 7 proven call sites, first a 0xFD2068, a 0xFD20C9, a 0xFD2239, a 0xFD2273, +3 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x280C.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x280C) holds.
+; ---------------------------------------------------------------------
+Var280C_SetW:
 	link XIZ,0x0000                                      ; FDA890  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FDA894  9e 08 21
 	stda16 (0x280c), bc                                  ; FDA897  f1 0c 28 51
 	unlk XIZ                                             ; FDA89B  ee 0d
 	ret                                                  ; FDA89D  0e
-sub_FDA89E:
+; ---------------------------------------------------------------------
+; Var280C_GetW -- *(u16 *)arg1 = (0x280C)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA89E to 0xFDA8AD, with no branch.
+; Called from: 2 proven call sites, first a 0xFD202E, a 0xFD208D.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x280C.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x280C) holds.
+; ---------------------------------------------------------------------
+Var280C_GetW:
 	link XIZ,0x0000                                      ; FDA89E  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA8A2  ae 08 21
 	ldw_d16 wa, (0x280c)                                 ; FDA8A5  d1 0c 28 20
 	ld (XBC),WA                                          ; FDA8A9  b1 50
 	unlk XIZ                                             ; FDA8AB  ee 0d
 	ret                                                  ; FDA8AD  0e
-sub_FDA8AE:
+; ---------------------------------------------------------------------
+; Var280E_SetW -- (0x280E) = (u16)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA8AE to 0xFDA8BB, with no branch.
+; Called from: 2 proven call sites, first a 0xFD2232, a 0xFD2418.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x280E.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x280E) holds.
+; ---------------------------------------------------------------------
+Var280E_SetW:
 	link XIZ,0x0000                                      ; FDA8AE  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FDA8B2  9e 08 21
 	stda16 (0x280e), bc                                  ; FDA8B5  f1 0e 28 51
@@ -118544,13 +120056,39 @@ sub_FDA8BC:
 	unlk XIZ                                             ; FDA8C9  ee 0d
 sub_FDA8CB:
 	ret                                                  ; FDA8CB  0e
-sub_FDA8CC:
+; ---------------------------------------------------------------------
+; Var2810_Set -- (0x2810) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDA8CC to 0xFDA8D9, with no branch.
+; Called from: 2 proven call sites, first a 0xFD206F, a 0xFD2240.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2810.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2810) holds.
+; ---------------------------------------------------------------------
+Var2810_Set:
 	link XIZ,0x0000                                      ; FDA8CC  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDA8D0  8e 08 23
 	stb_d8 (0x2810), c                                   ; FDA8D3  f1 10 28 43
 	unlk XIZ                                             ; FDA8D7  ee 0d
 	ret                                                  ; FDA8D9  0e
-sub_FDA8DA:
+; ---------------------------------------------------------------------
+; Var2810_Get -- *(u8 *)arg1 = (0x2810)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDA8DA to 0xFDA8E9, with no branch.
+; Called from: 1 proven call sites, first a 0xFD201F.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2810.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2810) holds.
+; ---------------------------------------------------------------------
+Var2810_Get:
 	link XIZ,0x0000                                      ; FDA8DA  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA8DE  ae 08 21
 	ldb_d8 a, (0x2810)                                   ; FDA8E1  c1 10 28 21
@@ -118584,9 +120122,9 @@ sub_FDA911:
 	lda xix, (xiz-40)                                    ; FDA918  be d8 34
 	lda xbc, (xiz-2)                                     ; FDA91B  be fe 31
 	push XBC                                             ; FDA91E  39
-	calr sub_FDA0CA                                      ; FDA91F  1e a8 f7
+	calr Var27F5_Get                                      ; FDA91F  1e a8 f7
 	push XIX                                             ; FDA922  3c
-	calr sub_FDA4F0                                      ; FDA923  1e ca fb
+	calr Var78B7_GetViaH                                      ; FDA923  1e ca fb
 	inc 0,XSP                                            ; FDA926  ef 60
 	pushw 0xff                                           ; FDA928  0b ff 00
 	push XIX                                             ; FDA92B  3c
@@ -118878,14 +120416,40 @@ sub_FDAA52:
 	popw hl                                              ; FDABCF  4b
 	unlk XIZ                                             ; FDABD0  ee 0d
 	ret                                                  ; FDABD2  0e
-sub_FDABD3:
+; ---------------------------------------------------------------------
+; Var2811_Get -- *(u8 *)arg1 = (0x2811)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDABD3 to 0xFDABE2, with no branch.
+; Called from: 1 proven call sites, first a 0xFDBDCD.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2811.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2811) holds.
+; ---------------------------------------------------------------------
+Var2811_Get:
 	link XIZ,0x0000                                      ; FDABD3  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDABD7  ae 08 21
 	ldb_d8 a, (0x2811)                                   ; FDABDA  c1 11 28 21
 	ld (XBC),A                                           ; FDABDE  b1 41
 	unlk XIZ                                             ; FDABE0  ee 0d
 	ret                                                  ; FDABE2  0e
-sub_FDABE3:
+; ---------------------------------------------------------------------
+; Var2811_Set -- (0x2811) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDABE3 to 0xFDABF0, with no branch.
+; Called from: 7 proven call sites, first a 0xFD0620, a 0xFD06FF, a 0xFD075B, a 0xFD0832, +3 more.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2811.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2811) holds.
+; ---------------------------------------------------------------------
+Var2811_Set:
 	link XIZ,0x0000                                      ; FDABE3  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDABE7  8e 08 23
 	stb_d8 (0x2811), c                                   ; FDABEA  f1 11 28 43
@@ -118901,40 +120465,118 @@ sub_FDABF1:
 	sub A,A                                              ; FDABFE  c9 a1
 .LFDAC00:
 	ret                                                  ; FDAC00  0e
-sub_FDAC01:
+; ---------------------------------------------------------------------
+; Var2812_Get -- *(u8 *)arg1 = (0x2812)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDAC01 to 0xFDAC10, with no branch.
+; Called from: 1 proven call sites, first a 0xFD207E.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2812.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2812) holds.
+; ---------------------------------------------------------------------
+Var2812_Get:
 	link XIZ,0x0000                                      ; FDAC01  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDAC05  ae 08 21
 	ldb_d8 a, (0x2812)                                   ; FDAC08  c1 12 28 21
 	ld (XBC),A                                           ; FDAC0C  b1 41
 	unlk XIZ                                             ; FDAC0E  ee 0d
 	ret                                                  ; FDAC10  0e
-sub_FDAC11:
+; ---------------------------------------------------------------------
+; Var2812_Set -- (0x2812) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDAC11 to 0xFDAC1E, with no branch.
+; Called from: 2 proven call sites, first a 0xFD20D0, a 0xFD2467.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x2812.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x2812) holds.
+; ---------------------------------------------------------------------
+Var2812_Set:
 	link XIZ,0x0000                                      ; FDAC11  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDAC15  8e 08 23
 	stb_d8 (0x2812), c                                   ; FDAC18  f1 12 28 43
 	unlk XIZ                                             ; FDAC1C  ee 0d
 	ret                                                  ; FDAC1E  0e
-sub_FDAC1F:
+; ---------------------------------------------------------------------
+; Var27A0_Get -- *(u8 *)arg1 = (0x27A0)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDAC1F to 0xFDAC2E, with no branch.
+; Called from: 2 proven call sites, first a 0xFCFDD4, a 0xFD05BA.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27A0.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27A0) holds.
+; ---------------------------------------------------------------------
+Var27A0_Get:
 	link XIZ,0x0000                                      ; FDAC1F  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDAC23  ae 08 21
 	ldb_d8 a, (0x27a0)                                   ; FDAC26  c1 a0 27 21
 	ld (XBC),A                                           ; FDAC2A  b1 41
 	unlk XIZ                                             ; FDAC2C  ee 0d
 	ret                                                  ; FDAC2E  0e
-sub_FDAC2F:
+; ---------------------------------------------------------------------
+; Var27A0_Set -- (0x27A0) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDAC2F to 0xFDAC3C, with no branch.
+; Called from: 2 proven call sites, first a 0xFCFE02, a 0xFD05CD.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27A0.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27A0) holds.
+; ---------------------------------------------------------------------
+Var27A0_Set:
 	link XIZ,0x0000                                      ; FDAC2F  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDAC33  8e 08 23
 	stb_d8 (0x27a0), c                                   ; FDAC36  f1 a0 27 43
 	unlk XIZ                                             ; FDAC3A  ee 0d
 	ret                                                  ; FDAC3C  0e
-sub_FDAC3D:
+; ---------------------------------------------------------------------
+; Var27A1_Get -- *(u8 *)arg1 = (0x27A1)
+;
+; A single-cell accessor of the C-compiled half of prom_a: 6
+; instructions, 0xFDAC3D to 0xFDAC4C, with no branch.
+; Called from: 1 proven call sites, first a 0xFCFDEF.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27A1.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27A1) holds.
+; ---------------------------------------------------------------------
+Var27A1_Get:
 	link XIZ,0x0000                                      ; FDAC3D  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDAC41  ae 08 21
 	ldb_d8 a, (0x27a1)                                   ; FDAC44  c1 a1 27 21
 	ld (XBC),A                                           ; FDAC48  b1 41
 	unlk XIZ                                             ; FDAC4A  ee 0d
 	ret                                                  ; FDAC4C  0e
-sub_FDAC4D:
+; ---------------------------------------------------------------------
+; Var27A1_Set -- (0x27A1) = (u8)arg1
+;
+; A single-cell accessor of the C-compiled half of prom_a: 5
+; instructions, 0xFDAC4D to 0xFDAC5A, with no branch.
+; Called from: 1 proven call sites, first a 0xFCFE0C.
+; Evidence: the body decoded from the ROM matches one of the 15
+;          templates in notes/prom_a_naming_round3.py EXACTLY,
+;          instruction for instruction, and touches exactly ONE
+;          absolute address, 0x27A1.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; Unknown:  what (0x27A1) holds.
+; ---------------------------------------------------------------------
+Var27A1_Set:
 	link XIZ,0x0000                                      ; FDAC4D  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDAC51  8e 08 23
 	stb_d8 (0x27a1), c                                   ; FDAC54  f1 a1 27 43
@@ -118949,7 +120591,7 @@ sub_FDAC5B:
 	ret                                                  ; FDAC6A  0e
 sub_FDAC6B:
 	pushw 0x00                                           ; FDAC6B  0b 00 00
-	call sub_FDA134                                      ; FDAC6E  1d 34 a1 fd
+	call Var27FB_Set                                      ; FDAC6E  1d 34 a1 fd
 	call 0xf409ac                                        ; FDAC72  1d ac 09 f4
 	pushw 0x01                                           ; FDAC76  0b 01 00
 	call sub_FDA43D                                      ; FDAC79  1d 3d a4 fd
@@ -118957,35 +120599,35 @@ sub_FDAC6B:
 	call sub_FDA459                                      ; FDAC80  1d 59 a4 fd
 	call sub_FD67C9                                      ; FDAC84  1d c9 67 fd
 	pushw 0x00                                           ; FDAC88  0b 00 00
-	call sub_FDA4D2                                      ; FDAC8B  1d d2 a4 fd
+	call Var2806_Set                                      ; FDAC8B  1d d2 a4 fd
 	call 0xf415c4                                        ; FDAC8F  1d c4 15 f4
 	pushw 0x00                                           ; FDAC93  0b 00 00
-	call sub_FDA0AC                                      ; FDAC96  1d ac a0 fd
+	call Var27F6_Set                                      ; FDAC96  1d ac a0 fd
 	pushw 0x00                                           ; FDAC9A  0b 00 00
-	call sub_FD6104                                      ; FDAC9D  1d 04 61 fd
+	call Var27DF_Set                                      ; FDAC9D  1d 04 61 fd
 	pushw 0xff                                           ; FDACA1  0b ff 00
-	call sub_FDA840                                      ; FDACA4  1d 40 a8 fd
+	call Var2807_Set                                      ; FDACA4  1d 40 a8 fd
 	pushw 0x00                                           ; FDACA8  0b 00 00
-	call sub_FDABE3                                      ; FDACAB  1d e3 ab fd
+	call Var2811_Set                                      ; FDACAB  1d e3 ab fd
 	pushw 0x00                                           ; FDACAF  0b 00 00
-	call sub_FDA792                                      ; FDACB2  1d 92 a7 fd
+	call Var2805_Set                                      ; FDACB2  1d 92 a7 fd
 	add XSP,0x00000012                                   ; FDACB6  ef c8 12 00 00 00
 	ret                                                  ; FDACBC  0e
 sub_FDACBD:
 	link XIZ,0xfffa                                      ; FDACBD  ee 0c fa ff
 	pushw 0x00                                           ; FDACC1  0b 00 00
-	call sub_FDA0AC                                      ; FDACC4  1d ac a0 fd
+	call Var27F6_Set                                      ; FDACC4  1d ac a0 fd
 	pushw 0x00                                           ; FDACC8  0b 00 00
 	call sub_FDA43D                                      ; FDACCB  1d 3d a4 fd
 	lda xbc, (xiz-2)                                     ; FDACCF  be fe 31
 	push XBC                                             ; FDACD2  39
-	call sub_FDA0CA                                      ; FDACD3  1d ca a0 fd
+	call Var27F5_Get                                      ; FDACD3  1d ca a0 fd
 	inc 0,XSP                                            ; FDACD7  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x02                          ; FDACD9  8e fe 3f 02
 	jr z, .LFDACFD                                       ; FDACDD  66 1e
 	lda xbc, (xiz-4)                                     ; FDACDF  be fc 31
 	push XBC                                             ; FDACE2  39
-	call sub_FD6B1E                                      ; FDACE3  1d 1e 6b fd
+	call Var27A2_Get                                      ; FDACE3  1d 1e 6b fd
 	pop XIY                                              ; FDACE7  5d
 	m_cp_mi8 MBD+r6, 0xfc, 0x01                          ; FDACE8  8e fc 3f 01
 	jr nz, .LFDACFD                                      ; FDACEC  6e 0f
@@ -119006,7 +120648,7 @@ sub_FDACBD:
 	call sub_FDAC5B                                      ; FDAD18  1d 5b ac fd
 	lda xbc, (xiz-6)                                     ; FDAD1C  be fa 31
 	push XBC                                             ; FDAD1F  39
-	call sub_FDA84E                                      ; FDAD20  1d 4e a8 fd
+	call Var2807_Get                                      ; FDAD20  1d 4e a8 fd
 	m_and_mi8 MBD+r6, 0xfa, 0x01                         ; FDAD24  8e fa 3c 01
 	inc 0,XSP                                            ; FDAD28  ef 60
 	inc 6,XSP                                            ; FDAD2A  ef 66
@@ -119027,19 +120669,19 @@ sub_FDAD44:
 	call 0xf42e80                                        ; FDAD4C  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDAD50  be fe 31
 	push XBC                                             ; FDAD53  39
-	call sub_FD76F5                                      ; FDAD54  1d f5 76 fd
+	call Var27DA_Get                                      ; FDAD54  1d f5 76 fd
 	pop XIY                                              ; FDAD58  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDAD59  8e fe 3f 00
 	jr nz, .LFDAD7F                                      ; FDAD5D  6e 20
 	pushw 0x01                                           ; FDAD5F  0b 01 00
-	call sub_FDA792                                      ; FDAD62  1d 92 a7 fd
+	call Var2805_Set                                      ; FDAD62  1d 92 a7 fd
 	pushw 0x80                                           ; FDAD66  0b 80 00
 	pushw 0x01                                           ; FDAD69  0b 01 00
 	pushw 0x10                                           ; FDAD6C  0b 10 00
 	pushw 0x00                                           ; FDAD6F  0b 00 00
 	call sub_FD61CF                                      ; FDAD72  1d cf 61 fd
 	pushw 0x01                                           ; FDAD76  0b 01 00
-	call sub_FD7705                                      ; FDAD79  1d 05 77 fd
+	call Var27DA_Set                                      ; FDAD79  1d 05 77 fd
 	jr .LFDADB9                                          ; FDAD7D  68 3a
 .LFDAD7F:
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FDAD7F  8e fe 3f 01
@@ -119052,17 +120694,17 @@ sub_FDAD44:
 	cp C,0x80                                            ; FDAD91  cb cf 80
 	jr nz, .LFDADBF                                      ; FDAD94  6e 29
 	pushw 0x01                                           ; FDAD96  0b 01 00
-	call sub_FDA0DA                                      ; FDAD99  1d da a0 fd
+	call Var27F5_Set                                      ; FDAD99  1d da a0 fd
 	pushw 0x02                                           ; FDAD9D  0b 02 00
-	call sub_FD7705                                      ; FDADA0  1d 05 77 fd
+	call Var27DA_Set                                      ; FDADA0  1d 05 77 fd
 	lda xbc, (xiz-4)                                     ; FDADA4  be fc 31
 	push XBC                                             ; FDADA7  39
-	call sub_FD6112                                      ; FDADA8  1d 12 61 fd
+	call Var27DF_Get                                      ; FDADA8  1d 12 61 fd
 	ld bc, (xiz-4)                                       ; FDADAC  9e fc 21
 	extz BC                                              ; FDADAF  d9 12
 	pushw bc                                             ; FDADB1  29
 	pushw 0x80                                           ; FDADB2  0b 80 00
-	call sub_FD608B                                      ; FDADB5  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FDADB5  1d 8b 60 fd
 .LFDADB9:
 	inc 0,XSP                                            ; FDADB9  ef 60
 	inc 4,XSP                                            ; FDADBB  ef 64
@@ -119072,31 +120714,31 @@ sub_FDAD44:
 	cp C,0x40                                            ; FDADC1  cb cf 40
 	jr nz, .LFDADE0                                      ; FDADC4  6e 1a
 	pushw 0x02                                           ; FDADC6  0b 02 00
-	call sub_FDA0DA                                      ; FDADC9  1d da a0 fd
+	call Var27F5_Set                                      ; FDADC9  1d da a0 fd
 	pushw 0x00                                           ; FDADCD  0b 00 00
 	pushw 0xa3                                           ; FDADD0  0b a3 00
-	call sub_FD608B                                      ; FDADD3  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FDADD3  1d 8b 60 fd
 	pushw 0x00                                           ; FDADD7  0b 00 00
-	call sub_FD7705                                      ; FDADDA  1d 05 77 fd
+	call Var27DA_Set                                      ; FDADDA  1d 05 77 fd
 	jr .LFDADF8                                          ; FDADDE  68 18
 .LFDADE0:
 	pushw 0x00                                           ; FDADE0  0b 00 00
-	call sub_FDA0DA                                      ; FDADE3  1d da a0 fd
+	call Var27F5_Set                                      ; FDADE3  1d da a0 fd
 	pushw 0x02                                           ; FDADE7  0b 02 00
-	call sub_FD7705                                      ; FDADEA  1d 05 77 fd
+	call Var27DA_Set                                      ; FDADEA  1d 05 77 fd
 	pushw 0x00                                           ; FDADEE  0b 00 00
 	pushw 0x80                                           ; FDADF1  0b 80 00
-	call sub_FD608B                                      ; FDADF4  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FDADF4  1d 8b 60 fd
 .LFDADF8:
 	inc 0,XSP                                            ; FDADF8  ef 60
 	pushw 0x00                                           ; FDADFA  0b 00 00
-	call sub_FDA792                                      ; FDADFD  1d 92 a7 fd
+	call Var2805_Set                                      ; FDADFD  1d 92 a7 fd
 	popw bc                                              ; FDAE01  49
 	jr .LFDAE1B                                          ; FDAE02  68 17
 .LFDAE04:
 	lda xbc, (xiz-6)                                     ; FDAE04  be fa 31
 	push XBC                                             ; FDAE07  39
-	call sub_FDA0CA                                      ; FDAE08  1d ca a0 fd
+	call Var27F5_Get                                      ; FDAE08  1d ca a0 fd
 	pop XIY                                              ; FDAE0C  5d
 	m_cp_mi8 MBD+r6, 0xfa, 0x01                          ; FDAE0D  8e fa 3f 01
 	jr nz, .LFDAE18                                      ; FDAE11  6e 05
@@ -119115,7 +120757,7 @@ sub_FDAE1F:
 	lda xix, (xiz-40)                                    ; FDAE25  be d8 34
 	lda xbc, (xiz-2)                                     ; FDAE28  be fe 31
 	push XBC                                             ; FDAE2B  39
-	call sub_FD76F5                                      ; FDAE2C  1d f5 76 fd
+	call Var27DA_Get                                      ; FDAE2C  1d f5 76 fd
 	pop XIY                                              ; FDAE30  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x02                          ; FDAE31  8e fe 3f 02
 	jr nz, .LFDAE4E                                      ; FDAE35  6e 17
@@ -119135,13 +120777,13 @@ sub_FDAE1F:
 	ld C,(XIX)                                           ; FDAE59  84 23
 	extz BC                                              ; FDAE5B  d9 12
 	pushw bc                                             ; FDAE5D  29
-	call sub_FD6BA8                                      ; FDAE5E  1d a8 6b fd
+	call Var27A4_Set                                      ; FDAE5E  1d a8 6b fd
 	pushw 0x80                                           ; FDAE62  0b 80 00
 	call sub_FD6447                                      ; FDAE65  1d 47 64 fd
 	inc 0,XSP                                            ; FDAE69  ef 60
 	pushw 0x04                                           ; FDAE6B  0b 04 00
 .LFDAE6E:
-	call sub_FD7705                                      ; FDAE6E  1d 05 77 fd
+	call Var27DA_Set                                      ; FDAE6E  1d 05 77 fd
 .LFDAE72:
 	popw bc                                              ; FDAE72  49
 	jrl .LFDAF02                                         ; FDAE73  78 8c 00
@@ -119155,7 +120797,7 @@ sub_FDAE1F:
 	extz BC                                              ; FDAE86  d9 12
 	pushw bc                                             ; FDAE88  29
 	pushw 0x01                                           ; FDAE89  0b 01 00
-	call sub_FD6C65                                      ; FDAE8C  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDAE8C  1d 65 6c fd
 	ldb h, 0x01                                          ; FDAE90  26 01
 	inc 0,XSP                                            ; FDAE92  ef 60
 .LFDAE94:
@@ -119171,14 +120813,14 @@ sub_FDAE1F:
 	cps h, 0x04                                          ; FDAEAA  ce dc
 	jr ule, .LFDAE94                                     ; FDAEAC  63 e6
 	pushw 0x05                                           ; FDAEAE  0b 05 00
-	call sub_FD7705                                      ; FDAEB1  1d 05 77 fd
-	call sub_FD7713                                      ; FDAEB5  1d 13 77 fd
+	call Var27DA_Set                                      ; FDAEB1  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDAEB5  1d 13 77 fd
 	call sub_FD7719                                      ; FDAEB9  1d 19 77 fd
 	jr .LFDAE72                                          ; FDAEBD  68 b3
 .LFDAEBF:
 	lda xbc, (xiz-4)                                     ; FDAEBF  be fc 31
 	push XBC                                             ; FDAEC2  39
-	call sub_FD7734                                      ; FDAEC3  1d 34 77 fd
+	call Var27DB_Get                                      ; FDAEC3  1d 34 77 fd
 	push XIX                                             ; FDAEC7  3c
 	call sub_FD7744                                      ; FDAEC8  1d 44 77 fd
 	ld C,(XIX)                                           ; FDAECC  84 23
@@ -119196,8 +120838,8 @@ sub_FDAE1F:
 	pushw 0x80                                           ; FDAEE7  0b 80 00
 	call 0xf41ed0                                        ; FDAEEA  1d d0 1e f4
 	pushw 0x00                                           ; FDAEEE  0b 00 00
-	call sub_FD7705                                      ; FDAEF1  1d 05 77 fd
-	call sub_FD7713                                      ; FDAEF5  1d 13 77 fd
+	call Var27DA_Set                                      ; FDAEF1  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDAEF5  1d 13 77 fd
 	pushw 0x10                                           ; FDAEF9  0b 10 00
 	call sub_FD6447                                      ; FDAEFC  1d 47 64 fd
 	inc 6,XSP                                            ; FDAF00  ef 66
@@ -119214,10 +120856,10 @@ sub_FDAF07:
 	lda xix, (xiz-32)                                    ; FDAF0E  be e0 34
 	lda xbc, (xiz-2)                                     ; FDAF11  be fe 31
 	push XBC                                             ; FDAF14  39
-	call sub_FD76F5                                      ; FDAF15  1d f5 76 fd
+	call Var27DA_Get                                      ; FDAF15  1d f5 76 fd
 	lda xbc, (xiz-4)                                     ; FDAF19  be fc 31
 	push XBC                                             ; FDAF1C  39
-	call sub_FD6112                                      ; FDAF1D  1d 12 61 fd
+	call Var27DF_Get                                      ; FDAF1D  1d 12 61 fd
 	inc 0,XSP                                            ; FDAF21  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x02                          ; FDAF23  8e fe 3f 02
 	jr nz, .LFDAF7D                                      ; FDAF27  6e 54
@@ -119228,7 +120870,7 @@ sub_FDAF07:
 	extz BC                                              ; FDAF34  d9 12
 	pushw bc                                             ; FDAF36  29
 	pushw 0x00                                           ; FDAF37  0b 00 00
-	call sub_FD6C65                                      ; FDAF3A  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDAF3A  1d 65 6c fd
 	lda xbc, (xiz-8)                                     ; FDAF3E  be f8 31
 	push XBC                                             ; FDAF41  39
 	call sub_FDA160                                      ; FDAF42  1d 60 a1 fd
@@ -119236,13 +120878,13 @@ sub_FDAF07:
 	extz BC                                              ; FDAF49  d9 12
 	pushw bc                                             ; FDAF4B  29
 	pushw 0x01                                           ; FDAF4C  0b 01 00
-	call sub_FD6C65                                      ; FDAF4F  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDAF4F  1d 65 6c fd
 	ld bc, (xiz-8)                                       ; FDAF53  9e f8 21
 	extz BC                                              ; FDAF56  d9 12
 	pushw bc                                             ; FDAF58  29
 	call sub_FD665C                                      ; FDAF59  1d 5c 66 fd
 	pushw 0x03                                           ; FDAF5D  0b 03 00
-	call sub_FD7705                                      ; FDAF60  1d 05 77 fd
+	call Var27DA_Set                                      ; FDAF60  1d 05 77 fd
 	pushw 0x80                                           ; FDAF64  0b 80 00
 	pushw 0x10                                           ; FDAF67  0b 10 00
 	pushw 0x00                                           ; FDAF6A  0b 00 00
@@ -119382,7 +121024,7 @@ sub_FDAF07:
 	pushw 0x00                                           ; FDB0BE  0b 00 00
 	call sub_FD63D7                                      ; FDB0C1  1d d7 63 fd
 	pushw 0x04                                           ; FDB0C5  0b 04 00
-	call sub_FD7705                                      ; FDB0C8  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB0C8  1d 05 77 fd
 	call sub_FD7719                                      ; FDB0CC  1d 19 77 fd
 	call sub_FD7719                                      ; FDB0D0  1d 19 77 fd
 	inc 0,XSP                                            ; FDB0D4  ef 60
@@ -119393,7 +121035,7 @@ sub_FDAF07:
 	jrl nz, .LFDB16D                                     ; FDB0DF  7e 8b 00
 	lda xbc, (xiz-10)                                    ; FDB0E2  be f6 31
 	push XBC                                             ; FDB0E5  39
-	call sub_FD7734                                      ; FDB0E6  1d 34 77 fd
+	call Var27DB_Get                                      ; FDB0E6  1d 34 77 fd
 	push XIX                                             ; FDB0EA  3c
 	call sub_FD7744                                      ; FDB0EB  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB0EF  84 23
@@ -119402,7 +121044,7 @@ sub_FDAF07:
 	ld bc, (xiz-10)                                      ; FDB0F4  9e f6 21
 	extz BC                                              ; FDB0F7  d9 12
 	pushw bc                                             ; FDB0F9  29
-	call sub_FD6C65                                      ; FDB0FA  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB0FA  1d 65 6c fd
 	call sub_FD7719                                      ; FDB0FE  1d 19 77 fd
 	inc 0,XSP                                            ; FDB102  ef 60
 	inc 4,XSP                                            ; FDB104  ef 64
@@ -119411,18 +121053,18 @@ sub_FDAF07:
 	lda xbc, (xiz-12)                                    ; FDB10C  be f4 31
 	push XBC                                             ; FDB10F  39
 	pushw 0x02                                           ; FDB110  0b 02 00
-	call sub_FD6C7B                                      ; FDB113  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDB113  1d 7b 6c fd
 	ld bc, (xiz-12)                                      ; FDB117  9e f4 21
 	extz BC                                              ; FDB11A  d9 12
 	pushw bc                                             ; FDB11C  29
-	call sub_FD6BA8                                      ; FDB11D  1d a8 6b fd
+	call Var27A4_Set                                      ; FDB11D  1d a8 6b fd
 	pushw 0x01                                           ; FDB121  0b 01 00
 	call sub_FD7D18                                      ; FDB124  1d 18 7d fd
 	pushw 0x02                                           ; FDB128  0b 02 00
 	call sub_FD7D18                                      ; FDB12B  1d 18 7d fd
 	push XIX                                             ; FDB12F  3c
 	pushw 0x03                                           ; FDB130  0b 03 00
-	call sub_FD6C7B                                      ; FDB133  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDB133  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDB137  84 23
 	extz BC                                              ; FDB139  d9 12
 	pushw bc                                             ; FDB13B  29
@@ -119430,7 +121072,7 @@ sub_FDAF07:
 	call sub_FDA48C                                      ; FDB13F  1d 8c a4 fd
 	push XIX                                             ; FDB143  3c
 	pushw 0x04                                           ; FDB144  0b 04 00
-	call sub_FD6C7B                                      ; FDB147  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDB147  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDB14B  84 23
 	extz BC                                              ; FDB14D  d9 12
 	pushw bc                                             ; FDB14F  29
@@ -119460,7 +121102,7 @@ sub_FDAF07:
 	call sub_FD9EB7                                      ; FDB194  1d b7 9e fd
 	lda xbc, (xiz-8)                                     ; FDB198  be f8 31
 	push XBC                                             ; FDB19B  39
-	call sub_FDA142                                      ; FDB19C  1d 42 a1 fd
+	call Var27FC_Get                                      ; FDB19C  1d 42 a1 fd
 	pushw 0x80                                           ; FDB1A0  0b 80 00
 	ld bc, (xiz-8)                                       ; FDB1A3  9e f8 21
 	extz BC                                              ; FDB1A6  d9 12
@@ -119491,7 +121133,7 @@ sub_FDAF07:
 	inc 6,XSP                                            ; FDB1E7  ef 66
 	pushw 0x09                                           ; FDB1E9  0b 09 00
 .LFDB1EC:
-	call sub_FD7705                                      ; FDB1EC  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB1EC  1d 05 77 fd
 	popw bc                                              ; FDB1F0  49
 	jr .LFDB229                                          ; FDB1F1  68 36
 .LFDB1F3:
@@ -119511,8 +121153,8 @@ sub_FDAF07:
 	pop XIY                                              ; FDB215  5d
 .LFDB216:
 	pushw 0x00                                           ; FDB216  0b 00 00
-	call sub_FD7705                                      ; FDB219  1d 05 77 fd
-	call sub_FD7713                                      ; FDB21D  1d 13 77 fd
+	call Var27DA_Set                                      ; FDB219  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDB21D  1d 13 77 fd
 	pushw 0x10                                           ; FDB221  0b 10 00
 	call sub_FD6447                                      ; FDB224  1d 47 64 fd
 	pop XIY                                              ; FDB228  5d
@@ -119531,12 +121173,12 @@ sub_FDB22F:
 	call 0xf42e80                                        ; FDB239  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDB23D  be fe 31
 	push XBC                                             ; FDB240  39
-	call sub_FD76F5                                      ; FDB241  1d f5 76 fd
+	call Var27DA_Get                                      ; FDB241  1d f5 76 fd
 	pop XIY                                              ; FDB245  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDB246  8e fe 3f 00
 	jrl nz, .LFDB2CD                                     ; FDB24A  7e 80 00
 	pushw 0x01                                           ; FDB24D  0b 01 00
-	call sub_FDA792                                      ; FDB250  1d 92 a7 fd
+	call Var2805_Set                                      ; FDB250  1d 92 a7 fd
 	ldb l, 0x01                                          ; FDB254  27 01
 	popw bc                                              ; FDB256  49
 .LFDB257:
@@ -119571,7 +121213,7 @@ sub_FDB22F:
 	pushw 0x00                                           ; FDB29D  0b 00 00
 	call sub_FD61CF                                      ; FDB2A0  1d cf 61 fd
 	pushw 0x01                                           ; FDB2A4  0b 01 00
-	call sub_FD7705                                      ; FDB2A7  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB2A7  1d 05 77 fd
 	call sub_FD7719                                      ; FDB2AB  1d 19 77 fd
 	lda xbc, (xiz-4)                                     ; FDB2AF  be fc 31
 	push XBC                                             ; FDB2B2  39
@@ -119580,13 +121222,13 @@ sub_FDB22F:
 	extz BC                                              ; FDB2BA  d9 12
 	pushw bc                                             ; FDB2BC  29
 	pushw 0x00                                           ; FDB2BD  0b 00 00
-	call sub_FD6C65                                      ; FDB2C0  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB2C0  1d 65 6c fd
 	add XSP,0x0000001a                                   ; FDB2C4  ef c8 1a 00 00 00
 	jrl .LFDB386                                         ; FDB2CA  78 b9 00
 .LFDB2CD:
 	lda xbc, (xiz-6)                                     ; FDB2CD  be fa 31
 	push XBC                                             ; FDB2D0  39
-	call sub_FD7734                                      ; FDB2D1  1d 34 77 fd
+	call Var27DB_Get                                      ; FDB2D1  1d 34 77 fd
 	push XIX                                             ; FDB2D5  3c
 	call sub_FD7744                                      ; FDB2D6  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB2DA  84 23
@@ -119595,7 +121237,7 @@ sub_FDB22F:
 	ld bc, (xiz-6)                                       ; FDB2DF  9e fa 21
 	extz BC                                              ; FDB2E2  d9 12
 	pushw bc                                             ; FDB2E4  29
-	call sub_FD6C65                                      ; FDB2E5  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB2E5  1d 65 6c fd
 	call sub_FD7719                                      ; FDB2E9  1d 19 77 fd
 	inc 0,XSP                                            ; FDB2ED  ef 60
 	inc 4,XSP                                            ; FDB2EF  ef 64
@@ -119603,27 +121245,27 @@ sub_FDB22F:
 	jrl ule, .LFDB386                                    ; FDB2F4  73 8f 00
 	push XIX                                             ; FDB2F7  3c
 	pushw 0x0e                                           ; FDB2F8  0b 0e 00
-	call sub_FD6C7B                                      ; FDB2FB  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDB2FB  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDB2FF  84 23
 	extz BC                                              ; FDB301  d9 12
 	pushw bc                                             ; FDB303  29
 	pushw 0x0f                                           ; FDB304  0b 0f 00
-	call sub_FD6C65                                      ; FDB307  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB307  1d 65 6c fd
 sub_FDB30B:
 	push XIX                                             ; FDB30B  3c
 	pushw 0x0d                                           ; FDB30C  0b 0d 00
-	call sub_FD6C7B                                      ; FDB30F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDB30F  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDB313  84 23
 	extz BC                                              ; FDB315  d9 12
 	pushw bc                                             ; FDB317  29
 	pushw 0x0e                                           ; FDB318  0b 0e 00
-	call sub_FD6C65                                      ; FDB31B  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB31B  1d 65 6c fd
 	pushw 0x01                                           ; FDB31F  0b 01 00
 	pushw 0x0d                                           ; FDB322  0b 0d 00
-	call sub_FD6C65                                      ; FDB325  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB325  1d 65 6c fd
 	push XIX                                             ; FDB329  3c
 	pushw 0x0e                                           ; FDB32A  0b 0e 00
-	call sub_FD6C7B                                      ; FDB32D  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDB32D  1d 7b 6c fd
 	ldb l, 0x00                                          ; FDB331  27 00
 	add XSP,0x0000001e                                   ; FDB333  ef c8 1e 00 00 00
 .LFDB339:
@@ -119645,14 +121287,14 @@ sub_FDB30B:
 	extz BC                                              ; FDB358  d9 12
 	pushw bc                                             ; FDB35A  29
 	pushw 0x10                                           ; FDB35B  0b 10 00
-	call sub_FD6C65                                      ; FDB35E  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB35E  1d 65 6c fd
 	pushw 0x87                                           ; FDB362  0b 87 00
 	call 0xf41ed0                                        ; FDB365  1d d0 1e f4
 	pushw 0x01                                           ; FDB369  0b 01 00
 	call sub_FD69E0                                      ; FDB36C  1d e0 69 fd
 	pushw 0x00                                           ; FDB370  0b 00 00
-	call sub_FD7705                                      ; FDB373  1d 05 77 fd
-	call sub_FD7713                                      ; FDB377  1d 13 77 fd
+	call Var27DA_Set                                      ; FDB373  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDB377  1d 13 77 fd
 	pushw 0x10                                           ; FDB37B  0b 10 00
 	call sub_FD6447                                      ; FDB37E  1d 47 64 fd
 	inc 0,XSP                                            ; FDB382  ef 60
@@ -119671,12 +121313,12 @@ sub_FDB38C:
 	call 0xf42e80                                        ; FDB393  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDB397  be fe 31
 	push XBC                                             ; FDB39A  39
-	call sub_FD76F5                                      ; FDB39B  1d f5 76 fd
+	call Var27DA_Get                                      ; FDB39B  1d f5 76 fd
 	pop XIY                                              ; FDB39F  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDB3A0  8e fe 3f 00
 	jr nz, .LFDB3F4                                      ; FDB3A4  6e 4e
 	pushw 0x01                                           ; FDB3A6  0b 01 00
-	call sub_FDA792                                      ; FDB3A9  1d 92 a7 fd
+	call Var2805_Set                                      ; FDB3A9  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDB3AD  be fc 31
 	push XBC                                             ; FDB3B0  39
 	call sub_FD6B4D                                      ; FDB3B1  1d 4d 6b fd
@@ -119699,17 +121341,17 @@ sub_FDB38C:
 	cps h, 0x00                                          ; FDB3D7  ce d8
 	jr nz, .LFDB3BC                                      ; FDB3D9  6e e1
 	pushw 0x01                                           ; FDB3DB  0b 01 00
-	call sub_FD7705                                      ; FDB3DE  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB3DE  1d 05 77 fd
 	call sub_FD7719                                      ; FDB3E2  1d 19 77 fd
 	pushw 0x01                                           ; FDB3E6  0b 01 00
 	pushw 0x00                                           ; FDB3E9  0b 00 00
-	call sub_FD6C65                                      ; FDB3EC  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB3EC  1d 65 6c fd
 	inc 6,XSP                                            ; FDB3F0  ef 66
 	jr .LFDB447                                          ; FDB3F2  68 53
 .LFDB3F4:
 	lda xbc, (xiz-6)                                     ; FDB3F4  be fa 31
 	push XBC                                             ; FDB3F7  39
-	call sub_FD7734                                      ; FDB3F8  1d 34 77 fd
+	call Var27DB_Get                                      ; FDB3F8  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDB3FC  be f6 31
 	push XBC                                             ; FDB3FF  39
 	call sub_FD7744                                      ; FDB400  1d 44 77 fd
@@ -119719,7 +121361,7 @@ sub_FDB38C:
 	ld bc, (xiz-6)                                       ; FDB40A  9e fa 21
 	extz BC                                              ; FDB40D  d9 12
 	pushw bc                                             ; FDB40F  29
-	call sub_FD6C65                                      ; FDB410  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB410  1d 65 6c fd
 	call sub_FD7719                                      ; FDB414  1d 19 77 fd
 	inc 0,XSP                                            ; FDB418  ef 60
 	inc 4,XSP                                            ; FDB41A  ef 64
@@ -119731,8 +121373,8 @@ sub_FDB38C:
 	pushw 0x01                                           ; FDB42C  0b 01 00
 	call sub_FD69E0                                      ; FDB42F  1d e0 69 fd
 	pushw 0x00                                           ; FDB433  0b 00 00
-	call sub_FD7705                                      ; FDB436  1d 05 77 fd
-	call sub_FD7713                                      ; FDB43A  1d 13 77 fd
+	call Var27DA_Set                                      ; FDB436  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDB43A  1d 13 77 fd
 	pushw 0x10                                           ; FDB43E  0b 10 00
 	call sub_FD6447                                      ; FDB441  1d 47 64 fd
 	inc 0,XSP                                            ; FDB445  ef 60
@@ -119751,12 +121393,12 @@ sub_FDB44D:
 	call 0xf42e80                                        ; FDB457  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDB45B  be fe 31
 	push XBC                                             ; FDB45E  39
-	call sub_FD76F5                                      ; FDB45F  1d f5 76 fd
+	call Var27DA_Get                                      ; FDB45F  1d f5 76 fd
 	pop XIY                                              ; FDB463  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDB464  8e fe 3f 00
 	jr nz, .LFDB4AD                                      ; FDB468  6e 43
 	pushw 0x01                                           ; FDB46A  0b 01 00
-	call sub_FDA792                                      ; FDB46D  1d 92 a7 fd
+	call Var2805_Set                                      ; FDB46D  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDB471  be fc 31
 	push XBC                                             ; FDB474  39
 	call sub_FD6B4D                                      ; FDB475  1d 4d 6b fd
@@ -119779,14 +121421,14 @@ sub_FDB44D:
 	cps h, 0x00                                          ; FDB49F  ce d8
 	jr nz, .LFDB480                                      ; FDB4A1  6e dd
 	pushw 0x01                                           ; FDB4A3  0b 01 00
-	call sub_FD7705                                      ; FDB4A6  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB4A6  1d 05 77 fd
 	popw bc                                              ; FDB4AA  49
 	jr .LFDB523                                          ; FDB4AB  68 76
 .LFDB4AD:
 	lda xbc, (xiz-6)                                     ; FDB4AD  be fa 31
 sub_FDB4B0:
 	push XBC                                             ; FDB4B0  39
-	call sub_FD7734                                      ; FDB4B1  1d 34 77 fd
+	call Var27DB_Get                                      ; FDB4B1  1d 34 77 fd
 	push XIX                                             ; FDB4B5  3c
 	call sub_FD7744                                      ; FDB4B6  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB4BA  84 23
@@ -119795,7 +121437,7 @@ sub_FDB4B0:
 	ld bc, (xiz-6)                                       ; FDB4BF  9e fa 21
 	extz BC                                              ; FDB4C2  d9 12
 	pushw bc                                             ; FDB4C4  29
-	call sub_FD6C65                                      ; FDB4C5  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB4C5  1d 65 6c fd
 	call sub_FD7719                                      ; FDB4C9  1d 19 77 fd
 	inc 0,XSP                                            ; FDB4CD  ef 60
 	inc 4,XSP                                            ; FDB4CF  ef 64
@@ -119803,15 +121445,15 @@ sub_FDB4B0:
 	jr ule, .LFDB523                                     ; FDB4D3  63 4e
 	push XIX                                             ; FDB4D5  3c
 	pushw 0x03                                           ; FDB4D6  0b 03 00
-	call sub_FD6C7B                                      ; FDB4D9  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDB4D9  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDB4DD  84 23
 	extz BC                                              ; FDB4DF  d9 12
 	pushw bc                                             ; FDB4E1  29
 	pushw 0x0a                                           ; FDB4E2  0b 0a 00
-	call sub_FD6C65                                      ; FDB4E5  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB4E5  1d 65 6c fd
 	pushw 0x00                                           ; FDB4E9  0b 00 00
 	pushw 0x09                                           ; FDB4EC  0b 09 00
-	call sub_FD6C65                                      ; FDB4EF  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB4EF  1d 65 6c fd
 	pushw 0x89                                           ; FDB4F3  0b 89 00
 	call 0xf41ed0                                        ; FDB4F6  1d d0 1e f4
 	pushw 0x01                                           ; FDB4FA  0b 01 00
@@ -119820,8 +121462,8 @@ sub_FDB4B0:
 	pushw 0x01                                           ; FDB504  0b 01 00
 	call sub_FD69E0                                      ; FDB507  1d e0 69 fd
 	pushw 0x00                                           ; FDB50B  0b 00 00
-	call sub_FD7705                                      ; FDB50E  1d 05 77 fd
-	call sub_FD7713                                      ; FDB512  1d 13 77 fd
+	call Var27DA_Set                                      ; FDB50E  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDB512  1d 13 77 fd
 	pushw 0x10                                           ; FDB516  0b 10 00
 	call sub_FD6447                                      ; FDB519  1d 47 64 fd
 	add XSP,0x0000001a                                   ; FDB51D  ef c8 1a 00 00 00
@@ -119861,12 +121503,12 @@ sub_FDB53C:
 .LFDB560:
 	lda xbc, (xiz-2)                                     ; FDB560  be fe 31
 	push XBC                                             ; FDB563  39
-	call sub_FD76F5                                      ; FDB564  1d f5 76 fd
+	call Var27DA_Get                                      ; FDB564  1d f5 76 fd
 	pop XIY                                              ; FDB568  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDB569  8e fe 3f 00
 	jrl nz, .LFDB60D                                     ; FDB56D  7e 9d 00
 	pushw 0x01                                           ; FDB570  0b 01 00
-	call sub_FDA792                                      ; FDB573  1d 92 a7 fd
+	call Var2805_Set                                      ; FDB573  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDB577  be fc 31
 	push XBC                                             ; FDB57A  39
 	ld A,L                                               ; FDB57B  cf 89
@@ -119927,19 +121569,19 @@ sub_FDB53C:
 	cps h, 0x04                                          ; FDB5EC  ce dc
 	jr ule, .LFDB5D1                                     ; FDB5EE  63 e1
 	pushw 0x01                                           ; FDB5F0  0b 01 00
-	call sub_FD7705                                      ; FDB5F3  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB5F3  1d 05 77 fd
 	call sub_FD7719                                      ; FDB5F7  1d 19 77 fd
 	ld bc, (xiz-4)                                       ; FDB5FB  9e fc 21
 	extz BC                                              ; FDB5FE  d9 12
 	pushw bc                                             ; FDB600  29
 	pushw 0x00                                           ; FDB601  0b 00 00
-	call sub_FD6C65                                      ; FDB604  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB604  1d 65 6c fd
 	inc 6,XSP                                            ; FDB608  ef 66
 	jrl .LFDB68D                                         ; FDB60A  78 80 00
 .LFDB60D:
 	lda xbc, (xiz-8)                                     ; FDB60D  be f8 31
 	push XBC                                             ; FDB610  39
-	call sub_FD7734                                      ; FDB611  1d 34 77 fd
+	call Var27DB_Get                                      ; FDB611  1d 34 77 fd
 	lda xbc, (xiz-12)                                    ; FDB615  be f4 31
 	push XBC                                             ; FDB618  39
 	call sub_FD7744                                      ; FDB619  1d 44 77 fd
@@ -119949,7 +121591,7 @@ sub_FDB53C:
 	ld bc, (xiz-8)                                       ; FDB623  9e f8 21
 	extz BC                                              ; FDB626  d9 12
 	pushw bc                                             ; FDB628  29
-	call sub_FD6C65                                      ; FDB629  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB629  1d 65 6c fd
 	call sub_FD7719                                      ; FDB62D  1d 19 77 fd
 	inc 0,XSP                                            ; FDB631  ef 60
 	inc 4,XSP                                            ; FDB633  ef 64
@@ -119957,7 +121599,7 @@ sub_FDB53C:
 	jr ule, .LFDB68D                                     ; FDB638  63 53
 	lda xbc, (xiz-14)                                    ; FDB63A  be f2 31
 	push XBC                                             ; FDB63D  39
-	call sub_FD6112                                      ; FDB63E  1d 12 61 fd
+	call Var27DF_Get                                      ; FDB63E  1d 12 61 fd
 	pop XIY                                              ; FDB642  5d
 	m_cp_mi8 MBD+r6, 0xf2, 0x00                          ; FDB643  8e f2 3f 00
 	jr nz, .LFDB655                                      ; FDB647  6e 0c
@@ -119979,7 +121621,7 @@ sub_FDB53C:
 	call sub_FDA467                                      ; FDB665  1d 67 a4 fd
 	lda xbc, (xiz-16)                                    ; FDB669  be f0 31
 	push XBC                                             ; FDB66C  39
-	call sub_FD6112                                      ; FDB66D  1d 12 61 fd
+	call Var27DF_Get                                      ; FDB66D  1d 12 61 fd
 	inc 6,XSP                                            ; FDB671  ef 66
 	m_cp_mi8 MBD+r6, 0xf0, 0x00                          ; FDB673  8e f0 3f 00
 	jr nz, .LFDB681                                      ; FDB677  6e 08
@@ -119988,8 +121630,8 @@ sub_FDB53C:
 	popw bc                                              ; FDB680  49
 .LFDB681:
 	pushw 0x00                                           ; FDB681  0b 00 00
-	call sub_FD7705                                      ; FDB684  1d 05 77 fd
-	call sub_FD7713                                      ; FDB688  1d 13 77 fd
+	call Var27DA_Set                                      ; FDB684  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDB688  1d 13 77 fd
 	popw bc                                              ; FDB68C  49
 .LFDB68D:
 	popw ix                                              ; FDB68D  4c
@@ -120004,15 +121646,15 @@ sub_FDB693:
 	call 0xf42e80                                        ; FDB69B  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDB69F  be fe 31
 	push XBC                                             ; FDB6A2  39
-	call sub_FD76F5                                      ; FDB6A3  1d f5 76 fd
+	call Var27DA_Get                                      ; FDB6A3  1d f5 76 fd
 	lda xbc, (xiz-4)                                     ; FDB6A7  be fc 31
 	push XBC                                             ; FDB6AA  39
-	call sub_FDA0CA                                      ; FDB6AB  1d ca a0 fd
+	call Var27F5_Get                                      ; FDB6AB  1d ca a0 fd
 	inc 0,XSP                                            ; FDB6AF  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDB6B1  8e fe 3f 00
 	jr nz, .LFDB6F4                                      ; FDB6B5  6e 3d
 	pushw 0x01                                           ; FDB6B7  0b 01 00
-	call sub_FDA792                                      ; FDB6BA  1d 92 a7 fd
+	call Var2805_Set                                      ; FDB6BA  1d 92 a7 fd
 	popw bc                                              ; FDB6BE  49
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDB6BF  8e fc 3f 00
 	jr nz, .LFDB6CA                                      ; FDB6C3  6e 05
@@ -120022,7 +121664,7 @@ sub_FDB693:
 	calr sub_FDB81F                                      ; FDB6CA  1e 52 01
 .LFDB6CD:
 	pushw 0x01                                           ; FDB6CD  0b 01 00
-	call sub_FD7705                                      ; FDB6D0  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB6D0  1d 05 77 fd
 	call sub_FD7719                                      ; FDB6D4  1d 19 77 fd
 	lda xbc, (xiz-6)                                     ; FDB6D8  be fa 31
 	push XBC                                             ; FDB6DB  39
@@ -120031,14 +121673,14 @@ sub_FDB693:
 	extz BC                                              ; FDB6E3  d9 12
 	pushw bc                                             ; FDB6E5  29
 	pushw 0x00                                           ; FDB6E6  0b 00 00
-	call sub_FD6C65                                      ; FDB6E9  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB6E9  1d 65 6c fd
 	inc 0,XSP                                            ; FDB6ED  ef 60
 	inc 2,XSP                                            ; FDB6EF  ef 62
 	jrl .LFDB7EF                                         ; FDB6F1  78 fb 00
 .LFDB6F4:
 	lda xbc, (xiz-8)                                     ; FDB6F4  be f8 31
 	push XBC                                             ; FDB6F7  39
-	call sub_FD7734                                      ; FDB6F8  1d 34 77 fd
+	call Var27DB_Get                                      ; FDB6F8  1d 34 77 fd
 	push XIX                                             ; FDB6FC  3c
 	call sub_FD7744                                      ; FDB6FD  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB701  84 23
@@ -120047,7 +121689,7 @@ sub_FDB693:
 	ld bc, (xiz-8)                                       ; FDB706  9e f8 21
 	extz BC                                              ; FDB709  d9 12
 	pushw bc                                             ; FDB70B  29
-	call sub_FD6C65                                      ; FDB70C  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB70C  1d 65 6c fd
 	inc 0,XSP                                            ; FDB710  ef 60
 	inc 4,XSP                                            ; FDB712  ef 64
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDB714  8e fc 3f 00
@@ -120057,37 +121699,37 @@ sub_FDB693:
 	jrl ule, .LFDB7EF                                    ; FDB721  73 cb 00
 	lda xbc, (xiz-10)                                    ; FDB724  be f6 31
 	push XBC                                             ; FDB727  39
-	call sub_FDA84E                                      ; FDB728  1d 4e a8 fd
+	call Var2807_Get                                      ; FDB728  1d 4e a8 fd
 	m_and_mi8 MBD+r6, 0xf6, 0x02                         ; FDB72C  8e f6 3c 02
 	pop XIY                                              ; FDB730  5d
 	jrl nz, .LFDB7CD                                     ; FDB731  7e 99 00
 	push XIX                                             ; FDB734  3c
 	pushw 0x01                                           ; FDB735  0b 01 00
-	call sub_FDA4A4                                      ; FDB738  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDB738  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDB73C  84 23
 	extz BC                                              ; FDB73E  d9 12
 	pushw bc                                             ; FDB740  29
 	pushw 0x01                                           ; FDB741  0b 01 00
-	call sub_FD6C65                                      ; FDB744  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB744  1d 65 6c fd
 	push XIX                                             ; FDB748  3c
 	pushw 0x02                                           ; FDB749  0b 02 00
-	call sub_FDA4A4                                      ; FDB74C  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDB74C  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDB750  84 23
 	extz BC                                              ; FDB752  d9 12
 	pushw bc                                             ; FDB754  29
 	pushw 0x02                                           ; FDB755  0b 02 00
-	call sub_FD6C65                                      ; FDB758  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB758  1d 65 6c fd
 	push XIX                                             ; FDB75C  3c
 	pushw 0x03                                           ; FDB75D  0b 03 00
-	call sub_FDA4A4                                      ; FDB760  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDB760  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDB764  84 23
 	extz BC                                              ; FDB766  d9 12
 	pushw bc                                             ; FDB768  29
 	pushw 0x03                                           ; FDB769  0b 03 00
-	call sub_FD6C65                                      ; FDB76C  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB76C  1d 65 6c fd
 	push XIX                                             ; FDB770  3c
 	pushw 0x04                                           ; FDB771  0b 04 00
-	call sub_FDA4A4                                      ; FDB774  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDB774  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDB778  84 23
 	extz BC                                              ; FDB77A  d9 12
 	add XSP,0x00000024                                   ; FDB77C  ef c8 24 00 00 00
@@ -120100,21 +121742,21 @@ sub_FDB693:
 	jr ule, .LFDB7EF                                     ; FDB78F  63 5e
 	lda xbc, (xiz-10)                                    ; FDB791  be f6 31
 	push XBC                                             ; FDB794  39
-	call sub_FDA84E                                      ; FDB795  1d 4e a8 fd
+	call Var2807_Get                                      ; FDB795  1d 4e a8 fd
 	pop XIY                                              ; FDB799  5d
 	m_cp_mi8 MBD+r6, 0xf6, 0x01                          ; FDB79A  8e f6 3f 01
 	jr nz, .LFDB7CD                                      ; FDB79E  6e 2d
 	push XIX                                             ; FDB7A0  3c
 	pushw 0x01                                           ; FDB7A1  0b 01 00
-	call sub_FDA4A4                                      ; FDB7A4  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDB7A4  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDB7A8  84 23
 	extz BC                                              ; FDB7AA  d9 12
 	pushw bc                                             ; FDB7AC  29
 	pushw 0x02                                           ; FDB7AD  0b 02 00
-	call sub_FD6C65                                      ; FDB7B0  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB7B0  1d 65 6c fd
 	push XIX                                             ; FDB7B4  3c
 	pushw 0x02                                           ; FDB7B5  0b 02 00
-	call sub_FDA4A4                                      ; FDB7B8  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDB7B8  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDB7BC  84 23
 	extz BC                                              ; FDB7BE  d9 12
 	inc 0,XSP                                            ; FDB7C0  ef 60
@@ -120122,7 +121764,7 @@ sub_FDB693:
 	pushw bc                                             ; FDB7C4  29
 	pushw 0x03                                           ; FDB7C5  0b 03 00
 .LFDB7C8:
-	call sub_FD6C65                                      ; FDB7C8  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB7C8  1d 65 6c fd
 	pop XIY                                              ; FDB7CC  5d
 .LFDB7CD:
 	pushw 0x8b                                           ; FDB7CD  0b 8b 00
@@ -120130,8 +121772,8 @@ sub_FDB693:
 	pushw 0x01                                           ; FDB7D4  0b 01 00
 	call sub_FD69E0                                      ; FDB7D7  1d e0 69 fd
 	pushw 0x00                                           ; FDB7DB  0b 00 00
-	call sub_FD7705                                      ; FDB7DE  1d 05 77 fd
-	call sub_FD7713                                      ; FDB7E2  1d 13 77 fd
+	call Var27DA_Set                                      ; FDB7DE  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDB7E2  1d 13 77 fd
 	pushw 0x10                                           ; FDB7E6  0b 10 00
 	call sub_FD6447                                      ; FDB7E9  1d 47 64 fd
 	inc 0,XSP                                            ; FDB7ED  ef 60
@@ -120252,12 +121894,12 @@ sub_FDB8D9:
 	call 0xf42e80                                        ; FDB8E3  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDB8E7  be fe 31
 	push XBC                                             ; FDB8EA  39
-	call sub_FD76F5                                      ; FDB8EB  1d f5 76 fd
+	call Var27DA_Get                                      ; FDB8EB  1d f5 76 fd
 	pop XIY                                              ; FDB8EF  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDB8F0  8e fe 3f 00
 	jr nz, .LFDB939                                      ; FDB8F4  6e 43
 	pushw 0x01                                           ; FDB8F6  0b 01 00
-	call sub_FDA792                                      ; FDB8F9  1d 92 a7 fd
+	call Var2805_Set                                      ; FDB8F9  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDB8FD  be fc 31
 	push XBC                                             ; FDB900  39
 	call sub_FD6B4D                                      ; FDB901  1d 4d 6b fd
@@ -120280,13 +121922,13 @@ sub_FDB8D9:
 	cps h, 0x00                                          ; FDB92B  ce d8
 	jr nz, .LFDB90C                                      ; FDB92D  6e dd
 	pushw 0x01                                           ; FDB92F  0b 01 00
-	call sub_FD7705                                      ; FDB932  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB932  1d 05 77 fd
 	popw bc                                              ; FDB936  49
 	jr .LFDB9A5                                          ; FDB937  68 6c
 .LFDB939:
 	lda xbc, (xiz-6)                                     ; FDB939  be fa 31
 	push XBC                                             ; FDB93C  39
-	call sub_FD7734                                      ; FDB93D  1d 34 77 fd
+	call Var27DB_Get                                      ; FDB93D  1d 34 77 fd
 	push XIX                                             ; FDB941  3c
 	call sub_FD7744                                      ; FDB942  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB946  84 23
@@ -120295,7 +121937,7 @@ sub_FDB8D9:
 	ld bc, (xiz-6)                                       ; FDB94B  9e fa 21
 	extz BC                                              ; FDB94E  d9 12
 	pushw bc                                             ; FDB950  29
-	call sub_FD6C65                                      ; FDB951  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB951  1d 65 6c fd
 	call sub_FD7719                                      ; FDB955  1d 19 77 fd
 	inc 0,XSP                                            ; FDB959  ef 60
 	inc 4,XSP                                            ; FDB95B  ef 64
@@ -120305,20 +121947,20 @@ sub_FDB8D9:
 	call 0xf41ed0                                        ; FDB964  1d d0 1e f4
 	push XIX                                             ; FDB968  3c
 	pushw 0x03                                           ; FDB969  0b 03 00
-	call sub_FD6C7B                                      ; FDB96C  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDB96C  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDB970  84 23
 	extz BC                                              ; FDB972  d9 12
 	pushw bc                                             ; FDB974  29
 	pushw 0x0a                                           ; FDB975  0b 0a 00
-	call sub_FD6C65                                      ; FDB978  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDB978  1d 65 6c fd
 	pushw 0x00                                           ; FDB97C  0b 00 00
 	pushw 0x00                                           ; FDB97F  0b 00 00
 	call sub_FD946B                                      ; FDB982  1d 6b 94 fd
 	pushw 0x01                                           ; FDB986  0b 01 00
 	call sub_FD69E0                                      ; FDB989  1d e0 69 fd
 	pushw 0x00                                           ; FDB98D  0b 00 00
-	call sub_FD7705                                      ; FDB990  1d 05 77 fd
-	call sub_FD7713                                      ; FDB994  1d 13 77 fd
+	call Var27DA_Set                                      ; FDB990  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDB994  1d 13 77 fd
 	pushw 0x10                                           ; FDB998  0b 10 00
 	call sub_FD6447                                      ; FDB99B  1d 47 64 fd
 	add XSP,0x00000016                                   ; FDB99F  ef c8 16 00 00 00
@@ -120333,15 +121975,15 @@ sub_FDB9AB:
 	call 0xf42e80                                        ; FDB9AF  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDB9B3  be fe 31
 	push XBC                                             ; FDB9B6  39
-	call sub_FD76F5                                      ; FDB9B7  1d f5 76 fd
+	call Var27DA_Get                                      ; FDB9B7  1d f5 76 fd
 	lda xbc, (xiz-4)                                     ; FDB9BB  be fc 31
 	push XBC                                             ; FDB9BE  39
-	call sub_FDA0CA                                      ; FDB9BF  1d ca a0 fd
+	call Var27F5_Get                                      ; FDB9BF  1d ca a0 fd
 	inc 0,XSP                                            ; FDB9C3  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDB9C5  8e fe 3f 00
 	jr nz, .LFDB9EB                                      ; FDB9C9  6e 20
 	pushw 0x01                                           ; FDB9CB  0b 01 00
-	call sub_FDA792                                      ; FDB9CE  1d 92 a7 fd
+	call Var2805_Set                                      ; FDB9CE  1d 92 a7 fd
 	popw bc                                              ; FDB9D2  49
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDB9D3  8e fc 3f 00
 	jr nz, .LFDB9DE                                      ; FDB9D7  6e 05
@@ -120351,13 +121993,13 @@ sub_FDB9AB:
 	calr sub_FDBA8B                                      ; FDB9DE  1e aa 00
 .LFDB9E1:
 	pushw 0x01                                           ; FDB9E1  0b 01 00
-	call sub_FD7705                                      ; FDB9E4  1d 05 77 fd
+	call Var27DA_Set                                      ; FDB9E4  1d 05 77 fd
 	popw bc                                              ; FDB9E8  49
 	jr .LFDBA4E                                          ; FDB9E9  68 63
 .LFDB9EB:
 	lda xbc, (xiz-6)                                     ; FDB9EB  be fa 31
 	push XBC                                             ; FDB9EE  39
-	call sub_FD7734                                      ; FDB9EF  1d 34 77 fd
+	call Var27DB_Get                                      ; FDB9EF  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDB9F3  be f6 31
 	push XBC                                             ; FDB9F6  39
 	call sub_FD7744                                      ; FDB9F7  1d 44 77 fd
@@ -120367,7 +122009,7 @@ sub_FDB9AB:
 	ld bc, (xiz-6)                                       ; FDBA01  9e fa 21
 	extz BC                                              ; FDBA04  d9 12
 	pushw bc                                             ; FDBA06  29
-	call sub_FD6C65                                      ; FDBA07  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBA07  1d 65 6c fd
 	inc 0,XSP                                            ; FDBA0B  ef 60
 	inc 4,XSP                                            ; FDBA0D  ef 64
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDBA0F  8e fc 3f 00
@@ -120385,10 +122027,10 @@ sub_FDB9AB:
 	call 0xf41ed0                                        ; FDBA2B  1d d0 1e f4
 	call sub_FD89FA                                      ; FDBA2F  1d fa 89 fd
 	pushw 0x00                                           ; FDBA33  0b 00 00
-	call sub_FD7705                                      ; FDBA36  1d 05 77 fd
+	call Var27DA_Set                                      ; FDBA36  1d 05 77 fd
 	pushw 0x01                                           ; FDBA3A  0b 01 00
 	call sub_FD69E0                                      ; FDBA3D  1d e0 69 fd
-	call sub_FD7713                                      ; FDBA41  1d 13 77 fd
+	call Var27DB_Clear                                      ; FDBA41  1d 13 77 fd
 	pushw 0x10                                           ; FDBA45  0b 10 00
 	call sub_FD6447                                      ; FDBA48  1d 47 64 fd
 	inc 0,XSP                                            ; FDBA4C  ef 60
@@ -120478,12 +122120,12 @@ sub_FDBAE7:
 	call 0xf42e80                                        ; FDBAF1  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDBAF5  be fe 31
 	push XBC                                             ; FDBAF8  39
-	call sub_FD76F5                                      ; FDBAF9  1d f5 76 fd
+	call Var27DA_Get                                      ; FDBAF9  1d f5 76 fd
 	pop XIY                                              ; FDBAFD  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDBAFE  8e fe 3f 00
 	jr nz, .LFDBB47                                      ; FDBB02  6e 43
 	pushw 0x01                                           ; FDBB04  0b 01 00
-	call sub_FDA792                                      ; FDBB07  1d 92 a7 fd
+	call Var2805_Set                                      ; FDBB07  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDBB0B  be fc 31
 	push XBC                                             ; FDBB0E  39
 	call sub_FD6B4D                                      ; FDBB0F  1d 4d 6b fd
@@ -120506,13 +122148,13 @@ sub_FDBAE7:
 	cps h, 0x00                                          ; FDBB39  ce d8
 	jr nz, .LFDBB1A                                      ; FDBB3B  6e dd
 	pushw 0x01                                           ; FDBB3D  0b 01 00
-	call sub_FD7705                                      ; FDBB40  1d 05 77 fd
+	call Var27DA_Set                                      ; FDBB40  1d 05 77 fd
 	popw bc                                              ; FDBB44  49
 	jr .LFDBBBD                                          ; FDBB45  68 76
 .LFDBB47:
 	lda xbc, (xiz-6)                                     ; FDBB47  be fa 31
 	push XBC                                             ; FDBB4A  39
-	call sub_FD7734                                      ; FDBB4B  1d 34 77 fd
+	call Var27DB_Get                                      ; FDBB4B  1d 34 77 fd
 	push XIX                                             ; FDBB4F  3c
 	call sub_FD7744                                      ; FDBB50  1d 44 77 fd
 	ld C,(XIX)                                           ; FDBB54  84 23
@@ -120521,7 +122163,7 @@ sub_FDBAE7:
 	ld bc, (xiz-6)                                       ; FDBB59  9e fa 21
 	extz BC                                              ; FDBB5C  d9 12
 	pushw bc                                             ; FDBB5E  29
-	call sub_FD6C65                                      ; FDBB5F  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBB5F  1d 65 6c fd
 	call sub_FD7719                                      ; FDBB63  1d 19 77 fd
 	inc 0,XSP                                            ; FDBB67  ef 60
 	inc 4,XSP                                            ; FDBB69  ef 64
@@ -120529,15 +122171,15 @@ sub_FDBAE7:
 	jr ule, .LFDBBBD                                     ; FDBB6D  63 4e
 	push XIX                                             ; FDBB6F  3c
 	pushw 0x05                                           ; FDBB70  0b 05 00
-	call sub_FD6C7B                                      ; FDBB73  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDBB73  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDBB77  84 23
 	extz BC                                              ; FDBB79  d9 12
 	pushw bc                                             ; FDBB7B  29
 	pushw 0x0a                                           ; FDBB7C  0b 0a 00
-	call sub_FD6C65                                      ; FDBB7F  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBB7F  1d 65 6c fd
 	pushw 0x00                                           ; FDBB83  0b 00 00
 	pushw 0x09                                           ; FDBB86  0b 09 00
-	call sub_FD6C65                                      ; FDBB89  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBB89  1d 65 6c fd
 	pushw 0x8e                                           ; FDBB8D  0b 8e 00
 	call 0xf41ed0                                        ; FDBB90  1d d0 1e f4
 	pushw 0x00                                           ; FDBB94  0b 00 00
@@ -120546,8 +122188,8 @@ sub_FDBAE7:
 	pushw 0x01                                           ; FDBB9E  0b 01 00
 	call sub_FD69E0                                      ; FDBBA1  1d e0 69 fd
 	pushw 0x00                                           ; FDBBA5  0b 00 00
-	call sub_FD7705                                      ; FDBBA8  1d 05 77 fd
-	call sub_FD7713                                      ; FDBBAC  1d 13 77 fd
+	call Var27DA_Set                                      ; FDBBA8  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDBBAC  1d 13 77 fd
 	pushw 0x10                                           ; FDBBB0  0b 10 00
 	call sub_FD6447                                      ; FDBBB3  1d 47 64 fd
 	add XSP,0x0000001a                                   ; FDBBB7  ef c8 1a 00 00 00
@@ -120576,23 +122218,23 @@ sub_FDBBD6:
 	jr z, .LFDBC00                                       ; FDBBE6  66 18
 	lda xbc, (xiz-2)                                     ; FDBBE8  be fe 31
 	push XBC                                             ; FDBBEB  39
-	call sub_FDA7A0                                      ; FDBBEC  1d a0 a7 fd
+	call Var2805_Get                                      ; FDBBEC  1d a0 a7 fd
 	pop XIY                                              ; FDBBF0  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FDBBF1  8e fe 3f 01
 	jrl z, .LFDBE8A                                      ; FDBBF5  76 92 02
 	pushw 0x01                                           ; FDBBF8  0b 01 00
-	call sub_FD6104                                      ; FDBBFB  1d 04 61 fd
+	call Var27DF_Set                                      ; FDBBFB  1d 04 61 fd
 	popw bc                                              ; FDBBFF  49
 .LFDBC00:
 	call 0xf42e80                                        ; FDBC00  1d 80 2e f4
 	lda xbc, (xiz-4)                                     ; FDBC04  be fc 31
 	push XBC                                             ; FDBC07  39
-	call sub_FD76F5                                      ; FDBC08  1d f5 76 fd
+	call Var27DA_Get                                      ; FDBC08  1d f5 76 fd
 	pop XIY                                              ; FDBC0C  5d
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDBC0D  8e fc 3f 00
 	jrl nz, .LFDBD16                                     ; FDBC11  7e 02 01
 	pushw 0x01                                           ; FDBC14  0b 01 00
-	call sub_FDA792                                      ; FDBC17  1d 92 a7 fd
+	call Var2805_Set                                      ; FDBC17  1d 92 a7 fd
 	lda xbc, (xiz-6)                                     ; FDBC1B  be fa 31
 	push XBC                                             ; FDBC1E  39
 	pushw 0x01                                           ; FDBC1F  0b 01 00
@@ -120624,10 +122266,10 @@ sub_FDBBD6:
 	extz BC                                              ; FDBC69  d9 12
 	pushw bc                                             ; FDBC6B  29
 	pushw 0x00                                           ; FDBC6C  0b 00 00
-	call sub_FD6C65                                      ; FDBC6F  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBC6F  1d 65 6c fd
 	lda xbc, (xiz-10)                                    ; FDBC73  be f6 31
 	push XBC                                             ; FDBC76  39
-	call sub_FDA0CA                                      ; FDBC77  1d ca a0 fd
+	call Var27F5_Get                                      ; FDBC77  1d ca a0 fd
 	inc 0,XSP                                            ; FDBC7B  ef 60
 	inc 4,XSP                                            ; FDBC7D  ef 64
 	pushw 0xcd                                           ; FDBC7F  0b cd 00
@@ -120675,14 +122317,14 @@ sub_FDBBD6:
 .LFDBD01:
 	add XSP,0x00000020                                   ; FDBD01  ef c8 20 00 00 00
 	pushw 0x01                                           ; FDBD07  0b 01 00
-	call sub_FD7705                                      ; FDBD0A  1d 05 77 fd
+	call Var27DA_Set                                      ; FDBD0A  1d 05 77 fd
 	call sub_FD7719                                      ; FDBD0E  1d 19 77 fd
 	popw bc                                              ; FDBD12  49
 	jrl .LFDBE8A                                         ; FDBD13  78 74 01
 .LFDBD16:
 	lda xbc, (xiz-12)                                    ; FDBD16  be f4 31
 	push XBC                                             ; FDBD19  39
-	call sub_FD7734                                      ; FDBD1A  1d 34 77 fd
+	call Var27DB_Get                                      ; FDBD1A  1d 34 77 fd
 	push XIX                                             ; FDBD1E  3c
 	call sub_FD7744                                      ; FDBD1F  1d 44 77 fd
 	inc 0,XSP                                            ; FDBD23  ef 60
@@ -120692,7 +122334,7 @@ sub_FDBBD6:
 	extz BC                                              ; FDBD2D  d9 12
 	pushw bc                                             ; FDBD2F  29
 	pushw 0x05                                           ; FDBD30  0b 05 00
-	call sub_FD6C65                                      ; FDBD33  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBD33  1d 65 6c fd
 	ldb h, 0x00                                          ; FDBD37  26 00
 	pop XIY                                              ; FDBD39  5d
 .LFDBD3A:
@@ -120704,7 +122346,7 @@ sub_FDBBD6:
 	extz BC                                              ; FDBD45  d9 12
 	pushw bc                                             ; FDBD47  29
 	pushw 0x0e                                           ; FDBD48  0b 0e 00
-	call sub_FD6C65                                      ; FDBD4B  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBD4B  1d 65 6c fd
 	pop XIY                                              ; FDBD4F  5d
 	jrl .LFDBDBA                                         ; FDBD50  78 67 00
 .LFDBD53:
@@ -120722,7 +122364,7 @@ sub_FDBBD6:
 	extz BC                                              ; FDBD6A  d9 12
 	pushw bc                                             ; FDBD6C  29
 	pushw 0x06                                           ; FDBD6D  0b 06 00
-	call sub_FD6C65                                      ; FDBD70  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBD70  1d 65 6c fd
 	ldb h, 0x00                                          ; FDBD74  26 00
 	pop XIY                                              ; FDBD76  5d
 .LFDBD77:
@@ -120734,7 +122376,7 @@ sub_FDBBD6:
 	extz BC                                              ; FDBD82  d9 12
 	pushw bc                                             ; FDBD84  29
 	pushw 0x0f                                           ; FDBD85  0b 0f 00
-	call sub_FD6C65                                      ; FDBD88  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBD88  1d 65 6c fd
 	pop XIY                                              ; FDBD8C  5d
 	jr .LFDBDBA                                          ; FDBD8D  68 2b
 .LFDBD8F:
@@ -120767,13 +122409,13 @@ sub_FDBBD6:
 	calr sub_FDBE90                                      ; FDBDC6  1e c7 00
 	lda xbc, (xiz-14)                                    ; FDBDC9  be f2 31
 	push XBC                                             ; FDBDCC  39
-	call sub_FDABD3                                      ; FDBDCD  1d d3 ab fd
+	call Var2811_Get                                      ; FDBDCD  1d d3 ab fd
 	inc 6,XSP                                            ; FDBDD1  ef 66
 	m_cp_mi8 MBD+r6, 0xf2, 0x01                          ; FDBDD3  8e f2 3f 01
 	jr nz, .LFDBE40                                      ; FDBDD7  6e 67
 	push XIX                                             ; FDBDD9  3c
 	pushw 0x00                                           ; FDBDDA  0b 00 00
-	call sub_FD6C7B                                      ; FDBDDD  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDBDDD  1d 7b 6c fd
 	ld H,(XIX)                                           ; FDBDE1  84 26
 	inc 6,XSP                                            ; FDBDE3  ef 66
 	cps h, 0x01                                          ; FDBDE5  ce d9
@@ -120784,14 +122426,14 @@ sub_FDBBD6:
 	lda xbc, (xiz-16)                                    ; FDBDED  be f0 31
 	push XBC                                             ; FDBDF0  39
 	pushw 0x05                                           ; FDBDF1  0b 05 00
-	call sub_FD6C7B                                      ; FDBDF4  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDBDF4  1d 7b 6c fd
 	ldb h, 0x19                                          ; FDBDF8  26 19
 	jr .LFDBE09                                          ; FDBDFA  68 0d
 .LFDBDFC:
 	lda xbc, (xiz-16)                                    ; FDBDFC  be f0 31
 	push XBC                                             ; FDBDFF  39
 	pushw 0x06                                           ; FDBE00  0b 06 00
-	call sub_FD6C7B                                      ; FDBE03  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDBE03  1d 7b 6c fd
 	ldb h, 0x1a                                          ; FDBE07  26 1a
 .LFDBE09:
 	inc 6,XSP                                            ; FDBE09  ef 66
@@ -120812,13 +122454,13 @@ sub_FDBBD6:
 	pushw 0x20                                           ; FDBE2A  0b 20 00
 	call 0xf41b14                                        ; FDBE2D  1d 14 1b f4
 	pushw 0x00                                           ; FDBE31  0b 00 00
-	call sub_FDABE3                                      ; FDBE34  1d e3 ab fd
+	call Var2811_Set                                      ; FDBE34  1d e3 ab fd
 	add XSP,0x00000014                                   ; FDBE38  ef c8 14 00 00 00
 	jr .LFDBE77                                          ; FDBE3E  68 37
 .LFDBE40:
 	lda xbc, (xiz-2)                                     ; FDBE40  be fe 31
 	push XBC                                             ; FDBE43  39
-	call sub_FD6112                                      ; FDBE44  1d 12 61 fd
+	call Var27DF_Get                                      ; FDBE44  1d 12 61 fd
 	pop XIY                                              ; FDBE48  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FDBE49  8e fe 3f 01
 	jr nz, .LFDBE67                                      ; FDBE4D  6e 18
@@ -120840,10 +122482,10 @@ sub_FDBBD6:
 	popw bc                                              ; FDBE76  49
 .LFDBE77:
 	pushw 0x00                                           ; FDBE77  0b 00 00
-	call sub_FD7705                                      ; FDBE7A  1d 05 77 fd
-	call sub_FD7713                                      ; FDBE7E  1d 13 77 fd
+	call Var27DA_Set                                      ; FDBE7A  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDBE7E  1d 13 77 fd
 	pushw 0x00                                           ; FDBE82  0b 00 00
-	call sub_FDA792                                      ; FDBE85  1d 92 a7 fd
+	call Var2805_Set                                      ; FDBE85  1d 92 a7 fd
 	pop XIY                                              ; FDBE89  5d
 .LFDBE8A:
 	pop XIX                                              ; FDBE8A  5c
@@ -120865,7 +122507,7 @@ sub_FDBE90:
 	ld wa, (xiz-2)                                       ; FDBEA7  9e fe 20
 	extz WA                                              ; FDBEAA  d8 12
 	pushw wa                                             ; FDBEAC  28
-	call sub_FD6C7B                                      ; FDBEAD  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDBEAD  1d 7b 6c fd
 	m_and_mi8 MBD+r6, 0xfc, 0x3f                         ; FDBEB1  8e fc 3c 3f
 	ld bc, (xiz-4)                                       ; FDBEB5  9e fc 21
 	extz BC                                              ; FDBEB8  d9 12
@@ -120880,7 +122522,7 @@ sub_FDBE90:
 	jr ugt, .LFDBEDA                                     ; FDBECD  6b 0b
 	pushw 0xaa                                           ; FDBECF  0b aa 00
 	pushw 0x0c                                           ; FDBED2  0b 0c 00
-	call sub_FD6C65                                      ; FDBED5  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDBED5  1d 65 6c fd
 	pop XIY                                              ; FDBED9  5d
 .LFDBEDA:
 	popw hl                                              ; FDBEDA  4b
@@ -120895,12 +122537,12 @@ sub_FDBEDE:
 	call 0xf42e80                                        ; FDBEE8  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDBEEC  be fe 31
 	push XBC                                             ; FDBEEF  39
-	call sub_FD76F5                                      ; FDBEF0  1d f5 76 fd
+	call Var27DA_Get                                      ; FDBEF0  1d f5 76 fd
 	pop XIY                                              ; FDBEF4  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDBEF5  8e fe 3f 00
 	jrl nz, .LFDC048                                     ; FDBEF9  7e 4c 01
 	pushw 0x01                                           ; FDBEFC  0b 01 00
-	call sub_FDA792                                      ; FDBEFF  1d 92 a7 fd
+	call Var2805_Set                                      ; FDBEFF  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDBF03  be fc 31
 	push XBC                                             ; FDBF06  39
 	pushw 0x02                                           ; FDBF07  0b 02 00
@@ -120913,7 +122555,7 @@ sub_FDBEDE:
 	call sub_FD7095                                      ; FDBF18  1d 95 70 fd
 	lda xbc, (xiz-8)                                     ; FDBF1C  be f8 31
 	push XBC                                             ; FDBF1F  39
-	call sub_FDA0CA                                      ; FDBF20  1d ca a0 fd
+	call Var27F5_Get                                      ; FDBF20  1d ca a0 fd
 	add XSP,0x00000012                                   ; FDBF24  ef c8 12 00 00 00
 	m_cp_mi8 MBD+r6, 0xf8, 0x00                          ; FDBF2A  8e f8 3f 00
 	jrl nz, .LFDBFA6                                     ; FDBF2E  7e 75 00
@@ -121017,22 +122659,22 @@ sub_FDBF5E:
 	extz BC                                              ; FDC01F  d9 12
 	pushw bc                                             ; FDC021  29
 	pushw 0x0d                                           ; FDC022  0b 0d 00
-	call sub_FD6C65                                      ; FDC025  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC025  1d 65 6c fd
 	pushw 0x01                                           ; FDC029  0b 01 00
-	call sub_FD7705                                      ; FDC02C  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC02C  1d 05 77 fd
 	call sub_FD7719                                      ; FDC030  1d 19 77 fd
 	ld bc, (xiz-4)                                       ; FDC034  9e fc 21
 	extz BC                                              ; FDC037  d9 12
 	pushw bc                                             ; FDC039  29
 	pushw 0x00                                           ; FDC03A  0b 00 00
-	call sub_FD6C65                                      ; FDC03D  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC03D  1d 65 6c fd
 	inc 0,XSP                                            ; FDC041  ef 60
 	inc 2,XSP                                            ; FDC043  ef 62
 	jrl .LFDC0DB                                         ; FDC045  78 93 00
 .LFDC048:
 	lda xbc, (xiz-10)                                    ; FDC048  be f6 31
 	push XBC                                             ; FDC04B  39
-	call sub_FD7734                                      ; FDC04C  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC04C  1d 34 77 fd
 	push XIX                                             ; FDC050  3c
 	call sub_FD7744                                      ; FDC051  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC055  84 23
@@ -121041,7 +122683,7 @@ sub_FDBF5E:
 	ld bc, (xiz-10)                                      ; FDC05A  9e f6 21
 	extz BC                                              ; FDC05D  d9 12
 	pushw bc                                             ; FDC05F  29
-	call sub_FD6C65                                      ; FDC060  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC060  1d 65 6c fd
 	call sub_FD7719                                      ; FDC064  1d 19 77 fd
 	inc 0,XSP                                            ; FDC068  ef 60
 	inc 4,XSP                                            ; FDC06A  ef 64
@@ -121049,25 +122691,25 @@ sub_FDBF5E:
 	jr ule, .LFDC0DB                                     ; FDC06F  63 6a
 	push XIX                                             ; FDC071  3c
 	pushw 0x0b                                           ; FDC072  0b 0b 00
-	call sub_FD6C7B                                      ; FDC075  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDC075  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDC079  84 23
 	extz BC                                              ; FDC07B  d9 12
 	pushw bc                                             ; FDC07D  29
 	pushw 0x0c                                           ; FDC07E  0b 0c 00
-	call sub_FD6C65                                      ; FDC081  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC081  1d 65 6c fd
 	push XIX                                             ; FDC085  3c
 	pushw 0x0a                                           ; FDC086  0b 0a 00
-	call sub_FD6C7B                                      ; FDC089  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDC089  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDC08D  84 23
 	extz BC                                              ; FDC08F  d9 12
 	pushw bc                                             ; FDC091  29
 	pushw 0x0b                                           ; FDC092  0b 0b 00
-	call sub_FD6C65                                      ; FDC095  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC095  1d 65 6c fd
 	pushw 0x02                                           ; FDC099  0b 02 00
 	calr sub_FDBE90                                      ; FDC09C  1e f1 fd
 	lda xbc, (xiz-12)                                    ; FDC09F  be f4 31
 	push XBC                                             ; FDC0A2  39
-	call sub_FD6112                                      ; FDC0A3  1d 12 61 fd
+	call Var27DF_Get                                      ; FDC0A3  1d 12 61 fd
 	add XSP,0x0000001a                                   ; FDC0A7  ef c8 1a 00 00 00
 	m_cp_mi8 MBD+r6, 0xf4, 0x01                          ; FDC0AD  8e f4 3f 01
 	jr nz, .LFDC0C0                                      ; FDC0B1  6e 0d
@@ -121082,8 +122724,8 @@ sub_FDBF5E:
 	popw bc                                              ; FDC0C7  49
 .LFDC0C8:
 	pushw 0x00                                           ; FDC0C8  0b 00 00
-	call sub_FD7705                                      ; FDC0CB  1d 05 77 fd
-	call sub_FD7713                                      ; FDC0CF  1d 13 77 fd
+	call Var27DA_Set                                      ; FDC0CB  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDC0CF  1d 13 77 fd
 	pushw 0x10                                           ; FDC0D3  0b 10 00
 	call sub_FD6447                                      ; FDC0D6  1d 47 64 fd
 	pop XIY                                              ; FDC0DA  5d
@@ -121108,15 +122750,15 @@ sub_FDC0ED:
 	lda xbc, (xiz-2)                                     ; FDC0FA  be fe 31
 sub_FDC0FD:
 	push XBC                                             ; FDC0FD  39
-	call sub_FD76F5                                      ; FDC0FE  1d f5 76 fd
+	call Var27DA_Get                                      ; FDC0FE  1d f5 76 fd
 	lda xbc, (xiz-4)                                     ; FDC102  be fc 31
 	push XBC                                             ; FDC105  39
-	call sub_FDA0CA                                      ; FDC106  1d ca a0 fd
+	call Var27F5_Get                                      ; FDC106  1d ca a0 fd
 	inc 0,XSP                                            ; FDC10A  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDC10C  8e fe 3f 00
 	jr nz, .LFDC133                                      ; FDC110  6e 21
 	pushw 0x01                                           ; FDC112  0b 01 00
-	call sub_FDA792                                      ; FDC115  1d 92 a7 fd
+	call Var2805_Set                                      ; FDC115  1d 92 a7 fd
 	popw bc                                              ; FDC119  49
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDC11A  8e fc 3f 00
 	jr nz, .LFDC125                                      ; FDC11E  6e 05
@@ -121126,13 +122768,13 @@ sub_FDC0FD:
 	calr sub_FDC22F                                      ; FDC125  1e 07 01
 .LFDC128:
 	pushw 0x01                                           ; FDC128  0b 01 00
-	call sub_FD7705                                      ; FDC12B  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC12B  1d 05 77 fd
 	popw bc                                              ; FDC12F  49
 	jrl .LFDC1CC                                         ; FDC130  78 99 00
 .LFDC133:
 	lda xbc, (xiz-6)                                     ; FDC133  be fa 31
 	push XBC                                             ; FDC136  39
-	call sub_FD7734                                      ; FDC137  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC137  1d 34 77 fd
 	push XIX                                             ; FDC13B  3c
 	call sub_FD7744                                      ; FDC13C  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC140  84 23
@@ -121141,7 +122783,7 @@ sub_FDC0FD:
 	ld bc, (xiz-6)                                       ; FDC145  9e fa 21
 	extz BC                                              ; FDC148  d9 12
 	pushw bc                                             ; FDC14A  29
-	call sub_FD6C65                                      ; FDC14B  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC14B  1d 65 6c fd
 	call sub_FD7719                                      ; FDC14F  1d 19 77 fd
 	inc 0,XSP                                            ; FDC153  ef 60
 	inc 4,XSP                                            ; FDC155  ef 64
@@ -121149,11 +122791,11 @@ sub_FDC0FD:
 	jrl ule, .LFDC1CC                                    ; FDC159  73 70 00
 	push XIX                                             ; FDC15C  3c
 	pushw 0x00                                           ; FDC15D  0b 00 00
-	call sub_FD6C7B                                      ; FDC160  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDC160  1d 7b 6c fd
 	and (XIX),0x07                                       ; FDC164  84 3c 07
 	pushw 0x00                                           ; FDC167  0b 00 00
-	call sub_FD7705                                      ; FDC16A  1d 05 77 fd
-	call sub_FD7713                                      ; FDC16E  1d 13 77 fd
+	call Var27DA_Set                                      ; FDC16A  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDC16E  1d 13 77 fd
 	ld H,(XIX)                                           ; FDC172  84 26
 	inc 0,XSP                                            ; FDC174  ef 60
 	cps h, 0x01                                          ; FDC176  ce d9
@@ -121176,7 +122818,7 @@ sub_FDC0FD:
 	pushw 0x00                                           ; FDC198  0b 00 00
 	pushw 0x95                                           ; FDC19B  0b 95 00
 .LFDC19E:
-	call sub_FD608B                                      ; FDC19E  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FDC19E  1d 8b 60 fd
 	pop XIY                                              ; FDC1A2  5d
 	jr .LFDC1CC                                          ; FDC1A3  68 27
 .LFDC1A5:
@@ -121357,12 +122999,12 @@ sub_FDC333:
 	call 0xf42e80                                        ; FDC33D  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDC341  be fe 31
 	push XBC                                             ; FDC344  39
-	call sub_FD76F5                                      ; FDC345  1d f5 76 fd
+	call Var27DA_Get                                      ; FDC345  1d f5 76 fd
 	pop XIY                                              ; FDC349  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDC34A  8e fe 3f 00
 	jr nz, .LFDC393                                      ; FDC34E  6e 43
 	pushw 0x01                                           ; FDC350  0b 01 00
-	call sub_FDA792                                      ; FDC353  1d 92 a7 fd
+	call Var2805_Set                                      ; FDC353  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDC357  be fc 31
 	push XBC                                             ; FDC35A  39
 	call sub_FD6B4D                                      ; FDC35B  1d 4d 6b fd
@@ -121385,13 +123027,13 @@ sub_FDC333:
 	cps h, 0x00                                          ; FDC385  ce d8
 	jr nz, .LFDC366                                      ; FDC387  6e dd
 	pushw 0x01                                           ; FDC389  0b 01 00
-	call sub_FD7705                                      ; FDC38C  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC38C  1d 05 77 fd
 	popw bc                                              ; FDC390  49
 	jr .LFDC3FF                                          ; FDC391  68 6c
 .LFDC393:
 	lda xbc, (xiz-6)                                     ; FDC393  be fa 31
 	push XBC                                             ; FDC396  39
-	call sub_FD7734                                      ; FDC397  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC397  1d 34 77 fd
 	push XIX                                             ; FDC39B  3c
 	call sub_FD7744                                      ; FDC39C  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC3A0  84 23
@@ -121400,7 +123042,7 @@ sub_FDC333:
 	ld bc, (xiz-6)                                       ; FDC3A5  9e fa 21
 	extz BC                                              ; FDC3A8  d9 12
 	pushw bc                                             ; FDC3AA  29
-	call sub_FD6C65                                      ; FDC3AB  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC3AB  1d 65 6c fd
 	call sub_FD7719                                      ; FDC3AF  1d 19 77 fd
 	inc 0,XSP                                            ; FDC3B3  ef 60
 	inc 4,XSP                                            ; FDC3B5  ef 64
@@ -121408,12 +123050,12 @@ sub_FDC333:
 	jr ule, .LFDC3FF                                     ; FDC3B9  63 44
 	push XIX                                             ; FDC3BB  3c
 	pushw 0x03                                           ; FDC3BC  0b 03 00
-	call sub_FD6C7B                                      ; FDC3BF  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDC3BF  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDC3C3  84 23
 	extz BC                                              ; FDC3C5  d9 12
 	pushw bc                                             ; FDC3C7  29
 	pushw 0x0a                                           ; FDC3C8  0b 0a 00
-	call sub_FD6C65                                      ; FDC3CB  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC3CB  1d 65 6c fd
 	pushw 0x96                                           ; FDC3CF  0b 96 00
 	call 0xf41ed0                                        ; FDC3D2  1d d0 1e f4
 	pushw 0x00                                           ; FDC3D6  0b 00 00
@@ -121422,8 +123064,8 @@ sub_FDC333:
 	pushw 0x01                                           ; FDC3E0  0b 01 00
 	call sub_FD69E0                                      ; FDC3E3  1d e0 69 fd
 	pushw 0x00                                           ; FDC3E7  0b 00 00
-	call sub_FD7705                                      ; FDC3EA  1d 05 77 fd
-	call sub_FD7713                                      ; FDC3EE  1d 13 77 fd
+	call Var27DA_Set                                      ; FDC3EA  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDC3EE  1d 13 77 fd
 	pushw 0x10                                           ; FDC3F2  0b 10 00
 	call sub_FD6447                                      ; FDC3F5  1d 47 64 fd
 sub_FDC3F9:
@@ -121443,12 +123085,12 @@ sub_FDC405:
 sub_FDC410:
 	lda xbc, (xiz-2)                                     ; FDC410  be fe 31
 	push XBC                                             ; FDC413  39
-	call sub_FD76F5                                      ; FDC414  1d f5 76 fd
+	call Var27DA_Get                                      ; FDC414  1d f5 76 fd
 	pop XIY                                              ; FDC418  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDC419  8e fe 3f 00
 	jr nz, .LFDC46D                                      ; FDC41D  6e 4e
 	pushw 0x01                                           ; FDC41F  0b 01 00
-	call sub_FDA792                                      ; FDC422  1d 92 a7 fd
+	call Var2805_Set                                      ; FDC422  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDC426  be fc 31
 	push XBC                                             ; FDC429  39
 	call sub_FD6B4D                                      ; FDC42A  1d 4d 6b fd
@@ -121472,17 +123114,17 @@ sub_FDC438:
 	cps h, 0x00                                          ; FDC450  ce d8
 	jr nz, .LFDC435                                      ; FDC452  6e e1
 	pushw 0x01                                           ; FDC454  0b 01 00
-	call sub_FD7705                                      ; FDC457  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC457  1d 05 77 fd
 	call sub_FD7719                                      ; FDC45B  1d 19 77 fd
 	pushw 0x01                                           ; FDC45F  0b 01 00
 	pushw 0x00                                           ; FDC462  0b 00 00
-	call sub_FD6C65                                      ; FDC465  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC465  1d 65 6c fd
 	inc 6,XSP                                            ; FDC469  ef 66
 	jr .LFDC4C0                                          ; FDC46B  68 53
 .LFDC46D:
 	lda xbc, (xiz-6)                                     ; FDC46D  be fa 31
 	push XBC                                             ; FDC470  39
-	call sub_FD7734                                      ; FDC471  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC471  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDC475  be f6 31
 	push XBC                                             ; FDC478  39
 	call sub_FD7744                                      ; FDC479  1d 44 77 fd
@@ -121492,7 +123134,7 @@ sub_FDC438:
 	ld bc, (xiz-6)                                       ; FDC483  9e fa 21
 	extz BC                                              ; FDC486  d9 12
 	pushw bc                                             ; FDC488  29
-	call sub_FD6C65                                      ; FDC489  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC489  1d 65 6c fd
 	call sub_FD7719                                      ; FDC48D  1d 19 77 fd
 	inc 0,XSP                                            ; FDC491  ef 60
 	inc 4,XSP                                            ; FDC493  ef 64
@@ -121504,8 +123146,8 @@ sub_FDC438:
 	pushw 0x01                                           ; FDC4A5  0b 01 00
 	call sub_FD69E0                                      ; FDC4A8  1d e0 69 fd
 	pushw 0x00                                           ; FDC4AC  0b 00 00
-	call sub_FD7705                                      ; FDC4AF  1d 05 77 fd
-	call sub_FD7713                                      ; FDC4B3  1d 13 77 fd
+	call Var27DA_Set                                      ; FDC4AF  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDC4B3  1d 13 77 fd
 	pushw 0x10                                           ; FDC4B7  0b 10 00
 	call sub_FD6447                                      ; FDC4BA  1d 47 64 fd
 	inc 0,XSP                                            ; FDC4BE  ef 60
@@ -121524,12 +123166,12 @@ sub_FDC4C6:
 	call 0xf42e80                                        ; FDC4D0  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDC4D4  be fe 31
 	push XBC                                             ; FDC4D7  39
-	call sub_FD76F5                                      ; FDC4D8  1d f5 76 fd
+	call Var27DA_Get                                      ; FDC4D8  1d f5 76 fd
 	pop XIY                                              ; FDC4DC  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDC4DD  8e fe 3f 00
 	jr nz, .LFDC526                                      ; FDC4E1  6e 43
 	pushw 0x01                                           ; FDC4E3  0b 01 00
-	call sub_FDA792                                      ; FDC4E6  1d 92 a7 fd
+	call Var2805_Set                                      ; FDC4E6  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDC4EA  be fc 31
 	push XBC                                             ; FDC4ED  39
 	call sub_FD6B4D                                      ; FDC4EE  1d 4d 6b fd
@@ -121552,13 +123194,13 @@ sub_FDC4C6:
 	cps h, 0x00                                          ; FDC518  ce d8
 	jr nz, .LFDC4F9                                      ; FDC51A  6e dd
 	pushw 0x01                                           ; FDC51C  0b 01 00
-	call sub_FD7705                                      ; FDC51F  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC51F  1d 05 77 fd
 	popw bc                                              ; FDC523  49
 	jr .LFDC59C                                          ; FDC524  68 76
 .LFDC526:
 	lda xbc, (xiz-6)                                     ; FDC526  be fa 31
 	push XBC                                             ; FDC529  39
-	call sub_FD7734                                      ; FDC52A  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC52A  1d 34 77 fd
 	push XIX                                             ; FDC52E  3c
 	call sub_FD7744                                      ; FDC52F  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC533  84 23
@@ -121567,7 +123209,7 @@ sub_FDC4C6:
 	ld bc, (xiz-6)                                       ; FDC538  9e fa 21
 	extz BC                                              ; FDC53B  d9 12
 	pushw bc                                             ; FDC53D  29
-	call sub_FD6C65                                      ; FDC53E  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC53E  1d 65 6c fd
 	call sub_FD7719                                      ; FDC542  1d 19 77 fd
 	inc 0,XSP                                            ; FDC546  ef 60
 	inc 4,XSP                                            ; FDC548  ef 64
@@ -121575,15 +123217,15 @@ sub_FDC4C6:
 	jr ule, .LFDC59C                                     ; FDC54C  63 4e
 	push XIX                                             ; FDC54E  3c
 	pushw 0x03                                           ; FDC54F  0b 03 00
-	call sub_FD6C7B                                      ; FDC552  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDC552  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDC556  84 23
 	extz BC                                              ; FDC558  d9 12
 	pushw bc                                             ; FDC55A  29
 	pushw 0x0a                                           ; FDC55B  0b 0a 00
-	call sub_FD6C65                                      ; FDC55E  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC55E  1d 65 6c fd
 	pushw 0x00                                           ; FDC562  0b 00 00
 	pushw 0x09                                           ; FDC565  0b 09 00
-	call sub_FD6C65                                      ; FDC568  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC568  1d 65 6c fd
 	pushw 0x98                                           ; FDC56C  0b 98 00
 	call 0xf41ed0                                        ; FDC56F  1d d0 1e f4
 	pushw 0x01                                           ; FDC573  0b 01 00
@@ -121592,8 +123234,8 @@ sub_FDC4C6:
 	pushw 0x01                                           ; FDC57D  0b 01 00
 	call sub_FD69E0                                      ; FDC580  1d e0 69 fd
 	pushw 0x00                                           ; FDC584  0b 00 00
-	call sub_FD7705                                      ; FDC587  1d 05 77 fd
-	call sub_FD7713                                      ; FDC58B  1d 13 77 fd
+	call Var27DA_Set                                      ; FDC587  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDC58B  1d 13 77 fd
 	pushw 0x10                                           ; FDC58F  0b 10 00
 	call sub_FD6447                                      ; FDC592  1d 47 64 fd
 	add XSP,0x0000001a                                   ; FDC596  ef c8 1a 00 00 00
@@ -121621,15 +123263,15 @@ sub_FDC5BB:
 	call 0xf42e80                                        ; FDC5BF  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDC5C3  be fe 31
 	push XBC                                             ; FDC5C6  39
-	call sub_FD76F5                                      ; FDC5C7  1d f5 76 fd
+	call Var27DA_Get                                      ; FDC5C7  1d f5 76 fd
 	lda xbc, (xiz-4)                                     ; FDC5CB  be fc 31
 	push XBC                                             ; FDC5CE  39
-	call sub_FDA0CA                                      ; FDC5CF  1d ca a0 fd
+	call Var27F5_Get                                      ; FDC5CF  1d ca a0 fd
 	inc 0,XSP                                            ; FDC5D3  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDC5D5  8e fe 3f 00
 	jrl nz, .LFDC6D6                                     ; FDC5D9  7e fa 00
 	pushw 0x01                                           ; FDC5DC  0b 01 00
-	call sub_FDA792                                      ; FDC5DF  1d 92 a7 fd
+	call Var2805_Set                                      ; FDC5DF  1d 92 a7 fd
 	popw bc                                              ; FDC5E3  49
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDC5E4  8e fc 3f 00
 	jr nz, .LFDC62B                                      ; FDC5E8  6e 41
@@ -121707,7 +123349,7 @@ sub_FDC62E:
 	jr nz, .LFDC630                                      ; FDC6A9  6e 85
 .LFDC6AB:
 	pushw 0x01                                           ; FDC6AB  0b 01 00
-	call sub_FD7705                                      ; FDC6AE  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC6AE  1d 05 77 fd
 	call sub_FD7719                                      ; FDC6B2  1d 19 77 fd
 	lda xbc, (xiz-6)                                     ; FDC6B6  be fa 31
 	push XBC                                             ; FDC6B9  39
@@ -121716,7 +123358,7 @@ sub_FDC62E:
 	extz BC                                              ; FDC6C1  d9 12
 	pushw bc                                             ; FDC6C3  29
 	pushw 0x00                                           ; FDC6C4  0b 00 00
-	call sub_FD6C65                                      ; FDC6C7  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC6C7  1d 65 6c fd
 sub_FDC6CB:
 	call sub_FD7719                                      ; FDC6CB  1d 19 77 fd
 	inc 0,XSP                                            ; FDC6CF  ef 60
@@ -121727,7 +123369,7 @@ sub_FDC6CB:
 	jr nz, .LFDC73B                                      ; FDC6DA  6e 5f
 	lda xbc, (xiz-8)                                     ; FDC6DC  be f8 31
 	push XBC                                             ; FDC6DF  39
-	call sub_FD7734                                      ; FDC6E0  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC6E0  1d 34 77 fd
 	push XIX                                             ; FDC6E4  3c
 	call sub_FD7744                                      ; FDC6E5  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC6E9  84 23
@@ -121736,7 +123378,7 @@ sub_FDC6CB:
 	ld bc, (xiz-8)                                       ; FDC6EE  9e f8 21
 	extz BC                                              ; FDC6F1  d9 12
 	pushw bc                                             ; FDC6F3  29
-	call sub_FD6C65                                      ; FDC6F4  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC6F4  1d 65 6c fd
 	inc 0,XSP                                            ; FDC6F8  ef 60
 	inc 4,XSP                                            ; FDC6FA  ef 64
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDC6FC  8e fc 3f 00
@@ -121750,11 +123392,11 @@ sub_FDC6CB:
 	cps a, 0x07                                          ; FDC712  c9 df
 	jrl ule, .LFDC846                                    ; FDC714  73 2f 01
 .LFDC717:
-	call sub_FD7713                                      ; FDC717  1d 13 77 fd
+	call Var27DB_Clear                                      ; FDC717  1d 13 77 fd
 	call sub_FD7719                                      ; FDC71B  1d 19 77 fd
 	lda xbc, (xiz-8)                                     ; FDC71F  be f8 31
 	push XBC                                             ; FDC722  39
-	call sub_FD7734                                      ; FDC723  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC723  1d 34 77 fd
 	pushw 0x82                                           ; FDC727  0b 82 00
 	ld bc, (xiz-8)                                       ; FDC72A  9e f8 21
 	extz BC                                              ; FDC72D  d9 12
@@ -121768,7 +123410,7 @@ sub_FDC6CB:
 	jr nz, .LFDC7A0                                      ; FDC73F  6e 5f
 	lda xbc, (xiz-8)                                     ; FDC741  be f8 31
 	push XBC                                             ; FDC744  39
-	call sub_FD7734                                      ; FDC745  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC745  1d 34 77 fd
 	ld bc, (xiz-8)                                       ; FDC749  9e f8 21
 	extz BC                                              ; FDC74C  d9 12
 	pushw bc                                             ; FDC74E  29
@@ -121784,7 +123426,7 @@ sub_FDC6CB:
 	jr ugt, .LFDC77F                                     ; FDC765  6b 18
 	lda xbc, (xiz-8)                                     ; FDC767  be f8 31
 	push XBC                                             ; FDC76A  39
-	call sub_FD7734                                      ; FDC76B  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC76B  1d 34 77 fd
 	pushw 0x82                                           ; FDC76F  0b 82 00
 	ld bc, (xiz-8)                                       ; FDC772  9e f8 21
 	extz BC                                              ; FDC775  d9 12
@@ -121804,7 +123446,7 @@ sub_FDC6CB:
 	pop XIY                                              ; FDC794  5d
 	pushw 0x03                                           ; FDC795  0b 03 00
 .LFDC798:
-	call sub_FD7705                                      ; FDC798  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC798  1d 05 77 fd
 	popw bc                                              ; FDC79C  49
 	jrl .LFDC846                                         ; FDC79D  78 a6 00
 .LFDC7A0:
@@ -121818,45 +123460,45 @@ sub_FDC6CB:
 	call sub_FD9D6C                                      ; FDC7AE  1d 6c 9d fd
 	lda xbc, (xiz-10)                                    ; FDC7B2  be f6 31
 	push XBC                                             ; FDC7B5  39
-	call sub_FDA84E                                      ; FDC7B6  1d 4e a8 fd
+	call Var2807_Get                                      ; FDC7B6  1d 4e a8 fd
 	m_and_mi8 MBD+r6, 0xf6, 0x02                         ; FDC7BA  8e f6 3c 02
 	inc 6,XSP                                            ; FDC7BE  ef 66
 	jr nz, .LFDC824                                      ; FDC7C0  6e 62
 	push XIX                                             ; FDC7C2  3c
 	pushw 0x01                                           ; FDC7C3  0b 01 00
-	call sub_FDA4A4                                      ; FDC7C6  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDC7C6  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDC7CA  84 23
 	extz BC                                              ; FDC7CC  d9 12
 	pushw bc                                             ; FDC7CE  29
 	pushw 0x02                                           ; FDC7CF  0b 02 00
-	call sub_FD6C65                                      ; FDC7D2  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC7D2  1d 65 6c fd
 	push XIX                                             ; FDC7D6  3c
 	pushw 0x02                                           ; FDC7D7  0b 02 00
-	call sub_FDA4A4                                      ; FDC7DA  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDC7DA  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDC7DE  84 23
 	extz BC                                              ; FDC7E0  d9 12
 	pushw bc                                             ; FDC7E2  29
 	pushw 0x05                                           ; FDC7E3  0b 05 00
-	call sub_FD6C65                                      ; FDC7E6  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC7E6  1d 65 6c fd
 	add XSP,0x00000014                                   ; FDC7EA  ef c8 14 00 00 00
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDC7F0  8e fc 3f 00
 	jr nz, .LFDC824                                      ; FDC7F4  6e 2e
 	push XIX                                             ; FDC7F6  3c
 	pushw 0x03                                           ; FDC7F7  0b 03 00
-	call sub_FDA4A4                                      ; FDC7FA  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDC7FA  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDC7FE  84 23
 	extz BC                                              ; FDC800  d9 12
 	pushw bc                                             ; FDC802  29
 	pushw 0x08                                           ; FDC803  0b 08 00
-	call sub_FD6C65                                      ; FDC806  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC806  1d 65 6c fd
 	push XIX                                             ; FDC80A  3c
 	pushw 0x04                                           ; FDC80B  0b 04 00
-	call sub_FDA4A4                                      ; FDC80E  1d a4 a4 fd
+	call Arr2800_Get1                                      ; FDC80E  1d a4 a4 fd
 	ld C,(XIX)                                           ; FDC812  84 23
 	extz BC                                              ; FDC814  d9 12
 	pushw bc                                             ; FDC816  29
 	pushw 0x0b                                           ; FDC817  0b 0b 00
-	call sub_FD6C65                                      ; FDC81A  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC81A  1d 65 6c fd
 	add XSP,0x00000014                                   ; FDC81E  ef c8 14 00 00 00
 .LFDC824:
 	pushw 0x82                                           ; FDC824  0b 82 00
@@ -121864,8 +123506,8 @@ sub_FDC6CB:
 	pushw 0x01                                           ; FDC82B  0b 01 00
 	call sub_FD69E0                                      ; FDC82E  1d e0 69 fd
 	pushw 0x00                                           ; FDC832  0b 00 00
-	call sub_FD7705                                      ; FDC835  1d 05 77 fd
-	call sub_FD7713                                      ; FDC839  1d 13 77 fd
+	call Var27DA_Set                                      ; FDC835  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDC839  1d 13 77 fd
 	pushw 0x10                                           ; FDC83D  0b 10 00
 	call sub_FD6447                                      ; FDC840  1d 47 64 fd
 .LFDC844:
@@ -121884,12 +123526,12 @@ sub_FDC84C:
 	call 0xf42e80                                        ; FDC857  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDC85B  be fe 31
 	push XBC                                             ; FDC85E  39
-	call sub_FD76F5                                      ; FDC85F  1d f5 76 fd
+	call Var27DA_Get                                      ; FDC85F  1d f5 76 fd
 	pop XIY                                              ; FDC863  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDC864  8e fe 3f 00
 	jrl nz, .LFDC8EC                                     ; FDC868  7e 81 00
 	pushw 0x01                                           ; FDC86B  0b 01 00
-	call sub_FDA792                                      ; FDC86E  1d 92 a7 fd
+	call Var2805_Set                                      ; FDC86E  1d 92 a7 fd
 	pushw 0x83                                           ; FDC872  0b 83 00
 	pushw 0x01                                           ; FDC875  0b 01 00
 	pushw 0x12                                           ; FDC878  0b 12 00
@@ -121931,7 +123573,7 @@ sub_FDC87E:
 	cps h, 0x04                                          ; FDC8C6  ce dc
 	jr ule, .LFDC8AC                                     ; FDC8C8  63 e2
 	pushw 0x01                                           ; FDC8CA  0b 01 00
-	call sub_FD7705                                      ; FDC8CD  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC8CD  1d 05 77 fd
 	call sub_FD7719                                      ; FDC8D1  1d 19 77 fd
 	lda xbc, (xiz-4)                                     ; FDC8D5  be fc 31
 	push XBC                                             ; FDC8D8  39
@@ -121940,12 +123582,12 @@ sub_FDC87E:
 	extz BC                                              ; FDC8E0  d9 12
 	pushw bc                                             ; FDC8E2  29
 	pushw 0x00                                           ; FDC8E3  0b 00 00
-	call sub_FD6C65                                      ; FDC8E6  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC8E6  1d 65 6c fd
 	jr .LFDC952                                          ; FDC8EA  68 66
 .LFDC8EC:
 	lda xbc, (xiz-6)                                     ; FDC8EC  be fa 31
 	push XBC                                             ; FDC8EF  39
-	call sub_FD7734                                      ; FDC8F0  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC8F0  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDC8F4  be f6 31
 	push XBC                                             ; FDC8F7  39
 	call sub_FD7744                                      ; FDC8F8  1d 44 77 fd
@@ -121955,7 +123597,7 @@ sub_FDC87E:
 	ld bc, (xiz-6)                                       ; FDC902  9e fa 21
 	extz BC                                              ; FDC905  d9 12
 	pushw bc                                             ; FDC907  29
-	call sub_FD6C65                                      ; FDC908  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC908  1d 65 6c fd
 	call sub_FD7719                                      ; FDC90C  1d 19 77 fd
 	inc 0,XSP                                            ; FDC910  ef 60
 	inc 4,XSP                                            ; FDC912  ef 64
@@ -121976,8 +123618,8 @@ sub_FDC87E:
 	pushw 0x01                                           ; FDC932  0b 01 00
 	call sub_FD69E0                                      ; FDC935  1d e0 69 fd
 	pushw 0x00                                           ; FDC939  0b 00 00
-	call sub_FD7705                                      ; FDC93C  1d 05 77 fd
-	call sub_FD7713                                      ; FDC940  1d 13 77 fd
+	call Var27DA_Set                                      ; FDC93C  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDC940  1d 13 77 fd
 	pushw 0x03                                           ; FDC944  0b 03 00
 	call sub_FD7C01                                      ; FDC947  1d 01 7c fd
 	pushw 0x10                                           ; FDC94B  0b 10 00
@@ -121998,12 +123640,12 @@ sub_FDC95B:
 	call 0xf42e80                                        ; FDC962  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDC966  be fe 31
 	push XBC                                             ; FDC969  39
-	call sub_FD76F5                                      ; FDC96A  1d f5 76 fd
+	call Var27DA_Get                                      ; FDC96A  1d f5 76 fd
 	pop XIY                                              ; FDC96E  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDC96F  8e fe 3f 00
 	jrl nz, .LFDC9FB                                     ; FDC973  7e 85 00
 	pushw 0x01                                           ; FDC976  0b 01 00
-	call sub_FDA792                                      ; FDC979  1d 92 a7 fd
+	call Var2805_Set                                      ; FDC979  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDC97D  be fc 31
 	push XBC                                             ; FDC980  39
 	call sub_FD6B4D                                      ; FDC981  1d 4d 6b fd
@@ -122049,18 +123691,18 @@ sub_FDC9C4:
 	cps h, 0x04                                          ; FDC9DC  ce dc
 	jr ule, .LFDC9B2                                     ; FDC9DE  63 d2
 	pushw 0x01                                           ; FDC9E0  0b 01 00
-	call sub_FD7705                                      ; FDC9E3  1d 05 77 fd
+	call Var27DA_Set                                      ; FDC9E3  1d 05 77 fd
 	call sub_FD7719                                      ; FDC9E7  1d 19 77 fd
 	ld bc, (xiz-4)                                       ; FDC9EB  9e fc 21
 	extz BC                                              ; FDC9EE  d9 12
 	pushw bc                                             ; FDC9F0  29
 	pushw 0x00                                           ; FDC9F1  0b 00 00
-	call sub_FD6C65                                      ; FDC9F4  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDC9F4  1d 65 6c fd
 	jrl .LFDCA6F                                         ; FDC9F8  78 74 00
 .LFDC9FB:
 	lda xbc, (xiz-6)                                     ; FDC9FB  be fa 31
 	push XBC                                             ; FDC9FE  39
-	call sub_FD7734                                      ; FDC9FF  1d 34 77 fd
+	call Var27DB_Get                                      ; FDC9FF  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDCA03  be f6 31
 	push XBC                                             ; FDCA06  39
 	call sub_FD7744                                      ; FDCA07  1d 44 77 fd
@@ -122070,7 +123712,7 @@ sub_FDC9C4:
 	ld bc, (xiz-6)                                       ; FDCA11  9e fa 21
 	extz BC                                              ; FDCA14  d9 12
 	pushw bc                                             ; FDCA16  29
-	call sub_FD6C65                                      ; FDCA17  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCA17  1d 65 6c fd
 	call sub_FD7719                                      ; FDCA1B  1d 19 77 fd
 	inc 0,XSP                                            ; FDCA1F  ef 60
 	inc 4,XSP                                            ; FDCA21  ef 64
@@ -122099,8 +123741,8 @@ sub_FDCA4E:
 	pushw 0x01                                           ; FDCA56  0b 01 00
 	call sub_FD69E0                                      ; FDCA59  1d e0 69 fd
 	pushw 0x00                                           ; FDCA5D  0b 00 00
-	call sub_FD7705                                      ; FDCA60  1d 05 77 fd
-	call sub_FD7713                                      ; FDCA64  1d 13 77 fd
+	call Var27DA_Set                                      ; FDCA60  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDCA64  1d 13 77 fd
 	pushw 0x10                                           ; FDCA68  0b 10 00
 	call sub_FD6447                                      ; FDCA6B  1d 47 64 fd
 .LFDCA6F:
@@ -122119,12 +123761,12 @@ sub_FDCA77:
 	call 0xf42e80                                        ; FDCA7E  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDCA82  be fe 31
 	push XBC                                             ; FDCA85  39
-	call sub_FD76F5                                      ; FDCA86  1d f5 76 fd
+	call Var27DA_Get                                      ; FDCA86  1d f5 76 fd
 	pop XIY                                              ; FDCA8A  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDCA8B  8e fe 3f 00
 	jrl nz, .LFDCB17                                     ; FDCA8F  7e 85 00
 	pushw 0x01                                           ; FDCA92  0b 01 00
-	call sub_FDA792                                      ; FDCA95  1d 92 a7 fd
+	call Var2805_Set                                      ; FDCA95  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDCA99  be fc 31
 	push XBC                                             ; FDCA9C  39
 	call sub_FD6B4D                                      ; FDCA9D  1d 4d 6b fd
@@ -122169,18 +123811,18 @@ sub_FDCA77:
 	cps h, 0x04                                          ; FDCAF8  ce dc
 	jr ule, .LFDCACE                                     ; FDCAFA  63 d2
 	pushw 0x01                                           ; FDCAFC  0b 01 00
-	call sub_FD7705                                      ; FDCAFF  1d 05 77 fd
+	call Var27DA_Set                                      ; FDCAFF  1d 05 77 fd
 	call sub_FD7719                                      ; FDCB03  1d 19 77 fd
 	ld bc, (xiz-4)                                       ; FDCB07  9e fc 21
 	extz BC                                              ; FDCB0A  d9 12
 	pushw bc                                             ; FDCB0C  29
 	pushw 0x00                                           ; FDCB0D  0b 00 00
-	call sub_FD6C65                                      ; FDCB10  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCB10  1d 65 6c fd
 	jrl .LFDCB8B                                         ; FDCB14  78 74 00
 .LFDCB17:
 	lda xbc, (xiz-6)                                     ; FDCB17  be fa 31
 	push XBC                                             ; FDCB1A  39
-	call sub_FD7734                                      ; FDCB1B  1d 34 77 fd
+	call Var27DB_Get                                      ; FDCB1B  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDCB1F  be f6 31
 	push XBC                                             ; FDCB22  39
 	call sub_FD7744                                      ; FDCB23  1d 44 77 fd
@@ -122190,7 +123832,7 @@ sub_FDCA77:
 	ld bc, (xiz-6)                                       ; FDCB2D  9e fa 21
 	extz BC                                              ; FDCB30  d9 12
 	pushw bc                                             ; FDCB32  29
-	call sub_FD6C65                                      ; FDCB33  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCB33  1d 65 6c fd
 	call sub_FD7719                                      ; FDCB37  1d 19 77 fd
 	inc 0,XSP                                            ; FDCB3B  ef 60
 	inc 4,XSP                                            ; FDCB3D  ef 64
@@ -122218,8 +123860,8 @@ sub_FDCA77:
 	pushw 0x01                                           ; FDCB72  0b 01 00
 	call sub_FD69E0                                      ; FDCB75  1d e0 69 fd
 	pushw 0x00                                           ; FDCB79  0b 00 00
-	call sub_FD7705                                      ; FDCB7C  1d 05 77 fd
-	call sub_FD7713                                      ; FDCB80  1d 13 77 fd
+	call Var27DA_Set                                      ; FDCB7C  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDCB80  1d 13 77 fd
 	pushw 0x10                                           ; FDCB84  0b 10 00
 	call sub_FD6447                                      ; FDCB87  1d 47 64 fd
 .LFDCB8B:
@@ -122238,19 +123880,19 @@ sub_FDCB93:
 	call 0xf42e80                                        ; FDCB9C  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDCBA0  be fe 31
 	push XBC                                             ; FDCBA3  39
-	call sub_FDA0CA                                      ; FDCBA4  1d ca a0 fd
+	call Var27F5_Get                                      ; FDCBA4  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FDCBA8  be fc 31
 	push XBC                                             ; FDCBAB  39
 	call sub_FD6B4D                                      ; FDCBAC  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FDCBB0  be fa 31
 	push XBC                                             ; FDCBB3  39
-	call sub_FD76F5                                      ; FDCBB4  1d f5 76 fd
+	call Var27DA_Get                                      ; FDCBB4  1d f5 76 fd
 	inc 0,XSP                                            ; FDCBB8  ef 60
 	inc 4,XSP                                            ; FDCBBA  ef 64
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FDCBBC  8e fa 3f 00
 	jrl nz, .LFDCC32                                     ; FDCBC0  7e 6f 00
 	pushw 0x01                                           ; FDCBC3  0b 01 00
-	call sub_FDA792                                      ; FDCBC6  1d 92 a7 fd
+	call Var2805_Set                                      ; FDCBC6  1d 92 a7 fd
 	lda xbc, (xiz-8)                                     ; FDCBCA  be f8 31
 	push XBC                                             ; FDCBCD  39
 	call sub_FD76BF                                      ; FDCBCE  1d bf 76 fd
@@ -122289,18 +123931,18 @@ sub_FDCB93:
 	jr c, .LFDCBFB                                       ; FDCC16  67 e3
 .LFDCC18:
 	pushw 0x01                                           ; FDCC18  0b 01 00
-	call sub_FD7705                                      ; FDCC1B  1d 05 77 fd
+	call Var27DA_Set                                      ; FDCC1B  1d 05 77 fd
 	call sub_FD7719                                      ; FDCC1F  1d 19 77 fd
 	pushw 0x01                                           ; FDCC23  0b 01 00
 	pushw 0x00                                           ; FDCC26  0b 00 00
-	call sub_FD6C65                                      ; FDCC29  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCC29  1d 65 6c fd
 	inc 6,XSP                                            ; FDCC2D  ef 66
 	jrl .LFDCD1D                                         ; FDCC2F  78 eb 00
 .LFDCC32:
 	m_cp_mi8 MBD+r6, 0xfa, 0x01                          ; FDCC32  8e fa 3f 01
 	jr nz, .LFDCC8B                                      ; FDCC36  6e 53
 	push XIX                                             ; FDCC38  3c
-	call sub_FD7734                                      ; FDCC39  1d 34 77 fd
+	call Var27DB_Get                                      ; FDCC39  1d 34 77 fd
 	lda xbc, (xiz-42)                                    ; FDCC3D  be d6 31
 	push XBC                                             ; FDCC40  39
 	call sub_FD7744                                      ; FDCC41  1d 44 77 fd
@@ -122310,16 +123952,16 @@ sub_FDCB93:
 	ld bc, (xiz-9)                                       ; FDCC4B  9e f7 21
 	extz BC                                              ; FDCC4E  d9 12
 	pushw bc                                             ; FDCC50  29
-	call sub_FD6C65                                      ; FDCC51  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCC51  1d 65 6c fd
 	call sub_FD7719                                      ; FDCC55  1d 19 77 fd
 	inc 0,XSP                                            ; FDCC59  ef 60
 	inc 4,XSP                                            ; FDCC5B  ef 64
 	cps a, 0x03                                          ; FDCC5D  c9 db
 	jrl ule, .LFDCD1D                                    ; FDCC5F  73 bb 00
-	call sub_FD7713                                      ; FDCC62  1d 13 77 fd
+	call Var27DB_Clear                                      ; FDCC62  1d 13 77 fd
 	call sub_FD7719                                      ; FDCC66  1d 19 77 fd
 	push XIX                                             ; FDCC6A  3c
-	call sub_FD7734                                      ; FDCC6B  1d 34 77 fd
+	call Var27DB_Get                                      ; FDCC6B  1d 34 77 fd
 	pushw 0x86                                           ; FDCC6F  0b 86 00
 	ld bc, (xiz-9)                                       ; FDCC72  9e f7 21
 	extz BC                                              ; FDCC75  d9 12
@@ -122336,7 +123978,7 @@ sub_FDCB93:
 	m_cp_mi8 MBD+r6, 0xfa, 0x02                          ; FDCC8B  8e fa 3f 02
 	jr nz, .LFDCCE4                                      ; FDCC8F  6e 53
 	push XIX                                             ; FDCC91  3c
-	call sub_FD7734                                      ; FDCC92  1d 34 77 fd
+	call Var27DB_Get                                      ; FDCC92  1d 34 77 fd
 	ld bc, (xiz-9)                                       ; FDCC96  9e f7 21
 	extz BC                                              ; FDCC99  d9 12
 	pushw bc                                             ; FDCC9B  29
@@ -122346,7 +123988,7 @@ sub_FDCB93:
 	cps a, 0x04                                          ; FDCCA6  c9 dc
 	jr ugt, .LFDCCC4                                     ; FDCCA8  6b 1a
 	push XIX                                             ; FDCCAA  3c
-	call sub_FD7734                                      ; FDCCAB  1d 34 77 fd
+	call Var27DB_Get                                      ; FDCCAB  1d 34 77 fd
 	pushw 0x86                                           ; FDCCAF  0b 86 00
 	ld bc, (xiz-9)                                       ; FDCCB2  9e f7 21
 	extz BC                                              ; FDCCB5  d9 12
@@ -122369,7 +124011,7 @@ sub_FDCB93:
 	pop XIY                                              ; FDCCD9  5d
 	pushw 0x03                                           ; FDCCDA  0b 03 00
 .LFDCCDD:
-	call sub_FD7705                                      ; FDCCDD  1d 05 77 fd
+	call Var27DA_Set                                      ; FDCCDD  1d 05 77 fd
 	popw bc                                              ; FDCCE1  49
 	jr .LFDCD1D                                          ; FDCCE2  68 39
 .LFDCCE4:
@@ -122387,8 +124029,8 @@ sub_FDCB93:
 	pushw 0x01                                           ; FDCD00  0b 01 00
 	call sub_FD69E0                                      ; FDCD03  1d e0 69 fd
 	pushw 0x00                                           ; FDCD07  0b 00 00
-	call sub_FD7705                                      ; FDCD0A  1d 05 77 fd
-	call sub_FD7713                                      ; FDCD0E  1d 13 77 fd
+	call Var27DA_Set                                      ; FDCD0A  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDCD0E  1d 13 77 fd
 	pushw 0x10                                           ; FDCD12  0b 10 00
 	call sub_FD6447                                      ; FDCD15  1d 47 64 fd
 .LFDCD19:
@@ -122406,7 +124048,7 @@ sub_FDCD22:
 	lda xbc, (xiz-2)                                     ; FDCD2C  be fe 31
 	push XBC                                             ; FDCD2F  39
 	pushw 0x01                                           ; FDCD30  0b 01 00
-	call sub_FD6C7B                                      ; FDCD33  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDCD33  1d 7b 6c fd
 	inc 6,XSP                                            ; FDCD37  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x7f                          ; FDCD39  8e fe 3f 7f
 	jr nz, .LFDCD50                                      ; FDCD3D  6e 11
@@ -122429,7 +124071,7 @@ sub_FDCD22:
 	lda xbc, (xiz-2)                                     ; FDCD63  be fe 31
 	push XBC                                             ; FDCD66  39
 	pushw 0x02                                           ; FDCD67  0b 02 00
-	call sub_FD6C7B                                      ; FDCD6A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDCD6A  1d 7b 6c fd
 	inc 0,XSP                                            ; FDCD6E  ef 60
 	inc 2,XSP                                            ; FDCD70  ef 62
 	m_cp_mi8 MBD+r6, 0xfe, 0x7f                          ; FDCD72  8e fe 3f 7f
@@ -122454,7 +124096,7 @@ sub_FDCD22:
 	lda xbc, (xiz-2)                                     ; FDCD9C  be fe 31
 	push XBC                                             ; FDCD9F  39
 	pushw 0x03                                           ; FDCDA0  0b 03 00
-	call sub_FD6C7B                                      ; FDCDA3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDCDA3  1d 7b 6c fd
 	inc 0,XSP                                            ; FDCDA7  ef 60
 	inc 2,XSP                                            ; FDCDA9  ef 62
 	m_cp_mi8 MBD+r6, 0xfe, 0x7f                          ; FDCDAB  8e fe 3f 7f
@@ -122491,13 +124133,13 @@ sub_FDCDE0:
 	call 0xf42e80                                        ; FDCDE9  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDCDED  be fe 31
 	push XBC                                             ; FDCDF0  39
-	call sub_FD76F5                                      ; FDCDF1  1d f5 76 fd
+	call Var27DA_Get                                      ; FDCDF1  1d f5 76 fd
 	lda xbc, (xiz-4)                                     ; FDCDF5  be fc 31
 	push XBC                                             ; FDCDF8  39
-	call sub_FDA0CA                                      ; FDCDF9  1d ca a0 fd
+	call Var27F5_Get                                      ; FDCDF9  1d ca a0 fd
 	lda xbc, (xiz-6)                                     ; FDCDFD  be fa 31
 	push XBC                                             ; FDCE00  39
-	call sub_FDA331                                      ; FDCE01  1d 31 a3 fd
+	call Var27FE_Get                                      ; FDCE01  1d 31 a3 fd
 	inc 0,XSP                                            ; FDCE05  ef 60
 	inc 4,XSP                                            ; FDCE07  ef 64
 	m_cp_mi8 MBD+r6, 0xfa, 0x01                          ; FDCE09  8e fa 3f 01
@@ -122506,7 +124148,7 @@ sub_FDCDE0:
 	jr nz, .LFDCE43                                      ; FDCE14  6e 2d
 	lda xbc, (xiz-8)                                     ; FDCE16  be f8 31
 	push XBC                                             ; FDCE19  39
-	call sub_FD7B6B                                      ; FDCE1A  1d 6b 7b fd
+	call Var27E9_Get                                      ; FDCE1A  1d 6b 7b fd
 	pushw 0x9e                                           ; FDCE1E  0b 9e 00
 	ld bc, (xiz-8)                                       ; FDCE21  9e f8 21
 	extz BC                                              ; FDCE24  d9 12
@@ -122514,16 +124156,16 @@ sub_FDCDE0:
 	call sub_FD622B                                      ; FDCE27  1d 2b 62 fd
 	pushw 0x23                                           ; FDCE2B  0b 23 00
 	pushw 0xab                                           ; FDCE2E  0b ab 00
-	call sub_FD60D9                                      ; FDCE31  1d d9 60 fd
+	call PanelScreen_PostRequestBit6                                      ; FDCE31  1d d9 60 fd
 	pushw 0x32                                           ; FDCE35  0b 32 00
-	call sub_FDA4D2                                      ; FDCE38  1d d2 a4 fd
+	call Var2806_Set                                      ; FDCE38  1d d2 a4 fd
 	inc 0,XSP                                            ; FDCE3C  ef 60
 	inc 6,XSP                                            ; FDCE3E  ef 66
 	jrl .LFDCEDA                                         ; FDCE40  78 97 00
 .LFDCE43:
 	lda xbc, (xiz-10)                                    ; FDCE43  be f6 31
 	push XBC                                             ; FDCE46  39
-	call sub_FDA4E0                                      ; FDCE47  1d e0 a4 fd
+	call Var2806_Get                                      ; FDCE47  1d e0 a4 fd
 	pop XIY                                              ; FDCE4B  5d
 	m_cp_mi8 MBD+r6, 0xf6, 0x00                          ; FDCE4C  8e f6 3f 00
 	jr z, sub_FDCE74                                     ; FDCE50  66 22
@@ -122531,13 +124173,13 @@ sub_FDCDE0:
 	ld bc, (xiz-10)                                      ; FDCE55  9e f6 21
 	extz BC                                              ; FDCE58  d9 12
 	pushw bc                                             ; FDCE5A  29
-	call sub_FDA4D2                                      ; FDCE5B  1d d2 a4 fd
+	call Var2806_Set                                      ; FDCE5B  1d d2 a4 fd
 	popw bc                                              ; FDCE5F  49
 	m_cp_mi8 MBD+r6, 0xf6, 0x00                          ; FDCE60  8e f6 3f 00
 	jr z, sub_FDCE74                                     ; FDCE64  66 0e
 	pushw 0x23                                           ; FDCE66  0b 23 00
 	pushw 0xab                                           ; FDCE69  0b ab 00
-	call sub_FD60D9                                      ; FDCE6C  1d d9 60 fd
+	call PanelScreen_PostRequestBit6                                      ; FDCE6C  1d d9 60 fd
 	pop XIY                                              ; FDCE70  5d
 	jrl .LFDCFE6                                         ; FDCE71  78 72 01
 sub_FDCE74:
@@ -122545,14 +124187,14 @@ sub_FDCE74:
 	call sub_FD60F2                                      ; FDCE77  1d f2 60 fd
 sub_FDCE7B:
 	pushw 0x00                                           ; FDCE7B  0b 00 00
-	call sub_FDA341                                      ; FDCE7E  1d 41 a3 fd
+	call Var27FE_Set                                      ; FDCE7E  1d 41 a3 fd
 	pushw 0x00                                           ; FDCE82  0b 00 00
-	call sub_FD7705                                      ; FDCE85  1d 05 77 fd
+	call Var27DA_Set                                      ; FDCE85  1d 05 77 fd
 	pushw 0x00                                           ; FDCE89  0b 00 00
-	call sub_FDA0AC                                      ; FDCE8C  1d ac a0 fd
+	call Var27F6_Set                                      ; FDCE8C  1d ac a0 fd
 	lda xbc, (xiz-8)                                     ; FDCE90  be f8 31
 	push XBC                                             ; FDCE93  39
-	call sub_FD7B6B                                      ; FDCE94  1d 6b 7b fd
+	call Var27E9_Get                                      ; FDCE94  1d 6b 7b fd
 	ld bc, (xiz-8)                                       ; FDCE98  9e f8 21
 	extz BC                                              ; FDCE9B  d9 12
 	pushw bc                                             ; FDCE9D  29
@@ -122565,7 +124207,7 @@ sub_FDCE7B:
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDCEAB  8e fe 3f 00
 	jr nz, .LFDCEE5                                      ; FDCEAF  6e 34
 	pushw 0x01                                           ; FDCEB1  0b 01 00
-	call sub_FDA792                                      ; FDCEB4  1d 92 a7 fd
+	call Var2805_Set                                      ; FDCEB4  1d 92 a7 fd
 	popw bc                                              ; FDCEB8  49
 	pushw 0x9e                                           ; FDCEB9  0b 9e 00
 	pushw 0x10                                           ; FDCEBC  0b 10 00
@@ -122584,7 +124226,7 @@ sub_FDCECF:
 .LFDCEDA:
 	pushw 0x01                                           ; FDCEDA  0b 01 00
 .LFDCEDD:
-	call sub_FD7705                                      ; FDCEDD  1d 05 77 fd
+	call Var27DA_Set                                      ; FDCEDD  1d 05 77 fd
 	popw bc                                              ; FDCEE1  49
 	jrl .LFDCFE6                                         ; FDCEE2  78 01 01
 .LFDCEE5:
@@ -122647,14 +124289,14 @@ sub_FDCF17:
 	extz BC                                              ; FDCF5E  d9 12
 	pushw bc                                             ; FDCF60  29
 	pushw 0x00                                           ; FDCF61  0b 00 00
-	call sub_FD6C65                                      ; FDCF64  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCF64  1d 65 6c fd
 	ld C,(XIX+0x01)                                      ; FDCF68  8c 01 23
 	extz BC                                              ; FDCF6B  d9 12
 	pop XIY                                              ; FDCF6D  5d
 	pushw bc                                             ; FDCF6E  29
 .LFDCF6F:
 	pushw 0x01                                           ; FDCF6F  0b 01 00
-	call sub_FD6C65                                      ; FDCF72  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCF72  1d 65 6c fd
 	pushw 0x9e                                           ; FDCF76  0b 9e 00
 	call 0xf41ed0                                        ; FDCF79  1d d0 1e f4
 	pushw 0x01                                           ; FDCF7D  0b 01 00
@@ -122668,10 +124310,10 @@ sub_FDCF17:
 	pushw 0x01                                           ; FDCF97  0b 01 00
 	call sub_FD7BDE                                      ; FDCF9A  1d de 7b fd
 	pushw 0x00                                           ; FDCF9E  0b 00 00
-	call sub_FD7705                                      ; FDCFA1  1d 05 77 fd
+	call Var27DA_Set                                      ; FDCFA1  1d 05 77 fd
 	pushw 0x00                                           ; FDCFA5  0b 00 00
 	pushw 0x1e                                           ; FDCFA8  0b 1e 00
-	call sub_FD6C65                                      ; FDCFAB  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCFAB  1d 65 6c fd
 	lda xbc, (xiz-12)                                    ; FDCFAF  be f4 31
 	push XBC                                             ; FDCFB2  39
 	lda xwa, (xiz-14)                                    ; FDCFB3  be f2 30
@@ -122681,14 +124323,14 @@ sub_FDCF17:
 	extz BC                                              ; FDCFBE  d9 12
 	pushw bc                                             ; FDCFC0  29
 	pushw 0x04                                           ; FDCFC1  0b 04 00
-	call sub_FD6C65                                      ; FDCFC4  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDCFC4  1d 65 6c fd
 	ld bc, (xiz-12)                                      ; FDCFC8  9e f4 21
 sub_FDCFCB:
 	extz BC                                              ; FDCFCB  d9 12
 	pushw bc                                             ; FDCFCD  29
 	pushw 0x05                                           ; FDCFCE  0b 05 00
-	call sub_FD6C65                                      ; FDCFD1  1d 65 6c fd
-	call sub_FD7713                                      ; FDCFD5  1d 13 77 fd
+	call Arr27A6_Set                                      ; FDCFD1  1d 65 6c fd
+	call Var27DB_Clear                                      ; FDCFD5  1d 13 77 fd
 	pushw 0x10                                           ; FDCFD9  0b 10 00
 	call sub_FD6447                                      ; FDCFDC  1d 47 64 fd
 	add XSP,0x0000002c                                   ; FDCFE0  ef c8 2c 00 00 00
@@ -122703,13 +124345,13 @@ sub_FDCFEB:
 	call 0xf42e80                                        ; FDCFF0  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDCFF4  be fe 31
 	push XBC                                             ; FDCFF7  39
-	call sub_FDA0CA                                      ; FDCFF8  1d ca a0 fd
+	call Var27F5_Get                                      ; FDCFF8  1d ca a0 fd
 	pop XIY                                              ; FDCFFC  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FDCFFD  8e fe 3f 01
 	jr nz, .LFDD016                                      ; FDD001  6e 13
 	lda xbc, (xiz-4)                                     ; FDD003  be fc 31
 	push XBC                                             ; FDD006  39
-	call sub_FDA0BA                                      ; FDD007  1d ba a0 fd
+	call Var27F6_Get                                      ; FDD007  1d ba a0 fd
 	pop XIY                                              ; FDD00B  5d
 	m_cp_mi8 MBD+r6, 0xfc, 0x02                          ; FDD00C  8e fc 3f 02
 	jr nz, .LFDD016                                      ; FDD010  6e 04
@@ -122734,19 +124376,19 @@ sub_FDD02D:
 	call 0xf42e80                                        ; FDD032  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDD036  be fe 31
 	push XBC                                             ; FDD039  39
-	call sub_FD76F5                                      ; FDD03A  1d f5 76 fd
+	call Var27DA_Get                                      ; FDD03A  1d f5 76 fd
 	pop XIY                                              ; FDD03E  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD03F  8e fe 3f 00
 	jr nz, .LFDD069                                      ; FDD043  6e 24
 	pushw 0x01                                           ; FDD045  0b 01 00
-	call sub_FDA792                                      ; FDD048  1d 92 a7 fd
+	call Var2805_Set                                      ; FDD048  1d 92 a7 fd
 	pushw 0x9c                                           ; FDD04C  0b 9c 00
 	pushw 0x09                                           ; FDD04F  0b 09 00
 	pushw 0xd0                                           ; FDD052  0b d0 00
 	pushw 0x00                                           ; FDD055  0b 00 00
 	call sub_FD61CF                                      ; FDD058  1d cf 61 fd
 	pushw 0x01                                           ; FDD05C  0b 01 00
-	call sub_FD7705                                      ; FDD05F  1d 05 77 fd
+	call Var27DA_Set                                      ; FDD05F  1d 05 77 fd
 	inc 0,XSP                                            ; FDD063  ef 60
 	inc 4,XSP                                            ; FDD065  ef 64
 	jr .LFDD0D0                                          ; FDD067  68 67
@@ -122767,7 +124409,7 @@ sub_FDD02D:
 	ld C,H                                               ; FDD082  ce 8b
 	extz BC                                              ; FDD084  d9 12
 	pushw bc                                             ; FDD086  29
-	call sub_FD6C65                                      ; FDD087  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD087  1d 65 6c fd
 	inc 1,H                                              ; FDD08B  ce 61
 	pop XIY                                              ; FDD08D  5d
 	cp H,0x09                                            ; FDD08E  ce cf 09
@@ -122775,7 +124417,7 @@ sub_FDD02D:
 	lda xbc, (xiz-4)                                     ; FDD093  be fc 31
 	push XBC                                             ; FDD096  39
 	pushw 0x00                                           ; FDD097  0b 00 00
-	call sub_FD6C7B                                      ; FDD09A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDD09A  1d 7b 6c fd
 	ld c, (xiz-4)                                        ; FDD09E  8e fc 23
 	and C,0x0f                                           ; FDD0A1  cb cc 0f
 	inc 6,XSP                                            ; FDD0A4  ef 66
@@ -122786,14 +124428,14 @@ sub_FDD02D:
 	extz BC                                              ; FDD0B2  d9 12
 	pushw bc                                             ; FDD0B4  29
 	pushw 0x00                                           ; FDD0B5  0b 00 00
-	call sub_FD6C65                                      ; FDD0B8  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD0B8  1d 65 6c fd
 	pop XIY                                              ; FDD0BC  5d
 .LFDD0BD:
 	pushw 0x9a                                           ; FDD0BD  0b 9a 00
 	call 0xf41ed0                                        ; FDD0C0  1d d0 1e f4
 	pushw 0x00                                           ; FDD0C4  0b 00 00
-	call sub_FD7705                                      ; FDD0C7  1d 05 77 fd
-	call sub_FD7713                                      ; FDD0CB  1d 13 77 fd
+	call Var27DA_Set                                      ; FDD0C7  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDD0CB  1d 13 77 fd
 	pop XIY                                              ; FDD0CF  5d
 .LFDD0D0:
 	popw hl                                              ; FDD0D0  4b
@@ -122806,10 +124448,10 @@ sub_FDD0D4:
 	lda_24 xix, (0xfd6c65)                               ; FDD0DA  f2 65 6c fd 34
 	lda xbc, (xiz-2)                                     ; FDD0DF  be fe 31
 	push XBC                                             ; FDD0E2  39
-	call sub_FDA0CA                                      ; FDD0E3  1d ca a0 fd
+	call Var27F5_Get                                      ; FDD0E3  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FDD0E7  be fc 31
 	push XBC                                             ; FDD0EA  39
-	call sub_FDA331                                      ; FDD0EB  1d 31 a3 fd
+	call Var27FE_Get                                      ; FDD0EB  1d 31 a3 fd
 	inc 0,XSP                                            ; FDD0EF  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x01                          ; FDD0F1  8e fc 3f 01
 	jr nz, .LFDD11E                                      ; FDD0F5  6e 27
@@ -122824,7 +124466,7 @@ sub_FDD0D4:
 	pop XIY                                              ; FDD10F  5d
 .LFDD110:
 	pushw 0x00                                           ; FDD110  0b 00 00
-	call sub_FDA341                                      ; FDD113  1d 41 a3 fd
+	call Var27FE_Set                                      ; FDD113  1d 41 a3 fd
 	popw bc                                              ; FDD117  49
 	pushw 0x10                                           ; FDD118  0b 10 00
 	jrl .LFDD268                                         ; FDD11B  78 4a 01
@@ -122931,7 +124573,7 @@ sub_FDD168:
 	jp (xix)                                             ; FDD20F  b4 d8
 	lda xbc, (xiz-16)                                    ; FDD211  be f0 31
 	push XBC                                             ; FDD214  39
-	call sub_FDA142                                      ; FDD215  1d 42 a1 fd
+	call Var27FC_Get                                      ; FDD215  1d 42 a1 fd
 	ld bc, (xiz-16)                                      ; FDD219  9e f0 21
 	extz BC                                              ; FDD21C  d9 12
 	inc 0,XSP                                            ; FDD21E  ef 60
@@ -122988,15 +124630,15 @@ sub_FDD27F:
 	lda xix, (xiz-18)                                    ; FDD286  be ee 34
 	lda xbc, (xiz-2)                                     ; FDD289  be fe 31
 	push XBC                                             ; FDD28C  39
-	call sub_FD76F5                                      ; FDD28D  1d f5 76 fd
+	call Var27DA_Get                                      ; FDD28D  1d f5 76 fd
 	lda xbc, (xiz-4)                                     ; FDD291  be fc 31
 	push XBC                                             ; FDD294  39
-	call sub_FD6112                                      ; FDD295  1d 12 61 fd
+	call Var27DF_Get                                      ; FDD295  1d 12 61 fd
 	inc 0,XSP                                            ; FDD299  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD29B  8e fe 3f 00
 	jr nz, .LFDD2E4                                      ; FDD29F  6e 43
 	pushw 0x01                                           ; FDD2A1  0b 01 00
-	call sub_FDA792                                      ; FDD2A4  1d 92 a7 fd
+	call Var2805_Set                                      ; FDD2A4  1d 92 a7 fd
 	lda xbc, (xiz-6)                                     ; FDD2A8  be fa 31
 	push XBC                                             ; FDD2AB  39
 	call sub_FDA160                                      ; FDD2AC  1d 60 a1 fd
@@ -123004,18 +124646,18 @@ sub_FDD27F:
 	extz BC                                              ; FDD2B3  d9 12
 	pushw bc                                             ; FDD2B5  29
 	pushw 0x00                                           ; FDD2B6  0b 00 00
-	call sub_FD6C65                                      ; FDD2B9  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD2B9  1d 65 6c fd
 	ld bc, (xiz-6)                                       ; FDD2BD  9e fa 21
 	extz BC                                              ; FDD2C0  d9 12
 	pushw bc                                             ; FDD2C2  29
 	call sub_FD665C                                      ; FDD2C3  1d 5c 66 fd
 	pushw 0x01                                           ; FDD2C7  0b 01 00
-	call sub_FD7705                                      ; FDD2CA  1d 05 77 fd
+	call Var27DA_Set                                      ; FDD2CA  1d 05 77 fd
 	ld bc, (xiz-4)                                       ; FDD2CE  9e fc 21
 	extz BC                                              ; FDD2D1  d9 12
 	pushw bc                                             ; FDD2D3  29
 	pushw 0xcb                                           ; FDD2D4  0b cb 00
-	call sub_FD608B                                      ; FDD2D7  1d 8b 60 fd
+	call PanelScreen_PostRequest                                      ; FDD2D7  1d 8b 60 fd
 	add XSP,0x00000012                                   ; FDD2DB  ef c8 12 00 00 00
 	jrl .LFDD430                                         ; FDD2E1  78 4c 01
 .LFDD2E4:
@@ -123050,7 +124692,7 @@ sub_FDD27F:
 	cps h, 0x00                                          ; FDD331  ce d8
 	jr nz, .LFDD301                                      ; FDD333  6e cc
 	pushw 0x02                                           ; FDD335  0b 02 00
-	call sub_FD7705                                      ; FDD338  1d 05 77 fd
+	call Var27DA_Set                                      ; FDD338  1d 05 77 fd
 	call sub_FD7719                                      ; FDD33C  1d 19 77 fd
 	jrl .LFDD3EC                                         ; FDD340  78 a9 00
 .LFDD343:
@@ -123058,7 +124700,7 @@ sub_FDD27F:
 	jrl nz, .LFDD3D0                                     ; FDD347  7e 86 00
 	lda xbc, (xiz-8)                                     ; FDD34A  be f8 31
 	push XBC                                             ; FDD34D  39
-	call sub_FD7734                                      ; FDD34E  1d 34 77 fd
+	call Var27DB_Get                                      ; FDD34E  1d 34 77 fd
 	push XIX                                             ; FDD352  3c
 	call sub_FD7744                                      ; FDD353  1d 44 77 fd
 	ld C,(XIX)                                           ; FDD357  84 23
@@ -123067,7 +124709,7 @@ sub_FDD27F:
 	ld bc, (xiz-8)                                       ; FDD35C  9e f8 21
 	extz BC                                              ; FDD35F  d9 12
 	pushw bc                                             ; FDD361  29
-	call sub_FD6C65                                      ; FDD362  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD362  1d 65 6c fd
 	call sub_FD7719                                      ; FDD366  1d 19 77 fd
 	inc 0,XSP                                            ; FDD36A  ef 60
 	inc 4,XSP                                            ; FDD36C  ef 64
@@ -123076,14 +124718,14 @@ sub_FDD27F:
 	lda xbc, (xiz-10)                                    ; FDD373  be f6 31
 	push XBC                                             ; FDD376  39
 	pushw 0x01                                           ; FDD377  0b 01 00
-	call sub_FD6C7B                                      ; FDD37A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDD37A  1d 7b 6c fd
 	ld bc, (xiz-10)                                      ; FDD37E  9e f6 21
 	extz BC                                              ; FDD381  d9 12
 	pushw bc                                             ; FDD383  29
-	call sub_FD6BA8                                      ; FDD384  1d a8 6b fd
+	call Var27A4_Set                                      ; FDD384  1d a8 6b fd
 	push XIX                                             ; FDD388  3c
 	pushw 0x02                                           ; FDD389  0b 02 00
-	call sub_FD6C7B                                      ; FDD38C  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDD38C  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDD390  84 23
 	extz BC                                              ; FDD392  d9 12
 	pushw bc                                             ; FDD394  29
@@ -123091,7 +124733,7 @@ sub_FDD27F:
 	call sub_FDA48C                                      ; FDD398  1d 8c a4 fd
 	push XIX                                             ; FDD39C  3c
 	pushw 0x03                                           ; FDD39D  0b 03 00
-	call sub_FD6C7B                                      ; FDD3A0  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDD3A0  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDD3A4  84 23
 	extz BC                                              ; FDD3A6  d9 12
 	pushw bc                                             ; FDD3A8  29
@@ -123099,7 +124741,7 @@ sub_FDD27F:
 	call sub_FDA48C                                      ; FDD3AC  1d 8c a4 fd
 	lda xbc, (xiz-6)                                     ; FDD3B0  be fa 31
 	push XBC                                             ; FDD3B3  39
-	call sub_FDA142                                      ; FDD3B4  1d 42 a1 fd
+	call Var27FC_Get                                      ; FDD3B4  1d 42 a1 fd
 	pushw 0xcb                                           ; FDD3B8  0b cb 00
 	ld bc, (xiz-6)                                       ; FDD3BB  9e fa 21
 	extz BC                                              ; FDD3BE  d9 12
@@ -123118,7 +124760,7 @@ sub_FDD27F:
 	pop XIY                                              ; FDD3E4  5d
 	pushw 0x04                                           ; FDD3E5  0b 04 00
 .LFDD3E8:
-	call sub_FD7705                                      ; FDD3E8  1d 05 77 fd
+	call Var27DA_Set                                      ; FDD3E8  1d 05 77 fd
 .LFDD3EC:
 	popw bc                                              ; FDD3EC  49
 	jr .LFDD430                                          ; FDD3ED  68 41
@@ -123143,8 +124785,8 @@ sub_FDD27F:
 .LFDD41D:
 	pushw 0x00                                           ; FDD41D  0b 00 00
 sub_FDD420:
-	call sub_FD7705                                      ; FDD420  1d 05 77 fd
-	call sub_FD7713                                      ; FDD424  1d 13 77 fd
+	call Var27DA_Set                                      ; FDD420  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDD424  1d 13 77 fd
 	pushw 0x10                                           ; FDD428  0b 10 00
 	call sub_FD6447                                      ; FDD42B  1d 47 64 fd
 	pop XIY                                              ; FDD42F  5d
@@ -123164,15 +124806,15 @@ sub_FDD437:
 	call 0xf42e80                                        ; FDD43E  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDD442  be fe 31
 	push XBC                                             ; FDD445  39
-	call sub_FDA0CA                                      ; FDD446  1d ca a0 fd
+	call Var27F5_Get                                      ; FDD446  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FDD44A  be fc 31
 	push XBC                                             ; FDD44D  39
-	call sub_FD76F5                                      ; FDD44E  1d f5 76 fd
+	call Var27DA_Get                                      ; FDD44E  1d f5 76 fd
 	inc 0,XSP                                            ; FDD452  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDD454  8e fc 3f 00
 	jr nz, .LFDD48C                                      ; FDD458  6e 32
 	pushw 0x01                                           ; FDD45A  0b 01 00
-	call sub_FDA792                                      ; FDD45D  1d 92 a7 fd
+	call Var2805_Set                                      ; FDD45D  1d 92 a7 fd
 	popw bc                                              ; FDD461  49
 	pushw 0xc0                                           ; FDD462  0b c0 00
 	pushw 0x01                                           ; FDD465  0b 01 00
@@ -123199,7 +124841,7 @@ sub_FDD437:
 	ld c, (xiz-12)                                       ; FDD49A  8e f4 23
 	extz BC                                              ; FDD49D  d9 12
 	pushw bc                                             ; FDD49F  29
-	call sub_FD6BA8                                      ; FDD4A0  1d a8 6b fd
+	call Var27A4_Set                                      ; FDD4A0  1d a8 6b fd
 	ldb h, 0x01                                          ; FDD4A4  26 01
 	inc 6,XSP                                            ; FDD4A6  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD4A8  8e fe 3f 00
@@ -123242,7 +124884,7 @@ sub_FDD437:
 	jrl nz, .LFDD613                                     ; FDD4FB  7e 15 01
 	lda xbc, (xiz-14)                                    ; FDD4FE  be f2 31
 	push XBC                                             ; FDD501  39
-	call sub_FD7734                                      ; FDD502  1d 34 77 fd
+	call Var27DB_Get                                      ; FDD502  1d 34 77 fd
 	lda xbc, (xiz-12)                                    ; FDD506  be f4 31
 	push XBC                                             ; FDD509  39
 	call sub_FD7744                                      ; FDD50A  1d 44 77 fd
@@ -123275,7 +124917,7 @@ sub_FDD437:
 	extz BC                                              ; FDD540  d9 12
 	inc 1,BC                                             ; FDD542  d9 61
 	pushw bc                                             ; FDD544  29
-	call sub_FD767B                                      ; FDD545  1d 7b 76 fd
+	call Arr27D6_Set1                                      ; FDD545  1d 7b 76 fd
 	ldb h, 0x01                                          ; FDD549  26 01
 	pop XIY                                              ; FDD54B  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD54C  8e fe 3f 00
@@ -123285,7 +124927,7 @@ sub_FDD437:
 	call sub_FD7719                                      ; FDD554  1d 19 77 fd
 	cp A,H                                               ; FDD558  ce f1
 	jrl ule, .LFDD7F1                                    ; FDD55A  73 94 02
-	call sub_FD7713                                      ; FDD55D  1d 13 77 fd
+	call Var27DB_Clear                                      ; FDD55D  1d 13 77 fd
 	ldb h, 0x01                                          ; FDD561  26 01
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD563  8e fe 3f 00
 	jr nz, .LFDD592                                      ; FDD567  6e 29
@@ -123322,14 +124964,14 @@ sub_FDD437:
 .LFDD5AC:
 	lda xbc, (xiz-16)                                    ; FDD5AC  be f0 31
 	push XBC                                             ; FDD5AF  39
-	call sub_FD6112                                      ; FDD5B0  1d 12 61 fd
+	call Var27DF_Get                                      ; FDD5B0  1d 12 61 fd
 	pop XIY                                              ; FDD5B4  5d
 	m_cp_mi8 MBD+r6, 0xf0, 0x01                          ; FDD5B5  8e f0 3f 01
 	jr nz, .LFDD5EE                                      ; FDD5B9  6e 33
 	lda xbc, (xiz-18)                                    ; FDD5BB  be ee 31
 	push XBC                                             ; FDD5BE  39
 	pushw 0x00                                           ; FDD5BF  0b 00 00
-	call sub_FD6C7B                                      ; FDD5C2  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDD5C2  1d 7b 6c fd
 	inc 6,XSP                                            ; FDD5C6  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD5C8  8e fe 3f 00
 	jr nz, .LFDD5DC                                      ; FDD5CC  6e 0e
@@ -123357,7 +124999,7 @@ sub_FDD437:
 	extz BC                                              ; FDD5FE  d9 12
 	pushw bc                                             ; FDD600  29
 	pushw 0x00                                           ; FDD601  0b 00 00
-	call sub_FD6C65                                      ; FDD604  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD604  1d 65 6c fd
 	call sub_FD7719                                      ; FDD608  1d 19 77 fd
 	pop XIY                                              ; FDD60C  5d
 	pushw 0x03                                           ; FDD60D  0b 03 00
@@ -123367,7 +125009,7 @@ sub_FDD437:
 	jrl nz, .LFDD70E                                     ; FDD617  7e f4 00
 	lda xbc, (xiz-14)                                    ; FDD61A  be f2 31
 	push XBC                                             ; FDD61D  39
-	call sub_FD7734                                      ; FDD61E  1d 34 77 fd
+	call Var27DB_Get                                      ; FDD61E  1d 34 77 fd
 	lda xbc, (xiz-12)                                    ; FDD622  be f4 31
 	push XBC                                             ; FDD625  39
 	call sub_FD7744                                      ; FDD626  1d 44 77 fd
@@ -123378,7 +125020,7 @@ sub_FDD437:
 	m_mul MBD+r6, 0xf2, 3                                ; FDD632  8e f2 43
 	dec 2,BC                                             ; FDD635  d9 6a
 	pushw bc                                             ; FDD637  29
-	call sub_FD6C65                                      ; FDD638  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD638  1d 65 6c fd
 	ld c, (xiz-11)                                       ; FDD63C  8e f5 23
 	extz BC                                              ; FDD63F  d9 12
 	pushw bc                                             ; FDD641  29
@@ -123386,7 +125028,7 @@ sub_FDD437:
 	m_mul MBD+r6, 0xf2, 3                                ; FDD644  8e f2 43
 	dec 1,BC                                             ; FDD647  d9 69
 	pushw bc                                             ; FDD649  29
-	call sub_FD6C65                                      ; FDD64A  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD64A  1d 65 6c fd
 	inc 0,XSP                                            ; FDD64E  ef 60
 	inc 0,XSP                                            ; FDD650  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD652  8e fe 3f 00
@@ -123414,12 +125056,12 @@ sub_FDD437:
 	ld WA,DE                                             ; FDD683  da 88
 	dec 2,WA                                             ; FDD685  d8 6a
 	pushw wa                                             ; FDD687  28
-	call sub_FD6C7B                                      ; FDD688  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDD688  1d 7b 6c fd
 	push XIX                                             ; FDD68C  3c
 	ld BC,DE                                             ; FDD68D  da 89
 	dec 1,BC                                             ; FDD68F  d9 69
 	pushw bc                                             ; FDD691  29
-	call sub_FD6C7B                                      ; FDD692  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDD692  1d 7b 6c fd
 	ld c, (xiz-12)                                       ; FDD696  8e f4 23
 	and C,0x3f                                           ; FDD699  cb cc 3f
 	ld (xiz-20), c                                       ; FDD69C  be ec 43
@@ -123429,7 +125071,7 @@ sub_FDD437:
 	extz BC                                              ; FDD6A4  d9 12
 	dec 1,BC                                             ; FDD6A6  d9 69
 	pushw bc                                             ; FDD6A8  29
-	call sub_FDA85E                                      ; FDD6A9  1d 5e a8 fd
+	call Arr2808_Set1                                      ; FDD6A9  1d 5e a8 fd
 	inc 0,XSP                                            ; FDD6AD  ef 60
 	inc 0,XSP                                            ; FDD6AF  ef 60
 	m_cp_mi8 MBD+r6, 0xec, 0x00                          ; FDD6B1  8e ec 3f 00
@@ -123448,18 +125090,18 @@ sub_FDD437:
 	ld C,H                                               ; FDD6D3  ce 8b
 	extz BC                                              ; FDD6D5  d9 12
 	pushw bc                                             ; FDD6D7  29
-	call sub_FD6C65                                      ; FDD6D8  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD6D8  1d 65 6c fd
 	inc 2,DE                                             ; FDD6DC  da 62
 	inc 1,H                                              ; FDD6DE  ce 61
 	pop XIY                                              ; FDD6E0  5d
 	cp H,L                                               ; FDD6E1  cf f6
 	jr c, .LFDD67F                                       ; FDD6E3  67 9a
 .LFDD6E5:
-	call sub_FD7713                                      ; FDD6E5  1d 13 77 fd
+	call Var27DB_Clear                                      ; FDD6E5  1d 13 77 fd
 	call sub_FD7719                                      ; FDD6E9  1d 19 77 fd
 	lda xbc, (xiz-14)                                    ; FDD6ED  be f2 31
 	push XBC                                             ; FDD6F0  39
-	call sub_FD7734                                      ; FDD6F1  1d 34 77 fd
+	call Var27DB_Get                                      ; FDD6F1  1d 34 77 fd
 	pushw 0xc0                                           ; FDD6F5  0b c0 00
 	pushw 0x01                                           ; FDD6F8  0b 01 00
 	ld bc, (xiz-14)                                      ; FDD6FB  9e f2 21
@@ -123475,7 +125117,7 @@ sub_FDD437:
 	jr nz, .LFDD76C                                      ; FDD712  6e 58
 	lda xbc, (xiz-14)                                    ; FDD714  be f2 31
 	push XBC                                             ; FDD717  39
-	call sub_FD7734                                      ; FDD718  1d 34 77 fd
+	call Var27DB_Get                                      ; FDD718  1d 34 77 fd
 	ld bc, (xiz-14)                                      ; FDD71C  9e f2 21
 	extz BC                                              ; FDD71F  d9 12
 	pushw bc                                             ; FDD721  29
@@ -123486,7 +125128,7 @@ sub_FDD437:
 	jr ugt, .LFDD74B                                     ; FDD72E  6b 1b
 	lda xbc, (xiz-14)                                    ; FDD730  be f2 31
 	push XBC                                             ; FDD733  39
-	call sub_FD7734                                      ; FDD734  1d 34 77 fd
+	call Var27DB_Get                                      ; FDD734  1d 34 77 fd
 	pushw 0xc0                                           ; FDD738  0b c0 00
 	pushw 0x01                                           ; FDD73B  0b 01 00
 	ld bc, (xiz-14)                                      ; FDD73E  9e f2 21
@@ -123507,7 +125149,7 @@ sub_FDD437:
 	pop XIY                                              ; FDD760  5d
 	pushw 0x05                                           ; FDD761  0b 05 00
 .LFDD764:
-	call sub_FD7705                                      ; FDD764  1d 05 77 fd
+	call Var27DA_Set                                      ; FDD764  1d 05 77 fd
 	popw bc                                              ; FDD768  49
 	jrl .LFDD7F1                                         ; FDD769  78 85 00
 .LFDD76C:
@@ -123557,8 +125199,8 @@ sub_FDD437:
 	pushw 0x00                                           ; FDD7C6  0b 00 00
 	call sub_FDA467                                      ; FDD7C9  1d 67 a4 fd
 	pushw 0x00                                           ; FDD7CD  0b 00 00
-	call sub_FD7705                                      ; FDD7D0  1d 05 77 fd
-	call sub_FD7713                                      ; FDD7D4  1d 13 77 fd
+	call Var27DA_Set                                      ; FDD7D0  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDD7D4  1d 13 77 fd
 	pushw 0x06                                           ; FDD7D8  0b 06 00
 	call sub_FD7C01                                      ; FDD7DB  1d 01 7c fd
 	pushw 0x01                                           ; FDD7DF  0b 01 00
@@ -123586,15 +125228,15 @@ sub_FDD7F9:
 	call 0xf42e80                                        ; FDD802  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDD806  be fe 31
 	push XBC                                             ; FDD809  39
-	call sub_FD76F5                                      ; FDD80A  1d f5 76 fd
+	call Var27DA_Get                                      ; FDD80A  1d f5 76 fd
 	pop XIY                                              ; FDD80E  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD80F  8e fe 3f 00
 	jrl nz, .LFDD8C2                                     ; FDD813  7e ac 00
 	pushw 0x01                                           ; FDD816  0b 01 00
-	call sub_FDA792                                      ; FDD819  1d 92 a7 fd
+	call Var2805_Set                                      ; FDD819  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDD81D  be fc 31
 	push XBC                                             ; FDD820  39
-	call sub_FDA0CA                                      ; FDD821  1d ca a0 fd
+	call Var27F5_Get                                      ; FDD821  1d ca a0 fd
 	inc 6,XSP                                            ; FDD825  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDD827  8e fc 3f 00
 	jr nz, .LFDD870                                      ; FDD82B  6e 43
@@ -123651,13 +125293,13 @@ sub_FDD7F9:
 .LFDD8B1:
 	add XSP,0x0000001c                                   ; FDD8B1  ef c8 1c 00 00 00
 	pushw 0x01                                           ; FDD8B7  0b 01 00
-	call sub_FD7705                                      ; FDD8BA  1d 05 77 fd
+	call Var27DA_Set                                      ; FDD8BA  1d 05 77 fd
 	popw bc                                              ; FDD8BE  49
 	jrl .LFDD953                                         ; FDD8BF  78 91 00
 .LFDD8C2:
 	lda xbc, (xiz-10)                                    ; FDD8C2  be f6 31
 	push XBC                                             ; FDD8C5  39
-	call sub_FD7734                                      ; FDD8C6  1d 34 77 fd
+	call Var27DB_Get                                      ; FDD8C6  1d 34 77 fd
 	lda xbc, (xiz-18)                                    ; FDD8CA  be ee 31
 	push XBC                                             ; FDD8CD  39
 	call sub_FD7744                                      ; FDD8CE  1d 44 77 fd
@@ -123667,7 +125309,7 @@ sub_FDD7F9:
 	ld bc, (xiz-10)                                      ; FDD8D8  9e f6 21
 	extz BC                                              ; FDD8DB  d9 12
 	pushw bc                                             ; FDD8DD  29
-	call sub_FD6C65                                      ; FDD8DE  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD8DE  1d 65 6c fd
 	call sub_FD7719                                      ; FDD8E2  1d 19 77 fd
 	inc 0,XSP                                            ; FDD8E6  ef 60
 	inc 4,XSP                                            ; FDD8E8  ef 64
@@ -123675,7 +125317,7 @@ sub_FDD7F9:
 	jr ule, .LFDD953                                     ; FDD8EC  63 65
 	push XIX                                             ; FDD8EE  3c
 	pushw 0x00                                           ; FDD8EF  0b 00 00
-	call sub_FD6C7B                                      ; FDD8F2  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDD8F2  1d 7b 6c fd
 	ld C,(XIX)                                           ; FDD8F6  84 23
 	extz BC                                              ; FDD8F8  d9 12
 	div C,0x05                                           ; FDD8FA  cb 0a 05
@@ -123692,17 +125334,17 @@ sub_FDD7F9:
 	extz BC                                              ; FDD916  d9 12
 	pushw bc                                             ; FDD918  29
 	pushw 0x04                                           ; FDD919  0b 04 00
-	call sub_FD6C65                                      ; FDD91C  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD91C  1d 65 6c fd
 	ld C,(XIX+0x02)                                      ; FDD920  8c 02 23
 	extz BC                                              ; FDD923  d9 12
 	pushw bc                                             ; FDD925  29
 	pushw 0x05                                           ; FDD926  0b 05 00
-	call sub_FD6C65                                      ; FDD929  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD929  1d 65 6c fd
 	pushw 0xc3                                           ; FDD92D  0b c3 00
 	call 0xf41ed0                                        ; FDD930  1d d0 1e f4
 	pushw 0x00                                           ; FDD934  0b 00 00
-	call sub_FD7705                                      ; FDD937  1d 05 77 fd
-	call sub_FD7713                                      ; FDD93B  1d 13 77 fd
+	call Var27DA_Set                                      ; FDD937  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDD93B  1d 13 77 fd
 	pushw 0x01                                           ; FDD93F  0b 01 00
 	call sub_FD69E0                                      ; FDD942  1d e0 69 fd
 	pushw 0x10                                           ; FDD946  0b 10 00
@@ -123719,15 +125361,15 @@ sub_FDD958:
 	call 0xf42e80                                        ; FDD95D  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDD961  be fe 31
 	push XBC                                             ; FDD964  39
-	call sub_FD76F5                                      ; FDD965  1d f5 76 fd
+	call Var27DA_Get                                      ; FDD965  1d f5 76 fd
 	pop XIY                                              ; FDD969  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD96A  8e fe 3f 00
 	jr nz, .LFDD9CD                                      ; FDD96E  6e 5d
 	pushw 0x01                                           ; FDD970  0b 01 00
-	call sub_FDA792                                      ; FDD973  1d 92 a7 fd
+	call Var2805_Set                                      ; FDD973  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDD977  be fc 31
 	push XBC                                             ; FDD97A  39
-	call sub_FDA0CA                                      ; FDD97B  1d ca a0 fd
+	call Var27F5_Get                                      ; FDD97B  1d ca a0 fd
 	inc 6,XSP                                            ; FDD97F  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDD981  8e fc 3f 00
 	jr nz, .LFDD9A4                                      ; FDD985  6e 1d
@@ -123757,7 +125399,7 @@ sub_FDD958:
 	inc 0,XSP                                            ; FDD9BF  ef 60
 	inc 4,XSP                                            ; FDD9C1  ef 64
 	pushw 0x01                                           ; FDD9C3  0b 01 00
-	call sub_FD7705                                      ; FDD9C6  1d 05 77 fd
+	call Var27DA_Set                                      ; FDD9C6  1d 05 77 fd
 	popw bc                                              ; FDD9CA  49
 	jr .LFDDA18                                          ; FDD9CB  68 4b
 .LFDD9CD:
@@ -123777,7 +125419,7 @@ sub_FDD958:
 	ld C,H                                               ; FDD9E6  ce 8b
 	extz BC                                              ; FDD9E8  d9 12
 	pushw bc                                             ; FDD9EA  29
-	call sub_FD6C65                                      ; FDD9EB  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDD9EB  1d 65 6c fd
 	inc 1,H                                              ; FDD9EF  ce 61
 	pop XIY                                              ; FDD9F1  5d
 	cps h, 0x03                                          ; FDD9F2  ce db
@@ -123785,8 +125427,8 @@ sub_FDD958:
 	pushw 0xc4                                           ; FDD9F6  0b c4 00
 	call 0xf41ed0                                        ; FDD9F9  1d d0 1e f4
 	pushw 0x00                                           ; FDD9FD  0b 00 00
-	call sub_FD7705                                      ; FDDA00  1d 05 77 fd
-	call sub_FD7713                                      ; FDDA04  1d 13 77 fd
+	call Var27DA_Set                                      ; FDDA00  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDDA04  1d 13 77 fd
 	pushw 0x01                                           ; FDDA08  0b 01 00
 	call sub_FD69E0                                      ; FDDA0B  1d e0 69 fd
 	pushw 0x10                                           ; FDDA0F  0b 10 00
@@ -123804,15 +125446,15 @@ sub_FDDA1C:
 	call 0xf42e80                                        ; FDDA25  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDDA29  be fe 31
 	push XBC                                             ; FDDA2C  39
-	call sub_FD76F5                                      ; FDDA2D  1d f5 76 fd
+	call Var27DA_Get                                      ; FDDA2D  1d f5 76 fd
 	pop XIY                                              ; FDDA31  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDDA32  8e fe 3f 00
 	jrl nz, .LFDDBA6                                     ; FDDA36  7e 6d 01
 	pushw 0x01                                           ; FDDA39  0b 01 00
-	call sub_FDA792                                      ; FDDA3C  1d 92 a7 fd
+	call Var2805_Set                                      ; FDDA3C  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDDA40  be fc 31
 	push XBC                                             ; FDDA43  39
-	call sub_FDA0CA                                      ; FDDA44  1d ca a0 fd
+	call Var27F5_Get                                      ; FDDA44  1d ca a0 fd
 	inc 6,XSP                                            ; FDDA48  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDDA4A  8e fc 3f 00
 	jrl nz, .LFDDAE7                                     ; FDDA4E  7e 96 00
@@ -123941,21 +125583,21 @@ sub_FDDA1C:
 .LFDDB7A:
 	add XSP,0x00000044                                   ; FDDB7A  ef c8 44 00 00 00
 	pushw 0x01                                           ; FDDB80  0b 01 00
-	call sub_FD7705                                      ; FDDB83  1d 05 77 fd
+	call Var27DA_Set                                      ; FDDB83  1d 05 77 fd
 	call sub_FD7719                                      ; FDDB87  1d 19 77 fd
 	pushw 0x01                                           ; FDDB8B  0b 01 00
 	pushw 0x00                                           ; FDDB8E  0b 00 00
-	call sub_FD6C65                                      ; FDDB91  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDDB91  1d 65 6c fd
 	pushw 0x00                                           ; FDDB95  0b 00 00
 	pushw 0x0f                                           ; FDDB98  0b 0f 00
-	call sub_FD6C65                                      ; FDDB9B  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDDB9B  1d 65 6c fd
 	inc 0,XSP                                            ; FDDB9F  ef 60
 	inc 2,XSP                                            ; FDDBA1  ef 62
 	jrl .LFDDC35                                         ; FDDBA3  78 8f 00
 .LFDDBA6:
 	lda xbc, (xiz-10)                                    ; FDDBA6  be f6 31
 	push XBC                                             ; FDDBA9  39
-	call sub_FD7734                                      ; FDDBAA  1d 34 77 fd
+	call Var27DB_Get                                      ; FDDBAA  1d 34 77 fd
 	push XIX                                             ; FDDBAE  3c
 	call sub_FD7744                                      ; FDDBAF  1d 44 77 fd
 	ld C,(XIX)                                           ; FDDBB3  84 23
@@ -123964,7 +125606,7 @@ sub_FDDA1C:
 	ld bc, (xiz-10)                                      ; FDDBB8  9e f6 21
 	extz BC                                              ; FDDBBB  d9 12
 	pushw bc                                             ; FDDBBD  29
-	call sub_FD6C65                                      ; FDDBBE  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDDBBE  1d 65 6c fd
 	call sub_FD7719                                      ; FDDBC2  1d 19 77 fd
 	inc 0,XSP                                            ; FDDBC6  ef 60
 	inc 4,XSP                                            ; FDDBC8  ef 64
@@ -123972,7 +125614,7 @@ sub_FDDA1C:
 	jr ule, .LFDDC35                                     ; FDDBCD  63 66
 	push XIX                                             ; FDDBCF  3c
 	pushw 0x02                                           ; FDDBD0  0b 02 00
-	call sub_FD6C7B                                      ; FDDBD3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDDBD3  1d 7b 6c fd
 	and (XIX),0x7f                                       ; FDDBD7  84 3c 7f
 	ld C,(XIX)                                           ; FDDBDA  84 23
 	ld H,C                                               ; FDDBDC  cb 8e
@@ -123982,10 +125624,10 @@ sub_FDDA1C:
 	extz BC                                              ; FDDBE5  d9 12
 	pushw bc                                             ; FDDBE7  29
 	pushw 0x0a                                           ; FDDBE8  0b 0a 00
-	call sub_FD6C65                                      ; FDDBEB  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDDBEB  1d 65 6c fd
 	push XIX                                             ; FDDBEF  3c
 	pushw 0x06                                           ; FDDBF0  0b 06 00
-	call sub_FD6C7B                                      ; FDDBF3  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDDBF3  1d 7b 6c fd
 	and (XIX),0x7f                                       ; FDDBF7  84 3c 7f
 	ld C,(XIX)                                           ; FDDBFA  84 23
 	ld H,C                                               ; FDDBFC  cb 8e
@@ -123995,12 +125637,12 @@ sub_FDDA1C:
 	extz BC                                              ; FDDC05  d9 12
 	pushw bc                                             ; FDDC07  29
 	pushw 0x0b                                           ; FDDC08  0b 0b 00
-	call sub_FD6C65                                      ; FDDC0B  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDDC0B  1d 65 6c fd
 	pushw 0xc5                                           ; FDDC0F  0b c5 00
 	call 0xf41ed0                                        ; FDDC12  1d d0 1e f4
 	pushw 0x00                                           ; FDDC16  0b 00 00
-	call sub_FD7705                                      ; FDDC19  1d 05 77 fd
-	call sub_FD7713                                      ; FDDC1D  1d 13 77 fd
+	call Var27DA_Set                                      ; FDDC19  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDDC1D  1d 13 77 fd
 	pushw 0x01                                           ; FDDC21  0b 01 00
 	call sub_FD69E0                                      ; FDDC24  1d e0 69 fd
 	pushw 0x10                                           ; FDDC28  0b 10 00
@@ -124020,15 +125662,15 @@ sub_FDDC3A:
 	call 0xf42e80                                        ; FDDC46  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDDC4A  be fe 31
 	push XBC                                             ; FDDC4D  39
-	call sub_FD76F5                                      ; FDDC4E  1d f5 76 fd
+	call Var27DA_Get                                      ; FDDC4E  1d f5 76 fd
 	pop XIY                                              ; FDDC52  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDDC53  8e fe 3f 00
 	jrl nz, .LFDDD52                                     ; FDDC57  7e f8 00
 	pushw 0x01                                           ; FDDC5A  0b 01 00
-	call sub_FDA792                                      ; FDDC5D  1d 92 a7 fd
+	call Var2805_Set                                      ; FDDC5D  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDDC61  be fc 31
 	push XBC                                             ; FDDC64  39
-	call sub_FDA0CA                                      ; FDDC65  1d ca a0 fd
+	call Var27F5_Get                                      ; FDDC65  1d ca a0 fd
 	inc 6,XSP                                            ; FDDC69  ef 66
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDDC6B  8e fc 3f 00
 	jr nz, .LFDDCCC                                      ; FDDC6F  6e 5b
@@ -124113,7 +125755,7 @@ sub_FDDCB9:
 	jr nz, .LFDDD02                                      ; FDDD23  6e dd
 .LFDDD25:
 	pushw 0x01                                           ; FDDD25  0b 01 00
-	call sub_FD7705                                      ; FDDD28  1d 05 77 fd
+	call Var27DA_Set                                      ; FDDD28  1d 05 77 fd
 	call sub_FD7719                                      ; FDDD2C  1d 19 77 fd
 	pushw 0x01                                           ; FDDD30  0b 01 00
 	pushw 0x00                                           ; FDDD33  0b 00 00
@@ -124131,7 +125773,7 @@ sub_FDDCB9:
 .LFDDD52:
 	lda xbc, (xiz-10)                                    ; FDDD52  be f6 31
 	push XBC                                             ; FDDD55  39
-	call sub_FD7734                                      ; FDDD56  1d 34 77 fd
+	call Var27DB_Get                                      ; FDDD56  1d 34 77 fd
 	lda xbc, (xiz-26)                                    ; FDDD5A  be e6 31
 	push XBC                                             ; FDDD5D  39
 	call sub_FD7744                                      ; FDDD5E  1d 44 77 fd
@@ -124152,8 +125794,8 @@ sub_FDDCB9:
 	pushw 0xc6                                           ; FDDD82  0b c6 00
 	call 0xf41ed0                                        ; FDDD85  1d d0 1e f4
 	pushw 0x00                                           ; FDDD89  0b 00 00
-	call sub_FD7705                                      ; FDDD8C  1d 05 77 fd
-	call sub_FD7713                                      ; FDDD90  1d 13 77 fd
+	call Var27DA_Set                                      ; FDDD8C  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDDD90  1d 13 77 fd
 	pushw 0x01                                           ; FDDD94  0b 01 00
 	call sub_FD69E0                                      ; FDDD97  1d e0 69 fd
 	pushw 0x10                                           ; FDDD9B  0b 10 00
@@ -124174,15 +125816,15 @@ sub_FDDDAA:
 	call 0xf42e80                                        ; FDDDB6  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDDDBA  be fe 31
 	push XBC                                             ; FDDDBD  39
-	call sub_FDA0CA                                      ; FDDDBE  1d ca a0 fd
+	call Var27F5_Get                                      ; FDDDBE  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FDDDC2  be fc 31
 	push XBC                                             ; FDDDC5  39
-	call sub_FD76F5                                      ; FDDDC6  1d f5 76 fd
+	call Var27DA_Get                                      ; FDDDC6  1d f5 76 fd
 	inc 0,XSP                                            ; FDDDCA  ef 60
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDDDCC  8e fc 3f 00
 	jrl nz, .LFDDED1                                     ; FDDDD0  7e fe 00
 	pushw 0x01                                           ; FDDDD3  0b 01 00
-	call sub_FDA792                                      ; FDDDD6  1d 92 a7 fd
+	call Var2805_Set                                      ; FDDDD6  1d 92 a7 fd
 	popw bc                                              ; FDDDDA  49
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDDDDB  8e fe 3f 00
 	jrl nz, .LFDDE78                                     ; FDDDDF  7e 96 00
@@ -124268,21 +125910,21 @@ sub_FDDDAA:
 	add XSP,0x00000014                                   ; FDDEA6  ef c8 14 00 00 00
 .LFDDEAC:
 	pushw 0x01                                           ; FDDEAC  0b 01 00
-	call sub_FD7705                                      ; FDDEAF  1d 05 77 fd
+	call Var27DA_Set                                      ; FDDEAF  1d 05 77 fd
 	call sub_FD7719                                      ; FDDEB3  1d 19 77 fd
 	pushw 0x01                                           ; FDDEB7  0b 01 00
 	pushw 0x00                                           ; FDDEBA  0b 00 00
-	call sub_FD6C65                                      ; FDDEBD  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDDEBD  1d 65 6c fd
 	pushw 0x00                                           ; FDDEC1  0b 00 00
 	pushw 0x0f                                           ; FDDEC4  0b 0f 00
-	call sub_FD6C65                                      ; FDDEC7  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDDEC7  1d 65 6c fd
 	inc 0,XSP                                            ; FDDECB  ef 60
 	inc 2,XSP                                            ; FDDECD  ef 62
 	jr .LFDDF30                                          ; FDDECF  68 5f
 .LFDDED1:
 	lda xbc, (xiz-10)                                    ; FDDED1  be f6 31
 	push XBC                                             ; FDDED4  39
-	call sub_FD7734                                      ; FDDED5  1d 34 77 fd
+	call Var27DB_Get                                      ; FDDED5  1d 34 77 fd
 	lda xbc, (xiz-26)                                    ; FDDED9  be e6 31
 	push XBC                                             ; FDDEDC  39
 	call sub_FD7744                                      ; FDDEDD  1d 44 77 fd
@@ -124292,7 +125934,7 @@ sub_FDDDAA:
 	ld bc, (xiz-10)                                      ; FDDEE7  9e f6 21
 	extz BC                                              ; FDDEEA  d9 12
 	pushw bc                                             ; FDDEEC  29
-	call sub_FD6C65                                      ; FDDEED  1d 65 6c fd
+	call Arr27A6_Set                                      ; FDDEED  1d 65 6c fd
 	inc 0,XSP                                            ; FDDEF1  ef 60
 	inc 4,XSP                                            ; FDDEF3  ef 64
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDDEF5  8e fe 3f 00
@@ -124310,8 +125952,8 @@ sub_FDDEFB:
 	pushw 0xc7                                           ; FDDF0E  0b c7 00
 	call 0xf41ed0                                        ; FDDF11  1d d0 1e f4
 	pushw 0x00                                           ; FDDF15  0b 00 00
-	call sub_FD7705                                      ; FDDF18  1d 05 77 fd
-	call sub_FD7713                                      ; FDDF1C  1d 13 77 fd
+	call Var27DA_Set                                      ; FDDF18  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDDF1C  1d 13 77 fd
 	pushw 0x01                                           ; FDDF20  0b 01 00
 	call sub_FD69E0                                      ; FDDF23  1d e0 69 fd
 	pushw 0x10                                           ; FDDF27  0b 10 00
@@ -124332,12 +125974,12 @@ sub_FDDF36:
 	call 0xf42e80                                        ; FDDF42  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDDF46  be fe 31
 	push XBC                                             ; FDDF49  39
-	call sub_FD76F5                                      ; FDDF4A  1d f5 76 fd
+	call Var27DA_Get                                      ; FDDF4A  1d f5 76 fd
 	pop XIY                                              ; FDDF4E  5d
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDDF4F  8e fe 3f 00
 	jrl nz, .LFDDFC7                                     ; FDDF53  7e 71 00
 	pushw 0x01                                           ; FDDF56  0b 01 00
-	call sub_FDA792                                      ; FDDF59  1d 92 a7 fd
+	call Var2805_Set                                      ; FDDF59  1d 92 a7 fd
 	ldw de, 0x00                                         ; FDDF5D  32 00 00
 	ldb h, 0x02                                          ; FDDF60  26 02
 	popw bc                                              ; FDDF62  49
@@ -124377,13 +126019,13 @@ sub_FDDF36:
 	cps h, 0x00                                          ; FDDFB8  ce d8
 	jr nz, .LFDDF9C                                      ; FDDFBA  6e e0
 	pushw 0x01                                           ; FDDFBC  0b 01 00
-	call sub_FD7705                                      ; FDDFBF  1d 05 77 fd
+	call Var27DA_Set                                      ; FDDFBF  1d 05 77 fd
 	popw bc                                              ; FDDFC3  49
 	jrl .LFDE14B                                         ; FDDFC4  78 84 01
 .LFDDFC7:
 	lda xbc, (xiz-4)                                     ; FDDFC7  be fc 31
 	push XBC                                             ; FDDFCA  39
-	call sub_FD7734                                      ; FDDFCB  1d 34 77 fd
+	call Var27DB_Get                                      ; FDDFCB  1d 34 77 fd
 	lda xbc, (xiz-12)                                    ; FDDFCF  be f4 31
 	push XBC                                             ; FDDFD2  39
 	call sub_FD7744                                      ; FDDFD3  1d 44 77 fd
@@ -124404,7 +126046,7 @@ sub_FDDF36:
 	lda xbc, (xiz-12)                                    ; FDDFF8  be f4 31
 	push XBC                                             ; FDDFFB  39
 	pushw 0x00                                           ; FDDFFC  0b 00 00
-	call sub_FD6C7B                                      ; FDDFFF  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDDFFF  1d 7b 6c fd
 	ld c, (xiz-12)                                       ; FDE003  8e f4 23
 sub_FDE006:
 	extz BC                                              ; FDE006  d9 12
@@ -124416,7 +126058,7 @@ sub_FDE006:
 	lda xbc, (xiz-12)                                    ; FDE014  be f4 31
 	push XBC                                             ; FDE017  39
 	pushw 0x01                                           ; FDE018  0b 01 00
-	call sub_FD6C7B                                      ; FDE01B  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDE01B  1d 7b 6c fd
 	ld c, (xiz-12)                                       ; FDE01F  8e f4 23
 	extz BC                                              ; FDE022  d9 12
 	pushw bc                                             ; FDE024  29
@@ -124438,15 +126080,15 @@ sub_FDE006:
 	lda xbc, (xiz-14)                                    ; FDE048  be f2 31
 	push XBC                                             ; FDE04B  39
 	pushw 0x03                                           ; FDE04C  0b 03 00
-	call sub_FD6C7B                                      ; FDE04F  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDE04F  1d 7b 6c fd
 	lda xbc, (xiz-16)                                    ; FDE053  be f0 31
 	push XBC                                             ; FDE056  39
 	pushw 0x04                                           ; FDE057  0b 04 00
-	call sub_FD6C7B                                      ; FDE05A  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDE05A  1d 7b 6c fd
 	lda xbc, (xiz-18)                                    ; FDE05E  be ee 31
 	push XBC                                             ; FDE061  39
 	pushw 0x02                                           ; FDE062  0b 02 00
-	call sub_FD6C7B                                      ; FDE065  1d 7b 6c fd
+	call Arr27A6_Get                                      ; FDE065  1d 7b 6c fd
 	ld l, (xiz-18)                                       ; FDE069  8e ee 27
 	and L,0x0f                                           ; FDE06C  cf cc 0f
 	ld d, (xiz-18)                                       ; FDE06F  8e ee 24
@@ -124504,7 +126146,7 @@ sub_FDE006:
 	jp (xix)                                             ; FDE0E6  b4 d8
 	lda xbc, (xiz-20)                                    ; FDE0E8  be ec 31
 	push XBC                                             ; FDE0EB  39
-	call sub_FDA4BE                                      ; FDE0EC  1d be a4 fd
+	call Var7634_GetViaH                                      ; FDE0EC  1d be a4 fd
 	m_and_mi8 MBD+r6, 0xec, 0x01                         ; FDE0F0  8e ec 3c 01
 	ld bc, (xiz-20)                                      ; FDE0F4  9e ec 21
 sub_FDE0F7:
@@ -124516,7 +126158,7 @@ sub_FDE0F7:
 	jp (xix)                                             ; FDE103  b4 d8
 	lda xbc, (xiz-12)                                    ; FDE105  be f4 31
 	push XBC                                             ; FDE108  39
-	call sub_FDA4F0                                      ; FDE109  1d f0 a4 fd
+	call Var78B7_GetViaH                                      ; FDE109  1d f0 a4 fd
 	ld c, (xiz-12)                                       ; FDE10D  8e f4 23
 	extz BC                                              ; FDE110  d9 12
 	pushw bc                                             ; FDE112  29
@@ -124532,8 +126174,8 @@ sub_FDE0F7:
 	pushw 0xc8                                           ; FDE12C  0b c8 00
 	call 0xf41ed0                                        ; FDE12F  1d d0 1e f4
 	pushw 0x00                                           ; FDE133  0b 00 00
-	call sub_FD7705                                      ; FDE136  1d 05 77 fd
-	call sub_FD7713                                      ; FDE13A  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE136  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE13A  1d 13 77 fd
 	pushw 0x10                                           ; FDE13E  0b 10 00
 	call sub_FD6447                                      ; FDE141  1d 47 64 fd
 	add XSP,0x0000002e                                   ; FDE145  ef c8 2e 00 00 00
@@ -124547,223 +126189,223 @@ sub_FDE151:
 	ret                                                  ; FDE151  0e
 sub_FDE152:
 	pushw 0x00                                           ; FDE152  0b 00 00
-	call sub_FD7705                                      ; FDE155  1d 05 77 fd
-	call sub_FD7713                                      ; FDE159  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE155  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE159  1d 13 77 fd
 	popw bc                                              ; FDE15D  49
 	ret                                                  ; FDE15E  0e
 sub_FDE15F:
 	ret                                                  ; FDE15F  0e
 sub_FDE160:
 	pushw 0x00                                           ; FDE160  0b 00 00
-	call sub_FD7705                                      ; FDE163  1d 05 77 fd
-	call sub_FD7713                                      ; FDE167  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE163  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE167  1d 13 77 fd
 	popw bc                                              ; FDE16B  49
 	ret                                                  ; FDE16C  0e
 sub_FDE16D:
 	ret                                                  ; FDE16D  0e
 sub_FDE16E:
 	pushw 0x00                                           ; FDE16E  0b 00 00
-	call sub_FD7705                                      ; FDE171  1d 05 77 fd
-	call sub_FD7713                                      ; FDE175  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE171  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE175  1d 13 77 fd
 	popw bc                                              ; FDE179  49
 	ret                                                  ; FDE17A  0e
 sub_FDE17B:
 	ret                                                  ; FDE17B  0e
 sub_FDE17C:
 	pushw 0x00                                           ; FDE17C  0b 00 00
-	call sub_FD7705                                      ; FDE17F  1d 05 77 fd
-	call sub_FD7713                                      ; FDE183  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE17F  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE183  1d 13 77 fd
 	popw bc                                              ; FDE187  49
 	ret                                                  ; FDE188  0e
 sub_FDE189:
 	ret                                                  ; FDE189  0e
 sub_FDE18A:
 	pushw 0x00                                           ; FDE18A  0b 00 00
-	call sub_FD7705                                      ; FDE18D  1d 05 77 fd
-	call sub_FD7713                                      ; FDE191  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE18D  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE191  1d 13 77 fd
 	popw bc                                              ; FDE195  49
 	ret                                                  ; FDE196  0e
 sub_FDE197:
 	ret                                                  ; FDE197  0e
 sub_FDE198:
 	pushw 0x00                                           ; FDE198  0b 00 00
-	call sub_FD7705                                      ; FDE19B  1d 05 77 fd
-	call sub_FD7713                                      ; FDE19F  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE19B  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE19F  1d 13 77 fd
 	popw bc                                              ; FDE1A3  49
 	ret                                                  ; FDE1A4  0e
 sub_FDE1A5:
 	ret                                                  ; FDE1A5  0e
 sub_FDE1A6:
 	pushw 0x00                                           ; FDE1A6  0b 00 00
-	call sub_FD7705                                      ; FDE1A9  1d 05 77 fd
-	call sub_FD7713                                      ; FDE1AD  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE1A9  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE1AD  1d 13 77 fd
 	popw bc                                              ; FDE1B1  49
 	ret                                                  ; FDE1B2  0e
 sub_FDE1B3:
 	ret                                                  ; FDE1B3  0e
 sub_FDE1B4:
 	pushw 0x00                                           ; FDE1B4  0b 00 00
-	call sub_FD7705                                      ; FDE1B7  1d 05 77 fd
-	call sub_FD7713                                      ; FDE1BB  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE1B7  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE1BB  1d 13 77 fd
 	popw bc                                              ; FDE1BF  49
 	ret                                                  ; FDE1C0  0e
 	ret                                                  ; FDE1C1  0e
 sub_FDE1C2:
 	pushw 0x00                                           ; FDE1C2  0b 00 00
-	call sub_FD7705                                      ; FDE1C5  1d 05 77 fd
-	call sub_FD7713                                      ; FDE1C9  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE1C5  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE1C9  1d 13 77 fd
 	popw bc                                              ; FDE1CD  49
 	ret                                                  ; FDE1CE  0e
 sub_FDE1CF:
 	ret                                                  ; FDE1CF  0e
 sub_FDE1D0:
 	pushw 0x00                                           ; FDE1D0  0b 00 00
-	call sub_FD7705                                      ; FDE1D3  1d 05 77 fd
-	call sub_FD7713                                      ; FDE1D7  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE1D3  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE1D7  1d 13 77 fd
 	popw bc                                              ; FDE1DB  49
 	ret                                                  ; FDE1DC  0e
 sub_FDE1DD:
 	ret                                                  ; FDE1DD  0e
 sub_FDE1DE:
 	pushw 0x00                                           ; FDE1DE  0b 00 00
-	call sub_FD7705                                      ; FDE1E1  1d 05 77 fd
-	call sub_FD7713                                      ; FDE1E5  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE1E1  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE1E5  1d 13 77 fd
 	popw bc                                              ; FDE1E9  49
 	ret                                                  ; FDE1EA  0e
 sub_FDE1EB:
 	ret                                                  ; FDE1EB  0e
 sub_FDE1EC:
 	pushw 0x00                                           ; FDE1EC  0b 00 00
-	call sub_FD7705                                      ; FDE1EF  1d 05 77 fd
-	call sub_FD7713                                      ; FDE1F3  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE1EF  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE1F3  1d 13 77 fd
 	popw bc                                              ; FDE1F7  49
 	ret                                                  ; FDE1F8  0e
 sub_FDE1F9:
 	ret                                                  ; FDE1F9  0e
 sub_FDE1FA:
 	pushw 0x00                                           ; FDE1FA  0b 00 00
-	call sub_FD7705                                      ; FDE1FD  1d 05 77 fd
-	call sub_FD7713                                      ; FDE201  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE1FD  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE201  1d 13 77 fd
 	popw bc                                              ; FDE205  49
 	ret                                                  ; FDE206  0e
 sub_FDE207:
 	ret                                                  ; FDE207  0e
 sub_FDE208:
 	pushw 0x00                                           ; FDE208  0b 00 00
-	call sub_FD7705                                      ; FDE20B  1d 05 77 fd
-	call sub_FD7713                                      ; FDE20F  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE20B  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE20F  1d 13 77 fd
 	popw bc                                              ; FDE213  49
 	ret                                                  ; FDE214  0e
 sub_FDE215:
 	ret                                                  ; FDE215  0e
 sub_FDE216:
 	pushw 0x00                                           ; FDE216  0b 00 00
-	call sub_FD7705                                      ; FDE219  1d 05 77 fd
-	call sub_FD7713                                      ; FDE21D  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE219  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE21D  1d 13 77 fd
 	popw bc                                              ; FDE221  49
 	ret                                                  ; FDE222  0e
 sub_FDE223:
 	ret                                                  ; FDE223  0e
 sub_FDE224:
 	pushw 0x00                                           ; FDE224  0b 00 00
-	call sub_FD7705                                      ; FDE227  1d 05 77 fd
-	call sub_FD7713                                      ; FDE22B  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE227  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE22B  1d 13 77 fd
 	popw bc                                              ; FDE22F  49
 	ret                                                  ; FDE230  0e
 sub_FDE231:
 	ret                                                  ; FDE231  0e
 sub_FDE232:
 	pushw 0x00                                           ; FDE232  0b 00 00
-	call sub_FD7705                                      ; FDE235  1d 05 77 fd
-	call sub_FD7713                                      ; FDE239  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE235  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE239  1d 13 77 fd
 	popw bc                                              ; FDE23D  49
 	ret                                                  ; FDE23E  0e
 sub_FDE23F:
 	ret                                                  ; FDE23F  0e
 sub_FDE240:
 	pushw 0x00                                           ; FDE240  0b 00 00
-	call sub_FD7705                                      ; FDE243  1d 05 77 fd
-	call sub_FD7713                                      ; FDE247  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE243  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE247  1d 13 77 fd
 	popw bc                                              ; FDE24B  49
 	ret                                                  ; FDE24C  0e
 sub_FDE24D:
 	ret                                                  ; FDE24D  0e
 sub_FDE24E:
 	pushw 0x00                                           ; FDE24E  0b 00 00
-	call sub_FD7705                                      ; FDE251  1d 05 77 fd
-	call sub_FD7713                                      ; FDE255  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE251  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE255  1d 13 77 fd
 	popw bc                                              ; FDE259  49
 	ret                                                  ; FDE25A  0e
 sub_FDE25B:
 	ret                                                  ; FDE25B  0e
 sub_FDE25C:
 	pushw 0x00                                           ; FDE25C  0b 00 00
-	call sub_FD7705                                      ; FDE25F  1d 05 77 fd
-	call sub_FD7713                                      ; FDE263  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE25F  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE263  1d 13 77 fd
 	popw bc                                              ; FDE267  49
 	ret                                                  ; FDE268  0e
 sub_FDE269:
 	ret                                                  ; FDE269  0e
 sub_FDE26A:
 	pushw 0x00                                           ; FDE26A  0b 00 00
-	call sub_FD7705                                      ; FDE26D  1d 05 77 fd
-	call sub_FD7713                                      ; FDE271  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE26D  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE271  1d 13 77 fd
 	popw bc                                              ; FDE275  49
 	ret                                                  ; FDE276  0e
 sub_FDE277:
 	ret                                                  ; FDE277  0e
 sub_FDE278:
 	pushw 0x00                                           ; FDE278  0b 00 00
-	call sub_FD7705                                      ; FDE27B  1d 05 77 fd
-	call sub_FD7713                                      ; FDE27F  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE27B  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE27F  1d 13 77 fd
 	popw bc                                              ; FDE283  49
 	ret                                                  ; FDE284  0e
 sub_FDE285:
 	ret                                                  ; FDE285  0e
 sub_FDE286:
 	pushw 0x00                                           ; FDE286  0b 00 00
-	call sub_FD7705                                      ; FDE289  1d 05 77 fd
-	call sub_FD7713                                      ; FDE28D  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE289  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE28D  1d 13 77 fd
 	popw bc                                              ; FDE291  49
 	ret                                                  ; FDE292  0e
 sub_FDE293:
 	ret                                                  ; FDE293  0e
 sub_FDE294:
 	pushw 0x00                                           ; FDE294  0b 00 00
-	call sub_FD7705                                      ; FDE297  1d 05 77 fd
-	call sub_FD7713                                      ; FDE29B  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE297  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE29B  1d 13 77 fd
 	popw bc                                              ; FDE29F  49
 	ret                                                  ; FDE2A0  0e
 sub_FDE2A1:
 	ret                                                  ; FDE2A1  0e
 sub_FDE2A2:
 	pushw 0x00                                           ; FDE2A2  0b 00 00
-	call sub_FD7705                                      ; FDE2A5  1d 05 77 fd
-	call sub_FD7713                                      ; FDE2A9  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE2A5  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE2A9  1d 13 77 fd
 	popw bc                                              ; FDE2AD  49
 	ret                                                  ; FDE2AE  0e
 sub_FDE2AF:
 	ret                                                  ; FDE2AF  0e
 sub_FDE2B0:
 	pushw 0x00                                           ; FDE2B0  0b 00 00
-	call sub_FD7705                                      ; FDE2B3  1d 05 77 fd
-	call sub_FD7713                                      ; FDE2B7  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE2B3  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE2B7  1d 13 77 fd
 	popw bc                                              ; FDE2BB  49
 	ret                                                  ; FDE2BC  0e
 sub_FDE2BD:
 	ret                                                  ; FDE2BD  0e
 sub_FDE2BE:
 	pushw 0x00                                           ; FDE2BE  0b 00 00
-	call sub_FD7705                                      ; FDE2C1  1d 05 77 fd
-	call sub_FD7713                                      ; FDE2C5  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE2C1  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE2C5  1d 13 77 fd
 	popw bc                                              ; FDE2C9  49
 	ret                                                  ; FDE2CA  0e
 sub_FDE2CB:
 	ret                                                  ; FDE2CB  0e
 sub_FDE2CC:
 	pushw 0x00                                           ; FDE2CC  0b 00 00
-	call sub_FD7705                                      ; FDE2CF  1d 05 77 fd
-	call sub_FD7713                                      ; FDE2D3  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE2CF  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE2D3  1d 13 77 fd
 	popw bc                                              ; FDE2D7  49
 	ret                                                  ; FDE2D8  0e
 sub_FDE2D9:
@@ -124777,127 +126419,127 @@ sub_FDE2DC:
 sub_FDE2DD:
 	ret                                                  ; FDE2DD  0e
 	pushw 0x00                                           ; FDE2DE  0b 00 00
-	call sub_FD7705                                      ; FDE2E1  1d 05 77 fd
-	call sub_FD7713                                      ; FDE2E5  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE2E1  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE2E5  1d 13 77 fd
 	popw bc                                              ; FDE2E9  49
 	ret                                                  ; FDE2EA  0e
 	ret                                                  ; FDE2EB  0e
 sub_FDE2EC:
 	pushw 0x00                                           ; FDE2EC  0b 00 00
-	call sub_FD7705                                      ; FDE2EF  1d 05 77 fd
-	call sub_FD7713                                      ; FDE2F3  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE2EF  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE2F3  1d 13 77 fd
 	popw bc                                              ; FDE2F7  49
 	ret                                                  ; FDE2F8  0e
 sub_FDE2F9:
 	ret                                                  ; FDE2F9  0e
 sub_FDE2FA:
 	pushw 0x00                                           ; FDE2FA  0b 00 00
-	call sub_FD7705                                      ; FDE2FD  1d 05 77 fd
-	call sub_FD7713                                      ; FDE301  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE2FD  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE301  1d 13 77 fd
 	popw bc                                              ; FDE305  49
 	ret                                                  ; FDE306  0e
 sub_FDE307:
 	ret                                                  ; FDE307  0e
 sub_FDE308:
 	pushw 0x00                                           ; FDE308  0b 00 00
-	call sub_FD7705                                      ; FDE30B  1d 05 77 fd
-	call sub_FD7713                                      ; FDE30F  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE30B  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE30F  1d 13 77 fd
 	popw bc                                              ; FDE313  49
 	ret                                                  ; FDE314  0e
 sub_FDE315:
 	ret                                                  ; FDE315  0e
 sub_FDE316:
 	pushw 0x00                                           ; FDE316  0b 00 00
-	call sub_FD7705                                      ; FDE319  1d 05 77 fd
-	call sub_FD7713                                      ; FDE31D  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE319  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE31D  1d 13 77 fd
 	popw bc                                              ; FDE321  49
 	ret                                                  ; FDE322  0e
 sub_FDE323:
 	ret                                                  ; FDE323  0e
 sub_FDE324:
 	pushw 0x00                                           ; FDE324  0b 00 00
-	call sub_FD7705                                      ; FDE327  1d 05 77 fd
-	call sub_FD7713                                      ; FDE32B  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE327  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE32B  1d 13 77 fd
 	popw bc                                              ; FDE32F  49
 	ret                                                  ; FDE330  0e
 sub_FDE331:
 	ret                                                  ; FDE331  0e
 sub_FDE332:
 	pushw 0x00                                           ; FDE332  0b 00 00
-	call sub_FD7705                                      ; FDE335  1d 05 77 fd
-	call sub_FD7713                                      ; FDE339  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE335  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE339  1d 13 77 fd
 	popw bc                                              ; FDE33D  49
 	ret                                                  ; FDE33E  0e
 sub_FDE33F:
 	ret                                                  ; FDE33F  0e
 sub_FDE340:
 	pushw 0x00                                           ; FDE340  0b 00 00
-	call sub_FD7705                                      ; FDE343  1d 05 77 fd
-	call sub_FD7713                                      ; FDE347  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE343  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE347  1d 13 77 fd
 	popw bc                                              ; FDE34B  49
 	ret                                                  ; FDE34C  0e
 sub_FDE34D:
 	ret                                                  ; FDE34D  0e
 sub_FDE34E:
 	pushw 0x00                                           ; FDE34E  0b 00 00
-	call sub_FD7705                                      ; FDE351  1d 05 77 fd
-	call sub_FD7713                                      ; FDE355  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE351  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE355  1d 13 77 fd
 	popw bc                                              ; FDE359  49
 	ret                                                  ; FDE35A  0e
 sub_FDE35B:
 	ret                                                  ; FDE35B  0e
 sub_FDE35C:
 	pushw 0x00                                           ; FDE35C  0b 00 00
-	call sub_FD7705                                      ; FDE35F  1d 05 77 fd
-	call sub_FD7713                                      ; FDE363  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE35F  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE363  1d 13 77 fd
 	popw bc                                              ; FDE367  49
 	ret                                                  ; FDE368  0e
 sub_FDE369:
 	ret                                                  ; FDE369  0e
 sub_FDE36A:
 	pushw 0x00                                           ; FDE36A  0b 00 00
-	call sub_FD7705                                      ; FDE36D  1d 05 77 fd
-	call sub_FD7713                                      ; FDE371  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE36D  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE371  1d 13 77 fd
 	popw bc                                              ; FDE375  49
 	ret                                                  ; FDE376  0e
 sub_FDE377:
 	ret                                                  ; FDE377  0e
 sub_FDE378:
 	pushw 0x00                                           ; FDE378  0b 00 00
-	call sub_FD7705                                      ; FDE37B  1d 05 77 fd
-	call sub_FD7713                                      ; FDE37F  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE37B  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE37F  1d 13 77 fd
 	popw bc                                              ; FDE383  49
 	ret                                                  ; FDE384  0e
 sub_FDE385:
 	ret                                                  ; FDE385  0e
 sub_FDE386:
 	pushw 0x00                                           ; FDE386  0b 00 00
-	call sub_FD7705                                      ; FDE389  1d 05 77 fd
-	call sub_FD7713                                      ; FDE38D  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE389  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE38D  1d 13 77 fd
 	popw bc                                              ; FDE391  49
 	ret                                                  ; FDE392  0e
 sub_FDE393:
 	ret                                                  ; FDE393  0e
 sub_FDE394:
 	pushw 0x00                                           ; FDE394  0b 00 00
-	call sub_FD7705                                      ; FDE397  1d 05 77 fd
-	call sub_FD7713                                      ; FDE39B  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE397  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE39B  1d 13 77 fd
 	popw bc                                              ; FDE39F  49
 	ret                                                  ; FDE3A0  0e
 sub_FDE3A1:
 	ret                                                  ; FDE3A1  0e
 sub_FDE3A2:
 	pushw 0x00                                           ; FDE3A2  0b 00 00
-	call sub_FD7705                                      ; FDE3A5  1d 05 77 fd
-	call sub_FD7713                                      ; FDE3A9  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE3A5  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE3A9  1d 13 77 fd
 	popw bc                                              ; FDE3AD  49
 	ret                                                  ; FDE3AE  0e
 sub_FDE3AF:
 	ret                                                  ; FDE3AF  0e
 sub_FDE3B0:
 	pushw 0x00                                           ; FDE3B0  0b 00 00
-	call sub_FD7705                                      ; FDE3B3  1d 05 77 fd
-	call sub_FD7713                                      ; FDE3B7  1d 13 77 fd
+	call Var27DA_Set                                      ; FDE3B3  1d 05 77 fd
+	call Var27DB_Clear                                      ; FDE3B7  1d 13 77 fd
 	popw bc                                              ; FDE3BB  49
 	ret                                                  ; FDE3BC  0e
 sub_FDE3BD:
@@ -124930,7 +126572,7 @@ sub_FDE3BE:
 	jp (xbc)                                             ; FDE400  b1 d8
 	pushw 0x00                                           ; FDE402  0b 00 00
 	call sub_FDAC5B                                      ; FDE405  1d 5b ac fd
-	call sub_FD60B9                                      ; FDE409  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE409  1d b9 60 fd
 	inc 6,XSP                                            ; FDE40D  ef 66
 	cps a, 0x00                                          ; FDE40F  c9 d8
 	jr nz, .LFDE41B                                      ; FDE411  6e 08
@@ -124968,7 +126610,7 @@ sub_FDE41E:
 	jp (xbc)                                             ; FDE460  b1 d8
 	pushw 0x00                                           ; FDE462  0b 00 00
 	call sub_FDAC5B                                      ; FDE465  1d 5b ac fd
-	call sub_FD60B9                                      ; FDE469  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE469  1d b9 60 fd
 	inc 6,XSP                                            ; FDE46D  ef 66
 	cps a, 0x00                                          ; FDE46F  c9 d8
 	jr nz, .LFDE47B                                      ; FDE471  6e 08
@@ -125006,7 +126648,7 @@ sub_FDE47E:
 	jp (xbc)                                             ; FDE4C0  b1 d8
 	pushw 0x00                                           ; FDE4C2  0b 00 00
 	call sub_FDAC5B                                      ; FDE4C5  1d 5b ac fd
-	call sub_FD60B9                                      ; FDE4C9  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE4C9  1d b9 60 fd
 	inc 6,XSP                                            ; FDE4CD  ef 66
 	cps a, 0x00                                          ; FDE4CF  c9 d8
 	jr nz, .LFDE4DB                                      ; FDE4D1  6e 08
@@ -125045,7 +126687,7 @@ sub_FDE4DE:
 	pushw 0x00                                           ; FDE522  0b 00 00
 	call sub_FDAC5B                                      ; FDE525  1d 5b ac fd
 sub_FDE529:
-	call sub_FD60B9                                      ; FDE529  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE529  1d b9 60 fd
 	inc 6,XSP                                            ; FDE52D  ef 66
 	cps a, 0x00                                          ; FDE52F  c9 d8
 	jr nz, .LFDE53B                                      ; FDE531  6e 08
@@ -125083,7 +126725,7 @@ sub_FDE53E:
 	jp (xbc)                                             ; FDE580  b1 d8
 	pushw 0x00                                           ; FDE582  0b 00 00
 	call sub_FDAC5B                                      ; FDE585  1d 5b ac fd
-	call sub_FD60B9                                      ; FDE589  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE589  1d b9 60 fd
 	inc 6,XSP                                            ; FDE58D  ef 66
 	cps a, 0x00                                          ; FDE58F  c9 d8
 	jr nz, .LFDE59B                                      ; FDE591  6e 08
@@ -125117,7 +126759,7 @@ sub_FDE59E:
 	lda_24 xiy, (0xfde5db)                               ; FDE5D3  f2 db e5 fd 35
 	push XIY                                             ; FDE5D8  3d
 	jp (xbc)                                             ; FDE5D9  b1 d8
-	call sub_FD60B9                                      ; FDE5DB  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE5DB  1d b9 60 fd
 	popw bc                                              ; FDE5DF  49
 	cps a, 0x00                                          ; FDE5E0  c9 d8
 	jr nz, .LFDE5EC                                      ; FDE5E2  6e 08
@@ -125155,7 +126797,7 @@ sub_FDE5EF:
 	jp (xbc)                                             ; FDE631  b1 d8
 	pushw 0x00                                           ; FDE633  0b 00 00
 	call sub_FDAC5B                                      ; FDE636  1d 5b ac fd
-	call sub_FD60B9                                      ; FDE63A  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE63A  1d b9 60 fd
 	inc 6,XSP                                            ; FDE63E  ef 66
 	cps a, 0x00                                          ; FDE640  c9 d8
 	jr nz, .LFDE64C                                      ; FDE642  6e 08
@@ -125193,7 +126835,7 @@ sub_FDE64F:
 	jp (xbc)                                             ; FDE691  b1 d8
 	pushw 0x00                                           ; FDE693  0b 00 00
 	call sub_FDAC5B                                      ; FDE696  1d 5b ac fd
-	call sub_FD60B9                                      ; FDE69A  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE69A  1d b9 60 fd
 	inc 6,XSP                                            ; FDE69E  ef 66
 	cps a, 0x00                                          ; FDE6A0  c9 d8
 	jr nz, .LFDE6AC                                      ; FDE6A2  6e 08
@@ -125231,7 +126873,7 @@ sub_FDE6AF:
 	jp (xbc)                                             ; FDE6F1  b1 d8
 	pushw 0x00                                           ; FDE6F3  0b 00 00
 	call sub_FDAC5B                                      ; FDE6F6  1d 5b ac fd
-	call sub_FD60B9                                      ; FDE6FA  1d b9 60 fd
+	call PanelScreen_RequestPending                                      ; FDE6FA  1d b9 60 fd
 	inc 6,XSP                                            ; FDE6FE  ef 66
 	cps a, 0x00                                          ; FDE700  c9 d8
 	jr nz, .LFDE70C                                      ; FDE702  6e 08

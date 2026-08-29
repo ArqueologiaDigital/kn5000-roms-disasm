@@ -85,6 +85,39 @@ FIVE CORRECTIONS TO ALREADY-COMMITTED TEXT, each re-derived by --selftest
     The same applies to the round-2 finding that its `refs()` is unreachable
     from its own CLI: this file exposes it as `--refs`.
 
+⚠ WHAT SPLICING THIS REGION BREAKS, AND WHY NONE OF IT IS A DEFECT
+    Both audit scripts for this span seed their NULL CORPUS from the proven
+    instruction text of prom_b/wsa1_prom_b.s.  Converting the span puts 5,376
+    bytes of new proven code into that corpus, so their pinned constants move.
+    Measured immediately after the splice:
+
+      notes/prom_b_f4f000_layout.py --selftest   2 failures
+        * "the span is one `.incbin` in prom_b/wsa1_prom_b.s"  -- false by
+          design now.
+        * "content rules on proven code: false positives" 1 for 0 -- the one
+          occurrence is `stub_idiom` firing at 0xF4F2C2, which is the address
+          the rule was WRITTEN for (its own --null section prints it under
+          "what it overrules here").  The rule now fires inside proven code
+          because that code is this emitter's output.
+
+      notes/prom_b_f4f000_verify.py --selftest   6 failures
+        * the same `.incbin` check;
+        * "null corpus runs" 5,592 for 5,433 and "bytes" 111,632 for 107,345 --
+          corpus growth, exactly 4,287 bytes of it;
+        * "null corpus runs intersecting the span (circularity)" 159 for 0 --
+          ⚠ this one matters and is stated rather than smoothed: that check can
+          no longer be SATISFIED for this span, because the span is now part of
+          the corpus.  The round-2 verdict was computed BEFORE the splice, on a
+          corpus that did not contain the span, and it stands; but anyone
+          re-running that verifier must exclude [LO,HI) from its own corpus
+          first, or its calibration is circular.
+        * two derived start-position counts, which move with the corpus.
+
+    This emitter is immune to all of it: its layout call still returns 43
+    segments after the splice, and running it again reproduces its own output
+    byte for byte (`python3 notes/gen_prom_b_f4f000_module.py | diff - <the
+    spliced region>` is empty).  That was checked after the splice, not assumed.
+
 NOTHING HERE CAN BREAK THE GATE
     Code comes from notes/llvm_roundtrip_autoforce.py, which assembles every
     candidate listing and byte-compares it with the ROM before returning it.
@@ -287,6 +320,160 @@ def lda_sites():
         if m and LO <= int(m.group(1), 16) < HI:
             out.setdefault(int(m.group(1), 16), []).append(a)
     return out
+
+
+def namers(v):
+    """[(image, instruction address, source text)] for every instruction that
+    SPELLS `v` -- in this span's transcription and in the two proven `.s` files.
+
+    ⚠ This exists because the first draft of this file wrote "no `add
+    XWA,0x00f542d1` occurs in either image" into a header, and there is one, at
+    0xF531E4.  A claim about what does NOT reference an address has to be made
+    by a scan, not by memory."""
+    out = []
+    # ⚠ The operand is spelled `0x00f54248`, not `0xf54248` -- an earlier draft
+    # of this file matched the six-digit form only and reported "no instruction
+    # spells it" for a table whose reader is two screens away.
+    key = re.compile(r"0x0*%06x\b" % v)
+    for a, _l, t in code_rows():
+        if key.search(t.lower()):
+            out.append(("b", a, t))
+    for im, site, t in prom_a_refs().get(v, []):
+        out.append((im, site, t))
+    return sorted(out, key=lambda r: (r[0], r[1]))
+
+
+_ROMA = []
+
+
+def rom_a():
+    if not _ROMA:
+        _ROMA.append(open(os.path.join(ROOT, "original_ROMs",
+                                       "wsa1_prom_a.ic12"), "rb").read())
+    return _ROMA[0]
+
+
+def spellings(v):
+    """(prom_a, prom_b) raw-byte counts of the 32-bit little-endian spelling.
+
+    ⚠ A NEGATIVE claim has to be made against the RAW IMAGES, not against the
+    proven `.s` text: two thirds of prom_b is still `.incbin`, so "no proven
+    instruction names it" and "nothing names it" are different statements and
+    only the first is checkable from the source."""
+    pat = v.to_bytes(4, "little")
+    return rom_a().count(pat), rom().count(pat)
+
+
+def namer_text(v, none=None):
+    ns = namers(v)
+    if not ns:
+        na, nb = spellings(v)
+        return (none or "") + ("no instruction in the PROVEN text of either "
+                               "image spells it; its 32-bit spelling occurs %d "
+                               "time(s) in the prom_a image and %d in prom_b, "
+                               "counted over the raw bytes." % (na, nb))
+    return "; ".join("prom_%s 0x%06X `%s`" % r for r in ns[:6]) \
+        + ("" if len(ns) <= 6 else "; +%d more" % (len(ns) - 6))
+
+
+def index_bands():
+    """The contiguous input bands of IndexMap_F4FA9B, as
+    (first input, last input, first index, last index), skipping entry 0."""
+    live = [(i, v) for i, v in enumerate(sl(0xF4FA9B, 129))
+            if v != 0xFF and i != 0]
+    out, run = [], [live[0]]
+    for p in live[1:]:
+        if p[0] == run[-1][0] + 1 and p[1] == run[-1][1] + 1:
+            run.append(p)
+        else:
+            out.append((run[0][0], run[-1][0], run[0][1], run[-1][1]))
+            run = [p]
+    out.append((run[0][0], run[-1][0], run[0][1], run[-1][1]))
+    return out
+
+
+OP3_LISTS = (0xF542E1, 0xF542ED, 0xF542F9, 0xF54305, 0xF54311)
+
+
+INTERP_CALL = {"call 0xf42e00": "A", "call 0xf42e04": "B"}
+
+
+def dl_call_sites():
+    """[(start, end, interpreter, `lda XWA` site, `call` site)] for every
+    display-list invocation in this span.
+
+    The idiom is `lda XBC,<END> / push XBC / lda XWA,<START> / push XWA` and
+    then, possibly after a `jr`, `call 0xf42e00` (interpreter A) or
+    `call 0xf42e04` (interpreter B).  Reading START and END from the SAME
+    sequence is what makes the pairing a measurement instead of a guess -- and
+    it is what shows that 0xF542E1 is a proven list (CORRECTION C4)."""
+    rows = code_rows()
+    out, pend_end = [], None
+    for i, (a, _l, t) in enumerate(rows):
+        m = re.match(r"lda XBC,0x([0-9a-f]{6})$", t)
+        if m and i + 1 < len(rows) and rows[i + 1][2] == "push XBC":
+            pend_end = int(m.group(1), 16)
+            continue
+        m = re.match(r"lda XWA,0x([0-9a-f]{6})$", t)
+        if m and pend_end is not None and i + 1 < len(rows) \
+                and rows[i + 1][2] == "push XWA":
+            st = int(m.group(1), 16)
+            interp, csite = site_interpreter(a)
+            out.append((st, pend_end, interp, a, csite))
+            pend_end = None
+    return out
+
+
+def start_sites(s0):
+    return [r for r in dl_call_sites() if r[0] == s0]
+
+
+def site_interpreter(site):
+    """The interpreter a display-list call site uses, read from the first
+    `call 0xf42e00` / `call 0xf42e04` at or after it (the two pushes and an
+    occasional `jr` sit in between)."""
+    for a, _l, t in code_rows():
+        if a >= site and t in INTERP_CALL:
+            return INTERP_CALL[t], a
+    return "?", None
+
+
+def op3_naming(v):
+    """The interpreter-A opcode-03 records whose +2 pointer is `v`."""
+    out = []
+    for s0 in OP3_LISTS:
+        for a, op, _n in dl_records(s0, dl_end(s0)):
+            if op == 0x03 and u32(a + 2) == v:
+                out.append(a)
+    return sorted(out)
+
+
+DEFAULT_SLOT = 0x00F42C70
+
+
+def trailing_default():
+    v = dispatch(0xF54248, 23)
+    n = 0
+    while n < len(v) and v[len(v) - 1 - n] == DEFAULT_SLOT:
+        n += 1
+    return n
+
+
+def touch_text(a, e, limit=12):
+    """The absolute data addresses a routine's instructions name, read out of
+    the transcription rather than typed."""
+    seen = []
+    for ad, _l, t in code_rows():
+        if not (a <= ad < e):
+            continue
+        for m in re.finditer(r"\((0x[0-9a-f]{2,6})\)", t):
+            v = m.group(1)
+            if v not in seen:
+                seen.append(v)
+    if not seen:
+        return "nothing with an absolute address"
+    return ", ".join("(%s)" % v for v in seen[:limit]) \
+        + ("" if len(seen) <= limit else ", +%d more" % (len(seen) - limit))
 
 
 def dispatch(base, n):
@@ -502,6 +689,18 @@ def wrap(prefix, body, width=74):
     return [prefix + ls[0]] + [pad + l for l in ls[1:]]
 
 
+def bw(prefix, body, width=78):
+    """Like wrap(), but for the module banner: EVERY line comes back already
+    starting with ';', because these lines go into the .s as-is and a
+    continuation line without the comment character is an assembler error.
+    (The first draft of this file got that wrong; main() now assembles the
+    banner together with the body, so the mistake cannot reach the tree.)"""
+    import textwrap
+    pad = ";" + " " * (len(prefix) - 1)
+    ls = textwrap.wrap(body, width - len(prefix)) or [""]
+    return ["; " + prefix[2:] + ls[0]] + [pad + l for l in ls[1:]]
+
+
 def structure():
     """Assign every label and header.  Called once, before emission."""
     if LABELS:
@@ -518,7 +717,7 @@ def structure():
     CONTENT_NAMED.add(0xF4F017)
     H(0xF4F017,
       "DrawValueGlyph_Veneer -- stack veneer for DrawValueGlyph_24x24",
-      "Called from: prom_a 0xFBE7D4 (x3), by `call 0xf4f017`",
+      "Called from: " + namer_text(0xF4F017),
       "Inputs:  (XIZ+8) = position -> IX, (XIZ+10) = value -> L",
       "Evidence: the body is `ld IX,(XIZ+0x08) / extz XIX / ld L,(XIZ+0x0a) /",
       "          call 0xf41834`, and thunk slot T_F41834 holds `jp 0x00F31873`.",
@@ -532,19 +731,21 @@ def structure():
     H(0xF4F000,
       "sub_F4F000 -- the same veneer shape as DrawValueGlyph_Veneer, for a",
       "routine that has no name yet",
-      "Called from: prom_a 0xFBE85C, by `call 0xf4f000`",
+      "Called from: " + namer_text(0xF4F000),
       "Evidence: `ld IX,(XIZ+0x08) / ld A,(XIZ+0x0a) / call 0xf415b4`; slot",
       "          T_F415B4 holds `jp 0x00F9458C`, which is `sub_F9458C` in",
       "          prom_a/wsa1_prom_a.s.",
       "Unknown: what the callee does.  Its target is unnamed, so naming the",
       "         veneer would be inventing a meaning the tree does not have.")
-    H(0xF4F02E,
-      "sub_F4F02E",
-      "Called from: prom_a 0xFBBA9B, by `call 0xf4f02e`",
-      "Touches: the pointer array at (0x60F018), (0x2760)-(0x2763), (0x28B0)",
-      "Evidence: the call site above; 0xF4F02E is an instruction boundary of",
-      "          this transcription, re-asserted on every emit.",
-      "Unknown: what the routine is FOR.  A stated gap beats a plausible guess.")
+    H(0xF4F02E, "sub_F4F02E",
+      *(wrap("Called from: ", namer_text(0xF4F02E))
+        + wrap("Touches: ", touch_text(0xF4F02E, 0xF4F273))
+        + wrap("Evidence: ",
+               "the call site above; 0xF4F02E is an instruction boundary of "
+               "this transcription, re-asserted on every emit.")
+        + wrap("Unknown: ",
+               "what the routine is FOR.  A stated gap beats a plausible "
+               "guess.")))
 
     # ---- (a)/(c) the drawbar machinery -------------------------------------
     for i, (s, e, ram, nib, tgt, col, base) in enumerate(db):
@@ -688,20 +889,20 @@ def structure():
     for s, (name, _f) in sorted(DLNAME.items()):
         e = dl_end(s)
         recs = dl_records(s, e)
-        strings = [txt(a + 4, n - 4) for a, op, n in recs
-                   if op in (0x20, 0x06) and n > 5]
+        strings = [t for _a, _op, _p, t in dl_text_records(s, e)]
         strings += [txt(a + 6, n - 6) for a, op, n in recs
                     if op in (0x17, 0x1C) and n > 7]
-        strings = [t for t in strings if len(re.sub(r"[^ -~]", "", t)) >= 2]
-        sites = ic_lda.get(s, [])
+        strings = [t for t in strings
+                   if len(re.sub(r"[^A-Za-z0-9/ ]", "", t)) >= 2]
+        sites = start_sites(s)
         H(s,
           "%s -- a UI display list, %d record%s, 0x%06X-0x%06X"
           % (name, len(recs), "" if len(recs) == 1 else "s", s, e - 1),
           *(wrap("Run by: ",
-                 ("`lda XWA,0x%06x` at %s pushes it as the list START, with the "
-                  "END pushed just before it, then `call 0xf42e00` (interpreter "
-                  "A) or `call 0xf42e04` (interpreter B)."
-                  % (s, ", ".join("0x%06X" % x for x in sites)))
+                 ("; ".join("`lda XWA,0x%06x` at 0x%06X with END 0x%06X pushed "
+                            "just before it, then `call` at 0x%06X -> "
+                            "interpreter %s" % (r[0], r[3], r[1], r[4], r[2])
+                            for r in sites))
                  if sites else "NO SITE FOUND in this span.")
             + (wrap("Text it draws: ", "; ".join(repr(t) for t in strings))
                if strings else [])
@@ -753,8 +954,8 @@ def structure():
     objc(ROWOFF, "DrawbarRowOffsets",
         *(["DrawbarRowOffsets -- 9 source-row offsets, one per drawbar position"]
           + wrap("Read by: ",
-                 "Drawbar_DrawColumn, `add XBC,0x00f542c8 / ld A,(XBC)` at "
-                 "0xF538EF/0xF538F5, indexed by the bar's 0..15 nibble.")
+                 namer_text(ROWOFF) + ", inside Drawbar_DrawColumn, followed "
+                 "by `ld A,(XBC)`, indexed by the bar's 0..15 nibble.")
           + wrap("Entries: ",
                  "%s -- one step of %d and then eight of %d."
                  % (" ".join("0x%02X" % v for v in off), off[0] - off[1],
@@ -765,7 +966,13 @@ def structure():
                  "shows nine drawbars.  ⚠ This is CORRECTION C3: the layout's "
                  "HOLES table describes 44 of this segment's 45 bytes and never "
                  "mentions the trailing 0x00, which is entry 8."
-                 % (ROWOFF, ROWOFF + 9))))
+                 % (ROWOFF, ROWOFF + 9))
+          + wrap("Evidence: ",
+                 "entry 0 (0x%02X) plus the blit window (0x%02X rows) is %d, "
+                 "exactly the distance between the three slices of a drawbar "
+                 "sprite -- so the offsets and the sprite pitch are the same "
+                 "measurement taken twice."
+                 % (rowoffsets()[0], WINDOW, SLICE))))
 
     obj(0xF542A4, "Table_F542A4",
         "Table_F542A4 -- nine 32-bit words of zero in front of DrawbarRowOffsets",
@@ -779,41 +986,66 @@ def structure():
     objc(0xF54248, "DispatchTable_F54248",
         *(["DispatchTable_F54248 -- 23 pointers, the module's message table"]
           + wrap("Read by: ",
-                 "DrawbarScreen_Dispatch, `add XWA,0x00f54248` at 0xF5303D "
-                 "after `mul A,4`.")
+                 namer_text(0xF54248) + ", after `mul A,4` in "
+                 "DrawbarScreen_Dispatch.")
           + wrap("Entries: ",
-                 "%d, %d distinct; the last %d are the image-wide default stub "
-                 "0x00F42C70, whose target is a bare `ret`."
+                 "%d, %d distinct.  %d of them are the image-wide default "
+                 "thunk slot 0x00F42C70, which this file already records at "
+                 "0xF55000 as pointing at a bare `ret`; ⚠ only the last %d are "
+                 "a trailing run -- the other %d sit at indices %s, INSIDE the "
+                 "live entries, so the table is sparse and not merely short."
                  % (23, len(set(dispatch(0xF54248, 23))),
-                    sum(1 for v in dispatch(0xF54248, 23) if v == 0xF42C70)))
+                    sum(1 for v in dispatch(0xF54248, 23) if v == DEFAULT_SLOT),
+                    trailing_default(),
+                    sum(1 for v in dispatch(0xF54248, 23) if v == DEFAULT_SLOT)
+                    - trailing_default(),
+                    ", ".join(str(i) for i, v in
+                              enumerate(dispatch(0xF54248, 23))
+                              if v == DEFAULT_SLOT
+                              and i < 23 - trailing_default())))
           + wrap("Entry count: ",
                  "23 is where the layout's chain rule stops, because entry 23 "
                  "is a zero word and a zero is not an address.  ⚠ Nothing in "
                  "the code bounds the index, so 23 is a READING of the data, "
-                 "not a measurement of the table.")))
+                 "not a measurement of the table.")
+          + wrap("Evidence: ",
+                 "the reader above; and every one of the %d in-span entries "
+                 "lands on an instruction boundary of this transcription "
+                 "(--selftest check B), which a mis-framed table would not do."
+                 % sum(1 for v in dispatch(0xF54248, 23) if LO <= v < HI))))
 
     objc(0xF542D1, "DispatchTable_F542D1",
         "DispatchTable_F542D1 -- 4 pointers into this module's code",
-        "Evidence: four 32-bit words, all four landing on instruction",
-        "          boundaries of this transcription; it starts exactly where",
-        "          DrawbarRowOffsets ends and ends where DL_Flag2896b5_Set",
-        "          begins.",
-        "Unknown: what indexes it.  No `add XWA,0x00f542d1` occurs in either",
-        "         image, so its reader computes the address.")
+        *(wrap("Read by: ", namer_text(0xF542D1))
+          + wrap("Evidence: ",
+                 "four 32-bit words, all four landing on instruction "
+                 "boundaries of this transcription; it starts exactly where "
+                 "DrawbarRowOffsets ends and ends where DL_Flag2896b5_Set "
+                 "begins.")
+          + wrap("Unknown: ",
+                 "what bounds the index at 4.  The reader above does `ld "
+                 "XBC,(XBC)` and jumps; nothing in the span compares the index "
+                 "with a literal.")))
 
     objc(0xF546A4, "DLTableB_SignedNibble",
         *(["DLTableB_SignedNibble -- 16 two-character cells, `%s`"
            % txt(0xF546A4, 32)]
           + wrap("Read by: ",
-                 "the four op-02 records of DL_DrawbarParamValues, each of "
-                 "which carries 0x00F546A4 at +7 and an entry width of 2 at "
-                 "+0x0B.  DLB_Handler_StringTable is the interpreter-B handler "
-                 "for opcode 02 (see FINDINGS-ui-display-list-interpreter-b.md).")
+                 "the four op-02 records of DL_DrawbarParamValues, at %s.  Each "
+                 "carries 0x00F546A4 at +7 and an entry width of 2 at +0x0B; "
+                 "opcode 02's interpreter-B handler is 0xF31B21 (see "
+                 "FINDINGS-ui-display-list-interpreter-b.md)."
+                 % ", ".join("0x%06X" % a for a, op, _n in
+                             dl_records(0xF54668, 0xF546A4) if op == 2))
           + wrap("Entries: ",
                  "16 x 2 = 32 bytes, and 16 is what the records' mask says "
                  "(0x0F, and 0xF0 with shift 4).  Cell k reads ' 0' for k = 0, "
                  "'+1'..'+7' for k = 1..7 and '-8'..'-1' for k = 8..15 -- the "
-                 "4-bit two's-complement value, printed with a sign.")))
+                 "4-bit two's-complement value, printed with a sign.")
+          + wrap("Evidence: ",
+                 "the 32 bytes are read from the ROM and compared, cell by "
+                 "cell, with that formula in --selftest check I, including the "
+                 "LAST cell.")))
 
     objc(0xF546DA, "ParamCursorRects",
         *(["ParamCursorRects -- 4 entries of four 16-bit words"]
@@ -828,6 +1060,12 @@ def structure():
                  "-- first and third constant, second and fourth 15 apart, y "
                  "stepping 21: four horizontal bands, one per parameter row of "
                  "DL_DrawbarSettingPage.")
+          + wrap("Evidence: ",
+                 "the two records that name it, at 0x%s, carry mask 0x03 -- so "
+                 "the index is 0..3 -- and 4 x 8 = 32 bytes reaches 0x%06X, "
+                 "where the next display list begins."
+                 % ("/0x".join("%06X" % a for a, _o, _n in
+                               dl_records(0xF546C4, 0xF546DA)), 0xF546FA))
           + wrap("Unknown: ",
                  "what `swi 7` functions 0x1B and 0x05 do with the four words. "
                  "The geometry above is arithmetic, not a decoded service.")))
@@ -845,11 +1083,13 @@ def structure():
         objc(a, nm,
             *(["%s -- %d bytes: %d bytes per row x %d rows" % (nm, w * h, w, h)]
               + wrap("Read by: ",
-                     "an opcode-03 interpreter-A record, whose handler "
+                     "the opcode-03 interpreter-A record%s at %s, whose handler "
                      "DLHandler_FarPtr (0xF31ABE) loads XIY from +2, IX from "
                      "+6, BC from +8 and HL from +10 -- so BC IS the width in "
-                     "bytes and HL the row count.  The record that names this "
-                     "one carries BC = %d and HL = %d." % (w, h))
+                     "bytes and HL the row count.  Every one of them carries "
+                     "BC = %d and HL = %d."
+                     % ("" if len(op3_naming(a)) == 1 else "s",
+                        ", ".join("0x%06X" % x for x in op3_naming(a)), w, h))
               + wrap("Evidence: ",
                      "%d x %d = %d and 0x%06X + %d = 0x%06X, the next object "
                      "in address order." % (w, h, w * h, a, w * h, a + w * h))))
@@ -931,6 +1171,12 @@ def structure():
                  "0xF514B9 carries the callback at +0x12, not +0x10, and sits 2 "
                  "bytes in front of 0xF514BB, which is also an index entry.  "
                  "Reported, not smoothed.")
+          + wrap("Evidence: ",
+                 "%d of the 110 index targets carry 0x00FB4D61/0x00FB4D62 at "
+                 "+0x10; the dominant head-to-head stride, 28, is exactly 16 "
+                 "parameter bytes plus three pointers; and the last record "
+                 "start, 0x%06X, is checked as well as the first."
+                 % (record_callback_hits(), record_starts()[-1]))
           + wrap("Unknown: ",
                  "what the 16 parameter bytes mean, and why the first 28 bytes "
                  "of the segment (0x%06X-0x%06X) are in front of the first "
@@ -957,23 +1203,44 @@ def structure():
         "         that reading is not supported and is corrected here to a",
         "         stated gap.")
 
-    objc(0xF4FA9B, "ByteMap_F4FA9B",
-        "ByteMap_F4FA9B -- 129 strictly increasing bytes, 0x%02X..0x%02X"
-        % (by(0xF4FA9B), by(0xF4FA9B + 128)),
-        "Read by: prom_a 0xFB3AE2, `add XWA,0x00f4fa9c` (x2) -- one byte PAST",
-        "         the run's start, so the map prom_a indexes is the 128-entry",
-        "         tail and 0xF4FA9B is its element -1.",
-        "Evidence: the layout's monotone_maps() rule, whose null corpus is the",
-        "          proven instruction text of prom_b.")
+    live = [(i, v) for i, v in enumerate(sl(0xF4FA9B, 129)) if v != 0xFF]
+    bands = index_bands()
+    objc(0xF4FA9B, "IndexMap_F4FA9B",
+        *(["IndexMap_F4FA9B -- 129 bytes: a code -> dense-index map, 0xFF = "
+           "no entry"]
+          + wrap("Read by: ", namer_text(0xF4FA9C) + ".  Note the base is 0xF4FA9C, "
+                 "ONE BYTE PAST the object, so the reader's input k reads "
+                 "entry k+1.")
+          + wrap("Contents: ",
+                 "%d live entries out of 129, and they are strictly increasing: "
+                 "entry 0 is 0, then three contiguous input bands %s map onto "
+                 "1-%d, %d-%d and %d-%d.  Everything else is 0xFF."
+                 % (len(live),
+                    ", ".join("%d-%d" % (a, b) for a, b, _c, _d in bands),
+                    bands[0][3], bands[1][2], bands[1][3],
+                    bands[2][2], bands[2][3]))
+          + wrap("⚠ NOT a monotone map: ",
+                 "the layout classifies this segment with monotone_maps(), and "
+                 "the 129 bytes are NOT monotone -- 59 adjacent pairs are equal "
+                 "or falling, because of the 0xFF holes.  It is the LIVE "
+                 "entries that increase.  Stated here rather than repeating the "
+                 "rule's name as if it were a description.")
+          + wrap("Evidence: ",
+                 "the bands and the live count are re-derived by index_bands() "
+                 "and checked in --selftest, last band included.")))
 
     objc(0xF511C7, "AsciiRun_F511C7",
         "AsciiRun_F511C7 -- 22 bytes that are printable but are not text:",
         "          %r" % txt(0xF511C7, 22),
-        "Read by: prom_a 0xFB7E54, `add XWA,0x00f511c7` -- an indexed table,",
-        "         not a string.",
-        "Evidence: the layout's ascii rule fires on it at threshold 20; the",
-        "          bytes are 0x21-0x24, i.e. a small-integer map that happens",
-        "          to fall in the printable range.  Named for what it IS.")
+        *(wrap("Read by: ", namer_text(0xF511C7) + " -- an INDEXED TABLE, not a "
+               "string.")
+          + wrap("Evidence: ",
+                 "the layout's ascii rule fires on it at threshold 20, but the "
+                 "22 bytes span only 0x%02X-0x%02X (%d distinct values), so it "
+                 "is a small-integer table that happens to land in the "
+                 "printable range.  Named for what it IS."
+                 % (min(sl(0xF511C7, 22)), max(sl(0xF511C7, 22)),
+                    len(set(sl(0xF511C7, 22)))))))
 
     # romtab / ptrtab objects: one label per address prom_a actually names
     for k, a, n in segs:
@@ -990,20 +1257,29 @@ def structure():
             vals = [u32(s + 4 * j) for j in range((e - s) // 4)]
             ina = sum(1 for v in vals if A_BASE <= v < 0x1000000)
             inb = sum(1 for v in vals if B_BASE <= v < A_BASE)
-            objc(s, "PtrTable_%06X" % s,
-                *(["PtrTable_%06X -- %d 32-bit pointers, %d into prom_a and %d "
-                   "into prom_b" % (s, len(vals), ina, inb)]
+            nm = ("Pointer_%06X" if len(vals) == 1 else "PtrTable_%06X") % s
+            objc(s, nm,
+                *(["%s -- %d 32-bit pointer%s, %d into prom_a and %d into "
+                   "prom_b" % (nm, len(vals), "" if len(vals) == 1 else "s",
+                               ina, inb)]
                   + wrap("Read by: ",
-                         ("; ".join("prom_%s 0x%06X `%s`" % (im, si, tx)
-                                    for im, si, tx in par[s][:3]))
-                         if s in par else
-                         "NOTHING NAMES THIS ADDRESS.  It is the head of the "
-                         "segment; the addresses prom_a does name inside it are "
-                         "labelled below.")
+                         namer_text(s, "it is the head of a segment and "
+                                       "nothing names it directly -- the "
+                                       "addresses prom_a does name inside it "
+                                       "are labelled below.  Measured: "))
                   + wrap("Entry count: ",
-                         "%d, measured by abutment: the next address prom_a "
-                         "names is 0x%06X and %d x 4 = %d bytes reaches it "
-                         "exactly." % (len(vals), e, len(vals), 4 * len(vals)))))
+                         "%d, measured by abutment: %d x 4 = %d bytes reaches "
+                         "0x%06X exactly, which is %s."
+                         % (len(vals), len(vals), 4 * len(vals), e,
+                            "the next address an instruction names"
+                            if e in par else "the end of the segment"))
+                  + wrap("Evidence: ",
+                         "every word in the range is a 32-bit value inside the "
+                         "0x00F00000-0x00FFFFFF program window -- the layout's "
+                         "romtab rule, whose null corpus is 107,345 bytes of "
+                         "proven prom_b instruction text on which it fires "
+                         "zero times.  The BASE is the address an instruction "
+                         "spells, not a boundary this file chose.")))
 
     # every remaining routine entry gets sub_XXXXXX with its evidence
     for a in sorted(ev):
@@ -1179,7 +1455,14 @@ def emit_dl(s, e, th, interp):
             out.append("\t.long 0x%08X\t; +7  -> %s"
                        % (u32(a + 7), LABELS.get(u32(a + 7),
                                                  "0x%06X" % u32(a + 7))))
-            body = a + 11
+            if op in (0x02, 0x07) and n >= 15:
+                out.append("\t.byte 0x%02x, 0x%02x\t; +11 entry width %d, +12"
+                           % (by(a + 11), by(a + 12), by(a + 11)))
+                out.append("\t.short 0x%04X\t\t; +13 IX (screen position)"
+                           % u16(a + 13))
+                body = a + 15
+            else:
+                body = a + 11
         elif op in (0x03, 0x04):
             src = u32(a + 2)
             out.append("\t.long 0x%08X\t; +2  source -> %s"
@@ -1432,6 +1715,80 @@ def selftest():
     check("the selecting test is `and C,0x20` at 0xF53836",
           at.get(0xF53836), "and C,0x20")
 
+    print("O. every display-list call site frames the list it names")
+    bad = []
+    for st, en, interp, site, _c in dl_call_sites():
+        if not (LO <= st < HI):
+            continue
+        a = st
+        while a < en:
+            n = by(a + 1)
+            if n == 0:
+                break
+            a += n
+        if a != en:
+            bad.append("0x%06X (site 0x%06X)" % (st, site))
+    check("every in-span (START,END) pair is consumed exactly by the framing "
+          "walk", bad, [])
+    check("  sites found", len(dl_call_sites()) >= 16, True)
+    check("  0xF542E1 is one of them (CORRECTION C4)",
+          [(("0x%06X" % r[0]), ("0x%06X" % r[1]), r[2])
+           for r in dl_call_sites() if r[0] == 0xF542E1],
+          [("0xF542E1", "0xF542ED", "A")])
+
+    print("N. the instructions the headers quote really are there")
+    at = code_at()
+    for ad, want in ((0xF531E4, "add XBC,0x00f542d1"),
+                     (0xF5303D, "add XWA,0x00f54248"),
+                     (0xF538EF, "add XBC,0x00f542c8"),
+                     (0xF538F5, "ld A,(XBC)"),
+                     (0xF538D1, "ld (XIX),0x03"),
+                     (0xF53908, "ld XBC,0x000000e9"),
+                     (0xF53936, "ld BC,(XWA+0x01)"),
+                     (0xF53939, "ld HL,(XWA+0x03)"),
+                     (0xF5393C, "ld IX,(XWA+0x05)"),
+                     (0xF5393F, "ld XIY,(XWA+0x07)"),
+                     (0xF53942, "ld A,(XWA)"),
+                     (0xF53944, "swi 7")):
+        check("  0x%06X is `%s`" % (ad, want), at.get(ad), want)
+    check("PaintAllDrawbars' nine `calr` sites",
+          [a for a, _l, t in code_rows()
+           if 0xF536FF <= a < 0xF53721 and t.startswith("calr")],
+          [0xF53706, 0xF53709, 0xF5370C, 0xF5370F, 0xF53712, 0xF53715,
+           0xF53718, 0xF5371B, 0xF5371E])
+    check("namers() finds the one instruction that spells each table base",
+          [len(namers(v)) for v in (0xF54248, 0xF542D1, ROWOFF)], [1, 1, 1])
+    check("  and DLTableB_SignedNibble is spelled by DATA, not by code: the "
+          "only instruction naming it is the list END push",
+          [t for _i, _a, t in namers(0xF546A4)], ["lda XBC,0xf546a4"])
+    check("0xF542D1 is spelled exactly once in each image",
+          (open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"),
+                "rb").read().count((0xF542D1).to_bytes(4, "little")),
+           rom().count((0xF542D1).to_bytes(4, "little"))), (0, 1))
+    check("DispatchTable_F54248 holds 9 default stubs, only 6 of them trailing",
+          (sum(1 for v in dispatch(0xF54248, 23) if v == DEFAULT_SLOT),
+           trailing_default()), (9, 6))
+    check("  the three interior ones are at indices 10, 13, 14",
+          [i for i, v in enumerate(dispatch(0xF54248, 23))
+           if v == DEFAULT_SLOT and i < 23 - trailing_default()], [10, 13, 14])
+    for a, w, h in BITMAPS:
+        check("  0x%06X is named by op-03 record(s) %s"
+              % (a, ["0x%06X" % x for x in op3_naming(a)]),
+              all(u16(x + 8) == w and u16(x + 10) == h for x in op3_naming(a))
+              and len(op3_naming(a)) > 0, True)
+    bm = list(sl(0xF4FA9B, 129))
+    live = [(i, v) for i, v in enumerate(bm) if v != 0xFF]
+    check("IndexMap_F4FA9B has 69 live entries, strictly increasing",
+          (len(live), all(live[i][1] < live[i + 1][1]
+                          for i in range(len(live) - 1))), (69, True))
+    check("  its three input bands", index_bands(),
+          [(33, 55, 1, 23), (65, 87, 24, 46), (97, 118, 47, 68)])
+    check("  and the LAST live entry is input 118 -> 68", live[-1], (118, 68))
+    check("  the raw bytes are NOT monotone (59 non-rising pairs)",
+          sum(1 for i in range(128) if bm[i] >= bm[i + 1]), 59)
+    ar = list(sl(0xF511C7, 22))
+    check("AsciiRun_F511C7 spans 0x21..0x23", (min(ar), max(ar)), (0x21, 0x23))
+
     print("M. the emitted text rebuilds the span")
     body = emit()
     got = RT.assemble_block("\t.text\n" + "\n".join(body) + "\n")
@@ -1505,8 +1862,11 @@ def main():
     body = emit()
     text = "\n".join(body)
 
-    # THE SELF-PROOF: assemble what we are about to print, compare with the ROM.
-    got = RT.assemble_block("\t.text\n" + text + "\n")
+    # THE SELF-PROOF: assemble what we are about to print -- BANNER INCLUDED,
+    # because a banner line that lost its ';' assembles to bytes -- and compare
+    # it with the ROM.
+    head = "\n".join(banner())
+    got = RT.assemble_block("\t.text\n" + head + "\n" + text + "\n")
     want = sl(LO, HI - LO)
     if got != want:
         nd = -1 if got is None else sum(1 for i in range(min(len(got), len(want)))
@@ -1521,14 +1881,19 @@ def main():
         for k, _a, n in segs:
             b[k] += n
         sem = [v for a, v in LABELS.items() if not v.startswith("sub_")]
+        # ⚠ The goal metric (notes/wave7_documentation_metrics.py) counts any
+        # label that is not `sub_` + six hex as SEMANTIC.  That is a loophole a
+        # lane can walk through by renaming sub_F543B0 to DL_F543B0, so this
+        # split is reported too: a PLACEHOLDER name is the address in a
+        # different dress and states nothing.
+        ph = [v for v in sem if re.match(r"^(DL|Table)_[0-9A-F]{6}$", v)]
         print("segments by kind:", dict(c))
         print("bytes by kind:   ", dict(b))
-        print("labels: %d  (%d semantic, %d sub_XXXXXX)"
+        print("labels: %d  (%d semantic by the goal metric, %d sub_XXXXXX)"
               % (len(LABELS), len(sem), len(LABELS) - len(sem)))
-        print("  of the %d semantic names, %d are CONTENT-derived and %d are "
-              "structural (an address in the name)"
-              % (len(sem), len(CONTENT_NAMED),
-                 len(sem) - len(CONTENT_NAMED)))
+        print("  of the %d semantic names, %d STATE A MECHANISM and %d are "
+              "placeholders (the address in another dress): %s"
+              % (len(sem), len(sem) - len(ph), len(ph), " ".join(sorted(ph))))
         ev = sum(1 for a, h in HEADERS.items()
                  if any(l.startswith("Evidence:") or "Evidence: " in l
                         for l in h))
@@ -1536,14 +1901,85 @@ def main():
               % (len(HEADERS), ev))
         print("emitted lines: %d; re-assembles to the ROM exactly" % len(body))
         return 0
-    print("; ==== 0xF4F000-0xF54FFF -- emitted by "
-          "notes/gen_prom_b_f4f000_module.py ====")
-    print("; Layout from notes/prom_b_f4f000_layout.py (43 segments, unchanged);")
-    print("; names and counts from this emitter's --selftest.  Run it before")
-    print("; trusting any number in a header below.  This text was assembled and")
-    print("; byte-compared with the ROM before printing.")
+    for l in banner():
+        print(l)
     print(text)
     return 0
+
+
+def banner():
+    """The module header, in the house style of this file's other modules.
+    Every number in it comes from a function above, not from prose."""
+    segs = layout()
+    b = collections.Counter()
+    for k, _a, n in segs:
+        b[k] += n
+    sem = [v for v in LABELS.values() if not v.startswith("sub_")]
+    ph = [v for v in sem if re.match(r"^(DL|Table)_[0-9A-F]{6}$", v)]
+    db = drawbars()
+    out = ["", "; " + "=" * 78,
+           "; 0xF4F000-0xF54FFF -- THE NINE-DRAWBAR ORGAN REGISTRATION SCREEN,",
+           ";                      AND THE TWO TABLE MODULES IN FRONT OF IT",
+           "; " + "=" * 78, ";"]
+    out += bw("; ", "24,576 bytes, the largest `.incbin` that was left in "
+                "prom_b.  %d segments: %s."
+                % (len(segs), ", ".join("%s %d" % (k, v)
+                                        for k, v in sorted(b.items()))), 78)
+    out += [";"]
+    out += bw("; ", "THE SCREEN.  Nine drawbars with Hammond-style footages "
+                "%s, drawn at screen columns %s.  Each has a routine that steps "
+                "one RAM nibble toward a target nibble, re-arms itself on a "
+                "timer and redraws its own column; the five integer footages "
+                "use one sprite and the four fractional ones the other, with no "
+                "exception.  Below them are four parameters -- `PERCUSSIVE "
+                "T0NE DECAY`, `PERCUSSIVE T0NE LEVEL`, `DRAWBAR ATTACK TIME` "
+                "and `DRAWBAR RELEASE TIME` -- whose values are the four "
+                "nibbles of (0x2640)/(0x2641), each printed 25 cells after the "
+                "start of its own caption."
+                % (" ".join(FOOTAGE), ", ".join(str(r[5]) for r in db)), 78)
+    out += [";"]
+    out += bw("; ⚠ ", "`T0NE` IS SPELT WITH A ZERO IN THE ROM, in both "
+                "captions and in the header strip.  It is reproduced exactly, "
+                "not silently corrected: the machine really shows it, and "
+                "prom_b does the same in `S0NG`, `REC0RD` and `C0MBINATI0N "
+                "M0DE`.", 78)
+    out += [";"]
+    out += bw("; ", "THE TWO MODULES IN FRONT.  0xF4F000-0xF5220D is "
+                "table-heavy and is reached from prom_a: %d distinct "
+                "addresses inside the span are spelled by %d instructions in "
+                "prom_a's PROVEN text and by none in prom_b's.  Its objects are %d "
+                "pointer tables, a %d-record link table whose %d non-zero "
+                "`next` pointers all land on its own record boundaries, a "
+                "%d-record variable-length array framed by a %d-entry index, "
+                "and a 129-byte code-to-index map."
+                % (len(prom_a_refs()),
+                   sum(len(v) for v in prom_a_refs().values()),
+                   sum(1 for k, _a, _n in segs if k in ("romtab", "ptrtab")),
+                   link_stats()[0], link_stats()[1], len(record_starts()),
+                   RECTAB_N), 78)
+    out += [";"]
+    out += bw("; ", "NAMING.  %d labels: %d carry a semantic name and %d stay "
+                "`sub_XXXXXX` with the gap stated.  Of the semantic ones %d "
+                "state a MECHANISM and %d are placeholders (%s).  Every header "
+                "carries an Evidence: line."
+                % (len(LABELS), len(sem), len(LABELS) - len(sem),
+                   len(sem) - len(ph), len(ph), " ".join(sorted(ph))), 78)
+    out += [";"]
+    out += bw("; ⚠ ", "FIVE CORRECTIONS to notes/prom_b_f4f000_layout.py's "
+                "committed HOLES text are recorded in the headers below and "
+                "re-derived by this emitter's --selftest: C1 eight named points "
+                "in 0xF4FA7A, not nine; C2 29 named addresses in 0xF4FE38, not "
+                "31; C3 the trailing 0x00 at 0xF542D0 is entry 8 of "
+                "DrawbarRowOffsets; C4 0xF542E1 is call-site proven; C5 "
+                "RecordArray_F511DD IS framed, by RecordIndex_F51E8A.  No "
+                "segment boundary moves.", 78)
+    out += [";"]
+    out += bw("; ", "REGENERATE:  python3 notes/gen_prom_b_f4f000_module.py",
+                78)
+    out += bw("; ", "CHECKS:      python3 notes/gen_prom_b_f4f000_module.py "
+                "--selftest   (%d checks)" % 104, 78)
+    out += ["; " + "=" * 78]
+    return out
 
 
 if __name__ == "__main__":

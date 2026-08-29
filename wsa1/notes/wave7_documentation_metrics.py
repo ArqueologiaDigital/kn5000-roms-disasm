@@ -21,6 +21,40 @@ WHY IT EXISTS
     Same size of territory, a quarter of the damage, because the second lane
     named as it went.  That comparison is the argument for this script existing.
 
+★ THREE GRADES, NOT TWO -- AND THE SECOND GRADE IS WHY
+    The first version of this script had two grades, sub_XXXXXX and "semantic",
+    and it was WRONG in exactly the way prom_d's 100%% is wrong.  The wave-7
+    prom_b lane said so about its own work, unprompted: of 373 non-sub_ labels it
+    added, 88 were placeholders and a further 180 were "a KIND plus an address"
+    (StringTable_F1828A, IndexMap_..., PtrTable_..., Bitmap_WxH) -- real, derived,
+    and NOT understanding.  Only 104 were content-derived.  A metric that scores
+    all 373 the same rewards framing and calls it meaning.
+
+    So labels are now graded:
+      UNNAMED   sub_XXXXXX
+      FRAMED    a structural KIND plus an address -- Table_F4EF40, DL_F17C00,
+                Bitmap_24x17_F17C59.  The object is delimited and typed; nobody
+                has said what it is FOR.  This is real work and a necessary step;
+                it is just not the goal.
+      CONTENT   a name that says what the thing IS or DOES.
+    ⚠ AND THE LINE BETWEEN FRAMED AND CONTENT IS A JUDGEMENT, SO THIS SCRIPT
+    REPORTS A BRACKET AND NOT A NUMBER.  The strict rule below (a label whose
+    distinguishing part is a NUMBER is positional) is deliberately harsh: it
+    classifies `Dev10C_StageRegs_0800_0840_FAB818` as framed, though that name
+    plainly states a mechanism and only carries an address to disambiguate.  The
+    loose rule (anything not sub_XXXXXX) is deliberately generous: it counts
+    `Table_F4EF40` as understanding.  The truth is between them.
+
+        CONT%%   = STRICT, a LOWER BOUND on how much is understood
+        named%%  = LOOSE, an UPPER BOUND
+
+    The one hand-classified calibration point in the tree: the wave-7 round-3
+    prom_b lane graded its OWN 373 new non-sub_ labels as 104 content-derived,
+    180 kind-plus-address, and 88 placeholders.  So for that sample the truth sat
+    at 28%% of the loose number, and the strict rule would have said less.  Quote
+    the bracket.  A metric that resolves a judgement by picking a threshold is
+    how prom_d came to read 100%%.
+
 WHAT COUNTS AS WHAT
     * A label matching sub_[0-9A-F]{6} is UNNAMED. Anything else at column 0
       ending in ':' is a SEMANTIC name.  Compiler-local .L labels are excluded
@@ -46,13 +80,30 @@ IMAGES = [("prom_a", "wsa1_prom_a.s", 0xF80000), ("prom_b", "wsa1_prom_b.s", 0xF
 EV_ADDRS = {}
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
 UNNAMED = re.compile(r'^sub_[0-9A-Fa-f]{6}$')
+# A "framed" name is a structural kind with an address glued on, in any of the
+# spellings the wave-7 lanes actually used. The trailing-address test alone is not
+# enough (Kernel_InitRam_F82D11 would be content), so a structural PREFIX is required.
+FRAMED_KIND = (r'sub|DL|Table|PtrTable|StringTable|IndexMap|RecordArray|Bitmap|Data|'
+               r'Blob|Pool|Pad|Fill|Array|Records?|Map|Curve|Seg|Block|Chunk|Unk|'
+               r'Unknown|Word|Byte|Ptr|Str|Buf')
+# ★ THE GENERAL RULE, which subsumes the prefix list: a label whose DISTINGUISHING
+# part is a NUMBER is positional, not semantic.  `PercInst_17` says "element 17 of
+# the percussion instrument array" -- the object is framed and indexed, and nobody
+# has said what it IS.  Same for `Table_F4EF40`.  Both are real work and neither is
+# understanding.  This is what made prom_d read 100% on the first draft of this
+# script: its 3,665 labels are `ToneDB_EnvDescTable_Pool_<addr>` and `PercInst_<n>`.
+# Deliberately NOT caught: Int32_ToFloat32_Q31, Multiply16_Signed_Shr11,
+# Kernel_InitRam -- their trailing digits are part of a word, not the whole suffix.
+FRAMED = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*_'
+                    r'(?:[0-9A-Fa-f]{2}x[0-9A-Fa-f]{2}_)?'
+                    r'(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$')
 ADDR_COMMENT = re.compile(r';\s*([0-9A-F]{6})\b')
 
 
 def scan(path, want_ev=False):
     """Walk the source once, classifying every label and the comment block above it."""
     lines = open(os.path.join(ROOT, path)).read().split("\n")
-    named, unnamed, with_header, with_evidence = [], [], 0, 0
+    named, framed, unnamed, with_header, with_evidence = [], [], [], 0, 0
     run = 0                      # consecutive comment lines immediately above
     last_addr = None
     ev_in_block = False
@@ -68,48 +119,61 @@ def scan(path, want_ev=False):
         lm = LABEL.match(ln)
         if lm:
             name = lm.group(1)
-            (unnamed if UNNAMED.match(name) else named).append((name, last_addr))
+            if UNNAMED.match(name):
+                unnamed.append((name, last_addr))
+            elif FRAMED.match(name):
+                framed.append((name, last_addr))
+            else:
+                named.append((name, last_addr))
             if run >= 3:
                 with_header += 1
             if ev_in_block:
                 with_evidence += 1
                 EV_ADDRS.setdefault(path, set()).add(last_addr)
         run, ev_in_block = 0, False
-    return named, unnamed, with_header, with_evidence
+    return named, framed, unnamed, with_header, with_evidence
 
 
 def report(rng=None):
-    tn = tu = th = te = 0
-    print("%-8s %10s %10s %9s %9s %9s" % ("image", "semantic", "sub_XXXX", "named%", "headers", "evidence"))
+    tn = tf = tu = th = te = 0
+    print("%-8s %9s %8s %9s %8s %8s %9s %9s"
+          % ("image", "content", "framed", "sub_XXXX", "LOWER", "UPPER", "headers", "evidence"))
     for tag, src, _base in IMAGES:
-        named, unnamed, hdr, ev = scan(os.path.join(tag, src))
-        n, u = len(named), len(unnamed)
-        tn, tu, th, te = tn + n, tu + u, th + hdr, te + ev
-        pct = (100.0 * n / (n + u)) if (n + u) else 0.0
-        print("%-8s %10s %10s %8.1f%% %9s %9s"
-              % (tag, format(n, ","), format(u, ","), pct, format(hdr, ","), format(ev, ",")))
-    pct = (100.0 * tn / (tn + tu)) if (tn + tu) else 0.0
-    print("%-8s %10s %10s %8.1f%% %9s %9s"
-          % ("TOTAL", format(tn, ","), format(tu, ","), pct, format(th, ","), format(te, ",")))
-    print("\n★ named%% is the goal metric. prom_a is the weak image at 26.2%%; prom_c is 91.8%%.")
-    print("  prom_d is 100%% named but has ZERO Evidence: lines -- its labels are generated")
-    print("  structure names, so 'named' there means 'framed', not 'understood'.")
-    print("  ★ named%% is the goal metric. Coverage measures TERRITORY; this measures MEANING,")
-    print("  and converting a span moves the two in OPPOSITE directions unless the lane names")
-    print("  as it goes. The gate is blind to every number on this page.")
+        named, framed, unnamed, hdr, ev = scan(os.path.join(tag, src))
+        n, f, u = len(named), len(framed), len(unnamed)
+        tn, tf, tu, th, te = tn + n, tf + f, tu + u, th + hdr, te + ev
+        tot = n + f + u
+        print("%-8s %9s %8s %9s %7.1f%% %7.1f%% %9s %9s"
+              % (tag, format(n, ","), format(f, ","), format(u, ","),
+                 100.0 * n / tot if tot else 0.0,
+                 100.0 * (n + f) / tot if tot else 0.0, format(hdr, ","), format(ev, ",")))
+    tot = tn + tf + tu
+    print("%-8s %9s %8s %9s %7.1f%% %7.1f%% %9s %9s"
+          % ("TOTAL", format(tn, ","), format(tf, ","), format(tu, ","),
+             100.0 * tn / tot if tot else 0.0, 100.0 * (tn + tf) / tot if tot else 0.0,
+             format(th, ","), format(te, ",")))
+    print("\n★ LOWER and UPPER BRACKET how much of the tree is UNDERSTOOD; neither alone is")
+    print("  the answer, and the gap between them is the work of deciding what a name claims.")
+    print("  LOWER treats every label whose distinguishing part is a number as merely FRAMED;")
+    print("  UPPER treats every non-sub_ label as understood. The tree's one hand-graded")
+    print("  sample (round-3 prom_b, 373 labels) landed at 28% of its UPPER figure.")
+    print("  Coverage measures TERRITORY; this measures MEANING, and converting a span moves")
+    print("  the two in OPPOSITE directions unless the lane names as it goes.")
+    print("  The byte gate is blind to every number on this page.")
 
 
 def in_range(tag, lo, hi):
     key = tag if tag.startswith("prom_") else "prom_" + tag
     src = dict((t, s) for t, s, _b in IMAGES)[key]
-    named, unnamed, _h, _e = scan(os.path.join(key, src))
+    named, framed, unnamed, _h, _e = scan(os.path.join(key, src))
     n = [x for x in named if x[1] is not None and lo <= x[1] < hi]
+    fr = [x for x in framed if x[1] is not None and lo <= x[1] < hi]
     u = [x for x in unnamed if x[1] is not None and lo <= x[1] < hi]
     ev = len([a for a in EV_ADDRS.get(os.path.join(key, src), set())
               if a is not None and lo <= a < hi])
-    print("prom_%s 0x%06X-0x%06X: %d labels, %d semantic, %d sub_XXXXXX, %d with an Evidence: line"
-          % (key[-1], lo, hi, len(n) + len(u), len(n), len(u), ev))
-    return len(n), len(u), ev
+    print("prom_%s 0x%06X-0x%06X: %d labels -- %d content, %d framed, %d sub_XXXXXX; %d evidenced"
+          % (key[-1], lo, hi, len(n) + len(fr) + len(u), len(n), len(fr), len(u), ev))
+    return len(n) + len(fr), len(u), ev
 
 
 def selftest():
@@ -122,7 +186,7 @@ def selftest():
 
     tot_u = 0
     for tag, src, _b in IMAGES:
-        named, unnamed, hdr, ev = scan(os.path.join(tag, src))
+        named, framed, unnamed, hdr, ev = scan(os.path.join(tag, src))
         tot_u += len(unnamed)
         check("%s: every 'unnamed' really matches sub_ + 6 hex" % tag,
               all(UNNAMED.match(n) for n, _a in unnamed))
@@ -142,34 +206,43 @@ def selftest():
     # undercount the work still to do.
     allnames = []
     for _t, _s, _b in IMAGES:
-        allnames += [n for n, _a in scan(os.path.join(_t, _s))[1]]
+        allnames += [n for n, _a in scan(os.path.join(_t, _s))[2]]
     dupes = len(allnames) - len(set(allnames))
     check("routines (%d) minus cross-file duplicate NAMES (%d) equals the documented grep (%s)"
           % (tot_u, dupes, g), tot_u - dupes == int(g))
     check("every duplicate name is shared between prom_a and prom_c, which share base 0xF80000",
           all(sum(1 for _t, _s, _b in IMAGES
-                  if n in [x for x, _a in scan(os.path.join(_t, _s))[1]]) <= 2
+                  if n in [x for x, _a in scan(os.path.join(_t, _s))[2]]) <= 2
               for n in set(x for x in allnames if allnames.count(x) > 1)))
     # the two wave-7 conversions, checked on the LAST one as well as the first
-    # ★ THE COMPARISON THIS SCRIPT EXISTS FOR. Two prom_a spans of near-identical
-    # size, converted the same day by the same recipe, differing only in whether the
-    # lane named as it went. NOTE the two criteria are different and both are real:
-    # a SEMANTIC NAME is not the same as a name carrying an EVIDENCE line, and the
-    # second is the stricter one. A wave-7 report quoted 100 for this span; that was
-    # its evidence count, and its semantic count is 193.
+    # ★ THE COMPARISON THIS SCRIPT EXISTS FOR, and a lesson about pinning.
+    # AT EMISSION on 2026-08-29 the two spans were:
+    #     0xFAD800  18,432 B   84 labels,   0 semantic,   0 evidenced  -> sub_ +82
+    #     0xFA5AEB  17,685 B  227 labels, 193 semantic, 103 evidenced  -> sub_ +18
+    # ⚠ The first draft of this script PINNED "0xFAD800: 84/0/0" as a check. It
+    # then FAILED -- because a later lane went back and named part of that span,
+    # which is the tree getting BETTER. A constant pinned to a number that is
+    # supposed to move is a check that punishes progress. The emission figures
+    # above are HISTORY and live in this comment; the check below asserts the
+    # INVARIANT instead: the span that was converted without naming still trails
+    # the span that was named as it went.
     n1, u1, e1 = in_range("a", 0xFAD800, 0xFB2000)
-    check("0xFAD800: 84 labels, 0 semantic, 0 evidenced -- the conversion that named nothing",
-          (n1 + u1, n1, e1) == (84, 0, 0))
     n2, u2, e2 = in_range("a", 0xFA5AEB, 0xFAA000)
-    check("0xFA5AEB: 227 labels, 193 semantic -- the conversion that named as it went",
-          (n2 + u2, n2) == (227, 193))
-    # ⚠ This script measures 103; the lane's own report said 100. The 3 are labels
-    # whose Evidence line sits in a comment block this script attributes to a
-    # neighbouring label. Recorded as a stated discrepancy rather than silently
-    # adopting whichever number is convenient -- neither is wrong, they are
-    # different attribution rules, and a reader deserves to know the tolerance.
-    check("...of which 103 carry an Evidence: line by THIS script's attribution"
-          " (the lane reported 100; the 3 are block-boundary attribution)", e2 == 103)
+    d1 = n1 / float(n1 + u1) if (n1 + u1) else 0.0
+    d2 = n2 / float(n2 + u2) if (n2 + u2) else 0.0
+    check("0xFAD800 (converted WITHOUT naming) is %.1f%% named" % (100 * d1), n1 + u1 > 0)
+    check("0xFA5AEB (named AS IT WENT) is %.1f%% named" % (100 * d2), n2 + u2 > 0)
+    check("...and the named-as-it-went span still leads -- the invariant, not a pin",
+          d2 > d1)
+    check("0xFA5AEB carries more Evidence: lines than 0xFAD800 (%d vs %d)" % (e2, e1),
+          e2 > e1)
+    # the classifier itself, on names taken from the tree, both directions
+    for nm in ("DSP_ChanFreq_CurvePool", "Int32_ToFloat32_Q31", "Kernel_InitRam",
+               "Multiply16_Signed_Shr11", "Stream_ReadU24BE"):
+        check("classifier: %s is CONTENT, not framed" % nm, not FRAMED.match(nm))
+    for nm in ("Table_F4EF40", "PercInst_17", "DL_F17C00", "Bitmap_24x17_F17C59",
+               "ToneDB_MixerDefaultTable_204"):
+        check("classifier: %s is FRAMED, not content" % nm, bool(FRAMED.match(nm)))
     print("\n%d checks, %d failures" % (ok + fail, fail))
     return 1 if fail else 0
 

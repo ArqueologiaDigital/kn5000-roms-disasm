@@ -110,6 +110,19 @@
 ;                      other unconverted prom_b span put together.  Contains a
 ;                      STANDARD MIDI FILE reader whose parse is decoded and
 ;                      checked (notes/prom_b_smf_reader.py, 40 checks).
+;   0xF17559-0xF1B3FF  THE COMBINATION / INTERNAL SOUND / MIDI SOUND PARAMETER
+;                      SCREENS (round 3, wave 7) -- 16,039 bytes, 299 objects,
+;                      no code at all.  297 labels, every header with an
+;                      Evidence: line; 33 display lists named from their own
+;                      captions.  Carries the EIGHT corrections
+;                      notes/prom_b_f17559_reaudit.py established.
+;                      notes/gen_prom_b_f17559_module.py, --selftest 53 checks.
+;   0xF4F000-0xF54FFF  THE NINE-DRAWBAR ORGAN REGISTRATION SCREEN and the two
+;                      table modules in front of it (round 3, wave 7) -- 24,576
+;                      bytes, the largest `.incbin` that was left in this image.
+;                      118 labels, 76 of them semantic; every header carries an
+;                      Evidence: line.  notes/gen_prom_b_f4f000_module.py, whose
+;                      --selftest is 104 checks.
 ;   0xF147AC-0xF14FAB  EffectNames -- 128 entries of 16 characters, 56 real
 ;                      effect names and 72 `----------` placeholders
 ;   0xF15024-0xF157A7  EffectParamNames -- the effect parameter labels
@@ -21792,14 +21805,6245 @@ DLB_Records_F174E1:
 	.short	0x0005		;   +0x0B bytes per entry
 	.short	0x1D2A		;   +0x0D -> IX
 
-; --- 0xF17559-0xF1B3FF: not converted ---
-;   Same family as the block above -- more interpreter-B records and their tables,
-;   plus objects reached from prom_a (0xFBB88C onward) and from prom_c.  It is left
-;   as `.incbin` because the record/table alternation does NOT tile it: a stride-15
-;   walk from every pointer target in it stops after one object, and 0xF17A6C holds
-;   a 24-entry array of pointers spaced 0x48 that nothing here explains.  Named
-;   rather than guessed.
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x017559, 0x003EA7
+; ⚠ CORRECTED 2026-08-29 (wave 7 round 3).  The paragraph that stood here said
+;   this block was left as `.incbin` because "the record/table alternation does
+;   NOT tile it: a stride-15 walk from every pointer target in it stops after one
+;   object, and 0xF17A6C holds a 24-entry array of pointers spaced 0x48 that
+;   nothing here explains".  Two things about it are now settled and one was
+;   wrong.  The array at 0xF17A6C has TWENTY-NINE entries, not 24 (the stride,
+;   0x48, was right); it is emitted below as PtrTable_F17A6C, and its 29 entries
+;   run from 0xF17AE0 -- the 24x24 glyph bitmaps -- upward.  And the span DOES
+;   tile, not by a stride walk but from proven operands, display-list call sites,
+;   `ldir` copy lengths and record framing walks: see notes/prom_b_f17559_layout.py
+;   and the module banner immediately below.
+
+; ==============================================================================
+; 0xF17559-0xF1B3FF -- THE COMBINATION / INTERNAL SOUND / MIDI SOUND
+;                      PARAMETER SCREENS, AND THEIR TABLES
+; ==============================================================================
+;
+; 16,039 bytes in 299 objects: ascii 3145, bit_table 45, bitmap 339,
+; display_list 7764, index_map 1086, notenames 384, pad 96, pointer_table
+; 1756, record 484, record_array 912, unknown 28.  The span holds NO CODE --
+; exactly thirteen in-span addresses are the target of a transfer anywhere in
+; the four `.s` files and all thirteen are `jp` slots of one STALE thunk run
+; (T_F42FD0-T_F43000, every slot with zero references, eleven of them landing
+; INSIDE a record).  So no decode is run here; the boundaries come from proven
+; operands, display-list call sites, `ldir` copy lengths and record framing
+; walks.  notes/prom_b_f17559_layout.py.
+;
+; WHAT IT DRAWS.  `INTERNAL SOUND` pages 1-3, `MIDI SOUND` pages 1-3, `MIDI
+; OUT FILTER`, `C0MBINATI0N EDIT`, `COMBINATION NAMING`, `KEY LAYER`,
+; `VELOCITY LAYER`, `MAIN OUT EQUALIZER` and the two write-protect / output-
+; conflict message screens.  With them: the 32 `PART nn` names, the 128-entry
+; pan ladder `L64`..`R63`, a 100-entry decimal value ladder ` 0.10`..`30.00`,
+; and the MIDI note names `C-2`..`G 8`.
+;
+; ⚠ The ROM spells several captions with a ZERO for the letter O -- `S0UND`,
+;   `V0LUME`, `PR0GRAM`, `C0MBINATI0N`, `MEM0RY`, `CH0RUS`.  Reproduced
+;   exactly; the machine really shows them.
+;
+; ⚠ EIGHT CORRECTIONS from notes/prom_b_f17559_reaudit.py are applied here
+;   rather than in the layout script (another lane may be running it), and
+;   every one is re-derived by --selftest: C1 0xF1A048 is a stride operand,
+;   not a boundary; C2 0xF1814E/0xF181D6 are interpreter B by the caller's own
+;   XIX; C3 0xF17C00 is interpreter A by byte-identity and is UNREACHED; C4
+;   0xF1A14D stays UNRESOLVED; C5 0xF17C59 is a bitmap; C6 0xF1A62F is the
+;   MIDI note-name table and is not ascii; C7 0xF185FD is FOUR arrays of
+;   eight; C8 the old block header's `24-entry array` at 0xF17A6C is 29.
+;
+; ⚠ 19 BYTES -- 0xF17C00 (8) and 0xF1A14D (11), 0.12% of the span -- are
+;   reached by NOTHING the census sees, and are marked UNREACHED where they
+;   sit.  `Unreached` is a statement about the census, not about the machine.
+;
+; NAMING.  297 labels.  33 display lists are named after the longest run of
+; letters their OWN records carry; 83 keep `DL_XXXXXX` because they carry
+; none.  Every other label is a KIND plus its address -- `StringTable_`,
+; `IndexMap_`, `PtrTable_`, `RecordArray_`, `Bitmap_WxH` -- which states the
+; measured shape and nothing more.  ⚠ The documentation metric counts all of
+; those as `semantic`; only the caption-derived ones carry meaning, and
+; --stats prints the split.
+;
+; REGENERATE:  python3 notes/gen_prom_b_f17559_module.py
+; CHECKS:      python3 notes/gen_prom_b_f17559_module.py --selftest
+; ==============================================================================
+
+; --------------------------------------------------------------------------
+; StringTable_F17559 -- ascii, 0xF17559-0xF1774C (500 bytes)
+; Shape: 100 entries of 5 bytes = 500 bytes, which is the whole segment.
+; First / last: ' 0.10' ... '  .  '
+; Evidence: 100 value strings of 5 bytes
+; --------------------------------------------------------------------------
+StringTable_F17559:
+	.byte 0x20, 0x30, 0x2e, 0x31, 0x30   ; F17559  [0]  ' 0.10'
+	.byte 0x20, 0x30, 0x2e, 0x31, 0x32   ; F1755E  [1]  ' 0.12'
+	.byte 0x20, 0x30, 0x2e, 0x31, 0x34   ; F17563  [2]  ' 0.14'
+	.byte 0x20, 0x30, 0x2e, 0x31, 0x36   ; F17568  [3]  ' 0.16'
+	.byte 0x20, 0x30, 0x2e, 0x31, 0x38   ; F1756D  [4]  ' 0.18'
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x30   ; F17572  [5]  ' 0.20'
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x32   ; F17577  [6]  ' 0.22'
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x34   ; F1757C  [7]  ' 0.24'
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x36   ; F17581  [8]  ' 0.26'
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x38   ; F17586  [9]  ' 0.28'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x30   ; F1758B  [10]  ' 0.30'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x32   ; F17590  [11]  ' 0.32'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x34   ; F17595  [12]  ' 0.34'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x36   ; F1759A  [13]  ' 0.36'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x38   ; F1759F  [14]  ' 0.38'
+	.byte 0x20, 0x30, 0x2e, 0x34, 0x30   ; F175A4  [15]  ' 0.40'
+	.byte 0x20, 0x30, 0x2e, 0x34, 0x35   ; F175A9  [16]  ' 0.45'
+	.byte 0x20, 0x30, 0x2e, 0x35, 0x30   ; F175AE  [17]  ' 0.50'
+	.byte 0x20, 0x30, 0x2e, 0x35, 0x35   ; F175B3  [18]  ' 0.55'
+	.byte 0x20, 0x30, 0x2e, 0x36, 0x30   ; F175B8  [19]  ' 0.60'
+	.byte 0x20, 0x30, 0x2e, 0x36, 0x35   ; F175BD  [20]  ' 0.65'
+	.byte 0x20, 0x30, 0x2e, 0x37, 0x30   ; F175C2  [21]  ' 0.70'
+	.byte 0x20, 0x30, 0x2e, 0x37, 0x35   ; F175C7  [22]  ' 0.75'
+	.byte 0x20, 0x30, 0x2e, 0x38, 0x30   ; F175CC  [23]  ' 0.80'
+	.byte 0x20, 0x30, 0x2e, 0x39, 0x30   ; F175D1  [24]  ' 0.90'
+	.byte 0x20, 0x31, 0x2e, 0x30, 0x30   ; F175D6  [25]  ' 1.00'
+	.byte 0x20, 0x31, 0x2e, 0x31, 0x30   ; F175DB  [26]  ' 1.10'
+	.byte 0x20, 0x31, 0x2e, 0x32, 0x30   ; F175E0  [27]  ' 1.20'
+	.byte 0x20, 0x31, 0x2e, 0x33, 0x30   ; F175E5  [28]  ' 1.30'
+	.byte 0x20, 0x31, 0x2e, 0x34, 0x30   ; F175EA  [29]  ' 1.40'
+	.byte 0x20, 0x31, 0x2e, 0x35, 0x30   ; F175EF  [30]  ' 1.50'
+	.byte 0x20, 0x31, 0x2e, 0x36, 0x30   ; F175F4  [31]  ' 1.60'
+	.byte 0x20, 0x31, 0x2e, 0x37, 0x30   ; F175F9  [32]  ' 1.70'
+	.byte 0x20, 0x31, 0x2e, 0x38, 0x30   ; F175FE  [33]  ' 1.80'
+	.byte 0x20, 0x31, 0x2e, 0x39, 0x30   ; F17603  [34]  ' 1.90'
+	.byte 0x20, 0x32, 0x2e, 0x30, 0x30   ; F17608  [35]  ' 2.00'
+	.byte 0x20, 0x32, 0x2e, 0x31, 0x30   ; F1760D  [36]  ' 2.10'
+	.byte 0x20, 0x32, 0x2e, 0x32, 0x30   ; F17612  [37]  ' 2.20'
+	.byte 0x20, 0x32, 0x2e, 0x33, 0x30   ; F17617  [38]  ' 2.30'
+	.byte 0x20, 0x32, 0x2e, 0x34, 0x30   ; F1761C  [39]  ' 2.40'
+	.byte 0x20, 0x32, 0x2e, 0x35, 0x30   ; F17621  [40]  ' 2.50'
+	.byte 0x20, 0x32, 0x2e, 0x36, 0x30   ; F17626  [41]  ' 2.60'
+	.byte 0x20, 0x32, 0x2e, 0x37, 0x30   ; F1762B  [42]  ' 2.70'
+	.byte 0x20, 0x32, 0x2e, 0x38, 0x30   ; F17630  [43]  ' 2.80'
+	.byte 0x20, 0x32, 0x2e, 0x39, 0x30   ; F17635  [44]  ' 2.90'
+	.byte 0x20, 0x33, 0x2e, 0x30, 0x30   ; F1763A  [45]  ' 3.00'
+	.byte 0x20, 0x33, 0x2e, 0x31, 0x30   ; F1763F  [46]  ' 3.10'
+	.byte 0x20, 0x33, 0x2e, 0x32, 0x30   ; F17644  [47]  ' 3.20'
+	.byte 0x20, 0x33, 0x2e, 0x33, 0x30   ; F17649  [48]  ' 3.30'
+	.byte 0x20, 0x33, 0x2e, 0x34, 0x30   ; F1764E  [49]  ' 3.40'
+	.byte 0x20, 0x33, 0x2e, 0x35, 0x30   ; F17653  [50]  ' 3.50'
+	.byte 0x20, 0x33, 0x2e, 0x36, 0x30   ; F17658  [51]  ' 3.60'
+	.byte 0x20, 0x33, 0x2e, 0x37, 0x30   ; F1765D  [52]  ' 3.70'
+	.byte 0x20, 0x33, 0x2e, 0x38, 0x30   ; F17662  [53]  ' 3.80'
+	.byte 0x20, 0x33, 0x2e, 0x39, 0x30   ; F17667  [54]  ' 3.90'
+	.byte 0x20, 0x34, 0x2e, 0x30, 0x30   ; F1766C  [55]  ' 4.00'
+	.byte 0x20, 0x34, 0x2e, 0x32, 0x30   ; F17671  [56]  ' 4.20'
+	.byte 0x20, 0x34, 0x2e, 0x34, 0x30   ; F17676  [57]  ' 4.40'
+	.byte 0x20, 0x34, 0x2e, 0x36, 0x30   ; F1767B  [58]  ' 4.60'
+	.byte 0x20, 0x34, 0x2e, 0x38, 0x30   ; F17680  [59]  ' 4.80'
+	.byte 0x20, 0x35, 0x2e, 0x30, 0x30   ; F17685  [60]  ' 5.00'
+	.byte 0x20, 0x35, 0x2e, 0x32, 0x30   ; F1768A  [61]  ' 5.20'
+	.byte 0x20, 0x35, 0x2e, 0x34, 0x30   ; F1768F  [62]  ' 5.40'
+	.byte 0x20, 0x35, 0x2e, 0x36, 0x30   ; F17694  [63]  ' 5.60'
+	.byte 0x20, 0x35, 0x2e, 0x38, 0x30   ; F17699  [64]  ' 5.80'
+	.byte 0x20, 0x36, 0x2e, 0x30, 0x30   ; F1769E  [65]  ' 6.00'
+	.byte 0x20, 0x36, 0x2e, 0x32, 0x30   ; F176A3  [66]  ' 6.20'
+	.byte 0x20, 0x36, 0x2e, 0x34, 0x30   ; F176A8  [67]  ' 6.40'
+	.byte 0x20, 0x36, 0x2e, 0x36, 0x30   ; F176AD  [68]  ' 6.60'
+	.byte 0x20, 0x36, 0x2e, 0x38, 0x30   ; F176B2  [69]  ' 6.80'
+	.byte 0x20, 0x37, 0x2e, 0x30, 0x30   ; F176B7  [70]  ' 7.00'
+	.byte 0x20, 0x37, 0x2e, 0x32, 0x30   ; F176BC  [71]  ' 7.20'
+	.byte 0x20, 0x37, 0x2e, 0x34, 0x30   ; F176C1  [72]  ' 7.40'
+	.byte 0x20, 0x37, 0x2e, 0x36, 0x30   ; F176C6  [73]  ' 7.60'
+	.byte 0x20, 0x37, 0x2e, 0x38, 0x30   ; F176CB  [74]  ' 7.80'
+	.byte 0x20, 0x38, 0x2e, 0x30, 0x30   ; F176D0  [75]  ' 8.00'
+	.byte 0x20, 0x39, 0x2e, 0x30, 0x30   ; F176D5  [76]  ' 9.00'
+	.byte 0x31, 0x30, 0x2e, 0x30, 0x30   ; F176DA  [77]  '10.00'
+	.byte 0x31, 0x31, 0x2e, 0x30, 0x30   ; F176DF  [78]  '11.00'
+	.byte 0x31, 0x32, 0x2e, 0x30, 0x30   ; F176E4  [79]  '12.00'
+	.byte 0x31, 0x33, 0x2e, 0x30, 0x30   ; F176E9  [80]  '13.00'
+	.byte 0x31, 0x34, 0x2e, 0x30, 0x30   ; F176EE  [81]  '14.00'
+	.byte 0x31, 0x35, 0x2e, 0x30, 0x30   ; F176F3  [82]  '15.00'
+	.byte 0x31, 0x36, 0x2e, 0x30, 0x30   ; F176F8  [83]  '16.00'
+	.byte 0x31, 0x37, 0x2e, 0x30, 0x30   ; F176FD  [84]  '17.00'
+	.byte 0x31, 0x38, 0x2e, 0x30, 0x30   ; F17702  [85]  '18.00'
+	.byte 0x31, 0x39, 0x2e, 0x30, 0x30   ; F17707  [86]  '19.00'
+	.byte 0x32, 0x30, 0x2e, 0x30, 0x30   ; F1770C  [87]  '20.00'
+	.byte 0x32, 0x31, 0x2e, 0x30, 0x30   ; F17711  [88]  '21.00'
+	.byte 0x32, 0x32, 0x2e, 0x30, 0x30   ; F17716  [89]  '22.00'
+	.byte 0x32, 0x33, 0x2e, 0x30, 0x30   ; F1771B  [90]  '23.00'
+	.byte 0x32, 0x34, 0x2e, 0x30, 0x30   ; F17720  [91]  '24.00'
+	.byte 0x32, 0x35, 0x2e, 0x30, 0x30   ; F17725  [92]  '25.00'
+	.byte 0x32, 0x36, 0x2e, 0x30, 0x30   ; F1772A  [93]  '26.00'
+	.byte 0x32, 0x37, 0x2e, 0x30, 0x30   ; F1772F  [94]  '27.00'
+	.byte 0x32, 0x38, 0x2e, 0x30, 0x30   ; F17734  [95]  '28.00'
+	.byte 0x32, 0x39, 0x2e, 0x30, 0x30   ; F17739  [96]  '29.00'
+	.byte 0x33, 0x30, 0x2e, 0x30, 0x30   ; F1773E  [97]  '30.00'
+	.byte 0x20, 0x20, 0x2e, 0x20, 0x20   ; F17743  [98]  '  .  '
+	.byte 0x20, 0x20, 0x2e, 0x20, 0x20   ; F17748  [99]  '  .  '
+
+; --------------------------------------------------------------------------
+; DL_MainOutEqualizer_F1774D -- display list, 0xF1774D-0xF1777F (51 bytes)
+; Interpreter: A.  4 records, framed by their own length bytes; the walk
+;              consumes 0xF1774D-0xF1777F exactly.
+; Text it draws: 'MAIN OUT EQUALIZER'; 'SYSTEM'
+; Evidence: 4 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_MainOutEqualizer_F1774D:
+	.byte 0x1c, 0x18	; F1774D  op 1C, 24 bytes -> handler 0xF31A52
+	.short 0x005C, 0x0005	; +2  the two words
+	.ascii "MAIN OUT EQUALIZER"	; +6
+	.byte 0x17, 0x0c	; F17765  op 17, 12 bytes -> handler 0xF31A52
+	.short 0x0006, 0x0007	; +2  the two words
+	.ascii "SYSTEM"	; +6
+	.byte 0x09, 0x0a	; F17771  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x2c, 0x00, 0x10, 0x00	; +2  '....,...'
+	.byte 0x23, 0x05	; F1777B  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x69, 0x30, 0x00	; +2  'i0.'
+
+; --------------------------------------------------------------------------
+; Unknown_F17780 -- unknown, 0xF17780-0xF17782 (3 bytes)
+; Evidence: 3 bytes; the 5-byte grid of the 94-cell value table at 0xF17783
+;           does not reach back this far, and the object before it ends
+;           exactly here
+; --------------------------------------------------------------------------
+Unknown_F17780:
+	.byte 0x2e, 0x32, 0x30   ; F17780  .20
+
+; --------------------------------------------------------------------------
+; StringTable_F17783 -- ascii, 0xF17783-0xF17958 (470 bytes)
+; Shape: 94 entries of 5 bytes = 470 bytes, which is the whole segment.
+; First / last: ' 0.22' ... '  .  '
+; Evidence: 94 value strings of 5 bytes
+; --------------------------------------------------------------------------
+StringTable_F17783:
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x32   ; F17783  [0]  ' 0.22'
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x34   ; F17788  [1]  ' 0.24'
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x36   ; F1778D  [2]  ' 0.26'
+	.byte 0x20, 0x30, 0x2e, 0x32, 0x38   ; F17792  [3]  ' 0.28'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x30   ; F17797  [4]  ' 0.30'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x32   ; F1779C  [5]  ' 0.32'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x34   ; F177A1  [6]  ' 0.34'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x36   ; F177A6  [7]  ' 0.36'
+	.byte 0x20, 0x30, 0x2e, 0x33, 0x38   ; F177AB  [8]  ' 0.38'
+	.byte 0x20, 0x30, 0x2e, 0x34, 0x30   ; F177B0  [9]  ' 0.40'
+	.byte 0x20, 0x30, 0x2e, 0x34, 0x35   ; F177B5  [10]  ' 0.45'
+	.byte 0x20, 0x30, 0x2e, 0x35, 0x30   ; F177BA  [11]  ' 0.50'
+	.byte 0x20, 0x30, 0x2e, 0x35, 0x35   ; F177BF  [12]  ' 0.55'
+	.byte 0x20, 0x30, 0x2e, 0x36, 0x30   ; F177C4  [13]  ' 0.60'
+	.byte 0x20, 0x30, 0x2e, 0x36, 0x35   ; F177C9  [14]  ' 0.65'
+	.byte 0x20, 0x30, 0x2e, 0x37, 0x30   ; F177CE  [15]  ' 0.70'
+	.byte 0x20, 0x30, 0x2e, 0x37, 0x35   ; F177D3  [16]  ' 0.75'
+	.byte 0x20, 0x30, 0x2e, 0x38, 0x30   ; F177D8  [17]  ' 0.80'
+	.byte 0x20, 0x30, 0x2e, 0x39, 0x30   ; F177DD  [18]  ' 0.90'
+	.byte 0x20, 0x31, 0x2e, 0x30, 0x30   ; F177E2  [19]  ' 1.00'
+	.byte 0x20, 0x31, 0x2e, 0x31, 0x30   ; F177E7  [20]  ' 1.10'
+	.byte 0x20, 0x31, 0x2e, 0x32, 0x30   ; F177EC  [21]  ' 1.20'
+	.byte 0x20, 0x31, 0x2e, 0x33, 0x30   ; F177F1  [22]  ' 1.30'
+	.byte 0x20, 0x31, 0x2e, 0x34, 0x30   ; F177F6  [23]  ' 1.40'
+	.byte 0x20, 0x31, 0x2e, 0x35, 0x30   ; F177FB  [24]  ' 1.50'
+	.byte 0x20, 0x31, 0x2e, 0x36, 0x30   ; F17800  [25]  ' 1.60'
+	.byte 0x20, 0x31, 0x2e, 0x37, 0x30   ; F17805  [26]  ' 1.70'
+	.byte 0x20, 0x31, 0x2e, 0x38, 0x30   ; F1780A  [27]  ' 1.80'
+	.byte 0x20, 0x31, 0x2e, 0x39, 0x30   ; F1780F  [28]  ' 1.90'
+	.byte 0x20, 0x32, 0x2e, 0x30, 0x30   ; F17814  [29]  ' 2.00'
+	.byte 0x20, 0x32, 0x2e, 0x31, 0x30   ; F17819  [30]  ' 2.10'
+	.byte 0x20, 0x32, 0x2e, 0x32, 0x30   ; F1781E  [31]  ' 2.20'
+	.byte 0x20, 0x32, 0x2e, 0x33, 0x30   ; F17823  [32]  ' 2.30'
+	.byte 0x20, 0x32, 0x2e, 0x34, 0x30   ; F17828  [33]  ' 2.40'
+	.byte 0x20, 0x32, 0x2e, 0x35, 0x30   ; F1782D  [34]  ' 2.50'
+	.byte 0x20, 0x32, 0x2e, 0x36, 0x30   ; F17832  [35]  ' 2.60'
+	.byte 0x20, 0x32, 0x2e, 0x37, 0x30   ; F17837  [36]  ' 2.70'
+	.byte 0x20, 0x32, 0x2e, 0x38, 0x30   ; F1783C  [37]  ' 2.80'
+	.byte 0x20, 0x32, 0x2e, 0x39, 0x30   ; F17841  [38]  ' 2.90'
+	.byte 0x20, 0x33, 0x2e, 0x30, 0x30   ; F17846  [39]  ' 3.00'
+	.byte 0x20, 0x33, 0x2e, 0x31, 0x30   ; F1784B  [40]  ' 3.10'
+	.byte 0x20, 0x33, 0x2e, 0x32, 0x30   ; F17850  [41]  ' 3.20'
+	.byte 0x20, 0x33, 0x2e, 0x33, 0x30   ; F17855  [42]  ' 3.30'
+	.byte 0x20, 0x33, 0x2e, 0x34, 0x30   ; F1785A  [43]  ' 3.40'
+	.byte 0x20, 0x33, 0x2e, 0x35, 0x30   ; F1785F  [44]  ' 3.50'
+	.byte 0x20, 0x33, 0x2e, 0x36, 0x30   ; F17864  [45]  ' 3.60'
+	.byte 0x20, 0x33, 0x2e, 0x37, 0x30   ; F17869  [46]  ' 3.70'
+	.byte 0x20, 0x33, 0x2e, 0x38, 0x30   ; F1786E  [47]  ' 3.80'
+	.byte 0x20, 0x33, 0x2e, 0x39, 0x30   ; F17873  [48]  ' 3.90'
+	.byte 0x20, 0x34, 0x2e, 0x30, 0x30   ; F17878  [49]  ' 4.00'
+	.byte 0x20, 0x34, 0x2e, 0x32, 0x30   ; F1787D  [50]  ' 4.20'
+	.byte 0x20, 0x34, 0x2e, 0x34, 0x30   ; F17882  [51]  ' 4.40'
+	.byte 0x20, 0x34, 0x2e, 0x36, 0x30   ; F17887  [52]  ' 4.60'
+	.byte 0x20, 0x34, 0x2e, 0x38, 0x30   ; F1788C  [53]  ' 4.80'
+	.byte 0x20, 0x35, 0x2e, 0x30, 0x30   ; F17891  [54]  ' 5.00'
+	.byte 0x20, 0x35, 0x2e, 0x32, 0x30   ; F17896  [55]  ' 5.20'
+	.byte 0x20, 0x35, 0x2e, 0x34, 0x30   ; F1789B  [56]  ' 5.40'
+	.byte 0x20, 0x35, 0x2e, 0x36, 0x30   ; F178A0  [57]  ' 5.60'
+	.byte 0x20, 0x35, 0x2e, 0x38, 0x30   ; F178A5  [58]  ' 5.80'
+	.byte 0x20, 0x36, 0x2e, 0x30, 0x30   ; F178AA  [59]  ' 6.00'
+	.byte 0x20, 0x36, 0x2e, 0x32, 0x30   ; F178AF  [60]  ' 6.20'
+	.byte 0x20, 0x36, 0x2e, 0x34, 0x30   ; F178B4  [61]  ' 6.40'
+	.byte 0x20, 0x36, 0x2e, 0x36, 0x30   ; F178B9  [62]  ' 6.60'
+	.byte 0x20, 0x36, 0x2e, 0x38, 0x30   ; F178BE  [63]  ' 6.80'
+	.byte 0x20, 0x37, 0x2e, 0x30, 0x30   ; F178C3  [64]  ' 7.00'
+	.byte 0x20, 0x37, 0x2e, 0x32, 0x30   ; F178C8  [65]  ' 7.20'
+	.byte 0x20, 0x37, 0x2e, 0x34, 0x30   ; F178CD  [66]  ' 7.40'
+	.byte 0x20, 0x37, 0x2e, 0x36, 0x30   ; F178D2  [67]  ' 7.60'
+	.byte 0x20, 0x37, 0x2e, 0x38, 0x30   ; F178D7  [68]  ' 7.80'
+	.byte 0x20, 0x38, 0x2e, 0x30, 0x30   ; F178DC  [69]  ' 8.00'
+	.byte 0x20, 0x39, 0x2e, 0x30, 0x30   ; F178E1  [70]  ' 9.00'
+	.byte 0x31, 0x30, 0x2e, 0x30, 0x30   ; F178E6  [71]  '10.00'
+	.byte 0x31, 0x31, 0x2e, 0x30, 0x30   ; F178EB  [72]  '11.00'
+	.byte 0x31, 0x32, 0x2e, 0x30, 0x30   ; F178F0  [73]  '12.00'
+	.byte 0x31, 0x33, 0x2e, 0x30, 0x30   ; F178F5  [74]  '13.00'
+	.byte 0x31, 0x34, 0x2e, 0x30, 0x30   ; F178FA  [75]  '14.00'
+	.byte 0x31, 0x35, 0x2e, 0x30, 0x30   ; F178FF  [76]  '15.00'
+	.byte 0x31, 0x36, 0x2e, 0x30, 0x30   ; F17904  [77]  '16.00'
+	.byte 0x31, 0x37, 0x2e, 0x30, 0x30   ; F17909  [78]  '17.00'
+	.byte 0x31, 0x38, 0x2e, 0x30, 0x30   ; F1790E  [79]  '18.00'
+	.byte 0x31, 0x39, 0x2e, 0x30, 0x30   ; F17913  [80]  '19.00'
+	.byte 0x32, 0x30, 0x2e, 0x30, 0x30   ; F17918  [81]  '20.00'
+	.byte 0x32, 0x31, 0x2e, 0x30, 0x30   ; F1791D  [82]  '21.00'
+	.byte 0x32, 0x32, 0x2e, 0x30, 0x30   ; F17922  [83]  '22.00'
+	.byte 0x32, 0x33, 0x2e, 0x30, 0x30   ; F17927  [84]  '23.00'
+	.byte 0x32, 0x34, 0x2e, 0x30, 0x30   ; F1792C  [85]  '24.00'
+	.byte 0x32, 0x35, 0x2e, 0x30, 0x30   ; F17931  [86]  '25.00'
+	.byte 0x32, 0x36, 0x2e, 0x30, 0x30   ; F17936  [87]  '26.00'
+	.byte 0x32, 0x37, 0x2e, 0x30, 0x30   ; F1793B  [88]  '27.00'
+	.byte 0x32, 0x38, 0x2e, 0x30, 0x30   ; F17940  [89]  '28.00'
+	.byte 0x32, 0x39, 0x2e, 0x30, 0x30   ; F17945  [90]  '29.00'
+	.byte 0x33, 0x30, 0x2e, 0x30, 0x30   ; F1794A  [91]  '30.00'
+	.byte 0x20, 0x20, 0x2e, 0x20, 0x20   ; F1794F  [92]  '  .  '
+	.byte 0x20, 0x20, 0x2e, 0x20, 0x20   ; F17954  [93]  '  .  '
+
+; --------------------------------------------------------------------------
+; DL_MainOutEqualizer_F17959 -- display list, 0xF17959-0xF1798B (51 bytes)
+; Interpreter: A.  4 records, framed by their own length bytes; the walk
+;              consumes 0xF17959-0xF1798B exactly.
+; Text it draws: 'MAIN OUT EQUALIZER'; 'SYSTEM'
+; Evidence: 4 records; byte-identical copy of the list at 0xF1774D
+; --------------------------------------------------------------------------
+DL_MainOutEqualizer_F17959:
+	.byte 0x1c, 0x18	; F17959  op 1C, 24 bytes -> handler 0xF31A52
+	.short 0x005C, 0x0005	; +2  the two words
+	.ascii "MAIN OUT EQUALIZER"	; +6
+	.byte 0x17, 0x0c	; F17971  op 17, 12 bytes -> handler 0xF31A52
+	.short 0x0006, 0x0007	; +2  the two words
+	.ascii "SYSTEM"	; +6
+	.byte 0x09, 0x0a	; F1797D  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x2c, 0x00, 0x10, 0x00	; +2  '....,...'
+	.byte 0x23, 0x05	; F17987  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x69, 0x30, 0x00	; +2  'i0.'
+
+; --------------------------------------------------------------------------
+; Unknown_F1798C -- unknown, 0xF1798C-0xF179A4 (25 bytes)
+; Evidence: 25 bytes, byte-identical to the LAST 25 bytes of the 51-byte
+;           list at 0xF1774D; not a record run of its own (its first byte is
+;           opcode 0x06 with length byte 0x00)
+; --------------------------------------------------------------------------
+Unknown_F1798C:
+	.byte 0x06, 0x00, 0x07, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00   ; F1798C  ....SYSTEM......
+	.byte 0x2c, 0x00, 0x10, 0x00, 0x23, 0x05, 0x69, 0x30, 0x00   ; F1799C  ,...#.i0.
+
+; --------------------------------------------------------------------------
+; StringTable_F179A5 -- ascii, 0xF179A5-0xF17A2B (135 bytes)
+; Shape: 27 entries of 5 bytes = 135 bytes, which is the whole segment.
+; First / last: ' 7.60' ... '  .  '
+; Evidence: 27 value strings of 5 bytes
+; --------------------------------------------------------------------------
+StringTable_F179A5:
+	.byte 0x20, 0x37, 0x2e, 0x36, 0x30   ; F179A5  [0]  ' 7.60'
+	.byte 0x20, 0x37, 0x2e, 0x38, 0x30   ; F179AA  [1]  ' 7.80'
+	.byte 0x20, 0x38, 0x2e, 0x30, 0x30   ; F179AF  [2]  ' 8.00'
+	.byte 0x20, 0x39, 0x2e, 0x30, 0x30   ; F179B4  [3]  ' 9.00'
+	.byte 0x31, 0x30, 0x2e, 0x30, 0x30   ; F179B9  [4]  '10.00'
+	.byte 0x31, 0x31, 0x2e, 0x30, 0x30   ; F179BE  [5]  '11.00'
+	.byte 0x31, 0x32, 0x2e, 0x30, 0x30   ; F179C3  [6]  '12.00'
+	.byte 0x31, 0x33, 0x2e, 0x30, 0x30   ; F179C8  [7]  '13.00'
+	.byte 0x31, 0x34, 0x2e, 0x30, 0x30   ; F179CD  [8]  '14.00'
+	.byte 0x31, 0x35, 0x2e, 0x30, 0x30   ; F179D2  [9]  '15.00'
+	.byte 0x31, 0x36, 0x2e, 0x30, 0x30   ; F179D7  [10]  '16.00'
+	.byte 0x31, 0x37, 0x2e, 0x30, 0x30   ; F179DC  [11]  '17.00'
+	.byte 0x31, 0x38, 0x2e, 0x30, 0x30   ; F179E1  [12]  '18.00'
+	.byte 0x31, 0x39, 0x2e, 0x30, 0x30   ; F179E6  [13]  '19.00'
+	.byte 0x32, 0x30, 0x2e, 0x30, 0x30   ; F179EB  [14]  '20.00'
+	.byte 0x32, 0x31, 0x2e, 0x30, 0x30   ; F179F0  [15]  '21.00'
+	.byte 0x32, 0x32, 0x2e, 0x30, 0x30   ; F179F5  [16]  '22.00'
+	.byte 0x32, 0x33, 0x2e, 0x30, 0x30   ; F179FA  [17]  '23.00'
+	.byte 0x32, 0x34, 0x2e, 0x30, 0x30   ; F179FF  [18]  '24.00'
+	.byte 0x32, 0x35, 0x2e, 0x30, 0x30   ; F17A04  [19]  '25.00'
+	.byte 0x32, 0x36, 0x2e, 0x30, 0x30   ; F17A09  [20]  '26.00'
+	.byte 0x32, 0x37, 0x2e, 0x30, 0x30   ; F17A0E  [21]  '27.00'
+	.byte 0x32, 0x38, 0x2e, 0x30, 0x30   ; F17A13  [22]  '28.00'
+	.byte 0x32, 0x39, 0x2e, 0x30, 0x30   ; F17A18  [23]  '29.00'
+	.byte 0x33, 0x30, 0x2e, 0x30, 0x30   ; F17A1D  [24]  '30.00'
+	.byte 0x20, 0x20, 0x2e, 0x20, 0x20   ; F17A22  [25]  '  .  '
+	.byte 0x20, 0x20, 0x2e, 0x20, 0x20   ; F17A27  [26]  '  .  '
+
+; --------------------------------------------------------------------------
+; DL_MainOutEqualizer_F17A2C -- display list, 0xF17A2C-0xF17A5E (51 bytes)
+; Interpreter: A.  4 records, framed by their own length bytes; the walk
+;              consumes 0xF17A2C-0xF17A5E exactly.
+; Text it draws: 'MAIN OUT EQUALIZER'; 'SYSTEM'
+; Evidence: 4 records; byte-identical copy of the list at 0xF1774D
+; --------------------------------------------------------------------------
+DL_MainOutEqualizer_F17A2C:
+	.byte 0x1c, 0x18	; F17A2C  op 1C, 24 bytes -> handler 0xF31A52
+	.short 0x005C, 0x0005	; +2  the two words
+	.ascii "MAIN OUT EQUALIZER"	; +6
+	.byte 0x17, 0x0c	; F17A44  op 17, 12 bytes -> handler 0xF31A52
+	.short 0x0006, 0x0007	; +2  the two words
+	.ascii "SYSTEM"	; +6
+	.byte 0x09, 0x0a	; F17A50  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x2c, 0x00, 0x10, 0x00	; +2  '....,...'
+	.byte 0x23, 0x05	; F17A5A  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x69, 0x30, 0x00	; +2  'i0.'
+
+; --------------------------------------------------------------------------
+; BitTable_F17A5F -- bit table, 0xF17A5F-0xF17A6B (13 bytes)
+; Evidence: last 13 bytes of the 128-byte glyph quantiser at 0xF31DED
+; --------------------------------------------------------------------------
+BitTable_F17A5F:
+	.byte 0x19, 0x19, 0x19, 0x19, 0x1a, 0x1a, 0x1a, 0x1a, 0x1b, 0x1b, 0x1b, 0x1b, 0x1c   ; F17A5F  .............
+
+; --------------------------------------------------------------------------
+; PtrTable_F17A6C -- pointer table, 0xF17A6C-0xF17ADF (116 bytes)
+; Shape: 29 entries of 4 bytes = 116 bytes, which is the whole segment.
+; First / last: 0xF17AE0 ... 0xF182C0
+; Evidence: 29 words, all addresses in prom_a/prom_b; UNREFERENCED
+; --------------------------------------------------------------------------
+PtrTable_F17A6C:
+	.long 0x00F17AE0                       ; F17A6C  [0]   -> Bitmap_F17AE0
+	.long 0x00F17B28                       ; F17A70  [1]   -> 0xF17B28 (inside this span)
+	.long 0x00F17B70                       ; F17A74  [2]   -> 0xF17B70 (inside this span)
+	.long 0x00F17BB8                       ; F17A78  [3]   -> 0xF17BB8 (inside this span)
+	.long 0x00F17C00                       ; F17A7C  [4]   -> DL_F17C00
+	.long 0x00F17C48                       ; F17A80  [5]   -> 0xF17C48 (inside this span)
+	.long 0x00F17C90                       ; F17A84  [6]   -> 0xF17C90 (inside this span)
+	.long 0x00F17CD8                       ; F17A88  [7]   -> 0xF17CD8 (inside this span)
+	.long 0x00F17D20                       ; F17A8C  [8]   -> 0xF17D20 (inside this span)
+	.long 0x00F17D68                       ; F17A90  [9]   -> 0xF17D68 (inside this span)
+	.long 0x00F17DB0                       ; F17A94  [10]   -> 0xF17DB0 (inside this span)
+	.long 0x00F17DF8                       ; F17A98  [11]   -> 0xF17DF8 (inside this span)
+	.long 0x00F17E40                       ; F17A9C  [12]   -> 0xF17E40 (inside this span)
+	.long 0x00F17E88                       ; F17AA0  [13]   -> 0xF17E88 (inside this span)
+	.long 0x00F17ED0                       ; F17AA4  [14]   -> 0xF17ED0 (inside this span)
+	.long 0x00F17F18                       ; F17AA8  [15]   -> 0xF17F18 (inside this span)
+	.long 0x00F17F60                       ; F17AAC  [16]   -> 0xF17F60 (inside this span)
+	.long 0x00F17FA8                       ; F17AB0  [17]   -> 0xF17FA8 (inside this span)
+	.long 0x00F17FF0                       ; F17AB4  [18]   -> 0xF17FF0 (inside this span)
+	.long 0x00F18038                       ; F17AB8  [19]   -> 0xF18038 (inside this span)
+	.long 0x00F18080                       ; F17ABC  [20]   -> 0xF18080 (inside this span)
+	.long 0x00F180C8                       ; F17AC0  [21]   -> 0xF180C8 (inside this span)
+	.long 0x00F18110                       ; F17AC4  [22]   -> 0xF18110 (inside this span)
+	.long 0x00F18158                       ; F17AC8  [23]   -> 0xF18158 (inside this span)
+	.long 0x00F181A0                       ; F17ACC  [24]   -> 0xF181A0 (inside this span)
+	.long 0x00F181E8                       ; F17AD0  [25]   -> 0xF181E8 (inside this span)
+	.long 0x00F18230                       ; F17AD4  [26]   -> 0xF18230 (inside this span)
+	.long 0x00F18278                       ; F17AD8  [27]   -> 0xF18278 (inside this span)
+	.long 0x00F182C0                       ; F17ADC  [28]   -> 0xF182C0 (inside this span)
+
+; --------------------------------------------------------------------------
+; Bitmap_F17AE0 -- bitmap, 0xF17AE0-0xF17BFF (288 bytes)
+; Evidence: 4 x 72-byte 24x24 glyphs, byte-identical to 0xF31EE1
+; --------------------------------------------------------------------------
+Bitmap_F17AE0:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x07, 0x07, 0x0f, 0x0f, 0x2f, 0x0f, 0x0f, 0x07, 0x07   ; F17AE0  .........../....
+	.byte 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x7c, 0xff, 0xff, 0xff   ; F17AF0  ............|...
+	.byte 0xff, 0xff, 0xff, 0xef, 0xef, 0xdf, 0xdf, 0xdf, 0xbf, 0xbf, 0x3c, 0x00, 0x10, 0x00, 0x00, 0x00   ; F17B00  ..........<.....
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xc0, 0xc0, 0xe0, 0xe0, 0xe8, 0xe0, 0xe0, 0xc0, 0xc0   ; F17B10  ................
+	.byte 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x07   ; F17B20  ................
+	.byte 0x07, 0x0f, 0x0f, 0x2f, 0x0f, 0x0f, 0x07, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F17B30  .../............
+	.byte 0x00, 0x00, 0x10, 0x00, 0x7c, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xef, 0xdf, 0xdf, 0xbf, 0x7f   ; F17B40  ....|...........
+	.byte 0x7f, 0xff, 0x7c, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xc0   ; F17B50  ..|.............
+	.byte 0xc0, 0xe0, 0xe0, 0xe8, 0xe0, 0xe0, 0xc0, 0xc0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F17B60  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x07, 0x07, 0x0f, 0x0f, 0x2f, 0x0f, 0x0f, 0x07, 0x06   ; F17B70  .........../....
+	.byte 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x7c, 0xff, 0xff, 0xff   ; F17B80  ............|...
+	.byte 0xff, 0xff, 0xff, 0xef, 0xdf, 0xbf, 0x7f, 0xff, 0xff, 0xff, 0x7c, 0x00, 0x10, 0x00, 0x00, 0x00   ; F17B90  ..........|.....
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xc0, 0xc0, 0xe0, 0xe0, 0xe8, 0xe0, 0xe0, 0xc0, 0xc0   ; F17BA0  ................
+	.byte 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x07   ; F17BB0  ................
+	.byte 0x07, 0x0f, 0x0f, 0x2f, 0x0f, 0x0f, 0x04, 0x03, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F17BC0  .../............
+	.byte 0x00, 0x00, 0x10, 0x00, 0x7c, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xef, 0x9f, 0x7f, 0xff, 0xff   ; F17BD0  ....|...........
+	.byte 0xff, 0xff, 0x7c, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xc0   ; F17BE0  ..|.............
+	.byte 0xc0, 0xe0, 0xe0, 0xe8, 0xe0, 0xe0, 0xc0, 0xc0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F17BF0  ................
+
+; --------------------------------------------------------------------------
+; DL_F17C00 -- display list, 0xF17C00-0xF17C07 (8 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF17C00-0xF17C07 exactly.
+; Evidence: 1 record, interpreter A by BYTE-IDENTITY with the proven one-
+;           record list at 0xF18CD5; UNREACHED
+; ⚠ UNREACHED: no display-list call site in prom_a, prom_b or prom_c names
+;              this run.  `Unreached` is a statement about the CENSUS -- the
+;              four call shapes it knows are in
+;              notes/prom_b_dl_call_shapes.py, and this span alone needed a
+;              fifth (the stride loop at prom_a 0xFBF79C) to be found by
+;              hand.  It is marked, not hidden.
+; ★ CORRECTION C3: the layout calls this AMBIG and says `both ends are E0
+;                  references`.  Its low end is a CONTENT boundary -- the
+;                  end of the 4-glyph copy above it -- not a reference.  The
+;                  eight bytes are byte-identical to the one-record list at
+;                  0xF18CD5 that prom_a 0xFBD235 runs with a literal `call
+;                  0xf42e00`, and the pattern occurs exactly twice in the
+;                  whole image, so the interpreter is A.  Nothing executes
+;                  THIS copy.
+; --------------------------------------------------------------------------
+DL_F17C00:
+	.byte 0x0e, 0x08	; F17C00  op 0E, 8 bytes -> handler 0xF31A9F
+	.byte 0xb0, 0x0e, 0x28, 0x00, 0x64, 0x00	; +2  '..(.d.'
+
+; --------------------------------------------------------------------------
+; DL_OtherParts -- display list, 0xF17C08-0xF17C29 (34 bytes)
+; Interpreter: A.  3 records, framed by their own length bytes; the walk
+;              consumes 0xF17C08-0xF17C29 exactly.
+; Text it draws: 'OTHER PARTS'
+; Evidence: 3 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_OtherParts:
+	.byte 0x17, 0x11	; F17C08  op 17, 17 bytes -> handler 0xF31A52
+	.short 0x00F3, 0x009B	; +2  the two words
+	.ascii "OTHER PARTS"	; +6
+	.byte 0x17, 0x07	; F17C19  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x0099	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x09, 0x0a	; F17C20  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0xf0, 0x00, 0x99, 0x00, 0x39, 0x01, 0xa3, 0x00	; +2  '....9...'
+
+; --------------------------------------------------------------------------
+; DL_Solo_F17C2A -- display list, 0xF17C2A-0xF17C44 (27 bytes)
+; Interpreter: A.  3 records, framed by their own length bytes; the walk
+;              consumes 0xF17C2A-0xF17C44 exactly.
+; Text it draws: 'SOLO'
+; Evidence: 3 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_Solo_F17C2A:
+	.byte 0x17, 0x0a	; F17C2A  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0120, 0x001F	; +2  the two words
+	.ascii "SOLO"	; +6
+	.byte 0x17, 0x07	; F17C34  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x0021	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x09, 0x0a	; F17C3B  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x1f, 0x01, 0x1d, 0x00, 0x39, 0x01, 0x27, 0x00	; +2  "....9.'."
+
+; --------------------------------------------------------------------------
+; DL_F17C45 -- display list, 0xF17C45-0xF17C4E (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF17C45-0xF17C4E exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F17C45:
+	.byte 0x1b, 0x0a	; F17C45  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0x20, 0x01, 0x1e, 0x00, 0x38, 0x01, 0x26, 0x00	; +2  ' ...8.&.'
+
+; --------------------------------------------------------------------------
+; DL_F17C4F -- display list, 0xF17C4F-0xF17C58 (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF17C4F-0xF17C58 exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F17C4F:
+	.byte 0x05, 0x0a	; F17C4F  op 05, 10 bytes -> handler 0xF31A75
+	.byte 0x20, 0x01, 0x1e, 0x00, 0x38, 0x01, 0x26, 0x00	; +2  ' ...8.&.'
+
+; --------------------------------------------------------------------------
+; Bitmap_F17C59_24x17 -- bitmap, 0xF17C59-0xF17C8B (51 bytes)
+; Shape: 17 entries of 3 bytes = 51 bytes, which is the whole segment.
+; Evidence: 3 bytes per row x 17 rows, from the BC and HL fields of the
+;           op-03 record at 0xF1AAA9
+; ★ CORRECTION C5: the layout calls this an index_map.  It is a BITMAP: the
+;                  op-03 record at 0xF1AAA9 points at it with BC = 3 (bytes
+;                  per row) and HL = 17 (rows), and 3 x 17 = 51 is the whole
+;                  segment.
+; --------------------------------------------------------------------------
+Bitmap_F17C59_24x17:
+	.byte 0x0f, 0x10, 0x10   ; F17C59  ...
+	.byte 0x10, 0x10, 0x10   ; F17C5C  ...
+	.byte 0x10, 0x10, 0x1f   ; F17C5F  ...
+	.byte 0x10, 0x10, 0x10   ; F17C62  ...
+	.byte 0x10, 0x10, 0x10   ; F17C65  ...
+	.byte 0x10, 0x0f, 0xff   ; F17C68  ...
+	.byte 0x00, 0x10, 0x10   ; F17C6B  ...
+	.byte 0x10, 0x10, 0x10   ; F17C6E  ...
+	.byte 0x00, 0xff, 0x00   ; F17C71  ...
+	.byte 0x38, 0x44, 0x44   ; F17C74  8DD
+	.byte 0x44, 0x38, 0x00   ; F17C77  D8.
+	.byte 0xff, 0xe0, 0x10   ; F17C7A  ...
+	.byte 0x10, 0x10, 0x10   ; F17C7D  ...
+	.byte 0x10, 0x10, 0x10   ; F17C80  ...
+	.byte 0xf0, 0x10, 0x10   ; F17C83  ...
+	.byte 0x10, 0x10, 0x10   ; F17C86  ...
+	.byte 0x10, 0x10, 0xe0   ; F17C89  ...
+
+; --------------------------------------------------------------------------
+; DL_Mixer -- display list, 0xF17C8C-0xF17E2D (418 bytes)
+; Interpreter: A.  42 records, framed by their own length bytes; the walk
+;              consumes 0xF17C8C-0xF17E2D exactly.
+; Text it draws: 'MIXER'; 'SOUND:'
+; Evidence: 42 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_Mixer:
+	.byte 0x23, 0x05	; F17C8C  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x05, 0x00, 0x00	; +2  '...'
+	.byte 0x1c, 0x0b	; F17C91  op 1C, 11 bytes -> handler 0xF31A52
+	.short 0x001B, 0x0004	; +2  the two words
+	.ascii "MIXER"	; +6
+	.byte 0x17, 0x0c	; F17C9C  op 17, 12 bytes -> handler 0xF31A52
+	.short 0x0077, 0x001B	; +2  the two words
+	.ascii "SOUND:"	; +6
+	.byte 0x09, 0x0a	; F17CA8  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x46, 0x00, 0x18, 0x00, 0x02, 0x01, 0x24, 0x00	; +2  'F.....$.'
+	.byte 0x01, 0x0a	; F17CB2  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x46, 0x00, 0x19, 0x00, 0x02, 0x01, 0x19, 0x00	; +2  'F.......'
+	.byte 0x01, 0x0a	; F17CBC  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x46, 0x00, 0x23, 0x00, 0x02, 0x01, 0x23, 0x00	; +2  'F.#...#.'
+	.byte 0x01, 0x0a	; F17CC6  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x05, 0x00, 0xe1, 0x00, 0x21, 0x00, 0xe1, 0x00	; +2  '....!...'
+	.byte 0x01, 0x0a	; F17CD0  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x2d, 0x00, 0xe1, 0x00, 0x49, 0x00, 0xe1, 0x00	; +2  '-...I...'
+	.byte 0x01, 0x0a	; F17CDA  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x55, 0x00, 0xe1, 0x00, 0x71, 0x00, 0xe1, 0x00	; +2  'U...q...'
+	.byte 0x01, 0x0a	; F17CE4  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x7d, 0x00, 0xe1, 0x00, 0x99, 0x00, 0xe1, 0x00	; +2  '}.......'
+	.byte 0x01, 0x0a	; F17CEE  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xa5, 0x00, 0xe1, 0x00, 0xc1, 0x00, 0xe1, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F17CF8  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xcd, 0x00, 0xe1, 0x00, 0xe9, 0x00, 0xe1, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F17D02  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xf5, 0x00, 0xe1, 0x00, 0x11, 0x01, 0xe1, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F17D0C  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x1d, 0x01, 0xe1, 0x00, 0x39, 0x01, 0xe1, 0x00	; +2  '....9...'
+	.byte 0x01, 0x0a	; F17D16  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x05, 0x00, 0xed, 0x00, 0x21, 0x00, 0xed, 0x00	; +2  '....!...'
+	.byte 0x01, 0x0a	; F17D20  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x2d, 0x00, 0xed, 0x00, 0x49, 0x00, 0xed, 0x00	; +2  '-...I...'
+	.byte 0x01, 0x0a	; F17D2A  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x55, 0x00, 0xed, 0x00, 0x71, 0x00, 0xed, 0x00	; +2  'U...q...'
+	.byte 0x01, 0x0a	; F17D34  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x7d, 0x00, 0xed, 0x00, 0x99, 0x00, 0xed, 0x00	; +2  '}.......'
+	.byte 0x01, 0x0a	; F17D3E  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xa5, 0x00, 0xed, 0x00, 0xc1, 0x00, 0xed, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F17D48  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xcd, 0x00, 0xed, 0x00, 0xe9, 0x00, 0xed, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F17D52  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xf5, 0x00, 0xed, 0x00, 0x11, 0x01, 0xed, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F17D5C  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x1d, 0x01, 0xed, 0x00, 0x39, 0x01, 0xed, 0x00	; +2  '....9...'
+	.byte 0x02, 0x0a	; F17D66  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0xe2, 0x00, 0x04, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17D70  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x22, 0x00, 0xe2, 0x00, 0x22, 0x00, 0xec, 0x00	; +2  '"..."...'
+	.byte 0x02, 0x0a	; F17D7A  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x2c, 0x00, 0xe2, 0x00, 0x2c, 0x00, 0xec, 0x00	; +2  ',...,...'
+	.byte 0x02, 0x0a	; F17D84  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x42, 0x00, 0x1b, 0x00, 0x42, 0x00, 0x22, 0x00	; +2  'B...B.".'
+	.byte 0x02, 0x0a	; F17D8E  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x44, 0x00, 0x1a, 0x00, 0x44, 0x00, 0x23, 0x00	; +2  'D...D.#.'
+	.byte 0x02, 0x0a	; F17D98  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x4a, 0x00, 0xe2, 0x00, 0x4a, 0x00, 0xec, 0x00	; +2  'J...J...'
+	.byte 0x02, 0x0a	; F17DA2  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x54, 0x00, 0xe2, 0x00, 0x54, 0x00, 0xec, 0x00	; +2  'T...T...'
+	.byte 0x02, 0x0a	; F17DAC  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x72, 0x00, 0xe2, 0x00, 0x72, 0x00, 0xec, 0x00	; +2  'r...r...'
+	.byte 0x02, 0x0a	; F17DB6  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x7c, 0x00, 0xe2, 0x00, 0x7c, 0x00, 0xec, 0x00	; +2  '|...|...'
+	.byte 0x02, 0x0a	; F17DC0  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x9a, 0x00, 0xe2, 0x00, 0x9a, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17DCA  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xa4, 0x00, 0xe2, 0x00, 0xa4, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17DD4  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xc2, 0x00, 0xe2, 0x00, 0xc2, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17DDE  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xcc, 0x00, 0xe2, 0x00, 0xcc, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17DE8  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xea, 0x00, 0xe2, 0x00, 0xea, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17DF2  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xf4, 0x00, 0xe2, 0x00, 0xf4, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17DFC  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x01, 0x1a, 0x00, 0x04, 0x01, 0x23, 0x00	; +2  '......#.'
+	.byte 0x02, 0x0a	; F17E06  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x01, 0x1b, 0x00, 0x06, 0x01, 0x22, 0x00	; +2  '......".'
+	.byte 0x02, 0x0a	; F17E10  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x12, 0x01, 0xe2, 0x00, 0x12, 0x01, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17E1A  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x1c, 0x01, 0xe2, 0x00, 0x1c, 0x01, 0xec, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F17E24  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x3a, 0x01, 0xe2, 0x00, 0x3a, 0x01, 0xec, 0x00	; +2  ':...:...'
+
+; --------------------------------------------------------------------------
+; DL_F17E2E -- display list, 0xF17E2E-0xF17E41 (20 bytes)
+; Interpreter: A.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF17E2E-0xF17E41 exactly.
+; Evidence: 2 records, interpreter A, inside the call-site run
+;           0xF17E2E-0xF17E9D
+; --------------------------------------------------------------------------
+DL_F17E2E:
+	.byte 0x09, 0x0a	; F17E2E  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x29, 0x00, 0x3a, 0x01, 0x6a, 0x00	; +2  '..).:.j.'
+	.byte 0x02, 0x0a	; F17E38  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xa0, 0x00, 0x29, 0x00, 0xa0, 0x00, 0x6a, 0x00	; +2  '..)...j.'
+
+; --------------------------------------------------------------------------
+; DL_Sound -- display list, 0xF17E42-0xF17E9C (91 bytes)
+; Interpreter: A.  10 records, framed by their own length bytes; the walk
+;              consumes 0xF17E42-0xF17E9C exactly.
+; Text it draws: 'PAGE1/3'; 'SOUND'; 'PAN'; 'VOL'
+; Evidence: 10 records, interpreter A, inside the call-site run
+;           0xF17E2E-0xF17E9D
+; --------------------------------------------------------------------------
+DL_Sound:
+	.byte 0x20, 0x0b	; F17E42  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE1/3"	; +4
+	.byte 0x17, 0x0b	; F17E4D  op 17, 11 bytes -> handler 0xF31A52
+	.short 0x0007, 0x001F	; +2  the two words
+	.ascii "SOUND"	; +6
+	.byte 0x17, 0x07	; F17E58  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0021	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x09	; F17E5F  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x000D, 0x0070	; +2  the two words
+	.ascii "PAN"	; +6
+	.byte 0x17, 0x07	; F17E68  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0072	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F17E6F  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0099	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x09	; F17E76  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x000D, 0x009B	; +2  the two words
+	.ascii "VOL"	; +6
+	.byte 0x09, 0x0a	; F17E7F  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x1d, 0x00, 0x26, 0x00, 0x27, 0x00	; +2  "....&.'."
+	.byte 0x09, 0x0a	; F17E89  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x6e, 0x00, 0x26, 0x00, 0x78, 0x00	; +2  '..n.&.x.'
+	.byte 0x09, 0x0a	; F17E93  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x99, 0x00, 0x26, 0x00, 0xa3, 0x00	; +2  '....&...'
+
+; --------------------------------------------------------------------------
+; DL_F17E9D -- display list, 0xF17E9D-0xF17F06 (106 bytes)
+; Interpreter: A.  11 records, framed by their own length bytes; the walk
+;              consumes 0xF17E9D-0xF17F06 exactly.
+; Text it draws: 'INT'
+; Evidence: 11 records, interpreter A, inside the call-site run
+;           0xF17E42-0xF17F07
+; --------------------------------------------------------------------------
+DL_F17E9D:
+	.byte 0x17, 0x09	; F17E9D  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x000D, 0x0049	; +2  the two words
+	.ascii "INT"	; +6
+	.byte 0x09, 0x0a	; F17EA6  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x47, 0x00, 0x26, 0x00, 0x51, 0x00	; +2  '..G.&.Q.'
+	.byte 0x17, 0x07	; F17EB0  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x004B	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x11, 0x0a	; F17EB7  op 11, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x38, 0x00, 0x22, 0x00, 0x38, 0x00	; +2  '..8.".8.'
+	.byte 0x11, 0x0a	; F17EC1  op 11, 10 bytes -> handler 0xF31A75
+	.byte 0x2c, 0x00, 0x38, 0x00, 0x4a, 0x00, 0x38, 0x00	; +2  ',.8.J.8.'
+	.byte 0x11, 0x0a	; F17ECB  op 11, 10 bytes -> handler 0xF31A75
+	.byte 0x54, 0x00, 0x38, 0x00, 0x72, 0x00, 0x38, 0x00	; +2  'T.8.r.8.'
+	.byte 0x11, 0x0a	; F17ED5  op 11, 10 bytes -> handler 0xF31A75
+	.byte 0x7c, 0x00, 0x38, 0x00, 0x9a, 0x00, 0x38, 0x00	; +2  '|.8...8.'
+	.byte 0x11, 0x0a	; F17EDF  op 11, 10 bytes -> handler 0xF31A75
+	.byte 0xa4, 0x00, 0x38, 0x00, 0xc2, 0x00, 0x38, 0x00	; +2  '..8...8.'
+	.byte 0x11, 0x0a	; F17EE9  op 11, 10 bytes -> handler 0xF31A75
+	.byte 0xcc, 0x00, 0x38, 0x00, 0xea, 0x00, 0x38, 0x00	; +2  '..8...8.'
+	.byte 0x11, 0x0a	; F17EF3  op 11, 10 bytes -> handler 0xF31A75
+	.byte 0xf4, 0x00, 0x38, 0x00, 0x12, 0x01, 0x38, 0x00	; +2  '..8...8.'
+	.byte 0x11, 0x0a	; F17EFD  op 11, 10 bytes -> handler 0xF31A75
+	.byte 0x1c, 0x01, 0x38, 0x00, 0x3a, 0x01, 0x38, 0x00	; +2  '..8.:.8.'
+
+; --------------------------------------------------------------------------
+; DL_KeyShift -- display list, 0xF17F07-0xF17FA3 (157 bytes)
+; Interpreter: A.  17 records, framed by their own length bytes; the walk
+;              consumes 0xF17F07-0xF17FA3 exactly.
+; Text it draws: 'PAGE2/3'; 'REV'; 'EFF1'; 'EFF2'; 'MAIN'; 'KEY SHIFT'
+; Evidence: 17 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_KeyShift:
+	.byte 0x17, 0x07	; F17F07  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0109, 0x0002	; +2  the two words
+	.byte 0x91	; +6  '.'
+	.byte 0x20, 0x0b	; F17F0E  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE2/3"	; +4
+	.byte 0x17, 0x09	; F17F19  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x000C, 0x001F	; +2  the two words
+	.ascii "REV"	; +6
+	.byte 0x17, 0x07	; F17F22  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0021	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x0a	; F17F29  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0009, 0x0049	; +2  the two words
+	.ascii "EFF1"	; +6
+	.byte 0x17, 0x07	; F17F33  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x004B	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x0a	; F17F3A  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0009, 0x0070	; +2  the two words
+	.ascii "EFF2"	; +6
+	.byte 0x17, 0x07	; F17F44  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0072	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F17F4B  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0099	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x0a	; F17F52  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0009, 0x009B	; +2  the two words
+	.ascii "MAIN"	; +6
+	.byte 0x17, 0x0f	; F17F5C  op 17, 15 bytes -> handler 0xF31A52
+	.short 0x0009, 0x00C0	; +2  the two words
+	.ascii "KEY SHIFT"	; +6
+	.byte 0x17, 0x07	; F17F6B  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x00C2	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x09, 0x0a	; F17F72  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x1d, 0x00, 0x26, 0x00, 0x27, 0x00	; +2  "....&.'."
+	.byte 0x09, 0x0a	; F17F7C  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x47, 0x00, 0x26, 0x00, 0x51, 0x00	; +2  '..G.&.Q.'
+	.byte 0x09, 0x0a	; F17F86  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x6e, 0x00, 0x26, 0x00, 0x78, 0x00	; +2  '..n.&.x.'
+	.byte 0x09, 0x0a	; F17F90  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x99, 0x00, 0x26, 0x00, 0xa3, 0x00	; +2  '....&...'
+	.byte 0x09, 0x0a	; F17F9A  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0xbe, 0x00, 0x44, 0x00, 0xc8, 0x00	; +2  '....D...'
+
+; --------------------------------------------------------------------------
+; DL_Midiout -- display list, 0xF17FA4-0xF18029 (134 bytes)
+; Interpreter: A.  14 records, framed by their own length bytes; the walk
+;              consumes 0xF17FA4-0xF18029 exactly.
+; Text it draws: 'PAGE3/3'; 'MIDIOUT'; 'MIDI IN'; 'MIDI CH'; 'SUB'
+; Evidence: 14 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_Midiout:
+	.byte 0x17, 0x07	; F17FA4  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0109, 0x0002	; +2  the two words
+	.byte 0x91	; +6  '.'
+	.byte 0x20, 0x0b	; F17FAB  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE3/3"	; +4
+	.byte 0x17, 0x0d	; F17FB6  op 17, 13 bytes -> handler 0xF31A52
+	.short 0x0009, 0x0049	; +2  the two words
+	.ascii "MIDIOUT"	; +6
+	.byte 0x17, 0x07	; F17FC3  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x004B	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x0d	; F17FCA  op 17, 13 bytes -> handler 0xF31A52
+	.short 0x0009, 0x0070	; +2  the two words
+	.ascii "MIDI IN"	; +6
+	.byte 0x17, 0x07	; F17FD7  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0072	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F17FDE  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0099	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x0d	; F17FE5  op 17, 13 bytes -> handler 0xF31A52
+	.short 0x0009, 0x009B	; +2  the two words
+	.ascii "MIDI CH"	; +6
+	.byte 0x17, 0x09	; F17FF2  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x000C, 0x00C0	; +2  the two words
+	.ascii "SUB"	; +6
+	.byte 0x17, 0x07	; F17FFB  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x00C2	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x09, 0x0a	; F18002  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x47, 0x00, 0x36, 0x00, 0x51, 0x00	; +2  '..G.6.Q.'
+	.byte 0x09, 0x0a	; F1800C  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x6e, 0x00, 0x36, 0x00, 0x78, 0x00	; +2  '..n.6.x.'
+	.byte 0x09, 0x0a	; F18016  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x99, 0x00, 0x36, 0x00, 0xa3, 0x00	; +2  '....6...'
+	.byte 0x09, 0x0a	; F18020  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0xbe, 0x00, 0x26, 0x00, 0xc8, 0x00	; +2  '....&...'
+
+; --------------------------------------------------------------------------
+; DL_F1802A -- display list, 0xF1802A-0xF18043 (26 bytes)
+; Interpreter: A.  3 records, framed by their own length bytes; the walk
+;              consumes 0xF1802A-0xF18043 exactly.
+; Text it draws: 'INT'
+; Evidence: 3 records, interpreter A, inside the call-site run
+;           0xF17FA4-0xF18044
+; --------------------------------------------------------------------------
+DL_F1802A:
+	.byte 0x17, 0x09	; F1802A  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x000D, 0x001F	; +2  the two words
+	.ascii "INT"	; +6
+	.byte 0x17, 0x07	; F18033  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0021	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x09, 0x0a	; F1803A  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x06, 0x00, 0x1d, 0x00, 0x26, 0x00, 0x27, 0x00	; +2  "....&.'."
+
+; --------------------------------------------------------------------------
+; DL_F18044 -- display list, 0xF18044-0xF18065 (34 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF18044-0xF18065 exactly.
+; Evidence: 2 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F18044:
+	.byte 0x07, 0x11	; F18044  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2765		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1828A	; +7  -> StringTable_F1828A
+	.byte 0x06, 0x00, 0x4d, 0x00, 0x1b, 0x00	; +11  '..M...'
+	.byte 0x07, 0x11	; F18055  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x0000		; +2  RAM variable
+	.byte 0x00, 0x00, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00002640	; +7  -> 0x002640
+	.byte 0x10, 0x00, 0x9b, 0x00, 0x1b, 0x00	; +11  '......'
+
+; --------------------------------------------------------------------------
+; RecordArray_F18066 -- record array, 0xF18066-0xF180ED (136 bytes)
+; Shape: 8 entries of 17 bytes = 136 bytes, which is the whole segment.
+; Evidence: 8 records of 17 bytes, individually addressed (stride 17);
+;           entries [0..] of the pointer table at 0xF1B06B; interpreter B --
+;           every record's +7 pointer lands in the span
+; --------------------------------------------------------------------------
+RecordArray_F18066:
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x4a, 0x83, 0xf1, 0x00, 0x03, 0x00, 0x0a, 0x00, 0x30, 0x00   ; F18066  [0]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x4a, 0x83, 0xf1, 0x00, 0x03, 0x00, 0x32, 0x00, 0x30, 0x00   ; F18077  [1]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x4a, 0x83, 0xf1, 0x00, 0x03, 0x00, 0x5a, 0x00, 0x30, 0x00   ; F18088  [2]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x4a, 0x83, 0xf1, 0x00, 0x03, 0x00, 0x82, 0x00, 0x30, 0x00   ; F18099  [3]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x4a, 0x83, 0xf1, 0x00, 0x03, 0x00, 0xaa, 0x00, 0x30, 0x00   ; F180AA  [4]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x4a, 0x83, 0xf1, 0x00, 0x03, 0x00, 0xd2, 0x00, 0x30, 0x00   ; F180BB  [5]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x4a, 0x83, 0xf1, 0x00, 0x03, 0x00, 0xfa, 0x00, 0x30, 0x00   ; F180CC  [6]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x4a, 0x83, 0xf1, 0x00, 0x03, 0x00, 0x22, 0x01, 0x30, 0x00   ; F180DD  [7]
+
+; --------------------------------------------------------------------------
+; RecordArray_F180EE -- record array, 0xF180EE-0xF1814D (96 bytes)
+; Shape: 8 entries of 12 bytes = 96 bytes, which is the whole segment.
+; Evidence: 8 records of 12 bytes, individually addressed (stride 12);
+;           entries [0..] of the pointer table at 0xF1B08B
+; --------------------------------------------------------------------------
+RecordArray_F180EE:
+	.byte 0x09, 0x0c, 0x41, 0x26, 0xff, 0x00, 0x17, 0x0a, 0x00, 0x3a, 0x00, 0x03   ; F180EE  [0]
+	.byte 0x09, 0x0c, 0x41, 0x26, 0xff, 0x00, 0x17, 0x32, 0x00, 0x3a, 0x00, 0x03   ; F180FA  [1]
+	.byte 0x09, 0x0c, 0x41, 0x26, 0xff, 0x00, 0x17, 0x5a, 0x00, 0x3a, 0x00, 0x03   ; F18106  [2]
+	.byte 0x09, 0x0c, 0x41, 0x26, 0xff, 0x00, 0x17, 0x82, 0x00, 0x3a, 0x00, 0x03   ; F18112  [3]
+	.byte 0x09, 0x0c, 0x41, 0x26, 0xff, 0x00, 0x17, 0xaa, 0x00, 0x3a, 0x00, 0x03   ; F1811E  [4]
+	.byte 0x09, 0x0c, 0x41, 0x26, 0xff, 0x00, 0x17, 0xd2, 0x00, 0x3a, 0x00, 0x03   ; F1812A  [5]
+	.byte 0x09, 0x0c, 0x41, 0x26, 0xff, 0x00, 0x17, 0xfa, 0x00, 0x3a, 0x00, 0x03   ; F18136  [6]
+	.byte 0x09, 0x0c, 0x41, 0x26, 0xff, 0x00, 0x17, 0x22, 0x01, 0x3a, 0x00, 0x03   ; F18142  [7]
+
+; --------------------------------------------------------------------------
+; DL_F1814E -- display list, 0xF1814E-0xF181D5 (136 bytes)
+; Interpreter: B.  8 records, framed by their own length bytes; the walk
+;              consumes 0xF1814E-0xF181D5 exactly.
+; Evidence: 8 records, interpreter B, named by a push pair whose framing
+;           walk lands on the end address
+; ★ CORRECTION C2: the layout calls this run AMBIG because its records
+;                  satisfy both interpreters' implied-length tables.  It is
+;                  interpreter B, and not by the length rule -- which
+;                  misclassifies 23 of the 4,097 records whose interpreter
+;                  is known -- but by the caller's own register: prom_a
+;                  0xFBE2EC does `lda XIX,0x00F42E04` and reaches the
+;                  interpreter with `jp (XIX)` at 0xFBE32A and 0xFBE34E.
+; --------------------------------------------------------------------------
+DL_F1814E:
+	.byte 0x07, 0x11	; F1814E  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1840D	; +7  -> StringTable_F1840D
+	.byte 0x03, 0x00, 0x0a, 0x00, 0xe4, 0x00	; +11  '......'
+	.byte 0x07, 0x11	; F1815F  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18419	; +7  -> StringTable_F18419
+	.byte 0x03, 0x00, 0x32, 0x00, 0xe4, 0x00	; +11  '..2...'
+	.byte 0x07, 0x11	; F18170  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18425	; +7  -> StringTable_F18425
+	.byte 0x03, 0x00, 0x5a, 0x00, 0xe4, 0x00	; +11  '..Z...'
+	.byte 0x07, 0x11	; F18181  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18431	; +7  -> StringTable_F18431
+	.byte 0x03, 0x00, 0x82, 0x00, 0xe4, 0x00	; +11  '......'
+	.byte 0x07, 0x11	; F18192  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1843D	; +7  -> StringTable_F1843D
+	.byte 0x03, 0x00, 0xaa, 0x00, 0xe4, 0x00	; +11  '......'
+	.byte 0x07, 0x11	; F181A3  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18449	; +7  -> StringTable_F18449
+	.byte 0x03, 0x00, 0xd2, 0x00, 0xe4, 0x00	; +11  '......'
+	.byte 0x07, 0x11	; F181B4  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18455	; +7  -> StringTable_F18455
+	.byte 0x03, 0x00, 0xfa, 0x00, 0xe4, 0x00	; +11  '......'
+	.byte 0x07, 0x11	; F181C5  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18461	; +7  -> StringTable_F18461
+	.byte 0x03, 0x00, 0x22, 0x01, 0xe4, 0x00	; +11  '.."...'
+
+; --------------------------------------------------------------------------
+; DL_F181D6 -- display list, 0xF181D6-0xF1825D (136 bytes)
+; Interpreter: B.  8 records, framed by their own length bytes; the walk
+;              consumes 0xF181D6-0xF1825D exactly.
+; Evidence: 8 records, interpreter B, named by a push pair whose framing
+;           walk lands on the end address
+; ★ CORRECTION C2: the layout calls this run AMBIG because its records
+;                  satisfy both interpreters' implied-length tables.  It is
+;                  interpreter B, and not by the length rule -- which
+;                  misclassifies 23 of the 4,097 records whose interpreter
+;                  is known -- but by the caller's own register: prom_a
+;                  0xFBE2EC does `lda XIX,0x00F42E04` and reaches the
+;                  interpreter with `jp (XIX)` at 0xFBE32A and 0xFBE34E.
+; --------------------------------------------------------------------------
+DL_F181D6:
+	.byte 0x07, 0x11	; F181D6  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1846D	; +7  -> StringTable_F1846D
+	.byte 0x07, 0x00, 0x0e, 0x00, 0x2f, 0x00	; +11  '..../.'
+	.byte 0x07, 0x11	; F181E7  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18489	; +7  -> StringTable_F18489
+	.byte 0x07, 0x00, 0x0e, 0x00, 0x3f, 0x00	; +11  '....?.'
+	.byte 0x07, 0x11	; F181F8  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F184A5	; +7  -> StringTable_F184A5
+	.byte 0x07, 0x00, 0x0e, 0x00, 0x4f, 0x00	; +11  '....O.'
+	.byte 0x07, 0x11	; F18209  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F184C1	; +7  -> StringTable_F184C1
+	.byte 0x07, 0x00, 0x0e, 0x00, 0x5f, 0x00	; +11  '...._.'
+	.byte 0x07, 0x11	; F1821A  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F184DD	; +7  -> StringTable_F184DD
+	.byte 0x07, 0x00, 0xa8, 0x00, 0x2f, 0x00	; +11  '..../.'
+	.byte 0x07, 0x11	; F1822B  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F184F9	; +7  -> StringTable_F184F9
+	.byte 0x07, 0x00, 0xa8, 0x00, 0x3f, 0x00	; +11  '....?.'
+	.byte 0x07, 0x11	; F1823C  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18515	; +7  -> StringTable_F18515
+	.byte 0x07, 0x00, 0xa8, 0x00, 0x4f, 0x00	; +11  '....O.'
+	.byte 0x07, 0x11	; F1824D  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x18, 0x03, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F18531	; +7  -> StringTable_F18531
+	.byte 0x07, 0x00, 0xa8, 0x00, 0x5f, 0x00	; +11  '...._.'
+
+; --------------------------------------------------------------------------
+; DL_F1825E -- display list, 0xF1825E-0xF18268 (11 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1825E-0xF18268 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1825E:
+	.byte 0x08, 0x0b	; F1825E  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x2641		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F1854D	; +7  -> IndexMap_F1854D
+
+; --------------------------------------------------------------------------
+; DL_F18269 -- display list, 0xF18269-0xF18273 (11 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF18269-0xF18273 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F18269:
+	.byte 0x03, 0x0b	; F18269  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F1854D	; +7  -> IndexMap_F1854D
+
+; --------------------------------------------------------------------------
+; DL_F18274 -- display list, 0xF18274-0xF18289 (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF18274-0xF18289 exactly.
+; Evidence: 2 records, interpreter B, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_F18274:
+	.byte 0x08, 0x0b	; F18274  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x2641		; +2  RAM variable
+	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F185BD	; +7  -> IndexMap_F185BD
+	.byte 0x03, 0x0b	; F1827F  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2640		; +2  RAM variable
+	.byte 0x07, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F185BD	; +7  -> IndexMap_F185BD
+
+; --------------------------------------------------------------------------
+; StringTable_F1828A -- ascii, 0xF1828A-0xF18349 (192 bytes)
+; Shape: 32 entries of 6 bytes = 192 bytes, which is the whole segment.
+; First / last: 'PART 1' ... 'PART32'
+; Evidence: 32 entries of 6 bytes; 1 record(s) point into it, the first at
+;           0xF18044, whose mask allows at most 32 indices
+; --------------------------------------------------------------------------
+StringTable_F1828A:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x31   ; F1828A  [0]  'PART 1'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x32   ; F18290  [1]  'PART 2'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x33   ; F18296  [2]  'PART 3'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x34   ; F1829C  [3]  'PART 4'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x35   ; F182A2  [4]  'PART 5'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x36   ; F182A8  [5]  'PART 6'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x37   ; F182AE  [6]  'PART 7'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x38   ; F182B4  [7]  'PART 8'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x39   ; F182BA  [8]  'PART 9'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x30   ; F182C0  [9]  'PART10'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x31   ; F182C6  [10]  'PART11'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x32   ; F182CC  [11]  'PART12'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x33   ; F182D2  [12]  'PART13'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x34   ; F182D8  [13]  'PART14'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x35   ; F182DE  [14]  'PART15'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x36   ; F182E4  [15]  'PART16'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x37   ; F182EA  [16]  'PART17'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x38   ; F182F0  [17]  'PART18'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x39   ; F182F6  [18]  'PART19'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x30   ; F182FC  [19]  'PART20'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x31   ; F18302  [20]  'PART21'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x32   ; F18308  [21]  'PART22'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x33   ; F1830E  [22]  'PART23'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x34   ; F18314  [23]  'PART24'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x35   ; F1831A  [24]  'PART25'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x36   ; F18320  [25]  'PART26'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x37   ; F18326  [26]  'PART27'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x38   ; F1832C  [27]  'PART28'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x39   ; F18332  [28]  'PART29'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x30   ; F18338  [29]  'PART30'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x31   ; F1833E  [30]  'PART31'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x32   ; F18344  [31]  'PART32'
+
+; --------------------------------------------------------------------------
+; StringTable_F1834A -- ascii, 0xF1834A-0xF1840C (195 bytes)
+; Shape: 65 entries of 3 bytes = 195 bytes, which is the whole segment.
+; First / last: 'R1-' ... '   '
+; Evidence: 65 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF18066, whose mask allows at most 128 indices
+; --------------------------------------------------------------------------
+StringTable_F1834A:
+	.byte 0x52, 0x31, 0x2d   ; F1834A  [0]  'R1-'
+	.byte 0x52, 0x32, 0x2d   ; F1834D  [1]  'R2-'
+	.byte 0x20, 0x20, 0x20   ; F18350  [2]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18353  [3]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18356  [4]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18359  [5]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1835C  [6]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1835F  [7]  '   '
+	.byte 0x55, 0x31, 0x2d   ; F18362  [8]  'U1-'
+	.byte 0x55, 0x32, 0x2d   ; F18365  [9]  'U2-'
+	.byte 0x20, 0x20, 0x20   ; F18368  [10]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1836B  [11]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1836E  [12]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18371  [13]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18374  [14]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18377  [15]  '   '
+	.byte 0x45, 0x31, 0x2d   ; F1837A  [16]  'E1-'
+	.byte 0x20, 0x20, 0x20   ; F1837D  [17]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18380  [18]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18383  [19]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18386  [20]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18389  [21]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1838C  [22]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1838F  [23]  '   '
+	.byte 0x4d, 0x31, 0x2d   ; F18392  [24]  'M1-'
+	.byte 0x4d, 0x32, 0x2d   ; F18395  [25]  'M2-'
+	.byte 0x4d, 0x33, 0x2d   ; F18398  [26]  'M3-'
+	.byte 0x20, 0x20, 0x20   ; F1839B  [27]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1839E  [28]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183A1  [29]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183A4  [30]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183A7  [31]  '   '
+	.byte 0x52, 0x44, 0x31   ; F183AA  [32]  'RD1'
+	.byte 0x52, 0x44, 0x32   ; F183AD  [33]  'RD2'
+	.byte 0x20, 0x20, 0x20   ; F183B0  [34]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183B3  [35]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183B6  [36]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183B9  [37]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183BC  [38]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183BF  [39]  '   '
+	.byte 0x55, 0x44, 0x31   ; F183C2  [40]  'UD1'
+	.byte 0x55, 0x44, 0x32   ; F183C5  [41]  'UD2'
+	.byte 0x20, 0x20, 0x20   ; F183C8  [42]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183CB  [43]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183CE  [44]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183D1  [45]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183D4  [46]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183D7  [47]  '   '
+	.byte 0x45, 0x44, 0x31   ; F183DA  [48]  'ED1'
+	.byte 0x20, 0x20, 0x20   ; F183DD  [49]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183E0  [50]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183E3  [51]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183E6  [52]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183E9  [53]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183EC  [54]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183EF  [55]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183F2  [56]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183F5  [57]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183F8  [58]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183FB  [59]  '   '
+	.byte 0x20, 0x20, 0x20   ; F183FE  [60]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18401  [61]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18404  [62]  '   '
+	.byte 0x20, 0x20, 0x20   ; F18407  [63]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1840A  [64]  '   '
+
+; --------------------------------------------------------------------------
+; StringTable_F1840D -- ascii, 0xF1840D-0xF18418 (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'PT1' ... 'P25'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF1814E, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F1840D:
+	.byte 0x50, 0x54, 0x31   ; F1840D  [0]  'PT1'
+	.byte 0x50, 0x54, 0x39   ; F18410  [1]  'PT9'
+	.byte 0x50, 0x31, 0x37   ; F18413  [2]  'P17'
+	.byte 0x50, 0x32, 0x35   ; F18416  [3]  'P25'
+
+; --------------------------------------------------------------------------
+; StringTable_F18419 -- ascii, 0xF18419-0xF18424 (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'PT2' ... 'P26'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF1815F, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18419:
+	.byte 0x50, 0x54, 0x32   ; F18419  [0]  'PT2'
+	.byte 0x50, 0x31, 0x30   ; F1841C  [1]  'P10'
+	.byte 0x50, 0x31, 0x38   ; F1841F  [2]  'P18'
+	.byte 0x50, 0x32, 0x36   ; F18422  [3]  'P26'
+
+; --------------------------------------------------------------------------
+; StringTable_F18425 -- ascii, 0xF18425-0xF18430 (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'PT3' ... 'P27'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF18170, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18425:
+	.byte 0x50, 0x54, 0x33   ; F18425  [0]  'PT3'
+	.byte 0x50, 0x31, 0x31   ; F18428  [1]  'P11'
+	.byte 0x50, 0x31, 0x39   ; F1842B  [2]  'P19'
+	.byte 0x50, 0x32, 0x37   ; F1842E  [3]  'P27'
+
+; --------------------------------------------------------------------------
+; StringTable_F18431 -- ascii, 0xF18431-0xF1843C (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'PT4' ... 'P28'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF18181, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18431:
+	.byte 0x50, 0x54, 0x34   ; F18431  [0]  'PT4'
+	.byte 0x50, 0x31, 0x32   ; F18434  [1]  'P12'
+	.byte 0x50, 0x32, 0x30   ; F18437  [2]  'P20'
+	.byte 0x50, 0x32, 0x38   ; F1843A  [3]  'P28'
+
+; --------------------------------------------------------------------------
+; StringTable_F1843D -- ascii, 0xF1843D-0xF18448 (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'PT5' ... 'P29'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF18192, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F1843D:
+	.byte 0x50, 0x54, 0x35   ; F1843D  [0]  'PT5'
+	.byte 0x50, 0x31, 0x33   ; F18440  [1]  'P13'
+	.byte 0x50, 0x32, 0x31   ; F18443  [2]  'P21'
+	.byte 0x50, 0x32, 0x39   ; F18446  [3]  'P29'
+
+; --------------------------------------------------------------------------
+; StringTable_F18449 -- ascii, 0xF18449-0xF18454 (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'PT6' ... 'P30'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF181A3, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18449:
+	.byte 0x50, 0x54, 0x36   ; F18449  [0]  'PT6'
+	.byte 0x50, 0x31, 0x34   ; F1844C  [1]  'P14'
+	.byte 0x50, 0x32, 0x32   ; F1844F  [2]  'P22'
+	.byte 0x50, 0x33, 0x30   ; F18452  [3]  'P30'
+
+; --------------------------------------------------------------------------
+; StringTable_F18455 -- ascii, 0xF18455-0xF18460 (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'PT7' ... 'P31'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF181B4, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18455:
+	.byte 0x50, 0x54, 0x37   ; F18455  [0]  'PT7'
+	.byte 0x50, 0x31, 0x35   ; F18458  [1]  'P15'
+	.byte 0x50, 0x32, 0x33   ; F1845B  [2]  'P23'
+	.byte 0x50, 0x33, 0x31   ; F1845E  [3]  'P31'
+
+; --------------------------------------------------------------------------
+; StringTable_F18461 -- ascii, 0xF18461-0xF1846C (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'PT8' ... 'P32'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF181C5, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18461:
+	.byte 0x50, 0x54, 0x38   ; F18461  [0]  'PT8'
+	.byte 0x50, 0x31, 0x36   ; F18464  [1]  'P16'
+	.byte 0x50, 0x32, 0x34   ; F18467  [2]  'P24'
+	.byte 0x50, 0x33, 0x32   ; F1846A  [3]  'P32'
+
+; --------------------------------------------------------------------------
+; StringTable_F1846D -- ascii, 0xF1846D-0xF18488 (28 bytes)
+; Shape: 4 entries of 7 bytes = 28 bytes, which is the whole segment.
+; First / last: 'PART 1:' ... 'PART25:'
+; Evidence: 4 entries of 7 bytes; 1 record(s) point into it, the first at
+;           0xF181D6, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F1846D:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x31, 0x3a   ; F1846D  [0]  'PART 1:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x39, 0x3a   ; F18474  [1]  'PART 9:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x37, 0x3a   ; F1847B  [2]  'PART17:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x35, 0x3a   ; F18482  [3]  'PART25:'
+
+; --------------------------------------------------------------------------
+; StringTable_F18489 -- ascii, 0xF18489-0xF184A4 (28 bytes)
+; Shape: 4 entries of 7 bytes = 28 bytes, which is the whole segment.
+; First / last: 'PART 2:' ... 'PART26:'
+; Evidence: 4 entries of 7 bytes; 1 record(s) point into it, the first at
+;           0xF181E7, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18489:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x32, 0x3a   ; F18489  [0]  'PART 2:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x30, 0x3a   ; F18490  [1]  'PART10:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x38, 0x3a   ; F18497  [2]  'PART18:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x36, 0x3a   ; F1849E  [3]  'PART26:'
+
+; --------------------------------------------------------------------------
+; StringTable_F184A5 -- ascii, 0xF184A5-0xF184C0 (28 bytes)
+; Shape: 4 entries of 7 bytes = 28 bytes, which is the whole segment.
+; First / last: 'PART 3:' ... 'PART27:'
+; Evidence: 4 entries of 7 bytes; 1 record(s) point into it, the first at
+;           0xF181F8, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F184A5:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x33, 0x3a   ; F184A5  [0]  'PART 3:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x31, 0x3a   ; F184AC  [1]  'PART11:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x39, 0x3a   ; F184B3  [2]  'PART19:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x37, 0x3a   ; F184BA  [3]  'PART27:'
+
+; --------------------------------------------------------------------------
+; StringTable_F184C1 -- ascii, 0xF184C1-0xF184DC (28 bytes)
+; Shape: 4 entries of 7 bytes = 28 bytes, which is the whole segment.
+; First / last: 'PART 4:' ... 'PART28:'
+; Evidence: 4 entries of 7 bytes; 1 record(s) point into it, the first at
+;           0xF18209, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F184C1:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x34, 0x3a   ; F184C1  [0]  'PART 4:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x32, 0x3a   ; F184C8  [1]  'PART12:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x30, 0x3a   ; F184CF  [2]  'PART20:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x38, 0x3a   ; F184D6  [3]  'PART28:'
+
+; --------------------------------------------------------------------------
+; StringTable_F184DD -- ascii, 0xF184DD-0xF184F8 (28 bytes)
+; Shape: 4 entries of 7 bytes = 28 bytes, which is the whole segment.
+; First / last: 'PART 5:' ... 'PART29:'
+; Evidence: 4 entries of 7 bytes; 1 record(s) point into it, the first at
+;           0xF1821A, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F184DD:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x35, 0x3a   ; F184DD  [0]  'PART 5:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x33, 0x3a   ; F184E4  [1]  'PART13:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x31, 0x3a   ; F184EB  [2]  'PART21:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x39, 0x3a   ; F184F2  [3]  'PART29:'
+
+; --------------------------------------------------------------------------
+; StringTable_F184F9 -- ascii, 0xF184F9-0xF18514 (28 bytes)
+; Shape: 4 entries of 7 bytes = 28 bytes, which is the whole segment.
+; First / last: 'PART 6:' ... 'PART30:'
+; Evidence: 4 entries of 7 bytes; 1 record(s) point into it, the first at
+;           0xF1822B, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F184F9:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x36, 0x3a   ; F184F9  [0]  'PART 6:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x34, 0x3a   ; F18500  [1]  'PART14:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x32, 0x3a   ; F18507  [2]  'PART22:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x30, 0x3a   ; F1850E  [3]  'PART30:'
+
+; --------------------------------------------------------------------------
+; StringTable_F18515 -- ascii, 0xF18515-0xF18530 (28 bytes)
+; Shape: 4 entries of 7 bytes = 28 bytes, which is the whole segment.
+; First / last: 'PART 7:' ... 'PART31:'
+; Evidence: 4 entries of 7 bytes; 1 record(s) point into it, the first at
+;           0xF1823C, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18515:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x37, 0x3a   ; F18515  [0]  'PART 7:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x35, 0x3a   ; F1851C  [1]  'PART15:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x33, 0x3a   ; F18523  [2]  'PART23:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x31, 0x3a   ; F1852A  [3]  'PART31:'
+
+; --------------------------------------------------------------------------
+; StringTable_F18531 -- ascii, 0xF18531-0xF1854C (28 bytes)
+; Shape: 4 entries of 7 bytes = 28 bytes, which is the whole segment.
+; First / last: 'PART 8:' ... 'PART32:'
+; Evidence: 4 entries of 7 bytes; 1 record(s) point into it, the first at
+;           0xF1824D, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+StringTable_F18531:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x38, 0x3a   ; F18531  [0]  'PART 8:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x36, 0x3a   ; F18538  [1]  'PART16:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x34, 0x3a   ; F1853F  [2]  'PART24:'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x32, 0x3a   ; F18546  [3]  'PART32:'
+
+; --------------------------------------------------------------------------
+; IndexMap_F1854D -- index map, 0xF1854D-0xF185BC (112 bytes)
+; Shape: 14 entries of 8 bytes = 112 bytes, which is the whole segment.
+; Evidence: 14 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF1825E, whose mask allows at most 32 indices
+; --------------------------------------------------------------------------
+IndexMap_F1854D:
+	.byte 0x07, 0x00, 0x1e, 0x00, 0x25, 0x00, 0x26, 0x00   ; F1854D  [0]
+	.byte 0x07, 0x00, 0x48, 0x00, 0x25, 0x00, 0x50, 0x00   ; F18555  [1]
+	.byte 0x07, 0x00, 0x6f, 0x00, 0x25, 0x00, 0x77, 0x00   ; F1855D  [2]
+	.byte 0x07, 0x00, 0x9a, 0x00, 0x25, 0x00, 0xa2, 0x00   ; F18565  [3]
+	.byte 0x07, 0x00, 0x1e, 0x00, 0x25, 0x00, 0x26, 0x00   ; F1856D  [4]
+	.byte 0x07, 0x00, 0x48, 0x00, 0x25, 0x00, 0x50, 0x00   ; F18575  [5]
+	.byte 0x07, 0x00, 0x6f, 0x00, 0x25, 0x00, 0x77, 0x00   ; F1857D  [6]
+	.byte 0x07, 0x00, 0xbf, 0x00, 0x25, 0x00, 0xc7, 0x00   ; F18585  [7]
+	.byte 0x07, 0x00, 0x9a, 0x00, 0x25, 0x00, 0xa2, 0x00   ; F1858D  [8]
+	.byte 0x07, 0x00, 0x1e, 0x00, 0x25, 0x00, 0x26, 0x00   ; F18595  [9]
+	.byte 0x07, 0x00, 0x48, 0x00, 0x35, 0x00, 0x50, 0x00   ; F1859D  [10]
+	.byte 0x07, 0x00, 0x6f, 0x00, 0x35, 0x00, 0x77, 0x00   ; F185A5  [11]
+	.byte 0x07, 0x00, 0x9a, 0x00, 0x35, 0x00, 0xa2, 0x00   ; F185AD  [12]
+	.byte 0x07, 0x00, 0xbf, 0x00, 0x43, 0x00, 0xc7, 0x00   ; F185B5  [13]
+
+; --------------------------------------------------------------------------
+; IndexMap_F185BD -- index map, 0xF185BD-0xF185FC (64 bytes)
+; Shape: 8 entries of 8 bytes = 64 bytes, which is the whole segment.
+; Evidence: 8 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF18274, whose mask allows at most 8 indices
+; --------------------------------------------------------------------------
+IndexMap_F185BD:
+	.byte 0x05, 0x00, 0xe2, 0x00, 0x21, 0x00, 0xec, 0x00   ; F185BD  [0]
+	.byte 0x2d, 0x00, 0xe2, 0x00, 0x49, 0x00, 0xec, 0x00   ; F185C5  [1]
+	.byte 0x55, 0x00, 0xe2, 0x00, 0x71, 0x00, 0xec, 0x00   ; F185CD  [2]
+	.byte 0x7d, 0x00, 0xe2, 0x00, 0x99, 0x00, 0xec, 0x00   ; F185D5  [3]
+	.byte 0xa5, 0x00, 0xe2, 0x00, 0xc1, 0x00, 0xec, 0x00   ; F185DD  [4]
+	.byte 0xcd, 0x00, 0xe2, 0x00, 0xe9, 0x00, 0xec, 0x00   ; F185E5  [5]
+	.byte 0xf5, 0x00, 0xe2, 0x00, 0x11, 0x01, 0xec, 0x00   ; F185ED  [6]
+	.byte 0x1d, 0x01, 0xe2, 0x00, 0x39, 0x01, 0xec, 0x00   ; F185F5  [7]
+
+; --------------------------------------------------------------------------
+; RecordArray_F185FD -- record array, 0xF185FD-0xF18684 (136 bytes)
+; Shape: 8 entries of 17 bytes = 136 bytes, which is the whole segment.
+; Evidence: 8 records of 17 bytes, addressed one at a time by the 8 entries
+;           of the pointer table at 0xF1B04B
+; ★ CORRECTION C7: the layout makes 0xF185FD-0xF1881C ONE array of 32
+;                  records.  It is FOUR arrays of eight: the pointer tables
+;                  0xF1B04B, 0xF1B10B, 0xF1B0AB and 0xF1B12B hold eight
+;                  entries each, and their first entries are 0xF185FD,
+;                  0xF18685, 0xF1870D and 0xF18795.
+; --------------------------------------------------------------------------
+RecordArray_F185FD:
+	.byte 0x07, 0x11, 0x40, 0x26, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x38, 0x00, 0x2f, 0x00   ; F185FD  [0]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x38, 0x00, 0x3f, 0x00   ; F1860E  [1]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x38, 0x00, 0x4f, 0x00   ; F1861F  [2]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x38, 0x00, 0x5f, 0x00   ; F18630  [3]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0xd2, 0x00, 0x2f, 0x00   ; F18641  [4]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0xd2, 0x00, 0x3f, 0x00   ; F18652  [5]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0xd2, 0x00, 0x4f, 0x00   ; F18663  [6]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0xd2, 0x00, 0x5f, 0x00   ; F18674  [7]
+
+; --------------------------------------------------------------------------
+; RecordArray_F18685 -- record array, 0xF18685-0xF1870C (136 bytes)
+; Shape: 8 entries of 17 bytes = 136 bytes, which is the whole segment.
+; Evidence: 8 records of 17 bytes, addressed one at a time by the 8 entries
+;           of the pointer table at 0xF1B10B
+; ★ CORRECTION C7: the layout makes 0xF185FD-0xF1881C ONE array of 32
+;                  records.  It is FOUR arrays of eight: the pointer tables
+;                  0xF1B04B, 0xF1B10B, 0xF1B0AB and 0xF1B12B hold eight
+;                  entries each, and their first entries are 0xF185FD,
+;                  0xF18685, 0xF1870D and 0xF18795.
+; --------------------------------------------------------------------------
+RecordArray_F18685:
+	.byte 0x07, 0x11, 0x40, 0x26, 0x1f, 0x00, 0x17, 0x1d, 0x88, 0xf1, 0x00, 0x04, 0x00, 0x07, 0x00, 0xae, 0x00   ; F18685  [0]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x1f, 0x00, 0x17, 0x1d, 0x88, 0xf1, 0x00, 0x04, 0x00, 0x2f, 0x00, 0xae, 0x00   ; F18696  [1]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x1f, 0x00, 0x17, 0x1d, 0x88, 0xf1, 0x00, 0x04, 0x00, 0x57, 0x00, 0xae, 0x00   ; F186A7  [2]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x1f, 0x00, 0x17, 0x1d, 0x88, 0xf1, 0x00, 0x04, 0x00, 0x7f, 0x00, 0xae, 0x00   ; F186B8  [3]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x1f, 0x00, 0x17, 0x1d, 0x88, 0xf1, 0x00, 0x04, 0x00, 0xa7, 0x00, 0xae, 0x00   ; F186C9  [4]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x1f, 0x00, 0x17, 0x1d, 0x88, 0xf1, 0x00, 0x04, 0x00, 0xcf, 0x00, 0xae, 0x00   ; F186DA  [5]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x1f, 0x00, 0x17, 0x1d, 0x88, 0xf1, 0x00, 0x04, 0x00, 0xf7, 0x00, 0xae, 0x00   ; F186EB  [6]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x1f, 0x00, 0x17, 0x1d, 0x88, 0xf1, 0x00, 0x04, 0x00, 0x1f, 0x01, 0xae, 0x00   ; F186FC  [7]
+
+; --------------------------------------------------------------------------
+; RecordArray_F1870D -- record array, 0xF1870D-0xF18794 (136 bytes)
+; Shape: 8 entries of 17 bytes = 136 bytes, which is the whole segment.
+; Evidence: 8 records of 17 bytes, addressed one at a time by the 8 entries
+;           of the pointer table at 0xF1B0AB
+; ★ CORRECTION C7: the layout makes 0xF185FD-0xF1881C ONE array of 32
+;                  records.  It is FOUR arrays of eight: the pointer tables
+;                  0xF1B04B, 0xF1B10B, 0xF1B0AB and 0xF1B12B hold eight
+;                  entries each, and their first entries are 0xF185FD,
+;                  0xF18685, 0xF1870D and 0xF18795.
+; --------------------------------------------------------------------------
+RecordArray_F1870D:
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x9d, 0x88, 0xf1, 0x00, 0x03, 0x00, 0x0a, 0x00, 0x7b, 0x00   ; F1870D  [0]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x9d, 0x88, 0xf1, 0x00, 0x03, 0x00, 0x32, 0x00, 0x7b, 0x00   ; F1871E  [1]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x9d, 0x88, 0xf1, 0x00, 0x03, 0x00, 0x5a, 0x00, 0x7b, 0x00   ; F1872F  [2]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x9d, 0x88, 0xf1, 0x00, 0x03, 0x00, 0x82, 0x00, 0x7b, 0x00   ; F18740  [3]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x9d, 0x88, 0xf1, 0x00, 0x03, 0x00, 0xaa, 0x00, 0x7b, 0x00   ; F18751  [4]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x9d, 0x88, 0xf1, 0x00, 0x03, 0x00, 0xd2, 0x00, 0x7b, 0x00   ; F18762  [5]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x9d, 0x88, 0xf1, 0x00, 0x03, 0x00, 0xfa, 0x00, 0x7b, 0x00   ; F18773  [6]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x7f, 0x00, 0x17, 0x9d, 0x88, 0xf1, 0x00, 0x03, 0x00, 0x22, 0x01, 0x7b, 0x00   ; F18784  [7]
+
+; --------------------------------------------------------------------------
+; RecordArray_F18795 -- record array, 0xF18795-0xF1881C (136 bytes)
+; Shape: 8 entries of 17 bytes = 136 bytes, which is the whole segment.
+; Evidence: 8 records of 17 bytes, addressed one at a time by the 8 entries
+;           of the pointer table at 0xF1B12B
+; ★ CORRECTION C7: the layout makes 0xF185FD-0xF1881C ONE array of 32
+;                  records.  It is FOUR arrays of eight: the pointer tables
+;                  0xF1B04B, 0xF1B10B, 0xF1B0AB and 0xF1B12B hold eight
+;                  entries each, and their first entries are 0xF185FD,
+;                  0xF18685, 0xF1870D and 0xF18795.
+; --------------------------------------------------------------------------
+RecordArray_F18795:
+	.byte 0x07, 0x11, 0x40, 0x26, 0x07, 0x00, 0x17, 0xf8, 0x97, 0xf1, 0x00, 0x04, 0x00, 0x07, 0x00, 0xd1, 0x00   ; F18795  [0]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x07, 0x00, 0x17, 0xf8, 0x97, 0xf1, 0x00, 0x04, 0x00, 0x2f, 0x00, 0xd1, 0x00   ; F187A6  [1]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x07, 0x00, 0x17, 0xf8, 0x97, 0xf1, 0x00, 0x04, 0x00, 0x57, 0x00, 0xd1, 0x00   ; F187B7  [2]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x07, 0x00, 0x17, 0xf8, 0x97, 0xf1, 0x00, 0x04, 0x00, 0x7f, 0x00, 0xd1, 0x00   ; F187C8  [3]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x07, 0x00, 0x17, 0xf8, 0x97, 0xf1, 0x00, 0x04, 0x00, 0xa7, 0x00, 0xd1, 0x00   ; F187D9  [4]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x07, 0x00, 0x17, 0xf8, 0x97, 0xf1, 0x00, 0x04, 0x00, 0xcf, 0x00, 0xd1, 0x00   ; F187EA  [5]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x07, 0x00, 0x17, 0xf8, 0x97, 0xf1, 0x00, 0x04, 0x00, 0xf7, 0x00, 0xd1, 0x00   ; F187FB  [6]
+	.byte 0x07, 0x11, 0x40, 0x26, 0x07, 0x00, 0x17, 0xf8, 0x97, 0xf1, 0x00, 0x04, 0x00, 0x1f, 0x01, 0xd1, 0x00   ; F1880C  [7]
+
+; --------------------------------------------------------------------------
+; StringTable_F1881D -- ascii, 0xF1881D-0xF1889C (128 bytes)
+; Shape: 32 entries of 4 bytes = 128 bytes, which is the whole segment.
+; First / last: '1- 1' ... '2-16'
+; Evidence: 32 entries of 4 bytes; 1 record(s) point into it, the first at
+;           0xF18685, whose mask allows at most 32 indices
+; --------------------------------------------------------------------------
+StringTable_F1881D:
+	.byte 0x31, 0x2d, 0x20, 0x31   ; F1881D  [0]  '1- 1'
+	.byte 0x31, 0x2d, 0x20, 0x32   ; F18821  [1]  '1- 2'
+	.byte 0x31, 0x2d, 0x20, 0x33   ; F18825  [2]  '1- 3'
+	.byte 0x31, 0x2d, 0x20, 0x34   ; F18829  [3]  '1- 4'
+	.byte 0x31, 0x2d, 0x20, 0x35   ; F1882D  [4]  '1- 5'
+	.byte 0x31, 0x2d, 0x20, 0x36   ; F18831  [5]  '1- 6'
+	.byte 0x31, 0x2d, 0x20, 0x37   ; F18835  [6]  '1- 7'
+	.byte 0x31, 0x2d, 0x20, 0x38   ; F18839  [7]  '1- 8'
+	.byte 0x31, 0x2d, 0x20, 0x39   ; F1883D  [8]  '1- 9'
+	.byte 0x31, 0x2d, 0x31, 0x30   ; F18841  [9]  '1-10'
+	.byte 0x31, 0x2d, 0x31, 0x31   ; F18845  [10]  '1-11'
+	.byte 0x31, 0x2d, 0x31, 0x32   ; F18849  [11]  '1-12'
+	.byte 0x31, 0x2d, 0x31, 0x33   ; F1884D  [12]  '1-13'
+	.byte 0x31, 0x2d, 0x31, 0x34   ; F18851  [13]  '1-14'
+	.byte 0x31, 0x2d, 0x31, 0x35   ; F18855  [14]  '1-15'
+	.byte 0x31, 0x2d, 0x31, 0x36   ; F18859  [15]  '1-16'
+	.byte 0x32, 0x2d, 0x20, 0x31   ; F1885D  [16]  '2- 1'
+	.byte 0x32, 0x2d, 0x20, 0x32   ; F18861  [17]  '2- 2'
+	.byte 0x32, 0x2d, 0x20, 0x33   ; F18865  [18]  '2- 3'
+	.byte 0x32, 0x2d, 0x20, 0x34   ; F18869  [19]  '2- 4'
+	.byte 0x32, 0x2d, 0x20, 0x35   ; F1886D  [20]  '2- 5'
+	.byte 0x32, 0x2d, 0x20, 0x36   ; F18871  [21]  '2- 6'
+	.byte 0x32, 0x2d, 0x20, 0x37   ; F18875  [22]  '2- 7'
+	.byte 0x32, 0x2d, 0x20, 0x38   ; F18879  [23]  '2- 8'
+	.byte 0x32, 0x2d, 0x20, 0x39   ; F1887D  [24]  '2- 9'
+	.byte 0x32, 0x2d, 0x31, 0x30   ; F18881  [25]  '2-10'
+	.byte 0x32, 0x2d, 0x31, 0x31   ; F18885  [26]  '2-11'
+	.byte 0x32, 0x2d, 0x31, 0x32   ; F18889  [27]  '2-12'
+	.byte 0x32, 0x2d, 0x31, 0x33   ; F1888D  [28]  '2-13'
+	.byte 0x32, 0x2d, 0x31, 0x34   ; F18891  [29]  '2-14'
+	.byte 0x32, 0x2d, 0x31, 0x35   ; F18895  [30]  '2-15'
+	.byte 0x32, 0x2d, 0x31, 0x36   ; F18899  [31]  '2-16'
+
+; --------------------------------------------------------------------------
+; StringTable_F1889D -- ascii, 0xF1889D-0xF18A1C (384 bytes)
+; Shape: 128 entries of 3 bytes = 384 bytes, which is the whole segment.
+; First / last: 'L64' ... 'R63'
+; Evidence: 128 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF1870D, whose mask allows at most 128 indices
+; --------------------------------------------------------------------------
+StringTable_F1889D:
+	.byte 0x4c, 0x36, 0x34   ; F1889D  [0]  'L64'
+	.byte 0x4c, 0x36, 0x33   ; F188A0  [1]  'L63'
+	.byte 0x4c, 0x36, 0x32   ; F188A3  [2]  'L62'
+	.byte 0x4c, 0x36, 0x31   ; F188A6  [3]  'L61'
+	.byte 0x4c, 0x36, 0x30   ; F188A9  [4]  'L60'
+	.byte 0x4c, 0x35, 0x39   ; F188AC  [5]  'L59'
+	.byte 0x4c, 0x35, 0x38   ; F188AF  [6]  'L58'
+	.byte 0x4c, 0x35, 0x37   ; F188B2  [7]  'L57'
+	.byte 0x4c, 0x35, 0x36   ; F188B5  [8]  'L56'
+	.byte 0x4c, 0x35, 0x35   ; F188B8  [9]  'L55'
+	.byte 0x4c, 0x35, 0x34   ; F188BB  [10]  'L54'
+	.byte 0x4c, 0x35, 0x33   ; F188BE  [11]  'L53'
+	.byte 0x4c, 0x35, 0x32   ; F188C1  [12]  'L52'
+	.byte 0x4c, 0x35, 0x31   ; F188C4  [13]  'L51'
+	.byte 0x4c, 0x35, 0x30   ; F188C7  [14]  'L50'
+	.byte 0x4c, 0x34, 0x39   ; F188CA  [15]  'L49'
+	.byte 0x4c, 0x34, 0x38   ; F188CD  [16]  'L48'
+	.byte 0x4c, 0x34, 0x37   ; F188D0  [17]  'L47'
+	.byte 0x4c, 0x34, 0x36   ; F188D3  [18]  'L46'
+	.byte 0x4c, 0x34, 0x35   ; F188D6  [19]  'L45'
+	.byte 0x4c, 0x34, 0x34   ; F188D9  [20]  'L44'
+	.byte 0x4c, 0x34, 0x33   ; F188DC  [21]  'L43'
+	.byte 0x4c, 0x34, 0x32   ; F188DF  [22]  'L42'
+	.byte 0x4c, 0x34, 0x31   ; F188E2  [23]  'L41'
+	.byte 0x4c, 0x34, 0x30   ; F188E5  [24]  'L40'
+	.byte 0x4c, 0x33, 0x39   ; F188E8  [25]  'L39'
+	.byte 0x4c, 0x33, 0x38   ; F188EB  [26]  'L38'
+	.byte 0x4c, 0x33, 0x37   ; F188EE  [27]  'L37'
+	.byte 0x4c, 0x33, 0x36   ; F188F1  [28]  'L36'
+	.byte 0x4c, 0x33, 0x35   ; F188F4  [29]  'L35'
+	.byte 0x4c, 0x33, 0x34   ; F188F7  [30]  'L34'
+	.byte 0x4c, 0x33, 0x33   ; F188FA  [31]  'L33'
+	.byte 0x4c, 0x33, 0x32   ; F188FD  [32]  'L32'
+	.byte 0x4c, 0x33, 0x31   ; F18900  [33]  'L31'
+	.byte 0x4c, 0x33, 0x30   ; F18903  [34]  'L30'
+	.byte 0x4c, 0x32, 0x39   ; F18906  [35]  'L29'
+	.byte 0x4c, 0x32, 0x38   ; F18909  [36]  'L28'
+	.byte 0x4c, 0x32, 0x37   ; F1890C  [37]  'L27'
+	.byte 0x4c, 0x32, 0x36   ; F1890F  [38]  'L26'
+	.byte 0x4c, 0x32, 0x35   ; F18912  [39]  'L25'
+	.byte 0x4c, 0x32, 0x34   ; F18915  [40]  'L24'
+	.byte 0x4c, 0x32, 0x33   ; F18918  [41]  'L23'
+	.byte 0x4c, 0x32, 0x32   ; F1891B  [42]  'L22'
+	.byte 0x4c, 0x32, 0x31   ; F1891E  [43]  'L21'
+	.byte 0x4c, 0x32, 0x30   ; F18921  [44]  'L20'
+	.byte 0x4c, 0x31, 0x39   ; F18924  [45]  'L19'
+	.byte 0x4c, 0x31, 0x38   ; F18927  [46]  'L18'
+	.byte 0x4c, 0x31, 0x37   ; F1892A  [47]  'L17'
+	.byte 0x4c, 0x31, 0x36   ; F1892D  [48]  'L16'
+	.byte 0x4c, 0x31, 0x35   ; F18930  [49]  'L15'
+	.byte 0x4c, 0x31, 0x34   ; F18933  [50]  'L14'
+	.byte 0x4c, 0x31, 0x33   ; F18936  [51]  'L13'
+	.byte 0x4c, 0x31, 0x32   ; F18939  [52]  'L12'
+	.byte 0x4c, 0x31, 0x31   ; F1893C  [53]  'L11'
+	.byte 0x4c, 0x31, 0x30   ; F1893F  [54]  'L10'
+	.byte 0x4c, 0x20, 0x39   ; F18942  [55]  'L 9'
+	.byte 0x4c, 0x20, 0x38   ; F18945  [56]  'L 8'
+	.byte 0x4c, 0x20, 0x37   ; F18948  [57]  'L 7'
+	.byte 0x4c, 0x20, 0x36   ; F1894B  [58]  'L 6'
+	.byte 0x4c, 0x20, 0x35   ; F1894E  [59]  'L 5'
+	.byte 0x4c, 0x20, 0x34   ; F18951  [60]  'L 4'
+	.byte 0x4c, 0x20, 0x33   ; F18954  [61]  'L 3'
+	.byte 0x4c, 0x20, 0x32   ; F18957  [62]  'L 2'
+	.byte 0x4c, 0x20, 0x31   ; F1895A  [63]  'L 1'
+	.byte 0x43, 0x54, 0x52   ; F1895D  [64]  'CTR'
+	.byte 0x52, 0x20, 0x31   ; F18960  [65]  'R 1'
+	.byte 0x52, 0x20, 0x32   ; F18963  [66]  'R 2'
+	.byte 0x52, 0x20, 0x33   ; F18966  [67]  'R 3'
+	.byte 0x52, 0x20, 0x34   ; F18969  [68]  'R 4'
+	.byte 0x52, 0x20, 0x35   ; F1896C  [69]  'R 5'
+	.byte 0x52, 0x20, 0x36   ; F1896F  [70]  'R 6'
+	.byte 0x52, 0x20, 0x37   ; F18972  [71]  'R 7'
+	.byte 0x52, 0x20, 0x38   ; F18975  [72]  'R 8'
+	.byte 0x52, 0x20, 0x39   ; F18978  [73]  'R 9'
+	.byte 0x52, 0x31, 0x30   ; F1897B  [74]  'R10'
+	.byte 0x52, 0x31, 0x31   ; F1897E  [75]  'R11'
+	.byte 0x52, 0x31, 0x32   ; F18981  [76]  'R12'
+	.byte 0x52, 0x31, 0x33   ; F18984  [77]  'R13'
+	.byte 0x52, 0x31, 0x34   ; F18987  [78]  'R14'
+	.byte 0x52, 0x31, 0x35   ; F1898A  [79]  'R15'
+	.byte 0x52, 0x31, 0x36   ; F1898D  [80]  'R16'
+	.byte 0x52, 0x31, 0x37   ; F18990  [81]  'R17'
+	.byte 0x52, 0x31, 0x38   ; F18993  [82]  'R18'
+	.byte 0x52, 0x31, 0x39   ; F18996  [83]  'R19'
+	.byte 0x52, 0x32, 0x30   ; F18999  [84]  'R20'
+	.byte 0x52, 0x32, 0x31   ; F1899C  [85]  'R21'
+	.byte 0x52, 0x32, 0x32   ; F1899F  [86]  'R22'
+	.byte 0x52, 0x32, 0x33   ; F189A2  [87]  'R23'
+	.byte 0x52, 0x32, 0x34   ; F189A5  [88]  'R24'
+	.byte 0x52, 0x32, 0x35   ; F189A8  [89]  'R25'
+	.byte 0x52, 0x32, 0x36   ; F189AB  [90]  'R26'
+	.byte 0x52, 0x32, 0x37   ; F189AE  [91]  'R27'
+	.byte 0x52, 0x32, 0x38   ; F189B1  [92]  'R28'
+	.byte 0x52, 0x32, 0x39   ; F189B4  [93]  'R29'
+	.byte 0x52, 0x33, 0x30   ; F189B7  [94]  'R30'
+	.byte 0x52, 0x33, 0x31   ; F189BA  [95]  'R31'
+	.byte 0x52, 0x33, 0x32   ; F189BD  [96]  'R32'
+	.byte 0x52, 0x33, 0x33   ; F189C0  [97]  'R33'
+	.byte 0x52, 0x33, 0x34   ; F189C3  [98]  'R34'
+	.byte 0x52, 0x33, 0x35   ; F189C6  [99]  'R35'
+	.byte 0x52, 0x33, 0x36   ; F189C9  [100]  'R36'
+	.byte 0x52, 0x33, 0x37   ; F189CC  [101]  'R37'
+	.byte 0x52, 0x33, 0x38   ; F189CF  [102]  'R38'
+	.byte 0x52, 0x33, 0x39   ; F189D2  [103]  'R39'
+	.byte 0x52, 0x34, 0x30   ; F189D5  [104]  'R40'
+	.byte 0x52, 0x34, 0x31   ; F189D8  [105]  'R41'
+	.byte 0x52, 0x34, 0x32   ; F189DB  [106]  'R42'
+	.byte 0x52, 0x34, 0x33   ; F189DE  [107]  'R43'
+	.byte 0x52, 0x34, 0x34   ; F189E1  [108]  'R44'
+	.byte 0x52, 0x34, 0x35   ; F189E4  [109]  'R45'
+	.byte 0x52, 0x34, 0x36   ; F189E7  [110]  'R46'
+	.byte 0x52, 0x34, 0x37   ; F189EA  [111]  'R47'
+	.byte 0x52, 0x34, 0x38   ; F189ED  [112]  'R48'
+	.byte 0x52, 0x34, 0x39   ; F189F0  [113]  'R49'
+	.byte 0x52, 0x35, 0x30   ; F189F3  [114]  'R50'
+	.byte 0x52, 0x35, 0x31   ; F189F6  [115]  'R51'
+	.byte 0x52, 0x35, 0x32   ; F189F9  [116]  'R52'
+	.byte 0x52, 0x35, 0x33   ; F189FC  [117]  'R53'
+	.byte 0x52, 0x35, 0x34   ; F189FF  [118]  'R54'
+	.byte 0x52, 0x35, 0x35   ; F18A02  [119]  'R55'
+	.byte 0x52, 0x35, 0x36   ; F18A05  [120]  'R56'
+	.byte 0x52, 0x35, 0x37   ; F18A08  [121]  'R57'
+	.byte 0x52, 0x35, 0x38   ; F18A0B  [122]  'R58'
+	.byte 0x52, 0x35, 0x39   ; F18A0E  [123]  'R59'
+	.byte 0x52, 0x36, 0x30   ; F18A11  [124]  'R60'
+	.byte 0x52, 0x36, 0x31   ; F18A14  [125]  'R61'
+	.byte 0x52, 0x36, 0x32   ; F18A17  [126]  'R62'
+	.byte 0x52, 0x36, 0x33   ; F18A1A  [127]  'R63'
+
+; --------------------------------------------------------------------------
+; DL_InternalSound_F18A1D -- display list, 0xF18A1D-0xF18AB6 (154 bytes)
+; Interpreter: A.  18 records, framed by their own length bytes; the walk
+;              consumes 0xF18A1D-0xF18AB6 exactly.
+; Text it draws: 'PART'; 'INTERNAL SOUND'; 'CONFIGURE'; 'MIDI OUTPUT';
+;                'FILTER'; 'MIXER'; 'DSP EFFECT'
+; Evidence: 18 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_InternalSound_F18A1D:
+	.byte 0x1c, 0x0a	; F18A1D  op 1C, 10 bytes -> handler 0xF31A52
+	.short 0x0096, 0x0005	; +2  the two words
+	.ascii "PART"	; +6
+	.byte 0x06, 0x12	; F18A27  op 06, 18 bytes -> handler 0xF31A3A
+	.short 0x11D5		; +2  IX (screen position)
+	.ascii "INTERNAL SOUND"	; +4
+	.byte 0x06, 0x0d	; F18A39  op 06, 13 bytes -> handler 0xF31A3A
+	.short 0x11E8		; +2  IX (screen position)
+	.ascii "CONFIGURE"	; +4
+	.byte 0x17, 0x07	; F18A46  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0074	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F18A4D  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x0074	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x06, 0x0f	; F18A54  op 06, 15 bytes -> handler 0xF31A3A
+	.short 0x16FD		; +2  IX (screen position)
+	.ascii "MIDI OUTPUT"	; +4
+	.byte 0x06, 0x0a	; F18A63  op 06, 10 bytes -> handler 0xF31A3A
+	.short 0x192D		; +2  IX (screen position)
+	.ascii "FILTER"	; +4
+	.byte 0x06, 0x09	; F18A6D  op 06, 9 bytes -> handler 0xF31A3A
+	.short 0x1800		; +2  IX (screen position)
+	.ascii "MIXER"	; +4
+	.byte 0x17, 0x07	; F18A76  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x009B	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F18A7D  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x009B	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x20, 0x0e	; F18A84  op 20, 14 bytes -> handler 0xF31A3A
+	.short 0x1E18		; +2  IX (screen position)
+	.ascii "DSP EFFECT"	; +4
+	.byte 0x17, 0x07	; F18A92  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x00C2	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x23, 0x05	; F18A99  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x00, 0x37, 0x00	; +2  '.7.'
+	.byte 0x23, 0x05	; F18A9E  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x01, 0xe1, 0x10	; +2  '...'
+	.byte 0x23, 0x05	; F18AA3  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x6e, 0xf9, 0x16	; +2  'n..'
+	.byte 0x23, 0x05	; F18AA8  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x04, 0x04, 0x11	; +2  '...'
+	.byte 0x23, 0x05	; F18AAD  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x05, 0x1c, 0x17	; +2  '...'
+	.byte 0x23, 0x05	; F18AB2  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0a, 0x34, 0x1d	; +2  '.4.'
+
+; --------------------------------------------------------------------------
+; DL_CopyFromSoundPlay -- display list, 0xF18AB7-0xF18BB9 (259 bytes)
+; Interpreter: A.  28 records, framed by their own length bytes; the walk
+;              consumes 0xF18AB7-0xF18BB9 exactly.
+; Text it draws: 'C0MBINATI0N EDIT'; 'INTERNAL'; 'CONFIGURE'; 'MIDI';
+;                'MIXER'; 'DSP EFFECT'; 'SOUND'; 'WRITE'; 'COPY FROM SOUND
+;                PLAY'
+; Evidence: 28 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_CopyFromSoundPlay:
+	.byte 0x1c, 0x16	; F18AB7  op 1C, 22 bytes -> handler 0xF31A52
+	.short 0x005C, 0x0005	; +2  the two words
+	.ascii "C0MBINATI0N EDIT"	; +6
+	.byte 0x06, 0x0c	; F18ACD  op 06, 12 bytes -> handler 0xF31A3A
+	.short 0x11D5		; +2  IX (screen position)
+	.ascii "INTERNAL"	; +4
+	.byte 0x06, 0x0d	; F18AD9  op 06, 13 bytes -> handler 0xF31A3A
+	.short 0x11E8		; +2  IX (screen position)
+	.ascii "CONFIGURE"	; +4
+	.byte 0x17, 0x07	; F18AE6  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0074	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F18AED  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x0074	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x06, 0x08	; F18AF4  op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x17ED		; +2  IX (screen position)
+	.ascii "MIDI"	; +4
+	.byte 0x06, 0x09	; F18AFC  op 06, 9 bytes -> handler 0xF31A3A
+	.short 0x1800		; +2  IX (screen position)
+	.ascii "MIXER"	; +4
+	.byte 0x17, 0x07	; F18B05  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x009B	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F18B0C  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x009B	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x20, 0x0e	; F18B13  op 20, 14 bytes -> handler 0xF31A3A
+	.short 0x1E18		; +2  IX (screen position)
+	.ascii "DSP EFFECT"	; +4
+	.byte 0x17, 0x07	; F18B21  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x00C2	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x20, 0x09	; F18B28  op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x1526		; +2  IX (screen position)
+	.ascii "SOUND"	; +4
+	.byte 0x20, 0x09	; F18B31  op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x1E2A		; +2  IX (screen position)
+	.ascii "WRITE"	; +4
+	.byte 0x17, 0x07	; F18B3A  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x00C2	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x1a	; F18B41  op 17, 26 bytes -> handler 0xF31A52
+	.short 0x0005, 0x00DE	; +2  the two words
+	.ascii "COPY FROM SOUND PLAY"	; +6
+	.byte 0x07, 0x05	; F18B5B  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2419		; +2  IX (screen position)
+	.byte 0x12	; +4  '.'
+	.byte 0x09, 0x0a	; F18B60  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0b, 0x00, 0xbb, 0x00, 0x3d, 0x00, 0xd0, 0x00	; +2  '....=...'
+	.byte 0x09, 0x0a	; F18B6A  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0d, 0x00, 0xbd, 0x00, 0x3b, 0x00, 0xce, 0x00	; +2  '....;...'
+	.byte 0x09, 0x0a	; F18B74  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x02, 0x00, 0xda, 0x00, 0x80, 0x00, 0xe8, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F18B7E  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x6a, 0x00, 0x78, 0x00, 0x6d, 0x00, 0x78, 0x00	; +2  'j.x.m.x.'
+	.byte 0x01, 0x0a	; F18B88  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x6a, 0x00, 0xa0, 0x00, 0x6d, 0x00, 0xa0, 0x00	; +2  'j...m...'
+	.byte 0x02, 0x0a	; F18B92  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x6d, 0x00, 0x78, 0x00, 0x6d, 0x00, 0xa0, 0x00	; +2  'm.x.m...'
+	.byte 0x23, 0x05	; F18B9C  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x10, 0x30, 0x00	; +2  '.0.'
+	.byte 0x23, 0x05	; F18BA1  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x01, 0xe1, 0x10	; +2  '...'
+	.byte 0x23, 0x05	; F18BA6  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x6e, 0xf9, 0x16	; +2  'n..'
+	.byte 0x23, 0x05	; F18BAB  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x04, 0x04, 0x11	; +2  '...'
+	.byte 0x23, 0x05	; F18BB0  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x05, 0x1c, 0x17	; +2  '...'
+	.byte 0x23, 0x05	; F18BB5  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0a, 0x34, 0x1d	; +2  '.4.'
+
+; --------------------------------------------------------------------------
+; DL_Part_F18BBA -- display list, 0xF18BBA-0xF18BCD (20 bytes)
+; Interpreter: A.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF18BBA-0xF18BCD exactly.
+; Text it draws: 'PART'
+; Evidence: 2 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_Part_F18BBA:
+	.byte 0x17, 0x0a	; F18BBA  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0007, 0x0008	; +2  the two words
+	.ascii "PART"	; +6
+	.byte 0x09, 0x0a	; F18BC4  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x22, 0x00, 0x12, 0x00	; +2  '...."...'
+
+; --------------------------------------------------------------------------
+; DL_CombiEdit -- display list, 0xF18BCE-0xF18BE7 (26 bytes)
+; Interpreter: A.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF18BCE-0xF18BE7 exactly.
+; Text it draws: 'COMBI.EDIT'
+; Evidence: 2 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_CombiEdit:
+	.byte 0x17, 0x10	; F18BCE  op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0007, 0x0008	; +2  the two words
+	.ascii "COMBI.EDIT"	; +6
+	.byte 0x09, 0x0a	; F18BDE  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x46, 0x00, 0x12, 0x00	; +2  '....F...'
+
+; --------------------------------------------------------------------------
+; DL_Solo_F18BE8 -- display list, 0xF18BE8-0xF18C07 (32 bytes)
+; Interpreter: A.  3 records, framed by their own length bytes; the walk
+;              consumes 0xF18BE8-0xF18C07 exactly.
+; Text it draws: 'SOLO .'
+; Evidence: 3 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_Solo_F18BE8:
+	.byte 0x17, 0x0c	; F18BE8  op 17, 12 bytes -> handler 0xF31A52
+	.short 0x011C, 0x004D	; +2  the two words
+	.byte 0x53, 0x4f, 0x4c, 0x4f, 0x20, 0x11	; +6  'SOLO .'
+	.byte 0x09, 0x0a	; F18BF4  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x18, 0x01, 0x48, 0x00, 0x38, 0x01, 0x58, 0x00	; +2  '..H.8.X.'
+	.byte 0x09, 0x0a	; F18BFE  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x1a, 0x01, 0x4a, 0x00, 0x36, 0x01, 0x56, 0x00	; +2  '..J.6.V.'
+
+; --------------------------------------------------------------------------
+; DL_F18C08 -- display list, 0xF18C08-0xF18C11 (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF18C08-0xF18C11 exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F18C08:
+	.byte 0x1b, 0x0a	; F18C08  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0x1b, 0x01, 0x4b, 0x00, 0x35, 0x01, 0x55, 0x00	; +2  '..K.5.U.'
+
+; --------------------------------------------------------------------------
+; DL_F18C12 -- display list, 0xF18C12-0xF18C1B (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF18C12-0xF18C1B exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F18C12:
+	.byte 0x05, 0x0a	; F18C12  op 05, 10 bytes -> handler 0xF31A75
+	.byte 0x1b, 0x01, 0x4b, 0x00, 0x35, 0x01, 0x55, 0x00	; +2  '..K.5.U.'
+
+; --------------------------------------------------------------------------
+; DL_F18C1C -- display list, 0xF18C1C-0xF18C68 (77 bytes)
+; Interpreter: A.  10 records, framed by their own length bytes; the walk
+;              consumes 0xF18C1C-0xF18C68 exactly.
+; Text it draws: 'ITEM'; 'VALUE'
+; Evidence: 10 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_F18C1C:
+	.byte 0x20, 0x08	; F18C1C  op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x200F		; +2  IX (screen position)
+	.ascii "ITEM"	; +4
+	.byte 0x20, 0x09	; F18C24  op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x2024		; +2  IX (screen position)
+	.ascii "VALUE"	; +4
+	.byte 0x07, 0x05	; F18C2D  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x21C9		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x07, 0x05	; F18C32  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x21DE		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x07, 0x05	; F18C37  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2359		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x07, 0x05	; F18C3C  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x236E		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x0a, 0x0a	; F18C41  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0x05, 0x00, 0xda, 0x00, 0x91, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x0a, 0x0a	; F18C4B  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0xaf, 0x00, 0xda, 0x00, 0x38, 0x01, 0xec, 0x00	; +2  '....8...'
+	.byte 0x01, 0x0a	; F18C55  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x05, 0x00, 0xe3, 0x00, 0x91, 0x00, 0xe3, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F18C5F  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xaf, 0x00, 0xe3, 0x00, 0x38, 0x01, 0xe3, 0x00	; +2  '....8...'
+
+; --------------------------------------------------------------------------
+; DL_Part_F18C69 -- display list, 0xF18C69-0xF18CD4 (108 bytes)
+; Interpreter: A.  14 records, framed by their own length bytes; the walk
+;              consumes 0xF18C69-0xF18CD4 exactly.
+; Text it draws: 'PART'
+; Evidence: 14 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_Part_F18C69:
+	.byte 0x07, 0x05	; F18C69  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0552		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x07, 0x05	; F18C6E  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x058B		; +2  IX (screen position)
+	.ascii "_"	; +4
+	.byte 0x17, 0x07	; F18C73  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0026	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x20, 0x05	; F18C7A  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0677		; +2  IX (screen position)
+	.ascii ":"	; +4
+	.byte 0x17, 0x07	; F18C7F  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0044, 0x0037	; +2  the two words
+	.ascii "("	; +6
+	.byte 0x17, 0x07	; F18C86  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x006E, 0x0037	; +2  the two words
+	.ascii ")"	; +6
+	.byte 0x17, 0x0a	; F18C8D  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0008, 0x0039	; +2  the two words
+	.ascii "PART"	; +6
+	.byte 0x07, 0x05	; F18C97  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0B92		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x17, 0x07	; F18C9C  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x004D	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x0a, 0x0a	; F18CA3  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0x30, 0x00, 0x20, 0x00, 0x21, 0x01, 0x40, 0x00	; +2  '0. .!.@.'
+	.byte 0x09, 0x0a	; F18CAD  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x08, 0x00, 0x20, 0x00, 0x1f, 0x00, 0x31, 0x00	; +2  '.. ...1.'
+	.byte 0x09, 0x0a	; F18CB7  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0a, 0x00, 0x22, 0x00, 0x1d, 0x00, 0x2f, 0x00	; +2  '..".../.'
+	.byte 0x09, 0x0a	; F18CC1  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x08, 0x00, 0x47, 0x00, 0x1f, 0x00, 0x58, 0x00	; +2  '..G...X.'
+	.byte 0x09, 0x0a	; F18CCB  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0a, 0x00, 0x49, 0x00, 0x1d, 0x00, 0x56, 0x00	; +2  '..I...V.'
+
+; --------------------------------------------------------------------------
+; DL_F18CD5 -- display list, 0xF18CD5-0xF18CDC (8 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF18CD5-0xF18CDC exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F18CD5:
+	.byte 0x0e, 0x08	; F18CD5  op 0E, 8 bytes -> handler 0xF31A9F
+	.byte 0xb0, 0x0e, 0x28, 0x00, 0x64, 0x00	; +2  '..(.d.'
+
+; --------------------------------------------------------------------------
+; DL_InternalSound_F18CDD -- display list, 0xF18CDD-0xF18DBC (224 bytes)
+; Interpreter: A.  17 records, framed by their own length bytes; the walk
+;              consumes 0xF18CDD-0xF18DBC exactly.
+; Text it draws: 'PAGE1/3'; 'INTERNAL SOUND'; 'S0UND     :'; 'V0LUME    :';
+;                'EFFECT1 SEND:'; 'PAN       :'; 'EFFECT2     :'; 'KEY SHIFT
+;                :'; 'REVERB  SEND:'; 'FINE TUNE :'; 'MAIN OUT    :'; 'BEND
+;                RANGE:'; 'SUB OUT     :'
+; Evidence: 17 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_InternalSound_F18CDD:
+	.byte 0x20, 0x0b	; F18CDD  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE1/3"	; +4
+	.byte 0x07, 0x12	; F18CE8  op 07, 18 bytes -> handler 0xF31A3A
+	.short 0x00FE		; +2  IX (screen position)
+	.ascii "INTERNAL SOUND"	; +4
+	.byte 0x07, 0x05	; F18CFA  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0F63		; +2  IX (screen position)
+	.ascii "-"	; +4
+	.byte 0x20, 0x0f	; F18CFF  op 20, 15 bytes -> handler 0xF31A3A
+	.short 0x0FA2		; +2  IX (screen position)
+	.ascii "S0UND     :"	; +4
+	.byte 0x20, 0x05	; F18D0E  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0FB0		; +2  IX (screen position)
+	.ascii "_"	; +4
+	.byte 0x07, 0x05	; F18D13  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0F64		; +2  IX (screen position)
+	.ascii "."	; +4
+	.byte 0x20, 0x0f	; F18D18  op 20, 15 bytes -> handler 0xF31A3A
+	.short 0x1222		; +2  IX (screen position)
+	.ascii "V0LUME    :"	; +4
+	.byte 0x20, 0x11	; F18D27  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1235		; +2  IX (screen position)
+	.ascii "EFFECT1 SEND:"	; +4
+	.byte 0x20, 0x0f	; F18D38  op 20, 15 bytes -> handler 0xF31A3A
+	.short 0x14A2		; +2  IX (screen position)
+	.ascii "PAN       :"	; +4
+	.byte 0x20, 0x11	; F18D47  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x14B5		; +2  IX (screen position)
+	.ascii "EFFECT2     :"	; +4
+	.byte 0x20, 0x0f	; F18D58  op 20, 15 bytes -> handler 0xF31A3A
+	.short 0x1722		; +2  IX (screen position)
+	.ascii "KEY SHIFT :"	; +4
+	.byte 0x20, 0x11	; F18D67  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1735		; +2  IX (screen position)
+	.ascii "REVERB  SEND:"	; +4
+	.byte 0x20, 0x0f	; F18D78  op 20, 15 bytes -> handler 0xF31A3A
+	.short 0x19A2		; +2  IX (screen position)
+	.ascii "FINE TUNE :"	; +4
+	.byte 0x20, 0x11	; F18D87  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x19B5		; +2  IX (screen position)
+	.ascii "MAIN OUT    :"	; +4
+	.byte 0x20, 0x0f	; F18D98  op 20, 15 bytes -> handler 0xF31A3A
+	.short 0x1C22		; +2  IX (screen position)
+	.ascii "BEND RANGE:"	; +4
+	.byte 0x20, 0x11	; F18DA7  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1C35		; +2  IX (screen position)
+	.ascii "SUB OUT     :"	; +4
+	.byte 0x23, 0x05	; F18DB8  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x01, 0x0a, 0x00	; +2  '...'
+
+; --------------------------------------------------------------------------
+; DL_InternalSound_F18DBD -- display list, 0xF18DBD-0xF18E83 (199 bytes)
+; Interpreter: A.  13 records, framed by their own length bytes; the walk
+;              consumes 0xF18DBD-0xF18E83 exactly.
+; Text it draws: 'PAGE2/3'; 'INTERNAL SOUND'; 'PITCH BEND :';
+;                'MODULATION1:'; 'MODULATION2:'; 'R.T.CREAT.X:';
+;                'R.T.CREAT.Y:'; 'R.T.CTRL. X:'; 'R.T.CTRL. Y:'; 'HOLD
+;                :'; 'CTRL.PEDAL :'; 'AFTER TOUCH:'
+; Evidence: 13 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_InternalSound_F18DBD:
+	.byte 0x20, 0x0b	; F18DBD  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE2/3"	; +4
+	.byte 0x07, 0x12	; F18DC8  op 07, 18 bytes -> handler 0xF31A3A
+	.short 0x00FE		; +2  IX (screen position)
+	.ascii "INTERNAL SOUND"	; +4
+	.byte 0x20, 0x10	; F18DDA  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1222		; +2  IX (screen position)
+	.ascii "PITCH BEND :"	; +4
+	.byte 0x20, 0x10	; F18DEA  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x14A2		; +2  IX (screen position)
+	.ascii "MODULATION1:"	; +4
+	.byte 0x20, 0x10	; F18DFA  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1722		; +2  IX (screen position)
+	.ascii "MODULATION2:"	; +4
+	.byte 0x20, 0x10	; F18E0A  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x19A2		; +2  IX (screen position)
+	.ascii "R.T.CREAT.X:"	; +4
+	.byte 0x20, 0x10	; F18E1A  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1C22		; +2  IX (screen position)
+	.ascii "R.T.CREAT.Y:"	; +4
+	.byte 0x20, 0x11	; F18E2A  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1235		; +2  IX (screen position)
+	.ascii " R.T.CTRL. X:"	; +4
+	.byte 0x20, 0x11	; F18E3B  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x14B5		; +2  IX (screen position)
+	.ascii " R.T.CTRL. Y:"	; +4
+	.byte 0x20, 0x11	; F18E4C  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1735		; +2  IX (screen position)
+	.ascii " HOLD       :"	; +4
+	.byte 0x20, 0x11	; F18E5D  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x19B5		; +2  IX (screen position)
+	.ascii " CTRL.PEDAL :"	; +4
+	.byte 0x20, 0x11	; F18E6E  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1C35		; +2  IX (screen position)
+	.ascii " AFTER TOUCH:"	; +4
+	.byte 0x23, 0x05	; F18E7F  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x01, 0x0a, 0x00	; +2  '...'
+
+; --------------------------------------------------------------------------
+; DL_BankSelectMidiIn -- display list, 0xF18E84-0xF18F35 (178 bytes)
+; Interpreter: A.  9 records, framed by their own length bytes; the walk
+;              consumes 0xF18E84-0xF18F35 exactly.
+; Text it draws: 'PAGE3/3'; 'INTERNAL SOUND'; 'MONOPHONIC         :'; 'KEY
+;                SCALING        :'; 'VELOCITY OFFSET    :'; 'PR0GRAM CNG
+;                MIDI IN:'; 'BANK SELECT MIDI IN:'; 'V0LUME      MIDI IN:'
+; Evidence: 9 records, interpreter A, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_BankSelectMidiIn:
+	.byte 0x20, 0x0b	; F18E84  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE3/3"	; +4
+	.byte 0x07, 0x12	; F18E8F  op 07, 18 bytes -> handler 0xF31A3A
+	.short 0x00FE		; +2  IX (screen position)
+	.ascii "INTERNAL SOUND"	; +4
+	.byte 0x20, 0x18	; F18EA1  op 20, 24 bytes -> handler 0xF31A3A
+	.short 0x0FA7		; +2  IX (screen position)
+	.ascii "MONOPHONIC         :"	; +4
+	.byte 0x20, 0x18	; F18EB9  op 20, 24 bytes -> handler 0xF31A3A
+	.short 0x1227		; +2  IX (screen position)
+	.ascii "KEY SCALING        :"	; +4
+	.byte 0x20, 0x18	; F18ED1  op 20, 24 bytes -> handler 0xF31A3A
+	.short 0x14A7		; +2  IX (screen position)
+	.ascii "VELOCITY OFFSET    :"	; +4
+	.byte 0x20, 0x18	; F18EE9  op 20, 24 bytes -> handler 0xF31A3A
+	.short 0x1727		; +2  IX (screen position)
+	.ascii "PR0GRAM CNG MIDI IN:"	; +4
+	.byte 0x20, 0x18	; F18F01  op 20, 24 bytes -> handler 0xF31A3A
+	.short 0x19A7		; +2  IX (screen position)
+	.ascii "BANK SELECT MIDI IN:"	; +4
+	.byte 0x20, 0x18	; F18F19  op 20, 24 bytes -> handler 0xF31A3A
+	.short 0x1C27		; +2  IX (screen position)
+	.ascii "V0LUME      MIDI IN:"	; +4
+	.byte 0x23, 0x05	; F18F31  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x01, 0x0a, 0x00	; +2  '...'
+
+; --------------------------------------------------------------------------
+; DL_MidiOutFilter_F18F36 -- display list, 0xF18F36-0xF18F58 (35 bytes)
+; Interpreter: A.  3 records, framed by their own length bytes; the walk
+;              consumes 0xF18F36-0xF18F58 exactly.
+; Text it draws: 'MIDI OUT FILTER'; 'PAGE1/2'
+; Evidence: 3 records, interpreter A, inside the call-site run
+;           0xF18F36-0xF18FC8
+; --------------------------------------------------------------------------
+DL_MidiOutFilter_F18F36:
+	.byte 0x07, 0x13	; F18F36  op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x00FD		; +2  IX (screen position)
+	.ascii "MIDI OUT FILTER"	; +4
+	.byte 0x20, 0x0b	; F18F49  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE1/2"	; +4
+	.byte 0x23, 0x05	; F18F54  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x6e, 0x09, 0x00	; +2  'n..'
+
+; --------------------------------------------------------------------------
+; DL_EffectDepth -- display list, 0xF18F59-0xF18FC7 (111 bytes)
+; Interpreter: A.  6 records, framed by their own length bytes; the walk
+;              consumes 0xF18F59-0xF18FC7 exactly.
+; Text it draws: 'BANK SELECT:'; 'PR0G CHANGE:'; 'V0LUME      :'; 'PAN
+;                :'; 'EFFECT DEPTH:'; 'MIDI 0UT KEY TRANSP0SE :'
+; Evidence: 6 records, interpreter A, inside the call-site run
+;           0xF18F36-0xF18FC8
+; --------------------------------------------------------------------------
+DL_EffectDepth:
+	.byte 0x20, 0x10	; F18F59  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x14A2		; +2  IX (screen position)
+	.ascii "BANK SELECT:"	; +4
+	.byte 0x20, 0x10	; F18F69  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1222		; +2  IX (screen position)
+	.ascii "PR0G CHANGE:"	; +4
+	.byte 0x20, 0x11	; F18F79  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1235		; +2  IX (screen position)
+	.ascii "V0LUME      :"	; +4
+	.byte 0x20, 0x11	; F18F8A  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x14B5		; +2  IX (screen position)
+	.ascii "PAN         :"	; +4
+	.byte 0x20, 0x11	; F18F9B  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1735		; +2  IX (screen position)
+	.ascii "EFFECT DEPTH:"	; +4
+	.byte 0x20, 0x1c	; F18FAC  op 20, 28 bytes -> handler 0xF31A3A
+	.short 0x1A92		; +2  IX (screen position)
+	.ascii "MIDI 0UT KEY TRANSP0SE :"	; +4
+
+; --------------------------------------------------------------------------
+; DL_MidiOutFilter_F18FC8 -- display list, 0xF18FC8-0xF1900E (71 bytes)
+; Interpreter: A.  6 records, framed by their own length bytes; the walk
+;              consumes 0xF18FC8-0xF1900E exactly.
+; Text it draws: 'MIDI SOUND'; 'PAGE2/3'; 'MIDI OUT FILTER'
+; Evidence: 6 records, interpreter A, inside the call-site run
+;           0xF18F59-0xF1900F
+; --------------------------------------------------------------------------
+DL_MidiOutFilter_F18FC8:
+	.byte 0x07, 0x0e	; F18FC8  op 07, 14 bytes -> handler 0xF31A3A
+	.short 0x0101		; +2  IX (screen position)
+	.ascii "MIDI SOUND"	; +4
+	.byte 0x20, 0x0b	; F18FD6  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE2/3"	; +4
+	.byte 0x23, 0x05	; F18FE1  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x6e, 0x0d, 0x00	; +2  'n..'
+	.byte 0x01, 0x0a	; F18FE6  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x00, 0x64, 0x00, 0x2b, 0x01, 0x64, 0x00	; +2  '..d.+.d.'
+	.byte 0x01, 0x0a	; F18FF0  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x00, 0x68, 0x00, 0x2b, 0x01, 0x68, 0x00	; +2  '..h.+.h.'
+	.byte 0x20, 0x15	; F18FFA  op 20, 21 bytes -> handler 0xF31A3A
+	.short 0x0F33		; +2  IX (screen position)
+	.ascii " MIDI OUT FILTER "	; +4
+
+; --------------------------------------------------------------------------
+; DL_ReverbDepth -- display list, 0xF1900F-0xF190E8 (218 bytes)
+; Interpreter: A.  14 records, framed by their own length bytes; the walk
+;              consumes 0xF1900F-0xF190E8 exactly.
+; Text it draws: 'MIDI SOUND'; 'PAGE1/3'; 'PR0G CHANGE:'; 'V0LUME      :';
+;                'PAN         :'; 'REVERB DEPTH:'; 'CH0RUS DEPTH:'; 'BANK
+;                MSB   :'; 'BANK LSB   :'; '(BANK SEL.#=     )'; 'MULTIPLE
+;                MESSAGES OUTPUT'
+; Evidence: 14 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_ReverbDepth:
+	.byte 0x07, 0x0e	; F1900F  op 07, 14 bytes -> handler 0xF31A3A
+	.short 0x0101		; +2  IX (screen position)
+	.ascii "MIDI SOUND"	; +4
+	.byte 0x20, 0x0b	; F1901D  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE1/3"	; +4
+	.byte 0x20, 0x10	; F19028  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1222		; +2  IX (screen position)
+	.ascii "PR0G CHANGE:"	; +4
+	.byte 0x20, 0x11	; F19038  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1235		; +2  IX (screen position)
+	.ascii "V0LUME      :"	; +4
+	.byte 0x20, 0x11	; F19049  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x14B5		; +2  IX (screen position)
+	.ascii "PAN         :"	; +4
+	.byte 0x20, 0x11	; F1905A  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1735		; +2  IX (screen position)
+	.ascii "REVERB DEPTH:"	; +4
+	.byte 0x20, 0x11	; F1906B  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x19B5		; +2  IX (screen position)
+	.ascii "CH0RUS DEPTH:"	; +4
+	.byte 0x23, 0x05	; F1907C  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x6e, 0x0d, 0x00	; +2  'n..'
+	.byte 0x20, 0x10	; F19081  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x14A2		; +2  IX (screen position)
+	.ascii "BANK MSB   :"	; +4
+	.byte 0x20, 0x10	; F19091  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1722		; +2  IX (screen position)
+	.ascii "BANK LSB   :"	; +4
+	.byte 0x20, 0x16	; F190A1  op 20, 22 bytes -> handler 0xF31A3A
+	.short 0x19A2		; +2  IX (screen position)
+	.ascii "(BANK SEL.#=     )"	; +4
+	.byte 0x01, 0x0a	; F190B7  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x00, 0x64, 0x00, 0x2b, 0x01, 0x64, 0x00	; +2  '..d.+.d.'
+	.byte 0x01, 0x0a	; F190C1  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x00, 0x68, 0x00, 0x2b, 0x01, 0x68, 0x00	; +2  '..h.+.h.'
+	.byte 0x20, 0x1e	; F190CB  op 20, 30 bytes -> handler 0xF31A3A
+	.short 0x0F2F		; +2  IX (screen position)
+	.ascii " MULTIPLE MESSAGES OUTPUT "	; +4
+
+; --------------------------------------------------------------------------
+; DL_MidiOutFilter_F190E9 -- display list, 0xF190E9-0xF1910B (35 bytes)
+; Interpreter: A.  3 records, framed by their own length bytes; the walk
+;              consumes 0xF190E9-0xF1910B exactly.
+; Text it draws: 'MIDI OUT FILTER'; 'PAGE2/2'
+; Evidence: 3 records, interpreter A, inside the call-site run
+;           0xF190E9-0xF191B1
+; --------------------------------------------------------------------------
+DL_MidiOutFilter_F190E9:
+	.byte 0x07, 0x13	; F190E9  op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x00FD		; +2  IX (screen position)
+	.ascii "MIDI OUT FILTER"	; +4
+	.byte 0x20, 0x0b	; F190FC  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE2/2"	; +4
+	.byte 0x23, 0x05	; F19107  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x6e, 0x09, 0x00	; +2  'n..'
+
+; --------------------------------------------------------------------------
+; DL_Modulation1 -- display list, 0xF1910C-0xF191B0 (165 bytes)
+; Interpreter: A.  10 records, framed by their own length bytes; the walk
+;              consumes 0xF1910C-0xF191B0 exactly.
+; Text it draws: 'PITCH BEND :'; 'MODULATION1:'; 'MODULATION2:';
+;                'R.T.CREAT.X:'; 'R.T.CREAT.Y:'; 'R.T.CTRL. X:'; 'R.T.CTRL.
+;                Y:'; 'HOLD       :'; 'CTRL.PEDAL :'; 'AFTER TOUCH:'
+; Evidence: 10 records, interpreter A, inside the call-site run
+;           0xF190E9-0xF191B1
+; --------------------------------------------------------------------------
+DL_Modulation1:
+	.byte 0x20, 0x10	; F1910C  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1222		; +2  IX (screen position)
+	.ascii "PITCH BEND :"	; +4
+	.byte 0x20, 0x10	; F1911C  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x14A2		; +2  IX (screen position)
+	.ascii "MODULATION1:"	; +4
+	.byte 0x20, 0x10	; F1912C  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1722		; +2  IX (screen position)
+	.ascii "MODULATION2:"	; +4
+	.byte 0x20, 0x10	; F1913C  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x19A2		; +2  IX (screen position)
+	.ascii "R.T.CREAT.X:"	; +4
+	.byte 0x20, 0x10	; F1914C  op 20, 16 bytes -> handler 0xF31A3A
+	.short 0x1C22		; +2  IX (screen position)
+	.ascii "R.T.CREAT.Y:"	; +4
+	.byte 0x20, 0x11	; F1915C  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1235		; +2  IX (screen position)
+	.ascii " R.T.CTRL. X:"	; +4
+	.byte 0x20, 0x11	; F1916D  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x14B5		; +2  IX (screen position)
+	.ascii " R.T.CTRL. Y:"	; +4
+	.byte 0x20, 0x11	; F1917E  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1735		; +2  IX (screen position)
+	.ascii " HOLD       :"	; +4
+	.byte 0x20, 0x11	; F1918F  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x19B5		; +2  IX (screen position)
+	.ascii " CTRL.PEDAL :"	; +4
+	.byte 0x20, 0x11	; F191A0  op 20, 17 bytes -> handler 0xF31A3A
+	.short 0x1C35		; +2  IX (screen position)
+	.ascii " AFTER TOUCH:"	; +4
+
+; --------------------------------------------------------------------------
+; DL_MidiOutFilter_F191B1 -- display list, 0xF191B1-0xF191F7 (71 bytes)
+; Interpreter: A.  6 records, framed by their own length bytes; the walk
+;              consumes 0xF191B1-0xF191F7 exactly.
+; Text it draws: 'MIDI SOUND'; 'PAGE3/3'; 'MIDI OUT FILTER'
+; Evidence: 6 records, interpreter A, inside the call-site run
+;           0xF1910C-0xF191F8
+; --------------------------------------------------------------------------
+DL_MidiOutFilter_F191B1:
+	.byte 0x07, 0x0e	; F191B1  op 07, 14 bytes -> handler 0xF31A3A
+	.short 0x0101		; +2  IX (screen position)
+	.ascii "MIDI SOUND"	; +4
+	.byte 0x20, 0x0b	; F191BF  op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110		; +2  IX (screen position)
+	.ascii "PAGE3/3"	; +4
+	.byte 0x23, 0x05	; F191CA  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x6e, 0x0d, 0x00	; +2  'n..'
+	.byte 0x01, 0x0a	; F191CF  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x00, 0x64, 0x00, 0x2b, 0x01, 0x64, 0x00	; +2  '..d.+.d.'
+	.byte 0x01, 0x0a	; F191D9  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x00, 0x68, 0x00, 0x2b, 0x01, 0x68, 0x00	; +2  '..h.+.h.'
+	.byte 0x20, 0x15	; F191E3  op 20, 21 bytes -> handler 0xF31A3A
+	.short 0x0F33		; +2  IX (screen position)
+	.ascii " MIDI OUT FILTER "	; +4
+
+; --------------------------------------------------------------------------
+; DL_F191F8 -- display list, 0xF191F8-0xF19206 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF191F8-0xF19206 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F191F8:
+	.byte 0x02, 0x0f	; F191F8  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x0000		; +2  RAM variable
+	.byte 0x00, 0x00, 0x07	; +4  mask, shift, swi 7 function
+	.long 0x00002640	; +7  -> 0x002640
+	.byte 0x10, 0x00, 0x54, 0x06	; +11  '..T.'
+
+; --------------------------------------------------------------------------
+; DL_F19207 -- display list, 0xF19207-0xF19237 (49 bytes)
+; Interpreter: B.  3 records, framed by their own length bytes; the walk
+;              consumes 0xF19207-0xF19237 exactly.
+; Evidence: 3 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19207:
+	.byte 0x07, 0x11	; F19207  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2765		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x1c	; +4  mask, shift, swi 7 function
+	.long 0x00F19238	; +7  -> StringTable_F19238
+	.byte 0x06, 0x00, 0x34, 0x00, 0x25, 0x00	; +11  '..4.%.'
+	.byte 0x02, 0x0f	; F19218  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F193BE	; +7  -> StringTable_F193BE
+	.byte 0x03, 0x00, 0x78, 0x06	; +11  '..x.'
+	.byte 0x07, 0x11	; F19227  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2641		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F192F8	; +7  -> StringTable_F192F8
+	.byte 0x06, 0x00, 0x4a, 0x00, 0x37, 0x00	; +11  '..J.7.'
+
+; --------------------------------------------------------------------------
+; StringTable_F19238 -- ascii, 0xF19238-0xF192F7 (192 bytes)
+; Shape: 32 entries of 6 bytes = 192 bytes, which is the whole segment.
+; First / last: 'PART 1' ... 'PART32'
+; Evidence: 32 entries of 6 bytes; 1 record(s) point into it, the first at
+;           0xF19207, whose mask allows at most 32 indices
+; --------------------------------------------------------------------------
+StringTable_F19238:
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x31   ; F19238  [0]  'PART 1'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x32   ; F1923E  [1]  'PART 2'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x33   ; F19244  [2]  'PART 3'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x34   ; F1924A  [3]  'PART 4'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x35   ; F19250  [4]  'PART 5'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x36   ; F19256  [5]  'PART 6'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x37   ; F1925C  [6]  'PART 7'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x38   ; F19262  [7]  'PART 8'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x20, 0x39   ; F19268  [8]  'PART 9'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x30   ; F1926E  [9]  'PART10'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x31   ; F19274  [10]  'PART11'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x32   ; F1927A  [11]  'PART12'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x33   ; F19280  [12]  'PART13'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x34   ; F19286  [13]  'PART14'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x35   ; F1928C  [14]  'PART15'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x36   ; F19292  [15]  'PART16'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x37   ; F19298  [16]  'PART17'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x38   ; F1929E  [17]  'PART18'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x31, 0x39   ; F192A4  [18]  'PART19'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x30   ; F192AA  [19]  'PART20'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x31   ; F192B0  [20]  'PART21'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x32   ; F192B6  [21]  'PART22'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x33   ; F192BC  [22]  'PART23'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x34   ; F192C2  [23]  'PART24'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x35   ; F192C8  [24]  'PART25'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x36   ; F192CE  [25]  'PART26'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x37   ; F192D4  [26]  'PART27'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x38   ; F192DA  [27]  'PART28'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x32, 0x39   ; F192E0  [28]  'PART29'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x30   ; F192E6  [29]  'PART30'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x31   ; F192EC  [30]  'PART31'
+	.byte 0x50, 0x41, 0x52, 0x54, 0x33, 0x32   ; F192F2  [31]  'PART32'
+
+; --------------------------------------------------------------------------
+; StringTable_F192F8 -- ascii, 0xF192F8-0xF193BD (198 bytes)
+; Shape: 33 entries of 6 bytes = 198 bytes, which is the whole segment.
+; First / last: '1-CH 1' ... '  OFF '
+; Evidence: 33 entries of 6 bytes; 1 record(s) point into it, the first at
+;           0xF19227, whose mask allows at most 32 indices
+; --------------------------------------------------------------------------
+StringTable_F192F8:
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x31   ; F192F8  [0]  '1-CH 1'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x32   ; F192FE  [1]  '1-CH 2'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x33   ; F19304  [2]  '1-CH 3'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x34   ; F1930A  [3]  '1-CH 4'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x35   ; F19310  [4]  '1-CH 5'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x36   ; F19316  [5]  '1-CH 6'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x37   ; F1931C  [6]  '1-CH 7'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x38   ; F19322  [7]  '1-CH 8'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x20, 0x39   ; F19328  [8]  '1-CH 9'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x31, 0x30   ; F1932E  [9]  '1-CH10'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x31, 0x31   ; F19334  [10]  '1-CH11'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x31, 0x32   ; F1933A  [11]  '1-CH12'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x31, 0x33   ; F19340  [12]  '1-CH13'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x31, 0x34   ; F19346  [13]  '1-CH14'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x31, 0x35   ; F1934C  [14]  '1-CH15'
+	.byte 0x31, 0x2d, 0x43, 0x48, 0x31, 0x36   ; F19352  [15]  '1-CH16'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x31   ; F19358  [16]  '2-CH 1'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x32   ; F1935E  [17]  '2-CH 2'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x33   ; F19364  [18]  '2-CH 3'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x34   ; F1936A  [19]  '2-CH 4'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x35   ; F19370  [20]  '2-CH 5'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x36   ; F19376  [21]  '2-CH 6'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x37   ; F1937C  [22]  '2-CH 7'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x38   ; F19382  [23]  '2-CH 8'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x20, 0x39   ; F19388  [24]  '2-CH 9'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x31, 0x30   ; F1938E  [25]  '2-CH10'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x31, 0x31   ; F19394  [26]  '2-CH11'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x31, 0x32   ; F1939A  [27]  '2-CH12'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x31, 0x33   ; F193A0  [28]  '2-CH13'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x31, 0x34   ; F193A6  [29]  '2-CH14'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x31, 0x35   ; F193AC  [30]  '2-CH15'
+	.byte 0x32, 0x2d, 0x43, 0x48, 0x31, 0x36   ; F193B2  [31]  '2-CH16'
+	.byte 0x20, 0x20, 0x4f, 0x46, 0x46, 0x20   ; F193B8  [32]  '  OFF '
+
+; --------------------------------------------------------------------------
+; StringTable_F193BE -- ascii, 0xF193BE-0xF19480 (195 bytes)
+; Shape: 65 entries of 3 bytes = 195 bytes, which is the whole segment.
+; First / last: ' R1' ... '   '
+; Evidence: 65 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF19218, whose mask allows at most 128 indices
+; --------------------------------------------------------------------------
+StringTable_F193BE:
+	.byte 0x20, 0x52, 0x31   ; F193BE  [0]  ' R1'
+	.byte 0x20, 0x52, 0x32   ; F193C1  [1]  ' R2'
+	.byte 0x20, 0x20, 0x20   ; F193C4  [2]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193C7  [3]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193CA  [4]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193CD  [5]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193D0  [6]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193D3  [7]  '   '
+	.byte 0x20, 0x55, 0x31   ; F193D6  [8]  ' U1'
+	.byte 0x20, 0x55, 0x32   ; F193D9  [9]  ' U2'
+	.byte 0x20, 0x20, 0x20   ; F193DC  [10]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193DF  [11]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193E2  [12]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193E5  [13]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193E8  [14]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193EB  [15]  '   '
+	.byte 0x20, 0x45, 0x31   ; F193EE  [16]  ' E1'
+	.byte 0x20, 0x20, 0x20   ; F193F1  [17]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193F4  [18]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193F7  [19]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193FA  [20]  '   '
+	.byte 0x20, 0x20, 0x20   ; F193FD  [21]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19400  [22]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19403  [23]  '   '
+	.byte 0x20, 0x4d, 0x31   ; F19406  [24]  ' M1'
+	.byte 0x20, 0x4d, 0x32   ; F19409  [25]  ' M2'
+	.byte 0x20, 0x4d, 0x33   ; F1940C  [26]  ' M3'
+	.byte 0x20, 0x20, 0x20   ; F1940F  [27]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19412  [28]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19415  [29]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19418  [30]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1941B  [31]  '   '
+	.byte 0x52, 0x44, 0x31   ; F1941E  [32]  'RD1'
+	.byte 0x52, 0x44, 0x32   ; F19421  [33]  'RD2'
+	.byte 0x20, 0x20, 0x20   ; F19424  [34]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19427  [35]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1942A  [36]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1942D  [37]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19430  [38]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19433  [39]  '   '
+	.byte 0x55, 0x44, 0x31   ; F19436  [40]  'UD1'
+	.byte 0x55, 0x44, 0x32   ; F19439  [41]  'UD2'
+	.byte 0x20, 0x20, 0x20   ; F1943C  [42]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1943F  [43]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19442  [44]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19445  [45]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19448  [46]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1944B  [47]  '   '
+	.byte 0x45, 0x44, 0x31   ; F1944E  [48]  'ED1'
+	.byte 0x20, 0x20, 0x20   ; F19451  [49]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19454  [50]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19457  [51]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1945A  [52]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1945D  [53]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19460  [54]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19463  [55]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19466  [56]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19469  [57]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1946C  [58]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1946F  [59]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19472  [60]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19475  [61]  '   '
+	.byte 0x20, 0x20, 0x20   ; F19478  [62]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1947B  [63]  '   '
+	.byte 0x20, 0x20, 0x20   ; F1947E  [64]  '   '
+
+; --------------------------------------------------------------------------
+; DL_F19481 -- display list, 0xF19481-0xF19496 (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF19481-0xF19496 exactly.
+; Evidence: 2 records, interpreter B, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_F19481:
+	.byte 0x08, 0x0b	; F19481  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x276A		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F19497	; +7  -> IndexMap_F19497
+	.byte 0x03, 0x0b	; F1948C  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2769		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F19497	; +7  -> IndexMap_F19497
+
+; --------------------------------------------------------------------------
+; IndexMap_F19497 -- index map, 0xF19497-0xF19516 (128 bytes)
+; Shape: 16 entries of 8 bytes = 128 bytes, which is the whole segment.
+; Evidence: 16 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF19481, whose mask allows at most 16 indices
+; --------------------------------------------------------------------------
+IndexMap_F19497:
+	.byte 0x0e, 0x00, 0x63, 0x00, 0x2a, 0x01, 0x71, 0x00   ; F19497  [0]
+	.byte 0x0e, 0x00, 0x73, 0x00, 0x8a, 0x00, 0x7e, 0x00   ; F1949F  [1]
+	.byte 0x0e, 0x00, 0x83, 0x00, 0x8a, 0x00, 0x8e, 0x00   ; F194A7  [2]
+	.byte 0x0e, 0x00, 0x93, 0x00, 0x8a, 0x00, 0x9e, 0x00   ; F194AF  [3]
+	.byte 0x0e, 0x00, 0xa3, 0x00, 0x8a, 0x00, 0xae, 0x00   ; F194B7  [4]
+	.byte 0x0e, 0x00, 0xb3, 0x00, 0x8a, 0x00, 0xbe, 0x00   ; F194BF  [5]
+	.byte 0xa6, 0x00, 0x73, 0x00, 0x32, 0x01, 0x7e, 0x00   ; F194C7  [6]
+	.byte 0xa6, 0x00, 0x83, 0x00, 0x32, 0x01, 0x8e, 0x00   ; F194CF  [7]
+	.byte 0xa6, 0x00, 0x93, 0x00, 0x32, 0x01, 0x9e, 0x00   ; F194D7  [8]
+	.byte 0xa6, 0x00, 0xa3, 0x00, 0x32, 0x01, 0xae, 0x00   ; F194DF  [9]
+	.byte 0xa6, 0x00, 0xb3, 0x00, 0x32, 0x01, 0xbe, 0x00   ; F194E7  [10]
+	.byte 0xa6, 0x00, 0xb3, 0x00, 0x32, 0x01, 0xbe, 0x00   ; F194EF  [11]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F194F7  [12]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F194FF  [13]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F19507  [14]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F1950F  [15]
+
+; --------------------------------------------------------------------------
+; DL_F19517 -- display list, 0xF19517-0xF1952C (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF19517-0xF1952C exactly.
+; Evidence: 2 records, interpreter B, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_F19517:
+	.byte 0x08, 0x0b	; F19517  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x276A		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F1952D	; +7  -> IndexMap_F1952D
+	.byte 0x03, 0x0b	; F19522  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2769		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F1952D	; +7  -> IndexMap_F1952D
+
+; --------------------------------------------------------------------------
+; IndexMap_F1952D -- index map, 0xF1952D-0xF195AC (128 bytes)
+; Shape: 16 entries of 8 bytes = 128 bytes, which is the whole segment.
+; Evidence: 16 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF19517, whose mask allows at most 16 indices
+; --------------------------------------------------------------------------
+IndexMap_F1952D:
+	.byte 0x0e, 0x00, 0x73, 0x00, 0x92, 0x00, 0x7e, 0x00   ; F1952D  [0]
+	.byte 0x0e, 0x00, 0x83, 0x00, 0x92, 0x00, 0x8e, 0x00   ; F19535  [1]
+	.byte 0x0e, 0x00, 0x93, 0x00, 0x92, 0x00, 0x9e, 0x00   ; F1953D  [2]
+	.byte 0x0e, 0x00, 0xa3, 0x00, 0x92, 0x00, 0xae, 0x00   ; F19545  [3]
+	.byte 0x0e, 0x00, 0xb3, 0x00, 0x92, 0x00, 0xbe, 0x00   ; F1954D  [4]
+	.byte 0xae, 0x00, 0x73, 0x00, 0x32, 0x01, 0x7e, 0x00   ; F19555  [5]
+	.byte 0xae, 0x00, 0x83, 0x00, 0x32, 0x01, 0x8e, 0x00   ; F1955D  [6]
+	.byte 0xae, 0x00, 0x93, 0x00, 0x32, 0x01, 0x9e, 0x00   ; F19565  [7]
+	.byte 0xae, 0x00, 0xa3, 0x00, 0x32, 0x01, 0xae, 0x00   ; F1956D  [8]
+	.byte 0xae, 0x00, 0xb3, 0x00, 0x32, 0x01, 0xbe, 0x00   ; F19575  [9]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F1957D  [10]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F19585  [11]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F1958D  [12]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F19595  [13]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F1959D  [14]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F195A5  [15]
+
+; --------------------------------------------------------------------------
+; DL_F195AD -- display list, 0xF195AD-0xF195C2 (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF195AD-0xF195C2 exactly.
+; Evidence: 2 records, interpreter B, named by a push pair whose framing
+;           walk lands on the end address
+; --------------------------------------------------------------------------
+DL_F195AD:
+	.byte 0x08, 0x0b	; F195AD  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x276A		; +2  RAM variable
+	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F195C3	; +7  -> IndexMap_F195C3
+	.byte 0x03, 0x0b	; F195B8  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2769		; +2  RAM variable
+	.byte 0x07, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F195C3	; +7  -> IndexMap_F195C3
+
+; --------------------------------------------------------------------------
+; IndexMap_F195C3 -- index map, 0xF195C3-0xF19602 (64 bytes)
+; Shape: 8 entries of 8 bytes = 64 bytes, which is the whole segment.
+; Evidence: 8 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF195AD, whose mask allows at most 8 indices
+; --------------------------------------------------------------------------
+IndexMap_F195C3:
+	.byte 0x36, 0x00, 0x63, 0x00, 0xfa, 0x00, 0x6e, 0x00   ; F195C3  [0]
+	.byte 0x36, 0x00, 0x73, 0x00, 0xfa, 0x00, 0x7e, 0x00   ; F195CB  [1]
+	.byte 0x36, 0x00, 0x83, 0x00, 0xfa, 0x00, 0x8e, 0x00   ; F195D3  [2]
+	.byte 0x36, 0x00, 0x93, 0x00, 0xfa, 0x00, 0x9e, 0x00   ; F195DB  [3]
+	.byte 0x36, 0x00, 0xa3, 0x00, 0xfa, 0x00, 0xae, 0x00   ; F195E3  [4]
+	.byte 0x36, 0x00, 0xb3, 0x00, 0xfa, 0x00, 0xbe, 0x00   ; F195EB  [5]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F195F3  [6]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F195FB  [7]
+
+; --------------------------------------------------------------------------
+; DL_F19603 -- display list, 0xF19603-0xF19618 (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF19603-0xF19618 exactly.
+; Evidence: 2 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19603:
+	.byte 0x08, 0x0b	; F19603  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x276A		; +2  RAM variable
+	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F19619	; +7  -> IndexMap_F19619
+	.byte 0x03, 0x0b	; F1960E  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2769		; +2  RAM variable
+	.byte 0x07, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F19619	; +7  -> IndexMap_F19619
+
+; --------------------------------------------------------------------------
+; IndexMap_F19619 -- index map, 0xF19619-0xF19658 (64 bytes)
+; Shape: 8 entries of 8 bytes = 64 bytes, which is the whole segment.
+; Evidence: 8 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF19603, whose mask allows at most 8 indices
+; --------------------------------------------------------------------------
+IndexMap_F19619:
+	.byte 0x0e, 0x00, 0x73, 0x00, 0x92, 0x00, 0x7e, 0x00   ; F19619  [0]
+	.byte 0x0e, 0x00, 0x83, 0x00, 0x92, 0x00, 0x8e, 0x00   ; F19621  [1]
+	.byte 0xa6, 0x00, 0x73, 0x00, 0x32, 0x01, 0x7e, 0x00   ; F19629  [2]
+	.byte 0xa6, 0x00, 0x83, 0x00, 0x32, 0x01, 0x8e, 0x00   ; F19631  [3]
+	.byte 0xa6, 0x00, 0x93, 0x00, 0x32, 0x01, 0x9e, 0x00   ; F19639  [4]
+	.byte 0x0e, 0x00, 0xa9, 0x00, 0xf2, 0x00, 0xb4, 0x00   ; F19641  [5]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F19649  [6]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F19651  [7]
+
+; --------------------------------------------------------------------------
+; DL_F19659 -- display list, 0xF19659-0xF1966E (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF19659-0xF1966E exactly.
+; Evidence: 2 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19659:
+	.byte 0x08, 0x0b	; F19659  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x276A		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F1966F	; +7  -> IndexMap_F1966F
+	.byte 0x03, 0x0b	; F19664  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2769		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F1966F	; +7  -> IndexMap_F1966F
+
+; --------------------------------------------------------------------------
+; IndexMap_F1966F -- index map, 0xF1966F-0xF196EE (128 bytes)
+; Shape: 16 entries of 8 bytes = 128 bytes, which is the whole segment.
+; Evidence: 16 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF19659, whose mask allows at most 16 indices
+; --------------------------------------------------------------------------
+IndexMap_F1966F:
+	.byte 0x0e, 0x00, 0x73, 0x00, 0x92, 0x00, 0x7e, 0x00   ; F1966F  [0]
+	.byte 0x0e, 0x00, 0x83, 0x00, 0x92, 0x00, 0x8e, 0x00   ; F19677  [1]
+	.byte 0x0e, 0x00, 0x93, 0x00, 0x92, 0x00, 0x9e, 0x00   ; F1967F  [2]
+	.byte 0x0e, 0x00, 0xa3, 0x00, 0x92, 0x00, 0xae, 0x00   ; F19687  [3]
+	.byte 0x0e, 0x00, 0xb3, 0x00, 0x92, 0x00, 0xbe, 0x00   ; F1968F  [4]
+	.byte 0xae, 0x00, 0x73, 0x00, 0x32, 0x01, 0x7e, 0x00   ; F19697  [5]
+	.byte 0xae, 0x00, 0x83, 0x00, 0x32, 0x01, 0x8e, 0x00   ; F1969F  [6]
+	.byte 0xae, 0x00, 0x93, 0x00, 0x32, 0x01, 0x9e, 0x00   ; F196A7  [7]
+	.byte 0xae, 0x00, 0xa3, 0x00, 0x32, 0x01, 0xae, 0x00   ; F196AF  [8]
+	.byte 0xae, 0x00, 0xb3, 0x00, 0x32, 0x01, 0xbe, 0x00   ; F196B7  [9]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F196BF  [10]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F196C7  [11]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F196CF  [12]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F196D7  [13]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F196DF  [14]
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00   ; F196E7  [15]
+
+; --------------------------------------------------------------------------
+; DL_F196EF -- display list, 0xF196EF-0xF19704 (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF196EF-0xF19704 exactly.
+; Evidence: 2 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F196EF:
+	.byte 0x08, 0x0b	; F196EF  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x276A		; +2  RAM variable
+	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F19705	; +7  -> IndexMap_F19705
+	.byte 0x03, 0x0b	; F196FA  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2769		; +2  RAM variable
+	.byte 0x07, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F19705	; +7  -> IndexMap_F19705
+
+; --------------------------------------------------------------------------
+; IndexMap_F19705 -- index map, 0xF19705-0xF19744 (64 bytes)
+; Shape: 8 entries of 8 bytes = 64 bytes, which is the whole segment.
+; Evidence: 8 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF196EF, whose mask allows at most 8 indices
+; --------------------------------------------------------------------------
+IndexMap_F19705:
+	.byte 0x0e, 0x00, 0x73, 0x00, 0x92, 0x00, 0x7e, 0x00   ; F19705  [0]
+	.byte 0x0e, 0x00, 0x83, 0x00, 0x92, 0x00, 0x8e, 0x00   ; F1970D  [1]
+	.byte 0x0e, 0x00, 0x93, 0x00, 0x92, 0x00, 0x9e, 0x00   ; F19715  [2]
+	.byte 0xa6, 0x00, 0x73, 0x00, 0x32, 0x01, 0x7e, 0x00   ; F1971D  [3]
+	.byte 0xa6, 0x00, 0x83, 0x00, 0x32, 0x01, 0x8e, 0x00   ; F19725  [4]
+	.byte 0xa6, 0x00, 0x93, 0x00, 0x32, 0x01, 0x9e, 0x00   ; F1972D  [5]
+	.byte 0xa6, 0x00, 0xa3, 0x00, 0x32, 0x01, 0xae, 0x00   ; F19735  [6]
+	.byte 0x0e, 0x00, 0xb3, 0x00, 0xf2, 0x00, 0xbe, 0x00   ; F1973D  [7]
+
+; --------------------------------------------------------------------------
+; DL_F19745 -- display list, 0xF19745-0xF19753 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19745-0xF19753 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19745:
+	.byte 0x02, 0x0f	; F19745  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x0000		; +2  RAM variable
+	.byte 0x00, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00002640	; +7  -> 0x002640
+	.byte 0x10, 0x00, 0xb5, 0x0f	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19754 -- display list, 0xF19754-0xF19771 (30 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF19754-0xF19771 exactly.
+; Evidence: 2 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19754:
+	.byte 0x02, 0x0f	; F19754  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F193BE	; +7  -> StringTable_F193BE
+	.byte 0x03, 0x00, 0xad, 0x0f	; +11  '....'
+	.byte 0x02, 0x0f	; F19763  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x0000		; +2  RAM variable
+	.byte 0x00, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00002661	; +7  -> 0x002661
+	.byte 0x03, 0x00, 0xb1, 0x0f	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19772 -- display list, 0xF19772-0xF19780 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19772-0xF19780 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19772:
+	.byte 0x02, 0x0f	; F19772  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1889D	; +7  -> StringTable_F1889D
+	.byte 0x03, 0x00, 0xae, 0x14	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19781 -- display list, 0xF19781-0xF1978F (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19781-0xF1978F exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19781:
+	.byte 0x02, 0x0f	; F19781  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19790 -- display list, 0xF19790-0xF1979E (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19790-0xF1979E exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19790:
+	.byte 0x02, 0x0f	; F19790  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x03, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xc3, 0x19	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F1979F -- display list, 0xF1979F-0xF197AD (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1979F-0xF197AD exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1979F:
+	.byte 0x02, 0x0f	; F1979F  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x07, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197F8	; +7  -> StringTable_F197F8
+	.byte 0x04, 0x00, 0x42, 0x1c	; +11  '..B.'
+
+; --------------------------------------------------------------------------
+; DL_F197AE -- display list, 0xF197AE-0xF197B7 (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF197AE-0xF197B7 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F197AE:
+	.byte 0x00, 0x0a	; F197AE  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x2e, 0x12, 0x03	; +7  '...'
+
+; --------------------------------------------------------------------------
+; DL_F197B8 -- display list, 0xF197B8-0xF197C1 (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF197B8-0xF197C1 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F197B8:
+	.byte 0x00, 0x0a	; F197B8  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x43, 0x12, 0x03	; +7  'C..'
+
+; --------------------------------------------------------------------------
+; DL_F197C2 -- display list, 0xF197C2-0xF197CB (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF197C2-0xF197CB exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F197C2:
+	.byte 0x00, 0x0a	; F197C2  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x43, 0x17, 0x03	; +7  'C..'
+
+; --------------------------------------------------------------------------
+; DL_F197CC -- display list, 0xF197CC-0xF197D6 (11 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF197CC-0xF197D6 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F197CC:
+	.byte 0x05, 0x0b	; F197CC  op 05, 11 bytes -> handler 0xF31BD7
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x4002172E	; +7  -> 0x4002172E
+
+; --------------------------------------------------------------------------
+; DL_F197D7 -- display list, 0xF197D7-0xF197E1 (11 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF197D7-0xF197E1 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F197D7:
+	.byte 0x05, 0x0b	; F197D7  op 05, 11 bytes -> handler 0xF31BD7
+	.short 0x2640		; +2  RAM variable
+	.byte 0xff, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x800319AD	; +7  -> 0x800319AD
+
+; --------------------------------------------------------------------------
+; DL_F197E2 -- display list, 0xF197E2-0xF197EB (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF197E2-0xF197EB exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F197E2:
+	.byte 0x00, 0x0a	; F197E2  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x2f, 0x1c, 0x02	; +7  '/..'
+
+; --------------------------------------------------------------------------
+; StringTable_F197EC -- ascii, 0xF197EC-0xF197F7 (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'OFF' ... ' --'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF19781, whose mask allows at most 2 indices
+; --------------------------------------------------------------------------
+StringTable_F197EC:
+	.byte 0x4f, 0x46, 0x46   ; F197EC  [0]  'OFF'
+	.byte 0x20, 0x4f, 0x4e   ; F197EF  [1]  ' ON'
+	.byte 0x20, 0x2d, 0x2d   ; F197F2  [2]  ' --'
+	.byte 0x20, 0x2d, 0x2d   ; F197F5  [3]  ' --'
+
+; --------------------------------------------------------------------------
+; StringTable_F197F8 -- ascii, 0xF197F8-0xF19817 (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: ' OFF' ... ' -- '
+; Evidence: 8 entries of 4 bytes; 1 record(s) point into it, the first at
+;           0xF18795, whose mask allows at most 8 indices
+; --------------------------------------------------------------------------
+StringTable_F197F8:
+	.byte 0x20, 0x4f, 0x46, 0x46   ; F197F8  [0]  ' OFF'
+	.byte 0x4d, 0x41, 0x49, 0x4e   ; F197FC  [1]  'MAIN'
+	.byte 0x53, 0x55, 0x42, 0x31   ; F19800  [2]  'SUB1'
+	.byte 0x53, 0x55, 0x42, 0x32   ; F19804  [3]  'SUB2'
+	.byte 0x53, 0x55, 0x42, 0x33   ; F19808  [4]  'SUB3'
+	.byte 0x45, 0x46, 0x46, 0x32   ; F1980C  [5]  'EFF2'
+	.byte 0x20, 0x2d, 0x2d, 0x20   ; F19810  [6]  ' -- '
+	.byte 0x20, 0x2d, 0x2d, 0x20   ; F19814  [7]  ' -- '
+
+; --------------------------------------------------------------------------
+; DL_F19818 -- display list, 0xF19818-0xF198AD (150 bytes)
+; Interpreter: B.  10 records, framed by their own length bytes; the walk
+;              consumes 0xF19818-0xF198AD exactly.
+; Evidence: 10 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19818:
+	.byte 0x02, 0x0f	; F19818  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x2f, 0x12	; +11  '../.'
+	.byte 0x02, 0x0f	; F19827  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x02, 0x01, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xaf, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F19836  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x10, 0x04, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x2f, 0x17	; +11  '../.'
+	.byte 0x02, 0x0f	; F19845  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xaf, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F19854  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x02, 0x01, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x2f, 0x1c	; +11  '../.'
+	.byte 0x02, 0x0f	; F19863  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x04, 0x02, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x43, 0x12	; +11  '..C.'
+	.byte 0x02, 0x0f	; F19872  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x08, 0x03, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F19881  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x43, 0x17	; +11  '..C.'
+	.byte 0x02, 0x0f	; F19890  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xc3, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F1989F  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x43, 0x1c	; +11  '..C.'
+
+; --------------------------------------------------------------------------
+; DL_F198AE -- display list, 0xF198AE-0xF198BC (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF198AE-0xF198BC exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F198AE:
+	.byte 0x02, 0x0f	; F198AE  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xbc, 0x0f	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F198BD -- display list, 0xF198BD-0xF198CB (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF198BD-0xF198CB exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F198BD:
+	.byte 0x02, 0x0f	; F198BD  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x08, 0x03, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x3c, 0x12	; +11  '..<.'
+
+; --------------------------------------------------------------------------
+; DL_F198CC -- display list, 0xF198CC-0xF198D6 (11 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF198CC-0xF198D6 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F198CC:
+	.byte 0x05, 0x0b	; F198CC  op 05, 11 bytes -> handler 0xF31BD7
+	.short 0x2640		; +2  RAM variable
+	.byte 0xff, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x180214BC	; +7  -> 0x180214BC
+
+; --------------------------------------------------------------------------
+; DL_F198D7 -- display list, 0xF198D7-0xF198E5 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF198D7-0xF198E5 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F198D7:
+	.byte 0x02, 0x0f	; F198D7  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x10, 0x04, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x3c, 0x17	; +11  '..<.'
+
+; --------------------------------------------------------------------------
+; DL_F198E6 -- display list, 0xF198E6-0xF198F4 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF198E6-0xF198F4 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F198E6:
+	.byte 0x02, 0x0f	; F198E6  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xbc, 0x19	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F198F5 -- display list, 0xF198F5-0xF19903 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF198F5-0xF19903 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F198F5:
+	.byte 0x02, 0x0f	; F198F5  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x04, 0x02, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x3c, 0x1c	; +11  '..<.'
+
+; --------------------------------------------------------------------------
+; DL_F19904 -- display list, 0xF19904-0xF19912 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19904-0xF19912 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19904:
+	.byte 0x02, 0x0f	; F19904  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x10, 0x04, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x2f, 0x12	; +11  '../.'
+
+; --------------------------------------------------------------------------
+; DL_F19913 -- display list, 0xF19913-0xF19921 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19913-0xF19921 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19913:
+	.byte 0x02, 0x0f	; F19913  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xaf, 0x14	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19922 -- display list, 0xF19922-0xF19930 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19922-0xF19930 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19922:
+	.byte 0x02, 0x0f	; F19922  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x04, 0x02, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x43, 0x12	; +11  '..C.'
+
+; --------------------------------------------------------------------------
+; DL_F19931 -- display list, 0xF19931-0xF1993F (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19931-0xF1993F exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19931:
+	.byte 0x02, 0x0f	; F19931  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x10, 0x04, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19940 -- display list, 0xF19940-0xF1994E (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19940-0xF1994E exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19940:
+	.byte 0x02, 0x0f	; F19940  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x43, 0x17	; +11  '..C.'
+
+; --------------------------------------------------------------------------
+; DL_F1994F -- display list, 0xF1994F-0xF19959 (11 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1994F-0xF19959 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1994F:
+	.byte 0x05, 0x0b	; F1994F  op 05, 11 bytes -> handler 0xF31BD7
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x40021AAB	; +7  -> 0x40021AAB
+
+; --------------------------------------------------------------------------
+; DL_F1995A -- display list, 0xF1995A-0xF199EF (150 bytes)
+; Interpreter: B.  10 records, framed by their own length bytes; the walk
+;              consumes 0xF1995A-0xF199EF exactly.
+; Evidence: 10 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1995A:
+	.byte 0x02, 0x0f	; F1995A  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x2f, 0x12	; +11  '../.'
+	.byte 0x02, 0x0f	; F19969  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x02, 0x01, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xaf, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F19978  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x10, 0x04, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x2f, 0x17	; +11  '../.'
+	.byte 0x02, 0x0f	; F19987  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xaf, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F19996  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x02, 0x01, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x2f, 0x1c	; +11  '../.'
+	.byte 0x02, 0x0f	; F199A5  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x04, 0x02, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x43, 0x12	; +11  '..C.'
+	.byte 0x02, 0x0f	; F199B4  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x08, 0x03, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F199C3  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x43, 0x17	; +11  '..C.'
+	.byte 0x02, 0x0f	; F199D2  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0xc3, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F199E1  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F197EC	; +7  -> StringTable_F197EC
+	.byte 0x03, 0x00, 0x43, 0x1c	; +11  '..C.'
+
+; --------------------------------------------------------------------------
+; DL_F199F0 -- display list, 0xF199F0-0xF199FE (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF199F0-0xF199FE exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F199F0:
+	.byte 0x02, 0x0f	; F199F0  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F19AB3	; +7  -> StringTable_F19AB3
+	.byte 0x03, 0x00, 0x2f, 0x12	; +11  '../.'
+
+; --------------------------------------------------------------------------
+; DL_F199FF -- display list, 0xF199FF-0xF19A08 (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF199FF-0xF19A08 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F199FF:
+	.byte 0x00, 0x0a	; F199FF  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2640		; +2  RAM variable
+	.byte 0xff, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x2f, 0x12, 0x03	; +7  '/..'
+
+; --------------------------------------------------------------------------
+; DL_F19A09 -- display list, 0xF19A09-0xF19A17 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A09-0xF19A17 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A09:
+	.byte 0x02, 0x0f	; F19A09  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2642		; +2  RAM variable
+	.byte 0x03, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F19AB3	; +7  -> StringTable_F19AB3
+	.byte 0x03, 0x00, 0xaf, 0x14	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19A18 -- display list, 0xF19A18-0xF19A21 (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A18-0xF19A21 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A18:
+	.byte 0x00, 0x0a	; F19A18  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2642		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xaf, 0x14, 0x03	; +7  '...'
+
+; --------------------------------------------------------------------------
+; DL_F19A22 -- display list, 0xF19A22-0xF19A30 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A22-0xF19A30 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A22:
+	.byte 0x02, 0x0f	; F19A22  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F19AB3	; +7  -> StringTable_F19AB3
+	.byte 0x03, 0x00, 0x2f, 0x17	; +11  '../.'
+
+; --------------------------------------------------------------------------
+; DL_F19A31 -- display list, 0xF19A31-0xF19A3A (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A31-0xF19A3A exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A31:
+	.byte 0x00, 0x0a	; F19A31  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2641		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x2f, 0x17, 0x03	; +7  '/..'
+
+; --------------------------------------------------------------------------
+; DL_F19A3B -- display list, 0xF19A3B-0xF19A49 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A3B-0xF19A49 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A3B:
+	.byte 0x02, 0x0f	; F19A3B  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x00, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00002650	; +7  -> 0x002650
+	.byte 0x05, 0x00, 0xae, 0x19	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19A4A -- display list, 0xF19A4A-0xF19A58 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A4A-0xF19A58 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A4A:
+	.byte 0x02, 0x0f	; F19A4A  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F19AB3	; +7  -> StringTable_F19AB3
+	.byte 0x03, 0x00, 0x43, 0x12	; +11  '..C.'
+
+; --------------------------------------------------------------------------
+; DL_F19A59 -- display list, 0xF19A59-0xF19A62 (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A59-0xF19A62 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A59:
+	.byte 0x00, 0x0a	; F19A59  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2643		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x43, 0x12, 0x03	; +7  'C..'
+
+; --------------------------------------------------------------------------
+; DL_F19A63 -- display list, 0xF19A63-0xF19A71 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A63-0xF19A71 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A63:
+	.byte 0x02, 0x0f	; F19A63  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2644		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F19AB3	; +7  -> StringTable_F19AB3
+	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19A72 -- display list, 0xF19A72-0xF19A80 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A72-0xF19A80 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A72:
+	.byte 0x02, 0x0f	; F19A72  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2644		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1889D	; +7  -> StringTable_F1889D
+	.byte 0x03, 0x00, 0xc3, 0x14	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19A81 -- display list, 0xF19A81-0xF19A8F (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A81-0xF19A8F exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A81:
+	.byte 0x02, 0x0f	; F19A81  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2646		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F19AB3	; +7  -> StringTable_F19AB3
+	.byte 0x03, 0x00, 0x43, 0x17	; +11  '..C.'
+
+; --------------------------------------------------------------------------
+; DL_F19A90 -- display list, 0xF19A90-0xF19A99 (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A90-0xF19A99 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A90:
+	.byte 0x00, 0x0a	; F19A90  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2646		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x43, 0x17, 0x03	; +7  'C..'
+
+; --------------------------------------------------------------------------
+; DL_F19A9A -- display list, 0xF19A9A-0xF19AA8 (15 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19A9A-0xF19AA8 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19A9A:
+	.byte 0x02, 0x0f	; F19A9A  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2645		; +2  RAM variable
+	.byte 0x01, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F19AB3	; +7  -> StringTable_F19AB3
+	.byte 0x03, 0x00, 0xc3, 0x19	; +11  '....'
+
+; --------------------------------------------------------------------------
+; DL_F19AA9 -- display list, 0xF19AA9-0xF19AB2 (10 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19AA9-0xF19AB2 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19AA9:
+	.byte 0x00, 0x0a	; F19AA9  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2645		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xc3, 0x19, 0x03	; +7  '...'
+
+; --------------------------------------------------------------------------
+; StringTable_F19AB3 -- ascii, 0xF19AB3-0xF19ABE (12 bytes)
+; Shape: 4 entries of 3 bytes = 12 bytes, which is the whole segment.
+; First / last: 'INT' ... '---'
+; Evidence: 4 entries of 3 bytes; 1 record(s) point into it, the first at
+;           0xF199F0, whose mask allows at most 2 indices
+; --------------------------------------------------------------------------
+StringTable_F19AB3:
+	.byte 0x49, 0x4e, 0x54   ; F19AB3  [0]  'INT'
+	.byte 0x4f, 0x46, 0x46   ; F19AB6  [1]  'OFF'
+	.byte 0x2d, 0x2d, 0x2d   ; F19AB9  [2]  '---'
+	.byte 0x2d, 0x2d, 0x2d   ; F19ABC  [3]  '---'
+
+; --------------------------------------------------------------------------
+; DL_CombinationNaming_F19ABF -- display list, 0xF19ABF-0xF19BBC (254 bytes)
+; Interpreter: A.  26 records, framed by their own length bytes; the walk
+;              consumes 0xF19ABF-0xF19BBC exactly.
+; Text it draws: 'MEM0RY WRITE'; 'COMBI.EDIT'; '0K'; 'NAME:'; 'MEMORY
+;                BANK:U1-'; 'COMBINATION NAMING'
+; Evidence: 26 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_CombinationNaming_F19ABF:
+	.byte 0x1c, 0x12	; F19ABF  op 1C, 18 bytes -> handler 0xF31A52
+	.short 0x0063, 0x0005	; +2  the two words
+	.ascii "MEM0RY WRITE"	; +6
+	.byte 0x17, 0x10	; F19AD1  op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0006, 0x0007	; +2  the two words
+	.ascii "COMBI.EDIT"	; +6
+	.byte 0x07, 0x05	; F19AE1  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0550		; +2  IX (screen position)
+	.byte 0x10	; +4  '.'
+	.byte 0x20, 0x06	; F19AE6  op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x057A		; +2  IX (screen position)
+	.ascii "0K"	; +4
+	.byte 0x07, 0x09	; F19AEC  op 07, 9 bytes -> handler 0xF31A3A
+	.short 0x0B6F		; +2  IX (screen position)
+	.ascii "NAME:"	; +4
+	.byte 0x17, 0x07	; F19AF5  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0136, 0x006D	; +2  the two words
+	.byte 0x91	; +6  '.'
+	.byte 0x07, 0x05	; F19AFC  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x117C		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x07, 0x05	; F19B01  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x11CF		; +2  IX (screen position)
+	.byte 0xa9	; +4  '.'
+	.byte 0x07, 0x13	; F19B06  op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x1367		; +2  IX (screen position)
+	.ascii "MEMORY BANK:U1-"	; +4
+	.byte 0x17, 0x07	; F19B19  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0136, 0x0094	; +2  the two words
+	.byte 0x91	; +6  '.'
+	.byte 0x07, 0x05	; F19B20  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17BC		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x07, 0x05	; F19B25  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17E7		; +2  IX (screen position)
+	.byte 0xa9	; +4  '.'
+	.byte 0x07, 0x05	; F19B2A  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1DD7		; +2  IX (screen position)
+	.byte 0x11	; +4  '.'
+	.byte 0x07, 0x16	; F19B2F  op 07, 22 bytes -> handler 0xF31A3A
+	.short 0x1DEA		; +2  IX (screen position)
+	.ascii "COMBINATION NAMING"	; +4
+	.byte 0x09, 0x0a	; F19B45  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x44, 0x00, 0x10, 0x00	; +2  '....D...'
+	.byte 0x09, 0x0a	; F19B4F  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0b, 0x00, 0x1e, 0x00, 0x25, 0x00, 0x31, 0x00	; +2  '....%.1.'
+	.byte 0x09, 0x0a	; F19B59  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0d, 0x00, 0x20, 0x00, 0x23, 0x00, 0x2f, 0x00	; +2  '.. .#./.'
+	.byte 0x22, 0x0a	; F19B63  op 22, 10 bytes -> handler 0xF31A75
+	.byte 0x29, 0x00, 0x3c, 0x00, 0xee, 0x00, 0xac, 0x00	; +2  ').<.....'
+	.byte 0x09, 0x0a	; F19B6D  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x12, 0x01, 0x6c, 0x00, 0x35, 0x01, 0x7f, 0x00	; +2  '..l.5...'
+	.byte 0x09, 0x0a	; F19B77  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x01, 0x6e, 0x00, 0x33, 0x01, 0x7d, 0x00	; +2  '..n.3.}.'
+	.byte 0x09, 0x0a	; F19B81  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x12, 0x01, 0x93, 0x00, 0x35, 0x01, 0xa6, 0x00	; +2  '....5...'
+	.byte 0x09, 0x0a	; F19B8B  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x01, 0x95, 0x00, 0x33, 0x01, 0xa4, 0x00	; +2  '....3...'
+	.byte 0x22, 0x0a	; F19B95  op 22, 10 bytes -> handler 0xF31A75
+	.byte 0x81, 0x00, 0xb3, 0x00, 0x30, 0x01, 0xd6, 0x00	; +2  '....0...'
+	.byte 0x09, 0x0a	; F19B9F  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0xf7, 0x00, 0x89, 0x00, 0x0a, 0x01, 0x8a, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F19BA9  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0a, 0x01, 0x75, 0x00, 0x0b, 0x01, 0x9e, 0x00	; +2  '..u.....'
+	.byte 0x01, 0x0a	; F19BB3  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x29, 0x00, 0x72, 0x00, 0xee, 0x00, 0x72, 0x00	; +2  ').r...r.'
+
+; --------------------------------------------------------------------------
+; DL_F19BBD -- display list, 0xF19BBD-0xF19BE4 (40 bytes)
+; Interpreter: B.  3 records, framed by their own length bytes; the walk
+;              consumes 0xF19BBD-0xF19BE4 exactly.
+; Evidence: 3 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F19BBD:
+	.byte 0x02, 0x0f	; F19BBD  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x0000		; +2  RAM variable
+	.byte 0x00, 0x00, 0x07	; +4  mask, shift, swi 7 function
+	.long 0x00007622	; +7  -> 0x007622
+	.byte 0x10, 0x00, 0x69, 0x0e	; +11  '..i.'
+	.byte 0x00, 0x0a	; F19BCC  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2650		; +2  RAM variable
+	.byte 0xff, 0x00, 0x07	; +4  mask, shift, swi 7 function
+	.byte 0x76, 0x13, 0x03	; +7  'v..'
+	.byte 0x02, 0x0f	; F19BD6  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x0000		; +2  RAM variable
+	.byte 0x00, 0x00, 0x07	; +4  mask, shift, swi 7 function
+	.long 0x00002640	; +7  -> 0x002640
+	.byte 0x10, 0x00, 0x61, 0x16	; +11  '..a.'
+
+; --------------------------------------------------------------------------
+; DL_CombinationNaming_F19BE5 -- display list, 0xF19BE5-0xF19C38 (84 bytes)
+; Interpreter: A.  7 records, framed by their own length bytes; the walk
+;              consumes 0xF19BE5-0xF19C38 exactly.
+; Text it draws: 'COMBI.EDIT'; 'COMBINATION NAMING'; 'WRITE'
+; Evidence: 7 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_CombinationNaming_F19BE5:
+	.byte 0x17, 0x10	; F19BE5  op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0006, 0x0007	; +2  the two words
+	.ascii "COMBI.EDIT"	; +6
+	.byte 0x1c, 0x18	; F19BF5  op 1C, 24 bytes -> handler 0xF31A52
+	.short 0x0050, 0x0005	; +2  the two words
+	.ascii "COMBINATION NAMING"	; +6
+	.byte 0x07, 0x05	; F19C0D  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0550		; +2  IX (screen position)
+	.byte 0x10	; +4  '.'
+	.byte 0x06, 0x09	; F19C12  op 06, 9 bytes -> handler 0xF31A3A
+	.short 0x057A		; +2  IX (screen position)
+	.ascii "WRITE"	; +4
+	.byte 0x09, 0x0a	; F19C1B  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x44, 0x00, 0x10, 0x00	; +2  '....D...'
+	.byte 0x09, 0x0a	; F19C25  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0c, 0x00, 0x1e, 0x00, 0x3c, 0x00, 0x31, 0x00	; +2  '....<.1.'
+	.byte 0x09, 0x0a	; F19C2F  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0e, 0x00, 0x20, 0x00, 0x3a, 0x00, 0x2f, 0x00	; +2  '.. .:./.'
+
+; --------------------------------------------------------------------------
+; DL_Configure_F19C39 -- display list, 0xF19C39-0xF19D5B (291 bytes)
+; Interpreter: A.  31 records, framed by their own length bytes; the walk
+;              consumes 0xF19C39-0xF19D5B exactly.
+; Text it draws: 'CONFIGURE'; 'COMBI.EDIT'; 'SOLO'; 'PART'; 'ASIGN'; 'KEY';
+;                'LAYER'; 'VEL'; 'LAYER'; 'PART'
+; Evidence: 31 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_Configure_F19C39:
+	.byte 0x07, 0x0d	; F19C39  op 07, 13 bytes -> handler 0xF31A3A
+	.short 0x0100		; +2  IX (screen position)
+	.ascii "CONFIGURE"	; +4
+	.byte 0x17, 0x10	; F19C46  op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0007, 0x0008	; +2  the two words
+	.ascii "COMBI.EDIT"	; +6
+	.byte 0x17, 0x0a	; F19C56  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x011C, 0x0024	; +2  the two words
+	.ascii "SOLO"	; +6
+	.byte 0x17, 0x07	; F19C60  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x0024	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x17, 0x0a	; F19C67  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0038, 0x002C	; +2  the two words
+	.ascii "PART"	; +6
+	.byte 0x17, 0x0b	; F19C71  op 17, 11 bytes -> handler 0xF31A52
+	.short 0x0115, 0x004C	; +2  the two words
+	.ascii "ASIGN"	; +6
+	.byte 0x17, 0x07	; F19C7C  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x004C	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x17, 0x09	; F19C83  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0115, 0x006F	; +2  the two words
+	.ascii "KEY"	; +6
+	.byte 0x17, 0x07	; F19C8C  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x0074	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x17, 0x0b	; F19C93  op 17, 11 bytes -> handler 0xF31A52
+	.short 0x0115, 0x0079	; +2  the two words
+	.ascii "LAYER"	; +6
+	.byte 0x17, 0x09	; F19C9E  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0115, 0x0097	; +2  the two words
+	.ascii "VEL"	; +6
+	.byte 0x17, 0x07	; F19CA7  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x009C	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x17, 0x0b	; F19CAE  op 17, 11 bytes -> handler 0xF31A52
+	.short 0x0115, 0x00A1	; +2  the two words
+	.ascii "LAYER"	; +6
+	.byte 0x20, 0x08	; F19CB9  op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x1F1E		; +2  IX (screen position)
+	.ascii "PART"	; +4
+	.byte 0x06, 0x05	; F19CC1  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x20FF		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19CC6  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x232F		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x0a, 0x0a	; F19CCB  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0x2d, 0x00, 0xd4, 0x00, 0x4a, 0x00, 0xec, 0x00	; +2  '-...J...'
+	.byte 0x09, 0x0a	; F19CD5  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x46, 0x00, 0x12, 0x00	; +2  '....F...'
+	.byte 0x09, 0x0a	; F19CDF  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x02, 0x00, 0x1e, 0x00, 0x08, 0x01, 0xc2, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F19CE9  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x18, 0x01, 0x1f, 0x00, 0x38, 0x01, 0x2f, 0x00	; +2  '....8./.'
+	.byte 0x09, 0x0a	; F19CF3  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x1a, 0x01, 0x21, 0x00, 0x36, 0x01, 0x2d, 0x00	; +2  '..!.6.-.'
+	.byte 0x09, 0x0a	; F19CFD  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0f, 0x01, 0x40, 0x00, 0x39, 0x01, 0x5e, 0x00	; +2  '..@.9.^.'
+	.byte 0x09, 0x0a	; F19D07  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x11, 0x01, 0x42, 0x00, 0x37, 0x01, 0x5c, 0x00	; +2  '..B.7.\\.'
+	.byte 0x09, 0x0a	; F19D11  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0f, 0x01, 0x68, 0x00, 0x39, 0x01, 0x86, 0x00	; +2  '..h.9...'
+	.byte 0x09, 0x0a	; F19D1B  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x11, 0x01, 0x6a, 0x00, 0x37, 0x01, 0x84, 0x00	; +2  '..j.7...'
+	.byte 0x09, 0x0a	; F19D25  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0f, 0x01, 0x90, 0x00, 0x39, 0x01, 0xae, 0x00	; +2  '....9...'
+	.byte 0x09, 0x0a	; F19D2F  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x11, 0x01, 0x92, 0x00, 0x37, 0x01, 0xac, 0x00	; +2  '....7...'
+	.byte 0x01, 0x0a	; F19D39  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x02, 0x00, 0x3f, 0x00, 0x8a, 0x00, 0x3f, 0x00	; +2  '..?...?.'
+	.byte 0x01, 0x0a	; F19D43  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x2d, 0x00, 0xe0, 0x00, 0x4c, 0x00, 0xe0, 0x00	; +2  '-...L...'
+	.byte 0x02, 0x0a	; F19D4D  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x8a, 0x00, 0x1e, 0x00, 0x8a, 0x00, 0xc2, 0x00	; +2  '........'
+	.byte 0x23, 0x05	; F19D57  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x04, 0x34, 0x00	; +2  '.4.'
+
+; --------------------------------------------------------------------------
+; DL_Configure_F19D5C -- display list, 0xF19D5C-0xF19DCF (116 bytes)
+; Interpreter: A.  13 records, framed by their own length bytes; the walk
+;              consumes 0xF19D5C-0xF19DCF exactly.
+; Text it draws: 'CONFIGURE'; 'PART'; 'PART'; 'PART'
+; Evidence: 13 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_Configure_F19D5C:
+	.byte 0x07, 0x0d	; F19D5C  op 07, 13 bytes -> handler 0xF31A3A
+	.short 0x0100		; +2  IX (screen position)
+	.ascii "CONFIGURE"	; +4
+	.byte 0x17, 0x0a	; F19D69  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0007, 0x0008	; +2  the two words
+	.ascii "PART"	; +6
+	.byte 0x17, 0x0a	; F19D73  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0038, 0x002C	; +2  the two words
+	.ascii "PART"	; +6
+	.byte 0x20, 0x08	; F19D7D  op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x1F1E		; +2  IX (screen position)
+	.ascii "PART"	; +4
+	.byte 0x06, 0x05	; F19D85  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x20FF		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19D8A  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x232F		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x0a, 0x0a	; F19D8F  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0x2d, 0x00, 0xd4, 0x00, 0x4a, 0x00, 0xec, 0x00	; +2  '-...J...'
+	.byte 0x09, 0x0a	; F19D99  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x22, 0x00, 0x12, 0x00	; +2  '...."...'
+	.byte 0x09, 0x0a	; F19DA3  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x02, 0x00, 0x1e, 0x00, 0x08, 0x01, 0xc2, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F19DAD  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x02, 0x00, 0x3f, 0x00, 0x8a, 0x00, 0x3f, 0x00	; +2  '..?...?.'
+	.byte 0x01, 0x0a	; F19DB7  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x2d, 0x00, 0xe0, 0x00, 0x4c, 0x00, 0xe0, 0x00	; +2  '-...L...'
+	.byte 0x02, 0x0a	; F19DC1  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x8a, 0x00, 0x1e, 0x00, 0x8a, 0x00, 0xc2, 0x00	; +2  '........'
+	.byte 0x23, 0x05	; F19DCB  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x04, 0x34, 0x00	; +2  '.4.'
+
+; --------------------------------------------------------------------------
+; DL_Midi -- display list, 0xF19DD0-0xF19DD9 (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF19DD0-0xF19DD9 exactly.
+; Text it draws: 'MIDI'
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_Midi:
+	.byte 0x17, 0x0a	; F19DD0  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0007, 0x0008	; +2  the two words
+	.ascii "MIDI"	; +6
+
+; --------------------------------------------------------------------------
+; DL_Inter -- display list, 0xF19DDA-0xF19ED5 (252 bytes)
+; Interpreter: A.  31 records, framed by their own length bytes; the walk
+;              consumes 0xF19DDA-0xF19ED5 exactly.
+; Text it draws: 'INTER'; 'MIDI'; '-NAL'; 'OUT'; 'IN'; 'CH'; 'INT'; 'OUT';
+;                'IN'; 'CH'
+; Evidence: 31 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_Inter:
+	.byte 0x17, 0x0b	; F19DDA  op 17, 11 bytes -> handler 0xF31A52
+	.short 0x008D, 0x0023	; +2  the two words
+	.ascii "INTER"	; +6
+	.byte 0x17, 0x0a	; F19DE5  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x00D0, 0x0023	; +2  the two words
+	.ascii "MIDI"	; +6
+	.byte 0x17, 0x0a	; F19DEF  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x008D, 0x0033	; +2  the two words
+	.ascii "-NAL"	; +6
+	.byte 0x17, 0x09	; F19DF9  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x00B3, 0x0034	; +2  the two words
+	.ascii "OUT"	; +6
+	.byte 0x17, 0x08	; F19E02  op 17, 8 bytes -> handler 0xF31A52
+	.short 0x00CD, 0x0034	; +2  the two words
+	.ascii "IN"	; +6
+	.byte 0x17, 0x08	; F19E0A  op 17, 8 bytes -> handler 0xF31A52
+	.short 0x00ED, 0x0034	; +2  the two words
+	.ascii "CH"	; +6
+	.byte 0x20, 0x07	; F19E12  op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1F28		; +2  IX (screen position)
+	.ascii "INT"	; +4
+	.byte 0x20, 0x07	; F19E19  op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1F2D		; +2  IX (screen position)
+	.ascii "OUT"	; +4
+	.byte 0x20, 0x06	; F19E20  op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1F32		; +2  IX (screen position)
+	.ascii "IN"	; +4
+	.byte 0x20, 0x06	; F19E26  op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1F37		; +2  IX (screen position)
+	.ascii "CH"	; +4
+	.byte 0x06, 0x05	; F19E2C  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2109		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19E31  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x210E		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19E36  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2113		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19E3B  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2118		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19E40  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2339		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x06, 0x05	; F19E45  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x233E		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x06, 0x05	; F19E4A  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2343		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x06, 0x05	; F19E4F  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2348		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x0a, 0x0a	; F19E54  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0x7d, 0x00, 0xd4, 0x00, 0x9a, 0x00, 0xec, 0x00	; +2  '}.......'
+	.byte 0x0a, 0x0a	; F19E5E  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0xa5, 0x00, 0xd4, 0x00, 0xc2, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x0a, 0x0a	; F19E68  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0xcd, 0x00, 0xd4, 0x00, 0xea, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x0a, 0x0a	; F19E72  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0xf5, 0x00, 0xd4, 0x00, 0x12, 0x01, 0xec, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F19E7C  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xb0, 0x00, 0x2f, 0x00, 0x07, 0x01, 0x2f, 0x00	; +2  '../.../.'
+	.byte 0x01, 0x0a	; F19E86  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x8b, 0x00, 0x3f, 0x00, 0x07, 0x01, 0x3f, 0x00	; +2  '..?...?.'
+	.byte 0x01, 0x0a	; F19E90  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x7d, 0x00, 0xe0, 0x00, 0x9c, 0x00, 0xe0, 0x00	; +2  '}.......'
+	.byte 0x01, 0x0a	; F19E9A  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xa5, 0x00, 0xe0, 0x00, 0xc4, 0x00, 0xe0, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F19EA4  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xcd, 0x00, 0xe0, 0x00, 0xec, 0x00, 0xe0, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F19EAE  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xf5, 0x00, 0xe0, 0x00, 0x14, 0x01, 0xe0, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F19EB8  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xb0, 0x00, 0x1f, 0x00, 0xb0, 0x00, 0xc1, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F19EC2  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xc8, 0x00, 0x2f, 0x00, 0xc8, 0x00, 0xc1, 0x00	; +2  '../.....'
+	.byte 0x02, 0x0a	; F19ECC  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xe0, 0x00, 0x2f, 0x00, 0xe0, 0x00, 0xc1, 0x00	; +2  '../.....'
+
+; --------------------------------------------------------------------------
+; DL_KeyLayer -- display list, 0xF19ED6-0xF19F88 (179 bytes)
+; Interpreter: A.  20 records, framed by their own length bytes; the walk
+;              consumes 0xF19ED6-0xF19F88 exactly.
+; Text it draws: 'KEY LAYER'; 'LOW'; 'HIGH'; 'LOW'; 'HIGH'
+; Evidence: 20 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_KeyLayer:
+	.byte 0x17, 0x0f	; F19ED6  op 17, 15 bytes -> handler 0xF31A52
+	.short 0x00AF, 0x0023	; +2  the two words
+	.ascii "KEY LAYER"	; +6
+	.byte 0x17, 0x09	; F19EE5  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0094, 0x0034	; +2  the two words
+	.ascii "LOW"	; +6
+	.byte 0x17, 0x0a	; F19EEE  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x00B8, 0x0034	; +2  the two words
+	.ascii "HIGH"	; +6
+	.byte 0x20, 0x07	; F19EF8  op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1F2D		; +2  IX (screen position)
+	.ascii "LOW"	; +4
+	.byte 0x20, 0x08	; F19EFF  op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x1F31		; +2  IX (screen position)
+	.ascii "HIGH"	; +4
+	.byte 0x06, 0x05	; F19F07  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x210E		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19F0C  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2113		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19F11  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x233E		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x06, 0x05	; F19F16  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2343		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x0a, 0x0a	; F19F1B  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0xa5, 0x00, 0xd4, 0x00, 0xc2, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x0a, 0x0a	; F19F25  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0xcd, 0x00, 0xd4, 0x00, 0xea, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F19F2F  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0xdc, 0x00, 0x37, 0x00, 0x05, 0x01, 0x38, 0x00	; +2  '..7...8.'
+	.byte 0x01, 0x0a	; F19F39  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x8b, 0x00, 0x2f, 0x00, 0x07, 0x01, 0x2f, 0x00	; +2  '../.../.'
+	.byte 0x01, 0x0a	; F19F43  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x8b, 0x00, 0x3f, 0x00, 0x07, 0x01, 0x3f, 0x00	; +2  '..?...?.'
+	.byte 0x01, 0x0a	; F19F4D  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xa5, 0x00, 0xe0, 0x00, 0xc4, 0x00, 0xe0, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F19F57  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xcd, 0x00, 0xe0, 0x00, 0xec, 0x00, 0xe0, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F19F61  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xb0, 0x00, 0x2f, 0x00, 0xb0, 0x00, 0xc1, 0x00	; +2  '../.....'
+	.byte 0x02, 0x0a	; F19F6B  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xd8, 0x00, 0x2f, 0x00, 0xd8, 0x00, 0xc1, 0x00	; +2  '../.....'
+	.byte 0x02, 0x0a	; F19F75  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xdc, 0x00, 0x35, 0x00, 0xdc, 0x00, 0x3a, 0x00	; +2  '..5...:.'
+	.byte 0x02, 0x0a	; F19F7F  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x05, 0x01, 0x35, 0x00, 0x05, 0x01, 0x3a, 0x00	; +2  '..5...:.'
+
+; --------------------------------------------------------------------------
+; DL_VelocityLayer -- display list, 0xF19F89-0xF1A018 (144 bytes)
+; Interpreter: A.  16 records, framed by their own length bytes; the walk
+;              consumes 0xF19F89-0xF1A018 exactly.
+; Text it draws: 'VELOCITY LAYER'; 'LOW'; 'HIGH'; 'LOW'; 'HIGH'
+; Evidence: 16 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_VelocityLayer:
+	.byte 0x17, 0x14	; F19F89  op 17, 20 bytes -> handler 0xF31A52
+	.short 0x009E, 0x0023	; +2  the two words
+	.ascii "VELOCITY LAYER"	; +6
+	.byte 0x17, 0x09	; F19F9D  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x009E, 0x0034	; +2  the two words
+	.ascii "LOW"	; +6
+	.byte 0x17, 0x0a	; F19FA6  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x00DA, 0x0034	; +2  the two words
+	.ascii "HIGH"	; +6
+	.byte 0x20, 0x07	; F19FB0  op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1F2D		; +2  IX (screen position)
+	.ascii "LOW"	; +4
+	.byte 0x20, 0x08	; F19FB7  op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x1F31		; +2  IX (screen position)
+	.ascii "HIGH"	; +4
+	.byte 0x06, 0x05	; F19FBF  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x210E		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19FC4  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2113		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x06, 0x05	; F19FC9  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x233E		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x06, 0x05	; F19FCE  op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x2343		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x0a, 0x0a	; F19FD3  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0xa5, 0x00, 0xd4, 0x00, 0xc2, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x0a, 0x0a	; F19FDD  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0xcd, 0x00, 0xd4, 0x00, 0xea, 0x00, 0xec, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F19FE7  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x8b, 0x00, 0x2f, 0x00, 0x07, 0x01, 0x2f, 0x00	; +2  '../.../.'
+	.byte 0x01, 0x0a	; F19FF1  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x8b, 0x00, 0x3f, 0x00, 0x07, 0x01, 0x3f, 0x00	; +2  '..?...?.'
+	.byte 0x01, 0x0a	; F19FFB  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xa5, 0x00, 0xe0, 0x00, 0xc4, 0x00, 0xe0, 0x00	; +2  '........'
+	.byte 0x01, 0x0a	; F1A005  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xcd, 0x00, 0xe0, 0x00, 0xec, 0x00, 0xe0, 0x00	; +2  '........'
+	.byte 0x02, 0x0a	; F1A00F  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xc7, 0x00, 0x2f, 0x00, 0xc7, 0x00, 0xc1, 0x00	; +2  '../.....'
+
+; --------------------------------------------------------------------------
+; DL_F1A019 -- display list, 0xF1A019-0xF1A02C (20 bytes)
+; Interpreter: A.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF1A019-0xF1A02C exactly.
+; Evidence: 2 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A019:
+	.byte 0x1b, 0x0a	; F1A019  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0x8b, 0x00, 0x1f, 0x00, 0x07, 0x01, 0xc1, 0x00	; +2  '........'
+	.byte 0x1b, 0x0a	; F1A023  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0x7d, 0x00, 0xc7, 0x00, 0x14, 0x01, 0xee, 0x00	; +2  '}.......'
+
+; --------------------------------------------------------------------------
+; DL_F1A02D -- display list, 0xF1A02D-0xF1A036 (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1A02D-0xF1A036 exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A02D:
+	.byte 0x1b, 0x0a	; F1A02D  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0x12, 0x01, 0x43, 0x00, 0x36, 0x01, 0xab, 0x00	; +2  '..C.6...'
+
+; --------------------------------------------------------------------------
+; RecordArray_F1A037 -- record array, 0xF1A037-0xF1A0BE (136 bytes)
+; Shape: 8 entries of 17 bytes = 136 bytes, which is the whole segment.
+; Evidence: 8 records of 17 bytes, interpreter B, run ONE AT A TIME by `call
+;           0xf42e0c` at prom_a 0xFBF7EA
+; ★ CORRECTION C1: notes/prom_b_f17559_layout.py splits this object at
+;                  0xF1A048.  That address is the STRIDE OPERAND of the loop
+;                  in prom_a's sub_FBF79C: `lda_24 xwa,(0xf1a037)` at
+;                  0xFBF7C9, `lda_24 xix,(0xf1a048)` at 0xFBF7D1, `sub
+;                  XIX,XWA` at 0xFBF7D6 -- so 0xF1A048 is 0xF1A037 plus ONE
+;                  RECORD, computed to get the stride 17, and not an object
+;                  boundary.  The loop then runs each record through `call
+;                  0xf42e0c` (T_F42E0C, DisplayListB_RunOne_Stack) at
+;                  0xFBF7EA.  0xF1A037 + 8*17 = 0xF1A0BF lands on the next
+;                  proven run.  The halves are merged.
+; --------------------------------------------------------------------------
+RecordArray_F1A037:
+	.byte 0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x28, 0x00, 0x46, 0x00   ; F1A037  [0]
+	.byte 0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x28, 0x00, 0x56, 0x00   ; F1A048  [1]
+	.byte 0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x28, 0x00, 0x66, 0x00   ; F1A059  [2]
+	.byte 0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x28, 0x00, 0x76, 0x00   ; F1A06A  [3]
+	.byte 0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x28, 0x00, 0x86, 0x00   ; F1A07B  [4]
+	.byte 0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x28, 0x00, 0x96, 0x00   ; F1A08C  [5]
+	.byte 0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x28, 0x00, 0xa6, 0x00   ; F1A09D  [6]
+	.byte 0x07, 0x11, 0x00, 0x00, 0x00, 0x00, 0x17, 0x40, 0x26, 0x00, 0x00, 0x10, 0x00, 0x28, 0x00, 0xb6, 0x00   ; F1A0AE  [7]
+
+; --------------------------------------------------------------------------
+; DL_F1A0BF -- display list, 0xF1A0BF-0xF1A136 (120 bytes)
+; Interpreter: B.  8 records, framed by their own length bytes; the walk
+;              consumes 0xF1A0BF-0xF1A136 exactly.
+; Evidence: 8 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A0BF:
+	.byte 0x02, 0x0f	; F1A0BF  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A22D	; +7  -> StringTable_F1A22D
+	.byte 0x04, 0x00, 0xa1, 0x0a	; +11  '....'
+	.byte 0x02, 0x0f	; F1A0CE  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A231	; +7  -> 0xF1A231
+	.byte 0x04, 0x00, 0x21, 0x0d	; +11  '..!.'
+	.byte 0x02, 0x0f	; F1A0DD  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A235	; +7  -> 0xF1A235
+	.byte 0x04, 0x00, 0xa1, 0x0f	; +11  '....'
+	.byte 0x02, 0x0f	; F1A0EC  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A239	; +7  -> 0xF1A239
+	.byte 0x04, 0x00, 0x21, 0x12	; +11  '..!.'
+	.byte 0x02, 0x0f	; F1A0FB  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A23D	; +7  -> 0xF1A23D
+	.byte 0x04, 0x00, 0xa1, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F1A10A  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A241	; +7  -> 0xF1A241
+	.byte 0x04, 0x00, 0x21, 0x17	; +11  '..!.'
+	.byte 0x02, 0x0f	; F1A119  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A245	; +7  -> 0xF1A245
+	.byte 0x04, 0x00, 0xa1, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F1A128  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A249	; +7  -> 0xF1A249
+	.byte 0x04, 0x00, 0x21, 0x1c	; +11  '..!.'
+
+; --------------------------------------------------------------------------
+; DL_F1A137 -- display list, 0xF1A137-0xF1A14C (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF1A137-0xF1A14C exactly.
+; Evidence: 2 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A137:
+	.byte 0x08, 0x0b	; F1A137  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x2643		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F1A18D	; +7  -> IndexMap_F1A18D
+	.byte 0x03, 0x0b	; F1A142  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2642		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F1A18D	; +7  -> IndexMap_F1A18D
+
+; --------------------------------------------------------------------------
+; DL_F1A14D -- display list, 0xF1A14D-0xF1A157 (11 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1A14D-0xF1A157 exactly.
+; Evidence: 1 record, well-formed as interpreter B by FORMAT; interpreter
+;           NOT RESOLVED and the run is UNREACHED -- its only reference
+;           anywhere is as the END address of the run at 0xF1A137
+; ⚠ UNREACHED: no display-list call site in prom_a, prom_b or prom_c names
+;              this run.  `Unreached` is a statement about the CENSUS -- the
+;              four call shapes it knows are in
+;              notes/prom_b_dl_call_shapes.py, and this span alone needed a
+;              fifth (the stride loop at prom_a 0xFBF79C) to be found by
+;              hand.  It is marked, not hidden.
+; ★ CORRECTION C4: left honestly UNRESOLVED.  It is a well-formed
+;                  interpreter-B op-08 record by FORMAT, and its two
+;                  neighbours are interpreter B, but the format rule has a
+;                  measured 0.56% error rate all in the direction of calling
+;                  an A record B.  Its only reference anywhere in prom_a,
+;                  prom_b or prom_c is as the END address of the run at
+;                  0xF1A137 -- one past the last byte that run's interpreter
+;                  reads.  No mechanism is invented for it.
+; --------------------------------------------------------------------------
+DL_F1A14D:
+	.byte 0x08, 0x0b	; F1A14D  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x2768		; +2  RAM variable
+	.byte 0x03, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F1A1D5	; +7  -> IndexMap_F1A1D5
+
+; --------------------------------------------------------------------------
+; DL_F1A158 -- display list, 0xF1A158-0xF1A162 (11 bytes)
+; Interpreter: B.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1A158-0xF1A162 exactly.
+; Evidence: 1 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A158:
+	.byte 0x03, 0x0b	; F1A158  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2767		; +2  RAM variable
+	.byte 0x03, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F1A1D5	; +7  -> IndexMap_F1A1D5
+
+; --------------------------------------------------------------------------
+; DL_F1A163 -- display list, 0xF1A163-0xF1A178 (22 bytes)
+; Interpreter: B.  2 records, framed by their own length bytes; the walk
+;              consumes 0xF1A163-0xF1A178 exactly.
+; Evidence: 2 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A163:
+	.byte 0x08, 0x0b	; F1A163  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x2641		; +2  RAM variable
+	.byte 0x07, 0x00, 0x1b	; +4  mask, shift, swi 7 function
+	.long 0x00F1A1ED	; +7  -> IndexMap_F1A1ED
+	.byte 0x03, 0x0b	; F1A16E  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2640		; +2  RAM variable
+	.byte 0x07, 0x00, 0x05	; +4  mask, shift, swi 7 function
+	.long 0x00F1A1ED	; +7  -> IndexMap_F1A1ED
+
+; --------------------------------------------------------------------------
+; DL_F1A179 -- display list, 0xF1A179-0xF1A182 (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1A179-0xF1A182 exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A179:
+	.byte 0x1b, 0x0a	; F1A179  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0x1b, 0x01, 0x22, 0x00, 0x35, 0x01, 0x2c, 0x00	; +2  '..".5.,.'
+
+; --------------------------------------------------------------------------
+; DL_F1A183 -- display list, 0xF1A183-0xF1A18C (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1A183-0xF1A18C exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A183:
+	.byte 0x05, 0x0a	; F1A183  op 05, 10 bytes -> handler 0xF31A75
+	.byte 0x1b, 0x01, 0x22, 0x00, 0x35, 0x01, 0x2c, 0x00	; +2  '..".5.,.'
+
+; --------------------------------------------------------------------------
+; IndexMap_F1A18D -- index map, 0xF1A18D-0xF1A1D4 (72 bytes)
+; Shape: 9 entries of 8 bytes = 72 bytes, which is the whole segment.
+; Evidence: 9 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF1A137, whose mask allows at most 16 indices
+; --------------------------------------------------------------------------
+IndexMap_F1A18D:
+	.byte 0x30, 0x00, 0xc6, 0x00, 0x50, 0x00, 0xd1, 0x00   ; F1A18D  [0]
+	.byte 0x80, 0x00, 0xc6, 0x00, 0x98, 0x00, 0xd1, 0x00   ; F1A195  [1]
+	.byte 0xa8, 0x00, 0xc6, 0x00, 0xc0, 0x00, 0xd1, 0x00   ; F1A19D  [2]
+	.byte 0xd0, 0x00, 0xc6, 0x00, 0xe0, 0x00, 0xd1, 0x00   ; F1A1A5  [3]
+	.byte 0xf8, 0x00, 0xc6, 0x00, 0x08, 0x01, 0xd1, 0x00   ; F1A1AD  [4]
+	.byte 0xa8, 0x00, 0xc6, 0x00, 0xc0, 0x00, 0xd1, 0x00   ; F1A1B5  [5]
+	.byte 0xc8, 0x00, 0xc6, 0x00, 0xe8, 0x00, 0xd1, 0x00   ; F1A1BD  [6]
+	.byte 0xa8, 0x00, 0xc6, 0x00, 0xc0, 0x00, 0xd1, 0x00   ; F1A1C5  [7]
+	.byte 0xc8, 0x00, 0xc6, 0x00, 0xe8, 0x00, 0xd1, 0x00   ; F1A1CD  [8]
+
+; --------------------------------------------------------------------------
+; IndexMap_F1A1D5 -- index map, 0xF1A1D5-0xF1A1EC (24 bytes)
+; Shape: 3 entries of 8 bytes = 24 bytes, which is the whole segment.
+; Evidence: 3 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF1A14D, whose mask allows at most 4 indices
+; --------------------------------------------------------------------------
+IndexMap_F1A1D5:
+	.byte 0x12, 0x01, 0x43, 0x00, 0x36, 0x01, 0x5b, 0x00   ; F1A1D5  [0]
+	.byte 0x12, 0x01, 0x6b, 0x00, 0x36, 0x01, 0x83, 0x00   ; F1A1DD  [1]
+	.byte 0x12, 0x01, 0x93, 0x00, 0x36, 0x01, 0xab, 0x00   ; F1A1E5  [2]
+
+; --------------------------------------------------------------------------
+; IndexMap_F1A1ED -- index map, 0xF1A1ED-0xF1A22C (64 bytes)
+; Shape: 8 entries of 8 bytes = 64 bytes, which is the whole segment.
+; Evidence: 8 entries of 8 bytes; 1 record(s) point into it, the first at
+;           0xF1A163, whose mask allows at most 8 indices
+; --------------------------------------------------------------------------
+IndexMap_F1A1ED:
+	.byte 0x03, 0x00, 0x41, 0x00, 0x07, 0x01, 0x50, 0x00   ; F1A1ED  [0]
+	.byte 0x03, 0x00, 0x51, 0x00, 0x07, 0x01, 0x60, 0x00   ; F1A1F5  [1]
+	.byte 0x03, 0x00, 0x61, 0x00, 0x07, 0x01, 0x70, 0x00   ; F1A1FD  [2]
+	.byte 0x03, 0x00, 0x71, 0x00, 0x07, 0x01, 0x80, 0x00   ; F1A205  [3]
+	.byte 0x03, 0x00, 0x81, 0x00, 0x07, 0x01, 0x90, 0x00   ; F1A20D  [4]
+	.byte 0x03, 0x00, 0x91, 0x00, 0x07, 0x01, 0xa0, 0x00   ; F1A215  [5]
+	.byte 0x03, 0x00, 0xa1, 0x00, 0x07, 0x01, 0xb0, 0x00   ; F1A21D  [6]
+	.byte 0x03, 0x00, 0xb1, 0x00, 0x07, 0x01, 0xc0, 0x00   ; F1A225  [7]
+
+; --------------------------------------------------------------------------
+; StringTable_F1A22D -- ascii, 0xF1A22D-0xF1A2AC (128 bytes)
+; Shape: 32 entries of 4 bytes = 128 bytes, which is the whole segment.
+; First / last: 'PT1:' ... 'P32:'
+; Evidence: 32 entries of 4 bytes; 8 record(s) point into it, the first at
+;           0xF1A0BF, whose mask allows at most 32 indices
+; --------------------------------------------------------------------------
+StringTable_F1A22D:
+	.byte 0x50, 0x54, 0x31, 0x3a   ; F1A22D  [0]  'PT1:'
+	.byte 0x50, 0x54, 0x32, 0x3a   ; F1A231  [1]  'PT2:'
+	.byte 0x50, 0x54, 0x33, 0x3a   ; F1A235  [2]  'PT3:'
+	.byte 0x50, 0x54, 0x34, 0x3a   ; F1A239  [3]  'PT4:'
+	.byte 0x50, 0x54, 0x35, 0x3a   ; F1A23D  [4]  'PT5:'
+	.byte 0x50, 0x54, 0x36, 0x3a   ; F1A241  [5]  'PT6:'
+	.byte 0x50, 0x54, 0x37, 0x3a   ; F1A245  [6]  'PT7:'
+	.byte 0x50, 0x54, 0x38, 0x3a   ; F1A249  [7]  'PT8:'
+	.byte 0x50, 0x54, 0x39, 0x3a   ; F1A24D  [8]  'PT9:'
+	.byte 0x50, 0x31, 0x30, 0x3a   ; F1A251  [9]  'P10:'
+	.byte 0x50, 0x31, 0x31, 0x3a   ; F1A255  [10]  'P11:'
+	.byte 0x50, 0x31, 0x32, 0x3a   ; F1A259  [11]  'P12:'
+	.byte 0x50, 0x31, 0x33, 0x3a   ; F1A25D  [12]  'P13:'
+	.byte 0x50, 0x31, 0x34, 0x3a   ; F1A261  [13]  'P14:'
+	.byte 0x50, 0x31, 0x35, 0x3a   ; F1A265  [14]  'P15:'
+	.byte 0x50, 0x31, 0x36, 0x3a   ; F1A269  [15]  'P16:'
+	.byte 0x50, 0x31, 0x37, 0x3a   ; F1A26D  [16]  'P17:'
+	.byte 0x50, 0x31, 0x38, 0x3a   ; F1A271  [17]  'P18:'
+	.byte 0x50, 0x31, 0x39, 0x3a   ; F1A275  [18]  'P19:'
+	.byte 0x50, 0x32, 0x30, 0x3a   ; F1A279  [19]  'P20:'
+	.byte 0x50, 0x32, 0x31, 0x3a   ; F1A27D  [20]  'P21:'
+	.byte 0x50, 0x32, 0x32, 0x3a   ; F1A281  [21]  'P22:'
+	.byte 0x50, 0x32, 0x33, 0x3a   ; F1A285  [22]  'P23:'
+	.byte 0x50, 0x32, 0x34, 0x3a   ; F1A289  [23]  'P24:'
+	.byte 0x50, 0x32, 0x35, 0x3a   ; F1A28D  [24]  'P25:'
+	.byte 0x50, 0x32, 0x36, 0x3a   ; F1A291  [25]  'P26:'
+	.byte 0x50, 0x32, 0x37, 0x3a   ; F1A295  [26]  'P27:'
+	.byte 0x50, 0x32, 0x38, 0x3a   ; F1A299  [27]  'P28:'
+	.byte 0x50, 0x32, 0x39, 0x3a   ; F1A29D  [28]  'P29:'
+	.byte 0x50, 0x33, 0x30, 0x3a   ; F1A2A1  [29]  'P30:'
+	.byte 0x50, 0x33, 0x31, 0x3a   ; F1A2A5  [30]  'P31:'
+	.byte 0x50, 0x33, 0x32, 0x3a   ; F1A2A9  [31]  'P32:'
+
+; --------------------------------------------------------------------------
+; DL_F1A2AD -- display list, 0xF1A2AD-0xF1A514 (616 bytes)
+; Interpreter: B.  40 records, framed by their own length bytes; the walk
+;              consumes 0xF1A2AD-0xF1A514 exactly.
+; Evidence: 40 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A2AD:
+	.byte 0x02, 0x0f	; F1A2AD  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xb3, 0x0a	; +11  '....'
+	.byte 0x02, 0x0f	; F1A2BC  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x33, 0x0d	; +11  '..3.'
+	.byte 0x02, 0x0f	; F1A2CB  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2642		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xb3, 0x0f	; +11  '....'
+	.byte 0x02, 0x0f	; F1A2DA  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x33, 0x12	; +11  '..3.'
+	.byte 0x02, 0x0f	; F1A2E9  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2644		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xb3, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F1A2F8  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2645		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x33, 0x17	; +11  '..3.'
+	.byte 0x02, 0x0f	; F1A307  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2646		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xb3, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F1A316  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2647		; +2  RAM variable
+	.byte 0x20, 0x05, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x33, 0x1c	; +11  '..3.'
+	.byte 0x02, 0x0f	; F1A325  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xb7, 0x0a	; +11  '....'
+	.byte 0x02, 0x0f	; F1A334  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x37, 0x0d	; +11  '..7.'
+	.byte 0x02, 0x0f	; F1A343  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2642		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xb7, 0x0f	; +11  '....'
+	.byte 0x02, 0x0f	; F1A352  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x37, 0x12	; +11  '..7.'
+	.byte 0x02, 0x0f	; F1A361  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2644		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xb7, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F1A370  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2645		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x37, 0x17	; +11  '..7.'
+	.byte 0x02, 0x0f	; F1A37F  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2646		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xb7, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F1A38E  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2647		; +2  RAM variable
+	.byte 0x40, 0x06, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x37, 0x1c	; +11  '..7.'
+	.byte 0x02, 0x0f	; F1A39D  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xba, 0x0a	; +11  '....'
+	.byte 0x02, 0x0f	; F1A3AC  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x3a, 0x0d	; +11  '..:.'
+	.byte 0x02, 0x0f	; F1A3BB  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2642		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xba, 0x0f	; +11  '....'
+	.byte 0x02, 0x0f	; F1A3CA  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x3a, 0x12	; +11  '..:.'
+	.byte 0x02, 0x0f	; F1A3D9  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2644		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xba, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F1A3E8  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2645		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x3a, 0x17	; +11  '..:.'
+	.byte 0x02, 0x0f	; F1A3F7  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2646		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0xba, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F1A406  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2647		; +2  RAM variable
+	.byte 0x80, 0x07, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A515	; +7  -> StringTable_F1A515
+	.byte 0x01, 0x00, 0x3a, 0x1c	; +11  '..:.'
+	.byte 0x07, 0x11	; F1A415  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2640		; +2  RAM variable
+	.byte 0x10, 0x04, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1A517	; +7  -> StringTable_F1A517
+	.byte 0x02, 0x00, 0xe3, 0x00, 0x46, 0x00	; +11  '....F.'
+	.byte 0x07, 0x11	; F1A426  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2641		; +2  RAM variable
+	.byte 0x10, 0x04, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1A517	; +7  -> StringTable_F1A517
+	.byte 0x02, 0x00, 0xe3, 0x00, 0x56, 0x00	; +11  '....V.'
+	.byte 0x07, 0x11	; F1A437  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2642		; +2  RAM variable
+	.byte 0x10, 0x04, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1A517	; +7  -> StringTable_F1A517
+	.byte 0x02, 0x00, 0xe3, 0x00, 0x66, 0x00	; +11  '....f.'
+	.byte 0x07, 0x11	; F1A448  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2643		; +2  RAM variable
+	.byte 0x10, 0x04, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1A517	; +7  -> StringTable_F1A517
+	.byte 0x02, 0x00, 0xe3, 0x00, 0x76, 0x00	; +11  '....v.'
+	.byte 0x07, 0x11	; F1A459  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2644		; +2  RAM variable
+	.byte 0x10, 0x04, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1A517	; +7  -> StringTable_F1A517
+	.byte 0x02, 0x00, 0xe3, 0x00, 0x86, 0x00	; +11  '......'
+	.byte 0x07, 0x11	; F1A46A  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2645		; +2  RAM variable
+	.byte 0x10, 0x04, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1A517	; +7  -> StringTable_F1A517
+	.byte 0x02, 0x00, 0xe3, 0x00, 0x96, 0x00	; +11  '......'
+	.byte 0x07, 0x11	; F1A47B  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2646		; +2  RAM variable
+	.byte 0x10, 0x04, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1A517	; +7  -> StringTable_F1A517
+	.byte 0x02, 0x00, 0xe3, 0x00, 0xa6, 0x00	; +11  '......'
+	.byte 0x07, 0x11	; F1A48C  op 07, 17 bytes -> handler 0xF31B39
+	.short 0x2647		; +2  RAM variable
+	.byte 0x10, 0x04, 0x17	; +4  mask, shift, swi 7 function
+	.long 0x00F1A517	; +7  -> StringTable_F1A517
+	.byte 0x02, 0x00, 0xe3, 0x00, 0xb6, 0x00	; +11  '......'
+	.byte 0x02, 0x0f	; F1A49D  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A51F	; +7  -> StringTable_F1A51F
+	.byte 0x02, 0x00, 0xbe, 0x0a	; +11  '....'
+	.byte 0x02, 0x0f	; F1A4AC  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A51F	; +7  -> StringTable_F1A51F
+	.byte 0x02, 0x00, 0x3e, 0x0d	; +11  '..>.'
+	.byte 0x02, 0x0f	; F1A4BB  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2642		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A51F	; +7  -> StringTable_F1A51F
+	.byte 0x02, 0x00, 0xbe, 0x0f	; +11  '....'
+	.byte 0x02, 0x0f	; F1A4CA  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A51F	; +7  -> StringTable_F1A51F
+	.byte 0x02, 0x00, 0x3e, 0x12	; +11  '..>.'
+	.byte 0x02, 0x0f	; F1A4D9  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2644		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A51F	; +7  -> StringTable_F1A51F
+	.byte 0x02, 0x00, 0xbe, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F1A4E8  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2645		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A51F	; +7  -> StringTable_F1A51F
+	.byte 0x02, 0x00, 0x3e, 0x17	; +11  '..>.'
+	.byte 0x02, 0x0f	; F1A4F7  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2646		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A51F	; +7  -> StringTable_F1A51F
+	.byte 0x02, 0x00, 0xbe, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F1A506  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2647		; +2  RAM variable
+	.byte 0x0f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.long 0x00F1A51F	; +7  -> StringTable_F1A51F
+	.byte 0x02, 0x00, 0x3e, 0x1c	; +11  '..>.'
+
+; --------------------------------------------------------------------------
+; StringTable_F1A515 -- ascii, 0xF1A515-0xF1A516 (2 bytes)
+; Shape: 2 entries of 1 byte = 2 bytes, which is the whole segment.
+; First / last: 'o' ... '-'
+; Evidence: 2 entries of 1 bytes; 1 record(s) point into it, the first at
+;           0xF1A2AD, whose mask allows at most 2 indices
+; --------------------------------------------------------------------------
+StringTable_F1A515:
+	.byte 0x6f   ; F1A515  [0]  'o'
+	.byte 0x2d   ; F1A516  [1]  '-'
+
+; --------------------------------------------------------------------------
+; StringTable_F1A517 -- ascii, 0xF1A517-0xF1A51E (8 bytes)
+; Shape: 4 entries of 2 bytes = 8 bytes, which is the whole segment.
+; First / last: '1-' ... '  '
+; Evidence: 4 entries of 2 bytes; 1 record(s) point into it, the first at
+;           0xF1A415, whose mask allows at most 2 indices
+; --------------------------------------------------------------------------
+StringTable_F1A517:
+	.byte 0x31, 0x2d   ; F1A517  [0]  '1-'
+	.byte 0x32, 0x2d   ; F1A519  [1]  '2-'
+	.byte 0x20, 0x20   ; F1A51B  [2]  '  '
+	.byte 0x20, 0x20   ; F1A51D  [3]  '  '
+
+; --------------------------------------------------------------------------
+; StringTable_F1A51F -- ascii, 0xF1A51F-0xF1A53E (32 bytes)
+; Shape: 16 entries of 2 bytes = 32 bytes, which is the whole segment.
+; First / last: ' 1' ... '16'
+; Evidence: 16 entries of 2 bytes; 1 record(s) point into it, the first at
+;           0xF1A49D, whose mask allows at most 16 indices
+; --------------------------------------------------------------------------
+StringTable_F1A51F:
+	.byte 0x20, 0x31   ; F1A51F  [0]  ' 1'
+	.byte 0x20, 0x32   ; F1A521  [1]  ' 2'
+	.byte 0x20, 0x33   ; F1A523  [2]  ' 3'
+	.byte 0x20, 0x34   ; F1A525  [3]  ' 4'
+	.byte 0x20, 0x35   ; F1A527  [4]  ' 5'
+	.byte 0x20, 0x36   ; F1A529  [5]  ' 6'
+	.byte 0x20, 0x37   ; F1A52B  [6]  ' 7'
+	.byte 0x20, 0x38   ; F1A52D  [7]  ' 8'
+	.byte 0x20, 0x39   ; F1A52F  [8]  ' 9'
+	.byte 0x31, 0x30   ; F1A531  [9]  '10'
+	.byte 0x31, 0x31   ; F1A533  [10]  '11'
+	.byte 0x31, 0x32   ; F1A535  [11]  '12'
+	.byte 0x31, 0x33   ; F1A537  [12]  '13'
+	.byte 0x31, 0x34   ; F1A539  [13]  '14'
+	.byte 0x31, 0x35   ; F1A53B  [14]  '15'
+	.byte 0x31, 0x36   ; F1A53D  [15]  '16'
+
+; --------------------------------------------------------------------------
+; DL_F1A53F -- display list, 0xF1A53F-0xF1A62E (240 bytes)
+; Interpreter: B.  16 records, framed by their own length bytes; the walk
+;              consumes 0xF1A53F-0xF1A62E exactly.
+; Evidence: 16 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A53F:
+	.byte 0x02, 0x0f	; F1A53F  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0xb2, 0x0a	; +11  '....'
+	.byte 0x02, 0x0f	; F1A54E  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0x32, 0x0d	; +11  '..2.'
+	.byte 0x02, 0x0f	; F1A55D  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2642		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0xb2, 0x0f	; +11  '....'
+	.byte 0x02, 0x0f	; F1A56C  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2643		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0x32, 0x12	; +11  '..2.'
+	.byte 0x02, 0x0f	; F1A57B  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2644		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0xb2, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F1A58A  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2645		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0x32, 0x17	; +11  '..2.'
+	.byte 0x02, 0x0f	; F1A599  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2646		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0xb2, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F1A5A8  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2647		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0x32, 0x1c	; +11  '..2.'
+	.byte 0x02, 0x0f	; F1A5B7  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2648		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0xb7, 0x0a	; +11  '....'
+	.byte 0x02, 0x0f	; F1A5C6  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2649		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0x37, 0x0d	; +11  '..7.'
+	.byte 0x02, 0x0f	; F1A5D5  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x264A		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0xb7, 0x0f	; +11  '....'
+	.byte 0x02, 0x0f	; F1A5E4  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x264B		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0x37, 0x12	; +11  '..7.'
+	.byte 0x02, 0x0f	; F1A5F3  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x264C		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0xb7, 0x14	; +11  '....'
+	.byte 0x02, 0x0f	; F1A602  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x264D		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0x37, 0x17	; +11  '..7.'
+	.byte 0x02, 0x0f	; F1A611  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x264E		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0xb7, 0x19	; +11  '....'
+	.byte 0x02, 0x0f	; F1A620  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x264F		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x06	; +4  mask, shift, swi 7 function
+	.long 0x00F1A62F	; +7  -> MidiNoteNames
+	.byte 0x03, 0x00, 0x37, 0x1c	; +11  '..7.'
+
+; --------------------------------------------------------------------------
+; MidiNoteNames -- notenames, 0xF1A62F-0xF1A7AE (384 bytes)
+; Shape: 128 entries of 3 bytes = 384 bytes, which is the whole segment.
+; First / last: 'C-2' ... 'G 8'
+; Evidence: 128 entries of 3 characters, note 0 'C-2' to note 127 'G 8'
+; ★ CORRECTION C6: the layout calls this ascii.  It is the MIDI NOTE-NAME
+;                  table and it is not ascii: 53 of the 128 entries carry a
+;                  byte >= 0x80 (0x88 for flat, 0x8C for sharp).  Nor is it
+;                  an index map -- nothing indexes it; it is DRAWN, by swi-7
+;                  function 6.  A natural note is `<letter><' ' or
+;                  '-'><digit>`; an accidental note is `<letter><0x88 flat |
+;                  0x8C sharp><octave>`, and because the sign takes the
+;                  middle cell the octaves -2 and -1 are COMPOSITE glyphs
+;                  0xBC and 0xB0 rather than two characters.  All 128
+;                  entries decode to the octave their note number implies.
+; --------------------------------------------------------------------------
+MidiNoteNames:
+	.byte 0x43, 0x2d, 0x32   ; F1A62F  note   0  C-2 
+	.byte 0x44, 0x88, 0xbc   ; F1A632  note   1  Db-2  0x88 = b, 0xBC = the octave -2 in one cell
+	.byte 0x44, 0x2d, 0x32   ; F1A635  note   2  D-2 
+	.byte 0x45, 0x88, 0xbc   ; F1A638  note   3  Eb-2  0x88 = b, 0xBC = the octave -2 in one cell
+	.byte 0x45, 0x2d, 0x32   ; F1A63B  note   4  E-2 
+	.byte 0x46, 0x2d, 0x32   ; F1A63E  note   5  F-2 
+	.byte 0x46, 0x8c, 0xbc   ; F1A641  note   6  F#-2  0x8C = #, 0xBC = the octave -2 in one cell
+	.byte 0x47, 0x2d, 0x32   ; F1A644  note   7  G-2 
+	.byte 0x41, 0x88, 0xbc   ; F1A647  note   8  Ab-2  0x88 = b, 0xBC = the octave -2 in one cell
+	.byte 0x41, 0x2d, 0x32   ; F1A64A  note   9  A-2 
+	.byte 0x42, 0x88, 0xbc   ; F1A64D  note  10  Bb-2  0x88 = b, 0xBC = the octave -2 in one cell
+	.byte 0x42, 0x2d, 0x32   ; F1A650  note  11  B-2 
+	.byte 0x43, 0x2d, 0x31   ; F1A653  note  12  C-1 
+	.byte 0x44, 0x88, 0xb0   ; F1A656  note  13  Db-1  0x88 = b, 0xB0 = the octave -1 in one cell
+	.byte 0x44, 0x2d, 0x31   ; F1A659  note  14  D-1 
+	.byte 0x45, 0x88, 0xb0   ; F1A65C  note  15  Eb-1  0x88 = b, 0xB0 = the octave -1 in one cell
+	.byte 0x45, 0x2d, 0x31   ; F1A65F  note  16  E-1 
+	.byte 0x46, 0x2d, 0x31   ; F1A662  note  17  F-1 
+	.byte 0x46, 0x8c, 0xb0   ; F1A665  note  18  F#-1  0x8C = #, 0xB0 = the octave -1 in one cell
+	.byte 0x47, 0x2d, 0x31   ; F1A668  note  19  G-1 
+	.byte 0x41, 0x88, 0xb0   ; F1A66B  note  20  Ab-1  0x88 = b, 0xB0 = the octave -1 in one cell
+	.byte 0x41, 0x2d, 0x31   ; F1A66E  note  21  A-1 
+	.byte 0x42, 0x88, 0xb0   ; F1A671  note  22  Bb-1  0x88 = b, 0xB0 = the octave -1 in one cell
+	.byte 0x42, 0x2d, 0x31   ; F1A674  note  23  B-1 
+	.byte 0x43, 0x20, 0x30   ; F1A677  note  24  C0  
+	.byte 0x44, 0x88, 0x30   ; F1A67A  note  25  Db0   0x88 = b
+	.byte 0x44, 0x20, 0x30   ; F1A67D  note  26  D0  
+	.byte 0x45, 0x88, 0x30   ; F1A680  note  27  Eb0   0x88 = b
+	.byte 0x45, 0x20, 0x30   ; F1A683  note  28  E0  
+	.byte 0x46, 0x20, 0x30   ; F1A686  note  29  F0  
+	.byte 0x46, 0x8c, 0x30   ; F1A689  note  30  F#0   0x8C = #
+	.byte 0x47, 0x20, 0x30   ; F1A68C  note  31  G0  
+	.byte 0x41, 0x88, 0x30   ; F1A68F  note  32  Ab0   0x88 = b
+	.byte 0x41, 0x20, 0x30   ; F1A692  note  33  A0  
+	.byte 0x42, 0x88, 0x30   ; F1A695  note  34  Bb0   0x88 = b
+	.byte 0x42, 0x20, 0x30   ; F1A698  note  35  B0  
+	.byte 0x43, 0x20, 0x31   ; F1A69B  note  36  C1  
+	.byte 0x44, 0x88, 0x31   ; F1A69E  note  37  Db1   0x88 = b
+	.byte 0x44, 0x20, 0x31   ; F1A6A1  note  38  D1  
+	.byte 0x45, 0x88, 0x31   ; F1A6A4  note  39  Eb1   0x88 = b
+	.byte 0x45, 0x20, 0x31   ; F1A6A7  note  40  E1  
+	.byte 0x46, 0x20, 0x31   ; F1A6AA  note  41  F1  
+	.byte 0x46, 0x8c, 0x31   ; F1A6AD  note  42  F#1   0x8C = #
+	.byte 0x47, 0x20, 0x31   ; F1A6B0  note  43  G1  
+	.byte 0x41, 0x88, 0x31   ; F1A6B3  note  44  Ab1   0x88 = b
+	.byte 0x41, 0x20, 0x31   ; F1A6B6  note  45  A1  
+	.byte 0x42, 0x88, 0x31   ; F1A6B9  note  46  Bb1   0x88 = b
+	.byte 0x42, 0x20, 0x31   ; F1A6BC  note  47  B1  
+	.byte 0x43, 0x20, 0x32   ; F1A6BF  note  48  C2  
+	.byte 0x44, 0x88, 0x32   ; F1A6C2  note  49  Db2   0x88 = b
+	.byte 0x44, 0x20, 0x32   ; F1A6C5  note  50  D2  
+	.byte 0x45, 0x88, 0x32   ; F1A6C8  note  51  Eb2   0x88 = b
+	.byte 0x45, 0x20, 0x32   ; F1A6CB  note  52  E2  
+	.byte 0x46, 0x20, 0x32   ; F1A6CE  note  53  F2  
+	.byte 0x46, 0x8c, 0x32   ; F1A6D1  note  54  F#2   0x8C = #
+	.byte 0x47, 0x20, 0x32   ; F1A6D4  note  55  G2  
+	.byte 0x41, 0x88, 0x32   ; F1A6D7  note  56  Ab2   0x88 = b
+	.byte 0x41, 0x20, 0x32   ; F1A6DA  note  57  A2  
+	.byte 0x42, 0x88, 0x32   ; F1A6DD  note  58  Bb2   0x88 = b
+	.byte 0x42, 0x20, 0x32   ; F1A6E0  note  59  B2  
+	.byte 0x43, 0x20, 0x33   ; F1A6E3  note  60  C3  
+	.byte 0x44, 0x88, 0x33   ; F1A6E6  note  61  Db3   0x88 = b
+	.byte 0x44, 0x20, 0x33   ; F1A6E9  note  62  D3  
+	.byte 0x45, 0x88, 0x33   ; F1A6EC  note  63  Eb3   0x88 = b
+	.byte 0x45, 0x20, 0x33   ; F1A6EF  note  64  E3  
+	.byte 0x46, 0x20, 0x33   ; F1A6F2  note  65  F3  
+	.byte 0x46, 0x8c, 0x33   ; F1A6F5  note  66  F#3   0x8C = #
+	.byte 0x47, 0x20, 0x33   ; F1A6F8  note  67  G3  
+	.byte 0x41, 0x88, 0x33   ; F1A6FB  note  68  Ab3   0x88 = b
+	.byte 0x41, 0x20, 0x33   ; F1A6FE  note  69  A3  
+	.byte 0x42, 0x88, 0x33   ; F1A701  note  70  Bb3   0x88 = b
+	.byte 0x42, 0x20, 0x33   ; F1A704  note  71  B3  
+	.byte 0x43, 0x20, 0x34   ; F1A707  note  72  C4  
+	.byte 0x44, 0x88, 0x34   ; F1A70A  note  73  Db4   0x88 = b
+	.byte 0x44, 0x20, 0x34   ; F1A70D  note  74  D4  
+	.byte 0x45, 0x88, 0x34   ; F1A710  note  75  Eb4   0x88 = b
+	.byte 0x45, 0x20, 0x34   ; F1A713  note  76  E4  
+	.byte 0x46, 0x20, 0x34   ; F1A716  note  77  F4  
+	.byte 0x46, 0x8c, 0x34   ; F1A719  note  78  F#4   0x8C = #
+	.byte 0x47, 0x20, 0x34   ; F1A71C  note  79  G4  
+	.byte 0x41, 0x88, 0x34   ; F1A71F  note  80  Ab4   0x88 = b
+	.byte 0x41, 0x20, 0x34   ; F1A722  note  81  A4  
+	.byte 0x42, 0x88, 0x34   ; F1A725  note  82  Bb4   0x88 = b
+	.byte 0x42, 0x20, 0x34   ; F1A728  note  83  B4  
+	.byte 0x43, 0x20, 0x35   ; F1A72B  note  84  C5  
+	.byte 0x44, 0x88, 0x35   ; F1A72E  note  85  Db5   0x88 = b
+	.byte 0x44, 0x20, 0x35   ; F1A731  note  86  D5  
+	.byte 0x45, 0x88, 0x35   ; F1A734  note  87  Eb5   0x88 = b
+	.byte 0x45, 0x20, 0x35   ; F1A737  note  88  E5  
+	.byte 0x46, 0x20, 0x35   ; F1A73A  note  89  F5  
+	.byte 0x46, 0x8c, 0x35   ; F1A73D  note  90  F#5   0x8C = #
+	.byte 0x47, 0x20, 0x35   ; F1A740  note  91  G5  
+	.byte 0x41, 0x88, 0x35   ; F1A743  note  92  Ab5   0x88 = b
+	.byte 0x41, 0x20, 0x35   ; F1A746  note  93  A5  
+	.byte 0x42, 0x88, 0x35   ; F1A749  note  94  Bb5   0x88 = b
+	.byte 0x42, 0x20, 0x35   ; F1A74C  note  95  B5  
+	.byte 0x43, 0x20, 0x36   ; F1A74F  note  96  C6  
+	.byte 0x44, 0x88, 0x36   ; F1A752  note  97  Db6   0x88 = b
+	.byte 0x44, 0x20, 0x36   ; F1A755  note  98  D6  
+	.byte 0x45, 0x88, 0x36   ; F1A758  note  99  Eb6   0x88 = b
+	.byte 0x45, 0x20, 0x36   ; F1A75B  note 100  E6  
+	.byte 0x46, 0x20, 0x36   ; F1A75E  note 101  F6  
+	.byte 0x46, 0x8c, 0x36   ; F1A761  note 102  F#6   0x8C = #
+	.byte 0x47, 0x20, 0x36   ; F1A764  note 103  G6  
+	.byte 0x41, 0x88, 0x36   ; F1A767  note 104  Ab6   0x88 = b
+	.byte 0x41, 0x20, 0x36   ; F1A76A  note 105  A6  
+	.byte 0x42, 0x88, 0x36   ; F1A76D  note 106  Bb6   0x88 = b
+	.byte 0x42, 0x20, 0x36   ; F1A770  note 107  B6  
+	.byte 0x43, 0x20, 0x37   ; F1A773  note 108  C7  
+	.byte 0x44, 0x88, 0x37   ; F1A776  note 109  Db7   0x88 = b
+	.byte 0x44, 0x20, 0x37   ; F1A779  note 110  D7  
+	.byte 0x45, 0x88, 0x37   ; F1A77C  note 111  Eb7   0x88 = b
+	.byte 0x45, 0x20, 0x37   ; F1A77F  note 112  E7  
+	.byte 0x46, 0x20, 0x37   ; F1A782  note 113  F7  
+	.byte 0x46, 0x8c, 0x37   ; F1A785  note 114  F#7   0x8C = #
+	.byte 0x47, 0x20, 0x37   ; F1A788  note 115  G7  
+	.byte 0x41, 0x88, 0x37   ; F1A78B  note 116  Ab7   0x88 = b
+	.byte 0x41, 0x20, 0x37   ; F1A78E  note 117  A7  
+	.byte 0x42, 0x88, 0x37   ; F1A791  note 118  Bb7   0x88 = b
+	.byte 0x42, 0x20, 0x37   ; F1A794  note 119  B7  
+	.byte 0x43, 0x20, 0x38   ; F1A797  note 120  C8  
+	.byte 0x44, 0x88, 0x38   ; F1A79A  note 121  Db8   0x88 = b
+	.byte 0x44, 0x20, 0x38   ; F1A79D  note 122  D8  
+	.byte 0x45, 0x88, 0x38   ; F1A7A0  note 123  Eb8   0x88 = b
+	.byte 0x45, 0x20, 0x38   ; F1A7A3  note 124  E8  
+	.byte 0x46, 0x20, 0x38   ; F1A7A6  note 125  F8  
+	.byte 0x46, 0x8c, 0x38   ; F1A7A9  note 126  F#8   0x8C = #
+	.byte 0x47, 0x20, 0x38   ; F1A7AC  note 127  G8  
+
+; --------------------------------------------------------------------------
+; DL_F1A7AF -- display list, 0xF1A7AF-0xF1A84E (160 bytes)
+; Interpreter: B.  16 records, framed by their own length bytes; the walk
+;              consumes 0xF1A7AF-0xF1A84E exactly.
+; Evidence: 16 records, interpreter B, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A7AF:
+	.byte 0x00, 0x0a	; F1A7AF  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2640		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xb3, 0x0a, 0x03	; +7  '...'
+	.byte 0x00, 0x0a	; F1A7B9  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2641		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x33, 0x0d, 0x03	; +7  '3..'
+	.byte 0x00, 0x0a	; F1A7C3  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2642		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xb3, 0x0f, 0x03	; +7  '...'
+	.byte 0x00, 0x0a	; F1A7CD  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2643		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x33, 0x12, 0x03	; +7  '3..'
+	.byte 0x00, 0x0a	; F1A7D7  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2644		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xb3, 0x14, 0x03	; +7  '...'
+	.byte 0x00, 0x0a	; F1A7E1  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2645		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x33, 0x17, 0x03	; +7  '3..'
+	.byte 0x00, 0x0a	; F1A7EB  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2646		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xb3, 0x19, 0x03	; +7  '...'
+	.byte 0x00, 0x0a	; F1A7F5  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2647		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x33, 0x1c, 0x03	; +7  '3..'
+	.byte 0x00, 0x0a	; F1A7FF  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2648		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xbb, 0x0a, 0x03	; +7  '...'
+	.byte 0x00, 0x0a	; F1A809  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x2649		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x3b, 0x0d, 0x03	; +7  ';..'
+	.byte 0x00, 0x0a	; F1A813  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x264A		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xbb, 0x0f, 0x03	; +7  '...'
+	.byte 0x00, 0x0a	; F1A81D  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x264B		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x3b, 0x12, 0x03	; +7  ';..'
+	.byte 0x00, 0x0a	; F1A827  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x264C		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xbb, 0x14, 0x03	; +7  '...'
+	.byte 0x00, 0x0a	; F1A831  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x264D		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x3b, 0x17, 0x03	; +7  ';..'
+	.byte 0x00, 0x0a	; F1A83B  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x264E		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0xbb, 0x19, 0x03	; +7  '...'
+	.byte 0x00, 0x0a	; F1A845  op 00, 10 bytes -> handler 0xF31BA1
+	.short 0x264F		; +2  RAM variable
+	.byte 0x7f, 0x00, 0x20	; +4  mask, shift, swi 7 function
+	.byte 0x3b, 0x1c, 0x03	; +7  ';..'
+
+; --------------------------------------------------------------------------
+; DL_F1A84F -- display list, 0xF1A84F-0xF1A858 (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1A84F-0xF1A858 exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A84F:
+	.byte 0x1b, 0x0a	; F1A84F  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0x00, 0x00, 0x7c, 0x00, 0x3f, 0x01, 0xc6, 0x00	; +2  '..|.?...'
+
+; --------------------------------------------------------------------------
+; DL_F1A859 -- display list, 0xF1A859-0xF1A8EE (150 bytes)
+; Interpreter: A.  6 records, framed by their own length bytes; the walk
+;              consumes 0xF1A859-0xF1A8EE exactly.
+; Text it draws: 'It is impossible to use both the'; 'Main and Sub outputs
+;                if Effect2'; 'is turned on.'; 'Please select either the
+;                Main or'; 'Sub outputs.'
+; Evidence: 6 records, interpreter A, inside the call-site run
+;           0xF1A84F-0xF1A8EF
+; --------------------------------------------------------------------------
+DL_F1A859:
+	.byte 0x06, 0x24	; F1A859  op 06, 36 bytes -> handler 0xF31A3A
+	.short 0x13DC		; +2  IX (screen position)
+	.ascii "It is impossible to use both the"	; +4
+	.byte 0x06, 0x23	; F1A87D  op 06, 35 bytes -> handler 0xF31A3A
+	.short 0x160C		; +2  IX (screen position)
+	.ascii "Main and Sub outputs if Effect2"	; +4
+	.byte 0x06, 0x11	; F1A8A0  op 06, 17 bytes -> handler 0xF31A3A
+	.short 0x183C		; +2  IX (screen position)
+	.ascii "is turned on."	; +4
+	.byte 0x06, 0x24	; F1A8B1  op 06, 36 bytes -> handler 0xF31A3A
+	.short 0x1A6C		; +2  IX (screen position)
+	.ascii "Please select either the Main or"	; +4
+	.byte 0x06, 0x10	; F1A8D5  op 06, 16 bytes -> handler 0xF31A3A
+	.short 0x1C9C		; +2  IX (screen position)
+	.ascii "Sub outputs."	; +4
+	.byte 0x0a, 0x0a	; F1A8E5  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0x17, 0x00, 0x7c, 0x00, 0x28, 0x01, 0xc6, 0x00	; +2  '..|.(...'
+
+; --------------------------------------------------------------------------
+; DL_F1A8EF -- display list, 0xF1A8EF-0xF1A8F8 (10 bytes)
+; Interpreter: A.  1 record, framed by their own length bytes; the walk
+;              consumes 0xF1A8EF-0xF1A8F8 exactly.
+; Evidence: 1 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A8EF:
+	.byte 0x1b, 0x0a	; F1A8EF  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0x15, 0x00, 0x7a, 0x00, 0x2c, 0x01, 0xca, 0x00	; +2  '..z.,...'
+
+; --------------------------------------------------------------------------
+; DL_F1A8F9 -- display list, 0xF1A8F9-0xF1A998 (160 bytes)
+; Interpreter: A.  7 records, framed by their own length bytes; the walk
+;              consumes 0xF1A8F9-0xF1A998 exactly.
+; Text it draws: 'It is impossible to use both the'; 'Main and Sub outputs
+;                if Effect2'; 'is turned on.'; 'Please select either the
+;                Main or'; 'Sub outputs.'
+; Evidence: 7 records, interpreter A, inside the call-site run
+;           0xF1A8EF-0xF1A999
+; --------------------------------------------------------------------------
+DL_F1A8F9:
+	.byte 0x06, 0x24	; F1A8F9  op 06, 36 bytes -> handler 0xF31A3A
+	.short 0x13DC		; +2  IX (screen position)
+	.ascii "It is impossible to use both the"	; +4
+	.byte 0x06, 0x23	; F1A91D  op 06, 35 bytes -> handler 0xF31A3A
+	.short 0x160C		; +2  IX (screen position)
+	.ascii "Main and Sub outputs if Effect2"	; +4
+	.byte 0x06, 0x11	; F1A940  op 06, 17 bytes -> handler 0xF31A3A
+	.short 0x183C		; +2  IX (screen position)
+	.ascii "is turned on."	; +4
+	.byte 0x06, 0x24	; F1A951  op 06, 36 bytes -> handler 0xF31A3A
+	.short 0x1A6C		; +2  IX (screen position)
+	.ascii "Please select either the Main or"	; +4
+	.byte 0x06, 0x10	; F1A975  op 06, 16 bytes -> handler 0xF31A3A
+	.short 0x1C9C		; +2  IX (screen position)
+	.ascii "Sub outputs."	; +4
+	.byte 0x0a, 0x0a	; F1A985  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0x17, 0x00, 0x7c, 0x00, 0x28, 0x01, 0xc6, 0x00	; +2  '..|.(...'
+	.byte 0x05, 0x0a	; F1A98F  op 05, 10 bytes -> handler 0xF31A75
+	.byte 0x19, 0x00, 0x7e, 0x00, 0x26, 0x01, 0xc4, 0x00	; +2  '..~.&...'
+
+; --------------------------------------------------------------------------
+; DL_F1A999 -- display list, 0xF1A999-0xF1AA7B (227 bytes)
+; Interpreter: A.  16 records, framed by their own length bytes; the walk
+;              consumes 0xF1A999-0xF1AA7B exactly.
+; Text it draws: 'ERR0R!'; 'The S0UND or C0MBINATI0N'; 'memories are write
+;                protected.'; 'YES'; 'To proceed select YES and'; 'turn off
+;                the write protection.'; 'NO'
+; Evidence: 16 records, interpreter A, named by its call site's thunk
+; --------------------------------------------------------------------------
+DL_F1A999:
+	.byte 0x08, 0x0a	; F1A999  op 08, 10 bytes -> handler 0xF31A3A
+	.short 0x0265		; +2  IX (screen position)
+	.ascii "ERR0R!"	; +4
+	.byte 0x07, 0x1c	; F1A9A3  op 07, 28 bytes -> handler 0xF31A3A
+	.short 0x0B6B		; +2  IX (screen position)
+	.ascii "The S0UND or C0MBINATI0N"	; +4
+	.byte 0x07, 0x21	; F1A9BF  op 07, 33 bytes -> handler 0xF31A3A
+	.short 0x1043		; +2  IX (screen position)
+	.ascii "memories are write protected."	; +4
+	.byte 0x07, 0x05	; F1A9E0  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1157		; +2  IX (screen position)
+	.byte 0x11	; +4  '.'
+	.byte 0x20, 0x07	; F1A9E5  op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x117B		; +2  IX (screen position)
+	.ascii "YES"	; +4
+	.byte 0x07, 0x1d	; F1A9EC  op 07, 29 bytes -> handler 0xF31A3A
+	.short 0x151B		; +2  IX (screen position)
+	.ascii "To proceed select YES and"	; +4
+	.byte 0x07, 0x22	; F1AA09  op 07, 34 bytes -> handler 0xF31A3A
+	.short 0x19F3		; +2  IX (screen position)
+	.ascii "turn off the write protection."	; +4
+	.byte 0x07, 0x05	; F1AA2B  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1797		; +2  IX (screen position)
+	.byte 0x11	; +4  '.'
+	.byte 0x20, 0x06	; F1AA30  op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x17BB		; +2  IX (screen position)
+	.ascii "NO"	; +4
+	.byte 0x0a, 0x0a	; F1AA36  op 0A, 10 bytes -> handler 0xF31A75
+	.byte 0x07, 0x00, 0x2f, 0x00, 0x0b, 0x01, 0xcc, 0x00	; +2  '../.....'
+	.byte 0x09, 0x0a	; F1AA40  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x01, 0x6a, 0x00, 0x34, 0x01, 0x7d, 0x00	; +2  '..j.4.}.'
+	.byte 0x09, 0x0a	; F1AA4A  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x16, 0x01, 0x6c, 0x00, 0x32, 0x01, 0x7b, 0x00	; +2  '..l.2.{.'
+	.byte 0x09, 0x0a	; F1AA54  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0xa4, 0x00, 0x83, 0x00, 0xc4, 0x00, 0x96, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F1AA5E  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0xa6, 0x00, 0x85, 0x00, 0xc2, 0x00, 0x94, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F1AA68  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x14, 0x01, 0x92, 0x00, 0x34, 0x01, 0xa5, 0x00	; +2  '....4...'
+	.byte 0x09, 0x0a	; F1AA72  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x16, 0x01, 0x94, 0x00, 0x32, 0x01, 0xa3, 0x00	; +2  '....2...'
+
+; --------------------------------------------------------------------------
+; Record_F1AA7C -- record, 0xF1AA7C-0xF1AA84 (9 bytes)
+; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBBE61
+; --------------------------------------------------------------------------
+Record_F1AA7C:
+	.byte 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0c, 0x10, 0x00   ; F1AA7C  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AA85 -- record, 0xF1AA85-0xF1AA8D (9 bytes)
+; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBBE9C
+; --------------------------------------------------------------------------
+Record_F1AA85:
+	.byte 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0c, 0x10, 0x00   ; F1AA85  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AA8E -- record, 0xF1AA8E-0xF1AA96 (9 bytes)
+; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBBED7
+; --------------------------------------------------------------------------
+Record_F1AA8E:
+	.byte 0x09, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x10, 0x00   ; F1AA8E  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AA97 -- record, 0xF1AA97-0xF1AA9F (9 bytes)
+; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBBF12
+; --------------------------------------------------------------------------
+Record_F1AA97:
+	.byte 0x0a, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x10, 0x00   ; F1AA97  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AAA0 -- record, 0xF1AAA0-0xF1AAA8 (9 bytes)
+; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBCF8B
+; --------------------------------------------------------------------------
+Record_F1AAA0:
+	.byte 0x00, 0xff, 0x00, 0x0a, 0x00, 0x01, 0x01, 0x01, 0x00   ; F1AAA0  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AAA9 -- record, 0xF1AAA9-0xF1AAB4 (12 bytes)
+; Evidence: 12 bytes, stated by `ldw BC` at prom_a 0xFBE278
+; --------------------------------------------------------------------------
+Record_F1AAA9:
+	.byte 0x03, 0x0c, 0x59, 0x7c, 0xf1, 0x00, 0x00, 0x00, 0x03, 0x00, 0x11, 0x00   ; F1AAA9  ..Y|........
+
+; --------------------------------------------------------------------------
+; Record_F1AAB5 -- record, 0xF1AAB5-0xF1AABE (10 bytes)
+; Evidence: 10 bytes, stated by `ldw BC` at prom_a 0xFBE2B1
+; --------------------------------------------------------------------------
+Record_F1AAB5:
+	.byte 0x09, 0x0a, 0x04, 0x00, 0x00, 0x00, 0x22, 0x00, 0x00, 0x00   ; F1AAB5  ......"...
+
+; --------------------------------------------------------------------------
+; Record_F1AABF -- record, 0xF1AABF-0xF1AAD2 (20 bytes)
+; Evidence: 20 bytes, stated by `ldw BC` at prom_a 0xFBE4C1
+; --------------------------------------------------------------------------
+Record_F1AABF:
+	.byte 0x1b, 0x0a, 0x0c, 0x00, 0x09, 0x00, 0x1a, 0x00, 0x0f, 0x00, 0x05, 0x0a, 0x0c, 0x00, 0x01, 0x00   ; F1AABF  ................
+	.byte 0x1a, 0x00, 0x07, 0x00   ; F1AACF  ....
+
+; --------------------------------------------------------------------------
+; Record_F1AAD3 -- record, 0xF1AAD3-0xF1AADE (12 bytes)
+; Evidence: 12 bytes, stated by `ldw BC` at prom_a 0xFBE552
+; --------------------------------------------------------------------------
+Record_F1AAD3:
+	.byte 0x09, 0x0c, 0x40, 0x26, 0xff, 0x00, 0x17, 0x0a, 0x00, 0xa7, 0x00, 0x03   ; F1AAD3  ..@&........
+
+; --------------------------------------------------------------------------
+; Record_F1AADF -- record, 0xF1AADF-0xF1AAEB (13 bytes)
+; Evidence: 13 bytes, stated by `ldw BC` at prom_a 0xFBE591
+; --------------------------------------------------------------------------
+Record_F1AADF:
+	.byte 0x0b, 0x0c, 0x40, 0x26, 0xff, 0x00, 0x17, 0x0a, 0x00, 0xa7, 0x00, 0x02, 0x40   ; F1AADF  ..@&........@
+
+; --------------------------------------------------------------------------
+; Record_F1AAEC -- record, 0xF1AAEC-0xF1AB09 (30 bytes)
+; Evidence: 30 bytes, stated by `ldw BC` at prom_a 0xFBF97B
+; --------------------------------------------------------------------------
+Record_F1AAEC:
+	.byte 0x1b, 0x0a, 0xdb, 0x00, 0x48, 0x00, 0x06, 0x01, 0x49, 0x00, 0x09, 0x0a, 0xdb, 0x00, 0x48, 0x00   ; F1AAEC  ....H...I.....H.
+	.byte 0x06, 0x01, 0x49, 0x00, 0x1b, 0x0a, 0xdb, 0x00, 0x48, 0x00, 0x06, 0x01, 0x49, 0x00   ; F1AAFC  ..I.....H...I.
+
+; --- 0xF1AB0A-0xF1AB12  9 bytes of 0x00 padding ---
+	.fill	9, 1, 0x00	; asserted a single value
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AB13 -- pointer table, 0xF1AB13-0xF1AB4A (56 bytes)
+; Shape: 14 entries of 4 bytes = 56 bytes, which is the whole segment.
+; First / last: 0xFBBA8E ... 0xFBBCA4
+; Evidence: 14 entries of 4 bytes; base and width from prom_a 0xFBB88A
+; --------------------------------------------------------------------------
+PtrTable_F1AB13:
+	.long 0x00FBBA8E                       ; F1AB13  [0]   -> prom_a 0xFBBA8E
+	.long 0x00FBBAA3                       ; F1AB17  [1]   -> prom_a 0xFBBAA3
+	.long 0x00FBBAD3                       ; F1AB1B  [2]   -> prom_a 0xFBBAD3
+	.long 0x00FBBAEB                       ; F1AB1F  [3]   -> prom_a 0xFBBAEB
+	.long 0x00FBBB1B                       ; F1AB23  [4]   -> prom_a 0xFBBB1B
+	.long 0x00FBBB4B                       ; F1AB27  [5]   -> prom_a 0xFBBB4B
+	.long 0x00FBBB7B                       ; F1AB2B  [6]   -> prom_a 0xFBBB7B
+	.long 0x00FBBBAB                       ; F1AB2F  [7]   -> prom_a 0xFBBBAB
+	.long 0x00FBBC2B                       ; F1AB33  [8]   -> prom_a 0xFBBC2B
+	.long 0x00FBBC5B                       ; F1AB37  [9]   -> prom_a 0xFBBC5B
+	.long 0x00FBBC73                       ; F1AB3B  [10]   -> prom_a 0xFBBC73
+	.long 0x00FBBC8B                       ; F1AB3F  [11]   -> prom_a 0xFBBC8B
+	.long 0x00FBBCA3                       ; F1AB43  [12]   -> prom_a 0xFBBCA3
+	.long 0x00FBBCA4                       ; F1AB47  [13]   -> prom_a 0xFBBCA4
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AB4B -- pointer table, 0xF1AB4B-0xF1AB6E (36 bytes)
+; Shape: 9 entries of 4 bytes = 36 bytes, which is the whole segment.
+; First / last: 0xFBBCBC ... 0xFBBF0A
+; Evidence: 9 entries of 4 bytes; base and width from prom_a 0xFBB8AA
+; --------------------------------------------------------------------------
+PtrTable_F1AB4B:
+	.long 0x00FBBCBC                       ; F1AB4B  [0]   -> prom_a 0xFBBCBC
+	.long 0x00FBBD4F                       ; F1AB4F  [1]   -> prom_a 0xFBBD4F
+	.long 0x00FBBDF9                       ; F1AB53  [2]   -> prom_a 0xFBBDF9
+	.long 0x00FBBE11                       ; F1AB57  [3]   -> prom_a 0xFBBE11
+	.long 0x00FBBE41                       ; F1AB5B  [4]   -> prom_a 0xFBBE41
+	.long 0x00FBBE59                       ; F1AB5F  [5]   -> prom_a 0xFBBE59
+	.long 0x00FBBE94                       ; F1AB63  [6]   -> prom_a 0xFBBE94
+	.long 0x00FBBECF                       ; F1AB67  [7]   -> prom_a 0xFBBECF
+	.long 0x00FBBF0A                       ; F1AB6B  [8]   -> prom_a 0xFBBF0A
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AB6F -- pointer table, 0xF1AB6F-0xF1AB96 (40 bytes)
+; Shape: 10 entries of 4 bytes = 40 bytes, which is the whole segment.
+; First / last: 0xFBBF45 ... 0xFBC01D
+; Evidence: 10 entries of 4 bytes; base and width from prom_a 0xFBB8CA
+; --------------------------------------------------------------------------
+PtrTable_F1AB6F:
+	.long 0x00FBBF45                       ; F1AB6F  [0]   -> prom_a 0xFBBF45
+	.long 0x00FBBF5D                       ; F1AB73  [1]   -> prom_a 0xFBBF5D
+	.long 0x00FBBF75                       ; F1AB77  [2]   -> prom_a 0xFBBF75
+	.long 0x00FBBF8D                       ; F1AB7B  [3]   -> prom_a 0xFBBF8D
+	.long 0x00FBBFA5                       ; F1AB7F  [4]   -> prom_a 0xFBBFA5
+	.long 0x00FBBFBD                       ; F1AB83  [5]   -> prom_a 0xFBBFBD
+	.long 0x00FBBFD5                       ; F1AB87  [6]   -> prom_a 0xFBBFD5
+	.long 0x00FBBFED                       ; F1AB8B  [7]   -> prom_a 0xFBBFED
+	.long 0x00FBC005                       ; F1AB8F  [8]   -> prom_a 0xFBC005
+	.long 0x00FBC01D                       ; F1AB93  [9]   -> prom_a 0xFBC01D
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AB97 -- pointer table, 0xF1AB97-0xF1ABA2 (12 bytes)
+; Shape: 3 entries of 4 bytes = 12 bytes, which is the whole segment.
+; First / last: 0xFBC035 ... 0xFBC065
+; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBB8E9
+; --------------------------------------------------------------------------
+PtrTable_F1AB97:
+	.long 0x00FBC035                       ; F1AB97  [0]   -> prom_a 0xFBC035
+	.long 0x00FBC04D                       ; F1AB9B  [1]   -> prom_a 0xFBC04D
+	.long 0x00FBC065                       ; F1AB9F  [2]   -> prom_a 0xFBC065
+
+; --------------------------------------------------------------------------
+; PtrTable_F1ABA3 -- pointer table, 0xF1ABA3-0xF1ABE6 (68 bytes)
+; Shape: 17 entries of 4 bytes = 68 bytes, which is the whole segment.
+; First / last: 0xFBC07D ... 0xFBC215
+; Evidence: 17 entries of 4 bytes; base and width from prom_a 0xFBB908
+; --------------------------------------------------------------------------
+PtrTable_F1ABA3:
+	.long 0x00FBC07D                       ; F1ABA3  [0]   -> prom_a 0xFBC07D
+	.long 0x00FBC095                       ; F1ABA7  [1]   -> prom_a 0xFBC095
+	.long 0x00FBC0AD                       ; F1ABAB  [2]   -> prom_a 0xFBC0AD
+	.long 0x00FBC0C5                       ; F1ABAF  [3]   -> prom_a 0xFBC0C5
+	.long 0x00FBC0DD                       ; F1ABB3  [4]   -> prom_a 0xFBC0DD
+	.long 0x00FBC0F5                       ; F1ABB7  [5]   -> prom_a 0xFBC0F5
+	.long 0x00FBC10D                       ; F1ABBB  [6]   -> prom_a 0xFBC10D
+	.long 0x00FBC13D                       ; F1ABBF  [7]   -> prom_a 0xFBC13D
+	.long 0x00FBC155                       ; F1ABC3  [8]   -> prom_a 0xFBC155
+	.long 0x00FBC16D                       ; F1ABC7  [9]   -> prom_a 0xFBC16D
+	.long 0x00FBC185                       ; F1ABCB  [10]   -> prom_a 0xFBC185
+	.long 0x00FBC19D                       ; F1ABCF  [11]   -> prom_a 0xFBC19D
+	.long 0x00FBC1B5                       ; F1ABD3  [12]   -> prom_a 0xFBC1B5
+	.long 0x00FBC1CD                       ; F1ABD7  [13]   -> prom_a 0xFBC1CD
+	.long 0x00FBC1E5                       ; F1ABDB  [14]   -> prom_a 0xFBC1E5
+	.long 0x00FBC1FD                       ; F1ABDF  [15]   -> prom_a 0xFBC1FD
+	.long 0x00FBC215                       ; F1ABE3  [16]   -> prom_a 0xFBC215
+
+; --------------------------------------------------------------------------
+; PtrTable_F1ABE7 -- pointer table, 0xF1ABE7-0xF1AC06 (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: 0xFBC2FF ... 0xFBC53B
+; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBB927
+; --------------------------------------------------------------------------
+PtrTable_F1ABE7:
+	.long 0x00FBC2FF                       ; F1ABE7  [0]   -> prom_a 0xFBC2FF
+	.long 0x00FBC352                       ; F1ABEB  [1]   -> prom_a 0xFBC352
+	.long 0x00FBC3D8                       ; F1ABEF  [2]   -> prom_a 0xFBC3D8
+	.long 0x00FBC42B                       ; F1ABF3  [3]   -> prom_a 0xFBC42B
+	.long 0x00FBC47E                       ; F1ABF7  [4]   -> prom_a 0xFBC47E
+	.long 0x00FBC495                       ; F1ABFB  [5]   -> prom_a 0xFBC495
+	.long 0x00FBC4E8                       ; F1ABFF  [6]   -> prom_a 0xFBC4E8
+	.long 0x00FBC53B                       ; F1AC03  [7]   -> prom_a 0xFBC53B
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AC07 -- pointer table, 0xF1AC07-0xF1AC3E (56 bytes)
+; Shape: 14 entries of 4 bytes = 56 bytes, which is the whole segment.
+; First / last: 0xFBBA83 ... 0xFBBA83
+; Evidence: 14 entries of 4 bytes; base and width from prom_a 0xFBB9C7
+; --------------------------------------------------------------------------
+PtrTable_F1AC07:
+	.long 0x00FBBA83                       ; F1AC07  [0]   -> prom_a 0xFBBA83
+	.long 0x00FBBABB                       ; F1AC0B  [1]   -> prom_a 0xFBBABB
+	.long 0x00FBBA83                       ; F1AC0F  [2]   -> prom_a 0xFBBA83
+	.long 0x00FBBB03                       ; F1AC13  [3]   -> prom_a 0xFBBB03
+	.long 0x00FBBB33                       ; F1AC17  [4]   -> prom_a 0xFBBB33
+	.long 0x00FBBB63                       ; F1AC1B  [5]   -> prom_a 0xFBBB63
+	.long 0x00FBBB93                       ; F1AC1F  [6]   -> prom_a 0xFBBB93
+	.long 0x00FBBA83                       ; F1AC23  [7]   -> prom_a 0xFBBA83
+	.long 0x00FBBC43                       ; F1AC27  [8]   -> prom_a 0xFBBC43
+	.long 0x00FBBA83                       ; F1AC2B  [9]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC2F  [10]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC33  [11]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC37  [12]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC3B  [13]   -> prom_a 0xFBBA83
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AC3F -- pointer table, 0xF1AC3F-0xF1AC62 (36 bytes)
+; Shape: 9 entries of 4 bytes = 36 bytes, which is the whole segment.
+; First / last: 0xFBBA83 ... 0xFBBA83
+; Evidence: 9 entries of 4 bytes; base and width from prom_a 0xFBB9E8
+; --------------------------------------------------------------------------
+PtrTable_F1AC3F:
+	.long 0x00FBBA83                       ; F1AC3F  [0]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC43  [1]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC47  [2]   -> prom_a 0xFBBA83
+	.long 0x00FBBE29                       ; F1AC4B  [3]   -> prom_a 0xFBBE29
+	.long 0x00FBBA83                       ; F1AC4F  [4]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC53  [5]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC57  [6]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC5B  [7]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC5F  [8]   -> prom_a 0xFBBA83
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AC63 -- pointer table, 0xF1AC63-0xF1AC8A (40 bytes)
+; Shape: 10 entries of 4 bytes = 40 bytes, which is the whole segment.
+; First / last: 0xFBBA83 ... 0xFBBA83
+; Evidence: 10 entries of 4 bytes; base and width from prom_a 0xFBBA09
+; --------------------------------------------------------------------------
+PtrTable_F1AC63:
+	.long 0x00FBBA83                       ; F1AC63  [0]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC67  [1]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC6B  [2]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC6F  [3]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC73  [4]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC77  [5]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC7B  [6]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC7F  [7]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC83  [8]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC87  [9]   -> prom_a 0xFBBA83
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AC8B -- pointer table, 0xF1AC8B-0xF1AC96 (12 bytes)
+; Shape: 3 entries of 4 bytes = 12 bytes, which is the whole segment.
+; First / last: 0xFBBA83 ... 0xFBBA83
+; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBBA29
+; --------------------------------------------------------------------------
+PtrTable_F1AC8B:
+	.long 0x00FBBA83                       ; F1AC8B  [0]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC8F  [1]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC93  [2]   -> prom_a 0xFBBA83
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AC97 -- pointer table, 0xF1AC97-0xF1ACDA (68 bytes)
+; Shape: 17 entries of 4 bytes = 68 bytes, which is the whole segment.
+; First / last: 0xFBBA83 ... 0xFBBA83
+; Evidence: 17 entries of 4 bytes; base and width from prom_a 0xFBBA49
+; --------------------------------------------------------------------------
+PtrTable_F1AC97:
+	.long 0x00FBBA83                       ; F1AC97  [0]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC9B  [1]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1AC9F  [2]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACA3  [3]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACA7  [4]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACAB  [5]   -> prom_a 0xFBBA83
+	.long 0x00FBC125                       ; F1ACAF  [6]   -> prom_a 0xFBC125
+	.long 0x00FBBA83                       ; F1ACB3  [7]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACB7  [8]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACBB  [9]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACBF  [10]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACC3  [11]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACC7  [12]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACCB  [13]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACCF  [14]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACD3  [15]   -> prom_a 0xFBBA83
+	.long 0x00FBBA83                       ; F1ACD7  [16]   -> prom_a 0xFBBA83
+
+; --------------------------------------------------------------------------
+; PtrTable_F1ACDB -- pointer table, 0xF1ACDB-0xF1ACFA (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: 0xFBC316 ... 0xFBC553
+; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBBA69
+; --------------------------------------------------------------------------
+PtrTable_F1ACDB:
+	.long 0x00FBC316                       ; F1ACDB  [0]   -> prom_a 0xFBC316
+	.long 0x00FBC38F                       ; F1ACDF  [1]   -> prom_a 0xFBC38F
+	.long 0x00FBC3EF                       ; F1ACE3  [2]   -> prom_a 0xFBC3EF
+	.long 0x00FBC442                       ; F1ACE7  [3]   -> prom_a 0xFBC442
+	.long 0x00FBBA83                       ; F1ACEB  [4]   -> prom_a 0xFBBA83
+	.long 0x00FBC4AC                       ; F1ACEF  [5]   -> prom_a 0xFBC4AC
+	.long 0x00FBC4FF                       ; F1ACF3  [6]   -> prom_a 0xFBC4FF
+	.long 0x00FBC553                       ; F1ACF7  [7]   -> prom_a 0xFBC553
+
+; --------------------------------------------------------------------------
+; Record_F1ACFB -- record, 0xF1ACFB-0xF1AD03 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBAA7
+; --------------------------------------------------------------------------
+Record_F1ACFB:
+	.byte 0x03, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x03   ; F1ACFB  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD04 -- record, 0xF1AD04-0xF1AD0C (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBAD7
+; --------------------------------------------------------------------------
+Record_F1AD04:
+	.byte 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x00   ; F1AD04  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD0D -- record, 0xF1AD0D-0xF1AD15 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBAEF
+; --------------------------------------------------------------------------
+Record_F1AD0D:
+	.byte 0x09, 0x7f, 0x00, 0x64, 0x1c, 0x01, 0x02, 0x08, 0x12   ; F1AD0D  ...d.....
+
+; --------------------------------------------------------------------------
+; Record_F1AD16 -- record, 0xF1AD16-0xF1AD1E (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBB1F
+; --------------------------------------------------------------------------
+Record_F1AD16:
+	.byte 0x0a, 0xff, 0x00, 0xff, 0x00, 0x04, 0x0a, 0x08, 0x23   ; F1AD16  ........#
+
+; --------------------------------------------------------------------------
+; Record_F1AD1F -- record, 0xF1AD1F-0xF1AD27 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBB4F
+; --------------------------------------------------------------------------
+Record_F1AD1F:
+	.byte 0x0b, 0x7f, 0x00, 0x0c, 0x00, 0x01, 0x02, 0x08, 0x02   ; F1AD1F  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD28 -- record, 0xF1AD28-0xF1AD30 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBB7F
+; --------------------------------------------------------------------------
+Record_F1AD28:
+	.byte 0x05, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x03   ; F1AD28  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD31 -- record, 0xF1AD31-0xF1AD39 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBC2F
+; --------------------------------------------------------------------------
+Record_F1AD31:
+	.byte 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x03   ; F1AD31  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD3A -- record, 0xF1AD3A-0xF1AD3C (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBC5F
+; --------------------------------------------------------------------------
+Record_F1AD3A:
+	.byte 0x0d, 0x20, 0x01   ; F1AD3A  . .
+
+; --------------------------------------------------------------------------
+; Record_F1AD3D -- record, 0xF1AD3D-0xF1AD3F (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBC77
+; --------------------------------------------------------------------------
+Record_F1AD3D:
+	.byte 0x0d, 0x40, 0x01   ; F1AD3D  .@.
+
+; --------------------------------------------------------------------------
+; Record_F1AD40 -- record, 0xF1AD40-0xF1AD42 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBC8F
+; --------------------------------------------------------------------------
+Record_F1AD40:
+	.byte 0x0d, 0x80, 0x01   ; F1AD40  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD43 -- record, 0xF1AD43-0xF1AD45 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBCA8
+; --------------------------------------------------------------------------
+Record_F1AD43:
+	.byte 0x0c, 0x08, 0x00   ; F1AD43  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD46 -- record, 0xF1AD46-0xF1AD4E (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBCDD
+; --------------------------------------------------------------------------
+Record_F1AD46:
+	.byte 0x03, 0xff, 0x00, 0x01, 0x00, 0x01, 0x01, 0x10, 0x00   ; F1AD46  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD4F -- record, 0xF1AD4F-0xF1AD57 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBD70
+; --------------------------------------------------------------------------
+Record_F1AD4F:
+	.byte 0x04, 0xff, 0x00, 0x04, 0x00, 0x01, 0x01, 0x10, 0x00   ; F1AD4F  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD58 -- record, 0xF1AD58-0xF1AD60 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBDFD
+; --------------------------------------------------------------------------
+Record_F1AD58:
+	.byte 0x06, 0x0f, 0x00, 0x01, 0x00, 0x01, 0x01, 0x10, 0x00   ; F1AD58  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD61 -- record, 0xF1AD61-0xF1AD69 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBE15
+; --------------------------------------------------------------------------
+Record_F1AD61:
+	.byte 0x05, 0xff, 0x00, 0x30, 0x00, 0x01, 0x02, 0x10, 0x32   ; F1AD61  ...0....2
+
+; --------------------------------------------------------------------------
+; Record_F1AD6A -- record, 0xF1AD6A-0xF1AD72 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBE45
+; --------------------------------------------------------------------------
+Record_F1AD6A:
+	.byte 0x0d, 0x1f, 0x00, 0x1f, 0x00, 0x01, 0x01, 0x00, 0x00   ; F1AD6A  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AD73 -- record, 0xF1AD73-0xF1AD75 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBF49
+; --------------------------------------------------------------------------
+Record_F1AD73:
+	.byte 0x0b, 0x40, 0x10   ; F1AD73  .@.
+
+; --------------------------------------------------------------------------
+; Record_F1AD76 -- record, 0xF1AD76-0xF1AD78 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBF61
+; --------------------------------------------------------------------------
+Record_F1AD76:
+	.byte 0x0c, 0x02, 0x10   ; F1AD76  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD79 -- record, 0xF1AD79-0xF1AD7B (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBF79
+; --------------------------------------------------------------------------
+Record_F1AD79:
+	.byte 0x0e, 0x10, 0x10   ; F1AD79  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD7C -- record, 0xF1AD7C-0xF1AD7E (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBF91
+; --------------------------------------------------------------------------
+Record_F1AD7C:
+	.byte 0x0e, 0x01, 0x10   ; F1AD7C  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD7F -- record, 0xF1AD7F-0xF1AD81 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBFA9
+; --------------------------------------------------------------------------
+Record_F1AD7F:
+	.byte 0x0e, 0x02, 0x10   ; F1AD7F  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD82 -- record, 0xF1AD82-0xF1AD84 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBFC1
+; --------------------------------------------------------------------------
+Record_F1AD82:
+	.byte 0x0e, 0x04, 0x10   ; F1AD82  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD85 -- record, 0xF1AD85-0xF1AD87 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBFD9
+; --------------------------------------------------------------------------
+Record_F1AD85:
+	.byte 0x0e, 0x08, 0x10   ; F1AD85  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD88 -- record, 0xF1AD88-0xF1AD8A (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBFF1
+; --------------------------------------------------------------------------
+Record_F1AD88:
+	.byte 0x0c, 0x01, 0x10   ; F1AD88  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD8B -- record, 0xF1AD8B-0xF1AD8D (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC009
+; --------------------------------------------------------------------------
+Record_F1AD8B:
+	.byte 0x0e, 0x20, 0x10   ; F1AD8B  . .
+
+; --------------------------------------------------------------------------
+; Record_F1AD8E -- record, 0xF1AD8E-0xF1AD90 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC021
+; --------------------------------------------------------------------------
+Record_F1AD8E:
+	.byte 0x0b, 0x20, 0x10   ; F1AD8E  . .
+
+; --------------------------------------------------------------------------
+; Record_F1AD91 -- record, 0xF1AD91-0xF1AD93 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC039
+; --------------------------------------------------------------------------
+Record_F1AD91:
+	.byte 0x0f, 0x10, 0x10   ; F1AD91  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD94 -- record, 0xF1AD94-0xF1AD96 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC051
+; --------------------------------------------------------------------------
+Record_F1AD94:
+	.byte 0x10, 0x80, 0x10   ; F1AD94  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD97 -- record, 0xF1AD97-0xF1AD99 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC069
+; --------------------------------------------------------------------------
+Record_F1AD97:
+	.byte 0x10, 0x04, 0x10   ; F1AD97  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD9A -- record, 0xF1AD9A-0xF1AD9C (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC081
+; --------------------------------------------------------------------------
+Record_F1AD9A:
+	.byte 0x13, 0x10, 0x10   ; F1AD9A  ...
+
+; --------------------------------------------------------------------------
+; Record_F1AD9D -- record, 0xF1AD9D-0xF1AD9F (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC099
+; --------------------------------------------------------------------------
+Record_F1AD9D:
+	.byte 0x14, 0x80, 0x10   ; F1AD9D  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADA0 -- record, 0xF1ADA0-0xF1ADA2 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC0B1
+; --------------------------------------------------------------------------
+Record_F1ADA0:
+	.byte 0x14, 0x04, 0x10   ; F1ADA0  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADA3 -- record, 0xF1ADA3-0xF1ADA5 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC0C9
+; --------------------------------------------------------------------------
+Record_F1ADA3:
+	.byte 0x14, 0x10, 0x10   ; F1ADA3  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADA6 -- record, 0xF1ADA6-0xF1ADA8 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC0E1
+; --------------------------------------------------------------------------
+Record_F1ADA6:
+	.byte 0x14, 0x20, 0x10   ; F1ADA6  . .
+
+; --------------------------------------------------------------------------
+; Record_F1ADA9 -- record, 0xF1ADA9-0xF1ADAB (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC0F9
+; --------------------------------------------------------------------------
+Record_F1ADA9:
+	.byte 0x14, 0x20, 0x10   ; F1ADA9  . .
+
+; --------------------------------------------------------------------------
+; Record_F1ADAC -- record, 0xF1ADAC-0xF1ADB4 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC111
+; --------------------------------------------------------------------------
+Record_F1ADAC:
+	.byte 0x17, 0xff, 0x00, 0x64, 0x1c, 0x01, 0x01, 0x10, 0x12   ; F1ADAC  ...d.....
+
+; --------------------------------------------------------------------------
+; Record_F1ADB5 -- record, 0xF1ADB5-0xF1ADB7 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC141
+; --------------------------------------------------------------------------
+Record_F1ADB5:
+	.byte 0x13, 0x40, 0x10   ; F1ADB5  .@.
+
+; --------------------------------------------------------------------------
+; Record_F1ADB8 -- record, 0xF1ADB8-0xF1ADBA (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC159
+; --------------------------------------------------------------------------
+Record_F1ADB8:
+	.byte 0x14, 0x02, 0x10   ; F1ADB8  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADBB -- record, 0xF1ADBB-0xF1ADBD (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC171
+; --------------------------------------------------------------------------
+Record_F1ADBB:
+	.byte 0x16, 0x10, 0x10   ; F1ADBB  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADBE -- record, 0xF1ADBE-0xF1ADC0 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC189
+; --------------------------------------------------------------------------
+Record_F1ADBE:
+	.byte 0x16, 0x01, 0x10   ; F1ADBE  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADC1 -- record, 0xF1ADC1-0xF1ADC3 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC1A1
+; --------------------------------------------------------------------------
+Record_F1ADC1:
+	.byte 0x16, 0x02, 0x10   ; F1ADC1  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADC4 -- record, 0xF1ADC4-0xF1ADC6 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC1B9
+; --------------------------------------------------------------------------
+Record_F1ADC4:
+	.byte 0x16, 0x04, 0x10   ; F1ADC4  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADC7 -- record, 0xF1ADC7-0xF1ADC9 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC1D1
+; --------------------------------------------------------------------------
+Record_F1ADC7:
+	.byte 0x16, 0x08, 0x10   ; F1ADC7  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADCA -- record, 0xF1ADCA-0xF1ADCC (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC1E9
+; --------------------------------------------------------------------------
+Record_F1ADCA:
+	.byte 0x14, 0x01, 0x10   ; F1ADCA  ...
+
+; --------------------------------------------------------------------------
+; Record_F1ADCD -- record, 0xF1ADCD-0xF1ADCF (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC201
+; --------------------------------------------------------------------------
+Record_F1ADCD:
+	.byte 0x16, 0x20, 0x10   ; F1ADCD  . .
+
+; --------------------------------------------------------------------------
+; Record_F1ADD0 -- record, 0xF1ADD0-0xF1ADD2 (3 bytes)
+; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC219
+; --------------------------------------------------------------------------
+Record_F1ADD0:
+	.byte 0x13, 0x20, 0x10   ; F1ADD0  . .
+
+; --------------------------------------------------------------------------
+; Record_F1ADD3 -- record, 0xF1ADD3-0xF1ADDB (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC285
+; --------------------------------------------------------------------------
+Record_F1ADD3:
+	.byte 0x0e, 0xff, 0x00, 0x81, 0x00, 0x04, 0x0a, 0x00, 0x00   ; F1ADD3  .........
+
+; --------------------------------------------------------------------------
+; Record_F1ADDC -- record, 0xF1ADDC-0xF1ADE4 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC31E
+; --------------------------------------------------------------------------
+Record_F1ADDC:
+	.byte 0x0e, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x80, 0x03   ; F1ADDC  .........
+
+; --------------------------------------------------------------------------
+; Record_F1ADE5 -- record, 0xF1ADE5-0xF1ADED (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC37A
+; --------------------------------------------------------------------------
+Record_F1ADE5:
+	.byte 0x10, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1ADE5  .........
+
+; --------------------------------------------------------------------------
+; Record_F1ADEE -- record, 0xF1ADEE-0xF1ADF6 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC3F7
+; --------------------------------------------------------------------------
+Record_F1ADEE:
+	.byte 0x0f, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1ADEE  .........
+
+; --------------------------------------------------------------------------
+; Record_F1ADF7 -- record, 0xF1ADF7-0xF1ADFF (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC44A
+; --------------------------------------------------------------------------
+Record_F1ADF7:
+	.byte 0x11, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1ADF7  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AE00 -- record, 0xF1AE00-0xF1AE08 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC4B4
+; --------------------------------------------------------------------------
+Record_F1AE00:
+	.byte 0x14, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1AE00  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AE09 -- record, 0xF1AE09-0xF1AE11 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC507
+; --------------------------------------------------------------------------
+Record_F1AE09:
+	.byte 0x13, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1AE09  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AE12 -- record, 0xF1AE12-0xF1AE1A (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC53F
+; --------------------------------------------------------------------------
+Record_F1AE12:
+	.byte 0x17, 0xff, 0x00, 0x64, 0x1c, 0x01, 0x01, 0x10, 0x12   ; F1AE12  ...d.....
+
+; --------------------------------------------------------------------------
+; Record_F1AE1B -- record, 0xF1AE1B-0xF1AE23 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBF4C9
+; --------------------------------------------------------------------------
+Record_F1AE1B:
+	.byte 0x00, 0xff, 0x00, 0x1f, 0x00, 0x01, 0x01, 0x00, 0x00   ; F1AE1B  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AE24 -- record, 0xF1AE24-0xF1AE2C (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBCBC9
+; --------------------------------------------------------------------------
+Record_F1AE24:
+	.byte 0x00, 0xff, 0x00, 0x07, 0x00, 0x01, 0x01, 0x00, 0x00   ; F1AE24  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AE2D -- record, 0xF1AE2D-0xF1AE35 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBD064
+; --------------------------------------------------------------------------
+Record_F1AE2D:
+	.byte 0x00, 0x03, 0x00, 0x02, 0x00, 0x01, 0x01, 0x00, 0x00   ; F1AE2D  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AE36 -- record, 0xF1AE36-0xF1AE3E (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBD07B
+; --------------------------------------------------------------------------
+Record_F1AE36:
+	.byte 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00   ; F1AE36  .........
+
+; --------------------------------------------------------------------------
+; Record_F1AE3F -- record, 0xF1AE3F-0xF1AE47 (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBE038
+; --------------------------------------------------------------------------
+Record_F1AE3F:
+	.byte 0x00, 0x07, 0x00, 0x02, 0x00, 0x01, 0x01, 0x00, 0x00   ; F1AE3F  .........
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AE48 -- index map, 0xF1AE48-0xF1AE52 (11 bytes)
+; Evidence: 10 byte values then the 0xFF terminator; entry [0] of the
+;           pointer table at 0xF1AE71
+; --------------------------------------------------------------------------
+IndexMap_F1AE48:
+	.byte 0x03, 0x08, 0x09, 0x0a, 0x0b, 0x05, 0x06, 0x07, 0x83, 0x84, 0xff   ; F1AE48  ...........
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AE53 -- index map, 0xF1AE53-0xF1AE57 (5 bytes)
+; Evidence: 4 byte values then the 0xFF terminator; entry [1] of the pointer
+;           table at 0xF1AE71
+; --------------------------------------------------------------------------
+IndexMap_F1AE53:
+	.byte 0x8b, 0x8c, 0x8d, 0x8e, 0xff   ; F1AE53  .....
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AE58 -- index map, 0xF1AE58-0xF1AE5D (6 bytes)
+; Evidence: 5 byte values then the 0xFF terminator; entry [2] of the pointer
+;           table at 0xF1AE71
+; --------------------------------------------------------------------------
+IndexMap_F1AE58:
+	.byte 0x86, 0x0c, 0x85, 0x8f, 0x90, 0xff   ; F1AE58  ......
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AE5E -- index map, 0xF1AE5E-0xF1AE63 (6 bytes)
+; Evidence: 5 byte values then the 0xFF terminator; entry [3] of the pointer
+;           table at 0xF1AE71
+; --------------------------------------------------------------------------
+IndexMap_F1AE5E:
+	.byte 0x93, 0x94, 0x95, 0x96, 0x97, 0xff   ; F1AE5E  ......
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AE64 -- index map, 0xF1AE64-0xF1AE68 (5 bytes)
+; Evidence: 4 byte values then the 0xFF terminator; entry [4] of the pointer
+;           table at 0xF1AE71
+; --------------------------------------------------------------------------
+IndexMap_F1AE64:
+	.byte 0x93, 0x94, 0x95, 0x96, 0xff   ; F1AE64  .....
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AE69 -- index map, 0xF1AE69-0xF1AE70 (8 bytes)
+; Evidence: 7 byte values then the 0xFF terminator; entry [5] of the pointer
+;           table at 0xF1AE71
+; --------------------------------------------------------------------------
+IndexMap_F1AE69:
+	.byte 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x15, 0xff   ; F1AE69  ........
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AE71 -- pointer table, 0xF1AE71-0xF1AE88 (24 bytes)
+; Shape: 6 entries of 4 bytes = 24 bytes, which is the whole segment.
+; First / last: 0xF1AE48 ... 0xF1AE69
+; Evidence: 6 entries of 4 bytes; base and width from prom_a 0xFBC726
+; --------------------------------------------------------------------------
+PtrTable_F1AE71:
+	.long 0x00F1AE48                       ; F1AE71  [0]   -> IndexMap_F1AE48
+	.long 0x00F1AE53                       ; F1AE75  [1]   -> IndexMap_F1AE53
+	.long 0x00F1AE58                       ; F1AE79  [2]   -> IndexMap_F1AE58
+	.long 0x00F1AE5E                       ; F1AE7D  [3]   -> IndexMap_F1AE5E
+	.long 0x00F1AE64                       ; F1AE81  [4]   -> IndexMap_F1AE64
+	.long 0x00F1AE69                       ; F1AE85  [5]   -> IndexMap_F1AE69
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AE89 -- pointer table, 0xF1AE89-0xF1AE94 (12 bytes)
+; Shape: 3 entries of 4 bytes = 12 bytes, which is the whole segment.
+; First / last: 0xFBC768 ... 0xFBC90D
+; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBC757
+; --------------------------------------------------------------------------
+PtrTable_F1AE89:
+	.long 0x00FBC768                       ; F1AE89  [0]   -> prom_a 0xFBC768
+	.long 0x00FBC82C                       ; F1AE8D  [1]   -> prom_a 0xFBC82C
+	.long 0x00FBC90D                       ; F1AE91  [2]   -> prom_a 0xFBC90D
+
+; --------------------------------------------------------------------------
+; BitTable_F1AE95 -- bit table, 0xF1AE95-0xF1AEB4 (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; Evidence: 8 words, w[k] = w[0] << k
+; --------------------------------------------------------------------------
+BitTable_F1AE95:
+	.byte 0x01, 0x00, 0x00, 0x00   ; F1AE95  [0]
+	.byte 0x02, 0x00, 0x00, 0x00   ; F1AE99  [1]
+	.byte 0x04, 0x00, 0x00, 0x00   ; F1AE9D  [2]
+	.byte 0x08, 0x00, 0x00, 0x00   ; F1AEA1  [3]
+	.byte 0x10, 0x00, 0x00, 0x00   ; F1AEA5  [4]
+	.byte 0x20, 0x00, 0x00, 0x00   ; F1AEA9  [5]
+	.byte 0x40, 0x00, 0x00, 0x00   ; F1AEAD  [6]
+	.byte 0x80, 0x00, 0x00, 0x00   ; F1AEB1  [7]
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AEB5 -- pointer table, 0xF1AEB5-0xF1AF10 (92 bytes)
+; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
+; First / last: 0xF42C70 ... 0xF42C70
+; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBCB95
+; --------------------------------------------------------------------------
+PtrTable_F1AEB5:
+	.long 0x00F42C70                       ; F1AEB5  [0]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AEB9  [1]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AEBD  [2]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AEC1  [3]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AEC5  [4]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AEC9  [5]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AECD  [6]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AED1  [7]   -> prom_b 0xF42C70
+	.long 0x00FBCBAA                       ; F1AED5  [8]   -> prom_a 0xFBCBAA
+	.long 0x00FBCBF1                       ; F1AED9  [9]   -> prom_a 0xFBCBF1
+	.long 0x00FBCC3D                       ; F1AEDD  [10]   -> prom_a 0xFBCC3D
+	.long 0x00FBCC64                       ; F1AEE1  [11]   -> prom_a 0xFBCC64
+	.long 0x00FBCC8B                       ; F1AEE5  [12]   -> prom_a 0xFBCC8B
+	.long 0x00F42C70                       ; F1AEE9  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AEED  [14]   -> prom_b 0xF42C70
+	.long 0x00FBCC9E                       ; F1AEF1  [15]   -> prom_a 0xFBCC9E
+	.long 0x00F42C70                       ; F1AEF5  [16]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AEF9  [17]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AEFD  [18]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF01  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF05  [20]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF09  [21]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF0D  [22]   -> prom_b 0xF42C70
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AF11 -- pointer table, 0xF1AF11-0xF1AF6C (92 bytes)
+; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
+; First / last: 0xFBCF82 ... 0xF42C70
+; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBCF69
+; --------------------------------------------------------------------------
+PtrTable_F1AF11:
+	.long 0x00FBCF82                       ; F1AF11  [0]   -> prom_a 0xFBCF82
+	.long 0x00FBCF82                       ; F1AF15  [1]   -> prom_a 0xFBCF82
+	.long 0x00FBCF82                       ; F1AF19  [2]   -> prom_a 0xFBCF82
+	.long 0x00FBCF82                       ; F1AF1D  [3]   -> prom_a 0xFBCF82
+	.long 0x00FBCFD1                       ; F1AF21  [4]   -> prom_a 0xFBCFD1
+	.long 0x00FBCFD1                       ; F1AF25  [5]   -> prom_a 0xFBCFD1
+	.long 0x00FBCFD1                       ; F1AF29  [6]   -> prom_a 0xFBCFD1
+	.long 0x00FBCFD1                       ; F1AF2D  [7]   -> prom_a 0xFBCFD1
+	.long 0x00FBCBAA                       ; F1AF31  [8]   -> prom_a 0xFBCBAA
+	.long 0x00FBCBF1                       ; F1AF35  [9]   -> prom_a 0xFBCBF1
+	.long 0x00F42C70                       ; F1AF39  [10]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF3D  [11]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF41  [12]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF45  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF49  [14]   -> prom_b 0xF42C70
+	.long 0x00FBD016                       ; F1AF4D  [15]   -> prom_a 0xFBD016
+	.long 0x00FBD044                       ; F1AF51  [16]   -> prom_a 0xFBD044
+	.long 0x00F42C70                       ; F1AF55  [17]   -> prom_b 0xF42C70
+	.long 0x00FBD0A4                       ; F1AF59  [18]   -> prom_a 0xFBD0A4
+	.long 0x00F42C70                       ; F1AF5D  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1AF61  [20]   -> prom_b 0xF42C70
+	.long 0x00FBEDBE                       ; F1AF65  [21]   -> prom_a 0xFBEDBE
+	.long 0x00F42C70                       ; F1AF69  [22]   -> prom_b 0xF42C70
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AF6D -- index map, 0xF1AF6D-0xF1AF72 (6 bytes)
+; Shape: 6 entries of 1 byte = 6 bytes, which is the whole segment.
+; Evidence: 6 entries of 1 bytes; base and width from prom_a 0xFBCFA6
+; --------------------------------------------------------------------------
+IndexMap_F1AF6D:
+	.byte 0x0a   ; F1AF6D  [0]  = 10
+	.byte 0x09   ; F1AF6E  [1]  = 9
+	.byte 0x05   ; F1AF6F  [2]  = 5
+	.byte 0x05   ; F1AF70  [3]  = 5
+	.byte 0x09   ; F1AF71  [4]  = 9
+	.byte 0x06   ; F1AF72  [5]  = 6
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AF73 -- index map, 0xF1AF73-0xF1AF7D (11 bytes)
+; Evidence: 11 byte values; entry [0] of the pointer table at 0xF1AFA5
+; --------------------------------------------------------------------------
+IndexMap_F1AF73:
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x20, 0x21   ; F1AF73  ......... !
+
+; --------------------------------------------------------------------------
+; StringTable_F1AF7E -- ascii, 0xF1AF7E-0xF1AF87 (10 bytes)
+; Evidence: 10 characters; entry [1] of the pointer table at 0xF1AFA5
+; --------------------------------------------------------------------------
+StringTable_F1AF7E:
+	.byte 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49   ; F1AF7E  @ABCDEFGHI
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AF88 -- index map, 0xF1AF88-0xF1AF8D (6 bytes)
+; Evidence: 6 byte values; entry [2] of the pointer table at 0xF1AFA5
+; --------------------------------------------------------------------------
+IndexMap_F1AF88:
+	.byte 0x22, 0x0d, 0x23, 0x60, 0x61, 0x62   ; F1AF88  ".#`ab
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AF8E -- index map, 0xF1AF8E-0xF1AF93 (6 bytes)
+; Evidence: 6 byte values; entry [3] of the pointer table at 0xF1AFA5
+; --------------------------------------------------------------------------
+IndexMap_F1AF8E:
+	.byte 0x80, 0x81, 0x82, 0x83, 0x84, 0x86   ; F1AF8E  ......
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AF94 -- index map, 0xF1AF94-0xF1AF9D (10 bytes)
+; Evidence: 10 byte values; entry [4] of the pointer table at 0xF1AFA5
+; --------------------------------------------------------------------------
+IndexMap_F1AF94:
+	.byte 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90   ; F1AF94  ..........
+
+; --------------------------------------------------------------------------
+; IndexMap_F1AF9E -- index map, 0xF1AF9E-0xF1AFA4 (7 bytes)
+; Evidence: 7 byte values; entry [5] of the pointer table at 0xF1AFA5
+; --------------------------------------------------------------------------
+IndexMap_F1AF9E:
+	.byte 0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6   ; F1AF9E  .......
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AFA5 -- pointer table, 0xF1AFA5-0xF1AFBC (24 bytes)
+; Shape: 6 entries of 4 bytes = 24 bytes, which is the whole segment.
+; First / last: 0xF1AF73 ... 0xF1AF9E
+; Evidence: 6 entries of 4 bytes; base and width from prom_a 0xFBD109
+; --------------------------------------------------------------------------
+PtrTable_F1AFA5:
+	.long 0x00F1AF73                       ; F1AFA5  [0]   -> IndexMap_F1AF73
+	.long 0x00F1AF7E                       ; F1AFA9  [1]   -> StringTable_F1AF7E
+	.long 0x00F1AF88                       ; F1AFAD  [2]   -> IndexMap_F1AF88
+	.long 0x00F1AF8E                       ; F1AFB1  [3]   -> IndexMap_F1AF8E
+	.long 0x00F1AF94                       ; F1AFB5  [4]   -> IndexMap_F1AF94
+	.long 0x00F1AF9E                       ; F1AFB9  [5]   -> IndexMap_F1AF9E
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AFBD -- pointer table, 0xF1AFBD-0xF1AFD4 (24 bytes)
+; Shape: 6 entries of 4 bytes = 24 bytes, which is the whole segment.
+; First / last: 0xFBD3E8 ... 0xFBD7D9
+; Evidence: 6 entries of 4 bytes; base and width from prom_a 0xFBD3D2
+; --------------------------------------------------------------------------
+PtrTable_F1AFBD:
+	.long 0x00FBD3E8                       ; F1AFBD  [0]   -> prom_a 0xFBD3E8
+	.long 0x00FBD593                       ; F1AFC1  [1]   -> prom_a 0xFBD593
+	.long 0x00FBD5E8                       ; F1AFC5  [2]   -> prom_a 0xFBD5E8
+	.long 0x00FBD6B8                       ; F1AFC9  [3]   -> prom_a 0xFBD6B8
+	.long 0x00FBD784                       ; F1AFCD  [4]   -> prom_a 0xFBD784
+	.long 0x00FBD7D9                       ; F1AFD1  [5]   -> prom_a 0xFBD7D9
+
+; --------------------------------------------------------------------------
+; PtrTable_F1AFD5 -- pointer table, 0xF1AFD5-0xF1B030 (92 bytes)
+; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
+; First / last: 0xFBDDD7 ... 0xF42C70
+; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBDDBE
+; --------------------------------------------------------------------------
+PtrTable_F1AFD5:
+	.long 0x00FBDDD7                       ; F1AFD5  [0]   -> prom_a 0xFBDDD7
+	.long 0x00FBDDD7                       ; F1AFD9  [1]   -> prom_a 0xFBDDD7
+	.long 0x00FBDDD7                       ; F1AFDD  [2]   -> prom_a 0xFBDDD7
+	.long 0x00FBDDD7                       ; F1AFE1  [3]   -> prom_a 0xFBDDD7
+	.long 0x00FBDDD7                       ; F1AFE5  [4]   -> prom_a 0xFBDDD7
+	.long 0x00FBDDD7                       ; F1AFE9  [5]   -> prom_a 0xFBDDD7
+	.long 0x00FBDDD7                       ; F1AFED  [6]   -> prom_a 0xFBDDD7
+	.long 0x00FBDDD7                       ; F1AFF1  [7]   -> prom_a 0xFBDDD7
+	.long 0x00FBDDF9                       ; F1AFF5  [8]   -> prom_a 0xFBDDF9
+	.long 0x00FBDE6B                       ; F1AFF9  [9]   -> prom_a 0xFBDE6B
+	.long 0x00FBDECC                       ; F1AFFD  [10]   -> prom_a 0xFBDECC
+	.long 0x00FBDF26                       ; F1B001  [11]   -> prom_a 0xFBDF26
+	.long 0x00FBDF86                       ; F1B005  [12]   -> prom_a 0xFBDF86
+	.long 0x00F42C70                       ; F1B009  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B00D  [14]   -> prom_b 0xF42C70
+	.long 0x00FBDFCC                       ; F1B011  [15]   -> prom_a 0xFBDFCC
+	.long 0x00FBE038                       ; F1B015  [16]   -> prom_a 0xFBE038
+	.long 0x00F42C70                       ; F1B019  [17]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B01D  [18]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B021  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B025  [20]   -> prom_b 0xF42C70
+	.long 0x00FBEDBE                       ; F1B029  [21]   -> prom_a 0xFBEDBE
+	.long 0x00F42C70                       ; F1B02D  [22]   -> prom_b 0xF42C70
+
+; --------------------------------------------------------------------------
+; IndexMap_F1B031 -- index map, 0xF1B031-0xF1B03E (14 bytes)
+; Shape: 14 entries of 1 byte = 14 bytes, which is the whole segment.
+; Evidence: 14 entries of 1 bytes; base and width from prom_a 0xFBE092
+; --------------------------------------------------------------------------
+IndexMap_F1B031:
+	.byte 0x00   ; F1B031  [0]  = 0
+	.byte 0x09   ; F1B032  [1]  = 9
+	.byte 0x02   ; F1B033  [2]  = 2
+	.byte 0x01   ; F1B034  [3]  = 1
+	.byte 0x08   ; F1B035  [4]  = 8
+	.byte 0x06   ; F1B036  [5]  = 6
+	.byte 0x07   ; F1B037  [6]  = 7
+	.byte 0x21   ; F1B038  [7]  = 33
+	.byte 0x20   ; F1B039  [8]  = 32
+	.byte 0x09   ; F1B03A  [9]  = 9
+	.byte 0x0a   ; F1B03B  [10]  = 10
+	.byte 0x0b   ; F1B03C  [11]  = 11
+	.byte 0x24   ; F1B03D  [12]  = 36
+	.byte 0x03   ; F1B03E  [13]  = 3
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B03F -- pointer table, 0xF1B03F-0xF1B04A (12 bytes)
+; Shape: 3 entries of 4 bytes = 12 bytes, which is the whole segment.
+; First / last: 0xFBE3F1 ... 0xFBE467
+; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBE3DB
+; --------------------------------------------------------------------------
+PtrTable_F1B03F:
+	.long 0x00FBE3F1                       ; F1B03F  [0]   -> prom_a 0xFBE3F1
+	.long 0x00FBE433                       ; F1B043  [1]   -> prom_a 0xFBE433
+	.long 0x00FBE467                       ; F1B047  [2]   -> prom_a 0xFBE467
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B04B -- pointer table, 0xF1B04B-0xF1B06A (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: 0xF185FD ... 0xF18674
+; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBE61B
+; --------------------------------------------------------------------------
+PtrTable_F1B04B:
+	.long 0x00F185FD                       ; F1B04B  [0]   -> RecordArray_F185FD
+	.long 0x00F1860E                       ; F1B04F  [1]   -> 0xF1860E (inside this span)
+	.long 0x00F1861F                       ; F1B053  [2]   -> 0xF1861F (inside this span)
+	.long 0x00F18630                       ; F1B057  [3]   -> 0xF18630 (inside this span)
+	.long 0x00F18641                       ; F1B05B  [4]   -> 0xF18641 (inside this span)
+	.long 0x00F18652                       ; F1B05F  [5]   -> 0xF18652 (inside this span)
+	.long 0x00F18663                       ; F1B063  [6]   -> 0xF18663 (inside this span)
+	.long 0x00F18674                       ; F1B067  [7]   -> 0xF18674 (inside this span)
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B06B -- pointer table, 0xF1B06B-0xF1B08A (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: 0xF18066 ... 0xF180DD
+; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBE69D
+; --------------------------------------------------------------------------
+PtrTable_F1B06B:
+	.long 0x00F18066                       ; F1B06B  [0]   -> RecordArray_F18066
+	.long 0x00F18077                       ; F1B06F  [1]   -> 0xF18077 (inside this span)
+	.long 0x00F18088                       ; F1B073  [2]   -> 0xF18088 (inside this span)
+	.long 0x00F18099                       ; F1B077  [3]   -> 0xF18099 (inside this span)
+	.long 0x00F180AA                       ; F1B07B  [4]   -> 0xF180AA (inside this span)
+	.long 0x00F180BB                       ; F1B07F  [5]   -> 0xF180BB (inside this span)
+	.long 0x00F180CC                       ; F1B083  [6]   -> 0xF180CC (inside this span)
+	.long 0x00F180DD                       ; F1B087  [7]   -> 0xF180DD (inside this span)
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B08B -- pointer table, 0xF1B08B-0xF1B0AA (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: 0xF180EE ... 0xF18142
+; Evidence: 8 words, all addresses in prom_a/prom_b
+; --------------------------------------------------------------------------
+PtrTable_F1B08B:
+	.long 0x00F180EE                       ; F1B08B  [0]   -> RecordArray_F180EE
+	.long 0x00F180FA                       ; F1B08F  [1]   -> 0xF180FA (inside this span)
+	.long 0x00F18106                       ; F1B093  [2]   -> 0xF18106 (inside this span)
+	.long 0x00F18112                       ; F1B097  [3]   -> 0xF18112 (inside this span)
+	.long 0x00F1811E                       ; F1B09B  [4]   -> 0xF1811E (inside this span)
+	.long 0x00F1812A                       ; F1B09F  [5]   -> 0xF1812A (inside this span)
+	.long 0x00F18136                       ; F1B0A3  [6]   -> 0xF18136 (inside this span)
+	.long 0x00F18142                       ; F1B0A7  [7]   -> 0xF18142 (inside this span)
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B0AB -- pointer table, 0xF1B0AB-0xF1B0CA (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: 0xF1870D ... 0xF18784
+; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBE7AE
+; --------------------------------------------------------------------------
+PtrTable_F1B0AB:
+	.long 0x00F1870D                       ; F1B0AB  [0]   -> RecordArray_F1870D
+	.long 0x00F1871E                       ; F1B0AF  [1]   -> 0xF1871E (inside this span)
+	.long 0x00F1872F                       ; F1B0B3  [2]   -> 0xF1872F (inside this span)
+	.long 0x00F18740                       ; F1B0B7  [3]   -> 0xF18740 (inside this span)
+	.long 0x00F18751                       ; F1B0BB  [4]   -> 0xF18751 (inside this span)
+	.long 0x00F18762                       ; F1B0BF  [5]   -> 0xF18762 (inside this span)
+	.long 0x00F18773                       ; F1B0C3  [6]   -> 0xF18773 (inside this span)
+	.long 0x00F18784                       ; F1B0C7  [7]   -> 0xF18784 (inside this span)
+
+; --------------------------------------------------------------------------
+; IndexMap_F1B0CB -- index map, 0xF1B0CB-0xF1B0DA (16 bytes)
+; Shape: 8 entries of 2 bytes = 16 bytes, which is the whole segment.
+; Evidence: 8 entries of 2 bytes; base and width from prom_a 0xFBE7CB
+; --------------------------------------------------------------------------
+IndexMap_F1B0CB:
+	.byte 0x29, 0x14   ; F1B0CB  [0]
+	.byte 0x2e, 0x14   ; F1B0CD  [1]
+	.byte 0x33, 0x14   ; F1B0CF  [2]
+	.byte 0x38, 0x14   ; F1B0D1  [3]
+	.byte 0x3d, 0x14   ; F1B0D3  [4]
+	.byte 0x42, 0x14   ; F1B0D5  [5]
+	.byte 0x47, 0x14   ; F1B0D7  [6]
+	.byte 0x4c, 0x14   ; F1B0D9  [7]
+
+; --------------------------------------------------------------------------
+; IndexMap_F1B0DB -- index map, 0xF1B0DB-0xF1B0EA (16 bytes)
+; Shape: 8 entries of 2 bytes = 16 bytes, which is the whole segment.
+; Evidence: 8 entries of 2 bytes; base and width from prom_a 0xFBE853
+; --------------------------------------------------------------------------
+IndexMap_F1B0DB:
+	.byte 0xa8, 0x1b   ; F1B0DB  [0]
+	.byte 0xad, 0x1b   ; F1B0DD  [1]
+	.byte 0xb2, 0x1b   ; F1B0DF  [2]
+	.byte 0xb7, 0x1b   ; F1B0E1  [3]
+	.byte 0xbc, 0x1b   ; F1B0E3  [4]
+	.byte 0xc1, 0x1b   ; F1B0E5  [5]
+	.byte 0xc6, 0x1b   ; F1B0E7  [6]
+	.byte 0xcb, 0x1b   ; F1B0E9  [7]
+
+; --------------------------------------------------------------------------
+; IndexMap_F1B0EB -- index map, 0xF1B0EB-0xF1B0FA (16 bytes)
+; Shape: 8 entries of 2 bytes = 16 bytes, which is the whole segment.
+; Evidence: 8 entries of 2 bytes; base and width from prom_a 0xFBE8DB
+; --------------------------------------------------------------------------
+IndexMap_F1B0EB:
+	.byte 0x81, 0x07   ; F1B0EB  [0]
+	.byte 0x86, 0x07   ; F1B0ED  [1]
+	.byte 0x8b, 0x07   ; F1B0EF  [2]
+	.byte 0x90, 0x07   ; F1B0F1  [3]
+	.byte 0x95, 0x07   ; F1B0F3  [4]
+	.byte 0x9a, 0x07   ; F1B0F5  [5]
+	.byte 0x9f, 0x07   ; F1B0F7  [6]
+	.byte 0xa4, 0x07   ; F1B0F9  [7]
+
+; --------------------------------------------------------------------------
+; IndexMap_F1B0FB -- index map, 0xF1B0FB-0xF1B10A (16 bytes)
+; Shape: 8 entries of 2 bytes = 16 bytes, which is the whole segment.
+; Evidence: 8 entries of 2 bytes; base and width from prom_a 0xFBE963
+; --------------------------------------------------------------------------
+IndexMap_F1B0FB:
+	.byte 0xe9, 0x0d   ; F1B0FB  [0]
+	.byte 0xee, 0x0d   ; F1B0FD  [1]
+	.byte 0xf3, 0x0d   ; F1B0FF  [2]
+	.byte 0xf8, 0x0d   ; F1B101  [3]
+	.byte 0xfd, 0x0d   ; F1B103  [4]
+	.byte 0x02, 0x0e   ; F1B105  [5]
+	.byte 0x07, 0x0e   ; F1B107  [6]
+	.byte 0x0c, 0x0e   ; F1B109  [7]
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B10B -- pointer table, 0xF1B10B-0xF1B12A (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: 0xF18685 ... 0xF186FC
+; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBEB94
+; --------------------------------------------------------------------------
+PtrTable_F1B10B:
+	.long 0x00F18685                       ; F1B10B  [0]   -> RecordArray_F18685
+	.long 0x00F18696                       ; F1B10F  [1]   -> 0xF18696 (inside this span)
+	.long 0x00F186A7                       ; F1B113  [2]   -> 0xF186A7 (inside this span)
+	.long 0x00F186B8                       ; F1B117  [3]   -> 0xF186B8 (inside this span)
+	.long 0x00F186C9                       ; F1B11B  [4]   -> 0xF186C9 (inside this span)
+	.long 0x00F186DA                       ; F1B11F  [5]   -> 0xF186DA (inside this span)
+	.long 0x00F186EB                       ; F1B123  [6]   -> 0xF186EB (inside this span)
+	.long 0x00F186FC                       ; F1B127  [7]   -> 0xF186FC (inside this span)
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B12B -- pointer table, 0xF1B12B-0xF1B14A (32 bytes)
+; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
+; First / last: 0xF18795 ... 0xF1880C
+; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBEC0A
+; --------------------------------------------------------------------------
+PtrTable_F1B12B:
+	.long 0x00F18795                       ; F1B12B  [0]   -> RecordArray_F18795
+	.long 0x00F187A6                       ; F1B12F  [1]   -> 0xF187A6 (inside this span)
+	.long 0x00F187B7                       ; F1B133  [2]   -> 0xF187B7 (inside this span)
+	.long 0x00F187C8                       ; F1B137  [3]   -> 0xF187C8 (inside this span)
+	.long 0x00F187D9                       ; F1B13B  [4]   -> 0xF187D9 (inside this span)
+	.long 0x00F187EA                       ; F1B13F  [5]   -> 0xF187EA (inside this span)
+	.long 0x00F187FB                       ; F1B143  [6]   -> 0xF187FB (inside this span)
+	.long 0x00F1880C                       ; F1B147  [7]   -> 0xF1880C (inside this span)
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B14B -- pointer table, 0xF1B14B-0xF1B1A6 (92 bytes)
+; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
+; First / last: 0xF42C70 ... 0xF42C70
+; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBEF9C
+; --------------------------------------------------------------------------
+PtrTable_F1B14B:
+	.long 0x00F42C70                       ; F1B14B  [0]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B14F  [1]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B153  [2]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B157  [3]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B15B  [4]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B15F  [5]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B163  [6]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B167  [7]   -> prom_b 0xF42C70
+	.long 0x00FBEFB1                       ; F1B16B  [8]   -> prom_a 0xFBEFB1
+	.long 0x00F42C70                       ; F1B16F  [9]   -> prom_b 0xF42C70
+	.long 0x00FBEFD2                       ; F1B173  [10]   -> prom_a 0xFBEFD2
+	.long 0x00FBEFE6                       ; F1B177  [11]   -> prom_a 0xFBEFE6
+	.long 0x00FBEFFA                       ; F1B17B  [12]   -> prom_a 0xFBEFFA
+	.long 0x00F42C70                       ; F1B17F  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B183  [14]   -> prom_b 0xF42C70
+	.long 0x00FBF00D                       ; F1B187  [15]   -> prom_a 0xFBF00D
+	.long 0x00F42C70                       ; F1B18B  [16]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B18F  [17]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B193  [18]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B197  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B19B  [20]   -> prom_b 0xF42C70
+	.long 0x00FBEDBE                       ; F1B19F  [21]   -> prom_a 0xFBEDBE
+	.long 0x00F42C70                       ; F1B1A3  [22]   -> prom_b 0xF42C70
+
+; --------------------------------------------------------------------------
+; Record_F1B1A7 -- record, 0xF1B1A7-0xF1B1AF (9 bytes)
+; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBF020
+; --------------------------------------------------------------------------
+Record_F1B1A7:
+	.byte 0x00, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x00   ; F1B1A7  .........
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B1B0 -- pointer table, 0xF1B1B0-0xF1B22F (128 bytes)
+; Shape: 32 entries of 4 bytes = 128 bytes, which is the whole segment.
+; First / last: 0xF42F84 ... 0xFBF235
+; Evidence: 32 entries of 4 bytes; base and width from prom_a 0xFBF25E
+; --------------------------------------------------------------------------
+PtrTable_F1B1B0:
+	.long 0x00F42F84                       ; F1B1B0  [0]   -> prom_b 0xF42F84
+	.long 0x00F42F88                       ; F1B1B4  [1]   -> prom_b 0xF42F88
+	.long 0x00F42F8C                       ; F1B1B8  [2]   -> prom_b 0xF42F8C
+	.long 0x00F42F90                       ; F1B1BC  [3]   -> prom_b 0xF42F90
+	.long 0x00F42F94                       ; F1B1C0  [4]   -> prom_b 0xF42F94
+	.long 0x00F42F98                       ; F1B1C4  [5]   -> prom_b 0xF42F98
+	.long 0x00F42F9C                       ; F1B1C8  [6]   -> prom_b 0xF42F9C
+	.long 0x00F42FA0                       ; F1B1CC  [7]   -> prom_b 0xF42FA0
+	.long 0x00FBF274                       ; F1B1D0  [8]   -> prom_a 0xFBF274
+	.long 0x00FBF295                       ; F1B1D4  [9]   -> prom_a 0xFBF295
+	.long 0x00FBF235                       ; F1B1D8  [10]   -> prom_a 0xFBF235
+	.long 0x00FBF235                       ; F1B1DC  [11]   -> prom_a 0xFBF235
+	.long 0x00FBF235                       ; F1B1E0  [12]   -> prom_a 0xFBF235
+	.long 0x00FBF235                       ; F1B1E4  [13]   -> prom_a 0xFBF235
+	.long 0x00FBF235                       ; F1B1E8  [14]   -> prom_a 0xFBF235
+	.long 0x00FBF2AB                       ; F1B1EC  [15]   -> prom_a 0xFBF2AB
+	.long 0x00FBF235                       ; F1B1F0  [16]   -> prom_a 0xFBF235
+	.long 0x00F42F84                       ; F1B1F4  [17]   -> prom_b 0xF42F84
+	.long 0x00F42F88                       ; F1B1F8  [18]   -> prom_b 0xF42F88
+	.long 0x00F42F8C                       ; F1B1FC  [19]   -> prom_b 0xF42F8C
+	.long 0x00F42F90                       ; F1B200  [20]   -> prom_b 0xF42F90
+	.long 0x00F42F94                       ; F1B204  [21]   -> prom_b 0xF42F94
+	.long 0x00F42F98                       ; F1B208  [22]   -> prom_b 0xF42F98
+	.long 0x00F42F9C                       ; F1B20C  [23]   -> prom_b 0xF42F9C
+	.long 0x00F42FA0                       ; F1B210  [24]   -> prom_b 0xF42FA0
+	.long 0x00FBF235                       ; F1B214  [25]   -> prom_a 0xFBF235
+	.long 0x00FBF235                       ; F1B218  [26]   -> prom_a 0xFBF235
+	.long 0x00FBF235                       ; F1B21C  [27]   -> prom_a 0xFBF235
+	.long 0x00FBF235                       ; F1B220  [28]   -> prom_a 0xFBF235
+	.long 0x00FBF235                       ; F1B224  [29]   -> prom_a 0xFBF235
+	.long 0x00FBEDBE                       ; F1B228  [30]   -> prom_a 0xFBEDBE
+	.long 0x00FBF235                       ; F1B22C  [31]   -> prom_a 0xFBF235
+
+; --------------------------------------------------------------------------
+; IndexMap_F1B230 -- index map, 0xF1B230-0xF1B238 (9 bytes)
+; Shape: 9 entries of 1 byte = 9 bytes, which is the whole segment.
+; Evidence: 9 entries of 1 bytes; base and width from prom_a 0xFBF37E
+; --------------------------------------------------------------------------
+IndexMap_F1B230:
+	.byte 0x81   ; F1B230  [0]  = 129
+	.byte 0x03   ; F1B231  [1]  = 3
+	.byte 0x04   ; F1B232  [2]  = 4
+	.byte 0x05   ; F1B233  [3]  = 5
+	.byte 0x06   ; F1B234  [4]  = 6
+	.byte 0x04   ; F1B235  [5]  = 4
+	.byte 0x05   ; F1B236  [6]  = 5
+	.byte 0x04   ; F1B237  [7]  = 4
+	.byte 0x05   ; F1B238  [8]  = 5
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B239 -- pointer table, 0xF1B239-0xF1B294 (92 bytes)
+; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
+; First / last: 0xF42C70 ... 0xF42C70
+; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBF480
+; --------------------------------------------------------------------------
+PtrTable_F1B239:
+	.long 0x00F42C70                       ; F1B239  [0]   -> prom_b 0xF42C70
+	.long 0x00FBF499                       ; F1B23D  [1]   -> prom_a 0xFBF499
+	.long 0x00F42C70                       ; F1B241  [2]   -> prom_b 0xF42C70
+	.long 0x00FBF50F                       ; F1B245  [3]   -> prom_a 0xFBF50F
+	.long 0x00FBF53A                       ; F1B249  [4]   -> prom_a 0xFBF53A
+	.long 0x00FBF582                       ; F1B24D  [5]   -> prom_a 0xFBF582
+	.long 0x00FBF5CA                       ; F1B251  [6]   -> prom_a 0xFBF5CA
+	.long 0x00F42C70                       ; F1B255  [7]   -> prom_b 0xF42C70
+	.long 0x00FBF5F5                       ; F1B259  [8]   -> prom_a 0xFBF5F5
+	.long 0x00FBF609                       ; F1B25D  [9]   -> prom_a 0xFBF609
+	.long 0x00FBF62F                       ; F1B261  [10]   -> prom_a 0xFBF62F
+	.long 0x00FBF655                       ; F1B265  [11]   -> prom_a 0xFBF655
+	.long 0x00F42C70                       ; F1B269  [12]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B26D  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B271  [14]   -> prom_b 0xF42C70
+	.long 0x00FBF67B                       ; F1B275  [15]   -> prom_a 0xFBF67B
+	.long 0x00F42C70                       ; F1B279  [16]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B27D  [17]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B281  [18]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B285  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B289  [20]   -> prom_b 0xF42C70
+	.long 0x00FBEDBE                       ; F1B28D  [21]   -> prom_a 0xFBEDBE
+	.long 0x00F42C70                       ; F1B291  [22]   -> prom_b 0xF42C70
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B295 -- pointer table, 0xF1B295-0xF1B2F0 (92 bytes)
+; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
+; First / last: 0xFBFC53 ... 0xF42C70
+; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBFB1F
+; --------------------------------------------------------------------------
+PtrTable_F1B295:
+	.long 0x00FBFC53                       ; F1B295  [0]   -> prom_a 0xFBFC53
+	.long 0x00F42C70                       ; F1B299  [1]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B29D  [2]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2A1  [3]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2A5  [4]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2A9  [5]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2AD  [6]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2B1  [7]   -> prom_b 0xF42C70
+	.long 0x00FBFB34                       ; F1B2B5  [8]   -> prom_a 0xFBFB34
+	.long 0x00FBFB68                       ; F1B2B9  [9]   -> prom_a 0xFBFB68
+	.long 0x00FBFB9A                       ; F1B2BD  [10]   -> prom_a 0xFBFB9A
+	.long 0x00FBFBC1                       ; F1B2C1  [11]   -> prom_a 0xFBFBC1
+	.long 0x00FBFBE8                       ; F1B2C5  [12]   -> prom_a 0xFBFBE8
+	.long 0x00F42C70                       ; F1B2C9  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2CD  [14]   -> prom_b 0xF42C70
+	.long 0x00FBFC0F                       ; F1B2D1  [15]   -> prom_a 0xFBFC0F
+	.long 0x00F42C70                       ; F1B2D5  [16]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2D9  [17]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2DD  [18]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2E1  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2E5  [20]   -> prom_b 0xF42C70
+	.long 0x00FBEDBE                       ; F1B2E9  [21]   -> prom_a 0xFBEDBE
+	.long 0x00F42C70                       ; F1B2ED  [22]   -> prom_b 0xF42C70
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B2F1 -- pointer table, 0xF1B2F1-0xF1B34C (92 bytes)
+; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
+; First / last: 0xF42C70 ... 0xF42C70
+; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBFE0A
+; --------------------------------------------------------------------------
+PtrTable_F1B2F1:
+	.long 0x00F42C70                       ; F1B2F1  [0]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2F5  [1]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2F9  [2]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B2FD  [3]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B301  [4]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B305  [5]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B309  [6]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B30D  [7]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B311  [8]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B315  [9]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B319  [10]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B31D  [11]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B321  [12]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B325  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B329  [14]   -> prom_b 0xF42C70
+	.long 0x00FBFE1F                       ; F1B32D  [15]   -> prom_a 0xFBFE1F
+	.long 0x00F42C70                       ; F1B331  [16]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B335  [17]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B339  [18]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B33D  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B341  [20]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B345  [21]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B349  [22]   -> prom_b 0xF42C70
+
+; --------------------------------------------------------------------------
+; PtrTable_F1B34D -- pointer table, 0xF1B34D-0xF1B3A8 (92 bytes)
+; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
+; First / last: 0xF42C70 ... 0xF42C70
+; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBFEED
+; --------------------------------------------------------------------------
+PtrTable_F1B34D:
+	.long 0x00F42C70                       ; F1B34D  [0]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B351  [1]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B355  [2]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B359  [3]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B35D  [4]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B361  [5]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B365  [6]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B369  [7]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B36D  [8]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B371  [9]   -> prom_b 0xF42C70
+	.long 0x00FBFF02                       ; F1B375  [10]   -> prom_a 0xFBFF02
+	.long 0x00FBFF19                       ; F1B379  [11]   -> prom_a 0xFBFF19
+	.long 0x00F42C70                       ; F1B37D  [12]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B381  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B385  [14]   -> prom_b 0xF42C70
+	.long 0x00FBFF19                       ; F1B389  [15]   -> prom_a 0xFBFF19
+	.long 0x00F42C70                       ; F1B38D  [16]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B391  [17]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B395  [18]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B399  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B39D  [20]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B3A1  [21]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F1B3A5  [22]   -> prom_b 0xF42C70
+
+; --- 0xF1B3A9-0xF1B3FF  87 bytes of 0x0E padding ---
+	.fill	87, 1, 0x0E	; asserted a single value
 
 ; ==========================================================================
 ; 0xF1B400-0xF27BFF -- THE TWELVE CHARACTER GENERATORS, 51,200 bytes
@@ -49715,10 +55959,17 @@ WorkspaceDefaults:
 ; point and what it touches, per this tree's rule that a stated gap beats a
 ; plausible guess.
 ;
-; ⚠ WHAT IS LEFT.  0xF4F000-0xF54FFF stays `.incbin`.
-; notes/prom_b_module_trace.py reaches NONE of 0xF4EF14-0xF53019: those modules
-; have no thunk slot pointing at them, so a code/data split there would rest on a
-; linear decode, which this tree does not accept as a boundary argument.
+; ⚠ CORRECTED 2026-08-29 (wave 7 round 3).  This paragraph used to read "WHAT IS
+; LEFT.  0xF4F000-0xF54FFF stays `.incbin`", and that span is now CONVERTED --
+; see the module banner at 0xF4F000 below and notes/gen_prom_b_f4f000_module.py.
+; The reason given here was that notes/prom_b_module_trace.py reaches none of
+; 0xF4EF14-0xF53019 because no thunk slot points at it, so a code/data split
+; would rest on a linear decode.  That reason was right about the TOOL and wrong
+; about the SPAN: eleven slots of the thunk run T_F42E44-T_F42E6C do point into
+; 0xF53000, and the boundaries the conversion uses come from
+; notes/prom_b_f4f000_layout.py's content rules and a descent from those slots,
+; not from a linear decode.  What module_trace cannot reach, it cannot reach;
+; that is a limit of module_trace.
 ;
 ; REGENERATE:  python3 notes/gen_prom_b_f47800_module.py
 ; CHECKS:      python3 notes/gen_prom_b_f47800_module.py --checks
@@ -60401,8 +66652,5872 @@ Table_F4EF40:
 
 	.fill	156, 1, 0x0E	; F4EF64-F4EFFF  `ret` padding (asserted pure 0x0E)
 
-; --- 0xF4F000-0xF54FFF: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x04F000, 0x006000
+
+; ==============================================================================
+; 0xF4F000-0xF54FFF -- THE NINE-DRAWBAR ORGAN REGISTRATION SCREEN,
+;                      AND THE TWO TABLE MODULES IN FRONT OF IT
+; ==============================================================================
+;
+; 24,576 bytes, the largest `.incbin` that was left in prom_b.  43 segments:
+; ascii 54, bytemap 129, code 5376, data 5978, dl 972, fill 4903, link 4692,
+; ptrtab 28, romtab 2444.
+;
+; THE SCREEN.  Nine drawbars with Hammond-style footages 16' 5 1/3' 8' 4' 2
+; 2/3' 2' 1 3/5' 1 1/3' 1', drawn at screen columns 3, 7, 11, 15, 19, 23, 27,
+; 31, 35.  Each has a routine that steps one RAM nibble toward a target
+; nibble, re-arms itself on a timer and redraws its own column; the five
+; integer footages use one sprite and the four fractional ones the other, with
+; no exception.  Below them are four parameters -- `PERCUSSIVE T0NE DECAY`,
+; `PERCUSSIVE T0NE LEVEL`, `DRAWBAR ATTACK TIME` and `DRAWBAR RELEASE TIME` --
+; whose values are the four nibbles of (0x2640)/(0x2641), each printed 25
+; cells after the start of its own caption.
+;
+; ⚠ `T0NE` IS SPELT WITH A ZERO IN THE ROM, in both captions and in the header
+;   strip.  It is reproduced exactly, not silently corrected: the machine
+;   really shows it, and prom_b does the same in `S0NG`, `REC0RD` and
+;   `C0MBINATI0N M0DE`.
+;
+; THE TWO MODULES IN FRONT.  0xF4F000-0xF5220D is table-heavy and is reached
+; from prom_a: 81 distinct addresses inside the span are spelled by 134
+; instructions in prom_a's PROVEN text and by none in prom_b's.  Its objects
+; are 8 pointer tables, a 782-record link table whose 779 non-zero `next`
+; pointers all land on its own record boundaries, a 110-record variable-length
+; array framed by a 225-entry index, and a 129-byte code-to-index map.
+;
+; NAMING.  118 labels: 76 carry a semantic name and 42 stay `sub_XXXXXX` with
+; the gap stated.  Of the semantic ones 71 state a MECHANISM and 5 are
+; placeholders (DL_F543B0 DL_F543C4 DL_F546FA DL_F54705 Table_F542A4).  Every
+; header carries an Evidence: line.
+;
+; ⚠ FIVE CORRECTIONS to notes/prom_b_f4f000_layout.py's committed HOLES text
+;   are recorded in the headers below and re-derived by this emitter's
+;   --selftest: C1 eight named points in 0xF4FA7A, not nine; C2 29 named
+;   addresses in 0xF4FE38, not 31; C3 the trailing 0x00 at 0xF542D0 is entry 8
+;   of DrawbarRowOffsets; C4 0xF542E1 is call-site proven; C5
+;   RecordArray_F511DD IS framed, by RecordIndex_F51E8A.  No segment boundary
+;   moves.
+;
+; REGENERATE:  python3 notes/gen_prom_b_f4f000_module.py
+; CHECKS:      python3 notes/gen_prom_b_f4f000_module.py --selftest   (104
+; checks)
+; ==============================================================================
+
+; --------------------------------------------------------------------------
+; sub_F4F000 -- the same veneer shape as DrawValueGlyph_Veneer, for a
+; routine that has no name yet
+; Called from: prom_a 0xFBE85C `call 0xf4f000`
+; Evidence: `ld IX,(XIZ+0x08) / ld A,(XIZ+0x0a) / call 0xf415b4`; slot
+;           T_F415B4 holds `jp 0x00F9458C`, which is `sub_F9458C` in
+;           prom_a/wsa1_prom_a.s.
+; Unknown: what the callee does.  Its target is unnamed, so naming the
+;          veneer would be inventing a meaning the tree does not have.
+; --------------------------------------------------------------------------
+sub_F4F000:
+	push	xiz	; F4F000  push XIZ
+	ld	xiz, xsp	; F4F001  ld XIZ,XSP
+	push	xix	; F4F003  push XIX
+	push	xhl	; F4F004  push XHL
+	push	xde	; F4F005  push XDE
+	ld	ix, (xiz+8)	; F4F006  ld IX,(XIZ+0x08)
+	extz	xix	; F4F009  extz XIX
+	ld	a, (xiz+10)	; F4F00B  ld A,(XIZ+0x0a)
+	call	15996340	; F4F00E  call 0xf415b4
+	pop	xde	; F4F012  pop XDE
+	pop	xhl	; F4F013  pop XHL
+	pop	xix	; F4F014  pop XIX
+	pop	xiz	; F4F015  pop XIZ
+	ret	; F4F016  ret
+
+; --------------------------------------------------------------------------
+; DrawValueGlyph_Veneer -- stack veneer for DrawValueGlyph_24x24
+; Called from: prom_a 0xFBE7D4 `call 0xf4f017`; prom_a 0xFBE8E4 `call 0xf4f017`; prom_a 0xFBE96C `call 0xf4f017`
+; Inputs:  (XIZ+8) = position -> IX, (XIZ+10) = value -> L
+; Evidence: the body is `ld IX,(XIZ+0x08) / extz XIX / ld L,(XIZ+0x0a) /
+;           call 0xf41834`, and thunk slot T_F41834 holds `jp 0x00F31873`.
+;           0xF31873 is DrawValueGlyph_24x24 in this file, whose stated
+;           inputs are exactly `L = value; IX = position`.  Both halves of
+;           the name come from a label the tree already carries.
+; --------------------------------------------------------------------------
+DrawValueGlyph_Veneer:
+	push	xiz	; F4F017  push XIZ
+	ld	xiz, xsp	; F4F018  ld XIZ,XSP
+	push	xix	; F4F01A  push XIX
+	push	xhl	; F4F01B  push XHL
+	push	xde	; F4F01C  push XDE
+	ld	ix, (xiz+8)	; F4F01D  ld IX,(XIZ+0x08)
+	extz	xix	; F4F020  extz XIX
+	ld	l, (xiz+10)	; F4F022  ld L,(XIZ+0x0a)
+	call	15996980	; F4F025  call 0xf41834
+	pop	xde	; F4F029  pop XDE
+	pop	xhl	; F4F02A  pop XHL
+	pop	xix	; F4F02B  pop XIX
+	pop	xiz	; F4F02C  pop XIZ
+	ret	; F4F02D  ret
+
+; --------------------------------------------------------------------------
+; sub_F4F02E
+; Called from: prom_a 0xFBBA9B `call 0xf4f02e`
+; Touches: (0x60f018), (0x002760), (0x28b0), (0x60f01d), (0x002761),
+;          (0x002762), (0x002763), (0x002764), (0x08e8), (0x08ec)
+; Evidence: the call site above; 0xF4F02E is an instruction boundary of this
+;           transcription, re-asserted on every emit.
+; Unknown: what the routine is FOR.  A stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F4F02E:
+	push	xiz	; F4F02E  push XIZ
+	ld	xiz, xsp	; F4F02F  ld XIZ,XSP
+	push	xix	; F4F031  push XIX
+	push	xhl	; F4F032  push XHL
+	push	xde	; F4F033  push XDE
+	ldl_da	xiy, (6352920)	; F4F034  ld XIY,(0x60f018)
+	ld	l, (xiz+8)	; F4F039  ld L,(XIZ+0x08)
+	extz	hl	; F4F03C  extz HL
+	sla	hl, 2	; F4F03E  sla 0x02,HL
+	.byte 0xE3, 0x07, 0xF4, 0xEC, 0x25	; F4F041  ld XIY,(XIY+HL)   [llvm-mc cannot encode this]
+	ld	a, (xiz+8)	; F4F046  ld A,(XIZ+0x08)
+	stb_da	(10080), a	; F4F049  ld (0x002760),A
+	ldb_d8	w, (10416)	; F4F04E  ld W,(0x28b0)
+	and	w, 1	; F4F052  and W,0x01
+	sll	w, 7	; F4F055  sll 0x07,W
+	or	w, 1	; F4F058  or W,0x01
+	and	w, 129	; F4F05B  and W,0x81
+	push	w	; F4F05E  push W
+	ld	h, (xiy+1)	; F4F060  ld H,(XIY+0x01)
+	and	h, 127	; F4F063  and H,0x7f
+	.byte 0x8D, 0x00, 0x27	; F4F066  ld L,(XIY+0x00)   [llvm-mc cannot encode this]
+	and	l, 127	; F4F069  and L,0x7f
+	ldb_da	a, (10080)	; F4F06C  ld A,(0x002760)
+	stb_da	(6352925), a	; F4F071  ld (0x60f01d),A
+	ld	w, (xiy+61)	; F4F076  ld W,(XIY+0x3d)
+	ld	l, (xiy+59)	; F4F079  ld L,(XIY+0x3b)
+	ld	h, (xiy+60)	; F4F07C  ld H,(XIY+0x3c)
+	stb_da	(10081), w	; F4F07F  ld (0x002761),W
+	stb_da	(10082), l	; F4F084  ld (0x002762),L
+	stb_da	(10083), h	; F4F089  ld (0x002763),H
+	ld	a, l	; F4F08E  ld A,L
+	ldb_da	b, (10080)	; F4F090  ld B,(0x002760)
+	call	15994908	; F4F095  call 0xf4101c
+	stb_da	(10084), a	; F4F099  ld (0x002764),A
+	extz	wa	; F4F09E  extz WA
+	ld	ix, wa	; F4F0A0  ld IX,WA
+	ldw	iy, 0	; F4F0A2  ld IY,0x0000
+	pop	w	; F4F0A5  pop W
+	ldb_da	l, (10083)	; F4F0A7  ld L,(0x002763)
+	extz	hl	; F4F0AC  extz HL
+	ld	de, hl	; F4F0AE  ld DE,HL
+	push	w	; F4F0B0  push W
+	pushw	hl	; F4F0B2  push HL
+	call	16052862	; F4F0B3  call 0xf4f27e
+	popw	hl	; F4F0B7  pop HL
+	pop	w	; F4F0B8  pop W
+	cp	de, hl	; F4F0BA  cp DE,HL
+	jrl	nz, 384	; F4F0BC  jrl NZ,0xf4f23f
+	.byte 0xC2, 0x61, 0x27, 0x00, 0x3F, 0x10	; F4F0BF  cp (0x002761),0x10   [llvm-mc cannot encode this]
+	jr	nz, 12	; F4F0C5  jr NZ,0xf4f0d3
+	ldb_d8	c, (2280)	; F4F0C7  ld C,(0x08e8)
+	dec	1, c	; F4F0CB  dec 1,C
+	xor	b, b	; F4F0CD  xor B,B
+	ld	ix, bc	; F4F0CF  ld IX,BC
+	jr	32	; F4F0D1  jr T,0xf4f0f3
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCC	; F4F0D3  bit 4,(0x002761)   [llvm-mc cannot encode this]
+	jr	nz, 22	; F4F0D8  jr NZ,0xf4f0f0
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCD	; F4F0DA  bit 5,(0x002761)   [llvm-mc cannot encode this]
+	jr	z, 15	; F4F0DF  jr Z,0xf4f0f0
+	ldw	ix, 1	; F4F0E1  ld IX,0x0001
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCB	; F4F0E4  bit 3,(0x002761)   [llvm-mc cannot encode this]
+	jr	z, 8	; F4F0E9  jr Z,0xf4f0f3
+	ldw	ix, 0	; F4F0EB  ld IX,0x0000
+	jr	3	; F4F0EE  jr T,0xf4f0f3
+	ldw	ix, 15	; F4F0F0  ld IX,0x000f
+	ldw	iy, 0	; F4F0F3  ld IY,0x0000
+	ldb_da	e, (10082)	; F4F0F6  ld E,(0x002762)
+	extz	de	; F4F0FB  extz DE
+	ld	hl, de	; F4F0FD  ld HL,DE
+	push	w	; F4F0FF  push W
+	pushw	hl	; F4F101  push HL
+	call	16052862	; F4F102  call 0xf4f27e
+	popw	hl	; F4F106  pop HL
+	pop	w	; F4F107  pop W
+	cp	de, hl	; F4F109  cp DE,HL
+	jrl	nz, 204	; F4F10B  jrl NZ,0xf4f1da
+	ld	xix, 16052851	; F4F10E  ld XIX,0x00f4f273
+	ldb_da	l, (10081)	; F4F113  ld L,(0x002761)
+	xor	de, de	; F4F118  xor DE,DE
+	.byte 0xC3, 0x07, 0xF0, 0xE8, 0xF7	; F4F11A  cp L,(XIX+DE)   [llvm-mc cannot encode this]
+	jr	z, 4	; F4F11F  jr Z,0xf4f125
+	inc	1, de	; F4F121  inc 1,DE
+	jr	-11	; F4F123  jr T,0xf4f11a
+	ld	hl, de	; F4F125  ld HL,DE
+	ldw	ix, 10	; F4F127  ld IX,0x000a
+	ldw	iy, 0	; F4F12A  ld IY,0x0000
+	push	w	; F4F12D  push W
+	pushw	hl	; F4F12F  push HL
+	call	16052862	; F4F130  call 0xf4f27e
+	popw	hl	; F4F134  pop HL
+	pop	w	; F4F135  pop W
+	cp	de, hl	; F4F137  cp DE,HL
+	jrl	z, 306	; F4F139  jrl Z,0xf4f26e
+	.byte 0xF1, 0xEC, 0x08, 0xC8	; F4F13C  bit 0,(0x08ec)   [llvm-mc cannot encode this]
+	jr	nz, 4	; F4F140  jr NZ,0xf4f146
+	cps	e, 4	; F4F142  cp E,4
+	jr	z, -33	; F4F144  jr Z,0xf4f125
+	ld	xix, 16052851	; F4F146  ld XIX,0x00f4f273
+	.byte 0xC3, 0x07, 0xF0, 0xE8, 0x21	; F4F14B  ld A,(XIX+DE)   [llvm-mc cannot encode this]
+	stb_da	(10081), a	; F4F150  ld (0x002761),A
+	bit	7, w	; F4F155  bit 0x07,W
+	jr	z, 114	; F4F158  jr Z,0xf4f1cc
+	.byte 0xC2, 0x61, 0x27, 0x00, 0x3F, 0x10	; F4F15A  cp (0x002761),0x10   [llvm-mc cannot encode this]
+	jr	nz, 39	; F4F160  jr NZ,0xf4f189
+	push	w	; F4F162  push W
+	ldb_d8	c, (2280)	; F4F164  ld C,(0x08e8)
+	dec	1, c	; F4F168  dec 1,C
+	stb_da	(10082), c	; F4F16A  ld (0x002762),C
+	ld	a, c	; F4F16F  ld A,C
+	ldb_da	w, (10081)	; F4F171  ld W,(0x002761)
+	ldb_da	b, (10080)	; F4F176  ld B,(0x002760)
+	call	15994908	; F4F17B  call 0xf4101c
+	pop	w	; F4F17F  pop W
+	stb_da	(10083), a	; F4F181  ld (0x002763),A
+	jrl	187	; F4F186  jrl T,0xf4f244
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCC	; F4F189  bit 4,(0x002761)   [llvm-mc cannot encode this]
+	jr	nz, 46	; F4F18E  jr NZ,0xf4f1be
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCD	; F4F190  bit 5,(0x002761)   [llvm-mc cannot encode this]
+	jr	z, 39	; F4F195  jr Z,0xf4f1be
+	stib_da	(10082), 1	; F4F197  ld (0x002762),0x01
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCB	; F4F19D  bit 3,(0x002761)   [llvm-mc cannot encode this]
+	jr	z, 16	; F4F1A2  jr Z,0xf4f1b4
+	stib_da	(10082), 0	; F4F1A4  ld (0x002762),0x00
+	stib_da	(10083), 1	; F4F1AA  ld (0x002763),0x01
+	jp	16052804	; F4F1B0  jp 0xf4f244
+	stib_da	(10083), 7	; F4F1B4  ld (0x002763),0x07
+	jp	16052804	; F4F1BA  jp 0xf4f244
+	stib_da	(10083), 7	; F4F1BE  ld (0x002763),0x07
+	stib_da	(10082), 15	; F4F1C4  ld (0x002762),0x0f
+	jr	120	; F4F1CA  jr T,0xf4f244
+	stib_da	(10082), 0	; F4F1CC  ld (0x002762),0x00
+	stib_da	(10083), 0	; F4F1D2  ld (0x002763),0x00
+	jr	106	; F4F1D8  jr T,0xf4f244
+	stb_da	(10082), e	; F4F1DA  ld (0x002762),E
+	bit	7, w	; F4F1DF  bit 0x07,W
+	jr	z, 83	; F4F1E2  jr Z,0xf4f237
+	.byte 0xC2, 0x61, 0x27, 0x00, 0x3F, 0x10	; F4F1E4  cp (0x002761),0x10   [llvm-mc cannot encode this]
+	jr	nz, 30	; F4F1EA  jr NZ,0xf4f20a
+	push	w	; F4F1EC  push W
+	ldb_da	a, (10082)	; F4F1EE  ld A,(0x002762)
+	ldb_da	w, (10081)	; F4F1F3  ld W,(0x002761)
+	ldb_da	b, (10080)	; F4F1F8  ld B,(0x002760)
+	call	15994908	; F4F1FD  call 0xf4101c
+	pop	w	; F4F201  pop W
+	stb_da	(10083), a	; F4F203  ld (0x002763),A
+	jr	58	; F4F208  jr T,0xf4f244
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCC	; F4F20A  bit 4,(0x002761)   [llvm-mc cannot encode this]
+	jr	nz, 30	; F4F20F  jr NZ,0xf4f22f
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCD	; F4F211  bit 5,(0x002761)   [llvm-mc cannot encode this]
+	jr	z, 23	; F4F216  jr Z,0xf4f22f
+	.byte 0xF2, 0x61, 0x27, 0x00, 0xCB	; F4F218  bit 3,(0x002761)   [llvm-mc cannot encode this]
+	jr	z, 8	; F4F21D  jr Z,0xf4f227
+	stib_da	(10083), 1	; F4F21F  ld (0x002763),0x01
+	jr	29	; F4F225  jr T,0xf4f244
+	stib_da	(10083), 7	; F4F227  ld (0x002763),0x07
+	jr	21	; F4F22D  jr T,0xf4f244
+	stib_da	(10083), 7	; F4F22F  ld (0x002763),0x07
+	jr	13	; F4F235  jr T,0xf4f244
+	stib_da	(10083), 0	; F4F237  ld (0x002763),0x00
+	jr	5	; F4F23D  jr T,0xf4f244
+	stb_da	(10083), e	; F4F23F  ld (0x002763),E
+	ldb_da	e, (10080)	; F4F244  ld E,(0x002760)
+	ldb	d, 0	; F4F249  ld D,0x00
+	ldb_da	a, (10081)	; F4F24B  ld A,(0x002761)
+	ldb_da	w, (10081)	; F4F250  ld W,(0x002761)
+	call	15994688	; F4F255  call 0xf40f40
+	ldb_da	e, (10080)	; F4F259  ld E,(0x002760)
+	ldb	d, 0	; F4F25E  ld D,0x00
+	ldb_da	a, (10082)	; F4F260  ld A,(0x002762)
+	ldb_da	w, (10083)	; F4F265  ld W,(0x002763)
+	call	15994688	; F4F26A  call 0xf40f40
+	pop	xde	; F4F26E  pop XDE
+	pop	xhl	; F4F26F  pop XHL
+	pop	xix	; F4F270  pop XIX
+	pop	xiz	; F4F271  pop XIZ
+	ret	; F4F272  ret
+
+; --- 0xF4F273-0xF4F27D  data (11 bytes) ---
+	.byte 0x00, 0x01, 0x08, 0x09, 0x10, 0x20, 0x28, 0x29, 0x18, 0x19, 0x1a   ; F4F273  ..... ()...
+
+; --------------------------------------------------------------------------
+; sub_F4F27E
+; Called from: call from 0xF4F0B3, 0xF4F102, 0xF4F130
+; Evidence: 0xF4F27E is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F4F27E:
+	ld	l, w	; F4F27E  ld L,W
+	and	l, 7	; F4F280  and L,0x07
+	and	w, 128	; F4F283  and W,0x80
+	srl	w, 4	; F4F286  srl 0x04,W
+	or	w, l	; F4F289  or W,L
+	ld	xhl, 16052914	; F4F28B  ld XHL,0x00f4f2b2
+	.byte 0xC3, 0x03, 0xEC, 0xE1, 0x27	; F4F290  ld L,(XHL+W)   [llvm-mc cannot encode this]
+	exts	hl	; F4F295  exts HL
+	add	de, hl	; F4F297  add DE,HL
+	bit	15, de	; F4F299  bit 0x0f,DE
+	jr	z, 7	; F4F29C  jr Z,0xf4f2a5
+	bit	15, hl	; F4F29E  bit 0x0f,HL
+	jr	z, 8	; F4F2A1  jr Z,0xf4f2ab
+	xor	de, de	; F4F2A3  xor DE,DE
+	cp	de, iy	; F4F2A5  cp DE,IY
+	jr	nc, 2	; F4F2A7  jr NC,0xf4f2ab
+	ld	de, iy	; F4F2A9  ld DE,IY
+	cp	de, ix	; F4F2AB  cp DE,IX
+	jr	ule, 2	; F4F2AD  jr ULE,0xf4f2b1
+	ld	de, ix	; F4F2AF  ld DE,IX
+	ret	; F4F2B1  ret
+
+; --- 0xF4F2B2-0xF4F2C1  data (16 bytes) ---
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x00, 0xff, 0xfe, 0xfd, 0xfc, 0xfb, 0xfa, 0xf9   ; F4F2B2  ................
+	jp	16052954	; F4F2C2  jp 0xf4f2da
+	ret	; F4F2C6  ret
+	nop	; F4F2C7  nop
+	nop	; F4F2C8  nop
+	nop	; F4F2C9  nop
+	ret	; F4F2CA  ret
+	nop	; F4F2CB  nop
+	nop	; F4F2CC  nop
+	nop	; F4F2CD  nop
+	ret	; F4F2CE  ret
+	nop	; F4F2CF  nop
+	nop	; F4F2D0  nop
+	nop	; F4F2D1  nop
+	ret	; F4F2D2  ret
+	nop	; F4F2D3  nop
+	nop	; F4F2D4  nop
+	nop	; F4F2D5  nop
+	ret	; F4F2D6  ret
+	nop	; F4F2D7  nop
+	nop	; F4F2D8  nop
+	nop	; F4F2D9  nop
+	calr	1	; F4F2DA  calr 0xf4f2de
+	ret	; F4F2DD  ret
+
+; --------------------------------------------------------------------------
+; sub_F4F2DE
+; Called from: call from 0xF4F2DA
+; Evidence: 0xF4F2DE is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F4F2DE:
+	ld	xbc, 0	; F4F2DE  ld XBC,0x00000000
+	and	xbc, xbc	; F4F2E3  and XBC,XBC
+	jr	z, 12	; F4F2E5  jr Z,0xf4f2f3
+	lda_24	xiy, (16053005)	; F4F2E7  lda XIY,0xf4f30d
+	lda_24	xix, (0)	; F4F2EC  lda XIX,0x000000
+	.byte 0x85, 0x11	; F4F2F1  ldir   [llvm-mc cannot encode this]
+	ld	xbc, 32	; F4F2F3  ld XBC,0x00000020
+	and	xbc, xbc	; F4F2F8  and XBC,XBC
+	jr	z, 16	; F4F2FA  jr Z,0xf4f30c
+	lda_24	xix, (10080)	; F4F2FC  lda XIX,0x002760
+	xor	wa, wa	; F4F301  xor WA,WA
+	lda_dpi	xbc, 240	; F4F303  ld (XIX+),A
+	sub	bc, 1	; F4F306  sub BC,0x0001
+	jr	nz, -9	; F4F30A  jr NZ,0xf4f303
+
+; --- 0xF4F30C-0xF4F7FF  fill (1268 bytes) ---
+	.fill	1268, 1, 0x0E	; asserted a single value
+
+; --- 0xF4F800-0xF4F90F  romtab (272 bytes) ---
+
+; --------------------------------------------------------------------------
+; PtrTable_F4F800 -- 34 32-bit pointers, 34 into prom_a and 0 into prom_b
+; Read by: prom_a 0xFB21AF `add XWA,0x00f4f800`
+; Entry count: 34, measured by abutment: 34 x 4 = 136 bytes reaches 0xF4F888
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F4F800:
+	.long 0x00FB22C8                       ; F4F800  [0]   -> prom_a 0xFB22C8
+	.long 0x00FB2820                       ; F4F804  [1]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F808  [2]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F80C  [3]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F810  [4]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F814  [5]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F818  [6]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F81C  [7]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F820  [8]   -> prom_a 0xFB2820
+	.long 0x00FB33FE                       ; F4F824  [9]   -> prom_a 0xFB33FE
+	.long 0x00FB2820                       ; F4F828  [10]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F82C  [11]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F830  [12]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F834  [13]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F838  [14]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F83C  [15]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F840  [16]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F844  [17]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F848  [18]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F84C  [19]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F850  [20]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F854  [21]   -> prom_a 0xFB2820
+	.long 0x00FB2820                       ; F4F858  [22]   -> prom_a 0xFB2820
+	.long 0x00FB3483                       ; F4F85C  [23]   -> prom_a 0xFB3483
+	.long 0x00FB34CA                       ; F4F860  [24]   -> prom_a 0xFB34CA
+	.long 0x00FB3495                       ; F4F864  [25]   -> prom_a 0xFB3495
+	.long 0x00FB42AB                       ; F4F868  [26]   -> prom_a 0xFB42AB
+	.long 0x00FB5122                       ; F4F86C  [27]   -> prom_a 0xFB5122
+	.long 0x00FB512C                       ; F4F870  [28]   -> prom_a 0xFB512C
+	.long 0x00FB5136                       ; F4F874  [29]   -> prom_a 0xFB5136
+	.long 0x00FB5140                       ; F4F878  [30]   -> prom_a 0xFB5140
+	.long 0x00FB514A                       ; F4F87C  [31]   -> prom_a 0xFB514A
+	.long 0x00FB51E7                       ; F4F880  [32]   -> prom_a 0xFB51E7
+	.long 0x00FB520C                       ; F4F884  [33]   -> prom_a 0xFB520C
+
+; --------------------------------------------------------------------------
+; PtrTable_F4F888 -- 34 32-bit pointers, 34 into prom_a and 0 into prom_b
+; Read by: prom_a 0xFB22AC `add XWA,0x00f4f888`
+; Entry count: 34, measured by abutment: 34 x 4 = 136 bytes reaches 0xF4F910
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F4F888:
+	.long 0x00FB22C8                       ; F4F888  [0]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F88C  [1]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F890  [2]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F894  [3]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F898  [4]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F89C  [5]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8A0  [6]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8A4  [7]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8A8  [8]   -> prom_a 0xFB22C8
+	.long 0x00FB33FE                       ; F4F8AC  [9]   -> prom_a 0xFB33FE
+	.long 0x00FB22C8                       ; F4F8B0  [10]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8B4  [11]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8B8  [12]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8BC  [13]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8C0  [14]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8C4  [15]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8C8  [16]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8CC  [17]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8D0  [18]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8D4  [19]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8D8  [20]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8DC  [21]   -> prom_a 0xFB22C8
+	.long 0x00FB22C8                       ; F4F8E0  [22]   -> prom_a 0xFB22C8
+	.long 0x00FB3483                       ; F4F8E4  [23]   -> prom_a 0xFB3483
+	.long 0x00FB34CA                       ; F4F8E8  [24]   -> prom_a 0xFB34CA
+	.long 0x00FB3495                       ; F4F8EC  [25]   -> prom_a 0xFB3495
+	.long 0x00FB42AB                       ; F4F8F0  [26]   -> prom_a 0xFB42AB
+	.long 0x00FB5122                       ; F4F8F4  [27]   -> prom_a 0xFB5122
+	.long 0x00FB512C                       ; F4F8F8  [28]   -> prom_a 0xFB512C
+	.long 0x00FB5136                       ; F4F8FC  [29]   -> prom_a 0xFB5136
+	.long 0x00FB5140                       ; F4F900  [30]   -> prom_a 0xFB5140
+	.long 0x00FB514A                       ; F4F904  [31]   -> prom_a 0xFB514A
+	.long 0x00FB51E7                       ; F4F908  [32]   -> prom_a 0xFB51E7
+	.long 0x00FB520C                       ; F4F90C  [33]   -> prom_a 0xFB520C
+
+; --- 0xF4F910-0xF4F915  data (6 bytes) ---
+	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00   ; F4F910  ......
+
+; --- 0xF4F916-0xF4FA79  romtab (356 bytes) ---
+
+; --------------------------------------------------------------------------
+; PtrTable_F4F916 -- 34 32-bit pointers, 34 into prom_a and 0 into prom_b
+; Read by: prom_a 0xFB28A1 `add XWA,0x00f4f916`
+; Entry count: 34, measured by abutment: 34 x 4 = 136 bytes reaches 0xF4F99E
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F4F916:
+	.long 0x00FB3230                       ; F4F916  [0]   -> prom_a 0xFB3230
+	.long 0x00FB3231                       ; F4F91A  [1]   -> prom_a 0xFB3231
+	.long 0x00FB3232                       ; F4F91E  [2]   -> prom_a 0xFB3232
+	.long 0x00FB3041                       ; F4F922  [3]   -> prom_a 0xFB3041
+	.long 0x00FB30F7                       ; F4F926  [4]   -> prom_a 0xFB30F7
+	.long 0x00FB3244                       ; F4F92A  [5]   -> prom_a 0xFB3244
+	.long 0x00FB3233                       ; F4F92E  [6]   -> prom_a 0xFB3233
+	.long 0x00FB28FF                       ; F4F932  [7]   -> prom_a 0xFB28FF
+	.long 0x00FB291D                       ; F4F936  [8]   -> prom_a 0xFB291D
+	.long 0x00FB3230                       ; F4F93A  [9]   -> prom_a 0xFB3230
+	.long 0x00FB2C6C                       ; F4F93E  [10]   -> prom_a 0xFB2C6C
+	.long 0x00FB2978                       ; F4F942  [11]   -> prom_a 0xFB2978
+	.long 0x00FB29BB                       ; F4F946  [12]   -> prom_a 0xFB29BB
+	.long 0x00FB29F1                       ; F4F94A  [13]   -> prom_a 0xFB29F1
+	.long 0x00FB2A27                       ; F4F94E  [14]   -> prom_a 0xFB2A27
+	.long 0x00FB2A7B                       ; F4F952  [15]   -> prom_a 0xFB2A7B
+	.long 0x00FB2ABE                       ; F4F956  [16]   -> prom_a 0xFB2ABE
+	.long 0x00FB2AF5                       ; F4F95A  [17]   -> prom_a 0xFB2AF5
+	.long 0x00FB2B30                       ; F4F95E  [18]   -> prom_a 0xFB2B30
+	.long 0x00FB2B6F                       ; F4F962  [19]   -> prom_a 0xFB2B6F
+	.long 0x00FB2BA6                       ; F4F966  [20]   -> prom_a 0xFB2BA6
+	.long 0x00FB2BE1                       ; F4F96A  [21]   -> prom_a 0xFB2BE1
+	.long 0x00FB2C35                       ; F4F96E  [22]   -> prom_a 0xFB2C35
+	.long 0x00FB3230                       ; F4F972  [23]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F976  [24]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F97A  [25]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F97E  [26]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F982  [27]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F986  [28]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F98A  [29]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F98E  [30]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F992  [31]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F996  [32]   -> prom_a 0xFB3230
+	.long 0x00FB3230                       ; F4F99A  [33]   -> prom_a 0xFB3230
+
+; --------------------------------------------------------------------------
+; PtrTable_F4F99E -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
+; Read by: prom_a 0xFB2C88 `add XWA,0x00f4f99e`
+; Entry count: 18, measured by abutment: 18 x 4 = 72 bytes reaches 0xF4F9E6
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F4F99E:
+	.long 0x00FB2C9A                       ; F4F99E  [0]   -> prom_a 0xFB2C9A
+	.long 0x00FB2CAD                       ; F4F9A2  [1]   -> prom_a 0xFB2CAD
+	.long 0x00FB2CE7                       ; F4F9A6  [2]   -> prom_a 0xFB2CE7
+	.long 0x00FB2C9A                       ; F4F9AA  [3]   -> prom_a 0xFB2C9A
+	.long 0x00FB2D21                       ; F4F9AE  [4]   -> prom_a 0xFB2D21
+	.long 0x00FB328D                       ; F4F9B2  [5]   -> prom_a 0xFB328D
+	.long 0x00FB2C9A                       ; F4F9B6  [6]   -> prom_a 0xFB2C9A
+	.long 0x00FB2D72                       ; F4F9BA  [7]   -> prom_a 0xFB2D72
+	.long 0x00FB2DAC                       ; F4F9BE  [8]   -> prom_a 0xFB2DAC
+	.long 0x00FB2DE6                       ; F4F9C2  [9]   -> prom_a 0xFB2DE6
+	.long 0x00FB2C9A                       ; F4F9C6  [10]   -> prom_a 0xFB2C9A
+	.long 0x00FB2E20                       ; F4F9CA  [11]   -> prom_a 0xFB2E20
+	.long 0x00FB2E69                       ; F4F9CE  [12]   -> prom_a 0xFB2E69
+	.long 0x00FB2EB2                       ; F4F9D2  [13]   -> prom_a 0xFB2EB2
+	.long 0x00FB2C9A                       ; F4F9D6  [14]   -> prom_a 0xFB2C9A
+	.long 0x00FB2EFB                       ; F4F9DA  [15]   -> prom_a 0xFB2EFB
+	.long 0x00FB2F35                       ; F4F9DE  [16]   -> prom_a 0xFB2F35
+	.long 0x00FB2C9A                       ; F4F9E2  [17]   -> prom_a 0xFB2C9A
+
+; --------------------------------------------------------------------------
+; PtrTable_F4F9E6 -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
+; Read by: prom_a 0xFB3055 `add XWA,0x00f4f9e6`
+; Entry count: 18, measured by abutment: 18 x 4 = 72 bytes reaches 0xF4FA2E
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F4F9E6:
+	.long 0x00FB306C                       ; F4F9E6  [0]   -> prom_a 0xFB306C
+	.long 0x00FB306C                       ; F4F9EA  [1]   -> prom_a 0xFB306C
+	.long 0x00FB306C                       ; F4F9EE  [2]   -> prom_a 0xFB306C
+	.long 0x00FB307F                       ; F4F9F2  [3]   -> prom_a 0xFB307F
+	.long 0x00FB306C                       ; F4F9F6  [4]   -> prom_a 0xFB306C
+	.long 0x00FB306C                       ; F4F9FA  [5]   -> prom_a 0xFB306C
+	.long 0x00FB3097                       ; F4F9FE  [6]   -> prom_a 0xFB3097
+	.long 0x00FB306C                       ; F4FA02  [7]   -> prom_a 0xFB306C
+	.long 0x00FB306C                       ; F4FA06  [8]   -> prom_a 0xFB306C
+	.long 0x00FB306C                       ; F4FA0A  [9]   -> prom_a 0xFB306C
+	.long 0x00FB30AF                       ; F4FA0E  [10]   -> prom_a 0xFB30AF
+	.long 0x00FB306C                       ; F4FA12  [11]   -> prom_a 0xFB306C
+	.long 0x00FB306C                       ; F4FA16  [12]   -> prom_a 0xFB306C
+	.long 0x00FB306C                       ; F4FA1A  [13]   -> prom_a 0xFB306C
+	.long 0x00FB30C7                       ; F4FA1E  [14]   -> prom_a 0xFB30C7
+	.long 0x00FB306C                       ; F4FA22  [15]   -> prom_a 0xFB306C
+	.long 0x00FB306C                       ; F4FA26  [16]   -> prom_a 0xFB306C
+	.long 0x00FB30DF                       ; F4FA2A  [17]   -> prom_a 0xFB30DF
+
+; --------------------------------------------------------------------------
+; PtrTable_F4FA2E -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
+; Read by: prom_a 0xFB3265 `add XWA,0x00f4fa2e`
+; Entry count: 18, measured by abutment: 18 x 4 = 72 bytes reaches 0xF4FA76
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F4FA2E:
+	.long 0x00FB3277                       ; F4FA2E  [0]   -> prom_a 0xFB3277
+	.long 0x00FB3278                       ; F4FA32  [1]   -> prom_a 0xFB3278
+	.long 0x00FB3278                       ; F4FA36  [2]   -> prom_a 0xFB3278
+	.long 0x00FB3278                       ; F4FA3A  [3]   -> prom_a 0xFB3278
+	.long 0x00FB327D                       ; F4FA3E  [4]   -> prom_a 0xFB327D
+	.long 0x00FB327D                       ; F4FA42  [5]   -> prom_a 0xFB327D
+	.long 0x00FB327D                       ; F4FA46  [6]   -> prom_a 0xFB327D
+	.long 0x00FB3282                       ; F4FA4A  [7]   -> prom_a 0xFB3282
+	.long 0x00FB3282                       ; F4FA4E  [8]   -> prom_a 0xFB3282
+	.long 0x00FB3282                       ; F4FA52  [9]   -> prom_a 0xFB3282
+	.long 0x00FB3282                       ; F4FA56  [10]   -> prom_a 0xFB3282
+	.long 0x00FB3287                       ; F4FA5A  [11]   -> prom_a 0xFB3287
+	.long 0x00FB3287                       ; F4FA5E  [12]   -> prom_a 0xFB3287
+	.long 0x00FB3287                       ; F4FA62  [13]   -> prom_a 0xFB3287
+	.long 0x00FB3287                       ; F4FA66  [14]   -> prom_a 0xFB3287
+	.long 0x00FB328C                       ; F4FA6A  [15]   -> prom_a 0xFB328C
+	.long 0x00FB328C                       ; F4FA6E  [16]   -> prom_a 0xFB328C
+	.long 0x00FB328C                       ; F4FA72  [17]   -> prom_a 0xFB328C
+
+; --------------------------------------------------------------------------
+; Pointer_F4FA76 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
+; Read by: prom_a 0xFB3363 `lda_24 xiy, (0xf4fa76)`
+; Entry count: 1, measured by abutment: 1 x 4 = 4 bytes reaches 0xF4FA7A
+;              exactly, which is the end of the segment.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+Pointer_F4FA76:
+	.long 0x00F70708                       ; F4FA76  [0]   -> prom_b 0xF70708
+
+; --- 0xF4FA7A-0xF4FA9A  data (33 bytes) ---
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F4FA7A  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F4FA8A  ................
+	.byte 0x00   ; F4FA9A  .
+
+; --- 0xF4FA9B-0xF4FB1B  bytemap (129 bytes) ---
+
+; --------------------------------------------------------------------------
+; IndexMap_F4FA9B -- 129 bytes: a code -> dense-index map, 0xFF = no entry
+; Read by: prom_a 0xFB3AE2 `add XWA,0x00f4fa9c`; prom_a 0xFB4A28 `add
+;          XWA,0x00f4fa9c`.  Note the base is 0xF4FA9C, ONE BYTE PAST the
+;          object, so the reader's input k reads entry k+1.
+; Contents: 69 live entries out of 129, and they are strictly increasing:
+;           entry 0 is 0, then three contiguous input bands 33-55, 65-87,
+;           97-118 map onto 1-23, 24-46 and 47-68.  Everything else is 0xFF.
+; ⚠ NOT a monotone map: the layout classifies this segment with
+;                       monotone_maps(), and the 129 bytes are NOT monotone
+;                       -- 59 adjacent pairs are equal or falling, because
+;                       of the 0xFF holes.  It is the LIVE entries that
+;                       increase.  Stated here rather than repeating the
+;                       rule's name as if it were a description.
+; Evidence: the bands and the live count are re-derived by index_bands() and
+;           checked in --selftest, last band included.
+; --------------------------------------------------------------------------
+IndexMap_F4FA9B:
+	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F4FA9B  ................
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F4FAAB  ................
+	.byte 0xff, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f   ; F4FABB  ................
+	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F4FACB  ................
+	.byte 0xff, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26   ; F4FADB  ......... !"#$%&
+	.byte 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F4FAEB  '()*+,-.........
+	.byte 0xff, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d   ; F4FAFB  ./0123456789:;<=
+	.byte 0x3e, 0x3f, 0x40, 0x41, 0x42, 0x43, 0x44, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F4FB0B  >?@ABCD.........
+	.byte 0xff   ; F4FB1B  .
+
+; --- 0xF4FB1C-0xF4FE37  romtab (796 bytes) ---
+
+; --------------------------------------------------------------------------
+; PtrTable_F4FB1C -- 7 32-bit pointers, 7 into prom_a and 0 into prom_b
+; Read by: prom_a 0xFB3E87 `add XBC,0x00f4fb1c`
+; Entry count: 7, measured by abutment: 7 x 4 = 28 bytes reaches 0xF4FB38
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F4FB1C:
+	.long 0x00FB3DBC                       ; F4FB1C  [0]   -> prom_a 0xFB3DBC
+	.long 0x00FB3DCD                       ; F4FB20  [1]   -> prom_a 0xFB3DCD
+	.long 0x00FB3DD2                       ; F4FB24  [2]   -> prom_a 0xFB3DD2
+	.long 0x00FB3DE6                       ; F4FB28  [3]   -> prom_a 0xFB3DE6
+	.long 0x00FB3E02                       ; F4FB2C  [4]   -> prom_a 0xFB3E02
+	.long 0x00FB3E22                       ; F4FB30  [5]   -> prom_a 0xFB3E22
+	.long 0x00FB3E3E                       ; F4FB34  [6]   -> prom_a 0xFB3E3E
+
+; --------------------------------------------------------------------------
+; PtrTable_F4FB38 -- 192 32-bit pointers, 192 into prom_a and 0 into prom_b
+; Read by: prom_a 0xFB4BC5 `add XWA,0x00f4fb38`
+; Entry count: 192, measured by abutment: 192 x 4 = 768 bytes reaches
+;              0xF4FE38 exactly, which is the next address an instruction
+;              names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F4FB38:
+	.long 0x00FB4BDD                       ; F4FB38  [0]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB3C  [1]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB40  [2]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB44  [3]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB48  [4]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB4C  [5]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB50  [6]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB54  [7]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB58  [8]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB5C  [9]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB60  [10]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB64  [11]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB68  [12]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB6C  [13]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB70  [14]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB74  [15]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB78  [16]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB7C  [17]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB80  [18]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB84  [19]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB88  [20]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB8C  [21]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB90  [22]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB94  [23]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB98  [24]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FB9C  [25]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBA0  [26]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBA4  [27]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBA8  [28]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBAC  [29]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBB0  [30]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBB4  [31]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBB8  [32]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBBC  [33]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBC0  [34]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBC4  [35]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBC8  [36]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBCC  [37]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBD0  [38]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBD4  [39]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBD8  [40]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBDC  [41]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBE0  [42]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBE4  [43]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBE8  [44]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBEC  [45]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBF0  [46]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBF4  [47]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBF8  [48]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FBFC  [49]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC00  [50]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC04  [51]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC08  [52]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC0C  [53]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC10  [54]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC14  [55]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC18  [56]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC1C  [57]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC20  [58]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC24  [59]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC28  [60]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC2C  [61]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC30  [62]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC34  [63]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC38  [64]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC3C  [65]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC40  [66]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC44  [67]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC48  [68]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC4C  [69]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC50  [70]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC54  [71]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDE                       ; F4FC58  [72]   -> prom_a 0xFB4BDE
+	.long 0x00FB4BDD                       ; F4FC5C  [73]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC60  [74]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC64  [75]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC68  [76]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC6C  [77]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC70  [78]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC74  [79]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC78  [80]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC7C  [81]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC80  [82]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC84  [83]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC88  [84]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC8C  [85]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC90  [86]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC94  [87]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC98  [88]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FC9C  [89]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCA0  [90]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCA4  [91]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCA8  [92]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCAC  [93]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCB0  [94]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCB4  [95]   -> prom_a 0xFB4BDD
+	.long 0x00FB4C12                       ; F4FCB8  [96]   -> prom_a 0xFB4C12
+	.long 0x00FB4BDD                       ; F4FCBC  [97]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCC0  [98]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCC4  [99]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCC8  [100]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCCC  [101]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCD0  [102]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCD4  [103]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCD8  [104]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCDC  [105]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCE0  [106]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCE4  [107]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCE8  [108]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCEC  [109]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCF0  [110]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FCF4  [111]   -> prom_a 0xFB4BDD
+	.long 0x00FB4C46                       ; F4FCF8  [112]   -> prom_a 0xFB4C46
+	.long 0x00FB4BDD                       ; F4FCFC  [113]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD00  [114]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD04  [115]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD08  [116]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD0C  [117]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD10  [118]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD14  [119]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD18  [120]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD1C  [121]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD20  [122]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD24  [123]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD28  [124]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD2C  [125]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD30  [126]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD34  [127]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD38  [128]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD3C  [129]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD40  [130]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD44  [131]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD48  [132]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD4C  [133]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD50  [134]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD54  [135]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD58  [136]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD5C  [137]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD60  [138]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD64  [139]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD68  [140]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD6C  [141]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD70  [142]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD74  [143]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD78  [144]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD7C  [145]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD80  [146]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD84  [147]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD88  [148]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD8C  [149]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD90  [150]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FD94  [151]   -> prom_a 0xFB4BDD
+	.long 0x00FB4C7A                       ; F4FD98  [152]   -> prom_a 0xFB4C7A
+	.long 0x00FB4BDD                       ; F4FD9C  [153]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDA0  [154]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDA4  [155]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDA8  [156]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDAC  [157]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDB0  [158]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDB4  [159]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDB8  [160]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDBC  [161]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDC0  [162]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDC4  [163]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDC8  [164]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDCC  [165]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDD0  [166]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDD4  [167]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDD8  [168]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDDC  [169]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDE0  [170]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDE4  [171]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDE8  [172]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDEC  [173]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDF0  [174]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FDF4  [175]   -> prom_a 0xFB4BDD
+	.long 0x00FB4CAE                       ; F4FDF8  [176]   -> prom_a 0xFB4CAE
+	.long 0x00FB4BDD                       ; F4FDFC  [177]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE00  [178]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE04  [179]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE08  [180]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE0C  [181]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE10  [182]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE14  [183]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE18  [184]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE1C  [185]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE20  [186]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE24  [187]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE28  [188]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE2C  [189]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE30  [190]   -> prom_a 0xFB4BDD
+	.long 0x00FB4BDD                       ; F4FE34  [191]   -> prom_a 0xFB4BDD
+
+; --- 0xF4FE38-0xF4FF60  data (297 bytes) ---
+	.byte 0x00, 0x0c, 0x00, 0x08, 0x20, 0x03, 0x01, 0xff, 0x20, 0x04, 0x00, 0xff, 0x20, 0x05, 0x18, 0xff   ; F4FE38  .... ... ... ...
+	.byte 0x20, 0x06, 0x00, 0x0f, 0x20, 0x17, 0x40, 0xff, 0x60, 0x00, 0x00, 0xff, 0x7a, 0x02, 0x00, 0x0f   ; F4FE48   ... .@.`...z...
+	.byte 0x98, 0x09, 0x01, 0x01, 0x79, 0x05, 0x01, 0x0f, 0x79, 0x05, 0x10, 0xf0, 0x91, 0x04, 0x00, 0xff   ; F4FE58  ....y...y.......
+	.byte 0x00, 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F4FE68  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F4FE78  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x03, 0x03, 0x02, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01   ; F4FE88  ................
+	.byte 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F4FE98  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x50, 0x23, 0x7e   ; F4FEA8  .............P#~
+	.byte 0xf7, 0xf0, 0x50, 0x24, 0x7e, 0xf7, 0xf0, 0x50, 0x27, 0x7e, 0xf7, 0xf0, 0x50, 0x28, 0x7e, 0xf7   ; F4FEB8  ..P$~..P'~..P(~.
+	.byte 0xf0, 0x50, 0x29, 0x7e, 0xf7, 0xf0, 0x50, 0x2a, 0x7e, 0xf7, 0xf0, 0x50, 0x7e, 0xf0, 0x50, 0x21   ; F4FEC8  .P)~..P*~..P~.P!
+	.byte 0x04, 0x00, 0x11, 0xf7, 0xf0, 0x50, 0x22, 0x04, 0x00, 0x11, 0xf7, 0xf0, 0x50, 0x25, 0xf0, 0x7e   ; F4FED8  .....P".....P%.~
+	.byte 0x7f, 0x09, 0x01, 0xf7, 0xf0, 0x7e, 0x7f, 0x09, 0x02, 0xf7, 0xf0, 0x50, 0x2c, 0x04, 0x00, 0x11   ; F4FEE8  .....~.....P,...
+	.byte 0xf0, 0x50, 0x2d, 0x04, 0x00, 0x11, 0x40, 0x00, 0x00, 0x00, 0x00, 0x20, 0xf0, 0x50, 0x2d, 0x04   ; F4FEF8  .P-...@.... .P-.
+	.byte 0x00, 0x11, 0x40, 0x00, 0x20, 0x00, 0x12, 0x60, 0xf0, 0x50, 0x2d, 0x04, 0x00, 0x11, 0x20, 0x00   ; F4FF08  ..@. ..`.P-... .
+	.byte 0x00, 0x00, 0x00, 0x10, 0xf0, 0x50, 0x2d, 0x04, 0x00, 0x11, 0x20, 0x00, 0x00, 0x10, 0x00, 0x00   ; F4FF18  .....P-... .....
+	.byte 0xf0, 0x50, 0x2d, 0x04, 0x00, 0x11, 0x60, 0x00, 0x00, 0x00, 0x18, 0x00, 0xf0, 0x50, 0x2d, 0x04   ; F4FF28  .P-...`......P-.
+	.byte 0x00, 0x11, 0x60, 0x18, 0x00, 0x01, 0x70, 0x00, 0xf0, 0x50, 0x2d, 0x04, 0x00, 0x11, 0x62, 0x08   ; F4FF38  ..`...p..P-...b.
+	.byte 0x00, 0xf0, 0x50, 0x2d, 0x04, 0x00, 0x11, 0x50, 0x00, 0x00, 0x00, 0x06, 0x00, 0xf0, 0x50, 0x2d   ; F4FF48  ..P-...P......P-
+	.byte 0x04, 0x00, 0x11, 0x50, 0x06, 0x00, 0x05, 0x40, 0x00   ; F4FF58  ...P...@.
+
+; --- 0xF4FF61-0xF511B4  link (4692 bytes) ---
+
+; --------------------------------------------------------------------------
+; LinkTable_F4FF61 -- 782 records of `[u16 key][u32 next]`
+; Evidence: 779 of the 782 `next` pointers are non-zero and ALL 779 of them
+;           land exactly on a record boundary of this table -- the rule the
+;           layout's link_tables() walks, whose null corpus is 107,345 bytes
+;           of proven prom_b instruction text on which it fires zero times.
+; Read by: prom_a 0xFB63FC does `add XBC,0x00f5115b`, and 0xF5115B is record
+;          767 of this table exactly -- so prom_a indexes a sub-array that
+;          begins 767 records in.
+; Unknown: what the keys mean.  353 distinct keys over 782 records, spanning
+;          0x0000-0xFFFF.  The traversal that follows `next` is not located.
+; --------------------------------------------------------------------------
+LinkTable_F4FF61:
+	.byte 0xff, 0xff, 0x61, 0xff, 0xf4, 0x00   ; F4FF61  [  0] key 0xFFFF  -> rec 0
+	.byte 0x11, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F4FF67  [  1] key 0x0711  -> rec 0
+	.byte 0xff, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F4FF6D  [  2] key 0x0AFF  -> rec 0
+	.byte 0x00, 0x00, 0x67, 0xff, 0xf4, 0x00   ; F4FF73  [  3] key 0x0000  -> rec 1
+	.byte 0x01, 0x00, 0x67, 0xff, 0xf4, 0x00   ; F4FF79  [  4] key 0x0001  -> rec 1
+	.byte 0xff, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F4FF7F  [  5] key 0x09FF  -> rec 0
+	.byte 0x04, 0x00, 0x73, 0xff, 0xf4, 0x00   ; F4FF85  [  6] key 0x0004  -> rec 3
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F4FF8B  [  7] key 0x08FF  -> rec 0
+	.byte 0x11, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F4FF91  [  8] key 0x0811  -> rec 0
+	.byte 0xff, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F4FF97  [  9] key 0x0AFF  -> rec 0
+	.byte 0x00, 0x00, 0x91, 0xff, 0xf4, 0x00   ; F4FF9D  [ 10] key 0x0000  -> rec 8
+	.byte 0x01, 0x00, 0x91, 0xff, 0xf4, 0x00   ; F4FFA3  [ 11] key 0x0001  -> rec 8
+	.byte 0xff, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F4FFA9  [ 12] key 0x09FF  -> rec 0
+	.byte 0x04, 0x00, 0x9d, 0xff, 0xf4, 0x00   ; F4FFAF  [ 13] key 0x0004  -> rec 10
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F4FFB5  [ 14] key 0x08FF  -> rec 0
+	.byte 0x01, 0x20, 0x61, 0xff, 0xf4, 0x00   ; F4FFBB  [ 15] key 0x2001  -> rec 0
+	.byte 0x02, 0x21, 0x61, 0xff, 0xf4, 0x00   ; F4FFC1  [ 16] key 0x2102  -> rec 0
+	.byte 0xff, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F4FFC7  [ 17] key 0x09FF  -> rec 0
+	.byte 0x09, 0x00, 0xbb, 0xff, 0xf4, 0x00   ; F4FFCD  [ 18] key 0x0009  -> rec 15
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F4FFD3  [ 19] key 0x08FF  -> rec 0
+	.byte 0x7e, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F4FFD9  [ 20] key 0x017E  -> rec 0
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F4FFDF  [ 21] key 0x08FF  -> rec 0
+	.byte 0x7e, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F4FFE5  [ 22] key 0x027E  -> rec 0
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F4FFEB  [ 23] key 0x08FF  -> rec 0
+	.byte 0x7e, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F4FFF1  [ 24] key 0x037E  -> rec 0
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F4FFF7  [ 25] key 0x08FF  -> rec 0
+	.byte 0x7e, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F4FFFD  [ 26] key 0x047E  -> rec 0
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F50003  [ 27] key 0x08FF  -> rec 0
+	.byte 0x7e, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F50009  [ 28] key 0x057E  -> rec 0
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F5000F  [ 29] key 0x08FF  -> rec 0
+	.byte 0x7e, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F50015  [ 30] key 0x047E  -> rec 0
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F5001B  [ 31] key 0x08FF  -> rec 0
+	.byte 0x00, 0x14, 0x61, 0xff, 0xf4, 0x00   ; F50021  [ 32] key 0x1400  -> rec 0
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50027  [ 33] key 0x0DFF  -> rec 0
+	.byte 0x08, 0x00, 0x21, 0x00, 0xf5, 0x00   ; F5002D  [ 34] key 0x0008  -> rec 32
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50033  [ 35] key 0x0CFF  -> rec 0
+	.byte 0x00, 0x13, 0x61, 0xff, 0xf4, 0x00   ; F50039  [ 36] key 0x1300  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F5003F  [ 37] key 0x10FF  -> rec 0
+	.byte 0x70, 0x00, 0x39, 0x00, 0xf5, 0x00   ; F50045  [ 38] key 0x0070  -> rec 36
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F5004B  [ 39] key 0x0FFF  -> rec 0
+	.byte 0x01, 0x00, 0x45, 0x00, 0xf5, 0x00   ; F50051  [ 40] key 0x0001  -> rec 38
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50057  [ 41] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0x51, 0x00, 0xf5, 0x00   ; F5005D  [ 42] key 0x0000  -> rec 40
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50063  [ 43] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F50069  [ 44] key 0x1200  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F5006F  [ 45] key 0x10FF  -> rec 0
+	.byte 0x18, 0x00, 0x69, 0x00, 0xf5, 0x00   ; F50075  [ 46] key 0x0018  -> rec 44
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F5007B  [ 47] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0x75, 0x00, 0xf5, 0x00   ; F50081  [ 48] key 0x0000  -> rec 46
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50087  [ 49] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0x81, 0x00, 0xf5, 0x00   ; F5008D  [ 50] key 0x0000  -> rec 48
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50093  [ 51] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0x8d, 0x00, 0xf5, 0x00   ; F50099  [ 52] key 0x0000  -> rec 50
+	.byte 0x18, 0x00, 0x5d, 0x00, 0xf5, 0x00   ; F5009F  [ 53] key 0x0018  -> rec 42
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F500A5  [ 54] key 0x0CFF  -> rec 0
+	.byte 0x00, 0x16, 0x61, 0xff, 0xf4, 0x00   ; F500AB  [ 55] key 0x1600  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F500B1  [ 56] key 0x10FF  -> rec 0
+	.byte 0x40, 0x00, 0xab, 0x00, 0xf5, 0x00   ; F500B7  [ 57] key 0x0040  -> rec 55
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F500BD  [ 58] key 0x0FFF  -> rec 0
+	.byte 0x05, 0x00, 0xb7, 0x00, 0xf5, 0x00   ; F500C3  [ 59] key 0x0005  -> rec 57
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F500C9  [ 60] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0xc3, 0x00, 0xf5, 0x00   ; F500CF  [ 61] key 0x0000  -> rec 59
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F500D5  [ 62] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x15, 0x61, 0xff, 0xf4, 0x00   ; F500DB  [ 63] key 0x1500  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F500E1  [ 64] key 0x10FF  -> rec 0
+	.byte 0x06, 0x00, 0xdb, 0x00, 0xf5, 0x00   ; F500E7  [ 65] key 0x0006  -> rec 63
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F500ED  [ 66] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0xe7, 0x00, 0xf5, 0x00   ; F500F3  [ 67] key 0x0000  -> rec 65
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F500F9  [ 68] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0xf3, 0x00, 0xf5, 0x00   ; F500FF  [ 69] key 0x0000  -> rec 67
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50105  [ 70] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0xff, 0x00, 0xf5, 0x00   ; F5010B  [ 71] key 0x0000  -> rec 69
+	.byte 0x06, 0x00, 0xcf, 0x00, 0xf5, 0x00   ; F50111  [ 72] key 0x0006  -> rec 61
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50117  [ 73] key 0x0CFF  -> rec 0
+	.byte 0x00, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F5011D  [ 74] key 0x0E00  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50123  [ 75] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0x1d, 0x01, 0xf5, 0x00   ; F50129  [ 76] key 0x0000  -> rec 74
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F5012F  [ 77] key 0x0FFF  -> rec 0
+	.byte 0x10, 0x00, 0x29, 0x01, 0xf5, 0x00   ; F50135  [ 78] key 0x0010  -> rec 76
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F5013B  [ 79] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0x35, 0x01, 0xf5, 0x00   ; F50141  [ 80] key 0x0000  -> rec 78
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50147  [ 81] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F5014D  [ 82] key 0x0000  
+	.byte 0x00, 0x00, 0x41, 0x01, 0xf5, 0x00   ; F50153  [ 83] key 0x0000  -> rec 80
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50159  [ 84] key 0x0CFF  -> rec 0
+	.byte 0x60, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F5015F  [ 85] key 0x0C60  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50165  [ 86] key 0x10FF  -> rec 0
+	.byte 0x12, 0x00, 0x5f, 0x01, 0xf5, 0x00   ; F5016B  [ 87] key 0x0012  -> rec 85
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F50171  [ 88] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0x6b, 0x01, 0xf5, 0x00   ; F50177  [ 89] key 0x0000  -> rec 87
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F5017D  [ 90] key 0x0EFF  -> rec 0
+	.byte 0x20, 0x00, 0x77, 0x01, 0xf5, 0x00   ; F50183  [ 91] key 0x0020  -> rec 89
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50189  [ 92] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0x83, 0x01, 0xf5, 0x00   ; F5018F  [ 93] key 0x0000  -> rec 91
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50195  [ 94] key 0x0CFF  -> rec 0
+	.byte 0x20, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F5019B  [ 95] key 0x0B20  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F501A1  [ 96] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0x9b, 0x01, 0xf5, 0x00   ; F501A7  [ 97] key 0x0000  -> rec 95
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F501AD  [ 98] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0xa7, 0x01, 0xf5, 0x00   ; F501B3  [ 99] key 0x0000  -> rec 97
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F501B9  [100] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0xb3, 0x01, 0xf5, 0x00   ; F501BF  [101] key 0x0000  -> rec 99
+	.byte 0x20, 0x00, 0x77, 0x01, 0xf5, 0x00   ; F501C5  [102] key 0x0020  -> rec 89
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F501CB  [103] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0xbf, 0x01, 0xf5, 0x00   ; F501D1  [104] key 0x0000  -> rec 101
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F501D7  [105] key 0x0CFF  -> rec 0
+	.byte 0x40, 0x00, 0xd1, 0x01, 0xf5, 0x00   ; F501DD  [106] key 0x0040  -> rec 104
+	.byte 0x20, 0x00, 0x53, 0x01, 0xf5, 0x00   ; F501E3  [107] key 0x0020  -> rec 83
+	.byte 0x50, 0x00, 0x0b, 0x01, 0xf5, 0x00   ; F501E9  [108] key 0x0050  -> rec 71
+	.byte 0x60, 0x00, 0x99, 0x00, 0xf5, 0x00   ; F501EF  [109] key 0x0060  -> rec 52
+	.byte 0x62, 0x00, 0x2d, 0x00, 0xf5, 0x00   ; F501F5  [110] key 0x0062  -> rec 34
+	.byte 0xff, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F501FB  [111] key 0x0BFF  -> rec 0
+	.byte 0x11, 0x00, 0xdd, 0x01, 0xf5, 0x00   ; F50201  [112] key 0x0011  -> rec 106
+	.byte 0xff, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F50207  [113] key 0x0AFF  -> rec 0
+	.byte 0x00, 0x00, 0x01, 0x02, 0xf5, 0x00   ; F5020D  [114] key 0x0000  -> rec 112
+	.byte 0x01, 0x00, 0x01, 0x02, 0xf5, 0x00   ; F50213  [115] key 0x0001  -> rec 112
+	.byte 0xff, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F50219  [116] key 0x09FF  -> rec 0
+	.byte 0x04, 0x00, 0x0d, 0x02, 0xf5, 0x00   ; F5021F  [117] key 0x0004  -> rec 114
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F50225  [118] key 0x08FF  -> rec 0
+	.byte 0x01, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F5022B  [119] key 0x0101  -> rec 0
+	.byte 0x01, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F50231  [120] key 0x0101  -> rec 0
+	.byte 0x01, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F50237  [121] key 0x0201  -> rec 0
+	.byte 0x01, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F5023D  [122] key 0x0201  -> rec 0
+	.byte 0x01, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F50243  [123] key 0x0301  -> rec 0
+	.byte 0x01, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F50249  [124] key 0x0301  -> rec 0
+	.byte 0x01, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F5024F  [125] key 0x0401  -> rec 0
+	.byte 0x01, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F50255  [126] key 0x0401  -> rec 0
+	.byte 0x01, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F5025B  [127] key 0x0501  -> rec 0
+	.byte 0x01, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F50261  [128] key 0x0501  -> rec 0
+	.byte 0x01, 0x06, 0x61, 0xff, 0xf4, 0x00   ; F50267  [129] key 0x0601  -> rec 0
+	.byte 0x01, 0x06, 0x61, 0xff, 0xf4, 0x00   ; F5026D  [130] key 0x0601  -> rec 0
+	.byte 0x01, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F50273  [131] key 0x0701  -> rec 0
+	.byte 0x01, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F50279  [132] key 0x0701  -> rec 0
+	.byte 0x01, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F5027F  [133] key 0x0801  -> rec 0
+	.byte 0x01, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F50285  [134] key 0x0801  -> rec 0
+	.byte 0x01, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F5028B  [135] key 0x0901  -> rec 0
+	.byte 0x01, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F50291  [136] key 0x0901  -> rec 0
+	.byte 0x01, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F50297  [137] key 0x0A01  -> rec 0
+	.byte 0x01, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F5029D  [138] key 0x0A01  -> rec 0
+	.byte 0x01, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F502A3  [139] key 0x0B01  -> rec 0
+	.byte 0x01, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F502A9  [140] key 0x0B01  -> rec 0
+	.byte 0x01, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F502AF  [141] key 0x0C01  -> rec 0
+	.byte 0x01, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F502B5  [142] key 0x0C01  -> rec 0
+	.byte 0x01, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F502BB  [143] key 0x0D01  -> rec 0
+	.byte 0x01, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F502C1  [144] key 0x0D01  -> rec 0
+	.byte 0x01, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F502C7  [145] key 0x0E01  -> rec 0
+	.byte 0x01, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F502CD  [146] key 0x0E01  -> rec 0
+	.byte 0x01, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F502D3  [147] key 0x0F01  -> rec 0
+	.byte 0x01, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F502D9  [148] key 0x0F01  -> rec 0
+	.byte 0x01, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F502DF  [149] key 0x1001  -> rec 0
+	.byte 0x02, 0x18, 0xdf, 0x02, 0xf5, 0x00   ; F502E5  [150] key 0x1802  -> rec 149
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F502EB  [151] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0xe5, 0x02, 0xf5, 0x00   ; F502F1  [152] key 0x0000  -> rec 150
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F502F7  [153] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0xf1, 0x02, 0xf5, 0x00   ; F502FD  [154] key 0x0000  -> rec 152
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50303  [155] key 0x0EFF  -> rec 0
+	.byte 0x01, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50309  [156] key 0x1001  -> rec 0
+	.byte 0x02, 0x1a, 0x09, 0x03, 0xf5, 0x00   ; F5030F  [157] key 0x1A02  -> rec 156
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50315  [158] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0x0f, 0x03, 0xf5, 0x00   ; F5031B  [159] key 0x0000  -> rec 157
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F50321  [160] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0x1b, 0x03, 0xf5, 0x00   ; F50327  [161] key 0x0000  -> rec 159
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F5032D  [162] key 0x0EFF  -> rec 0
+	.byte 0x01, 0x11, 0x61, 0xff, 0xf4, 0x00   ; F50333  [163] key 0x1101  -> rec 0
+	.byte 0x01, 0x11, 0x61, 0xff, 0xf4, 0x00   ; F50339  [164] key 0x1101  -> rec 0
+	.byte 0x01, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F5033F  [165] key 0x1201  -> rec 0
+	.byte 0x01, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F50345  [166] key 0x1201  -> rec 0
+	.byte 0x01, 0x13, 0x61, 0xff, 0xf4, 0x00   ; F5034B  [167] key 0x1301  -> rec 0
+	.byte 0x01, 0x13, 0x61, 0xff, 0xf4, 0x00   ; F50351  [168] key 0x1301  -> rec 0
+	.byte 0x01, 0x14, 0x61, 0xff, 0xf4, 0x00   ; F50357  [169] key 0x1401  -> rec 0
+	.byte 0x01, 0x14, 0x61, 0xff, 0xf4, 0x00   ; F5035D  [170] key 0x1401  -> rec 0
+	.byte 0x01, 0x15, 0x61, 0xff, 0xf4, 0x00   ; F50363  [171] key 0x1501  -> rec 0
+	.byte 0x01, 0x15, 0x61, 0xff, 0xf4, 0x00   ; F50369  [172] key 0x1501  -> rec 0
+	.byte 0x01, 0x16, 0x61, 0xff, 0xf4, 0x00   ; F5036F  [173] key 0x1601  -> rec 0
+	.byte 0x01, 0x16, 0x61, 0xff, 0xf4, 0x00   ; F50375  [174] key 0x1601  -> rec 0
+	.byte 0x00, 0x18, 0x2b, 0x02, 0xf5, 0x00   ; F5037B  [175] key 0x1800  -> rec 119
+	.byte 0x01, 0x18, 0x37, 0x02, 0xf5, 0x00   ; F50381  [176] key 0x1801  -> rec 121
+	.byte 0x08, 0x18, 0x43, 0x02, 0xf5, 0x00   ; F50387  [177] key 0x1808  -> rec 123
+	.byte 0x10, 0x18, 0x4f, 0x02, 0xf5, 0x00   ; F5038D  [178] key 0x1810  -> rec 125
+	.byte 0x11, 0x18, 0x5b, 0x02, 0xf5, 0x00   ; F50393  [179] key 0x1811  -> rec 127
+	.byte 0x12, 0x18, 0x67, 0x02, 0xf5, 0x00   ; F50399  [180] key 0x1812  -> rec 129
+	.byte 0x13, 0x18, 0x73, 0x02, 0xf5, 0x00   ; F5039F  [181] key 0x1813  -> rec 131
+	.byte 0x20, 0x18, 0x7f, 0x02, 0xf5, 0x00   ; F503A5  [182] key 0x1820  -> rec 133
+	.byte 0x30, 0x18, 0x8b, 0x02, 0xf5, 0x00   ; F503AB  [183] key 0x1830  -> rec 135
+	.byte 0x31, 0x18, 0x97, 0x02, 0xf5, 0x00   ; F503B1  [184] key 0x1831  -> rec 137
+	.byte 0x32, 0x18, 0xa3, 0x02, 0xf5, 0x00   ; F503B7  [185] key 0x1832  -> rec 139
+	.byte 0x33, 0x18, 0xaf, 0x02, 0xf5, 0x00   ; F503BD  [186] key 0x1833  -> rec 141
+	.byte 0x34, 0x18, 0xbb, 0x02, 0xf5, 0x00   ; F503C3  [187] key 0x1834  -> rec 143
+	.byte 0x35, 0x18, 0xc7, 0x02, 0xf5, 0x00   ; F503C9  [188] key 0x1835  -> rec 145
+	.byte 0x36, 0x18, 0xd3, 0x02, 0xf5, 0x00   ; F503CF  [189] key 0x1836  -> rec 147
+	.byte 0x40, 0x00, 0xfd, 0x02, 0xf5, 0x00   ; F503D5  [190] key 0x0040  -> rec 154
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F503DB  [191] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x18, 0x33, 0x03, 0xf5, 0x00   ; F503E1  [192] key 0x1800  -> rec 163
+	.byte 0x01, 0x18, 0x3f, 0x03, 0xf5, 0x00   ; F503E7  [193] key 0x1801  -> rec 165
+	.byte 0x02, 0x18, 0x4b, 0x03, 0xf5, 0x00   ; F503ED  [194] key 0x1802  -> rec 167
+	.byte 0x03, 0x18, 0x57, 0x03, 0xf5, 0x00   ; F503F3  [195] key 0x1803  -> rec 169
+	.byte 0x04, 0x18, 0x63, 0x03, 0xf5, 0x00   ; F503F9  [196] key 0x1804  -> rec 171
+	.byte 0x05, 0x18, 0x6f, 0x03, 0xf5, 0x00   ; F503FF  [197] key 0x1805  -> rec 173
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50405  [198] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x1a, 0x31, 0x02, 0xf5, 0x00   ; F5040B  [199] key 0x1A00  -> rec 120
+	.byte 0x01, 0x1a, 0x3d, 0x02, 0xf5, 0x00   ; F50411  [200] key 0x1A01  -> rec 122
+	.byte 0x08, 0x1a, 0x49, 0x02, 0xf5, 0x00   ; F50417  [201] key 0x1A08  -> rec 124
+	.byte 0x10, 0x1a, 0x55, 0x02, 0xf5, 0x00   ; F5041D  [202] key 0x1A10  -> rec 126
+	.byte 0x11, 0x1a, 0x61, 0x02, 0xf5, 0x00   ; F50423  [203] key 0x1A11  -> rec 128
+	.byte 0x12, 0x1a, 0x6d, 0x02, 0xf5, 0x00   ; F50429  [204] key 0x1A12  -> rec 130
+	.byte 0x13, 0x1a, 0x79, 0x02, 0xf5, 0x00   ; F5042F  [205] key 0x1A13  -> rec 132
+	.byte 0x20, 0x1a, 0x85, 0x02, 0xf5, 0x00   ; F50435  [206] key 0x1A20  -> rec 134
+	.byte 0x30, 0x1a, 0x91, 0x02, 0xf5, 0x00   ; F5043B  [207] key 0x1A30  -> rec 136
+	.byte 0x31, 0x1a, 0x9d, 0x02, 0xf5, 0x00   ; F50441  [208] key 0x1A31  -> rec 138
+	.byte 0x32, 0x1a, 0xa9, 0x02, 0xf5, 0x00   ; F50447  [209] key 0x1A32  -> rec 140
+	.byte 0x33, 0x1a, 0xb5, 0x02, 0xf5, 0x00   ; F5044D  [210] key 0x1A33  -> rec 142
+	.byte 0x34, 0x1a, 0xc1, 0x02, 0xf5, 0x00   ; F50453  [211] key 0x1A34  -> rec 144
+	.byte 0x35, 0x1a, 0xcd, 0x02, 0xf5, 0x00   ; F50459  [212] key 0x1A35  -> rec 146
+	.byte 0x36, 0x1a, 0xd9, 0x02, 0xf5, 0x00   ; F5045F  [213] key 0x1A36  -> rec 148
+	.byte 0x40, 0x00, 0x27, 0x03, 0xf5, 0x00   ; F50465  [214] key 0x0040  -> rec 161
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F5046B  [215] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x1a, 0x39, 0x03, 0xf5, 0x00   ; F50471  [216] key 0x1A00  -> rec 164
+	.byte 0x01, 0x1a, 0x45, 0x03, 0xf5, 0x00   ; F50477  [217] key 0x1A01  -> rec 166
+	.byte 0x02, 0x1a, 0x51, 0x03, 0xf5, 0x00   ; F5047D  [218] key 0x1A02  -> rec 168
+	.byte 0x03, 0x1a, 0x5d, 0x03, 0xf5, 0x00   ; F50483  [219] key 0x1A03  -> rec 170
+	.byte 0x04, 0x1a, 0x69, 0x03, 0xf5, 0x00   ; F50489  [220] key 0x1A04  -> rec 172
+	.byte 0x05, 0x1a, 0x75, 0x03, 0xf5, 0x00   ; F5048F  [221] key 0x1A05  -> rec 174
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50495  [222] key 0x0DFF  -> rec 0
+	.byte 0x02, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F5049B  [223] key 0x0102  -> rec 0
+	.byte 0x02, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F504A1  [224] key 0x0202  -> rec 0
+	.byte 0x02, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F504A7  [225] key 0x0302  -> rec 0
+	.byte 0x02, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F504AD  [226] key 0x0402  -> rec 0
+	.byte 0x03, 0x18, 0xad, 0x04, 0xf5, 0x00   ; F504B3  [227] key 0x1803  -> rec 226
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F504B9  [228] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0xb3, 0x04, 0xf5, 0x00   ; F504BF  [229] key 0x0000  -> rec 227
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F504C5  [230] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0xbf, 0x04, 0xf5, 0x00   ; F504CB  [231] key 0x0000  -> rec 229
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F504D1  [232] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x18, 0x9b, 0x04, 0xf5, 0x00   ; F504D7  [233] key 0x1800  -> rec 223
+	.byte 0x08, 0x18, 0xa1, 0x04, 0xf5, 0x00   ; F504DD  [234] key 0x1808  -> rec 224
+	.byte 0x10, 0x18, 0xa7, 0x04, 0xf5, 0x00   ; F504E3  [235] key 0x1810  -> rec 225
+	.byte 0x11, 0x00, 0xcb, 0x04, 0xf5, 0x00   ; F504E9  [236] key 0x0011  -> rec 231
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F504EF  [237] key 0x0DFF  -> rec 0
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F504F5  [238] key 0x0DFF  -> rec 0
+	.byte 0x03, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F504FB  [239] key 0x0103  -> rec 0
+	.byte 0x03, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F50501  [240] key 0x0103  -> rec 0
+	.byte 0x03, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F50507  [241] key 0x0203  -> rec 0
+	.byte 0x03, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F5050D  [242] key 0x0203  -> rec 0
+	.byte 0x03, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F50513  [243] key 0x0303  -> rec 0
+	.byte 0x03, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F50519  [244] key 0x0303  -> rec 0
+	.byte 0x03, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F5051F  [245] key 0x0403  -> rec 0
+	.byte 0x03, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F50525  [246] key 0x0403  -> rec 0
+	.byte 0x03, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F5052B  [247] key 0x0503  -> rec 0
+	.byte 0x03, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F50531  [248] key 0x0503  -> rec 0
+	.byte 0x03, 0x06, 0x61, 0xff, 0xf4, 0x00   ; F50537  [249] key 0x0603  -> rec 0
+	.byte 0x03, 0x06, 0x61, 0xff, 0xf4, 0x00   ; F5053D  [250] key 0x0603  -> rec 0
+	.byte 0x03, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F50543  [251] key 0x0703  -> rec 0
+	.byte 0x03, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F50549  [252] key 0x0703  -> rec 0
+	.byte 0x03, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F5054F  [253] key 0x0803  -> rec 0
+	.byte 0x03, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F50555  [254] key 0x0803  -> rec 0
+	.byte 0x03, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F5055B  [255] key 0x0903  -> rec 0
+	.byte 0x03, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F50561  [256] key 0x0903  -> rec 0
+	.byte 0x03, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F50567  [257] key 0x0A03  -> rec 0
+	.byte 0x03, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F5056D  [258] key 0x0A03  -> rec 0
+	.byte 0x03, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F50573  [259] key 0x0B03  -> rec 0
+	.byte 0x03, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F50579  [260] key 0x0B03  -> rec 0
+	.byte 0x03, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F5057F  [261] key 0x0C03  -> rec 0
+	.byte 0x03, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50585  [262] key 0x0C03  -> rec 0
+	.byte 0x03, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F5058B  [263] key 0x0D03  -> rec 0
+	.byte 0x03, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50591  [264] key 0x0D03  -> rec 0
+	.byte 0x03, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50597  [265] key 0x0E03  -> rec 0
+	.byte 0x03, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F5059D  [266] key 0x0E03  -> rec 0
+	.byte 0x03, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F505A3  [267] key 0x0F03  -> rec 0
+	.byte 0x03, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F505A9  [268] key 0x0F03  -> rec 0
+	.byte 0x03, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F505AF  [269] key 0x1003  -> rec 0
+	.byte 0x03, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F505B5  [270] key 0x1003  -> rec 0
+	.byte 0x03, 0x11, 0x61, 0xff, 0xf4, 0x00   ; F505BB  [271] key 0x1103  -> rec 0
+	.byte 0x03, 0x11, 0x61, 0xff, 0xf4, 0x00   ; F505C1  [272] key 0x1103  -> rec 0
+	.byte 0x03, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F505C7  [273] key 0x1203  -> rec 0
+	.byte 0x03, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F505CD  [274] key 0x1203  -> rec 0
+	.byte 0x03, 0x13, 0x61, 0xff, 0xf4, 0x00   ; F505D3  [275] key 0x1303  -> rec 0
+	.byte 0x03, 0x13, 0x61, 0xff, 0xf4, 0x00   ; F505D9  [276] key 0x1303  -> rec 0
+	.byte 0x03, 0x14, 0x61, 0xff, 0xf4, 0x00   ; F505DF  [277] key 0x1403  -> rec 0
+	.byte 0x03, 0x14, 0x61, 0xff, 0xf4, 0x00   ; F505E5  [278] key 0x1403  -> rec 0
+	.byte 0x03, 0x15, 0x61, 0xff, 0xf4, 0x00   ; F505EB  [279] key 0x1503  -> rec 0
+	.byte 0x03, 0x15, 0x61, 0xff, 0xf4, 0x00   ; F505F1  [280] key 0x1503  -> rec 0
+	.byte 0x03, 0x16, 0x61, 0xff, 0xf4, 0x00   ; F505F7  [281] key 0x1603  -> rec 0
+	.byte 0x03, 0x16, 0x61, 0xff, 0xf4, 0x00   ; F505FD  [282] key 0x1603  -> rec 0
+	.byte 0x03, 0x17, 0x61, 0xff, 0xf4, 0x00   ; F50603  [283] key 0x1703  -> rec 0
+	.byte 0x03, 0x17, 0x61, 0xff, 0xf4, 0x00   ; F50609  [284] key 0x1703  -> rec 0
+	.byte 0x03, 0x18, 0x61, 0xff, 0xf4, 0x00   ; F5060F  [285] key 0x1803  -> rec 0
+	.byte 0x03, 0x18, 0x61, 0xff, 0xf4, 0x00   ; F50615  [286] key 0x1803  -> rec 0
+	.byte 0x00, 0x18, 0xfb, 0x04, 0xf5, 0x00   ; F5061B  [287] key 0x1800  -> rec 239
+	.byte 0x10, 0x18, 0x07, 0x05, 0xf5, 0x00   ; F50621  [288] key 0x1810  -> rec 241
+	.byte 0x11, 0x18, 0x13, 0x05, 0xf5, 0x00   ; F50627  [289] key 0x1811  -> rec 243
+	.byte 0x12, 0x18, 0x1f, 0x05, 0xf5, 0x00   ; F5062D  [290] key 0x1812  -> rec 245
+	.byte 0x13, 0x18, 0x2b, 0x05, 0xf5, 0x00   ; F50633  [291] key 0x1813  -> rec 247
+	.byte 0x14, 0x18, 0x37, 0x05, 0xf5, 0x00   ; F50639  [292] key 0x1814  -> rec 249
+	.byte 0x15, 0x18, 0x43, 0x05, 0xf5, 0x00   ; F5063F  [293] key 0x1815  -> rec 251
+	.byte 0x16, 0x18, 0x4f, 0x05, 0xf5, 0x00   ; F50645  [294] key 0x1816  -> rec 253
+	.byte 0x17, 0x18, 0x5b, 0x05, 0xf5, 0x00   ; F5064B  [295] key 0x1817  -> rec 255
+	.byte 0x18, 0x18, 0x67, 0x05, 0xf5, 0x00   ; F50651  [296] key 0x1818  -> rec 257
+	.byte 0x19, 0x18, 0x73, 0x05, 0xf5, 0x00   ; F50657  [297] key 0x1819  -> rec 259
+	.byte 0x1a, 0x18, 0x7f, 0x05, 0xf5, 0x00   ; F5065D  [298] key 0x181A  -> rec 261
+	.byte 0x1b, 0x18, 0x8b, 0x05, 0xf5, 0x00   ; F50663  [299] key 0x181B  -> rec 263
+	.byte 0x1c, 0x18, 0x97, 0x05, 0xf5, 0x00   ; F50669  [300] key 0x181C  -> rec 265
+	.byte 0x1d, 0x18, 0xa3, 0x05, 0xf5, 0x00   ; F5066F  [301] key 0x181D  -> rec 267
+	.byte 0x1e, 0x18, 0xaf, 0x05, 0xf5, 0x00   ; F50675  [302] key 0x181E  -> rec 269
+	.byte 0x20, 0x18, 0xbb, 0x05, 0xf5, 0x00   ; F5067B  [303] key 0x1820  -> rec 271
+	.byte 0x21, 0x18, 0xc7, 0x05, 0xf5, 0x00   ; F50681  [304] key 0x1821  -> rec 273
+	.byte 0x22, 0x18, 0xd3, 0x05, 0xf5, 0x00   ; F50687  [305] key 0x1822  -> rec 275
+	.byte 0x23, 0x18, 0xdf, 0x05, 0xf5, 0x00   ; F5068D  [306] key 0x1823  -> rec 277
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50693  [307] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x18, 0xeb, 0x05, 0xf5, 0x00   ; F50699  [308] key 0x1800  -> rec 279
+	.byte 0x01, 0x18, 0xf7, 0x05, 0xf5, 0x00   ; F5069F  [309] key 0x1801  -> rec 281
+	.byte 0x02, 0x18, 0x03, 0x06, 0xf5, 0x00   ; F506A5  [310] key 0x1802  -> rec 283
+	.byte 0xfe, 0x18, 0x0f, 0x06, 0xf5, 0x00   ; F506AB  [311] key 0x18FE  -> rec 285
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F506B1  [312] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x1a, 0x01, 0x05, 0xf5, 0x00   ; F506B7  [313] key 0x1A00  -> rec 240
+	.byte 0x10, 0x1a, 0x0d, 0x05, 0xf5, 0x00   ; F506BD  [314] key 0x1A10  -> rec 242
+	.byte 0x11, 0x1a, 0x19, 0x05, 0xf5, 0x00   ; F506C3  [315] key 0x1A11  -> rec 244
+	.byte 0x12, 0x1a, 0x25, 0x05, 0xf5, 0x00   ; F506C9  [316] key 0x1A12  -> rec 246
+	.byte 0x13, 0x1a, 0x31, 0x05, 0xf5, 0x00   ; F506CF  [317] key 0x1A13  -> rec 248
+	.byte 0x14, 0x1a, 0x3d, 0x05, 0xf5, 0x00   ; F506D5  [318] key 0x1A14  -> rec 250
+	.byte 0x15, 0x1a, 0x49, 0x05, 0xf5, 0x00   ; F506DB  [319] key 0x1A15  -> rec 252
+	.byte 0x16, 0x1a, 0x55, 0x05, 0xf5, 0x00   ; F506E1  [320] key 0x1A16  -> rec 254
+	.byte 0x17, 0x1a, 0x61, 0x05, 0xf5, 0x00   ; F506E7  [321] key 0x1A17  -> rec 256
+	.byte 0x18, 0x1a, 0x6d, 0x05, 0xf5, 0x00   ; F506ED  [322] key 0x1A18  -> rec 258
+	.byte 0x19, 0x1a, 0x79, 0x05, 0xf5, 0x00   ; F506F3  [323] key 0x1A19  -> rec 260
+	.byte 0x1a, 0x1a, 0x85, 0x05, 0xf5, 0x00   ; F506F9  [324] key 0x1A1A  -> rec 262
+	.byte 0x1b, 0x1a, 0x91, 0x05, 0xf5, 0x00   ; F506FF  [325] key 0x1A1B  -> rec 264
+	.byte 0x1c, 0x1a, 0x9d, 0x05, 0xf5, 0x00   ; F50705  [326] key 0x1A1C  -> rec 266
+	.byte 0x1d, 0x1a, 0xa9, 0x05, 0xf5, 0x00   ; F5070B  [327] key 0x1A1D  -> rec 268
+	.byte 0x1e, 0x1a, 0xb5, 0x05, 0xf5, 0x00   ; F50711  [328] key 0x1A1E  -> rec 270
+	.byte 0x20, 0x1a, 0xc1, 0x05, 0xf5, 0x00   ; F50717  [329] key 0x1A20  -> rec 272
+	.byte 0x21, 0x1a, 0xcd, 0x05, 0xf5, 0x00   ; F5071D  [330] key 0x1A21  -> rec 274
+	.byte 0x22, 0x1a, 0xd9, 0x05, 0xf5, 0x00   ; F50723  [331] key 0x1A22  -> rec 276
+	.byte 0x23, 0x1a, 0xe5, 0x05, 0xf5, 0x00   ; F50729  [332] key 0x1A23  -> rec 278
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F5072F  [333] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x1a, 0xf1, 0x05, 0xf5, 0x00   ; F50735  [334] key 0x1A00  -> rec 280
+	.byte 0x01, 0x1a, 0xfd, 0x05, 0xf5, 0x00   ; F5073B  [335] key 0x1A01  -> rec 282
+	.byte 0x02, 0x1a, 0x09, 0x06, 0xf5, 0x00   ; F50741  [336] key 0x1A02  -> rec 284
+	.byte 0xfe, 0x1a, 0x15, 0x06, 0xf5, 0x00   ; F50747  [337] key 0x1AFE  -> rec 286
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F5074D  [338] key 0x0DFF  -> rec 0
+	.byte 0x05, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F50753  [339] key 0x0105  -> rec 0
+	.byte 0x03, 0x18, 0x53, 0x07, 0xf5, 0x00   ; F50759  [340] key 0x1803  -> rec 339
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F5075F  [341] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0x59, 0x07, 0xf5, 0x00   ; F50765  [342] key 0x0000  -> rec 340
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F5076B  [343] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0x65, 0x07, 0xf5, 0x00   ; F50771  [344] key 0x0000  -> rec 342
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50777  [345] key 0x0EFF  -> rec 0
+	.byte 0x05, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F5077D  [346] key 0x0105  -> rec 0
+	.byte 0x03, 0x1a, 0x7d, 0x07, 0xf5, 0x00   ; F50783  [347] key 0x1A03  -> rec 346
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50789  [348] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0x83, 0x07, 0xf5, 0x00   ; F5078F  [349] key 0x0000  -> rec 347
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F50795  [350] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0x8f, 0x07, 0xf5, 0x00   ; F5079B  [351] key 0x0000  -> rec 349
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F507A1  [352] key 0x0EFF  -> rec 0
+	.byte 0x05, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F507A7  [353] key 0x0205  -> rec 0
+	.byte 0x05, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F507AD  [354] key 0x0205  -> rec 0
+	.byte 0x05, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F507B3  [355] key 0x0305  -> rec 0
+	.byte 0x05, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F507B9  [356] key 0x0305  -> rec 0
+	.byte 0x05, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F507BF  [357] key 0x0405  -> rec 0
+	.byte 0x05, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F507C5  [358] key 0x0405  -> rec 0
+	.byte 0x05, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F507CB  [359] key 0x0505  -> rec 0
+	.byte 0x05, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F507D1  [360] key 0x0505  -> rec 0
+	.byte 0x05, 0x06, 0x61, 0xff, 0xf4, 0x00   ; F507D7  [361] key 0x0605  -> rec 0
+	.byte 0x05, 0x06, 0x61, 0xff, 0xf4, 0x00   ; F507DD  [362] key 0x0605  -> rec 0
+	.byte 0x05, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F507E3  [363] key 0x0705  -> rec 0
+	.byte 0x05, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F507E9  [364] key 0x0705  -> rec 0
+	.byte 0x05, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F507EF  [365] key 0x0805  -> rec 0
+	.byte 0x05, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F507F5  [366] key 0x0805  -> rec 0
+	.byte 0x05, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F507FB  [367] key 0x0905  -> rec 0
+	.byte 0x05, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F50801  [368] key 0x0905  -> rec 0
+	.byte 0x05, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F50807  [369] key 0x0A05  -> rec 0
+	.byte 0x05, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F5080D  [370] key 0x0A05  -> rec 0
+	.byte 0x05, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F50813  [371] key 0x0B05  -> rec 0
+	.byte 0x05, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F50819  [372] key 0x0B05  -> rec 0
+	.byte 0x05, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F5081F  [373] key 0x0C05  -> rec 0
+	.byte 0x05, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50825  [374] key 0x0C05  -> rec 0
+	.byte 0x05, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F5082B  [375] key 0x0D05  -> rec 0
+	.byte 0x05, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50831  [376] key 0x0D05  -> rec 0
+	.byte 0x05, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50837  [377] key 0x0E05  -> rec 0
+	.byte 0x05, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F5083D  [378] key 0x0E05  -> rec 0
+	.byte 0x05, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F50843  [379] key 0x0F05  -> rec 0
+	.byte 0x05, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F50849  [380] key 0x0F05  -> rec 0
+	.byte 0x05, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F5084F  [381] key 0x1005  -> rec 0
+	.byte 0x05, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50855  [382] key 0x1005  -> rec 0
+	.byte 0x05, 0x11, 0x61, 0xff, 0xf4, 0x00   ; F5085B  [383] key 0x1105  -> rec 0
+	.byte 0x05, 0x11, 0x61, 0xff, 0xf4, 0x00   ; F50861  [384] key 0x1105  -> rec 0
+	.byte 0x05, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F50867  [385] key 0x1205  -> rec 0
+	.byte 0x05, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F5086D  [386] key 0x1205  -> rec 0
+	.byte 0x06, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F50873  [387] key 0x0106  -> rec 0
+	.byte 0x06, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F50879  [388] key 0x0106  -> rec 0
+	.byte 0x06, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F5087F  [389] key 0x0206  -> rec 0
+	.byte 0x06, 0x02, 0x61, 0xff, 0xf4, 0x00   ; F50885  [390] key 0x0206  -> rec 0
+	.byte 0x06, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F5088B  [391] key 0x0306  -> rec 0
+	.byte 0x06, 0x03, 0x61, 0xff, 0xf4, 0x00   ; F50891  [392] key 0x0306  -> rec 0
+	.byte 0x06, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F50897  [393] key 0x0406  -> rec 0
+	.byte 0x06, 0x04, 0x61, 0xff, 0xf4, 0x00   ; F5089D  [394] key 0x0406  -> rec 0
+	.byte 0x06, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F508A3  [395] key 0x0506  -> rec 0
+	.byte 0x06, 0x05, 0x61, 0xff, 0xf4, 0x00   ; F508A9  [396] key 0x0506  -> rec 0
+	.byte 0x06, 0x06, 0x61, 0xff, 0xf4, 0x00   ; F508AF  [397] key 0x0606  -> rec 0
+	.byte 0x06, 0x06, 0x61, 0xff, 0xf4, 0x00   ; F508B5  [398] key 0x0606  -> rec 0
+	.byte 0x06, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F508BB  [399] key 0x0706  -> rec 0
+	.byte 0x06, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F508C1  [400] key 0x0706  -> rec 0
+	.byte 0x06, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F508C7  [401] key 0x0806  -> rec 0
+	.byte 0x06, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F508CD  [402] key 0x0806  -> rec 0
+	.byte 0x06, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F508D3  [403] key 0x0906  -> rec 0
+	.byte 0x06, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F508D9  [404] key 0x0906  -> rec 0
+	.byte 0x06, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F508DF  [405] key 0x0A06  -> rec 0
+	.byte 0x06, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F508E5  [406] key 0x0A06  -> rec 0
+	.byte 0x06, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F508EB  [407] key 0x0B06  -> rec 0
+	.byte 0x06, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F508F1  [408] key 0x0B06  -> rec 0
+	.byte 0x06, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F508F7  [409] key 0x0C06  -> rec 0
+	.byte 0x06, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F508FD  [410] key 0x0C06  -> rec 0
+	.byte 0x06, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50903  [411] key 0x0D06  -> rec 0
+	.byte 0x06, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50909  [412] key 0x0D06  -> rec 0
+	.byte 0x06, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F5090F  [413] key 0x0E06  -> rec 0
+	.byte 0x06, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50915  [414] key 0x0E06  -> rec 0
+	.byte 0x06, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F5091B  [415] key 0x0F06  -> rec 0
+	.byte 0x06, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F50921  [416] key 0x0F06  -> rec 0
+	.byte 0x06, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50927  [417] key 0x1006  -> rec 0
+	.byte 0x06, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F5092D  [418] key 0x1006  -> rec 0
+	.byte 0x06, 0x11, 0x61, 0xff, 0xf4, 0x00   ; F50933  [419] key 0x1106  -> rec 0
+	.byte 0x06, 0x11, 0x61, 0xff, 0xf4, 0x00   ; F50939  [420] key 0x1106  -> rec 0
+	.byte 0x06, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F5093F  [421] key 0x1206  -> rec 0
+	.byte 0x06, 0x12, 0x61, 0xff, 0xf4, 0x00   ; F50945  [422] key 0x1206  -> rec 0
+	.byte 0x06, 0x13, 0x61, 0xff, 0xf4, 0x00   ; F5094B  [423] key 0x1306  -> rec 0
+	.byte 0x06, 0x13, 0x61, 0xff, 0xf4, 0x00   ; F50951  [424] key 0x1306  -> rec 0
+	.byte 0x06, 0x14, 0x61, 0xff, 0xf4, 0x00   ; F50957  [425] key 0x1406  -> rec 0
+	.byte 0x06, 0x14, 0x61, 0xff, 0xf4, 0x00   ; F5095D  [426] key 0x1406  -> rec 0
+	.byte 0x06, 0x15, 0x61, 0xff, 0xf4, 0x00   ; F50963  [427] key 0x1506  -> rec 0
+	.byte 0x06, 0x15, 0x61, 0xff, 0xf4, 0x00   ; F50969  [428] key 0x1506  -> rec 0
+	.byte 0x06, 0x16, 0x61, 0xff, 0xf4, 0x00   ; F5096F  [429] key 0x1606  -> rec 0
+	.byte 0x06, 0x16, 0x61, 0xff, 0xf4, 0x00   ; F50975  [430] key 0x1606  -> rec 0
+	.byte 0x06, 0x17, 0x61, 0xff, 0xf4, 0x00   ; F5097B  [431] key 0x1706  -> rec 0
+	.byte 0x06, 0x17, 0x61, 0xff, 0xf4, 0x00   ; F50981  [432] key 0x1706  -> rec 0
+	.byte 0x06, 0x18, 0x61, 0xff, 0xf4, 0x00   ; F50987  [433] key 0x1806  -> rec 0
+	.byte 0x02, 0x18, 0x87, 0x09, 0xf5, 0x00   ; F5098D  [434] key 0x1802  -> rec 433
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50993  [435] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0x8d, 0x09, 0xf5, 0x00   ; F50999  [436] key 0x0000  -> rec 434
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F5099F  [437] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0x99, 0x09, 0xf5, 0x00   ; F509A5  [438] key 0x0000  -> rec 436
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F509AB  [439] key 0x0EFF  -> rec 0
+	.byte 0x06, 0x18, 0x61, 0xff, 0xf4, 0x00   ; F509B1  [440] key 0x1806  -> rec 0
+	.byte 0x02, 0x1a, 0xb1, 0x09, 0xf5, 0x00   ; F509B7  [441] key 0x1A02  -> rec 440
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F509BD  [442] key 0x10FF  -> rec 0
+	.byte 0x00, 0x00, 0xb7, 0x09, 0xf5, 0x00   ; F509C3  [443] key 0x0000  -> rec 441
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F509C9  [444] key 0x0FFF  -> rec 0
+	.byte 0x00, 0x00, 0xc3, 0x09, 0xf5, 0x00   ; F509CF  [445] key 0x0000  -> rec 443
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F509D5  [446] key 0x0EFF  -> rec 0
+	.byte 0x06, 0x19, 0x61, 0xff, 0xf4, 0x00   ; F509DB  [447] key 0x1906  -> rec 0
+	.byte 0x06, 0x19, 0x61, 0xff, 0xf4, 0x00   ; F509E1  [448] key 0x1906  -> rec 0
+	.byte 0x06, 0x1a, 0x61, 0xff, 0xf4, 0x00   ; F509E7  [449] key 0x1A06  -> rec 0
+	.byte 0x06, 0x1a, 0x61, 0xff, 0xf4, 0x00   ; F509ED  [450] key 0x1A06  -> rec 0
+	.byte 0x06, 0x1b, 0x61, 0xff, 0xf4, 0x00   ; F509F3  [451] key 0x1B06  -> rec 0
+	.byte 0x06, 0x1b, 0x61, 0xff, 0xf4, 0x00   ; F509F9  [452] key 0x1B06  -> rec 0
+	.byte 0x06, 0x1c, 0x61, 0xff, 0xf4, 0x00   ; F509FF  [453] key 0x1C06  -> rec 0
+	.byte 0x06, 0x1c, 0x61, 0xff, 0xf4, 0x00   ; F50A05  [454] key 0x1C06  -> rec 0
+	.byte 0x06, 0x1d, 0x61, 0xff, 0xf4, 0x00   ; F50A0B  [455] key 0x1D06  -> rec 0
+	.byte 0x06, 0x1d, 0x61, 0xff, 0xf4, 0x00   ; F50A11  [456] key 0x1D06  -> rec 0
+	.byte 0x06, 0x1e, 0x61, 0xff, 0xf4, 0x00   ; F50A17  [457] key 0x1E06  -> rec 0
+	.byte 0x06, 0x1e, 0x61, 0xff, 0xf4, 0x00   ; F50A1D  [458] key 0x1E06  -> rec 0
+	.byte 0x06, 0x1f, 0x61, 0xff, 0xf4, 0x00   ; F50A23  [459] key 0x1F06  -> rec 0
+	.byte 0x06, 0x1f, 0x61, 0xff, 0xf4, 0x00   ; F50A29  [460] key 0x1F06  -> rec 0
+	.byte 0x06, 0x20, 0x61, 0xff, 0xf4, 0x00   ; F50A2F  [461] key 0x2006  -> rec 0
+	.byte 0x06, 0x20, 0x61, 0xff, 0xf4, 0x00   ; F50A35  [462] key 0x2006  -> rec 0
+	.byte 0x06, 0x21, 0x61, 0xff, 0xf4, 0x00   ; F50A3B  [463] key 0x2106  -> rec 0
+	.byte 0x06, 0x21, 0x61, 0xff, 0xf4, 0x00   ; F50A41  [464] key 0x2106  -> rec 0
+	.byte 0x06, 0x22, 0x61, 0xff, 0xf4, 0x00   ; F50A47  [465] key 0x2206  -> rec 0
+	.byte 0x06, 0x22, 0x61, 0xff, 0xf4, 0x00   ; F50A4D  [466] key 0x2206  -> rec 0
+	.byte 0x06, 0x23, 0x61, 0xff, 0xf4, 0x00   ; F50A53  [467] key 0x2306  -> rec 0
+	.byte 0x06, 0x23, 0x61, 0xff, 0xf4, 0x00   ; F50A59  [468] key 0x2306  -> rec 0
+	.byte 0x06, 0x24, 0x61, 0xff, 0xf4, 0x00   ; F50A5F  [469] key 0x2406  -> rec 0
+	.byte 0x06, 0x24, 0x61, 0xff, 0xf4, 0x00   ; F50A65  [470] key 0x2406  -> rec 0
+	.byte 0x06, 0x25, 0x61, 0xff, 0xf4, 0x00   ; F50A6B  [471] key 0x2506  -> rec 0
+	.byte 0x06, 0x25, 0x61, 0xff, 0xf4, 0x00   ; F50A71  [472] key 0x2506  -> rec 0
+	.byte 0x06, 0x26, 0x61, 0xff, 0xf4, 0x00   ; F50A77  [473] key 0x2606  -> rec 0
+	.byte 0x06, 0x26, 0x61, 0xff, 0xf4, 0x00   ; F50A7D  [474] key 0x2606  -> rec 0
+	.byte 0x06, 0x27, 0x61, 0xff, 0xf4, 0x00   ; F50A83  [475] key 0x2706  -> rec 0
+	.byte 0x06, 0x27, 0x61, 0xff, 0xf4, 0x00   ; F50A89  [476] key 0x2706  -> rec 0
+	.byte 0x00, 0x00, 0x71, 0x07, 0xf5, 0x00   ; F50A8F  [477] key 0x0000  -> rec 344
+	.byte 0x03, 0x18, 0xa7, 0x07, 0xf5, 0x00   ; F50A95  [478] key 0x1803  -> rec 353
+	.byte 0x04, 0x18, 0xb3, 0x07, 0xf5, 0x00   ; F50A9B  [479] key 0x1804  -> rec 355
+	.byte 0x05, 0x18, 0xbf, 0x07, 0xf5, 0x00   ; F50AA1  [480] key 0x1805  -> rec 357
+	.byte 0x06, 0x18, 0xcb, 0x07, 0xf5, 0x00   ; F50AA7  [481] key 0x1806  -> rec 359
+	.byte 0x07, 0x18, 0xd7, 0x07, 0xf5, 0x00   ; F50AAD  [482] key 0x1807  -> rec 361
+	.byte 0x08, 0x18, 0xe3, 0x07, 0xf5, 0x00   ; F50AB3  [483] key 0x1808  -> rec 363
+	.byte 0x09, 0x18, 0xef, 0x07, 0xf5, 0x00   ; F50AB9  [484] key 0x1809  -> rec 365
+	.byte 0x0a, 0x18, 0xfb, 0x07, 0xf5, 0x00   ; F50ABF  [485] key 0x180A  -> rec 367
+	.byte 0x10, 0x18, 0x07, 0x08, 0xf5, 0x00   ; F50AC5  [486] key 0x1810  -> rec 369
+	.byte 0x14, 0x18, 0x13, 0x08, 0xf5, 0x00   ; F50ACB  [487] key 0x1814  -> rec 371
+	.byte 0x20, 0x18, 0x1f, 0x08, 0xf5, 0x00   ; F50AD1  [488] key 0x1820  -> rec 373
+	.byte 0x28, 0x18, 0x2b, 0x08, 0xf5, 0x00   ; F50AD7  [489] key 0x1828  -> rec 375
+	.byte 0x29, 0x18, 0x37, 0x08, 0xf5, 0x00   ; F50ADD  [490] key 0x1829  -> rec 377
+	.byte 0x2a, 0x18, 0x43, 0x08, 0xf5, 0x00   ; F50AE3  [491] key 0x182A  -> rec 379
+	.byte 0x2b, 0x18, 0x4f, 0x08, 0xf5, 0x00   ; F50AE9  [492] key 0x182B  -> rec 381
+	.byte 0x30, 0x18, 0x5b, 0x08, 0xf5, 0x00   ; F50AEF  [493] key 0x1830  -> rec 383
+	.byte 0x31, 0x18, 0x67, 0x08, 0xf5, 0x00   ; F50AF5  [494] key 0x1831  -> rec 385
+	.byte 0x40, 0x18, 0x73, 0x08, 0xf5, 0x00   ; F50AFB  [495] key 0x1840  -> rec 387
+	.byte 0x41, 0x18, 0x7f, 0x08, 0xf5, 0x00   ; F50B01  [496] key 0x1841  -> rec 389
+	.byte 0x42, 0x18, 0x8b, 0x08, 0xf5, 0x00   ; F50B07  [497] key 0x1842  -> rec 391
+	.byte 0x43, 0x18, 0x97, 0x08, 0xf5, 0x00   ; F50B0D  [498] key 0x1843  -> rec 393
+	.byte 0x48, 0x18, 0xa3, 0x08, 0xf5, 0x00   ; F50B13  [499] key 0x1848  -> rec 395
+	.byte 0x49, 0x18, 0xaf, 0x08, 0xf5, 0x00   ; F50B19  [500] key 0x1849  -> rec 397
+	.byte 0x4a, 0x18, 0xbb, 0x08, 0xf5, 0x00   ; F50B1F  [501] key 0x184A  -> rec 399
+	.byte 0x50, 0x18, 0xc7, 0x08, 0xf5, 0x00   ; F50B25  [502] key 0x1850  -> rec 401
+	.byte 0x51, 0x18, 0xd3, 0x08, 0xf5, 0x00   ; F50B2B  [503] key 0x1851  -> rec 403
+	.byte 0x52, 0x18, 0xdf, 0x08, 0xf5, 0x00   ; F50B31  [504] key 0x1852  -> rec 405
+	.byte 0x53, 0x18, 0xeb, 0x08, 0xf5, 0x00   ; F50B37  [505] key 0x1853  -> rec 407
+	.byte 0x54, 0x18, 0xf7, 0x08, 0xf5, 0x00   ; F50B3D  [506] key 0x1854  -> rec 409
+	.byte 0x55, 0x18, 0x03, 0x09, 0xf5, 0x00   ; F50B43  [507] key 0x1855  -> rec 411
+	.byte 0x56, 0x18, 0x0f, 0x09, 0xf5, 0x00   ; F50B49  [508] key 0x1856  -> rec 413
+	.byte 0x57, 0x18, 0x1b, 0x09, 0xf5, 0x00   ; F50B4F  [509] key 0x1857  -> rec 415
+	.byte 0x58, 0x18, 0x27, 0x09, 0xf5, 0x00   ; F50B55  [510] key 0x1858  -> rec 417
+	.byte 0x59, 0x18, 0x33, 0x09, 0xf5, 0x00   ; F50B5B  [511] key 0x1859  -> rec 419
+	.byte 0x5a, 0x18, 0x3f, 0x09, 0xf5, 0x00   ; F50B61  [512] key 0x185A  -> rec 421
+	.byte 0x5b, 0x18, 0x4b, 0x09, 0xf5, 0x00   ; F50B67  [513] key 0x185B  -> rec 423
+	.byte 0x5c, 0x18, 0x57, 0x09, 0xf5, 0x00   ; F50B6D  [514] key 0x185C  -> rec 425
+	.byte 0x5d, 0x18, 0x63, 0x09, 0xf5, 0x00   ; F50B73  [515] key 0x185D  -> rec 427
+	.byte 0x5e, 0x18, 0x6f, 0x09, 0xf5, 0x00   ; F50B79  [516] key 0x185E  -> rec 429
+	.byte 0x60, 0x18, 0x7b, 0x09, 0xf5, 0x00   ; F50B7F  [517] key 0x1860  -> rec 431
+	.byte 0x61, 0x00, 0xa5, 0x09, 0xf5, 0x00   ; F50B85  [518] key 0x0061  -> rec 438
+	.byte 0x63, 0x18, 0xdb, 0x09, 0xf5, 0x00   ; F50B8B  [519] key 0x1863  -> rec 447
+	.byte 0x64, 0x18, 0xe7, 0x09, 0xf5, 0x00   ; F50B91  [520] key 0x1864  -> rec 449
+	.byte 0x65, 0x18, 0xf3, 0x09, 0xf5, 0x00   ; F50B97  [521] key 0x1865  -> rec 451
+	.byte 0x66, 0x18, 0xff, 0x09, 0xf5, 0x00   ; F50B9D  [522] key 0x1866  -> rec 453
+	.byte 0x68, 0x18, 0x0b, 0x0a, 0xf5, 0x00   ; F50BA3  [523] key 0x1868  -> rec 455
+	.byte 0x70, 0x18, 0x17, 0x0a, 0xf5, 0x00   ; F50BA9  [524] key 0x1870  -> rec 457
+	.byte 0x71, 0x18, 0x23, 0x0a, 0xf5, 0x00   ; F50BAF  [525] key 0x1871  -> rec 459
+	.byte 0x72, 0x18, 0x2f, 0x0a, 0xf5, 0x00   ; F50BB5  [526] key 0x1872  -> rec 461
+	.byte 0x73, 0x18, 0x3b, 0x0a, 0xf5, 0x00   ; F50BBB  [527] key 0x1873  -> rec 463
+	.byte 0x74, 0x18, 0x47, 0x0a, 0xf5, 0x00   ; F50BC1  [528] key 0x1874  -> rec 465
+	.byte 0x75, 0x18, 0x53, 0x0a, 0xf5, 0x00   ; F50BC7  [529] key 0x1875  -> rec 467
+	.byte 0x76, 0x18, 0x5f, 0x0a, 0xf5, 0x00   ; F50BCD  [530] key 0x1876  -> rec 469
+	.byte 0x77, 0x18, 0x6b, 0x0a, 0xf5, 0x00   ; F50BD3  [531] key 0x1877  -> rec 471
+	.byte 0x78, 0x18, 0x77, 0x0a, 0xf5, 0x00   ; F50BD9  [532] key 0x1878  -> rec 473
+	.byte 0x79, 0x18, 0x83, 0x0a, 0xf5, 0x00   ; F50BDF  [533] key 0x1879  -> rec 475
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50BE5  [534] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F50BEB  [535] key 0x0000  
+	.byte 0x00, 0x00, 0x9b, 0x07, 0xf5, 0x00   ; F50BF1  [536] key 0x0000  -> rec 351
+	.byte 0x03, 0x1a, 0xad, 0x07, 0xf5, 0x00   ; F50BF7  [537] key 0x1A03  -> rec 354
+	.byte 0x04, 0x1a, 0xb9, 0x07, 0xf5, 0x00   ; F50BFD  [538] key 0x1A04  -> rec 356
+	.byte 0x05, 0x1a, 0xc5, 0x07, 0xf5, 0x00   ; F50C03  [539] key 0x1A05  -> rec 358
+	.byte 0x06, 0x1a, 0xd1, 0x07, 0xf5, 0x00   ; F50C09  [540] key 0x1A06  -> rec 360
+	.byte 0x07, 0x1a, 0xdd, 0x07, 0xf5, 0x00   ; F50C0F  [541] key 0x1A07  -> rec 362
+	.byte 0x08, 0x1a, 0xe9, 0x07, 0xf5, 0x00   ; F50C15  [542] key 0x1A08  -> rec 364
+	.byte 0x09, 0x1a, 0xf5, 0x07, 0xf5, 0x00   ; F50C1B  [543] key 0x1A09  -> rec 366
+	.byte 0x0a, 0x1a, 0x01, 0x08, 0xf5, 0x00   ; F50C21  [544] key 0x1A0A  -> rec 368
+	.byte 0x10, 0x1a, 0x0d, 0x08, 0xf5, 0x00   ; F50C27  [545] key 0x1A10  -> rec 370
+	.byte 0x14, 0x1a, 0x19, 0x08, 0xf5, 0x00   ; F50C2D  [546] key 0x1A14  -> rec 372
+	.byte 0x20, 0x1a, 0x25, 0x08, 0xf5, 0x00   ; F50C33  [547] key 0x1A20  -> rec 374
+	.byte 0x28, 0x1a, 0x31, 0x08, 0xf5, 0x00   ; F50C39  [548] key 0x1A28  -> rec 376
+	.byte 0x29, 0x1a, 0x3d, 0x08, 0xf5, 0x00   ; F50C3F  [549] key 0x1A29  -> rec 378
+	.byte 0x2a, 0x1a, 0x49, 0x08, 0xf5, 0x00   ; F50C45  [550] key 0x1A2A  -> rec 380
+	.byte 0x2b, 0x1a, 0x55, 0x08, 0xf5, 0x00   ; F50C4B  [551] key 0x1A2B  -> rec 382
+	.byte 0x30, 0x1a, 0x61, 0x08, 0xf5, 0x00   ; F50C51  [552] key 0x1A30  -> rec 384
+	.byte 0x31, 0x1a, 0x6d, 0x08, 0xf5, 0x00   ; F50C57  [553] key 0x1A31  -> rec 386
+	.byte 0x40, 0x1a, 0x79, 0x08, 0xf5, 0x00   ; F50C5D  [554] key 0x1A40  -> rec 388
+	.byte 0x41, 0x1a, 0x85, 0x08, 0xf5, 0x00   ; F50C63  [555] key 0x1A41  -> rec 390
+	.byte 0x42, 0x1a, 0x91, 0x08, 0xf5, 0x00   ; F50C69  [556] key 0x1A42  -> rec 392
+	.byte 0x43, 0x1a, 0x9d, 0x08, 0xf5, 0x00   ; F50C6F  [557] key 0x1A43  -> rec 394
+	.byte 0x48, 0x1a, 0xa9, 0x08, 0xf5, 0x00   ; F50C75  [558] key 0x1A48  -> rec 396
+	.byte 0x49, 0x1a, 0xb5, 0x08, 0xf5, 0x00   ; F50C7B  [559] key 0x1A49  -> rec 398
+	.byte 0x4a, 0x1a, 0xc1, 0x08, 0xf5, 0x00   ; F50C81  [560] key 0x1A4A  -> rec 400
+	.byte 0x50, 0x1a, 0xcd, 0x08, 0xf5, 0x00   ; F50C87  [561] key 0x1A50  -> rec 402
+	.byte 0x51, 0x1a, 0xd9, 0x08, 0xf5, 0x00   ; F50C8D  [562] key 0x1A51  -> rec 404
+	.byte 0x52, 0x1a, 0xe5, 0x08, 0xf5, 0x00   ; F50C93  [563] key 0x1A52  -> rec 406
+	.byte 0x53, 0x1a, 0xf1, 0x08, 0xf5, 0x00   ; F50C99  [564] key 0x1A53  -> rec 408
+	.byte 0x54, 0x1a, 0xfd, 0x08, 0xf5, 0x00   ; F50C9F  [565] key 0x1A54  -> rec 410
+	.byte 0x55, 0x1a, 0x09, 0x09, 0xf5, 0x00   ; F50CA5  [566] key 0x1A55  -> rec 412
+	.byte 0x56, 0x1a, 0x15, 0x09, 0xf5, 0x00   ; F50CAB  [567] key 0x1A56  -> rec 414
+	.byte 0x57, 0x1a, 0x21, 0x09, 0xf5, 0x00   ; F50CB1  [568] key 0x1A57  -> rec 416
+	.byte 0x58, 0x1a, 0x2d, 0x09, 0xf5, 0x00   ; F50CB7  [569] key 0x1A58  -> rec 418
+	.byte 0x59, 0x1a, 0x39, 0x09, 0xf5, 0x00   ; F50CBD  [570] key 0x1A59  -> rec 420
+	.byte 0x5a, 0x1a, 0x45, 0x09, 0xf5, 0x00   ; F50CC3  [571] key 0x1A5A  -> rec 422
+	.byte 0x5b, 0x1a, 0x51, 0x09, 0xf5, 0x00   ; F50CC9  [572] key 0x1A5B  -> rec 424
+	.byte 0x5c, 0x1a, 0x5d, 0x09, 0xf5, 0x00   ; F50CCF  [573] key 0x1A5C  -> rec 426
+	.byte 0x5d, 0x1a, 0x69, 0x09, 0xf5, 0x00   ; F50CD5  [574] key 0x1A5D  -> rec 428
+	.byte 0x5e, 0x1a, 0x75, 0x09, 0xf5, 0x00   ; F50CDB  [575] key 0x1A5E  -> rec 430
+	.byte 0x60, 0x1a, 0x81, 0x09, 0xf5, 0x00   ; F50CE1  [576] key 0x1A60  -> rec 432
+	.byte 0x61, 0x00, 0xcf, 0x09, 0xf5, 0x00   ; F50CE7  [577] key 0x0061  -> rec 445
+	.byte 0x63, 0x1a, 0xe1, 0x09, 0xf5, 0x00   ; F50CED  [578] key 0x1A63  -> rec 448
+	.byte 0x64, 0x1a, 0xed, 0x09, 0xf5, 0x00   ; F50CF3  [579] key 0x1A64  -> rec 450
+	.byte 0x65, 0x1a, 0xf9, 0x09, 0xf5, 0x00   ; F50CF9  [580] key 0x1A65  -> rec 452
+	.byte 0x66, 0x1a, 0x05, 0x0a, 0xf5, 0x00   ; F50CFF  [581] key 0x1A66  -> rec 454
+	.byte 0x68, 0x1a, 0x11, 0x0a, 0xf5, 0x00   ; F50D05  [582] key 0x1A68  -> rec 456
+	.byte 0x70, 0x1a, 0x1d, 0x0a, 0xf5, 0x00   ; F50D0B  [583] key 0x1A70  -> rec 458
+	.byte 0x71, 0x1a, 0x29, 0x0a, 0xf5, 0x00   ; F50D11  [584] key 0x1A71  -> rec 460
+	.byte 0x72, 0x1a, 0x35, 0x0a, 0xf5, 0x00   ; F50D17  [585] key 0x1A72  -> rec 462
+	.byte 0x73, 0x1a, 0x41, 0x0a, 0xf5, 0x00   ; F50D1D  [586] key 0x1A73  -> rec 464
+	.byte 0x74, 0x1a, 0x4d, 0x0a, 0xf5, 0x00   ; F50D23  [587] key 0x1A74  -> rec 466
+	.byte 0x75, 0x1a, 0x59, 0x0a, 0xf5, 0x00   ; F50D29  [588] key 0x1A75  -> rec 468
+	.byte 0x76, 0x1a, 0x65, 0x0a, 0xf5, 0x00   ; F50D2F  [589] key 0x1A76  -> rec 470
+	.byte 0x77, 0x1a, 0x71, 0x0a, 0xf5, 0x00   ; F50D35  [590] key 0x1A77  -> rec 472
+	.byte 0x78, 0x1a, 0x7d, 0x0a, 0xf5, 0x00   ; F50D3B  [591] key 0x1A78  -> rec 474
+	.byte 0x79, 0x1a, 0x89, 0x0a, 0xf5, 0x00   ; F50D41  [592] key 0x1A79  -> rec 476
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50D47  [593] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F50D4D  [594] key 0x0000  
+	.byte 0x07, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F50D53  [595] key 0x0107  -> rec 0
+	.byte 0x07, 0x01, 0x61, 0xff, 0xf4, 0x00   ; F50D59  [596] key 0x0107  -> rec 0
+	.byte 0x00, 0x18, 0x53, 0x0d, 0xf5, 0x00   ; F50D5F  [597] key 0x1800  -> rec 595
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50D65  [598] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x1a, 0x59, 0x0d, 0xf5, 0x00   ; F50D6B  [599] key 0x1A00  -> rec 596
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50D71  [600] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0x7b, 0x03, 0xf5, 0x00   ; F50D77  [601] key 0x0000  -> rec 175
+	.byte 0x01, 0x00, 0xe1, 0x03, 0xf5, 0x00   ; F50D7D  [602] key 0x0001  -> rec 192
+	.byte 0x08, 0x00, 0xd7, 0x04, 0xf5, 0x00   ; F50D83  [603] key 0x0008  -> rec 233
+	.byte 0x10, 0x00, 0x1b, 0x06, 0xf5, 0x00   ; F50D89  [604] key 0x0010  -> rec 287
+	.byte 0x11, 0x00, 0x99, 0x06, 0xf5, 0x00   ; F50D8F  [605] key 0x0011  -> rec 308
+	.byte 0x20, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50D95  [606] key 0x0020  -> rec 477
+	.byte 0x21, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50D9B  [607] key 0x0021  -> rec 477
+	.byte 0x22, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DA1  [608] key 0x0022  -> rec 477
+	.byte 0x23, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DA7  [609] key 0x0023  -> rec 477
+	.byte 0x24, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DAD  [610] key 0x0024  -> rec 477
+	.byte 0x25, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DB3  [611] key 0x0025  -> rec 477
+	.byte 0x26, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DB9  [612] key 0x0026  -> rec 477
+	.byte 0x27, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DBF  [613] key 0x0027  -> rec 477
+	.byte 0x28, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DC5  [614] key 0x0028  -> rec 477
+	.byte 0x29, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DCB  [615] key 0x0029  -> rec 477
+	.byte 0x2a, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DD1  [616] key 0x002A  -> rec 477
+	.byte 0x2b, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DD7  [617] key 0x002B  -> rec 477
+	.byte 0x2c, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DDD  [618] key 0x002C  -> rec 477
+	.byte 0x2d, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DE3  [619] key 0x002D  -> rec 477
+	.byte 0x2e, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DE9  [620] key 0x002E  -> rec 477
+	.byte 0x2f, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DEF  [621] key 0x002F  -> rec 477
+	.byte 0x30, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DF5  [622] key 0x0030  -> rec 477
+	.byte 0x31, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50DFB  [623] key 0x0031  -> rec 477
+	.byte 0x32, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E01  [624] key 0x0032  -> rec 477
+	.byte 0x33, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E07  [625] key 0x0033  -> rec 477
+	.byte 0x34, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E0D  [626] key 0x0034  -> rec 477
+	.byte 0x35, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E13  [627] key 0x0035  -> rec 477
+	.byte 0x36, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E19  [628] key 0x0036  -> rec 477
+	.byte 0x37, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E1F  [629] key 0x0037  -> rec 477
+	.byte 0x38, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E25  [630] key 0x0038  -> rec 477
+	.byte 0x39, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E2B  [631] key 0x0039  -> rec 477
+	.byte 0x3a, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E31  [632] key 0x003A  -> rec 477
+	.byte 0x3b, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E37  [633] key 0x003B  -> rec 477
+	.byte 0x3c, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E3D  [634] key 0x003C  -> rec 477
+	.byte 0x3d, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E43  [635] key 0x003D  -> rec 477
+	.byte 0x3e, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E49  [636] key 0x003E  -> rec 477
+	.byte 0x3f, 0x00, 0x8f, 0x0a, 0xf5, 0x00   ; F50E4F  [637] key 0x003F  -> rec 477
+	.byte 0x60, 0x00, 0x5f, 0x0d, 0xf5, 0x00   ; F50E55  [638] key 0x0060  -> rec 597
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50E5B  [639] key 0x0CFF  -> rec 0
+	.byte 0x00, 0x00, 0x0b, 0x04, 0xf5, 0x00   ; F50E61  [640] key 0x0000  -> rec 199
+	.byte 0x01, 0x00, 0x71, 0x04, 0xf5, 0x00   ; F50E67  [641] key 0x0001  -> rec 216
+	.byte 0x08, 0x00, 0xf5, 0x04, 0xf5, 0x00   ; F50E6D  [642] key 0x0008  -> rec 238
+	.byte 0x10, 0x00, 0xb7, 0x06, 0xf5, 0x00   ; F50E73  [643] key 0x0010  -> rec 313
+	.byte 0x11, 0x00, 0x35, 0x07, 0xf5, 0x00   ; F50E79  [644] key 0x0011  -> rec 334
+	.byte 0x20, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50E7F  [645] key 0x0020  -> rec 536
+	.byte 0x21, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50E85  [646] key 0x0021  -> rec 536
+	.byte 0x22, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50E8B  [647] key 0x0022  -> rec 536
+	.byte 0x23, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50E91  [648] key 0x0023  -> rec 536
+	.byte 0x24, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50E97  [649] key 0x0024  -> rec 536
+	.byte 0x25, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50E9D  [650] key 0x0025  -> rec 536
+	.byte 0x26, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EA3  [651] key 0x0026  -> rec 536
+	.byte 0x27, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EA9  [652] key 0x0027  -> rec 536
+	.byte 0x28, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EAF  [653] key 0x0028  -> rec 536
+	.byte 0x29, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EB5  [654] key 0x0029  -> rec 536
+	.byte 0x2a, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EBB  [655] key 0x002A  -> rec 536
+	.byte 0x2b, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EC1  [656] key 0x002B  -> rec 536
+	.byte 0x2c, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EC7  [657] key 0x002C  -> rec 536
+	.byte 0x2d, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50ECD  [658] key 0x002D  -> rec 536
+	.byte 0x2e, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50ED3  [659] key 0x002E  -> rec 536
+	.byte 0x2f, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50ED9  [660] key 0x002F  -> rec 536
+	.byte 0x30, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EDF  [661] key 0x0030  -> rec 536
+	.byte 0x31, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EE5  [662] key 0x0031  -> rec 536
+	.byte 0x32, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EEB  [663] key 0x0032  -> rec 536
+	.byte 0x33, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EF1  [664] key 0x0033  -> rec 536
+	.byte 0x34, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EF7  [665] key 0x0034  -> rec 536
+	.byte 0x35, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50EFD  [666] key 0x0035  -> rec 536
+	.byte 0x36, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F03  [667] key 0x0036  -> rec 536
+	.byte 0x37, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F09  [668] key 0x0037  -> rec 536
+	.byte 0x38, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F0F  [669] key 0x0038  -> rec 536
+	.byte 0x39, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F15  [670] key 0x0039  -> rec 536
+	.byte 0x3a, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F1B  [671] key 0x003A  -> rec 536
+	.byte 0x3b, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F21  [672] key 0x003B  -> rec 536
+	.byte 0x3c, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F27  [673] key 0x003C  -> rec 536
+	.byte 0x3d, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F2D  [674] key 0x003D  -> rec 536
+	.byte 0x3e, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F33  [675] key 0x003E  -> rec 536
+	.byte 0x3f, 0x00, 0xf1, 0x0b, 0xf5, 0x00   ; F50F39  [676] key 0x003F  -> rec 536
+	.byte 0x60, 0x00, 0x6b, 0x0d, 0xf5, 0x00   ; F50F3F  [677] key 0x0060  -> rec 599
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50F45  [678] key 0x0CFF  -> rec 0
+	.byte 0xfe, 0x17, 0x61, 0xff, 0xf4, 0x00   ; F50F4B  [679] key 0x17FE  -> rec 0
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50F51  [680] key 0x0EFF  -> rec 0
+	.byte 0xfe, 0x00, 0x4b, 0x0f, 0xf5, 0x00   ; F50F57  [681] key 0x00FE  -> rec 679
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50F5D  [682] key 0x0EFF  -> rec 0
+	.byte 0xfe, 0x00, 0x57, 0x0f, 0xf5, 0x00   ; F50F63  [683] key 0x00FE  -> rec 681
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50F69  [684] key 0x0EFF  -> rec 0
+	.byte 0xfe, 0x00, 0x63, 0x0f, 0xf5, 0x00   ; F50F6F  [685] key 0x00FE  -> rec 683
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50F75  [686] key 0x0DFF  -> rec 0
+	.byte 0xfe, 0x00, 0x6f, 0x0f, 0xf5, 0x00   ; F50F7B  [687] key 0x00FE  -> rec 685
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F50F81  [688] key 0x0CFF  -> rec 0
+	.byte 0x00, 0x00, 0x77, 0x0d, 0xf5, 0x00   ; F50F87  [689] key 0x0000  -> rec 601
+	.byte 0x10, 0x00, 0x7b, 0x0f, 0xf5, 0x00   ; F50F8D  [690] key 0x0010  -> rec 687
+	.byte 0x18, 0x00, 0x7b, 0x0f, 0xf5, 0x00   ; F50F93  [691] key 0x0018  -> rec 687
+	.byte 0x19, 0x00, 0x7b, 0x0f, 0xf5, 0x00   ; F50F99  [692] key 0x0019  -> rec 687
+	.byte 0xff, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F50F9F  [693] key 0x0BFF  -> rec 0
+	.byte 0x11, 0x00, 0x87, 0x0f, 0xf5, 0x00   ; F50FA5  [694] key 0x0011  -> rec 689
+	.byte 0xff, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F50FAB  [695] key 0x0AFF  -> rec 0
+	.byte 0x00, 0x00, 0xa5, 0x0f, 0xf5, 0x00   ; F50FB1  [696] key 0x0000  -> rec 694
+	.byte 0x01, 0x00, 0xa5, 0x0f, 0xf5, 0x00   ; F50FB7  [697] key 0x0001  -> rec 694
+	.byte 0xff, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F50FBD  [698] key 0x09FF  -> rec 0
+	.byte 0x04, 0x00, 0xb1, 0x0f, 0xf5, 0x00   ; F50FC3  [699] key 0x0004  -> rec 696
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F50FC9  [700] key 0x08FF  -> rec 0
+	.byte 0xfe, 0x1e, 0x61, 0xff, 0xf4, 0x00   ; F50FCF  [701] key 0x1EFE  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F50FD5  [702] key 0x10FF  -> rec 0
+	.byte 0xfe, 0x00, 0xcf, 0x0f, 0xf5, 0x00   ; F50FDB  [703] key 0x00FE  -> rec 701
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F50FE1  [704] key 0x0FFF  -> rec 0
+	.byte 0xfe, 0x00, 0xdb, 0x0f, 0xf5, 0x00   ; F50FE7  [705] key 0x00FE  -> rec 703
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F50FED  [706] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0xe7, 0x0f, 0xf5, 0x00   ; F50FF3  [707] key 0x0000  -> rec 705
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F50FF9  [708] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0xf3, 0x0f, 0xf5, 0x00   ; F50FFF  [709] key 0x0000  -> rec 707
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F51005  [710] key 0x0CFF  -> rec 0
+	.byte 0xfe, 0x1f, 0x61, 0xff, 0xf4, 0x00   ; F5100B  [711] key 0x1FFE  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F51011  [712] key 0x10FF  -> rec 0
+	.byte 0xfe, 0x00, 0x0b, 0x10, 0xf5, 0x00   ; F51017  [713] key 0x00FE  -> rec 711
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F5101D  [714] key 0x0FFF  -> rec 0
+	.byte 0xfe, 0x00, 0x17, 0x10, 0xf5, 0x00   ; F51023  [715] key 0x00FE  -> rec 713
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F51029  [716] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0x23, 0x10, 0xf5, 0x00   ; F5102F  [717] key 0x0000  -> rec 715
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F51035  [718] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0x2f, 0x10, 0xf5, 0x00   ; F5103B  [719] key 0x0000  -> rec 717
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F51041  [720] key 0x0CFF  -> rec 0
+	.byte 0xfe, 0x1c, 0x61, 0xff, 0xf4, 0x00   ; F51047  [721] key 0x1CFE  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F5104D  [722] key 0x10FF  -> rec 0
+	.byte 0xfe, 0x00, 0x47, 0x10, 0xf5, 0x00   ; F51053  [723] key 0x00FE  -> rec 721
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F51059  [724] key 0x0FFF  -> rec 0
+	.byte 0xfe, 0x00, 0x53, 0x10, 0xf5, 0x00   ; F5105F  [725] key 0x00FE  -> rec 723
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F51065  [726] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0x5f, 0x10, 0xf5, 0x00   ; F5106B  [727] key 0x0000  -> rec 725
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F51071  [728] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0x6b, 0x10, 0xf5, 0x00   ; F51077  [729] key 0x0000  -> rec 727
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F5107D  [730] key 0x0CFF  -> rec 0
+	.byte 0xfe, 0x1b, 0x61, 0xff, 0xf4, 0x00   ; F51083  [731] key 0x1BFE  -> rec 0
+	.byte 0xff, 0x10, 0x61, 0xff, 0xf4, 0x00   ; F51089  [732] key 0x10FF  -> rec 0
+	.byte 0xfe, 0x00, 0x83, 0x10, 0xf5, 0x00   ; F5108F  [733] key 0x00FE  -> rec 731
+	.byte 0xff, 0x0f, 0x61, 0xff, 0xf4, 0x00   ; F51095  [734] key 0x0FFF  -> rec 0
+	.byte 0xfe, 0x00, 0x8f, 0x10, 0xf5, 0x00   ; F5109B  [735] key 0x00FE  -> rec 733
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F510A1  [736] key 0x0EFF  -> rec 0
+	.byte 0x00, 0x00, 0x9b, 0x10, 0xf5, 0x00   ; F510A7  [737] key 0x0000  -> rec 735
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F510AD  [738] key 0x0DFF  -> rec 0
+	.byte 0x00, 0x00, 0xa7, 0x10, 0xf5, 0x00   ; F510B3  [739] key 0x0000  -> rec 737
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F510B9  [740] key 0x0CFF  -> rec 0
+	.byte 0xfe, 0x19, 0x61, 0xff, 0xf4, 0x00   ; F510BF  [741] key 0x19FE  -> rec 0
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F510C5  [742] key 0x0EFF  -> rec 0
+	.byte 0xfe, 0x00, 0xbf, 0x10, 0xf5, 0x00   ; F510CB  [743] key 0x00FE  -> rec 741
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F510D1  [744] key 0x0EFF  -> rec 0
+	.byte 0xfe, 0x00, 0xcb, 0x10, 0xf5, 0x00   ; F510D7  [745] key 0x00FE  -> rec 743
+	.byte 0xff, 0x0e, 0x61, 0xff, 0xf4, 0x00   ; F510DD  [746] key 0x0EFF  -> rec 0
+	.byte 0xfe, 0x00, 0xd7, 0x10, 0xf5, 0x00   ; F510E3  [747] key 0x00FE  -> rec 745
+	.byte 0xff, 0x0d, 0x61, 0xff, 0xf4, 0x00   ; F510E9  [748] key 0x0DFF  -> rec 0
+	.byte 0xfe, 0x00, 0xe3, 0x10, 0xf5, 0x00   ; F510EF  [749] key 0x00FE  -> rec 747
+	.byte 0xff, 0x0c, 0x61, 0xff, 0xf4, 0x00   ; F510F5  [750] key 0x0CFF  -> rec 0
+	.byte 0x00, 0x00, 0x61, 0x0e, 0xf5, 0x00   ; F510FB  [751] key 0x0000  -> rec 640
+	.byte 0x10, 0x00, 0xef, 0x10, 0xf5, 0x00   ; F51101  [752] key 0x0010  -> rec 749
+	.byte 0x18, 0x00, 0xef, 0x10, 0xf5, 0x00   ; F51107  [753] key 0x0018  -> rec 749
+	.byte 0x19, 0x00, 0xef, 0x10, 0xf5, 0x00   ; F5110D  [754] key 0x0019  -> rec 749
+	.byte 0x40, 0x00, 0xb3, 0x10, 0xf5, 0x00   ; F51113  [755] key 0x0040  -> rec 739
+	.byte 0x20, 0x00, 0x77, 0x10, 0xf5, 0x00   ; F51119  [756] key 0x0020  -> rec 729
+	.byte 0x50, 0x00, 0x3b, 0x10, 0xf5, 0x00   ; F5111F  [757] key 0x0050  -> rec 719
+	.byte 0x60, 0x00, 0xff, 0x0f, 0xf5, 0x00   ; F51125  [758] key 0x0060  -> rec 709
+	.byte 0xff, 0x0b, 0x61, 0xff, 0xf4, 0x00   ; F5112B  [759] key 0x0BFF  -> rec 0
+	.byte 0x11, 0x00, 0xfb, 0x10, 0xf5, 0x00   ; F51131  [760] key 0x0011  -> rec 751
+	.byte 0xff, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F51137  [761] key 0x0AFF  -> rec 0
+	.byte 0x00, 0x00, 0x31, 0x11, 0xf5, 0x00   ; F5113D  [762] key 0x0000  -> rec 760
+	.byte 0x01, 0x00, 0x31, 0x11, 0xf5, 0x00   ; F51143  [763] key 0x0001  -> rec 760
+	.byte 0xff, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F51149  [764] key 0x09FF  -> rec 0
+	.byte 0x04, 0x00, 0x3d, 0x11, 0xf5, 0x00   ; F5114F  [765] key 0x0004  -> rec 762
+	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F51155  [766] key 0x08FF  -> rec 0
+	.byte 0x25, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F5115B  [767] key 0x0925  -> rec 0
+	.byte 0x7e, 0x0a, 0x61, 0xff, 0xf4, 0x00   ; F51161  [768] key 0x0A7E  -> rec 0
+	.byte 0x23, 0x00, 0xd9, 0xff, 0xf4, 0x00   ; F51167  [769] key 0x0023  -> rec 20
+	.byte 0x24, 0x00, 0xe5, 0xff, 0xf4, 0x00   ; F5116D  [770] key 0x0024  -> rec 22
+	.byte 0x2d, 0x00, 0x1f, 0x02, 0xf5, 0x00   ; F51173  [771] key 0x002D  -> rec 117
+	.byte 0x27, 0x00, 0xf1, 0xff, 0xf4, 0x00   ; F51179  [772] key 0x0027  -> rec 24
+	.byte 0x28, 0x00, 0xfd, 0xff, 0xf4, 0x00   ; F5117F  [773] key 0x0028  -> rec 26
+	.byte 0x2c, 0x00, 0xc3, 0x0f, 0xf5, 0x00   ; F51185  [774] key 0x002C  -> rec 699
+	.byte 0x2b, 0x00, 0x4f, 0x11, 0xf5, 0x00   ; F5118B  [775] key 0x002B  -> rec 765
+	.byte 0x7f, 0x00, 0xcd, 0xff, 0xf4, 0x00   ; F51191  [776] key 0x007F  -> rec 18
+	.byte 0x29, 0x00, 0x09, 0x00, 0xf5, 0x00   ; F51197  [777] key 0x0029  -> rec 28
+	.byte 0x2a, 0x00, 0x15, 0x00, 0xf5, 0x00   ; F5119D  [778] key 0x002A  -> rec 30
+	.byte 0x21, 0x00, 0x85, 0xff, 0xf4, 0x00   ; F511A3  [779] key 0x0021  -> rec 6
+	.byte 0x22, 0x00, 0xaf, 0xff, 0xf4, 0x00   ; F511A9  [780] key 0x0022  -> rec 13
+	.byte 0xff, 0x07, 0x61, 0xff, 0xf4, 0x00   ; F511AF  [781] key 0x07FF  -> rec 0
+
+; --- 0xF511B5-0xF511C6  data (18 bytes) ---
+	.byte 0x00, 0x01, 0x01, 0x02, 0x03, 0x03, 0x04, 0x05, 0x05, 0x05, 0x06, 0x07, 0x07, 0x07, 0x08, 0x09   ; F511B5  ................
+	.byte 0x09, 0x0a   ; F511C5  ..
+
+; --- 0xF511C7-0xF511DC  ascii (22 bytes) ---
+
+; --------------------------------------------------------------------------
+; AsciiRun_F511C7 -- 22 bytes that are printable but are not text:
+;           '#!!!!!!!"""!!!!!!!!!!!'
+; Read by: prom_a 0xFB7E54 `add XWA,0x00f511c7` -- an INDEXED TABLE, not a
+;          string.
+; Evidence: the layout's ascii rule fires on it at threshold 20, but the 22
+;           bytes span only 0x21-0x23 (3 distinct values), so it is a small-
+;           integer table that happens to land in the printable range.
+;           Named for what it IS.
+; --------------------------------------------------------------------------
+AsciiRun_F511C7:
+	.byte 0x23, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x22, 0x22, 0x22, 0x21, 0x21, 0x21, 0x21, 0x21   ; F511C7  #!!!!!!!"""!!!!!
+	.byte 0x21, 0x21, 0x21, 0x21, 0x21, 0x21   ; F511D7  !!!!!!
+
+; --- 0xF511DD-0xF51E1F  data (3139 bytes) ---
+
+; --------------------------------------------------------------------------
+; RecordArray_F511DD -- 110 variable-length records, framed by RecordIndex_F51E8A
+; ★ CORRECTION C5: the layout's HOLES table says "the record boundary is not
+;                  pinned by anything this lane could measure".  It is
+;                  pinned. The 225 entries of RecordIndex_F51E8A resolve to
+;                  110 distinct addresses, every one of them inside this
+;                  segment, and 109 of the 110 carry the prom_a callback
+;                  word 0x00FB4D61 or 0x00FB4D62 at exactly +0x10.  Those
+;                  110 ARE the record starts.
+; Record shape: 16 parameter bytes, then three 32-bit prom_a pointers at
+;               +0x10, +0x14 and +0x18, then 0 or more trailing bytes.
+;               Head-to-head strides: 28 x99, 32 x7, 2 x1, 43 x1, 30 x1.
+; ⚠ The one exception: 0xF514B9 carries the callback at +0x12, not +0x10,
+;                      and sits 2 bytes in front of 0xF514BB, which is also
+;                      an index entry.  Reported, not smoothed.
+; Evidence: 109 of the 110 index targets carry 0x00FB4D61/0x00FB4D62 at
+;           +0x10; the dominant head-to-head stride, 28, is exactly 16
+;           parameter bytes plus three pointers; and the last record start,
+;           0xF51DF8, is checked as well as the first.
+; Unknown: what the 16 parameter bytes mean, and why the first 28 bytes of
+;          the segment (0xF511DD-0xF511F8) are in front of the first record.
+; --------------------------------------------------------------------------
+RecordArray_F511DD:
+	.byte 0x0f, 0x21, 0x20, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x20, 0x20, 0x21, 0x00, 0x00, 0x00, 0x00   ; F511DD  .! !!!!!!  !....
+	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F511ED  ............
+	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x01, 0xb0, 0x01, 0x7f, 0x00, 0x7f, 0x00, 0x00, 0x00, 0xff, 0x00   ; F511F9  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x4c, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51209  aM..L7..bE..
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00   ; F51215  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x82, 0x38, 0xfb, 0x00, 0x07, 0x45, 0xfb, 0x00   ; F51225  aM...8...E..
+	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00   ; F51231  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x82, 0x38, 0xfb, 0x00, 0x07, 0x45, 0xfb, 0x00   ; F51241  aM...8...E..
+	.byte 0x00, 0x00, 0x08, 0x00, 0x00, 0x01, 0x91, 0x00, 0xff, 0x30, 0xc0, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5124D  .........0......
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5125D  aM..x7..bE..
+	.byte 0x00, 0x00, 0x10, 0x00, 0x00, 0x01, 0x93, 0x00, 0x0f, 0x00, 0x09, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51269  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51279  aM..x7..bE..
+	.byte 0x00, 0x00, 0x11, 0x00, 0x00, 0x01, 0x93, 0x02, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51285  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51295  aM..x7..bE..
+	.byte 0x00, 0x00, 0x12, 0x00, 0x00, 0x01, 0x93, 0x05, 0xff, 0x00, 0x0a, 0x00, 0x01, 0x00, 0xff, 0x00   ; F512A1  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F512B1  aM..x7..bE..
+	.byte 0x00, 0x00, 0x13, 0x00, 0x00, 0x01, 0x93, 0x06, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F512BD  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F512CD  aM..x7..bE..
+	.byte 0x00, 0x00, 0x20, 0x00, 0x00, 0x01, 0x91, 0x04, 0xff, 0x00, 0x42, 0x00, 0x01, 0x00, 0x00, 0x00   ; F512D9  .. .......B.....
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00, 0x00, 0x40, 0x41, 0x42   ; F512E9  aM..x7..bE...@AB
+	.byte 0x00, 0x00, 0x30, 0x00, 0x00, 0x01, 0x7a, 0x02, 0x0f, 0x00, 0x02, 0x00, 0x01, 0x00, 0xff, 0x00   ; F512F9  ..0...z.........
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51309  aM..x7..bE..
+	.byte 0x00, 0x00, 0x31, 0x00, 0x00, 0x01, 0x7a, 0x02, 0xf0, 0x00, 0x02, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51315  ..1...z.........
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51325  aM..x7..bE..
+	.byte 0x00, 0x00, 0x32, 0x00, 0x00, 0x01, 0x98, 0x05, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0xff   ; F51331  ..2.............
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51341  aM..x7..bE..
+	.byte 0x00, 0x00, 0x33, 0x00, 0x00, 0x01, 0x98, 0x05, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0xff   ; F5134D  ..3.............
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5135D  aM..x7..bE..
+	.byte 0x00, 0x00, 0x34, 0x00, 0x00, 0x01, 0x98, 0x05, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0xff   ; F51369  ..4.............
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51379  aM..x7..bE..
+	.byte 0x00, 0x00, 0x35, 0x00, 0x00, 0x01, 0x98, 0x05, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0xff   ; F51385  ..5.............
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51395  aM..x7..bE..
+	.byte 0x00, 0x00, 0x36, 0x00, 0x00, 0x01, 0x98, 0x05, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0xff   ; F513A1  ..6.............
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F513B1  aM..x7..bE..
+	.byte 0x00, 0x00, 0x40, 0x00, 0x00, 0x02, 0x98, 0x01, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F513BD  ..@.............
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x9d, 0x3f, 0xfb, 0x00, 0x1a, 0x46, 0xfb, 0x00   ; F513CD  aM...?...F..
+	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x80, 0x03, 0x0f, 0x00, 0x02, 0x00, 0x01, 0x00, 0xff, 0x00   ; F513D9  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F513E9  aM..x7..bE..
+	.byte 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x80, 0x03, 0xf0, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F513F5  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51405  aM..x7..bE..
+	.byte 0x00, 0x01, 0x02, 0x00, 0x00, 0x01, 0x80, 0x04, 0x1f, 0x00, 0x0f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51411  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51421  aM..x7..bE..
+	.byte 0x00, 0x01, 0x03, 0x00, 0x00, 0x01, 0x80, 0x04, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0xff   ; F5142D  ........ .......
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5143D  aM..x7..bE..
+	.byte 0x00, 0x01, 0x04, 0x00, 0x00, 0x01, 0x80, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51449  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51459  aM..x7..bE..
+	.byte 0x00, 0x01, 0x05, 0x00, 0x00, 0x01, 0x80, 0x00, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0x00   ; F51465  ................
+	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51475  aM..x7..bE..
+	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51481  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x5a, 0x3e, 0xfb, 0x00, 0x06, 0x45, 0xfb, 0x00   ; F51491  bM..Z>...E..
+	.byte 0x00, 0x08, 0x08, 0x00, 0x00, 0x01, 0x98, 0x00, 0xf0, 0x00, 0x01, 0x04, 0x01, 0x00, 0x00, 0x00   ; F5149D  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x23, 0x42, 0xfb, 0x00, 0x06, 0x45, 0xfb, 0x00   ; F514AD  bM..#B...E..
+	.byte 0x01, 0x02   ; F514B9  ..
+	.byte 0x00, 0x08, 0x10, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F514BB  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x41, 0x52, 0xfb, 0x00, 0x06, 0x45, 0xfb, 0x00   ; F514CB  bM..AR...E..
+	.byte 0x00, 0x08, 0x11, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F514D7  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xa3, 0x3e, 0xfb, 0x00, 0x06, 0x45, 0xfb, 0x00   ; F514E7  bM...>...E..
+	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x01, 0x79, 0x00, 0x7f, 0x1c, 0x64, 0x00, 0x01, 0x00, 0xff, 0x00   ; F514F3  ......y...d.....
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51503  bM..x7..bE..
+	.byte 0x00, 0x10, 0x10, 0x00, 0x00, 0x01, 0x92, 0x01, 0x80, 0x00, 0x01, 0x07, 0x01, 0x00, 0xff, 0x00   ; F5150F  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5151F  bM..x7..bE..
+	.byte 0x00, 0x10, 0x11, 0x00, 0x00, 0x01, 0x92, 0x00, 0xff, 0x00, 0x80, 0x00, 0x01, 0x00, 0x02, 0x00   ; F5152B  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00, 0x00, 0x40, 0x41, 0x42   ; F5153B  bM..x7..bE...@AB
+	.byte 0x03, 0x04, 0x06, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x80   ; F5154B  ...........
+	.byte 0x00, 0x10, 0x12, 0x00, 0x00, 0x01, 0x92, 0x01, 0x0f, 0x00, 0x0b, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51556  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51566  bM..x7..bE..
+	.byte 0x00, 0x10, 0x13, 0x00, 0x00, 0x01, 0x92, 0x02, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51572  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51582  bM..x7..bE..
+	.byte 0x00, 0x10, 0x14, 0x00, 0x00, 0x01, 0x92, 0x03, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5158E  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5159E  bM..x7..bE..
+	.byte 0x00, 0x10, 0x15, 0x00, 0x00, 0x01, 0x92, 0x04, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F515AA  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F515BA  bM..x7..bE..
+	.byte 0x00, 0x10, 0x16, 0x00, 0x00, 0x01, 0x92, 0x05, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F515C6  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F515D6  bM..x7..bE..
+	.byte 0x00, 0x10, 0x17, 0x00, 0x00, 0x01, 0x92, 0x06, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F515E2  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F515F2  bM..x7..bE..
+	.byte 0x00, 0x10, 0x18, 0x00, 0x00, 0x01, 0x92, 0x07, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F515FE  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5160E  bM..x7..bE..
+	.byte 0x00, 0x10, 0x19, 0x00, 0x00, 0x01, 0x92, 0x08, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5161A  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5162A  bM..x7..bE..
+	.byte 0x00, 0x10, 0x1a, 0x00, 0x00, 0x01, 0x92, 0x09, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51636  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51646  bM..x7..bE..
+	.byte 0x00, 0x10, 0x1b, 0x00, 0x00, 0x01, 0x92, 0x0a, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51652  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51662  bM..x7..bE..
+	.byte 0x00, 0x10, 0x1c, 0x00, 0x00, 0x01, 0x92, 0x0b, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5166E  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5167E  bM..x7..bE..
+	.byte 0x00, 0x10, 0x1d, 0x00, 0x00, 0x01, 0x92, 0x0c, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5168A  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5169A  bM..x7..bE..
+	.byte 0x00, 0x10, 0x1e, 0x00, 0x00, 0x01, 0x92, 0x0d, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F516A6  ................
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F516B6  bM..x7..bE..
+	.byte 0x00, 0x10, 0x20, 0x00, 0x00, 0x01, 0x79, 0x01, 0x1f, 0x00, 0x11, 0x06, 0x01, 0x00, 0xff, 0x00   ; F516C2  .. ...y.........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x1f, 0x38, 0xfb, 0x00, 0xa5, 0x45, 0xfb, 0x00   ; F516D2  bM...8...E..
+	.byte 0x00, 0x10, 0x21, 0x00, 0x00, 0x01, 0x79, 0x01, 0x3f, 0x00, 0x30, 0x00, 0x01, 0x00, 0xff, 0x00   ; F516DE  ..!...y.?.0.....
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F516EE  bM..x7..bE..
+	.byte 0x00, 0x10, 0x22, 0x00, 0x00, 0x01, 0x79, 0x03, 0x1f, 0x11, 0x1a, 0x06, 0x01, 0x00, 0xff, 0x00   ; F516FA  .."...y.........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x1f, 0x38, 0xfb, 0x00, 0xa5, 0x45, 0xfb, 0x00   ; F5170A  bM...8...E..
+	.byte 0x00, 0x10, 0x23, 0x00, 0x00, 0x01, 0x79, 0x03, 0x3f, 0x00, 0x30, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51716  ..#...y.?.0.....
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51726  bM..x7..bE..
+	.byte 0x00, 0x11, 0x00, 0x00, 0x00, 0x01, 0x60, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51732  ......`.........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51742  bM..x7..bE..
+	.byte 0x00, 0x11, 0x01, 0x00, 0x00, 0x01, 0x79, 0x05, 0x0f, 0x01, 0x04, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5174E  ......y.........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5175E  bM..x7..bE..
+	.byte 0x00, 0x11, 0x02, 0x00, 0x00, 0x01, 0x79, 0x05, 0xf0, 0x01, 0x04, 0x04, 0x01, 0x00, 0xff, 0x00   ; F5176A  ......y.........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5177A  bM..x7..bE..
+	.byte 0x00, 0x11, 0x20, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51786  .. .............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xc4, 0x3a, 0xfb, 0x00, 0xff, 0x49, 0xfb, 0x00   ; F51796  bM...:...I..
+	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0xff, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F517A2  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xa4, 0x39, 0xfb, 0x00, 0xff, 0x46, 0xfb, 0x00   ; F517B2  bM...9...F..
+	.byte 0x00, 0x20, 0x03, 0x00, 0x00, 0x01, 0x00, 0x03, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F517BE  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F517CE  bM...8...F..
+	.byte 0x00, 0x20, 0x04, 0x00, 0x00, 0x01, 0x00, 0x05, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F517DA  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F517EA  bM...8...F..
+	.byte 0x00, 0x20, 0x05, 0x00, 0x00, 0x01, 0x00, 0x06, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0x00, 0x00   ; F517F6  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x13, 0x3d, 0xfb, 0x00, 0x6e, 0x49, 0xfb, 0x00, 0x00, 0x7f   ; F51806  bM...=..nI....
+	.byte 0x00, 0x20, 0x06, 0x00, 0x00, 0x01, 0x00, 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51814  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51824  bM...8...F..
+	.byte 0x00, 0x20, 0x07, 0x00, 0x00, 0x01, 0x00, 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51830  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51840  bM...8...F..
+	.byte 0x00, 0x20, 0x08, 0x00, 0x00, 0x01, 0x00, 0x09, 0x7f, 0x1c, 0x64, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5184C  . ........d.....
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F5185C  bM...8...F..
+	.byte 0x00, 0x20, 0x09, 0x00, 0x00, 0x01, 0x00, 0x0a, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51868  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51878  bM...8...F..
+	.byte 0x00, 0x20, 0x0a, 0x00, 0x00, 0x01, 0x00, 0x0b, 0x7f, 0x00, 0x0c, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51884  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51894  bM...8...F..
+	.byte 0x00, 0x20, 0x10, 0x00, 0x00, 0x01, 0x20, 0x06, 0x0f, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F518A0  . .... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F518B0  bM...8...F..
+	.byte 0x00, 0x20, 0x14, 0x00, 0x00, 0x01, 0x00, 0x0c, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0x00   ; F518BC  . ..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F518CC  bM...8...F..
+	.byte 0x00, 0x20, 0x20, 0x00, 0x00, 0x01, 0x20, 0x05, 0xff, 0x00, 0x30, 0x00, 0x01, 0x00, 0xff, 0x00   ; F518D8  .  ... ...0.....
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F518E8  bM...8...F..
+	.byte 0x00, 0x20, 0x28, 0x00, 0x00, 0x01, 0x20, 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F518F4  . (... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51904  bM...8...F..
+	.byte 0x00, 0x20, 0x29, 0x00, 0x00, 0x01, 0x20, 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51910  . )... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51920  bM...8...F..
+	.byte 0x00, 0x20, 0x2a, 0x00, 0x00, 0x01, 0x20, 0x09, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5192C  . *... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F5193C  bM...8...F..
+	.byte 0x00, 0x20, 0x2b, 0x00, 0x00, 0x01, 0x20, 0x0a, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51948  . +... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51958  bM...8...F..
+	.byte 0x00, 0x20, 0x30, 0x00, 0x00, 0x01, 0x20, 0x03, 0xff, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51964  . 0... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51974  bM...8...F..
+	.byte 0x00, 0x20, 0x31, 0x00, 0x00, 0x01, 0x20, 0x04, 0xff, 0x00, 0x04, 0x00, 0x01, 0x00, 0x03, 0x00   ; F51980  . 1... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00, 0x00, 0x02, 0x03, 0x04   ; F51990  bM...8...F......
+	.byte 0x00, 0x20, 0x40, 0x00, 0x00, 0x01, 0x00, 0x0d, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F519A0  . @..... .......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F519B0  bM...8...F..
+	.byte 0x00, 0x20, 0x41, 0x00, 0x00, 0x01, 0x00, 0x0d, 0x1f, 0x00, 0x1f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F519BC  . A.............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F519CC  bM...8...F..
+	.byte 0x00, 0x20, 0x42, 0x00, 0x00, 0x01, 0x00, 0x0d, 0x40, 0x00, 0x01, 0x06, 0x01, 0x00, 0xff, 0x00   ; F519D8  . B.....@.......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F519E8  bM...8...F..
+	.byte 0x00, 0x20, 0x43, 0x00, 0x00, 0x01, 0x00, 0x0d, 0x80, 0x00, 0x01, 0x07, 0x01, 0x00, 0xff, 0x00   ; F519F4  . C.............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A04  bM...8...F..
+	.byte 0x00, 0x20, 0x48, 0x00, 0x00, 0x01, 0x20, 0x0f, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51A10  . H... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A20  bM...8...F..
+	.byte 0x00, 0x20, 0x49, 0x00, 0x00, 0x01, 0x20, 0x10, 0x80, 0x00, 0x01, 0x07, 0x01, 0x00, 0xff, 0x00   ; F51A2C  . I... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A3C  bM...8...F..
+	.byte 0x00, 0x20, 0x4a, 0x00, 0x00, 0x01, 0x20, 0x10, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0x00   ; F51A48  . J... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A58  bM...8...F..
+	.byte 0x00, 0x20, 0x50, 0x00, 0x00, 0x01, 0x20, 0x13, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51A64  . P... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A74  bM...8...F..
+	.byte 0x00, 0x20, 0x51, 0x00, 0x00, 0x01, 0x20, 0x14, 0x80, 0x00, 0x01, 0x07, 0x01, 0x00, 0xff, 0x00   ; F51A80  . Q... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A90  bM...8...F..
+	.byte 0x00, 0x20, 0x52, 0x00, 0x00, 0x01, 0x20, 0x14, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0x00   ; F51A9C  . R... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51AAC  bM...8...F..
+	.byte 0x00, 0x20, 0x53, 0x00, 0x00, 0x01, 0x20, 0x14, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51AB8  . S... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51AC8  bM...8...F..
+	.byte 0x00, 0x20, 0x54, 0x00, 0x00, 0x01, 0x20, 0x14, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51AD4  . T... . .......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51AE4  bM...8...F..
+	.byte 0x00, 0x20, 0x55, 0x00, 0x00, 0x01, 0x20, 0x13, 0x40, 0x00, 0x01, 0x06, 0x01, 0x00, 0xff, 0x00   ; F51AF0  . U... .@.......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B00  bM...8...F..
+	.byte 0x00, 0x20, 0x56, 0x00, 0x00, 0x01, 0x20, 0x14, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0x00   ; F51B0C  . V... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B1C  bM...8...F..
+	.byte 0x00, 0x20, 0x57, 0x00, 0x00, 0x01, 0x20, 0x16, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51B28  . W... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B38  bM...8...F..
+	.byte 0x00, 0x20, 0x58, 0x00, 0x00, 0x01, 0x20, 0x16, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51B44  . X... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B54  bM...8...F..
+	.byte 0x00, 0x20, 0x59, 0x00, 0x00, 0x01, 0x20, 0x16, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0x00   ; F51B60  . Y... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B70  bM...8...F..
+	.byte 0x00, 0x20, 0x5a, 0x00, 0x00, 0x01, 0x20, 0x16, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0x00   ; F51B7C  . Z... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B8C  bM...8...F..
+	.byte 0x00, 0x20, 0x5b, 0x00, 0x00, 0x01, 0x20, 0x16, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0x00   ; F51B98  . [... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51BA8  bM...8...F..
+	.byte 0x00, 0x20, 0x5c, 0x00, 0x00, 0x01, 0x20, 0x14, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51BB4  . \... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51BC4  bM...8...F..
+	.byte 0x00, 0x20, 0x5d, 0x00, 0x00, 0x01, 0x20, 0x16, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51BD0  . ]... . .......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51BE0  bM...8...F..
+	.byte 0x00, 0x20, 0x5e, 0x00, 0x00, 0x01, 0x20, 0x13, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51BEC  . ^... . .......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51BFC  bM...8...F..
+	.byte 0x00, 0x20, 0x60, 0x00, 0x00, 0x01, 0x00, 0x0e, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x00, 0x00   ; F51C08  . `.............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x01, 0x01   ; F51C18  bM...;..SG......
+	.byte 0x00, 0x20, 0x61, 0x00, 0x00, 0x02, 0x00, 0x0f, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51C28  . a.............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xcf, 0x3b, 0xfb, 0x00, 0x4a, 0x48, 0xfb, 0x00   ; F51C38  bM...;..JH..
+	.byte 0x00, 0x20, 0x63, 0x00, 0x00, 0x01, 0x00, 0x11, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x01, 0x00   ; F51C44  . c.............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x02, 0x02   ; F51C54  bM...;..SG......
+	.byte 0x00, 0x20, 0x64, 0x00, 0x00, 0x01, 0x00, 0x12, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x02, 0x00   ; F51C64  . d.............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x04, 0x04   ; F51C74  bM...;..SG......
+	.byte 0x00, 0x20, 0x65, 0x00, 0x00, 0x01, 0x00, 0x14, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x03, 0x00   ; F51C84  . e.............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x10, 0x10   ; F51C94  bM...;..SG......
+	.byte 0x00, 0x20, 0x66, 0x00, 0x00, 0x01, 0x00, 0x13, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x04, 0x00   ; F51CA4  . f.............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x08, 0x08   ; F51CB4  bM...;..SG......
+	.byte 0x00, 0x20, 0x68, 0x00, 0x00, 0x01, 0x20, 0x17, 0xff, 0x1c, 0x64, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51CC4  . h... ...d.....
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51CD4  bM...8...F..
+	.byte 0x00, 0x20, 0x70, 0x00, 0x00, 0x01, 0x20, 0x0b, 0x40, 0x00, 0x01, 0x06, 0x01, 0x00, 0xff, 0x00   ; F51CE0  . p... .@.......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51CF0  bM...8...F..
+	.byte 0x00, 0x20, 0x71, 0x00, 0x00, 0x01, 0x20, 0x0c, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0x00   ; F51CFC  . q... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D0C  bM...8...F..
+	.byte 0x00, 0x20, 0x72, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51D18  . r... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D28  bM...8...F..
+	.byte 0x00, 0x20, 0x73, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51D34  . s... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D44  bM...8...F..
+	.byte 0x00, 0x20, 0x74, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0x00   ; F51D50  . t... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D60  bM...8...F..
+	.byte 0x00, 0x20, 0x75, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0x00   ; F51D6C  . u... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D7C  bM...8...F..
+	.byte 0x00, 0x20, 0x76, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0x00   ; F51D88  . v... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D98  bM...8...F..
+	.byte 0x00, 0x20, 0x77, 0x00, 0x00, 0x01, 0x20, 0x0c, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51DA4  . w... .........
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51DB4  bM...8...F..
+	.byte 0x00, 0x20, 0x78, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51DC0  . x... . .......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51DD0  bM...8...F..
+	.byte 0x00, 0x20, 0x79, 0x00, 0x00, 0x01, 0x20, 0x0b, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51DDC  . y... . .......
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51DEC  bM...8...F..
+	.byte 0x00, 0x60, 0x00, 0x00, 0x00, 0x01, 0x98, 0x03, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51DF8  .`..............
+	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00, 0xf9, 0x11, 0xf5, 0x00   ; F51E08  bM..x7..bE......
+	.byte 0xf9, 0x11, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00   ; F51E18  ........
+
+; --- 0xF51E20-0xF51E2B  ptrtab (12 bytes) ---
+
+; --------------------------------------------------------------------------
+; Pointer_F51E20 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
+; Read by: prom_a 0xFB4C4E `lda_24 xbc, (0xf51e20)`
+; Entry count: 1, measured by abutment: 1 x 4 = 4 bytes reaches 0xF51E24
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+Pointer_F51E20:
+	.long 0x00F511F9                       ; F51E20  [0]   -> 0xF511F9
+
+; --------------------------------------------------------------------------
+; Pointer_F51E24 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
+; Read by: prom_a 0xFB4C82 `lda_24 xbc, (0xf51e24)`
+; Entry count: 1, measured by abutment: 1 x 4 = 4 bytes reaches 0xF51E28
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+Pointer_F51E24:
+	.long 0x00F511F9                       ; F51E24  [0]   -> 0xF511F9
+
+; --------------------------------------------------------------------------
+; Pointer_F51E28 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
+; Read by: prom_a 0xFB4CF3 `lda_24 xbc, (0xf51e28)`
+; Entry count: 1, measured by abutment: 1 x 4 = 4 bytes reaches 0xF51E2C
+;              exactly, which is the end of the segment.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+Pointer_F51E28:
+	.long 0x00F511F9                       ; F51E28  [0]   -> 0xF511F9
+
+; --- 0xF51E2C-0xF51E6B  data (64 bytes) ---
+	.byte 0x00, 0x00, 0x00, 0x00, 0xf9, 0x11, 0xf5, 0x00, 0x38, 0x7f, 0x00, 0x00, 0x08, 0x08, 0x38, 0x7f   ; F51E2C  ........8.....8.
+	.byte 0x00, 0x00, 0x08, 0x08, 0x38, 0x7f, 0x00, 0x00, 0x04, 0x04, 0x38, 0x7f, 0x00, 0x00, 0x08, 0x08   ; F51E3C  ....8.....8.....
+	.byte 0x3b, 0x7f, 0x00, 0x00, 0x20, 0x20, 0x3b, 0x7f, 0x00, 0x00, 0x40, 0x40, 0x04, 0x00, 0xf5, 0x12   ; F51E4C  ;...  ;...@@....
+	.byte 0xf5, 0x00, 0x00, 0x00, 0xd6, 0x7f, 0x00, 0x00, 0x0f, 0x00, 0x47, 0x15, 0xf5, 0x00, 0x04, 0x00   ; F51E5C  ..........G.....
+
+; --- 0xF51E6C-0xF51E87  romtab (28 bytes) ---
+
+; --------------------------------------------------------------------------
+; Pointer_F51E6C -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
+; Read by: it is the head of a segment and nothing names it directly -- the
+;          addresses prom_a does name inside it are labelled below.
+;          Measured: no instruction in the PROVEN text of either image
+;          spells it; its 32-bit spelling occurs 0 time(s) in the prom_a
+;          image and 0 in prom_b, counted over the raw bytes.
+; Entry count: 1, measured by abutment: 1 x 4 = 4 bytes reaches 0xF51E70
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+Pointer_F51E6C:
+	.long 0x00F5199C                       ; F51E6C  [0]   -> 0xF5199C
+
+; --------------------------------------------------------------------------
+; PtrTable_F51E70 -- 5 32-bit pointers, 0 into prom_a and 5 into prom_b
+; Read by: prom_a 0xFB3B39 `add XWA,0x00f51e70`; prom_a 0xFB47BD `add
+;          XWA,0x00f51e70`
+; Entry count: 5, measured by abutment: 5 x 4 = 20 bytes reaches 0xF51E84
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F51E70:
+	.long 0x00F51C24                       ; F51E70  [0]   -> 0xF51C24
+	.long 0x00F51C60                       ; F51E74  [1]   -> 0xF51C60
+	.long 0x00F51C80                       ; F51E78  [2]   -> 0xF51C80
+	.long 0x00F51CA0                       ; F51E7C  [3]   -> 0xF51CA0
+	.long 0x00F51CC0                       ; F51E80  [4]   -> 0xF51CC0
+
+; --------------------------------------------------------------------------
+; Pointer_F51E84 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
+; Read by: prom_a 0xFB3D4D `add XWA,0x00f51e84`; prom_a 0xFB49A9 `add
+;          XBC,0x00f51e84`
+; Entry count: 1, measured by abutment: 1 x 4 = 4 bytes reaches 0xF51E88
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+Pointer_F51E84:
+	.long 0x00F51812                       ; F51E84  [0]   -> 0xF51812
+
+; --- 0xF51E88-0xF51E89  data (2 bytes) ---
+
+; --------------------------------------------------------------------------
+; RecordIndex_Count -- the two bytes 0x02 0x00 in front of
+;           RecordIndex_F51E8A
+; Evidence: prom_a 0xFB4288 does `add XBC,0x00f51e88`.
+; Unknown: 0x0002 is not 225, so it is NOT the entry count of the table
+;          behind it.  The layout's HOLES table calls it "a count word";
+;          that reading is not supported and is corrected here to a
+;          stated gap.
+; --------------------------------------------------------------------------
+RecordIndex_Count:
+	.byte 0x02, 0x00   ; F51E88  ..
+
+; --- 0xF51E8A-0xF5220D  romtab (900 bytes) ---
+
+; --------------------------------------------------------------------------
+; RecordIndex_F51E8A -- 225 pointers into RecordArray_F511DD
+; Evidence: all 225 entries land inside 0xF511DD-0xF51E1F, and they
+;           resolve to 110 distinct addresses; 0xF51E8A + 225*4 =
+;           0xF5220E, exactly where the 0x0E padding run begins.
+; Read by: prom_a spells 8 addresses inside it (`add XWA,0x00f51e8e`
+;          at 0xFB3578 and seven more at a 0x5C/0x50 spacing), so the
+;          225 entries are read as several sub-arrays, not one.
+; Unknown: where each sub-array starts and how long it is.
+; --------------------------------------------------------------------------
+RecordIndex_F51E8A:
+	.long 0x00F514B9                       ; F51E8A  [0]   -> 0xF514B9
+
+; --------------------------------------------------------------------------
+; PtrTable_F51E8E -- 23 32-bit pointers, 0 into prom_a and 23 into prom_b
+; Read by: prom_a 0xFB3578 `add XWA,0x00f51e8e`; prom_a 0xFB358B `lda_24
+;          xbc, (0xf51e8e)`
+; Entry count: 23, measured by abutment: 23 x 4 = 92 bytes reaches 0xF51EEA
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F51E8E:
+	.long 0x00F511F9                       ; F51E8E  [0]   -> 0xF511F9
+	.long 0x00F51215                       ; F51E92  [1]   -> 0xF51215
+	.long 0x00F51231                       ; F51E96  [2]   -> 0xF51231
+	.long 0x00F5124D                       ; F51E9A  [3]   -> 0xF5124D
+	.long 0x00F51269                       ; F51E9E  [4]   -> 0xF51269
+	.long 0x00F51285                       ; F51EA2  [5]   -> 0xF51285
+	.long 0x00F512A1                       ; F51EA6  [6]   -> 0xF512A1
+	.long 0x00F512BD                       ; F51EAA  [7]   -> 0xF512BD
+	.long 0x00F512D9                       ; F51EAE  [8]   -> 0xF512D9
+	.long 0x00F512F9                       ; F51EB2  [9]   -> 0xF512F9
+	.long 0x00F51315                       ; F51EB6  [10]   -> 0xF51315
+	.long 0x00F51331                       ; F51EBA  [11]   -> 0xF51331
+	.long 0x00F5134D                       ; F51EBE  [12]   -> 0xF5134D
+	.long 0x00F51369                       ; F51EC2  [13]   -> 0xF51369
+	.long 0x00F51385                       ; F51EC6  [14]   -> 0xF51385
+	.long 0x00F513A1                       ; F51ECA  [15]   -> 0xF513A1
+	.long 0x00F513BD                       ; F51ECE  [16]   -> 0xF513BD
+	.long 0x00F513D9                       ; F51ED2  [17]   -> 0xF513D9
+	.long 0x00F513F5                       ; F51ED6  [18]   -> 0xF513F5
+	.long 0x00F51411                       ; F51EDA  [19]   -> 0xF51411
+	.long 0x00F5142D                       ; F51EDE  [20]   -> 0xF5142D
+	.long 0x00F51449                       ; F51EE2  [21]   -> 0xF51449
+	.long 0x00F51465                       ; F51EE6  [22]   -> 0xF51465
+
+; --------------------------------------------------------------------------
+; PtrTable_F51EEA -- 23 32-bit pointers, 0 into prom_a and 23 into prom_b
+; Read by: prom_a 0xFB4332 `add XWA,0x00f51eea`; prom_a 0xFB4345 `lda_24
+;          xbc, (0xf51eea)`
+; Entry count: 23, measured by abutment: 23 x 4 = 92 bytes reaches 0xF51F46
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F51EEA:
+	.long 0x00F511F9                       ; F51EEA  [0]   -> 0xF511F9
+	.long 0x00F51215                       ; F51EEE  [1]   -> 0xF51215
+	.long 0x00F51231                       ; F51EF2  [2]   -> 0xF51231
+	.long 0x00F5124D                       ; F51EF6  [3]   -> 0xF5124D
+	.long 0x00F51269                       ; F51EFA  [4]   -> 0xF51269
+	.long 0x00F51285                       ; F51EFE  [5]   -> 0xF51285
+	.long 0x00F512A1                       ; F51F02  [6]   -> 0xF512A1
+	.long 0x00F512BD                       ; F51F06  [7]   -> 0xF512BD
+	.long 0x00F512D9                       ; F51F0A  [8]   -> 0xF512D9
+	.long 0x00F512F9                       ; F51F0E  [9]   -> 0xF512F9
+	.long 0x00F51315                       ; F51F12  [10]   -> 0xF51315
+	.long 0x00F51331                       ; F51F16  [11]   -> 0xF51331
+	.long 0x00F5134D                       ; F51F1A  [12]   -> 0xF5134D
+	.long 0x00F51369                       ; F51F1E  [13]   -> 0xF51369
+	.long 0x00F51385                       ; F51F22  [14]   -> 0xF51385
+	.long 0x00F513A1                       ; F51F26  [15]   -> 0xF513A1
+	.long 0x00F513BD                       ; F51F2A  [16]   -> 0xF513BD
+	.long 0x00F513D9                       ; F51F2E  [17]   -> 0xF513D9
+	.long 0x00F513F5                       ; F51F32  [18]   -> 0xF513F5
+	.long 0x00F51411                       ; F51F36  [19]   -> 0xF51411
+	.long 0x00F5142D                       ; F51F3A  [20]   -> 0xF5142D
+	.long 0x00F51449                       ; F51F3E  [21]   -> 0xF51449
+	.long 0x00F51465                       ; F51F42  [22]   -> 0xF51465
+
+; --------------------------------------------------------------------------
+; PtrTable_F51F46 -- 5 32-bit pointers, 0 into prom_a and 5 into prom_b
+; Read by: prom_a 0xFB35CB `add XWA,0x00f51f46`; prom_a 0xFB35DE `lda_24
+;          xbc, (0xf51f46)`
+; Entry count: 5, measured by abutment: 5 x 4 = 20 bytes reaches 0xF51F5A
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F51F46:
+	.long 0x00F511F9                       ; F51F46  [0]   -> 0xF511F9
+	.long 0x00F51481                       ; F51F4A  [1]   -> 0xF51481
+	.long 0x00F5149D                       ; F51F4E  [2]   -> 0xF5149D
+	.long 0x00F514BB                       ; F51F52  [3]   -> 0xF514BB
+	.long 0x00F514D7                       ; F51F56  [4]   -> 0xF514D7
+
+; --------------------------------------------------------------------------
+; Pointer_F51F5A -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
+; Read by: prom_a 0xFB4385 `add XWA,0x00f51f5a`; prom_a 0xFB4398 `lda_24
+;          xbc, (0xf51f5a)`
+; Entry count: 1, measured by abutment: 1 x 4 = 4 bytes reaches 0xF51F5E
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+Pointer_F51F5A:
+	.long 0x00F511F9                       ; F51F5A  [0]   -> 0xF511F9
+
+; --------------------------------------------------------------------------
+; PtrTable_F51F5E -- 25 32-bit pointers, 0 into prom_a and 25 into prom_b
+; Read by: prom_a 0xFB361F `add XWA,0x00f51f5e`; prom_a 0xFB3632 `lda_24
+;          xbc, (0xf51f5e)`
+; Entry count: 25, measured by abutment: 25 x 4 = 100 bytes reaches 0xF51FC2
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F51F5E:
+	.long 0x00F511F9                       ; F51F5E  [0]   -> 0xF511F9
+	.long 0x00F514F3                       ; F51F62  [1]   -> 0xF514F3
+	.long 0x00F5150F                       ; F51F66  [2]   -> 0xF5150F
+	.long 0x00F5152B                       ; F51F6A  [3]   -> 0xF5152B
+	.long 0x00F51556                       ; F51F6E  [4]   -> 0xF51556
+	.long 0x00F51572                       ; F51F72  [5]   -> 0xF51572
+	.long 0x00F5158E                       ; F51F76  [6]   -> 0xF5158E
+	.long 0x00F515AA                       ; F51F7A  [7]   -> 0xF515AA
+	.long 0x00F515C6                       ; F51F7E  [8]   -> 0xF515C6
+	.long 0x00F515E2                       ; F51F82  [9]   -> 0xF515E2
+	.long 0x00F515FE                       ; F51F86  [10]   -> 0xF515FE
+	.long 0x00F5161A                       ; F51F8A  [11]   -> 0xF5161A
+	.long 0x00F51636                       ; F51F8E  [12]   -> 0xF51636
+	.long 0x00F51652                       ; F51F92  [13]   -> 0xF51652
+	.long 0x00F5166E                       ; F51F96  [14]   -> 0xF5166E
+	.long 0x00F5168A                       ; F51F9A  [15]   -> 0xF5168A
+	.long 0x00F516A6                       ; F51F9E  [16]   -> 0xF516A6
+	.long 0x00F516C2                       ; F51FA2  [17]   -> 0xF516C2
+	.long 0x00F516DE                       ; F51FA6  [18]   -> 0xF516DE
+	.long 0x00F516FA                       ; F51FAA  [19]   -> 0xF516FA
+	.long 0x00F51716                       ; F51FAE  [20]   -> 0xF51716
+	.long 0x00F51732                       ; F51FB2  [21]   -> 0xF51732
+	.long 0x00F5174E                       ; F51FB6  [22]   -> 0xF5174E
+	.long 0x00F5176A                       ; F51FBA  [23]   -> 0xF5176A
+	.long 0x00F51786                       ; F51FBE  [24]   -> 0xF51786
+
+; --------------------------------------------------------------------------
+; PtrTable_F51FC2 -- 25 32-bit pointers, 0 into prom_a and 25 into prom_b
+; Read by: prom_a 0xFB43D9 `add XWA,0x00f51fc2`; prom_a 0xFB43EC `lda_24
+;          xbc, (0xf51fc2)`
+; Entry count: 25, measured by abutment: 25 x 4 = 100 bytes reaches 0xF52026
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F51FC2:
+	.long 0x00F511F9                       ; F51FC2  [0]   -> 0xF511F9
+	.long 0x00F514F3                       ; F51FC6  [1]   -> 0xF514F3
+	.long 0x00F5150F                       ; F51FCA  [2]   -> 0xF5150F
+	.long 0x00F5152B                       ; F51FCE  [3]   -> 0xF5152B
+	.long 0x00F51556                       ; F51FD2  [4]   -> 0xF51556
+	.long 0x00F51572                       ; F51FD6  [5]   -> 0xF51572
+	.long 0x00F5158E                       ; F51FDA  [6]   -> 0xF5158E
+	.long 0x00F515AA                       ; F51FDE  [7]   -> 0xF515AA
+	.long 0x00F515C6                       ; F51FE2  [8]   -> 0xF515C6
+	.long 0x00F515E2                       ; F51FE6  [9]   -> 0xF515E2
+	.long 0x00F515FE                       ; F51FEA  [10]   -> 0xF515FE
+	.long 0x00F5161A                       ; F51FEE  [11]   -> 0xF5161A
+	.long 0x00F51636                       ; F51FF2  [12]   -> 0xF51636
+	.long 0x00F51652                       ; F51FF6  [13]   -> 0xF51652
+	.long 0x00F5166E                       ; F51FFA  [14]   -> 0xF5166E
+	.long 0x00F5168A                       ; F51FFE  [15]   -> 0xF5168A
+	.long 0x00F516A6                       ; F52002  [16]   -> 0xF516A6
+	.long 0x00F516C2                       ; F52006  [17]   -> 0xF516C2
+	.long 0x00F516DE                       ; F5200A  [18]   -> 0xF516DE
+	.long 0x00F516FA                       ; F5200E  [19]   -> 0xF516FA
+	.long 0x00F51716                       ; F52012  [20]   -> 0xF51716
+	.long 0x00F51732                       ; F52016  [21]   -> 0xF51732
+	.long 0x00F5174E                       ; F5201A  [22]   -> 0xF5174E
+	.long 0x00F5176A                       ; F5201E  [23]   -> 0xF5176A
+	.long 0x00F51786                       ; F52022  [24]   -> 0xF51786
+
+; --------------------------------------------------------------------------
+; PtrTable_F52026 -- 19 32-bit pointers, 0 into prom_a and 19 into prom_b
+; Read by: prom_a 0xFB3674 `add XWA,0x00f52026`; prom_a 0xFB3687 `lda_24
+;          xbc, (0xf52026)`
+; Entry count: 19, measured by abutment: 19 x 4 = 76 bytes reaches 0xF52072
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F52026:
+	.long 0x00F511F9                       ; F52026  [0]   -> 0xF511F9
+	.long 0x00F517A2                       ; F5202A  [1]   -> 0xF517A2
+	.long 0x00F517BE                       ; F5202E  [2]   -> 0xF517BE
+	.long 0x00F517DA                       ; F52032  [3]   -> 0xF517DA
+	.long 0x00F517F6                       ; F52036  [4]   -> 0xF517F6
+	.long 0x00F51814                       ; F5203A  [5]   -> 0xF51814
+	.long 0x00F51830                       ; F5203E  [6]   -> 0xF51830
+	.long 0x00F5184C                       ; F52042  [7]   -> 0xF5184C
+	.long 0x00F51868                       ; F52046  [8]   -> 0xF51868
+	.long 0x00F51884                       ; F5204A  [9]   -> 0xF51884
+	.long 0x00F518A0                       ; F5204E  [10]   -> 0xF518A0
+	.long 0x00F518BC                       ; F52052  [11]   -> 0xF518BC
+	.long 0x00F518D8                       ; F52056  [12]   -> 0xF518D8
+	.long 0x00F518F4                       ; F5205A  [13]   -> 0xF518F4
+	.long 0x00F51910                       ; F5205E  [14]   -> 0xF51910
+	.long 0x00F5192C                       ; F52062  [15]   -> 0xF5192C
+	.long 0x00F51948                       ; F52066  [16]   -> 0xF51948
+	.long 0x00F51964                       ; F5206A  [17]   -> 0xF51964
+	.long 0x00F51980                       ; F5206E  [18]   -> 0xF51980
+
+; --------------------------------------------------------------------------
+; PtrTable_F52072 -- 19 32-bit pointers, 0 into prom_a and 19 into prom_b
+; Read by: prom_a 0xFB442E `add XWA,0x00f52072`; prom_a 0xFB4441 `lda_24
+;          xbc, (0xf52072)`
+; Entry count: 19, measured by abutment: 19 x 4 = 76 bytes reaches 0xF520BE
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F52072:
+	.long 0x00F511F9                       ; F52072  [0]   -> 0xF511F9
+	.long 0x00F517A2                       ; F52076  [1]   -> 0xF517A2
+	.long 0x00F517BE                       ; F5207A  [2]   -> 0xF517BE
+	.long 0x00F517DA                       ; F5207E  [3]   -> 0xF517DA
+	.long 0x00F517F6                       ; F52082  [4]   -> 0xF517F6
+	.long 0x00F51814                       ; F52086  [5]   -> 0xF51814
+	.long 0x00F51830                       ; F5208A  [6]   -> 0xF51830
+	.long 0x00F5184C                       ; F5208E  [7]   -> 0xF5184C
+	.long 0x00F51868                       ; F52092  [8]   -> 0xF51868
+	.long 0x00F51884                       ; F52096  [9]   -> 0xF51884
+	.long 0x00F518A0                       ; F5209A  [10]   -> 0xF518A0
+	.long 0x00F518BC                       ; F5209E  [11]   -> 0xF518BC
+	.long 0x00F518D8                       ; F520A2  [12]   -> 0xF518D8
+	.long 0x00F518F4                       ; F520A6  [13]   -> 0xF518F4
+	.long 0x00F51910                       ; F520AA  [14]   -> 0xF51910
+	.long 0x00F5192C                       ; F520AE  [15]   -> 0xF5192C
+	.long 0x00F51948                       ; F520B2  [16]   -> 0xF51948
+	.long 0x00F51964                       ; F520B6  [17]   -> 0xF51964
+	.long 0x00F51980                       ; F520BA  [18]   -> 0xF51980
+
+; --------------------------------------------------------------------------
+; PtrTable_F520BE -- 40 32-bit pointers, 0 into prom_a and 40 into prom_b
+; Read by: prom_a 0xFB36C8 `add XWA,0x00f520be`; prom_a 0xFB36DB `lda_24
+;          xbc, (0xf520be)`
+; Entry count: 40, measured by abutment: 40 x 4 = 160 bytes reaches 0xF5215E
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F520BE:
+	.long 0x00F511F9                       ; F520BE  [0]   -> 0xF511F9
+	.long 0x00F519A0                       ; F520C2  [1]   -> 0xF519A0
+	.long 0x00F519BC                       ; F520C6  [2]   -> 0xF519BC
+	.long 0x00F519D8                       ; F520CA  [3]   -> 0xF519D8
+	.long 0x00F519F4                       ; F520CE  [4]   -> 0xF519F4
+	.long 0x00F51A10                       ; F520D2  [5]   -> 0xF51A10
+	.long 0x00F51A2C                       ; F520D6  [6]   -> 0xF51A2C
+	.long 0x00F51A48                       ; F520DA  [7]   -> 0xF51A48
+	.long 0x00F51A64                       ; F520DE  [8]   -> 0xF51A64
+	.long 0x00F51A80                       ; F520E2  [9]   -> 0xF51A80
+	.long 0x00F51A9C                       ; F520E6  [10]   -> 0xF51A9C
+	.long 0x00F51AB8                       ; F520EA  [11]   -> 0xF51AB8
+	.long 0x00F51AD4                       ; F520EE  [12]   -> 0xF51AD4
+	.long 0x00F51AF0                       ; F520F2  [13]   -> 0xF51AF0
+	.long 0x00F51B0C                       ; F520F6  [14]   -> 0xF51B0C
+	.long 0x00F51B28                       ; F520FA  [15]   -> 0xF51B28
+	.long 0x00F51B44                       ; F520FE  [16]   -> 0xF51B44
+	.long 0x00F51B60                       ; F52102  [17]   -> 0xF51B60
+	.long 0x00F51B7C                       ; F52106  [18]   -> 0xF51B7C
+	.long 0x00F51B98                       ; F5210A  [19]   -> 0xF51B98
+	.long 0x00F51BB4                       ; F5210E  [20]   -> 0xF51BB4
+	.long 0x00F51BD0                       ; F52112  [21]   -> 0xF51BD0
+	.long 0x00F51BEC                       ; F52116  [22]   -> 0xF51BEC
+	.long 0x00F51C08                       ; F5211A  [23]   -> 0xF51C08
+	.long 0x00F51C28                       ; F5211E  [24]   -> 0xF51C28
+	.long 0x00F51C44                       ; F52122  [25]   -> 0xF51C44
+	.long 0x00F51C64                       ; F52126  [26]   -> 0xF51C64
+	.long 0x00F51C84                       ; F5212A  [27]   -> 0xF51C84
+	.long 0x00F51CA4                       ; F5212E  [28]   -> 0xF51CA4
+	.long 0x00F51CC4                       ; F52132  [29]   -> 0xF51CC4
+	.long 0x00F51CE0                       ; F52136  [30]   -> 0xF51CE0
+	.long 0x00F51CFC                       ; F5213A  [31]   -> 0xF51CFC
+	.long 0x00F51D18                       ; F5213E  [32]   -> 0xF51D18
+	.long 0x00F51D34                       ; F52142  [33]   -> 0xF51D34
+	.long 0x00F51D50                       ; F52146  [34]   -> 0xF51D50
+	.long 0x00F51D6C                       ; F5214A  [35]   -> 0xF51D6C
+	.long 0x00F51D88                       ; F5214E  [36]   -> 0xF51D88
+	.long 0x00F51DA4                       ; F52152  [37]   -> 0xF51DA4
+	.long 0x00F51DC0                       ; F52156  [38]   -> 0xF51DC0
+	.long 0x00F51DDC                       ; F5215A  [39]   -> 0xF51DDC
+
+; --------------------------------------------------------------------------
+; PtrTable_F5215E -- 40 32-bit pointers, 0 into prom_a and 40 into prom_b
+; Read by: prom_a 0xFB4482 `add XWA,0x00f5215e`; prom_a 0xFB4495 `lda_24
+;          xbc, (0xf5215e)`
+; Entry count: 40, measured by abutment: 40 x 4 = 160 bytes reaches 0xF521FE
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F5215E:
+	.long 0x00F511F9                       ; F5215E  [0]   -> 0xF511F9
+	.long 0x00F519A0                       ; F52162  [1]   -> 0xF519A0
+	.long 0x00F519BC                       ; F52166  [2]   -> 0xF519BC
+	.long 0x00F519D8                       ; F5216A  [3]   -> 0xF519D8
+	.long 0x00F519F4                       ; F5216E  [4]   -> 0xF519F4
+	.long 0x00F51A10                       ; F52172  [5]   -> 0xF51A10
+	.long 0x00F51A2C                       ; F52176  [6]   -> 0xF51A2C
+	.long 0x00F51A48                       ; F5217A  [7]   -> 0xF51A48
+	.long 0x00F51A64                       ; F5217E  [8]   -> 0xF51A64
+	.long 0x00F51A80                       ; F52182  [9]   -> 0xF51A80
+	.long 0x00F51A9C                       ; F52186  [10]   -> 0xF51A9C
+	.long 0x00F51AB8                       ; F5218A  [11]   -> 0xF51AB8
+	.long 0x00F51AD4                       ; F5218E  [12]   -> 0xF51AD4
+	.long 0x00F51AF0                       ; F52192  [13]   -> 0xF51AF0
+	.long 0x00F51B0C                       ; F52196  [14]   -> 0xF51B0C
+	.long 0x00F51B28                       ; F5219A  [15]   -> 0xF51B28
+	.long 0x00F51B44                       ; F5219E  [16]   -> 0xF51B44
+	.long 0x00F51B60                       ; F521A2  [17]   -> 0xF51B60
+	.long 0x00F51B7C                       ; F521A6  [18]   -> 0xF51B7C
+	.long 0x00F51B98                       ; F521AA  [19]   -> 0xF51B98
+	.long 0x00F51BB4                       ; F521AE  [20]   -> 0xF51BB4
+	.long 0x00F51BD0                       ; F521B2  [21]   -> 0xF51BD0
+	.long 0x00F51BEC                       ; F521B6  [22]   -> 0xF51BEC
+	.long 0x00F51C08                       ; F521BA  [23]   -> 0xF51C08
+	.long 0x00F51C28                       ; F521BE  [24]   -> 0xF51C28
+	.long 0x00F51C44                       ; F521C2  [25]   -> 0xF51C44
+	.long 0x00F51C64                       ; F521C6  [26]   -> 0xF51C64
+	.long 0x00F51C84                       ; F521CA  [27]   -> 0xF51C84
+	.long 0x00F51CA4                       ; F521CE  [28]   -> 0xF51CA4
+	.long 0x00F51CC4                       ; F521D2  [29]   -> 0xF51CC4
+	.long 0x00F51CE0                       ; F521D6  [30]   -> 0xF51CE0
+	.long 0x00F51CFC                       ; F521DA  [31]   -> 0xF51CFC
+	.long 0x00F51D18                       ; F521DE  [32]   -> 0xF51D18
+	.long 0x00F51D34                       ; F521E2  [33]   -> 0xF51D34
+	.long 0x00F51D50                       ; F521E6  [34]   -> 0xF51D50
+	.long 0x00F51D6C                       ; F521EA  [35]   -> 0xF51D6C
+	.long 0x00F51D88                       ; F521EE  [36]   -> 0xF51D88
+	.long 0x00F51DA4                       ; F521F2  [37]   -> 0xF51DA4
+	.long 0x00F51DC0                       ; F521F6  [38]   -> 0xF51DC0
+	.long 0x00F51DDC                       ; F521FA  [39]   -> 0xF51DDC
+
+; --------------------------------------------------------------------------
+; PtrTable_F521FE -- 2 32-bit pointers, 0 into prom_a and 2 into prom_b
+; Read by: prom_a 0xFB371B `add XWA,0x00f521fe`; prom_a 0xFB372E `lda_24
+;          xbc, (0xf521fe)`
+; Entry count: 2, measured by abutment: 2 x 4 = 8 bytes reaches 0xF52206
+;              exactly, which is the next address an instruction names.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F521FE:
+	.long 0x00F511F9                       ; F521FE  [0]   -> 0xF511F9
+	.long 0x00F51DF8                       ; F52202  [1]   -> 0xF51DF8
+
+; --------------------------------------------------------------------------
+; PtrTable_F52206 -- 2 32-bit pointers, 0 into prom_a and 2 into prom_b
+; Read by: prom_a 0xFB44D5 `add XWA,0x00f52206`; prom_a 0xFB44E8 `lda_24
+;          xbc, (0xf52206)`
+; Entry count: 2, measured by abutment: 2 x 4 = 8 bytes reaches 0xF5220E
+;              exactly, which is the end of the segment.
+; Evidence: every word in the range is a 32-bit value inside the
+;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
+;           rule, whose null corpus is 107,345 bytes of proven prom_b
+;           instruction text on which it fires zero times.  The BASE is the
+;           address an instruction spells, not a boundary this file chose.
+; --------------------------------------------------------------------------
+PtrTable_F52206:
+	.long 0x00F511F9                       ; F52206  [0]   -> 0xF511F9
+	.long 0x00F51DF8                       ; F5220A  [1]   -> 0xF51DF8
+
+; --- 0xF5220E-0xF52FFF  fill (3570 bytes) ---
+	.fill	3570, 1, 0x0E	; asserted a single value
+	ret	; F53000  ret
+	nop	; F53001  nop
+	nop	; F53002  nop
+	nop	; F53003  nop
+	ret	; F53004  ret
+	nop	; F53005  nop
+	nop	; F53006  nop
+	nop	; F53007  nop
+	ret	; F53008  ret
+	nop	; F53009  nop
+	nop	; F5300A  nop
+	nop	; F5300B  nop
+	jr	8	; F5300C  jr T,0xf53016
+	ret	; F5300E  ret
+	nop	; F5300F  nop
+	nop	; F53010  nop
+	nop	; F53011  nop
+	ret	; F53012  ret
+	nop	; F53013  nop
+	nop	; F53014  nop
+	nop	; F53015  nop
+	calr	4581	; F53016  calr 0xf541fe
+	ret	; F53019  ret
+
+; --------------------------------------------------------------------------
+; sub_F5301A
+; Called from: thunk slot T_F42E58; thunk slot T_F42E5C
+; Evidence: 0xF5301A is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5301A:		; <- T_F42E58, T_F42E5C
+	ret	; F5301A  ret
+	.byte 0xF1, 0x34, 0x21, 0xB9	; F5301B  set 1,(0x2134)   [llvm-mc cannot encode this]
+	ret	; F5301F  ret
+	.byte 0xF1, 0x34, 0x21, 0xB9	; F53020  set 1,(0x2134)   [llvm-mc cannot encode this]
+	ret	; F53024  ret
+
+; --------------------------------------------------------------------------
+; sub_F53025
+; Called from: thunk slot T_F42E44
+; Evidence: 0xF53025 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53025:		; <- T_F42E44
+	calr	42	; F53025  calr 0xf53052
+	ret	; F53028  ret
+
+; --------------------------------------------------------------------------
+; sub_F53029
+; Called from: thunk slot T_F42E48
+; Evidence: 0xF53029 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53029:		; <- T_F42E48
+	ret	; F53029  ret
+
+; --------------------------------------------------------------------------
+; DrawbarScreen_Dispatch -- the module's message entry
+; Called from: T_F42E4C
+; What it does: `link XIZ,0 / pushw (XIZ+0x0A) / pushw (XIZ+0x08) / call
+;               0xf42c74 / mul A,4 / add XWA,0x00f54248 / ld XBC,(XWA) / jp
+;               (XBC)` -- the image-wide message-dispatch idiom, here
+;               through DispatchTable_F54248.
+; Evidence: the byte-identical idiom appears at sub_F0F17C, sub_F4C4B5 and
+;           0xF1233E in this same file, each with its own table; the only
+;           thing this file adds is WHICH table.  The name states the
+;           mechanism and the table, not a purpose.
+; --------------------------------------------------------------------------
+DrawbarScreen_Dispatch:		; <- T_F42E4C
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F5302A  link XIZ,0x0000   [llvm-mc cannot encode this]
+	.byte 0x9E, 0x0A, 0x04	; F5302E  pushw (XIZ+0x0a)   [llvm-mc cannot encode this]
+	.byte 0x9E, 0x08, 0x04	; F53031  pushw (XIZ+0x08)   [llvm-mc cannot encode this]
+	call	16002164	; F53034  call 0xf42c74
+	mul	a, 4	; F53038  mul A,0x04
+	extz	xwa	; F5303B  extz XWA
+	add	xwa, 16073288	; F5303D  add XWA,0x00f54248
+	ld	xbc, (xwa)	; F53043  ld XBC,(XWA)
+	lda_24	xiy, (16068685)	; F53045  lda XIY,0xf5304d
+	push	xiy	; F5304A  push XIY
+	jp	(xbc)	; F5304B  jp T,XBC
+	pop	xbc	; F5304D  pop XBC
+	.byte 0xEE, 0x0D	; F5304E  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F53050  ret
+
+; --------------------------------------------------------------------------
+; sub_F53051
+; Called from: thunk slot T_F42E50
+; Evidence: 0xF53051 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53051:		; <- T_F42E50
+	ret	; F53051  ret
+
+; --------------------------------------------------------------------------
+; sub_F53052
+; Called from: call from 0xF53025
+; Evidence: 0xF53052 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53052:
+	push	xix	; F53052  push XIX
+	lda_d16	xix, (10399)	; F53053  lda XIX,0x289f
+	stdi8	(10396), 0	; F53057  ld (0x289c),0x00
+	ldb_d8	c, (8314)	; F5305C  ld C,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF3	; F53060  cp C,(0x207b)   [llvm-mc cannot encode this]
+	jr	z, 53	; F53064  jr Z,0xf5309b
+	stdi8	(10397), 0	; F53066  ld (0x289d),0x00
+	.byte 0xC1, 0x7D, 0x20, 0x3F, 0x66	; F5306B  cp (0x207d),0x66   [llvm-mc cannot encode this]
+	jr	z, 10	; F53070  jr Z,0xf5307c
+	ld	(xix), 0	; F53072  ld (XIX),0x00
+	stdi8	(10398), 0	; F53075  ld (0x289e),0x00
+	jr	8	; F5307A  jr T,0xf53084
+	ld	(xix), 1	; F5307C  ld (XIX),0x01
+	stdi8	(10398), 1	; F5307F  ld (0x289e),0x01
+	stdi8	(10402), 0	; F53084  ld (0x28a2),0x00
+	stdi8	(10401), 0	; F53089  ld (0x28a1),0x00
+	ldb_d8	c, (10415)	; F5308E  ld C,(0x28af)
+	and	c, 1	; F53092  and C,0x01
+	jr	z, 4	; F53095  jr Z,0xf5309b
+	.byte 0xF1, 0xAF, 0x28, 0xB0	; F53097  res 0,(0x28af)   [llvm-mc cannot encode this]
+	ldb_d8	c, (8316)	; F5309B  ld C,(0x207c)
+	.byte 0xC1, 0x7D, 0x20, 0xF3	; F5309F  cp C,(0x207d)   [llvm-mc cannot encode this]
+	jr	z, 8	; F530A3  jr Z,0xf530ad
+	incm8	1, (xix)	; F530A5  inc 1,(XIX)
+	incm8	1, (xix)	; F530A7  inc 1,(XIX)
+	incdi8	1, (10402)	; F530A9  inc 1,(0x28a2)
+	ld	c, (xix)	; F530AD  ld C,(XIX)
+	cpdm8	(10398), c	; F530AF  cp (0x289e),C
+	jr	z, 20	; F530B3  jr Z,0xf530c9
+	.byte 0xC1, 0x9D, 0x28, 0x3F, 0x00	; F530B5  cp (0x289d),0x00   [llvm-mc cannot encode this]
+	jr	z, 13	; F530BA  jr Z,0xf530c9
+	ldb_d8	c, (8341)	; F530BC  ld C,(0x2095)
+	and	c, 16	; F530C0  and C,0x10
+	jr	nz, 4	; F530C3  jr NZ,0xf530c9
+	call	16002688	; F530C5  call 0xf42e80
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F530C9  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 6	; F530CE  jr NZ,0xf530d6
+	.byte 0xF1, 0x75, 0x20, 0xB0	; F530D0  res 0,(0x2075)   [llvm-mc cannot encode this]
+	jr	14	; F530D4  jr T,0xf530e4
+	.byte 0xF1, 0x75, 0x20, 0xB8	; F530D6  set 0,(0x2075)   [llvm-mc cannot encode this]
+	stdi8	(8347), 12	; F530DA  ld (0x209b),0x0c
+	stdi8	(8348), 11	; F530DF  ld (0x209c),0x0b
+	ldb_d8	c, (8341)	; F530E4  ld C,(0x2095)
+	and	c, 16	; F530E8  and C,0x10
+	jr	nz, 52	; F530EB  jr NZ,0xf53121
+	ldb_d8	c, (8316)	; F530ED  ld C,(0x207c)
+	.byte 0xC1, 0x7D, 0x20, 0xF3	; F530F1  cp C,(0x207d)   [llvm-mc cannot encode this]
+	jr	z, 23	; F530F5  jr Z,0xf5310e
+	call	16002688	; F530F7  call 0xf42e80
+	lda_24	xbc, (16070332)	; F530FB  lda XBC,0xf536bc
+	push	xbc	; F53100  push XBC
+	call	16002692	; F53101  call 0xf42e84
+	pushw	1	; F53105  push 0x0001
+	call	16002496	; F53108  call 0xf42dc0
+	inc	6, xsp	; F5310C  inc 6,XSP
+	lda_24	xbc, (16070434)	; F5310E  lda XBC,0xf53722
+	push	xbc	; F53113  push XBC
+	call	16002692	; F53114  call 0xf42e84
+	pushw	1	; F53118  push 0x0001
+	call	16002496	; F5311B  call 0xf42dc0
+	inc	6, xsp	; F5311F  inc 6,XSP
+	lda_24	xbc, (16070691)	; F53121  lda XBC,0xf53823
+	push	xbc	; F53126  push XBC
+	call	16002692	; F53127  call 0xf42e84
+	pushw	1	; F5312B  push 0x0001
+	call	16002496	; F5312E  call 0xf42dc0
+	inc	6, xsp	; F53132  inc 6,XSP
+	pop	xix	; F53134  pop XIX
+	ret	; F53135  ret
+
+; --------------------------------------------------------------------------
+; sub_F53136
+; Called from: DispatchTable_F54248[8]
+; Evidence: 0xF53136 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53136:
+	push	xix	; F53136  push XIX
+	lda_d16	xix, (10416)	; F53137  lda XIX,0x28b0
+	ld	c, (xix)	; F5313B  ld C,(XIX)
+	and	c, 1	; F5313D  and C,0x01
+	jr	z, 18	; F53140  jr Z,0xf53154
+	.byte 0xC1, 0x76, 0x20, 0x3F, 0x17	; F53142  cp (0x2076),0x17   [llvm-mc cannot encode this]
+	jr	nz, 24	; F53147  jr NZ,0xf53161
+	.byte 0xF1, 0x71, 0x20, 0xBF	; F53149  set 7,(0x2071)   [llvm-mc cannot encode this]
+	stdi8	(8304), 158	; F5314D  ld (0x2070),0x9e
+	jr	13	; F53152  jr T,0xf53161
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F53154  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 6	; F53159  jr NZ,0xf53161
+	.byte 0x84, 0x3C, 0xFE	; F5315B  and (XIX),0xfe   [llvm-mc cannot encode this]
+	calr	221	; F5315E  calr 0xf5323e
+	pop	xix	; F53161  pop XIX
+	ret	; F53162  ret
+
+; --------------------------------------------------------------------------
+; sub_F53163
+; Called from: DispatchTable_F54248[9]
+; Evidence: 0xF53163 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53163:
+	push	xix	; F53163  push XIX
+	lda_d16	xix, (10416)	; F53164  lda XIX,0x28b0
+	ld	c, (xix)	; F53168  ld C,(XIX)
+	and	c, 1	; F5316A  and C,0x01
+	jr	z, 5	; F5316D  jr Z,0xf53174
+	calr	173	; F5316F  calr 0xf5321f
+	jr	24	; F53172  jr T,0xf5318c
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F53174  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 8	; F53179  jr NZ,0xf53183
+	.byte 0x84, 0x3E, 0x01	; F5317B  or (XIX),0x01   [llvm-mc cannot encode this]
+	calr	189	; F5317E  calr 0xf5323e
+	jr	9	; F53181  jr T,0xf5318c
+	.byte 0xF1, 0x71, 0x20, 0xBF	; F53183  set 7,(0x2071)   [llvm-mc cannot encode this]
+	stdi8	(8304), 102	; F53187  ld (0x2070),0x66
+	pop	xix	; F5318C  pop XIX
+	ret	; F5318D  ret
+
+; --------------------------------------------------------------------------
+; sub_F5318E
+; Called from: DispatchTable_F54248[11]
+; Evidence: 0xF5318E is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5318E:
+	push	xix	; F5318E  push XIX
+	lda_d16	xix, (10416)	; F5318F  lda XIX,0x28b0
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x01	; F53193  cp (0x289e),0x01   [llvm-mc cannot encode this]
+	jr	nz, 25	; F53198  jr NZ,0xf531b3
+	ld	c, (xix)	; F5319A  ld C,(XIX)
+	and	c, 1	; F5319C  and C,0x01
+	jr	z, 8	; F5319F  jr Z,0xf531a9
+	.byte 0x84, 0x3C, 0xFE	; F531A1  and (XIX),0xfe   [llvm-mc cannot encode this]
+	calr	78	; F531A4  calr 0xf531f5
+	jr	10	; F531A7  jr T,0xf531b3
+	.byte 0xF1, 0x75, 0x20, 0xB8	; F531A9  set 0,(0x2075)   [llvm-mc cannot encode this]
+	.byte 0x84, 0x3C, 0xFE	; F531AD  and (XIX),0xfe   [llvm-mc cannot encode this]
+	calr	41	; F531B0  calr 0xf531dc
+	pop	xix	; F531B3  pop XIX
+	ret	; F531B4  ret
+
+; --------------------------------------------------------------------------
+; sub_F531B5
+; Called from: DispatchTable_F54248[12]
+; Evidence: 0xF531B5 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F531B5:
+	push	xix	; F531B5  push XIX
+	lda_d16	xix, (10416)	; F531B6  lda XIX,0x28b0
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x01	; F531BA  cp (0x289e),0x01   [llvm-mc cannot encode this]
+	jr	nz, 25	; F531BF  jr NZ,0xf531da
+	ld	c, (xix)	; F531C1  ld C,(XIX)
+	and	c, 1	; F531C3  and C,0x01
+	jr	z, 8	; F531C6  jr Z,0xf531d0
+	.byte 0x84, 0x3E, 0x01	; F531C8  or (XIX),0x01   [llvm-mc cannot encode this]
+	calr	39	; F531CB  calr 0xf531f5
+	jr	10	; F531CE  jr T,0xf531da
+	.byte 0xF1, 0x75, 0x20, 0xB8	; F531D0  set 0,(0x2075)   [llvm-mc cannot encode this]
+	.byte 0x84, 0x3E, 0x01	; F531D4  or (XIX),0x01   [llvm-mc cannot encode this]
+	calr	2	; F531D7  calr 0xf531dc
+	pop	xix	; F531DA  pop XIX
+	ret	; F531DB  ret
+
+; --------------------------------------------------------------------------
+; sub_F531DC
+; Called from: call from 0xF531B0, 0xF531D7
+; Evidence: 0xF531DC is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F531DC:
+	ldb	c, 4	; F531DC  ld C,0x04
+	.byte 0xC1, 0xA1, 0x28, 0x43	; F531DE  mul BC,(0x28a1)   [llvm-mc cannot encode this]
+	extz	xbc	; F531E2  extz XBC
+	add	xbc, 16073425	; F531E4  add XBC,0x00f542d1
+	ld	xbc, (xbc)	; F531EA  ld XBC,(XBC)
+	lda_24	xiy, (16069108)	; F531EC  lda XIY,0xf531f4
+	push	xiy	; F531F1  push XIY
+	jp	(xbc)	; F531F2  jp T,XBC
+	ret	; F531F4  ret
+
+; --------------------------------------------------------------------------
+; sub_F531F5
+; Called from: call from 0xF531A4, 0xF531CB
+; Evidence: 0xF531F5 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F531F5:
+	push	xix	; F531F5  push XIX
+	lda_d16	xix, (10401)	; F531F6  lda XIX,0x28a1
+	ldb_d8	c, (10416)	; F531FA  ld C,(0x28b0)
+	and	c, 1	; F531FE  and C,0x01
+	jr	z, 10	; F53201  jr Z,0xf5320d
+	ld	c, (xix)	; F53203  ld C,(XIX)
+	cps	c, 3	; F53205  cp C,3
+	jr	nc, 20	; F53207  jr NC,0xf5321d
+	incm8	1, (xix)	; F53209  inc 1,(XIX)
+	jr	8	; F5320B  jr T,0xf53215
+	ld	c, (xix)	; F5320D  ld C,(XIX)
+	cps	c, 0	; F5320F  cp C,0
+	jr	z, 10	; F53211  jr Z,0xf5321d
+	decm8	1, (xix)	; F53213  dec 1,(XIX)
+	.byte 0xF1, 0x75, 0x20, 0xBB	; F53215  set 3,(0x2075)   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x71, 0x20, 0xBC	; F53219  set 4,(0x2071)   [llvm-mc cannot encode this]
+	pop	xix	; F5321D  pop XIX
+	ret	; F5321E  ret
+
+; --------------------------------------------------------------------------
+; sub_F5321F
+; Called from: call from 0xF5316F
+; Evidence: 0xF5321F is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5321F:
+	push	xix	; F5321F  push XIX
+	lda_d16	xix, (10398)	; F53220  lda XIX,0x289e
+	ld	c, (xix)	; F53224  ld C,(XIX)
+	cps	c, 0	; F53226  cp C,0
+	jr	nz, 5	; F53228  jr NZ,0xf5322f
+	ld	(xix), 1	; F5322A  ld (XIX),0x01
+	jr	3	; F5322D  jr T,0xf53232
+	ld	(xix), 0	; F5322F  ld (XIX),0x00
+	.byte 0xF1, 0x71, 0x20, 0xBC	; F53232  set 4,(0x2071)   [llvm-mc cannot encode this]
+	stdi8	(10399), 2	; F53236  ld (0x289f),0x02
+	pop	xix	; F5323B  pop XIX
+	ret	; F5323C  ret
+	ret	; F5323D  ret
+
+; --------------------------------------------------------------------------
+; sub_F5323E
+; Called from: call from 0xF5315E, 0xF5317E
+; Evidence: 0xF5323E is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5323E:
+	push	xix	; F5323E  push XIX
+	lda_d16	xix, (10390)	; F5323F  lda XIX,0x2896
+	ldb_d8	c, (10416)	; F53243  ld C,(0x28b0)
+	and	c, 1	; F53247  and C,0x01
+	jr	z, 5	; F5324A  jr Z,0xf53251
+	.byte 0x84, 0x3D, 0x10	; F5324C  xor (XIX),0x10   [llvm-mc cannot encode this]
+	jr	3	; F5324F  jr T,0xf53254
+	.byte 0x84, 0x3D, 0x20	; F53251  xor (XIX),0x20   [llvm-mc cannot encode this]
+	push	0	; F53254  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F53256  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3889	; F5325A  calr 0xf5418e
+	.byte 0xF1, 0x95, 0x20, 0xBC	; F5325D  set 4,(0x2095)   [llvm-mc cannot encode this]
+	popw	bc	; F53261  pop BC
+	pop	xix	; F53262  pop XIX
+	ret	; F53263  ret
+
+; --------------------------------------------------------------------------
+; sub_F53264
+; Called from: DispatchTable_F542D1[2]
+; Evidence: 0xF53264 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53264:
+	push	xix	; F53264  push XIX
+	lda_d16	xix, (10385)	; F53265  lda XIX,0x2891
+	ldb_d8	c, (10416)	; F53269  ld C,(0x28b0)
+	and	c, 1	; F5326D  and C,0x01
+	jr	z, 30	; F53270  jr Z,0xf53290
+	ld	c, (xix)	; F53272  ld C,(XIX)
+	sra	c, 4	; F53274  sra 0x04,C
+	cp	c, 251	; F53277  cp C,0xfb
+	jr	le, 65	; F5327A  jr LE,0xf532bd
+	ld	c, (xix)	; F5327C  ld C,(XIX)
+	sra	c, 4	; F5327E  sra 0x04,C
+	dec	1, c	; F53281  dec 1,C
+	sll	c, 4	; F53283  sll 0x04,C
+	and	c, 240	; F53286  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53289  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F5328C  or (XIX),C
+	jr	27	; F5328E  jr T,0xf532ab
+	ld	c, (xix)	; F53290  ld C,(XIX)
+	sra	c, 4	; F53292  sra 0x04,C
+	cps	c, 5	; F53295  cp C,5
+	jr	ge, 36	; F53297  jr GE,0xf532bd
+	ld	c, (xix)	; F53299  ld C,(XIX)
+	sra	c, 4	; F5329B  sra 0x04,C
+	inc	1, c	; F5329E  inc 1,C
+	sll	c, 4	; F532A0  sll 0x04,C
+	and	c, 240	; F532A3  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F532A6  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F532A9  or (XIX),C
+	.byte 0xF1, 0x75, 0x20, 0xBB	; F532AB  set 3,(0x2075)   [llvm-mc cannot encode this]
+	push	0	; F532AF  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F532B1  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3798	; F532B5  calr 0xf5418e
+	.byte 0xF1, 0x95, 0x20, 0xBC	; F532B8  set 4,(0x2095)   [llvm-mc cannot encode this]
+	popw	bc	; F532BC  pop BC
+	pop	xix	; F532BD  pop XIX
+	ret	; F532BE  ret
+
+; --------------------------------------------------------------------------
+; sub_F532BF
+; Called from: DispatchTable_F542D1[3]
+; Evidence: 0xF532BF is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F532BF:
+	push	xix	; F532BF  push XIX
+	lda_d16	xix, (10385)	; F532C0  lda XIX,0x2891
+	ldb_d8	c, (10416)	; F532C4  ld C,(0x28b0)
+	and	c, 1	; F532C8  and C,0x01
+	jr	z, 33	; F532CB  jr Z,0xf532ee
+	ld	c, (xix)	; F532CD  ld C,(XIX)
+	sll	c, 4	; F532CF  sll 0x04,C
+	sra	c, 4	; F532D2  sra 0x04,C
+	cp	c, 251	; F532D5  cp C,0xfb
+	jr	le, 68	; F532D8  jr LE,0xf5331e
+	ld	c, (xix)	; F532DA  ld C,(XIX)
+	sll	c, 4	; F532DC  sll 0x04,C
+	sra	c, 4	; F532DF  sra 0x04,C
+	dec	1, c	; F532E2  dec 1,C
+	and	c, 15	; F532E4  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F532E7  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F532EA  or (XIX),C
+	jr	30	; F532EC  jr T,0xf5330c
+	ld	c, (xix)	; F532EE  ld C,(XIX)
+	sll	c, 4	; F532F0  sll 0x04,C
+	sra	c, 4	; F532F3  sra 0x04,C
+	cps	c, 5	; F532F6  cp C,5
+	jr	ge, 36	; F532F8  jr GE,0xf5331e
+	ld	c, (xix)	; F532FA  ld C,(XIX)
+	sll	c, 4	; F532FC  sll 0x04,C
+	sra	c, 4	; F532FF  sra 0x04,C
+	inc	1, c	; F53302  inc 1,C
+	and	c, 15	; F53304  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53307  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F5330A  or (XIX),C
+	.byte 0xF1, 0x75, 0x20, 0xBB	; F5330C  set 3,(0x2075)   [llvm-mc cannot encode this]
+	push	0	; F53310  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F53312  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3701	; F53316  calr 0xf5418e
+	.byte 0xF1, 0x95, 0x20, 0xBC	; F53319  set 4,(0x2095)   [llvm-mc cannot encode this]
+	popw	bc	; F5331D  pop BC
+	pop	xix	; F5331E  pop XIX
+	ret	; F5331F  ret
+
+; --------------------------------------------------------------------------
+; sub_F53320
+; Called from: DispatchTable_F542D1[0]
+; Evidence: 0xF53320 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53320:
+	push	xix	; F53320  push XIX
+	lda_d16	xix, (10384)	; F53321  lda XIX,0x2890
+	ldb_d8	c, (10416)	; F53325  ld C,(0x28b0)
+	and	c, 1	; F53329  and C,0x01
+	jr	z, 33	; F5332C  jr Z,0xf5334f
+	ld	c, (xix)	; F5332E  ld C,(XIX)
+	sll	c, 4	; F53330  sll 0x04,C
+	sra	c, 4	; F53333  sra 0x04,C
+	cp	c, 251	; F53336  cp C,0xfb
+	jr	le, 68	; F53339  jr LE,0xf5337f
+	ld	c, (xix)	; F5333B  ld C,(XIX)
+	sll	c, 4	; F5333D  sll 0x04,C
+	sra	c, 4	; F53340  sra 0x04,C
+	dec	1, c	; F53343  dec 1,C
+	and	c, 15	; F53345  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53348  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F5334B  or (XIX),C
+	jr	30	; F5334D  jr T,0xf5336d
+	ld	c, (xix)	; F5334F  ld C,(XIX)
+	sll	c, 4	; F53351  sll 0x04,C
+	sra	c, 4	; F53354  sra 0x04,C
+	cps	c, 5	; F53357  cp C,5
+	jr	ge, 36	; F53359  jr GE,0xf5337f
+	ld	c, (xix)	; F5335B  ld C,(XIX)
+	sll	c, 4	; F5335D  sll 0x04,C
+	sra	c, 4	; F53360  sra 0x04,C
+	inc	1, c	; F53363  inc 1,C
+	and	c, 15	; F53365  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53368  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F5336B  or (XIX),C
+	.byte 0xF1, 0x75, 0x20, 0xBB	; F5336D  set 3,(0x2075)   [llvm-mc cannot encode this]
+	push	0	; F53371  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F53373  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3604	; F53377  calr 0xf5418e
+	.byte 0xF1, 0x95, 0x20, 0xBC	; F5337A  set 4,(0x2095)   [llvm-mc cannot encode this]
+	popw	bc	; F5337E  pop BC
+	pop	xix	; F5337F  pop XIX
+	ret	; F53380  ret
+
+; --------------------------------------------------------------------------
+; sub_F53381
+; Called from: DispatchTable_F542D1[1]
+; Evidence: 0xF53381 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53381:
+	push	xix	; F53381  push XIX
+	lda_d16	xix, (10384)	; F53382  lda XIX,0x2890
+	ldb_d8	c, (10416)	; F53386  ld C,(0x28b0)
+	and	c, 1	; F5338A  and C,0x01
+	jr	z, 30	; F5338D  jr Z,0xf533ad
+	ld	c, (xix)	; F5338F  ld C,(XIX)
+	sra	c, 4	; F53391  sra 0x04,C
+	cp	c, 251	; F53394  cp C,0xfb
+	jr	le, 65	; F53397  jr LE,0xf533da
+	ld	c, (xix)	; F53399  ld C,(XIX)
+	sra	c, 4	; F5339B  sra 0x04,C
+	dec	1, c	; F5339E  dec 1,C
+	sll	c, 4	; F533A0  sll 0x04,C
+	and	c, 240	; F533A3  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F533A6  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F533A9  or (XIX),C
+	jr	27	; F533AB  jr T,0xf533c8
+	ld	c, (xix)	; F533AD  ld C,(XIX)
+	sra	c, 4	; F533AF  sra 0x04,C
+	cps	c, 5	; F533B2  cp C,5
+	jr	ge, 36	; F533B4  jr GE,0xf533da
+	ld	c, (xix)	; F533B6  ld C,(XIX)
+	sra	c, 4	; F533B8  sra 0x04,C
+	inc	1, c	; F533BB  inc 1,C
+	sll	c, 4	; F533BD  sll 0x04,C
+	and	c, 240	; F533C0  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F533C3  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F533C6  or (XIX),C
+	.byte 0xF1, 0x75, 0x20, 0xBB	; F533C8  set 3,(0x2075)   [llvm-mc cannot encode this]
+	push	0	; F533CC  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F533CE  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3513	; F533D2  calr 0xf5418e
+	.byte 0xF1, 0x95, 0x20, 0xBC	; F533D5  set 4,(0x2095)   [llvm-mc cannot encode this]
+	popw	bc	; F533D9  pop BC
+	pop	xix	; F533DA  pop XIX
+	ret	; F533DB  ret
+
+; --------------------------------------------------------------------------
+; sub_F533DC
+; Called from: call from 0xF53419, 0xF5345B, 0xF534A0, 0xF534EB, 0xF53533,
+;              0xF53578, +3 more
+; Evidence: 0xF533DC is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F533DC:
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F533DC  link XIZ,0x0000   [llvm-mc cannot encode this]
+	pushw	hl	; F533E0  push HL
+	ld	h, (xiz+8)	; F533E1  ld H,(XIZ+0x08)
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F533E4  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 28	; F533E9  jr NZ,0xf53407
+	ldb_d8	c, (10416)	; F533EB  ld C,(0x28b0)
+	and	c, 1	; F533EF  and C,0x01
+	jr	z, 9	; F533F2  jr Z,0xf533fd
+	cp	h, 8	; F533F4  cp H,0x08
+	jr	nc, 14	; F533F7  jr NC,0xf53407
+	inc	1, h	; F533F9  inc 1,H
+	jr	6	; F533FB  jr T,0xf53403
+	cps	h, 0	; F533FD  cp H,0
+	jr	z, 6	; F533FF  jr Z,0xf53407
+	dec	1, h	; F53401  dec 1,H
+	.byte 0xF1, 0x75, 0x20, 0xBB	; F53403  set 3,(0x2075)   [llvm-mc cannot encode this]
+	ld	a, h	; F53407  ld A,H
+	popw	hl	; F53409  pop HL
+	.byte 0xEE, 0x0D	; F5340A  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5340C  ret
+
+; --------------------------------------------------------------------------
+; sub_F5340D
+; Called from: DispatchTable_F54248[0]
+; Evidence: 0xF5340D is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5340D:
+	pushw	hl	; F5340D  push HL
+	push	xix	; F5340E  push XIX
+	lda_d16	xix, (10386)	; F5340F  lda XIX,0x2892
+	ld	c, (xix)	; F53413  ld C,(XIX)
+	and	c, 15	; F53415  and C,0x0f
+	pushw	bc	; F53418  push BC
+	calr	65472	; F53419  calr 0xf533dc
+	ld	h, a	; F5341C  ld H,A
+	ld	c, (xix)	; F5341E  ld C,(XIX)
+	and	c, 15	; F53420  and C,0x0f
+	popw	iy	; F53423  pop IY
+	cp	a, c	; F53424  cp A,C
+	jr	z, 36	; F53426  jr Z,0xf5344c
+	and	a, 15	; F53428  and A,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F5342B  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), a	; F5342E  or (XIX),A
+	push	0	; F53430  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F53432  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3258	; F53436  calr 0xf540f3
+	lda_24	xbc, (16070988)	; F53439  lda XBC,0xf5394c
+	push	xbc	; F5343E  push XBC
+	call	16002692	; F5343F  call 0xf42e84
+	pushw	1	; F53443  push 0x0001
+	call	16002496	; F53446  call 0xf42dc0
+	inc	8, xsp	; F5344A  inc 0,XSP
+	pop	xix	; F5344C  pop XIX
+	popw	hl	; F5344D  pop HL
+	ret	; F5344E  ret
+
+; --------------------------------------------------------------------------
+; sub_F5344F
+; Called from: DispatchTable_F54248[1]
+; Evidence: 0xF5344F is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5344F:
+	pushw	hl	; F5344F  push HL
+	push	xix	; F53450  push XIX
+	lda_d16	xix, (10387)	; F53451  lda XIX,0x2893
+	ld	c, (xix)	; F53455  ld C,(XIX)
+	and	c, 15	; F53457  and C,0x0f
+	pushw	bc	; F5345A  push BC
+	calr	65406	; F5345B  calr 0xf533dc
+	ld	h, a	; F5345E  ld H,A
+	ld	c, (xix)	; F53460  ld C,(XIX)
+	and	c, 15	; F53462  and C,0x0f
+	popw	iy	; F53465  pop IY
+	cp	a, c	; F53466  cp A,C
+	jr	z, 36	; F53468  jr Z,0xf5348e
+	and	a, 15	; F5346A  and A,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F5346D  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), a	; F53470  or (XIX),A
+	push	0	; F53472  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F53474  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3192	; F53478  calr 0xf540f3
+	lda_24	xbc, (16071104)	; F5347B  lda XBC,0xf539c0
+	push	xbc	; F53480  push XBC
+	call	16002692	; F53481  call 0xf42e84
+	pushw	1	; F53485  push 0x0001
+	call	16002496	; F53488  call 0xf42dc0
+	inc	8, xsp	; F5348C  inc 0,XSP
+	pop	xix	; F5348E  pop XIX
+	popw	hl	; F5348F  pop HL
+	ret	; F53490  ret
+
+; --------------------------------------------------------------------------
+; sub_F53491
+; Called from: DispatchTable_F54248[2]
+; Evidence: 0xF53491 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53491:
+	pushw	hl	; F53491  push HL
+	push	xix	; F53492  push XIX
+	lda_d16	xix, (10386)	; F53493  lda XIX,0x2892
+	ld	c, (xix)	; F53497  ld C,(XIX)
+	and	c, 240	; F53499  and C,0xf0
+	srl	c, 4	; F5349C  srl 0x04,C
+	pushw	bc	; F5349F  push BC
+	calr	65337	; F534A0  calr 0xf533dc
+	ld	h, a	; F534A3  ld H,A
+	ld	c, (xix)	; F534A5  ld C,(XIX)
+	and	c, 240	; F534A7  and C,0xf0
+	srl	c, 4	; F534AA  srl 0x04,C
+	popw	iy	; F534AD  pop IY
+	cp	a, c	; F534AE  cp A,C
+	jr	z, 39	; F534B0  jr Z,0xf534d9
+	sll	a, 4	; F534B2  sll 0x04,A
+	and	a, 240	; F534B5  and A,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F534B8  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), a	; F534BB  or (XIX),A
+	push	0	; F534BD  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F534BF  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3117	; F534C3  calr 0xf540f3
+	lda_24	xbc, (16071220)	; F534C6  lda XBC,0xf53a34
+	push	xbc	; F534CB  push XBC
+	call	16002692	; F534CC  call 0xf42e84
+	pushw	1	; F534D0  push 0x0001
+	call	16002496	; F534D3  call 0xf42dc0
+	inc	8, xsp	; F534D7  inc 0,XSP
+	pop	xix	; F534D9  pop XIX
+	popw	hl	; F534DA  pop HL
+	ret	; F534DB  ret
+
+; --------------------------------------------------------------------------
+; sub_F534DC
+; Called from: DispatchTable_F54248[3]
+; Evidence: 0xF534DC is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F534DC:
+	pushw	hl	; F534DC  push HL
+	push	xix	; F534DD  push XIX
+	lda_d16	xix, (10387)	; F534DE  lda XIX,0x2893
+	ld	c, (xix)	; F534E2  ld C,(XIX)
+	and	c, 240	; F534E4  and C,0xf0
+	srl	c, 4	; F534E7  srl 0x04,C
+	pushw	bc	; F534EA  push BC
+	calr	65262	; F534EB  calr 0xf533dc
+	ld	h, a	; F534EE  ld H,A
+	ld	c, (xix)	; F534F0  ld C,(XIX)
+	and	c, 240	; F534F2  and C,0xf0
+	srl	c, 4	; F534F5  srl 0x04,C
+	popw	iy	; F534F8  pop IY
+	cp	a, c	; F534F9  cp A,C
+	jr	z, 39	; F534FB  jr Z,0xf53524
+	sll	a, 4	; F534FD  sll 0x04,A
+	and	a, 240	; F53500  and A,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53503  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), a	; F53506  or (XIX),A
+	push	0	; F53508  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F5350A  push (0x289c)   [llvm-mc cannot encode this]
+	calr	3042	; F5350E  calr 0xf540f3
+	lda_24	xbc, (16071363)	; F53511  lda XBC,0xf53ac3
+	push	xbc	; F53516  push XBC
+	call	16002692	; F53517  call 0xf42e84
+	pushw	1	; F5351B  push 0x0001
+	call	16002496	; F5351E  call 0xf42dc0
+	inc	8, xsp	; F53522  inc 0,XSP
+	pop	xix	; F53524  pop XIX
+	popw	hl	; F53525  pop HL
+	ret	; F53526  ret
+
+; --------------------------------------------------------------------------
+; sub_F53527
+; Called from: DispatchTable_F54248[4]
+; Evidence: 0xF53527 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53527:
+	pushw	hl	; F53527  push HL
+	push	xix	; F53528  push XIX
+	lda_d16	xix, (10388)	; F53529  lda XIX,0x2894
+	ld	c, (xix)	; F5352D  ld C,(XIX)
+	and	c, 15	; F5352F  and C,0x0f
+	pushw	bc	; F53532  push BC
+	calr	65190	; F53533  calr 0xf533dc
+	ld	h, a	; F53536  ld H,A
+	ld	c, (xix)	; F53538  ld C,(XIX)
+	and	c, 15	; F5353A  and C,0x0f
+	popw	iy	; F5353D  pop IY
+	cp	a, c	; F5353E  cp A,C
+	jr	z, 36	; F53540  jr Z,0xf53566
+	and	a, 15	; F53542  and A,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53545  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), a	; F53548  or (XIX),A
+	push	0	; F5354A  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F5354C  push (0x289c)   [llvm-mc cannot encode this]
+	calr	2976	; F53550  calr 0xf540f3
+	lda_24	xbc, (16071506)	; F53553  lda XBC,0xf53b52
+	push	xbc	; F53558  push XBC
+	call	16002692	; F53559  call 0xf42e84
+	pushw	1	; F5355D  push 0x0001
+	call	16002496	; F53560  call 0xf42dc0
+	inc	8, xsp	; F53564  inc 0,XSP
+	pop	xix	; F53566  pop XIX
+	popw	hl	; F53567  pop HL
+	ret	; F53568  ret
+
+; --------------------------------------------------------------------------
+; sub_F53569
+; Called from: DispatchTable_F54248[5]
+; Evidence: 0xF53569 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53569:
+	pushw	hl	; F53569  push HL
+	push	xix	; F5356A  push XIX
+	lda_d16	xix, (10388)	; F5356B  lda XIX,0x2894
+	ld	c, (xix)	; F5356F  ld C,(XIX)
+	and	c, 240	; F53571  and C,0xf0
+	srl	c, 4	; F53574  srl 0x04,C
+	pushw	bc	; F53577  push BC
+	calr	65121	; F53578  calr 0xf533dc
+	ld	h, a	; F5357B  ld H,A
+	ld	c, (xix)	; F5357D  ld C,(XIX)
+	and	c, 240	; F5357F  and C,0xf0
+	srl	c, 4	; F53582  srl 0x04,C
+	popw	iy	; F53585  pop IY
+	cp	a, c	; F53586  cp A,C
+	jr	z, 39	; F53588  jr Z,0xf535b1
+	sll	a, 4	; F5358A  sll 0x04,A
+	and	a, 240	; F5358D  and A,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53590  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), a	; F53593  or (XIX),A
+	push	0	; F53595  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F53597  push (0x289c)   [llvm-mc cannot encode this]
+	calr	2901	; F5359B  calr 0xf540f3
+	lda_24	xbc, (16071622)	; F5359E  lda XBC,0xf53bc6
+	push	xbc	; F535A3  push XBC
+	call	16002692	; F535A4  call 0xf42e84
+	pushw	1	; F535A8  push 0x0001
+	call	16002496	; F535AB  call 0xf42dc0
+	inc	8, xsp	; F535AF  inc 0,XSP
+	pop	xix	; F535B1  pop XIX
+	popw	hl	; F535B2  pop HL
+	ret	; F535B3  ret
+
+; --------------------------------------------------------------------------
+; sub_F535B4
+; Called from: DispatchTable_F54248[6]
+; Evidence: 0xF535B4 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F535B4:
+	pushw	hl	; F535B4  push HL
+	push	xix	; F535B5  push XIX
+	lda_d16	xix, (10389)	; F535B6  lda XIX,0x2895
+	ld	c, (xix)	; F535BA  ld C,(XIX)
+	and	c, 15	; F535BC  and C,0x0f
+	pushw	bc	; F535BF  push BC
+	calr	65049	; F535C0  calr 0xf533dc
+	ld	h, a	; F535C3  ld H,A
+	ld	c, (xix)	; F535C5  ld C,(XIX)
+	and	c, 15	; F535C7  and C,0x0f
+	popw	iy	; F535CA  pop IY
+	cp	a, c	; F535CB  cp A,C
+	jr	z, 36	; F535CD  jr Z,0xf535f3
+	and	a, 15	; F535CF  and A,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F535D2  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), a	; F535D5  or (XIX),A
+	push	0	; F535D7  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F535D9  push (0x289c)   [llvm-mc cannot encode this]
+	calr	2835	; F535DD  calr 0xf540f3
+	lda_24	xbc, (16071765)	; F535E0  lda XBC,0xf53c55
+	push	xbc	; F535E5  push XBC
+	call	16002692	; F535E6  call 0xf42e84
+	pushw	1	; F535EA  push 0x0001
+	call	16002496	; F535ED  call 0xf42dc0
+	inc	8, xsp	; F535F1  inc 0,XSP
+	pop	xix	; F535F3  pop XIX
+	popw	hl	; F535F4  pop HL
+	ret	; F535F5  ret
+
+; --------------------------------------------------------------------------
+; sub_F535F6
+; Called from: DispatchTable_F54248[7]
+; Evidence: 0xF535F6 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F535F6:
+	pushw	hl	; F535F6  push HL
+	push	xix	; F535F7  push XIX
+	lda_d16	xix, (10389)	; F535F8  lda XIX,0x2895
+	ld	c, (xix)	; F535FC  ld C,(XIX)
+	and	c, 240	; F535FE  and C,0xf0
+	srl	c, 4	; F53601  srl 0x04,C
+	pushw	bc	; F53604  push BC
+	calr	64980	; F53605  calr 0xf533dc
+	ld	h, a	; F53608  ld H,A
+	ld	c, (xix)	; F5360A  ld C,(XIX)
+	and	c, 240	; F5360C  and C,0xf0
+	srl	c, 4	; F5360F  srl 0x04,C
+	popw	iy	; F53612  pop IY
+	cp	a, c	; F53613  cp A,C
+	jr	z, 39	; F53615  jr Z,0xf5363e
+	sll	a, 4	; F53617  sll 0x04,A
+	and	a, 240	; F5361A  and A,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F5361D  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), a	; F53620  or (XIX),A
+	push	0	; F53622  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F53624  push (0x289c)   [llvm-mc cannot encode this]
+	calr	2760	; F53628  calr 0xf540f3
+	lda_24	xbc, (16071881)	; F5362B  lda XBC,0xf53cc9
+	push	xbc	; F53630  push XBC
+	call	16002692	; F53631  call 0xf42e84
+	pushw	1	; F53635  push 0x0001
+	call	16002496	; F53638  call 0xf42dc0
+	inc	8, xsp	; F5363C  inc 0,XSP
+	pop	xix	; F5363E  pop XIX
+	popw	hl	; F5363F  pop HL
+	ret	; F53640  ret
+
+; --------------------------------------------------------------------------
+; sub_F53641
+; Called from: DispatchTable_F54248[16]
+; Evidence: 0xF53641 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53641:
+	pushw	hl	; F53641  push HL
+	push	xix	; F53642  push XIX
+	lda_d16	xix, (10390)	; F53643  lda XIX,0x2896
+	ld	c, (xix)	; F53647  ld C,(XIX)
+	and	c, 15	; F53649  and C,0x0f
+	pushw	bc	; F5364C  push BC
+	calr	64908	; F5364D  calr 0xf533dc
+	ld	h, a	; F53650  ld H,A
+	ld	c, (xix)	; F53652  ld C,(XIX)
+	and	c, 15	; F53654  and C,0x0f
+	popw	iy	; F53657  pop IY
+	cp	a, c	; F53658  cp A,C
+	jr	z, 36	; F5365A  jr Z,0xf53680
+	and	a, 15	; F5365C  and A,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F5365F  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), a	; F53662  or (XIX),A
+	push	0	; F53664  push 0x00
+	.byte 0xC1, 0x9C, 0x28, 0x04	; F53666  push (0x289c)   [llvm-mc cannot encode this]
+	calr	2694	; F5366A  calr 0xf540f3
+	lda_24	xbc, (16072024)	; F5366D  lda XBC,0xf53d58
+	push	xbc	; F53672  push XBC
+	call	16002692	; F53673  call 0xf42e84
+	pushw	1	; F53677  push 0x0001
+	call	16002496	; F5367A  call 0xf42dc0
+	inc	8, xsp	; F5367E  inc 0,XSP
+	pop	xix	; F53680  pop XIX
+	popw	hl	; F53681  pop HL
+	ret	; F53682  ret
+
+; --------------------------------------------------------------------------
+; sub_F53683
+; Called from: DispatchTable_F54248[15]
+; Evidence: 0xF53683 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53683:
+	push	xix	; F53683  push XIX
+	lda_d16	xix, (8305)	; F53684  lda XIX,0x2071
+	ldb_d8	c, (10416)	; F53688  ld C,(0x28b0)
+	and	c, 1	; F5368C  and C,0x01
+	jr	nz, 41	; F5368F  jr NZ,0xf536ba
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F53691  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 26	; F53696  jr NZ,0xf536b2
+	ldb_d8	c, (8338)	; F53698  ld C,(0x2092)
+	and	c, 1	; F5369C  and C,0x01
+	jr	z, 7	; F5369F  jr Z,0xf536a8
+	stdi8	(8346), 1	; F536A1  ld (0x209a),0x01
+	jr	18	; F536A6  jr T,0xf536ba
+	ld	(xix), 2	; F536A8  ld (XIX),0x02
+	stdi8	(8304), 1	; F536AB  ld (0x2070),0x01
+	jr	8	; F536B0  jr T,0xf536ba
+	stdi8	(10398), 0	; F536B2  ld (0x289e),0x00
+	.byte 0x84, 0x3E, 0x10	; F536B7  or (XIX),0x10   [llvm-mc cannot encode this]
+	pop	xix	; F536BA  pop XIX
+	ret	; F536BB  ret
+
+; --- 0xF536BC-0xF536C4  data (9 bytes) ---
+	.byte 0x1d, 0x10, 0x2e, 0xf4, 0xf1, 0x40, 0x25, 0x00, 0x00   ; F536BC  .....@%..
+	lda_24	xbc, (16073750)	; F536C5  lda XBC,0xf54416
+	push	xbc	; F536CA  push XBC
+	lda_24	xwa, (16073686)	; F536CB  lda XWA,0xf543d6
+	push	xwa	; F536D0  push XWA
+	call	16002560	; F536D1  call 0xf42e00
+	inc	8, xsp	; F536D5  inc 0,XSP
+	.byte 0xC1, 0x76, 0x20, 0x3F, 0x17	; F536D7  cp (0x2076),0x17   [llvm-mc cannot encode this]
+	jr	z, 14	; F536DC  jr Z,0xf536ec
+	lda_24	xbc, (16073901)	; F536DE  lda XBC,0xf544ad
+	push	xbc	; F536E3  push XBC
+	lda_24	xwa, (16073875)	; F536E4  lda XWA,0xf54493
+	push	xwa	; F536E9  push XWA
+	jr	12	; F536EA  jr T,0xf536f8
+	lda_24	xbc, (16073963)	; F536EC  lda XBC,0xf544eb
+	push	xbc	; F536F1  push XBC
+	lda_24	xwa, (16073901)	; F536F2  lda XWA,0xf544ad
+	push	xwa	; F536F7  push XWA
+	call	16002560	; F536F8  call 0xf42e00
+	inc	8, xsp	; F536FC  inc 0,XSP
+	ret	; F536FE  ret
+
+; --------------------------------------------------------------------------
+; PaintAllDrawbars -- step and redraw all nine bars
+; Called from: 0xF537A1
+; What it does: returns at once if (0x289E) != 0, else `calr` each of the
+;               nine Drawbar*_Update routines in footage order.
+; Evidence: nine `calr` instructions at 0xF53706, 0xF53709, 0xF5370C,
+;           0xF5370F, 0xF53712, 0xF53715, 0xF53718, 0xF5371B and 0xF5371E,
+;           whose targets are exactly the nine drawbar entry points and
+;           nothing else (--selftest check E4).
+; --------------------------------------------------------------------------
+PaintAllDrawbars:
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F536FF  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 27	; F53704  jr NZ,0xf53721
+	calr	579	; F53706  calr 0xf5394c
+	calr	692	; F53709  calr 0xf539c0
+	calr	805	; F5370C  calr 0xf53a34
+	calr	945	; F5370F  calr 0xf53ac3
+	calr	1085	; F53712  calr 0xf53b52
+	calr	1198	; F53715  calr 0xf53bc6
+	calr	1338	; F53718  calr 0xf53c55
+	calr	1451	; F5371B  calr 0xf53cc9
+	calr	1591	; F5371E  calr 0xf53d58
+	ret	; F53721  ret
+
+; --- 0xF53722-0xF5373C  data (27 bytes) ---
+	.byte 0x2b, 0x3c, 0xf1, 0x40, 0x25, 0x34, 0xf0, 0xc6, 0xb8, 0xc1, 0x9e, 0x28, 0x23, 0xc1, 0x9f, 0x28   ; F53722  +<.@%4.....(#..(
+	.byte 0xf3, 0x76, 0x97, 0x00, 0xf1, 0x9f, 0x28, 0x43, 0xb4, 0x00, 0x00   ; F53732  .v....(C...
+	lda_24	xbc, (16073686)	; F5373D  lda XBC,0xf543d6
+	push	xbc	; F53742  push XBC
+	lda_24	xwa, (16073668)	; F53743  lda XWA,0xf543c4
+	push	xwa	; F53748  push XWA
+	call	16002560	; F53749  call 0xf42e00
+	ld	(xix), 1	; F5374D  ld (XIX),0x01
+	lda_24	xbc, (16073686)	; F53750  lda XBC,0xf543d6
+	push	xbc	; F53755  push XBC
+	lda_24	xwa, (16073668)	; F53756  lda XWA,0xf543c4
+	push	xwa	; F5375B  push XWA
+	call	16002560	; F5375C  call 0xf42e00
+	inc	8, xsp	; F53760  inc 0,XSP
+	inc	8, xsp	; F53762  inc 0,XSP
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F53764  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 77	; F53769  jr NZ,0xf537b8
+	ld	(xix), 0	; F5376B  ld (XIX),0x00
+	lda_24	xbc, (16073648)	; F5376E  lda XBC,0xf543b0
+	push	xbc	; F53773  push XBC
+	lda_24	xwa, (16073521)	; F53774  lda XWA,0xf54331
+	push	xwa	; F53779  push XWA
+	call	16002560	; F5377A  call 0xf42e00
+	ld	(xix), 1	; F5377E  ld (XIX),0x01
+	lda_24	xbc, (16073668)	; F53781  lda XBC,0xf543c4
+	push	xbc	; F53786  push XBC
+	lda_24	xwa, (16073648)	; F53787  lda XWA,0xf543b0
+	push	xwa	; F5378C  push XWA
+	call	16002560	; F5378D  call 0xf42e00
+	lda_24	xbc, (16073521)	; F53791  lda XBC,0xf54331
+	push	xbc	; F53796  push XBC
+	lda_24	xwa, (16073489)	; F53797  lda XWA,0xf54311
+	push	xwa	; F5379C  push XWA
+	call	16002560	; F5379D  call 0xf42e00
+	calr	65371	; F537A1  calr 0xf536ff
+	add	xsp, 24	; F537A4  add XSP,0x00000018
+	lda_24	xbc, (16073875)	; F537AA  lda XBC,0xf54493
+	push	xbc	; F537AF  push XBC
+	lda_24	xwa, (16073750)	; F537B0  lda XWA,0xf54416
+	push	xwa	; F537B5  push XWA
+	jr	15	; F537B6  jr T,0xf537c7
+	ld	(xix), 0	; F537B8  ld (XIX),0x00
+	lda_24	xbc, (16074344)	; F537BB  lda XBC,0xf54668
+	push	xbc	; F537C0  push XBC
+	lda_24	xwa, (16073963)	; F537C1  lda XWA,0xf544eb
+	push	xwa	; F537C6  push XWA
+	call	16002560	; F537C7  call 0xf42e00
+	inc	8, xsp	; F537CB  inc 0,XSP
+	ld	(xix), 1	; F537CD  ld (XIX),0x01
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F537D0  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 14	; F537D5  jr NZ,0xf537e5
+	lda_24	xbc, (16074501)	; F537D7  lda XBC,0xf54705
+	push	xbc	; F537DC  push XBC
+	lda_24	xwa, (16074490)	; F537DD  lda XWA,0xf546fa
+	push	xwa	; F537E2  push XWA
+	jr	50	; F537E3  jr T,0xf53817
+	.byte 0xC1, 0xA1, 0x28, 0x19, 0x40, 0x26	; F537E5  ld (0x2640),(0x28a1)   [llvm-mc cannot encode this]
+	ldb_d8	h, (10401)	; F537EB  ld H,(0x28a1)
+	.byte 0xC1, 0xA2, 0x28, 0x19, 0x41, 0x26	; F537EF  ld (0x2641),(0x28a2)   [llvm-mc cannot encode this]
+	stb_d8	(10402), h	; F537F5  ld (0x28a2),H
+	lda_24	xbc, (16074458)	; F537F9  lda XBC,0xf546da
+	push	xbc	; F537FE  push XBC
+	lda_24	xwa, (16074436)	; F537FF  lda XWA,0xf546c4
+	push	xwa	; F53804  push XWA
+	call	16002564	; F53805  call 0xf42e04
+	inc	8, xsp	; F53809  inc 0,XSP
+	lda_24	xbc, (16074512)	; F5380B  lda XBC,0xf54710
+	push	xbc	; F53810  push XBC
+	lda_24	xwa, (16074501)	; F53811  lda XWA,0xf54705
+	push	xwa	; F53816  push XWA
+	call	16002564	; F53817  call 0xf42e04
+	res_dd8	0, 198	; F5381B  res 0,(0xc6)
+	inc	8, xsp	; F5381E  inc 0,XSP
+	pop	xix	; F53820  pop XIX
+	popw	hl	; F53821  pop HL
+	ret	; F53822  ret
+	pushw	hl	; F53823  push HL
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x00	; F53824  cp (0x289e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 89	; F53829  jr NZ,0xf53884
+	stdi8	(9536), 1	; F5382B  ld (0x2540),0x01
+	ldb_d8	h, (10390)	; F53830  ld H,(0x2896)
+	ld	c, h	; F53834  ld C,H
+	and	c, 32	; F53836  and C,0x20
+	jr	z, 14	; F53839  jr Z,0xf53849
+	lda_24	xbc, (16073453)	; F5383B  lda XBC,0xf542ed
+	push	xbc	; F53840  push XBC
+	lda_24	xwa, (16073441)	; F53841  lda XWA,0xf542e1
+	push	xwa	; F53846  push XWA
+	jr	12	; F53847  jr T,0xf53855
+	lda_24	xbc, (16073465)	; F53849  lda XBC,0xf542f9
+	push	xbc	; F5384E  push XBC
+	lda_24	xwa, (16073453)	; F5384F  lda XWA,0xf542ed
+	push	xwa	; F53854  push XWA
+	call	16002560	; F53855  call 0xf42e00
+	ld	c, h	; F53859  ld C,H
+	and	c, 16	; F5385B  and C,0x10
+	inc	8, xsp	; F5385E  inc 0,XSP
+	jr	z, 14	; F53860  jr Z,0xf53870
+	lda_24	xbc, (16073477)	; F53862  lda XBC,0xf54305
+	push	xbc	; F53867  push XBC
+	lda_24	xwa, (16073465)	; F53868  lda XWA,0xf542f9
+	push	xwa	; F5386D  push XWA
+	jr	12	; F5386E  jr T,0xf5387c
+	lda_24	xbc, (16073489)	; F53870  lda XBC,0xf54311
+	push	xbc	; F53875  push XBC
+	lda_24	xwa, (16073477)	; F53876  lda XWA,0xf54305
+	push	xwa	; F5387B  push XWA
+	call	16002560	; F5387C  call 0xf42e00
+	inc	8, xsp	; F53880  inc 0,XSP
+	jr	39	; F53882  jr T,0xf538ab
+
+; --- 0xF53884-0xF53898  data (21 bytes) ---
+	.byte 0xf1, 0x40, 0x25, 0x00, 0x00, 0xc1, 0x90, 0x28, 0x23, 0xf1, 0x40, 0x26, 0x43, 0xc1, 0x91, 0x28   ; F53884  .@%....(#.@&C..(
+	.byte 0x23, 0xf1, 0x41, 0x26, 0x43   ; F53894  #.A&C
+	lda_24	xbc, (16074404)	; F53899  lda XBC,0xf546a4
+	push	xbc	; F5389E  push XBC
+	lda_24	xwa, (16074344)	; F5389F  lda XWA,0xf54668
+	push	xwa	; F538A4  push XWA
+	call	16002564	; F538A5  call 0xf42e04
+	jr	-43	; F538A9  jr T,0xf53880
+	call	16002580	; F538AB  call 0xf42e14
+	stdi8	(10397), 1	; F538AF  ld (0x289d),0x01
+	popw	hl	; F538B4  pop HL
+	ret	; F538B5  ret
+
+; --------------------------------------------------------------------------
+; Drawbar_DrawColumn -- blit one drawbar, three 8-pixel slices wide
+; Called from: 0xF539B8, 0xF53A2C, 0xF53ABB, 0xF53B4A, 0xF53BBE, 0xF53C4D,
+;              0xF53CC1, 0xF53D50, 0xF53DC4
+; Inputs:  (XIZ+8) = the bar's 0..15 value, (XIZ+0x0A) = the screen column,
+;          (XIZ+0x0C) = the sprite base.
+; What it does: builds an 11-byte display-list-shaped record on its own
+;               stack frame -- opcode 3, BC = 1 byte per row, HL = 0x7B
+;               rows, IX = column + 0x10B8, XIY = base +
+;               DrawbarRowOffsets[value] -- and hands it to
+;               Blit_FromStackRecord three times, advancing IX by 1 and XIY
+;               by 233 each time.
+; Evidence: `ld (XIX),0x03`, `ld (XIX+0x01),0x0001`, `ld (XIX+0x03),0x007b`,
+;           `add BC,0x10b8`, `add XBC,0x00f542c8` and `ld A,(XBC)` at
+;           0xF538D1-0xF538F5; then `ld XBC,0x000000e9` (= 233) added to
+;           (XIX+7) twice.  0x7B + 0x6E = 0xE9 = 233, so the window and the
+;           largest row offset fill one slice exactly.
+; Unknown: nothing bounds the value at 9 -- the callers mask it to 4 bits.
+;          Nine is the number of offsets that fit before the pointer table
+;          at 0xF542D1 begins.
+; --------------------------------------------------------------------------
+Drawbar_DrawColumn:
+	.byte 0xEE, 0x0C, 0xF4, 0xFF	; F538B6  link XIZ,0xfff4   [llvm-mc cannot encode this]
+	push	xix	; F538BA  push XIX
+	lda	xix, (xiz-12)	; F538BB  lda XIX,XIZ+0xf4
+	stdi8	(9536), 0	; F538BE  ld (0x2540),0x00
+	.byte 0xC1, 0x7C, 0x20, 0x3F, 0xA3	; F538C3  cp (0x207c),0xa3   [llvm-mc cannot encode this]
+	jr	nz, 93	; F538C8  jr NZ,0xf53927
+	.byte 0xC1, 0x9E, 0x28, 0x3F, 0x01	; F538CA  cp (0x289e),0x01   [llvm-mc cannot encode this]
+	jr	z, 86	; F538CF  jr Z,0xf53927
+	ld	(xix), 3	; F538D1  ld (XIX),0x03
+	.byte 0xBC, 0x01, 0x02, 0x01, 0x00	; F538D4  ld (XIX+0x01),0x0001   [llvm-mc cannot encode this]
+	.byte 0xBC, 0x03, 0x02, 0x7B, 0x00	; F538D9  ld (XIX+0x03),0x007b   [llvm-mc cannot encode this]
+	ld	bc, (xiz+10)	; F538DE  ld BC,(XIZ+0x0a)
+	add	bc, 4280	; F538E1  add BC,0x10b8
+	ld	(xix+5), bc	; F538E5  ld (XIX+0x05),BC
+	ld	bc, (xiz+8)	; F538E8  ld BC,(XIZ+0x08)
+	extz	bc	; F538EB  extz BC
+	extz	xbc	; F538ED  extz XBC
+	add	xbc, 16073416	; F538EF  add XBC,0x00f542c8
+	ld	a, (xbc)	; F538F5  ld A,(XBC)
+	extz	wa	; F538F7  extz WA
+	extz	xwa	; F538F9  extz XWA
+	.byte 0xAE, 0x0C, 0x80	; F538FB  add XWA,(XIZ+0x0c)   [llvm-mc cannot encode this]
+	ld	(xix+7), xwa	; F538FE  ld (XIX+0x07),XWA
+	push	xix	; F53901  push XIX
+	calr	38	; F53902  calr 0xf5392b
+	incm	1, (xix+5)	; F53905  incw 1,(XIX+0x05)
+	ld	xbc, 233	; F53908  ld XBC,0x000000e9
+	add	(xix+7), xbc	; F5390D  add (XIX+0x07),XBC
+	push	xix	; F53910  push XIX
+	calr	23	; F53911  calr 0xf5392b
+	incm	1, (xix+5)	; F53914  incw 1,(XIX+0x05)
+	ld	xbc, 233	; F53917  ld XBC,0x000000e9
+	add	(xix+7), xbc	; F5391C  add (XIX+0x07),XBC
+	push	xix	; F5391F  push XIX
+	calr	8	; F53920  calr 0xf5392b
+	inc	8, xsp	; F53923  inc 0,XSP
+	inc	4, xsp	; F53925  inc 4,XSP
+	pop	xix	; F53927  pop XIX
+	.byte 0xEE, 0x0D	; F53928  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5392A  ret
+
+; --------------------------------------------------------------------------
+; Blit_FromStackRecord -- issue one `swi 7` from an 11-byte record
+; Called from: 0xF53902, 0xF53911, 0xF53920
+; Inputs:  (XSP+0x18) = the record.
+; What it does: BC = (rec+1), HL = (rec+3), IX = (rec+5), XIY = (rec+7), A =
+;               (rec+0), `swi 7`.  That is the same register set
+;               DLHandler_FarPtr (0xF31ABE) loads from an opcode-3 display-
+;               list record, taken from RAM instead of from ROM.
+; Evidence: the five loads at 0xF53936-0xF53942 and the `swi 7` at 0xF53944,
+;           read out of this transcription.
+; --------------------------------------------------------------------------
+Blit_FromStackRecord:
+	.byte 0xEE, 0x0C, 0x00, 0x00	; F5392B  link XIZ,0x0000   [llvm-mc cannot encode this]
+	push	xde	; F5392F  push XDE
+	push	xhl	; F53930  push XHL
+	push	xix	; F53931  push XIX
+	push	xiz	; F53932  push XIZ
+	ld	xwa, (xsp+24)	; F53933  ld XWA,(XSP+0x18)
+	ld	bc, (xwa+1)	; F53936  ld BC,(XWA+0x01)
+	ld	hl, (xwa+3)	; F53939  ld HL,(XWA+0x03)
+	ld	ix, (xwa+5)	; F5393C  ld IX,(XWA+0x05)
+	ld	xiy, (xwa+7)	; F5393F  ld XIY,(XWA+0x07)
+	ld	a, (xwa)	; F53942  ld A,(XWA)
+	swi	7	; F53944  swi 7
+	pop	xiz	; F53945  pop XIZ
+	pop	xix	; F53946  pop XIX
+	pop	xhl	; F53947  pop XHL
+	pop	xde	; F53948  pop XDE
+	.byte 0xEE, 0x0D	; F53949  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5394B  ret
+
+; --------------------------------------------------------------------------
+; Drawbar1_16ft_Update -- drawbar 1 of 9, footage 16'
+; Called from: 0xF53706; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the low nibble of (0x2897), compares it with the low
+;               nibble of (0x2892), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF5394C / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 3, sprite =
+;               Bitmap_DrawbarA).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x2897`, `ld
+;           A,(0x2892)`, `push 0x0003` and `lda XBC,0xf54808` all occur
+;           exactly once in 0xF5394C-0xF539BF.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 3 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar1_16ft_Update:
+	pushw	hl	; F5394C  push HL
+	push	xix	; F5394D  push XIX
+	lda_d16	xix, (10391)	; F5394E  lda XIX,0x2897
+	ld	c, (xix)	; F53952  ld C,(XIX)
+	and	c, 15	; F53954  and C,0x0f
+	ld	h, c	; F53957  ld H,C
+	ldb_d8	a, (10386)	; F53959  ld A,(0x2892)
+	and	a, 15	; F5395D  and A,0x0f
+	cp	a, c	; F53960  cp A,C
+	jr	z, 69	; F53962  jr Z,0xf539a9
+	ld	c, (xix)	; F53964  ld C,(XIX)
+	and	c, 15	; F53966  and C,0x0f
+	ld	h, c	; F53969  ld H,C
+	ldb_d8	a, (10386)	; F5396B  ld A,(0x2892)
+	and	a, 15	; F5396F  and A,0x0f
+	cp	a, c	; F53972  cp A,C
+	jr	ule, 17	; F53974  jr ULE,0xf53987
+	ld	c, (xix)	; F53976  ld C,(XIX)
+	and	c, 15	; F53978  and C,0x0f
+	inc	1, c	; F5397B  inc 1,C
+	and	c, 15	; F5397D  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53980  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53983  or (XIX),C
+	jr	15	; F53985  jr T,0xf53996
+	ld	c, (xix)	; F53987  ld C,(XIX)
+	and	c, 15	; F53989  and C,0x0f
+	dec	1, c	; F5398C  dec 1,C
+	and	c, 15	; F5398E  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53991  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53994  or (XIX),C
+	lda_24	xbc, (16070988)	; F53996  lda XBC,0xf5394c
+	push	xbc	; F5399B  push XBC
+	call	16002692	; F5399C  call 0xf42e84
+	pushw	1	; F539A0  push 0x0001
+	call	16002496	; F539A3  call 0xf42dc0
+	inc	6, xsp	; F539A7  inc 6,XSP
+	lda_24	xbc, (16074760)	; F539A9  lda XBC,0xf54808
+	push	xbc	; F539AE  push XBC
+	pushw	3	; F539AF  push 0x0003
+	ld	a, (xix)	; F539B2  ld A,(XIX)
+	and	a, 15	; F539B4  and A,0x0f
+	pushw	wa	; F539B7  push WA
+	calr	65275	; F539B8  calr 0xf538b6
+	inc	8, xsp	; F539BB  inc 0,XSP
+	pop	xix	; F539BD  pop XIX
+	popw	hl	; F539BE  pop HL
+	ret	; F539BF  ret
+
+; --------------------------------------------------------------------------
+; Drawbar2_5_1_3ft_Update -- drawbar 2 of 9, footage 5 1/3'
+; Called from: 0xF53709; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the low nibble of (0x2898), compares it with the low
+;               nibble of (0x2893), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF539C0 / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 7, sprite =
+;               Bitmap_DrawbarB).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x2898`, `ld
+;           A,(0x2893)`, `push 0x0007` and `lda XBC,0xf54ac3` all occur
+;           exactly once in 0xF539C0-0xF53A33.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 7 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar2_5_1_3ft_Update:
+	pushw	hl	; F539C0  push HL
+	push	xix	; F539C1  push XIX
+	lda_d16	xix, (10392)	; F539C2  lda XIX,0x2898
+	ld	c, (xix)	; F539C6  ld C,(XIX)
+	and	c, 15	; F539C8  and C,0x0f
+	ld	h, c	; F539CB  ld H,C
+	ldb_d8	a, (10387)	; F539CD  ld A,(0x2893)
+	and	a, 15	; F539D1  and A,0x0f
+	cp	a, c	; F539D4  cp A,C
+	jr	z, 69	; F539D6  jr Z,0xf53a1d
+	ld	c, (xix)	; F539D8  ld C,(XIX)
+	and	c, 15	; F539DA  and C,0x0f
+	ld	h, c	; F539DD  ld H,C
+	ldb_d8	a, (10387)	; F539DF  ld A,(0x2893)
+	and	a, 15	; F539E3  and A,0x0f
+	cp	a, c	; F539E6  cp A,C
+	jr	ule, 17	; F539E8  jr ULE,0xf539fb
+	ld	c, (xix)	; F539EA  ld C,(XIX)
+	and	c, 15	; F539EC  and C,0x0f
+	inc	1, c	; F539EF  inc 1,C
+	and	c, 15	; F539F1  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F539F4  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F539F7  or (XIX),C
+	jr	15	; F539F9  jr T,0xf53a0a
+	ld	c, (xix)	; F539FB  ld C,(XIX)
+	and	c, 15	; F539FD  and C,0x0f
+	dec	1, c	; F53A00  dec 1,C
+	and	c, 15	; F53A02  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53A05  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53A08  or (XIX),C
+	lda_24	xbc, (16071104)	; F53A0A  lda XBC,0xf539c0
+	push	xbc	; F53A0F  push XBC
+	call	16002692	; F53A10  call 0xf42e84
+	pushw	1	; F53A14  push 0x0001
+	call	16002496	; F53A17  call 0xf42dc0
+	inc	6, xsp	; F53A1B  inc 6,XSP
+	lda_24	xbc, (16075459)	; F53A1D  lda XBC,0xf54ac3
+	push	xbc	; F53A22  push XBC
+	pushw	7	; F53A23  push 0x0007
+	ld	a, (xix)	; F53A26  ld A,(XIX)
+	and	a, 15	; F53A28  and A,0x0f
+	pushw	wa	; F53A2B  push WA
+	calr	65159	; F53A2C  calr 0xf538b6
+	inc	8, xsp	; F53A2F  inc 0,XSP
+	pop	xix	; F53A31  pop XIX
+	popw	hl	; F53A32  pop HL
+	ret	; F53A33  ret
+
+; --------------------------------------------------------------------------
+; Drawbar3_8ft_Update -- drawbar 3 of 9, footage 8'
+; Called from: 0xF5370C; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the high nibble of (0x2897), compares it with the high
+;               nibble of (0x2892), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF53A34 / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 11, sprite =
+;               Bitmap_DrawbarA).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x2897`, `ld
+;           A,(0x2892)`, `push 0x000b` and `lda XBC,0xf54808` all occur
+;           exactly once in 0xF53A34-0xF53AC2.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 11 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar3_8ft_Update:
+	pushw	hl	; F53A34  push HL
+	push	xix	; F53A35  push XIX
+	lda_d16	xix, (10391)	; F53A36  lda XIX,0x2897
+	ld	c, (xix)	; F53A3A  ld C,(XIX)
+	and	c, 240	; F53A3C  and C,0xf0
+	srl	c, 4	; F53A3F  srl 0x04,C
+	ld	h, c	; F53A42  ld H,C
+	ldb_d8	a, (10386)	; F53A44  ld A,(0x2892)
+	and	a, 240	; F53A48  and A,0xf0
+	srl	a, 4	; F53A4B  srl 0x04,A
+	cp	a, c	; F53A4E  cp A,C
+	jr	z, 87	; F53A50  jr Z,0xf53aa9
+	ld	c, (xix)	; F53A52  ld C,(XIX)
+	and	c, 240	; F53A54  and C,0xf0
+	srl	c, 4	; F53A57  srl 0x04,C
+	ld	h, c	; F53A5A  ld H,C
+	ldb_d8	a, (10386)	; F53A5C  ld A,(0x2892)
+	and	a, 240	; F53A60  and A,0xf0
+	srl	a, 4	; F53A63  srl 0x04,A
+	cp	a, c	; F53A66  cp A,C
+	jr	ule, 23	; F53A68  jr ULE,0xf53a81
+	ld	c, (xix)	; F53A6A  ld C,(XIX)
+	and	c, 240	; F53A6C  and C,0xf0
+	srl	c, 4	; F53A6F  srl 0x04,C
+	inc	1, c	; F53A72  inc 1,C
+	sll	c, 4	; F53A74  sll 0x04,C
+	and	c, 240	; F53A77  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53A7A  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F53A7D  or (XIX),C
+	jr	21	; F53A7F  jr T,0xf53a96
+	ld	c, (xix)	; F53A81  ld C,(XIX)
+	and	c, 240	; F53A83  and C,0xf0
+	srl	c, 4	; F53A86  srl 0x04,C
+	dec	1, c	; F53A89  dec 1,C
+	sll	c, 4	; F53A8B  sll 0x04,C
+	and	c, 240	; F53A8E  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53A91  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F53A94  or (XIX),C
+	lda_24	xbc, (16071220)	; F53A96  lda XBC,0xf53a34
+	push	xbc	; F53A9B  push XBC
+	call	16002692	; F53A9C  call 0xf42e84
+	pushw	1	; F53AA0  push 0x0001
+	call	16002496	; F53AA3  call 0xf42dc0
+	inc	6, xsp	; F53AA7  inc 6,XSP
+	lda_24	xbc, (16074760)	; F53AA9  lda XBC,0xf54808
+	push	xbc	; F53AAE  push XBC
+	pushw	11	; F53AAF  push 0x000b
+	ld	a, (xix)	; F53AB2  ld A,(XIX)
+	and	a, 240	; F53AB4  and A,0xf0
+	srl	a, 4	; F53AB7  srl 0x04,A
+	pushw	wa	; F53ABA  push WA
+	calr	65016	; F53ABB  calr 0xf538b6
+	inc	8, xsp	; F53ABE  inc 0,XSP
+	pop	xix	; F53AC0  pop XIX
+	popw	hl	; F53AC1  pop HL
+	ret	; F53AC2  ret
+
+; --------------------------------------------------------------------------
+; Drawbar4_4ft_Update -- drawbar 4 of 9, footage 4'
+; Called from: 0xF5370F; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the high nibble of (0x2898), compares it with the high
+;               nibble of (0x2893), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF53AC3 / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 15, sprite =
+;               Bitmap_DrawbarA).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x2898`, `ld
+;           A,(0x2893)`, `push 0x000f` and `lda XBC,0xf54808` all occur
+;           exactly once in 0xF53AC3-0xF53B51.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 15 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar4_4ft_Update:
+	pushw	hl	; F53AC3  push HL
+	push	xix	; F53AC4  push XIX
+	lda_d16	xix, (10392)	; F53AC5  lda XIX,0x2898
+	ld	c, (xix)	; F53AC9  ld C,(XIX)
+	and	c, 240	; F53ACB  and C,0xf0
+	srl	c, 4	; F53ACE  srl 0x04,C
+	ld	h, c	; F53AD1  ld H,C
+	ldb_d8	a, (10387)	; F53AD3  ld A,(0x2893)
+	and	a, 240	; F53AD7  and A,0xf0
+	srl	a, 4	; F53ADA  srl 0x04,A
+	cp	a, c	; F53ADD  cp A,C
+	jr	z, 87	; F53ADF  jr Z,0xf53b38
+	ld	c, (xix)	; F53AE1  ld C,(XIX)
+	and	c, 240	; F53AE3  and C,0xf0
+	srl	c, 4	; F53AE6  srl 0x04,C
+	ld	h, c	; F53AE9  ld H,C
+	ldb_d8	a, (10387)	; F53AEB  ld A,(0x2893)
+	and	a, 240	; F53AEF  and A,0xf0
+	srl	a, 4	; F53AF2  srl 0x04,A
+	cp	a, c	; F53AF5  cp A,C
+	jr	ule, 23	; F53AF7  jr ULE,0xf53b10
+	ld	c, (xix)	; F53AF9  ld C,(XIX)
+	and	c, 240	; F53AFB  and C,0xf0
+	srl	c, 4	; F53AFE  srl 0x04,C
+	inc	1, c	; F53B01  inc 1,C
+	sll	c, 4	; F53B03  sll 0x04,C
+	and	c, 240	; F53B06  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53B09  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F53B0C  or (XIX),C
+	jr	21	; F53B0E  jr T,0xf53b25
+	ld	c, (xix)	; F53B10  ld C,(XIX)
+	and	c, 240	; F53B12  and C,0xf0
+	srl	c, 4	; F53B15  srl 0x04,C
+	dec	1, c	; F53B18  dec 1,C
+	sll	c, 4	; F53B1A  sll 0x04,C
+	and	c, 240	; F53B1D  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53B20  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F53B23  or (XIX),C
+	lda_24	xbc, (16071363)	; F53B25  lda XBC,0xf53ac3
+	push	xbc	; F53B2A  push XBC
+	call	16002692	; F53B2B  call 0xf42e84
+	pushw	1	; F53B2F  push 0x0001
+	call	16002496	; F53B32  call 0xf42dc0
+	inc	6, xsp	; F53B36  inc 6,XSP
+	lda_24	xbc, (16074760)	; F53B38  lda XBC,0xf54808
+	push	xbc	; F53B3D  push XBC
+	pushw	15	; F53B3E  push 0x000f
+	ld	a, (xix)	; F53B41  ld A,(XIX)
+	and	a, 240	; F53B43  and A,0xf0
+	srl	a, 4	; F53B46  srl 0x04,A
+	pushw	wa	; F53B49  push WA
+	calr	64873	; F53B4A  calr 0xf538b6
+	inc	8, xsp	; F53B4D  inc 0,XSP
+	pop	xix	; F53B4F  pop XIX
+	popw	hl	; F53B50  pop HL
+	ret	; F53B51  ret
+
+; --------------------------------------------------------------------------
+; Drawbar5_2_2_3ft_Update -- drawbar 5 of 9, footage 2 2/3'
+; Called from: 0xF53712; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the low nibble of (0x2899), compares it with the low
+;               nibble of (0x2894), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF53B52 / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 19, sprite =
+;               Bitmap_DrawbarB).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x2899`, `ld
+;           A,(0x2894)`, `push 0x0013` and `lda XBC,0xf54ac3` all occur
+;           exactly once in 0xF53B52-0xF53BC5.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 19 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar5_2_2_3ft_Update:
+	pushw	hl	; F53B52  push HL
+	push	xix	; F53B53  push XIX
+	lda_d16	xix, (10393)	; F53B54  lda XIX,0x2899
+	ld	c, (xix)	; F53B58  ld C,(XIX)
+	and	c, 15	; F53B5A  and C,0x0f
+	ld	h, c	; F53B5D  ld H,C
+	ldb_d8	a, (10388)	; F53B5F  ld A,(0x2894)
+	and	a, 15	; F53B63  and A,0x0f
+	cp	a, c	; F53B66  cp A,C
+	jr	z, 69	; F53B68  jr Z,0xf53baf
+	ld	c, (xix)	; F53B6A  ld C,(XIX)
+	and	c, 15	; F53B6C  and C,0x0f
+	ld	h, c	; F53B6F  ld H,C
+	ldb_d8	a, (10388)	; F53B71  ld A,(0x2894)
+	and	a, 15	; F53B75  and A,0x0f
+	cp	a, c	; F53B78  cp A,C
+	jr	ule, 17	; F53B7A  jr ULE,0xf53b8d
+	ld	c, (xix)	; F53B7C  ld C,(XIX)
+	and	c, 15	; F53B7E  and C,0x0f
+	inc	1, c	; F53B81  inc 1,C
+	and	c, 15	; F53B83  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53B86  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53B89  or (XIX),C
+	jr	15	; F53B8B  jr T,0xf53b9c
+	ld	c, (xix)	; F53B8D  ld C,(XIX)
+	and	c, 15	; F53B8F  and C,0x0f
+	dec	1, c	; F53B92  dec 1,C
+	and	c, 15	; F53B94  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53B97  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53B9A  or (XIX),C
+	lda_24	xbc, (16071506)	; F53B9C  lda XBC,0xf53b52
+	push	xbc	; F53BA1  push XBC
+	call	16002692	; F53BA2  call 0xf42e84
+	pushw	1	; F53BA6  push 0x0001
+	call	16002496	; F53BA9  call 0xf42dc0
+	inc	6, xsp	; F53BAD  inc 6,XSP
+	lda_24	xbc, (16075459)	; F53BAF  lda XBC,0xf54ac3
+	push	xbc	; F53BB4  push XBC
+	pushw	19	; F53BB5  push 0x0013
+	ld	a, (xix)	; F53BB8  ld A,(XIX)
+	and	a, 15	; F53BBA  and A,0x0f
+	pushw	wa	; F53BBD  push WA
+	calr	64757	; F53BBE  calr 0xf538b6
+	inc	8, xsp	; F53BC1  inc 0,XSP
+	pop	xix	; F53BC3  pop XIX
+	popw	hl	; F53BC4  pop HL
+	ret	; F53BC5  ret
+
+; --------------------------------------------------------------------------
+; Drawbar6_2ft_Update -- drawbar 6 of 9, footage 2'
+; Called from: 0xF53715; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the high nibble of (0x2899), compares it with the high
+;               nibble of (0x2894), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF53BC6 / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 23, sprite =
+;               Bitmap_DrawbarA).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x2899`, `ld
+;           A,(0x2894)`, `push 0x0017` and `lda XBC,0xf54808` all occur
+;           exactly once in 0xF53BC6-0xF53C54.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 23 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar6_2ft_Update:
+	pushw	hl	; F53BC6  push HL
+	push	xix	; F53BC7  push XIX
+	lda_d16	xix, (10393)	; F53BC8  lda XIX,0x2899
+	ld	c, (xix)	; F53BCC  ld C,(XIX)
+	and	c, 240	; F53BCE  and C,0xf0
+	srl	c, 4	; F53BD1  srl 0x04,C
+	ld	h, c	; F53BD4  ld H,C
+	ldb_d8	a, (10388)	; F53BD6  ld A,(0x2894)
+	and	a, 240	; F53BDA  and A,0xf0
+	srl	a, 4	; F53BDD  srl 0x04,A
+	cp	a, c	; F53BE0  cp A,C
+	jr	z, 87	; F53BE2  jr Z,0xf53c3b
+	ld	c, (xix)	; F53BE4  ld C,(XIX)
+	and	c, 240	; F53BE6  and C,0xf0
+	srl	c, 4	; F53BE9  srl 0x04,C
+	ld	h, c	; F53BEC  ld H,C
+	ldb_d8	a, (10388)	; F53BEE  ld A,(0x2894)
+	and	a, 240	; F53BF2  and A,0xf0
+	srl	a, 4	; F53BF5  srl 0x04,A
+	cp	a, c	; F53BF8  cp A,C
+	jr	ule, 23	; F53BFA  jr ULE,0xf53c13
+	ld	c, (xix)	; F53BFC  ld C,(XIX)
+	and	c, 240	; F53BFE  and C,0xf0
+	srl	c, 4	; F53C01  srl 0x04,C
+	inc	1, c	; F53C04  inc 1,C
+	sll	c, 4	; F53C06  sll 0x04,C
+	and	c, 240	; F53C09  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53C0C  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F53C0F  or (XIX),C
+	jr	21	; F53C11  jr T,0xf53c28
+	ld	c, (xix)	; F53C13  ld C,(XIX)
+	and	c, 240	; F53C15  and C,0xf0
+	srl	c, 4	; F53C18  srl 0x04,C
+	dec	1, c	; F53C1B  dec 1,C
+	sll	c, 4	; F53C1D  sll 0x04,C
+	and	c, 240	; F53C20  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53C23  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F53C26  or (XIX),C
+	lda_24	xbc, (16071622)	; F53C28  lda XBC,0xf53bc6
+	push	xbc	; F53C2D  push XBC
+	call	16002692	; F53C2E  call 0xf42e84
+	pushw	1	; F53C32  push 0x0001
+	call	16002496	; F53C35  call 0xf42dc0
+	inc	6, xsp	; F53C39  inc 6,XSP
+	lda_24	xbc, (16074760)	; F53C3B  lda XBC,0xf54808
+	push	xbc	; F53C40  push XBC
+	pushw	23	; F53C41  push 0x0017
+	ld	a, (xix)	; F53C44  ld A,(XIX)
+	and	a, 240	; F53C46  and A,0xf0
+	srl	a, 4	; F53C49  srl 0x04,A
+	pushw	wa	; F53C4C  push WA
+	calr	64614	; F53C4D  calr 0xf538b6
+	inc	8, xsp	; F53C50  inc 0,XSP
+	pop	xix	; F53C52  pop XIX
+	popw	hl	; F53C53  pop HL
+	ret	; F53C54  ret
+
+; --------------------------------------------------------------------------
+; Drawbar7_1_3_5ft_Update -- drawbar 7 of 9, footage 1 3/5'
+; Called from: 0xF53718; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the low nibble of (0x289A), compares it with the low
+;               nibble of (0x2895), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF53C55 / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 27, sprite =
+;               Bitmap_DrawbarB).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x289a`, `ld
+;           A,(0x2895)`, `push 0x001b` and `lda XBC,0xf54ac3` all occur
+;           exactly once in 0xF53C55-0xF53CC8.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 27 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar7_1_3_5ft_Update:
+	pushw	hl	; F53C55  push HL
+	push	xix	; F53C56  push XIX
+	lda_d16	xix, (10394)	; F53C57  lda XIX,0x289a
+	ld	c, (xix)	; F53C5B  ld C,(XIX)
+	and	c, 15	; F53C5D  and C,0x0f
+	ld	h, c	; F53C60  ld H,C
+	ldb_d8	a, (10389)	; F53C62  ld A,(0x2895)
+	and	a, 15	; F53C66  and A,0x0f
+	cp	a, c	; F53C69  cp A,C
+	jr	z, 69	; F53C6B  jr Z,0xf53cb2
+	ld	c, (xix)	; F53C6D  ld C,(XIX)
+	and	c, 15	; F53C6F  and C,0x0f
+	ld	h, c	; F53C72  ld H,C
+	ldb_d8	a, (10389)	; F53C74  ld A,(0x2895)
+	and	a, 15	; F53C78  and A,0x0f
+	cp	a, c	; F53C7B  cp A,C
+	jr	ule, 17	; F53C7D  jr ULE,0xf53c90
+	ld	c, (xix)	; F53C7F  ld C,(XIX)
+	and	c, 15	; F53C81  and C,0x0f
+	inc	1, c	; F53C84  inc 1,C
+	and	c, 15	; F53C86  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53C89  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53C8C  or (XIX),C
+	jr	15	; F53C8E  jr T,0xf53c9f
+	ld	c, (xix)	; F53C90  ld C,(XIX)
+	and	c, 15	; F53C92  and C,0x0f
+	dec	1, c	; F53C95  dec 1,C
+	and	c, 15	; F53C97  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53C9A  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53C9D  or (XIX),C
+	lda_24	xbc, (16071765)	; F53C9F  lda XBC,0xf53c55
+	push	xbc	; F53CA4  push XBC
+	call	16002692	; F53CA5  call 0xf42e84
+	pushw	1	; F53CA9  push 0x0001
+	call	16002496	; F53CAC  call 0xf42dc0
+	inc	6, xsp	; F53CB0  inc 6,XSP
+	lda_24	xbc, (16075459)	; F53CB2  lda XBC,0xf54ac3
+	push	xbc	; F53CB7  push XBC
+	pushw	27	; F53CB8  push 0x001b
+	ld	a, (xix)	; F53CBB  ld A,(XIX)
+	and	a, 15	; F53CBD  and A,0x0f
+	pushw	wa	; F53CC0  push WA
+	calr	64498	; F53CC1  calr 0xf538b6
+	inc	8, xsp	; F53CC4  inc 0,XSP
+	pop	xix	; F53CC6  pop XIX
+	popw	hl	; F53CC7  pop HL
+	ret	; F53CC8  ret
+
+; --------------------------------------------------------------------------
+; Drawbar8_1_1_3ft_Update -- drawbar 8 of 9, footage 1 1/3'
+; Called from: 0xF5371B; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the high nibble of (0x289A), compares it with the high
+;               nibble of (0x2895), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF53CC9 / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 31, sprite =
+;               Bitmap_DrawbarB).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x289a`, `ld
+;           A,(0x2895)`, `push 0x001f` and `lda XBC,0xf54ac3` all occur
+;           exactly once in 0xF53CC9-0xF53D57.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 31 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar8_1_1_3ft_Update:
+	pushw	hl	; F53CC9  push HL
+	push	xix	; F53CCA  push XIX
+	lda_d16	xix, (10394)	; F53CCB  lda XIX,0x289a
+	ld	c, (xix)	; F53CCF  ld C,(XIX)
+	and	c, 240	; F53CD1  and C,0xf0
+	srl	c, 4	; F53CD4  srl 0x04,C
+	ld	h, c	; F53CD7  ld H,C
+	ldb_d8	a, (10389)	; F53CD9  ld A,(0x2895)
+	and	a, 240	; F53CDD  and A,0xf0
+	srl	a, 4	; F53CE0  srl 0x04,A
+	cp	a, c	; F53CE3  cp A,C
+	jr	z, 87	; F53CE5  jr Z,0xf53d3e
+	ld	c, (xix)	; F53CE7  ld C,(XIX)
+	and	c, 240	; F53CE9  and C,0xf0
+	srl	c, 4	; F53CEC  srl 0x04,C
+	ld	h, c	; F53CEF  ld H,C
+	ldb_d8	a, (10389)	; F53CF1  ld A,(0x2895)
+	and	a, 240	; F53CF5  and A,0xf0
+	srl	a, 4	; F53CF8  srl 0x04,A
+	cp	a, c	; F53CFB  cp A,C
+	jr	ule, 23	; F53CFD  jr ULE,0xf53d16
+	ld	c, (xix)	; F53CFF  ld C,(XIX)
+	and	c, 240	; F53D01  and C,0xf0
+	srl	c, 4	; F53D04  srl 0x04,C
+	inc	1, c	; F53D07  inc 1,C
+	sll	c, 4	; F53D09  sll 0x04,C
+	and	c, 240	; F53D0C  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53D0F  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F53D12  or (XIX),C
+	jr	21	; F53D14  jr T,0xf53d2b
+	ld	c, (xix)	; F53D16  ld C,(XIX)
+	and	c, 240	; F53D18  and C,0xf0
+	srl	c, 4	; F53D1B  srl 0x04,C
+	dec	1, c	; F53D1E  dec 1,C
+	sll	c, 4	; F53D20  sll 0x04,C
+	and	c, 240	; F53D23  and C,0xf0
+	.byte 0x84, 0x3C, 0x0F	; F53D26  and (XIX),0x0f   [llvm-mc cannot encode this]
+	or	(xix), c	; F53D29  or (XIX),C
+	lda_24	xbc, (16071881)	; F53D2B  lda XBC,0xf53cc9
+	push	xbc	; F53D30  push XBC
+	call	16002692	; F53D31  call 0xf42e84
+	pushw	1	; F53D35  push 0x0001
+	call	16002496	; F53D38  call 0xf42dc0
+	inc	6, xsp	; F53D3C  inc 6,XSP
+	lda_24	xbc, (16075459)	; F53D3E  lda XBC,0xf54ac3
+	push	xbc	; F53D43  push XBC
+	pushw	31	; F53D44  push 0x001f
+	ld	a, (xix)	; F53D47  ld A,(XIX)
+	and	a, 240	; F53D49  and A,0xf0
+	srl	a, 4	; F53D4C  srl 0x04,A
+	pushw	wa	; F53D4F  push WA
+	calr	64355	; F53D50  calr 0xf538b6
+	inc	8, xsp	; F53D53  inc 0,XSP
+	pop	xix	; F53D55  pop XIX
+	popw	hl	; F53D56  pop HL
+	ret	; F53D57  ret
+
+; --------------------------------------------------------------------------
+; Drawbar9_1ft_Update -- drawbar 9 of 9, footage 1'
+; Called from: 0xF5371E; and PaintAllDrawbars (0xF536FF) calls all nine in
+;              order.
+; What it does: reads the low nibble of (0x289B), compares it with the low
+;               nibble of (0x2896), and if they differ writes the value one
+;               step nearer, re-arms ITSELF through the timer (`lda
+;               XBC,0xF53D58 / call 0xf42e84 / push 1 / call 0xf42dc0`) and
+;               falls into the redraw.  Then it calls Drawbar_DrawColumn
+;               with (index = that nibble, column = 35, sprite =
+;               Bitmap_DrawbarA).
+; Evidence: every field above is read out of this transcription by
+;           drawbars() and re-checked by --selftest: `lda XIX,0x289b`, `ld
+;           A,(0x2896)`, `push 0x0023` and `lda XBC,0xf54808` all occur
+;           exactly once in 0xF53D58-0xF53DCB.  The footage is the op-0x20
+;           label of DL_DrawbarFootageScale whose screen position is one
+;           cell of column 35 (bijection, --selftest check F).
+; Note: the sprite split is exact -- the five INTEGER footages (16', 8', 4',
+;       2', 1') use Bitmap_DrawbarA and the four FRACTIONAL ones (5 1/3', 2
+;       2/3', 1 3/5', 1 1/3') use Bitmap_DrawbarB, with no exception.  It is
+;       close to but not equal to the Hammond white/coloured pattern, which
+;       would put 16' in the other group, so the two sprites are recorded as
+;       A and B and NOT named by colour.
+; --------------------------------------------------------------------------
+Drawbar9_1ft_Update:
+	pushw	hl	; F53D58  push HL
+	push	xix	; F53D59  push XIX
+	lda_d16	xix, (10395)	; F53D5A  lda XIX,0x289b
+	ld	c, (xix)	; F53D5E  ld C,(XIX)
+	and	c, 15	; F53D60  and C,0x0f
+	ld	h, c	; F53D63  ld H,C
+	ldb_d8	a, (10390)	; F53D65  ld A,(0x2896)
+	and	a, 15	; F53D69  and A,0x0f
+	cp	a, c	; F53D6C  cp A,C
+	jr	z, 69	; F53D6E  jr Z,0xf53db5
+	ld	c, (xix)	; F53D70  ld C,(XIX)
+	and	c, 15	; F53D72  and C,0x0f
+	ld	h, c	; F53D75  ld H,C
+	ldb_d8	a, (10390)	; F53D77  ld A,(0x2896)
+	and	a, 15	; F53D7B  and A,0x0f
+	cp	a, c	; F53D7E  cp A,C
+	jr	ule, 17	; F53D80  jr ULE,0xf53d93
+	ld	c, (xix)	; F53D82  ld C,(XIX)
+	and	c, 15	; F53D84  and C,0x0f
+	inc	1, c	; F53D87  inc 1,C
+	and	c, 15	; F53D89  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53D8C  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53D8F  or (XIX),C
+	jr	15	; F53D91  jr T,0xf53da2
+	ld	c, (xix)	; F53D93  ld C,(XIX)
+	and	c, 15	; F53D95  and C,0x0f
+	dec	1, c	; F53D98  dec 1,C
+	and	c, 15	; F53D9A  and C,0x0f
+	.byte 0x84, 0x3C, 0xF0	; F53D9D  and (XIX),0xf0   [llvm-mc cannot encode this]
+	or	(xix), c	; F53DA0  or (XIX),C
+	lda_24	xbc, (16072024)	; F53DA2  lda XBC,0xf53d58
+	push	xbc	; F53DA7  push XBC
+	call	16002692	; F53DA8  call 0xf42e84
+	pushw	1	; F53DAC  push 0x0001
+	call	16002496	; F53DAF  call 0xf42dc0
+	inc	6, xsp	; F53DB3  inc 6,XSP
+	lda_24	xbc, (16074760)	; F53DB5  lda XBC,0xf54808
+	push	xbc	; F53DBA  push XBC
+	pushw	35	; F53DBB  push 0x0023
+	ld	a, (xix)	; F53DBE  ld A,(XIX)
+	and	a, 15	; F53DC0  and A,0x0f
+	pushw	wa	; F53DC3  push WA
+	calr	64239	; F53DC4  calr 0xf538b6
+	inc	8, xsp	; F53DC7  inc 0,XSP
+	pop	xix	; F53DC9  pop XIX
+	popw	hl	; F53DCA  pop HL
+	ret	; F53DCB  ret
+
+; --------------------------------------------------------------------------
+; sub_F53DCC
+; Called from: thunk slot T_F42E54
+; Evidence: 0xF53DCC is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53DCC:		; <- T_F42E54
+	ldw_d16	bc, (8376)	; F53DCC  ld BC,(0x20b8)
+	extz	bc	; F53DD0  extz BC
+	cps	bc, 0	; F53DD2  cp BC,0
+	jr	z, 24	; F53DD4  jr Z,0xf53dee
+	cps	bc, 1	; F53DD6  cp BC,1
+	jr	z, 20	; F53DD8  jr Z,0xf53dee
+	cp	bc, 155	; F53DDA  cp BC,0x009b
+	jr	z, 14	; F53DDE  jr Z,0xf53dee
+	cp	bc, 156	; F53DE0  cp BC,0x009c
+	jr	z, 8	; F53DE4  jr Z,0xf53dee
+	cp	bc, 157	; F53DE6  cp BC,0x009d
+	jr	z, 2	; F53DEA  jr Z,0xf53dee
+	jr	5	; F53DEC  jr T,0xf53df3
+	stdi8	(10400), 15	; F53DEE  ld (0x28a0),0x0f
+	ret	; F53DF3  ret
+
+; --------------------------------------------------------------------------
+; sub_F53DF4
+; Called from: thunk slot T_F42E60
+; Evidence: 0xF53DF4 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53DF4:		; <- T_F42E60
+	.byte 0xC1, 0xA0, 0x28, 0x3F, 0x0F	; F53DF4  cp (0x28a0),0x0f   [llvm-mc cannot encode this]
+	jr	nz, 8	; F53DF9  jr NZ,0xf53e03
+	stdi8	(10400), 240	; F53DFB  ld (0x28a0),0xf0
+	calr	704	; F53E00  calr 0xf540c3
+	ret	; F53E03  ret
+
+; --------------------------------------------------------------------------
+; sub_F53E04
+; Called from: thunk slot T_F42E64
+; Evidence: 0xF53E04 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F53E04:		; <- T_F42E64
+	push	xix	; F53E04  push XIX
+	lda_d16	xix, (9008)	; F53E05  lda XIX,0x2330
+	extz	xix	; F53E09  extz XIX
+	ld	c, (xix+1)	; F53E0B  ld C,(XIX+0x01)
+	cps	c, 0	; F53E0E  cp C,0
+	jrl	nz, 572	; F53E10  jrl NZ,0xf5404f
+	extz	xix	; F53E13  extz XIX
+	ld	c, (xix+5)	; F53E15  ld C,(XIX+0x05)
+	cp	c, 163	; F53E18  cp C,0xa3
+	jrl	nz, 561	; F53E1B  jrl NZ,0xf5404f
+	ld	c, (xix)	; F53E1E  ld C,(XIX)
+	extz	bc	; F53E20  extz BC
+	cp	bc, 128	; F53E22  cp BC,0x0080
+	jrl	z, 550	; F53E26  jrl Z,0xf5404f
+	cp	bc, 129	; F53E29  cp BC,0x0081
+	jr	z, 17	; F53E2D  jr Z,0xf53e40
+	cp	bc, 130	; F53E2F  cp BC,0x0082
+	jrl	z, 115	; F53E33  jrl Z,0xf53ea9
+	cp	bc, 131	; F53E36  cp BC,0x0083
+	jrl	z, 339	; F53E3A  jrl Z,0xf53f90
+	jrl	527	; F53E3D  jrl T,0xf5404f
+	extz	xix	; F53E40  extz XIX
+	ld	c, (xix+2)	; F53E42  ld C,(XIX+0x02)
+	cp	c, 16	; F53E45  cp C,0x10
+	jrl	nz, 516	; F53E48  jrl NZ,0xf5404f
+	extz	xix	; F53E4B  extz XIX
+	ld	c, (xix+6)	; F53E4D  ld C,(XIX+0x06)
+	and	c, 192	; F53E50  and C,0xc0
+	extz	bc	; F53E53  extz BC
+	cps	bc, 0	; F53E55  cp BC,0
+	jr	z, 45	; F53E57  jr Z,0xf53e86
+	cp	bc, 64	; F53E59  cp BC,0x0040
+	jr	z, 8	; F53E5D  jr Z,0xf53e67
+	cp	bc, 128	; F53E5F  cp BC,0x0080
+	jr	z, 26	; F53E63  jr Z,0xf53e7f
+	jr	31	; F53E65  jr T,0xf53e86
+	stdi8	(10400), 1	; F53E67  ld (0x28a0),0x01
+	pushw	0	; F53E6C  push 0x0000
+	calr	479	; F53E6F  calr 0xf54051
+	stdi8	(10384), 0	; F53E72  ld (0x2890),0x00
+	stdi8	(10385), 0	; F53E77  ld (0x2891),0x00
+	popw	bc	; F53E7C  pop BC
+	jr	14	; F53E7D  jr T,0xf53e8d
+	stdi8	(10400), 2	; F53E7F  ld (0x28a0),0x02
+	jr	15	; F53E84  jr T,0xf53e95
+	stdi8	(10400), 0	; F53E86  ld (0x28a0),0x00
+	jr	8	; F53E8B  jr T,0xf53e95
+	.byte 0xC1, 0xA0, 0x28, 0x3F, 0x01	; F53E8D  cp (0x28a0),0x01   [llvm-mc cannot encode this]
+	jrl	z, 442	; F53E92  jrl Z,0xf5404f
+	.byte 0xC1, 0x7C, 0x20, 0x3F, 0xA3	; F53E95  cp (0x207c),0xa3   [llvm-mc cannot encode this]
+	jrl	nz, 434	; F53E9A  jrl NZ,0xf5404f
+	.byte 0xF1, 0x71, 0x20, 0xB9	; F53E9D  set 1,(0x2071)   [llvm-mc cannot encode this]
+	stdi8	(8304), 1	; F53EA1  ld (0x2070),0x01
+	jrl	422	; F53EA6  jrl T,0xf5404f
+	extz	xix	; F53EA9  extz XIX
+	ld	c, (xix+2)	; F53EAB  ld C,(XIX+0x02)
+	extz	bc	; F53EAE  extz BC
+	cps	bc, 2	; F53EB0  cp BC,2
+	jr	z, 9	; F53EB2  jr Z,0xf53ebd
+	cp	bc, 130	; F53EB4  cp BC,0x0082
+	jr	z, 85	; F53EB8  jr Z,0xf53f0f
+	jrl	211	; F53EBA  jrl T,0xf53f90
+	extz	xix	; F53EBD  extz XIX
+	ld	c, (xix+7)	; F53EBF  ld C,(XIX+0x07)
+	and	c, 15	; F53EC2  and C,0x0f
+	and	c, 15	; F53EC5  and C,0x0f
+	.byte 0xC1, 0x95, 0x28, 0x3C, 0xF0	; F53EC8  and (0x2895),0xf0   [llvm-mc cannot encode this]
+	orddm8	(10389), c	; F53ECD  or (0x2895),C
+	ld	c, (xix+6)	; F53ED1  ld C,(XIX+0x06)
+	stb_d8	(10386), c	; F53ED4  ld (0x2892),C
+	.byte 0xC1, 0x7C, 0x20, 0x3F, 0xA3	; F53ED8  cp (0x207c),0xa3   [llvm-mc cannot encode this]
+	jrl	nz, 176	; F53EDD  jrl NZ,0xf53f90
+	lda_24	xbc, (16070988)	; F53EE0  lda XBC,0xf5394c
+	push	xbc	; F53EE5  push XBC
+	call	16002692	; F53EE6  call 0xf42e84
+	pushw	1	; F53EEA  push 0x0001
+	call	16002496	; F53EED  call 0xf42dc0
+	lda_24	xbc, (16071220)	; F53EF1  lda XBC,0xf53a34
+	push	xbc	; F53EF6  push XBC
+	call	16002692	; F53EF7  call 0xf42e84
+	pushw	1	; F53EFB  push 0x0001
+	call	16002496	; F53EFE  call 0xf42dc0
+	inc	8, xsp	; F53F02  inc 0,XSP
+	inc	4, xsp	; F53F04  inc 4,XSP
+	lda_24	xbc, (16071765)	; F53F06  lda XBC,0xf53c55
+	push	xbc	; F53F0B  push XBC
+	jrl	116	; F53F0C  jrl T,0xf53f83
+	extz	xix	; F53F0F  extz XIX
+	ld	c, (xix+7)	; F53F11  ld C,(XIX+0x07)
+	and	c, 15	; F53F14  and C,0x0f
+	and	c, 15	; F53F17  and C,0x0f
+	.byte 0xC1, 0x96, 0x28, 0x3C, 0xF0	; F53F1A  and (0x2896),0xf0   [llvm-mc cannot encode this]
+	orddm8	(10390), c	; F53F1F  or (0x2896),C
+	ld	c, (xix+6)	; F53F23  ld C,(XIX+0x06)
+	srl	c, 4	; F53F26  srl 0x04,C
+	and	c, 15	; F53F29  and C,0x0f
+	sll	c, 4	; F53F2C  sll 0x04,C
+	and	c, 240	; F53F2F  and C,0xf0
+	.byte 0xC1, 0x94, 0x28, 0x3C, 0x0F	; F53F32  and (0x2894),0x0f   [llvm-mc cannot encode this]
+	orddm8	(10388), c	; F53F37  or (0x2894),C
+	ld	c, (xix+6)	; F53F3B  ld C,(XIX+0x06)
+	and	c, 15	; F53F3E  and C,0x0f
+	sll	c, 4	; F53F41  sll 0x04,C
+	and	c, 240	; F53F44  and C,0xf0
+	.byte 0xC1, 0x93, 0x28, 0x3C, 0x0F	; F53F47  and (0x2893),0x0f   [llvm-mc cannot encode this]
+	orddm8	(10387), c	; F53F4C  or (0x2893),C
+	.byte 0xC1, 0x7C, 0x20, 0x3F, 0xA3	; F53F50  cp (0x207c),0xa3   [llvm-mc cannot encode this]
+	jr	nz, 57	; F53F55  jr NZ,0xf53f90
+	lda_24	xbc, (16071363)	; F53F57  lda XBC,0xf53ac3
+	push	xbc	; F53F5C  push XBC
+	call	16002692	; F53F5D  call 0xf42e84
+	pushw	1	; F53F61  push 0x0001
+	call	16002496	; F53F64  call 0xf42dc0
+	lda_24	xbc, (16071622)	; F53F68  lda XBC,0xf53bc6
+	push	xbc	; F53F6D  push XBC
+	call	16002692	; F53F6E  call 0xf42e84
+	pushw	1	; F53F72  push 0x0001
+	call	16002496	; F53F75  call 0xf42dc0
+	inc	8, xsp	; F53F79  inc 0,XSP
+	inc	4, xsp	; F53F7B  inc 4,XSP
+	lda_24	xbc, (16072024)	; F53F7D  lda XBC,0xf53d58
+	push	xbc	; F53F82  push XBC
+	call	16002692	; F53F83  call 0xf42e84
+	pushw	1	; F53F87  push 0x0001
+	call	16002496	; F53F8A  call 0xf42dc0
+	inc	6, xsp	; F53F8E  inc 6,XSP
+	extz	xix	; F53F90  extz XIX
+	ld	c, (xix+2)	; F53F92  ld C,(XIX+0x02)
+	extz	bc	; F53F95  extz BC
+	cps	bc, 2	; F53F97  cp BC,2
+	jr	z, 10	; F53F99  jr Z,0xf53fa5
+	cp	bc, 130	; F53F9B  cp BC,0x0082
+	jrl	z, 131	; F53F9F  jrl Z,0xf54025
+	jrl	170	; F53FA2  jrl T,0xf5404f
+	extz	xix	; F53FA5  extz XIX
+	ld	c, (xix+7)	; F53FA7  ld C,(XIX+0x07)
+	and	c, 15	; F53FAA  and C,0x0f
+	sll	c, 4	; F53FAD  sll 0x04,C
+	and	c, 240	; F53FB0  and C,0xf0
+	.byte 0xC1, 0x95, 0x28, 0x3C, 0x0F	; F53FB3  and (0x2895),0x0f   [llvm-mc cannot encode this]
+	orddm8	(10389), c	; F53FB8  or (0x2895),C
+	ld	c, (xix+6)	; F53FBC  ld C,(XIX+0x06)
+	srl	c, 4	; F53FBF  srl 0x04,C
+	and	c, 15	; F53FC2  and C,0x0f
+	and	c, 15	; F53FC5  and C,0x0f
+	.byte 0xC1, 0x94, 0x28, 0x3C, 0xF0	; F53FC8  and (0x2894),0xf0   [llvm-mc cannot encode this]
+	orddm8	(10388), c	; F53FCD  or (0x2894),C
+	ld	c, (xix+6)	; F53FD1  ld C,(XIX+0x06)
+	and	c, 15	; F53FD4  and C,0x0f
+	and	c, 15	; F53FD7  and C,0x0f
+	.byte 0xC1, 0x93, 0x28, 0x3C, 0xF0	; F53FDA  and (0x2893),0xf0   [llvm-mc cannot encode this]
+	orddm8	(10387), c	; F53FDF  or (0x2893),C
+	.byte 0xC1, 0x7C, 0x20, 0x3F, 0xA3	; F53FE3  cp (0x207c),0xa3   [llvm-mc cannot encode this]
+	jr	nz, 101	; F53FE8  jr NZ,0xf5404f
+	lda_24	xbc, (16071104)	; F53FEA  lda XBC,0xf539c0
+	push	xbc	; F53FEF  push XBC
+	call	16002692	; F53FF0  call 0xf42e84
+	pushw	1	; F53FF4  push 0x0001
+	call	16002496	; F53FF7  call 0xf42dc0
+	lda_24	xbc, (16071506)	; F53FFB  lda XBC,0xf53b52
+	push	xbc	; F54000  push XBC
+	call	16002692	; F54001  call 0xf42e84
+	pushw	1	; F54005  push 0x0001
+	call	16002496	; F54008  call 0xf42dc0
+	lda_24	xbc, (16071881)	; F5400C  lda XBC,0xf53cc9
+	push	xbc	; F54011  push XBC
+	call	16002692	; F54012  call 0xf42e84
+	pushw	1	; F54016  push 0x0001
+	call	16002496	; F54019  call 0xf42dc0
+	add	xsp, 18	; F5401D  add XSP,0x00000012
+	jr	42	; F54023  jr T,0xf5404f
+	extz	xix	; F54025  extz XIX
+	ld	c, (xix+6)	; F54027  ld C,(XIX+0x06)
+	and	c, 1	; F5402A  and C,0x01
+	.byte 0xCB, 0x23, 0x00	; F5402D  ldcf 0x00,C   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x96, 0x28, 0xA4	; F54030  stcf 4,(0x2896)   [llvm-mc cannot encode this]
+	ld	c, (xix+6)	; F54034  ld C,(XIX+0x06)
+	srl	c, 1	; F54037  srl 0x01,C
+	and	c, 1	; F5403A  and C,0x01
+	.byte 0xCB, 0x23, 0x00	; F5403D  ldcf 0x00,C   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x96, 0x28, 0xA5	; F54040  stcf 5,(0x2896)   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x7C, 0x20, 0x3F, 0xA3	; F54044  cp (0x207c),0xa3   [llvm-mc cannot encode this]
+	jr	nz, 4	; F54049  jr NZ,0xf5404f
+	.byte 0xF1, 0x95, 0x20, 0xBC	; F5404B  set 4,(0x2095)   [llvm-mc cannot encode this]
+	pop	xix	; F5404F  pop XIX
+	ret	; F54050  ret
+
+; --------------------------------------------------------------------------
+; sub_F54051
+; Called from: call from 0xF53E6F
+; Evidence: 0xF54051 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F54051:
+	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F54051  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	push	xix	; F54055  push XIX
+	lda	xix, (xiz-6)	; F54056  lda XIX,XIZ+0xfa
+	ld	(xix), 130	; F54059  ld (XIX),0x82
+	ld	c, (xiz+8)	; F5405C  ld C,(XIZ+0x08)
+	ld	(xix+1), c	; F5405F  ld (XIX+0x01),C
+	ld	(xix+2), 2	; F54062  ld (XIX+0x02),0x02
+	ld	(xix+3), 2	; F54066  ld (XIX+0x03),0x02
+	ld	(xix+4), 1	; F5406A  ld (XIX+0x04),0x01
+	ld	(xix+5), 163	; F5406E  ld (XIX+0x05),0xa3
+	push	xix	; F54072  push XIX
+	pushw	6	; F54073  push 0x0006
+	pushw	0	; F54076  push 0x0000
+	call	15994580	; F54079  call 0xf40ed4
+	ld	(xix+2), 130	; F5407D  ld (XIX+0x02),0x82
+	ld	(xix+3), 2	; F54081  ld (XIX+0x03),0x02
+	push	xix	; F54085  push XIX
+	pushw	6	; F54086  push 0x0006
+	pushw	0	; F54089  push 0x0000
+	call	15994580	; F5408C  call 0xf40ed4
+	ld	(xix), 131	; F54090  ld (XIX),0x83
+	ld	(xix+2), 2	; F54093  ld (XIX+0x02),0x02
+	ld	(xix+3), 2	; F54097  ld (XIX+0x03),0x02
+	push	xix	; F5409B  push XIX
+	pushw	6	; F5409C  push 0x0006
+	pushw	0	; F5409F  push 0x0000
+	call	15994580	; F540A2  call 0xf40ed4
+	ld	(xix+2), 130	; F540A6  ld (XIX+0x02),0x82
+	ld	(xix+3), 2	; F540AA  ld (XIX+0x03),0x02
+	push	xix	; F540AE  push XIX
+	pushw	6	; F540AF  push 0x0006
+	pushw	0	; F540B2  push 0x0000
+	call	15994580	; F540B5  call 0xf40ed4
+	add	xsp, 32	; F540B9  add XSP,0x00000020
+	pop	xix	; F540BF  pop XIX
+	.byte 0xEE, 0x0D	; F540C0  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F540C2  ret
+
+; --------------------------------------------------------------------------
+; sub_F540C3
+; Called from: call from 0xF53E00
+; Evidence: 0xF540C3 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F540C3:
+	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F540C3  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	push	xix	; F540C7  push XIX
+	lda	xix, (xiz-6)	; F540C8  lda XIX,XIZ+0xfa
+	ld	(xix), 129	; F540CB  ld (XIX),0x81
+	ld	(xix+1), 0	; F540CE  ld (XIX+0x01),0x00
+	ld	(xix+2), 16	; F540D2  ld (XIX+0x02),0x10
+	ld	(xix+3), 1	; F540D6  ld (XIX+0x03),0x01
+	ld	(xix+4), 1	; F540DA  ld (XIX+0x04),0x01
+	ld	(xix+5), 163	; F540DE  ld (XIX+0x05),0xa3
+	push	xix	; F540E2  push XIX
+	pushw	6	; F540E3  push 0x0006
+	pushw	0	; F540E6  push 0x0000
+	call	15994580	; F540E9  call 0xf40ed4
+	inc	8, xsp	; F540ED  inc 0,XSP
+	pop	xix	; F540EF  pop XIX
+	.byte 0xEE, 0x0D	; F540F0  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F540F2  ret
+
+; --------------------------------------------------------------------------
+; sub_F540F3
+; Called from: call from 0xF53436, 0xF53478, 0xF534C3, 0xF5350E, 0xF53550,
+;              0xF5359B, +3 more
+; Evidence: 0xF540F3 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F540F3:
+	.byte 0xEE, 0x0C, 0xF6, 0xFF	; F540F3  link XIZ,0xfff6   [llvm-mc cannot encode this]
+	pushw	hl	; F540F7  push HL
+	push	xix	; F540F8  push XIX
+	lda	xix, (xiz-10)	; F540F9  lda XIX,XIZ+0xf6
+	ld	l, (xiz+8)	; F540FC  ld L,(XIZ+0x08)
+	ldw	bc, 10384	; F540FF  ld BC,0x2890
+	extz	xbc	; F54102  extz XBC
+	ld	(xiz-4), xbc	; F54104  ld (XIZ+0xfc),XBC
+	ld	(xix), 176	; F54107  ld (XIX),0xb0
+	ld	(xix+1), l	; F5410A  ld (XIX+0x01),L
+	ld	(xix+2), 120	; F5410D  ld (XIX+0x02),0x78
+	ld	(xix+3), 0	; F54111  ld (XIX+0x03),0x00
+	push	xix	; F54115  push XIX
+	pushw	4	; F54116  push 0x0004
+	pushw	0	; F54119  push 0x0000
+	call	15994580	; F5411C  call 0xf40ed4
+	ld	(xix), 136	; F54120  ld (XIX),0x88
+	ld	(xix+1), l	; F54123  ld (XIX+0x01),L
+	ld	(xix+3), 0	; F54126  ld (XIX+0x03),0x00
+	ld	(xix+5), 0	; F5412A  ld (XIX+0x05),0x00
+	ldb	h, 11	; F5412E  ld H,0x0b
+	inc	8, xsp	; F54130  inc 0,XSP
+	ld	(xix+2), h	; F54132  ld (XIX+0x02),H
+	ld	xbc, (xiz-4)	; F54135  ld XBC,(XIZ+0xfc)
+	ld	a, (xbc)	; F54138  ld A,(XBC)
+	ld	(xix+4), a	; F5413A  ld (XIX+0x04),A
+	push	xix	; F5413D  push XIX
+	pushw	6	; F5413E  push 0x0006
+	pushw	0	; F54141  push 0x0000
+	call	15994580	; F54144  call 0xf40ed4
+	sub	xbc, xbc	; F54148  sub XBC,XBC
+	inc	1, xbc	; F5414A  inc 1,XBC
+	add	(xiz-4), xbc	; F5414C  add (XIZ+0xfc),XBC
+	add	h, c	; F5414F  add H,C
+	inc	8, xsp	; F54151  inc 0,XSP
+	cp	h, 12	; F54153  cp H,0x0c
+	jr	ule, -38	; F54156  jr ULE,0xf54132
+	ldb	h, 4	; F54158  ld H,0x04
+	ld	(xix+2), h	; F5415A  ld (XIX+0x02),H
+	ld	xbc, (xiz-4)	; F5415D  ld XBC,(XIZ+0xfc)
+	ld	a, (xbc)	; F54160  ld A,(XBC)
+	ld	(xix+4), a	; F54162  ld (XIX+0x04),A
+	push	xix	; F54165  push XIX
+	pushw	6	; F54166  push 0x0006
+	pushw	0	; F54169  push 0x0000
+	call	15994580	; F5416C  call 0xf40ed4
+	sub	xbc, xbc	; F54170  sub XBC,XBC
+	inc	1, xbc	; F54172  inc 1,XBC
+	add	(xiz-4), xbc	; F54174  add (XIZ+0xfc),XBC
+	add	h, c	; F54177  add H,C
+	inc	8, xsp	; F54179  inc 0,XSP
+	cp	h, 8	; F5417B  cp H,0x08
+	jr	ule, -38	; F5417E  jr ULE,0xf5415a
+	pushw	hl	; F54180  push HL
+	pushw	255	; F54181  push 0x00ff
+	call	15995864	; F54184  call 0xf413d8
+	pop	xbc	; F54188  pop XBC
+	pop	xix	; F54189  pop XIX
+	popw	hl	; F5418A  pop HL
+	.byte 0xEE, 0x0D	; F5418B  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F5418D  ret
+
+; --------------------------------------------------------------------------
+; sub_F5418E
+; Called from: call from 0xF5325A, 0xF532B5, 0xF53316, 0xF53377, 0xF533D2
+; Evidence: 0xF5418E is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5418E:
+	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F5418E  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	pushw	hl	; F54192  push HL
+	push	xix	; F54193  push XIX
+	lda	xix, (xiz-10)	; F54194  lda XIX,XIZ+0xf6
+	ldw	bc, 10384	; F54197  ld BC,0x2890
+	extz	xbc	; F5419A  extz XBC
+	ld	(xiz-4), xbc	; F5419C  ld (XIZ+0xfc),XBC
+	ld	(xix), 136	; F5419F  ld (XIX),0x88
+	ld	c, (xiz+8)	; F541A2  ld C,(XIZ+0x08)
+	ld	(xix+1), c	; F541A5  ld (XIX+0x01),C
+	ld	(xix+3), 0	; F541A8  ld (XIX+0x03),0x00
+	ld	(xix+5), 0	; F541AC  ld (XIX+0x05),0x00
+	ldb	h, 11	; F541B0  ld H,0x0b
+	ld	(xix+2), h	; F541B2  ld (XIX+0x02),H
+	ld	xbc, (xiz-4)	; F541B5  ld XBC,(XIZ+0xfc)
+	ld	a, (xbc)	; F541B8  ld A,(XBC)
+	ld	(xix+4), a	; F541BA  ld (XIX+0x04),A
+	push	xix	; F541BD  push XIX
+	pushw	6	; F541BE  push 0x0006
+	pushw	0	; F541C1  push 0x0000
+	call	15994580	; F541C4  call 0xf40ed4
+	sub	xbc, xbc	; F541C8  sub XBC,XBC
+	inc	1, xbc	; F541CA  inc 1,XBC
+	add	(xiz-4), xbc	; F541CC  add (XIZ+0xfc),XBC
+	add	h, c	; F541CF  add H,C
+	inc	8, xsp	; F541D1  inc 0,XSP
+	cp	h, 12	; F541D3  cp H,0x0c
+	jr	ule, -38	; F541D6  jr ULE,0xf541b2
+	ld	xwa, (xiz-4)	; F541D8  ld XWA,(XIZ+0xfc)
+	inc	4, xwa	; F541DB  inc 4,XWA
+	ld	(xiz-14), xwa	; F541DD  ld (XIZ+0xf2),XWA
+	ld	(xix+2), 8	; F541E0  ld (XIX+0x02),0x08
+	ld	xbc, (xiz-14)	; F541E4  ld XBC,(XIZ+0xf2)
+	ld	a, (xbc)	; F541E7  ld A,(XBC)
+	ld	(xix+4), a	; F541E9  ld (XIX+0x04),A
+	push	xix	; F541EC  push XIX
+	pushw	6	; F541ED  push 0x0006
+	pushw	0	; F541F0  push 0x0000
+	call	15994580	; F541F3  call 0xf40ed4
+	inc	8, xsp	; F541F7  inc 0,XSP
+	pop	xix	; F541F9  pop XIX
+	popw	hl	; F541FA  pop HL
+	.byte 0xEE, 0x0D	; F541FB  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F541FD  ret
+
+; --------------------------------------------------------------------------
+; sub_F541FE
+; Called from: call from 0xF53016
+; Evidence: 0xF541FE is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F541FE:
+	ret	; F541FE  ret
+
+; --------------------------------------------------------------------------
+; sub_F541FF
+; Called from: thunk slot T_F42E68
+; Evidence: 0xF541FF is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F541FF:		; <- T_F42E68
+	calr	14	; F541FF  calr 0xf54210
+	cps	a, 1	; F54202  cp A,1
+	jr	nz, 9	; F54204  jr NZ,0xf5420f
+	.byte 0xF1, 0x71, 0x20, 0xBF	; F54206  set 7,(0x2071)   [llvm-mc cannot encode this]
+	stdi8	(8304), 163	; F5420A  ld (0x2070),0xa3
+	ret	; F5420F  ret
+
+; --------------------------------------------------------------------------
+; sub_F54210
+; Called from: thunk slot T_F42E6C; call from 0xF541FF
+; Evidence: 0xF54210 is an instruction boundary of this transcription, re-
+;           asserted on every emit, and the reference above names it.  That
+;           is ALL the name rests on -- the name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F54210:		; <- T_F42E6C
+	pushw	hl	; F54210  push HL
+	push	xix	; F54211  push XIX
+	lda_d16	xix, (10400)	; F54212  lda XIX,0x28a0
+	ldw	hl, 0	; F54216  ld HL,0x0000
+	ld	c, (xix)	; F54219  ld C,(XIX)
+	cp	c, 15	; F5421B  cp C,0x0f
+	jr	z, 7	; F5421E  jr Z,0xf54227
+	ld	c, (xix)	; F54220  ld C,(XIX)
+	cp	c, 240	; F54222  cp C,0xf0
+	jr	nz, 26	; F54225  jr NZ,0xf54241
+	inc	1, hl	; F54227  inc 1,HL
+	cp	hl, 10000	; F54229  cp HL,0x2710
+	jr	nc, 14	; F5422D  jr NC,0xf5423d
+	call	15998172	; F5422F  call 0xf41cdc
+	cps	wa, 0	; F54233  cp WA,0
+	jr	z, -30	; F54235  jr Z,0xf54219
+	call	15999872	; F54237  call 0xf42380
+	jr	-36	; F5423B  jr T,0xf54219
+	sub	a, a	; F5423D  sub A,A
+	jr	4	; F5423F  jr T,0xf54245
+	ld	c, (xix)	; F54241  ld C,(XIX)
+	ld	a, c	; F54243  ld A,C
+	pop	xix	; F54245  pop XIX
+	popw	hl	; F54246  pop HL
+	ret	; F54247  ret
+
+; --- 0xF54248-0xF542A3  romtab (92 bytes) ---
+
+; --------------------------------------------------------------------------
+; DispatchTable_F54248 -- 23 pointers, the module's message table
+; Read by: prom_b 0xF5303D `add XWA,0x00f54248`, after `mul A,4` in
+;          DrawbarScreen_Dispatch.
+; Entries: 23, 15 distinct.  9 of them are the image-wide default thunk slot
+;          0x00F42C70, which this file already records at 0xF55000 as
+;          pointing at a bare `ret`; ⚠ only the last 6 are a trailing run --
+;          the other 3 sit at indices 10, 13, 14, INSIDE the live entries,
+;          so the table is sparse and not merely short.
+; Entry count: 23 is where the layout's chain rule stops, because entry 23
+;              is a zero word and a zero is not an address.  ⚠ Nothing in
+;              the code bounds the index, so 23 is a READING of the data,
+;              not a measurement of the table.
+; Evidence: the reader above; and every one of the 14 in-span entries lands
+;           on an instruction boundary of this transcription (--selftest
+;           check B), which a mis-framed table would not do.
+; --------------------------------------------------------------------------
+DispatchTable_F54248:
+	.long 0x00F5340D                       ; F54248  [0]   -> sub_F5340D
+	.long 0x00F5344F                       ; F5424C  [1]   -> sub_F5344F
+	.long 0x00F53491                       ; F54250  [2]   -> sub_F53491
+	.long 0x00F534DC                       ; F54254  [3]   -> sub_F534DC
+	.long 0x00F53527                       ; F54258  [4]   -> sub_F53527
+	.long 0x00F53569                       ; F5425C  [5]   -> sub_F53569
+	.long 0x00F535B4                       ; F54260  [6]   -> sub_F535B4
+	.long 0x00F535F6                       ; F54264  [7]   -> sub_F535F6
+	.long 0x00F53136                       ; F54268  [8]   -> sub_F53136
+	.long 0x00F53163                       ; F5426C  [9]   -> sub_F53163
+	.long 0x00F42C70                       ; F54270  [10]   -> prom_b 0xF42C70
+	.long 0x00F5318E                       ; F54274  [11]   -> sub_F5318E
+	.long 0x00F531B5                       ; F54278  [12]   -> sub_F531B5
+	.long 0x00F42C70                       ; F5427C  [13]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F54280  [14]   -> prom_b 0xF42C70
+	.long 0x00F53683                       ; F54284  [15]   -> sub_F53683
+	.long 0x00F53641                       ; F54288  [16]   -> sub_F53641
+	.long 0x00F42C70                       ; F5428C  [17]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F54290  [18]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F54294  [19]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F54298  [20]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F5429C  [21]   -> prom_b 0xF42C70
+	.long 0x00F42C70                       ; F542A0  [22]   -> prom_b 0xF42C70
+
+; --- 0xF542A4-0xF542D0  data (45 bytes) ---
+
+; --------------------------------------------------------------------------
+; Table_F542A4 -- nine 32-bit words of zero in front of DrawbarRowOffsets
+; Evidence: read from the ROM.  If they are empty slots of
+;           DispatchTable_F54248 that table would have 32 entries and end at
+;           0xF542C8; nothing in the code bounds the index, so the layout
+;           stops the table at 23 and this stays a separate object.
+; Unknown: whether they belong to the table before them.
+; --------------------------------------------------------------------------
+Table_F542A4:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F542A4  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F542B4  ................
+	.byte 0x00, 0x00, 0x00, 0x00   ; F542C4  ....
+
+; --------------------------------------------------------------------------
+; DrawbarRowOffsets -- 9 source-row offsets, one per drawbar position
+; Read by: prom_b 0xF538EF `add XBC,0x00f542c8`, inside Drawbar_DrawColumn,
+;          followed by `ld A,(XBC)`, indexed by the bar's 0..15 nibble.
+; Entries: 0x6E 0x62 0x54 0x46 0x38 0x2A 0x1C 0x0E 0x00 -- one step of 12
+;          and then eight of 14.
+; Entry count: NINE, and nine is measured twice: 0xF542C8 + 9 = 0xF542D1,
+;              which is exactly where DispatchTable_F542D1 starts; and the
+;              screen shows nine drawbars.  ⚠ This is CORRECTION C3: the
+;              layout's HOLES table describes 44 of this segment's 45 bytes
+;              and never mentions the trailing 0x00, which is entry 8.
+; Evidence: entry 0 (0x6E) plus the blit window (0x7B rows) is 233, exactly
+;           the distance between the three slices of a drawbar sprite -- so
+;           the offsets and the sprite pitch are the same measurement taken
+;           twice.
+; --------------------------------------------------------------------------
+DrawbarRowOffsets:
+	.byte 0x6e, 0x62, 0x54, 0x46, 0x38, 0x2a, 0x1c, 0x0e, 0x00   ; F542C8  nbTF8*...
+
+; --- 0xF542D1-0xF542E0  ptrtab (16 bytes) ---
+
+; --------------------------------------------------------------------------
+; DispatchTable_F542D1 -- 4 pointers into this module's code
+; Read by: prom_b 0xF531E4 `add XBC,0x00f542d1`
+; Evidence: four 32-bit words, all four landing on instruction boundaries of
+;           this transcription; it starts exactly where DrawbarRowOffsets
+;           ends and ends where DL_Flag2896b5_Set begins.
+; Unknown: what bounds the index at 4.  The reader above does `ld XBC,(XBC)`
+;          and jumps; nothing in the span compares the index with a literal.
+; --------------------------------------------------------------------------
+DispatchTable_F542D1:
+	.long 0x00F53320                       ; F542D1  [0]   -> sub_F53320
+	.long 0x00F53381                       ; F542D5  [1]   -> sub_F53381
+	.long 0x00F53264                       ; F542D9  [2]   -> sub_F53264
+	.long 0x00F532BF                       ; F542DD  [3]   -> sub_F532BF
+
+; --- 0xF542E1-0xF542EC  data (12 bytes) ---
+
+; --------------------------------------------------------------------------
+; DL_Flag2896b5_Set -- a UI display list, 1 record, 0xF542E1-0xF542EC
+; Run by: `lda XWA,0xf542e1` at 0xF53841 with END 0xF542ED pushed just
+;         before it, then `call` at 0xF53855 -> interpreter A
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF542E1-0xF542EC exactly -- a miscount anywhere
+;           would end somewhere else.
+; ⚠ CORRECTION: notes/prom_b_f4f000_layout.py's HOLES table calls this a
+;               display list its INTER_MIN = 2 rule refuses.  It is CALL-
+;               SITE PROVEN: `lda XWA,0xf542e1` at 0xF53841 and `lda
+;               XBC,0xf542ed` at 0xF5383B, two instructions before the `call
+;               0xf42e00` at 0xF53855.  The layout's site scanner misses it
+;               because a `jr` splits the pair.  No boundary moves.
+; --------------------------------------------------------------------------
+DL_Flag2896b5_Set:
+	.byte 0x03, 0x0c	; F542E1  op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F54790	; +2  source -> Bitmap_F54790_48x20
+	.short 0x04D1		; +6  IX  (screen position)
+	.short 0x0006		; +8  BC  (6 bytes per row)
+	.short 0x0014		; +10 HL  (20 rows)
+
+; --- 0xF542ED-0xF542F8  dl (12 bytes) ---
+
+; --------------------------------------------------------------------------
+; DL_Flag2896b5_Clear -- a UI display list, 1 record, 0xF542ED-0xF542F8
+; Run by: `lda XWA,0xf542ed` at 0xF5384F with END 0xF542F9 pushed just
+;         before it, then `call` at 0xF53855 -> interpreter A
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF542ED-0xF542F8 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_Flag2896b5_Clear:
+	.byte 0x03, 0x0c	; F542ED  op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F54718	; +2  source -> Bitmap_F54718_48x20
+	.short 0x04D1		; +6  IX  (screen position)
+	.short 0x0006		; +8  BC  (6 bytes per row)
+	.short 0x0014		; +10 HL  (20 rows)
+
+; --- 0xF542F9-0xF54304  data (12 bytes) ---
+
+; --------------------------------------------------------------------------
+; DL_Flag2896b4_Set -- a UI display list, 1 record, 0xF542F9-0xF54304
+; Run by: `lda XWA,0xf542f9` at 0xF53868 with END 0xF54305 pushed just
+;         before it, then `call` at 0xF5387C -> interpreter A
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF542F9-0xF54304 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_Flag2896b4_Set:
+	.byte 0x03, 0x0c	; F542F9  op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F54790	; +2  source -> Bitmap_F54790_48x20
+	.short 0x0981		; +6  IX  (screen position)
+	.short 0x0006		; +8  BC  (6 bytes per row)
+	.short 0x0014		; +10 HL  (20 rows)
+
+; --- 0xF54305-0xF546A3  dl (927 bytes) ---
+
+; --------------------------------------------------------------------------
+; DL_Flag2896b4_Clear -- a UI display list, 1 record, 0xF54305-0xF54310
+; Run by: `lda XWA,0xf54305` at 0xF53876 with END 0xF54311 pushed just
+;         before it, then `call` at 0xF5387C -> interpreter A
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF54305-0xF54310 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_Flag2896b4_Clear:
+	.byte 0x03, 0x0c	; F54305  op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F54718	; +2  source -> Bitmap_F54718_48x20
+	.short 0x0981		; +6  IX  (screen position)
+	.short 0x0006		; +8  BC  (6 bytes per row)
+	.short 0x0014		; +10 HL  (20 rows)
+
+; --------------------------------------------------------------------------
+; DL_DrawbarScaleStrip -- a UI display list, 3 records, 0xF54311-0xF54330
+; Run by: `lda XWA,0xf54311` at 0xF53797 with END 0xF54331 pushed just
+;         before it, then `call` at 0xF5379D -> interpreter A
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF54311-0xF54330 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_DrawbarScaleStrip:
+	.byte 0x02, 0x0a	; F54311  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x0d, 0x00, 0x59, 0x00, 0x0d, 0x00, 0x67, 0x00	; +2  '..Y...g.'
+	.byte 0x02, 0x0a	; F5431B  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x37, 0x01, 0x59, 0x00, 0x37, 0x01, 0x67, 0x00	; +2  '7.Y.7.g.'
+	.byte 0x03, 0x0c	; F54325  op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F54D7E	; +2  source -> Bitmap_F54D7E_304x6
+	.short 0x2493		; +6  IX  (screen position)
+	.short 0x0026		; +8  BC  (38 bytes per row)
+	.short 0x0006		; +10 HL  (6 rows)
+
+; --------------------------------------------------------------------------
+; DL_DrawbarFootageScale -- a UI display list, 22 records, 0xF54331-0xF543AF
+; Run by: `lda XWA,0xf54331` at 0xF53774 with END 0xF543B0 pushed just
+;         before it, then `call` at 0xF5377A -> interpreter A
+; Text it draws: '16'; '1/3'; '2/3'; '3/5'; '1/3'
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF54331-0xF543AF exactly -- a miscount anywhere
+;           would end somewhere else.
+; ★ Footages: nine whole-number labels reading '16', '5', '8', '4', '2',
+;             '2', '1', '1', '1', nine foot marks, and four fraction labels
+;             reading '1/3', '2/3', '3/5', '1/3'.  Read together they are
+;             the nine Hammond-style drawbar footages 16' 5 1/3' 8' 4' 2
+;             2/3' 2' 1 3/5' 1 1/3' 1'.  The numeric labels' screen
+;             positions run 0x0E3B..0x0E5C and each falls within one cell of
+;             its bar's own column (--selftest check F).
+; --------------------------------------------------------------------------
+DL_DrawbarFootageScale:
+	.byte 0x07, 0x05	; F54331  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0E3D		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x07, 0x05	; F54336  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0E45		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x07, 0x05	; F5433B  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0E49		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x07, 0x05	; F54340  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0E51		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x07, 0x05	; F54345  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0E5D		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x20, 0x05	; F5434A  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E5A		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x20, 0x06	; F5434F  op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x0E3B		; +2  IX (screen position)
+	.ascii "16"	; +4
+	.byte 0x20, 0x05	; F54355  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E3F		; +2  IX (screen position)
+	.ascii "5"	; +4
+	.byte 0x07, 0x05	; F5435A  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0E42		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x20, 0x05	; F5435F  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E44		; +2  IX (screen position)
+	.ascii "8"	; +4
+	.byte 0x20, 0x05	; F54364  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E48		; +2  IX (screen position)
+	.ascii "4"	; +4
+	.byte 0x20, 0x05	; F54369  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E4B		; +2  IX (screen position)
+	.ascii "2"	; +4
+	.byte 0x07, 0x05	; F5436E  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0E4E		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x20, 0x05	; F54373  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E50		; +2  IX (screen position)
+	.ascii "2"	; +4
+	.byte 0x20, 0x05	; F54378  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E53		; +2  IX (screen position)
+	.ascii "1"	; +4
+	.byte 0x07, 0x05	; F5437D  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0E56		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x20, 0x05	; F54382  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E57		; +2  IX (screen position)
+	.ascii "1"	; +4
+	.byte 0x20, 0x05	; F54387  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0E5C		; +2  IX (screen position)
+	.ascii "1"	; +4
+	.byte 0x17, 0x09	; F5438C  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0040, 0x005E	; +2  the two words
+	.ascii "1/3"	; +6
+	.byte 0x17, 0x09	; F54395  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x00A0, 0x005E	; +2  the two words
+	.ascii "2/3"	; +6
+	.byte 0x17, 0x09	; F5439E  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x00DF, 0x005E	; +2  the two words
+	.ascii "3/5"	; +6
+	.byte 0x17, 0x09	; F543A7  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x00FF, 0x005E	; +2  the two words
+	.ascii "1/3"	; +6
+
+; --------------------------------------------------------------------------
+; DL_F543B0 -- a UI display list, 2 records, 0xF543B0-0xF543C3
+; Run by: `lda XWA,0xf543b0` at 0xF53787 with END 0xF543C4 pushed just
+;         before it, then `call` at 0xF5378D -> interpreter A
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF543B0-0xF543C3 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_F543B0:
+	.byte 0x05, 0x0a	; F543B0  op 05, 10 bytes -> handler 0xF31A75
+	.byte 0x0e, 0x00, 0x58, 0x00, 0x36, 0x01, 0x67, 0x00	; +2  '..X.6.g.'
+	.byte 0x05, 0x0a	; F543BA  op 05, 10 bytes -> handler 0xF31A75
+	.byte 0x0d, 0x00, 0x6b, 0x00, 0x37, 0x01, 0xe8, 0x00	; +2  '..k.7...'
+
+; --------------------------------------------------------------------------
+; DL_F543C4 -- a UI display list, 2 records, 0xF543C4-0xF543D5
+; Run by: `lda XWA,0xf543c4` at 0xF53743 with END 0xF543D6 pushed just
+;         before it, then `call` at 0xF53749 -> interpreter A; `lda
+;         XWA,0xf543c4` at 0xF53756 with END 0xF543D6 pushed just before it,
+;         then `call` at 0xF5375C -> interpreter A
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF543C4-0xF543D5 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_F543C4:
+	.byte 0x1b, 0x0a	; F543C4  op 1B, 10 bytes -> handler 0xF31A75
+	.byte 0xa7, 0x00, 0x1b, 0x00, 0x3f, 0x01, 0x53, 0x00	; +2  '....?.S.'
+	.byte 0x0e, 0x08	; F543CE  op 0E, 8 bytes -> handler 0xF31A9F
+	.byte 0xc0, 0x0d, 0x28, 0x00, 0x98, 0x00	; +2  '..(...'
+
+; --------------------------------------------------------------------------
+; DL_DrawbarTitle -- a UI display list, 6 records, 0xF543D6-0xF54415
+; Run by: `lda XWA,0xf543d6` at 0xF536CB with END 0xF54416 pushed just
+;         before it, then `call` at 0xF536D1 -> interpreter A
+; Text it draws: 'DRAWBAR SETTING'; 'DRAWBAR'
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF543D6-0xF54415 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_DrawbarTitle:
+	.byte 0x1c, 0x0d	; F543D6  op 1C, 13 bytes -> handler 0xF31A52
+	.short 0x007A, 0x0003	; +2  the two words
+	.ascii "DRAWBAR"	; +6
+	.byte 0x20, 0x13	; F543E3  op 20, 19 bytes -> handler 0xF31A3A
+	.short 0x0AF2		; +2  IX (screen position)
+	.ascii "DRAWBAR SETTING"	; +4
+	.byte 0x17, 0x07	; F543F6  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x004C	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x09, 0x0a	; F543FD  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x08, 0x00, 0x42, 0x00, 0x90, 0x00, 0x53, 0x00	; +2  '..B...S.'
+	.byte 0x09, 0x0a	; F54407  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0a, 0x00, 0x44, 0x00, 0x8e, 0x00, 0x51, 0x00	; +2  '..D...Q.'
+	.byte 0x23, 0x05	; F54411  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x6d, 0x0c, 0x00	; +2  'm..'
+
+; --------------------------------------------------------------------------
+; DL_PercussiveToneHeader -- a UI display list, 17 records, 0xF54416-0xF544AC
+; Run by: `lda XWA,0xf54416` at 0xF537B0 with END 0xF54493 pushed just
+;         before it, then `call` at 0xF537C7 -> interpreter A
+; Text it draws: 'PERCUSSIVE'; 'T0NE'; '2/3'; 'SOUND MODE'
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF54416-0xF544AC exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_PercussiveToneHeader:
+	.byte 0x20, 0x05	; F54416  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x059A		; +2  IX (screen position)
+	.ascii "2"	; +4
+	.byte 0x07, 0x05	; F5441B  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x059D		; +2  IX (screen position)
+	.ascii "'"	; +4
+	.byte 0x17, 0x07	; F54420  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x0025	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x17, 0x09	; F54427  op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0118, 0x0026	; +2  the two words
+	.ascii "2/3"	; +6
+	.byte 0x20, 0x0e	; F54430  op 20, 14 bytes -> handler 0xF31A3A
+	.short 0x06CE		; +2  IX (screen position)
+	.ascii "PERCUSSIVE"	; +4
+	.byte 0x07, 0x05	; F5443E  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x08BC		; +2  IX (screen position)
+	.ascii ","	; +4
+	.byte 0x20, 0x08	; F54443  op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x0905		; +2  IX (screen position)
+	.ascii "T0NE"	; +4
+	.byte 0x20, 0x05	; F5444B  op 20, 5 bytes -> handler 0xF31A3A
+	.short 0x0A4B		; +2  IX (screen position)
+	.ascii "4"	; +4
+	.byte 0x17, 0x07	; F54450  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x004C	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x01, 0x0a	; F54457  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xa8, 0x00, 0x1b, 0x00, 0x36, 0x01, 0x1b, 0x00	; +2  '....6...'
+	.byte 0x01, 0x0a	; F54461  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xa7, 0x00, 0x52, 0x00, 0x37, 0x01, 0x52, 0x00	; +2  '..R.7.R.'
+	.byte 0x01, 0x0a	; F5446B  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0xa8, 0x00, 0x53, 0x00, 0x36, 0x01, 0x53, 0x00	; +2  '..S.6.S.'
+	.byte 0x02, 0x0a	; F54475  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0xa7, 0x00, 0x1c, 0x00, 0xa7, 0x00, 0x52, 0x00	; +2  '......R.'
+	.byte 0x02, 0x0a	; F5447F  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x36, 0x01, 0x1b, 0x00, 0x36, 0x01, 0x53, 0x00	; +2  '6...6.S.'
+	.byte 0x02, 0x0a	; F54489  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x37, 0x01, 0x1c, 0x00, 0x37, 0x01, 0x52, 0x00	; +2  '7...7.R.'
+	.byte 0x17, 0x10	; F54493  op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0006, 0x0007	; +2  the two words
+	.ascii "SOUND MODE"	; +6
+	.byte 0x09, 0x0a	; F544A3  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x44, 0x00, 0x10, 0x00	; +2  '....D...'
+
+; --------------------------------------------------------------------------
+; DL_SoundEditBar -- a UI display list, 6 records, 0xF544AD-0xF544EA
+; Run by: `lda XWA,0xf544ad` at 0xF536F2 with END 0xF544EB pushed just
+;         before it, then `call` at 0xF536F8 -> interpreter A
+; Text it draws: 'WRITE'; 'SOUND EDIT'
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF544AD-0xF544EA exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_SoundEditBar:
+	.byte 0x17, 0x10	; F544AD  op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0006, 0x0007	; +2  the two words
+	.ascii "SOUND EDIT"	; +6
+	.byte 0x20, 0x09	; F544BD  op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x05A2		; +2  IX (screen position)
+	.ascii "WRITE"	; +4
+	.byte 0x17, 0x07	; F544C6  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x0025	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x09, 0x0a	; F544CD  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x04, 0x00, 0x04, 0x00, 0x44, 0x00, 0x10, 0x00	; +2  '....D...'
+	.byte 0x09, 0x0a	; F544D7  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x08, 0x00, 0x20, 0x00, 0x40, 0x00, 0x31, 0x00	; +2  '.. .@.1.'
+	.byte 0x09, 0x0a	; F544E1  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0a, 0x00, 0x22, 0x00, 0x3e, 0x00, 0x2f, 0x00	; +2  '..".>./.'
+
+; --------------------------------------------------------------------------
+; DL_DrawbarSettingPage -- a UI display list, 33 records, 0xF544EB-0xF54667
+; Run by: `lda XWA,0xf544eb` at 0xF537C1 with END 0xF54668 pushed just
+;         before it, then `call` at 0xF537C7 -> interpreter A
+; Text it draws: 'DSP EFFECT'; 'DRAWBAR SETTING'; 'PERCUSSIVE T0NE DECAY
+;                :'; 'PERCUSSIVE T0NE LEVEL  :'; 'DRAWBAR ATTACK TIME    :';
+;                'DRAWBAR RELEASE TIME   :'; 'ITEM'; 'VALUE'
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF544EB-0xF54667 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_DrawbarSettingPage:
+	.byte 0x20, 0x0e	; F544EB  op 20, 14 bytes -> handler 0xF31A3A
+	.short 0x0B0C		; +2  IX (screen position)
+	.ascii "DSP EFFECT"	; +4
+	.byte 0x17, 0x07	; F544F9  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x004C	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x07, 0x13	; F54500  op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x104C		; +2  IX (screen position)
+	.ascii "DRAWBAR SETTING"	; +4
+	.byte 0x07, 0x1c	; F54513  op 07, 28 bytes -> handler 0xF31A3A
+	.short 0x1456		; +2  IX (screen position)
+	.ascii "PERCUSSIVE T0NE DECAY  :"	; +4
+	.byte 0x07, 0x1c	; F5452F  op 07, 28 bytes -> handler 0xF31A3A
+	.short 0x179E		; +2  IX (screen position)
+	.ascii "PERCUSSIVE T0NE LEVEL  :"	; +4
+	.byte 0x07, 0x05	; F5454B  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17C2		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x07, 0x05	; F54550  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17E5		; +2  IX (screen position)
+	.byte 0x8d	; +4  '.'
+	.byte 0x17, 0x07	; F54555  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x009B	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F5455C  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x009B	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x07, 0x1c	; F54563  op 07, 28 bytes -> handler 0xF31A3A
+	.short 0x1AE6		; +2  IX (screen position)
+	.ascii "DRAWBAR ATTACK TIME    :"	; +4
+	.byte 0x17, 0x0a	; F5457F  op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0007, 0x00AF	; +2  the two words
+	.ascii "ITEM"	; +6
+	.byte 0x17, 0x0b	; F54589  op 17, 11 bytes -> handler 0xF31A52
+	.short 0x011C, 0x00AF	; +2  the two words
+	.ascii "VALUE"	; +6
+	.byte 0x07, 0x05	; F54594  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1E02		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x07, 0x05	; F54599  op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1E25		; +2  IX (screen position)
+	.byte 0x8e	; +4  '.'
+	.byte 0x07, 0x1c	; F5459E  op 07, 28 bytes -> handler 0xF31A3A
+	.short 0x1E2E		; +2  IX (screen position)
+	.ascii "DRAWBAR RELEASE TIME   :"	; +4
+	.byte 0x17, 0x07	; F545BA  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000, 0x00C2	; +2  the two words
+	.byte 0x10	; +6  '.'
+	.byte 0x17, 0x07	; F545C1  op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A, 0x00C2	; +2  the two words
+	.byte 0x11	; +6  '.'
+	.byte 0x09, 0x0a	; F545C8  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0xd8, 0x00, 0x42, 0x00, 0x38, 0x01, 0x53, 0x00	; +2  '..B.8.S.'
+	.byte 0x09, 0x0a	; F545D2  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0xda, 0x00, 0x44, 0x00, 0x36, 0x01, 0x51, 0x00	; +2  '..D.6.Q.'
+	.byte 0x09, 0x0a	; F545DC  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x08, 0x00, 0x96, 0x00, 0x1f, 0x00, 0xa7, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F545E6  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x20, 0x01, 0x96, 0x00, 0x37, 0x01, 0xa7, 0x00	; +2  ' ...7...'
+	.byte 0x09, 0x0a	; F545F0  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0a, 0x00, 0x98, 0x00, 0x1d, 0x00, 0xa5, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F545FA  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x22, 0x01, 0x98, 0x00, 0x35, 0x01, 0xa5, 0x00	; +2  '"...5...'
+	.byte 0x09, 0x0a	; F54604  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x08, 0x00, 0xbd, 0x00, 0x1f, 0x00, 0xce, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F5460E  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x20, 0x01, 0xbd, 0x00, 0x37, 0x01, 0xce, 0x00	; +2  ' ...7...'
+	.byte 0x09, 0x0a	; F54618  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x0a, 0x00, 0xbf, 0x00, 0x1d, 0x00, 0xcc, 0x00	; +2  '........'
+	.byte 0x09, 0x0a	; F54622  op 09, 10 bytes -> handler 0xF31A75
+	.byte 0x22, 0x01, 0xbf, 0x00, 0x35, 0x01, 0xcc, 0x00	; +2  '"...5...'
+	.byte 0x01, 0x0a	; F5462C  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x28, 0x00, 0x61, 0x00, 0x12, 0x01, 0x61, 0x00	; +2  '(.a...a.'
+	.byte 0x01, 0x0a	; F54636  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x27, 0x00, 0xd8, 0x00, 0x13, 0x01, 0xd8, 0x00	; +2  "'......."
+	.byte 0x01, 0x0a	; F54640  op 01, 10 bytes -> handler 0xF31A75
+	.byte 0x28, 0x00, 0xd9, 0x00, 0x12, 0x01, 0xd9, 0x00	; +2  '(.......'
+	.byte 0x02, 0x0a	; F5464A  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x27, 0x00, 0x62, 0x00, 0x27, 0x00, 0xd8, 0x00	; +2  "'.b.'..."
+	.byte 0x02, 0x0a	; F54654  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x12, 0x01, 0x61, 0x00, 0x12, 0x01, 0xd9, 0x00	; +2  '..a.....'
+	.byte 0x02, 0x0a	; F5465E  op 02, 10 bytes -> handler 0xF31A75
+	.byte 0x13, 0x01, 0x62, 0x00, 0x13, 0x01, 0xd8, 0x00	; +2  '..b.....'
+
+; --------------------------------------------------------------------------
+; DL_DrawbarParamValues -- a UI display list, 4 records, 0xF54668-0xF546A3
+; Run by: `lda XWA,0xf54668` at 0xF5389F with END 0xF546A4 pushed just
+;         before it, then `call` at 0xF538A5 -> interpreter B
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF54668-0xF546A3 exactly -- a miscount anywhere
+;           would end somewhere else.
+; ★ The pairing: four interpreter-B op-02 records, each printing a nibble of
+;                (0x2640)/(0x2641) through DLTableB_SignedNibble.  Each is
+;                placed exactly 25 cells after the START of one 24-character
+;                caption in DL_DrawbarSettingPage, so the value sits one
+;                cell past the colon: 'PERCUSSIVE T0NE DECAY  :' <- (0x2640)
+;                & 0x0F >> 0; 'PERCUSSIVE T0NE LEVEL  :' <- (0x2640) & 0xF0
+;                >> 4; 'DRAWBAR ATTACK TIME    :' <- (0x2641) & 0xF0 >> 4;
+;                'DRAWBAR RELEASE TIME   :' <- (0x2641) & 0x0F >> 0.
+; --------------------------------------------------------------------------
+DL_DrawbarParamValues:
+	.byte 0x02, 0x0f	; F54668  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0x0f, 0x00	; +4  mask, shift
+	.byte 0x07		; +6  swi 7 function
+	.long 0x00F546A4	; +7  -> DLTableB_SignedNibble
+	.byte 0x02, 0x00	; +11 entry width 2, +12
+	.short 0x146F		; +13 IX (screen position)
+	.byte 0x02, 0x0f	; F54677  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2640		; +2  RAM variable
+	.byte 0xf0, 0x04	; +4  mask, shift
+	.byte 0x07		; +6  swi 7 function
+	.long 0x00F546A4	; +7  -> DLTableB_SignedNibble
+	.byte 0x02, 0x00	; +11 entry width 2, +12
+	.short 0x17B7		; +13 IX (screen position)
+	.byte 0x02, 0x0f	; F54686  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0xf0, 0x04	; +4  mask, shift
+	.byte 0x07		; +6  swi 7 function
+	.long 0x00F546A4	; +7  -> DLTableB_SignedNibble
+	.byte 0x02, 0x00	; +11 entry width 2, +12
+	.short 0x1AFF		; +13 IX (screen position)
+	.byte 0x02, 0x0f	; F54695  op 02, 15 bytes -> handler 0xF31B21
+	.short 0x2641		; +2  RAM variable
+	.byte 0x0f, 0x00	; +4  mask, shift
+	.byte 0x07		; +6  swi 7 function
+	.long 0x00F546A4	; +7  -> DLTableB_SignedNibble
+	.byte 0x02, 0x00	; +11 entry width 2, +12
+	.short 0x1E47		; +13 IX (screen position)
+
+; --- 0xF546A4-0xF546C3  ascii (32 bytes) ---
+
+; --------------------------------------------------------------------------
+; DLTableB_SignedNibble -- 16 two-character cells, ` 0+1+2+3+4+5+6+7-8-7-6-5-4-3-2-1`
+; Read by: the four op-02 records of DL_DrawbarParamValues, at 0xF54668,
+;          0xF54677, 0xF54686, 0xF54695.  Each carries 0x00F546A4 at +7 and
+;          an entry width of 2 at +0x0B; opcode 02's interpreter-B handler
+;          is 0xF31B21 (see FINDINGS-ui-display-list-interpreter-b.md).
+; Entries: 16 x 2 = 32 bytes, and 16 is what the records' mask says (0x0F,
+;          and 0xF0 with shift 4).  Cell k reads ' 0' for k = 0, '+1'..'+7'
+;          for k = 1..7 and '-8'..'-1' for k = 8..15 -- the 4-bit
+;          two's-complement value, printed with a sign.
+; Evidence: the 32 bytes are read from the ROM and compared, cell by cell,
+;           with that formula in --selftest check I, including the LAST
+;           cell.
+; --------------------------------------------------------------------------
+DLTableB_SignedNibble:
+	.byte 0x20, 0x30, 0x2b, 0x31, 0x2b, 0x32, 0x2b, 0x33, 0x2b, 0x34, 0x2b, 0x35, 0x2b, 0x36, 0x2b, 0x37   ; F546A4   0+1+2+3+4+5+6+7
+	.byte 0x2d, 0x38, 0x2d, 0x37, 0x2d, 0x36, 0x2d, 0x35, 0x2d, 0x34, 0x2d, 0x33, 0x2d, 0x32, 0x2d, 0x31   ; F546B4  -8-7-6-5-4-3-2-1
+
+; --- 0xF546C4-0xF546D9  dl (22 bytes) ---
+
+; --------------------------------------------------------------------------
+; DL_ParamCursorBar -- a UI display list, 2 records, 0xF546C4-0xF546D9
+; Run by: `lda XWA,0xf546c4` at 0xF537FF with END 0xF546DA pushed just
+;         before it, then `call` at 0xF53805 -> interpreter B
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF546C4-0xF546D9 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_ParamCursorBar:
+	.byte 0x08, 0x0b	; F546C4  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x2641		; +2  RAM variable
+	.byte 0x03, 0x00	; +4  mask, shift
+	.byte 0x1b		; +6  swi 7 function
+	.long 0x00F546DA	; +7  -> ParamCursorRects
+	.byte 0x03, 0x0b	; F546CF  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2640		; +2  RAM variable
+	.byte 0x03, 0x00	; +4  mask, shift
+	.byte 0x05		; +6  swi 7 function
+	.long 0x00F546DA	; +7  -> ParamCursorRects
+
+; --- 0xF546DA-0xF54704  data (43 bytes) ---
+
+; --------------------------------------------------------------------------
+; ParamCursorRects -- 4 entries of four 16-bit words
+; Read by: DL_ParamCursorBar's two records, opcodes 08 and 03, whose handler
+;          DLB_Handler_Array8 (0xF31B57) does `sla 3,HL` before indexing --
+;          which is what fixes the entry at 8 bytes -- and then four `ld
+;          BC,(XIX+n)` at n = 0, 2, 4, 6.
+; Entries: 4, and 4 is what the records' mask says (0x03).  The words are
+;          (0x0029, y, 0x0110, y+15) for y = 0x80, 0x95, 0xAA, 0xBF -- first
+;          and third constant, second and fourth 15 apart, y stepping 21:
+;          four horizontal bands, one per parameter row of
+;          DL_DrawbarSettingPage.
+; Evidence: the two records that name it, at 0xF546C4/0xF546CF, carry mask
+;           0x03 -- so the index is 0..3 -- and 4 x 8 = 32 bytes reaches
+;           0xF546FA, where the next display list begins.
+; Unknown: what `swi 7` functions 0x1B and 0x05 do with the four words. The
+;          geometry above is arithmetic, not a decoded service.
+; --------------------------------------------------------------------------
+ParamCursorRects:
+	.byte 0x29, 0x00, 0x80, 0x00, 0x10, 0x01, 0x8f, 0x00   ; F546DA  ).......
+	.byte 0x29, 0x00, 0x95, 0x00, 0x10, 0x01, 0xa4, 0x00   ; F546E2  ).......
+	.byte 0x29, 0x00, 0xaa, 0x00, 0x10, 0x01, 0xb9, 0x00   ; F546EA  ).......
+	.byte 0x29, 0x00, 0xbf, 0x00, 0x10, 0x01, 0xce, 0x00   ; F546F2  ).......
+
+; --------------------------------------------------------------------------
+; DL_F546FA -- a UI display list, 1 record, 0xF546FA-0xF54704
+; Run by: `lda XWA,0xf546fa` at 0xF537DD with END 0xF54705 pushed just
+;         before it, then `call` at 0xF53805 -> interpreter B
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF546FA-0xF54704 exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_F546FA:
+	.byte 0x08, 0x0b	; F546FA  op 08, 11 bytes -> handler 0xF31B57
+	.short 0x2640		; +2  RAM variable
+	.byte 0x00, 0x00	; +4  mask, shift
+	.byte 0x1b		; +6  swi 7 function
+	.long 0x00F54710	; +7  -> ParamCursorRect_Single
+
+; --- 0xF54705-0xF5470F  dl (11 bytes) ---
+
+; --------------------------------------------------------------------------
+; DL_F54705 -- a UI display list, 1 record, 0xF54705-0xF5470F
+; Run by: `lda XWA,0xf54705` at 0xF53811 with END 0xF54710 pushed just
+;         before it, then `call` at 0xF53817 -> interpreter B
+; Evidence: the records above are framed by their own length bytes, and the
+;           walk consumes 0xF54705-0xF5470F exactly -- a miscount anywhere
+;           would end somewhere else.
+; --------------------------------------------------------------------------
+DL_F54705:
+	.byte 0x03, 0x0b	; F54705  op 03, 11 bytes -> handler 0xF31B57
+	.short 0x2640		; +2  RAM variable
+	.byte 0x00, 0x00	; +4  mask, shift
+	.byte 0x05		; +6  swi 7 function
+	.long 0x00F54710	; +7  -> ParamCursorRect_Single
+
+; --- 0xF54710-0xF54FBE  data (2223 bytes) ---
+
+; --------------------------------------------------------------------------
+; ParamCursorRect_Single -- one 8-byte entry, words 0x000B 0x0045
+;           0x008D 0x0050
+; Read by: DL_F546FA and DL_F54705, both with mask 0x00 -- so the entry
+;          index is always 0 and this array has exactly one entry.
+; Evidence: the two records carry 0x00F54710 at +7 and 0x00 at +4;
+;           0xF54710 + 8 = 0xF54718, where Bitmap_F54718 begins.
+; --------------------------------------------------------------------------
+ParamCursorRect_Single:
+	.byte 0x0b, 0x00, 0x45, 0x00, 0x8d, 0x00, 0x50, 0x00   ; F54710  ..E...P.
+
+; --------------------------------------------------------------------------
+; Bitmap_F54718_48x20 -- 120 bytes: 6 bytes per row x 20 rows
+; Read by: the opcode-03 interpreter-A records at 0xF542ED, 0xF54305, whose
+;          handler DLHandler_FarPtr (0xF31ABE) loads XIY from +2, IX from
+;          +6, BC from +8 and HL from +10 -- so BC IS the width in bytes and
+;          HL the row count.  Every one of them carries BC = 6 and HL = 20.
+; Evidence: 6 x 20 = 120 and 0xF54718 + 120 = 0xF54790, the next object in
+;           address order.
+; --------------------------------------------------------------------------
+Bitmap_F54718_48x20:
+	.byte 0x0f, 0x18, 0x14, 0x11, 0x12, 0x10, 0x12, 0x10, 0x12, 0x10, 0x12, 0x10, 0x12, 0x10, 0x12, 0x10   ; F54718  ................
+	.byte 0x13, 0x17, 0x1f, 0x0f, 0xff, 0x00, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54728  .......U........
+	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x55, 0x00, 0x00, 0x00, 0x00   ; F54738  ...........U....
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x55   ; F54748  ...............U
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff   ; F54758  ................
+	.byte 0xff, 0x00, 0x01, 0x57, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03   ; F54768  ...W............
+	.byte 0xfd, 0xfe, 0xff, 0xff, 0x80, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0   ; F54778  ................
+	.byte 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0x40, 0x80   ; F54788  ......@.
+
+; --------------------------------------------------------------------------
+; Bitmap_F54790_48x20 -- 120 bytes: 6 bytes per row x 20 rows
+; Read by: the opcode-03 interpreter-A records at 0xF542E1, 0xF542F9, whose
+;          handler DLHandler_FarPtr (0xF31ABE) loads XIY from +2, IX from
+;          +6, BC from +8 and HL from +10 -- so BC IS the width in bytes and
+;          HL the row count.  Every one of them carries BC = 6 and HL = 20.
+; Evidence: 6 x 20 = 120 and 0xF54790 + 120 = 0xF54808, the next object in
+;           address order.
+; --------------------------------------------------------------------------
+Bitmap_F54790_48x20:
+	.byte 0x0f, 0x18, 0x14, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13   ; F54790  ................
+	.byte 0x13, 0x17, 0x1f, 0x0f, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F547A0  ................
+	.byte 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff   ; F547B0  ....U...........
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0xff   ; F547C0  ........U.......
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff   ; F547D0  ............U...
+	.byte 0xff, 0x00, 0x01, 0xff, 0xfd, 0xff, 0xfd, 0xff, 0xfd, 0xff, 0xfd, 0xff, 0xfd, 0xff, 0xfd, 0xff   ; F547E0  ................
+	.byte 0x55, 0xfe, 0xff, 0xff, 0x80, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0   ; F547F0  U...............
+	.byte 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0x40, 0x80   ; F54800  ......@.
+
+; --------------------------------------------------------------------------
+; Bitmap_DrawbarA -- one drawbar sprite: 3 slices of 233 bytes
+; Read by: Drawbar_DrawColumn, as `base + DrawbarRowOffsets[value]`, blitted
+;          three times 1 byte x 0x7B rows with the source advanced by 233
+;          between slices -- so the drawn image is 24 pixels wide and 123
+;          rows tall, taken out of a 233-row slice.
+; Used by: the integer footages -- 16', 8', 4', 2', 1'.
+; Evidence: 3 x 233 = 699 and 0xF54808 + 699 = 0xF54AC3, the next object in
+;           address order.  The 110 zero bytes that end each slice are what
+;           the 123-row window leaves unused at offset 0.
+; --------------------------------------------------------------------------
+Bitmap_DrawbarA:
+	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x07, 0x1f, 0x1f, 0x1f, 0x1f   ; F54808  ................
+	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x07, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f   ; F54818  ................
+	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x07, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f   ; F54828  ................
+	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x07, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f   ; F54838  ................
+	.byte 0x1f, 0x1f, 0x1f, 0x07, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f   ; F54848  ................
+	.byte 0x1f, 0x03, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x07   ; F54858  ................
+	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x20, 0x20   ; F54868  ..............  
+	.byte 0x20, 0x7f, 0x80, 0x80, 0x7f, 0x3f, 0x20, 0x3f, 0x20, 0x3f, 0x1f, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54878   ....? ? ?......
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54888  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54898  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F548A8  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F548B8  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F548C8  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F548D8  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F548E8  .........
+	.byte 0x83, 0x01, 0x39, 0x39, 0x83, 0x83, 0x39, 0x39, 0x01, 0x83, 0xff, 0xff, 0xff, 0xff, 0x01, 0x01   ; F548F1  ..99..99........
+	.byte 0xf9, 0xf1, 0xe3, 0xe7, 0xc7, 0xcf, 0xcf, 0xcf, 0xff, 0xff, 0xff, 0xff, 0x83, 0x01, 0x39, 0x3f   ; F54901  ..............9?
+	.byte 0x03, 0x01, 0x39, 0x39, 0x01, 0x83, 0xff, 0xff, 0xff, 0xff, 0x01, 0x01, 0x3f, 0x3f, 0x03, 0x01   ; F54911  ..99........??..
+	.byte 0xf9, 0x39, 0x01, 0x83, 0xff, 0xff, 0xff, 0xff, 0xf3, 0xe3, 0xc3, 0xc3, 0x93, 0x93, 0x01, 0x01   ; F54921  .9..............
+	.byte 0xf3, 0xf3, 0xff, 0xff, 0xff, 0xff, 0x83, 0x01, 0x39, 0xf9, 0xe3, 0xe3, 0xf9, 0x39, 0x01, 0x83   ; F54931  ........9....9..
+	.byte 0xff, 0xff, 0xff, 0xff, 0x83, 0x01, 0x39, 0xf9, 0xf1, 0xe3, 0xc7, 0x8f, 0x01, 0x01, 0xff, 0xff   ; F54941  ......9.........
+	.byte 0xff, 0xff, 0xe7, 0xc7, 0xc7, 0xe7, 0xe7, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xff, 0xff, 0x00, 0x00   ; F54951  ................
+	.byte 0x00, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0xff, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54961  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54971  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54981  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54991  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F549A1  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F549B1  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F549C1  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F549D1  .........
+	.byte 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2   ; F549DA  ................
+	.byte 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2   ; F549EA  ................
+	.byte 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2   ; F549FA  ................
+	.byte 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2   ; F54A0A  ................
+	.byte 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2   ; F54A1A  ................
+	.byte 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2   ; F54A2A  ................
+	.byte 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0xf2, 0x0e, 0x0e   ; F54A3A  ................
+	.byte 0x0e, 0xfe, 0x3e, 0x3e, 0xfe, 0xfe, 0x0e, 0xfe, 0x0e, 0xfe, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54A4A  ..>>............
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54A5A  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54A6A  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54A7A  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54A8A  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54A9A  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54AAA  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54ABA  .........
+
+; --------------------------------------------------------------------------
+; Bitmap_DrawbarB -- one drawbar sprite: 3 slices of 233 bytes
+; Read by: Drawbar_DrawColumn, as `base + DrawbarRowOffsets[value]`, blitted
+;          three times 1 byte x 0x7B rows with the source advanced by 233
+;          between slices -- so the drawn image is 24 pixels wide and 123
+;          rows tall, taken out of a 233-row slice.
+; Used by: the fractional footages -- 5 1/3', 2 2/3', 1 3/5', 1 1/3'.
+; Evidence: 3 x 233 = 699 and 0xF54AC3 + 699 = 0xF54D7E, the next object in
+;           address order.  The 110 zero bytes that end each slice are what
+;           the 123-row window leaves unused at offset 0.
+; --------------------------------------------------------------------------
+Bitmap_DrawbarB:
+	.byte 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x07, 0x1d, 0x1f, 0x17, 0x1f   ; F54AC3  ................
+	.byte 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x07, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f   ; F54AD3  ................
+	.byte 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x07, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f   ; F54AE3  ................
+	.byte 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x07, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f   ; F54AF3  ................
+	.byte 0x1d, 0x1f, 0x17, 0x07, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f   ; F54B03  ................
+	.byte 0x1d, 0x03, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x07   ; F54B13  ................
+	.byte 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x17, 0x1f, 0x1d, 0x1f, 0x20, 0x20   ; F54B23  ..............  
+	.byte 0x20, 0x7f, 0x80, 0x80, 0x7f, 0x3f, 0x20, 0x3f, 0x20, 0x3f, 0x1f, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54B33   ....? ? ?......
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54B43  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54B53  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54B63  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54B73  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54B83  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54B93  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54BA3  .........
+	.byte 0x83, 0x01, 0x39, 0x39, 0x83, 0x83, 0x39, 0x39, 0x01, 0x83, 0x77, 0xff, 0xdd, 0xff, 0x01, 0x01   ; F54BAC  ..99..99..w.....
+	.byte 0xf9, 0xf1, 0x63, 0xe7, 0xc5, 0xcf, 0x4f, 0xcf, 0xfd, 0xff, 0x77, 0xff, 0x83, 0x01, 0x39, 0x3f   ; F54BBC  ..c...O...w...9?
+	.byte 0x03, 0x01, 0x39, 0x39, 0x01, 0x83, 0x77, 0xff, 0xdd, 0xff, 0x01, 0x01, 0x3f, 0x3f, 0x03, 0x01   ; F54BCC  ..99..w.....??..
+	.byte 0xf9, 0x39, 0x01, 0x83, 0xdd, 0xff, 0x77, 0xff, 0xd3, 0xe3, 0x43, 0xc3, 0x93, 0x93, 0x01, 0x01   ; F54BDC  .9....w...C.....
+	.byte 0xf3, 0xf3, 0x7f, 0xff, 0xdd, 0xff, 0x83, 0x01, 0x39, 0xf9, 0x63, 0xe3, 0xf9, 0x39, 0x01, 0x83   ; F54BEC  ........9.c..9..
+	.byte 0xdd, 0xff, 0x77, 0xff, 0x83, 0x01, 0x39, 0xf9, 0xd1, 0xe3, 0x47, 0x8f, 0x01, 0x01, 0x77, 0xff   ; F54BFC  ..w...9...G...w.
+	.byte 0xdd, 0xff, 0x67, 0xc7, 0xc5, 0xe7, 0x67, 0xe7, 0xe5, 0xe7, 0x43, 0xc3, 0xfd, 0xff, 0x00, 0x00   ; F54C0C  ..g...g...C.....
+	.byte 0x00, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0xff, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54C1C  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54C2C  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54C3C  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54C4C  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54C5C  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54C6C  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54C7C  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54C8C  .........
+	.byte 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2   ; F54C95  ..r...r...r...r.
+	.byte 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2   ; F54CA5  ..r...r...r...r.
+	.byte 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2   ; F54CB5  ..r...r...r...r.
+	.byte 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2   ; F54CC5  ..r...r...r...r.
+	.byte 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2   ; F54CD5  ..r...r...r...r.
+	.byte 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2   ; F54CE5  ..r...r...r...r.
+	.byte 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x72, 0xf2, 0xd2, 0xf2, 0x0e, 0x0e   ; F54CF5  ..r...r...r.....
+	.byte 0x0e, 0xfe, 0x3e, 0x3e, 0xfe, 0xfe, 0x0e, 0xfe, 0x0e, 0xfe, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D05  ..>>............
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D15  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D25  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D35  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D45  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D55  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D65  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D75  .........
+
+; --------------------------------------------------------------------------
+; Bitmap_F54D7E_304x6 -- 228 bytes: 38 bytes per row x 6 rows
+; Read by: the opcode-03 interpreter-A record at 0xF54325, whose handler
+;          DLHandler_FarPtr (0xF31ABE) loads XIY from +2, IX from +6, BC
+;          from +8 and HL from +10 -- so BC IS the width in bytes and HL the
+;          row count.  Every one of them carries BC = 38 and HL = 6.
+; Evidence: 38 x 6 = 228 and 0xF54D7E + 228 = 0xF54E62, the next object in
+;           address order.
+; --------------------------------------------------------------------------
+Bitmap_F54D7E_304x6:
+	.byte 0x0f, 0x0f, 0x1f, 0x1f, 0x3e, 0x30, 0xfe, 0xfc, 0xf0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D7E  ....>0..........
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x07, 0x03, 0x03, 0x01, 0x01, 0xff, 0xfe   ; F54D8E  ................
+	.byte 0xfc, 0xf0, 0xc0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54D9E  ................
+	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7f, 0x3e, 0x1c, 0x08, 0xc0, 0x80, 0x00, 0x00   ; F54DAE  .........>......
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x7f   ; F54DBE  ................
+	.byte 0x1f, 0x07, 0x01, 0x00, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54DCE  .........@......
+	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x7f, 0x0f, 0x01, 0x00, 0x00, 0xe0, 0xf0, 0xf8, 0xfc   ; F54DDE  ................
+	.byte 0x3e, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f, 0x1f   ; F54DEE  >...............
+	.byte 0x03, 0x00, 0x00, 0x00, 0xf8, 0xfc, 0xff, 0x3f, 0x03, 0x00, 0x00, 0x00, 0x00, 0x80, 0xc0, 0x70   ; F54DFE  .......?.......p
+	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x7f, 0x03, 0x00, 0x00, 0x00, 0xfc, 0xff, 0xff, 0x1f   ; F54E0E  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0xc0, 0xf0, 0xfc, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x1f   ; F54E1E  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0xff, 0xff, 0x07, 0x00, 0x00, 0x00, 0x80, 0xf0, 0xfe, 0x1f, 0x00   ; F54E2E  ................
+	.byte 0x01, 0x00, 0x00, 0x00, 0xc0, 0xf0, 0xff, 0x3f, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7f, 0x01   ; F54E3E  .......?........
+	.byte 0x00, 0x00, 0xc0, 0xf8, 0xff, 0xff, 0x07, 0x00, 0x00, 0x00, 0x00, 0xe0, 0xfc, 0x0f, 0x00, 0x00   ; F54E4E  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfe, 0xf8, 0x00, 0x00   ; F54E5E  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54E6E  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54E7E  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54E8E  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54E9E  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54EAE  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54EBE  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54ECE  ............
+
+; --------------------------------------------------------------------------
+; Bitmap_F54D7E_Duplicate -- 228 bytes byte-identical to Bitmap_F54D7E_304x6
+; Evidence: the 228-byte block occurs exactly TWICE in the whole prom_b
+;           image, at 0xF54D7E and here; nothing in either image names this
+;           copy.
+; Unknown: how it got here, and what the 10 bytes and 110 zero bytes in
+;          front of it are.  prom_b already carries one dead duplicate of
+;          exactly this kind -- Table_F4EF40, 36 bytes identical to 0xF4EF1C
+;          with no reference anywhere -- so this is recorded and not
+;          explained.
+; --------------------------------------------------------------------------
+Bitmap_F54D7E_Duplicate:
+	.byte 0x0f, 0x0f, 0x1f, 0x1f, 0x3e, 0x30, 0xfe, 0xfc, 0xf0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54EDA  ....>0..........
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x07, 0x03, 0x03, 0x01, 0x01, 0xff, 0xfe   ; F54EEA  ................
+	.byte 0xfc, 0xf0, 0xc0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54EFA  ................
+	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7f, 0x3e, 0x1c, 0x08, 0xc0, 0x80, 0x00, 0x00   ; F54F0A  .........>......
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x7f   ; F54F1A  ................
+	.byte 0x1f, 0x07, 0x01, 0x00, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F54F2A  .........@......
+	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x7f, 0x0f, 0x01, 0x00, 0x00, 0xe0, 0xf0, 0xf8, 0xfc   ; F54F3A  ................
+	.byte 0x3e, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f, 0x1f   ; F54F4A  >...............
+	.byte 0x03, 0x00, 0x00, 0x00, 0xf8, 0xfc, 0xff, 0x3f, 0x03, 0x00, 0x00, 0x00, 0x00, 0x80, 0xc0, 0x70   ; F54F5A  .......?.......p
+	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x7f, 0x03, 0x00, 0x00, 0x00, 0xfc, 0xff, 0xff, 0x1f   ; F54F6A  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0xc0, 0xf0, 0xfc, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x1f   ; F54F7A  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0xff, 0xff, 0x07, 0x00, 0x00, 0x00, 0x80, 0xf0, 0xfe, 0x1f, 0x00   ; F54F8A  ................
+	.byte 0x01, 0x00, 0x00, 0x00, 0xc0, 0xf0, 0xff, 0x3f, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7f, 0x01   ; F54F9A  .......?........
+	.byte 0x00, 0x00, 0xc0, 0xf8, 0xff, 0xff, 0x07, 0x00, 0x00, 0x00, 0x00, 0xe0, 0xfc, 0x0f, 0x00, 0x00   ; F54FAA  ................
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00   ; F54FBA  .....
+
+; --- 0xF54FBF-0xF54FFF  fill (65 bytes) ---
+	.fill	65, 1, 0x0E	; asserted a single value
 
 ; ==============================================================================
 ; 0xF55000-0xF5535A -- PARAMETER-EDIT PRIMITIVES AND TWO TABLE ACCESSORS
