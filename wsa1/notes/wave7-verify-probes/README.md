@@ -158,11 +158,20 @@ chunk>=32  whole-run rule 0/1084 (0.0%)   with <=8-byte trim  35/1084 (3.2%)
 
 ## What is deliberately NOT here
 
-About thirty other scratch files — `try1.py`…`try5.py`, `probe1.py`…`probe8.py`, `codesegs*.py`,
-`islands.py`, `refs*.py`, `expl*.py` and similar — were lane **scaffolding**: the exploration each
-lane did before writing its committed `notes/*_layout.py`. They are disposable because the committed
-script is the durable form of the same derivation, and each lane's verifier was required to re-run
-that script and confirm it reproduces every number the dossier quotes.
+Thirty-two other scratch files — `try1.py`…`try5.py`, `probe1.py`…`probe8.py`, `codesegs*.py`,
+`islands.py`, `refs*.py`, `expl*.py`, `ext*.py`, `ctx.py`, `hx.py`, `layout.py`, `proto.py`,
+`prov.py`, `entrypoints.py`, `checktargets.py`, `tile.py`, `verify_tile.py` — were lane
+**scaffolding**: the exploration each lane did before writing its committed `notes/*_layout.py`.
+They are disposable because the committed script is the durable form of the same derivation, and
+each lane's verifier was required to re-run that script and confirm it reproduces every number the
+dossier quotes. `tile.py` and `verify_tile.py` additionally read scratch `.txt` intermediates that
+no longer exist; their job is done by `wave7_tile_b1_f17559.py`, which regenerates its input from
+the committed lane script instead.
+
+Every number asserted in a wave-7 commit message, notes document or blog draft has a reproducer in
+this repository. The two that did not — the 38-start convergence figures and the summed-thunk-extent
+ranking — became `wave7_pa_write_census.py --adjudicate` and `wave7_frontier_table.py --sums` rather
+than staying in a shell heredoc.
 
 The probes kept here are the ones that are **not** reproduced by any committed script, because they
 were written to disagree with one.
