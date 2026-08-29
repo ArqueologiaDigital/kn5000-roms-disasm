@@ -51,3 +51,20 @@ scripts, written before they died.
 **Do not convert any of those three spans on the strength of what is in `round1-results.json`.**
 Every documented error in this project's history was plausible and gate-clean, and the three lanes
 above are exactly the ones nothing has attacked.
+
+## Round 2 outcome (2026-08-29)
+
+| lane | outcome |
+|---|---|
+| a4 `0xF85FF9` | **Not refuted as a layout, REFUTED as a dossier** — convert the tiling, do not copy the prose. 45 segments tile exactly; all 28 instruction citations decode AT the cited address (no a2-style off-by-one). Seven prose claims that would have become routine headers are wrong. NOT YET CONVERTED. |
+| b1 `0xF17559` | Re-audited after refutation. 5 of 6 AMBIG segments resolved **by mechanism**, 4 of 6 shown to be reached at all; 19 bytes (0.12% of the span) reached by nothing the census sees. Eight corrections (C1–C8) required **before** conversion. NOT YET CONVERTED. |
+| b2 `0xF4F000` | **Safe to convert on the layout unchanged** — 43 segments, every correction is to prose, no boundary moves. NOT YET CONVERTED. |
+| writer prom_a | ✅ `0xFA5AEB-0xFAA000` converted, 17,685 B, 227 labels, **100 semantic**. |
+| writer prom_c | ✅ 15 routines named with evidence from a graded census of 539. |
+| writer prom_d | ✅ three descriptor blocks reframed as array+pool; new region `ToneDB_DescCurveBank`; 1,302 labels. |
+| crossref X1 | TLCS-900: 68 shared register NAMES, **exactly one shared ADDRESS**. A sibling SFR address imported here is wrong 67 times in 68. |
+| crossref X2 | MN10300: three Latin glyph faces shared byte-for-byte; 195 of 252 sound names shared; 74 runs at the 81-byte stride. Code negative **proven**: 0 of 389 runs contains an instruction start. |
+
+**prom_b is still the frontier**: 159,459 bytes in 124 spans, and the three audited spans
+(`0xF17559`, `0xF4F000`, and a4's `0xF85FF9` in prom_a) are all cleared for conversion but not
+converted. That is round 3's work, and b1 needs its eight corrections applied first.
