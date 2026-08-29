@@ -39570,7 +39570,7 @@ Clamp_ToRange_Word__FA75B6:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; ★ WHAT IT COMPUTES.  The body is fifteen instructions and there is nothing else in it:
+; ★ WHAT IT COMPUTES.  The body is thirty instructions and there is nothing else in it:
 ;     0xFA75BF  ld L,(XIZ+0x08)          the DEPTH, tested as a signed byte
 ;     0xFA75C2  ld H,(XIZ+0x0a)          the POSITION
 ;     0xFA75C5  res 0x07,H               ...taken modulo 0x80
@@ -39582,8 +39582,13 @@ Clamp_ToRange_Word__FA75B6:
 ;     0xFA75FA  call Shift16_ArithRight(product, (XIZ+0x0c))
 ;   The depth's SIGN is therefore not carried into the product -- it chooses which end of
 ;   the coefficient curve is read.
-; ★ THE RESULT IS NEVER POSITIVE.  All 128 entries of PitchBend_ScaleCoeff_Table are in
-;   [-64, 0] as signed bytes, so the product is <= 0 and so is the shifted result.  That is
+; ★ THE RESULT IS <= 0 FOR EVERY INPUT EXCEPT ONE.  All 128 entries of
+;   PitchBend_ScaleCoeff_Table are in [-64, -1] as signed bytes, so the product is normally
+;   <= 0 and so is the shifted result.  ⚠ CORRECTED: this line used to read "THE RESULT IS
+;   NEVER POSITIVE", which contradicted the 0x80 paragraph FOUR LINES BELOW in this same
+;   header -- depth byte 0x80 negates to itself, the product changes sign, and an exhaustive
+;   sweep reaches +1. The clamp exists for exactly that case, which is why the header
+;   describing the clamp and the header denying the case could both be here at once. That is
 ;   why Voice_StageRegs_0500_08C0_AB adds 0x7F: with a count of 6 the value lands in
 ;   [-127, 0], 0x7F + it lands in [0, 0x7F] -- exactly the 7-bit low byte of register
 ;   0x0500 + chan -- and the caller's Clamp_ToRange_Word(x, 0, 0x7F) does nothing at all.
@@ -110921,7 +110926,7 @@ Double_Add__FCA616:
 ;              be counted (round-2 audit F12; the same caveat applies to the
 ;              1,274 total in notes/prom_c_runtime_check.py).
 ; Inputs:  two doubles; XIY = the result pointer.  `retd 0x0010`.
-; Evidence: fifteen instructions, of which the only arithmetic is
+; Evidence: twenty-five instructions, of which the only arithmetic is
 ;          `ld WA,QIX / xor WA,0x8000 / ld QIX,WA` on the SECOND operand's high
 ;          halfword, followed by `call Double_Add` with both operands pushed in
 ;          their original order.  It then copies Double_Add's result out through

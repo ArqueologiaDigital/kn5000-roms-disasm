@@ -10522,7 +10522,7 @@ DSP_WriteChannelRegs_Inner:
 ; ---------------------------------------------------------------------
 ; PanelTask_EntryVectors -- six `jp addr24` slots at the module's head
 ;
-; Slots 0,1,2 -> PanelTask_Reset; slot 3 -> PanelTask_ResetAndPoll;
+; Slots 0,1,2 -> PanelTask_Reset; slot 3 -> PanelTask_StepAndCheckRequest;
 ; slots 4,5 -> PanelTask_Return, a bare `ret`.
 ; Evidence: six consecutive 4-byte `jp` (opcode 0x1B) at 0xF86000-0xF86017,
 ;          all three targets inside this span.  The pad at 0xF85FF9-0xF85FFF
@@ -10543,7 +10543,7 @@ PanelTask_Reset:
 	calr .LF86023                                 ; F86018  1e 08 00
 PanelTask_Return:
 	ret                                           ; F8601B  0e
-PanelTask_ResetAndPoll:
+PanelTask_StepAndCheckRequest:
 	calr .LF86066                                 ; F8601C  1e 47 00
 	calr 0x0ac7                                   ; F8601F  1e c7 0a   calr 0xf86ae9
 	ret                                           ; F86022  0e
@@ -10557,7 +10557,7 @@ PanelTask_ResetAndPoll:
 ;          A and W are both 1, or both 2 when (0x7F02) & 0xF0 == 0x10.
 ; Evidence: the 0x40AA store at 0xF86055 is a 16-bit store to 0x2070, so it
 ;          writes 0xAA to (0x2070) and 0x40 to (0x2071).  0x40 is bit 6, the
-;          bit PanelScreen_ApplyHomeRequest tests at 0xF862A6, and every
+;          bit PanelScreen_ApplyRequest tests at 0xF862A6, and every
 ;          live entry of PanelHold_ScreenRequest has the same 0x40 high
 ;          byte -- so (0x2070) is a screen id and (0x2071) its request flags.
 ;          Setting the two `previous` cells to 0xFF is what makes the first
@@ -10610,9 +10610,9 @@ sub_F8605C:
 ; PanelTask_Step -- one pass of the panel/screen state machine
 ;
 ; Called from: thunk slot T_F40F34 (`jp 0x00F86066`), whose one proven call
-;          site is prom_a 0xF8210E; also `calr` from PanelTask_ResetAndPoll
+;          site is prom_a 0xF8210E; also `calr` from PanelTask_StepAndCheckRequest
 ;          0xF8601C.
-; Body, in order: PanelState_CheckHomeAllowed, PanelState_Sync2095,
+; Body, in order: PanelState_CheckRequestAllowed, PanelState_Sync2095,
 ;          PanelState_LatchPrevious, PanelState_RunRequests,
 ;          PanelMode_To2076, PanelState_UpdateFlags2092,
 ;          PanelState_Update207A, PanelState_ClearOnChange,
@@ -10658,7 +10658,7 @@ sub_F86093:
 ; Called from: PanelTask_Step 0xF8608F (`calr`), and nothing else.
 ; Outputs: if (0x209A) != 0 then (0x2073) = (0x209A) and (0x209A) = 0.
 ; Evidence: (0x2073) is the cell PanelTimer_Screen2073 counts down and that
-;          PanelScreen_ApplyHomeRequest reloads with 0x70, so (0x209A) is a
+;          PanelScreen_ApplyRequest reloads with 0x70, so (0x209A) is a
 ;          one-shot request to preload that counter.
 ; ---------------------------------------------------------------------
 .LF86094:
@@ -10738,8 +10738,8 @@ PanelState_LatchPrevious:   ; entry: calr from 0xF8606C
 ;
 ; Called from: PanelTask_Step 0xF8606F (`calr`), and nothing else.
 ; Body:    if (0x2071) != 0: PanelScreen_ApplyPendingId (bit 2),
-;          PanelScreen_ApplyHomeRequest (bits 6,5), PanelScreen_ApplyModeChange
-;          (bit 1), PanelScreen_ApplyHomeForce (bit 7); then
+;          PanelScreen_ApplyRequest (bits 6,5), PanelScreen_ApplyModeChange
+;          (bit 1), PanelScreen_ApplyRequestForced (bit 7); then
 ;          `and (0x2071),0x09` -- keeping only bits 0 and 3, the two
 ;          PanelButton_RunPending consumes.
 ; Evidence: the mask 0x09 at 0xF86115 and the mask 0xF6 at 0xF8612C are
@@ -11021,7 +11021,7 @@ PanelScreen_ApplyPendingId:   ; entry: calr from 0xF86109
 	ret                                           ; F86294  0e
 
 ; ---------------------------------------------------------------------
-; PanelScreen_ApplyHomeRequest -- (0x207C) := (0x2070), the requested screen
+; PanelScreen_ApplyRequest -- (0x207C) := (0x2070), the requested screen
 ;
 ; Called from: PanelState_RunRequests 0xF8610C (`calr`), and nothing else.
 ; Guard:   bit 0 of (0x2095) or bit 4 of (0x2075) clear, then bit 6 or bit 5
@@ -11032,7 +11032,7 @@ PanelScreen_ApplyPendingId:   ; entry: calr from 0xF86109
 ;          PanelHold_ScreenRequest write together with the screen id.
 ; ---------------------------------------------------------------------
 .LF86295:
-PanelScreen_ApplyHomeRequest:   ; entry: calr from 0xF8610C
+PanelScreen_ApplyRequest:   ; entry: calr from 0xF8610C
 	m_bit 0, MD16, 0x2095                         ; F86295  f1 95 20 c8   bit 0,(0x2095)
 	jr nz, .LF862A2                               ; F86299  6e 07
 	m_bit 4, MD16, 0x2075                         ; F8629B  f1 75 20 cc   bit 4,(0x2075)
@@ -11176,18 +11176,18 @@ PanelMode_ToScreenId:   ; entry: calr from 0xF8632A
 	ret                                           ; F8639B  0e
 
 ; ---------------------------------------------------------------------
-; PanelScreen_ApplyHomeForce -- (0x207C) := (0x2070) and clear (0x2073)
+; PanelScreen_ApplyRequestForced -- (0x207C) := (0x2070) and clear (0x2073)
 ;
 ; Called from: PanelState_RunRequests 0xF86112 (`calr`), and nothing else.
 ; Guard:   bit 0 of (0x2095) or bit 4 of (0x2075) clear, then bit 7 of (0x2071).
-; Differs from PanelScreen_ApplyHomeRequest only in leaving (0x2083) alone
+; Differs from PanelScreen_ApplyRequest only in leaving (0x2083) alone
 ; and in zeroing (0x2073) instead of loading it with 0x70.
 ; Evidence: `bit 0x07,A` at 0xF863AC is the guard -- bit 7 of (0x2071), the
-;          same bit PanelState_CheckHomeAllowed tests at 0xF86B1F on the
+;          same bit PanelState_CheckRequestAllowed tests at 0xF86B1F on the
 ;          high half of the 16-bit load from (0x2070).
 ; ---------------------------------------------------------------------
 .LF8639C:
-PanelScreen_ApplyHomeForce:   ; entry: calr from 0xF86112
+PanelScreen_ApplyRequestForced:   ; entry: calr from 0xF86112
 	m_bit 0, MD16, 0x2095                         ; F8639C  f1 95 20 c8   bit 0,(0x2095)
 	jr nz, .LF863A8                               ; F863A0  6e 06
 	m_bit 4, MD16, 0x2075                         ; F863A2  f1 75 20 cc   bit 4,(0x2075)
@@ -12418,26 +12418,26 @@ List2030_AppendRegs:   ; entry: calr from 0xF8625A, 0xF868D7, prom_b directory s
 	ret                                           ; F86AE8  0e
 
 ; ---------------------------------------------------------------------
-; PanelState_CheckHomeAllowed -- veto the pending home jump on two screens
+; PanelState_CheckRequestAllowed -- veto the pending home jump on two screens
 ;
 ; Called from: thunk slots T_F40F48 AND T_F40F4C (both `jp 0x00F86AE9`);
 ;          T_F40F4C has 2 proven call sites (prom_a 0xFE01F1, 0xFE70AB) and
-;          T_F40F48 none.  Also `calr` from PanelTask_ResetAndPoll 0xF8601F
+;          T_F40F48 none.  Also `calr` from PanelTask_StepAndCheckRequest 0xF8601F
 ;          and PanelTask_Step 0xF86066.
 ; Body:    bit 6 of (0x2071) and bit 4 of (0x2075) both set, with (0x207C)
 ;          either 0x01 or 0xDA -> `and (0x2071),0xBF`, i.e. drop the home
 ;          request.  Then, unless (bit 0 of (0x2092) is clear AND bit 4 of
 ;          (0x2075) is set -- which only does `and (0x2095),0xFE`), if bit 7
 ;          of (0x2071) is set the low byte of (0x2070) is compared against
-;          the two entries of PanelHome_ScreenIds; a match gives
+;          the two entries of PanelState_AllowedScreenIds; a match gives
 ;          `or (0x2095),0x03` and (0x20A2) = 0.
 ; Evidence: `ld WA,(0x2070)` at 0xF86B1B is a 16-bit load and `bit 0x07,W`
 ;          at 0xF86B1F then tests bit 7 of the HIGH half -- which is byte
 ;          (0x2071), the same flag byte PanelState_Init writes at 0xF86055
-;          and PanelScreen_ApplyHomeForce tests at 0xF863AC.  That is a
+;          and PanelScreen_ApplyRequestForced tests at 0xF863AC.  That is a
 ;          third independent witness for the (0x2070)/(0x2071) pairing.
 ; ---------------------------------------------------------------------
-PanelState_CheckHomeAllowed:   ; entry: calr from 0xF8601F, 0xF86066, prom_b directory slot T_F40F48, prom_b directory slot T_F40F4C
+PanelState_CheckRequestAllowed:   ; entry: calr from 0xF8601F, 0xF86066, prom_b directory slot T_F40F48, prom_b directory slot T_F40F4C
 	m_bit 6, MD16, 0x2071                         ; F86AE9  f1 71 20 ce   bit 6,(0x2071)
 	jr z, .LF86B08                                ; F86AED  66 19
 	m_bit 4, MD16, 0x2075                         ; F86AEF  f1 75 20 cc   bit 4,(0x2075)
@@ -12807,19 +12807,26 @@ PanelMode_To2076:   ; entry: calr from 0xF86072
 ; --- 0xF86CC9-0xF86CCA  table (2 bytes) ---
 
 ; ---------------------------------------------------------------------
-; PanelHome_ScreenIds -- 2 bytes: 0xA1, 0xA0
+; PanelState_AllowedScreenIds -- 2 bytes: 0xA1, 0xA0
 ;
 ; Read by: ONE site, `ld XIX,0x00F86CC9 / ld XBC,2 / cp A,(XIX+) / djnz BC`
-;          at 0xF86B24-0xF86B33 (PanelState_CheckHomeAllowed).
+;          at 0xF86B24-0xF86B33 (PanelState_CheckRequestAllowed).
 ; ENTRY COUNT 2, pinned twice: the literal `ld XBC,0x00000002` IS the loop
 ;          count, and 0xF86CCB begins the 438-byte 0x00 pad.
 ; Evidence: `ld XIX,0x00f86cc9` at 0xF86B24 is the only instruction in
 ;          either image that names this base; `cp A,(XIX+)` at 0xF86B2E
 ;          with `djnz BC` at 0xF86B33 is what makes it a 2-entry scan.
-; Note:    0xAA -- the id PanelState_Init installs as the home screen -- is
-;          NOT one of these two.
+; ⚠ NOT ESTABLISHED: what these two ids MEAN. The table was called
+;          PanelHome_ScreenIds and its Note asserted "0xAA -- the id
+;          PanelState_Init installs as the home screen" as fact, then said 0xAA
+;          is not in the table -- telling the reader it is the home-screen list
+;          and that the home screen is not in it. Both halves were wrong: 0xAA is
+;          only the power-on default, and the morpheme "home" occurs ZERO times
+;          in all four ROM images (grep -aic home over each -> 0). What IS
+;          established is the mechanism above: a 2-entry scan that gates whether
+;          a screen request is allowed. The two ids are 0xA1 and 0xA0.
 ; ---------------------------------------------------------------------
-PanelHome_ScreenIds:
+PanelState_AllowedScreenIds:
 	.byte 0xa1, 0xa0   ; F86CC9
 
 ; --- 0xF86CCB-0xF86E80  0x00 pad (438 bytes) ---
@@ -111048,7 +111055,7 @@ sub_FD5F52:
 ;          byte -- prom_a 0xF86055 writes the pair as one 16-bit 0x40AA,
 ;          PanelHold_ScreenRequest's live entries are all 0x40NN, and
 ;          PanelHold_Tick stores a whole WORD there (0xF86C82).  0x80 is
-;          bit 7, which is exactly the bit PanelScreen_ApplyHomeForce
+;          bit 7, which is exactly the bit PanelScreen_ApplyRequestForced
 ;          tests at 0xF863AC; 0x10 is bit 4.  So both arms of this routine
 ;          raise a request the panel task already has a handler for.
 ;          All five citations decode at the address given -- check Q1.
@@ -111084,8 +111091,8 @@ PanelScreen_PostRequest:
 ; Called from: 28 proven call sites.
 ; Body:    `ld C,(0x2071) / and C,0xd0` -> A = 1 when non-zero, else 0.
 ; Evidence: 0xD0 is bits 7, 6 and 4 -- exactly the three request bits the
-;          panel task acts on: bit 7 PanelScreen_ApplyHomeForce (0xF863AC),
-;          bit 6 PanelScreen_ApplyHomeRequest (0xF862A6), bit 4 the bit
+;          panel task acts on: bit 7 PanelScreen_ApplyRequestForced (0xF863AC),
+;          bit 6 PanelScreen_ApplyRequest (0xF862A6), bit 4 the bit
 ;          PanelState_Sync2095 moves in and out of (0x2095) (0xF86559).
 ;          Bits 2, 1, 3 and 0 -- the other four consumers -- are NOT in the
 ;          mask, which is what makes the name specific.  Check Q2.
@@ -111125,7 +111132,7 @@ Var207C_Get:
 ;
 ; Called from: 2 proven call sites.
 ; Body:    (0x2880) := arg2; (0x2070) := arg1; `set 6,(0x2071)`.
-; Evidence: bit 6 is the bit PanelScreen_ApplyHomeRequest tests at
+; Evidence: bit 6 is the bit PanelScreen_ApplyRequest tests at
 ;          0xF862A6, and 0x40 is the high byte of every live entry of
 ;          PanelHold_ScreenRequest.  Check Q3.
 ; Unknown:  what (0x2880) is for.

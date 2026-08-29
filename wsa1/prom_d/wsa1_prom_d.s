@@ -13282,11 +13282,19 @@ ToneDB_ToneIndexMapC:
 ; are a separate object: see ToneDB_DescCurveBank immediately below.
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
-; 0x2223B, which is directory slot +0x28's value, and ends at 0x22A3B,
-; which is the next value in the same directory.  So the entry count 1024
-; is pinned at BOTH ends by the image's own table and is not a stride
-; guess -- the failure mode this tree has paid for.  The value range
-; above is measured over all 1024 entries, first to last.
+; 0x2223B, which IS directory slot +0x28's value.  ⚠ CORRECTED in round 3:
+; the previous version of this line claimed the region "ends at 0x22A3B,
+; which is the next value in the same directory", and concluded the entry
+; count was "pinned at BOTH ends by the image's own table".  THAT IS FALSE.
+; 0x22A3B is not a directory value at all -- the next one after 0x2223B is
+; 0x22D3B, so the directory-delimited span is 2,816 bytes, not 2,048.
+; (Reproduce: the 44 LE32 words at file offset 0 hold 0x21A3B, 0x2223B and
+; 0x22D3B in this neighbourhood and nothing between them.)
+; What actually pins 0x22A3B is the OTHER END: ToneDB_DescCurveBank starts
+; there, and 2,816 - 2,048 = 768 = its six 128-byte curves.  So the low end
+; is directory-pinned and the high end is pinned by the object beyond it;
+; the count of 1024 stands, and the mechanism stated for it did not.
+; The value range above is measured over all 1024 entries, first to last.
 ; 
 ; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
 ; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
