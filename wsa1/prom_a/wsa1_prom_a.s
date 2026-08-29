@@ -3991,7 +3991,7 @@ sub_F821D7:
 	call 0xf40f64                                        ; F821D7  1d 64 0f f4
 	call 0xf40780                                        ; F821DB  1d 80 07 f4
 	stdi8 (0x2030), 0xff                                 ; F821DF  f1 30 20 00 ff
-	call sub_F823AC                                      ; F821E4  1d ac 23 f8
+	call Queue2C00_DrainPassAB                                      ; F821E4  1d ac 23 f8
 	ret                                                  ; F821E8  0e
 sub_F821E9:
 	call 0xf413cc                                        ; F821E9  1d cc 13 f4
@@ -4083,7 +4083,7 @@ sub_F82204:
 	ld (xhl-6), iy                                       ; F822B6  bb fa 55
 	call 0xf40744                                        ; F822B9  1d 44 07 f4
 	call 0xf41f14                                        ; F822BD  1d 14 1f f4
-	calr sub_F823AC                                      ; F822C1  1e e8 00
+	calr Queue2C00_DrainPassAB                                      ; F822C1  1e e8 00
 .LF822C4:
 	ld XHL,0x00600c1e                                    ; F822C4  43 1e 0c 60 00
 	ld wa, (xhl-6)                                       ; F822C9  9b fa 20
@@ -4172,7 +4172,7 @@ sub_F822D4:
 	ld (xhl-6), iy                                       ; F82386  bb fa 55
 	call 0xf43358                                        ; F82389  1d 58 33 f4
 	call 0xf41f14                                        ; F8238D  1d 14 1f f4
-	calr sub_F823AC                                      ; F82391  1e 18 00
+	calr Queue2C00_DrainPassAB                                      ; F82391  1e 18 00
 .LF82394:
 	ld XHL,0x00601028                                    ; F82394  43 28 10 60 00
 	ld wa, (xhl-6)                                       ; F82399  9b fa 20
@@ -4186,7 +4186,23 @@ sub_F823A4:
 	ret                                                  ; F823AA  0e
 sub_F823AB:
 	ret                                                  ; F823AB  0e
-sub_F823AC:
+; ---------------------------------------------------------------------
+; Queue2C00_DrainPassAB -- run pass A and pass B over the 0x2C00 event
+;                           queue, then empty it
+;
+; Called from: prom_b directory slot T_F40018.
+; Body:    return at once when (0x2C00) is already 0xFF (empty).
+;          Otherwise `call 0xf40f5c` and `call 0xf40f60`, then write 0xFF
+;          to 0x2C00 and zero the cursor (0x60F000).
+; Evidence: `cp (0x2c00),0xff` at 0xF823AC; `call 0xf40f5c` at 0xF823B3 and
+;          `call 0xf40f60` at 0xF823B7, and prom_b's directory says
+;          T_F40F5C is UiEventList_RunPassA (0xF8697E) and T_F40F60 is
+;          UiEventList_RunPassB (0xF8699D) -- both already named, both
+;          setting (0x20AD) to 0x2C00, i.e. running over THIS queue.
+;          `ld (0x2c00),0xff` at 0xF823BB and `ld (0x60f000),0x0000` at
+;          0xF823C0 are the emptying.
+; ---------------------------------------------------------------------
+Queue2C00_DrainPassAB:
 	m_cp_mi8 MB16, 0x2c00, 0xff                          ; F823AC  c1 00 2c 3f ff
 	jr z, .LF823C7                                       ; F823B1  66 14
 	call 0xf40f5c                                        ; F823B3  1d 5c 0f f4
@@ -4195,7 +4211,20 @@ sub_F823AC:
 	stiw_da (0x60f000), 0x00                             ; F823C0  f2 00 f0 60 02 00 00
 .LF823C7:
 	ret                                                  ; F823C7  0e
-sub_F823C8:
+; ---------------------------------------------------------------------
+; Queue2C00_DrainPassB -- the same, running pass B ONLY
+;
+; Called from: prom_b directory slot T_F40038.
+; ★ BORROWED SHAPE, WITH THE DIFF: 0xF823AC and 0xF823C8 do the same four
+;          things and 0xF823C8 omits ONE call.  They are 28 and 24 bytes;
+;          the difference is the four bytes `1d 5c 0f f4` (`call 0xf40f5c`,
+;          pass A) at 0xF823B3, and the remaining 24 bytes are identical
+;          except for the two `jr` displacements that the missing four
+;          bytes shift.  Check Y1 recomputes that.
+; Evidence: `cp (0x2c00),0xff` at 0xF823C8, `call 0xf40f60` at 0xF823CF,
+;          `ld (0x2c00),0xff` at 0xF823D3.
+; ---------------------------------------------------------------------
+Queue2C00_DrainPassB:
 	m_cp_mi8 MB16, 0x2c00, 0xff                          ; F823C8  c1 00 2c 3f ff
 	jr z, .LF823DF                                       ; F823CD  66 10
 	call 0xf40f60                                        ; F823CF  1d 60 0f f4
@@ -4339,7 +4368,7 @@ sub_F82427:
 	pushw iz                                             ; F82507  2e
 	ld (xhl-6), iy                                       ; F82508  bb fa 55
 	call 0xf41f10                                        ; F8250B  1d 10 1f f4
-	calr sub_F823AC                                      ; F8250F  1e 9a fe
+	calr Queue2C00_DrainPassAB                                      ; F8250F  1e 9a fe
 .LF82512:
 	ld XIX,0x0060080a                                    ; F82512  44 0a 08 60 00
 	ld wa, (xix-6)                                       ; F82517  9c fa 20
@@ -51364,7 +51393,7 @@ MidiIn_ControlChange:   ; entry: MidiIn_ChannelStatusTable[3]
 
 ; --- 0xFA62B8-0xFA6377  pointer table (192 bytes) ---
 MidiIn_ControllerHandlerTable:
-	.long 0x00FA645B                            ; FA62B8  [0]   -> MidiIn_CC40_Damper
+	.long 0x00FA645B                            ; FA62B8  [0]   -> MidiIn_CC40_Hold
 	.long 0x00FA6567                            ; FA62BC  [1]   -> MidiIn_CC01_Modulation
 	.long 0x00FA65F1                            ; FA62C0  [2]   -> MidiIn_CC07_Volume
 	.long 0x00FA6650                            ; FA62C4  [3]   -> MidiIn_CC0B_Expression
@@ -51374,12 +51403,12 @@ MidiIn_ControllerHandlerTable:
 	.long 0x00FA679D                            ; FA62D4  [7]   -> MidiIn_CC5B_Effect1Depth
 	.long 0x00FA64E5                            ; FA62D8  [8]   -> sub_FA64E5
 	.long 0x00FA6526                            ; FA62DC  [9]   -> sub_FA6526
-	.long 0x00FA67E8                            ; FA62E0  [10]   -> MidiIn_CC02_Breath
-	.long 0x00FA6872                            ; FA62E4  [11]   -> MidiIn_CC04_Foot
-	.long 0x00FA68FC                            ; FA62E8  [12]   -> MidiIn_CC10_General1
-	.long 0x00FA6986                            ; FA62EC  [13]   -> MidiIn_CC11_General2
-	.long 0x00FA6A10                            ; FA62F0  [14]   -> MidiIn_CC12_General3
-	.long 0x00FA6A9A                            ; FA62F4  [15]   -> MidiIn_CC13_General4
+	.long 0x00FA67E8                            ; FA62E0  [10]   -> MidiIn_CC02_Modulation2
+	.long 0x00FA6872                            ; FA62E4  [11]   -> MidiIn_CC04_CtrlPedal
+	.long 0x00FA68FC                            ; FA62E8  [12]   -> MidiIn_CC10_RTCreatX
+	.long 0x00FA6986                            ; FA62EC  [13]   -> MidiIn_CC11_RTCreatY
+	.long 0x00FA6A10                            ; FA62F0  [14]   -> MidiIn_CC12_RTCtrlX
+	.long 0x00FA6A9A                            ; FA62F4  [15]   -> MidiIn_CC13_RTCtrlY
 	.long 0x00FA6459                            ; FA62F8  [16]   -> sub_FA6459
 	.long 0x00FA645A                            ; FA62FC  [17]   -> sub_FA645A
 	.long 0x00FA6B24                            ; FA6300  [18]   -> MidiIn_CC51_General6
@@ -51556,7 +51585,7 @@ sub_FA645A:   ; entry: MidiIn_ControllerHandlerTable[17]
 	ret                                           ; FA645A  0e
 
 ; ---------------------------------------------------------------------
-; MidiIn_CC40_Damper -- MIDI controller 0x40, Damper pedal (sustain)
+; MidiIn_CC40_Hold -- MIDI controller 0x40, Damper pedal (sustain)
 ;
 ; Called from: MidiIn_ControllerHandlerTable[0], and nothing else.
 ; Evidence: TWO independent witnesses give the controller number.
@@ -51566,8 +51595,22 @@ sub_FA645A:   ; entry: MidiIn_ControllerHandlerTable[17]
 ;          first (check M1).
 ; Reads:   MidiIn_CC40_ParamTable, indexed by the part number (0x1976), 32
 ;          records of stride 3.
+;
+; ★ RENAMED FROM MidiIn_CC40_Damper.  Controller 64 is what this
+;          instrument's own on-screen list at 0xFA2C13 calls
+;          `HOLD       (#64)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Damper` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiIn_CC40_Damper:   ; entry: MidiIn_ControllerHandlerTable[0]
+MidiIn_CC40_Hold:   ; entry: MidiIn_ControllerHandlerTable[0]
 	ldb_d8 a, (0x1976)                            ; FA645B  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA645F  c9 cf ff
 	jr nz, .LFA6470                               ; FA6462  6e 0c
@@ -52000,7 +52043,7 @@ MidiIn_CC5B_Effect1Depth:   ; entry: MidiIn_ControllerHandlerTable[7]
 	ret                                           ; FA67E7  0e
 
 ; ---------------------------------------------------------------------
-; MidiIn_CC02_Breath -- MIDI controller 0x02, Breath controller
+; MidiIn_CC02_Modulation2 -- MIDI controller 0x02, Breath controller
 ;
 ; Called from: MidiIn_ControllerHandlerTable[10], and nothing else.
 ; Evidence: TWO independent witnesses give the controller number.
@@ -52010,8 +52053,22 @@ MidiIn_CC5B_Effect1Depth:   ; entry: MidiIn_ControllerHandlerTable[7]
 ;          first (check M1).
 ; Reads:   MidiIn_CC02_ParamTable, indexed by the part number (0x1976), 32
 ;          records of stride 3.
+;
+; ★ RENAMED FROM MidiIn_CC02_Breath.  Controller 2 is what this
+;          instrument's own on-screen list at 0xFA2BE3 calls
+;          `MODULATION2(# 2)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Breath` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiIn_CC02_Breath:   ; entry: MidiIn_ControllerHandlerTable[10]
+MidiIn_CC02_Modulation2:   ; entry: MidiIn_ControllerHandlerTable[10]
 	ldb_d8 a, (0x1976)                            ; FA67E8  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA67EC  c9 cf ff
 	jr nz, .LFA67FD                               ; FA67EF  6e 0c
@@ -52063,7 +52120,7 @@ MidiIn_CC02_Breath:   ; entry: MidiIn_ControllerHandlerTable[10]
 	ret                                           ; FA6871  0e
 
 ; ---------------------------------------------------------------------
-; MidiIn_CC04_Foot -- MIDI controller 0x04, Foot controller
+; MidiIn_CC04_CtrlPedal -- MIDI controller 0x04, Foot controller
 ;
 ; Called from: MidiIn_ControllerHandlerTable[11], and nothing else.
 ; Evidence: TWO independent witnesses give the controller number.
@@ -52073,8 +52130,22 @@ MidiIn_CC02_Breath:   ; entry: MidiIn_ControllerHandlerTable[10]
 ;          first (check M1).
 ; Reads:   MidiIn_CC04_ParamTable, indexed by the part number (0x1976), 32
 ;          records of stride 3.
+;
+; ★ RENAMED FROM MidiIn_CC04_Foot.  Controller 4 is what this
+;          instrument's own on-screen list at 0xFA2BF3 calls
+;          `CTRL.PEDAL (# 4)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Foot` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiIn_CC04_Foot:   ; entry: MidiIn_ControllerHandlerTable[11]
+MidiIn_CC04_CtrlPedal:   ; entry: MidiIn_ControllerHandlerTable[11]
 	ldb_d8 a, (0x1976)                            ; FA6872  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6876  c9 cf ff
 	jr nz, .LFA6887                               ; FA6879  6e 0c
@@ -52126,7 +52197,7 @@ MidiIn_CC04_Foot:   ; entry: MidiIn_ControllerHandlerTable[11]
 	ret                                           ; FA68FB  0e
 
 ; ---------------------------------------------------------------------
-; MidiIn_CC10_General1 -- MIDI controller 0x10, General Purpose 1
+; MidiIn_CC10_RTCreatX -- MIDI controller 0x10, General Purpose 1
 ;
 ; Called from: MidiIn_ControllerHandlerTable[12], and nothing else.
 ; Evidence: TWO independent witnesses give the controller number.
@@ -52136,8 +52207,22 @@ MidiIn_CC04_Foot:   ; entry: MidiIn_ControllerHandlerTable[11]
 ;          first (check M1).
 ; Reads:   MidiIn_CC10_ParamTable, indexed by the part number (0x1976), 32
 ;          records of stride 3.
+;
+; ★ RENAMED FROM MidiIn_CC10_General1.  Controller 16 is what this
+;          instrument's own on-screen list at 0xFA2C23 calls
+;          `R.T.CREAT.X(#16)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General1` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiIn_CC10_General1:   ; entry: MidiIn_ControllerHandlerTable[12]
+MidiIn_CC10_RTCreatX:   ; entry: MidiIn_ControllerHandlerTable[12]
 	ldb_d8 a, (0x1976)                            ; FA68FC  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6900  c9 cf ff
 	jr nz, .LFA6911                               ; FA6903  6e 0c
@@ -52189,7 +52274,7 @@ MidiIn_CC10_General1:   ; entry: MidiIn_ControllerHandlerTable[12]
 	ret                                           ; FA6985  0e
 
 ; ---------------------------------------------------------------------
-; MidiIn_CC11_General2 -- MIDI controller 0x11, General Purpose 2
+; MidiIn_CC11_RTCreatY -- MIDI controller 0x11, General Purpose 2
 ;
 ; Called from: MidiIn_ControllerHandlerTable[13], and nothing else.
 ; Evidence: TWO independent witnesses give the controller number.
@@ -52199,8 +52284,22 @@ MidiIn_CC10_General1:   ; entry: MidiIn_ControllerHandlerTable[12]
 ;          first (check M1).
 ; Reads:   MidiIn_CC11_ParamTable, indexed by the part number (0x1976), 32
 ;          records of stride 3.
+;
+; ★ RENAMED FROM MidiIn_CC11_General2.  Controller 17 is what this
+;          instrument's own on-screen list at 0xFA2C33 calls
+;          `R.T.CREAT.Y(#17)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General2` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiIn_CC11_General2:   ; entry: MidiIn_ControllerHandlerTable[13]
+MidiIn_CC11_RTCreatY:   ; entry: MidiIn_ControllerHandlerTable[13]
 	ldb_d8 a, (0x1976)                            ; FA6986  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA698A  c9 cf ff
 	jr nz, .LFA699B                               ; FA698D  6e 0c
@@ -52252,7 +52351,7 @@ MidiIn_CC11_General2:   ; entry: MidiIn_ControllerHandlerTable[13]
 	ret                                           ; FA6A0F  0e
 
 ; ---------------------------------------------------------------------
-; MidiIn_CC12_General3 -- MIDI controller 0x12, General Purpose 3
+; MidiIn_CC12_RTCtrlX -- MIDI controller 0x12, General Purpose 3
 ;
 ; Called from: MidiIn_ControllerHandlerTable[14], and nothing else.
 ; Evidence: TWO independent witnesses give the controller number.
@@ -52262,8 +52361,22 @@ MidiIn_CC11_General2:   ; entry: MidiIn_ControllerHandlerTable[13]
 ;          first (check M1).
 ; Reads:   MidiIn_CC12_ParamTable, indexed by the part number (0x1976), 32
 ;          records of stride 3.
+;
+; ★ RENAMED FROM MidiIn_CC12_General3.  Controller 18 is what this
+;          instrument's own on-screen list at 0xFA2C43 calls
+;          `R.T.CTRL. X(#18)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General3` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiIn_CC12_General3:   ; entry: MidiIn_ControllerHandlerTable[14]
+MidiIn_CC12_RTCtrlX:   ; entry: MidiIn_ControllerHandlerTable[14]
 	ldb_d8 a, (0x1976)                            ; FA6A10  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6A14  c9 cf ff
 	jr nz, .LFA6A25                               ; FA6A17  6e 0c
@@ -52315,7 +52428,7 @@ MidiIn_CC12_General3:   ; entry: MidiIn_ControllerHandlerTable[14]
 	ret                                           ; FA6A99  0e
 
 ; ---------------------------------------------------------------------
-; MidiIn_CC13_General4 -- MIDI controller 0x13, General Purpose 4
+; MidiIn_CC13_RTCtrlY -- MIDI controller 0x13, General Purpose 4
 ;
 ; Called from: MidiIn_ControllerHandlerTable[15], and nothing else.
 ; Evidence: TWO independent witnesses give the controller number.
@@ -52325,8 +52438,22 @@ MidiIn_CC12_General3:   ; entry: MidiIn_ControllerHandlerTable[14]
 ;          first (check M1).
 ; Reads:   MidiIn_CC13_ParamTable, indexed by the part number (0x1976), 32
 ;          records of stride 3.
+;
+; ★ RENAMED FROM MidiIn_CC13_General4.  Controller 19 is what this
+;          instrument's own on-screen list at 0xFA2C53 calls
+;          `R.T.CTRL. Y(#19)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General4` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiIn_CC13_General4:   ; entry: MidiIn_ControllerHandlerTable[15]
+MidiIn_CC13_RTCtrlY:   ; entry: MidiIn_ControllerHandlerTable[15]
 	ldb_d8 a, (0x1976)                            ; FA6A9A  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6A9E  c9 cf ff
 	jr nz, .LFA6AAF                               ; FA6AA1  6e 0c
@@ -54120,16 +54247,30 @@ sub_FA786A:   ; entry: call from 0xFA781B
 	ret                                           ; FA7890  0e
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC40_Damper -- echo controller 0x40 (Damper pedal (sustain)) outbound
+; MidiOut_CC40_Hold -- echo controller 0x40 (Damper pedal (sustain)) outbound
 ;
 ; Called from: MidiOut_ParamNumberTable[181]; call from 0xFA64CF.
-; Evidence: its tail MidiOut_CC40_Damper__emit at 0xFA78F5 ends in `ld
+; Evidence: its tail MidiOut_CC40_Hold__emit at 0xFA78F5 ends in `ld
 ;          W,0x00 / calr MidiOut_SendController`, which
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x00 of that map is 0x40.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC40_Damper.  Controller 64 is what this
+;          instrument's own on-screen list at 0xFA2C13 calls
+;          `HOLD       (#64)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Damper` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC40_Damper:   ; entry: MidiOut_ParamNumberTable[181]; call from 0xFA64CF
+MidiOut_CC40_Hold:   ; entry: MidiOut_ParamNumberTable[181]; call from 0xFA64CF
 	cps b, 0x00                                   ; FA7891  ca d8   cp B,0
 	jr nz, .LFA78D0                               ; FA7893  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7895  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -54172,7 +54313,7 @@ sub_FA78D0:   ; entry: call from 0xFA78C9
 .LFA78F5:
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC40_Damper__emit -- echo controller 0x40 (Damper pedal (sustain)) outbound
+; MidiOut_CC40_Hold__emit -- echo controller 0x40 (Damper pedal (sustain)) outbound
 ;
 ; Called from: call from 0xFA78B2.
 ; Evidence: it ends in `ld W,0x00 / calr MidiOut_SendController`,
@@ -54180,8 +54321,22 @@ sub_FA78D0:   ; entry: call from 0xFA78C9
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x00 of that map is 0x40.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC40_Damper__emit.  Controller 64 is what this
+;          instrument's own on-screen list at 0xFA2C13 calls
+;          `HOLD       (#64)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Damper` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC40_Damper__emit:   ; entry: call from 0xFA78B2
+MidiOut_CC40_Hold__emit:   ; entry: call from 0xFA78B2
 	ldb_d8 e, (0x195a)                            ; FA78F5  c1 5a 19 25   ld E,(0x195a)
 	ldb w, 0x00                                   ; FA78F9  20 00   ld W,0x00
 	calr .LFA7BF3                                 ; FA78FB  1e f5 02
@@ -54221,16 +54376,30 @@ MidiOut_CC40_Damper__emit:   ; entry: call from 0xFA78B2
 	ret                                           ; FA795E  0e
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC10_General1 -- echo controller 0x10 (General Purpose 1) outbound
+; MidiOut_CC10_RTCreatX -- echo controller 0x10 (General Purpose 1) outbound
 ;
 ; Called from: MidiOut_ParamNumberTable[184]; call from 0xFA6970.
-; Evidence: its tail MidiOut_CC10_General1__emit at 0xFA79C3 ends in
+; Evidence: its tail MidiOut_CC10_RTCreatX__emit at 0xFA79C3 ends in
 ;          `ld W,0x0c / calr MidiOut_SendController`, which
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0c of that map is 0x10.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC10_General1.  Controller 16 is what this
+;          instrument's own on-screen list at 0xFA2C23 calls
+;          `R.T.CREAT.X(#16)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General1` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC10_General1:   ; entry: MidiOut_ParamNumberTable[184]; call from 0xFA6970
+MidiOut_CC10_RTCreatX:   ; entry: MidiOut_ParamNumberTable[184]; call from 0xFA6970
 	cps b, 0x00                                   ; FA795F  ca d8   cp B,0
 	jr nz, .LFA799E                               ; FA7961  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7963  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -54273,7 +54442,7 @@ sub_FA799E:   ; entry: call from 0xFA7997
 .LFA79C3:
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC10_General1__emit -- echo controller 0x10 (General Purpose 1) outbound
+; MidiOut_CC10_RTCreatX__emit -- echo controller 0x10 (General Purpose 1) outbound
 ;
 ; Called from: call from 0xFA7980.
 ; Evidence: it ends in `ld W,0x0c / calr MidiOut_SendController`,
@@ -54281,8 +54450,22 @@ sub_FA799E:   ; entry: call from 0xFA7997
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0c of that map is 0x10.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC10_General1__emit.  Controller 16 is what this
+;          instrument's own on-screen list at 0xFA2C23 calls
+;          `R.T.CREAT.X(#16)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General1` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC10_General1__emit:   ; entry: call from 0xFA7980
+MidiOut_CC10_RTCreatX__emit:   ; entry: call from 0xFA7980
 	ldb_d8 e, (0x195a)                            ; FA79C3  c1 5a 19 25   ld E,(0x195a)
 	ldb w, 0x0c                                   ; FA79C7  20 0c   ld W,0x0c
 	calr .LFA7BF3                                 ; FA79C9  1e 27 02
@@ -54290,16 +54473,30 @@ MidiOut_CC10_General1__emit:   ; entry: call from 0xFA7980
 	ret                                           ; FA79CC  0e
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC11_General2 -- echo controller 0x11 (General Purpose 2) outbound
+; MidiOut_CC11_RTCreatY -- echo controller 0x11 (General Purpose 2) outbound
 ;
 ; Called from: MidiOut_ParamNumberTable[185]; call from 0xFA69FA.
-; Evidence: its tail MidiOut_CC11_General2__emit at 0xFA7A31 ends in
+; Evidence: its tail MidiOut_CC11_RTCreatY__emit at 0xFA7A31 ends in
 ;          `ld W,0x0d / calr MidiOut_SendController`, which
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0d of that map is 0x11.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC11_General2.  Controller 17 is what this
+;          instrument's own on-screen list at 0xFA2C33 calls
+;          `R.T.CREAT.Y(#17)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General2` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC11_General2:   ; entry: MidiOut_ParamNumberTable[185]; call from 0xFA69FA
+MidiOut_CC11_RTCreatY:   ; entry: MidiOut_ParamNumberTable[185]; call from 0xFA69FA
 	cps b, 0x00                                   ; FA79CD  ca d8   cp B,0
 	jr nz, .LFA7A0C                               ; FA79CF  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA79D1  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -54342,7 +54539,7 @@ sub_FA7A0C:   ; entry: call from 0xFA7A05
 .LFA7A31:
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC11_General2__emit -- echo controller 0x11 (General Purpose 2) outbound
+; MidiOut_CC11_RTCreatY__emit -- echo controller 0x11 (General Purpose 2) outbound
 ;
 ; Called from: call from 0xFA79EE.
 ; Evidence: it ends in `ld W,0x0d / calr MidiOut_SendController`,
@@ -54350,8 +54547,22 @@ sub_FA7A0C:   ; entry: call from 0xFA7A05
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0d of that map is 0x11.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC11_General2__emit.  Controller 17 is what this
+;          instrument's own on-screen list at 0xFA2C33 calls
+;          `R.T.CREAT.Y(#17)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General2` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC11_General2__emit:   ; entry: call from 0xFA79EE
+MidiOut_CC11_RTCreatY__emit:   ; entry: call from 0xFA79EE
 	ldb_d8 e, (0x195a)                            ; FA7A31  c1 5a 19 25   ld E,(0x195a)
 	ldb w, 0x0d                                   ; FA7A35  20 0d   ld W,0x0d
 	calr .LFA7BF3                                 ; FA7A37  1e b9 01
@@ -54359,16 +54570,30 @@ MidiOut_CC11_General2__emit:   ; entry: call from 0xFA79EE
 	ret                                           ; FA7A3A  0e
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC12_General3 -- echo controller 0x12 (General Purpose 3) outbound
+; MidiOut_CC12_RTCtrlX -- echo controller 0x12 (General Purpose 3) outbound
 ;
 ; Called from: MidiOut_ParamNumberTable[186]; call from 0xFA6A84.
-; Evidence: its tail MidiOut_CC12_General3__emit at 0xFA7A9F ends in
+; Evidence: its tail MidiOut_CC12_RTCtrlX__emit at 0xFA7A9F ends in
 ;          `ld W,0x0e / calr MidiOut_SendController`, which
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0e of that map is 0x12.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC12_General3.  Controller 18 is what this
+;          instrument's own on-screen list at 0xFA2C43 calls
+;          `R.T.CTRL. X(#18)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General3` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC12_General3:   ; entry: MidiOut_ParamNumberTable[186]; call from 0xFA6A84
+MidiOut_CC12_RTCtrlX:   ; entry: MidiOut_ParamNumberTable[186]; call from 0xFA6A84
 	cps b, 0x00                                   ; FA7A3B  ca d8   cp B,0
 	jr nz, .LFA7A7A                               ; FA7A3D  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7A3F  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -54411,7 +54636,7 @@ sub_FA7A7A:   ; entry: call from 0xFA7A73
 .LFA7A9F:
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC12_General3__emit -- echo controller 0x12 (General Purpose 3) outbound
+; MidiOut_CC12_RTCtrlX__emit -- echo controller 0x12 (General Purpose 3) outbound
 ;
 ; Called from: call from 0xFA7A5C.
 ; Evidence: it ends in `ld W,0x0e / calr MidiOut_SendController`,
@@ -54419,8 +54644,22 @@ sub_FA7A7A:   ; entry: call from 0xFA7A73
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0e of that map is 0x12.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC12_General3__emit.  Controller 18 is what this
+;          instrument's own on-screen list at 0xFA2C43 calls
+;          `R.T.CTRL. X(#18)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General3` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC12_General3__emit:   ; entry: call from 0xFA7A5C
+MidiOut_CC12_RTCtrlX__emit:   ; entry: call from 0xFA7A5C
 	ldb_d8 e, (0x195a)                            ; FA7A9F  c1 5a 19 25   ld E,(0x195a)
 	ldb w, 0x0e                                   ; FA7AA3  20 0e   ld W,0x0e
 	calr .LFA7BF3                                 ; FA7AA5  1e 4b 01
@@ -54428,16 +54667,30 @@ MidiOut_CC12_General3__emit:   ; entry: call from 0xFA7A5C
 	ret                                           ; FA7AA8  0e
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC13_General4 -- echo controller 0x13 (General Purpose 4) outbound
+; MidiOut_CC13_RTCtrlY -- echo controller 0x13 (General Purpose 4) outbound
 ;
 ; Called from: MidiOut_ParamNumberTable[187]; call from 0xFA6B0E.
-; Evidence: its tail MidiOut_CC13_General4__emit at 0xFA7B0D ends in
+; Evidence: its tail MidiOut_CC13_RTCtrlY__emit at 0xFA7B0D ends in
 ;          `ld W,0x0f / calr MidiOut_SendController`, which
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0f of that map is 0x13.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC13_General4.  Controller 19 is what this
+;          instrument's own on-screen list at 0xFA2C53 calls
+;          `R.T.CTRL. Y(#19)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General4` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC13_General4:   ; entry: MidiOut_ParamNumberTable[187]; call from 0xFA6B0E
+MidiOut_CC13_RTCtrlY:   ; entry: MidiOut_ParamNumberTable[187]; call from 0xFA6B0E
 	cps b, 0x00                                   ; FA7AA9  ca d8   cp B,0
 	jr nz, .LFA7AE8                               ; FA7AAB  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7AAD  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -54480,7 +54733,7 @@ sub_FA7AE8:   ; entry: call from 0xFA7AE1
 .LFA7B0D:
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC13_General4__emit -- echo controller 0x13 (General Purpose 4) outbound
+; MidiOut_CC13_RTCtrlY__emit -- echo controller 0x13 (General Purpose 4) outbound
 ;
 ; Called from: call from 0xFA7ACA.
 ; Evidence: it ends in `ld W,0x0f / calr MidiOut_SendController`,
@@ -54488,8 +54741,22 @@ sub_FA7AE8:   ; entry: call from 0xFA7AE1
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0f of that map is 0x13.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC13_General4__emit.  Controller 19 is what this
+;          instrument's own on-screen list at 0xFA2C53 calls
+;          `R.T.CTRL. Y(#19)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `General4` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC13_General4__emit:   ; entry: call from 0xFA7ACA
+MidiOut_CC13_RTCtrlY__emit:   ; entry: call from 0xFA7ACA
 	ldb_d8 e, (0x195a)                            ; FA7B0D  c1 5a 19 25   ld E,(0x195a)
 	ldb w, 0x0f                                   ; FA7B11  20 0f   ld W,0x0f
 	calr .LFA7BF3                                 ; FA7B13  1e dd 00
@@ -54497,16 +54764,30 @@ MidiOut_CC13_General4__emit:   ; entry: call from 0xFA7ACA
 	ret                                           ; FA7B16  0e
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC02_Breath -- echo controller 0x02 (Breath controller) outbound
+; MidiOut_CC02_Modulation2 -- echo controller 0x02 (Breath controller) outbound
 ;
 ; Called from: MidiOut_ParamNumberTable[188]; call from 0xFA685C.
-; Evidence: its tail MidiOut_CC02_Breath__emit at 0xFA7B7B ends in `ld
+; Evidence: its tail MidiOut_CC02_Modulation2__emit at 0xFA7B7B ends in `ld
 ;          W,0x0a / calr MidiOut_SendController`, which
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0a of that map is 0x02.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC02_Breath.  Controller 2 is what this
+;          instrument's own on-screen list at 0xFA2BE3 calls
+;          `MODULATION2(# 2)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Breath` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC02_Breath:   ; entry: MidiOut_ParamNumberTable[188]; call from 0xFA685C
+MidiOut_CC02_Modulation2:   ; entry: MidiOut_ParamNumberTable[188]; call from 0xFA685C
 	cps b, 0x00                                   ; FA7B17  ca d8   cp B,0
 	jr nz, .LFA7B56                               ; FA7B19  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7B1B  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -54549,7 +54830,7 @@ sub_FA7B56:   ; entry: call from 0xFA7B4F
 .LFA7B7B:
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC02_Breath__emit -- echo controller 0x02 (Breath controller) outbound
+; MidiOut_CC02_Modulation2__emit -- echo controller 0x02 (Breath controller) outbound
 ;
 ; Called from: call from 0xFA7B38.
 ; Evidence: it ends in `ld W,0x0a / calr MidiOut_SendController`,
@@ -54557,8 +54838,22 @@ sub_FA7B56:   ; entry: call from 0xFA7B4F
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0a of that map is 0x02.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC02_Breath__emit.  Controller 2 is what this
+;          instrument's own on-screen list at 0xFA2BE3 calls
+;          `MODULATION2(# 2)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Breath` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC02_Breath__emit:   ; entry: call from 0xFA7B38
+MidiOut_CC02_Modulation2__emit:   ; entry: call from 0xFA7B38
 	ldb_d8 e, (0x195a)                            ; FA7B7B  c1 5a 19 25   ld E,(0x195a)
 	ldb w, 0x0a                                   ; FA7B7F  20 0a   ld W,0x0a
 	calr .LFA7BF3                                 ; FA7B81  1e 6f 00
@@ -54566,16 +54861,30 @@ MidiOut_CC02_Breath__emit:   ; entry: call from 0xFA7B38
 	ret                                           ; FA7B84  0e
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC04_Foot -- echo controller 0x04 (Foot controller) outbound
+; MidiOut_CC04_CtrlPedal -- echo controller 0x04 (Foot controller) outbound
 ;
 ; Called from: MidiOut_ParamNumberTable[189]; call from 0xFA68E6.
-; Evidence: its tail MidiOut_CC04_Foot__emit at 0xFA7BE9 ends in `ld
+; Evidence: its tail MidiOut_CC04_CtrlPedal__emit at 0xFA7BE9 ends in `ld
 ;          W,0x0b / calr MidiOut_SendController`, which
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0b of that map is 0x04.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC04_Foot.  Controller 4 is what this
+;          instrument's own on-screen list at 0xFA2BF3 calls
+;          `CTRL.PEDAL (# 4)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Foot` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC04_Foot:   ; entry: MidiOut_ParamNumberTable[189]; call from 0xFA68E6
+MidiOut_CC04_CtrlPedal:   ; entry: MidiOut_ParamNumberTable[189]; call from 0xFA68E6
 	cps b, 0x00                                   ; FA7B85  ca d8   cp B,0
 	jr nz, .LFA7BC4                               ; FA7B87  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7B89  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -54618,7 +54927,7 @@ sub_FA7BC4:   ; entry: call from 0xFA7BBD
 .LFA7BE9:
 
 ; ---------------------------------------------------------------------
-; MidiOut_CC04_Foot__emit -- echo controller 0x04 (Foot controller) outbound
+; MidiOut_CC04_CtrlPedal__emit -- echo controller 0x04 (Foot controller) outbound
 ;
 ; Called from: call from 0xFA7BA6.
 ; Evidence: it ends in `ld W,0x0b / calr MidiOut_SendController`,
@@ -54626,8 +54935,22 @@ sub_FA7BC4:   ; entry: call from 0xFA7BBD
 ;          maps the index through MidiOut_IndexToControllerNumber; entry
 ;          0x0b of that map is 0x04.  Check E asserts this agrees with
 ;          the inbound handler's controller number wherever one calls it.
+;
+; ★ RENAMED FROM MidiOut_CC04_Foot__emit.  Controller 4 is what this
+;          instrument's own on-screen list at 0xFA2BF3 calls
+;          `CTRL.PEDAL (# 4)` -- the string is 16 bytes and carries the
+;          controller number in its own text.  `Foot` is the MIDI 1.0
+;          spec's word for the same controller number, not this
+;          machine's, and for `Breath` and `General` the spec word
+;          occurs ZERO times in all four images (check W2).  The
+;          controller NUMBER in the label is unchanged and is still
+;          the thing that is proven; only the gloss moved to the
+;          word the ROM itself uses.
+; Evidence: notes/prom_a_understanding_round4.py --controllers prints
+;          both lists straight from the ROM; check W1 re-reads this
+;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
-MidiOut_CC04_Foot__emit:   ; entry: call from 0xFA7BA6
+MidiOut_CC04_CtrlPedal__emit:   ; entry: call from 0xFA7BA6
 	ldb_d8 e, (0x195a)                            ; FA7BE9  c1 5a 19 25   ld E,(0x195a)
 	ldb w, 0x0b                                   ; FA7BED  20 0b   ld W,0x0b
 	calr .LFA7BF3                                 ; FA7BEF  1e 01 00
@@ -55167,22 +55490,22 @@ MidiOut_ChangeIndexMap:
 
 ; --- 0xFA80FE-0xFA8129  pointer table (44 bytes) ---
 MidiOut_ChangeRecordTable:
-	.long 0x00FA812A                            ; FA80FE  [0]   -> MidiOut_ChangeRecord_00
-	.long 0x00FA8136                            ; FA8102  [1]   -> MidiOut_ChangeRecord_01
-	.long 0x00FA8142                            ; FA8106  [2]   -> MidiOut_ChangeRecord_02
-	.long 0x00FA814E                            ; FA810A  [3]   -> MidiOut_ChangeRecord_03
-	.long 0x00FA815A                            ; FA810E  [4]   -> MidiOut_ChangeRecord_04
-	.long 0x00FA8166                            ; FA8112  [5]   -> MidiOut_ChangeRecord_05
-	.long 0x00FA8172                            ; FA8116  [6]   -> MidiOut_ChangeRecord_06
-	.long 0x00FA817E                            ; FA811A  [7]   -> MidiOut_ChangeRecord_07
+	.long 0x00FA812A                            ; FA80FE  [0]   -> MidiOut_ChangeRecord_CC01Modulation
+	.long 0x00FA8136                            ; FA8102  [1]   -> MidiOut_ChangeRecord_CC02Modulation2
+	.long 0x00FA8142                            ; FA8106  [2]   -> MidiOut_ChangeRecord_CC04CtrlPedal
+	.long 0x00FA814E                            ; FA810A  [3]   -> MidiOut_ChangeRecord_CC10RTCreatX
+	.long 0x00FA815A                            ; FA810E  [4]   -> MidiOut_ChangeRecord_CC11RTCreatY
+	.long 0x00FA8166                            ; FA8112  [5]   -> MidiOut_ChangeRecord_CC12RTCtrlX
+	.long 0x00FA8172                            ; FA8116  [6]   -> MidiOut_ChangeRecord_CC13RTCtrlY
+	.long 0x00FA817E                            ; FA811A  [7]   -> MidiOut_ChangeRecord_CC40Hold
 	.long 0x00FA818A                            ; FA811E  [8]   -> MidiOut_ChangeRecord_08
 	.long 0x00FA8196                            ; FA8122  [9]   -> MidiOut_ChangeRecord_09
-	.long 0x00FA81A2                            ; FA8126  [10]   -> MidiOut_ChangeRecord_10
+	.long 0x00FA81A2                            ; FA8126  [10]   -> MidiOut_ChangeRecord_CC0BExpression
 
 ; --- 0xFA812A-0xFA81AD  12-byte records (132 bytes) ---
 
 ; ---------------------------------------------------------------------
-; MidiOut_ChangeRecord_00 .. _10 -- eleven 12-byte records
+; The eleven MidiOut_ChangeRecord_* -- eleven 12-byte records
 ;
 ; Read by: MidiOut_RunChangeRecord, through MidiOut_ChangeRecordTable.
 ; Layout:  [0:4] a routine called with a 32-bit part mask, [4:8] a routine
@@ -55197,28 +55520,171 @@ MidiOut_ChangeRecordTable:
 ; ⚠ Indices 8 and 9 are never produced by MidiOut_ChangeIndexMap (its live
 ;   values are 0,1,2,3,4,5,6,7,10), so two of the eleven records are
 ;   unreachable through that map.  Stated, not explained.
+;
+; MidiOut_ChangeRecord_CC01Modulation -- the record whose handler is MidiOut_CC01_Modulation
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_00, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA812A.  [0:4] = 0x00FA820B, [4:8] = 0x00FA771D
+;          (MidiOut_CC01_Modulation), [8:10] = parameter number 0x00B2, [10:12] = 0x7F00.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xB2] is MidiOut_CC01_Modulation too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
-MidiOut_ChangeRecord_00:
+MidiOut_ChangeRecord_CC01Modulation:
 	.byte 0x0b, 0x82, 0xfa, 0x00, 0x1d, 0x77, 0xfa, 0x00, 0xb2, 0x00, 0x00, 0x7f   ; FA812A  MidiIn_BuildList_1A00 / MidiOut_CC01_Modulation  id 0x00B2 val 0x7F00
-MidiOut_ChangeRecord_01:
-	.byte 0x74, 0x82, 0xfa, 0x00, 0x17, 0x7b, 0xfa, 0x00, 0xbc, 0x00, 0x00, 0x7f   ; FA8136  MidiIn_BuildList_1A70 / MidiOut_CC02_Breath  id 0x00BC val 0x7F00
-MidiOut_ChangeRecord_02:
-	.byte 0x83, 0x82, 0xfa, 0x00, 0x85, 0x7b, 0xfa, 0x00, 0xbd, 0x00, 0x00, 0x7f   ; FA8142  MidiIn_BuildList_1A80 / MidiOut_CC04_Foot  id 0x00BD val 0x7F00
-MidiOut_ChangeRecord_03:
-	.byte 0x38, 0x82, 0xfa, 0x00, 0x5f, 0x79, 0xfa, 0x00, 0xb8, 0x00, 0x40, 0x7f   ; FA814E  MidiIn_BuildList_1A30 / MidiOut_CC10_General1  id 0x00B8 val 0x7F40
-MidiOut_ChangeRecord_04:
-	.byte 0x47, 0x82, 0xfa, 0x00, 0xcd, 0x79, 0xfa, 0x00, 0xb9, 0x00, 0x40, 0x7f   ; FA815A  MidiIn_BuildList_1A40 / MidiOut_CC11_General2  id 0x00B9 val 0x7F40
-MidiOut_ChangeRecord_05:
-	.byte 0x56, 0x82, 0xfa, 0x00, 0x3b, 0x7a, 0xfa, 0x00, 0xba, 0x00, 0x40, 0x7f   ; FA8166  MidiIn_BuildList_1A50 / MidiOut_CC12_General3  id 0x00BA val 0x7F40
-MidiOut_ChangeRecord_06:
-	.byte 0x65, 0x82, 0xfa, 0x00, 0xa9, 0x7a, 0xfa, 0x00, 0xbb, 0x00, 0x40, 0x7f   ; FA8172  MidiIn_BuildList_1A60 / MidiOut_CC13_General4  id 0x00BB val 0x7F40
-MidiOut_ChangeRecord_07:
-	.byte 0x29, 0x82, 0xfa, 0x00, 0x91, 0x78, 0xfa, 0x00, 0xb5, 0x00, 0x00, 0x7f   ; FA817E  MidiIn_BuildList_1A20 / MidiOut_CC40_Damper  id 0x00B5 val 0x7F00
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_CC02Modulation2 -- the record whose handler is MidiOut_CC02_Modulation2
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_01, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA8136.  [0:4] = 0x00FA8274, [4:8] = 0x00FA7B17
+;          (MidiOut_CC02_Modulation2), [8:10] = parameter number 0x00BC, [10:12] = 0x7F00.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xBC] is MidiOut_CC02_Breath too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
+; ---------------------------------------------------------------------
+MidiOut_ChangeRecord_CC02Modulation2:
+	.byte 0x74, 0x82, 0xfa, 0x00, 0x17, 0x7b, 0xfa, 0x00, 0xbc, 0x00, 0x00, 0x7f   ; FA8136  MidiIn_BuildList_1A70 / MidiOut_CC02_Modulation2  id 0x00BC val 0x7F00
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_CC04CtrlPedal -- the record whose handler is MidiOut_CC04_CtrlPedal
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_02, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA8142.  [0:4] = 0x00FA8283, [4:8] = 0x00FA7B85
+;          (MidiOut_CC04_CtrlPedal), [8:10] = parameter number 0x00BD, [10:12] = 0x7F00.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xBD] is MidiOut_CC04_Foot too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
+; ---------------------------------------------------------------------
+MidiOut_ChangeRecord_CC04CtrlPedal:
+	.byte 0x83, 0x82, 0xfa, 0x00, 0x85, 0x7b, 0xfa, 0x00, 0xbd, 0x00, 0x00, 0x7f   ; FA8142  MidiIn_BuildList_1A80 / MidiOut_CC04_CtrlPedal  id 0x00BD val 0x7F00
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_CC10RTCreatX -- the record whose handler is MidiOut_CC10_RTCreatX
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_03, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA814E.  [0:4] = 0x00FA8238, [4:8] = 0x00FA795F
+;          (MidiOut_CC10_RTCreatX), [8:10] = parameter number 0x00B8, [10:12] = 0x7F40.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xB8] is MidiOut_CC10_General1 too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
+; ---------------------------------------------------------------------
+MidiOut_ChangeRecord_CC10RTCreatX:
+	.byte 0x38, 0x82, 0xfa, 0x00, 0x5f, 0x79, 0xfa, 0x00, 0xb8, 0x00, 0x40, 0x7f   ; FA814E  MidiIn_BuildList_1A30 / MidiOut_CC10_RTCreatX  id 0x00B8 val 0x7F40
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_CC11RTCreatY -- the record whose handler is MidiOut_CC11_RTCreatY
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_04, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA815A.  [0:4] = 0x00FA8247, [4:8] = 0x00FA79CD
+;          (MidiOut_CC11_RTCreatY), [8:10] = parameter number 0x00B9, [10:12] = 0x7F40.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xB9] is MidiOut_CC11_General2 too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
+; ---------------------------------------------------------------------
+MidiOut_ChangeRecord_CC11RTCreatY:
+	.byte 0x47, 0x82, 0xfa, 0x00, 0xcd, 0x79, 0xfa, 0x00, 0xb9, 0x00, 0x40, 0x7f   ; FA815A  MidiIn_BuildList_1A40 / MidiOut_CC11_RTCreatY  id 0x00B9 val 0x7F40
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_CC12RTCtrlX -- the record whose handler is MidiOut_CC12_RTCtrlX
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_05, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA8166.  [0:4] = 0x00FA8256, [4:8] = 0x00FA7A3B
+;          (MidiOut_CC12_RTCtrlX), [8:10] = parameter number 0x00BA, [10:12] = 0x7F40.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xBA] is MidiOut_CC12_General3 too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
+; ---------------------------------------------------------------------
+MidiOut_ChangeRecord_CC12RTCtrlX:
+	.byte 0x56, 0x82, 0xfa, 0x00, 0x3b, 0x7a, 0xfa, 0x00, 0xba, 0x00, 0x40, 0x7f   ; FA8166  MidiIn_BuildList_1A50 / MidiOut_CC12_RTCtrlX  id 0x00BA val 0x7F40
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_CC13RTCtrlY -- the record whose handler is MidiOut_CC13_RTCtrlY
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_06, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA8172.  [0:4] = 0x00FA8265, [4:8] = 0x00FA7AA9
+;          (MidiOut_CC13_RTCtrlY), [8:10] = parameter number 0x00BB, [10:12] = 0x7F40.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xBB] is MidiOut_CC13_General4 too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
+; ---------------------------------------------------------------------
+MidiOut_ChangeRecord_CC13RTCtrlY:
+	.byte 0x65, 0x82, 0xfa, 0x00, 0xa9, 0x7a, 0xfa, 0x00, 0xbb, 0x00, 0x40, 0x7f   ; FA8172  MidiIn_BuildList_1A60 / MidiOut_CC13_RTCtrlY  id 0x00BB val 0x7F40
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_CC40Hold -- the record whose handler is MidiOut_CC40_Hold
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_07, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA817E.  [0:4] = 0x00FA8229, [4:8] = 0x00FA7891
+;          (MidiOut_CC40_Hold), [8:10] = parameter number 0x00B5, [10:12] = 0x7F00.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xB5] is MidiOut_CC40_Damper too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
+; ---------------------------------------------------------------------
+MidiOut_ChangeRecord_CC40Hold:
+	.byte 0x29, 0x82, 0xfa, 0x00, 0x91, 0x78, 0xfa, 0x00, 0xb5, 0x00, 0x00, 0x7f   ; FA817E  MidiIn_BuildList_1A20 / MidiOut_CC40_Hold  id 0x00B5 val 0x7F00
 MidiOut_ChangeRecord_08:
 	.byte 0x1a, 0x82, 0xfa, 0x00, 0xfa, 0x77, 0xfa, 0x00, 0xb4, 0x00, 0x00, 0x7f   ; FA818A  MidiIn_BuildList_1A10 / sub_FA77FA  id 0x00B4 val 0x7F00
 MidiOut_ChangeRecord_09:
 	.byte 0xfc, 0x81, 0xfa, 0x00, 0x7e, 0x76, 0xfa, 0x00, 0xb1, 0x00, 0x00, 0x40   ; FA8196  MidiIn_BuildList_19F0 / sub_FA767E  id 0x00B1 val 0x4000
-MidiOut_ChangeRecord_10:
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_CC0BExpression -- the record whose handler is MidiOut_CC0B_Expression
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_10, whose suffix was the record's position
+;          in the table and nothing else.
+; Body:    12 bytes at 0xFA81A2.  [0:4] = 0x00FA8292, [4:8] = 0x00FA778B
+;          (MidiOut_CC0B_Expression), [8:10] = parameter number 0x00B3, [10:12] = 0x7F7F.
+; ★ Evidence, and it is a THIRD independent derivation of the same
+;          eleven-element set: the eleven records' [8:10] fields are
+;          exactly {0xB1..0xB5, 0xB8..0xBD} -- the eleven parameter
+;          numbers that have an Evt2030 handler and no record in
+;          ParamNumber_RecordPtrs, and the eleven the forwarders at
+;          0xFADE56-0xFADE8C serve.  And for this record
+;          MidiOut_ParamNumberTable[0xB3] is MidiOut_CC0B_Expression too, so the pairing
+;          has two witnesses.  Check R2 re-derives both for all eleven.
+; ---------------------------------------------------------------------
+MidiOut_ChangeRecord_CC0BExpression:
 	.byte 0x92, 0x82, 0xfa, 0x00, 0x8b, 0x77, 0xfa, 0x00, 0xb3, 0x00, 0x7f, 0x7f   ; FA81A2  MidiIn_BuildList_1A90 / MidiOut_CC0B_Expression  id 0x00B3 val 0x7F7F
 
 ; ---------------------------------------------------------------------
@@ -55966,15 +56432,15 @@ MidiOut_ParamNumberTable:
 	.long 0x00FA771D                            ; FA8F90  [178]   -> MidiOut_CC01_Modulation
 	.long 0x00FA778B                            ; FA8F94  [179]   -> MidiOut_CC0B_Expression
 	.long 0x00FA77FA                            ; FA8F98  [180]   -> sub_FA77FA
-	.long 0x00FA7891                            ; FA8F9C  [181]   -> MidiOut_CC40_Damper
+	.long 0x00FA7891                            ; FA8F9C  [181]   -> MidiOut_CC40_Hold
 	.long 0x00FA7129                            ; FA8FA0  [182]   -> MidiOut_Param_Ignore
 	.long 0x00FA7129                            ; FA8FA4  [183]   -> MidiOut_Param_Ignore
-	.long 0x00FA795F                            ; FA8FA8  [184]   -> MidiOut_CC10_General1
-	.long 0x00FA79CD                            ; FA8FAC  [185]   -> MidiOut_CC11_General2
-	.long 0x00FA7A3B                            ; FA8FB0  [186]   -> MidiOut_CC12_General3
-	.long 0x00FA7AA9                            ; FA8FB4  [187]   -> MidiOut_CC13_General4
-	.long 0x00FA7B17                            ; FA8FB8  [188]   -> MidiOut_CC02_Breath
-	.long 0x00FA7B85                            ; FA8FBC  [189]   -> MidiOut_CC04_Foot
+	.long 0x00FA795F                            ; FA8FA8  [184]   -> MidiOut_CC10_RTCreatX
+	.long 0x00FA79CD                            ; FA8FAC  [185]   -> MidiOut_CC11_RTCreatY
+	.long 0x00FA7A3B                            ; FA8FB0  [186]   -> MidiOut_CC12_RTCtrlX
+	.long 0x00FA7AA9                            ; FA8FB4  [187]   -> MidiOut_CC13_RTCtrlY
+	.long 0x00FA7B17                            ; FA8FB8  [188]   -> MidiOut_CC02_Modulation2
+	.long 0x00FA7B85                            ; FA8FBC  [189]   -> MidiOut_CC04_CtrlPedal
 	.long 0x00FA7129                            ; FA8FC0  [190]   -> MidiOut_Param_Ignore
 	.long 0x00FA7129                            ; FA8FC4  [191]   -> MidiOut_Param_Ignore
 
@@ -56038,7 +56504,24 @@ MidiOut_PartRecordPtrs_00:
 	.long 0x00007E2F                            ; FA906C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9070  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9074  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_01:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC07Volume -- the copy MidiOut_CC07_Volume loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_01.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa9078` at 0xFA7234, inside MidiOut_CC07_Volume.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA7234 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_CC07Volume:
 	.long 0x000076AF                            ; FA9078  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA907C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9080  [2]   RAM 0x772F
@@ -56071,7 +56554,24 @@ MidiOut_PartRecordPtrs_01:
 	.long 0x00007E2F                            ; FA90EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA90F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA90F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_02:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC5DEffect3Depth -- the copy MidiOut_CC5D_Effect3Depth loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_02.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa90f8` at 0xFA7272, inside MidiOut_CC5D_Effect3Depth.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA7272 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_CC5DEffect3Depth:
 	.long 0x000076AF                            ; FA90F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA90FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9100  [2]   RAM 0x772F
@@ -56104,7 +56604,24 @@ MidiOut_PartRecordPtrs_02:
 	.long 0x00007E2F                            ; FA916C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9170  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9174  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_03:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC5EEffect4Depth -- the copy MidiOut_CC5E_Effect4Depth loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_03.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa9178` at 0xFA72B0, inside MidiOut_CC5E_Effect4Depth.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA72B0 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_CC5EEffect4Depth:
 	.long 0x000076AF                            ; FA9178  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA917C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9180  [2]   RAM 0x772F
@@ -56137,7 +56654,24 @@ MidiOut_PartRecordPtrs_03:
 	.long 0x00007E2F                            ; FA91EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA91F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA91F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_04:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC5BEffect1Depth -- the copy MidiOut_CC5B_Effect1Depth loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_04.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa91f8` at 0xFA72E9, inside MidiOut_CC5B_Effect1Depth.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA72E9 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_CC5BEffect1Depth:
 	.long 0x000076AF                            ; FA91F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA91FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9200  [2]   RAM 0x772F
@@ -56170,7 +56704,24 @@ MidiOut_PartRecordPtrs_04:
 	.long 0x00007E2F                            ; FA926C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9270  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9274  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_05:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC0APan -- the copy MidiOut_CC0A_Pan loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_05.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa9278` at 0xFA7327, inside MidiOut_CC0A_Pan.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA7327 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_CC0APan:
 	.long 0x000076AF                            ; FA9278  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA927C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9280  [2]   RAM 0x772F
@@ -56203,7 +56754,24 @@ MidiOut_PartRecordPtrs_05:
 	.long 0x00007E2F                            ; FA92EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA92F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA92F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_06:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_Rpn02CoarseTune -- the copy MidiOut_Rpn02_CoarseTune loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_06.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa92f8` at 0xFA736B, inside MidiOut_Rpn02_CoarseTune.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA736B is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_Rpn02CoarseTune:
 	.long 0x000076AF                            ; FA92F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA92FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9300  [2]   RAM 0x772F
@@ -56236,7 +56804,24 @@ MidiOut_PartRecordPtrs_06:
 	.long 0x00007E2F                            ; FA936C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9370  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9374  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_07:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_Rpn01FineTune -- the copy MidiOut_Rpn01_FineTune loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_07.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa9378` at 0xFA73A7, inside MidiOut_Rpn01_FineTune.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA73A7 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_Rpn01FineTune:
 	.long 0x000076AF                            ; FA9378  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA937C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9380  [2]   RAM 0x772F
@@ -56269,7 +56854,24 @@ MidiOut_PartRecordPtrs_07:
 	.long 0x00007E2F                            ; FA93EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA93F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA93F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_08:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_Rpn00PitchBendRange -- the copy MidiOut_Rpn00_PitchBendRange loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_08.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa93f8` at 0xFA73E9, inside MidiOut_Rpn00_PitchBendRange.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA73E9 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_Rpn00PitchBendRange:
 	.long 0x000076AF                            ; FA93F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA93FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9400  [2]   RAM 0x772F
@@ -56302,7 +56904,24 @@ MidiOut_PartRecordPtrs_08:
 	.long 0x00007E2F                            ; FA946C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9470  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9474  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_09:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC79ResetAllCtrl -- the copy MidiOut_CC79_ResetAllCtrl loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_09.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa9478` at 0xFA7630, inside MidiOut_CC79_ResetAllCtrl.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA7630 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_CC79ResetAllCtrl:
 	.long 0x000076AF                            ; FA9478  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA947C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9480  [2]   RAM 0x772F
@@ -56335,7 +56954,24 @@ MidiOut_PartRecordPtrs_09:
 	.long 0x00007E2F                            ; FA94EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA94F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA94F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_10:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC78AllSoundOff -- the copy MidiOut_CC78_AllSoundOff loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_10.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa94f8` at 0xFA765E, inside MidiOut_CC78_AllSoundOff.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA765E is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_CC78AllSoundOff:
 	.long 0x000076AF                            ; FA94F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA94FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9500  [2]   RAM 0x772F
@@ -56797,7 +57433,24 @@ MidiOut_PartRecordPtrs_23:
 	.long 0x00007E2F                            ; FA9BEC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9BF0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9BF4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_24:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC51General6 -- the copy MidiOut_CC51_General6 loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_24.  All 25 of these blocks are
+;          BYTE-IDENTICAL (their shared header says so and check B2 of
+;          notes/gen_prom_a_fa5aeb_module.py proves it), so the number
+;          in the old name said only "the Nth in address order".  What
+;          actually distinguishes this block is the routine that loads
+;          it, and that routine has a name.
+; Read by: `ld XIX,0x00fa9bf8` at 0xFA74E9, inside MidiOut_CC51_General6.  The table's address
+;          occurs EXACTLY ONCE as a 32-bit little-endian word anywhere
+;          in prom_a, and the byte at 0xFA74E9 is the `ld` opcode -- the
+;          instruction address, not the operand address one byte later.
+; Evidence: check R1 re-runs the scan and the owner lookup for every one
+;          of the 25 blocks and reports which are renamed and which are
+;          not; the eleven that are not are listed by --gaps.
+; ---------------------------------------------------------------------
+MidiOut_PartRecordPtrs_CC51General6:
 	.long 0x000076AF                            ; FA9BF8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA9BFC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9C00  [2]   RAM 0x772F
@@ -57469,7 +58122,31 @@ sub_FAA47E:
 	ldw_da hl, (0x60f18d)                                ; FAA495  d2 8d f1 60 23
 	ldb_da w, (0x60f18f)                                 ; FAA49A  c2 8f f1 60 20
 	ret                                                  ; FAA49F  0e
-sub_FAA4A0:
+; ---------------------------------------------------------------------
+; Queue2C00_PublishStagedIfPending -- append the staged 4-byte record at
+;                           (0x60F080..0x60F083) to the 0x2C00 queue, but
+;                           only when (0x60F083) is non-zero
+;
+; Called from: prom_b directory slot T_F407B4.
+; Body:    return at once when (0x60F083) == 0.  Otherwise: if the queue
+;          cursor (0x60F000) has reached 0x01FC, drain the queue through
+;          T_F40018 and restart the cursor at 0; then store (0x60F080) and
+;          (0x60F082) as two 16-bit words at 0x2C00 + cursor, write 0xFF
+;          one past, advance the cursor by 4 and clear (0x60F083).
+; Evidence: `cp (0x60f083),0x00` at 0xFAA4A0, `cp HL,0x01fc` at 0xFAA4B0,
+;          `call 0xf40018` at 0xFAA4BD, `ld XIX,0x00002c00` at 0xFAA4CA,
+;          `ld (0x60f000),HL` at 0xFAA4ED, `ld (0x60f083),0x00` at
+;          0xFAA4F2.  The record shape -- four bytes plus an 0xFF one past
+;          and a cursor step of 4 -- is the shape Queue2C00_AppendRegs
+;          (0xF86A81) already documents for the same buffer and the same
+;          cursor cell, and T_F40018 is sub_F823AC, which empties 0x2C00
+;          and rezeroes (0x60F000).
+; Note:    (0x60F083) is the record's mask byte, so "a mask of 0" is what
+;          "nothing staged" means here; the writers that stage a record
+;          (ParamRecord_WriteFieldAndStage and the ParamApply_ entries in
+;          the 0xFAD800 module) all set it last.
+; ---------------------------------------------------------------------
+Queue2C00_PublishStagedIfPending:
 	m_cp_mi8 MB24, 0x60f083, 0x00                        ; FAA4A0  c2 83 f0 60 3f 00
 	jr z, .LFAA4FB                                       ; FAA4A6  66 53
 	pushw wa                                             ; FAA4A8  28
@@ -57511,7 +58188,21 @@ sub_FAA4B7:
 	popw wa                                              ; FAA4FA  48
 .LFAA4FB:
 	ret                                                  ; FAA4FB  0e
-sub_FAA4FC:
+; ---------------------------------------------------------------------
+; Queue2C00_PublishStaged -- the same, with no (0x60F083) test
+;
+; Called from: no directory slot and no proven call site found; it is
+;          reached by falling out of Queue2C00_PublishStagedIfPending's
+;          `ret` only if something jumps here, which nothing does.  Stated
+;          as a searched negative, not as a fact about the hardware.
+; Body:    identical to Queue2C00_PublishStagedIfPending from its second
+;          instruction on, including the same `jr c` into that routine's
+;          own tail at 0xFAA4CA, and then a SECOND copy of the same tail
+;          inline at 0xFAA51E.
+; Evidence: `jr C,0xfaa4ca` at 0xFAA508 targets the other routine's body;
+;          `ld XIX,0x00002c00` appears twice, at 0xFAA4CA and 0xFAA51E.
+; ---------------------------------------------------------------------
+Queue2C00_PublishStaged:
 	pushw wa                                             ; FAA4FC  28
 	pushw hl                                             ; FAA4FD  2b
 	push XIX                                             ; FAA4FE  3c
@@ -57548,7 +58239,25 @@ sub_FAA4FC:
 	popw hl                                              ; FAA54D  4b
 	popw wa                                              ; FAA54E  48
 	ret                                                  ; FAA54F  0e
-sub_FAA550:
+; ---------------------------------------------------------------------
+; Queue2C00_PublishStagedDrainPassB -- the same again, draining through
+;                           Queue2C00_DrainPassB instead of
+;                           Queue2C00_DrainPassAB
+;
+; Called from: prom_b directory slot T_F407B8.
+; Evidence: `call 0xf40038` at 0xFAA565 where the other two call
+;          0xf40018.  T_F40018 is Queue2C00_DrainPassAB and T_F40038 is
+;          Queue2C00_DrainPassB; the only difference between those two is
+;          the `call 0xf40f5c` -- UiEventList_RunPassA -- that the second
+;          omits.  So what this entry point skips is PASS A over the
+;          queue, and nothing else.
+; ⚠ CORRECTION: an earlier header of this same pass called this routine
+;          `Queue2C00_PublishStagedDrainQuiet` and said `the difference is
+;          one notification`.  It is not a notification; T_F40F5C is
+;          UiEventList_RunPassA, which prom_a already names, and the
+;          earlier header simply had not looked it up.
+; ---------------------------------------------------------------------
+Queue2C00_PublishStagedDrainPassB:
 	pushw wa                                             ; FAA550  28
 	pushw hl                                             ; FAA551  2b
 	push XIX                                             ; FAA552  3c
@@ -57592,6 +58301,22 @@ sub_FAA5A5:
 	ret                                                  ; FAA5A5  0e
 sub_FAA5A6:
 	ret                                                  ; FAA5A6  0e
+; ---------------------------------------------------------------------
+; ParamRecord_WriteFieldIfChanged -- the same masked write as
+;                           ParamRecord_WriteFieldAndStage, staged ONLY
+;                           when the masked bits actually change
+;
+; Called from: no directory slot; it sits between sub_FAA4FC's tail and
+;          ParamChange_NotifyClearSource and had no label at all.
+; Body:    as ParamRecord_WriteFieldAndStage, except that the old byte is
+;          saved to (0x60F08B), the new one is XORed against it and ANDed
+;          with D, and the store and the staging are skipped when that
+;          comes out zero.
+; Evidence: `ld (0x60f08b),A` at 0xFAA5D0, `xor W,(0x60f08b)` at 0xFAA5E2,
+;          `and W,D` at 0xFAA5E7, `jr Z,0xfaa5fa` at 0xFAA5E9 -- the jump
+;          that skips both `ld (XIX+HL),A` and the two staging stores.
+; ---------------------------------------------------------------------
+ParamRecord_WriteFieldIfChanged:
 	push XIX                                             ; FAA5A7  3c
 	pushw wa                                             ; FAA5A8  28
 	push XHL                                             ; FAA5A9  3b
@@ -57625,9 +58350,39 @@ sub_FAA5A6:
 	popw wa                                              ; FAA5FB  48
 	pop XIX                                              ; FAA5FC  5c
 	ret                                                  ; FAA5FD  0e
-sub_FAA5FE:
+; ---------------------------------------------------------------------
+; ParamChange_NotifyClearSource -- clear (0x60F007), then notify
+;
+; Called from: prom_b directory slot T_F407CC, and it is the target of
+;          all eleven Evt2030_ClassXX_Fwd forwarders.
+; Body:    `ld (0x60f007),0x00` and then falls straight into
+;          ParamChange_Notify -- the two are one routine with two entry
+;          points, which is why the directory publishes both.
+; Evidence: `ld (0x60f007),0x00` at 0xFAA5FE is five bytes and 0xFAA604 is
+;          the next address; the forwarders are `call 0xf407cc / ret`.
+; Note:    (0x60F007) is the byte MidiOut_ParamChanged clears bit 7 of on
+;          its way out (`res 7,(0x60f007)` at 0xFA7123), and the byte
+;          ParamReset_SixParamsForIndex sets before each of its six posts.
+;          So it is a per-call source/flags byte and this entry is the
+;          "no source" one.  What its bits SELECT is not established.
+; ---------------------------------------------------------------------
+ParamChange_NotifyClearSource:
 	stib_da (0x60f007), 0x00                             ; FAA5FE  f2 07 f0 60 00 00
-sub_FAA604:
+; ---------------------------------------------------------------------
+; ParamChange_Notify -- hand the register-face parameter change to
+;                           MidiOut_ParamChanged, unless it is gated off
+;
+; Called from: prom_b directory slot T_F407D0, and by falling in from
+;          ParamChange_NotifyClearSource.
+; Body:    return when bit 0 of (0x0922) is set AND bit 1 is clear;
+;          otherwise save all seven register pairs, `call 0xf40748`, and
+;          restore them.
+; Evidence: `bit 0,(0x0922)` at 0xFAA604 and `bit 1,(0x0922)` at 0xFAA60A;
+;          T_F40748 is MidiOut_ParamChanged (prom_a 0xFA70F5), already
+;          named, and that routine opens with the SAME two bit tests on
+;          the SAME cell -- so the gate is duplicated, not delegated.
+; ---------------------------------------------------------------------
+ParamChange_Notify:
 	m_bit 0, MD16, 0x0922                                ; FAA604  f1 22 09 c8
 	jr z, .LFAA610                                       ; FAA608  66 06
 	m_bit 1, MD16, 0x0922                                ; FAA60A  f1 22 09 c9
@@ -57650,7 +58405,29 @@ sub_FAA604:
 	pop XWA                                              ; FAA621  58
 .LFAA622:
 	ret                                                  ; FAA622  0e
-sub_FAA623:
+; ---------------------------------------------------------------------
+; ParamRecord_WriteFieldAndStage -- write masked bits into one byte of a
+;                           parameter's record and stage the change
+;
+; Called from: prom_b directory slot T_F407D4.
+; Inputs:  C = the parameter number, B = the byte offset inside that
+;          parameter's record, E = the new value, D = the bit mask.
+; Body:    return when D == 0; XIX = ParamNumber_RecordPtrs[C] through
+;          (0x60F018); return when that entry is 0xFFFFFFFF; then
+;          (XIX+B) = ((XIX+B) & ~D) | (E & D), and finally
+;          (0x60F080) = BC and (0x60F082) = DE, i.e. the four staged bytes
+;          {C, B, E, D} that Queue2C00_PublishStagedIfPending publishes.
+; Evidence: `cp D,0` at 0xFAA626, `ld XIX,(0x60f018)` at 0xFAA631,
+;          `cp XIX,0xffffffff` at 0xFAA63B, `xor W,0xff / and A,W /
+;          and E,D / or E,A` at 0xFAA64E-0xFAA655, `ld (XIX+HL),E` at
+;          0xFAA657, `ld (0x60f080),BC` at 0xFAA65C.
+; ★ THE STAGED RECORD IS THE SAME FOUR BYTES the 0x2030 list, the 0x2C00
+;          queue and the 0x2E00 queue all carry: List2030_AppendRegs
+;          (0xF86AC7) stores {E,D,A,W} and the Evt2030 runner reads byte
+;          +0 as the parameter number and hands +1..+3 to the handler in
+;          B, E and D.
+; ---------------------------------------------------------------------
+ParamRecord_WriteFieldAndStage:
 	push XIX                                             ; FAA623  3c
 	pushw wa                                             ; FAA624  28
 	push XHL                                             ; FAA625  3b
@@ -57679,7 +58456,21 @@ sub_FAA623:
 	popw wa                                              ; FAA667  48
 	pop XIX                                              ; FAA668  5c
 	ret                                                  ; FAA669  0e
-sub_FAA66A:
+; ---------------------------------------------------------------------
+; ParamRecord_WriteFieldAndStage_Copy -- a second copy of the routine
+;                           above, published as its own directory slot
+;
+; Called from: prom_b directory slot T_F407D8.
+; ★ BORROWED NAME, WITH THE DIFF: 0xFAA623 and 0xFAA66A are 71 bytes with
+;          exactly TWO differing -- offset +2 (0x3B `push XHL` against
+;          0x2B `push HL`) and offset +67 (0x5B `pop XHL` against 0x4B
+;          `pop HL`).  Every other byte, including both `jr` displacements,
+;          is identical, so the two routines differ only in whether the
+;          saved HL is 32 or 16 bits wide.  Check C1 recomputes the length
+;          and the differing count and prints both offsets.
+; Unknown:  why the firmware publishes both.  Nothing here explains it.
+; ---------------------------------------------------------------------
+ParamRecord_WriteFieldAndStage_Copy:
 	push XIX                                             ; FAA66A  3c
 	pushw wa                                             ; FAA66B  28
 	pushw hl                                             ; FAA66C  2b
@@ -57742,7 +58533,7 @@ sub_FAA6B1:
 	ldb d, 0xff                                          ; FAA705  24 ff
 	stw_da (0x60f080), bc                                ; FAA707  f2 80 f0 60 51
 	stw_da (0x60f082), de                                ; FAA70C  f2 82 f0 60 52
-	calr sub_FAA4A0                                      ; FAA711  1e 8c fd
+	calr Queue2C00_PublishStagedIfPending                                      ; FAA711  1e 8c fd
 .LFAA714:
 	pop XIZ                                              ; FAA714  5e
 	pop XIY                                              ; FAA715  5d
@@ -57767,7 +58558,7 @@ sub_FAA71F:
 	ldb_d8 e, (0x24f1)                                   ; FAA732  c1 f1 24 25
 	ldb d, 0x7f                                          ; FAA736  24 7f
 	stw_da (0x60f082), de                                ; FAA738  f2 82 f0 60 52
-	calr sub_FAA4A0                                      ; FAA73D  1e 60 fd
+	calr Queue2C00_PublishStagedIfPending                                      ; FAA73D  1e 60 fd
 .LFAA740:
 	popw de                                              ; FAA740  4a
 	ret                                                  ; FAA741  0e
@@ -57823,7 +58614,7 @@ sub_FAA7AB:
 	push XDE                                             ; FAA7B0  3a
 	ldw_da bc, (0x60f177)                                ; FAA7B1  d2 77 f1 60 21
 	ldw_da de, (0x60f179)                                ; FAA7B6  d2 79 f1 60 22
-	call sub_FAA66A                                      ; FAA7BB  1d 6a a6 fa
+	call ParamRecord_WriteFieldAndStage_Copy                                      ; FAA7BB  1d 6a a6 fa
 	pop XDE                                              ; FAA7BF  5a
 	pop XHL                                              ; FAA7C0  5b
 	pop XIX                                              ; FAA7C1  5c
@@ -57840,7 +58631,7 @@ sub_FAA7C4:
 	push XIZ                                             ; FAA7D0  3e
 	ldw_da bc, (0x60f177)                                ; FAA7D1  d2 77 f1 60 21
 	ldw_da de, (0x60f179)                                ; FAA7D6  d2 79 f1 60 22
-	call sub_FAA604                                      ; FAA7DB  1d 04 a6 fa
+	call ParamChange_Notify                                      ; FAA7DB  1d 04 a6 fa
 	pop XIZ                                              ; FAA7DF  5e
 	pop XIY                                              ; FAA7E0  5d
 	pop XIX                                              ; FAA7E1  5c
@@ -60222,7 +61013,7 @@ sub_FABE6F:
 	stb_da (0x60f082), c                                 ; FABE8E  f2 82 f0 60 43
 	ldb_da a, (0x60f08a)                                 ; FABE93  c2 8a f0 60 21
 	stb_da (0x60f083), a                                 ; FABE98  f2 83 f0 60 41
-	call sub_FAA4FC                                      ; FABE9D  1d fc a4 fa
+	call Queue2C00_PublishStaged                                      ; FABE9D  1d fc a4 fa
 .LFABEA1:
 	inc 1,H                                              ; FABEA1  ce 61
 	ld XIY,XIX                                           ; FABEA3  ec 8d
@@ -61547,7 +62338,7 @@ Dispatch_By_60F080:
 ;
 ; These 64 LE32 words sit between the last reachable entry of
 ; Dispatch_By_60F080 (index 255, at 0xFACCE6) and the first entry of
-; Lookup32_By_Arg8 (0xFACDEA, which its own reader names as a 32-bit
+; ParamNumber_RecordPtrs (0xFACDEA, which its own reader names as a 32-bit
 ; immediate).  Every one of them is 0x00FAC845, the address of the bare `ret`
 ; that 168 of the reachable entries also hold.
 ; Evidence: `set(words) == {0x00FAC845}` over the whole 64, checked byte by
@@ -61623,30 +62414,51 @@ Dispatch_By_60F080__Tail:
 	.long 0x00fac845                                 ; FACDE2  [ 62]
 	.long 0x00fac845                                 ; FACDE6  [ 63]
 ; ---------------------------------------------------------------------
-; Lookup32_By_Arg8 -- 256 LE32 values, indexed by a caller's byte argument
+; ParamNumber_RecordPtrs -- 256 LE32 words: the WORK-RAM address of the
+;                           record that parameter number k's fields live
+;                           in, or 0xFFFFFFFF when k has no record
 ;
-; Read by: ONE site, the routine at 0xFAC8AA:
-;            link XIZ,0x0000 / ld C,0x04 / mul BC,(XIZ+0x08) / extz XBC
-;            add XBC,0x00FACDEA / ld XBC,(XBC) / ld XIY,XBC / unlk / ret
-;          i.e. `XIY := Lookup32_By_Arg8[arg]`, with the argument passed on the
-;          stack at (XIZ+0x08).  That routine is reached by four `calr` sites
-;          in this module (0xFAAE3C among them).
-; ENTRY COUNT 256: `mul BC,(XIZ+0x08)` takes an 8-BIT operand, so the index is
-;          0..255 and the table's reach is 1024 bytes.  ★ LAST-ENTRY TEST:
-;          0xFACDEA + 1024 = 0xFAD1EA, and the byte there is 0x00 followed by
-;          0x01, 0x02 ... 0x1F -- the start of Bytes_00_to_1F, a structure of a
-;          different kind.  255 or 257 entries would not land on it.
-; Evidence about the VALUES: 78 distinct; 179 of the 256 are 0xFFFFFFFF; every
-;          value that is not 0xFFFFFFFF lies in 0x00007622-0x00007F5A, i.e. a
-;          16-bit quantity in a 32-bit slot.  Counted by
-;          notes/prom_a_byte_checks.py, checks named "Lookup32_By_Arg8:".
-; Unknown:  what the 16-bit values ARE.  They are NOT addresses in any image of
-;          this machine (prom_a and prom_b start at 0xF00000, RAM at 0x600000),
-;          and 0xFFFFFFFF reads as "absent" but nothing in the module tests for
-;          it.  No claim about their meaning belongs in this name; the name says
-;          the shape and the index, which is all that is established.
+; ★ THIS REPLACES THE NAME `Lookup32_By_Arg8` AND CORRECTS ITS HEADER.
+;          That header said `Unknown: what the 16-bit values ARE.  They
+;          are NOT addresses in any image of this machine ... and
+;          0xFFFFFFFF reads as "absent" but nothing in the module tests
+;          for it.`  Both halves are wrong:
+;            * the values are 16-bit WORK-RAM addresses, the same form
+;              prom_b's RamPtrTable_F7554D header already describes;
+;            * `cp XIX,0xffffffff` at 0xFAA5BF, 0xFAA63B and 0xFAA682
+;              tests a fetched entry for exactly that value and skips the
+;              whole operation when it matches.
+;          The old header's shape facts -- 256 entries, 1024 bytes, 179
+;          empty, values in 0x7622..0x7F5A -- are re-derived here and all
+;          four still hold.
+; Read by: (0x60F018) holds this table's base.  Three instructions load
+;          it -- `lda XBC,0xfacdea` at 0xFAA873, 0xFAA94E and 0xFAB7F4 --
+;          and every reader of (0x60F018) therefore reads THIS table,
+;          including prom_b's IndexedTable_GetPtr (0xF55321) and
+;          IndexedTable_GetByte (0xF5533C), whose own headers say
+;          `Unknown: what the table holds and who writes 0x60F018`.
+;          The reader the old header named, 0xFAC8AA, is one of several.
+; ★ Evidence, four independent pins, all re-derived by
+;          notes/prom_a_understanding_round4.py --table:
+;          1. entry[k] + 0x0D == MidiOut_PartRecordPtrs_00[k] for all 32
+;             of that already-named table's entries, last included.  So
+;             entries 0x00-0x1F ARE the 32 part records, given at their
+;             base rather than at the +0x0D channel byte.
+;          2. entries 0x00-0x1F step by 0x40 with one step of 0x80 after
+;             index 7 -- the same irregularity MidiOut_PartRecordPtrs_00's
+;             header records for itself.
+;          3. entry[0x20+i] == entry[i] + 0x20 for all 32, which is why
+;             Evt2030_ClassHandlers routes 0x00-0x1F and 0x20-0x3F to two
+;             different handlers: they are two halves of one 0x40 record.
+;          4. entry[0x80] == 0x7F32, and (0x7F32) is the byte whose bit 2
+;             MIDI_RT_ExternalOff already names; prom_b 0xF6F858 writes
+;             its low two bits and then posts {0x80, 0, value, 0x03}.
+; Unknown:  the field layout inside a record.  Only three offsets are
+;          established anywhere in the tree: +0x0D (the MIDI channel,
+;          from MidiIn_BuildChannelRouteTable) and +0x1B..+0x1D (written
+;          by 0xFAA6B1).  The 0x40-byte size is a step, not a proof.
 ; ---------------------------------------------------------------------
-Lookup32_By_Arg8:
+ParamNumber_RecordPtrs:
 	.long 0x000076a2                                 ; FACDEA  [  0]
 	.long 0x000076e2                                 ; FACDEE  [  1]
 	.long 0x00007722                                 ; FACDF2  [  2]
@@ -61914,7 +62726,7 @@ Lookup32_By_Arg8:
 ; Layout:  one byte per entry, 32 entries, value == index.
 ; Evidence: `list(bytes) == list(range(32))`, checked whole.
 ; ENTRY COUNT 32: both ends are pinned by something other than this table --
-;          0xFAD1EA is Lookup32_By_Arg8's last-entry boundary (above) and
+;          0xFAD1EA is ParamNumber_RecordPtrs's last-entry boundary (above) and
 ;          0xFAD20A is BitMask32_Table's base, which its eleven readers name as
 ;          a 32-bit immediate.
 ; Unknown:  what it is for.  An identity table is what a compiler emits for a
@@ -62189,12 +63001,50 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x0704
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_MaskedWriteAndPublish -- apply {C,B,E,D} to the parameter
+;                           record and publish the change
+;
+; Called from: prom_b directory slot T_F40858.  ⚠ This address had NO
+;          LABEL before this pass; the emitter that converted the span
+;          labels only what its own descent reaches, and a `jp` in prom_b
+;          is invisible to it.
+; Inputs:  C, B, E, D, passed straight through in registers.
+; Body:    `ld (0x60f01e),0xff`, then T_F407D8
+;          (ParamRecord_WriteFieldAndStage_Copy) and T_F407B4
+;          (Queue2C00_PublishStagedIfPending).
+; Evidence: the three instructions at 0xFAD80A, 0xFAD810 and 0xFAD814.
+; Unknown:  what (0x60F01E) means.  Every entry point of this module
+;          except the four ParamShadow_ ones writes 0xFF to it first, and
+;          0xFAA86D seeds it with 0x7F at start-up; nothing here says what
+;          reads it.
+; ---------------------------------------------------------------------
+ParamApply_MaskedWriteAndPublish:
 	stib_da (0x60f01e), 0xff
 	call 0xf407d8
 	call 0xf407b4
 	ret
 	calr 0x06f1
 	ret
+; ---------------------------------------------------------------------
+; ParamShadow_SetField3 -- remember a value for field 3 of parameter C,
+;                           to be published later by ParamShadow_FlushAll
+;
+; Called from: prom_b directory slot T_F40874.
+; Body:    when BC == 0x00B0 (C = 0xB0, B = 0), write E to (0x24F1) and
+;          go out immediately through T_F407EC; otherwise, when C <= 0x1F,
+;          store E with bit 7 forced into the 32-byte array at 0x60F610,
+;          indexed by C, and return.
+; Evidence: `cp BC,0x00b0` at 0xFAD81D, `cp C,0x1f` at 0xFAD823,
+;          `set 0x07,E` at 0xFAD828, `ld XIX,0x0060f610` at 0xFAD82B.
+; ★ WHY "field 3": ParamShadow_FlushAll's arm for this array emits the
+;          record with `ld C,L` at 0xFADB14 and `ld B,0x03` at 0xFADB16,
+;          so the deferred write is byte 3 of the record
+;          of the parameter whose number is the array index.  Bit 7 is the
+;          pending flag: the flush tests it and clears it.
+; Unknown:  what field 3 of a part record holds.
+; ---------------------------------------------------------------------
+ParamShadow_SetField3:
 	cp BC,0x00b0
 	jr z, .LFAD837
 	cp C,0x1f
@@ -62211,6 +63061,32 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x06c4
 	ret
+; ---------------------------------------------------------------------
+; ParamShadow_SetExpression -- remember an EXPRESSION value (parameter
+;                           number 0xB3) for index B, to be published
+;                           later by ParamShadow_FlushAll
+;
+; Called from: prom_b directory slot T_F4086C.
+; Body:    when C == 0xB0, store E with bit 7 forced into the single byte
+;          at 0x60F650; otherwise, when B <= 0x1F, into the 32-byte array
+;          at 0x60F590 indexed by B.  Bit 7 is the pending flag.
+; Evidence: `cp C,0xb0` at 0xFAD84A, `ld (0x60f650),E` at 0xFAD852,
+;          `cp B,0x1f` at 0xFAD859, `ld XIX,0x0060f590` at 0xFAD861.
+; ★ WHY 0xB3: ParamShadow_FlushAll walks 0x60F590 with W = 0xB3 (`ld
+;          W,0xb3` at 0xFADA2B) and emits {W, index, value, 0x7F}.
+; ★ WHY "EXPRESSION", with three witnesses:
+;          1. MidiOut_ParamNumberTable[0xB3] is MidiOut_CC0B_Expression;
+;          2. the change record at 0xFA81A2 carries parameter number
+;             0x00B3 in bytes [8:10] and the SAME routine in [4:8];
+;          3. prom_a's own controller list spells controller #11 --
+;             which is CC 0x0B -- `EXPRESSION (#11)` at 0xFA2C03.
+;          Check R2 re-derives 1 and 2 for all eleven records; check W1
+;          re-reads 3 from the ROM.
+; Note:    the C == 0xB0 arm defers parameter number 0xB0 instead, whose
+;          MidiOut_ParamNumberTable entry is a bare `ret` (0xFA767D), so
+;          nothing echoes it and nothing here names it.
+; ---------------------------------------------------------------------
+ParamShadow_SetExpression:
 	cp C,0xb0
 	jr nz, .LFAD859
 	set 0x07,E
@@ -62226,6 +63102,40 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x069e
 	ret
+; ---------------------------------------------------------------------
+; ParamShadow_SetPitchBend -- remember a PITCH BEND value AND its mask
+;                           (parameter number 0xB1) for index B
+;
+; Called from: prom_b directory slot T_F40864.
+; Body:    when B <= 0x1F, store the 16-bit DE -- with bit 7 of E forced --
+;          at 0x60F5D0 + 2*B.  This is the ONLY 16-bit shadow of the four,
+;          and on the flush the high byte becomes the record's mask.
+; Evidence: `cp B,0x1f` at 0xFAD870, `set 0x07,E` at 0xFAD875,
+;          `ld XIX,0x0060f5d0` at 0xFAD878, `sll 0x01,B` at 0xFAD87D,
+;          `ld (XIX+B),DE` at 0xFAD880; ParamShadow_FlushAll reads the pair
+;          back with `ld WA,(XIY+HL)` at 0xFADAC3 and emits
+;          {0xB1, index, A, W}.
+; ★ WHY "PITCH BEND", and this one is weaker than the other two -- it has
+;          no named handler to borrow from, so it is spelled out:
+;          1. MidiOut_ParamNumberTable[0xB1] is sub_FA767E, and the code
+;             that routine reaches builds its MIDI status byte with
+;             `and A,0x0f` at 0xFA7703 and `or A,0xe0` at 0xFA7706 and sets a
+;             three-byte length with `ld DE,0x0300` at 0xFA76F5.  0xEn is
+;             the pitch-bend status in MIDI 1.0 -- ⚠ that last step is a
+;             fact about the PROTOCOL, not about this ROM;
+;          2. the change record at 0xFA8196 carries parameter number
+;             0x00B1 with value bytes 0x4000, and 0x4000 is the pitch-bend
+;             centre;
+;          3. pitch bend is the only 14-bit channel message, and this is
+;             the only one of the four shadows that stores 16 bits.
+;          The `or A,0xe0` has two siblings and no others: `or A,0xc0` at
+;          0xFA7612 and `or A,0xd0` at 0xFA7882 -- program change and
+;          channel pressure -- so the idiom is the status-byte builder and
+;          not a coincidence (check V1).
+; Unknown:  sub_FA767E itself is still unnamed; naming it would retire
+;          MidiOut_ChangeRecord_09's positional suffix as well.
+; ---------------------------------------------------------------------
+ParamShadow_SetPitchBend:
 	cp B,0x1f
 	jr ugt, .LFAD86B
 	set 0x07,E
@@ -62235,6 +63145,26 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x0684
 	ret
+; ---------------------------------------------------------------------
+; ParamShadow_SetModulation1 -- remember a MODULATION 1 value (parameter
+;                           number 0xB2) for index B
+;
+; Called from: prom_b directory slot T_F40868.
+; Body:    when B <= 0x1F, store E with bit 7 forced into the 32-byte
+;          array at 0x60F5B0 indexed by B.
+; Evidence: `cp B,0x1f` at 0xFAD88A, `ld XIX,0x0060f5b0` at 0xFAD892.
+;          ParamShadow_FlushAll walks the same array with W = 0xB2
+;          (`ld W,0xb2` at 0xFADA38) through the same shared loop it uses
+;          for 0x60F590, which is what pins the parameter number.
+; ★ WHY "MODULATION 1", with three witnesses:
+;          1. MidiOut_ParamNumberTable[0xB2] is MidiOut_CC01_Modulation;
+;          2. the change record at 0xFA812A carries parameter number
+;             0x00B2 and the same routine in [4:8];
+;          3. prom_a's controller list spells controller #1 -- CC 0x01 --
+;             `MODULATION1(# 1)` at 0xFA2BD3, and #2 `MODULATION2(# 2)`,
+;             which is why the name carries the 1.
+; ---------------------------------------------------------------------
+ParamShadow_SetModulation1:
 	cp B,0x1f
 	jr ugt, .LFAD86B
 	set 0x07,E
@@ -62243,6 +63173,20 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x066d
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_WriteStagedAndPublish -- take {C,B,E,D} from the 0x1950
+;                           staging cells, apply it and publish it
+;
+; Called from: prom_b directory slot T_F40878.
+; Body:    `ld (0x60f01e),0xff`, BC = (0x1950), DE = (0x1952), then
+;          T_F407D4 (ParamRecord_WriteFieldAndStage) and T_F407B4.
+; Evidence: the six instructions at 0xFAD8A1-0xFAD8B3.
+; ★ (0x1950..0x1953) is the four-byte staging area the MIDI-in handlers
+;          fill: MidiIn_CC5B_Effect1Depth and its neighbours end in
+;          `ld (0x1950),BC / ld (0x1952),DE` and then call one of this
+;          module's slots -- 0xFA6D1A and 0xFA6D1E are one such pair.
+; ---------------------------------------------------------------------
+ParamApply_WriteStagedAndPublish:
 	stib_da (0x60f01e), 0xff
 	ldw_d16 bc, (0x1950)
 	ldw_d16 de, (0x1952)
@@ -62251,6 +63195,19 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x0652
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_PublishStagedPair -- copy the 0x1950 staging cells into the
+;                           publish record and publish, with NO record
+;                           write
+;
+; Called from: prom_b directory slot T_F40884.
+; Body:    `ld (0x60f01e),0xff`; (0x60F080) = (0x1950); (0x60F082) =
+;          (0x1952); T_F407B4.  Nothing reads ParamNumber_RecordPtrs on
+;          this path, so a parameter number with no record can use it.
+; Evidence: the six instructions at 0xFAD8BC-0xFAD8D8; the absence of any
+;          `call 0xf407d4`/`0xf407d8` between them.
+; ---------------------------------------------------------------------
+ParamApply_PublishStagedPair:
 	stib_da (0x60f01e), 0xff
 	ldw_d16 wa, (0x1950)
 	stw_da (0x60f080), wa
@@ -62260,6 +63217,19 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x0631
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_PublishStagedPair_Copy -- a second copy, published as its own
+;                           directory slot
+;
+; Called from: prom_b directory slot T_F4088C.
+; ★ BORROWED NAME, WITH THE DIFF: 0xFAD8BC and 0xFAD8DD are 29 bytes with
+;          ZERO differing -- byte for byte the same routine, `ret`
+;          included.  Check C2 recomputes both numbers.  (At 33 bytes the
+;          count is 1, and that byte is the `calr` displacement of the
+;          four-byte stub that FOLLOWS each routine; 29 is where both
+;          routines end.)
+; ---------------------------------------------------------------------
+ParamApply_PublishStagedPair_Copy:
 	stib_da (0x60f01e), 0xff
 	ldw_d16 wa, (0x1950)
 	stw_da (0x60f080), wa
@@ -62269,6 +63239,26 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x0610
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_PublishStagedAndPostSeven -- publish the staged pair, then
+;                           post seven fixed records for the same index
+;
+; Called from: prom_b directory slot T_F4087C.
+; Body:    the ParamApply_PublishStagedPair sequence, then seven
+;          Queue2E00_AppendRegs (T_F40F3C) calls with E = 0xB1, 0xB4,
+;          0xB2, 0xB3, 0xB5, 0xB6, 0xB7 in that order, D = (0x1951) each
+;          time and WA = 0x4000, 0x7F00, 0x7F00, 0x7F7F, 0x7F00, 0x7F00,
+;          0x7F00; then (0x1980 + 2*(0x1951)) = 0x7F7F.
+; Evidence: the seven `ld E,0xbN` immediates at 0xFAD91A, 0xFAD927,
+;          0xFAD934, 0xFAD941, 0xFAD94E, 0xFAD95B and 0xFAD968, each
+;          followed by `call 0xf40f3c`; `ld XIX,0x00001980` at 0xFAD97E.
+;          Check C3 reads the seven parameter numbers and the seven WA
+;          immediates out of the ROM rather than trusting this list.
+; ★ All seven are parameter numbers that have an Evt2030 handler and NO
+;          record, so the seven posts go out as queue traffic only.
+; Unknown:  what 0x1980 is.  A 16-bit array indexed by the same index.
+; ---------------------------------------------------------------------
+ParamApply_PublishStagedAndPostSeven:
 	ldw_d16 bc, (0x1950)
 	ldw_d16 de, (0x1952)
 	stib_da (0x60f01e), 0xff
@@ -62311,6 +63301,20 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x057f
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_PublishStagedPairBCDE -- the same publish, staged through
+;                           BC/DE instead of WA
+;
+; Called from: prom_b directory slot T_F40880.
+; Body:    BC = (0x1950); DE = (0x1952); `ld (0x60f01e),0xff`;
+;          (0x60F080) = BC; (0x60F082) = DE; T_F407B4.  Same effect as
+;          ParamApply_PublishStagedPair, different register file and a
+;          different order, so the two are NOT a byte match -- the name
+;          says which spelling this is and claims nothing more.
+; Evidence: `ld BC,(0x1950)` at 0xFAD98F against `ld WA,(0x1950)` at
+;          0xFAD8C2; 28 bytes here against 29 there.
+; ---------------------------------------------------------------------
+ParamApply_PublishStagedPairBCDE:
 	ldw_d16 bc, (0x1950)
 	ldw_d16 de, (0x1952)
 	stib_da (0x60f01e), 0xff
@@ -62320,6 +63324,14 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x055e
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_WriteStagedAndPublish_Copy -- a second copy of 0xFAD8A1
+;
+; Called from: prom_b directory slot T_F40888.
+; ★ BORROWED NAME, WITH THE DIFF: 0xFAD8A1 and 0xFAD9B0 are 23 bytes with
+;          ZERO differing.  Check C2 recomputes both numbers.
+; ---------------------------------------------------------------------
+ParamApply_WriteStagedAndPublish_Copy:
 	stib_da (0x60f01e), 0xff
 	ldw_d16 bc, (0x1950)
 	ldw_d16 de, (0x1952)
@@ -62328,6 +63340,27 @@ DuplicateTail_FAD3EB:
 	ret
 	calr 0x0543
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_OneHotOfSix -- apply a value whose low six bits are an
+;                           ORDINAL, as a one-hot bit in the next field
+;
+; Called from: prom_b directory slot T_F4089C.
+; Body:    A = (0x1952) & 0x3F; return when A >= 6.  Then write bit 6 of
+;          the value, INVERTED, into field B under the staged mask, and
+;          publish.  Then reload BC = (0x1950), advance B by 1 -- or by 2
+;          when bit 7 of the value is clear -- look the ordinal up in
+;          OrdinalToBitMask6, set D = 0x3F, and write and publish that.
+; Evidence: `and A,0x3f` at 0xFAD9CF and `cp A,6` at 0xFAD9D2 bound the
+;          ordinal; `srl 0x06,E / xor E,0xff / and E,0x01` at
+;          0xFAD9E4-0xFAD9EA is the inverted bit 6; `inc 1,B` at 0xFAD9F9
+;          and 0xFADA06 with `srl 0x07,A / jr C` between them is the
+;          +1-or-+2; `ld XIX,0x00fada20` at 0xFADA0B is the table.
+;          Two independent pins on the 6: the `cp A,6` bound and the
+;          table's own six bytes.
+; Unknown:  which parameter this is for -- C comes from (0x1950) and is
+;          not constrained here.
+; ---------------------------------------------------------------------
+ParamApply_OneHotOfSix:
 	ldb_d8 a, (0x1952)
 	and A,0x3f
 	cps a, 0x06
@@ -62356,10 +63389,64 @@ DuplicateTail_FAD3EB:
 	call 0xf407b4
 .LFADA1F:
 	ret
+; ---------------------------------------------------------------------
+; OrdinalToBitMask6 -- six bytes, 0x01 0x02 0x04 0x08 0x10 0x20: ordinal
+;                           k (0..5) as a one-hot bit
+;
+; Read by: `ld E,(XIX+E)` at 0xFADA10, with XIX loaded from
+;          `ld XIX,0x00fada20` at 0xFADA0B, inside ParamApply_OneHotOfSix.
+; ★ It is the exact inverse of BitMaskToOrdinal6 at 0xFADD30: for every
+;          k in 0..5, BitMaskToOrdinal6[OrdinalToBitMask6[k]] == k.  Check
+;          C4 asserts that round trip on all six, last included -- which is
+;          what makes both names something better than a reading of six
+;          bytes.
+; Evidence: the six bytes, re-read from the ROM by check C4.
+; ⚠ THE EMITTER SPELLED THEM AS INSTRUCTIONS.  The four lines below this
+;          label -- `normal`, `push SR`, `max`, `ld (0x10),0x20` (the .s
+;          spells the last one `ldio 0x10, 0x20`) -- are
+;          0x01 0x02 0x04 0x08 0x10 0x20, this table, decoded as code by
+;          notes/gen_prom_a_fad800_module.py.  The byte gate cannot tell
+;          the difference and never will; only this header can.
+; ---------------------------------------------------------------------
+OrdinalToBitMask6:
 	normal
 	push SR
 	max
 	ldio 0x10, 0x20
+; ---------------------------------------------------------------------
+; ParamShadow_FlushAll -- publish every shadow entry whose bit 7 is set,
+;                           then clear the bit
+;
+; Called from: prom_b directory slot T_F40898.
+; Body:    five sweeps, starting immediately with `ld XIY,0x0060f590`:
+;            0x60F590[0..0x1F]  as parameter 0xB3, mask 0x7F
+;            0x60F650           as parameter 0xB0 index 1, mask 0x7F,
+;                               also copied to (0x24F0) and sent through
+;                               T_F407EC
+;            0x60F5B0[0..0x1F]  as parameter 0xB2, mask 0x7F
+;            0x60F5D0[0..0x1F]  as parameter 0xB1, 16-bit: the stored high
+;                               byte becomes the mask (T_F407B8)
+;            0x60F610[0..0x1F]  as parameter <index>, field 3, mask 0x7F
+;                               (T_F407D4 then T_F407B4)
+;          Each sweep tests bit 7, clears it, writes the record and calls
+;          a publish entry.
+; Evidence: `ld XIY,0x0060f590` at 0xFADA26, `ld W,0xb3` at 0xFADA2B,
+;          `ld XIY,0x0060f5b0` at 0xFADA33, `ld W,0xb2` at 0xFADA38,
+;          `ld XIY,0x0060f650` at 0xFADA7F, `ld XIY,0x0060f5d0` at
+;          0xFADABA, `ld XIY,0x0060f610` at 0xFADAF5; `bit 0x07,A` and
+;          `res 0x07,A` in each loop; `cp L,0x1f`/`cp B,0x1f` bound each
+;          sweep at 32 entries.
+; ★ 0xB3 is EXPRESSION, 0xB2 is MODULATION 1 and 0xB1 is PITCH BEND --
+;          see ParamShadow_SetExpression, ParamShadow_SetModulation1 and
+;          ParamShadow_SetPitchBend for the witnesses.  0xB0 has no
+;          outbound handler (MidiOut_ParamNumberTable[0xB0] is a bare
+;          `ret` at 0xFA767D), so nothing here names it.
+; ★ These five arrays are the deferred half of this module: the four
+;          ParamShadow_Set* entries write them and only this routine reads
+;          them.  Nothing else in prom_a names 0x60F590, 0x60F5B0,
+;          0x60F5D0, 0x60F610 or 0x60F650.
+; ---------------------------------------------------------------------
+ParamShadow_FlushAll:
 	ld XIY,0x0060f590
 	ldb w, 0xb3
 	calr .LFADA44
@@ -62448,6 +63535,28 @@ DuplicateTail_FAD3EB:
 	cp L,0x1f
 	jr ule, .LFADAFC
 	ret
+; ---------------------------------------------------------------------
+; Evt2030_RunList -- walk the 0x2030 event list and dispatch every record
+;                           through Evt2030_ClassHandlers
+;
+; Called from: prom_b directory slot T_F40850.
+; Body:    return when bit 0 of (0x0922) is set and bit 1 is clear;
+;          otherwise (0x60F08C) = 0 and loop: A = byte +0 of the record at
+;          0x2030 + (0x60F08C); stop at 0xFF; skip when A > 0xBF; else
+;          XIY = Evt2030_ClassHandlers[A]; skip when that is 0xFFFFFFFF;
+;          load BC and DE from the record, save them to (0x60F0BC) and
+;          (0x60F0BE), `call XIY`, advance (0x60F08C) by 4.
+; Evidence: `ld (0x60f08c),0x0000` at 0xFADB3A, `ld XIX,0x00002030` at
+;          0xFADB41, `cp A,0xff` at 0xFADB50, `cp A,0xbf` at 0xFADB55,
+;          `ld XIY,0x00fae3a2` at 0xFADB5F, `cp XIY,0xffffffff` at
+;          0xFADB69, `call T,XIY` at 0xFADB87, `inc 4,(0x60f08c)` at
+;          0xFADB89.  The 0x2030 list itself is List2030_AppendRegs'
+;          (0xF86AC7) buffer, whose header already names this loop as one
+;          of its three consumers.
+; ★ 0xBF is the same bound MidiOut_ParamChanged uses on the SAME byte
+;          (`cp C,0xbf` at 0xFA710B), and both tables have 192 entries.
+; ---------------------------------------------------------------------
+Evt2030_RunList:
 	ldb_d8 a, (0x0922)
 	bit 0x00,A
 	jr z, .LFADB3A
@@ -62530,6 +63639,23 @@ Evt2030_Class00to1F:   ; entry: pointer-table entry
 ; ---------------------------------------------------------------------
 Evt2030_Class00to1F_Op01:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FADBDA -- arm 3 of the 4-entry jump table at 0xFAE30E
+;
+; Called from: the reader `ld XIX,0x00fae30e` at 0xFAE301, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   Evt2030_Class00to1F_Op00.
+; Body:    starts `cp C,0x48`.
+; Evidence: the LE32 word at 0xFAE31A reads 0x00FADBDA, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FADBDA:   ; entry: pointer-table entry
 	cp C,0x48
 	jr z, .LFADC1F
@@ -62716,6 +63842,23 @@ Evt2030_Class20to3F_Op1A:   ; entry: pointer-table entry
 	ldb b, 0x18
 	call 0xf407cc
 	ret
+; ---------------------------------------------------------------------
+; BitMaskToOrdinal6 -- 48 bytes indexed by a one-hot byte: 0x01 -> 0,
+;                           0x02 -> 1, 0x04 -> 2, 0x08 -> 3, 0x10 -> 4,
+;                           0x20 -> 5, every other index 0
+;
+; Read by: `ld A,(XIX+A)` at 0xFADD1D, with XIX loaded from
+;          `ld XIX,0x00fadd30` at 0xFADD18, inside the shared tail at
+;          0xFADCE5 that all three Evt2030_Class20to3F arms call.
+; ★ The inverse of OrdinalToBitMask6 at 0xFADA20 -- check C4 asserts the
+;          round trip on all six, last included.
+; Extent:  48 bytes, from 0xFADD30 to the code at 0xFADD60.  The largest
+;          index it can be reached with is 0x3F (`and A,0x3f` at 0xFADD0A
+;          and 0xFADD15), so 0x40 bytes would be the natural size and the
+;          table is 0x30; indices 0x30..0x3F would run into the code.
+;          ⚠ Stated as measured, not explained.
+; ---------------------------------------------------------------------
+BitMaskToOrdinal6:
 	nop
 	nop
 	normal
@@ -62777,8 +63920,32 @@ Evt2030_Class20to3F_Op1A:   ; entry: pointer-table entry
 	.long 0x00FADD87   ; -> sub_FADD87   ; FADD7B
 	.long 0x00FADD87   ; -> sub_FADD87   ; FADD7F
 	.long 0x00FADD88   ; -> sub_FADD88   ; FADD83
+; ---------------------------------------------------------------------
+; sub_FADD87 -- arm 1, 2 of the 4-entry jump table at 0xFADD77
+;
+; Called from: the reader `ld XIX,0x00fadd77` at 0xFADD6B, through XIX/XIY.
+;          Index: B, bounded by `cp L,3` at 0xFADD64.
+; Owner:   the handler at 0xFADD60, which NOTHING references.
+; Body:    starts `ret`.
+; Evidence: the LE32 words at 0xFADD7B, 0xFADD7F reads 0x00FADD87, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names B, bounded by `cp L,3` at 0xFADD64, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FADD87:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FADD88 -- arm 3 of the 4-entry jump table at 0xFADD77
+;
+; Called from: the reader `ld XIX,0x00fadd77` at 0xFADD6B, through XIX/XIY.
+;          Index: B, bounded by `cp L,3` at 0xFADD64.
+; Owner:   the handler at 0xFADD60, which NOTHING references.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFADD83 reads 0x00FADD88, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names B, bounded by `cp L,3` at 0xFADD64, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FADD88:   ; entry: pointer-table entry
 	ret
 	extz HL
@@ -62792,8 +63959,32 @@ sub_FADD88:   ; entry: pointer-table entry
 ; --- 0xFADDA0-0xFADDA8  pointer table (8 bytes) ---
 	.long 0x00FADDA8   ; -> sub_FADDA8   ; FADDA0
 	.long 0x00FADDA9   ; -> sub_FADDA9   ; FADDA4
+; ---------------------------------------------------------------------
+; sub_FADDA8 -- arm 0 of the 2-entry jump table at 0xFADDA0
+;
+; Called from: the reader `ld XIX,0x00fadda0` at 0xFADD94, through XIX/XIY.
+;          Index: B, bounded by `cp L,1` at 0xFADD8D.
+; Owner:   the handler at 0xFADD89, which NOTHING references.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFADDA0 reads 0x00FADDA8, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names B, bounded by `cp L,1` at 0xFADD8D, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FADDA8:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FADDA9 -- arm 1 of the 2-entry jump table at 0xFADDA0
+;
+; Called from: the reader `ld XIX,0x00fadda0` at 0xFADD94, through XIX/XIY.
+;          Index: B, bounded by `cp L,1` at 0xFADD8D.
+; Owner:   the handler at 0xFADD89, which NOTHING references.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFADDA4 reads 0x00FADDA9, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names B, bounded by `cp L,1` at 0xFADD8D, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FADDA9:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
@@ -62817,11 +64008,37 @@ Evt2030_Class98:   ; entry: pointer-table entry
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADDC1-0xFADDC9  pointer table (8 bytes) ---
-	.long 0x00FADDC9   ; -> sub_FADDC9   ; FADDC1
-	.long 0x00FADDCA   ; -> sub_FADDCA   ; FADDC5
-sub_FADDC9:   ; entry: pointer-table entry
+	.long 0x00FADDC9   ; -> Evt2030_Class98_Op00   ; FADDC1
+	.long 0x00FADDCA   ; -> Evt2030_Class98_Op01   ; FADDC5
+; ---------------------------------------------------------------------
+; Evt2030_Class98_Op00 -- operation 0 of parameter number 0x98: do nothing
+;
+; Called from: `jp T,XIX` at 0xFADDBF; index 0 of the 2-entry table at
+;          0x00FADDC1, which Evt2030_Class98 indexes with B after
+;          `cp L,1` at 0xFADDAE.
+; Body:    one `ret`.
+; Evidence: the LE32 word at 0xFADDC1 reads 0x00FADDC9 and the word at
+;          0xFADDC5 reads 0x00FADDCA, so the two arms are one byte apart
+;          and the first is the `ret`.
+; ---------------------------------------------------------------------
+Evt2030_Class98_Op00:   ; entry: pointer-table entry
 	ret
-sub_FADDCA:   ; entry: pointer-table entry
+; ---------------------------------------------------------------------
+; Evt2030_Class98_Op01 -- operation 1 of parameter number 0x98
+;
+; Called from: `jp T,XIX` at 0xFADDBF; index 1 of the table at 0x00FADDC1.
+; Body:    return unless bit 3 of (0x7F32) is set; bump (0x1965) and
+;          return if its bit 0 is now set; otherwise dispatch on
+;          (0x7F32) & 3 through the 4-entry table at 0x00FADDF1.
+; Evidence: `bit 3,(0x7f32)` at 0xFADDCA, `inc 1,(0x1965)` at 0xFADDD1,
+;          `ld L,(0x7f32)` at 0xFADDDB and `and L,0x03` at 0xFADDDF,
+;          `ld XIX,0x00faddf1` at 0xFADDE5.
+; ★ (0x7F32) is parameter number 0x80's own record -- see
+;          ParamNumber_RecordPtrs -- so this handler for parameter 0x98
+;          is gated by, and dispatched on, ANOTHER parameter's value.
+; Unknown:  what bit 3 of (0x7F32) is, and what (0x1965) counts.
+; ---------------------------------------------------------------------
+Evt2030_Class98_Op01:   ; entry: pointer-table entry
 	m_bit 3, MD16, 0x7f32
 	jrl z, 0x84
 	incdi8 0x01, (0x1965)
@@ -62838,6 +64055,23 @@ sub_FADDCA:   ; entry: pointer-table entry
 	.long 0x00FADE2F   ; -> sub_FADE2F   ; FADDF5
 	.long 0x00FADE55   ; -> sub_FADE55   ; FADDF9
 	.long 0x00FADE55   ; -> sub_FADE55   ; FADDFD
+; ---------------------------------------------------------------------
+; sub_FADE01 -- arm 0 of the 4-entry jump table at 0xFADDF1
+;
+; Called from: the reader `ld XIX,0x00faddf1` at 0xFADDE5, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   Evt2030_Class98_Op01.
+; Body:    starts `ld BC,0x0298`.
+; Evidence: the LE32 word at 0xFADDF1 reads 0x00FADE01, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FADE01:   ; entry: pointer-table entry
 	ldw bc, 0x0298
 	extz DE
@@ -62854,6 +64088,23 @@ sub_FADE01:   ; entry: pointer-table entry
 	ldb d, 0xff
 	call 0xf407cc
 	jr .LFADE55
+; ---------------------------------------------------------------------
+; sub_FADE2F -- arm 1 of the 4-entry jump table at 0xFADDF1
+;
+; Called from: the reader `ld XIX,0x00faddf1` at 0xFADDE5, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   Evt2030_Class98_Op01.
+; Body:    starts `extz DE`.
+; Evidence: the LE32 word at 0xFADDF5 reads 0x00FADE2F, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FADE2F:   ; entry: pointer-table entry
 	extz DE
 	ldb_d8 e, (0x7f04)
@@ -62868,6 +64119,23 @@ sub_FADE2F:   ; entry: pointer-table entry
 	ldb d, 0xff
 	call 0xf407cc
 .LFADE55:
+; ---------------------------------------------------------------------
+; sub_FADE55 -- arm 2, 3 of the 4-entry jump table at 0xFADDF1
+;
+; Called from: the reader `ld XIX,0x00faddf1` at 0xFADDE5, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   Evt2030_Class98_Op01.
+; Body:    starts `ret`.
+; Evidence: the LE32 words at 0xFADDF9, 0xFADDFD reads 0x00FADE55, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FADE55:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
@@ -63057,6 +64325,27 @@ Evt2030_ClassBC_Fwd:   ; entry: pointer-table entry
 Evt2030_ClassBD_Fwd:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
+; ---------------------------------------------------------------------
+; ParamReset_SixParamsForIndex -- post six fixed parameter records for one
+;                           index, through ParamChange_Notify
+;
+; Called from: prom_b directory slot T_F40890.  No call/jump line in any
+;          of the four transcriptions names that slot, so nothing recorded
+;          calls it; stated as a searched negative.
+; Inputs:  A = the index, W = a source byte.
+; Body:    return when A == 0x48.  W = (W & 0x0F) | 0x80, saved on the
+;          stack; then six times: (0x60F007) = W, C = the parameter number,
+;          B = A, DE = the fixed pair, `call 0xf407d0`.  The six parameter
+;          numbers are 0xB5, 0xB7, 0xB6, 0xB1, 0xB2, 0xB4 in that order
+;          and the pairs are 0x7F00 except 0xB1's 0x4000.
+; Evidence: `cp A,0x48` at 0xFADE8D; `and W,0x0f` at 0xFADE92 and
+;          `or W,0x80` at 0xFADE95; the six `ld C,0xbN` immediates at
+;          0xFADEA0, 0xFADEB2, 0xFADEC4, 0xFADED6, 0xFADEE8 and 0xFADEFA, each
+;          followed by `call 0xf407d0`.  Check C3 reads all six numbers
+;          and all six pairs out of the ROM.
+; Unknown:  why 0x48 is the excluded index.
+; ---------------------------------------------------------------------
+ParamReset_SixParamsForIndex:
 	cp A,0x48
 	jr z, .LFADF07
 	and W,0x0f
@@ -63101,13 +64390,76 @@ Evt2030_ClassBD_Fwd:   ; entry: pointer-table entry
 	inc 2,XSP
 .LFADF07:
 	ret
+; ---------------------------------------------------------------------
+; sub_FADF08 -- a five-byte veneer: `call 0xf40fd0 / ret`
+;
+; Called from: prom_b directory slot T_F40894.
+; ★ IT KEEPS A sub_XXXXXX NAME ON PURPOSE.  It is a published entry point
+;          and so it needs a label -- before this pass the twenty slots of
+;          T_F40850-T_F4089C pointed at twenty addresses with no label at
+;          all -- but its whole body is one call to T_F40FD0, which is
+;          prom_a 0xFC10DD, and that routine is `sub_FC10DD`.  A veneer
+;          can be named no better than its target, so this one is not
+;          named.  A stated gap beats a plausible guess.
+; Evidence: `call 0xf40fd0` at 0xFADF08 and `ret` at 0xFADF0C; prom_b's
+;          directory line `T_F40FD0: jp 0xFC10DD`.
+; Unknown:  everything 0xFC10DD does.
+; ---------------------------------------------------------------------
+sub_FADF08:
 	call 0xf40fd0
 	ret
+; ---------------------------------------------------------------------
+; Dev7F_WriteAllFourSlots -- call all four Dev7F_WriteSlot8 slot entries
+;                           in order
+;
+; Called from: thirteen four-byte `calr <here> / ret` stubs inside this
+;          module, at 0xFAD801, 0xFAD806, 0xFAD819, 0xFAD846, 0xFAD86C,
+;          0xFAD886, 0xFAD89D, 0xFAD8B8, 0xFAD8D9, 0xFAD8FA, 0xFAD98B,
+;          0xFAD9AC and 0xFAD9C7 -- one immediately after each of the
+;          module's first thirteen entry points.  Check C5 re-derives that
+;          list from the ROM and reports that NOTHING references any of the
+;          thirteen stubs.
+; Body:    `call 0xf40004 / call 0xf40008 / call 0xf4000c / call 0xf40010`
+;          and `ret`, four directory slots that are
+;          Dev7F_WriteSlot8_Slot0..Slot3 (prom_a 0xF83171, 0xF83179,
+;          0xF83181, 0xF83189), all four already named.
+; Evidence: the five instructions at 0xFADF0D-0xFADF1D.
+; Unknown:  what device 0x7F is -- FINDINGS-memory-map.md already records
+;          that as open, and this routine does not settle it.
+; ---------------------------------------------------------------------
+Dev7F_WriteAllFourSlots:
 	call 0xf40004
 	call 0xf40008
 	call 0xf4000c
 	call 0xf40010
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_ByModeOfParam80 -- apply the staged record through one of
+;                           four arms chosen by (0x7F32) & 3
+;
+; Called from: prom_b directory slot T_F40854.
+; Body:    `ld (0x60f01e),0xff`.  When C != 0x98 the routine jumps to
+;          0xFAE032, which dispatches on (0x7F32) & 3 through the table at
+;          0xFAE04D.  When C == 0x98 it first requires (0x7F02) & 0xF0 to
+;          be 0x10, then builds a byte out of (0x60F652) and dispatches on
+;          (0x7F32) & 3 through the table at 0xFADF77.
+; Evidence: `cp C,0x98` at 0xFADF24, `ld A,(0x7f02)` at 0xFADF2A,
+;          `cp A,0x10` at 0xFADF31, `ld WA,(0x60f652)` at 0xFADF37,
+;          `ld L,(0x7f32)` at 0xFADF61 and `and L,0x03` at 0xFADF65,
+;          `ld XIX,0x00fadf77` at 0xFADF6B; and the same three-instruction
+;          selector again at 0xFAE032-0xFAE03C with 0xFAE04D.
+; ★ (0x7F32) is parameter number 0x80's record -- ParamNumber_RecordPtrs
+;          entry 0x80 IS 0x7F32 -- and 0x7F02 is parameter 0x98's.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 MEAN IS NOT
+;          ESTABLISHED.  Six separate tables in this span are indexed by
+;          it (--tables lists them); bit 2 of the same byte is the
+;          already-named follow-external-clock bit and prom_b 0xF6F858
+;          writes the low two bits from (0x1380) before posting them as
+;          {0x80, 0, value, 0x03}.  That names the PRODUCER, not the
+;          meaning, and the arms keep their sub_XXXXXX names because of
+;          it.
+; ---------------------------------------------------------------------
+ParamApply_ByModeOfParam80:
 	stib_da (0x60f01e), 0xff
 	cp C,0x98
 	jrl nz, 0x0108
@@ -63142,6 +64494,23 @@ Evt2030_ClassBD_Fwd:   ; entry: pointer-table entry
 	.long 0x00FADFD9   ; -> sub_FADFD9   ; FADF7B
 	.long 0x00FAE02D   ; -> sub_FAE02D   ; FADF7F
 	.long 0x00FAE02D   ; -> sub_FAE02D   ; FADF83
+; ---------------------------------------------------------------------
+; sub_FADF87 -- arm 0 of the 4-entry jump table at 0xFADF77
+;
+; Called from: the reader `ld XIX,0x00fadf77` at 0xFADF6B, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   ParamApply_ByModeOfParam80.
+; Body:    starts `ld XIX,0x00007f02`.
+; Evidence: the LE32 word at 0xFADF77 reads 0x00FADF87, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FADF87:   ; entry: pointer-table entry
 	ld XIX,0x00007f02
 	ld XIY,0x0060f010
@@ -63167,6 +64536,23 @@ sub_FADF87:   ; entry: pointer-table entry
 	call 0xf407d4
 	call 0xf407b4
 	jr .LFAE02D
+; ---------------------------------------------------------------------
+; sub_FADFD9 -- arm 1 of the 4-entry jump table at 0xFADF77
+;
+; Called from: the reader `ld XIX,0x00fadf77` at 0xFADF6B, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   ParamApply_ByModeOfParam80.
+; Body:    starts `ld BC,0x0298`.
+; Evidence: the LE32 word at 0xFADF7B reads 0x00FADFD9, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FADFD9:   ; entry: pointer-table entry
 	ldw bc, 0x0298
 	ld E,A
@@ -63191,6 +64577,23 @@ sub_FADFD9:   ; entry: pointer-table entry
 	ldb_da a, (0x60f016)
 	stb_d8 (0x7f0a), a
 .LFAE02D:
+; ---------------------------------------------------------------------
+; sub_FAE02D -- arm 2, 3 of the 4-entry jump table at 0xFADF77
+;
+; Called from: the reader `ld XIX,0x00fadf77` at 0xFADF6B, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   ParamApply_ByModeOfParam80.
+; Body:    starts `ret`.
+; Evidence: the LE32 words at 0xFADF7F, 0xFADF83 reads 0x00FAE02D, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE02D:   ; entry: pointer-table entry
 	ret
 	calr 0xfedc
@@ -63209,6 +64612,23 @@ sub_FAE02D:   ; entry: pointer-table entry
 	.long 0x00FAE0FC   ; -> sub_FAE0FC   ; FAE051
 	.long 0x00FAE188   ; -> sub_FAE188   ; FAE055
 	.long 0x00FAE189   ; -> sub_FAE189   ; FAE059
+; ---------------------------------------------------------------------
+; sub_FAE05D -- arm 0 of the 4-entry jump table at 0xFAE04D
+;
+; Called from: the reader `ld XIX,0x00fae04d` at 0xFAE03C, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   the tail of ParamApply_ByModeOfParam80.
+; Body:    starts `ld BC,(0x1950)`.
+; Evidence: the LE32 word at 0xFAE04D reads 0x00FAE05D, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE05D:   ; entry: pointer-table entry
 	ldw_d16 bc, (0x1950)
 	ldw_d16 de, (0x1952)
@@ -63261,6 +64681,23 @@ sub_FAE05D:   ; entry: pointer-table entry
 .LFAE0FB:
 	ret
 .LFAE0FC:
+; ---------------------------------------------------------------------
+; sub_FAE0FC -- arm 1 of the 4-entry jump table at 0xFAE04D
+;
+; Called from: the reader `ld XIX,0x00fae04d` at 0xFAE03C, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   the tail of ParamApply_ByModeOfParam80.
+; Body:    starts `ld BC,(0x1950)`.
+; Evidence: the LE32 word at 0xFAE051 reads 0x00FAE0FC, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE0FC:   ; entry: pointer-table entry
 	ldw_d16 bc, (0x1950)
 	ldw_d16 de, (0x1952)
@@ -63307,8 +64744,42 @@ sub_FAE0FC:   ; entry: pointer-table entry
 	call 0xf407b4
 .LFAE187:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAE188 -- arm 2 of the 4-entry jump table at 0xFAE04D
+;
+; Called from: the reader `ld XIX,0x00fae04d` at 0xFAE03C, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   the tail of ParamApply_ByModeOfParam80.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAE055 reads 0x00FAE188, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE188:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FAE189 -- arm 3 of the 4-entry jump table at 0xFAE04D
+;
+; Called from: the reader `ld XIX,0x00fae04d` at 0xFAE03C, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   the tail of ParamApply_ByModeOfParam80.
+; Body:    starts `ld BC,(0x1950)`.
+; Evidence: the LE32 word at 0xFAE059 reads 0x00FAE189, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE189:   ; entry: pointer-table entry
 	ldw_d16 bc, (0x1950)
 	ldw_d16 de, (0x1952)
@@ -63355,6 +64826,26 @@ sub_FAE189:   ; entry: pointer-table entry
 	call 0xf407b4
 .LFAE222:
 	ret
+; ---------------------------------------------------------------------
+; ParamApply_StorePairAndDerive -- store the staged value in a 16-bit
+;                           table, then derive a byte from it by mode
+;
+; Called from: prom_b directory slot T_F40870.
+; Body:    BC = (0x1950), DE = (0x1952); XIX = 0x60F530, XIZ = 0x60F570,
+;          HL = 2*C -- or, when C == 0x98, XIX = 0x60F652, XIZ = 0x60F654,
+;          HL = 0.  Store E at (XIX+HL) when E != 0xFF, otherwise D at
+;          (XIX+HL+1), each with bit 7 cleared; mask the 16-bit pair with
+;          0x7F7F; then dispatch on (0x7F32) & 3 through the table at
+;          0xFAE28F and store the resulting A at (XIZ + C).
+; Evidence: `ld XIX,0x0060f530` at 0xFAE22B, `ld XIZ,0x0060f570` at
+;          0xFAE230, `cp C,0x98` at 0xFAE23C, `ld XIX,0x0060f652` at
+;          0xFAE241, `cp E,0xff` at 0xFAE24D, `and WA,0x7f7f` at 0xFAE26D,
+;          `ld B,(0x7f32)` at 0xFAE279 and `and B,0x03` at 0xFAE27D,
+;          `ld XIY,0x00fae28f` at 0xFAE283, `ld (XIZ+HL),A` at 0xFAE2D8.
+; Unknown:  what 0x60F530 and 0x60F570 hold, and what the four arms
+;          compute.  The arms keep their sub_XXXXXX names.
+; ---------------------------------------------------------------------
+ParamApply_StorePairAndDerive:
 	ldw_d16 bc, (0x1950)
 	ldw_d16 de, (0x1952)
 	ld XIX,0x0060f530
@@ -63394,8 +64885,42 @@ sub_FAE189:   ; entry: pointer-table entry
 	.long 0x00FAE2A1   ; -> sub_FAE2A1   ; FAE293
 	.long 0x00FAE2D3   ; -> sub_FAE2D3   ; FAE297
 	.long 0x00FAE2D5   ; -> sub_FAE2D5   ; FAE29B
+; ---------------------------------------------------------------------
+; sub_FAE29F -- arm 0 of the 4-entry jump table at 0xFAE28F
+;
+; Called from: the reader `ld XIY,0x00fae28f` at 0xFAE283, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   ParamApply_StorePairAndDerive.
+; Body:    starts `jr T,0xfae2aa`.
+; Evidence: the LE32 word at 0xFAE28F reads 0x00FAE29F, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE29F:   ; entry: pointer-table entry
 	jr .LFAE2AA
+; ---------------------------------------------------------------------
+; sub_FAE2A1 -- arm 1 of the 4-entry jump table at 0xFAE28F
+;
+; Called from: the reader `ld XIY,0x00fae28f` at 0xFAE283, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   ParamApply_StorePairAndDerive.
+; Body:    starts `and W,0x07`.
+; Evidence: the LE32 word at 0xFAE293 reads 0x00FAE2A1, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE2A1:   ; entry: pointer-table entry
 	and W,0x07
 	cps w, 0x03
@@ -63421,8 +64946,42 @@ sub_FAE2A1:   ; entry: pointer-table entry
 	and A,0xe7
 .LFAE2D1:
 	jr .LFAE2D8
+; ---------------------------------------------------------------------
+; sub_FAE2D3 -- arm 2 of the 4-entry jump table at 0xFAE28F
+;
+; Called from: the reader `ld XIY,0x00fae28f` at 0xFAE283, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   ParamApply_StorePairAndDerive.
+; Body:    starts `jr T,0xfae2d8`.
+; Evidence: the LE32 word at 0xFAE297 reads 0x00FAE2D3, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE2D3:   ; entry: pointer-table entry
 	jr .LFAE2D8
+; ---------------------------------------------------------------------
+; sub_FAE2D5 -- arm 3 of the 4-entry jump table at 0xFAE28F
+;
+; Called from: the reader `ld XIY,0x00fae28f` at 0xFAE283, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   ParamApply_StorePairAndDerive.
+; Body:    starts `srl 0x08,WA`.
+; Evidence: the LE32 word at 0xFAE29B reads 0x00FAE2D5, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE2D5:   ; entry: pointer-table entry
 	srl wa, 0x08
 .LFAE2D8:
@@ -63451,6 +65010,23 @@ Evt2030_Class00to1F_Op00:   ; entry: pointer-table entry
 	mx8_ld_rm MXL, ra_IX, rb_L, r4
 	jp (xix)
 .LFAE30D:
+; ---------------------------------------------------------------------
+; sub_FAE30D -- arm 2 of the 4-entry jump table at 0xFAE30E
+;
+; Called from: the reader `ld XIX,0x00fae30e` at 0xFAE301, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   Evt2030_Class00to1F_Op00.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAE316 reads 0x00FAE30D, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE30D:   ; entry: pointer-table entry
 	ret
 ; --- 0xFAE30E-0xFAE31E  pointer table (16 bytes) ---
@@ -63458,6 +65034,23 @@ sub_FAE30D:   ; entry: pointer-table entry
 	.long 0x00FAE36C   ; -> sub_FAE36C   ; FAE312
 	.long 0x00FAE30D   ; -> sub_FAE30D   ; FAE316
 	.long 0x00FADBDA   ; -> sub_FADBDA   ; FAE31A
+; ---------------------------------------------------------------------
+; sub_FAE31E -- arm 0 of the 4-entry jump table at 0xFAE30E
+;
+; Called from: the reader `ld XIX,0x00fae30e` at 0xFAE301, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   Evt2030_Class00to1F_Op00.
+; Body:    starts `bit 2,(0x7f4d)`.
+; Evidence: the LE32 word at 0xFAE30E reads 0x00FAE31E, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE31E:   ; entry: pointer-table entry
 	m_bit 2, MD16, 0x7f4d
 	jr z, .LFAE32E
@@ -63490,6 +65083,23 @@ sub_FAE31E:   ; entry: pointer-table entry
 	call 0xf407cc
 	ret
 .LFAE36C:
+; ---------------------------------------------------------------------
+; sub_FAE36C -- arm 1 of the 4-entry jump table at 0xFAE30E
+;
+; Called from: the reader `ld XIX,0x00fae30e` at 0xFAE301, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   Evt2030_Class00to1F_Op00.
+; Body:    starts `extz HL`.
+; Evidence: the LE32 word at 0xFAE312 reads 0x00FAE36C, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAE36C:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
@@ -63513,7 +65123,30 @@ sub_FAE36C:   ; entry: pointer-table entry
 	ret
 ; --- 0xFAE3A1-0xFAE3A2  align (1 bytes) ---
 	.byte 0x00   ; FAE3A1
+;
+; Evt2030_ClassHandlers -- 192 LE32 words: the handler for each parameter
+;                           number 0x00-0xBF, or 0xFFFFFFFF for none
+;
+; ★ THIS NAME WAS ALREADY IN THE TREE -- thirteen routine headers in this
+;          module cite `Evt2030_ClassHandlers` -- but the table itself had
+;          no label, so every citation pointed at a name that did not
+;          exist.  This adds the label the prose already assumed.
+; Read by: Evt2030_RunList, `ld XIY,0x00fae3a2` at 0xFADB5F, its only
+;          reader (the table's address appears as a 32-bit little-endian
+;          word at exactly one place in prom_a).
+; Layout:  15 distinct values.  All 32 entries 0x00-0x1F hold
+;          Evt2030_Class00to1F; all 32 entries 0x20-0x3F hold
+;          Evt2030_Class20to3F; 0x98 holds Evt2030_Class98; eleven single
+;          entries hold the eleven five-byte forwarders at
+;          0xFADE56-0xFADE8C; the other 116 are 0xFFFFFFFF.
+; ★ Evidence, against ParamNumber_RecordPtrs and re-derived by check C6:
+;          76 parameter numbers have a handler and 77 have a record; 65
+;          have both; the eleven with a handler and NO record are exactly
+;          0xB1-0xB5, 0xB8-0xBD, i.e. exactly the eleven forwarders.  Two
+;          tables derived from different parts of the ROM agreeing on an
+;          eleven-element set is what makes both of them readable.
 ; --- 0xFAE3A2-0xFAE6A2  pointer table (768 bytes) ---
+Evt2030_ClassHandlers:
 	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3A2
 	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3A6
 	.long 0x00FADB91   ; -> Evt2030_Class00to1F   ; FAE3AA
@@ -63742,17 +65375,89 @@ sub_FAE36C:   ; entry: pointer-table entry
 	.long 0x00FAE822   ; -> sub_FAE822   ; FAE816
 	.long 0x00FAE822   ; -> sub_FAE822   ; FAE81A
 	.long 0x00FAE822   ; -> sub_FAE822   ; FAE81E
+; ---------------------------------------------------------------------
+; sub_FAE822 -- arm 5, 6, 7 of the 8-entry jump table at 0xFAE802
+;
+; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
+;          Index: -- no reader found --.
+; Owner:   nothing.
+; Body:    starts `ret`.
+; Evidence: the LE32 words at 0xFAE816, 0xFAE81A, 0xFAE81E reads 0x00FAE822, and no other
+;          entry of that table does.
+; Unknown:  everything.  Nothing loads the table, so nothing
+;          is known to reach this arm at all.
+; ---------------------------------------------------------------------
 sub_FAE822:   ; entry: pointer-table entry
 	ret
 	ret
+; ---------------------------------------------------------------------
+; sub_FAE824 -- arm 0 of the 8-entry jump table at 0xFAE802
+;
+; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
+;          Index: -- no reader found --.
+; Owner:   nothing.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAE802 reads 0x00FAE824, and no other
+;          entry of that table does.
+; Unknown:  everything.  Nothing loads the table, so nothing
+;          is known to reach this arm at all.
+; ---------------------------------------------------------------------
 sub_FAE824:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FAE825 -- arm 1 of the 8-entry jump table at 0xFAE802
+;
+; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
+;          Index: -- no reader found --.
+; Owner:   nothing.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAE806 reads 0x00FAE825, and no other
+;          entry of that table does.
+; Unknown:  everything.  Nothing loads the table, so nothing
+;          is known to reach this arm at all.
+; ---------------------------------------------------------------------
 sub_FAE825:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FAE826 -- arm 2 of the 8-entry jump table at 0xFAE802
+;
+; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
+;          Index: -- no reader found --.
+; Owner:   nothing.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAE80A reads 0x00FAE826, and no other
+;          entry of that table does.
+; Unknown:  everything.  Nothing loads the table, so nothing
+;          is known to reach this arm at all.
+; ---------------------------------------------------------------------
 sub_FAE826:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FAE827 -- arm 3 of the 8-entry jump table at 0xFAE802
+;
+; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
+;          Index: -- no reader found --.
+; Owner:   nothing.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAE80E reads 0x00FAE827, and no other
+;          entry of that table does.
+; Unknown:  everything.  Nothing loads the table, so nothing
+;          is known to reach this arm at all.
+; ---------------------------------------------------------------------
 sub_FAE827:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FAE828 -- arm 4 of the 8-entry jump table at 0xFAE802
+;
+; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
+;          Index: -- no reader found --.
+; Owner:   nothing.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAE812 reads 0x00FAE828, and no other
+;          entry of that table does.
+; Unknown:  everything.  Nothing loads the table, so nothing
+;          is known to reach this arm at all.
+; ---------------------------------------------------------------------
 sub_FAE828:   ; entry: pointer-table entry
 	ret
 	ret
@@ -63765,6 +65470,18 @@ sub_FAE828:   ; entry: pointer-table entry
 	.long 0x00FAE84A   ; -> sub_FAE84A   ; FAE83E
 	.long 0x00FAE84A   ; -> sub_FAE84A   ; FAE842
 	.long 0x00FAE84A   ; -> sub_FAE84A   ; FAE846
+; ---------------------------------------------------------------------
+; sub_FAE84A -- arm 0, 1, 2 of the 3-entry jump table at 0xFAE83E
+;
+; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
+;          Index: -- no reader found --.
+; Owner:   nothing.
+; Body:    starts `ret`.
+; Evidence: the LE32 words at 0xFAE83E, 0xFAE842, 0xFAE846 reads 0x00FAE84A, and no other
+;          entry of that table does.
+; Unknown:  everything.  Nothing loads the table, so nothing
+;          is known to reach this arm at all.
+; ---------------------------------------------------------------------
 sub_FAE84A:   ; entry: pointer-table entry
 	ret
 	ret
@@ -63924,9 +65641,33 @@ sub_FAE84A:   ; entry: pointer-table entry
 	.long 0x00FAEA10   ; -> sub_FAEA10   ; FAEA04
 	.long 0x00FAEA10   ; -> sub_FAEA10   ; FAEA08
 	.long 0x00FAEA10   ; -> sub_FAEA10   ; FAEA0C
+; ---------------------------------------------------------------------
+; sub_FAEA10 -- arm 7, 8, 9, 10, 11, 12, 13, 14, 15 of the 16-entry jump table at 0xFAE9D0
+;
+; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
+;          Index: W & 0x0F.
+; Owner:   the routine at 0xFAE921.
+; Body:    starts `ret`.
+; Evidence: the LE32 words at 0xFAE9EC, 0xFAE9F0, 0xFAE9F4, 0xFAE9F8, 0xFAE9FC, 0xFAEA00, 0xFAEA04, 0xFAEA08, 0xFAEA0C reads 0x00FAEA10, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names W & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEA10:   ; entry: pointer-table entry
 	ret
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEA12 -- arm 0 of the 16-entry jump table at 0xFAE9D0
+;
+; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
+;          Index: W & 0x0F.
+; Owner:   the routine at 0xFAE921.
+; Body:    starts `ld XIX,0x0060f300`.
+; Evidence: the LE32 word at 0xFAE9D0 reads 0x00FAEA12, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names W & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEA12:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ldb a, 0xc0
@@ -63956,6 +65697,18 @@ sub_FAEA12:   ; entry: pointer-table entry
 	stib_da (0x60f31f), 0x07
 	calr .LFAEC0F
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEA6B -- arm 1 of the 16-entry jump table at 0xFAE9D0
+;
+; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
+;          Index: W & 0x0F.
+; Owner:   the routine at 0xFAE921.
+; Body:    starts `ld XIX,0x0060f300`.
+; Evidence: the LE32 word at 0xFAE9D4 reads 0x00FAEA6B, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names W & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEA6B:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ldb a, 0xb0
@@ -63986,6 +65739,18 @@ sub_FAEA6B:   ; entry: pointer-table entry
 	stib_da (0x60f31f), 0x07
 	calr .LFAEC0F
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEAC5 -- arm 3 of the 16-entry jump table at 0xFAE9D0
+;
+; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
+;          Index: W & 0x0F.
+; Owner:   the routine at 0xFAE921.
+; Body:    starts `ld XIX,0x0060f300`.
+; Evidence: the LE32 word at 0xFAE9DC reads 0x00FAEAC5, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names W & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEAC5:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ldb a, 0xd2
@@ -64000,6 +65765,18 @@ sub_FAEAC5:   ; entry: pointer-table entry
 	stib_da (0x60f31f), 0x25
 	calr .LFAEC0F
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEAF4 -- arm 4 of the 16-entry jump table at 0xFAE9D0
+;
+; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
+;          Index: W & 0x0F.
+; Owner:   the routine at 0xFAE921.
+; Body:    starts `ld XIX,0x0060f300`.
+; Evidence: the LE32 word at 0xFAE9E0 reads 0x00FAEAF4, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names W & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEAF4:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ldb a, 0xd1
@@ -64012,6 +65789,18 @@ sub_FAEAF4:   ; entry: pointer-table entry
 	stib_da (0x60f31f), 0x14
 	calr .LFAEC0F
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEB1D -- arm 5 of the 16-entry jump table at 0xFAE9D0
+;
+; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
+;          Index: W & 0x0F.
+; Owner:   the routine at 0xFAE921.
+; Body:    starts `ld XIX,0x0060f300`.
+; Evidence: the LE32 word at 0xFAE9E4 reads 0x00FAEB1D, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names W & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEB1D:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ldb a, 0xd3
@@ -64024,6 +65813,18 @@ sub_FAEB1D:   ; entry: pointer-table entry
 	stib_da (0x60f31f), 0x04
 	calr .LFAEC0F
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEB46 -- arm 6 of the 16-entry jump table at 0xFAE9D0
+;
+; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
+;          Index: W & 0x0F.
+; Owner:   the routine at 0xFAE921.
+; Body:    starts `bit 0,(0x7fc2)`.
+; Evidence: the LE32 word at 0xFAE9E8 reads 0x00FAEB46, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names W & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEB46:   ; entry: pointer-table entry
 	m_bit 0, MD16, 0x7fc2
 	jr z, .LFAEB74
@@ -64039,6 +65840,18 @@ sub_FAEB46:   ; entry: pointer-table entry
 	calr .LFAEC0F
 .LFAEB74:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEB75 -- arm 2 of the 16-entry jump table at 0xFAE9D0
+;
+; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
+;          Index: W & 0x0F.
+; Owner:   the routine at 0xFAE921.
+; Body:    starts `ld XIX,0x0060f300`.
+; Evidence: the LE32 word at 0xFAE9D8 reads 0x00FAEB75, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names W & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEB75:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ldb a, 0x80
@@ -64266,6 +66079,18 @@ sub_FAEB75:   ; entry: pointer-table entry
 	.long 0x00FAF148   ; -> sub_FAF148   ; FAEE04
 	.long 0x00FAEE10   ; -> sub_FAEE10   ; FAEE08
 	.long 0x00FAEE10   ; -> sub_FAEE10   ; FAEE0C
+; ---------------------------------------------------------------------
+; sub_FAEE10 -- arm 1, 2, 6, 7 of the 8-entry jump table at 0xFAEDF0
+;
+; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
+;          Index: ((0x60F308) & 0x70) >> 2.
+; Owner:   the routine at 0xFAED76.
+; Body:    starts `ret`.
+; Evidence: the LE32 words at 0xFAEDF4, 0xFAEDF8, 0xFAEE08, 0xFAEE0C reads 0x00FAEE10, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEE10:   ; entry: pointer-table entry
 	ret
 	ld XIX,0x00002c00
@@ -64282,6 +66107,18 @@ sub_FAEE10:   ; entry: pointer-table entry
 	set 7,(XIX+0x05)
 .LFAEE35:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEE36 -- arm 3 of the 8-entry jump table at 0xFAEDF0
+;
+; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
+;          Index: ((0x60F308) & 0x70) >> 2.
+; Owner:   the routine at 0xFAED76.
+; Body:    starts `calr 0xfaf055`.
+; Evidence: the LE32 word at 0xFAEDFC reads 0x00FAEE36, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEE36:   ; entry: pointer-table entry
 	calr 0x021c
 	m_cp_mi8 MB24, 0x60f308, 0xff
@@ -64314,8 +66151,32 @@ sub_FAEE36:   ; entry: pointer-table entry
 	.long 0x00FAEE10   ; -> sub_FAEE10   ; FAEE90
 	.long 0x00FAEE10   ; -> sub_FAEE10   ; FAEE94
 	.long 0x00FAEE10   ; -> sub_FAEE10   ; FAEE98
+; ---------------------------------------------------------------------
+; sub_FAEE9C -- arm 0 of the 16-entry jump table at 0xFAEE5C
+;
+; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
+;          Index: (0x60F327) & 0x0F.
+; Owner:   the routine at 0xFAEE10.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAEE5C reads 0x00FAEE9C, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEE9C:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEE9D -- arm 6 of the 16-entry jump table at 0xFAEE5C
+;
+; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
+;          Index: (0x60F327) & 0x0F.
+; Owner:   the routine at 0xFAEE10.
+; Body:    starts `call 0xfaf562`.
+; Evidence: the LE32 word at 0xFAEE74 reads 0x00FAEE9D, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEE9D:   ; entry: pointer-table entry
 	call 0xfaf562
 	jr nc, .LFAEEED
@@ -64356,6 +66217,18 @@ sub_FAEE9D:   ; entry: pointer-table entry
 	call 0xf407d0
 .LFAEF23:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEF24 -- arm 5 of the 16-entry jump table at 0xFAEE5C
+;
+; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
+;          Index: (0x60F327) & 0x0F.
+; Owner:   the routine at 0xFAEE10.
+; Body:    starts `ld E,(0x60f30c)`.
+; Evidence: the LE32 word at 0xFAEE70 reads 0x00FAEF24, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEF24:   ; entry: pointer-table entry
 	ldb_da e, (0x60f30c)
 	extz HL
@@ -64395,10 +66268,46 @@ sub_FAEF24:   ; entry: pointer-table entry
 	call 0xf407d0
 .LFAEFB0:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEFB1 -- arm 1 of the 16-entry jump table at 0xFAEE5C
+;
+; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
+;          Index: (0x60F327) & 0x0F.
+; Owner:   the routine at 0xFAEE10.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAEE60 reads 0x00FAEFB1, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEFB1:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEFB2 -- arm 2 of the 16-entry jump table at 0xFAEE5C
+;
+; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
+;          Index: (0x60F327) & 0x0F.
+; Owner:   the routine at 0xFAEE10.
+; Body:    starts `ret`.
+; Evidence: the LE32 word at 0xFAEE64 reads 0x00FAEFB2, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEFB2:   ; entry: pointer-table entry
 	ret
+; ---------------------------------------------------------------------
+; sub_FAEFB3 -- arm 3 of the 16-entry jump table at 0xFAEE5C
+;
+; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
+;          Index: (0x60F327) & 0x0F.
+; Owner:   the routine at 0xFAEE10.
+; Body:    starts `call 0xfaf562`.
+; Evidence: the LE32 word at 0xFAEE68 reads 0x00FAEFB3, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAEFB3:   ; entry: pointer-table entry
 	call 0xfaf562
 	jr nc, .LFAEFDD
@@ -64425,6 +66334,18 @@ sub_FAEFB3:   ; entry: pointer-table entry
 	call 0xf407d0
 .LFAF009:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAF00A -- arm 4 of the 16-entry jump table at 0xFAEE5C
+;
+; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
+;          Index: (0x60F327) & 0x0F.
+; Owner:   the routine at 0xFAEE10.
+; Body:    starts `call 0xfaf562`.
+; Evidence: the LE32 word at 0xFAEE6C reads 0x00FAF00A, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF00A:   ; entry: pointer-table entry
 	call 0xfaf562
 	jr nc, .LFAF028
@@ -64511,6 +66432,18 @@ sub_FAF00A:   ; entry: pointer-table entry
 	jr .LFAF0EA
 .LFAF0FD:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAF0FE -- arm 0 of the 8-entry jump table at 0xFAEDF0
+;
+; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
+;          Index: ((0x60F308) & 0x70) >> 2.
+; Owner:   the routine at 0xFAED76.
+; Body:    starts `cp (0x60f308),0x80`.
+; Evidence: the LE32 word at 0xFAEDF0 reads 0x00FAF0FE, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF0FE:   ; entry: pointer-table entry
 	m_cp_mi8 MB24, 0x60f308, 0x80
 	jr nz, .LFAF147
@@ -64534,6 +66467,18 @@ sub_FAF0FE:   ; entry: pointer-table entry
 	call 0xf407b4
 .LFAF147:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAF148 -- arm 5 of the 8-entry jump table at 0xFAEDF0
+;
+; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
+;          Index: ((0x60F308) & 0x70) >> 2.
+; Owner:   the routine at 0xFAED76.
+; Body:    starts `calr 0xfaf3f9`.
+; Evidence: the LE32 word at 0xFAEE04 reads 0x00FAF148, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF148:   ; entry: pointer-table entry
 	calr 0x02ae
 	m_cp_mi8 MB24, 0x60f308, 0xff
@@ -64553,6 +66498,18 @@ sub_FAF148:   ; entry: pointer-table entry
 	.long 0x00FAF20B   ; -> sub_FAF20B   ; FAF170
 	.long 0x00FAF29A   ; -> sub_FAF29A   ; FAF174
 	.long 0x00FAF332   ; -> sub_FAF332   ; FAF178
+; ---------------------------------------------------------------------
+; sub_FAF17C -- arm 0 of the 4-entry jump table at 0xFAF16C
+;
+; Called from: the reader `ld XIX,0x00faf16c` at 0xFAF15E, through XIX/XIY.
+;          Index: (0x60F308) & 3.
+; Owner:   the routine at 0xFAF148.
+; Body:    starts `extz HL`.
+; Evidence: the LE32 word at 0xFAF16C reads 0x00FAF17C, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF17C:   ; entry: pointer-table entry
 	extz HL
 	ldb_da l, (0x60f31d)
@@ -64591,6 +66548,18 @@ sub_FAF17C:   ; entry: pointer-table entry
 	call 0xf407d0
 .LFAF20A:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAF20B -- arm 1 of the 4-entry jump table at 0xFAF16C
+;
+; Called from: the reader `ld XIX,0x00faf16c` at 0xFAF15E, through XIX/XIY.
+;          Index: (0x60F308) & 3.
+; Owner:   the routine at 0xFAF148.
+; Body:    starts `extz HL`.
+; Evidence: the LE32 word at 0xFAF170 reads 0x00FAF20B, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF20B:   ; entry: pointer-table entry
 	extz HL
 	ldb_da l, (0x60f31d)
@@ -64629,6 +66598,18 @@ sub_FAF20B:   ; entry: pointer-table entry
 	call 0xf407d0
 .LFAF299:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAF29A -- arm 2 of the 4-entry jump table at 0xFAF16C
+;
+; Called from: the reader `ld XIX,0x00faf16c` at 0xFAF15E, through XIX/XIY.
+;          Index: (0x60F308) & 3.
+; Owner:   the routine at 0xFAF148.
+; Body:    starts `extz HL`.
+; Evidence: the LE32 word at 0xFAF174 reads 0x00FAF29A, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF29A:   ; entry: pointer-table entry
 	extz HL
 	ldb_da l, (0x60f31d)
@@ -64669,6 +66650,18 @@ sub_FAF29A:   ; entry: pointer-table entry
 	call 0xf407d0
 .LFAF331:
 	ret
+; ---------------------------------------------------------------------
+; sub_FAF332 -- arm 3 of the 4-entry jump table at 0xFAF16C
+;
+; Called from: the reader `ld XIX,0x00faf16c` at 0xFAF15E, through XIX/XIY.
+;          Index: (0x60F308) & 3.
+; Owner:   the routine at 0xFAF148.
+; Body:    starts `ld E,(0x60f30a)`.
+; Evidence: the LE32 word at 0xFAF178 reads 0x00FAF332, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF332:   ; entry: pointer-table entry
 	ldb_da e, (0x60f30a)
 	extz HL
@@ -64739,21 +66732,69 @@ sub_FAF332:   ; entry: pointer-table entry
 	.long 0x00FAF431   ; -> sub_FAF431   ; FAF414
 	.long 0x00FAF442   ; -> sub_FAF442   ; FAF418
 	.long 0x00FAF453   ; -> sub_FAF453   ; FAF41C
+; ---------------------------------------------------------------------
+; sub_FAF420 -- arm 0 of the 4-entry jump table at 0xFAF410
+;
+; Called from: the reader `ld XIX,0x00faf410` at 0xFAF404, through XIX/XIY.
+;          Index: (0x60F308) & 3.
+; Owner:   the routine at 0xFAF332.
+; Body:    starts `ld XIY,0x00faf7c7`.
+; Evidence: the LE32 word at 0xFAF410 reads 0x00FAF420, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF420:   ; entry: pointer-table entry
 	ld XIY,0x00faf7c7
 	ld XBC,0x00000020
 	ldb_da l, (0x60f30b)
 	jr .LFAF462
+; ---------------------------------------------------------------------
+; sub_FAF431 -- arm 1 of the 4-entry jump table at 0xFAF410
+;
+; Called from: the reader `ld XIX,0x00faf410` at 0xFAF404, through XIX/XIY.
+;          Index: (0x60F308) & 3.
+; Owner:   the routine at 0xFAF332.
+; Body:    starts `ld XIY,0x00faf7c7`.
+; Evidence: the LE32 word at 0xFAF414 reads 0x00FAF431, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF431:   ; entry: pointer-table entry
 	ld XIY,0x00faf7c7
 	ld XBC,0x00000020
 	ldb_da l, (0x60f30b)
 	jr .LFAF462
+; ---------------------------------------------------------------------
+; sub_FAF442 -- arm 2 of the 4-entry jump table at 0xFAF410
+;
+; Called from: the reader `ld XIX,0x00faf410` at 0xFAF404, through XIX/XIY.
+;          Index: (0x60F308) & 3.
+; Owner:   the routine at 0xFAF332.
+; Body:    starts `ld XIY,0x00faf7c7`.
+; Evidence: the LE32 word at 0xFAF418 reads 0x00FAF442, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF442:   ; entry: pointer-table entry
 	ld XIY,0x00faf7c7
 	ld XBC,0x00000020
 	ldb_da l, (0x60f30c)
 	jr .LFAF462
+; ---------------------------------------------------------------------
+; sub_FAF453 -- arm 3 of the 4-entry jump table at 0xFAF410
+;
+; Called from: the reader `ld XIX,0x00faf410` at 0xFAF404, through XIX/XIY.
+;          Index: (0x60F308) & 3.
+; Owner:   the routine at 0xFAF332.
+; Body:    starts `ld XIY,0x00faf7c7`.
+; Evidence: the LE32 word at 0xFAF41C reads 0x00FAF453, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF453:   ; entry: pointer-table entry
 	ld XIY,0x00faf7c7
 	ld XBC,0x00000020
@@ -64895,6 +66936,18 @@ sub_FAF453:   ; entry: pointer-table entry
 	ldl_da xiy, (0x60f0a4)
 	ldl_da xiz, (0x60f0a8)
 	ret
+; ---------------------------------------------------------------------
+; sub_FAF5C1 -- arm 4 of the 8-entry jump table at 0xFAEDF0
+;
+; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
+;          Index: ((0x60F308) & 0x70) >> 2.
+; Owner:   the routine at 0xFAED76.
+; Body:    starts `calr 0xfaee22`.
+; Evidence: the LE32 word at 0xFAEE00 reads 0x00FAF5C1, and no other
+;          entry of that table does.
+; Unknown:  what the selector means.  Nothing in the tree
+;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
+; ---------------------------------------------------------------------
 sub_FAF5C1:   ; entry: pointer-table entry
 	calr 0xf85e
 	m_cp_mi8 MB24, 0x60f308, 0xff
@@ -64968,6 +67021,23 @@ sub_FAF5C1:   ; entry: pointer-table entry
 	.long 0x00FAF728   ; -> sub_FAF728   ; FAF6BC
 	.long 0x00FAF771   ; -> sub_FAF771   ; FAF6C0
 	.long 0x00FAF771   ; -> sub_FAF771   ; FAF6C4
+; ---------------------------------------------------------------------
+; sub_FAF6C8 -- arm 0 of the 4-entry jump table at 0xFAF6B8
+;
+; Called from: the reader `ld XIX,0x00faf6b8` at 0xFAF6AB, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   the routine at 0xFAF5C1.
+; Body:    starts `bit 2,(0x7f4d)`.
+; Evidence: the LE32 word at 0xFAF6B8 reads 0x00FAF6C8, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAF6C8:   ; entry: pointer-table entry
 	m_bit 2, MD16, 0x7f4d
 	jr z, .LFAF6D8
@@ -64999,6 +67069,23 @@ sub_FAF6C8:   ; entry: pointer-table entry
 	call 0xf407d0
 	jr .LFAF771
 .LFAF728:
+; ---------------------------------------------------------------------
+; sub_FAF728 -- arm 1 of the 4-entry jump table at 0xFAF6B8
+;
+; Called from: the reader `ld XIX,0x00faf6b8` at 0xFAF6AB, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   the routine at 0xFAF5C1.
+; Body:    starts `ld B,(0x60f0bc)`.
+; Evidence: the LE32 word at 0xFAF6BC reads 0x00FAF728, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAF728:   ; entry: pointer-table entry
 	ldb_da b, (0x60f0bc)
 	ldb c, 0x81
@@ -65021,6 +67108,23 @@ sub_FAF728:   ; entry: pointer-table entry
 	ldb d, 0xff
 	call 0xf407d0
 .LFAF771:
+; ---------------------------------------------------------------------
+; sub_FAF771 -- arm 2, 3 of the 4-entry jump table at 0xFAF6B8
+;
+; Called from: the reader `ld XIX,0x00faf6b8` at 0xFAF6AB, through XIX/XIY.
+;          Index: (0x7F32) & 3.
+; Owner:   the routine at 0xFAF5C1.
+; Body:    starts `ret`.
+; Evidence: the LE32 words at 0xFAF6C0, 0xFAF6C4 reads 0x00FAF771, and no other
+;          entry of that table does.
+; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
+;          SIX tables in this span are indexed by that same
+;          2-bit field; prom_b 0xF6F858 copies it from
+;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
+;          That names the producer, not the meaning, so this
+;          label stays sub_XXXXXX.  A stated gap beats a
+;          plausible guess.
+; ---------------------------------------------------------------------
 sub_FAF771:   ; entry: pointer-table entry
 	ret
 	m_cp_mi8 MB16, 0x7642, 0x35
@@ -78699,7 +80803,7 @@ sub_FB9E96:
 	push XBC                                             ; FB9F40  39
 	m_push MWD+r6, 0xfa                                  ; FB9F41  9e fa 04
 	m_push MWD+r6, 0xf8                                  ; FB9F44  9e f8 04
-	call sub_FBA10D                                      ; FB9F47  1d 0d a1 fb
+	call Multiply32                                      ; FB9F47  1d 0d a1 fb
 	pushw 0x00                                           ; FB9F4B  0b 00 00
 	pushw 0x60                                           ; FB9F4E  0b 60 00
 	push XIY                                             ; FB9F51  3d
@@ -78809,7 +80913,7 @@ sub_FB9FE1:
 	push XBC                                             ; FBA070  39
 	m_push MWD+r6, 0xfa                                  ; FBA071  9e fa 04
 	m_push MWD+r6, 0xf8                                  ; FBA074  9e f8 04
-	call sub_FBA10D                                      ; FBA077  1d 0d a1 fb
+	call Multiply32                                      ; FBA077  1d 0d a1 fb
 	pushw 0x00                                           ; FBA07B  0b 00 00
 	pushw 0x60                                           ; FBA07E  0b 60 00
 	push XIY                                             ; FBA081  3d
@@ -78869,7 +80973,32 @@ sub_FB9FE1:
 	popw hl                                              ; FBA109  4b
 	unlk XIZ                                             ; FBA10A  ee 0d
 	ret                                                  ; FBA10C  0e
-sub_FBA10D:
+; ---------------------------------------------------------------------
+; Multiply32 -- 32x32 -> 32 multiply, the two low-by-high partial products
+;                           shifted 16 and added, the high-by-high dropped
+;
+; ★ BORROWED FROM prom_c, WITH THE DIFF: prom_c 0xFCB11B carries this name
+;          already and the two routines are the same 38 bytes with **0
+;          differing** -- ROM_A[0xFBA10D..0xFBA132] ==
+;          ROM_C[0xFCB11B..0xFCB140].  Check T1 of --twins recomputes both
+;          numbers; a borrowed name with no diff behind it is exactly what
+;          this tree's rules forbid.
+; ★ AND IT IS THE ONLY ONE.  --twins asks the general question -- is any
+;          prom_a sub_XXXXXX byte-identical, at the same label-to-label
+;          extent, to a NAMED routine in prom_a or prom_c? -- and the
+;          answer is one routine, this one.  The byte-identical-twin lever
+;          that the round-4 brief points at is otherwise empty, because the
+;          two images do not split routines at the same boundaries.
+; Inputs:  (XIZ+0x08) and (XIZ+0x0C) longs.  Outputs: XIY.  `retd 0x0008`.
+; Evidence: `mul XIY,IX` at 0xFBA11A on the two low halves, then
+;          `mul XIX,(XIZ+0x0a)` at 0xFBA11C and `mul XIX,(XIZ+0x0e)` at
+;          0xFBA126, each shifted left 16 by `sll A,XIX` with A = 0x10
+;          loaded once at 0xFBA112, and added.  The high-by-high product is
+;          never computed, which is right for a result truncated to 32
+;          bits -- the same sentence prom_c's header already carries.
+; Called from: 3 textual references in prom_a.
+; ---------------------------------------------------------------------
+Multiply32:
 	link XIZ,0x0000                                      ; FBA10D  ee 0c 00 00
 	push XIX                                             ; FBA111  3c
 	ldb a, 0x10                                          ; FBA112  21 10
@@ -93490,8 +95619,11 @@ Bytes_00_to_1F_x3_FC65C6:
 ;          block with no entry count claimed.
 ; What the bytes are: 32-bit little-endian values 0x000076A2, 0x000076E2,
 ;          0x00007722 ... stepping by 0x40 -- the SAME family of 16-bit
-;          quantities that Lookup32_By_Arg8 (0xFACDEA, the other module) holds,
-;          and neither module says what they mean.  Interrupted by short byte
+;          quantities that ParamNumber_RecordPtrs (0xFACDEA, the other
+;          module) holds: 16-bit WORK-RAM addresses, 0x76A2 + 0x40*k being
+;          parameter number k's record.  ⚠ That is established for THAT table
+;          only (see its header); what THIS block, which nothing reads, is for
+;          is still open.  Interrupted by short byte
 ;          runs at 0xFC6800 (00 01 02 03 00 FD FE FF FB FC FD FE FF 00 01 02 03
 ;          04 05 06) and again at 0xFC6830, which read as small signed deltas.
 ; The last byte, 0xFC6844 = 0x0E, is the first byte of the module's 1980-byte

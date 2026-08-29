@@ -290,10 +290,22 @@ PresetBank_CategoryNames:
 ; The eight blocks tagged 0x00..0x07 each carry their own index in payload[13] &
 ; 0x0F (checked for all 1,032); the blocks tagged 0x20..0x27 are their partners by
 ; position, which is what the alternating layout shows and all that it shows.
+;
+; ★ ROUND 4 -- THE 129 RECORD LABELS NOW CARRY THE RECORD'S OWN NAME.  Each was
+; PresetBank_Record_NNN, a kind plus an index; each is now the 16-character ASCII
+; string the record itself begins with, mangled to an identifier (spaces and
+; punctuation to '_', '&' to 'And', apostrophes dropped).  Nothing is invented:
+; the name is chunk 0x78's payload at record+2, which this file already printed in
+; the comment above every label, and the 129 strings are distinct before AND after
+; mangling.  Regenerate and re-verify all 129 against the ROM -- including the last,
+; record 128, which is the template and is named 'Clear' -- with
+;     python3 notes/prom_c_understanding_round4.py --presets
+; ⚠ The record INDEX is no longer in the label.  It is still in the comment line
+; directly above each one, which is where the address is too.
 PresetBank_Records:
 ; ............................................................................
 ; record 0 -- 0xF80300  '  Downtown Set  '
-PresetBank_Record_000:
+PresetBank_Downtown_Set:
 	.byte	0x78, 0x10
 	.ascii	"  Downtown Set  "
 	.byte	0x60, 0x0c
@@ -364,7 +376,7 @@ PresetBank_Record_000:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 1 -- 0xF805C0  'ReggaeBass Chord'
-PresetBank_Record_001:
+PresetBank_ReggaeBass_Chord:
 	.byte	0x78, 0x10
 	.ascii	"ReggaeBass Chord"
 	.byte	0x60, 0x0c
@@ -435,7 +447,7 @@ PresetBank_Record_001:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 2 -- 0xF80880  '   Pad & Bass   '
-PresetBank_Record_002:
+PresetBank_Pad_And_Bass:
 	.byte	0x78, 0x10
 	.ascii	"   Pad & Bass   "
 	.byte	0x60, 0x0c
@@ -506,7 +518,7 @@ PresetBank_Record_002:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 3 -- 0xF80B40  '    Metalap     '
-PresetBank_Record_003:
+PresetBank_Metalap:
 	.byte	0x78, 0x10
 	.ascii	"    Metalap     "
 	.byte	0x60, 0x0c
@@ -577,7 +589,7 @@ PresetBank_Record_003:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 4 -- 0xF80E00  'E.Bass/Wah Gtr. '
-PresetBank_Record_004:
+PresetBank_E_Bass_Wah_Gtr:
 	.byte	0x78, 0x10
 	.ascii	"E.Bass/Wah Gtr. "
 	.byte	0x60, 0x0c
@@ -648,7 +660,7 @@ PresetBank_Record_004:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 5 -- 0xF810C0  ' Funky Bassoon  '
-PresetBank_Record_005:
+PresetBank_Funky_Bassoon:
 	.byte	0x78, 0x10
 	.ascii	" Funky Bassoon  "
 	.byte	0x60, 0x0c
@@ -719,7 +731,7 @@ PresetBank_Record_005:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 6 -- 0xF81380  ' Funky Cup Mute '
-PresetBank_Record_006:
+PresetBank_Funky_Cup_Mute:
 	.byte	0x78, 0x10
 	.ascii	" Funky Cup Mute "
 	.byte	0x60, 0x0c
@@ -790,7 +802,7 @@ PresetBank_Record_006:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 7 -- 0xF81640  ' Ac.Bass/Guitar '
-PresetBank_Record_007:
+PresetBank_Ac_Bass_Guitar:
 	.byte	0x78, 0x10
 	.ascii	" Ac.Bass/Guitar "
 	.byte	0x60, 0x0c
@@ -861,7 +873,7 @@ PresetBank_Record_007:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 8 -- 0xF81900  '   Sheer Jazz   '
-PresetBank_Record_008:
+PresetBank_Sheer_Jazz:
 	.byte	0x78, 0x10
 	.ascii	"   Sheer Jazz   "
 	.byte	0x60, 0x0c
@@ -932,7 +944,7 @@ PresetBank_Record_008:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 9 -- 0xF81BC0  '   Jazz Chops   '
-PresetBank_Record_009:
+PresetBank_Jazz_Chops:
 	.byte	0x78, 0x10
 	.ascii	"   Jazz Chops   "
 	.byte	0x60, 0x0c
@@ -1003,7 +1015,7 @@ PresetBank_Record_009:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 10 -- 0xF81E80  '  Jazz Unison   '
-PresetBank_Record_010:
+PresetBank_Jazz_Unison:
 	.byte	0x78, 0x10
 	.ascii	"  Jazz Unison   "
 	.byte	0x60, 0x0c
@@ -1074,7 +1086,7 @@ PresetBank_Record_010:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 11 -- 0xF82140  ' Sweet Backing  '
-PresetBank_Record_011:
+PresetBank_Sweet_Backing:
 	.byte	0x78, 0x10
 	.ascii	" Sweet Backing  "
 	.byte	0x60, 0x0c
@@ -1145,7 +1157,7 @@ PresetBank_Record_011:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 12 -- 0xF82400  '   Miles Night  '
-PresetBank_Record_012:
+PresetBank_Miles_Night:
 	.byte	0x78, 0x10
 	.ascii	"   Miles Night  "
 	.byte	0x60, 0x0c
@@ -1216,7 +1228,7 @@ PresetBank_Record_012:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 13 -- 0xF826C0  '   Dixie Band   '
-PresetBank_Record_013:
+PresetBank_Dixie_Band:
 	.byte	0x78, 0x10
 	.ascii	"   Dixie Band   "
 	.byte	0x60, 0x0c
@@ -1287,7 +1299,7 @@ PresetBank_Record_013:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 14 -- 0xF82980  '  Fantasy Sax   '
-PresetBank_Record_014:
+PresetBank_Fantasy_Sax:
 	.byte	0x78, 0x10
 	.ascii	"  Fantasy Sax   "
 	.byte	0x60, 0x0c
@@ -1358,7 +1370,7 @@ PresetBank_Record_014:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 15 -- 0xF82C40  ' Bass/JazzOrgan '
-PresetBank_Record_015:
+PresetBank_Bass_JazzOrgan:
 	.byte	0x78, 0x10
 	.ascii	" Bass/JazzOrgan "
 	.byte	0x60, 0x0c
@@ -1429,7 +1441,7 @@ PresetBank_Record_015:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 16 -- 0xF82F00  '  Latin Combo   '
-PresetBank_Record_016:
+PresetBank_Latin_Combo:
 	.byte	0x78, 0x10
 	.ascii	"  Latin Combo   "
 	.byte	0x60, 0x0c
@@ -1500,7 +1512,7 @@ PresetBank_Record_016:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 17 -- 0xF831C0  '  Limbo Combo   '
-PresetBank_Record_017:
+PresetBank_Limbo_Combo:
 	.byte	0x78, 0x10
 	.ascii	"  Limbo Combo   "
 	.byte	0x60, 0x0c
@@ -1571,7 +1583,7 @@ PresetBank_Record_017:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 18 -- 0xF83480  'DanceTheFlamenco'
-PresetBank_Record_018:
+PresetBank_DanceTheFlamenco:
 	.byte	0x78, 0x10
 	.ascii	"DanceTheFlamenco"
 	.byte	0x60, 0x0c
@@ -1642,7 +1654,7 @@ PresetBank_Record_018:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 19 -- 0xF83740  'Tango Argentina '
-PresetBank_Record_019:
+PresetBank_Tango_Argentina:
 	.byte	0x78, 0x10
 	.ascii	"Tango Argentina "
 	.byte	0x60, 0x0c
@@ -1713,7 +1725,7 @@ PresetBank_Record_019:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 20 -- 0xF83A00  'Gondola Serenade'
-PresetBank_Record_020:
+PresetBank_Gondola_Serenade:
 	.byte	0x78, 0x10
 	.ascii	"Gondola Serenade"
 	.byte	0x60, 0x0c
@@ -1784,7 +1796,7 @@ PresetBank_Record_020:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 21 -- 0xF83CC0  ' Venetian Band  '
-PresetBank_Record_021:
+PresetBank_Venetian_Band:
 	.byte	0x78, 0x10
 	.ascii	" Venetian Band  "
 	.byte	0x60, 0x0c
@@ -1855,7 +1867,7 @@ PresetBank_Record_021:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 22 -- 0xF83F80  ' Go For Baroque '
-PresetBank_Record_022:
+PresetBank_Go_For_Baroque:
 	.byte	0x78, 0x10
 	.ascii	" Go For Baroque "
 	.byte	0x60, 0x0c
@@ -1926,7 +1938,7 @@ PresetBank_Record_022:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 23 -- 0xF84240  '   Highlander   '
-PresetBank_Record_023:
+PresetBank_Highlander:
 	.byte	0x78, 0x10
 	.ascii	"   Highlander   "
 	.byte	0x60, 0x0c
@@ -1997,7 +2009,7 @@ PresetBank_Record_023:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 24 -- 0xF84500  '   Christmas    '
-PresetBank_Record_024:
+PresetBank_Christmas:
 	.byte	0x78, 0x10
 	.ascii	"   Christmas    "
 	.byte	0x60, 0x0c
@@ -2068,7 +2080,7 @@ PresetBank_Record_024:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 25 -- 0xF847C0  'Christmas Synth '
-PresetBank_Record_025:
+PresetBank_Christmas_Synth:
 	.byte	0x78, 0x10
 	.ascii	"Christmas Synth "
 	.byte	0x60, 0x0c
@@ -2139,7 +2151,7 @@ PresetBank_Record_025:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 26 -- 0xF84A80  'Moonlight Space '
-PresetBank_Record_026:
+PresetBank_Moonlight_Space:
 	.byte	0x78, 0x10
 	.ascii	"Moonlight Space "
 	.byte	0x60, 0x0c
@@ -2210,7 +2222,7 @@ PresetBank_Record_026:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 27 -- 0xF84D40  '   Fairy Dust   '
-PresetBank_Record_027:
+PresetBank_Fairy_Dust:
 	.byte	0x78, 0x10
 	.ascii	"   Fairy Dust   "
 	.byte	0x60, 0x0c
@@ -2281,7 +2293,7 @@ PresetBank_Record_027:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 28 -- 0xF85000  ' Backward Bell  '
-PresetBank_Record_028:
+PresetBank_Backward_Bell:
 	.byte	0x78, 0x10
 	.ascii	" Backward Bell  "
 	.byte	0x60, 0x0c
@@ -2352,7 +2364,7 @@ PresetBank_Record_028:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 29 -- 0xF852C0  '  Let It Rain   '
-PresetBank_Record_029:
+PresetBank_Let_It_Rain:
 	.byte	0x78, 0x10
 	.ascii	"  Let It Rain   "
 	.byte	0x60, 0x0c
@@ -2423,7 +2435,7 @@ PresetBank_Record_029:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 30 -- 0xF85580  '   White Lead   '
-PresetBank_Record_030:
+PresetBank_White_Lead:
 	.byte	0x78, 0x10
 	.ascii	"   White Lead   "
 	.byte	0x60, 0x0c
@@ -2494,7 +2506,7 @@ PresetBank_Record_030:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 31 -- 0xF85840  '  Paris Caffe   '
-PresetBank_Record_031:
+PresetBank_Paris_Caffe:
 	.byte	0x78, 0x10
 	.ascii	"  Paris Caffe   "
 	.byte	0x60, 0x0c
@@ -2565,7 +2577,7 @@ PresetBank_Record_031:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 32 -- 0xF85B00  '  The Symphony  '
-PresetBank_Record_032:
+PresetBank_The_Symphony:
 	.byte	0x78, 0x10
 	.ascii	"  The Symphony  "
 	.byte	0x60, 0x0c
@@ -2636,7 +2648,7 @@ PresetBank_Record_032:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 33 -- 0xF85DC0  ' String Texture '
-PresetBank_Record_033:
+PresetBank_String_Texture:
 	.byte	0x78, 0x10
 	.ascii	" String Texture "
 	.byte	0x60, 0x0c
@@ -2707,7 +2719,7 @@ PresetBank_Record_033:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 34 -- 0xF86080  'Orchestra Switch'
-PresetBank_Record_034:
+PresetBank_Orchestra_Switch:
 	.byte	0x78, 0x10
 	.ascii	"Orchestra Switch"
 	.byte	0x60, 0x0c
@@ -2778,7 +2790,7 @@ PresetBank_Record_034:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 35 -- 0xF86340  'Italiano Strings'
-PresetBank_Record_035:
+PresetBank_Italiano_Strings:
 	.byte	0x78, 0x10
 	.ascii	"Italiano Strings"
 	.byte	0x60, 0x0c
@@ -2849,7 +2861,7 @@ PresetBank_Record_035:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 36 -- 0xF86600  ' String Quartet '
-PresetBank_Record_036:
+PresetBank_String_Quartet:
 	.byte	0x78, 0x10
 	.ascii	" String Quartet "
 	.byte	0x60, 0x0c
@@ -2920,7 +2932,7 @@ PresetBank_Record_036:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 37 -- 0xF868C0  '  Chamber Set   '
-PresetBank_Record_037:
+PresetBank_Chamber_Set:
 	.byte	0x78, 0x10
 	.ascii	"  Chamber Set   "
 	.byte	0x60, 0x0c
@@ -2991,7 +3003,7 @@ PresetBank_Record_037:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 38 -- 0xF86B80  '  Baroque Tune  '
-PresetBank_Record_038:
+PresetBank_Baroque_Tune:
 	.byte	0x78, 0x10
 	.ascii	"  Baroque Tune  "
 	.byte	0x60, 0x0c
@@ -3062,7 +3074,7 @@ PresetBank_Record_038:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 39 -- 0xF86E40  'Warm String Pad '
-PresetBank_Record_039:
+PresetBank_Warm_String_Pad:
 	.byte	0x78, 0x10
 	.ascii	"Warm String Pad "
 	.byte	0x60, 0x0c
@@ -3133,7 +3145,7 @@ PresetBank_Record_039:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 40 -- 0xF87100  '  Tutti Finale  '
-PresetBank_Record_040:
+PresetBank_Tutti_Finale:
 	.byte	0x78, 0x10
 	.ascii	"  Tutti Finale  "
 	.byte	0x60, 0x0c
@@ -3204,7 +3216,7 @@ PresetBank_Record_040:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 41 -- 0xF873C0  'Orchestra pp~ff '
-PresetBank_Record_041:
+PresetBank_Orchestra_pp_ff:
 	.byte	0x78, 0x10
 	.ascii	"Orchestra pp~ff "
 	.byte	0x60, 0x0c
@@ -3275,7 +3287,7 @@ PresetBank_Record_041:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 42 -- 0xF87680  '   Oratorio     '
-PresetBank_Record_042:
+PresetBank_Oratorio:
 	.byte	0x78, 0x10
 	.ascii	"   Oratorio     "
 	.byte	0x60, 0x0c
@@ -3346,7 +3358,7 @@ PresetBank_Record_042:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 43 -- 0xF87940  ' Piano Concert  '
-PresetBank_Record_043:
+PresetBank_Piano_Concert:
 	.byte	0x78, 0x10
 	.ascii	" Piano Concert  "
 	.byte	0x60, 0x0c
@@ -3417,7 +3429,7 @@ PresetBank_Record_043:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 44 -- 0xF87C00  'Orchestral Wood '
-PresetBank_Record_044:
+PresetBank_Orchestral_Wood:
 	.byte	0x78, 0x10
 	.ascii	"Orchestral Wood "
 	.byte	0x60, 0x0c
@@ -3488,7 +3500,7 @@ PresetBank_Record_044:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 45 -- 0xF87EC0  '  Chamber Wood  '
-PresetBank_Record_045:
+PresetBank_Chamber_Wood:
 	.byte	0x78, 0x10
 	.ascii	"  Chamber Wood  "
 	.byte	0x60, 0x0c
@@ -3559,7 +3571,7 @@ PresetBank_Record_045:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 46 -- 0xF88180  '   Royal Solo   '
-PresetBank_Record_046:
+PresetBank_Royal_Solo:
 	.byte	0x78, 0x10
 	.ascii	"   Royal Solo   "
 	.byte	0x60, 0x0c
@@ -3630,7 +3642,7 @@ PresetBank_Record_046:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 47 -- 0xF88440  '  Woodwind Ens. '
-PresetBank_Record_047:
+PresetBank_Woodwind_Ens:
 	.byte	0x78, 0x10
 	.ascii	"  Woodwind Ens. "
 	.byte	0x60, 0x0c
@@ -3701,7 +3713,7 @@ PresetBank_Record_047:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 48 -- 0xF88700  '   Hallelujah   '
-PresetBank_Record_048:
+PresetBank_Hallelujah:
 	.byte	0x78, 0x10
 	.ascii	"   Hallelujah   "
 	.byte	0x60, 0x0c
@@ -3772,7 +3784,7 @@ PresetBank_Record_048:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 49 -- 0xF889C0  ' Carol Service  '
-PresetBank_Record_049:
+PresetBank_Carol_Service:
 	.byte	0x78, 0x10
 	.ascii	" Carol Service  "
 	.byte	0x60, 0x0c
@@ -3843,7 +3855,7 @@ PresetBank_Record_049:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 50 -- 0xF88C80  ' Cast Of 1000's '
-PresetBank_Record_050:
+PresetBank_Cast_Of_1000s:
 	.byte	0x78, 0x10
 	.ascii	" Cast Of 1000's "
 	.byte	0x60, 0x0c
@@ -3914,7 +3926,7 @@ PresetBank_Record_050:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 51 -- 0xF88F40  'Pipe Org.W/Touch'
-PresetBank_Record_051:
+PresetBank_Pipe_Org_W_Touch:
 	.byte	0x78, 0x10
 	.ascii	"Pipe Org.W/Touch"
 	.byte	0x60, 0x0c
@@ -3985,7 +3997,7 @@ PresetBank_Record_051:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 52 -- 0xF89200  '  Sing Praises  '
-PresetBank_Record_052:
+PresetBank_Sing_Praises:
 	.byte	0x78, 0x10
 	.ascii	"  Sing Praises  "
 	.byte	0x60, 0x0c
@@ -4056,7 +4068,7 @@ PresetBank_Record_052:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 53 -- 0xF894C0  '   Blues Bars   '
-PresetBank_Record_053:
+PresetBank_Blues_Bars:
 	.byte	0x78, 0x10
 	.ascii	"   Blues Bars   "
 	.byte	0x60, 0x0c
@@ -4127,7 +4139,7 @@ PresetBank_Record_053:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 54 -- 0xF89780  '  Street Organ  '
-PresetBank_Record_054:
+PresetBank_Street_Organ:
 	.byte	0x78, 0x10
 	.ascii	"  Street Organ  "
 	.byte	0x60, 0x0c
@@ -4198,7 +4210,7 @@ PresetBank_Record_054:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 55 -- 0xF89A40  '   Mediaeval    '
-PresetBank_Record_055:
+PresetBank_Mediaeval:
 	.byte	0x78, 0x10
 	.ascii	"   Mediaeval    "
 	.byte	0x60, 0x0c
@@ -4269,7 +4281,7 @@ PresetBank_Record_055:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 56 -- 0xF89D00  ' Big Band Mutes '
-PresetBank_Record_056:
+PresetBank_Big_Band_Mutes:
 	.byte	0x78, 0x10
 	.ascii	" Big Band Mutes "
 	.byte	0x60, 0x0c
@@ -4340,7 +4352,7 @@ PresetBank_Record_056:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 57 -- 0xF89FC0  '    UniBono     '
-PresetBank_Record_057:
+PresetBank_UniBono:
 	.byte	0x78, 0x10
 	.ascii	"    UniBono     "
 	.byte	0x60, 0x0c
@@ -4411,7 +4423,7 @@ PresetBank_Record_057:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 58 -- 0xF8A280  '   Brass 1995   '
-PresetBank_Record_058:
+PresetBank_Brass_1995:
 	.byte	0x78, 0x10
 	.ascii	"   Brass 1995   "
 	.byte	0x60, 0x0c
@@ -4482,7 +4494,7 @@ PresetBank_Record_058:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 59 -- 0xF8A540  '  Brass Unison  '
-PresetBank_Record_059:
+PresetBank_Brass_Unison:
 	.byte	0x78, 0x10
 	.ascii	"  Brass Unison  "
 	.byte	0x60, 0x0c
@@ -4553,7 +4565,7 @@ PresetBank_Record_059:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 60 -- 0xF8A800  '  Bass SAXtion  '
-PresetBank_Record_060:
+PresetBank_Bass_SAXtion:
 	.byte	0x78, 0x10
 	.ascii	"  Bass SAXtion  "
 	.byte	0x60, 0x0c
@@ -4624,7 +4636,7 @@ PresetBank_Record_060:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 61 -- 0xF8AAC0  '   Saxophones   '
-PresetBank_Record_061:
+PresetBank_Saxophones:
 	.byte	0x78, 0x10
 	.ascii	"   Saxophones   "
 	.byte	0x60, 0x0c
@@ -4695,7 +4707,7 @@ PresetBank_Record_061:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 62 -- 0xF8AD80  'Dance Band Reeds'
-PresetBank_Record_062:
+PresetBank_Dance_Band_Reeds:
 	.byte	0x78, 0x10
 	.ascii	"Dance Band Reeds"
 	.byte	0x60, 0x0c
@@ -4766,7 +4778,7 @@ PresetBank_Record_062:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 63 -- 0xF8B040  '  French Brass  '
-PresetBank_Record_063:
+PresetBank_French_Brass:
 	.byte	0x78, 0x10
 	.ascii	"  French Brass  "
 	.byte	0x60, 0x0c
@@ -4837,7 +4849,7 @@ PresetBank_Record_063:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 64 -- 0xF8B300  '   Piano Pad    '
-PresetBank_Record_064:
+PresetBank_Piano_Pad:
 	.byte	0x78, 0x10
 	.ascii	"   Piano Pad    "
 	.byte	0x60, 0x0c
@@ -4908,7 +4920,7 @@ PresetBank_Record_064:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 65 -- 0xF8B5C0  'Piano & Strings '
-PresetBank_Record_065:
+PresetBank_Piano_And_Strings:
 	.byte	0x78, 0x10
 	.ascii	"Piano & Strings "
 	.byte	0x60, 0x0c
@@ -4979,7 +4991,7 @@ PresetBank_Record_065:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 66 -- 0xF8B880  '  Good For You  '
-PresetBank_Record_066:
+PresetBank_Good_For_You:
 	.byte	0x78, 0x10
 	.ascii	"  Good For You  "
 	.byte	0x60, 0x0c
@@ -5050,7 +5062,7 @@ PresetBank_Record_066:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 67 -- 0xF8BB40  '  Sweet Piano   '
-PresetBank_Record_067:
+PresetBank_Sweet_Piano:
 	.byte	0x78, 0x10
 	.ascii	"  Sweet Piano   "
 	.byte	0x60, 0x0c
@@ -5121,7 +5133,7 @@ PresetBank_Record_067:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 68 -- 0xF8BE00  '  Foster Phaze  '
-PresetBank_Record_068:
+PresetBank_Foster_Phaze:
 	.byte	0x78, 0x10
 	.ascii	"  Foster Phaze  "
 	.byte	0x60, 0x0c
@@ -5192,7 +5204,7 @@ PresetBank_Record_068:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 69 -- 0xF8C0C0  'Dream Piano Pad '
-PresetBank_Record_069:
+PresetBank_Dream_Piano_Pad:
 	.byte	0x78, 0x10
 	.ascii	"Dream Piano Pad "
 	.byte	0x60, 0x0c
@@ -5263,7 +5275,7 @@ PresetBank_Record_069:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 70 -- 0xF8C380  ' Fantasy Piano  '
-PresetBank_Record_070:
+PresetBank_Fantasy_Piano:
 	.byte	0x78, 0x10
 	.ascii	" Fantasy Piano  "
 	.byte	0x60, 0x0c
@@ -5334,7 +5346,7 @@ PresetBank_Record_070:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 71 -- 0xF8C640  '   Dreamy EP    '
-PresetBank_Record_071:
+PresetBank_Dreamy_EP:
 	.byte	0x78, 0x10
 	.ascii	"   Dreamy EP    "
 	.byte	0x60, 0x0c
@@ -5405,7 +5417,7 @@ PresetBank_Record_071:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 72 -- 0xF8C900  '  Ethnic Stuff  '
-PresetBank_Record_072:
+PresetBank_Ethnic_Stuff:
 	.byte	0x78, 0x10
 	.ascii	"  Ethnic Stuff  "
 	.byte	0x60, 0x0c
@@ -5476,7 +5488,7 @@ PresetBank_Record_072:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 73 -- 0xF8CBC0  '  Gamelan Pad   '
-PresetBank_Record_073:
+PresetBank_Gamelan_Pad:
 	.byte	0x78, 0x10
 	.ascii	"  Gamelan Pad   "
 	.byte	0x60, 0x0c
@@ -5547,7 +5559,7 @@ PresetBank_Record_073:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 74 -- 0xF8CE80  '  Birumsemble   '
-PresetBank_Record_074:
+PresetBank_Birumsemble:
 	.byte	0x78, 0x10
 	.ascii	"  Birumsemble   "
 	.byte	0x60, 0x0c
@@ -5618,7 +5630,7 @@ PresetBank_Record_074:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 75 -- 0xF8D140  '   Ethno Harp   '
-PresetBank_Record_075:
+PresetBank_Ethno_Harp:
 	.byte	0x78, 0x10
 	.ascii	"   Ethno Harp   "
 	.byte	0x60, 0x0c
@@ -5689,7 +5701,7 @@ PresetBank_Record_075:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 76 -- 0xF8D400  '  Eat This Pad  '
-PresetBank_Record_076:
+PresetBank_Eat_This_Pad:
 	.byte	0x78, 0x10
 	.ascii	"  Eat This Pad  "
 	.byte	0x60, 0x0c
@@ -5760,7 +5772,7 @@ PresetBank_Record_076:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 77 -- 0xF8D6C0  'Fantasia Guitar '
-PresetBank_Record_077:
+PresetBank_Fantasia_Guitar:
 	.byte	0x78, 0x10
 	.ascii	"Fantasia Guitar "
 	.byte	0x60, 0x0c
@@ -5831,7 +5843,7 @@ PresetBank_Record_077:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 78 -- 0xF8D980  '   Milky Way    '
-PresetBank_Record_078:
+PresetBank_Milky_Way:
 	.byte	0x78, 0x10
 	.ascii	"   Milky Way    "
 	.byte	0x60, 0x0c
@@ -5902,7 +5914,7 @@ PresetBank_Record_078:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 79 -- 0xF8DC40  '   Dreamy Pad   '
-PresetBank_Record_079:
+PresetBank_Dreamy_Pad:
 	.byte	0x78, 0x10
 	.ascii	"   Dreamy Pad   "
 	.byte	0x60, 0x0c
@@ -5973,7 +5985,7 @@ PresetBank_Record_079:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 80 -- 0xF8DF00  'Metal Distortion'
-PresetBank_Record_080:
+PresetBank_Metal_Distortion:
 	.byte	0x78, 0x10
 	.ascii	"Metal Distortion"
 	.byte	0x60, 0x0c
@@ -6044,7 +6056,7 @@ PresetBank_Record_080:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 81 -- 0xF8E1C0  '  The Big Pad   '
-PresetBank_Record_081:
+PresetBank_The_Big_Pad:
 	.byte	0x78, 0x10
 	.ascii	"  The Big Pad   "
 	.byte	0x60, 0x0c
@@ -6115,7 +6127,7 @@ PresetBank_Record_081:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 82 -- 0xF8E480  '   Angel Wing   '
-PresetBank_Record_082:
+PresetBank_Angel_Wing:
 	.byte	0x78, 0x10
 	.ascii	"   Angel Wing   "
 	.byte	0x60, 0x0c
@@ -6186,7 +6198,7 @@ PresetBank_Record_082:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 83 -- 0xF8E740  '  Bigger Mist   '
-PresetBank_Record_083:
+PresetBank_Bigger_Mist:
 	.byte	0x78, 0x10
 	.ascii	"  Bigger Mist   "
 	.byte	0x60, 0x0c
@@ -6257,7 +6269,7 @@ PresetBank_Record_083:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 84 -- 0xF8EA00  '   Breath Pad   '
-PresetBank_Record_084:
+PresetBank_Breath_Pad:
 	.byte	0x78, 0x10
 	.ascii	"   Breath Pad   "
 	.byte	0x60, 0x0c
@@ -6328,7 +6340,7 @@ PresetBank_Record_084:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 85 -- 0xF8ECC0  '   Big & Warm   '
-PresetBank_Record_085:
+PresetBank_Big_And_Warm:
 	.byte	0x78, 0x10
 	.ascii	"   Big & Warm   "
 	.byte	0x60, 0x0c
@@ -6399,7 +6411,7 @@ PresetBank_Record_085:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 86 -- 0xF8EF80  '    Fat Pad     '
-PresetBank_Record_086:
+PresetBank_Fat_Pad:
 	.byte	0x78, 0x10
 	.ascii	"    Fat Pad     "
 	.byte	0x60, 0x0c
@@ -6470,7 +6482,7 @@ PresetBank_Record_086:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 87 -- 0xF8F240  '    Wave Pad    '
-PresetBank_Record_087:
+PresetBank_Wave_Pad:
 	.byte	0x78, 0x10
 	.ascii	"    Wave Pad    "
 	.byte	0x60, 0x0c
@@ -6541,7 +6553,7 @@ PresetBank_Record_087:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 88 -- 0xF8F500  ' Sizeable Orch  '
-PresetBank_Record_088:
+PresetBank_Sizeable_Orch:
 	.byte	0x78, 0x10
 	.ascii	" Sizeable Orch  "
 	.byte	0x60, 0x0c
@@ -6612,7 +6624,7 @@ PresetBank_Record_088:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 89 -- 0xF8F7C0  'Infinite Cosmos '
-PresetBank_Record_089:
+PresetBank_Infinite_Cosmos:
 	.byte	0x78, 0x10
 	.ascii	"Infinite Cosmos "
 	.byte	0x60, 0x0c
@@ -6683,7 +6695,7 @@ PresetBank_Record_089:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 90 -- 0xF8FA80  'The Big Sweeper '
-PresetBank_Record_090:
+PresetBank_The_Big_Sweeper:
 	.byte	0x78, 0x10
 	.ascii	"The Big Sweeper "
 	.byte	0x60, 0x0c
@@ -6754,7 +6766,7 @@ PresetBank_Record_090:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 91 -- 0xF8FD40  '  Phasing Pad   '
-PresetBank_Record_091:
+PresetBank_Phasing_Pad:
 	.byte	0x78, 0x10
 	.ascii	"  Phasing Pad   "
 	.byte	0x60, 0x0c
@@ -6825,7 +6837,7 @@ PresetBank_Record_091:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 92 -- 0xF90000  '  Goblinterval  '
-PresetBank_Record_092:
+PresetBank_Goblinterval:
 	.byte	0x78, 0x10
 	.ascii	"  Goblinterval  "
 	.byte	0x60, 0x0c
@@ -6896,7 +6908,7 @@ PresetBank_Record_092:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 93 -- 0xF902C0  '    Winterval   '
-PresetBank_Record_093:
+PresetBank_Winterval:
 	.byte	0x78, 0x10
 	.ascii	"    Winterval   "
 	.byte	0x60, 0x0c
@@ -6967,7 +6979,7 @@ PresetBank_Record_093:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 94 -- 0xF90580  'Fullness Of Time'
-PresetBank_Record_094:
+PresetBank_Fullness_Of_Time:
 	.byte	0x78, 0x10
 	.ascii	"Fullness Of Time"
 	.byte	0x60, 0x0c
@@ -7038,7 +7050,7 @@ PresetBank_Record_094:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 95 -- 0xF90840  'Over Indulgance '
-PresetBank_Record_095:
+PresetBank_Over_Indulgance:
 	.byte	0x78, 0x10
 	.ascii	"Over Indulgance "
 	.byte	0x60, 0x0c
@@ -7109,7 +7121,7 @@ PresetBank_Record_095:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 96 -- 0xF90B00  '  Guitar Synth  '
-PresetBank_Record_096:
+PresetBank_Guitar_Synth:
 	.byte	0x78, 0x10
 	.ascii	"  Guitar Synth  "
 	.byte	0x60, 0x0c
@@ -7180,7 +7192,7 @@ PresetBank_Record_096:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 97 -- 0xF90DC0  '  Guitar Clav   '
-PresetBank_Record_097:
+PresetBank_Guitar_Clav:
 	.byte	0x78, 0x10
 	.ascii	"  Guitar Clav   "
 	.byte	0x60, 0x0c
@@ -7251,7 +7263,7 @@ PresetBank_Record_097:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 98 -- 0xF91080  '   Mega Strat   '
-PresetBank_Record_098:
+PresetBank_Mega_Strat:
 	.byte	0x78, 0x10
 	.ascii	"   Mega Strat   "
 	.byte	0x60, 0x0c
@@ -7322,7 +7334,7 @@ PresetBank_Record_098:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 99 -- 0xF91340  '   L&R Guitar   '
-PresetBank_Record_099:
+PresetBank_LAndR_Guitar:
 	.byte	0x78, 0x10
 	.ascii	"   L&R Guitar   "
 	.byte	0x60, 0x0c
@@ -7393,7 +7405,7 @@ PresetBank_Record_099:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 100 -- 0xF91600  '  Beauty Feel   '
-PresetBank_Record_100:
+PresetBank_Beauty_Feel:
 	.byte	0x78, 0x10
 	.ascii	"  Beauty Feel   "
 	.byte	0x60, 0x0c
@@ -7464,7 +7476,7 @@ PresetBank_Record_100:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 101 -- 0xF918C0  '   E. Picking   '
-PresetBank_Record_101:
+PresetBank_E_Picking:
 	.byte	0x78, 0x10
 	.ascii	"   E. Picking   "
 	.byte	0x60, 0x0c
@@ -7535,7 +7547,7 @@ PresetBank_Record_101:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 102 -- 0xF91B80  ' Playing Ac.Gtr.'
-PresetBank_Record_102:
+PresetBank_Playing_Ac_Gtr:
 	.byte	0x78, 0x10
 	.ascii	" Playing Ac.Gtr."
 	.byte	0x60, 0x0c
@@ -7606,7 +7618,7 @@ PresetBank_Record_102:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 103 -- 0xF91E40  '  Chorus Guitar '
-PresetBank_Record_103:
+PresetBank_Chorus_Guitar:
 	.byte	0x78, 0x10
 	.ascii	"  Chorus Guitar "
 	.byte	0x60, 0x0c
@@ -7677,7 +7689,7 @@ PresetBank_Record_103:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 104 -- 0xF92100  'Lead Dynanamics '
-PresetBank_Record_104:
+PresetBank_Lead_Dynanamics:
 	.byte	0x78, 0x10
 	.ascii	"Lead Dynanamics "
 	.byte	0x60, 0x0c
@@ -7748,7 +7760,7 @@ PresetBank_Record_104:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 105 -- 0xF923C0  '  Unusual Clav  '
-PresetBank_Record_105:
+PresetBank_Unusual_Clav:
 	.byte	0x78, 0x10
 	.ascii	"  Unusual Clav  "
 	.byte	0x60, 0x0c
@@ -7819,7 +7831,7 @@ PresetBank_Record_105:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 106 -- 0xF92680  '  Fusion Lead   '
-PresetBank_Record_106:
+PresetBank_Fusion_Lead:
 	.byte	0x78, 0x10
 	.ascii	"  Fusion Lead   "
 	.byte	0x60, 0x0c
@@ -7890,7 +7902,7 @@ PresetBank_Record_106:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 107 -- 0xF92940  '    Wah Lead    '
-PresetBank_Record_107:
+PresetBank_Wah_Lead:
 	.byte	0x78, 0x10
 	.ascii	"    Wah Lead    "
 	.byte	0x60, 0x0c
@@ -7961,7 +7973,7 @@ PresetBank_Record_107:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 108 -- 0xF92C00  ' The Big Olymp  '
-PresetBank_Record_108:
+PresetBank_The_Big_Olymp:
 	.byte	0x78, 0x10
 	.ascii	" The Big Olymp  "
 	.byte	0x60, 0x0c
@@ -8032,7 +8044,7 @@ PresetBank_Record_108:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 109 -- 0xF92EC0  '   Parp Parp    '
-PresetBank_Record_109:
+PresetBank_Parp_Parp:
 	.byte	0x78, 0x10
 	.ascii	"   Parp Parp    "
 	.byte	0x60, 0x0c
@@ -8103,7 +8115,7 @@ PresetBank_Record_109:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 110 -- 0xF93180  'Metallica Stack '
-PresetBank_Record_110:
+PresetBank_Metallica_Stack:
 	.byte	0x78, 0x10
 	.ascii	"Metallica Stack "
 	.byte	0x60, 0x0c
@@ -8174,7 +8186,7 @@ PresetBank_Record_110:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 111 -- 0xF93440  '  Large S.Brass '
-PresetBank_Record_111:
+PresetBank_Large_S_Brass:
 	.byte	0x78, 0x10
 	.ascii	"  Large S.Brass "
 	.byte	0x60, 0x0c
@@ -8245,7 +8257,7 @@ PresetBank_Record_111:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 112 -- 0xF93700  '  Jimmy Plays   '
-PresetBank_Record_112:
+PresetBank_Jimmy_Plays:
 	.byte	0x78, 0x10
 	.ascii	"  Jimmy Plays   "
 	.byte	0x60, 0x0c
@@ -8316,7 +8328,7 @@ PresetBank_Record_112:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 113 -- 0xF939C0  '    Raw Meat    '
-PresetBank_Record_113:
+PresetBank_Raw_Meat:
 	.byte	0x78, 0x10
 	.ascii	"    Raw Meat    "
 	.byte	0x60, 0x0c
@@ -8387,7 +8399,7 @@ PresetBank_Record_113:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 114 -- 0xF93C80  'Big Dist.Guitar '
-PresetBank_Record_114:
+PresetBank_Big_Dist_Guitar:
 	.byte	0x78, 0x10
 	.ascii	"Big Dist.Guitar "
 	.byte	0x60, 0x0c
@@ -8458,7 +8470,7 @@ PresetBank_Record_114:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 115 -- 0xF93F40  '    Run Away    '
-PresetBank_Record_115:
+PresetBank_Run_Away:
 	.byte	0x78, 0x10
 	.ascii	"    Run Away    "
 	.byte	0x60, 0x0c
@@ -8529,7 +8541,7 @@ PresetBank_Record_115:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 116 -- 0xF94200  '    Funk It     '
-PresetBank_Record_116:
+PresetBank_Funk_It:
 	.byte	0x78, 0x10
 	.ascii	"    Funk It     "
 	.byte	0x60, 0x0c
@@ -8600,7 +8612,7 @@ PresetBank_Record_116:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 117 -- 0xF944C0  '   Strut Bass   '
-PresetBank_Record_117:
+PresetBank_Strut_Bass:
 	.byte	0x78, 0x10
 	.ascii	"   Strut Bass   "
 	.byte	0x60, 0x0c
@@ -8671,7 +8683,7 @@ PresetBank_Record_117:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 118 -- 0xF94780  '   Wah Rhythm   '
-PresetBank_Record_118:
+PresetBank_Wah_Rhythm:
 	.byte	0x78, 0x10
 	.ascii	"   Wah Rhythm   "
 	.byte	0x60, 0x0c
@@ -8742,7 +8754,7 @@ PresetBank_Record_118:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 119 -- 0xF94A40  '    Funk Set    '
-PresetBank_Record_119:
+PresetBank_Funk_Set:
 	.byte	0x78, 0x10
 	.ascii	"    Funk Set    "
 	.byte	0x60, 0x0c
@@ -8813,7 +8825,7 @@ PresetBank_Record_119:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 120 -- 0xF94D00  '  Unsure Pitz   '
-PresetBank_Record_120:
+PresetBank_Unsure_Pitz:
 	.byte	0x78, 0x10
 	.ascii	"  Unsure Pitz   "
 	.byte	0x60, 0x0c
@@ -8884,7 +8896,7 @@ PresetBank_Record_120:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 121 -- 0xF94FC0  '    Orbital     '
-PresetBank_Record_121:
+PresetBank_Orbital:
 	.byte	0x78, 0x10
 	.ascii	"    Orbital     "
 	.byte	0x60, 0x0c
@@ -8955,7 +8967,7 @@ PresetBank_Record_121:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 122 -- 0xF95280  '     Cosmos     '
-PresetBank_Record_122:
+PresetBank_Cosmos:
 	.byte	0x78, 0x10
 	.ascii	"     Cosmos     "
 	.byte	0x60, 0x0c
@@ -9026,7 +9038,7 @@ PresetBank_Record_122:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 123 -- 0xF95540  '  Velo Fantasy  '
-PresetBank_Record_123:
+PresetBank_Velo_Fantasy:
 	.byte	0x78, 0x10
 	.ascii	"  Velo Fantasy  "
 	.byte	0x60, 0x0c
@@ -9097,7 +9109,7 @@ PresetBank_Record_123:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 124 -- 0xF95800  '   Model Kit    '
-PresetBank_Record_124:
+PresetBank_Model_Kit:
 	.byte	0x78, 0x10
 	.ascii	"   Model Kit    "
 	.byte	0x60, 0x0c
@@ -9168,7 +9180,7 @@ PresetBank_Record_124:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 125 -- 0xF95AC0  ' Dancing Indian '
-PresetBank_Record_125:
+PresetBank_Dancing_Indian:
 	.byte	0x78, 0x10
 	.ascii	" Dancing Indian "
 	.byte	0x60, 0x0c
@@ -9239,7 +9251,7 @@ PresetBank_Record_125:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 126 -- 0xF95D80  ' Asian Paradise '
-PresetBank_Record_126:
+PresetBank_Asian_Paradise:
 	.byte	0x78, 0x10
 	.ascii	" Asian Paradise "
 	.byte	0x60, 0x0c
@@ -9310,7 +9322,7 @@ PresetBank_Record_126:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 127 -- 0xF96040  'Avant-gardeMusic'
-PresetBank_Record_127:
+PresetBank_Avant_gardeMusic:
 	.byte	0x78, 0x10
 	.ascii	"Avant-gardeMusic"
 	.byte	0x60, 0x0c
@@ -9381,7 +9393,7 @@ PresetBank_Record_127:
 	.byte	0xff, 0xff                                    ; end marker
 ; ............................................................................
 ; record 128 -- 0xF96300  '    Clear       '   (the template; not one of the 128 the header counts)
-PresetBank_Record_128:
+PresetBank_Clear:
 	.byte	0x78, 0x10
 	.ascii	"    Clear       "
 	.byte	0x60, 0x0c
@@ -35266,7 +35278,7 @@ sub_FA5535__FA58DD:
 ; ★ IT IS A LEAF LAYER, and the call census says so: 254 literal call sites reach it
 ;   from outside, 54 from inside, and the outside ones are dominated by the block
 ;   below -- sub_FAB0BD (17), sub_FAA4C3 (15), sub_FAACEE (15), sub_FA93AF (13),
-;   sub_FA842D (10), sub_FAA96C (9), sub_FA9915 (8), Voice_StageRegs_0500_08C0_AB (8),
+;   sub_FA842D (10), sub_FAA96C (9), Voice_StageChanSel_Reg0440_Reg0480 (8), Voice_StageRegs_0500_08C0_AB (8),
 ;   VoiceParams_Compute_A (7) and so on.  ⚠ An earlier draft of this list named
 ;   sub_FAA61A (10); that address was a BYTE-PATTERN false entry, and with the
 ;   filter its sites belong to sub_FAA4C3.
@@ -36172,14 +36184,14 @@ sub_FA5E82__FA5ECE:
 	unlk32 xiz                                 ; FA5ED0  unlk XIZ
 	ret                                        ; FA5ED2  ret
 ; --------------------------------------------------------------------------
-; sub_FA5ED3 -- 0xFA5ED3..0xFA6025 (339 bytes)
+; Voice_LookupDev10CChanIndex -- 0xFA5ED3..0xFA6025 (339 bytes)
 ;
 ; Called from: 9 site(s) outside this module:
-;          0xFA9992 in sub_FA9915, 0xFA99B9 in sub_FA9915__FA99A7
-;          0xFA9B04 in sub_FA9915__FA9ACB, 0xFA9BAD in sub_FA9915__FA9B74
+;          0xFA9992 in Voice_StageChanSel_Reg0440_Reg0480, 0xFA99B9 in Voice_StageChanSel_Reg0440_Reg0480__FA99A7
+;          0xFA9B04 in Voice_StageChanSel_Reg0440_Reg0480__FA9ACB, 0xFA9BAD in Voice_StageChanSel_Reg0440_Reg0480__FA9B74
 ;          0xFA9CC9 in sub_FA9C60, 0xFA9CF2 in sub_FA9C60__FA9CDE
-;          0xFA9E47 in sub_FA9C60__FA9E12, 0xFA9F7C in sub_FA9F19
-;          0xFA9FA3 in sub_FA9F19__FA9F94
+;          0xFA9E47 in sub_FA9C60__FA9E12, 0xFA9F7C in Voice_StageChanSel_Reg04C0
+;          0xFA9FA3 in Voice_StageChanSel_Reg04C0__FA9F94
 ;          1 site(s) inside this module:
 ;          0xFA6071
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
@@ -36191,10 +36203,66 @@ sub_FA5E82__FA5ECE:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+;
+; ★ THE RETURN VALUE IS TWO BYTES WITH TWO JOBS:
+;       high byte = the third argument masked to 6 bits (0xFA5EDA `ld E,(XIZ+0x0c)`,
+;                   0xFA5EDD `and E,0x3f`), sometimes with bit 7 set (0xFA5F67,
+;                   0xFA5FC7), shifted up at 0xFA6015 and OR'd in at 0xFA601C;
+;       low byte  = THE RESULT, or 0xFF when there is none (0xFA600D `ld H,0xff`).
+;   Assembled at 0xFA601E `ld WA,BC` and returned through the common exit 0xFA6020.
+;
+; ★ THE LOW BYTE IS A 0x0010C000 CHANNEL INDEX, and the name says only that
+;   because only that is measured.  NINE of the ten call sites mask it to 0x3F or
+;   0x7F immediately (the tenth, 0xFA6071, is sub_FA6051's tail call and passes
+;   the value through untouched), and THREE of those nine hand the masked value
+;   straight to a Dev10C_Slot* accessor as its `chan` argument -- 0xFA999F
+;   (Dev10C_Slot2_WriteGate8100), 0xFA9CD6 (Dev10C_Slot1_WriteGate8100), 0xFA9F8C
+;   (Dev10C_Slot1or3_WriteGate8100) -- where it becomes a device register selector
+;   by adding a block base.  The other six are the else-arms of the same if/else
+;   pairs and mask to the IDENTICAL width, so the field width is not an artefact
+;   of which arm ran.  Three of nine is the honest fraction, not a majority.
+; ★ WHAT BOUNDS IT: a 192-entry RAM array of 5-byte records at 0x00000E3E.
+;          0xFA5F37 `cp H,0xc0` rejects >= 192 before use; 0xFA5F3C/0xFA5F3E
+;          `ld C,0x05` / `mul BC,H` is the stride; 0xFA5F43 `ld IX,0x0e3e` is the
+;          base.  0x0E3E + 192*5 = 0x11FE, which is the base of the NEXT array
+;          this same routine indexes (0xFA5F22 `ld WA,0x11fe`) -- the two arrays
+;          close on each other, and that is what fixes the count at 192.
+;          192 = 3 * 64; the consumers accept only 0..0x7F = 2 * 64 of it.
+;
+; ★ THE THREE ARGUMENTS, BOUNDED BY THE ROUTINE'S OWN GUARDS AND BY THREE RAM
+;   ARRAYS THAT CLOSE ON EACH OTHER.  This is the read
+;   `notes/WSA1-EMULATION-DISASM-GAPS.md` gap A asks for by name ("339 bytes,
+;   converted, never read"):
+;       (XIZ+0x08)  guarded `cp (XIZ+0x08),0x21` at 0xFA5EE6  -> 0..32  (33 values)
+;                   indexes the STRIDE-27 array at RAM 0x00000AA8
+;                   (0xFA5F97 `ld C,0x1b` / 0xFA5F99 `mul BC,(XIZ+0x08)`,
+;                    0xFA5FA6 `ld H,(XBC+0x0aa8)`)
+;       (XIZ+0x0A)  guarded `cp (XIZ+0x0a),0x40` at 0xFA5EE0  -> 0..63  (64 values)
+;                   indexes the STRIDE-12 array at RAM 0x000011FE
+;                   (0xFA5F1B `ld C,0x0c` / 0xFA5F1D `mul BC,(XIZ+0x0a)`,
+;                    0xFA5F22 `ld WA,0x11fe`)
+;       (XIZ+0x0C)  masked `and E,0x3f` at 0xFA5EDD          -> 0..63  (6 bits)
+;                   keys BOTH lookup tables: Table_FE10C9 through `and C,0x1f`
+;                   (0xFA5EFE/0xFA5F05, 32 entries, values 0..3) and Table_FE10E9
+;                   unmasked (0xFA5F13, 64 entries, values 0..26)
+;   ★ AND THE THREE RAM ARRAYS ARE CONTIGUOUS, each one's COUNT fixed by the next
+;   one's base -- which is why the counts above are not guesses:
+;       0x0AA8 + 27*34  = 0x0E3E      0x0E3E + 5*192 = 0x11FE
+;       0x11FE + 12*64  = 0x14FE
+;   The 0x0AA8 array holds 34 records although the guard admits only 33 indices;
+;   the extra room is the `+ D` from Table_FE10E9, whose largest value is 26, so
+;   27*32 + 26 = 890 stays inside 27*34 = 918.  Checked over all 64 entries.
+; ⚠ NOT ESTABLISHED: WHAT the three arguments are.  The overlay's copy of the gap
+;   list proposes "(part, channel, parameter index)" from these same three bounds;
+;   that is a reading of the bounds, not a measurement, and it is NOT adopted here.
+;   Also open: why the 0x0E3E array is 192 long when the consumers use 128 of it,
+;   and whether the routine ALLOCATES or merely LOOKS UP.  "Lookup" is the weaker
+;   of the two readings and is the one the name uses.
+; Evidence: `python3 notes/prom_c_understanding_round4.py --chanarg --lookup`,
+;          with every cited address re-decoded by an independent disassembler and
+;          the call-site census printed with its denominator.
 ; --------------------------------------------------------------------------
-sub_FA5ED3:
+Voice_LookupDev10CChanIndex:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FA5ED3  link XIZ,0xfffe
 	pushw	hl                                   ; FA5ED7  push HL
 	pushw	de                                   ; FA5ED8  push DE
@@ -36202,17 +36270,17 @@ sub_FA5ED3:
 	ld	e, (xiz+12)                             ; FA5EDA  ld E,(XIZ+0x0c)
 	and	e, 63                                  ; FA5EDD  and E,0x3f
 	cp (xiz+10), 0x40                          ; FA5EE0  cp (XIZ+0x0a),0x40
-	jr nc, sub_FA5ED3__FA5EEC                  ; FA5EE4  jr NC,0xfa5eec
+	jr nc, Voice_LookupDev10CChanIndex__FA5EEC                  ; FA5EE4  jr NC,0xfa5eec
 	cp (xiz+8), 0x21                           ; FA5EE6  cp (XIZ+0x08),0x21
-	jr c, sub_FA5ED3__FA5EFC                   ; FA5EEA  jr C,0xfa5efc
-sub_FA5ED3__FA5EEC:
+	jr c, Voice_LookupDev10CChanIndex__FA5EFC                   ; FA5EEA  jr C,0xfa5efc
+Voice_LookupDev10CChanIndex__FA5EEC:
 	ld	c, e                                    ; FA5EEC  ld C,E
 	extz	bc                                    ; FA5EEE  extz BC
 	sll	bc, 8                                  ; FA5EF0  sll 0x08,BC
 	or	bc, 0xFF                                ; FA5EF3  or BC,0x00ff
 	ld	wa, bc                                  ; FA5EF7  ld WA,BC
-	jrl sub_FA5ED3__FA6020                     ; FA5EF9  jrl T,0xfa6020
-sub_FA5ED3__FA5EFC:
+	jrl Voice_LookupDev10CChanIndex__FA6020                     ; FA5EF9  jrl T,0xfa6020
+Voice_LookupDev10CChanIndex__FA5EFC:
 	ld	c, e                                    ; FA5EFC  ld C,E
 	and	c, 31                                  ; FA5EFE  and C,0x1f
 	extz	bc                                    ; FA5F01  extz BC
@@ -36236,7 +36304,7 @@ sub_FA5ED3__FA5EFC:
 	extz	xwa                                   ; FA5F30  extz XWA
 	extpfx5 0xC3, 0x07, 0xE0, 0xE4, 0x26       ; FA5F32  ld H,(XWA+BC)
 	cp	h, 0xC0                                 ; FA5F37  cp H,0xc0
-	jr nc, sub_FA5ED3__FA5F7D                  ; FA5F3A  jr NC,0xfa5f7d
+	jr nc, Voice_LookupDev10CChanIndex__FA5F7D                  ; FA5F3A  jr NC,0xfa5f7d
 	ldb	c, 5                                   ; FA5F3C  ld C,0x05
 	mul8rr	c, h                                ; FA5F3E  mul BC,H
 	ld	(xiz-2), bc                             ; FA5F40  ld (XIZ+0xfe),BC
@@ -36245,11 +36313,11 @@ sub_FA5ED3__FA5EFC:
 	extz	xix                                   ; FA5F48  extz XIX
 	ld	c, (xix+2)                              ; FA5F4A  ld C,(XIX+0x02)
 	extpfx3 0x8E, 0x08, 0xF3                   ; FA5F4D  cp C,(XIZ+0x08)
-	jr nz, sub_FA5ED3__FA5F7D                  ; FA5F50  jr NZ,0xfa5f7d
+	jr nz, Voice_LookupDev10CChanIndex__FA5F7D                  ; FA5F50  jr NZ,0xfa5f7d
 	extz	xix                                   ; FA5F52  extz XIX
 	ld	c, (xix+3)                              ; FA5F54  ld C,(XIX+0x03)
 	cp	c, d                                    ; FA5F57  cp C,D
-	jr nz, sub_FA5ED3__FA5F7D                  ; FA5F59  jr NZ,0xfa5f7d
+	jr nz, Voice_LookupDev10CChanIndex__FA5F7D                  ; FA5F59  jr NZ,0xfa5f7d
 	pushw	hl                                   ; FA5F5B  push HL
 	push	0                                     ; FA5F5C  push 0x00
 	push	h                                     ; FA5F5E  push H
@@ -36265,11 +36333,11 @@ sub_FA5ED3__FA5EFC:
 	or	bc, ix                                  ; FA5F75  or BC,IX
 	pop	xiy                                    ; FA5F77  pop XIY
 	ld	wa, bc                                  ; FA5F78  ld WA,BC
-	jrl sub_FA5ED3__FA6020                     ; FA5F7A  jrl T,0xfa6020
-sub_FA5ED3__FA5F7D:
+	jrl Voice_LookupDev10CChanIndex__FA6020                     ; FA5F7A  jrl T,0xfa6020
+Voice_LookupDev10CChanIndex__FA5F7D:
 	ld	c, e                                    ; FA5F7D  ld C,E
 	and	c, 32                                  ; FA5F7F  and C,0x20
-	jr z, sub_FA5ED3__FA5F97                   ; FA5F82  jr Z,0xfa5f97
+	jr z, Voice_LookupDev10CChanIndex__FA5F97                   ; FA5F82  jr Z,0xfa5f97
 	ld	c, l                                    ; FA5F84  ld C,L
 	extz	bc                                    ; FA5F86  extz BC
 	pushw	bc                                   ; FA5F88  push BC
@@ -36277,9 +36345,9 @@ sub_FA5ED3__FA5F7D:
 	ld	h, a                                    ; FA5F8C  ld H,A
 	popw	bc                                    ; FA5F8E  pop BC
 	cp	a, 0xC0                                 ; FA5F8F  cp A,0xc0
-	jrl nc, sub_FA5ED3__FA600D                 ; FA5F92  jrl NC,0xfa600d
-	jr sub_FA5ED3__FA5FE0                      ; FA5F95  jr T,0xfa5fe0
-sub_FA5ED3__FA5F97:
+	jrl nc, Voice_LookupDev10CChanIndex__FA600D                 ; FA5F92  jrl NC,0xfa600d
+	jr Voice_LookupDev10CChanIndex__FA5FE0                      ; FA5F95  jr T,0xfa5fe0
+Voice_LookupDev10CChanIndex__FA5F97:
 	ldb	c, 27                                  ; FA5F97  ld C,0x1b
 	extpfx3 0x8E, 0x08, 0x43                   ; FA5F99  mul BC,(XIZ+0x08)
 	ld	ix, bc                                  ; FA5F9C  ld IX,BC
@@ -36289,7 +36357,7 @@ sub_FA5ED3__FA5F97:
 	extz	xbc                                   ; FA5FA4  extz XBC
 	ld	h, (xbc+0xAA8)                          ; FA5FA6  ld H,(XBC+0x0aa8)
 	cp	h, 0xC0                                 ; FA5FAB  cp H,0xc0
-	jr nc, sub_FA5ED3__FA5FD0                  ; FA5FAE  jr NC,0xfa5fd0
+	jr nc, Voice_LookupDev10CChanIndex__FA5FD0                  ; FA5FAE  jr NC,0xfa5fd0
 	push	0                                     ; FA5FB0  push 0x00
 	push	h                                     ; FA5FB2  push H
 	pushw	hl                                   ; FA5FB4  push HL
@@ -36304,8 +36372,8 @@ sub_FA5ED3__FA5F97:
 	set	7, e                                   ; FA5FC7  set 0x07,E
 	inc	8, xsp                                 ; FA5FCA  inc 0,XSP
 	inc	2, xsp                                 ; FA5FCC  inc 2,XSP
-	jr sub_FA5ED3__FA600F                      ; FA5FCE  jr T,0xfa600f
-sub_FA5ED3__FA5FD0:
+	jr Voice_LookupDev10CChanIndex__FA600F                      ; FA5FCE  jr T,0xfa600f
+Voice_LookupDev10CChanIndex__FA5FD0:
 	ld	c, l                                    ; FA5FD0  ld C,L
 	extz	bc                                    ; FA5FD2  extz BC
 	pushw	bc                                   ; FA5FD4  push BC
@@ -36313,8 +36381,8 @@ sub_FA5ED3__FA5FD0:
 	ld	h, a                                    ; FA5FD8  ld H,A
 	popw	bc                                    ; FA5FDA  pop BC
 	cp	a, 0xC0                                 ; FA5FDB  cp A,0xc0
-	jr nc, sub_FA5ED3__FA600D                  ; FA5FDE  jr NC,0xfa600d
-sub_FA5ED3__FA5FE0:
+	jr nc, Voice_LookupDev10CChanIndex__FA600D                  ; FA5FDE  jr NC,0xfa600d
+Voice_LookupDev10CChanIndex__FA5FE0:
 	push	0                                     ; FA5FE0  push 0x00
 	push	d                                     ; FA5FE2  push D
 	push	0                                     ; FA5FE4  push 0x00
@@ -36335,10 +36403,10 @@ sub_FA5ED3__FA5FE0:
 	ld	h, a                                    ; FA6005  ld H,A
 	inc	8, xsp                                 ; FA6007  inc 0,XSP
 	inc	8, xsp                                 ; FA6009  inc 0,XSP
-	jr sub_FA5ED3__FA600F                      ; FA600B  jr T,0xfa600f
-sub_FA5ED3__FA600D:
+	jr Voice_LookupDev10CChanIndex__FA600F                      ; FA600B  jr T,0xfa600f
+Voice_LookupDev10CChanIndex__FA600D:
 	ldb	h, 0xFF                                ; FA600D  ld H,0xff
-sub_FA5ED3__FA600F:
+Voice_LookupDev10CChanIndex__FA600F:
 	ld	c, e                                    ; FA600F  ld C,E
 	extz	bc                                    ; FA6011  extz BC
 	ld	ix, bc                                  ; FA6013  ld IX,BC
@@ -36347,7 +36415,7 @@ sub_FA5ED3__FA600F:
 	extz	bc                                    ; FA601A  extz BC
 	or	bc, ix                                  ; FA601C  or BC,IX
 	ld	wa, bc                                  ; FA601E  ld WA,BC
-sub_FA5ED3__FA6020:
+Voice_LookupDev10CChanIndex__FA6020:
 	pop	xix                                    ; FA6020  pop XIX
 	popw	de                                    ; FA6021  pop DE
 	popw	hl                                    ; FA6022  pop HL
@@ -36399,7 +36467,7 @@ sub_FA6026__FA6040:
 ;          scan, so this is "not found", not "dead".
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA5ED3 = sub_FA5ED3, 0xFA6026 = sub_FA6026
+; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA6026 = sub_FA6026
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA6051-0xFA607A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -40206,7 +40274,7 @@ sub_FA78C6__FA78E4:
 ; sub_FA78E8 -- 0xFA78E8..0xFA7926 (63 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFA9B23 in sub_FA9915__FA9ACB, 0xFA9E65 in sub_FA9C60__FA9E12
+;          0xFA9B23 in Voice_StageChanSel_Reg0440_Reg0480__FA9ACB, 0xFA9E65 in sub_FA9C60__FA9E12
 ;          0xFB6D8D in sub_FB6CEE__FB6D83
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
@@ -40248,7 +40316,7 @@ sub_FA78E8:
 ; sub_FA7927 -- 0xFA7927..0xFA796C (70 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFA9C18 in sub_FA9915__FA9BF3
+;          0xFA9C18 in Voice_StageChanSel_Reg0440_Reg0480__FA9BF3
 ;          4 site(s) inside this module:
 ;          0xFA79B9 0xFA7A9B 0xFA7B89 0xFA7BFC
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x0E)
@@ -40299,7 +40367,7 @@ sub_FA7927__FA7969:
 ; sub_FA796D -- 0xFA796D..0xFA79F3 (135 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFA9AB2 in sub_FA9915__FA9AAF, 0xFABE60 in sub_FABE30__FABE3F
+;          0xFA9AB2 in Voice_StageChanSel_Reg0440_Reg0480__FA9AAF, 0xFABE60 in sub_FABE30__FABE3F
 ;          0xFAE45F in sub_FAE34A__FAE45B, 0xFB8AC9 in sub_FB89F8__FB8A85
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
@@ -40376,7 +40444,7 @@ sub_FA796D__FA79D4:
 ; sub_FA79F4 -- 0xFA79F4..0xFA7A4A (87 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFA9A34 in sub_FA9915__FA9A14, 0xFAE5A3 in sub_FAE484__FAE59F
+;          0xFA9A34 in Voice_StageChanSel_Reg0440_Reg0480__FA9A14, 0xFAE5A3 in sub_FAE484__FAE59F
 ;          0xFB8AD7 in sub_FB89F8__FB8A85
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
@@ -40567,7 +40635,7 @@ sub_FA7AD6__FA7B27:
 ; sub_FA7B31 -- 0xFA7B31..0xFA7C39 (265 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFAA0A5 in sub_FA9F19__FAA0A1, 0xFABF7E in sub_FABE30__FABF5D
+;          0xFAA0A5 in Voice_StageChanSel_Reg04C0__FAA0A1, 0xFABF7E in sub_FABE30__FABF5D
 ;          0xFAE966 in sub_FAE848__FAE962, 0xFB8CC9 in sub_FB8BF6__FB8C85
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D796, 0x00D7A0
@@ -40696,7 +40764,7 @@ sub_FA7B31__FA7C34:
 ; sub_FA7C3A -- 0xFA7C3A..0xFA7CC8 (143 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFAA024 in sub_FA9F19__FAA00A, 0xFAEAAF in sub_FAE986__FAEAAB
+;          0xFAA024 in Voice_StageChanSel_Reg04C0__FAA00A, 0xFAEAAF in sub_FAE986__FAEAAB
 ;          0xFB8CD2 in sub_FB8BF6__FB8C85
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D798, 0x00D79C
@@ -44572,12 +44640,12 @@ sub_FA93AF__FA9556:
 ;          (0xFA9651, 0xFA9667), and it is the ONLY producer of register 0x0500 that
 ;          computes rather than clears it.
 ; ★ AND THE LOW BYTE IS CACHED PER VOICE.  0xFA9609/0xFA960D hands it to sub_FC810C,
-;          which stores it at RAM 0x00E1DD + voice[+0x00]; sub_FA96F7 clears that slot on
+;          which stores it at RAM 0x00E1DD + voice[+0x00]; Voice_StageRegs_CD clears that slot on
 ;          the C/D path (0xFA9740) and sub_FC7FCA reads it back and ORs it into word 11
 ;          (0xFC80D6) when it rebuilds the register.  Three routines, one byte, one
 ;          register field.
 ; Called from: VoiceRegs_Stage_A (0xFB0B25) and VoiceRegs_Stage_B (0xFB1F13).  The C/D
-;          path has no computing counterpart: sub_FA96F7 zeroes both words and leaves
+;          path has no computing counterpart: Voice_StageRegs_CD zeroes both words and leaves
 ;          word 11 to sub_FC7FCA.
 ; ⚠ SIBLING: the KN5000 sub-CPU calls its register 0x500 the "detune / bend pair"
 ;          (kn5000_subprogram_v142.s:6949).  A byte pair whose high byte is a detune-curve
@@ -44708,7 +44776,7 @@ Voice_StageRegs_0500_08C0_AB__FA96F1:
 	unlk32 xiz                                 ; FA96F4  unlk XIZ
 	ret                                        ; FA96F6  ret
 ; --------------------------------------------------------------------------
-; sub_FA96F7 -- 0xFA96F7..0xFA981A (292 bytes)
+; Voice_StageRegs_CD -- 0xFA96F7..0xFA981A (292 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB2850 in VoiceRegs_Stage_C, 0xFB2F25 in VoiceRegs_Stage_D
@@ -44721,10 +44789,29 @@ Voice_StageRegs_0500_08C0_AB__FA96F1:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+;
+; ★ THE C/D COUNTERPART OF THE A/B STAGERS, and the reason gap A's four registers
+;   read 0x0000 on two of the four voice paths.  It is called only from
+;   VoiceRegs_Stage_C (0xFB2850) and VoiceRegs_Stage_D (0xFB2F25), and it ZEROES
+;   all four of gap A's staging words rather than computing them:
+;       0xFA970F  word 11 (+0x16) -> register chan+0x0500
+;       0xFA9773  word  8 (+0x10) -> register chan+0x0440
+;       0xFA977A  word  9 (+0x12) -> register chan+0x0480
+;       0xFA980E  word 10 (+0x14) -> register chan+0x04C0
+;   No channel-selector value is ever computed on the C and D paths: the two
+;   routines that compute them, Voice_StageChanSel_Reg0440_Reg0480 and
+;   Voice_StageChanSel_Reg04C0, are reached only from VoiceRegs_Stage_A/_B and
+;   from two refresh loops.  Word 11 is not left at zero -- 0xFA9760 calls
+;   sub_FC7FCA, which rebuilds it from the per-voice byte cached at 0x00E1DD.
+; Evidence: the four `ld (0x00d7xx),0x0000` stores above are the whole census of
+;          absolute writes to those words on this path; the census is a raw-byte
+;          sweep of all four ROM images, `python3
+;          notes/prom_c_understanding_round4.py --sites` (4/3/3/3 sites, all in
+;          prom_c, none in prom_a, prom_b or prom_d).
+; Unknown:  what the routine is FOR beyond staging; the twelve words it writes are
+;          named by their register, not by their meaning.
 ; --------------------------------------------------------------------------
-sub_FA96F7:
+Voice_StageRegs_CD:
 	link32 0xEE, 0x0C, 0xFF, 0xFF              ; FA96F7  link XIZ,0xffff
 	push	xhl                                   ; FA96FB  push XHL
 	pushw	de                                   ; FA96FC  push DE
@@ -44749,7 +44836,7 @@ sub_FA96F7:
 	ld	wa, (xbc+1)                             ; FA974F  ld WA,(XBC+0x01)
 	and	wa, 0x200                              ; FA9752  and WA,0x0200
 	pop	xiy                                    ; FA9756  pop XIY
-	jr z, sub_FA96F7__FA9773                   ; FA9757  jr Z,0xfa9773
+	jr z, Voice_StageRegs_CD__FA9773                   ; FA9757  jr Z,0xfa9773
 	lda_24	xwa, (0xD75E)                       ; FA9759  lda XWA,0x00d75e
 	push	xwa                                   ; FA975E  push XWA
 	pushw	bc                                   ; FA975F  push BC
@@ -44758,28 +44845,28 @@ sub_FA96F7:
 	sll	bc, 8                                  ; FA9769  sll 0x08,BC
 	ordm16_24	(0xD77C), bc                     ; FA976C  or (0x00d77c),BC
 	inc	6, xsp                                 ; FA9771  inc 6,XSP
-sub_FA96F7__FA9773:
+Voice_StageRegs_CD__FA9773:
 	stiw_da	(0xD76E), 0                        ; FA9773  ld (0x00d76e),0x0000
 	stiw_da	(0xD770), 0                        ; FA977A  ld (0x00d770),0x0000
 	ld	c, (xix+1)                              ; FA9781  ld C,(XIX+0x01)
 	ld	(xiz-1), c                              ; FA9784  ld (XIZ+0xff),C
 	cp	c, 0x80                                 ; FA9787  cp C,0x80
-	jr nz, sub_FA96F7__FA979F                  ; FA978A  jr NZ,0xfa979f
+	jr nz, Voice_StageRegs_CD__FA979F                  ; FA978A  jr NZ,0xfa979f
 	calr (0xFA7F04 - 0xFA978F)                 ; FA978C  calr 0xfa7f04
 	res	7, a                                   ; FA978F  res 0x07,A
 	exts	wa                                    ; FA9792  exts WA
 	ld	bc, (xiz+8)                             ; FA9794  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9797  extz XBC
 	ld	(xbc+39), wa                            ; FA9799  ld (XBC+0x27),WA
-	jrl sub_FA96F7__FA9801                     ; FA979C  jrl T,0xfa9801
-sub_FA96F7__FA979F:
+	jrl Voice_StageRegs_CD__FA9801                     ; FA979C  jrl T,0xfa9801
+Voice_StageRegs_CD__FA979F:
 	ld	hl, (xiz+8)                             ; FA979F  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FA97A2  extz XHL
 	ld	hl, (xhl+37)                            ; FA97A4  ld HL,(XHL+0x25)
 	extz	xhl                                   ; FA97A7  extz XHL
 	ld	bc, (xhl+26)                            ; FA97A9  ld BC,(XHL+0x1a)
 	and	bc, 64                                 ; FA97AC  and BC,0x0040
-	jr z, sub_FA96F7__FA97F4                   ; FA97B0  jr Z,0xfa97f4
+	jr z, Voice_StageRegs_CD__FA97F4                   ; FA97B0  jr Z,0xfa97f4
 	extz	xhl                                   ; FA97B2  extz XHL
 	ld	bc, (xhl+28)                            ; FA97B4  ld BC,(XHL+0x1c)
 	ld	ix, bc                                  ; FA97B7  ld IX,BC
@@ -44793,30 +44880,30 @@ sub_FA96F7__FA979F:
 	ld	wa, (xbc+35)                            ; FA97CD  ld WA,(XBC+0x23)
 	extz	xwa                                   ; FA97D0  extz XWA
 	ld	hl, (xwa+37)                            ; FA97D2  ld HL,(XWA+0x25)
-	jr z, sub_FA96F7__FA97DE                   ; FA97D5  jr Z,0xfa97de
+	jr z, Voice_StageRegs_CD__FA97DE                   ; FA97D5  jr Z,0xfa97de
 	ld	wa, de                                  ; FA97D7  ld WA,DE
 	sub	wa, hl                                 ; FA97D9  sub WA,HL
 	pushw	wa                                   ; FA97DB  push WA
-	jr sub_FA96F7__FA97E3                      ; FA97DC  jr T,0xfa97e3
-sub_FA96F7__FA97DE:
+	jr Voice_StageRegs_CD__FA97E3                      ; FA97DC  jr T,0xfa97e3
+Voice_StageRegs_CD__FA97DE:
 	ld	bc, de                                  ; FA97DE  ld BC,DE
 	add	bc, hl                                 ; FA97E0  add BC,HL
 	pushw	bc                                   ; FA97E2  push BC
-sub_FA96F7__FA97E3:
+Voice_StageRegs_CD__FA97E3:
 	calr (0xFA7EE2 - 0xFA97E6)                 ; FA97E3  calr 0xfa7ee2
 	exts	wa                                    ; FA97E6  exts WA
 	ld	bc, (xiz+8)                             ; FA97E8  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA97EB  extz XBC
 	ld	(xbc+39), wa                            ; FA97ED  ld (XBC+0x27),WA
 	inc	6, xsp                                 ; FA97F0  inc 6,XSP
-	jr sub_FA96F7__FA9801                      ; FA97F2  jr T,0xfa9801
-sub_FA96F7__FA97F4:
+	jr Voice_StageRegs_CD__FA9801                      ; FA97F2  jr T,0xfa9801
+Voice_StageRegs_CD__FA97F4:
 	ld	bc, (xiz-1)                             ; FA97F4  ld BC,(XIZ+0xff)
 	extz	bc                                    ; FA97F7  extz BC
 	ld	wa, (xiz+8)                             ; FA97F9  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FA97FC  extz XWA
 	ld	(xwa+39), bc                            ; FA97FE  ld (XWA+0x27),BC
-sub_FA96F7__FA9801:
+Voice_StageRegs_CD__FA9801:
 	ld	bc, (xiz+8)                             ; FA9801  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9804  extz XBC
 	ld	wa, (xbc+39)                            ; FA9806  ld WA,(XBC+0x27)
@@ -44955,17 +45042,17 @@ sub_FA981B__FA98E9:
 	unlk32 xiz                                 ; FA9912  unlk XIZ
 	ret                                        ; FA9914  ret
 ; --------------------------------------------------------------------------
-; sub_FA9915 -- 0xFA9915..0xFA9C5F (843 bytes)
+; Voice_StageChanSel_Reg0440_Reg0480 -- 0xFA9915..0xFA9C5F (843 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFAE3C4 in sub_FAE34A__FAE3B5, 0xFAE4FE in sub_FAE484__FAE4EF
 ;          0xFB0B2A in VoiceRegs_Stage_A, 0xFB1F18 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D76E, 0x00D770, 0x00D79A, 0x00D79C, 0x00D79E, 0x00D7A0
-; Calls:   0xFA5ED3 = sub_FA5ED3, 0xFA78E8 = sub_FA78E8
+; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA78E8 = sub_FA78E8
 ;          0xFA7927 = sub_FA7927, 0xFA796D = sub_FA796D
 ;          0xFA79F4 = sub_FA79F4, 0xFA981B = sub_FA981B
-;          0xFB5B56 = sub_FB5B56, 0xFB5E39 = sub_FB5E39
+;          0xFB5B56 = sub_FB5B56, 0xFB5E39 = Dev10C_ChanSelHighBits
 ;          0xFB7C27 = Dev10C_Slot2_WriteGateAndValue, 0xFB7C8F = Dev10C_SetChanReg_0600_b
 ;          0xFB7CB1 = Dev10C_Slot2_StrobeGate, 0xFB7CFF = Dev10C_Slot2_WriteGate8100
 ;          0xFB7D1D = Dev10C_Slot3_WriteGateAndValue
@@ -44974,10 +45061,65 @@ sub_FA981B__FA98E9:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+;
+; ★★ GAP A -- THIS IS WHERE REGISTERS 0x0440 AND 0x0480 GET THEIR VALUE.
+;   It stages the 0x0010C000 staging struct's words 8 and 9,
+;       word 8 (+0x10, RAM 0x00D76E) -> register chan+0x0440
+;       word 9 (+0x12, RAM 0x00D770) -> register chan+0x0480
+;   and both words have the same shape:   word = MODE | CHANNEL.
+;
+;   ★ THE CHANNEL FIELD IS A CHANNEL OF THIS SAME DEVICE, in the device's own
+;   encoding -- bit for bit the value this routine hands, a few instructions
+;   later, to a Dev10C_Slot* accessor as that accessor's `chan` argument, where
+;   it is added to a register-block base to form the device's register selector.
+;   Bits 5..0 are the channel of the 64-channel device and BIT 6 CHOOSES THE
+;   BLOCK: Dev10C_Slot1or3_StrobeGate splits on exactly that bit (`cp HL,0x0040`
+;   at 0xFB801F) and the two arms read the two slots' own staging fields --
+;   +0x3A with block 0x0540 on the low arm (0xFB8025/0xFB8030), +0x3E with
+;   0x0580+arg = 0x05C0 + (arg & 0x3F) on the high (0xFB8065/0xFB8070), which is
+;   exactly what Dev10C_Slot1_ and Dev10C_Slot3_WriteGateAndValue use.
+;
+; Evidence, word 8, path A -- MODE from the tone descriptor:
+;          0xFA9992 `call Voice_LookupDev10CChanIndex`; 0xFA999A `and DE,0x007f`
+;          is the CHANNEL field, and the SAME DE is pushed at 0xFA999E into
+;          Dev10C_Slot2_WriteGate8100 (0xFA999F), which forms chan+0x0580 at
+;          0xFB7D08.  0xFA99F0 `ld WA,(XBC+0x1e)` / 0xFA99F3 `and WA,0x00c0` is
+;          the MODE field; 0xFA99F7 `or WA,DE`; 0xFA99F9 `ld (0x00d76e),WA`.
+; Evidence, word 8, path B -- MODE from Dev10C_ChanSelHighBits:
+;          0xFA9AE7 `call Dev10C_ChanSelHighBits` -> DE, rejected if 0
+;          (0xFA9AEF/0xFA9AF1); 0xFA9B04 `call Voice_LookupDev10CChanIndex`,
+;          rejected if its low byte is >= 0x80 (0xFA9B0A/0xFA9B10/0xFA9B14);
+;          0xFA9B18 `and IX,0x007f`; 0xFA9B28 `or BC,IX`; 0xFA9B2A
+;          `ld (0x00d76e),BC`.  The same masked value reaches
+;          Dev10C_Slot2_WriteGateAndValue at 0xFA9B68/0xFA9B6C/0xFA9B6D.
+; Evidence, word 9:
+;          0xFA9B90 `call Dev10C_ChanSelHighBits` -> DE, rejected if 0
+;          (0xFA9B98/0xFA9B9A); 0xFA9BAD `call Voice_LookupDev10CChanIndex`,
+;          rejected if >= 0x80 (0xFA9BB3/0xFA9BB9/0xFA9BBD); 0xFA9BC2
+;          `and BC,0x003f` -- SIX bits here, not seven; 0xFA9BC6 `or BC,DE`;
+;          0xFA9BC8 `ld (0x00d770),BC`.  The same six-bit value reaches
+;          Dev10C_Slot3_WriteGateAndValue at 0xFA9C4D/0xFA9C51/0xFA9C52.
+; ⚠ WORD 8's TWO FIELDS OVERLAP AT BIT 6.  Mask 0x00C0 against mask 0x007F leaves
+;   bit 6 in both, and they are combined with `or`.  Dev10C_ChanSelHighBits never
+;   returns a value with bit 6 clear, so on path B word 8's bit 6 is 1 whatever
+;   the channel is.  Either the channel is always <= 0x3F there -- nothing in this
+;   routine bounds it -- or the two fields genuinely collide.  Recorded, not
+;   explained away.  Word 9 has no such problem: 0x00C0 and 0x003F are disjoint.
+; Both words are CLEARED at entry (0xFA991C, 0xFA9923), so a rejected lookup
+;   leaves 0x0000 -- which is also their power-on value, from offsets +0x10/+0x12
+;   of Dev10C_StagingStruct_ResetImage.
+; ⚠ NOT ESTABLISHED: that the named channel is a DIFFERENT channel from the one
+;   the struct is committed to.  Nothing here compares the two numbers, so
+;   "cross-reference" is a shape and not a proven relation.  Nor what the MODE
+;   bits mean: their width, position and source are measured, their meaning is not.
+; Evidence: every address above is re-decoded by an INDEPENDENT disassembler at
+;          the address quoted, and the write census is a raw-byte sweep of all
+;          four ROM images -- `python3 notes/prom_c_understanding_round4.py`,
+;          sections 1, 2, 3 and 5.  The round-1 lane published this reading with
+;          citations that pointed at other instructions; see
+;          notes/wave7-round1/README.md lane g1.
 ; --------------------------------------------------------------------------
-sub_FA9915:
+Voice_StageChanSel_Reg0440_Reg0480:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FA9915  link XIZ,0xfff4
 	pushw	hl                                   ; FA9919  push HL
 	pushw	de                                   ; FA991A  push DE
@@ -45000,7 +45142,7 @@ sub_FA9915:
 	extz	xiy                                   ; FA994F  extz XIY
 	ld	bc, (xiy)                               ; FA9951  ld BC,(XIY)
 	cps	bc, 0                                  ; FA9953  cp BC,0
-	jrl z, sub_FA9915__FA9ACB                  ; FA9955  jrl Z,0xfa9acb
+	jrl z, Voice_StageChanSel_Reg0440_Reg0480__FA9ACB                  ; FA9955  jrl Z,0xfa9acb
 	ld	c, (xiy)                                ; FA9958  ld C,(XIY)
 	and	c, 3                                   ; FA995A  and C,0x03
 	ld	(xiz-1), c                              ; FA995D  ld (XIZ+0xff),C
@@ -45014,7 +45156,7 @@ sub_FA9915:
 	add	xiy, xix                               ; FA9975  add XIY,XIX
 	ld	c, (xiy)                                ; FA9977  ld C,(XIY)
 	and	c, 0x80                                ; FA9979  and C,0x80
-	jr z, sub_FA9915__FA99A7                   ; FA997C  jr Z,0xfa99a7
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA99A7                   ; FA997C  jr Z,0xfa99a7
 	ld	c, (xiz-1)                              ; FA997E  ld C,(XIZ+0xff)
 	set	5, c                                   ; FA9981  set 0x05,C
 	pushw	bc                                   ; FA9984  push BC
@@ -45031,8 +45173,8 @@ sub_FA9915:
 	pushw	de                                   ; FA999E  push DE
 	call	0xFB7CFF                              ; FA999F  call 0xfb7cff
 	inc	8, xsp                                 ; FA99A3  inc 0,XSP
-	jr sub_FA9915__FA99C7                      ; FA99A5  jr T,0xfa99c7
-sub_FA9915__FA99A7:
+	jr Voice_StageChanSel_Reg0440_Reg0480__FA99C7                      ; FA99A5  jr T,0xfa99c7
+Voice_StageChanSel_Reg0440_Reg0480__FA99A7:
 	push	0                                     ; FA99A7  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA99A9  push (XIZ+0xff)
 	ld	bc, (xiz+8)                             ; FA99AC  ld BC,(XIZ+0x08)
@@ -45046,7 +45188,7 @@ sub_FA9915__FA99A7:
 	ld	de, wa                                  ; FA99BF  ld DE,WA
 	and	de, 0x7F                               ; FA99C1  and DE,0x007f
 	inc	6, xsp                                 ; FA99C5  inc 6,XSP
-sub_FA9915__FA99C7:
+Voice_StageChanSel_Reg0440_Reg0480__FA99C7:
 	ldw	bc, 27                                 ; FA99C7  ld BC,0x001b
 	mul	xbc, xde                               ; FA99CA  mul XBC,DE
 	ld	(xiz-10), bc                            ; FA99CC  ld (XIZ+0xf6),BC
@@ -45059,7 +45201,7 @@ sub_FA9915__FA99C7:
 	extz	xix                                   ; FA99DF  extz XIX
 	ld	(xix+6), a                              ; FA99E1  ld (XIX+0x06),A
 	cp	de, 0x80                                ; FA99E4  cp DE,0x0080
-	jrl nc, sub_FA9915__FA9B74                 ; FA99E8  jrl NC,0xfa9b74
+	jrl nc, Voice_StageChanSel_Reg0440_Reg0480__FA9B74                 ; FA99E8  jrl NC,0xfa9b74
 	ld	bc, (xiz-8)                             ; FA99EB  ld BC,(XIZ+0xf8)
 	extz	xbc                                   ; FA99EE  extz XBC
 	ld	wa, (xbc+30)                            ; FA99F0  ld WA,(XBC+0x1e)
@@ -45068,13 +45210,13 @@ sub_FA9915__FA99C7:
 	stw_da	(0xD76E), wa                        ; FA99F9  ld (0x00d76e),WA
 	ld	bc, hl                                  ; FA99FE  ld BC,HL
 	and	bc, 0x8000                             ; FA9A00  and BC,0x8000
-	jr z, sub_FA9915__FA9A14                   ; FA9A04  jr Z,0xfa9a14
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9A14                   ; FA9A04  jr Z,0xfa9a14
 	ld	bc, (xiz-6)                             ; FA9A06  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9A09  extz XBC
 	ld	wa, (xbc+4)                             ; FA9A0B  ld WA,(XBC+0x04)
 	and	wa, 12                                 ; FA9A0E  and WA,0x000c
-	jr z, sub_FA9915__FA9A4D                   ; FA9A12  jr Z,0xfa9a4d
-sub_FA9915__FA9A14:
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9A4D                   ; FA9A12  jr Z,0xfa9a4d
+Voice_StageChanSel_Reg0440_Reg0480__FA9A14:
 	ld	(xiz-10), e                             ; FA9A14  ld (XIZ+0xf6),E
 	push	0                                     ; FA9A17  push 0x00
 	extpfx3 0x8E, 0xF6, 0x04                   ; FA9A19  push (XIZ+0xf6)
@@ -45094,22 +45236,22 @@ sub_FA9915__FA9A14:
 	pushw	de                                   ; FA9A42  push DE
 	call	0xFB7CB1                              ; FA9A43  call 0xfb7cb1
 	add	xsp, 18                                ; FA9A47  add XSP,0x00000012
-sub_FA9915__FA9A4D:
+Voice_StageChanSel_Reg0440_Reg0480__FA9A4D:
 	extz	xix                                   ; FA9A4D  extz XIX
 	ld	c, (xix+7)                              ; FA9A4F  ld C,(XIX+0x07)
 	cps	c, 0                                   ; FA9A52  cp C,0
-	jr z, sub_FA9915__FA9A64                   ; FA9A54  jr Z,0xfa9a64
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9A64                   ; FA9A54  jr Z,0xfa9a64
 	ld	bc, (xiz-6)                             ; FA9A56  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9A59  extz XBC
 	ld	wa, (xbc+6)                             ; FA9A5B  ld WA,(XBC+0x06)
 	and	wa, 0x2000                             ; FA9A5E  and WA,0x2000
-	jr nz, sub_FA9915__FA9A6D                  ; FA9A62  jr NZ,0xfa9a6d
-sub_FA9915__FA9A64:
+	jr nz, Voice_StageChanSel_Reg0440_Reg0480__FA9A6D                  ; FA9A62  jr NZ,0xfa9a6d
+Voice_StageChanSel_Reg0440_Reg0480__FA9A64:
 	extz	xix                                   ; FA9A64  extz XIX
 	ld	c, (xix)                                ; FA9A66  ld C,(XIX)
 	and	c, 32                                  ; FA9A68  and C,0x20
-	jr z, sub_FA9915__FA9A86                   ; FA9A6B  jr Z,0xfa9a86
-sub_FA9915__FA9A6D:
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9A86                   ; FA9A6B  jr Z,0xfa9a86
+Voice_StageChanSel_Reg0440_Reg0480__FA9A6D:
 	extz	xix                                   ; FA9A6D  extz XIX
 	ld	(xix+8), 0                              ; FA9A6F  ld (XIX+0x08),0x00
 	extpfx3 0x84, 0x3C, 0xF3                   ; FA9A73  and (XIX),0xf3
@@ -45117,46 +45259,46 @@ sub_FA9915__FA9A6D:
 	set	4, c                                   ; FA9A78  set 0x04,C
 	ld	(xix), c                                ; FA9A7B  ld (XIX),C
 	stiw_da	(0xD79E), 0                        ; FA9A7D  ld (0x00d79e),0x0000
-	jr sub_FA9915__FA9ABB                      ; FA9A84  jr T,0xfa9abb
-sub_FA9915__FA9A86:
+	jr Voice_StageChanSel_Reg0440_Reg0480__FA9ABB                      ; FA9A84  jr T,0xfa9abb
+Voice_StageChanSel_Reg0440_Reg0480__FA9A86:
 	extz	xix                                   ; FA9A86  extz XIX
 	ld	c, (xix+5)                              ; FA9A88  ld C,(XIX+0x05)
 	cps	c, 0                                   ; FA9A8B  cp C,0
-	jr nz, sub_FA9915__FA9A97                  ; FA9A8D  jr NZ,0xfa9a97
+	jr nz, Voice_StageChanSel_Reg0440_Reg0480__FA9A97                  ; FA9A8D  jr NZ,0xfa9a97
 	ld	bc, hl                                  ; FA9A8F  ld BC,HL
 	and	bc, 0x8000                             ; FA9A91  and BC,0x8000
-	jr nz, sub_FA9915__FA9AA0                  ; FA9A95  jr NZ,0xfa9aa0
-sub_FA9915__FA9A97:
+	jr nz, Voice_StageChanSel_Reg0440_Reg0480__FA9AA0                  ; FA9A95  jr NZ,0xfa9aa0
+Voice_StageChanSel_Reg0440_Reg0480__FA9A97:
 	extz	xix                                   ; FA9A97  extz XIX
 	ld	c, (xix)                                ; FA9A99  ld C,(XIX)
 	and	c, 56                                  ; FA9A9B  and C,0x38
-	jr z, sub_FA9915__FA9AAF                   ; FA9A9E  jr Z,0xfa9aaf
-sub_FA9915__FA9AA0:
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9AAF                   ; FA9A9E  jr Z,0xfa9aaf
+Voice_StageChanSel_Reg0440_Reg0480__FA9AA0:
 	ld	bc, (xiz-6)                             ; FA9AA0  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9AA3  extz XBC
 	ld	wa, (xbc+4)                             ; FA9AA5  ld WA,(XBC+0x04)
 	and	wa, 12                                 ; FA9AA8  and WA,0x000c
-	jrl z, sub_FA9915__FA9B74                  ; FA9AAC  jrl Z,0xfa9b74
-sub_FA9915__FA9AAF:
+	jrl z, Voice_StageChanSel_Reg0440_Reg0480__FA9B74                  ; FA9AAC  jrl Z,0xfa9b74
+Voice_StageChanSel_Reg0440_Reg0480__FA9AAF:
 	ld	c, e                                    ; FA9AAF  ld C,E
 	pushw	bc                                   ; FA9AB1  push BC
 	calr (0xFA796D - 0xFA9AB5)                 ; FA9AB2  calr 0xfa796d
 	stw_da	(0xD79E), wa                        ; FA9AB5  ld (0x00d79e),WA
 	popw	bc                                    ; FA9ABA  pop BC
-sub_FA9915__FA9ABB:
+Voice_StageChanSel_Reg0440_Reg0480__FA9ABB:
 	lda_24	xbc, (0xD75E)                       ; FA9ABB  lda XBC,0x00d75e
 	push	xbc                                   ; FA9AC0  push XBC
 	pushw	de                                   ; FA9AC1  push DE
 	call	0xFB7C8F                              ; FA9AC2  call 0xfb7c8f
-sub_FA9915__FA9AC6:
+Voice_StageChanSel_Reg0440_Reg0480__FA9AC6:
 	inc	6, xsp                                 ; FA9AC6  inc 6,XSP
-	jrl sub_FA9915__FA9B74                     ; FA9AC8  jrl T,0xfa9b74
-sub_FA9915__FA9ACB:
+	jrl Voice_StageChanSel_Reg0440_Reg0480__FA9B74                     ; FA9AC8  jrl T,0xfa9b74
+Voice_StageChanSel_Reg0440_Reg0480__FA9ACB:
 	ld	bc, (xiz-6)                             ; FA9ACB  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9ACE  extz XBC
 	ld	wa, (xbc+9)                             ; FA9AD0  ld WA,(XBC+0x09)
 	and	wa, 0x8000                             ; FA9AD3  and WA,0x8000
-	jrl z, sub_FA9915__FA9B74                  ; FA9AD7  jrl Z,0xfa9b74
+	jrl z, Voice_StageChanSel_Reg0440_Reg0480__FA9B74                  ; FA9AD7  jrl Z,0xfa9b74
 	pushw	1                                    ; FA9ADA  push 0x0001
 	push	0                                     ; FA9ADD  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9ADF  push (XIZ+0xfe)
@@ -45166,7 +45308,7 @@ sub_FA9915__FA9ACB:
 	ld	de, wa                                  ; FA9AEB  ld DE,WA
 	inc	6, xsp                                 ; FA9AED  inc 6,XSP
 	cps	wa, 0                                  ; FA9AEF  cp WA,0
-	jrl z, sub_FA9915__FA9B74                  ; FA9AF1  jrl Z,0xfa9b74
+	jrl z, Voice_StageChanSel_Reg0440_Reg0480__FA9B74                  ; FA9AF1  jrl Z,0xfa9b74
 	pushw	13                                   ; FA9AF4  push 0x000d
 	ld	bc, (xiz+8)                             ; FA9AF7  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9AFA  extz XBC
@@ -45179,7 +45321,7 @@ sub_FA9915__FA9ACB:
 	and	wa, 0xFF                               ; FA9B0A  and WA,0x00ff
 	inc	6, xsp                                 ; FA9B0E  inc 6,XSP
 	cp	wa, 0x80                                ; FA9B10  cp WA,0x0080
-	jr nc, sub_FA9915__FA9B74                  ; FA9B14  jr NC,0xfa9b74
+	jr nc, Voice_StageChanSel_Reg0440_Reg0480__FA9B74                  ; FA9B14  jr NC,0xfa9b74
 	ld	ix, hl                                  ; FA9B16  ld IX,HL
 	and	ix, 0x7F                               ; FA9B18  and IX,0x007f
 	extpfx3 0xC7, 0xF0, 0x8B                   ; FA9B1C  ld C,IXL
@@ -45192,13 +45334,13 @@ sub_FA9915__FA9ACB:
 	ld	bc, hl                                  ; FA9B2F  ld BC,HL
 	and	bc, 0x8000                             ; FA9B31  and BC,0x8000
 	pop	xiy                                    ; FA9B35  pop XIY
-	jr z, sub_FA9915__FA9B46                   ; FA9B36  jr Z,0xfa9b46
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9B46                   ; FA9B36  jr Z,0xfa9b46
 	ld	bc, (xiz-6)                             ; FA9B38  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9B3B  extz XBC
 	ld	wa, (xbc+4)                             ; FA9B3D  ld WA,(XBC+0x04)
 	and	wa, 4                                  ; FA9B40  and WA,0x0004
-	jr z, sub_FA9915__FA9B74                   ; FA9B44  jr Z,0xfa9b74
-sub_FA9915__FA9B46:
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9B74                   ; FA9B44  jr Z,0xfa9b74
+Voice_StageChanSel_Reg0440_Reg0480__FA9B46:
 	ld	bc, (xiz-6)                             ; FA9B46  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9B49  extz XBC
 	ld	wa, (xbc+0x69)                          ; FA9B4B  ld WA,(XBC+0x69)
@@ -45213,13 +45355,13 @@ sub_FA9915__FA9B46:
 	and	wa, 0x7F                               ; FA9B68  and WA,0x007f
 	pushw	wa                                   ; FA9B6C  push WA
 	call	0xFB7C27                              ; FA9B6D  call 0xfb7c27
-	jrl sub_FA9915__FA9AC6                     ; FA9B71  jrl T,0xfa9ac6
-sub_FA9915__FA9B74:
+	jrl Voice_StageChanSel_Reg0440_Reg0480__FA9AC6                     ; FA9B71  jrl T,0xfa9ac6
+Voice_StageChanSel_Reg0440_Reg0480__FA9B74:
 	ld	bc, (xiz-6)                             ; FA9B74  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9B77  extz XBC
 	ld	wa, (xbc+9)                             ; FA9B79  ld WA,(XBC+0x09)
 	and	wa, 0x8000                             ; FA9B7C  and WA,0x8000
-	jrl z, sub_FA9915__FA9C5A                  ; FA9B80  jrl Z,0xfa9c5a
+	jrl z, Voice_StageChanSel_Reg0440_Reg0480__FA9C5A                  ; FA9B80  jrl Z,0xfa9c5a
 	pushw	0                                    ; FA9B83  push 0x0000
 	push	0                                     ; FA9B86  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9B88  push (XIZ+0xfe)
@@ -45229,7 +45371,7 @@ sub_FA9915__FA9B74:
 	ld	de, wa                                  ; FA9B94  ld DE,WA
 	inc	6, xsp                                 ; FA9B96  inc 6,XSP
 	cps	wa, 0                                  ; FA9B98  cp WA,0
-	jrl z, sub_FA9915__FA9C5A                  ; FA9B9A  jrl Z,0xfa9c5a
+	jrl z, Voice_StageChanSel_Reg0440_Reg0480__FA9C5A                  ; FA9B9A  jrl Z,0xfa9c5a
 	pushw	12                                   ; FA9B9D  push 0x000c
 	ld	bc, (xiz+8)                             ; FA9BA0  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9BA3  extz XBC
@@ -45242,7 +45384,7 @@ sub_FA9915__FA9B74:
 	and	wa, 0xFF                               ; FA9BB3  and WA,0x00ff
 	inc	6, xsp                                 ; FA9BB7  inc 6,XSP
 	cp	wa, 0x80                                ; FA9BB9  cp WA,0x0080
-	jrl nc, sub_FA9915__FA9C5A                 ; FA9BBD  jrl NC,0xfa9c5a
+	jrl nc, Voice_StageChanSel_Reg0440_Reg0480__FA9C5A                 ; FA9BBD  jrl NC,0xfa9c5a
 	ld	bc, hl                                  ; FA9BC0  ld BC,HL
 	and	bc, 63                                 ; FA9BC2  and BC,0x003f
 	or	bc, de                                  ; FA9BC6  or BC,DE
@@ -45253,16 +45395,16 @@ sub_FA9915__FA9B74:
 	ld	d, a                                    ; FA9BD6  ld D,A
 	popw	bc                                    ; FA9BD8  pop BC
 	cps	a, 0                                   ; FA9BD9  cp A,0
-	jr nz, sub_FA9915__FA9BF3                  ; FA9BDB  jr NZ,0xfa9bf3
+	jr nz, Voice_StageChanSel_Reg0440_Reg0480__FA9BF3                  ; FA9BDB  jr NZ,0xfa9bf3
 	ld	bc, hl                                  ; FA9BDD  ld BC,HL
 	and	bc, 0x8000                             ; FA9BDF  and BC,0x8000
-	jr z, sub_FA9915__FA9BF3                   ; FA9BE3  jr Z,0xfa9bf3
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9BF3                   ; FA9BE3  jr Z,0xfa9bf3
 	ld	bc, (xiz-6)                             ; FA9BE5  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9BE8  extz XBC
 	ld	wa, (xbc+4)                             ; FA9BEA  ld WA,(XBC+0x04)
 	and	wa, 4                                  ; FA9BED  and WA,0x0004
-	jr z, sub_FA9915__FA9C5A                   ; FA9BF1  jr Z,0xfa9c5a
-sub_FA9915__FA9BF3:
+	jr z, Voice_StageChanSel_Reg0440_Reg0480__FA9C5A                   ; FA9BF1  jr Z,0xfa9c5a
+Voice_StageChanSel_Reg0440_Reg0480__FA9BF3:
 	ld	bc, (xiz-6)                             ; FA9BF3  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9BF6  extz XBC
 	ld	ix, (xbc+0x65)                          ; FA9BF8  ld IX,(XBC+0x65)
@@ -45299,7 +45441,7 @@ sub_FA9915__FA9BF3:
 	call	0xFB7D1D                              ; FA9C52  call 0xfb7d1d
 	inc	8, xsp                                 ; FA9C56  inc 0,XSP
 	inc	6, xsp                                 ; FA9C58  inc 6,XSP
-sub_FA9915__FA9C5A:
+Voice_StageChanSel_Reg0440_Reg0480__FA9C5A:
 	pop	xix                                    ; FA9C5A  pop XIX
 	popw	de                                    ; FA9C5B  pop DE
 	popw	hl                                    ; FA9C5C  pop HL
@@ -45313,7 +45455,7 @@ sub_FA9915__FA9C5A:
 ;          0xFB0B2F in VoiceRegs_Stage_A, 0xFB1F1D in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D76A, 0x00D796, 0x00D798
-; Calls:   0xFA5ED3 = sub_FA5ED3, 0xFA78E8 = sub_FA78E8
+; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA78E8 = sub_FA78E8
 ;          0xFA7A4B = sub_FA7A4B, 0xFA7AD6 = sub_FA7AD6
 ;          0xFA7F04 = Rand_FromTickSquared, 0xFA981B = sub_FA981B
 ;          0xFB5F91 = sub_FB5F91, 0xFB7E13 = Dev10C_Slot1_WriteGateAndValue
@@ -45607,14 +45749,14 @@ sub_FA9C60__FA9F06:
 	unlk32 xiz                                 ; FA9F16  unlk XIZ
 	ret                                        ; FA9F18  ret
 ; --------------------------------------------------------------------------
-; sub_FA9F19 -- 0xFA9F19..0xFAA0BB (419 bytes)
+; Voice_StageChanSel_Reg04C0 -- 0xFA9F19..0xFAA0BB (419 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFAE8C2 in sub_FAE848__FAE8B3, 0xFAEA00 in sub_FAE986__FAE9F1
 ;          0xFB0B34 in VoiceRegs_Stage_A, 0xFB1F22 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D772, 0x00D796, 0x00D7A0
-; Calls:   0xFA5ED3 = sub_FA5ED3, 0xFA7B31 = sub_FA7B31
+; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA7B31 = sub_FA7B31
 ;          0xFA7C3A = sub_FA7C3A, 0xFA981B = sub_FA981B
 ;          0xFB7FCE = Dev10C_SetChanReg_01C0_or_0600_b, 0xFB8012 = Dev10C_Slot1or3_StrobeGate
 ;          0xFB80A9 = Dev10C_Slot1or3_WriteGate8100
@@ -45623,10 +45765,34 @@ sub_FA9C60__FA9F06:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+;
+; ★★ GAP A -- THIS IS WHERE REGISTER 0x04C0 GETS ITS VALUE.  It stages the
+;   0x0010C000 staging struct's word 10 (+0x14, RAM 0x00D772) -> chan+0x04C0, and
+;   the word tiles CLEANLY into three disjoint fields:
+;       0x4400  a literal, seeded before any test
+;       0x3300  a MODE field, from the tone descriptor word at +0x22
+;       0x007F  a CHANNEL of this same 0x0010C000 device
+;   (0x4400 | 0x3300 | 0x007F = 0x777F, and the three masks are pairwise disjoint
+;   -- unlike word 8's, which overlap at bit 6.)
+;
+; Evidence: 0xFA9F20 `ld (0x00d772),0x4400` SEEDS the word at entry -- it is not
+;          cleared, so a rejected lookup leaves 0x4400 in it, NOT 0x0000.  Two
+;          arms then call the lookup, 0xFA9F7C and 0xFA9FA3, and both mask its
+;          result the same way (0xFA9F85, 0xFA9FAC `and WA,0x007f`) into IX.  A
+;          result whose low byte is >= 0x80 is rejected at
+;          0xFA9FD5/0xFA9FD9/0xFA9FDD.  0xFA9FE5 `ld WA,(XBC+0x22)` / 0xFA9FE8
+;          `and WA,0x3300` is the MODE field; 0xFA9FEC `or WA,IX`; 0xFA9FEE
+;          `or (0x00d772),WA` -- an OR into the seeded word, which is why 0x4400
+;          survives.  The same IX is pushed at 0xFAA02D into
+;          Dev10C_Slot1or3_StrobeGate (0xFAA02E), which turns it into the device
+;          register selector 0x0540+arg or 0x0580+arg (0xFB801F/0xFB8030/0xFB8070)
+;          -- that is what makes the field a CHANNEL and not just a number.
+; ⚠ NOT ESTABLISHED: what the literal 0x4400 or the two mode bits MEAN, and
+;   whether the named channel differs from the one the struct is committed to.
+; Evidence: `python3 notes/prom_c_understanding_round4.py`, sections 1, 2, 3c, 5;
+;          every address is re-decoded by an independent disassembler.
 ; --------------------------------------------------------------------------
-sub_FA9F19:
+Voice_StageChanSel_Reg04C0:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FA9F19  link XIZ,0xfff8
 	pushw	hl                                   ; FA9F1D  push HL
 	push	xde                                   ; FA9F1E  push XDE
@@ -45642,7 +45808,7 @@ sub_FA9F19:
 	extz	xiy                                   ; FA9F3B  extz XIY
 	ld	bc, (xiy+34)                            ; FA9F3D  ld BC,(XIY+0x22)
 	cps	bc, 0                                  ; FA9F40  cp BC,0
-	jrl z, sub_FA9F19__FAA0B6                  ; FA9F42  jrl Z,0xfaa0b6
+	jrl z, Voice_StageChanSel_Reg04C0__FAA0B6                  ; FA9F42  jrl Z,0xfaa0b6
 	ld	h, (xiy+34)                             ; FA9F45  ld H,(XIY+0x22)
 	and	h, 3                                   ; FA9F48  and H,0x03
 	ldb	c, 4                                   ; FA9F4B  ld C,0x04
@@ -45656,7 +45822,7 @@ sub_FA9F19:
 	add	xwa, xix                               ; FA9F61  add XWA,XIX
 	ld	c, (xwa)                                ; FA9F63  ld C,(XWA)
 	and	c, 0x80                                ; FA9F65  and C,0x80
-	jr z, sub_FA9F19__FA9F94                   ; FA9F68  jr Z,0xfa9f94
+	jr z, Voice_StageChanSel_Reg04C0__FA9F94                   ; FA9F68  jr Z,0xfa9f94
 	ld	c, h                                    ; FA9F6A  ld C,H
 	or	c, 40                                   ; FA9F6C  or C,0x28
 	pushw	bc                                   ; FA9F6F  push BC
@@ -45674,8 +45840,8 @@ sub_FA9F19:
 	pushw	wa                                   ; FA9F8B  push WA
 	call	0xFB80A9                              ; FA9F8C  call 0xfb80a9
 	inc	8, xsp                                 ; FA9F90  inc 0,XSP
-	jr sub_FA9F19__FA9FB4                      ; FA9F92  jr T,0xfa9fb4
-sub_FA9F19__FA9F94:
+	jr Voice_StageChanSel_Reg04C0__FA9FB4                      ; FA9F92  jr T,0xfa9fb4
+Voice_StageChanSel_Reg04C0__FA9F94:
 	ld	c, h                                    ; FA9F94  ld C,H
 	set	3, c                                   ; FA9F96  set 0x03,C
 	pushw	bc                                   ; FA9F99  push BC
@@ -45690,7 +45856,7 @@ sub_FA9F19__FA9F94:
 	and	wa, 0x7F                               ; FA9FAC  and WA,0x007f
 	ld	ix, wa                                  ; FA9FB0  ld IX,WA
 	inc	6, xsp                                 ; FA9FB2  inc 6,XSP
-sub_FA9F19__FA9FB4:
+Voice_StageChanSel_Reg04C0__FA9FB4:
 	ldw	bc, 27                                 ; FA9FB4  ld BC,0x001b
 	mul	xbc, xix                               ; FA9FB7  mul XBC,IX
 	add	bc, 18                                 ; FA9FB9  add BC,0x0012
@@ -45705,7 +45871,7 @@ sub_FA9F19__FA9FB4:
 	ld	bc, (xiz-2)                             ; FA9FD2  ld BC,(XIZ+0xfe)
 	and	bc, 0xFF                               ; FA9FD5  and BC,0x00ff
 	cp	bc, 0x80                                ; FA9FD9  cp BC,0x0080
-	jrl nc, sub_FA9F19__FAA0B6                 ; FA9FDD  jrl NC,0xfaa0b6
+	jrl nc, Voice_StageChanSel_Reg04C0__FAA0B6                 ; FA9FDD  jrl NC,0xfaa0b6
 	ld	bc, (xiz-4)                             ; FA9FE0  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA9FE3  extz XBC
 	ld	wa, (xbc+34)                            ; FA9FE5  ld WA,(XBC+0x22)
@@ -45714,13 +45880,13 @@ sub_FA9F19__FA9FB4:
 	ordm16_24	(0xD772), wa                     ; FA9FEE  or (0x00d772),WA
 	ld	bc, (xiz-2)                             ; FA9FF3  ld BC,(XIZ+0xfe)
 	and	bc, 0x8000                             ; FA9FF6  and BC,0x8000
-	jr z, sub_FA9F19__FAA00A                   ; FA9FFA  jr Z,0xfaa00a
+	jr z, Voice_StageChanSel_Reg04C0__FAA00A                   ; FA9FFA  jr Z,0xfaa00a
 	ld	bc, (xiz-6)                             ; FA9FFC  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FA9FFF  extz XBC
 	ld	wa, (xbc+4)                             ; FAA001  ld WA,(XBC+0x04)
 	and	wa, 12                                 ; FAA004  and WA,0x000c
-	jr z, sub_FA9F19__FAA038                   ; FAA008  jr Z,0xfaa038
-sub_FA9F19__FAA00A:
+	jr z, Voice_StageChanSel_Reg04C0__FAA038                   ; FAA008  jr Z,0xfaa038
+Voice_StageChanSel_Reg04C0__FAA00A:
 	extpfx3 0xC7, 0xF0, 0x8B                   ; FAA00A  ld C,IXL
 	ld	(xiz-8), c                              ; FAA00D  ld (XIZ+0xf8),C
 	pushw	bc                                   ; FAA010  push BC
@@ -45738,22 +45904,22 @@ sub_FA9F19__FAA00A:
 	pushw	ix                                   ; FAA02D  push IX
 	call	0xFB8012                              ; FAA02E  call 0xfb8012
 	add	xsp, 18                                ; FAA032  add XSP,0x00000012
-sub_FA9F19__FAA038:
+Voice_StageChanSel_Reg04C0__FAA038:
 	extz	xde                                   ; FAA038  extz XDE
 	ld	c, (xde+7)                              ; FAA03A  ld C,(XDE+0x07)
 	cps	c, 0                                   ; FAA03D  cp C,0
-	jr z, sub_FA9F19__FAA04F                   ; FAA03F  jr Z,0xfaa04f
+	jr z, Voice_StageChanSel_Reg04C0__FAA04F                   ; FAA03F  jr Z,0xfaa04f
 	ld	bc, (xiz-6)                             ; FAA041  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FAA044  extz XBC
 	ld	wa, (xbc+6)                             ; FAA046  ld WA,(XBC+0x06)
 	and	wa, 0x2000                             ; FAA049  and WA,0x2000
-	jr nz, sub_FA9F19__FAA058                  ; FAA04D  jr NZ,0xfaa058
-sub_FA9F19__FAA04F:
+	jr nz, Voice_StageChanSel_Reg04C0__FAA058                  ; FAA04D  jr NZ,0xfaa058
+Voice_StageChanSel_Reg04C0__FAA04F:
 	extz	xde                                   ; FAA04F  extz XDE
 	ld	c, (xde)                                ; FAA051  ld C,(XDE)
 	and	c, 32                                  ; FAA053  and C,0x20
-	jr z, sub_FA9F19__FAA078                   ; FAA056  jr Z,0xfaa078
-sub_FA9F19__FAA058:
+	jr z, Voice_StageChanSel_Reg04C0__FAA078                   ; FAA056  jr Z,0xfaa078
+Voice_StageChanSel_Reg04C0__FAA058:
 	extz	xde                                   ; FAA058  extz XDE
 	ld	(xde+8), 0                              ; FAA05A  ld (XDE+0x08),0x00
 	extpfx3 0x82, 0x3C, 0xF3                   ; FAA05E  and (XDE),0xf3
@@ -45762,38 +45928,38 @@ sub_FA9F19__FAA058:
 	ld	(xde), c                                ; FAA066  ld (XDE),C
 	stiw_da	(0xD796), 0                        ; FAA068  ld (0x00d796),0x0000
 	stiw_da	(0xD7A0), 0                        ; FAA06F  ld (0x00d7a0),0x0000
-	jr sub_FA9F19__FAA0A9                      ; FAA076  jr T,0xfaa0a9
-sub_FA9F19__FAA078:
+	jr Voice_StageChanSel_Reg04C0__FAA0A9                      ; FAA076  jr T,0xfaa0a9
+Voice_StageChanSel_Reg04C0__FAA078:
 	extz	xde                                   ; FAA078  extz XDE
 	ld	c, (xde+5)                              ; FAA07A  ld C,(XDE+0x05)
 	cps	c, 0                                   ; FAA07D  cp C,0
-	jr nz, sub_FA9F19__FAA08A                  ; FAA07F  jr NZ,0xfaa08a
+	jr nz, Voice_StageChanSel_Reg04C0__FAA08A                  ; FAA07F  jr NZ,0xfaa08a
 	ld	bc, (xiz-2)                             ; FAA081  ld BC,(XIZ+0xfe)
 	and	bc, 0x8000                             ; FAA084  and BC,0x8000
-	jr nz, sub_FA9F19__FAA093                  ; FAA088  jr NZ,0xfaa093
-sub_FA9F19__FAA08A:
+	jr nz, Voice_StageChanSel_Reg04C0__FAA093                  ; FAA088  jr NZ,0xfaa093
+Voice_StageChanSel_Reg04C0__FAA08A:
 	extz	xde                                   ; FAA08A  extz XDE
 	ld	c, (xde)                                ; FAA08C  ld C,(XDE)
 	and	c, 56                                  ; FAA08E  and C,0x38
-	jr z, sub_FA9F19__FAA0A1                   ; FAA091  jr Z,0xfaa0a1
-sub_FA9F19__FAA093:
+	jr z, Voice_StageChanSel_Reg04C0__FAA0A1                   ; FAA091  jr Z,0xfaa0a1
+Voice_StageChanSel_Reg04C0__FAA093:
 	ld	bc, (xiz-6)                             ; FAA093  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FAA096  extz XBC
 	ld	wa, (xbc+4)                             ; FAA098  ld WA,(XBC+0x04)
 	and	wa, 12                                 ; FAA09B  and WA,0x000c
-	jr z, sub_FA9F19__FAA0B6                   ; FAA09F  jr Z,0xfaa0b6
-sub_FA9F19__FAA0A1:
+	jr z, Voice_StageChanSel_Reg04C0__FAA0B6                   ; FAA09F  jr Z,0xfaa0b6
+Voice_StageChanSel_Reg04C0__FAA0A1:
 	extpfx3 0xC7, 0xF0, 0x8B                   ; FAA0A1  ld C,IXL
 	pushw	bc                                   ; FAA0A4  push BC
 	calr (0xFA7B31 - 0xFAA0A8)                 ; FAA0A5  calr 0xfa7b31
 	popw	bc                                    ; FAA0A8  pop BC
-sub_FA9F19__FAA0A9:
+Voice_StageChanSel_Reg04C0__FAA0A9:
 	lda_24	xbc, (0xD75E)                       ; FAA0A9  lda XBC,0x00d75e
 	push	xbc                                   ; FAA0AE  push XBC
 	pushw	ix                                   ; FAA0AF  push IX
 	call	0xFB7FCE                              ; FAA0B0  call 0xfb7fce
 	inc	6, xsp                                 ; FAA0B4  inc 6,XSP
-sub_FA9F19__FAA0B6:
+Voice_StageChanSel_Reg04C0__FAA0B6:
 	pop	xix                                    ; FAA0B6  pop XIX
 	pop	xde                                    ; FAA0B7  pop XDE
 	popw	hl                                    ; FAA0B8  pop HL
@@ -52278,9 +52444,22 @@ Dev10C_SetChanReg_0180:
 ;     lda XWA,0xfe12cf); notes/prom_c_gapA_remaining_regs.py cites 0xFB8175
 ;     for it, which is the argument load of the NEXT loop -- corrected here,
 ;     see notes/wave7-round1/README.md lane g1.
-; ⚠ NOT ESTABLISHED: what the register DOES.  0x0000 is what the ROM holds, not
-;   a meaning, and this round did not re-derive the channel-cross-reference
-;   reading that prom_c_gapA_remaining_regs.py argues for.
+; ★★ ROUND 4 -- WHAT THE REGISTER HOLDS.  Word 8 is `MODE | CHANNEL`, and the
+;   CHANNEL field (bits 6..0) is a channel of this same 0x0010C000 device: it is
+;   bit for bit the value its producer hands to a Dev10C_Slot* accessor as that
+;   accessor's `chan` argument, where it is added to a register-block base
+;   (0x0540 / 0x0580 / 0x05C0) to form the device's register selector.  Bits 5..0
+;   are the channel of the 64-channel device and bit 6 selects the block --
+;   Dev10C_Slot1or3_StrobeGate splits on that bit at 0xFB801F and its two arms
+;   read the two slots' own staging fields (+0x3A / +0x3E).  The MODE bits (7..6)
+;   come from the tone descriptor on one path (0xFA99F3 `and WA,0x00c0`) and from
+;   Dev10C_ChanSelHighBits on the other (0xFA9AE7).
+;   ⚠ THE TWO FIELDS OVERLAP AT BIT 6 in this word and are combined with `or`;
+;   word 0x0480 masks its channel to 0x3F and does not.  Stated, not resolved.
+;   Producer: Voice_StageChanSel_Reg0440_Reg0480 (0xFA9915).  Full citation list
+;   and the raw-byte write census: `python3 notes/prom_c_understanding_round4.py`.
+; ⚠ STILL NOT ESTABLISHED: that the named channel is a DIFFERENT channel from the
+;   one the word is written to, and what the two mode bits mean.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0440:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACFD6  ee 0c 00 00
@@ -52318,9 +52497,21 @@ Dev10C_SetChanReg_0440:
 ;     lda XWA,0xfe12cf); notes/prom_c_gapA_remaining_regs.py cites 0xFB8175
 ;     for it, which is the argument load of the NEXT loop -- corrected here,
 ;     see notes/wave7-round1/README.md lane g1.
-; ⚠ NOT ESTABLISHED: what the register DOES.  0x0000 is what the ROM holds, not
-;   a meaning, and this round did not re-derive the channel-cross-reference
-;   reading that prom_c_gapA_remaining_regs.py argues for.
+; ★★ ROUND 4 -- WHAT THE REGISTER HOLDS.  Word 10 tiles into THREE disjoint
+;   fields: a literal 0x4400, a 0x3300 mode field taken from the tone descriptor
+;   word at +0x22 (0xFA9FE8 `and WA,0x3300`), and a 0x007F channel of this same
+;   0x0010C000 device (0xFA9F85 / 0xFA9FAC `and WA,0x007f`).  The channel field is
+;   a channel because the same masked value is handed to
+;   Dev10C_Slot1or3_StrobeGate at 0xFAA02D/0xFAA02E, which adds a register-block
+;   base to it (0xFB8030 / 0xFB8070).
+;   ⚠ AND THE POWER-ON ROW ABOVE IS NOT THE WHOLE STORY FOR THIS REGISTER: its
+;   producer SEEDS the word with 0x4400 at 0xFA9F20 before any test, so a
+;   REJECTED lookup leaves 0x4400 in it, not 0x0000.  0x0000 is only what the
+;   reset image writes.
+;   Producer: Voice_StageChanSel_Reg04C0 (0xFA9F19).  Full citation list and the
+;   raw-byte write census: `python3 notes/prom_c_understanding_round4.py`.
+; ⚠ STILL NOT ESTABLISHED: what the literal 0x4400 or the two mode bits mean, and
+;   whether the named channel differs from the one the word is written to.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_04C0:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACFF8  ee 0c 00 00
@@ -55754,7 +55945,7 @@ sub_FAE2C6__FAE326:
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D79E
 ; Calls:   0xFA6110 = sub_FA6110, 0xFA796D = sub_FA796D
-;          0xFA981B = sub_FA981B, 0xFA9915 = sub_FA9915
+;          0xFA981B = sub_FA981B, 0xFA9915 = Voice_StageChanSel_Reg0440_Reg0480
 ;          0xFACFD6 = Dev10C_SetChanReg_0440, 0xFAD01A = Dev10C_SetChanReg_0600
 ;          0xFAE242 = sub_FAE242, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE34A-0xFAE483
@@ -55903,7 +56094,7 @@ sub_FAE34A__FAE47E:
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D79A, 0x00D79E
 ; Calls:   0xFA6110 = sub_FA6110, 0xFA79F4 = sub_FA79F4
-;          0xFA981B = sub_FA981B, 0xFA9915 = sub_FA9915
+;          0xFA981B = sub_FA981B, 0xFA9915 = Voice_StageChanSel_Reg0440_Reg0480
 ;          0xFACFD6 = Dev10C_SetChanReg_0440, 0xFAD01A = Dev10C_SetChanReg_0600
 ;          0xFAD03C = Dev10C_SetChanReg_0580, 0xFAE2C6 = sub_FAE2C6
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
@@ -56362,7 +56553,7 @@ sub_FAE703__FAE842:
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796, 0x00D7A0
 ; Calls:   0xFA6110 = sub_FA6110, 0xFA7B31 = sub_FA7B31
-;          0xFA981B = sub_FA981B, 0xFA9F19 = sub_FA9F19
+;          0xFA981B = sub_FA981B, 0xFA9F19 = Voice_StageChanSel_Reg04C0
 ;          0xFACFF8 = Dev10C_SetChanReg_04C0, 0xFAD0A2 = Dev10C_SetChanReg_01C0_or_0600
 ;          0xFAE242 = sub_FAE242, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE848-0xFAE985
@@ -56512,7 +56703,7 @@ sub_FAE848__FAE980:
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796, 0x00D7A0
 ; Calls:   0xFA6110 = sub_FA6110, 0xFA7C3A = sub_FA7C3A
-;          0xFA981B = sub_FA981B, 0xFA9F19 = sub_FA9F19
+;          0xFA981B = sub_FA981B, 0xFA9F19 = Voice_StageChanSel_Reg04C0
 ;          0xFACFF8 = Dev10C_SetChanReg_04C0, 0xFAD0A2 = Dev10C_SetChanReg_01C0_or_0600
 ;          0xFAD0E6 = Dev10C_SetChanReg_0540_or_0580, 0xFAE2C6 = sub_FAE2C6
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
@@ -70480,7 +70671,7 @@ sub_FB59D2__FB5B33:
 ; sub_FB5B56 -- 0xFB5B56..0xFB5BA9 (84 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFA9BD2 in sub_FA9915__FA9B74
+;          0xFA9BD2 in Voice_StageChanSel_Reg0440_Reg0480__FA9B74
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB5B56-0xFB5BA9
@@ -70878,10 +71069,10 @@ sub_FB5E00__FB5E34:
 	unlk32 xiz                                 ; FB5E36  unlk XIZ
 	ret                                        ; FB5E38  ret
 ; --------------------------------------------------------------------------
-; sub_FB5E39 -- 0xFB5E39..0xFB5F90 (344 bytes)
+; Dev10C_ChanSelHighBits -- 0xFB5E39..0xFB5F90 (344 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFA9AE7 in sub_FA9915__FA9ACB, 0xFA9B90 in sub_FA9915__FA9B74
+;          0xFA9AE7 in Voice_StageChanSel_Reg0440_Reg0480__FA9ACB, 0xFA9B90 in Voice_StageChanSel_Reg0440_Reg0480__FA9B74
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Arms:    3 computed-goto arm(s) inside this routine: 0xFB5EAA 0xFB5F44 0xFB5F89
@@ -70890,10 +71081,36 @@ sub_FB5E00__FB5E34:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+;
+; ★ IT RETURNS EXACTLY THREE VALUES: 0x0000, 0x0040 and 0x00C0 -- and that is a
+;   SWEEP of the routine, not a sample.  Outside the 48-byte jump table at
+;   0xFB5E7A only three instructions load WA: 0xFB5F7F `ld WA,0x00c0`, 0xFB5F84
+;   `ld WA,0x0040` and 0xFB5F89 `ld WA,IX`.  IX is written twice, 0xFB5E46
+;   `ld IX,0x0000` and 0xFB5F62 `ld XIX,XBC`.  0xFB5F89 is reached FIVE ways, not
+;   four, and every one of them is BELOW 0xFB5F62, so IX is still 0 at every
+;   arrival: the four conditional branches 0xFB5E6A, 0xFB5ED4, 0xFB5F20, 0xFB5F5A,
+;   AND the computed goto `jp T,XBC` at 0xFB5E78, whose table entries 6, 8 and 9
+;   hold 0xFB5F89.  The decode covers 0xFB5E39..0xFB5F90 with one gap, and that gap
+;   is the jump table.
+; ★ NAME: at BOTH of its two call sites the value becomes the high bits of a
+;   0x0010C000 channel-selector word -- 0xFA9AE7 for word 8 (register 0x0440) and
+;   0xFA9B90 for word 9 (register 0x0480), each OR'd with a 6- or 7-bit channel
+;   index at 0xFA9B28 and 0xFA9BC6.  Both callers REJECT the value 0
+;   (0xFA9AEF/0xFA9AF1 and 0xFA9B98/0xFA9B9A), so only 0x0040 and 0x00C0 ever
+;   reach a register, and bit 6 of the word is therefore always set.
+; ★ The index into the jump table is bounded to 0..11 by 0xFB5E66 `cp BC,0x000b`
+;   and out-of-range returns 0 (0xFB5E6A).  The twelve entries hold only THREE
+;   distinct targets: 0xFB5EAA (entries 0-5, 7), 0xFB5F89 (6, 8, 9) and 0xFB5F44
+;   (10, 11).  Read from the ROM, not inferred.
+; ⚠ NOT ESTABLISHED: what 0x0040 and 0x00C0 MEAN.  Their width (2 bits), their
+;   position (bits 7..6) and their source are measured; their meaning is not, and
+;   naming them "modes" here would be an invention.
+; Evidence: `python3 notes/prom_c_understanding_round4.py --modes`, which sweeps
+;          the address extent and enumerates the jump table rather than reasoning
+;          about it; every cited address is re-decoded by an independent
+;          disassembler.
 ; --------------------------------------------------------------------------
-sub_FB5E39:
+Dev10C_ChanSelHighBits:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB5E39  link XIZ,0xfffc
 	pushw	hl                                   ; FB5E3D  push HL
 	pushw	de                                   ; FB5E3E  push DE
@@ -70912,7 +71129,7 @@ sub_FB5E39:
 	extz	bc                                    ; FB5E62  extz BC
 	extz	xbc                                   ; FB5E64  extz XBC
 	cp	bc, 11                                  ; FB5E66  cp BC,0x000b
-	jrl ugt, sub_FB5E39__FB5F89                ; FB5E6A  jrl UGT,0xfb5f89
+	jrl ugt, Dev10C_ChanSelHighBits__FB5F89                ; FB5E6A  jrl UGT,0xfb5f89
 	sll	bc, 2                                  ; FB5E6D  sll 0x02,BC
 	add	xbc, 0xFB5E7A                          ; FB5E70  add XBC,0x00fb5e7a
 	ld	xbc, (xbc)                              ; FB5E76  ld XBC,(XBC)
@@ -70937,9 +71154,9 @@ sub_FB5E39:
 	.long 0x00FB5F89	; 0xFB5E9E  entry 9 -> 0xFB5F89
 	.long 0x00FB5F44	; 0xFB5EA2  entry 10 -> 0xFB5F44
 	.long 0x00FB5F44	; 0xFB5EA6  entry 11 -> 0xFB5F44
-sub_FB5E39__FB5EAA:
+Dev10C_ChanSelHighBits__FB5EAA:
 	cp (xiz+12), 0x00                          ; FB5EAA  cp (XIZ+0x0c),0x00
-	jr nz, sub_FB5E39__FB5EFC                  ; FB5EAE  jr NZ,0xfb5efc
+	jr nz, Dev10C_ChanSelHighBits__FB5EFC                  ; FB5EAE  jr NZ,0xfb5efc
 	ldb	c, 5                                   ; FB5EB0  ld C,0x05
 	mul8rr	c, d                                ; FB5EB2  mul BC,D
 	extz	xbc                                   ; FB5EB4  extz XBC
@@ -70953,7 +71170,7 @@ sub_FB5E39__FB5EAA:
 	ld	h, (xwa)                                ; FB5ECD  ld H,(XWA)
 	ld	c, h                                    ; FB5ECF  ld C,H
 	and	c, 0x80                                ; FB5ED1  and C,0x80
-	jrl z, sub_FB5E39__FB5F89                  ; FB5ED4  jrl Z,0xfb5f89
+	jrl z, Dev10C_ChanSelHighBits__FB5F89                  ; FB5ED4  jrl Z,0xfb5f89
 	ld	c, l                                    ; FB5ED7  ld C,L
 	extz	bc                                    ; FB5ED9  extz BC
 	mul	bc, 0x12C                              ; FB5EDB  mul BC,0x012c
@@ -70961,12 +71178,12 @@ sub_FB5E39__FB5EAA:
 	ld	xwa, (xbc+0x1523)                       ; FB5EE1  ld XWA,(XBC+0x1523)
 	ld	c, (xwa+0xD0)                           ; FB5EE6  ld C,(XWA+0x00d0)
 	and	c, 64                                  ; FB5EEB  and C,0x40
-	jrl z, sub_FB5E39__FB5F84                  ; FB5EEE  jrl Z,0xfb5f84
+	jrl z, Dev10C_ChanSelHighBits__FB5F84                  ; FB5EEE  jrl Z,0xfb5f84
 	ld	c, h                                    ; FB5EF1  ld C,H
 	and	c, 8                                   ; FB5EF3  and C,0x08
-	jrl z, sub_FB5E39__FB5F84                  ; FB5EF6  jrl Z,0xfb5f84
-	jrl sub_FB5E39__FB5F7F                     ; FB5EF9  jrl T,0xfb5f7f
-sub_FB5E39__FB5EFC:
+	jrl z, Dev10C_ChanSelHighBits__FB5F84                  ; FB5EF6  jrl Z,0xfb5f84
+	jrl Dev10C_ChanSelHighBits__FB5F7F                     ; FB5EF9  jrl T,0xfb5f7f
+Dev10C_ChanSelHighBits__FB5EFC:
 	ldb	c, 5                                   ; FB5EFC  ld C,0x05
 	mul8rr	c, d                                ; FB5EFE  mul BC,D
 	extz	xbc                                   ; FB5F00  extz XBC
@@ -70980,7 +71197,7 @@ sub_FB5E39__FB5EFC:
 	ld	h, (xwa)                                ; FB5F19  ld H,(XWA)
 	ld	c, h                                    ; FB5F1B  ld C,H
 	and	c, 64                                  ; FB5F1D  and C,0x40
-	jr z, sub_FB5E39__FB5F89                   ; FB5F20  jr Z,0xfb5f89
+	jr z, Dev10C_ChanSelHighBits__FB5F89                   ; FB5F20  jr Z,0xfb5f89
 	ld	c, l                                    ; FB5F22  ld C,L
 	extz	bc                                    ; FB5F24  extz BC
 	mul	bc, 0x12C                              ; FB5F26  mul BC,0x012c
@@ -70988,12 +71205,12 @@ sub_FB5E39__FB5EFC:
 	ld	xwa, (xbc+0x1523)                       ; FB5F2C  ld XWA,(XBC+0x1523)
 	ld	c, (xwa+0xD0)                           ; FB5F31  ld C,(XWA+0x00d0)
 	and	c, 64                                  ; FB5F36  and C,0x40
-	jr z, sub_FB5E39__FB5F84                   ; FB5F39  jr Z,0xfb5f84
+	jr z, Dev10C_ChanSelHighBits__FB5F84                   ; FB5F39  jr Z,0xfb5f84
 	ld	c, h                                    ; FB5F3B  ld C,H
 	and	c, 4                                   ; FB5F3D  and C,0x04
-	jr z, sub_FB5E39__FB5F84                   ; FB5F40  jr Z,0xfb5f84
-	jr sub_FB5E39__FB5F7F                      ; FB5F42  jr T,0xfb5f7f
-sub_FB5E39__FB5F44:
+	jr z, Dev10C_ChanSelHighBits__FB5F84                   ; FB5F40  jr Z,0xfb5f84
+	jr Dev10C_ChanSelHighBits__FB5F7F                      ; FB5F42  jr T,0xfb5f7f
+Dev10C_ChanSelHighBits__FB5F44:
 	ld	c, l                                    ; FB5F44  ld C,L
 	extz	bc                                    ; FB5F46  extz BC
 	mul	bc, 0x12C                              ; FB5F48  mul BC,0x012c
@@ -71001,7 +71218,7 @@ sub_FB5E39__FB5F44:
 	ld	xwa, (xbc+0x1523)                       ; FB5F4E  ld XWA,(XBC+0x1523)
 	ld	c, (xwa+0xD1)                           ; FB5F53  ld C,(XWA+0x00d1)
 	cps	c, 0                                   ; FB5F58  cp C,0
-	jr z, sub_FB5E39__FB5F89                   ; FB5F5A  jr Z,0xfb5f89
+	jr z, Dev10C_ChanSelHighBits__FB5F89                   ; FB5F5A  jr Z,0xfb5f89
 	ldb	c, 5                                   ; FB5F5C  ld C,0x05
 	mul8rr	c, d                                ; FB5F5E  mul BC,D
 	extz	xbc                                   ; FB5F60  extz XBC
@@ -71014,16 +71231,16 @@ sub_FB5E39__FB5F44:
 	add	xwa, 0xFDF4F1                          ; FB5F72  add XWA,0x00fdf4f1
 	ld	c, (xwa)                                ; FB5F78  ld C,(XWA)
 	and	c, 8                                   ; FB5F7A  and C,0x08
-	jr z, sub_FB5E39__FB5F84                   ; FB5F7D  jr Z,0xfb5f84
-sub_FB5E39__FB5F7F:
+	jr z, Dev10C_ChanSelHighBits__FB5F84                   ; FB5F7D  jr Z,0xfb5f84
+Dev10C_ChanSelHighBits__FB5F7F:
 	ldw	wa, 0xC0                               ; FB5F7F  ld WA,0x00c0
-	jr sub_FB5E39__FB5F8B                      ; FB5F82  jr T,0xfb5f8b
-sub_FB5E39__FB5F84:
+	jr Dev10C_ChanSelHighBits__FB5F8B                      ; FB5F82  jr T,0xfb5f8b
+Dev10C_ChanSelHighBits__FB5F84:
 	ldw	wa, 64                                 ; FB5F84  ld WA,0x0040
-	jr sub_FB5E39__FB5F8B                      ; FB5F87  jr T,0xfb5f8b
-sub_FB5E39__FB5F89:
+	jr Dev10C_ChanSelHighBits__FB5F8B                      ; FB5F87  jr T,0xfb5f8b
+Dev10C_ChanSelHighBits__FB5F89:
 	ld	wa, ix                                  ; FB5F89  ld WA,IX
-sub_FB5E39__FB5F8B:
+Dev10C_ChanSelHighBits__FB5F8B:
 	pop	xix                                    ; FB5F8B  pop XIX
 	popw	de                                    ; FB5F8C  pop DE
 	popw	hl                                    ; FB5F8D  pop HL
@@ -73402,7 +73619,7 @@ sub_FB707E:
 ;                                                               KN5000 sibling calls
 ;                                                               0x100 the TVF cutoff and
 ;                                                               0x140 its depth/bias
-;   chan + 0x0180   word 6   sub_FA96F7 / sub_FA9C60         WRITE side: a 0..0x7F
+;   chan + 0x0180   word 6   Voice_StageRegs_CD / sub_FA9C60         WRITE side: a 0..0x7F
 ;                                                               control, tone byte 0x80
 ;                                                               = choose at random.  The
 ;                                                               sibling calls it pan,
@@ -75244,9 +75461,18 @@ Dev10C_SetChanReg_0440_b:
 ;     lda XWA,0xfe12cf); notes/prom_c_gapA_remaining_regs.py cites 0xFB8175
 ;     for it, which is the argument load of the NEXT loop -- corrected here,
 ;     see notes/wave7-round1/README.md lane g1.
-; ⚠ NOT ESTABLISHED: what the register DOES.  0x0000 is what the ROM holds, not
-;   a meaning, and this round did not re-derive the channel-cross-reference
-;   reading that prom_c_gapA_remaining_regs.py argues for.
+; ★★ ROUND 4 -- WHAT THE REGISTER HOLDS.  Word 9 is `MODE | CHANNEL`, and its two
+;   fields TILE cleanly: bits 5..0 are a channel of this same 0x0010C000 device
+;   (0xFA9BC2 `and BC,0x003f`) and bits 7..6 are a mode from
+;   Dev10C_ChanSelHighBits (0xFA9B90), which returns only 0x0040 or 0x00C0 here
+;   because 0 is rejected at 0xFA9B98/0xFA9B9A.  The channel field is a channel
+;   because the SAME six-bit value is handed to Dev10C_Slot3_WriteGateAndValue at
+;   0xFA9C4D/0xFA9C51/0xFA9C52, which turns it into the register selector
+;   chan+0x05C0 (0xFB7D35).
+;   Producer: Voice_StageChanSel_Reg0440_Reg0480 (0xFA9915).  Full citation list
+;   and the raw-byte write census: `python3 notes/prom_c_understanding_round4.py`.
+; ⚠ STILL NOT ESTABLISHED: that the named channel is a DIFFERENT channel from the
+;   one the word is written to, and what the two mode bits mean.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0480:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7BE3  ee 0c 00 00       link XIZ,0x0000
@@ -79069,7 +79295,7 @@ sub_FB9AC2__FB9B0E:
 	unlk32 xiz                                 ; FB9B0E  unlk XIZ
 	ret                                        ; FB9B10  ret
 ; --------------------------------------------------------------------------
-; sub_FB9B11 -- 0xFB9B11..0xFB9B68 (88 bytes)
+; Field2Bit_CopyField -- 0xFB9B11..0xFB9B68 (88 bytes)
 ;
 ; Called from: no site outside this module.
 ;          7 site(s) inside this module:
@@ -79083,10 +79309,31 @@ sub_FB9AC2__FB9B0E:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+;
+; ★ IT COPIES ONE 2-BIT FIELD OF A BYTE INTO ANOTHER 2-BIT FIELD POSITION.  The
+;   whole 88 bytes are five steps and nothing else, so the name is a transcript
+;   rather than a reading:
+;       srcSlot = (XIZ+0x08)   dstSlot = (XIZ+0x0A)
+;       srcByte = (XIZ+0x0C)   dstPtr  = (XIZ+0x0E)
+;     1. 0xFB9B1C/0xFB9B22/0xFB9B24/0xFB9B29
+;        *dstPtr &= ~Field2Bit_Masks_b[dstSlot]        -- clear the target field
+;     2. 0xFB9B32/0xFB9B38/0xFB9B3A
+;        srcByte &= Field2Bit_Masks_b[srcSlot]         -- isolate the source field
+;     3. 0xFB9B3D/0xFB9B40/0xFB9B4B
+;        srcByte = Shift8_LogicalRight(srcByte, 2*srcSlot)   -- right-align it
+;     4. 0xFB9B52/0xFB9B55/0xFB9B5D
+;        A = Shift8_Left(srcByte, 2*dstSlot)           -- move to the new position
+;     5. 0xFB9B61/0xFB9B64   *dstPtr |= A              -- insert
+;   The shift count is 2*slot, computed with `add B,B` / `add C,C`, which is what
+;   ties the slot index to a 2-bit field and makes Field2Bit_Masks_b's four values
+;   MASKS rather than four numbers that happen to match another table.
+; ⚠ NOT ESTABLISHED: what the four slots ARE.  The routine is field plumbing; the
+;   meaning lives in its seven callers (0xFB9F05, 0xFB9F23, 0xFBA00A, 0xFBA1FD,
+;   0xFBA26C, 0xFBA765, 0xFBA86E), none of which is decoded here.
+; Evidence: `python3 notes/prom_c_understanding_round4.py --names`, which re-decodes
+;          each cited address with an independent disassembler.
 ; --------------------------------------------------------------------------
-sub_FB9B11:
+Field2Bit_CopyField:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB9B11  link XIZ,0x0000
 	ld	bc, (xiz+10)                            ; FB9B15  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FB9B18  extz BC
@@ -79133,7 +79380,7 @@ sub_FB9B11:
 ;          0xFB4124 = sub_FB4124, 0xFB42E3 = sub_FB42E3
 ;          0xFB4324 = sub_FB4324, 0xFB44A5 = sub_FB44A5
 ;          0xFB454C = sub_FB454C, 0xFB48F7 = sub_FB48F7
-;          0xFB9AC2 = sub_FB9AC2, 0xFB9B11 = sub_FB9B11
+;          0xFB9AC2 = sub_FB9AC2, 0xFB9B11 = Field2Bit_CopyField
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB9B69-0xFBAAA1
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -105464,7 +105711,7 @@ sub_FC7F7A__FC7FB4:
 ; sub_FC7FCA -- 0xFC7FCA..0xFC810B (322 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFA844F in sub_FA842D, 0xFA9760 in sub_FA96F7
+;          0xFA844F in sub_FA842D, 0xFA9760 in Voice_StageRegs_CD
 ;          0xFADD69 in sub_FADD29__FADD3B
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
@@ -105613,7 +105860,7 @@ sub_FC7FCA__FC80C1:
 ; sub_FC810C -- 0xFC810C..0xFC8128 (29 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFA960D in Voice_StageRegs_0500_08C0_AB, 0xFA9746 in sub_FA96F7
+;          0xFA960D in Voice_StageRegs_0500_08C0_AB, 0xFA9746 in Voice_StageRegs_CD
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC810C-0xFC8128
@@ -124764,6 +125011,12 @@ MathTable_Exp2_256:
 ;
 ; 32 u8, values 0..3.  COUNT 32 from the reader's mask: 0xFA5EFC `ld C,E / and C,0x1f`,
 ; then `add XBC,<this> / ld L,(XBC)` at 0xFA5F05 -- index 0..31 exactly.
+; ROUND 4: the reader is Voice_LookupDev10CChanIndex (0xFA5ED3) and the key is its THIRD
+; argument, `and E,0x3f` at 0xFA5EDD.  The value L is used as a byte offset INSIDE the
+; 12-byte record at RAM 0x11FE + 12*arg2: 0xFA5F2A/0xFA5F2E `ld C,L / inc 0,BC` then
+; 0xFA5F32 `ld H,(XWA+BC)`, so the four values 0..3 select bytes +1..+4 of that record.
+; Values 0..3 confirmed over all 32 entries -- STILL NOT NAMED, because what the record
+; is is not established.
 ;
 ; Cited by: 0xFA5F05 [add <X..>,#imm32], 0xFA6173 [add <X..>,#imm32], 0xFA6230 [add <X..>,#imm32]
 ; ----------------------------------------------------------------------------
@@ -124777,6 +125030,12 @@ Table_FE10C9:
 ; 64 u8: 0x00..0x0D then 0x0C 0x0D 0x0E 0x0E 0x0E 0x0E, twelve zeroes, 0x0F..0x1A, then
 ; zeroes.  Read one instruction after Table_FE10C9 (0xFA5F13) with the UNMASKED E, so the
 ; two are parallel tables over the same key: 0x1F wide masked, 0x3F wide unmasked.
+; ROUND 4: same reader, Voice_LookupDev10CChanIndex (0xFA5ED3).  Its value D is compared
+; for EQUALITY against byte +3 of the 5-byte record at RAM 0x0E3E + 5*H (0xFA5F54/
+; 0xFA5F57 `ld C,(XIX+0x03) / cp C,D`, mismatch -> the fail path at 0xFA5F7D), and it is
+; also added to 27*arg1 at 0xFA5FA2.  Its maximum over all 64 entries is 26, which is what
+; keeps that sum inside the 34-record stride-27 array at 0x0AA8 (27*32 + 26 = 890 < 918).
+; STILL NOT NAMED: what the record is.
 ;
 ; Cited by: 0xFA5F13 [add <X..>,#imm32]
 ; ----------------------------------------------------------------------------
@@ -125189,14 +125448,20 @@ Dev104_StagingStruct_ResetImage:
 ; ============================================================================
 
 ; ----------------------------------------------------------------------------
-; Table_FE1361 -- 0xFE1361-0xFE1364  (4 bytes)
+; Field2Bit_Masks_b -- 0xFE1361-0xFE1364  (4 bytes)
 ;
-; Four 2-bit field masks, 0x03 0x0C 0x30 0xC0 -- the same four values as Field2Bit_Masks
-; at 0xFE12AD.  Cited twice from 0xFB9B1C and 0xFB9B32.
+; Four 2-bit field masks, 0x03 0x0C 0x30 0xC0 -- byte-identical to Field2Bit_Masks at
+; 0xFE12AD, all 4 of 4.  Cited twice, from 0xFB9B1C and 0xFB9B32, and ROUND 4 promoted
+; the name from Table_FE1361 because the reader PROVES they are masks and not just the
+; same four numbers: Field2Bit_CopyField (0xFB9B11) loads T[dst], complements it and ANDs
+; it into the destination byte (0xFB9B24/0xFB9B29) to CLEAR that field, then loads T[src]
+; and ANDs it with the source byte (0xFB9B38/0xFB9B3A) to EXTRACT it.  The shift is not a
+; second table here -- it is computed as 2*index (`add B,B` at 0xFB9B40).
+; Re-checked by `python3 notes/prom_c_understanding_round4.py --names`.
 ;
 ; Cited by: 0xFB9B1C [add <X..>,#imm32], 0xFB9B32 [add <X..>,#imm32]
 ; ----------------------------------------------------------------------------
-Table_FE1361:
+Field2Bit_Masks_b:
 	.byte	0x03, 0x0c, 0x30, 0xc0   ; 0xFE1361
 
 ; ----------------------------------------------------------------------------
@@ -125911,12 +126176,12 @@ unexplained_FE1315_B:
 	.short	0xD71B, 0xD71B, 0xD71B   ; 0xFE1F60
 
 ; ----------------------------------------------------------------------------
-; Table_FE1361_B -- 0xFE1F66-0xFE1F69  (4 bytes)
+; Field2Bit_Masks_b_B -- 0xFE1F66-0xFE1F69  (4 bytes)
 ;
-; Byte-identical to Table_FE1361 (0xFE1361), 4 bytes, except 0 byte(s).
+; Byte-identical to Field2Bit_Masks_b (0xFE1361), 4 bytes, except 0 byte(s).
 ; Copy-B address = copy-A address + 0xC05.
 ; ----------------------------------------------------------------------------
-Table_FE1361_B:
+Field2Bit_Masks_b_B:
 	.byte	0x03, 0x0c, 0x30, 0xc0   ; 0xFE1F66
 
 ; ----------------------------------------------------------------------------

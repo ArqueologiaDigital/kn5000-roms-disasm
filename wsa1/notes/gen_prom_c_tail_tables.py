@@ -178,7 +178,7 @@ OBJ_R1 = [
   "    if A < 0:  D = 0x7F - D ; A = -A   ; the curve is MIRRORED for a negative depth",
   "    result = (T[D] * A) >> 5",
   "so T is a coefficient in Q5 (32 = 1.0) and this one spans -4.0 .. +3.94.",
-  "COUNT 128: the index is (0x00E088), which sub_FC4D63 builds as voice_record[+0x0C] with",
+  "COUNT 128: the index is (0x00E088), which Pack104_SetInputs_E088_E089_E08A builds as voice_record[+0x0C] with",
   "BIT 7 CLEARED, so 0..127, and 0x7F - D stays in range.",
   "⚠ that the key IS a note number is not established here."]),
  (0xFE0116, 128, 'b', "LinCoef_FE0116", [
@@ -255,11 +255,23 @@ OBJ_R1 = [
   "2^x for x in Q11, scaled by 2*pi*1024: the shape of an angular frequency."]),
  (0xFE10C9, 32, 'b', "Table_FE10C9", [
   "32 u8, values 0..3.  COUNT 32 from the reader's mask: 0xFA5EFC `ld C,E / and C,0x1f`,",
-  "then `add XBC,<this> / ld L,(XBC)` at 0xFA5F05 -- index 0..31 exactly."]),
+  "then `add XBC,<this> / ld L,(XBC)` at 0xFA5F05 -- index 0..31 exactly.",
+  "ROUND 4: the reader is Voice_LookupDev10CChanIndex (0xFA5ED3) and the key is its THIRD",
+  "argument, `and E,0x3f` at 0xFA5EDD.  The value L is used as a byte offset INSIDE the",
+  "12-byte record at RAM 0x11FE + 12*arg2: 0xFA5F2A/0xFA5F2E `ld C,L / inc 0,BC` then",
+  "0xFA5F32 `ld H,(XWA+BC)`, so the four values 0..3 select bytes +1..+4 of that record.",
+  "Values 0..3 confirmed over all 32 entries -- STILL NOT NAMED, because what the record",
+  "is is not established."]),
  (0xFE10E9, 64, 'b', "Table_FE10E9", [
   "64 u8: 0x00..0x0D then 0x0C 0x0D 0x0E 0x0E 0x0E 0x0E, twelve zeroes, 0x0F..0x1A, then",
   "zeroes.  Read one instruction after Table_FE10C9 (0xFA5F13) with the UNMASKED E, so the",
-  "two are parallel tables over the same key: 0x1F wide masked, 0x3F wide unmasked."]),
+  "two are parallel tables over the same key: 0x1F wide masked, 0x3F wide unmasked.",
+  "ROUND 4: same reader, Voice_LookupDev10CChanIndex (0xFA5ED3).  Its value D is compared",
+  "for EQUALITY against byte +3 of the 5-byte record at RAM 0x0E3E + 5*H (0xFA5F54/",
+  "0xFA5F57 `ld C,(XIX+0x03) / cp C,D`, mismatch -> the fail path at 0xFA5F7D), and it is",
+  "also added to 27*arg1 at 0xFA5FA2.  Its maximum over all 64 entries is 26, which is what",
+  "keeps that sum inside the 34-record stride-27 array at 0x0AA8 (27*32 + 26 = 890 < 918).",
+  "STILL NOT NAMED: what the record is."]),
  (0xFE1129, 27, 'b', "Table_FE1129", [
   "27 u8: 0x00..0x0D, 0x10, then 0x20..0x2B.  Read at 0xFA60C9 with an index fetched from",
   "(XWA + 0x0E3E) in RAM.  ⚠ Nothing here bounds that index to 26; the size comes from the",
@@ -283,9 +295,15 @@ OBJ_R1 = [
 ]
 
 OBJ_R2 = [
- (0xFE1361, 4, 'b', "Table_FE1361", [
-  "Four 2-bit field masks, 0x03 0x0C 0x30 0xC0 -- the same four values as Field2Bit_Masks",
-  "at 0xFE12AD.  Cited twice from 0xFB9B1C and 0xFB9B32."]),
+ (0xFE1361, 4, 'b', "Field2Bit_Masks_b", [
+  "Four 2-bit field masks, 0x03 0x0C 0x30 0xC0 -- byte-identical to Field2Bit_Masks at",
+  "0xFE12AD, all 4 of 4.  Cited twice, from 0xFB9B1C and 0xFB9B32, and ROUND 4 promoted",
+  "the name from Table_FE1361 because the reader PROVES they are masks and not just the",
+  "same four numbers: Field2Bit_CopyField (0xFB9B11) loads T[dst], complements it and ANDs",
+  "it into the destination byte (0xFB9B24/0xFB9B29) to CLEAR that field, then loads T[src]",
+  "and ANDs it with the source byte (0xFB9B38/0xFB9B3A) to EXTRACT it.  The shift is not a",
+  "second table here -- it is computed as 2*index (`add B,B` at 0xFB9B40).",
+  "Re-checked by `python3 notes/prom_c_understanding_round4.py --names`."]),
  (0xFE1365, 8, 'b', "Table_FE1365", [
   "8 u8: 00 F5 then six zeroes.  Cited once, `lda XIX,<this>` at 0xFC1077."]),
  (0xFE136D, 9, 'b', "Table_FE136D", [

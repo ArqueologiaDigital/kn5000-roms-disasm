@@ -105,6 +105,21 @@ def u32(d, o):
     return d[o] | (d[o + 1] << 8) | (d[o + 2] << 16) | (d[o + 3] << 24)
 
 
+def preset_label(name):
+    """The record's 16-character ASCII name as an assembler identifier.
+
+    ROUND 4: the labels used to be `PresetBank_Record_NNN` -- a kind plus an index,
+    which frames the object without saying what it is.  The record already carries
+    its own name in chunk 0x78 at +0x02, so the label is that, mangled: spaces and
+    punctuation collapse to '_', '&' becomes 'And', apostrophes are dropped.  The
+    caller asserts the 129 results are distinct, so nothing needs a number glued
+    back on.  Verified against the ROM by
+    `python3 notes/prom_c_understanding_round4.py --presets`."""
+    t = name.strip().replace("&", "And").replace("+", "Plus").replace("'", "")
+    t = re.sub(r"[^A-Za-z0-9]+", "_", t)
+    return "PresetBank_" + re.sub(r"_+", "_", t).strip("_")
+
+
 def layout(d, rec):
     """The (offset, tag, length) triples of one record, terminator included."""
     p = REC + rec * STRIDE
@@ -411,13 +426,27 @@ def asm():
     a("; The eight blocks tagged 0x00..0x07 each carry their own index in payload[13] &")
     a("; 0x0F (checked for all 1,032); the blocks tagged 0x20..0x27 are their partners by")
     a("; position, which is what the alternating layout shows and all that it shows.")
+    a(";")
+    a("; \u2605 ROUND 4 -- THE 129 RECORD LABELS NOW CARRY THE RECORD'S OWN NAME.  Each was")
+    a("; PresetBank_Record_NNN, a kind plus an index; each is now the 16-character ASCII")
+    a("; string the record itself begins with, mangled to an identifier (spaces and")
+    a("; punctuation to '_', '&' to 'And', apostrophes dropped).  Nothing is invented:")
+    a("; the name is chunk 0x78's payload at record+2, which this file already printed in")
+    a("; the comment above every label, and the 129 strings are distinct before AND after")
+    a("; mangling.  Regenerate and re-verify all 129 against the ROM -- including the last,")
+    a("; record 128, which is the template and is named 'Clear' -- with")
+    a(";     python3 notes/prom_c_understanding_round4.py --presets")
+    a("; \u26a0 The record INDEX is no longer in the label.  It is still in the comment line")
+    a("; directly above each one, which is where the address is too.")
     a("PresetBank_Records:")
+    labels = [preset_label(n) for n in nms]
+    assert len(set(labels)) == NREC, "preset names collide after mangling"
     for r in range(NREC):
         rb = REC + r * STRIDE
         extra = "   (the template; not one of the 128 the header counts)" if r >= 128 else ""
         a("; ............................................................................")
         a(f"; record {r} -- 0x{BASE+rb:06X}  '{nms[r]}'{extra}")
-        a(f"PresetBank_Record_{r:03d}:")
+        a(f"{labels[r]}:")
         for off, tag, ln in ref:
             if tag == 0xFF:
                 a("\t.byte\t0xff, 0xff                                    ; end marker")

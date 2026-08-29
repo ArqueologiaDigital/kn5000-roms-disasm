@@ -75,8 +75,8 @@ key-zone word. `0x0100`/`0x0140` are established as a pair carrying a 7-bit fiel
 **36..120**, which is this machine's MIDI note range, and `0x0180`'s write side is decoded. ★ The
 KN5000 sub-CPU **stages the same 22 registers in the same order** and names twenty of them --
 and that is a structural correspondence, not a transplant: 100/102 and 116/120 of the bytes the
-two routines share actually differ. Only **four** registers now have no statement of any kind:
-`0x0440`, `0x0480`, `0x04C0`, `0x0500`. Synthesis remains a large separate job, but it is no
+two routines share actually differ. ★★ **AND SINCE 2026-08-29 THE LAST FOUR ARE STATED TOO** --
+see the round-4 banner in section A below. Synthesis remains a large separate job, but it is no
 longer blocked on naming.
 
 **3. Gap F is ANSWERED, and it retires the driver's last load-bearing stub.** Register block
@@ -103,10 +103,43 @@ transmit block.
 > ★★ **LARGELY ANSWERED 2026-08-25, after this entry was written.** Three registers are NAMED
 > (`0x0400` pitch, `0x0080` level, `0x0040` key-zone word), `0x0100`/`0x0140` are a pair carrying a
 > 7-bit value clamped to 36..120, `0x0180`'s write side is decoded, and the KN5000 sub-CPU stages
-> the same 22 registers in the same order with twenty named. Four remain with no statement:
-> `0x0440`, `0x0480`, `0x04C0`, `0x0500`. See `FINDINGS-prom_c-dev10c-register-meanings.md` and
+> the same 22 registers in the same order with twenty named. See
+> `FINDINGS-prom_c-dev10c-register-meanings.md` and
 > `FINDINGS-prom_c-dev10c-sibling-register-map.md` in the disassembly tree. The text below is the
 > question as it was asked and is kept for its evidence pointers.
+>
+> ★★ **AND THE LAST FOUR ARE NOW STATED, 2026-08-29 (wave 7 round 4).** This paragraph used to
+> end "Four remain with no statement: `0x0440`, `0x0480`, `0x04C0`, `0x0500`". That is retracted:
+>
+> * **`0x0440`, `0x0480`, `0x04C0` hold `MODE | CHANNEL`.** The low 6 or 7 bits are a channel of
+>   this same `0x0010C000` device, in the device's own encoding -- bit for bit the value the
+>   firmware hands, a few instructions later, to a `Dev10C_Slot*` accessor as that accessor's
+>   `chan` argument, where it is added to a register-block base (`0x0540` slot 1, `0x0580` slot 2,
+>   `0x05C0` slot 3) to form the device's register selector. **Bits 5..0 are the channel of the
+>   64-channel device and bit 6 selects the block**: `Dev10C_Slot1or3_StrobeGate` splits on exactly
+>   that bit (`cp HL,0x0040` at `0xFB801F`) and its two arms read the two slots' own staging
+>   fields, `+0x3A` with block `0x0540` and `+0x3E` with `0x0580+arg = 0x05C0 + (arg & 0x3F)`.
+>   The remaining bits are a small field whose width, position and source are measured and whose
+>   MEANING is not: `0x0440`/`0x0480` take two bits from `Dev10C_ChanSelHighBits` (which returns
+>   only `0x0000`, `0x0040`, `0x00C0`, swept over its whole extent) or from the tone descriptor;
+>   `0x04C0` takes a `0x3300` field from the descriptor plus a literal `0x4400`.
+> * ⚠ **`0x04C0`'s power-on row is not the whole story**: its producer SEEDS the word with
+>   `0x4400` at `0xFA9F20` before any test, so a rejected lookup leaves `0x4400` there, not `0`.
+> * ⚠ **`0x0440`'s two fields OVERLAP at bit 6** and are combined with `or`; `0x0480` masks its
+>   channel to `0x3F` and does not. Stated, not resolved.
+> * **`0x0500` was already decoded before this round** and this entry was simply stale about it:
+>   the header of `Voice_StageRegs_0500_08C0_AB` in `prom_c/wsa1_prom_c.s` gives it as a byte
+>   pair whose high byte comes out of the detune curve, with the closed form.
+> * On the C and D voice paths NONE of the four is computed: `Voice_StageRegs_CD` (`0xFA96F7`)
+>   zeroes all four staging words, at `0xFA970F`, `0xFA9773`, `0xFA977A` and `0xFA980E`.
+>
+> Every address above is re-decoded by an INDEPENDENT disassembler at the address quoted, and the
+> write census is a raw-byte sweep of all four ROM images (4/3/3/3 sites, all in prom_c, none in
+> prom_a, prom_b or prom_d):
+> `python3 notes/prom_c_understanding_round4.py` -- it exits non-zero if any check fails, and
+> prints its own check count rather than having one quoted here.
+> ⚠ Round 1 published this reading with citations that pointed at other instructions; see
+> `notes/wave7-round1/README.md` lane g1. The round-4 script exists because of that.
 
 **HALF CLOSED 2026-08-25** by `notes/FINDINGS-prom_c-dev10c-producers.md`, and the half that is
 closed is worth stating precisely because the note itself had to correct its own title over it.

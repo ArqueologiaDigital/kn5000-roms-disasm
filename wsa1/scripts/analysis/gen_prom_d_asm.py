@@ -108,6 +108,77 @@ if (len(_R3.ALL_HITS), len({h[2] for h in _R3.ALL_HITS})) != _R3.AUDITED:
              "notes/prom_d_documentation_round3.py before regenerating."
              % (len(_R3.ALL_HITS), len({h[2] for h in _R3.ALL_HITS}), _R3.AUDITED))
 
+# ---------------------------------------------------------------------------
+# ★ WAVE 7 ROUND 4.  What are these arrays FOR?  notes/prom_d_understanding_round4.py
+# proves the descriptor pools are the two stages of a THREE-STAGE INDEX CHAIN --
+# curve (128 entries) -> part A (exactly max(curve)+1 entries) -> part B (exactly
+# max(part A)+1 elements of 6 or 8 bytes, chosen by the descriptor's tag bit 7) --
+# with no slack at either join, in 318/318 and 161/161 descriptors.  That is what
+# lets the pool labels below say what an object IS instead of where it sits.
+# This emitter refuses to run if either join stopped holding.
+# ---------------------------------------------------------------------------
+_spec4 = _ilu.spec_from_file_location(
+    "prom_d_understanding_round4",
+    os.path.join(ROOT, "notes", "prom_d_understanding_round4.py"))
+_R4 = _ilu.module_from_spec(_spec4)
+_saved_argv, sys.argv = sys.argv, ["prom_d_understanding_round4", "--quiet"]
+try:
+    _spec4.loader.exec_module(_R4)
+finally:
+    sys.argv = _saved_argv
+CHAIN = {}
+for _slot, _audited in _R4.AUDITED_CHAIN.items():
+    _rows = [r for r in _R4.chain(_slot) if r]
+    _joined = sum(1 for r in _rows if r["ecount"] == max(r["a_tab"]) + 1)
+    if (len(_rows), _joined) != _audited:
+        sys.exit("REFUSING TO EMIT: the round-4 index chain at slot +0x%02X is now "
+                 "%d descriptors with %d joins; audited as %s.  Re-audit with "
+                 "notes/prom_d_understanding_round4.py before regenerating."
+                 % (_slot, len(_rows), _joined, _audited))
+    CHAIN[_slot] = {r["i"]: r for r in _rows}
+_TONE_NAMES, _PERC_NAMES = _R4.names()
+if (len(_TONE_NAMES), len(_PERC_NAMES)) != _R4.AUDITED_NAMES:
+    sys.exit("REFUSING TO EMIT: the record name census is now %s; audited as %s."
+             % ((len(_TONE_NAMES), len(_PERC_NAMES)), _R4.AUDITED_NAMES))
+CHAIN_CHECKS = _R4.NCHECK[0]
+
+
+_PROG_SEL = _R4.prog_selectors()
+_DRUM_A, _DRUM_B = _R4.drum_selectors()
+
+
+def tone_hdr_lines(p, idx, extra):
+    """The per-record header block: what it is called, and what can select it.
+
+    Both numbers are measured, not decorative: the name is the record's own 16
+    bytes and the selector count is how many of the 1,280 program-map entries at
+    directory slot +0x04 hold this record's index.  round 4 Q6.
+    """
+    n = _PROG_SEL.get(idx, 0)
+    return ["",
+            "; ---- tone 0x%03X %r ----" % (idx, NAME(p)),
+            "; %s" % extra,
+            "; Selected by %d of the %d entries of the program map at directory"
+            % (n, 10 * 128),
+            "; slot +0x04.",
+            "; Evidence: the record's address is ToneDB_ToneOffsetTable entry %d,"
+            % idx,
+            "; file 0x%05X; the program map holds no 0xFFFF and its values run"
+            % (0xB80 + 4 * idx),
+            "; 0..273 over that table's 274 entries, so the count above is the",
+            "; number of times this record's index appears in it.  round 4 Q6a-Q6c."]
+
+
+def tone_name(p):
+    """The CamelCase label suffix a tone record's OWN 16 ASCII bytes give it."""
+    return _TONE_NAMES[p][1]
+
+
+def perc_name(i):
+    """The CamelCase label suffix drum-instrument record i's OWN 13 bytes give it."""
+    return _PERC_NAMES[i][1]
+
+
 CENSUS_N = len(_R3.ALL_HITS)
 CENSUS_SLOTS = len({h[2] for h in _R3.ALL_HITS})
 CENSUS_CHECKS = _R3.NCHECK[0]
@@ -730,6 +801,30 @@ for i, p in enumerate(MEL):
         TONE_END[p] = (nxt if nxt and nxt < 0x40000 else GUNSHOT_END)
 IDX_OF = {p: i for i, p in enumerate(PTRS)}
 
+NAMING_RULE = [
+    "",
+    "★ WAVE 7 ROUND 4 -- THESE LABELS NOW CARRY THE RECORD'S OWN NAME.",
+    "A label used to read `ToneRec_017`, which says WHERE the record sits and",
+    "nothing about what it is.  It now reads `ToneRec_017_<Name>`, where <Name>",
+    "is the CamelCase form of the record's OWN 16 ASCII bytes at offset 0 --",
+    "data read out of the image, not a guess about it.  The ordinal stays in",
+    "front so the label is still unique and still sorts in record order.",
+    "",
+    "Evidence: the name is the record's first 16 bytes, and every one of the 274",
+    "tone records and 504 drum-instrument records has a fully printable one",
+    "(notes/prom_d_understanding_round4.py Q3a/Q3b).  The 274 CamelCase forms are",
+    "distinct, so a tone label names exactly one record (Q3c); the drum forms are",
+    "NOT distinct -- 'TublarBellC' occurs four times -- which is why the ordinal",
+    "must stay (Q3c').  ★ AND THE NAMES CROSS AN ARCHITECTURE BOUNDARY: 202 of",
+    "the 274 tone names and 101 of the 504 drum names occur VERBATIM in the",
+    "KN7000's table ROM, an MN10300 machine (Q3e/Q3f), so they are strings this",
+    "family of instruments really uses and not an artefact of reading these bytes",
+    "as text.",
+    "⚠ A name says what the record is CALLED.  It does not identify one field",
+    "inside the record, and nothing below claims it does.",
+]
+
+
 TONE_HDR = [
     "TONE RECORD.  Layout, established in scripts/analysis/prom_d_tone_database.py:",
     "",
@@ -813,14 +908,15 @@ def emit_tone_record(p, end):
     idx = IDX_OF[p]
     size = end - p
     n = (size - 217) // 124 if (size - 217) % 124 == 0 else None
-    W("")
     if n is None:
-        W("; ---- tone 0x%03X %r  %d B  -- NOT 217+N*124, see the DRAWBAR note ----"
-          % (idx, NAME(p), size))
+        extra = ("%d B -- NOT 217 + N x 124; see the DRAWBAR note" % size)
     else:
-        W("; ---- tone 0x%03X %r  %d B = 217 + %d x (81+43),  mask +0x11 = 0x%02X ----"
-          % (idx, NAME(p), size, n, D[p + 0x11]))
-    W("ToneRec_%03X:" % idx)
+        extra = ("%d B = 217 + %d x (81+43),  element mask +0x11 = 0x%02X"
+                 % (size, n, D[p + 0x11]))
+    for ln in tone_hdr_lines(p, idx, extra):
+        W(ln)
+    lab = "ToneRec_%03X_%s" % (idx, tone_name(p))
+    W("%s:" % lab)
     e_ascii(p, 16)
     if n is None:
         e_bytes(p + 16, end)
@@ -829,17 +925,17 @@ def emit_tone_record(p, end):
     e_bytes(p + 16, p + 217)
     for i in range(n):
         a = p + 217 + 81 * i
-        W("ToneRec_%03X_Elem%d:" % (idx, i))
+        W("%s_Elem%d:" % (lab, i))
         e_bytes(a, a + 81)
     for i in range(n):
         a = p + 217 + 81 * n + 43 * i
-        W("ToneRec_%03X_WaveSel%d:" % (idx, i))
+        W("%s_WaveSel%d:" % (lab, i))
         e_bytes(a, a + 43)
 
 
 def emit_melodic_block():
     banner("MELODIC TONE RECORDS -- tone indices 0x000-0x0FF (254 of the 256 here)",
-           0x13C8, GUNSHOT_END, TONE_HDR + [
+           0x13C8, GUNSHOT_END, TONE_HDR + NAMING_RULE + [
                "",
                "Records appear in file order, not tone-index order.  The two missing",
                "indices are 0x058 and 0x059, the 541-byte '<<< Drawbar n>>>' records,",
@@ -973,16 +1069,38 @@ def mk_indexmap(slot, extra_note=None):
         ]
         if extra_note:
             lines.extend(extra_note if isinstance(extra_note, list) else [extra_note])
+        # ⚠ THE HIGH END IS NOT ALWAYS A DIRECTORY VALUE, AND THIS USED TO CLAIM IT
+        # WAS AT ALL TWELVE SITES.  At slot +0x28 the cut is 0x22A3B, which is NOT
+        # among the 44 directory words -- the next one after 0x2223B is 0x22D3B --
+        # and what actually ends the map there is ToneDB_DescCurveBank starting at
+        # that address (2,816 - 2,048 = 768 = its six 128-byte curves).
+        # The correction was made once by hand in the GENERATED .s (commit 1706229)
+        # and regenerating this file silently put the false wording back. That is
+        # why it now lives here, in the generator, and is DERIVED per slot rather
+        # than asserted: emitting the "directory" sentence for a cut that is not a
+        # directory value is impossible by construction.
+        b_is_dir = b in set(DIR)
+        if b_is_dir:
+            high = ["0x%05X, which is directory slot +0x%02X's value, and ends at 0x%05X,"
+                    % (a, slot, b),
+                    "which IS the next value in the same directory.  So the entry count %d"
+                    % n,
+                    "is pinned at BOTH ends by the image's own table and is not a stride",
+                    "guess -- the failure mode this tree has paid for."]
+        else:
+            high = ["0x%05X, which is directory slot +0x%02X's value.  It ends at 0x%05X,"
+                    % (a, slot, b),
+                    "which is ⚠ NOT a directory value -- the next directory word after",
+                    "0x%05X is 0x%05X.  The high end is pinned instead by the object that"
+                    % (a, min([v for v in DIR if v > a], default=0)),
+                    "begins at 0x%05X.  So the low end is directory-pinned, the high end" % b,
+                    "is pinned by its neighbour, and the count %d still stands -- but not" % n,
+                    "for the reason this header used to give."]
         lines += [
             "",
             "Evidence: (image-internal, NOT from code) this region begins at",
-            "0x%05X, which is directory slot +0x%02X's value, and ends at 0x%05X,"
-            % (a, slot, b),
-            "which is the next value in the same directory.  So the entry count %d"
-            % n,
-            "is pinned at BOTH ends by the image's own table and is not a stride",
-            "guess -- the failure mode this tree has paid for.  The value range",
-            "above is measured over all %d entries, first to last." % n,
+        ] + high + [
+            "The value range above is measured over all %d entries, first to last." % n,
         ] + ev_slot(slot, INDEXMAP_CHAIN(slot) if _R3.readers(slot) else ())
         banner("%s -- directory slot +0x%02X" % (slot_label(slot), slot), a, b, lines)
         W("%s:" % slot_label(slot))
@@ -1077,8 +1195,93 @@ DESC_HDR = [
     "every run of this generator by notes/prom_d_structures_round2.py, which",
     "refuses to emit if a boundary moved.",
     "",
-    "⚠ NO field inside a descriptor, a part A or a part B is identified.",
+    "⚠ ROUND 2 ENDED HERE with 'NO field inside a descriptor, a part A or a part",
+    "B is identified'.  That sentence is now WRONG for three of them and is",
+    "corrected rather than left standing: see THE INDEX CHAIN below, which",
+    "identifies tag bit 7 and the ROLE of both offsets.  It is still true of the",
+    "descriptor's +0x09/+0x0A/+0x0B/+0x0C and of every byte inside an element.",
 ]
+
+
+def chain_hdr(slot):
+    """The round-4 index chain, stated with the counts that prove it."""
+    if slot not in CHAIN:
+        return ["",
+                "⚠ THE INDEX CHAIN DOES NOT REACH THIS BLOCK.  Its descriptors carry",
+                "no part-A offset at all (all four are 0), so the curve -> stage 2 ->",
+                "element chain that names the pool objects at slots +0x30 and +0x38",
+                "cannot even start here.  These pool objects therefore keep a",
+                "POSITIONAL name.  notes/prom_d_understanding_round4.py Q4a."]
+    rows = CHAIN[slot]
+    n = len(rows)
+    e6 = sum(1 for r in rows.values() if r["esize"] == 6)
+    e8 = n - e6
+    lines = [
+        "",
+        "★ THE INDEX CHAIN -- what the two pool objects per descriptor ARE.",
+        "",
+        "  stage 1  ToneDB_DescCurve_k     %d entries, non-decreasing.  The" % CURVE_STRIDE,
+        "                                  descriptor's part A begins with a 32-bit",
+        "                                  file offset naming one of the %d curves." % CURVE_N,
+        "  stage 2  part A, after that     a byte table, one entry per distinct",
+        "                                  curve OUTPUT, yielding an element index.",
+        "  stage 3  part B                 the element array itself.",
+        "",
+        "Each stage's codomain is EXACTLY the next stage's domain, with nothing",
+        "unused and nothing missing.  That is the whole claim, and it is two",
+        "joins measured over every descriptor in this block:",
+        "",
+    ]
+    if slot == 0x30:
+        lines += [
+            "  JOIN 1   len(part A) - 4 == max(curve) + 1        %d of %d" % (n, n),
+        ]
+    else:
+        r0 = next(iter(rows.values()))
+        lines += [
+            "  JOIN 1   all %d descriptors share ONE part A, a full %d-entry table"
+            % (n, CURVE_STRIDE),
+            "           of which max(curve)+1 = %d are addressable.  Nothing is"
+            % (r0["curve_max"] + 1),
+            "           packed after it, so its extent is not its used length and",
+            "           the +0x30 form of this join is NOT claimed here.",
+        ]
+    # ⚠ A JOIN THAT SCORES n OF n IS NOT EVIDENCE IF ITS NULL ALSO SCORES n OF n.
+    # At slot +0x38 the shared part-A table is ALL ZERO, so max(part A) is 0 for
+    # every one of the 161 records, every part B is a single 6-byte element, and a
+    # permutation null scores 161/161 as well -- the join cannot fail there and so
+    # says nothing. At +0x30 it is real: 318/318 against a permutation null of
+    # 64.2/318. The generator now states which case it is instead of printing the
+    # same triumphant fraction for both.
+    _amax = max((max(r["a_tab"]) if r.get("a_tab") else 0) for r in rows.values())
+    lines += [
+        "  JOIN 2   elements == max(part A) + 1               %d of %d" % (n, n),
+    ] + ([
+        "           ⚠ NOT INDEPENDENT EVIDENCE HERE: max(part A) is 0 in all %d" % n,
+        "           records, every part B is one element, and a permutation null",
+        "           scores %d of %d too.  A criterion that cannot fail is not a" % (n, n),
+        "           pass.  Stated, not hidden." ] if _amax == 0 else []) + [
+        "",
+        "and the element SIZE is the descriptor's own tag bit 7: 6 bytes when it is",
+        "clear (%d records here) and 8 when it is set (%d)." % (e6, e8),
+        "⚠ ../kn5000-roms-disasm's note on the same field states the OPPOSITE",
+        "polarity.  It is measured here, not borrowed: with the polarity inverted",
+        "JOIN 2 holds for 0 of 318 records at slot +0x30, and with the size forced",
+        "to a single value for 187 or 131 of 318.  Nulls in round 4 Q5.",
+        "",
+        "⚠ WHAT THIS DOES NOT SAY: what an element MEANS (no byte inside one is",
+        "identified), and that the curve's index is a MIDI note -- %d entries is" % CURVE_STRIDE,
+        "the note range and that is suggestive, but nothing here reads a note.",
+        "",
+        "Evidence: (image-internal, NOT from code) the two joins above, %d of %d"
+        % (n, n),
+        "and %d of %d, re-derived on every run of this generator by" % (n, n),
+        "notes/prom_d_understanding_round4.py Q1, which refuses to emit if either",
+        "count moves.  The LAST descriptor of the block is checked by name as well",
+        "as the first, because a rule verified only on element 0 has been wrong in",
+        "this tree before.",
+    ]
+    return lines
 
 
 def desc_hdr(slot):
@@ -1104,14 +1307,34 @@ def desc_pool_labels(slot):
         if o2:
             owner.setdefault(o2, ("B", i))
     base = slot_label(slot)
+    ch = CHAIN.get(slot)
     for p in pts:
         kind, i = owner[p]
         shared = sum(1 for _t, a1, a2, _b, _w, _v in recs
                      if (a1 if kind == "A" else a2) == p)
-        note = "part %s of descriptor %d" % (kind, i)
+        if ch is None or i not in ch:
+            # ⚠ slot +0x70 has no part-A object at all, so round 4's chain cannot
+            # start there.  Those objects keep a POSITIONAL name and say so.
+            note = "part %s of descriptor %d -- role NOT established" % (kind, i)
+            if shared > 1:
+                note += " (shared by %d descriptors)" % shared
+            lab[p] = ("%s_Pool_%s%03d" % (base, kind, i), note)
+            continue
+        r = ch[i]
+        if kind == "A":
+            name = "%s_%03d_CurveStepToElem" % (base, i)
+            note = ("descriptor %d stage 2: ToneDB_DescCurve_%d step -> element, "
+                    "%d entries = max(curve)+1"
+                    % (i, r["curve_k"], r["curve_max"] + 1))
+        else:
+            name = "%s_%03d_ElemArray" % (base, i)
+            note = ("descriptor %d stage 3: %d element%s of %d B = max(stage 2)+1, "
+                    "size from tag 0x%02X bit 7"
+                    % (i, r["ecount"], "" if r["ecount"] == 1 else "s",
+                       r["esize"], r["tag"]))
         if shared > 1:
             note += " (shared by %d descriptors)" % shared
-        lab[p] = ("%s_Pool_%s%03d" % (base, kind, i), note)
+        lab[p] = (name, note)
     return lab
 
 
@@ -1129,7 +1352,8 @@ def mk_desc_block(slot, extra):
                    % (P, b - 1, len(lab), 14 * H, b - P, b - a),
                    "block, with nothing unaccounted for.",
                    "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
-               ] + DESC_INTERNAL_EV(slot, H, P, recs) + ev_slot(slot, DESC_CHAIN(slot)))
+               ] + chain_hdr(slot)
+               + DESC_INTERNAL_EV(slot, H, P, recs) + ev_slot(slot, DESC_CHAIN(slot)))
         W("%s:" % slot_label(slot))
         for i in range(H):
             t, o1, o2, b9, w10, w12 = recs[i]
@@ -1140,10 +1364,43 @@ def mk_desc_block(slot, extra):
         W("; ---- the pool ----")
         W("%s_Pool:" % slot_label(slot))
         pts = sorted(lab)
+        ch = CHAIN.get(slot)
         for j, p in enumerate(pts):
             e = pts[j + 1] if j + 1 < len(pts) else b
             name, note = lab[p]
-            W("%s:\t\t; %s, %d bytes" % (name, note, e - p))
+            W("")
+            W("; %s -- file 0x%05X..0x%05X (%d bytes)" % (name, p, e - 1, e - p))
+            W("; %s" % note)
+            if ch is not None and name.endswith("_CurveStepToElem"):
+                r = ch[int(name.split("_")[-2])]
+                W("; Its entries index %s_%03d_ElemArray, and they reach every"
+                  % (slot_label(slot), r["i"]))
+                W("; element of it and no further.")
+                W("; Evidence: this table's largest entry is %d; that array is %d"
+                  % (max(r["a_tab"]), r["b_len"]))
+                W("; bytes / %d = %d elements, and %d + 1 = %d."
+                  % (r["esize"], r["ecount"], max(r["a_tab"]), r["ecount"]))
+                W("; notes/prom_d_understanding_round4.py Q1, join 2.")
+            elif ch is not None and name.endswith("_ElemArray"):
+                r = ch[int(name.split("_")[-2])]
+                # ⚠ This used to name %s_%03d_CurveStepToElem, a label that IS NOT
+                # DEFINED anywhere -- 160 of 958 references in this prose dangled.
+                # The stage-2 step table is not emitted as its own label at slot
+                # +0x38 (all 161 records share ONE part-A table), so the prose now
+                # names the object that actually exists.
+                W("; Reached as ToneDB_DescCurve_%d[i] -> the shared stage-2 step"
+                  % r["curve_k"])
+                W("; table of %s, entry %d -> this array."
+                  % (slot_label(slot), r["i"]))
+                W("; Evidence: %d bytes / %d = %d element%s, and the stage-2 table's"
+                  % (r["b_len"], r["esize"], r["ecount"],
+                     "" if r["ecount"] == 1 else "s"))
+                W("; largest entry is %d, so %d + 1 = %d matches exactly.  The"
+                  % (max(r["a_tab"]), max(r["a_tab"]), r["ecount"]))
+                W("; element size %d is this descriptor's tag 0x%02X, bit 7 %s"
+                  % (r["esize"], r["tag"], "SET" if r["esize"] == 8 else "CLEAR"))
+                W("; (round 4 Q1c).  ⚠ No byte inside an element is identified.")
+            W("%s:" % name)
             e_bytes(p, e)
     return fn
 
@@ -1168,13 +1425,24 @@ def emit_curves():
         "rising slope; curve 0 is exactly index//12.  Curves 3 and 4 share both",
         "their end value and their sum but differ in 14 of 128 bytes.",
         "",
-        "⚠ WHAT IS NOT ESTABLISHED: what the index MEANS.  128 entries is the MIDI",
-        "note range and prom_c's Voice_SelectKeyZone_Reg0040 walks a 128-byte key",
-        "map indexed by the played note (notes/FINDINGS-prom_c-dev10c-register-",
-        "meanings.md §4b), which is why 'note-indexed curve' is the natural",
-        "reading -- but no WSA1 instruction has been shown to read THIS table, so",
-        "the label states the RELATIONSHIP that is proved (the descriptors point",
-        "here) and not a synthesis role.",
+        "★ WHAT THE CURVE'S OUTPUT IS FOR -- NEW IN ROUND 4, and it upgrades the",
+        "paragraph that used to stand here.  Round 2 could only say the descriptors",
+        "POINT here.  The curve's VALUE is now placed as well: in 318 of the 318",
+        "descriptors at slot +0x30, the number of bytes in the part-A object AFTER",
+        "its 4-byte curve pointer is exactly this curve's largest entry PLUS ONE.",
+        "So the curve's codomain is precisely the part-A table's index space -- no",
+        "entry of that table is unreachable and no curve value runs past its end.",
+        "The part-A table's own largest value then indexes the descriptor's element",
+        "array with the same exactness (round 4 join 2), so the bank is stage 1 of",
+        "a three-stage index chain.  notes/prom_d_understanding_round4.py Q1.",
+        "",
+        "⚠ WHAT IS STILL NOT ESTABLISHED: what the curve's INPUT means.  128",
+        "entries is the MIDI note range and prom_c's Voice_SelectKeyZone_Reg0040",
+        "walks a 128-byte key map indexed by the played note (notes/FINDINGS-",
+        "prom_c-dev10c-register-meanings.md §4b), which is why 'note-indexed curve'",
+        "is the natural reading -- but no WSA1 instruction has been shown to read",
+        "THIS table, so nothing below claims a synthesis role.  Nor is any byte of",
+        "an element identified.",
         "",
         "Re-derived by notes/prom_d_structures_round2.py section Q2.",
         "",
@@ -1199,6 +1467,13 @@ def emit_curves():
         W("; %d entries, non-decreasing, v[0] = 0, v[127] = %d.%s"
           % (CURVE_STRIDE, D[c + 127],
              "  Exactly index//12." if k == 0 else ""))
+        _users = [r for r in CHAIN[0x30].values() if r["curve"] == c]
+        if _users:
+            W("; Consumers' stage-2 tables are all %d bytes long = this curve's"
+              % (max(D[c:c + CURVE_STRIDE]) + 1))
+            W("; largest entry + 1, in %d of %d cases -- round 4 join 1."
+              % (sum(1 for r in _users if len(r["a_tab"]) == max(D[c:c + CURVE_STRIDE]) + 1),
+                 len(_users)))
         W("; Evidence: %d of the 318 part-A objects at slot +0x30 name THIS curve"
           % _heads.get(c, 0))
         W("; in their leading LE32; the first is the object at 0x%05X.  %s"
@@ -1246,23 +1521,24 @@ def emit_drumkits():
         "banner previously said had NOT been confirmed against code, for the note",
         "map; it is still NOT confirmed for the per-record map emitted below.",
         "notes/prom_d_documentation_round3.py Q4a and Q4d.",
-    ])
+    ] + NAMING_RULE)
     for k in range(18):
         p = a + 408 * k
         idx = IDX_OF[p]
-        W("")
-        W("; ---- tone 0x%03X %r ----" % (idx, NAME(p)))
-        W("DrumKit_%03X:" % idx)
+        for ln in tone_hdr_lines(p, idx, "408 B = 16 name + 136 common + 128 x LE16"):
+            W(ln)
+        lab = "DrumKit_%03X_%s" % (idx, tone_name(p))
+        W("%s:" % lab)
         e_ascii(p, 16)
         e_bytes(p + 16, p + 152)
-        W("DrumKit_%03X_NoteMap:" % idx)
+        W("%s_NoteMap:" % lab)
         e_shorts(p + 152, p + 408, comment=lambda i: "note %3d" % i)
 
 
 def emit_percinst():
     a, b = S(0x78), NEXT[S(0x78)]
     n = (b - a) // PERC_STRIDE
-    banner("PercInst -- directory slot +0x78", a, b, PERC_HDR + [
+    banner("PercInst -- directory slot +0x78", a, b, PERC_HDR + NAMING_RULE + [
         "",
         "%d records here; the span divides exactly by %d." % (n, PERC_STRIDE),
     ] + ev_slot(0x78, [
@@ -1277,12 +1553,25 @@ def emit_percinst():
         "which is why the +0xEE line on the directory says CONFIRMED.",
         "notes/prom_d_documentation_round3.py Q4d.",
     ]))
-    W("PercInst_000_Silent:")
     for i in range(n):
         p = a + PERC_STRIDE * i
+        na, nb = _DRUM_A.get(i, 0), _DRUM_B.get(i, 0)
+        W("")
+        W("; ---- drum instrument %3d %r ----" % (i, D[p:p + 13].decode("latin1")))
+        W("; %d B: 13-byte name then %d bytes of parameters, none identified."
+          % (PERC_STRIDE, PERC_STRIDE - 13))
+        W("; Named by %d of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and %d"
+          % (na, nb))
+        W("; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run")
+        W("; 0..503 over exactly these 504 records and name every one of them;")
+        W("; map B names 503 of the 504.  round 4 Q6d/Q6e.%s"
+          % ("  ⚠ THIS record is one" if nb == 0 else ""))
+        if nb == 0:
+            W("; map B never names -- the honest asymmetry, not a rounding.")
         if i:
-            W("PercInst_%03d:" % i)
-        W("\t; ---- drum instrument %3d %r ----" % (i, D[p:p + 13].decode("latin1")))
+            W("PercInst_%03d_%s:" % (i, perc_name(i)))
+        else:
+            W("PercInst_000_Silent:")
         e_ascii(p, 13)
         e_bytes(p + 13, p + PERC_STRIDE)
 
@@ -1335,13 +1624,14 @@ def emit_drawbars():
     for k in range(2):
         p = a + 541 * k
         idx = IDX_OF[p]
-        W("")
-        W("; ---- tone 0x%03X %r  541 B ----" % (idx, NAME(p)))
-        W("ToneRec_%03X:" % idx)
+        for ln in tone_hdr_lines(p, idx, "541 B = 217 + 4 x 81, and NO wave-select array"):
+            W(ln)
+        lab = "ToneRec_%03X_%s" % (idx, tone_name(p))
+        W("%s:" % lab)
         e_ascii(p, 16)
         e_bytes(p + 16, p + 217)
         for j in range(4):
-            W("ToneRec_%03X_Elem%d:\t\t; 81-byte element block" % (idx, j))
+            W("%s_Elem%d:\t\t; 81-byte element block" % (lab, j))
             e_bytes(p + 217 + 81 * j, p + 217 + 81 * (j + 1))
         assert p + 217 + 4 * 81 == p + 541
 
