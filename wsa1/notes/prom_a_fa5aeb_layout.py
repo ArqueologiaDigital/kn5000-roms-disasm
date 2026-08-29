@@ -55,11 +55,26 @@ WHAT THE SPAN TURNS OUT TO BE (run with no arguments for the byte-exact table)
     * 0xFA84C8-0xFA8CC7 is 23 tables of exactly 32 records each -- 17 of stride
       3, 6 of stride 2 -- plus a 32-byte 0x00..0x1F index map.  32 is the count
       that recurs everywhere in this module.
-    * 0xFA8FF8 is 800 four-byte 16-bit RAM addresses = 25 blocks of 32, and
-      0xFA82DE is one more block of 32 at stride 0x40.  They tile a RAM array of
-      32 records of 0x40 bytes around 0x7670-0x7EEF.
+    * 0xFA8FF8 is 800 FOUR-BYTE entries holding 16-bit RAM addresses (3,200 bytes,
+      0xFA8FF8-0xFA9C78) = 25 blocks of 32 -- and ★ THE 25 BLOCKS ARE IDENTICAL.
+      All 800 entries hold only 32 distinct values, 0x76AF..0x7EAF in 30 steps of
+      0x40 and one of 0x80, and entry[i] == entry[i mod 32] for every i.  So THE
+      ROW INDEX SELECTS NOTHING; whatever supplies a per-parameter offset, it is
+      not this table, and the first draft's reading of it as "the RAM-address
+      dispatch layer" of a 32-part parameter store does not follow.  The wave-7
+      skeptic found this because check K tested the count, the block arithmetic,
+      the first entry, the last entry and the terminator -- everything except the
+      one property the READING depended on.  Now checked; see also open question 9.
+      (The start is pinned too: the cycle does not continue below 0xFA8FF8, and
+      the word at 0xFA9C78 is zero.)
+    * 0xFA82DE is one more block of 32 at stride 0x40.  Together with the cycle
+      above they tile a RAM array of 32 records of 0x40 bytes around
+      0x7670-0x7EEF.
   So: a 32-part MIDI-controller / parameter store.  ⚠ That sentence is a
-  READING; what is proven is the tables, their extents and the inverse pair.
+  READING; what is proven is the tables, their extents and the inverse pair --
+  and it is WEAKER than the first draft made it sound, because the 0xFA8FF8
+  table's 25 rows are the same row.  The "32 parts" is supported; the "dispatch
+  layer" is not.
 
 THE RULES, IN PRIORITY ORDER, AND THE NULL MEASURED FOR EACH
   Run `--null` for the live numbers; the corpus GROWS as rounds convert code, so
@@ -115,6 +130,7 @@ WHAT THIS FILE DOES NOT DO
   the property that makes that mechanical.
 """
 import os
+import collections
 import re
 import subprocess
 import sys
@@ -725,6 +741,14 @@ def all_seeds(d, lo=LO, hi=HI):
 OPERAND = re.compile(r"0x00([0-9a-f]{6})|\(0x([0-9a-f]{6})\)")
 
 
+# value -> set of INSTRUCTION addresses that name it.  Exists because the wave-7
+# skeptic found ~31 evidence citations that were all one byte past the instruction
+# -- they pointed at the imm32 of the `ld XIX/XIY/XIZ,imm32` that does the load --
+# and NO mode of this script printed the sites, so not one was reproducible.
+# `p` below is the instruction address; `p + 1` is what the wrong citations used.
+NAMED_SITES = {}
+
+
 def descend(d, lo, hi, seeds, block, named=None):
     """Recursive descent that refuses to enter a barrier byte.
 
@@ -749,6 +773,7 @@ def descend(d, lo, hi, seeds, block, named=None):
                 v = int(m, 16)
                 if named is not None and lo <= v < hi:
                     named.add(v)
+                    NAMED_SITES.setdefault(v, set()).add(p)
                 if lo <= v < hi and v not in seen and v not in block:
                     work.append(v)
             if TC.is_flow_end(txt):
@@ -937,6 +962,7 @@ def build(lo=LO, hi=HI, passes=3):
         for _, x, y in regs:
             block |= set(range(x, y))
         named = set()
+        NAMED_SITES.clear()
         seen = descend(d, lo, hi, sorted(all_seeds(d, lo, hi)), block, named)
         gaps = gaps_of(lo, hi, seen, block)
         ok, pend, pads = accept(gaps, seen)
@@ -1361,6 +1387,38 @@ def selftest():
     check("LAST entry", "0x%04X" % w32(d, 0xFA9C74), "0x7EAF")
     check("the word after it is zero, so the chain really ended",
           w32(d, 0xFA9C78), 0)
+    # ⚠ Added after the wave-7 skeptic pointed out that check K verified the count,
+    # the block arithmetic, the first entry, the last entry and the terminator --
+    # and never the one property that matters for the READING: whether the 25 blocks
+    # differ.  They do not.  The table is one 32-entry cycle repeated 25 times, so
+    # THE ROW INDEX SELECTS NOTHING, and it cannot be the per-parameter dispatch
+    # layer the first draft's verdict described.  See open question 9.
+    _e = [w32(d, 0xFA8FF8 + 4 * i) for i in range(800)]
+    _blocks = [tuple(_e[i * 32:(i + 1) * 32]) for i in range(25)]
+    check("★ the 25 blocks are IDENTICAL -- the row index selects nothing",
+          len(set(_blocks)), 1)
+    check("★ so all 800 entries hold only 32 distinct values", len(set(_e)), 32)
+    check("...and it is a strict cycle: entry[i] == entry[i mod 32], all 800",
+          all(_e[i] == _e[i % 32] for i in range(800)), True)
+    check("the cycle runs 0x76AF..0x7EAF in 30 steps of 0x40 and one of 0x80",
+          sorted(collections.Counter(
+              _e[i + 1] - _e[i] for i in range(31)).items()),
+          [(0x40, 30), (0x80, 1)])
+    check("nothing before 0xFA8FF8 continues the cycle (the start is pinned)",
+          w32(d, 0xFA8FF8 - 4) == _e[31], False)
+
+    print("K2. every naming site is an INSTRUCTION address, not an operand")
+    # ⚠ The wave-7 skeptic found ~31 evidence citations one byte past the
+    # instruction -- all of them the imm32 of an `ld XIX/XIY/XIZ,imm32`.  --sites
+    # is the reproducible source for them now, and this check is what keeps it
+    # honest: cited-1 being 0x44/0x45/0x46 is the SYMPTOM of the off-by-one, so
+    # every site's own first byte must be the opcode instead.
+    build()
+    _bad = [(v, s) for v in NAMED_SITES for s in NAMED_SITES[v]
+            if d[s - A_BASE] not in (0x44, 0x45, 0x46, 0xF0, 0xC0, 0xD0, 0xE0)]
+    check("naming sites collected", sum(len(s) for s in NAMED_SITES.values()) > 0, True)
+    check("★ sites whose first byte is NOT an opcode (the off-by-one signature)",
+          len(_bad), 0)
     check("0xFA82DE framed as 32 entries",
           ("ramtab", 0xFA82DE, 0xFA835E) in tri, True)
     check("  its FIRST entry", "0x%04X" % w32(d, 0xFA82DE), "0x76D5")
@@ -1528,6 +1586,27 @@ def main():
         if "--rev" in sys.argv:
             rev = sys.argv[sys.argv.index("--rev") + 1]
         null(rev)
+        return 0
+    if "--sites" in sys.argv:
+        # ★ Every in-span address the decoded code NAMES, with the INSTRUCTION
+        # addresses that name it.  Cite from THIS, never from a hexdump offset: the
+        # `ld XIX/XIY/XIZ,imm32` opcode is at p and its immediate at p+1, and a
+        # citation of p+1 is the systematic off-by-one this project has now made
+        # twice.  The check line under each address proves p is the instruction.
+        build()
+        d = rom("a")
+        print("named address   named by (INSTRUCTION addresses)")
+        bad = 0
+        for v in sorted(NAMED_SITES):
+            sites = sorted(NAMED_SITES[v])
+            print("  0x%06X      %s" % (v, ", ".join("0x%06X" % s for s in sites)))
+            for s in sites:
+                op = d[s - A_BASE]
+                if op not in (0x44, 0x45, 0x46, 0xF0, 0xC0, 0xD0, 0xE0):
+                    bad += 1
+        print("\n%d named addresses, %d naming sites; %d sites whose first byte is not"
+              % (len(NAMED_SITES), sum(len(s) for s in NAMED_SITES.values()), bad))
+        print("a recognised opcode (0 means every citation is at an instruction, not an operand)")
         return 0
     if "--frontier" in sys.argv:
         frontier()
