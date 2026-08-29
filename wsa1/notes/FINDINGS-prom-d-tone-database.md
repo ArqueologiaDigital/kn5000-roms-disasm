@@ -9,6 +9,73 @@ python3 scripts/analysis/gen_prom_d_asm.py             # regenerates prom_d/wsa1
 python3 scripts/analysis/assert_byte_identical.py      # THE GATE
 ```
 
+> ## ★★ CORRECTIONS AND ADDITIONS — wave 7 round 2, 2026-08-29
+>
+> Reproduced by `python3 notes/prom_d_structures_round2.py` (78 checks, all held).
+> Four of §7's open items are closed and one number below is **wrong as written**.
+>
+> 1. **The descriptor blocks at `+0x30`, `+0x38` and `+0x70` are not "N × 14 + a
+>    remainder".** There is no remainder. Each is an **array of 14-byte descriptor
+>    records followed by a data pool**, and the boundary is stated by the records
+>    themselves: bytes `+0x01` and `+0x05` of a descriptor are 32-bit 0-based file
+>    offsets, every non-null one lands past the array and inside the block, and the
+>    **smallest of them is exactly where the array ends**.
+>
+>    | slot | descriptors | header | pool | tiles |
+>    |---|---:|---:|---:|---|
+>    | `+0x30` | 318 | 4,452 | 29,709 @0x23E9F | 34,161 ✓ |
+>    | `+0x38` | 161 | 2,254 | 1,098 @0x4426A | 3,352 ✓ |
+>    | `+0x70` | 4 | 56 | 8,772 @0x44B26 | 8,828 ✓ |
+>
+>    Both ends are pinned: the **last** descriptor's second offset is the last
+>    object in its pool (6, 6 and 24 bytes short of the block end). `+0x30`'s 318
+>    (part A, part B) pairs **partition** its pool exactly — 0 bytes uncovered, 0
+>    covered twice. In `+0x30`, descriptor tag **bit 7** governs the part-B row
+>    size: clear in 187 records and then always a multiple of 6, set in 131 and
+>    then always a multiple of 8, no exception; the rule is discriminating for 264
+>    of the 318 (the other 54 lengths are multiples of 24 and decide nothing).
+>    ⚠ `+0x70`'s records are a different class (tag 0x92, null part A) and its
+>    objects are multiples of 6 despite bit 7 being set, so the rule is **not**
+>    claimed there. So "2440 × 14 + 1", "239 × 14 + 6" and "framing not
+>    established" in §1 and §7 are all superseded.
+>
+> 2. **The "768 extra bytes at `+0x28`" are six 128-byte curves at 0x22A3B.** The
+>    index map is 2,048 bytes like its eleven siblings. What says the 768 are a
+>    separate object is inside the image: the head word of **every one of the 318**
+>    part-A objects of `+0x30` is a 32-bit offset naming one of exactly those six
+>    addresses (318/318; no part-B object does), and `+0x38`'s single shared part A
+>    names the sixth. Each curve is 128 bytes, starts at 0 and is monotonically
+>    non-decreasing; end values 10, 20, 27, 34, 34, 107; curve 0 is exactly
+>    `index // 12`. Curves 3 and 4 share their end value **and** their sum but
+>    differ in 14 of 128 bytes. ⚠ What the index *means* is not established — 128
+>    entries is the MIDI note range, which is suggestive and is not evidence.
+>
+> 3. **The two 541-byte Drawbar records are not short of anything.** 541 =
+>    217 + 4·81 exactly: four element blocks and **zero** wave-select records, and
+>    the "172 bytes short" of §3 is precisely the 4 × 43 that are absent. The four
+>    blocks match the modal-byte profile of the 451 ordinary element blocks in
+>    53–54 of 81 columns (those 451 average 57.2 among themselves) against 20–32
+>    for the same windows shifted by ±3, ±5, ±7.
+>
+> 4. **The five catalogue footers are PARTITIONS, not merely self-sized.** In all
+>    five, the *n* group bytes **sum to** the LE16 count, which is the catalogue's
+>    row count. The stray `0x08` at 0x50B08 is outside that partition and stays
+>    unexplained (it is not the payload's sum8, xor8, or the footer region's sum8).
+>
+> 5. **⚠ WRONG AS WRITTEN, in §3.** "Bytes +0x00..+0x02 are `7F 7F 7F` and
+>    +0x0D..+0x0F are `7D 80 54` in every record inspected" does not hold over the
+>    full populations. Measured first record to last:
+>    `+0x18` 312/322 and 261/322 · `+0x20` 203/208 and 158/208 · `+0x3C` 64/64 and
+>    **18/64**. This is the project's signature failure — a shape read off the
+>    first record and quoted as a universal.
+>
+> 6. **A tie between a NAMED structure here and an instruction still does not
+>    exist.** 46 prom_d offsets × 3 encodings × 3 code ROMs produced 5 candidate
+>    byte matches; all five are adjudicated false positives by name in §Q5 of the
+>    script (two are `ld DE,0x0100` / `or DE,0x0180` in prom_c's EEPROM bit-banger
+>    where the third byte of the "LE24" is the next instruction's opcode). The tie
+>    to the *image* and its base 0x00F00000 stands, from wave 5.
+
 `prom_d/wsa1_prom_d.s` is no longer one `.incbin`. All 524,288 bytes are now
 emitted as `.long` / `.short` / `.byte` / `.ascii` inside labelled regions with
 their record geometry stated above them, and it still rebuilds byte-identically.
@@ -272,9 +339,10 @@ established, three independent ways:
 The same record appears in four places: the second per-element array of every
 tone record, the tail of `ToneDB_DefaultLayerParams`, and three standalone arrays
 at slots `+0x18` (322 records), `+0x20` (208) and `+0x3C` (64) — each of whose
-spans divides by 43 **exactly**. Bytes +0x00..+0x02 are `7F 7F 7F` and
-+0x0D..+0x0F are `7D 80 54` in every record inspected, but no consumer has been
-read and no field is named.
+spans divides by 43 **exactly**. ~~Bytes +0x00..+0x02 are `7F 7F 7F` and
++0x0D..+0x0F are `7D 80 54` in every record inspected~~ — **RETRACTED, see
+correction 5 at the head of this file**: the true counts are 312/322, 203/208,
+64/64 and 261/322, 158/208, 18/64. No consumer has been read and no field is named.
 
 ### The two Drawbar records — an open discrepancy, not smoothed over
 

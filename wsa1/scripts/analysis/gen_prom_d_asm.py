@@ -50,6 +50,41 @@ PTRS = [u32(0xB80 + 4 * i) for i in range(274)]
 NAME = lambda p: D[p:p + 16].decode("latin1")
 
 # ---------------------------------------------------------------------------
+# The descriptor-block layout is RE-DERIVED on every run by
+# notes/prom_d_structures_round2.py, from the descriptors' own 32-bit offsets --
+# it is never hard-coded here.  This emitter REFUSES to run if the shape it gets
+# differs from the one that was audited, so a boundary cannot move silently
+# between the audit and the assembly (the pattern of
+# notes/gen_prom_a_fad800_module.py).
+# ---------------------------------------------------------------------------
+import importlib.util as _ilu
+
+_spec = _ilu.spec_from_file_location(
+    "prom_d_structures_round2",
+    os.path.join(ROOT, "notes", "prom_d_structures_round2.py"))
+_R2 = _ilu.module_from_spec(_spec)
+_saved_argv, sys.argv = sys.argv, ["prom_d_structures_round2", "--quiet"]
+try:
+    _spec.loader.exec_module(_R2)
+finally:
+    sys.argv = _saved_argv
+
+DESC_AUDITED = {0x30: (318, 0x23E9F), 0x38: (161, 0x4426A), 0x70: (4, 0x44B26)}
+DESC = {}
+for _slot in DESC_AUDITED:
+    _H, _P, _recs = _R2.desc_layout(_slot)
+    if (_H, _P) != DESC_AUDITED[_slot]:
+        sys.exit("REFUSING TO EMIT: descriptor block +0x%02X is now %d records over a "
+                 "pool at 0x%05X; audited as %d over 0x%05X.  Re-audit with "
+                 "notes/prom_d_structures_round2.py before regenerating."
+                 % (_slot, _H, _P, DESC_AUDITED[_slot][0], DESC_AUDITED[_slot][1]))
+    DESC[_slot] = (_H, _P, _recs)
+
+CURVE_BASE, CURVE_STRIDE, CURVE_N = _R2.CURVE_BASE, _R2.CURVE_STRIDE, _R2.CURVE_N
+if CURVE_BASE != S(0x28) + 2048 or CURVE_N * CURVE_STRIDE != S(0x30) - CURVE_BASE:
+    sys.exit("REFUSING TO EMIT: the curve bank moved.")
+
+# ---------------------------------------------------------------------------
 # emitters
 # ---------------------------------------------------------------------------
 OUTBUF = []
@@ -524,7 +559,7 @@ def mk_indexmap(slot, extra_note=None):
             "possibly address (see notes/FINDINGS-prom-d-tone-database.md).",
         ]
         if extra_note:
-            lines.append(extra_note)
+            lines.extend(extra_note if isinstance(extra_note, list) else [extra_note])
         banner("%s -- directory slot +0x%02X" % (slot_label(slot), slot), a, b, lines)
         W("%s:" % slot_label(slot))
         e_shorts(a, b)
@@ -542,8 +577,14 @@ def mk_wavesel_array(slot):
             "The same 43-byte record is the second per-element array of every tone",
             "record and the tail of ToneDB_DefaultLayerParams.",
             "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
-            "⚠ Field meanings NOT established.  Bytes +0x00..+0x02 are 0x7F in every",
-            "record examined and +0x0D..+0x0F are 7D 80 54, but no consumer has been read.",
+            "⚠ Field meanings NOT established, and ⚠ CORRECTED in wave 7 round 2:",
+            "the leading 7F 7F 7F and the 7D 80 54 at +0x0D are NOT in every record.",
+            "Counted over this array, first record to last: %d of %d start 7F 7F 7F"
+            % (sum(1 for i in range(n) if D[a + 43 * i:a + 43 * i + 3] == b"\x7f\x7f\x7f"), n),
+            "and %d of %d carry 7D 80 54 at +0x0D.  The earlier text said 'every"
+            % (sum(1 for i in range(n) if D[a + 43 * i + 13:a + 43 * i + 16] == b"\x7d\x80\x54"), n),
+            "record examined', which was the first record quoted as a universal.",
+            "Re-derived by notes/prom_d_structures_round2.py section Q4b.",
         ])
         W("%s:" % slot_label(slot))
         for i in range(n):
@@ -591,25 +632,123 @@ def mk_footer(slot, of_slot):
     return fn
 
 
-def mk_desc14(slot, note):
+DESC_HDR = [
+    "⚠ REFRAMED in wave 7 round 2.  This block used to be emitted as 'N x 14 +",
+    "a remainder' and called SUPPORTED-not-proved, because nothing placed the",
+    "leftover byte(s).  There is no remainder.  The block is an ARRAY of 14-byte",
+    "descriptor records followed by a DATA POOL, and the descriptors' own 32-bit",
+    "offsets say where the array stops:",
+    "",
+    "    descriptor  +0x00  1 B    tag",
+    "                +0x01  LE32   file offset of part A   (0 = none)",
+    "                +0x05  LE32   file offset of part B",
+    "                +0x09  1 B    unidentified",
+    "                +0x0A  LE16   unidentified",
+    "                +0x0C  LE16   unidentified",
+    "",
+    "Every non-null offset lands past the array and inside the block, and the",
+    "SMALLEST of them is exactly where the array ends -- that is what proves the",
+    "split, not a stride sweep.  The LAST descriptor's part-B offset is the last",
+    "object in the pool, so both ends are pinned.  All of it is re-derived on",
+    "every run of this generator by notes/prom_d_structures_round2.py, which",
+    "refuses to emit if a boundary moved.",
+    "",
+    "⚠ NO field inside a descriptor, a part A or a part B is identified, and no",
+    "WSA1 instruction that reads any of this has been found.",
+]
+
+
+def desc_pool_labels(slot):
+    """Address -> (label, comment) for every object in this block's pool."""
+    H, P, recs = DESC[slot]
+    lab = {}
+    pts = sorted({o for t, o1, o2, b9, w10, w12 in recs for o in (o1, o2) if o})
+    owner = {}
+    for i, (t, o1, o2, b9, w10, w12) in enumerate(recs):
+        if o1:
+            owner.setdefault(o1, ("A", i))
+        if o2:
+            owner.setdefault(o2, ("B", i))
+    base = slot_label(slot)
+    for p in pts:
+        kind, i = owner[p]
+        shared = sum(1 for _t, a1, a2, _b, _w, _v in recs
+                     if (a1 if kind == "A" else a2) == p)
+        note = "part %s of descriptor %d" % (kind, i)
+        if shared > 1:
+            note += " (shared by %d descriptors)" % shared
+        lab[p] = ("%s_Pool_%s%03d" % (base, kind, i), note)
+    return lab
+
+
+def mk_desc_block(slot, extra):
     def fn():
         a, b = S(slot), NEXT[S(slot)]
-        n = (b - a) // 14
-        banner("%s -- directory slot +0x%02X" % (slot_label(slot), slot), a, b, [
-            "Descriptor block.  The directory's stride word (+0xEC / +0xF2) is 14,",
-            "and a stride sweep over this block scoring column entropy per byte does",
-            "pick 14 out of 10..19.  %d x 14 = %d, leaving %d byte(s)."
-            % (n, n * 14, b - a - n * 14),
-            note,
-            "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
-            "⚠ Emitted on a 14-byte grid for readability.  The framing is SUPPORTED,",
-            "not proved, and no field inside a record is identified.",
-        ])
+        H, P, recs = DESC[slot]
+        lab = desc_pool_labels(slot)
+        banner("%s -- directory slot +0x%02X" % (slot_label(slot), slot), a, b,
+               DESC_HDR + [""] + extra + [
+                   "",
+                   "Here: %d descriptors x 14 = %d bytes, then a pool of %d bytes"
+                   % (H, 14 * H, b - P),
+                   "at 0x%05X..0x%05X, holding %d objects.  %d + %d = %d, the whole"
+                   % (P, b - 1, len(lab), 14 * H, b - P, b - a),
+                   "block, with nothing unaccounted for.",
+                   "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
+               ])
         W("%s:" % slot_label(slot))
-        for i in range(n):
+        for i in range(H):
+            t, o1, o2, b9, w10, w12 = recs[i]
+            W("%s_Desc%03d:\t\t; tag 0x%02X  A=%s  B=0x%05X"
+              % (slot_label(slot), i, t, ("0x%05X" % o1) if o1 else "none", o2))
             e_bytes(a + 14 * i, a + 14 * (i + 1), per=14)
-        e_gap(a + 14 * n, b)
+        W("")
+        W("; ---- the pool ----")
+        W("%s_Pool:" % slot_label(slot))
+        pts = sorted(lab)
+        for j, p in enumerate(pts):
+            e = pts[j + 1] if j + 1 < len(pts) else b
+            name, note = lab[p]
+            W("%s:\t\t; %s, %d bytes" % (name, note, e - p))
+            e_bytes(p, e)
     return fn
+
+
+def emit_curves():
+    a, b = CURVE_BASE, CURVE_BASE + CURVE_N * CURVE_STRIDE
+    tops = [D[a + CURVE_STRIDE * k + CURVE_STRIDE - 1] for k in range(CURVE_N)]
+    banner("ToneDB_DescCurveBank -- the 768 bytes formerly 'unexplained'", a, b, [
+        "⚠ NEW in wave 7 round 2.  These 768 bytes used to be counted as part of",
+        "the index map at directory slot +0x28, whose 2816-byte span was 768 more",
+        "than its eleven siblings' 2048 and was recorded as NOT ESTABLISHED.  They",
+        "are not part of that map.  They are %d tables of %d bytes, and the thing"
+        % (CURVE_N, CURVE_STRIDE),
+        "that says so is inside the image: the head word of EVERY one of the 318",
+        "part-A objects in the descriptor pool at slot +0x30 is a 32-bit file",
+        "offset naming one of these six addresses, 318 of 318, and the set of",
+        "values used is exactly this set of six.  The shared part-A object of the",
+        "161 descriptors at slot +0x38 names the last one.",
+        "",
+        "Each table is 128 bytes, starts at 0, and is monotonically NON-DECREASING",
+        "over its whole length.  Their end values are %s, i.e. six curves of" % tops,
+        "rising slope; curve 0 is exactly index//12.  Curves 3 and 4 share both",
+        "their end value and their sum but differ in 14 of 128 bytes.",
+        "",
+        "⚠ WHAT IS NOT ESTABLISHED: what the index MEANS.  128 entries is the MIDI",
+        "note range and prom_c's Voice_SelectKeyZone_Reg0040 walks a 128-byte key",
+        "map indexed by the played note (notes/FINDINGS-prom_c-dev10c-register-",
+        "meanings.md §4b), which is why 'note-indexed curve' is the natural",
+        "reading -- but no WSA1 instruction has been shown to read THIS table, so",
+        "the label states the RELATIONSHIP that is proved (the descriptors point",
+        "here) and not a synthesis role.",
+        "",
+        "Re-derived by notes/prom_d_structures_round2.py section Q2.",
+    ])
+    W("ToneDB_DescCurveBank:")
+    for k in range(CURVE_N):
+        c = a + CURVE_STRIDE * k
+        W("ToneDB_DescCurve_%d:\t\t; 128 entries, 0 .. %d" % (k, D[c + 127]))
+        e_bytes(c, c + CURVE_STRIDE)
 
 
 def emit_drumkits():
@@ -684,13 +823,22 @@ def emit_drawbars():
     banner("DRAWBAR TONE RECORDS -- tone indices 0x058 and 0x059", a, b, [
         "Two records of 541 bytes named '<<< Drawbar 1>>>' and '<<< Drawbar 2>>>'.",
         "",
-        "⚠ 541 is NOT 217 + N*124: 541 - 217 = 324, which is not a multiple of 124.",
-        "Their element mask at +0x11 is 0x55, i.e. all four element slots set, and",
-        "217 + 4*124 = 713, so these records are 172 bytes SHORT of the layout",
-        "their own mask implies.  They are emitted as bytes, not as elements, and",
-        "the discrepancy is left open.  The KN5000 also treats drawbar presets",
-        "specially (its directory slot +0x70 is DrawbarPreset_EnvDescTable, and",
-        "prom_d's +0x70 points at the block immediately after these two records).",
+        "⚠ RESOLVED in wave 7 round 2.  This note used to say the records were 172",
+        "bytes SHORT of the 217 + 4*124 = 713 their mask implies, and left it open.",
+        "They are not short of anything: 541 = 217 + 4*81 EXACTLY.  A drawbar",
+        "record carries its four 81-byte element blocks and NO wave-select records",
+        "at all, and the 172 missing bytes are precisely the 4 x 43 that are absent.",
+        "",
+        "The four blocks really are element blocks, not unclassified bytes: each",
+        "matches the modal-byte profile of the 451 ordinary element blocks in 53-54",
+        "of 81 columns (those 451 average 57.2 among themselves), while the same",
+        "windows shifted by -7,-5,-3,+3,+5,+7 score 20-32.  So they are emitted with",
+        "element labels.  Their mask at +0x11 is 0x55, four slots set, agreeing.",
+        "notes/prom_d_structures_round2.py section Q4.",
+        "",
+        "The KN5000 also treats drawbar presets specially: its directory slot +0x70",
+        "is DrawbarPreset_EnvDescTable, and prom_d's +0x70 points at the descriptor",
+        "block immediately after these two records.",
     ])
     for k in range(2):
         p = a + 541 * k
@@ -699,16 +847,26 @@ def emit_drawbars():
         W("; ---- tone 0x%03X %r  541 B ----" % (idx, NAME(p)))
         W("ToneRec_%03X:" % idx)
         e_ascii(p, 16)
-        e_bytes(p + 16, p + 541)
+        e_bytes(p + 16, p + 217)
+        for j in range(4):
+            W("ToneRec_%03X_Elem%d:\t\t; 81-byte element block" % (idx, j))
+            e_bytes(p + 217 + 81 * j, p + 217 + 81 * (j + 1))
+        assert p + 217 + 4 * 81 == p + 541
 
 
 def emit_tail():
     banner("ERASED TAIL and BUILD TAG", 0x50B09, 0x80000, [
         "The payload's last byte is at 0x50B08.  From 0x50B09 to 0x7FFEF the image",
         "is ONE unbroken 0xFF run of 0x2F4E7 bytes -- the shape of an erased flash",
-        "device, and the strongest single argument in prom_d/prom_d.ld for reading",
-        "this image as the 512 KiB flash at 0xE80000 on CPU 2's bus.",
-        "The last 16 bytes are the build tag.",
+        "device.  The last 16 bytes are the build tag, and they are what ties this",
+        "image to an address: VersionScreen_Show (prom_a 0xF82A28) reads eleven",
+        "bytes from remote 0x00F7FFF0 and shows them as WSA-D:, so the base is",
+        "0x00F00000 on CPU 2's bus (notes/FINDINGS-memory-map.md §5).",
+        "⚠ This banner used to end 'the 512 KiB flash at 0xE80000', which is the",
+        "REFUTED reading -- prom_c's own Flash_SectorErase bounds that part at",
+        "0x00E80000..0x00EFFFFF, below this image.  prom_d/prom_d.ld still carries",
+        "the old argument; its ORIGIN 0 stays correct either way, because this",
+        "image is addressed by 0-based offsets and holds no absolute pointers.",
     ])
     W("erased_tail:")
     W("\t.fill 0x%X, 1, 0xFF" % (0x7FFF0 - 0x50B09))
@@ -720,24 +878,47 @@ def emit_tail():
 # ---------------------------------------------------------------------------
 # assemble the region list
 # ---------------------------------------------------------------------------
-BOUND = sorted(set(v for v in DIR if v != 0xFFFFFFFF) | {0x13C8, 0x2B2AC, 0x446B4, 0x50B09, 0x80000})
+BOUND = sorted(set(v for v in DIR if v != 0xFFFFFFFF)
+               | {0x13C8, CURVE_BASE, 0x2B2AC, 0x446B4, 0x50B09, 0x80000})
 NEXT = {BOUND[i]: BOUND[i + 1] for i in range(len(BOUND) - 1)}
 
 for slot in (0x0C, 0x10, 0x14, 0x24, 0x2C, 0x44, 0x48, 0x4C, 0x58, 0x5C, 0x60):
     region(S(slot), NEXT[S(slot)], mk_indexmap(slot))
 region(S(0x28), NEXT[S(0x28)], mk_indexmap(
-    0x28, "⚠ This block is 2816 bytes, 768 more than the 2048 its eleven siblings "
-          "occupy.  What the extra 384 entries are is NOT established."))
+    0x28, ["⚠ CORRECTED in wave 7 round 2.  This map is 2048 bytes, exactly like",
+           "its eleven siblings.  The 768 bytes that used to be counted into it,",
+           "and recorded as 'what the extra 384 entries are is NOT established',",
+           "are a separate object: see ToneDB_DescCurveBank immediately below."]))
+region(CURVE_BASE, NEXT[CURVE_BASE], emit_curves)
 for slot in (0x18, 0x20, 0x3C):
     region(S(slot), NEXT[S(slot)], mk_wavesel_array(slot))
 for cat, foot in ((0x50, 0x54), (0x64, 0x68), (0x80, 0x84), (0x8C, 0x90), (0x94, 0x98)):
     region(S(cat), NEXT[S(cat)], mk_catalogue(cat, foot))
     region(S(foot), NEXT[S(foot)], mk_footer(foot, cat))
-region(S(0x30), 0x2B2AC, mk_desc14(0x30, "The span to the drum-kit block is 2440*14 + 1."))
-region(S(0x38), 0x446B4, mk_desc14(0x38, "The span to the drawbar records is 239*14 + 6."))
-region(S(0x70), NEXT[S(0x70)], mk_desc14(
-    0x70, "⚠ WEAKER HERE: the entropy sweep prefers periods that are multiples of 6, "
-          "and the block visibly switches to 6-byte rows at 0x44B26."))
+region(S(0x30), 0x2B2AC, mk_desc_block(0x30, [
+    "This is the LARGEST of the three, and the only one whose descriptors each own",
+    "a PRIVATE part A.  Its 318 (part A, part B) pairs partition the pool exactly:",
+    "0 bytes uncovered, 0 bytes covered twice.  Part A is 15, 25, 32, 39 or 112",
+    "bytes and always begins with a curve offset; part B is 6 to 144 bytes, and its",
+    "length is governed by BIT 7 OF THE TAG -- clear in 187 records and then always",
+    "a multiple of 6, set in 131 and then always a multiple of 8, with no exception.",
+    "That rule is discriminating (not just arithmetic luck) for 264 of the 318: the",
+    "other 54 lengths are multiples of 24 and decide nothing.",
+]))
+region(S(0x38), 0x446B4, mk_desc_block(0x38, [
+    "All 161 descriptors here point their part A at ONE shared 132-byte object,",
+    "which itself names the steepest curve; their part-B offsets are an arithmetic",
+    "run of step 6, so this block is 132 + 161*6 = 1098 bytes of pool with nothing",
+    "left over.  Every tag is 0x40, bit 7 clear, agreeing with the 6-byte rows.",
+]))
+region(S(0x70), NEXT[S(0x70)], mk_desc_block(0x70, [
+    "A DIFFERENT record class: tag 0x92 in all four, part A null in all four, and",
+    "the four part-B offsets name only THREE objects -- 4374, 4374 and 24 bytes,",
+    "the first two being 729 rows of 6.  A column census over the first object",
+    "picks period 6 (3 near-constant columns) over 4, 5, 7 and 8 (0 each).",
+    "⚠ Tag 0x92 has bit 7 SET yet every object is a multiple of 6, so the bit-7",
+    "rule stated on slot +0x30 is NOT claimed for this block.",
+]))
 region(0x2B2AC, S(0x74), emit_drumkits)
 region(S(0x74), NEXT[S(0x74)], mk_notemap(0x74))
 region(S(0x7C), NEXT[S(0x7C)], mk_notemap(0x7C))
@@ -814,10 +995,21 @@ HEADER = '''\t.text
 ;     block, a wave-select record, a drum-instrument record, a descriptor -- is
 ;     unknown throughout.  Where a comment states a field, it states a shape
 ;     (a count, an offset, a stride) that was measured, never a semantics.
-;   * Three regions resist framing and say so in place: the descriptor blocks at
-;     slots +0x30/+0x38/+0x70, the 768 extra bytes in the index map at +0x28,
-;     and the 8 x 128-byte table at +0xA8, for which the KN5000 has no name
-;     because it leaves that slot unused.
+;   * ⚠ WAVE 7 ROUND 2 changed this bullet.  It used to read "Three regions
+;     resist framing": the descriptor blocks at slots +0x30/+0x38/+0x70, the 768
+;     extra bytes in the index map at +0x28, and the 8 x 128-byte table at +0xA8.
+;     The first four are now FRAMED, each from evidence inside the image itself:
+;       - +0x30/+0x38/+0x70 are an ARRAY of 14-byte descriptors over a POOL, and
+;         the descriptors' own 32-bit offsets say where the array ends.  318, 161
+;         and 4 descriptors; header + pool tiles each block exactly; the LAST
+;         descriptor's offset is the last object in its pool.
+;       - the 768 bytes at 0x22A3B are SIX 128-byte monotone curves, and what
+;         says so is that all 318 part-A objects of slot +0x30 begin with a
+;         32-bit offset naming one of exactly those six addresses.
+;     What still resists: the 8 x 128-byte table at +0xA8 (the KN5000 leaves that
+;     slot unused, so there is no name to transplant and none is invented), and
+;     every FIELD inside a descriptor, a curve or a pool row.
+;     notes/prom_d_structures_round2.py, 78 checks.
 ;   * Directory slot +0x88 holds 0x125.  In the KN5000 the same slot holds a
 ;     SCALAR, not an offset.  Nothing here decides which prom_d means.
 ;
