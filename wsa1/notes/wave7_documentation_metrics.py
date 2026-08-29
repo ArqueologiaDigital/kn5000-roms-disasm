@@ -85,6 +85,17 @@ IMAGES = [("prom_a", "wsa1_prom_a.s", 0xF80000), ("prom_b", "wsa1_prom_b.s", 0xF
           ("prom_c", "wsa1_prom_c.s", 0xF80000), ("prom_d", "wsa1_prom_d.s", 0x000000)]
 
 EV_ADDRS = {}
+# ★★ AN INTERNAL BRANCH TARGET IS NOT A DOCUMENTATION DEBT.
+# prom_c spells the branch targets inside a routine as <parent>__<address> --
+# sub_FBDCD3__FBDD01, VoiceParams_Compute_A__FA1234. They are jump destinations,
+# the exact equivalent of the .L compiler-locals this script already excludes, and
+# they are NOT objects waiting for a name. The first four versions of this script
+# counted all 4,975 of them (24.7% of every label in the tree, 4,851 of them in
+# prom_c alone) as unnamed or merely framed, which is why prom_c read 11.8%
+# understood while being territorially complete and heavily annotated.
+# ⚠ The denominator changed when this was fixed, so figures from earlier rounds are
+# not comparable to later ones. Both are printed.
+INTERNAL = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*__[0-9A-Fa-f]{4,6}$')
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
 UNNAMED = re.compile(r'^sub_[0-9A-Fa-f]{6}$')
 # A "framed" name is a structural kind with an address glued on, in any of the
@@ -110,7 +121,7 @@ ADDR_COMMENT = re.compile(r';\s*([0-9A-F]{6})\b')
 def scan(path, want_ev=False):
     """Walk the source once, classifying every label and the comment block above it."""
     lines = open(os.path.join(ROOT, path)).read().split("\n")
-    named, framed, unnamed, with_header, with_evidence = [], [], [], 0, 0
+    named, framed, unnamed, internal, with_header, with_evidence = [], [], [], [], 0, 0
     run = 0                      # consecutive comment lines above
     blanks = 0                   # blank lines seen since the comment run ended
     last_addr = None
@@ -134,7 +145,9 @@ def scan(path, want_ev=False):
         lm = LABEL.match(ln)
         if lm:
             name = lm.group(1)
-            if UNNAMED.match(name):
+            if INTERNAL.match(name):
+                internal.append((name, last_addr))
+            elif UNNAMED.match(name):
                 unnamed.append((name, last_addr))
             elif FRAMED.match(name):
                 framed.append((name, last_addr))
@@ -146,27 +159,33 @@ def scan(path, want_ev=False):
                 with_evidence += 1
                 EV_ADDRS.setdefault(path, set()).add(last_addr)
         run, ev_in_block, blanks = 0, False, 0
-    return named, framed, unnamed, with_header, with_evidence
+    return named, framed, unnamed, internal, with_header, with_evidence
 
 
 def report(rng=None):
-    tn = tf = tu = th = te = 0
-    print("%-8s %9s %8s %9s %8s %8s %9s %9s"
-          % ("image", "content", "framed", "sub_XXXX", "LOWER", "UPPER", "headers", "evidence"))
+    tn = tf = tu = th = te = ti = 0
+    print("%-8s %9s %8s %9s %8s %8s %9s %9s  %8s"
+          % ("image", "content", "framed", "sub_XXXX", "LOWER", "UPPER", "headers", "evidence",
+             "internal"))
     for tag, src, _base in IMAGES:
-        named, framed, unnamed, hdr, ev = scan(os.path.join(tag, src))
-        n, f, u = len(named), len(framed), len(unnamed)
+        named, framed, unnamed, internal, hdr, ev = scan(os.path.join(tag, src))
+        n, f, u, il = len(named), len(framed), len(unnamed), len(internal)
+        ti += il
         tn, tf, tu, th, te = tn + n, tf + f, tu + u, th + hdr, te + ev
         tot = n + f + u
-        print("%-8s %9s %8s %9s %7.1f%% %7.1f%% %9s %9s"
+        print("%-8s %9s %8s %9s %7.1f%% %7.1f%% %9s %9s  %8s"
               % (tag, format(n, ","), format(f, ","), format(u, ","),
                  100.0 * n / tot if tot else 0.0,
-                 100.0 * (n + f) / tot if tot else 0.0, format(hdr, ","), format(ev, ",")))
+                 100.0 * (n + f) / tot if tot else 0.0, format(hdr, ","), format(ev, ","),
+                 format(il, ",")))
     tot = tn + tf + tu
-    print("%-8s %9s %8s %9s %7.1f%% %7.1f%% %9s %9s"
+    print("%-8s %9s %8s %9s %7.1f%% %7.1f%% %9s %9s  %8s"
           % ("TOTAL", format(tn, ","), format(tf, ","), format(tu, ","),
              100.0 * tn / tot if tot else 0.0, 100.0 * (tn + tf) / tot if tot else 0.0,
-             format(th, ","), format(te, ",")))
+             format(th, ","), format(te, ","), format(ti, ",")))
+    print("\n  'internal' = <parent>__<address> branch targets, EXCLUDED from the")
+    print("  percentages. They are jump destinations inside a routine, not objects")
+    print("  awaiting a name -- the same reason .L locals are excluded.")
     print("\n★ LOWER and UPPER BRACKET how much of the tree is UNDERSTOOD; neither alone is")
     print("  the answer, and the gap between them is the work of deciding what a name claims.")
     print("  LOWER treats every label whose distinguishing part is a number as merely FRAMED;")
@@ -180,7 +199,7 @@ def report(rng=None):
 def in_range(tag, lo, hi):
     key = tag if tag.startswith("prom_") else "prom_" + tag
     src = dict((t, s) for t, s, _b in IMAGES)[key]
-    named, framed, unnamed, _h, _e = scan(os.path.join(key, src))
+    named, framed, unnamed, _il, _h, _e = scan(os.path.join(key, src))
     n = [x for x in named if x[1] is not None and lo <= x[1] < hi]
     fr = [x for x in framed if x[1] is not None and lo <= x[1] < hi]
     u = [x for x in unnamed if x[1] is not None and lo <= x[1] < hi]
@@ -201,7 +220,7 @@ def selftest():
 
     tot_u = 0
     for tag, src, _b in IMAGES:
-        named, framed, unnamed, hdr, ev = scan(os.path.join(tag, src))
+        named, framed, unnamed, _il, hdr, ev = scan(os.path.join(tag, src))
         tot_u += len(unnamed)
         check("%s: every 'unnamed' really matches sub_ + 6 hex" % tag,
               all(UNNAMED.match(n) for n, _a in unnamed))
@@ -258,6 +277,20 @@ def selftest():
     for nm in ("Table_F4EF40", "PercInst_17", "DL_F17C00", "Bitmap_24x17_F17C59",
                "ToneDB_MixerDefaultTable_204"):
         check("classifier: %s is FRAMED, not content" % nm, bool(FRAMED.match(nm)))
+    # ★ Internal branch targets: excluded, but ONLY the undescriptive ones.
+    for nm in ("sub_FBDCD3__FBDD01", "VoiceParams_Compute_A__FA1234",
+               "P7Unit_EmitChangedParams__FB0011"):
+        check("classifier: %s is an INTERNAL branch target, excluded" % nm,
+              bool(INTERNAL.match(nm)))
+    for nm in ("RESET__clear_iram", "DSP_ChannelRegs_Init__loop",
+               "SeqBuf_AppendMarker__done", "Kernel_InitRam__ready_queues"):
+        check("classifier: %s is a DESCRIPTIVE branch label -- still counted" % nm,
+              not INTERNAL.match(nm) and not FRAMED.match(nm) and not UNNAMED.match(nm))
+    _tot_int = 0
+    for _t, _s, _b in IMAGES:
+        _tot_int += len(scan(os.path.join(_t, _s))[3])
+    check("internal branch targets excluded tree-wide: %s, nearly all in prom_c"
+          % format(_tot_int, ","), _tot_int > 4000)
     print("\n%d checks, %d failures" % (ok + fail, fail))
     return 1 if fail else 0
 
