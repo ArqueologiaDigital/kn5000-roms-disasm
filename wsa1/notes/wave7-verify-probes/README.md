@@ -156,6 +156,45 @@ chunk>=32  whole-run rule 0/1084 (0.0%)   with <=8-byte trim  35/1084 (3.2%)
 
 ---
 
+## The round-3 review probes
+
+Round 3's writers were reviewed the same way round 1's recon lanes were, and the reviewers found
+defects in names **already committed** -- which is the whole argument for the review phase, because
+a wrong name passes the byte gate forever.
+
+### `wave7_r3_promc_refute.py` -- ★ it refuted five claims in ONE header
+
+**"Do round 3's prom_c names survive a check that does not use the lane's own decoder?"**
+
+```
+python3 notes/wave7-verify-probes/wave7_r3_promc_refute.py     # 7 checks, 6 refuted
+```
+
+The seven new *names* all hold. Five *quantified claims* in one header do not: `ScaleCoeff_TimesAbsDepth_Shr`
+said "fifteen instructions" (it is thirty across its stated extent), said "★ THE RESULT IS NEVER
+POSITIVE" while the same header four lines below describes the `0x80` byte that negates to itself
+and flips the product's sign, and got three more ranges wrong. All corrected in `1706229`.
+
+★ **And it caught a flaw in the documentation metric itself.** prom_c's `headers` count rose by 35;
+the probe proved all 35 were **removed blank lines** sitting between an existing comment block and
+its label, with **zero** newly written headers -- the prose was already there and only the metric
+could not see it. `wave7_documentation_metrics.py` now tolerates one blank line between a block and
+its label. A measurement that moves when you delete whitespace is measuring the whitespace.
+
+### `wave7_r3_citation_check.py` -- are the cited addresses instruction starts?
+
+**"Does any Evidence: line cite an operand instead of the instruction that owns it?"**
+
+Result: **6 of 164 cited addresses are not instruction starts, and 0 carry the off-by-one
+signature** -- all six are data-table addresses correctly cited as data. That is a clean pass on the
+failure that hit lane a2 on 31 of 31 citations.
+
+### `wave7_r3_borrowed_names.py` -- do borrowed names come with their byte diff?
+
+**"For a name shared with a sibling routine, do the two really hold the same bytes, and is the
+differing count stated?"** It prints each pair's actual extents, so a claim of "34 bytes" that is
+59 on the other side cannot pass unnoticed.
+
 ## What is deliberately NOT here
 
 Thirty-two other scratch files — `try1.py`…`try5.py`, `probe1.py`…`probe8.py`, `codesegs*.py`,

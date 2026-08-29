@@ -61,8 +61,15 @@ WHAT COUNTS AS WHAT
       -- counting them was a real error in a wave-7 audit (they inflated a
       label count by 8,237).
     * An "Evidence:" line is a comment line stating why a name is what it is.
-    * A HEADER is a comment block of >= 3 consecutive comment lines immediately
-      above a label -- the house style used around DSP_ChanFreq_CurvePool.
+    * A HEADER is a comment block of >= 3 consecutive comment lines above a label,
+      with at most ONE blank line between the block and the label -- the house
+      style used around DSP_ChanFreq_CurvePool.
+      ⚠ The blank-line tolerance was added in round 3 because without it the count
+      was an artefact of whitespace: a wave-7 reviewer proved that prom_c's whole
+      +35 "headers" gain was 35 REMOVED BLANK LINES, each sitting between an
+      existing comment block and its label, with zero newly written headers. The
+      prose was already there; only the metric could not see it. A measurement
+      that moves when you delete whitespace is measuring the whitespace.
 
 RUN
     python3 notes/wave7_documentation_metrics.py
@@ -104,7 +111,8 @@ def scan(path, want_ev=False):
     """Walk the source once, classifying every label and the comment block above it."""
     lines = open(os.path.join(ROOT, path)).read().split("\n")
     named, framed, unnamed, with_header, with_evidence = [], [], [], 0, 0
-    run = 0                      # consecutive comment lines immediately above
+    run = 0                      # consecutive comment lines above
+    blanks = 0                   # blank lines seen since the comment run ended
     last_addr = None
     ev_in_block = False
     for ln in lines:
@@ -115,6 +123,13 @@ def scan(path, want_ev=False):
             run += 1
             if "Evidence:" in ln:
                 ev_in_block = True
+            blanks = 0
+            continue
+        if ln.strip() == "" and run:
+            # One blank line does not break a header block; two do.
+            blanks += 1
+            if blanks > 1:
+                run, ev_in_block, blanks = 0, False, 0
             continue
         lm = LABEL.match(ln)
         if lm:
@@ -130,7 +145,7 @@ def scan(path, want_ev=False):
             if ev_in_block:
                 with_evidence += 1
                 EV_ADDRS.setdefault(path, set()).add(last_addr)
-        run, ev_in_block = 0, False
+        run, ev_in_block, blanks = 0, False, 0
     return named, framed, unnamed, with_header, with_evidence
 
 
