@@ -53,13 +53,13 @@ misreported downstream.
 
 ## Status
 
-**Converted: 1,831,108 of 2,097,152 bytes (87.3%)** -- of which 1,420,501 substantive (67.7%) and 410,607 verified filler.
+**Converted: 1,849,540 of 2,097,152 bytes (88.2%)** -- of which 1,438,933 substantive (68.6%) and 410,607 verified filler.
 
 | source | image | substantive | filler | still `.incbin` | `.incbin` spans |
 |---|---|---:|---:|---:|---:|
-| `prom_a/` | `wsa1_prom_a.ic12` | 374,691 | 43,012 | 106,585 | 49 |
-| `prom_b/` | `wsa1_prom_b.ic13` | 320,217 | 44,612 | 159,459 | 148 |
-| `prom_c/` | `wsa1_prom_c.ic28` | 395,072 | 129,216 | 0 | 34 |
+| `prom_a/` | `wsa1_prom_a.ic12` | 393,123 | 43,012 | 88,153 | 12 |
+| `prom_b/` | `wsa1_prom_b.ic13` | 320,217 | 44,612 | 159,459 | 124 |
+| `prom_c/` | `wsa1_prom_c.ic28` | 395,072 | 129,216 | 0 | 0 |
 | `prom_d/` | `wsa1_prom_d.bin` | 330,521 | 193,767 | 0 | 0 |
 
 ⚠ **Quote the substantive column, not the total.** Wave 3 converted 123,151 bytes of prom_c of

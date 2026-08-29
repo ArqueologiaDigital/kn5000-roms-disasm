@@ -31,6 +31,16 @@ first place is that no check reproduced the number.
 | d1 | its own label count (25,675) and script count (194) struck; 17,438 / 191 stand | ⬜ pending |
 | — | gap T: five PA writes, not four (found against MY census, not a lane's) | ✅ applied |
 
+## Converted
+
+**a1 / prom_a 0xFAD800-0xFB2000 — CONVERTED, gate green.** 18,432 bytes, by
+`notes/gen_prom_a_fad800_module.py`, which re-derives the layout on every run and refuses to print
+unless the emitted text re-assembles to the ROM exactly. It retired all three thunk runs that
+pointed into it (prom_a's frontier went 14 runs -> 11) and added 84 `sub_XXXXXX:` labels, each
+carrying the entry-point evidence that justifies it. It is the only span in this wave that has
+been converted, and it is the one whose dossier survived verification AND had its corrections
+applied first.
+
 ## Not verified at all
 
 **a4** (prom_a 0xF85FF9), **b2** (prom_b 0xF4F000) and **c1** (the prom_c 0xFCD0F7 interpreter
