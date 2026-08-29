@@ -208,7 +208,6 @@
 ; that reads like an in-use flag; nothing here proves it.
 ;
 ; PROVENANCE unchanged: the publicly redistributed v2 firmware set, not a chip read.
-
 wsa1_prom_c:
 ; Evidence: the whole-region name for the block argued at length in the banner above and
 ;           in notes/FINDINGS-prom_c-preset-bank.md; re-proved by
@@ -39231,7 +39230,7 @@ KeyMap_LookupByPitch:
 ;          0xFA8210 in Voice_SelectKeyZone_Reg0040__FA81C1
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0E)
 ; Outputs: writes 0x005A4F, 0x00D760
-; Calls:   0xFC4D85 = sub_FC4D85
+; Calls:   0xFC4D85 = Pack104_SetInputs_Rec0C_E08C
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA7467-0xFA74AA
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -39241,7 +39240,7 @@ KeyMap_LookupByPitch:
 ;          and copy record word 0 into staging word 1 (RAM 0x00D760), which
 ;          Dev10C_WriteAllChanRegs sends to 0x0010C000 register `chan + 0x0040`.  It also
 ;          stores the record cursor in voice[+0x0F], ORs 0x6000 into voice[+0x01], and hands
-;          three record bytes to sub_FC4D85 for the 0x00104000 side.
+;          three record bytes to Pack104_SetInputs_Rec0C_E08C for the 0x00104000 side.
 ; Evidence: the stride is the `ld C,imm8` at offset +9 of the body; the mask is the
 ;          `or (XHL+0x01),imm16` at +0x1D; the store is `ld (0x00D760),BC`.
 ;          ⚠ THE FOUR ARE NOT COPIES OF ONE ANOTHER -- pairwise, 18 to 38 of the bytes they
@@ -39285,7 +39284,7 @@ KeyZone_Stage_Reg0040_Stride8:
 ;          0xFA8215 in Voice_SelectKeyZone_Reg0040__FA8215
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0E)
 ; Outputs: writes 0x005A4F, 0x00D760
-; Calls:   0xFC4D85 = sub_FC4D85
+; Calls:   0xFC4D85 = Pack104_SetInputs_Rec0C_E08C
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA74AB-0xFA74EC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -39295,7 +39294,7 @@ KeyZone_Stage_Reg0040_Stride8:
 ;          and copy record word 0 into staging word 1 (RAM 0x00D760), which
 ;          Dev10C_WriteAllChanRegs sends to 0x0010C000 register `chan + 0x0040`.  It also
 ;          stores the record cursor in voice[+0x0F], ORs 0x6000 into voice[+0x01], and hands
-;          three record bytes to sub_FC4D85 for the 0x00104000 side.
+;          three record bytes to Pack104_SetInputs_Rec0C_E08C for the 0x00104000 side.
 ; Evidence: the stride is the `ld C,imm8` at offset +9 of the body; the mask is the
 ;          `or (XHL+0x01),imm16` at +0x1D; the store is `ld (0x00D760),BC`.
 ;          ⚠ THE FOUR ARE NOT COPIES OF ONE ANOTHER -- pairwise, 18 to 38 of the bytes they
@@ -39337,7 +39336,7 @@ KeyZone_Stage_Reg0040_Stride6A:
 ;          0xFA8229 in Voice_SelectKeyZone_Reg0040__FA821A
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0E)
 ; Outputs: writes 0x005A4F, 0x00D760
-; Calls:   0xFC4D85 = sub_FC4D85
+; Calls:   0xFC4D85 = Pack104_SetInputs_Rec0C_E08C
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA74ED-0xFA752E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -39347,7 +39346,7 @@ KeyZone_Stage_Reg0040_Stride6A:
 ;          and copy record word 0 into staging word 1 (RAM 0x00D760), which
 ;          Dev10C_WriteAllChanRegs sends to 0x0010C000 register `chan + 0x0040`.  It also
 ;          stores the record cursor in voice[+0x0F], ORs 0x4000 into voice[+0x01], and hands
-;          three record bytes to sub_FC4D85 for the 0x00104000 side.
+;          three record bytes to Pack104_SetInputs_Rec0C_E08C for the 0x00104000 side.
 ; Evidence: the stride is the `ld C,imm8` at offset +9 of the body; the mask is the
 ;          `or (XHL+0x01),imm16` at +0x1D; the store is `ld (0x00D760),BC`.
 ;          ⚠ THE FOUR ARE NOT COPIES OF ONE ANOTHER -- pairwise, 18 to 38 of the bytes they
@@ -39389,7 +39388,7 @@ KeyZone_Stage_Reg0040_Stride6B:
 ;          0xFA822E in Voice_SelectKeyZone_Reg0040__FA822E
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0E)
 ; Outputs: writes 0x005A4F, 0x00D760
-; Calls:   0xFC4D85 = sub_FC4D85
+; Calls:   0xFC4D85 = Pack104_SetInputs_Rec0C_E08C
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA752F-0xFA756F
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -39399,7 +39398,7 @@ KeyZone_Stage_Reg0040_Stride6B:
 ;          and copy record word 0 into staging word 1 (RAM 0x00D760), which
 ;          Dev10C_WriteAllChanRegs sends to 0x0010C000 register `chan + 0x0040`.  It also
 ;          stores the record cursor in voice[+0x0F], ORs none into voice[+0x01], and hands
-;          three record bytes to sub_FC4D85 for the 0x00104000 side.
+;          three record bytes to Pack104_SetInputs_Rec0C_E08C for the 0x00104000 side.
 ; Evidence: the stride is the `ld C,imm8` at offset +9 of the body; the mask is the
 ;          `or (XHL+0x01),imm16` at +0x1D; the store is `ld (0x00D760),BC`.
 ;          ⚠ THE FOUR ARE NOT COPIES OF ONE ANOTHER -- pairwise, 18 to 38 of the bytes they
@@ -39550,7 +39549,7 @@ Clamp_ToRange_Word__FA75B6:
 	unlk32 xiz                                 ; FA75B7  unlk XIZ
 	ret                                        ; FA75B9  ret
 ; --------------------------------------------------------------------------
-; sub_FA75BA -- 0xFA75BA..0xFA7601 (72 bytes)
+; ScaleCoeff_TimesAbsDepth_Shr -- 0xFA75BA..0xFA7601 (72 bytes)
 ;
 ; Called from: 20 site(s) outside this module:
 ;          0xFA84BE in sub_FA842D__FA84A3, 0xFA93D4 in sub_FA93AF
@@ -39571,17 +39570,48 @@ Clamp_ToRange_Word__FA75B6:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ WHAT IT COMPUTES.  The body is fifteen instructions and there is nothing else in it:
+;     0xFA75BF  ld L,(XIZ+0x08)          the DEPTH, tested as a signed byte
+;     0xFA75C2  ld H,(XIZ+0x0a)          the POSITION
+;     0xFA75C5  res 0x07,H               ...taken modulo 0x80
+;     0xFA75C8  cp L,0 / jr GE           if the depth is negative:
+;     0xFA75D2  add XBC,0x00FDD5AB         H = Voice_DepthMirror_Table[H], i.e. 0x7F - H
+;     0xFA75DC  cpl A / inc 1,A            L = -L
+;     0xFA75EA  add XBC,0x00FDD62B       A = PitchBend_ScaleCoeff_Table[H]
+;     0xFA75F2  muls WA,L                SIGNED 8x8 -> 16: coeff * |depth|
+;     0xFA75FA  call Shift16_ArithRight(product, (XIZ+0x0c))
+;   The depth's SIGN is therefore not carried into the product -- it chooses which end of
+;   the coefficient curve is read.
+; ★ THE RESULT IS NEVER POSITIVE.  All 128 entries of PitchBend_ScaleCoeff_Table are in
+;   [-64, 0] as signed bytes, so the product is <= 0 and so is the shifted result.  That is
+;   why Voice_StageRegs_0500_08C0_AB adds 0x7F: with a count of 6 the value lands in
+;   [-127, 0], 0x7F + it lands in [0, 0x7F] -- exactly the 7-bit low byte of register
+;   0x0500 + chan -- and the caller's Clamp_ToRange_Word(x, 0, 0x7F) does nothing at all.
+; Called with count 4 at 18 of the 20 sites and with count 6 at 2 (both inside
+;   Voice_StageRegs_0500_08C0_AB).
+; Evidence: `python3 notes/prom_c_naming_round3.py --scale` evaluates the datapath
+;          EXHAUSTIVELY -- all 256 depth bytes against all 128 positions, against the two
+;          ROM tables read at their `add XBC,imm32` operands -- and reports that the clamp
+;          changes its argument for exactly ONE depth byte, 0x80, at 127 of the 128
+;          positions.  0x80 is the one value whose two's-complement negation at
+;          0xFA75DC-0xFA75E2 overflows back to itself, so the product changes sign; the
+;          clamp exists for that case and no other.  `--claims C6` re-derives the 20/18/2
+;          call-site split and checks the total against an independent grep.
+; Unknown:  ⚠ what the two arguments MEAN.  "depth" and "position" are the roles the
+;          arithmetic gives them, not decoded quantities, and the two table names come
+;          from the KN5000 sibling (see each table's own header) rather than from here.
+;          ⚠ with the count of 4 that 18 callers pass, the result spans [-508, 0], which
+;          does NOT fit a 7-bit field.  Nothing was traced about what those callers do
+;          with it.
 ; --------------------------------------------------------------------------
-sub_FA75BA:
+ScaleCoeff_TimesAbsDepth_Shr:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA75BA  link XIZ,0x0000
 	pushw	hl                                   ; FA75BE  push HL
 	ld	l, (xiz+8)                              ; FA75BF  ld L,(XIZ+0x08)
 	ld	h, (xiz+10)                             ; FA75C2  ld H,(XIZ+0x0a)
 	res	7, h                                   ; FA75C5  res 0x07,H
 	cps	l, 0                                   ; FA75C8  cp L,0
-	jr ge, sub_FA75BA__FA75E4                  ; FA75CA  jr GE,0xfa75e4
+	jr ge, ScaleCoeff_TimesAbsDepth_Shr__FA75E4                  ; FA75CA  jr GE,0xfa75e4
 	ld	c, h                                    ; FA75CC  ld C,H
 	extz	bc                                    ; FA75CE  extz BC
 	extz	xbc                                   ; FA75D0  extz XBC
@@ -39592,7 +39622,7 @@ sub_FA75BA:
 	ld	l, a                                    ; FA75DE  ld L,A
 	inc	1, a                                   ; FA75E0  inc 1,A
 	ld	l, a                                    ; FA75E2  ld L,A
-sub_FA75BA__FA75E4:
+ScaleCoeff_TimesAbsDepth_Shr__FA75E4:
 	ld	c, h                                    ; FA75E4  ld C,H
 	extz	bc                                    ; FA75E6  extz BC
 	extz	xbc                                   ; FA75E8  extz XBC
@@ -41655,7 +41685,7 @@ sub_FA814C:
 ;          a specific prom_d structure is one of these arrays; the RAM objects holding the
 ;          offsets have no traced loader.  notes/prom_c_dev10c_meaning_checks.py section 16.
 ; Unknown:  what the zone records ARE.  Their first word reaches the hardware; their bytes
-;          at +4, +5 and +6 go to sub_FC4D85, which stashes them for the 0x00104000 packer.
+;          at +4, +5 and +6 go to Pack104_SetInputs_Rec0C_E08C, which stashes them for the 0x00104000 packer.
 ; --------------------------------------------------------------------------
 Voice_SelectKeyZone_Reg0040:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FA819A  link XIZ,0xfff4
@@ -42073,7 +42103,7 @@ Voice_StagePitch_Reg0400_CD__FA841D:
 ;          0xFB0B11 in VoiceRegs_Stage_A, 0xFB1EFF in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-20`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D77E, 0x00D780, 0x00D782
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
 ;          0xFC7FCA = sub_FC7FCA
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA842D-0xFA866A
@@ -44262,7 +44292,7 @@ Voice_StagePair_Reg0100_0140_CD__FA93A9:
 ;          0xFB0B20 in VoiceRegs_Stage_A, 0xFB1F0E in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D784, 0x00D786, 0x00D788
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA93AF-0xFA95D3
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -44513,7 +44543,7 @@ sub_FA93AF__FA9556:
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D774, 0x00D77C
 ;          reads 0x00D77E
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA7654 = DetuneCurve_LookupUnsigned
 ;          0xFC810C = sub_FC810C
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA95D4-0xFA96F6
@@ -44526,9 +44556,9 @@ sub_FA93AF__FA9556:
 ;          are word 11; `ld (0x00d77c),BC` at 0xFA96C3 and 0xFA96EC are word 15.
 ; ★ REGISTER 0x0500 + chan IS ASSEMBLED AS A BYTE PAIR, AND ITS HIGH BYTE COMES OUT OF
 ;          THE DETUNE CURVE:
-;              hi = Clamp_ToRange_Word( sub_FA75BA(tone[+0x12], voice[+0x0C], 6)
+;              hi = Clamp_ToRange_Word( ScaleCoeff_TimesAbsDepth_Shr(tone[+0x12], voice[+0x0C], 6)
 ;                                       + DetuneCurve_LookupSigned(...), 0, 0x7F )
-;              lo = Clamp_ToRange_Word( sub_FA75BA(tone[+0x48], voice[+0x0C], 6) + 0x7F,
+;              lo = Clamp_ToRange_Word( ScaleCoeff_TimesAbsDepth_Shr(tone[+0x48], voice[+0x0C], 6) + 0x7F,
 ;                                       0, 0x7F ) & 0xFF
 ;              word 11 = (hi << 8) | lo                      (`sll 0x08,WA / or WA,BC`,
 ;                                                             0xFA96AB-0xFA96B0)
@@ -44549,7 +44579,7 @@ sub_FA93AF__FA9556:
 ;          lookup is what that predicts; see
 ;          notes/FINDINGS-prom_c-dev10c-sibling-register-map.md §5.  ⚠ No byte comparison
 ;          was made for this routine, and "bend" is not asserted here.
-; Unknown:  what sub_FA75BA computes, and what tone fields +0x12 and +0x48 are.
+; Unknown:  what ScaleCoeff_TimesAbsDepth_Shr computes, and what tone fields +0x12 and +0x48 are.
 ; --------------------------------------------------------------------------
 Voice_StageRegs_0500_08C0_AB:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FA95D4  link XIZ,0xfff6
@@ -46328,7 +46358,7 @@ sub_FAA3EB__FAA478:
 ; Inputs:  frame `link XIZ,-15`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D776
 ;          reads 0x0014FF
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA766C = ScaleClampedDelta_Shr5
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA4C3-0xFAA87D
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -46883,7 +46913,7 @@ sub_FAA87E__FAA966:
 ;          0xFB2843 in VoiceRegs_Stage_C, 0xFB2F18 in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D776
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA96C-0xFAABFF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -47302,7 +47332,7 @@ sub_FAAC00__FAACE8:
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D776
 ;          reads 0xFDEF8E
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37E2 = sub_FC37E2
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAACEE-0xFAB0BC
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -47749,7 +47779,7 @@ sub_FAACEE__FAB070:
 ;          0xFB1F7B in VoiceRegs_Stage_B__FB1F7B
 ; Inputs:  frame `link XIZ,-15`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D776
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37BE = sub_FC37BE
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB0BD-0xFAB489
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -49141,7 +49171,7 @@ Dev10C_StageRegs_0800_0840_FAB9D8__FABAC9:
 ;          0xFB3E28 in Voice_Retire_Mode08__FB3E26
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D78E, 0x00D790
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
 ;          0xFC8129 = sub_FC8129
 ; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
@@ -49308,7 +49338,7 @@ Dev10C_StageRegs_0900_0940__FABBF5:
 ;          0xFB3E2D in Voice_Retire_Mode08__FB3E26
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D792, 0x00D794
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
 ; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
 ;          absolute stores below are the routine's only absolute-addressed output, and
@@ -52049,6 +52079,29 @@ Dev10C_SetChanReg_0840_0880:
 ; Evidence: `add hl,0x0840` then `add bc,0x0800`; sources (xbc+46) and (xbc+44).
 ; Unknown:  why this one writes the higher block first when
 ;          Dev10C_SetChanReg_0840_0880 writes the lower first.
+; ★★ ROUND 3 -- THIS ROUTINE IS WHY THE STAGING STRUCT'S SIZE IS KNOWN.  It reads
+;   fields +0x2C and +0x2E, which are PAST the 22 words (+0x00..+0x2A) that
+;   Dev10C_WriteAllChanRegs commits.  Four readings close on one number:
+;     1. 0x00D75E + 0x2C = 0x00D78A -- the absolute address round 2's
+;        Dev10C_WriteSixChanRegs_FromD78A commits registers 0x0800/0x0840/0x0900/
+;        0x0940/0x09C0/0x0A00 from.  It maps +0x2C -> 0x0800 and +0x2E -> 0x0840,
+;        exactly as this routine does.
+;     2. Dev10C_ResetAllChannels copies 0x44 = 68 bytes (`push 0x0044` at 0xFB814B)
+;        from ROM 0xFE12CF into a second instance at RAM 0x00D8DB.
+;     3. 0x00D75E + 0x44 = 0x00D7A2 -- the pointer VoiceRegs_Stage_A pushes at
+;        0xFB0B5B as the 0x00104000 staging struct.  The two structs abut.
+;     4. The highest field any accessor reads is +0x42 (Dev10C_SetChanReg_0640),
+;        which is the last word that fits in 68 bytes.
+;   So the 0x0010C000 staging struct is RAM 0x00D75E..0x00D7A1, 68 bytes:
+;     +0x00..+0x2A  the 22 words Dev10C_WriteAllChanRegs commits
+;     +0x2C..+0x36  the six words Dev10C_WriteSixChanRegs_FromD78A commits
+;     +0x38..+0x42  the slot gate/value words the Dev10C_Slot* writers commit
+; ⚠ NOT ESTABLISHED: why registers 0x0800 and 0x0840 have TWO committers reading
+;   two different words.  The reset image disagrees with itself about 0x0800 --
+;   word 12 (+0x18) is 0xFF80 and word 22 (+0x2C) is 0xA080 -- so the two paths are
+;   alternatives, and nothing here says which one runs when.
+; Evidence: `python3 notes/prom_c_naming_round3.py --struct` prints the ten checks
+;          above and the whole 68-byte image, word by word, out of the ROM.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_0800:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FACEDE  ee 0c fc ff
@@ -52137,6 +52190,16 @@ Dev10C_SetChanReg_0100_0140:
 ;
 ; Called from: 0xFAE092, 0xFAE0F8.
 ; Evidence / Inputs / Outputs: see 0xFACEA2.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFACF81  `add rr,0x0840` forms the select value chan+0x0840,
+;          0xFACF8F  `ld rr,(XBC+0x1A)` fetches the staging word it is
+;                    given -- struct offset +0x1A.
+;          0xFACF9E  `add rr,0x0880` forms the select value chan+0x0880,
+;          0xFACFA7  `ld rr,(XBC+0x1C)` fetches the staging word it is
+;                    given -- struct offset +0x1C.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_0880_dup:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FACF78  ee 0c fc ff
@@ -52166,6 +52229,13 @@ Dev10C_SetChanReg_0840_0880_dup:
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0180 -- register (chan + 0x0180) = staging->0x0C.
 ; Called from: 0xFAE650, 0xFAE78C.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFACFBD  `add rr,0x0180` forms the select value chan+0x0180,
+;          0xFACFCB  `ld rr,(XBC+0x0C)` fetches the staging word it is
+;                    given -- struct offset +0x0C.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0180:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACFB4  ee 0c 00 00
@@ -52185,6 +52255,27 @@ Dev10C_SetChanReg_0180:
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0440 -- register (chan + 0x0440) = staging->0x10.
 ; Called from: 0xFAE3D3, 0xFAE50D.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFACFDF  `add rr,0x0440` forms the select value chan+0x0440,
+;          0xFACFED  `ld rr,(XBC+0x10)` fetches the staging word it is
+;                    given -- struct offset +0x10.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
+; ★ GAP A, round 3 -- what IS established about register chan+0x0440:
+;   * it is committed from staging word 8, at struct offset +0x10, both by
+;     this accessor and by Dev10C_WriteAllChanRegs (0xFB713A); two independent
+;     readings of the same pairing.
+;   * its POWER-ON value is 0x0000, and the ROM bytes that say so are at
+;     0xFE12DF -- offset +0x10 of the 68-byte reset image at 0xFE12CF that
+;     Dev10C_ResetAllChannels copies to RAM 0x00D8DB.  ⚠ The copy is at
+;     0xFB8146 / 0xFB814B / 0xFB814F (lda XIX,0x00d8db / push 0x0044 /
+;     lda XWA,0xfe12cf); notes/prom_c_gapA_remaining_regs.py cites 0xFB8175
+;     for it, which is the argument load of the NEXT loop -- corrected here,
+;     see notes/wave7-round1/README.md lane g1.
+; ⚠ NOT ESTABLISHED: what the register DOES.  0x0000 is what the ROM holds, not
+;   a meaning, and this round did not re-derive the channel-cross-reference
+;   reading that prom_c_gapA_remaining_regs.py argues for.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0440:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACFD6  ee 0c 00 00
@@ -52204,6 +52295,27 @@ Dev10C_SetChanReg_0440:
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_04C0 -- register (chan + 0x04C0) = staging->0x14.
 ; Called from: 0xFAE8D1, 0xFAEA0F.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFAD001  `add rr,0x04C0` forms the select value chan+0x04C0,
+;          0xFAD00F  `ld rr,(XBC+0x14)` fetches the staging word it is
+;                    given -- struct offset +0x14.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
+; ★ GAP A, round 3 -- what IS established about register chan+0x04C0:
+;   * it is committed from staging word 10, at struct offset +0x14, both by
+;     this accessor and by Dev10C_WriteAllChanRegs (0xFB713A); two independent
+;     readings of the same pairing.
+;   * its POWER-ON value is 0x0000, and the ROM bytes that say so are at
+;     0xFE12E3 -- offset +0x14 of the 68-byte reset image at 0xFE12CF that
+;     Dev10C_ResetAllChannels copies to RAM 0x00D8DB.  ⚠ The copy is at
+;     0xFB8146 / 0xFB814B / 0xFB814F (lda XIX,0x00d8db / push 0x0044 /
+;     lda XWA,0xfe12cf); notes/prom_c_gapA_remaining_regs.py cites 0xFB8175
+;     for it, which is the argument load of the NEXT loop -- corrected here,
+;     see notes/wave7-round1/README.md lane g1.
+; ⚠ NOT ESTABLISHED: what the register DOES.  0x0000 is what the ROM holds, not
+;   a meaning, and this round did not re-derive the channel-cross-reference
+;   reading that prom_c_gapA_remaining_regs.py argues for.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_04C0:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACFF8  ee 0c 00 00
@@ -52223,6 +52335,13 @@ Dev10C_SetChanReg_04C0:
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0600 -- register (chan + 0x0600) = staging->0x40.
 ; Called from: 0xFAE475, 0xFAE598.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFAD023  `add rr,0x0600` forms the select value chan+0x0600,
+;          0xFAD031  `ld rr,(XBC+0x40)` fetches the staging word it is
+;                    given -- struct offset +0x40.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0600:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD01A  ee 0c 00 00
@@ -52243,6 +52362,13 @@ Dev10C_SetChanReg_0600:
 ; Dev10C_SetChanReg_0580 -- register (chan + 0x0580) = staging->0x3C.
 ; Called from: 0xFAE5B7.  No copy of this body exists elsewhere in prom_c
 ;              (`--dups`), unlike thirteen of its neighbours.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFAD045  `add rr,0x0580` forms the select value chan+0x0580,
+;          0xFAD053  `ld rr,(XBC+0x3C)` fetches the staging word it is
+;                    given -- struct offset +0x3C.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0580:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD03C  ee 0c 00 00
@@ -52262,6 +52388,13 @@ Dev10C_SetChanReg_0580:
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_01C0 -- register (chan + 0x01C0) = staging->0x38.
 ; Called from: 0xFAE6F4, 0xFAE819.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFAD067  `add rr,0x01C0` forms the select value chan+0x01C0,
+;          0xFAD075  `ld rr,(XBC+0x38)` fetches the staging word it is
+;                    given -- struct offset +0x38.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_01C0:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD05E  ee 0c 00 00
@@ -52281,6 +52414,13 @@ Dev10C_SetChanReg_01C0:
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0540 -- register (chan + 0x0540) = staging->0x3A.
 ; Called from: 0xFAE838.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFAD089  `add rr,0x0540` forms the select value chan+0x0540,
+;          0xFAD097  `ld rr,(XBC+0x3A)` fetches the staging word it is
+;                    given -- struct offset +0x3A.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0540:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD080  ee 0c 00 00
@@ -52310,11 +52450,29 @@ Dev10C_SetChanReg_0540:
 ; Evidence: `cp hl,0x0040` / `jr nc,...`.  On TLCS-900 CF is set when the first
 ;          operand is the smaller, so NC is taken for chan >= 0x40.  The two arms
 ;          are otherwise the same six instructions with different constants.
-; ⚠ WHAT THE SPLIT MEANS IS NOT ESTABLISHED.  The obvious reading -- that the
-;          first 64 channels are one kind of voice and the rest another -- is a
-;          reading.  What IS on the ROM: the arms differ in the register block AND
-;          in which staging field they read, so the two ranges are not the same
-;          parameter relocated; they are different parameters.
+; ★★ CORRECTED (wave 7 round 3) -- THE SPLIT IS NOW ESTABLISHED, and the last
+;   sentence of the old paragraph ("they are different parameters") was WRONG.
+;   Decoding all eight Dev10C_Slot* writers with the same scanner gives:
+;       slot   gate register   gate word   value register   value word
+;         1     chan+0x0540      +0x3A       chan+0x01C0       +0x38
+;         2     chan+0x0580      +0x3C       chan+0x0600       +0x40
+;         3     chan+0x05C0      +0x3E       chan+0x0640       +0x42
+;   This routine's LOW arm is slot 1's value (0x01C0, +0x38).  Its HIGH arm uses
+;   register 0x0600 with struct word +0x42 -- and +0x42 is SLOT 3's value word,
+;   while the register arithmetic is an identity:
+;       0x0600 + chan  ==  0x0640 + (chan - 0x40)   for every chan in 0x40..0x7F
+;   so the high arm IS slot 3, addressed with the lower block base and an
+;   un-decremented channel.  The same holds for Dev10C_SetChanReg_0540_or_0580
+;   (0x0580 + chan == 0x05C0 + (chan - 0x40), word +0x3E = slot 3's gate) and for
+;   the two Dev10C_Slot1or3_* routines, whose name was right all along.
+;   A register block is therefore 0x40 = 64 channels wide, which is also the
+;   literal loop counter `ld D,0x40` at 0xFB8116 in Dev10C_ResetAllChannels.
+; Evidence: `python3 notes/prom_c_naming_round3.py --slots` decodes the table from
+;          the ROM and reports that of the (register, word) pairs these ten routines
+;          use, 8 are the slot-3 alias and ZERO are unexplained; `--claims C12/C13`
+;          assert that and the 0x40 counter byte.
+; ⚠ STILL NOT ESTABLISHED: what a slot IS.  Three parallel (gate, value) pairs per
+;   channel is the structure; "partial", "operator" and "envelope stage" all fit it.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_01C0_or_0600:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD0A2  ee 0c 00 00
@@ -60485,7 +60643,6 @@ sub_FB0338__FB0500:
 ; Unknown:  ⚠ what P9 bit 0 is wired to, and what bit 2 of (0x14FF) selects.  What
 ;          the eight base slots are indexed BY.  What is at expansion-board +0x10
 ;          beyond "a link, 0xFFFFFFFF means none".
-
 ExtBoard_ProbeAndInstallBases:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB0504  link XIZ,0xfffc
 	pushw	hl                                   ; FB0508  push HL
@@ -60580,7 +60737,6 @@ ExtBoard_ProbeAndInstallBases__FB05CD:
 ;          converted but unexplained (⚠ CORRECTED 2026-08-25: this line said "all
 ;          still .incbin"; all three are converted).  The name records the
 ;          mechanism, not a purpose.
-
 Toggle14FE_AndDispatch:
 	push	xix                                   ; FB05EC  push XIX
 	lda_d16	xix, (0x14FE)                      ; FB05ED  lda XIX,0x14fe
@@ -60671,7 +60827,6 @@ Toggle14FE_AndDispatch__FB0605:
 ;          ⚠ the 0x80 arm has TWO sub-paths, chosen on bit 3 of the status byte's
 ;          low nibble and on `cp DE,6`; both consume six bytes and both end at the
 ;          same `call 0xFC2600`, and what distinguishes them is not traced.
-
 MidiIn_ParseRingAndDispatch:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FB060A  link XIZ,0xfff0
 	pushw	hl                                   ; FB060E  push HL
@@ -61089,7 +61244,6 @@ MidiIn_ParseRingAndDispatch__FB0A07:
 ; Unknown:  ⚠ WHY a note-on at velocity 1 is part of a boot sequence that ends
 ;          with All Sound Off.  Priming the engine is the obvious reading and it
 ;          is not established here.
-
 MidiMsg_SendBootSequence:
 	push	xix                                   ; FB0A0D  push XIX
 	lda_24	xix, (0xD7D8)                       ; FB0A0E  lda XIX,0x00d7d8
@@ -61146,7 +61300,6 @@ MidiMsg_SendBootSequence:
 ; Unknown:  ⚠ what registers `n` and `n+0xC0` are, and what 0x7E00 means.
 ;          "Reset" is the shape -- two registers driven to fixed values and a
 ;          record word cleared -- not a decoded meaning.
-
 Dev10C_ChanReset:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB0A8B  link XIZ,0x0000
 	pushw	hl                                   ; FB0A8F  push HL
@@ -61212,10 +61365,9 @@ Dev10C_ChanReset:
 ;          it takes the struct POINTER as its only argument and writes 19 offsets
 ;          0x00..0x24 through it -- exactly the span Dev104_WriteAllChanRegs reads.
 ;          Its inputs are the pointer block at RAM 0x00E082-0x00E08D, which
-;          sub_FC4BB6 / sub_FC4C85 / sub_FC4D63 / sub_FC4DA1 set from the part and
+;          sub_FC4BB6 / sub_FC4C85 / Pack104_SetInputs_E088_E089_E08A / Pack104_SetInputs_Rec0E_E08D set from the part and
 ;          voice records.  See notes/FINDINGS-prom_c-dev10c-producers.md.
 ;          ⚠ "_A" is a label for "the variant part mode 0x00 uses", nothing more.
-
 VoiceRegs_Stage_A:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB0AD0  link XIZ,0x0000
 	pushw	hl                                   ; FB0AD4  push HL
@@ -61331,7 +61483,6 @@ VoiceRegs_Stage_A:
 ;          add THE SAME THREE callees the orphans lack -- MemCopyWords (0xF9A038),
 ;          0xFA6BB5 and 0xFC376C.  One shared difference across four independent
 ;          pairs is a fact; what it MEANS is still not asserted.
-
 sub_FB0B95:
 	link32 0xEE, 0x0C, 0xD4, 0xFF              ; FB0B95  link XIZ,0xffd4
 	push	xhl                                   ; FB0B99  push XHL
@@ -61615,7 +61766,6 @@ sub_FB0B95__FB0E49:
 ;          operands are all still-unconverted tables is not something this pass
 ;          decodes; what is established is the ROUTINE'S PLACE in the chain, not
 ;          its formulae.
-
 VoiceParams_Compute_A:
 	link32 0xEE, 0x0C, 0xD8, 0xFF              ; FB0E4F  link XIZ,0xffd8
 	push	xhl                                   ; FB0E53  push XHL
@@ -63109,7 +63259,6 @@ VoiceParams_Compute_A__FB1EA6:
 ;          of arithmetic this tree has shipped wrong by hand before.
 ; Unknown:  ⚠ what the six extra calls add.  ⚠ "_B" is a label for "the variant
 ;          part mode 0x40 uses".
-
 VoiceRegs_Stage_B:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB1EBD  link XIZ,0x0000
 	pushw	hl                                   ; FB1EC1  push HL
@@ -63224,7 +63373,6 @@ VoiceRegs_Stage_B__FB1F91:
 ;          it): `mul BC,0x012c`, `(XBC+0x1523)`, `+0x12`.  Its call set
 ;          {0xFA7F28, Shift8_LogicalRight} is a strict subset of that routine's
 ;          six (checker section 11).
-
 sub_FB1FB1:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB1FB1  link XIZ,0xffec
 	push	xhl                                   ; FB1FB5  push XHL
@@ -63406,7 +63554,6 @@ sub_FB1FB1__FB216C:
 ;          Calls MemCopyWords (0xF9A038), 0xFA6BB5, 0xFA7F28, 0xFC376C, 0xFC382A
 ;          and Shift8_LogicalRight.
 ; Unknown:  ⚠ the formulae, as for _A.
-
 VoiceParams_Compute_B:
 	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FB2172  link XIZ,0xffee
 	push	xhl                                   ; FB2176  push XHL
@@ -64011,7 +64158,6 @@ VoiceParams_Compute_B__FB27DC:
 ;          six intersections are computed by
 ;          `python3 notes/prom_c_voice_module_check.py` section 10.
 ; Unknown:  ⚠ the helpers.
-
 VoiceRegs_Stage_C:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB27EE  link XIZ,0x0000
 	pushw	hl                                   ; FB27F2  push HL
@@ -64090,7 +64236,6 @@ VoiceRegs_Stage_C:
 ; Evidence: call set {0xFA72B3, 0xFA814C, 0xFB456F, 0xFB474E, 0xFB49EB, 0xFC4B2E,
 ;          0xFC6803} is a strict subset of VoiceParams_Compute_C's ten, which
 ;          follows it immediately (checker section 11).
-
 sub_FB289A:
 	link32 0xEE, 0x0C, 0xE4, 0xFF              ; FB289A  link XIZ,0xffe4
 	pushw	hl                                   ; FB289E  push HL
@@ -64300,7 +64445,6 @@ sub_FB289A__FB2A92:
 ;          callees the other _Compute_ routines have and their short twins do not:
 ;          MemCopyWords (0xF9A038), 0xFA6BB5 and 0xFC376C.
 ; Unknown:  ⚠ the formulae.
-
 VoiceParams_Compute_C:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FB2A98  link XIZ,0xfff0
 	pushw	hl                                   ; FB2A9C  push HL
@@ -64702,7 +64846,6 @@ VoiceParams_Compute_C__FB2EA5:
 ;          0xFC35B8 and 0xFC369F (section 10 of the checker prints the difference
 ;          both ways, and the C-only direction is EMPTY).
 ; Unknown:  ⚠ the helpers.
-
 VoiceRegs_Stage_D:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB2EB7  link XIZ,0x0000
 	pushw	hl                                   ; FB2EBB  push HL
@@ -64787,7 +64930,6 @@ VoiceRegs_Stage_D:
 ; Evidence: call set {0xFA72B3, 0xFB4124, 0xFB454C, 0xFB474E, 0xFB48F7, 0xFC36BE,
 ;          0xFC6803} is a strict subset of VoiceParams_Compute_D's ten (checker
 ;          section 11).
-
 sub_FB2F74:
 	link32 0xEE, 0x0C, 0xE0, 0xFF              ; FB2F74  link XIZ,0xffe0
 	pushw	hl                                   ; FB2F78  push HL
@@ -65014,7 +65156,6 @@ sub_FB2F74__FB3194:
 ; Evidence: the subset relation with sub_FB2F74, plus MemCopyWords / 0xFA6BB5 /
 ;          0xFC376C.
 ; Unknown:  ⚠ the formulae.
-
 VoiceParams_Compute_D:
 	link32 0xEE, 0x0C, 0xE2, 0xFF              ; FB31AB  link XIZ,0xffe2
 	pushw	hl                                   ; FB31AF  push HL
@@ -65459,7 +65600,6 @@ VoiceParams_Compute_D__FB362E:
 ;          call.  Both are 278 bytes and 205 of those bytes DIFFER -- measured by
 ;          checker section 12, because "twin" in this block means same length and
 ;          same call shape and never same code.
-
 MidiNote_OnTail:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB3634  link XIZ,0xffec
 	pushw	hl                                   ; FB3638  push HL
@@ -65582,7 +65722,6 @@ MidiNote_OnTail__FB3744:
 ;          then Dev104_WriteAllChanRegs (0xFB3815) sequence.  The name comes from
 ;          its one caller and the arm it is in, nothing else.
 ; Unknown:  ⚠ as above.
-
 MidiNote_OffTail:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB374A  link XIZ,0xffec
 	pushw	hl                                   ; FB374E  push HL
@@ -65729,7 +65868,6 @@ MidiNote_OffTail__FB385A:
 ; Unknown:  ⚠ what part-record byte +0x10 IS.  ⚠ what arm 0xC0 does -- 0xFB3C0E is
 ;          inside this routine and was not traced.  ⚠ what the Z test at 0xFB3946
 ;          tests, i.e. what makes a voice take Stage_A rather than Stage_C.
-
 MidiNote_OnByPartMode:
 	link32 0xEE, 0x0C, 0xE8, 0xFF              ; FB3860  link XIZ,0xffe8
 	pushw	hl                                   ; FB3864  push HL
@@ -66175,7 +66313,6 @@ MidiNote_OnByPartMode__FB3C0E:
 ;          VoiceList_RetireByMode.  That is the note-off lookup: find the voices
 ;          playing THIS note of THIS part.
 ; Inputs:  (XIZ+0x08) part, (XIZ+0x0a) note.   Outputs: XIY = 0x00D815.
-
 VoiceQuery_Tag80_PartNote:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3C28  link XIZ,0x0000
 	pushw	hl                                   ; FB3C2C  push HL
@@ -66205,7 +66342,6 @@ VoiceQuery_Tag80_PartNote:
 ; Called from: TWO sites, `call 0xFB3C5F` at 0xFAFCEB and 0xFAFF7B (both .incbin).
 ; Inputs:  (XIZ+0x08) part.   Outputs: XIY = 0x00D815.
 ; Evidence: see the family header above; tag 0x80, key (part<<8)|0x80, mask 0x007F.
-
 VoiceQuery_Tag80_Part:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3C5F  link XIZ,0x0000
 	push	xix                                   ; FB3C63  push XIX
@@ -66231,7 +66367,6 @@ VoiceQuery_Tag80_Part:
 ; Inputs:  (XIZ+0x08) part.   Outputs: XIY = 0x00D815.
 ; Evidence: the only one of the six with tag 0x40, and the only one that does NOT
 ;          force bit 7 of the key.
-
 VoiceQuery_Tag40_Part:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3C8B  link XIZ,0x0000
 	push	xix                                   ; FB3C8F  push XIX
@@ -66255,7 +66390,6 @@ VoiceQuery_Tag40_Part:
 ; Inputs:  (XIZ+0x08) part.   Outputs: XIY = 0x00D815.
 ; Evidence: tag 0x00, key (part<<8)|0x80 -- the bit-7 that gives it its name is
 ;          `set 0x07,BC` at 0xFB3CC9 -- mask 0x007F.
-
 VoiceQuery_Tag00_PartBit7:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3CB4  link XIZ,0x0000
 	push	xix                                   ; FB3CB8  push XIX
@@ -66283,7 +66417,6 @@ VoiceQuery_Tag00_PartBit7:
 ; Inputs:  (XIZ+0x08) part.   Outputs: XIY = 0x00D815.
 ; Evidence: tag 0x00, key (part<<8) with no bit forced, mask 0x00FF -- the only
 ;          0x00FF of the six.
-
 VoiceQuery_Tag00_Part:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3CE0  link XIZ,0x0000
 	push	xix                                   ; FB3CE4  push XIX
@@ -66310,7 +66443,6 @@ VoiceQuery_Tag00_Part:
 ; Outputs: XIY = 0x00D815.
 ; Evidence: key 0x0000 and mask 0x1FFF, the widest of the six; every bit 0xFA6FE0
 ;          tests with `and BC,0x1f00` is set, so this is the "every voice" query.
-
 VoiceQuery_Tag00_All:
 	push	xix                                   ; FB3D09  push XIX
 	lda_24	xix, (0xD815)                       ; FB3D0A  lda XIX,0x00d815
@@ -66342,13 +66474,19 @@ VoiceQuery_Tag00_All:
 ;          ★ "Retire" names the ONE observable all three share -- bit 7 of the
 ;          record's +5 byte goes to 0, and (voice, &0x00D75E) is passed to
 ;          0xFB7345 -- and claims nothing about the device registers, because
-;          0xFB7345 is unexplained (⚠ CORRECTED 2026-08-25: "still .incbin"; it is
-;          converted).  "_Mode20" is the value of
+;          0xFB7345 is unexplained.  ⚠ CORRECTED TWICE: 2026-08-25 struck "still
+;          .incbin" (it is converted), and wave 7 round 2 NAMED it
+;          Dev10C_WriteSixChanRegs_FromD78A -- it commits registers 0x0800, 0x0840,
+;          0x0900, 0x0940, 0x09C0 and 0x0A00 of one channel from the staging
+;          struct's tail words +0x2C..+0x36, reproduced by
+;          `notes/prom_c_tg_chanmap.py 0xFB7345 0xAB --pairs`.  So "claims nothing
+;          about the device registers" is now too weak: retiring a voice DOES reach
+;          six named registers.  What those six MEAN is still open.
+;          "_Mode20" is the value of
 ;          `(record+1) & 0x3C` for which VoiceList_RetireByMode selects it.
 ; Unknown:  ⚠ what 0xFB7345, 0xFAB8CC, 0xFABAE3, 0xFABBFB, 0xFA6EA5 and 0xFB74C6
 ;          do.  ⚠ five of the six callers are outside this module, so the mode
 ;          suffix describes the selector, not a precondition they all satisfy.
-
 Voice_Retire_Mode20:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3D26  link XIZ,0x0000
 	pushw	hl                                   ; FB3D2A  push HL
@@ -66429,7 +66567,6 @@ Voice_Retire_Mode20__FB3DBB:
 ;          preserves (record+0x23)->+9 across the call, clears bit 0 of it when
 ;          (record+3) == 3, and chooses 0xFAB9D8 or 0xFAB8CC on `cp C,3`.
 ; Unknown:  ⚠ as Voice_Retire_Mode20.
-
 Voice_Retire_Mode08:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FB3DC1  link XIZ,0xfffe
 	push	xhl                                   ; FB3DC5  push XHL
@@ -66505,7 +66642,6 @@ Voice_Retire_Mode08__FB3E45:
 ;          (record+0x43) != 0 call 0xFABCF9 and 0xFB7345, else nothing.
 ;          0x43 is the LAST byte of the 0x44-byte record.
 ; Unknown:  ⚠ as above.
-
 Voice_Retire_Mode10:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3E50  link XIZ,0x0000
 	push	xhl                                   ; FB3E54  push XHL
@@ -66559,7 +66695,6 @@ Voice_Retire_Mode10__FB3E86:
 ; Unknown:  ⚠ what the mode field means, and what +0x2B/+0x2D hold.  The four
 ;          values are read off the compares; nothing here says a fifth is
 ;          impossible, only that the code has no arm for one.
-
 VoiceList_RetireByMode:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FB3E8B  link XIZ,0xfffa
 	pushw	hl                                   ; FB3E8F  push HL
@@ -66678,7 +66813,6 @@ VoiceList_RetireByMode__FB3F30:
 ;          ⚠ what happens for parts 0x21..0xEF: nothing.  The parser routes
 ;          byte [1] >= 0xF0 to a different handler and this routine drops
 ;          0x21-0xEF silently.
-
 MidiNote_Dispatch:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3F36  link XIZ,0x0000
 	push	xix                                   ; FB3F3A  push XIX
@@ -74760,6 +74894,19 @@ Dev104_WriteChanReg0:
 ; Dev104_SetChanRegs_00C0_0100_0240 -- registers (chan+0x00C0), (chan+0x0100),
 ; (chan+0x0240) from fields 0x06, 0x08, 0x12.
 ; Called from: 0xFACB85, 0xFAEB56, 0xFAEBC2.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7A82  `add rr,0x00C0` forms the select value chan+0x00C0,
+;          0xFB7A90  `ld rr,(XIX+0x06)` fetches the staging word it is
+;                    given -- struct offset +0x06.
+;          0xFB7A9F  `add rr,0x0100` forms the select value chan+0x0100,
+;          0xFB7AA8  `ld rr,(XIX+0x08)` fetches the staging word it is
+;                    given -- struct offset +0x08.
+;          0xFB7AB2  `add rr,0x0240` forms the select value chan+0x0240,
+;          0xFB7ABB  `ld rr,(XIX+0x12)` fetches the staging word it is
+;                    given -- struct offset +0x12.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev104_SetChanRegs_00C0_0100_0240:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7A73  ee 0c f8 ff       link XIZ,0xfff8
@@ -74801,6 +74948,16 @@ Dev104_SetChanRegs_00C0_0100_0240:
 ; Dev104_SetChanRegs_00C0_0100 -- registers (chan+0x00C0), (chan+0x0100) from fields
 ; 0x06, 0x08.
 ; Called from: 0xFACB96.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7AD2  `add rr,0x00C0` forms the select value chan+0x00C0,
+;          0xFB7AE0  `ld rr,(XBC+0x06)` fetches the staging word it is
+;                    given -- struct offset +0x06.
+;          0xFB7AEF  `add rr,0x0100` forms the select value chan+0x0100,
+;          0xFB7AF8  `ld rr,(XBC+0x08)` fetches the staging word it is
+;                    given -- struct offset +0x08.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev104_SetChanRegs_00C0_0100:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7AC9  ee 0c fc ff       link XIZ,0xfffc
@@ -74831,6 +74988,16 @@ Dev104_SetChanRegs_00C0_0100:
 ; Dev104_SetChanRegs_0140_0180 -- registers (chan+0x0140), (chan+0x0180) from fields
 ; 0x0A, 0x0C.
 ; Called from: 0xFB373A, 0xFB3847, 0xFB39D1, 0xFB3AD9, 0xFB3BF2.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7B0E  `add rr,0x0140` forms the select value chan+0x0140,
+;          0xFB7B1C  `ld rr,(XBC+0x0A)` fetches the staging word it is
+;                    given -- struct offset +0x0A.
+;          0xFB7B2B  `add rr,0x0180` forms the select value chan+0x0180,
+;          0xFB7B34  `ld rr,(XBC+0x0C)` fetches the staging word it is
+;                    given -- struct offset +0x0C.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev104_SetChanRegs_0140_0180:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7B05  ee 0c fc ff       link XIZ,0xfffc
@@ -74860,6 +75027,13 @@ Dev104_SetChanRegs_0140_0180:
 ; --------------------------------------------------------------------------
 ; Dev104_SetChanReg_0280 -- register (chan+0x0280) from field 0x14.
 ; Called from: 0xFAED24.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7B4A  `add rr,0x0280` forms the select value chan+0x0280,
+;          0xFB7B58  `ld rr,(XBC+0x14)` fetches the staging word it is
+;                    given -- struct offset +0x14.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev104_SetChanReg_0280:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7B41  ee 0c 00 00       link XIZ,0x0000
@@ -74992,6 +75166,13 @@ Dev10C_SetChanReg_0440_0480:
 ; ⚠ 34 bytes BYTE-IDENTICAL to Dev10C_SetChanReg_0180 at 0xFACFB4
 ;   (`python3 notes/prom_c_tg_regmap.py --dups`).
 ; Called from: NOT FOUND (same caveat as 0xFB7B63).
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7BA8  `add rr,0x0180` forms the select value chan+0x0180,
+;          0xFB7BB6  `ld rr,(XBC+0x0C)` fetches the staging word it is
+;                    given -- struct offset +0x0C.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0180_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7B9F  ee 0c 00 00       link XIZ,0x0000
@@ -75012,6 +75193,13 @@ Dev10C_SetChanReg_0180_b:
 ; Dev10C_SetChanReg_0440_b -- register (chan+0x0440) = staging->0x10.
 ; ⚠ 34 bytes BYTE-IDENTICAL to Dev10C_SetChanReg_0440 at 0xFACFD6.
 ; Called from: NOT FOUND.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7BCA  `add rr,0x0440` forms the select value chan+0x0440,
+;          0xFB7BD8  `ld rr,(XBC+0x10)` fetches the staging word it is
+;                    given -- struct offset +0x10.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0440_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7BC1  ee 0c 00 00       link XIZ,0x0000
@@ -75033,6 +75221,27 @@ Dev10C_SetChanReg_0440_b:
 ; Block 0x0480 has no writer in the 0xFACE67 bank; it is one of the five blocks
 ; only this second bank reaches.
 ; Called from: NOT FOUND.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7BEC  `add rr,0x0480` forms the select value chan+0x0480,
+;          0xFB7BFA  `ld rr,(XBC+0x12)` fetches the staging word it is
+;                    given -- struct offset +0x12.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
+; ★ GAP A, round 3 -- what IS established about register chan+0x0480:
+;   * it is committed from staging word 9, at struct offset +0x12, both by
+;     this accessor and by Dev10C_WriteAllChanRegs (0xFB713A); two independent
+;     readings of the same pairing.
+;   * its POWER-ON value is 0x0000, and the ROM bytes that say so are at
+;     0xFE12E1 -- offset +0x12 of the 68-byte reset image at 0xFE12CF that
+;     Dev10C_ResetAllChannels copies to RAM 0x00D8DB.  ⚠ The copy is at
+;     0xFB8146 / 0xFB814B / 0xFB814F (lda XIX,0x00d8db / push 0x0044 /
+;     lda XWA,0xfe12cf); notes/prom_c_gapA_remaining_regs.py cites 0xFB8175
+;     for it, which is the argument load of the NEXT loop -- corrected here,
+;     see notes/wave7-round1/README.md lane g1.
+; ⚠ NOT ESTABLISHED: what the register DOES.  0x0000 is what the ROM holds, not
+;   a meaning, and this round did not re-derive the channel-cross-reference
+;   reading that prom_c_gapA_remaining_regs.py argues for.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0480:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7BE3  ee 0c 00 00       link XIZ,0x0000
@@ -75053,6 +75262,13 @@ Dev10C_SetChanReg_0480:
 ; Dev10C_SetChanReg_04C0_b -- register (chan+0x04C0) = staging->0x14.
 ; ⚠ 34 bytes BYTE-IDENTICAL to Dev10C_SetChanReg_04C0 at 0xFACFF8.
 ; Called from: NOT FOUND.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7C0E  `add rr,0x04C0` forms the select value chan+0x04C0,
+;          0xFB7C1C  `ld rr,(XBC+0x14)` fetches the staging word it is
+;                    given -- struct offset +0x14.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_04C0_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7C05  ee 0c 00 00       link XIZ,0x0000
@@ -75098,7 +75314,7 @@ Dev10C_Slot2_WriteGateAndValue:
 	ld	hl, (xiz+8)                             ; FB7C31  9e 08 23          ld HL,(XIZ+0x08)
 	ld	bc, (xix+60)                            ; FB7C34  9c 3c 21          ld BC,(XIX+0x3c)
 	and	bc, 0x8000                             ; FB7C37  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB7C56                             ; FB7C3B  66 19             jr Z,0xfb7c56
+	jr z, Dev10C_Slot2_WriteGateAndValue__FB7C56                             ; FB7C3B  66 19             jr Z,0xfb7c56
 	ld	de, hl                                  ; FB7C3D  db 8a             ld DE,HL
 	add	de, 0x0580                             ; FB7C3F  da c8 80 05       add DE,0x0580
 	ld	xbc, 0x0010C000                         ; FB7C43  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75107,7 +75323,7 @@ Dev10C_Slot2_WriteGateAndValue:
 	ld	bc, (xix+60)                            ; FB7C4D  9c 3c 21          ld BC,(XIX+0x3c)
 	ld	xwa, (xiz-4)                            ; FB7C50  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB7C53  b8 02 51          ld (XWA+0x02),BC
-L_FB7C56:
+Dev10C_Slot2_WriteGateAndValue__FB7C56:
 	ld	de, hl                                  ; FB7C56  db 8a             ld DE,HL
 	add	de, 0x0600                             ; FB7C58  da c8 00 06       add DE,0x0600
 	ld	xbc, 0x0010C000                         ; FB7C5C  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75135,6 +75351,13 @@ L_FB7C56:
 ; Dev10C_SetChanReg_0600_b -- register (chan+0x0600) = staging->0x40.
 ; ⚠ 34 bytes BYTE-IDENTICAL to Dev10C_SetChanReg_0600 at 0xFAD01A.
 ; Called from: 0xFA9AC2, 0xFABEAD, 0xFACD0B.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7C98  `add rr,0x0600` forms the select value chan+0x0600,
+;          0xFB7CA6  `ld rr,(XBC+0x40)` fetches the staging word it is
+;                    given -- struct offset +0x40.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0600_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7C8F  ee 0c 00 00       link XIZ,0x0000
@@ -75159,6 +75382,12 @@ Dev10C_SetChanReg_0600_b:
 ;       register (chan+0x0580) = staging->0x3C with bit 15 cleared
 ;
 ; Called from: 0xFA9A43, 0xFACDB1.
+; Evidence: decoded from the ROM bytes by `notes/prom_c_naming_round3.py --slots`:
+;          0xFB7CC6 select chan+0x0580, 0xFB7CD4 fetch (XIX+0x3C)  -- slot 2 gate
+;          0xFB7CE0 select chan+0x0580, 0xFB7CEE fetch (XIX+0x3C)  -- slot 2 gate
+;          The slot table is 1: (0x0540,+0x3A)/(0x01C0,+0x38), 2: (0x0580,+0x3C)/
+;          (0x0600,+0x40), 3: (0x05C0,+0x3E)/(0x0640,+0x42); `--claims C12`
+;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot2_StrobeGate:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7CB1  ee 0c fc ff       link XIZ,0xfffc
@@ -75167,7 +75396,7 @@ Dev10C_Slot2_StrobeGate:
 	ld	xix, (xiz+10)                           ; FB7CB7  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	bc, (xix+60)                            ; FB7CBA  9c 3c 21          ld BC,(XIX+0x3c)
 	and	bc, 0x8000                             ; FB7CBD  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB7CDD                             ; FB7CC1  66 1a             jr Z,0xfb7cdd
+	jr z, Dev10C_Slot2_StrobeGate__FB7CDD                             ; FB7CC1  66 1a             jr Z,0xfb7cdd
 	ld	hl, (xiz+8)                             ; FB7CC3  9e 08 23          ld HL,(XIZ+0x08)
 	add	hl, 0x0580                             ; FB7CC6  db c8 80 05       add HL,0x0580
 	ld	xbc, 0x0010C000                         ; FB7CCA  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75176,7 +75405,7 @@ Dev10C_Slot2_StrobeGate:
 	ld	bc, (xix+60)                            ; FB7CD4  9c 3c 21          ld BC,(XIX+0x3c)
 	ld	xwa, (xiz-4)                            ; FB7CD7  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB7CDA  b8 02 51          ld (XWA+0x02),BC
-L_FB7CDD:
+Dev10C_Slot2_StrobeGate__FB7CDD:
 	ld	hl, (xiz+8)                             ; FB7CDD  9e 08 23          ld HL,(XIZ+0x08)
 	add	hl, 0x0580                             ; FB7CE0  db c8 80 05       add HL,0x0580
 	ld	xbc, 0x0010C000                         ; FB7CE4  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75218,6 +75447,13 @@ Dev10C_Slot2_WriteGate8100:
 ;       register (chan+0x05C0) = staging->0x3E with bit 15 cleared
 ;
 ; Called from: 0xFA9C52, 0xFAC679, 0xFAC6E2, 0xFB8236.
+; Evidence: decoded from the ROM bytes by `notes/prom_c_naming_round3.py --slots`:
+;          0xFB7D35 select chan+0x05C0, 0xFB7D43 fetch (XIX+0x3E)  -- slot 3 gate
+;          0xFB7D4E select chan+0x0640, 0xFB7D5C fetch (XIX+0x42)  -- slot 3 value
+;          0xFB7D6B select chan+0x05C0, 0xFB7D74 fetch (XIX+0x3E)  -- slot 3 gate
+;          The slot table is 1: (0x0540,+0x3A)/(0x01C0,+0x38), 2: (0x0580,+0x3C)/
+;          (0x0600,+0x40), 3: (0x05C0,+0x3E)/(0x0640,+0x42); `--claims C12`
+;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot3_WriteGateAndValue:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7D1D  ee 0c f8 ff       link XIZ,0xfff8
@@ -75228,7 +75464,7 @@ Dev10C_Slot3_WriteGateAndValue:
 	ld	hl, (xiz+8)                             ; FB7D27  9e 08 23          ld HL,(XIZ+0x08)
 	ld	bc, (xix+62)                            ; FB7D2A  9c 3e 21          ld BC,(XIX+0x3e)
 	and	bc, 0x8000                             ; FB7D2D  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB7D4C                             ; FB7D31  66 19             jr Z,0xfb7d4c
+	jr z, Dev10C_Slot3_WriteGateAndValue__FB7D4C                             ; FB7D31  66 19             jr Z,0xfb7d4c
 	ld	de, hl                                  ; FB7D33  db 8a             ld DE,HL
 	add	de, 0x05C0                             ; FB7D35  da c8 c0 05       add DE,0x05c0
 	ld	xbc, 0x0010C000                         ; FB7D39  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75237,7 +75473,7 @@ Dev10C_Slot3_WriteGateAndValue:
 	ld	bc, (xix+62)                            ; FB7D43  9c 3e 21          ld BC,(XIX+0x3e)
 	ld	xwa, (xiz-4)                            ; FB7D46  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB7D49  b8 02 51          ld (XWA+0x02),BC
-L_FB7D4C:
+Dev10C_Slot3_WriteGateAndValue__FB7D4C:
 	ld	de, hl                                  ; FB7D4C  db 8a             ld DE,HL
 	add	de, 0x0640                             ; FB7D4E  da c8 40 06       add DE,0x0640
 	ld	xbc, 0x0010C000                         ; FB7D52  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75264,6 +75500,13 @@ L_FB7D4C:
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0640 -- register (chan+0x0640) = staging->0x42.
 ; Called from: 0xFACCCA.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7D8E  `add rr,0x0640` forms the select value chan+0x0640,
+;          0xFB7D9C  `ld rr,(XBC+0x42)` fetches the staging word it is
+;                    given -- struct offset +0x42.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0640:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7D85  ee 0c 00 00       link XIZ,0x0000
@@ -75283,6 +75526,12 @@ Dev10C_SetChanReg_0640:
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot3_StrobeGate -- slot 3's copy of Dev10C_Slot2_StrobeGate, on 0x05C0 / 0x3E.
 ; Called from: 0xFACD70.
+; Evidence: decoded from the ROM bytes by `notes/prom_c_naming_round3.py --slots`:
+;          0xFB7DBC select chan+0x05C0, 0xFB7DCA fetch (XIX+0x3E)  -- slot 3 gate
+;          0xFB7DD6 select chan+0x05C0, 0xFB7DE4 fetch (XIX+0x3E)  -- slot 3 gate
+;          The slot table is 1: (0x0540,+0x3A)/(0x01C0,+0x38), 2: (0x0580,+0x3C)/
+;          (0x0600,+0x40), 3: (0x05C0,+0x3E)/(0x0640,+0x42); `--claims C12`
+;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot3_StrobeGate:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7DA7  ee 0c fc ff       link XIZ,0xfffc
@@ -75291,7 +75540,7 @@ Dev10C_Slot3_StrobeGate:
 	ld	xix, (xiz+10)                           ; FB7DAD  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	bc, (xix+62)                            ; FB7DB0  9c 3e 21          ld BC,(XIX+0x3e)
 	and	bc, 0x8000                             ; FB7DB3  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB7DD3                             ; FB7DB7  66 1a             jr Z,0xfb7dd3
+	jr z, Dev10C_Slot3_StrobeGate__FB7DD3                             ; FB7DB7  66 1a             jr Z,0xfb7dd3
 	ld	hl, (xiz+8)                             ; FB7DB9  9e 08 23          ld HL,(XIZ+0x08)
 	add	hl, 0x05C0                             ; FB7DBC  db c8 c0 05       add HL,0x05c0
 	ld	xbc, 0x0010C000                         ; FB7DC0  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75300,7 +75549,7 @@ Dev10C_Slot3_StrobeGate:
 	ld	bc, (xix+62)                            ; FB7DCA  9c 3e 21          ld BC,(XIX+0x3e)
 	ld	xwa, (xiz-4)                            ; FB7DCD  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB7DD0  b8 02 51          ld (XWA+0x02),BC
-L_FB7DD3:
+Dev10C_Slot3_StrobeGate__FB7DD3:
 	ld	hl, (xiz+8)                             ; FB7DD3  9e 08 23          ld HL,(XIZ+0x08)
 	add	hl, 0x05C0                             ; FB7DD6  db c8 c0 05       add HL,0x05c0
 	ld	xbc, 0x0010C000                         ; FB7DDA  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75349,6 +75598,13 @@ Dev10C_Slot3_WriteGate8100:
 ;       register (chan+0x0540) = staging->0x3A with bit 15 cleared
 ;
 ; Called from: 0xFA9EAE, 0xFB8BEA, 0xFB821E.
+; Evidence: decoded from the ROM bytes by `notes/prom_c_naming_round3.py --slots`:
+;          0xFB7E2B select chan+0x0540, 0xFB7E39 fetch (XIX+0x3A)  -- slot 1 gate
+;          0xFB7E44 select chan+0x01C0, 0xFB7E52 fetch (XIX+0x38)  -- slot 1 value
+;          0xFB7E61 select chan+0x0540, 0xFB7E6A fetch (XIX+0x3A)  -- slot 1 gate
+;          The slot table is 1: (0x0540,+0x3A)/(0x01C0,+0x38), 2: (0x0580,+0x3C)/
+;          (0x0600,+0x40), 3: (0x05C0,+0x3E)/(0x0640,+0x42); `--claims C12`
+;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1_WriteGateAndValue:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7E13  ee 0c f8 ff       link XIZ,0xfff8
@@ -75359,7 +75615,7 @@ Dev10C_Slot1_WriteGateAndValue:
 	ld	hl, (xiz+8)                             ; FB7E1D  9e 08 23          ld HL,(XIZ+0x08)
 	ld	bc, (xix+58)                            ; FB7E20  9c 3a 21          ld BC,(XIX+0x3a)
 	and	bc, 0x8000                             ; FB7E23  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB7E42                             ; FB7E27  66 19             jr Z,0xfb7e42
+	jr z, Dev10C_Slot1_WriteGateAndValue__FB7E42                             ; FB7E27  66 19             jr Z,0xfb7e42
 	ld	de, hl                                  ; FB7E29  db 8a             ld DE,HL
 	add	de, 0x0540                             ; FB7E2B  da c8 40 05       add DE,0x0540
 	ld	xbc, 0x0010C000                         ; FB7E2F  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75368,7 +75624,7 @@ Dev10C_Slot1_WriteGateAndValue:
 	ld	bc, (xix+58)                            ; FB7E39  9c 3a 21          ld BC,(XIX+0x3a)
 	ld	xwa, (xiz-4)                            ; FB7E3C  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB7E3F  b8 02 51          ld (XWA+0x02),BC
-L_FB7E42:
+Dev10C_Slot1_WriteGateAndValue__FB7E42:
 	ld	de, hl                                  ; FB7E42  db 8a             ld DE,HL
 	add	de, 0x01C0                             ; FB7E44  da c8 c0 01       add DE,0x01c0
 	ld	xbc, 0x0010C000                         ; FB7E48  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75396,6 +75652,13 @@ L_FB7E42:
 ; Dev10C_SetChanReg_01C0_b -- register (chan+0x01C0) = staging->0x38.
 ; ⚠ 34 bytes BYTE-IDENTICAL to Dev10C_SetChanReg_01C0 at 0xFAD05E.
 ; Called from: 0xFA9E09, 0xFABF3A, 0xFACE04.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7E84  `add rr,0x01C0` forms the select value chan+0x01C0,
+;          0xFB7E92  `ld rr,(XBC+0x38)` fetches the staging word it is
+;                    given -- struct offset +0x38.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_01C0_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7E7B  ee 0c 00 00       link XIZ,0x0000
@@ -75415,6 +75678,12 @@ Dev10C_SetChanReg_01C0_b:
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot1_StrobeGate -- slot 1's copy of Dev10C_Slot2_StrobeGate, on 0x0540 / 0x3A.
 ; Called from: 0xFA9D89, 0xFAC78C, 0xFAC7DF, 0xFACE57.
+; Evidence: decoded from the ROM bytes by `notes/prom_c_naming_round3.py --slots`:
+;          0xFB7EB2 select chan+0x0540, 0xFB7EC0 fetch (XIX+0x3A)  -- slot 1 gate
+;          0xFB7ECC select chan+0x0540, 0xFB7EDA fetch (XIX+0x3A)  -- slot 1 gate
+;          The slot table is 1: (0x0540,+0x3A)/(0x01C0,+0x38), 2: (0x0580,+0x3C)/
+;          (0x0600,+0x40), 3: (0x05C0,+0x3E)/(0x0640,+0x42); `--claims C12`
+;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1_StrobeGate:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7E9D  ee 0c fc ff       link XIZ,0xfffc
@@ -75423,7 +75692,7 @@ Dev10C_Slot1_StrobeGate:
 	ld	xix, (xiz+10)                           ; FB7EA3  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	bc, (xix+58)                            ; FB7EA6  9c 3a 21          ld BC,(XIX+0x3a)
 	and	bc, 0x8000                             ; FB7EA9  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB7EC9                             ; FB7EAD  66 1a             jr Z,0xfb7ec9
+	jr z, Dev10C_Slot1_StrobeGate__FB7EC9                             ; FB7EAD  66 1a             jr Z,0xfb7ec9
 	ld	hl, (xiz+8)                             ; FB7EAF  9e 08 23          ld HL,(XIZ+0x08)
 	add	hl, 0x0540                             ; FB7EB2  db c8 40 05       add HL,0x0540
 	ld	xbc, 0x0010C000                         ; FB7EB6  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75432,7 +75701,7 @@ Dev10C_Slot1_StrobeGate:
 	ld	bc, (xix+58)                            ; FB7EC0  9c 3a 21          ld BC,(XIX+0x3a)
 	ld	xwa, (xiz-4)                            ; FB7EC3  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB7EC6  b8 02 51          ld (XWA+0x02),BC
-L_FB7EC9:
+Dev10C_Slot1_StrobeGate__FB7EC9:
 	ld	hl, (xiz+8)                             ; FB7EC9  9e 08 23          ld HL,(XIZ+0x08)
 	add	hl, 0x0540                             ; FB7ECC  db c8 40 05       add HL,0x0540
 	ld	xbc, 0x0010C000                         ; FB7ED0  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75493,10 +75762,10 @@ Dev10C_Slot1or3_WriteGateAndValue:
 	ld	xix, (xiz+10)                           ; FB7F10  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	hl, (xiz+8)                             ; FB7F13  9e 08 23          ld HL,(XIZ+0x08)
 	cp	hl, 64                                  ; FB7F16  db cf 40 00       cp HL,0x0040
-	jr nc, L_FB7F73                            ; FB7F1A  6f 57             jr NC,0xfb7f73
+	jr nc, Dev10C_Slot1or3_WriteGateAndValue__FB7F73                            ; FB7F1A  6f 57             jr NC,0xfb7f73
 	ld	bc, (xix+58)                            ; FB7F1C  9c 3a 21          ld BC,(XIX+0x3a)
 	and	bc, 0x8000                             ; FB7F1F  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB7F3E                             ; FB7F23  66 19             jr Z,0xfb7f3e
+	jr z, Dev10C_Slot1or3_WriteGateAndValue__FB7F3E                             ; FB7F23  66 19             jr Z,0xfb7f3e
 	ld	de, hl                                  ; FB7F25  db 8a             ld DE,HL
 	add	de, 0x0540                             ; FB7F27  da c8 40 05       add DE,0x0540
 	ld	xbc, 0x0010C000                         ; FB7F2B  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75505,7 +75774,7 @@ Dev10C_Slot1or3_WriteGateAndValue:
 	ld	bc, (xix+58)                            ; FB7F35  9c 3a 21          ld BC,(XIX+0x3a)
 	ld	xwa, (xiz-4)                            ; FB7F38  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB7F3B  b8 02 51          ld (XWA+0x02),BC
-L_FB7F3E:
+Dev10C_Slot1or3_WriteGateAndValue__FB7F3E:
 	ld	de, hl                                  ; FB7F3E  db 8a             ld DE,HL
 	add	de, 0x01C0                             ; FB7F40  da c8 c0 01       add DE,0x01c0
 	ld	xbc, 0x0010C000                         ; FB7F44  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75524,11 +75793,11 @@ L_FB7F3E:
 	res	15, bc                                 ; FB7F69  d9 30 0f          res 0x0f,BC
 	ld	xwa, (xiz-8)                            ; FB7F6C  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7F6F  b0 51             ld (XWA),BC
-	jr L_FB7FC8                                ; FB7F71  68 55             jr T,0xfb7fc8
-L_FB7F73:
+	jr Dev10C_Slot1or3_WriteGateAndValue__FB7FC8                                ; FB7F71  68 55             jr T,0xfb7fc8
+Dev10C_Slot1or3_WriteGateAndValue__FB7F73:
 	ld	bc, (xix+62)                            ; FB7F73  9c 3e 21          ld BC,(XIX+0x3e)
 	and	bc, 0x8000                             ; FB7F76  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB7F95                             ; FB7F7A  66 19             jr Z,0xfb7f95
+	jr z, Dev10C_Slot1or3_WriteGateAndValue__FB7F95                             ; FB7F7A  66 19             jr Z,0xfb7f95
 	ld	de, hl                                  ; FB7F7C  db 8a             ld DE,HL
 	add	de, 0x0580                             ; FB7F7E  da c8 80 05       add DE,0x0580
 	ld	xbc, 0x0010C000                         ; FB7F82  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75537,7 +75806,7 @@ L_FB7F73:
 	ld	bc, (xix+62)                            ; FB7F8C  9c 3e 21          ld BC,(XIX+0x3e)
 	ld	xwa, (xiz-4)                            ; FB7F8F  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB7F92  b8 02 51          ld (XWA+0x02),BC
-L_FB7F95:
+Dev10C_Slot1or3_WriteGateAndValue__FB7F95:
 	ld	de, hl                                  ; FB7F95  db 8a             ld DE,HL
 	add	de, 0x0600                             ; FB7F97  da c8 00 06       add DE,0x0600
 	ld	xbc, 0x0010C000                         ; FB7F9B  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75556,7 +75825,7 @@ L_FB7F95:
 	res	15, bc                                 ; FB7FC0  d9 30 0f          res 0x0f,BC
 	ld	xwa, (xiz-8)                            ; FB7FC3  ae f8 20          ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB7FC6  b0 51             ld (XWA),BC
-L_FB7FC8:
+Dev10C_Slot1or3_WriteGateAndValue__FB7FC8:
 	pop	xix                                    ; FB7FC8  5c                pop XIX
 	popw	de                                    ; FB7FC9  4a                pop DE
 	popw	hl                                    ; FB7FCA  4b                pop HL
@@ -75566,6 +75835,16 @@ L_FB7FC8:
 ; Dev10C_SetChanReg_01C0_or_0600_b -- the value half of the split alone.
 ; ⚠ 68 bytes BYTE-IDENTICAL to Dev10C_SetChanReg_01C0_or_0600 at 0xFAD0A2.
 ; Called from: 0xFAA0B0, 0xFAC008.
+; Evidence: decoded from the ROM bytes, not from the name --
+;          0xFB7FE0  `add rr,0x01C0` forms the select value chan+0x01C0,
+;          0xFB7FEE  `ld rr,(XBC+0x38)` fetches the staging word it is
+;                    given -- struct offset +0x38.
+;          0xFB7FF8  `add rr,0x0600` forms the select value chan+0x0600,
+;          0xFB8006  `ld rr,(XBC+0x42)` fetches the staging word it is
+;                    given -- struct offset +0x42.
+;          Re-derived for all 32 Dev10C_/Dev104_ accessors at once by
+;          `python3 notes/prom_c_naming_round3.py --regaudit`, which compares each
+;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_01C0_or_0600_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7FCE  ee 0c 00 00       link XIZ,0x0000
@@ -75574,7 +75853,7 @@ Dev10C_SetChanReg_01C0_or_0600_b:
 	push	xix                                   ; FB7FD4  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7FD5  9e 08 23          ld HL,(XIZ+0x08)
 	cp	hl, 64                                  ; FB7FD8  db cf 40 00       cp HL,0x0040
-	jr nc, L_FB7FF6                            ; FB7FDC  6f 18             jr NC,0xfb7ff6
+	jr nc, Dev10C_SetChanReg_01C0_or_0600_b__FB7FF6                            ; FB7FDC  6f 18             jr NC,0xfb7ff6
 	ld	de, hl                                  ; FB7FDE  db 8a             ld DE,HL
 	add	de, 0x01C0                             ; FB7FE0  da c8 c0 01       add DE,0x01c0
 	ld	xix, 0x0010C000                         ; FB7FE4  44 00 c0 10 00    ld XIX,0x0010c000
@@ -75582,8 +75861,8 @@ Dev10C_SetChanReg_01C0_or_0600_b:
 	ld	xbc, (xiz+10)                           ; FB7FEB  ae 0a 21          ld XBC,(XIZ+0x0a)
 	ld	wa, (xbc+56)                            ; FB7FEE  99 38 20          ld WA,(XBC+0x38)
 	ld	(xix+2), wa                             ; FB7FF1  bc 02 50          ld (XIX+0x02),WA
-	jr L_FB800C                                ; FB7FF4  68 16             jr T,0xfb800c
-L_FB7FF6:
+	jr Dev10C_SetChanReg_01C0_or_0600_b__FB800C                                ; FB7FF4  68 16             jr T,0xfb800c
+Dev10C_SetChanReg_01C0_or_0600_b__FB7FF6:
 	ld	de, hl                                  ; FB7FF6  db 8a             ld DE,HL
 	add	de, 0x0600                             ; FB7FF8  da c8 00 06       add DE,0x0600
 	ld	xix, 0x0010C000                         ; FB7FFC  44 00 c0 10 00    ld XIX,0x0010c000
@@ -75591,7 +75870,7 @@ L_FB7FF6:
 	ld	xbc, (xiz+10)                           ; FB8003  ae 0a 21          ld XBC,(XIZ+0x0a)
 	ld	wa, (xbc+66)                            ; FB8006  99 42 20          ld WA,(XBC+0x42)
 	ld	(xix+2), wa                             ; FB8009  bc 02 50          ld (XIX+0x02),WA
-L_FB800C:
+Dev10C_SetChanReg_01C0_or_0600_b__FB800C:
 	pop	xix                                    ; FB800C  5c                pop XIX
 	popw	de                                    ; FB800D  4a                pop DE
 	popw	hl                                    ; FB800E  4b                pop HL
@@ -75601,6 +75880,14 @@ L_FB800C:
 ; Dev10C_Slot1or3_StrobeGate -- the gate half of the split alone: the bit-15 pulse on
 ; slot 1 for chan < 0x40 and on slot 3 for chan >= 0x40.
 ; Called from: 0xFAA02E.
+; Evidence: decoded from the ROM bytes by `notes/prom_c_naming_round3.py --slots`:
+;          0xFB8030 select chan+0x0540, 0xFB803E fetch (XIX+0x3A)  -- slot 1 gate
+;          0xFB8049 select chan+0x0540, 0xFB8057 fetch (XIX+0x3A)  -- slot 1 gate
+;          0xFB8070 select chan+0x0580, 0xFB807E fetch (XIX+0x3E)  -- slot 3 gate, aliased (0x0580+chan == 0x05C0+(chan-0x40))
+;          0xFB8089 select chan+0x0580, 0xFB8097 fetch (XIX+0x3E)  -- slot 3 gate, aliased (0x0580+chan == 0x05C0+(chan-0x40))
+;          The slot table is 1: (0x0540,+0x3A)/(0x01C0,+0x38), 2: (0x0580,+0x3C)/
+;          (0x0600,+0x40), 3: (0x05C0,+0x3E)/(0x0640,+0x42); `--claims C12`
+;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1or3_StrobeGate:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB8012  ee 0c fc ff       link XIZ,0xfffc
@@ -75610,10 +75897,10 @@ Dev10C_Slot1or3_StrobeGate:
 	ld	xix, (xiz+10)                           ; FB8019  ae 0a 24          ld XIX,(XIZ+0x0a)
 	ld	hl, (xiz+8)                             ; FB801C  9e 08 23          ld HL,(XIZ+0x08)
 	cp	hl, 64                                  ; FB801F  db cf 40 00       cp HL,0x0040
-	jr nc, L_FB8065                            ; FB8023  6f 40             jr NC,0xfb8065
+	jr nc, Dev10C_Slot1or3_StrobeGate__FB8065                            ; FB8023  6f 40             jr NC,0xfb8065
 	ld	bc, (xix+58)                            ; FB8025  9c 3a 21          ld BC,(XIX+0x3a)
 	and	bc, 0x8000                             ; FB8028  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB8047                             ; FB802C  66 19             jr Z,0xfb8047
+	jr z, Dev10C_Slot1or3_StrobeGate__FB8047                             ; FB802C  66 19             jr Z,0xfb8047
 	ld	de, hl                                  ; FB802E  db 8a             ld DE,HL
 	add	de, 0x0540                             ; FB8030  da c8 40 05       add DE,0x0540
 	ld	xbc, 0x0010C000                         ; FB8034  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75622,7 +75909,7 @@ Dev10C_Slot1or3_StrobeGate:
 	ld	bc, (xix+58)                            ; FB803E  9c 3a 21          ld BC,(XIX+0x3a)
 	ld	xwa, (xiz-4)                            ; FB8041  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB8044  b8 02 51          ld (XWA+0x02),BC
-L_FB8047:
+Dev10C_Slot1or3_StrobeGate__FB8047:
 	ld	de, hl                                  ; FB8047  db 8a             ld DE,HL
 	add	de, 0x0540                             ; FB8049  da c8 40 05       add DE,0x0540
 	ld	xbc, 0x0010C000                         ; FB804D  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75632,11 +75919,11 @@ L_FB8047:
 	res	15, bc                                 ; FB805A  d9 30 0f          res 0x0f,BC
 	ld	xwa, (xiz-4)                            ; FB805D  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB8060  b8 02 51          ld (XWA+0x02),BC
-	jr L_FB80A3                                ; FB8063  68 3e             jr T,0xfb80a3
-L_FB8065:
+	jr Dev10C_Slot1or3_StrobeGate__FB80A3                                ; FB8063  68 3e             jr T,0xfb80a3
+Dev10C_Slot1or3_StrobeGate__FB8065:
 	ld	bc, (xix+62)                            ; FB8065  9c 3e 21          ld BC,(XIX+0x3e)
 	and	bc, 0x8000                             ; FB8068  d9 cc 00 80       and BC,0x8000
-	jr z, L_FB8087                             ; FB806C  66 19             jr Z,0xfb8087
+	jr z, Dev10C_Slot1or3_StrobeGate__FB8087                             ; FB806C  66 19             jr Z,0xfb8087
 	ld	de, hl                                  ; FB806E  db 8a             ld DE,HL
 	add	de, 0x0580                             ; FB8070  da c8 80 05       add DE,0x0580
 	ld	xbc, 0x0010C000                         ; FB8074  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75645,7 +75932,7 @@ L_FB8065:
 	ld	bc, (xix+62)                            ; FB807E  9c 3e 21          ld BC,(XIX+0x3e)
 	ld	xwa, (xiz-4)                            ; FB8081  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB8084  b8 02 51          ld (XWA+0x02),BC
-L_FB8087:
+Dev10C_Slot1or3_StrobeGate__FB8087:
 	ld	de, hl                                  ; FB8087  db 8a             ld DE,HL
 	add	de, 0x0580                             ; FB8089  da c8 80 05       add DE,0x0580
 	ld	xbc, 0x0010C000                         ; FB808D  41 00 c0 10 00    ld XBC,0x0010c000
@@ -75655,7 +75942,7 @@ L_FB8087:
 	res	15, bc                                 ; FB809A  d9 30 0f          res 0x0f,BC
 	ld	xwa, (xiz-4)                            ; FB809D  ae fc 20          ld XWA,(XIZ+0xfc)
 	ld	(xwa+2), bc                             ; FB80A0  b8 02 51          ld (XWA+0x02),BC
-L_FB80A3:
+Dev10C_Slot1or3_StrobeGate__FB80A3:
 	pop	xix                                    ; FB80A3  5c                pop XIX
 	popw	de                                    ; FB80A4  4a                pop DE
 	popw	hl                                    ; FB80A5  4b                pop HL
@@ -75676,18 +75963,18 @@ Dev10C_Slot1or3_WriteGate8100:
 	ld	xix, 0x0010C000                         ; FB80B0  44 00 c0 10 00    ld XIX,0x0010c000
 	ld	hl, (xiz+8)                             ; FB80B5  9e 08 23          ld HL,(XIZ+0x08)
 	cp	hl, 64                                  ; FB80B8  db cf 40 00       cp HL,0x0040
-	jr nc, L_FB80CA                            ; FB80BC  6f 0c             jr NC,0xfb80ca
+	jr nc, Dev10C_Slot1or3_WriteGate8100__FB80CA                            ; FB80BC  6f 0c             jr NC,0xfb80ca
 	ld	de, hl                                  ; FB80BE  db 8a             ld DE,HL
 	add	de, 0x0540                             ; FB80C0  da c8 40 05       add DE,0x0540
 	ld	xbc, xix                                ; FB80C4  ec 89             ld XBC,XIX
 	ld	(xbc), de                               ; FB80C6  b1 52             ld (XBC),DE
-	jr L_FB80D4                                ; FB80C8  68 0a             jr T,0xfb80d4
-L_FB80CA:
+	jr Dev10C_Slot1or3_WriteGate8100__FB80D4                                ; FB80C8  68 0a             jr T,0xfb80d4
+Dev10C_Slot1or3_WriteGate8100__FB80CA:
 	ld	de, hl                                  ; FB80CA  db 8a             ld DE,HL
 	add	de, 0x0580                             ; FB80CC  da c8 80 05       add DE,0x0580
 	ld	xbc, xix                                ; FB80D0  ec 89             ld XBC,XIX
 	ld	(xbc), de                               ; FB80D2  b1 52             ld (XBC),DE
-L_FB80D4:
+Dev10C_Slot1or3_WriteGate8100__FB80D4:
 	ld	xbc, xix                                ; FB80D4  ec 89             ld XBC,XIX
 	ldw (xbc+2), 0x8100                        ; FB80D6  b9 02 02 00 81    ld (XBC+0x02),0x8100
 	pop	xix                                    ; FB80DB  5c                pop XIX
@@ -75744,9 +76031,25 @@ L_FB80D4:
 ;      strongest evidence in the image that the three (gate, value) pairs really
 ;      are three parallel per-channel objects and not three unrelated parameters.
 ;
-; ⚠ 0xFB7715, 0xFB713A, 0xFB77EF and 0xFB7A58 are NOT converted, so what steps 1
-;   and 5 compute is unknown.  The reset VALUES above are what the ROM writes;
-;   what they mean is not established.
+; ⚠ CORRECTED (wave 7 round 3).  This paragraph used to say that 0xFB7715,
+;   0xFB713A, 0xFB77EF and 0xFB7A58 are NOT converted.  ALL FOUR ARE CONVERTED AND
+;   NAMED: Dev10C_WriteGlobalRegs, Dev10C_WriteAllChanRegs, Dev104_WriteAllChanRegs
+;   and Dev104_WriteChanReg0 -- `llvm-nm rebuilt_ROMs/wsa1_prom_c.llvm.elf` places a
+;   symbol at each, and prom_c has zero `.incbin`.  What steps 1 and 5 COMPUTE is
+;   still not established; that part of the sentence stands.  The reset VALUES above
+;   are what the ROM writes; what they mean is not established.
+; ★ ROUND 3 -- step 4's copy IS the 0x0010C000 staging struct's power-on image, and
+;   the struct is 68 bytes: RAM 0x00D75E..0x00D7A1 on the voice path, a second
+;   instance at 0x00D8DB here.  0x00D75E + 0x2C = 0x00D78A (round 2's
+;   Dev10C_WriteSixChanRegs_FromD78A) and 0x00D75E + 0x44 = 0x00D7A2 (the 0x00104000
+;   struct VoiceRegs_Stage_A pushes at 0xFB0B5B), so three readings close on the same
+;   length.  Word by word, out of the ROM:
+;   `python3 notes/prom_c_naming_round3.py --struct`.
+; ★ AND THE IMAGE AGREES WITH THIS ROUTINE'S OWN DIRECT WRITES: image word 12 (+0x18,
+;   register 0x0800) is 0xFF80 and word 13 (+0x1A, register 0x0840) is 0xFF00 --
+;   exactly the two constants step 3 writes at 0xFB8132 and 0xFB811E.  Two
+;   independent paths, the same two values; if the field map were off by one word
+;   that coincidence would break.
 ; --------------------------------------------------------------------------
 Dev10C_ResetAllChannels:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FB80E1  ee 0c f4 ff       link XIZ,0xfff4
@@ -75768,7 +76071,7 @@ Dev10C_ResetAllChannels:
 	ldw (xiz-2), 0x0800                        ; FB8111  be fe 02 00 08    ld (XIZ+0xfe),0x0800
 	ldb	d, 64                                  ; FB8116  24 40             ld D,0x40
 	pop	xiy                                    ; FB8118  5d                pop XIY
-L_FB8119:
+Dev10C_ResetAllChannels__FB8119:
 	ld	(xix), hl                               ; FB8119  b4 53             ld (XIX),HL
 	ld	xbc, (xiz-6)                            ; FB811B  ae fa 21          ld XBC,(XIZ+0xfa)
 	ldw (xbc), 0xFF00                          ; FB811E  b1 02 00 ff       ld (XBC),0xff00
@@ -75788,7 +76091,7 @@ L_FB8119:
 	ld	(xiz-2), bc                             ; FB813D  be fe 51          ld (XIZ+0xfe),BC
 	dec	1, d                                   ; FB8140  cc 69             dec 1,D
 	cps	d, 0                                   ; FB8142  cc d8             cp D,0
-	jr nz, L_FB8119                            ; FB8144  6e d3             jr NZ,0xfb8119
+	jr nz, Dev10C_ResetAllChannels__FB8119                            ; FB8144  6e d3             jr NZ,0xfb8119
 	lda_24	xix, 0x00D8DB                       ; FB8146  f2 db d8 00 34    lda XIX,0x00d8db
 	pushw	68                                   ; FB814B  0b 44 00          push 0x0044
 	push	xix                                   ; FB814E  3c                push XIX
@@ -75803,7 +76106,7 @@ L_FB8119:
 	call 0x00F9A038                            ; FB8168  1d 38 a0 f9       call 0xf9a038
 	ldw	hl, 0                                  ; FB816C  33 00 00          ld HL,0x0000
 	add	xsp, 20                                ; FB816F  ef c8 14 00 00 00 add XSP,0x00000014
-L_FB8175:
+Dev10C_ResetAllChannels__FB8175:
 	lda_24	xbc, 0x00D8DB                       ; FB8175  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB817A  39                push XBC
 	ld	de, hl                                  ; FB817B  db 8a             ld DE,HL
@@ -75829,7 +76132,7 @@ L_FB8175:
 	inc	8, xsp                                 ; FB81B5  ef 60             inc 0,XSP
 	inc	8, xsp                                 ; FB81B7  ef 60             inc 0,XSP
 	cp	hl, 64                                  ; FB81B9  db cf 40 00       cp HL,0x0040
-	jr c, L_FB8175                             ; FB81BD  67 b6             jr C,0xfb8175
+	jr c, Dev10C_ResetAllChannels__FB8175                             ; FB81BD  67 b6             jr C,0xfb8175
 	ldw	hl, 0                                  ; FB81BF  33 00 00          ld HL,0x0000
 	ld	xix, 0x0010C000                         ; FB81C2  44 00 c0 10 00    ld XIX,0x0010c000
 	ld	xbc, xix                                ; FB81C7  ec 89             ld XBC,XIX
@@ -75838,7 +76141,7 @@ L_FB8175:
 	ldw (xiz-2), 0x0840                        ; FB81CE  be fe 02 40 08    ld (XIZ+0xfe),0x0840
 	ldw	de, 0x0800                             ; FB81D3  32 00 08          ld DE,0x0800
 	ldw (xiz-4), 0x00C0                        ; FB81D6  be fc 02 c0 00    ld (XIZ+0xfc),0x00c0
-L_FB81DB:
+Dev10C_ResetAllChannels__FB81DB:
 	ld	bc, (xiz-2)                             ; FB81DB  9e fe 21          ld BC,(XIZ+0xfe)
 	ld	(xix), bc                               ; FB81DE  b4 51             ld (XIX),BC
 	ld	xbc, (xiz-8)                            ; FB81E0  ae f8 21          ld XBC,(XIZ+0xf8)
@@ -75898,7 +76201,7 @@ L_FB81DB:
 	inc	1, hl                                  ; FB8279  db 61             inc 1,HL
 	add	xsp, 24                                ; FB827B  ef c8 18 00 00 00 add XSP,0x00000018
 	cp	hl, 64                                  ; FB8281  db cf 40 00       cp HL,0x0040
-	jrl c, L_FB81DB                            ; FB8285  77 53 ff          jrl C,0xfb81db
+	jrl c, Dev10C_ResetAllChannels__FB81DB                            ; FB8285  77 53 ff          jrl C,0xfb81db
 	pop	xix                                    ; FB8288  5c                pop XIX
 	popw	de                                    ; FB8289  4a                pop DE
 	popw	hl                                    ; FB828A  4b                pop HL
@@ -85943,7 +86246,7 @@ sub_FBDBCE__FBDC65:
 	unlk32 xiz                                 ; FBDC69  unlk XIZ
 	ret                                        ; FBDC6B  ret
 ; --------------------------------------------------------------------------
-; sub_FBDC6C -- 0xFBDC6C..0xFBDCD2 (103 bytes)
+; BitPair_TestAndEncode_Bits4to7 -- 0xFBDC6C..0xFBDCD2 (103 bytes)
 ;
 ; Called from: no site outside this module.
 ;          24 site(s) inside this module:
@@ -85958,10 +86261,26 @@ sub_FBDBCE__FBDC65:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ WHAT IT DOES, with i = (XIZ+0x08), flags = *(XIZ+0x0a), v = (XIZ+0x0e) and the output
+;   byte *(XIZ+0x10):
+;     0xFBDC74  and (XBC),0x0f          the output byte keeps ONLY its low nibble
+;     0xFBDC7E  add XBC,0x00FDE6A1      mask A = 1 << (2i)
+;     0xFBDC8B  and A,H / jr Z          nothing happens unless bit 2i of flags is set
+;     0xFBDC96  add XWA,0x00FDE6A5      mask B = 1 << (2i+1)
+;     0xFBDCA0  and W,H / jr Z
+;        bit 2i+1 set   : out |= (v << 6) | 0x30    (`or C,0x30`   at 0xFBDCB4)
+;        bit 2i+1 clear : out |= (v << 6); bit 5    (`set 0x05,A`  at 0xFBDCCA)
+;   so the byte is rebuilt as <v:2 in bits 7:6><bit 5 = the pair is present><bit 4 = both
+;   bits of the pair are set><the low nibble, untouched>.
+; Evidence: both table addresses are `add rr,imm32` operands; `--claims C7` asserts from the
+;          ROM that 0xFDE6A1[i] == 1 << (2i) and 0xFDE6A5[i] == 1 << (2i+1) for i = 0..3.
+;          BitMask_Table_FDE695's header records that these are the SAME bytes that table
+;          is read from as u16 -- one block, two element widths.
+; Unknown:  ⚠ which flag byte this is, and what the 2-bit value in bits 7:6 selects.  Bits 4
+;          and 5 are set by opcodes; nothing here names them.  All 24 call sites are inside
+;          this module.
 ; --------------------------------------------------------------------------
-sub_FBDC6C:
+BitPair_TestAndEncode_Bits4to7:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FBDC6C  link XIZ,0x0000
 	pushw	hl                                   ; FBDC70  push HL
 	ld	xbc, (xiz+16)                           ; FBDC71  ld XBC,(XIZ+0x10)
@@ -85974,7 +86293,7 @@ sub_FBDC6C:
 	ld	xbc, (xiz+10)                           ; FBDC86  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc)                                ; FBDC89  ld A,(XBC)
 	and	a, h                                   ; FBDC8B  and A,H
-	jr z, sub_FBDC6C__FBDCCF                   ; FBDC8D  jr Z,0xfbdccf
+	jr z, BitPair_TestAndEncode_Bits4to7__FBDCCF                   ; FBDC8D  jr Z,0xfbdccf
 	ld	wa, (xiz+8)                             ; FBDC8F  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FBDC92  extz WA
 	extz	xwa                                   ; FBDC94  extz XWA
@@ -85982,7 +86301,7 @@ sub_FBDC6C:
 	ld	h, (xwa)                                ; FBDC9C  ld H,(XWA)
 	ld	w, (xbc)                                ; FBDC9E  ld W,(XBC)
 	and	w, h                                   ; FBDCA0  and W,H
-	jr z, sub_FBDC6C__FBDCBB                   ; FBDCA2  jr Z,0xfbdcbb
+	jr z, BitPair_TestAndEncode_Bits4to7__FBDCBB                   ; FBDCA2  jr Z,0xfbdcbb
 	ld	iy, (xiz+14)                            ; FBDCA4  ld IY,(XIZ+0x0e)
 	sll	iy, 6                                  ; FBDCA7  sll 0x06,IY
 	extpfx3 0xC7, 0xF4, 0x8E                   ; FBDCAA  ld H,IYL
@@ -85991,8 +86310,8 @@ sub_FBDC6C:
 	or	c, h                                    ; FBDCB2  or C,H
 	or	c, 48                                   ; FBDCB4  or C,0x30
 	ld	(xwa), c                                ; FBDCB7  ld (XWA),C
-	jr sub_FBDC6C__FBDCCF                      ; FBDCB9  jr T,0xfbdccf
-sub_FBDC6C__FBDCBB:
+	jr BitPair_TestAndEncode_Bits4to7__FBDCCF                      ; FBDCB9  jr T,0xfbdccf
+BitPair_TestAndEncode_Bits4to7__FBDCBB:
 	ld	bc, (xiz+14)                            ; FBDCBB  ld BC,(XIZ+0x0e)
 	sll	bc, 6                                  ; FBDCBE  sll 0x06,BC
 	ld	h, c                                    ; FBDCC1  ld H,C
@@ -86001,7 +86320,7 @@ sub_FBDC6C__FBDCBB:
 	or	a, h                                    ; FBDCC8  or A,H
 	set	5, a                                   ; FBDCCA  set 0x05,A
 	ld	(xbc), a                                ; FBDCCD  ld (XBC),A
-sub_FBDC6C__FBDCCF:
+BitPair_TestAndEncode_Bits4to7__FBDCCF:
 	popw	hl                                    ; FBDCCF  pop HL
 	unlk32 xiz                                 ; FBDCD0  unlk XIZ
 	ret                                        ; FBDCD2  ret
@@ -86018,7 +86337,7 @@ sub_FBDC6C__FBDCCF:
 ;          0xFAD688 = sub_FAD688, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
 ;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFBDA2C = sub_FBDA2C
-;          0xFBDBCE = sub_FBDBCE, 0xFBDC6C = sub_FBDC6C
+;          0xFBDBCE = sub_FBDBCE, 0xFBDC6C = BitPair_TestAndEncode_Bits4to7
 ;          0xFC7AB4 = sub_FC7AB4, 0xFC7B64 = sub_FC7B64
 ; Arms:    51 computed-goto arm(s) inside this routine: 0xFBDCEA 0xFBDE92 0xFBDFC5 0xFBE00A 0xFBE00D 0xFBE040 0xFBE0D7 0xFBE134 0xFBE191 0xFBE1EE 0xFBE24B 0xFBE2A8 0xFBE305 0xFBE362 0xFBE3BF 0xFBE41C 0xFBE479 0xFBE4D6 0xFBE533 0xFBE590 0xFBE5ED 0xFBE64A 0xFBE6A7 0xFBE704 0xFBE761 0xFBE7BE 0xFBE81B 0xFBE878 0xFBE8D5 0xFBE932 0xFBE98F 0xFBEA53 0xFBEB5F 0xFBEBB9 0xFBEC13 0xFBEC6D 0xFBECF8 0xFBED83 0xFBEDDD 0xFBEE37 0xFBEE91 0xFBEEC6 0xFBEEFB 0xFBEF55 0xFBEFAF 0xFBF03A 0xFBF094 0xFBF0D9 0xFBF0DC 0xFBF10F 0xFBF1A6
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBDCD3-0xFBF27F
@@ -96224,7 +96543,7 @@ sub_FC36BE:
 	unlk32 xiz                                 ; FC3769  unlk XIZ
 	ret                                        ; FC376B  ret
 ; --------------------------------------------------------------------------
-; sub_FC376C -- 0xFC376C..0xFC3792 (39 bytes)
+; PartSlot_SetRecordPtr_DF05 -- 0xFC376C..0xFC3792 (39 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFB1DFE in VoiceParams_Compute_A__FB1DB9, 0xFB27D4 in VoiceParams_Compute_B__FB2793
@@ -96236,10 +96555,22 @@ sub_FC36BE:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ WHAT IT DOES: `slotptr[arg1] = &record[arg0]`, over two RAM arrays whose strides are
+;   both instruction immediates:
+;     0xFC3771  ld C,0x17 / mul BC,(XIZ+0x08)    23-byte records
+;     0xFC377A  add XIX,0x0000DC0E               the record array's base
+;     0xFC3780  ld C,0x04 / mul BC,(XIZ+0x0a)    4-byte slots, i.e. 32-bit pointers
+;     0xFC3787  add XBC,0x0000DF05               the pointer table's base
+;     0xFC378D  ld (XBC),XIX                     the store
+; Evidence: the five constants are `mul r,imm` and `add rr,imm32` operands and are checked
+;          against the routine's 39 ROM bytes by `--claims C8`.  RAM 0x0000DC0E is named on
+;          32 addressed lines of prom_c and 0x0000DF05 on 9, all at these two strides
+;          (`--claims C11`).
+; Unknown:  ⚠ what a 23-byte record holds, and what indexes the pointer table.  All four
+;          callers are VoiceParams_Compute_A..D, so arg1 is plausibly a slot within a
+;          part -- PLAUSIBLY.  Nothing here reads either field.
 ; --------------------------------------------------------------------------
-sub_FC376C:
+PartSlot_SetRecordPtr_DF05:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC376C  link XIZ,0x0000
 	push	xix                                   ; FC3770  push XIX
 	ldb	c, 23                                  ; FC3771  ld C,0x17
@@ -99199,7 +99530,7 @@ sub_FC4C85__FC4D1E:
 	unlk32 xiz                                 ; FC4D60  unlk XIZ
 	ret                                        ; FC4D62  ret
 ; --------------------------------------------------------------------------
-; sub_FC4D63 -- 0xFC4D63..0xFC4D84 (34 bytes)
+; Pack104_SetInputs_E088_E089_E08A -- 0xFC4D63..0xFC4D84 (34 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFB0AF8 in VoiceRegs_Stage_A, 0xFB1EE6 in VoiceRegs_Stage_B
@@ -99211,10 +99542,22 @@ sub_FC4C85__FC4D1E:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ WHAT IT DOES: it is a SETTER for the argument block the 0x00104000 packer reads.
+;   VoiceRegs_Stage_A's header identifies 0xFC4DBD as that packer and RAM
+;   0x00E082..0x00E08D as its inputs; this routine writes three of them and nothing else:
+;     0xFC4D6A  res 0x07,C          bit 7 of (XIZ+0x0c) is dropped
+;     0xFC4D6D  ld (0x00E088),C     a BYTE
+;     0xFC4D75  ld (0x00E08A),BC    a WORD, from (XIZ+0x0a)
+;     0xFC4D7D  ld (0x00E089),A     a BYTE, from (XIZ+0x0e)
+;   0x00E088 and 0x00E089 are adjacent bytes written from DIFFERENT arguments, so they are
+;   two fields and not one word -- which is the only thing an address list alone cannot say.
+; Evidence: those three stores are the entire body between `link` and `unlk`; the address
+;          list in the "Outputs:" line above is gen_prom_c_block_headers.py's
+;          instruction-operand scan, and the mask is the `res 0x07,C` opcode at 0xFC4D6A.
+; Unknown:  what each field feeds.  The name records WHERE the values go; "Pack104" is the
+;          packer this block belongs to, not a decoded meaning.
 ; --------------------------------------------------------------------------
-sub_FC4D63:
+Pack104_SetInputs_E088_E089_E08A:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC4D63  link XIZ,0x0000
 	ld	c, (xiz+12)                             ; FC4D67  ld C,(XIZ+0x0c)
 	res	7, c                                   ; FC4D6A  res 0x07,C
@@ -99226,7 +99569,7 @@ sub_FC4D63:
 	unlk32 xiz                                 ; FC4D82  unlk XIZ
 	ret                                        ; FC4D84  ret
 ; --------------------------------------------------------------------------
-; sub_FC4D85 -- 0xFC4D85..0xFC4DA0 (28 bytes)
+; Pack104_SetInputs_Rec0C_E08C -- 0xFC4D85..0xFC4DA0 (28 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFA74A0 in KeyZone_Stage_Reg0040_Stride8, 0xFA74E2 in KeyZone_Stage_Reg0040_Stride6A
@@ -99239,10 +99582,19 @@ sub_FC4D63:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ WHAT IT DOES: one store THROUGH the pointer at RAM 0x00E086 and one scalar store.
+;     0xFC4D89  ld BC,(0x00E086) / extz XBC   0x00E086 is a POINTER, not a scalar
+;     0xFC4D93  ld (XBC+0x0c),WA              field +0x0C of the pointed-to record
+;     0xFC4D99  ld (0x00E08C),C               a BYTE, from (XIZ+0x0a)
+;   So the 0x00E082..0x00E08D block mixes two kinds of slot -- a pointer and scalars -- and
+;   this routine is the one that proves it, by dereferencing one of them.
+; Evidence: the two stores are the whole body; `ld BC,(0x00E086)` is an absolute LOAD and
+;          `ld (XBC+0x0c),WA` an indexed store, so the indirection is in the opcodes.
+;          0x00E086 is named on 69 addressed lines of prom_c (`--claims C11`).
+; Unknown:  what field +0x0C of the record is, and what 0x00E08C selects.  Called only
+;          from the four KeyZone_Stage_Reg0040_Stride* routines listed above.
 ; --------------------------------------------------------------------------
-sub_FC4D85:
+Pack104_SetInputs_Rec0C_E08C:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC4D85  link XIZ,0x0000
 	ldw_da	bc, (0xE086)                        ; FC4D89  ld BC,(0x00e086)
 	extz	xbc                                   ; FC4D8E  extz XBC
@@ -99253,7 +99605,7 @@ sub_FC4D85:
 	unlk32 xiz                                 ; FC4D9E  unlk XIZ
 	ret                                        ; FC4DA0  ret
 ; --------------------------------------------------------------------------
-; sub_FC4DA1 -- 0xFC4DA1..0xFC4DBC (28 bytes)
+; Pack104_SetInputs_Rec0E_E08D -- 0xFC4DA1..0xFC4DBC (28 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFB0B57 in VoiceRegs_Stage_A, 0xFB1F38 in VoiceRegs_Stage_B
@@ -99266,10 +99618,17 @@ sub_FC4D85:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ WHAT IT DOES: the +0x0E sibling of Pack104_SetInputs_Rec0C_E08C above.
+;     0xFC4DA5  ld BC,(0x00E086) / extz XBC   the same pointer
+;     0xFC4DAF  ld (XBC+0x0e),WA              field +0x0E, from (XIZ+0x08)
+;     0xFC4DB5  ld (0x00E08D),BC              a WORD, from (XIZ+0x0a)
+;   ⚠ Note the asymmetry with its sibling, which is in the opcodes and not a slip: 0x00E08C
+;   is written as a BYTE (`ld (0x00E08C),C`) and 0x00E08D as a WORD (`ld (0x00E08D),BC`),
+;   so the two overlap unless they are never both live.  Nothing here resolves that.
+; Evidence: the three instructions above are the entire body between `link` and `unlk`.
+; Unknown:  what field +0x0E is.  Called from VoiceRegs_Stage_A..D, one site each.
 ; --------------------------------------------------------------------------
-sub_FC4DA1:
+Pack104_SetInputs_Rec0E_E08D:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC4DA1  link XIZ,0x0000
 	ldw_da	bc, (0xE086)                        ; FC4DA5  ld BC,(0x00e086)
 	extz	xbc                                   ; FC4DAA  extz XBC
@@ -105310,7 +105669,7 @@ sub_FC8129:
 	unlk32 xiz                                 ; FC8161  unlk XIZ
 	ret                                        ; FC8163  ret
 ; --------------------------------------------------------------------------
-; sub_FC8164 -- 0xFC8164..0xFC81B7 (84 bytes)
+; PartRec_TallyScaledField_80_40 -- 0xFC8164..0xFC81B7 (84 bytes)
 ;
 ; Called from: no site outside this module.
 ;          14 site(s) inside this module:
@@ -105324,10 +105683,26 @@ sub_FC8129:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ WHAT IT DOES: a two-threshold tally of one scaled record byte.
+;     0xFC8171  ld A,(XBC+0x01) / and A,0x3f / cp A,1 / jr NZ   runs only when the record's
+;                                                               byte +1, masked to 6 bits, is 1
+;     0xFC817B  ld A,(XBC+0x02)                                 the value
+;     0xFC8187  mul IY,0x012c / add IY,0x0012                   part stride 0x12C, field +0x12
+;     0xFC8191  ld C,(XIY+0x1523)                               of the part record at RAM 0x1523
+;     0xFC8198  mul XWA,BC / srl 0x03,WA                        value * field, then >> 3
+;     0xFC81A1  cp WA,0x007f / jr UGT / inc 1,(XIX)             tally A if the result <= 0x7F
+;     0xFC81A9  cp HL,0x003f / jr UGT / inc 1,(XIX+0x01)        tally B if the result <= 0x3F
+;   The two counters are ADJACENT BYTES of the caller's block, so what a caller learns is
+;   how many records fall under each of two thresholds.
+; ★ `0x1523 + part * 0x12C` is the same part-record geometry round 2 established for
+;   PartRec_ResetSlotValues_ByTag (0xFAF340) -- two routines in two modules, one structure.
+; Evidence: `--claims C9` finds all five constants -- 0x012C, 0x1523, 0x0012, 0x007F and
+;          0x003F -- in this routine's 84 ROM bytes.  The comparisons are UNSIGNED (`jr UGT`)
+;          and the shift is LOGICAL (`srl`, not `sra`); both are opcodes, not readings.
+; Unknown:  ⚠ what tag value 1 selects, and what the scaled quantity is.  The first
+;          `ld HL,WA` at 0xFC819A is overwritten at 0xFC819F and is dead.
 ; --------------------------------------------------------------------------
-sub_FC8164:
+PartRec_TallyScaledField_80_40:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC8164  link XIZ,0x0000
 	pushw	hl                                   ; FC8168  push HL
 	pushw	de                                   ; FC8169  push DE
@@ -105337,7 +105712,7 @@ sub_FC8164:
 	ld	a, (xbc+1)                              ; FC8171  ld A,(XBC+0x01)
 	and	a, 63                                  ; FC8174  and A,0x3f
 	cps	a, 1                                   ; FC8177  cp A,1
-	jr nz, sub_FC8164__FC81B2                  ; FC8179  jr NZ,0xfc81b2
+	jr nz, PartRec_TallyScaledField_80_40__FC81B2                  ; FC8179  jr NZ,0xfc81b2
 	ld	a, (xbc+2)                              ; FC817B  ld A,(XBC+0x02)
 	extz	wa                                    ; FC817E  extz WA
 	ld	de, wa                                  ; FC8180  ld DE,WA
@@ -105353,13 +105728,13 @@ sub_FC8164:
 	srl	wa, 3                                  ; FC819C  srl 0x03,WA
 	ld	hl, wa                                  ; FC819F  ld HL,WA
 	cp	wa, 0x7F                                ; FC81A1  cp WA,0x007f
-	jr ugt, sub_FC8164__FC81A9                 ; FC81A5  jr UGT,0xfc81a9
+	jr ugt, PartRec_TallyScaledField_80_40__FC81A9                 ; FC81A5  jr UGT,0xfc81a9
 	incm8	1, (xix)                             ; FC81A7  inc 1,(XIX)
-sub_FC8164__FC81A9:
+PartRec_TallyScaledField_80_40__FC81A9:
 	cp	hl, 63                                  ; FC81A9  cp HL,0x003f
-	jr ugt, sub_FC8164__FC81B2                 ; FC81AD  jr UGT,0xfc81b2
+	jr ugt, PartRec_TallyScaledField_80_40__FC81B2                 ; FC81AD  jr UGT,0xfc81b2
 	incm8	1, (xix+1)                           ; FC81AF  inc 1,(XIX+0x01)
-sub_FC8164__FC81B2:
+PartRec_TallyScaledField_80_40__FC81B2:
 	pop	xix                                    ; FC81B2  pop XIX
 	popw	de                                    ; FC81B3  pop DE
 	popw	hl                                    ; FC81B4  pop HL
@@ -105424,7 +105799,7 @@ sub_FC81B8__FC81F4:
 ;          0xFBC4A4 in sub_FBC39D__FBC49F, 0xFC2647 in sub_FC2600__FC262D
 ; Inputs:  frame `link XIZ,-26`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC8164 = sub_FC8164, 0xFC81B8 = sub_FC81B8
+; Calls:   0xFC8164 = PartRec_TallyScaledField_80_40, 0xFC81B8 = sub_FC81B8
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC81F8-0xFC856B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -122905,6 +123280,19 @@ Voice_FilterDepth_Scale:
 ; Seven reference sites in all.  The entry count is the space between its two
 ; neighbours; nothing has been traced that bounds the index, so 10 is a capacity,
 ; not a proven count.  What the mask SELECTS is NOT ESTABLISHED.
+; ★ ROUND 3 -- THESE BYTES ARE READ AT TWO ELEMENT WIDTHS.  The u16 reading above
+;   is real, but entries 6..9 (0x0401, 0x4010, 0x0802, 0x8020) are ALSO read as two
+;   4-byte BYTE tables, at 0xFDE6A1 = 01 04 10 40 and 0xFDE6A5 = 02 08 20 80, i.e.
+;   bit 2i and bit 2i+1 of one flag byte.  Two readers do it: 
+;   ByteField_AddOrSub_Clamped (0xFBD8B8, named in round 2) and
+;   BitPair_TestAndEncode_Bits4to7 (0xFBDC6C, named in round 3, `add XBC,0x00FDE6A1`
+;   at 0xFBDC7E and `add XWA,0x00FDE6A5` at 0xFBDC96).
+; Evidence: the byte identity 0xFDE6A1[i] == 1 << (2i) and 0xFDE6A5[i] == 1 << (2i+1)
+;          for i = 0..3 is asserted from the ROM by
+;          notes/prom_c_naming_round2.py --claims (claim_bitmask_tables) and again
+;          by notes/prom_c_naming_round3.py --claims (C7).
+; ⚠ NOT ESTABLISHED: whether the two widths are two USES of one table or two tables
+;   that happen to overlap.  Only the reads are measured.
 ; ----------------------------------------------------------------------------
 BitMask_Table_FDE695:
 	.short	0x0001, 0x0002, 0x0004, 0x0008, 0x0401, 0x4010, 0x0401, 0x4010
@@ -123942,7 +124330,7 @@ Table_FDFF96:
 ;     if A < 0:  D = 0x7F - D ; A = -A   ; the curve is MIRRORED for a negative depth
 ;     result = (T[D] * A) >> 5
 ; so T is a coefficient in Q5 (32 = 1.0) and this one spans -4.0 .. +3.94.
-; COUNT 128: the index is (0x00E088), which sub_FC4D63 builds as voice_record[+0x0C] with
+; COUNT 128: the index is (0x00E088), which Pack104_SetInputs_E088_E089_E08A builds as voice_record[+0x0C] with
 ; BIT 7 CLEARED, so 0..127, and 0x7F - D stays in range.
 ; ⚠ that the key IS a note number is not established here.
 ;
@@ -124628,7 +125016,6 @@ Words_FE128E:
 ; byte and a high byte from the run 0x60,0x62,0x64,0x65,0x67,0x69,0x6B,0x6C -- the
 ; gaps 2,2,1,2,2,2,1 are the black/white pattern of an octave, which is suggestive
 ; and is NOT asserted.
-
 ExtBoard_Signature:
 	.ascii	"WSA1 EXTBD"                         ; 0xFE129E
 	.byte	0x00                                 ; 0xFE12A8  the terminator
@@ -124639,14 +125026,12 @@ ExtBoard_Signature:
 ; other end; this is the copy the code actually reads.  The second copy at
 ; 0xFE1EC9 belongs to the duplicate initialiser image
 ; (notes/FINDINGS-prom_c-duplicate-initialiser.md).
-
 Table_FE12A9:
 	.byte	0x00, 0x01, 0x02, 0x03               ; 0xFE12A9  four entries, cited 3/2/1/1
 ; All seven citations are inside VoiceParams_Compute_A (0xFB0E4F-0xFB1EBC) and
 ; sub_FB0B95.  Four entries because entry 3 is cited and entry 4 would be
 ; 0xFE12AD, which is a different table with its own five citations.
 ; ⚠ what an identity table is FOR is not established.
-
 Field2Bit_Masks:
 	.byte	0x03, 0x0C, 0x30, 0xC0               ; 0xFE12AD  four 2-bit field masks
 ; Evidence: the shift half of the pair -- cited 5/3/2/2 times, entry for entry the

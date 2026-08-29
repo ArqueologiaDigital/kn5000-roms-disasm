@@ -85,6 +85,283 @@ if CURVE_BASE != S(0x28) + 2048 or CURVE_N * CURVE_STRIDE != S(0x30) - CURVE_BAS
     sys.exit("REFUSING TO EMIT: the curve bank moved.")
 
 # ---------------------------------------------------------------------------
+# ★ WAVE 7 ROUND 3.  Who READS this image?  notes/prom_d_documentation_round3.py
+# runs the census -- every `ld X<r>,(0x00d7ed|0x00d7f1)` in prom_c, which is
+# prom_d's base 0x00F00000, followed by a load from (X<r> + directory slot) --
+# and re-decodes every hit from prom_c's ROM BYTES at the address it cites.
+# The Evidence: lines below are GENERATED from that census, so a citation in the
+# assembly cannot outlive the measurement that justifies it.  This emitter
+# refuses to run if the census shape moved.
+# ---------------------------------------------------------------------------
+_spec3 = _ilu.spec_from_file_location(
+    "prom_d_documentation_round3",
+    os.path.join(ROOT, "notes", "prom_d_documentation_round3.py"))
+_R3 = _ilu.module_from_spec(_spec3)
+_saved_argv, sys.argv = sys.argv, ["prom_d_documentation_round3", "--quiet"]
+try:
+    _spec3.loader.exec_module(_R3)
+finally:
+    sys.argv = _saved_argv
+if (len(_R3.ALL_HITS), len({h[2] for h in _R3.ALL_HITS})) != _R3.AUDITED:
+    sys.exit("REFUSING TO EMIT: the prom_c directory-read census is now %d sites "
+             "over %d slots; audited as %s.  Re-audit with "
+             "notes/prom_d_documentation_round3.py before regenerating."
+             % (len(_R3.ALL_HITS), len({h[2] for h in _R3.ALL_HITS}), _R3.AUDITED))
+
+CENSUS_N = len(_R3.ALL_HITS)
+CENSUS_SLOTS = len({h[2] for h in _R3.ALL_HITS})
+CENSUS_CHECKS = _R3.NCHECK[0]
+
+
+def ev_slot(slot, extra=()):
+    """Evidence: lines for a directory slot -- or an honest statement of none.
+
+    Never invents a reader.  A slot with no reader gets the gap, spelled out,
+    because an honest hole is worth more than a confident wrong name and this
+    tree has paid for that lesson.
+    """
+    sites = _R3.readers(slot)
+    if not sites:
+        return ["",
+                "⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks",
+                "every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)",
+                "in prom_c and every directory slot read through it -- %d reads over"
+                % CENSUS_N,
+                "%d slots -- and directory slot +0x%02X is not among them.  So this"
+                % (CENSUS_SLOTS, slot),
+                "region's NAME is still the KN5000 transplant and NOTHING in the WSA1",
+                "firmware confirms it.  (The census is a LOWER BOUND: it does not",
+                "follow a base parked in a frame slot.)"] + list(extra)
+    first = sites[0]
+    breg = _R3.RSEQ[_R3.C[first[0] - _R3.PROM_C_BASE + 4] & 7]
+    alias = [h for h in sites if h[2] != slot]
+    lines = ["",
+             "Evidence: prom_c reads directory slot +0x%02X at %d site%s.  The first is"
+             % (slot, len(sites), "" if len(sites) == 1 else "s"),
+             "0x%06X `ld X%s,(0x%06X)` -- prom_d's base 0x00F00000 -- followed at"
+             % (first[0], breg, first[5]),
+             "0x%06X by `ld %s,(X%s+0x%02X)`.  All %d: %s."
+             % (first[1], first[4], breg, first[2], len(sites),
+                ", ".join("0x%06X" % h[1] for h in sites)),
+             "Every one re-decoded from prom_c's ROM bytes at the cited address by",
+             "notes/prom_d_documentation_round3.py Q2 (%d reads over %d slots, 0 that"
+             % (CENSUS_N, CENSUS_SLOTS),
+             "fail to decode).  The base is a compile-time constant: the only two",
+             "instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and",
+             "0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E."]
+    if alias:
+        lines += ["Sites through alias slot%s %s are counted here: the alias holds the"
+                  % ("" if len({h[2] for h in alias}) == 1 else "s",
+                     ", ".join(sorted({"+0x%02X" % h[2] for h in alias}))),
+                  "same value and therefore names the same object."]
+    return lines + list(extra)
+
+
+def ev_none(what, why):
+    """A stated gap for something the census cannot speak to at all."""
+    return ["", "⚠ NOT ESTABLISHED: %s." % what, "  %s" % why]
+
+
+# --- the decoded chains, each one re-derived by round 3 from prom_c's bytes ---
+
+def INDEXMAP_CHAIN(slot):
+    if slot != 0x4C:
+        return ["",
+                "The chain this reader belongs to has NOT been decoded end to end.",
+                "For the one that has -- slot +0x4C -- see its banner: the map value",
+                "turns out to be a ROW NUMBER in a catalogue.  Whether that reading",
+                "carries over to this map is NOT asserted here."]
+    return [
+        "",
+        "★ AND ROUND 3 GIVES THIS MAP A ROLE, not just a value range.  One prom_c",
+        "routine reads the map and then the catalogue at slot +0x8C, and what it",
+        "does with the value is multiply it by the catalogue's row stride:",
+        "    0xFC156D  ld XIY,(XWA+0x4c)     this map's file offset",
+        "    0xFC1573  sll 0x07,BC           row * 128",
+        "    0xFC1576  add BC,(XIZ+0x08)     + column",
+        "    0xFC1579  mul BC,0x0002         * 2, so entries are LE16",
+        "    0xFC157F  add XIY,(0x00d7ed)    + base",
+        "    0xFC1584  ld BC,(XIY)           THE MAP VALUE",
+        "    0xFC1589  cp BC,0xffff          0xFFFF is the 'no entry' sentinel",
+        "    0xFC1594  ld XIY,(XWA+0x008c)   the +0x8C catalogue",
+        "    0xFC163F  ld BC,0x0010          16 = that catalogue's ROW STRIDE",
+        "    0xFC1642  mul XBC,(XIZ+0xf0)    * the map value",
+        "    0xFC1645  add XBC,(XIZ+0xfc)    + the catalogue base -> the row",
+        "So: (row, column) -> a row of ToneDB_PercSourceNameList1, 0xFFFF = none.",
+        "notes/prom_d_documentation_round3.py Q4g decodes all sixteen instructions",
+        "from the ROM bytes and checks 16 x %d against that catalogue's own footer."
+        % (u16(S(0x90))),
+    ]
+
+
+def _pair(foot):
+    for f, c, lb, lf, lc, cm, lcat in _R3.PAIRS:
+        if f == foot:
+            return (f, c, lb, lf, lc, cm, lcat)
+    return None
+
+
+def CATALOGUE_CHAIN(cat, foot):
+    p = _pair(foot)
+    if not p:
+        return []
+    _f, _c, lb, lf, lc, cm, lcat = p
+    return [
+        "",
+        "★ AND THE COUNT IS ENFORCED BY prom_c, not just declared by the footer.",
+        "One routine loads the footer, reads its first word, compares the caller's",
+        "row index against it, and only then addresses THIS catalogue:",
+        "    0x%06X  ld X..,(base+0x%02X)   the footer at slot +0x%02X" % (lf, foot, foot),
+        "    0x%06X  ld IY,(X..)            its leading LE16 = %d" % (lc, u16(S(foot))),
+        "    0x%06X  cp (XIZ+0x0a),IY       the row index against that count" % cm,
+        "    0x%06X  ld X..,(base+0x%02X)   this catalogue" % (lcat, cat),
+        "and %d is exactly the row count measured from the image (span / 16)."
+        % u16(S(foot)),
+        "All five catalogue/footer pairs are read this way; the five chains are",
+        "checked byte for byte in notes/prom_d_documentation_round3.py Q4c.",
+    ]
+
+
+def FOOTER_CHAIN(foot, cat):
+    p = _pair(foot)
+    if not p:
+        return []
+    _f, _c, lb, lf, lc, cm, lcat = p
+    return [
+        "",
+        "★ AND prom_c USES IT AS A BOUND.  0x%06X loads this footer, 0x%06X reads"
+        % (lf, lc),
+        "its leading LE16, 0x%06X compares the caller's row index against it, and" % cm,
+        "0x%06X addresses the +0x%02X catalogue only on the in-range arm.  So the"
+        % (lcat, cat),
+        "LE16 is not merely equal to the row count: it IS the row count the",
+        "firmware checks against.  notes/prom_d_documentation_round3.py Q4c.",
+        "0xFC1967 / 0xFC196C additionally read the count AND the length byte at",
+        "+0x02 of the +0x98 footer, which is this block's declared two-field head.",
+    ]
+
+
+def DESC_CHAIN(slot):
+    if slot == 0x70:
+        return [
+            "",
+            "★ AND THE 14-BYTE STRIDE IS prom_c's.  Its one reader does not use a",
+            "literal; it reads the directory's OWN stride word and multiplies:",
+            "    0xFC2995  ld XIY,(XWA+0x70)     this block's file offset",
+            "    0xFC299A  ld BC,(XWA+0x00ec)    the stride word = %d" % u16(0xEC),
+            "    0xFC299F  mul XBC,HL            * the descriptor index",
+            "    0xFC29A1  add XIY,XBC",
+            "    0xFC29A5  add XIX,(0x00d7ed)    + base",
+            "That is the array framing of round 2, asserted by the firmware rather",
+            "than by the descriptors' own pointers.",
+            "notes/prom_d_documentation_round3.py Q4e.",
+        ]
+    return [
+        "",
+        "⚠ No reader was found for THIS block.  What round 3 adds is indirect and",
+        "is stated as such: the stride word this block uses (directory +0x%02X = %d)"
+        % (0xEC if slot == 0x30 else 0xF2, u16(0xEC if slot == 0x30 else 0xF2)),
+        "IS read by prom_c -- at 0x%s -- and at 0xFC299A the SAME stride word is"
+        % ", 0x".join("%06X" % h[1] for h in _R3.readers(0xEC if slot == 0x30 else 0xF2)),
+        "multiplied by a record index to walk the descriptor array at slot +0x70,",
+        "which is the same record class.  That corroborates the 14-byte array; it",
+        "does NOT show anything reading this block, and the label stays a KN5000",
+        "transplant on that basis.",
+    ]
+
+
+def DESC_INTERNAL_EV(slot, H, P, recs):
+    a = S(slot)
+    last = a + 14 * (H - 1)
+    tg = [o for _t, o1, o2, _x, _y, _z in recs for o in (o1, o2) if o]
+    return [
+        "",
+        "Evidence: (image-internal, NOT from code) the array's end is fixed",
+        "by the records' own 32-bit offsets.  The smallest non-null offset over all",
+        "%d descriptors is 0x%05X, which is 0x%05X + 14 x %d exactly -- so the"
+        % (H, min(tg), a, H),
+        "array cannot be one record longer or shorter.  The LAST descriptor, at",
+        "0x%05X, points its part B at 0x%05X, which is the last object in the pool"
+        % (last, recs[-1][2]),
+        "(%d bytes short of the block end).  Both ends are pinned, first record and"
+        % (NEXT[a] - recs[-1][2]),
+        "last.  Re-derived on every run by notes/prom_d_structures_round2.py, which",
+        "this emitter refuses to run without.",
+    ]
+
+
+def WAVESEL_EV(slot, a, b, n):
+    """In-image evidence for a wave-select array: both ends, and the stride word."""
+    return [
+        "",
+        "Evidence: (image-internal, NOT from code) the array's last record starts",
+        "0x%05X and ends at 0x%05X, which is the next directory value, so the"
+        % (a + 43 * (n - 1), b),
+        "count %d is fixed at BOTH ends and is not a stride guess.  43 is the" % n,
+        "directory's own word at +0x%02X, and prom_c reads that word at %d sites."
+        % (0xF0 if slot == 0x20 else 0xEA, len(_R3.readers(0xF0 if slot == 0x20 else 0xEA))),
+    ]
+
+
+def WAVESEL_CHAIN(slot):
+    lead = ["",
+            "★ AND 43 IS THE RECORD LENGTH, not just a divisor.  One prom_c routine"]
+    if slot != 0x3C:
+        lead = ["",
+                "⚠ NO reader was found for THIS array.  What follows is about the",
+                "array at slot +0x3C, which has the same record shape, and is quoted",
+                "as corroboration for the 43 -- not as evidence about this block.",
+                "One prom_c routine"]
+    return lead + [
+        "reaches a record by multiplying the directory's stride word, and then",
+        "uses the SAME word as the loop bound of a byte copy out of it:",
+        "    0xFBC7B6  ld XIY,(XWA+0x3c)     the +0x3C array's file offset",
+        "    0xFBC7BE  ld IY,(XWA+0x00ea)    the stride word = 43",
+        "    0xFBC7C3  mul XIY,(XIZ+0xf2)    * the record index",
+        "    0xFBC7C6  add XBC,XIY           => the record",
+        "    0xFBC7CE  ld A,(XBC+0x0b)       field +0x0B, handled on its own",
+        "    0xFBC7D9  ld (XIZ+0xf0),0x000d  i = 13",
+        "    0xFBC7E3  ld WA,(XBC+0x00ea)    the stride word AS THE LOOP BOUND",
+        "    0xFBC7E8  cp (XIZ+0xf0),WA      while i < 43: copy byte i",
+        "So the record is 43 bytes long AND is cut into a 13-byte head that is",
+        "handled field by field and a 30-byte tail that is copied wholesale --",
+        "which is where round 2's `7D 80 54 at +0x0D` sits: at the first byte the",
+        "loop touches.  notes/prom_d_documentation_round3.py Q4h decodes all",
+        "twelve instructions from prom_c's ROM bytes.",
+        "⚠ NOT established: what any of the 43 bytes means, or what the head/tail",
+        "split is FOR.",
+    ]
+
+
+def NOTEMAP_CHAIN(slot):
+    if slot == 0x74:
+        return [
+            "",
+            "★ AND prom_c SCALES IT AS 128 ENTRIES PER KIT:",
+            "    0xFB4931  ld XBC,(XIX+0x74)     this map's file offset",
+            "    0xFB4947  sll 0x07,BC           kit * 128",
+            "    0xFB494C  mul BC,0x0002         * 2, so entries are LE16",
+            "    0xFB4953  add XBC,(0x00d7ed)    + base",
+            "    0xFB4958  ld WA,(XBC)           a drum-instrument index",
+            "    0xFB495A  mul XIY,WA            * the stride word +0xEE = %d,"
+            % u16(0xEE),
+            "                                    which 0xFB493D loaded",
+            "so the value read here really is an index into the 150-byte drum-",
+            "instrument records at slot +0x78.  notes/prom_d_documentation_round3.py",
+            "Q4d decodes all nine instructions from the ROM bytes.",
+        ]
+    return [
+        "",
+        "★ AND prom_c SCALES IT THE SAME WAY as +0x74: 0xFC10FE `sll 0x07,BC`,",
+        "0xFC1101 `add BC,(XIZ+0x08)`, 0xFC1104 `mul BC,0x0002`, 0xFC110A add the",
+        "base, 0xFC110F `ld BC,(XIY)`, then 0xFC1114 `cp BC,0xffff` -- the same",
+        "'no entry' sentinel -- before 0xFC111F addresses the +0x80 catalogue.",
+        "⚠ that chain is NOT decoded byte for byte by round 3; only the slot read",
+        "at 0xFC10F8 is.  It is quoted from the listing and labelled as such.",
+    ]
+
+
+# ---------------------------------------------------------------------------
 # emitters
 # ---------------------------------------------------------------------------
 OUTBUF = []
@@ -229,9 +506,40 @@ def emit_directory():
         "and +0x30==+0x34 in both; the tail scalars +0xD0..+0xDA and +0xE8 have",
         "IDENTICAL values in both.",
         "",
-        "⚠ NO WSA1 INSTRUCTION THAT READS THIS TABLE HAS BEEN FOUND.  The names",
-        "are transplanted, not derived.  Where prom_d's content contradicts the",
-        "KN5000 role the label follows the CONTENT and the note says so.",
+        "⚠ The NAMES are still transplanted, not derived.  Where prom_d's content",
+        "contradicts the KN5000 role the label follows the CONTENT and says so.",
+        "",
+        "Evidence: ★ THIS TABLE IS READ BY prom_c, and that is new in wave 7 round 3.",
+        "prom_d's base is 0x00F00000 on CPU 2's bus, held in RAM 0x00D7ED and",
+        "0x00D7F1; the ONLY two instructions in prom_c that write either address",
+        "are 0xFB0523 and 0xFB0528, both storing the 0x00F00000 that 0xFB051E loads",
+        "as an immediate, so the base is a compile-time constant everywhere.",
+        "notes/prom_d_documentation_round3.py then finds %d reads of this table --"
+        % CENSUS_N,
+        "a load of that base immediately followed by a load from (base + slot) --",
+        "covering %d distinct slots, and RE-DECODES every one from prom_c's ROM"
+        % CENSUS_SLOTS,
+        "bytes at the address it cites.  Which slots, and which sites, is printed",
+        "on each region's own banner below.",
+        "",
+        "★ AND THE POINTER/SCALAR SPLIT IS prom_c's TOO.  Every read of a slot",
+        "BELOW +0xC0 loads a 32-BIT register; every read of a slot AT OR ABOVE",
+        "+0xC0 loads a 16-BIT one.  %d of %d, no exception.  Until round 3 the"
+        % (CENSUS_N, CENSUS_N),
+        "'offsets here, scalars there' reading was borrowed from the KN5000's",
+        "table; it is now this machine's own instruction encodings that say it.",
+        "",
+        "The 0-BASED reading is prom_c's as well: at 0xFB429D it loads a tone",
+        "record's entry out of the table at slot +0x08 and at 0xFB429F it ADDS THE",
+        "BASE AGAIN.  A stored absolute address would not need that second add.",
+        "",
+        "⚠ WHAT IS STILL NOT ESTABLISHED: %d of the 39 filled primary slots have no"
+        % (39 - len([x for x in range(0, 0xB8, 4)
+                     if DIR[x // 4] != 0xFFFFFFFF and x not in _R3.ALIAS
+                     and _R3.readers(x)])),
+        "reader at all -- they are named on each banner, and every one of them",
+        "keeps its transplanted name on that basis.  And no FIELD inside any",
+        "record these slots point at is identified by anything.",
     ])
     W("ToneDB_Base:")
     W("ToneDB_Directory:")
@@ -251,6 +559,20 @@ def emit_directory():
     W("; takes +0xEA/+0xEC/+0xEE/+0xF0/+0xF2 as record STRIDES for the blocks")
     W("; behind the pointer slots; the values here differ from the KN5000's but")
     W("; three of them are confirmed by this image's own geometry (43, 150).")
+    W(";")
+    W("; Evidence: ★ prom_c reads SIX of these tail words, always into a 16-bit")
+    W("; register, and it uses two of them AS STRIDES rather than as data:")
+    W(";   +0xEC = %d  0xFC299A `ld BC,(XWA+0x00ec)` then 0xFC299F `mul XBC,HL`,"
+      % u16(0xEC))
+    W(";               walking the 14-byte descriptor array at slot +0x70;")
+    W(";   +0xEE = %d 0xFB493D `ld IY,(XIX+0x00ee)` then 0xFB495A `mul XIY,WA`,"
+      % u16(0xEE))
+    W(";               scaling a drum-instrument index into the 150-byte records.")
+    W("; The other four (+0xE0, +0xEA, +0xF0, +0xF2) are read at %d sites in all"
+      % sum(len(_R3.readers(x)) for x in (0xE0, 0xEA, 0xF0, 0xF2)))
+    W("; and parked in a frame slot; what they are then multiplied BY is not")
+    W("; traced, so they are NOT claimed as strides on the strength of the reads.")
+    W("; Sites and byte-level decodes: notes/prom_d_documentation_round3.py Q3/Q4.")
     KNTAIL = {0xD0: "3, same in the KN5000", 0xD2: "0", 0xD4: "3, same in the KN5000", 0xD6: "2, same",
               0xD8: "3, same in the KN5000", 0xDA: "2, same", 0xE0: "24 (KN5000: 28)",
               0xE8: "426 -- IDENTICAL to the KN5000, where it is 21+5*81, its longest tone record",
@@ -280,7 +602,7 @@ def emit_bankmap():
         "is directory slot +0x04 that names this table and +0x6C that names the",
         "second copy; in prom_d it is +0x6C that names THIS table and +0x04 that",
         "names the tone-number banks 0x80 above it.  There is only one copy here.",
-    ])
+    ] + ev_slot(0x6C))
     W("ToneDB_BankMap:")
     e_bytes(0x100, 0x180)
 
@@ -301,7 +623,19 @@ def emit_numbanks():
         "32-39 are Harp/Banjo/Harp/Mandolin/Shamisen/Koto/Sitar/Kalimba where GM",
         "has the bass family.  It is a Technics-internal ordering; nothing here",
         "identifies which panel control it corresponds to.",
-    ])
+    ] + ev_slot(0x04, [
+        "",
+        "★ AND THE 10 x 128 SHAPE IS prom_c's, not an inference from the span.",
+        "The reader scales the index before it adds the table:",
+        "    0xFB4271  sll 0x07,BC          row * 128",
+        "    0xFB4274  add BC,DE            + program number",
+        "    0xFB4276  add BC,BC            * 2, so the entry is an LE16",
+        "    0xFB427C  add XIY,(0x00d7ed)   + the base  => the absolute entry",
+        "    0xFB4281  ld HL,(XIY)          the tone index",
+        "and the value it produces goes straight into ToneDB_ToneOffsetTable at",
+        "0xFB4283.  notes/prom_d_documentation_round3.py Q4a decodes all fifteen",
+        "instructions of that chain from the ROM bytes.",
+    ]))
     W("ToneDB_ToneNumBanks:")
     for b in range(10):
         base = 0x180 + 0x100 * b
@@ -328,7 +662,18 @@ def emit_offtable():
         "",
         "Same structure and same directory slot as the KN5000's table of the same",
         "name (629 entries there).",
-    ])
+    ] + ev_slot(0x08, [
+        "",
+        "★ THE ENTRY WIDTH AND THE 0-BASED READING ARE prom_c's TOO:",
+        "    0xFB4288  ld XWA,(XBC+0x08)    this table's file offset",
+        "    0xFB4290  sll 0x02,IY          tone index * 4, so entries are LE32",
+        "    0xFB4298  add XIY,(0x00d7ed)   + base => the absolute entry",
+        "    0xFB429D  ld XWA,(XIY)         the entry: a tone record's FILE OFFSET",
+        "    0xFB429F  add XWA,(0x00d7ed)   + base AGAIN => the record itself",
+        "That second add is the whole argument for `0-based file offsets`: the",
+        "value stored here is NOT an address, and prom_c adds the base to it.",
+        "notes/prom_d_documentation_round3.py Q4a.",
+    ]))
     W("ToneDB_ToneOffsetTable:")
     for i in range(274):
         W("\t.long 0x%08X\t; tone 0x%03X  %r" % (PTRS[i], i, NAME(PTRS[i])))
@@ -347,7 +692,22 @@ def emit_unk_fc8():
         "",
         "⚠ The KN5000 leaves directory slot +0xA8 UNUSED, so there is no name to",
         "transplant and none is invented here.",
-    ])
+    ] + ev_slot(0xA8, [
+        "",
+        "★ NEW in wave 7 round 3: the 128-byte RECORD SIZE is now prom_c's, not",
+        "just a zero/non-zero column pattern.  The one reader indexes it by 128:",
+        "    0xFA7332  ld XIY,(XWA+0x00a8)  this table's file offset",
+        "    0xFA734A  add XIY,XBC          + a byte fetched from RAM 0x1523",
+        "    0xFA7351  sll 0x07,BC          record index * 128",
+        "    0xFA7356  add XIY,XBC",
+        "    0xFA7358  add XIY,(0x00d7ed)   + base",
+        "    0xFA735D  ld BC,(XIY)          a 16-bit word out of the record",
+        "notes/prom_d_documentation_round3.py Q4f decodes all of it from bytes.",
+        "",
+        "⚠ STILL NOT ESTABLISHED: what a record MEANS, what selects one, or what",
+        "the 16-bit word at the computed offset is for.  What round 3 adds is the",
+        "RECORD SIZE and the fact that the block is reached at all.",
+    ]))
     W("Unk_0FC8_Table:")
     for k in range(8):
         W("Unk_0FC8_Rec_%d:" % k)
@@ -413,7 +773,39 @@ TONE_HDR = [
     "per-element 43-byte wave-select array, which the KN5000 does not have.",
     "",
     "⚠ NOT established: the meaning of any field inside the head, the element",
-    "block or the wave-select record.  No consumer code has been read.",
+    "block or the wave-select record.  Round 3 reads a consumer's ADDRESS",
+    "arithmetic; it does not read a field.",
+    "",
+    "Evidence: ★ 217 AND 81 ARE LITERALS IN prom_c.  One routine computes an",
+    "element block's address as record + 217 + 81*index:",
+    "    0xFB436D  ld C,0x51             81, the element-block stride",
+    "    0xFB436F  mul BC,H              * the element index",
+    "    0xFB4373  add XBC,0x000000d9    + 217, the record head",
+    "    0xFB4379  add XBC,(XIZ+0x08)    + the tone record",
+    "and its other arm, taken when the element index is the sentinel 0xFF",
+    "(0xFB4351 `cp A,0xff`), loads directory slot +0xAC instead -- which is why",
+    "ToneDB_DefaultLayerParams is called a fallback.  The record itself is",
+    "reached from ToneDB_ToneOffsetTable at 0xFB429D/0xFB429F.  Every instruction",
+    "quoted is re-decoded from prom_c's ROM bytes by",
+    "notes/prom_d_documentation_round3.py Q4a/Q4b.",
+    "",
+    "So the 81-byte cut, which this file used to justify by an entropy sweep and",
+    "by the 124-byte block at slot +0xAC, now has a third and independent",
+    "witness in the firmware; and a FOURTH from another CPU architecture entirely:",
+    "",
+    "★ CROSS-TREE.  The KN7000 (2002) is an MN10300 machine -- a different",
+    "instruction set -- and its table ROM shares data with this image.  195 of the",
+    "252 distinct sixteen-character 0x10-terminated name fields in the four WSA1",
+    "images occur VERBATIM in that ROM, and every one of the 195 is in prom_d",
+    "(0 in prom_a, prom_b or prom_c).  Of the 250 guarded binary runs prom_d",
+    "shares with it, 74 -- the modal gap, and the largest class by a factor of",
+    "2.6 over the next -- are exactly 81 BYTES APART: the per-element stride",
+    "derived here from prom_d alone.  Two methods, two CPU architectures, one",
+    "number.  notes/wave7_xref_mn10300_family.py section 4 (the runs need its",
+    "entropy AND first-difference guards); the 195/252 is re-derived by a second",
+    "path, off the collection's already-linear table image, in",
+    "notes/prom_d_documentation_round3.py Q6.",
+    "⚠ NOT claimed: which way the data travelled, or what any shared field means.",
 ]
 
 
@@ -468,7 +860,18 @@ def emit_default_layer():
         "wave-select record.  The KN5000's slot +0xAC has the same name and the",
         "same role -- 'fallback descriptor bound when a patch partial is absent'.",
         "This block is the second, independent witness for the 81+43 cut.",
-    ])
+    ] + ev_slot(0xAC, [
+        "",
+        "★ AND `FALLBACK` IS NOW prom_c's WORD, not a borrowed one.  0xFB4351",
+        "`cp A,0xff` / 0xFB4354 `jr NZ` splits two arms of one routine:",
+        "  A == 0xFF -> 0xFB435B `ld XWA,(XBC+0x00ac)`, i.e. THIS block;",
+        "  otherwise -> 0xFB436D `ld C,0x51` (81) / 0xFB436F `mul BC,H` /",
+        "               0xFB4373 `add XBC,0x000000d9` (217) / 0xFB4379 add the",
+        "               tone record, i.e. record + 217 + 81*index.",
+        "So the sentinel 0xFF selects this 124-byte block IN PLACE OF an element",
+        "block, which is exactly what a fallback is.",
+        "notes/prom_d_documentation_round3.py Q4b decodes both arms from bytes.",
+    ]))
     W("ToneDB_DefaultLayerParams:")
     W("ToneDB_DefaultLayerParams_Elem:")
     e_bytes(S(0xAC), S(0xAC) + 81)
@@ -490,7 +893,12 @@ def emit_clear_template():
         "",
         "⚠ The KN5000's slot +0xB0 is PercName_Pack, packed 10-char percussion",
         "names.  prom_d's content is not that, so the KN5000 name is NOT used.",
-    ])
+    ] + ev_slot(0xB0, [
+        "",
+        "⚠ The reader proves the slot is FETCHED, not what the record is FOR.",
+        "'the blank template a user tone starts from' remains an inference from",
+        "the name and from the IC28 combination bank, and is labelled as one.",
+    ]))
     emit_tone_record_named("ToneRec_Template_Clear", p, end)
 
 
@@ -532,7 +940,12 @@ def emit_silent_template():
         "",
         "One record, byte-identical to drum-instrument record 0 at slot +0x78.",
         "⚠ The KN5000 leaves slot +0xB4 unused.",
-    ])
+    ] + ev_slot(0xB4, [
+        "",
+        "The reader at 0xFBA5C9 is followed at 0xFBA5DD by `ld C,0x96` and",
+        "0xFBA5DF `mul BC,(XIZ+0xc2)` -- 150, this record class's stride -- so the",
+        "same routine addresses both this template and the 150-byte array.",
+    ]))
     W("PercInst_Template_Silent:")
     e_ascii(p, 13)
     e_bytes(p + 13, p + PERC_STRIDE)
@@ -560,6 +973,17 @@ def mk_indexmap(slot, extra_note=None):
         ]
         if extra_note:
             lines.extend(extra_note if isinstance(extra_note, list) else [extra_note])
+        lines += [
+            "",
+            "Evidence: (image-internal, NOT from code) this region begins at",
+            "0x%05X, which is directory slot +0x%02X's value, and ends at 0x%05X,"
+            % (a, slot, b),
+            "which is the next value in the same directory.  So the entry count %d"
+            % n,
+            "is pinned at BOTH ends by the image's own table and is not a stride",
+            "guess -- the failure mode this tree has paid for.  The value range",
+            "above is measured over all %d entries, first to last." % n,
+        ] + ev_slot(slot, INDEXMAP_CHAIN(slot) if _R3.readers(slot) else ())
         banner("%s -- directory slot +0x%02X" % (slot_label(slot), slot), a, b, lines)
         W("%s:" % slot_label(slot))
         e_shorts(a, b)
@@ -585,7 +1009,7 @@ def mk_wavesel_array(slot):
             % (sum(1 for i in range(n) if D[a + 43 * i + 13:a + 43 * i + 16] == b"\x7d\x80\x54"), n),
             "record examined', which was the first record quoted as a universal.",
             "Re-derived by notes/prom_d_structures_round2.py section Q4b.",
-        ])
+        ] + WAVESEL_EV(slot, a, b, n) + ev_slot(slot, WAVESEL_CHAIN(slot)))
         W("%s:" % slot_label(slot))
         for i in range(n):
             W("%s_%03d:" % (slot_label(slot), i))
@@ -603,7 +1027,7 @@ def mk_catalogue(slot, foot_slot):
             "The row count is CONFIRMED by the block's own footer at directory slot",
             "+0x%02X, whose leading LE16 is %d." % (foot_slot, n),
             "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
-        ])
+        ] + ev_slot(slot, CATALOGUE_CHAIN(slot, foot_slot)))
         W("%s:" % slot_label(slot))
         for i in range(n):
             e_ascii(a + 16 * i, 13)
@@ -619,7 +1043,7 @@ def mk_footer(slot, of_slot):
             "The LE16 is %d, which is exactly the row count of the catalogue at" % u16(a),
             "directory slot +0x%02X.  That is what identifies these blocks." % of_slot,
             "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
-        ] + ([] if 3 + D[a + 2] == b - a else [
+        ] + ev_slot(slot, FOOTER_CHAIN(slot, of_slot)) + ([] if 3 + D[a + 2] == b - a else [
             "⚠ 3 + %d = %d, but this region is %d bytes.  The %d extra byte(s) after"
             % (D[a + 2], 3 + D[a + 2], b - a, b - a - 3 - D[a + 2]),
             "the declared payload are the LAST bytes of the whole payload (it ends at",
@@ -653,9 +1077,19 @@ DESC_HDR = [
     "every run of this generator by notes/prom_d_structures_round2.py, which",
     "refuses to emit if a boundary moved.",
     "",
-    "⚠ NO field inside a descriptor, a part A or a part B is identified, and no",
-    "WSA1 instruction that reads any of this has been found.",
+    "⚠ NO field inside a descriptor, a part A or a part B is identified.",
 ]
+
+
+def desc_hdr(slot):
+    """DESC_HDR plus the one line that differs per block: is it READ?"""
+    if _R3.readers(slot):
+        return DESC_HDR + ["⚠ And no field is identified even though the block "
+                           "IS reached: see the Evidence",
+                           "line below, which pins the ARRAY STRIDE and nothing else."]
+    return DESC_HDR + ["⚠ And no prom_c instruction that reads THIS block has been "
+                       "found; the Evidence",
+                       "note below states what that leaves standing and what it does not."]
 
 
 def desc_pool_labels(slot):
@@ -687,7 +1121,7 @@ def mk_desc_block(slot, extra):
         H, P, recs = DESC[slot]
         lab = desc_pool_labels(slot)
         banner("%s -- directory slot +0x%02X" % (slot_label(slot), slot), a, b,
-               DESC_HDR + [""] + extra + [
+               desc_hdr(slot) + [""] + extra + [
                    "",
                    "Here: %d descriptors x 14 = %d bytes, then a pool of %d bytes"
                    % (H, 14 * H, b - P),
@@ -695,7 +1129,7 @@ def mk_desc_block(slot, extra):
                    % (P, b - 1, len(lab), 14 * H, b - P, b - a),
                    "block, with nothing unaccounted for.",
                    "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
-               ])
+               ] + DESC_INTERNAL_EV(slot, H, P, recs) + ev_slot(slot, DESC_CHAIN(slot)))
         W("%s:" % slot_label(slot))
         for i in range(H):
             t, o1, o2, b9, w10, w12 = recs[i]
@@ -743,11 +1177,36 @@ def emit_curves():
         "here) and not a synthesis role.",
         "",
         "Re-derived by notes/prom_d_structures_round2.py section Q2.",
+        "",
+        "Evidence: (image-internal, NOT from code) every one of the 318",
+        "part-A objects in the descriptor pool at slot +0x30 begins with a 32-bit",
+        "file offset, and the set of values those 318 words take is EXACTLY the",
+        "set of these %d addresses -- no other value appears and no curve is" % CURVE_N,
+        "unused.  That is what makes the boundary at 0x%05X real rather than a" % a,
+        "convenient place to cut.",
+        "⚠ No prom_c instruction reads this bank: the census in",
+        "notes/prom_d_documentation_round3.py finds no reader for slot +0x30, the",
+        "only slot from which this bank is reachable.",
     ])
     W("ToneDB_DescCurveBank:")
+    _heads = collections.Counter(u32(p) for p, _e, kd, _i in _R2.desc_segments(0x30)
+                                 if kd == "A")
     for k in range(CURVE_N):
         c = a + CURVE_STRIDE * k
-        W("ToneDB_DescCurve_%d:\t\t; 128 entries, 0 .. %d" % (k, D[c + 127]))
+        W("")
+        W("; ToneDB_DescCurve_%d -- file 0x%05X..0x%05X (%d bytes)"
+          % (k, c, c + CURVE_STRIDE - 1, CURVE_STRIDE))
+        W("; %d entries, non-decreasing, v[0] = 0, v[127] = %d.%s"
+          % (CURVE_STRIDE, D[c + 127],
+             "  Exactly index//12." if k == 0 else ""))
+        W("; Evidence: %d of the 318 part-A objects at slot +0x30 name THIS curve"
+          % _heads.get(c, 0))
+        W("; in their leading LE32; the first is the object at 0x%05X.  %s"
+          % (min(p for p, _e, kd, _i in _R2.desc_segments(0x30)
+                 if kd == "A" and u32(p) == c),
+             "The 161 descriptors at slot +0x38 share one part A, and it names "
+             "this curve too." if c == a + CURVE_STRIDE * (CURVE_N - 1) else ""))
+        W("ToneDB_DescCurve_%d:" % k)
         e_bytes(c, c + CURVE_STRIDE)
 
 
@@ -774,6 +1233,19 @@ def emit_drumkits():
         "agree: 55 of 70 columns share a modal byte, against 17-27 for every shift",
         "null.  But the melodic head runs 79 bytes past the landmark and the drum",
         "head only 70, so the two heads are NOT interchangeable.",
+        "",
+        "Evidence: these 18 records are named by ToneDB_ToneOffsetTable entries",
+        "256..273 (file 0x%05X..0x%05X), and that table is the one prom_c walks at"
+        % (0xB80 + 4 * 256, 0xB80 + 4 * 273),
+        "0xFB4288/0xFB4290/0xFB429D -- index x 4, entry, plus the base -- so the",
+        "records are reached the same way a melodic tone record is.",
+        "★ AND THE 128-ENTRY NOTE MAP IS CONFIRMED FROM THE OTHER END: 0xFB4947",
+        "`sll 0x07,BC` scales a kit number by 128 into DrumKit_NoteMapA (slot",
+        "+0x74) and 0xFB495A multiplies the value it finds by the +0xEE stride",
+        "word, 150, i.e. into the drum-instrument records.  That is the chain this",
+        "banner previously said had NOT been confirmed against code, for the note",
+        "map; it is still NOT confirmed for the per-record map emitted below.",
+        "notes/prom_d_documentation_round3.py Q4a and Q4d.",
     ])
     for k in range(18):
         p = a + 408 * k
@@ -793,7 +1265,18 @@ def emit_percinst():
     banner("PercInst -- directory slot +0x78", a, b, PERC_HDR + [
         "",
         "%d records here; the span divides exactly by %d." % (n, PERC_STRIDE),
-    ])
+    ] + ev_slot(0x78, [
+        "",
+        "★ AND THE STRIDE IS prom_c's.  It does not use a literal 150 here; it",
+        "reads the directory's OWN stride word and multiplies by it:",
+        "    0xFB48FE  ld XIX,(0x00d7f1)    the base, parked for the routine",
+        "    0xFB4937  ld XWA,(XIX+0x78)    this array's file offset",
+        "    0xFB493D  ld IY,(XIX+0x00ee)   the stride word = %d" % PERC_STRIDE,
+        "    0xFB4958  ld WA,(XBC)          a drum-instrument index",
+        "    0xFB495A  mul XIY,WA           index * the stride word",
+        "which is why the +0xEE line on the directory says CONFIRMED.",
+        "notes/prom_d_documentation_round3.py Q4d.",
+    ]))
     W("PercInst_000_Silent:")
     for i in range(n):
         p = a + PERC_STRIDE * i
@@ -812,7 +1295,7 @@ def mk_notemap(slot):
             "drum-instrument records at slot +0x78 (max %d)."
             % max(v for v in (u16(a + 2 * i) for i in range((b - a) // 2)) if v != 0xFFFF),
             "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
-        ])
+        ] + ev_slot(slot, NOTEMAP_CHAIN(slot) if _R3.readers(slot) else ()))
         W("%s:" % slot_label(slot))
         e_shorts(a, b)
     return fn
@@ -839,6 +1322,15 @@ def emit_drawbars():
         "The KN5000 also treats drawbar presets specially: its directory slot +0x70",
         "is DrawbarPreset_EnvDescTable, and prom_d's +0x70 points at the descriptor",
         "block immediately after these two records.",
+        "",
+        "Evidence: (image-internal) ToneDB_ToneOffsetTable entries 0x058 and",
+        "0x059, at file 0x%05X and 0x%05X, hold 0x%05X and 0x%05X; the second plus"
+        % (0xB80 + 4 * 0x58, 0xB80 + 4 * 0x59, 0x446B4, 0x448D1),
+        "541 is exactly directory slot +0x70, so BOTH ends are pinned by something",
+        "other than the stride.  The 81-byte element cut inside them is the same",
+        "one prom_c uses at 0xFB436D (`ld C,0x51`) for every other tone record.",
+        "⚠ Nothing has been found that reads these two records specifically, and",
+        "nothing explains why they carry no wave-select array.",
     ])
     for k in range(2):
         p = a + 541 * k
@@ -864,9 +1356,18 @@ def emit_tail():
         "0x00F00000 on CPU 2's bus (notes/FINDINGS-memory-map.md §5).",
         "⚠ This banner used to end 'the 512 KiB flash at 0xE80000', which is the",
         "REFUTED reading -- prom_c's own Flash_SectorErase bounds that part at",
-        "0x00E80000..0x00EFFFFF, below this image.  prom_d/prom_d.ld still carries",
-        "the old argument; its ORIGIN 0 stays correct either way, because this",
-        "image is addressed by 0-based offsets and holds no absolute pointers.",
+        "0x00E80000..0x00EFFFFF, below this image.  ORIGIN 0 in prom_d/prom_d.ld",
+        "stays correct anyway, because this image is addressed by 0-based offsets",
+        "and holds no absolute pointers -- which round 3 turned from an argument",
+        "about content into a fact about the firmware (see the directory banner:",
+        "prom_c adds the base to a value it read out of this image).",
+        "",
+        "Evidence: prom_a 0xF82A5F is `ld XWA,0x00F7FFF0` (bytes 40 f0 ff f7 00)",
+        "and the eleven bytes at prom_d file 0x7FFF0 are `wsad_54.ssf`.",
+        "0x00F7FFF0 - 0x7FFF0 = 0x00F00000, the same base prom_c installs in RAM",
+        "0x00D7ED / 0x00D7F1 from the immediate at 0xFB051E.  Two processors, two",
+        "independent routes, one base.  notes/prom_d_base_checks.py (12 checks)",
+        "and notes/prom_d_documentation_round3.py Q1.",
     ])
     W("erased_tail:")
     W("\t.fill 0x%X, 1, 0xFF" % (0x7FFF0 - 0x50B09))
@@ -943,15 +1444,41 @@ HEADER = '''\t.text
 ;
 ; Reference designator not legible in the manual scan; this image is
 ; wsa1_os_v2.ic21 of the redistributed v2 firmware set, so IC21 is the likely
-; designator and is NOT asserted here.  DATA ONLY -- all 64 words at file offset
-; 0x7FF00 are 0xFFFFFFFF, so it is not a boot image and nothing in it executes.
+; designator and is NOT asserted here.  DATA ONLY -- 60 of the 64 words at file
+; offset 0x7FF00 are 0xFFFFFFFF and the other four are the build tag, so there is
+; no vector table: it is not a boot image and nothing in it executes.
+; (⚠ this line used to say "all 64"; corrected against notes/prom_d_base_checks.py.)
 ;
-; BASE: **NOT ESTABLISHED.**  ORIGIN 0 in prom_d/prom_d.ld is a build
-; convenience and asserts nothing; the leading hypothesis (the 512 KiB flash at
-; 0xE80000 on CPU 2's bus) and the one link it is still missing are set out in
-; full in that file.  Every offset in this source is therefore FILE-RELATIVE,
-; which is also how the image itself addresses its contents: it holds no
-; absolute pointers, only 0-based offsets.
+; BASE: **0x00F00000 on CPU 2's bus** -- ⚠ CHANGED IN WAVE 7 ROUND 3, where this
+; paragraph used to read "NOT ESTABLISHED".  What establishes it:
+;
+;   * prom_c installs 0x00F00000 in RAM 0x00D7ED and 0x00D7F1 (0xFB051E loads
+;     the immediate, 0xFB0523 and 0xFB0528 store it).  Those two stores are the
+;     ONLY instructions in prom_c that write either address, so the value is a
+;     compile-time constant at every use.
+;   * prom_c then reads THIS IMAGE'S 48-slot directory through that base at 99
+;     instruction pairs covering 33 slots, and adds the base to the offsets it
+;     finds there.  Every one of the 99 is re-decoded from prom_c's ROM bytes.
+;   * independently, prom_a 0xF82A5F `ld XWA,0x00F7FFF0` reads eleven bytes that
+;     are this image's build tag at file 0x7FFF0, "wsad_54.ssf"; the difference
+;     is 0x00F00000.  Two processors, two routes, one base.
+;   * the earlier "512 KiB flash at 0xE80000" reading is REFUTED: prom_c's own
+;     Flash_SectorErase bounds that part at 0x00E80000..0x00EFFFFF, below this
+;     image, and ExtBoard_ProbeAndInstallBases installs the two addresses in
+;     SEPARATE slots.  notes/prom_d_base_checks.py, 12 checks.
+;
+; ORIGIN in prom_d/prom_d.ld nevertheless STAYS 0, and that is deliberate: this
+; image's own directory is 0-BASED, and what proves that is not a statistic but
+; an instruction sequence -- prom_c reads a tone-record entry out of the table at
+; slot +0x08 (0xFB429D) and then ADDS THE BASE TO IT (0xFB429F), having already
+; added the base to reach the table (0xFB4298).  A stored absolute address needs
+; neither add.  Every offset in this source is therefore FILE-RELATIVE, which is
+; how the hardware reads it.  (⚠ the older argument from bank statistics is kept
+; in prom_d/prom_d.ld but DOWNGRADED there: round 3 Q8 shows it does not
+; discriminate -- prom_c is a code ROM and scores like prom_d on it.)
+;
+; ⚠ What is still open is which PHYSICAL PART this is.  The base fixes the
+; address the firmware reads it at, not the device.
 ;
 ; ------------------------------------------------------------------------------
 ; WHAT THIS IMAGE IS
@@ -973,6 +1500,13 @@ HEADER = '''\t.text
 ;     ROMs' entire populations (1637 KN5000 blocks, 451 WSA1 blocks), against
 ;     18-29 columns for every shift and rotation null.
 ;
+; And it reaches ACROSS THE ARCHITECTURE BOUNDARY as well: 195 of the 252
+; distinct 16-character name fields in the WSA1 images are verbatim in the
+; KN7000's (MN10300) table ROM and all 195 are in prom_d, while 74 of the 250
+; shared binary runs sit exactly 81 bytes apart -- prom_d's own per-element
+; stride, derived on this side without reference to any KN7000.  See the
+; MELODIC TONE RECORDS banner; notes/wave7_xref_mn10300_family.py section 4.
+;
 ; Contents, by count:
 ;     274 tones           256 melodic + 18 drum kits, named and reachable from
 ;                         the offset table at 0x0B80
@@ -988,13 +1522,31 @@ HEADER = '''\t.text
 ; The byte gate certifies BYTES.  It is blind to a wrong label and a wrong
 ; comment.  For this file specifically:
 ;
-;   * NO WSA1 INSTRUCTION THAT READS ANY OF THESE STRUCTURES HAS BEEN FOUND.
-;     Every region NAME is transplanted from the KN5000 directory slot with the
-;     same offset.  They are hypotheses with a stated basis, not derivations.
+;   * ⚠ WAVE 7 ROUND 3 RETIRED THE HEADLINE CAVEAT.  This bullet used to read
+;     "NO WSA1 INSTRUCTION THAT READS ANY OF THESE STRUCTURES HAS BEEN FOUND",
+;     and it appeared four times in this file.  It is now FALSE and is retracted.
+;     prom_c reads this image's directory at 99 instruction pairs over 33 slots
+;     (notes/prom_d_documentation_round3.py, %d checks, every citation re-decoded
+;     from prom_c's ROM bytes).  What that changed, region by region, is on each
+;     banner as an `Evidence:` line.  The headline consequences:
+;       - the base, the 0-based offsets and the pointer/scalar split of the
+;         directory are now prom_c's own encodings, not a KN5000 transplant;
+;       - 81 and 217 (the element block and the tone-record head), 16 (the
+;         catalogue row), 128 (the +0xA8 record and the index-map row) and 4/2
+;         (the LE32/LE16 entry widths) appear as literals or shifts in prom_c;
+;       - the stride words at +0xEC and +0xEE are read and MULTIPLIED BY;
+;       - a catalogue's row count is not merely equal to its footer's LE16, it
+;         is bounded by it at run time, in all five catalogue/footer pairs;
+;       - an index map's VALUE is a catalogue row number, 0xFFFF meaning none.
+;     ⚠ BUT 13 of the 39 filled primary slots still have NO reader -- including
+;     the two largest structures, the descriptor blocks at +0x30/+0x38 and the
+;     wave-select arrays at +0x18/+0x20.  Those keep their transplanted names,
+;     and their banners say so in as many words.
 ;   * The MEANING of individual fields -- inside a tone record, an element
 ;     block, a wave-select record, a drum-instrument record, a descriptor -- is
-;     unknown throughout.  Where a comment states a field, it states a shape
-;     (a count, an offset, a stride) that was measured, never a semantics.
+;     STILL unknown throughout.  Round 3 read a consumer's ADDRESS ARITHMETIC;
+;     it did not read one field.  Where a comment states a field, it states a
+;     shape (a count, an offset, a stride) that was measured, never a semantics.
 ;   * ⚠ WAVE 7 ROUND 2 changed this bullet.  It used to read "Three regions
 ;     resist framing": the descriptor blocks at slots +0x30/+0x38/+0x70, the 768
 ;     extra bytes in the index map at +0x28, and the 8 x 128-byte table at +0xA8.
@@ -1006,15 +1558,20 @@ HEADER = '''\t.text
 ;       - the 768 bytes at 0x22A3B are SIX 128-byte monotone curves, and what
 ;         says so is that all 318 part-A objects of slot +0x30 begin with a
 ;         32-bit offset naming one of exactly those six addresses.
-;     What still resists: the 8 x 128-byte table at +0xA8 (the KN5000 leaves that
-;     slot unused, so there is no name to transplant and none is invented), and
-;     every FIELD inside a descriptor, a curve or a pool row.
+;     What still resists: the PURPOSE of the 8 x 128-byte table at +0xA8 (the
+;     KN5000 leaves that slot unused, so there is no name to transplant and none
+;     is invented -- though round 3 confirmed its 128-byte RECORD SIZE from
+;     prom_c's own indexing), and every FIELD inside a descriptor, a curve or a
+;     pool row.
 ;     notes/prom_d_structures_round2.py, 78 checks.
 ;   * Directory slot +0x88 holds 0x125.  In the KN5000 the same slot holds a
 ;     SCALAR, not an offset.  Nothing here decides which prom_d means.
 ;
 ; Reproduce every number quoted in this file:
 ;     python3 scripts/analysis/prom_d_tone_database.py
+;     python3 notes/prom_d_structures_round2.py        # the record framing, 78 checks
+;     python3 notes/prom_d_documentation_round3.py     # who READS it, %d checks
+;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
 ; Regenerate this file:
 ;     python3 scripts/analysis/gen_prom_d_asm.py
 ; Then, always:
@@ -1027,7 +1584,7 @@ HEADER = '''\t.text
 wsa1_prom_d:
 '''
 
-W(HEADER.rstrip("\n"))
+W((HEADER % (CENSUS_CHECKS, CENSUS_CHECKS)).rstrip("\n"))
 for a, b, fn in REGIONS:
     before = len(OUTBUF)
     fn()

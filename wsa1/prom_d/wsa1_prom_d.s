@@ -6,15 +6,41 @@
 ;
 ; Reference designator not legible in the manual scan; this image is
 ; wsa1_os_v2.ic21 of the redistributed v2 firmware set, so IC21 is the likely
-; designator and is NOT asserted here.  DATA ONLY -- all 64 words at file offset
-; 0x7FF00 are 0xFFFFFFFF, so it is not a boot image and nothing in it executes.
+; designator and is NOT asserted here.  DATA ONLY -- 60 of the 64 words at file
+; offset 0x7FF00 are 0xFFFFFFFF and the other four are the build tag, so there is
+; no vector table: it is not a boot image and nothing in it executes.
+; (⚠ this line used to say "all 64"; corrected against notes/prom_d_base_checks.py.)
 ;
-; BASE: **NOT ESTABLISHED.**  ORIGIN 0 in prom_d/prom_d.ld is a build
-; convenience and asserts nothing; the leading hypothesis (the 512 KiB flash at
-; 0xE80000 on CPU 2's bus) and the one link it is still missing are set out in
-; full in that file.  Every offset in this source is therefore FILE-RELATIVE,
-; which is also how the image itself addresses its contents: it holds no
-; absolute pointers, only 0-based offsets.
+; BASE: **0x00F00000 on CPU 2's bus** -- ⚠ CHANGED IN WAVE 7 ROUND 3, where this
+; paragraph used to read "NOT ESTABLISHED".  What establishes it:
+;
+;   * prom_c installs 0x00F00000 in RAM 0x00D7ED and 0x00D7F1 (0xFB051E loads
+;     the immediate, 0xFB0523 and 0xFB0528 store it).  Those two stores are the
+;     ONLY instructions in prom_c that write either address, so the value is a
+;     compile-time constant at every use.
+;   * prom_c then reads THIS IMAGE'S 48-slot directory through that base at 99
+;     instruction pairs covering 33 slots, and adds the base to the offsets it
+;     finds there.  Every one of the 99 is re-decoded from prom_c's ROM bytes.
+;   * independently, prom_a 0xF82A5F `ld XWA,0x00F7FFF0` reads eleven bytes that
+;     are this image's build tag at file 0x7FFF0, "wsad_54.ssf"; the difference
+;     is 0x00F00000.  Two processors, two routes, one base.
+;   * the earlier "512 KiB flash at 0xE80000" reading is REFUTED: prom_c's own
+;     Flash_SectorErase bounds that part at 0x00E80000..0x00EFFFFF, below this
+;     image, and ExtBoard_ProbeAndInstallBases installs the two addresses in
+;     SEPARATE slots.  notes/prom_d_base_checks.py, 12 checks.
+;
+; ORIGIN in prom_d/prom_d.ld nevertheless STAYS 0, and that is deliberate: this
+; image's own directory is 0-BASED, and what proves that is not a statistic but
+; an instruction sequence -- prom_c reads a tone-record entry out of the table at
+; slot +0x08 (0xFB429D) and then ADDS THE BASE TO IT (0xFB429F), having already
+; added the base to reach the table (0xFB4298).  A stored absolute address needs
+; neither add.  Every offset in this source is therefore FILE-RELATIVE, which is
+; how the hardware reads it.  (⚠ the older argument from bank statistics is kept
+; in prom_d/prom_d.ld but DOWNGRADED there: round 3 Q8 shows it does not
+; discriminate -- prom_c is a code ROM and scores like prom_d on it.)
+;
+; ⚠ What is still open is which PHYSICAL PART this is.  The base fixes the
+; address the firmware reads it at, not the device.
 ;
 ; ------------------------------------------------------------------------------
 ; WHAT THIS IMAGE IS
@@ -36,6 +62,13 @@
 ;     ROMs' entire populations (1637 KN5000 blocks, 451 WSA1 blocks), against
 ;     18-29 columns for every shift and rotation null.
 ;
+; And it reaches ACROSS THE ARCHITECTURE BOUNDARY as well: 195 of the 252
+; distinct 16-character name fields in the WSA1 images are verbatim in the
+; KN7000's (MN10300) table ROM and all 195 are in prom_d, while 74 of the 250
+; shared binary runs sit exactly 81 bytes apart -- prom_d's own per-element
+; stride, derived on this side without reference to any KN7000.  See the
+; MELODIC TONE RECORDS banner; notes/wave7_xref_mn10300_family.py section 4.
+;
 ; Contents, by count:
 ;     274 tones           256 melodic + 18 drum kits, named and reachable from
 ;                         the offset table at 0x0B80
@@ -51,13 +84,31 @@
 ; The byte gate certifies BYTES.  It is blind to a wrong label and a wrong
 ; comment.  For this file specifically:
 ;
-;   * NO WSA1 INSTRUCTION THAT READS ANY OF THESE STRUCTURES HAS BEEN FOUND.
-;     Every region NAME is transplanted from the KN5000 directory slot with the
-;     same offset.  They are hypotheses with a stated basis, not derivations.
+;   * ⚠ WAVE 7 ROUND 3 RETIRED THE HEADLINE CAVEAT.  This bullet used to read
+;     "NO WSA1 INSTRUCTION THAT READS ANY OF THESE STRUCTURES HAS BEEN FOUND",
+;     and it appeared four times in this file.  It is now FALSE and is retracted.
+;     prom_c reads this image's directory at 99 instruction pairs over 33 slots
+;     (notes/prom_d_documentation_round3.py, 62 checks, every citation re-decoded
+;     from prom_c's ROM bytes).  What that changed, region by region, is on each
+;     banner as an `Evidence:` line.  The headline consequences:
+;       - the base, the 0-based offsets and the pointer/scalar split of the
+;         directory are now prom_c's own encodings, not a KN5000 transplant;
+;       - 81 and 217 (the element block and the tone-record head), 16 (the
+;         catalogue row), 128 (the +0xA8 record and the index-map row) and 4/2
+;         (the LE32/LE16 entry widths) appear as literals or shifts in prom_c;
+;       - the stride words at +0xEC and +0xEE are read and MULTIPLIED BY;
+;       - a catalogue's row count is not merely equal to its footer's LE16, it
+;         is bounded by it at run time, in all five catalogue/footer pairs;
+;       - an index map's VALUE is a catalogue row number, 0xFFFF meaning none.
+;     ⚠ BUT 13 of the 39 filled primary slots still have NO reader -- including
+;     the two largest structures, the descriptor blocks at +0x30/+0x38 and the
+;     wave-select arrays at +0x18/+0x20.  Those keep their transplanted names,
+;     and their banners say so in as many words.
 ;   * The MEANING of individual fields -- inside a tone record, an element
 ;     block, a wave-select record, a drum-instrument record, a descriptor -- is
-;     unknown throughout.  Where a comment states a field, it states a shape
-;     (a count, an offset, a stride) that was measured, never a semantics.
+;     STILL unknown throughout.  Round 3 read a consumer's ADDRESS ARITHMETIC;
+;     it did not read one field.  Where a comment states a field, it states a
+;     shape (a count, an offset, a stride) that was measured, never a semantics.
 ;   * ⚠ WAVE 7 ROUND 2 changed this bullet.  It used to read "Three regions
 ;     resist framing": the descriptor blocks at slots +0x30/+0x38/+0x70, the 768
 ;     extra bytes in the index map at +0x28, and the 8 x 128-byte table at +0xA8.
@@ -69,15 +120,20 @@
 ;       - the 768 bytes at 0x22A3B are SIX 128-byte monotone curves, and what
 ;         says so is that all 318 part-A objects of slot +0x30 begin with a
 ;         32-bit offset naming one of exactly those six addresses.
-;     What still resists: the 8 x 128-byte table at +0xA8 (the KN5000 leaves that
-;     slot unused, so there is no name to transplant and none is invented), and
-;     every FIELD inside a descriptor, a curve or a pool row.
+;     What still resists: the PURPOSE of the 8 x 128-byte table at +0xA8 (the
+;     KN5000 leaves that slot unused, so there is no name to transplant and none
+;     is invented -- though round 3 confirmed its 128-byte RECORD SIZE from
+;     prom_c's own indexing), and every FIELD inside a descriptor, a curve or a
+;     pool row.
 ;     notes/prom_d_structures_round2.py, 78 checks.
 ;   * Directory slot +0x88 holds 0x125.  In the KN5000 the same slot holds a
 ;     SCALAR, not an offset.  Nothing here decides which prom_d means.
 ;
 ; Reproduce every number quoted in this file:
 ;     python3 scripts/analysis/prom_d_tone_database.py
+;     python3 notes/prom_d_structures_round2.py        # the record framing, 78 checks
+;     python3 notes/prom_d_documentation_round3.py     # who READS it, 62 checks
+;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
 ; Regenerate this file:
 ;     python3 scripts/analysis/gen_prom_d_asm.py
 ; Then, always:
@@ -107,9 +163,34 @@ wsa1_prom_d:
 ; and +0x30==+0x34 in both; the tail scalars +0xD0..+0xDA and +0xE8 have
 ; IDENTICAL values in both.
 ; 
-; ⚠ NO WSA1 INSTRUCTION THAT READS THIS TABLE HAS BEEN FOUND.  The names
-; are transplanted, not derived.  Where prom_d's content contradicts the
-; KN5000 role the label follows the CONTENT and the note says so.
+; ⚠ The NAMES are still transplanted, not derived.  Where prom_d's content
+; contradicts the KN5000 role the label follows the CONTENT and says so.
+; 
+; Evidence: ★ THIS TABLE IS READ BY prom_c, and that is new in wave 7 round 3.
+; prom_d's base is 0x00F00000 on CPU 2's bus, held in RAM 0x00D7ED and
+; 0x00D7F1; the ONLY two instructions in prom_c that write either address
+; are 0xFB0523 and 0xFB0528, both storing the 0x00F00000 that 0xFB051E loads
+; as an immediate, so the base is a compile-time constant everywhere.
+; notes/prom_d_documentation_round3.py then finds 99 reads of this table --
+; a load of that base immediately followed by a load from (base + slot) --
+; covering 33 distinct slots, and RE-DECODES every one from prom_c's ROM
+; bytes at the address it cites.  Which slots, and which sites, is printed
+; on each region's own banner below.
+; 
+; ★ AND THE POINTER/SCALAR SPLIT IS prom_c's TOO.  Every read of a slot
+; BELOW +0xC0 loads a 32-BIT register; every read of a slot AT OR ABOVE
+; +0xC0 loads a 16-BIT one.  99 of 99, no exception.  Until round 3 the
+; 'offsets here, scalars there' reading was borrowed from the KN5000's
+; table; it is now this machine's own instruction encodings that say it.
+; 
+; The 0-BASED reading is prom_c's as well: at 0xFB429D it loads a tone
+; record's entry out of the table at slot +0x08 and at 0xFB429F it ADDS THE
+; BASE AGAIN.  A stored absolute address would not need that second add.
+; 
+; ⚠ WHAT IS STILL NOT ESTABLISHED: 13 of the 39 filled primary slots have no
+; reader at all -- they are named on each banner, and every one of them
+; keeps its transplanted name on that basis.  And no FIELD inside any
+; record these slots point at is identified by anything.
 ; ==========================================================================
 ToneDB_Base:
 ToneDB_Directory:
@@ -211,6 +292,17 @@ ToneDB_Directory:
 ; takes +0xEA/+0xEC/+0xEE/+0xF0/+0xF2 as record STRIDES for the blocks
 ; behind the pointer slots; the values here differ from the KN5000's but
 ; three of them are confirmed by this image's own geometry (43, 150).
+;
+; Evidence: ★ prom_c reads SIX of these tail words, always into a 16-bit
+; register, and it uses two of them AS STRIDES rather than as data:
+;   +0xEC = 14  0xFC299A `ld BC,(XWA+0x00ec)` then 0xFC299F `mul XBC,HL`,
+;               walking the 14-byte descriptor array at slot +0x70;
+;   +0xEE = 150 0xFB493D `ld IY,(XIX+0x00ee)` then 0xFB495A `mul XIY,WA`,
+;               scaling a drum-instrument index into the 150-byte records.
+; The other four (+0xE0, +0xEA, +0xF0, +0xF2) are read at 22 sites in all
+; and parked in a frame slot; what they are then multiplied BY is not
+; traced, so they are NOT claimed as strides on the strength of the reads.
+; Sites and byte-level decodes: notes/prom_d_documentation_round3.py Q3/Q4.
 	.short 0     				; +0xC0  
 	.short 0     				; +0xC2  
 	.short 0     				; +0xC4  
@@ -258,6 +350,15 @@ ToneDB_Directory:
 ; is directory slot +0x04 that names this table and +0x6C that names the
 ; second copy; in prom_d it is +0x6C that names THIS table and +0x04 that
 ; names the tone-number banks 0x80 above it.  There is only one copy here.
+; 
+; Evidence: prom_c reads directory slot +0x6C at 2 sites.  The first is
+; 0xFA72FC `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFA7301 by `ld XWA,(XBC+0x6C)`.  All 2: 0xFA7301, 0xFB424F.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
 ; ==========================================================================
 ToneDB_BankMap:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 00100  |................|
@@ -283,6 +384,26 @@ ToneDB_BankMap:
 ; 32-39 are Harp/Banjo/Harp/Mandolin/Shamisen/Koto/Sitar/Kalimba where GM
 ; has the bass family.  It is a Technics-internal ordering; nothing here
 ; identifies which panel control it corresponds to.
+; 
+; Evidence: prom_c reads directory slot +0x04 at 1 site.  The first is
+; 0xFB4266 `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB426B by `ld XIY,(XWA+0x04)`.  All 1: 0xFB426B.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND THE 10 x 128 SHAPE IS prom_c's, not an inference from the span.
+; The reader scales the index before it adds the table:
+;     0xFB4271  sll 0x07,BC          row * 128
+;     0xFB4274  add BC,DE            + program number
+;     0xFB4276  add BC,BC            * 2, so the entry is an LE16
+;     0xFB427C  add XIY,(0x00d7ed)   + the base  => the absolute entry
+;     0xFB4281  ld HL,(XIY)          the tone index
+; and the value it produces goes straight into ToneDB_ToneOffsetTable at
+; 0xFB4283.  notes/prom_d_documentation_round3.py Q4a decodes all fifteen
+; instructions of that chain from the ROM bytes.
 ; ==========================================================================
 ToneDB_ToneNumBanks:
 
@@ -1609,6 +1730,25 @@ ToneNumBank_9:
 ; 
 ; Same structure and same directory slot as the KN5000's table of the same
 ; name (629 entries there).
+; 
+; Evidence: prom_c reads directory slot +0x08 at 1 site.  The first is
+; 0xFB4283 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB4288 by `ld XWA,(XBC+0x08)`.  All 1: 0xFB4288.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ THE ENTRY WIDTH AND THE 0-BASED READING ARE prom_c's TOO:
+;     0xFB4288  ld XWA,(XBC+0x08)    this table's file offset
+;     0xFB4290  sll 0x02,IY          tone index * 4, so entries are LE32
+;     0xFB4298  add XIY,(0x00d7ed)   + base => the absolute entry
+;     0xFB429D  ld XWA,(XIY)         the entry: a tone record's FILE OFFSET
+;     0xFB429F  add XWA,(0x00d7ed)   + base AGAIN => the record itself
+; That second add is the whole argument for `0-based file offsets`: the
+; value stored here is NOT an address, and prom_c adds the base to it.
+; notes/prom_d_documentation_round3.py Q4a.
 ; ==========================================================================
 ToneDB_ToneOffsetTable:
 	.long 0x000013C8	; tone 0x000  '     Piano      '
@@ -1897,6 +2037,29 @@ ToneDB_ToneOffsetTable:
 ; 
 ; ⚠ The KN5000 leaves directory slot +0xA8 UNUSED, so there is no name to
 ; transplant and none is invented here.
+; 
+; Evidence: prom_c reads directory slot +0xA8 at 1 site.  The first is
+; 0xFA732D `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFA7332 by `ld XIY,(XWA+0xA8)`.  All 1: 0xFA7332.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ NEW in wave 7 round 3: the 128-byte RECORD SIZE is now prom_c's, not
+; just a zero/non-zero column pattern.  The one reader indexes it by 128:
+;     0xFA7332  ld XIY,(XWA+0x00a8)  this table's file offset
+;     0xFA734A  add XIY,XBC          + a byte fetched from RAM 0x1523
+;     0xFA7351  sll 0x07,BC          record index * 128
+;     0xFA7356  add XIY,XBC
+;     0xFA7358  add XIY,(0x00d7ed)   + base
+;     0xFA735D  ld BC,(XIY)          a 16-bit word out of the record
+; notes/prom_d_documentation_round3.py Q4f decodes all of it from bytes.
+; 
+; ⚠ STILL NOT ESTABLISHED: what a record MEANS, what selects one, or what
+; the 16-bit word at the computed offset is for.  What round 3 adds is the
+; RECORD SIZE and the fact that the block is reached at all.
 ; ==========================================================================
 Unk_0FC8_Table:
 Unk_0FC8_Rec_0:
@@ -2017,7 +2180,39 @@ Unk_0FC8_Rec_7:
 ; per-element 43-byte wave-select array, which the KN5000 does not have.
 ; 
 ; ⚠ NOT established: the meaning of any field inside the head, the element
-; block or the wave-select record.  No consumer code has been read.
+; block or the wave-select record.  Round 3 reads a consumer's ADDRESS
+; arithmetic; it does not read a field.
+; 
+; Evidence: ★ 217 AND 81 ARE LITERALS IN prom_c.  One routine computes an
+; element block's address as record + 217 + 81*index:
+;     0xFB436D  ld C,0x51             81, the element-block stride
+;     0xFB436F  mul BC,H              * the element index
+;     0xFB4373  add XBC,0x000000d9    + 217, the record head
+;     0xFB4379  add XBC,(XIZ+0x08)    + the tone record
+; and its other arm, taken when the element index is the sentinel 0xFF
+; (0xFB4351 `cp A,0xff`), loads directory slot +0xAC instead -- which is why
+; ToneDB_DefaultLayerParams is called a fallback.  The record itself is
+; reached from ToneDB_ToneOffsetTable at 0xFB429D/0xFB429F.  Every instruction
+; quoted is re-decoded from prom_c's ROM bytes by
+; notes/prom_d_documentation_round3.py Q4a/Q4b.
+; 
+; So the 81-byte cut, which this file used to justify by an entropy sweep and
+; by the 124-byte block at slot +0xAC, now has a third and independent
+; witness in the firmware; and a FOURTH from another CPU architecture entirely:
+; 
+; ★ CROSS-TREE.  The KN7000 (2002) is an MN10300 machine -- a different
+; instruction set -- and its table ROM shares data with this image.  195 of the
+; 252 distinct sixteen-character 0x10-terminated name fields in the four WSA1
+; images occur VERBATIM in that ROM, and every one of the 195 is in prom_d
+; (0 in prom_a, prom_b or prom_c).  Of the 250 guarded binary runs prom_d
+; shares with it, 74 -- the modal gap, and the largest class by a factor of
+; 2.6 over the next -- are exactly 81 BYTES APART: the per-element stride
+; derived here from prom_d alone.  Two methods, two CPU architectures, one
+; number.  notes/wave7_xref_mn10300_family.py section 4 (the runs need its
+; entropy AND first-difference guards); the 195/252 is re-derived by a second
+; path, off the collection's already-linear table image, in
+; notes/prom_d_documentation_round3.py Q6.
+; ⚠ NOT claimed: which way the data travelled, or what any shared field means.
 ; 
 ; Records appear in file order, not tone-index order.  The two missing
 ; indices are 0x058 and 0x059, the 541-byte '<<< Drawbar n>>>' records,
@@ -11565,6 +11760,25 @@ ToneRec_0FF_WaveSel2:
 ; wave-select record.  The KN5000's slot +0xAC has the same name and the
 ; same role -- 'fallback descriptor bound when a patch partial is absent'.
 ; This block is the second, independent witness for the 81+43 cut.
+; 
+; Evidence: prom_c reads directory slot +0xAC at 5 sites.  The first is
+; 0xFB4356 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB435B by `ld XWA,(XBC+0xAC)`.  All 5: 0xFB435B, 0xFB43F3, 0xFB9D9A, 0xFBA274, 0xFBA2AA.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND `FALLBACK` IS NOW prom_c's WORD, not a borrowed one.  0xFB4351
+; `cp A,0xff` / 0xFB4354 `jr NZ` splits two arms of one routine:
+;   A == 0xFF -> 0xFB435B `ld XWA,(XBC+0x00ac)`, i.e. THIS block;
+;   otherwise -> 0xFB436D `ld C,0x51` (81) / 0xFB436F `mul BC,H` /
+;                0xFB4373 `add XBC,0x000000d9` (217) / 0xFB4379 add the
+;                tone record, i.e. record + 217 + 81*index.
+; So the sentinel 0xFF selects this 124-byte block IN PLACE OF an element
+; block, which is exactly what a fallback is.
+; notes/prom_d_documentation_round3.py Q4b decodes both arms from bytes.
 ; ==========================================================================
 ToneDB_DefaultLayerParams:
 ToneDB_DefaultLayerParams_Elem:
@@ -11591,6 +11805,19 @@ ToneDB_DefaultLayerParams_WaveSel:
 ; 
 ; ⚠ The KN5000's slot +0xB0 is PercName_Pack, packed 10-char percussion
 ; names.  prom_d's content is not that, so the KN5000 name is NOT used.
+; 
+; Evidence: prom_c reads directory slot +0xB0 at 3 sites.  The first is
+; 0xFB41EC `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB41F1 by `ld XWA,(XBC+0xB0)`.  All 3: 0xFB41F1, 0xFB9D76, 0xFBA247.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ⚠ The reader proves the slot is FETCHED, not what the record is FOR.
+; 'the blank template a user tone starts from' remains an inference from
+; the name and from the IC28 combination bank, and is labelled as one.
 ; ==========================================================================
 ToneRec_Template_Clear:
 	.ascii "     Clear      "	; 1C606
@@ -11667,6 +11894,19 @@ ToneRec_Template_Clear_WaveSel3:
 ; 
 ; One record, byte-identical to drum-instrument record 0 at slot +0x78.
 ; ⚠ The KN5000 leaves slot +0xB4 unused.
+; 
+; Evidence: prom_c reads directory slot +0xB4 at 2 sites.  The first is
+; 0xFBA5C4 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFBA5C9 by `ld XWA,(XBC+0xB4)`.  All 2: 0xFBA5C9, 0xFBA9A7.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; The reader at 0xFBA5C9 is followed at 0xFBA5DD by `ld C,0x96` and
+; 0xFBA5DF `mul BC,(XIZ+0xc2)` -- 150, this record class's stride -- so the
+; same routine addresses both this template and the 150-byte array.
 ; ==========================================================================
 PercInst_Template_Silent:
 	.ascii "Silent       "	; 1C8CF
@@ -11690,6 +11930,21 @@ PercInst_Template_Silent:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x1C965, which is directory slot +0x0C's value, and ends at 0x1D165,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x0C is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
 ; ==========================================================================
 ToneDB_ToneIndexMapA:
 	.short 0x0015, 0x0016, 0x0015, 0x00CF, 0x00D4, 0x00D2, 0x00D8, 0x0021	; 1C965  [0]
@@ -11831,6 +12086,21 @@ ToneDB_ToneIndexMapA:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x1D165, which is directory slot +0x10's value, and ends at 0x1D965,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x10 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
 ; ==========================================================================
 ToneDB_ToneIndexMapB:
 	.short 0x0055, 0x0055, 0x0056, 0x0055, 0x0056, 0x00FE, 0x0100, 0x00FB	; 1D165  [0]
@@ -11977,6 +12247,41 @@ ToneDB_ToneIndexMapB:
 ; and 261 of 322 carry 7D 80 54 at +0x0D.  The earlier text said 'every
 ; record examined', which was the first record quoted as a universal.
 ; Re-derived by notes/prom_d_structures_round2.py section Q4b.
+; 
+; Evidence: (image-internal, NOT from code) the array's last record starts
+; 0x20F50 and ends at 0x20F7B, which is the next directory value, so the
+; count 322 is fixed at BOTH ends and is not a stride guess.  43 is the
+; directory's own word at +0xEA, and prom_c reads that word at 11 sites.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x18 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
+; 
+; ⚠ NO reader was found for THIS array.  What follows is about the
+; array at slot +0x3C, which has the same record shape, and is quoted
+; as corroboration for the 43 -- not as evidence about this block.
+; One prom_c routine
+; reaches a record by multiplying the directory's stride word, and then
+; uses the SAME word as the loop bound of a byte copy out of it:
+;     0xFBC7B6  ld XIY,(XWA+0x3c)     the +0x3C array's file offset
+;     0xFBC7BE  ld IY,(XWA+0x00ea)    the stride word = 43
+;     0xFBC7C3  mul XIY,(XIZ+0xf2)    * the record index
+;     0xFBC7C6  add XBC,XIY           => the record
+;     0xFBC7CE  ld A,(XBC+0x0b)       field +0x0B, handled on its own
+;     0xFBC7D9  ld (XIZ+0xf0),0x000d  i = 13
+;     0xFBC7E3  ld WA,(XBC+0x00ea)    the stride word AS THE LOOP BOUND
+;     0xFBC7E8  cp (XIZ+0xf0),WA      while i < 43: copy byte i
+; So the record is 43 bytes long AND is cut into a 13-byte head that is
+; handled field by field and a 30-byte tail that is copied wholesale --
+; which is where round 2's `7D 80 54 at +0x0D` sits: at the first byte the
+; loop touches.  notes/prom_d_documentation_round3.py Q4h decodes all
+; twelve instructions from prom_c's ROM bytes.
+; ⚠ NOT established: what any of the 43 bytes means, or what the head/tail
+; split is FOR.
 ; ==========================================================================
 ToneDB_MixerDefaultTable:
 ToneDB_MixerDefaultTable_000:
@@ -12639,6 +12944,41 @@ ToneDB_MixerDefaultTable_321:
 ; and 18 of 64 carry 7D 80 54 at +0x0D.  The earlier text said 'every
 ; record examined', which was the first record quoted as a universal.
 ; Re-derived by notes/prom_d_structures_round2.py section Q4b.
+; 
+; Evidence: (image-internal, NOT from code) the array's last record starts
+; 0x21A10 and ends at 0x21A3B, which is the next directory value, so the
+; count 64 is fixed at BOTH ends and is not a stride guess.  43 is the
+; directory's own word at +0xEA, and prom_c reads that word at 11 sites.
+; 
+; Evidence: prom_c reads directory slot +0x3C at 2 sites.  The first is
+; 0xFBC7B1 `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFBC7B6 by `ld XIY,(XWA+0x3C)`.  All 2: 0xFBC7B6, 0xFBC8F2.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; Sites through alias slot +0x40 are counted here: the alias holds the
+; same value and therefore names the same object.
+; 
+; ★ AND 43 IS THE RECORD LENGTH, not just a divisor.  One prom_c routine
+; reaches a record by multiplying the directory's stride word, and then
+; uses the SAME word as the loop bound of a byte copy out of it:
+;     0xFBC7B6  ld XIY,(XWA+0x3c)     the +0x3C array's file offset
+;     0xFBC7BE  ld IY,(XWA+0x00ea)    the stride word = 43
+;     0xFBC7C3  mul XIY,(XIZ+0xf2)    * the record index
+;     0xFBC7C6  add XBC,XIY           => the record
+;     0xFBC7CE  ld A,(XBC+0x0b)       field +0x0B, handled on its own
+;     0xFBC7D9  ld (XIZ+0xf0),0x000d  i = 13
+;     0xFBC7E3  ld WA,(XBC+0x00ea)    the stride word AS THE LOOP BOUND
+;     0xFBC7E8  cp (XIZ+0xf0),WA      while i < 43: copy byte i
+; So the record is 43 bytes long AND is cut into a 13-byte head that is
+; handled field by field and a 30-byte tail that is copied wholesale --
+; which is where round 2's `7D 80 54 at +0x0D` sits: at the first byte the
+; loop touches.  notes/prom_d_documentation_round3.py Q4h decodes all
+; twelve instructions from prom_c's ROM bytes.
+; ⚠ NOT established: what any of the 43 bytes means, or what the head/tail
+; split is FOR.
 ; ==========================================================================
 ToneDB_MixerDefaultTable_3C:
 ToneDB_MixerDefaultTable_3C_000:
@@ -12780,6 +13120,21 @@ ToneDB_MixerDefaultTable_3C_063:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x21A3B, which is directory slot +0x24's value, and ends at 0x2223B,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x24 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
 ; ==========================================================================
 ToneDB_ToneIndexMapC:
 	.short 0x0005, 0x0017, 0x0005, 0x00D0, 0x00D5, 0x00D3, 0x00D9, 0x0022	; 21A3B  [0]
@@ -12925,6 +13280,21 @@ ToneDB_ToneIndexMapC:
 ; its eleven siblings.  The 768 bytes that used to be counted into it,
 ; and recorded as 'what the extra 384 entries are is NOT established',
 ; are a separate object: see ToneDB_DescCurveBank immediately below.
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x2223B, which is directory slot +0x28's value, and ends at 0x22A3B,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x28 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
 ; ==========================================================================
 ToneDB_ToneIndexMapD:
 	.short 0x0056, 0x0056, 0x0057, 0x0056, 0x0057, 0x00FF, 0x0101, 0x00FC	; 2223B  [0]
@@ -13084,9 +13454,24 @@ ToneDB_ToneIndexMapD:
 ; here) and not a synthesis role.
 ; 
 ; Re-derived by notes/prom_d_structures_round2.py section Q2.
+; 
+; Evidence: (image-internal, NOT from code) every one of the 318
+; part-A objects in the descriptor pool at slot +0x30 begins with a 32-bit
+; file offset, and the set of values those 318 words take is EXACTLY the
+; set of these 6 addresses -- no other value appears and no curve is
+; unused.  That is what makes the boundary at 0x22A3B real rather than a
+; convenient place to cut.
+; ⚠ No prom_c instruction reads this bank: the census in
+; notes/prom_d_documentation_round3.py finds no reader for slot +0x30, the
+; only slot from which this bank is reachable.
 ; ==========================================================================
 ToneDB_DescCurveBank:
-ToneDB_DescCurve_0:		; 128 entries, 0 .. 10
+
+; ToneDB_DescCurve_0 -- file 0x22A3B..0x22ABA (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 10.  Exactly index//12.
+; Evidence: 136 of the 318 part-A objects at slot +0x30 name THIS curve
+; in their leading LE32; the first is the object at 0x23E9F.  
+ToneDB_DescCurve_0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01	; 22A3B  |................|
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 22A4B  |................|
 	.byte 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03	; 22A5B  |................|
@@ -13095,7 +13480,12 @@ ToneDB_DescCurve_0:		; 128 entries, 0 .. 10
 	.byte 0x06, 0x06, 0x06, 0x06, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07	; 22A8B  |................|
 	.byte 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09	; 22A9B  |................|
 	.byte 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A	; 22AAB  |................|
-ToneDB_DescCurve_1:		; 128 entries, 0 .. 20
+
+; ToneDB_DescCurve_1 -- file 0x22ABB..0x22B3A (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 20.
+; Evidence: 27 of the 318 part-A objects at slot +0x30 name THIS curve
+; in their leading LE32; the first is the object at 0x246B6.  
+ToneDB_DescCurve_1:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22ABB  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x05	; 22ACB  |................|
 	.byte 0x05, 0x05, 0x05, 0x05, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07	; 22ADB  |................|
@@ -13104,7 +13494,12 @@ ToneDB_DescCurve_1:		; 128 entries, 0 .. 20
 	.byte 0x0D, 0x0D, 0x0D, 0x0D, 0x0E, 0x0E, 0x0E, 0x0E, 0x0E, 0x0E, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F	; 22B0B  |................|
 	.byte 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x12, 0x12, 0x12, 0x12	; 22B1B  |................|
 	.byte 0x12, 0x12, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14	; 22B2B  |................|
-ToneDB_DescCurve_2:		; 128 entries, 0 .. 27
+
+; ToneDB_DescCurve_2 -- file 0x22B3B..0x22BBA (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 27.
+; Evidence: 7 of the 318 part-A objects at slot +0x30 name THIS curve
+; in their leading LE32; the first is the object at 0x27415.  
+ToneDB_DescCurve_2:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22B3B  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x04, 0x05, 0x05, 0x05, 0x05	; 22B4B  |................|
 	.byte 0x06, 0x06, 0x06, 0x06, 0x07, 0x07, 0x07, 0x07, 0x08, 0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09	; 22B5B  |................|
@@ -13113,7 +13508,12 @@ ToneDB_DescCurve_2:		; 128 entries, 0 .. 27
 	.byte 0x12, 0x12, 0x12, 0x12, 0x13, 0x13, 0x13, 0x13, 0x14, 0x14, 0x14, 0x14, 0x15, 0x15, 0x15, 0x15	; 22B8B  |................|
 	.byte 0x16, 0x16, 0x16, 0x16, 0x17, 0x17, 0x17, 0x17, 0x18, 0x18, 0x18, 0x18, 0x19, 0x19, 0x19, 0x19	; 22B9B  |................|
 	.byte 0x19, 0x19, 0x1A, 0x1A, 0x1A, 0x1A, 0x1A, 0x1A, 0x1B, 0x1B, 0x1B, 0x1B, 0x1B, 0x1B, 0x1B, 0x1B	; 22BAB  |................|
-ToneDB_DescCurve_3:		; 128 entries, 0 .. 34
+
+; ToneDB_DescCurve_3 -- file 0x22BBB..0x22C3A (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 34.
+; Evidence: 11 of the 318 part-A objects at slot +0x30 name THIS curve
+; in their leading LE32; the first is the object at 0x247D2.  
+ToneDB_DescCurve_3:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22BBB  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x05, 0x05, 0x05, 0x06, 0x06	; 22BCB  |................|
 	.byte 0x06, 0x07, 0x07, 0x07, 0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x0A, 0x0A, 0x0A, 0x0B, 0x0B, 0x0B	; 22BDB  |................|
@@ -13122,7 +13522,12 @@ ToneDB_DescCurve_3:		; 128 entries, 0 .. 34
 	.byte 0x16, 0x17, 0x17, 0x17, 0x18, 0x18, 0x18, 0x19, 0x19, 0x19, 0x1A, 0x1A, 0x1A, 0x1B, 0x1B, 0x1B	; 22C0B  |................|
 	.byte 0x1C, 0x1C, 0x1C, 0x1D, 0x1D, 0x1D, 0x1E, 0x1E, 0x1E, 0x1F, 0x1F, 0x1F, 0x20, 0x20, 0x20, 0x20	; 22C1B  |............    |
 	.byte 0x20, 0x20, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22	; 22C2B  |  !!!!!!""""""""|
-ToneDB_DescCurve_4:		; 128 entries, 0 .. 34
+
+; ToneDB_DescCurve_4 -- file 0x22C3B..0x22CBA (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 34.
+; Evidence: 7 of the 318 part-A objects at slot +0x30 name THIS curve
+; in their leading LE32; the first is the object at 0x24D0B.  
+ToneDB_DescCurve_4:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22C3B  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x04, 0x05, 0x05, 0x06, 0x06	; 22C4B  |................|
 	.byte 0x07, 0x07, 0x07, 0x07, 0x08, 0x08, 0x08, 0x08, 0x09, 0x09, 0x0A, 0x0A, 0x0B, 0x0B, 0x0B, 0x0B	; 22C5B  |................|
@@ -13131,7 +13536,12 @@ ToneDB_DescCurve_4:		; 128 entries, 0 .. 34
 	.byte 0x17, 0x17, 0x17, 0x17, 0x18, 0x18, 0x18, 0x18, 0x19, 0x19, 0x1A, 0x1A, 0x1B, 0x1B, 0x1B, 0x1B	; 22C8B  |................|
 	.byte 0x1C, 0x1C, 0x1C, 0x1C, 0x1D, 0x1D, 0x1E, 0x1E, 0x1F, 0x1F, 0x1F, 0x1F, 0x20, 0x20, 0x20, 0x20	; 22C9B  |............    |
 	.byte 0x20, 0x20, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22	; 22CAB  |  !!!!!!""""""""|
-ToneDB_DescCurve_5:		; 128 entries, 0 .. 107
+
+; ToneDB_DescCurve_5 -- file 0x22CBB..0x22D3A (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 107.
+; Evidence: 130 of the 318 part-A objects at slot +0x30 name THIS curve
+; in their leading LE32; the first is the object at 0x23EDE.  The 161 descriptors at slot +0x38 share one part A, and it names this curve too.
+ToneDB_DescCurve_5:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22CBB  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B	; 22CCB  |................|
 	.byte 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B	; 22CDB  |................|
@@ -13165,8 +13575,9 @@ ToneDB_DescCurve_5:		; 128 entries, 0 .. 107
 ; every run of this generator by notes/prom_d_structures_round2.py, which
 ; refuses to emit if a boundary moved.
 ; 
-; ⚠ NO field inside a descriptor, a part A or a part B is identified, and no
-; WSA1 instruction that reads any of this has been found.
+; ⚠ NO field inside a descriptor, a part A or a part B is identified.
+; ⚠ And no prom_c instruction that reads THIS block has been found; the Evidence
+; note below states what that leaves standing and what it does not.
 ; 
 ; This is the LARGEST of the three, and the only one whose descriptors each own
 ; a PRIVATE part A.  Its 318 (part A, part B) pairs partition the pool exactly:
@@ -13181,6 +13592,31 @@ ToneDB_DescCurve_5:		; 128 entries, 0 .. 107
 ; at 0x23E9F..0x2B2AB, holding 636 objects.  4452 + 29709 = 34161, the whole
 ; block, with nothing unaccounted for.
 ; KN5000 label at the same directory slot: ToneDB_EnvDescTable.
+; 
+; Evidence: (image-internal, NOT from code) the array's end is fixed
+; by the records' own 32-bit offsets.  The smallest non-null offset over all
+; 318 descriptors is 0x23E9F, which is 0x22D3B + 14 x 318 exactly -- so the
+; array cannot be one record longer or shorter.  The LAST descriptor, at
+; 0x23E91, points its part B at 0x2B2A6, which is the last object in the pool
+; (6 bytes short of the block end).  Both ends are pinned, first record and
+; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
+; this emitter refuses to run without.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x30 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
+; 
+; ⚠ No reader was found for THIS block.  What round 3 adds is indirect and
+; is stated as such: the stride word this block uses (directory +0xEC = 14)
+; IS read by prom_c -- at 0xFB4679, 0xFB46C4, 0xFC299A -- and at 0xFC299A the SAME stride word is
+; multiplied by a record index to walk the descriptor array at slot +0x70,
+; which is the same record class.  That corroborates the 14-byte array; it
+; does NOT show anything reading this block, and the label stays a KN5000
+; transplant on that basis.
 ; ==========================================================================
 ToneDB_EnvDescTable:
 ToneDB_EnvDescTable_Desc000:		; tag 0x40  A=0x23E9F  B=0x23EAE
@@ -16509,6 +16945,18 @@ ToneDB_EnvDescTable_Pool_B317:		; part B of descriptor 317, 6 bytes
 ; agree: 55 of 70 columns share a modal byte, against 17-27 for every shift
 ; null.  But the melodic head runs 79 bytes past the landmark and the drum
 ; head only 70, so the two heads are NOT interchangeable.
+; 
+; Evidence: these 18 records are named by ToneDB_ToneOffsetTable entries
+; 256..273 (file 0x00F80..0x00FC4), and that table is the one prom_c walks at
+; 0xFB4288/0xFB4290/0xFB429D -- index x 4, entry, plus the base -- so the
+; records are reached the same way a melodic tone record is.
+; ★ AND THE 128-ENTRY NOTE MAP IS CONFIRMED FROM THE OTHER END: 0xFB4947
+; `sll 0x07,BC` scales a kit number by 128 into DrumKit_NoteMapA (slot
+; +0x74) and 0xFB495A multiplies the value it finds by the +0xEE stride
+; word, 150, i.e. into the drum-instrument records.  That is the chain this
+; banner previously said had NOT been confirmed against code, for the note
+; map; it is still NOT confirmed for the per-record map emitted below.
+; notes/prom_d_documentation_round3.py Q4a and Q4d.
 ; ==========================================================================
 
 ; ---- tone 0x103 ' Standard Kit   ' ----
@@ -19074,6 +19522,27 @@ DrumKit_111_NoteMap:
 ; 2048 LE16.  Every non-0xFFFF value is a valid index into the 504
 ; drum-instrument records at slot +0x78 (max 503).
 ; KN5000 label at the same directory slot: DrumKit_NoteMapA.
+; 
+; Evidence: prom_c reads directory slot +0x74 at 1 site.  The first is
+; 0xFB48FE `ld XIX,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB4931 by `ld XBC,(XIX+0x74)`.  All 1: 0xFB4931.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND prom_c SCALES IT AS 128 ENTRIES PER KIT:
+;     0xFB4931  ld XBC,(XIX+0x74)     this map's file offset
+;     0xFB4947  sll 0x07,BC           kit * 128
+;     0xFB494C  mul BC,0x0002         * 2, so entries are LE16
+;     0xFB4953  add XBC,(0x00d7ed)    + base
+;     0xFB4958  ld WA,(XBC)           a drum-instrument index
+;     0xFB495A  mul XIY,WA            * the stride word +0xEE = 150,
+;                                     which 0xFB493D loaded
+; so the value read here really is an index into the 150-byte drum-
+; instrument records at slot +0x78.  notes/prom_d_documentation_round3.py
+; Q4d decodes all nine instructions from the ROM bytes.
 ; ==========================================================================
 DrumKit_NoteMapA:
 	.short 0x0000, 0x0000, 0x0000, 0x01D7, 0x01D8, 0x01D9, 0x01DA, 0x01DB	; 2CF5C  [0]
@@ -19343,6 +19812,21 @@ DrumKit_NoteMapA:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x2DF5C, which is directory slot +0x14's value, and ends at 0x2E75C,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x14 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
 ; ==========================================================================
 ToneDB_PercSourceIndexMapA:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x000B	; 2DF5C  [0]
@@ -19484,6 +19968,21 @@ ToneDB_PercSourceIndexMapA:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x2E75C, which is directory slot +0x2C's value, and ends at 0x2EF5C,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x2C is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
 ; ==========================================================================
 ToneDB_DrumToneIndexMap:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 2E75C  [0]
@@ -19629,6 +20128,25 @@ ToneDB_DrumToneIndexMap:
 ; with 13 printable bytes.
 ; 
 ; 504 records here; the span divides exactly by 150.
+; 
+; Evidence: prom_c reads directory slot +0x78 at 2 sites.  The first is
+; 0xFB48FE `ld XIX,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB4937 by `ld XWA,(XIX+0x78)`.  All 2: 0xFB4937, 0xFB49CF.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND THE STRIDE IS prom_c's.  It does not use a literal 150 here; it
+; reads the directory's OWN stride word and multiplies by it:
+;     0xFB48FE  ld XIX,(0x00d7f1)    the base, parked for the routine
+;     0xFB4937  ld XWA,(XIX+0x78)    this array's file offset
+;     0xFB493D  ld IY,(XIX+0x00ee)   the stride word = 150
+;     0xFB4958  ld WA,(XBC)          a drum-instrument index
+;     0xFB495A  mul XIY,WA           index * the stride word
+; which is why the +0xEE line on the directory says CONFIRMED.
+; notes/prom_d_documentation_round3.py Q4d.
 ; ==========================================================================
 PercInst_000_Silent:
 	; ---- drum instrument   0 'Silent       ' ----
@@ -25694,6 +26212,41 @@ PercInst_503:
 ; and 158 of 208 carry 7D 80 54 at +0x0D.  The earlier text said 'every
 ; record examined', which was the first record quoted as a universal.
 ; Re-derived by notes/prom_d_structures_round2.py section Q4b.
+; 
+; Evidence: (image-internal, NOT from code) the array's last record starts
+; 0x43971 and ends at 0x4399C, which is the next directory value, so the
+; count 208 is fixed at BOTH ends and is not a stride guess.  43 is the
+; directory's own word at +0xF0, and prom_c reads that word at 8 sites.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x20 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
+; 
+; ⚠ NO reader was found for THIS array.  What follows is about the
+; array at slot +0x3C, which has the same record shape, and is quoted
+; as corroboration for the 43 -- not as evidence about this block.
+; One prom_c routine
+; reaches a record by multiplying the directory's stride word, and then
+; uses the SAME word as the loop bound of a byte copy out of it:
+;     0xFBC7B6  ld XIY,(XWA+0x3c)     the +0x3C array's file offset
+;     0xFBC7BE  ld IY,(XWA+0x00ea)    the stride word = 43
+;     0xFBC7C3  mul XIY,(XIZ+0xf2)    * the record index
+;     0xFBC7C6  add XBC,XIY           => the record
+;     0xFBC7CE  ld A,(XBC+0x0b)       field +0x0B, handled on its own
+;     0xFBC7D9  ld (XIZ+0xf0),0x000d  i = 13
+;     0xFBC7E3  ld WA,(XBC+0x00ea)    the stride word AS THE LOOP BOUND
+;     0xFBC7E8  cp (XIZ+0xf0),WA      while i < 43: copy byte i
+; So the record is 43 bytes long AND is cut into a 13-byte head that is
+; handled field by field and a 30-byte tail that is copied wholesale --
+; which is where round 2's `7D 80 54 at +0x0D` sits: at the first byte the
+; loop touches.  notes/prom_d_documentation_round3.py Q4h decodes all
+; twelve instructions from prom_c's ROM bytes.
+; ⚠ NOT established: what any of the 43 bytes means, or what the head/tail
+; split is FOR.
 ; ==========================================================================
 ToneDB_PercMixerDefaultTable:
 ToneDB_PercMixerDefaultTable_000:
@@ -26137,8 +26690,9 @@ ToneDB_PercMixerDefaultTable_207:
 ; every run of this generator by notes/prom_d_structures_round2.py, which
 ; refuses to emit if a boundary moved.
 ; 
-; ⚠ NO field inside a descriptor, a part A or a part B is identified, and no
-; WSA1 instruction that reads any of this has been found.
+; ⚠ NO field inside a descriptor, a part A or a part B is identified.
+; ⚠ And no prom_c instruction that reads THIS block has been found; the Evidence
+; note below states what that leaves standing and what it does not.
 ; 
 ; All 161 descriptors here point their part A at ONE shared 132-byte object,
 ; which itself names the steepest curve; their part-B offsets are an arithmetic
@@ -26149,6 +26703,31 @@ ToneDB_PercMixerDefaultTable_207:
 ; at 0x4426A..0x446B3, holding 162 objects.  2254 + 1098 = 3352, the whole
 ; block, with nothing unaccounted for.
 ; KN5000 label at the same directory slot: ToneDB_EnvDescTable (shared).
+; 
+; Evidence: (image-internal, NOT from code) the array's end is fixed
+; by the records' own 32-bit offsets.  The smallest non-null offset over all
+; 161 descriptors is 0x4426A, which is 0x4399C + 14 x 161 exactly -- so the
+; array cannot be one record longer or shorter.  The LAST descriptor, at
+; 0x4425C, points its part B at 0x446AE, which is the last object in the pool
+; (6 bytes short of the block end).  Both ends are pinned, first record and
+; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
+; this emitter refuses to run without.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x38 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
+; 
+; ⚠ No reader was found for THIS block.  What round 3 adds is indirect and
+; is stated as such: the stride word this block uses (directory +0xF2 = 14)
+; IS read by prom_c -- at 0xFB469D -- and at 0xFC299A the SAME stride word is
+; multiplied by a record index to walk the descriptor array at slot +0x70,
+; which is the same record class.  That corroborates the 14-byte array; it
+; does NOT show anything reading this block, and the label stays a KN5000
+; transplant on that basis.
 ; ==========================================================================
 ToneDB_EnvDescTable_Perc:
 ToneDB_EnvDescTable_Perc_Desc000:		; tag 0x40  A=0x4426A  B=0x442EE
@@ -26831,6 +27410,14 @@ ToneDB_EnvDescTable_Perc_Pool_B160:		; part B of descriptor 160, 6 bytes
 ; The KN5000 also treats drawbar presets specially: its directory slot +0x70
 ; is DrawbarPreset_EnvDescTable, and prom_d's +0x70 points at the descriptor
 ; block immediately after these two records.
+; 
+; Evidence: (image-internal) ToneDB_ToneOffsetTable entries 0x058 and
+; 0x059, at file 0x00CE0 and 0x00CE4, hold 0x446B4 and 0x448D1; the second plus
+; 541 is exactly directory slot +0x70, so BOTH ends are pinned by something
+; other than the stride.  The 81-byte element cut inside them is the same
+; one prom_c uses at 0xFB436D (`ld C,0x51`) for every other tone record.
+; ⚠ Nothing has been found that reads these two records specifically, and
+; nothing explains why they carry no wave-select array.
 ; ==========================================================================
 
 ; ---- tone 0x058 '<<< Drawbar 1>>>'  541 B ----
@@ -26947,8 +27534,9 @@ ToneRec_059_Elem3:		; 81-byte element block
 ; every run of this generator by notes/prom_d_structures_round2.py, which
 ; refuses to emit if a boundary moved.
 ; 
-; ⚠ NO field inside a descriptor, a part A or a part B is identified, and no
-; WSA1 instruction that reads any of this has been found.
+; ⚠ NO field inside a descriptor, a part A or a part B is identified.
+; ⚠ And no field is identified even though the block IS reached: see the Evidence
+; line below, which pins the ARRAY STRIDE and nothing else.
 ; 
 ; A DIFFERENT record class: tag 0x92 in all four, part A null in all four, and
 ; the four part-B offsets name only THREE objects -- 4374, 4374 and 24 bytes,
@@ -26961,6 +27549,35 @@ ToneRec_059_Elem3:		; 81-byte element block
 ; at 0x44B26..0x46D69, holding 3 objects.  56 + 8772 = 8828, the whole
 ; block, with nothing unaccounted for.
 ; KN5000 label at the same directory slot: DrawbarPreset_EnvDescTable.
+; 
+; Evidence: (image-internal, NOT from code) the array's end is fixed
+; by the records' own 32-bit offsets.  The smallest non-null offset over all
+; 4 descriptors is 0x44B26, which is 0x44AEE + 14 x 4 exactly -- so the
+; array cannot be one record longer or shorter.  The LAST descriptor, at
+; 0x44B18, points its part B at 0x46D52, which is the last object in the pool
+; (24 bytes short of the block end).  Both ends are pinned, first record and
+; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
+; this emitter refuses to run without.
+; 
+; Evidence: prom_c reads directory slot +0x70 at 1 site.  The first is
+; 0xFC2990 `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFC2995 by `ld XIY,(XWA+0x70)`.  All 1: 0xFC2995.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND THE 14-BYTE STRIDE IS prom_c's.  Its one reader does not use a
+; literal; it reads the directory's OWN stride word and multiplies:
+;     0xFC2995  ld XIY,(XWA+0x70)     this block's file offset
+;     0xFC299A  ld BC,(XWA+0x00ec)    the stride word = 14
+;     0xFC299F  mul XBC,HL            * the descriptor index
+;     0xFC29A1  add XIY,XBC
+;     0xFC29A5  add XIX,(0x00d7ed)    + base
+; That is the array framing of round 2, asserted by the firmware rather
+; than by the descriptors' own pointers.
+; notes/prom_d_documentation_round3.py Q4e.
 ; ==========================================================================
 DrawbarPreset_EnvDescTable:
 DrawbarPreset_EnvDescTable_Desc000:		; tag 0x92  A=none  B=0x44B26
@@ -27536,6 +28153,26 @@ DrawbarPreset_EnvDescTable_Pool_B003:		; part B of descriptor 3, 24 bytes
 ; The row count is CONFIRMED by the block's own footer at directory slot
 ; +0x54, whose leading LE16 is 307.
 ; KN5000 label at the same directory slot: ToneDB_SourceNameList1.
+; 
+; Evidence: prom_c reads directory slot +0x50 at 3 sites.  The first is
+; 0xFB90B8 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB90D7 by `ld XIY,(XBC+0x50)`.  All 3: 0xFB90D7, 0xFC069F, 0xFC06F4.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND THE COUNT IS ENFORCED BY prom_c, not just declared by the footer.
+; One routine loads the footer, reads its first word, compares the caller's
+; row index against it, and only then addresses THIS catalogue:
+;     0xFB90BD  ld X..,(base+0x54)   the footer at slot +0x54
+;     0xFB90D0  ld IY,(X..)            its leading LE16 = 307
+;     0xFB90D2  cp (XIZ+0x0a),IY       the row index against that count
+;     0xFB90D7  ld X..,(base+0x50)   this catalogue
+; and 307 is exactly the row count measured from the image (span / 16).
+; All five catalogue/footer pairs are read this way; the five chains are
+; checked byte for byte in notes/prom_d_documentation_round3.py Q4c.
 ; ==========================================================================
 ToneDB_SourceNameList1:
 	.ascii "Piano L      "	; 46D6A
@@ -28163,6 +28800,27 @@ ToneDB_SourceNameList1:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x4809A, which is directory slot +0x44's value, and ends at 0x4889A,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; Evidence: prom_c reads directory slot +0x44 at 1 site.  The first is
+; 0xFC06D9 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFC06DE by `ld XWA,(XBC+0x44)`.  All 1: 0xFC06DE.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; The chain this reader belongs to has NOT been decoded end to end.
+; For the one that has -- slot +0x4C -- see its banner: the map value
+; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
+; carries over to this map is NOT asserted here.
 ; ==========================================================================
 ToneDB_SourceIndexMapA:
 	.short 0x0002, 0x0004, 0x0002, 0x0005, 0x0008, 0x0006, 0x0009, 0x0033	; 4809A  [0]
@@ -28304,6 +28962,21 @@ ToneDB_SourceIndexMapA:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x4889A, which is directory slot +0x48's value, and ends at 0x4909A,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x48 is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
 ; ==========================================================================
 ToneDB_SourceIndexMapB:
 	.short 0x00B6, 0x00B6, 0x00B7, 0x00B7, 0x00B7, 0x00BB, 0x00BD, 0x00B8	; 4889A  [0]
@@ -28443,6 +29116,23 @@ ToneDB_SourceIndexMapB:
 ; The LE16 is 307, which is exactly the row count of the catalogue at
 ; directory slot +0x50.  That is what identifies these blocks.
 ; KN5000 label at the same directory slot: ToneDB_SourceList1_Footer.
+; 
+; Evidence: prom_c reads directory slot +0x54 at 5 sites.  The first is
+; 0xFB90B8 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB90BD by `ld XWA,(XBC+0x54)`.  All 5: 0xFB90BD, 0xFC0685, 0xFC091C, 0xFC0DCA, 0xFC0E51.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND prom_c USES IT AS A BOUND.  0xFB90BD loads this footer, 0xFB90D0 reads
+; its leading LE16, 0xFB90D2 compares the caller's row index against it, and
+; 0xFB90D7 addresses the +0x50 catalogue only on the in-range arm.  So the
+; LE16 is not merely equal to the row count: it IS the row count the
+; firmware checks against.  notes/prom_d_documentation_round3.py Q4c.
+; 0xFC1967 / 0xFC196C additionally read the count AND the length byte at
+; +0x02 of the +0x98 footer, which is this block's declared two-field head.
 ; ==========================================================================
 ToneDB_SourceList1_Footer:
 	.short 307				; row count of the +0x50 catalogue
@@ -28457,6 +29147,26 @@ ToneDB_SourceList1_Footer:
 ; The row count is CONFIRMED by the block's own footer at directory slot
 ; +0x68, whose leading LE16 is 314.
 ; KN5000 label at the same directory slot: ToneDB_SourceNameList2.
+; 
+; Evidence: prom_c reads directory slot +0x64 at 3 sites.  The first is
+; 0xFB9288 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB92A7 by `ld XIY,(XBC+0x64)`.  All 3: 0xFB92A7, 0xFC076B, 0xFC07C0.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND THE COUNT IS ENFORCED BY prom_c, not just declared by the footer.
+; One routine loads the footer, reads its first word, compares the caller's
+; row index against it, and only then addresses THIS catalogue:
+;     0xFB928D  ld X..,(base+0x68)   the footer at slot +0x68
+;     0xFB92A0  ld IY,(X..)            its leading LE16 = 314
+;     0xFB92A2  cp (XIZ+0x0a),IY       the row index against that count
+;     0xFB92A7  ld X..,(base+0x64)   this catalogue
+; and 314 is exactly the row count measured from the image (span / 16).
+; All five catalogue/footer pairs are read this way; the five chains are
+; checked byte for byte in notes/prom_d_documentation_round3.py Q4c.
 ; ==========================================================================
 ToneDB_SourceNameList2:
 	.ascii "Piano L      "	; 490AC
@@ -29098,6 +29808,27 @@ ToneDB_SourceNameList2:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x4A44C, which is directory slot +0x58's value, and ends at 0x4AC4C,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; Evidence: prom_c reads directory slot +0x58 at 1 site.  The first is
+; 0xFC07A5 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFC07AA by `ld XWA,(XBC+0x58)`.  All 1: 0xFC07AA.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; The chain this reader belongs to has NOT been decoded end to end.
+; For the one that has -- slot +0x4C -- see its banner: the map value
+; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
+; carries over to this map is NOT asserted here.
 ; ==========================================================================
 ToneDB_SourceIndexMapC:
 	.short 0x0002, 0x0004, 0x0002, 0x0005, 0x000C, 0x0008, 0x0010, 0x003D	; 4A44C  [0]
@@ -29239,6 +29970,21 @@ ToneDB_SourceIndexMapC:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x4AC4C, which is directory slot +0x5C's value, and ends at 0x4B44C,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
+; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
+; in prom_c and every directory slot read through it -- 99 reads over
+; 33 slots -- and directory slot +0x5C is not among them.  So this
+; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
+; firmware confirms it.  (The census is a LOWER BOUND: it does not
+; follow a base parked in a frame slot.)
 ; ==========================================================================
 ToneDB_SourceIndexMapD:
 	.short 0x00BD, 0x00BD, 0x00BE, 0x00BE, 0x00BE, 0x00C2, 0x00C4, 0x00BF	; 4AC4C  [0]
@@ -29378,6 +30124,23 @@ ToneDB_SourceIndexMapD:
 ; The LE16 is 314, which is exactly the row count of the catalogue at
 ; directory slot +0x64.  That is what identifies these blocks.
 ; KN5000 label at the same directory slot: ToneDB_SourceList2_Footer.
+; 
+; Evidence: prom_c reads directory slot +0x68 at 4 sites.  The first is
+; 0xFB9288 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB928D by `ld XWA,(XBC+0x68)`.  All 4: 0xFB928D, 0xFC0751, 0xFC0C03, 0xFC0DE3.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND prom_c USES IT AS A BOUND.  0xFB928D loads this footer, 0xFB92A0 reads
+; its leading LE16, 0xFB92A2 compares the caller's row index against it, and
+; 0xFB92A7 addresses the +0x64 catalogue only on the in-range arm.  So the
+; LE16 is not merely equal to the row count: it IS the row count the
+; firmware checks against.  notes/prom_d_documentation_round3.py Q4c.
+; 0xFC1967 / 0xFC196C additionally read the count AND the length byte at
+; +0x02 of the +0x98 footer, which is this block's declared two-field head.
 ; ==========================================================================
 ToneDB_SourceList2_Footer:
 	.short 314				; row count of the +0x64 catalogue
@@ -29392,6 +30155,26 @@ ToneDB_SourceList2_Footer:
 ; The row count is CONFIRMED by the block's own footer at directory slot
 ; +0x84, whose leading LE16 is 503.
 ; KN5000 label at the same directory slot: ToneDB_DrumSourceNameList.
+; 
+; Evidence: prom_c reads directory slot +0x80 at 5 sites.  The first is
+; 0xFB9563 `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB9584 by `ld XBC,(XWA+0x80)`.  All 5: 0xFB9584, 0xFC111F, 0xFC11AA, 0xFC130F, 0xFC1362.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND THE COUNT IS ENFORCED BY prom_c, not just declared by the footer.
+; One routine loads the footer, reads its first word, compares the caller's
+; row index against it, and only then addresses THIS catalogue:
+;     0xFB9568  ld X..,(base+0x84)   the footer at slot +0x84
+;     0xFB957D  ld IY,(X..)            its leading LE16 = 503
+;     0xFB957F  cp (XIZ+0x0a),IY       the row index against that count
+;     0xFB9584  ld X..,(base+0x80)   this catalogue
+; and 503 is exactly the row count measured from the image (span / 16).
+; All five catalogue/footer pairs are read this way; the five chains are
+; checked byte for byte in notes/prom_d_documentation_round3.py Q4c.
 ; ==========================================================================
 ToneDB_DrumSourceNameList:
 	.ascii "Silent       "	; 4B45E
@@ -30408,6 +31191,22 @@ ToneDB_DrumSourceNameList:
 ; 2048 LE16.  Every non-0xFFFF value is a valid index into the 504
 ; drum-instrument records at slot +0x78 (max 502).
 ; KN5000 label at the same directory slot: DrumKit_NoteMapB.
+; 
+; Evidence: prom_c reads directory slot +0x7C at 3 sites.  The first is
+; 0xFC10F3 `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFC10F8 by `ld XIY,(XWA+0x7C)`.  All 3: 0xFC10F8, 0xFC119A, 0xFC1352.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND prom_c SCALES IT THE SAME WAY as +0x74: 0xFC10FE `sll 0x07,BC`,
+; 0xFC1101 `add BC,(XIZ+0x08)`, 0xFC1104 `mul BC,0x0002`, 0xFC110A add the
+; base, 0xFC110F `ld BC,(XIY)`, then 0xFC1114 `cp BC,0xffff` -- the same
+; 'no entry' sentinel -- before 0xFC111F addresses the +0x80 catalogue.
+; ⚠ that chain is NOT decoded byte for byte by round 3; only the slot read
+; at 0xFC10F8 is.  It is quoted from the listing and labelled as such.
 ; ==========================================================================
 DrumKit_NoteMapB:
 	.short 0x0000, 0x0000, 0x0000, 0x01CF, 0x01D1, 0x01D2, 0x01D3, 0x01D0	; 4D3CE  [0]
@@ -30675,6 +31474,23 @@ DrumKit_NoteMapB:
 ; The LE16 is 503, which is exactly the row count of the catalogue at
 ; directory slot +0x80.  That is what identifies these blocks.
 ; KN5000 label at the same directory slot: ToneDB_DrumList_Footer.
+; 
+; Evidence: prom_c reads directory slot +0x84 at 5 sites.  The first is
+; 0xFB9563 `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB9568 by `ld XIY,(XWA+0x84)`.  All 5: 0xFB9568, 0xFC0DFC, 0xFC117E, 0xFC12F8, 0xFC14C9.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND prom_c USES IT AS A BOUND.  0xFB9568 loads this footer, 0xFB957D reads
+; its leading LE16, 0xFB957F compares the caller's row index against it, and
+; 0xFB9584 addresses the +0x80 catalogue only on the in-range arm.  So the
+; LE16 is not merely equal to the row count: it IS the row count the
+; firmware checks against.  notes/prom_d_documentation_round3.py Q4c.
+; 0xFC1967 / 0xFC196C additionally read the count AND the length byte at
+; +0x02 of the +0x98 footer, which is this block's declared two-field head.
 ; ==========================================================================
 ToneDB_DrumList_Footer:
 	.short 503				; row count of the +0x80 catalogue
@@ -30689,6 +31505,26 @@ ToneDB_DrumList_Footer:
 ; The row count is CONFIRMED by the block's own footer at directory slot
 ; +0x90, whose leading LE16 is 208.
 ; KN5000 label at the same directory slot: ToneDB_PercSourceNameList1.
+; 
+; Evidence: prom_c reads directory slot +0x8C at 5 sites.  The first is
+; 0xFB9798 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB97B9 by `ld XIY,(XBC+0x8C)`.  All 5: 0xFB97B9, 0xFC1594, 0xFC161F, 0xFC166F, 0xFC16C2.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND THE COUNT IS ENFORCED BY prom_c, not just declared by the footer.
+; One routine loads the footer, reads its first word, compares the caller's
+; row index against it, and only then addresses THIS catalogue:
+;     0xFB979D  ld X..,(base+0x90)   the footer at slot +0x90
+;     0xFB97B2  ld IY,(X..)            its leading LE16 = 208
+;     0xFB97B4  cp (XIZ+0x0a),IY       the row index against that count
+;     0xFB97B9  ld X..,(base+0x8C)   this catalogue
+; and 208 is exactly the row count measured from the image (span / 16).
+; All five catalogue/footer pairs are read this way; the five chains are
+; checked byte for byte in notes/prom_d_documentation_round3.py Q4c.
 ; ==========================================================================
 ToneDB_PercSourceNameList1:
 	.ascii "Silent       "	; 4E3DC
@@ -31118,6 +31954,40 @@ ToneDB_PercSourceNameList1:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x4F0DC, which is directory slot +0x4C's value, and ends at 0x4F8DC,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; Evidence: prom_c reads directory slot +0x4C at 3 sites.  The first is
+; 0xFC1568 `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFC156D by `ld XIY,(XWA+0x4C)`.  All 3: 0xFC156D, 0xFC160F, 0xFC16B2.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND ROUND 3 GIVES THIS MAP A ROLE, not just a value range.  One prom_c
+; routine reads the map and then the catalogue at slot +0x8C, and what it
+; does with the value is multiply it by the catalogue's row stride:
+;     0xFC156D  ld XIY,(XWA+0x4c)     this map's file offset
+;     0xFC1573  sll 0x07,BC           row * 128
+;     0xFC1576  add BC,(XIZ+0x08)     + column
+;     0xFC1579  mul BC,0x0002         * 2, so entries are LE16
+;     0xFC157F  add XIY,(0x00d7ed)    + base
+;     0xFC1584  ld BC,(XIY)           THE MAP VALUE
+;     0xFC1589  cp BC,0xffff          0xFFFF is the 'no entry' sentinel
+;     0xFC1594  ld XIY,(XWA+0x008c)   the +0x8C catalogue
+;     0xFC163F  ld BC,0x0010          16 = that catalogue's ROW STRIDE
+;     0xFC1642  mul XBC,(XIZ+0xf0)    * the map value
+;     0xFC1645  add XBC,(XIZ+0xfc)    + the catalogue base -> the row
+; So: (row, column) -> a row of ToneDB_PercSourceNameList1, 0xFFFF = none.
+; notes/prom_d_documentation_round3.py Q4g decodes all sixteen instructions
+; from the ROM bytes and checks 16 x 208 against that catalogue's own footer.
 ; ==========================================================================
 ToneDB_PercSourceIndexMapB:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 4F0DC  [0]
@@ -31257,6 +32127,23 @@ ToneDB_PercSourceIndexMapB:
 ; The LE16 is 208, which is exactly the row count of the catalogue at
 ; directory slot +0x8C.  That is what identifies these blocks.
 ; KN5000 label at the same directory slot: ToneDB_PercList1_Footer.
+; 
+; Evidence: prom_c reads directory slot +0x90 at 5 sites.  The first is
+; 0xFB9798 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB979D by `ld XWA,(XBC+0x90)`.  All 5: 0xFB979D, 0xFC0E19, 0xFC15F3, 0xFC1658, 0xFC17B9.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND prom_c USES IT AS A BOUND.  0xFB979D loads this footer, 0xFB97B2 reads
+; its leading LE16, 0xFB97B4 compares the caller's row index against it, and
+; 0xFB97B9 addresses the +0x8C catalogue only on the in-range arm.  So the
+; LE16 is not merely equal to the row count: it IS the row count the
+; firmware checks against.  notes/prom_d_documentation_round3.py Q4c.
+; 0xFC1967 / 0xFC196C additionally read the count AND the length byte at
+; +0x02 of the +0x98 footer, which is this block's declared two-field head.
 ; ==========================================================================
 ToneDB_PercList1_Footer:
 	.short 208				; row count of the +0x8C catalogue
@@ -31271,6 +32158,26 @@ ToneDB_PercList1_Footer:
 ; The row count is CONFIRMED by the block's own footer at directory slot
 ; +0x98, whose leading LE16 is 161.
 ; KN5000 label at the same directory slot: ToneDB_PercSourceNameList2.
+; 
+; Evidence: prom_c reads directory slot +0x94 at 3 sites.  The first is
+; 0xFB995C `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB997D by `ld XIY,(XBC+0x94)`.  All 3: 0xFB997D, 0xFC1924, 0xFC19C3.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND THE COUNT IS ENFORCED BY prom_c, not just declared by the footer.
+; One routine loads the footer, reads its first word, compares the caller's
+; row index against it, and only then addresses THIS catalogue:
+;     0xFB9961  ld X..,(base+0x98)   the footer at slot +0x98
+;     0xFB9976  ld IY,(X..)            its leading LE16 = 161
+;     0xFB9978  cp (XIZ+0x0a),IY       the row index against that count
+;     0xFB997D  ld X..,(base+0x94)   this catalogue
+; and 161 is exactly the row count measured from the image (span / 16).
+; All five catalogue/footer pairs are read this way; the five chains are
+; checked byte for byte in notes/prom_d_documentation_round3.py Q4c.
 ; ==========================================================================
 ToneDB_PercSourceNameList2:
 	.ascii "Silent       "	; 4F8EA
@@ -31606,6 +32513,27 @@ ToneDB_PercSourceNameList2:
 ; ⚠ What the index SELECTS is not established here; the value ranges are
 ; recorded because they pin which catalogue or record array each map can
 ; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; 
+; Evidence: (image-internal, NOT from code) this region begins at
+; 0x502FA, which is directory slot +0x60's value, and ends at 0x50AFA,
+; which is the next value in the same directory.  So the entry count 1024
+; is pinned at BOTH ends by the image's own table and is not a stride
+; guess -- the failure mode this tree has paid for.  The value range
+; above is measured over all 1024 entries, first to last.
+; 
+; Evidence: prom_c reads directory slot +0x60 at 2 sites.  The first is
+; 0xFC18FF `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFC1904 by `ld XWA,(XBC+0x60)`.  All 2: 0xFC1904, 0xFC19B3.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; The chain this reader belongs to has NOT been decoded end to end.
+; For the one that has -- slot +0x4C -- see its banner: the map value
+; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
+; carries over to this map is NOT asserted here.
 ; ==========================================================================
 ToneDB_PercSourceIndexMapC:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 502FA  [0]
@@ -31745,6 +32673,23 @@ ToneDB_PercSourceIndexMapC:
 ; The LE16 is 161, which is exactly the row count of the catalogue at
 ; directory slot +0x94.  That is what identifies these blocks.
 ; KN5000 label at the same directory slot: ToneDB_PercList2_Footer.
+; 
+; Evidence: prom_c reads directory slot +0x98 at 3 sites.  The first is
+; 0xFB995C `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+; 0xFB9961 by `ld XWA,(XBC+0x98)`.  All 3: 0xFB9961, 0xFC0E35, 0xFC1952.
+; Every one re-decoded from prom_c's ROM bytes at the cited address by
+; notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+; fail to decode).  The base is a compile-time constant: the only two
+; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
+; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
+; 
+; ★ AND prom_c USES IT AS A BOUND.  0xFB9961 loads this footer, 0xFB9976 reads
+; its leading LE16, 0xFB9978 compares the caller's row index against it, and
+; 0xFB997D addresses the +0x94 catalogue only on the in-range arm.  So the
+; LE16 is not merely equal to the row count: it IS the row count the
+; firmware checks against.  notes/prom_d_documentation_round3.py Q4c.
+; 0xFC1967 / 0xFC196C additionally read the count AND the length byte at
+; +0x02 of the +0x98 footer, which is this block's declared two-field head.
 ; ⚠ 3 + 11 = 14, but this region is 15 bytes.  The 1 extra byte(s) after
 ; the declared payload are the LAST bytes of the whole payload (it ends at
 ; 0x50B08) and are not accounted for.
@@ -31766,9 +32711,18 @@ ToneDB_PercList2_Footer:
 ; 0x00F00000 on CPU 2's bus (notes/FINDINGS-memory-map.md §5).
 ; ⚠ This banner used to end 'the 512 KiB flash at 0xE80000', which is the
 ; REFUTED reading -- prom_c's own Flash_SectorErase bounds that part at
-; 0x00E80000..0x00EFFFFF, below this image.  prom_d/prom_d.ld still carries
-; the old argument; its ORIGIN 0 stays correct either way, because this
-; image is addressed by 0-based offsets and holds no absolute pointers.
+; 0x00E80000..0x00EFFFFF, below this image.  ORIGIN 0 in prom_d/prom_d.ld
+; stays correct anyway, because this image is addressed by 0-based offsets
+; and holds no absolute pointers -- which round 3 turned from an argument
+; about content into a fact about the firmware (see the directory banner:
+; prom_c adds the base to a value it read out of this image).
+; 
+; Evidence: prom_a 0xF82A5F is `ld XWA,0x00F7FFF0` (bytes 40 f0 ff f7 00)
+; and the eleven bytes at prom_d file 0x7FFF0 are `wsad_54.ssf`.
+; 0x00F7FFF0 - 0x7FFF0 = 0x00F00000, the same base prom_c installs in RAM
+; 0x00D7ED / 0x00D7F1 from the immediate at 0xFB051E.  Two processors, two
+; independent routes, one base.  notes/prom_d_base_checks.py (12 checks)
+; and notes/prom_d_documentation_round3.py Q1.
 ; ==========================================================================
 erased_tail:
 	.fill 0x2F4E7, 1, 0xFF
