@@ -4,14 +4,19 @@
 QUESTION IT ANSWERS
   "Which bytes of prom_a's largest remaining `.incbin` are instructions, which
    are tables, and which are padding?"  A later lane converts the span; a linear
-   decode of it desynchronises inside the first module -- there are eight inline
+   decode of it desynchronises inside the first module -- there are TEN inline
    jump tables in it -- so the boundaries have to be pinned FIRST.  This is that
    pinning, and every boundary below is the output of a rule, not of an eye.
 
   The span is one `.incbin`: prom_a/wsa1_prom_a.s line 49272,
   `.incbin "original_ROMs/wsa1_prom_a.ic12", 0x02D800, 0x004800`
   = 0xFAD800-0xFB1FFF, 18,432 bytes.  notes/prom_a_module_frontier.py ranks it
-  top by contiguous unconverted extent summed over the thunk runs that point
+  NOT top by contiguous unconverted extent -- summed, this span's runs give
+  3,216 + 2,595 + 0 = 5,811, where 0xFA5AEB-0xFAA000's give 16,799 and T_F43350
+  alone (8,886) outranks anything here.  It was picked because it is prom_a's
+  LARGEST remaining .incbin (18,432 B), which is a perfectly good reason and is
+  what WAVE7-BRIEFING.md actually says.  This line used to claim the frontier
+  ranked it
   into it -- T_F40850-T_F4089C (20 slots, 2,595 B, ref bound 35),
   T_F41F10-T_F41F3C (12 slots, 3,216 B, 17) and T_F40840 (1 slot) = 33
   directory slots, all of which converting the span retires.
@@ -95,7 +100,8 @@ WHAT IS NOT CLAIMED
     content rule and their entries are valid code entry points, but NO
     instruction in prom_a or prom_b loads either base address -- `--readers`
     prints that, and it is an open question, not a defect of the rule.
-  * 26 code runs totalling ~306 bytes (~4%) are `accept()`-promoted, i.e. code
+  * 26 code runs totalling 261 bytes (3.7% of the 7,107 code bytes) are
+    `accept()`-promoted, i.e. code
     by SHAPE and not by a control-flow path.  `--accepted` lists them.
   * ★ TWO BYTE TABLES SIT INSIDE `code` SEGMENTS AND THIS LAYOUT DOES NOT FRAME
     THEM.  The content rules find POINTER tables; a table of BYTES is
@@ -265,7 +271,7 @@ def ptr_tables(d, lo, hi, minent=PTR_MIN, plo=PTR_LO, phi=PTR_HI, off=A_BASE,
 
     SPARSE (the default, and it is a correction).  A dense chain rule frames the
     192-entry dispatch table at 0xFAE3A2 as FOUR fragments -- 64 entries, then
-    two of 5 and 6 -- because 88 of its slots hold 0xFFFFFFFF, which the reader
+    two of 5 and 6 -- because 116 of its slots hold 0xFFFFFFFF, which the reader
     at 0xFADB69 tests for explicitly (`cp XIY,0xffffffff / jr Z`) as "no
     handler".  So 0xFFFFFFFF counts as an EMPTY ENTRY inside a chain, but a
     chain may not begin or end on one, and it still needs `minent` real
@@ -711,7 +717,7 @@ def build(lo=LO, hi=HI):
                 kind[x - lo] = name
 
     # Painted lowest priority FIRST.  The constant-byte runs go first because a
-    # table may legitimately CONTAIN one: 88 of the 192 slots at 0xFAE3A2 are
+    # table may legitimately CONTAIN one: 116 of the 192 slots at 0xFAE3A2 are
     # 0xFFFFFFFF, which is 352 contiguous bytes of 0xFF, and painting the pad
     # last split one table into three segments with pad between them.
     paint(zero_runs(d, lo, hi), "pad_00")
@@ -927,14 +933,25 @@ def selftest():
     # the two payload blobs, checked on their LAST entry
     blobs = ptr_blobs(d, LO, HI)
     check("PTRBLOB count", len(blobs), 2)
-    b0 = [b for b in blobs if b[0] == 0xFAF7E8][0]
-    b1 = [b for b in blobs if b[0] == 0xFB0700][0]
-    check("blob 0xFAF7E8: entries, stride, payload",
-          (b0[4], hex(b0[3]), "0x%06X-0x%06X" % (b0[1], b0[2])),
-          (33, "0x74", "0x%06X-0x%06X" % (0xFAF86C, 0xFB0700)))
-    check("blob 0xFB0700: entries, stride, payload",
-          (b1[4], hex(b1[3]), "0x%06X-0x%06X" % (b1[1], b1[2])),
-          (33, "0x60", "0x%06X-0x%06X" % (0xFB0784, 0xFB1394)))
+    # ⚠ Guarded: when PTRBLOB detection breaks, the [0] indexing used to raise an
+    # uncaught IndexError here, so the remaining ~40 checks never ran and no failure
+    # summary was printed.  A self-test that dies on its first failure hides the rest.
+    _b0 = [b for b in blobs if b[0] == 0xFAF7E8]
+    _b1 = [b for b in blobs if b[0] == 0xFB0700]
+    if not _b0 or not _b1:
+        FAIL.append("PTRBLOB bases missing (0xFAF7E8 found=%d, 0xFB0700 found=%d) -- "
+                    "skipping the blob checks, the rest still run" % (len(_b0), len(_b1)))
+        b0 = b1 = None
+    else:
+        b0, b1 = _b0[0], _b1[0]
+    if b0 is not None:
+        check("blob 0xFAF7E8: entries, stride, payload",
+              (b0[4], hex(b0[3]), "0x%06X-0x%06X" % (b0[1], b0[2])),
+              (33, "0x74", "0x%06X-0x%06X" % (0xFAF86C, 0xFB0700)))
+    if b1 is not None:
+        check("blob 0xFB0700: entries, stride, payload",
+              (b1[4], hex(b1[3]), "0x%06X-0x%06X" % (b1[1], b1[2])),
+              (33, "0x60", "0x%06X-0x%06X" % (0xFB0784, 0xFB1394)))
     check("blob 0xFAF7E8 LAST entry is where the stride says",
           "0x%06X" % w32(0xFAF7E8 + 32 * 4), "0x%06X" % (0xFAF86C + 32 * 0x74))
     check("blob 0xFB0700 LAST entry is where the stride says",
@@ -946,6 +963,26 @@ def selftest():
           "0x%08X" % w32(0xFAE69E), "0x%08X" % 0xFFFFFFFF)
     check("...and 0xFAE6A2, one past it, is not a pointer",
           "0x%08X" % w32(0xFAE6A2), "0x%08X" % 0)
+    # ⚠ These three checks exist because the wave-7 skeptic found the prose claiming
+    # "88 of its slots hold 0xFFFFFFFF" when the ROM says 116, and NO mode of this
+    # script printed either number.  A quantified claim no check reproduces is
+    # exactly the shape of this project's recorded "handler count of 35 that was 34".
+    _slots = [w32(0xFAE3A2 + 4 * i) for i in range(192)]
+    check("dispatch table: empty markers", sum(1 for v in _slots if v == 0xFFFFFFFF), 116)
+    check("dispatch table: filled slots", sum(1 for v in _slots if v != 0xFFFFFFFF), 76)
+    check("dispatch table: DISTINCT handlers behind those 76 slots",
+          len(set(v for v in _slots if v != 0xFFFFFFFF)), 14)
+    # ⚠ Also from the wave-7 skeptic: the prose said "19 inline jump tables" and the
+    # docstring said module 1 held "eight".  Both were counted by eye.  Pinned here.
+    _pt = sorted(a for a, _e in ptr_tables(d, LO, HI))
+    _inline = [a for a in _pt if a not in (0xFAE3A2, 0xFAF7E8, 0xFB0700)]
+    check("pointer_table segments in the span", len(_pt), 21)
+    check("...of which INLINE jump tables (not the dispatch table, not the 2 blob tables)",
+          len(_inline), 18)
+    check("...ten of them in module 1 (0xFAD800-0xFAE3A0)",
+          sum(1 for a in _inline if a < 0xFAE3A2), 10)
+    check("...and eight in module 2 (0xFAE800-0xFAF7A5)",
+          sum(1 for a in _inline if a > 0xFAE6A1), 8)
     # the three poke lists
     check("RECLIST count", len(rl), 3)
     check("RECLIST addresses",
