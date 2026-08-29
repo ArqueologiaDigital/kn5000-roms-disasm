@@ -31,6 +31,7 @@ base address is not established.  Slots whose prom_d content does not match the
 KN5000 role are named for what they contain, not for the KN5000 label.
 """
 import collections
+import itertools
 import os
 import struct
 import sys
@@ -136,6 +137,54 @@ for _slot, _audited in _R4.AUDITED_CHAIN.items():
                  "notes/prom_d_understanding_round4.py before regenerating."
                  % (_slot, len(_rows), _joined, _audited))
     CHAIN[_slot] = {r["i"]: r for r in _rows}
+# ---------------------------------------------------------------------------
+# ★ WAVE 7 ROUND 5.  notes/prom_d_understanding_round5.py answers the question
+# round 4 left: WHICH of the 622 still-framed labels sit on an object that
+# carries a name at all.  614 do not and stay framed WITH THE GAP STATED; 8 are
+# promoted, and both promotions DERIVE the label from the bytes rather than
+# asserting it -- the program-map rows from what they select, the descriptor
+# curves from their own run lengths.  This emitter refuses to run if either
+# derivation stopped producing the audited names.
+# ---------------------------------------------------------------------------
+_spec5 = _ilu.spec_from_file_location(
+    "prom_d_understanding_round5",
+    os.path.join(ROOT, "notes", "prom_d_understanding_round5.py"))
+_R5 = _ilu.module_from_spec(_spec5)
+_saved_argv, sys.argv = sys.argv, ["prom_d_understanding_round5", "--quiet"]
+try:
+    _spec5.loader.exec_module(_R5)
+finally:
+    sys.argv = _saved_argv
+CURVE_NAME = _R5.curve_names()
+ROW_NAME = _R5.row_names()
+PERC_OVERLAP = _R5.perc_overlap()
+if tuple(CURVE_NAME[_k] for _k in sorted(CURVE_NAME)) != _R5.AUDITED_CURVES:
+    sys.exit("REFUSING TO EMIT: the derived curve names are now %s; audited as %s.  "
+             "Re-audit with notes/prom_d_understanding_round5.py."
+             % (tuple(CURVE_NAME[_k] for _k in sorted(CURVE_NAME)), _R5.AUDITED_CURVES))
+if tuple(ROW_NAME[_r] for _r in sorted(ROW_NAME)) != _R5.AUDITED_ROWS:
+    sys.exit("REFUSING TO EMIT: the derived program-map row names are now %s; "
+             "audited as %s.  Re-audit with notes/prom_d_understanding_round5.py."
+             % (tuple(ROW_NAME[_r] for _r in sorted(ROW_NAME)), _R5.AUDITED_ROWS))
+if PERC_OVERLAP != _R5.AUDITED_PERC:
+    sys.exit("REFUSING TO EMIT: the slot +0x20 / drum-instrument overlap is now %s; "
+             "audited as %s.  Re-audit with notes/prom_d_understanding_round5.py."
+             % (PERC_OVERLAP, _R5.AUDITED_PERC))
+PRESET_IDX = _R5.wavesel_preset_index()
+if PRESET_IDX != _R5.AUDITED_SELFIDX:
+    sys.exit("REFUSING TO EMIT: the +0x3C array's self-index shape is now %s; audited "
+             "as %s.  Re-audit with notes/prom_d_understanding_round5.py Q7."
+             % (PRESET_IDX, _R5.AUDITED_SELFIDX))
+ROUND5_CHECKS = _R5.NCHECK[0]
+
+
+def CURVE_LABEL(k):
+    """`ToneDB_DescCurve_<shape>` -- the suffix is DERIVED from the curve's own
+    run lengths by notes/prom_d_understanding_round5.py curve_names(), which is
+    why no curve name is typed anywhere in this file."""
+    return "ToneDB_DescCurve_%s" % CURVE_NAME[k]
+
+
 _TONE_NAMES, _PERC_NAMES = _R4.names()
 if (len(_TONE_NAMES), len(_PERC_NAMES)) != _R4.AUDITED_NAMES:
     sys.exit("REFUSING TO EMIT: the record name census is now %s; audited as %s."
@@ -374,6 +423,87 @@ def WAVESEL_EV(slot, a, b, n):
     ]
 
 
+def WAVESEL_GAP(slot):
+    """★ ROUND 5: why every record in this array keeps a NUMBER, stated with the
+    measurements that make it a gap rather than an omission."""
+    n, per, els = _R5.wavesel_gap(slot)
+    lines = [
+        "",
+        "★ WHY EVERY RECORD BELOW IS `_%03d` AND NOT A NAME -- round 5 asked the" % (n - 1),
+        "question directly instead of leaving it implied.",
+        "",
+        "  1. THE RECORD CARRIES NO NAME.  Round 4 named 778 tone and drum records",
+        "     from their own ASCII fields.  These have none: over all %d records" % n,
+        "     the widest run of printable bytes anywhere in a record is %d, against" % per,
+        "     the 13 bytes of the narrowest name field this image uses.  No column",
+        "     is printable in every record.  The test is not blind -- run on the",
+        "     208-row catalogue at slot +0x8C it finds 14 printable columns of 16.",
+    ]
+    if slot == 0x20:
+        recs, carried, uniq, agree = _R5.perc_overlap()
+        lines += [
+            "",
+            "  2. AND THIS ARRAY IS THE ONE THAT LOOKED NAMEABLE, WHICH IS WHY THE",
+            "     REFUSAL IS WORTH STATING.  Two independent proposals exist for it:",
+            "       (a) POSITIONAL -- ToneDB_PercSourceNameList1 at slot +0x8C holds",
+            "           exactly %d rows, the same count as this array;" % recs,
+            "       (b) BY CONTENT -- %d of these %d records are byte-identical to"
+            % (carried, recs),
+            "           the LAST 43 BYTES of one of the 504 drum-instrument records",
+            "           at slot +0x78 (150-byte stride, so bytes +107..+149), and",
+            "           %d of them to exactly ONE such record, whose own 13-byte" % uniq,
+            "           name would then be the obvious label.",
+            "     Where both proposals exist and are unique they AGREE IN ONLY %d OF"
+            % agree,
+            "     %d.  Two derivations that contradict each other are better evidence"
+            % uniq,
+            "     than either alone, and what they are evidence FOR is that neither",
+            "     may be used: a name taken from either source would be wrong %d"
+            % (uniq - agree),
+            "     times in %d.  So both are refused and the index stands." % uniq,
+            "     ⚠ The byte overlap itself is real and is NOT retracted -- it is a",
+            "     fact about the image worth having.  What is refused is naming an",
+            "     object after a different object that happens to hold equal bytes.",
+        ]
+    else:
+        lines += [
+            "",
+            "  2. AND THERE IS NO SECOND COPY TO BORROW FROM.  Every 43-byte window",
+            "     of the whole %s-byte payload was indexed and matched against these"
+            % format(0x50B09, ","),
+            "     records: %d of %d occur anywhere else in the image.  (The array at"
+            % (els, n),
+            "     slot +0x20 is different -- see its own banner -- and that",
+            "     difference is what makes this zero informative.)",
+        ]
+    if slot == 0x3C:
+        lines += [
+            "",
+            "  3. ★ BUT THE NUMBER IS NOT MERELY POSITIONAL HERE, and that is the",
+            "     difference between this array and the other two.  Round 5 Q7 shows",
+            "     the suffix IS the preset number prom_c indexes this array by, and",
+            "     that each record carries that number in the low 6 bits of its own",
+            "     byte +0x0B (%d of %d).  So `_%03d` is derived from the object, the"
+            % (PRESET_IDX[1], PRESET_IDX[0], PRESET_IDX[0] - 1),
+            "     way round 4's names were -- it is simply a number rather than a",
+            "     string, so the documentation metric still counts it as framed.",
+            "     WHAT IS STILL OPEN: what a preset MEANS (nothing here reads audio",
+            "     state) and every byte of the record except +0x0B.",
+            "  notes/prom_d_understanding_round5.py Q1a, Q4d, Q7.",
+        ]
+    else:
+        lines += [
+            "",
+            "  3. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of",
+            "     THIS array with an index whose meaning is known -- exactly what",
+            "     round 5 Q7 found for the array at slot +0x3C and did NOT find here.",
+            "     Round 3's census of 99 directory reads found no reader for slot",
+            "     +0x%02X at all." % slot,
+            "  notes/prom_d_understanding_round5.py Q1a, Q4c, Q4d.",
+        ]
+    return lines
+
+
 def WAVESEL_CHAIN(slot):
     lead = ["",
             "★ AND 43 IS THE RECORD LENGTH, not just a divisor.  One prom_c routine"]
@@ -399,8 +529,40 @@ def WAVESEL_CHAIN(slot):
         "which is where round 2's `7D 80 54 at +0x0D` sits: at the first byte the",
         "loop touches.  notes/prom_d_documentation_round3.py Q4h decodes all",
         "twelve instructions from prom_c's ROM bytes.",
-        "⚠ NOT established: what any of the 43 bytes means, or what the head/tail",
-        "split is FOR.",
+        "",
+        "★★ AND IN ROUND 5 THAT ROUTINE ANSWERED THE QUESTION THIS LINE USED TO",
+        "REFUSE.  ⚠ CORRECTED: this paragraph ended `NOT established: what any of",
+        "the 43 bytes means, or what the head/tail split is FOR`, and BOTH halves",
+        "of that sentence are now wrong.  The same routine begins by reading the",
+        "field it is about to compute an index from:",
+        "    0xFBC72B  ld C,0x2b             43, the record length",
+        "    0xFBC72D  mul BC,(XIZ+0x0a)     * the caller's record number",
+        "    0xFBC738  add XBC,0x000087d2    => the DESTINATION record, in RAM",
+        "    0xFBC741  ld A,(XBC+0x0b)       ★ its field +0x0B",
+        "    0xFBC744  and A,0x3f            ★ the LOW 6 BITS",
+        "    0xFBC74C  cp WA,0 / jr NZ       0 takes a different arm entirely",
+        "    0xFBC7C3  mul XIY,(XIZ+0xf2)    ★ that value INDEXES the +0x3C array",
+        "    0xFBC7D6  ld (XWA+0x0b),H       the chosen record's own +0x0B, back",
+        "    0xFBC7D9..0xFBC805              then bytes 13..42, copied over",
+        "So FIELD +0x0B IS A 6-BIT PRESET NUMBER: 0 means `not from that array`",
+        "(prom_c builds the tail from a live RAM block at 0x1523 instead,",
+        "0xFBC750-0xFBC7A7) and 1..63 name one of the 64 records of",
+        "ToneDB_WaveSelTailPresets, which then supplies this record's +0x0B and",
+        "its whole 30-byte tail.  The 13/30 split is therefore not a curiosity:",
+        "the tail is exactly what a preset REPLACES.",
+        "",
+        "★ AND THE ARRAY CONFIRMS IT WITHOUT THE CODE.  Its own record N carries N",
+        "in the low 6 bits of its own +0x0B, %d of %d -- the exception is record 0,"
+        % (PRESET_IDX[1], PRESET_IDX[0]),
+        "which holds 1 and which that routine can never select because index 0",
+        "takes the other arm.  %d of the 64 also set bit 6, which `and A,0x3f`" % PRESET_IDX[2],
+        "strips; without the mask those %d would index past the array's end.  The"
+        % PRESET_IDX[2],
+        "same self-index test scores 2 of 322 on the +0x18 array and 1 of 208 on",
+        "+0x20, so it is specific and not an artefact.  round 5 Q7.",
+        "",
+        "⚠ STILL NOT ESTABLISHED: any of bytes 0..10 or byte 12, and what a preset",
+        "SOUNDS like -- nothing here reads audio state.",
     ]
 
 
@@ -521,8 +683,14 @@ SLOT = {
     0x30: ("ToneDB_EnvDescTable", "descriptor block, stride word +0xEC = 14", "ToneDB_EnvDescTable"),
     0x34: ("ToneDB_EnvDescTable", "(alias of +0x30)", "ToneDB_EnvDescTable"),
     0x38: ("ToneDB_EnvDescTable_Perc", "descriptor block, stride word +0xF2 = 14", "ToneDB_EnvDescTable (shared)"),
-    0x3C: ("ToneDB_MixerDefaultTable_3C", "64 x 43-byte wave-select records", "UNUSED in the KN5000"),
-    0x40: ("ToneDB_MixerDefaultTable_3C", "(alias of +0x3C)", "UNUSED in the KN5000"),
+    # ★ RENAMED IN WAVE 7 ROUND 5.  This block was ToneDB_MixerDefaultTable_3C --
+    # a name copied from the +0x18 array's shape for a slot the KN5000 does not use,
+    # i.e. a guess.  prom_c's sub_FBC725 now says what it is: 64 alternative TAILS
+    # for a wave-select record, chosen by that record's own field +0x0B & 0x3F, and
+    # the array's records carry their own index in that same field, 63 of 64.
+    # notes/prom_d_understanding_round5.py Q7.
+    0x3C: ("ToneDB_WaveSelTailPresets", "64 x 43-byte wave-select records", "UNUSED in the KN5000"),
+    0x40: ("ToneDB_WaveSelTailPresets", "(alias of +0x3C)", "UNUSED in the KN5000"),
     0x44: ("ToneDB_SourceIndexMapA", "1024 LE16 index map", "ToneDB_SourceIndexMapA"),
     0x48: ("ToneDB_SourceIndexMapB", "1024 LE16 index map", "ToneDB_SourceIndexMapB"),
     0x4C: ("ToneDB_PercSourceIndexMapB", "1024 LE16 index map", "ToneDB_PercSourceIndexMapB"),
@@ -689,6 +857,32 @@ def emit_numbanks():
         "(index 0x000-0x0FF); rows 8-9 only ever name drum kits (0x100-0x111).",
         "Asserted over all 1280 entries by scripts/analysis/prom_d_tone_database.py.",
         "",
+        "★ NEW IN ROUND 5 -- TWO OF THE TEN ROW LABELS NOW SAY WHAT THE ROW IS,",
+        "and they say it from what the row SELECTS, since every record a row",
+        "selects carries its own 16-byte ASCII name:",
+        "",
+        "  ToneNumBank_DrumKits      row 8.  All 128 of its entries name a record",
+        "                            whose own name ENDS IN 'Kit' -- 128 of 128,",
+        "                            checked at program 127 as well as program 0.",
+        "  ToneNumBank_SpecialSound  row 9.  127 of its entries hold tone 0x100",
+        "                            'Jazz Kit'; the entry at program 127 holds",
+        "                            tone 0x110 ' Special sound ', and row 9 is the",
+        "                            ONLY row in all 1,280 entries in which 0x110",
+        "                            occurs.  That one entry is the whole of what",
+        "                            distinguishes this row, so it is what names it.",
+        "",
+        "⚠ AND ROWS 0-7 KEEP A NUMBER, deliberately.  What they share is measured",
+        "(no entry >= 256 in any of the 1,024) and it is not enough to tell them",
+        "apart; against row 0 they differ in %s of 128 entries"
+        % "/".join(str(sum(1 for _p in range(128)
+                           if u16(0x180 + 0x100 * _r + 2 * _p) != u16(0x180 + 2 * _p)))
+                   for _r in range(1, 8)),
+        "respectively, and NOTHING in this image says what that variation means.",
+        "`Melodic_<r>` states the class and admits the gap; it is not a name.",
+        "The row-name rule is derived, not typed: notes/prom_d_understanding_round5.py",
+        "row_names(), and this generator refuses to emit if it stops producing the",
+        "audited ten.  round 5 Q2.",
+        "",
         "The program ORDER is NOT General MIDI: program 1 of row 0 is",
         "'Honky-Tonk Piano' where GM has Bright Acoustic Piano, and programs",
         "32-39 are Harp/Banjo/Harp/Mandolin/Shamisen/Koto/Sitar/Kalimba where GM",
@@ -712,7 +906,7 @@ def emit_numbanks():
         base = 0x180 + 0x100 * b
         W("")
         W("; --- row %d (%s) ---" % (b, "melodic" if b < 8 else "drum kits"))
-        W("ToneNumBank_%d:" % b)
+        W("ToneNumBank_%s:" % ROW_NAME[b])
         e_shorts(base, base + 0x100,
                  comment=lambda i, base=base: "prog %3d -> tone 0x%03X %r"
                  % (i, u16(base + 2 * i), NAME(PTRS[u16(base + 2 * i)])))
@@ -763,6 +957,17 @@ def emit_unk_fc8():
         "",
         "⚠ The KN5000 leaves directory slot +0xA8 UNUSED, so there is no name to",
         "transplant and none is invented here.",
+        "",
+        "★ ROUND 5 adds the two facts that a per-record label cannot carry.",
+        "  (a) THE EIGHT RECORDS ARE ONLY %d DISTINCT BYTE STRINGS: %s."
+        % (len(_R5.fc8_classes()),
+           "; ".join("{%s}" % ",".join(str(k) for k in g) for g in _R5.fc8_classes())),
+        "      A table whose eight rows take three values is not eight independent",
+        "      settings, whatever it is.",
+        "  (b) AND THERE IS NO NAME IN IT TO TAKE: 0 of the %d bytes are printable"
+        % (8 * 128),
+        "      at all, so the round-4 mechanism has nothing to work with here.",
+        "  notes/prom_d_understanding_round5.py Q1c.",
     ] + ev_slot(0xA8, [
         "",
         "★ NEW in wave 7 round 3: the 128-byte RECORD SIZE is now prom_c's, not",
@@ -1119,7 +1324,8 @@ def mk_wavesel_array(slot):
             "The same 43-byte record is the second per-element array of every tone",
             "record and the tail of ToneDB_DefaultLayerParams.",
             "KN5000 label at the same directory slot: %s." % SLOT[slot][2],
-            "⚠ Field meanings NOT established, and ⚠ CORRECTED in wave 7 round 2:",
+            "⚠ Field meanings NOT established -- EXCEPT +0x0B, which wave 7 round 5",
+            "identified as a 6-bit preset number; see below.  And ⚠ CORRECTED in round 2:",
             "the leading 7F 7F 7F and the 7D 80 54 at +0x0D are NOT in every record.",
             "Counted over this array, first record to last: %d of %d start 7F 7F 7F"
             % (sum(1 for i in range(n) if D[a + 43 * i:a + 43 * i + 3] == b"\x7f\x7f\x7f"), n),
@@ -1127,9 +1333,83 @@ def mk_wavesel_array(slot):
             % (sum(1 for i in range(n) if D[a + 43 * i + 13:a + 43 * i + 16] == b"\x7d\x80\x54"), n),
             "record examined', which was the first record quoted as a universal.",
             "Re-derived by notes/prom_d_structures_round2.py section Q4b.",
-        ] + WAVESEL_EV(slot, a, b, n) + ev_slot(slot, WAVESEL_CHAIN(slot)))
+        ] + WAVESEL_EV(slot, a, b, n) + ev_slot(slot, WAVESEL_CHAIN(slot))
+          + WAVESEL_GAP(slot))
         W("%s:" % slot_label(slot))
+        # ★ ROUND 5: the +0x20 array is the ONE of the three where a per-record
+        # header can say something that DIFFERS per record -- which drum-instrument
+        # records carry these exact 43 bytes.  The other two arrays get no
+        # per-record header, because there the only true statement ("no copy
+        # anywhere in the payload") is the same 322 and 64 times over and repeating
+        # it would be padding, not prose.  That asymmetry is deliberate.
+        car = _R5.perc_carriers() if slot == 0x20 else None
         for i in range(n):
+            if slot == 0x3C:
+                # ★ ROUND 5: this array's records SELF-IDENTIFY.  Each header states
+                # the record's own +0x0B and whether its low 6 bits are its index --
+                # a different fact per record, and the one that makes the numeric
+                # suffix a MEANING rather than a position.
+                _b = D[a + 43 * i + 0x0B]
+                W("")
+                W("; %s_%03d -- file 0x%05X..0x%05X"
+                  % (slot_label(slot), i, a + 43 * i, a + 43 * (i + 1) - 1))
+                if i:
+                    W("; Selected when a wave-select record's field +0x0B & 0x3F == %d."
+                      % i)
+                else:
+                    W("; ⚠ NOT SELECTABLE by prom_c's sub_FBC725: the index this")
+                    W("; record would need is 0, and 0xFBC74E `jr NZ` sends index 0")
+                    W("; down the other arm, which builds the tail from RAM 0x1523")
+                    W("; instead of from this array.  What this record is FOR is")
+                    W("; therefore open.  round 5 Q7b.")
+                if (_b & 0x3F) == i:
+                    W("; This record's own +0x0B is 0x%02X, and 0x%02X & 0x3F = %d --"
+                      % (_b, _b, i))
+                    W("; it carries its own index.%s"
+                      % ("  Bit 6 is SET and the mask strips it."
+                         if _b & 0x40 else ""))
+                else:
+                    W("; ⚠ Its own +0x0B is 0x%02X, whose low 6 bits are %d, NOT %d."
+                      % (_b, _b & 0x3F, i))
+                    W("; This is the ONE record of the %d that does not carry its own"
+                      % n)
+                    W("; index, and prom_c's 0xFBC74E `jr NZ` can never reach it:")
+                    W("; index 0 takes the other arm.  round 5 Q7b.")
+                W("; Evidence: this record's own byte +0x0B is at file 0x%05X and"
+                  % (a + 43 * i + 0x0B))
+                W("; holds 0x%02X; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is"
+                  % _b)
+                W("; what makes its low 6 bits, %d, the index into this array."
+                  % (_b & 0x3F))
+            if car is not None:
+                ks = car[i]
+                W("")
+                W("; %s_%03d -- file 0x%05X..0x%05X"
+                  % (slot_label(slot), i, a + 43 * i, a + 43 * (i + 1) - 1))
+                if ks:
+                    W("; The last 43 bytes of %d drum-instrument record%s are these"
+                      % (len(ks), "" if len(ks) == 1 else "s"))
+                    W("; bytes exactly: %s."
+                      % ", ".join("PercInst_%03d_%s" % (k, perc_name(k) if k else "Silent")
+                                  for k in ks[:4])
+                      + ("  (+%d more)" % (len(ks) - 4) if len(ks) > 4 else ""))
+                    _pb = S(0x78) + PERC_STRIDE * ks[0]
+                    W("; Evidence: drum-instrument record %d at file 0x%05X, its"
+                      % (ks[0], _pb))
+                    W("; bytes +107..+149 (file 0x%05X..0x%05X), compared byte for"
+                      % (_pb + 107, _pb + 149))
+                    W("; byte against this record.  round 5 perc_carriers().")
+                    W("; ⚠ A carrier is NOT a name for this record: see the banner --"
+                      " where")
+                    W("; the carrier is unique the positional proposal disagrees with"
+                      " it %d" % (PERC_OVERLAP[2] - PERC_OVERLAP[3]))
+                    W("; times in %d.  notes/prom_d_understanding_round5.py Q4c."
+                      % PERC_OVERLAP[2])
+                else:
+                    W("; NO drum-instrument record carries these bytes -- one of the")
+                    W("; %d records of this array with no carrier at all, against %d"
+                      % (sum(1 for v in car.values() if not v), PERC_OVERLAP[1]))
+                    W("; that have one.  round 5 Q4c.")
             W("%s_%03d:" % (slot_label(slot), i))
             e_bytes(a + 43 * i, a + 43 * (i + 1), per=43)
     return fn
@@ -1211,7 +1491,11 @@ def chain_hdr(slot):
                 "no part-A offset at all (all four are 0), so the curve -> stage 2 ->",
                 "element chain that names the pool objects at slots +0x30 and +0x38",
                 "cannot even start here.  These pool objects therefore keep a",
-                "POSITIONAL name.  notes/prom_d_understanding_round4.py Q4a."]
+                "POSITIONAL name.  notes/prom_d_understanding_round4.py Q4a.",
+                "⚠ RE-MEASURED, NOT RESTATED, in round 5 Q4a: through round 2's own",
+                "segmentation this block still has 0 part-A objects, so the refusal",
+                "is not a sentence that was copied forward.  It stays a refusal, and",
+                "raising prom_d's content score is not a reason to weaken it."]
     rows = CHAIN[slot]
     n = len(rows)
     e6 = sum(1 for r in rows.values() if r["esize"] == 6)
@@ -1220,7 +1504,7 @@ def chain_hdr(slot):
         "",
         "★ THE INDEX CHAIN -- what the two pool objects per descriptor ARE.",
         "",
-        "  stage 1  ToneDB_DescCurve_k     %d entries, non-decreasing.  The" % CURVE_STRIDE,
+        "  stage 1  a ToneDB_DescCurve_*   %d entries, non-decreasing.  The" % CURVE_STRIDE,
         "                                  descriptor's part A begins with a 32-bit",
         "                                  file offset naming one of the %d curves." % CURVE_N,
         "  stage 2  part A, after that     a byte table, one entry per distinct",
@@ -1323,9 +1607,9 @@ def desc_pool_labels(slot):
         r = ch[i]
         if kind == "A":
             name = "%s_%03d_CurveStepToElem" % (base, i)
-            note = ("descriptor %d stage 2: ToneDB_DescCurve_%d step -> element, "
+            note = ("descriptor %d stage 2: %s step -> element, "
                     "%d entries = max(curve)+1"
-                    % (i, r["curve_k"], r["curve_max"] + 1))
+                    % (i, CURVE_LABEL(r["curve_k"]), r["curve_max"] + 1))
         else:
             name = "%s_%03d_ElemArray" % (base, i)
             note = ("descriptor %d stage 3: %d element%s of %d B = max(stage 2)+1, "
@@ -1388,8 +1672,8 @@ def mk_desc_block(slot, extra):
                 # The stage-2 step table is not emitted as its own label at slot
                 # +0x38 (all 161 records share ONE part-A table), so the prose now
                 # names the object that actually exists.
-                W("; Reached as ToneDB_DescCurve_%d[i] -> the shared stage-2 step"
-                  % r["curve_k"])
+                W("; Reached as %s[i] -> the shared stage-2 step"
+                  % CURVE_LABEL(r["curve_k"]))
                 W("; table of %s, entry %d -> this array."
                   % (slot_label(slot), r["i"]))
                 W("; Evidence: %d bytes / %d = %d element%s, and the stage-2 table's"
@@ -1424,6 +1708,32 @@ def emit_curves():
         "over its whole length.  Their end values are %s, i.e. six curves of" % tops,
         "rising slope; curve 0 is exactly index//12.  Curves 3 and 4 share both",
         "their end value and their sum but differ in 14 of 128 bytes.",
+        "",
+        "★ AND THAT IS WHERE THE SIX LABELS BELOW COME FROM -- NEW IN ROUND 5.",
+        "These tables used to be called ToneDB_DescCurve_0..5, which says where a",
+        "curve sits and nothing about what it is.  A staircase IS its step width,",
+        "so each one is now named for the run length that dominates it:",
+        "",
+        "    %s" % "  ".join("%s(%d zones)" % (CURVE_NAME[k], max(D[a + CURVE_STRIDE * k:
+                                                                  a + CURVE_STRIDE * (k + 1)]) + 1)
+                             for k in range(CURVE_N)),
+        "",
+        "The suffix is DERIVED, not typed: notes/prom_d_understanding_round5.py",
+        "curve_names() counts run lengths and takes the strict plurality, or the",
+        "two-way tie spelled `<hi>And<lo>` -- which is why curve 4, whose interior",
+        "alternates 4,2,2,4 so that 4 and 2 each occur 14 times, is Step4And2 and",
+        "not Step4.  This generator refuses to emit if the derivation stops",
+        "producing the audited six names.",
+        "",
+        "★ AND THE INTERIOR IS PERIODIC WITH PERIOD 12, in all six: over entries",
+        "24..119 each 12-wide block carries exactly 1, 2, 3, 4, 4 and 12 distinct",
+        "values respectively.  So the six curves are six RESOLUTIONS of one 12-wide",
+        "unit, and Step4And2 differs from Step3 in how it cuts the block (4+2+2+4",
+        "against 3+3+3+3) and not in how many pieces it cuts it into.",
+        "⚠ 12 is NOT claimed to be an octave, and the domain is NOT claimed to be a",
+        "note number.  Round 4 refused that and round 5 refuses it again: the",
+        "period is arithmetic, measured over 96 entries of every curve, and the",
+        "meaning of the index is still nobody's.  round 5 Q3.",
         "",
         "★ WHAT THE CURVE'S OUTPUT IS FOR -- NEW IN ROUND 4, and it upgrades the",
         "paragraph that used to stand here.  Round 2 could only say the descriptors",
@@ -1462,11 +1772,16 @@ def emit_curves():
     for k in range(CURVE_N):
         c = a + CURVE_STRIDE * k
         W("")
-        W("; ToneDB_DescCurve_%d -- file 0x%05X..0x%05X (%d bytes)"
-          % (k, c, c + CURVE_STRIDE - 1, CURVE_STRIDE))
-        W("; %d entries, non-decreasing, v[0] = 0, v[127] = %d.%s"
-          % (CURVE_STRIDE, D[c + 127],
+        W("; %s -- file 0x%05X..0x%05X (%d bytes)"
+          % (CURVE_LABEL(k), c, c + CURVE_STRIDE - 1, CURVE_STRIDE))
+        _row = list(D[c:c + CURVE_STRIDE])
+        _runs = collections.Counter(len(list(_g)) for _v, _g in itertools.groupby(_row))
+        W("; %d entries, non-decreasing, v[0] = 0, v[127] = %d, %d zones.%s"
+          % (CURVE_STRIDE, D[c + 127], max(_row) + 1,
              "  Exactly index//12." if k == 0 else ""))
+        W("; Run lengths: %s -- which is what the label's suffix says, and it is"
+          % ", ".join("%d x %d" % (n, w) for w, n in sorted(_runs.items(), reverse=True)))
+        W("; derived by notes/prom_d_understanding_round5.py curve_names(), not typed.")
         _users = [r for r in CHAIN[0x30].values() if r["curve"] == c]
         if _users:
             W("; Consumers' stage-2 tables are all %d bytes long = this curve's"
@@ -1481,7 +1796,7 @@ def emit_curves():
                  if kd == "A" and u32(p) == c),
              "The 161 descriptors at slot +0x38 share one part A, and it names "
              "this curve too." if c == a + CURVE_STRIDE * (CURVE_N - 1) else ""))
-        W("ToneDB_DescCurve_%d:" % k)
+        W("%s:" % CURVE_LABEL(k))
         e_bytes(c, c + CURVE_STRIDE)
 
 

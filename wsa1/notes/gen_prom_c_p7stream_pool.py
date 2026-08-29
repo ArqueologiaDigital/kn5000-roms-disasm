@@ -282,7 +282,17 @@ def census():
                   f"  inner pointed-at: {[hex(x) for x in inner]}")
 
 # ---------------------------------------------------------------- emission
+# ★ Streams that a READER names.  Wave-7 round 5 named one -- 0xFD2C2B is the stream
+# P7Unit_SendPreambleOnce sends to a unit under a first-use latch, and the same stream
+# P7Units_ReloadForGroup broadcasts to all three (notes/prom_c_understanding_round5.py).
+# Everything else keeps its address, which is the honest answer while the byte-code is
+# undecoded.  Emitting the old spelling here would silently undo the rename in the .s.
+NAMED_STREAMS = {0xFD2C2B: "P7Stream_UnitPreamble"}
+
+
 def label(kind, a):
+    if kind == "STREAM" and a in NAMED_STREAMS:
+        return NAMED_STREAMS[a]
     return {"STREAM": "P7Stream_%06X", "DATA": "P7Stream_Data_%06X"}[kind] % a
 
 def callers_of(a):
@@ -386,7 +396,7 @@ def emit(out):
                 f.write(f"\t.byte\t0x{B(r+24):02x}\n")
         elif kind == "IDXMAP":
             f.write(IDX_HEADER)
-            f.write("PoolDir_IndexMap128:\n")
+            f.write("PoolDir_RecordForUnitProgram:\n")
             emit_rows(f, s, e - s)
         elif kind == "FIELDREC":
             tgts = sorted({U32(PTRLO + 4*k) for k in range(NDIR)})
@@ -524,7 +534,7 @@ DIR_HEADER = """
 ;
 ; THE COUNT IS 56, established three independent ways and asserted by `--verify`:
 ;   * 56 x 25 = 1400 reaches 0xFDC551 exactly, where the index map below begins;
-;   * PoolDir_IndexMap128 takes every value 0..55 and no other;
+;   * PoolDir_RecordForUnitProgram takes every value 0..55 and no other;
 ;   * PoolDir_FieldRec_PtrTable has 56 entries and ends on the region's last byte.
 ; The last record (0xFDC538) still carries four in-region stream pointers -- the
 ; last-entry test.
@@ -533,7 +543,7 @@ DIR_HEADER = """
 
 IDX_HEADER = """
 ; ------------------------------------------------------------------------------
-; PoolDir_IndexMap128 -- 0xFDC551-0xFDC5D0, 128 bytes
+; PoolDir_RecordForUnitProgram -- 0xFDC551-0xFDC5D0, 128 bytes
 ;
 ; 128 entries, each a PoolDir_Records index in 0..55.  Every one of the 56 indices occurs,
 ; which is what fixes the record count; 53 occurs 73 times and is the catch-all.

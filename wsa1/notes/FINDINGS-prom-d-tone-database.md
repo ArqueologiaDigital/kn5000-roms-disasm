@@ -463,6 +463,16 @@ because they pin which array each map can possibly address:
 
 ## 7. What resisted, and is flagged rather than guessed
 
+* ⚠ **SUPERSEDED IN WAVE 7 ROUND 2 — the remainder does not exist.** The bullet
+  below concluded "supported-not-proved" because nothing placed the leftover
+  byte(s). There is no leftover: each block is an ARRAY of 14-byte descriptors
+  followed by a DATA POOL, and the descriptors' own 32-bit offsets say where the
+  array stops (the smallest of them is exactly the array's end, and the last
+  one's part B is the last object in the pool, so both ends are pinned).
+  Re-derived on every run of the generator by
+  `notes/prom_d_structures_round2.py`, which refuses to emit if a boundary moved.
+  The text is kept below because the *reasoning* it records — the entropy sweep,
+  and why it was not enough — is worth keeping.
 * **The descriptor blocks at `+0x30`, `+0x38`, `+0x70`.** The directory's stride
   words `+0xEC`/`+0xF2` are 14, and each block *starts* with clean 14-byte
   records (`40 9F 3E 02 00 AE 3E 02 00 00 7F 42 80 42` then `40 B4 3E 02 00 C3
@@ -474,13 +484,23 @@ because they pin which array each map can possibly address:
   00 | …`). A leading-tag-byte framing was tried and **fails** — 2222 of 8828
   bytes have bit 7 set. Emitted on a 14-byte grid for readability, labelled as
   supported-not-proved.
-* **The 768 extra bytes at `+0x28`.** Its eleven sibling index maps are 2048
-  bytes; this one is 2816. Unexplained.
+* ⚠ **SUPERSEDED IN WAVE 7 ROUND 2 — the 768 extra bytes at `+0x28` are not part
+  of that map.** They are `ToneDB_DescCurveBank`: six 128-byte non-decreasing
+  curves. What says so is inside the image — the head word of every one of the
+  318 part-A objects in the `+0x30` descriptor pool is a 32-bit file offset
+  naming one of exactly these six addresses. In wave 7 round 5 the six were
+  renamed from `ToneDB_DescCurve_0..5` to names derived from their own run
+  lengths (`Step12`, `Step6`, `Step4`, `Step3`, `Step4And2`, `Step1`);
+  `notes/prom_d_understanding_round5.py` Q3.
 * **`Unk_0FC8_Table` at `+0xA8`.** Eight 128-byte records, almost entirely zero:
   the only non-zero bytes sit at record-relative +0x0E, +0x58..+0x5F, +0x7A and
   +0x7E, values 0xF4 (and 0x0C at +0x7A in five of the eight), repeating on a
   0x80 grid in all eight records. The KN5000 leaves this slot unused, so there is
-  no name to transplant and none is invented.
+  no name to transplant and none is invented. ★ Round 5 adds the two facts a
+  per-record label cannot carry: the eight records are only **three** distinct
+  byte strings ({0,4,5,6,7}, {1,3}, {2}), and **0 of the 1,024 bytes are
+  printable**, so the round-4 "the record contains its own name" mechanism has
+  nothing to work with here.
 * **Directory slot `+0x88` = 0x125.** Scalar or offset — see §1.
 * **One stray byte.** The `+0x98` footer is 14 bytes (`3 + 11`, consistent with
   the other four), and then there is a single 0x08 at 0x50B08 before the erased
@@ -501,6 +521,102 @@ image is addressed by 0-based offsets and holds no absolute pointers.
 
 ---
 
+## 9. Wave 7 round 5 — which of the remaining framed labels could be named at all
+
+Round 4 took prom_d from 44.5% to 83.0% content on
+`notes/wave7_documentation_metrics.py` by rewriting 778 record labels as the camel
+form of each record's **own** ASCII name field. 622 labels were left FRAMED — a
+kind plus a number. Round 5 asked the only honest first question about those 622:
+**which of them sit on an object that carries a name, and which genuinely have
+none?** `notes/prom_d_understanding_round5.py` (65 checks) answers it:
+
+| labels | object | verdict |
+|---|---|---|
+| 594 | 43-byte wave-select records (`+0x18`, `+0x20`, `+0x3C`) | **no name field.** Widest printable run in any record: 4, 4, 5 bytes, against the 13 of the narrowest name field this image uses. Stay framed |
+| 10 | program-map rows (128 LE16 each) | no name field, but **2 of the 10 are named by what they select** |
+| 8 | `Unk_0FC8` records | no name field; 0 printable bytes of 1,024 |
+| 6 | descriptor curves | no name field, but **each states its own shape** |
+| 3 | `+0x70` pool objects | the round-4 refusal, re-measured and still refused |
+| 1 | `ToneRec_05D_161` | ★ a **metric artefact**: this record IS named from its own bytes, `"    16' & 1'    "`, and the camel form of an organ registration is all digits. NOT renamed — the camel rule is round 4's and an independent reviewer re-derived all 778 names with it at 0 mismatches |
+
+**8 of the 622 promoted, 614 left framed with the gap stated.** That is the
+correct output, and the gaps are not empty:
+
+* **`ToneNumBank_DrumKits` / `ToneNumBank_SpecialSound`** (rows 8 and 9). All 128
+  entries of row 8 name a tone record whose own name ends in `Kit`; row 9 holds
+  `Jazz Kit` 127 times and, at program 127, tone 0x110 `' Special sound '`, which
+  no other row in all 1,280 entries selects. Rows 0-7 keep `Melodic_<r>`: what
+  they share is measured (no entry ≥ 256 in any of the 1,024) and it is not enough
+  to tell them apart; they differ from row 0 in 36/37/25/18/9/9/6 of 128 entries
+  and nothing in the image says what that variation means.
+* **The six curves** are named from their own run lengths by a rule, not by hand:
+  strict plurality → `Step<n>`, two-way tie → `Step<hi>And<lo>`, which is why
+  curve 4 (interior 4,2,2,4; 4 and 2 occur 14 times each) is `Step4And2`. Their
+  interiors are periodic with period 12, splitting each block into 1/2/3/4/4/12
+  zones. ⚠ 12 is **not** claimed to be an octave and the domain is **not** claimed
+  to be a note number.
+
+### ★★ The one positive result that is not a naming: field `+0x0B`
+
+Every wave-select banner ended `⚠ NOT established: what any of the 43 bytes
+means, or what the head/tail split is FOR`. Both halves are now wrong, and the
+text is corrected rather than left standing. prom_c's `sub_FBC725`:
+
+    0xFBC741  ld A,(XBC+0x0b)       the record's field +0x0B
+    0xFBC744  and A,0x3f            its LOW 6 BITS
+    0xFBC74C  cp WA,0 / jr NZ       0 takes a different arm entirely
+    0xFBC7B6  ld XIY,(XWA+0x3c)     the +0x3C array
+    0xFBC7C3  mul XIY,(XIZ+0xf2)    * that 6-bit value
+    0xFBC7D6  ld (XWA+0x0b),H       the chosen record's +0x0B, written back
+    0xFBC7D9..0xFBC805              then bytes 13..42, copied over
+
+Six bits addresses 64 values and the array holds exactly 64 records. **And the
+array confirms it without the code**: its record N carries N in the low 6 bits of
+its own `+0x0B`, 63 of 64 — the exception is record 0, which index 0 can never
+reach because that value takes the other arm. 28 records set bit 6, which the
+mask strips. The same self-index test scores 2 of 322 on `+0x18` and 1 of 208 on
+`+0x20`. So the block is renamed `ToneDB_MixerDefaultTable_3C` →
+**`ToneDB_WaveSelTailPresets`** (the old name was copied from the `+0x18` array's
+shape for a slot the KN5000 does not use, i.e. a guess), and the 13/30 head/tail
+split has a reason: the tail is exactly what a preset replaces.
+
+### The refusals, and why two of them got stronger
+
+* **`+0x70`'s three pool objects** — re-measured through round 2's own
+  segmentation: still 0 part-A objects, so round 4's index chain cannot start.
+  Refused.
+* **The 161 perc catalogue transfer** — the two maps still agree in 988 of 1,024.
+  Refused.
+* ★ **The 208 records of `ToneDB_PercMixerDefaultTable`** — this is the new one,
+  and it is the strongest refusal the round produced. Two *independent* candidate
+  name sources exist: the 208-row catalogue at `+0x8C` taken positionally, and the
+  drum-instrument record whose last 43 bytes are **byte-identical** (196 of 208
+  have one; 106 have exactly one). Where both exist and are unique they **agree in
+  only 45 of 106**. Two derivations that contradict each other are better evidence
+  than either alone, and what they are evidence for is that *neither may be used*.
+  The byte overlap itself is real and is not retracted; each of the 208 records now
+  carries a header naming its carriers.
+* **The melodic side has no such overlap at all**: 0 of 322 and 0 of 64 records
+  occur anywhere else in the payload.
+
+### The base-address search, which had to come up empty to be worth anything
+
+`prom_d/prom_d.ld` argues ORIGIN 0 is a decision. The way that decision could be
+**wrong** is a prom_c instruction carrying the absolute address of a prom_d
+object. Over all 76,013 instruction lines of prom_c's converted assembly there is
+**exactly one** operand literal in `0x00F00000-0x00F7FFFF`, and it is the base
+itself at `0xFB051E`. A raw byte scan finds 84 `ld Xrr,imm32` patterns in that
+window; 83 are phantom decodes inside data, 75 of them in the undecoded byte-code
+stream at `0xFCD0F7-0xFDD2AA`. ⚠ The search is therefore complete over prom_c's
+*instructions* and not over its data, and prom_a cannot contribute a
+counter-example (prom_b occupies `0xF00000-0xF7FFFF` on CPU 1's bus; prom_a's one
+genuine reach into prom_d, `ld XWA,0x00F7FFF0` at `0xF82A5F`, is the source
+argument of a remote block read). ORIGIN 0 stands, now on a search that could have
+overturned it. The Q6d null runs the same scanner over `0xE80000-0xEFFFFF` and
+finds 15 literals, so the zero is an absence and not a broken scanner.
+
+---
+
 ## Scripts added by this pass
 
 Both live in `scripts/analysis/`; `scripts/analysis/README.md` was left alone to
@@ -512,7 +628,18 @@ here instead.
   every claim that can fail is an `assert`. Reads `original_ROMs/wsa1_prom_d.bin`
   and, for §4 only, `../kn5000-roms-disasm/original_ROMs/kn5000_table_data.rom`.
   Exits non-zero if anything fails. `--quiet` prints only failures.
+* **`notes/prom_d_understanding_round5.py`** — *"Which of the 622 still-framed
+  labels sit on an object that carries a name at all, and is there any prom_c
+  instruction that addresses a prom_d object absolutely?"* 65 checks, ⚠ **run it
+  before quoting any number in §9**. Exports `curve_names()`, `row_names()`,
+  `perc_overlap()`, `perc_carriers()` and `wavesel_preset_index()` to the
+  generator, which **refuses to emit** if any of those shapes moved — both
+  refusal paths were exercised deliberately, not assumed.
 * **`gen_prom_d_asm.py`** — *"Emit the whole image as structured assembly."*
   Writes `prom_d/wsa1_prom_d.s`. Region boundaries come from the image's own
   directory; the script asserts its region list tiles 0x00000–0x80000 with no gap
   and no overlap before writing. Re-running it must leave the gate green.
+  ⚠ **`prom_d/wsa1_prom_d.s` IS GENERATED BY THIS SCRIPT.** A hand-edit to the
+  `.s` is silently reverted the next time it runs — which is exactly how a
+  corrected false claim came back verbatim in wave 7 round 4. Every prose change
+  to prom_d goes in the generator, and a claim is better DERIVED than asserted.

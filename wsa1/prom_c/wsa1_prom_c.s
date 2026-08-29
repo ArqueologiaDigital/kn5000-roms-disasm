@@ -9769,10 +9769,15 @@ DSP_WriteChannelRegs_Inner:
 ; The three records are the three TASKS: 1 = MAIN at level 2, 2 = 0xFA54DB at
 ; level 2, 3 = DSP_ChannelRefresh_Loop at level 1.  Kernel_Start starts 1 and 3;
 ; 0xFA3365 starts 2.
+; ★ ROUND 5: TASK 2 IS THE PORT-P7 UNIT MODULE'S SERVICE TASK.  0xFA54DB is the inner
+; label P7Units_ServiceTask__FA54DB, inside P7Units_ServiceTask (0xFA5177-0xFA5534),
+; which waits on SEMAPHORE 2 -- the semaphore P7Mixer_RequestGain signals at 0xFA2DE1
+; -- and diffs the three unit blocks at RAM 0x856E against their shadows at 0x85BC.
+; 0xFA3365 is inside P7Units_BootLoadAndStartTask.
 ; ----------------------------------------------------------------------------
 EntryPoint_Records:
 	.long	0x00F98B7D, 0x0000FFF0, 0x00028800	; MAIN
-	.long	0x00FA54DB, 0x0000F980, 0x00028800
+	.long	0x00FA54DB, 0x0000F980, 0x00028800	; P7Units_ServiceTask__FA54DB
 	.long	0x00F98118, 0x0000F480, 0x00018800	; DSP_ChannelRefresh_Loop
 
 ; ==============================================================================
@@ -12301,7 +12306,7 @@ MAIN__tail:
 ; path is the separate drain in MAIN that uses channel 6.
 ;
 ; ★ THE FOUR LINK-CHANNEL HANDLERS ARE THESE FOUR ROUTINES.
-; Handler_PtrTable_FCC53F (further down this file) is 8 x u32 and its header ends
+; Link_ClassHandlerTable (further down this file) is 8 x u32 and its header ends
 ; "⚠ Still not established: what the four real class handlers DO".  Its first four
 ; entries are 0xF98D9A, 0xF98DE6, 0xF98FD6 and 0xF9901B -- the four routines below
 ; -- and its last four are all 0xF9993D, the `ret` now labelled
@@ -12462,7 +12467,7 @@ KeyEvents_ToLink__F98D95:
 ; Link_Ch0_AppendToRing -- append a packet's bytes to the 4096-byte ring at
 ;             0x00E2F1.
 ;
-; Called from: entry 0 of Handler_PtrTable_FCC53F -- the ROM table entry at
+; Called from: entry 0 of Link_ClassHandlerTable -- the ROM table entry at
 ;          0xFCC53F, which notes/prom_c_xrefs.py 0xF98D9A finds, and nothing else.
 ; Inputs:  (XIZ+0x08) u16 byte count, (XIZ+0x0a) pointer to the bytes.
 ;          The dispatch indexes the table's RAM COPY at 0x00F334, not the ROM
@@ -12543,7 +12548,7 @@ Link_Ch0_AppendToRing__F98DE2:
 ; ★ Link_Ch1_WriteParamBlock -- CPU 1 writes a byte range into one of four
 ;             parameter blocks, and flags it.
 ;
-; Called from: entry 1 of Handler_PtrTable_FCC53F (ROM 0xFCC543).
+; Called from: entry 1 of Link_ClassHandlerTable (ROM 0xFCC543).
 ; Inputs:  (XIZ+0x08) u16 total packet length, (XIZ+0x0a) pointer to the packet.
 ; Packet:  `{u8 command, u8 offset, u8 length, payload...}` -- read off the three
 ;          byte fetches at 0xF98DEC-0xF98E0A and the two checks that follow:
@@ -12795,7 +12800,7 @@ Link_Ch1_WriteParamBlock__F98FD1:
 ; Link_Ch2_ForwardBytes -- push a packet's bytes one at a time into 0xF992C6,
 ;             intercepting the byte 0xFA.
 ;
-; Called from: entry 2 of Handler_PtrTable_FCC53F (ROM 0xFCC547).
+; Called from: entry 2 of Link_ClassHandlerTable (ROM 0xFCC547).
 ; Inputs:  (XIZ+0x08) u16 count, (XIZ+0x0a) pointer.
 ; Outputs: for each byte: if it is **0xFA**, `(0x00F328) = 0xFF` and the byte is
 ;          NOT forwarded; otherwise `0xF992C6(byte)`.
@@ -12851,7 +12856,7 @@ Link_Ch2_ForwardBytes__F99017:
 ; --------------------------------------------------------------------------
 ; ★★ Link_Ch3_SetTouchControl -- CPU 1 sets the two TOUCH controls.
 ;
-; Called from: entry 3 of Handler_PtrTable_FCC53F (ROM 0xFCC54B).
+; Called from: entry 3 of Link_ClassHandlerTable (ROM 0xFCC54B).
 ; Inputs:  (XIZ+0x08) u16 packet length, (XIZ+0x0a) pointer to `{u8 sel, u8 val}`.
 ; Outputs: nothing unless the length is EXACTLY 2 (`cp (XIZ+0x08),0x02 / jr NZ`);
 ;          then
@@ -14834,12 +14839,12 @@ KeyScan_InitKeyStateBitmap__F99939:
 ;     ABS32 at 0xFCC54F / 0xFCC553 / 0xFCC557 / 0xFCC55B
 ;     TOTAL literal-addressed sites: 4
 ;
-; They are entries 4, 5, 6 and 7 of Handler_PtrTable_FCC53F, whose own header
+; They are entries 4, 5, 6 and 7 of Link_ClassHandlerTable, whose own header
 ; further down THIS FILE already said so -- "the remaining four are all the SAME
 ; address, 0xF9993D, whose first byte is 0x0E = RET".  The byte gate passed either
 ; way; nothing but reading catches this.
 ;
-; Called from: entries 4, 5, 6 and 7 of Handler_PtrTable_FCC53F -- the ROM table
+; Called from: entries 4, 5, 6 and 7 of Link_ClassHandlerTable -- the ROM table
 ;          entries at 0xFCC54F/0xFCC553/0xFCC557/0xFCC55B, which is the whole of
 ;          `notes/prom_c_xrefs.py 0xF9993D --no-window`.  No instruction calls it.
 ; Inputs:  none.  Outputs: none.  It returns immediately, so a packet on channels
@@ -15704,7 +15709,7 @@ INTTC3_HANDLER__jumptable:
 ;          and no INT0 arm writes either.  (A write through a pointer register
 ;          would still be invisible -- see the INTT1_HANDLER header.)
 ;
-;          ★ THIS CLOSES THE Handler_PtrTable_FCC53F QUESTION.  That table's
+;          ★ THIS CLOSES THE Link_ClassHandlerTable QUESTION.  That table's
 ;          header (below, at 0xFCC53F) said "nothing in prom_c references
 ;          0xFCC53F as a literal ... what dispatches through it is not traced".
 ;          Both halves are now answered, and the reason the literal search failed
@@ -15776,7 +15781,7 @@ INTTC3_HANDLER__state1_generic:
 	ld c, w                                    ; F99D8A  c8 8b
 	mul c, 4                                   ; F99D8C  cb 08 04   x 4: these are 32-bit pointers
 	extz xbc                                   ; F99D8F  e9 12
-	add xbc, 0x0000F334                        ; F99D91  e9 c8 34 f3 00 00   the RAM copy of Handler_PtrTable_FCC53F
+	add xbc, 0x0000F334                        ; F99D91  e9 c8 34 f3 00 00   the RAM copy of Link_ClassHandlerTable
 	ld xbc, (xbc)                              ; F99D97  a1 21
 	lda_24 xiy, 0x00F99DA1                     ; F99D99  f2 a1 9d f9 35
 	push xiy                                   ; F99D9E  3d   return address for the tail-jump call
@@ -25503,7 +25508,7 @@ sub_F9F765__F9F8DE:
 	unlk32 xiz                                 ; F9F8DE  unlk XIZ
 	ret                                        ; F9F8E0  ret
 ; --------------------------------------------------------------------------
-; sub_F9F8E1 -- 0xF9F8E1..0xF9F9F9 (281 bytes)
+; P7Stream_StageAndSend -- 0xF9F8E1..0xF9F9F9 (281 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -25518,10 +25523,29 @@ sub_F9F765__F9F8DE:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    stages one PORT-P7 UPLOAD and runs it.  Its nine arguments are copied
+;          into the module's global request block at 0x00862E-0x008642, the six-byte
+;          relocation record `recTable + 6*recIndex - 6` is unpacked into
+;          0x008614-0x00861C, and the send then runs from those globals.
+; Evidence: the nine `ld (0x0086xx),<arg>` stores at 0xF9F8E8-0xF9F96B, in the order
+;          the three callers push them; the record read is
+;          `ld BC,0x0006 / muls XBC,(XIZ+0x1a) / dec 6,XBC / add XIY,XBC` at
+;          0xF9F915-0xF9F91D -- the same stride and 1-based index P7Stream_Run uses
+;          at 0xF9A652.  Bytes 0,1,2,4,5 of that record go to 0x008614, 0x008616,
+;          0x008618, 0x00861A, 0x00861C; byte 3 is skipped.  0x00861C is then the
+;          FIRST argument of every P7Byte_SendCmd / SendData / SendArg call in
+;          sub_F9F9FA (0xF9FA3A onward), i.e. it is the P7 DESTINATION.
+;          Argument slots, from the push order at the 0xFA2C51 site:
+;            +0x08 stream ptr (record field +0)   +0x0C stream ptr (record field +8)
+;            +0x10 parameter index                +0x12 parameter value
+;            +0x16 relocation record table        +0x1A record index (unit + 1)
+;            +0x1C stream ptr from RAM 0xF36B     +0x20 mode   +0x22 per-unit byte
+; Unknown:  what the mode words 0x0073/0x0064 and the sentinel 0x0063 MEAN.  Their
+;          ROLE is measured -- 0x008640 == 0x0063 skips the parameter path
+;          (0xF9F978), 0x008642 == 0x0073 takes the 0xFA237C path (0xF9F9A1) -- and
+;          nothing here reads their meaning.
 ; --------------------------------------------------------------------------
-sub_F9F8E1:
+P7Stream_StageAndSend:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9F8E1  link XIZ,0xfff0
 	ld	xbc, (xiz+12)                           ; F9F8E5  ld XBC,(XIZ+0x0c)
 	stl_da	(0x862E), xbc                       ; F9F8E8  ld (0x00862e),XBC
@@ -25570,21 +25594,21 @@ sub_F9F8E1:
 	ldl_da	xbc, (0x862E)                       ; F9F970  ld XBC,(0x00862e)
 	ld	(xiz-8), xbc                            ; F9F975  ld (XIZ+0xf8),XBC
 	extpfx7 0xD2, 0x40, 0x86, 0x00, 0x3F, 0x63, 0x00 ; F9F978  cp (0x008640),0x0063
-	jr z, sub_F9F8E1__F9F98F                   ; F9F97F  jr Z,0xf9f98f
+	jr z, P7Stream_StageAndSend__F9F98F                   ; F9F97F  jr Z,0xf9f98f
 	extpfx5 0xD2, 0x40, 0x86, 0x00, 0x04       ; F9F981  pushw (0x008640)
 	push	xbc                                   ; F9F986  push XBC
 	calr (0xF9E140 - 0xF9F98A)                 ; F9F987  calr 0xf9e140
 	ld	(xiz-8), xiy                            ; F9F98A  ld (XIZ+0xf8),XIY
 	inc	6, xsp                                 ; F9F98D  inc 6,XSP
-sub_F9F8E1__F9F98F:
+P7Stream_StageAndSend__F9F98F:
 	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9F98F  cp (0x008612),0x0000
-	jr z, sub_F9F8E1__F9F9A1                   ; F9F996  jr Z,0xf9f9a1
+	jr z, P7Stream_StageAndSend__F9F9A1                   ; F9F996  jr Z,0xf9f9a1
 	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9F998  pushw (0x008612)
 	calr (0xF9E1AC - 0xF9F9A0)                 ; F9F99D  calr 0xf9e1ac
 	popw	bc                                    ; F9F9A0  pop BC
-sub_F9F8E1__F9F9A1:
+P7Stream_StageAndSend__F9F9A1:
 	extpfx7 0xD2, 0x42, 0x86, 0x00, 0x3F, 0x73, 0x00 ; F9F9A1  cp (0x008642),0x0073
-	jr nz, sub_F9F8E1__F9F9D0                  ; F9F9A8  jr NZ,0xf9f9d0
+	jr nz, P7Stream_StageAndSend__F9F9D0                  ; F9F9A8  jr NZ,0xf9f9d0
 	ldl_da	xbc, (0x8632)                       ; F9F9AA  ld XBC,(0x008632)
 	push	xbc                                   ; F9F9AF  push XBC
 	ld	xwa, (xiz-8)                            ; F9F9B0  ld XWA,(XIZ+0xf8)
@@ -25593,13 +25617,13 @@ sub_F9F8E1__F9F9A1:
 	ld	(xiz-8), xiy                            ; F9F9B7  ld (XIZ+0xf8),XIY
 	inc	8, xsp                                 ; F9F9BA  inc 0,XSP
 	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9F9BC  cp (0x008612),0x0000
-	jr z, sub_F9F8E1__F9F9CE                   ; F9F9C3  jr Z,0xf9f9ce
+	jr z, P7Stream_StageAndSend__F9F9CE                   ; F9F9C3  jr Z,0xf9f9ce
 	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9F9C5  pushw (0x008612)
 	calr (0xF9E1AC - 0xF9F9CD)                 ; F9F9CA  calr 0xf9e1ac
 	popw	bc                                    ; F9F9CD  pop BC
-sub_F9F8E1__F9F9CE:
-	jr sub_F9F8E1__F9F9F7                      ; F9F9CE  jr T,0xf9f9f7
-sub_F9F8E1__F9F9D0:
+P7Stream_StageAndSend__F9F9CE:
+	jr P7Stream_StageAndSend__F9F9F7                      ; F9F9CE  jr T,0xf9f9f7
+P7Stream_StageAndSend__F9F9D0:
 	ld	xbc, (xiz+18)                           ; F9F9D0  ld XBC,(XIZ+0x12)
 	push	xbc                                   ; F9F9D3  push XBC
 	ldl_da	xwa, (0x8632)                       ; F9F9D4  ld XWA,(0x008632)
@@ -25610,11 +25634,11 @@ sub_F9F8E1__F9F9D0:
 	inc	8, xsp                                 ; F9F9E1  inc 0,XSP
 	inc	4, xsp                                 ; F9F9E3  inc 4,XSP
 	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9F9E5  cp (0x008612),0x0000
-	jr z, sub_F9F8E1__F9F9F7                   ; F9F9EC  jr Z,0xf9f9f7
+	jr z, P7Stream_StageAndSend__F9F9F7                   ; F9F9EC  jr Z,0xf9f9f7
 	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9F9EE  pushw (0x008612)
 	calr (0xF9E1AC - 0xF9F9F6)                 ; F9F9F3  calr 0xf9e1ac
 	popw	bc                                    ; F9F9F6  pop BC
-sub_F9F8E1__F9F9F7:
+P7Stream_StageAndSend__F9F9F7:
 	unlk32 xiz                                 ; F9F9F7  unlk XIZ
 	ret                                        ; F9F9F9  ret
 ; --------------------------------------------------------------------------
@@ -29965,6 +29989,58 @@ sub_FA26CB__FA277F:
 	popw	hl                                    ; FA2780  pop HL
 	unlk32 xiz                                 ; FA2781  unlk XIZ
 	ret                                        ; FA2783  ret
+; ==============================================================================
+; 0xFA2784-0xFA5948 -- ★ THE PORT-P7 UNIT MODULE: three devices, their PROGRAMS,
+;                      and the parameter diff that feeds them
+; ==============================================================================
+; Named in wave-7 round 5.  Every claim below is re-derived from the ROM by
+;   python3 notes/prom_c_understanding_round5.py
+; which exits non-zero on any failure.  The transport this module sits on --
+; port P7, the three destinations, the byte handshake and the 65,972-byte stream
+; pool -- is notes/FINDINGS-prom_c-p7-byte-stream-pool.md; this banner is about
+; the STATE MACHINE above it.  ⚠ Nothing here says what a P7 destination IS.
+;
+; ★ THE STATE.  Three 26-byte UNIT BLOCKS in work RAM, one per destination:
+;
+;       live   RAM 0x856E + 26*unit      unit = 0, 1, 2   (0x856E, 0x8588, 0x85A2)
+;       shadow RAM 0x85BC + 26*unit      = 0x856E + 3*26, i.e. immediately after
+;
+;   The stride 26 is `ld C,0x1a / mul BC,(XIZ+0x08)` (0xFA2B2F); the three live
+;   bases are literals in P7Units_ResolveProgramsAndReload's three block copies
+;   (0xFA553D, 0xFA554C, 0xFA555B, each `ld BC,0x000d / ldirw` = 13 words = 26 B).
+;   Known fields of a block:
+;       +0x00  u8   PROGRAM, 0..127
+;       +0x01.. the parameter bytes the field descriptors address (offset f -> +1+f)
+;       +0x18  u8   the PoolDir_Records index that PROGRAM resolves to
+;
+; ★ THE CHAIN, from the number a user changes to the bytes that leave the port:
+;
+;   block+0 (0..127)
+;     -> PoolDir_RecordForUnitProgram[program]         0xFA5582 / 0xFA55A7 / 0xFA55CC
+;     -> block+0x18                                    0xFA558A / 0xFA55AF / 0xFA55D4
+;     -> PoolDir_Records[idx]     `mul A,0x19 / add XWA,0x00FDBFD9`   (0xFA2B44)
+;          fields +0, +4, +8, +12 : four P7Stream pointers
+;          fields +16, +20        : the DescriptorStrings pair (type string, digits)
+;          field  +24             : a BYTE OFFSET into the unit block
+;     -> PoolDir_FieldRec_PtrTable[idx]  `mul C,0x04 / add XBC,0x00FDD1CB` (0xFA2BBE)
+;          -> that program's 7-byte field descriptors: s16 min, s16 max, block
+;             offset, a flag, a field index
+;     -> P7Stream_StageAndSend  -> P7Stream_Run / P7Byte_Send*  -> port P7
+;
+; ★ HOW A CHANGE GETS OUT.  P7Unit_MarkParamsDirty sets RAM[0x865F + unit];
+;   P7Unit_FlushDirtyParams tests it, corrupts ONE shadow byte on purpose so it
+;   cannot compare equal (`xor C,0xff`, 0xFA49BB), runs P7Unit_EmitChangedParams --
+;   which walks the descriptors and diffs live against shadow -- then restores the
+;   byte and clears the flag.  P7Units_ServiceTask is the task that drives it.
+;
+; ⚠ WHAT IS NOT ESTABLISHED, and is not guessed at anywhere in this module:
+;   * what a PROGRAM 0..127 sounds like.  The word means the selector at block +0
+;     and nothing more; 128 programs map onto 56 directory records, with record 53
+;     as the catch-all for 73 of them.
+;   * what the descriptor type letters {b, w, v, s, h, c, B} mean, or the flag at
+;     descriptor +5 (four values in the whole table: 0x62, 0x20, 0x42, 0x77).
+;   * what any P7Stream object CONTAINS.  297 of them keep an address for a name.
+; ==============================================================================
 ; --------------------------------------------------------------------------
 ; sub_FA2784 -- 0xFA2784..0xFA294E (459 bytes)
 ;
@@ -29974,8 +30050,8 @@ sub_FA26CB__FA277F:
 ;          0xFA41BC 0xFA424A 0xFA42DB 0xFA45CF 0xFA47B8
 ; Inputs:  frame `link XIZ,-36`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA294F = sub_FA294F, 0xFA2D11 = sub_FA2D11
-;          0xFA3CD7 = sub_FA3CD7
+; Calls:   0xFA294F = sub_FA294F, 0xFA2D11 = P7Unit_SendParamValue
+;          0xFA3CD7 = P7Unit_EmitChangedParams
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2784-0xFA294E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -30384,7 +30460,7 @@ sub_FA2A19__FA2A9D:
 	unlk32 xiz                                 ; FA2B06  unlk XIZ
 	ret                                        ; FA2B08  ret
 ; --------------------------------------------------------------------------
-; sub_FA2B09 -- 0xFA2B09..0xFA2C5D (341 bytes)
+; P7Unit_SendFieldParamZero -- 0xFA2B09..0xFA2C5D (341 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -30392,17 +30468,25 @@ sub_FA2A19__FA2A9D:
 ; Inputs:  frame `link XIZ,-13`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00F35D
-; Calls:   0xF9F8E1 = sub_F9F8E1, 0xFA2784 = sub_FA2784
-;          0xFA2A19 = sub_FA2A19, 0xFA2C5E = sub_FA2C5E
+; Calls:   0xF9F8E1 = P7Stream_StageAndSend, 0xFA2784 = sub_FA2784
+;          0xFA2A19 = sub_FA2A19, 0xFA2C5E = P7Unit_LoadProgramStreams
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2B09-0xFA2C5D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    sends ONE of a unit's parameters, by FIELD INDEX, with the value ZERO.
+;          arg1 = unit, arg2 = field index; the field's 7-byte descriptor supplies
+;          the parameter index and the value pushed is a literal 0.
+; Evidence: the descriptor is fetched with `ld A,0x07 / mul WA,(XIZ+0x0a) / inc 6,XIX`
+;          then `mul C,0x04 / add XBC,0x00FDD1CB` at 0xFA2B9C-0xFA2BCD -- i.e.
+;          PoolDir_FieldRec_PtrTable[record][7*field + 6], the descriptor's +6 byte.
+;          That byte becomes P7Stream_StageAndSend's +0x10 slot; the value slot
+;          +0x12 is `sub XIY,XIY / push XIY` at 0xFA2C40.
+; Unknown:  why zero, and what the two MixerGain_ProductOfCurves-shaped calls to
+;          sub_FA2784 with 0x0076 and 0x0064 (0xFA2BDB, 0xFA2BF3) contribute.
 ; --------------------------------------------------------------------------
-sub_FA2B09:
+P7Unit_SendFieldParamZero:
 	link32 0xEE, 0x0C, 0xF3, 0xFF              ; FA2B09  link XIZ,0xfff3
 	push	xix                                   ; FA2B0D  push XIX
 	ldb	c, 26                                  ; FA2B0E  ld C,0x1a
@@ -30412,10 +30496,10 @@ sub_FA2B09:
 	add	xbc, 0x856E                            ; FA2B1B  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA2B21  ld A,(XBC)
 	cp	a, 14                                   ; FA2B23  cp A,0x0e
-	jr nz, sub_FA2B09__FA2B2F                  ; FA2B26  jr NZ,0xfa2b2f
+	jr nz, P7Unit_SendFieldParamZero__FA2B2F                  ; FA2B26  jr NZ,0xfa2b2f
 	cp (xiz+10), 0x0E                          ; FA2B28  cp (XIZ+0x0a),0x0e
-	jrl z, sub_FA2B09__FA2C5A                  ; FA2B2C  jrl Z,0xfa2c5a
-sub_FA2B09__FA2B2F:
+	jrl z, P7Unit_SendFieldParamZero__FA2C5A                  ; FA2B2C  jrl Z,0xfa2c5a
+P7Unit_SendFieldParamZero__FA2B2F:
 	ldb	c, 26                                  ; FA2B2F  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA2B31  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2B34  extz XBC
@@ -30525,12 +30609,12 @@ sub_FA2B09__FA2B2F:
 	push	xbc                                   ; FA2C50  push XBC
 	calr (0xF9F8E1 - 0xFA2C54)                 ; FA2C51  calr 0xf9f8e1
 	add	xsp, 28                                ; FA2C54  add XSP,0x0000001c
-sub_FA2B09__FA2C5A:
+P7Unit_SendFieldParamZero__FA2C5A:
 	pop	xix                                    ; FA2C5A  pop XIX
 	unlk32 xiz                                 ; FA2C5B  unlk XIZ
 	ret                                        ; FA2C5D  ret
 ; --------------------------------------------------------------------------
-; sub_FA2C5E -- 0xFA2C5E..0xFA2D10 (179 bytes)
+; P7Unit_LoadProgramStreams -- 0xFA2C5E..0xFA2D10 (179 bytes)
 ;
 ; Called from: no site outside this module.
 ;          15 site(s) inside this module:
@@ -30540,16 +30624,25 @@ sub_FA2B09__FA2C5A:
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00F35D
-; Calls:   0xF9F8E1 = sub_F9F8E1
+; Calls:   0xF9F8E1 = P7Stream_StageAndSend
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2C5E-0xFA2D10
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    loads a unit's WHOLE PROGRAM -- both of its directory record's stream
+;          pointers -- with no single parameter selected.  arg1 = unit.
+; Evidence: it repeats the unit-block chain twice, once for record field +8 (`inc
+;          8,XWA` at 0xFA2C7D -- unidasm prints it `inc 0,XWA`, because 0 is how the
+;          `inc #3,r` field encodes 8) and once for field +0 (0xFA2CA1), and hands
+;          both to P7Stream_StageAndSend with the
+;          parameter-index slot set to the literal 0x0063 (`push 0x0063` at
+;          0xFA2CF9), which is exactly the value P7Stream_StageAndSend tests for at
+;          0xF9F978 to SKIP the single-parameter path.  15 call sites in this module.
+; Unknown:  nothing outstanding about the mechanism; the meaning of a program is not
+;          established anywhere in this tree.
 ; --------------------------------------------------------------------------
-sub_FA2C5E:
+P7Unit_LoadProgramStreams:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FA2C5E  link XIZ,0xfff4
 	push	xix                                   ; FA2C62  push XIX
 	ldb	c, 26                                  ; FA2C63  ld C,0x1a
@@ -30616,7 +30709,7 @@ sub_FA2C5E:
 	unlk32 xiz                                 ; FA2D0E  unlk XIZ
 	ret                                        ; FA2D10  ret
 ; --------------------------------------------------------------------------
-; sub_FA2D11 -- 0xFA2D11..0xFA2DCC (188 bytes)
+; P7Unit_SendParamValue -- 0xFA2D11..0xFA2DCC (188 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -30624,16 +30717,25 @@ sub_FA2C5E:
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00F35D
-; Calls:   0xF9F8E1 = sub_F9F8E1
+; Calls:   0xF9F8E1 = P7Stream_StageAndSend
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2D11-0xFA2DCC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    sends ONE parameter of one unit with a caller-supplied VALUE.
+;          arg1 = unit, arg2 = parameter index, arg3 = value (sign-extended),
+;          arg4 = mode.
+; Evidence: the same unit-block chain as P7Unit_LoadProgramStreams, then
+;          `ld IY,(XIZ+0x0a) / extz IY / push IY` at 0xFA2DB2 fills
+;          P7Stream_StageAndSend's parameter-index slot (+0x10) and
+;          `ld IY,(XIZ+0x0c) / exts XIY / push XIY` at 0xFA2DAC fills the value slot
+;          (+0x12) -- the two slots whose roles P7Stream_StageAndSend's own header
+;          fixes.  arg4 goes to the mode slot (+0x20) at 0xFA2D97.
+; Unknown:  the value's units.  The field descriptor's s16 minimum and maximum bound
+;          it, but nothing here says what it scales.
 ; --------------------------------------------------------------------------
-sub_FA2D11:
+P7Unit_SendParamValue:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FA2D11  link XIZ,0xfff4
 	push	xix                                   ; FA2D15  push XIX
 	ldb	c, 26                                  ; FA2D16  ld C,0x1a
@@ -30705,7 +30807,7 @@ sub_FA2D11:
 	unlk32 xiz                                 ; FA2DCA  unlk XIZ
 	ret                                        ; FA2DCC  ret
 ; --------------------------------------------------------------------------
-; sub_FA2DCD -- 0xFA2DCD..0xFA2DEB (31 bytes)
+; P7Mixer_RequestGain -- 0xFA2DCD..0xFA2DEB (31 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFADAC2 in sub_FADAB1, 0xFADADF in sub_FADACA
@@ -30717,10 +30819,18 @@ sub_FA2D11:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    REQUESTS a mixer-gain pair.  It only records the two indices and wakes the
+;          service task; the send happens later, in P7Mixer_SendGainIfChanged.
+; Evidence: `ld (0x00f3b3),C` at 0xFA2DD4 and `ld (0x00f3b4),A` at 0xFA2DDC store the
+;          two arguments, then `push 0x0002 / call Kernel_SemaSignal_StackArg` at
+;          0xFA2DE1.  RAM 0xF3B3/0xF3B4 is the requested pair and 0xF3B5/0xF3B6 the
+;          last-sent pair; both boot from ROM 0xFCC5BE (prom_c_ram_image.py).
+;          Its only two callers are 0xFADAC2 and 0xFADADF, in the voice module.
+; Unknown:  what the two indices SELECT.  They index DSP_MixerGain_Curve_B and
+;          DSP_MixerGain_Curve_A respectively (MixerGain_ProductOfCurves), and
+;          nothing here says which signal the product scales.
 ; --------------------------------------------------------------------------
-sub_FA2DCD:
+P7Mixer_RequestGain:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA2DCD  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FA2DD1  ld C,(XIZ+0x08)
 	stb_da	(0xF3B3), c                         ; FA2DD4  ld (0x00f3b3),C
@@ -30732,7 +30842,7 @@ sub_FA2DCD:
 	unlk32 xiz                                 ; FA2DE9  unlk XIZ
 	ret                                        ; FA2DEB  ret
 ; --------------------------------------------------------------------------
-; sub_FA2DEC -- 0xFA2DEC..0xFA2E2C (65 bytes)
+; P7Mixer_SendGainIfChanged -- 0xFA2DEC..0xFA2E2C (65 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -30740,23 +30850,28 @@ sub_FA2DCD:
 ; Inputs:  no frame and no argument slot read.
 ; Outputs: writes 0x00F3B5, 0x00F3B6
 ;          reads 0x00F3B3, 0x00F3B4
-; Calls:   0xFA2E2D = sub_FA2E2D
+; Calls:   0xFA2E2D = P7Mixer_SendGain
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2DEC-0xFA2E2C
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    sends the requested mixer-gain pair only when it DIFFERS from the pair
+;          last sent, then latches the new pair.
+; Evidence: `ld C,(0x00f3b3) / cp C,(0x00f3b5)` at 0xFA2DEC-0xFA2DF1 and
+;          `ld A,(0x00f3b4) / cp A,(0x00f3b6)` at 0xFA2DF8-0xFA2DFD return early when
+;          both match (0xFA2E02); otherwise 0xFA2E14 calls P7Mixer_SendGain with the
+;          pair and 0xFA2E1C/0xFA2E26 copy it into 0xF3B5/0xF3B6.
+; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
-sub_FA2DEC:
+P7Mixer_SendGainIfChanged:
 	ldb_da	c, (0xF3B3)                         ; FA2DEC  ld C,(0x00f3b3)
 	extpfx5 0xC2, 0xB5, 0xF3, 0x00, 0xF3       ; FA2DF1  cp C,(0x00f3b5)
-	jr nz, sub_FA2DEC__FA2E04                  ; FA2DF6  jr NZ,0xfa2e04
+	jr nz, P7Mixer_SendGainIfChanged__FA2E04                  ; FA2DF6  jr NZ,0xfa2e04
 	ldb_da	a, (0xF3B4)                         ; FA2DF8  ld A,(0x00f3b4)
 	extpfx5 0xC2, 0xB6, 0xF3, 0x00, 0xF1       ; FA2DFD  cp A,(0x00f3b6)
-	jr z, sub_FA2DEC__FA2E2C                   ; FA2E02  jr Z,0xfa2e2c
-sub_FA2DEC__FA2E04:
+	jr z, P7Mixer_SendGainIfChanged__FA2E2C                   ; FA2E02  jr Z,0xfa2e2c
+P7Mixer_SendGainIfChanged__FA2E04:
 	ldw_da	bc, (0xF3B4)                        ; FA2E04  ld BC,(0x00f3b4)
 	extz	bc                                    ; FA2E09  extz BC
 	pushw	bc                                   ; FA2E0B  push BC
@@ -30769,10 +30884,10 @@ sub_FA2DEC__FA2E04:
 	ldb_da	a, (0xF3B4)                         ; FA2E21  ld A,(0x00f3b4)
 	stb_da	(0xF3B6), a                         ; FA2E26  ld (0x00f3b6),A
 	pop	xiy                                    ; FA2E2B  pop XIY
-sub_FA2DEC__FA2E2C:
+P7Mixer_SendGainIfChanged__FA2E2C:
 	ret                                        ; FA2E2C  ret
 ; --------------------------------------------------------------------------
-; sub_FA2E2D -- 0xFA2E2D..0xFA30B7 (651 bytes)
+; P7Mixer_SendGain -- 0xFA2E2D..0xFA30B7 (651 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -30780,16 +30895,26 @@ sub_FA2DEC__FA2E2C:
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00861C
 ; Calls:   0xF9A163 = P7Byte_SendCmd, 0xF9A31A = P7Byte_SendData
-;          0xFA30B8 = sub_FA30B8, 0xFCAB06 = Shift32_ArithRight
+;          0xFA30B8 = MixerGain_ProductOfCurves, 0xFCAB06 = Shift32_ArithRight
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2E2D-0xFA30B7
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    computes the mixer gain from the two curve tables and writes it to P7
+;          DESTINATION 1, byte by byte, without going through the stream interpreter.
+; Evidence: 0xFA2E46 calls MixerGain_ProductOfCurves with the two arguments;
+;          `ld (0x00861c),0x0001` at 0xFA2E4C sets the destination global that every
+;          following P7Byte_SendCmd/SendData call takes as its first argument
+;          (0xFA2E5D onward).  The record is opened with P7Byte_SendCmd and its
+;          payload bytes are shifted and masked out of the frame words 0x00DB /
+;          0x00C3 / 0x0160 loaded at 0xFA2E31-0xFA2E3B (`sra 0x08,BC / and BC,0x0001`
+;          at 0xFA2E6B, `and BC,0x00ff` at 0xFA2E81, `sra 0x04,BC / add BC,0x0010`
+;          at 0xFA2EB0 and `sll 0x04,BC` at 0xFA2ECA).
+; Unknown:  what the three frame constants 0x00DB, 0x00C3, 0x0160 address on the
+;          device.
 ; --------------------------------------------------------------------------
-sub_FA2E2D:
+P7Mixer_SendGain:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FA2E2D  link XIZ,0xfff6
 	ldw (xiz-2), 0x00DB                        ; FA2E31  ld (XIZ+0xfe),0x00db
 	ldw (xiz-4), 0x00C3                        ; FA2E36  ld (XIZ+0xfc),0x00c3
@@ -31010,7 +31135,7 @@ sub_FA2E2D:
 	unlk32 xiz                                 ; FA30B5  unlk XIZ
 	ret                                        ; FA30B7  ret
 ; --------------------------------------------------------------------------
-; sub_FA30B8 -- 0xFA30B8..0xFA30F5 (62 bytes)
+; MixerGain_ProductOfCurves -- 0xFA30B8..0xFA30F5 (62 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -31023,10 +31148,18 @@ sub_FA2E2D:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    multiplies the two mixer-gain curves: DSP_MixerGain_Curve_B[arg1] times
+;          (DSP_MixerGain_Curve_A[arg2] >> 15), 32-bit signed.
+; Evidence: `ld WA,0x0004 / muls XWA,(XIZ+0x0a) / add XWA,0x00FCCD71` at
+;          0xFA30C5-0xFA30CB reads curve A and `sra 0x0f,XIX` at 0xFA30D5 shifts it;
+;          `ld WA,0x0004 / muls XWA,(XIZ+0x08) / add XWA,0x00FCCB71` at
+;          0xFA30D8-0xFA30DE reads curve B; 0xFA30EB calls Multiply32_Signed.  The
+;          element size 4 and both bases are instruction operands -- this is the
+;          consumer the two curve headers already cite for their stride.
+; Unknown:  the unclamped 0x7FFFFF00 loaded into (XIZ-4) at 0xFA30BD is overwritten
+;          by the product at 0xFA30EF and never read; why it is loaded is not known.
 ; --------------------------------------------------------------------------
-sub_FA30B8:
+MixerGain_ProductOfCurves:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA30B8  link XIZ,0xfffc
 	push	xix                                   ; FA30BC  push XIX
 	ld	xbc, 0x7FFFFF00                         ; FA30BD  ld XBC,0x7fffff00
@@ -31096,23 +31229,32 @@ Wait_Ticks_Yield__FA3123:
 	unlk32 xiz                                 ; FA3124  unlk XIZ
 	ret                                        ; FA3126  ret
 ; --------------------------------------------------------------------------
-; sub_FA3127 -- 0xFA3127..0xFA336A (580 bytes)
+; P7Units_BootLoadAndStartTask -- 0xFA3127..0xFA336A (580 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xF98BAE in Analog_ScanAndReport__done
 ; Inputs:  no frame and no argument slot read.
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xF9833B = Kernel_StartTask_StackArg, 0xF98B39 = converted
-;          0xF9A646 = P7Stream_Run, 0xFA2E2D = sub_FA2E2D
+;          0xF9A646 = P7Stream_Run, 0xFA2E2D = P7Mixer_SendGain
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA3127-0xFA336A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    the P7 module's BOOT ENTRY: it uploads the fixed opening stream set to the
+;          three units and then starts the module's service task.
+; Evidence: its one caller is 0xF98BAE in Analog_ScanAndReport__done; it makes
+;          literal P7Stream_Run calls naming 20 distinct pool objects, each pushing a
+;          record index of 1, 3 or 4 into P7Stream_Data_FD4B97 (0xFA313E onward).
+;          Those 20 are a strict SUBSET of the 22 P7Units_ReloadFixedStreams names,
+;          so this is the cold-start copy of that sequence.
+; ★ Evidence: the task it starts is TASK 2 -- `push 0x0002 / call
+;          Kernel_StartTask_StackArg` at 0xFA3362 -- and EntryPoint_Records' second
+;          record gives task 2 the entry PC 0x00FA54DB, inside P7Units_ServiceTask.
+; Unknown:  what any of the streams DOES.  They stay P7Stream_XXXXXX.
 ; --------------------------------------------------------------------------
-sub_FA3127:
+P7Units_BootLoadAndStartTask:
 	res_dd8	2, PB                              ; FA3127  res 2,(0x1f)
 	res_dd8	3, PB                              ; FA312A  res 3,(0x1f)
 	res_dd8	4, PB                              ; FA312D  res 4,(0x1f)
@@ -31317,7 +31459,7 @@ sub_FA3127:
 	popw	bc                                    ; FA3369  pop BC
 	ret                                        ; FA336A  ret
 ; --------------------------------------------------------------------------
-; sub_FA336B -- 0xFA336B..0xFA35D4 (618 bytes)
+; P7Units_ReloadFixedStreams -- 0xFA336B..0xFA35D4 (618 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -31331,10 +31473,18 @@ sub_FA3127:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    re-runs the module's FIXED stream sequence -- the 22 streams that do not
+;          depend on any unit's program -- on all three destinations.
+; Evidence: it makes literal P7Stream_Run calls naming 22 distinct pool objects, and
+;          the 20 that P7Units_BootLoadAndStartTask also names are that routine's
+;          ENTIRE set (boot-only: none; this routine adds 0xFDBC5A and 0xFDBE94).
+;          So the cold-start entry is this sequence minus two streams, plus the task
+;          start.  Its two call sites, 0xFA5506 and 0xFA5522, are both in
+;          P7Units_ServiceTask.  notes/prom_c_understanding_round5.py --names.
+; Unknown:  what any of the 22 streams contains, and what RAM 0x00F35F -- the one
+;          absolute address it reads -- holds.
 ; --------------------------------------------------------------------------
-sub_FA336B:
+P7Units_ReloadFixedStreams:
 	res_dd8	2, PB                              ; FA336B  res 2,(0x1f)
 	res_dd8	3, PB                              ; FA336E  res 3,(0x1f)
 	res_dd8	4, PB                              ; FA3371  res 4,(0x1f)
@@ -31352,7 +31502,7 @@ sub_FA336B:
 	inc	8, xsp                                 ; FA3395  inc 0,XSP
 	inc	2, xsp                                 ; FA3397  inc 2,XSP
 	cpib_da 0x00F35F, 0x02                     ; FA3399  cp (0x00f35f),0x02
-	jr z, sub_FA336B__FA33D1                   ; FA339F  jr Z,0xfa33d1
+	jr z, P7Units_ReloadFixedStreams__FA33D1                   ; FA339F  jr Z,0xfa33d1
 	lda_24	xbc, (0xFD4B97)                     ; FA33A1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33A6  push XBC
 	pushw	3                                    ; FA33A7  push 0x0003
@@ -31369,8 +31519,8 @@ sub_FA336B:
 	call	0xF9A646                              ; FA33C7  call 0xf9a646
 	inc	8, xsp                                 ; FA33CB  inc 0,XSP
 	inc	2, xsp                                 ; FA33CD  inc 2,XSP
-	jr sub_FA336B__FA33FF                      ; FA33CF  jr T,0xfa33ff
-sub_FA336B__FA33D1:
+	jr P7Units_ReloadFixedStreams__FA33FF                      ; FA33CF  jr T,0xfa33ff
+P7Units_ReloadFixedStreams__FA33D1:
 	lda_24	xbc, (0xFD4B97)                     ; FA33D1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33D6  push XBC
 	pushw	3                                    ; FA33D7  push 0x0003
@@ -31387,7 +31537,7 @@ sub_FA336B__FA33D1:
 	call	0xF9A646                              ; FA33F7  call 0xf9a646
 	inc	8, xsp                                 ; FA33FB  inc 0,XSP
 	inc	2, xsp                                 ; FA33FD  inc 2,XSP
-sub_FA336B__FA33FF:
+P7Units_ReloadFixedStreams__FA33FF:
 	lda_24	xbc, (0xFD4B97)                     ; FA33FF  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3404  push XBC
 	pushw	1                                    ; FA3405  push 0x0001
@@ -31553,7 +31703,7 @@ sub_FA336B__FA33FF:
 	inc	2, xsp                                 ; FA35D2  inc 2,XSP
 	ret                                        ; FA35D4  ret
 ; --------------------------------------------------------------------------
-; sub_FA35D5 -- 0xFA35D5..0xFA362B (87 bytes)
+; P7Unit_SendPreambleOnce -- 0xFA35D5..0xFA362B (87 bytes)
 ;
 ; Called from: no site outside this module.
 ;          7 site(s) inside this module:
@@ -31562,16 +31712,23 @@ sub_FA336B__FA33FF:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xF9A646 = P7Stream_Run, 0xFA30F6 = Wait_Ticks_Yield
-;          0xFA4940 = sub_FA4940
+;          0xFA4940 = P7Unit_MarkParamsDirty
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA35D5-0xFA362B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    sends P7Stream_UnitPreamble to one unit the FIRST time the unit is used,
+;          and never again; then marks the unit's parameters dirty.
+; Evidence: the latch is `ld C,0x02 / mul BC,(XIZ+0x08) / add XBC,0x0000F354` at
+;          0xFA35D9-0xFA35E0 -- RAM 0xF354 + 2*unit, three words whose boot image is
+;          zero (ROM 0xFCC55F, prom_c_ram_image.py).  Zero runs the stream
+;          (0xFA35EA), waits 20 ticks (0xFA3608) and writes 0xFFFF back
+;          (`ld (XBC),0xffff` at 0xFA361B); non-zero skips straight to the
+;          P7Unit_MarkParamsDirty call at 0xFA3625.
+; Unknown:  what the preamble stream contains.
 ; --------------------------------------------------------------------------
-sub_FA35D5:
+P7Unit_SendPreambleOnce:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA35D5  link XIZ,0x0000
 	ldb	c, 2                                   ; FA35D9  ld C,0x02
 	extpfx3 0x8E, 0x08, 0x43                   ; FA35DB  mul BC,(XIZ+0x08)
@@ -31579,7 +31736,7 @@ sub_FA35D5:
 	add	xbc, 0xF354                            ; FA35E0  add XBC,0x0000f354
 	ld	bc, (xbc)                               ; FA35E6  ld BC,(XBC)
 	cps	bc, 0                                  ; FA35E8  cp BC,0
-	jr nz, sub_FA35D5__FA3620                  ; FA35EA  jr NZ,0xfa3620
+	jr nz, P7Unit_SendPreambleOnce__FA3620                  ; FA35EA  jr NZ,0xfa3620
 	lda_24	xbc, (0xFD4B85)                     ; FA35EC  lda XBC,0xfd4b85
 	push	xbc                                   ; FA35F1  push XBC
 	ld	wa, (xiz+8)                             ; FA35F2  ld WA,(XIZ+0x08)
@@ -31599,7 +31756,7 @@ sub_FA35D5:
 	add	xbc, 0xF354                            ; FA3615  add XBC,0x0000f354
 	extpfx4 0xB1, 0x02, 0xFF, 0xFF             ; FA361B  ld (XBC),0xffff
 	popw	bc                                    ; FA361F  pop BC
-sub_FA35D5__FA3620:
+P7Unit_SendPreambleOnce__FA3620:
 	push	0                                     ; FA3620  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA3622  push (XIZ+0x08)
 	calr (0xFA4940 - 0xFA3628)                 ; FA3625  calr 0xfa4940
@@ -31851,7 +32008,7 @@ sub_FA3717__FA37FF:
 	unlk32 xiz                                 ; FA37FF  unlk XIZ
 	ret                                        ; FA3801  ret
 ; --------------------------------------------------------------------------
-; sub_FA3802 -- 0xFA3802..0xFA3A3B (570 bytes)
+; P7Units_ReloadForGroup -- 0xFA3802..0xFA3A3B (570 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -31859,23 +32016,33 @@ sub_FA3717__FA37FF:
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x0085D2, 0x0085D4, 0x0085EC, 0x0085EE, 0x008606
 ;          reads 0x008584, 0x008586, 0x00859E, 0x0085A0, 0x0085B8
-; Calls:   0xF9A646 = P7Stream_Run, 0xFA2C5E = sub_FA2C5E
-;          0xFA30F6 = Wait_Ticks_Yield, 0xFA4940 = sub_FA4940
+; Calls:   0xF9A646 = P7Stream_Run, 0xFA2C5E = P7Unit_LoadProgramStreams
+;          0xFA30F6 = Wait_Ticks_Yield, 0xFA4940 = P7Unit_MarkParamsDirty
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA3802-0xFA3A3B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    reloads all three units for a new stream-pointer GROUP.  Called only when
+;          the group selector actually changed.
+; Evidence: its single call site is 0xFA5730 in P7Units_ResolveProgramsAndReload, and
+;          the two instructions before it are `ld C,(0x00f35d) / cp C,(0x00f35e)` with
+;          `jr Z` past the call (0xFA5723-0xFA572D) -- i.e. the call happens only when
+;          the current group differs from the previous one, and 0xFA5739 then latches
+;          the new value.  The argument pushed at 0xFA572F is the group itself.
+;          Its body broadcasts P7Stream_UnitPreamble to records 1, 2 and 3 -- one per
+;          unit -- twice, each time followed by a 20-tick wait (0xFA382F, 0xFA3846,
+;          0xFA385D, 0xFA386B and again at 0xFA393D, 0xFA3954, 0xFA396B, 0xFA3979).
+; Unknown:  what a GROUP is.  RAM 0xF35D is copied from 0xF361 and clamped to 0..1,
+;          and nothing traced here says what 0xF361 represents.
 ; --------------------------------------------------------------------------
-sub_FA3802:
+P7Units_ReloadForGroup:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FA3802  link XIZ,0xfffe
 	ld	bc, (xiz+8)                             ; FA3806  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3809  extz BC
 	ld	(xiz-2), bc                             ; FA380B  ld (XIZ+0xfe),BC
-	jrl sub_FA3802__FA3A2C                     ; FA380E  jrl T,0xfa3a2c
-sub_FA3802__FA3811:
+	jrl P7Units_ReloadForGroup__FA3A2C                     ; FA380E  jrl T,0xfa3a2c
+P7Units_ReloadForGroup__FA3811:
 	pushw	0                                    ; FA3811  push 0x0000
 	calr (0xFA2C5E - 0xFA3817)                 ; FA3814  calr 0xfa2c5e
 	popw	bc                                    ; FA3817  pop BC
@@ -31964,8 +32131,8 @@ sub_FA3802__FA3811:
 	xor	c, 0xFF                                ; FA3913  xor C,0xff
 	stb_da	(0x8606), c                         ; FA3916  ld (0x008606),C
 	popw	bc                                    ; FA391B  pop BC
-	jrl sub_FA3802__FA3A39                     ; FA391C  jrl T,0xfa3a39
-sub_FA3802__FA391F:
+	jrl P7Units_ReloadForGroup__FA3A39                     ; FA391C  jrl T,0xfa3a39
+P7Units_ReloadForGroup__FA391F:
 	pushw	0                                    ; FA391F  push 0x0000
 	calr (0xFA2C5E - 0xFA3925)                 ; FA3922  calr 0xfa2c5e
 	popw	bc                                    ; FA3925  pop BC
@@ -32054,14 +32221,14 @@ sub_FA3802__FA391F:
 	xor	c, 0xFF                                ; FA3A21  xor C,0xff
 	stb_da	(0x8606), c                         ; FA3A24  ld (0x008606),C
 	popw	bc                                    ; FA3A29  pop BC
-	jr sub_FA3802__FA3A39                      ; FA3A2A  jr T,0xfa3a39
-sub_FA3802__FA3A2C:
+	jr P7Units_ReloadForGroup__FA3A39                      ; FA3A2A  jr T,0xfa3a39
+P7Units_ReloadForGroup__FA3A2C:
 	ld	bc, (xiz-2)                             ; FA3A2C  ld BC,(XIZ+0xfe)
 	cps	bc, 0                                  ; FA3A2F  cp BC,0
-	jrl z, sub_FA3802__FA3811                  ; FA3A31  jrl Z,0xfa3811
+	jrl z, P7Units_ReloadForGroup__FA3811                  ; FA3A31  jrl Z,0xfa3811
 	cps	bc, 1                                  ; FA3A34  cp BC,1
-	jrl z, sub_FA3802__FA391F                  ; FA3A36  jrl Z,0xfa391f
-sub_FA3802__FA3A39:
+	jrl z, P7Units_ReloadForGroup__FA391F                  ; FA3A36  jrl Z,0xfa391f
+P7Units_ReloadForGroup__FA3A39:
 	unlk32 xiz                                 ; FA3A39  unlk XIZ
 	ret                                        ; FA3A3B  ret
 ; --------------------------------------------------------------------------
@@ -32072,11 +32239,11 @@ sub_FA3802__FA3A39:
 ;          0xFA5773 0xFA581C 0xFA58CE
 ; Inputs:  frame `link XIZ,-22`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xF9A646 = P7Stream_Run, 0xFA2C5E = sub_FA2C5E
-;          0xFA30F6 = Wait_Ticks_Yield, 0xFA35D5 = sub_FA35D5
+; Calls:   0xF9A646 = P7Stream_Run, 0xFA2C5E = P7Unit_LoadProgramStreams
+;          0xFA30F6 = Wait_Ticks_Yield, 0xFA35D5 = P7Unit_SendPreambleOnce
 ;          0xFA362C = sub_FA362C, 0xFA3717 = sub_FA3717
-;          0xFA3CD7 = sub_FA3CD7, 0xFA4819 = sub_FA4819
-;          0xFA4940 = sub_FA4940
+;          0xFA3CD7 = P7Unit_EmitChangedParams, 0xFA4819 = P7Unit_SelectStreamsForRecord
+;          0xFA4940 = P7Unit_MarkParamsDirty
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA3A3C-0xFA3CA5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -32329,7 +32496,7 @@ sub_FA3A3C__FA3C87:
 	unlk32 xiz                                 ; FA3CA3  unlk XIZ
 	ret                                        ; FA3CA5  ret
 ; --------------------------------------------------------------------------
-; sub_FA3CA6 -- 0xFA3CA6..0xFA3CD6 (49 bytes)
+; Base36DigitToValue -- 0xFA3CA6..0xFA3CD6 (49 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -32341,34 +32508,43 @@ sub_FA3A3C__FA3C87:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    converts ONE base-36 ASCII digit to its value: '0'-'9' -> 0..9,
+;          'a' and above -> 10 and above, anything else -> 0.
+; Evidence: `cp (XIZ+0x08),0x61 / sub C,0x57` at 0xFA3CAA-0xFA3CB3 ('a' -> 10) and
+;          `cp (XIZ+0x08),0x30 / cp (XIZ+0x08),0x39 / sub C,0x30` at
+;          0xFA3CBC-0xFA3CCB, with `sub A,A` at 0xFA3CD2 as the else.
+; ★ The digits it reads are IN THE ROM, delimited: the DescriptorStrings pool holds
+;          '0', '01234', ... '0123456789abc' -- runs of consecutive base-36 digits --
+;          and its only caller, 0xFA4764, is inside P7Unit_EmitChangedParams, which
+;          loads a directory record's digit-string pointer from PoolDir_Records +20
+;          (0xFA3D3E).  So the reader and the data name each other.
+; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
-sub_FA3CA6:
+Base36DigitToValue:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA3CA6  link XIZ,0x0000
 	cp (xiz+8), 0x61                           ; FA3CAA  cp (XIZ+0x08),0x61
-	jr c, sub_FA3CA6__FA3CBC                   ; FA3CAE  jr C,0xfa3cbc
+	jr c, Base36DigitToValue__FA3CBC                   ; FA3CAE  jr C,0xfa3cbc
 	ld	c, (xiz+8)                              ; FA3CB0  ld C,(XIZ+0x08)
 	sub	c, 87                                  ; FA3CB3  sub C,0x57
 	ld	a, c                                    ; FA3CB6  ld A,C
-	jr sub_FA3CA6__FA3CD4                      ; FA3CB8  jr T,0xfa3cd4
-	jr sub_FA3CA6__FA3CD2                      ; FA3CBA  jr T,0xfa3cd2
-sub_FA3CA6__FA3CBC:
+	jr Base36DigitToValue__FA3CD4                      ; FA3CB8  jr T,0xfa3cd4
+	jr Base36DigitToValue__FA3CD2                      ; FA3CBA  jr T,0xfa3cd2
+Base36DigitToValue__FA3CBC:
 	cp (xiz+8), 0x30                           ; FA3CBC  cp (XIZ+0x08),0x30
-	jr c, sub_FA3CA6__FA3CD2                   ; FA3CC0  jr C,0xfa3cd2
+	jr c, Base36DigitToValue__FA3CD2                   ; FA3CC0  jr C,0xfa3cd2
 	cp (xiz+8), 0x39                           ; FA3CC2  cp (XIZ+0x08),0x39
-	jr ugt, sub_FA3CA6__FA3CD2                 ; FA3CC6  jr UGT,0xfa3cd2
+	jr ugt, Base36DigitToValue__FA3CD2                 ; FA3CC6  jr UGT,0xfa3cd2
 	ld	c, (xiz+8)                              ; FA3CC8  ld C,(XIZ+0x08)
 	sub	c, 48                                  ; FA3CCB  sub C,0x30
 	ld	a, c                                    ; FA3CCE  ld A,C
-	jr sub_FA3CA6__FA3CD4                      ; FA3CD0  jr T,0xfa3cd4
-sub_FA3CA6__FA3CD2:
+	jr Base36DigitToValue__FA3CD4                      ; FA3CD0  jr T,0xfa3cd4
+Base36DigitToValue__FA3CD2:
 	sub	a, a                                   ; FA3CD2  sub A,A
-sub_FA3CA6__FA3CD4:
+Base36DigitToValue__FA3CD4:
 	unlk32 xiz                                 ; FA3CD4  unlk XIZ
 	ret                                        ; FA3CD6  ret
 ; --------------------------------------------------------------------------
-; sub_FA3CD7 -- 0xFA3CD7..0xFA4818 (2882 bytes)
+; P7Unit_EmitChangedParams -- 0xFA3CD7..0xFA4818 (2882 bytes)
 ;
 ; Called from: no site outside this module.
 ;          6 site(s) inside this module:
@@ -32376,16 +32552,27 @@ sub_FA3CA6__FA3CD4:
 ; Inputs:  frame `link XIZ,-54`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xF9ADB5 = sub_F9ADB5, 0xFA2784 = sub_FA2784
-;          0xFA3CA6 = sub_FA3CA6, 0xFA4819 = sub_FA4819
+;          0xFA3CA6 = Base36DigitToValue, 0xFA4819 = P7Unit_SelectStreamsForRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA3CD7-0xFA4818
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    walks one unit's FIELD DESCRIPTORS, compares the live block at RAM 0x856E
+;          against the shadow at RAM 0x85BC, and emits the parameters that moved.
+;          arg1 = unit.  2,882 bytes; the module's engine.
+; Evidence: it loads both descriptor pointers of the unit's directory record --
+;          `add XBC,0x00000010` at 0xFA3D26 (the type string) and
+;          `add XBC,0x00000014` at 0xFA3D3E (the digit string), both followed by
+;          `add XBC,0x00FDBFD9` -- reads the live block (`add XBC,0x0000856e`,
+;          0xFA3D58) and the shadow (`add XBC,0x000085bc`, 0xFA3D6A) in adjacent
+;          instructions, indexes PoolDir_FieldRec_PtrTable at ten sites
+;          (0xFA3DCD, 0xFA3FFE, 0xFA40F0, 0xFA419B, 0xFA4229, 0xFA42BA, 0xFA4591,
+;          0xFA4793 ...), and calls Base36DigitToValue at 0xFA4764.
+; Unknown:  what the descriptor TYPE LETTERS mean.  The comparison and the emission
+;          are traced; the alphabet {b,w,v,s,h,c,B} is not decoded.
 ; --------------------------------------------------------------------------
-sub_FA3CD7:
+P7Unit_EmitChangedParams:
 	link32 0xEE, 0x0C, 0xCA, 0xFF              ; FA3CD7  link XIZ,0xffca
 	pushw	hl                                   ; FA3CDB  push HL
 	push	xix                                   ; FA3CDC  push XIX
@@ -32441,8 +32628,8 @@ sub_FA3CD7:
 	extz	iy                                    ; FA3D76  extz IY
 	ld	(xiz-42), iy                            ; FA3D78  ld (XIZ+0xd6),IY
 	popw	bc                                    ; FA3D7B  pop BC
-	jrl sub_FA3CD7__FA47EB                     ; FA3D7C  jrl T,0xfa47eb
-sub_FA3CD7__FA3D7F:
+	jrl P7Unit_EmitChangedParams__FA47EB                     ; FA3D7C  jrl T,0xfa47eb
+P7Unit_EmitChangedParams__FA3D7F:
 	ld	xbc, (xiz-14)                           ; FA3D7F  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA3D82  ld A,(XBC)
 	extz	wa                                    ; FA3D84  extz WA
@@ -32458,7 +32645,7 @@ sub_FA3CD7__FA3D7F:
 	inc	1, xiy                                 ; FA3D9C  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA3D9E  ld (XIZ+0xee),XIY
 	cp	xwa, xbc                                ; FA3DA1  cp XWA,XBC
-	jrl z, sub_FA3CD7__FA3E1C                  ; FA3DA3  jrl Z,0xfa3e1c
+	jrl z, P7Unit_EmitChangedParams__FA3E1C                  ; FA3DA3  jrl Z,0xfa3e1c
 	ldb	c, 26                                  ; FA3DA6  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA3DA8  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3DAB  extz XBC
@@ -32478,7 +32665,7 @@ sub_FA3CD7__FA3D7F:
 	add	xbc, xix                               ; FA3DD5  add XBC,XIX
 	ld	a, (xbc)                                ; FA3DD7  ld A,(XBC)
 	cps	a, 0                                   ; FA3DD9  cp A,0
-	jr nz, sub_FA3CD7__FA3DF5                  ; FA3DDB  jr NZ,0xfa3df5
+	jr nz, P7Unit_EmitChangedParams__FA3DF5                  ; FA3DDB  jr NZ,0xfa3df5
 	pushw	0x76                                 ; FA3DDD  push 0x0076
 	pushw	0                                    ; FA3DE0  push 0x0000
 	pushw	0                                    ; FA3DE3  push 0x0000
@@ -32488,7 +32675,7 @@ sub_FA3CD7__FA3D7F:
 	calr (0xFA2784 - 0xFA3DF1)                 ; FA3DEE  calr 0xfa2784
 	inc	8, xsp                                 ; FA3DF1  inc 0,XSP
 	inc	2, xsp                                 ; FA3DF3  inc 2,XSP
-sub_FA3CD7__FA3DF5:
+P7Unit_EmitChangedParams__FA3DF5:
 	ld	bc, (xiz+8)                             ; FA3DF5  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3DF8  extz BC
 	inc	1, bc                                  ; FA3DFA  inc 1,BC
@@ -32504,7 +32691,7 @@ sub_FA3CD7__FA3DF5:
 	push	xbc                                   ; FA3E11  push XBC
 	call	0xF9ADB5                              ; FA3E12  call 0xf9adb5
 	add	xsp, 20                                ; FA3E16  add XSP,0x00000014
-sub_FA3CD7__FA3E1C:
+P7Unit_EmitChangedParams__FA3E1C:
 	ld	xbc, (xiz-14)                           ; FA3E1C  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA3E1F  ld A,(XBC)
 	extz	wa                                    ; FA3E21  extz WA
@@ -32538,7 +32725,7 @@ sub_FA3CD7__FA3E1C:
 	sub	xbc, xiy                               ; FA3E66  sub XBC,XIY
 	ld	a, (xbc)                                ; FA3E68  ld A,(XBC)
 	cp	a, h                                    ; FA3E6A  cp A,H
-	jrl z, sub_FA3CD7__FA3EE7                  ; FA3E6C  jrl Z,0xfa3ee7
+	jrl z, P7Unit_EmitChangedParams__FA3EE7                  ; FA3E6C  jrl Z,0xfa3ee7
 	ld	bc, (xiz+8)                             ; FA3E6F  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3E72  extz BC
 	inc	1, bc                                  ; FA3E74  inc 1,BC
@@ -32584,8 +32771,8 @@ sub_FA3CD7__FA3E1C:
 	push	xbc                                   ; FA3ED9  push XBC
 	call	0xF9ADB5                              ; FA3EDA  call 0xf9adb5
 	add	xsp, 20                                ; FA3EDE  add XSP,0x00000014
-	jrl sub_FA3CD7__FA3F59                     ; FA3EE4  jrl T,0xfa3f59
-sub_FA3CD7__FA3EE7:
+	jrl P7Unit_EmitChangedParams__FA3F59                     ; FA3EE4  jrl T,0xfa3f59
+P7Unit_EmitChangedParams__FA3EE7:
 	ld	xbc, (xiz-18)                           ; FA3EE7  ld XBC,(XIZ+0xee)
 	dec	2, xbc                                 ; FA3EEA  dec 2,XBC
 	ld	h, (xbc)                                ; FA3EEC  ld H,(XBC)
@@ -32593,7 +32780,7 @@ sub_FA3CD7__FA3EE7:
 	dec	2, xbc                                 ; FA3EF1  dec 2,XBC
 	ld	a, (xbc)                                ; FA3EF3  ld A,(XBC)
 	cp	a, h                                    ; FA3EF5  cp A,H
-	jr z, sub_FA3CD7__FA3F20                   ; FA3EF7  jr Z,0xfa3f20
+	jr z, P7Unit_EmitChangedParams__FA3F20                   ; FA3EF7  jr Z,0xfa3f20
 	ld	bc, (xiz+8)                             ; FA3EF9  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3EFC  extz BC
 	inc	1, bc                                  ; FA3EFE  inc 1,BC
@@ -32609,7 +32796,7 @@ sub_FA3CD7__FA3EE7:
 	push	xbc                                   ; FA3F15  push XBC
 	call	0xF9ADB5                              ; FA3F16  call 0xf9adb5
 	add	xsp, 20                                ; FA3F1A  add XSP,0x00000014
-sub_FA3CD7__FA3F20:
+P7Unit_EmitChangedParams__FA3F20:
 	ld	xbc, (xiz-18)                           ; FA3F20  ld XBC,(XIZ+0xee)
 	dec	1, xbc                                 ; FA3F23  dec 1,XBC
 	ld	h, (xbc)                                ; FA3F25  ld H,(XBC)
@@ -32617,7 +32804,7 @@ sub_FA3CD7__FA3F20:
 	dec	1, xbc                                 ; FA3F2A  dec 1,XBC
 	ld	a, (xbc)                                ; FA3F2C  ld A,(XBC)
 	cp	a, h                                    ; FA3F2E  cp A,H
-	jr z, sub_FA3CD7__FA3F59                   ; FA3F30  jr Z,0xfa3f59
+	jr z, P7Unit_EmitChangedParams__FA3F59                   ; FA3F30  jr Z,0xfa3f59
 	ld	bc, (xiz+8)                             ; FA3F32  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3F35  extz BC
 	inc	1, bc                                  ; FA3F37  inc 1,BC
@@ -32633,21 +32820,21 @@ sub_FA3CD7__FA3F20:
 	push	xbc                                   ; FA3F4E  push XBC
 	call	0xF9ADB5                              ; FA3F4F  call 0xf9adb5
 	add	xsp, 20                                ; FA3F53  add XSP,0x00000014
-sub_FA3CD7__FA3F59:
+P7Unit_EmitChangedParams__FA3F59:
 	ld	bc, (xiz-39)                            ; FA3F59  ld BC,(XIZ+0xd9)
 	extz	bc                                    ; FA3F5C  extz BC
 	ld	(xiz-44), bc                            ; FA3F5E  ld (XIZ+0xd4),BC
-	jrl sub_FA3CD7__FA430B                     ; FA3F61  jrl T,0xfa430b
-sub_FA3CD7__FA3F64:
+	jrl P7Unit_EmitChangedParams__FA430B                     ; FA3F61  jrl T,0xfa430b
+P7Unit_EmitChangedParams__FA3F64:
 	ldw (xiz-2), 0x0004                        ; FA3F64  ld (XIZ+0xfe),0x0004
-sub_FA3CD7__FA3F69:
+P7Unit_EmitChangedParams__FA3F69:
 	cpw (xiz-2), 0x000A                        ; FA3F69  cp (XIZ+0xfe),0x000a
-	jrl ge, sub_FA3CD7__FA4053                 ; FA3F6E  jrl GE,0xfa4053
-	jr sub_FA3CD7__FA3F78                      ; FA3F71  jr T,0xfa3f78
-sub_FA3CD7__FA3F73:
+	jrl ge, P7Unit_EmitChangedParams__FA4053                 ; FA3F6E  jrl GE,0xfa4053
+	jr P7Unit_EmitChangedParams__FA3F78                      ; FA3F71  jr T,0xfa3f78
+P7Unit_EmitChangedParams__FA3F73:
 	incm	1, (xiz-2)                            ; FA3F73  incw 1,(XIZ+0xfe)
-	jr sub_FA3CD7__FA3F69                      ; FA3F76  jr T,0xfa3f69
-sub_FA3CD7__FA3F78:
+	jr P7Unit_EmitChangedParams__FA3F69                      ; FA3F76  jr T,0xfa3f69
+P7Unit_EmitChangedParams__FA3F78:
 	ld	xbc, (xiz-14)                           ; FA3F78  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA3F7B  ld A,(XBC)
 	extz	wa                                    ; FA3F7D  extz WA
@@ -32663,10 +32850,10 @@ sub_FA3CD7__FA3F78:
 	inc	1, xiy                                 ; FA3F95  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA3F97  ld (XIZ+0xee),XIY
 	cpw (xiz-2), 0x0005                        ; FA3F9A  cp (XIZ+0xfe),0x0005
-	jr z, sub_FA3CD7__FA3FA8                   ; FA3F9F  jr Z,0xfa3fa8
+	jr z, P7Unit_EmitChangedParams__FA3FA8                   ; FA3F9F  jr Z,0xfa3fa8
 	cpw (xiz-2), 0x0006                        ; FA3FA1  cp (XIZ+0xfe),0x0006
-	jr nz, sub_FA3CD7__FA3FCE                  ; FA3FA6  jr NZ,0xfa3fce
-sub_FA3CD7__FA3FA8:
+	jr nz, P7Unit_EmitChangedParams__FA3FCE                  ; FA3FA6  jr NZ,0xfa3fce
+P7Unit_EmitChangedParams__FA3FA8:
 	ld	xbc, (xiz-14)                           ; FA3FA8  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA3FAB  ld A,(XBC)
 	extz	wa                                    ; FA3FAD  extz WA
@@ -32681,10 +32868,10 @@ sub_FA3CD7__FA3FA8:
 	add	(xiz-34), xbc                          ; FA3FC6  add (XIZ+0xde),XBC
 	inc	1, xwa                                 ; FA3FC9  inc 1,XWA
 	ld	(xiz-18), xwa                           ; FA3FCB  ld (XIZ+0xee),XWA
-sub_FA3CD7__FA3FCE:
+P7Unit_EmitChangedParams__FA3FCE:
 	ld	xbc, (xiz-30)                           ; FA3FCE  ld XBC,(XIZ+0xe2)
 	extpfx3 0xAE, 0xDE, 0xF1                   ; FA3FD1  cp XBC,(XIZ+0xde)
-	jrl z, sub_FA3CD7__FA4050                  ; FA3FD4  jrl Z,0xfa4050
+	jrl z, P7Unit_EmitChangedParams__FA4050                  ; FA3FD4  jrl Z,0xfa4050
 	ldb	a, 26                                  ; FA3FD7  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA3FD9  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA3FDC  extz XWA
@@ -32705,7 +32892,7 @@ sub_FA3CD7__FA3FCE:
 	ld	a, (xbc)                                ; FA4008  ld A,(XBC)
 	extz	wa                                    ; FA400A  extz WA
 	cp	(xiz-2), wa                             ; FA400C  cp (XIZ+0xfe),WA
-	jr nz, sub_FA3CD7__FA4029                  ; FA400F  jr NZ,0xfa4029
+	jr nz, P7Unit_EmitChangedParams__FA4029                  ; FA400F  jr NZ,0xfa4029
 	pushw	0x76                                 ; FA4011  push 0x0076
 	pushw	0                                    ; FA4014  push 0x0000
 	pushw	0                                    ; FA4017  push 0x0000
@@ -32715,7 +32902,7 @@ sub_FA3CD7__FA3FCE:
 	calr (0xFA2784 - 0xFA4025)                 ; FA4022  calr 0xfa2784
 	inc	8, xsp                                 ; FA4025  inc 0,XSP
 	inc	2, xsp                                 ; FA4027  inc 2,XSP
-sub_FA3CD7__FA4029:
+P7Unit_EmitChangedParams__FA4029:
 	ld	bc, (xiz+8)                             ; FA4029  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA402C  extz BC
 	inc	1, bc                                  ; FA402E  inc 1,BC
@@ -32731,20 +32918,20 @@ sub_FA3CD7__FA4029:
 	push	xbc                                   ; FA4045  push XBC
 	call	0xF9ADB5                              ; FA4046  call 0xf9adb5
 	add	xsp, 20                                ; FA404A  add XSP,0x00000014
-sub_FA3CD7__FA4050:
-	jrl sub_FA3CD7__FA3F73                     ; FA4050  jrl T,0xfa3f73
-sub_FA3CD7__FA4053:
-	jrl sub_FA3CD7__FA432A                     ; FA4053  jrl T,0xfa432a
-sub_FA3CD7__FA4056:
+P7Unit_EmitChangedParams__FA4050:
+	jrl P7Unit_EmitChangedParams__FA3F73                     ; FA4050  jrl T,0xfa3f73
+P7Unit_EmitChangedParams__FA4053:
+	jrl P7Unit_EmitChangedParams__FA432A                     ; FA4053  jrl T,0xfa432a
+P7Unit_EmitChangedParams__FA4056:
 	ldw (xiz-2), 0x0004                        ; FA4056  ld (XIZ+0xfe),0x0004
-sub_FA3CD7__FA405B:
+P7Unit_EmitChangedParams__FA405B:
 	cpw (xiz-2), 0x000B                        ; FA405B  cp (XIZ+0xfe),0x000b
-	jrl ge, sub_FA3CD7__FA4145                 ; FA4060  jrl GE,0xfa4145
-	jr sub_FA3CD7__FA406A                      ; FA4063  jr T,0xfa406a
-sub_FA3CD7__FA4065:
+	jrl ge, P7Unit_EmitChangedParams__FA4145                 ; FA4060  jrl GE,0xfa4145
+	jr P7Unit_EmitChangedParams__FA406A                      ; FA4063  jr T,0xfa406a
+P7Unit_EmitChangedParams__FA4065:
 	incm	1, (xiz-2)                            ; FA4065  incw 1,(XIZ+0xfe)
-	jr sub_FA3CD7__FA405B                      ; FA4068  jr T,0xfa405b
-sub_FA3CD7__FA406A:
+	jr P7Unit_EmitChangedParams__FA405B                      ; FA4068  jr T,0xfa405b
+P7Unit_EmitChangedParams__FA406A:
 	ld	xbc, (xiz-14)                           ; FA406A  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA406D  ld A,(XBC)
 	extz	wa                                    ; FA406F  extz WA
@@ -32760,10 +32947,10 @@ sub_FA3CD7__FA406A:
 	inc	1, xiy                                 ; FA4087  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA4089  ld (XIZ+0xee),XIY
 	cpw (xiz-2), 0x0006                        ; FA408C  cp (XIZ+0xfe),0x0006
-	jr z, sub_FA3CD7__FA409A                   ; FA4091  jr Z,0xfa409a
+	jr z, P7Unit_EmitChangedParams__FA409A                   ; FA4091  jr Z,0xfa409a
 	cpw (xiz-2), 0x0007                        ; FA4093  cp (XIZ+0xfe),0x0007
-	jr nz, sub_FA3CD7__FA40C0                  ; FA4098  jr NZ,0xfa40c0
-sub_FA3CD7__FA409A:
+	jr nz, P7Unit_EmitChangedParams__FA40C0                  ; FA4098  jr NZ,0xfa40c0
+P7Unit_EmitChangedParams__FA409A:
 	ld	xbc, (xiz-14)                           ; FA409A  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA409D  ld A,(XBC)
 	extz	wa                                    ; FA409F  extz WA
@@ -32778,10 +32965,10 @@ sub_FA3CD7__FA409A:
 	add	(xiz-34), xbc                          ; FA40B8  add (XIZ+0xde),XBC
 	inc	1, xwa                                 ; FA40BB  inc 1,XWA
 	ld	(xiz-18), xwa                           ; FA40BD  ld (XIZ+0xee),XWA
-sub_FA3CD7__FA40C0:
+P7Unit_EmitChangedParams__FA40C0:
 	ld	xbc, (xiz-30)                           ; FA40C0  ld XBC,(XIZ+0xe2)
 	extpfx3 0xAE, 0xDE, 0xF1                   ; FA40C3  cp XBC,(XIZ+0xde)
-	jrl z, sub_FA3CD7__FA4142                  ; FA40C6  jrl Z,0xfa4142
+	jrl z, P7Unit_EmitChangedParams__FA4142                  ; FA40C6  jrl Z,0xfa4142
 	ldb	a, 26                                  ; FA40C9  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA40CB  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA40CE  extz XWA
@@ -32802,7 +32989,7 @@ sub_FA3CD7__FA40C0:
 	ld	a, (xbc)                                ; FA40FA  ld A,(XBC)
 	extz	wa                                    ; FA40FC  extz WA
 	cp	(xiz-2), wa                             ; FA40FE  cp (XIZ+0xfe),WA
-	jr nz, sub_FA3CD7__FA411B                  ; FA4101  jr NZ,0xfa411b
+	jr nz, P7Unit_EmitChangedParams__FA411B                  ; FA4101  jr NZ,0xfa411b
 	pushw	0x76                                 ; FA4103  push 0x0076
 	pushw	0                                    ; FA4106  push 0x0000
 	pushw	0                                    ; FA4109  push 0x0000
@@ -32812,7 +32999,7 @@ sub_FA3CD7__FA40C0:
 	calr (0xFA2784 - 0xFA4117)                 ; FA4114  calr 0xfa2784
 	inc	8, xsp                                 ; FA4117  inc 0,XSP
 	inc	2, xsp                                 ; FA4119  inc 2,XSP
-sub_FA3CD7__FA411B:
+P7Unit_EmitChangedParams__FA411B:
 	ld	bc, (xiz+8)                             ; FA411B  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA411E  extz BC
 	inc	1, bc                                  ; FA4120  inc 1,BC
@@ -32828,11 +33015,11 @@ sub_FA3CD7__FA411B:
 	push	xbc                                   ; FA4137  push XBC
 	call	0xF9ADB5                              ; FA4138  call 0xf9adb5
 	add	xsp, 20                                ; FA413C  add XSP,0x00000014
-sub_FA3CD7__FA4142:
-	jrl sub_FA3CD7__FA4065                     ; FA4142  jrl T,0xfa4065
-sub_FA3CD7__FA4145:
-	jrl sub_FA3CD7__FA432A                     ; FA4145  jrl T,0xfa432a
-sub_FA3CD7__FA4148:
+P7Unit_EmitChangedParams__FA4142:
+	jrl P7Unit_EmitChangedParams__FA4065                     ; FA4142  jrl T,0xfa4065
+P7Unit_EmitChangedParams__FA4145:
+	jrl P7Unit_EmitChangedParams__FA432A                     ; FA4145  jrl T,0xfa432a
+P7Unit_EmitChangedParams__FA4148:
 	ld	xix, (xiz-18)                           ; FA4148  ld XIX,(XIZ+0xee)
 	ld	xbc, xix                                ; FA414B  ld XBC,XIX
 	inc	1, xbc                                 ; FA414D  inc 1,XBC
@@ -32846,7 +33033,7 @@ sub_FA3CD7__FA4148:
 	ld	(xiz-14), xwa                           ; FA4161  ld (XIZ+0xf2),XWA
 	ld	c, (xix)                                ; FA4164  ld C,(XIX)
 	cp	c, h                                    ; FA4166  cp C,H
-	jrl z, sub_FA3CD7__FA41EA                  ; FA4168  jrl Z,0xfa41ea
+	jrl z, P7Unit_EmitChangedParams__FA41EA                  ; FA4168  jrl Z,0xfa41ea
 	ld	c, (xwa)                                ; FA416B  ld C,(XWA)
 	extz	bc                                    ; FA416D  extz BC
 	extz	xbc                                   ; FA416F  extz XBC
@@ -32870,7 +33057,7 @@ sub_FA3CD7__FA4148:
 	add	xbc, xix                               ; FA41A3  add XBC,XIX
 	ld	a, (xbc)                                ; FA41A5  ld A,(XBC)
 	cps	a, 4                                   ; FA41A7  cp A,4
-	jr nz, sub_FA3CD7__FA41C3                  ; FA41A9  jr NZ,0xfa41c3
+	jr nz, P7Unit_EmitChangedParams__FA41C3                  ; FA41A9  jr NZ,0xfa41c3
 	pushw	0x76                                 ; FA41AB  push 0x0076
 	pushw	0                                    ; FA41AE  push 0x0000
 	pushw	0                                    ; FA41B1  push 0x0000
@@ -32880,7 +33067,7 @@ sub_FA3CD7__FA4148:
 	calr (0xFA2784 - 0xFA41BF)                 ; FA41BC  calr 0xfa2784
 	inc	8, xsp                                 ; FA41BF  inc 0,XSP
 	inc	2, xsp                                 ; FA41C1  inc 2,XSP
-sub_FA3CD7__FA41C3:
+P7Unit_EmitChangedParams__FA41C3:
 	ld	bc, (xiz+8)                             ; FA41C3  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA41C6  extz BC
 	inc	1, bc                                  ; FA41C8  inc 1,BC
@@ -32896,13 +33083,13 @@ sub_FA3CD7__FA41C3:
 	push	xbc                                   ; FA41DF  push XBC
 	call	0xF9ADB5                              ; FA41E0  call 0xf9adb5
 	add	xsp, 20                                ; FA41E4  add XSP,0x00000014
-sub_FA3CD7__FA41EA:
+P7Unit_EmitChangedParams__FA41EA:
 	ld	xbc, (xiz-18)                           ; FA41EA  ld XBC,(XIZ+0xee)
 	ld	h, (xbc)                                ; FA41ED  ld H,(XBC)
 	ld	xwa, (xiz-14)                           ; FA41EF  ld XWA,(XIZ+0xf2)
 	ld	c, (xwa)                                ; FA41F2  ld C,(XWA)
 	cp	c, h                                    ; FA41F4  cp C,H
-	jrl z, sub_FA3CD7__FA4278                  ; FA41F6  jrl Z,0xfa4278
+	jrl z, P7Unit_EmitChangedParams__FA4278                  ; FA41F6  jrl Z,0xfa4278
 	ld	c, (xwa)                                ; FA41F9  ld C,(XWA)
 	extz	bc                                    ; FA41FB  extz BC
 	extz	xbc                                   ; FA41FD  extz XBC
@@ -32926,7 +33113,7 @@ sub_FA3CD7__FA41EA:
 	add	xbc, xix                               ; FA4231  add XBC,XIX
 	ld	a, (xbc)                                ; FA4233  ld A,(XBC)
 	cps	a, 5                                   ; FA4235  cp A,5
-	jr nz, sub_FA3CD7__FA4251                  ; FA4237  jr NZ,0xfa4251
+	jr nz, P7Unit_EmitChangedParams__FA4251                  ; FA4237  jr NZ,0xfa4251
 	pushw	0x76                                 ; FA4239  push 0x0076
 	pushw	0                                    ; FA423C  push 0x0000
 	pushw	0                                    ; FA423F  push 0x0000
@@ -32936,7 +33123,7 @@ sub_FA3CD7__FA41EA:
 	calr (0xFA2784 - 0xFA424D)                 ; FA424A  calr 0xfa2784
 	inc	8, xsp                                 ; FA424D  inc 0,XSP
 	inc	2, xsp                                 ; FA424F  inc 2,XSP
-sub_FA3CD7__FA4251:
+P7Unit_EmitChangedParams__FA4251:
 	ld	bc, (xiz+8)                             ; FA4251  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA4254  extz BC
 	inc	1, bc                                  ; FA4256  inc 1,BC
@@ -32952,15 +33139,15 @@ sub_FA3CD7__FA4251:
 	push	xbc                                   ; FA426D  push XBC
 	call	0xF9ADB5                              ; FA426E  call 0xf9adb5
 	add	xsp, 20                                ; FA4272  add XSP,0x00000014
-sub_FA3CD7__FA4278:
-	jrl sub_FA3CD7__FA432A                     ; FA4278  jrl T,0xfa432a
-sub_FA3CD7__FA427B:
+P7Unit_EmitChangedParams__FA4278:
+	jrl P7Unit_EmitChangedParams__FA432A                     ; FA4278  jrl T,0xfa432a
+P7Unit_EmitChangedParams__FA427B:
 	ld	xbc, (xiz-18)                           ; FA427B  ld XBC,(XIZ+0xee)
 	ld	h, (xbc)                                ; FA427E  ld H,(XBC)
 	ld	xwa, (xiz-14)                           ; FA4280  ld XWA,(XIZ+0xf2)
 	ld	c, (xwa)                                ; FA4283  ld C,(XWA)
 	cp	c, h                                    ; FA4285  cp C,H
-	jrl z, sub_FA3CD7__FA4309                  ; FA4287  jrl Z,0xfa4309
+	jrl z, P7Unit_EmitChangedParams__FA4309                  ; FA4287  jrl Z,0xfa4309
 	ld	c, (xwa)                                ; FA428A  ld C,(XWA)
 	extz	bc                                    ; FA428C  extz BC
 	extz	xbc                                   ; FA428E  extz XBC
@@ -32984,7 +33171,7 @@ sub_FA3CD7__FA427B:
 	add	xbc, xix                               ; FA42C2  add XBC,XIX
 	ld	a, (xbc)                                ; FA42C4  ld A,(XBC)
 	cps	a, 4                                   ; FA42C6  cp A,4
-	jr nz, sub_FA3CD7__FA42E2                  ; FA42C8  jr NZ,0xfa42e2
+	jr nz, P7Unit_EmitChangedParams__FA42E2                  ; FA42C8  jr NZ,0xfa42e2
 	pushw	0x76                                 ; FA42CA  push 0x0076
 	pushw	0                                    ; FA42CD  push 0x0000
 	pushw	0                                    ; FA42D0  push 0x0000
@@ -32994,7 +33181,7 @@ sub_FA3CD7__FA427B:
 	calr (0xFA2784 - 0xFA42DE)                 ; FA42DB  calr 0xfa2784
 	inc	8, xsp                                 ; FA42DE  inc 0,XSP
 	inc	2, xsp                                 ; FA42E0  inc 2,XSP
-sub_FA3CD7__FA42E2:
+P7Unit_EmitChangedParams__FA42E2:
 	ld	bc, (xiz+8)                             ; FA42E2  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA42E5  extz BC
 	inc	1, bc                                  ; FA42E7  inc 1,BC
@@ -33010,21 +33197,21 @@ sub_FA3CD7__FA42E2:
 	push	xbc                                   ; FA42FE  push XBC
 	call	0xF9ADB5                              ; FA42FF  call 0xf9adb5
 	add	xsp, 20                                ; FA4303  add XSP,0x00000014
-sub_FA3CD7__FA4309:
-	jr sub_FA3CD7__FA432A                      ; FA4309  jr T,0xfa432a
-sub_FA3CD7__FA430B:
+P7Unit_EmitChangedParams__FA4309:
+	jr P7Unit_EmitChangedParams__FA432A                      ; FA4309  jr T,0xfa432a
+P7Unit_EmitChangedParams__FA430B:
 	ld	bc, (xiz-44)                            ; FA430B  ld BC,(XIZ+0xd4)
 	cp	bc, 12                                  ; FA430E  cp BC,0x000c
-	jrl z, sub_FA3CD7__FA4148                  ; FA4312  jrl Z,0xfa4148
+	jrl z, P7Unit_EmitChangedParams__FA4148                  ; FA4312  jrl Z,0xfa4148
 	cp	bc, 13                                  ; FA4315  cp BC,0x000d
-	jrl z, sub_FA3CD7__FA427B                  ; FA4319  jrl Z,0xfa427b
+	jrl z, P7Unit_EmitChangedParams__FA427B                  ; FA4319  jrl Z,0xfa427b
 	cp	bc, 43                                  ; FA431C  cp BC,0x002b
-	jrl z, sub_FA3CD7__FA3F64                  ; FA4320  jrl Z,0xfa3f64
+	jrl z, P7Unit_EmitChangedParams__FA3F64                  ; FA4320  jrl Z,0xfa3f64
 	cp	bc, 55                                  ; FA4323  cp BC,0x0037
-	jrl z, sub_FA3CD7__FA4056                  ; FA4327  jrl Z,0xfa4056
-sub_FA3CD7__FA432A:
-	jrl sub_FA3CD7__FA4814                     ; FA432A  jrl T,0xfa4814
-sub_FA3CD7__FA432D:
+	jrl z, P7Unit_EmitChangedParams__FA4056                  ; FA4327  jrl Z,0xfa4056
+P7Unit_EmitChangedParams__FA432A:
+	jrl P7Unit_EmitChangedParams__FA4814                     ; FA432A  jrl T,0xfa4814
+P7Unit_EmitChangedParams__FA432D:
 	ldb	c, 26                                  ; FA432D  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA432F  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4332  extz XBC
@@ -33043,7 +33230,7 @@ sub_FA3CD7__FA432D:
 	add	xbc, xix                               ; FA4360  add XBC,XIX
 	ld	a, (xbc)                                ; FA4362  ld A,(XBC)
 	cp	a, h                                    ; FA4364  cp A,H
-	jrl z, sub_FA3CD7__FA4479                  ; FA4366  jrl Z,0xfa4479
+	jrl z, P7Unit_EmitChangedParams__FA4479                  ; FA4366  jrl Z,0xfa4479
 	ldb	c, 26                                  ; FA4369  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA436B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA436E  extz XBC
@@ -33140,16 +33327,16 @@ sub_FA3CD7__FA432D:
 	lda_24	xbc, (0x85BC)                       ; FA4470  lda XBC,0x0085bc
 	add	xbc, xix                               ; FA4475  add XBC,XIX
 	ld	(xbc), a                                ; FA4477  ld (XBC),A
-sub_FA3CD7__FA4479:
+P7Unit_EmitChangedParams__FA4479:
 	ldw (xiz-2), 0x0000                        ; FA4479  ld (XIZ+0xfe),0x0000
-sub_FA3CD7__FA447E:
+P7Unit_EmitChangedParams__FA447E:
 	cpw (xiz-2), 0x000A                        ; FA447E  cp (XIZ+0xfe),0x000a
-	jrl gt, sub_FA3CD7__FA4600                 ; FA4483  jrl GT,0xfa4600
-	jr sub_FA3CD7__FA448D                      ; FA4486  jr T,0xfa448d
-sub_FA3CD7__FA4488:
+	jrl gt, P7Unit_EmitChangedParams__FA4600                 ; FA4483  jrl GT,0xfa4600
+	jr P7Unit_EmitChangedParams__FA448D                      ; FA4486  jr T,0xfa448d
+P7Unit_EmitChangedParams__FA4488:
 	incm	1, (xiz-2)                            ; FA4488  incw 1,(XIZ+0xfe)
-	jr sub_FA3CD7__FA447E                      ; FA448B  jr T,0xfa447e
-sub_FA3CD7__FA448D:
+	jr P7Unit_EmitChangedParams__FA447E                      ; FA448B  jr T,0xfa447e
+P7Unit_EmitChangedParams__FA448D:
 	ldb	c, 26                                  ; FA448D  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA448F  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4492  extz XBC
@@ -33157,21 +33344,21 @@ sub_FA3CD7__FA448D:
 	add	xbc, 0x856E                            ; FA449A  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA44A0  ld A,(XBC)
 	cps	a, 0                                   ; FA44A2  cp A,0
-	jr nz, sub_FA3CD7__FA44F0                  ; FA44A4  jr NZ,0xfa44f0
+	jr nz, P7Unit_EmitChangedParams__FA44F0                  ; FA44A4  jr NZ,0xfa44f0
 	cpw (xiz-2), 0x0004                        ; FA44A6  cp (XIZ+0xfe),0x0004
-	jr z, sub_FA3CD7__FA44C2                   ; FA44AB  jr Z,0xfa44c2
+	jr z, P7Unit_EmitChangedParams__FA44C2                   ; FA44AB  jr Z,0xfa44c2
 	cpw (xiz-2), 0x0005                        ; FA44AD  cp (XIZ+0xfe),0x0005
-	jr z, sub_FA3CD7__FA44C2                   ; FA44B2  jr Z,0xfa44c2
+	jr z, P7Unit_EmitChangedParams__FA44C2                   ; FA44B2  jr Z,0xfa44c2
 	cpw (xiz-2), 0x0007                        ; FA44B4  cp (XIZ+0xfe),0x0007
-	jr z, sub_FA3CD7__FA44C2                   ; FA44B9  jr Z,0xfa44c2
+	jr z, P7Unit_EmitChangedParams__FA44C2                   ; FA44B9  jr Z,0xfa44c2
 	cpw (xiz-2), 0x0008                        ; FA44BB  cp (XIZ+0xfe),0x0008
-	jr nz, sub_FA3CD7__FA44CC                  ; FA44C0  jr NZ,0xfa44cc
-sub_FA3CD7__FA44C2:
+	jr nz, P7Unit_EmitChangedParams__FA44CC                  ; FA44C0  jr NZ,0xfa44cc
+P7Unit_EmitChangedParams__FA44C2:
 	sub	xbc, xbc                               ; FA44C2  sub XBC,XBC
 	inc	1, xbc                                 ; FA44C4  inc 1,XBC
 	add	(xiz-14), xbc                          ; FA44C6  add (XIZ+0xf2),XBC
 	add	(xiz-18), xbc                          ; FA44C9  add (XIZ+0xee),XBC
-sub_FA3CD7__FA44CC:
+P7Unit_EmitChangedParams__FA44CC:
 	ld	xbc, (xiz-14)                           ; FA44CC  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA44CF  ld A,(XBC)
 	extz	wa                                    ; FA44D1  extz WA
@@ -33186,8 +33373,8 @@ sub_FA3CD7__FA44CC:
 	ld	(xiz-34), xbc                           ; FA44E6  ld (XIZ+0xde),XBC
 	inc	1, xiy                                 ; FA44E9  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA44EB  ld (XIZ+0xee),XIY
-	jr sub_FA3CD7__FA4538                      ; FA44EE  jr T,0xfa4538
-sub_FA3CD7__FA44F0:
+	jr P7Unit_EmitChangedParams__FA4538                      ; FA44EE  jr T,0xfa4538
+P7Unit_EmitChangedParams__FA44F0:
 	ld	xbc, (xiz-14)                           ; FA44F0  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA44F3  ld A,(XBC)
 	extz	wa                                    ; FA44F5  extz WA
@@ -33203,21 +33390,21 @@ sub_FA3CD7__FA44F0:
 	inc	1, xiy                                 ; FA450D  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA450F  ld (XIZ+0xee),XIY
 	cpw (xiz-2), 0x0004                        ; FA4512  cp (XIZ+0xfe),0x0004
-	jr z, sub_FA3CD7__FA452E                   ; FA4517  jr Z,0xfa452e
+	jr z, P7Unit_EmitChangedParams__FA452E                   ; FA4517  jr Z,0xfa452e
 	cpw (xiz-2), 0x0005                        ; FA4519  cp (XIZ+0xfe),0x0005
-	jr z, sub_FA3CD7__FA452E                   ; FA451E  jr Z,0xfa452e
+	jr z, P7Unit_EmitChangedParams__FA452E                   ; FA451E  jr Z,0xfa452e
 	cpw (xiz-2), 0x0007                        ; FA4520  cp (XIZ+0xfe),0x0007
-	jr z, sub_FA3CD7__FA452E                   ; FA4525  jr Z,0xfa452e
+	jr z, P7Unit_EmitChangedParams__FA452E                   ; FA4525  jr Z,0xfa452e
 	cpw (xiz-2), 0x0008                        ; FA4527  cp (XIZ+0xfe),0x0008
-	jr nz, sub_FA3CD7__FA4538                  ; FA452C  jr NZ,0xfa4538
-sub_FA3CD7__FA452E:
+	jr nz, P7Unit_EmitChangedParams__FA4538                  ; FA452C  jr NZ,0xfa4538
+P7Unit_EmitChangedParams__FA452E:
 	sub	xbc, xbc                               ; FA452E  sub XBC,XBC
 	inc	1, xbc                                 ; FA4530  inc 1,XBC
 	add	(xiz-14), xbc                          ; FA4532  add (XIZ+0xf2),XBC
 	add	(xiz-18), xbc                          ; FA4535  add (XIZ+0xee),XBC
-sub_FA3CD7__FA4538:
+P7Unit_EmitChangedParams__FA4538:
 	cpw (xiz-2), 0x000A                        ; FA4538  cp (XIZ+0xfe),0x000a
-	jr nz, sub_FA3CD7__FA4561                  ; FA453D  jr NZ,0xfa4561
+	jr nz, P7Unit_EmitChangedParams__FA4561                  ; FA453D  jr NZ,0xfa4561
 	ld	xbc, (xiz-14)                           ; FA453F  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA4542  ld A,(XBC)
 	extz	wa                                    ; FA4544  extz WA
@@ -33232,10 +33419,10 @@ sub_FA3CD7__FA4538:
 	ld	(xiz-34), xbc                           ; FA4559  ld (XIZ+0xde),XBC
 	inc	1, xiy                                 ; FA455C  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA455E  ld (XIZ+0xee),XIY
-sub_FA3CD7__FA4561:
+P7Unit_EmitChangedParams__FA4561:
 	ld	xbc, (xiz-30)                           ; FA4561  ld XBC,(XIZ+0xe2)
 	extpfx3 0xAE, 0xDE, 0xF1                   ; FA4564  cp XBC,(XIZ+0xde)
-	jrl z, sub_FA3CD7__FA45FD                  ; FA4567  jrl Z,0xfa45fd
+	jrl z, P7Unit_EmitChangedParams__FA45FD                  ; FA4567  jrl Z,0xfa45fd
 	ldb	a, 26                                  ; FA456A  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA456C  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA456F  extz XWA
@@ -33256,7 +33443,7 @@ sub_FA3CD7__FA4561:
 	ld	a, (xbc)                                ; FA459B  ld A,(XBC)
 	extz	wa                                    ; FA459D  extz WA
 	cp	(xiz-2), wa                             ; FA459F  cp (XIZ+0xfe),WA
-	jr nz, sub_FA3CD7__FA45D6                  ; FA45A2  jr NZ,0xfa45d6
+	jr nz, P7Unit_EmitChangedParams__FA45D6                  ; FA45A2  jr NZ,0xfa45d6
 	ldb	c, 26                                  ; FA45A4  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA45A6  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA45A9  extz XBC
@@ -33264,7 +33451,7 @@ sub_FA3CD7__FA4561:
 	add	xbc, 0x856E                            ; FA45B1  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA45B7  ld A,(XBC)
 	cp	a, 14                                   ; FA45B9  cp A,0x0e
-	jr z, sub_FA3CD7__FA45D6                   ; FA45BC  jr Z,0xfa45d6
+	jr z, P7Unit_EmitChangedParams__FA45D6                   ; FA45BC  jr Z,0xfa45d6
 	pushw	0x76                                 ; FA45BE  push 0x0076
 	pushw	0                                    ; FA45C1  push 0x0000
 	pushw	0                                    ; FA45C4  push 0x0000
@@ -33274,7 +33461,7 @@ sub_FA3CD7__FA4561:
 	calr (0xFA2784 - 0xFA45D2)                 ; FA45CF  calr 0xfa2784
 	inc	8, xsp                                 ; FA45D2  inc 0,XSP
 	inc	2, xsp                                 ; FA45D4  inc 2,XSP
-sub_FA3CD7__FA45D6:
+P7Unit_EmitChangedParams__FA45D6:
 	ld	bc, (xiz+8)                             ; FA45D6  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA45D9  extz BC
 	inc	1, bc                                  ; FA45DB  inc 1,BC
@@ -33290,29 +33477,29 @@ sub_FA3CD7__FA45D6:
 	push	xbc                                   ; FA45F2  push XBC
 	call	0xF9ADB5                              ; FA45F3  call 0xf9adb5
 	add	xsp, 20                                ; FA45F7  add XSP,0x00000014
-sub_FA3CD7__FA45FD:
-	jrl sub_FA3CD7__FA4488                     ; FA45FD  jrl T,0xfa4488
-sub_FA3CD7__FA4600:
-	jrl sub_FA3CD7__FA4814                     ; FA4600  jrl T,0xfa4814
-sub_FA3CD7__FA4603:
+P7Unit_EmitChangedParams__FA45FD:
+	jrl P7Unit_EmitChangedParams__FA4488                     ; FA45FD  jrl T,0xfa4488
+P7Unit_EmitChangedParams__FA4600:
+	jrl P7Unit_EmitChangedParams__FA4814                     ; FA4600  jrl T,0xfa4814
+P7Unit_EmitChangedParams__FA4603:
 	ld	xbc, (xiz-22)                           ; FA4603  ld XBC,(XIZ+0xea)
 	ld	a, (xbc)                                ; FA4606  ld A,(XBC)
 	cps	a, 0                                   ; FA4608  cp A,0
-	jrl z, sub_FA3CD7__FA47E9                  ; FA460A  jrl Z,0xfa47e9
-	jr sub_FA3CD7__FA461B                      ; FA460D  jr T,0xfa461b
-sub_FA3CD7__FA460F:
+	jrl z, P7Unit_EmitChangedParams__FA47E9                  ; FA460A  jrl Z,0xfa47e9
+	jr P7Unit_EmitChangedParams__FA461B                      ; FA460D  jr T,0xfa461b
+P7Unit_EmitChangedParams__FA460F:
 	sub	xbc, xbc                               ; FA460F  sub XBC,XBC
 	inc	1, xbc                                 ; FA4611  inc 1,XBC
 	add	(xiz-22), xbc                          ; FA4613  add (XIZ+0xea),XBC
 	add	(xiz-26), xbc                          ; FA4616  add (XIZ+0xe6),XBC
-	jr sub_FA3CD7__FA4603                      ; FA4619  jr T,0xfa4603
-sub_FA3CD7__FA461B:
+	jr P7Unit_EmitChangedParams__FA4603                      ; FA4619  jr T,0xfa4603
+P7Unit_EmitChangedParams__FA461B:
 	ld	xbc, (xiz-22)                           ; FA461B  ld XBC,(XIZ+0xea)
 	ld	a, (xbc)                                ; FA461E  ld A,(XBC)
 	extz	wa                                    ; FA4620  extz WA
 	ld	(xiz-54), wa                            ; FA4622  ld (XIZ+0xca),WA
-	jrl sub_FA3CD7__FA4735                     ; FA4625  jrl T,0xfa4735
-sub_FA3CD7__FA4628:
+	jrl P7Unit_EmitChangedParams__FA4735                     ; FA4625  jrl T,0xfa4735
+P7Unit_EmitChangedParams__FA4628:
 	ld	xbc, (xiz-14)                           ; FA4628  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA462B  ld A,(XBC)
 	extz	wa                                    ; FA462D  extz WA
@@ -33329,8 +33516,8 @@ sub_FA3CD7__FA4628:
 	ld	(xiz-34), xbc                           ; FA464E  ld (XIZ+0xde),XBC
 	inc	1, xiy                                 ; FA4651  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA4653  ld (XIZ+0xee),XIY
-	jrl sub_FA3CD7__FA4755                     ; FA4656  jrl T,0xfa4755
-sub_FA3CD7__FA4659:
+	jrl P7Unit_EmitChangedParams__FA4755                     ; FA4656  jrl T,0xfa4755
+P7Unit_EmitChangedParams__FA4659:
 	ld	xbc, (xiz-14)                           ; FA4659  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA465C  ld A,(XBC)
 	extz	wa                                    ; FA465E  extz WA
@@ -33357,8 +33544,8 @@ sub_FA3CD7__FA4659:
 	add	(xiz-34), xbc                          ; FA4693  add (XIZ+0xde),XBC
 	inc	1, xwa                                 ; FA4696  inc 1,XWA
 	ld	(xiz-18), xwa                           ; FA4698  ld (XIZ+0xee),XWA
-	jrl sub_FA3CD7__FA4755                     ; FA469B  jrl T,0xfa4755
-sub_FA3CD7__FA469E:
+	jrl P7Unit_EmitChangedParams__FA4755                     ; FA469B  jrl T,0xfa4755
+P7Unit_EmitChangedParams__FA469E:
 	ld	xbc, (xiz-14)                           ; FA469E  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA46A1  ld A,(XBC)
 	extz	wa                                    ; FA46A3  extz WA
@@ -33391,8 +33578,8 @@ sub_FA3CD7__FA469E:
 	ld	(xiz-34), xwa                           ; FA46E2  ld (XIZ+0xde),XWA
 	inc	1, xiy                                 ; FA46E5  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA46E7  ld (XIZ+0xee),XIY
-	jrl sub_FA3CD7__FA4755                     ; FA46EA  jrl T,0xfa4755
-sub_FA3CD7__FA46ED:
+	jrl P7Unit_EmitChangedParams__FA4755                     ; FA46EA  jrl T,0xfa4755
+P7Unit_EmitChangedParams__FA46ED:
 	ld	xbc, (xiz-14)                           ; FA46ED  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA46F0  ld A,(XBC)
 	exts	wa                                    ; FA46F2  exts WA
@@ -33407,8 +33594,8 @@ sub_FA3CD7__FA46ED:
 	ld	(xiz-34), xbc                           ; FA4707  ld (XIZ+0xde),XBC
 	inc	1, xiy                                 ; FA470A  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA470C  ld (XIZ+0xee),XIY
-	jr sub_FA3CD7__FA4755                      ; FA470F  jr T,0xfa4755
-sub_FA3CD7__FA4711:
+	jr P7Unit_EmitChangedParams__FA4755                      ; FA470F  jr T,0xfa4755
+P7Unit_EmitChangedParams__FA4711:
 	ld	xbc, (xiz-14)                           ; FA4711  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FA4714  ld A,(XBC)
 	extz	wa                                    ; FA4716  extz WA
@@ -33423,22 +33610,22 @@ sub_FA3CD7__FA4711:
 	ld	(xiz-34), xbc                           ; FA472B  ld (XIZ+0xde),XBC
 	inc	1, xiy                                 ; FA472E  inc 1,XIY
 	ld	(xiz-18), xiy                           ; FA4730  ld (XIZ+0xee),XIY
-	jr sub_FA3CD7__FA4755                      ; FA4733  jr T,0xfa4755
-sub_FA3CD7__FA4735:
+	jr P7Unit_EmitChangedParams__FA4755                      ; FA4733  jr T,0xfa4755
+P7Unit_EmitChangedParams__FA4735:
 	ld	bc, (xiz-54)                            ; FA4735  ld BC,(XIZ+0xca)
 	cp	bc, 66                                  ; FA4738  cp BC,0x0042
-	jr z, sub_FA3CD7__FA46ED                   ; FA473C  jr Z,0xfa46ed
+	jr z, P7Unit_EmitChangedParams__FA46ED                   ; FA473C  jr Z,0xfa46ed
 	cp	bc, 99                                  ; FA473E  cp BC,0x0063
-	jrl z, sub_FA3CD7__FA469E                  ; FA4742  jrl Z,0xfa469e
+	jrl z, P7Unit_EmitChangedParams__FA469E                  ; FA4742  jrl Z,0xfa469e
 	cp	bc, 0x68                                ; FA4745  cp BC,0x0068
-	jrl z, sub_FA3CD7__FA4628                  ; FA4749  jrl Z,0xfa4628
+	jrl z, P7Unit_EmitChangedParams__FA4628                  ; FA4749  jrl Z,0xfa4628
 	cp	bc, 0x77                                ; FA474C  cp BC,0x0077
-	jrl z, sub_FA3CD7__FA4659                  ; FA4750  jrl Z,0xfa4659
-	jr sub_FA3CD7__FA4711                      ; FA4753  jr T,0xfa4711
-sub_FA3CD7__FA4755:
+	jrl z, P7Unit_EmitChangedParams__FA4659                  ; FA4750  jrl Z,0xfa4659
+	jr P7Unit_EmitChangedParams__FA4711                      ; FA4753  jr T,0xfa4711
+P7Unit_EmitChangedParams__FA4755:
 	ld	xbc, (xiz-30)                           ; FA4755  ld XBC,(XIZ+0xe2)
 	extpfx3 0xAE, 0xDE, 0xF1                   ; FA4758  cp XBC,(XIZ+0xde)
-	jrl z, sub_FA3CD7__FA47E6                  ; FA475B  jrl Z,0xfa47e6
+	jrl z, P7Unit_EmitChangedParams__FA47E6                  ; FA475B  jrl Z,0xfa47e6
 	ld	xwa, (xiz-26)                           ; FA475E  ld XWA,(XIZ+0xe6)
 	ld	c, (xwa)                                ; FA4761  ld C,(XWA)
 	pushw	bc                                   ; FA4763  push BC
@@ -33466,7 +33653,7 @@ sub_FA3CD7__FA4755:
 	extz	wa                                    ; FA479F  extz WA
 	popw	iy                                    ; FA47A1  pop IY
 	cp	(xiz-2), wa                             ; FA47A2  cp (XIZ+0xfe),WA
-	jr nz, sub_FA3CD7__FA47BF                  ; FA47A5  jr NZ,0xfa47bf
+	jr nz, P7Unit_EmitChangedParams__FA47BF                  ; FA47A5  jr NZ,0xfa47bf
 	pushw	0x76                                 ; FA47A7  push 0x0076
 	pushw	0                                    ; FA47AA  push 0x0000
 	pushw	0                                    ; FA47AD  push 0x0000
@@ -33476,7 +33663,7 @@ sub_FA3CD7__FA4755:
 	calr (0xFA2784 - 0xFA47BB)                 ; FA47B8  calr 0xfa2784
 	inc	8, xsp                                 ; FA47BB  inc 0,XSP
 	inc	2, xsp                                 ; FA47BD  inc 2,XSP
-sub_FA3CD7__FA47BF:
+P7Unit_EmitChangedParams__FA47BF:
 	ld	bc, (xiz+8)                             ; FA47BF  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA47C2  extz BC
 	inc	1, bc                                  ; FA47C4  inc 1,BC
@@ -33492,30 +33679,30 @@ sub_FA3CD7__FA47BF:
 	push	xbc                                   ; FA47DB  push XBC
 	call	0xF9ADB5                              ; FA47DC  call 0xf9adb5
 	add	xsp, 20                                ; FA47E0  add XSP,0x00000014
-sub_FA3CD7__FA47E6:
-	jrl sub_FA3CD7__FA460F                     ; FA47E6  jrl T,0xfa460f
-sub_FA3CD7__FA47E9:
-	jr sub_FA3CD7__FA4814                      ; FA47E9  jr T,0xfa4814
-sub_FA3CD7__FA47EB:
+P7Unit_EmitChangedParams__FA47E6:
+	jrl P7Unit_EmitChangedParams__FA460F                     ; FA47E6  jrl T,0xfa460f
+P7Unit_EmitChangedParams__FA47E9:
+	jr P7Unit_EmitChangedParams__FA4814                      ; FA47E9  jr T,0xfa4814
+P7Unit_EmitChangedParams__FA47EB:
 	ld	bc, (xiz-42)                            ; FA47EB  ld BC,(XIZ+0xd6)
 	cp	bc, 12                                  ; FA47EE  cp BC,0x000c
-	jrl z, sub_FA3CD7__FA3D7F                  ; FA47F2  jrl Z,0xfa3d7f
+	jrl z, P7Unit_EmitChangedParams__FA3D7F                  ; FA47F2  jrl Z,0xfa3d7f
 	cp	bc, 13                                  ; FA47F5  cp BC,0x000d
-	jrl z, sub_FA3CD7__FA3D7F                  ; FA47F9  jrl Z,0xfa3d7f
+	jrl z, P7Unit_EmitChangedParams__FA3D7F                  ; FA47F9  jrl Z,0xfa3d7f
 	cp	bc, 14                                  ; FA47FC  cp BC,0x000e
-	jrl z, sub_FA3CD7__FA432D                  ; FA4800  jrl Z,0xfa432d
+	jrl z, P7Unit_EmitChangedParams__FA432D                  ; FA4800  jrl Z,0xfa432d
 	cp	bc, 43                                  ; FA4803  cp BC,0x002b
-	jrl z, sub_FA3CD7__FA3D7F                  ; FA4807  jrl Z,0xfa3d7f
+	jrl z, P7Unit_EmitChangedParams__FA3D7F                  ; FA4807  jrl Z,0xfa3d7f
 	cp	bc, 55                                  ; FA480A  cp BC,0x0037
-	jrl z, sub_FA3CD7__FA3D7F                  ; FA480E  jrl Z,0xfa3d7f
-	jrl sub_FA3CD7__FA4603                     ; FA4811  jrl T,0xfa4603
-sub_FA3CD7__FA4814:
+	jrl z, P7Unit_EmitChangedParams__FA3D7F                  ; FA480E  jrl Z,0xfa3d7f
+	jrl P7Unit_EmitChangedParams__FA4603                     ; FA4811  jrl T,0xfa4603
+P7Unit_EmitChangedParams__FA4814:
 	pop	xix                                    ; FA4814  pop XIX
 	popw	hl                                    ; FA4815  pop HL
 	unlk32 xiz                                 ; FA4816  unlk XIZ
 	ret                                        ; FA4818  ret
 ; --------------------------------------------------------------------------
-; sub_FA4819 -- 0xFA4819..0xFA493F (295 bytes)
+; P7Unit_SelectStreamsForRecord -- 0xFA4819..0xFA493F (295 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -33527,16 +33714,29 @@ sub_FA3CD7__FA4814:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    selects the module's THREE working stream pointers, and the three words at
+;          RAM 0xF365/0xF367/0xF369, from a PoolDir_Records INDEX.  Four arms and a
+;          default, dispatched on the argument at 0xFA48FA-0xFA493B.
+; Evidence: the switch tests the argument against 0, 1, 2, 3, 14, 49, 50, 51, 52 and
+;          54 -- every one inside the directory's 0..55 range -- and each arm writes
+;          0x008622, 0x008626 and 0x00862A with three pool addresses and then
+;          0x00F365/0x00F367/0x00F369 with one constant:
+;            0,1,2,3,49,50,51,52 -> 0xFD28C7, 0xFD4E13, 0xFD3B60   words 99
+;            14                  -> 0xFD28C7 three times            words 99
+;            54                  -> 0xFD06FA three times            words 99
+;            anything else       -> 0xFDA4E7, 0xFDA5C1, 0xFDA554   words 0x6C
+;          0x6C is also the POWER-ON value of those three words (ROM 0xFCC55F, see
+;          P7Module_RamStateImage), so the default arm restores the boot state.
+; Unknown:  what the three globals 0x8622/0x8626/0x862A are used FOR, and what the
+;          words 99 and 0x6C scale.  The streams keep their addresses for names.
 ; --------------------------------------------------------------------------
-sub_FA4819:
+P7Unit_SelectStreamsForRecord:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FA4819  link XIZ,0xfffe
 	ld	bc, (xiz+8)                             ; FA481D  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA4820  extz BC
 	ld	(xiz-2), bc                             ; FA4822  ld (XIZ+0xfe),BC
-	jrl sub_FA4819__FA48FA                     ; FA4825  jrl T,0xfa48fa
-sub_FA4819__FA4828:
+	jrl P7Unit_SelectStreamsForRecord__FA48FA                     ; FA4825  jrl T,0xfa48fa
+P7Unit_SelectStreamsForRecord__FA4828:
 	lda_24	xbc, (0xFD28C7)                     ; FA4828  lda XBC,0xfd28c7
 	stl_da	(0x8622), xbc                       ; FA482D  ld (0x008622),XBC
 	lda_24	xwa, (0xFD4E13)                     ; FA4832  lda XWA,0xfd4e13
@@ -33546,8 +33746,8 @@ sub_FA4819__FA4828:
 	stiw_da	(0xF365), 99                       ; FA4846  ld (0x00f365),0x0063
 	stiw_da	(0xF367), 99                       ; FA484D  ld (0x00f367),0x0063
 	stiw_da	(0xF369), 99                       ; FA4854  ld (0x00f369),0x0063
-	jrl sub_FA4819__FA493D                     ; FA485B  jrl T,0xfa493d
-sub_FA4819__FA485E:
+	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA485B  jrl T,0xfa493d
+P7Unit_SelectStreamsForRecord__FA485E:
 	lda_24	xbc, (0xFD28C7)                     ; FA485E  lda XBC,0xfd28c7
 	stl_da	(0x8622), xbc                       ; FA4863  ld (0x008622),XBC
 	stl_da	(0x8626), xbc                       ; FA4868  ld (0x008626),XBC
@@ -33556,8 +33756,8 @@ sub_FA4819__FA485E:
 	stiw_da	(0xF365), 99                       ; FA4877  ld (0x00f365),0x0063
 	stiw_da	(0xF367), 99                       ; FA487E  ld (0x00f367),0x0063
 	stiw_da	(0xF369), 99                       ; FA4885  ld (0x00f369),0x0063
-	jrl sub_FA4819__FA493D                     ; FA488C  jrl T,0xfa493d
-sub_FA4819__FA488F:
+	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA488C  jrl T,0xfa493d
+P7Unit_SelectStreamsForRecord__FA488F:
 	lda_24	xbc, (0xFD06FA)                     ; FA488F  lda XBC,0xfd06fa
 	stl_da	(0x8622), xbc                       ; FA4894  ld (0x008622),XBC
 	lda_24	xwa, (0xFD06FA)                     ; FA4899  lda XWA,0xfd06fa
@@ -33567,8 +33767,8 @@ sub_FA4819__FA488F:
 	stiw_da	(0xF365), 99                       ; FA48AD  ld (0x00f365),0x0063
 	stiw_da	(0xF367), 99                       ; FA48B4  ld (0x00f367),0x0063
 	stiw_da	(0xF369), 99                       ; FA48BB  ld (0x00f369),0x0063
-	jrl sub_FA4819__FA493D                     ; FA48C2  jrl T,0xfa493d
-sub_FA4819__FA48C5:
+	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA48C2  jrl T,0xfa493d
+P7Unit_SelectStreamsForRecord__FA48C5:
 	lda_24	xbc, (0xFDA4E7)                     ; FA48C5  lda XBC,0xfda4e7
 	stl_da	(0x8622), xbc                       ; FA48CA  ld (0x008622),XBC
 	lda_24	xwa, (0xFDA5C1)                     ; FA48CF  lda XWA,0xfda5c1
@@ -33578,35 +33778,35 @@ sub_FA4819__FA48C5:
 	stiw_da	(0xF365), 0x6C                     ; FA48E3  ld (0x00f365),0x006c
 	stiw_da	(0xF367), 0x6C                     ; FA48EA  ld (0x00f367),0x006c
 	stiw_da	(0xF369), 0x6C                     ; FA48F1  ld (0x00f369),0x006c
-	jr sub_FA4819__FA493D                      ; FA48F8  jr T,0xfa493d
-sub_FA4819__FA48FA:
+	jr P7Unit_SelectStreamsForRecord__FA493D                      ; FA48F8  jr T,0xfa493d
+P7Unit_SelectStreamsForRecord__FA48FA:
 	ld	bc, (xiz-2)                             ; FA48FA  ld BC,(XIZ+0xfe)
 	cps	bc, 0                                  ; FA48FD  cp BC,0
-	jrl z, sub_FA4819__FA4828                  ; FA48FF  jrl Z,0xfa4828
+	jrl z, P7Unit_SelectStreamsForRecord__FA4828                  ; FA48FF  jrl Z,0xfa4828
 	cps	bc, 1                                  ; FA4902  cp BC,1
-	jrl z, sub_FA4819__FA4828                  ; FA4904  jrl Z,0xfa4828
+	jrl z, P7Unit_SelectStreamsForRecord__FA4828                  ; FA4904  jrl Z,0xfa4828
 	cps	bc, 2                                  ; FA4907  cp BC,2
-	jrl z, sub_FA4819__FA4828                  ; FA4909  jrl Z,0xfa4828
+	jrl z, P7Unit_SelectStreamsForRecord__FA4828                  ; FA4909  jrl Z,0xfa4828
 	cps	bc, 3                                  ; FA490C  cp BC,3
-	jrl z, sub_FA4819__FA4828                  ; FA490E  jrl Z,0xfa4828
+	jrl z, P7Unit_SelectStreamsForRecord__FA4828                  ; FA490E  jrl Z,0xfa4828
 	cp	bc, 14                                  ; FA4911  cp BC,0x000e
-	jrl z, sub_FA4819__FA485E                  ; FA4915  jrl Z,0xfa485e
+	jrl z, P7Unit_SelectStreamsForRecord__FA485E                  ; FA4915  jrl Z,0xfa485e
 	cp	bc, 49                                  ; FA4918  cp BC,0x0031
-	jrl z, sub_FA4819__FA4828                  ; FA491C  jrl Z,0xfa4828
+	jrl z, P7Unit_SelectStreamsForRecord__FA4828                  ; FA491C  jrl Z,0xfa4828
 	cp	bc, 50                                  ; FA491F  cp BC,0x0032
-	jrl z, sub_FA4819__FA4828                  ; FA4923  jrl Z,0xfa4828
+	jrl z, P7Unit_SelectStreamsForRecord__FA4828                  ; FA4923  jrl Z,0xfa4828
 	cp	bc, 51                                  ; FA4926  cp BC,0x0033
-	jrl z, sub_FA4819__FA4828                  ; FA492A  jrl Z,0xfa4828
+	jrl z, P7Unit_SelectStreamsForRecord__FA4828                  ; FA492A  jrl Z,0xfa4828
 	cp	bc, 52                                  ; FA492D  cp BC,0x0034
-	jrl z, sub_FA4819__FA4828                  ; FA4931  jrl Z,0xfa4828
+	jrl z, P7Unit_SelectStreamsForRecord__FA4828                  ; FA4931  jrl Z,0xfa4828
 	cp	bc, 54                                  ; FA4934  cp BC,0x0036
-	jrl z, sub_FA4819__FA488F                  ; FA4938  jrl Z,0xfa488f
-	jr sub_FA4819__FA48C5                      ; FA493B  jr T,0xfa48c5
-sub_FA4819__FA493D:
+	jrl z, P7Unit_SelectStreamsForRecord__FA488F                  ; FA4938  jrl Z,0xfa488f
+	jr P7Unit_SelectStreamsForRecord__FA48C5                      ; FA493B  jr T,0xfa48c5
+P7Unit_SelectStreamsForRecord__FA493D:
 	unlk32 xiz                                 ; FA493D  unlk XIZ
 	ret                                        ; FA493F  ret
 ; --------------------------------------------------------------------------
-; sub_FA4940 -- 0xFA4940..0xFA4956 (23 bytes)
+; P7Unit_MarkParamsDirty -- 0xFA4940..0xFA4956 (23 bytes)
 ;
 ; Called from: no site outside this module.
 ;          7 site(s) inside this module:
@@ -33619,10 +33819,13 @@ sub_FA4819__FA493D:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    sets the per-unit DIRTY flag: RAM[0x865F + unit] := 1.
+; Evidence: `add XBC,0x0000865f` at 0xFA494B then `ld (XBC),0x01` at 0xFA4951; the
+;          flag's only other two sites are in P7Unit_FlushDirtyParams, which tests it
+;          for 1 (0xFA496C) and clears it (0xFA4A04).  Seven call sites in this module.
+; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
-sub_FA4940:
+P7Unit_MarkParamsDirty:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA4940  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FA4944  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA4947  extz BC
@@ -33632,23 +33835,33 @@ sub_FA4940:
 	unlk32 xiz                                 ; FA4954  unlk XIZ
 	ret                                        ; FA4956  ret
 ; --------------------------------------------------------------------------
-; sub_FA4957 -- 0xFA4957..0xFA4A0C (182 bytes)
+; P7Unit_FlushDirtyParams -- 0xFA4957..0xFA4A0C (182 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
 ;          0xFA57E3 0xFA5895 0xFA5913
 ; Inputs:  frame `link XIZ,-1`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA3CD7 = sub_FA3CD7
+; Calls:   0xFA3CD7 = P7Unit_EmitChangedParams
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA4957-0xFA4A0C
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    if the unit is marked dirty, forces one field to look changed, runs
+;          P7Unit_EmitChangedParams, restores the shadow and clears the flag.
+; Evidence: `add XBC,0x0000865f / cp A,1` at 0xFA4964-0xFA496C gates the whole body.
+;          The forced field is PoolDir_Records +24, addressed in this order:
+;          `mul A,0x19` (0xFA4986), `add XWA,0x00000018` (0xFA498B),
+;          `add XWA,0x00FDBFD9` (0xFA4991); its value is a BYTE OFFSET into
+;          the unit block, and `inc 1,XIX` at 0xFA49B0 before `lda XWA,0x00856e` is
+;          what maps offset f to block byte +1+f.  0xFA49BB `xor C,0xff` writes the
+;          COMPLEMENT of the live byte into the shadow at 0x85BC, so the comparison
+;          in P7Unit_EmitChangedParams cannot match; 0xFA49F5 copies the true value
+;          back afterwards, and 0xFA4A04 clears the dirty flag.
+; Unknown:  why that particular field is always re-sent.
 ; --------------------------------------------------------------------------
-sub_FA4957:
+P7Unit_FlushDirtyParams:
 	link32 0xEE, 0x0C, 0xFF, 0xFF              ; FA4957  link XIZ,0xffff
 	pushw	hl                                   ; FA495B  push HL
 	push	xix                                   ; FA495C  push XIX
@@ -33658,7 +33871,7 @@ sub_FA4957:
 	add	xbc, 0x865F                            ; FA4964  add XBC,0x0000865f
 	ld	a, (xbc)                                ; FA496A  ld A,(XBC)
 	cps	a, 1                                   ; FA496C  cp A,1
-	jrl nz, sub_FA4957__FA4A08                 ; FA496E  jrl NZ,0xfa4a08
+	jrl nz, P7Unit_FlushDirtyParams__FA4A08                 ; FA496E  jrl NZ,0xfa4a08
 	ldb	c, 26                                  ; FA4971  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA4973  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4976  extz XBC
@@ -33713,7 +33926,7 @@ sub_FA4957:
 	add	xbc, 0x865F                            ; FA49FE  add XBC,0x0000865f
 	ld	(xbc), 0                                ; FA4A04  ld (XBC),0x00
 	popw	bc                                    ; FA4A07  pop BC
-sub_FA4957__FA4A08:
+P7Unit_FlushDirtyParams__FA4A08:
 	pop	xix                                    ; FA4A08  pop XIX
 	popw	hl                                    ; FA4A09  pop HL
 	unlk32 xiz                                 ; FA4A0A  unlk XIZ
@@ -33727,8 +33940,8 @@ sub_FA4957__FA4A08:
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x0085D2, 0x008606
 ;          reads 0x008584, 0x0085B8
-; Calls:   0xF9ADB5 = sub_F9ADB5, 0xFA2C5E = sub_FA2C5E
-;          0xFA35D5 = sub_FA35D5, 0xFA4940 = sub_FA4940
+; Calls:   0xF9ADB5 = sub_F9ADB5, 0xFA2C5E = P7Unit_LoadProgramStreams
+;          0xFA35D5 = P7Unit_SendPreambleOnce, 0xFA4940 = P7Unit_MarkParamsDirty
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA4A0D-0xFA4C5D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -34017,8 +34230,8 @@ sub_FA4C5E__FA4CD9:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x008606
 ;          reads 0x0085B8, 0x00F35D
-; Calls:   0xF9ADB5 = sub_F9ADB5, 0xFA2C5E = sub_FA2C5E
-;          0xFA35D5 = sub_FA35D5, 0xFA4940 = sub_FA4940
+; Calls:   0xF9ADB5 = sub_F9ADB5, 0xFA2C5E = P7Unit_LoadProgramStreams
+;          0xFA35D5 = P7Unit_SendPreambleOnce, 0xFA4940 = P7Unit_MarkParamsDirty
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA4CE5-0xFA4E22
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -34150,7 +34363,7 @@ sub_FA4CE5__FA4E20:
 ;          0xFA57BE 0xFA5870 0xFA58EB
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA2B09 = sub_FA2B09, 0xFA2C5E = sub_FA2C5E
+; Calls:   0xFA2B09 = P7Unit_SendFieldParamZero, 0xFA2C5E = P7Unit_LoadProgramStreams
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA4E23-0xFA4E96
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -34458,7 +34671,7 @@ sub_FA4E97__FA5172:
 	unlk32 xiz                                 ; FA5174  unlk XIZ
 	ret                                        ; FA5176  ret
 ; --------------------------------------------------------------------------
-; sub_FA5177 -- 0xFA5177..0xFA5534 (958 bytes)
+; P7Units_ServiceTask -- 0xFA5177..0xFA5534 (958 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -34468,18 +34681,34 @@ sub_FA4E97__FA5172:
 ;          reads 0x00F35F
 ; Calls:   0xF983AF = Kernel_ExitTask, 0xF985F8 = Kernel_SemaWait_StackArg
 ;          0xF98654 = Kernel_SemaTryWait, 0xFA26CB = sub_FA26CB
-;          0xFA2C5E = sub_FA2C5E, 0xFA2DEC = sub_FA2DEC
-;          0xFA336B = sub_FA336B, 0xFA35D5 = sub_FA35D5
-;          0xFA5535 = sub_FA5535
+;          0xFA2C5E = P7Unit_LoadProgramStreams, 0xFA2DEC = P7Mixer_SendGainIfChanged
+;          0xFA336B = P7Units_ReloadFixedStreams, 0xFA35D5 = P7Unit_SendPreambleOnce
+;          0xFA5535 = P7Units_ResolveProgramsAndReload
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA5177-0xFA5534
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    the P7 module's SERVICE TASK: it waits on the module semaphore and, when
+;          woken, diffs the live unit blocks against their shadows and services the
+;          pending work.  It ends at Kernel_ExitTask, not at a return to a caller.
+; ★ Evidence: IT IS KERNEL TASK 2, and the kernel's own table says so.
+;          EntryPoint_Records' second record (0xF980F6) holds entry PC 0x00FA54DB,
+;          which falls inside this routine -- the inner label
+;          P7Units_ServiceTask__FA54DB is exactly that address.  Task 2 is started by
+;          P7Units_BootLoadAndStartTask (`push 0x0002 / call Kernel_StartTask_StackArg`
+;          at 0xFA3362) and woken by P7Mixer_RequestGain (`push 0x0002 /
+;          call Kernel_SemaSignal_StackArg` at 0xFA2DE1) -- task 2 and semaphore 2.
+; Evidence: Kernel_SemaWait_StackArg / Kernel_SemaTryWait / Kernel_ExitTask are in
+;          its call list; it reads the live block and the shadow in adjacent
+;          instructions three times -- `lda XBC,0x0085bc` / `lda XBC,0x00856e` at
+;          0xFA51DC-0xFA51E5, 0xFA5225-0xFA522E and 0xFA5252-0xFA525B, each followed
+;          by `cp A,H`.  Its one call site is 0xFA5631, inside
+;          P7Units_ResolveProgramsAndReload.
+; Unknown:  what the two frame constants 0x0010 and 0x0004 compared at 0xFA51BA and
+;          0xFA51FF select.
 ; --------------------------------------------------------------------------
-sub_FA5177:
+P7Units_ServiceTask:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA5177  link XIZ,0xfffc
 	pushw	hl                                   ; FA517B  push HL
 	push	xix                                   ; FA517C  push XIX
@@ -34491,7 +34720,7 @@ sub_FA5177:
 	add	xbc, 0x856E                            ; FA518E  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA5194  ld A,(XBC)
 	cps	a, 0                                   ; FA5196  cp A,0
-	jrl z, sub_FA5177__FA52A8                  ; FA5198  jrl Z,0xfa52a8
+	jrl z, P7Units_ServiceTask__FA52A8                  ; FA5198  jrl Z,0xfa52a8
 	ldb	c, 26                                  ; FA519B  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA519D  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA51A0  extz XBC
@@ -34500,14 +34729,14 @@ sub_FA5177:
 	ld	(xbc), 0                                ; FA51AE  ld (XBC),0x00
 	ld	(xiz-3), 0                              ; FA51B1  ld (XIZ+0xfd),0x00
 	ldw (xiz-2), 0x0000                        ; FA51B5  ld (XIZ+0xfe),0x0000
-sub_FA5177__FA51BA:
+P7Units_ServiceTask__FA51BA:
 	cpw (xiz-2), 0x0010                        ; FA51BA  cp (XIZ+0xfe),0x0010
-	jr ge, sub_FA5177__FA51FA                  ; FA51BF  jr GE,0xfa51fa
-	jr sub_FA5177__FA51C8                      ; FA51C1  jr T,0xfa51c8
-sub_FA5177__FA51C3:
+	jr ge, P7Units_ServiceTask__FA51FA                  ; FA51BF  jr GE,0xfa51fa
+	jr P7Units_ServiceTask__FA51C8                      ; FA51C1  jr T,0xfa51c8
+P7Units_ServiceTask__FA51C3:
 	incm	1, (xiz-2)                            ; FA51C3  incw 1,(XIZ+0xfe)
-	jr sub_FA5177__FA51BA                      ; FA51C6  jr T,0xfa51ba
-sub_FA5177__FA51C8:
+	jr P7Units_ServiceTask__FA51BA                      ; FA51C6  jr T,0xfa51ba
+P7Units_ServiceTask__FA51C8:
 	ldb	c, 26                                  ; FA51C8  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA51CA  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA51CD  extz XBC
@@ -34524,21 +34753,21 @@ sub_FA5177__FA51C8:
 	add	xbc, xix                               ; FA51EA  add XBC,XIX
 	ld	a, (xbc)                                ; FA51EC  ld A,(XBC)
 	cp	a, h                                    ; FA51EE  cp A,H
-	jr z, sub_FA5177__FA51F8                   ; FA51F0  jr Z,0xfa51f8
+	jr z, P7Units_ServiceTask__FA51F8                   ; FA51F0  jr Z,0xfa51f8
 	ld	(xiz-3), 1                              ; FA51F2  ld (XIZ+0xfd),0x01
-	jr sub_FA5177__FA51FA                      ; FA51F6  jr T,0xfa51fa
-sub_FA5177__FA51F8:
-	jr sub_FA5177__FA51C3                      ; FA51F8  jr T,0xfa51c3
-sub_FA5177__FA51FA:
+	jr P7Units_ServiceTask__FA51FA                      ; FA51F6  jr T,0xfa51fa
+P7Units_ServiceTask__FA51F8:
+	jr P7Units_ServiceTask__FA51C3                      ; FA51F8  jr T,0xfa51c3
+P7Units_ServiceTask__FA51FA:
 	ldw (xiz-2), 0x0000                        ; FA51FA  ld (XIZ+0xfe),0x0000
-sub_FA5177__FA51FF:
+P7Units_ServiceTask__FA51FF:
 	cpw (xiz-2), 0x0004                        ; FA51FF  cp (XIZ+0xfe),0x0004
-	jr ge, sub_FA5177__FA5243                  ; FA5204  jr GE,0xfa5243
-	jr sub_FA5177__FA520D                      ; FA5206  jr T,0xfa520d
-sub_FA5177__FA5208:
+	jr ge, P7Units_ServiceTask__FA5243                  ; FA5204  jr GE,0xfa5243
+	jr P7Units_ServiceTask__FA520D                      ; FA5206  jr T,0xfa520d
+P7Units_ServiceTask__FA5208:
 	incm	1, (xiz-2)                            ; FA5208  incw 1,(XIZ+0xfe)
-	jr sub_FA5177__FA51FF                      ; FA520B  jr T,0xfa51ff
-sub_FA5177__FA520D:
+	jr P7Units_ServiceTask__FA51FF                      ; FA520B  jr T,0xfa51ff
+P7Units_ServiceTask__FA520D:
 	ldb	c, 26                                  ; FA520D  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA520F  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5212  extz XBC
@@ -34555,12 +34784,12 @@ sub_FA5177__FA520D:
 	add	xbc, xix                               ; FA5233  add XBC,XIX
 	ld	a, (xbc)                                ; FA5235  ld A,(XBC)
 	cp	a, h                                    ; FA5237  cp A,H
-	jr z, sub_FA5177__FA5241                   ; FA5239  jr Z,0xfa5241
+	jr z, P7Units_ServiceTask__FA5241                   ; FA5239  jr Z,0xfa5241
 	ld	(xiz-3), 1                              ; FA523B  ld (XIZ+0xfd),0x01
-	jr sub_FA5177__FA5243                      ; FA523F  jr T,0xfa5243
-sub_FA5177__FA5241:
-	jr sub_FA5177__FA5208                      ; FA5241  jr T,0xfa5208
-sub_FA5177__FA5243:
+	jr P7Units_ServiceTask__FA5243                      ; FA523F  jr T,0xfa5243
+P7Units_ServiceTask__FA5241:
+	jr P7Units_ServiceTask__FA5208                      ; FA5241  jr T,0xfa5208
+P7Units_ServiceTask__FA5243:
 	ldb	c, 26                                  ; FA5243  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA5245  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5248  extz XBC
@@ -34573,11 +34802,11 @@ sub_FA5177__FA5243:
 	add	xbc, xix                               ; FA5260  add XBC,XIX
 	ld	a, (xbc)                                ; FA5262  ld A,(XBC)
 	cp	a, h                                    ; FA5264  cp A,H
-	jr z, sub_FA5177__FA526C                   ; FA5266  jr Z,0xfa526c
+	jr z, P7Units_ServiceTask__FA526C                   ; FA5266  jr Z,0xfa526c
 	ld	(xiz-3), 1                              ; FA5268  ld (XIZ+0xfd),0x01
-sub_FA5177__FA526C:
+P7Units_ServiceTask__FA526C:
 	cp (xiz-3), 0x00                           ; FA526C  cp (XIZ+0xfd),0x00
-	jr z, sub_FA5177__FA52A8                   ; FA5270  jr Z,0xfa52a8
+	jr z, P7Units_ServiceTask__FA52A8                   ; FA5270  jr Z,0xfa52a8
 	push	0                                     ; FA5272  push 0x00
 	extpfx3 0x8E, 0xFC, 0x04                   ; FA5274  push (XIZ+0xfc)
 	calr (0xFA2C5E - 0xFA527A)                 ; FA5277  calr 0xfa2c5e
@@ -34598,7 +34827,7 @@ sub_FA5177__FA526C:
 	extpfx3 0x8E, 0xFC, 0x04                   ; FA52A1  push (XIZ+0xfc)
 	calr (0xFA35D5 - 0xFA52A7)                 ; FA52A4  calr 0xfa35d5
 	popw	bc                                    ; FA52A7  pop BC
-sub_FA5177__FA52A8:
+P7Units_ServiceTask__FA52A8:
 	ld	(xiz-4), 1                              ; FA52A8  ld (XIZ+0xfc),0x01
 	ldb	c, 26                                  ; FA52AC  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA52AE  mul BC,(XIZ+0xfc)
@@ -34607,7 +34836,7 @@ sub_FA5177__FA52A8:
 	add	xbc, 0x856E                            ; FA52B9  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA52BF  ld A,(XBC)
 	cps	a, 0                                   ; FA52C1  cp A,0
-	jrl z, sub_FA5177__FA53D3                  ; FA52C3  jrl Z,0xfa53d3
+	jrl z, P7Units_ServiceTask__FA53D3                  ; FA52C3  jrl Z,0xfa53d3
 	ldb	c, 26                                  ; FA52C6  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA52C8  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA52CB  extz XBC
@@ -34616,14 +34845,14 @@ sub_FA5177__FA52A8:
 	ld	(xbc), 0                                ; FA52D9  ld (XBC),0x00
 	ld	(xiz-3), 0                              ; FA52DC  ld (XIZ+0xfd),0x00
 	ldw (xiz-2), 0x0000                        ; FA52E0  ld (XIZ+0xfe),0x0000
-sub_FA5177__FA52E5:
+P7Units_ServiceTask__FA52E5:
 	cpw (xiz-2), 0x0010                        ; FA52E5  cp (XIZ+0xfe),0x0010
-	jr ge, sub_FA5177__FA5325                  ; FA52EA  jr GE,0xfa5325
-	jr sub_FA5177__FA52F3                      ; FA52EC  jr T,0xfa52f3
-sub_FA5177__FA52EE:
+	jr ge, P7Units_ServiceTask__FA5325                  ; FA52EA  jr GE,0xfa5325
+	jr P7Units_ServiceTask__FA52F3                      ; FA52EC  jr T,0xfa52f3
+P7Units_ServiceTask__FA52EE:
 	incm	1, (xiz-2)                            ; FA52EE  incw 1,(XIZ+0xfe)
-	jr sub_FA5177__FA52E5                      ; FA52F1  jr T,0xfa52e5
-sub_FA5177__FA52F3:
+	jr P7Units_ServiceTask__FA52E5                      ; FA52F1  jr T,0xfa52e5
+P7Units_ServiceTask__FA52F3:
 	ldb	c, 26                                  ; FA52F3  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA52F5  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA52F8  extz XBC
@@ -34640,21 +34869,21 @@ sub_FA5177__FA52F3:
 	add	xbc, xix                               ; FA5315  add XBC,XIX
 	ld	a, (xbc)                                ; FA5317  ld A,(XBC)
 	cp	a, h                                    ; FA5319  cp A,H
-	jr z, sub_FA5177__FA5323                   ; FA531B  jr Z,0xfa5323
+	jr z, P7Units_ServiceTask__FA5323                   ; FA531B  jr Z,0xfa5323
 	ld	(xiz-3), 1                              ; FA531D  ld (XIZ+0xfd),0x01
-	jr sub_FA5177__FA5325                      ; FA5321  jr T,0xfa5325
-sub_FA5177__FA5323:
-	jr sub_FA5177__FA52EE                      ; FA5323  jr T,0xfa52ee
-sub_FA5177__FA5325:
+	jr P7Units_ServiceTask__FA5325                      ; FA5321  jr T,0xfa5325
+P7Units_ServiceTask__FA5323:
+	jr P7Units_ServiceTask__FA52EE                      ; FA5323  jr T,0xfa52ee
+P7Units_ServiceTask__FA5325:
 	ldw (xiz-2), 0x0000                        ; FA5325  ld (XIZ+0xfe),0x0000
-sub_FA5177__FA532A:
+P7Units_ServiceTask__FA532A:
 	cpw (xiz-2), 0x0004                        ; FA532A  cp (XIZ+0xfe),0x0004
-	jr ge, sub_FA5177__FA536E                  ; FA532F  jr GE,0xfa536e
-	jr sub_FA5177__FA5338                      ; FA5331  jr T,0xfa5338
-sub_FA5177__FA5333:
+	jr ge, P7Units_ServiceTask__FA536E                  ; FA532F  jr GE,0xfa536e
+	jr P7Units_ServiceTask__FA5338                      ; FA5331  jr T,0xfa5338
+P7Units_ServiceTask__FA5333:
 	incm	1, (xiz-2)                            ; FA5333  incw 1,(XIZ+0xfe)
-	jr sub_FA5177__FA532A                      ; FA5336  jr T,0xfa532a
-sub_FA5177__FA5338:
+	jr P7Units_ServiceTask__FA532A                      ; FA5336  jr T,0xfa532a
+P7Units_ServiceTask__FA5338:
 	ldb	c, 26                                  ; FA5338  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA533A  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA533D  extz XBC
@@ -34671,12 +34900,12 @@ sub_FA5177__FA5338:
 	add	xbc, xix                               ; FA535E  add XBC,XIX
 	ld	a, (xbc)                                ; FA5360  ld A,(XBC)
 	cp	a, h                                    ; FA5362  cp A,H
-	jr z, sub_FA5177__FA536C                   ; FA5364  jr Z,0xfa536c
+	jr z, P7Units_ServiceTask__FA536C                   ; FA5364  jr Z,0xfa536c
 	ld	(xiz-3), 1                              ; FA5366  ld (XIZ+0xfd),0x01
-	jr sub_FA5177__FA536E                      ; FA536A  jr T,0xfa536e
-sub_FA5177__FA536C:
-	jr sub_FA5177__FA5333                      ; FA536C  jr T,0xfa5333
-sub_FA5177__FA536E:
+	jr P7Units_ServiceTask__FA536E                      ; FA536A  jr T,0xfa536e
+P7Units_ServiceTask__FA536C:
+	jr P7Units_ServiceTask__FA5333                      ; FA536C  jr T,0xfa5333
+P7Units_ServiceTask__FA536E:
 	ldb	c, 26                                  ; FA536E  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA5370  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5373  extz XBC
@@ -34689,11 +34918,11 @@ sub_FA5177__FA536E:
 	add	xbc, xix                               ; FA538B  add XBC,XIX
 	ld	a, (xbc)                                ; FA538D  ld A,(XBC)
 	cp	a, h                                    ; FA538F  cp A,H
-	jr z, sub_FA5177__FA5397                   ; FA5391  jr Z,0xfa5397
+	jr z, P7Units_ServiceTask__FA5397                   ; FA5391  jr Z,0xfa5397
 	ld	(xiz-3), 1                              ; FA5393  ld (XIZ+0xfd),0x01
-sub_FA5177__FA5397:
+P7Units_ServiceTask__FA5397:
 	cp (xiz-3), 0x00                           ; FA5397  cp (XIZ+0xfd),0x00
-	jr z, sub_FA5177__FA53D3                   ; FA539B  jr Z,0xfa53d3
+	jr z, P7Units_ServiceTask__FA53D3                   ; FA539B  jr Z,0xfa53d3
 	push	0                                     ; FA539D  push 0x00
 	extpfx3 0x8E, 0xFC, 0x04                   ; FA539F  push (XIZ+0xfc)
 	calr (0xFA2C5E - 0xFA53A5)                 ; FA53A2  calr 0xfa2c5e
@@ -34714,7 +34943,7 @@ sub_FA5177__FA5397:
 	extpfx3 0x8E, 0xFC, 0x04                   ; FA53CC  push (XIZ+0xfc)
 	calr (0xFA35D5 - 0xFA53D2)                 ; FA53CF  calr 0xfa35d5
 	popw	bc                                    ; FA53D2  pop BC
-sub_FA5177__FA53D3:
+P7Units_ServiceTask__FA53D3:
 	ld	(xiz-4), 2                              ; FA53D3  ld (XIZ+0xfc),0x02
 	ldb	c, 26                                  ; FA53D7  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA53D9  mul BC,(XIZ+0xfc)
@@ -34723,7 +34952,7 @@ sub_FA5177__FA53D3:
 	add	xbc, 0x856E                            ; FA53E4  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA53EA  ld A,(XBC)
 	cps	a, 0                                   ; FA53EC  cp A,0
-	jrl z, sub_FA5177__FA54D5                  ; FA53EE  jrl Z,0xfa54d5
+	jrl z, P7Units_ServiceTask__FA54D5                  ; FA53EE  jrl Z,0xfa54d5
 	ldb	c, 26                                  ; FA53F1  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA53F3  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA53F6  extz XBC
@@ -34732,14 +34961,14 @@ sub_FA5177__FA53D3:
 	ld	(xbc), 0                                ; FA5404  ld (XBC),0x00
 	ld	(xiz-3), 0                              ; FA5407  ld (XIZ+0xfd),0x00
 	ldw (xiz-2), 0x0000                        ; FA540B  ld (XIZ+0xfe),0x0000
-sub_FA5177__FA5410:
+P7Units_ServiceTask__FA5410:
 	cpw (xiz-2), 0x0010                        ; FA5410  cp (XIZ+0xfe),0x0010
-	jr ge, sub_FA5177__FA5450                  ; FA5415  jr GE,0xfa5450
-	jr sub_FA5177__FA541E                      ; FA5417  jr T,0xfa541e
-sub_FA5177__FA5419:
+	jr ge, P7Units_ServiceTask__FA5450                  ; FA5415  jr GE,0xfa5450
+	jr P7Units_ServiceTask__FA541E                      ; FA5417  jr T,0xfa541e
+P7Units_ServiceTask__FA5419:
 	incm	1, (xiz-2)                            ; FA5419  incw 1,(XIZ+0xfe)
-	jr sub_FA5177__FA5410                      ; FA541C  jr T,0xfa5410
-sub_FA5177__FA541E:
+	jr P7Units_ServiceTask__FA5410                      ; FA541C  jr T,0xfa5410
+P7Units_ServiceTask__FA541E:
 	ldb	c, 26                                  ; FA541E  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA5420  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5423  extz XBC
@@ -34756,21 +34985,21 @@ sub_FA5177__FA541E:
 	add	xbc, xix                               ; FA5440  add XBC,XIX
 	ld	a, (xbc)                                ; FA5442  ld A,(XBC)
 	cp	a, h                                    ; FA5444  cp A,H
-	jr z, sub_FA5177__FA544E                   ; FA5446  jr Z,0xfa544e
+	jr z, P7Units_ServiceTask__FA544E                   ; FA5446  jr Z,0xfa544e
 	ld	(xiz-3), 1                              ; FA5448  ld (XIZ+0xfd),0x01
-	jr sub_FA5177__FA5450                      ; FA544C  jr T,0xfa5450
-sub_FA5177__FA544E:
-	jr sub_FA5177__FA5419                      ; FA544E  jr T,0xfa5419
-sub_FA5177__FA5450:
+	jr P7Units_ServiceTask__FA5450                      ; FA544C  jr T,0xfa5450
+P7Units_ServiceTask__FA544E:
+	jr P7Units_ServiceTask__FA5419                      ; FA544E  jr T,0xfa5419
+P7Units_ServiceTask__FA5450:
 	ldw (xiz-2), 0x0000                        ; FA5450  ld (XIZ+0xfe),0x0000
-sub_FA5177__FA5455:
+P7Units_ServiceTask__FA5455:
 	cpw (xiz-2), 0x0004                        ; FA5455  cp (XIZ+0xfe),0x0004
-	jr ge, sub_FA5177__FA5499                  ; FA545A  jr GE,0xfa5499
-	jr sub_FA5177__FA5463                      ; FA545C  jr T,0xfa5463
-sub_FA5177__FA545E:
+	jr ge, P7Units_ServiceTask__FA5499                  ; FA545A  jr GE,0xfa5499
+	jr P7Units_ServiceTask__FA5463                      ; FA545C  jr T,0xfa5463
+P7Units_ServiceTask__FA545E:
 	incm	1, (xiz-2)                            ; FA545E  incw 1,(XIZ+0xfe)
-	jr sub_FA5177__FA5455                      ; FA5461  jr T,0xfa5455
-sub_FA5177__FA5463:
+	jr P7Units_ServiceTask__FA5455                      ; FA5461  jr T,0xfa5455
+P7Units_ServiceTask__FA5463:
 	ldb	c, 26                                  ; FA5463  ld C,0x1a
 	extpfx3 0x8E, 0xFC, 0x43                   ; FA5465  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5468  extz XBC
@@ -34787,14 +35016,14 @@ sub_FA5177__FA5463:
 	add	xbc, xix                               ; FA5489  add XBC,XIX
 	ld	a, (xbc)                                ; FA548B  ld A,(XBC)
 	cp	a, h                                    ; FA548D  cp A,H
-	jr z, sub_FA5177__FA5497                   ; FA548F  jr Z,0xfa5497
+	jr z, P7Units_ServiceTask__FA5497                   ; FA548F  jr Z,0xfa5497
 	ld	(xiz-3), 1                              ; FA5491  ld (XIZ+0xfd),0x01
-	jr sub_FA5177__FA5499                      ; FA5495  jr T,0xfa5499
-sub_FA5177__FA5497:
-	jr sub_FA5177__FA545E                      ; FA5497  jr T,0xfa545e
-sub_FA5177__FA5499:
+	jr P7Units_ServiceTask__FA5499                      ; FA5495  jr T,0xfa5499
+P7Units_ServiceTask__FA5497:
+	jr P7Units_ServiceTask__FA545E                      ; FA5497  jr T,0xfa545e
+P7Units_ServiceTask__FA5499:
 	cp (xiz-3), 0x00                           ; FA5499  cp (XIZ+0xfd),0x00
-	jr z, sub_FA5177__FA54D5                   ; FA549D  jr Z,0xfa54d5
+	jr z, P7Units_ServiceTask__FA54D5                   ; FA549D  jr Z,0xfa54d5
 	push	0                                     ; FA549F  push 0x00
 	extpfx3 0x8E, 0xFC, 0x04                   ; FA54A1  push (XIZ+0xfc)
 	calr (0xFA2C5E - 0xFA54A7)                 ; FA54A4  calr 0xfa2c5e
@@ -34815,49 +35044,49 @@ sub_FA5177__FA5499:
 	extpfx3 0x8E, 0xFC, 0x04                   ; FA54CE  push (XIZ+0xfc)
 	calr (0xFA35D5 - 0xFA54D4)                 ; FA54D1  calr 0xfa35d5
 	popw	bc                                    ; FA54D4  pop BC
-sub_FA5177__FA54D5:
+P7Units_ServiceTask__FA54D5:
 	pop	xix                                    ; FA54D5  pop XIX
 	popw	hl                                    ; FA54D6  pop HL
 	unlk32 xiz                                 ; FA54D7  unlk XIZ
 	ret                                        ; FA54D9  ret
 	ret                                        ; FA54DA  ret
-sub_FA5177__FA54DB:
+P7Units_ServiceTask__FA54DB:
 	pushw	2                                    ; FA54DB  push 0x0002
 	call	0xF985F8                              ; FA54DE  call 0xf985f8
 	popw	bc                                    ; FA54E2  pop BC
-sub_FA5177__FA54E3:
+P7Units_ServiceTask__FA54E3:
 	pushw	2                                    ; FA54E3  push 0x0002
 	call	0xF98654                              ; FA54E6  call 0xf98654
 	popw	bc                                    ; FA54EA  pop BC
 	cps	wa, 0                                  ; FA54EB  cp WA,0
-	jr nz, sub_FA5177__FA54F1                  ; FA54ED  jr NZ,0xfa54f1
-	jr sub_FA5177__FA54E3                      ; FA54EF  jr T,0xfa54e3
-sub_FA5177__FA54F1:
+	jr nz, P7Units_ServiceTask__FA54F1                  ; FA54ED  jr NZ,0xfa54f1
+	jr P7Units_ServiceTask__FA54E3                      ; FA54EF  jr T,0xfa54e3
+P7Units_ServiceTask__FA54F1:
 	ei	6                                       ; FA54F1  ei 0x06
 	ldb_da	c, (0xF35F)                         ; FA54F3  ld C,(0x00f35f)
 	extpfx5 0xC2, 0x60, 0xF3, 0x00, 0xF3       ; FA54F8  cp C,(0x00f360)
-	jr z, sub_FA5177__FA5509                   ; FA54FD  jr Z,0xfa5509
+	jr z, P7Units_ServiceTask__FA5509                   ; FA54FD  jr Z,0xfa5509
 	stb_da	(0xF360), c                         ; FA54FF  ld (0x00f360),C
 	ei	0                                       ; FA5504  ei 0x00
 	calr (0xFA336B - 0xFA5509)                 ; FA5506  calr 0xfa336b
-sub_FA5177__FA5509:
+P7Units_ServiceTask__FA5509:
 	ei	0                                       ; FA5509  ei 0x00
 	calr (0xFA5535 - 0xFA550E)                 ; FA550B  calr 0xfa5535
 	calr (0xFA2DEC - 0xFA5511)                 ; FA550E  calr 0xfa2dec
 	calr (0xFA26CB - 0xFA5514)                 ; FA5511  calr 0xfa26cb
 	cpib_da 0x00F35C, 0x00                     ; FA5514  cp (0x00f35c),0x00
-	jr z, sub_FA5177__FA552E                   ; FA551A  jr Z,0xfa552e
+	jr z, P7Units_ServiceTask__FA552E                   ; FA551A  jr Z,0xfa552e
 	stib_da	(0xF35C), 0                        ; FA551C  ld (0x00f35c),0x00
 	calr (0xFA336B - 0xFA5525)                 ; FA5522  calr 0xfa336b
 	calr (0xFA5535 - 0xFA5528)                 ; FA5525  calr 0xfa5535
 	calr (0xFA2DEC - 0xFA552B)                 ; FA5528  calr 0xfa2dec
 	calr (0xFA26CB - 0xFA552E)                 ; FA552B  calr 0xfa26cb
-sub_FA5177__FA552E:
-	jr sub_FA5177__FA54DB                      ; FA552E  jr T,0xfa54db
+P7Units_ServiceTask__FA552E:
+	jr P7Units_ServiceTask__FA54DB                      ; FA552E  jr T,0xfa54db
 	call	0xF983AF                              ; FA5530  call 0xf983af
 	ret                                        ; FA5534  ret
 ; --------------------------------------------------------------------------
-; sub_FA5535 -- 0xFA5535..0xFA5948 (1044 bytes)
+; P7Units_ResolveProgramsAndReload -- 0xFA5535..0xFA5948 (1044 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -34865,20 +35094,34 @@ sub_FA5177__FA552E:
 ; Inputs:  frame `link XIZ,-34`; no positive frame slot is read
 ; Outputs: writes 0x007E97, 0x007EB1, 0x007ECB, 0x008586, 0x0085A0, 0x0085BA, 0x0085D4, 0x0085EE, 0x008608, 0x00860A, 0x00860C, 0x00F354, 0x00F356, 0x00F358, 0x00F35A, 0x00F35D, 0x00F35E
 ;          reads 0x007ECD, 0x007ECF, 0x00856E, 0x008570, 0x008588, 0x00858A, 0x0085A2, 0x0085A4, 0x0085BE, 0x0085D8, 0x0085F2, 0x00F361
-; Calls:   0xFA3802 = sub_FA3802, 0xFA3A3C = sub_FA3A3C
-;          0xFA3CD7 = sub_FA3CD7, 0xFA4957 = sub_FA4957
+; Calls:   0xFA3802 = P7Units_ReloadForGroup, 0xFA3A3C = sub_FA3A3C
+;          0xFA3CD7 = P7Unit_EmitChangedParams, 0xFA4957 = P7Unit_FlushDirtyParams
 ;          0xFA4A0D = sub_FA4A0D, 0xFA4C5E = sub_FA4C5E
 ;          0xFA4CE5 = sub_FA4CE5, 0xFA4E23 = sub_FA4E23
-;          0xFA4E97 = sub_FA4E97, 0xFA5177 = sub_FA5177
+;          0xFA4E97 = sub_FA4E97, 0xFA5177 = P7Units_ServiceTask
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA5535-0xFA5948
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    resolves all three units' PROGRAM numbers into directory-record indices
+;          and reloads whatever changed.  This is the routine that turns the number
+;          at unit-block +0 into the number at unit-block +0x18.
+; Evidence: it first copies each 26-byte live block to its 0x7E7E/0x7E98/0x7EB2 twin
+;          (`lda XIX,0x00856e / lda XIY,0x007e7e / ld BC,0x000d / ldirw` at
+;          0xFA553D-0xFA554A, and the same at 0xFA554C and 0xFA555B -- 13 words = 26
+;          bytes, which is where the block size comes from).  Then, three times over:
+;          read block +0, clamp it with `cp A,0x7f / jr ULE` (0xFA5572, 0xFA5597,
+;          0xFA55BC), index PoolDir_RecordForUnitProgram (`add XBC,0x00fdc551` at
+;          0xFA5582, 0xFA55A7, 0xFA55CC) and store the answer to block +0x18
+;          (0x008586, 0x0085A0, 0x0085BA at 0xFA558A, 0xFA55AF, 0xFA55D4).
+;          It also copies RAM 0xF361 into the group selector 0xF35D and clamps it to
+;          0..1 (0xFA5709-0xFA571D), and calls P7Units_ReloadForGroup when the group changed
+;          (0xFA5730).
+; Unknown:  what the 0x7E7E/0x7E98/0x7EB2 copies are for -- they are written here and
+;          this pass did not find the reader.
 ; --------------------------------------------------------------------------
-sub_FA5535:
+P7Units_ResolveProgramsAndReload:
 	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FA5535  link XIZ,0xffde
 	pushw	hl                                   ; FA5539  push HL
 	push	xix                                   ; FA553A  push XIX
@@ -34898,9 +35141,9 @@ sub_FA5535:
 	ldb_da	a, (0x856E)                         ; FA556A  ld A,(0x00856e)
 	ld	(xiz-2), a                              ; FA556F  ld (XIZ+0xfe),A
 	cp	a, 0x7F                                 ; FA5572  cp A,0x7f
-	jr ule, sub_FA5535__FA557B                 ; FA5575  jr ULE,0xfa557b
+	jr ule, P7Units_ResolveProgramsAndReload__FA557B                 ; FA5575  jr ULE,0xfa557b
 	ld	(xiz-2), 0                              ; FA5577  ld (XIZ+0xfe),0x00
-sub_FA5535__FA557B:
+P7Units_ResolveProgramsAndReload__FA557B:
 	ld	bc, (xiz-2)                             ; FA557B  ld BC,(XIZ+0xfe)
 	extz	bc                                    ; FA557E  extz BC
 	extz	xbc                                   ; FA5580  extz XBC
@@ -34910,9 +35153,9 @@ sub_FA5535__FA557B:
 	ldb_da	c, (0x8588)                         ; FA558F  ld C,(0x008588)
 	ld	(xiz-2), c                              ; FA5594  ld (XIZ+0xfe),C
 	cp	c, 0x7F                                 ; FA5597  cp C,0x7f
-	jr ule, sub_FA5535__FA55A0                 ; FA559A  jr ULE,0xfa55a0
+	jr ule, P7Units_ResolveProgramsAndReload__FA55A0                 ; FA559A  jr ULE,0xfa55a0
 	ld	(xiz-2), 0                              ; FA559C  ld (XIZ+0xfe),0x00
-sub_FA5535__FA55A0:
+P7Units_ResolveProgramsAndReload__FA55A0:
 	ld	bc, (xiz-2)                             ; FA55A0  ld BC,(XIZ+0xfe)
 	extz	bc                                    ; FA55A3  extz BC
 	extz	xbc                                   ; FA55A5  extz XBC
@@ -34922,9 +35165,9 @@ sub_FA5535__FA55A0:
 	ldb_da	c, (0x85A2)                         ; FA55B4  ld C,(0x0085a2)
 	ld	(xiz-2), c                              ; FA55B9  ld (XIZ+0xfe),C
 	cp	c, 0x7F                                 ; FA55BC  cp C,0x7f
-	jr ule, sub_FA5535__FA55C5                 ; FA55BF  jr ULE,0xfa55c5
+	jr ule, P7Units_ResolveProgramsAndReload__FA55C5                 ; FA55BF  jr ULE,0xfa55c5
 	ld	(xiz-2), 0                              ; FA55C1  ld (XIZ+0xfe),0x00
-sub_FA5535__FA55C5:
+P7Units_ResolveProgramsAndReload__FA55C5:
 	ld	bc, (xiz-2)                             ; FA55C5  ld BC,(XIZ+0xfe)
 	extz	bc                                    ; FA55C8  extz BC
 	extz	xbc                                   ; FA55CA  extz XBC
@@ -34937,19 +35180,19 @@ sub_FA5535__FA55C5:
 	stw_da	(0x860C), bc                        ; FA55E8  ld (0x00860c),BC
 	ldb_da	c, (0x7E97)                         ; FA55ED  ld C,(0x007e97)
 	cps	c, 0                                   ; FA55F2  cp C,0
-	jr z, sub_FA5535__FA55FC                   ; FA55F4  jr Z,0xfa55fc
+	jr z, P7Units_ResolveProgramsAndReload__FA55FC                   ; FA55F4  jr Z,0xfa55fc
 	stib_da	(0x7E97), 0                        ; FA55F6  ld (0x007e97),0x00
-sub_FA5535__FA55FC:
+P7Units_ResolveProgramsAndReload__FA55FC:
 	ldb_da	c, (0x7EB1)                         ; FA55FC  ld C,(0x007eb1)
 	cps	c, 0                                   ; FA5601  cp C,0
-	jr z, sub_FA5535__FA560B                   ; FA5603  jr Z,0xfa560b
+	jr z, P7Units_ResolveProgramsAndReload__FA560B                   ; FA5603  jr Z,0xfa560b
 	stib_da	(0x7EB1), 0                        ; FA5605  ld (0x007eb1),0x00
-sub_FA5535__FA560B:
+P7Units_ResolveProgramsAndReload__FA560B:
 	ldb_da	c, (0x7ECB)                         ; FA560B  ld C,(0x007ecb)
 	cps	c, 0                                   ; FA5610  cp C,0
-	jr z, sub_FA5535__FA561A                   ; FA5612  jr Z,0xfa561a
+	jr z, P7Units_ResolveProgramsAndReload__FA561A                   ; FA5612  jr Z,0xfa561a
 	stib_da	(0x7ECB), 0                        ; FA5614  ld (0x007ecb),0x00
-sub_FA5535__FA561A:
+P7Units_ResolveProgramsAndReload__FA561A:
 	ei	0                                       ; FA561A  ei 0x00
 	stiw_da	(0xF354), 0                        ; FA561C  ld (0x00f354),0x0000
 	stiw_da	(0xF356), 0                        ; FA5623  ld (0x00f356),0x0000
@@ -34958,72 +35201,72 @@ sub_FA5535__FA561A:
 	ldb_da	c, (0x8586)                         ; FA5634  ld C,(0x008586)
 	extz	bc                                    ; FA5639  extz BC
 	ld	(xiz-4), bc                             ; FA563B  ld (XIZ+0xfc),BC
-	jr sub_FA5535__FA5656                      ; FA563E  jr T,0xfa5656
-sub_FA5535__FA5640:
+	jr P7Units_ResolveProgramsAndReload__FA5656                      ; FA563E  jr T,0xfa5656
+P7Units_ResolveProgramsAndReload__FA5640:
 	ldb_da	h, (0x85BE)                         ; FA5640  ld H,(0x0085be)
 	ldb_da	c, (0x8570)                         ; FA5645  ld C,(0x008570)
 	cp	c, h                                    ; FA564A  cp C,H
-	jr z, sub_FA5535__FA5654                   ; FA564C  jr Z,0xfa5654
+	jr z, P7Units_ResolveProgramsAndReload__FA5654                   ; FA564C  jr Z,0xfa5654
 	stib_da	(0x85D4), 53                       ; FA564E  ld (0x0085d4),0x35
-sub_FA5535__FA5654:
-	jr sub_FA5535__FA5671                      ; FA5654  jr T,0xfa5671
-sub_FA5535__FA5656:
+P7Units_ResolveProgramsAndReload__FA5654:
+	jr P7Units_ResolveProgramsAndReload__FA5671                      ; FA5654  jr T,0xfa5671
+P7Units_ResolveProgramsAndReload__FA5656:
 	ld	bc, (xiz-4)                             ; FA5656  ld BC,(XIZ+0xfc)
 	cp	bc, 12                                  ; FA5659  cp BC,0x000c
-	jr z, sub_FA5535__FA5640                   ; FA565D  jr Z,0xfa5640
+	jr z, P7Units_ResolveProgramsAndReload__FA5640                   ; FA565D  jr Z,0xfa5640
 	cp	bc, 13                                  ; FA565F  cp BC,0x000d
-	jr z, sub_FA5535__FA5640                   ; FA5663  jr Z,0xfa5640
+	jr z, P7Units_ResolveProgramsAndReload__FA5640                   ; FA5663  jr Z,0xfa5640
 	cp	bc, 43                                  ; FA5665  cp BC,0x002b
-	jr z, sub_FA5535__FA5640                   ; FA5669  jr Z,0xfa5640
+	jr z, P7Units_ResolveProgramsAndReload__FA5640                   ; FA5669  jr Z,0xfa5640
 	cp	bc, 55                                  ; FA566B  cp BC,0x0037
-	jr z, sub_FA5535__FA5640                   ; FA566F  jr Z,0xfa5640
-sub_FA5535__FA5671:
+	jr z, P7Units_ResolveProgramsAndReload__FA5640                   ; FA566F  jr Z,0xfa5640
+P7Units_ResolveProgramsAndReload__FA5671:
 	ldb_da	c, (0x85A0)                         ; FA5671  ld C,(0x0085a0)
 	extz	bc                                    ; FA5676  extz BC
 	ld	(xiz-6), bc                             ; FA5678  ld (XIZ+0xfa),BC
-	jr sub_FA5535__FA5693                      ; FA567B  jr T,0xfa5693
-sub_FA5535__FA567D:
+	jr P7Units_ResolveProgramsAndReload__FA5693                      ; FA567B  jr T,0xfa5693
+P7Units_ResolveProgramsAndReload__FA567D:
 	ldb_da	h, (0x85D8)                         ; FA567D  ld H,(0x0085d8)
 	ldb_da	c, (0x858A)                         ; FA5682  ld C,(0x00858a)
 	cp	c, h                                    ; FA5687  cp C,H
-	jr z, sub_FA5535__FA5691                   ; FA5689  jr Z,0xfa5691
+	jr z, P7Units_ResolveProgramsAndReload__FA5691                   ; FA5689  jr Z,0xfa5691
 	stib_da	(0x85EE), 53                       ; FA568B  ld (0x0085ee),0x35
-sub_FA5535__FA5691:
-	jr sub_FA5535__FA56AE                      ; FA5691  jr T,0xfa56ae
-sub_FA5535__FA5693:
+P7Units_ResolveProgramsAndReload__FA5691:
+	jr P7Units_ResolveProgramsAndReload__FA56AE                      ; FA5691  jr T,0xfa56ae
+P7Units_ResolveProgramsAndReload__FA5693:
 	ld	bc, (xiz-6)                             ; FA5693  ld BC,(XIZ+0xfa)
 	cp	bc, 12                                  ; FA5696  cp BC,0x000c
-	jr z, sub_FA5535__FA567D                   ; FA569A  jr Z,0xfa567d
+	jr z, P7Units_ResolveProgramsAndReload__FA567D                   ; FA569A  jr Z,0xfa567d
 	cp	bc, 13                                  ; FA569C  cp BC,0x000d
-	jr z, sub_FA5535__FA567D                   ; FA56A0  jr Z,0xfa567d
+	jr z, P7Units_ResolveProgramsAndReload__FA567D                   ; FA56A0  jr Z,0xfa567d
 	cp	bc, 43                                  ; FA56A2  cp BC,0x002b
-	jr z, sub_FA5535__FA567D                   ; FA56A6  jr Z,0xfa567d
+	jr z, P7Units_ResolveProgramsAndReload__FA567D                   ; FA56A6  jr Z,0xfa567d
 	cp	bc, 55                                  ; FA56A8  cp BC,0x0037
-	jr z, sub_FA5535__FA567D                   ; FA56AC  jr Z,0xfa567d
-sub_FA5535__FA56AE:
+	jr z, P7Units_ResolveProgramsAndReload__FA567D                   ; FA56AC  jr Z,0xfa567d
+P7Units_ResolveProgramsAndReload__FA56AE:
 	ldb_da	c, (0x85BA)                         ; FA56AE  ld C,(0x0085ba)
 	extz	bc                                    ; FA56B3  extz BC
 	ld	(xiz-8), bc                             ; FA56B5  ld (XIZ+0xf8),BC
-	jr sub_FA5535__FA56D0                      ; FA56B8  jr T,0xfa56d0
-sub_FA5535__FA56BA:
+	jr P7Units_ResolveProgramsAndReload__FA56D0                      ; FA56B8  jr T,0xfa56d0
+P7Units_ResolveProgramsAndReload__FA56BA:
 	ldb_da	h, (0x85F2)                         ; FA56BA  ld H,(0x0085f2)
 	ldb_da	c, (0x85A4)                         ; FA56BF  ld C,(0x0085a4)
 	cp	c, h                                    ; FA56C4  cp C,H
-	jr z, sub_FA5535__FA56CE                   ; FA56C6  jr Z,0xfa56ce
+	jr z, P7Units_ResolveProgramsAndReload__FA56CE                   ; FA56C6  jr Z,0xfa56ce
 	stib_da	(0x8608), 53                       ; FA56C8  ld (0x008608),0x35
-sub_FA5535__FA56CE:
-	jr sub_FA5535__FA56EB                      ; FA56CE  jr T,0xfa56eb
-sub_FA5535__FA56D0:
+P7Units_ResolveProgramsAndReload__FA56CE:
+	jr P7Units_ResolveProgramsAndReload__FA56EB                      ; FA56CE  jr T,0xfa56eb
+P7Units_ResolveProgramsAndReload__FA56D0:
 	ld	bc, (xiz-8)                             ; FA56D0  ld BC,(XIZ+0xf8)
 	cp	bc, 12                                  ; FA56D3  cp BC,0x000c
-	jr z, sub_FA5535__FA56BA                   ; FA56D7  jr Z,0xfa56ba
+	jr z, P7Units_ResolveProgramsAndReload__FA56BA                   ; FA56D7  jr Z,0xfa56ba
 	cp	bc, 13                                  ; FA56D9  cp BC,0x000d
-	jr z, sub_FA5535__FA56BA                   ; FA56DD  jr Z,0xfa56ba
+	jr z, P7Units_ResolveProgramsAndReload__FA56BA                   ; FA56DD  jr Z,0xfa56ba
 	cp	bc, 43                                  ; FA56DF  cp BC,0x002b
-	jr z, sub_FA5535__FA56BA                   ; FA56E3  jr Z,0xfa56ba
+	jr z, P7Units_ResolveProgramsAndReload__FA56BA                   ; FA56E3  jr Z,0xfa56ba
 	cp	bc, 55                                  ; FA56E5  cp BC,0x0037
-	jr z, sub_FA5535__FA56BA                   ; FA56E9  jr Z,0xfa56ba
-sub_FA5535__FA56EB:
+	jr z, P7Units_ResolveProgramsAndReload__FA56BA                   ; FA56E9  jr Z,0xfa56ba
+P7Units_ResolveProgramsAndReload__FA56EB:
 	stiw_da	(0xF35A), 0                        ; FA56EB  ld (0x00f35a),0x0000
 	pushw	0                                    ; FA56F2  push 0x0000
 	calr (0xFA4E97 - 0xFA56F8)                 ; FA56F5  calr 0xfa4e97
@@ -35039,16 +35282,16 @@ sub_FA5535__FA56EB:
 	stb_da	(0xF35D), c                         ; FA570E  ld (0x00f35d),C
 	ei	0                                       ; FA5713  ei 0x00
 	cpib_da 0x00F35D, 0x01                     ; FA5715  cp (0x00f35d),0x01
-	jr ule, sub_FA5535__FA5723                 ; FA571B  jr ULE,0xfa5723
+	jr ule, P7Units_ResolveProgramsAndReload__FA5723                 ; FA571B  jr ULE,0xfa5723
 	stib_da	(0xF35D), 1                        ; FA571D  ld (0x00f35d),0x01
-sub_FA5535__FA5723:
+P7Units_ResolveProgramsAndReload__FA5723:
 	ldb_da	c, (0xF35D)                         ; FA5723  ld C,(0x00f35d)
 	extpfx5 0xC2, 0x5E, 0xF3, 0x00, 0xF3       ; FA5728  cp C,(0x00f35e)
-	jr z, sub_FA5535__FA5734                   ; FA572D  jr Z,0xfa5734
+	jr z, P7Units_ResolveProgramsAndReload__FA5734                   ; FA572D  jr Z,0xfa5734
 	pushw	bc                                   ; FA572F  push BC
 	calr (0xFA3802 - 0xFA5733)                 ; FA5730  calr 0xfa3802
 	popw	bc                                    ; FA5733  pop BC
-sub_FA5535__FA5734:
+P7Units_ResolveProgramsAndReload__FA5734:
 	ldb_da	c, (0xF35D)                         ; FA5734  ld C,(0x00f35d)
 	stb_da	(0xF35E), c                         ; FA5739  ld (0x00f35e),C
 	ld	(xiz-1), 1                              ; FA573E  ld (XIZ+0xff),0x01
@@ -35064,7 +35307,7 @@ sub_FA5535__FA5734:
 	add	xbc, xix                               ; FA575F  add XBC,XIX
 	ld	a, (xbc)                                ; FA5761  ld A,(XBC)
 	cp	a, h                                    ; FA5763  cp A,H
-	jr z, sub_FA5535__FA5782                   ; FA5765  jr Z,0xfa5782
+	jr z, P7Units_ResolveProgramsAndReload__FA5782                   ; FA5765  jr Z,0xfa5782
 	push	0                                     ; FA5767  push 0x00
 	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x04       ; FA5769  push (0x00f35d)
 	push	0                                     ; FA576E  push 0x00
@@ -35075,8 +35318,8 @@ sub_FA5535__FA5734:
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA5779  push (XIZ+0xff)
 	calr (0xFA4CE5 - 0xFA577F)                 ; FA577C  calr 0xfa4ce5
 	popw	bc                                    ; FA577F  pop BC
-	jr sub_FA5535__FA57B9                      ; FA5780  jr T,0xfa57b9
-sub_FA5535__FA5782:
+	jr P7Units_ResolveProgramsAndReload__FA57B9                      ; FA5780  jr T,0xfa57b9
+P7Units_ResolveProgramsAndReload__FA5782:
 	ldb	c, 26                                  ; FA5782  ld C,0x1a
 	extpfx3 0x8E, 0xFF, 0x43                   ; FA5784  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA5787  extz XBC
@@ -35089,17 +35332,17 @@ sub_FA5535__FA5782:
 	add	xbc, xix                               ; FA579F  add XBC,XIX
 	ld	a, (xbc)                                ; FA57A1  ld A,(XBC)
 	cp	a, h                                    ; FA57A3  cp A,H
-	jr z, sub_FA5535__FA57B0                   ; FA57A5  jr Z,0xfa57b0
+	jr z, P7Units_ResolveProgramsAndReload__FA57B0                   ; FA57A5  jr Z,0xfa57b0
 	push	0                                     ; FA57A7  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA57A9  push (XIZ+0xff)
 	calr (0xFA4CE5 - 0xFA57AF)                 ; FA57AC  calr 0xfa4ce5
 	popw	bc                                    ; FA57AF  pop BC
-sub_FA5535__FA57B0:
+P7Units_ResolveProgramsAndReload__FA57B0:
 	push	0                                     ; FA57B0  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA57B2  push (XIZ+0xff)
 	calr (0xFA3CD7 - 0xFA57B8)                 ; FA57B5  calr 0xfa3cd7
 	popw	bc                                    ; FA57B8  pop BC
-sub_FA5535__FA57B9:
+P7Units_ResolveProgramsAndReload__FA57B9:
 	push	0                                     ; FA57B9  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA57BB  push (XIZ+0xff)
 	calr (0xFA4E23 - 0xFA57C1)                 ; FA57BE  calr 0xfa4e23
@@ -35132,7 +35375,7 @@ sub_FA5535__FA57B9:
 	ld	a, (xbc)                                ; FA5809  ld A,(XBC)
 	popw	iy                                    ; FA580B  pop IY
 	cp	a, h                                    ; FA580C  cp A,H
-	jr z, sub_FA5535__FA582B                   ; FA580E  jr Z,0xfa582b
+	jr z, P7Units_ResolveProgramsAndReload__FA582B                   ; FA580E  jr Z,0xfa582b
 	push	0                                     ; FA5810  push 0x00
 	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x04       ; FA5812  push (0x00f35d)
 	push	0                                     ; FA5817  push 0x00
@@ -35143,8 +35386,8 @@ sub_FA5535__FA57B9:
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA5822  push (XIZ+0xff)
 	calr (0xFA4CE5 - 0xFA5828)                 ; FA5825  calr 0xfa4ce5
 	popw	bc                                    ; FA5828  pop BC
-	jr sub_FA5535__FA5862                      ; FA5829  jr T,0xfa5862
-sub_FA5535__FA582B:
+	jr P7Units_ResolveProgramsAndReload__FA5862                      ; FA5829  jr T,0xfa5862
+P7Units_ResolveProgramsAndReload__FA582B:
 	ldb	c, 26                                  ; FA582B  ld C,0x1a
 	extpfx3 0x8E, 0xFF, 0x43                   ; FA582D  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA5830  extz XBC
@@ -35157,17 +35400,17 @@ sub_FA5535__FA582B:
 	add	xbc, xix                               ; FA5848  add XBC,XIX
 	ld	a, (xbc)                                ; FA584A  ld A,(XBC)
 	cp	a, h                                    ; FA584C  cp A,H
-	jr z, sub_FA5535__FA5859                   ; FA584E  jr Z,0xfa5859
+	jr z, P7Units_ResolveProgramsAndReload__FA5859                   ; FA584E  jr Z,0xfa5859
 	push	0                                     ; FA5850  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA5852  push (XIZ+0xff)
 	calr (0xFA4CE5 - 0xFA5858)                 ; FA5855  calr 0xfa4ce5
 	popw	bc                                    ; FA5858  pop BC
-sub_FA5535__FA5859:
+P7Units_ResolveProgramsAndReload__FA5859:
 	push	0                                     ; FA5859  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA585B  push (XIZ+0xff)
 	calr (0xFA3CD7 - 0xFA5861)                 ; FA585E  calr 0xfa3cd7
 	popw	bc                                    ; FA5861  pop BC
-sub_FA5535__FA5862:
+P7Units_ResolveProgramsAndReload__FA5862:
 	push	0                                     ; FA5862  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA5864  push (XIZ+0xff)
 	calr (0xFA4A0D - 0xFA586A)                 ; FA5867  calr 0xfa4a0d
@@ -35204,20 +35447,20 @@ sub_FA5535__FA5862:
 	ld	a, (xbc)                                ; FA58BB  ld A,(XBC)
 	popw	iy                                    ; FA58BD  pop IY
 	cp	a, h                                    ; FA58BE  cp A,H
-	jr z, sub_FA5535__FA58D4                   ; FA58C0  jr Z,0xfa58d4
+	jr z, P7Units_ResolveProgramsAndReload__FA58D4                   ; FA58C0  jr Z,0xfa58d4
 	push	0                                     ; FA58C2  push 0x00
 	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x04       ; FA58C4  push (0x00f35d)
 	push	0                                     ; FA58C9  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA58CB  push (XIZ+0xff)
 	calr (0xFA3A3C - 0xFA58D1)                 ; FA58CE  calr 0xfa3a3c
 	pop	xiy                                    ; FA58D1  pop XIY
-	jr sub_FA5535__FA58DD                      ; FA58D2  jr T,0xfa58dd
-sub_FA5535__FA58D4:
+	jr P7Units_ResolveProgramsAndReload__FA58DD                      ; FA58D2  jr T,0xfa58dd
+P7Units_ResolveProgramsAndReload__FA58D4:
 	push	0                                     ; FA58D4  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA58D6  push (XIZ+0xff)
 	calr (0xFA3CD7 - 0xFA58DC)                 ; FA58D9  calr 0xfa3cd7
 	popw	bc                                    ; FA58DC  pop BC
-sub_FA5535__FA58DD:
+P7Units_ResolveProgramsAndReload__FA58DD:
 	push	0                                     ; FA58DD  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA58DF  push (XIZ+0xff)
 	calr (0xFA4A0D - 0xFA58E5)                 ; FA58E2  calr 0xfa4a0d
@@ -54467,7 +54710,7 @@ sub_FADA7C__FADAA1:
 ;          0xFB0413
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x001501
-; Calls:   0xFA2DCD = sub_FA2DCD
+; Calls:   0xFA2DCD = P7Mixer_RequestGain
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADAB1-0xFADAC9
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -54496,7 +54739,7 @@ sub_FADAB1:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x001502
 ;          reads 0x001501
-; Calls:   0xFA2DCD = sub_FA2DCD
+; Calls:   0xFA2DCD = P7Mixer_RequestGain
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADACA-0xFADAE6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -113543,7 +113786,7 @@ BootRamImage_Head:
 ; 0xFCCB6E.  An honest .incbin beats an invented stride.
 
 ; ----------------------------------------------------------------------------
-; Handler_PtrTable_FCC53F -- 0xFCC53F..0xFCC55E  (32 bytes)
+; Link_ClassHandlerTable -- 0xFCC53F..0xFCC55E  (32 bytes)
 ;
 ; 8 x u32.  Every entry is a valid prom_c code address, and four of them
 ; (0xF98D9A, 0xF98DE6, 0xF98FD6, 0xF9901B) land exactly on a `link XIZ,imm` /
@@ -113564,23 +113807,58 @@ BootRamImage_Head:
 ;     python3 notes/prom_c_ram_image.py 0x00F334:32     # the boot contents
 ;     python3 notes/prom_c_link_state_machine.py        # the dispatcher
 ; ⚠ Still not established: what the four real class handlers DO.
+; ★ ROUND 5 renamed it from `Handler_PtrTable_FCC53F`: the dispatcher, the index and the
+; entry count were all already proved above, so the address in the name was carrying
+; nothing the prose did not.  Nothing about the object changed.
+; Evidence: the RAM copy at 0x00F334 is the operand of `add xbc,0x0000F334` at 0xF99D91,
+;          inside INTTC3_HANDLER__state1_generic, which jumps through it.
 ; ----------------------------------------------------------------------------
-Handler_PtrTable_FCC53F:
+Link_ClassHandlerTable:
 	.long	0x00f98d9a, 0x00f98de6, 0x00f98fd6, 0x00f9901b
 	.long	0x00f9993d, 0x00f9993d, 0x00f9993d, 0x00f9993d
 
 ; ----------------------------------------------------------------------------
-; unexplained_FCC55F -- 0xFCC55F..0xFCC575  (23 bytes)
+; P7Module_RamStateImage -- 0xFCC55F..0xFCC575  (23 bytes)
 ;
-; 23 bytes that fit no structure found so far: 16 zero bytes, then
-; 00 53 6c 00 6c 00 6c 00.  Left as bytes rather than guessed at.
+; ★ ROUND 5: IT IS A RAM IMAGE, and the RAM it images is the PORT-P7 MODULE'S STATE.
+; The RESET copy carries ROM 0xFCB4EA.. to RAM 0x00E2DF (notes/prom_c_ram_image.py), and
+; 0xFCC55F - 0xFCB4EA = 0x1075, so these 23 bytes are the power-on contents of
+; RAM 0x00F354..0x00F36A -- checked with `python3 notes/prom_c_ram_image.py 0x00F354:23`.
+; Every variable in that range belongs to the P7 module:
+;       0xF354, 0xF356, 0xF358   u16 x3, per unit: the "preamble already sent" latch.
+;                                P7Unit_SendPreambleOnce tests it at 0xFA35E0 and writes
+;                                0xFFFF at 0xFA361B; boot value 0, so nothing is skipped
+;                                on a cold start.
+;       0xF35A                   u16, the MIDI-OUT hex trace enable read by
+;                                P7Byte_SendCmd/SendData/SendArg (0xF9A17A, 0xF9A322,
+;                                0xF9A4B8).  ★ Boot value 0, and the ONE literal write in
+;                                prom_c stores 0 as well (0xFA56EB) -- see below.
+;       0xF35C                   the handshake timeout flag set on an 8000-spin expiry
+;                                (notes/FINDINGS-prom_c-p7-byte-stream-pool.md §5).
+;       0xF35D, 0xF35E           the stream-pointer GROUP selector and its previous value;
+;                                0xF35D is loaded from 0xF361 and clamped to 0..1 at
+;                                0xFA5715-0xFA571D.
+;       0xF364                   u8, boot 0x53.
+;       0xF365, 0xF367, 0xF369   u16 x3, per unit, boot 0x006C, written by P7Unit_SelectStreamsForRecord.
+; ⚠ NOT ESTABLISHED: what 0xF35F..0xF363 hold (they boot zero and this pass did not trace
+; every writer), what 0x53 at 0xF364 means, and what the three 0x006C words scale.
+;
+; ★★ AND ONE COMMITTED CLAIM IS NOW CLOSED.  FINDINGS-prom_c-p7-byte-stream-pool.md §5
+; said "⚠ What sets (0x00F35A) is not established."  NOTHING DOES.  0x00F35A appears
+; four times in prom_c: three `cp (0x00f35a),0x0000` tests in the three byte senders and
+; ONE write, `ld (0x00f35a),0x0000` at 0xFA56EB -- a clear.  With a boot image of zero,
+; the service trace can never run on this firmware.  ⚠ QUALIFIED: a write through a
+; register, or one arriving over the inter-processor link, is invisible to a literal scan.
+; notes/prom_c_understanding_round5.py --trace.
+; Evidence: the boot copy's own operands at 0xF989EF-0xF989F9, and 0xFCC55F - 0xFCB4EA
+;          = 0x1075 added to 0x00E2DF; notes/prom_c_ram_image.py 0x00F354:23.
 ; ----------------------------------------------------------------------------
-unexplained_FCC55F:
+P7Module_RamStateImage:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte	0x53, 0x6c, 0x00, 0x6c, 0x00, 0x6c, 0x00
 
 ; ----------------------------------------------------------------------------
-; Packet_PtrTable_FCC576 -- 0xFCC576..0xFCC5BD  (72 bytes)
+; P7Unit_StreamPtrsByGroupAndUnit -- 0xFCC576..0xFCC5BD  (72 bytes)
 ;
 ; 6 groups x 3 u32 = 18 pointers, all into the byte-stream pool that starts at
 ; 0xFCD0F7 -- which is now CONVERTED, and every one of the 18 lands exactly on a
@@ -113598,10 +113876,29 @@ unexplained_FCC55F:
 ; Five of the six distinct low targets are exactly the packet starts that the
 ; length walk in the header of the string pool below lands on, which is what ties
 ; the two structures together.
-; ⚠ NOT ESTABLISHED: the table start, again -- no literal reference to 0xFCC576.
+; ★ ROUND 5: THE TABLE START IS ESTABLISHED, the same way Link_ClassHandlerTable's was --
+; through the RAM copy, because the reader never uses the ROM address.  RESET copies ROM
+; 0xFCB4EA.. to RAM 0x00E2DF, and 0xFCC576 - 0xFCB4EA = 0x108C, so this table's RAM copy
+; begins at 0x00E2DF + 0x108C = 0x00F36B (`python3 notes/prom_c_ram_image.py 0x00F36B:72`).
+; 0x00F36B is an instruction operand at three sites in the port-P7 module -- 0xFA2B91,
+; 0xFA2CC5 and 0xFA2D78, each `add XBC,0x0000f36b` -- and the index built just above each
+; of them is
+;       `ld C,0x0c / mul BC,(0x00f35d)`   (0xFA2B86)   12 * group
+;       `ld A,0x04 / mul WA,(XIZ+0x08)`   (0xFA2B7D)    4 * unit
+; i.e. 12*group + 4*unit.  So the GROUPING THE DATA ALREADY SHOWED IS THE ADDRESSING: six
+; groups of three u32, one entry per unit, and the fetched pointer becomes
+; P7Stream_StageAndSend's +0x1C argument.
+; ★ AND THE {X, X, Y} SHAPE IS CORROBORATED FROM THE OTHER SIDE: units 0 and 1 share a
+; stream here, and in P7Stream_Data_FD4B85 the destination byte of records 1, 2 and 3 --
+; the records those same three units select -- reads 0, 0, 1.  Two independent structures
+; pair unit 0 with unit 1 and leave unit 2 apart.
+; ⚠ STILL NOT ESTABLISHED: groups 2..5.  RAM 0xF35D is clamped to 0..1 at 0xFA5715, so the
+; three sites found reach only groups 0 and 1 -- 24 of these 72 bytes.  Recorded as a gap.
 ; ★ But the 18 TARGETS are now established objects, which they were not in round 3.
+; Evidence: 0xFCC576 - 0xFCB4EA = 0x108C added to 0x00E2DF gives 0x00F36B, which is an
+;          operand at 0xFA2B91, 0xFA2CC5 and 0xFA2D78, indexed 12*group + 4*unit.
 ; ----------------------------------------------------------------------------
-Packet_PtrTable_FCC576:
+P7Unit_StreamPtrsByGroupAndUnit:
 	; group 0
 	.long	0x00fcd22d, 0x00fcd22d, 0x00fcd40f
 	; group 1
@@ -113965,10 +114262,26 @@ DSP_EQ_Q_Table:
 ; ----------------------------------------------------------------------------
 ; unexplained_FCCB6E -- 0xFCCB6E..0xFCCB70  (3 bytes)
 ;
-; 3 bytes, 00 01 00, sitting between the Q table and the gain curve.  0xFCCB6E is
-; referenced three times (0xFA2C21, 0xFA2CD9, 0xFA2D8C) so it is a real object,
-; but three bytes is too little to infer a shape from and the readers are not
-; traced.  Left as bytes.
+; 3 bytes, 00 01 00, sitting between the Q table and the gain curve.
+; ★ ROUND 5 TRACED THE READERS (the round-3 header said they were not traced) -- and it
+; is still not named, because tracing them does not reach a meaning.
+; All three sites are in the port-P7 unit module and all three index it with the UNIT
+; index, 0..2, so the object is three bytes because there are three units:
+;       0xFA2C1F  add XWA,0x00fccb6e   in P7Unit_LoadProgramStreams   (index (XIZ+0x08))
+;       0xFA2CD7  add XWA,0x00fccb6e   in P7Unit_LoadProgramStreams
+;       0xFA2D8A  add XWA,0x00fccb6e   in P7Unit_SendParamValue
+; ⚠ The citation addresses in the round-3 header (0xFA2C21, 0xFA2CD9, 0xFA2D8C) were each
+; TWO BYTES PAST the instruction -- they named the imm32 inside `add <X..>,#imm32`
+; (`e9 c8 <addr24> 00`), which is the defect class FINDINGS-prom_c-tail-data-zone.md §8
+; records.  Corrected above.
+; The fetched byte becomes P7Stream_StageAndSend's +0x22 argument and is stored to the
+; global 0x00863E (0xF9F908), which sub_F9F9FA passes to sub_F9E0B7 at 0xF9FA15 beside the
+; constant 0x0078.  So it is a per-unit selector inside the byte emitter.
+; ⚠ NOT ESTABLISHED: what it selects.  Values 0, 1, 0 for units 0, 1, 2 -- the same
+; pairing of units 0 and 1 that P7Unit_StreamPtrsByGroupAndUnit and P7Stream_Data_FD4B85
+; both show -- but nothing here reads sub_F9E0B7's meaning, so it keeps its address.
+; Evidence: the three reader sites 0xFA2C1F, 0xFA2CD7 and 0xFA2D8A, each an
+;          `add <X..>,#imm32` whose index is the unit argument (XIZ+0x08).
 ; ----------------------------------------------------------------------------
 unexplained_FCCB6E:
 	.byte	0x00, 0x01, 0x00
@@ -117249,7 +117562,7 @@ P7Stream_FD29F9:
 ; ---- 0xFD2C2B-0xFD2C3E  20 bytes, 3 records  [interpreter-clean] ----
 ;      RUN BY P7Stream_Run -- `call` at 0xFA3835 (arg setup 0xFA3826, record table 0xFD4B85 index 1), 0xFA384C (arg setup 0xFA383D, record table 0xFD4B85 index 2), 0xFA3863 (arg setup 0xFA3854, record table 0xFD4B85 index 3) and 3 more
 ;      pointed at by: LDA instruction at 0xFA35FA, LDA instruction at 0xFA382F, LDA instruction at 0xFA3846, LDA instruction at 0xFA385D, LDA instruction at 0xFA393D, LDA instruction at 0xFA3954 (+1 more)
-P7Stream_FD2C2B:
+P7Stream_UnitPreamble:
 	.byte	0x00, 0x0f   ; 0xFD2C2B  op  0  len 15  payload 13
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x60, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15   ; 0xFD2C2D
 	.byte	0x40, 0x03   ; 0xFD2C3A  op  4  len 3  payload 1
@@ -122019,7 +122332,7 @@ P7Stream_FDBE94:
 ;
 ; THE COUNT IS 56, established three independent ways and asserted by `--verify`:
 ;   * 56 x 25 = 1400 reaches 0xFDC551 exactly, where the index map below begins;
-;   * PoolDir_IndexMap128 takes every value 0..55 and no other;
+;   * PoolDir_RecordForUnitProgram takes every value 0..55 and no other;
 ;   * PoolDir_FieldRec_PtrTable has 56 entries and ends on the region's last byte.
 ; The last record (0xFDC538) still carries four in-region stream pointers -- the
 ; last-entry test.
@@ -122251,14 +122564,29 @@ PoolDir_Records:
 	.byte	0x0c
 
 ; ------------------------------------------------------------------------------
-; PoolDir_IndexMap128 -- 0xFDC551-0xFDC5D0, 128 bytes
+; PoolDir_RecordForUnitProgram -- 0xFDC551-0xFDC5D0, 128 bytes
 ;
 ; 128 entries, each a PoolDir_Records index in 0..55.  Every one of the 56 indices occurs,
 ; which is what fixes the record count; 53 occurs 73 times and is the catch-all.
-; ⚠ WHAT INDEXES IT is not established here -- 128 is the size of a MIDI value or of half a
-; 256-entry space, and nothing in this pass reads the caller.
+;
+; ★ ROUND 5 -- WHAT INDEXES IT (the round-4 header said this was not established).
+; It is the PROGRAM byte of a P7 unit: byte +0 of the 26-byte block at
+; RAM 0x856E + 26*unit, clamped to 0..127 by `cp A,0x7f / jr ULE` immediately before the
+; lookup.  P7Units_ResolveProgramsAndReload does it three times, once per unit:
+;       0xFA5572 clamp -> 0xFA5582 `add XBC,0x00fdc551` -> 0xFA558A `ld (0x008586),A`
+;       0xFA5597 clamp -> 0xFA55A7                      -> 0xFA55AF `ld (0x0085a0),A`
+;       0xFA55BC clamp -> 0xFA55CC                      -> 0xFA55D4 `ld (0x0085ba),A`
+; and 0x8586 / 0x85A0 / 0x85BA are exactly 0x856E + 26*n + 0x18, so the fetched value is
+; written back into the SAME unit block as its directory-record index.  That +0x18 byte is
+; then `mul A,0x19 / add XWA,0x00FDBFD9` (PoolDir_Records) at 0xFA2B44, 0xFA2C78, 0xFA2D2B
+; and 0xFA4986, and `mul C,0x04 / add XBC,0x00FDD1CB` (PoolDir_FieldRec_PtrTable) at
+; 0xFA2BBE.  Reproduced by notes/prom_c_understanding_round5.py --program.
+; ⚠ "Program" is defined by that mechanism and by nothing else: it is the 0..127 selector
+; that chooses which streams a unit is sent.  What any program SOUNDS like is not known.
+; Evidence: the three clamp/lookup/store triples listed above -- 0xFA5572-0xFA558A,
+;          0xFA5597-0xFA55AF and 0xFA55BC-0xFA55D4 -- all instruction operands.
 ; ------------------------------------------------------------------------------
-PoolDir_IndexMap128:
+PoolDir_RecordForUnitProgram:
 	.byte	0x35, 0x05, 0x06, 0x07, 0x08, 0x09, 0x14, 0x35, 0x12, 0x17, 0x18, 0x19, 0x35, 0x35, 0x35, 0x35   ; 0xFDC551
 	.byte	0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x35, 0x35, 0x35, 0x35   ; 0xFDC561
 	.byte	0x00, 0x01, 0x02, 0x03, 0x15, 0x11, 0x10, 0x04, 0x35, 0x35, 0x35, 0x35, 0x35, 0x35, 0x35, 0x35   ; 0xFDC571
@@ -122271,6 +122599,25 @@ PoolDir_IndexMap128:
 ; ------------------------------------------------------------------------------
 ; PoolDir_FieldRecords -- 0xFDC5D1-0xFDD1CA, 3,066 bytes in 56 records
 ;
+; ★ ROUND 5 DECODED THE 7-BYTE RECORD.  Reproduced, on all 438 of them, by
+; `python3 notes/prom_c_understanding_round5.py --fields`:
+;       +0..+1  s16   MINIMUM        438/438 records have +0 <= +2 as signed 16-bit
+;       +2..+3  s16   MAXIMUM
+;       +4      u8    BYTE OFFSET inside the 26-byte unit block at RAM 0x856E + 26*unit.
+;                     438/438 are < 26, and the widest seen is 15.  The mapping is
+;                     offset f -> block byte +1+f: P7Unit_FlushDirtyParams does
+;                     `inc 1,XIX` (0xFA49B0) then `lda XWA,0x00856e` (0xFA49B2).
+;       +5      u8    a flag.  ⚠ NOT DECODED.  It takes only four values in the whole
+;                     table -- 0x62 x204, 0x20 x196, 0x42 x34, 0x77 x4 -- and nothing
+;                     here reads them.
+;       +6      u8    FIELD INDEX, non-decreasing from 0 in all 56 arrays.  A parameter
+;                     wider than one byte owns several consecutive records with the same
+;                     index (record 4's six two-byte fields have three records each).
+; ★ AND THAT DECODES PoolDir_Records +24: it is one of the record's OWN +4 offsets, in
+; 56 of 56 -- so the u8 the array header calls unexplained is a BYTE OFFSET into the unit
+; block, and it is the field P7Unit_FlushDirtyParams forces to look changed on every
+; flush (0xFA498B `add XWA,0x00000018`, then 0xFA49BB `xor C,0xff` into the shadow).
+;
 ; The 56 records PoolDir_FieldRec_PtrTable points at.  Their boundaries are the pointers
 ; themselves: the 56 pointers are distinct, the lowest is this object's first byte, and
 ; laid end to end they reach the pointer table exactly -- so the pointers TILE the zone and
@@ -122280,6 +122627,8 @@ PoolDir_IndexMap128:
 ; arrays of a 7-byte entry.  That is a property of the data, checked over all 56, not a
 ; stride chosen to make the arithmetic work.
 ; ⚠ What a 7-byte entry MEANS is not established.
+; Evidence: the 438-record sweep in notes/prom_c_understanding_round5.py --fields, plus
+;          `inc 1,XIX` at 0xFA49B0 and `lda XWA,0x00856e` at 0xFA49B2.
 ; ------------------------------------------------------------------------------
 PoolDir_FieldRecords:
 

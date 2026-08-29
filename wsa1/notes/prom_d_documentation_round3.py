@@ -696,7 +696,9 @@ NAMES = {
     0x24: "ToneDB_ToneIndexMapC", 0x28: "ToneDB_ToneIndexMapD",
     0x2C: "ToneDB_DrumToneIndexMap", 0x30: "ToneDB_EnvDescTable",
     0x34: "ToneDB_EnvDescTable (alias)", 0x38: "ToneDB_EnvDescTable_Perc",
-    0x3C: "ToneDB_MixerDefaultTable_3C", 0x40: "ToneDB_MixerDefaultTable_3C (alias)",
+    # renamed in round 5 (Q7): the block is a bank of wave-select TAIL presets,
+    # not a second copy of the +0x18 "default table".
+    0x3C: "ToneDB_WaveSelTailPresets", 0x40: "ToneDB_WaveSelTailPresets (alias)",
     0x44: "ToneDB_SourceIndexMapA", 0x48: "ToneDB_SourceIndexMapB",
     0x4C: "ToneDB_PercSourceIndexMapB", 0x50: "ToneDB_SourceNameList1",
     0x54: "ToneDB_SourceList1_Footer", 0x58: "ToneDB_SourceIndexMapC",

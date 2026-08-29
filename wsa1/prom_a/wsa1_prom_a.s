@@ -885,6 +885,22 @@ sub_F80000:
 	calr sub_F8001A                                      ; F80016  1e 01 00
 .LF80019:
 	ret                                                  ; F80019  0e
+; sub_F8001A -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 8
+; instructions to its first `ret`:
+;     site 0xF8002C  interpreter A  list 0xF39551-0xF39559
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F8001A:
 	stdi8 (0x2540), 0x01                                 ; F8001A  f1 40 25 00 01
 	calr 0xe2b6                                          ; F8001F  1e b6 e2
@@ -921,6 +937,22 @@ sub_F8001A:
 	call 0xf42a80                                        ; F80081  1d 80 2a f4
 .LF80085:
 	ret                                                  ; F80085  0e
+; sub_F80086 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 6
+; instructions to its first `ret`:
+;     site 0xF80098  interpreter B  list 0xF3B379-0xF3B3A7
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F80086:
 	stdi8 (0x2540), 0x00                                 ; F80086  f1 40 25 00 00
 	calr 0xe24a                                          ; F8008B  1e 4a e2
@@ -1137,7 +1169,35 @@ BlinkArgPtrs_F8024D:
 	.long 0x00f3b388                                 ; F80255  [  2]
 	.long 0x00f3b392                                 ; F80259  [  3]
 	.long 0x00f3b39c                                 ; F8025D  [  4]
-sub_F80261:
+; Paint_S0ngC0py -- paints the screen whose own text reads "S0NG C0PY", "FROM", "TO"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 6 time(s); XIY = list start, XIX = list end.  4 of those 6 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF80277  interpreter A  list 0xF3BF80  DL_S0ngC0pyFromToSongSongOk
+;        text: "S0NG C0PY"; "FROM"; "TO"; "SONG "; "SONG "; "OK"
+;     site 0xF8028C  interpreter A  list 0xF3BFF8  DL_FromToSongNoTrAllSongNoTrAll
+;        text: "FROM"; "TO"; "SONG NO   TR/ALL    SONG NO   TR/ALL"; " <    >    <    >    <    >    <    >"
+;     site 0xF802B1  interpreter A  list 0xF3C4D5  DL_ACurrentTrackWillBeClearedAutomaticaly
+;        text: "A current "; " track will be"; "."; "cleared automaticaly"; "Are You Sure ?"
+;     site 0xF802D7  interpreter A  list 0xF3A461  DL_AreYouSure
+;        text: "Are You Sure ?"
+; Evidence: the list address is the `ld XIY,0x00F3BF80` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_S0ngC0py:
 	call 0xf42e80                                        ; F80261  1d 80 2e f4
 	call 0xf7e2d9                                        ; F80265  1d d9 e2 f7
 	call 0xf42a08                                        ; F80269  1d 08 2a f4
@@ -1175,6 +1235,23 @@ sub_F80261:
 	call sub_F80384                                      ; F802E3  1d 84 03 f8
 	call 0xf7e2e7                                        ; F802E7  1d e7 e2 f7
 	ret                                                  ; F802EB  0e
+; sub_F802EC -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 2 time(s) in the 23
+; instructions to its first `ret`:
+;     site 0xF80301  interpreter B  list 0xF3C199-0xF3C1A3
+;     site 0xF80333  interpreter B  list 0xF3C15D-0xF3C16C
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F802EC:
 	xor XWA,XWA                                          ; F802EC  e8 d0
 	ldb_d8 a, (0x0e0c)                                   ; F802EE  c1 0c 0e 21
@@ -1199,6 +1276,23 @@ sub_F802EC:
 	ld XIX,0x00f3c16c                                    ; F8032E  44 6c c1 f3 00
 	call 0xf417f4                                        ; F80333  1d f4 17 f4
 	ret                                                  ; F80337  0e
+; sub_F80338 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 2 time(s) in the 23
+; instructions to its first `ret`:
+;     site 0xF8034D  interpreter B  list 0xF3C1A3-0xF3C1AD
+;     site 0xF8037F  interpreter B  list 0xF3C16C-0xF3C17B
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F80338:
 	xor XWA,XWA                                          ; F80338  e8 d0
 	ldb_d8 a, (0x0e0d)                                   ; F8033A  c1 0d 0e 21
@@ -1289,7 +1383,33 @@ sub_F803C8:
 	call 0xf42a34                                        ; F80433  1d 34 2a f4
 	ret                                                  ; F80437  0e
 	ret                                                  ; F80438  0e
-sub_F80439:
+; Paint_N0teChange -- paints the screen whose own text reads "N0TE CHANGE", "TARGET NOTE", "TRACK         :"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 6 time(s); XIY = list start, XIX = list end.  3 of those 6 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF8048D  interpreter A  list 0xF3AEAF  DL_N0teChangeTargetNoteTrack
+;        text: "N0TE CHANGE"; "TARGET NOTE"; "TRACK         :"; ":"; " ("; ")"
+;     site 0xF804C0  interpreter A  list 0xF3A461  DL_AreYouSure
+;        text: "Are You Sure ?"
+;     site 0xF804CE  interpreter A  list 0xF3A461  DL_AreYouSure
+;        text: "Are You Sure ?"
+; Evidence: the list address is the `ld XIY,0x00F3AEAF` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_N0teChange:
 	call 0xf42e80                                        ; F80439  1d 80 2e f4
 	m_cp_mi8 MB16, 0x207e, 0x00                          ; F8043D  c1 7e 20 3f 00
 	jr nz, .LF8047B                                      ; F80442  6e 37
@@ -1384,6 +1504,22 @@ sub_F8051E:
 	calr sub_F80549                                      ; F80545  1e 01 00
 .LF80548:
 	ret                                                  ; F80548  0e
+; sub_F80549 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 8
+; instructions to its first `ret`:
+;     site 0xF8055B  interpreter A  list 0xF39551-0xF39559
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F80549:
 	stdi8 (0x2540), 0x01                                 ; F80549  f1 40 25 00 01
 	calr 0xdd87                                          ; F8054E  1e 87 dd
@@ -1425,6 +1561,22 @@ sub_F80549:
 	call 0xf42aac                                        ; F805B3  1d ac 2a f4
 .LF805B7:
 	ret                                                  ; F805B7  0e
+; sub_F805B8 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 6
+; instructions to its first `ret`:
+;     site 0xF805CA  interpreter B  list 0xF3AFE7-0xF3B05A
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F805B8:
 	stdi8 (0x2540), 0x00                                 ; F805B8  f1 40 25 00 00
 	calr 0xdd18                                          ; F805BD  1e 18 dd
@@ -1608,7 +1760,31 @@ BlinkArgPtrs_F80754:
 	.long 0x00f3b050                                 ; F80760  [  3]
 	.long 0x00f3b032                                 ; F80764  [  4]
 	.long 0x00f3b046                                 ; F80768  [  5]
-sub_F8076C:
+; Paint_MeasureC0py -- paints the screen whose own text reads "MEASURE C0PY", "FROM TRACK", "TO TRACK"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 6 time(s); XIY = list start, XIX = list end.  2 of those 6 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF807B7  interpreter A  list 0xF3BBA5  DL_MeasureC0pyFromTrackToTrack
+;        text: "MEASURE C0PY"; "FROM TRACK"; "TO TRACK"; ":"; ":"; "FIRST MEASURE"
+;     site 0xF807ED  interpreter A  list 0xF3A461  DL_AreYouSure
+;        text: "Are You Sure ?"
+; Evidence: the list address is the `ld XIY,0x00F3BBA5` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_MeasureC0py:
 	call 0xf42e80                                        ; F8076C  1d 80 2e f4
 	m_cp_mi8 MB16, 0x207e, 0x00                          ; F80770  c1 7e 20 3f 00
 	jr nz, .LF80792                                      ; F80775  6e 1b
@@ -1705,6 +1881,22 @@ sub_F80809:
 	calr sub_F80808                                      ; F8088D  1e 78 ff
 .LF80890:
 	ret                                                  ; F80890  0e
+; sub_F80891 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 8
+; instructions to its first `ret`:
+;     site 0xF808A3  interpreter A  list 0xF39551-0xF39559
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F80891:
 	stdi8 (0x2540), 0x01                                 ; F80891  f1 40 25 00 01
 	calr 0xda3f                                          ; F80896  1e 3f da
@@ -1817,6 +2009,22 @@ sub_F80891:
 .LF8099B:
 	ret                                                  ; F8099B  0e
 	ret                                                  ; F8099C  0e
+; sub_F8099D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xF809A7  interpreter B  list 0xF3BD07-0xF3BD4D
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F8099D:
 	ld XIY,0x00f3bd07                                    ; F8099D  45 07 bd f3 00
 	ld XIX,0x00f3bd4d                                    ; F809A2  44 4d bd f3 00
@@ -1939,7 +2147,31 @@ BlinkArgPtrs_F80AAD:
 	.long 0x00000000                                 ; F80ABD  [  4]
 	.long 0x00f3bd39                                 ; F80AC1  [  5]
 	.long 0x00000000                                 ; F80AC5  [  6]
-sub_F80AC9:
+; Paint_MeasureInsert -- paints the screen whose own text reads "MEASURE INSERT", "FROM TRACK", "TO TRACK"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 6 time(s); XIY = list start, XIX = list end.  2 of those 6 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF80B14  interpreter A  list 0xF3BDCF  DL_MeasureInsertFromTrackToTrack
+;        text: "MEASURE INSERT"; "FROM TRACK"; "TO TRACK"; ":"; ":"; "FIRST MEASURE"
+;     site 0xF80B4A  interpreter A  list 0xF3A461  DL_AreYouSure
+;        text: "Are You Sure ?"
+; Evidence: the list address is the `ld XIY,0x00F3BDCF` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_MeasureInsert:
 	call 0xf42e80                                        ; F80AC9  1d 80 2e f4
 	m_cp_mi8 MB16, 0x207e, 0x00                          ; F80ACD  c1 7e 20 3f 00
 	jr nz, .LF80AEF                                      ; F80AD2  6e 1b
@@ -2036,6 +2268,22 @@ sub_F80B66:
 	calr sub_F80B65                                      ; F80BEA  1e 78 ff
 .LF80BED:
 	ret                                                  ; F80BED  0e
+; sub_F80BEE -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 8
+; instructions to its first `ret`:
+;     site 0xF80C00  interpreter A  list 0xF39551-0xF39559
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F80BEE:
 	stdi8 (0x2540), 0x01                                 ; F80BEE  f1 40 25 00 01
 	calr 0xd6e2                                          ; F80BF3  1e e2 d6
@@ -2150,6 +2398,22 @@ sub_F80CED:
 .LF80CF9:
 	ret                                                  ; F80CF9  0e
 	ret                                                  ; F80CFA  0e
+; sub_F80CFB -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 6
+; instructions to its first `ret`:
+;     site 0xF80D0D  interpreter B  list 0xF3BEF7-0xF3BF3D
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F80CFB:
 	stdi8 (0x2540), 0x00                                 ; F80CFB  f1 40 25 00 00
 	calr 0xd5d5                                          ; F80D00  1e d5 d5
@@ -2274,7 +2538,29 @@ BlinkArgPtrs_F80E12:
 	.long 0x00000000                                 ; F80E22  [  4]
 	.long 0x00f3bf29                                 ; F80E26  [  5]
 	.long 0x00000000                                 ; F80E2A  [  6]
-sub_F80E2E:
+; Paint_S0ngSelectName -- paints the screen whose own text reads "S0NG SELECT & NAME", " KB", "S0NG"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF80E65  interpreter A  list 0xF3C1AD  DL_S0ngSelectNameKbS0ngName
+;        text: "S0NG SELECT & NAME"; " KB"; "S0NG"; ":"; "%"; ":"
+; Evidence: the list address is the `ld XIY,0x00F3C1AD` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_S0ngSelectName:
 	call 0xf42e80                                        ; F80E2E  1d 80 2e f4
 	call sub_F8178D                                      ; F80E32  1d 8d 17 f8
 	m_or_mi8 MB16, 0x2075, 0x01                          ; F80E36  c1 75 20 3e 01
@@ -2301,6 +2587,22 @@ sub_F80E2E:
 	call 0xf4181c                                        ; F80E92  1d 1c 18 f4
 	call 0xf7e2e7                                        ; F80E96  1d e7 e2 f7
 	ret                                                  ; F80E9A  0e
+; sub_F80E9B -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xF80EAA  interpreter B  list 0xF3C31E-0xF3C351
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F80E9B:
 	stdi8 (0x2540), 0x00                                 ; F80E9B  f1 40 25 00 00
 	ld XIY,0x00f3c31e                                    ; F80EA0  45 1e c3 f3 00
@@ -2379,7 +2681,29 @@ sub_F80F4F:
 	.byte 0xd1, 0x34, 0x21, 0x3e, 0x02, 0x00             ; F80F4F  d1 34 21 3e 02 00   or (0x2134),0x0002
 	call 0xf42bb8                                        ; F80F55  1d b8 2b f4
 	ret                                                  ; F80F59  0e
-sub_F80F5A:
+; Paint_StepRecordPartSelect -- paints the screen whose own text reads "STEP RECORD", ": PART SELECT", "Press the up/down button under"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 3 time(s); XIY = list start, XIX = list end.  1 of those 3 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF80F75  interpreter A  list 0xF3C8A7  DL_StepRecordPartSelectPressTheUpDownButton
+;        text: "STEP RECORD"; ": PART SELECT"; "Press the up/down button under"; "the screen corresponding to the"; "track that you want to"; "STEP RECORD."
+; Evidence: the list address is the `ld XIY,0x00F3C8A7` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_StepRecordPartSelect:
 	call 0xf42e80                                        ; F80F5A  1d 80 2e f4
 	m_bit 4, MD16, 0x2095                                ; F80F5E  f1 95 20 cc
 	jr nz, .LF80F8F                                      ; F80F62  6e 2b
@@ -2460,7 +2784,31 @@ sub_F81039:
 	jr z, .LF81047                                       ; F81045  66 00
 .LF81047:
 	ret                                                  ; F81047  0e
-sub_F81048:
+; Paint_SequencerMedley -- paints the screen whose own text reads "SEQUENCER MEDLEY", "START", "FIRST S0NG    "
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 3 time(s); XIY = list start, XIX = list end.  2 of those 3 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF81098  interpreter A  list 0xF3C562  DL_SequencerMedleyStartFirstS0ng
+;        text: "SEQUENCER MEDLEY"; "START"; "FIRST S0NG    "; "STOP"; "SKIP"; "LAST S0NG     "
+;     site 0xF810A6  interpreter A  list 0xF3C721  DL_SelectIntFd
+;        text: "SELECT"; "INT"; "FD"
+; Evidence: the list address is the `ld XIY,0x00F3C562` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_SequencerMedley:
 	call 0xf42e80                                        ; F81048  1d 80 2e f4
 	m_cp_mi8 MB16, 0x207b, 0x13                          ; F8104C  c1 7b 20 3f 13
 	jr z, .LF81073                                       ; F81051  66 20
@@ -2757,6 +3105,23 @@ BlinkArgPtrs_F81344:
 	.long 0x00000000                                 ; F81344  [  0]
 	.long 0x00f3c778                                 ; F81348  [  1]
 	.long 0x00f3c782                                 ; F8134C  [  2]
+; sub_F81350 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 2 time(s) in the 27
+; instructions to its first `ret`:
+;     site 0xF81366  interpreter A  list 0xF3C86B-0xF3C873
+;     site 0xF81392  interpreter B  list 0xF3C89D-0xF3C8A7
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F81350:
 	stdi8 (0x2540), 0x00                                 ; F81350  f1 40 25 00 00
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81355  c1 c1 0d 3f 01
@@ -2806,6 +3171,22 @@ sub_F813E7:
 	ld XIY,0x00f3c78c                                    ; F813F5  45 8c c7 f3 00
 	call 0xf4181c                                        ; F813FA  1d 1c 18 f4
 	ret                                                  ; F813FE  0e
+; sub_F813FF -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xF8140E  interpreter A  list 0xF3C7C3-0xF3C7CD
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F813FF:
 	stdi8 (0x2540), 0x01                                 ; F813FF  f1 40 25 00 01
 	ld XIY,0x00f3c7c3                                    ; F81404  45 c3 c7 f3 00
@@ -2821,6 +3202,22 @@ sub_F8141C:
 	ld XIY,0x00f3c7a2                                    ; F8142A  45 a2 c7 f3 00
 	call 0xf4181c                                        ; F8142F  1d 1c 18 f4
 	ret                                                  ; F81433  0e
+; sub_F81434 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 23
+; instructions to its first `ret`:
+;     site 0xF81453  interpreter B  list 0xF3C367-0xF3C37D
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F81434:
 	m_cp_mi8 MB16, 0x0e45, 0x00                          ; F81434  c1 45 0e 3f 00
 	jr nz, .LF8147C                                      ; F81439  6e 41
@@ -2871,6 +3268,22 @@ sub_F8149A:
 	ldw bc, 0x0c00                                       ; F814C1  31 00 0c
 	ldir85                                               ; F814C4  85 11
 	ret                                                  ; F814C6  0e
+; sub_F814C7 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 23
+; instructions to its first `ret`:
+;     site 0xF814E7  interpreter B  list 0xF3C367-0xF3C37D
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F814C7:
 	m_cp_mi8 MB16, 0x0e45, 0x00                          ; F814C7  c1 45 0e 3f 00
 	jr nz, .LF81510                                      ; F814CC  6e 42
@@ -2897,6 +3310,22 @@ sub_F814C7:
 .LF81510:
 	ret                                                  ; F81510  0e
 	ret                                                  ; F81511  0e
+; sub_F81512 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 24
+; instructions to its first `ret`:
+;     site 0xF8152C  interpreter B  list 0xF3C367-0xF3C37D
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F81512:
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F81512  c1 75 20 3e 09
 	stdi16 (0x209b), 0x0605                              ; F81517  f1 9b 20 02 05 06
@@ -2923,6 +3352,22 @@ sub_F81512:
 	ld XIX,0x00f3c367                                    ; F8156A  44 67 c3 f3 00
 	call 0xf4181c                                        ; F8156F  1d 1c 18 f4
 	ret                                                  ; F81573  0e
+; sub_F81574 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 24
+; instructions to its first `ret`:
+;     site 0xF8158E  interpreter B  list 0xF3C367-0xF3C37D
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F81574:
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F81574  c1 75 20 3e 09
 	stdi16 (0x209b), 0x0605                              ; F81579  f1 9b 20 02 05 06
@@ -2991,6 +3436,22 @@ sub_F8165E:
 	ldb a, 0x08                                          ; F8166C  21 08
 	swi 7                                                ; F8166E  ff
 	ret                                                  ; F8166F  0e
+; sub_F81670 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 6
+; instructions to its first `ret`:
+;     site 0xF8167F  interpreter B  list 0xF3C367-0xF3C372
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F81670:
 	stdi8 (0x2540), 0x01                                 ; F81670  f1 40 25 00 01
 	ld XIY,0x00f3c367                                    ; F81675  45 67 c3 f3 00
@@ -3389,6 +3850,41 @@ sub_F81A83:
 	jr .LF81A98                                          ; F81AB2  68 e4
 .LF81AB4:
 	ret                                                  ; F81AB4  0e
+; sub_F81AB5 -- paints the screen whose own text reads "MASTER TRACK CLEAR", "ATTENTION!", "Using MASTER TRACK CLEAR will"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 4 time(s); XIY = list start, XIX = list end.  1 of those 4 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF81B21  interpreter A  list 0xF3E06E  DL_MasterTrackClearAttention
+;        text: "MASTER TRACK CLEAR"; "ATTENTION!"; "Using MASTER TRACK CLEAR will"; "YES"; "erase any existing recordings"; "in the MASTER TRACK."
+; Evidence: the list address is the `ld XIY,0x00F3E06E` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ⚠⚠ NAME RETRACTED IN ROUND 5, AND THE REASON MATTERS MORE THAN THE NAME.
+;    This routine was called Paint_MasterTrackClear. The screen text quoted above is real
+;    and every morpheme of that name really is in it -- but the text belongs to a
+;    DIFFERENT function. The namer credited each display-list site to the nearest
+;    preceding label BY SOURCE LINE and never checked the routine's own `ret`, so a
+;    site inside an unlabelled function was attributed to whatever label came before
+;    it. This body is a ten-instruction record-address computation -- base + (index-1)*256
+;    stored at 0x126E -- and the screen it was named for lives at 0xF81ACB, which this
+;    routine never calls and which has ZERO pointer references in all four ROM images.
+;    That is LOCATED, not IDENTIFIED -- the failure this tree has documented before.
+;    The evidence below is left in place because it is true about the SCREEN; what is
+;    not established is that THIS routine paints it.
+; Unknown: what this routine is for. Its body contains ZERO display-list calls.
+; ---------------------------------------------------------------------
 sub_F81AB5:
 	push XIY                                             ; F81AB5  3d
 	ldda32 xiy, (0x3604)                                 ; F81AB6  e1 04 36 25
@@ -3438,7 +3934,7 @@ sub_F81AB5:
 	pop XHL                                              ; F81B48  5b
 	m_cp_mi8 MB16, 0x0e63, 0x00                          ; F81B49  c1 63 0e 3f 00
 	jr nz, .LF81B56                                      ; F81B4E  6e 06
-	call sub_F81BD4                                      ; F81B50  1d d4 1b f8
+	call Paint_StepRecordTrackClrMeas                                      ; F81B50  1d d4 1b f8
 	jr .LF81BCF                                          ; F81B54  68 79
 .LF81B56:
 	m_cp_mi8 MB16, 0x0e63, 0x02                          ; F81B56  c1 63 0e 3f 02
@@ -3481,7 +3977,29 @@ sub_F81AB5:
 .LF81BCF:
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81BCF  c0 c6 3c fe
 	ret                                                  ; F81BD3  0e
-sub_F81BD4:
+; Paint_StepRecordTrackClrMeas -- paints the screen whose own text reads "STEP RECORD:", "TRACK:", "TRACK"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 3 time(s); XIY = list start, XIX = list end.  1 of those 3 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF81BEA  interpreter A  list 0xF3D016  DL_StepRecordTrackTrackClrMeas
+;        text: "STEP RECORD:"; "TRACK:"; "TRACK"; "CLR"; "MEAS"
+; Evidence: the list address is the `ld XIY,0x00F3D016` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_StepRecordTrackClrMeas:
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81BD4  c0 c6 3e 01
 	stdi8 (0x2540), 0x00                                 ; F81BD8  f1 40 25 00 00
 	calr 0xc70d                                          ; F81BDD  1e 0d c7
@@ -28887,6 +29405,24 @@ sub_F90989:
 	ldb a, 0x0c                                          ; F90B8A  21 0c
 	swi 7                                                ; F90B8C  ff
 	ret                                                  ; F90B8D  0e
+; sub_F90B8E -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 3 time(s) in the 38
+; instructions to its first `ret`:
+;     site 0xF90BB4  interpreter B  list 0xF286B8-0xF286E4
+;     site 0xF90BC9  interpreter B  list 0xF28724-0xF28750
+;     site 0xF90BE8  interpreter A  list 0xF287C1-0xF287CB
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F90B8E:
 	m_bit 0, MD16, 0x2677                                ; F90B8E  f1 77 26 c8
 	jr z, 0x39                                           ; F90B92  66 39
@@ -29116,7 +29652,7 @@ sub_F90D58:
 	.byte 0xd1, 0x16, 0x21, 0x3e, 0x44, 0x00             ; F90E41  d1 16 21 3e 44 00   or (0x2116),0x0044
 	calr sub_F911B6                                      ; F90E47  1e 6c 03
 	ret                                                  ; F90E4A  0e
-	calr sub_F9113F                                      ; F90E4B  1e f1 02
+	calr Paint_Drawbar                                      ; F90E4B  1e f1 02
 	stdi8 (0x2540), 0x00                                 ; F90E4E  f1 40 25 00 00
 	calr 0x36e3                                          ; F90E53  1e e3 36
 	ld A,(XIY)                                           ; F90E56  85 21
@@ -29240,6 +29776,34 @@ sub_F90EDD:
 	ldb a, 0x0c                                          ; F90F9B  21 0c
 	swi 7                                                ; F90F9D  ff
 	ret                                                  ; F90F9E  0e
+; sub_F90F9F -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 13 time(s) in the 119
+; instructions to its first `ret`:
+;     site 0xF90FC5  interpreter B  list 0xF286F9-0xF28725
+;     site 0xF90FE6  interpreter A  list 0xF28802-0xF2880C
+;     site 0xF91009  interpreter B  list 0xF28820-0xF2882B
+;     site 0xF9102F  interpreter B  list 0xF288D1-0xF288E0
+;     site 0xF91045  interpreter B  list 0xF288E0-0xF288EF
+;     site 0xF91067  interpreter A  list 0xF2880C-0xF28816
+;     site 0xF9108A  interpreter B  list 0xF2885B-0xF28866
+;     site 0xF910B0  interpreter B  list 0xF288EF-0xF288FE
+;     site 0xF910C6  interpreter B  list 0xF288FE-0xF2890D
+;     site 0xF910DB  interpreter A  list 0xF28816-0xF28820
+;     site 0xF910FE  interpreter B  list 0xF28896-0xF288A1
+;     site 0xF91124  interpreter B  list 0xF2890D-0xF2891C
+;     site 0xF9113A  interpreter B  list 0xF2891C-0xF2892B
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F90F9F:
 	m_bit 0, MD16, 0x2677                                ; F90F9F  f1 77 26 c8
 	jr z, .LF90FCB                                       ; F90FA3  66 26
@@ -29367,7 +29931,29 @@ sub_F90F9F:
 	call 0xf417f4                                        ; F9113A  1d f4 17 f4
 .LF9113E:
 	ret                                                  ; F9113E  0e
-sub_F9113F:
+; Paint_Drawbar -- paints the screen whose own text reads "DRAWBAR"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 4 time(s); XIY = list start, XIX = list end.  1 of those 4 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF91166  interpreter A  list 0xF2834F  DL_Drawbar
+;        text: "DRAWBAR"
+; Evidence: the list address is the `ld XIY,0x00F2834F` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_Drawbar:
 	call 0xf42e6c                                        ; F9113F  1d 6c 2e f4
 	cps a, 0x01                                          ; F91143  c9 d9
 	jr nz, .LF9117F                                      ; F91145  6e 38
@@ -29399,6 +29985,23 @@ sub_F9113F:
 	call 0xf417f0                                        ; F911B1  1d f0 17 f4
 .LF911B5:
 	ret                                                  ; F911B5  0e
+; sub_F911B6 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 2 time(s) in the 11
+; instructions to its first `ret`:
+;     site 0xF911CB  interpreter A  list 0xF28930-0xF28938
+;     site 0xF911DB  interpreter A  list 0xF2892B-0xF28930
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F911B6:
 	stdi8 (0x2540), 0x00                                 ; F911B6  f1 40 25 00 00
 	m_bit 2, MD16, 0x7f4d                                ; F911BB  f1 4d 7f ca
@@ -29862,6 +30465,41 @@ sub_F915FB:
 	ldb a, 0x01                                          ; F91676  21 01
 sub_F91678:
 	call 0xf42d88                                        ; F91678  1d 88 2d f4
+; sub_F9167C -- paints the screen whose own text reads "C0MBINATI0N M0DE", "PAGE2/2", "SOUND:"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 4 time(s); XIY = list start, XIX = list end.  1 of those 4 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF916C1  interpreter A  list 0xF29135  DL_C0mbinati0nM0dePage22Sound
+;        text: "C0MBINATI0N M0DE"; "PAGE2/2"; "SOUND:"; "SOUND"; "SOLO"; "INT"
+; Evidence: the list address is the `ld XIY,0x00F29135` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ⚠⚠ NAME RETRACTED IN ROUND 5, AND THE REASON MATTERS MORE THAN THE NAME.
+;    This routine was called Paint_C0mbinati0nM0de. The screen text quoted above is real
+;    and every morpheme of that name really is in it -- but the text belongs to a
+;    DIFFERENT function. The namer credited each display-list site to the nearest
+;    preceding label BY SOURCE LINE and never checked the routine's own `ret`, so a
+;    site inside an unlabelled function was attributed to whatever label came before
+;    it. The routine that really owns that screen is sub_F915FB, which installs the painter
+;    at 0xF916AA via `ld XWA,0x00f916aa` at 0xF9166A. 0xF9167C installs two OTHER
+;    callbacks, and neither contains any text at all.
+;    That is LOCATED, not IDENTIFIED -- the failure this tree has documented before.
+;    The evidence below is left in place because it is true about the SCREEN; what is
+;    not established is that THIS routine paints it.
+; Unknown: what this routine is for. Its body contains ZERO display-list calls.
+; ---------------------------------------------------------------------
 sub_F9167C:
 	m_cp_mi8 MB16, 0x2687, 0x00                          ; F9167C  c1 87 26 3f 00
 	jr nz, .LF91697                                      ; F91681  6e 14
@@ -31453,7 +32091,29 @@ DisplayListPtrs_F92726:
 	.long 0x00f92ce6                                 ; F9279A  [ 29]
 	.long 0x00f92ce6                                 ; F9279E  [ 30]
 	.long 0x00f92ce6                                 ; F927A2  [ 31]
-sub_F927A6:
+; InstallPainter_SoundGroupMenu -- paints the screen whose own text reads "SOUND", "GROUP", "MENU"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 2 time(s); XIY = list start, XIX = list end.  1 of those 2 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF92828  interpreter A  list 0xF2B130  DL_SoundGroupMenuReMap1ReMap2
+;        text: "SOUND"; "GROUP"; "MENU"; "1."; "9."; "2."
+; Evidence: the list address is the `ld XIY,0x00F2B130` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+InstallPainter_SoundGroupMenu:
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F927A6  c0 c6 3e 01
 	ldb_d8 a, (0x207c)                                   ; F927AA  c1 7c 20 21
 	cpdm8 (0x207d), a                                    ; F927AE  c1 7d 20 f9
@@ -31541,7 +32201,7 @@ sub_F927A6:
 .LF928A4:
 	calr sub_F92A40                                      ; F928A4  1e 99 01
 .LF928A7:
-	calr sub_F928DB                                      ; F928A7  1e 31 00
+	calr Paint_Drum                                      ; F928A7  1e 31 00
 	calr sub_F9291F                                      ; F928AA  1e 72 00
 	ret                                                  ; F928AD  0e
 	ldb_d8 a, (0x2675)                                   ; F928AE  c1 75 26 21
@@ -31557,7 +32217,29 @@ sub_F927A6:
 	ldb a, 0x0c                                          ; F928D7  21 0c
 	swi 7                                                ; F928D9  ff
 	ret                                                  ; F928DA  0e
-sub_F928DB:
+; Paint_Drum -- paints the screen whose own text reads "DRUM"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 3 time(s); XIY = list start, XIX = list end.  1 of those 3 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF928F1  interpreter A  list 0xF2BA20  DL_Drum
+;        text: "DRUM"
+; Evidence: the list address is the `ld XIY,0x00F2BA20` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_Drum:
 	calr 0x08a9                                          ; F928DB  1e a9 08
 	cps a, 0x01                                          ; F928DE  c9 d9
 	jr z, .LF9291E                                       ; F928E0  66 3c
@@ -31655,6 +32337,22 @@ sub_F92A10:
 	ld XIY,0x00f2bb0d                                    ; F92A36  45 0d bb f2 00
 	call 0xf4181c                                        ; F92A3B  1d 1c 18 f4
 	ret                                                  ; F92A3F  0e
+; sub_F92A40 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xF92A4F  interpreter A  list 0xF2BB03-0xF2BB0D
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F92A40:
 	stdi8 (0x2540), 0x00                                 ; F92A40  f1 40 25 00 00
 	ld XIY,0x00f2bb03                                    ; F92A45  45 03 bb f2 00
@@ -31959,7 +32657,29 @@ DisplayListPtrs_F92C66:
 	.long 0x00f92ce6                                 ; F92CDE  [ 30]
 	.long 0x00f92ce6                                 ; F92CE2  [ 31]
 	ret                                                  ; F92CE6  0e
-sub_F92CE7:
+; InstallPainter_GroupSoundDisplayHold -- paints the screen whose own text reads "GROUP:", "SOUND", "DISPLAY"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF92D66  interpreter A  list 0xF2B574  DL_GroupSoundDisplayHoldGr0up
+;        text: "GROUP:"; "SOUND"; "DISPLAY"; "HOLD"; "GR0UP"; "MENU"
+; Evidence: the list address is the `ld XIY,0x00F2B574` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+InstallPainter_GroupSoundDisplayHold:
 	m_bit 6, MD16, 0x2673                                ; F92CE7  f1 73 26 ce
 	jr nz, .LF92CF7                                      ; F92CEB  6e 0a
 	m_bit 7, MD16, 0x2673                                ; F92CED  f1 73 26 cf
@@ -32384,6 +33104,22 @@ sub_F92F7F:
 	ret                                                  ; F93122  0e
 sub_F93123:
 	ret                                                  ; F93123  0e
+; sub_F93124 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 17
+; instructions to its first `ret`:
+;     site 0xF93145  interpreter B  list 0xF2BA64-0xF2BA73
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F93124:
 	ldb_d8 a, (0x2169)                                   ; F93124  c1 69 21 21
 	inc 1,A                                              ; F93128  c9 61
@@ -32404,6 +33140,23 @@ sub_F93124:
 	inc 4,XSP                                            ; F9315A  ef 64
 .LF9315C:
 	ret                                                  ; F9315C  0e
+; sub_F9315D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 2 time(s) in the 11
+; instructions to its first `ret`:
+;     site 0xF93172  interpreter A  list 0xF2BA0C-0xF2BA16
+;     site 0xF93182  interpreter A  list 0xF2BA16-0xF2BA20
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F9315D:
 	stdi8 (0x2540), 0x01                                 ; F9315D  f1 40 25 00 01
 	m_bit 0, MD16, 0x267f                                ; F93162  f1 7f 26 c8
@@ -32433,6 +33186,24 @@ sub_F93187:
 sub_F9319F:
 	calr sub_F92F7F                                      ; F9319F  1e dd fd
 	jr .LF931A7                                          ; F931A2  68 03
+; sub_F931A4 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 3 time(s) in the 29
+; instructions to its first `ret`:
+;     site 0xF931D8  interpreter B  list 0xF2BDC3-0xF2BDD2
+;     site 0xF931F5  interpreter B  list 0xF2BDB4-0xF2BDC3
+;     site 0xF93208  interpreter A  list 0xF2BDD2-0xF2BDF5
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F931A4:
 	calr 0x098c                                          ; F931A4  1e 8c 09
 .LF931A7:
@@ -32823,6 +33594,22 @@ sub_F934AF:
 	jr .LF934E0                                          ; F9352A  68 b4
 .LF9352C:
 	ret                                                  ; F9352C  0e
+; sub_F9352D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xF9353C  interpreter A  list 0xF2BDF5-0xF2BE35
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F9352D:
 	stdi8 (0x2540), 0x00                                 ; F9352D  f1 40 25 00 00
 	ld XIY,0x00f2bdf5                                    ; F93532  45 f5 bd f2 00
@@ -32883,7 +33670,29 @@ DisplayListPtrs_F93557:
 	.long 0x00f92ce6                                 ; F935CB  [ 29]
 	.long 0x00f92ce6                                 ; F935CF  [ 30]
 	.long 0x00f92ce6                                 ; F935D3  [ 31]
-sub_F935D7:
+; InstallPainter_CombinationGroupMenu -- paints the screen whose own text reads "COMBINATION GROUP MENU", "1.", "9."
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 2 time(s); XIY = list start, XIX = list end.  1 of those 2 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF93659  interpreter A  list 0xF2ADD2  DL_CombinationGroupMenuReMap1
+;        text: "COMBINATION GROUP MENU"; "1."; "9."; "2."; "10."; "3."
+; Evidence: the list address is the `ld XIY,0x00F2ADD2` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+InstallPainter_CombinationGroupMenu:
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F935D7  c0 c6 3e 01
 	ldb_d8 a, (0x207c)                                   ; F935DB  c1 7c 20 21
 	cpdm8 (0x207d), a                                    ; F935DF  c1 7d 20 f9
@@ -33164,7 +33973,29 @@ DisplayListPtrs_F93839:
 	.long 0x00f92ce6                                 ; F938AD  [ 29]
 	.long 0x00f92ce6                                 ; F938B1  [ 30]
 	.long 0x00f92ce6                                 ; F938B5  [ 31]
-sub_F938B9:
+; InstallPainter_GroupCombiDisplayHold -- paints the screen whose own text reads "GROUP:", "COMBI.", "DISPLAY"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF93938  interpreter A  list 0xF2B736  DL_GroupCombiDisplayHoldGr0up
+;        text: "GROUP:"; "COMBI."; "DISPLAY"; "HOLD"; "GR0UP"; "MENU"
+; Evidence: the list address is the `ld XIY,0x00F2B736` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+InstallPainter_GroupCombiDisplayHold:
 	m_bit 6, MD16, 0x2673                                ; F938B9  f1 73 26 ce
 	jr nz, .LF938C9                                      ; F938BD  6e 0a
 	m_bit 7, MD16, 0x2673                                ; F938BF  f1 73 26 cf
@@ -37198,6 +38029,22 @@ sub_F999FE:
 	ldb a, 0x0c                                          ; F99A00  21 0c
 	swi 7                                                ; F99A02  ff
 	ret                                                  ; F99A03  0e
+; sub_F99A04 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 19
+; instructions to its first `ret`:
+;     site 0xF99A3D  interpreter A  list 0xF0D6AF-0xF0D77F
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F99A04:
 	call 0xf42e80                                        ; F99A04  1d 80 2e f4
 	ldb_d8 a, (0x207a)                                   ; F99A08  c1 7a 20 21
@@ -37336,7 +38183,29 @@ sub_F99A4E:
 	ret                                                  ; F99B7F  0e
 	ret                                                  ; F99B80  0e
 	ret                                                  ; F99B81  0e
-sub_F99B82:
+; Paint_Sending -- paints the screen whose own text reads "SENDING"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF99B96  interpreter A  list 0xF0D79C  DL_Sending
+;        text: "SENDING"
+; Evidence: the list address is the `ld XIY,0x00F0D79C` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_Sending:
 	m_bit 0, MD24, 0x60f810                              ; F99B82  f2 10 f8 60 c8
 	jr z, .LF99BA0                                       ; F99B87  66 17
 	calr sub_F999F0                                      ; F99B89  1e 64 fe
@@ -37370,6 +38239,22 @@ sub_F99B82:
 .LF99BE9:
 	calr sub_F999FE                                      ; F99BE9  1e 12 fe
 	ret                                                  ; F99BEC  0e
+; sub_F99BED -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 30
+; instructions to its first `ret`:
+;     site 0xF99BF8  interpreter A  list 0xF0D99C-0xF0D9A4
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F99BED:
 	push XHL                                             ; F99BED  3b
 	ld XIY,0x00f0d99c                                    ; F99BEE  45 9c d9 f0 00
@@ -37426,6 +38311,22 @@ sub_F99C32:
 	jr .LF99C3D                                          ; F99C59  68 e2
 .LF99C5B:
 	ret                                                  ; F99C5B  0e
+; sub_F99C5C -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 23
+; instructions to its first `ret`:
+;     site 0xF99C76  interpreter A  list 0xF0D7E2-0xF0D81B
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_F99C5C:
 	and L,0x7f                                           ; F99C5C  cf cc 7f
 	jr nz, .LF99C7C                                      ; F99C5F  6e 1b
@@ -37454,7 +38355,29 @@ sub_F99C5C:
 	call 0xf4182c                                        ; F99C9C  1d 2c 18 f4
 .LF99CA0:
 	ret                                                  ; F99CA0  0e
-sub_F99CA1:
+; Paint_SystemExclusivePleaseWait -- paints the screen whose own text reads "SYSTEM EXCLUSIVE", "PLEASE WAIT!", "RECEIVING"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF99CB5  interpreter A  list 0xF0D7A7  DL_SystemExclusivePleaseWait
+;        text: "SYSTEM EXCLUSIVE"; "PLEASE WAIT!"; "RECEIVING"
+; Evidence: the list address is the `ld XIY,0x00F0D7A7` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_SystemExclusivePleaseWait:
 	m_bit 1, MD24, 0x60f810                              ; F99CA1  f2 10 f8 60 c9
 	jr z, .LF99CBF                                       ; F99CA6  66 17
 	calr sub_F999F0                                      ; F99CA8  1e 45 fd
@@ -37488,7 +38411,31 @@ sub_F99CA1:
 .LF99D08:
 	calr sub_F999FE                                      ; F99D08  1e f3 fc
 	ret                                                  ; F99D0B  0e
-sub_F99D0C:
+; Paint_GeneralMidiMode -- paints the screen whose own text reads "GENERAL MIDI", "MIDI", " GENERAL MIDI MODE  :  "
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 5 time(s); XIY = list start, XIX = list end.  2 of those 5 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xF99D67  interpreter A  list 0xF0D9E2  DL_GeneralMidiMidiGeneralMidiMode
+;        text: "GENERAL MIDI"; "MIDI"; " GENERAL MIDI MODE  :  "; " ON"; " OFF"
+;     site 0xF99D80  interpreter A  list 0xF0DAA2  DL_GeneralMidiMidiYesNo
+;        text: "GENERAL MIDI"; "MIDI"; " YES"; " NO"
+; Evidence: the list address is the `ld XIY,0x00F0D9E2` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_GeneralMidiMode:
 	call 0xf42e80                                        ; F99D0C  1d 80 2e f4
 	ldb_d8 a, (0x207a)                                   ; F99D10  c1 7a 20 21
 	m_cp_rm MB16, 0x207b, r1                             ; F99D14  c1 7b 20 f1
@@ -57660,7 +58607,18 @@ sub_FAA03A:
 	ldw_da hl, (0x60f18d)                                ; FAA095  d2 8d f1 60 23
 	ldb_da w, (0x60f18f)                                 ; FAA09A  c2 8f f1 60 20
 	ret                                                  ; FAA09F  0e
-sub_FAA0A0:
+; Queue2C00_PublishStagedIfPending_StaleCopy -- the stale copy of Queue2C00_PublishStagedIfPending @FAA4A0
+;
+; Evidence: 0xFAA018-0xFAA3FF is a copy of 0xFAA418-0xFAA7FF differing in
+;          exactly ten bytes, established in
+;          notes/FINDINGS-prom_a-message-module.md section 3a; this
+;          routine's own body is byte-identical to its twin at +0x400.
+;          Nothing publishes an entry into the copy: zero directory slots
+;          point into it against 37 for the live block.
+; Unknown: whether anything ever calls it.  The name asserts what the code
+;          IS, not that it runs.
+; ---------------------------------------------------------------------
+Queue2C00_PublishStagedIfPending_StaleCopy:
 	m_cp_mi8 MB24, 0x60f083, 0x00                        ; FAA0A0  c2 83 f0 60 3f 00
 	jr z, .LFAA0FB                                       ; FAA0A6  66 53
 	pushw wa                                             ; FAA0A8  28
@@ -57811,7 +58769,18 @@ sub_FAA0A0:
 	pop XIX                                              ; FAA1FC  5c
 	ret                                                  ; FAA1FD  0e
 	stib_da (0x60f007), 0x00                             ; FAA1FE  f2 07 f0 60 00 00
-sub_FAA204:
+; ParamChange_Notify_StaleCopy -- the stale copy of ParamChange_Notify @FAA604
+;
+; Evidence: 0xFAA018-0xFAA3FF is a copy of 0xFAA418-0xFAA7FF differing in
+;          exactly ten bytes, established in
+;          notes/FINDINGS-prom_a-message-module.md section 3a; this
+;          routine's own body is byte-identical to its twin at +0x400.
+;          Nothing publishes an entry into the copy: zero directory slots
+;          point into it against 37 for the live block.
+; Unknown: whether anything ever calls it.  The name asserts what the code
+;          IS, not that it runs.
+; ---------------------------------------------------------------------
+ParamChange_Notify_StaleCopy:
 	m_bit 0, MD16, 0x0922                                ; FAA204  f1 22 09 c8
 	jr z, .LFAA210                                       ; FAA208  66 06
 	m_bit 1, MD16, 0x0922                                ; FAA20A  f1 22 09 c9
@@ -57862,7 +58831,18 @@ sub_FAA204:
 	popw wa                                              ; FAA267  48
 	pop XIX                                              ; FAA268  5c
 	ret                                                  ; FAA269  0e
-sub_FAA26A:
+; ParamRecord_WriteFieldAndStage_StaleCopy -- the stale copy of ParamRecord_WriteFieldAndStage_Copy @FAA66A
+;
+; Evidence: 0xFAA018-0xFAA3FF is a copy of 0xFAA418-0xFAA7FF differing in
+;          exactly ten bytes, established in
+;          notes/FINDINGS-prom_a-message-module.md section 3a; this
+;          routine's own body is byte-identical to its twin at +0x400.
+;          Nothing publishes an entry into the copy: zero directory slots
+;          point into it against 37 for the live block.
+; Unknown: whether anything ever calls it.  The name asserts what the code
+;          IS, not that it runs.
+; ---------------------------------------------------------------------
+ParamRecord_WriteFieldAndStage_StaleCopy:
 	push XIX                                             ; FAA26A  3c
 	pushw wa                                             ; FAA26B  28
 	pushw hl                                             ; FAA26C  2b
@@ -57924,7 +58904,7 @@ sub_FAA26A:
 	ldb d, 0xff                                          ; FAA305  24 ff
 	stw_da (0x60f080), bc                                ; FAA307  f2 80 f0 60 51
 	stw_da (0x60f082), de                                ; FAA30C  f2 82 f0 60 52
-	calr sub_FAA0A0                                      ; FAA311  1e 8c fd
+	calr Queue2C00_PublishStagedIfPending_StaleCopy                                      ; FAA311  1e 8c fd
 .LFAA314:
 	pop XIZ                                              ; FAA314  5e
 	pop XIY                                              ; FAA315  5d
@@ -57945,7 +58925,7 @@ sub_FAA26A:
 	ldb_d8 e, (0x24f1)                                   ; FAA332  c1 f1 24 25
 	ldb d, 0x7f                                          ; FAA336  24 7f
 	stw_da (0x60f082), de                                ; FAA338  f2 82 f0 60 52
-	calr sub_FAA0A0                                      ; FAA33D  1e 60 fd
+	calr Queue2C00_PublishStagedIfPending_StaleCopy                                      ; FAA33D  1e 60 fd
 .LFAA340:
 	popw de                                              ; FAA340  4a
 	ret                                                  ; FAA341  0e
@@ -57999,7 +58979,7 @@ sub_FAA26A:
 	push XDE                                             ; FAA3B0  3a
 	ldw_da bc, (0x60f177)                                ; FAA3B1  d2 77 f1 60 21
 	ldw_da de, (0x60f179)                                ; FAA3B6  d2 79 f1 60 22
-	call sub_FAA26A                                      ; FAA3BB  1d 6a a2 fa
+	call ParamRecord_WriteFieldAndStage_StaleCopy                                      ; FAA3BB  1d 6a a2 fa
 	pop XDE                                              ; FAA3BF  5a
 	pop XHL                                              ; FAA3C0  5b
 	pop XIX                                              ; FAA3C1  5c
@@ -58015,7 +58995,7 @@ sub_FAA26A:
 	push XIZ                                             ; FAA3D0  3e
 	ldw_da bc, (0x60f177)                                ; FAA3D1  d2 77 f1 60 21
 	ldw_da de, (0x60f179)                                ; FAA3D6  d2 79 f1 60 22
-	call sub_FAA204                                      ; FAA3DB  1d 04 a2 fa
+	call ParamChange_Notify_StaleCopy                                      ; FAA3DB  1d 04 a2 fa
 	pop XIZ                                              ; FAA3DF  5e
 	pop XIY                                              ; FAA3E0  5d
 	pop XIX                                              ; FAA3E1  5c
@@ -69947,7 +70927,7 @@ sub_FB2F35:
 	ld xwa, (xiz-4)                                      ; FB2FE6  ae fc 20
 	push XWA                                             ; FB2FE9  38
 	push XBC                                             ; FB2FEA  39
-	call sub_FB81CE                                      ; FB2FEB  1d ce 81 fb
+	call MemCopyWords_Copy                                      ; FB2FEB  1d ce 81 fb
 	inc 0,XSP                                            ; FB2FEF  ef 60
 	inc 2,XSP                                            ; FB2FF1  ef 62
 .LFB2FF3:
@@ -70290,7 +71270,7 @@ sub_FB328D:
 	ld xwa, (xiz-4)                                      ; FB330E  ae fc 20
 	push XWA                                             ; FB3311  38
 	push XBC                                             ; FB3312  39
-	call sub_FB81CE                                      ; FB3313  1d ce 81 fb
+	call MemCopyWords_Copy                                      ; FB3313  1d ce 81 fb
 	inc 0,XSP                                            ; FB3317  ef 60
 	inc 2,XSP                                            ; FB3319  ef 62
 .LFB331B:
@@ -72584,7 +73564,7 @@ sub_FB44B3:
 	push XBC                                             ; FB47F9  39
 	ld XWA,(XIZ+0x08)                                    ; FB47FA  ae 08 20
 	push XWA                                             ; FB47FD  38
-	call sub_FB81CE                                      ; FB47FE  1d ce 81 fb
+	call MemCopyWords_Copy                                      ; FB47FE  1d ce 81 fb
 	ld C,H                                               ; FB4802  ce 8b
 	add C,0x20                                           ; FB4804  cb c8 20
 	ld (xiz-9), c                                        ; FB4807  be f7 43
@@ -72684,7 +73664,7 @@ sub_FB44B3:
 	push XBC                                             ; FB48F7  39
 	ld XWA,(XIZ+0x08)                                    ; FB48F8  ae 08 20
 	push XWA                                             ; FB48FB  38
-	call sub_FB81CE                                      ; FB48FC  1d ce 81 fb
+	call MemCopyWords_Copy                                      ; FB48FC  1d ce 81 fb
 	ld C,H                                               ; FB4900  ce 8b
 	add C,0x20                                           ; FB4902  cb c8 20
 	ld (xiz-11), c                                       ; FB4905  be f5 43
@@ -72834,7 +73814,7 @@ sub_FB49AF:
 	push XBC                                             ; FB4A69  39
 	ld XWA,(XIZ+0x08)                                    ; FB4A6A  ae 08 20
 	push XWA                                             ; FB4A6D  38
-	call sub_FB81CE                                      ; FB4A6E  1d ce 81 fb
+	call MemCopyWords_Copy                                      ; FB4A6E  1d ce 81 fb
 	pushw 0x0b                                           ; FB4A72  0b 0b 00
 	ldl_da xbc, (0x60fcd8)                               ; FB4A75  e2 d8 fc 60 21
 	push XBC                                             ; FB4A7A  39
@@ -73411,7 +74391,7 @@ sub_FB4F8F:
 	push XBC                                             ; FB4FEC  39
 	ld XWA,(XIX+0x04)                                    ; FB4FED  ac 04 20
 	push XWA                                             ; FB4FF0  38
-	call sub_FB81CE                                      ; FB4FF1  1d ce 81 fb
+	call MemCopyWords_Copy                                      ; FB4FF1  1d ce 81 fb
 	ld XBC,(XIX)                                         ; FB4FF5  a4 21
 	ld A,(XBC)                                           ; FB4FF7  81 21
 	set 0x05,A                                           ; FB4FF9  c9 31 05
@@ -73866,7 +74846,7 @@ sub_FB5425:
 	ld XWA,(XIZ+0x08)                                    ; FB5484  ae 08 20
 	ld XIY,(XWA+0x04)                                    ; FB5487  a8 04 25
 	push XIY                                             ; FB548A  3d
-	call sub_FB81CE                                      ; FB548B  1d ce 81 fb
+	call MemCopyWords_Copy                                      ; FB548B  1d ce 81 fb
 	ld XBC,(XIZ+0x08)                                    ; FB548F  ae 08 21
 	ld XWA,(XBC)                                         ; FB5492  a1 20
 	ld C,(XWA)                                           ; FB5494  80 23
@@ -78853,7 +79833,17 @@ sub_FB818A:
 	ret                                                  ; FB81C9  0e
 	m_ldc_reg_cr RL+r5, CR_DMAD3                         ; FB81CA  ed 2f 1c
 	ret                                                  ; FB81CD  0e
-sub_FB81CE:
+; MemCopyWords_Copy -- a second, byte-identical copy of MemCopyWords
+;
+; Evidence: 24 of 24 bytes equal to prom_a's MemCopyWords at 0xF8E6E2 and
+;          to prom_c's at 0xF9A038 (zero differing on both diffs), and the
+;          eleven-instruction mnemonic sequence is identical.  Reproduced
+;          by notes/prom_a_understanding_round5.py --twins, which prints
+;          the differing count for both diffs.
+; Unknown: why the copy exists, and which of the two the callers of this
+;          address use.  Neither was established.
+; ---------------------------------------------------------------------
+MemCopyWords_Copy:
 	push XIX                                             ; FB81CE  3c
 	ld BC,(XSP+0x10)                                     ; FB81CF  9f 10 21
 	ld XIY,(XSP+0x08)                                    ; FB81D2  af 08 25
@@ -102995,7 +103985,7 @@ sub_FCFDA7:
 	ld bc, (xiz-4)                                       ; FD0052  9e fc 21
 	extz BC                                              ; FD0055  d9 12
 	pushw bc                                             ; FD0057  29
-	call sub_FDA48C                                      ; FD0058  1d 8c a4 fd
+	call Arr2800_Set1                                      ; FD0058  1d 8c a4 fd
 	pop XIY                                              ; FD005C  5d
 .LFD005D:
 	pushw 0x04                                           ; FD005D  0b 04 00
@@ -104466,7 +105456,7 @@ sub_FD0C07:
 	ld bc, (xiz-2)                                       ; FD0E03  9e fe 21
 	extz BC                                              ; FD0E06  d9 12
 	pushw bc                                             ; FD0E08  29
-	call sub_FDA48C                                      ; FD0E09  1d 8c a4 fd
+	call Arr2800_Set1                                      ; FD0E09  1d 8c a4 fd
 	pop XIY                                              ; FD0E0D  5d
 .LFD0E0E:
 	pushw 0x05                                           ; FD0E0E  0b 05 00
@@ -106399,7 +107389,7 @@ sub_FD2014:
 .LFD2053:
 	lda xbc, (xiz-6)                                     ; FD2053  be fa 31
 	push XBC                                             ; FD2056  39
-	call sub_FDA8BC                                      ; FD2057  1d bc a8 fd
+	call Var280E_GetW                                      ; FD2057  1d bc a8 fd
 	pop XIY                                              ; FD205B  5d
 	ld bc, (xiz-6)                                       ; FD205C  9e fa 21
 	m_cp_rm MWD+r6, 0xfc, r1                             ; FD205F  9e fc f1
@@ -106438,7 +107428,7 @@ sub_FD2014:
 .LFD20B4:
 	lda xbc, (xiz-6)                                     ; FD20B4  be fa 31
 	push XBC                                             ; FD20B7  39
-	call sub_FDA8BC                                      ; FD20B8  1d bc a8 fd
+	call Var280E_GetW                                      ; FD20B8  1d bc a8 fd
 	pop XIY                                              ; FD20BC  5d
 	ld bc, (xiz-6)                                       ; FD20BD  9e fa 21
 	m_cp_rm MWD+r6, 0xfc, r1                             ; FD20C0  9e fc f1
@@ -107418,7 +108408,7 @@ sub_FD28F8:
 	ld bc, (xiz-4)                                       ; FD2A23  9e fc 21
 	extz BC                                              ; FD2A26  d9 12
 	pushw bc                                             ; FD2A28  29
-	call sub_FDA48C                                      ; FD2A29  1d 8c a4 fd
+	call Arr2800_Set1                                      ; FD2A29  1d 8c a4 fd
 	pop XIY                                              ; FD2A2D  5d
 .LFD2A2E:
 	pushw 0x03                                           ; FD2A2E  0b 03 00
@@ -121484,7 +122474,19 @@ sub_FDA482:
 	and C,0x08                                           ; FDA486  cb cc 08
 	ld A,C                                               ; FDA489  cb 89
 	ret                                                  ; FDA48B  0e
-sub_FDA48C:
+; Arr2800_Set1 -- accessor sibling of Arr27D6_Set1
+;
+; Evidence: byte-for-byte identical to that routine except in the two
+;          bytes that hold the absolute cell address, so it is the same
+;          single-cell accessor on a different cell.  Round 3's pass
+;          (notes/prom_a_naming_round3.py) could not see it because its
+;          `ret` carries a label of its own and the body extraction
+;          stopped one instruction short.  Reproduced by
+;          notes/prom_a_understanding_round5.py --accessors.
+; Unknown: what the cell holds.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; ---------------------------------------------------------------------
+Arr2800_Set1:
 	link XIZ,0x0000                                      ; FDA48C  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FDA490  9e 08 21
 	extz BC                                              ; FDA493  d9 12
@@ -122187,7 +123189,19 @@ Var280E_SetW:
 	stda16 (0x280e), bc                                  ; FDA8B5  f1 0e 28 51
 	unlk XIZ                                             ; FDA8B9  ee 0d
 	ret                                                  ; FDA8BB  0e
-sub_FDA8BC:
+; Var280E_GetW -- accessor sibling of Var27F2_GetW
+;
+; Evidence: byte-for-byte identical to that routine except in the two
+;          bytes that hold the absolute cell address, so it is the same
+;          single-cell accessor on a different cell.  Round 3's pass
+;          (notes/prom_a_naming_round3.py) could not see it because its
+;          `ret` carries a label of its own and the body extraction
+;          stopped one instruction short.  Reproduced by
+;          notes/prom_a_understanding_round5.py --accessors.
+; Unknown: what the cell holds.  The name states the cell and the
+;          direction and claims nothing about meaning.
+; ---------------------------------------------------------------------
+Var280E_GetW:
 	link XIZ,0x0000                                      ; FDA8BC  ee 0c 00 00
 	ld XBC,(XIZ+0x08)                                    ; FDA8C0  ae 08 21
 	ldw_d16 wa, (0x280e)                                 ; FDA8C3  d1 0e 28 20
@@ -122968,7 +123982,7 @@ sub_FDAE1F:
 	ld bc, (xiz-4)                                       ; FDAED1  9e fc 21
 	extz BC                                              ; FDAED4  d9 12
 	pushw bc                                             ; FDAED6  29
-	call sub_FDA48C                                      ; FDAED7  1d 8c a4 fd
+	call Arr2800_Set1                                      ; FDAED7  1d 8c a4 fd
 	call sub_FD7719                                      ; FDAEDB  1d 19 77 fd
 	inc 0,XSP                                            ; FDAEDF  ef 60
 	inc 4,XSP                                            ; FDAEE1  ef 64
@@ -123208,7 +124222,7 @@ sub_FDAF07:
 	extz BC                                              ; FDB139  d9 12
 	pushw bc                                             ; FDB13B  29
 	pushw 0x01                                           ; FDB13C  0b 01 00
-	call sub_FDA48C                                      ; FDB13F  1d 8c a4 fd
+	call Arr2800_Set1                                      ; FDB13F  1d 8c a4 fd
 	push XIX                                             ; FDB143  3c
 	pushw 0x04                                           ; FDB144  0b 04 00
 	call Arr27A6_Get                                      ; FDB147  1d 7b 6c fd
@@ -123216,7 +124230,7 @@ sub_FDAF07:
 	extz BC                                              ; FDB14D  d9 12
 	pushw bc                                             ; FDB14F  29
 	pushw 0x02                                           ; FDB150  0b 02 00
-	call sub_FDA48C                                      ; FDB153  1d 8c a4 fd
+	call Arr2800_Set1                                      ; FDB153  1d 8c a4 fd
 	pushw 0x80                                           ; FDB157  0b 80 00
 	pushw 0x01                                           ; FDB15A  0b 01 00
 	call sub_FD62B4                                      ; FDB15D  1d b4 62 fd
@@ -126869,7 +127883,7 @@ sub_FDD27F:
 	extz BC                                              ; FDD392  d9 12
 	pushw bc                                             ; FDD394  29
 	pushw 0x01                                           ; FDD395  0b 01 00
-	call sub_FDA48C                                      ; FDD398  1d 8c a4 fd
+	call Arr2800_Set1                                      ; FDD398  1d 8c a4 fd
 	push XIX                                             ; FDD39C  3c
 	pushw 0x03                                           ; FDD39D  0b 03 00
 	call Arr27A6_Get                                      ; FDD3A0  1d 7b 6c fd
@@ -126877,7 +127891,7 @@ sub_FDD27F:
 	extz BC                                              ; FDD3A6  d9 12
 	pushw bc                                             ; FDD3A8  29
 	pushw 0x02                                           ; FDD3A9  0b 02 00
-	call sub_FDA48C                                      ; FDD3AC  1d 8c a4 fd
+	call Arr2800_Set1                                      ; FDD3AC  1d 8c a4 fd
 	lda xbc, (xiz-6)                                     ; FDD3B0  be fa 31
 	push XBC                                             ; FDD3B3  39
 	call Var27FC_Get                                      ; FDD3B4  1d 42 a1 fd
@@ -144863,7 +145877,29 @@ sub_FE8116:
 	m_and_mi8 MB16, 0x3614, 0xfe                         ; FE8121  c1 14 36 3c fe
 	m_and_mi8 MB16, 0x34d1, 0xef                         ; FE8126  c1 d1 34 3c ef
 	ret                                                  ; FE812B  0e
-sub_FE812C:
+; Paint_Sequencer -- paints the screen whose own text reads "SEQUENCER", "REALTIME", "EDIT"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xFE8142  interpreter A  list 0xFF0E2B  DisplayList_SequencerRealtimeEdit
+;        text: "SEQUENCER"; "REALTIME"; "EDIT"; "MASTER"; "REC0RD"; "TRACK"
+; Evidence: the list address is the `ld XIY,0x00FF0E2B` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_Sequencer:
 	call 0xf42e80                                        ; FE812C  1d 80 2e f4
 	calr sub_FE80F7                                      ; FE8130  1e c4 ff
 	stdi8 (0x2540), 0x00                                 ; FE8133  f1 40 25 00 00
@@ -144937,26 +145973,106 @@ sub_FE8165:
 	ret                                                  ; FE81E5  0e
 sub_FE81E6:
 	ret                                                  ; FE81E6  0e
+; sub_FE81E7 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE81F1  interpreter A  list 0xFE829B-0xFE82A0
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE81E7:
 	ld XIY,0x00fe829b                                    ; FE81E7  45 9b 82 fe 00
 	ld XIX,0x00fe82a0                                    ; FE81EC  44 a0 82 fe 00
 	call 0xf417f0                                        ; FE81F1  1d f0 17 f4
 	ret                                                  ; FE81F5  0e
+; sub_FE81F6 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE8200  interpreter A  list 0xFE82A0-0xFE82A5
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE81F6:
 	ld XIY,0x00fe82a0                                    ; FE81F6  45 a0 82 fe 00
 	ld XIX,0x00fe82a5                                    ; FE81FB  44 a5 82 fe 00
 	call 0xf417f0                                        ; FE8200  1d f0 17 f4
 	ret                                                  ; FE8204  0e
+; sub_FE8205 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE820F  interpreter A  list 0xFE82A5-0xFE82AA
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE8205:
 	ld XIY,0x00fe82a5                                    ; FE8205  45 a5 82 fe 00
 	ld XIX,0x00fe82aa                                    ; FE820A  44 aa 82 fe 00
 	call 0xf417f0                                        ; FE820F  1d f0 17 f4
 	ret                                                  ; FE8213  0e
+; sub_FE8214 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE821E  interpreter A  list 0xFE82AA-0xFE82AF
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE8214:
 	ld XIY,0x00fe82aa                                    ; FE8214  45 aa 82 fe 00
 	ld XIX,0x00fe82af                                    ; FE8219  44 af 82 fe 00
 	call 0xf417f0                                        ; FE821E  1d f0 17 f4
 	ret                                                  ; FE8222  0e
+; sub_FE8223 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE822D  interpreter A  list 0xFE82AF-0xFE82B4
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE8223:
 	ld XIY,0x00fe82af                                    ; FE8223  45 af 82 fe 00
 	ld XIX,0x00fe82b4                                    ; FE8228  44 b4 82 fe 00
@@ -144966,31 +146082,127 @@ sub_FE8223:
 	ld XIX,0x00fe82b9                                    ; FE8237  44 b9 82 fe 00
 	call 0xf417f0                                        ; FE823C  1d f0 17 f4
 	ret                                                  ; FE8240  0e
+; sub_FE8241 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE824B  interpreter A  list 0xFE82B9-0xFE82BE
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE8241:
 	ld XIY,0x00fe82b9                                    ; FE8241  45 b9 82 fe 00
 	ld XIX,0x00fe82be                                    ; FE8246  44 be 82 fe 00
 	call 0xf417f0                                        ; FE824B  1d f0 17 f4
 	ret                                                  ; FE824F  0e
+; sub_FE8250 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE825A  interpreter A  list 0xFE82BE-0xFE82C3
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE8250:
 	ld XIY,0x00fe82be                                    ; FE8250  45 be 82 fe 00
 	ld XIX,0x00fe82c3                                    ; FE8255  44 c3 82 fe 00
 	call 0xf417f0                                        ; FE825A  1d f0 17 f4
 	ret                                                  ; FE825E  0e
+; sub_FE825F -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE8269  interpreter A  list 0xFE82C3-0xFE82C8
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE825F:
 	ld XIY,0x00fe82c3                                    ; FE825F  45 c3 82 fe 00
 	ld XIX,0x00fe82c8                                    ; FE8264  44 c8 82 fe 00
 	call 0xf417f0                                        ; FE8269  1d f0 17 f4
 	ret                                                  ; FE826D  0e
+; sub_FE826E -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE8278  interpreter A  list 0xFE82C8-0xFE82CD
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE826E:
 	ld XIY,0x00fe82c8                                    ; FE826E  45 c8 82 fe 00
 	ld XIX,0x00fe82cd                                    ; FE8273  44 cd 82 fe 00
 	call 0xf417f0                                        ; FE8278  1d f0 17 f4
 	ret                                                  ; FE827C  0e
+; sub_FE827D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE8287  interpreter A  list 0xFE82CD-0xFE82D2
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE827D:
 	ld XIY,0x00fe82cd                                    ; FE827D  45 cd 82 fe 00
 	ld XIX,0x00fe82d2                                    ; FE8282  44 d2 82 fe 00
 	call 0xf417f0                                        ; FE8287  1d f0 17 f4
 	ret                                                  ; FE828B  0e
+; sub_FE828C -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFE8296  interpreter A  list 0xFE82D2-0xFE82D7
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE828C:
 	ld XIY,0x00fe82d2                                    ; FE828C  45 d2 82 fe 00
 	ld XIX,0x00fe82d7                                    ; FE8291  44 d7 82 fe 00
@@ -145127,14 +146339,36 @@ sub_FE836F:
 	swi 7                                                ; FE8381  ff
 	ldb a, 0x10                                          ; FE8382  21 10
 	swi 7                                                ; FE8384  ff
-	calr sub_FE8394                                      ; FE8385  1e 0c 00
+	calr Paint_NoteEditPartSelect                                      ; FE8385  1e 0c 00
 	calr sub_FE83DC                                      ; FE8388  1e 51 00
 	calr 0xfeef                                          ; FE838B  1e ef fe
 	ldb c, 0x07                                          ; FE838E  23 07
 	ldb a, 0x0c                                          ; FE8390  21 0c
 	swi 7                                                ; FE8392  ff
 	ret                                                  ; FE8393  0e
-sub_FE8394:
+; Paint_NoteEditPartSelect -- paints the screen whose own text reads "NOTE", "EDIT", "PART"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xFE839E  interpreter A  list 0xFF1332  DisplayList_NoteEditPartSelect
+;        text: "NOTE"; "EDIT"; "PART"; "SELECT"; "Press"; "the"
+; Evidence: the list address is the `ld XIY,0x00FF1332` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_NoteEditPartSelect:
 	ld XIY,0x00ff1332                                    ; FE8394  45 32 13 ff 00
 	ld XIX,0x00ff158a                                    ; FE8399  44 8a 15 ff 00
 	call 0xf417f0                                        ; FE839E  1d f0 17 f4
@@ -145149,18 +146383,56 @@ sub_FE83A3:
 	swi 7                                                ; FE83BA  ff
 	ldb a, 0x10                                          ; FE83BB  21 10
 	swi 7                                                ; FE83BD  ff
-	calr sub_FE83CD                                      ; FE83BE  1e 0c 00
+	calr Paint_DrumEditPartSelect                                      ; FE83BE  1e 0c 00
 	calr sub_FE83DC                                      ; FE83C1  1e 18 00
 	calr 0xfec5                                          ; FE83C4  1e c5 fe
 	ldb c, 0x07                                          ; FE83C7  23 07
 	ldb a, 0x0c                                          ; FE83C9  21 0c
 	swi 7                                                ; FE83CB  ff
 	ret                                                  ; FE83CC  0e
-sub_FE83CD:
+; Paint_DrumEditPartSelect -- paints the screen whose own text reads "DRUM", "EDIT", "PART"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xFE83D7  interpreter A  list 0xFF158A  DisplayList_DrumEditPartSelect
+;        text: "DRUM"; "EDIT"; "PART"; "SELECT"; "Press"; "the"
+; Evidence: the list address is the `ld XIY,0x00FF158A` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_DrumEditPartSelect:
 	ld XIY,0x00ff158a                                    ; FE83CD  45 8a 15 ff 00
 	ld XIX,0x00ff17e2                                    ; FE83D2  44 e2 17 ff 00
 	call 0xf417f0                                        ; FE83D7  1d f0 17 f4
 	ret                                                  ; FE83DB  0e
+; sub_FE83DC -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 14
+; instructions to its first `ret`:
+;     site 0xFE8400  interpreter B  list 0xFE8405-0xFE84F5
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FE83DC:
 	ld XIY,0x00603422                                    ; FE83DC  45 22 34 60 00
 	ld XIX,0x000012f6                                    ; FE83E1  44 f6 12 00 00
@@ -149366,6 +150638,22 @@ sub_FEB07A:
 	calr 0x0190                                          ; FEB09D  1e 90 01
 	calr 0x01b5                                          ; FEB0A0  1e b5 01
 	ret                                                  ; FEB0A3  0e
+; sub_FEB0A4 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 6
+; instructions to its first `ret`:
+;     site 0xFEB0B7  interpreter B  list 0xFEB0BC-0xFEB0C8
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB0A4:
 	ldw_da wa, (0x601f71)                                ; FEB0A4  d2 71 1f 60 20
 	stda16 (0x26b0), wa                                  ; FEB0A9  f1 b0 26 50
@@ -149379,6 +150667,22 @@ sub_FEB0A4:
 DisplayList_FEB0BC:
 	.byte 0x0A, 0x0C                               ; FEB0BC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x2B, 0x00, 0x03  ; FEB0BE
+; sub_FEB0C8 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB0DF  interpreter B  list 0xFEB0E4-0xFEB0F0
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB0C8:
 	ldw_da wa, (0x601f71)                                ; FEB0C8  d2 71 1f 60 20
 	add WA,0x0001                                        ; FEB0CD  d8 c8 01 00
@@ -149393,6 +150697,22 @@ sub_FEB0C8:
 DisplayList_FEB0E4:
 	.byte 0x0A, 0x0C                               ; FEB0E4  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x35, 0x00, 0x03  ; FEB0E6
+; sub_FEB0F0 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB107  interpreter B  list 0xFEB10C-0xFEB118
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB0F0:
 	ldw_da wa, (0x601f71)                                ; FEB0F0  d2 71 1f 60 20
 	add WA,0x0002                                        ; FEB0F5  d8 c8 02 00
@@ -149407,6 +150727,22 @@ sub_FEB0F0:
 DisplayList_FEB10C:
 	.byte 0x0A, 0x0C                               ; FEB10C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x3F, 0x00, 0x03  ; FEB10E
+; sub_FEB118 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB12F  interpreter B  list 0xFEB134-0xFEB140
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB118:
 	ldw_da wa, (0x601f71)                                ; FEB118  d2 71 1f 60 20
 	add WA,0x0003                                        ; FEB11D  d8 c8 03 00
@@ -149421,6 +150757,22 @@ sub_FEB118:
 DisplayList_FEB134:
 	.byte 0x0A, 0x0C                               ; FEB134  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x49, 0x00, 0x03  ; FEB136
+; sub_FEB140 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB157  interpreter B  list 0xFEB15C-0xFEB168
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB140:
 	ldw_da wa, (0x601f71)                                ; FEB140  d2 71 1f 60 20
 	add WA,0x0004                                        ; FEB145  d8 c8 04 00
@@ -149435,6 +150787,22 @@ sub_FEB140:
 DisplayList_FEB15C:
 	.byte 0x0A, 0x0C                               ; FEB15C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x53, 0x00, 0x03  ; FEB15E
+; sub_FEB168 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB17F  interpreter B  list 0xFEB184-0xFEB190
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB168:
 	ldw_da wa, (0x601f71)                                ; FEB168  d2 71 1f 60 20
 	add WA,0x0005                                        ; FEB16D  d8 c8 05 00
@@ -149449,6 +150817,22 @@ sub_FEB168:
 DisplayList_FEB184:
 	.byte 0x0A, 0x0C                               ; FEB184  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x5D, 0x00, 0x03  ; FEB186
+; sub_FEB190 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB1A7  interpreter B  list 0xFEB1AC-0xFEB1B8
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB190:
 	ldw_da wa, (0x601f71)                                ; FEB190  d2 71 1f 60 20
 	add WA,0x0006                                        ; FEB195  d8 c8 06 00
@@ -149463,6 +150847,22 @@ sub_FEB190:
 DisplayList_FEB1AC:
 	.byte 0x0A, 0x0C                               ; FEB1AC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x67, 0x00, 0x03  ; FEB1AE
+; sub_FEB1B8 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB1CF  interpreter B  list 0xFEB1D4-0xFEB1E0
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB1B8:
 	ldw_da wa, (0x601f71)                                ; FEB1B8  d2 71 1f 60 20
 	add WA,0x0007                                        ; FEB1BD  d8 c8 07 00
@@ -149477,6 +150877,22 @@ sub_FEB1B8:
 DisplayList_FEB1D4:
 	.byte 0x0A, 0x0C                               ; FEB1D4  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x71, 0x00, 0x03  ; FEB1D6
+; sub_FEB1E0 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB1F7  interpreter B  list 0xFEB1FC-0xFEB208
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB1E0:
 	ldw_da wa, (0x601f71)                                ; FEB1E0  d2 71 1f 60 20
 	add WA,0x0008                                        ; FEB1E5  d8 c8 08 00
@@ -149491,6 +150907,22 @@ sub_FEB1E0:
 DisplayList_FEB1FC:
 	.byte 0x0A, 0x0C                               ; FEB1FC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x7B, 0x00, 0x03  ; FEB1FE
+; sub_FEB208 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB21F  interpreter B  list 0xFEB224-0xFEB230
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB208:
 	ldw_da wa, (0x601f71)                                ; FEB208  d2 71 1f 60 20
 	add WA,0x0009                                        ; FEB20D  d8 c8 09 00
@@ -149505,6 +150937,22 @@ sub_FEB208:
 DisplayList_FEB224:
 	.byte 0x0A, 0x0C                               ; FEB224  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x85, 0x00, 0x03  ; FEB226
+; sub_FEB230 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB247  interpreter B  list 0xFEB24C-0xFEB258
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB230:
 	ldw_da wa, (0x601f71)                                ; FEB230  d2 71 1f 60 20
 	add WA,0x000a                                        ; FEB235  d8 c8 0a 00
@@ -149519,6 +150967,22 @@ sub_FEB230:
 DisplayList_FEB24C:
 	.byte 0x0A, 0x0C                               ; FEB24C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x8F, 0x00, 0x03  ; FEB24E
+; sub_FEB258 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFEB26F  interpreter B  list 0xFEB274-0xFEB280
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEB258:
 	ldw_da wa, (0x601f71)                                ; FEB258  d2 71 1f 60 20
 	add WA,0x000b                                        ; FEB25D  d8 c8 0b 00
@@ -151671,6 +153135,22 @@ sub_FEF758:
 	stdi8 (0x2540), 0x02                                 ; FEF758  f1 40 25 00 02
 	calr sub_FEF761                                      ; FEF75D  1e 01 00
 	ret                                                  ; FEF760  0e
+; sub_FEF761 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFEF76B  interpreter A  list 0xFEF770-0xFEF778
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF761:
 	ld XIY,0x00fef770                                    ; FEF761  45 70 f7 fe 00
 	ld XIX,0x00fef778                                    ; FEF766  44 78 f7 fe 00
@@ -151682,6 +153162,22 @@ sub_FEF761:
 DisplayList_FEF770:
 	.byte 0x0E, 0x08                               ; FEF770  op 0E, 8 bytes, handler 0xF31A9F
 	.byte 0x00, 0x00, 0x28, 0x00, 0xF0, 0x00  ; FEF772
+; sub_FEF778 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xFEF787  interpreter A  list 0xFEF78C-0xFEF796
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF778:
 	stdi8 (0x2540), 0x00                                 ; FEF778  f1 40 25 00 00
 	ld XIY,0x00fef78c                                    ; FEF77D  45 8c f7 fe 00
@@ -151694,6 +153190,22 @@ sub_FEF778:
 DisplayList_FEF78C:
 	.byte 0x1B, 0x0A                               ; FEF78C  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x08, 0x00, 0xB2, 0x00, 0xE8, 0x00, 0xC0, 0x00  ; FEF78E
+; sub_FEF796 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xFEF7A5  interpreter A  list 0xFEF7AA-0xFEF7B4
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF796:
 	stdi8 (0x2540), 0x01                                 ; FEF796  f1 40 25 00 01
 	ld XIY,0x00fef7aa                                    ; FEF79B  45 aa f7 fe 00
@@ -151706,6 +153218,22 @@ sub_FEF796:
 DisplayList_FEF7AA:
 	.byte 0x1B, 0x0A                               ; FEF7AA  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x21, 0x00, 0x08, 0x01, 0x27, 0x00  ; FEF7AC
+; sub_FEF7B4 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xFEF7C3  interpreter A  list 0xFEF7C8-0xFEF7D2
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF7B4:
 	stdi8 (0x2540), 0x00                                 ; FEF7B4  f1 40 25 00 00
 	ld XIY,0x00fef7c8                                    ; FEF7B9  45 c8 f7 fe 00
@@ -151728,6 +153256,22 @@ sub_FEF7D2:
 	ret                                                  ; FEF7E0  0e
 sub_FEF7E1:
 	stdi8 (0x2540), 0x00                                 ; FEF7E1  f1 40 25 00 00
+; sub_FEF7E6 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFEF7F0  interpreter A  list 0xFEF7F5-0xFEF7FF
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF7E6:
 	ld XIY,0x00fef7f5                                    ; FEF7E6  45 f5 f7 fe 00
 	ld XIX,0x00fef7ff                                    ; FEF7EB  44 ff f7 fe 00
@@ -151741,6 +153285,22 @@ DisplayList_FEF7F5:
 	.byte 0x10, 0x00, 0x29, 0x00, 0x02, 0x01, 0xAE, 0x00  ; FEF7F7
 sub_FEF7FF:
 	stdi8 (0x2540), 0x00                                 ; FEF7FF  f1 40 25 00 00
+; sub_FEF804 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 4
+; instructions to its first `ret`:
+;     site 0xFEF80E  interpreter A  list 0xFEF813-0xFEF81D
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF804:
 	ld XIY,0x00fef813                                    ; FEF804  45 13 f8 fe 00
 	ld XIX,0x00fef81d                                    ; FEF809  44 1d f8 fe 00
@@ -151752,6 +153312,22 @@ sub_FEF804:
 DisplayList_FEF813:
 	.byte 0x1B, 0x0A                               ; FEF813  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x58, 0x00, 0x29, 0x00, 0x02, 0x01, 0xAE, 0x00  ; FEF815
+; sub_FEF81D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xFEF82C  interpreter A  list 0xFEF831-0xFEF83B
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF81D:
 	stdi8 (0x2540), 0x00                                 ; FEF81D  f1 40 25 00 00
 	ld XIY,0x00fef831                                    ; FEF822  45 31 f8 fe 00
@@ -151764,6 +153340,22 @@ sub_FEF81D:
 DisplayList_FEF831:
 	.byte 0x1B, 0x0A                               ; FEF831  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x78, 0x00, 0xB2, 0x00, 0x80, 0x00, 0xC0, 0x00  ; FEF833
+; sub_FEF83B -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xFEF84A  interpreter A  list 0xFEF84F-0xFEF859
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF83B:
 	stdi8 (0x2540), 0x00                                 ; FEF83B  f1 40 25 00 00
 	ld XIY,0x00fef84f                                    ; FEF840  45 4f f8 fe 00
@@ -151785,6 +153377,22 @@ sub_FEF859:
 .LFEF869:
 	calr 0xff7a                                          ; FEF869  1e 7a ff
 	ret                                                  ; FEF86C  0e
+; sub_FEF86D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 5
+; instructions to its first `ret`:
+;     site 0xFEF87C  interpreter A  list 0xFEF881-0xFEF88B
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF86D:
 	stdi8 (0x2540), 0x01                                 ; FEF86D  f1 40 25 00 01
 	ld XIY,0x00fef881                                    ; FEF872  45 81 f8 fe 00
@@ -151801,6 +153409,22 @@ sub_FEF88B:
 	stdi8 (0x2540), 0x00                                 ; FEF88B  f1 40 25 00 00
 	ld XIY,0x00fef89f                                    ; FEF890  45 9f f8 fe 00
 	ld XIX,0x00fef8a9                                    ; FEF895  44 a9 f8 fe 00
+; sub_FEF89A -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 2
+; instructions to its first `ret`:
+;     site 0xFEF89A  interpreter A  list 0xFEF89F-0xFEF8A9
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FEF89A:
 	call 0xf417f0                                        ; FEF89A  1d f0 17 f4
 	ret                                                  ; FEF89E  0e
@@ -152871,26 +154495,86 @@ sub_FF031F:
 	stdi8 (0x2540), 0x02                                 ; FF031F  f1 40 25 00 02
 	m_bit 0, MD24, 0x601f70                              ; FF0324  f2 70 1f 60 c8
 	jr z, .LFF0330                                       ; FF0329  66 05
-	calr sub_FF034F                                      ; FF032B  1e 21 00
+	calr Paint_DrumEdit                                      ; FF032B  1e 21 00
 	jr .LFF0333                                          ; FF032E  68 03
 .LFF0330:
-	calr sub_FF0340                                      ; FF0330  1e 0d 00
+	calr Paint_NoteEdit                                      ; FF0330  1e 0d 00
 .LFF0333:
 	calr sub_FF035E                                      ; FF0333  1e 28 00
 	calr 0x50                                            ; FF0336  1e 50 00
 	calr 0x05cf                                          ; FF0339  1e cf 05
 	calr 0x0502                                          ; FF033C  1e 02 05
 	ret                                                  ; FF033F  0e
-sub_FF0340:
+; Paint_NoteEdit -- paints the screen whose own text reads "NOTE EDIT", "TRACK", "SONG"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xFF034A  interpreter A  list 0xFF0F11  DisplayList_NoteEditTrackSong
+;        text: "NOTE EDIT"; "TRACK"; "SONG"; "PLAY"; "GRAPH"; "ERS"
+; Evidence: the list address is the `ld XIY,0x00FF0F11` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_NoteEdit:
 	ld XIY,0x00ff0f11                                    ; FF0340  45 11 0f ff 00
 	ld XIX,0x00ff10e0                                    ; FF0345  44 e0 10 ff 00
 	call 0xf417f0                                        ; FF034A  1d f0 17 f4
 	ret                                                  ; FF034E  0e
-sub_FF034F:
+; Paint_DrumEdit -- paints the screen whose own text reads "DRUM EDIT", "TRACK", "SONG"
+;
+; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
+; 1 time(s); XIY = list start, XIX = list end.  1 of those 1 list(s)
+; carry text, and those are the ones that name this routine:
+;     site 0xFF0359  interpreter A  list 0xFF10E0  DisplayList_DrumEditTrackSong
+;        text: "DRUM EDIT"; "TRACK"; "SONG"; "PLAY"; "SOUND"; "ERS"
+; Evidence: the list address is the `ld XIY,0x00FF10E0` IMMEDIATE at the
+;          instruction two before the cited `call`, and the text quoted
+;          above is the `.ascii` the interpreter draws verbatim.  Every
+;          alphabetic morpheme of this name occurs in that text; the
+;          check is notes/prom_a_understanding_round5.py --morphemes.
+;          `Paint_` is a structural verb, not ROM text.
+;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
+;          ZERO display-list calls -- it INSTALLS the callback that paints this
+;          screen, through `call 0xF42E84`. The screen association is real one hop
+;          away; the earlier `Paint_` verb claimed the body did the drawing and it
+;          does not. Any display-list COUNT in a header above such a label is the
+;          installed callback's, not this routine's.
+; Unknown: whether this routine also handles input for the screen, and
+;          whether any other routine paints it.  Neither was searched.
+; ---------------------------------------------------------------------
+Paint_DrumEdit:
 	ld XIY,0x00ff10e0                                    ; FF034F  45 e0 10 ff 00
 	ld XIX,0x00ff1332                                    ; FF0354  44 32 13 ff 00
 	call 0xf417f0                                        ; FF0359  1d f0 17 f4
 	ret                                                  ; FF035D  0e
+; sub_FF035E -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 9
+; instructions to its first `ret`:
+;     site 0xFF037A  interpreter B  list 0xFF037F-0xFF0389
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF035E:
 	stdi8 (0x2540), 0x02                                 ; FF035E  f1 40 25 00 02
 	xor WA,WA                                            ; FF0363  d8 d0
@@ -152907,6 +154591,22 @@ sub_FF035E:
 DisplayList_FF037F:
 	.byte 0x06, 0x0A                               ; FF037F  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x8B, 0x00, 0x02  ; FF0381
+; sub_FF0389 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 9
+; instructions to its first `ret`:
+;     site 0xFF03A4  interpreter B  list 0xFF03A9-0xFF03B3
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0389:
 	stdi8 (0x2540), 0x02                                 ; FF0389  f1 40 25 00 02
 	xor WA,WA                                            ; FF038E  d8 d0
@@ -153365,6 +155065,22 @@ sub_FF096C:
 	cp DE,0x0101                                         ; FF0982  da cf 01 01
 	jr c, .LFF096F                                       ; FF0986  67 e7
 	ret                                                  ; FF0988  0e
+; sub_FF0989 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 8
+; instructions to its first `ret`:
+;     site 0xFF09A7  interpreter B  list 0xFF09D8-0xFF09E7
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0989:
 	stdi8 (0x2540), 0x00                                 ; FF0989  f1 40 25 00 00
 	m_cp_mi16 MW24, 0x601f3f, 0x03e8                     ; FF098E  d2 3f 1f 60 3f e8 03
@@ -153407,6 +155123,23 @@ DisplayList_FF09EB:
 DisplayList_FF09F5:
 	.byte 0x02, 0x0F                               ; FF09F5  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xEA, 0x09, 0xFF, 0x00, 0x01, 0x00, 0xFC, 0x1B  ; FF09F7
+; sub_FF0A04 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 2 time(s) in the 13
+; instructions to its first `ret`:
+;     site 0xFF0A20  interpreter B  list 0xFF0A39-0xFF0A43
+;     site 0xFF0A34  interpreter B  list 0xFF0A43-0xFF0A52
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0A04:
 	stdi8 (0x2540), 0x00                                 ; FF0A04  f1 40 25 00 00
 	xor WA,WA                                            ; FF0A09  d8 d0
@@ -153433,6 +155166,22 @@ DisplayList_FF0A39:
 DisplayList_FF0A43:
 	.byte 0x02, 0x0F                               ; FF0A43  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xEA, 0x09, 0xFF, 0x00, 0x01, 0x00, 0xFE, 0x1B  ; FF0A45
+; sub_FF0A52 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 8
+; instructions to its first `ret`:
+;     site 0xFF0A6C  interpreter B  list 0xFF0A71-0xFF0A7B
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0A52:
 	stdi8 (0x2540), 0x00                                 ; FF0A52  f1 40 25 00 00
 	xor WA,WA                                            ; FF0A57  d8 d0
@@ -153457,6 +155206,22 @@ sub_FF0A7B:
 .LFF0A8B:
 	calr 0x25                                            ; FF0A8B  1e 25 00
 	ret                                                  ; FF0A8E  0e
+; sub_FF0A8F -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 7
+; instructions to its first `ret`:
+;     site 0xFF0AA4  interpreter B  list 0xFF0AA9-0xFF0AB3
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0A8F:
 	xor WA,WA                                            ; FF0A8F  d8 d0
 	ldb_da a, (0x601f44)                                 ; FF0A91  c2 44 1f 60 21
@@ -153471,6 +155236,23 @@ sub_FF0A8F:
 DisplayList_FF0AA9:
 	.byte 0x00, 0x0A                               ; FF0AA9  op 00, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x04, 0x1C, 0x02  ; FF0AAB
+; sub_FF0AB3 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 2 time(s) in the 17
+; instructions to its first `ret`:
+;     site 0xFF0AD0  interpreter B  list 0xFF0AEA-0xFF0AF9
+;     site 0xFF0AE5  interpreter B  list 0xFF0AF9-0xFF0B08
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0AB3:
 	xor WA,WA                                            ; FF0AB3  d8 d0
 	ldb_da a, (0x601f44)                                 ; FF0AB5  c2 44 1f 60 21
@@ -153535,6 +155317,23 @@ sub_FF0B3A:
 	ldb_da a, (0x601f46)                                 ; FF0B3A  c2 46 1f 60 21
 	stb_da (0x601f19), a                                 ; FF0B3F  f2 19 1f 60 41
 	jr .LFF0B50                                          ; FF0B44  68 0a
+; sub_FF0B46 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 2 time(s) in the 18
+; instructions to its first `ret`:
+;     site 0xFF0B72  interpreter B  list 0xFF0BD2-0xFF0BE1
+;     site 0xFF0B8B  interpreter B  list 0xFF0BBE-0xFF0BC8
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0B46:
 	ldb_da a, (0x601f45)                                 ; FF0B46  c2 45 1f 60 21
 	stb_da (0x601f19), a                                 ; FF0B4B  f2 19 1f 60 41
@@ -153697,6 +155496,22 @@ sub_FF0D03:
 .LFF0D13:
 	calr sub_FF0D17                                      ; FF0D13  1e 01 00
 	ret                                                  ; FF0D16  0e
+; sub_FF0D17 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 6
+; instructions to its first `ret`:
+;     site 0xFF0D2A  interpreter B  list 0xFF0D2F-0xFF0D3E
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0D17:
 	ldw_da wa, (0x601f4d)                                ; FF0D17  d2 4d 1f 60 20
 	stda16 (0x26b0), wa                                  ; FF0D1C  f1 b0 26 50
@@ -153710,6 +155525,22 @@ sub_FF0D17:
 DisplayList_FF0D2F:
 	.byte 0x02, 0x0F                               ; FF0D2F  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x65, 0x0D, 0xFF, 0x00, 0x02, 0x00, 0x13, 0x1C  ; FF0D31
+; sub_FF0D3E -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+;
+; Its body reaches the display-list interpreters 1 time(s) in the 6
+; instructions to its first `ret`:
+;     site 0xFF0D51  interpreter B  list 0xFF0D56-0xFF0D65
+; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
+;          immediates of the LAST such loads before each cited `call` -- within
+;          five instructions above it; --selftest measures every distance;
+;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
+;          (notes/FINDINGS-ui-display-list.md).
+; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
+;          so the rule that named 24 of prom_a's painters -- take the
+;          name from the text the list draws -- has nothing to read here.
+;          The label stays sub_XXXXXX on purpose; naming it would need the
+;          list's opcodes decoded or a caller that says what it is.
+; ---------------------------------------------------------------------
 sub_FF0D3E:
 	ldw_da wa, (0x601f4d)                                ; FF0D3E  d2 4d 1f 60 20
 	stda16 (0x26b0), wa                                  ; FF0D43  f1 b0 26 50
@@ -153768,9 +155599,18 @@ TickLabels:
 	.byte 0x38, 0x38, 0x38, 0x39, 0x39, 0x30, 0x39, 0x31, 0x39, 0x32, 0x39, 0x33, 0x39, 0x34, 0x39, 0x35  ; FF0E15
 	.byte 0x15, 0x20, 0x20, 0x20, 0x20, 0x20                                  ; FF0E25
 
-; DisplayList_FF0E2B -- 26 record(s), 230 bytes.  Run by interpreter A (0xF31A09)
+; DisplayList_SequencerRealtimeEdit -- 26 record(s), 230 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFF0E2B and land exactly on 0xFF0F11.
-DisplayList_FF0E2B:
+; DisplayList_SequencerRealtimeEdit -- the display list at 0xFF0E2B, renamed from its framed label
+;                  `DisplayList_FF0E2B`.  Its own text records read:
+;     "SEQUENCER"; "REALTIME"; "EDIT"; "MASTER"; "REC0RD"; "TRACK"; "ASSIGN"; "STEP"; "MEDLEY"; "S0NG"
+; Evidence: the `.ascii` literals printed below this label, which the
+;          display-list interpreter draws verbatim.  The name is the
+;          CamelCase of the first of them and says what the list PUTS ON
+;          THE SCREEN and nothing more -- the rule wave 7 round 4 used
+;          for prom_b's 249 named lists.
+; ---------------------------------------------------------------------
+DisplayList_SequencerRealtimeEdit:
 	.byte 0x1C, 0x0F                               ; FF0E2B  op 1C, 15 bytes, handler 0xF31A52
 	.byte 0x7A, 0x00, 0x05, 0x00       ; FF0E2D
 	.ascii "SEQUENCER"                          ; FF0E31
@@ -153839,9 +155679,18 @@ DisplayList_FF0E2B:
 	.byte 0x02, 0x0A                               ; FF0F07  op 02, 10 bytes, handler 0xF31A75
 	.byte 0x6C, 0x00, 0x29, 0x00, 0x6C, 0x00, 0x78, 0x00  ; FF0F09
 
-; DisplayList_FF0F11 -- 59 record(s), 463 bytes.  Run by interpreter A (0xF31A09)
+; DisplayList_NoteEditTrackSong -- 59 record(s), 463 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFF0F11 and land exactly on 0xFF10E0.
-DisplayList_FF0F11:
+; DisplayList_NoteEditTrackSong -- the display list at 0xFF0F11, renamed from its framed label
+;                  `DisplayList_FF0F11`.  Its own text records read:
+;     "NOTE EDIT"; "TRACK"; "SONG"; "PLAY"; "GRAPH"; "ERS"; "MEAS"; "POS"; "NOTE"; "VEL"
+; Evidence: the `.ascii` literals printed below this label, which the
+;          display-list interpreter draws verbatim.  The name is the
+;          CamelCase of the first of them and says what the list PUTS ON
+;          THE SCREEN and nothing more -- the rule wave 7 round 4 used
+;          for prom_b's 249 named lists.
+; ---------------------------------------------------------------------
+DisplayList_NoteEditTrackSong:
 	.byte 0x07, 0x0D                               ; FF0F11  op 07, 13 bytes, handler 0xF31A3A
 	.byte 0x51, 0x00                   ; FF0F13
 	.ascii "NOTE EDIT"                          ; FF0F15
@@ -153982,9 +155831,18 @@ DisplayList_FF0F11:
 	.byte 0x02, 0x0A                               ; FF10D6  op 02, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x01, 0x27, 0x00, 0x00, 0x01, 0xA9, 0x00  ; FF10D8
 
-; DisplayList_FF10E0 -- 71 record(s), 594 bytes.  Run by interpreter A (0xF31A09)
+; DisplayList_DrumEditTrackSong -- 71 record(s), 594 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFF10E0 and land exactly on 0xFF1332.
-DisplayList_FF10E0:
+; DisplayList_DrumEditTrackSong -- the display list at 0xFF10E0, renamed from its framed label
+;                  `DisplayList_FF10E0`.  Its own text records read:
+;     "DRUM EDIT"; "TRACK"; "SONG"; "PLAY"; "SOUND"; "ERS"; "MEAS"; "POS"; "SND"; "VEL"
+; Evidence: the `.ascii` literals printed below this label, which the
+;          display-list interpreter draws verbatim.  The name is the
+;          CamelCase of the first of them and says what the list PUTS ON
+;          THE SCREEN and nothing more -- the rule wave 7 round 4 used
+;          for prom_b's 249 named lists.
+; ---------------------------------------------------------------------
+DisplayList_DrumEditTrackSong:
 	.byte 0x07, 0x0D                               ; FF10E0  op 07, 13 bytes, handler 0xF31A3A
 	.byte 0x51, 0x00                   ; FF10E2
 	.ascii "DRUM EDIT"                          ; FF10E4
@@ -154148,9 +156006,18 @@ DisplayList_FF10E0:
 	.byte 0x01, 0x0A                               ; FF1328  op 01, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x97, 0x00, 0x58, 0x00, 0x97, 0x00  ; FF132A
 
-; DisplayList_FF1332 -- 70 record(s), 600 bytes.  Run by interpreter A (0xF31A09)
+; DisplayList_NoteEditPartSelect -- 70 record(s), 600 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFF1332 and land exactly on 0xFF158A.
-DisplayList_FF1332:
+; DisplayList_NoteEditPartSelect -- the display list at 0xFF1332, renamed from its framed label
+;                  `DisplayList_FF1332`.  Its own text records read:
+;     "NOTE"; "EDIT"; "PART"; "SELECT"; "Press"; "the"; "up/down"; "button"; "under"; "the"
+; Evidence: the `.ascii` literals printed below this label, which the
+;          display-list interpreter draws verbatim.  The name is the
+;          CamelCase of the first of them and says what the list PUTS ON
+;          THE SCREEN and nothing more -- the rule wave 7 round 4 used
+;          for prom_b's 249 named lists.
+; ---------------------------------------------------------------------
+DisplayList_NoteEditPartSelect:
 	.byte 0x1C, 0x0A                               ; FF1332  op 1C, 10 bytes, handler 0xF31A52
 	.byte 0x50, 0x00, 0x06, 0x00       ; FF1334
 	.ascii "NOTE"                               ; FF1338
@@ -154320,9 +156187,18 @@ DisplayList_FF1332:
 	.byte 0x01, 0x0A                               ; FF1580  op 01, 10 bytes, handler 0xF31A75
 	.byte 0x1D, 0x01, 0xDC, 0x00, 0x3C, 0x01, 0xDC, 0x00  ; FF1582
 
-; DisplayList_FF158A -- 70 record(s), 600 bytes.  Run by interpreter A (0xF31A09)
+; DisplayList_DrumEditPartSelect -- 70 record(s), 600 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFF158A and land exactly on 0xFF17E2.
-DisplayList_FF158A:
+; DisplayList_DrumEditPartSelect -- the display list at 0xFF158A, renamed from its framed label
+;                  `DisplayList_FF158A`.  Its own text records read:
+;     "DRUM"; "EDIT"; "PART"; "SELECT"; "Press"; "the"; "up/down"; "button"; "under"; "the"
+; Evidence: the `.ascii` literals printed below this label, which the
+;          display-list interpreter draws verbatim.  The name is the
+;          CamelCase of the first of them and says what the list PUTS ON
+;          THE SCREEN and nothing more -- the rule wave 7 round 4 used
+;          for prom_b's 249 named lists.
+; ---------------------------------------------------------------------
+DisplayList_DrumEditPartSelect:
 	.byte 0x1C, 0x0A                               ; FF158A  op 1C, 10 bytes, handler 0xF31A52
 	.byte 0x50, 0x00, 0x06, 0x00       ; FF158C
 	.ascii "DRUM"                               ; FF1590

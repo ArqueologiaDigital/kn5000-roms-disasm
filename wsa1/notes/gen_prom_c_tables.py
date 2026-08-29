@@ -335,7 +335,7 @@ END = 0xFDF7E0
 # kind: 'b' byte  'w' u16  'l' u32  'f' f32  'S' asciz pool  'I' incbin  'R' rows
 # ============================================================================
 SPEC2 = [
- ('l', "Handler_PtrTable_FCC53F", 0xFCC53F, 32, None, [
+ ('l', "Link_ClassHandlerTable", 0xFCC53F, 32, None, [
   "8 x u32.  Every entry is a valid prom_c code address, and four of them",
   "(0xF98D9A, 0xF98DE6, 0xF98FD6, 0xF9901B) land exactly on a `link XIZ,imm` /",
   "`push HL` prologue -- this compiler's function entry -- while the remaining",
@@ -356,11 +356,11 @@ SPEC2 = [
   "    python3 notes/prom_c_link_state_machine.py        # the dispatcher",
   "⚠ Still not established: what the four real class handlers DO.",
  ]),
- ('b', "unexplained_FCC55F", 0xFCC55F, 23, None, [
+ ('b', "P7Module_RamStateImage", 0xFCC55F, 23, None, [
   "23 bytes that fit no structure found so far: 16 zero bytes, then",
   "00 53 6c 00 6c 00 6c 00.  Left as bytes rather than guessed at.",
  ]),
- ('R', "Packet_PtrTable_FCC576", 0xFCC576, 72, (6, 12, 'l', "group %d"), [
+ ('R', "P7Unit_StreamPtrsByGroupAndUnit", 0xFCC576, 72, (6, 12, 'l', "group %d"), [
   "6 groups x 3 u32 = 18 pointers, all into the length-prefixed packet pool that",
   "starts at 0xFCD0F7.  The grouping is visible in the data itself: every group is",
   "{X, X, Y} -- the first two entries of each group are always equal.",

@@ -338,7 +338,8 @@ def q2():
     say("  the count is all that is on offer.\n")
     counts = {"ToneDB_MixerDefaultTable (+0x18)": 322,
               "ToneDB_PercMixerDefaultTable (+0x20)": 208,
-              "ToneDB_MixerDefaultTable_3C (+0x3C)": 64,
+              # renamed in round 5 (Q7); the count this line asserts is unchanged.
+              "ToneDB_WaveSelTailPresets (+0x3C)": 64,
               "ToneDB_EnvDescTable (+0x30)": 318,
               "ToneDB_EnvDescTable_Perc (+0x38)": 161,
               "ToneDB_SourceNameList1 (+0x50)": 307,

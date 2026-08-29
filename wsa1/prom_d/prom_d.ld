@@ -62,6 +62,36 @@
  * every one of the four images.  The observation is kept as support; it is no
  * longer offered as proof, and the ORIGIN-0 decision does not rest on it.
  *
+ * ★ AND IN WAVE 7 ROUND 5 THE DECISION WAS ATTACKED RATHER THAN RESTATED.
+ * The way ORIGIN 0 could be WRONG is a prom_c instruction that carries the
+ * ABSOLUTE address of a prom_d OBJECT -- `ld XIX,0x00F1D965` for the mixer
+ * table, say.  If one existed, linking this image at 0xF00000 would be the
+ * right call and every offset label here would be wrong.  So it was searched
+ * for, over all 76,013 instruction lines of prom_c's converted assembly:
+ *
+ *     operand literals in 0x00F00000-0x00F7FFFF ..... ONE, and it is the base
+ *                                                    itself, 0xFB051E.
+ *
+ * ⚠ AND THE RAW BYTE SCAN IS WHY THAT NUMBER IS QUOTED FROM THE .s AND NOT FROM
+ * THE ROM.  Scanning prom_c's bytes for `ld Xrr,imm32` with an immediate in
+ * that window finds 84 patterns; 83 are phantom decodes inside DATA, 75 of them
+ * in the byte-code stream at 0xFCD0F7-0xFDD2AA that is deliberately left
+ * undecoded.  Ranking on a linear decode of data is this project's documented
+ * failure mode.
+ *
+ * ⚠ THE SEARCH'S STATED LIMIT: it is complete over prom_c's INSTRUCTIONS and
+ * not over its data, so an absolute pointer inside that same undecoded stream
+ * would not be seen.  And prom_a cannot contribute a counter-example either:
+ * prom_b occupies 0xF00000-0xF7FFFF on CPU 1's bus, so every prom_a literal in
+ * this window is a prom_b address -- prom_a's one genuine reach into prom_d,
+ * `ld XWA,0x00F7FFF0` at 0xF82A5F, is the source argument of a REMOTE block
+ * read over the link (0xF82A65 `call 0xF40EF0`), not a load.
+ *
+ * RESULT: ORIGIN 0 stands, and now stands on a search that could have
+ * overturned it.  notes/prom_d_understanding_round5.py Q5, and its Q6d null
+ * runs the SAME scanner over the neighbouring window 0xE80000-0xEFFFFF and
+ * finds 15 literals, so the zero above is an absence and not a broken scanner.
+ *
  * ⚠ WHAT IS STILL OPEN: which PHYSICAL PART this is.  The evidence above fixes
  * the ADDRESS the firmware reads it at, not the device; the erased tail
  * (0x50B09..0x7FFEF is one unbroken 0xFF run of 0x2F4E7 bytes, the only 0xFF run

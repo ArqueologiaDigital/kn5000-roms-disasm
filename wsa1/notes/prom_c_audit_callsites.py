@@ -147,7 +147,7 @@ def selftest():
     fails = []
     # 1. a KNOWN pointer-table entry classifies as PTR32
     if classify(0xF98D9A, 0xFCC53F)[0] != "PTR32":
-        fails.append("entry 0 of Handler_PtrTable_FCC53F is not seen as PTR32")
+        fails.append("entry 0 of Link_ClassHandlerTable is not seen as PTR32")
     # 2. a RAM address classifies as RAM
     if classify(0xF98A75, 0x007ED1)[0] != "RAM":
         fails.append("0x007ED1 is not seen as RAM")

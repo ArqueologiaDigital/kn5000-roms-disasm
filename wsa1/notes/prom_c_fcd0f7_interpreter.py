@@ -99,7 +99,7 @@ WHAT SEPARATES THE TWO FAMILIES -- the measurement, not an argument
   genuinely ambiguous on the container alone, and NINE of them are settled by being
   literal arguments of sub_F9ADB5 (0xFCD188 0xFCD199 0xFCD1AF 0xFCD1C0 0xFCD1D6
   0xFCD1E7 0xFCD22D 0xFCD40F 0xFCD97D).  The remaining THREE -- 0xFCD0F7, 0xFCD0FE,
-  0xFCD105 -- are reached only from `Packet_PtrTable_FCC576` and stay ambiguous;
+  0xFCD105 -- are reached only from `P7Unit_StreamPtrsByGroupAndUnit` and stay ambiguous;
   that is the honest hole and `--verify` names them.
 
   ⚠ WHAT THE NAME "second consumer" IS AND IS NOT.  sub_F9ADB5 is the routine that
@@ -229,7 +229,7 @@ _LABELS = None
 
 def labels_by_address():
     """{addr: label} for every top-level label in the .s whose NAME ends in the six
-    hex digits of an address (`Packet_PtrTable_FCC576`, `P7Stream_FCD0F7`, ...).
+    hex digits of an address (`P7Unit_StreamPtrsByGroupAndUnit`, `P7Stream_FCD0F7`, ...).
 
     Naming by the convention the tree already uses is deliberate: it needs no
     address arithmetic over directive sizes, and a label whose name does not match
@@ -430,7 +430,7 @@ def rep_sites():
     for t, c in sorted(bytgt.items(), key=lambda x: (-x[1], x[0])):
         nm = labels_by_address().get(t) or ""
         note = {DESCLO: "PoolDir_Records, stride 25 (`mul A,0x19`)",
-                IDXLO: "PoolDir_IndexMap128",
+                IDXLO: "PoolDir_RecordForUnitProgram",
                 FRLO: "PoolDir_FieldRecords",
                 PTRLO: "PoolDir_FieldRec_PtrTable, stride 4"}.get(t, nm)
         print("    0x%06X  x%-3d %s" % (t, c, note))
@@ -836,7 +836,7 @@ def verify():
         % (len(both & S), len(both)))
     chk(sorted(both - S) == [0xFCD0F7, 0xFCD0FE, 0xFCD105],
         "the remaining %d stay AMBIGUOUS -- %s -- and are reached only from "
-        "Packet_PtrTable_FCC576" % (len(both - S),
+        "P7Unit_StreamPtrsByGroupAndUnit" % (len(both - S),
                                     " ".join("0x%06X" % x for x in sorted(both - S))))
     chk(lit[-1] == (0xFA4DFA, 0xFCD97D, 0xFCD173),
         "LAST literal site is call 0x%06X (0x%06X, 0x%06X) -- checked, not only the first "

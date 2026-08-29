@@ -223,9 +223,9 @@ ToneDB_Directory:
 					;        KN5000: ToneDB_EnvDescTable
 	.long 0x0004399C			; +0x38  ToneDB_EnvDescTable_Perc     descriptor block, stride word +0xF2 = 14
 					;        KN5000: ToneDB_EnvDescTable (shared)
-	.long 0x00020F7B			; +0x3C  ToneDB_MixerDefaultTable_3C  64 x 43-byte wave-select records
+	.long 0x00020F7B			; +0x3C  ToneDB_WaveSelTailPresets    64 x 43-byte wave-select records
 					;        KN5000: UNUSED in the KN5000
-	.long 0x00020F7B			; +0x40  ToneDB_MixerDefaultTable_3C  (alias of +0x3C)
+	.long 0x00020F7B			; +0x40  ToneDB_WaveSelTailPresets    (alias of +0x3C)
 					;        KN5000: UNUSED in the KN5000
 	.long 0x0004809A			; +0x44  ToneDB_SourceIndexMapA       1024 LE16 index map
 					;        KN5000: ToneDB_SourceIndexMapA
@@ -379,6 +379,29 @@ ToneDB_BankMap:
 ; (index 0x000-0x0FF); rows 8-9 only ever name drum kits (0x100-0x111).
 ; Asserted over all 1280 entries by scripts/analysis/prom_d_tone_database.py.
 ; 
+; ★ NEW IN ROUND 5 -- TWO OF THE TEN ROW LABELS NOW SAY WHAT THE ROW IS,
+; and they say it from what the row SELECTS, since every record a row
+; selects carries its own 16-byte ASCII name:
+; 
+;   ToneNumBank_DrumKits      row 8.  All 128 of its entries name a record
+;                             whose own name ENDS IN 'Kit' -- 128 of 128,
+;                             checked at program 127 as well as program 0.
+;   ToneNumBank_SpecialSound  row 9.  127 of its entries hold tone 0x100
+;                             'Jazz Kit'; the entry at program 127 holds
+;                             tone 0x110 ' Special sound ', and row 9 is the
+;                             ONLY row in all 1,280 entries in which 0x110
+;                             occurs.  That one entry is the whole of what
+;                             distinguishes this row, so it is what names it.
+; 
+; ⚠ AND ROWS 0-7 KEEP A NUMBER, deliberately.  What they share is measured
+; (no entry >= 256 in any of the 1,024) and it is not enough to tell them
+; apart; against row 0 they differ in 36/37/25/18/9/9/6 of 128 entries
+; respectively, and NOTHING in this image says what that variation means.
+; `Melodic_<r>` states the class and admits the gap; it is not a name.
+; The row-name rule is derived, not typed: notes/prom_d_understanding_round5.py
+; row_names(), and this generator refuses to emit if it stops producing the
+; audited ten.  round 5 Q2.
+; 
 ; The program ORDER is NOT General MIDI: program 1 of row 0 is
 ; 'Honky-Tonk Piano' where GM has Bright Acoustic Piano, and programs
 ; 32-39 are Harp/Banjo/Harp/Mandolin/Shamisen/Koto/Sitar/Kalimba where GM
@@ -408,7 +431,7 @@ ToneDB_BankMap:
 ToneDB_ToneNumBanks:
 
 ; --- row 0 (melodic) ---
-ToneNumBank_0:
+ToneNumBank_Melodic_0:
 	.short 0x0000	; 00180  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00182  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
 	.short 0x0001	; 00184  [  2] prog   2 -> tone 0x001 '   WSA Piano    '
@@ -539,7 +562,7 @@ ToneNumBank_0:
 	.short 0x0023	; 0027E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 1 (melodic) ---
-ToneNumBank_1:
+ToneNumBank_Melodic_1:
 	.short 0x0000	; 00280  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00282  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
 	.short 0x0001	; 00284  [  2] prog   2 -> tone 0x001 '   WSA Piano    '
@@ -670,7 +693,7 @@ ToneNumBank_1:
 	.short 0x0023	; 0037E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 2 (melodic) ---
-ToneNumBank_2:
+ToneNumBank_Melodic_2:
 	.short 0x0005	; 00380  [  0] prog   0 -> tone 0x005 '  Midi Grand 1  '
 	.short 0x0003	; 00382  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
 	.short 0x0001	; 00384  [  2] prog   2 -> tone 0x001 '   WSA Piano    '
@@ -801,7 +824,7 @@ ToneNumBank_2:
 	.short 0x0024	; 0047E  [127] prog 127 -> tone 0x024 'Orchestra Hit 2 '
 
 ; --- row 3 (melodic) ---
-ToneNumBank_3:
+ToneNumBank_Melodic_3:
 	.short 0x0000	; 00480  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0007	; 00482  [  1] prog   1 -> tone 0x007 '  Jangle Piano  '
 	.short 0x0001	; 00484  [  2] prog   2 -> tone 0x001 '   WSA Piano    '
@@ -932,7 +955,7 @@ ToneNumBank_3:
 	.short 0x0023	; 0057E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 4 (melodic) ---
-ToneNumBank_4:
+ToneNumBank_Melodic_4:
 	.short 0x0006	; 00580  [  0] prog   0 -> tone 0x006 '  Midi Grand 2  '
 	.short 0x0003	; 00582  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
 	.short 0x0001	; 00584  [  2] prog   2 -> tone 0x001 '   WSA Piano    '
@@ -1063,7 +1086,7 @@ ToneNumBank_4:
 	.short 0x0023	; 0067E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 5 (melodic) ---
-ToneNumBank_5:
+ToneNumBank_Melodic_5:
 	.short 0x0000	; 00680  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00682  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
 	.short 0x0001	; 00684  [  2] prog   2 -> tone 0x001 '   WSA Piano    '
@@ -1194,7 +1217,7 @@ ToneNumBank_5:
 	.short 0x0023	; 0077E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 6 (melodic) ---
-ToneNumBank_6:
+ToneNumBank_Melodic_6:
 	.short 0x0000	; 00780  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00782  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
 	.short 0x0001	; 00784  [  2] prog   2 -> tone 0x001 '   WSA Piano    '
@@ -1325,7 +1348,7 @@ ToneNumBank_6:
 	.short 0x0023	; 0087E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 7 (melodic) ---
-ToneNumBank_7:
+ToneNumBank_Melodic_7:
 	.short 0x0000	; 00880  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00882  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
 	.short 0x0001	; 00884  [  2] prog   2 -> tone 0x001 '   WSA Piano    '
@@ -1456,7 +1479,7 @@ ToneNumBank_7:
 	.short 0x0023	; 0097E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 8 (drum kits) ---
-ToneNumBank_8:
+ToneNumBank_DrumKits:
 	.short 0x0103	; 00980  [  0] prog   0 -> tone 0x103 ' Standard Kit   '
 	.short 0x0103	; 00982  [  1] prog   1 -> tone 0x103 ' Standard Kit   '
 	.short 0x0103	; 00984  [  2] prog   2 -> tone 0x103 ' Standard Kit   '
@@ -1587,7 +1610,7 @@ ToneNumBank_8:
 	.short 0x0100	; 00A7E  [127] prog 127 -> tone 0x100 '   Jazz Kit     '
 
 ; --- row 9 (drum kits) ---
-ToneNumBank_9:
+ToneNumBank_SpecialSound:
 	.short 0x0100	; 00A80  [  0] prog   0 -> tone 0x100 '   Jazz Kit     '
 	.short 0x0100	; 00A82  [  1] prog   1 -> tone 0x100 '   Jazz Kit     '
 	.short 0x0100	; 00A84  [  2] prog   2 -> tone 0x100 '   Jazz Kit     '
@@ -2037,6 +2060,14 @@ ToneDB_ToneOffsetTable:
 ; 
 ; ⚠ The KN5000 leaves directory slot +0xA8 UNUSED, so there is no name to
 ; transplant and none is invented here.
+; 
+; ★ ROUND 5 adds the two facts that a per-record label cannot carry.
+;   (a) THE EIGHT RECORDS ARE ONLY 3 DISTINCT BYTE STRINGS: {0,4,5,6,7}; {1,3}; {2}.
+;       A table whose eight rows take three values is not eight independent
+;       settings, whatever it is.
+;   (b) AND THERE IS NO NAME IN IT TO TAKE: 0 of the 1024 bytes are printable
+;       at all, so the round-4 mechanism has nothing to work with here.
+;   notes/prom_d_understanding_round5.py Q1c.
 ; 
 ; Evidence: prom_c reads directory slot +0xA8 at 1 site.  The first is
 ; 0xFA732D `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
@@ -14039,7 +14070,8 @@ ToneDB_ToneIndexMapB:
 ; The same 43-byte record is the second per-element array of every tone
 ; record and the tail of ToneDB_DefaultLayerParams.
 ; KN5000 label at the same directory slot: ToneDB_MixerDefaultTable.
-; ⚠ Field meanings NOT established, and ⚠ CORRECTED in wave 7 round 2:
+; ⚠ Field meanings NOT established -- EXCEPT +0x0B, which wave 7 round 5
+; identified as a 6-bit preset number; see below.  And ⚠ CORRECTED in round 2:
 ; the leading 7F 7F 7F and the 7D 80 54 at +0x0D are NOT in every record.
 ; Counted over this array, first record to last: 312 of 322 start 7F 7F 7F
 ; and 261 of 322 carry 7D 80 54 at +0x0D.  The earlier text said 'every
@@ -14078,8 +14110,61 @@ ToneDB_ToneIndexMapB:
 ; which is where round 2's `7D 80 54 at +0x0D` sits: at the first byte the
 ; loop touches.  notes/prom_d_documentation_round3.py Q4h decodes all
 ; twelve instructions from prom_c's ROM bytes.
-; ⚠ NOT established: what any of the 43 bytes means, or what the head/tail
-; split is FOR.
+; 
+; ★★ AND IN ROUND 5 THAT ROUTINE ANSWERED THE QUESTION THIS LINE USED TO
+; REFUSE.  ⚠ CORRECTED: this paragraph ended `NOT established: what any of
+; the 43 bytes means, or what the head/tail split is FOR`, and BOTH halves
+; of that sentence are now wrong.  The same routine begins by reading the
+; field it is about to compute an index from:
+;     0xFBC72B  ld C,0x2b             43, the record length
+;     0xFBC72D  mul BC,(XIZ+0x0a)     * the caller's record number
+;     0xFBC738  add XBC,0x000087d2    => the DESTINATION record, in RAM
+;     0xFBC741  ld A,(XBC+0x0b)       ★ its field +0x0B
+;     0xFBC744  and A,0x3f            ★ the LOW 6 BITS
+;     0xFBC74C  cp WA,0 / jr NZ       0 takes a different arm entirely
+;     0xFBC7C3  mul XIY,(XIZ+0xf2)    ★ that value INDEXES the +0x3C array
+;     0xFBC7D6  ld (XWA+0x0b),H       the chosen record's own +0x0B, back
+;     0xFBC7D9..0xFBC805              then bytes 13..42, copied over
+; So FIELD +0x0B IS A 6-BIT PRESET NUMBER: 0 means `not from that array`
+; (prom_c builds the tail from a live RAM block at 0x1523 instead,
+; 0xFBC750-0xFBC7A7) and 1..63 name one of the 64 records of
+; ToneDB_WaveSelTailPresets, which then supplies this record's +0x0B and
+; its whole 30-byte tail.  The 13/30 split is therefore not a curiosity:
+; the tail is exactly what a preset REPLACES.
+; 
+; ★ AND THE ARRAY CONFIRMS IT WITHOUT THE CODE.  Its own record N carries N
+; in the low 6 bits of its own +0x0B, 63 of 64 -- the exception is record 0,
+; which holds 1 and which that routine can never select because index 0
+; takes the other arm.  28 of the 64 also set bit 6, which `and A,0x3f`
+; strips; without the mask those 28 would index past the array's end.  The
+; same self-index test scores 2 of 322 on the +0x18 array and 1 of 208 on
+; +0x20, so it is specific and not an artefact.  round 5 Q7.
+; 
+; ⚠ STILL NOT ESTABLISHED: any of bytes 0..10 or byte 12, and what a preset
+; SOUNDS like -- nothing here reads audio state.
+; 
+; ★ WHY EVERY RECORD BELOW IS `_321` AND NOT A NAME -- round 5 asked the
+; question directly instead of leaving it implied.
+; 
+;   1. THE RECORD CARRIES NO NAME.  Round 4 named 778 tone and drum records
+;      from their own ASCII fields.  These have none: over all 322 records
+;      the widest run of printable bytes anywhere in a record is 4, against
+;      the 13 bytes of the narrowest name field this image uses.  No column
+;      is printable in every record.  The test is not blind -- run on the
+;      208-row catalogue at slot +0x8C it finds 14 printable columns of 16.
+; 
+;   2. AND THERE IS NO SECOND COPY TO BORROW FROM.  Every 43-byte window
+;      of the whole 330,505-byte payload was indexed and matched against these
+;      records: 0 of 322 occur anywhere else in the image.  (The array at
+;      slot +0x20 is different -- see its own banner -- and that
+;      difference is what makes this zero informative.)
+; 
+;   3. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
+;      THIS array with an index whose meaning is known -- exactly what
+;      round 5 Q7 found for the array at slot +0x3C and did NOT find here.
+;      Round 3's census of 99 directory reads found no reader for slot
+;      +0x18 at all.
+;   notes/prom_d_understanding_round5.py Q1a, Q4c, Q4d.
 ; ==========================================================================
 ToneDB_MixerDefaultTable:
 ToneDB_MixerDefaultTable_000:
@@ -14728,7 +14813,7 @@ ToneDB_MixerDefaultTable_321:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x19, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20F50  |...x.x.x.x.....T....d....B.x.....d...B.x...|
 
 ; ==========================================================================
-; ToneDB_MixerDefaultTable_3C -- directory slot +0x3C
+; ToneDB_WaveSelTailPresets -- directory slot +0x3C
 ; file 0x20F7B .. 0x21A3A   (2752 bytes)
 ; --------------------------------------------------------------------------
 ; 64 wave-select records of 43 bytes -- the span divides exactly, and 43
@@ -14736,7 +14821,8 @@ ToneDB_MixerDefaultTable_321:
 ; The same 43-byte record is the second per-element array of every tone
 ; record and the tail of ToneDB_DefaultLayerParams.
 ; KN5000 label at the same directory slot: UNUSED in the KN5000.
-; ⚠ Field meanings NOT established, and ⚠ CORRECTED in wave 7 round 2:
+; ⚠ Field meanings NOT established -- EXCEPT +0x0B, which wave 7 round 5
+; identified as a 6-bit preset number; see below.  And ⚠ CORRECTED in round 2:
 ; the leading 7F 7F 7F and the 7D 80 54 at +0x0D are NOT in every record.
 ; Counted over this array, first record to last: 64 of 64 start 7F 7F 7F
 ; and 18 of 64 carry 7D 80 54 at +0x0D.  The earlier text said 'every
@@ -14775,137 +14861,712 @@ ToneDB_MixerDefaultTable_321:
 ; which is where round 2's `7D 80 54 at +0x0D` sits: at the first byte the
 ; loop touches.  notes/prom_d_documentation_round3.py Q4h decodes all
 ; twelve instructions from prom_c's ROM bytes.
-; ⚠ NOT established: what any of the 43 bytes means, or what the head/tail
-; split is FOR.
+; 
+; ★★ AND IN ROUND 5 THAT ROUTINE ANSWERED THE QUESTION THIS LINE USED TO
+; REFUSE.  ⚠ CORRECTED: this paragraph ended `NOT established: what any of
+; the 43 bytes means, or what the head/tail split is FOR`, and BOTH halves
+; of that sentence are now wrong.  The same routine begins by reading the
+; field it is about to compute an index from:
+;     0xFBC72B  ld C,0x2b             43, the record length
+;     0xFBC72D  mul BC,(XIZ+0x0a)     * the caller's record number
+;     0xFBC738  add XBC,0x000087d2    => the DESTINATION record, in RAM
+;     0xFBC741  ld A,(XBC+0x0b)       ★ its field +0x0B
+;     0xFBC744  and A,0x3f            ★ the LOW 6 BITS
+;     0xFBC74C  cp WA,0 / jr NZ       0 takes a different arm entirely
+;     0xFBC7C3  mul XIY,(XIZ+0xf2)    ★ that value INDEXES the +0x3C array
+;     0xFBC7D6  ld (XWA+0x0b),H       the chosen record's own +0x0B, back
+;     0xFBC7D9..0xFBC805              then bytes 13..42, copied over
+; So FIELD +0x0B IS A 6-BIT PRESET NUMBER: 0 means `not from that array`
+; (prom_c builds the tail from a live RAM block at 0x1523 instead,
+; 0xFBC750-0xFBC7A7) and 1..63 name one of the 64 records of
+; ToneDB_WaveSelTailPresets, which then supplies this record's +0x0B and
+; its whole 30-byte tail.  The 13/30 split is therefore not a curiosity:
+; the tail is exactly what a preset REPLACES.
+; 
+; ★ AND THE ARRAY CONFIRMS IT WITHOUT THE CODE.  Its own record N carries N
+; in the low 6 bits of its own +0x0B, 63 of 64 -- the exception is record 0,
+; which holds 1 and which that routine can never select because index 0
+; takes the other arm.  28 of the 64 also set bit 6, which `and A,0x3f`
+; strips; without the mask those 28 would index past the array's end.  The
+; same self-index test scores 2 of 322 on the +0x18 array and 1 of 208 on
+; +0x20, so it is specific and not an artefact.  round 5 Q7.
+; 
+; ⚠ STILL NOT ESTABLISHED: any of bytes 0..10 or byte 12, and what a preset
+; SOUNDS like -- nothing here reads audio state.
+; 
+; ★ WHY EVERY RECORD BELOW IS `_063` AND NOT A NAME -- round 5 asked the
+; question directly instead of leaving it implied.
+; 
+;   1. THE RECORD CARRIES NO NAME.  Round 4 named 778 tone and drum records
+;      from their own ASCII fields.  These have none: over all 64 records
+;      the widest run of printable bytes anywhere in a record is 5, against
+;      the 13 bytes of the narrowest name field this image uses.  No column
+;      is printable in every record.  The test is not blind -- run on the
+;      208-row catalogue at slot +0x8C it finds 14 printable columns of 16.
+; 
+;   2. AND THERE IS NO SECOND COPY TO BORROW FROM.  Every 43-byte window
+;      of the whole 330,505-byte payload was indexed and matched against these
+;      records: 0 of 64 occur anywhere else in the image.  (The array at
+;      slot +0x20 is different -- see its own banner -- and that
+;      difference is what makes this zero informative.)
+; 
+;   3. ★ BUT THE NUMBER IS NOT MERELY POSITIONAL HERE, and that is the
+;      difference between this array and the other two.  Round 5 Q7 shows
+;      the suffix IS the preset number prom_c indexes this array by, and
+;      that each record carries that number in the low 6 bits of its own
+;      byte +0x0B (63 of 64).  So `_063` is derived from the object, the
+;      way round 4's names were -- it is simply a number rather than a
+;      string, so the documentation metric still counts it as framed.
+;      WHAT IS STILL OPEN: what a preset MEANS (nothing here reads audio
+;      state) and every byte of the record except +0x0B.
+;   notes/prom_d_understanding_round5.py Q1a, Q4d, Q7.
 ; ==========================================================================
-ToneDB_MixerDefaultTable_3C:
-ToneDB_MixerDefaultTable_3C_000:
+ToneDB_WaveSelTailPresets:
+
+; ToneDB_WaveSelTailPresets_000 -- file 0x20F7B..0x20FA5
+; ⚠ NOT SELECTABLE by prom_c's sub_FBC725: the index this
+; record would need is 0, and 0xFBC74E `jr NZ` sends index 0
+; down the other arm, which builds the tail from RAM 0x1523
+; instead of from this array.  What this record is FOR is
+; therefore open.  round 5 Q7b.
+; ⚠ Its own +0x0B is 0x01, whose low 6 bits are 1, NOT 0.
+; This is the ONE record of the 64 that does not carry its own
+; index, and prom_c's 0xFBC74E `jr NZ` can never reach it:
+; index 0 takes the other arm.  round 5 Q7b.
+; Evidence: this record's own byte +0x0B is at file 0x20F86 and
+; holds 0x01; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 1, the index into this array.
+ToneDB_WaveSelTailPresets_000:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00	; 20F7B  |.............}.T....d0...B.`...0.d...B.`...|
-ToneDB_MixerDefaultTable_3C_001:
+
+; ToneDB_WaveSelTailPresets_001 -- file 0x20FA6..0x20FD0
+; Selected when a wave-select record's field +0x0B & 0x3F == 1.
+; This record's own +0x0B is 0x01, and 0x01 & 0x3F = 1 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x20FB1 and
+; holds 0x01; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 1, the index into this array.
+ToneDB_WaveSelTailPresets_001:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x55, 0x80, 0x54, 0xEC, 0x00, 0x06, 0x7F, 0x64, 0x40, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x40, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00	; 20FA6  |.............U.T....d@...B.`...@.d...B.`...|
-ToneDB_MixerDefaultTable_3C_002:
+
+; ToneDB_WaveSelTailPresets_002 -- file 0x20FD1..0x20FFB
+; Selected when a wave-select record's field +0x0B & 0x3F == 2.
+; This record's own +0x0B is 0x02, and 0x02 & 0x3F = 2 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x20FDC and
+; holds 0x02; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 2, the index into this array.
+ToneDB_WaveSelTailPresets_002:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x02, 0x02, 0xFA, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20FD1  |...D.D.D.D.....T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_003:
+
+; ToneDB_WaveSelTailPresets_003 -- file 0x20FFC..0x21026
+; Selected when a wave-select record's field +0x0B & 0x3F == 3.
+; This record's own +0x0B is 0x03, and 0x03 & 0x3F = 3 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21007 and
+; holds 0x03; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 3, the index into this array.
+ToneDB_WaveSelTailPresets_003:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x03, 0x03, 0x4F, 0x35, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20FFC  |...B.B.B.B...O5T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_004:
+
+; ToneDB_WaveSelTailPresets_004 -- file 0x21027..0x21051
+; Selected when a wave-select record's field +0x0B & 0x3F == 4.
+; This record's own +0x0B is 0x04, and 0x04 & 0x3F = 4 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21032 and
+; holds 0x04; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 4, the index into this array.
+ToneDB_WaveSelTailPresets_004:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x04, 0x04, 0x14, 0x18, 0x54, 0xE2, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21027  |...0.0.0.0.....T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_005:
+
+; ToneDB_WaveSelTailPresets_005 -- file 0x21052..0x2107C
+; Selected when a wave-select record's field +0x0B & 0x3F == 5.
+; This record's own +0x0B is 0x45, and 0x45 & 0x3F = 5 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x2105D and
+; holds 0x45; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 5, the index into this array.
+ToneDB_WaveSelTailPresets_005:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x45, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x40, 0xE1, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xD5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x2F, 0x58	; 21052  |...........E.}.T....t@...B.`...Z.d...B.`./X|
-ToneDB_MixerDefaultTable_3C_006:
+
+; ToneDB_WaveSelTailPresets_006 -- file 0x2107D..0x210A7
+; Selected when a wave-select record's field +0x0B & 0x3F == 6.
+; This record's own +0x0B is 0x46, and 0x46 & 0x3F = 6 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21088 and
+; holds 0x46; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 6, the index into this array.
+ToneDB_WaveSelTailPresets_006:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, 0x06, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x40, 0xE1, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x17, 0x4E, 0x5A, 0xD5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x25, 0x47	; 2107D  |...........F.}.T....t@...B.`..NZ.d...B.`.%G|
-ToneDB_MixerDefaultTable_3C_007:
+
+; ToneDB_WaveSelTailPresets_007 -- file 0x210A8..0x210D2
+; Selected when a wave-select record's field +0x0B & 0x3F == 7.
+; This record's own +0x0B is 0x47, and 0x47 & 0x3F = 7 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x210B3 and
+; holds 0x47; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 7, the index into this array.
+ToneDB_WaveSelTailPresets_007:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x47, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x46, 0xB0, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xB0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x08, 0x03	; 210A8  |...........G.}.T....tF...B.`...Z.d...B.`...|
-ToneDB_MixerDefaultTable_3C_008:
+
+; ToneDB_WaveSelTailPresets_008 -- file 0x210D3..0x210FD
+; Selected when a wave-select record's field +0x0B & 0x3F == 8.
+; This record's own +0x0B is 0x48, and 0x48 & 0x3F = 8 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x210DE and
+; holds 0x48; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 8, the index into this array.
+ToneDB_WaveSelTailPresets_008:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x48, 0x08, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x46, 0xB0, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0D, 0x16, 0x5A, 0xB0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0E, 0x36	; 210D3  |...........H.}.T....tF...B.`...Z.d...B.`..6|
-ToneDB_MixerDefaultTable_3C_009:
+
+; ToneDB_WaveSelTailPresets_009 -- file 0x210FE..0x21128
+; Selected when a wave-select record's field +0x0B & 0x3F == 9.
+; This record's own +0x0B is 0x09, and 0x09 & 0x3F = 9 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21109 and
+; holds 0x09; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 9, the index into this array.
+ToneDB_WaveSelTailPresets_009:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x09, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0x7F, 0x00, 0x00, 0x42, 0x18, 0x60, 0x00, 0x00, 0x00, 0x00, 0x7F, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x00, 0x00, 0x00	; 210FE  |.............}.T....d....B.`.....d...B.`...|
-ToneDB_MixerDefaultTable_3C_010:
+
+; ToneDB_WaveSelTailPresets_010 -- file 0x21129..0x21153
+; Selected when a wave-select record's field +0x0B & 0x3F == 10.
+; This record's own +0x0B is 0x0A, and 0x0A & 0x3F = 10 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21134 and
+; holds 0x0A; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 10, the index into this array.
+ToneDB_WaveSelTailPresets_010:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0A, 0x55, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x5A, 0xD7, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xD7, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00	; 21129  |.............U.T....dZ...B.`...Z.d...B.`...|
-ToneDB_MixerDefaultTable_3C_011:
+
+; ToneDB_WaveSelTailPresets_011 -- file 0x21154..0x2117E
+; Selected when a wave-select record's field +0x0B & 0x3F == 11.
+; This record's own +0x0B is 0x0B, and 0x0B & 0x3F = 11 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2115F and
+; holds 0x0B; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 11, the index into this array.
+ToneDB_WaveSelTailPresets_011:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0B, 0x0B, 0xB9, 0x8F, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x1E, 0xC0, 0xEC, 0x00, 0x42, 0x18, 0x60, 0x19, 0x00, 0x00, 0x1E, 0xC0, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x19, 0x00, 0x00	; 21154  |...............T....d....B.`.....d...B.`...|
-ToneDB_MixerDefaultTable_3C_012:
+
+; ToneDB_WaveSelTailPresets_012 -- file 0x2117F..0x211A9
+; Selected when a wave-select record's field +0x0B & 0x3F == 12.
+; This record's own +0x0B is 0x0C, and 0x0C & 0x3F = 12 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2118A and
+; holds 0x0C; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 12, the index into this array.
+ToneDB_WaveSelTailPresets_012:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x0C, 0x64, 0xD0, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD7, 0xE2, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x30, 0xD7, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00	; 2117F  |.............d.T....d0...B.`...0.d...B.`...|
-ToneDB_MixerDefaultTable_3C_013:
+
+; ToneDB_WaveSelTailPresets_013 -- file 0x211AA..0x211D4
+; Selected when a wave-select record's field +0x0B & 0x3F == 13.
+; This record's own +0x0B is 0x0D, and 0x0D & 0x3F = 13 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x211B5 and
+; holds 0x0D; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 13, the index into this array.
+ToneDB_WaveSelTailPresets_013:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x0D, 0xC8, 0xB2, 0x54, 0xD3, 0x0A, 0x86, 0x7F, 0x64, 0x30, 0xCC, 0xF6, 0x0A, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0xF6, 0x0A, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 211AA  |...............T....d0...B.`...0.d...B.`...|
-ToneDB_MixerDefaultTable_3C_014:
+
+; ToneDB_WaveSelTailPresets_014 -- file 0x211D5..0x211FF
+; Selected when a wave-select record's field +0x0B & 0x3F == 14.
+; This record's own +0x0B is 0x0E, and 0x0E & 0x3F = 14 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x211E0 and
+; holds 0x0E; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 14, the index into this array.
+ToneDB_WaveSelTailPresets_014:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0E, 0x0E, 0x7D, 0xB2, 0x54, 0x00, 0x32, 0x86, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00	; 211D5  |.............}.T.2..d0...B.`...0.d...B.`...|
-ToneDB_MixerDefaultTable_3C_015:
+
+; ToneDB_WaveSelTailPresets_015 -- file 0x21200..0x2122A
+; Selected when a wave-select record's field +0x0B & 0x3F == 15.
+; This record's own +0x0B is 0x0F, and 0x0F & 0x3F = 15 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2120B and
+; holds 0x0F; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 15, the index into this array.
+ToneDB_WaveSelTailPresets_015:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0F, 0x0F, 0x55, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x70, 0x40, 0xD7, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x40, 0xD7, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0C, 0x00	; 21200  |.............U.T....p@...B.`...@.d...B.`...|
-ToneDB_MixerDefaultTable_3C_016:
+
+; ToneDB_WaveSelTailPresets_016 -- file 0x2122B..0x21255
+; Selected when a wave-select record's field +0x0B & 0x3F == 16.
+; This record's own +0x0B is 0x10, and 0x10 & 0x3F = 16 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21236 and
+; holds 0x10; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 16, the index into this array.
+ToneDB_WaveSelTailPresets_016:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x10, 0x55, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xFF, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0C, 0x00, 0x30, 0xFF, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0C, 0x00	; 2122B  |.............U.T....d0...B.`...0.d...B.`...|
-ToneDB_MixerDefaultTable_3C_017:
+
+; ToneDB_WaveSelTailPresets_017 -- file 0x21256..0x21280
+; Selected when a wave-select record's field +0x0B & 0x3F == 17.
+; This record's own +0x0B is 0x11, and 0x11 & 0x3F = 17 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21261 and
+; holds 0x11; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 17, the index into this array.
+ToneDB_WaveSelTailPresets_017:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x11, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x70, 0x30, 0xE1, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x07, 0x00, 0x30, 0xE1, 0x50, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00	; 21256  |.............}.T....p0...B.`...0.P...B.`...|
-ToneDB_MixerDefaultTable_3C_018:
+
+; ToneDB_WaveSelTailPresets_018 -- file 0x21281..0x212AB
+; Selected when a wave-select record's field +0x0B & 0x3F == 18.
+; This record's own +0x0B is 0x12, and 0x12 & 0x3F = 18 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2128C and
+; holds 0x12; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 18, the index into this array.
+ToneDB_WaveSelTailPresets_018:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x12, 0x12, 0xA6, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0xB0, 0xD7, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0xB0, 0xD7, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21281  |...D.D.D.D.....T....d....B$`.....d...B$`...|
-ToneDB_MixerDefaultTable_3C_019:
+
+; ToneDB_WaveSelTailPresets_019 -- file 0x212AC..0x212D6
+; Selected when a wave-select record's field +0x0B & 0x3F == 19.
+; This record's own +0x0B is 0x13, and 0x13 & 0x3F = 19 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x212B7 and
+; holds 0x13; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 19, the index into this array.
+ToneDB_WaveSelTailPresets_019:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x13, 0x13, 0xFA, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x5A, 0xD7, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xD7, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 212AC  |...D.D.D.D.....T....dZ...B$`...Z.d...B$`...|
-ToneDB_MixerDefaultTable_3C_020:
+
+; ToneDB_WaveSelTailPresets_020 -- file 0x212D7..0x21301
+; Selected when a wave-select record's field +0x0B & 0x3F == 20.
+; This record's own +0x0B is 0x14, and 0x14 & 0x3F = 20 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x212E2 and
+; holds 0x14; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 20, the index into this array.
+ToneDB_WaveSelTailPresets_020:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x14, 0x14, 0xB9, 0x8F, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x9E, 0xC0, 0xEC, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x9E, 0xC0, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 212D7  |...D.D.D.D.....T....d....B$`.....d...B$`...|
-ToneDB_MixerDefaultTable_3C_021:
+
+; ToneDB_WaveSelTailPresets_021 -- file 0x21302..0x2132C
+; Selected when a wave-select record's field +0x0B & 0x3F == 21.
+; This record's own +0x0B is 0x15, and 0x15 & 0x3F = 21 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2130D and
+; holds 0x15; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 21, the index into this array.
+ToneDB_WaveSelTailPresets_021:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x15, 0x15, 0xFA, 0x94, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD7, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xD7, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21302  |...D.D.D.D.....T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_022:
+
+; ToneDB_WaveSelTailPresets_022 -- file 0x2132D..0x21357
+; Selected when a wave-select record's field +0x0B & 0x3F == 22.
+; This record's own +0x0B is 0x16, and 0x16 & 0x3F = 22 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21338 and
+; holds 0x16; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 22, the index into this array.
+ToneDB_WaveSelTailPresets_022:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x16, 0x16, 0xC8, 0xB2, 0x54, 0xCE, 0x00, 0x06, 0x7F, 0x64, 0xB0, 0xC4, 0xF6, 0x0A, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0xB0, 0xC4, 0x64, 0xF6, 0x0A, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2132D  |...D.D.D.D.....T....d....B$`.....d...B$`...|
-ToneDB_MixerDefaultTable_3C_023:
+
+; ToneDB_WaveSelTailPresets_023 -- file 0x21358..0x21382
+; Selected when a wave-select record's field +0x0B & 0x3F == 23.
+; This record's own +0x0B is 0x17, and 0x17 & 0x3F = 23 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21363 and
+; holds 0x17; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 23, the index into this array.
+ToneDB_WaveSelTailPresets_023:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x17, 0x17, 0x7D, 0xB2, 0x54, 0x00, 0x32, 0x86, 0x7F, 0x64, 0xB0, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0xB0, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21358  |...D.D.D.D...}.T.2..d....B$`.....d...B$`...|
-ToneDB_MixerDefaultTable_3C_024:
+
+; ToneDB_WaveSelTailPresets_024 -- file 0x21383..0x213AD
+; Selected when a wave-select record's field +0x0B & 0x3F == 24.
+; This record's own +0x0B is 0x18, and 0x18 & 0x3F = 24 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2138E and
+; holds 0x18; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 24, the index into this array.
+ToneDB_WaveSelTailPresets_024:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x18, 0x18, 0xFA, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x70, 0x40, 0xFF, 0xEC, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x40, 0xFF, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x0C, 0x00	; 21383  |...D.D.D.D.....T....p@...B$`...@.d...B$`...|
-ToneDB_MixerDefaultTable_3C_025:
+
+; ToneDB_WaveSelTailPresets_025 -- file 0x213AE..0x213D8
+; Selected when a wave-select record's field +0x0B & 0x3F == 25.
+; This record's own +0x0B is 0x19, and 0x19 & 0x3F = 25 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x213B9 and
+; holds 0x19; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 25, the index into this array.
+ToneDB_WaveSelTailPresets_025:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x19, 0x19, 0xCD, 0x14, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x49, 0xC4, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x49, 0xC4, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 213AE  |...B.B.B.B.....T....dI...B$`...I.d...B$`...|
-ToneDB_MixerDefaultTable_3C_026:
+
+; ToneDB_WaveSelTailPresets_026 -- file 0x213D9..0x21403
+; Selected when a wave-select record's field +0x0B & 0x3F == 26.
+; This record's own +0x0B is 0x1A, and 0x1A & 0x3F = 26 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x213E4 and
+; holds 0x1A; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 26, the index into this array.
+ToneDB_WaveSelTailPresets_026:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x1A, 0x1A, 0x4F, 0x35, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x5A, 0xD7, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xD7, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 213D9  |...B.B.B.B...O5T....dZ...B$`...Z.d...B$`...|
-ToneDB_MixerDefaultTable_3C_027:
+
+; ToneDB_WaveSelTailPresets_027 -- file 0x21404..0x2142E
+; Selected when a wave-select record's field +0x0B & 0x3F == 27.
+; This record's own +0x0B is 0x1B, and 0x1B & 0x3F = 27 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2140F and
+; holds 0x1B; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 27, the index into this array.
+ToneDB_WaveSelTailPresets_027:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x1B, 0x1B, 0x55, 0x3C, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x1E, 0xC0, 0xEC, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x1E, 0xC0, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21404  |...B.B.B.B...U<T....d....B$`.....d...B$`...|
-ToneDB_MixerDefaultTable_3C_028:
+
+; ToneDB_WaveSelTailPresets_028 -- file 0x2142F..0x21459
+; Selected when a wave-select record's field +0x0B & 0x3F == 28.
+; This record's own +0x0B is 0x1C, and 0x1C & 0x3F = 28 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2143A and
+; holds 0x1C; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 28, the index into this array.
+ToneDB_WaveSelTailPresets_028:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x1C, 0x1C, 0x4F, 0x46, 0x54, 0xF9, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xFF, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x00, 0x00, 0x00, 0x3C, 0xFF, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x00, 0x00, 0x00	; 2142F  |...B.B.B.B...OFT....d<...B$`...<.d...B$`...|
-ToneDB_MixerDefaultTable_3C_029:
+
+; ToneDB_WaveSelTailPresets_029 -- file 0x2145A..0x21484
+; Selected when a wave-select record's field +0x0B & 0x3F == 29.
+; This record's own +0x0B is 0x1D, and 0x1D & 0x3F = 29 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21465 and
+; holds 0x1D; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 29, the index into this array.
+ToneDB_WaveSelTailPresets_029:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x1D, 0x1D, 0x4F, 0x35, 0x54, 0xE2, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2145A  |...B.B.B.B...O5T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_030:
+
+; ToneDB_WaveSelTailPresets_030 -- file 0x21485..0x214AF
+; Selected when a wave-select record's field +0x0B & 0x3F == 30.
+; This record's own +0x0B is 0x1E, and 0x1E & 0x3F = 30 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21490 and
+; holds 0x1E; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 30, the index into this array.
+ToneDB_WaveSelTailPresets_030:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x1E, 0x1E, 0x4F, 0x35, 0x54, 0x00, 0x32, 0x86, 0x7F, 0x64, 0x30, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21485  |...B.B.B.B...O5T.2..d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_031:
+
+; ToneDB_WaveSelTailPresets_031 -- file 0x214B0..0x214DA
+; Selected when a wave-select record's field +0x0B & 0x3F == 31.
+; This record's own +0x0B is 0x1F, and 0x1F & 0x3F = 31 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x214BB and
+; holds 0x1F; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 31, the index into this array.
+ToneDB_WaveSelTailPresets_031:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x1F, 0x1F, 0x4F, 0x35, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x70, 0x40, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x40, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x0C, 0x00	; 214B0  |...B.B.B.B...O5T....p@...B$`...@.d...B$`...|
-ToneDB_MixerDefaultTable_3C_032:
+
+; ToneDB_WaveSelTailPresets_032 -- file 0x214DB..0x21505
+; Selected when a wave-select record's field +0x0B & 0x3F == 32.
+; This record's own +0x0B is 0x20, and 0x20 & 0x3F = 32 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x214E6 and
+; holds 0x20; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 32, the index into this array.
+ToneDB_WaveSelTailPresets_032:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x20, 0x20, 0x14, 0x14, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x5A, 0xD7, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xD7, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 214DB  |...0.0.0.0.  ..T....dZ...B$`...Z.d...B$`...|
-ToneDB_MixerDefaultTable_3C_033:
+
+; ToneDB_WaveSelTailPresets_033 -- file 0x21506..0x21530
+; Selected when a wave-select record's field +0x0B & 0x3F == 33.
+; This record's own +0x0B is 0x21, and 0x21 & 0x3F = 33 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21511 and
+; holds 0x21; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 33, the index into this array.
+ToneDB_WaveSelTailPresets_033:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x21, 0x21, 0x14, 0x18, 0x54, 0xE2, 0x00, 0x06, 0x7F, 0x64, 0x1E, 0xC0, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x1E, 0xC0, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21506  |...0.0.0.0.!!..T....d....B$`.....d...B$`...|
-ToneDB_MixerDefaultTable_3C_034:
+
+; ToneDB_WaveSelTailPresets_034 -- file 0x21531..0x2155B
+; Selected when a wave-select record's field +0x0B & 0x3F == 34.
+; This record's own +0x0B is 0x22, and 0x22 & 0x3F = 34 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x2153C and
+; holds 0x22; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 34, the index into this array.
+ToneDB_WaveSelTailPresets_034:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x22, 0x22, 0x14, 0x64, 0x54, 0xEC, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21531  |...0.0.0.0."".dT....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_035:
+
+; ToneDB_WaveSelTailPresets_035 -- file 0x2155C..0x21586
+; Selected when a wave-select record's field +0x0B & 0x3F == 35.
+; This record's own +0x0B is 0x23, and 0x23 & 0x3F = 35 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21567 and
+; holds 0x23; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 35, the index into this array.
+ToneDB_WaveSelTailPresets_035:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x23, 0x23, 0x3C, 0x32, 0x54, 0xCE, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2155C  |...0.0.0.0.##<2T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_036:
+
+; ToneDB_WaveSelTailPresets_036 -- file 0x21587..0x215B1
+; Selected when a wave-select record's field +0x0B & 0x3F == 36.
+; This record's own +0x0B is 0x24, and 0x24 & 0x3F = 36 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21592 and
+; holds 0x24; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 36, the index into this array.
+ToneDB_WaveSelTailPresets_036:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x24, 0x24, 0x14, 0x32, 0x54, 0x00, 0x32, 0x86, 0x7F, 0x64, 0x30, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 21587  |...0.0.0.0.$$.2T.2..d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_3C_037:
+
+; ToneDB_WaveSelTailPresets_037 -- file 0x215B2..0x215DC
+; Selected when a wave-select record's field +0x0B & 0x3F == 37.
+; This record's own +0x0B is 0x25, and 0x25 & 0x3F = 37 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x215BD and
+; holds 0x25; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 37, the index into this array.
+ToneDB_WaveSelTailPresets_037:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x25, 0x25, 0x14, 0x18, 0x54, 0xE2, 0x00, 0x86, 0x7F, 0x70, 0x40, 0xE0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x40, 0xE0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x0C, 0x00	; 215B2  |...0.0.0.0.%%..T....p@...B$`...@.d...B$`...|
-ToneDB_MixerDefaultTable_3C_038:
+
+; ToneDB_WaveSelTailPresets_038 -- file 0x215DD..0x21607
+; Selected when a wave-select record's field +0x0B & 0x3F == 38.
+; This record's own +0x0B is 0x66, and 0x66 & 0x3F = 38 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x215E8 and
+; holds 0x66; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 38, the index into this array.
+ToneDB_WaveSelTailPresets_038:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x26, 0x7D, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0xC0, 0x80, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0xC0, 0x80, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x2F, 0x58	; 215DD  |...........f&}.T....t....B.`.....d...B.`./X|
-ToneDB_MixerDefaultTable_3C_039:
+
+; ToneDB_WaveSelTailPresets_039 -- file 0x21608..0x21632
+; Selected when a wave-select record's field +0x0B & 0x3F == 39.
+; This record's own +0x0B is 0x67, and 0x67 & 0x3F = 39 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21613 and
+; holds 0x67; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 39, the index into this array.
+ToneDB_WaveSelTailPresets_039:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x67, 0x27, 0x7D, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0xC0, 0x80, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x17, 0x4E, 0xC0, 0x80, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x25, 0x47	; 21608  |...........g'}.T....t....B.`..N..d...B.`.%G|
-ToneDB_MixerDefaultTable_3C_040:
+
+; ToneDB_WaveSelTailPresets_040 -- file 0x21633..0x2165D
+; Selected when a wave-select record's field +0x0B & 0x3F == 40.
+; This record's own +0x0B is 0x68, and 0x68 & 0x3F = 40 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x2163E and
+; holds 0x68; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 40, the index into this array.
+ToneDB_WaveSelTailPresets_040:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x68, 0x28, 0x7D, 0xAD, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x74, 0x2D, 0xC6, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x45, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x03	; 21633  |...........h(}.T....t-...B.`...E.d...B.`...|
-ToneDB_MixerDefaultTable_3C_041:
+
+; ToneDB_WaveSelTailPresets_041 -- file 0x2165E..0x21688
+; Selected when a wave-select record's field +0x0B & 0x3F == 41.
+; This record's own +0x0B is 0x69, and 0x69 & 0x3F = 41 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21669 and
+; holds 0x69; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 41, the index into this array.
+ToneDB_WaveSelTailPresets_041:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x69, 0x29, 0x7D, 0xA5, 0x54, 0x00, 0x02, 0x86, 0x7F, 0x74, 0x41, 0xE1, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x17, 0x4E, 0x5A, 0xD5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x47	; 2165E  |...........i)}.T....tA...B.`..NZ.d...B.`..G|
-ToneDB_MixerDefaultTable_3C_042:
+
+; ToneDB_WaveSelTailPresets_042 -- file 0x21689..0x216B3
+; Selected when a wave-select record's field +0x0B & 0x3F == 42.
+; This record's own +0x0B is 0x6A, and 0x6A & 0x3F = 42 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21694 and
+; holds 0x6A; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 42, the index into this array.
+ToneDB_WaveSelTailPresets_042:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6A, 0x2A, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x40, 0xCD, 0xEC, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xC1, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x2F, 0x58	; 21689  |...........j*}.T....t@...B.`...Z.d...B.`./X|
-ToneDB_MixerDefaultTable_3C_043:
+
+; ToneDB_WaveSelTailPresets_043 -- file 0x216B4..0x216DE
+; Selected when a wave-select record's field +0x0B & 0x3F == 43.
+; This record's own +0x0B is 0x6B, and 0x6B & 0x3F = 43 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x216BF and
+; holds 0x6B; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 43, the index into this array.
+ToneDB_WaveSelTailPresets_043:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6B, 0x2B, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x40, 0xCD, 0xEC, 0x00, 0x42, 0x18, 0x60, 0x10, 0x17, 0x4E, 0x5A, 0xC1, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x25, 0x47	; 216B4  |...........k+}.T....t@...B.`..NZ.d...B.`.%G|
-ToneDB_MixerDefaultTable_3C_044:
+
+; ToneDB_WaveSelTailPresets_044 -- file 0x216DF..0x21709
+; Selected when a wave-select record's field +0x0B & 0x3F == 44.
+; This record's own +0x0B is 0x6C, and 0x6C & 0x3F = 44 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x216EA and
+; holds 0x6C; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 44, the index into this array.
+ToneDB_WaveSelTailPresets_044:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6C, 0x2C, 0x7D, 0xE4, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x4A, 0xFF, 0x00, 0x00, 0x42, 0x18, 0x60, 0x00, 0x00, 0x00, 0x64, 0xFF, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x00, 0x2F, 0x58	; 216DF  |...........l,}.T....tJ...B.`...d.d...B.`./X|
-ToneDB_MixerDefaultTable_3C_045:
+
+; ToneDB_WaveSelTailPresets_045 -- file 0x2170A..0x21734
+; Selected when a wave-select record's field +0x0B & 0x3F == 45.
+; This record's own +0x0B is 0x6D, and 0x6D & 0x3F = 45 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21715 and
+; holds 0x6D; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 45, the index into this array.
+ToneDB_WaveSelTailPresets_045:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6D, 0x2D, 0x7D, 0xE4, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x4A, 0xFF, 0x00, 0x00, 0x42, 0x18, 0x60, 0x00, 0x17, 0x4E, 0x64, 0xFF, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x00, 0x25, 0x47	; 2170A  |...........m-}.T....tJ...B.`..Nd.d...B.`.%G|
-ToneDB_MixerDefaultTable_3C_046:
+
+; ToneDB_WaveSelTailPresets_046 -- file 0x21735..0x2175F
+; Selected when a wave-select record's field +0x0B & 0x3F == 46.
+; This record's own +0x0B is 0x6E, and 0x6E & 0x3F = 46 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21740 and
+; holds 0x6E; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 46, the index into this array.
+ToneDB_WaveSelTailPresets_046:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6E, 0x2E, 0x7D, 0xB2, 0x54, 0xCE, 0x00, 0x06, 0x7F, 0x74, 0x40, 0xE1, 0xE2, 0x1E, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xD5, 0x64, 0xE2, 0x1E, 0x00, 0x42, 0x18, 0x60, 0x10, 0x2F, 0x58	; 21735  |...........n.}.T....t@...B.`...Z.d...B.`./X|
-ToneDB_MixerDefaultTable_3C_047:
+
+; ToneDB_WaveSelTailPresets_047 -- file 0x21760..0x2178A
+; Selected when a wave-select record's field +0x0B & 0x3F == 47.
+; This record's own +0x0B is 0x6F, and 0x6F & 0x3F = 47 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x2176B and
+; holds 0x6F; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 47, the index into this array.
+ToneDB_WaveSelTailPresets_047:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6F, 0x2F, 0x7D, 0xB2, 0x54, 0xCE, 0x00, 0x06, 0x7F, 0x74, 0x40, 0xE1, 0xE2, 0x1E, 0x42, 0x18, 0x60, 0x10, 0x17, 0x4E, 0x5A, 0xD5, 0x64, 0xE2, 0x1E, 0x00, 0x42, 0x18, 0x60, 0x10, 0x25, 0x47	; 21760  |...........o/}.T....t@...B.`..NZ.d...B.`.%G|
-ToneDB_MixerDefaultTable_3C_048:
+
+; ToneDB_WaveSelTailPresets_048 -- file 0x2178B..0x217B5
+; Selected when a wave-select record's field +0x0B & 0x3F == 48.
+; This record's own +0x0B is 0x70, and 0x70 & 0x3F = 48 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21796 and
+; holds 0x70; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 48, the index into this array.
+ToneDB_WaveSelTailPresets_048:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x70, 0x30, 0x7D, 0xB2, 0x54, 0x00, 0x32, 0x86, 0x7F, 0x74, 0x40, 0xE1, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xD5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x2F, 0x58	; 2178B  |...........p0}.T.2..t@...B.`...Z.d...B.`./X|
-ToneDB_MixerDefaultTable_3C_049:
+
+; ToneDB_WaveSelTailPresets_049 -- file 0x217B6..0x217E0
+; Selected when a wave-select record's field +0x0B & 0x3F == 49.
+; This record's own +0x0B is 0x71, and 0x71 & 0x3F = 49 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x217C1 and
+; holds 0x71; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 49, the index into this array.
+ToneDB_WaveSelTailPresets_049:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x71, 0x31, 0x7D, 0xB2, 0x54, 0x00, 0x32, 0x86, 0x7F, 0x74, 0x40, 0xE1, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x17, 0x4E, 0x5A, 0xD5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x25, 0x47	; 217B6  |...........q1}.T.2..t@...B.`..NZ.d...B.`.%G|
-ToneDB_MixerDefaultTable_3C_050:
+
+; ToneDB_WaveSelTailPresets_050 -- file 0x217E1..0x2180B
+; Selected when a wave-select record's field +0x0B & 0x3F == 50.
+; This record's own +0x0B is 0x72, and 0x72 & 0x3F = 50 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x217EC and
+; holds 0x72; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 50, the index into this array.
+ToneDB_WaveSelTailPresets_050:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x72, 0x32, 0x7D, 0x8B, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x74, 0x3A, 0x98, 0x00, 0x00, 0x42, 0x18, 0x60, 0x00, 0x00, 0x00, 0x40, 0xA6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x00, 0x00, 0x00	; 217E1  |...........r2}.T....t:...B.`...@.d...B.`...|
-ToneDB_MixerDefaultTable_3C_051:
+
+; ToneDB_WaveSelTailPresets_051 -- file 0x2180C..0x21836
+; Selected when a wave-select record's field +0x0B & 0x3F == 51.
+; This record's own +0x0B is 0x73, and 0x73 & 0x3F = 51 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21817 and
+; holds 0x73; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 51, the index into this array.
+ToneDB_WaveSelTailPresets_051:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x73, 0x33, 0x7D, 0xA7, 0x54, 0x0B, 0x0F, 0x86, 0x7F, 0x74, 0x32, 0xC7, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x18, 0xF3, 0x35, 0xBD, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0xFB, 0x03	; 2180C  |...........s3}.T....t2...B.`...5.d...B.`...|
-ToneDB_MixerDefaultTable_3C_052:
+
+; ToneDB_WaveSelTailPresets_052 -- file 0x21837..0x21861
+; Selected when a wave-select record's field +0x0B & 0x3F == 52.
+; This record's own +0x0B is 0x74, and 0x74 & 0x3F = 52 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21842 and
+; holds 0x74; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 52, the index into this array.
+ToneDB_WaveSelTailPresets_052:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x74, 0x34, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x46, 0xE2, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xB0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x07, 0x03	; 21837  |...........t4}.T....tF...B.`...Z.d...B.`...|
-ToneDB_MixerDefaultTable_3C_053:
+
+; ToneDB_WaveSelTailPresets_053 -- file 0x21862..0x2188C
+; Selected when a wave-select record's field +0x0B & 0x3F == 53.
+; This record's own +0x0B is 0x75, and 0x75 & 0x3F = 53 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x2186D and
+; holds 0x75; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 53, the index into this array.
+ToneDB_WaveSelTailPresets_053:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x75, 0x35, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x30, 0xB0, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0xFB, 0x00, 0x5A, 0xB0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x07, 0x03	; 21862  |...........u5}.T....t0...B.`...Z.d...B.`...|
-ToneDB_MixerDefaultTable_3C_054:
+
+; ToneDB_WaveSelTailPresets_054 -- file 0x2188D..0x218B7
+; Selected when a wave-select record's field +0x0B & 0x3F == 54.
+; This record's own +0x0B is 0x76, and 0x76 & 0x3F = 54 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21898 and
+; holds 0x76; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 54, the index into this array.
+ToneDB_WaveSelTailPresets_054:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x76, 0x36, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x6C, 0x30, 0x80, 0xEC, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x44, 0x80, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x08, 0x03	; 2188D  |...........v6}.T....l0...B.`...D.d...B.`...|
-ToneDB_MixerDefaultTable_3C_055:
+
+; ToneDB_WaveSelTailPresets_055 -- file 0x218B8..0x218E2
+; Selected when a wave-select record's field +0x0B & 0x3F == 55.
+; This record's own +0x0B is 0x77, and 0x77 & 0x3F = 55 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x218C3 and
+; holds 0x77; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 55, the index into this array.
+ToneDB_WaveSelTailPresets_055:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x77, 0x37, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x6C, 0x30, 0x80, 0xEC, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0D, 0x16, 0x44, 0x80, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0E, 0x36	; 218B8  |...........w7}.T....l0...B.`...D.d...B.`..6|
-ToneDB_MixerDefaultTable_3C_056:
+
+; ToneDB_WaveSelTailPresets_056 -- file 0x218E3..0x2190D
+; Selected when a wave-select record's field +0x0B & 0x3F == 56.
+; This record's own +0x0B is 0x78, and 0x78 & 0x3F = 56 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x218EE and
+; holds 0x78; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 56, the index into this array.
+ToneDB_WaveSelTailPresets_056:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x78, 0x38, 0x69, 0x7C, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0x50, 0xB2, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0C, 0x16, 0xDA, 0xB6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x1D, 0x38	; 218E3  |...........x8i|T....tP...B.`.....d...B.`..8|
-ToneDB_MixerDefaultTable_3C_057:
+
+; ToneDB_WaveSelTailPresets_057 -- file 0x2190E..0x21938
+; Selected when a wave-select record's field +0x0B & 0x3F == 57.
+; This record's own +0x0B is 0x79, and 0x79 & 0x3F = 57 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21919 and
+; holds 0x79; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 57, the index into this array.
+ToneDB_WaveSelTailPresets_057:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79, 0x39, 0x7B, 0xE7, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x74, 0xA3, 0x87, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0C, 0x16, 0xDA, 0x86, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0D, 0x36	; 2190E  |...........y9{.T....t....B.`.....d...B.`..6|
-ToneDB_MixerDefaultTable_3C_058:
+
+; ToneDB_WaveSelTailPresets_058 -- file 0x21939..0x21963
+; Selected when a wave-select record's field +0x0B & 0x3F == 58.
+; This record's own +0x0B is 0x7A, and 0x7A & 0x3F = 58 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x21944 and
+; holds 0x7A; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 58, the index into this array.
+ToneDB_WaveSelTailPresets_058:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7A, 0x3A, 0x7D, 0x80, 0x54, 0xCE, 0x00, 0x06, 0x7F, 0x74, 0x46, 0xB0, 0xCE, 0x1E, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xB0, 0x64, 0xCE, 0x1E, 0x00, 0x42, 0x18, 0x60, 0x10, 0x08, 0x03	; 21939  |...........z:}.T....tF...B.`...Z.d...B.`...|
-ToneDB_MixerDefaultTable_3C_059:
+
+; ToneDB_WaveSelTailPresets_059 -- file 0x21964..0x2198E
+; Selected when a wave-select record's field +0x0B & 0x3F == 59.
+; This record's own +0x0B is 0x7B, and 0x7B & 0x3F = 59 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x2196F and
+; holds 0x7B; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 59, the index into this array.
+ToneDB_WaveSelTailPresets_059:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7B, 0x3B, 0x7D, 0x80, 0x54, 0xCE, 0x00, 0x06, 0x7F, 0x74, 0x46, 0xB0, 0xCE, 0x1E, 0x42, 0x18, 0x60, 0x10, 0x0D, 0x16, 0x5A, 0xB0, 0x64, 0xCE, 0x1E, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0E, 0x36	; 21964  |...........{;}.T....tF...B.`...Z.d...B.`..6|
-ToneDB_MixerDefaultTable_3C_060:
+
+; ToneDB_WaveSelTailPresets_060 -- file 0x2198F..0x219B9
+; Selected when a wave-select record's field +0x0B & 0x3F == 60.
+; This record's own +0x0B is 0x7C, and 0x7C & 0x3F = 60 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x2199A and
+; holds 0x7C; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 60, the index into this array.
+ToneDB_WaveSelTailPresets_060:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7C, 0x3C, 0x7D, 0x80, 0x54, 0x00, 0x32, 0x86, 0x7F, 0x74, 0x46, 0xB0, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x5A, 0xB0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x08, 0x03	; 2198F  |...........|<}.T.2..tF...B.`...Z.d...B.`...|
-ToneDB_MixerDefaultTable_3C_061:
+
+; ToneDB_WaveSelTailPresets_061 -- file 0x219BA..0x219E4
+; Selected when a wave-select record's field +0x0B & 0x3F == 61.
+; This record's own +0x0B is 0x7D, and 0x7D & 0x3F = 61 --
+; it carries its own index.  Bit 6 is SET and the mask strips it.
+; Evidence: this record's own byte +0x0B is at file 0x219C5 and
+; holds 0x7D; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 61, the index into this array.
+ToneDB_WaveSelTailPresets_061:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7D, 0x3D, 0x7D, 0x80, 0x54, 0x00, 0x32, 0x86, 0x7F, 0x74, 0x46, 0xB0, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0D, 0x16, 0x5A, 0xB0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x0E, 0x36	; 219BA  |...........}=}.T.2..tF...B.`...Z.d...B.`..6|
-ToneDB_MixerDefaultTable_3C_062:
+
+; ToneDB_WaveSelTailPresets_062 -- file 0x219E5..0x21A0F
+; Selected when a wave-select record's field +0x0B & 0x3F == 62.
+; This record's own +0x0B is 0x3E, and 0x3E & 0x3F = 62 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x219F0 and
+; holds 0x3E; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 62, the index into this array.
+ToneDB_WaveSelTailPresets_062:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3E, 0x3E, 0x7D, 0x80, 0x54, 0x00, 0x32, 0x07, 0x7F, 0x74, 0x7F, 0xFF, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x32, 0x00, 0x30, 0xFF, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x18, 0x00	; 219E5  |...........>>}.T.2..t....B.`.2.0.d...B.`...|
-ToneDB_MixerDefaultTable_3C_063:
+
+; ToneDB_WaveSelTailPresets_063 -- file 0x21A10..0x21A3A
+; Selected when a wave-select record's field +0x0B & 0x3F == 63.
+; This record's own +0x0B is 0x3F, and 0x3F & 0x3F = 63 --
+; it carries its own index.
+; Evidence: this record's own byte +0x0B is at file 0x21A1B and
+; holds 0x3F; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
+; what makes its low 6 bits, 63, the index into this array.
+ToneDB_WaveSelTailPresets_063:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3F, 0x3F, 0x55, 0x80, 0x54, 0x00, 0x32, 0x07, 0x7F, 0x74, 0x7F, 0xFF, 0x00, 0x00, 0x42, 0x18, 0x60, 0x04, 0x32, 0x00, 0x00, 0xFF, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x04, 0x18, 0x00	; 21A10  |...........??U.T.2..t....B.`.2...d...B.`...|
 
 ; ==========================================================================
@@ -15245,6 +15906,30 @@ ToneDB_ToneIndexMapD:
 ; rising slope; curve 0 is exactly index//12.  Curves 3 and 4 share both
 ; their end value and their sum but differ in 14 of 128 bytes.
 ; 
+; ★ AND THAT IS WHERE THE SIX LABELS BELOW COME FROM -- NEW IN ROUND 5.
+; These tables used to be called ToneDB_DescCurve_0..5, which says where a
+; curve sits and nothing about what it is.  A staircase IS its step width,
+; so each one is now named for the run length that dominates it:
+; 
+;     Step12(11 zones)  Step6(21 zones)  Step4(28 zones)  Step3(35 zones)  Step4And2(35 zones)  Step1(108 zones)
+; 
+; The suffix is DERIVED, not typed: notes/prom_d_understanding_round5.py
+; curve_names() counts run lengths and takes the strict plurality, or the
+; two-way tie spelled `<hi>And<lo>` -- which is why curve 4, whose interior
+; alternates 4,2,2,4 so that 4 and 2 each occur 14 times, is Step4And2 and
+; not Step4.  This generator refuses to emit if the derivation stops
+; producing the audited six names.
+; 
+; ★ AND THE INTERIOR IS PERIODIC WITH PERIOD 12, in all six: over entries
+; 24..119 each 12-wide block carries exactly 1, 2, 3, 4, 4 and 12 distinct
+; values respectively.  So the six curves are six RESOLUTIONS of one 12-wide
+; unit, and Step4And2 differs from Step3 in how it cuts the block (4+2+2+4
+; against 3+3+3+3) and not in how many pieces it cuts it into.
+; ⚠ 12 is NOT claimed to be an octave, and the domain is NOT claimed to be a
+; note number.  Round 4 refused that and round 5 refuses it again: the
+; period is arithmetic, measured over 96 entries of every curve, and the
+; meaning of the index is still nobody's.  round 5 Q3.
+; 
 ; ★ WHAT THE CURVE'S OUTPUT IS FOR -- NEW IN ROUND 4, and it upgrades the
 ; paragraph that used to stand here.  Round 2 could only say the descriptors
 ; POINT here.  The curve's VALUE is now placed as well: in 318 of the 318
@@ -15278,13 +15963,15 @@ ToneDB_ToneIndexMapD:
 ; ==========================================================================
 ToneDB_DescCurveBank:
 
-; ToneDB_DescCurve_0 -- file 0x22A3B..0x22ABA (128 bytes)
-; 128 entries, non-decreasing, v[0] = 0, v[127] = 10.  Exactly index//12.
+; ToneDB_DescCurve_Step12 -- file 0x22A3B..0x22ABA (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 10, 11 zones.  Exactly index//12.
+; Run lengths: 10 x 12, 1 x 8 -- which is what the label's suffix says, and it is
+; derived by notes/prom_d_understanding_round5.py curve_names(), not typed.
 ; Consumers' stage-2 tables are all 11 bytes long = this curve's
 ; largest entry + 1, in 136 of 136 cases -- round 4 join 1.
 ; Evidence: 136 of the 318 part-A objects at slot +0x30 name THIS curve
 ; in their leading LE32; the first is the object at 0x23E9F.  
-ToneDB_DescCurve_0:
+ToneDB_DescCurve_Step12:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01	; 22A3B  |................|
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02	; 22A4B  |................|
 	.byte 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03	; 22A5B  |................|
@@ -15294,13 +15981,15 @@ ToneDB_DescCurve_0:
 	.byte 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09	; 22A9B  |................|
 	.byte 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A	; 22AAB  |................|
 
-; ToneDB_DescCurve_1 -- file 0x22ABB..0x22B3A (128 bytes)
-; 128 entries, non-decreasing, v[0] = 0, v[127] = 20.
+; ToneDB_DescCurve_Step6 -- file 0x22ABB..0x22B3A (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 20, 21 zones.
+; Run lengths: 1 x 8, 20 x 6 -- which is what the label's suffix says, and it is
+; derived by notes/prom_d_understanding_round5.py curve_names(), not typed.
 ; Consumers' stage-2 tables are all 21 bytes long = this curve's
 ; largest entry + 1, in 27 of 27 cases -- round 4 join 1.
 ; Evidence: 27 of the 318 part-A objects at slot +0x30 name THIS curve
 ; in their leading LE32; the first is the object at 0x246B6.  
-ToneDB_DescCurve_1:
+ToneDB_DescCurve_Step6:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22ABB  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x05, 0x05	; 22ACB  |................|
 	.byte 0x05, 0x05, 0x05, 0x05, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07	; 22ADB  |................|
@@ -15310,13 +15999,15 @@ ToneDB_DescCurve_1:
 	.byte 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x12, 0x12, 0x12, 0x12	; 22B1B  |................|
 	.byte 0x12, 0x12, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14	; 22B2B  |................|
 
-; ToneDB_DescCurve_2 -- file 0x22B3B..0x22BBA (128 bytes)
-; 128 entries, non-decreasing, v[0] = 0, v[127] = 27.
+; ToneDB_DescCurve_Step4 -- file 0x22B3B..0x22BBA (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 27, 28 zones.
+; Run lengths: 1 x 8, 6 x 6, 21 x 4 -- which is what the label's suffix says, and it is
+; derived by notes/prom_d_understanding_round5.py curve_names(), not typed.
 ; Consumers' stage-2 tables are all 28 bytes long = this curve's
 ; largest entry + 1, in 7 of 7 cases -- round 4 join 1.
 ; Evidence: 7 of the 318 part-A objects at slot +0x30 name THIS curve
 ; in their leading LE32; the first is the object at 0x27415.  
-ToneDB_DescCurve_2:
+ToneDB_DescCurve_Step4:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22B3B  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x04, 0x05, 0x05, 0x05, 0x05	; 22B4B  |................|
 	.byte 0x06, 0x06, 0x06, 0x06, 0x07, 0x07, 0x07, 0x07, 0x08, 0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09	; 22B5B  |................|
@@ -15326,13 +16017,15 @@ ToneDB_DescCurve_2:
 	.byte 0x16, 0x16, 0x16, 0x16, 0x17, 0x17, 0x17, 0x17, 0x18, 0x18, 0x18, 0x18, 0x19, 0x19, 0x19, 0x19	; 22B9B  |................|
 	.byte 0x19, 0x19, 0x1A, 0x1A, 0x1A, 0x1A, 0x1A, 0x1A, 0x1B, 0x1B, 0x1B, 0x1B, 0x1B, 0x1B, 0x1B, 0x1B	; 22BAB  |................|
 
-; ToneDB_DescCurve_3 -- file 0x22BBB..0x22C3A (128 bytes)
-; 128 entries, non-decreasing, v[0] = 0, v[127] = 34.
+; ToneDB_DescCurve_Step3 -- file 0x22BBB..0x22C3A (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 34, 35 zones.
+; Run lengths: 1 x 8, 6 x 6, 28 x 3 -- which is what the label's suffix says, and it is
+; derived by notes/prom_d_understanding_round5.py curve_names(), not typed.
 ; Consumers' stage-2 tables are all 35 bytes long = this curve's
 ; largest entry + 1, in 11 of 11 cases -- round 4 join 1.
 ; Evidence: 11 of the 318 part-A objects at slot +0x30 name THIS curve
 ; in their leading LE32; the first is the object at 0x247D2.  
-ToneDB_DescCurve_3:
+ToneDB_DescCurve_Step3:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22BBB  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x05, 0x05, 0x05, 0x06, 0x06	; 22BCB  |................|
 	.byte 0x06, 0x07, 0x07, 0x07, 0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x0A, 0x0A, 0x0A, 0x0B, 0x0B, 0x0B	; 22BDB  |................|
@@ -15342,13 +16035,15 @@ ToneDB_DescCurve_3:
 	.byte 0x1C, 0x1C, 0x1C, 0x1D, 0x1D, 0x1D, 0x1E, 0x1E, 0x1E, 0x1F, 0x1F, 0x1F, 0x20, 0x20, 0x20, 0x20	; 22C1B  |............    |
 	.byte 0x20, 0x20, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22	; 22C2B  |  !!!!!!""""""""|
 
-; ToneDB_DescCurve_4 -- file 0x22C3B..0x22CBA (128 bytes)
-; 128 entries, non-decreasing, v[0] = 0, v[127] = 34.
+; ToneDB_DescCurve_Step4And2 -- file 0x22C3B..0x22CBA (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 34, 35 zones.
+; Run lengths: 1 x 8, 6 x 6, 14 x 4, 14 x 2 -- which is what the label's suffix says, and it is
+; derived by notes/prom_d_understanding_round5.py curve_names(), not typed.
 ; Consumers' stage-2 tables are all 35 bytes long = this curve's
 ; largest entry + 1, in 7 of 7 cases -- round 4 join 1.
 ; Evidence: 7 of the 318 part-A objects at slot +0x30 name THIS curve
 ; in their leading LE32; the first is the object at 0x24D0B.  
-ToneDB_DescCurve_4:
+ToneDB_DescCurve_Step4And2:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22C3B  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x04, 0x04, 0x05, 0x05, 0x06, 0x06	; 22C4B  |................|
 	.byte 0x07, 0x07, 0x07, 0x07, 0x08, 0x08, 0x08, 0x08, 0x09, 0x09, 0x0A, 0x0A, 0x0B, 0x0B, 0x0B, 0x0B	; 22C5B  |................|
@@ -15358,13 +16053,15 @@ ToneDB_DescCurve_4:
 	.byte 0x1C, 0x1C, 0x1C, 0x1C, 0x1D, 0x1D, 0x1E, 0x1E, 0x1F, 0x1F, 0x1F, 0x1F, 0x20, 0x20, 0x20, 0x20	; 22C9B  |............    |
 	.byte 0x20, 0x20, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22	; 22CAB  |  !!!!!!""""""""|
 
-; ToneDB_DescCurve_5 -- file 0x22CBB..0x22D3A (128 bytes)
-; 128 entries, non-decreasing, v[0] = 0, v[127] = 107.
+; ToneDB_DescCurve_Step1 -- file 0x22CBB..0x22D3A (128 bytes)
+; 128 entries, non-decreasing, v[0] = 0, v[127] = 107, 108 zones.
+; Run lengths: 4 x 6, 104 x 1 -- which is what the label's suffix says, and it is
+; derived by notes/prom_d_understanding_round5.py curve_names(), not typed.
 ; Consumers' stage-2 tables are all 108 bytes long = this curve's
 ; largest entry + 1, in 130 of 130 cases -- round 4 join 1.
 ; Evidence: 130 of the 318 part-A objects at slot +0x30 name THIS curve
 ; in their leading LE32; the first is the object at 0x23EDE.  The 161 descriptors at slot +0x38 share one part A, and it names this curve too.
-ToneDB_DescCurve_5:
+ToneDB_DescCurve_Step1:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02	; 22CBB  |................|
 	.byte 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B	; 22CCB  |................|
 	.byte 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B	; 22CDB  |................|
@@ -15422,7 +16119,7 @@ ToneDB_DescCurve_5:
 ; 
 ; ★ THE INDEX CHAIN -- what the two pool objects per descriptor ARE.
 ; 
-;   stage 1  ToneDB_DescCurve_k     128 entries, non-decreasing.  The
+;   stage 1  a ToneDB_DescCurve_*   128 entries, non-decreasing.  The
 ;                                   descriptor's part A begins with a 32-bit
 ;                                   file offset naming one of the 6 curves.
 ;   stage 2  part A, after that     a byte table, one entry per distinct
@@ -16121,7 +16818,7 @@ ToneDB_EnvDescTable_Desc317:		; tag 0x40  A=0x2B297  B=0x2B2A6
 ToneDB_EnvDescTable_Pool:
 
 ; ToneDB_EnvDescTable_000_CurveStepToElem -- file 0x23E9F..0x23EAD (15 bytes)
-; descriptor 0 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 0 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_000_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -16132,7 +16829,7 @@ ToneDB_EnvDescTable_000_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_000_ElemArray -- file 0x23EAE..0x23EB3 (6 bytes)
 ; descriptor 0 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 0 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -16142,7 +16839,7 @@ ToneDB_EnvDescTable_000_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0xE0	; 23EAE  |......|
 
 ; ToneDB_EnvDescTable_001_CurveStepToElem -- file 0x23EB4..0x23EC2 (15 bytes)
-; descriptor 1 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 1 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_001_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -16153,7 +16850,7 @@ ToneDB_EnvDescTable_001_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_001_ElemArray -- file 0x23EC3..0x23EC8 (6 bytes)
 ; descriptor 1 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 1 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -16163,7 +16860,7 @@ ToneDB_EnvDescTable_001_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xE0	; 23EC3  |......|
 
 ; ToneDB_EnvDescTable_002_CurveStepToElem -- file 0x23EC9..0x23ED7 (15 bytes)
-; descriptor 2 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 2 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_002_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -16174,7 +16871,7 @@ ToneDB_EnvDescTable_002_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_002_ElemArray -- file 0x23ED8..0x23EDD (6 bytes)
 ; descriptor 2 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 2 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -16184,7 +16881,7 @@ ToneDB_EnvDescTable_002_ElemArray:
 	.byte 0x02, 0x00, 0x00, 0xE0, 0x00, 0x00	; 23ED8  |......|
 
 ; ToneDB_EnvDescTable_003_CurveStepToElem -- file 0x23EDE..0x23F4D (112 bytes)
-; descriptor 3 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 3 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_003_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 16; that array is 136
@@ -16201,7 +16898,7 @@ ToneDB_EnvDescTable_003_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_003_ElemArray -- file 0x23F4E..0x23FD5 (136 bytes)
 ; descriptor 3 stage 3: 17 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 3 -> this array.
 ; Evidence: 136 bytes / 8 = 17 elements, and the stage-2 table's
 ; largest entry is 16, so 16 + 1 = 17 matches exactly.  The
@@ -16219,7 +16916,7 @@ ToneDB_EnvDescTable_003_ElemArray:
 	.byte 0x13, 0x00, 0x00, 0xDA, 0x00, 0x00, 0x47, 0xF2	; 23FCE  |......G.|
 
 ; ToneDB_EnvDescTable_004_CurveStepToElem -- file 0x23FD6..0x24045 (112 bytes)
-; descriptor 4 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 4 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_004_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 17; that array is 144
@@ -16236,7 +16933,7 @@ ToneDB_EnvDescTable_004_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_004_ElemArray -- file 0x24046..0x240D5 (144 bytes)
 ; descriptor 4 stage 3: 18 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 4 -> this array.
 ; Evidence: 144 bytes / 8 = 18 elements, and the stage-2 table's
 ; largest entry is 17, so 17 + 1 = 18 matches exactly.  The
@@ -16254,7 +16951,7 @@ ToneDB_EnvDescTable_004_ElemArray:
 	.byte 0x12, 0x00, 0x00, 0xE0, 0x00, 0x00, 0x42, 0xF4, 0x13, 0x00, 0x00, 0xDA, 0x00, 0x00, 0x47, 0xF2	; 240C6  |......B.......G.|
 
 ; ToneDB_EnvDescTable_005_CurveStepToElem -- file 0x240D6..0x24145 (112 bytes)
-; descriptor 5 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 5 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_005_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 16; that array is 136
@@ -16271,7 +16968,7 @@ ToneDB_EnvDescTable_005_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_005_ElemArray -- file 0x24146..0x241CD (136 bytes)
 ; descriptor 5 stage 3: 17 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 5 -> this array.
 ; Evidence: 136 bytes / 8 = 17 elements, and the stage-2 table's
 ; largest entry is 16, so 16 + 1 = 17 matches exactly.  The
@@ -16289,7 +16986,7 @@ ToneDB_EnvDescTable_005_ElemArray:
 	.byte 0x10, 0x10, 0x00, 0xE3, 0x00, 0x00, 0x47, 0xF2	; 241C6  |......G.|
 
 ; ToneDB_EnvDescTable_006_CurveStepToElem -- file 0x241CE..0x2423D (112 bytes)
-; descriptor 6 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 6 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_006_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 3; that array is 32
@@ -16306,7 +17003,7 @@ ToneDB_EnvDescTable_006_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_006_ElemArray -- file 0x2423E..0x2425D (32 bytes)
 ; descriptor 6 stage 3: 4 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 6 -> this array.
 ; Evidence: 32 bytes / 8 = 4 elements, and the stage-2 table's
 ; largest entry is 3, so 3 + 1 = 4 matches exactly.  The
@@ -16317,7 +17014,7 @@ ToneDB_EnvDescTable_006_ElemArray:
 	.byte 0x16, 0x00, 0x90, 0xF9, 0x00, 0xE0, 0xCD, 0xF9, 0x29, 0x00, 0xC0, 0xF8, 0x00, 0xE0, 0x23, 0x00	; 2424E  |........).....#.|
 
 ; ToneDB_EnvDescTable_007_CurveStepToElem -- file 0x2425E..0x242CD (112 bytes)
-; descriptor 7 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 7 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_007_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 40
@@ -16334,7 +17031,7 @@ ToneDB_EnvDescTable_007_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_007_ElemArray -- file 0x242CE..0x242F5 (40 bytes)
 ; descriptor 7 stage 3: 5 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 7 -> this array.
 ; Evidence: 40 bytes / 8 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -16346,7 +17043,7 @@ ToneDB_EnvDescTable_007_ElemArray:
 	.byte 0x29, 0x00, 0xC0, 0xF8, 0x00, 0xE0, 0x23, 0x00	; 242EE  |).....#.|
 
 ; ToneDB_EnvDescTable_008_CurveStepToElem -- file 0x242F6..0x24365 (112 bytes)
-; descriptor 8 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 8 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_008_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 48
@@ -16363,7 +17060,7 @@ ToneDB_EnvDescTable_008_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_008_ElemArray -- file 0x24366..0x24395 (48 bytes)
 ; descriptor 8 stage 3: 6 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 8 -> this array.
 ; Evidence: 48 bytes / 8 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -16375,7 +17072,7 @@ ToneDB_EnvDescTable_008_ElemArray:
 	.byte 0x1F, 0x00, 0x00, 0xF9, 0x00, 0xE0, 0x00, 0x00, 0x29, 0x00, 0xC0, 0xF8, 0x00, 0xE0, 0x23, 0x00	; 24386  |........).....#.|
 
 ; ToneDB_EnvDescTable_009_CurveStepToElem -- file 0x24396..0x24405 (112 bytes)
-; descriptor 9 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 9 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_009_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 56
@@ -16392,7 +17089,7 @@ ToneDB_EnvDescTable_009_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_009_ElemArray -- file 0x24406..0x2443D (56 bytes)
 ; descriptor 9 stage 3: 7 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 9 -> this array.
 ; Evidence: 56 bytes / 8 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -16405,7 +17102,7 @@ ToneDB_EnvDescTable_009_ElemArray:
 	.byte 0x29, 0x00, 0xC0, 0xF8, 0x00, 0xE0, 0x23, 0x00	; 24436  |).....#.|
 
 ; ToneDB_EnvDescTable_010_CurveStepToElem -- file 0x2443E..0x244AD (112 bytes)
-; descriptor 10 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 10 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_010_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 2; that array is 24
@@ -16422,7 +17119,7 @@ ToneDB_EnvDescTable_010_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_010_ElemArray -- file 0x244AE..0x244C5 (24 bytes)
 ; descriptor 10 stage 3: 3 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 10 -> this array.
 ; Evidence: 24 bytes / 8 = 3 elements, and the stage-2 table's
 ; largest entry is 2, so 2 + 1 = 3 matches exactly.  The
@@ -16433,7 +17130,7 @@ ToneDB_EnvDescTable_010_ElemArray:
 	.byte 0x29, 0x00, 0xC0, 0xF0, 0x00, 0xE0, 0x23, 0x00	; 244BE  |).....#.|
 
 ; ToneDB_EnvDescTable_011_CurveStepToElem -- file 0x244C6..0x24535 (112 bytes)
-; descriptor 11 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 11 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_011_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 3; that array is 32
@@ -16450,7 +17147,7 @@ ToneDB_EnvDescTable_011_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_011_ElemArray -- file 0x24536..0x24555 (32 bytes)
 ; descriptor 11 stage 3: 4 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 11 -> this array.
 ; Evidence: 32 bytes / 8 = 4 elements, and the stage-2 table's
 ; largest entry is 3, so 3 + 1 = 4 matches exactly.  The
@@ -16461,7 +17158,7 @@ ToneDB_EnvDescTable_011_ElemArray:
 	.byte 0x28, 0x00, 0x00, 0xFB, 0x00, 0xE0, 0x00, 0x00, 0x29, 0x00, 0xC0, 0xF4, 0x00, 0xE0, 0x23, 0x00	; 24546  |(.......).....#.|
 
 ; ToneDB_EnvDescTable_012_CurveStepToElem -- file 0x24556..0x24564 (15 bytes)
-; descriptor 12 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 12 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_012_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -16472,7 +17169,7 @@ ToneDB_EnvDescTable_012_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_012_ElemArray -- file 0x24565..0x2456C (8 bytes)
 ; descriptor 12 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 12 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -16482,7 +17179,7 @@ ToneDB_EnvDescTable_012_ElemArray:
 	.byte 0x29, 0x00, 0xC0, 0xF8, 0x00, 0xE0, 0x23, 0x00	; 24565  |).....#.|
 
 ; ToneDB_EnvDescTable_013_CurveStepToElem -- file 0x2456D..0x2457B (15 bytes)
-; descriptor 13 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 13 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_013_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 2; that array is 18
@@ -16493,7 +17190,7 @@ ToneDB_EnvDescTable_013_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_013_ElemArray -- file 0x2457C..0x2458D (18 bytes)
 ; descriptor 13 stage 3: 3 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 13 -> this array.
 ; Evidence: 18 bytes / 6 = 3 elements, and the stage-2 table's
 ; largest entry is 2, so 2 + 1 = 3 matches exactly.  The
@@ -16504,7 +17201,7 @@ ToneDB_EnvDescTable_013_ElemArray:
 	.byte 0x00, 0xE0	; 2458C  |..|
 
 ; ToneDB_EnvDescTable_014_CurveStepToElem -- file 0x2458E..0x245FD (112 bytes)
-; descriptor 14 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 14 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_014_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 48
@@ -16521,7 +17218,7 @@ ToneDB_EnvDescTable_014_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_014_ElemArray -- file 0x245FE..0x2462D (48 bytes)
 ; descriptor 14 stage 3: 6 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 14 -> this array.
 ; Evidence: 48 bytes / 8 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -16533,7 +17230,7 @@ ToneDB_EnvDescTable_014_ElemArray:
 	.byte 0x2F, 0x00, 0xA0, 0xFB, 0x00, 0xE4, 0x00, 0x00, 0x29, 0x00, 0xC0, 0xF4, 0x00, 0xE0, 0x23, 0x00	; 2461E  |/.......).....#.|
 
 ; ToneDB_EnvDescTable_015_CurveStepToElem -- file 0x2462E..0x2469D (112 bytes)
-; descriptor 15 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 15 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_015_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 2; that array is 24
@@ -16550,7 +17247,7 @@ ToneDB_EnvDescTable_015_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_015_ElemArray -- file 0x2469E..0x246B5 (24 bytes)
 ; descriptor 15 stage 3: 3 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 15 -> this array.
 ; Evidence: 24 bytes / 8 = 3 elements, and the stage-2 table's
 ; largest entry is 2, so 2 + 1 = 3 matches exactly.  The
@@ -16561,7 +17258,7 @@ ToneDB_EnvDescTable_015_ElemArray:
 	.byte 0x29, 0x00, 0xC0, 0xF8, 0x00, 0xE0, 0x23, 0x00	; 246AE  |).....#.|
 
 ; ToneDB_EnvDescTable_016_CurveStepToElem -- file 0x246B6..0x246CE (25 bytes)
-; descriptor 16 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 16 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_016_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 1; that array is 12
@@ -16573,7 +17270,7 @@ ToneDB_EnvDescTable_016_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_016_ElemArray -- file 0x246CF..0x246DA (12 bytes)
 ; descriptor 16 stage 3: 2 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 16 -> this array.
 ; Evidence: 12 bytes / 6 = 2 elements, and the stage-2 table's
 ; largest entry is 1, so 1 + 1 = 2 matches exactly.  The
@@ -16583,7 +17280,7 @@ ToneDB_EnvDescTable_016_ElemArray:
 	.byte 0x32, 0x00, 0x80, 0xF6, 0x00, 0xF8, 0xC8, 0x50, 0x00, 0xF2, 0x00, 0xFA	; 246CF  |2......P....|
 
 ; ToneDB_EnvDescTable_017_CurveStepToElem -- file 0x246DB..0x2474A (112 bytes)
-; descriptor 17 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 17 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_017_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -16600,7 +17297,7 @@ ToneDB_EnvDescTable_017_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_017_ElemArray -- file 0x2474B..0x2478C (66 bytes)
 ; descriptor 17 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 17 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -16614,7 +17311,7 @@ ToneDB_EnvDescTable_017_ElemArray:
 	.byte 0x00, 0xFA	; 2478B  |..|
 
 ; ToneDB_EnvDescTable_018_CurveStepToElem -- file 0x2478D..0x2479B (15 bytes)
-; descriptor 18 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 18 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_018_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -16625,7 +17322,7 @@ ToneDB_EnvDescTable_018_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_018_ElemArray -- file 0x2479C..0x247D1 (54 bytes)
 ; descriptor 18 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 18 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -16638,7 +17335,7 @@ ToneDB_EnvDescTable_018_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xFA, 0x00, 0xFA	; 247CC  |.P....|
 
 ; ToneDB_EnvDescTable_019_CurveStepToElem -- file 0x247D2..0x247F8 (39 bytes)
-; descriptor 19 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 19 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_019_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 13; that array is 112
@@ -16651,7 +17348,7 @@ ToneDB_EnvDescTable_019_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_019_ElemArray -- file 0x247F9..0x24868 (112 bytes)
 ; descriptor 19 stage 3: 14 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 19 -> this array.
 ; Evidence: 112 bytes / 8 = 14 elements, and the stage-2 table's
 ; largest entry is 13, so 13 + 1 = 14 matches exactly.  The
@@ -16667,7 +17364,7 @@ ToneDB_EnvDescTable_019_ElemArray:
 	.byte 0x82, 0x00, 0xB0, 0xC1, 0x00, 0x00, 0x00, 0xDF, 0x82, 0x00, 0xB0, 0xC1, 0x00, 0x00, 0x00, 0xDF	; 24859  |................|
 
 ; ToneDB_EnvDescTable_020_CurveStepToElem -- file 0x24869..0x248D8 (112 bytes)
-; descriptor 20 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 20 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_020_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 2; that array is 18
@@ -16684,7 +17381,7 @@ ToneDB_EnvDescTable_020_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_020_ElemArray -- file 0x248D9..0x248EA (18 bytes)
 ; descriptor 20 stage 3: 3 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 20 -> this array.
 ; Evidence: 18 bytes / 6 = 3 elements, and the stage-2 table's
 ; largest entry is 2, so 2 + 1 = 3 matches exactly.  The
@@ -16695,7 +17392,7 @@ ToneDB_EnvDescTable_020_ElemArray:
 	.byte 0x00, 0xE0	; 248E9  |..|
 
 ; ToneDB_EnvDescTable_021_CurveStepToElem -- file 0x248EB..0x2495A (112 bytes)
-; descriptor 21 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 21 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_021_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 1; that array is 12
@@ -16712,7 +17409,7 @@ ToneDB_EnvDescTable_021_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_021_ElemArray -- file 0x2495B..0x24966 (12 bytes)
 ; descriptor 21 stage 3: 2 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 21 -> this array.
 ; Evidence: 12 bytes / 6 = 2 elements, and the stage-2 table's
 ; largest entry is 1, so 1 + 1 = 2 matches exactly.  The
@@ -16722,7 +17419,7 @@ ToneDB_EnvDescTable_021_ElemArray:
 	.byte 0x8A, 0x00, 0xB0, 0xF8, 0x00, 0xE0, 0x00, 0x00, 0x00, 0xD8, 0x00, 0xE0	; 2495B  |............|
 
 ; ToneDB_EnvDescTable_022_CurveStepToElem -- file 0x24967..0x249D6 (112 bytes)
-; descriptor 22 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 22 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_022_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 16; that array is 136
@@ -16739,7 +17436,7 @@ ToneDB_EnvDescTable_022_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_022_ElemArray -- file 0x249D7..0x24A5E (136 bytes)
 ; descriptor 22 stage 3: 17 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 22 -> this array.
 ; Evidence: 136 bytes / 8 = 17 elements, and the stage-2 table's
 ; largest entry is 16, so 16 + 1 = 17 matches exactly.  The
@@ -16757,7 +17454,7 @@ ToneDB_EnvDescTable_022_ElemArray:
 	.byte 0x10, 0x10, 0x00, 0xE3, 0x00, 0x00, 0x47, 0xF2	; 24A57  |......G.|
 
 ; ToneDB_EnvDescTable_023_CurveStepToElem -- file 0x24A5F..0x24ACE (112 bytes)
-; descriptor 23 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 23 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_023_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 17; that array is 144
@@ -16774,7 +17471,7 @@ ToneDB_EnvDescTable_023_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_023_ElemArray -- file 0x24ACF..0x24B5E (144 bytes)
 ; descriptor 23 stage 3: 18 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 23 -> this array.
 ; Evidence: 144 bytes / 8 = 18 elements, and the stage-2 table's
 ; largest entry is 17, so 17 + 1 = 18 matches exactly.  The
@@ -16792,7 +17489,7 @@ ToneDB_EnvDescTable_023_ElemArray:
 	.byte 0x0F, 0x10, 0x00, 0xEF, 0x00, 0x00, 0x42, 0xF4, 0x10, 0x10, 0x00, 0xE3, 0x00, 0x00, 0x47, 0xF2	; 24B4F  |......B.......G.|
 
 ; ToneDB_EnvDescTable_024_CurveStepToElem -- file 0x24B5F..0x24BCE (112 bytes)
-; descriptor 24 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 24 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_024_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 16; that array is 102
@@ -16809,7 +17506,7 @@ ToneDB_EnvDescTable_024_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_024_ElemArray -- file 0x24BCF..0x24C34 (102 bytes)
 ; descriptor 24 stage 3: 17 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 24 -> this array.
 ; Evidence: 102 bytes / 6 = 17 elements, and the stage-2 table's
 ; largest entry is 16, so 16 + 1 = 17 matches exactly.  The
@@ -16825,7 +17522,7 @@ ToneDB_EnvDescTable_024_ElemArray:
 	.byte 0x4A, 0x40, 0x00, 0xF1, 0x00, 0x00	; 24C2F  |J@....|
 
 ; ToneDB_EnvDescTable_025_CurveStepToElem -- file 0x24C35..0x24CA4 (112 bytes)
-; descriptor 25 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 25 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_025_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 16; that array is 102
@@ -16842,7 +17539,7 @@ ToneDB_EnvDescTable_025_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_025_ElemArray -- file 0x24CA5..0x24D0A (102 bytes)
 ; descriptor 25 stage 3: 17 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 25 -> this array.
 ; Evidence: 102 bytes / 6 = 17 elements, and the stage-2 table's
 ; largest entry is 16, so 16 + 1 = 17 matches exactly.  The
@@ -16858,7 +17555,7 @@ ToneDB_EnvDescTable_025_ElemArray:
 	.byte 0x4A, 0x40, 0x00, 0xF1, 0x00, 0x00	; 24D05  |J@....|
 
 ; ToneDB_EnvDescTable_026_CurveStepToElem -- file 0x24D0B..0x24D31 (39 bytes)
-; descriptor 26 stage 2: ToneDB_DescCurve_4 step -> element, 35 entries = max(curve)+1
+; descriptor 26 stage 2: ToneDB_DescCurve_Step4And2 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_026_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -16871,7 +17568,7 @@ ToneDB_EnvDescTable_026_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_026_ElemArray -- file 0x24D32..0x24D61 (48 bytes)
 ; descriptor 26 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_4[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4And2[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 26 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -16883,7 +17580,7 @@ ToneDB_EnvDescTable_026_ElemArray:
 	.byte 0x00, 0xF0, 0x00, 0x00, 0x56, 0x40, 0x00, 0xF0, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xF1, 0x00, 0x00	; 24D52  |....V@....J@....|
 
 ; ToneDB_EnvDescTable_027_CurveStepToElem -- file 0x24D62..0x24D88 (39 bytes)
-; descriptor 27 stage 2: ToneDB_DescCurve_4 step -> element, 35 entries = max(curve)+1
+; descriptor 27 stage 2: ToneDB_DescCurve_Step4And2 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_027_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 56
@@ -16896,7 +17593,7 @@ ToneDB_EnvDescTable_027_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_027_ElemArray -- file 0x24D89..0x24DC0 (56 bytes)
 ; descriptor 27 stage 3: 7 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_4[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4And2[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 27 -> this array.
 ; Evidence: 56 bytes / 8 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -16909,7 +17606,7 @@ ToneDB_EnvDescTable_027_ElemArray:
 	.byte 0x11, 0x20, 0x00, 0xC9, 0x00, 0x00, 0x00, 0x00	; 24DB9  |. ......|
 
 ; ToneDB_EnvDescTable_028_CurveStepToElem -- file 0x24DC1..0x24DE7 (39 bytes)
-; descriptor 28 stage 2: ToneDB_DescCurve_4 step -> element, 35 entries = max(curve)+1
+; descriptor 28 stage 2: ToneDB_DescCurve_Step4And2 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_028_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 64
@@ -16922,7 +17619,7 @@ ToneDB_EnvDescTable_028_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_028_ElemArray -- file 0x24DE8..0x24E27 (64 bytes)
 ; descriptor 28 stage 3: 8 elements of 8 B = max(stage 2)+1, size from tag 0xC1 bit 7
-; Reached as ToneDB_DescCurve_4[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4And2[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 28 -> this array.
 ; Evidence: 64 bytes / 8 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -16935,7 +17632,7 @@ ToneDB_EnvDescTable_028_ElemArray:
 	.byte 0x10, 0x20, 0x00, 0xC9, 0x00, 0x00, 0x00, 0x00, 0x11, 0x20, 0x00, 0xC9, 0x00, 0x00, 0x00, 0x00	; 24E18  |. ....... ......|
 
 ; ToneDB_EnvDescTable_029_CurveStepToElem -- file 0x24E28..0x24E97 (112 bytes)
-; descriptor 29 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 29 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_029_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -16952,7 +17649,7 @@ ToneDB_EnvDescTable_029_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_029_ElemArray -- file 0x24E98..0x24ED3 (60 bytes)
 ; descriptor 29 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 29 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -16965,7 +17662,7 @@ ToneDB_EnvDescTable_029_ElemArray:
 	.byte 0x40, 0x20, 0x00, 0xE5, 0x00, 0x00, 0x41, 0x20, 0x00, 0xE5, 0x00, 0x00	; 24EC8  |@ ....A ....|
 
 ; ToneDB_EnvDescTable_030_CurveStepToElem -- file 0x24ED4..0x24F43 (112 bytes)
-; descriptor 30 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 30 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_030_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -16982,7 +17679,7 @@ ToneDB_EnvDescTable_030_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_030_ElemArray -- file 0x24F44..0x24F7F (60 bytes)
 ; descriptor 30 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 30 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -16995,7 +17692,7 @@ ToneDB_EnvDescTable_030_ElemArray:
 	.byte 0xB3, 0x40, 0xD0, 0xED, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE3, 0x00, 0x00	; 24F74  |.@....M ....|
 
 ; ToneDB_EnvDescTable_031_CurveStepToElem -- file 0x24F80..0x24FEF (112 bytes)
-; descriptor 31 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 31 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_031_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 13; that array is 84
@@ -17012,7 +17709,7 @@ ToneDB_EnvDescTable_031_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_031_ElemArray -- file 0x24FF0..0x25043 (84 bytes)
 ; descriptor 31 stage 3: 14 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 31 -> this array.
 ; Evidence: 84 bytes / 6 = 14 elements, and the stage-2 table's
 ; largest entry is 13, so 13 + 1 = 14 matches exactly.  The
@@ -17027,7 +17724,7 @@ ToneDB_EnvDescTable_031_ElemArray:
 	.byte 0x00, 0xDF, 0x00, 0x00	; 25040  |....|
 
 ; ToneDB_EnvDescTable_032_CurveStepToElem -- file 0x25044..0x25052 (15 bytes)
-; descriptor 32 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 32 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_032_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -17038,7 +17735,7 @@ ToneDB_EnvDescTable_032_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_032_ElemArray -- file 0x25053..0x25058 (6 bytes)
 ; descriptor 32 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 32 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -17048,7 +17745,7 @@ ToneDB_EnvDescTable_032_ElemArray:
 	.byte 0x53, 0x10, 0x00, 0x05, 0x00, 0x00	; 25053  |S.....|
 
 ; ToneDB_EnvDescTable_033_CurveStepToElem -- file 0x25059..0x25067 (15 bytes)
-; descriptor 33 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 33 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_033_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -17059,7 +17756,7 @@ ToneDB_EnvDescTable_033_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_033_ElemArray -- file 0x25068..0x2506F (8 bytes)
 ; descriptor 33 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 33 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -17069,7 +17766,7 @@ ToneDB_EnvDescTable_033_ElemArray:
 	.byte 0x54, 0x10, 0xE0, 0x04, 0x00, 0x00, 0x44, 0xFE	; 25068  |T.....D.|
 
 ; ToneDB_EnvDescTable_034_CurveStepToElem -- file 0x25070..0x25088 (25 bytes)
-; descriptor 34 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 34 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_034_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -17081,7 +17778,7 @@ ToneDB_EnvDescTable_034_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_034_ElemArray -- file 0x25089..0x250AC (36 bytes)
 ; descriptor 34 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 34 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -17093,7 +17790,7 @@ ToneDB_EnvDescTable_034_ElemArray:
 	.byte 0x00, 0xD7, 0x00, 0x00	; 250A9  |....|
 
 ; ToneDB_EnvDescTable_035_CurveStepToElem -- file 0x250AD..0x2511C (112 bytes)
-; descriptor 35 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 35 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_035_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -17110,7 +17807,7 @@ ToneDB_EnvDescTable_035_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_035_ElemArray -- file 0x2511D..0x2515E (66 bytes)
 ; descriptor 35 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 35 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -17124,7 +17821,7 @@ ToneDB_EnvDescTable_035_ElemArray:
 	.byte 0x00, 0x00	; 2515D  |..|
 
 ; ToneDB_EnvDescTable_036_CurveStepToElem -- file 0x2515F..0x251CE (112 bytes)
-; descriptor 36 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 36 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_036_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -17141,7 +17838,7 @@ ToneDB_EnvDescTable_036_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_036_ElemArray -- file 0x251CF..0x25204 (54 bytes)
 ; descriptor 36 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 36 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -17154,7 +17851,7 @@ ToneDB_EnvDescTable_036_ElemArray:
 	.byte 0x93, 0x40, 0x00, 0xFB, 0x00, 0x00	; 251FF  |.@....|
 
 ; ToneDB_EnvDescTable_037_CurveStepToElem -- file 0x25205..0x25213 (15 bytes)
-; descriptor 37 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 37 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_037_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -17165,7 +17862,7 @@ ToneDB_EnvDescTable_037_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_037_ElemArray -- file 0x25214..0x25231 (30 bytes)
 ; descriptor 37 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 37 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -17176,7 +17873,7 @@ ToneDB_EnvDescTable_037_ElemArray:
 	.byte 0x00, 0x00, 0x6A, 0x10, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 25224  |..j.....M ....|
 
 ; ToneDB_EnvDescTable_038_CurveStepToElem -- file 0x25232..0x252A1 (112 bytes)
-; descriptor 38 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 38 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_038_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -17193,7 +17890,7 @@ ToneDB_EnvDescTable_038_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_038_ElemArray -- file 0x252A2..0x252E3 (66 bytes)
 ; descriptor 38 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 38 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -17207,7 +17904,7 @@ ToneDB_EnvDescTable_038_ElemArray:
 	.byte 0x00, 0x00	; 252E2  |..|
 
 ; ToneDB_EnvDescTable_039_CurveStepToElem -- file 0x252E4..0x25353 (112 bytes)
-; descriptor 39 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 39 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_039_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -17224,7 +17921,7 @@ ToneDB_EnvDescTable_039_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_039_ElemArray -- file 0x25354..0x2539B (72 bytes)
 ; descriptor 39 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 39 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -17238,7 +17935,7 @@ ToneDB_EnvDescTable_039_ElemArray:
 	.byte 0x00, 0x00, 0x4A, 0x40, 0x00, 0xE9, 0x00, 0x00	; 25394  |..J@....|
 
 ; ToneDB_EnvDescTable_040_CurveStepToElem -- file 0x2539C..0x253B4 (25 bytes)
-; descriptor 40 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 40 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_040_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 1; that array is 12
@@ -17250,7 +17947,7 @@ ToneDB_EnvDescTable_040_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_040_ElemArray -- file 0x253B5..0x253C0 (12 bytes)
 ; descriptor 40 stage 3: 2 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 40 -> this array.
 ; Evidence: 12 bytes / 6 = 2 elements, and the stage-2 table's
 ; largest entry is 1, so 1 + 1 = 2 matches exactly.  The
@@ -17260,7 +17957,7 @@ ToneDB_EnvDescTable_040_ElemArray:
 	.byte 0x7F, 0x10, 0x80, 0xEE, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 253B5  |......M ....|
 
 ; ToneDB_EnvDescTable_041_CurveStepToElem -- file 0x253C1..0x253CF (15 bytes)
-; descriptor 41 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 41 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_041_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 1; that array is 12
@@ -17271,7 +17968,7 @@ ToneDB_EnvDescTable_041_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_041_ElemArray -- file 0x253D0..0x253DB (12 bytes)
 ; descriptor 41 stage 3: 2 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 41 -> this array.
 ; Evidence: 12 bytes / 6 = 2 elements, and the stage-2 table's
 ; largest entry is 1, so 1 + 1 = 2 matches exactly.  The
@@ -17281,7 +17978,7 @@ ToneDB_EnvDescTable_041_ElemArray:
 	.byte 0x80, 0x10, 0xC0, 0xF5, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 253D0  |......M ....|
 
 ; ToneDB_EnvDescTable_042_CurveStepToElem -- file 0x253DC..0x2544B (112 bytes)
-; descriptor 42 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 42 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_042_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -17298,7 +17995,7 @@ ToneDB_EnvDescTable_042_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_042_ElemArray -- file 0x2544C..0x25475 (42 bytes)
 ; descriptor 42 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 42 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -17310,7 +18007,7 @@ ToneDB_EnvDescTable_042_ElemArray:
 	.byte 0x00, 0xF7, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 2546C  |....M ....|
 
 ; ToneDB_EnvDescTable_043_CurveStepToElem -- file 0x25476..0x254E5 (112 bytes)
-; descriptor 43 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 43 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_043_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 2; that array is 18
@@ -17327,7 +18024,7 @@ ToneDB_EnvDescTable_043_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_043_ElemArray -- file 0x254E6..0x254F7 (18 bytes)
 ; descriptor 43 stage 3: 3 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 43 -> this array.
 ; Evidence: 18 bytes / 6 = 3 elements, and the stage-2 table's
 ; largest entry is 2, so 2 + 1 = 3 matches exactly.  The
@@ -17338,7 +18035,7 @@ ToneDB_EnvDescTable_043_ElemArray:
 	.byte 0x00, 0x00	; 254F6  |..|
 
 ; ToneDB_EnvDescTable_044_CurveStepToElem -- file 0x254F8..0x25506 (15 bytes)
-; descriptor 44 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 44 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_044_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -17349,7 +18046,7 @@ ToneDB_EnvDescTable_044_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_044_ElemArray -- file 0x25507..0x2553C (54 bytes)
 ; descriptor 44 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 44 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -17362,7 +18059,7 @@ ToneDB_EnvDescTable_044_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xF2, 0x00, 0xFA	; 25537  |.P....|
 
 ; ToneDB_EnvDescTable_045_CurveStepToElem -- file 0x2553D..0x255AC (112 bytes)
-; descriptor 45 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 45 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_045_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -17379,7 +18076,7 @@ ToneDB_EnvDescTable_045_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_045_ElemArray -- file 0x255AD..0x255D0 (36 bytes)
 ; descriptor 45 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 45 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -17391,7 +18088,7 @@ ToneDB_EnvDescTable_045_ElemArray:
 	.byte 0x00, 0xF2, 0x00, 0xFA	; 255CD  |....|
 
 ; ToneDB_EnvDescTable_046_CurveStepToElem -- file 0x255D1..0x255F7 (39 bytes)
-; descriptor 46 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 46 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_046_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -17404,7 +18101,7 @@ ToneDB_EnvDescTable_046_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_046_ElemArray -- file 0x255F8..0x25615 (30 bytes)
 ; descriptor 46 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 46 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -17415,7 +18112,7 @@ ToneDB_EnvDescTable_046_ElemArray:
 	.byte 0x00, 0xF8, 0x94, 0x10, 0x80, 0xFA, 0x00, 0xF8, 0xC8, 0x50, 0x00, 0xF2, 0x00, 0xFA	; 25608  |.........P....|
 
 ; ToneDB_EnvDescTable_047_CurveStepToElem -- file 0x25616..0x25624 (15 bytes)
-; descriptor 47 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 47 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_047_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -17426,7 +18123,7 @@ ToneDB_EnvDescTable_047_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_047_ElemArray -- file 0x25625..0x2562C (8 bytes)
 ; descriptor 47 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 47 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -17436,7 +18133,7 @@ ToneDB_EnvDescTable_047_ElemArray:
 	.byte 0x98, 0x10, 0x00, 0xE0, 0x00, 0x00, 0xBB, 0x04	; 25625  |........|
 
 ; ToneDB_EnvDescTable_048_CurveStepToElem -- file 0x2562D..0x2563B (15 bytes)
-; descriptor 48 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 48 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_048_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -17447,7 +18144,7 @@ ToneDB_EnvDescTable_048_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_048_ElemArray -- file 0x2563C..0x25643 (8 bytes)
 ; descriptor 48 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 48 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -17457,7 +18154,7 @@ ToneDB_EnvDescTable_048_ElemArray:
 	.byte 0x9A, 0x10, 0x00, 0xD5, 0x00, 0x00, 0xBB, 0x04	; 2563C  |........|
 
 ; ToneDB_EnvDescTable_049_CurveStepToElem -- file 0x25644..0x25652 (15 bytes)
-; descriptor 49 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 49 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_049_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -17468,7 +18165,7 @@ ToneDB_EnvDescTable_049_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_049_ElemArray -- file 0x25653..0x2565A (8 bytes)
 ; descriptor 49 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 49 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -17478,7 +18175,7 @@ ToneDB_EnvDescTable_049_ElemArray:
 	.byte 0xA1, 0x10, 0x00, 0xE2, 0x00, 0x00, 0xBB, 0x04	; 25653  |........|
 
 ; ToneDB_EnvDescTable_050_CurveStepToElem -- file 0x2565B..0x25669 (15 bytes)
-; descriptor 50 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 50 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_050_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -17489,7 +18186,7 @@ ToneDB_EnvDescTable_050_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_050_ElemArray -- file 0x2566A..0x25671 (8 bytes)
 ; descriptor 50 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 50 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -17499,7 +18196,7 @@ ToneDB_EnvDescTable_050_ElemArray:
 	.byte 0xA2, 0x10, 0x00, 0xE2, 0x00, 0x00, 0xBB, 0x04	; 2566A  |........|
 
 ; ToneDB_EnvDescTable_051_CurveStepToElem -- file 0x25672..0x25680 (15 bytes)
-; descriptor 51 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 51 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_051_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -17510,7 +18207,7 @@ ToneDB_EnvDescTable_051_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_051_ElemArray -- file 0x25681..0x25688 (8 bytes)
 ; descriptor 51 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 51 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -17520,7 +18217,7 @@ ToneDB_EnvDescTable_051_ElemArray:
 	.byte 0xA6, 0x10, 0x00, 0xEF, 0x00, 0x00, 0xBB, 0x04	; 25681  |........|
 
 ; ToneDB_EnvDescTable_052_CurveStepToElem -- file 0x25689..0x25697 (15 bytes)
-; descriptor 52 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 52 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_052_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -17531,7 +18228,7 @@ ToneDB_EnvDescTable_052_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_052_ElemArray -- file 0x25698..0x2569F (8 bytes)
 ; descriptor 52 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 52 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -17541,7 +18238,7 @@ ToneDB_EnvDescTable_052_ElemArray:
 	.byte 0xA7, 0x10, 0x00, 0xDA, 0x00, 0x00, 0xBB, 0x04	; 25698  |........|
 
 ; ToneDB_EnvDescTable_053_CurveStepToElem -- file 0x256A0..0x2570F (112 bytes)
-; descriptor 53 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 53 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_053_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 14; that array is 90
@@ -17558,7 +18255,7 @@ ToneDB_EnvDescTable_053_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_053_ElemArray -- file 0x25710..0x25769 (90 bytes)
 ; descriptor 53 stage 3: 15 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 53 -> this array.
 ; Evidence: 90 bytes / 6 = 15 elements, and the stage-2 table's
 ; largest entry is 14, so 14 + 1 = 15 matches exactly.  The
@@ -17573,7 +18270,7 @@ ToneDB_EnvDescTable_053_ElemArray:
 	.byte 0x00, 0xC9, 0x00, 0x00, 0x11, 0x20, 0x00, 0xC9, 0x00, 0x00	; 25760  |..... ....|
 
 ; ToneDB_EnvDescTable_054_CurveStepToElem -- file 0x2576A..0x257D9 (112 bytes)
-; descriptor 54 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 54 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_054_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 15; that array is 96
@@ -17590,7 +18287,7 @@ ToneDB_EnvDescTable_054_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_054_ElemArray -- file 0x257DA..0x25839 (96 bytes)
 ; descriptor 54 stage 3: 16 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 54 -> this array.
 ; Evidence: 96 bytes / 6 = 16 elements, and the stage-2 table's
 ; largest entry is 15, so 15 + 1 = 16 matches exactly.  The
@@ -17605,7 +18302,7 @@ ToneDB_EnvDescTable_054_ElemArray:
 	.byte 0x00, 0xD4, 0x00, 0x00, 0x10, 0x20, 0x00, 0xC9, 0x00, 0x00, 0x11, 0x20, 0x00, 0xC9, 0x00, 0x00	; 2582A  |..... ..... ....|
 
 ; ToneDB_EnvDescTable_055_CurveStepToElem -- file 0x2583A..0x258A9 (112 bytes)
-; descriptor 55 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 55 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_055_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 13; that array is 84
@@ -17622,7 +18319,7 @@ ToneDB_EnvDescTable_055_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_055_ElemArray -- file 0x258AA..0x258FD (84 bytes)
 ; descriptor 55 stage 3: 14 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 55 -> this array.
 ; Evidence: 84 bytes / 6 = 14 elements, and the stage-2 table's
 ; largest entry is 13, so 13 + 1 = 14 matches exactly.  The
@@ -17637,7 +18334,7 @@ ToneDB_EnvDescTable_055_ElemArray:
 	.byte 0x00, 0xE5, 0x00, 0x00	; 258FA  |....|
 
 ; ToneDB_EnvDescTable_056_CurveStepToElem -- file 0x258FE..0x25924 (39 bytes)
-; descriptor 56 stage 2: ToneDB_DescCurve_4 step -> element, 35 entries = max(curve)+1
+; descriptor 56 stage 2: ToneDB_DescCurve_Step4And2 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_056_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -17650,7 +18347,7 @@ ToneDB_EnvDescTable_056_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_056_ElemArray -- file 0x25925..0x25954 (48 bytes)
 ; descriptor 56 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_4[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4And2[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 56 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -17662,7 +18359,7 @@ ToneDB_EnvDescTable_056_ElemArray:
 	.byte 0x90, 0xE0, 0x00, 0x00, 0x56, 0x40, 0x00, 0xE8, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xE9, 0x00, 0x00	; 25945  |....V@....J@....|
 
 ; ToneDB_EnvDescTable_057_CurveStepToElem -- file 0x25955..0x259C4 (112 bytes)
-; descriptor 57 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 57 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_057_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -17679,7 +18376,7 @@ ToneDB_EnvDescTable_057_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_057_ElemArray -- file 0x259C5..0x259FA (54 bytes)
 ; descriptor 57 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 57 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -17692,7 +18389,7 @@ ToneDB_EnvDescTable_057_ElemArray:
 	.byte 0x4D, 0x20, 0x00, 0xEF, 0x00, 0x00	; 259F5  |M ....|
 
 ; ToneDB_EnvDescTable_058_CurveStepToElem -- file 0x259FB..0x25A13 (25 bytes)
-; descriptor 58 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 58 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_058_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -17704,7 +18401,7 @@ ToneDB_EnvDescTable_058_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_058_ElemArray -- file 0x25A14..0x25A43 (48 bytes)
 ; descriptor 58 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 58 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -17716,7 +18413,7 @@ ToneDB_EnvDescTable_058_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3A, 0x20, 0x00, 0x00, 0x00, 0x00, 0x41, 0x20, 0x00, 0x01, 0x00, 0x00	; 25A34  |....: ....A ....|
 
 ; ToneDB_EnvDescTable_059_CurveStepToElem -- file 0x25A44..0x25A5C (25 bytes)
-; descriptor 59 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 59 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_059_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -17728,7 +18425,7 @@ ToneDB_EnvDescTable_059_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_059_ElemArray -- file 0x25A5D..0x25A8C (48 bytes)
 ; descriptor 59 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 59 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -17740,7 +18437,7 @@ ToneDB_EnvDescTable_059_ElemArray:
 	.byte 0x00, 0xF1, 0x00, 0x00, 0x40, 0x20, 0x00, 0xF1, 0x00, 0x00, 0x41, 0x20, 0x00, 0xF1, 0x00, 0x00	; 25A7D  |....@ ....A ....|
 
 ; ToneDB_EnvDescTable_060_CurveStepToElem -- file 0x25A8D..0x25AFC (112 bytes)
-; descriptor 60 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 60 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_060_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 12; that array is 78
@@ -17757,7 +18454,7 @@ ToneDB_EnvDescTable_060_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_060_ElemArray -- file 0x25AFD..0x25B4A (78 bytes)
 ; descriptor 60 stage 3: 13 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 60 -> this array.
 ; Evidence: 78 bytes / 6 = 13 elements, and the stage-2 table's
 ; largest entry is 12, so 12 + 1 = 13 matches exactly.  The
@@ -17771,7 +18468,7 @@ ToneDB_EnvDescTable_060_ElemArray:
 	.byte 0x00, 0x00, 0x4C, 0x20, 0x00, 0xEF, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xEF, 0x00, 0x00	; 25B3D  |..L ....M ....|
 
 ; ToneDB_EnvDescTable_061_CurveStepToElem -- file 0x25B4B..0x25BBA (112 bytes)
-; descriptor 61 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 61 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_061_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -17788,7 +18485,7 @@ ToneDB_EnvDescTable_061_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_061_ElemArray -- file 0x25BBB..0x25BDE (36 bytes)
 ; descriptor 61 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 61 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -17800,7 +18497,7 @@ ToneDB_EnvDescTable_061_ElemArray:
 	.byte 0x00, 0xC7, 0x00, 0x00	; 25BDB  |....|
 
 ; ToneDB_EnvDescTable_062_CurveStepToElem -- file 0x25BDF..0x25C4E (112 bytes)
-; descriptor 62 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 62 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_062_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -17817,7 +18514,7 @@ ToneDB_EnvDescTable_062_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_062_ElemArray -- file 0x25C4F..0x25C7E (48 bytes)
 ; descriptor 62 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 62 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -17829,7 +18526,7 @@ ToneDB_EnvDescTable_062_ElemArray:
 	.byte 0x00, 0xFC, 0x00, 0x00, 0x55, 0x20, 0x00, 0xFC, 0x00, 0x00, 0x41, 0x20, 0x00, 0x09, 0x00, 0x00	; 25C6F  |....U ....A ....|
 
 ; ToneDB_EnvDescTable_063_CurveStepToElem -- file 0x25C7F..0x25CEE (112 bytes)
-; descriptor 63 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 63 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_063_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -17846,7 +18543,7 @@ ToneDB_EnvDescTable_063_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_063_ElemArray -- file 0x25CEF..0x25D0C (30 bytes)
 ; descriptor 63 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 63 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -17857,7 +18554,7 @@ ToneDB_EnvDescTable_063_ElemArray:
 	.byte 0x00, 0x00, 0x59, 0x20, 0x90, 0xEF, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 25CFF  |..Y ....M ....|
 
 ; ToneDB_EnvDescTable_064_CurveStepToElem -- file 0x25D0D..0x25D7C (112 bytes)
-; descriptor 64 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 64 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_064_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -17874,7 +18571,7 @@ ToneDB_EnvDescTable_064_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_064_ElemArray -- file 0x25D7D..0x25DA6 (42 bytes)
 ; descriptor 64 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 64 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -17886,7 +18583,7 @@ ToneDB_EnvDescTable_064_ElemArray:
 	.byte 0xD0, 0xED, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xDF, 0x00, 0x00	; 25D9D  |....M ....|
 
 ; ToneDB_EnvDescTable_065_CurveStepToElem -- file 0x25DA7..0x25E16 (112 bytes)
-; descriptor 65 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 65 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_065_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 80
@@ -17903,7 +18600,7 @@ ToneDB_EnvDescTable_065_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_065_ElemArray -- file 0x25E17..0x25E66 (80 bytes)
 ; descriptor 65 stage 3: 10 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 65 -> this array.
 ; Evidence: 80 bytes / 8 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -17917,7 +18614,7 @@ ToneDB_EnvDescTable_065_ElemArray:
 	.byte 0x6F, 0x20, 0x00, 0xE1, 0x00, 0xF0, 0x15, 0xFC, 0xAF, 0x20, 0x00, 0xDB, 0x00, 0xF0, 0x00, 0x00	; 25E57  |o ....... ......|
 
 ; ToneDB_EnvDescTable_066_CurveStepToElem -- file 0x25E67..0x25ED6 (112 bytes)
-; descriptor 66 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 66 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_066_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 80
@@ -17934,7 +18631,7 @@ ToneDB_EnvDescTable_066_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_066_ElemArray -- file 0x25ED7..0x25F26 (80 bytes)
 ; descriptor 66 stage 3: 10 elements of 8 B = max(stage 2)+1, size from tag 0xC1 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 66 -> this array.
 ; Evidence: 80 bytes / 8 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -17948,7 +18645,7 @@ ToneDB_EnvDescTable_066_ElemArray:
 	.byte 0x70, 0x20, 0x00, 0xE1, 0x00, 0xF0, 0x15, 0xFC, 0xAF, 0x20, 0x00, 0xDB, 0x00, 0xF0, 0x00, 0x00	; 25F17  |p ....... ......|
 
 ; ToneDB_EnvDescTable_067_CurveStepToElem -- file 0x25F27..0x25F3F (25 bytes)
-; descriptor 67 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 67 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_067_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 1; that array is 16
@@ -17960,7 +18657,7 @@ ToneDB_EnvDescTable_067_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_067_ElemArray -- file 0x25F40..0x25F4F (16 bytes)
 ; descriptor 67 stage 3: 2 elements of 8 B = max(stage 2)+1, size from tag 0xC1 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 67 -> this array.
 ; Evidence: 16 bytes / 8 = 2 elements, and the stage-2 table's
 ; largest entry is 1, so 1 + 1 = 2 matches exactly.  The
@@ -17970,7 +18667,7 @@ ToneDB_EnvDescTable_067_ElemArray:
 	.byte 0x70, 0x20, 0x00, 0xDF, 0x00, 0xF2, 0x15, 0xFC, 0xAF, 0x20, 0x00, 0xDB, 0x00, 0xF0, 0x00, 0x00	; 25F40  |p ....... ......|
 
 ; ToneDB_EnvDescTable_068_CurveStepToElem -- file 0x25F50..0x25FBF (112 bytes)
-; descriptor 68 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 68 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_068_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 80
@@ -17987,7 +18684,7 @@ ToneDB_EnvDescTable_068_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_068_ElemArray -- file 0x25FC0..0x2600F (80 bytes)
 ; descriptor 68 stage 3: 10 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 68 -> this array.
 ; Evidence: 80 bytes / 8 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -18001,7 +18698,7 @@ ToneDB_EnvDescTable_068_ElemArray:
 	.byte 0x81, 0x20, 0x00, 0xE4, 0x00, 0xF0, 0x66, 0xFC, 0xAF, 0x20, 0x00, 0xDB, 0x00, 0xF0, 0x00, 0x00	; 26000  |. ....f.. ......|
 
 ; ToneDB_EnvDescTable_069_CurveStepToElem -- file 0x26010..0x2607F (112 bytes)
-; descriptor 69 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 69 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_069_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 80
@@ -18018,7 +18715,7 @@ ToneDB_EnvDescTable_069_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_069_ElemArray -- file 0x26080..0x260CF (80 bytes)
 ; descriptor 69 stage 3: 10 elements of 8 B = max(stage 2)+1, size from tag 0xC1 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 69 -> this array.
 ; Evidence: 80 bytes / 8 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -18032,7 +18729,7 @@ ToneDB_EnvDescTable_069_ElemArray:
 	.byte 0x82, 0x20, 0x00, 0xE4, 0x00, 0xF0, 0x66, 0xFC, 0xAF, 0x20, 0x00, 0xDB, 0x00, 0xF0, 0x00, 0x00	; 260C0  |. ....f.. ......|
 
 ; ToneDB_EnvDescTable_070_CurveStepToElem -- file 0x260D0..0x2613F (112 bytes)
-; descriptor 70 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 70 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_070_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 14; that array is 90
@@ -18049,7 +18746,7 @@ ToneDB_EnvDescTable_070_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_070_ElemArray -- file 0x26140..0x26199 (90 bytes)
 ; descriptor 70 stage 3: 15 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 70 -> this array.
 ; Evidence: 90 bytes / 6 = 15 elements, and the stage-2 table's
 ; largest entry is 14, so 14 + 1 = 15 matches exactly.  The
@@ -18064,7 +18761,7 @@ ToneDB_EnvDescTable_070_ElemArray:
 	.byte 0x00, 0xF4, 0x00, 0xF4, 0x90, 0x20, 0x00, 0xF4, 0x00, 0xF4	; 26190  |..... ....|
 
 ; ToneDB_EnvDescTable_071_CurveStepToElem -- file 0x2619A..0x26209 (112 bytes)
-; descriptor 71 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 71 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_071_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -18081,7 +18778,7 @@ ToneDB_EnvDescTable_071_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_071_ElemArray -- file 0x2620A..0x26233 (42 bytes)
 ; descriptor 71 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 71 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -18093,7 +18790,7 @@ ToneDB_EnvDescTable_071_ElemArray:
 	.byte 0xC0, 0xE8, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xEF, 0x00, 0xE0	; 2622A  |....*.....|
 
 ; ToneDB_EnvDescTable_072_CurveStepToElem -- file 0x26234..0x262A3 (112 bytes)
-; descriptor 72 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 72 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_072_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -18110,7 +18807,7 @@ ToneDB_EnvDescTable_072_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_072_ElemArray -- file 0x262A4..0x262CD (42 bytes)
 ; descriptor 72 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 72 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -18122,7 +18819,7 @@ ToneDB_EnvDescTable_072_ElemArray:
 	.byte 0xC0, 0xEC, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xF3, 0x00, 0xE0	; 262C4  |....*.....|
 
 ; ToneDB_EnvDescTable_073_CurveStepToElem -- file 0x262CE..0x2633D (112 bytes)
-; descriptor 73 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 73 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_073_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -18139,7 +18836,7 @@ ToneDB_EnvDescTable_073_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_073_ElemArray -- file 0x2633E..0x26367 (42 bytes)
 ; descriptor 73 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 73 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -18151,7 +18848,7 @@ ToneDB_EnvDescTable_073_ElemArray:
 	.byte 0xC0, 0xE0, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xF3, 0x00, 0xE0	; 2635E  |....*.....|
 
 ; ToneDB_EnvDescTable_074_CurveStepToElem -- file 0x26368..0x263D7 (112 bytes)
-; descriptor 74 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 74 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_074_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -18168,7 +18865,7 @@ ToneDB_EnvDescTable_074_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_074_ElemArray -- file 0x263D8..0x2640D (54 bytes)
 ; descriptor 74 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 74 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -18181,7 +18878,7 @@ ToneDB_EnvDescTable_074_ElemArray:
 	.byte 0x2A, 0x00, 0xE0, 0xF3, 0x00, 0xE0	; 26408  |*.....|
 
 ; ToneDB_EnvDescTable_075_CurveStepToElem -- file 0x2640E..0x2647D (112 bytes)
-; descriptor 75 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 75 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_075_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -18198,7 +18895,7 @@ ToneDB_EnvDescTable_075_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_075_ElemArray -- file 0x2647E..0x264A7 (42 bytes)
 ; descriptor 75 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 75 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -18210,7 +18907,7 @@ ToneDB_EnvDescTable_075_ElemArray:
 	.byte 0xC0, 0xE0, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xEF, 0x00, 0xE0	; 2649E  |....*.....|
 
 ; ToneDB_EnvDescTable_076_CurveStepToElem -- file 0x264A8..0x264C0 (25 bytes)
-; descriptor 76 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 76 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_076_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 56
@@ -18222,7 +18919,7 @@ ToneDB_EnvDescTable_076_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_076_ElemArray -- file 0x264C1..0x264F8 (56 bytes)
 ; descriptor 76 stage 3: 7 elements of 8 B = max(stage 2)+1, size from tag 0xC1 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 76 -> this array.
 ; Evidence: 56 bytes / 8 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -18235,7 +18932,7 @@ ToneDB_EnvDescTable_076_ElemArray:
 	.byte 0xAF, 0x20, 0x00, 0xE7, 0x00, 0xF0, 0x00, 0x00	; 264F1  |. ......|
 
 ; ToneDB_EnvDescTable_077_CurveStepToElem -- file 0x264F9..0x26568 (112 bytes)
-; descriptor 77 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 77 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_077_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 96
@@ -18252,7 +18949,7 @@ ToneDB_EnvDescTable_077_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_077_ElemArray -- file 0x26569..0x265C8 (96 bytes)
 ; descriptor 77 stage 3: 12 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 77 -> this array.
 ; Evidence: 96 bytes / 8 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -18267,7 +18964,7 @@ ToneDB_EnvDescTable_077_ElemArray:
 	.byte 0xB6, 0x20, 0x00, 0xE4, 0x00, 0xF4, 0x00, 0x00, 0xAF, 0x20, 0x00, 0xD7, 0x00, 0xF0, 0x00, 0x00	; 265B9  |. ....... ......|
 
 ; ToneDB_EnvDescTable_078_CurveStepToElem -- file 0x265C9..0x26638 (112 bytes)
-; descriptor 78 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 78 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_078_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -18284,7 +18981,7 @@ ToneDB_EnvDescTable_078_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_078_ElemArray -- file 0x26639..0x26656 (30 bytes)
 ; descriptor 78 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 78 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -18295,7 +18992,7 @@ ToneDB_EnvDescTable_078_ElemArray:
 	.byte 0x00, 0xF4, 0x4C, 0x20, 0x00, 0xF7, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xF7, 0x00, 0x00	; 26649  |..L ....M ....|
 
 ; ToneDB_EnvDescTable_079_CurveStepToElem -- file 0x26657..0x26665 (15 bytes)
-; descriptor 79 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 79 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_079_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18306,7 +19003,7 @@ ToneDB_EnvDescTable_079_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_079_ElemArray -- file 0x26666..0x2666D (8 bytes)
 ; descriptor 79 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 79 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18316,7 +19013,7 @@ ToneDB_EnvDescTable_079_ElemArray:
 	.byte 0xBA, 0x20, 0x80, 0xE6, 0x00, 0xFC, 0x1A, 0xFD	; 26666  |. ......|
 
 ; ToneDB_EnvDescTable_080_CurveStepToElem -- file 0x2666E..0x266DD (112 bytes)
-; descriptor 80 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 80 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_080_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -18333,7 +19030,7 @@ ToneDB_EnvDescTable_080_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_080_ElemArray -- file 0x266DE..0x26719 (60 bytes)
 ; descriptor 80 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 80 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -18346,7 +19043,7 @@ ToneDB_EnvDescTable_080_ElemArray:
 	.byte 0xC2, 0x20, 0x00, 0xFB, 0x00, 0xFD, 0xC8, 0x50, 0x00, 0xF2, 0x00, 0xFA	; 2670E  |. .....P....|
 
 ; ToneDB_EnvDescTable_081_CurveStepToElem -- file 0x2671A..0x26789 (112 bytes)
-; descriptor 81 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 81 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_081_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -18363,7 +19060,7 @@ ToneDB_EnvDescTable_081_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_081_ElemArray -- file 0x2678A..0x267BF (54 bytes)
 ; descriptor 81 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 81 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -18376,7 +19073,7 @@ ToneDB_EnvDescTable_081_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xEE, 0x00, 0xFA	; 267BA  |.P....|
 
 ; ToneDB_EnvDescTable_082_CurveStepToElem -- file 0x267C0..0x267D8 (25 bytes)
-; descriptor 82 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 82 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_082_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -18388,7 +19085,7 @@ ToneDB_EnvDescTable_082_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_082_ElemArray -- file 0x267D9..0x2680E (54 bytes)
 ; descriptor 82 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 82 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -18401,7 +19098,7 @@ ToneDB_EnvDescTable_082_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xFA, 0x00, 0xFA	; 26809  |.P....|
 
 ; ToneDB_EnvDescTable_083_CurveStepToElem -- file 0x2680F..0x26827 (25 bytes)
-; descriptor 83 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 83 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_083_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -18413,7 +19110,7 @@ ToneDB_EnvDescTable_083_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_083_ElemArray -- file 0x26828..0x2685D (54 bytes)
 ; descriptor 83 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 83 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -18426,7 +19123,7 @@ ToneDB_EnvDescTable_083_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xEA, 0x00, 0xFA	; 26858  |.P....|
 
 ; ToneDB_EnvDescTable_084_CurveStepToElem -- file 0x2685E..0x26884 (39 bytes)
-; descriptor 84 stage 2: ToneDB_DescCurve_4 step -> element, 35 entries = max(curve)+1
+; descriptor 84 stage 2: ToneDB_DescCurve_Step4And2 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_084_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -18439,7 +19136,7 @@ ToneDB_EnvDescTable_084_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_084_ElemArray -- file 0x26885..0x268A8 (36 bytes)
 ; descriptor 84 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_4[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4And2[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 84 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -18451,7 +19148,7 @@ ToneDB_EnvDescTable_084_ElemArray:
 	.byte 0x00, 0xFA, 0x00, 0xFA	; 268A5  |....|
 
 ; ToneDB_EnvDescTable_085_CurveStepToElem -- file 0x268A9..0x268CF (39 bytes)
-; descriptor 85 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 85 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_085_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 3; that array is 24
@@ -18464,7 +19161,7 @@ ToneDB_EnvDescTable_085_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_085_ElemArray -- file 0x268D0..0x268E7 (24 bytes)
 ; descriptor 85 stage 3: 4 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 85 -> this array.
 ; Evidence: 24 bytes / 6 = 4 elements, and the stage-2 table's
 ; largest entry is 3, so 3 + 1 = 4 matches exactly.  The
@@ -18475,7 +19172,7 @@ ToneDB_EnvDescTable_085_ElemArray:
 	.byte 0x00, 0xF6, 0xC8, 0x50, 0x00, 0xF2, 0x00, 0xFA	; 268E0  |...P....|
 
 ; ToneDB_EnvDescTable_086_CurveStepToElem -- file 0x268E8..0x268F6 (15 bytes)
-; descriptor 86 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 86 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_086_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18486,7 +19183,7 @@ ToneDB_EnvDescTable_086_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_086_ElemArray -- file 0x268F7..0x268FE (8 bytes)
 ; descriptor 86 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 86 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18496,7 +19193,7 @@ ToneDB_EnvDescTable_086_ElemArray:
 	.byte 0xE0, 0x20, 0x00, 0xD8, 0x00, 0x00, 0x1D, 0x02	; 268F7  |. ......|
 
 ; ToneDB_EnvDescTable_087_CurveStepToElem -- file 0x268FF..0x2690D (15 bytes)
-; descriptor 87 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 87 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_087_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18507,7 +19204,7 @@ ToneDB_EnvDescTable_087_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_087_ElemArray -- file 0x2690E..0x26915 (8 bytes)
 ; descriptor 87 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 87 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18517,7 +19214,7 @@ ToneDB_EnvDescTable_087_ElemArray:
 	.byte 0xE1, 0x20, 0x00, 0xE4, 0x00, 0x00, 0x1D, 0xEC	; 2690E  |. ......|
 
 ; ToneDB_EnvDescTable_088_CurveStepToElem -- file 0x26916..0x26924 (15 bytes)
-; descriptor 88 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 88 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_088_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -18528,7 +19225,7 @@ ToneDB_EnvDescTable_088_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_088_ElemArray -- file 0x26925..0x2692A (6 bytes)
 ; descriptor 88 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 88 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18538,7 +19235,7 @@ ToneDB_EnvDescTable_088_ElemArray:
 	.byte 0xE2, 0x20, 0x80, 0xDB, 0x00, 0x00	; 26925  |. ....|
 
 ; ToneDB_EnvDescTable_089_CurveStepToElem -- file 0x2692B..0x26939 (15 bytes)
-; descriptor 89 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 89 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_089_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -18549,7 +19246,7 @@ ToneDB_EnvDescTable_089_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_089_ElemArray -- file 0x2693A..0x2693F (6 bytes)
 ; descriptor 89 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 89 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18559,7 +19256,7 @@ ToneDB_EnvDescTable_089_ElemArray:
 	.byte 0xE3, 0x20, 0x80, 0xE2, 0x00, 0x00	; 2693A  |. ....|
 
 ; ToneDB_EnvDescTable_090_CurveStepToElem -- file 0x26940..0x2694E (15 bytes)
-; descriptor 90 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 90 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_090_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -18570,7 +19267,7 @@ ToneDB_EnvDescTable_090_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_090_ElemArray -- file 0x2694F..0x26954 (6 bytes)
 ; descriptor 90 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 90 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18580,7 +19277,7 @@ ToneDB_EnvDescTable_090_ElemArray:
 	.byte 0xE4, 0x20, 0x80, 0xDB, 0x00, 0x00	; 2694F  |. ....|
 
 ; ToneDB_EnvDescTable_091_CurveStepToElem -- file 0x26955..0x26963 (15 bytes)
-; descriptor 91 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 91 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_091_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18591,7 +19288,7 @@ ToneDB_EnvDescTable_091_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_091_ElemArray -- file 0x26964..0x2696B (8 bytes)
 ; descriptor 91 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 91 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18601,7 +19298,7 @@ ToneDB_EnvDescTable_091_ElemArray:
 	.byte 0xE5, 0x20, 0x00, 0xE5, 0x00, 0x00, 0xC4, 0x0A	; 26964  |. ......|
 
 ; ToneDB_EnvDescTable_092_CurveStepToElem -- file 0x2696C..0x2697A (15 bytes)
-; descriptor 92 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 92 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_092_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18612,7 +19309,7 @@ ToneDB_EnvDescTable_092_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_092_ElemArray -- file 0x2697B..0x26982 (8 bytes)
 ; descriptor 92 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 92 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18622,7 +19319,7 @@ ToneDB_EnvDescTable_092_ElemArray:
 	.byte 0xE6, 0x20, 0x00, 0xE1, 0x00, 0x00, 0xC4, 0x0A	; 2697B  |. ......|
 
 ; ToneDB_EnvDescTable_093_CurveStepToElem -- file 0x26983..0x26991 (15 bytes)
-; descriptor 93 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 93 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_093_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18633,7 +19330,7 @@ ToneDB_EnvDescTable_093_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_093_ElemArray -- file 0x26992..0x26999 (8 bytes)
 ; descriptor 93 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 93 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18643,7 +19340,7 @@ ToneDB_EnvDescTable_093_ElemArray:
 	.byte 0xE7, 0x20, 0x00, 0xE3, 0x00, 0x00, 0xC4, 0x0A	; 26992  |. ......|
 
 ; ToneDB_EnvDescTable_094_CurveStepToElem -- file 0x2699A..0x269A8 (15 bytes)
-; descriptor 94 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 94 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_094_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18654,7 +19351,7 @@ ToneDB_EnvDescTable_094_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_094_ElemArray -- file 0x269A9..0x269B0 (8 bytes)
 ; descriptor 94 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 94 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18664,7 +19361,7 @@ ToneDB_EnvDescTable_094_ElemArray:
 	.byte 0xE8, 0x20, 0x00, 0xE3, 0x00, 0x00, 0xC4, 0x0A	; 269A9  |. ......|
 
 ; ToneDB_EnvDescTable_095_CurveStepToElem -- file 0x269B1..0x269BF (15 bytes)
-; descriptor 95 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 95 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_095_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18675,7 +19372,7 @@ ToneDB_EnvDescTable_095_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_095_ElemArray -- file 0x269C0..0x269C7 (8 bytes)
 ; descriptor 95 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 95 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18685,7 +19382,7 @@ ToneDB_EnvDescTable_095_ElemArray:
 	.byte 0xE9, 0x20, 0x00, 0xE3, 0x00, 0x00, 0xC4, 0x0A	; 269C0  |. ......|
 
 ; ToneDB_EnvDescTable_096_CurveStepToElem -- file 0x269C8..0x269D6 (15 bytes)
-; descriptor 96 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 96 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_096_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18696,7 +19393,7 @@ ToneDB_EnvDescTable_096_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_096_ElemArray -- file 0x269D7..0x269DE (8 bytes)
 ; descriptor 96 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 96 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18706,7 +19403,7 @@ ToneDB_EnvDescTable_096_ElemArray:
 	.byte 0xEA, 0x20, 0x00, 0xD2, 0x00, 0x00, 0xC4, 0x0A	; 269D7  |. ......|
 
 ; ToneDB_EnvDescTable_097_CurveStepToElem -- file 0x269DF..0x269ED (15 bytes)
-; descriptor 97 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 97 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_097_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18717,7 +19414,7 @@ ToneDB_EnvDescTable_097_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_097_ElemArray -- file 0x269EE..0x269F5 (8 bytes)
 ; descriptor 97 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 97 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18727,7 +19424,7 @@ ToneDB_EnvDescTable_097_ElemArray:
 	.byte 0xEB, 0x20, 0x00, 0xCB, 0x00, 0x00, 0xC4, 0x0A	; 269EE  |. ......|
 
 ; ToneDB_EnvDescTable_098_CurveStepToElem -- file 0x269F6..0x26A04 (15 bytes)
-; descriptor 98 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 98 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_098_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18738,7 +19435,7 @@ ToneDB_EnvDescTable_098_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_098_ElemArray -- file 0x26A05..0x26A0C (8 bytes)
 ; descriptor 98 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 98 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18748,7 +19445,7 @@ ToneDB_EnvDescTable_098_ElemArray:
 	.byte 0xEC, 0x20, 0x00, 0xD1, 0x00, 0x00, 0xC4, 0x0A	; 26A05  |. ......|
 
 ; ToneDB_EnvDescTable_099_CurveStepToElem -- file 0x26A0D..0x26A1B (15 bytes)
-; descriptor 99 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 99 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_099_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18759,7 +19456,7 @@ ToneDB_EnvDescTable_099_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_099_ElemArray -- file 0x26A1C..0x26A23 (8 bytes)
 ; descriptor 99 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 99 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18769,7 +19466,7 @@ ToneDB_EnvDescTable_099_ElemArray:
 	.byte 0xEE, 0x20, 0x00, 0xD8, 0x00, 0x00, 0xC4, 0x0A	; 26A1C  |. ......|
 
 ; ToneDB_EnvDescTable_100_CurveStepToElem -- file 0x26A24..0x26A32 (15 bytes)
-; descriptor 100 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 100 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_100_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18780,7 +19477,7 @@ ToneDB_EnvDescTable_100_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_100_ElemArray -- file 0x26A33..0x26A3A (8 bytes)
 ; descriptor 100 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 100 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18790,7 +19487,7 @@ ToneDB_EnvDescTable_100_ElemArray:
 	.byte 0xEF, 0x20, 0x00, 0xCD, 0x00, 0x00, 0xC4, 0x0A	; 26A33  |. ......|
 
 ; ToneDB_EnvDescTable_101_CurveStepToElem -- file 0x26A3B..0x26A49 (15 bytes)
-; descriptor 101 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 101 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_101_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18801,7 +19498,7 @@ ToneDB_EnvDescTable_101_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_101_ElemArray -- file 0x26A4A..0x26A51 (8 bytes)
 ; descriptor 101 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 101 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18811,7 +19508,7 @@ ToneDB_EnvDescTable_101_ElemArray:
 	.byte 0xF0, 0x20, 0x00, 0xDB, 0x00, 0x00, 0xC4, 0x0A	; 26A4A  |. ......|
 
 ; ToneDB_EnvDescTable_102_CurveStepToElem -- file 0x26A52..0x26A60 (15 bytes)
-; descriptor 102 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 102 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_102_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18822,7 +19519,7 @@ ToneDB_EnvDescTable_102_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_102_ElemArray -- file 0x26A61..0x26A68 (8 bytes)
 ; descriptor 102 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 102 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18832,7 +19529,7 @@ ToneDB_EnvDescTable_102_ElemArray:
 	.byte 0xF1, 0x20, 0x00, 0xD4, 0x00, 0x00, 0xC4, 0x0A	; 26A61  |. ......|
 
 ; ToneDB_EnvDescTable_103_CurveStepToElem -- file 0x26A69..0x26A77 (15 bytes)
-; descriptor 103 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 103 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_103_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18843,7 +19540,7 @@ ToneDB_EnvDescTable_103_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_103_ElemArray -- file 0x26A78..0x26A7F (8 bytes)
 ; descriptor 103 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 103 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18853,7 +19550,7 @@ ToneDB_EnvDescTable_103_ElemArray:
 	.byte 0xF2, 0x20, 0x00, 0xE5, 0x00, 0x00, 0xC4, 0x0A	; 26A78  |. ......|
 
 ; ToneDB_EnvDescTable_104_CurveStepToElem -- file 0x26A80..0x26A8E (15 bytes)
-; descriptor 104 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 104 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_104_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18864,7 +19561,7 @@ ToneDB_EnvDescTable_104_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_104_ElemArray -- file 0x26A8F..0x26A96 (8 bytes)
 ; descriptor 104 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 104 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18874,7 +19571,7 @@ ToneDB_EnvDescTable_104_ElemArray:
 	.byte 0xF9, 0x20, 0x00, 0xE7, 0x00, 0x00, 0xC4, 0x0A	; 26A8F  |. ......|
 
 ; ToneDB_EnvDescTable_105_CurveStepToElem -- file 0x26A97..0x26AA5 (15 bytes)
-; descriptor 105 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 105 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_105_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18885,7 +19582,7 @@ ToneDB_EnvDescTable_105_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_105_ElemArray -- file 0x26AA6..0x26AAD (8 bytes)
 ; descriptor 105 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 105 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18895,7 +19592,7 @@ ToneDB_EnvDescTable_105_ElemArray:
 	.byte 0xFA, 0x20, 0x00, 0xE5, 0x00, 0x00, 0xC4, 0x0A	; 26AA6  |. ......|
 
 ; ToneDB_EnvDescTable_106_CurveStepToElem -- file 0x26AAE..0x26ABC (15 bytes)
-; descriptor 106 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 106 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_106_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18906,7 +19603,7 @@ ToneDB_EnvDescTable_106_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_106_ElemArray -- file 0x26ABD..0x26AC4 (8 bytes)
 ; descriptor 106 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 106 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18916,7 +19613,7 @@ ToneDB_EnvDescTable_106_ElemArray:
 	.byte 0xFB, 0x20, 0x00, 0xE4, 0x00, 0x00, 0xC4, 0x0A	; 26ABD  |. ......|
 
 ; ToneDB_EnvDescTable_107_CurveStepToElem -- file 0x26AC5..0x26AD3 (15 bytes)
-; descriptor 107 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 107 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_107_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -18927,7 +19624,7 @@ ToneDB_EnvDescTable_107_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_107_ElemArray -- file 0x26AD4..0x26ADB (8 bytes)
 ; descriptor 107 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 107 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -18937,7 +19634,7 @@ ToneDB_EnvDescTable_107_ElemArray:
 	.byte 0xFC, 0x20, 0x00, 0xE6, 0x00, 0x00, 0xC4, 0x0A	; 26AD4  |. ......|
 
 ; ToneDB_EnvDescTable_108_CurveStepToElem -- file 0x26ADC..0x26B02 (39 bytes)
-; descriptor 108 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 108 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_108_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 1; that array is 12
@@ -18950,7 +19647,7 @@ ToneDB_EnvDescTable_108_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_108_ElemArray -- file 0x26B03..0x26B0E (12 bytes)
 ; descriptor 108 stage 3: 2 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 108 -> this array.
 ; Evidence: 12 bytes / 6 = 2 elements, and the stage-2 table's
 ; largest entry is 1, so 1 + 1 = 2 matches exactly.  The
@@ -18960,7 +19657,7 @@ ToneDB_EnvDescTable_108_ElemArray:
 	.byte 0xFE, 0x20, 0x00, 0x07, 0x00, 0xE0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE0	; 26B03  |. ..........|
 
 ; ToneDB_EnvDescTable_109_CurveStepToElem -- file 0x26B0F..0x26B7E (112 bytes)
-; descriptor 109 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 109 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_109_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -18977,7 +19674,7 @@ ToneDB_EnvDescTable_109_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_109_ElemArray -- file 0x26B7F..0x26B9C (30 bytes)
 ; descriptor 109 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 109 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -18988,7 +19685,7 @@ ToneDB_EnvDescTable_109_ElemArray:
 	.byte 0x00, 0xF0, 0x0F, 0x30, 0xA0, 0xF6, 0x00, 0xF0, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0	; 26B8F  |...0..........|
 
 ; ToneDB_EnvDescTable_110_CurveStepToElem -- file 0x26B9D..0x26C0C (112 bytes)
-; descriptor 110 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 110 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_110_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -19005,7 +19702,7 @@ ToneDB_EnvDescTable_110_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_110_ElemArray -- file 0x26C0D..0x26C42 (54 bytes)
 ; descriptor 110 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 110 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -19018,7 +19715,7 @@ ToneDB_EnvDescTable_110_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xF0, 0x00, 0xE0	; 26C3D  |......|
 
 ; ToneDB_EnvDescTable_111_CurveStepToElem -- file 0x26C43..0x26CB2 (112 bytes)
-; descriptor 111 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 111 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_111_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -19035,7 +19732,7 @@ ToneDB_EnvDescTable_111_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_111_ElemArray -- file 0x26CB3..0x26CDC (42 bytes)
 ; descriptor 111 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 111 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -19047,7 +19744,7 @@ ToneDB_EnvDescTable_111_ElemArray:
 	.byte 0xA0, 0xEE, 0x00, 0xF0, 0x00, 0x00, 0x00, 0xF0, 0x00, 0xE0	; 26CD3  |..........|
 
 ; ToneDB_EnvDescTable_112_CurveStepToElem -- file 0x26CDD..0x26D4C (112 bytes)
-; descriptor 112 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 112 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_112_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 3; that array is 24
@@ -19064,7 +19761,7 @@ ToneDB_EnvDescTable_112_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_112_ElemArray -- file 0x26D4D..0x26D64 (24 bytes)
 ; descriptor 112 stage 3: 4 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 112 -> this array.
 ; Evidence: 24 bytes / 6 = 4 elements, and the stage-2 table's
 ; largest entry is 3, so 3 + 1 = 4 matches exactly.  The
@@ -19075,7 +19772,7 @@ ToneDB_EnvDescTable_112_ElemArray:
 	.byte 0x00, 0xF0, 0x00, 0x00, 0x00, 0xF0, 0x00, 0xE0	; 26D5D  |........|
 
 ; ToneDB_EnvDescTable_113_CurveStepToElem -- file 0x26D65..0x26DD4 (112 bytes)
-; descriptor 113 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 113 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_113_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 15; that array is 128
@@ -19092,7 +19789,7 @@ ToneDB_EnvDescTable_113_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_113_ElemArray -- file 0x26DD5..0x26E54 (128 bytes)
 ; descriptor 113 stage 3: 16 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 113 -> this array.
 ; Evidence: 128 bytes / 8 = 16 elements, and the stage-2 table's
 ; largest entry is 15, so 15 + 1 = 16 matches exactly.  The
@@ -19109,7 +19806,7 @@ ToneDB_EnvDescTable_113_ElemArray:
 	.byte 0x1E, 0x30, 0x00, 0xE8, 0x00, 0xE0, 0x00, 0xF4, 0x29, 0x00, 0xC0, 0xFC, 0x00, 0xE0, 0x23, 0xF4	; 26E45  |.0......).....#.|
 
 ; ToneDB_EnvDescTable_114_CurveStepToElem -- file 0x26E55..0x26EC4 (112 bytes)
-; descriptor 114 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 114 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_114_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 88
@@ -19126,7 +19823,7 @@ ToneDB_EnvDescTable_114_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_114_ElemArray -- file 0x26EC5..0x26F1C (88 bytes)
 ; descriptor 114 stage 3: 11 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 114 -> this array.
 ; Evidence: 88 bytes / 8 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -19141,7 +19838,7 @@ ToneDB_EnvDescTable_114_ElemArray:
 	.byte 0x29, 0x00, 0xC0, 0xE4, 0x00, 0xE0, 0x23, 0x00	; 26F15  |).....#.|
 
 ; ToneDB_EnvDescTable_115_CurveStepToElem -- file 0x26F1D..0x26F8C (112 bytes)
-; descriptor 115 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 115 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_115_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -19158,7 +19855,7 @@ ToneDB_EnvDescTable_115_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_115_ElemArray -- file 0x26F8D..0x26FC8 (60 bytes)
 ; descriptor 115 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 115 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -19171,7 +19868,7 @@ ToneDB_EnvDescTable_115_ElemArray:
 	.byte 0xB3, 0x50, 0xC0, 0xEC, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xF7, 0x00, 0xE0	; 26FBD  |.P....*.....|
 
 ; ToneDB_EnvDescTable_116_CurveStepToElem -- file 0x26FC9..0x27038 (112 bytes)
-; descriptor 116 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 116 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_116_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -19188,7 +19885,7 @@ ToneDB_EnvDescTable_116_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_116_ElemArray -- file 0x27039..0x2705C (36 bytes)
 ; descriptor 116 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 116 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -19200,7 +19897,7 @@ ToneDB_EnvDescTable_116_ElemArray:
 	.byte 0xE0, 0xF3, 0x00, 0xE0	; 27059  |....|
 
 ; ToneDB_EnvDescTable_117_CurveStepToElem -- file 0x2705D..0x270CC (112 bytes)
-; descriptor 117 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 117 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_117_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -19217,7 +19914,7 @@ ToneDB_EnvDescTable_117_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_117_ElemArray -- file 0x270CD..0x27102 (54 bytes)
 ; descriptor 117 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 117 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -19230,7 +19927,7 @@ ToneDB_EnvDescTable_117_ElemArray:
 	.byte 0x2A, 0x00, 0xE0, 0xED, 0x00, 0xE0	; 270FD  |*.....|
 
 ; ToneDB_EnvDescTable_118_CurveStepToElem -- file 0x27103..0x27172 (112 bytes)
-; descriptor 118 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 118 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_118_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -19247,7 +19944,7 @@ ToneDB_EnvDescTable_118_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_118_ElemArray -- file 0x27173..0x271A2 (48 bytes)
 ; descriptor 118 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 118 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -19259,7 +19956,7 @@ ToneDB_EnvDescTable_118_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xE0, 0x36, 0x30, 0x00, 0x00, 0x00, 0xE0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE0	; 27193  |....60..........|
 
 ; ToneDB_EnvDescTable_119_CurveStepToElem -- file 0x271A3..0x271BB (25 bytes)
-; descriptor 119 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 119 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_119_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -19271,7 +19968,7 @@ ToneDB_EnvDescTable_119_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_119_ElemArray -- file 0x271BC..0x271FD (66 bytes)
 ; descriptor 119 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 119 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -19285,7 +19982,7 @@ ToneDB_EnvDescTable_119_ElemArray:
 	.byte 0x00, 0xE0	; 271FC  |..|
 
 ; ToneDB_EnvDescTable_120_CurveStepToElem -- file 0x271FE..0x27216 (25 bytes)
-; descriptor 120 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 120 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_120_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -19297,7 +19994,7 @@ ToneDB_EnvDescTable_120_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_120_ElemArray -- file 0x27217..0x2724C (54 bytes)
 ; descriptor 120 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 120 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -19310,7 +20007,7 @@ ToneDB_EnvDescTable_120_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0	; 27247  |......|
 
 ; ToneDB_EnvDescTable_121_CurveStepToElem -- file 0x2724D..0x272BC (112 bytes)
-; descriptor 121 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 121 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_121_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -19327,7 +20024,7 @@ ToneDB_EnvDescTable_121_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_121_ElemArray -- file 0x272BD..0x272EC (48 bytes)
 ; descriptor 121 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 121 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -19339,7 +20036,7 @@ ToneDB_EnvDescTable_121_ElemArray:
 	.byte 0x00, 0xF8, 0x00, 0xE0, 0x5D, 0x30, 0x00, 0xF8, 0x00, 0xE0, 0x00, 0x00, 0x00, 0xE8, 0x00, 0xE0	; 272DD  |....]0..........|
 
 ; ToneDB_EnvDescTable_122_CurveStepToElem -- file 0x272ED..0x2735C (112 bytes)
-; descriptor 122 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 122 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_122_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -19356,7 +20053,7 @@ ToneDB_EnvDescTable_122_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_122_ElemArray -- file 0x2735D..0x2738C (48 bytes)
 ; descriptor 122 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 122 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -19368,7 +20065,7 @@ ToneDB_EnvDescTable_122_ElemArray:
 	.byte 0x00, 0xF8, 0x00, 0xE0, 0x36, 0x30, 0x00, 0xE4, 0x00, 0xE0, 0x00, 0x00, 0x00, 0xDC, 0x00, 0xE0	; 2737D  |....60..........|
 
 ; ToneDB_EnvDescTable_123_CurveStepToElem -- file 0x2738D..0x273A5 (25 bytes)
-; descriptor 123 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 123 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_123_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -19380,7 +20077,7 @@ ToneDB_EnvDescTable_123_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_123_ElemArray -- file 0x273A6..0x273C3 (30 bytes)
 ; descriptor 123 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 123 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -19391,7 +20088,7 @@ ToneDB_EnvDescTable_123_ElemArray:
 	.byte 0x00, 0xE0, 0x36, 0x30, 0x00, 0x00, 0x00, 0xE0, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0	; 273B6  |..60..........|
 
 ; ToneDB_EnvDescTable_124_CurveStepToElem -- file 0x273C4..0x273EA (39 bytes)
-; descriptor 124 stage 2: ToneDB_DescCurve_4 step -> element, 35 entries = max(curve)+1
+; descriptor 124 stage 2: ToneDB_DescCurve_Step4And2 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_124_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -19404,7 +20101,7 @@ ToneDB_EnvDescTable_124_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_124_ElemArray -- file 0x273EB..0x27414 (42 bytes)
 ; descriptor 124 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_4[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4And2[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 124 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -19416,7 +20113,7 @@ ToneDB_EnvDescTable_124_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xE0, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0	; 2740B  |..........|
 
 ; ToneDB_EnvDescTable_125_CurveStepToElem -- file 0x27415..0x27434 (32 bytes)
-; descriptor 125 stage 2: ToneDB_DescCurve_2 step -> element, 28 entries = max(curve)+1
+; descriptor 125 stage 2: ToneDB_DescCurve_Step4 step -> element, 28 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_125_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -19428,7 +20125,7 @@ ToneDB_EnvDescTable_125_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_125_ElemArray -- file 0x27435..0x27458 (36 bytes)
 ; descriptor 125 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_2[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 125 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -19440,7 +20137,7 @@ ToneDB_EnvDescTable_125_ElemArray:
 	.byte 0x00, 0xF8, 0x00, 0xE0	; 27455  |....|
 
 ; ToneDB_EnvDescTable_126_CurveStepToElem -- file 0x27459..0x2747F (39 bytes)
-; descriptor 126 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 126 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_126_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 2; that array is 18
@@ -19453,7 +20150,7 @@ ToneDB_EnvDescTable_126_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_126_ElemArray -- file 0x27480..0x27491 (18 bytes)
 ; descriptor 126 stage 3: 3 elements of 6 B = max(stage 2)+1, size from tag 0x41 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 126 -> this array.
 ; Evidence: 18 bytes / 6 = 3 elements, and the stage-2 table's
 ; largest entry is 2, so 2 + 1 = 3 matches exactly.  The
@@ -19464,7 +20161,7 @@ ToneDB_EnvDescTable_126_ElemArray:
 	.byte 0x00, 0x00	; 27490  |..|
 
 ; ToneDB_EnvDescTable_127_CurveStepToElem -- file 0x27492..0x27501 (112 bytes)
-; descriptor 127 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 127 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_127_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -19481,7 +20178,7 @@ ToneDB_EnvDescTable_127_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_127_ElemArray -- file 0x27502..0x27525 (36 bytes)
 ; descriptor 127 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 127 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -19493,7 +20190,7 @@ ToneDB_EnvDescTable_127_ElemArray:
 	.byte 0x00, 0xBF, 0x00, 0x00	; 27522  |....|
 
 ; ToneDB_EnvDescTable_128_CurveStepToElem -- file 0x27526..0x27595 (112 bytes)
-; descriptor 128 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 128 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_128_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -19510,7 +20207,7 @@ ToneDB_EnvDescTable_128_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_128_ElemArray -- file 0x27596..0x275B9 (36 bytes)
 ; descriptor 128 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 128 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -19522,7 +20219,7 @@ ToneDB_EnvDescTable_128_ElemArray:
 	.byte 0x00, 0xD7, 0x00, 0x00	; 275B6  |....|
 
 ; ToneDB_EnvDescTable_129_CurveStepToElem -- file 0x275BA..0x27629 (112 bytes)
-; descriptor 129 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 129 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_129_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 56
@@ -19539,7 +20236,7 @@ ToneDB_EnvDescTable_129_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_129_ElemArray -- file 0x2762A..0x27661 (56 bytes)
 ; descriptor 129 stage 3: 7 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 129 -> this array.
 ; Evidence: 56 bytes / 8 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -19552,7 +20249,7 @@ ToneDB_EnvDescTable_129_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xFC, 0x00, 0xE0, 0x00, 0x00	; 2765A  |........|
 
 ; ToneDB_EnvDescTable_130_CurveStepToElem -- file 0x27662..0x276D1 (112 bytes)
-; descriptor 130 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 130 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_130_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 56
@@ -19569,7 +20266,7 @@ ToneDB_EnvDescTable_130_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_130_ElemArray -- file 0x276D2..0x27709 (56 bytes)
 ; descriptor 130 stage 3: 7 elements of 8 B = max(stage 2)+1, size from tag 0xC1 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 130 -> this array.
 ; Evidence: 56 bytes / 8 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -19582,7 +20279,7 @@ ToneDB_EnvDescTable_130_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xFC, 0x00, 0xE0, 0x00, 0x00	; 27702  |........|
 
 ; ToneDB_EnvDescTable_131_CurveStepToElem -- file 0x2770A..0x27729 (32 bytes)
-; descriptor 131 stage 2: ToneDB_DescCurve_2 step -> element, 28 entries = max(curve)+1
+; descriptor 131 stage 2: ToneDB_DescCurve_Step4 step -> element, 28 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_131_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -19594,7 +20291,7 @@ ToneDB_EnvDescTable_131_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_131_ElemArray -- file 0x2772A..0x2775F (54 bytes)
 ; descriptor 131 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_2[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 131 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -19607,7 +20304,7 @@ ToneDB_EnvDescTable_131_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xF2, 0x00, 0xFA	; 2775A  |.P....|
 
 ; ToneDB_EnvDescTable_132_CurveStepToElem -- file 0x27760..0x2776E (15 bytes)
-; descriptor 132 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 132 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_132_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19618,7 +20315,7 @@ ToneDB_EnvDescTable_132_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_132_ElemArray -- file 0x2776F..0x27776 (8 bytes)
 ; descriptor 132 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 132 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19628,7 +20325,7 @@ ToneDB_EnvDescTable_132_ElemArray:
 	.byte 0x86, 0x30, 0x00, 0xE4, 0x00, 0x00, 0x2F, 0x1B	; 2776F  |.0..../.|
 
 ; ToneDB_EnvDescTable_133_CurveStepToElem -- file 0x27777..0x27785 (15 bytes)
-; descriptor 133 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 133 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_133_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19639,7 +20336,7 @@ ToneDB_EnvDescTable_133_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_133_ElemArray -- file 0x27786..0x2778D (8 bytes)
 ; descriptor 133 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 133 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19649,7 +20346,7 @@ ToneDB_EnvDescTable_133_ElemArray:
 	.byte 0x85, 0x30, 0x00, 0xE4, 0x00, 0x00, 0x50, 0x15	; 27786  |.0....P.|
 
 ; ToneDB_EnvDescTable_134_CurveStepToElem -- file 0x2778E..0x2779C (15 bytes)
-; descriptor 134 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 134 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_134_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19660,7 +20357,7 @@ ToneDB_EnvDescTable_134_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_134_ElemArray -- file 0x2779D..0x277A4 (8 bytes)
 ; descriptor 134 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 134 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19670,7 +20367,7 @@ ToneDB_EnvDescTable_134_ElemArray:
 	.byte 0x89, 0x30, 0x00, 0xDD, 0x00, 0x00, 0x00, 0x0C	; 2779D  |.0......|
 
 ; ToneDB_EnvDescTable_135_CurveStepToElem -- file 0x277A5..0x277B3 (15 bytes)
-; descriptor 135 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 135 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_135_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19681,7 +20378,7 @@ ToneDB_EnvDescTable_135_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_135_ElemArray -- file 0x277B4..0x277BB (8 bytes)
 ; descriptor 135 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 135 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19691,7 +20388,7 @@ ToneDB_EnvDescTable_135_ElemArray:
 	.byte 0x8A, 0x30, 0x00, 0xE5, 0x00, 0x00, 0x00, 0x0B	; 277B4  |.0......|
 
 ; ToneDB_EnvDescTable_136_CurveStepToElem -- file 0x277BC..0x277CA (15 bytes)
-; descriptor 136 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 136 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_136_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19702,7 +20399,7 @@ ToneDB_EnvDescTable_136_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_136_ElemArray -- file 0x277CB..0x277D2 (8 bytes)
 ; descriptor 136 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 136 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19712,7 +20409,7 @@ ToneDB_EnvDescTable_136_ElemArray:
 	.byte 0x8F, 0x30, 0x00, 0xE7, 0x00, 0x00, 0xC4, 0x0F	; 277CB  |.0......|
 
 ; ToneDB_EnvDescTable_137_CurveStepToElem -- file 0x277D3..0x277E1 (15 bytes)
-; descriptor 137 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 137 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_137_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19723,7 +20420,7 @@ ToneDB_EnvDescTable_137_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_137_ElemArray -- file 0x277E2..0x277E9 (8 bytes)
 ; descriptor 137 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 137 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19733,7 +20430,7 @@ ToneDB_EnvDescTable_137_ElemArray:
 	.byte 0x90, 0x30, 0x00, 0xDF, 0x00, 0x00, 0x00, 0x0C	; 277E2  |.0......|
 
 ; ToneDB_EnvDescTable_138_CurveStepToElem -- file 0x277EA..0x277F8 (15 bytes)
-; descriptor 138 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 138 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_138_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19744,7 +20441,7 @@ ToneDB_EnvDescTable_138_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_138_ElemArray -- file 0x277F9..0x27800 (8 bytes)
 ; descriptor 138 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 138 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19754,7 +20451,7 @@ ToneDB_EnvDescTable_138_ElemArray:
 	.byte 0x91, 0x30, 0x00, 0xE5, 0x00, 0x00, 0xC4, 0x0A	; 277F9  |.0......|
 
 ; ToneDB_EnvDescTable_139_CurveStepToElem -- file 0x27801..0x2780F (15 bytes)
-; descriptor 139 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 139 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_139_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19765,7 +20462,7 @@ ToneDB_EnvDescTable_139_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_139_ElemArray -- file 0x27810..0x27817 (8 bytes)
 ; descriptor 139 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 139 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19775,7 +20472,7 @@ ToneDB_EnvDescTable_139_ElemArray:
 	.byte 0x92, 0x30, 0x00, 0xE6, 0x00, 0x00, 0xC4, 0x0A	; 27810  |.0......|
 
 ; ToneDB_EnvDescTable_140_CurveStepToElem -- file 0x27818..0x27826 (15 bytes)
-; descriptor 140 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 140 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_140_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19786,7 +20483,7 @@ ToneDB_EnvDescTable_140_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_140_ElemArray -- file 0x27827..0x2782E (8 bytes)
 ; descriptor 140 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 140 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19796,7 +20493,7 @@ ToneDB_EnvDescTable_140_ElemArray:
 	.byte 0x93, 0x30, 0x00, 0xB7, 0x00, 0x00, 0xC4, 0x0A	; 27827  |.0......|
 
 ; ToneDB_EnvDescTable_141_CurveStepToElem -- file 0x2782F..0x2783D (15 bytes)
-; descriptor 141 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 141 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_141_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19807,7 +20504,7 @@ ToneDB_EnvDescTable_141_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_141_ElemArray -- file 0x2783E..0x27845 (8 bytes)
 ; descriptor 141 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 141 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19817,7 +20514,7 @@ ToneDB_EnvDescTable_141_ElemArray:
 	.byte 0x94, 0x30, 0x00, 0xDA, 0x00, 0x00, 0xC4, 0x0A	; 2783E  |.0......|
 
 ; ToneDB_EnvDescTable_142_CurveStepToElem -- file 0x27846..0x27854 (15 bytes)
-; descriptor 142 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 142 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_142_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19828,7 +20525,7 @@ ToneDB_EnvDescTable_142_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_142_ElemArray -- file 0x27855..0x2785C (8 bytes)
 ; descriptor 142 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 142 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19838,7 +20535,7 @@ ToneDB_EnvDescTable_142_ElemArray:
 	.byte 0x95, 0x30, 0x00, 0xD3, 0x00, 0x00, 0x00, 0x0C	; 27855  |.0......|
 
 ; ToneDB_EnvDescTable_143_CurveStepToElem -- file 0x2785D..0x2786B (15 bytes)
-; descriptor 143 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 143 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_143_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19849,7 +20546,7 @@ ToneDB_EnvDescTable_143_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_143_ElemArray -- file 0x2786C..0x27873 (8 bytes)
 ; descriptor 143 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 143 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19859,7 +20556,7 @@ ToneDB_EnvDescTable_143_ElemArray:
 	.byte 0x99, 0x30, 0x00, 0xDB, 0x00, 0x00, 0x00, 0x0C	; 2786C  |.0......|
 
 ; ToneDB_EnvDescTable_144_CurveStepToElem -- file 0x27874..0x27882 (15 bytes)
-; descriptor 144 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 144 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_144_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -19870,7 +20567,7 @@ ToneDB_EnvDescTable_144_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_144_ElemArray -- file 0x27883..0x2788A (8 bytes)
 ; descriptor 144 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 144 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19880,7 +20577,7 @@ ToneDB_EnvDescTable_144_ElemArray:
 	.byte 0x97, 0x30, 0x00, 0xDE, 0x00, 0x00, 0x00, 0x0C	; 27883  |.0......|
 
 ; ToneDB_EnvDescTable_145_CurveStepToElem -- file 0x2788B..0x27899 (15 bytes)
-; descriptor 145 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 145 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_145_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -19891,7 +20588,7 @@ ToneDB_EnvDescTable_145_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_145_ElemArray -- file 0x2789A..0x2789F (6 bytes)
 ; descriptor 145 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 145 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19901,7 +20598,7 @@ ToneDB_EnvDescTable_145_ElemArray:
 	.byte 0x9A, 0x30, 0x00, 0xDA, 0x00, 0x00	; 2789A  |.0....|
 
 ; ToneDB_EnvDescTable_146_CurveStepToElem -- file 0x278A0..0x278AE (15 bytes)
-; descriptor 146 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 146 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_146_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -19912,7 +20609,7 @@ ToneDB_EnvDescTable_146_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_146_ElemArray -- file 0x278AF..0x278B4 (6 bytes)
 ; descriptor 146 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 146 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19922,7 +20619,7 @@ ToneDB_EnvDescTable_146_ElemArray:
 	.byte 0x9C, 0x30, 0x00, 0xDD, 0x00, 0x00	; 278AF  |.0....|
 
 ; ToneDB_EnvDescTable_147_CurveStepToElem -- file 0x278B5..0x278C3 (15 bytes)
-; descriptor 147 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 147 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_147_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -19933,7 +20630,7 @@ ToneDB_EnvDescTable_147_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_147_ElemArray -- file 0x278C4..0x278C9 (6 bytes)
 ; descriptor 147 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 147 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19943,7 +20640,7 @@ ToneDB_EnvDescTable_147_ElemArray:
 	.byte 0x9F, 0x30, 0x00, 0xD3, 0x00, 0x00	; 278C4  |.0....|
 
 ; ToneDB_EnvDescTable_148_CurveStepToElem -- file 0x278CA..0x278D8 (15 bytes)
-; descriptor 148 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 148 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_148_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -19954,7 +20651,7 @@ ToneDB_EnvDescTable_148_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_148_ElemArray -- file 0x278D9..0x278DE (6 bytes)
 ; descriptor 148 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 148 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19964,7 +20661,7 @@ ToneDB_EnvDescTable_148_ElemArray:
 	.byte 0xA2, 0x30, 0x00, 0xD3, 0x00, 0x00	; 278D9  |.0....|
 
 ; ToneDB_EnvDescTable_149_CurveStepToElem -- file 0x278DF..0x278ED (15 bytes)
-; descriptor 149 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 149 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_149_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -19975,7 +20672,7 @@ ToneDB_EnvDescTable_149_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_149_ElemArray -- file 0x278EE..0x278F3 (6 bytes)
 ; descriptor 149 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 149 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -19985,7 +20682,7 @@ ToneDB_EnvDescTable_149_ElemArray:
 	.byte 0x9D, 0x30, 0x00, 0xDD, 0x00, 0x00	; 278EE  |.0....|
 
 ; ToneDB_EnvDescTable_150_CurveStepToElem -- file 0x278F4..0x27902 (15 bytes)
-; descriptor 150 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 150 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_150_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -19996,7 +20693,7 @@ ToneDB_EnvDescTable_150_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_150_ElemArray -- file 0x27903..0x27908 (6 bytes)
 ; descriptor 150 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 150 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20006,7 +20703,7 @@ ToneDB_EnvDescTable_150_ElemArray:
 	.byte 0xA0, 0x30, 0x00, 0xD3, 0x00, 0x00	; 27903  |.0....|
 
 ; ToneDB_EnvDescTable_151_CurveStepToElem -- file 0x27909..0x27917 (15 bytes)
-; descriptor 151 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 151 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_151_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20017,7 +20714,7 @@ ToneDB_EnvDescTable_151_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_151_ElemArray -- file 0x27918..0x2791D (6 bytes)
 ; descriptor 151 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 151 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20027,7 +20724,7 @@ ToneDB_EnvDescTable_151_ElemArray:
 	.byte 0xA4, 0x30, 0x00, 0xDA, 0x00, 0x00	; 27918  |.0....|
 
 ; ToneDB_EnvDescTable_152_CurveStepToElem -- file 0x2791E..0x2792C (15 bytes)
-; descriptor 152 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 152 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_152_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20038,7 +20735,7 @@ ToneDB_EnvDescTable_152_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_152_ElemArray -- file 0x2792D..0x27932 (6 bytes)
 ; descriptor 152 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 152 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20048,7 +20745,7 @@ ToneDB_EnvDescTable_152_ElemArray:
 	.byte 0xA5, 0x30, 0x00, 0xE4, 0x00, 0x00	; 2792D  |.0....|
 
 ; ToneDB_EnvDescTable_153_CurveStepToElem -- file 0x27933..0x27941 (15 bytes)
-; descriptor 153 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 153 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_153_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20059,7 +20756,7 @@ ToneDB_EnvDescTable_153_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_153_ElemArray -- file 0x27942..0x27947 (6 bytes)
 ; descriptor 153 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 153 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20069,7 +20766,7 @@ ToneDB_EnvDescTable_153_ElemArray:
 	.byte 0xA6, 0x30, 0x00, 0xDE, 0x00, 0x00	; 27942  |.0....|
 
 ; ToneDB_EnvDescTable_154_CurveStepToElem -- file 0x27948..0x27956 (15 bytes)
-; descriptor 154 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 154 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_154_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20080,7 +20777,7 @@ ToneDB_EnvDescTable_154_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_154_ElemArray -- file 0x27957..0x2795C (6 bytes)
 ; descriptor 154 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 154 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20090,7 +20787,7 @@ ToneDB_EnvDescTable_154_ElemArray:
 	.byte 0xA7, 0x30, 0x00, 0xDF, 0x00, 0x00	; 27957  |.0....|
 
 ; ToneDB_EnvDescTable_155_CurveStepToElem -- file 0x2795D..0x2796B (15 bytes)
-; descriptor 155 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 155 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_155_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20101,7 +20798,7 @@ ToneDB_EnvDescTable_155_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_155_ElemArray -- file 0x2796C..0x27973 (8 bytes)
 ; descriptor 155 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 155 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20111,7 +20808,7 @@ ToneDB_EnvDescTable_155_ElemArray:
 	.byte 0xA8, 0x30, 0x00, 0xE7, 0x00, 0x00, 0xC0, 0xFD	; 2796C  |.0......|
 
 ; ToneDB_EnvDescTable_156_CurveStepToElem -- file 0x27974..0x27982 (15 bytes)
-; descriptor 156 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 156 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_156_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20122,7 +20819,7 @@ ToneDB_EnvDescTable_156_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_156_ElemArray -- file 0x27983..0x2798A (8 bytes)
 ; descriptor 156 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 156 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20132,7 +20829,7 @@ ToneDB_EnvDescTable_156_ElemArray:
 	.byte 0xA9, 0x30, 0x00, 0xDD, 0x00, 0x00, 0xC4, 0x0A	; 27983  |.0......|
 
 ; ToneDB_EnvDescTable_157_CurveStepToElem -- file 0x2798B..0x27999 (15 bytes)
-; descriptor 157 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 157 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_157_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20143,7 +20840,7 @@ ToneDB_EnvDescTable_157_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_157_ElemArray -- file 0x2799A..0x279A1 (8 bytes)
 ; descriptor 157 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 157 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20153,7 +20850,7 @@ ToneDB_EnvDescTable_157_ElemArray:
 	.byte 0xAA, 0x30, 0x00, 0xF6, 0x00, 0xF0, 0xD0, 0x06	; 2799A  |.0......|
 
 ; ToneDB_EnvDescTable_158_CurveStepToElem -- file 0x279A2..0x279B0 (15 bytes)
-; descriptor 158 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 158 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_158_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20164,7 +20861,7 @@ ToneDB_EnvDescTable_158_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_158_ElemArray -- file 0x279B1..0x279B8 (8 bytes)
 ; descriptor 158 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 158 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20174,7 +20871,7 @@ ToneDB_EnvDescTable_158_ElemArray:
 	.byte 0xAB, 0x30, 0x00, 0xDB, 0x00, 0x00, 0xC4, 0xFE	; 279B1  |.0......|
 
 ; ToneDB_EnvDescTable_159_CurveStepToElem -- file 0x279B9..0x279C7 (15 bytes)
-; descriptor 159 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 159 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_159_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20185,7 +20882,7 @@ ToneDB_EnvDescTable_159_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_159_ElemArray -- file 0x279C8..0x279CF (8 bytes)
 ; descriptor 159 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 159 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20195,7 +20892,7 @@ ToneDB_EnvDescTable_159_ElemArray:
 	.byte 0xAC, 0x30, 0x00, 0xDB, 0x00, 0x00, 0xC4, 0xFE	; 279C8  |.0......|
 
 ; ToneDB_EnvDescTable_160_CurveStepToElem -- file 0x279D0..0x279DE (15 bytes)
-; descriptor 160 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 160 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_160_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20206,7 +20903,7 @@ ToneDB_EnvDescTable_160_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_160_ElemArray -- file 0x279DF..0x279E6 (8 bytes)
 ; descriptor 160 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 160 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20216,7 +20913,7 @@ ToneDB_EnvDescTable_160_ElemArray:
 	.byte 0xAF, 0x30, 0x00, 0xF5, 0x00, 0xF0, 0x00, 0x01	; 279DF  |.0......|
 
 ; ToneDB_EnvDescTable_161_CurveStepToElem -- file 0x279E7..0x279F5 (15 bytes)
-; descriptor 161 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 161 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_161_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20227,7 +20924,7 @@ ToneDB_EnvDescTable_161_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_161_ElemArray -- file 0x279F6..0x279FD (8 bytes)
 ; descriptor 161 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 161 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20237,7 +20934,7 @@ ToneDB_EnvDescTable_161_ElemArray:
 	.byte 0xB5, 0x30, 0x00, 0xE0, 0x00, 0x00, 0x80, 0x08	; 279F6  |.0......|
 
 ; ToneDB_EnvDescTable_162_CurveStepToElem -- file 0x279FE..0x27A0C (15 bytes)
-; descriptor 162 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 162 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_162_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20248,7 +20945,7 @@ ToneDB_EnvDescTable_162_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_162_ElemArray -- file 0x27A0D..0x27A14 (8 bytes)
 ; descriptor 162 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 162 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20258,7 +20955,7 @@ ToneDB_EnvDescTable_162_ElemArray:
 	.byte 0xB6, 0x30, 0x00, 0xF3, 0x00, 0xF0, 0x80, 0x01	; 27A0D  |.0......|
 
 ; ToneDB_EnvDescTable_163_CurveStepToElem -- file 0x27A15..0x27A23 (15 bytes)
-; descriptor 163 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 163 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_163_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20269,7 +20966,7 @@ ToneDB_EnvDescTable_163_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_163_ElemArray -- file 0x27A24..0x27A2B (8 bytes)
 ; descriptor 163 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 163 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20279,7 +20976,7 @@ ToneDB_EnvDescTable_163_ElemArray:
 	.byte 0xB7, 0x30, 0x00, 0xF2, 0x00, 0xF0, 0x20, 0xFC	; 27A24  |.0.... .|
 
 ; ToneDB_EnvDescTable_164_CurveStepToElem -- file 0x27A2C..0x27A3A (15 bytes)
-; descriptor 164 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 164 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_164_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20290,7 +20987,7 @@ ToneDB_EnvDescTable_164_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_164_ElemArray -- file 0x27A3B..0x27A42 (8 bytes)
 ; descriptor 164 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 164 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20300,7 +20997,7 @@ ToneDB_EnvDescTable_164_ElemArray:
 	.byte 0xB8, 0x30, 0x00, 0xF7, 0x00, 0xF0, 0x00, 0x10	; 27A3B  |.0......|
 
 ; ToneDB_EnvDescTable_165_CurveStepToElem -- file 0x27A43..0x27A51 (15 bytes)
-; descriptor 165 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 165 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_165_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20311,7 +21008,7 @@ ToneDB_EnvDescTable_165_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_165_ElemArray -- file 0x27A52..0x27A59 (8 bytes)
 ; descriptor 165 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 165 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20321,7 +21018,7 @@ ToneDB_EnvDescTable_165_ElemArray:
 	.byte 0xB9, 0x30, 0x00, 0xE0, 0x00, 0x00, 0x3C, 0x0C	; 27A52  |.0....<.|
 
 ; ToneDB_EnvDescTable_166_CurveStepToElem -- file 0x27A5A..0x27A68 (15 bytes)
-; descriptor 166 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 166 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_166_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20332,7 +21029,7 @@ ToneDB_EnvDescTable_166_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_166_ElemArray -- file 0x27A69..0x27A70 (8 bytes)
 ; descriptor 166 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 166 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20342,7 +21039,7 @@ ToneDB_EnvDescTable_166_ElemArray:
 	.byte 0xBA, 0x30, 0x00, 0xE0, 0x00, 0x00, 0x3C, 0x0C	; 27A69  |.0....<.|
 
 ; ToneDB_EnvDescTable_167_CurveStepToElem -- file 0x27A71..0x27A7F (15 bytes)
-; descriptor 167 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 167 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_167_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20353,7 +21050,7 @@ ToneDB_EnvDescTable_167_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_167_ElemArray -- file 0x27A80..0x27A87 (8 bytes)
 ; descriptor 167 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 167 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20363,7 +21060,7 @@ ToneDB_EnvDescTable_167_ElemArray:
 	.byte 0xBB, 0x30, 0x00, 0xE6, 0x00, 0x00, 0xC4, 0x0A	; 27A80  |.0......|
 
 ; ToneDB_EnvDescTable_168_CurveStepToElem -- file 0x27A88..0x27A96 (15 bytes)
-; descriptor 168 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 168 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_168_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20374,7 +21071,7 @@ ToneDB_EnvDescTable_168_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_168_ElemArray -- file 0x27A97..0x27A9E (8 bytes)
 ; descriptor 168 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 168 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20384,7 +21081,7 @@ ToneDB_EnvDescTable_168_ElemArray:
 	.byte 0xBC, 0x30, 0x00, 0xD9, 0x00, 0x00, 0x3C, 0x0C	; 27A97  |.0....<.|
 
 ; ToneDB_EnvDescTable_169_CurveStepToElem -- file 0x27A9F..0x27AAD (15 bytes)
-; descriptor 169 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 169 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_169_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20395,7 +21092,7 @@ ToneDB_EnvDescTable_169_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_169_ElemArray -- file 0x27AAE..0x27AB5 (8 bytes)
 ; descriptor 169 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 169 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20405,7 +21102,7 @@ ToneDB_EnvDescTable_169_ElemArray:
 	.byte 0xBD, 0x30, 0x00, 0xDC, 0x00, 0x00, 0x3C, 0x0C	; 27AAE  |.0....<.|
 
 ; ToneDB_EnvDescTable_170_CurveStepToElem -- file 0x27AB6..0x27AC4 (15 bytes)
-; descriptor 170 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 170 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_170_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20416,7 +21113,7 @@ ToneDB_EnvDescTable_170_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_170_ElemArray -- file 0x27AC5..0x27ACC (8 bytes)
 ; descriptor 170 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 170 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20426,7 +21123,7 @@ ToneDB_EnvDescTable_170_ElemArray:
 	.byte 0xBE, 0x30, 0x00, 0xE2, 0x00, 0x00, 0xC4, 0x0A	; 27AC5  |.0......|
 
 ; ToneDB_EnvDescTable_171_CurveStepToElem -- file 0x27ACD..0x27ADB (15 bytes)
-; descriptor 171 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 171 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_171_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20437,7 +21134,7 @@ ToneDB_EnvDescTable_171_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_171_ElemArray -- file 0x27ADC..0x27AE3 (8 bytes)
 ; descriptor 171 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 171 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20447,7 +21144,7 @@ ToneDB_EnvDescTable_171_ElemArray:
 	.byte 0xBF, 0x30, 0x00, 0xE7, 0x00, 0x00, 0xC4, 0x0A	; 27ADC  |.0......|
 
 ; ToneDB_EnvDescTable_172_CurveStepToElem -- file 0x27AE4..0x27AF2 (15 bytes)
-; descriptor 172 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 172 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_172_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20458,7 +21155,7 @@ ToneDB_EnvDescTable_172_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_172_ElemArray -- file 0x27AF3..0x27AFA (8 bytes)
 ; descriptor 172 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 172 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20468,7 +21165,7 @@ ToneDB_EnvDescTable_172_ElemArray:
 	.byte 0xC0, 0x30, 0x00, 0xE6, 0x00, 0x00, 0xC4, 0x0A	; 27AF3  |.0......|
 
 ; ToneDB_EnvDescTable_173_CurveStepToElem -- file 0x27AFB..0x27B09 (15 bytes)
-; descriptor 173 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 173 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_173_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20479,7 +21176,7 @@ ToneDB_EnvDescTable_173_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_173_ElemArray -- file 0x27B0A..0x27B11 (8 bytes)
 ; descriptor 173 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 173 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20489,7 +21186,7 @@ ToneDB_EnvDescTable_173_ElemArray:
 	.byte 0xC1, 0x30, 0x00, 0xDF, 0x00, 0x00, 0xC4, 0x0A	; 27B0A  |.0......|
 
 ; ToneDB_EnvDescTable_174_CurveStepToElem -- file 0x27B12..0x27B20 (15 bytes)
-; descriptor 174 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 174 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_174_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20500,7 +21197,7 @@ ToneDB_EnvDescTable_174_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_174_ElemArray -- file 0x27B21..0x27B28 (8 bytes)
 ; descriptor 174 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 174 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20510,7 +21207,7 @@ ToneDB_EnvDescTable_174_ElemArray:
 	.byte 0xC2, 0x30, 0x00, 0xE1, 0x00, 0x00, 0xC4, 0x0A	; 27B21  |.0......|
 
 ; ToneDB_EnvDescTable_175_CurveStepToElem -- file 0x27B29..0x27B37 (15 bytes)
-; descriptor 175 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 175 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_175_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20521,7 +21218,7 @@ ToneDB_EnvDescTable_175_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_175_ElemArray -- file 0x27B38..0x27B3F (8 bytes)
 ; descriptor 175 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 175 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20531,7 +21228,7 @@ ToneDB_EnvDescTable_175_ElemArray:
 	.byte 0xC3, 0x30, 0x00, 0xF5, 0x00, 0xE8, 0x00, 0xFA	; 27B38  |.0......|
 
 ; ToneDB_EnvDescTable_176_CurveStepToElem -- file 0x27B40..0x27B4E (15 bytes)
-; descriptor 176 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 176 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_176_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20542,7 +21239,7 @@ ToneDB_EnvDescTable_176_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_176_ElemArray -- file 0x27B4F..0x27B56 (8 bytes)
 ; descriptor 176 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 176 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20552,7 +21249,7 @@ ToneDB_EnvDescTable_176_ElemArray:
 	.byte 0xC4, 0x30, 0x00, 0xE8, 0x00, 0x00, 0xC4, 0x0A	; 27B4F  |.0......|
 
 ; ToneDB_EnvDescTable_177_CurveStepToElem -- file 0x27B57..0x27B65 (15 bytes)
-; descriptor 177 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 177 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_177_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20563,7 +21260,7 @@ ToneDB_EnvDescTable_177_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_177_ElemArray -- file 0x27B66..0x27B6D (8 bytes)
 ; descriptor 177 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 177 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20573,7 +21270,7 @@ ToneDB_EnvDescTable_177_ElemArray:
 	.byte 0xC5, 0x30, 0x00, 0xE3, 0x00, 0x00, 0x20, 0x13	; 27B66  |.0.... .|
 
 ; ToneDB_EnvDescTable_178_CurveStepToElem -- file 0x27B6E..0x27B7C (15 bytes)
-; descriptor 178 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 178 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_178_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20584,7 +21281,7 @@ ToneDB_EnvDescTable_178_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_178_ElemArray -- file 0x27B7D..0x27B84 (8 bytes)
 ; descriptor 178 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 178 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20594,7 +21291,7 @@ ToneDB_EnvDescTable_178_ElemArray:
 	.byte 0xC6, 0x30, 0x00, 0xD0, 0x00, 0x00, 0xA4, 0x11	; 27B7D  |.0......|
 
 ; ToneDB_EnvDescTable_179_CurveStepToElem -- file 0x27B85..0x27B93 (15 bytes)
-; descriptor 179 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 179 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_179_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20605,7 +21302,7 @@ ToneDB_EnvDescTable_179_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_179_ElemArray -- file 0x27B94..0x27B9B (8 bytes)
 ; descriptor 179 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 179 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20615,7 +21312,7 @@ ToneDB_EnvDescTable_179_ElemArray:
 	.byte 0xC7, 0x30, 0x00, 0xF5, 0x00, 0xF0, 0x00, 0x08	; 27B94  |.0......|
 
 ; ToneDB_EnvDescTable_180_CurveStepToElem -- file 0x27B9C..0x27BAA (15 bytes)
-; descriptor 180 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 180 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_180_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20626,7 +21323,7 @@ ToneDB_EnvDescTable_180_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_180_ElemArray -- file 0x27BAB..0x27BB2 (8 bytes)
 ; descriptor 180 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 180 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20636,7 +21333,7 @@ ToneDB_EnvDescTable_180_ElemArray:
 	.byte 0xC8, 0x30, 0x00, 0xD5, 0x00, 0x00, 0x00, 0x07	; 27BAB  |.0......|
 
 ; ToneDB_EnvDescTable_181_CurveStepToElem -- file 0x27BB3..0x27BC1 (15 bytes)
-; descriptor 181 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 181 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_181_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20647,7 +21344,7 @@ ToneDB_EnvDescTable_181_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_181_ElemArray -- file 0x27BC2..0x27BC7 (6 bytes)
 ; descriptor 181 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 181 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20657,7 +21354,7 @@ ToneDB_EnvDescTable_181_ElemArray:
 	.byte 0xC9, 0x30, 0x00, 0xE4, 0x00, 0x00	; 27BC2  |.0....|
 
 ; ToneDB_EnvDescTable_182_CurveStepToElem -- file 0x27BC8..0x27BD6 (15 bytes)
-; descriptor 182 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 182 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_182_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20668,7 +21365,7 @@ ToneDB_EnvDescTable_182_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_182_ElemArray -- file 0x27BD7..0x27BDC (6 bytes)
 ; descriptor 182 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 182 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20678,7 +21375,7 @@ ToneDB_EnvDescTable_182_ElemArray:
 	.byte 0xCA, 0x30, 0x00, 0xD8, 0x00, 0x00	; 27BD7  |.0....|
 
 ; ToneDB_EnvDescTable_183_CurveStepToElem -- file 0x27BDD..0x27BEB (15 bytes)
-; descriptor 183 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 183 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_183_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20689,7 +21386,7 @@ ToneDB_EnvDescTable_183_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_183_ElemArray -- file 0x27BEC..0x27BF3 (8 bytes)
 ; descriptor 183 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 183 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20699,7 +21396,7 @@ ToneDB_EnvDescTable_183_ElemArray:
 	.byte 0xCB, 0x30, 0x00, 0xE1, 0x00, 0x00, 0x00, 0xE8	; 27BEC  |.0......|
 
 ; ToneDB_EnvDescTable_184_CurveStepToElem -- file 0x27BF4..0x27C02 (15 bytes)
-; descriptor 184 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 184 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_184_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20710,7 +21407,7 @@ ToneDB_EnvDescTable_184_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_184_ElemArray -- file 0x27C03..0x27C08 (6 bytes)
 ; descriptor 184 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 184 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20720,7 +21417,7 @@ ToneDB_EnvDescTable_184_ElemArray:
 	.byte 0xCC, 0x30, 0x00, 0xE2, 0x00, 0x00	; 27C03  |.0....|
 
 ; ToneDB_EnvDescTable_185_CurveStepToElem -- file 0x27C09..0x27C17 (15 bytes)
-; descriptor 185 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 185 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_185_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20731,7 +21428,7 @@ ToneDB_EnvDescTable_185_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_185_ElemArray -- file 0x27C18..0x27C1D (6 bytes)
 ; descriptor 185 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 185 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20741,7 +21438,7 @@ ToneDB_EnvDescTable_185_ElemArray:
 	.byte 0xCD, 0x30, 0x00, 0xDF, 0x00, 0x00	; 27C18  |.0....|
 
 ; ToneDB_EnvDescTable_186_CurveStepToElem -- file 0x27C1E..0x27C2C (15 bytes)
-; descriptor 186 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 186 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_186_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20752,7 +21449,7 @@ ToneDB_EnvDescTable_186_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_186_ElemArray -- file 0x27C2D..0x27C34 (8 bytes)
 ; descriptor 186 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 186 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20762,7 +21459,7 @@ ToneDB_EnvDescTable_186_ElemArray:
 	.byte 0xCE, 0x30, 0x00, 0xE2, 0x00, 0x00, 0x3C, 0x04	; 27C2D  |.0....<.|
 
 ; ToneDB_EnvDescTable_187_CurveStepToElem -- file 0x27C35..0x27C43 (15 bytes)
-; descriptor 187 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 187 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_187_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20773,7 +21470,7 @@ ToneDB_EnvDescTable_187_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_187_ElemArray -- file 0x27C44..0x27C4B (8 bytes)
 ; descriptor 187 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 187 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20783,7 +21480,7 @@ ToneDB_EnvDescTable_187_ElemArray:
 	.byte 0xCF, 0x30, 0x00, 0xE5, 0x00, 0x00, 0xA0, 0xFE	; 27C44  |.0......|
 
 ; ToneDB_EnvDescTable_188_CurveStepToElem -- file 0x27C4C..0x27C5A (15 bytes)
-; descriptor 188 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 188 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_188_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20794,7 +21491,7 @@ ToneDB_EnvDescTable_188_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_188_ElemArray -- file 0x27C5B..0x27C62 (8 bytes)
 ; descriptor 188 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 188 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20804,7 +21501,7 @@ ToneDB_EnvDescTable_188_ElemArray:
 	.byte 0xD0, 0x30, 0x00, 0xE7, 0x00, 0x00, 0x80, 0xFA	; 27C5B  |.0......|
 
 ; ToneDB_EnvDescTable_189_CurveStepToElem -- file 0x27C63..0x27C71 (15 bytes)
-; descriptor 189 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 189 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_189_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20815,7 +21512,7 @@ ToneDB_EnvDescTable_189_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_189_ElemArray -- file 0x27C72..0x27C79 (8 bytes)
 ; descriptor 189 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 189 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20825,7 +21522,7 @@ ToneDB_EnvDescTable_189_ElemArray:
 	.byte 0xD1, 0x30, 0x00, 0xDF, 0x00, 0x00, 0x80, 0xF1	; 27C72  |.0......|
 
 ; ToneDB_EnvDescTable_190_CurveStepToElem -- file 0x27C7A..0x27C88 (15 bytes)
-; descriptor 190 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 190 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_190_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20836,7 +21533,7 @@ ToneDB_EnvDescTable_190_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_190_ElemArray -- file 0x27C89..0x27C8E (6 bytes)
 ; descriptor 190 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 190 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20846,7 +21543,7 @@ ToneDB_EnvDescTable_190_ElemArray:
 	.byte 0xD2, 0x30, 0x00, 0xDC, 0x00, 0x00	; 27C89  |.0....|
 
 ; ToneDB_EnvDescTable_191_CurveStepToElem -- file 0x27C8F..0x27C9D (15 bytes)
-; descriptor 191 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 191 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_191_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20857,7 +21554,7 @@ ToneDB_EnvDescTable_191_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_191_ElemArray -- file 0x27C9E..0x27CA5 (8 bytes)
 ; descriptor 191 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 191 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20867,7 +21564,7 @@ ToneDB_EnvDescTable_191_ElemArray:
 	.byte 0xD4, 0x30, 0x00, 0xE4, 0x00, 0x00, 0xA0, 0x0F	; 27C9E  |.0......|
 
 ; ToneDB_EnvDescTable_192_CurveStepToElem -- file 0x27CA6..0x27CB4 (15 bytes)
-; descriptor 192 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 192 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_192_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20878,7 +21575,7 @@ ToneDB_EnvDescTable_192_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_192_ElemArray -- file 0x27CB5..0x27CBC (8 bytes)
 ; descriptor 192 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 192 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20888,7 +21585,7 @@ ToneDB_EnvDescTable_192_ElemArray:
 	.byte 0xD3, 0x30, 0x00, 0xE4, 0x00, 0x00, 0x20, 0x0E	; 27CB5  |.0.... .|
 
 ; ToneDB_EnvDescTable_193_CurveStepToElem -- file 0x27CBD..0x27CCB (15 bytes)
-; descriptor 193 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 193 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_193_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20899,7 +21596,7 @@ ToneDB_EnvDescTable_193_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_193_ElemArray -- file 0x27CCC..0x27CD3 (8 bytes)
 ; descriptor 193 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 193 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20909,7 +21606,7 @@ ToneDB_EnvDescTable_193_ElemArray:
 	.byte 0xD7, 0x30, 0x00, 0xF5, 0x00, 0xF0, 0xA0, 0x0B	; 27CCC  |.0......|
 
 ; ToneDB_EnvDescTable_194_CurveStepToElem -- file 0x27CD4..0x27CE2 (15 bytes)
-; descriptor 194 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 194 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_194_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20920,7 +21617,7 @@ ToneDB_EnvDescTable_194_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_194_ElemArray -- file 0x27CE3..0x27CEA (8 bytes)
 ; descriptor 194 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 194 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20930,7 +21627,7 @@ ToneDB_EnvDescTable_194_ElemArray:
 	.byte 0xD6, 0x30, 0x00, 0xE5, 0x00, 0x00, 0xA0, 0x0B	; 27CE3  |.0......|
 
 ; ToneDB_EnvDescTable_195_CurveStepToElem -- file 0x27CEB..0x27CF9 (15 bytes)
-; descriptor 195 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 195 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_195_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -20941,7 +21638,7 @@ ToneDB_EnvDescTable_195_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_195_ElemArray -- file 0x27CFA..0x27D01 (8 bytes)
 ; descriptor 195 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 195 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20951,7 +21648,7 @@ ToneDB_EnvDescTable_195_ElemArray:
 	.byte 0xD9, 0x30, 0x00, 0xE5, 0x00, 0x00, 0xA0, 0x11	; 27CFA  |.0......|
 
 ; ToneDB_EnvDescTable_196_CurveStepToElem -- file 0x27D02..0x27D10 (15 bytes)
-; descriptor 196 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 196 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_196_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20962,7 +21659,7 @@ ToneDB_EnvDescTable_196_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_196_ElemArray -- file 0x27D11..0x27D16 (6 bytes)
 ; descriptor 196 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 196 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20972,7 +21669,7 @@ ToneDB_EnvDescTable_196_ElemArray:
 	.byte 0xDA, 0x30, 0x00, 0xE2, 0x00, 0x00	; 27D11  |.0....|
 
 ; ToneDB_EnvDescTable_197_CurveStepToElem -- file 0x27D17..0x27D25 (15 bytes)
-; descriptor 197 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 197 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_197_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -20983,7 +21680,7 @@ ToneDB_EnvDescTable_197_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_197_ElemArray -- file 0x27D26..0x27D2B (6 bytes)
 ; descriptor 197 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 197 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -20993,7 +21690,7 @@ ToneDB_EnvDescTable_197_ElemArray:
 	.byte 0xDC, 0x30, 0x00, 0xDD, 0x00, 0x00	; 27D26  |.0....|
 
 ; ToneDB_EnvDescTable_198_CurveStepToElem -- file 0x27D2C..0x27D3A (15 bytes)
-; descriptor 198 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 198 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_198_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21004,7 +21701,7 @@ ToneDB_EnvDescTable_198_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_198_ElemArray -- file 0x27D3B..0x27D42 (8 bytes)
 ; descriptor 198 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 198 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21014,7 +21711,7 @@ ToneDB_EnvDescTable_198_ElemArray:
 	.byte 0xDE, 0x30, 0x00, 0xE5, 0x00, 0x00, 0xC4, 0x1D	; 27D3B  |.0......|
 
 ; ToneDB_EnvDescTable_199_CurveStepToElem -- file 0x27D43..0x27D51 (15 bytes)
-; descriptor 199 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 199 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_199_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21025,7 +21722,7 @@ ToneDB_EnvDescTable_199_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_199_ElemArray -- file 0x27D52..0x27D59 (8 bytes)
 ; descriptor 199 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 199 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21035,7 +21732,7 @@ ToneDB_EnvDescTable_199_ElemArray:
 	.byte 0xE1, 0x30, 0x00, 0xE3, 0x00, 0x00, 0x41, 0x07	; 27D52  |.0....A.|
 
 ; ToneDB_EnvDescTable_200_CurveStepToElem -- file 0x27D5A..0x27D68 (15 bytes)
-; descriptor 200 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 200 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_200_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21046,7 +21743,7 @@ ToneDB_EnvDescTable_200_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_200_ElemArray -- file 0x27D69..0x27D70 (8 bytes)
 ; descriptor 200 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 200 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21056,7 +21753,7 @@ ToneDB_EnvDescTable_200_ElemArray:
 	.byte 0xE5, 0x30, 0x00, 0xE4, 0x00, 0x00, 0x41, 0x07	; 27D69  |.0....A.|
 
 ; ToneDB_EnvDescTable_201_CurveStepToElem -- file 0x27D71..0x27D7F (15 bytes)
-; descriptor 201 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 201 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_201_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21067,7 +21764,7 @@ ToneDB_EnvDescTable_201_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_201_ElemArray -- file 0x27D80..0x27D87 (8 bytes)
 ; descriptor 201 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 201 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21077,7 +21774,7 @@ ToneDB_EnvDescTable_201_ElemArray:
 	.byte 0xE2, 0x30, 0x00, 0xE5, 0x00, 0x00, 0x41, 0x0D	; 27D80  |.0....A.|
 
 ; ToneDB_EnvDescTable_202_CurveStepToElem -- file 0x27D88..0x27D96 (15 bytes)
-; descriptor 202 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 202 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_202_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21088,7 +21785,7 @@ ToneDB_EnvDescTable_202_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_202_ElemArray -- file 0x27D97..0x27D9E (8 bytes)
 ; descriptor 202 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 202 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21098,7 +21795,7 @@ ToneDB_EnvDescTable_202_ElemArray:
 	.byte 0xE3, 0x30, 0x00, 0xE6, 0x00, 0x00, 0x41, 0x07	; 27D97  |.0....A.|
 
 ; ToneDB_EnvDescTable_203_CurveStepToElem -- file 0x27D9F..0x27DAD (15 bytes)
-; descriptor 203 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 203 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_203_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21109,7 +21806,7 @@ ToneDB_EnvDescTable_203_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_203_ElemArray -- file 0x27DAE..0x27DB5 (8 bytes)
 ; descriptor 203 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 203 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21119,7 +21816,7 @@ ToneDB_EnvDescTable_203_ElemArray:
 	.byte 0xE4, 0x30, 0x00, 0xE5, 0x00, 0x00, 0x41, 0x07	; 27DAE  |.0....A.|
 
 ; ToneDB_EnvDescTable_204_CurveStepToElem -- file 0x27DB6..0x27DC4 (15 bytes)
-; descriptor 204 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 204 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_204_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -21130,7 +21827,7 @@ ToneDB_EnvDescTable_204_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_204_ElemArray -- file 0x27DC5..0x27DCA (6 bytes)
 ; descriptor 204 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 204 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21140,7 +21837,7 @@ ToneDB_EnvDescTable_204_ElemArray:
 	.byte 0xE6, 0x30, 0x00, 0x00, 0x00, 0x00	; 27DC5  |.0....|
 
 ; ToneDB_EnvDescTable_205_CurveStepToElem -- file 0x27DCB..0x27DD9 (15 bytes)
-; descriptor 205 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 205 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_205_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -21151,7 +21848,7 @@ ToneDB_EnvDescTable_205_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_205_ElemArray -- file 0x27DDA..0x27DDF (6 bytes)
 ; descriptor 205 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 205 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21161,7 +21858,7 @@ ToneDB_EnvDescTable_205_ElemArray:
 	.byte 0xE7, 0x30, 0x00, 0x00, 0x00, 0x00	; 27DDA  |.0....|
 
 ; ToneDB_EnvDescTable_206_CurveStepToElem -- file 0x27DE0..0x27DEE (15 bytes)
-; descriptor 206 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 206 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_206_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -21172,7 +21869,7 @@ ToneDB_EnvDescTable_206_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_206_ElemArray -- file 0x27DEF..0x27DF4 (6 bytes)
 ; descriptor 206 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 206 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21182,7 +21879,7 @@ ToneDB_EnvDescTable_206_ElemArray:
 	.byte 0xE8, 0x30, 0x00, 0xFC, 0x00, 0x00	; 27DEF  |.0....|
 
 ; ToneDB_EnvDescTable_207_CurveStepToElem -- file 0x27DF5..0x27E03 (15 bytes)
-; descriptor 207 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 207 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_207_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -21193,7 +21890,7 @@ ToneDB_EnvDescTable_207_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_207_ElemArray -- file 0x27E04..0x27E09 (6 bytes)
 ; descriptor 207 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 207 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21203,7 +21900,7 @@ ToneDB_EnvDescTable_207_ElemArray:
 	.byte 0xE9, 0x30, 0x00, 0xFD, 0x00, 0x00	; 27E04  |.0....|
 
 ; ToneDB_EnvDescTable_208_CurveStepToElem -- file 0x27E0A..0x27E79 (112 bytes)
-; descriptor 208 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 208 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_208_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 80
@@ -21220,7 +21917,7 @@ ToneDB_EnvDescTable_208_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_208_ElemArray -- file 0x27E7A..0x27EC9 (80 bytes)
 ; descriptor 208 stage 3: 10 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 208 -> this array.
 ; Evidence: 80 bytes / 8 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -21234,7 +21931,7 @@ ToneDB_EnvDescTable_208_ElemArray:
 	.byte 0x18, 0x40, 0x00, 0xF5, 0x00, 0x00, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xDD, 0x00, 0x00, 0x00, 0x00	; 27EBA  |.@......J@......|
 
 ; ToneDB_EnvDescTable_209_CurveStepToElem -- file 0x27ECA..0x27EE2 (25 bytes)
-; descriptor 209 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 209 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_209_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -21246,7 +21943,7 @@ ToneDB_EnvDescTable_209_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_209_ElemArray -- file 0x27EE3..0x27F1E (60 bytes)
 ; descriptor 209 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 209 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -21259,7 +21956,7 @@ ToneDB_EnvDescTable_209_ElemArray:
 	.byte 0x10, 0x40, 0x00, 0xF2, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xE1, 0x00, 0x00	; 27F13  |.@....J@....|
 
 ; ToneDB_EnvDescTable_210_CurveStepToElem -- file 0x27F1F..0x27F37 (25 bytes)
-; descriptor 210 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 210 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_210_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -21271,7 +21968,7 @@ ToneDB_EnvDescTable_210_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_210_ElemArray -- file 0x27F38..0x27F73 (60 bytes)
 ; descriptor 210 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 210 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -21284,7 +21981,7 @@ ToneDB_EnvDescTable_210_ElemArray:
 	.byte 0x18, 0x40, 0x00, 0xF9, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xE1, 0x00, 0x00	; 27F68  |.@....J@....|
 
 ; ToneDB_EnvDescTable_211_CurveStepToElem -- file 0x27F74..0x27F8C (25 bytes)
-; descriptor 211 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 211 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_211_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -21296,7 +21993,7 @@ ToneDB_EnvDescTable_211_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_211_ElemArray -- file 0x27F8D..0x27FC8 (60 bytes)
 ; descriptor 211 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 211 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -21309,7 +22006,7 @@ ToneDB_EnvDescTable_211_ElemArray:
 	.byte 0x20, 0x40, 0x00, 0xF7, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xE1, 0x00, 0x00	; 27FBD  | @....J@....|
 
 ; ToneDB_EnvDescTable_212_CurveStepToElem -- file 0x27FC9..0x27FE1 (25 bytes)
-; descriptor 212 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 212 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_212_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -21321,7 +22018,7 @@ ToneDB_EnvDescTable_212_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_212_ElemArray -- file 0x27FE2..0x2801D (60 bytes)
 ; descriptor 212 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 212 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -21334,7 +22031,7 @@ ToneDB_EnvDescTable_212_ElemArray:
 	.byte 0x28, 0x40, 0x00, 0xF6, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xE1, 0x00, 0x00	; 28012  |(@....J@....|
 
 ; ToneDB_EnvDescTable_213_CurveStepToElem -- file 0x2801E..0x2808D (112 bytes)
-; descriptor 213 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 213 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_213_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 14; that array is 90
@@ -21351,7 +22048,7 @@ ToneDB_EnvDescTable_213_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_213_ElemArray -- file 0x2808E..0x280E7 (90 bytes)
 ; descriptor 213 stage 3: 15 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 213 -> this array.
 ; Evidence: 90 bytes / 6 = 15 elements, and the stage-2 table's
 ; largest entry is 14, so 14 + 1 = 15 matches exactly.  The
@@ -21366,7 +22063,7 @@ ToneDB_EnvDescTable_213_ElemArray:
 	.byte 0x00, 0xF7, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xF9, 0x00, 0x00	; 280DE  |....J@....|
 
 ; ToneDB_EnvDescTable_214_CurveStepToElem -- file 0x280E8..0x28157 (112 bytes)
-; descriptor 214 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 214 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_214_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 14; that array is 90
@@ -21383,7 +22080,7 @@ ToneDB_EnvDescTable_214_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_214_ElemArray -- file 0x28158..0x281B1 (90 bytes)
 ; descriptor 214 stage 3: 15 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 214 -> this array.
 ; Evidence: 90 bytes / 6 = 15 elements, and the stage-2 table's
 ; largest entry is 14, so 14 + 1 = 15 matches exactly.  The
@@ -21398,7 +22095,7 @@ ToneDB_EnvDescTable_214_ElemArray:
 	.byte 0x00, 0xFB, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xF9, 0x00, 0x00	; 281A8  |....J@....|
 
 ; ToneDB_EnvDescTable_215_CurveStepToElem -- file 0x281B2..0x281D1 (32 bytes)
-; descriptor 215 stage 2: ToneDB_DescCurve_2 step -> element, 28 entries = max(curve)+1
+; descriptor 215 stage 2: ToneDB_DescCurve_Step4 step -> element, 28 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_215_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -21410,7 +22107,7 @@ ToneDB_EnvDescTable_215_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_215_ElemArray -- file 0x281D2..0x28201 (48 bytes)
 ; descriptor 215 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_2[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 215 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -21422,7 +22119,7 @@ ToneDB_EnvDescTable_215_ElemArray:
 	.byte 0x00, 0xF1, 0x00, 0x00, 0x49, 0x40, 0x00, 0xF1, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xF1, 0x00, 0x00	; 281F2  |....I@....J@....|
 
 ; ToneDB_EnvDescTable_216_CurveStepToElem -- file 0x28202..0x28221 (32 bytes)
-; descriptor 216 stage 2: ToneDB_DescCurve_2 step -> element, 28 entries = max(curve)+1
+; descriptor 216 stage 2: ToneDB_DescCurve_Step4 step -> element, 28 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_216_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -21434,7 +22131,7 @@ ToneDB_EnvDescTable_216_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_216_ElemArray -- file 0x28222..0x28251 (48 bytes)
 ; descriptor 216 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_2[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 216 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -21446,7 +22143,7 @@ ToneDB_EnvDescTable_216_ElemArray:
 	.byte 0x00, 0xF1, 0x00, 0x00, 0x49, 0x40, 0x00, 0xF1, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xF1, 0x00, 0x00	; 28242  |....I@....J@....|
 
 ; ToneDB_EnvDescTable_217_CurveStepToElem -- file 0x28252..0x28271 (32 bytes)
-; descriptor 217 stage 2: ToneDB_DescCurve_2 step -> element, 28 entries = max(curve)+1
+; descriptor 217 stage 2: ToneDB_DescCurve_Step4 step -> element, 28 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_217_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -21458,7 +22155,7 @@ ToneDB_EnvDescTable_217_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_217_ElemArray -- file 0x28272..0x282A1 (48 bytes)
 ; descriptor 217 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_2[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 217 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -21470,7 +22167,7 @@ ToneDB_EnvDescTable_217_ElemArray:
 	.byte 0x00, 0xF0, 0x00, 0x00, 0x56, 0x40, 0x00, 0xF0, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xF1, 0x00, 0x00	; 28292  |....V@....J@....|
 
 ; ToneDB_EnvDescTable_218_CurveStepToElem -- file 0x282A2..0x282C1 (32 bytes)
-; descriptor 218 stage 2: ToneDB_DescCurve_2 step -> element, 28 entries = max(curve)+1
+; descriptor 218 stage 2: ToneDB_DescCurve_Step4 step -> element, 28 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_218_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -21482,7 +22179,7 @@ ToneDB_EnvDescTable_218_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_218_ElemArray -- file 0x282C2..0x282F1 (48 bytes)
 ; descriptor 218 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_2[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 218 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -21494,7 +22191,7 @@ ToneDB_EnvDescTable_218_ElemArray:
 	.byte 0x00, 0xF0, 0x00, 0x00, 0x56, 0x40, 0x00, 0xF0, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xF1, 0x00, 0x00	; 282E2  |....V@....J@....|
 
 ; ToneDB_EnvDescTable_219_CurveStepToElem -- file 0x282F2..0x28361 (112 bytes)
-; descriptor 219 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 219 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_219_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -21511,7 +22208,7 @@ ToneDB_EnvDescTable_219_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_219_ElemArray -- file 0x28362..0x283A9 (72 bytes)
 ; descriptor 219 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 219 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -21525,7 +22222,7 @@ ToneDB_EnvDescTable_219_ElemArray:
 	.byte 0x00, 0x00, 0x4A, 0x40, 0x00, 0xF1, 0x00, 0x00	; 283A2  |..J@....|
 
 ; ToneDB_EnvDescTable_220_CurveStepToElem -- file 0x283AA..0x283D0 (39 bytes)
-; descriptor 220 stage 2: ToneDB_DescCurve_4 step -> element, 35 entries = max(curve)+1
+; descriptor 220 stage 2: ToneDB_DescCurve_Step4And2 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_220_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -21538,7 +22235,7 @@ ToneDB_EnvDescTable_220_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_220_ElemArray -- file 0x283D1..0x28406 (54 bytes)
 ; descriptor 220 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_4[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4And2[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 220 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -21551,7 +22248,7 @@ ToneDB_EnvDescTable_220_ElemArray:
 	.byte 0x4D, 0x20, 0x00, 0xDF, 0x00, 0x00	; 28401  |M ....|
 
 ; ToneDB_EnvDescTable_221_CurveStepToElem -- file 0x28407..0x2841F (25 bytes)
-; descriptor 221 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 221 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_221_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -21563,7 +22260,7 @@ ToneDB_EnvDescTable_221_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_221_ElemArray -- file 0x28420..0x2844F (48 bytes)
 ; descriptor 221 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 221 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -21575,7 +22272,7 @@ ToneDB_EnvDescTable_221_ElemArray:
 	.byte 0x00, 0xF8, 0x00, 0x00, 0x67, 0x40, 0x00, 0xE4, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xCF, 0x00, 0x00	; 28440  |....g@....M ....|
 
 ; ToneDB_EnvDescTable_222_CurveStepToElem -- file 0x28450..0x2846F (32 bytes)
-; descriptor 222 stage 2: ToneDB_DescCurve_2 step -> element, 28 entries = max(curve)+1
+; descriptor 222 stage 2: ToneDB_DescCurve_Step4 step -> element, 28 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_222_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 1; that array is 12
@@ -21587,7 +22284,7 @@ ToneDB_EnvDescTable_222_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_222_ElemArray -- file 0x28470..0x2847B (12 bytes)
 ; descriptor 222 stage 3: 2 elements of 6 B = max(stage 2)+1, size from tag 0x41 bit 7
-; Reached as ToneDB_DescCurve_2[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step4[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 222 -> this array.
 ; Evidence: 12 bytes / 6 = 2 elements, and the stage-2 table's
 ; largest entry is 1, so 1 + 1 = 2 matches exactly.  The
@@ -21597,7 +22294,7 @@ ToneDB_EnvDescTable_222_ElemArray:
 	.byte 0x6C, 0x40, 0x90, 0xE8, 0x00, 0x00, 0x6D, 0x40, 0x90, 0xE8, 0x00, 0x00	; 28470  |l@....m@....|
 
 ; ToneDB_EnvDescTable_223_CurveStepToElem -- file 0x2847C..0x284EB (112 bytes)
-; descriptor 223 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 223 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_223_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -21614,7 +22311,7 @@ ToneDB_EnvDescTable_223_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_223_ElemArray -- file 0x284EC..0x28533 (72 bytes)
 ; descriptor 223 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 223 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -21628,7 +22325,7 @@ ToneDB_EnvDescTable_223_ElemArray:
 	.byte 0x00, 0x00, 0x81, 0x40, 0x00, 0xE8, 0x00, 0x00	; 2852C  |...@....|
 
 ; ToneDB_EnvDescTable_224_CurveStepToElem -- file 0x28534..0x285A3 (112 bytes)
-; descriptor 224 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 224 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_224_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -21645,7 +22342,7 @@ ToneDB_EnvDescTable_224_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_224_ElemArray -- file 0x285A4..0x285E5 (66 bytes)
 ; descriptor 224 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 224 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -21659,7 +22356,7 @@ ToneDB_EnvDescTable_224_ElemArray:
 	.byte 0x00, 0x00	; 285E4  |..|
 
 ; ToneDB_EnvDescTable_225_CurveStepToElem -- file 0x285E6..0x28655 (112 bytes)
-; descriptor 225 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 225 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_225_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -21676,7 +22373,7 @@ ToneDB_EnvDescTable_225_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_225_ElemArray -- file 0x28656..0x2869D (72 bytes)
 ; descriptor 225 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 225 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -21690,7 +22387,7 @@ ToneDB_EnvDescTable_225_ElemArray:
 	.byte 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE3, 0x00, 0x00	; 28696  |..M ....|
 
 ; ToneDB_EnvDescTable_226_CurveStepToElem -- file 0x2869E..0x2870D (112 bytes)
-; descriptor 226 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 226 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_226_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -21707,7 +22404,7 @@ ToneDB_EnvDescTable_226_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_226_ElemArray -- file 0x2870E..0x28749 (60 bytes)
 ; descriptor 226 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 226 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -21720,7 +22417,7 @@ ToneDB_EnvDescTable_226_ElemArray:
 	.byte 0x92, 0x40, 0x00, 0xFB, 0x00, 0x00, 0x93, 0x40, 0x00, 0xFB, 0x00, 0x00	; 2873E  |.@.....@....|
 
 ; ToneDB_EnvDescTable_227_CurveStepToElem -- file 0x2874A..0x28758 (15 bytes)
-; descriptor 227 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 227 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_227_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -21731,7 +22428,7 @@ ToneDB_EnvDescTable_227_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_227_ElemArray -- file 0x28759..0x2875E (6 bytes)
 ; descriptor 227 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 227 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21741,7 +22438,7 @@ ToneDB_EnvDescTable_227_ElemArray:
 	.byte 0x94, 0x40, 0x80, 0xE8, 0x00, 0x00	; 28759  |.@....|
 
 ; ToneDB_EnvDescTable_228_CurveStepToElem -- file 0x2875F..0x2876D (15 bytes)
-; descriptor 228 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 228 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_228_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -21752,7 +22449,7 @@ ToneDB_EnvDescTable_228_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_228_ElemArray -- file 0x2876E..0x28773 (6 bytes)
 ; descriptor 228 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 228 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21762,7 +22459,7 @@ ToneDB_EnvDescTable_228_ElemArray:
 	.byte 0x96, 0x40, 0x80, 0xE4, 0x00, 0x00	; 2876E  |.@....|
 
 ; ToneDB_EnvDescTable_229_CurveStepToElem -- file 0x28774..0x28782 (15 bytes)
-; descriptor 229 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 229 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_229_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -21773,7 +22470,7 @@ ToneDB_EnvDescTable_229_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_229_ElemArray -- file 0x28783..0x28788 (6 bytes)
 ; descriptor 229 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 229 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21783,7 +22480,7 @@ ToneDB_EnvDescTable_229_ElemArray:
 	.byte 0x95, 0x40, 0x80, 0xE8, 0x00, 0x00	; 28783  |.@....|
 
 ; ToneDB_EnvDescTable_230_CurveStepToElem -- file 0x28789..0x28797 (15 bytes)
-; descriptor 230 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 230 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_230_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -21794,7 +22491,7 @@ ToneDB_EnvDescTable_230_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_230_ElemArray -- file 0x28798..0x2879D (6 bytes)
 ; descriptor 230 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 230 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21804,7 +22501,7 @@ ToneDB_EnvDescTable_230_ElemArray:
 	.byte 0x97, 0x40, 0x80, 0xE4, 0x00, 0x00	; 28798  |.@....|
 
 ; ToneDB_EnvDescTable_231_CurveStepToElem -- file 0x2879E..0x2880D (112 bytes)
-; descriptor 231 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 231 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_231_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -21821,7 +22518,7 @@ ToneDB_EnvDescTable_231_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_231_ElemArray -- file 0x2880E..0x2884F (66 bytes)
 ; descriptor 231 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x42 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 231 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -21835,7 +22532,7 @@ ToneDB_EnvDescTable_231_ElemArray:
 	.byte 0x00, 0x00	; 2884E  |..|
 
 ; ToneDB_EnvDescTable_232_CurveStepToElem -- file 0x28850..0x2885E (15 bytes)
-; descriptor 232 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 232 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_232_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21846,7 +22543,7 @@ ToneDB_EnvDescTable_232_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_232_ElemArray -- file 0x2885F..0x28866 (8 bytes)
 ; descriptor 232 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 232 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21856,7 +22553,7 @@ ToneDB_EnvDescTable_232_ElemArray:
 	.byte 0xA2, 0x40, 0x00, 0xE3, 0x00, 0x00, 0x00, 0x0C	; 2885F  |.@......|
 
 ; ToneDB_EnvDescTable_233_CurveStepToElem -- file 0x28867..0x288D6 (112 bytes)
-; descriptor 233 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 233 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_233_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 12; that array is 78
@@ -21873,7 +22570,7 @@ ToneDB_EnvDescTable_233_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_233_ElemArray -- file 0x288D7..0x28924 (78 bytes)
 ; descriptor 233 stage 3: 13 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 233 -> this array.
 ; Evidence: 78 bytes / 6 = 13 elements, and the stage-2 table's
 ; largest entry is 12, so 12 + 1 = 13 matches exactly.  The
@@ -21887,7 +22584,7 @@ ToneDB_EnvDescTable_233_ElemArray:
 	.byte 0x00, 0x00, 0xB3, 0x40, 0xD0, 0xF1, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE3, 0x00, 0x00	; 28917  |...@....M ....|
 
 ; ToneDB_EnvDescTable_234_CurveStepToElem -- file 0x28925..0x2893D (25 bytes)
-; descriptor 234 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 234 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_234_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -21899,7 +22596,7 @@ ToneDB_EnvDescTable_234_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_234_ElemArray -- file 0x2893E..0x2896D (48 bytes)
 ; descriptor 234 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x42 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 234 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -21911,7 +22608,7 @@ ToneDB_EnvDescTable_234_ElemArray:
 	.byte 0xA0, 0xFC, 0x00, 0x00, 0xB3, 0x40, 0xD0, 0xF5, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 2895E  |.....@....M ....|
 
 ; ToneDB_EnvDescTable_235_CurveStepToElem -- file 0x2896E..0x289DD (112 bytes)
-; descriptor 235 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 235 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_235_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 13; that array is 84
@@ -21928,7 +22625,7 @@ ToneDB_EnvDescTable_235_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_235_ElemArray -- file 0x289DE..0x28A31 (84 bytes)
 ; descriptor 235 stage 3: 14 elements of 6 B = max(stage 2)+1, size from tag 0x42 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 235 -> this array.
 ; Evidence: 84 bytes / 6 = 14 elements, and the stage-2 table's
 ; largest entry is 13, so 13 + 1 = 14 matches exactly.  The
@@ -21943,7 +22640,7 @@ ToneDB_EnvDescTable_235_ElemArray:
 	.byte 0x00, 0xDF, 0x00, 0x00	; 28A2E  |....|
 
 ; ToneDB_EnvDescTable_236_CurveStepToElem -- file 0x28A32..0x28A40 (15 bytes)
-; descriptor 236 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 236 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_236_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21954,7 +22651,7 @@ ToneDB_EnvDescTable_236_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_236_ElemArray -- file 0x28A41..0x28A48 (8 bytes)
 ; descriptor 236 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 236 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21964,7 +22661,7 @@ ToneDB_EnvDescTable_236_ElemArray:
 	.byte 0xBF, 0x40, 0x80, 0xDA, 0x00, 0x00, 0x00, 0x0C	; 28A41  |.@......|
 
 ; ToneDB_EnvDescTable_237_CurveStepToElem -- file 0x28A49..0x28A57 (15 bytes)
-; descriptor 237 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 237 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_237_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21975,7 +22672,7 @@ ToneDB_EnvDescTable_237_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_237_ElemArray -- file 0x28A58..0x28A5F (8 bytes)
 ; descriptor 237 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 237 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -21985,7 +22682,7 @@ ToneDB_EnvDescTable_237_ElemArray:
 	.byte 0xC0, 0x40, 0x80, 0xE4, 0x00, 0x00, 0x00, 0x0C	; 28A58  |.@......|
 
 ; ToneDB_EnvDescTable_238_CurveStepToElem -- file 0x28A60..0x28A6E (15 bytes)
-; descriptor 238 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 238 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_238_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -21996,7 +22693,7 @@ ToneDB_EnvDescTable_238_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_238_ElemArray -- file 0x28A6F..0x28A76 (8 bytes)
 ; descriptor 238 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xBF bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 238 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22006,7 +22703,7 @@ ToneDB_EnvDescTable_238_ElemArray:
 	.byte 0xC1, 0x40, 0x80, 0xE1, 0x00, 0x00, 0x00, 0x0C	; 28A6F  |.@......|
 
 ; ToneDB_EnvDescTable_239_CurveStepToElem -- file 0x28A77..0x28A8F (25 bytes)
-; descriptor 239 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 239 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_239_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -22018,7 +22715,7 @@ ToneDB_EnvDescTable_239_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_239_ElemArray -- file 0x28A90..0x28AD1 (66 bytes)
 ; descriptor 239 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x42 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 239 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -22032,7 +22729,7 @@ ToneDB_EnvDescTable_239_ElemArray:
 	.byte 0x00, 0x00	; 28AD0  |..|
 
 ; ToneDB_EnvDescTable_240_CurveStepToElem -- file 0x28AD2..0x28B41 (112 bytes)
-; descriptor 240 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 240 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_240_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -22049,7 +22746,7 @@ ToneDB_EnvDescTable_240_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_240_ElemArray -- file 0x28B42..0x28B89 (72 bytes)
 ; descriptor 240 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x42 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 240 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -22063,7 +22760,7 @@ ToneDB_EnvDescTable_240_ElemArray:
 	.byte 0x00, 0x00, 0x4A, 0x40, 0x00, 0xD9, 0x00, 0x00	; 28B82  |..J@....|
 
 ; ToneDB_EnvDescTable_241_CurveStepToElem -- file 0x28B8A..0x28BF9 (112 bytes)
-; descriptor 241 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 241 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_241_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 12; that array is 78
@@ -22080,7 +22777,7 @@ ToneDB_EnvDescTable_241_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_241_ElemArray -- file 0x28BFA..0x28C47 (78 bytes)
 ; descriptor 241 stage 3: 13 elements of 6 B = max(stage 2)+1, size from tag 0x42 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 241 -> this array.
 ; Evidence: 78 bytes / 6 = 13 elements, and the stage-2 table's
 ; largest entry is 12, so 12 + 1 = 13 matches exactly.  The
@@ -22094,7 +22791,7 @@ ToneDB_EnvDescTable_241_ElemArray:
 	.byte 0x00, 0x00, 0xDC, 0x40, 0x00, 0x04, 0x00, 0x00, 0x4A, 0x40, 0x00, 0xE1, 0x00, 0x00	; 28C3A  |...@....J@....|
 
 ; ToneDB_EnvDescTable_242_CurveStepToElem -- file 0x28C48..0x28C6E (39 bytes)
-; descriptor 242 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 242 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_242_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -22107,7 +22804,7 @@ ToneDB_EnvDescTable_242_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_242_ElemArray -- file 0x28C6F..0x28CB6 (72 bytes)
 ; descriptor 242 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 242 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -22121,7 +22818,7 @@ ToneDB_EnvDescTable_242_ElemArray:
 	.byte 0x00, 0x00, 0x4D, 0x20, 0x00, 0xDB, 0x00, 0x00	; 28CAF  |..M ....|
 
 ; ToneDB_EnvDescTable_243_CurveStepToElem -- file 0x28CB7..0x28CC5 (15 bytes)
-; descriptor 243 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 243 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_243_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -22132,7 +22829,7 @@ ToneDB_EnvDescTable_243_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_243_ElemArray -- file 0x28CC6..0x28CCB (6 bytes)
 ; descriptor 243 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 243 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22142,7 +22839,7 @@ ToneDB_EnvDescTable_243_ElemArray:
 	.byte 0xE6, 0x40, 0x80, 0xDE, 0x00, 0x00	; 28CC6  |.@....|
 
 ; ToneDB_EnvDescTable_244_CurveStepToElem -- file 0x28CCC..0x28D3B (112 bytes)
-; descriptor 244 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 244 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_244_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 13; that array is 84
@@ -22159,7 +22856,7 @@ ToneDB_EnvDescTable_244_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_244_ElemArray -- file 0x28D3C..0x28D8F (84 bytes)
 ; descriptor 244 stage 3: 14 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 244 -> this array.
 ; Evidence: 84 bytes / 6 = 14 elements, and the stage-2 table's
 ; largest entry is 13, so 13 + 1 = 14 matches exactly.  The
@@ -22174,7 +22871,7 @@ ToneDB_EnvDescTable_244_ElemArray:
 	.byte 0x00, 0xDB, 0x00, 0x00	; 28D8C  |....|
 
 ; ToneDB_EnvDescTable_245_CurveStepToElem -- file 0x28D90..0x28DA8 (25 bytes)
-; descriptor 245 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 245 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_245_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -22186,7 +22883,7 @@ ToneDB_EnvDescTable_245_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_245_ElemArray -- file 0x28DA9..0x28DF0 (72 bytes)
 ; descriptor 245 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 245 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -22200,7 +22897,7 @@ ToneDB_EnvDescTable_245_ElemArray:
 	.byte 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 28DE9  |..M ....|
 
 ; ToneDB_EnvDescTable_246_CurveStepToElem -- file 0x28DF1..0x28E60 (112 bytes)
-; descriptor 246 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 246 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_246_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 12; that array is 78
@@ -22217,7 +22914,7 @@ ToneDB_EnvDescTable_246_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_246_ElemArray -- file 0x28E61..0x28EAE (78 bytes)
 ; descriptor 246 stage 3: 13 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 246 -> this array.
 ; Evidence: 78 bytes / 6 = 13 elements, and the stage-2 table's
 ; largest entry is 12, so 12 + 1 = 13 matches exactly.  The
@@ -22231,7 +22928,7 @@ ToneDB_EnvDescTable_246_ElemArray:
 	.byte 0x00, 0x00, 0x30, 0x41, 0x00, 0xEB, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 28EA1  |..0A....M ....|
 
 ; ToneDB_EnvDescTable_247_CurveStepToElem -- file 0x28EAF..0x28F1E (112 bytes)
-; descriptor 247 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 247 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_247_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 13; that array is 84
@@ -22248,7 +22945,7 @@ ToneDB_EnvDescTable_247_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_247_ElemArray -- file 0x28F1F..0x28F72 (84 bytes)
 ; descriptor 247 stage 3: 14 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 247 -> this array.
 ; Evidence: 84 bytes / 6 = 14 elements, and the stage-2 table's
 ; largest entry is 13, so 13 + 1 = 14 matches exactly.  The
@@ -22263,7 +22960,7 @@ ToneDB_EnvDescTable_247_ElemArray:
 	.byte 0x00, 0xEB, 0x00, 0x00	; 28F6F  |....|
 
 ; ToneDB_EnvDescTable_248_CurveStepToElem -- file 0x28F73..0x28FE2 (112 bytes)
-; descriptor 248 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 248 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_248_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -22280,7 +22977,7 @@ ToneDB_EnvDescTable_248_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_248_ElemArray -- file 0x28FE3..0x29000 (30 bytes)
 ; descriptor 248 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 248 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -22291,7 +22988,7 @@ ToneDB_EnvDescTable_248_ElemArray:
 	.byte 0x00, 0x00, 0x21, 0x41, 0xF0, 0xE2, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xDF, 0x00, 0x00	; 28FF3  |..!A....M ....|
 
 ; ToneDB_EnvDescTable_249_CurveStepToElem -- file 0x29001..0x29019 (25 bytes)
-; descriptor 249 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 249 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_249_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -22303,7 +23000,7 @@ ToneDB_EnvDescTable_249_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_249_ElemArray -- file 0x2901A..0x29049 (48 bytes)
 ; descriptor 249 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x42 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 249 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -22315,7 +23012,7 @@ ToneDB_EnvDescTable_249_ElemArray:
 	.byte 0x00, 0xFB, 0x00, 0x00, 0x30, 0x41, 0x00, 0xE3, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE3, 0x00, 0x00	; 2903A  |....0A....M ....|
 
 ; ToneDB_EnvDescTable_250_CurveStepToElem -- file 0x2904A..0x290B9 (112 bytes)
-; descriptor 250 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 250 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_250_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -22332,7 +23029,7 @@ ToneDB_EnvDescTable_250_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_250_ElemArray -- file 0x290BA..0x29101 (72 bytes)
 ; descriptor 250 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 250 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -22346,7 +23043,7 @@ ToneDB_EnvDescTable_250_ElemArray:
 	.byte 0x00, 0x00, 0x4D, 0x20, 0x00, 0xEB, 0x00, 0x00	; 290FA  |..M ....|
 
 ; ToneDB_EnvDescTable_251_CurveStepToElem -- file 0x29102..0x2911A (25 bytes)
-; descriptor 251 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 251 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_251_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 3; that array is 24
@@ -22358,7 +23055,7 @@ ToneDB_EnvDescTable_251_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_251_ElemArray -- file 0x2911B..0x29132 (24 bytes)
 ; descriptor 251 stage 3: 4 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 251 -> this array.
 ; Evidence: 24 bytes / 6 = 4 elements, and the stage-2 table's
 ; largest entry is 3, so 3 + 1 = 4 matches exactly.  The
@@ -22369,7 +23066,7 @@ ToneDB_EnvDescTable_251_ElemArray:
 	.byte 0x00, 0x00, 0x4D, 0x20, 0x00, 0xE7, 0x00, 0x00	; 2912B  |..M ....|
 
 ; ToneDB_EnvDescTable_252_CurveStepToElem -- file 0x29133..0x29141 (15 bytes)
-; descriptor 252 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 252 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_252_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -22380,7 +23077,7 @@ ToneDB_EnvDescTable_252_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_252_ElemArray -- file 0x29142..0x29147 (6 bytes)
 ; descriptor 252 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 252 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22390,7 +23087,7 @@ ToneDB_EnvDescTable_252_ElemArray:
 	.byte 0x33, 0x41, 0x00, 0xE2, 0x00, 0x00	; 29142  |3A....|
 
 ; ToneDB_EnvDescTable_253_CurveStepToElem -- file 0x29148..0x29156 (15 bytes)
-; descriptor 253 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 253 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_253_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -22401,7 +23098,7 @@ ToneDB_EnvDescTable_253_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_253_ElemArray -- file 0x29157..0x2915C (6 bytes)
 ; descriptor 253 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 253 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22411,7 +23108,7 @@ ToneDB_EnvDescTable_253_ElemArray:
 	.byte 0x34, 0x41, 0x00, 0xE2, 0x00, 0x00	; 29157  |4A....|
 
 ; ToneDB_EnvDescTable_254_CurveStepToElem -- file 0x2915D..0x2916B (15 bytes)
-; descriptor 254 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 254 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_254_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -22422,7 +23119,7 @@ ToneDB_EnvDescTable_254_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_254_ElemArray -- file 0x2916C..0x29171 (6 bytes)
 ; descriptor 254 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 254 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22432,7 +23129,7 @@ ToneDB_EnvDescTable_254_ElemArray:
 	.byte 0x35, 0x41, 0x00, 0xD4, 0x00, 0x00	; 2916C  |5A....|
 
 ; ToneDB_EnvDescTable_255_CurveStepToElem -- file 0x29172..0x29180 (15 bytes)
-; descriptor 255 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 255 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_255_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -22443,7 +23140,7 @@ ToneDB_EnvDescTable_255_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_255_ElemArray -- file 0x29181..0x29186 (6 bytes)
 ; descriptor 255 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 255 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22453,7 +23150,7 @@ ToneDB_EnvDescTable_255_ElemArray:
 	.byte 0x36, 0x41, 0x00, 0xDA, 0x00, 0x00	; 29181  |6A....|
 
 ; ToneDB_EnvDescTable_256_CurveStepToElem -- file 0x29187..0x29195 (15 bytes)
-; descriptor 256 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 256 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_256_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -22464,7 +23161,7 @@ ToneDB_EnvDescTable_256_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_256_ElemArray -- file 0x29196..0x2919B (6 bytes)
 ; descriptor 256 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x41 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 256 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22474,7 +23171,7 @@ ToneDB_EnvDescTable_256_ElemArray:
 	.byte 0x37, 0x41, 0x00, 0xDA, 0x00, 0x00	; 29196  |7A....|
 
 ; ToneDB_EnvDescTable_257_CurveStepToElem -- file 0x2919C..0x291AA (15 bytes)
-; descriptor 257 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 257 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_257_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -22485,7 +23182,7 @@ ToneDB_EnvDescTable_257_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_257_ElemArray -- file 0x291AB..0x291B0 (6 bytes)
 ; descriptor 257 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 257 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22495,7 +23192,7 @@ ToneDB_EnvDescTable_257_ElemArray:
 	.byte 0x39, 0x41, 0x00, 0xDE, 0x00, 0x00	; 291AB  |9A....|
 
 ; ToneDB_EnvDescTable_258_CurveStepToElem -- file 0x291B1..0x291BF (15 bytes)
-; descriptor 258 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 258 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_258_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -22506,7 +23203,7 @@ ToneDB_EnvDescTable_258_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_258_ElemArray -- file 0x291C0..0x291C5 (6 bytes)
 ; descriptor 258 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x41 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 258 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22516,7 +23213,7 @@ ToneDB_EnvDescTable_258_ElemArray:
 	.byte 0x3A, 0x41, 0x00, 0xDE, 0x00, 0x00	; 291C0  |:A....|
 
 ; ToneDB_EnvDescTable_259_CurveStepToElem -- file 0x291C6..0x291D4 (15 bytes)
-; descriptor 259 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 259 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_259_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -22527,7 +23224,7 @@ ToneDB_EnvDescTable_259_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_259_ElemArray -- file 0x291D5..0x291DC (8 bytes)
 ; descriptor 259 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 259 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22537,7 +23234,7 @@ ToneDB_EnvDescTable_259_ElemArray:
 	.byte 0x3B, 0x41, 0x80, 0xD9, 0x00, 0x00, 0xA0, 0xFF	; 291D5  |;A......|
 
 ; ToneDB_EnvDescTable_260_CurveStepToElem -- file 0x291DD..0x291EB (15 bytes)
-; descriptor 260 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 260 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_260_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -22548,7 +23245,7 @@ ToneDB_EnvDescTable_260_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_260_ElemArray -- file 0x291EC..0x291F3 (8 bytes)
 ; descriptor 260 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 260 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22558,7 +23255,7 @@ ToneDB_EnvDescTable_260_ElemArray:
 	.byte 0x3C, 0x41, 0x80, 0xD9, 0x00, 0x00, 0xA0, 0xFF	; 291EC  |<A......|
 
 ; ToneDB_EnvDescTable_261_CurveStepToElem -- file 0x291F4..0x29202 (15 bytes)
-; descriptor 261 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 261 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_261_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 8
@@ -22569,7 +23266,7 @@ ToneDB_EnvDescTable_261_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_261_ElemArray -- file 0x29203..0x2920A (8 bytes)
 ; descriptor 261 stage 3: 1 element of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 261 -> this array.
 ; Evidence: 8 bytes / 8 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -22579,7 +23276,7 @@ ToneDB_EnvDescTable_261_ElemArray:
 	.byte 0x3D, 0x41, 0x00, 0xE0, 0x00, 0x00, 0x00, 0xFA	; 29203  |=A......|
 
 ; ToneDB_EnvDescTable_262_CurveStepToElem -- file 0x2920B..0x2927A (112 bytes)
-; descriptor 262 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 262 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_262_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 48
@@ -22596,7 +23293,7 @@ ToneDB_EnvDescTable_262_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_262_ElemArray -- file 0x2927B..0x292AA (48 bytes)
 ; descriptor 262 stage 3: 6 elements of 8 B = max(stage 2)+1, size from tag 0xC1 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 262 -> this array.
 ; Evidence: 48 bytes / 8 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -22608,7 +23305,7 @@ ToneDB_EnvDescTable_262_ElemArray:
 	.byte 0x04, 0x50, 0x00, 0xE6, 0x00, 0xEC, 0x4F, 0xFB, 0xAF, 0x20, 0x00, 0xDF, 0x00, 0xF0, 0x00, 0x00	; 2929B  |.P....O.. ......|
 
 ; ToneDB_EnvDescTable_263_CurveStepToElem -- file 0x292AB..0x2931A (112 bytes)
-; descriptor 263 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 263 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_263_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 56
@@ -22625,7 +23322,7 @@ ToneDB_EnvDescTable_263_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_263_ElemArray -- file 0x2931B..0x29352 (56 bytes)
 ; descriptor 263 stage 3: 7 elements of 8 B = max(stage 2)+1, size from tag 0xC1 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 263 -> this array.
 ; Evidence: 56 bytes / 8 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -22638,7 +23335,7 @@ ToneDB_EnvDescTable_263_ElemArray:
 	.byte 0xAF, 0x20, 0x00, 0xDF, 0x00, 0xF0, 0x00, 0x00	; 2934B  |. ......|
 
 ; ToneDB_EnvDescTable_264_CurveStepToElem -- file 0x29353..0x293C2 (112 bytes)
-; descriptor 264 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 264 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_264_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 40
@@ -22655,7 +23352,7 @@ ToneDB_EnvDescTable_264_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_264_ElemArray -- file 0x293C3..0x293EA (40 bytes)
 ; descriptor 264 stage 3: 5 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 264 -> this array.
 ; Evidence: 40 bytes / 8 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -22667,7 +23364,7 @@ ToneDB_EnvDescTable_264_ElemArray:
 	.byte 0x29, 0x00, 0xC0, 0xF8, 0x00, 0xE0, 0x23, 0x00	; 293E3  |).....#.|
 
 ; ToneDB_EnvDescTable_265_CurveStepToElem -- file 0x293EB..0x2945A (112 bytes)
-; descriptor 265 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 265 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_265_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 48
@@ -22684,7 +23381,7 @@ ToneDB_EnvDescTable_265_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_265_ElemArray -- file 0x2945B..0x2948A (48 bytes)
 ; descriptor 265 stage 3: 6 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 265 -> this array.
 ; Evidence: 48 bytes / 8 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -22696,7 +23393,7 @@ ToneDB_EnvDescTable_265_ElemArray:
 	.byte 0x0D, 0x50, 0x00, 0xF2, 0x00, 0xF4, 0x00, 0x00, 0x4D, 0x20, 0x00, 0xEF, 0x00, 0x00, 0x00, 0x00	; 2947B  |.P......M ......|
 
 ; ToneDB_EnvDescTable_266_CurveStepToElem -- file 0x2948B..0x294FA (112 bytes)
-; descriptor 266 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 266 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_266_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 88
@@ -22713,7 +23410,7 @@ ToneDB_EnvDescTable_266_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_266_ElemArray -- file 0x294FB..0x29552 (88 bytes)
 ; descriptor 266 stage 3: 11 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 266 -> this array.
 ; Evidence: 88 bytes / 8 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -22728,7 +23425,7 @@ ToneDB_EnvDescTable_266_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xFC, 0x00, 0xE0, 0x00, 0x00	; 2954B  |........|
 
 ; ToneDB_EnvDescTable_267_CurveStepToElem -- file 0x29553..0x295C2 (112 bytes)
-; descriptor 267 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 267 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_267_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 72
@@ -22745,7 +23442,7 @@ ToneDB_EnvDescTable_267_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_267_ElemArray -- file 0x295C3..0x2960A (72 bytes)
 ; descriptor 267 stage 3: 9 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 267 -> this array.
 ; Evidence: 72 bytes / 8 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -22759,7 +23456,7 @@ ToneDB_EnvDescTable_267_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xFC, 0x00, 0xE0, 0x00, 0x00	; 29603  |........|
 
 ; ToneDB_EnvDescTable_268_CurveStepToElem -- file 0x2960B..0x2967A (112 bytes)
-; descriptor 268 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 268 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_268_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 72
@@ -22776,7 +23473,7 @@ ToneDB_EnvDescTable_268_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_268_ElemArray -- file 0x2967B..0x296C2 (72 bytes)
 ; descriptor 268 stage 3: 9 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 268 -> this array.
 ; Evidence: 72 bytes / 8 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -22790,7 +23487,7 @@ ToneDB_EnvDescTable_268_ElemArray:
 	.byte 0x00, 0x00, 0x00, 0xF0, 0x00, 0xE0, 0x00, 0x00	; 296BB  |........|
 
 ; ToneDB_EnvDescTable_269_CurveStepToElem -- file 0x296C3..0x29732 (112 bytes)
-; descriptor 269 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 269 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_269_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -22807,7 +23504,7 @@ ToneDB_EnvDescTable_269_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_269_ElemArray -- file 0x29733..0x29762 (48 bytes)
 ; descriptor 269 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 269 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -22819,7 +23516,7 @@ ToneDB_EnvDescTable_269_ElemArray:
 	.byte 0x90, 0xF0, 0x00, 0xFC, 0x48, 0x50, 0xD0, 0xE3, 0x00, 0xF0, 0x00, 0x00, 0x00, 0xFC, 0x00, 0xE0	; 29753  |....HP..........|
 
 ; ToneDB_EnvDescTable_270_CurveStepToElem -- file 0x29763..0x297D2 (112 bytes)
-; descriptor 270 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 270 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_270_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -22836,7 +23533,7 @@ ToneDB_EnvDescTable_270_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_270_ElemArray -- file 0x297D3..0x29802 (48 bytes)
 ; descriptor 270 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 270 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -22848,7 +23545,7 @@ ToneDB_EnvDescTable_270_ElemArray:
 	.byte 0x90, 0xE8, 0x00, 0xFC, 0x48, 0x50, 0xD0, 0xDB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0	; 297F3  |....HP..........|
 
 ; ToneDB_EnvDescTable_271_CurveStepToElem -- file 0x29803..0x29872 (112 bytes)
-; descriptor 271 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 271 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_271_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -22865,7 +23562,7 @@ ToneDB_EnvDescTable_271_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_271_ElemArray -- file 0x29873..0x2989C (42 bytes)
 ; descriptor 271 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 271 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -22877,7 +23574,7 @@ ToneDB_EnvDescTable_271_ElemArray:
 	.byte 0xD0, 0xE3, 0x00, 0xF0, 0x00, 0x00, 0x00, 0xFC, 0x00, 0xE0	; 29893  |..........|
 
 ; ToneDB_EnvDescTable_272_CurveStepToElem -- file 0x2989D..0x2990C (112 bytes)
-; descriptor 272 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 272 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_272_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -22894,7 +23591,7 @@ ToneDB_EnvDescTable_272_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_272_ElemArray -- file 0x2990D..0x29936 (42 bytes)
 ; descriptor 272 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 272 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -22906,7 +23603,7 @@ ToneDB_EnvDescTable_272_ElemArray:
 	.byte 0xD0, 0xEB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x04, 0x00, 0xE0	; 2992D  |..........|
 
 ; ToneDB_EnvDescTable_273_CurveStepToElem -- file 0x29937..0x299A6 (112 bytes)
-; descriptor 273 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 273 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_273_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -22923,7 +23620,7 @@ ToneDB_EnvDescTable_273_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_273_ElemArray -- file 0x299A7..0x299D6 (48 bytes)
 ; descriptor 273 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 273 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -22935,7 +23632,7 @@ ToneDB_EnvDescTable_273_ElemArray:
 	.byte 0x80, 0xE3, 0x00, 0xF6, 0x48, 0x50, 0xD0, 0xEB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x04, 0x00, 0xE0	; 299C7  |....HP..........|
 
 ; ToneDB_EnvDescTable_274_CurveStepToElem -- file 0x299D7..0x29A46 (112 bytes)
-; descriptor 274 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 274 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_274_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 80
@@ -22952,7 +23649,7 @@ ToneDB_EnvDescTable_274_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_274_ElemArray -- file 0x29A47..0x29A96 (80 bytes)
 ; descriptor 274 stage 3: 10 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 274 -> this array.
 ; Evidence: 80 bytes / 8 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -22966,7 +23663,7 @@ ToneDB_EnvDescTable_274_ElemArray:
 	.byte 0x48, 0x50, 0xD0, 0xE3, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFC, 0x00, 0xE0, 0x00, 0x00	; 29A87  |HP..............|
 
 ; ToneDB_EnvDescTable_275_CurveStepToElem -- file 0x29A97..0x29B06 (112 bytes)
-; descriptor 275 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 275 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_275_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 96
@@ -22983,7 +23680,7 @@ ToneDB_EnvDescTable_275_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_275_ElemArray -- file 0x29B07..0x29B66 (96 bytes)
 ; descriptor 275 stage 3: 12 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 275 -> this array.
 ; Evidence: 96 bytes / 8 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -22998,7 +23695,7 @@ ToneDB_EnvDescTable_275_ElemArray:
 	.byte 0x48, 0x50, 0xD0, 0xD7, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0xE0, 0x00, 0x00	; 29B57  |HP..............|
 
 ; ToneDB_EnvDescTable_276_CurveStepToElem -- file 0x29B67..0x29B7F (25 bytes)
-; descriptor 276 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 276 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_276_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23010,7 +23707,7 @@ ToneDB_EnvDescTable_276_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_276_ElemArray -- file 0x29B80..0x29BAF (48 bytes)
 ; descriptor 276 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 276 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23022,7 +23719,7 @@ ToneDB_EnvDescTable_276_ElemArray:
 	.byte 0x90, 0xF8, 0x00, 0xFC, 0x48, 0x50, 0xD0, 0xEB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x04, 0x00, 0xE0	; 29BA0  |....HP..........|
 
 ; ToneDB_EnvDescTable_277_CurveStepToElem -- file 0x29BB0..0x29C1F (112 bytes)
-; descriptor 277 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 277 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_277_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 64
@@ -23039,7 +23736,7 @@ ToneDB_EnvDescTable_277_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_277_ElemArray -- file 0x29C20..0x29C5F (64 bytes)
 ; descriptor 277 stage 3: 8 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 277 -> this array.
 ; Evidence: 64 bytes / 8 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23052,7 +23749,7 @@ ToneDB_EnvDescTable_277_ElemArray:
 	.byte 0x48, 0x50, 0xD0, 0xEB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0xE0, 0x00, 0x00	; 29C50  |HP..............|
 
 ; ToneDB_EnvDescTable_278_CurveStepToElem -- file 0x29C60..0x29CCF (112 bytes)
-; descriptor 278 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 278 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_278_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -23069,7 +23766,7 @@ ToneDB_EnvDescTable_278_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_278_ElemArray -- file 0x29CD0..0x29CF3 (36 bytes)
 ; descriptor 278 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 278 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -23081,7 +23778,7 @@ ToneDB_EnvDescTable_278_ElemArray:
 	.byte 0x00, 0x04, 0x00, 0xE0	; 29CF0  |....|
 
 ; ToneDB_EnvDescTable_279_CurveStepToElem -- file 0x29CF4..0x29D1A (39 bytes)
-; descriptor 279 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 279 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_279_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23094,7 +23791,7 @@ ToneDB_EnvDescTable_279_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_279_ElemArray -- file 0x29D1B..0x29D4A (48 bytes)
 ; descriptor 279 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 279 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23106,7 +23803,7 @@ ToneDB_EnvDescTable_279_ElemArray:
 	.byte 0x80, 0xD3, 0x00, 0xF6, 0x48, 0x50, 0xD0, 0xDB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0	; 29D3B  |....HP..........|
 
 ; ToneDB_EnvDescTable_280_CurveStepToElem -- file 0x29D4B..0x29DBA (112 bytes)
-; descriptor 280 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 280 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_280_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 80
@@ -23123,7 +23820,7 @@ ToneDB_EnvDescTable_280_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_280_ElemArray -- file 0x29DBB..0x29E0A (80 bytes)
 ; descriptor 280 stage 3: 10 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 280 -> this array.
 ; Evidence: 80 bytes / 8 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -23137,7 +23834,7 @@ ToneDB_EnvDescTable_280_ElemArray:
 	.byte 0x48, 0x50, 0xD0, 0xDB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0, 0x00, 0x00	; 29DFB  |HP..............|
 
 ; ToneDB_EnvDescTable_281_CurveStepToElem -- file 0x29E0B..0x29E7A (112 bytes)
-; descriptor 281 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 281 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_281_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 64
@@ -23154,7 +23851,7 @@ ToneDB_EnvDescTable_281_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_281_ElemArray -- file 0x29E7B..0x29EBA (64 bytes)
 ; descriptor 281 stage 3: 8 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 281 -> this array.
 ; Evidence: 64 bytes / 8 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23167,7 +23864,7 @@ ToneDB_EnvDescTable_281_ElemArray:
 	.byte 0x48, 0x50, 0xD0, 0xDB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0, 0x00, 0x00	; 29EAB  |HP..............|
 
 ; ToneDB_EnvDescTable_282_CurveStepToElem -- file 0x29EBB..0x29F2A (112 bytes)
-; descriptor 282 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 282 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_282_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23184,7 +23881,7 @@ ToneDB_EnvDescTable_282_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_282_ElemArray -- file 0x29F2B..0x29F5A (48 bytes)
 ; descriptor 282 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 282 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23196,7 +23893,7 @@ ToneDB_EnvDescTable_282_ElemArray:
 	.byte 0xC0, 0xE3, 0x00, 0xF9, 0x48, 0x50, 0xD0, 0xDB, 0x00, 0xF0, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE0	; 29F4B  |....HP..........|
 
 ; ToneDB_EnvDescTable_283_CurveStepToElem -- file 0x29F5B..0x29FCA (112 bytes)
-; descriptor 283 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 283 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_283_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23213,7 +23910,7 @@ ToneDB_EnvDescTable_283_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_283_ElemArray -- file 0x29FCB..0x29FFA (48 bytes)
 ; descriptor 283 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 283 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23225,7 +23922,7 @@ ToneDB_EnvDescTable_283_ElemArray:
 	.byte 0x80, 0xF4, 0x00, 0xE0, 0xB3, 0x50, 0xC0, 0xF0, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xFB, 0x00, 0xE0	; 29FEB  |.....P....*.....|
 
 ; ToneDB_EnvDescTable_284_CurveStepToElem -- file 0x29FFB..0x2A06A (112 bytes)
-; descriptor 284 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 284 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_284_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -23242,7 +23939,7 @@ ToneDB_EnvDescTable_284_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_284_ElemArray -- file 0x2A06B..0x2A0A0 (54 bytes)
 ; descriptor 284 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 284 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -23255,7 +23952,7 @@ ToneDB_EnvDescTable_284_ElemArray:
 	.byte 0x2A, 0x00, 0xE0, 0xFB, 0x00, 0xE0	; 2A09B  |*.....|
 
 ; ToneDB_EnvDescTable_285_CurveStepToElem -- file 0x2A0A1..0x2A110 (112 bytes)
-; descriptor 285 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 285 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_285_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23272,7 +23969,7 @@ ToneDB_EnvDescTable_285_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_285_ElemArray -- file 0x2A111..0x2A140 (48 bytes)
 ; descriptor 285 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 285 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23284,7 +23981,7 @@ ToneDB_EnvDescTable_285_ElemArray:
 	.byte 0x80, 0xF4, 0x00, 0xE0, 0xB3, 0x50, 0xC0, 0xF0, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xFB, 0x00, 0xE0	; 2A131  |.....P....*.....|
 
 ; ToneDB_EnvDescTable_286_CurveStepToElem -- file 0x2A141..0x2A1B0 (112 bytes)
-; descriptor 286 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 286 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_286_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -23301,7 +23998,7 @@ ToneDB_EnvDescTable_286_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_286_ElemArray -- file 0x2A1B1..0x2A1E6 (54 bytes)
 ; descriptor 286 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 286 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -23314,7 +24011,7 @@ ToneDB_EnvDescTable_286_ElemArray:
 	.byte 0x2A, 0x00, 0xE0, 0xF3, 0x00, 0xE0	; 2A1E1  |*.....|
 
 ; ToneDB_EnvDescTable_287_CurveStepToElem -- file 0x2A1E7..0x2A256 (112 bytes)
-; descriptor 287 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 287 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_287_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23331,7 +24028,7 @@ ToneDB_EnvDescTable_287_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_287_ElemArray -- file 0x2A257..0x2A286 (48 bytes)
 ; descriptor 287 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 287 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23343,7 +24040,7 @@ ToneDB_EnvDescTable_287_ElemArray:
 	.byte 0x80, 0xE4, 0x00, 0xE0, 0xB3, 0x50, 0xC0, 0xE0, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xEB, 0x00, 0xE0	; 2A277  |.....P....*.....|
 
 ; ToneDB_EnvDescTable_288_CurveStepToElem -- file 0x2A287..0x2A2F6 (112 bytes)
-; descriptor 288 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 288 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_288_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -23360,7 +24057,7 @@ ToneDB_EnvDescTable_288_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_288_ElemArray -- file 0x2A2F7..0x2A33E (72 bytes)
 ; descriptor 288 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 288 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -23374,7 +24071,7 @@ ToneDB_EnvDescTable_288_ElemArray:
 	.byte 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xF3, 0x00, 0xE0	; 2A337  |..*.....|
 
 ; ToneDB_EnvDescTable_289_CurveStepToElem -- file 0x2A33F..0x2A3AE (112 bytes)
-; descriptor 289 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 289 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_289_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 64
@@ -23391,7 +24088,7 @@ ToneDB_EnvDescTable_289_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_289_ElemArray -- file 0x2A3AF..0x2A3EE (64 bytes)
 ; descriptor 289 stage 3: 8 elements of 8 B = max(stage 2)+1, size from tag 0xC0 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 289 -> this array.
 ; Evidence: 64 bytes / 8 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23404,7 +24101,7 @@ ToneDB_EnvDescTable_289_ElemArray:
 	.byte 0xB3, 0x50, 0xC0, 0xE0, 0x00, 0xE4, 0x00, 0x00, 0x2A, 0x00, 0xE0, 0xEB, 0x00, 0xE0, 0x00, 0x00	; 2A3DF  |.P......*.......|
 
 ; ToneDB_EnvDescTable_290_CurveStepToElem -- file 0x2A3EF..0x2A45E (112 bytes)
-; descriptor 290 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 290 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_290_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23421,7 +24118,7 @@ ToneDB_EnvDescTable_290_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_290_ElemArray -- file 0x2A45F..0x2A48E (48 bytes)
 ; descriptor 290 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 290 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23433,7 +24130,7 @@ ToneDB_EnvDescTable_290_ElemArray:
 	.byte 0x90, 0xED, 0x00, 0xF4, 0xB3, 0x50, 0xC0, 0xE8, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xF3, 0x00, 0xE0	; 2A47F  |.....P....*.....|
 
 ; ToneDB_EnvDescTable_291_CurveStepToElem -- file 0x2A48F..0x2A4FE (112 bytes)
-; descriptor 291 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 291 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_291_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23450,7 +24147,7 @@ ToneDB_EnvDescTable_291_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_291_ElemArray -- file 0x2A4FF..0x2A52E (48 bytes)
 ; descriptor 291 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 291 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23462,7 +24159,7 @@ ToneDB_EnvDescTable_291_ElemArray:
 	.byte 0x90, 0xE5, 0x00, 0xF4, 0xB3, 0x50, 0xC0, 0xE0, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xE3, 0x00, 0xE0	; 2A51F  |.....P....*.....|
 
 ; ToneDB_EnvDescTable_292_CurveStepToElem -- file 0x2A52F..0x2A59E (112 bytes)
-; descriptor 292 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 292 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_292_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -23479,7 +24176,7 @@ ToneDB_EnvDescTable_292_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_292_ElemArray -- file 0x2A59F..0x2A5C8 (42 bytes)
 ; descriptor 292 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 292 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -23491,7 +24188,7 @@ ToneDB_EnvDescTable_292_ElemArray:
 	.byte 0xC0, 0xF4, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xFF, 0x00, 0xE0	; 2A5BF  |....*.....|
 
 ; ToneDB_EnvDescTable_293_CurveStepToElem -- file 0x2A5C9..0x2A638 (112 bytes)
-; descriptor 293 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 293 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_293_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -23508,7 +24205,7 @@ ToneDB_EnvDescTable_293_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_293_ElemArray -- file 0x2A639..0x2A668 (48 bytes)
 ; descriptor 293 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 293 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -23520,7 +24217,7 @@ ToneDB_EnvDescTable_293_ElemArray:
 	.byte 0x80, 0xF8, 0x00, 0xE6, 0xB3, 0x50, 0xC0, 0xF4, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xFF, 0x00, 0xE0	; 2A659  |.....P....*.....|
 
 ; ToneDB_EnvDescTable_294_CurveStepToElem -- file 0x2A669..0x2A6D8 (112 bytes)
-; descriptor 294 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 294 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_294_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -23537,7 +24234,7 @@ ToneDB_EnvDescTable_294_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_294_ElemArray -- file 0x2A6D9..0x2A702 (42 bytes)
 ; descriptor 294 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 294 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -23549,7 +24246,7 @@ ToneDB_EnvDescTable_294_ElemArray:
 	.byte 0xC0, 0xF4, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xFF, 0x00, 0xE0	; 2A6F9  |....*.....|
 
 ; ToneDB_EnvDescTable_295_CurveStepToElem -- file 0x2A703..0x2A772 (112 bytes)
-; descriptor 295 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 295 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_295_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -23566,7 +24263,7 @@ ToneDB_EnvDescTable_295_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_295_ElemArray -- file 0x2A773..0x2A7AE (60 bytes)
 ; descriptor 295 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 295 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -23579,7 +24276,7 @@ ToneDB_EnvDescTable_295_ElemArray:
 	.byte 0xB3, 0x50, 0xC0, 0xE8, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xF3, 0x00, 0xE0	; 2A7A3  |.P....*.....|
 
 ; ToneDB_EnvDescTable_296_CurveStepToElem -- file 0x2A7AF..0x2A81E (112 bytes)
-; descriptor 296 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 296 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_296_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -23596,7 +24293,7 @@ ToneDB_EnvDescTable_296_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_296_ElemArray -- file 0x2A81F..0x2A860 (66 bytes)
 ; descriptor 296 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 296 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -23610,7 +24307,7 @@ ToneDB_EnvDescTable_296_ElemArray:
 	.byte 0x00, 0xE0	; 2A85F  |..|
 
 ; ToneDB_EnvDescTable_297_CurveStepToElem -- file 0x2A861..0x2A8D0 (112 bytes)
-; descriptor 297 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 297 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_297_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -23627,7 +24324,7 @@ ToneDB_EnvDescTable_297_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_297_ElemArray -- file 0x2A8D1..0x2A8FA (42 bytes)
 ; descriptor 297 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 297 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -23639,7 +24336,7 @@ ToneDB_EnvDescTable_297_ElemArray:
 	.byte 0xC0, 0xEC, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xF7, 0x00, 0xE0	; 2A8F1  |....*.....|
 
 ; ToneDB_EnvDescTable_298_CurveStepToElem -- file 0x2A8FB..0x2A96A (112 bytes)
-; descriptor 298 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 298 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_298_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -23656,7 +24353,7 @@ ToneDB_EnvDescTable_298_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_298_ElemArray -- file 0x2A96B..0x2A994 (42 bytes)
 ; descriptor 298 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 298 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -23668,7 +24365,7 @@ ToneDB_EnvDescTable_298_ElemArray:
 	.byte 0xC0, 0xE4, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xEF, 0x00, 0xE0	; 2A98B  |....*.....|
 
 ; ToneDB_EnvDescTable_299_CurveStepToElem -- file 0x2A995..0x2AA04 (112 bytes)
-; descriptor 299 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 299 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_299_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -23685,7 +24382,7 @@ ToneDB_EnvDescTable_299_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_299_ElemArray -- file 0x2AA05..0x2AA3A (54 bytes)
 ; descriptor 299 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 299 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -23698,7 +24395,7 @@ ToneDB_EnvDescTable_299_ElemArray:
 	.byte 0x2A, 0x00, 0xE0, 0xF7, 0x00, 0xE0	; 2AA35  |*.....|
 
 ; ToneDB_EnvDescTable_300_CurveStepToElem -- file 0x2AA3B..0x2AAAA (112 bytes)
-; descriptor 300 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 300 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_300_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 5; that array is 36
@@ -23715,7 +24412,7 @@ ToneDB_EnvDescTable_300_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_300_ElemArray -- file 0x2AAAB..0x2AACE (36 bytes)
 ; descriptor 300 stage 3: 6 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 300 -> this array.
 ; Evidence: 36 bytes / 6 = 6 elements, and the stage-2 table's
 ; largest entry is 5, so 5 + 1 = 6 matches exactly.  The
@@ -23727,7 +24424,7 @@ ToneDB_EnvDescTable_300_ElemArray:
 	.byte 0xE0, 0xFB, 0x00, 0xE0	; 2AACB  |....|
 
 ; ToneDB_EnvDescTable_301_CurveStepToElem -- file 0x2AACF..0x2AB3E (112 bytes)
-; descriptor 301 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 301 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_301_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -23744,7 +24441,7 @@ ToneDB_EnvDescTable_301_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_301_ElemArray -- file 0x2AB3F..0x2AB5C (30 bytes)
 ; descriptor 301 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 301 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -23755,7 +24452,7 @@ ToneDB_EnvDescTable_301_ElemArray:
 	.byte 0x00, 0xE4, 0xB3, 0x50, 0xC0, 0xF8, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0x03, 0x00, 0xE0	; 2AB4F  |...P....*.....|
 
 ; ToneDB_EnvDescTable_302_CurveStepToElem -- file 0x2AB5D..0x2ABCC (112 bytes)
-; descriptor 302 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 302 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_302_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 4; that array is 30
@@ -23772,7 +24469,7 @@ ToneDB_EnvDescTable_302_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_302_ElemArray -- file 0x2ABCD..0x2ABEA (30 bytes)
 ; descriptor 302 stage 3: 5 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 302 -> this array.
 ; Evidence: 30 bytes / 6 = 5 elements, and the stage-2 table's
 ; largest entry is 4, so 4 + 1 = 5 matches exactly.  The
@@ -23783,7 +24480,7 @@ ToneDB_EnvDescTable_302_ElemArray:
 	.byte 0x00, 0xF0, 0xB3, 0x50, 0xC0, 0xF0, 0x00, 0xE4, 0x2A, 0x00, 0xE0, 0xFB, 0x00, 0xE0	; 2ABDD  |...P....*.....|
 
 ; ToneDB_EnvDescTable_303_CurveStepToElem -- file 0x2ABEB..0x2AC5A (112 bytes)
-; descriptor 303 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 303 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_303_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 6; that array is 42
@@ -23800,7 +24497,7 @@ ToneDB_EnvDescTable_303_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_303_ElemArray -- file 0x2AC5B..0x2AC84 (42 bytes)
 ; descriptor 303 stage 3: 7 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 303 -> this array.
 ; Evidence: 42 bytes / 6 = 7 elements, and the stage-2 table's
 ; largest entry is 6, so 6 + 1 = 7 matches exactly.  The
@@ -23812,7 +24509,7 @@ ToneDB_EnvDescTable_303_ElemArray:
 	.byte 0xF0, 0xF1, 0x00, 0xF6, 0xC8, 0x50, 0x00, 0xFA, 0x00, 0xFA	; 2AC7B  |.....P....|
 
 ; ToneDB_EnvDescTable_304_CurveStepToElem -- file 0x2AC85..0x2ACF4 (112 bytes)
-; descriptor 304 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 304 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_304_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -23829,7 +24526,7 @@ ToneDB_EnvDescTable_304_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_304_ElemArray -- file 0x2ACF5..0x2AD30 (60 bytes)
 ; descriptor 304 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 304 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -23842,7 +24539,7 @@ ToneDB_EnvDescTable_304_ElemArray:
 	.byte 0xC7, 0x50, 0x00, 0xF2, 0x00, 0xFA, 0xC8, 0x50, 0x00, 0xF2, 0x00, 0xFA	; 2AD25  |.P.....P....|
 
 ; ToneDB_EnvDescTable_305_CurveStepToElem -- file 0x2AD31..0x2AD49 (25 bytes)
-; descriptor 305 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 305 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_305_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 9; that array is 60
@@ -23854,7 +24551,7 @@ ToneDB_EnvDescTable_305_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_305_ElemArray -- file 0x2AD4A..0x2AD85 (60 bytes)
 ; descriptor 305 stage 3: 10 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 305 -> this array.
 ; Evidence: 60 bytes / 6 = 10 elements, and the stage-2 table's
 ; largest entry is 9, so 9 + 1 = 10 matches exactly.  The
@@ -23867,7 +24564,7 @@ ToneDB_EnvDescTable_305_ElemArray:
 	.byte 0xD8, 0x20, 0x00, 0xFC, 0x00, 0xFD, 0xC8, 0x50, 0x00, 0xEA, 0x00, 0xFA	; 2AD7A  |. .....P....|
 
 ; ToneDB_EnvDescTable_306_CurveStepToElem -- file 0x2AD86..0x2AD9E (25 bytes)
-; descriptor 306 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 306 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_306_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -23879,7 +24576,7 @@ ToneDB_EnvDescTable_306_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_306_ElemArray -- file 0x2AD9F..0x2ADD4 (54 bytes)
 ; descriptor 306 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 306 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -23892,7 +24589,7 @@ ToneDB_EnvDescTable_306_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xEA, 0x00, 0xFA	; 2ADCF  |.P....|
 
 ; ToneDB_EnvDescTable_307_CurveStepToElem -- file 0x2ADD5..0x2ADED (25 bytes)
-; descriptor 307 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 307 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_307_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -23904,7 +24601,7 @@ ToneDB_EnvDescTable_307_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_307_ElemArray -- file 0x2ADEE..0x2AE2F (66 bytes)
 ; descriptor 307 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 307 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -23918,7 +24615,7 @@ ToneDB_EnvDescTable_307_ElemArray:
 	.byte 0x00, 0xFA	; 2AE2E  |..|
 
 ; ToneDB_EnvDescTable_308_CurveStepToElem -- file 0x2AE30..0x2AE9F (112 bytes)
-; descriptor 308 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 308 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_308_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -23935,7 +24632,7 @@ ToneDB_EnvDescTable_308_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_308_ElemArray -- file 0x2AEA0..0x2AEE1 (66 bytes)
 ; descriptor 308 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 308 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -23949,7 +24646,7 @@ ToneDB_EnvDescTable_308_ElemArray:
 	.byte 0x00, 0xFA	; 2AEE0  |..|
 
 ; ToneDB_EnvDescTable_309_CurveStepToElem -- file 0x2AEE2..0x2AEFA (25 bytes)
-; descriptor 309 stage 2: ToneDB_DescCurve_1 step -> element, 21 entries = max(curve)+1
+; descriptor 309 stage 2: ToneDB_DescCurve_Step6 step -> element, 21 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_309_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -23961,7 +24658,7 @@ ToneDB_EnvDescTable_309_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_309_ElemArray -- file 0x2AEFB..0x2AF30 (54 bytes)
 ; descriptor 309 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_1[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step6[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 309 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -23974,7 +24671,7 @@ ToneDB_EnvDescTable_309_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xEA, 0x00, 0xFA	; 2AF2B  |.P....|
 
 ; ToneDB_EnvDescTable_310_CurveStepToElem -- file 0x2AF31..0x2AFA0 (112 bytes)
-; descriptor 310 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 310 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_310_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 11; that array is 72
@@ -23991,7 +24688,7 @@ ToneDB_EnvDescTable_310_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_310_ElemArray -- file 0x2AFA1..0x2AFE8 (72 bytes)
 ; descriptor 310 stage 3: 12 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 310 -> this array.
 ; Evidence: 72 bytes / 6 = 12 elements, and the stage-2 table's
 ; largest entry is 11, so 11 + 1 = 12 matches exactly.  The
@@ -24005,7 +24702,7 @@ ToneDB_EnvDescTable_310_ElemArray:
 	.byte 0x00, 0xFD, 0xC8, 0x50, 0x00, 0xEA, 0x00, 0xFA	; 2AFE1  |...P....|
 
 ; ToneDB_EnvDescTable_311_CurveStepToElem -- file 0x2AFE9..0x2B00F (39 bytes)
-; descriptor 311 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 311 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_311_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -24018,7 +24715,7 @@ ToneDB_EnvDescTable_311_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_311_ElemArray -- file 0x2B010..0x2B045 (54 bytes)
 ; descriptor 311 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 311 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -24031,7 +24728,7 @@ ToneDB_EnvDescTable_311_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xEE, 0x00, 0xFA	; 2B040  |.P....|
 
 ; ToneDB_EnvDescTable_312_CurveStepToElem -- file 0x2B046..0x2B06C (39 bytes)
-; descriptor 312 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 312 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_312_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 7; that array is 48
@@ -24044,7 +24741,7 @@ ToneDB_EnvDescTable_312_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_312_ElemArray -- file 0x2B06D..0x2B09C (48 bytes)
 ; descriptor 312 stage 3: 8 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 312 -> this array.
 ; Evidence: 48 bytes / 6 = 8 elements, and the stage-2 table's
 ; largest entry is 7, so 7 + 1 = 8 matches exactly.  The
@@ -24056,7 +24753,7 @@ ToneDB_EnvDescTable_312_ElemArray:
 	.byte 0x00, 0x06, 0x00, 0xFB, 0xCA, 0x20, 0x00, 0xF8, 0x00, 0xFE, 0xC8, 0x50, 0x00, 0xEE, 0x00, 0xFA	; 2B08D  |..... .....P....|
 
 ; ToneDB_EnvDescTable_313_CurveStepToElem -- file 0x2B09D..0x2B0C3 (39 bytes)
-; descriptor 313 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 313 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_313_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -24069,7 +24766,7 @@ ToneDB_EnvDescTable_313_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_313_ElemArray -- file 0x2B0C4..0x2B105 (66 bytes)
 ; descriptor 313 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 313 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -24083,7 +24780,7 @@ ToneDB_EnvDescTable_313_ElemArray:
 	.byte 0x00, 0xFA	; 2B104  |..|
 
 ; ToneDB_EnvDescTable_314_CurveStepToElem -- file 0x2B106..0x2B12C (39 bytes)
-; descriptor 314 stage 2: ToneDB_DescCurve_3 step -> element, 35 entries = max(curve)+1
+; descriptor 314 stage 2: ToneDB_DescCurve_Step3 step -> element, 35 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_314_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 8; that array is 54
@@ -24096,7 +24793,7 @@ ToneDB_EnvDescTable_314_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_314_ElemArray -- file 0x2B12D..0x2B162 (54 bytes)
 ; descriptor 314 stage 3: 9 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_3[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step3[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 314 -> this array.
 ; Evidence: 54 bytes / 6 = 9 elements, and the stage-2 table's
 ; largest entry is 8, so 8 + 1 = 9 matches exactly.  The
@@ -24109,7 +24806,7 @@ ToneDB_EnvDescTable_314_ElemArray:
 	.byte 0xC8, 0x50, 0x00, 0xFA, 0x00, 0xFA	; 2B15D  |.P....|
 
 ; ToneDB_EnvDescTable_315_CurveStepToElem -- file 0x2B163..0x2B1D2 (112 bytes)
-; descriptor 315 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 315 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_315_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 2; that array is 18
@@ -24126,7 +24823,7 @@ ToneDB_EnvDescTable_315_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_315_ElemArray -- file 0x2B1D3..0x2B1E4 (18 bytes)
 ; descriptor 315 stage 3: 3 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 315 -> this array.
 ; Evidence: 18 bytes / 6 = 3 elements, and the stage-2 table's
 ; largest entry is 2, so 2 + 1 = 3 matches exactly.  The
@@ -24137,7 +24834,7 @@ ToneDB_EnvDescTable_315_ElemArray:
 	.byte 0x00, 0xFA	; 2B1E3  |..|
 
 ; ToneDB_EnvDescTable_316_CurveStepToElem -- file 0x2B1E5..0x2B254 (112 bytes)
-; descriptor 316 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1
+; descriptor 316 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_316_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 10; that array is 66
@@ -24154,7 +24851,7 @@ ToneDB_EnvDescTable_316_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_316_ElemArray -- file 0x2B255..0x2B296 (66 bytes)
 ; descriptor 316 stage 3: 11 elements of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 316 -> this array.
 ; Evidence: 66 bytes / 6 = 11 elements, and the stage-2 table's
 ; largest entry is 10, so 10 + 1 = 11 matches exactly.  The
@@ -24168,7 +24865,7 @@ ToneDB_EnvDescTable_316_ElemArray:
 	.byte 0x00, 0xFA	; 2B295  |..|
 
 ; ToneDB_EnvDescTable_317_CurveStepToElem -- file 0x2B297..0x2B2A5 (15 bytes)
-; descriptor 317 stage 2: ToneDB_DescCurve_0 step -> element, 11 entries = max(curve)+1
+; descriptor 317 stage 2: ToneDB_DescCurve_Step12 step -> element, 11 entries = max(curve)+1
 ; Its entries index ToneDB_EnvDescTable_317_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -24179,7 +24876,7 @@ ToneDB_EnvDescTable_317_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_317_ElemArray -- file 0x2B2A6..0x2B2AB (6 bytes)
 ; descriptor 317 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_0[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step12[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable, entry 317 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -36664,7 +37361,8 @@ PercInst_503_SlapShot:
 ; The same 43-byte record is the second per-element array of every tone
 ; record and the tail of ToneDB_DefaultLayerParams.
 ; KN5000 label at the same directory slot: ToneDB_PercMixerDefaultTable.
-; ⚠ Field meanings NOT established, and ⚠ CORRECTED in wave 7 round 2:
+; ⚠ Field meanings NOT established -- EXCEPT +0x0B, which wave 7 round 5
+; identified as a 6-bit preset number; see below.  And ⚠ CORRECTED in round 2:
 ; the leading 7F 7F 7F and the 7D 80 54 at +0x0D are NOT in every record.
 ; Counted over this array, first record to last: 203 of 208 start 7F 7F 7F
 ; and 158 of 208 carry 7D 80 54 at +0x0D.  The earlier text said 'every
@@ -36703,424 +37401,2509 @@ PercInst_503_SlapShot:
 ; which is where round 2's `7D 80 54 at +0x0D` sits: at the first byte the
 ; loop touches.  notes/prom_d_documentation_round3.py Q4h decodes all
 ; twelve instructions from prom_c's ROM bytes.
-; ⚠ NOT established: what any of the 43 bytes means, or what the head/tail
-; split is FOR.
+; 
+; ★★ AND IN ROUND 5 THAT ROUTINE ANSWERED THE QUESTION THIS LINE USED TO
+; REFUSE.  ⚠ CORRECTED: this paragraph ended `NOT established: what any of
+; the 43 bytes means, or what the head/tail split is FOR`, and BOTH halves
+; of that sentence are now wrong.  The same routine begins by reading the
+; field it is about to compute an index from:
+;     0xFBC72B  ld C,0x2b             43, the record length
+;     0xFBC72D  mul BC,(XIZ+0x0a)     * the caller's record number
+;     0xFBC738  add XBC,0x000087d2    => the DESTINATION record, in RAM
+;     0xFBC741  ld A,(XBC+0x0b)       ★ its field +0x0B
+;     0xFBC744  and A,0x3f            ★ the LOW 6 BITS
+;     0xFBC74C  cp WA,0 / jr NZ       0 takes a different arm entirely
+;     0xFBC7C3  mul XIY,(XIZ+0xf2)    ★ that value INDEXES the +0x3C array
+;     0xFBC7D6  ld (XWA+0x0b),H       the chosen record's own +0x0B, back
+;     0xFBC7D9..0xFBC805              then bytes 13..42, copied over
+; So FIELD +0x0B IS A 6-BIT PRESET NUMBER: 0 means `not from that array`
+; (prom_c builds the tail from a live RAM block at 0x1523 instead,
+; 0xFBC750-0xFBC7A7) and 1..63 name one of the 64 records of
+; ToneDB_WaveSelTailPresets, which then supplies this record's +0x0B and
+; its whole 30-byte tail.  The 13/30 split is therefore not a curiosity:
+; the tail is exactly what a preset REPLACES.
+; 
+; ★ AND THE ARRAY CONFIRMS IT WITHOUT THE CODE.  Its own record N carries N
+; in the low 6 bits of its own +0x0B, 63 of 64 -- the exception is record 0,
+; which holds 1 and which that routine can never select because index 0
+; takes the other arm.  28 of the 64 also set bit 6, which `and A,0x3f`
+; strips; without the mask those 28 would index past the array's end.  The
+; same self-index test scores 2 of 322 on the +0x18 array and 1 of 208 on
+; +0x20, so it is specific and not an artefact.  round 5 Q7.
+; 
+; ⚠ STILL NOT ESTABLISHED: any of bytes 0..10 or byte 12, and what a preset
+; SOUNDS like -- nothing here reads audio state.
+; 
+; ★ WHY EVERY RECORD BELOW IS `_207` AND NOT A NAME -- round 5 asked the
+; question directly instead of leaving it implied.
+; 
+;   1. THE RECORD CARRIES NO NAME.  Round 4 named 778 tone and drum records
+;      from their own ASCII fields.  These have none: over all 208 records
+;      the widest run of printable bytes anywhere in a record is 4, against
+;      the 13 bytes of the narrowest name field this image uses.  No column
+;      is printable in every record.  The test is not blind -- run on the
+;      208-row catalogue at slot +0x8C it finds 14 printable columns of 16.
+; 
+;   2. AND THIS ARRAY IS THE ONE THAT LOOKED NAMEABLE, WHICH IS WHY THE
+;      REFUSAL IS WORTH STATING.  Two independent proposals exist for it:
+;        (a) POSITIONAL -- ToneDB_PercSourceNameList1 at slot +0x8C holds
+;            exactly 208 rows, the same count as this array;
+;        (b) BY CONTENT -- 196 of these 208 records are byte-identical to
+;            the LAST 43 BYTES of one of the 504 drum-instrument records
+;            at slot +0x78 (150-byte stride, so bytes +107..+149), and
+;            106 of them to exactly ONE such record, whose own 13-byte
+;            name would then be the obvious label.
+;      Where both proposals exist and are unique they AGREE IN ONLY 45 OF
+;      106.  Two derivations that contradict each other are better evidence
+;      than either alone, and what they are evidence FOR is that neither
+;      may be used: a name taken from either source would be wrong 61
+;      times in 106.  So both are refused and the index stands.
+;      ⚠ The byte overlap itself is real and is NOT retracted -- it is a
+;      fact about the image worth having.  What is refused is naming an
+;      object after a different object that happens to hold equal bytes.
+; 
+;   3. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
+;      THIS array with an index whose meaning is known -- exactly what
+;      round 5 Q7 found for the array at slot +0x3C and did NOT find here.
+;      Round 3's census of 99 directory reads found no reader for slot
+;      +0x20 at all.
+;   notes/prom_d_understanding_round5.py Q1a, Q4c, Q4d.
 ; ==========================================================================
 ToneDB_PercMixerDefaultTable:
+
+; ToneDB_PercMixerDefaultTable_000 -- file 0x416AC..0x416D6
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_000_Silent.
+; Evidence: drum-instrument record 0 at file 0x2EF5C, its
+; bytes +107..+149 (file 0x2EFC7..0x2EFF1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_000:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 416AC  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_001 -- file 0x416D7..0x41701
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_001_SquareClick.
+; Evidence: drum-instrument record 1 at file 0x2EFF2, its
+; bytes +107..+149 (file 0x2F05D..0x2F087), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_001:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 416D7  |....A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_002 -- file 0x41702..0x4172C
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_002_RockBassDrm.
+; Evidence: drum-instrument record 2 at file 0x2F088, its
+; bytes +107..+149 (file 0x2F0F3..0x2F11D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_002:
 	.byte 0x7F, 0x7F, 0x7F, 0x01, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41702  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_003 -- file 0x4172D..0x41757
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_003_RoomBassDrm1, PercInst_004_RoomBassDrm2.
+; Evidence: drum-instrument record 3 at file 0x2F11E, its
+; bytes +107..+149 (file 0x2F189..0x2F1B3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_003:
 	.byte 0x7F, 0x7F, 0x7F, 0x02, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4172D  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_004 -- file 0x41758..0x41782
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_005_JazzBassDrm1, PercInst_006_JazzBassDrm2.
+; Evidence: drum-instrument record 5 at file 0x2F24A, its
+; bytes +107..+149 (file 0x2F2B5..0x2F2DF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_004:
 	.byte 0x7F, 0x7F, 0x7F, 0x03, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41758  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_005 -- file 0x41783..0x417AD
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_007_TradBassDrm1, PercInst_008_TradBassDrm2.
+; Evidence: drum-instrument record 7 at file 0x2F376, its
+; bytes +107..+149 (file 0x2F3E1..0x2F40B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_005:
 	.byte 0x7F, 0x7F, 0x7F, 0x04, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41783  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_006 -- file 0x417AE..0x417D8
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_009_LtRockBassDrm.
+; Evidence: drum-instrument record 9 at file 0x2F4A2, its
+; bytes +107..+149 (file 0x2F50D..0x2F537), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_006:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 417AE  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_007 -- file 0x417D9..0x41803
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_007:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 417D9  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_008 -- file 0x41804..0x4182E
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_010_PowerBassDrm1, PercInst_011_PowerBassDrm2.
+; Evidence: drum-instrument record 10 at file 0x2F538, its
+; bytes +107..+149 (file 0x2F5A3..0x2F5CD), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_008:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41804  |....A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_009 -- file 0x4182F..0x41859
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_009:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x96, 0x8A, 0x54, 0xF1, 0x0F, 0x01, 0x32, 0x64, 0xA8, 0x39, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05, 0xA8, 0x39, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05	; 4182F  |....@.@.@.@....T...2d.9.........9d.........|
+
+; ToneDB_PercMixerDefaultTable_010 -- file 0x4185A..0x41884
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_012_ModelBassDrm1.
+; Evidence: drum-instrument record 12 at file 0x2F664, its
+; bytes +107..+149 (file 0x2F6CF..0x2F6F9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_010:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x96, 0x8A, 0x54, 0xF1, 0x0F, 0x01, 0x32, 0x64, 0xA8, 0x39, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05, 0xA8, 0x39, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05	; 4185A  |....A.@.@.@....T...2d.9.........9d.........|
+
+; ToneDB_PercMixerDefaultTable_011 -- file 0x41885..0x418AF
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_013_HouseBassDrm.
+; Evidence: drum-instrument record 13 at file 0x2F6FA, its
+; bytes +107..+149 (file 0x2F765..0x2F78F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_011:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41885  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_012 -- file 0x418B0..0x418DA
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_014_SoulBassDrm1.
+; Evidence: drum-instrument record 14 at file 0x2F790, its
+; bytes +107..+149 (file 0x2F7FB..0x2F825), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_012:
 	.byte 0x7F, 0x7F, 0x7F, 0x08, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 418B0  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_013 -- file 0x418DB..0x41905
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_015_DanceBassDrm.
+; Evidence: drum-instrument record 15 at file 0x2F826, its
+; bytes +107..+149 (file 0x2F891..0x2F8BB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_013:
 	.byte 0x7F, 0x7F, 0x7F, 0x09, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 418DB  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_014 -- file 0x41906..0x41930
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_016_ElectBassDrm1, PercInst_017_ElectBassDrm2.
+; Evidence: drum-instrument record 16 at file 0x2F8BC, its
+; bytes +107..+149 (file 0x2F927..0x2F951), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_014:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41906  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_015 -- file 0x41931..0x4195B
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_018_ModelBassDrm2.
+; Evidence: drum-instrument record 18 at file 0x2F9E8, its
+; bytes +107..+149 (file 0x2FA53..0x2FA7D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_015:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x7D, 0x87, 0x54, 0x00, 0x00, 0x01, 0x5F, 0x64, 0x25, 0x1B, 0xEC, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xDC, 0xA6, 0x25, 0x1B, 0x64, 0xEC, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xDC, 0xA6	; 41931  |....@.@.@.@@.}.T..._d%.........%.d.........|
+
+; ToneDB_PercMixerDefaultTable_016 -- file 0x4195C..0x41986
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_019_FunkBassDrm.
+; Evidence: drum-instrument record 19 at file 0x2FA7E, its
+; bytes +107..+149 (file 0x2FAE9..0x2FB13), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_016:
 	.byte 0x7F, 0x7F, 0x7F, 0x0B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4195C  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_017 -- file 0x41987..0x419B1
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_020_OrchBassDrm1, PercInst_021_OrchBassDrm2, PercInst_022_OrchBassDrm3.
+; Evidence: drum-instrument record 20 at file 0x2FB14, its
+; bytes +107..+149 (file 0x2FB7F..0x2FBA9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_017:
 	.byte 0x7F, 0x7F, 0x7F, 0x0C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41987  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_018 -- file 0x419B2..0x419DC
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_023_RockSnare1.
+; Evidence: drum-instrument record 23 at file 0x2FCD6, its
+; bytes +107..+149 (file 0x2FD41..0x2FD6B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_018:
 	.byte 0x6E, 0x7F, 0x7F, 0x0D, 0x40, 0x0D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 419B2  |n...@.A.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_019 -- file 0x419DD..0x41A07
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_025_RoomSnare1.
+; Evidence: drum-instrument record 25 at file 0x2FE02, its
+; bytes +107..+149 (file 0x2FE6D..0x2FE97), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_019:
 	.byte 0x64, 0x73, 0x7F, 0x0E, 0x40, 0x0E, 0x41, 0x0E, 0x42, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 419DD  |ds..@.A.B.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_020 -- file 0x41A08..0x41A32
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_027_ModelSnare4.
+; Evidence: drum-instrument record 27 at file 0x2FF2E, its
+; bytes +107..+149 (file 0x2FF99..0x2FFC3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_020:
 	.byte 0x64, 0x73, 0x7F, 0x0E, 0x40, 0x0E, 0x41, 0x0E, 0x42, 0x00, 0x40, 0x40, 0x07, 0x96, 0x82, 0x54, 0xFE, 0x0A, 0x86, 0x64, 0x64, 0xA8, 0x43, 0xE2, 0xE2, 0x80, 0xFF, 0xDE, 0x00, 0xE9, 0x03, 0xA8, 0x43, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0xE9, 0x03	; 41A08  |ds..@.A.B.@@...T...dd.C.........Cd.........|
+
+; ToneDB_PercMixerDefaultTable_021 -- file 0x41A33..0x41A5D
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_028_JazzSnare.
+; Evidence: drum-instrument record 28 at file 0x2FFC4, its
+; bytes +107..+149 (file 0x3002F..0x30059), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_021:
 	.byte 0x6E, 0x7F, 0x7F, 0x0F, 0x40, 0x0F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41A33  |n...@.A.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_022 -- file 0x41A5E..0x41A88
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_029_TradSnare.
+; Evidence: drum-instrument record 29 at file 0x3005A, its
+; bytes +107..+149 (file 0x300C5..0x300EF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_022:
 	.byte 0x7F, 0x7F, 0x7F, 0x10, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41A5E  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_023 -- file 0x41A89..0x41AB3
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_030_LtRockSnare1, PercInst_031_LtRockSnare2.
+; Evidence: drum-instrument record 30 at file 0x300F0, its
+; bytes +107..+149 (file 0x3015B..0x30185), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_023:
 	.byte 0x7F, 0x7F, 0x7F, 0x11, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41A89  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_024 -- file 0x41AB4..0x41ADE
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_024:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41AB4  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_025 -- file 0x41ADF..0x41B09
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_032_PowerSnare1, PercInst_033_PowerSnare2.
+; Evidence: drum-instrument record 32 at file 0x3021C, its
+; bytes +107..+149 (file 0x30287..0x302B1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_025:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41ADF  |....A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_026 -- file 0x41B0A..0x41B34
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_026:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0xAA, 0x8A, 0x54, 0xF6, 0x14, 0x86, 0x50, 0x64, 0x9E, 0x2F, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB, 0x9E, 0x2F, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB	; 41B0A  |....@.@.@.@@...T...Pd./........./d.........|
+
+; ToneDB_PercMixerDefaultTable_027 -- file 0x41B35..0x41B5F
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_034_ModelSnare1, PercInst_035_ModelSnare2.
+; Evidence: drum-instrument record 34 at file 0x30348, its
+; bytes +107..+149 (file 0x303B3..0x303DD), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_027:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0xAA, 0x8A, 0x54, 0xF6, 0x14, 0x86, 0x50, 0x64, 0x9E, 0x2F, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB, 0x9E, 0x2F, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB	; 41B35  |....A.@.@.@@...T...Pd./........./d.........|
+
+; ToneDB_PercMixerDefaultTable_028 -- file 0x41B60..0x41B8A
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_036_HouseSnare1, PercInst_037_HouseSnare2.
+; Evidence: drum-instrument record 36 at file 0x30474, its
+; bytes +107..+149 (file 0x304DF..0x30509), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_028:
 	.byte 0x7F, 0x7F, 0x7F, 0x13, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41B60  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_029 -- file 0x41B8B..0x41BB5
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_038_SoulSnare1, PercInst_039_SoulSnare2.
+; Evidence: drum-instrument record 38 at file 0x305A0, its
+; bytes +107..+149 (file 0x3060B..0x30635), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_029:
 	.byte 0x7F, 0x7F, 0x7F, 0x14, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41B8B  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_030 -- file 0x41BB6..0x41BE0
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_040_DanceSnare1, PercInst_041_DanceSnare2.
+; Evidence: drum-instrument record 40 at file 0x306CC, its
+; bytes +107..+149 (file 0x30737..0x30761), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_030:
 	.byte 0x7F, 0x7F, 0x7F, 0x15, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41BB6  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_031 -- file 0x41BE1..0x41C0B
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_042_ElectSnare1, PercInst_043_ElectSnare2.
+; Evidence: drum-instrument record 42 at file 0x307F8, its
+; bytes +107..+149 (file 0x30863..0x3088D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_031:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41BE1  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_032 -- file 0x41C0C..0x41C36
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_044_ModelSnare3.
+; Evidence: drum-instrument record 44 at file 0x30924, its
+; bytes +107..+149 (file 0x3098F..0x309B9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_032:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x7D, 0x8A, 0x54, 0xF6, 0x14, 0x80, 0x27, 0x64, 0xA1, 0x2F, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xEA, 0xC8, 0xA1, 0x2F, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEA, 0xC8	; 41C0C  |....@.@.@.@@.}.T...'d./........./d.........|
+
+; ToneDB_PercMixerDefaultTable_033 -- file 0x41C37..0x41C61
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_045_FunkSnare1, PercInst_046_FunkSnare2, PercInst_047_SynthRim.
+; Evidence: drum-instrument record 45 at file 0x309BA, its
+; bytes +107..+149 (file 0x30A25..0x30A4F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_033:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41C37  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_034 -- file 0x41C62..0x41C8C
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_048_AnalogSnare.
+; Evidence: drum-instrument record 48 at file 0x30B7C, its
+; bytes +107..+149 (file 0x30BE7..0x30C11), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_034:
 	.byte 0x7F, 0x7F, 0x7F, 0x18, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41C62  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_035 -- file 0x41C8D..0x41CB7
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_049_PiccoloSnare.
+; Evidence: drum-instrument record 49 at file 0x30C12, its
+; bytes +107..+149 (file 0x30C7D..0x30CA7), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_035:
 	.byte 0x7F, 0x7F, 0x7F, 0x19, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41C8D  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_036 -- file 0x41CB8..0x41CE2
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_050_OrchSnare1, PercInst_051_OrchSnare2, PercInst_052_OrchSnare3.
+; Evidence: drum-instrument record 50 at file 0x30CA8, its
+; bytes +107..+149 (file 0x30D13..0x30D3D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_036:
 	.byte 0x7F, 0x7F, 0x7F, 0x1A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41CB8  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_037 -- file 0x41CE3..0x41D0D
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_053_ReverseSnare1, PercInst_054_ReverseSnare2, PercInst_055_ReverseSnare3.
+; Evidence: drum-instrument record 53 at file 0x30E6A, its
+; bytes +107..+149 (file 0x30ED5..0x30EFF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_037:
 	.byte 0x7F, 0x7F, 0x7F, 0x1B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41CE3  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_038 -- file 0x41D0E..0x41D38
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_056_SynRevSnare, PercInst_057_SynthSnare3.
+; Evidence: drum-instrument record 56 at file 0x3102C, its
+; bytes +107..+149 (file 0x31097..0x310C1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_038:
 	.byte 0x7F, 0x7F, 0x7F, 0x1C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D0E  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_039 -- file 0x41D39..0x41D63
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_058_BrushLong.
+; Evidence: drum-instrument record 58 at file 0x31158, its
+; bytes +107..+149 (file 0x311C3..0x311ED), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_039:
 	.byte 0x7F, 0x7F, 0x7F, 0x1D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D39  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_040 -- file 0x41D64..0x41D8E
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_059_BrushHit.
+; Evidence: drum-instrument record 59 at file 0x311EE, its
+; bytes +107..+149 (file 0x31259..0x31283), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_040:
 	.byte 0x7F, 0x7F, 0x7F, 0x1D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D64  |....A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_041 -- file 0x41D8F..0x41DB9
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_060_BrushShort.
+; Evidence: drum-instrument record 60 at file 0x31284, its
+; bytes +107..+149 (file 0x312EF..0x31319), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_041:
 	.byte 0x7F, 0x7F, 0x7F, 0x1E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D8F  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_042 -- file 0x41DBA..0x41DE4
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_061_RockRim, PercInst_062_MetronomeClik.
+; Evidence: drum-instrument record 61 at file 0x3131A, its
+; bytes +107..+149 (file 0x31385..0x313AF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_042:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41DBA  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_043 -- file 0x41DE5..0x41E0F
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_043:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xC8, 0xC6, 0x54, 0x0E, 0x0A, 0x80, 0x7F, 0x64, 0x99, 0x25, 0xCE, 0xE2, 0x80, 0x00, 0x00, 0x00, 0x0B, 0x32, 0xDA, 0x33, 0x64, 0xCE, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x32	; 41DE5  |....@.@.@.@....T....d.%.......2.3d........2|
+
+; ToneDB_PercMixerDefaultTable_044 -- file 0x41E10..0x41E3A
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_065_SoulRim.
+; Evidence: drum-instrument record 65 at file 0x31572, its
+; bytes +107..+149 (file 0x315DD..0x31607), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_044:
 	.byte 0x7F, 0x7F, 0x7F, 0x20, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E10  |... @.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_045 -- file 0x41E3B..0x41E65
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_066_DanceRim.
+; Evidence: drum-instrument record 66 at file 0x31608, its
+; bytes +107..+149 (file 0x31673..0x3169D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_045:
 	.byte 0x7F, 0x7F, 0x7F, 0x21, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E3B  |...!@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_046 -- file 0x41E66..0x41E90
+; The last 43 bytes of 10 drum-instrument records are these
+; bytes exactly: PercInst_067_RockTom1, PercInst_068_RockTom2, PercInst_069_RockTom3, PercInst_070_RockTomHigh.  (+6 more)
+; Evidence: drum-instrument record 67 at file 0x3169E, its
+; bytes +107..+149 (file 0x31709..0x31733), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_046:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E66  |..."@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_047 -- file 0x41E91..0x41EBB
+; The last 43 bytes of 8 drum-instrument records are these
+; bytes exactly: PercInst_077_JazzTom1, PercInst_078_JazzTom2, PercInst_079_JazzTom3, PercInst_080_JazzTomHigh.  (+4 more)
+; Evidence: drum-instrument record 77 at file 0x31C7A, its
+; bytes +107..+149 (file 0x31CE5..0x31D0F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_047:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E91  |..."D.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_048 -- file 0x41EBC..0x41EE6
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_085_RockBassTomHi, PercInst_086_RockBassTomLo.
+; Evidence: drum-instrument record 85 at file 0x3212A, its
+; bytes +107..+149 (file 0x32195..0x321BF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_048:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41EBC  |...#@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_049 -- file 0x41EE7..0x41F11
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_087_JazzBassTomHi, PercInst_088_JazzBassTomLo, PercInst_089_BrushBassTomH, PercInst_090_BrushBassTomL.
+; Evidence: drum-instrument record 87 at file 0x32256, its
+; bytes +107..+149 (file 0x322C1..0x322EB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_049:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41EE7  |...#D.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_050 -- file 0x41F12..0x41F3C
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_050:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41F12  |...$@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_051 -- file 0x41F3D..0x41F67
+; The last 43 bytes of 11 drum-instrument records are these
+; bytes exactly: PercInst_091_PowerTom1, PercInst_092_PowerTom2, PercInst_093_PowerTom3, PercInst_094_PowerTom4.  (+7 more)
+; Evidence: drum-instrument record 91 at file 0x324AE, its
+; bytes +107..+149 (file 0x32519..0x32543), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_051:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41F3D  |...$A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_052 -- file 0x41F68..0x41F92
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_052:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x87, 0x8A, 0x54, 0xFA, 0x0A, 0x80, 0x5A, 0x64, 0xAC, 0x43, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D, 0xAC, 0x43, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 41F68  |...$@.@.@.@@...T...Zd.C.........Cd.........|
+
+; ToneDB_PercMixerDefaultTable_053 -- file 0x41F93..0x41FBD
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_102_ModelingTom1, PercInst_103_ModelingTom2, PercInst_104_ModelingTom3, PercInst_105_ModelingTomHi.
+; Evidence: drum-instrument record 102 at file 0x32B20, its
+; bytes +107..+149 (file 0x32B8B..0x32BB5), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_053:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x87, 0x8A, 0x54, 0xFA, 0x0A, 0x80, 0x5A, 0x64, 0xAC, 0x43, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D, 0xAC, 0x43, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 41F93  |...$A.@.@.@@...T...Zd.C.........Cd.........|
+
+; ToneDB_PercMixerDefaultTable_054 -- file 0x41FBE..0x41FE8
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_106_PowerBassTomH, PercInst_107_PowerBassTomL, PercInst_110_RoomBassTomHi, PercInst_111_RoomBassTomLo.
+; Evidence: drum-instrument record 106 at file 0x32D78, its
+; bytes +107..+149 (file 0x32DE3..0x32E0D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_054:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41FBE  |...%@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_055 -- file 0x41FE9..0x42013
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_108_ModelBassTomH, PercInst_109_ModelBassTomL.
+; Evidence: drum-instrument record 108 at file 0x32EA4, its
+; bytes +107..+149 (file 0x32F0F..0x32F39), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_055:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x8C, 0x86, 0x54, 0xFA, 0x0A, 0x86, 0x5A, 0x64, 0xB2, 0x43, 0xD8, 0xE2, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5, 0xB2, 0x43, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5	; 41FE9  |...%@.@.@.@@...T...Zd.C.........Cd.........|
+
+; ToneDB_PercMixerDefaultTable_056 -- file 0x42014..0x4203E
+; The last 43 bytes of 11 drum-instrument records are these
+; bytes exactly: PercInst_112_ElectricTom1, PercInst_113_ElectricTom2, PercInst_114_ElectricTom3, PercInst_115_ElectricTom4.  (+7 more)
+; Evidence: drum-instrument record 112 at file 0x330FC, its
+; bytes +107..+149 (file 0x33167..0x33191), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_056:
 	.byte 0x7F, 0x7F, 0x7F, 0x26, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42014  |...&@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_057 -- file 0x4203F..0x42069
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_125_ElectBassTomH, PercInst_126_ElectBassTomL, PercInst_127_SynOrchSnare.
+; Evidence: drum-instrument record 125 at file 0x3389A, its
+; bytes +107..+149 (file 0x33905..0x3392F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_057:
 	.byte 0x7F, 0x7F, 0x7F, 0x27, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4203F  |...'@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_058 -- file 0x4206A..0x42094
+; The last 43 bytes of 11 drum-instrument records are these
+; bytes exactly: PercInst_128_SoulTom1, PercInst_129_SoulTom2, PercInst_130_SoulTom3, PercInst_131_SoulTomHigh.  (+7 more)
+; Evidence: drum-instrument record 128 at file 0x33A5C, its
+; bytes +107..+149 (file 0x33AC7..0x33AF1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_058:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4206A  |...(@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_059 -- file 0x42095..0x420BF
+; The last 43 bytes of 7 drum-instrument records are these
+; bytes exactly: PercInst_139_SoulBassTomH, PercInst_140_SoulBassTomL, PercInst_141_HouseBassTomH, PercInst_142_HouseBassTomL.  (+3 more)
+; Evidence: drum-instrument record 139 at file 0x340CE, its
+; bytes +107..+149 (file 0x34139..0x34163), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_059:
 	.byte 0x7F, 0x7F, 0x7F, 0x29, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42095  |...)@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_060 -- file 0x420C0..0x420EA
+; The last 43 bytes of 6 drum-instrument records are these
+; bytes exactly: PercInst_146_DanceTom1, PercInst_147_DanceTom2, PercInst_148_DanceTom3, PercInst_149_DanceTomHigh.  (+2 more)
+; Evidence: drum-instrument record 146 at file 0x344E8, its
+; bytes +107..+149 (file 0x34553..0x3457D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_060:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 420C0  |...*@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_061 -- file 0x420EB..0x42115
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_152_HiHatClosed1.
+; Evidence: drum-instrument record 152 at file 0x3486C, its
+; bytes +107..+149 (file 0x348D7..0x34901), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_061:
 	.byte 0x64, 0x7F, 0x7F, 0x2B, 0x40, 0x2B, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 420EB  |d..+@+A.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_062 -- file 0x42116..0x42140
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_164_ModelHHClose1, PercInst_165_ModelHHClose2.
+; Evidence: drum-instrument record 164 at file 0x34F74, its
+; bytes +107..+149 (file 0x34FDF..0x35009), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_062:
 	.byte 0x7F, 0x7F, 0x7F, 0x2B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xEC, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 42116  |...+@.@.@.@..x.T....d(@........(@d.........|
+
+; ToneDB_PercMixerDefaultTable_063 -- file 0x42141..0x4216B
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_166_DanceHHClose1, PercInst_167_DanceHHClose2.
+; Evidence: drum-instrument record 166 at file 0x350A0, its
+; bytes +107..+149 (file 0x3510B..0x35135), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_063:
 	.byte 0x7F, 0x7F, 0x7F, 0x2C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42141  |...,@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_064 -- file 0x4216C..0x42196
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_168_SynHHClose1, PercInst_169_SynHHClose2, PercInst_170_SynHHAccent, PercInst_171_SynHHPedal.
+; Evidence: drum-instrument record 168 at file 0x351CC, its
+; bytes +107..+149 (file 0x35237..0x35261), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_064:
 	.byte 0x7F, 0x7F, 0x7F, 0x2D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4216C  |...-@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_065 -- file 0x42197..0x421C1
+; The last 43 bytes of 12 drum-instrument records are these
+; bytes exactly: PercInst_172_HiHatOpen1, PercInst_173_HiHatOpen2, PercInst_174_HiHatOpen3, PercInst_175_HiHatOpen4.  (+8 more)
+; Evidence: drum-instrument record 172 at file 0x35424, its
+; bytes +107..+149 (file 0x3548F..0x354B9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_065:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42197  |....@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_066 -- file 0x421C2..0x421EC
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_184_ModelHHOpen, PercInst_185_ModelHHHfOpn.
+; Evidence: drum-instrument record 184 at file 0x35B2C, its
+; bytes +107..+149 (file 0x35B97..0x35BC1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_066:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xF6, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 421C2  |....@.@.@.@..x.T....d(@........(@d.........|
+
+; ToneDB_PercMixerDefaultTable_067 -- file 0x421ED..0x42217
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_186_DanceHHOpen.
+; Evidence: drum-instrument record 186 at file 0x35C58, its
+; bytes +107..+149 (file 0x35CC3..0x35CED), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_067:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 421ED  |.../@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_068 -- file 0x42218..0x42242
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_187_SynthHHOpen, PercInst_188_SynHHHfOpen.
+; Evidence: drum-instrument record 187 at file 0x35CEE, its
+; bytes +107..+149 (file 0x35D59..0x35D83), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_068:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42218  |...0@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_069 -- file 0x42243..0x4226D
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_189_HiHatPedal1, PercInst_190_HiHatPedal2, PercInst_191_HiHatPedal3, PercInst_192_HiHatPedal4.
+; Evidence: drum-instrument record 189 at file 0x35E1A, its
+; bytes +107..+149 (file 0x35E85..0x35EAF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_069:
 	.byte 0x7F, 0x7F, 0x7F, 0x31, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42243  |...1@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_070 -- file 0x4226E..0x42298
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_193_ModelHHPedal.
+; Evidence: drum-instrument record 193 at file 0x36072, its
+; bytes +107..+149 (file 0x360DD..0x36107), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_070:
 	.byte 0x7F, 0x7F, 0x7F, 0x31, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xEC, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 4226E  |...1@.@.@.@..x.T....d(@........(@d.........|
+
+; ToneDB_PercMixerDefaultTable_071 -- file 0x42299..0x422C3
+; The last 43 bytes of 6 drum-instrument records are these
+; bytes exactly: PercInst_194_HiHatAccent1, PercInst_195_HiHatAccent2, PercInst_196_HiHatAccent3, PercInst_197_HiHatAccent4.  (+2 more)
+; Evidence: drum-instrument record 194 at file 0x36108, its
+; bytes +107..+149 (file 0x36173..0x3619D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_071:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42299  |...2@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_072 -- file 0x422C4..0x422EE
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_200_ModelHHAccent.
+; Evidence: drum-instrument record 200 at file 0x3648C, its
+; bytes +107..+149 (file 0x364F7..0x36521), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_072:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xEC, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 422C4  |...2@.@.@.@..x.T....d(@........(@d.........|
+
+; ToneDB_PercMixerDefaultTable_073 -- file 0x422EF..0x42319
+; The last 43 bytes of 7 drum-instrument records are these
+; bytes exactly: PercInst_201_CrashCymbal1, PercInst_202_CrashCymbal2, PercInst_203_CrashCymbal3, PercInst_204_CrashCymbal4.  (+3 more)
+; Evidence: drum-instrument record 201 at file 0x36522, its
+; bytes +107..+149 (file 0x3658D..0x365B7), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_073:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 422EF  |...3@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_074 -- file 0x4231A..0x42344
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_074:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x7B, 0x9E, 0x54, 0xFA, 0x0A, 0x01, 0x7F, 0x64, 0x24, 0x7F, 0xDD, 0x00, 0x80, 0xFD, 0x24, 0x00, 0xF0, 0xF4, 0x3E, 0x7F, 0x64, 0xD0, 0x00, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0xFC, 0xEF	; 4231A  |...3@.@.@.@@.{.T....d$.....$...>.d.........|
+
+; ToneDB_PercMixerDefaultTable_075 -- file 0x42345..0x4236F
+; The last 43 bytes of 6 drum-instrument records are these
+; bytes exactly: PercInst_210_CrashCymbal5, PercInst_211_CrashCymbal6, PercInst_212_CrashCymbal7, PercInst_213_CrashCymbal8.  (+2 more)
+; Evidence: drum-instrument record 210 at file 0x36A68, its
+; bytes +107..+149 (file 0x36AD3..0x36AFD), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_075:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42345  |...3D.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_076 -- file 0x42370..0x4239A
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_076:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x96, 0xA8, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x26, 0x00, 0xE7, 0x00, 0x80, 0x01, 0xB4, 0x00, 0x14, 0x00, 0x0D, 0x4D, 0x64, 0xE7, 0x00, 0x00, 0x80, 0x03, 0x98, 0x00, 0x1C, 0x00	; 42370  |...3D.@.@.@@...T....d&..........Md.........|
+
+; ToneDB_PercMixerDefaultTable_077 -- file 0x4239B..0x423C5
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_216_MdlCrashCym2.
+; Evidence: drum-instrument record 216 at file 0x36DEC, its
+; bytes +107..+149 (file 0x36E57..0x36E81), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_077:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x06, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x80, 0x7F, 0x74, 0x32, 0x60, 0xE2, 0x00, 0x80, 0x03, 0x43, 0x00, 0x2A, 0x03, 0x32, 0x50, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x01, 0xB4, 0x00, 0x3A, 0x1B	; 4239B  |...3D.@.@.@@.}.T....t2`....C.*.2Pd.......:.|
+
+; ToneDB_PercMixerDefaultTable_078 -- file 0x423C6..0x423F0
+; The last 43 bytes of 5 drum-instrument records are these
+; bytes exactly: PercInst_217_SplashCymbal1, PercInst_218_SplashCymbal2, PercInst_219_SplashCymbal3, PercInst_220_SplashCymbal4.  (+1 more)
+; Evidence: drum-instrument record 217 at file 0x36E82, its
+; bytes +107..+149 (file 0x36EED..0x36F17), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_078:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 423C6  |...4@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_079 -- file 0x423F1..0x4241B
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_079:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x7D, 0x8A, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x40, 0x60, 0xEC, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0x24, 0x03, 0x40, 0x50, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0x38, 0x1B	; 423F1  |...4@.@.@.@@.}.T....d@`......$.@Pd.......8.|
+
+; ToneDB_PercMixerDefaultTable_080 -- file 0x4241C..0x42446
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_222_MdlSplashCym.
+; Evidence: drum-instrument record 222 at file 0x37170, its
+; bytes +107..+149 (file 0x371DB..0x37205), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_080:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x06, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x74, 0x40, 0x60, 0xEC, 0x00, 0x80, 0x03, 0x98, 0x00, 0x00, 0x53, 0x40, 0x50, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x04, 0xCD, 0x00, 0x10, 0x6F	; 4241C  |...4@.@.@.@@.}.T....t@`.......S@Pd........o|
+
+; ToneDB_PercMixerDefaultTable_081 -- file 0x42447..0x42471
+; The last 43 bytes of 5 drum-instrument records are these
+; bytes exactly: PercInst_223_ChinaCymbal1, PercInst_224_ChinaCymbal2, PercInst_225_ChinaCymbal3, PercInst_226_ChinaCymbal4.  (+1 more)
+; Evidence: drum-instrument record 223 at file 0x37206, its
+; bytes +107..+149 (file 0x37271..0x3729B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_081:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42447  |...5@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_082 -- file 0x42472..0x4249C
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_082:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x7D, 0xB8, 0x54, 0xEC, 0x0A, 0x80, 0x7F, 0x64, 0x40, 0x60, 0xEC, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0x18, 0x03, 0x40, 0x50, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0x28, 0x1B	; 42472  |...5@.@.@.@@.}.T....d@`........@Pd.......(.|
+
+; ToneDB_PercMixerDefaultTable_083 -- file 0x4249D..0x424C7
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_228_ModelChinaCym.
+; Evidence: drum-instrument record 228 at file 0x374F4, its
+; bytes +107..+149 (file 0x3755F..0x37589), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_083:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x02, 0x7D, 0xB8, 0x54, 0xEC, 0x0A, 0x80, 0x7F, 0x64, 0x40, 0x60, 0xEC, 0x00, 0x80, 0x01, 0x43, 0x00, 0xFA, 0x53, 0x40, 0x50, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x0A, 0x6F	; 4249D  |...5@.@.@.@@.}.T....d@`....C..S@Pd........o|
+
+; ToneDB_PercMixerDefaultTable_084 -- file 0x424C8..0x424F2
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_229_OrchCymbal1, PercInst_230_OrchCymbal2.
+; Evidence: drum-instrument record 229 at file 0x3758A, its
+; bytes +107..+149 (file 0x375F5..0x3761F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_084:
 	.byte 0x7F, 0x7F, 0x7F, 0x36, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 424C8  |...6@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_085 -- file 0x424F3..0x4251D
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_231_SynOrchCymbal.
+; Evidence: drum-instrument record 231 at file 0x376B6, its
+; bytes +107..+149 (file 0x37721..0x3774B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_085:
 	.byte 0x7F, 0x7F, 0x7F, 0x36, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 424F3  |...6A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_086 -- file 0x4251E..0x42548
+; The last 43 bytes of 10 drum-instrument records are these
+; bytes exactly: PercInst_232_RideCymbal1, PercInst_233_RideCymbal2, PercInst_234_RideCymbal3, PercInst_235_RideCymbal4.  (+6 more)
+; Evidence: drum-instrument record 232 at file 0x3774C, its
+; bytes +107..+149 (file 0x377B7..0x377E1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_086:
 	.byte 0x7F, 0x7F, 0x7F, 0x37, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4251E  |...7@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_087 -- file 0x42549..0x42573
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_242_ModelRideCym2.
+; Evidence: drum-instrument record 242 at file 0x37D28, its
+; bytes +107..+149 (file 0x37D93..0x37DBD), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_087:
 	.byte 0x7F, 0x7F, 0x7F, 0x37, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x99, 0xA8, 0x54, 0xF2, 0x1A, 0x01, 0x7F, 0x64, 0x28, 0x00, 0xE1, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF0, 0xD4, 0x28, 0x00, 0x64, 0xE1, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCC	; 42549  |...7@.@.@.@....T....d(.........(.d.........|
+
+; ToneDB_PercMixerDefaultTable_088 -- file 0x42574..0x4259E
+; The last 43 bytes of 7 drum-instrument records are these
+; bytes exactly: PercInst_243_RideCymbal8, PercInst_244_RideCymbal9, PercInst_245_RideCymbal10, PercInst_246_RideCymbal11.  (+3 more)
+; Evidence: drum-instrument record 243 at file 0x37DBE, its
+; bytes +107..+149 (file 0x37E29..0x37E53), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_088:
 	.byte 0x7F, 0x7F, 0x7F, 0x38, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42574  |...8@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_089 -- file 0x4259F..0x425C9
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_250_ModelRideCym1.
+; Evidence: drum-instrument record 250 at file 0x381D8, its
+; bytes +107..+149 (file 0x38243..0x3826D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_089:
 	.byte 0x7F, 0x7F, 0x7F, 0x38, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x96, 0xBC, 0x54, 0x0A, 0x14, 0x80, 0x46, 0x64, 0x28, 0x25, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xF6, 0xEB, 0x28, 0x25, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF6, 0xEB	; 4259F  |...8@.@.@.@@...T...Fd(%........(%d.........|
+
+; ToneDB_PercMixerDefaultTable_090 -- file 0x425CA..0x425F4
+; The last 43 bytes of 11 drum-instrument records are these
+; bytes exactly: PercInst_251_RideBell1, PercInst_252_RideBell2, PercInst_253_RideBell3, PercInst_254_RideBell4.  (+7 more)
+; Evidence: drum-instrument record 251 at file 0x3826E, its
+; bytes +107..+149 (file 0x382D9..0x38303), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_090:
 	.byte 0x7F, 0x7F, 0x7F, 0x39, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 425CA  |...9@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_091 -- file 0x425F5..0x4261F
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_262_ModelRideBell.
+; Evidence: drum-instrument record 262 at file 0x388E0, its
+; bytes +107..+149 (file 0x3894B..0x38975), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_091:
 	.byte 0x7F, 0x7F, 0x7F, 0x39, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x85, 0x9E, 0x54, 0xF6, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x29, 0xEE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF6, 0x11, 0x28, 0x29, 0x64, 0xEE, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF5, 0xF4	; 425F5  |...9@.@.@.@....T....d()........()d.........|
+
+; ToneDB_PercMixerDefaultTable_092 -- file 0x42620..0x4264A
+; The last 43 bytes of 5 drum-instrument records are these
+; bytes exactly: PercInst_263_ReverseCymbl1, PercInst_264_ReverseCymbl2, PercInst_265_ReverseCymbl3, PercInst_266_ReverseCymbl4.  (+1 more)
+; Evidence: drum-instrument record 263 at file 0x38976, its
+; bytes +107..+149 (file 0x389E1..0x38A0B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_092:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42620  |...:@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_093 -- file 0x4264B..0x42675
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_268_AgogoLow, PercInst_269_AgogoHigh, PercInst_270_SynthAgogoLo, PercInst_271_SynthAgogoHi.
+; Evidence: drum-instrument record 268 at file 0x38C64, its
+; bytes +107..+149 (file 0x38CCF..0x38CF9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_093:
 	.byte 0x7F, 0x7F, 0x7F, 0x3B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4264B  |...;@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_094 -- file 0x42676..0x426A0
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_272_ModelAgogoLo, PercInst_273_ModelAgogoHi.
+; Evidence: drum-instrument record 272 at file 0x38EBC, its
+; bytes +107..+149 (file 0x38F27..0x38F51), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_094:
 	.byte 0x7F, 0x7F, 0x7F, 0x3B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x64, 0x8A, 0x54, 0x14, 0x0A, 0x80, 0x7F, 0x64, 0xBC, 0x61, 0x1E, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14, 0xBC, 0x61, 0x64, 0x1E, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14	; 42676  |...;@.@.@.@..d.T....d.a.........ad.........|
+
+; ToneDB_PercMixerDefaultTable_095 -- file 0x426A1..0x426CB
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_274_SleighBell.
+; Evidence: drum-instrument record 274 at file 0x38FE8, its
+; bytes +107..+149 (file 0x39053..0x3907D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_095:
 	.byte 0x7F, 0x7F, 0x7F, 0x3C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 426A1  |...<@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_096 -- file 0x426CC..0x426F6
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_275_MdlSleighBel.
+; Evidence: drum-instrument record 275 at file 0x3907E, its
+; bytes +107..+149 (file 0x390E9..0x39113), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_096:
 	.byte 0x7F, 0x7F, 0x7F, 0x3C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xA1, 0xFF, 0x54, 0xEC, 0x0A, 0x01, 0x7F, 0x64, 0x3C, 0x7F, 0xE7, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x23, 0x3C, 0x7F, 0x64, 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x13, 0xE7	; 426CC  |...<@.@.@.@....T....d<........#<.d.........|
+
+; ToneDB_PercMixerDefaultTable_097 -- file 0x426F7..0x42721
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_276_Cowbell1, PercInst_277_Cowbell2, PercInst_278_Cowbell3, PercInst_279_Cowbell4.
+; Evidence: drum-instrument record 276 at file 0x39114, its
+; bytes +107..+149 (file 0x3917F..0x391A9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_097:
 	.byte 0x7F, 0x7F, 0x7F, 0x3D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 426F7  |...=@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_098 -- file 0x42722..0x4274C
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_280_ModelCowbell1, PercInst_281_ModelCowbell2, PercInst_282_ModelCowbell3, PercInst_283_ModelCowbell4.
+; Evidence: drum-instrument record 280 at file 0x3936C, its
+; bytes +107..+149 (file 0x393D7..0x39401), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_098:
 	.byte 0x7F, 0x7F, 0x7F, 0x3D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x1E, 0xC6, 0x54, 0x32, 0x0A, 0x01, 0x7F, 0x64, 0x41, 0x4D, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF9, 0xF6, 0x24, 0x7F, 0x64, 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 42722  |...=@.@.@.@....T2...dAM........$.d.........|
+
+; ToneDB_PercMixerDefaultTable_099 -- file 0x4274D..0x42777
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_284_WindChime, PercInst_285_SynWindChime.
+; Evidence: drum-instrument record 284 at file 0x395C4, its
+; bytes +107..+149 (file 0x3962F..0x39659), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_099:
 	.byte 0x7F, 0x7F, 0x7F, 0x3E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4274D  |...>@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_100 -- file 0x42778..0x427A2
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_286_MdlWindChime.
+; Evidence: drum-instrument record 286 at file 0x396F0, its
+; bytes +107..+149 (file 0x3975B..0x39785), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_100:
 	.byte 0x7F, 0x7F, 0x7F, 0x3E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xA1, 0xFF, 0x54, 0xEC, 0x0A, 0x01, 0x7F, 0x64, 0x40, 0x7F, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF8, 0x23, 0x40, 0x7F, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x0F, 0xE7	; 42778  |...>@.@.@.@....T....d@........#@.d.........|
+
+; ToneDB_PercMixerDefaultTable_101 -- file 0x427A3..0x427CD
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_287_TriangleOpen, PercInst_288_SynTriangleO, PercInst_289_MetalHitLow, PercInst_290_MetalHitHi.
+; Evidence: drum-instrument record 287 at file 0x39786, its
+; bytes +107..+149 (file 0x397F1..0x3981B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_101:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 427A3  |...?@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_102 -- file 0x427CE..0x427F8
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_291_MdlTriangleO.
+; Evidence: drum-instrument record 291 at file 0x399DE, its
+; bytes +107..+149 (file 0x39A49..0x39A73), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_102:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xA1, 0xFF, 0x54, 0xEC, 0x0A, 0x01, 0x7F, 0x64, 0x53, 0x7F, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x29, 0x51, 0x7F, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0xED	; 427CE  |...?@.@.@.@....T....dS........)Q.d.........|
+
+; ToneDB_PercMixerDefaultTable_103 -- file 0x427F9..0x42823
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_292_TriangleMute, PercInst_293_SynTriangleM, PercInst_294_SynTimbPaila.
+; Evidence: drum-instrument record 292 at file 0x39A74, its
+; bytes +107..+149 (file 0x39ADF..0x39B09), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_103:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 427F9  |...?A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_104 -- file 0x42824..0x4284E
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_295_MdlTriangleM.
+; Evidence: drum-instrument record 295 at file 0x39C36, its
+; bytes +107..+149 (file 0x39CA1..0x39CCB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_104:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x8E, 0xFF, 0x54, 0xEC, 0x0A, 0x01, 0x7F, 0x64, 0x39, 0x7F, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x29, 0x37, 0x7F, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0xED	; 42824  |...?A.@.@.@....T....d9........)7.d.........|
+
+; ToneDB_PercMixerDefaultTable_105 -- file 0x4284F..0x42879
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_296_SmallBell.
+; Evidence: drum-instrument record 296 at file 0x39CCC, its
+; bytes +107..+149 (file 0x39D37..0x39D61), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_105:
 	.byte 0x7F, 0x7F, 0x7F, 0x40, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4284F  |...@@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_106 -- file 0x4287A..0x428A4
+; NO drum-instrument record carries these bytes -- one of the
+; 12 records of this array with no carrier at all, against 196
+; that have one.  round 5 Q4c.
 ToneDB_PercMixerDefaultTable_106:
 	.byte 0x7F, 0x7F, 0x7F, 0x40, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4287A  |...@A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_107 -- file 0x428A5..0x428CF
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_297_FingerCymbal, PercInst_298_FingerCymH, PercInst_299_FingerCymL.
+; Evidence: drum-instrument record 297 at file 0x39D62, its
+; bytes +107..+149 (file 0x39DCD..0x39DF7), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_107:
 	.byte 0x7F, 0x7F, 0x7F, 0x6A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 428A5  |...j@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_108 -- file 0x428D0..0x428FA
+; The last 43 bytes of 24 drum-instrument records are these
+; bytes exactly: PercInst_300_TublarBellC, PercInst_301_TublarBellC, PercInst_302_TublarBellD, PercInst_303_TublarBellD.  (+20 more)
+; Evidence: drum-instrument record 300 at file 0x39F24, its
+; bytes +107..+149 (file 0x39F8F..0x39FB9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_108:
 	.byte 0x7F, 0x7F, 0x7F, 0x41, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x1E, 0x01, 0x7F, 0x64, 0x00, 0x58, 0xD8, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58, 0x64, 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 428D0  |...A@.@.@.@..}.T....d.X.........Xd.........|
+
+; ToneDB_PercMixerDefaultTable_109 -- file 0x428FB..0x42925
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_324_BongoMute1, PercInst_325_SynSmalCongaL, PercInst_326_SynSmalCongaH.
+; Evidence: drum-instrument record 324 at file 0x3AD34, its
+; bytes +107..+149 (file 0x3AD9F..0x3ADC9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_109:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 428FB  |...B@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_110 -- file 0x42926..0x42950
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_327_BongoMute2.
+; Evidence: drum-instrument record 327 at file 0x3AEF6, its
+; bytes +107..+149 (file 0x3AF61..0x3AF8B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_110:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42926  |...BA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_111 -- file 0x42951..0x4297B
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_328_BongoMute3.
+; Evidence: drum-instrument record 328 at file 0x3AF8C, its
+; bytes +107..+149 (file 0x3AFF7..0x3B021), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_111:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42951  |...BB.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_112 -- file 0x4297C..0x429A6
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_329_BongoHigh.
+; Evidence: drum-instrument record 329 at file 0x3B022, its
+; bytes +107..+149 (file 0x3B08D..0x3B0B7), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_112:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4297C  |...BC.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_113 -- file 0x429A7..0x429D1
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_330_ModelBongoH.
+; Evidence: drum-instrument record 330 at file 0x3B0B8, its
+; bytes +107..+149 (file 0x3B123..0x3B14D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_113:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x5D, 0x9E, 0x54, 0x09, 0x28, 0x01, 0x7F, 0x64, 0x23, 0x7A, 0x15, 0xCE, 0x80, 0x00, 0x00, 0x00, 0xFF, 0xFB, 0x32, 0x27, 0x64, 0xF2, 0xE8, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0x04	; 429A7  |...BC.@.@.@..].T.(..d#z........2'd.........|
+
+; ToneDB_PercMixerDefaultTable_114 -- file 0x429D2..0x429FC
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_331_ModelBongoL.
+; Evidence: drum-instrument record 331 at file 0x3B14E, its
+; bytes +107..+149 (file 0x3B1B9..0x3B1E3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_114:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xFF, 0x54, 0xF3, 0x0A, 0x01, 0x7F, 0x64, 0x25, 0x27, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x25, 0x27, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 429D2  |...BC.@.@.@....T....d%'........%'d.........|
+
+; ToneDB_PercMixerDefaultTable_115 -- file 0x429FD..0x42A27
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_332_BongoLow.
+; Evidence: drum-instrument record 332 at file 0x3B1E4, its
+; bytes +107..+149 (file 0x3B24F..0x3B279), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_115:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 429FD  |...BD.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_116 -- file 0x42A28..0x42A52
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_333_CongaMuteOn.
+; Evidence: drum-instrument record 333 at file 0x3B27A, its
+; bytes +107..+149 (file 0x3B2E5..0x3B30F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_116:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42A28  |...C@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_117 -- file 0x42A53..0x42A7D
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_334_CongaMuteOff.
+; Evidence: drum-instrument record 334 at file 0x3B310, its
+; bytes +107..+149 (file 0x3B37B..0x3B3A5), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_117:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42A53  |...CA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_118 -- file 0x42A7E..0x42AA8
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_335_CongaMutCrash.
+; Evidence: drum-instrument record 335 at file 0x3B3A6, its
+; bytes +107..+149 (file 0x3B411..0x3B43B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_118:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42A7E  |...CB.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_119 -- file 0x42AA9..0x42AD3
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_336_MdlCngMtCrash.
+; Evidence: drum-instrument record 336 at file 0x3B43C, its
+; bytes +107..+149 (file 0x3B4A7..0x3B4D1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_119:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x8F, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x1E, 0x3F, 0xF2, 0xE1, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05, 0x1E, 0x3F, 0x64, 0xF2, 0xE1, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 42AA9  |...CB.@.@.@..}.T....d.?.........?d.........|
+
+; ToneDB_PercMixerDefaultTable_120 -- file 0x42AD4..0x42AFE
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_337_CongaHigh, PercInst_338_SmallCongaHi, PercInst_339_Click1, PercInst_340_Click2.
+; Evidence: drum-instrument record 337 at file 0x3B4D2, its
+; bytes +107..+149 (file 0x3B53D..0x3B567), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_120:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42AD4  |...CC.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_121 -- file 0x42AFF..0x42B29
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_341_CongaLow, PercInst_342_SmallCongaLo, PercInst_343_SynthBassDrm3, PercInst_344_SteamWhistle.
+; Evidence: drum-instrument record 341 at file 0x3B72A, its
+; bytes +107..+149 (file 0x3B795..0x3B7BF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_121:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42AFF  |...CD.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_122 -- file 0x42B2A..0x42B54
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_345_ModelCongaHi, PercInst_346_ModelCongaLo, PercInst_347_MdlsmallCngHi, PercInst_348_MdlsmallCngLo.
+; Evidence: drum-instrument record 345 at file 0x3B982, its
+; bytes +107..+149 (file 0x3B9ED..0x3BA17), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_122:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xFF, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x30, 0x44, 0xE7, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6, 0x30, 0x44, 0x64, 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 42B2A  |...CD.@.@.@....T....d0D........0Dd.........|
+
+; ToneDB_PercMixerDefaultTable_123 -- file 0x42B55..0x42B7F
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_349_CongaCrash.
+; Evidence: drum-instrument record 349 at file 0x3BBDA, its
+; bytes +107..+149 (file 0x3BC45..0x3BC6F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_123:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x45, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42B55  |...CE.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_124 -- file 0x42B80..0x42BAA
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_350_TimbalesOpenL, PercInst_351_TimbalesOpenH.
+; Evidence: drum-instrument record 350 at file 0x3BC70, its
+; bytes +107..+149 (file 0x3BCDB..0x3BD05), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_124:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42B80  |...D@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_125 -- file 0x42BAB..0x42BD5
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_352_ModelTimbOpnL, PercInst_353_ModelTimbOpnH.
+; Evidence: drum-instrument record 352 at file 0x3BD9C, its
+; bytes +107..+149 (file 0x3BE07..0x3BE31), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_125:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0xC8, 0x35, 0x54, 0xF1, 0x0A, 0x80, 0x7F, 0x64, 0x3C, 0x23, 0xE2, 0xCE, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8, 0x3C, 0x23, 0x64, 0xE2, 0xCE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8	; 42BAB  |...D@.@.@.@...5T....d<#........<#d.........|
+
+; ToneDB_PercMixerDefaultTable_126 -- file 0x42BD6..0x42C00
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_354_TimblsOpenRim.
+; Evidence: drum-instrument record 354 at file 0x3BEC8, its
+; bytes +107..+149 (file 0x3BF33..0x3BF5D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_126:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42BD6  |...DA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_127 -- file 0x42C01..0x42C2B
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_355_MdlTimbOpenRm.
+; Evidence: drum-instrument record 355 at file 0x3BF5E, its
+; bytes +107..+149 (file 0x3BFC9..0x3BFF3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_127:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x64, 0x8A, 0x54, 0xF6, 0x0A, 0x01, 0x7F, 0x64, 0x32, 0x33, 0xE6, 0xD2, 0x80, 0x00, 0x00, 0x00, 0xEE, 0x28, 0x32, 0x33, 0x64, 0xE6, 0xD2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEE, 0x28	; 42C01  |...DA.@.@.@..d.T....d23.......(23d........(|
+
+; ToneDB_PercMixerDefaultTable_128 -- file 0x42C2C..0x42C56
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_356_SynTimbOpenLo, PercInst_357_SynTimbOpenRm, PercInst_358_SynTimbOpenHi.
+; Evidence: drum-instrument record 356 at file 0x3BFF4, its
+; bytes +107..+149 (file 0x3C05F..0x3C089), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_128:
 	.byte 0x7F, 0x7F, 0x7F, 0x45, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42C2C  |...E@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_129 -- file 0x42C57..0x42C81
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_359_BataDrumSlap.
+; Evidence: drum-instrument record 359 at file 0x3C1B6, its
+; bytes +107..+149 (file 0x3C221..0x3C24B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_129:
 	.byte 0x7F, 0x7F, 0x7F, 0x65, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42C57  |...e@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_130 -- file 0x42C82..0x42CAC
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_360_BataDrumOpen.
+; Evidence: drum-instrument record 360 at file 0x3C24C, its
+; bytes +107..+149 (file 0x3C2B7..0x3C2E1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_130:
 	.byte 0x7F, 0x7F, 0x7F, 0x65, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42C82  |...eA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_131 -- file 0x42CAD..0x42CD7
+; The last 43 bytes of 24 drum-instrument records are these
+; bytes exactly: PercInst_361_TimpaniC, PercInst_362_TimpaniC, PercInst_363_TimpaniD, PercInst_364_TimpaniD.  (+20 more)
+; Evidence: drum-instrument record 361 at file 0x3C2E2, its
+; bytes +107..+149 (file 0x3C34D..0x3C377), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_131:
 	.byte 0x7F, 0x7F, 0x7F, 0x46, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x06, 0x7F, 0x64, 0x37, 0x27, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0xDE, 0x37, 0x27, 0x64, 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 42CAD  |...F@.@.@.@..}.T....d7'........7'd.........|
+
+; ToneDB_PercMixerDefaultTable_132 -- file 0x42CD8..0x42D02
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_385_CuicaHigh, PercInst_386_LittleDog.
+; Evidence: drum-instrument record 385 at file 0x3D0F2, its
+; bytes +107..+149 (file 0x3D15D..0x3D187), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_132:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42CD8  |...G@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_133 -- file 0x42D03..0x42D2D
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_387_MdlCuicaHi.
+; Evidence: drum-instrument record 387 at file 0x3D21E, its
+; bytes +107..+149 (file 0x3D289..0x3D2B3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_133:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0xEE, 0x32, 0x54, 0x0A, 0x0F, 0x01, 0x7F, 0x64, 0x51, 0x60, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x4C, 0x51, 0x60, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x4C	; 42D03  |...G@.@.@.@...2T....dQ`.......LQ`d........L|
+
+; ToneDB_PercMixerDefaultTable_134 -- file 0x42D2E..0x42D58
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_388_CuicaLow, PercInst_389_Bullfrog.
+; Evidence: drum-instrument record 388 at file 0x3D2B4, its
+; bytes +107..+149 (file 0x3D31F..0x3D349), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_134:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42D2E  |...GA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_135 -- file 0x42D59..0x42D83
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_390_MdlCuicaLow.
+; Evidence: drum-instrument record 390 at file 0x3D3E0, its
+; bytes +107..+149 (file 0x3D44B..0x3D475), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_135:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0xEE, 0x32, 0x54, 0x0A, 0x0F, 0x01, 0x7F, 0x64, 0x51, 0x60, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCB, 0x51, 0x60, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCB	; 42D59  |...GA.@.@.@...2T....dQ`........Q`d.........|
+
+; ToneDB_PercMixerDefaultTable_136 -- file 0x42D84..0x42DAE
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_391_GuiroLong1, PercInst_392_GuiroLong2, PercInst_393_HeartBeat.
+; Evidence: drum-instrument record 391 at file 0x3D476, its
+; bytes +107..+149 (file 0x3D4E1..0x3D50B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_136:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42D84  |...H@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_137 -- file 0x42DAF..0x42DD9
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_394_MdlGuiroLong.
+; Evidence: drum-instrument record 394 at file 0x3D638, its
+; bytes +107..+149 (file 0x3D6A3..0x3D6CD), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_137:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xE0, 0xB2, 0x54, 0xE2, 0x14, 0x80, 0x7F, 0x64, 0x3C, 0x39, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x04, 0x00, 0x3C, 0x39, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x04, 0x00	; 42DAF  |...H@.@.@.@....T....d<9........<9d.........|
+
+; ToneDB_PercMixerDefaultTable_138 -- file 0x42DDA..0x42E04
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_395_GuiroShort1, PercInst_396_GuiroShort2.
+; Evidence: drum-instrument record 395 at file 0x3D6CE, its
+; bytes +107..+149 (file 0x3D739..0x3D763), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_138:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42DDA  |...HA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_139 -- file 0x42E05..0x42E2F
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_397_MdlGuiroShort.
+; Evidence: drum-instrument record 397 at file 0x3D7FA, its
+; bytes +107..+149 (file 0x3D865..0x3D88F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_139:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xE0, 0xB2, 0x54, 0xE2, 0x14, 0x01, 0x7F, 0x64, 0x3C, 0x39, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x08, 0x00, 0x3C, 0x39, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x08, 0x00	; 42E05  |...HA.@.@.@....T....d<9........<9d.........|
+
+; ToneDB_PercMixerDefaultTable_140 -- file 0x42E30..0x42E5A
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_398_HandClaps.
+; Evidence: drum-instrument record 398 at file 0x3D890, its
+; bytes +107..+149 (file 0x3D8FB..0x3D925), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_140:
 	.byte 0x7F, 0x7F, 0x7F, 0x49, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42E30  |...I@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_141 -- file 0x42E5B..0x42E85
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_399_MdlHandClaps.
+; Evidence: drum-instrument record 399 at file 0x3D926, its
+; bytes +107..+149 (file 0x3D991..0x3D9BB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_141:
 	.byte 0x7F, 0x7F, 0x7F, 0x49, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xB2, 0x54, 0xF6, 0x14, 0x01, 0x7F, 0x64, 0x28, 0x44, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x28, 0x44, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 42E5B  |...I@.@.@.@....T....d(D........(Dd.........|
+
+; ToneDB_PercMixerDefaultTable_142 -- file 0x42E86..0x42EB0
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_400_ShakerOn, PercInst_401_ShakerOff, PercInst_402_SynShakerOn, PercInst_403_SynShakerOff.
+; Evidence: drum-instrument record 400 at file 0x3D9BC, its
+; bytes +107..+149 (file 0x3DA27..0x3DA51), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_142:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42E86  |...J@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_143 -- file 0x42EB1..0x42EDB
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_404_MdlShakerOn, PercInst_405_MdlShakerOff.
+; Evidence: drum-instrument record 404 at file 0x3DC14, its
+; bytes +107..+149 (file 0x3DC7F..0x3DCA9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_143:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x87, 0x99, 0x54, 0xE2, 0x03, 0x01, 0x7F, 0x64, 0x30, 0x44, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF9, 0x01, 0x30, 0x44, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 42EB1  |...J@.@.@.@....T....d0D........0Dd.........|
+
+; ToneDB_PercMixerDefaultTable_144 -- file 0x42EDC..0x42F06
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_406_ShekeleOn.
+; Evidence: drum-instrument record 406 at file 0x3DD40, its
+; bytes +107..+149 (file 0x3DDAB..0x3DDD5), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_144:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42EDC  |...h@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_145 -- file 0x42F07..0x42F31
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_407_ShekeleOff.
+; Evidence: drum-instrument record 407 at file 0x3DDD6, its
+; bytes +107..+149 (file 0x3DE41..0x3DE6B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_145:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42F07  |...hA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_146 -- file 0x42F32..0x42F5C
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_408_Cabasa1, PercInst_409_Cabasa2.
+; Evidence: drum-instrument record 408 at file 0x3DE6C, its
+; bytes +107..+149 (file 0x3DED7..0x3DF01), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_146:
 	.byte 0x7F, 0x7F, 0x7F, 0x4B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42F32  |...K@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_147 -- file 0x42F5D..0x42F87
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_410_ModelCabasa.
+; Evidence: drum-instrument record 410 at file 0x3DF98, its
+; bytes +107..+149 (file 0x3E003..0x3E02D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_147:
 	.byte 0x7F, 0x7F, 0x7F, 0x4B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x87, 0x99, 0x54, 0xE2, 0x03, 0x01, 0x7F, 0x64, 0x30, 0x44, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF9, 0x01, 0x30, 0x44, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 42F5D  |...K@.@.@.@....T....d0D........0Dd.........|
+
+; ToneDB_PercMixerDefaultTable_148 -- file 0x42F88..0x42FB2
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_411_MaracasOn, PercInst_412_MaracasOff, PercInst_413_SynMaracasOn, PercInst_414_SynMaracasOff.
+; Evidence: drum-instrument record 411 at file 0x3E02E, its
+; bytes +107..+149 (file 0x3E099..0x3E0C3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_148:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42F88  |...L@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_149 -- file 0x42FB3..0x42FDD
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_415_MdlMaracasOn, PercInst_416_MdlMaracasOff.
+; Evidence: drum-instrument record 415 at file 0x3E286, its
+; bytes +107..+149 (file 0x3E2F1..0x3E31B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_149:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xFF, 0x54, 0xEA, 0x1E, 0x80, 0x7F, 0x64, 0x30, 0x44, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x44, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 42FB3  |...L@.@.@.@....T....d0D........0Dd.........|
+
+; ToneDB_PercMixerDefaultTable_150 -- file 0x42FDE..0x43008
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_417_CaxixiOn.
+; Evidence: drum-instrument record 417 at file 0x3E3B2, its
+; bytes +107..+149 (file 0x3E41D..0x3E447), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_150:
 	.byte 0x7F, 0x7F, 0x7F, 0x67, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42FDE  |...g@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_151 -- file 0x43009..0x43033
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_418_CaxixiOff.
+; Evidence: drum-instrument record 418 at file 0x3E448, its
+; bytes +107..+149 (file 0x3E4B3..0x3E4DD), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_151:
 	.byte 0x7F, 0x7F, 0x7F, 0x67, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43009  |...gA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_152 -- file 0x43034..0x4305E
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_419_SambaWhistleL, PercInst_420_SambaWhistleH, PercInst_421_SambaWhiShort, PercInst_422_SambaWhiLong.
+; Evidence: drum-instrument record 419 at file 0x3E4DE, its
+; bytes +107..+149 (file 0x3E549..0x3E573), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_152:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43034  |...M@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_153 -- file 0x4305F..0x43089
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_423_MdlSambaWhiL, PercInst_424_MdlSambaWhiH, PercInst_425_MdlSmbWhShort, PercInst_426_MdlSmbWhLong.
+; Evidence: drum-instrument record 423 at file 0x3E736, its
+; bytes +107..+149 (file 0x3E7A1..0x3E7CB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_153:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x35, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0x60, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05, 0x30, 0x60, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 4305F  |...M@.@.@.@..}5T....d0`........0`d.........|
+
+; ToneDB_PercMixerDefaultTable_154 -- file 0x4308A..0x430B4
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_427_SynSambaWhiL, PercInst_428_SynSambaWhiH, PercInst_429_SynSmbWhShort, PercInst_430_SynSmbWhLong.
+; Evidence: drum-instrument record 427 at file 0x3E98E, its
+; bytes +107..+149 (file 0x3E9F9..0x3EA23), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_154:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4308A  |...MA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_155 -- file 0x430B5..0x430DF
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_431_SambaDrumOn.
+; Evidence: drum-instrument record 431 at file 0x3EBE6, its
+; bytes +107..+149 (file 0x3EC51..0x3EC7B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_155:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 430B5  |...N@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_156 -- file 0x430E0..0x4310A
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_432_SambaDrumOff.
+; Evidence: drum-instrument record 432 at file 0x3EC7C, its
+; bytes +107..+149 (file 0x3ECE7..0x3ED11), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_156:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 430E0  |...NA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_157 -- file 0x4310B..0x43135
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_433_DarbukaSlap.
+; Evidence: drum-instrument record 433 at file 0x3ED12, its
+; bytes +107..+149 (file 0x3ED7D..0x3EDA7), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_157:
 	.byte 0x7F, 0x7F, 0x7F, 0x66, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4310B  |...f@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_158 -- file 0x43136..0x43160
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_434_DarbukaOpen.
+; Evidence: drum-instrument record 434 at file 0x3EDA8, its
+; bytes +107..+149 (file 0x3EE13..0x3EE3D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_158:
 	.byte 0x7F, 0x7F, 0x7F, 0x66, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43136  |...fA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_159 -- file 0x43161..0x4318B
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_435_SurdoOpen.
+; Evidence: drum-instrument record 435 at file 0x3EE3E, its
+; bytes +107..+149 (file 0x3EEA9..0x3EED3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_159:
 	.byte 0x7F, 0x7F, 0x7F, 0x69, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43161  |...i@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_160 -- file 0x4318C..0x431B6
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_436_SurdoMute.
+; Evidence: drum-instrument record 436 at file 0x3EED4, its
+; bytes +107..+149 (file 0x3EF3F..0x3EF69), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_160:
 	.byte 0x7F, 0x7F, 0x7F, 0x69, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4318C  |...iA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_161 -- file 0x431B7..0x431E1
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_437_SurdoLeftHand.
+; Evidence: drum-instrument record 437 at file 0x3EF6A, its
+; bytes +107..+149 (file 0x3EFD5..0x3EFFF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_161:
 	.byte 0x7F, 0x7F, 0x7F, 0x69, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 431B7  |...iB.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_162 -- file 0x431E2..0x4320C
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_438_TambourinAcc1, PercInst_439_TambourinAcc2.
+; Evidence: drum-instrument record 438 at file 0x3F000, its
+; bytes +107..+149 (file 0x3F06B..0x3F095), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_162:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 431E2  |...O@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_163 -- file 0x4320D..0x43237
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_440_MdlTamburnAcc.
+; Evidence: drum-instrument record 440 at file 0x3F12C, its
+; bytes +107..+149 (file 0x3F197..0x3F1C1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_163:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x96, 0x8F, 0x54, 0xE2, 0x0A, 0x01, 0x7F, 0x74, 0x2B, 0x6A, 0xE2, 0xEC, 0x80, 0x00, 0x00, 0x00, 0x00, 0x53, 0x2B, 0x5A, 0x64, 0xE2, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0x6F	; 4320D  |...O@.@.@.@....T....t+j.......S+Zd........o|
+
+; ToneDB_PercMixerDefaultTable_164 -- file 0x43238..0x43262
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_441_TambourineBt1, PercInst_442_TambourineBt2.
+; Evidence: drum-instrument record 441 at file 0x3F1C2, its
+; bytes +107..+149 (file 0x3F22D..0x3F257), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_164:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43238  |...OA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_165 -- file 0x43263..0x4328D
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_443_MdlTamburnBt.
+; Evidence: drum-instrument record 443 at file 0x3F2EE, its
+; bytes +107..+149 (file 0x3F359..0x3F383), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_165:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x96, 0x8F, 0x54, 0xE2, 0x0A, 0x01, 0x7F, 0x74, 0x2B, 0x6A, 0xE2, 0xEC, 0x80, 0x00, 0x00, 0x00, 0x00, 0x53, 0x2B, 0x5A, 0x64, 0xE2, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0x6F	; 43263  |...OA.@.@.@....T....t+j.......S+Zd........o|
+
+; ToneDB_PercMixerDefaultTable_166 -- file 0x4328E..0x432B8
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_444_OrchTambourin.
+; Evidence: drum-instrument record 444 at file 0x3F384, its
+; bytes +107..+149 (file 0x3F3EF..0x3F419), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_166:
 	.byte 0x7F, 0x7F, 0x7F, 0x50, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4328E  |...P@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_167 -- file 0x432B9..0x432E3
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_445_NutshellTree.
+; Evidence: drum-instrument record 445 at file 0x3F41A, its
+; bytes +107..+149 (file 0x3F485..0x3F4AF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_167:
 	.byte 0x7F, 0x7F, 0x7F, 0x6B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 432B9  |...k@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_168 -- file 0x432E4..0x4330E
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_446_Crikets.
+; Evidence: drum-instrument record 446 at file 0x3F4B0, its
+; bytes +107..+149 (file 0x3F51B..0x3F545), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_168:
 	.byte 0x7F, 0x7F, 0x7F, 0x6E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 432E4  |...n@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_169 -- file 0x4330F..0x43339
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_447_RainStick.
+; Evidence: drum-instrument record 447 at file 0x3F546, its
+; bytes +107..+149 (file 0x3F5B1..0x3F5DB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_169:
 	.byte 0x7F, 0x7F, 0x7F, 0x6C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4330F  |...l@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_170 -- file 0x4333A..0x43364
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_448_Vibraslap, PercInst_449_SynVibraslap, PercInst_450_Rattle.
+; Evidence: drum-instrument record 448 at file 0x3F5DC, its
+; bytes +107..+149 (file 0x3F647..0x3F671), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_170:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4333A  |...Q@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_171 -- file 0x43365..0x4338F
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_451_MdlVibraslap.
+; Evidence: drum-instrument record 451 at file 0x3F79E, its
+; bytes +107..+149 (file 0x3F809..0x3F833), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_171:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xE0, 0xB2, 0x54, 0xD8, 0x14, 0x01, 0x7F, 0x64, 0x30, 0x4F, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x00, 0x30, 0x4F, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x00	; 43365  |...Q@.@.@.@....T....d0O........0Od.........|
+
+; ToneDB_PercMixerDefaultTable_172 -- file 0x43390..0x433BA
+; The last 43 bytes of 4 drum-instrument records are these
+; bytes exactly: PercInst_452_WoodBlockHigh, PercInst_453_WoodBlockLow, PercInst_454_WoodBlockHi2, PercInst_455_TempleBlock.
+; Evidence: drum-instrument record 452 at file 0x3F834, its
+; bytes +107..+149 (file 0x3F89F..0x3F8C9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_172:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43390  |...R@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_173 -- file 0x433BB..0x433E5
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_456_MdlWdblockHi, PercInst_457_MdlWdBlockLow, PercInst_458_MdlWdBlockHi2.
+; Evidence: drum-instrument record 456 at file 0x3FA8C, its
+; bytes +107..+149 (file 0x3FAF7..0x3FB21), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_173:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x32, 0x9E, 0x54, 0x14, 0x09, 0x01, 0x7F, 0x64, 0x1E, 0x43, 0x14, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14, 0x1E, 0x43, 0x64, 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 433BB  |...R@.@.@.@..2.T....d.C.........Cd.........|
+
+; ToneDB_PercMixerDefaultTable_174 -- file 0x433E6..0x43410
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_459_Castanets.
+; Evidence: drum-instrument record 459 at file 0x3FC4E, its
+; bytes +107..+149 (file 0x3FCB9..0x3FCE3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_174:
 	.byte 0x7F, 0x7F, 0x7F, 0x53, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 433E6  |...S@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_175 -- file 0x43411..0x4343B
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_460_ModelCastanet.
+; Evidence: drum-instrument record 460 at file 0x3FCE4, its
+; bytes +107..+149 (file 0x3FD4F..0x3FD79), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_175:
 	.byte 0x7F, 0x7F, 0x7F, 0x53, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x4F, 0xE3, 0x54, 0x03, 0x0A, 0x01, 0x7F, 0x64, 0x3A, 0x47, 0xD6, 0x00, 0x80, 0x00, 0x00, 0x00, 0x11, 0x89, 0x3A, 0x47, 0x64, 0xD6, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x11, 0x89	; 43411  |...S@.@.@.@..O.T....d:G........:Gd.........|
+
+; ToneDB_PercMixerDefaultTable_176 -- file 0x4343C..0x43466
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_064_ModelingRim, PercInst_461_Claves, PercInst_462_SynthClaves.
+; Evidence: drum-instrument record 64 at file 0x314DC, its
+; bytes +107..+149 (file 0x31547..0x31571), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_176:
 	.byte 0x7F, 0x7F, 0x7F, 0x54, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4343C  |...T@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_177 -- file 0x43467..0x43491
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_463_ModelClaves.
+; Evidence: drum-instrument record 463 at file 0x3FEA6, its
+; bytes +107..+149 (file 0x3FF11..0x3FF3B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_177:
 	.byte 0x7F, 0x7F, 0x7F, 0x54, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x32, 0xB2, 0x54, 0x0A, 0x04, 0x80, 0x7F, 0x64, 0x1E, 0x55, 0x14, 0x0D, 0x80, 0x00, 0x00, 0x00, 0x06, 0x42, 0x1E, 0x55, 0x64, 0x14, 0x0D, 0x00, 0x80, 0x00, 0x00, 0x00, 0x06, 0x42	; 43467  |...T@.@.@.@..2.T....d.U.......B.Ud........B|
+
+; ToneDB_PercMixerDefaultTable_178 -- file 0x43492..0x434BC
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_464_Slap1, PercInst_465_Slap2, PercInst_466_Slap3.
+; Evidence: drum-instrument record 464 at file 0x3FF3C, its
+; bytes +107..+149 (file 0x3FFA7..0x3FFD1), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_178:
 	.byte 0x7F, 0x7F, 0x7F, 0x55, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43492  |...U@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_179 -- file 0x434BD..0x434E7
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_467_Scratch1, PercInst_468_Scratch2.
+; Evidence: drum-instrument record 467 at file 0x400FE, its
+; bytes +107..+149 (file 0x40169..0x40193), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_179:
 	.byte 0x7F, 0x7F, 0x7F, 0x56, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 434BD  |...V@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_180 -- file 0x434E8..0x43512
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_469_Scratch3, PercInst_470_Scratch4.
+; Evidence: drum-instrument record 469 at file 0x4022A, its
+; bytes +107..+149 (file 0x40295..0x402BF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_180:
 	.byte 0x7F, 0x7F, 0x7F, 0x56, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 434E8  |...VA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_181 -- file 0x43513..0x4353D
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_471_Zap1.
+; Evidence: drum-instrument record 471 at file 0x40356, its
+; bytes +107..+149 (file 0x403C1..0x403EB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_181:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43513  |...m@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_182 -- file 0x4353E..0x43568
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_472_ElectroUnizon.
+; Evidence: drum-instrument record 472 at file 0x403EC, its
+; bytes +107..+149 (file 0x40457..0x40481), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_182:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4353E  |...mA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_183 -- file 0x43569..0x43593
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_473_ElectroShot1.
+; Evidence: drum-instrument record 473 at file 0x40482, its
+; bytes +107..+149 (file 0x404ED..0x40517), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_183:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43569  |...mB.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_184 -- file 0x43594..0x435BE
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_474_ElectroShot2.
+; Evidence: drum-instrument record 474 at file 0x40518, its
+; bytes +107..+149 (file 0x40583..0x405AD), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_184:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43594  |...mC.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_185 -- file 0x435BF..0x435E9
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_475_Zap2.
+; Evidence: drum-instrument record 475 at file 0x405AE, its
+; bytes +107..+149 (file 0x40619..0x40643), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_185:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 435BF  |...mD.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_186 -- file 0x435EA..0x43614
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_476_AmbientHammer.
+; Evidence: drum-instrument record 476 at file 0x40644, its
+; bytes +107..+149 (file 0x406AF..0x406D9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_186:
 	.byte 0x7F, 0x7F, 0x7F, 0x57, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 435EA  |...W@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_187 -- file 0x43615..0x4363F
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_477_Wave1.
+; Evidence: drum-instrument record 477 at file 0x406DA, its
+; bytes +107..+149 (file 0x40745..0x4076F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_187:
 	.byte 0x7F, 0x7F, 0x7F, 0x58, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43615  |...X@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_188 -- file 0x43640..0x4366A
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_478_Wave2.
+; Evidence: drum-instrument record 478 at file 0x40770, its
+; bytes +107..+149 (file 0x407DB..0x40805), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_188:
 	.byte 0x7F, 0x7F, 0x7F, 0x58, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43640  |...XA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_189 -- file 0x4366B..0x43695
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_479_Applause1, PercInst_480_Applause2.
+; Evidence: drum-instrument record 479 at file 0x40806, its
+; bytes +107..+149 (file 0x40871..0x4089B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_189:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4366B  |...Y@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_190 -- file 0x43696..0x436C0
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_481_VoiceAh.
+; Evidence: drum-instrument record 481 at file 0x40932, its
+; bytes +107..+149 (file 0x4099D..0x409C7), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_190:
 	.byte 0x7F, 0x7F, 0x7F, 0x5A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43696  |...Z@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_191 -- file 0x436C1..0x436EB
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_482_VoiceYeh.
+; Evidence: drum-instrument record 482 at file 0x409C8, its
+; bytes +107..+149 (file 0x40A33..0x40A5D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_191:
 	.byte 0x7F, 0x7F, 0x7F, 0x5A, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 436C1  |...ZA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_192 -- file 0x436EC..0x43716
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_483_VoiceUh.
+; Evidence: drum-instrument record 483 at file 0x40A5E, its
+; bytes +107..+149 (file 0x40AC9..0x40AF3), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_192:
 	.byte 0x7F, 0x7F, 0x7F, 0x5A, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 436EC  |...ZB.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_193 -- file 0x43717..0x43741
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_484_Helicopter, PercInst_485_Train.
+; Evidence: drum-instrument record 484 at file 0x40AF4, its
+; bytes +107..+149 (file 0x40B5F..0x40B89), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_193:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43717  |...[@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_194 -- file 0x43742..0x4376C
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_486_Telephone.
+; Evidence: drum-instrument record 486 at file 0x40C20, its
+; bytes +107..+149 (file 0x40C8B..0x40CB5), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_194:
 	.byte 0x7F, 0x7F, 0x7F, 0x5C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43742  |...\@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_195 -- file 0x4376D..0x43797
+; The last 43 bytes of 3 drum-instrument records are these
+; bytes exactly: PercInst_487_GunShot, PercInst_488_SynHandClaps, PercInst_489_Explosion.
+; Evidence: drum-instrument record 487 at file 0x40CB6, its
+; bytes +107..+149 (file 0x40D21..0x40D4B), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_195:
 	.byte 0x7F, 0x7F, 0x7F, 0x5D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4376D  |...]@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_196 -- file 0x43798..0x437C2
+; The last 43 bytes of 2 drum-instrument records are these
+; bytes exactly: PercInst_490_OrchHitHigh, PercInst_491_OrchHitLow.
+; Evidence: drum-instrument record 490 at file 0x40E78, its
+; bytes +107..+149 (file 0x40EE3..0x40F0D), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_196:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x38, 0x55, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x38, 0x55, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 43798  |...^@.@.@.@..}.T....d8U........8Ud.........|
+
+; ToneDB_PercMixerDefaultTable_197 -- file 0x437C3..0x437ED
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_492_Wind.
+; Evidence: drum-instrument record 492 at file 0x40FA4, its
+; bytes +107..+149 (file 0x4100F..0x41039), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_197:
 	.byte 0x7F, 0x7F, 0x7F, 0x5F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 437C3  |..._@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_198 -- file 0x437EE..0x43818
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_493_Bird1.
+; Evidence: drum-instrument record 493 at file 0x4103A, its
+; bytes +107..+149 (file 0x410A5..0x410CF), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_198:
 	.byte 0x7F, 0x7F, 0x7F, 0x60, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 437EE  |...`@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_199 -- file 0x43819..0x43843
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_494_Bird2.
+; Evidence: drum-instrument record 494 at file 0x410D0, its
+; bytes +107..+149 (file 0x4113B..0x41165), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_199:
 	.byte 0x7F, 0x7F, 0x7F, 0x60, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43819  |...`A.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_200 -- file 0x43844..0x4386E
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_495_SaxBreath.
+; Evidence: drum-instrument record 495 at file 0x41166, its
+; bytes +107..+149 (file 0x411D1..0x411FB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_200:
 	.byte 0x7F, 0x7F, 0x7F, 0x61, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43844  |...a@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_201 -- file 0x4386F..0x43899
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_496_FluteBreath.
+; Evidence: drum-instrument record 496 at file 0x411FC, its
+; bytes +107..+149 (file 0x41267..0x41291), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_201:
 	.byte 0x7F, 0x7F, 0x7F, 0x61, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4386F  |...aA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_202 -- file 0x4389A..0x438C4
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_497_PickNoise4.
+; Evidence: drum-instrument record 497 at file 0x41292, its
+; bytes +107..+149 (file 0x412FD..0x41327), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_202:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4389A  |...bA.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_203 -- file 0x438C5..0x438EF
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_498_PickNoise2.
+; Evidence: drum-instrument record 498 at file 0x41328, its
+; bytes +107..+149 (file 0x41393..0x413BD), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_203:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 438C5  |...bB.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_204 -- file 0x438F0..0x4391A
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_499_PickNoise1.
+; Evidence: drum-instrument record 499 at file 0x413BE, its
+; bytes +107..+149 (file 0x41429..0x41453), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_204:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 438F0  |...bC.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_205 -- file 0x4391B..0x43945
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_500_PickNoise3.
+; Evidence: drum-instrument record 500 at file 0x41454, its
+; bytes +107..+149 (file 0x414BF..0x414E9), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_205:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4391B  |...bD.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_206 -- file 0x43946..0x43970
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_501_FretNoise.
+; Evidence: drum-instrument record 501 at file 0x414EA, its
+; bytes +107..+149 (file 0x41555..0x4157F), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_206:
 	.byte 0x7F, 0x7F, 0x7F, 0x63, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43946  |...c@.@.@.@..}.T....d............d.........|
+
+; ToneDB_PercMixerDefaultTable_207 -- file 0x43971..0x4399B
+; The last 43 bytes of 1 drum-instrument record are these
+; bytes exactly: PercInst_503_SlapShot.
+; Evidence: drum-instrument record 503 at file 0x41616, its
+; bytes +107..+149 (file 0x41681..0x416AB), compared byte for
+; byte against this record.  round 5 perc_carriers().
+; ⚠ A carrier is NOT a name for this record: see the banner -- where
+; the carrier is unique the positional proposal disagrees with it 61
+; times in 106.  notes/prom_d_understanding_round5.py Q4c.
 ToneDB_PercMixerDefaultTable_207:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43971  |...d@.@.@.@..}.T....d............d.........|
 
@@ -37168,7 +39951,7 @@ ToneDB_PercMixerDefaultTable_207:
 ; 
 ; ★ THE INDEX CHAIN -- what the two pool objects per descriptor ARE.
 ; 
-;   stage 1  ToneDB_DescCurve_k     128 entries, non-decreasing.  The
+;   stage 1  a ToneDB_DescCurve_*   128 entries, non-decreasing.  The
 ;                                   descriptor's part A begins with a 32-bit
 ;                                   file offset naming one of the 6 curves.
 ;   stage 2  part A, after that     a byte table, one entry per distinct
@@ -37560,7 +40343,7 @@ ToneDB_EnvDescTable_Perc_Desc160:		; tag 0x40  A=0x4426A  B=0x446AE
 ToneDB_EnvDescTable_Perc_Pool:
 
 ; ToneDB_EnvDescTable_Perc_000_CurveStepToElem -- file 0x4426A..0x442ED (132 bytes)
-; descriptor 0 stage 2: ToneDB_DescCurve_5 step -> element, 108 entries = max(curve)+1 (shared by 161 descriptors)
+; descriptor 0 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1 (shared by 161 descriptors)
 ; Its entries index ToneDB_EnvDescTable_Perc_000_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
@@ -37579,7 +40362,7 @@ ToneDB_EnvDescTable_Perc_000_CurveStepToElem:
 
 ; ToneDB_EnvDescTable_Perc_000_ElemArray -- file 0x442EE..0x442F3 (6 bytes)
 ; descriptor 0 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 0 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37590,7 +40373,7 @@ ToneDB_EnvDescTable_Perc_000_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_001_ElemArray -- file 0x442F4..0x442F9 (6 bytes)
 ; descriptor 1 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 1 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37601,7 +40384,7 @@ ToneDB_EnvDescTable_Perc_001_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_002_ElemArray -- file 0x442FA..0x442FF (6 bytes)
 ; descriptor 2 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 2 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37612,7 +40395,7 @@ ToneDB_EnvDescTable_Perc_002_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_003_ElemArray -- file 0x44300..0x44305 (6 bytes)
 ; descriptor 3 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 3 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37623,7 +40406,7 @@ ToneDB_EnvDescTable_Perc_003_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_004_ElemArray -- file 0x44306..0x4430B (6 bytes)
 ; descriptor 4 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 4 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37634,7 +40417,7 @@ ToneDB_EnvDescTable_Perc_004_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_005_ElemArray -- file 0x4430C..0x44311 (6 bytes)
 ; descriptor 5 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 5 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37645,7 +40428,7 @@ ToneDB_EnvDescTable_Perc_005_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_006_ElemArray -- file 0x44312..0x44317 (6 bytes)
 ; descriptor 6 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 6 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37656,7 +40439,7 @@ ToneDB_EnvDescTable_Perc_006_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_007_ElemArray -- file 0x44318..0x4431D (6 bytes)
 ; descriptor 7 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 7 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37667,7 +40450,7 @@ ToneDB_EnvDescTable_Perc_007_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_008_ElemArray -- file 0x4431E..0x44323 (6 bytes)
 ; descriptor 8 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 8 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37678,7 +40461,7 @@ ToneDB_EnvDescTable_Perc_008_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_009_ElemArray -- file 0x44324..0x44329 (6 bytes)
 ; descriptor 9 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 9 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37689,7 +40472,7 @@ ToneDB_EnvDescTable_Perc_009_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_010_ElemArray -- file 0x4432A..0x4432F (6 bytes)
 ; descriptor 10 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 10 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37700,7 +40483,7 @@ ToneDB_EnvDescTable_Perc_010_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_011_ElemArray -- file 0x44330..0x44335 (6 bytes)
 ; descriptor 11 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 11 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37711,7 +40494,7 @@ ToneDB_EnvDescTable_Perc_011_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_012_ElemArray -- file 0x44336..0x4433B (6 bytes)
 ; descriptor 12 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 12 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37722,7 +40505,7 @@ ToneDB_EnvDescTable_Perc_012_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_013_ElemArray -- file 0x4433C..0x44341 (6 bytes)
 ; descriptor 13 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 13 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37733,7 +40516,7 @@ ToneDB_EnvDescTable_Perc_013_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_014_ElemArray -- file 0x44342..0x44347 (6 bytes)
 ; descriptor 14 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 14 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37744,7 +40527,7 @@ ToneDB_EnvDescTable_Perc_014_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_015_ElemArray -- file 0x44348..0x4434D (6 bytes)
 ; descriptor 15 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 15 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37755,7 +40538,7 @@ ToneDB_EnvDescTable_Perc_015_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_016_ElemArray -- file 0x4434E..0x44353 (6 bytes)
 ; descriptor 16 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 16 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37766,7 +40549,7 @@ ToneDB_EnvDescTable_Perc_016_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_017_ElemArray -- file 0x44354..0x44359 (6 bytes)
 ; descriptor 17 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 17 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37777,7 +40560,7 @@ ToneDB_EnvDescTable_Perc_017_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_018_ElemArray -- file 0x4435A..0x4435F (6 bytes)
 ; descriptor 18 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 18 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37788,7 +40571,7 @@ ToneDB_EnvDescTable_Perc_018_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_019_ElemArray -- file 0x44360..0x44365 (6 bytes)
 ; descriptor 19 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 19 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37799,7 +40582,7 @@ ToneDB_EnvDescTable_Perc_019_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_020_ElemArray -- file 0x44366..0x4436B (6 bytes)
 ; descriptor 20 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 20 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37810,7 +40593,7 @@ ToneDB_EnvDescTable_Perc_020_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_021_ElemArray -- file 0x4436C..0x44371 (6 bytes)
 ; descriptor 21 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 21 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37821,7 +40604,7 @@ ToneDB_EnvDescTable_Perc_021_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_022_ElemArray -- file 0x44372..0x44377 (6 bytes)
 ; descriptor 22 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 22 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37832,7 +40615,7 @@ ToneDB_EnvDescTable_Perc_022_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_023_ElemArray -- file 0x44378..0x4437D (6 bytes)
 ; descriptor 23 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 23 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37843,7 +40626,7 @@ ToneDB_EnvDescTable_Perc_023_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_024_ElemArray -- file 0x4437E..0x44383 (6 bytes)
 ; descriptor 24 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 24 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37854,7 +40637,7 @@ ToneDB_EnvDescTable_Perc_024_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_025_ElemArray -- file 0x44384..0x44389 (6 bytes)
 ; descriptor 25 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 25 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37865,7 +40648,7 @@ ToneDB_EnvDescTable_Perc_025_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_026_ElemArray -- file 0x4438A..0x4438F (6 bytes)
 ; descriptor 26 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 26 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37876,7 +40659,7 @@ ToneDB_EnvDescTable_Perc_026_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_027_ElemArray -- file 0x44390..0x44395 (6 bytes)
 ; descriptor 27 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 27 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37887,7 +40670,7 @@ ToneDB_EnvDescTable_Perc_027_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_028_ElemArray -- file 0x44396..0x4439B (6 bytes)
 ; descriptor 28 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 28 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37898,7 +40681,7 @@ ToneDB_EnvDescTable_Perc_028_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_029_ElemArray -- file 0x4439C..0x443A1 (6 bytes)
 ; descriptor 29 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 29 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37909,7 +40692,7 @@ ToneDB_EnvDescTable_Perc_029_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_030_ElemArray -- file 0x443A2..0x443A7 (6 bytes)
 ; descriptor 30 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 30 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37920,7 +40703,7 @@ ToneDB_EnvDescTable_Perc_030_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_031_ElemArray -- file 0x443A8..0x443AD (6 bytes)
 ; descriptor 31 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 31 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37931,7 +40714,7 @@ ToneDB_EnvDescTable_Perc_031_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_032_ElemArray -- file 0x443AE..0x443B3 (6 bytes)
 ; descriptor 32 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 32 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37942,7 +40725,7 @@ ToneDB_EnvDescTable_Perc_032_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_033_ElemArray -- file 0x443B4..0x443B9 (6 bytes)
 ; descriptor 33 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 33 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37953,7 +40736,7 @@ ToneDB_EnvDescTable_Perc_033_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_034_ElemArray -- file 0x443BA..0x443BF (6 bytes)
 ; descriptor 34 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 34 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37964,7 +40747,7 @@ ToneDB_EnvDescTable_Perc_034_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_035_ElemArray -- file 0x443C0..0x443C5 (6 bytes)
 ; descriptor 35 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 35 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37975,7 +40758,7 @@ ToneDB_EnvDescTable_Perc_035_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_036_ElemArray -- file 0x443C6..0x443CB (6 bytes)
 ; descriptor 36 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 36 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37986,7 +40769,7 @@ ToneDB_EnvDescTable_Perc_036_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_037_ElemArray -- file 0x443CC..0x443D1 (6 bytes)
 ; descriptor 37 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 37 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -37997,7 +40780,7 @@ ToneDB_EnvDescTable_Perc_037_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_038_ElemArray -- file 0x443D2..0x443D7 (6 bytes)
 ; descriptor 38 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 38 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38008,7 +40791,7 @@ ToneDB_EnvDescTable_Perc_038_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_039_ElemArray -- file 0x443D8..0x443DD (6 bytes)
 ; descriptor 39 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 39 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38019,7 +40802,7 @@ ToneDB_EnvDescTable_Perc_039_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_040_ElemArray -- file 0x443DE..0x443E3 (6 bytes)
 ; descriptor 40 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 40 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38030,7 +40813,7 @@ ToneDB_EnvDescTable_Perc_040_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_041_ElemArray -- file 0x443E4..0x443E9 (6 bytes)
 ; descriptor 41 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 41 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38041,7 +40824,7 @@ ToneDB_EnvDescTable_Perc_041_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_042_ElemArray -- file 0x443EA..0x443EF (6 bytes)
 ; descriptor 42 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 42 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38052,7 +40835,7 @@ ToneDB_EnvDescTable_Perc_042_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_043_ElemArray -- file 0x443F0..0x443F5 (6 bytes)
 ; descriptor 43 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 43 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38063,7 +40846,7 @@ ToneDB_EnvDescTable_Perc_043_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_044_ElemArray -- file 0x443F6..0x443FB (6 bytes)
 ; descriptor 44 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 44 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38074,7 +40857,7 @@ ToneDB_EnvDescTable_Perc_044_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_045_ElemArray -- file 0x443FC..0x44401 (6 bytes)
 ; descriptor 45 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 45 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38085,7 +40868,7 @@ ToneDB_EnvDescTable_Perc_045_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_046_ElemArray -- file 0x44402..0x44407 (6 bytes)
 ; descriptor 46 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 46 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38096,7 +40879,7 @@ ToneDB_EnvDescTable_Perc_046_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_047_ElemArray -- file 0x44408..0x4440D (6 bytes)
 ; descriptor 47 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 47 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38107,7 +40890,7 @@ ToneDB_EnvDescTable_Perc_047_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_048_ElemArray -- file 0x4440E..0x44413 (6 bytes)
 ; descriptor 48 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 48 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38118,7 +40901,7 @@ ToneDB_EnvDescTable_Perc_048_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_049_ElemArray -- file 0x44414..0x44419 (6 bytes)
 ; descriptor 49 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 49 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38129,7 +40912,7 @@ ToneDB_EnvDescTable_Perc_049_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_050_ElemArray -- file 0x4441A..0x4441F (6 bytes)
 ; descriptor 50 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 50 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38140,7 +40923,7 @@ ToneDB_EnvDescTable_Perc_050_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_051_ElemArray -- file 0x44420..0x44425 (6 bytes)
 ; descriptor 51 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 51 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38151,7 +40934,7 @@ ToneDB_EnvDescTable_Perc_051_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_052_ElemArray -- file 0x44426..0x4442B (6 bytes)
 ; descriptor 52 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 52 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38162,7 +40945,7 @@ ToneDB_EnvDescTable_Perc_052_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_053_ElemArray -- file 0x4442C..0x44431 (6 bytes)
 ; descriptor 53 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 53 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38173,7 +40956,7 @@ ToneDB_EnvDescTable_Perc_053_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_054_ElemArray -- file 0x44432..0x44437 (6 bytes)
 ; descriptor 54 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 54 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38184,7 +40967,7 @@ ToneDB_EnvDescTable_Perc_054_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_055_ElemArray -- file 0x44438..0x4443D (6 bytes)
 ; descriptor 55 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 55 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38195,7 +40978,7 @@ ToneDB_EnvDescTable_Perc_055_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_056_ElemArray -- file 0x4443E..0x44443 (6 bytes)
 ; descriptor 56 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 56 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38206,7 +40989,7 @@ ToneDB_EnvDescTable_Perc_056_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_057_ElemArray -- file 0x44444..0x44449 (6 bytes)
 ; descriptor 57 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 57 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38217,7 +41000,7 @@ ToneDB_EnvDescTable_Perc_057_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_058_ElemArray -- file 0x4444A..0x4444F (6 bytes)
 ; descriptor 58 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 58 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38228,7 +41011,7 @@ ToneDB_EnvDescTable_Perc_058_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_059_ElemArray -- file 0x44450..0x44455 (6 bytes)
 ; descriptor 59 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 59 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38239,7 +41022,7 @@ ToneDB_EnvDescTable_Perc_059_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_060_ElemArray -- file 0x44456..0x4445B (6 bytes)
 ; descriptor 60 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 60 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38250,7 +41033,7 @@ ToneDB_EnvDescTable_Perc_060_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_061_ElemArray -- file 0x4445C..0x44461 (6 bytes)
 ; descriptor 61 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 61 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38261,7 +41044,7 @@ ToneDB_EnvDescTable_Perc_061_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_062_ElemArray -- file 0x44462..0x44467 (6 bytes)
 ; descriptor 62 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 62 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38272,7 +41055,7 @@ ToneDB_EnvDescTable_Perc_062_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_063_ElemArray -- file 0x44468..0x4446D (6 bytes)
 ; descriptor 63 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 63 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38283,7 +41066,7 @@ ToneDB_EnvDescTable_Perc_063_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_064_ElemArray -- file 0x4446E..0x44473 (6 bytes)
 ; descriptor 64 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 64 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38294,7 +41077,7 @@ ToneDB_EnvDescTable_Perc_064_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_065_ElemArray -- file 0x44474..0x44479 (6 bytes)
 ; descriptor 65 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 65 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38305,7 +41088,7 @@ ToneDB_EnvDescTable_Perc_065_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_066_ElemArray -- file 0x4447A..0x4447F (6 bytes)
 ; descriptor 66 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 66 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38316,7 +41099,7 @@ ToneDB_EnvDescTable_Perc_066_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_067_ElemArray -- file 0x44480..0x44485 (6 bytes)
 ; descriptor 67 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 67 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38327,7 +41110,7 @@ ToneDB_EnvDescTable_Perc_067_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_068_ElemArray -- file 0x44486..0x4448B (6 bytes)
 ; descriptor 68 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 68 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38338,7 +41121,7 @@ ToneDB_EnvDescTable_Perc_068_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_069_ElemArray -- file 0x4448C..0x44491 (6 bytes)
 ; descriptor 69 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 69 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38349,7 +41132,7 @@ ToneDB_EnvDescTable_Perc_069_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_070_ElemArray -- file 0x44492..0x44497 (6 bytes)
 ; descriptor 70 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 70 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38360,7 +41143,7 @@ ToneDB_EnvDescTable_Perc_070_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_071_ElemArray -- file 0x44498..0x4449D (6 bytes)
 ; descriptor 71 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 71 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38371,7 +41154,7 @@ ToneDB_EnvDescTable_Perc_071_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_072_ElemArray -- file 0x4449E..0x444A3 (6 bytes)
 ; descriptor 72 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 72 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38382,7 +41165,7 @@ ToneDB_EnvDescTable_Perc_072_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_073_ElemArray -- file 0x444A4..0x444A9 (6 bytes)
 ; descriptor 73 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 73 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38393,7 +41176,7 @@ ToneDB_EnvDescTable_Perc_073_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_074_ElemArray -- file 0x444AA..0x444AF (6 bytes)
 ; descriptor 74 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 74 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38404,7 +41187,7 @@ ToneDB_EnvDescTable_Perc_074_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_075_ElemArray -- file 0x444B0..0x444B5 (6 bytes)
 ; descriptor 75 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 75 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38415,7 +41198,7 @@ ToneDB_EnvDescTable_Perc_075_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_076_ElemArray -- file 0x444B6..0x444BB (6 bytes)
 ; descriptor 76 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 76 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38426,7 +41209,7 @@ ToneDB_EnvDescTable_Perc_076_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_077_ElemArray -- file 0x444BC..0x444C1 (6 bytes)
 ; descriptor 77 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 77 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38437,7 +41220,7 @@ ToneDB_EnvDescTable_Perc_077_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_078_ElemArray -- file 0x444C2..0x444C7 (6 bytes)
 ; descriptor 78 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 78 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38448,7 +41231,7 @@ ToneDB_EnvDescTable_Perc_078_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_079_ElemArray -- file 0x444C8..0x444CD (6 bytes)
 ; descriptor 79 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 79 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38459,7 +41242,7 @@ ToneDB_EnvDescTable_Perc_079_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_080_ElemArray -- file 0x444CE..0x444D3 (6 bytes)
 ; descriptor 80 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 80 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38470,7 +41253,7 @@ ToneDB_EnvDescTable_Perc_080_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_081_ElemArray -- file 0x444D4..0x444D9 (6 bytes)
 ; descriptor 81 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 81 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38481,7 +41264,7 @@ ToneDB_EnvDescTable_Perc_081_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_082_ElemArray -- file 0x444DA..0x444DF (6 bytes)
 ; descriptor 82 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 82 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38492,7 +41275,7 @@ ToneDB_EnvDescTable_Perc_082_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_083_ElemArray -- file 0x444E0..0x444E5 (6 bytes)
 ; descriptor 83 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 83 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38503,7 +41286,7 @@ ToneDB_EnvDescTable_Perc_083_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_084_ElemArray -- file 0x444E6..0x444EB (6 bytes)
 ; descriptor 84 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 84 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38514,7 +41297,7 @@ ToneDB_EnvDescTable_Perc_084_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_085_ElemArray -- file 0x444EC..0x444F1 (6 bytes)
 ; descriptor 85 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 85 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38525,7 +41308,7 @@ ToneDB_EnvDescTable_Perc_085_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_086_ElemArray -- file 0x444F2..0x444F7 (6 bytes)
 ; descriptor 86 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 86 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38536,7 +41319,7 @@ ToneDB_EnvDescTable_Perc_086_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_087_ElemArray -- file 0x444F8..0x444FD (6 bytes)
 ; descriptor 87 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 87 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38547,7 +41330,7 @@ ToneDB_EnvDescTable_Perc_087_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_088_ElemArray -- file 0x444FE..0x44503 (6 bytes)
 ; descriptor 88 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 88 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38558,7 +41341,7 @@ ToneDB_EnvDescTable_Perc_088_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_089_ElemArray -- file 0x44504..0x44509 (6 bytes)
 ; descriptor 89 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 89 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38569,7 +41352,7 @@ ToneDB_EnvDescTable_Perc_089_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_090_ElemArray -- file 0x4450A..0x4450F (6 bytes)
 ; descriptor 90 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 90 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38580,7 +41363,7 @@ ToneDB_EnvDescTable_Perc_090_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_091_ElemArray -- file 0x44510..0x44515 (6 bytes)
 ; descriptor 91 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 91 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38591,7 +41374,7 @@ ToneDB_EnvDescTable_Perc_091_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_092_ElemArray -- file 0x44516..0x4451B (6 bytes)
 ; descriptor 92 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 92 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38602,7 +41385,7 @@ ToneDB_EnvDescTable_Perc_092_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_093_ElemArray -- file 0x4451C..0x44521 (6 bytes)
 ; descriptor 93 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 93 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38613,7 +41396,7 @@ ToneDB_EnvDescTable_Perc_093_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_094_ElemArray -- file 0x44522..0x44527 (6 bytes)
 ; descriptor 94 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 94 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38624,7 +41407,7 @@ ToneDB_EnvDescTable_Perc_094_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_095_ElemArray -- file 0x44528..0x4452D (6 bytes)
 ; descriptor 95 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 95 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38635,7 +41418,7 @@ ToneDB_EnvDescTable_Perc_095_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_096_ElemArray -- file 0x4452E..0x44533 (6 bytes)
 ; descriptor 96 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 96 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38646,7 +41429,7 @@ ToneDB_EnvDescTable_Perc_096_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_097_ElemArray -- file 0x44534..0x44539 (6 bytes)
 ; descriptor 97 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 97 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38657,7 +41440,7 @@ ToneDB_EnvDescTable_Perc_097_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_098_ElemArray -- file 0x4453A..0x4453F (6 bytes)
 ; descriptor 98 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 98 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38668,7 +41451,7 @@ ToneDB_EnvDescTable_Perc_098_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_099_ElemArray -- file 0x44540..0x44545 (6 bytes)
 ; descriptor 99 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 99 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38679,7 +41462,7 @@ ToneDB_EnvDescTable_Perc_099_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_100_ElemArray -- file 0x44546..0x4454B (6 bytes)
 ; descriptor 100 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 100 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38690,7 +41473,7 @@ ToneDB_EnvDescTable_Perc_100_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_101_ElemArray -- file 0x4454C..0x44551 (6 bytes)
 ; descriptor 101 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 101 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38701,7 +41484,7 @@ ToneDB_EnvDescTable_Perc_101_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_102_ElemArray -- file 0x44552..0x44557 (6 bytes)
 ; descriptor 102 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 102 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38712,7 +41495,7 @@ ToneDB_EnvDescTable_Perc_102_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_103_ElemArray -- file 0x44558..0x4455D (6 bytes)
 ; descriptor 103 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 103 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38723,7 +41506,7 @@ ToneDB_EnvDescTable_Perc_103_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_104_ElemArray -- file 0x4455E..0x44563 (6 bytes)
 ; descriptor 104 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 104 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38734,7 +41517,7 @@ ToneDB_EnvDescTable_Perc_104_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_105_ElemArray -- file 0x44564..0x44569 (6 bytes)
 ; descriptor 105 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 105 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38745,7 +41528,7 @@ ToneDB_EnvDescTable_Perc_105_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_106_ElemArray -- file 0x4456A..0x4456F (6 bytes)
 ; descriptor 106 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 106 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38756,7 +41539,7 @@ ToneDB_EnvDescTable_Perc_106_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_107_ElemArray -- file 0x44570..0x44575 (6 bytes)
 ; descriptor 107 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 107 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38767,7 +41550,7 @@ ToneDB_EnvDescTable_Perc_107_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_108_ElemArray -- file 0x44576..0x4457B (6 bytes)
 ; descriptor 108 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 108 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38778,7 +41561,7 @@ ToneDB_EnvDescTable_Perc_108_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_109_ElemArray -- file 0x4457C..0x44581 (6 bytes)
 ; descriptor 109 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 109 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38789,7 +41572,7 @@ ToneDB_EnvDescTable_Perc_109_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_110_ElemArray -- file 0x44582..0x44587 (6 bytes)
 ; descriptor 110 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 110 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38800,7 +41583,7 @@ ToneDB_EnvDescTable_Perc_110_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_111_ElemArray -- file 0x44588..0x4458D (6 bytes)
 ; descriptor 111 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 111 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38811,7 +41594,7 @@ ToneDB_EnvDescTable_Perc_111_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_112_ElemArray -- file 0x4458E..0x44593 (6 bytes)
 ; descriptor 112 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 112 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38822,7 +41605,7 @@ ToneDB_EnvDescTable_Perc_112_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_113_ElemArray -- file 0x44594..0x44599 (6 bytes)
 ; descriptor 113 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 113 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38833,7 +41616,7 @@ ToneDB_EnvDescTable_Perc_113_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_114_ElemArray -- file 0x4459A..0x4459F (6 bytes)
 ; descriptor 114 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 114 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38844,7 +41627,7 @@ ToneDB_EnvDescTable_Perc_114_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_115_ElemArray -- file 0x445A0..0x445A5 (6 bytes)
 ; descriptor 115 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 115 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38855,7 +41638,7 @@ ToneDB_EnvDescTable_Perc_115_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_116_ElemArray -- file 0x445A6..0x445AB (6 bytes)
 ; descriptor 116 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 116 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38866,7 +41649,7 @@ ToneDB_EnvDescTable_Perc_116_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_117_ElemArray -- file 0x445AC..0x445B1 (6 bytes)
 ; descriptor 117 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 117 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38877,7 +41660,7 @@ ToneDB_EnvDescTable_Perc_117_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_118_ElemArray -- file 0x445B2..0x445B7 (6 bytes)
 ; descriptor 118 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 118 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38888,7 +41671,7 @@ ToneDB_EnvDescTable_Perc_118_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_119_ElemArray -- file 0x445B8..0x445BD (6 bytes)
 ; descriptor 119 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 119 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38899,7 +41682,7 @@ ToneDB_EnvDescTable_Perc_119_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_120_ElemArray -- file 0x445BE..0x445C3 (6 bytes)
 ; descriptor 120 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 120 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38910,7 +41693,7 @@ ToneDB_EnvDescTable_Perc_120_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_121_ElemArray -- file 0x445C4..0x445C9 (6 bytes)
 ; descriptor 121 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 121 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38921,7 +41704,7 @@ ToneDB_EnvDescTable_Perc_121_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_122_ElemArray -- file 0x445CA..0x445CF (6 bytes)
 ; descriptor 122 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 122 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38932,7 +41715,7 @@ ToneDB_EnvDescTable_Perc_122_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_123_ElemArray -- file 0x445D0..0x445D5 (6 bytes)
 ; descriptor 123 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 123 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38943,7 +41726,7 @@ ToneDB_EnvDescTable_Perc_123_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_124_ElemArray -- file 0x445D6..0x445DB (6 bytes)
 ; descriptor 124 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 124 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38954,7 +41737,7 @@ ToneDB_EnvDescTable_Perc_124_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_125_ElemArray -- file 0x445DC..0x445E1 (6 bytes)
 ; descriptor 125 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 125 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38965,7 +41748,7 @@ ToneDB_EnvDescTable_Perc_125_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_126_ElemArray -- file 0x445E2..0x445E7 (6 bytes)
 ; descriptor 126 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 126 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38976,7 +41759,7 @@ ToneDB_EnvDescTable_Perc_126_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_127_ElemArray -- file 0x445E8..0x445ED (6 bytes)
 ; descriptor 127 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 127 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38987,7 +41770,7 @@ ToneDB_EnvDescTable_Perc_127_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_128_ElemArray -- file 0x445EE..0x445F3 (6 bytes)
 ; descriptor 128 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 128 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -38998,7 +41781,7 @@ ToneDB_EnvDescTable_Perc_128_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_129_ElemArray -- file 0x445F4..0x445F9 (6 bytes)
 ; descriptor 129 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 129 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39009,7 +41792,7 @@ ToneDB_EnvDescTable_Perc_129_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_130_ElemArray -- file 0x445FA..0x445FF (6 bytes)
 ; descriptor 130 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 130 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39020,7 +41803,7 @@ ToneDB_EnvDescTable_Perc_130_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_131_ElemArray -- file 0x44600..0x44605 (6 bytes)
 ; descriptor 131 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 131 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39031,7 +41814,7 @@ ToneDB_EnvDescTable_Perc_131_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_132_ElemArray -- file 0x44606..0x4460B (6 bytes)
 ; descriptor 132 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 132 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39042,7 +41825,7 @@ ToneDB_EnvDescTable_Perc_132_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_133_ElemArray -- file 0x4460C..0x44611 (6 bytes)
 ; descriptor 133 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 133 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39053,7 +41836,7 @@ ToneDB_EnvDescTable_Perc_133_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_134_ElemArray -- file 0x44612..0x44617 (6 bytes)
 ; descriptor 134 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 134 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39064,7 +41847,7 @@ ToneDB_EnvDescTable_Perc_134_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_135_ElemArray -- file 0x44618..0x4461D (6 bytes)
 ; descriptor 135 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 135 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39075,7 +41858,7 @@ ToneDB_EnvDescTable_Perc_135_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_136_ElemArray -- file 0x4461E..0x44623 (6 bytes)
 ; descriptor 136 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 136 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39086,7 +41869,7 @@ ToneDB_EnvDescTable_Perc_136_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_137_ElemArray -- file 0x44624..0x44629 (6 bytes)
 ; descriptor 137 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 137 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39097,7 +41880,7 @@ ToneDB_EnvDescTable_Perc_137_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_138_ElemArray -- file 0x4462A..0x4462F (6 bytes)
 ; descriptor 138 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 138 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39108,7 +41891,7 @@ ToneDB_EnvDescTable_Perc_138_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_139_ElemArray -- file 0x44630..0x44635 (6 bytes)
 ; descriptor 139 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 139 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39119,7 +41902,7 @@ ToneDB_EnvDescTable_Perc_139_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_140_ElemArray -- file 0x44636..0x4463B (6 bytes)
 ; descriptor 140 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 140 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39130,7 +41913,7 @@ ToneDB_EnvDescTable_Perc_140_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_141_ElemArray -- file 0x4463C..0x44641 (6 bytes)
 ; descriptor 141 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 141 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39141,7 +41924,7 @@ ToneDB_EnvDescTable_Perc_141_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_142_ElemArray -- file 0x44642..0x44647 (6 bytes)
 ; descriptor 142 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 142 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39152,7 +41935,7 @@ ToneDB_EnvDescTable_Perc_142_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_143_ElemArray -- file 0x44648..0x4464D (6 bytes)
 ; descriptor 143 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 143 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39163,7 +41946,7 @@ ToneDB_EnvDescTable_Perc_143_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_144_ElemArray -- file 0x4464E..0x44653 (6 bytes)
 ; descriptor 144 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 144 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39174,7 +41957,7 @@ ToneDB_EnvDescTable_Perc_144_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_145_ElemArray -- file 0x44654..0x44659 (6 bytes)
 ; descriptor 145 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 145 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39185,7 +41968,7 @@ ToneDB_EnvDescTable_Perc_145_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_146_ElemArray -- file 0x4465A..0x4465F (6 bytes)
 ; descriptor 146 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 146 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39196,7 +41979,7 @@ ToneDB_EnvDescTable_Perc_146_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_147_ElemArray -- file 0x44660..0x44665 (6 bytes)
 ; descriptor 147 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 147 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39207,7 +41990,7 @@ ToneDB_EnvDescTable_Perc_147_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_148_ElemArray -- file 0x44666..0x4466B (6 bytes)
 ; descriptor 148 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 148 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39218,7 +42001,7 @@ ToneDB_EnvDescTable_Perc_148_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_149_ElemArray -- file 0x4466C..0x44671 (6 bytes)
 ; descriptor 149 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 149 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39229,7 +42012,7 @@ ToneDB_EnvDescTable_Perc_149_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_150_ElemArray -- file 0x44672..0x44677 (6 bytes)
 ; descriptor 150 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 150 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39240,7 +42023,7 @@ ToneDB_EnvDescTable_Perc_150_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_151_ElemArray -- file 0x44678..0x4467D (6 bytes)
 ; descriptor 151 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 151 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39251,7 +42034,7 @@ ToneDB_EnvDescTable_Perc_151_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_152_ElemArray -- file 0x4467E..0x44683 (6 bytes)
 ; descriptor 152 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 152 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39262,7 +42045,7 @@ ToneDB_EnvDescTable_Perc_152_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_153_ElemArray -- file 0x44684..0x44689 (6 bytes)
 ; descriptor 153 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 153 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39273,7 +42056,7 @@ ToneDB_EnvDescTable_Perc_153_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_154_ElemArray -- file 0x4468A..0x4468F (6 bytes)
 ; descriptor 154 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 154 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39284,7 +42067,7 @@ ToneDB_EnvDescTable_Perc_154_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_155_ElemArray -- file 0x44690..0x44695 (6 bytes)
 ; descriptor 155 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 155 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39295,7 +42078,7 @@ ToneDB_EnvDescTable_Perc_155_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_156_ElemArray -- file 0x44696..0x4469B (6 bytes)
 ; descriptor 156 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 156 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39306,7 +42089,7 @@ ToneDB_EnvDescTable_Perc_156_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_157_ElemArray -- file 0x4469C..0x446A1 (6 bytes)
 ; descriptor 157 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 157 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39317,7 +42100,7 @@ ToneDB_EnvDescTable_Perc_157_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_158_ElemArray -- file 0x446A2..0x446A7 (6 bytes)
 ; descriptor 158 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 158 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39328,7 +42111,7 @@ ToneDB_EnvDescTable_Perc_158_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_159_ElemArray -- file 0x446A8..0x446AD (6 bytes)
 ; descriptor 159 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 159 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39339,7 +42122,7 @@ ToneDB_EnvDescTable_Perc_159_ElemArray:
 
 ; ToneDB_EnvDescTable_Perc_160_ElemArray -- file 0x446AE..0x446B3 (6 bytes)
 ; descriptor 160 stage 3: 1 element of 6 B = max(stage 2)+1, size from tag 0x40 bit 7
-; Reached as ToneDB_DescCurve_5[i] -> the shared stage-2 step
+; Reached as ToneDB_DescCurve_Step1[i] -> the shared stage-2 step
 ; table of ToneDB_EnvDescTable_Perc, entry 160 -> this array.
 ; Evidence: 6 bytes / 6 = 1 element, and the stage-2 table's
 ; largest entry is 0, so 0 + 1 = 1 matches exactly.  The
@@ -39533,6 +42316,10 @@ ToneRec_059_Drawbar2_Elem3:		; 81-byte element block
 ; element chain that names the pool objects at slots +0x30 and +0x38
 ; cannot even start here.  These pool objects therefore keep a
 ; POSITIONAL name.  notes/prom_d_understanding_round4.py Q4a.
+; ⚠ RE-MEASURED, NOT RESTATED, in round 5 Q4a: through round 2's own
+; segmentation this block still has 0 part-A objects, so the refusal
+; is not a sentence that was copied forward.  It stays a refusal, and
+; raising prom_d's content score is not a reason to weaken it.
 ; 
 ; Evidence: (image-internal, NOT from code) the array's end is fixed
 ; by the records' own 32-bit offsets.  The smallest non-null offset over all
