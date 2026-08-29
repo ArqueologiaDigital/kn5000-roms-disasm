@@ -1,7 +1,19 @@
 # SX-WSA1R disassembly — resume here
 
-**Paused 2026-08-25 after wave 6, at Felipe's request.** Six conversion waves ran; the work is
-deliberately incomplete. Read this before starting anything.
+**Paused 2026-08-25 after wave 6, at Felipe's request. RESUMED 2026-08-28 as wave 7.**
+Read this before starting anything, then `notes/WAVE7-BRIEFING.md`, which supersedes the
+"What is left" section below.
+
+⚠ **Wave 7 is mid-flight and NO span has been converted yet.** Round 1 was ten read-only recon
+lanes, each attacked by an independent skeptic; the results are in `notes/wave7-round1/`
+(`README.md` = the findings, `APPLIED.md` = what has been done about them). Six lanes survived
+verification, one (prom_b 0xF17559) was REFUTED, and three (prom_a 0xF85FF9, prom_b 0xF4F000, the
+prom_c 0xFCD0F7 interpreter hunt) are UNVERIFIED because their agents died. **Round 2 — the
+conversion round — has not started, and must not start on the three unverified lanes.**
+
+Corrections already landed: prom_a 0xFAD800's dispatch table has 116 empty slots not 88;
+prom_a 0xFA5AEB's citations were systematically one byte past the instruction and its 25-block
+table is one block 25 times; and gap T is FIVE PA writes, not four.
 
 ---
 

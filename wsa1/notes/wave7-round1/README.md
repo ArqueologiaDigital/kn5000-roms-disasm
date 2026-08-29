@@ -6,6 +6,8 @@ is. This file is generated from `round1-results.json`, which is the run's raw re
 
 Regenerate with `python3 notes/wave7-round1/render_ledger.py`.
 
+**What has been DONE about these is tracked separately, in `APPLIED.md`.**
+
 ## Status at a glance
 
 | lane | target | verdict | fatal | serious | minor |

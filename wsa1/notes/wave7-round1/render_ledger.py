@@ -31,6 +31,7 @@ def render(r):
       "a `.s` file or a findings document yet**, and several entries must be corrected before any of it\n"
       "is. This file is generated from `round1-results.json`, which is the run's raw return value.\n")
     W("Regenerate with `python3 notes/wave7-round1/render_ledger.py`.\n")
+    W("**What has been DONE about these is tracked separately, in `APPLIED.md`.**\n")
     W("## Status at a glance\n")
     W("| lane | target | verdict | fatal | serious | minor |")
     W("|---|---|---|---:|---:|---:|")
