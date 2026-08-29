@@ -19462,7 +19462,7 @@ sub_F9B5A5__F9B827:
 ; Inputs:  no frame; argument slots read: (XIZ+0x08), (XIZ+0x10), (XIZ+0x12)
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCCA0A, 0xFCCA0E, 0xFCCA12, 0xFCCA16, 0xFCCA1A, 0xFCCA1E, 0xFCCA22, 0xFCCA26, 0xFCCA2A, 0xFCCA2E, 0xFCCA32, 0xFCCA36, 0xFCCA3A, 0xFCCA3E, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA52, 0xFCCA56, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66
-; Calls:   0xF9AEB6 = sub_F9AEB6, 0xF9E020 = sub_F9E020
+; Calls:   0xF9AEB6 = sub_F9AEB6, 0xF9E020 = Stream_ReadU24BE
 ;          0xFC9576 = sub_FC9576, 0xFCA252 = Double_Multiply
 ;          0xFCA626 = Double_Subtract, 0xFCAA50 = Float32_ToDouble
 ;          0xFCABC6 = Int32_ToFloat32, 0xFCADD6 = Double_ToFloat32
@@ -19961,8 +19961,8 @@ sub_F9B887__F9BDC9:
 ; Calls:   0xF9AEB6 = sub_F9AEB6, 0xF9AFDC = sub_F9AFDC
 ;          0xF9B167 = sub_F9B167, 0xF9B28B = sub_F9B28B
 ;          0xF9B37E = sub_F9B37E, 0xF9B445 = sub_F9B445
-;          0xF9DFB7 = sub_F9DFB7, 0xF9E020 = sub_F9E020
-;          0xF9E077 = sub_F9E077, 0xF9E1ED = sub_F9E1ED
+;          0xF9DFB7 = Stream_ReadU24BE_Shl8, 0xF9E020 = Stream_ReadU24BE
+;          0xF9E077 = Int32_ToFloat32_Q31, 0xF9E1ED = sub_F9E1ED
 ;          0xF9ECF1 = sub_F9ECF1, 0xF9F765 = sub_F9F765
 ;          0xFC9576 = sub_FC9576, 0xFCA1B6 = Double_Negate
 ;          0xFCA252 = Double_Multiply, 0xFCA41F = Double_Add
@@ -22827,7 +22827,10 @@ sub_F9BE3A__F9DFAF:
 	unlk32 xiz                                 ; F9DFB4  unlk XIZ
 	ret                                        ; F9DFB6  ret
 ; --------------------------------------------------------------------------
-; sub_F9DFB7 -- 0xF9DFB7..0xF9E01F (105 bytes)
+; Stream_ReadU24BE_Shl8 -- 0xF9DFB7..0xF9E01F (105 bytes)
+;             the same three-byte big-endian cursor read as Stream_ReadU24BE, but placed
+;             in bits 31..8 instead of bits 23..0.
+;             (★ NAMED in wave 7 round 2; was `sub_F9DFB7`.)
 ;
 ; Called from: no site outside this module.
 ;          49 site(s) inside this module:
@@ -22843,15 +22846,40 @@ sub_F9BE3A__F9DFAF:
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFCA0FE = Shift32_Left
-; Evidence: the listing below is the byte-identical round-trip of 0xF9DFB7-0xF9E01F
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ three byte fetches, each followed by a cursor advance, shifted 24 / 16 / 8:
+;          (Each address in the block below is the FIRST instruction of the step it
+;          labels, not the only one; the rest of the step follows it.)
+;              0xF9DFBE  ld A,(XBC)                            -- byte 0
+;              0xF9DFC4  push 0x0018 / push XWA / call 0xFCA0FE -- Shift32_Left(byte0, 24)
+;              0xF9DFCC  and XIY,0xFF000000                     -- byte 0 << 24
+;              0xF9DFD5  sub XBC,XBC / inc 1,XBC / add (XIZ+0x08),XBC  -- cursor += 1
+;              0xF9DFE5  sll 0x00,XBC / and XBC,0x00FF0000      -- byte 1 << 16
+;              0xF9DFF1  the same three-instruction cursor advance again
+;              0xF9DFFF  sll 0x08,WA / and WA,0xFF00            -- byte 2 << 8
+;              0xF9E00B  inc 1,XBC / ld (XIZ+0x08),XBC         
+;                        -- cursor += 1 (three in all)
+;              0xF9E015  ld XBC,(XIZ+0x0C) / ld (XBC),XIY      
+;                        -- stored through the out-pointer
+;              0xF9E01A  ld XIY,(XIZ+0x08)                      -- advanced cursor returned
+;          There is NO fourth byte and no term at shift 0, so the low eight bits of the
+;          stored long are always zero: this is the same 24-bit field as
+;          Stream_ReadU24BE, left-aligned in a 32-bit word.  0xFCA0FE is Shift32_Left;
+;          the byte-0 term uses it rather than an inline `sll` because 24 is beyond the
+;          one-instruction range.
+;          ★ `sll 0x00,Xrr` is a shift by SIXTEEN, not by zero: the TLCS-900 encodes a
+;          shift count of 16 as the immediate 0, and MAME's core implements exactly that
+;          -- `uint8_t count = ( s & 0x0f ) ? ( s & 0x0f ) : 16;` at
+;          mame/src/devices/cpu/tlcs900/900tbl.hxx:1011 (sla32).  Corroborated inside
+;          this image at 0xFC90BA, where `sll 0x04,IY / extz XIY / sll 0x00,XIY / or
+;          XBC,XIY` assembles a double's exponent into bits 30..20 beside a `and
+;          XBC,0x000FFFFF` mantissa and an `or XBC,0x80000000` sign -- which only lands
+;          correctly if the second shift is 16.
+; Unknown:  ⚠ WHY the two readers differ.  Both are called from the same module (49 sites
+;          here, 27 for Stream_ReadU24BE) and both consume three bytes; nothing traced
+;          here says which operand kind takes which alignment.  A fractional/fixed-point
+;          reading of the left-aligned form is PLAUSIBLE and is NOT asserted.
 ; --------------------------------------------------------------------------
-sub_F9DFB7:
+Stream_ReadU24BE_Shl8:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; F9DFB7  link XIZ,0xfff4
 	ld	xbc, (xiz+8)                            ; F9DFBB  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)                                ; F9DFBE  ld A,(XBC)
@@ -22892,7 +22920,10 @@ sub_F9DFB7:
 	unlk32 xiz                                 ; F9E01D  unlk XIZ
 	ret                                        ; F9E01F  ret
 ; --------------------------------------------------------------------------
-; sub_F9E020 -- 0xF9E020..0xF9E076 (87 bytes)
+; Stream_ReadU24BE -- 0xF9E020..0xF9E076 (87 bytes)
+;             read three bytes big-endian from a caller-held cursor, store them as a
+;             32-bit value through an out-pointer, and advance the cursor by three.
+;             (★ NAMED in wave 7 round 2; was `sub_F9E020`.)
 ;
 ; Called from: no site outside this module.
 ;          27 site(s) inside this module:
@@ -22903,15 +22934,39 @@ sub_F9DFB7:
 ;          0xFA2512 0xFA259C 0xFA25A9
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Evidence: the listing below is the byte-identical round-trip of 0xF9E020-0xF9E076
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ the whole 87-byte body is one straight line, three byte fetches and a sum:
+;          (Each address in the block below is the FIRST instruction of the step it
+;          labels, not the only one; the rest of the step follows it.)
+;              0xF9E024  ld XBC,(XIZ+0x08) / ld A,(XBC)      -- byte 0 at the cursor
+;              0xF9E02D  sll 0x00,XWA / and XWA,0x00FF0000    -- byte 0 << 16
+;              0xF9E039  inc 1,XBC / ld (XIZ+0x08),XBC        -- cursor += 1, written BACK
+;              0xF9E042  sll 0x08,WA / and WA,0xFF00          -- byte 1 << 8
+;              0xF9E055  and A,0xFF                           -- byte 2 << 0
+;              0xF9E064  ld XIY,(XIZ-4) / add XIY,(XIZ-8) / add XIY,XWA   -- the sum
+;              0xF9E06C  ld XBC,(XIZ+0x0C) / ld (XBC),XIY    
+;                        -- stored through the out-pointer
+;              0xF9E071  ld XIY,(XIZ+0x08)                   
+;                        -- advanced cursor returned in XIY
+;          ★ `sll 0x00,Xrr` is a shift by SIXTEEN, not by zero: the TLCS-900 encodes a
+;          shift count of 16 as the immediate 0, and MAME's core implements exactly that
+;          -- `uint8_t count = ( s & 0x0f ) ? ( s & 0x0f ) : 16;` at
+;          mame/src/devices/cpu/tlcs900/900tbl.hxx:1011 (sla32).  Corroborated inside
+;          this image at 0xFC90BA, where `sll 0x04,IY / extz XIY / sll 0x00,XIY / or
+;          XBC,XIY` assembles a double's exponent into bits 30..20 beside a `and
+;          XBC,0x000FFFFF` mantissa and an `or XBC,0x80000000` sign -- which only lands
+;          correctly if the second shift is 16.
+;          The cursor slot (XIZ+0x08) is written back after EVERY fetch, so a caller
+;          that passes the same slot again continues where this left off; that is what
+;          makes it a cursor and not a pointer argument.  Its 27 call sites are all
+;          inside the 0xF9BE3A byte-stream interpreter's module, which fetches its own
+;          opcodes the same way (`ld A,(XBC) / inc 1,XBC / ld (XIZ+0x08),XBC` at
+;          0xF9BE42).
+; Unknown:  ⚠ WHAT the three bytes are.  Nothing here reads the value's meaning; the name
+;          describes the encoding and the cursor discipline only.  Whether the 24-bit
+;          result is signed is not established either -- this routine zero-extends, but
+;          so would a reader that sign-extends later.
 ; --------------------------------------------------------------------------
-sub_F9E020:
+Stream_ReadU24BE:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; F9E020  link XIZ,0xfff4
 	ld	xbc, (xiz+8)                            ; F9E024  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)                                ; F9E027  ld A,(XBC)
@@ -22946,7 +23001,10 @@ sub_F9E020:
 	unlk32 xiz                                 ; F9E074  unlk XIZ
 	ret                                        ; F9E076  ret
 ; --------------------------------------------------------------------------
-; sub_F9E077 -- 0xF9E077..0xF9E0B6 (64 bytes)
+; Int32_ToFloat32_Q31 -- 0xF9E077..0xF9E0B6 (64 bytes)
+;             convert the 32-bit integer argument to float32 and divide it by 2**31, in
+;             two steps of 2**15 and 2**16.
+;             (★ NAMED in wave 7 round 2; was `sub_F9E077`.)
 ;
 ; Called from: no site outside this module.
 ;          23 site(s) inside this module:
@@ -22957,15 +23015,31 @@ sub_F9E020:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFCABC6 = Int32_ToFloat32, 0xFCAE60 = Float32_Divide
-; Evidence: the listing below is the byte-identical round-trip of 0xF9E077-0xF9E0B6
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ the 64-byte body is four calls and two literals, and the two literals are
+;          the name:
+;              0xF9E082  Int32_ToFloat32( (XIZ+0x0A):(XIZ+0x08) )  
+;                        -- the argument, as float
+;              0xF9E08E  Int32_ToFloat32( 0x00008000 )              -- 32768.0
+;              0xF9E094  Float32_Divide( arg, 32768.0 )             -- kept at (XIZ-4)
+;              0xF9E0A1  Int32_ToFloat32( 0x00010000 )              -- 65536.0
+;              0xF9E0AC  Float32_Divide( (XIZ-4), 65536.0 )         -- the result, in XIY
+;          0x8000 * 0x10000 = 0x80000000 = 2**31, so the routine returns arg / 2**31 --
+;          the conversion a Q31 fixed-point fraction needs.  The argument order is read
+;          off the pushes, not assumed: for each divide the LAST push is the dividend
+;          (`push XIY / push XIX` at 0xF9E092, `push XIY / pushw (XIZ+0xFE) / pushw
+;          (XIZ+0xFC)` at 0xF9E0A5), which is the same order Float32_Divide's other
+;          callers use.
+;          The split into two divides rather than one by 2**31 is what makes the scale
+;          legible: 2**31 is not representable as an int32 constant on this machine, and
+;          0x80000000 as an `Int32_ToFloat32` argument would be NEGATIVE.
+; Unknown:  ⚠ whether the argument is treated as SIGNED.  It is passed straight to
+;          Int32_ToFloat32 (0xFCABC6), whose own name says signed, but that name is not
+;          re-derived here.
+;          ⚠ what the value IS.  All 23 call sites are inside the 0xF9BE3A module; none
+;          was traced to a physical quantity, so `Q31` describes the scaling and claims
+;          nothing else.
 ; --------------------------------------------------------------------------
-sub_F9E077:
+Int32_ToFloat32_Q31:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9E077  link XIZ,0xfffc
 	push	xix                                   ; F9E07B  push XIX
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9E07C  pushw (XIZ+0x0a)
@@ -25260,7 +25334,7 @@ sub_F9ECF1__F9F75E:
 ;          reads 0x00861C, 0x008622, 0x008626, 0x00862A, 0x00F365, 0x00F367, 0x00F369
 ; Calls:   0xF9A163 = P7Byte_SendCmd, 0xF9A4B0 = P7Byte_SendArg
 ;          0xF9AFDC = sub_F9AFDC, 0xF9B0D1 = sub_F9B0D1
-;          0xF9E020 = sub_F9E020, 0xFCABC6 = Int32_ToFloat32
+;          0xF9E020 = Stream_ReadU24BE, 0xFCABC6 = Int32_ToFloat32
 ; Evidence: the listing below is the byte-identical round-trip of 0xF9F765-0xF9F8E0
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -26209,8 +26283,8 @@ sub_F9FEA5__F9FEF0:
 ; Inputs:  frame `link XIZ,-192`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x10), (XIZ+0x12)
 ; Outputs: writes 0x008612
 ;          reads 0xFCC81E, 0xFCC822, 0xFCC826, 0xFCC82A, 0xFCC82E, 0xFCC832, 0xFCC836, 0xFCC83A, 0xFCC83E, 0xFCC842, 0xFCC846, 0xFCC84A, 0xFCC84E, 0xFCC852, 0xFCC856, 0xFCC85A, 0xFCC85E, 0xFCC862, 0xFCC866, 0xFCC86A, 0xFCC86E, 0xFCC872, 0xFCC876, 0xFCC87A, 0xFCC87E, 0xFCC882, 0xFCC886, 0xFCC88A, 0xFCC88E, 0xFCC892, 0xFCC896, 0xFCC89A, 0xFCC89E, 0xFCC8A2, 0xFCC8A6, 0xFCC8AA, 0xFCC8AE, 0xFCC8B2, 0xFCC8B6, 0xFCC8BA, 0xFCC8BE, 0xFCC8C2, 0xFCC8C6, 0xFCC8CA, 0xFCC8CE, 0xFCC8D2, 0xFCC8D6, 0xFCC8DA, 0xFCC8DE, 0xFCC8E2, 0xFCC8E6, 0xFCC8EA, 0xFCC8EE, 0xFCC8F2, 0xFCC8F6, 0xFCC8FA, 0xFCC92A, 0xFCC92E, 0xFCC932, 0xFCC936, 0xFCC93A, 0xFCC93E, 0xFCC942, 0xFCC946, 0xFCC94A, 0xFCC94E, 0xFCC952, 0xFCC956, 0xFCC95A, 0xFCC95E, 0xFCC962, 0xFCC966, 0xFCC97A, 0xFCC97E, 0xFCC982, 0xFCC986, 0xFCC98A, 0xFCC98E, 0xFCC992, 0xFCC996, 0xFCC99A, 0xFCC99E, 0xFCC9A2, 0xFCC9A6, 0xFCC9AA, 0xFCC9AE, 0xFCC9B2, 0xFCC9B6, 0xFCC9BA, 0xFCC9BE, 0xFCC9C2, 0xFCC9C6, 0xFCC9CA, 0xFCC9CE, 0xFCC9D2, 0xFCC9D6, 0xFCC9DA, 0xFCC9DE, 0xFCC9E2, 0xFCC9E6, 0xFCC9EA, 0xFCC9EE, 0xFCC9F2, 0xFCC9F6, 0xFCC9FA, 0xFCC9FE, 0xFCCA02, 0xFCCA06, 0xFCCA0A, 0xFCCA0E, 0xFCCA12, 0xFCCA16, 0xFCCA1A, 0xFCCA1E, 0xFCCA22, 0xFCCA26, 0xFCCA2A, 0xFCCA2E, 0xFCCA32, 0xFCCA36, 0xFCCA3A, 0xFCCA3E, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA52, 0xFCCA56, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66, 0xFCCA6A, 0xFCCA6E, 0xFCCA72, 0xFCCA76
-; Calls:   0xF9DFB7 = sub_F9DFB7, 0xF9E020 = sub_F9E020
-;          0xF9E077 = sub_F9E077, 0xF9E0B7 = sub_F9E0B7
+; Calls:   0xF9DFB7 = Stream_ReadU24BE_Shl8, 0xF9E020 = Stream_ReadU24BE
+;          0xF9E077 = Int32_ToFloat32_Q31, 0xF9E0B7 = sub_F9E0B7
 ;          0xF9FD0E = sub_F9FD0E, 0xF9FEA5 = sub_F9FEA5
 ;          0xFC9576 = sub_FC9576, 0xFCA1B6 = Double_Negate
 ;          0xFCA252 = Double_Multiply, 0xFCA41F = Double_Add
@@ -29399,7 +29473,7 @@ sub_FA000B__FA2378:
 ;          0xF9F9B4
 ; Inputs:  frame `link XIZ,-60`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: writes 0x008612, 0x008640
-; Calls:   0xF9DFB7 = sub_F9DFB7, 0xF9E020 = sub_F9E020
+; Calls:   0xF9DFB7 = Stream_ReadU24BE_Shl8, 0xF9E020 = Stream_ReadU24BE
 ;          0xF9E0B7 = sub_F9E0B7, 0xF9F9FA = sub_F9F9FA
 ;          0xF9FBA9 = sub_F9FBA9
 ; Arms:    26 computed-goto arm(s) inside this routine: 0xFA23F1 0xFA23FE 0xFA240B 0xFA241F 0xFA243C 0xFA2450 0xFA247A 0xFA248D 0xFA24A0 0xFA24A3 0xFA24A6 0xFA24D0 0xFA24F0 0xFA24FD 0xFA2527 0xFA2534 0xFA2537 0xFA2544 0xFA2547 0xFA2571 0xFA2574 0xFA2591 0xFA2594 0xFA25B4 0xFA25BE 0xFA25D2
@@ -39433,10 +39507,10 @@ Sat16_0_to_7FFF__FA7591:
 ;          0xFAB2C8 in sub_FAB0BD__FAB20E, 0xFAB2EE in sub_FAB0BD__FAB2E9
 ;          0xFAB30B in sub_FAB0BD__FAB30B, 0xFAB3A0 in sub_FAB0BD__FAB312
 ;          0xFAB3C4 in sub_FAB0BD__FAB3B9, 0xFAB404 in sub_FAB0BD__FAB3D8
-;          0xFAB418 in sub_FAB0BD__FAB418, 0xFAB91B in sub_FAB8CC__FAB91B
-;          0xFAB9B5 in sub_FAB8CC__FAB987, 0xFABA42 in sub_FAB9D8__FABA42
-;          0xFABAC0 in sub_FAB9D8__FABA92, 0xFABBB6 in sub_FABAE3__FABBAF
-;          0xFABCB2 in sub_FABBFB__FABCAB, 0xFABCD1 in sub_FABBFB__FABCB9
+;          0xFAB418 in sub_FAB0BD__FAB418, 0xFAB91B in Dev10C_StageRegs_0800_0840_FAB8CC__FAB91B
+;          0xFAB9B5 in Dev10C_StageRegs_0800_0840_FAB8CC__FAB987, 0xFABA42 in Dev10C_StageRegs_0800_0840_FAB9D8__FABA42
+;          0xFABAC0 in Dev10C_StageRegs_0800_0840_FAB9D8__FABA92, 0xFABBB6 in Dev10C_StageRegs_0900_0940__FABBAF
+;          0xFABCB2 in Dev10C_StageRegs_09C0_0A00__FABCAB, 0xFABCD1 in Dev10C_StageRegs_09C0_0A00__FABCB9
 ; Inputs:  (XIZ+0x08) = the value, (XIZ+0x0A) = the HIGH bound, (XIZ+0x0C) = the LOW
 ;          bound -- so a caller pushes low, high, value, in that order.
 ; Outputs: WA = min(max(value, low), high).  SIGNED: the two compares are `jr LE`
@@ -39488,7 +39562,7 @@ Clamp_ToRange_Word__FA75B6:
 ;          0xFAAFC0 in sub_FAACEE__FAAF45, 0xFAB029 in sub_FAACEE__FAB00B
 ;          0xFAB1A2 in sub_FAB0BD__FAB14A, 0xFAB1E0 in sub_FAB0BD__FAB1C6
 ;          0xFAB38D in sub_FAB0BD__FAB312, 0xFAB3F6 in sub_FAB0BD__FAB3D8
-;          0xFABBA8 in sub_FABAE3__FABB98, 0xFABCA4 in sub_FABBFB__FABC94
+;          0xFABBA8 in Dev10C_StageRegs_0900_0940__FABB98, 0xFABCA4 in Dev10C_StageRegs_09C0_0A00__FABC94
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFCAA2F = Shift16_ArithRight
@@ -39540,7 +39614,7 @@ sub_FA75BA__FA75E4:
 ;          0xFA8633 in sub_FA842D__FA8623, 0xFA94DE in sub_FA93AF__FA94B3
 ;          0xFA9577 in sub_FA93AF__FA9556, 0xFA959A in sub_FA93AF__FA9556
 ;          0xFA961F in Voice_StageRegs_0500_08C0_AB, 0xFA9676 in Voice_StageRegs_0500_08C0_AB__FA9676
-;          0xFABBD6 in sub_FABAE3__FABBD6, 0xFABCD5 in sub_FABBFB__FABCB9
+;          0xFABBD6 in Dev10C_StageRegs_0900_0940__FABBD6, 0xFABCD5 in Dev10C_StageRegs_09C0_0A00__FABCB9
 ; Inputs:  (XIZ+0x08) = a SIGNED value.
 ; Outputs: WA = `sign(v) * Detune_Scale_Curve[min(|v|, 50)]`, i.e. -127..+127.
 ; Evidence: ★ NAMED round 2, 2026-08-25, for the TABLE it reads and NOT for a
@@ -39626,7 +39700,10 @@ DetuneCurve_LookupUnsigned:
 	unlk32 xiz                                 ; FA7669  unlk XIZ
 	ret                                        ; FA766B  ret
 ; --------------------------------------------------------------------------
-; sub_FA766C -- 0xFA766C..0xFA76B1 (70 bytes)
+; ScaleClampedDelta_Shr5 -- 0xFA766C..0xFA76B1 (70 bytes)
+;             take bits 14..8 of a packed word, clamp them to a caller's range, subtract
+;             a base and scale by a signed factor with an arithmetic shift right of 5.
+;             (★ NAMED in wave 7 round 2; was `sub_FA766C`.)
 ;
 ; Called from: 14 site(s) outside this module:
 ;          0xFA8594 in sub_FA842D__FA8570, 0xFA85E8 in sub_FA842D__FA859D
@@ -39634,19 +39711,36 @@ DetuneCurve_LookupUnsigned:
 ;          0xFAA59A in sub_FAA4C3__FAA565, 0xFAA75A in sub_FAA4C3__FAA706
 ;          0xFAADD4 in sub_FAACEE__FAAD9A, 0xFAAF99 in sub_FAACEE__FAAF45
 ;          0xFAB17F in sub_FAB0BD__FAB14A, 0xFAB366 in sub_FAB0BD__FAB312
-;          0xFAB9A7 in sub_FAB8CC__FAB987, 0xFABAB2 in sub_FAB9D8__FABA92
-;          0xFABB7F in sub_FABAE3__FABB61, 0xFABC75 in sub_FABBFB__FABC57
+;          0xFAB9A7 in Dev10C_StageRegs_0800_0840_FAB8CC__FAB987, 0xFABAB2 in Dev10C_StageRegs_0800_0840_FAB9D8__FABA92
+;          0xFABB7F in Dev10C_StageRegs_0900_0940__FABB61, 0xFABC75 in Dev10C_StageRegs_09C0_0A00__FABC57
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
-; Evidence: the listing below is the byte-identical round-trip of 0xFA766C-0xFA76B1
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ five steps, each an instruction or a pair:
+;              0xFA7675  and DE,0x7F00 / srl 0x08,BC     
+;                        -- v = (arg0 >> 8) & 0x7F, so 0..127
+;              0xFA7685  cp BC,(XIZ+0x0e) / jr ULE       
+;                        -- v > (XIZ+0x0E) ?  v = (XIZ+0x0E)
+;              0xFA7692  cp DE,(XIZ+0x0c) / jr NC        
+;                        -- v < (XIZ+0x0C) ?  v = (XIZ+0x0C)
+;              0xFA769D  ld HL,DE / sub HL,BC             -- minus the base at (XIZ+0x0A)
+;              0xFA76A4  exts BC / muls XBC,HL / sra 0x05,BC / ld WA,BC  
+;                        -- * (XIZ+0x10) >> 5
+;          The comparisons are the UNSIGNED conditions (`jr ULE`, `jr NC`) while the
+;          multiply is `muls` on an `exts`-ed factor, so the value is unsigned and the
+;          factor is signed; both are opcodes.  The bit field is `0x7F00` and the shift
+;          `0x08`, so the payload really is bits 14..8 and not a whole byte at bits
+;          15..8.
+;          Fourteen call sites, all outside this module, and four of them are the
+;          staging producers named in this round: Dev10C_StageRegs_0800_0840_FAB8CC
+;          (0xFAB9A7), _FAB9D8 (0xFABAB2), Dev10C_StageRegs_0900_0940 (0xFABB7F) and
+;          Dev10C_StageRegs_09C0_0A00 (0xFABC75).
+; Unknown:  ⚠ what the packed word at (XIZ+0x08) is, and therefore what bits 14..8 hold.
+;          A key-number or controller reading is PLAUSIBLE from the 0..127 range and is
+;          NOT asserted; nothing traced here reads the field's meaning.
+;          ⚠ the units of the >> 5.  It is the scale that makes the product fit, and no
+;          consumer was followed far enough to say what the result measures.
 ; --------------------------------------------------------------------------
-sub_FA766C:
+ScaleClampedDelta_Shr5:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA766C  link XIZ,0x0000
 	pushw	hl                                   ; FA7670  push HL
 	pushw	de                                   ; FA7671  push DE
@@ -39658,16 +39752,16 @@ sub_FA766C:
 	ld	hl, (xiz+14)                            ; FA7680  ld HL,(XIZ+0x0e)
 	extz	hl                                    ; FA7683  extz HL
 	cp	bc, hl                                  ; FA7685  cp BC,HL
-	jr ule, sub_FA766C__FA768D                 ; FA7687  jr ULE,0xfa768d
+	jr ule, ScaleClampedDelta_Shr5__FA768D                 ; FA7687  jr ULE,0xfa768d
 	ld	de, hl                                  ; FA7689  ld DE,HL
-	jr sub_FA766C__FA7698                      ; FA768B  jr T,0xfa7698
-sub_FA766C__FA768D:
+	jr ScaleClampedDelta_Shr5__FA7698                      ; FA768B  jr T,0xfa7698
+ScaleClampedDelta_Shr5__FA768D:
 	ld	hl, (xiz+12)                            ; FA768D  ld HL,(XIZ+0x0c)
 	extz	hl                                    ; FA7690  extz HL
 	cp	de, hl                                  ; FA7692  cp DE,HL
-	jr nc, sub_FA766C__FA7698                  ; FA7694  jr NC,0xfa7698
+	jr nc, ScaleClampedDelta_Shr5__FA7698                  ; FA7694  jr NC,0xfa7698
 	ld	de, hl                                  ; FA7696  ld DE,HL
-sub_FA766C__FA7698:
+ScaleClampedDelta_Shr5__FA7698:
 	ld	bc, (xiz+10)                            ; FA7698  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FA769B  extz BC
 	ld	hl, de                                  ; FA769D  ld HL,DE
@@ -41980,7 +42074,7 @@ Voice_StagePitch_Reg0400_CD__FA841D:
 ; Inputs:  frame `link XIZ,-20`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D77E, 0x00D780, 0x00D782
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
-;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = sub_FA766C
+;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
 ;          0xFC7FCA = sub_FC7FCA
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA842D-0xFA866A
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -43868,8 +43962,10 @@ Voice_StagePair_Reg0100_0140_Both__FA9195:
 ;            4                  -> Voice_StagePair_Reg0100_0140_Both;
 ;            5                  -> the inline arm at 0xFA91FC, which offsets EACH register
 ;                                  from ITS OWN base: with M = (voice[+0x23])[+0x21],
-;                                    word4 = (voice[+0x3F] & 0xFF80) | Clamp_36_to_120((voice[+0x3F] & 0x7F) -/+ M)
-;                                    word5 = (voice[+0x41] & 0xFF80) | Clamp_36_to_120((voice[+0x41] & 0x7F) -/+ M)
+;                                    word4 = (voice[+0x3F] & 0xFF80) |
+;                Clamp_36_to_120((voice[+0x3F] & 0x7F) -/+ M)
+;                                    word5 = (voice[+0x41] & 0xFF80) |
+;                Clamp_36_to_120((voice[+0x41] & 0x7F) -/+ M)
 ;                                  (0xFA9260-0xFA9285), sign again from bit 7 of
 ;                                  (voice[+0x25])[+0x18].
 ; ★ ITS TWIN IS Voice_StagePair_Reg0100_0140_CD, AND THE ONE SEMANTIC DIFFERENCE IS THE
@@ -44167,7 +44263,7 @@ Voice_StagePair_Reg0100_0140_CD__FA93A9:
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D784, 0x00D786, 0x00D788
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
-;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = sub_FA766C
+;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA93AF-0xFA95D3
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -46233,7 +46329,7 @@ sub_FAA3EB__FAA478:
 ; Outputs: writes 0x00D776
 ;          reads 0x0014FF
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
-;          0xFA766C = sub_FA766C
+;          0xFA766C = ScaleClampedDelta_Shr5
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA4C3-0xFAA87D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -47207,7 +47303,7 @@ sub_FAAC00__FAACE8:
 ; Outputs: writes 0x00D776
 ;          reads 0xFDEF8E
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
-;          0xFA766C = sub_FA766C, 0xFC37E2 = sub_FC37E2
+;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37E2 = sub_FC37E2
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAACEE-0xFAB0BC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -47654,7 +47750,7 @@ sub_FAACEE__FAB070:
 ; Inputs:  frame `link XIZ,-15`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D776
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
-;          0xFA766C = sub_FA766C, 0xFC37BE = sub_FC37BE
+;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37BE = sub_FC37BE
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB0BD-0xFAB489
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -48604,22 +48700,46 @@ sub_FAB7E0__FAB80C:
 	unlk32 xiz                                 ; FAB815  unlk XIZ
 	ret                                        ; FAB817  ret
 ; --------------------------------------------------------------------------
-; sub_FAB818 -- 0xFAB818..0xFAB8CB (180 bytes)
+; Dev10C_StageRegs_0800_0840_FAB818 -- 0xFAB818..0xFAB8CB (180 bytes)
+;             compute the two staging words that 0xFB7345 pushes into registers
+;             0x0800+chan and 0x0840+chan.
+;             (★ NAMED in wave 7 round 2; was `sub_FAB818`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB3B44 in MidiNote_OnByPartMode__FB3B29
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D78A, 0x00D78C
 ; Calls:   0xFB3CE0 = VoiceQuery_Tag00_Part, 0xFB73F0 = sub_FB73F0
-; Evidence: the listing below is the byte-identical round-trip of 0xFAB818-0xFAB8CB
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
+;          absolute stores below are the routine's only absolute-addressed output, and
+;          the two words they write are read back by Dev10C_WriteSixChanRegs_FromD78A
+;          (0xFB7345), which pushes them into registers 0x0800+chan and 0x0840+chan of
+;          one channel:
+;              0xFAB855  ld (0x00d78a),WA
+;              0xFAB869  ld (0x00d78c),WA
+;          That register/word map is reproduced from the ROM BYTES, not from this
+;          listing, by `python3 notes/prom_c_tg_chanmap.py 0xFB7345 0xAB --pairs`.
+;          The six words 0x00D78A..0x00D795 sit immediately after the 22-word staging
+;          struct 0x00D75E..0x00D789 of notes/FINDINGS-prom_c-dev10c-producers.md §2;
+;          this routine is one of THREE producers of that word pair -- the others are
+;          Dev10C_StageRegs_0800_0840_FAB8CC and _FAB9D8.
+;          Everything else above is an instruction operand listed by
+;          notes/gen_prom_c_block_headers.py; the call sites are
+;          notes/prom_c_module_map.py's image-wide scan; the listing is the byte-
+;          identical round-trip of 0xFAB818-0xFAB8CB (notes/gen_prom_c_block.py).
+; Unknown:  ⚠ what the two values MEAN.
+;          Registers 0x0800+chan and 0x0840+chan have a documented quiescent pair,
+;          0xFF80 / 0xFF00 (notes/FINDINGS-prom_c-dev10c-register-meanings.md §5), and
+;          that file's 2026-08-25 note reports 0x0800+chan as (envelope level << 8) |
+;          rate.  Neither statement is re-derived here and neither is asserted of THIS
+;          producer.
+;          ⚠ whether 0xFB7345 is the ONLY consumer of them.  prom_c contains no absolute
+;          LOAD of these six words at all, but a consumer handed the struct base as an
+;          argument -- as 0xFB7345 itself is -- would be invisible to that search.
+;          "Only located consumer", not "only consumer".
+;          ⚠ what this routine is FOR beyond producing those two words.
 ; --------------------------------------------------------------------------
-sub_FAB818:
+Dev10C_StageRegs_0800_0840_FAB818:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAB818  link XIZ,0xfffc
 	pushw	hl                                   ; FAB81C  push HL
 	push	xix                                   ; FAB81D  push XIX
@@ -48631,7 +48751,7 @@ sub_FAB818:
 	ld	l, (xwa+14)                             ; FAB82E  ld L,(XWA+0x0e)
 	ld	c, l                                    ; FAB831  ld C,L
 	and	c, 0x80                                ; FAB833  and C,0x80
-	jrl z, sub_FAB818__FAB8C7                  ; FAB836  jrl Z,0xfab8c7
+	jrl z, Dev10C_StageRegs_0800_0840_FAB818__FAB8C7                  ; FAB836  jrl Z,0xfab8c7
 	res	7, l                                   ; FAB839  res 0x07,L
 	ld	c, l                                    ; FAB83C  ld C,L
 	extz	bc                                    ; FAB83E  extz BC
@@ -48656,10 +48776,10 @@ sub_FAB818:
 	inc	5, xiy                                 ; FAB879  inc 5,XIY
 	ld	xix, xiy                                ; FAB87B  ld XIX,XIY
 	popw	bc                                    ; FAB87D  pop BC
-sub_FAB818__FAB87E:
+Dev10C_StageRegs_0800_0840_FAB818__FAB87E:
 	ld	h, (xix)                                ; FAB87E  ld H,(XIX)
 	cp	h, 64                                   ; FAB880  cp H,0x40
-	jr nc, sub_FAB818__FAB8C7                  ; FAB883  jr NC,0xfab8c7
+	jr nc, Dev10C_StageRegs_0800_0840_FAB818__FAB8C7                  ; FAB883  jr NC,0xfab8c7
 	ldb	c, 68                                  ; FAB885  ld C,0x44
 	mul8rr	c, h                                ; FAB887  mul BC,H
 	add	bc, 19                                 ; FAB889  add BC,0x0013
@@ -48668,9 +48788,9 @@ sub_FAB818__FAB87E:
 	ld	c, (xwa+14)                             ; FAB894  ld C,(XWA+0x0e)
 	res	7, c                                   ; FAB897  res 0x07,C
 	cp	l, c                                    ; FAB89A  cp L,C
-	jr nz, sub_FAB818__FAB8C3                  ; FAB89C  jr NZ,0xfab8c3
+	jr nz, Dev10C_StageRegs_0800_0840_FAB818__FAB8C3                  ; FAB89C  jr NZ,0xfab8c3
 	extpfx3 0x8E, 0x0A, 0xF6                   ; FAB89E  cp H,(XIZ+0x0a)
-	jr z, sub_FAB818__FAB8C3                   ; FAB8A1  jr Z,0xfab8c3
+	jr z, Dev10C_StageRegs_0800_0840_FAB818__FAB8C3                   ; FAB8A1  jr Z,0xfab8c3
 	ldb	c, 68                                  ; FAB8A3  ld C,0x44
 	mul8rr	c, h                                ; FAB8A5  mul BC,H
 	inc	1, bc                                  ; FAB8A7  inc 1,BC
@@ -48683,32 +48803,56 @@ sub_FAB818__FAB87E:
 	pushw	wa                                   ; FAB8BC  push WA
 	call	0xFB73F0                              ; FAB8BD  call 0xfb73f0
 	inc	6, xsp                                 ; FAB8C1  inc 6,XSP
-sub_FAB818__FAB8C3:
+Dev10C_StageRegs_0800_0840_FAB818__FAB8C3:
 	inc	1, xix                                 ; FAB8C3  inc 1,XIX
-	jr sub_FAB818__FAB87E                      ; FAB8C5  jr T,0xfab87e
-sub_FAB818__FAB8C7:
+	jr Dev10C_StageRegs_0800_0840_FAB818__FAB87E                      ; FAB8C5  jr T,0xfab87e
+Dev10C_StageRegs_0800_0840_FAB818__FAB8C7:
 	pop	xix                                    ; FAB8C7  pop XIX
 	popw	hl                                    ; FAB8C8  pop HL
 	unlk32 xiz                                 ; FAB8C9  unlk XIZ
 	ret                                        ; FAB8CB  ret
 ; --------------------------------------------------------------------------
-; sub_FAB8CC -- 0xFAB8CC..0xFAB9D7 (268 bytes)
+; Dev10C_StageRegs_0800_0840_FAB8CC -- 0xFAB8CC..0xFAB9D7 (268 bytes)
+;             compute the two staging words that 0xFB7345 pushes into registers
+;             0x0800+chan and 0x0840+chan.
+;             (★ NAMED in wave 7 round 2; was `sub_FAB8CC`.)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFADF1E in sub_FADEAC__FADF12, 0xFB3D66 in Voice_Retire_Mode20__FB3D5A
 ;          0xFB3E22 in Voice_Retire_Mode08__FB3E22
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D78A, 0x00D78C
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA766C = sub_FA766C
-; Evidence: the listing below is the byte-identical round-trip of 0xFAB8CC-0xFAB9D7
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA766C = ScaleClampedDelta_Shr5
+; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
+;          absolute stores below are the routine's only absolute-addressed output, and
+;          the two words they write are read back by Dev10C_WriteSixChanRegs_FromD78A
+;          (0xFB7345), which pushes them into registers 0x0800+chan and 0x0840+chan of
+;          one channel:
+;              0xFAB9C8  ld (0x00d78a),BC
+;              0xFAB9CD  ld (0x00d78c),DE
+;          That register/word map is reproduced from the ROM BYTES, not from this
+;          listing, by `python3 notes/prom_c_tg_chanmap.py 0xFB7345 0xAB --pairs`.
+;          The six words 0x00D78A..0x00D795 sit immediately after the 22-word staging
+;          struct 0x00D75E..0x00D789 of notes/FINDINGS-prom_c-dev10c-producers.md §2;
+;          this routine is one of THREE producers of that word pair -- the others are
+;          Dev10C_StageRegs_0800_0840_FAB818 and _FAB9D8.
+;          Everything else above is an instruction operand listed by
+;          notes/gen_prom_c_block_headers.py; the call sites are
+;          notes/prom_c_module_map.py's image-wide scan; the listing is the byte-
+;          identical round-trip of 0xFAB8CC-0xFAB9D7 (notes/gen_prom_c_block.py).
+; Unknown:  ⚠ what the two values MEAN.
+;          Registers 0x0800+chan and 0x0840+chan have a documented quiescent pair,
+;          0xFF80 / 0xFF00 (notes/FINDINGS-prom_c-dev10c-register-meanings.md §5), and
+;          that file's 2026-08-25 note reports 0x0800+chan as (envelope level << 8) |
+;          rate.  Neither statement is re-derived here and neither is asserted of THIS
+;          producer.
+;          ⚠ whether 0xFB7345 is the ONLY consumer of them.  prom_c contains no absolute
+;          LOAD of these six words at all, but a consumer handed the struct base as an
+;          argument -- as 0xFB7345 itself is -- would be invisible to that search.
+;          "Only located consumer", not "only consumer".
+;          ⚠ what this routine is FOR beyond producing those two words.
 ; --------------------------------------------------------------------------
-sub_FAB8CC:
+Dev10C_StageRegs_0800_0840_FAB8CC:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FAB8CC  link XIZ,0xfffa
 	push	xhl                                   ; FAB8D0  push XHL
 	pushw	de                                   ; FAB8D1  push DE
@@ -48721,7 +48865,7 @@ sub_FAB8CC:
 	extz	xhl                                   ; FAB8E1  extz XHL
 	ld	wa, (xhl+26)                            ; FAB8E3  ld WA,(XHL+0x1a)
 	and	wa, 0x1000                             ; FAB8E6  and WA,0x1000
-	jr z, sub_FAB8CC__FAB924                   ; FAB8EA  jr Z,0xfab924
+	jr z, Dev10C_StageRegs_0800_0840_FAB8CC__FAB924                   ; FAB8EA  jr Z,0xfab924
 	extz	xhl                                   ; FAB8EC  extz XHL
 	ld	wa, (xhl+28)                            ; FAB8EE  ld WA,(XHL+0x1c)
 	and	wa, 0x1000                             ; FAB8F1  and WA,0x1000
@@ -48735,25 +48879,25 @@ sub_FAB8CC:
 	ld	iy, (xix+35)                            ; FAB907  ld IY,(XIX+0x23)
 	extz	xiy                                   ; FAB90A  extz XIY
 	ld	hl, (xiy+49)                            ; FAB90C  ld HL,(XIY+0x31)
-	jr z, sub_FAB8CC__FAB916                   ; FAB90F  jr Z,0xfab916
+	jr z, Dev10C_StageRegs_0800_0840_FAB8CC__FAB916                   ; FAB90F  jr Z,0xfab916
 	sub	wa, hl                                 ; FAB911  sub WA,HL
 	pushw	wa                                   ; FAB913  push WA
-	jr sub_FAB8CC__FAB91B                      ; FAB914  jr T,0xfab91b
-sub_FAB8CC__FAB916:
+	jr Dev10C_StageRegs_0800_0840_FAB8CC__FAB91B                      ; FAB914  jr T,0xfab91b
+Dev10C_StageRegs_0800_0840_FAB8CC__FAB916:
 	ld	bc, de                                  ; FAB916  ld BC,DE
 	add	bc, hl                                 ; FAB918  add BC,HL
 	pushw	bc                                   ; FAB91A  push BC
-sub_FAB8CC__FAB91B:
+Dev10C_StageRegs_0800_0840_FAB8CC__FAB91B:
 	calr (0xFA7598 - 0xFAB91E)                 ; FAB91B  calr 0xfa7598
 	ld	hl, wa                                  ; FAB91E  ld HL,WA
 	inc	6, xsp                                 ; FAB920  inc 6,XSP
-	jr sub_FAB8CC__FAB92E                      ; FAB922  jr T,0xfab92e
-sub_FAB8CC__FAB924:
+	jr Dev10C_StageRegs_0800_0840_FAB8CC__FAB92E                      ; FAB922  jr T,0xfab92e
+Dev10C_StageRegs_0800_0840_FAB8CC__FAB924:
 	ld	xbc, (xiz-4)                            ; FAB924  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+45)                             ; FAB927  ld A,(XBC+0x2d)
 	extz	wa                                    ; FAB92A  extz WA
 	ld	hl, wa                                  ; FAB92C  ld HL,WA
-sub_FAB8CC__FAB92E:
+Dev10C_StageRegs_0800_0840_FAB8CC__FAB92E:
 	ld	c, l                                    ; FAB92E  ld C,L
 	extz	bc                                    ; FAB930  extz BC
 	exts	xbc                                   ; FAB932  exts XBC
@@ -48766,11 +48910,11 @@ sub_FAB8CC__FAB92E:
 	extz	xbc                                   ; FAB945  extz XBC
 	ld	iy, (xbc+9)                             ; FAB947  ld IY,(XBC+0x09)
 	and	iy, 1                                  ; FAB94A  and IY,0x0001
-	jr z, sub_FAB8CC__FAB987                   ; FAB94E  jr Z,0xfab987
+	jr z, Dev10C_StageRegs_0800_0840_FAB8CC__FAB987                   ; FAB94E  jr Z,0xfab987
 	extz	xix                                   ; FAB950  extz XIX
 	ld	bc, (xix+1)                             ; FAB952  ld BC,(XIX+0x01)
 	and	bc, 0x100                              ; FAB955  and BC,0x0100
-	jr nz, sub_FAB8CC__FAB987                  ; FAB959  jr NZ,0xfab987
+	jr nz, Dev10C_StageRegs_0800_0840_FAB8CC__FAB987                  ; FAB959  jr NZ,0xfab987
 	extz	xix                                   ; FAB95B  extz XIX
 	ld	bc, (xix+35)                            ; FAB95D  ld BC,(XIX+0x23)
 	extz	xbc                                   ; FAB960  extz XBC
@@ -48786,13 +48930,13 @@ sub_FAB8CC__FAB92E:
 	ld	e, b                                    ; FAB97D  ld E,B
 	extz	de                                    ; FAB97F  extz DE
 	cp	de, hl                                  ; FAB981  cp DE,HL
-	jr gt, sub_FAB8CC__FAB987                  ; FAB983  jr GT,0xfab987
+	jr gt, Dev10C_StageRegs_0800_0840_FAB8CC__FAB987                  ; FAB983  jr GT,0xfab987
 	ld	hl, de                                  ; FAB985  ld HL,DE
-sub_FAB8CC__FAB987:
+Dev10C_StageRegs_0800_0840_FAB8CC__FAB987:
 	ld	xbc, (xiz-4)                            ; FAB987  ld XBC,(XIZ+0xfc)
 	ld	d, (xbc+53)                             ; FAB98A  ld D,(XBC+0x35)
 	cps	d, 0                                   ; FAB98D  cp D,0
-	jr z, sub_FAB8CC__FAB9BE                   ; FAB98F  jr Z,0xfab9be
+	jr z, Dev10C_StageRegs_0800_0840_FAB8CC__FAB9BE                   ; FAB98F  jr Z,0xfab9be
 	push	0                                     ; FAB991  push 0x00
 	push	d                                     ; FAB993  push D
 	ld	a, (xbc+50)                             ; FAB995  ld A,(XBC+0x32)
@@ -48814,7 +48958,7 @@ sub_FAB8CC__FAB987:
 	ld	hl, wa                                  ; FAB9B8  ld HL,WA
 	inc	8, xsp                                 ; FAB9BA  inc 0,XSP
 	inc	8, xsp                                 ; FAB9BC  inc 0,XSP
-sub_FAB8CC__FAB9BE:
+Dev10C_StageRegs_0800_0840_FAB8CC__FAB9BE:
 	ld	de, hl                                  ; FAB9BE  ld DE,HL
 	sll	de, 8                                  ; FAB9C0  sll 0x08,DE
 	ld	bc, de                                  ; FAB9C3  ld BC,DE
@@ -48827,23 +48971,49 @@ sub_FAB8CC__FAB9BE:
 	unlk32 xiz                                 ; FAB9D5  unlk XIZ
 	ret                                        ; FAB9D7  ret
 ; --------------------------------------------------------------------------
-; sub_FAB9D8 -- 0xFAB9D8..0xFABAE2 (267 bytes)
+; Dev10C_StageRegs_0800_0840_FAB9D8 -- 0xFAB9D8..0xFABAE2 (267 bytes)
+;             compute the two staging words that 0xFB7345 pushes into registers
+;             0x0800+chan and 0x0840+chan.
+;             (★ NAMED in wave 7 round 2; was `sub_FAB9D8`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB3E1C in Voice_Retire_Mode08__FB3E0F
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D78A, 0x00D78C
-; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA766C = sub_FA766C
+; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA766C = ScaleClampedDelta_Shr5
 ;          0xFC3806 = sub_FC3806
-; Evidence: the listing below is the byte-identical round-trip of 0xFAB9D8-0xFABAE2
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
+;          absolute stores below are the routine's only absolute-addressed output, and
+;          the two words they write are read back by Dev10C_WriteSixChanRegs_FromD78A
+;          (0xFB7345), which pushes them into registers 0x0800+chan and 0x0840+chan of
+;          one channel:
+;              0xFABAD3  ld (0x00d78a),BC
+;              0xFABAD8  ld (0x00d78c),HL
+;              -- both from ONE value: `sll 0x08,HL` at 0xFABACB then `set 0x07,BC`
+;                 at 0xFABAD0, so 0x00D78A = (v<<8)|0x80 and 0x00D78C = v<<8
+;          That register/word map is reproduced from the ROM BYTES, not from this
+;          listing, by `python3 notes/prom_c_tg_chanmap.py 0xFB7345 0xAB --pairs`.
+;          The six words 0x00D78A..0x00D795 sit immediately after the 22-word staging
+;          struct 0x00D75E..0x00D789 of notes/FINDINGS-prom_c-dev10c-producers.md §2;
+;          this routine is one of THREE producers of that word pair -- the others are
+;          Dev10C_StageRegs_0800_0840_FAB818 and _FAB8CC.
+;          Everything else above is an instruction operand listed by
+;          notes/gen_prom_c_block_headers.py; the call sites are
+;          notes/prom_c_module_map.py's image-wide scan; the listing is the byte-
+;          identical round-trip of 0xFAB9D8-0xFABAE2 (notes/gen_prom_c_block.py).
+; Unknown:  ⚠ what the two values MEAN.
+;          Registers 0x0800+chan and 0x0840+chan have a documented quiescent pair,
+;          0xFF80 / 0xFF00 (notes/FINDINGS-prom_c-dev10c-register-meanings.md §5), and
+;          that file's 2026-08-25 note reports 0x0800+chan as (envelope level << 8) |
+;          rate.  Neither statement is re-derived here and neither is asserted of THIS
+;          producer.
+;          ⚠ whether 0xFB7345 is the ONLY consumer of them.  prom_c contains no absolute
+;          LOAD of these six words at all, but a consumer handed the struct base as an
+;          argument -- as 0xFB7345 itself is -- would be invisible to that search.
+;          "Only located consumer", not "only consumer".
+;          ⚠ what this routine is FOR beyond producing those two words.
 ; --------------------------------------------------------------------------
-sub_FAB9D8:
+Dev10C_StageRegs_0800_0840_FAB9D8:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FAB9D8  link XIZ,0xfffa
 	push	xhl                                   ; FAB9DC  push XHL
 	pushw	de                                   ; FAB9DD  push DE
@@ -48866,7 +49036,7 @@ sub_FAB9D8:
 	ld	iy, (xhl+26)                            ; FABA06  ld IY,(XHL+0x1a)
 	and	iy, 0x1000                             ; FABA09  and IY,0x1000
 	inc	2, xsp                                 ; FABA0D  inc 2,XSP
-	jr z, sub_FAB9D8__FABA3B                   ; FABA0F  jr Z,0xfaba3b
+	jr z, Dev10C_StageRegs_0800_0840_FAB9D8__FABA3B                   ; FABA0F  jr Z,0xfaba3b
 	extz	xhl                                   ; FABA11  extz XHL
 	ld	iy, (xhl+28)                            ; FABA13  ld IY,(XHL+0x1c)
 	and	iy, 0x1000                             ; FABA16  and IY,0x1000
@@ -48877,20 +49047,20 @@ sub_FAB9D8:
 	ld	bc, (xix+35)                            ; FABA25  ld BC,(XIX+0x23)
 	extz	xbc                                   ; FABA28  extz XBC
 	ld	hl, (xbc+49)                            ; FABA2A  ld HL,(XBC+0x31)
-	jr z, sub_FAB9D8__FABA34                   ; FABA2D  jr Z,0xfaba34
+	jr z, Dev10C_StageRegs_0800_0840_FAB9D8__FABA34                   ; FABA2D  jr Z,0xfaba34
 	sub	wa, hl                                 ; FABA2F  sub WA,HL
 	pushw	wa                                   ; FABA31  push WA
-	jr sub_FAB9D8__FABA42                      ; FABA32  jr T,0xfaba42
-sub_FAB9D8__FABA34:
+	jr Dev10C_StageRegs_0800_0840_FAB9D8__FABA42                      ; FABA32  jr T,0xfaba42
+Dev10C_StageRegs_0800_0840_FAB9D8__FABA34:
 	ld	bc, de                                  ; FABA34  ld BC,DE
 	add	bc, hl                                 ; FABA36  add BC,HL
 	pushw	bc                                   ; FABA38  push BC
-	jr sub_FAB9D8__FABA42                      ; FABA39  jr T,0xfaba42
-sub_FAB9D8__FABA3B:
+	jr Dev10C_StageRegs_0800_0840_FAB9D8__FABA42                      ; FABA39  jr T,0xfaba42
+Dev10C_StageRegs_0800_0840_FAB9D8__FABA3B:
 	pushw	0                                    ; FABA3B  push 0x0000
 	pushw	0x64                                 ; FABA3E  push 0x0064
 	pushw	de                                   ; FABA41  push DE
-sub_FAB9D8__FABA42:
+Dev10C_StageRegs_0800_0840_FAB9D8__FABA42:
 	calr (0xFA7598 - 0xFABA45)                 ; FABA42  calr 0xfa7598
 	ld	de, wa                                  ; FABA45  ld DE,WA
 	extz	wa                                    ; FABA47  extz WA
@@ -48905,7 +49075,7 @@ sub_FAB9D8__FABA42:
 	ld	wa, (xhl+9)                             ; FABA5E  ld WA,(XHL+0x09)
 	and	wa, 1                                  ; FABA61  and WA,0x0001
 	inc	6, xsp                                 ; FABA65  inc 6,XSP
-	jr z, sub_FAB9D8__FABA92                   ; FABA67  jr Z,0xfaba92
+	jr z, Dev10C_StageRegs_0800_0840_FAB9D8__FABA92                   ; FABA67  jr Z,0xfaba92
 	extz	xhl                                   ; FABA69  extz XHL
 	ld	a, (xhl+22)                             ; FABA6B  ld A,(XHL+0x16)
 	extz	wa                                    ; FABA6E  extz WA
@@ -48920,13 +49090,13 @@ sub_FAB9D8__FABA42:
 	ld	l, w                                    ; FABA88  ld L,W
 	extz	hl                                    ; FABA8A  extz HL
 	cp	hl, bc                                  ; FABA8C  cp HL,BC
-	jr gt, sub_FAB9D8__FABA92                  ; FABA8E  jr GT,0xfaba92
+	jr gt, Dev10C_StageRegs_0800_0840_FAB9D8__FABA92                  ; FABA8E  jr GT,0xfaba92
 	ld	de, hl                                  ; FABA90  ld DE,HL
-sub_FAB9D8__FABA92:
+Dev10C_StageRegs_0800_0840_FAB9D8__FABA92:
 	ld	xbc, (xiz-4)                            ; FABA92  ld XBC,(XIZ+0xfc)
 	ld	h, (xbc+53)                             ; FABA95  ld H,(XBC+0x35)
 	cps	h, 0                                   ; FABA98  cp H,0
-	jr z, sub_FAB9D8__FABAC9                   ; FABA9A  jr Z,0xfabac9
+	jr z, Dev10C_StageRegs_0800_0840_FAB9D8__FABAC9                   ; FABA9A  jr Z,0xfabac9
 	push	0                                     ; FABA9C  push 0x00
 	push	h                                     ; FABA9E  push H
 	ld	a, (xbc+50)                             ; FABAA0  ld A,(XBC+0x32)
@@ -48948,7 +49118,7 @@ sub_FAB9D8__FABA92:
 	ld	de, wa                                  ; FABAC3  ld DE,WA
 	inc	8, xsp                                 ; FABAC5  inc 0,XSP
 	inc	8, xsp                                 ; FABAC7  inc 0,XSP
-sub_FAB9D8__FABAC9:
+Dev10C_StageRegs_0800_0840_FAB9D8__FABAC9:
 	ld	hl, de                                  ; FABAC9  ld HL,DE
 	sll	hl, 8                                  ; FABACB  sll 0x08,HL
 	ld	bc, hl                                  ; FABACE  ld BC,HL
@@ -48961,7 +49131,10 @@ sub_FAB9D8__FABAC9:
 	unlk32 xiz                                 ; FABAE0  unlk XIZ
 	ret                                        ; FABAE2  ret
 ; --------------------------------------------------------------------------
-; sub_FABAE3 -- 0xFABAE3..0xFABBFA (280 bytes)
+; Dev10C_StageRegs_0900_0940 -- 0xFABAE3..0xFABBFA (280 bytes)
+;             compute the two staging words that 0xFB7345 pushes into registers
+;             0x0900+chan and 0x0940+chan.
+;             (★ NAMED in wave 7 round 2; was `sub_FABAE3`.)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFADF5C in sub_FADEAC__FADF55, 0xFB3D9F in Voice_Retire_Mode20__FB3D9E
@@ -48969,17 +49142,35 @@ sub_FAB9D8__FABAC9:
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D78E, 0x00D790
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
-;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = sub_FA766C
+;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
 ;          0xFC8129 = sub_FC8129
-; Evidence: the listing below is the byte-identical round-trip of 0xFABAE3-0xFABBFA
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
+;          absolute stores below are the routine's only absolute-addressed output, and
+;          the two words they write are read back by Dev10C_WriteSixChanRegs_FromD78A
+;          (0xFB7345), which pushes them into registers 0x0900+chan and 0x0940+chan of
+;          one channel:
+;              0xFABBEA  ld (0x00d78e),HL
+;              0xFABBEF  ld (0x00d790),HL
+;          That register/word map is reproduced from the ROM BYTES, not from this
+;          listing, by `python3 notes/prom_c_tg_chanmap.py 0xFB7345 0xAB --pairs`.
+;          The six words 0x00D78A..0x00D795 sit immediately after the 22-word staging
+;          struct 0x00D75E..0x00D789 of notes/FINDINGS-prom_c-dev10c-producers.md §2;
+;          this routine is the ONLY producer of that word pair in prom_c.
+;          Everything else above is an instruction operand listed by
+;          notes/gen_prom_c_block_headers.py; the call sites are
+;          notes/prom_c_module_map.py's image-wide scan; the listing is the byte-
+;          identical round-trip of 0xFABAE3-0xFABBFA (notes/gen_prom_c_block.py).
+; Unknown:  ⚠ what the two values MEAN.
+;          Register blocks 0x0900-0x0A40 have no statement of any kind: §0 of
+;          notes/FINDINGS-prom_c-dev10c-register-meanings.md lists them among the blocks
+;          whose contents are unknown.
+;          ⚠ whether 0xFB7345 is the ONLY consumer of them.  prom_c contains no absolute
+;          LOAD of these six words at all, but a consumer handed the struct base as an
+;          argument -- as 0xFB7345 itself is -- would be invisible to that search.
+;          "Only located consumer", not "only consumer".
+;          ⚠ what this routine is FOR beyond producing those two words.
 ; --------------------------------------------------------------------------
-sub_FABAE3:
+Dev10C_StageRegs_0900_0940:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FABAE3  link XIZ,0xfffe
 	push	xhl                                   ; FABAE7  push XHL
 	pushw	de                                   ; FABAE8  push DE
@@ -48988,14 +49179,14 @@ sub_FABAE3:
 	extz	xbc                                   ; FABAED  extz XBC
 	ld	wa, (xbc+1)                             ; FABAEF  ld WA,(XBC+0x01)
 	and	wa, 0x200                              ; FABAF2  and WA,0x0200
-	jr z, sub_FABAE3__FABB08                   ; FABAF6  jr Z,0xfabb08
+	jr z, Dev10C_StageRegs_0900_0940__FABB08                   ; FABAF6  jr Z,0xfabb08
 	lda_24	xwa, (0xD75E)                       ; FABAF8  lda XWA,0x00d75e
 	push	xwa                                   ; FABAFD  push XWA
 	pushw	bc                                   ; FABAFE  push BC
 	call	0xFC8129                              ; FABAFF  call 0xfc8129
 	inc	6, xsp                                 ; FABB03  inc 6,XSP
-	jrl sub_FABAE3__FABBF5                     ; FABB05  jrl T,0xfabbf5
-sub_FABAE3__FABB08:
+	jrl Dev10C_StageRegs_0900_0940__FABBF5                     ; FABB05  jrl T,0xfabbf5
+Dev10C_StageRegs_0900_0940__FABB08:
 	ld	bc, (xiz+8)                             ; FABB08  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FABB0B  extz XBC
 	ld	xwa, (xbc+23)                           ; FABB0D  ld XWA,(XBC+0x17)
@@ -49013,7 +49204,7 @@ sub_FABAE3__FABB08:
 	extz	xhl                                   ; FABB2D  extz XHL
 	ld	bc, (xhl+9)                             ; FABB2F  ld BC,(XHL+0x09)
 	and	bc, 1                                  ; FABB32  and BC,0x0001
-	jr z, sub_FABAE3__FABB61                   ; FABB36  jr Z,0xfabb61
+	jr z, Dev10C_StageRegs_0900_0940__FABB61                   ; FABB36  jr Z,0xfabb61
 	extz	xhl                                   ; FABB38  extz XHL
 	ld	c, (xhl+22)                             ; FABB3A  ld C,(XHL+0x16)
 	extz	bc                                    ; FABB3D  extz BC
@@ -49028,12 +49219,12 @@ sub_FABAE3__FABB08:
 	ld	l, b                                    ; FABB57  ld L,B
 	extz	hl                                    ; FABB59  extz HL
 	cp	hl, de                                  ; FABB5B  cp HL,DE
-	jr gt, sub_FABAE3__FABB61                  ; FABB5D  jr GT,0xfabb61
+	jr gt, Dev10C_StageRegs_0900_0940__FABB61                  ; FABB5D  jr GT,0xfabb61
 	ld	de, hl                                  ; FABB5F  ld DE,HL
-sub_FABAE3__FABB61:
+Dev10C_StageRegs_0900_0940__FABB61:
 	ld	h, (xix+22)                             ; FABB61  ld H,(XIX+0x16)
 	cps	h, 0                                   ; FABB64  cp H,0
-	jr z, sub_FABAE3__FABB91                   ; FABB66  jr Z,0xfabb91
+	jr z, Dev10C_StageRegs_0900_0940__FABB91                   ; FABB66  jr Z,0xfabb91
 	push	0                                     ; FABB68  push 0x00
 	push	h                                     ; FABB6A  push H
 	pushw	0x7F                                 ; FABB6C  push 0x007f
@@ -49050,13 +49241,13 @@ sub_FABAE3__FABB61:
 	inc	8, xsp                                 ; FABB87  inc 0,XSP
 	inc	2, xsp                                 ; FABB89  inc 2,XSP
 	cps	c, 0                                   ; FABB8B  cp C,0
-	jr z, sub_FABAE3__FABBAF                   ; FABB8D  jr Z,0xfabbaf
-	jr sub_FABAE3__FABB98                      ; FABB8F  jr T,0xfabb98
-sub_FABAE3__FABB91:
+	jr z, Dev10C_StageRegs_0900_0940__FABBAF                   ; FABB8D  jr Z,0xfabbaf
+	jr Dev10C_StageRegs_0900_0940__FABB98                      ; FABB8F  jr T,0xfabb98
+Dev10C_StageRegs_0900_0940__FABB91:
 	ld	c, (xix+17)                             ; FABB91  ld C,(XIX+0x11)
 	cps	c, 0                                   ; FABB94  cp C,0
-	jr z, sub_FABAE3__FABBBD                   ; FABB96  jr Z,0xfabbbd
-sub_FABAE3__FABB98:
+	jr z, Dev10C_StageRegs_0900_0940__FABBBD                   ; FABB96  jr Z,0xfabbbd
+Dev10C_StageRegs_0900_0940__FABB98:
 	pushw	4                                    ; FABB98  push 0x0004
 	ld	bc, (xiz+8)                             ; FABB9B  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FABB9E  extz XBC
@@ -49067,28 +49258,28 @@ sub_FABAE3__FABB98:
 	calr (0xFA75BA - 0xFABBAB)                 ; FABBA8  calr 0xfa75ba
 	add	de, wa                                 ; FABBAB  add DE,WA
 	inc	6, xsp                                 ; FABBAD  inc 6,XSP
-sub_FABAE3__FABBAF:
+Dev10C_StageRegs_0900_0940__FABBAF:
 	pushw	0                                    ; FABBAF  push 0x0000
 	pushw	0xFF                                 ; FABBB2  push 0x00ff
 	pushw	de                                   ; FABBB5  push DE
 	calr (0xFA7598 - 0xFABBB9)                 ; FABBB6  calr 0xfa7598
 	ld	de, wa                                  ; FABBB9  ld DE,WA
 	inc	6, xsp                                 ; FABBBB  inc 6,XSP
-sub_FABAE3__FABBBD:
+Dev10C_StageRegs_0900_0940__FABBBD:
 	ld	c, (xix+7)                              ; FABBBD  ld C,(XIX+0x07)
 	ld	(xiz-2), c                              ; FABBC0  ld (XIZ+0xfe),C
 	ld	a, (xix+16)                             ; FABBC3  ld A,(XIX+0x10)
 	exts	wa                                    ; FABBC6  exts WA
 	ld	hl, wa                                  ; FABBC8  ld HL,WA
 	cps	c, 0                                   ; FABBCA  cp C,0
-	jr ge, sub_FABAE3__FABBD5                  ; FABBCC  jr GE,0xfabbd5
+	jr ge, Dev10C_StageRegs_0900_0940__FABBD5                  ; FABBCC  jr GE,0xfabbd5
 	cpl	wa                                     ; FABBCE  cpl WA
 	inc	1, wa                                  ; FABBD0  inc 1,WA
 	pushw	wa                                   ; FABBD2  push WA
-	jr sub_FABAE3__FABBD6                      ; FABBD3  jr T,0xfabbd6
-sub_FABAE3__FABBD5:
+	jr Dev10C_StageRegs_0900_0940__FABBD6                      ; FABBD3  jr T,0xfabbd6
+Dev10C_StageRegs_0900_0940__FABBD5:
 	pushw	hl                                   ; FABBD5  push HL
-sub_FABAE3__FABBD6:
+Dev10C_StageRegs_0900_0940__FABBD6:
 	calr (0xFA7602 - 0xFABBD9)                 ; FABBD6  calr 0xfa7602
 	ld	hl, wa                                  ; FABBD9  ld HL,WA
 	ld	ix, wa                                  ; FABBDB  ld IX,WA
@@ -49100,14 +49291,17 @@ sub_FABAE3__FABBD6:
 	stw_da	(0xD78E), hl                        ; FABBEA  ld (0x00d78e),HL
 	stw_da	(0xD790), hl                        ; FABBEF  ld (0x00d790),HL
 	popw	bc                                    ; FABBF4  pop BC
-sub_FABAE3__FABBF5:
+Dev10C_StageRegs_0900_0940__FABBF5:
 	pop	xix                                    ; FABBF5  pop XIX
 	popw	de                                    ; FABBF6  pop DE
 	pop	xhl                                    ; FABBF7  pop XHL
 	unlk32 xiz                                 ; FABBF8  unlk XIZ
 	ret                                        ; FABBFA  ret
 ; --------------------------------------------------------------------------
-; sub_FABBFB -- 0xFABBFB..0xFABCF8 (254 bytes)
+; Dev10C_StageRegs_09C0_0A00 -- 0xFABBFB..0xFABCF8 (254 bytes)
+;             compute the two staging words that 0xFB7345 pushes into registers
+;             0x09C0+chan and 0x0A00+chan.
+;             (★ NAMED in wave 7 round 2; was `sub_FABBFB`.)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFADF61 in sub_FADEAC__FADF55, 0xFB3DA4 in Voice_Retire_Mode20__FB3D9E
@@ -49115,16 +49309,34 @@ sub_FABAE3__FABBF5:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D792, 0x00D794
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = sub_FA75BA
-;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = sub_FA766C
-; Evidence: the listing below is the byte-identical round-trip of 0xFABBFB-0xFABCF8
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
+; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
+;          absolute stores below are the routine's only absolute-addressed output, and
+;          the two words they write are read back by Dev10C_WriteSixChanRegs_FromD78A
+;          (0xFB7345), which pushes them into registers 0x09C0+chan and 0x0A00+chan of
+;          one channel:
+;              0xFABCE7  ld (0x00d792),DE
+;              0xFABCEC  ld (0x00d794),DE
+;          That register/word map is reproduced from the ROM BYTES, not from this
+;          listing, by `python3 notes/prom_c_tg_chanmap.py 0xFB7345 0xAB --pairs`.
+;          The six words 0x00D78A..0x00D795 sit immediately after the 22-word staging
+;          struct 0x00D75E..0x00D789 of notes/FINDINGS-prom_c-dev10c-producers.md §2;
+;          this routine is the ONLY producer of that word pair in prom_c.
+;          Everything else above is an instruction operand listed by
+;          notes/gen_prom_c_block_headers.py; the call sites are
+;          notes/prom_c_module_map.py's image-wide scan; the listing is the byte-
+;          identical round-trip of 0xFABBFB-0xFABCF8 (notes/gen_prom_c_block.py).
+; Unknown:  ⚠ what the two values MEAN.
+;          Register blocks 0x0900-0x0A40 have no statement of any kind: §0 of
+;          notes/FINDINGS-prom_c-dev10c-register-meanings.md lists them among the blocks
+;          whose contents are unknown.
+;          ⚠ whether 0xFB7345 is the ONLY consumer of them.  prom_c contains no absolute
+;          LOAD of these six words at all, but a consumer handed the struct base as an
+;          argument -- as 0xFB7345 itself is -- would be invisible to that search.
+;          "Only located consumer", not "only consumer".
+;          ⚠ what this routine is FOR beyond producing those two words.
 ; --------------------------------------------------------------------------
-sub_FABBFB:
+Dev10C_StageRegs_09C0_0A00:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FABBFB  link XIZ,0xfffc
 	push	xhl                                   ; FABBFF  push XHL
 	pushw	de                                   ; FABC00  push DE
@@ -49144,7 +49356,7 @@ sub_FABBFB:
 	extz	xhl                                   ; FABC23  extz XHL
 	ld	wa, (xhl+9)                             ; FABC25  ld WA,(XHL+0x09)
 	and	wa, 1                                  ; FABC28  and WA,0x0001
-	jr z, sub_FABBFB__FABC57                   ; FABC2C  jr Z,0xfabc57
+	jr z, Dev10C_StageRegs_09C0_0A00__FABC57                   ; FABC2C  jr Z,0xfabc57
 	extz	xhl                                   ; FABC2E  extz XHL
 	ld	a, (xhl+22)                             ; FABC30  ld A,(XHL+0x16)
 	extz	wa                                    ; FABC33  extz WA
@@ -49159,13 +49371,13 @@ sub_FABBFB:
 	ld	l, w                                    ; FABC4D  ld L,W
 	extz	hl                                    ; FABC4F  extz HL
 	cp	hl, de                                  ; FABC51  cp HL,DE
-	jr gt, sub_FABBFB__FABC57                  ; FABC53  jr GT,0xfabc57
+	jr gt, Dev10C_StageRegs_09C0_0A00__FABC57                  ; FABC53  jr GT,0xfabc57
 	ld	de, hl                                  ; FABC55  ld DE,HL
-sub_FABBFB__FABC57:
+Dev10C_StageRegs_09C0_0A00__FABC57:
 	ld	xbc, (xiz-4)                            ; FABC57  ld XBC,(XIZ+0xfc)
 	ld	h, (xbc+76)                             ; FABC5A  ld H,(XBC+0x4c)
 	cps	h, 0                                   ; FABC5D  cp H,0
-	jr z, sub_FABBFB__FABC8A                   ; FABC5F  jr Z,0xfabc8a
+	jr z, Dev10C_StageRegs_09C0_0A00__FABC8A                   ; FABC5F  jr Z,0xfabc8a
 	push	0                                     ; FABC61  push 0x00
 	push	h                                     ; FABC63  push H
 	pushw	0x7F                                 ; FABC65  push 0x007f
@@ -49182,14 +49394,14 @@ sub_FABBFB__FABC57:
 	inc	8, xsp                                 ; FABC80  inc 0,XSP
 	inc	2, xsp                                 ; FABC82  inc 2,XSP
 	cps	a, 0                                   ; FABC84  cp A,0
-	jr z, sub_FABBFB__FABCAB                   ; FABC86  jr Z,0xfabcab
-	jr sub_FABBFB__FABC94                      ; FABC88  jr T,0xfabc94
-sub_FABBFB__FABC8A:
+	jr z, Dev10C_StageRegs_09C0_0A00__FABCAB                   ; FABC86  jr Z,0xfabcab
+	jr Dev10C_StageRegs_09C0_0A00__FABC94                      ; FABC88  jr T,0xfabc94
+Dev10C_StageRegs_09C0_0A00__FABC8A:
 	ld	xbc, (xiz-4)                            ; FABC8A  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+71)                             ; FABC8D  ld A,(XBC+0x47)
 	cps	a, 0                                   ; FABC90  cp A,0
-	jr z, sub_FABBFB__FABCB9                   ; FABC92  jr Z,0xfabcb9
-sub_FABBFB__FABC94:
+	jr z, Dev10C_StageRegs_09C0_0A00__FABCB9                   ; FABC92  jr Z,0xfabcb9
+Dev10C_StageRegs_09C0_0A00__FABC94:
 	pushw	4                                    ; FABC94  push 0x0004
 	extz	xix                                   ; FABC97  extz XIX
 	ld	c, (xix+12)                             ; FABC99  ld C,(XIX+0x0c)
@@ -49200,14 +49412,14 @@ sub_FABBFB__FABC94:
 	calr (0xFA75BA - 0xFABCA7)                 ; FABCA4  calr 0xfa75ba
 	add	de, wa                                 ; FABCA7  add DE,WA
 	inc	6, xsp                                 ; FABCA9  inc 6,XSP
-sub_FABBFB__FABCAB:
+Dev10C_StageRegs_09C0_0A00__FABCAB:
 	pushw	0                                    ; FABCAB  push 0x0000
 	pushw	0xFF                                 ; FABCAE  push 0x00ff
 	pushw	de                                   ; FABCB1  push DE
 	calr (0xFA7598 - 0xFABCB5)                 ; FABCB2  calr 0xfa7598
 	ld	de, wa                                  ; FABCB5  ld DE,WA
 	inc	6, xsp                                 ; FABCB7  inc 6,XSP
-sub_FABBFB__FABCB9:
+Dev10C_StageRegs_09C0_0A00__FABCB9:
 	pushw	0xFFCE                               ; FABCB9  push 0xffce
 	pushw	50                                   ; FABCBC  push 0x0032
 	ld	xbc, (xiz-4)                            ; FABCBF  ld XBC,(XIZ+0xfc)
@@ -52875,7 +53087,11 @@ sub_FAD561__FAD5AF:
 	unlk32 xiz                                 ; FAD5BF  unlk XIZ
 	ret                                        ; FAD5C1  ret
 ; --------------------------------------------------------------------------
-; sub_FAD5C2 -- 0xFAD5C2..0xFAD624 (99 bytes)
+; Scale7Bit_ByDepth_UniOrBipolar -- 0xFAD5C2..0xFAD624 (99 bytes)
+;             scale a 0..127 value by a record's depth byte, normalised either unipolar
+;             (/0x7F) or bipolar (offset 0x800, /63 or /64) as bit 7 of the record
+;             selects.
+;             (★ NAMED in wave 7 round 2; was `sub_FAD5C2`.)
 ;
 ; Called from: 28 site(s) outside this module:
 ;          0xFBDE9B in sub_FBDCD3__FBDE92, 0xFBDFCE in sub_FBDCD3__FBDFC5
@@ -52898,21 +53114,44 @@ sub_FAD561__FAD5AF:
 ;          0xFAEF37
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Evidence: the listing below is the byte-identical round-trip of 0xFAD5C2-0xFAD624
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ the branch, the two normalisations and the final scale are all immediates:
+;          (Each address in the block below is the FIRST instruction of the step it
+;          labels, not the only one; the rest of the step follows it.)
+;              0xFAD5C7  ld XBC,(XIZ+0x0a) / ld A,(XBC+0x01) / and A,0x80 / jr
+;                Z,unipolar        -- BIT 7 of record byte +1 is the selector
+;            bipolar arm:
+;              0xFAD5D7  ld IY,HL / sll 0x05,IY / sub IY,0x0800     -- v*32 - 2048
+;              0xFAD5E4  cp IY,0 / jr LE,neg
+;              0xFAD5EA  divs IY,0x003f       -- positive half divided by 63
+;              0xFAD5F6  divs BC,0x0040       -- negative half divided by 64
+;            unipolar arm:
+;              0xFAD605  sll 0x05,BC   then   0xFAD60C  divs BC,0x007f   -- v*32 / 127
+;            both arms:
+;              0xFAD612  ld XBC,(XIZ+0x0a)   -- the record again
+;              0xFAD615  ld A,(XBC+0x02)     -- the depth byte
+;              0xFAD61A  muls XWA,HL   then   0xFAD61E  sra 0x06,WA   -- * depth, >> 6
+;          v*32 spans 0..4064 for v in 0..127, so the unipolar arm lands in 0..32 and
+;          the bipolar arm, after the 2048 offset, in about -32..+32 -- which is what
+;          makes "uni or bipolar" a description of the arithmetic rather than an
+;          interpretation of it.  The asymmetric divisors 63 and 64 are the two halves'
+;          own spans; they are immediates, not a reading.
+;          The routine sits between the Dev10C_SetChanReg_* accessors and MidiCtrl_CC07,
+;          and 28 of its 41 call sites are outside this module.
+; Unknown:  ⚠ what the record at (XIZ+0x0A) IS.  Only two of its bytes are touched, +1
+;          for the selector bit and +2 for the depth, and neither was traced to a named
+;          structure.  "Depth" names the ROLE the multiply gives byte +2, not a
+;          documented field.
+;          ⚠ that the input is a MIDI controller value.  0..127 is what the arithmetic
+;          assumes; the module is the MIDI controller module; neither fact is a proof
+;          about the caller.
 ; --------------------------------------------------------------------------
-sub_FAD5C2:
+Scale7Bit_ByDepth_UniOrBipolar:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD5C2  link XIZ,0x0000
 	pushw	hl                                   ; FAD5C6  push HL
 	ld	xbc, (xiz+10)                           ; FAD5C7  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+1)                              ; FAD5CA  ld A,(XBC+0x01)
 	and	a, 0x80                                ; FAD5CD  and A,0x80
-	jr z, sub_FAD5C2__FAD5FE                   ; FAD5D0  jr Z,0xfad5fe
+	jr z, Scale7Bit_ByDepth_UniOrBipolar__FAD5FE                   ; FAD5D0  jr Z,0xfad5fe
 	ld	hl, (xiz+8)                             ; FAD5D2  ld HL,(XIZ+0x08)
 	extz	hl                                    ; FAD5D5  extz HL
 	ld	iy, hl                                  ; FAD5D7  ld IY,HL
@@ -52921,18 +53160,18 @@ sub_FAD5C2:
 	sub	iy, 0x800                              ; FAD5DE  sub IY,0x0800
 	ld	hl, iy                                  ; FAD5E2  ld HL,IY
 	cps	iy, 0                                  ; FAD5E4  cp IY,0
-	jr le, sub_FAD5C2__FAD5F2                  ; FAD5E6  jr LE,0xfad5f2
+	jr le, Scale7Bit_ByDepth_UniOrBipolar__FAD5F2                  ; FAD5E6  jr LE,0xfad5f2
 	exts	xiy                                   ; FAD5E8  exts XIY
 	divs	iy, 63                                ; FAD5EA  divs IY,0x003f
 	ld	hl, iy                                  ; FAD5EE  ld HL,IY
-	jr sub_FAD5C2__FAD612                      ; FAD5F0  jr T,0xfad612
-sub_FAD5C2__FAD5F2:
+	jr Scale7Bit_ByDepth_UniOrBipolar__FAD612                      ; FAD5F0  jr T,0xfad612
+Scale7Bit_ByDepth_UniOrBipolar__FAD5F2:
 	ld	bc, hl                                  ; FAD5F2  ld BC,HL
 	exts	xbc                                   ; FAD5F4  exts XBC
 	divs	bc, 64                                ; FAD5F6  divs BC,0x0040
 	ld	hl, bc                                  ; FAD5FA  ld HL,BC
-	jr sub_FAD5C2__FAD612                      ; FAD5FC  jr T,0xfad612
-sub_FAD5C2__FAD5FE:
+	jr Scale7Bit_ByDepth_UniOrBipolar__FAD612                      ; FAD5FC  jr T,0xfad612
+Scale7Bit_ByDepth_UniOrBipolar__FAD5FE:
 	ld	hl, (xiz+8)                             ; FAD5FE  ld HL,(XIZ+0x08)
 	extz	hl                                    ; FAD601  extz HL
 	ld	bc, hl                                  ; FAD603  ld BC,HL
@@ -52941,7 +53180,7 @@ sub_FAD5C2__FAD5FE:
 	exts	xbc                                   ; FAD60A  exts XBC
 	divs	bc, 0x7F                              ; FAD60C  divs BC,0x007f
 	ld	hl, bc                                  ; FAD610  ld HL,BC
-sub_FAD5C2__FAD612:
+Scale7Bit_ByDepth_UniOrBipolar__FAD612:
 	ld	xbc, (xiz+10)                           ; FAD612  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+2)                              ; FAD615  ld A,(XBC+0x02)
 	extz	wa                                    ; FAD618  extz WA
@@ -54641,11 +54880,11 @@ sub_FADE2F__FADEA6:
 ;          0xFAEF70 0xFAFF26
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFAB8CC = sub_FAB8CC
-;          0xFABAE3 = sub_FABAE3, 0xFABBFB = sub_FABBFB
+; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFAB8CC = Dev10C_StageRegs_0800_0840_FAB8CC
+;          0xFABAE3 = Dev10C_StageRegs_0900_0940, 0xFABBFB = Dev10C_StageRegs_09C0_0A00
 ;          0xFABD50 = sub_FABD50, 0xFACE89 = Dev10C_WriteReg
 ;          0xFACEDE = Dev10C_SetChanReg_0840_0800, 0xFACF1A = Dev10C_SetChanReg_0840
-;          0xFB3DC1 = Voice_Retire_Mode08, 0xFB7345 = sub_FB7345
+;          0xFB3DC1 = Voice_Retire_Mode08, 0xFB7345 = Dev10C_WriteSixChanRegs_FromD78A
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADEAC-0xFADFAC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -55059,7 +55298,7 @@ sub_FAE109:
 ;          0xFAF171
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD142 = sub_FAD142, 0xFAD5C2 = sub_FAD5C2
+; Calls:   0xFAD142 = sub_FAD142, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFADFAD = sub_FADFAD, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE15F-0xFAE1B1
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -56264,7 +56503,7 @@ sub_FAE986__FAEAC8:
 ;          0xFAF240
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD5C2 = sub_FAD5C2, 0xFC589E = sub_FC589E
+; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC589E = sub_FC589E
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEACE-0xFAEAF8
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -56373,7 +56612,7 @@ sub_FAEAF9__FAEB60:
 ;          0xFAF25C
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD5C2 = sub_FAD5C2, 0xFB3CE0 = VoiceQuery_Tag00_Part
+; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ;          0xFB7A73 = Dev104_SetChanRegs_00C0_0100_0240, 0xFC5BA2 = sub_FC5BA2
 ;          0xFC5D5B = sub_FC5D5B
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEB65-0xFAEBD0
@@ -56560,7 +56799,7 @@ sub_FAEC21__FAEC6C:
 ;          0xFAF286
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD5C2 = sub_FAD5C2, 0xFC63EC = sub_FC63EC
+; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC63EC = sub_FC63EC
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEC71-0xFAEC9B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -56598,7 +56837,7 @@ sub_FAEC71:
 ;          0xFAF294
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD5C2 = sub_FAD5C2, 0xFC654F = sub_FC654F
+; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFC654F = sub_FC654F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEC9C-0xFAECC6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -56636,7 +56875,7 @@ sub_FAEC9C:
 ;          0xFAF2A2
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD5C2 = sub_FAD5C2, 0xFB3CE0 = VoiceQuery_Tag00_Part
+; Calls:   0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ;          0xFB7B41 = Dev104_SetChanReg_0280, 0xFC65EC = sub_FC65EC
 ;          0xFC6712 = sub_FC6712
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAECC7-0xFAED32
@@ -56752,7 +56991,7 @@ sub_FAED33:
 ;          0xFAF2BD
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = sub_FAD5C2
+; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFB4D45 = sub_FB4D45
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAED76-0xFAEDC3
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -56804,7 +57043,7 @@ sub_FAED76:
 ;          0xFAF2CA
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = sub_FAD5C2
+; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEDC4-0xFAEE06
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -56849,7 +57088,7 @@ sub_FAEDC4:
 ;          0xFAF2D7
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = sub_FAD5C2
+; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEE07-0xFAEE49
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -56894,7 +57133,7 @@ sub_FAEE07:
 ;          0xFAF2E4
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = sub_FAD5C2
+; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEE4A-0xFAEE8C
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -56939,7 +57178,7 @@ sub_FAEE4A:
 ;          0xFAF2F1
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = sub_FAD5C2
+; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEE8D-0xFAEECF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -56984,7 +57223,7 @@ sub_FAEE8D:
 ;          0xFAF2FE
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = sub_FAD5C2
+; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFADE2F = sub_FADE2F, 0xFB3C8B = VoiceQuery_Tag40_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEED0-0xFAEF23
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -57037,7 +57276,7 @@ sub_FAEED0:
 ;          0xFAF30B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = sub_FAD5C2
+; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFADEAC = sub_FADEAC, 0xFB3C8B = VoiceQuery_Tag40_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEF24-0xFAEF7E
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -57692,7 +57931,11 @@ sub_FAF031__FAF33A:
 	unlk32 xiz                                 ; FAF33D  unlk XIZ
 	ret                                        ; FAF33F  ret
 ; --------------------------------------------------------------------------
-; sub_FAF340 -- 0xFAF340..0xFAF3CB (140 bytes)
+; PartRec_ResetSlotValues_ByTag -- 0xFAF340..0xFAF3CB (140 bytes)
+;             walk six 6-byte slot records and, where a slot's 6-bit tag matches and its
+;             index is not the excluded one, write 0x40 into that slot's byte of the
+;             part record.
+;             (★ NAMED in wave 7 round 2; was `sub_FAF340`.)
 ;
 ; Called from: no site outside this module.
 ;          13 site(s) inside this module:
@@ -57701,15 +57944,46 @@ sub_FAF031__FAF33A:
 ;          0xFB01F3
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Evidence: the listing below is the byte-identical round-trip of 0xFAF340-0xFAF3CB
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ the loop bounds, the record stride and the destination address are all
+;          immediates:
+;          (Each address in the block below is the FIRST instruction of the step it
+;          labels, not the only one; the rest of the step follows it.)
+;              0xFAF34A  ld BC,(XIZ+0x08) / mul BC,0x012c / ld XIX,XBC       
+;                        -- the PART RECORD base: stride 0x012C = 300 bytes, the
+;                        geometry notes/FINDINGS-prom_c-voice-module.md and
+;                        notes/FINDINGS-prom_c-dev10c-register-meanings.md §1 both give
+;                        for RAM 0x001523
+;              0xFAF35B  ld A,(*(XIZ+0x0e)+1) / and A,0x3f / cp A,(XIZ+0x0c) 
+;                        -- tag test, arm 1
+;              0xFAF38D  ld A,(*(XIZ+0x0e)+4) / and A,0x3f / cp A,(XIZ+0x0c) 
+;                        -- tag test, arm 2
+;              0xFAF36B / 0xFAF39D  cp DE,WA  (WA loaded from (XIZ+0x0a) at 0xFAF366 /
+;                                   0xFAF398) -- the slot index must NOT be the excluded one
+;              0xFAF377  add WA,0x0076  then  0xFAF37E  ld BC,0x1523 / 0xFAF383 add WA,BC
+;                        then  0xFAF385  ld (XWA),0x40        -- arm 1 destination
+;              0xFAF3A9  add WA,0x0077 / ld (XWA+0x1523),0x40           
+;                        -- arm 2 destination
+;              0xFAF3B7  inc 6,XBC  then  0xFAF3B9  add (XIZ+0x0e),XBC
+;                        -- the slot record stride is SIX bytes
+;              0xFAF3BC  inc 2,HL / inc 1,DE / cp HL,0x000c / jr C  
+;                        -- SIX iterations, HL = 2*i
+;          so the destination is 0x001523 + 300*part + 0x76 + 2*i (arm 1) or +0x77 + 2*i
+;          (arm 2), for i = 0..5, and the value written is always 0x40.
+;          Thirteen call sites, all in this module, and ten of them are named MIDI
+;          controller handlers: MidiCtrl_CC01, CC02, CC04, CC16, CC17, CC18 and CC19
+;          (two sites each for CC01/CC02/CC04).
+; Unknown:  ⚠ what the tag at (XIZ+0x0C) and the two record fields +1 and +4 SELECT.
+;          `ByTag` names the comparison, not the quantity.
+;          ⚠ what part-record bytes +0x76..+0x81 hold.  The field map in notes/FINDINGS-
+;          prom_c-dev10c-register-meanings.md §1 documents +0x09..+0x1A and says nothing
+;          about this range, so "SlotValues" is a name for twelve bytes that are indexed
+;          per slot, not a claim about their contents.  That 0x40 is a CENTRE value for
+;          a 0x00..0x7F range is PLAUSIBLE and is NOT asserted.
+;          ⚠ whether the two arms are two independent slot fields or one field read at
+;          two offsets.  Both are tested per iteration and arm 2 is only reached when
+;          arm 1 misses.
 ; --------------------------------------------------------------------------
-sub_FAF340:
+PartRec_ResetSlotValues_ByTag:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAF340  link XIZ,0xfffc
 	pushw	hl                                   ; FAF344  push HL
 	pushw	de                                   ; FAF345  push DE
@@ -57720,16 +57994,16 @@ sub_FAF340:
 	mul	bc, 0x12C                              ; FAF34F  mul BC,0x012c
 	ld	xix, xbc                                ; FAF353  ld XIX,XBC
 	ldw	hl, 0                                  ; FAF355  ld HL,0x0000
-sub_FAF340__FAF358:
+PartRec_ResetSlotValues_ByTag__FAF358:
 	ld	xbc, (xiz+14)                           ; FAF358  ld XBC,(XIZ+0x0e)
 	ld	a, (xbc+1)                              ; FAF35B  ld A,(XBC+0x01)
 	and	a, 63                                  ; FAF35E  and A,0x3f
 	extpfx3 0x8E, 0x0C, 0xF1                   ; FAF361  cp A,(XIZ+0x0c)
-	jr nz, sub_FAF340__FAF38A                  ; FAF364  jr NZ,0xfaf38a
+	jr nz, PartRec_ResetSlotValues_ByTag__FAF38A                  ; FAF364  jr NZ,0xfaf38a
 	ld	wa, (xiz+10)                            ; FAF366  ld WA,(XIZ+0x0a)
 	extz	wa                                    ; FAF369  extz WA
 	cp	de, wa                                  ; FAF36B  cp DE,WA
-	jr z, sub_FAF340__FAF38A                   ; FAF36D  jr Z,0xfaf38a
+	jr z, PartRec_ResetSlotValues_ByTag__FAF38A                   ; FAF36D  jr Z,0xfaf38a
 	ld	(xiz-2), hl                             ; FAF36F  ld (XIZ+0xfe),HL
 	ld	wa, ix                                  ; FAF372  ld WA,IX
 	extpfx3 0x9E, 0xFE, 0x80                   ; FAF374  add WA,(XIZ+0xfe)
@@ -57739,31 +58013,31 @@ sub_FAF340__FAF358:
 	extz	xwa                                   ; FAF381  extz XWA
 	add	wa, bc                                 ; FAF383  add WA,BC
 	ld	(xwa), 64                               ; FAF385  ld (XWA),0x40
-	jr sub_FAF340__FAF3B5                      ; FAF388  jr T,0xfaf3b5
-sub_FAF340__FAF38A:
+	jr PartRec_ResetSlotValues_ByTag__FAF3B5                      ; FAF388  jr T,0xfaf3b5
+PartRec_ResetSlotValues_ByTag__FAF38A:
 	ld	xbc, (xiz+14)                           ; FAF38A  ld XBC,(XIZ+0x0e)
 	ld	a, (xbc+4)                              ; FAF38D  ld A,(XBC+0x04)
 	and	a, 63                                  ; FAF390  and A,0x3f
 	extpfx3 0x8E, 0x0C, 0xF1                   ; FAF393  cp A,(XIZ+0x0c)
-	jr nz, sub_FAF340__FAF3B5                  ; FAF396  jr NZ,0xfaf3b5
+	jr nz, PartRec_ResetSlotValues_ByTag__FAF3B5                  ; FAF396  jr NZ,0xfaf3b5
 	ld	wa, (xiz+10)                            ; FAF398  ld WA,(XIZ+0x0a)
 	extz	wa                                    ; FAF39B  extz WA
 	cp	de, wa                                  ; FAF39D  cp DE,WA
-	jr z, sub_FAF340__FAF3B5                   ; FAF39F  jr Z,0xfaf3b5
+	jr z, PartRec_ResetSlotValues_ByTag__FAF3B5                   ; FAF39F  jr Z,0xfaf3b5
 	ld	(xiz-2), hl                             ; FAF3A1  ld (XIZ+0xfe),HL
 	ld	wa, ix                                  ; FAF3A4  ld WA,IX
 	extpfx3 0x9E, 0xFE, 0x80                   ; FAF3A6  add WA,(XIZ+0xfe)
 	add	wa, 0x77                               ; FAF3A9  add WA,0x0077
 	extz	xwa                                   ; FAF3AD  extz XWA
 	ld	(xwa+0x1523), 64                        ; FAF3AF  ld (XWA+0x1523),0x40
-sub_FAF340__FAF3B5:
+PartRec_ResetSlotValues_ByTag__FAF3B5:
 	sub	xbc, xbc                               ; FAF3B5  sub XBC,XBC
 	inc	6, xbc                                 ; FAF3B7  inc 6,XBC
 	add	(xiz+14), xbc                          ; FAF3B9  add (XIZ+0x0e),XBC
 	inc	2, hl                                  ; FAF3BC  inc 2,HL
 	inc	1, de                                  ; FAF3BE  inc 1,DE
 	cp	hl, 12                                  ; FAF3C0  cp HL,0x000c
-	jr c, sub_FAF340__FAF358                   ; FAF3C4  jr C,0xfaf358
+	jr c, PartRec_ResetSlotValues_ByTag__FAF358                   ; FAF3C4  jr C,0xfaf358
 	pop	xix                                    ; FAF3C6  pop XIX
 	popw	de                                    ; FAF3C7  pop DE
 	popw	hl                                    ; FAF3C8  pop HL
@@ -57777,7 +58051,7 @@ sub_FAF340__FAF3B5:
 ;          0xFAFE74
 ; Inputs:  frame `link XIZ,-20`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF3CC-0xFAF4DC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -57906,7 +58180,7 @@ MidiCtrl_CC01__FAF4D8:
 ;          0xFAFE82
 ; Inputs:  frame `link XIZ,-20`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF4DD-0xFAF5ED
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -58035,7 +58309,7 @@ MidiCtrl_CC02__FAF5E9:
 ;          0xFAFE90
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF5EE-0xFAF6FB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -58166,7 +58440,7 @@ MidiCtrl_CC04__FAF6F6:
 ;          0xFAFEDD
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF6FC-0xFAF872
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -58328,7 +58602,7 @@ MidiCtrl_CC16__FAF85F:
 ;          0xFAFEEB
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF873-0xFAF9E5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -58486,7 +58760,7 @@ MidiCtrl_CC17__FAF9D2:
 ;          0xFAFEF9
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF9E6-0xFAFAE8
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -58611,7 +58885,7 @@ MidiCtrl_CC18__FAFADA:
 ;          0xFAFF07
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAFAE9-0xFAFBEB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59366,7 +59640,7 @@ MidiCtrl_Dispatch__FB000F:
 ;          0xFB092F in MidiIn_ParseRingAndDispatch__FB08DA
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB0013-0xFB0131
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59497,7 +59771,7 @@ sub_FB0013__FB012C:
 ;          0xFB098B in MidiIn_ParseRingAndDispatch__FB0936
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = sub_FAF340
+; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB0132-0xFB01FF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -73398,7 +73672,7 @@ Dev10C_WriteReg_c:
 ;   9 literal call site(s) from outside this block, 0 from inside it.
 ;          3  sub_FAC08D
 ;          2  Voice_Retire_Mode20
-;          1  sub_FAB818
+;          1  Dev10C_StageRegs_0800_0840_FAB818
 ;          1  sub_FADEAC
 ;          1  Voice_Retire_Mode08
 ;          1  Voice_Retire_Mode10
@@ -73433,23 +73707,62 @@ Dev10C_WriteReg_c:
 ;     python3 notes/prom_c_verify_fragment.py c 0xFB7345 /tmp/b.final.s
 ; ==============================================================================
 ; --------------------------------------------------------------------------
-; sub_FB7345 -- 0xFB7345..0xFB73EF (171 bytes)
+; Dev10C_WriteSixChanRegs_FromD78A -- 0xFB7345..0xFB73EF (171 bytes)
+;             push SIX words into six per-channel registers of the device at 0x0010C000,
+;             from the six words that follow the 22-word staging struct.
+;             (★ NAMED in wave 7 round 2; was `sub_FB7345`.)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFADF70 in sub_FADEAC__FADF55, 0xFB3DB3 in Voice_Retire_Mode20__FB3D9E
 ;          0xFB3E3D in Voice_Retire_Mode08__FB3E26, 0xFB3E80 in Voice_Retire_Mode10
-; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
-; Outputs: no absolute-addressed write.
-; Calls:   0xFB6E8C = Dev10C_ChanMinus2_SetReg_0080_Bit15, 0xFB6EDC = Dev10C_ChanMinus2_ClrReg_0080_Bit15
-; Evidence: the listing below is the byte-identical round-trip of 0xFB7345-0xFB73EF
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+;          ★ ALL FOUR pass the same shape: `lda XBC,0x00D75E / push XBC`, then the
+;          channel word.  So "struct" below is 0x00D75E at every located call site.
+; Inputs:  frame `link XIZ,-8`; (XIZ+0x08) = channel number, (XIZ+0x0A) = struct base.
+; Outputs: six registers of ONE channel of 0x0010C000 (no absolute-addressed RAM write).
+; Calls:   0xFB6E8C = Dev10C_ChanMinus2_SetReg_0080_Bit15 -- FIVE calr sites, 0xFB7353,
+;          0xFB7357, 0xFB735B, 0xFB735F and 0xFB7363, all with the same argument
+;          0xFB6EDC = Dev10C_ChanMinus2_ClrReg_0080_Bit15 -- once, 0xFB73BD, between the
+;          fourth and fifth register write
+; Evidence: ★ the register/word map is NOT read off this listing by eye.  It is
+;          reproduced from the ROM bytes by `python3 notes/prom_c_tg_chanmap.py 0xFB7345
+;          0xAB --pairs`, which follows the two frame slots holding the select and data
+;          pointers and prints, in execution order:
+;              0xFB7374  register arg0 + 0x0840   <- struct+0x2E
+;              0xFB738C  register arg0 + 0x0A00   <- struct+0x36
+;              0xFB739F  register arg0 + 0x0800   <- struct+0x2C
+;              0xFB73B2  register arg0 + 0x09C0   <- struct+0x34
+;              0xFB73C9  register arg0 + 0x0940   <- struct+0x32
+;              0xFB73DC  register arg0 + 0x0900   <- struct+0x30
+;          Sorted by register those six pairs are SIX CONSECUTIVE WORDS feeding
+;          ascending blocks: 0x0800<-+0x2C, 0x0840<-+0x2E, 0x0900<-+0x30, 0x0940<-+0x32,
+;          0x09C0<-+0x34, 0x0A00<-+0x36 -- i.e. RAM 0x00D78A, 0x00D78C, 0x00D78E,
+;          0x00D790, 0x00D792, 0x00D794, since every located caller passes struct =
+;          0x00D75E.
+;          Those six words sit immediately AFTER the 22-word staging struct
+;          0x00D75E..0x00D789 that Dev10C_WriteAllChanRegs (0xFB713A) moves
+;          (notes/FINDINGS-prom_c-dev10c-producers.md §2), and they feed exactly the six
+;          register blocks that struct's words 12, 13, 16, 17, 19 and 20 feed.
+;          Their five producers are named beside them:
+;          Dev10C_StageRegs_0800_0840_{FAB818,FAB8CC,FAB9D8} write 0x00D78A/0x00D78C,
+;          Dev10C_StageRegs_0900_0940 (0xFABAE3) writes 0x00D78E/0x00D790 and
+;          Dev10C_StageRegs_09C0_0A00 (0xFABBFB) writes 0x00D792/0x00D794.
+; Unknown:  ⚠ WHY the argument is used with TWO channel conventions.  The six direct
+;          writes index the register file with arg0 unmodified, while the six
+;          Dev10C_ChanMinus2_* calls index it with (arg0 - 2) & 0x3F.  Nothing in this
+;          routine explains the offset of two, and no reading of it establishes one.
+;          ⚠ WHY the set-bit-15 call is repeated FIVE times with the same argument.
+;          Dev10C_ChanMinus2_SetReg_0080_Bit15 preserves HL (notes/prom_c_tg_chanmap.py
+;          prints its preserved set), so the four repeats change nothing.  Whether that
+;          is a compiler artefact or a deliberate delay is NOT ESTABLISHED.
+;          ⚠ what the six values MEAN.  Registers 0x0800/0x0840 have a documented
+;          quiescent pair (0xFF80/0xFF00, notes/FINDINGS-prom_c-dev10c-register-
+;          meanings.md §5); blocks 0x0900-0x0A40 have no statement of any kind.
+;          ⚠ whether this is the ONLY consumer of the six words.  No absolute LOAD of
+;          0x00D78A..0x00D795 exists anywhere in prom_c, but a consumer that receives
+;          the struct base as an argument, as this routine does, is invisible to that
+;          search.  "Only located consumer", not "only consumer".
 ; --------------------------------------------------------------------------
-sub_FB7345:
+Dev10C_WriteSixChanRegs_FromD78A:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7345  link XIZ,0xfff8
 	pushw	hl                                   ; FB7349  push HL
 	pushw	de                                   ; FB734A  push DE
@@ -73524,7 +73837,7 @@ sub_FB7345:
 ; sub_FB73F0 -- 0xFB73F0..0xFB742B (60 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFAB8BD in sub_FAB818__FAB87E
+;          0xFAB8BD in Dev10C_StageRegs_0800_0840_FAB818__FAB87E
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB73F0-0xFB742B
@@ -85050,7 +85363,10 @@ sub_FBD858__FBD888:
 	unlk32 xiz                                 ; FBD88B  unlk XIZ
 	ret                                        ; FBD88D  ret
 ; --------------------------------------------------------------------------
-; sub_FBD88E -- 0xFBD88E..0xFBD8B7 (42 bytes)
+; Clamp_ToRange_LowByte_FBD88E -- 0xFBD88E..0xFBD8B7 (42 bytes)
+;             clamp(v, hi, lo) returning the low byte in A -- the same function as
+;             Clamp_ToRange_LowByte (0xFA7EE2), separately compiled.
+;             (★ NAMED in wave 7 round 2; was `sub_FBD88E`.)
 ;
 ; Called from: no site outside this module.
 ;          18 site(s) inside this module:
@@ -85059,35 +85375,56 @@ sub_FBD858__FBD888:
 ;          0xFBF40C 0xFBF439 0xFBF555 0xFBF577 0xFBFC1A 0xFBFC5D
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Evidence: the listing below is the byte-identical round-trip of 0xFBD88E-0xFBD8B7
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ the three-way compare is the whole body, and the argument roles come from
+;          it:
+;              0xFBD892  ld BC,(XIZ+0x08) / cp BC,(XIZ+0x0a) / jr LE   -- v > hi ?  v = hi
+;              0xFBD8A2  ld BC,(XIZ+0x08) / cp BC,(XIZ+0x0c) / jr GE   -- v < lo ?  v = lo
+;              0xFBD8B0  ld C,(XIZ+0x08) / ld A,C                     
+;                        -- low byte returned in A
+;          so (XIZ+0x0A) is the HIGH bound and (XIZ+0x0C) the LOW one -- the same order
+;          Clamp_ToRange_LowByte at 0xFA7EE2 uses.
+;          ★ THE BYTE DIFF, because "the same routine" without a count is the shape of
+;          an error this tree has already published: these two are NOT the same bytes.
+;          This one is 42 bytes, 0xFA7EE2 is 34, and over the first 42 bytes 36 DIFFER.
+;          0xFA7EE2 does the comparisons in HL and needs no `link` frame slot; this one
+;          does them in BC.  So the shared name records a shared FUNCTION established by
+;          reading both bodies, and the `_FBD88E` suffix records that it is a distinct
+;          object -- not a byte-identical twin.
+;          Reproduce the count with:  python3 -c
+;          "rom=open('original_ROMs/wsa1_prom_c.ic28','rb').read(); B=0xF80000;
+;          a=rom[0xFBD88E-B:0xFBD88E-B+42]; b=rom[0xFA7EE2-B:0xFA7EE2-B+42];
+;          print(sum(x!=y for x,y in zip(a,b)))"
+; Unknown:  ⚠ whether the comparisons are SIGNED.  `jr LE` and `jr GE` are the signed
+;          conditions, so they are read that way here, but no caller was checked for a
+;          negative bound.
+;          ⚠ why the module carries its own copy instead of calling 0xFA7EE2.  A
+;          compiler that emitted the function twice explains it; that is a guess and is
+;          not asserted.
 ; --------------------------------------------------------------------------
-sub_FBD88E:
+Clamp_ToRange_LowByte_FBD88E:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FBD88E  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FBD892  ld BC,(XIZ+0x08)
 	extpfx3 0x9E, 0x0A, 0xF1                   ; FBD895  cp BC,(XIZ+0x0a)
-	jr le, sub_FBD88E__FBD8A2                  ; FBD898  jr LE,0xfbd8a2
+	jr le, Clamp_ToRange_LowByte_FBD88E__FBD8A2                  ; FBD898  jr LE,0xfbd8a2
 	ld	wa, (xiz+10)                            ; FBD89A  ld WA,(XIZ+0x0a)
 	ld	(xiz+8), wa                             ; FBD89D  ld (XIZ+0x08),WA
-	jr sub_FBD88E__FBD8B0                      ; FBD8A0  jr T,0xfbd8b0
-sub_FBD88E__FBD8A2:
+	jr Clamp_ToRange_LowByte_FBD88E__FBD8B0                      ; FBD8A0  jr T,0xfbd8b0
+Clamp_ToRange_LowByte_FBD88E__FBD8A2:
 	ld	bc, (xiz+8)                             ; FBD8A2  ld BC,(XIZ+0x08)
 	extpfx3 0x9E, 0x0C, 0xF1                   ; FBD8A5  cp BC,(XIZ+0x0c)
-	jr ge, sub_FBD88E__FBD8B0                  ; FBD8A8  jr GE,0xfbd8b0
+	jr ge, Clamp_ToRange_LowByte_FBD88E__FBD8B0                  ; FBD8A8  jr GE,0xfbd8b0
 	ld	wa, (xiz+12)                            ; FBD8AA  ld WA,(XIZ+0x0c)
 	ld	(xiz+8), wa                             ; FBD8AD  ld (XIZ+0x08),WA
-sub_FBD88E__FBD8B0:
+Clamp_ToRange_LowByte_FBD88E__FBD8B0:
 	ld	c, (xiz+8)                              ; FBD8B0  ld C,(XIZ+0x08)
 	ld	a, c                                    ; FBD8B3  ld A,C
 	unlk32 xiz                                 ; FBD8B5  unlk XIZ
 	ret                                        ; FBD8B7  ret
 ; --------------------------------------------------------------------------
-; sub_FBD8B8 -- 0xFBD8B8..0xFBD942 (139 bytes)
+; ByteField_AddOrSub_Clamped -- 0xFBD8B8..0xFBD942 (139 bytes)
+;             add or subtract a delta into a masked field of a byte in memory, clamped,
+;             with the direction taken from a two-bit-per-index flag byte.
+;             (★ NAMED in wave 7 round 2; was `sub_FBD8B8`.)
 ;
 ; Called from: no site outside this module.
 ;          44 site(s) inside this module:
@@ -85101,16 +85438,44 @@ sub_FBD88E__FBD8B0:
 ;          0xFBFED9 0xFBFF00
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10), (XIZ+0x14), (XIZ+0x16), (XIZ+0x18)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFBD88E = sub_FBD88E
-; Evidence: the listing below is the byte-identical round-trip of 0xFBD8B8-0xFBD942
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Calls:   0xFBD88E = Clamp_ToRange_LowByte_FBD88E
+; Evidence: ★ the two byte tables the routine indexes are IN THIS FILE and their contents
+;          decide the shape.  0xFDE6A1 and 0xFDE6A5 are offsets 0x0C and 0x10 into
+;          BitMask_Table_FDE695 (0xFDE695..0xFDE6A8), whose twenty bytes are
+;              01 00 02 00 04 00 08 00 01 04 10 40 01 04 10 40 02 08 20 80
+;          so 0xFDE6A1 reads 01 04 10 40 02 08 20 80 and 0xFDE6A5 reads 02 08 20 80 ...
+;          .  For an index i the pair (0xFDE6A1[i], 0xFDE6A5[i]) is therefore (1<<2i,
+;          1<<(2i+1)) -- A TWO-BIT FIELD PER INDEX in one flag byte.
+;          The body then reads:
+;          (Each address in the block below is the FIRST instruction of the step it
+;          labels, not the only one; the rest of the step follows it.)
+;              0xFBD8C4  ld H,(0xFDE6A1 + i) / ld A,(*(XIZ+0x0C)) / and A,H / jrl Z,exit
+;                -- bit 2i of the flag byte GATES the whole routine
+;              0xFBD8DD  ld H,(0xFDE6A5 + i) / and W,H / jr Z,add-arm       
+;                        -- bit 2i+1 chooses SUBTRACT (non-zero) or ADD (zero)
+;              0xFBD8F1  ld C,(*(XIZ+0x10)) / and C,(XIZ+0x14) / sub BC,(XIZ+0x0a)
+;                [subtract arm]
+;              0xFBD911  ld A,(*(XIZ+0x10)) / and A,(XIZ+0x14) / add WA,(XIZ+0x0a)   [add arm]
+;              both arms then  push (XIZ+0x18) / push (XIZ+0x16) / <value> / calr
+;                0xFBD88E        -- Clamp_ToRange_LowByte_FBD88E(value, hi=(XIZ+0x16),
+;                lo=(XIZ+0x18))
+;              0xFBD929  ld C,(XIZ+0x14) / cpl C / and (*(XIZ+0x10)),H  then  or
+;                (*(XIZ+0x10)),H        -- the clamped result is masked BACK INTO the same
+;                byte
+;          So the arguments are: (XIZ+0x08) index, (XIZ+0x0A) delta, (XIZ+0x0C) pointer
+;          to the flag byte, (XIZ+0x10) pointer to the target byte, (XIZ+0x14) the field
+;          mask, (XIZ+0x16) high bound, (XIZ+0x18) low bound.  44 call sites, all in
+;          this module.
+; Unknown:  ⚠ THE INDEX BOUND.  0xFDE6A5 runs out of BitMask_Table_FDE695 after four
+;          entries (0xFDE6A9 is DSP_AlgoChannel_SelectorRecords), so i <= 3 keeps the
+;          second lookup inside the table -- but nothing traced here bounds i, and
+;          BitMask_Table_FDE695's own header already says its entry count is a capacity
+;          and not a proven count.  The four is a consequence of the table's length, NOT
+;          a checked precondition.
+;          ⚠ what the flag byte, the field and the bounds MEAN.  The name states the
+;          operation.
 ; --------------------------------------------------------------------------
-sub_FBD8B8:
+ByteField_AddOrSub_Clamped:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FBD8B8  link XIZ,0xfffe
 	pushw	hl                                   ; FBD8BC  push HL
 	ld	bc, (xiz+8)                             ; FBD8BD  ld BC,(XIZ+0x08)
@@ -85121,7 +85486,7 @@ sub_FBD8B8:
 	ld	xbc, (xiz+12)                           ; FBD8CC  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FBD8CF  ld A,(XBC)
 	and	a, h                                   ; FBD8D1  and A,H
-	jrl z, sub_FBD8B8__FBD93F                  ; FBD8D3  jrl Z,0xfbd93f
+	jrl z, ByteField_AddOrSub_Clamped__FBD93F                  ; FBD8D3  jrl Z,0xfbd93f
 	ld	wa, (xiz+8)                             ; FBD8D6  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FBD8D9  extz WA
 	extz	xwa                                   ; FBD8DB  extz XWA
@@ -85129,7 +85494,7 @@ sub_FBD8B8:
 	ld	h, (xwa)                                ; FBD8E3  ld H,(XWA)
 	ld	w, (xbc)                                ; FBD8E5  ld W,(XBC)
 	and	w, h                                   ; FBD8E7  and W,H
-	jr z, sub_FBD8B8__FBD90B                   ; FBD8E9  jr Z,0xfbd90b
+	jr z, ByteField_AddOrSub_Clamped__FBD90B                   ; FBD8E9  jr Z,0xfbd90b
 	extpfx3 0x9E, 0x18, 0x04                   ; FBD8EB  pushw (XIZ+0x18)
 	extpfx3 0x9E, 0x16, 0x04                   ; FBD8EE  pushw (XIZ+0x16)
 	ld	xwa, (xiz+16)                           ; FBD8F1  ld XWA,(XIZ+0x10)
@@ -85142,8 +85507,8 @@ sub_FBD8B8:
 	exts	wa                                    ; FBD902  exts WA
 	ld	(xiz-2), wa                             ; FBD904  ld (XIZ+0xfe),WA
 	inc	6, xsp                                 ; FBD907  inc 6,XSP
-	jr sub_FBD8B8__FBD929                      ; FBD909  jr T,0xfbd929
-sub_FBD8B8__FBD90B:
+	jr ByteField_AddOrSub_Clamped__FBD929                      ; FBD909  jr T,0xfbd929
+ByteField_AddOrSub_Clamped__FBD90B:
 	extpfx3 0x9E, 0x18, 0x04                   ; FBD90B  pushw (XIZ+0x18)
 	extpfx3 0x9E, 0x16, 0x04                   ; FBD90E  pushw (XIZ+0x16)
 	ld	xbc, (xiz+16)                           ; FBD911  ld XBC,(XIZ+0x10)
@@ -85156,7 +85521,7 @@ sub_FBD8B8__FBD90B:
 	exts	wa                                    ; FBD922  exts WA
 	ld	(xiz-2), wa                             ; FBD924  ld (XIZ+0xfe),WA
 	inc	6, xsp                                 ; FBD927  inc 6,XSP
-sub_FBD8B8__FBD929:
+ByteField_AddOrSub_Clamped__FBD929:
 	ld	c, (xiz+20)                             ; FBD929  ld C,(XIZ+0x14)
 	cpl	c                                      ; FBD92C  cpl C
 	ld	h, c                                    ; FBD92E  ld H,C
@@ -85166,7 +85531,7 @@ sub_FBD8B8__FBD929:
 	ld	h, c                                    ; FBD938  ld H,C
 	ld	xbc, (xiz+16)                           ; FBD93A  ld XBC,(XIZ+0x10)
 	or	(xbc), h                                ; FBD93D  or (XBC),H
-sub_FBD8B8__FBD93F:
+ByteField_AddOrSub_Clamped__FBD93F:
 	popw	hl                                    ; FBD93F  pop HL
 	unlk32 xiz                                 ; FBD940  unlk XIZ
 	ret                                        ; FBD942  ret
@@ -85178,7 +85543,7 @@ sub_FBD8B8__FBD93F:
 ;          0xFBED45 0xFBED75 0xFBEDCF 0xFBFA6C 0xFBFAA7 0xFBFB0C
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10), (XIZ+0x14), (XIZ+0x16), (XIZ+0x18)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFBD88E = sub_FBD88E
+; Calls:   0xFBD88E = Clamp_ToRange_LowByte_FBD88E
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBD943-0xFBD9D3
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -85649,9 +86014,9 @@ sub_FBDC6C__FBDCCF:
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x008829, 0x00882A, 0x00882D, 0x00882E, 0x008831, 0x008832, 0x008835, 0x008836, 0x008839, 0x00883A, 0x00883D, 0x00883E, 0x008841, 0x008842, 0x008845, 0x008846, 0x008849, 0x00884A, 0x00884D, 0x00884E, 0x008851, 0x008852, 0x008855, 0x008856
 ; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = sub_FAD4FE
-;          0xFAD561 = sub_FAD561, 0xFAD5C2 = sub_FAD5C2
-;          0xFAD688 = sub_FAD688, 0xFBD88E = sub_FBD88E
-;          0xFBD8B8 = sub_FBD8B8, 0xFBD943 = sub_FBD943
+;          0xFAD561 = sub_FAD561, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+;          0xFAD688 = sub_FAD688, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
+;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFBDA2C = sub_FBDA2C
 ;          0xFBDBCE = sub_FBDBCE, 0xFBDC6C = sub_FBDC6C
 ;          0xFC7AB4 = sub_FC7AB4, 0xFC7B64 = sub_FC7B64
@@ -87824,9 +88189,9 @@ sub_FBDCD3__FBF27B:
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = sub_FAD4FE
-;          0xFAD561 = sub_FAD561, 0xFAD5C2 = sub_FAD5C2
-;          0xFAD688 = sub_FAD688, 0xFBD88E = sub_FBD88E
-;          0xFBD8B8 = sub_FBD8B8, 0xFBD943 = sub_FBD943
+;          0xFAD561 = sub_FAD561, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+;          0xFAD688 = sub_FAD688, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
+;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFC7AB4 = sub_FC7AB4
 ;          0xFC7B64 = sub_FC7B64
 ; Arms:    6 computed-goto arm(s) inside this routine: 0xFBF5EA 0xFBF5ED 0xFBF617 0xFBFE8E 0xFBFE91 0xFBFEBB
@@ -95988,7 +96353,7 @@ sub_FC37E2:
 ; sub_FC3806 -- 0xFC3806..0xFC3829 (36 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFAB9EB in sub_FAB9D8
+;          0xFAB9EB in Dev10C_StageRegs_0800_0840_FAB9D8
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3806-0xFC3829
@@ -97240,7 +97605,10 @@ sub_FC40E6__FC411B:
 	popw	hl                                    ; FC412C  pop HL
 	ret                                        ; FC412D  ret
 ; --------------------------------------------------------------------------
-; sub_FC412E -- 0xFC412E..0xFC413F (18 bytes)
+; Multiply16_Signed_Shr11 -- 0xFC412E..0xFC413F (18 bytes)
+;             signed 16x16 multiply with an arithmetic right shift of 11 -- a Q11 fixed-
+;             point product.
+;             (★ NAMED in wave 7 round 2; was `sub_FC412E`.)
 ;
 ; Called from: no site outside this module.
 ;          15 site(s) inside this module:
@@ -97249,15 +97617,22 @@ sub_FC40E6__FC411B:
 ;          0xFC45E6 0xFC45FB 0xFC465C
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Evidence: the listing below is the byte-identical round-trip of 0xFC412E-0xFC413F
-;          (notes/gen_prom_c_block.py, cleared by
-;          notes/prom_c_verify_fragment.py before insertion).  Every field above
-;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
-;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Evidence: ★ the routine is 18 bytes and FOUR instructions; there is nothing else in it:
+;              0xFC4132  ld BC,(XIZ+0x08)          -- first argument, 16 bits
+;              0xFC4135  muls XBC,(XIZ+0x0a)       -- SIGNED 16x16 -> 32 into XBC
+;              0xFC4138  sra 0x0b,XBC              -- ARITHMETIC right shift of 11
+;              0xFC413B  ld WA,BC                  -- the low 16 bits are the result
+;          Both the signedness and the shift are instruction opcodes, not readings:
+;          `muls` against `mul`, and `sra` against `srl`.  The ROM bytes are `ee 0c 00
+;          00 9e 08 21 9e 0a 49 e9 ed 0b d9 88 ee 0d 0e`.
+; Unknown:  ⚠ what the two factors ARE.  All 15 call sites are inside this module; none
+;          was traced to a named quantity, so the name states the arithmetic and nothing
+;          more.
+;          ⚠ the truncation to 16 bits at 0xFC413B discards the product's high half
+;          without a saturation or an overflow test, so the caller must guarantee the
+;          range.  No caller was checked for that.
 ; --------------------------------------------------------------------------
-sub_FC412E:
+Multiply16_Signed_Shr11:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC412E  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FC4132  ld BC,(XIZ+0x08)
 	extpfx3 0x9E, 0x0A, 0x49                   ; FC4135  muls XBC,(XIZ+0x0a)
@@ -97538,7 +97913,7 @@ Math_Exp2_Q11__FC4264:
 ;          0xFC6F90 0xFC71BC 0xFC73FE
 ; Inputs:  frame `link XIZ,-80`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC412E = sub_FC412E, 0xFC4140 = sub_FC4140
+; Calls:   0xFC412E = Multiply16_Signed_Shr11, 0xFC4140 = sub_FC4140
 ;          0xFC419D = Math_Sin_Q11, 0xFC41C3 = Math_Cos_Q11
 ;          0xFC41E9 = Math_Atan_Q11, 0xFC4227 = Math_Exp2_Q11
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC4269-0xFC46A7
@@ -104901,7 +105276,7 @@ sub_FC810C:
 ; sub_FC8129 -- 0xFC8129..0xFC8163 (59 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFABAFF in sub_FABAE3, 0xFABD14 in sub_FABCF9
+;          0xFABAFF in Dev10C_StageRegs_0900_0940, 0xFABD14 in sub_FABCF9
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC8129-0xFC8163
