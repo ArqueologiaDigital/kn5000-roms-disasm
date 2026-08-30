@@ -912,7 +912,9 @@ def audit(prove=False):
 # ---------------------------------------------------------------------------
 def zero_d():
     print("WHY SLOT 0x0D IS NOT NAMED -- every claim re-read from the tree\n")
-    a = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8",
+    # ⚠ image_path: prom_a `.include`s kernel/kernel.s and two shared
+    # maincpu sources, and a split would leave its primary a header.
+    a = open(image_path(ROOT, "prom_a/wsa1_prom_a.s"), encoding="utf-8",
              errors="replace").read()
     for what, pat in [
             ("PanelButton_Route tests bit 0 of (0x2075)", r"F861C6\s+f1 75 20 c8"),

@@ -73,7 +73,7 @@ from asm_source import image_path, write_part  # noqa: E402
 # is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
 PROM_B_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
 PROM_B = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
-PROM_A = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")
+PROM_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")  # the READ path
 
 BLOB = re.compile(r'^\t\.byte ((?:0x[0-9A-F]{2}, )*0x[0-9A-F]{2})\t; ([0-9A-F]{6})  (.*?)   \[llvm-mc cannot encode this\]$')
 
