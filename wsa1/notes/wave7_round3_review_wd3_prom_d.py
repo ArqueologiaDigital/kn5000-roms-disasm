@@ -70,8 +70,11 @@ ADDR = re.compile(r';\s([0-9A-F]{6})\s\s')
 
 
 def starts(rel):
+    # ⚠ image_path, not os.path.join: prom_c is a 2,517-line master plus 26
+    # included sources, and reading the master alone scored 6 of 20 cited
+    # addresses as "not an instruction start" when 210 of 210 are.
     out = set()
-    for ln in open(os.path.join(ROOT, rel)):
+    for ln in open(image_path(ROOT, rel)):
         m = ADDR.search(ln)
         if m:
             out.add(int(m.group(1), 16))
@@ -84,10 +87,33 @@ for ln in SRC:
     if ln.startswith(";"):
         for m in re.finditer(r'0x(F[0-9A-F]{5})\b', ln):
             cited.add(int(m.group(1), 16))
-ST = starts("prom_c/wsa1_prom_c.s") | starts("prom_a/wsa1_prom_a.s")
-hit = sum(1 for a in cited if a in ST)
+# ⚠ prom_b BELONGS IN THIS UNION and was missing.  The citation pattern above
+# is `0xF?????`, and prom_b is based at 0xF00000, so prom_d's prose cites prom_b
+# addresses too -- three of them, all in round 11's sound-group argument, which
+# postdates this check.  Scoring them against prom_a and prom_c alone counted
+# them as misses for a reason that had nothing to do with the citation.
+ST = (starts("prom_c/wsa1_prom_c.s") | starts("prom_a/wsa1_prom_a.s")
+      | starts("prom_b/wsa1_prom_b.s"))
+# ★ AND THE CHECK STILL FAILS, ON THREE, WHICH IS LEFT STANDING ON PURPOSE.
+# Reading the IMAGE instead of the 494-line header took the citation census from
+# 20 addresses to 210 and the misses from 6 to 3.  The three that remain are not
+# citation errors and are not split collateral -- they are DATA addresses being
+# scored by a CODE criterion, and only became visible once the census could see
+# all 210:
+#     0xF03241  prom_b's 64-row name table, 142 bytes into a span prom_b still
+#               holds as .incbin, so it has no decoded row start to land on
+#     0xF33022  12 bytes INTO the decoded 16-byte row at 0xF33016 -- a field
+#               inside a table row, cited as a field
+#     0xFDF22A  Instrument_OctaveShift_Semitones, past prom_c's last decoded
+#               row (0xFCB27B); the tail zone around it is still .incbin
+# Relaxing the criterion to "lands anywhere in decoded source" would turn this
+# red into a green by redefining the question, so it is NOT done here.  What is
+# needed is either those spans converted, or a separate DATA-citation check.
+miss = sorted(a for a in cited if a not in ST)
 check("all %d cited addresses land on an instruction start" % len(cited),
-      hit == len(cited), "%d/%d" % (hit, len(cited)))
+      not miss, "%d/%d%s" % (len(cited) - len(miss), len(cited),
+                             ("  miss " + " ".join("0x%06X" % a for a in miss))
+                             if miss else ""))
 worst = max(sum(1 for a in cited if a + d in ST) for d in (-2, -1, 1, 2, 3, 4, 5))
 check("...and the check CAN fail: the best wrong frame scores strictly lower",
       worst < len(cited), "best shifted frame %d/%d" % (worst, len(cited)))
