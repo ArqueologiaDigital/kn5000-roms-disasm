@@ -32,6 +32,8 @@ RUN
     python3 notes/reachability.py                 # the coverage report
     python3 notes/reachability.py --targets       # ★ the WORK LIST, ranked by reachable
                                                   #   bytes with a cumulative column
+    python3 notes/reachability.py --evidence      # ★ per-run START evidence: convert the
+                                                  #   runs with it, refuse the ones without
     python3 notes/reachability.py --spans         # per-.incbin-span breakdown
     python3 notes/reachability.py --seeds         # where the walk starts, by class
     python3 notes/reachability.py --selftest      # checks, incl. the LAST element
@@ -76,6 +78,23 @@ CPU2 = ("prom_c",)
 # So the tool now reports BOTH numbers and the strong one is the one to convert on.
 STRONG = ("vector", "directory", "branch")
 WEAK = ("immediate", "pointer_table")
+
+# ⚠ AND GRADING THE SEEDS IS STILL NOT SUFFICIENT ON ITS OWN. walk() queues every
+# branch target it decodes, so a walk that decodes its way INTO data queues
+# whatever that data happens to look like. Round 2 found the case: prom_a
+# 0xFA369A is named by NO seed of any grade, the strong walk marked 17 bytes
+# there, and the bytes are the ASCII string "SOUND GROUP NAMING". Framing them
+# would have emitted `ld XIX,0x4f524720` and the byte gate would have PASSED --
+# the second time in two rounds that the gate would have accepted a wrong decode.
+# The lane refused, against its brief, and was right.
+#
+# ★ THE TEST THAT SETTLES IT, from that lane, and it is decidable rather than a
+# judgement: a run start has POSITIVE EVIDENCE if a graded seed names it, or if
+# already-converted code FALLS THROUGH into it -- prom_a 0xF961BD is named by no
+# seed and IS code, because the converted instruction at 0xF961B8 is five bytes
+# and ends exactly there. A target queued out of a decode of data has neither.
+# --evidence applies that test to every reachable run and prints which side each
+# falls on, so a converting lane never has to guess.
 
 LINE = re.compile(r'^\s*([0-9a-f]{6}):\s+((?:[0-9a-f]{2} )+)\s*(.*)$')
 FLOW_END = re.compile(r'^\s*(ret|reti|retd|jp\s|jr\s+0x|halt|swi)', re.I)
@@ -238,6 +257,14 @@ def walk(tag, start, seen, cpu, queue):
 # scan that tail. Measured: the old pattern matched 8,473 of prom_b's 78,022
 # addressed lines; this one matches all of them.
 SRC_LINE = re.compile(r'^\t(\S.*?)\s*;\s*([0-9A-F]{6})\s+(.*)$')
+# ★★ AN ADDRESSED LINE IS NOT NECESSARILY AN INSTRUCTION. A converted data table
+# carries an address comment exactly like a converted instruction does, and
+# 20,464 of prom_b's 78,022 addressed lines are .byte/.ascii/.long/.short rows.
+# Feeding those into the walk as `proven` SEEDS THE STRONG PASS ON DATA -- which
+# is why prom_b reported 913 STRONG-reachable bytes that a lane then correctly
+# refused to convert. Grading the seed CLASSES (commit 47d4094) did not fix this,
+# because the bad seeds were arriving through `proven`, not through a class.
+DATA_DIRECTIVE = re.compile(r'^\.(byte|ascii|asciz|short|word|long|quad|fill|space|zero|incbin|align|org)\b')
 LONG_DIR = re.compile(r'^\t\.long\s+0x([0-9A-Fa-f]{8})')
 INCBIN = re.compile(r'^\t\.incbin "original_ROMs/(\S+?)", (0x[0-9A-Fa-f]+), (0x[0-9A-Fa-f]+)\s*$')
 
@@ -254,7 +281,8 @@ def proven_and_incbin(tag):
     for ln in source_lines(tag):
         m = SRC_LINE.match(ln)
         if m:
-            proven.add(int(m.group(2), 16))
+            if not DATA_DIRECTIVE.match(m.group(1)):
+                proven.add(int(m.group(2), 16))
             continue
         m = INCBIN.match(ln)
         if m:
@@ -293,6 +321,8 @@ def seeds(tag, cpu):
         m = SRC_LINE.match(ln)
         if not m:
             continue
+        if DATA_DIRECTIVE.match(m.group(1)):
+            continue          # a .long row's "operand" is a datum, not an edge
         text = m.group(1) + " " + m.group(3)
         for mm in BRANCH.finditer(text):
             t = int(mm.group(1), 16)
@@ -442,6 +472,72 @@ def targets():
     print("Work list cached to %s" % os.path.relpath(CACHE, ROOT))
 
 
+def runs_of(seen, lo, hi):
+    """Maximal contiguous runs of marked bytes inside [lo,hi)."""
+    out, start = [], None
+    for x in range(lo, hi):
+        if x in seen:
+            if start is None:
+                start = x
+        elif start is not None:
+            out.append((start, x))
+            start = None
+    if start is not None:
+        out.append((start, hi))
+    return out
+
+
+def start_evidence(tag, cpu, addr, sd, proven):
+    """Does anything POSITIVELY say execution enters at `addr`?
+
+    Two admissible witnesses, and nothing else:
+      SEED       -- a graded seed names it (a directory slot, a branch in
+                    converted code, a hardware vector, or a weak pointer).
+      FALLTHROUGH-- already-converted code runs straight into it: some proven
+                    instruction ends exactly here.
+    A target queued while the walk was DECODING has neither, and that is the
+    case that would have framed "SOUND GROUP NAMING" as `ld XIX,0x4f524720`."""
+    for cls in list(STRONG) + list(WEAK):
+        if addr in sd.get(cls, ()):
+            return cls
+    for a in proven:
+        if a < addr:
+            rows = _decode_window(tag, a)
+            if rows and rows[0][0] == a and a + rows[0][1] == addr:
+                return "fallthrough"
+    return None
+
+
+def evidence():
+    """Every reachable run still inside an .incbin, with the evidence for its
+    START. Convert the ones with evidence; refuse the ones without."""
+    for tag, _s, _f, _b in IMAGES:
+        cpu = CPU1 if tag in CPU1 else CPU2
+        r = analyse(tag, cpu)
+        if r["seen"] is None:
+            print("%s: cached run has no byte set; delete notes/.reachability-cache.json"
+                  " and re-run to use --evidence" % tag)
+            continue
+        sd = seeds(tag, cpu)
+        proven, _ = proven_and_incbin(tag)
+        pset = set(proven)
+        good = bad = 0
+        for lo, hi in r["spans"]:
+            for a, b in runs_of(r["seen"], lo, hi):
+                ev = start_evidence(tag, cpu, a, sd, pset)
+                if ev:
+                    good += b - a
+                else:
+                    bad += b - a
+                    print("  %s 0x%06X-0x%06X %5d B  ⚠ NO EVIDENCE for the start -- refuse"
+                          % (tag, a, b, b - a))
+        print("%-8s runs with start evidence: %s bytes; WITHOUT: %s bytes"
+              % (tag, format(good, ","), format(bad, ",")))
+    print("\n★ A run whose START nothing names was queued while the walk was DECODING,")
+    print("  and the walk can decode its way into data. Two rounds running, framing such")
+    print("  a run would have passed the byte gate with a wrong instruction.")
+
+
 def report(mode=None):
     tot_i = tot_r = 0
     for tag, _s, _f, _b in IMAGES:
@@ -516,6 +612,9 @@ def selftest():
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(selftest())
+    if "--evidence" in sys.argv:
+        evidence()
+        sys.exit(0)
     if "--targets" in sys.argv:
         targets()
         sys.exit(0)

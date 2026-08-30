@@ -14,7 +14,7 @@ QUESTION IT ANSWERS
 ────────────────────────────────────────────────────────────────────────────────
 THE THREE MEASUREMENTS, IN THE ORDER THAT SETTLES IT
 ────────────────────────────────────────────────────────────────────────────────
-1. CLOSURE (--closure).  Of the 13,218 entry points prom_b's five seed classes
+1. CLOSURE (--closure).  Of the 12,095 entry points prom_b's five seed classes
    name -- 1,910 routine-directory slots, 7,285 branches its converted code
    decodes, 1,919 32-bit immediates, 2,104 framed `.long` entries, 0 vectors --
    ★ NOT ONE lands inside an `.incbin`.  Zero, in every class, weak ones
@@ -106,7 +106,7 @@ committed state is quotable):
     prom_a  directory 1 seed in an `.incbin` (0xFDE70F), branch 5 (0xF96432,
             0xF9646A, 0xF9647F, 0xF96C65, 0xF96C8A), immediate 49, vector 0,
             pointer_table 0
-    prom_b  0 in every class, out of 13,218
+    prom_b  0 in every class, out of 12,095
 
 So prom_a's residue HAS real entry points and its lane is right to convert them;
 the live file already shows those six gone.  ⚠ Measured on the live prom_a AFTER
@@ -906,7 +906,7 @@ REFUSAL = """\
 REFUSING TO SPLICE, and this is the round's result, not a failure.
 
   All 913 bytes are reached by decoding a printed DATA row as an instruction.
-  Not one of prom_b's 13,218 seeds -- 1,910 routine-directory slots, 7,285
+  Not one of prom_b's 12,095 seeds -- 1,910 routine-directory slots, 7,285
   decoded branches, 1,919 immediates, 2,104 framed `.long` entries -- lands in
   an `.incbin`.  11 of the 31 runs, 392 bytes, are 60-98% 0x00 fill; one is 100
   bytes of ASCII captions ("1-08 1-09 ... 2-16"); the rest are fixed-stride
@@ -1087,7 +1087,12 @@ def selftest():
       sorted((k, len(v[1])) for k, v in b["classes"].items()),
       [("branch", 0), ("directory", 0), ("immediate", 0), ("pointer_table", 0),
        ("vector", 0)])
-    c("...and that is 13,218 seeds", sum(v[0] for v in b["classes"].values()), 13218)
+    # ⚠ WAS 13,218, AND THAT NUMBER WAS THE BUG. notes/reachability.py used to feed
+    # EVERY addressed line into its seed scan, including the 20,464 prom_b lines
+    # that are .byte/.ascii/.long data rows -- so a .long datum's value was read as
+    # a control-flow edge. Excluding data directives drops the count by 1,123 to
+    # 12,095. Pinning the old figure would have made this check defend the defect.
+    c("...and that is 12,095 seeds", sum(v[0] for v in b["classes"].values()), 12095)
     c("prom_b's `proven` set is 78,022 lines, 20,464 of them printed DATA rows",
       (b["data_rows"] + b["instr_rows"], b["data_rows"]), (78022, 20464))
     c("111 of prom_b's 124 directives are immediately preceded by a data row",
