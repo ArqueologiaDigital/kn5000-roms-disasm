@@ -112,7 +112,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
-from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import image_path, image_text_at_rev  # noqa: E402
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 SRCA = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")
@@ -355,9 +355,17 @@ def check_prose():
             elif ln[1:].strip() == "":
                 remblank += 1
     import wave7_documentation_metrics as M
-    n0, f0, u0, i0, h0, e0 = M.scan("prom_b/wsa1_prom_b.s")
-    open(os.path.join(ROOT, ".rev_tmp_head.s"), "w").write(head("prom_b/wsa1_prom_b.s"))
-    n1, f1, u1, i1, h1, e1 = M.scan(".rev_tmp_head.s")
+    # ⚠ SEVEN, not six.  wave7_documentation_metrics.scan() grew a DESCRIPTIVE
+    # branch-target column in round 12 and this unpack was never widened, so
+    # every run of this section died with "too many values to unpack".  It is
+    # not split collateral -- it predates the split -- but it is why this probe
+    # could not be graded.
+    n0, f0, u0, i0, b0, h0, e0 = M.scan("prom_b/wsa1_prom_b.s")
+    # ⚠ THE IMAGE AT HEAD, written out so scan() can read it as a file: the
+    # working-tree side is the image, so the HEAD side must be too.
+    open(os.path.join(ROOT, ".rev_tmp_head.s"), "w").write(
+        image_text_at_rev(ROOT, "prom_b/wsa1_prom_b.s", "HEAD"))
+    n1, f1, u1, i1, b1, h1, e1 = M.scan(".rev_tmp_head.s")
     os.remove(os.path.join(ROOT, ".rev_tmp_head.s"))
     print("--prose   comment lines ADDED %d   REMOVED %d      blank lines added %d removed %d"
           % (add, rem, addblank, remblank))

@@ -78,7 +78,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
-from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import image_path, image_text_at_rev  # noqa: E402  (the image, not the master)
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 SRCA = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")
@@ -189,8 +189,11 @@ def check_cites():
 def check_suffix():
     at, _ = scan(SRCB)
     bound = {n: a for a, ns in at.items() for n in ns}
-    head = subprocess.run(["git", "-C", ROOT, "show", "HEAD:prom_b/wsa1_prom_b.s"],
-                          capture_output=True, text=True).stdout
+    # ⚠ THE IMAGE AT HEAD.  `git show HEAD:<primary>` returns the primary
+    # alone -- for prom_b that already omits the two shared maincpu sources,
+    # and after a split it would omit the body.  The working-tree side of
+    # this comparison reads the image, so both sides must.
+    head = image_text_at_rev(ROOT, "prom_b/wsa1_prom_b.s", "HEAD")
     old = set(re.findall(r'^([A-Za-z_][A-Za-z0-9_]*):', head, re.M))
     added = [n for n in bound if n not in old]
     good, bad = 0, []
@@ -318,8 +321,11 @@ def check_grade():
 
 def check_bytes():
     R = re.compile(r'\.incbin\s+"[^"]+"\s*,\s*(0x[0-9a-fA-F]+|\d+)\s*,\s*(0x[0-9a-fA-F]+|\d+)')
-    head = subprocess.run(["git", "-C", ROOT, "show", "HEAD:prom_b/wsa1_prom_b.s"],
-                          capture_output=True, text=True).stdout
+    # ⚠ THE IMAGE AT HEAD.  `git show HEAD:<primary>` returns the primary
+    # alone -- for prom_b that already omits the two shared maincpu sources,
+    # and after a split it would omit the body.  The working-tree side of
+    # this comparison reads the image, so both sides must.
+    head = image_text_at_rev(ROOT, "prom_b/wsa1_prom_b.s", "HEAD")
     now = open(SRCB).read()
 
     def tot(s):

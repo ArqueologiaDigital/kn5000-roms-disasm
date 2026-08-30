@@ -116,8 +116,10 @@ def pairs():
     """The (old, new) label renames, recovered from the uncommitted diff.
 
     A `-LABEL:` line followed, inside the same hunk, by a `+LABEL:` line."""
+    # ⚠ the image DIRECTORY: a diff of the primary alone cannot see a body
+    # that has moved into included sources.
     d = subprocess.run(["git", "-C", ROOT, "diff", "-U0", "--",
-                        "prom_b/wsa1_prom_b.s"],
+                        "prom_b/", "maincpu/"],
                        capture_output=True, text=True).stdout.split("\n")
     pat = re.compile(r'^([-+])([A-Za-z_][A-Za-z0-9_]*):$')
     out = []
@@ -389,7 +391,7 @@ def c9_morphemes(P):
 
 def c10_prose():
     print("\n10 NEW PROSE, NOT DELETED WHITESPACE")
-    d = subprocess.run(["git", "-C", ROOT, "diff", "--", "prom_b/wsa1_prom_b.s"],
+    d = subprocess.run(["git", "-C", ROOT, "diff", "--", "prom_b/", "maincpu/"],
                        capture_output=True, text=True).stdout.split("\n")
     add_c = sum(1 for l in d if l.startswith("+;"))
     del_blank = sum(1 for l in d if l == "-")
