@@ -443,6 +443,7 @@
 ;     python3 notes/prom_d_structures_round2.py        # the record framing, 78 checks
 ;     python3 notes/prom_d_documentation_round3.py     # who READS it, 62 checks
 ;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
+;     python3 notes/prom_d_split_probe.py              # ★ THE SPLIT LOST NOTHING
 ;     python3 notes/prom_d_finish_round7.py --selftest # the inventory, 56 checks
 ;     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, 129 checks
 ;     python3 notes/prom_d_finish_round12.py --selftest  # ★ THE FRAMED SET, 35 checks

@@ -3816,6 +3816,7 @@ _HDR = _HDR.replace(_MARK, _round7_header_lines() + "\n"
 _HDR = _HDR.replace(
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks",
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks\n"
+    ";     python3 notes/prom_d_split_probe.py              # \u2605 THE SPLIT LOST NOTHING\n"
     ";     python3 notes/prom_d_finish_round7.py --selftest # the inventory, %d checks\n"
     ";     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, "
     "%d checks\n"
