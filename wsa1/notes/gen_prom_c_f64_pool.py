@@ -61,8 +61,17 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, locate, write_part  # noqa: E402
 IMG = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+# ★ THE READ AND THE WRITE ARE DIFFERENT PATHS NOW, AND THAT IS THE POINT.
+#   PRIMARY names the image; image_path() expands it for READING; locate()
+#   finds the ONE included source that owns the block --apply splices, and
+#   write_part() refuses any write that would drop a file's .include lines.
+#   Pointing the read at the expansion while leaving the write on the primary
+#   would overwrite the 2,516-line master with the whole 132,304-line image,
+#   orphan 26 sources, and leave the byte gate green.
+PRIMARY = "prom_c/wsa1_prom_c.s"
 BASE = 0xF80000
 
 POOL = 0xFCB27E
@@ -97,7 +106,7 @@ def labels():
     lab = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
     addr = re.compile(r";\s*([0-9A-F]{6})\s")
     cur, out = None, {}
-    for line in open(SRC):
+    for line in open(image_path(ROOT, PRIMARY)):
         m = lab.match(line)
         if m:
             cur = m.group(1)
@@ -374,13 +383,24 @@ HEAD_RE = re.compile(
 
 
 def apply():
-    text = open(SRC).read()
+    # The block lives in whichever included source owns 0xFCB27E, not in the
+    # master.  locate() RAISES if it is in none of them or in more than one --
+    # "the regex missed" used to be indistinguishable from "nothing to do".
+    anchor = '\t.incbin "original_ROMs/wsa1_prom_c.ic28", 0x04B27E, 0x0012C1'
+    try:
+        path = locate(ROOT, PRIMARY, anchor)
+    except LookupError as e:
+        print("could not place the 0xFCB27E .incbin block: %s" % e, file=sys.stderr)
+        return 1
+    text = open(path, encoding="utf-8").read()
     m = HEAD_RE.search(text)
     if not m:
-        print("could not find the 0xFCB27E .incbin block to replace", file=sys.stderr)
+        print("could not find the 0xFCB27E .incbin block to replace in %s"
+              % os.path.relpath(path, ROOT), file=sys.stderr)
         return 1
-    open(SRC, "w").write(text[:m.start()] + asm() + text[m.end():])
-    print(f"spliced {len(asm().splitlines())} lines into {SRC}")
+    write_part(path, text[:m.start()] + asm() + text[m.end():])
+    print(f"spliced {len(asm().splitlines())} lines into "
+          f"{os.path.relpath(path, ROOT)}")
     return 0
 
 

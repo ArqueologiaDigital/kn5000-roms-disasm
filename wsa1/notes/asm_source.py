@@ -319,23 +319,48 @@ def locate(root, primary, needle, shared=False):
     return hits[0]
 
 
-def write_part(path, text, root=ROOT):
+# A splice that replaces one `.incbin` line with a decoded table is the biggest
+# LEGITIMATE growth this tree does: gen_prom_c_f64_pool --apply turns one line
+# into about 4,700 in a 12,000-line source.  Writing a whole 132,304-line image
+# into a part is not in that league, so the threshold sits between them and the
+# opt-out is explicit.
+GROWTH_FLOOR = 8192
+
+
+def write_part(path, text, root=ROOT, allow_growth=False):
     """Write one constituent file back, refusing the accident described above.
 
-    ★ THE GUARD: a file that carries `.include` directives must still carry at
+    ★ GUARD 1: a file that carries `.include` directives must still carry at
     least as many afterwards.  Overwriting a split master with the expanded
     image drops every one of them at once, which is exactly the mistake this
     refuses, and no legitimate splice removes an include.
+
+    ★ GUARD 2: the file must not EXPLODE.  Guard 1 alone is blind to the other
+    half of the same accident -- a part file carries no includes, so writing the
+    whole image into one passes guard 1 without a murmur.  A write may add at
+    most 4x the file's own lines, or GROWTH_FLOOR, whichever is larger.
+    allow_growth=True says the growth is meant, and has to be typed.
     """
     before = open(path, encoding="utf-8").read()
-    n_before = sum(1 for l in before.split("\n") if INCLUDE_RE.match(l))
-    n_after = sum(1 for l in text.split("\n") if INCLUDE_RE.match(l))
+    old, new = before.split("\n"), text.split("\n")
+    n_before = sum(1 for l in old if INCLUDE_RE.match(l))
+    n_after = sum(1 for l in new if INCLUDE_RE.match(l))
     if n_after < n_before:
         raise AssertionError(
             "%s carries %d .include directive(s); the text about to replace it "
             "carries %d.  Writing it would orphan the included sources and undo "
             "the split -- splice into the file that owns the text (locate())."
             % (os.path.relpath(path, root), n_before, n_after))
+    cap = max(4 * len(old), GROWTH_FLOOR)
+    if not allow_growth and len(new) - len(old) > cap:
+        raise AssertionError(
+            "%s has %s lines and the text about to replace it has %s -- +%s, "
+            "over the +%s a splice is allowed without saying so.  Writing a whole "
+            "image into a part passes the .include guard, so this one exists too; "
+            "pass allow_growth=True if the growth is meant."
+            % (os.path.relpath(path, root), format(len(old), ","),
+               format(len(new), ","), format(len(new) - len(old), ","),
+               format(cap, ",")))
     tmp = "%s.tmp%d" % (path, os.getpid())
     with open(tmp, "w", encoding="utf-8") as fh:
         fh.write(text)
@@ -498,6 +523,18 @@ def _selftest():
         write_part(part, "; part\nAnchor:\n; spliced\n", root=td)
         check("write_part() DOES write a part that carries no includes",
               "spliced" in open(part).read())
+        # ★ GUARD 2, both directions.  A part has no includes, so guard 1 is
+        #   blind to the whole image being written INTO one.
+        try:
+            write_part(part, "\n".join(["x"] * 60000), root=td)
+            check("write_part() REFUSES to explode a part into an image-sized "
+                  "file", False)
+        except AssertionError:
+            check("write_part() REFUSES to explode a part into an image-sized "
+                  "file", True)
+        write_part(part, "\n".join(["y"] * 60000), root=td, allow_growth=True)
+        check("...unless allow_growth=True is typed",
+              len(open(part).read().split("\n")) == 60000)
 
     print("\nFAILURES: %d" % len(fails))
     return 1 if fails else 0
