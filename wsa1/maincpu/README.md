@@ -89,9 +89,11 @@ it silently measures a tree with them missing.  `notes/reachability.py` knows;
 obvious next step and the tooling supports it -- both `notes/reachability.py`
 and `scripts/analysis/source_coverage.py` follow an image's own `.include`s.
 
-It was **not** done in this pass, deliberately: **107 committed analysis scripts
+It was **not** done in this pass, deliberately: **112 committed analysis scripts
 open `prom_a/wsa1_prom_a.s` or `prom_b/wsa1_prom_b.s` by path** and read them
 line by line, and a split moves the content out from under every one of them
-without any of them failing.  That is the same class of silent-emptying failure
-`notes/reachability.py`'s own comments describe, at 107x the blast radius.  The
+without any of them failing.  Regenerate that figure, never retype it:
+
+    python3 notes/maincpu_join_probe.py --split-cost  That is the same class of silent-emptying failure
+`notes/reachability.py`'s own comments describe, at 112x the blast radius.  The
 split is a wave, not a step, and its first job is that inventory.

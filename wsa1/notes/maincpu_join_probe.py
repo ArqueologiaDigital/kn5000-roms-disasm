@@ -31,8 +31,17 @@ WHAT IT ESTABLISHES, and each is a measurement rather than a reading
                  copy -- and it is why the chip boundary at 0xF80000 is invisible
                  to the call graph.
 
-  --shared       the two source files the duplicates now live in, and a check
-                 that each still assembles to both sites' bytes.
+  --shared       the two source files the duplicates now live in, and where each
+                 is included from.
+
+  --split-cost   ★ WHY THE PER-SUBJECT SPLIT IS NOT IN THIS PASS.  prom_c and
+                 prom_d have been split into subject sources; prom_a and prom_b
+                 have not.  This counts the committed analysis scripts that open
+                 either image BY PATH and read it line by line -- every one of
+                 which a split would empty WITHOUT FAILING, which is the same
+                 silent-emptying failure notes/reachability.py's own comments
+                 describe.  The number is the size of the inventory the split
+                 has to do first; it is not an argument that the split is wrong.
 
 RUN
     python3 notes/maincpu_join_probe.py --collisions --callers --nearest --shared
@@ -179,6 +188,15 @@ def main():
         print("    space, including the sixteen that cross from prom_a into prom_b.")
         print("    That is a per-LINK-UNIT copy, not a bank workaround.")
         print()
+    if '--split-cost' in a:
+        n, files = split_cost()
+        print("  committed .py files that open prom_a/wsa1_prom_a.s or")
+        print("  prom_b/wsa1_prom_b.s by path: %d" % n)
+        for f in files[:12]:
+            print("      %s" % f)
+        if n > 12:
+            print("      ... and %d more" % (n - 12))
+        print()
     if '--shared' in a:
         for rel in ("maincpu/shared/indexed_table.s",
                     "maincpu/shared/lcd_screen_redraw.s"):
@@ -190,6 +208,26 @@ def main():
             for g in got:
                 print("      %s" % g.strip())
     return 0
+
+
+PATH_REF = re.compile(r'prom_[ab]/wsa1_prom_[ab]\.s')
+
+
+def split_cost():
+    """(count, sorted paths) of committed .py files naming either image's path.
+    ⚠ COMMITTED ones: a working-tree script nobody has kept is not a cost."""
+    import subprocess
+    tracked = subprocess.run(["git", "ls-files", "*.py"], cwd=ROOT,
+                             capture_output=True, text=True, check=True).stdout.split()
+    hits = []
+    for rel in tracked:
+        try:
+            t = open(os.path.join(ROOT, rel), encoding="utf-8", errors="replace").read()
+        except OSError:
+            continue
+        if PATH_REF.search(t):
+            hits.append(rel)
+    return len(hits), sorted(hits)
 
 
 def selftest():
@@ -288,6 +326,15 @@ def selftest():
                 for g, _s, _k2 in r[pb] if g == "prom_a")
     check("prom_a references prom_b's copies (%d) -- the refutation has a witness"
           % cross, cross > 0)
+    # the split-cost figure is a measurement, so it gets an invariant too: it is
+    # a count of COMMITTED files and every one of them really names an image path
+    n, files = split_cost()
+    check("the split-cost census finds committed scripts naming an image path "
+          "(%d)" % n, n > 0)
+    bad = [f for f in files
+           if not PATH_REF.search(open(os.path.join(ROOT, f), encoding="utf-8",
+                                       errors="replace").read())]
+    check("every file it counts really names one (%d that do not)" % len(bad), not bad)
     print("\n%d checks, %d failed" % (ok + fail, fail))
     return 1 if fail else 0
 
