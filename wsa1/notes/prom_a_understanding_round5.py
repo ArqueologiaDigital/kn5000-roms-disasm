@@ -119,6 +119,12 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path, write_part  # noqa: E402
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
 S_A_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path: write_part() guards it
 S_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")  # the READ path: the image, not the master
 S_B = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")

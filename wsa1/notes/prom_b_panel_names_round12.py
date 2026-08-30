@@ -144,6 +144,12 @@ sys.path.insert(0, HERE)
 import wave7_panel_button_codes as L1        # noqa: E402
 import wave7_panel_names_round11 as R11      # noqa: E402
 
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
 SRC_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
 SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 RULE = "; " + "-" * 69

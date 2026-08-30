@@ -396,7 +396,13 @@ def writers_rewrite(text):
         img = site_image(m)
         line_start = new.rfind("\n", 0, m.start()) + 1
         line_end = new.find("\n", m.end())
-        repl = (('%s_MASTER = os.path.join(ROOT, "%s")'
+        repl = (('# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text\n'
+                 '# it is handed is the whole image: write_part() sees the master\'s\n'
+                 '# .include lines disappear.  That refusal is correct and is not the fix.\n'
+                 '# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),\n'
+                 '# which applies the transform to every constituent file; for a SPLICE it\n'
+                 '# is asm_source.locate() on the block\'s anchor.  See notes/asm_source.py.\n'
+                 '%s_MASTER = os.path.join(ROOT, "%s")'
                  '   # the WRITE path: write_part() guards it\n'
                  '%s = image_path(ROOT, "%s")'
                  '  # the READ path: the image, not the master')
