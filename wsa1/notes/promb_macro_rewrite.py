@@ -827,6 +827,22 @@ def _arity(nm):
 PROM_A_MACRO = re.compile(r'^\t(m[x]?8?_\S+) (.*?)\s*; ([0-9A-F]{6})  ([0-9a-f ]+)$')
 
 
+# ⚠ THE TREE IS THE TOOL'S OWN OUTPUT NOW, so running the checks against the
+# working tree exercises nothing: 7,230 of the 7,309 rows are already macros and
+# plan() proposes almost nothing.  A check that cannot fail is not a check.  The
+# recogniser checks therefore run against prom_b AS IT WAS BEFORE THE BATCHES,
+# read out of git -- which is also the only version that can prove the tool still
+# reproduces what it emitted.
+BASELINE = "a4c8972"
+
+
+def baseline_lines():
+    import subprocess
+    return subprocess.run(["git", "show", "%s:prom_b/wsa1_prom_b.s" % BASELINE],
+                          cwd=ROOT, capture_output=True, text=True,
+                          check=True).stdout.split('\n')
+
+
 def selftest(lines):
     """INVARIANTS, not pinned values. Each one would fail on a real defect and
     none of them encodes a number that legitimate work would move."""
@@ -906,7 +922,11 @@ def selftest(lines):
     check("the prefix decoder consumes exactly what _mem emits (%d bad)" % len(bad), not bad)
 
     # 5. Nothing the planner proposes changes the ADDRESS or the decode text.
+    #    Against the BASELINE, so there is something to propose.
+    lines = baseline_lines()
     p, _ = plan(lines)
+    check("the baseline still has rows to recognise (%d proposed of %d rows)"
+          % (len(p), sum(1 for _ in rows(lines))), len(p) > 5000)
     bad = 0
     for i, new, _n in p:
         m0 = BLOB.match(lines[i])
