@@ -25,6 +25,31 @@ done. **Documentation is 43.5% at the lower bound and that is the open half of t
 what a thing IS; UPPER counts a kind-plus-address as understood. The tree's one hand-graded sample
 landed at 28% of its UPPER figure.
 
+
+## ★★ THE COVERAGE GOAL'S REMAINING WORK IS 17,558 BYTES, NOT 107,371
+
+`python3 notes/reachability.py` follows every control-flow edge the machine can take, **including
+the indirect ones** — the CPU vector table, the 1,910-slot routine directory (each slot a
+`jp imm24`), the 2,104 entries of the pointer tables the tree has already framed, branch targets in
+converted code, and 32-bit immediates that land in an image. Result:
+
+    prom_a   reached 361,094 B | still .incbin 56,125 | ★ REACHABLE AND UNCONVERTED 10,169 (18.1%)
+    prom_b   reached 192,063 B | still .incbin 51,246 | ★ REACHABLE AND UNCONVERTED  7,389 (14.4%)
+    prom_c   reached 180,270 B | still .incbin      0 | ★ REACHABLE AND UNCONVERTED      0 (0.0%)
+    TOTAL still .incbin 107,371, of which REACHABLE CODE 17,558 (16.4%)
+
+★ **prom_c is already at 100 % reachable coverage.** Its territory is complete AND execution reaches
+nothing in it that is unconverted.
+
+★ **Only 16.4 % of what is still `.incbin` is reachable code.** The other 83.6 % is data or
+unreached, and converting it adds territory without adding coverage — which this wave demonstrated
+the expensive way: round 7 converted 9,175 bytes with ZERO call/jp references at any byte offset in
+any of the four images, and round 8's own splice added 96 unnamed routines for 11 content names.
+
+⚠ "Unreached" is not "dead". The walk is a lower bound on reachability: an entry point nobody has
+framed yet — a jump table still inside an `.incbin`, a computed address — will not be followed, and
+converting a span can therefore REVEAL new reachable bytes. Re-run the tool after every conversion.
+
 ## What is left, in order of size
 
 * **prom_b: 51,246 bytes still `.incbin`** across 117 spans, plus 1,899 `sub_XXXXXX` and 2,950
