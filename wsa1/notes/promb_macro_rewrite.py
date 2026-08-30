@@ -45,6 +45,7 @@ RUN
                                                           #   the commit log comes from
     python3 notes/promb_macro_rewrite.py --left            # what is NOT, by shape, with the reason
     python3 notes/promb_macro_rewrite.py --left --detail   # ... every remaining row, by address
+    python3 notes/promb_macro_rewrite.py --unused          # macros with no instance in the tree
     python3 notes/promb_macro_rewrite.py --apply --only m_cp_mi8,m_cp_mi16
     python3 notes/promb_macro_rewrite.py --selftest        # the invariants
 
@@ -740,6 +741,37 @@ def main():
         for k, v in c.most_common():
             print("  %6d  %s" % (v, k))
         print("\n  %6d  LEFT AS A BLOB" % (total - len(p)))
+        return 0
+    if '--unused' in args:
+        # ★ A MACRO WITH NO INSTANCE IS A NAME NOTHING CHECKS.  The byte gate
+        # proves an encoding only where it is used; selftest check 7 proves the
+        # .inc and the Python mirror agree; but for a macro this tree never
+        # emits, the NAME rests on MAME's dasm900.cpp tables alone -- there is no
+        # line whose unidasm comment can be compared with it by eye.  That is not
+        # a defect, it is a smaller warrant, and it should be a list rather than
+        # a footnote.
+        inc = os.path.join(ROOT, "include/tlcs900_mem_ops.inc")
+        defined = re.findall(r'^\.macro (\S+)', open(inc).read(), re.M)
+        srcs = ["prom_a/wsa1_prom_a.s", "prom_b/wsa1_prom_b.s", "kernel/kernel.s",
+                "maincpu/shared/indexed_table.s",
+                "maincpu/shared/lcd_screen_redraw.s", "include/tlcs900_mem_ops.inc"]
+        text = "".join(open(os.path.join(ROOT, f)).read() for f in srcs)
+        uses = {d: len(re.findall(r'^\t%s\b' % re.escape(d), text, re.M))
+                for d in defined}
+        un = sorted(d for d in defined if not uses[d])
+        print("macros defined in include/tlcs900_mem_ops.inc: %d" % len(defined))
+        print("with NO instance anywhere in the tree:         %d\n" % len(un))
+        for d in un:
+            print("  %s" % d)
+        print("\n  Their names come from dasm900.cpp's tables and from nothing else.")
+        print("  The ENCODING is still checked: selftest check 7 assembles the %d"
+              % sum(1 for d in defined if d in MIRROR))
+        print("  of them this file mirrors through llvm-mc and compares the bytes.")
+        print("  It is the MNEMONIC that has no witness until the tree uses one.")
+        nm = [d for d in defined if d not in MIRROR]
+        if nm:
+            print("\n  ⚠ defined but NOT mirrored, so not in that check: %s"
+                  % ", ".join(nm))
         return 0
     if '--left' in args:
         if '--detail' in args:

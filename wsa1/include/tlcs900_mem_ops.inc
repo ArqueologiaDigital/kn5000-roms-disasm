@@ -494,6 +494,16 @@
 ;   compared by eye, and notes/promb_macro_rewrite.py compares them by machine
 ;   before it emits anything.
 ;
+; ⚠ SOME OF THESE HAVE NO INSTANCE.  A macro this tree never emits has no line
+;   whose unidasm comment can be compared with its name, so its NAME rests on
+;   dasm900.cpp alone -- a smaller warrant than the used ones have.  The list is
+;   generated rather than described:
+;
+;     python3 notes/promb_macro_rewrite.py --unused
+;
+;   Their ENCODING is still checked: selftest check 7 assembles every macro in
+;   this file through llvm-mc and compares it with the tool's Python mirror.
+;
 ; The operation-byte numbers are the same four tables the block above cites:
 ; mnemonic_c0/d0/e0 for a size-carrying operand, mnemonic_f0/b0/b8 for a
 ; "destination" one, and mnemonic_c8/d8/e8 for a register-direct one.
