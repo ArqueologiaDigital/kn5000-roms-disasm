@@ -299,12 +299,33 @@ def selftest():
               not any(n.startswith(".L") for n, _a in named + unnamed))
     # agrees with the independent grep the handoff documents
     import subprocess
-    # ⚠ kernel/ is in the pattern because the shared kernel source moved 11
+    # ⚠ kernel/ is in the file list because the shared kernel source moved 11
     # sub_XXXXXX labels out of prom_a; scanning prom_*/*.s alone made this check
     # fail by exactly those 11.
-    g = subprocess.run("grep -rhoE '^sub_[0-9A-Fa-f]{6}:' prom_*/*.s kernel/*.s"
-                       " | sort -u | wc -l",
-                       shell=True, cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    #
+    # ★★ AND THE FILE LIST IS NO LONGER A SHELL GLOB, for the same reason.
+    # It used to be `grep -rhoE ... prom_*/*.s kernel/*.s`.  That glob is ONE
+    # LEVEL DEEP, and on 2026-08-30 the prom_c split moved 24 of its sources into
+    # prom_c/{boot,link,midi,keyscan,voice,p7,tone_db,devices,storage,mathlib,
+    # data_tables}/ -- two levels.  The glob stopped seeing them and the grep fell
+    # from 5,131 distinct names to 4,843, so this check has been FAILING at HEAD
+    # ever since, reported as "routines (5133) minus duplicates (2) != 4843".
+    # ⚠ NOTHING WAS WRONG WITH EITHER SIDE OF THE ARITHMETIC.  The scan reads the
+    # image through asm_source and was right; the grep read a directory listing
+    # and was wrong; 5133 - 2 == 5131 is the identity that was true all along.
+    # This is the same collateral as a probe opening a now-stubbed .s by path --
+    # a stale FILE LIST, not a stale number -- so the fix is the same in kind:
+    # ask git for the sources instead of guessing their depth.
+    #   old glob        prom_*/*.s kernel/*.s                -> 4,843
+    #   with subdirs    + prom_*/*/*.s                       -> 5,131
+    #   git ls-files    every tracked .s under those trees   -> 5,131
+    files = subprocess.run(
+        ["git", "ls-files", "--", "prom_a/*.s", "prom_b/*.s", "prom_c/*.s",
+         "prom_d/*.s", "kernel/*.s", "maincpu/*.s"],
+        cwd=ROOT, capture_output=True, text=True).stdout.split()
+    g = subprocess.run(["grep", "-hoE", "^sub_[0-9A-Fa-f]{6}:"] + files,
+                       cwd=ROOT, capture_output=True, text=True).stdout.split()
+    g = str(len(set(g)))
     # ⚠ The documented grep pipes through `sort -u`, so it counts DISTINCT NAMES.
     # prom_a and prom_c are BOTH based at 0xF80000, so the same sub_XXXXXX name can
     # legitimately exist in both files and is two different routines. This script
