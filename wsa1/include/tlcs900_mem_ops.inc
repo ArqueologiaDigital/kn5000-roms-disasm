@@ -133,7 +133,11 @@
 .endm
 
 ; --- mnemonic_c0/d0/e0 operations (dasm900.cpp:679/846/1012) -----------------
-.macro m_push pfx, addr			; push (addr)			op 0x04
+; ⚠ ONE MACRO, TWO MNEMONICS.  Operation 0x04 is `push` in mnemonic_c0 and
+; `pushw` in mnemonic_d0, so `m_push MB16, ...` disassembles as `push (nn)` and
+; `m_push MWD+r6, 0x0a` as `pushw (XIZ+0x0a)`.  The size comes from the prefix,
+; as it does for every macro here; the trailing comment on each use says which.
+.macro m_push pfx, addr			; push (addr) / pushw (addr)	op 0x04
 	_mem \pfx, \addr
 	.byte 0x04
 .endm
