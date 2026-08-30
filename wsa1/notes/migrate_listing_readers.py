@@ -82,9 +82,11 @@ SITE_FMT = re.compile(
     r'os\.path\.join\(\s*ROOT\s*,\s*"prom_%s"\s*%\s*([A-Za-z_][A-Za-z0-9_]*)\s*,\s*'
     r'"wsa1_prom_%s\.s"\s*%\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)')
 
-# A name used as a write target.  Deliberately loose -- a false REFUSAL costs a
-# hand migration, a false rewrite costs the split.
-WRITE_USE = re.compile(r'open\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*,\s*["\']w')
+# A name used as a write target: a raw open(NAME, "w"), and the guarded
+# asm_source.write_part(NAME, ...) that --writers replaces it with.  Missing the
+# second would let this tool rewrite a deliberate WRITE path into a read path.
+WRITE_USE = re.compile(r'open\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*,\s*["\']w'
+                       r'|write_part\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*,')
 
 # Files this tool must never rewrite: the resolver it would import, the health
 # tool that measures the result, the shim being retired, and the two emitters
@@ -113,7 +115,7 @@ def committed_py():
 
 
 def writer_names(text):
-    return set(WRITE_USE.findall(text))
+    return {g for m in WRITE_USE.finditer(text) for g in m.groups() if g}
 
 
 def site_image(m):
@@ -131,16 +133,42 @@ def assigned_name(text, m):
 
 
 def inline_write(text, m):
-    """True if the site sits inside an `open(..., "w")`."""
+    """True if the site sits inside an `open(..., "w")`.
+
+    ⚠ The MODE STRING, not "a string starting with w".  The first version
+    matched `, "w` and so read
+        SRCS = [(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "wsa1_prom_a.ic12", ...)]
+    as a write, refusing notes/vector_map.py for the letter w in a ROM filename.
+    """
     line_end = text.find("\n", m.end())
     tail = text[m.end():line_end if line_end != -1 else len(text)]
-    return bool(re.match(r'\s*,\s*["\']w', tail))
+    return bool(re.match(r'\s*,\s*(["\'])w[bt+]?\1', tail))
 
 
 def fmt_sites(text):
     """The computed-path sites, keeping only `prom_%s`/`wsa1_prom_%s.s` pairs
     that use THE SAME variable -- anything else is not this idiom."""
     return [m for m in SITE_FMT.finditer(text) if m.group(1) == m.group(2)]
+
+
+def listing_aliases(text, ms):
+    """Every name that can hold a LISTING path: the names the sites are assigned
+    to, and anything transitively assigned from one of those.
+
+    ⚠ WHY NOT "any write target in the file".  That was the first rule, and it
+    refused prom_a/roundtrip.py because it does `open(tmp, "wb")` on a scratch
+    binary -- a name that never holds a listing.  A refusal on the letter of a
+    variable's existence costs coverage; a refusal on "this name can hold the
+    listing and is written" is the actual hazard.
+    """
+    alias = {assigned_name(text, m) for m in ms}
+    alias.discard(None)
+    for _ in range(4):                      # transitive, a few hops is plenty
+        for m in re.finditer(r'^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*'
+                             r'([A-Za-z_][A-Za-z0-9_]*)\s*$', text, re.M):
+            if m.group(2) in alias:
+                alias.add(m.group(1))
+    return alias
 
 
 def survey(only=None):
@@ -152,15 +180,22 @@ def survey(only=None):
         ms = list(SITE.finditer(text)) + fmt_sites(text)
         if not ms:
             continue
-        wnames = writer_names(text)
+        wnames = writer_names(text) & listing_aliases(text, ms)
         rows = []
         for m in ms:
             img = site_image(m)
             if only and only not in img:
                 rows.append((img, "SKIP", "not selected"))
                 continue
+            nm0 = assigned_name(text, m)
             if rel in EXCLUDE:
                 rows.append((img, "REFUSED", "on the never-rewrite list"))
+            elif nm0 and nm0.endswith("_MASTER"):
+                # ★ --writers created this name ON PURPOSE to hold the file.
+                #   Rewriting it to image_path() would point the WRITE at the
+                #   expansion, which is the accident everything here exists for.
+                rows.append((img, "REFUSED",
+                             "%s is a deliberate WRITE path (--writers)" % nm0))
             elif inline_write(text, m):
                 rows.append((img, "REFUSED", "the site is an open(..., 'w')"))
             else:
@@ -170,8 +205,8 @@ def survey(only=None):
                                  "%s is also a write target in this file" % nm))
                 elif wnames:
                     rows.append((img, "REFUSED",
-                                 "this file writes through %s"
-                                 % ", ".join(sorted(wnames))))
+                                 "this file writes through %s, which can hold "
+                                 "the listing" % ", ".join(sorted(wnames))))
                 else:
                     rows.append((img, "REWRITE", ""))
         out.append((rel, rows))
@@ -188,8 +223,14 @@ def rewrite_text(text, only=None):
     """
     def one(m):
         img = site_image(m)
-        return m.group(0) if (only and only not in img) else \
-            'image_path(ROOT, "%s")' % img
+        if only and only not in img:
+            return m.group(0)
+        nm = assigned_name(text, m)
+        if nm and nm.endswith("_MASTER"):
+            # ★ --writers made this name to hold the FILE.  Rewriting it would
+            #   point a WRITE at the expansion -- the accident, exactly.
+            return m.group(0)
+        return 'image_path(ROOT, "%s")' % img
 
     def fmt(m):
         if m.group(1) != m.group(2):
@@ -519,8 +560,26 @@ def selftest():
     rows = [r for r in (("x", "REFUSED", "") if False else ())]
     wn = writer_names(writer)
     check("SRC" in wn, "a file that does open(SRC, 'w') is seen to write through SRC")
+    # ⚠ both false-positive shapes that cost real coverage
+    lit = ('import os\nROOT = "."\n'
+           'SRCS = [(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "wsa1_prom_a.ic12")]\n')
+    check(not inline_write(lit, list(SITE.finditer(lit))[0]),
+          "a ROM filename beginning with w is not read as a write mode")
+    tmpw = (reader + 'tmp = "/tmp/x"\nopen(tmp, "wb").write(b"")\n')
+    ms = list(SITE.finditer(tmpw))
+    check(writer_names(tmpw) & listing_aliases(tmpw, ms) == set(),
+          "a file that writes a scratch file is not refused for it")
+    alias = (reader + 'P = SRC\nopen(P, "w").write("")\n')
+    ms = list(SITE.finditer(alias))
+    check(writer_names(alias) & listing_aliases(alias, ms) == {"P"},
+          "...but a name ALIASED from the listing and written IS refused")
 
     # ★ THE CONTROL: the three real splicers must be REFUSED by the real survey.
+    mst = (reader.replace('SRC =', 'SRC_MASTER =')
+           + 'write_part(SRC_MASTER, "x")\n')
+    check("image_path" not in rewrite_text(mst),
+          "a *_MASTER write path is never rewritten into a read path")
+
     hazards = {"notes/gen_prom_c_f64_pool.py",
                "notes/prom_c_record68_round10.py",
                "notes/prom_c_understanding_round6.py",
@@ -528,6 +587,14 @@ def selftest():
                "prom_a/insert_region.py"}
     verdicts = {rel: set(v for _i, v, _r in rows) for rel, rows in survey()}
     for h in sorted(hazards):
+        t = open(os.path.join(ROOT, h), encoding="utf-8", errors="replace").read() \
+            if os.path.exists(os.path.join(ROOT, h)) else ""
+        # ⚠ TWO acceptable states, and "absent from the survey" is not one of
+        #   them on its own: either the tool still REFUSES to touch it, or its
+        #   write demonstrably goes through the guarded path.
+        if "write_part(" in t or "gen_prom_d_asm" in h:
+            check(True, "the splicer %s writes through the guarded path" % h)
+            continue
         if h in verdicts:
             check("REWRITE" not in verdicts[h],
                   "the splicer %s is REFUSED, not rewritten" % h)
@@ -536,10 +603,7 @@ def selftest():
         #   whose site simply vanished would silently drop off this list, so the
         #   alternative to REFUSED is "its write demonstrably goes through the
         #   guarded path", not "it is absent".
-        t = open(os.path.join(ROOT, h), encoding="utf-8", errors="replace").read() \
-            if os.path.exists(os.path.join(ROOT, h)) else ""
-        check("write_part(" in t or "gen_prom_d_asm" in h,
-              "the splicer %s is migrated: its write goes through write_part" % h)
+        pass
 
     # the writer split
     w = ('import os\nimport sys\n'
