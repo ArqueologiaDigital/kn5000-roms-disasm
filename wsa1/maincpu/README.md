@@ -12,8 +12,15 @@ That program is in **two chips**, and it is **one program**:
 
 They are contiguous, on the same chip select, with no banking: the boot block
 programs CS2 as `MSAR2 = 0xE0 / MAMR2 = 0x3F / B2CS = 0x1B`, one 1 MiB window
-(`prom_a/prom_a.ld`, `prom_b/prom_b.ld`, `notes/FINDINGS-memory-map.md`).  The
-naming is Panasonic's chip labelling, not a structure in the program.
+(`prom_a/prom_a.ld`, `prom_b/prom_b.ld`, `notes/FINDINGS-memory-map.md`).
+
+⚠ `prom_a` and `prom_b` are **this project's file names**, taken from the
+redistributed firmware set, and the program's own structure does not follow
+them.  Three things say so and each is a measurement: the boot block's
+25-module initialisation directory lives in prom_a and every one of its entries
+points into prom_b; `calr`, a 16-bit PC-relative call, crosses the boundary in
+both directions; and every reference to a duplicated routine binds to the
+nearest copy without regard to which chip it is in (below).
 
 CPU 2 is `prom_c/`, and `prom_d/` is data.  The multitasking kernel **both**
 processors run is written once, in `kernel/kernel.s`.
