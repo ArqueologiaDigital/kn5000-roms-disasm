@@ -50,6 +50,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import prom_c_tail_census as CEN                                    # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 BASE = 0xF80000
 IMG = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
 
@@ -611,7 +613,7 @@ def verify():
         "relocated pointer bytes and one 0x0010C000 parameter)" % diffs)
     chk(IMG[0xFE15E1 - BASE:0xFE1698 - BASE] == IMG[0xFE152A - BASE:0xFE15E1 - BASE],
         "DupTail_FE15E1's 183 bytes are byte-identical to 0xFE152A-0xFE15E0")
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read()
+    src = open(image_path(ROOT, "prom_c/wsa1_prom_c.s")).read()
     missing = [m[3] for m in MIDDLE if (m[3] + ":") not in src and m[3] != "Voice_SearchOrder_Records"]
     chk(not missing, "every mirrored middle name is a label in prom_c/wsa1_prom_c.s "
         "(Voice_SearchOrder_Records is a comment there, not a label): %s" % (missing or "none"))

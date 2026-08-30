@@ -68,6 +68,8 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 ROM = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
 BASE = 0xF80000
 LO, HI = 0xFB0504, 0xFB405F            # the block, end-exclusive
@@ -533,7 +535,7 @@ def main():
 
     print()
     print("13  THE 32 HEADERS TILE THE BLOCK  (reads prom_c/wsa1_prom_c.s)")
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s"), encoding="utf-8").read()
+    src = open(image_path(ROOT, "prom_c/wsa1_prom_c.s"), encoding="utf-8").read()
     import re as _re
     hdr = _re.compile(r'^; (?:★+ )?([A-Za-z_][A-Za-z0-9_]*) -- '
                       r'(0x[0-9A-F]{6})\.\.(0x[0-9A-F]{6}) \((\d+) bytes\)', _re.M)

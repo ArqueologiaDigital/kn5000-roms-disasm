@@ -53,11 +53,11 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # ⚠ prom_c is 26 files now (notes/prom_c_split.py): the master alone is 2% of
 # the image, and this scan passed VACUOUSLY over it until this line changed.
-# notes/prom_c_probe_health.py is the check; notes/prom_c_image.py is a shim
-# that should become `from asm_source import ...` when that reader is green.
+# notes/probe_health.py is the check; notes/asm_source.py is the reader,
+# and it absorbed the prom_c-only shim that used to stand here.
 sys.path.insert(0, os.path.join(ROOT, "notes"))
-import prom_c_image
-SRC = prom_c_image.path()
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")
 BASE = 0xF80000
 
 # established DATA regions, from the block banners at the top of prom_c/wsa1_prom_c.s

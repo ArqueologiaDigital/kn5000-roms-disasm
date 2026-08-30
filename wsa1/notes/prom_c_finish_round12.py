@@ -116,7 +116,9 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 ELF = os.path.join(ROOT, "rebuilt_ROMs", "wsa1_prom_c.llvm.elf")
 NM = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")

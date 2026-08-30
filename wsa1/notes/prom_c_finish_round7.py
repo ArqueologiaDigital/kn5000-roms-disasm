@@ -100,7 +100,9 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 ELF = os.path.join(ROOT, "rebuilt_ROMs", "wsa1_prom_c.llvm.elf")
 NM = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
@@ -766,7 +768,7 @@ def show_gapA():
     print("  the 0x0010C000 device 'have no statement of any kind'.  That was true when")
     print("  notes/WSA1-EMULATION-DISASM-GAPS.md was written and is not true now.")
     print()
-    txt = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read()
+    txt = open(image_path(ROOT, "prom_c/wsa1_prom_c.s")).read()
     ok = True
     for reg, sym in (("0x0440", "Dev10C_SetChanReg_0440"),
                      ("0x0480", "Dev10C_SetChanReg_0480"),

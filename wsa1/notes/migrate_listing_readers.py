@@ -165,13 +165,28 @@ def survey(only=None):
     return out
 
 
-def rewrite_text(text):
-    """Rewrite every site and make sure the import is present."""
-    new = SITE.sub(lambda m: 'image_path(ROOT, "%s")' % site_image(m), text)
-    new = SITE_FMT.sub(
-        lambda m: ('image_path(ROOT, "prom_%%s/wsa1_prom_%%s.s" %% (%s, %s))'
-                   % (m.group(1), m.group(2)))
-        if m.group(1) == m.group(2) else m.group(0), new)
+def rewrite_text(text, only=None):
+    """Rewrite every selected site and make sure the import is present.
+
+    ⚠ `only` selects SITES, not files.  The first version filtered the survey
+    but not the rewrite, so `--apply --only prom_c` quietly rewrote prom_a and
+    prom_b sites in any file that happened to have a prom_c one -- which would
+    have moved two images' probes before they had been measured.
+    """
+    def one(m):
+        img = site_image(m)
+        return m.group(0) if (only and only not in img) else \
+            'image_path(ROOT, "%s")' % img
+
+    def fmt(m):
+        if m.group(1) != m.group(2):
+            return m.group(0)
+        if only:                    # the computed form covers ALL four images
+            return m.group(0)       # and cannot be attributed to one of them
+        return ('image_path(ROOT, "prom_%%s/wsa1_prom_%%s.s" %% (%s, %s))'
+                % (m.group(1), m.group(2)))
+
+    new = SITE_FMT.sub(fmt, SITE.sub(one, text))
     if new == text:
         return text
     if IMPORT_LINE not in new:
@@ -268,7 +283,7 @@ def apply(only=None, quiet=False):
             continue
         p = os.path.join(ROOT, rel)
         text = open(p, encoding="utf-8").read()
-        new = rewrite_text(text)
+        new = rewrite_text(text, only)
         if new != text:
             open(p, "w", encoding="utf-8").write(new)
             changed += 1
@@ -365,6 +380,15 @@ def selftest():
     mixed = fmt.replace('"wsa1_prom_%s.s" % tag', '"wsa1_prom_%s.s" % other')
     check("image_path" not in rewrite_text(mixed),
           "...but not when the two format variables differ -- that is not the idiom")
+
+    two = ('import os\nimport sys\n'
+           'ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n'
+           'A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")\n'
+           'C = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")\n')
+    sel = rewrite_text(two, only="prom_c")
+    check('os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")' in sel
+          and 'image_path(ROOT, "prom_c/wsa1_prom_c.s")' in sel,
+          "--only selects SITES, not files: the other image's site is left alone")
 
     solo = rewrite_text(reader)
     check(re.search(r'^import sys$', solo, re.M) is not None,

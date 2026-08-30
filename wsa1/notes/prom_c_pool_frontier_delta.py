@@ -33,11 +33,13 @@ RUN
 import importlib.util, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 spec = importlib.util.spec_from_file_location("fr", os.path.join(ROOT, "notes", "prom_c_frontier.py"))
 FR = importlib.util.module_from_spec(spec); spec.loader.exec_module(FR)
 
 BASE = 0xF80000
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")
 IMG = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
 POOL = (0xFCD0F7 - BASE, 0xFDD2AB - BASE)
 

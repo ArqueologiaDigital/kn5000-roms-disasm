@@ -144,9 +144,11 @@ from collections import Counter, defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 import gen_prom_c_p7stream_pool as P                               # noqa: E402
 
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")
 D, BASE, LO, HI = P.D, P.BASE, P.LO, P.HI
 DESCLO, IDXLO, FRLO, PTRLO = P.DESCLO, P.IDXLO, P.FRLO, P.PTRLO
 NDIR, DIRSTRIDE = P.NDIR, P.DIRSTRIDE

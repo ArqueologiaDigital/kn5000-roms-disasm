@@ -44,6 +44,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 NOTES = os.path.join(ROOT, "notes")
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 BASE = 0xF80000
@@ -173,7 +175,7 @@ def boundary_check(text, tabs):
 
     mine = decoded(text.splitlines())
     bounds = {a for a, _ in mine}
-    src = decoded(open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read().splitlines())
+    src = decoded(open(image_path(ROOT, "prom_c/wsa1_prom_c.s")).read().splitlines())
     XFER = re.compile(r'^(?:call|calr|jp|jrl|jr)\b.*?0x([0-9a-f]{6})\s*$')
     bad, seen = [], set()
     for site, txt in mine + src:

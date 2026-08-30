@@ -42,10 +42,12 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 sys.path.insert(0, HERE)
 import prom_c_dev10c_field_sources as fs            # the shipped census, unmodified
 
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")
 STRUCT, NWORD = fs.STRUCT, fs.NWORD
 ADDR = re.compile(r";\s*([0-9A-F]{6})\s")
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")

@@ -46,7 +46,9 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")
 
 POOL, POOL_STRIDE, POOL_ROWS = 0xFDE6F1, 0x66, 12
 RECS, REC_STRIDE, REC_COUNT = 0xFDE6A9, 6, 12
