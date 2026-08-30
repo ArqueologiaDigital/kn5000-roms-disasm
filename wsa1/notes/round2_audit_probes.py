@@ -32,7 +32,10 @@ SIZE = 524288
 BASES = {"a": 0xF80000, "b": 0xF00000, "c": 0xF80000}
 FILES = {"a": "wsa1_prom_a.ic12", "b": "wsa1_prom_b.ic13", "c": "wsa1_prom_c.ic28"}
 ROM = {k: open(os.path.join(ROOT, "original_ROMs", v), "rb").read() for k, v in FILES.items()}
-SRC = {k: open(os.path.join(ROOT, f"prom_{k}", f"wsa1_prom_{k}.s")).read() for k in FILES}
+# ⚠ image_path: prom_c is a 2,516-line header since the per-subject split,
+# and prom_a `.include`s kernel/kernel.s.  An f-string join reads neither.
+SRC = {k: open(image_path(ROOT, f"prom_{k}/wsa1_prom_{k}.s")).read()
+       for k in FILES}
 
 fails = []
 def check(ok, msg, got=""):

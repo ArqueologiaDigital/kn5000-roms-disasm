@@ -64,7 +64,7 @@ from collections import Counter, defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
-from asm_source import image_path, write_part  # noqa: E402
+from asm_source import image_path, image_lines, write_part  # noqa: E402
 # ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
 # it is handed is the whole image: write_part() sees the master's
 # .include lines disappear.  That refusal is correct and is not the fix.
@@ -761,10 +761,18 @@ def main():
         # a footnote.
         inc = os.path.join(ROOT, "include/tlcs900_mem_ops.inc")
         defined = re.findall(r'^\.macro (\S+)', open(inc).read(), re.M)
-        srcs = ["prom_a/wsa1_prom_a.s", "prom_b/wsa1_prom_b.s", "kernel/kernel.s",
-                "maincpu/shared/indexed_table.s",
-                "maincpu/shared/lcd_screen_redraw.s", "include/tlcs900_mem_ops.inc"]
-        text = "".join(open(os.path.join(ROOT, f)).read() for f in srcs)
+        # ⚠ THE IMAGES, then the shared sources ONCE.  Listing the two
+        # primaries by path counts neither image's included parts, and
+        # would count nothing at all once prom_a or prom_b is split.
+        # skip= keeps the shared files out of the images so the explicit
+        # entries below do not double-count them.
+        shared = ["kernel/kernel.s", "maincpu/shared/indexed_table.s",
+                  "maincpu/shared/lcd_screen_redraw.s",
+                  "include/tlcs900_mem_ops.inc"]
+        text = "".join(
+            "\n".join(image_lines(ROOT, p, skip=shared)) + "\n"
+            for p in ("prom_a/wsa1_prom_a.s", "prom_b/wsa1_prom_b.s"))
+        text += "".join(open(os.path.join(ROOT, f)).read() for f in shared)
         uses = {d: len(re.findall(r'^\t%s\b' % re.escape(d), text, re.M))
                 for d in defined}
         un = sorted(d for d in defined if not uses[d])
