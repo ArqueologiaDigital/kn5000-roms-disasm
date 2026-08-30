@@ -63,7 +63,16 @@ import sys
 from collections import Counter, defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROM_B = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+PROM_B_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+PROM_B = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 PROM_A = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")
 
 BLOB = re.compile(r'^\t\.byte ((?:0x[0-9A-F]{2}, )*0x[0-9A-F]{2})\t; ([0-9A-F]{6})  (.*?)   \[llvm-mc cannot encode this\]$')
@@ -793,7 +802,7 @@ def main():
                 continue
             lines[i] = new
             n += 1
-        open(PROM_B, 'w').write('\n'.join(lines))
+        write_part(PROM_B_MASTER, '\n'.join(lines))
         print("rewrote %d rows%s" % (n, (" (--only %s)" % ','.join(sorted(only))) if only else ""))
         return 0
     print(__doc__)

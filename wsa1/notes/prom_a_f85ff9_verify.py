@@ -143,6 +143,8 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 IMGA = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
 IMGB = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
 DOSSIER = os.path.join(ROOT, "notes", "wave7-round1", "round1-results.json")
@@ -311,8 +313,7 @@ def boundary_proven(addr):
     lane-a2 bug: a citation of an imm32 field is NOT a boundary."""
     if addr < LO:                       # already-converted code: ask the .s
         return any(a == addr for a, _ in
-                   proven_instruction_lines(os.path.join(ROOT, "prom_a",
-                                                         "wsa1_prom_a.s")))
+                   proven_instruction_lines(image_path(ROOT, "prom_a/wsa1_prom_a.s")))
     cand = [a for a in anchors() if a <= addr]
     if not cand:
         return False
@@ -535,7 +536,7 @@ def corpus_bytes():
     e = the LAST INSTRUCTION'S ADDRESS, so its corpus silently omits the last
     instruction of all 10,509 runs -- and those bytes are never scanned by the
     content rules either."""
-    src = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+    src = image_path(ROOT, "prom_a/wsa1_prom_a.s")
     seq = []
     for l in open(src, encoding="utf-8", errors="replace"):
         body = l.split(";")[0]
@@ -563,8 +564,8 @@ def proven_call_sites():
     Only counts instructions the byte gate certifies, so it is a LOWER bound;
     a caller still inside an `.incbin` cannot be counted."""
     out = {}
-    for src, which in ((os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "a"),
-                       (os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), "b")):
+    for src, which in ((image_path(ROOT, "prom_a/wsa1_prom_a.s"), "a"),
+                       (image_path(ROOT, "prom_b/wsa1_prom_b.s"), "b")):
         for l in open(src, encoding="utf-8").read().splitlines():
             body = l.split(";")[0]
             if not body.startswith("\t"):

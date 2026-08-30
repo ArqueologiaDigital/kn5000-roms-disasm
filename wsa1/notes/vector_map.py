@@ -32,8 +32,10 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRCS = [(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "wsa1_prom_a.ic12", 0xF80000),
-        (os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), "wsa1_prom_b.ic13", 0xF00000)]
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRCS = [(image_path(ROOT, "prom_a/wsa1_prom_a.s"), "wsa1_prom_a.ic12", 0xF80000),
+        (image_path(ROOT, "prom_b/wsa1_prom_b.s"), "wsa1_prom_b.ic13", 0xF00000)]
 IMGS = [(0xF00000, 0xF80000, os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")),
         (0xF80000, 0x1000000, os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"))]
 VECTORS = 0xFFFF00

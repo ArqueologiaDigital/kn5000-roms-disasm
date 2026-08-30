@@ -30,7 +30,7 @@ KN   = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 PA = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
 PB = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
 PC = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
-SRC_A = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read()
+SRC_A = open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read()
 SRC_C = open(image_path(ROOT, "prom_c/wsa1_prom_c.s")).read()
 
 _fail = [0]

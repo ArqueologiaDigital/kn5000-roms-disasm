@@ -138,6 +138,8 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import trace_code as TC                                            # noqa: E402
 
@@ -146,7 +148,7 @@ B_BASE = 0xF00000
 LO, HI = 0xFA5AEB, 0xFAA000
 IMGA = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
 IMGB = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
-SRC = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+SRC = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 
 PTR_LO, PTR_HI = 0x00F80000, 0x01000000
 DIR_LO, DIR_HI = 0xF40000, 0xF44018        # prom_b's thunk directory

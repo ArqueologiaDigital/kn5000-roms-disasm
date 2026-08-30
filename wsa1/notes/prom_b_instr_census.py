@@ -38,10 +38,12 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_module_trace as MT                                   # noqa: E402
 
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 FAIL = []
 
 # name -> generator module that carries the frozen LAYOUT

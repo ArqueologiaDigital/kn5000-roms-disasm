@@ -43,11 +43,13 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_module_trace as MT                                   # noqa: E402
 
 B_BASE = 0xF00000
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 FAIL = []
 
 
@@ -67,7 +69,7 @@ def proven_targets():
     already transcribed in prom_a or prom_b."""
     out = set()
     for img in ("a", "b"):
-        src = os.path.join(ROOT, "prom_%s" % img, "wsa1_prom_%s.s" % img)
+        src = image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (img, img))
         for ln in open(src):
             if ";" not in ln:
                 continue

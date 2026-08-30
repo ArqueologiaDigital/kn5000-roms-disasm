@@ -93,6 +93,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 
 B_BASE, A_BASE = 0xF00000, 0xF80000
@@ -100,7 +102,14 @@ LO, HI = 0xF78029, 0xF7A400
 IDX_BASE = 0xF003F9                 # the index table, inside the 0xF00000 .incbin
 DEFAULT_ENTRY = 0x00FDB10E          # the "absent" entry it repeats
 TBL_LO, TBL_HI = 0xF40000, 0xF44018  # the routine directory
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+SRCB_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 FAIL = []
 
 
@@ -483,7 +492,7 @@ def splice():
         while hi_ + 1 < len(src) and not src[hi_ + 1].strip():
             hi_ += 1
         how = "in place over lines %d-%d" % (lo_ + 1, hi_ + 1)
-    open(SRCB, "w", encoding="utf-8").write("\n".join(src[:lo_] + lines + src[hi_ + 1:]))
+    write_part(SRCB_MASTER, "\n".join(src[:lo_] + lines + src[hi_ + 1:]))
     print("spliced %d lines %s; %s" % (len(lines), how, msg))
     return 0
 

@@ -100,11 +100,20 @@ import textwrap
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 AUTOFORCE = os.path.join(ROOT, "notes", "llvm_roundtrip_autoforce.py")
 IMGB = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
 IMGA = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+SRCB_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 B_BASE, A_BASE = 0xF00000, 0xF80000
 LO, HI = 0xF353AB, 0xF3934C
 TBL_LO, TBL_HI = 0xF40000, 0xF44018
@@ -1104,7 +1113,7 @@ def splice():
         while hi_ + 1 < len(src) and not src[hi_ + 1].strip():
             hi_ += 1
         how = "in place over lines %d-%d" % (lo_ + 1, hi_ + 1)
-    open(SRCB, "w").write("\n".join(src[:lo_] + lines + src[hi_ + 1:]))
+    write_part(SRCB_MASTER, "\n".join(src[:lo_] + lines + src[hi_ + 1:]))
     print("spliced %d lines %s; %s" % (len(lines), how, msg))
     return 0
 

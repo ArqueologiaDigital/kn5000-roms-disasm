@@ -128,6 +128,8 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 SIB = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 UNIDASM = os.environ.get("UNIDASM",
                          "/home/fsanches/compartilhado/kn7000_mame_build/unidasm")
@@ -854,7 +856,7 @@ def selftest():
        in open("/home/fsanches/compartilhado/mame/src/devices/cpu/tlcs900/"
                "tmp95c061.cpp", errors="replace").read())
 
-    src = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read()
+    src = open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read()
     sites = re.findall(r'ldio 0x77, 0x([0-9a-f]{2})', src)
     ck("S23 prom_a has exactly five ldio-to-0x77 sites, values {5d,dd,fd}",
        len(sites) == 5 and set(sites) == {"5d", "dd", "fd"},

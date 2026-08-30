@@ -104,7 +104,9 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 ELF = os.path.join(ROOT, "rebuilt_ROMs", "wsa1_prom_b.llvm.elf")
 LLVM = os.environ.get("LLVM_BIN", "/home/fsanches/compartilhado/llvm-project/build/bin")
 UNIDASM = os.environ.get("UNIDASM", "/home/fsanches/compartilhado/kn7000_mame_build/unidasm")

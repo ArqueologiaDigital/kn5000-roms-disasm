@@ -55,8 +55,10 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRCS = {"prom_b": os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"),
-        "prom_a": os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")}
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRCS = {"prom_b": image_path(ROOT, "prom_b/wsa1_prom_b.s"),
+        "prom_a": image_path(ROOT, "prom_a/wsa1_prom_a.s")}
 REGS = {0x54: "SC1BUF", 0x55: "SC1CR", 0x56: "SC1MOD", 0x57: "BR1CR",
         0x50: "SC0BUF", 0x51: "SC0CR", 0x52: "SC0MOD", 0x53: "BR0CR"}
 SM = {0: "I/O interface (clocked synchronous)", 1: "7-bit UART",

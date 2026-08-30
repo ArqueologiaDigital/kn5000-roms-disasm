@@ -63,6 +63,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import trace_code as TC                                            # noqa: E402
 import prom_b_module_trace as MT                                   # noqa: E402
@@ -73,7 +75,7 @@ IMG = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
 IMGA = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
 PTR_LO, PTR_HI = 0x00F60000, 0x00F70000
 FILL_MIN, PTR_MIN, ASCII_MIN, IDENT_MIN, RAM_MIN, BIT_MIN = 16, 3, 20, 12, 4, 8
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 
 _r = {}
 

@@ -27,7 +27,9 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 
 # A converted instruction line: <tab>text<spaces>; ADDR  bb bb bb
 LINE = re.compile(r"^\t(\S.*?)\s+;\s([0-9A-F]{6})\s\s([0-9a-f ]+?)\s*$")

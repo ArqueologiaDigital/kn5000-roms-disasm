@@ -35,8 +35,10 @@ WHAT IT FOUND (2026-08-30, working tree, gate green)
 import re, sys, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PA = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
-PB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+PA = image_path(ROOT, "prom_a/wsa1_prom_a.s")
+PB = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 
 INS = re.compile(r'^\t(.*?)\s*;\s*([0-9A-F]{6})\s+((?:[0-9a-f]{2} ?)+?)(?:\s{2,}.*)?$')
 LAB = re.compile(r'^([A-Za-z_.][A-Za-z0-9_.]*):')

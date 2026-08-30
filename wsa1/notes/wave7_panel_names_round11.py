@@ -230,6 +230,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 sys.path.insert(0, HERE)
 
 import wave7_panel_button_codes as L1          # noqa: E402  (layer 1: the wire)
@@ -386,7 +388,7 @@ def screen_names():
     banner line above each label and compares N with the label's position.
     """
     if "sn" not in _c:
-        src = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"),
+        src = open(image_path(ROOT, "prom_b/wsa1_prom_b.s"),
                    encoding="utf-8", errors="replace").read()
         labs = re.findall(r"^(ButtonTable_\w+):", src, re.M)
         banners = [int(m) for m in re.findall(r"^; --- table\s+(\d+) of 32:", src, re.M)]
@@ -690,7 +692,7 @@ def print_five():
          "into the list at 0x2030, bounded by `cp XIX,0x0000206C` at 0xF8A86D "
          "(15 records)"),
     ]
-    src = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read()
+    src = open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read()
     for addr, name, cite, want, site, what in rows:
         ok = A(site, len(want)) == want
         applied = re.search(r"^%s:" % name, src, re.M) is not None
@@ -989,8 +991,8 @@ def selftest():
        w2082(_a, 0xF80000) == [0xF8618F, 0xF86710] and w2082(_b, 0xF00000) == [],
        repr(w2082(_a, 0xF80000)))
     subs = set()
-    src = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read() + \
-        open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")).read()
+    src = open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read() + \
+        open(image_path(ROOT, "prom_b/wsa1_prom_b.s")).read()
     for m in re.finditer(r"ld \(0x209([bc])\),0x([0-9a-f]+)", src):
         val = int(m.group(2), 16)
         subs.add(val & 0xFF)

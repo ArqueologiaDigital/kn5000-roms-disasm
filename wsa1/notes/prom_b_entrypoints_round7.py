@@ -118,11 +118,20 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import wave7_documentation_metrics as M                            # noqa: E402
 
 SRCA = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+SRCB_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 UNIDASM = os.path.expanduser("~/compartilhado/kn7000_mame_build/unidasm")
 
 BLOCK_LO, BLOCK_HI = 0xF7D000, 0xF7D2D8        # the stub block, [lo, hi)
@@ -732,7 +741,7 @@ def unapply():
         if j >= 0 and src[j].strip() == "":
             kill.add(j)
     out = [l for k, l in enumerate(src) if k not in kill]
-    open(SRCB, "w", encoding="utf-8").write("\n".join(out))
+    write_part(SRCB_MASTER, "\n".join(out))
     print("  removed %d lines (%d labels)" % (len(kill), sum(
         1 for k in kill if LABEL.match(src[k]))))
     return len(kill)
@@ -791,7 +800,7 @@ def apply_():
             out.append(name + ":")
             inserted += 1
         out.append(ln)
-    open(SRCB, "w", encoding="utf-8").write("\n".join(out))
+    write_part(SRCB_MASTER, "\n".join(out))
     print("  inserted %d labels, %d of them under a per-screen header "
           "(the other %d carry a TWO-line evidence block, which the metric does "
           "NOT count as a header)" % (inserted, headers, inserted - headers))

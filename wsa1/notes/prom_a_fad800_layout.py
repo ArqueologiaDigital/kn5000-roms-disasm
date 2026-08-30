@@ -161,6 +161,8 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import trace_code as TC                                            # noqa: E402
 
@@ -169,7 +171,7 @@ B_BASE = 0xF00000
 LO, HI = 0xFAD800, 0xFB2000
 IMGA = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
 IMGB = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
-SRC = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+SRC = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 
 FILL_MIN = 16          # 0x0E == ret
 CONST_MIN = 32         # 0x00 / 0xFF -- see the docstring, 16 costs a false positive
@@ -449,8 +451,7 @@ def proven_addrs(which):
     requiring the mnemonic not to start with a dot, and label lines by requiring
     the line to start with a tab."""
     if which not in _proven:
-        f = SRC if which == "a" else os.path.join(ROOT, "prom_b",
-                                                  "wsa1_prom_b.s")
+        f = SRC if which == "a" else image_path(ROOT, "prom_b/wsa1_prom_b.s")
         out = set()
         for l in open(f):
             body = l.split(";")[0]

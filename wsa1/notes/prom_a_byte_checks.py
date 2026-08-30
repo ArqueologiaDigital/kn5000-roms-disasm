@@ -18,6 +18,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 A = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
 B = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
 FAILS = []
@@ -1217,7 +1219,7 @@ sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 # span-banner check below VACUOUS -- its one standing failure ("0 of 1") turned
 # into a pass because the banner had moved out of the file, not because anyone
 # had fixed it.  A check that cannot fail is not a check.
-_SRC = (open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
+_SRC = (open(image_path(ROOT, "prom_a/wsa1_prom_a.s"), encoding="utf-8").read()
         + "\n"
         + open(os.path.join(ROOT, "kernel", "kernel.s"), encoding="utf-8").read())
 _FILLS = [(int(m.group(1), 0), int(m.group(2)))

@@ -123,8 +123,17 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+SRCB_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 
 LAB = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
 FRAMED_DL = re.compile(r'^DL_([0-9A-F]{6})$')
@@ -708,7 +717,7 @@ def tables(apply=False):
         if "_F" in ln:
             ln = rx.sub(lambda mm: ren[mm.group(1)], ln)
         res.append(ln)
-    open(SRCB, "w").write("\n".join(res))
+    write_part(SRCB_MASTER, "\n".join(res))
     print("renamed %d operand tables in %s" % (k, SRCB))
     print("⚠ run  python3 scripts/analysis/assert_byte_identical.py  now")
     return 0
@@ -801,7 +810,7 @@ def apply_():
         if "DL_F" in ln:
             ln = rx.sub(lambda mm: ren[mm.group(1)], ln)
         out.append(ln)
-    open(SRCB, "w").write("\n".join(out))
+    write_part(SRCB_MASTER, "\n".join(out))
     print("renamed %d display lists in %s" % (k, SRCB))
     print("⚠ run  python3 scripts/analysis/assert_byte_identical.py  now")
     return 0

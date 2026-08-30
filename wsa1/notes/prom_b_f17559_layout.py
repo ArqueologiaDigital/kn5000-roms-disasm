@@ -121,6 +121,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_display_lists as DL                                  # noqa: E402
 import prom_b_dl_length_audit as LA                                # noqa: E402
@@ -187,7 +189,7 @@ def instructions(prom):
     key = "I" + prom
     if key in _cache:
         return _cache[key]
-    p = os.path.join(ROOT, "prom_%s" % prom, "wsa1_prom_%s.s" % prom)
+    p = image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (prom, prom))
     out = []
     if os.path.exists(p):
         for line in open(p):
@@ -237,7 +239,7 @@ def code_targets():
     slots.  Thirteen of them point into this span."""
     out = {}
     for prom in ("a", "b", "c", "d"):
-        path = os.path.join(ROOT, "prom_%s" % prom, "wsa1_prom_%s.s" % prom)
+        path = image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (prom, prom))
         if not os.path.exists(path):
             continue
         for line in open(path):
@@ -277,7 +279,7 @@ def stale_thunks():
             if r:
                 bounds |= {p for p, _op, _ln in r}
     out = []
-    path = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+    path = image_path(ROOT, "prom_b/wsa1_prom_b.s")
     for line in open(path):
         m = re.match(r"T_([0-9A-F]{6}):\s*jp\s+0x([0-9A-F]{6})", line)
         if not m:
@@ -1059,7 +1061,7 @@ def proven_code_runs(prom="b"):
     includes every data island, and a null measured on that corpus is
     meaningless.  Same construction as
     notes/prom_b_f65000_layout.py::proven_code_runs()."""
-    path = os.path.join(ROOT, "prom_%s" % prom, "wsa1_prom_%s.s" % prom)
+    path = image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (prom, prom))
     seq = []
     for line in open(path):
         i = line.find(";")

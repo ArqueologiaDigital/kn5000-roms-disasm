@@ -45,7 +45,9 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 GENERIC = re.compile(r"^(sub_[0-9A-Fa-f]{6}|L_[0-9A-Fa-f]{6}|T_[0-9A-Fa-f]{6}|__)")

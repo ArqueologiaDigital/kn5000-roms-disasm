@@ -36,10 +36,12 @@ import os
 import collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 LLVM_MC = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-mc")
 UNIDASM = os.path.expanduser("~/compartilhado/kn7000_mame_build/unidasm")
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
-SRC = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+SRC = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 BASE = 0xF80000
 
 PRELUDE_BEGIN = "; MACRO-PRELUDE-BEGIN"

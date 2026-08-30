@@ -47,6 +47,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_display_lists as DL
 import prom_b_dl_stack_sites as SS
@@ -473,7 +475,7 @@ def selftest():
     # The first draft of this file had ELEVEN that did not -- all of them taken
     # from a raw byte scan, which finds the OPERAND.  This is the check that
     # would have caught them, so it runs on every emit.
-    asrc = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
+    asrc = open(image_path(ROOT, "prom_a/wsa1_prom_a.s"), encoding="utf-8").read()
     istart = {int(m, 16) for m in re.findall(r";\s+([0-9A-F]{6})\s+[0-9a-f]{2}", asrc)}
     quoted = sorted({int(m, 16) for g in GAPS
                      for m in re.findall(r"0x(F[0-9A-F]{5})\b", g[4] or "")

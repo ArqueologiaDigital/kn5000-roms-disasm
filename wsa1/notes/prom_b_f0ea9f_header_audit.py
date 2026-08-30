@@ -33,10 +33,12 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import gen_prom_b_f0ea9f_module as G                               # noqa: E402
 
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 IMG = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
 B_BASE = 0xF00000
 FAIL = []

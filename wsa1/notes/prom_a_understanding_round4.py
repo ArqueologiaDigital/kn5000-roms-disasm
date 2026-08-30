@@ -192,12 +192,12 @@ ARGV = list(sys.argv)
 A_BASE, B_BASE = 0xF80000, 0xF00000
 # ⚠ THE WRITE PATH, kept separate from SRC.  --apply splices prose into prom_a's
 # listing; SRC is (or will become) the resolved IMAGE, which is a derived file.
-SRC_MASTER = {k: os.path.join(ROOT, "prom_%s" % k, "wsa1_prom_%s.s" % k)
+SRC_MASTER = {k: image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (k, k))
               for k in "abcd"}
-SRC = {"a": os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"),
-       "b": os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"),
-       "c": os.path.join(ROOT, "prom_c", "wsa1_prom_c.s"),
-       "d": os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")}
+SRC = {"a": image_path(ROOT, "prom_a/wsa1_prom_a.s"),
+       "b": image_path(ROOT, "prom_b/wsa1_prom_b.s"),
+       "c": image_path(ROOT, "prom_c/wsa1_prom_c.s"),
+       "d": image_path(ROOT, "prom_d/wsa1_prom_d.s")}
 ROMS = {"a": "wsa1_prom_a.ic12", "b": "wsa1_prom_b.ic13",
         "c": "wsa1_prom_c.ic28", "d": "wsa1_prom_d.bin"}
 UNIDASM = os.environ.get(

@@ -75,6 +75,8 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_display_lists as DL
 
@@ -279,7 +281,7 @@ def selftest(a, b):
     # headers is exactly where it gets in.  The round-2 audit of this very file
     # caught eleven such citations in its first draft.
     import re
-    asrc = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
+    asrc = open(image_path(ROOT, "prom_a/wsa1_prom_a.s"), encoding="utf-8").read()
     starts = {int(m, 16) for m in re.findall(r";\s+([0-9A-F]{6})\s+[0-9a-f]{2}", asrc)}
     allsites = [x for v in conf.values() for x in v]
     check("every site address STARTS an instruction in prom_a/wsa1_prom_a.s",

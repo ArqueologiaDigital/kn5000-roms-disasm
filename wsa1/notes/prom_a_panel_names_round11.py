@@ -288,9 +288,18 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
 A_BASE = 0xF80000
 B_BASE = 0xF00000
-A_SRC = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+A_SRC_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path: write_part() guards it
+A_SRC = image_path(ROOT, "prom_a/wsa1_prom_a.s")  # the READ path: the image, not the master
 _a = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
 _b = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
 
@@ -1386,7 +1395,7 @@ def apply():
             "         source line cost the round-5 pass.",
         ])
 
-    open(A_SRC, "w").write("\n".join(lines))
+    write_part(A_SRC_MASTER, "\n".join(lines))
     print("applied: 1 block split into 9 objects, 3 mis-decoded tables reframed,")
     print("         %d routines renamed, %d wrappers renamed, 1 dead copy labelled,"
           % (len(RENAMES) + 2, len(nameable)))
@@ -2611,7 +2620,7 @@ def apply12():
     assert lines[j + 1] == R12_OLD_PB_WHY[1], lines[j + 1]
     lines[j:j + 2] = list(R12_NEW_PB_WHY)
 
-    open(A_SRC, "w").write("\n".join(lines))
+    write_part(A_SRC_MASTER, "\n".join(lines))
     print("round 12 applied: %d family renames + 1 twin rename, 2 new labels, "
           "%d headers, 4 texts corrected" % (len(props), len(heads)))
 

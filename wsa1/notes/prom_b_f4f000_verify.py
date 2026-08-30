@@ -117,6 +117,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 
 LO, HI = 0xF4F000, 0xF55000
@@ -203,7 +205,7 @@ def tiling():
     print("  bytes by kind          %s" % dict(sorted(by.items())))
     print("  they sum to            %d" % sum(by.values()))
     # the .incbin the span currently is, read from the .s
-    src = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")).read()
+    src = open(image_path(ROOT, "prom_b/wsa1_prom_b.s")).read()
     want = '.incbin "original_ROMs/wsa1_prom_b.ic13", 0x%06X, 0x%06X' % (LO - B_BASE, HI - LO)
     print("  the .s still holds it as one .incbin: %s" % (want in src))
     ok = (not gaps and not overlaps and tot == HI - LO
@@ -226,7 +228,7 @@ def null():
           % len(inside))
     # is it really instruction text?  every run endpoint must decode, and the
     # corpus is built from lines whose mnemonic is not a directive
-    src = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")).read().splitlines()
+    src = open(image_path(ROOT, "prom_b/wsa1_prom_b.s")).read().splitlines()
     seen = set()
     for ln in src:
         m = re.search(r";\s*([0-9A-F]{6})\s\s", ln)
@@ -327,7 +329,7 @@ def evidence():
     dsrc = rom()
     print("prom_a instructions that call INTO the span (proven: they are lines")
     print("of prom_a/wsa1_prom_a.s, which the byte gate rebuilds):")
-    src = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read().splitlines()
+    src = open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read().splitlines()
     got = {}
     for ln in src:
         m = re.search(r";\s*([0-9A-F]{6})\s\s", ln)
@@ -608,7 +610,7 @@ def neighbour():
           % (d[-1][0], d[-1][1], d[-1][1] + d[-1][2] - 1, d[-1][2], 0x0E,
              set(b[d[-1][1] - B_BASE:d[-1][1] + d[-1][2] - B_BASE]) == {0x0E}))
     print("0xF55000 onward is ALREADY CONVERTED; its block header in the .s says:")
-    src = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")).read().splitlines()
+    src = open(image_path(ROOT, "prom_b/wsa1_prom_b.s")).read().splitlines()
     i = next(j for j, l in enumerate(src) if "0xF55000-0xF5535A" in l)
     for l in src[i:i + 12]:
         print("    %s" % l.rstrip())
@@ -682,7 +684,7 @@ def selftest():
     check("bytes by kind sum to the span", sum(by.values()), HI - LO)
     check("substantive (non-fill) bytes", sum(v for k, v in by.items() if k != "fill"),
           19673)
-    src = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")).read()
+    src = open(image_path(ROOT, "prom_b/wsa1_prom_b.s")).read()
     check("the span is still ONE .incbin in the .s",
           '.incbin "original_ROMs/wsa1_prom_b.ic13", 0x04F000, 0x006000' in src, True)
 

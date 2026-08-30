@@ -37,12 +37,14 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_thunk_table as T                                  # noqa: E402
 
 A = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
 B = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
-SRC_A = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
+SRC_A = open(image_path(ROOT, "prom_a/wsa1_prom_a.s"), encoding="utf-8").read()
 A_BASE, B_BASE = 0xF80000, 0xF00000
 TICK_MS = 1000.0 / 488.28          # notes/FINDINGS-system-clock.md
 DELAY_TICKS = 0xFE1421             # Delay_Ticks(arg on stack)

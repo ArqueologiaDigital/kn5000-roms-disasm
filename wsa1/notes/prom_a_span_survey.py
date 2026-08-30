@@ -28,10 +28,12 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 sys.path.insert(0, os.path.join(ROOT, "prom_a"))
 BASE = 0xF80000
 ROM = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
-SRC = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+SRC = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 REGS = {0x40: "XWA", 0x41: "XBC", 0x42: "XDE", 0x43: "XHL",
         0x44: "XIX", 0x45: "XIY", 0x46: "XIZ", 0x47: "XSP"}
 

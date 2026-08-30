@@ -179,10 +179,19 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 AUTOFORCE = os.path.join(ROOT, "notes", "llvm_roundtrip_autoforce.py")
 IMGB = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+SRCB_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 ROMNAME = "wsa1_prom_b.ic13"
 B_BASE = 0xF00000
 
@@ -796,7 +805,7 @@ def splice():
         raise SystemExit("REFUSING TO SPLICE: the already-converted text changed "
                          "(%d lines before, %d after).  First lost line(s):\n%s"
                          % (len(before), len(after), "\n".join(lost)))
-    open(SRCB, "w").write("\n".join(out))
+    write_part(SRCB_MASTER, "\n".join(out))
     print("spliced %d spans; %s" % (len(done), msg))
     print("already-converted lines outside this round's blocks, before / after: "
           "%d / %d -- IDENTICAL LINE FOR LINE, which is the no-overwrite proof."

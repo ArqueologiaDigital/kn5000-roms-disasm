@@ -104,6 +104,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 LO, HI = 0xF85FF9, 0xF89800
 A_BASE, B_BASE = 0xF80000, 0xF00000
 
@@ -1674,7 +1676,7 @@ def selftest():
                  len(set(LABELS.values())), len(LABELS))
     have = collections.Counter(
         re.findall(r"^([A-Za-z_][A-Za-z0-9_]*):",
-                   open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read(), re.M))
+                   open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read(), re.M))
     bad += check("A4 labels of this file appearing MORE THAN ONCE in prom_a",
                  sorted(v for v in set(LABELS.values()) if have[v] > 1), [])
     bad += check("A5 ...and the region IS spliced (each appears exactly once)",

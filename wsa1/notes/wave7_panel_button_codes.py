@@ -168,6 +168,8 @@ import sys
 import collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 A_BASE, B_BASE = 0xF80000, 0xF00000
 
 _a = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
@@ -314,7 +316,7 @@ def d_service_screens():
     VIEWB = 0xF86F41                  # = PanelScreen_VtableTable + 0x80, the base
                                       # `ld XBC,0x00F86F41` at PanelButton_Route 0xF86215
     labels = {}
-    src = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), encoding="utf-8", errors="replace").read()
+    src = open(image_path(ROOT, "prom_b/wsa1_prom_b.s"), encoding="utf-8", errors="replace").read()
     for m in re.finditer(r"^(T_\w+):\s*jp 0x([0-9A-F]{6})\s*;\s*F([0-9A-F]{5})", src, re.M):
         labels[0xF00000 + int(m.group(3), 16)] = (m.group(1), int(m.group(2), 16))
     rows, checks = [], []

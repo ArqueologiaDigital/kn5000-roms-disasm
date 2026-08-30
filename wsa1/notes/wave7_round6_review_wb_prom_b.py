@@ -78,8 +78,10 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
-SRCA = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+SRCA = image_path(ROOT, "prom_a/wsa1_prom_a.s")
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
 ADDR = re.compile(r';\s*([0-9A-F]{6})\b')
 

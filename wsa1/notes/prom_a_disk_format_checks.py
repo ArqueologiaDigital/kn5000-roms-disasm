@@ -19,6 +19,8 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 ROM = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
 BASE = 0xF80000
 
@@ -123,7 +125,7 @@ print("\n4. The two format routines' request tables")
 # fields are read back out of the instruction stream by the same immediate
 # shapes notes/prom_a_fdc_operation_census.py uses; here only the two shapes
 # this module actually emits are needed.
-SRC = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
+SRC = open(image_path(ROOT, "prom_a/wsa1_prom_a.s"), encoding="utf-8").read()
 
 
 def requests(lo, hi, absolute):

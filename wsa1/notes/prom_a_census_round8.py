@@ -460,10 +460,19 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 import prom_a_understanding_round6 as R6          # noqa: E402  Image/body/references
 import prom_a_understanding_round7 as R7          # noqa: E402  subs/extents/thunk hop
 
-S_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+S_A_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path: write_part() guards it
+S_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")  # the READ path: the image, not the master
 S_B = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
 RULE = "; ---------------------------------------------------------------------"
 
@@ -1573,7 +1582,7 @@ def apply():
                     done.add(old)
                     out.extend(_refusal_header(old, why))
         out.append(ln)
-    open(S_A, "w").write("\n".join(out))
+    write_part(S_A_MASTER, "\n".join(out))
     print("  renamed %d labels, wrote %d header blocks" % (len(renamed), len(done)))
     # the side-car, so the emitter cannot revert them
     side = open(SIDECAR, encoding="utf-8").read()
@@ -2273,7 +2282,7 @@ def apply9():
                     done.add(old)
                     out.extend(_refusal_header(old, why))
         out.append(ln)
-    open(S_A, "w").write("\n".join(out))
+    write_part(S_A_MASTER, "\n".join(out))
     print("  round 9: renamed %d labels, wrote %d header blocks"
           % (len(renamed), len(done)))
 
@@ -3406,7 +3415,7 @@ def apply10():
                     done.add(old)
                     out.extend(_refusal_header(old, why))
         out.append(ln)
-    open(S_A, "w").write("\n".join(out))
+    write_part(S_A_MASTER, "\n".join(out))
     print("  round 10: renamed %d labels, wrote %d header blocks"
           % (len(renamed), len(done)))
     # ★ AND THE SIDE-CAR, so a re-emit cannot revert what is in an emitter's

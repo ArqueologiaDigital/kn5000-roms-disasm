@@ -35,8 +35,10 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 A = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
-SRC_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+SRC_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 SIZE = 524288
 fails = []
 

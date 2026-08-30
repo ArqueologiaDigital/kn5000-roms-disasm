@@ -206,7 +206,16 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-S_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+S_A_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path: write_part() guards it
+S_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")  # the READ path: the image, not the master
 S_B = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
 ROM_A = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
 ROM_B = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
@@ -1231,7 +1240,7 @@ def apply():
         if n < 1:
             print("REFUSED: no occurrence of %s survived header insertion" % old)
             return 1
-    open(S_A, "w").write(src)
+    write_part(S_A_MASTER, src)
     print("applied %d renames and %d header blocks to %s" % (len(todo), len(todo), S_A))
     print("now run: python3 scripts/analysis/assert_byte_identical.py")
     return 0

@@ -22,10 +22,13 @@ RUN
 """
 import os
 import re
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 SIZE = 524288
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 
 text = open(SRC).read()
 inc = sum(int(m.group(2), 16) for m in re.finditer(

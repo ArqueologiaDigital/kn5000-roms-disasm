@@ -100,7 +100,7 @@ def finding(where, says, truth):
 
 
 def src(key):
-    p = os.path.join(ROOT, "prom_%s" % key, "wsa1_prom_%s.s" % key)
+    p = image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (key, key))
     if p not in _cache:
         _cache[p] = open(p).read()
     return _cache[p]

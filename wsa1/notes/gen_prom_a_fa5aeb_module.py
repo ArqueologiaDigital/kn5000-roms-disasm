@@ -73,6 +73,8 @@ import sys
 import textwrap
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 LO, HI = 0xFA5AEB, 0xFAA000
 A_BASE = 0xF80000
 
@@ -1700,7 +1702,7 @@ def selftest():
     # before the splice stops being a check the moment it matters.
     have = collections.Counter(
         re.findall(r"^([A-Za-z_][A-Za-z0-9_]*):",
-                   open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read(), re.M))
+                   open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read(), re.M))
     bad += check("labels appearing more than once",
                  sorted(v for v in set(LABELS.values()) if have[v] > 1), [])
     bad += check("... and the region is spliced in (each appears once)",

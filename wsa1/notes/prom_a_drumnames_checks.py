@@ -16,8 +16,10 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 ROM = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
-SRC = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
+SRC = open(image_path(ROOT, "prom_a/wsa1_prom_a.s"), encoding="utf-8").read()
 BASE = 0xF80000
 PART, NPART = 0xFEB330, 35
 KITP, NKITP = 0xFEB3BC, 130

@@ -318,6 +318,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 
 LO, HI = 0xF7E2D8, 0xF80000
@@ -326,7 +328,14 @@ BTN_LO, BTN_HI, BTN_STRIDE = 0xF7D2D8, 0xF7E2D8, 0x80   # the 32 button tables
 INTERP = {0xF417F0: "A", 0xF417F4: "B"}
 BLINK_CMD = 0xF42E20                    # T_Blink_Command -> prom_b 0xF0E9CF
 SRCA = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+SRCB_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 AUTOFORCE = os.path.join(ROOT, "notes", "llvm_roundtrip_autoforce.py")
 
 # The two prom_a routines this span holds a byte-identical copy of.  Both
@@ -1163,7 +1172,7 @@ def print_promote():
                "%s:" % (new, ev, new))
         new_src = new_src.replace("%s:" % old, blk)
         new_src = new_src.replace(old + " ", new + " ").replace(old + ",", new + ",")
-    open(SRCB, "w", encoding="utf-8").write(new_src)
+    write_part(SRCB_MASTER, new_src)
     lines = new_src.split("\n")
     labels = set(re.match(r"^([A-Za-z_][A-Za-z0-9_]*):", l).group(1)
                  for l in lines if re.match(r"^([A-Za-z_][A-Za-z0-9_]*):", l))

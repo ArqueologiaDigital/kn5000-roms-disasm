@@ -31,8 +31,10 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 IMG = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 B_BASE = 0xF00000
 
 TABLE = 0xF5AC67          # named by `add XHL,0x00f5ac67` in both dispatchers

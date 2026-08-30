@@ -208,11 +208,20 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 import prom_a_understanding_round6 as R6          # noqa: E402  Image/body/references
 import prom_a_dl_stack_map as SM                  # noqa: E402  the 12-byte idiom
 import wave7_documentation_metrics as MET         # noqa: E402  the FRAMED grader
 
-S_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+S_A_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path: write_part() guards it
+S_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")  # the READ path: the image, not the master
 RULE = "; ---------------------------------------------------------------------"
 
 # The six stack veneers (notes/prom_b_dl_stack_sites.py) and the prom_b thunk
@@ -1288,7 +1297,7 @@ def apply_strings():
         if re.search(r'^%s:' % old, src, re.M):
             src, k = re.subn(r'\b%s\b' % old, new, src)
             total += k
-    open(S_A, "w").write(src)
+    write_part(S_A_MASTER, src)
     print("%d string-lever headers written, %d skipped because the routine already"
           % (done, len(skipped)))
     print("carries another round's header: %s" % ", ".join(skipped))
@@ -1559,7 +1568,7 @@ def apply():
         src, k = re.subn(r'\b%s\b' % old, new, src)
         total += k
         renamed += 1
-    open(S_A, "w").write(src)
+    write_part(S_A_MASTER, src)
     print("applied %d renames (%d textual occurrences) and rebuilt %d headers, "
           "%d of them refusal headers" % (renamed, total, headers, len(REFUSALS)))
     print("⚠ NOW RUN: python3 scripts/analysis/assert_byte_identical.py")

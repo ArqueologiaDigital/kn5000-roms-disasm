@@ -42,6 +42,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 MAME = "/home/fsanches/compartilhado/mame/src/devices/cpu/tlcs900/900tbl.hxx"
 IMGS = (("prom_a", 0xF80000, os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")),
         ("prom_b", 0xF00000, os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")))
@@ -110,7 +112,7 @@ def main():
         # the one site that is confirmed to be a real instruction
         if not any(a == 0xF8EEBD and v == 1 for t, a, v in sites["write imm"]):
             bad.append("0xF8EEBD (LCD_Svc_05_FillRect) is not in the census")
-        src = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read()
+        src = open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read()
         if "stdi8 (0x2540), 0x01                          ; F8EEBD" not in src:
             bad.append("the converted source no longer spells 0xF8EEBD that way")
         for b in bad:

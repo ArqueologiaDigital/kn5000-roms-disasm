@@ -18,6 +18,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 A = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
 FAILS = []
 RAN = []
@@ -279,7 +281,7 @@ for site, pfx in ((0xFA54C3, 0xC0), (0xFA5823, 0xC0), (0xFA541F, 0xC0),
           a(site, n).hex(" "))
 
 # --- the source really uses the names these checks are about --------------
-src = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")).read()
+src = open(image_path(ROOT, "prom_a/wsa1_prom_a.s")).read()
 for label in ("MIDI_RX_DataByte", "MIDI_StatusDispatch_Table", "MIDI_RX_Drop",
               "MIDI_RX_DeliverTwo", "MIDI_RX_AwaitSecondByte",
               "MIDI_RX_SecondDataByte", "MIDI_RX_SystemCommon",

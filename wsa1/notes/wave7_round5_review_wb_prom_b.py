@@ -54,7 +54,9 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 BASE = 0xF00000
 IMAGES = {"a": "wsa1_prom_a.ic12", "b": "wsa1_prom_b.ic13",
           "c": "wsa1_prom_c.ic28", "d": "wsa1_prom_d.bin"}

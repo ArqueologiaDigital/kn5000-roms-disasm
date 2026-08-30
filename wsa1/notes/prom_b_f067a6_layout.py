@@ -135,6 +135,8 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_f0ea9f_layout as LY                                  # noqa: E402
 import prom_b_f65000_layout as L                                   # noqa: E402
@@ -249,7 +251,7 @@ def instr_starts(img):
     proves the file rebuilds the image, so these addresses are instruction
     boundaries beyond argument."""
     if img not in _starts:
-        src = os.path.join(ROOT, "prom_%s" % img, "wsa1_prom_%s.s" % img)
+        src = image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (img, img))
         out = set()
         for ln in open(src):
             body = ln.split(";")[0]
@@ -276,7 +278,7 @@ def instr_starts(img):
 def incbin_ranges(img):
     """[lo,hi) of every `.incbin` in prom_X/wsa1_prom_X.s -- the UNCONVERTED set."""
     if img not in _incbin:
-        src = os.path.join(ROOT, "prom_%s" % img, "wsa1_prom_%s.s" % img)
+        src = image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (img, img))
         r = []
         for m in re.finditer(
                 r'\.incbin\s+"[^"]+",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)',

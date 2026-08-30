@@ -53,8 +53,8 @@ from asm_source import image_path  # noqa: E402  (the image, not the master)
 A = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
 B = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
 C = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
-SRC_A = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
-SRC_B = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), encoding="utf-8").read()
+SRC_A = open(image_path(ROOT, "prom_a/wsa1_prom_a.s"), encoding="utf-8").read()
+SRC_B = open(image_path(ROOT, "prom_b/wsa1_prom_b.s"), encoding="utf-8").read()
 SRC_C = open(image_path(ROOT, "prom_c/wsa1_prom_c.s"), encoding="utf-8").read()
 A_BASE, B_BASE, C_BASE = 0xF80000, 0xF00000, 0xF80000
 

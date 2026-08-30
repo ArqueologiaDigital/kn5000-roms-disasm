@@ -54,6 +54,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 sys.path.insert(0, os.path.join(ROOT, "prom_a"))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 import roundtrip as RT                                          # noqa: E402
@@ -270,7 +272,7 @@ def main():
     # already defines is not an undefined symbol, so subtract those too; the
     # linker is the backstop and the byte gate runs it.
     defined |= set(re.findall(r"^(sub_[0-9A-F]{6}):",
-                              open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"),
+                              open(image_path(ROOT, "prom_a/wsa1_prom_a.s"),
                                    encoding="utf-8").read(), re.M))
     if used - defined:
         sys.exit("REFUSED: %d label(s) referenced but never defined: %s"

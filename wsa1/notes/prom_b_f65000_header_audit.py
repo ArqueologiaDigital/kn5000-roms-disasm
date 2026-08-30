@@ -36,7 +36,9 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 IMG = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
 B_BASE = 0xF00000
 LO, HI = 0xF65000, 0xF6D002

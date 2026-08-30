@@ -56,6 +56,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_f65000_layout as L                                   # noqa: E402
 import prom_b_display_lists as DL                                  # noqa: E402
@@ -310,7 +312,7 @@ def proven_call_sites(lo=None, hi=None):
     hi = HI if hi is None else hi
     out = set()
     for img in ("a", "b"):
-        src = os.path.join(ROOT, "prom_%s" % img, "wsa1_prom_%s.s" % img)
+        src = image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (img, img))
         for ln in open(src):
             if ";" not in ln:
                 continue

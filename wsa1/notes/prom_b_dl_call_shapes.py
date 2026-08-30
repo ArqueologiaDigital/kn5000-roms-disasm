@@ -48,6 +48,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import prom_b_display_lists as DL                                 # noqa: E402
 import prom_b_dl_length_audit as LA                               # noqa: E402
@@ -71,7 +73,7 @@ def le(d, o, n=3):
 
 def incbin_spans():
     out = []
-    for line in open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")):
+    for line in open(image_path(ROOT, "prom_b/wsa1_prom_b.s")):
         m = re.search(r'\.incbin\s+"[^"]+"\s*,\s*(0x[0-9a-fA-F]+)\s*,\s*(0x[0-9a-fA-F]+)', line)
         if m:
             s = B_BASE + int(m.group(1), 0)

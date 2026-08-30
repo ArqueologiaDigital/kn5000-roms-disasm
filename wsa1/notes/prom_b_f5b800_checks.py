@@ -18,6 +18,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 A = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
 B = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
 A_BASE, B_BASE = 0xF80000, 0xF00000
@@ -183,7 +185,7 @@ check("`ld A,C` / `sla 0x01,A` / `dec 1,A` / `srl A,W`",
 # is the same text llvm_roundtrip_autoforce.py proved reassembles to these
 # bytes.  (An earlier draft "checked" [2*c-1 for c in 1..4] == [1,3,5,7]:
 # arithmetic on literals, round-1 audit finding F13's cannot-fail defect.)
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 seq = []
 for line in open(SRC):
     m = re.search(r";\s*(F5BB3[EF]|F5BB4[0-9A-F])\s+(.*?)(?:\s+\[llvm-mc.*)?$",

@@ -47,8 +47,10 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
-SRC = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+SRC = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 UNIDASM = os.environ.get("UNIDASM",
                          "/home/fsanches/compartilhado/kn7000_mame_build/unidasm")
 BASE = 0xF80000

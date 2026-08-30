@@ -48,7 +48,9 @@ import sys
 from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 LO, HI = 0xF6D002, 0xF78000
 PANEL_LO, PANEL_HI = 0x2B20, 0x2B40      # the panel change-mask shadow
 RAM_HI = 0x10000                          # 16-bit absolute addressing window

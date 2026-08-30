@@ -28,6 +28,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
 BASE = 0xF80000
 TABLE = 0xF8E9C6
@@ -40,7 +42,7 @@ def still_incbin():
     rx = re.compile(r'\.incbin "original_ROMs/wsa1_prom_a\.ic12", (0x[0-9A-Fa-f]+), '
                     r'(0x[0-9A-Fa-f]+)')
     spans = []
-    for line in open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")):
+    for line in open(image_path(ROOT, "prom_a/wsa1_prom_a.s")):
         m = rx.search(line)
         if m:
             off, ln = int(m.group(1), 16), int(m.group(2), 16)
