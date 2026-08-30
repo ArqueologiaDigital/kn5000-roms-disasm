@@ -6,3 +6,8 @@ __pycache__/
 # Regenerate with `python3 notes/reachability.py`; never commit it, because a
 # stale copy would answer a question about a tree that no longer exists.
 notes/.reachability-cache.json
+
+# derived: prom_c/wsa1_prom_c.s with its 26 includes expanded, for probes that
+# still read the master directly.  Regenerate with notes/prom_c_image.py; never
+# commit it -- the sources are the source.
+notes/.prom_c-image.s

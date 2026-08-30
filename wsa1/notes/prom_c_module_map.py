@@ -64,6 +64,12 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ⚠ prom_c is 26 files now (notes/prom_c_split.py): the master alone is 2% of the
+# image, and both scans below passed VACUOUSLY over it until this import landed.
+# notes/prom_c_probe_health.py is the check; notes/prom_c_image.py is a shim that
+# should become `from asm_source import ...` when that reader is green.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import prom_c_image  # noqa: E402
 NOTES = os.path.dirname(os.path.abspath(__file__))
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 BASE = 0xF80000
@@ -80,7 +86,7 @@ def source_boundaries():
     global _BOUNDS
     if _BOUNDS is None:
         _BOUNDS = set()
-        path = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+        path = prom_c_image.path()
         for ln in open(path):
             m = re.search(r';\s*([0-9A-F]{6})\s\s', ln)
             if m:
@@ -95,7 +101,7 @@ _XFER = None
 def unconverted_spans():
     """(lo, hi) the source file still holds as `.incbin`."""
     out = []
-    text = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read()
+    text = open(prom_c_image.path()).read()
     for m in re.finditer(r'^\s*\.incbin\s+"[^"]+",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)',
                          text, re.M):
         lo = BASE + int(m.group(1), 16)
