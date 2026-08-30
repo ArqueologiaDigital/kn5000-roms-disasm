@@ -123,84 +123,24 @@
 
 ; ------------------------------------------------------------------------------
 ; TLCS-900 byte-emitter macros, needed by the lines below that llvm-mc cannot
-; spell.  MOVED VERBATIM from prom_a/wsa1_prom_a.s, which defines these (and 56
-; more) near the top of its own file and therefore must not see them twice --
-; llvm-mc rejects a redefined macro.  kernel_maincpu.inc sets the guard symbol;
-; kernel_subcpu.inc does not, because prom_c has no such block of its own.
+; spell.  ★ THIS FILE USED TO CARRY A SECOND COPY of prom_a's block -- a 17-name
+; subset of it, moved verbatim.  Since 2026-08-30 there is ONE text,
+; include/tlcs900_mem_ops.inc, which prom_a, prom_b and this file all include,
+; and it is prom_a's full set rather than the subset.
+;
+; The guard stays, and it is load-bearing: prom_a includes that file directly
+; too, and llvm-mc rejects a redefined macro.  kernel_maincpu.inc sets the guard
+; symbol; kernel_subcpu.inc does not, because prom_c reaches these macros only
+; through this file.
 ;
 ; ⚠ These emit BYTES.  The gate proves the bytes; it cannot prove the NAME on a
 ;   macro is the right mnemonic.  That comes from MAME's dasm900.cpp tables, as
-;   argued at prom_a/wsa1_prom_a.s's own definitions, and every use below carries
-;   unidasm's text in its trailing comment so the two can be compared by eye.
+;   argued at include/tlcs900_mem_ops.inc's own definitions, and every use below
+;   carries unidasm's text in its trailing comment so the two can be compared by
+;   eye.
 ; ------------------------------------------------------------------------------
 .ifndef KERNEL_MEM_OPS_PROVIDED
-
-; --- operand prefixes: <size><address width> ---------------------------------
-.equ MB8,  0xC0		; byte operand, 8-bit direct address	(n)
-.equ MW8,  0xD0		; word operand, 8-bit direct address
-.equ ML8,  0xE0		; long operand, 8-bit direct address
-.equ MD8,  0xF0		; "dst"-table op, 8-bit direct address
-; --- the same operations, with a REGISTER-relative operand -------------------
-; dasm900.cpp:1473-1521.  Add the register index r0-r7: `MWD+r7` is "word-size
-; operand at (XSP+d8)".  The +d8 forms take exactly one displacement byte.
-.equ MBD, 0x88		; byte operand at (Rn+d8)	-> mnemonic_88[]
-.equ MWD, 0x98		; word operand at (Rn+d8)	-> mnemonic_98[]
-.equ MLD, 0xA8		; long operand at (Rn+d8)	-> mnemonic_a0[]
-.equ MDD, 0xB8		; "dst"-table op at (Rn+d8)	-> mnemonic_b8[]
-; --- register index inside an operation byte ---------------------------------
-; dasm900.cpp:1345-1347.  The same index selects W/A/B/C/D/E/H/L,
-; WA/BC/DE/HL/IX/IY/IZ/SP or XWA/XBC/XDE/XHL/XIX/XIY/XIZ/XSP according to the
-; size the prefix already chose.
-.equ r0, 0	; W   / WA / XWA
-.equ r1, 1	; A   / BC / XBC
-.equ r2, 2	; B   / DE / XDE
-.equ r3, 3	; C   / HL / XHL
-.equ r4, 4	; D   / IX / XIX
-.equ r5, 5	; E   / IY / XIY
-.equ r6, 6	; H   / IZ / XIZ
-.equ r7, 7	; L   / SP / XSP
-; --- the operand-size byte for the two `ldc` forms ---------------------------
-.equ RW,   0xD8		; + index -> WA BC DE HL IX IY IZ SP
-
-.macro _mem pfx, addr
-	.byte \pfx
-	.if ((\pfx) & 0xC0) == 0xC0
-	.byte (\addr) & 0xFF
-	.if ((\pfx) & 3) >= 1
-	.byte ((\addr) >> 8) & 0xFF
-	.endif
-	.if ((\pfx) & 3) >= 2
-	.byte ((\addr) >> 16) & 0xFF
-	.endif
-	.else
-	.if ((\pfx) & 0x08) != 0
-	.byte (\addr) & 0xFF
-	.endif
-	.endif
-.endm
-.macro m_ld_rm pfx, addr, r		; ld  R,(addr)			op 0x20+r
-	_mem \pfx, \addr
-	.byte 0x20 + (\r)
-.endm
-.macro m_cp_mr pfx, addr, r		; cp  (addr),R			op 0xF8+r
-	_mem \pfx, \addr
-	.byte 0xF8 + (\r)
-.endm
-.macro m_ld_mi16 pfx, addr, imm		; ldw (addr),#imm16		op 0x02
-	_mem \pfx, \addr
-	.byte 0x02, (\imm) & 0xFF, ((\imm) >> 8) & 0xFF
-.endm
-.macro m_st_mr16 pfx, addr, r		; ld (addr),R16			op 0x50+r
-	_mem \pfx, \addr
-	.byte 0x50 + (\r)
-.endm
-.macro m_ldc_cr_reg rp, cr		; ldc <cr>,R			op 0x2E
-	.byte \rp, 0x2E, \cr
-.endm
-.macro m_ldc_reg_cr rp, cr		; ldc R,<cr>			op 0x2F
-	.byte \rp, 0x2F, \cr
-.endm
-
+	.include "include/tlcs900_mem_ops.inc"
 .endif
 
 

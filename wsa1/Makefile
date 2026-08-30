@@ -21,7 +21,7 @@ PROMS = a b c d
 # passed on a stale build.  It was caught by a six-byte failure that survived the
 # fix -- the fix had never been assembled.
 KERNEL_SRC = kernel/kernel.s kernel/kernel_maincpu.inc kernel/kernel_subcpu.inc
-COMMON_INC = include/tmp95c061_sfr.inc
+COMMON_INC = include/tmp95c061_sfr.inc include/tlcs900_mem_ops.inc
 
 .PHONY: all clean
 .SECONDARY:

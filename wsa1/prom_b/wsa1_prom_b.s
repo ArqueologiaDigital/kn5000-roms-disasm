@@ -133,6 +133,29 @@
 ; PROVENANCE: this is not a chip read.  It is the publicly redistributed v2
 ; firmware set (../technics_roms/roms/wsa1/PROVENANCE.md).
 
+; ------------------------------------------------------------------------------
+; THE TLCS-900 BYTE-EMITTER MACROS -- the same file prom_a and the kernel use.
+;
+; ★ WHY THIS FILE NOW HAS THEM.  This image was generated with a decoder that
+; wrote every operand llvm-mc's tlcs900 backend has no spelling for as a raw
+; `.byte` row with the disassembler's text in the comment:
+;
+;     .byte 0xC1, 0xB8, 0x20, 0x3F, 0x11	; F0003C  cp (0x20b8),0x11   [llvm-mc cannot encode this]
+;
+; prom_a wrote the SAME BYTES as `m_cp_mi8 MB16, 0x20b8, 0x11`, because prom_a
+; developed the macro set.  Sharing that set retires those rows here.  The
+; instruction that replaces a row emits exactly the bytes the row held -- the
+; byte gate is what says so -- and the `; ADDR <disassembler text>` comment,
+; which is the DECODE AUTHORITY for every line in this file, is kept verbatim.
+;
+; ⚠ The `[llvm-mc cannot encode this]` marker is dropped on a converted row and
+;   only there: it explained why the row was a `.byte`, and a row that is no
+;   longer a `.byte` no longer needs the excuse.  Every row still spelled
+;   `.byte` keeps its marker.  Counted by notes/promb_macro_rewrite.py --census.
+; ------------------------------------------------------------------------------
+	.include "include/tlcs900_mem_ops.inc"
+.equ KERNEL_MEM_OPS_PROVIDED, 1	; records "already provided"; this image does not include the kernel
+
 wsa1_prom_b:
 ; === COVER-R1 0xF00000-0xF01800 ===
 ; 0xF00000-0xF017FF, coverage round 1: 1757 of this span's 6144 bytes are
