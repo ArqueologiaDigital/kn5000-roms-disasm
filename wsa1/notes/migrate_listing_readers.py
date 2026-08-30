@@ -164,12 +164,16 @@ def rewrite_text(text):
             raise AssertionError("no `ROOT =` line to anchor the import to")
         at = m.end() + 1
         new = new[:at] + ins + new[at:]
-    if not re.search(r'^import sys$|^import sys,', new, re.M):
-        m = re.search(r'^import os$', new, re.M)
-        if m:
-            new = new[:m.end()] + "\nimport sys" + new[m.end():]
-        else:
-            raise AssertionError("no `import os` to anchor `import sys` to")
+    # `sys` may already be imported on its own line, in a comma list
+    # (`import os, re, sys`) or beside a dotted name (`import importlib.util,
+    # os, sys`).  All three spellings are in these files; adding a second
+    # `import sys` would be harmless but noisy, and missing one is a NameError.
+    if not re.search(r'^\s*import\s+[^\n]*\bsys\b', new, re.M):
+        anchors = list(re.finditer(r'^import\s+[^\n]*$', new, re.M))
+        if not anchors:
+            raise AssertionError("no top-level `import` line to anchor `sys` to")
+        at = anchors[-1].end()
+        new = new[:at] + "\nimport sys" + new[at:]
     return new
 
 
@@ -285,6 +289,15 @@ def selftest():
           "a plain reader's site is rewritten to image_path()")
     check(IMPORT_LINE in out and "import sys" in out,
           "...and the import it now needs is inserted")
+    # five of these files spell it `import os, re, sys`; the anchor must see both
+    for spell in ("import os, re, sys\n", "import importlib.util, os, sys\n"):
+        combo = rewrite_text(reader.replace("import os\n", spell))
+        check(not re.search(r'^import sys$', combo, re.M) and IMPORT_LINE in combo,
+              "%r is recognised -- sys is not imported twice" % spell.strip())
+        compile(combo, "<combo>", "exec")
+    solo = rewrite_text(reader)
+    check(re.search(r'^import sys$', solo, re.M) is not None,
+          "...and a file with no sys import gets one")
     check("os.path.join(ROOT, \"prom_c\", \"wsa1_prom_c.s\")" not in out,
           "...and the old spelling is gone")
     compile(out, "<rewritten>", "exec")

@@ -56,6 +56,9 @@ THE GRADES
                    bucket that gates the prom_a/prom_b (maincpu) split.
     WRITER         it tried to WRITE a source and was refused in every tree.  Not
                    a reader; it belongs on the hand-migration list.
+    TIMEOUT        it ran out of time in every tree.  NOT a pass: the instrument
+                   never saw an answer, and identical timeouts would otherwise
+                   read as UNAFFECTED.
     NONDET         the two identical trees disagreed.  Not graded.
 
 THE FIX, in every case, is notes/asm_source.py -- one reader that resolves an
@@ -335,6 +338,11 @@ def failed(rc, out):
 
 def grade(res):
     a, a2, f, s = res["asis"], res["asis2"], res["full"], res["stub"]
+    # ⚠ A probe that ran out of TIME in every tree produced the same string in
+    # every tree, and would otherwise be graded UNAFFECTED -- a green that means
+    # "the instrument never saw an answer".  Say so instead.
+    if all(r[1] == "<timeout>" for r in (a, f, s)):
+        return "TIMEOUT"
     if all(PERM_DENIED.search(r[1] or "") for r in (a, f, s)):
         return "WRITER"          # it tried to write a frozen source; see FROZEN_DIRS
     if a != a2:
@@ -346,7 +354,8 @@ def grade(res):
     return "LOUD" if failed(*a) else "VACUOUS"
 
 
-ORDER = ["VACUOUS", "LOUD", "SPLIT-FRAGILE", "WRITER", "NONDET", "UNAFFECTED"]
+ORDER = ["VACUOUS", "LOUD", "SPLIT-FRAGILE", "WRITER", "TIMEOUT", "NONDET",
+         "UNAFFECTED"]
 
 
 def measure(primary, argvs, jobs=6, base=None):
@@ -567,6 +576,9 @@ def selftest():
               "...and every tree's layout is intact afterwards")
         check(grade({k: outs[k] for k in ("asis", "asis2", "full", "stub")}) == "WRITER",
               "...and it is graded WRITER, not UNAFFECTED")
+        T = (None, "<timeout>")
+        check(grade({"asis": T, "asis2": T, "full": T, "stub": T}) == "TIMEOUT",
+              "grader: four identical timeouts are TIMEOUT, not UNAFFECTED")
 
         # the git-blind detector, both directions
         check(git_blind("notes/wave7_round8_review_wd3_prom_d.py",
