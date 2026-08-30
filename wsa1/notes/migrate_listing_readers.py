@@ -41,7 +41,20 @@ RUN
   python3 notes/migrate_listing_readers.py --list      every site and its verdict
   python3 notes/migrate_listing_readers.py --apply     rewrite the safe ones
   python3 notes/migrate_listing_readers.py --apply --only prom_c
+  python3 notes/migrate_listing_readers.py --writers   split a writer's two paths
+  python3 notes/migrate_listing_readers.py --shim      retire the prom_c shim
+  python3 notes/migrate_listing_readers.py --smoke     RUN every migrated script
   python3 notes/migrate_listing_readers.py --selftest  ★ the controls
+
+★ SPELLINGS THIS DOES NOT COVER, and which therefore need a hand migration --
+  probe_health is what finds them, because it does not pattern-match:
+    * a helper that joins a caller's argument:
+          def now(rel): return open(os.path.join(ROOT, rel)).read()
+      -- five of these, all migrated by hand
+    * pathlib:  src = (ROOT / 'prom_c' / 'wsa1_prom_c.s').read_text()
+      -- one, notes/wave7-verify-probes/wave7_r3_promc_refute.py, migrated
+    * `git show <rev>:<primary>`, which a tree flip cannot even see; those need
+      asm_source.image_text_at_rev.  probe_health lists them as GIT-BLIND.
 
 ★ AN EDIT IS NOT A FIX UNTIL THE ANSWER COMES BACK.  After --apply, re-run
   notes/probe_health.py for the image: a rewritten probe must move OUT of

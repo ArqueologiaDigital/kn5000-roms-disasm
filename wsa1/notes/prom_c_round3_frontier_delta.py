@@ -27,7 +27,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
-from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import image_path, image_text_at_rev  # noqa: E402
 SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")
 PAT = r'\.incbin\s+"[^"]+",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)'
 BASE = 0xF80000
@@ -52,8 +52,10 @@ def spans(text):
 
 def main():
     now = spans(open(SRC).read())
-    head = spans(subprocess.run(["git", "show", "HEAD:prom_c/wsa1_prom_c.s"],
-                                cwd=ROOT, capture_output=True, text=True).stdout)
+    # ⚠ THE IMAGE AT HEAD.  `git show HEAD:<master>` returns the 2,516-line
+    # header, so this line used to compare the whole image with a header and
+    # print "HEAD (wave 4): 0 span(s), 0 bytes" as context for a real number.
+    head = spans(image_text_at_rev(ROOT, "prom_c/wsa1_prom_c.s", "HEAD"))
     b2 = sum(n for _, n, _ in ROUND2)
     print("prom_c `.incbin` -- the only frontier this image has left")
     print("  BEFORE (round-2 worktree, recorded): %d span(s), %5d bytes" % (len(ROUND2), b2))

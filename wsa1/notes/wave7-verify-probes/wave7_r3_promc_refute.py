@@ -20,13 +20,19 @@ QUESTION IT ANSWERS
                                   much is the blank-line artefact being removed.
 """
 import re, subprocess, sys, pathlib
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent
 if not (ROOT / 'prom_c').is_dir():
     ROOT = pathlib.Path('/home/fsanches/compartilhado/wsa1-roms-disasm')
 BASE = 0xF80000
 rom = (ROOT / 'original_ROMs' / 'wsa1_prom_c.ic28').read_bytes()
-src = (ROOT / 'prom_c' / 'wsa1_prom_c.s').read_text().split('\n')
+# ⚠ THE IMAGE, not the primary: since the per-subject split that file is a
+# 2,516-line header, and R3's `starts` set would hold 130 addresses instead
+# of the image's, marking almost every citation a non-start.
+sys.path.insert(0, str(ROOT / 'notes'))
+from asm_source import image_lines  # noqa: E402
+src = image_lines(str(ROOT), 'prom_c/wsa1_prom_c.s')
 UNIDASM = pathlib.Path.home() / 'compartilhado/kn7000_mame_build/unidasm'
 fails = []
 def check(ok, desc, detail=''):
