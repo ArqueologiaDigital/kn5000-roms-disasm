@@ -34,6 +34,13 @@ WHAT IT ESTABLISHES, and each is a measurement rather than a reading
   --shared       the two source files the duplicates now live in, and where each
                  is included from.
 
+  --crossings    how often a 16-bit PC-RELATIVE call crosses the chip boundary,
+                 counted from the tree's own DECODED lines rather than from a
+                 byte scan -- a raw scan for opcode 0x1E finds the byte in data
+                 too.  `calr` has a +/-32 KB reach, so a crossing is only
+                 possible at all because the two chips are one flat window, and
+                 it happens in BOTH directions.
+
   --split-cost   ★ WHY THE PER-SUBJECT SPLIT IS NOT IN THIS PASS.  prom_c and
                  prom_d have been split into subject sources; prom_a and prom_b
                  have not.  This counts the committed analysis scripts that open
@@ -188,6 +195,13 @@ def main():
         print("    space, including the sixteen that cross from prom_a into prom_b.")
         print("    That is a per-LINK-UNIT copy, not a bank workaround.")
         print()
+    if '--crossings' in a:
+        for tag, other in (("prom_a", "prom_b"), ("prom_b", "prom_a")):
+            hits = crossings(tag, other)
+            print("  %s calr -> %s : %d decoded site(s)" % (tag, other, len(hits)))
+            for site, t in hits[:4]:
+                print("      0x%06X -> 0x%06X" % (site, t))
+        print()
     if '--split-cost' in a:
         n, files = split_cost()
         print("  committed .py files that open prom_a/wsa1_prom_a.s or")
@@ -208,6 +222,45 @@ def main():
             for g in got:
                 print("      %s" % g.strip())
     return 0
+
+
+# ⚠ THE TWO IMAGES WRITE `calr` DIFFERENTLY, and one of them does not write the
+# target at all.  prom_b's comment carries unidasm's `calr 0xf7c6e5`; prom_a
+# writes the raw 16-bit DISPLACEMENT -- `calr 0xf23b ; F80007 1e 3b f2` -- so a
+# scan of prom_a's TEXT for a target finds nothing, and a first version of this
+# probe duly reported "prom_a calr -> prom_b : 0" for something the linker script
+# proves happens.  So the sites are found in the BYTES and validated against the
+# listing: a 0x1E is only counted where the tree's own source says an instruction
+# starts at that address.  Opcode 0x1E occurs in data too, and without that
+# filter this number is about six times too big.
+SRC_LINE = re.compile(r'^\t(\S.*?)\s*;\s*([0-9A-F]{6})\s+(.*)$')
+DATA_DIR = re.compile(r'^\.(byte|ascii|asciz|short|word|long|quad|fill|space|zero|incbin|align|org)\b')
+
+
+def decoded_addrs(tag):
+    out = set()
+    for ln in src(tag):
+        m = SRC_LINE.match(ln)
+        if m and not DATA_DIR.match(m.group(1)):
+            out.add(int(m.group(2), 16))
+    return out
+
+
+def crossings(tag, other):
+    """[(site, target)] for every `calr` at a DECODED address in `tag` whose
+    target lands in `other`."""
+    d, base = rom(tag), IMAGES[tag][2]
+    lo = IMAGES[other][2]
+    known = decoded_addrs(tag)
+    out = []
+    for i in range(len(d) - 2):
+        if d[i] != 0x1E or (base + i) not in known:
+            continue
+        disp = d[i + 1] | d[i + 2] << 8
+        t = base + i + 3 + (disp - 0x10000 if disp >= 0x8000 else disp)
+        if lo <= t < lo + 0x80000:
+            out.append((base + i, t))
+    return out
 
 
 PATH_REF = re.compile(r'prom_[ab]/wsa1_prom_[ab]\.s')
@@ -326,6 +379,15 @@ def selftest():
                 for g, _s, _k2 in r[pb] if g == "prom_a")
     check("prom_a references prom_b's copies (%d) -- the refutation has a witness"
           % cross, cross > 0)
+    # the crossing claim is "in BOTH directions", so both must be non-empty --
+    # and every target must really be in the other image
+    for tag, other in (("prom_a", "prom_b"), ("prom_b", "prom_a")):
+        h = crossings(tag, other)
+        lo = IMAGES[other][2]
+        check("%s has decoded `calr` sites reaching %s (%d)" % (tag, other, len(h)), h)
+        check("%s: every one of them lands in %s" % (tag, other),
+              all(lo <= t < lo + 0x80000 for _s, t in h))
+
     # the split-cost figure is a measurement, so it gets an invariant too: it is
     # a count of COMMITTED files and every one of them really names an image path
     n, files = split_cost()

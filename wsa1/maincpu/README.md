@@ -18,9 +18,18 @@ programs CS2 as `MSAR2 = 0xE0 / MAMR2 = 0x3F / B2CS = 0x1B`, one 1 MiB window
 redistributed firmware set, and the program's own structure does not follow
 them.  Three things say so and each is a measurement: the boot block's
 25-module initialisation directory lives in prom_a and every one of its entries
-points into prom_b; `calr`, a 16-bit PC-relative call, crosses the boundary in
-both directions; and every reference to a duplicated routine binds to the
-nearest copy without regard to which chip it is in (below).
+points into prom_b; `calr`, a 16-bit PC-relative call, crosses the boundary --
+**64 decoded sites** from prom_a into prom_b and **1** the other way
+(`--crossings`), which a bank could not permit; and every reference to a
+duplicated routine binds to the nearest copy without regard to which chip it is
+in (below).
+
+⚠ That crossing count is taken from the BYTES and validated against the listing:
+prom_a writes a `calr`'s raw 16-bit **displacement**, not its target, so scanning
+prom_a's text for a target finds none, and the first version of that probe
+reported 0 for something `prom_b/prom_b.ld` proves happens.  Counting the 0x1E
+opcode alone instead gives 73 and 12; the difference is the byte occurring in
+data.
 
 CPU 2 is `prom_c/`, and `prom_d/` is data.  The multitasking kernel **both**
 processors run is written once, in `kernel/kernel.s`.
