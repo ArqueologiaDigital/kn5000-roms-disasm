@@ -11666,7 +11666,7 @@ sub_F09E02:
 	pop	xbc	; F09E2C  pop XBC
 	pop	xwa	; F09E2D  pop XWA
 	ret	; F09E2E  ret
-	.byte 0x04	; F09E2F  max   [llvm-mc cannot encode this]
+	max	; F09E2F  max
 	xor	b, b	; F09E30  xor B,B
 	sla	bc, 2	; F09E32  sla 0x02,BC
 	ld	xiz, 15743855	; F09E35  ld XIZ,0x00f03b6f
@@ -11776,7 +11776,7 @@ Unclaimed_F09E85:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A000:		; <- T_F42004
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0A000  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0A000  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A004  lda XBC,XIZ+0xfe
 	push	xbc	; F0A007  push XBC
 	lda	xwa, (xiz-4)	; F0A008  lda XWA,XIZ+0xfc
@@ -11806,7 +11806,7 @@ sub_F0A000:		; <- T_F42004
 	pushw	16	; F0A046  push 0x0010
 	call	16606279	; F0A049  call 0xfd6447
 	popw	bc	; F0A04D  pop BC
-	.byte 0xEE, 0x0D	; F0A04E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A04E  unlk XIZ
 	ret	; F0A050  ret
 
 ; --------------------------------------------------------------------------
@@ -11821,7 +11821,7 @@ sub_F0A000:		; <- T_F42004
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A051:		; <- T_F42014
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0A051  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0A051  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A055  lda XBC,XIZ+0xfe
 	push	xbc	; F0A058  push XBC
 	lda	xwa, (xiz-4)	; F0A059  lda XWA,XIZ+0xfc
@@ -11855,7 +11855,7 @@ sub_F0A051:		; <- T_F42014
 	pushw	16	; F0A0A6  push 0x0010
 	call	16606279	; F0A0A9  call 0xfd6447
 	popw	bc	; F0A0AD  pop BC
-	.byte 0xEE, 0x0D	; F0A0AE  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A0AE  unlk XIZ
 	ret	; F0A0B0  ret
 
 ; --------------------------------------------------------------------------
@@ -11870,7 +11870,7 @@ sub_F0A051:		; <- T_F42014
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A0B1:		; <- T_F42024
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0A0B1  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0A0B1  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A0B5  lda XBC,XIZ+0xfe
 	push	xbc	; F0A0B8  push XBC
 	lda	xwa, (xiz-4)	; F0A0B9  lda XWA,XIZ+0xfc
@@ -11904,7 +11904,7 @@ sub_F0A0B1:		; <- T_F42024
 	pushw	16	; F0A106  push 0x0010
 	call	16606279	; F0A109  call 0xfd6447
 	popw	bc	; F0A10D  pop BC
-	.byte 0xEE, 0x0D	; F0A10E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A10E  unlk XIZ
 	ret	; F0A110  ret
 
 ; --------------------------------------------------------------------------
@@ -11919,7 +11919,7 @@ sub_F0A0B1:		; <- T_F42024
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A111:		; <- T_F42034
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0A111  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0A111  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A115  lda XBC,XIZ+0xfe
 	push	xbc	; F0A118  push XBC
 	lda	xwa, (xiz-4)	; F0A119  lda XWA,XIZ+0xfc
@@ -11949,7 +11949,7 @@ sub_F0A111:		; <- T_F42034
 	pushw	16	; F0A157  push 0x0010
 	call	16606279	; F0A15A  call 0xfd6447
 	popw	bc	; F0A15E  pop BC
-	.byte 0xEE, 0x0D	; F0A15F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A15F  unlk XIZ
 	ret	; F0A161  ret
 
 ; --------------------------------------------------------------------------
@@ -11964,7 +11964,7 @@ sub_F0A111:		; <- T_F42034
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A162:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0A162  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0A162  link XIZ,0xfff2
 	pushw	hl	; F0A166  push HL
 	pushw	de	; F0A167  push DE
 	push	xix	; F0A168  push XIX
@@ -12007,7 +12007,7 @@ sub_F0A162:
 	pop	xix	; F0A1CB  pop XIX
 	popw	de	; F0A1CC  pop DE
 	popw	hl	; F0A1CD  pop HL
-	.byte 0xEE, 0x0D	; F0A1CE  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A1CE  unlk XIZ
 	ret	; F0A1D0  ret
 
 ; --------------------------------------------------------------------------
@@ -12022,7 +12022,7 @@ sub_F0A162:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A1D1:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0A1D1  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0A1D1  link XIZ,0xfff2
 	pushw	hl	; F0A1D5  push HL
 	pushw	de	; F0A1D6  push DE
 	push	xix	; F0A1D7  push XIX
@@ -12065,7 +12065,7 @@ sub_F0A1D1:
 	pop	xix	; F0A23A  pop XIX
 	popw	de	; F0A23B  pop DE
 	popw	hl	; F0A23C  pop HL
-	.byte 0xEE, 0x0D	; F0A23D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A23D  unlk XIZ
 	ret	; F0A23F  ret
 
 ; --------------------------------------------------------------------------
@@ -12080,7 +12080,7 @@ sub_F0A1D1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A240:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0A240  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0A240  link XIZ,0xfff2
 	pushw	hl	; F0A244  push HL
 	pushw	de	; F0A245  push DE
 	push	xix	; F0A246  push XIX
@@ -12121,7 +12121,7 @@ sub_F0A240:
 	pop	xix	; F0A2A5  pop XIX
 	popw	de	; F0A2A6  pop DE
 	popw	hl	; F0A2A7  pop HL
-	.byte 0xEE, 0x0D	; F0A2A8  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A2A8  unlk XIZ
 	ret	; F0A2AA  ret
 
 ; --------------------------------------------------------------------------
@@ -12137,7 +12137,7 @@ sub_F0A240:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A2AB:
-	.byte 0xEE, 0x0C, 0xEC, 0xFF	; F0A2AB  link XIZ,0xffec   [llvm-mc cannot encode this]
+	link XIZ,0xffec	; F0A2AB  link XIZ,0xffec
 	push	xix	; F0A2AF  push XIX
 	lda	xix, (xiz-16)	; F0A2B0  lda XIX,XIZ+0xf0
 	lda	xbc, (xiz-2)	; F0A2B3  lda XBC,XIZ+0xfe
@@ -12223,7 +12223,7 @@ sub_F0A2AB:
 	call	16612353	; F0A398  call 0xfd7c01
 	popw	bc	; F0A39C  pop BC
 	pop	xix	; F0A39D  pop XIX
-	.byte 0xEE, 0x0D	; F0A39E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A39E  unlk XIZ
 	ret	; F0A3A0  ret
 
 ; --------------------------------------------------------------------------
@@ -12238,7 +12238,7 @@ sub_F0A2AB:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A3A1:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A3A1  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A3A1  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3A5  cp (XIZ+0x08),0x00
 	jr	nz, 13	; F0A3A9  jr NZ,0xf0a3b8
 	pushw	0	; F0A3AB  push 0x0000
@@ -12247,7 +12247,7 @@ sub_F0A3A1:
 	pop	xiy	; F0A3B5  pop XIY
 	jr	4	; F0A3B6  jr T,0xf0a3bc
 	call	16608912	; F0A3B8  call 0xfd6e90
-	.byte 0xEE, 0x0D	; F0A3BC  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A3BC  unlk XIZ
 	ret	; F0A3BE  ret
 
 ; --------------------------------------------------------------------------
@@ -12262,7 +12262,7 @@ sub_F0A3A1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A3BF:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A3BF  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A3BF  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3C3  cp (XIZ+0x08),0x00
 	jr	z, 15	; F0A3C7  jr Z,0xf0a3d8
 	pushw	1	; F0A3C9  push 0x0001
@@ -12270,7 +12270,7 @@ sub_F0A3BF:
 	pushw	135	; F0A3CF  push 0x0087
 	call	16619619	; F0A3D2  call 0xfd9863
 	inc	6, xsp	; F0A3D6  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A3D8  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A3D8  unlk XIZ
 	ret	; F0A3DA  ret
 
 ; --------------------------------------------------------------------------
@@ -12285,7 +12285,7 @@ sub_F0A3BF:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A3DB:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A3DB  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A3DB  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3DF  cp (XIZ+0x08),0x00
 	jr	nz, 13	; F0A3E3  jr NZ,0xf0a3f2
 	pushw	0	; F0A3E5  push 0x0000
@@ -12298,7 +12298,7 @@ sub_F0A3DB:
 	pushw	135	; F0A3F8  push 0x0087
 	call	16619619	; F0A3FB  call 0xfd9863
 	inc	6, xsp	; F0A3FF  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A401  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A401  unlk XIZ
 	ret	; F0A403  ret
 
 ; --------------------------------------------------------------------------
@@ -12313,7 +12313,7 @@ sub_F0A3DB:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A404:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F0A404  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F0A404  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A408  cp (XIZ+0x08),0x00
 	jr	nz, 49	; F0A40C  jr NZ,0xf0a43f
 	lda	xbc, (xiz-2)	; F0A40E  lda XBC,XIZ+0xfe
@@ -12339,7 +12339,7 @@ sub_F0A404:
 	pushw	135	; F0A445  push 0x0087
 	call	16619619	; F0A448  call 0xfd9863
 	inc	6, xsp	; F0A44C  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A44E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A44E  unlk XIZ
 	ret	; F0A450  ret
 
 ; --------------------------------------------------------------------------
@@ -12354,7 +12354,7 @@ sub_F0A404:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A451:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F0A451  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F0A451  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A455  cp (XIZ+0x08),0x00
 	jr	nz, 49	; F0A459  jr NZ,0xf0a48c
 	lda	xbc, (xiz-2)	; F0A45B  lda XBC,XIZ+0xfe
@@ -12380,7 +12380,7 @@ sub_F0A451:
 	pushw	135	; F0A492  push 0x0087
 	call	16619619	; F0A495  call 0xfd9863
 	inc	6, xsp	; F0A499  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A49B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A49B  unlk XIZ
 	ret	; F0A49D  ret
 
 ; --------------------------------------------------------------------------
@@ -12395,7 +12395,7 @@ sub_F0A451:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A49E:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A49E  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A49E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A4A2  cp (XIZ+0x08),0x00
 	jr	nz, 19	; F0A4A6  jr NZ,0xf0a4bb
 	pushw	0	; F0A4A8  push 0x0000
@@ -12404,7 +12404,7 @@ sub_F0A49E:
 	pushw	128	; F0A4B2  push 0x0080
 	call	16605323	; F0A4B5  call 0xfd608b
 	inc	6, xsp	; F0A4B9  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A4BB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A4BB  unlk XIZ
 	ret	; F0A4BD  ret
 
 ; --------------------------------------------------------------------------
@@ -12419,7 +12419,7 @@ sub_F0A49E:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A4BE:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A4BE  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A4BE  link XIZ,0x0000
 	pushw	0	; F0A4C2  push 0x0000
 	pushw	9	; F0A4C5  push 0x0009
 	ld	bc, (xiz+8)	; F0A4C8  ld BC,(XIZ+0x08)
@@ -12427,7 +12427,7 @@ sub_F0A4BE:
 	pushw	bc	; F0A4CD  push BC
 	call	16613717	; F0A4CE  call 0xfd8155
 	inc	6, xsp	; F0A4D2  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A4D4  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A4D4  unlk XIZ
 	ret	; F0A4D6  ret
 
 ; --------------------------------------------------------------------------
@@ -12442,7 +12442,7 @@ sub_F0A4BE:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A4D7:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A4D7  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A4D7  link XIZ,0x0000
 	pushw	0	; F0A4DB  push 0x0000
 	pushw	10	; F0A4DE  push 0x000a
 	ld	bc, (xiz+8)	; F0A4E1  ld BC,(XIZ+0x08)
@@ -12450,7 +12450,7 @@ sub_F0A4D7:
 	pushw	bc	; F0A4E6  push BC
 	call	16613832	; F0A4E7  call 0xfd81c8
 	inc	6, xsp	; F0A4EB  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A4ED  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A4ED  unlk XIZ
 	ret	; F0A4EF  ret
 
 ; --------------------------------------------------------------------------
@@ -12465,7 +12465,7 @@ sub_F0A4D7:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A4F0:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A4F0  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A4F0  link XIZ,0x0000
 	pushw	11	; F0A4F4  push 0x000b
 	pushw	8	; F0A4F7  push 0x0008
 	ld	bc, (xiz+8)	; F0A4FA  ld BC,(XIZ+0x08)
@@ -12473,7 +12473,7 @@ sub_F0A4F0:
 	pushw	bc	; F0A4FF  push BC
 	call	16613947	; F0A500  call 0xfd823b
 	inc	6, xsp	; F0A504  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A506  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A506  unlk XIZ
 	ret	; F0A508  ret
 
 ; --------------------------------------------------------------------------
@@ -12488,7 +12488,7 @@ sub_F0A4F0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A509:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A509  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A509  link XIZ,0x0000
 	pushw	0	; F0A50D  push 0x0000
 	pushw	12	; F0A510  push 0x000c
 	ld	bc, (xiz+8)	; F0A513  ld BC,(XIZ+0x08)
@@ -12496,7 +12496,7 @@ sub_F0A509:
 	pushw	bc	; F0A518  push BC
 	call	16614104	; F0A519  call 0xfd82d8
 	inc	6, xsp	; F0A51D  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A51F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A51F  unlk XIZ
 	ret	; F0A521  ret
 
 ; --------------------------------------------------------------------------
@@ -12511,7 +12511,7 @@ sub_F0A509:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A522:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A522  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A522  link XIZ,0x0000
 	pushw	13	; F0A526  push 0x000d
 	pushw	16	; F0A529  push 0x0010
 	ld	bc, (xiz+8)	; F0A52C  ld BC,(XIZ+0x08)
@@ -12519,7 +12519,7 @@ sub_F0A522:
 	pushw	bc	; F0A531  push BC
 	call	16614219	; F0A532  call 0xfd834b
 	inc	6, xsp	; F0A536  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A538  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A538  unlk XIZ
 	ret	; F0A53A  ret
 
 ; --------------------------------------------------------------------------
@@ -12534,7 +12534,7 @@ sub_F0A522:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A53B:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A53B  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A53B  link XIZ,0x0000
 	pushw	0	; F0A53F  push 0x0000
 	pushw	14	; F0A542  push 0x000e
 	ld	bc, (xiz+8)	; F0A545  ld BC,(XIZ+0x08)
@@ -12542,7 +12542,7 @@ sub_F0A53B:
 	pushw	bc	; F0A54A  push BC
 	call	16614376	; F0A54B  call 0xfd83e8
 	inc	6, xsp	; F0A54F  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A551  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A551  unlk XIZ
 	ret	; F0A553  ret
 
 ; --------------------------------------------------------------------------
@@ -12557,7 +12557,7 @@ sub_F0A53B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A554:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A554  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A554  link XIZ,0x0000
 	pushw	15	; F0A558  push 0x000f
 	pushw	7	; F0A55B  push 0x0007
 	ld	bc, (xiz+8)	; F0A55E  ld BC,(XIZ+0x08)
@@ -12565,7 +12565,7 @@ sub_F0A554:
 	pushw	bc	; F0A563  push BC
 	call	16614491	; F0A564  call 0xfd845b
 	inc	6, xsp	; F0A568  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A56A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A56A  unlk XIZ
 	ret	; F0A56C  ret
 
 ; --------------------------------------------------------------------------
@@ -12580,11 +12580,11 @@ sub_F0A554:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A56D:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A56D  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A56D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A571  cp (XIZ+0x08),0x00
 	jr	z, 4	; F0A575  jr Z,0xf0a57b
 	call	16608912	; F0A577  call 0xfd6e90
-	.byte 0xEE, 0x0D	; F0A57B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A57B  unlk XIZ
 	ret	; F0A57D  ret
 
 ; --------------------------------------------------------------------------
@@ -12599,7 +12599,7 @@ sub_F0A56D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A57E:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A57E  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A57E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A582  cp (XIZ+0x08),0x00
 	jr	nz, 8	; F0A586  jr NZ,0xf0a590
 	pushw	0	; F0A588  push 0x0000
@@ -12614,7 +12614,7 @@ sub_F0A57E:
 	pushw	136	; F0A59F  push 0x0088
 	call	16605323	; F0A5A2  call 0xfd608b
 	pop	xiy	; F0A5A6  pop XIY
-	.byte 0xEE, 0x0D	; F0A5A7  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A5A7  unlk XIZ
 	ret	; F0A5A9  ret
 
 ; --------------------------------------------------------------------------
@@ -12629,7 +12629,7 @@ sub_F0A57E:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A5AA:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A5AA  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A5AA  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A5AE  cp (XIZ+0x08),0x00
 	jr	nz, 8	; F0A5B2  jr NZ,0xf0a5bc
 	pushw	0	; F0A5B4  push 0x0000
@@ -12644,7 +12644,7 @@ sub_F0A5AA:
 	pushw	136	; F0A5CB  push 0x0088
 	call	16605323	; F0A5CE  call 0xfd608b
 	pop	xiy	; F0A5D2  pop XIY
-	.byte 0xEE, 0x0D	; F0A5D3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A5D3  unlk XIZ
 	ret	; F0A5D5  ret
 
 ; --------------------------------------------------------------------------
@@ -12659,7 +12659,7 @@ sub_F0A5AA:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A5D6:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A5D6  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A5D6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A5DA  cp (XIZ+0x08),0x00
 	jr	nz, 10	; F0A5DE  jr NZ,0xf0a5ea
 	pushw	0	; F0A5E0  push 0x0000
@@ -12675,7 +12675,7 @@ sub_F0A5D6:
 	pushw	136	; F0A5F9  push 0x0088
 	call	16605323	; F0A5FC  call 0xfd608b
 	pop	xiy	; F0A600  pop XIY
-	.byte 0xEE, 0x0D	; F0A601  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A601  unlk XIZ
 	ret	; F0A603  ret
 
 ; --------------------------------------------------------------------------
@@ -12690,7 +12690,7 @@ sub_F0A5D6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A604:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A604  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A604  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A608  cp (XIZ+0x08),0x00
 	jr	nz, 10	; F0A60C  jr NZ,0xf0a618
 	pushw	1	; F0A60E  push 0x0001
@@ -12706,7 +12706,7 @@ sub_F0A604:
 	pushw	136	; F0A627  push 0x0088
 	call	16605323	; F0A62A  call 0xfd608b
 	pop	xiy	; F0A62E  pop XIY
-	.byte 0xEE, 0x0D	; F0A62F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A62F  unlk XIZ
 	ret	; F0A631  ret
 
 ; --------------------------------------------------------------------------
@@ -12721,14 +12721,14 @@ sub_F0A604:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A632:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A632  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A632  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A636  cp (XIZ+0x08),0x00
 	jr	nz, 11	; F0A63A  jr NZ,0xf0a647
 	pushw	0	; F0A63C  push 0x0000
 	pushw	137	; F0A63F  push 0x0089
 	call	16605323	; F0A642  call 0xfd608b
 	pop	xiy	; F0A646  pop XIY
-	.byte 0xEE, 0x0D	; F0A647  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A647  unlk XIZ
 	ret	; F0A649  ret
 
 ; --------------------------------------------------------------------------
@@ -12743,7 +12743,7 @@ sub_F0A632:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A64A:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A64A  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A64A  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A64E  cp (XIZ+0x08),0x00
 	jr	nz, 19	; F0A652  jr NZ,0xf0a667
 	pushw	0	; F0A654  push 0x0000
@@ -12752,7 +12752,7 @@ sub_F0A64A:
 	pushw	128	; F0A65E  push 0x0080
 	call	16605323	; F0A661  call 0xfd608b
 	inc	6, xsp	; F0A665  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A667  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A667  unlk XIZ
 	ret	; F0A669  ret
 
 ; --------------------------------------------------------------------------
@@ -12767,14 +12767,14 @@ sub_F0A64A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A66A:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A66A  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A66A  link XIZ,0x0000
 	pushw	20	; F0A66E  push 0x0014
 	ld	bc, (xiz+8)	; F0A671  ld BC,(XIZ+0x08)
 	extz	bc	; F0A674  extz BC
 	pushw	bc	; F0A676  push BC
 	call	16614648	; F0A677  call 0xfd84f8
 	pop	xbc	; F0A67B  pop XBC
-	.byte 0xEE, 0x0D	; F0A67C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A67C  unlk XIZ
 	ret	; F0A67E  ret
 
 ; --------------------------------------------------------------------------
@@ -12789,14 +12789,14 @@ sub_F0A66A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A67F:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A67F  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A67F  link XIZ,0x0000
 	pushw	21	; F0A683  push 0x0015
 	ld	bc, (xiz+8)	; F0A686  ld BC,(XIZ+0x08)
 	extz	bc	; F0A689  extz BC
 	pushw	bc	; F0A68B  push BC
 	call	16614811	; F0A68C  call 0xfd859b
 	pop	xbc	; F0A690  pop XBC
-	.byte 0xEE, 0x0D	; F0A691  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A691  unlk XIZ
 	ret	; F0A693  ret
 
 ; --------------------------------------------------------------------------
@@ -12811,14 +12811,14 @@ sub_F0A67F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A694:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A694  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A694  link XIZ,0x0000
 	pushw	22	; F0A698  push 0x0016
 	ld	bc, (xiz+8)	; F0A69B  ld BC,(XIZ+0x08)
 	extz	bc	; F0A69E  extz BC
 	pushw	bc	; F0A6A0  push BC
 	call	16614974	; F0A6A1  call 0xfd863e
 	pop	xbc	; F0A6A5  pop XBC
-	.byte 0xEE, 0x0D	; F0A6A6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A6A6  unlk XIZ
 	ret	; F0A6A8  ret
 
 ; --------------------------------------------------------------------------
@@ -12833,14 +12833,14 @@ sub_F0A694:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A6A9:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A6A9  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A6A9  link XIZ,0x0000
 	pushw	19	; F0A6AD  push 0x0013
 	ld	bc, (xiz+8)	; F0A6B0  ld BC,(XIZ+0x08)
 	extz	bc	; F0A6B3  extz BC
 	pushw	bc	; F0A6B5  push BC
 	call	16615137	; F0A6B6  call 0xfd86e1
 	pop	xbc	; F0A6BA  pop XBC
-	.byte 0xEE, 0x0D	; F0A6BB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A6BB  unlk XIZ
 	ret	; F0A6BD  ret
 
 ; --------------------------------------------------------------------------
@@ -12855,14 +12855,14 @@ sub_F0A6A9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A6BE:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A6BE  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A6BE  link XIZ,0x0000
 	pushw	17	; F0A6C2  push 0x0011
 	ld	bc, (xiz+8)	; F0A6C5  ld BC,(XIZ+0x08)
 	extz	bc	; F0A6C8  extz BC
 	pushw	bc	; F0A6CA  push BC
 	call	16615239	; F0A6CB  call 0xfd8747
 	pop	xbc	; F0A6CF  pop XBC
-	.byte 0xEE, 0x0D	; F0A6D0  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A6D0  unlk XIZ
 	ret	; F0A6D2  ret
 
 ; --------------------------------------------------------------------------
@@ -12877,14 +12877,14 @@ sub_F0A6BE:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A6D3:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A6D3  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A6D3  link XIZ,0x0000
 	pushw	18	; F0A6D7  push 0x0012
 	ld	bc, (xiz+8)	; F0A6DA  ld BC,(XIZ+0x08)
 	extz	bc	; F0A6DD  extz BC
 	pushw	bc	; F0A6DF  push BC
 	call	16615333	; F0A6E0  call 0xfd87a5
 	pop	xbc	; F0A6E4  pop XBC
-	.byte 0xEE, 0x0D	; F0A6E5  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A6E5  unlk XIZ
 	ret	; F0A6E7  ret
 
 ; --------------------------------------------------------------------------
@@ -12899,11 +12899,11 @@ sub_F0A6D3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A6E8:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A6E8  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A6E8  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A6EC  cp (XIZ+0x08),0x00
 	jr	z, 4	; F0A6F0  jr Z,0xf0a6f6
 	call	16608912	; F0A6F2  call 0xfd6e90
-	.byte 0xEE, 0x0D	; F0A6F6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A6F6  unlk XIZ
 	ret	; F0A6F8  ret
 
 ; --------------------------------------------------------------------------
@@ -12918,7 +12918,7 @@ sub_F0A6E8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A6F9:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A6F9  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A6F9  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A6FD  cp (XIZ+0x08),0x00
 	jr	nz, 8	; F0A701  jr NZ,0xf0a70b
 	pushw	0	; F0A703  push 0x0000
@@ -12933,7 +12933,7 @@ sub_F0A6F9:
 	pushw	137	; F0A71A  push 0x0089
 	call	16605323	; F0A71D  call 0xfd608b
 	pop	xiy	; F0A721  pop XIY
-	.byte 0xEE, 0x0D	; F0A722  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A722  unlk XIZ
 	ret	; F0A724  ret
 
 ; --------------------------------------------------------------------------
@@ -12948,7 +12948,7 @@ sub_F0A6F9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A725:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A725  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A725  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A729  cp (XIZ+0x08),0x00
 	jr	nz, 8	; F0A72D  jr NZ,0xf0a737
 	pushw	0	; F0A72F  push 0x0000
@@ -12963,7 +12963,7 @@ sub_F0A725:
 	pushw	137	; F0A746  push 0x0089
 	call	16605323	; F0A749  call 0xfd608b
 	pop	xiy	; F0A74D  pop XIY
-	.byte 0xEE, 0x0D	; F0A74E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A74E  unlk XIZ
 	ret	; F0A750  ret
 
 ; --------------------------------------------------------------------------
@@ -12978,7 +12978,7 @@ sub_F0A725:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A751:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A751  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A751  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A755  cp (XIZ+0x08),0x00
 	jr	z, 23	; F0A759  jr Z,0xf0a772
 	pushw	3	; F0A75B  push 0x0003
@@ -12990,7 +12990,7 @@ sub_F0A751:
 	pushw	137	; F0A76A  push 0x0089
 	call	16605323	; F0A76D  call 0xfd608b
 	pop	xiy	; F0A771  pop XIY
-	.byte 0xEE, 0x0D	; F0A772  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A772  unlk XIZ
 	ret	; F0A774  ret
 
 ; --------------------------------------------------------------------------
@@ -13005,7 +13005,7 @@ sub_F0A751:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A775:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A775  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A775  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A779  cp (XIZ+0x08),0x00
 	jr	z, 23	; F0A77D  jr Z,0xf0a796
 	pushw	4	; F0A77F  push 0x0004
@@ -13017,7 +13017,7 @@ sub_F0A775:
 	pushw	137	; F0A78E  push 0x0089
 	call	16605323	; F0A791  call 0xfd608b
 	pop	xiy	; F0A795  pop XIY
-	.byte 0xEE, 0x0D	; F0A796  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A796  unlk XIZ
 	ret	; F0A798  ret
 
 ; --------------------------------------------------------------------------
@@ -13032,14 +13032,14 @@ sub_F0A775:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A799:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A799  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A799  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A79D  cp (XIZ+0x08),0x00
 	jr	z, 11	; F0A7A1  jr Z,0xf0a7ae
 	pushw	0	; F0A7A3  push 0x0000
 	pushw	136	; F0A7A6  push 0x0088
 	call	16605323	; F0A7A9  call 0xfd608b
 	pop	xiy	; F0A7AD  pop XIY
-	.byte 0xEE, 0x0D	; F0A7AE  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A7AE  unlk XIZ
 	ret	; F0A7B0  ret
 
 ; --------------------------------------------------------------------------
@@ -13054,7 +13054,7 @@ sub_F0A799:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A7B1:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A7B1  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A7B1  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A7B5  cp (XIZ+0x08),0x00
 	jr	nz, 19	; F0A7B9  jr NZ,0xf0a7ce
 	pushw	0	; F0A7BB  push 0x0000
@@ -13063,7 +13063,7 @@ sub_F0A7B1:
 	pushw	128	; F0A7C5  push 0x0080
 	call	16605323	; F0A7C8  call 0xfd608b
 	inc	6, xsp	; F0A7CC  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A7CE  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A7CE  unlk XIZ
 	ret	; F0A7D0  ret
 
 ; --------------------------------------------------------------------------
@@ -13078,14 +13078,14 @@ sub_F0A7B1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A7D1:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A7D1  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A7D1  link XIZ,0x0000
 	pushw	1	; F0A7D5  push 0x0001
 	ld	bc, (xiz+8)	; F0A7D8  ld BC,(XIZ+0x08)
 	extz	bc	; F0A7DB  extz BC
 	pushw	bc	; F0A7DD  push BC
 	call	16612890	; F0A7DE  call 0xfd7e1a
 	pop	xbc	; F0A7E2  pop XBC
-	.byte 0xEE, 0x0D	; F0A7E3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A7E3  unlk XIZ
 	ret	; F0A7E5  ret
 
 ; --------------------------------------------------------------------------
@@ -13100,14 +13100,14 @@ sub_F0A7D1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A7E6:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A7E6  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A7E6  link XIZ,0x0000
 	pushw	1	; F0A7EA  push 0x0001
 	ld	bc, (xiz+8)	; F0A7ED  ld BC,(XIZ+0x08)
 	extz	bc	; F0A7F0  extz BC
 	pushw	bc	; F0A7F2  push BC
 	call	16612966	; F0A7F3  call 0xfd7e66
 	pop	xbc	; F0A7F7  pop XBC
-	.byte 0xEE, 0x0D	; F0A7F8  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A7F8  unlk XIZ
 	ret	; F0A7FA  ret
 
 ; --------------------------------------------------------------------------
@@ -13122,14 +13122,14 @@ sub_F0A7E6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A7FB:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A7FB  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A7FB  link XIZ,0x0000
 	pushw	1	; F0A7FF  push 0x0001
 	ld	bc, (xiz+8)	; F0A802  ld BC,(XIZ+0x08)
 	extz	bc	; F0A805  extz BC
 	pushw	bc	; F0A807  push BC
 	call	16613081	; F0A808  call 0xfd7ed9
 	pop	xbc	; F0A80C  pop XBC
-	.byte 0xEE, 0x0D	; F0A80D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A80D  unlk XIZ
 	ret	; F0A80F  ret
 
 ; --------------------------------------------------------------------------
@@ -13144,14 +13144,14 @@ sub_F0A7FB:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A810:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A810  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A810  link XIZ,0x0000
 	pushw	1	; F0A814  push 0x0001
 	ld	bc, (xiz+8)	; F0A817  ld BC,(XIZ+0x08)
 	extz	bc	; F0A81A  extz BC
 	pushw	bc	; F0A81C  push BC
 	call	16613196	; F0A81D  call 0xfd7f4c
 	pop	xbc	; F0A821  pop XBC
-	.byte 0xEE, 0x0D	; F0A822  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A822  unlk XIZ
 	ret	; F0A824  ret
 
 ; --------------------------------------------------------------------------
@@ -13166,14 +13166,14 @@ sub_F0A810:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A825:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A825  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A825  link XIZ,0x0000
 	pushw	1	; F0A829  push 0x0001
 	ld	bc, (xiz+8)	; F0A82C  ld BC,(XIZ+0x08)
 	extz	bc	; F0A82F  extz BC
 	pushw	bc	; F0A831  push BC
 	call	16613311	; F0A832  call 0xfd7fbf
 	pop	xbc	; F0A836  pop XBC
-	.byte 0xEE, 0x0D	; F0A837  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A837  unlk XIZ
 	ret	; F0A839  ret
 
 ; --------------------------------------------------------------------------
@@ -13188,14 +13188,14 @@ sub_F0A825:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A83A:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A83A  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A83A  link XIZ,0x0000
 	pushw	1	; F0A83E  push 0x0001
 	ld	bc, (xiz+8)	; F0A841  ld BC,(XIZ+0x08)
 	extz	bc	; F0A844  extz BC
 	pushw	bc	; F0A846  push BC
 	call	16613424	; F0A847  call 0xfd8030
 	pop	xbc	; F0A84B  pop XBC
-	.byte 0xEE, 0x0D	; F0A84C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A84C  unlk XIZ
 	ret	; F0A84E  ret
 
 ; --------------------------------------------------------------------------
@@ -13210,14 +13210,14 @@ sub_F0A83A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A84F:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A84F  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A84F  link XIZ,0x0000
 	pushw	1	; F0A853  push 0x0001
 	ld	bc, (xiz+8)	; F0A856  ld BC,(XIZ+0x08)
 	extz	bc	; F0A859  extz BC
 	pushw	bc	; F0A85B  push BC
 	call	16613539	; F0A85C  call 0xfd80a3
 	pop	xbc	; F0A860  pop XBC
-	.byte 0xEE, 0x0D	; F0A861  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A861  unlk XIZ
 	ret	; F0A863  ret
 
 ; --------------------------------------------------------------------------
@@ -13232,7 +13232,7 @@ sub_F0A84F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A864:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A864  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A864  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A868  cp (XIZ+0x08),0x00
 	jr	nz, 13	; F0A86C  jr NZ,0xf0a87b
 	pushw	0	; F0A86E  push 0x0000
@@ -13241,7 +13241,7 @@ sub_F0A864:
 	pop	xiy	; F0A878  pop XIY
 	jr	4	; F0A879  jr T,0xf0a87f
 	call	16608912	; F0A87B  call 0xfd6e90
-	.byte 0xEE, 0x0D	; F0A87F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A87F  unlk XIZ
 	ret	; F0A881  ret
 
 ; --------------------------------------------------------------------------
@@ -13256,7 +13256,7 @@ sub_F0A864:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A882:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A882  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A882  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A886  cp (XIZ+0x08),0x00
 	jr	nz, 12	; F0A88A  jr NZ,0xf0a898
 	pushw	0	; F0A88C  push 0x0000
@@ -13267,7 +13267,7 @@ sub_F0A882:
 	pushw	1	; F0A89B  push 0x0001
 	call	16610528	; F0A89E  call 0xfd74e0
 	pop	xiy	; F0A8A2  pop XIY
-	.byte 0xEE, 0x0D	; F0A8A3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A8A3  unlk XIZ
 	ret	; F0A8A5  ret
 
 ; --------------------------------------------------------------------------
@@ -13282,14 +13282,14 @@ sub_F0A882:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A8A6:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A8A6  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A8A6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8AA  cp (XIZ+0x08),0x00
 	jr	z, 11	; F0A8AE  jr Z,0xf0a8bb
 	pushw	2	; F0A8B0  push 0x0002
 	pushw	1	; F0A8B3  push 0x0001
 	call	16610528	; F0A8B6  call 0xfd74e0
 	pop	xiy	; F0A8BA  pop XIY
-	.byte 0xEE, 0x0D	; F0A8BB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A8BB  unlk XIZ
 	ret	; F0A8BD  ret
 
 ; --------------------------------------------------------------------------
@@ -13304,14 +13304,14 @@ sub_F0A8A6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A8BE:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A8BE  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A8BE  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8C2  cp (XIZ+0x08),0x00
 	jr	z, 11	; F0A8C6  jr Z,0xf0a8d3
 	pushw	3	; F0A8C8  push 0x0003
 	pushw	1	; F0A8CB  push 0x0001
 	call	16610528	; F0A8CE  call 0xfd74e0
 	pop	xiy	; F0A8D2  pop XIY
-	.byte 0xEE, 0x0D	; F0A8D3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A8D3  unlk XIZ
 	ret	; F0A8D5  ret
 
 ; --------------------------------------------------------------------------
@@ -13326,14 +13326,14 @@ sub_F0A8BE:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A8D6:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A8D6  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A8D6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8DA  cp (XIZ+0x08),0x00
 	jr	z, 11	; F0A8DE  jr Z,0xf0a8eb
 	pushw	4	; F0A8E0  push 0x0004
 	pushw	1	; F0A8E3  push 0x0001
 	call	16610528	; F0A8E6  call 0xfd74e0
 	pop	xiy	; F0A8EA  pop XIY
-	.byte 0xEE, 0x0D	; F0A8EB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A8EB  unlk XIZ
 	ret	; F0A8ED  ret
 
 ; --------------------------------------------------------------------------
@@ -13348,7 +13348,7 @@ sub_F0A8D6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A8EE:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0A8EE  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0A8EE  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8F2  cp (XIZ+0x08),0x00
 	jr	nz, 19	; F0A8F6  jr NZ,0xf0a90b
 	pushw	0	; F0A8F8  push 0x0000
@@ -13357,7 +13357,7 @@ sub_F0A8EE:
 	pushw	128	; F0A902  push 0x0080
 	call	16605323	; F0A905  call 0xfd608b
 	inc	6, xsp	; F0A909  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0A90B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A90B  unlk XIZ
 	ret	; F0A90D  ret
 
 ; --------------------------------------------------------------------------
@@ -13372,7 +13372,7 @@ sub_F0A8EE:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A90E:		; <- T_F42358
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0A90E  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0A90E  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A912  lda XBC,XIZ+0xfe
 	push	xbc	; F0A915  push XBC
 	lda	xwa, (xiz-4)	; F0A916  lda XWA,XIZ+0xfc
@@ -13402,7 +13402,7 @@ sub_F0A90E:		; <- T_F42358
 	pushw	16	; F0A954  push 0x0010
 	call	16606279	; F0A957  call 0xfd6447
 	popw	bc	; F0A95B  pop BC
-	.byte 0xEE, 0x0D	; F0A95C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A95C  unlk XIZ
 	ret	; F0A95E  ret
 
 ; --------------------------------------------------------------------------
@@ -13417,7 +13417,7 @@ sub_F0A90E:		; <- T_F42358
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A95F:		; <- T_F42368
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0A95F  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0A95F  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A963  lda XBC,XIZ+0xfe
 	push	xbc	; F0A966  push XBC
 	lda	xwa, (xiz-4)	; F0A967  lda XWA,XIZ+0xfc
@@ -13451,7 +13451,7 @@ sub_F0A95F:		; <- T_F42368
 	pushw	16	; F0A9B4  push 0x0010
 	call	16606279	; F0A9B7  call 0xfd6447
 	popw	bc	; F0A9BB  pop BC
-	.byte 0xEE, 0x0D	; F0A9BC  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0A9BC  unlk XIZ
 	ret	; F0A9BE  ret
 
 ; --------------------------------------------------------------------------
@@ -13466,7 +13466,7 @@ sub_F0A95F:		; <- T_F42368
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0A9BF:		; <- T_F42378
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0A9BF  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0A9BF  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A9C3  lda XBC,XIZ+0xfe
 	push	xbc	; F0A9C6  push XBC
 	lda	xwa, (xiz-4)	; F0A9C7  lda XWA,XIZ+0xfc
@@ -13496,7 +13496,7 @@ sub_F0A9BF:		; <- T_F42378
 	pushw	16	; F0AA05  push 0x0010
 	call	16606279	; F0AA08  call 0xfd6447
 	popw	bc	; F0AA0C  pop BC
-	.byte 0xEE, 0x0D	; F0AA0D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AA0D  unlk XIZ
 	ret	; F0AA0F  ret
 
 ; --------------------------------------------------------------------------
@@ -13511,7 +13511,7 @@ sub_F0A9BF:		; <- T_F42378
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AA10:		; <- T_F433D8
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0AA10  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0AA10  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA14  lda XBC,XIZ+0xfe
 	push	xbc	; F0AA17  push XBC
 	lda	xwa, (xiz-4)	; F0AA18  lda XWA,XIZ+0xfc
@@ -13541,7 +13541,7 @@ sub_F0AA10:		; <- T_F433D8
 	pushw	16	; F0AA56  push 0x0010
 	call	16606279	; F0AA59  call 0xfd6447
 	popw	bc	; F0AA5D  pop BC
-	.byte 0xEE, 0x0D	; F0AA5E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AA5E  unlk XIZ
 	ret	; F0AA60  ret
 
 ; --------------------------------------------------------------------------
@@ -13556,7 +13556,7 @@ sub_F0AA10:		; <- T_F433D8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AA61:		; <- T_F420B4
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0AA61  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0AA61  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA65  lda XBC,XIZ+0xfe
 	push	xbc	; F0AA68  push XBC
 	lda	xwa, (xiz-4)	; F0AA69  lda XWA,XIZ+0xfc
@@ -13586,7 +13586,7 @@ sub_F0AA61:		; <- T_F420B4
 	pushw	16	; F0AAA7  push 0x0010
 	call	16606279	; F0AAAA  call 0xfd6447
 	popw	bc	; F0AAAE  pop BC
-	.byte 0xEE, 0x0D	; F0AAAF  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AAAF  unlk XIZ
 	ret	; F0AAB1  ret
 
 ; --------------------------------------------------------------------------
@@ -13614,7 +13614,7 @@ sub_F0AAB2:		; <- T_F433E8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AAB3:		; <- T_F42328
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0AAB3  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0AAB3  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AAB7  lda XBC,XIZ+0xfe
 	push	xbc	; F0AABA  push XBC
 	lda	xwa, (xiz-4)	; F0AABB  lda XWA,XIZ+0xfc
@@ -13638,7 +13638,7 @@ sub_F0AAB3:		; <- T_F42328
 	pushw	16	; F0AAEE  push 0x0010
 	call	16606279	; F0AAF1  call 0xfd6447
 	popw	bc	; F0AAF5  pop BC
-	.byte 0xEE, 0x0D	; F0AAF6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AAF6  unlk XIZ
 	ret	; F0AAF8  ret
 
 ; --------------------------------------------------------------------------
@@ -13653,7 +13653,7 @@ sub_F0AAB3:		; <- T_F42328
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AAF9:		; <- T_F42338
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0AAF9  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0AAF9  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AAFD  lda XBC,XIZ+0xfe
 	push	xbc	; F0AB00  push XBC
 	lda	xwa, (xiz-4)	; F0AB01  lda XWA,XIZ+0xfc
@@ -13683,7 +13683,7 @@ sub_F0AAF9:		; <- T_F42338
 	pushw	16	; F0AB3F  push 0x0010
 	call	16606279	; F0AB42  call 0xfd6447
 	popw	bc	; F0AB46  pop BC
-	.byte 0xEE, 0x0D	; F0AB47  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AB47  unlk XIZ
 	ret	; F0AB49  ret
 
 ; --------------------------------------------------------------------------
@@ -13711,7 +13711,7 @@ sub_F0AB4A:		; <- T_F42348
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AB4B:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0AB4B  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0AB4B  link XIZ,0xfffc
 	pushw	hl	; F0AB4F  push HL
 	lda	xbc, (xiz-2)	; F0AB50  lda XBC,XIZ+0xfe
 	push	xbc	; F0AB53  push XBC
@@ -13753,7 +13753,7 @@ sub_F0AB4B:
 	call	16622695	; F0ABAF  call 0xfda467
 	inc	8, xsp	; F0ABB3  inc 0,XSP
 	popw	hl	; F0ABB5  pop HL
-	.byte 0xEE, 0x0D	; F0ABB6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0ABB6  unlk XIZ
 	ret	; F0ABB8  ret
 
 ; --------------------------------------------------------------------------
@@ -13768,7 +13768,7 @@ sub_F0AB4B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0ABB9:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F0ABB9  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F0ABB9  link XIZ,0xfff8
 	pushw	hl	; F0ABBD  push HL
 	lda	xbc, (xiz-2)	; F0ABBE  lda XBC,XIZ+0xfe
 	push	xbc	; F0ABC1  push XBC
@@ -13820,7 +13820,7 @@ sub_F0ABB9:
 	inc	8, xsp	; F0AC3B  inc 0,XSP
 	inc	8, xsp	; F0AC3D  inc 0,XSP
 	popw	hl	; F0AC3F  pop HL
-	.byte 0xEE, 0x0D	; F0AC40  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AC40  unlk XIZ
 	ret	; F0AC42  ret
 
 ; --------------------------------------------------------------------------
@@ -13835,7 +13835,7 @@ sub_F0ABB9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AC43:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0AC43  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0AC43  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0AC47  lda XBC,XIZ+0xfe
 	push	xbc	; F0AC4A  push XBC
 	call	16621770	; F0AC4B  call 0xfda0ca
@@ -13874,7 +13874,7 @@ sub_F0AC43:
 	pushw	1	; F0ACA5  push 0x0001
 	call	16622695	; F0ACA8  call 0xfda467
 	inc	8, xsp	; F0ACAC  inc 0,XSP
-	.byte 0xEE, 0x0D	; F0ACAE  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0ACAE  unlk XIZ
 	ret	; F0ACB0  ret
 
 ; --------------------------------------------------------------------------
@@ -13889,7 +13889,7 @@ sub_F0AC43:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0ACB1:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0ACB1  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0ACB1  link XIZ,0x0000
 	pushw	0	; F0ACB5  push 0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0ACB8  cp (XIZ+0x08),0x00
 	jr	z, 5	; F0ACBC  jr Z,0xf0acc3
@@ -13898,7 +13898,7 @@ sub_F0ACB1:
 	pushw	157	; F0ACC3  push 0x009d
 	call	16605323	; F0ACC6  call 0xfd608b
 	pop	xbc	; F0ACCA  pop XBC
-	.byte 0xEE, 0x0D	; F0ACCB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0ACCB  unlk XIZ
 	ret	; F0ACCD  ret
 
 ; --------------------------------------------------------------------------
@@ -13913,7 +13913,7 @@ sub_F0ACB1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0ACCE:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F0ACCE  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F0ACCE  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0ACD2  cp (XIZ+0x08),0x00
 	jr	z, 8	; F0ACD6  jr Z,0xf0ace0
 	pushw	0	; F0ACD8  push 0x0000
@@ -13931,7 +13931,7 @@ sub_F0ACCE:
 	pushw	200	; F0ACF7  push 0x00c8
 	call	16605323	; F0ACFA  call 0xfd608b
 	pop	xbc	; F0ACFE  pop XBC
-	.byte 0xEE, 0x0D	; F0ACFF  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0ACFF  unlk XIZ
 	ret	; F0AD01  ret
 
 ; --------------------------------------------------------------------------
@@ -13946,7 +13946,7 @@ sub_F0ACCE:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AD02:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F0AD02  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F0AD02  link XIZ,0xfffe
 	lda	xbc, (xiz-2)	; F0AD06  lda XBC,XIZ+0xfe
 	push	xbc	; F0AD09  push XBC
 	call	16621770	; F0AD0A  call 0xfda0ca
@@ -13964,7 +13964,7 @@ sub_F0AD02:
 	pushw	139	; F0AD2B  push 0x008b
 	call	16605323	; F0AD2E  call 0xfd608b
 	pop	xbc	; F0AD32  pop XBC
-	.byte 0xEE, 0x0D	; F0AD33  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AD33  unlk XIZ
 	ret	; F0AD35  ret
 
 ; --------------------------------------------------------------------------
@@ -13979,7 +13979,7 @@ sub_F0AD02:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AD36:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F0AD36  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F0AD36  link XIZ,0xfffe
 	lda	xbc, (xiz-2)	; F0AD3A  lda XBC,XIZ+0xfe
 	push	xbc	; F0AD3D  push XBC
 	call	16621770	; F0AD3E  call 0xfda0ca
@@ -14001,7 +14001,7 @@ sub_F0AD36:
 	pushw	144	; F0AD6A  push 0x0090
 	call	16605323	; F0AD6D  call 0xfd608b
 	pop	xbc	; F0AD71  pop XBC
-	.byte 0xEE, 0x0D	; F0AD72  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AD72  unlk XIZ
 	ret	; F0AD74  ret
 
 ; --------------------------------------------------------------------------
@@ -14016,7 +14016,7 @@ sub_F0AD36:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AD75:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F0AD75  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F0AD75  link XIZ,0xfffe
 	lda	xbc, (xiz-2)	; F0AD79  lda XBC,XIZ+0xfe
 	push	xbc	; F0AD7C  push XBC
 	call	16621770	; F0AD7D  call 0xfda0ca
@@ -14040,7 +14040,7 @@ sub_F0AD75:
 	pushw	144	; F0ADB1  push 0x0090
 	call	16605323	; F0ADB4  call 0xfd608b
 	pop	xiy	; F0ADB8  pop XIY
-	.byte 0xEE, 0x0D	; F0ADB9  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0ADB9  unlk XIZ
 	ret	; F0ADBB  ret
 
 ; --------------------------------------------------------------------------
@@ -14055,14 +14055,14 @@ sub_F0AD75:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0ADBC:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0ADBC  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0ADBC  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0ADC0  cp (XIZ+0x08),0x00
 	jr	nz, 11	; F0ADC4  jr NZ,0xf0add1
 	pushw	0	; F0ADC6  push 0x0000
 	pushw	128	; F0ADC9  push 0x0080
 	call	16605323	; F0ADCC  call 0xfd608b
 	pop	xiy	; F0ADD0  pop XIY
-	.byte 0xEE, 0x0D	; F0ADD1  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0ADD1  unlk XIZ
 	ret	; F0ADD3  ret
 
 ; --------------------------------------------------------------------------
@@ -14077,7 +14077,7 @@ sub_F0ADBC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0ADD4:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0ADD4  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0ADD4  link XIZ,0xfff2
 	push	xix	; F0ADD8  push XIX
 	lda	xix, (xiz-14)	; F0ADD9  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0ADDC  lda XBC,XIZ+0xfe
@@ -14194,7 +14194,7 @@ sub_F0AE6B:
 	inc	8, xsp	; F0AE93  inc 0,XSP
 	inc	6, xsp	; F0AE95  inc 6,XSP
 	pop	xix	; F0AE97  pop XIX
-	.byte 0xEE, 0x0D	; F0AE98  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AE98  unlk XIZ
 	ret	; F0AE9A  ret
 
 ; --------------------------------------------------------------------------
@@ -14209,7 +14209,7 @@ sub_F0AE6B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AE9B:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0AE9B  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0AE9B  link XIZ,0xfff2
 	push	xix	; F0AE9F  push XIX
 	lda	xix, (xiz-14)	; F0AEA0  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0AEA3  lda XBC,XIZ+0xfe
@@ -14327,7 +14327,7 @@ sub_F0AF36:
 	inc	8, xsp	; F0AF5E  inc 0,XSP
 	inc	6, xsp	; F0AF60  inc 6,XSP
 	pop	xix	; F0AF62  pop XIX
-	.byte 0xEE, 0x0D	; F0AF63  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0AF63  unlk XIZ
 	ret	; F0AF65  ret
 
 ; --------------------------------------------------------------------------
@@ -14342,7 +14342,7 @@ sub_F0AF36:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0AF66:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0AF66  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0AF66  link XIZ,0xfff2
 	push	xix	; F0AF6A  push XIX
 	lda	xix, (xiz-14)	; F0AF6B  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0AF6E  lda XBC,XIZ+0xfe
@@ -14489,7 +14489,7 @@ sub_F0B011:
 	inc	8, xsp	; F0B039  inc 0,XSP
 	inc	6, xsp	; F0B03B  inc 6,XSP
 	pop	xix	; F0B03D  pop XIX
-	.byte 0xEE, 0x0D	; F0B03E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B03E  unlk XIZ
 	ret	; F0B040  ret
 
 ; --------------------------------------------------------------------------
@@ -14504,7 +14504,7 @@ sub_F0B011:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B041:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0B041  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0B041  link XIZ,0xfff2
 	push	xix	; F0B045  push XIX
 	lda	xix, (xiz-14)	; F0B046  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0B049  lda XBC,XIZ+0xfe
@@ -14619,7 +14619,7 @@ sub_F0B0CF:
 	inc	8, xsp	; F0B0F7  inc 0,XSP
 	inc	6, xsp	; F0B0F9  inc 6,XSP
 	pop	xix	; F0B0FB  pop XIX
-	.byte 0xEE, 0x0D	; F0B0FC  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B0FC  unlk XIZ
 	ret	; F0B0FE  ret
 
 ; --------------------------------------------------------------------------
@@ -14634,7 +14634,7 @@ sub_F0B0CF:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B0FF:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0B0FF  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0B0FF  link XIZ,0xfff2
 	push	xix	; F0B103  push XIX
 	lda	xix, (xiz-14)	; F0B104  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0B107  lda XBC,XIZ+0xfe
@@ -14731,7 +14731,7 @@ sub_F0B179:
 	inc	8, xsp	; F0B1A1  inc 0,XSP
 	inc	6, xsp	; F0B1A3  inc 6,XSP
 	pop	xix	; F0B1A5  pop XIX
-	.byte 0xEE, 0x0D	; F0B1A6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B1A6  unlk XIZ
 	ret	; F0B1A8  ret
 
 ; --------------------------------------------------------------------------
@@ -14746,7 +14746,7 @@ sub_F0B179:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B1A9:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0B1A9  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0B1A9  link XIZ,0xfff2
 	push	xix	; F0B1AD  push XIX
 	lda	xix, (xiz-14)	; F0B1AE  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0B1B1  lda XBC,XIZ+0xfe
@@ -14790,7 +14790,7 @@ sub_F0B1A9:
 	inc	8, xsp	; F0B220  inc 0,XSP
 	inc	6, xsp	; F0B222  inc 6,XSP
 	pop	xix	; F0B224  pop XIX
-	.byte 0xEE, 0x0D	; F0B225  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B225  unlk XIZ
 	ret	; F0B227  ret
 
 ; --------------------------------------------------------------------------
@@ -14805,7 +14805,7 @@ sub_F0B1A9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B228:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0B228  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0B228  link XIZ,0xfff2
 	push	xix	; F0B22C  push XIX
 	lda	xix, (xiz-14)	; F0B22D  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0B230  lda XBC,XIZ+0xfe
@@ -14906,7 +14906,7 @@ sub_F0B2B2:
 ; --------------------------------------------------------------------------
 sub_F0B2DE:
 	pop	xix	; F0B2DE  pop XIX
-	.byte 0xEE, 0x0D	; F0B2DF  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B2DF  unlk XIZ
 	ret	; F0B2E1  ret
 
 ; --------------------------------------------------------------------------
@@ -14921,7 +14921,7 @@ sub_F0B2DE:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B2E2:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0B2E2  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0B2E2  link XIZ,0xfff2
 	push	xix	; F0B2E6  push XIX
 	lda	xix, (xiz-14)	; F0B2E7  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0B2EA  lda XBC,XIZ+0xfe
@@ -15010,7 +15010,7 @@ sub_F0B36C:
 	inc	8, xsp	; F0B394  inc 0,XSP
 	inc	6, xsp	; F0B396  inc 6,XSP
 	pop	xix	; F0B398  pop XIX
-	.byte 0xEE, 0x0D	; F0B399  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B399  unlk XIZ
 	ret	; F0B39B  ret
 
 ; --------------------------------------------------------------------------
@@ -15025,7 +15025,7 @@ sub_F0B36C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B39C:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F0B39C  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F0B39C  link XIZ,0xfffe
 	pushw	hl	; F0B3A0  push HL
 	push	xix	; F0B3A1  push XIX
 	lda	xix, (xiz-1)	; F0B3A2  lda XIX,XIZ+0xff
@@ -15096,7 +15096,7 @@ sub_F0B39C:
 	popw	bc	; F0B45C  pop BC
 	pop	xix	; F0B45D  pop XIX
 	popw	hl	; F0B45E  pop HL
-	.byte 0xEE, 0x0D	; F0B45F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B45F  unlk XIZ
 	ret	; F0B461  ret
 
 ; --------------------------------------------------------------------------
@@ -15111,7 +15111,7 @@ sub_F0B39C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B462:
-	.byte 0xEE, 0x0C, 0xFF, 0xFF	; F0B462  link XIZ,0xffff   [llvm-mc cannot encode this]
+	link XIZ,0xffff	; F0B462  link XIZ,0xffff
 	pushw	hl	; F0B466  push HL
 	push	xix	; F0B467  push XIX
 	lda	xix, (xiz-1)	; F0B468  lda XIX,XIZ+0xff
@@ -15177,7 +15177,7 @@ sub_F0B462:
 	popw	bc	; F0B515  pop BC
 	pop	xix	; F0B516  pop XIX
 	popw	hl	; F0B517  pop HL
-	.byte 0xEE, 0x0D	; F0B518  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B518  unlk XIZ
 	ret	; F0B51A  ret
 
 ; --------------------------------------------------------------------------
@@ -15192,14 +15192,14 @@ sub_F0B462:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B51B:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0B51B  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0B51B  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B51F  cp (XIZ+0x08),0x00
 	jr	nz, 11	; F0B523  jr NZ,0xf0b530
 	pushw	0	; F0B525  push 0x0000
 	pushw	128	; F0B528  push 0x0080
 	call	16605323	; F0B52B  call 0xfd608b
 	pop	xiy	; F0B52F  pop XIY
-	.byte 0xEE, 0x0D	; F0B530  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B530  unlk XIZ
 	ret	; F0B532  ret
 
 ; --------------------------------------------------------------------------
@@ -15215,7 +15215,7 @@ sub_F0B51B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B533:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0B533  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0B533  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B537  cp (XIZ+0x08),0x00
 	jr	z, 56	; F0B53B  jr Z,0xf0b575
 	call	16623873	; F0B53D  call 0xfda901
@@ -15236,7 +15236,7 @@ sub_F0B533:
 	pushw	158	; F0B56C  push 0x009e
 	call	16605323	; F0B56F  call 0xfd608b
 	inc	6, xsp	; F0B573  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0B575  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B575  unlk XIZ
 	ret	; F0B577  ret
 
 ; --------------------------------------------------------------------------
@@ -15251,7 +15251,7 @@ sub_F0B533:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B578:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F0B578  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F0B578  link XIZ,0xfff8
 	pushw	hl	; F0B57C  push HL
 	push	xix	; F0B57D  push XIX
 	lda	xix, (xiz-8)	; F0B57E  lda XIX,XIZ+0xf8
@@ -15321,7 +15321,7 @@ sub_F0B578:
 	pop	xiy	; F0B629  pop XIY
 	pop	xix	; F0B62A  pop XIX
 	popw	hl	; F0B62B  pop HL
-	.byte 0xEE, 0x0D	; F0B62C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B62C  unlk XIZ
 	ret	; F0B62E  ret
 
 ; --------------------------------------------------------------------------
@@ -15336,7 +15336,7 @@ sub_F0B578:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B62F:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F0B62F  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F0B62F  link XIZ,0xfff8
 	pushw	hl	; F0B633  push HL
 	push	xix	; F0B634  push XIX
 	lda	xix, (xiz-8)	; F0B635  lda XIX,XIZ+0xf8
@@ -15401,7 +15401,7 @@ sub_F0B62F:
 	pop	xiy	; F0B6D1  pop XIY
 	pop	xix	; F0B6D2  pop XIX
 	popw	hl	; F0B6D3  pop HL
-	.byte 0xEE, 0x0D	; F0B6D4  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B6D4  unlk XIZ
 	ret	; F0B6D6  ret
 
 ; --------------------------------------------------------------------------
@@ -15416,14 +15416,14 @@ sub_F0B62F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B6D7:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0B6D7  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0B6D7  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B6DB  cp (XIZ+0x08),0x00
 	jr	nz, 11	; F0B6DF  jr NZ,0xf0b6ec
 	pushw	0	; F0B6E1  push 0x0000
 	pushw	159	; F0B6E4  push 0x009f
 	call	16605323	; F0B6E7  call 0xfd608b
 	pop	xiy	; F0B6EB  pop XIY
-	.byte 0xEE, 0x0D	; F0B6EC  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B6EC  unlk XIZ
 	ret	; F0B6EE  ret
 
 ; --------------------------------------------------------------------------
@@ -15438,7 +15438,7 @@ sub_F0B6D7:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B6EF:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0B6EF  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0B6EF  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B6F3  cp (XIZ+0x08),0x00
 	jr	nz, 19	; F0B6F7  jr NZ,0xf0b70c
 	pushw	0	; F0B6F9  push 0x0000
@@ -15447,7 +15447,7 @@ sub_F0B6EF:
 	pushw	128	; F0B703  push 0x0080
 	call	16605323	; F0B706  call 0xfd608b
 	inc	6, xsp	; F0B70A  inc 6,XSP
-	.byte 0xEE, 0x0D	; F0B70C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B70C  unlk XIZ
 	ret	; F0B70E  ret
 
 ; --------------------------------------------------------------------------
@@ -15552,7 +15552,7 @@ sub_F0B723:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B727:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0B727  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0B727  link XIZ,0x0000
 	pushw	hl	; F0B72B  push HL
 	ld	c, (xiz+8)	; F0B72C  ld C,(XIZ+0x08)
 	res	7, c	; F0B72F  res 0x07,C
@@ -15565,7 +15565,7 @@ sub_F0B727:
 	calr	1642	; F0B73F  calr 0xf0bdac
 	popw	bc	; F0B742  pop BC
 	popw	hl	; F0B743  pop HL
-	.byte 0xEE, 0x0D	; F0B744  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B744  unlk XIZ
 	ret	; F0B746  ret
 
 ; --------------------------------------------------------------------------
@@ -15596,7 +15596,7 @@ sub_F0B747:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B74B:
-	.byte 0xEE, 0x0C, 0xE8, 0xFF	; F0B74B  link XIZ,0xffe8   [llvm-mc cannot encode this]
+	link XIZ,0xffe8	; F0B74B  link XIZ,0xffe8
 	pushw	hl	; F0B74F  push HL
 	push	xix	; F0B750  push XIX
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B751  cp (XIZ+0x08),0x00
@@ -15675,7 +15675,7 @@ sub_F0B74B:
 	pop	xiy	; F0B807  pop XIY
 	pop	xix	; F0B808  pop XIX
 	popw	hl	; F0B809  pop HL
-	.byte 0xEE, 0x0D	; F0B80A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B80A  unlk XIZ
 	ret	; F0B80C  ret
 
 ; --------------------------------------------------------------------------
@@ -15690,11 +15690,11 @@ sub_F0B74B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B80D:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0B80D  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0B80D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B811  cp (XIZ+0x08),0x00
 	jr	nz, 3	; F0B815  jr NZ,0xf0b81a
 	calr	1770	; F0B817  calr 0xf0bf04
-	.byte 0xEE, 0x0D	; F0B81A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B81A  unlk XIZ
 	ret	; F0B81C  ret
 
 ; --------------------------------------------------------------------------
@@ -15710,7 +15710,7 @@ sub_F0B80D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B81D:
-	.byte 0xEE, 0x0C, 0xE4, 0xFF	; F0B81D  link XIZ,0xffe4   [llvm-mc cannot encode this]
+	link XIZ,0xffe4	; F0B81D  link XIZ,0xffe4
 	pushw	hl	; F0B821  push HL
 	push	xix	; F0B822  push XIX
 	lda	xix, (xiz-24)	; F0B823  lda XIX,XIZ+0xe8
@@ -15814,7 +15814,7 @@ sub_F0B81D:
 	pop	xiy	; F0B916  pop XIY
 	pop	xix	; F0B917  pop XIX
 	popw	hl	; F0B918  pop HL
-	.byte 0xEE, 0x0D	; F0B919  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B919  unlk XIZ
 	ret	; F0B91B  ret
 
 ; --------------------------------------------------------------------------
@@ -15829,7 +15829,7 @@ sub_F0B81D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B91C:		; <- T_F42F80
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0B91C  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0B91C  link XIZ,0xfffc
 	pushw	hl	; F0B920  push HL
 	push	xix	; F0B921  push XIX
 	lda_24	xix, (16608357)	; F0B922  lda XIX,0xfd6c65
@@ -15883,7 +15883,7 @@ sub_F0B91C:		; <- T_F42F80
 	add	xsp, 40	; F0B9A8  add XSP,0x00000028
 	pop	xix	; F0B9AE  pop XIX
 	popw	hl	; F0B9AF  pop HL
-	.byte 0xEE, 0x0D	; F0B9B0  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0B9B0  unlk XIZ
 	ret	; F0B9B2  ret
 
 ; --------------------------------------------------------------------------
@@ -15898,7 +15898,7 @@ sub_F0B91C:		; <- T_F42F80
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0B9B3:		; <- T_F42F84
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0B9B3  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0B9B3  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0B9B7  lda XBC,XIZ+0xfe
 	push	xbc	; F0B9BA  push XBC
 	pushw	0	; F0B9BB  push 0x0000
@@ -15936,7 +15936,7 @@ sub_F0B9B3:		; <- T_F42F84
 	pushw	159	; F0BA10  push 0x009f
 	call	15998676	; F0BA13  call 0xf41ed4
 	add	xsp, 28	; F0BA17  add XSP,0x0000001c
-	.byte 0xEE, 0x0D	; F0BA1D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0BA1D  unlk XIZ
 	ret	; F0BA1F  ret
 
 ; --------------------------------------------------------------------------
@@ -15951,7 +15951,7 @@ sub_F0B9B3:		; <- T_F42F84
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0BA20:		; <- T_F42F88
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F0BA20  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F0BA20  link XIZ,0xfff8
 	pushw	hl	; F0BA24  push HL
 	lda	xbc, (xiz-2)	; F0BA25  lda XBC,XIZ+0xfe
 	push	xbc	; F0BA28  push XBC
@@ -16002,7 +16002,7 @@ sub_F0BA20:		; <- T_F42F88
 	call	15998676	; F0BA9A  call 0xf41ed4
 	add	xsp, 28	; F0BA9E  add XSP,0x0000001c
 	popw	hl	; F0BAA4  pop HL
-	.byte 0xEE, 0x0D	; F0BAA5  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0BAA5  unlk XIZ
 	ret	; F0BAA7  ret
 
 ; --------------------------------------------------------------------------
@@ -16017,7 +16017,7 @@ sub_F0BA20:		; <- T_F42F88
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0BAA8:		; <- T_F42F8C
-	.byte 0xEE, 0x0C, 0xDE, 0xFF	; F0BAA8  link XIZ,0xffde   [llvm-mc cannot encode this]
+	link XIZ,0xffde	; F0BAA8  link XIZ,0xffde
 	pushw	hl	; F0BAAC  push HL
 	pushw	de	; F0BAAD  push DE
 	push	xix	; F0BAAE  push XIX
@@ -16126,7 +16126,7 @@ sub_F0BAA8:		; <- T_F42F8C
 	pop	xix	; F0BBAE  pop XIX
 	popw	de	; F0BBAF  pop DE
 	popw	hl	; F0BBB0  pop HL
-	.byte 0xEE, 0x0D	; F0BBB1  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0BBB1  unlk XIZ
 	ret	; F0BBB3  ret
 
 ; --------------------------------------------------------------------------
@@ -16141,7 +16141,7 @@ sub_F0BAA8:		; <- T_F42F8C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0BBB4:		; <- T_F42F90
-	.byte 0xEE, 0x0C, 0xE4, 0xFF	; F0BBB4  link XIZ,0xffe4   [llvm-mc cannot encode this]
+	link XIZ,0xffe4	; F0BBB4  link XIZ,0xffe4
 	pushw	hl	; F0BBB8  push HL
 	pushw	de	; F0BBB9  push DE
 	push	xix	; F0BBBA  push XIX
@@ -16234,7 +16234,7 @@ sub_F0BBB4:		; <- T_F42F90
 	pop	xix	; F0BC92  pop XIX
 	popw	de	; F0BC93  pop DE
 	popw	hl	; F0BC94  pop HL
-	.byte 0xEE, 0x0D	; F0BC95  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0BC95  unlk XIZ
 	ret	; F0BC97  ret
 
 ; --------------------------------------------------------------------------
@@ -16249,7 +16249,7 @@ sub_F0BBB4:		; <- T_F42F90
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0BC98:		; <- T_F42F94
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0BC98  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0BC98  link XIZ,0xfffa
 	pushw	hl	; F0BC9C  push HL
 	push	xix	; F0BC9D  push XIX
 	lda	xix, (xiz-6)	; F0BC9E  lda XIX,XIZ+0xfa
@@ -16310,7 +16310,7 @@ sub_F0BC98:		; <- T_F42F94
 	add	xsp, 22	; F0BD26  add XSP,0x00000016
 	pop	xix	; F0BD2C  pop XIX
 	popw	hl	; F0BD2D  pop HL
-	.byte 0xEE, 0x0D	; F0BD2E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0BD2E  unlk XIZ
 	ret	; F0BD30  ret
 
 ; --------------------------------------------------------------------------
@@ -16325,7 +16325,7 @@ sub_F0BC98:		; <- T_F42F94
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0BD31:		; <- T_F42F98
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0BD31  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0BD31  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0BD35  lda XBC,XIZ+0xfe
 	push	xbc	; F0BD38  push XBC
 	pushw	1	; F0BD39  push 0x0001
@@ -16367,7 +16367,7 @@ sub_F0BD31:		; <- T_F42F98
 	pushw	0	; F0BD9C  push 0x0000
 	call	16624731	; F0BD9F  call 0xfdac5b
 	add	xsp, 32	; F0BDA3  add XSP,0x00000020
-	.byte 0xEE, 0x0D	; F0BDA9  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0BDA9  unlk XIZ
 	ret	; F0BDAB  ret
 
 ; --------------------------------------------------------------------------
@@ -16382,7 +16382,7 @@ sub_F0BD31:		; <- T_F42F98
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0BDAC:		; <- T_F42F9C
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0BDAC  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0BDAC  link XIZ,0xfffa
 	pushw	hl	; F0BDB0  push HL
 	ldb	h, 0	; F0BDB1  ld H,0x00
 	ld	bc, (xiz+8)	; F0BDB3  ld BC,(XIZ+0x08)
@@ -16437,7 +16437,7 @@ sub_F0BDAC:		; <- T_F42F9C
 	call	15998676	; F0BE36  call 0xf41ed4
 	add	xsp, 28	; F0BE3A  add XSP,0x0000001c
 	popw	hl	; F0BE40  pop HL
-	.byte 0xEE, 0x0D	; F0BE41  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0BE41  unlk XIZ
 	ret	; F0BE43  ret
 
 ; --------------------------------------------------------------------------
@@ -16452,7 +16452,7 @@ sub_F0BDAC:		; <- T_F42F9C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0BE44:		; <- T_F42FA0
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0BE44  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0BE44  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0BE48  lda XBC,XIZ+0xfe
 	push	xbc	; F0BE4B  push XBC
 	pushw	1	; F0BE4C  push 0x0001
@@ -16494,7 +16494,7 @@ sub_F0BE44:		; <- T_F42FA0
 	pushw	0	; F0BEAF  push 0x0000
 	call	16624731	; F0BEB2  call 0xfdac5b
 	add	xsp, 32	; F0BEB6  add XSP,0x00000020
-	.byte 0xEE, 0x0D	; F0BEBC  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0BEBC  unlk XIZ
 	ret	; F0BEBE  ret
 
 ; --------------------------------------------------------------------------
@@ -16549,7 +16549,7 @@ sub_F0BEBF:		; <- T_F42FA4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0BF04:		; <- T_F42FA8
-	.byte 0xEE, 0x0C, 0xD4, 0xFF	; F0BF04  link XIZ,0xffd4   [llvm-mc cannot encode this]
+	link XIZ,0xffd4	; F0BF04  link XIZ,0xffd4
 	pushw	hl	; F0BF08  push HL
 	pushw	de	; F0BF09  push DE
 	push	xix	; F0BF0A  push XIX
@@ -16726,7 +16726,7 @@ sub_F0BF04:		; <- T_F42FA8
 	pop	xix	; F0C0B5  pop XIX
 	popw	de	; F0C0B6  pop DE
 	popw	hl	; F0C0B7  pop HL
-	.byte 0xEE, 0x0D	; F0C0B8  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C0B8  unlk XIZ
 	ret	; F0C0BA  ret
 
 ; --------------------------------------------------------------------------
@@ -16742,7 +16742,7 @@ sub_F0BF04:		; <- T_F42FA8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0C0BB:
-	.byte 0xEE, 0x0C, 0xF0, 0xFF	; F0C0BB  link XIZ,0xfff0   [llvm-mc cannot encode this]
+	link XIZ,0xfff0	; F0C0BB  link XIZ,0xfff0
 	pushw	hl	; F0C0BF  push HL
 	pushw	de	; F0C0C0  push DE
 	push	xix	; F0C0C1  push XIX
@@ -16924,7 +16924,7 @@ sub_F0C0BB:
 	pop	xix	; F0C28B  pop XIX
 	popw	de	; F0C28C  pop DE
 	popw	hl	; F0C28D  pop HL
-	.byte 0xEE, 0x0D	; F0C28E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C28E  unlk XIZ
 	ret	; F0C290  ret
 
 ; --------------------------------------------------------------------------
@@ -16938,7 +16938,7 @@ sub_F0C0BB:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0C291:
-	.byte 0xEE, 0x0C, 0xF6, 0xFF	; F0C291  link XIZ,0xfff6   [llvm-mc cannot encode this]
+	link XIZ,0xfff6	; F0C291  link XIZ,0xfff6
 	pushw	hl	; F0C295  push HL
 	pushw	de	; F0C296  push DE
 	push	xix	; F0C297  push XIX
@@ -17017,7 +17017,7 @@ sub_F0C291:
 	pop	xix	; F0C357  pop XIX
 	popw	de	; F0C358  pop DE
 	popw	hl	; F0C359  pop HL
-	.byte 0xEE, 0x0D	; F0C35A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C35A  unlk XIZ
 	ret	; F0C35C  ret
 
 ; --------------------------------------------------------------------------
@@ -17032,7 +17032,7 @@ sub_F0C291:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0C35D:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0C35D  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0C35D  link XIZ,0xfffa
 	ld	c, (xiz+8)	; F0C361  ld C,(XIZ+0x08)
 	res	7, c	; F0C364  res 0x07,C
 	ld	(xiz-1), c	; F0C367  ld (XIZ+0xff),C
@@ -17089,7 +17089,7 @@ sub_F0C35D:
 	pushw	2	; F0C3EE  push 0x0002
 	call	16612353	; F0C3F1  call 0xfd7c01
 	popw	bc	; F0C3F5  pop BC
-	.byte 0xEE, 0x0D	; F0C3F6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C3F6  unlk XIZ
 	ret	; F0C3F8  ret
 
 ; --------------------------------------------------------------------------
@@ -17104,7 +17104,7 @@ sub_F0C35D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0C3F9:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0C3F9  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0C3F9  link XIZ,0xfffa
 	pushw	hl	; F0C3FD  push HL
 	lda	xbc, (xiz-2)	; F0C3FE  lda XBC,XIZ+0xfe
 	push	xbc	; F0C401  push XBC
@@ -17154,7 +17154,7 @@ sub_F0C3F9:
 	call	15998676	; F0C471  call 0xf41ed4
 	inc	8, xsp	; F0C475  inc 0,XSP
 	popw	hl	; F0C477  pop HL
-	.byte 0xEE, 0x0D	; F0C478  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C478  unlk XIZ
 	ret	; F0C47A  ret
 
 ; --------------------------------------------------------------------------
@@ -17169,7 +17169,7 @@ sub_F0C3F9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0C47B:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0C47B  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0C47B  link XIZ,0xfffa
 	pushw	hl	; F0C47F  push HL
 	pushw	de	; F0C480  push DE
 	push	xix	; F0C481  push XIX
@@ -17240,7 +17240,7 @@ sub_F0C47B:
 	pop	xix	; F0C522  pop XIX
 	popw	de	; F0C523  pop DE
 	popw	hl	; F0C524  pop HL
-	.byte 0xEE, 0x0D	; F0C525  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C525  unlk XIZ
 	ret	; F0C527  ret
 
 ; --------------------------------------------------------------------------
@@ -17255,7 +17255,7 @@ sub_F0C47B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0C528:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0C528  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0C528  link XIZ,0xfffc
 	pushw	hl	; F0C52C  push HL
 	push	xix	; F0C52D  push XIX
 	lda_24	xix, (16608357)	; F0C52E  lda XIX,0xfd6c65
@@ -17343,7 +17343,7 @@ sub_F0C528:
 	pop	xiy	; F0C610  pop XIY
 	pop	xix	; F0C611  pop XIX
 	popw	hl	; F0C612  pop HL
-	.byte 0xEE, 0x0D	; F0C613  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C613  unlk XIZ
 	ret	; F0C615  ret
 
 ; --------------------------------------------------------------------------
@@ -17358,7 +17358,7 @@ sub_F0C528:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0C616:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F0C616  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F0C616  link XIZ,0xfff2
 	pushw	hl	; F0C61A  push HL
 	push	xix	; F0C61B  push XIX
 	lda_24	xix, (16608379)	; F0C61C  lda XIX,0xfd6c7b
@@ -17449,7 +17449,7 @@ sub_F0C616:
 	add	xsp, 22	; F0C6FF  add XSP,0x00000016
 	pop	xix	; F0C705  pop XIX
 	popw	hl	; F0C706  pop HL
-	.byte 0xEE, 0x0D	; F0C707  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C707  unlk XIZ
 	ret	; F0C709  ret
 
 ; --------------------------------------------------------------------------
@@ -17464,7 +17464,7 @@ sub_F0C616:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0C70A:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F0C70A  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F0C70A  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0C70E  cp (XIZ+0x08),0x00
 	jr	nz, 31	; F0C712  jr NZ,0xf0c733
 	lda	xbc, (xiz-2)	; F0C714  lda XBC,XIZ+0xfe
@@ -17479,7 +17479,7 @@ sub_F0C70A:
 	pushw	203	; F0C72B  push 0x00cb
 	call	16605323	; F0C72E  call 0xfd608b
 	pop	xiy	; F0C732  pop XIY
-	.byte 0xEE, 0x0D	; F0C733  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0C733  unlk XIZ
 
 ; 0xF0C735-0xF0C7FF -- 203 bytes of 0x0E `ret` padding, which is what bounds the
 ; module below on this side
@@ -19039,7 +19039,7 @@ DL_GeneralMidiMidiYesNo:
 ; Unknown:  what bit 1 is called elsewhere; the other six bits.
 ; ---------------------------------------------------------------------
 Blink_SetEnable:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0E800  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0E800  link XIZ,0x0000
 	push	xix	; F0E804  push XIX
 	lda_d16	xix, (8309)	; F0E805  lda XIX,0x2075
 	ld	c, (xix)	; F0E809  ld C,(XIX)
@@ -19054,7 +19054,7 @@ Blink_SetEnable:
 	m_or_mi8 MBI+r4, 0, 0x02	; F0E821  or (XIX),0x02
 	calr	4	; F0E824  calr 0xf0e82b
 	pop	xix	; F0E827  pop XIX
-	.byte 0xEE, 0x0D	; F0E828  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0E828  unlk XIZ
 	ret	; F0E82A  ret
 
 ; ---------------------------------------------------------------------
@@ -19251,7 +19251,7 @@ Blink_Deferred_Op07_Blank:
 ;          record as a one-entry table or as a plain string is not established.
 ; ---------------------------------------------------------------------
 Blink_DrawField_Op02:
-	.byte 0xEE, 0x0C, 0xF1, 0xFF	; F0E926  link XIZ,0xfff1   [llvm-mc cannot encode this]
+	link XIZ,0xfff1	; F0E926  link XIZ,0xfff1
 	pushw	hl	; F0E92A  push HL
 	push	xix	; F0E92B  push XIX
 	lda	xix, (xiz-15)	; F0E92C  lda XIX,XIZ+0xf1
@@ -19259,7 +19259,7 @@ Blink_DrawField_Op02:
 	ldw	bc, 15	; F0E930  ld BC,0x000f
 	lda_24	xiy, (16220160)	; F0E933  lda XIY,0xf78000
 	lda	xix, (xiz-15)	; F0E938  lda XIX,XIZ+0xf1
-	.byte 0x85, 0x11	; F0E93B  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F0E93B  ldir
 	pop	xix	; F0E93D  pop XIX
 	ldb_d8	h, (9536)	; F0E93E  ld H,(0x2540)
 	.byte 0xC1, 0xC8, 0x28, 0x19, 0x40, 0x25	; F0E942  ld (0x2540),(0x28c8)   [llvm-mc cannot encode this]
@@ -19278,7 +19278,7 @@ Blink_DrawField_Op02:
 	pop	xbc	; F0E972  pop XBC
 	pop	xix	; F0E973  pop XIX
 	popw	hl	; F0E974  pop HL
-	.byte 0xEE, 0x0D	; F0E975  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0E975  unlk XIZ
 	ret	; F0E977  ret
 
 ; ---------------------------------------------------------------------
@@ -19299,7 +19299,7 @@ Blink_DrawField_Op02:
 ; Unknown:  as above; plus why (0x28CC) and not (0x28CA) feeds +0x0D here.
 ; ---------------------------------------------------------------------
 Blink_DrawField_Op07:
-	.byte 0xEE, 0x0C, 0xEF, 0xFF	; F0E978  link XIZ,0xffef   [llvm-mc cannot encode this]
+	link XIZ,0xffef	; F0E978  link XIZ,0xffef
 	pushw	hl	; F0E97C  push HL
 	push	xix	; F0E97D  push XIX
 	lda	xix, (xiz-17)	; F0E97E  lda XIX,XIZ+0xef
@@ -19307,7 +19307,7 @@ Blink_DrawField_Op07:
 	ldw	bc, 17	; F0E982  ld BC,0x0011
 	lda_24	xiy, (16220175)	; F0E985  lda XIY,0xf7800f
 	lda	xix, (xiz-17)	; F0E98A  lda XIX,XIZ+0xef
-	.byte 0x85, 0x11	; F0E98D  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F0E98D  ldir
 	pop	xix	; F0E98F  pop XIX
 	ldb_d8	h, (9536)	; F0E990  ld H,(0x2540)
 	.byte 0xC1, 0xC8, 0x28, 0x19, 0x40, 0x25	; F0E994  ld (0x2540),(0x28c8)   [llvm-mc cannot encode this]
@@ -19327,7 +19327,7 @@ Blink_DrawField_Op07:
 	pop	xbc	; F0E9C9  pop XBC
 	pop	xix	; F0E9CA  pop XIX
 	popw	hl	; F0E9CB  pop HL
-	.byte 0xEE, 0x0D	; F0E9CC  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0E9CC  unlk XIZ
 	ret	; F0E9CE  ret
 
 ; ---------------------------------------------------------------------
@@ -19355,7 +19355,7 @@ Blink_DrawField_Op07:
 ;          below, from the four distinct arms the table names.
 ; ---------------------------------------------------------------------
 Blink_Command:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F0E9CF  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F0E9CF  link XIZ,0xfffa
 	push	xix	; F0E9D3  push XIX
 	lda_d16	xix, (10450)	; F0E9D4  lda XIX,0x28d2
 	ld	xbc, 6350848	; F0E9D8  ld XBC,0x0060e800
@@ -19497,7 +19497,7 @@ Blink_CmdArm_SetState_DashTest:
 ; ---------------------------------------------------------------------
 Blink_CmdArm_Ret:
 	pop	xix	; F0EA9B  pop XIX
-	.byte 0xEE, 0x0D	; F0EA9C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0EA9C  unlk XIZ
 	ret	; F0EA9E  ret
 
 ; ==============================================================================
@@ -19638,7 +19638,7 @@ Blink_CmdArm_Ret:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0EA9F:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F0EA9F  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F0EA9F  link XIZ,0xfff8
 	pushw	hl	; F0EAA3  push HL
 	pushw	de	; F0EAA4  push DE
 	push	xix	; F0EAA5  push XIX
@@ -19809,7 +19809,7 @@ sub_F0EA9F:
 	pop	xix	; F0EC44  pop XIX
 	popw	de	; F0EC45  pop DE
 	popw	hl	; F0EC46  pop HL
-	.byte 0xEE, 0x0D	; F0EC47  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0EC47  unlk XIZ
 	ret	; F0EC49  ret
 
 ; --------------------------------------------------------------------------
@@ -19829,7 +19829,7 @@ sub_F0EA9F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0EC4A:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F0EC4A  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F0EC4A  link XIZ,0xfff8
 	pushw	hl	; F0EC4E  push HL
 	pushw	de	; F0EC4F  push DE
 	push	xix	; F0EC50  push XIX
@@ -19925,7 +19925,7 @@ sub_F0EC4A:
 	pop	xix	; F0ED4A  pop XIX
 	popw	de	; F0ED4B  pop DE
 	popw	hl	; F0ED4C  pop HL
-	.byte 0xEE, 0x0D	; F0ED4D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0ED4D  unlk XIZ
 	ret	; F0ED4F  ret
 
 ; --------------------------------------------------------------------------
@@ -20174,11 +20174,11 @@ Data_F0F017:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F018:		; <- T_F42F40
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0F018  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0F018  link XIZ,0x0000
 	.byte 0x8E, 0x08, 0x19, 0x90, 0x27	; F0F01C  ld (0x2790),(XIZ+0x08)   [llvm-mc cannot encode this]
 	calr	35	; F0F021  calr 0xf0f047
 	m_set 7, MD16, 0x2791	; F0F024  set 7,(0x2791)
-	.byte 0xEE, 0x0D	; F0F028  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0F028  unlk XIZ
 	ret	; F0F02A  ret
 
 ; --------------------------------------------------------------------------
@@ -20195,12 +20195,12 @@ sub_F0F018:		; <- T_F42F40
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F02B:		; <- T_F42F44
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0F02B  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0F02B  link XIZ,0x0000
 	.byte 0x8E, 0x08, 0x19, 0x90, 0x27	; F0F02F  ld (0x2790),(XIZ+0x08)   [llvm-mc cannot encode this]
 	calr	16	; F0F034  calr 0xf0f047
 	m_set 7, MD16, 0x2791	; F0F037  set 7,(0x2791)
 	m_set 4, MD16, 0x2071	; F0F03B  set 4,(0x2071)
-	.byte 0xEE, 0x0D	; F0F03F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0F03F  unlk XIZ
 	ret	; F0F041  ret
 
 ; --------------------------------------------------------------------------
@@ -20516,7 +20516,7 @@ sub_F0F174:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F17C:		; <- T_F42F50
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F0F17C  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F0F17C  link XIZ,0x0000
 	push	xix	; F0F180  push XIX
 	lda_d16	xix, (10129)	; F0F181  lda XIX,0x2791
 	.byte 0x9E, 0x0A, 0x04	; F0F185  pushw (XIZ+0x0a)   [llvm-mc cannot encode this]
@@ -20538,7 +20538,7 @@ sub_F0F17C:		; <- T_F42F50
 	call	15803482	; F0F1B3  call 0xf1245a
 	m_and_mi8 MBI+r4, 0, 0xfe	; F0F1B7  and (XIX),0xfe
 	pop	xix	; F0F1BA  pop XIX
-	.byte 0xEE, 0x0D	; F0F1BB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0F1BB  unlk XIZ
 	ret	; F0F1BD  ret
 
 ; --------------------------------------------------------------------------
@@ -23151,7 +23151,7 @@ sub_F0FD5F:
 	add	xsp, 44	; F0FECE  add XSP,0x0000002c
 	pop	xix	; F0FED4  pop XIX
 	ret	; F0FED5  ret
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F0FED6  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F0FED6  link XIZ,0xfffc
 	push	xix	; F0FEDA  push XIX
 	lda_d16	xix, (9792)	; F0FEDB  lda XIX,0x2640
 	m_res 4, MD16, 0x2799	; F0FEDF  res 4,(0x2799)
@@ -23186,7 +23186,7 @@ sub_F0FD5F:
 	inc	8, xsp	; F0FF37  inc 0,XSP
 	inc	8, xsp	; F0FF39  inc 0,XSP
 	pop	xix	; F0FF3B  pop XIX
-	.byte 0xEE, 0x0D	; F0FF3C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F0FF3C  unlk XIZ
 	ret	; F0FF3E  ret
 
 ; --------------------------------------------------------------------------
@@ -23203,7 +23203,7 @@ sub_F0FD5F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0FF3F:
-	.byte 0xEE, 0x0C, 0xBA, 0xFF	; F0FF3F  link XIZ,0xffba   [llvm-mc cannot encode this]
+	link XIZ,0xffba	; F0FF3F  link XIZ,0xffba
 	pushw	hl	; F0FF43  push HL
 	pushw	de	; F0FF44  push DE
 	push	xix	; F0FF45  push XIX
@@ -23212,7 +23212,7 @@ sub_F0FF3F:
 	ldw	bc, 35	; F0FF4A  ld BC,0x0023
 	lda_24	xiy, (15803558)	; F0FF4D  lda XIY,0xf124a6
 	lda	xix, (xiz-70)	; F0FF52  lda XIX,XIZ+0xba
-	.byte 0x95, 0x11	; F0FF55  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F0FF55  ldirw
 	pop	xix	; F0FF57  pop XIX
 	ldb_d8	a, (9792)	; F0FF58  ld A,(0x2640)
 	mul	a, 6	; F0FF5C  mul A,0x06
@@ -23320,7 +23320,7 @@ sub_F0FF3F:
 	pop	xix	; F10088  pop XIX
 	popw	de	; F10089  pop DE
 	popw	hl	; F1008A  pop HL
-	.byte 0xEE, 0x0D	; F1008B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F1008B  unlk XIZ
 	ret	; F1008D  ret
 
 ; --------------------------------------------------------------------------
@@ -23589,7 +23589,7 @@ sub_F10222:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F10252:
-	.byte 0xEE, 0x0C, 0xF6, 0xFF	; F10252  link XIZ,0xfff6   [llvm-mc cannot encode this]
+	link XIZ,0xfff6	; F10252  link XIZ,0xfff6
 	pushw	hl	; F10256  push HL
 	pushw	de	; F10257  push DE
 	push	xix	; F10258  push XIX
@@ -23727,7 +23727,7 @@ sub_F10252:
 	pop	xix	; F103A5  pop XIX
 	popw	de	; F103A6  pop DE
 	popw	hl	; F103A7  pop HL
-	.byte 0xEE, 0x0D	; F103A8  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F103A8  unlk XIZ
 	ret	; F103AA  ret
 
 ; --------------------------------------------------------------------------
@@ -23744,7 +23744,7 @@ sub_F10252:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F103AB:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F103AB  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F103AB  link XIZ,0xfffa
 	pushw	hl	; F103AF  push HL
 	pushw	de	; F103B0  push DE
 	push	xix	; F103B1  push XIX
@@ -23828,7 +23828,7 @@ sub_F103AB:
 	pop	xix	; F10470  pop XIX
 	popw	de	; F10471  pop DE
 	popw	hl	; F10472  pop HL
-	.byte 0xEE, 0x0D	; F10473  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10473  unlk XIZ
 	ret	; F10475  ret
 
 ; --------------------------------------------------------------------------
@@ -23992,7 +23992,7 @@ sub_F10476:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F105B8:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F105B8  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F105B8  link XIZ,0xfffc
 	pushw	hl	; F105BC  push HL
 	push	xix	; F105BD  push XIX
 	lda_d16	xix, (10132)	; F105BE  lda XIX,0x2794
@@ -24075,7 +24075,7 @@ sub_F105B8:
 	m_set 4, MD16, 0x2095	; F10691  set 4,(0x2095)
 	pop	xix	; F10695  pop XIX
 	popw	hl	; F10696  pop HL
-	.byte 0xEE, 0x0D	; F10697  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10697  unlk XIZ
 	ret	; F10699  ret
 
 ; --------------------------------------------------------------------------
@@ -24092,7 +24092,7 @@ sub_F105B8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1069A:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F1069A  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F1069A  link XIZ,0xfff8
 	pushw	hl	; F1069E  push HL
 	push	xix	; F1069F  push XIX
 	pushw	23	; F106A0  push 0x0017
@@ -24142,7 +24142,7 @@ sub_F1069A:
 	calr	64864	; F10713  calr 0xf10476
 	pop	xix	; F10716  pop XIX
 	popw	hl	; F10717  pop HL
-	.byte 0xEE, 0x0D	; F10718  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10718  unlk XIZ
 	ret	; F1071A  ret
 
 ; --------------------------------------------------------------------------
@@ -24161,7 +24161,7 @@ sub_F1069A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1071B:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F1071B  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F1071B  link XIZ,0xfff8
 	pushw	hl	; F1071F  push HL
 	pushw	de	; F10720  push DE
 	push	xix	; F10721  push XIX
@@ -24234,7 +24234,7 @@ sub_F1071B:
 	pop	xix	; F107CA  pop XIX
 	popw	de	; F107CB  pop DE
 	popw	hl	; F107CC  pop HL
-	.byte 0xEE, 0x0D	; F107CD  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F107CD  unlk XIZ
 	ret	; F107CF  ret
 
 ; --------------------------------------------------------------------------
@@ -24254,7 +24254,7 @@ sub_F1071B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F107D0:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F107D0  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F107D0  link XIZ,0xfff8
 	pushw	hl	; F107D4  push HL
 	pushw	de	; F107D5  push DE
 	push	xix	; F107D6  push XIX
@@ -24327,7 +24327,7 @@ sub_F107D0:
 	pop	xix	; F1087F  pop XIX
 	popw	de	; F10880  pop DE
 	popw	hl	; F10881  pop HL
-	.byte 0xEE, 0x0D	; F10882  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10882  unlk XIZ
 	ret	; F10884  ret
 
 ; --------------------------------------------------------------------------
@@ -24347,7 +24347,7 @@ sub_F107D0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F10885:
-	.byte 0xEE, 0x0C, 0xEE, 0xFF	; F10885  link XIZ,0xffee   [llvm-mc cannot encode this]
+	link XIZ,0xffee	; F10885  link XIZ,0xffee
 	pushw	hl	; F10889  push HL
 	pushw	de	; F1088A  push DE
 	pushw	ix	; F1088B  push IX
@@ -24446,7 +24446,7 @@ sub_F10885:
 	popw	ix	; F1097F  pop IX
 	popw	de	; F10980  pop DE
 	popw	hl	; F10981  pop HL
-	.byte 0xEE, 0x0D	; F10982  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10982  unlk XIZ
 	ret	; F10984  ret
 
 ; --------------------------------------------------------------------------
@@ -24466,7 +24466,7 @@ sub_F10885:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F10985:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F10985  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F10985  link XIZ,0xfff2
 	pushw	hl	; F10989  push HL
 	pushw	de	; F1098A  push DE
 	push	xix	; F1098B  push XIX
@@ -24572,7 +24572,7 @@ sub_F10985:
 	pop	xix	; F10A91  pop XIX
 	popw	de	; F10A92  pop DE
 	popw	hl	; F10A93  pop HL
-	.byte 0xEE, 0x0D	; F10A94  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10A94  unlk XIZ
 	ret	; F10A96  ret
 
 ; --------------------------------------------------------------------------
@@ -24592,7 +24592,7 @@ sub_F10985:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F10A97:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F10A97  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F10A97  link XIZ,0xfff2
 	pushw	hl	; F10A9B  push HL
 	pushw	de	; F10A9C  push DE
 	push	xix	; F10A9D  push XIX
@@ -24698,7 +24698,7 @@ sub_F10A97:
 	pop	xix	; F10BA3  pop XIX
 	popw	de	; F10BA4  pop DE
 	popw	hl	; F10BA5  pop HL
-	.byte 0xEE, 0x0D	; F10BA6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10BA6  unlk XIZ
 	ret	; F10BA8  ret
 
 ; --------------------------------------------------------------------------
@@ -24718,7 +24718,7 @@ sub_F10A97:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F10BA9:
-	.byte 0xEE, 0x0C, 0xF4, 0xFF	; F10BA9  link XIZ,0xfff4   [llvm-mc cannot encode this]
+	link XIZ,0xfff4	; F10BA9  link XIZ,0xfff4
 	pushw	hl	; F10BAD  push HL
 	pushw	de	; F10BAE  push DE
 	push	xix	; F10BAF  push XIX
@@ -24820,7 +24820,7 @@ sub_F10BA9:
 	pop	xix	; F10CA9  pop XIX
 	popw	de	; F10CAA  pop DE
 	popw	hl	; F10CAB  pop HL
-	.byte 0xEE, 0x0D	; F10CAC  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10CAC  unlk XIZ
 	ret	; F10CAE  ret
 
 ; --------------------------------------------------------------------------
@@ -24840,14 +24840,14 @@ sub_F10BA9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F10CAF:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F10CAF  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F10CAF  link XIZ,0x0000
 	push	0	; F10CB3  push 0x00
 	.byte 0x8E, 0x0A, 0x04	; F10CB5  push (XIZ+0x0a)   [llvm-mc cannot encode this]
 	push	0	; F10CB8  push 0x00
 	.byte 0x8E, 0x08, 0x04	; F10CBA  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	calr	64091	; F10CBD  calr 0xf1071b
 	pop	xbc	; F10CC0  pop XBC
-	.byte 0xEE, 0x0D	; F10CC1  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10CC1  unlk XIZ
 	ret	; F10CC3  ret
 
 ; --------------------------------------------------------------------------
@@ -24864,7 +24864,7 @@ sub_F10CAF:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F10CC4:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F10CC4  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F10CC4  link XIZ,0xfffc
 	pushw	hl	; F10CC8  push HL
 	push	xix	; F10CC9  push XIX
 	pushw	23	; F10CCA  push 0x0017
@@ -24922,7 +24922,7 @@ sub_F10CC4:
 	inc	8, xsp	; F10D5B  inc 0,XSP
 	pop	xix	; F10D5D  pop XIX
 	popw	hl	; F10D5E  pop HL
-	.byte 0xEE, 0x0D	; F10D5F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10D5F  unlk XIZ
 	ret	; F10D61  ret
 
 ; --------------------------------------------------------------------------
@@ -25082,7 +25082,7 @@ Data_F10E0F:
 	pop	xix	; F10FEB  pop XIX
 	popw	de	; F10FEC  pop DE
 	popw	hl	; F10FED  pop HL
-	.byte 0xEE, 0x0D	; F10FEE  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F10FEE  unlk XIZ
 	ret	; F10FF0  ret
 
 ; --------------------------------------------------------------------------
@@ -25099,7 +25099,7 @@ Data_F10E0F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F10FF1:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F10FF1  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F10FF1  link XIZ,0xfffa
 	pushw	hl	; F10FF5  push HL
 	pushw	de	; F10FF6  push DE
 	push	xix	; F10FF7  push XIX
@@ -25139,7 +25139,7 @@ sub_F10FF1:
 	pop	xix	; F11051  pop XIX
 	popw	de	; F11052  pop DE
 	popw	hl	; F11053  pop HL
-	.byte 0xEE, 0x0D	; F11054  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11054  unlk XIZ
 	ret	; F11056  ret
 
 ; --------------------------------------------------------------------------
@@ -25156,7 +25156,7 @@ sub_F10FF1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11057:
-	.byte 0xEE, 0x0C, 0xE5, 0xFF	; F11057  link XIZ,0xffe5   [llvm-mc cannot encode this]
+	link XIZ,0xffe5	; F11057  link XIZ,0xffe5
 	pushw	hl	; F1105B  push HL
 	pushw	de	; F1105C  push DE
 	push	xix	; F1105D  push XIX
@@ -25259,7 +25259,7 @@ sub_F11057:
 	pop	xix	; F1116B  pop XIX
 	popw	de	; F1116C  pop DE
 	popw	hl	; F1116D  pop HL
-	.byte 0xEE, 0x0D	; F1116E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F1116E  unlk XIZ
 	ret	; F11170  ret
 
 ; --------------------------------------------------------------------------
@@ -25278,7 +25278,7 @@ sub_F11057:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11171:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F11171  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F11171  link XIZ,0x0000
 	push	0	; F11175  push 0x00
 	.byte 0x8E, 0x08, 0x04	; F11177  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	ldw_d16	bc, (10135)	; F1117A  ld BC,(0x2797)
@@ -25288,7 +25288,7 @@ sub_F11171:
 	call	16002192	; F11185  call 0xf42c90
 	stb_d8	(9792), a	; F11189  ld (0x2640),A
 	pop	xbc	; F1118D  pop XBC
-	.byte 0xEE, 0x0D	; F1118E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F1118E  unlk XIZ
 	ret	; F11190  ret
 
 ; --------------------------------------------------------------------------
@@ -25308,7 +25308,7 @@ sub_F11171:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11191:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F11191  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F11191  link XIZ,0x0000
 	push	0	; F11195  push 0x00
 	.byte 0x8E, 0x08, 0x04	; F11197  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	ldw_d16	bc, (10135)	; F1119A  ld BC,(0x2797)
@@ -25319,7 +25319,7 @@ sub_F11191:
 	add	a, 36	; F111A9  add A,0x24
 	stb_d8	(9792), a	; F111AC  ld (0x2640),A
 	pop	xbc	; F111B0  pop XBC
-	.byte 0xEE, 0x0D	; F111B1  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F111B1  unlk XIZ
 	ret	; F111B3  ret
 
 ; --------------------------------------------------------------------------
@@ -25339,7 +25339,7 @@ sub_F11191:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F111B4:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F111B4  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F111B4  link XIZ,0xfffa
 	push	xix	; F111B8  push XIX
 	lda	xix, (xiz-2)	; F111B9  lda XIX,XIZ+0xfe
 	lda_d16	xbc, (9792)	; F111BC  lda XBC,0x2640
@@ -25367,7 +25367,7 @@ sub_F111B4:
 	ld	(xwa), bc	; F111F8  ld (XWA),BC
 	inc	8, xsp	; F111FA  inc 0,XSP
 	pop	xix	; F111FC  pop XIX
-	.byte 0xEE, 0x0D	; F111FD  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F111FD  unlk XIZ
 	ret	; F111FF  ret
 
 ; --------------------------------------------------------------------------
@@ -25386,7 +25386,7 @@ sub_F111B4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11200:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F11200  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F11200  link XIZ,0xfffe
 	push	xix	; F11204  push XIX
 	lda	xix, (xiz-2)	; F11205  lda XIX,XIZ+0xfe
 	push	0	; F11208  push 0x00
@@ -25413,7 +25413,7 @@ sub_F11200:
 	stb_d8	(9792), c	; F11241  ld (0x2640),C
 	inc	8, xsp	; F11245  inc 0,XSP
 	pop	xix	; F11247  pop XIX
-	.byte 0xEE, 0x0D	; F11248  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11248  unlk XIZ
 	ret	; F1124A  ret
 
 ; --------------------------------------------------------------------------
@@ -25433,7 +25433,7 @@ sub_F11200:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1124B:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F1124B  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F1124B  link XIZ,0xfffe
 	push	xix	; F1124F  push XIX
 	lda	xix, (xiz-2)	; F11250  lda XIX,XIZ+0xfe
 	push	0	; F11253  push 0x00
@@ -25460,7 +25460,7 @@ sub_F1124B:
 	stb_d8	(9792), c	; F1128C  ld (0x2640),C
 	inc	8, xsp	; F11290  inc 0,XSP
 	pop	xix	; F11292  pop XIX
-	.byte 0xEE, 0x0D	; F11293  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11293  unlk XIZ
 	ret	; F11295  ret
 
 ; --------------------------------------------------------------------------
@@ -25479,7 +25479,7 @@ sub_F1124B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11296:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F11296  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F11296  link XIZ,0xfffe
 	push	xix	; F1129A  push XIX
 	lda	xix, (xiz-2)	; F1129B  lda XIX,XIZ+0xfe
 	push	0	; F1129E  push 0x00
@@ -25505,7 +25505,7 @@ sub_F11296:
 	stb_d8	(9792), c	; F112D3  ld (0x2640),C
 	inc	8, xsp	; F112D7  inc 0,XSP
 	pop	xix	; F112D9  pop XIX
-	.byte 0xEE, 0x0D	; F112DA  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F112DA  unlk XIZ
 	ret	; F112DC  ret
 
 ; --------------------------------------------------------------------------
@@ -25525,12 +25525,12 @@ sub_F11296:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F112DD:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F112DD  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F112DD  link XIZ,0x0000
 	push	0	; F112E1  push 0x00
 	.byte 0x8E, 0x08, 0x04	; F112E3  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	calr	65160	; F112E6  calr 0xf11171
 	popw	bc	; F112E9  pop BC
-	.byte 0xEE, 0x0D	; F112EA  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F112EA  unlk XIZ
 	ret	; F112EC  ret
 
 ; --------------------------------------------------------------------------
@@ -25547,7 +25547,7 @@ sub_F112DD:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F112ED:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F112ED  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F112ED  link XIZ,0xfffa
 	push	xix	; F112F1  push XIX
 	lda	xix, (xiz-6)	; F112F2  lda XIX,XIZ+0xfa
 	m_cp_mi8 MB16, 0x2076, 0x17	; F112F5  cp (0x2076),0x17
@@ -25566,7 +25566,7 @@ sub_F112ED:
 	call	15994580	; F1131F  call 0xf40ed4
 	inc	8, xsp	; F11323  inc 0,XSP
 	pop	xix	; F11325  pop XIX
-	.byte 0xEE, 0x0D	; F11326  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11326  unlk XIZ
 	ret	; F11328  ret
 
 ; --------------------------------------------------------------------------
@@ -25583,7 +25583,7 @@ sub_F112ED:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11329:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F11329  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F11329  link XIZ,0xfffa
 	push	xix	; F1132D  push XIX
 	lda	xix, (xiz-6)	; F1132E  lda XIX,XIZ+0xfa
 	m_cp_mi8 MB16, 0x2076, 0x17	; F11331  cp (0x2076),0x17
@@ -25602,7 +25602,7 @@ sub_F11329:
 	call	15994580	; F1135B  call 0xf40ed4
 	inc	8, xsp	; F1135F  inc 0,XSP
 	pop	xix	; F11361  pop XIX
-	.byte 0xEE, 0x0D	; F11362  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11362  unlk XIZ
 	ret	; F11364  ret
 
 ; --------------------------------------------------------------------------
@@ -25619,7 +25619,7 @@ sub_F11329:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11365:		; <- T_F42F60
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F11365  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F11365  link XIZ,0xfff2
 	pushw	hl	; F11369  push HL
 	pushw	de	; F1136A  push DE
 	push	xix	; F1136B  push XIX
@@ -25766,7 +25766,7 @@ sub_F11365:		; <- T_F42F60
 	pop	xix	; F114D4  pop XIX
 	popw	de	; F114D5  pop DE
 	popw	hl	; F114D6  pop HL
-	.byte 0xEE, 0x0D	; F114D7  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F114D7  unlk XIZ
 	ret	; F114D9  ret
 
 ; --------------------------------------------------------------------------
@@ -25783,7 +25783,7 @@ sub_F11365:		; <- T_F42F60
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F114DA:		; <- T_F42F58
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F114DA  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F114DA  link XIZ,0x0000
 	pushw	hl	; F114DE  push HL
 	pushw	de	; F114DF  push DE
 	ld	d, (xiz+8)	; F114E0  ld D,(XIZ+0x08)
@@ -25832,7 +25832,7 @@ sub_F114DA:		; <- T_F42F58
 	ldw	wa, 65535	; F1154E  ld WA,0xffff
 	popw	de	; F11551  pop DE
 	popw	hl	; F11552  pop HL
-	.byte 0xEE, 0x0D	; F11553  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11553  unlk XIZ
 	ret	; F11555  ret
 
 ; --------------------------------------------------------------------------
@@ -25849,14 +25849,14 @@ sub_F114DA:		; <- T_F42F58
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11556:		; <- T_F42F64
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F11556  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F11556  link XIZ,0x0000
 	ld	xbc, (xiz+10)	; F1155A  ld XBC,(XIZ+0x0a)
 	push	xbc	; F1155D  push XBC
 	push	0	; F1155E  push 0x00
 	.byte 0x8E, 0x08, 0x04	; F11560  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	calr	200	; F11563  calr 0xf1162e
 	inc	6, xsp	; F11566  inc 6,XSP
-	.byte 0xEE, 0x0D	; F11568  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11568  unlk XIZ
 	ret	; F1156A  ret
 
 ; --------------------------------------------------------------------------
@@ -25873,7 +25873,7 @@ sub_F11556:		; <- T_F42F64
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1156B:		; <- T_F42F5C
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F1156B  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F1156B  link XIZ,0x0000
 	pushw	hl	; F1156F  push HL
 	push	xix	; F11570  push XIX
 	ld	xbc, (xiz+10)	; F11571  ld XBC,(XIZ+0x0a)
@@ -25949,7 +25949,7 @@ sub_F1156B:		; <- T_F42F5C
 	jr	-17	; F11627  jr T,0xf11618
 	pop	xix	; F11629  pop XIX
 	popw	hl	; F1162A  pop HL
-	.byte 0xEE, 0x0D	; F1162B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F1162B  unlk XIZ
 	ret	; F1162D  ret
 
 ; --------------------------------------------------------------------------
@@ -25965,7 +25965,7 @@ sub_F1156B:		; <- T_F42F5C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1162E:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F1162E  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F1162E  link XIZ,0xfff8
 	pushw	hl	; F11632  push HL
 	pushw	de	; F11633  push DE
 	push	xix	; F11634  push XIX
@@ -26026,7 +26026,7 @@ sub_F1162E:
 	pop	xix	; F116BE  pop XIX
 	popw	de	; F116BF  pop DE
 	popw	hl	; F116C0  pop HL
-	.byte 0xEE, 0x0D	; F116C1  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F116C1  unlk XIZ
 	ret	; F116C3  ret
 
 ; --------------------------------------------------------------------------
@@ -26043,7 +26043,7 @@ sub_F1162E:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F116C4:
-	.byte 0xEE, 0x0C, 0xD6, 0xFF	; F116C4  link XIZ,0xffd6   [llvm-mc cannot encode this]
+	link XIZ,0xffd6	; F116C4  link XIZ,0xffd6
 	pushw	hl	; F116C8  push HL
 	pushw	de	; F116C9  push DE
 	push	xix	; F116CA  push XIX
@@ -26216,7 +26216,7 @@ Data_F1173A:
 	pop	xix	; F1182B  pop XIX
 	popw	de	; F1182C  pop DE
 	popw	hl	; F1182D  pop HL
-	.byte 0xEE, 0x0D	; F1182E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F1182E  unlk XIZ
 	ret	; F11830  ret
 
 ; --------------------------------------------------------------------------
@@ -26232,7 +26232,7 @@ Data_F1173A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11831:
-	.byte 0xEE, 0x0C, 0xEC, 0xFF	; F11831  link XIZ,0xffec   [llvm-mc cannot encode this]
+	link XIZ,0xffec	; F11831  link XIZ,0xffec
 	pushw	hl	; F11835  push HL
 	pushw	de	; F11836  push DE
 	push	xix	; F11837  push XIX
@@ -26302,7 +26302,7 @@ sub_F11831:
 	pop	xix	; F118DC  pop XIX
 	popw	de	; F118DD  pop DE
 	popw	hl	; F118DE  pop HL
-	.byte 0xEE, 0x0D	; F118DF  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F118DF  unlk XIZ
 	ret	; F118E1  ret
 
 ; --------------------------------------------------------------------------
@@ -26318,7 +26318,7 @@ sub_F11831:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F118E2:
-	.byte 0xEE, 0x0C, 0xE8, 0xFF	; F118E2  link XIZ,0xffe8   [llvm-mc cannot encode this]
+	link XIZ,0xffe8	; F118E2  link XIZ,0xffe8
 	pushw	hl	; F118E6  push HL
 	push	xix	; F118E7  push XIX
 	ld	bc, (xiz+10)	; F118E8  ld BC,(XIZ+0x0a)
@@ -26365,7 +26365,7 @@ sub_F118E2:
 	ld	(xix), a	; F11953  ld (XIX),A
 	pop	xix	; F11955  pop XIX
 	popw	hl	; F11956  pop HL
-	.byte 0xEE, 0x0D	; F11957  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11957  unlk XIZ
 	ret	; F11959  ret
 
 ; --------------------------------------------------------------------------
@@ -26383,7 +26383,7 @@ sub_F118E2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1195A:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F1195A  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F1195A  link XIZ,0xfffc
 	pushw	hl	; F1195E  push HL
 	pushw	de	; F1195F  push DE
 	push	xix	; F11960  push XIX
@@ -26416,7 +26416,7 @@ sub_F1195A:
 	pop	xix	; F119A3  pop XIX
 	popw	de	; F119A4  pop DE
 	popw	hl	; F119A5  pop HL
-	.byte 0xEE, 0x0D	; F119A6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F119A6  unlk XIZ
 	ret	; F119A8  ret
 
 ; --------------------------------------------------------------------------
@@ -26435,7 +26435,7 @@ sub_F1195A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F119A9:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F119A9  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F119A9  link XIZ,0xfffc
 	pushw	hl	; F119AD  push HL
 	pushw	de	; F119AE  push DE
 	push	xix	; F119AF  push XIX
@@ -26468,7 +26468,7 @@ sub_F119A9:
 	pop	xix	; F119F2  pop XIX
 	popw	de	; F119F3  pop DE
 	popw	hl	; F119F4  pop HL
-	.byte 0xEE, 0x0D	; F119F5  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F119F5  unlk XIZ
 	ret	; F119F7  ret
 
 ; --------------------------------------------------------------------------
@@ -26487,7 +26487,7 @@ sub_F119A9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F119F8:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F119F8  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F119F8  link XIZ,0xfff8
 	pushw	hl	; F119FC  push HL
 	pushw	de	; F119FD  push DE
 	push	xix	; F119FE  push XIX
@@ -26530,7 +26530,7 @@ sub_F119F8:
 	pop	xix	; F11A5B  pop XIX
 	popw	de	; F11A5C  pop DE
 	popw	hl	; F11A5D  pop HL
-	.byte 0xEE, 0x0D	; F11A5E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11A5E  unlk XIZ
 	ret	; F11A60  ret
 
 ; --------------------------------------------------------------------------
@@ -26549,7 +26549,7 @@ sub_F119F8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11A61:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F11A61  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F11A61  link XIZ,0xfffc
 	pushw	hl	; F11A65  push HL
 	pushw	de	; F11A66  push DE
 	push	xix	; F11A67  push XIX
@@ -26609,7 +26609,7 @@ sub_F11A61:
 	pop	xix	; F11AED  pop XIX
 	popw	de	; F11AEE  pop DE
 	popw	hl	; F11AEF  pop HL
-	.byte 0xEE, 0x0D	; F11AF0  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11AF0  unlk XIZ
 	ret	; F11AF2  ret
 
 ; --------------------------------------------------------------------------
@@ -26628,7 +26628,7 @@ sub_F11A61:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11AF3:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F11AF3  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F11AF3  link XIZ,0xfffc
 	pushw	hl	; F11AF7  push HL
 	pushw	de	; F11AF8  push DE
 	push	xix	; F11AF9  push XIX
@@ -26688,7 +26688,7 @@ sub_F11AF3:
 	pop	xix	; F11B7F  pop XIX
 	popw	de	; F11B80  pop DE
 	popw	hl	; F11B81  pop HL
-	.byte 0xEE, 0x0D	; F11B82  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11B82  unlk XIZ
 	ret	; F11B84  ret
 
 ; --------------------------------------------------------------------------
@@ -26707,7 +26707,7 @@ sub_F11AF3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11B85:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F11B85  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F11B85  link XIZ,0xfffc
 	pushw	hl	; F11B89  push HL
 	pushw	de	; F11B8A  push DE
 	push	xix	; F11B8B  push XIX
@@ -26764,7 +26764,7 @@ sub_F11B85:
 	pop	xix	; F11C0A  pop XIX
 	popw	de	; F11C0B  pop DE
 	popw	hl	; F11C0C  pop HL
-	.byte 0xEE, 0x0D	; F11C0D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11C0D  unlk XIZ
 	ret	; F11C0F  ret
 
 ; --------------------------------------------------------------------------
@@ -26784,7 +26784,7 @@ sub_F11B85:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11C10:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F11C10  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F11C10  link XIZ,0x0000
 	ld	xbc, (xiz+16)	; F11C14  ld XBC,(XIZ+0x10)
 	push	xbc	; F11C17  push XBC
 	ld	xwa, (xiz+12)	; F11C18  ld XWA,(XIZ+0x0c)
@@ -26796,7 +26796,7 @@ sub_F11C10:
 	calr	64817	; F11C26  calr 0xf1195a
 	inc	8, xsp	; F11C29  inc 0,XSP
 	inc	4, xsp	; F11C2B  inc 4,XSP
-	.byte 0xEE, 0x0D	; F11C2D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F11C2D  unlk XIZ
 	ret	; F11C2F  ret
 
 ; --------------------------------------------------------------------------
@@ -26813,7 +26813,7 @@ sub_F11C10:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F11C30:		; <- T_F434A0
-	.byte 0xEE, 0x0C, 0xA4, 0xFF	; F11C30  link XIZ,0xffa4   [llvm-mc cannot encode this]
+	link XIZ,0xffa4	; F11C30  link XIZ,0xffa4
 	pushw	hl	; F11C34  push HL
 	pushw	de	; F11C35  push DE
 	push	xix	; F11C36  push XIX
@@ -27382,7 +27382,7 @@ sub_F11C30:		; <- T_F434A0
 	pop	xix	; F12205  pop XIX
 	popw	de	; F12206  pop DE
 	popw	hl	; F12207  pop HL
-	.byte 0xEE, 0x0D	; F12208  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F12208  unlk XIZ
 	ret	; F1220A  ret
 
 ; --------------------------------------------------------------------------
@@ -27399,7 +27399,7 @@ sub_F11C30:		; <- T_F434A0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1220B:		; <- T_F434A4
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F1220B  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F1220B  link XIZ,0xfffe
 	pushw	hl	; F1220F  push HL
 	pushw	de	; F12210  push DE
 	push	xix	; F12211  push XIX
@@ -27473,7 +27473,7 @@ sub_F1220B:		; <- T_F434A4
 	pop	xix	; F122BF  pop XIX
 	popw	de	; F122C0  pop DE
 	popw	hl	; F122C1  pop HL
-	.byte 0xEE, 0x0D	; F122C2  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F122C2  unlk XIZ
 	ret	; F122C4  ret
 
 ; --------------------------------------------------------------------------
@@ -27541,7 +27541,7 @@ sub_F122C5:		; <- T_F42F68
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F12334:		; <- T_F42F6C
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F12334  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F12334  link XIZ,0x0000
 	.byte 0x9E, 0x0A, 0x04	; F12338  pushw (XIZ+0x0a)   [llvm-mc cannot encode this]
 	.byte 0x9E, 0x08, 0x04	; F1233B  pushw (XIZ+0x08)   [llvm-mc cannot encode this]
 	call	16002164	; F1233E  call 0xf42c74
@@ -27553,7 +27553,7 @@ sub_F12334:		; <- T_F42F6C
 	push	xiy	; F12354  push XIY
 	jp	(xbc)	; F12355  jp T,XBC
 	pop	xbc	; F12357  pop XBC
-	.byte 0xEE, 0x0D	; F12358  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F12358  unlk XIZ
 	ret	; F1235A  ret
 
 ; --------------------------------------------------------------------------
@@ -27695,7 +27695,7 @@ sub_F123AD:
 	inc	8, xsp	; F123EF  inc 0,XSP
 	inc	8, xsp	; F123F1  inc 0,XSP
 	ret	; F123F3  ret
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F123F4  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F123F4  link XIZ,0xfffc
 	push	xix	; F123F8  push XIX
 	lda_d16	xix, (9792)	; F123F9  lda XIX,0x2640
 	m_res 4, MD16, 0x2799	; F123FD  res 4,(0x2799)
@@ -27729,7 +27729,7 @@ sub_F123AD:
 	inc	8, xsp	; F12452  inc 0,XSP
 	inc	8, xsp	; F12454  inc 0,XSP
 	pop	xix	; F12456  pop XIX
-	.byte 0xEE, 0x0D	; F12457  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F12457  unlk XIZ
 	ret	; F12459  ret
 
 ; --------------------------------------------------------------------------
@@ -27747,7 +27747,7 @@ sub_F123AD:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1245A:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F1245A  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F1245A  link XIZ,0xfffa
 	push	xix	; F1245E  push XIX
 	lda	xix, (xiz-6)	; F1245F  lda XIX,XIZ+0xfa
 	call	16002668	; F12462  call 0xf42e6c
@@ -27772,7 +27772,7 @@ sub_F1245A:
 	inc	8, xsp	; F1249E  inc 0,XSP
 	inc	4, xsp	; F124A0  inc 4,XSP
 	pop	xix	; F124A2  pop XIX
-	.byte 0xEE, 0x0D	; F124A3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F124A3  unlk XIZ
 	ret	; F124A5  ret
 
 ; --------------------------------------------------------------------------
@@ -57838,7 +57838,7 @@ DL_F3539F:
 ;          21-bit claim is made.
 ; --------------------------------------------------------------------------
 Pack3x7BitFields_Bytes9To11:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F36800  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F36800  link XIZ,0xfff8
 	pushw	hl	; F36804  push HL
 	pushw	de	; F36805  push DE
 	push	xix	; F36806  push XIX
@@ -57869,7 +57869,7 @@ Pack3x7BitFields_Bytes9To11:
 	pop	xix	; F36843  pop XIX
 	popw	de	; F36844  pop DE
 	popw	hl	; F36845  pop HL
-	.byte 0xEE, 0x0D	; F36846  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36846  unlk XIZ
 	ret	; F36848  ret
 
 ; --------------------------------------------------------------------------
@@ -57884,7 +57884,7 @@ Pack3x7BitFields_Bytes9To11:
 ;          about it.
 ; --------------------------------------------------------------------------
 Pack3x7BitFields_Bytes6To8:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F36849  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F36849  link XIZ,0xfff8
 	push	xix	; F3684D  push XIX
 	ld	xix, (xiz+8)	; F3684E  ld XIX,(XIZ+0x08)
 	ld	c, (xix+6)	; F36851  ld C,(XIX+0x06)
@@ -57908,7 +57908,7 @@ Pack3x7BitFields_Bytes6To8:
 	or	xwa, xbc	; F36880  or XWA,XBC
 	ld	xiy, xwa	; F36882  ld XIY,XWA
 	pop	xix	; F36884  pop XIX
-	.byte 0xEE, 0x0D	; F36885  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36885  unlk XIZ
 	ret	; F36887  ret
 
 ; --------------------------------------------------------------------------
@@ -57921,7 +57921,7 @@ Pack3x7BitFields_Bytes6To8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36888:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F36888  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F36888  link XIZ,0xfffc
 	pushw	hl	; F3688C  push HL
 	pushw	de	; F3688D  push DE
 	push	xix	; F3688E  push XIX
@@ -57956,7 +57956,7 @@ sub_F36888:
 	pop	xix	; F368DA  pop XIX
 	popw	de	; F368DB  pop DE
 	popw	hl	; F368DC  pop HL
-	.byte 0xEE, 0x0D	; F368DD  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F368DD  unlk XIZ
 	ret	; F368DF  ret
 
 ; --------------------------------------------------------------------------
@@ -57969,7 +57969,7 @@ sub_F36888:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F368E0:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F368E0  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F368E0  link XIZ,0xfffc
 	pushw	hl	; F368E4  push HL
 	pushw	de	; F368E5  push DE
 	push	xix	; F368E6  push XIX
@@ -58004,7 +58004,7 @@ sub_F368E0:
 	pop	xix	; F36932  pop XIX
 	popw	de	; F36933  pop DE
 	popw	hl	; F36934  pop HL
-	.byte 0xEE, 0x0D	; F36935  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36935  unlk XIZ
 	ret	; F36937  ret
 
 ; --------------------------------------------------------------------------
@@ -58017,7 +58017,7 @@ sub_F368E0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36938:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F36938  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F36938  link XIZ,0xfffe
 	pushw	hl	; F3693C  push HL
 	pushw	de	; F3693D  push DE
 	push	xix	; F3693E  push XIX
@@ -58087,7 +58087,7 @@ sub_F36938:
 	pop	xix	; F36A00  pop XIX
 	popw	de	; F36A01  pop DE
 	popw	hl	; F36A02  pop HL
-	.byte 0xEE, 0x0D	; F36A03  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36A03  unlk XIZ
 	ret	; F36A05  ret
 
 ; --------------------------------------------------------------------------
@@ -58101,7 +58101,7 @@ sub_F36938:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36A06:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F36A06  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F36A06  link XIZ,0x0000
 	pushw	hl	; F36A0A  push HL
 	pushw	de	; F36A0B  push DE
 	pushw	ix	; F36A0C  push IX
@@ -58210,7 +58210,7 @@ sub_F36A06:
 	popw	ix	; F36B29  pop IX
 	popw	de	; F36B2A  pop DE
 	popw	hl	; F36B2B  pop HL
-	.byte 0xEE, 0x0D	; F36B2C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36B2C  unlk XIZ
 	ret	; F36B2E  ret
 
 ; --------------------------------------------------------------------------
@@ -58223,7 +58223,7 @@ sub_F36A06:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36B2F:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F36B2F  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F36B2F  link XIZ,0xfff8
 	pushw	hl	; F36B33  push HL
 	pushw	de	; F36B34  push DE
 	push	xix	; F36B35  push XIX
@@ -58263,7 +58263,7 @@ sub_F36B2F:
 	pop	xix	; F36B8E  pop XIX
 	popw	de	; F36B8F  pop DE
 	popw	hl	; F36B90  pop HL
-	.byte 0xEE, 0x0D	; F36B91  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36B91  unlk XIZ
 	ret	; F36B93  ret
 
 ; --------------------------------------------------------------------------
@@ -58277,7 +58277,7 @@ sub_F36B2F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36B94:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F36B94  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F36B94  link XIZ,0xfff8
 	pushw	hl	; F36B98  push HL
 	pushw	de	; F36B99  push DE
 	push	xix	; F36B9A  push XIX
@@ -58353,7 +58353,7 @@ sub_F36B94:
 	pop	xix	; F36C57  pop XIX
 	popw	de	; F36C58  pop DE
 	popw	hl	; F36C59  pop HL
-	.byte 0xEE, 0x0D	; F36C5A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36C5A  unlk XIZ
 	ret	; F36C5C  ret
 
 ; --------------------------------------------------------------------------
@@ -58366,7 +58366,7 @@ sub_F36B94:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36C5D:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F36C5D  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F36C5D  link XIZ,0xfffe
 	pushw	hl	; F36C61  push HL
 	pushw	de	; F36C62  push DE
 	push	xix	; F36C63  push XIX
@@ -58416,7 +58416,7 @@ sub_F36C5D:
 	pop	xix	; F36CE7  pop XIX
 	popw	de	; F36CE8  pop DE
 	popw	hl	; F36CE9  pop HL
-	.byte 0xEE, 0x0D	; F36CEA  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36CEA  unlk XIZ
 	ret	; F36CEC  ret
 
 ; --------------------------------------------------------------------------
@@ -58430,7 +58430,7 @@ sub_F36C5D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36CED:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F36CED  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F36CED  link XIZ,0xfffc
 	pushw	hl	; F36CF1  push HL
 	pushw	de	; F36CF2  push DE
 	push	xix	; F36CF3  push XIX
@@ -58540,7 +58540,7 @@ sub_F36CED:
 	pop	xix	; F36E1B  pop XIX
 	popw	de	; F36E1C  pop DE
 	popw	hl	; F36E1D  pop HL
-	.byte 0xEE, 0x0D	; F36E1E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36E1E  unlk XIZ
 	ret	; F36E20  ret
 
 ; --------------------------------------------------------------------------
@@ -58556,7 +58556,7 @@ sub_F36CED:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36E21:		; <- T_F41250
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F36E21  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F36E21  link XIZ,0xfffc
 	pushw	hl	; F36E25  push HL
 	push	xix	; F36E26  push XIX
 	ldw_da	hl, (2567)	; F36E27  ld HL,(0x000a07)
@@ -58668,7 +58668,7 @@ sub_F36E21:		; <- T_F41250
 	m_set 1, MD24, 0x000a00	; F36F82  set 1,(0x000a00)
 	pop	xix	; F36F87  pop XIX
 	popw	hl	; F36F88  pop HL
-	.byte 0xEE, 0x0D	; F36F89  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F36F89  unlk XIZ
 	ret	; F36F8B  ret
 
 ; --------------------------------------------------------------------------
@@ -58683,7 +58683,7 @@ sub_F36E21:		; <- T_F41250
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F36F8C:		; <- T_F41254
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F36F8C  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F36F8C  link XIZ,0xfffc
 	pushw	hl	; F36F90  push HL
 	push	xix	; F36F91  push XIX
 	lda_24	xix, (2563)	; F36F92  lda XIX,0x000a03
@@ -58734,7 +58734,7 @@ sub_F36F8C:		; <- T_F41254
 	ld	wa, hl	; F37028  ld WA,HL
 	pop	xix	; F3702A  pop XIX
 	popw	hl	; F3702B  pop HL
-	.byte 0xEE, 0x0D	; F3702C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F3702C  unlk XIZ
 	ret	; F3702E  ret
 
 ; --------------------------------------------------------------------------
@@ -58756,7 +58756,7 @@ sub_F36F8C:		; <- T_F41254
 ;          arm called it, and no arm carries a name.
 ; --------------------------------------------------------------------------
 ClampFieldToRange:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F3702F  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F3702F  link XIZ,0x0000
 	pushw	hl	; F37033  push HL
 	pushw	de	; F37034  push DE
 	ld	de, (xiz+10)	; F37035  ld DE,(XIZ+0x0a)
@@ -58780,7 +58780,7 @@ ClampFieldToRange:
 	ld	a, c	; F37062  ld A,C
 	popw	de	; F37064  pop DE
 	popw	hl	; F37065  pop HL
-	.byte 0xEE, 0x0D	; F37066  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F37066  unlk XIZ
 	ret	; F37068  ret
 
 ; --------------------------------------------------------------------------
@@ -58801,7 +58801,7 @@ ClampFieldToRange:
 ;          any of them is.
 ; --------------------------------------------------------------------------
 ClampParamValueById_From541:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F37069  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F37069  link XIZ,0x0000
 	pushw	hl	; F3706D  push HL
 	push	xix	; F3706E  push XIX
 	ld	h, (xiz+12)	; F3706F  ld H,(XIZ+0x0c)
@@ -59433,7 +59433,7 @@ sub_F3758D:
 	ld	a, h	; F3758D  ld A,H
 	pop	xix	; F3758F  pop XIX
 	popw	hl	; F37590  pop HL
-	.byte 0xEE, 0x0D	; F37591  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F37591  unlk XIZ
 	ret	; F37593  ret
 
 ; --------------------------------------------------------------------------
@@ -59453,7 +59453,7 @@ sub_F3758D:
 ;          default arms.
 ; --------------------------------------------------------------------------
 ClampParamValueById_From408:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F37594  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F37594  link XIZ,0xfff8
 	pushw	hl	; F37598  push HL
 	pushw	de	; F37599  push DE
 	push	xix	; F3759A  push XIX
@@ -59972,7 +59972,7 @@ sub_F379A3:
 	pop	xix	; F379A5  pop XIX
 	popw	de	; F379A6  pop DE
 	popw	hl	; F379A7  pop HL
-	.byte 0xEE, 0x0D	; F379A8  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F379A8  unlk XIZ
 	ret	; F379AA  ret
 
 ; --------------------------------------------------------------------------
@@ -59989,7 +59989,7 @@ sub_F379A3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F379AB:		; <- T_F41258
-	.byte 0xEE, 0x0C, 0xE8, 0xFF	; F379AB  link XIZ,0xffe8   [llvm-mc cannot encode this]
+	link XIZ,0xffe8	; F379AB  link XIZ,0xffe8
 	pushw	hl	; F379AF  push HL
 	push	xix	; F379B0  push XIX
 	ld	xbc, (xiz+8)	; F379B1  ld XBC,(XIZ+0x08)
@@ -60277,7 +60277,7 @@ sub_F379AB:		; <- T_F41258
 	ldw	wa, 1	; F37D0F  ld WA,0x0001
 	pop	xix	; F37D12  pop XIX
 	popw	hl	; F37D13  pop HL
-	.byte 0xEE, 0x0D	; F37D14  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F37D14  unlk XIZ
 	ret	; F37D16  ret
 
 ; --------------------------------------------------------------------------
@@ -60292,7 +60292,7 @@ sub_F379AB:		; <- T_F41258
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F37D17:		; <- T_F4125C
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F37D17  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F37D17  link XIZ,0xfffc
 	pushw	hl	; F37D1B  push HL
 	pushw	de	; F37D1C  push DE
 	push	xix	; F37D1D  push XIX
@@ -60357,7 +60357,7 @@ sub_F37D17:		; <- T_F4125C
 	pop	xix	; F37DA8  pop XIX
 	popw	de	; F37DA9  pop DE
 	popw	hl	; F37DAA  pop HL
-	.byte 0xEE, 0x0D	; F37DAB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F37DAB  unlk XIZ
 	ret	; F37DAD  ret
 
 ; --------------------------------------------------------------------------
@@ -60384,7 +60384,7 @@ sub_F37DAE:		; <- T_F41260
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F37DB4:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F37DB4  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F37DB4  link XIZ,0x0000
 	push	xix	; F37DB8  push XIX
 	ld	xix, (xiz+8)	; F37DB9  ld XIX,(XIZ+0x08)
 	ld	(xix), 240	; F37DBC  ld (XIX),0xf0
@@ -60412,7 +60412,7 @@ sub_F37DB4:
 	add	xbc, 12	; F37E10  add XBC,0x0000000c
 	ld	xiy, xbc	; F37E16  ld XIY,XBC
 	pop	xix	; F37E18  pop XIX
-	.byte 0xEE, 0x0D	; F37E19  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F37E19  unlk XIZ
 	ret	; F37E1B  ret
 
 ; --------------------------------------------------------------------------
@@ -60427,7 +60427,7 @@ sub_F37DB4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F37E1C:		; <- T_F41264
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F37E1C  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F37E1C  link XIZ,0xfff8
 	pushw	hl	; F37E20  push HL
 	pushw	de	; F37E21  push DE
 	push	xix	; F37E22  push XIX
@@ -60521,7 +60521,7 @@ sub_F37E1C:		; <- T_F41264
 	pop	xix	; F37F34  pop XIX
 	popw	de	; F37F35  pop DE
 	popw	hl	; F37F36  pop HL
-	.byte 0xEE, 0x0D	; F37F37  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F37F37  unlk XIZ
 	ret	; F37F39  ret
 
 ; --------------------------------------------------------------------------
@@ -60541,7 +60541,7 @@ sub_F37E1C:		; <- T_F41264
 ;           a quotient.
 ; --------------------------------------------------------------------------
 Divide32_Unsigned_Quotient:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F37F3A  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F37F3A  link XIZ,0x0000
 	push	xix	; F37F3E  push XIX
 	ldb	b, 32	; F37F3F  ld B,0x20
 	sub	wa, wa	; F37F41  sub WA,WA
@@ -60561,7 +60561,7 @@ Divide32_Unsigned_Quotient:
 	dec	1, b	; F37F66  dec 1,B
 	jr	nz, -35	; F37F68  jr NZ,0xf37f47
 	pop	xix	; F37F6A  pop XIX
-	.byte 0xEE, 0x0D	; F37F6B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F37F6B  unlk XIZ
 	retd	8	; F37F6D  retd 0x0008
 
 ; --------------------------------------------------------------------------
@@ -60602,7 +60602,7 @@ sub_F37F70:
 ;           and would be wrong for a quotient.
 ; --------------------------------------------------------------------------
 Divide32_Unsigned_Remainder:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F37F91  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F37F91  link XIZ,0x0000
 	push	xix	; F37F95  push XIX
 	ldb	b, 32	; F37F96  ld B,0x20
 	sub	wa, wa	; F37F98  sub WA,WA
@@ -60622,7 +60622,7 @@ Divide32_Unsigned_Remainder:
 	dec	1, b	; F37FBD  dec 1,B
 	jr	nz, -35	; F37FBF  jr NZ,0xf37f9e
 	pop	xix	; F37FC1  pop XIX
-	.byte 0xEE, 0x0D	; F37FC2  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F37FC2  unlk XIZ
 	retd	8	; F37FC4  retd 0x0008
 	.fill	2105, 1, 0x0E	; F37FC7-F387FF  `ret` padding (asserted pure 0x0E)
 
@@ -60638,7 +60638,7 @@ Divide32_Unsigned_Remainder:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F38800:		; <- T_F42660
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F38800  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F38800  link XIZ,0xfffc
 	push	xix	; F38804  push XIX
 	ldw	bc, 30208	; F38805  ld BC,0x7600
 	exts	xbc	; F38808  exts XBC
@@ -60659,7 +60659,7 @@ sub_F38800:		; <- T_F42660
 	incdi16_24	1, (6328578)	; F38838  incw 1,(0x609102)
 	jr	-38	; F3883D  jr T,0xf38819
 	pop	xix	; F3883F  pop XIX
-	.byte 0xEE, 0x0D	; F38840  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F38840  unlk XIZ
 	ret	; F38842  ret
 
 ; --------------------------------------------------------------------------
@@ -60675,7 +60675,7 @@ sub_F38800:		; <- T_F42660
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F38843:		; <- T_F42664
-	.byte 0xEE, 0x0C, 0xFB, 0xFF	; F38843  link XIZ,0xfffb   [llvm-mc cannot encode this]
+	link XIZ,0xfffb	; F38843  link XIZ,0xfffb
 	pushw	hl	; F38847  push HL
 	pushw	de	; F38848  push DE
 	push	xix	; F38849  push XIX
@@ -60839,7 +60839,7 @@ sub_F38843:		; <- T_F42664
 	pop	xix	; F3899C  pop XIX
 	popw	de	; F3899D  pop DE
 	popw	hl	; F3899E  pop HL
-	.byte 0xEE, 0x0D	; F3899F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F3899F  unlk XIZ
 	ret	; F389A1  ret
 
 ; --------------------------------------------------------------------------
@@ -60852,7 +60852,7 @@ sub_F38843:		; <- T_F42664
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F389A2:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F389A2  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F389A2  link XIZ,0x0000
 	pushw	hl	; F389A6  push HL
 	pushw	de	; F389A7  push DE
 	push	xix	; F389A8  push XIX
@@ -60895,9 +60895,9 @@ sub_F389A2:
 	pop	xix	; F38A03  pop XIX
 	popw	de	; F38A04  pop DE
 	popw	hl	; F38A05  pop HL
-	.byte 0xEE, 0x0D	; F38A06  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F38A06  unlk XIZ
 	ret	; F38A08  ret
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F38A09  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F38A09  link XIZ,0xfffc
 	pushw	hl	; F38A0D  push HL
 	push	xix	; F38A0E  push XIX
 	ld	hl, (xiz+10)	; F38A0F  ld HL,(XIZ+0x0a)
@@ -60927,9 +60927,9 @@ sub_F389A2:
 	jr	c, -30	; F38A57  jr C,0xf38a3b
 	pop	xix	; F38A59  pop XIX
 	popw	hl	; F38A5A  pop HL
-	.byte 0xEE, 0x0D	; F38A5B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F38A5B  unlk XIZ
 	ret	; F38A5D  ret
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F38A5E  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F38A5E  link XIZ,0x0000
 	push	xix	; F38A62  push XIX
 	ldl_da	xix, (6352920)	; F38A63  ld XIX,(0x60f018)
 	ldb	c, 4	; F38A68  ld C,0x04
@@ -60939,7 +60939,7 @@ sub_F389A2:
 	ld	xwa, (xbc)	; F38A71  ld XWA,(XBC)
 	ld	xiy, xwa	; F38A73  ld XIY,XWA
 	pop	xix	; F38A75  pop XIX
-	.byte 0xEE, 0x0D	; F38A76  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F38A76  unlk XIZ
 	ret	; F38A78  ret
 
 ; --------------------------------------------------------------------------
@@ -60952,7 +60952,7 @@ sub_F389A2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F38A79:
-	.byte 0xEE, 0x0C, 0xFB, 0xFF	; F38A79  link XIZ,0xfffb   [llvm-mc cannot encode this]
+	link XIZ,0xfffb	; F38A79  link XIZ,0xfffb
 	pushw	hl	; F38A7D  push HL
 	pushw	de	; F38A7E  push DE
 	push	xix	; F38A7F  push XIX
@@ -61018,9 +61018,9 @@ sub_F38A79:
 	pop	xix	; F38B34  pop XIX
 	popw	de	; F38B35  pop DE
 	popw	hl	; F38B36  pop HL
-	.byte 0xEE, 0x0D	; F38B37  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F38B37  unlk XIZ
 	ret	; F38B39  ret
-	.byte 0xEE, 0x0C, 0xF4, 0xFF	; F38B3A  link XIZ,0xfff4   [llvm-mc cannot encode this]
+	link XIZ,0xfff4	; F38B3A  link XIZ,0xfff4
 	pushw	hl	; F38B3E  push HL
 	push	xix	; F38B3F  push XIX
 	ld	bc, (xiz+8)	; F38B40  ld BC,(XIZ+0x08)
@@ -61051,7 +61051,7 @@ sub_F38A79:
 	jr	-40	; F38B87  jr T,0xf38b61
 	pop	xix	; F38B89  pop XIX
 	popw	hl	; F38B8A  pop HL
-	.byte 0xEE, 0x0D	; F38B8B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F38B8B  unlk XIZ
 	ret	; F38B8D  ret
 
 ; --------------------------------------------------------------------------
@@ -61064,7 +61064,7 @@ sub_F38A79:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F38B8E:
-	.byte 0xEE, 0x0C, 0xFB, 0xFF	; F38B8E  link XIZ,0xfffb   [llvm-mc cannot encode this]
+	link XIZ,0xfffb	; F38B8E  link XIZ,0xfffb
 	pushw	hl	; F38B92  push HL
 	pushw	de	; F38B93  push DE
 	push	xix	; F38B94  push XIX
@@ -61130,7 +61130,7 @@ sub_F38B8E:
 	pop	xix	; F38C49  pop XIX
 	popw	de	; F38C4A  pop DE
 	popw	hl	; F38C4B  pop HL
-	.byte 0xEE, 0x0D	; F38C4C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F38C4C  unlk XIZ
 	ret	; F38C4E  ret
 
 ; --------------------------------------------------------------------------
@@ -70414,7 +70414,7 @@ sub_F440A0:		; <- T_F40AB8
 	mul	wa, 3072	; F440B0  mul WA,0x0c00
 	mx_lda32 MXD, ra_DE, ra_WA, 2	; F440B4  lda XDE,XDE+WA
 	pop	xwa	; F440B9  pop XWA
-	.byte 0x93, 0x11	; F440BA  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F440BA  ldirw
 	inc	1, a	; F440BC  inc 1,A
 	cp	a, 10	; F440BE  cp A,0x0a
 	jr	c, -33	; F440C1  jr C,0xf440a2
@@ -70509,7 +70509,7 @@ sub_F44143:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F44158  lda XIX,XIX+DE
 	lda	xix, (xix+214)	; F4415D  lda XIX,XIX+0x00d6
 	ld	xiy, 6304982	; F44162  ld XIY,0x006034d6
-	.byte 0x85, 0x11	; F44167  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F44167  ldir
 	inc	1, wa	; F44169  inc 1,WA
 	cp	wa, 10	; F4416B  cp WA,0x000a
 	jr	c, -39	; F4416F  jr C,0xf4414a
@@ -70532,7 +70532,7 @@ sub_F44143:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4418C  lda XIX,XIX+DE
 	lda	xix, (xix+200)	; F44191  lda XIX,XIX+0x00c8
 	ld	xiy, 6304968	; F44196  ld XIY,0x006034c8
-	.byte 0x85, 0x11	; F4419B  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4419B  ldir
 	inc	1, wa	; F4419D  inc 1,WA
 	cp	wa, 10	; F4419F  cp WA,0x000a
 	jr	c, -39	; F441A3  jr C,0xf4417e
@@ -70563,7 +70563,7 @@ sub_F441AB:
 	ld	xde, 6356992	; F441BD  ld XDE,0x00610000
 	mul	wa, 3072	; F441C2  mul WA,0x0c00
 	mx_lda32 MXD, ra_DE, ra_WA, 2	; F441C6  lda XDE,XDE+WA
-	.byte 0x93, 0x11	; F441CB  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F441CB  ldirw
 	xor	a, a	; F441CD  xor A,A
 	stb_d8	(13834), a	; F441CF  ld (0x360a),A
 	m_cp_mi8 MB16, 0x360a, 0x0a	; F441D3  cp (0x360a),0x0a
@@ -70585,7 +70585,7 @@ sub_F441AB:
 	ld	xde, 6356992	; F44204  ld XDE,0x00610000
 	mul	wa, 3072	; F44209  mul WA,0x0c00
 	mx_lda32 MXD, ra_DE, ra_WA, 2	; F4420D  lda XDE,XDE+WA
-	.byte 0x93, 0x11	; F44212  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F44212  ldirw
 	xor	wa, wa	; F44214  xor WA,WA
 	ldb_d8	a, (3651)	; F44216  ld A,(0x0e43)
 	stb_d8	(13834), a	; F4421A  ld (0x360a),A
@@ -70594,7 +70594,7 @@ sub_F441AB:
 	ld	xhl, 6356992	; F44226  ld XHL,0x00610000
 	mul	wa, 3072	; F4422B  mul WA,0x0c00
 	mx_lda32 MXD, ra_HL, ra_WA, 3	; F4422F  lda XHL,XHL+WA
-	.byte 0x93, 0x11	; F44234  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F44234  ldirw
 	ret	; F44236  ret
 
 ; --------------------------------------------------------------------------
@@ -70687,7 +70687,7 @@ sub_F442C4:
 	ldw	bc, 3	; F442C7  ld BC,0x0003
 	ld	xix, 6304970	; F442CA  ld XIX,0x006034ca
 	ld	xiy, 16015589	; F442CF  ld XIY,0x00f460e5
-	.byte 0x95, 0x11	; F442D4  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F442D4  ldirw
 	popw	bc	; F442D6  pop BC
 	pop	xiy	; F442D7  pop XIY
 	pop	xix	; F442D8  pop XIX
@@ -72730,7 +72730,7 @@ sub_F45463:
 	ld	xiy, 6304802	; F45468  ld XIY,0x00603422
 	xor	bc, bc	; F4546D  xor BC,BC
 	ldb	c, 17	; F4546F  ld C,0x11
-	.byte 0x85, 0x11	; F45471  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F45471  ldir
 	ret	; F45473  ret
 
 ; --------------------------------------------------------------------------
@@ -72764,7 +72764,7 @@ sub_F45478:
 	ld	xix, 6304802	; F4547D  ld XIX,0x00603422
 	xor	bc, bc	; F45482  xor BC,BC
 	ldb	c, 17	; F45484  ld C,0x11
-	.byte 0x85, 0x11	; F45486  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F45486  ldir
 	ret	; F45488  ret
 
 ; --------------------------------------------------------------------------
@@ -75477,7 +75477,7 @@ sub_F47C7C:
 	ldw	bc, 5	; F47E38  ld BC,0x0005
 	ld	xde, 14057	; F47E3B  ld XDE,0x000036e9
 	ld	xhl, 13476	; F47E40  ld XHL,0x000034a4
-	.byte 0x83, 0x11	; F47E45  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F47E45  ldir
 	call	15993832	; F47E47  call 0xf40be8
 	ldw_d16	de, (14140)	; F47E4B  ld DE,(0x373c)
 	.byte 0xD1, 0xE2, 0x33, 0x38, 0x07, 0x00	; F47E4F  add (0x33e2),0x0007   [llvm-mc cannot encode this]
@@ -75674,11 +75674,11 @@ sub_F47FE0:
 	ldw	bc, 17	; F47FE0  ld BC,0x0011
 	ld	xde, 13408	; F47FE3  ld XDE,0x00003460
 	ld	xhl, 13866	; F47FE8  ld XHL,0x0000362a
-	.byte 0x93, 0x11	; F47FED  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F47FED  ldirw
 	ldw	bc, 17	; F47FEF  ld BC,0x0011
 	ld	xde, 13442	; F47FF2  ld XDE,0x00003482
 	ld	xhl, 13900	; F47FF7  ld XHL,0x0000364c
-	.byte 0x83, 0x11	; F47FFC  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F47FFC  ldir
 	xor	bc, bc	; F47FFE  xor BC,BC
 	ld	xde, 13290	; F48000  ld XDE,0x000033ea
 	ldw_d16	wa, (14148)	; F48005  ld WA,(0x3744)
@@ -76375,11 +76375,11 @@ sub_F48464:		; <- T_F40B5C
 	ldw	bc, 17	; F48550  ld BC,0x0011
 	ld	xde, 13866	; F48553  ld XDE,0x0000362a
 	ld	xhl, 13408	; F48558  ld XHL,0x00003460
-	.byte 0x93, 0x11	; F4855D  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F4855D  ldirw
 	ldw	bc, 17	; F4855F  ld BC,0x0011
 	ld	xde, 13900	; F48562  ld XDE,0x0000364c
 	ld	xhl, 13442	; F48567  ld XHL,0x00003482
-	.byte 0x83, 0x11	; F4856C  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F4856C  ldir
 	call	15993488	; F4856E  call 0xf40a90
 	call	15995848	; F48572  call 0xf413c8
 	call	15998744	; F48576  call 0xf41f18
@@ -76418,11 +76418,11 @@ sub_F48580:		; <- T_F40B60
 	ldw	bc, 17	; F485B0  ld BC,0x0011
 	ld	xde, 13918	; F485B3  ld XDE,0x0000365e
 	ld	xhl, 13408	; F485B8  ld XHL,0x00003460
-	.byte 0x93, 0x11	; F485BD  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F485BD  ldirw
 	ldw	bc, 17	; F485BF  ld BC,0x0011
 	ld	xde, 13952	; F485C2  ld XDE,0x00003680
 	ld	xhl, 13442	; F485C7  ld XHL,0x00003482
-	.byte 0x83, 0x11	; F485CC  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F485CC  ldir
 	popw	wa	; F485CE  pop WA
 	stda16	(13650), wa	; F485CF  ld (0x3552),WA
 	calr	228	; F485D3  calr 0xf486ba
@@ -76538,11 +76538,11 @@ sub_F4869B:		; <- T_F40B68
 	ldw	bc, 17	; F4869B  ld BC,0x0011
 	ld	xde, 13970	; F4869E  ld XDE,0x00003692
 	ld	xhl, 13408	; F486A3  ld XHL,0x00003460
-	.byte 0x93, 0x11	; F486A8  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F486A8  ldirw
 	ldw	bc, 17	; F486AA  ld BC,0x0011
 	ld	xde, 14004	; F486AD  ld XDE,0x000036b4
 	ld	xhl, 13442	; F486B2  ld XHL,0x00003482
-	.byte 0x83, 0x11	; F486B7  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F486B7  ldir
 	ret	; F486B9  ret
 
 ; --------------------------------------------------------------------------
@@ -76560,11 +76560,11 @@ sub_F486BA:		; <- T_F40B64
 	ldw	bc, 17	; F486BA  ld BC,0x0011
 	ld	xde, 13408	; F486BD  ld XDE,0x00003460
 	ld	xhl, 13970	; F486C2  ld XHL,0x00003692
-	.byte 0x93, 0x11	; F486C7  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F486C7  ldirw
 	ldw	bc, 17	; F486C9  ld BC,0x0011
 	ld	xde, 13442	; F486CC  ld XDE,0x00003482
 	ld	xhl, 14004	; F486D1  ld XHL,0x000036b4
-	.byte 0x83, 0x11	; F486D6  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F486D6  ldir
 	ret	; F486D8  ret
 
 ; --------------------------------------------------------------------------
@@ -76648,11 +76648,11 @@ sub_F48707:		; <- T_F40B70
 	ldw	bc, 17	; F48783  ld BC,0x0011
 	ld	xde, 13866	; F48786  ld XDE,0x0000362a
 	ld	xhl, 13408	; F4878B  ld XHL,0x00003460
-	.byte 0x93, 0x11	; F48790  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F48790  ldirw
 	ldw	bc, 17	; F48792  ld BC,0x0011
 	ld	xde, 13900	; F48795  ld XDE,0x0000364c
 	ld	xhl, 13442	; F4879A  ld XHL,0x00003482
-	.byte 0x83, 0x11	; F4879F  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F4879F  ldir
 	popw	wa	; F487A1  pop WA
 	stda16	(13650), wa	; F487A2  ld (0x3552),WA
 	ret	; F487A6  ret
@@ -76682,11 +76682,11 @@ sub_F487A7:		; <- T_F40B74
 	ldw	bc, 17	; F487C3  ld BC,0x0011
 	ld	xde, 13918	; F487C6  ld XDE,0x0000365e
 	ld	xhl, 13408	; F487CB  ld XHL,0x00003460
-	.byte 0x93, 0x11	; F487D0  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F487D0  ldirw
 	ldw	bc, 17	; F487D2  ld BC,0x0011
 	ld	xde, 13952	; F487D5  ld XDE,0x00003680
 	ld	xhl, 13442	; F487DA  ld XHL,0x00003482
-	.byte 0x83, 0x11	; F487DF  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F487DF  ldir
 	popw	wa	; F487E1  pop WA
 	stda16	(13650), wa	; F487E2  ld (0x3552),WA
 	calr	65233	; F487E6  calr 0xf486ba
@@ -76751,14 +76751,14 @@ Table_WsaSoundRamS0Wsa1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F48C1A:		; <- T_F43430
-	.byte 0xEE, 0x0C, 0xA0, 0xFF	; F48C1A  link XIZ,0xffa0   [llvm-mc cannot encode this]
+	link XIZ,0xffa0	; F48C1A  link XIZ,0xffa0
 	pushw	hl	; F48C1E  push HL
 	pushw	de	; F48C1F  push DE
 	push	xix	; F48C20  push XIX
 	ldw	bc, 8	; F48C21  ld BC,0x0008
 	lda_24	xiy, (16026624)	; F48C24  lda XIY,0xf48c00
 	lda	xix, (xiz-58)	; F48C29  lda XIX,XIZ+0xc6
-	.byte 0x95, 0x11	; F48C2C  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F48C2C  ldirw
 	ldl_da	xbc, (16026640)	; F48C2E  ld XBC,(0xf48c10)
 	ld	(xiz-36), xbc	; F48C33  ld (XIZ+0xdc),XBC
 	stdi8	(10368), 38	; F48C36  ld (0x2880),0x26
@@ -77051,7 +77051,7 @@ sub_F48C1A:		; <- T_F43430
 	pop	xix	; F48F13  pop XIX
 	popw	de	; F48F14  pop DE
 	popw	hl	; F48F15  pop HL
-	.byte 0xEE, 0x0D	; F48F16  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F48F16  unlk XIZ
 	ret	; F48F18  ret
 
 ; --------------------------------------------------------------------------
@@ -77066,7 +77066,7 @@ sub_F48C1A:		; <- T_F43430
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F48F19:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F48F19  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F48F19  link XIZ,0xfffc
 	pushw	hl	; F48F1D  push HL
 	push	xix	; F48F1E  push XIX
 	lda_d16	xix, (8648)	; F48F1F  lda XIX,0x21c8
@@ -77093,7 +77093,7 @@ sub_F48F19:
 	m_res 5, MD16, 0x21e7	; F48F6C  res 5,(0x21e7)
 	pop	xix	; F48F70  pop XIX
 	popw	hl	; F48F71  pop HL
-	.byte 0xEE, 0x0D	; F48F72  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F48F72  unlk XIZ
 	ret	; F48F74  ret
 
 ; --------------------------------------------------------------------------
@@ -77139,7 +77139,7 @@ sub_F48F75:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F48F9F:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F48F9F  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F48F9F  link XIZ,0x0000
 	pushw	hl	; F48FA3  push HL
 	pushw	de	; F48FA4  push DE
 	ld	d, (xiz+8)	; F48FA5  ld D,(XIZ+0x08)
@@ -77165,7 +77165,7 @@ sub_F48F9F:
 	jr	-25	; F48FD1  jr T,0xf48fba
 	popw	de	; F48FD3  pop DE
 	popw	hl	; F48FD4  pop HL
-	.byte 0xEE, 0x0D	; F48FD5  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F48FD5  unlk XIZ
 	ret	; F48FD7  ret
 
 ; --------------------------------------------------------------------------
@@ -77180,7 +77180,7 @@ sub_F48F9F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F48FD8:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F48FD8  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F48FD8  link XIZ,0x0000
 	pushw	hl	; F48FDC  push HL
 	push	xix	; F48FDD  push XIX
 	ldb	h, 0	; F48FDE  ld H,0x00
@@ -77217,7 +77217,7 @@ sub_F48FD8:
 	jr	ule, -78	; F4902C  jr ULE,0xf48fe0
 	pop	xix	; F4902E  pop XIX
 	popw	hl	; F4902F  pop HL
-	.byte 0xEE, 0x0D	; F49030  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F49030  unlk XIZ
 	ret	; F49032  ret
 
 ; --------------------------------------------------------------------------
@@ -77234,7 +77234,7 @@ sub_F48FD8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F49033:
-	.byte 0xEE, 0x0C, 0xF4, 0xFF	; F49033  link XIZ,0xfff4   [llvm-mc cannot encode this]
+	link XIZ,0xfff4	; F49033  link XIZ,0xfff4
 	pushw	hl	; F49037  push HL
 	pushw	de	; F49038  push DE
 	push	xix	; F49039  push XIX
@@ -77554,7 +77554,7 @@ sub_F49033:
 	pop	xix	; F493F4  pop XIX
 	popw	de	; F493F5  pop DE
 	popw	hl	; F493F6  pop HL
-	.byte 0xEE, 0x0D	; F493F7  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F493F7  unlk XIZ
 	ret	; F493F9  ret
 
 ; --------------------------------------------------------------------------
@@ -77569,7 +77569,7 @@ sub_F49033:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F493FA:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F493FA  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F493FA  link XIZ,0x0000
 	pushw	hl	; F493FE  push HL
 	push	xix	; F493FF  push XIX
 	ld	h, (xiz+10)	; F49400  ld H,(XIZ+0x0a)
@@ -77635,7 +77635,7 @@ sub_F493FA:
 	ld	xiy, xbc	; F494B1  ld XIY,XBC
 	pop	xix	; F494B3  pop XIX
 	popw	hl	; F494B4  pop HL
-	.byte 0xEE, 0x0D	; F494B5  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F494B5  unlk XIZ
 	ret	; F494B7  ret
 	.fill	840, 1, 0x0E	; F494B8-F497FF  `ret` padding (asserted pure 0x0E)
 
@@ -78317,7 +78317,7 @@ sub_F49CC2:
 	ldw	bc, 8	; F49CD3  ld BC,0x0008
 	ld	xde, 14056	; F49CD6  ld XDE,0x000036e8
 	ld	xhl, 13482	; F49CDB  ld XHL,0x000034aa
-	.byte 0x83, 0x11	; F49CE0  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F49CE0  ldir
 	calr	3843	; F49CE2  calr 0xf4abe8
 	ret	; F49CE5  ret
 
@@ -78339,7 +78339,7 @@ sub_F49CE6:
 	ldw	bc, 8	; F49CED  ld BC,0x0008
 	ld	xde, 14056	; F49CF0  ld XDE,0x000036e8
 	ld	xhl, 13482	; F49CF5  ld XHL,0x000034aa
-	.byte 0x83, 0x11	; F49CFA  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F49CFA  ldir
 	calr	3817	; F49CFC  calr 0xf4abe8
 	ret	; F49CFF  ret
 
@@ -79051,7 +79051,7 @@ sub_F4A2C8:
 	mx_lda32 MXD, ra_HL, ra_IX, 3	; F4A363  lda XHL,XHL+IX
 	ld	xix, xhl	; F4A368  ld XIX,XHL
 	ld	bc, de	; F4A36A  ld BC,DE
-	.byte 0x85, 0x11	; F4A36C  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4A36C  ldir
 	and	xix, 255	; F4A36E  and XIX,0x000000ff
 	cps	ix, 5	; F4A374  cp IX,5
 	jr	ugt, 75	; F4A376  jr UGT,0xf4a3c3
@@ -79064,7 +79064,7 @@ sub_F4A2C8:
 	call	15993988	; F4A38B  call 0xf40c84
 	mx_lda32 MXD, ra_HL, ra_IX, 3	; F4A38F  lda XHL,XHL+IX
 	ld	xix, xhl	; F4A394  ld XIX,XHL
-	.byte 0x85, 0x11	; F4A396  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4A396  ldir
 	calr	328	; F4A398  calr 0xf4a4e3
 	ldw	ix, 5	; F4A39B  ld IX,0x0005
 	ldw_d16	hl, (13404)	; F4A39E  ld HL,(0x345c)
@@ -79073,7 +79073,7 @@ sub_F4A2C8:
 	ld	xix, xhl	; F4A3AB  ld XIX,XHL
 	sub	wa, 256	; F4A3AD  sub WA,0x0100
 	ld	bc, wa	; F4A3B1  ld BC,WA
-	.byte 0x85, 0x11	; F4A3B3  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4A3B3  ldir
 	and	xix, 255	; F4A3B5  and XIX,0x000000ff
 	cps	ix, 5	; F4A3BB  cp IX,5
 	jr	ugt, 4	; F4A3BD  jr UGT,0xf4a3c3
@@ -79139,7 +79139,7 @@ sub_F4A2C8:
 	mx_lda32 MXD, ra_HL, ra_IX, 3	; F4A46C  lda XHL,XHL+IX
 	ld	xix, xhl	; F4A471  ld XIX,XHL
 	ld	bc, de	; F4A473  ld BC,DE
-	.byte 0x85, 0x11	; F4A475  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4A475  ldir
 	and	xix, 255	; F4A477  and XIX,0x000000ff
 	cps	ix, 5	; F4A47D  cp IX,5
 	jr	ugt, 75	; F4A47F  jr UGT,0xf4a4cc
@@ -79152,7 +79152,7 @@ sub_F4A2C8:
 	call	15993988	; F4A494  call 0xf40c84
 	mx_lda32 MXD, ra_HL, ra_IX, 3	; F4A498  lda XHL,XHL+IX
 	ld	xix, xhl	; F4A49D  ld XIX,XHL
-	.byte 0x85, 0x11	; F4A49F  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4A49F  ldir
 	calr	63	; F4A4A1  calr 0xf4a4e3
 	ldw	ix, 5	; F4A4A4  ld IX,0x0005
 	ldw_d16	hl, (13404)	; F4A4A7  ld HL,(0x345c)
@@ -79161,7 +79161,7 @@ sub_F4A2C8:
 	ld	xix, xhl	; F4A4B4  ld XIX,XHL
 	sub	wa, 256	; F4A4B6  sub WA,0x0100
 	ld	bc, wa	; F4A4BA  ld BC,WA
-	.byte 0x85, 0x11	; F4A4BC  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4A4BC  ldir
 	and	xix, 255	; F4A4BE  and XIX,0x000000ff
 	cps	ix, 5	; F4A4C4  cp IX,5
 	jr	ugt, 4	; F4A4C6  jr UGT,0xf4a4cc
@@ -79334,11 +79334,11 @@ sub_F4A58E:
 	ldw	bc, 17	; F4A58E  ld BC,0x0011
 	ld	xde, 14078	; F4A591  ld XDE,0x000036fe
 	ld	xhl, 6304894	; F4A596  ld XHL,0x0060347e
-	.byte 0x93, 0x11	; F4A59B  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F4A59B  ldirw
 	ldw	bc, 17	; F4A59D  ld BC,0x0011
 	ld	xde, 14112	; F4A5A0  ld XDE,0x00003720
 	ld	xhl, 6304928	; F4A5A5  ld XHL,0x006034a0
-	.byte 0x83, 0x11	; F4A5AA  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F4A5AA  ldir
 	ret	; F4A5AC  ret
 
 ; --------------------------------------------------------------------------
@@ -81153,11 +81153,11 @@ sub_F4B414:		; <- T_F40C04
 	ldw	bc, 17	; F4B414  ld BC,0x0011
 	ld	xde, 6304894	; F4B417  ld XDE,0x0060347e
 	ld	xhl, 14078	; F4B41C  ld XHL,0x000036fe
-	.byte 0x93, 0x11	; F4B421  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F4B421  ldirw
 	ldw	bc, 17	; F4B423  ld BC,0x0011
 	ld	xde, 6304928	; F4B426  ld XDE,0x006034a0
 	ld	xhl, 14112	; F4B42B  ld XHL,0x00003720
-	.byte 0x83, 0x11	; F4B430  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r3	; F4B430  ldir
 	ret	; F4B432  ret
 
 ; --------------------------------------------------------------------------
@@ -81864,7 +81864,7 @@ sub_F4C4B0:		; <- T_F434E4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4C4B5:		; <- T_F434E8
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F4C4B5  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F4C4B5  link XIZ,0x0000
 	.byte 0x9E, 0x0A, 0x04	; F4C4B9  pushw (XIZ+0x0a)   [llvm-mc cannot encode this]
 	.byte 0x9E, 0x08, 0x04	; F4C4BC  pushw (XIZ+0x08)   [llvm-mc cannot encode this]
 	call	16002164	; F4C4BF  call 0xf42c74
@@ -81876,7 +81876,7 @@ sub_F4C4B5:		; <- T_F434E8
 	push	xiy	; F4C4D5  push XIY
 	jp	(xbc)	; F4C4D6  jp T,XBC
 	pop	xbc	; F4C4D8  pop XBC
-	.byte 0xEE, 0x0D	; F4C4D9  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F4C4D9  unlk XIZ
 	ret	; F4C4DB  ret
 
 ; --------------------------------------------------------------------------
@@ -82092,7 +82092,7 @@ sub_F4C684:
 	pop	xiy	; F4C6BC  pop XIY
 	pop	xix	; F4C6BD  pop XIX
 	ret	; F4C6BE  ret
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F4C6BF  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F4C6BF  link XIZ,0x0000
 	pushw	hl	; F4C6C3  push HL
 	ld	h, (xiz+8)	; F4C6C4  ld H,(XIZ+0x08)
 	cp	h, 8	; F4C6C7  cp H,0x08
@@ -82104,7 +82104,7 @@ sub_F4C684:
 	add	xbc, 16040937	; F4C6D4  add XBC,0x00f4c3e9
 	ld	a, (xbc)	; F4C6DA  ld A,(XBC)
 	popw	hl	; F4C6DC  pop HL
-	.byte 0xEE, 0x0D	; F4C6DD  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F4C6DD  unlk XIZ
 	ret	; F4C6DF  ret
 
 ; --------------------------------------------------------------------------
@@ -82119,7 +82119,7 @@ sub_F4C684:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4C6E0:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F4C6E0  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F4C6E0  link XIZ,0x0000
 	ld	c, (xiz+8)	; F4C6E4  ld C,(XIZ+0x08)
 	stb_d8	(9793), c	; F4C6E7  ld (0x2641),C
 	ld	a, (xiz+10)	; F4C6EB  ld A,(XIZ+0x0a)
@@ -82137,19 +82137,19 @@ sub_F4C6E0:
 	ld	xiy, 8944	; F4C709  ld XIY,0x000022f0
 	ld	xix, 10560	; F4C70E  ld XIX,0x00002940
 	ldw	bc, 7	; F4C713  ld BC,0x0007
-	.byte 0x95, 0x11	; F4C716  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F4C716  ldirw
 	pop	xiy	; F4C718  pop XIY
 	ld	a, (xiy+1)	; F4C719  ld A,(XIY+0x01)
 	call	16003888	; F4C71C  call 0xf43330
 	ld	xiy, 8944	; F4C720  ld XIY,0x000022f0
 	ld	xix, 10576	; F4C725  ld XIX,0x00002950
 	ldw	bc, 7	; F4C72A  ld BC,0x0007
-	.byte 0x95, 0x11	; F4C72D  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F4C72D  ldirw
 	pop	xiz	; F4C72F  pop XIZ
 	pop	xix	; F4C730  pop XIX
 	pop	xhl	; F4C731  pop XHL
 	pop	xde	; F4C732  pop XDE
-	.byte 0xEE, 0x0D	; F4C733  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F4C733  unlk XIZ
 	ret	; F4C735  ret
 	.fill	202, 1, 0x0E	; F4C736-F4C7FF  `ret` padding (asserted pure 0x0E)
 
@@ -82376,7 +82376,7 @@ sub_F4C901:
 	push	xix	; F4C902  push XIX
 	push	xiy	; F4C903  push XIY
 	ldw	bc, 256	; F4C904  ld BC,0x0100
-	.byte 0x85, 0x11	; F4C907  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4C907  ldir
 	pop	xiy	; F4C909  pop XIY
 	m_and_mi8 MBD+r5, 0x00, 0x7f	; F4C90A  and (XIY+0x00),0x7f
 	pop	xix	; F4C90E  pop XIX
@@ -82668,7 +82668,7 @@ sub_F4CB0D:
 	ld	xde, 6356992	; F4CB1F  ld XDE,0x00610000
 	mul	wa, 3072	; F4CB24  mul WA,0x0c00
 	mx_lda32 MXD, ra_DE, ra_WA, 2	; F4CB28  lda XDE,XDE+WA
-	.byte 0x93, 0x11	; F4CB2D  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F4CB2D  ldirw
 	pop	xde	; F4CB2F  pop XDE
 	pop	xhl	; F4CB30  pop XHL
 	pop	xbc	; F4CB31  pop XBC
@@ -82697,7 +82697,7 @@ sub_F4CB34:
 	ld	xhl, 6356992	; F4CB46  ld XHL,0x00610000
 	mul	wa, 3072	; F4CB4B  mul WA,0x0c00
 	mx_lda32 MXD, ra_HL, ra_WA, 3	; F4CB4F  lda XHL,XHL+WA
-	.byte 0x93, 0x11	; F4CB54  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r3	; F4CB54  ldirw
 	pop	xde	; F4CB56  pop XDE
 	pop	xhl	; F4CB57  pop XHL
 	pop	xbc	; F4CB58  pop XBC
@@ -83102,7 +83102,7 @@ sub_F4D1B8:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D1CD  lda XIX,XIX+DE
 	.byte 0xBC, 0x00, 0x34	; F4D1D2  lda XIX,XIX+0x00   [llvm-mc cannot encode this]
 	ld	xiy, 6304768	; F4D1D5  ld XIY,0x00603400
-	.byte 0x85, 0x11	; F4D1DA  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D1DA  ldir
 	inc	1, wa	; F4D1DC  inc 1,WA
 	cp	wa, 10	; F4D1DE  cp WA,0x000a
 	jr	c, -37	; F4D1E2  jr C,0xf4d1bf
@@ -83114,7 +83114,7 @@ sub_F4D1B8:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D1F4  lda XIX,XIX+DE
 	lda	xix, (xix+20)	; F4D1F9  lda XIX,XIX+0x14
 	ld	xiy, 6304788	; F4D1FC  ld XIY,0x00603414
-	.byte 0x85, 0x11	; F4D201  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D201  ldir
 	inc	1, wa	; F4D203  inc 1,WA
 	cp	wa, 10	; F4D205  cp WA,0x000a
 	jr	c, -37	; F4D209  jr C,0xf4d1e6
@@ -83126,7 +83126,7 @@ sub_F4D1B8:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D21B  lda XIX,XIX+DE
 	lda	xix, (xix+70)	; F4D220  lda XIX,XIX+0x46
 	ld	xiy, 6304838	; F4D223  ld XIY,0x00603446
-	.byte 0x85, 0x11	; F4D228  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D228  ldir
 	inc	1, wa	; F4D22A  inc 1,WA
 	cp	wa, 10	; F4D22C  cp WA,0x000a
 	jr	c, -37	; F4D230  jr C,0xf4d20d
@@ -83163,7 +83163,7 @@ sub_F4D238:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D24D  lda XIX,XIX+DE
 	lda	xix, (xix+7)	; F4D252  lda XIX,XIX+0x07
 	ld	xiy, 6304775	; F4D255  ld XIY,0x00603407
-	.byte 0x85, 0x11	; F4D25A  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D25A  ldir
 	inc	1, wa	; F4D25C  inc 1,WA
 	cp	wa, 10	; F4D25E  cp WA,0x000a
 	jr	c, -37	; F4D262  jr C,0xf4d23f
@@ -83175,7 +83175,7 @@ sub_F4D238:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D274  lda XIX,XIX+DE
 	lda	xix, (xix+28)	; F4D279  lda XIX,XIX+0x1c
 	ld	xiy, 6304796	; F4D27C  ld XIY,0x0060341c
-	.byte 0x85, 0x11	; F4D281  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D281  ldir
 	inc	1, wa	; F4D283  inc 1,WA
 	cp	wa, 10	; F4D285  cp WA,0x000a
 	jr	c, -37	; F4D289  jr C,0xf4d266
@@ -83187,7 +83187,7 @@ sub_F4D238:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D29B  lda XIX,XIX+DE
 	lda	xix, (xix+126)	; F4D2A0  lda XIX,XIX+0x7e
 	ld	xiy, 6304894	; F4D2A3  ld XIY,0x0060347e
-	.byte 0x85, 0x11	; F4D2A8  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D2A8  ldir
 	inc	1, wa	; F4D2AA  inc 1,WA
 	cp	wa, 10	; F4D2AC  cp WA,0x000a
 	jr	c, -37	; F4D2B0  jr C,0xf4d28d
@@ -83199,7 +83199,7 @@ sub_F4D238:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D2C2  lda XIX,XIX+DE
 	lda	xix, (xix+184)	; F4D2C7  lda XIX,XIX+0x00b8
 	ld	xiy, 6304952	; F4D2CC  ld XIY,0x006034b8
-	.byte 0x85, 0x11	; F4D2D1  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D2D1  ldir
 	inc	1, wa	; F4D2D3  inc 1,WA
 	cp	wa, 10	; F4D2D5  cp WA,0x000a
 	jr	c, -39	; F4D2D9  jr C,0xf4d2b4
@@ -83211,7 +83211,7 @@ sub_F4D238:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D2EB  lda XIX,XIX+DE
 	.byte 0xF3, 0xF1, 0x00, 0x01, 0x34	; F4D2F0  lda XIX,XIX+0x0100   [llvm-mc cannot encode this]
 	ld	xiy, 6305024	; F4D2F5  ld XIY,0x00603500
-	.byte 0x85, 0x11	; F4D2FA  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D2FA  ldir
 	inc	1, wa	; F4D2FC  inc 1,WA
 	cp	wa, 10	; F4D2FE  cp WA,0x000a
 	jr	c, -39	; F4D302  jr C,0xf4d2dd
@@ -83223,7 +83223,7 @@ sub_F4D238:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D314  lda XIX,XIX+DE
 	lda	xix, (xix+214)	; F4D319  lda XIX,XIX+0x00d6
 	ld	xiy, 6304982	; F4D31E  ld XIY,0x006034d6
-	.byte 0x85, 0x11	; F4D323  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4D323  ldir
 	inc	1, wa	; F4D325  inc 1,WA
 	cp	wa, 10	; F4D327  cp WA,0x000a
 	jr	c, -39	; F4D32B  jr C,0xf4d306
@@ -83384,7 +83384,7 @@ sub_F4D346:
 	ld	xix, 6332416	; F4D4EC  ld XIX,0x0060a000
 	ldw	bc, 256	; F4D4F1  ld BC,0x0100
 	ld	xiy, xwa	; F4D4F4  ld XIY,XWA
-	.byte 0x95, 0x11	; F4D4F6  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F4D4F6  ldirw
 	ldw_d16	iy, (13404)	; F4D4F8  ld IY,(0x345c)
 	ldw	wa, 1	; F4D4FC  ld WA,0x0001
 	pushw	de	; F4D4FF  push DE
@@ -83417,7 +83417,7 @@ sub_F4D346:
 	ld	xiy, xbc	; F4D545  ld XIY,XBC
 	ld	xix, 6332416	; F4D547  ld XIX,0x0060a000
 	ldw	bc, 256	; F4D54C  ld BC,0x0100
-	.byte 0x95, 0x11	; F4D54F  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F4D54F  ldirw
 	ldw_d16	iy, (13404)	; F4D551  ld IY,(0x345c)
 	ldw	wa, 1	; F4D555  ld WA,0x0001
 	pushw	de	; F4D558  push DE
@@ -83434,7 +83434,7 @@ sub_F4D346:
 	ld	xiy, xde	; F4D574  ld XIY,XDE
 	ld	xix, 6332416	; F4D576  ld XIX,0x0060a000
 	ldw	bc, 256	; F4D57B  ld BC,0x0100
-	.byte 0x95, 0x11	; F4D57E  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F4D57E  ldirw
 	ldw_d16	iy, (13404)	; F4D580  ld IY,(0x345c)
 	ldw	wa, 1	; F4D584  ld WA,0x0001
 	calr	787	; F4D587  calr 0xf4d89d
@@ -85778,7 +85778,7 @@ sub_F4F2DE:
 	jr	z, 12	; F4F2E5  jr Z,0xf4f2f3
 	lda_24	xiy, (16053005)	; F4F2E7  lda XIY,0xf4f30d
 	lda_24	xix, (0)	; F4F2EC  lda XIX,0x000000
-	.byte 0x85, 0x11	; F4F2F1  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F4F2F1  ldir
 	ld	xbc, 32	; F4F2F3  ld XBC,0x00000020
 	and	xbc, xbc	; F4F2F8  and XBC,XBC
 	jr	z, 16	; F4F2FA  jr Z,0xf4f30c
@@ -88005,7 +88005,7 @@ sub_F53029:		; <- T_F42E48
 ;           mechanism and the table, not a purpose.
 ; --------------------------------------------------------------------------
 DrawbarScreen_Dispatch:		; <- T_DrawbarScreen_Dispatch
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F5302A  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F5302A  link XIZ,0x0000
 	.byte 0x9E, 0x0A, 0x04	; F5302E  pushw (XIZ+0x0a)   [llvm-mc cannot encode this]
 	.byte 0x9E, 0x08, 0x04	; F53031  pushw (XIZ+0x08)   [llvm-mc cannot encode this]
 	call	16002164	; F53034  call 0xf42c74
@@ -88017,7 +88017,7 @@ DrawbarScreen_Dispatch:		; <- T_DrawbarScreen_Dispatch
 	push	xiy	; F5304A  push XIY
 	jp	(xbc)	; F5304B  jp T,XBC
 	pop	xbc	; F5304D  pop XBC
-	.byte 0xEE, 0x0D	; F5304E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F5304E  unlk XIZ
 	ret	; F53050  ret
 
 ; --------------------------------------------------------------------------
@@ -88666,7 +88666,7 @@ sub_F53381:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F533DC:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F533DC  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F533DC  link XIZ,0x0000
 	pushw	hl	; F533E0  push HL
 	ld	h, (xiz+8)	; F533E1  ld H,(XIZ+0x08)
 	m_cp_mi8 MB16, 0x289e, 0x00	; F533E4  cp (0x289e),0x00
@@ -88684,7 +88684,7 @@ sub_F533DC:
 	m_set 3, MD16, 0x2075	; F53403  set 3,(0x2075)
 	ld	a, h	; F53407  ld A,H
 	popw	hl	; F53409  pop HL
-	.byte 0xEE, 0x0D	; F5340A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F5340A  unlk XIZ
 	ret	; F5340C  ret
 
 ; --------------------------------------------------------------------------
@@ -89627,7 +89627,7 @@ PaintAllDrawbars:
 ;          at 0xF542D1 begins.
 ; --------------------------------------------------------------------------
 Drawbar_DrawColumn:
-	.byte 0xEE, 0x0C, 0xF4, 0xFF	; F538B6  link XIZ,0xfff4   [llvm-mc cannot encode this]
+	link XIZ,0xfff4	; F538B6  link XIZ,0xfff4
 	push	xix	; F538BA  push XIX
 	lda	xix, (xiz-12)	; F538BB  lda XIX,XIZ+0xf4
 	stdi8	(9536), 0	; F538BE  ld (0x2540),0x00
@@ -89665,7 +89665,7 @@ Drawbar_DrawColumn:
 	inc	8, xsp	; F53923  inc 0,XSP
 	inc	4, xsp	; F53925  inc 4,XSP
 	pop	xix	; F53927  pop XIX
-	.byte 0xEE, 0x0D	; F53928  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F53928  unlk XIZ
 	ret	; F5392A  ret
 
 ; --------------------------------------------------------------------------
@@ -89680,7 +89680,7 @@ Drawbar_DrawColumn:
 ;           read out of this transcription.
 ; --------------------------------------------------------------------------
 Blit_FromStackRecord:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F5392B  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F5392B  link XIZ,0x0000
 	push	xde	; F5392F  push XDE
 	push	xhl	; F53930  push XHL
 	push	xix	; F53931  push XIX
@@ -89696,7 +89696,7 @@ Blit_FromStackRecord:
 	pop	xix	; F53946  pop XIX
 	pop	xhl	; F53947  pop XHL
 	pop	xde	; F53948  pop XDE
-	.byte 0xEE, 0x0D	; F53949  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F53949  unlk XIZ
 	ret	; F5394B  ret
 
 ; --------------------------------------------------------------------------
@@ -90641,7 +90641,7 @@ sub_F53E04:		; <- T_F42E64
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F54051:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F54051  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F54051  link XIZ,0xfffa
 	push	xix	; F54055  push XIX
 	lda	xix, (xiz-6)	; F54056  lda XIX,XIZ+0xfa
 	ld	(xix), 130	; F54059  ld (XIX),0x82
@@ -90676,7 +90676,7 @@ sub_F54051:
 	call	15994580	; F540B5  call 0xf40ed4
 	add	xsp, 32	; F540B9  add XSP,0x00000020
 	pop	xix	; F540BF  pop XIX
-	.byte 0xEE, 0x0D	; F540C0  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F540C0  unlk XIZ
 	ret	; F540C2  ret
 
 ; --------------------------------------------------------------------------
@@ -90689,7 +90689,7 @@ sub_F54051:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F540C3:
-	.byte 0xEE, 0x0C, 0xFA, 0xFF	; F540C3  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link XIZ,0xfffa	; F540C3  link XIZ,0xfffa
 	push	xix	; F540C7  push XIX
 	lda	xix, (xiz-6)	; F540C8  lda XIX,XIZ+0xfa
 	ld	(xix), 129	; F540CB  ld (XIX),0x81
@@ -90704,7 +90704,7 @@ sub_F540C3:
 	call	15994580	; F540E9  call 0xf40ed4
 	inc	8, xsp	; F540ED  inc 0,XSP
 	pop	xix	; F540EF  pop XIX
-	.byte 0xEE, 0x0D	; F540F0  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F540F0  unlk XIZ
 	ret	; F540F2  ret
 
 ; --------------------------------------------------------------------------
@@ -90718,7 +90718,7 @@ sub_F540C3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F540F3:
-	.byte 0xEE, 0x0C, 0xF6, 0xFF	; F540F3  link XIZ,0xfff6   [llvm-mc cannot encode this]
+	link XIZ,0xfff6	; F540F3  link XIZ,0xfff6
 	pushw	hl	; F540F7  push HL
 	push	xix	; F540F8  push XIX
 	lda	xix, (xiz-10)	; F540F9  lda XIX,XIZ+0xf6
@@ -90777,7 +90777,7 @@ sub_F540F3:
 	pop	xbc	; F54188  pop XBC
 	pop	xix	; F54189  pop XIX
 	popw	hl	; F5418A  pop HL
-	.byte 0xEE, 0x0D	; F5418B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F5418B  unlk XIZ
 	ret	; F5418D  ret
 
 ; --------------------------------------------------------------------------
@@ -90790,7 +90790,7 @@ sub_F540F3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5418E:
-	.byte 0xEE, 0x0C, 0xF2, 0xFF	; F5418E  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link XIZ,0xfff2	; F5418E  link XIZ,0xfff2
 	pushw	hl	; F54192  push HL
 	push	xix	; F54193  push XIX
 	lda	xix, (xiz-10)	; F54194  lda XIX,XIZ+0xf6
@@ -90832,7 +90832,7 @@ sub_F5418E:
 	inc	8, xsp	; F541F7  inc 0,XSP
 	pop	xix	; F541F9  pop XIX
 	popw	hl	; F541FA  pop HL
-	.byte 0xEE, 0x0D	; F541FB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F541FB  unlk XIZ
 	ret	; F541FD  ret
 
 ; --------------------------------------------------------------------------
@@ -91892,7 +91892,7 @@ Stub_Ret_F55018:
 ;           notes/gen_prom_b_f5553f_module.py (--selftest re-reads all 32 words).
 ; ---------------------------------------------------------------------
 PanelCode_ToSlotAndFlags:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F55019  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F55019  link XIZ,0x0000
 	pushw	hl	; F5501D  push HL
 	push	xix	; F5501E  push XIX
 	lda_d16	xix, (10416)	; F5501F  lda XIX,0x28b0
@@ -91939,7 +91939,7 @@ PanelCode_ToSlotAndFlags:
 	ld	a, c	; F5509F  ld A,C
 	pop	xix	; F550A1  pop XIX
 	popw	hl	; F550A2  pop HL
-	.byte 0xEE, 0x0D	; F550A3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F550A3  unlk XIZ
 	ret	; F550A5  ret
 
 ; ---------------------------------------------------------------------
@@ -91971,7 +91971,7 @@ PanelCode_ToSlotAndFlags:
 ; Unknown:  what the descriptor describes.
 ; ---------------------------------------------------------------------
 sub_F550A6:
-	.byte 0xEE, 0x0C, 0xFE, 0xFF	; F550A6  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link XIZ,0xfffe	; F550A6  link XIZ,0xfffe
 	pushw	hl	; F550AA  push HL
 	pushw	de	; F550AB  push DE
 	push	xix	; F550AC  push XIX
@@ -92062,7 +92062,7 @@ sub_F550A6:
 	pop	xix	; F55175  pop XIX
 	popw	de	; F55176  pop DE
 	popw	hl	; F55177  pop HL
-	.byte 0xEE, 0x0D	; F55178  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F55178  unlk XIZ
 	ret	; F5517A  ret
 
 ; ---------------------------------------------------------------------
@@ -92080,7 +92080,7 @@ sub_F550A6:
 ; Unknown:  what the byte is.
 ; ---------------------------------------------------------------------
 sub_F5517B:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F5517B  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F5517B  link XIZ,0x0000
 	pushw	hl	; F5517F  push HL
 	pushw	de	; F55180  push DE
 	push	xix	; F55181  push XIX
@@ -92128,7 +92128,7 @@ sub_F5517B:
 	pop	xix	; F551E1  pop XIX
 	popw	de	; F551E2  pop DE
 	popw	hl	; F551E3  pop HL
-	.byte 0xEE, 0x0D	; F551E4  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F551E4  unlk XIZ
 	ret	; F551E6  ret
 
 ; ---------------------------------------------------------------------
@@ -92146,7 +92146,7 @@ sub_F5517B:
 ; Unknown:  what the value is.
 ; ---------------------------------------------------------------------
 sub_F551E7:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F551E7  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F551E7  link XIZ,0x0000
 	pushw	hl	; F551EB  push HL
 	pushw	de	; F551EC  push DE
 	pushw	ix	; F551ED  push IX
@@ -92179,7 +92179,7 @@ sub_F551E7:
 	popw	ix	; F5522B  pop IX
 	popw	de	; F5522C  pop DE
 	popw	hl	; F5522D  pop HL
-	.byte 0xEE, 0x0D	; F5522E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F5522E  unlk XIZ
 	ret	; F55230  ret
 
 ; ---------------------------------------------------------------------
@@ -92197,7 +92197,7 @@ sub_F551E7:
 ; Unknown:  what reads the queue, and what the four bytes mean.
 ; ---------------------------------------------------------------------
 Queue2C00_Append4:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F55231  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F55231  link XIZ,0xfffc
 	pushw	hl	; F55235  push HL
 	push	xix	; F55236  push XIX
 	lda_24	xix, (6352896)	; F55237  lda XIX,0x60f000
@@ -92225,7 +92225,7 @@ Queue2C00_Append4:
 	incm	4, (xix)	; F55277  incw 4,(XIX)
 	pop	xix	; F55279  pop XIX
 	popw	hl	; F5527A  pop HL
-	.byte 0xEE, 0x0D	; F5527B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F5527B  unlk XIZ
 	ret	; F5527D  ret
 
 ; ---------------------------------------------------------------------
@@ -92240,7 +92240,7 @@ Queue2C00_Append4:
 ; Unknown:  why the two queues are coupled this way.
 ; ---------------------------------------------------------------------
 Queue2E00_Append4:
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F5527E  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F5527E  link XIZ,0xfffc
 	pushw	hl	; F55282  push HL
 	push	xix	; F55283  push XIX
 	m_cp_mi16 MW24, 0x60f000, 0x00fc	; F55284  cp (0x60f000),0x00fc
@@ -92267,7 +92267,7 @@ Queue2E00_Append4:
 	incm	4, (xix)	; F552C5  incw 4,(XIX)
 	pop	xix	; F552C7  pop XIX
 	popw	hl	; F552C8  pop HL
-	.byte 0xEE, 0x0D	; F552C9  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F552C9  unlk XIZ
 	ret	; F552CB  ret
 
 ; ---------------------------------------------------------------------
@@ -92283,7 +92283,7 @@ Queue2E00_Append4:
 ; Unknown:  what the list is for.
 ; ---------------------------------------------------------------------
 List2030_Append4:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F552CC  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F552CC  link XIZ,0xfff8
 	push	xix	; F552D0  push XIX
 	lda_d16	xix, (8240)	; F552D1  lda XIX,0x2030
 	lda_d16	xbc, (8300)	; F552D5  lda XBC,0x206c
@@ -92314,7 +92314,7 @@ List2030_Append4:
 	ld	xbc, (xiz-8)	; F55316  ld XBC,(XIZ+0xf8)
 	ld	(xbc+3), 255	; F55319  ld (XBC+0x03),0xff
 	pop	xix	; F5531D  pop XIX
-	.byte 0xEE, 0x0D	; F5531E  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F5531E  unlk XIZ
 	ret	; F55320  ret
 
 ; ---------------------------------------------------------------------
@@ -92328,7 +92328,7 @@ List2030_Append4:
 ; Unknown:  what the table holds and who writes 0x60F018.
 ; ---------------------------------------------------------------------
 IndexedTable_GetPtr:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F55321  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F55321  link XIZ,0x0000
 	push	xix	; F55325  push XIX
 	ldl_da	xix, (6352920)	; F55326  ld XIX,(0x60f018)
 	ldb	c, 4	; F5532B  ld C,0x04
@@ -92338,7 +92338,7 @@ IndexedTable_GetPtr:
 	ld	xwa, (xbc)	; F55334  ld XWA,(XBC)
 	ld	xiy, xwa	; F55336  ld XIY,XWA
 	pop	xix	; F55338  pop XIX
-	.byte 0xEE, 0x0D	; F55339  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F55339  unlk XIZ
 	ret	; F5533B  ret
 
 ; ---------------------------------------------------------------------
@@ -92353,7 +92353,7 @@ IndexedTable_GetPtr:
 ; Unknown:  as above.
 ; ---------------------------------------------------------------------
 IndexedTable_GetByte:
-	.byte 0xEE, 0x0C, 0x00, 0x00	; F5533C  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link XIZ,0x0000	; F5533C  link XIZ,0x0000
 	push	xix	; F55340  push XIX
 	push	0	; F55341  push 0x00
 	.byte 0x8E, 0x08, 0x04	; F55343  push (XIZ+0x08)   [llvm-mc cannot encode this]
@@ -92366,7 +92366,7 @@ IndexedTable_GetByte:
 	ld	a, (xiy)	; F55354  ld A,(XIY)
 	popw	bc	; F55356  pop BC
 	pop	xix	; F55357  pop XIX
-	.byte 0xEE, 0x0D	; F55358  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F55358  unlk XIZ
 	ret	; F5535A  ret
 
 
@@ -92415,7 +92415,7 @@ IndexedTable_GetByte:
 ;          0x2030 list for the write-back instead of doing both.
 ; ---------------------------------------------------------------------
 IndexedParam_AdjustField:
-	.byte 0xEE, 0x0C, 0xF5, 0xFF	; F5535B  link XIZ,0xfff5   [llvm-mc cannot encode this]
+	link XIZ,0xfff5	; F5535B  link XIZ,0xfff5
 	pushw	hl	; F5535F  push HL
 	pushw	de	; F55360  push DE
 	push	xix	; F55361  push XIX
@@ -92538,7 +92538,7 @@ IndexedParam_AdjustField:
 	pop	xix	; F55475  pop XIX
 	popw	de	; F55476  pop DE
 	popw	hl	; F55477  pop HL
-	.byte 0xEE, 0x0D	; F55478  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F55478  unlk XIZ
 	ret	; F5547A  ret
 
 ; ---------------------------------------------------------------------
@@ -92576,7 +92576,7 @@ IndexedParam_AdjustField:
 ; Unknown:  the same three gaps as the routine above.
 ; ---------------------------------------------------------------------
 IndexedParam_SetBit:
-	.byte 0xEE, 0x0C, 0xF8, 0xFF	; F5547B  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link XIZ,0xfff8	; F5547B  link XIZ,0xfff8
 	pushw	hl	; F5547F  push HL
 	pushw	de	; F55480  push DE
 	push	xix	; F55481  push XIX
@@ -92665,7 +92665,7 @@ IndexedParam_SetBit:
 	pop	xix	; F55539  pop XIX
 	popw	de	; F5553A  pop DE
 	popw	hl	; F5553B  pop HL
-	.byte 0xEE, 0x0D	; F5553C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F5553C  unlk XIZ
 	ret	; F5553E  ret
 ; ==============================================================================
 ; 0xF5553F-0xF57D1D -- THE 32-SELECTOR ROUTINE BANK, THE PARAMETER-FIELD WRITER
@@ -92775,7 +92775,7 @@ IndexedParam_SetBit:
 ;          and returns.
 ; --------------------------------------------------------------------------
 IndexedParam_SetFieldFromAsciiEntry:		; <- T_IndexedParam_SetFieldFromAsciiEntry
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F5553F  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F5553F  link XIZ,0xfffc
 	pushw	hl	; F55543  push HL
 	pushw	de	; F55544  push DE
 	push	xix	; F55545  push XIX
@@ -92937,7 +92937,7 @@ IndexedParam_SetFieldFromAsciiEntry:		; <- T_IndexedParam_SetFieldFromAsciiEntry
 	pop	xix	; F556CC  pop XIX
 	popw	de	; F556CD  pop DE
 	popw	hl	; F556CE  pop HL
-	.byte 0xEE, 0x0D	; F556CF  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F556CF  unlk XIZ
 	ret	; F556D1  ret
 
 ; --------------------------------------------------------------------------
@@ -92974,7 +92974,7 @@ sub_F556D2:		; <- T_F42C9C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F556EA:		; <- T_F42CA0
-	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F556EA  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link XIZ,0xfffc	; F556EA  link XIZ,0xfffc
 	pushw	hl	; F556EE  push HL
 	push	xix	; F556EF  push XIX
 	ld	l, (xiz+8)	; F556F0  ld L,(XIZ+0x08)
@@ -93018,7 +93018,7 @@ sub_F556EA:		; <- T_F42CA0
 	jr	nz, -22	; F5574E  jr NZ,0xf5573a
 	pop	xix	; F55750  pop XIX
 	popw	hl	; F55751  pop HL
-	.byte 0xEE, 0x0D	; F55752  unlk XIZ   [llvm-mc cannot encode this]
+	unlk XIZ	; F55752  unlk XIZ
 	ret	; F55754  ret
 
 ; --------------------------------------------------------------------------
@@ -98536,21 +98536,21 @@ Ring_PutBlockWrapped:
 	jr	z, 12	; F57CE8  jr Z,0xf57cf6
 	add	(xix-4), bc	; F57CEA  add (XIX+0xfc),BC
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F57CED  lda XIX,XIX+DE
-	.byte 0x85, 0x11	; F57CF2  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F57CF2  ldir
 	jr	36	; F57CF4  jr T,0xf57d1a
 	.byte 0xBC, 0xFC, 0x02, 0x00, 0x00	; F57CF6  ld (XIX+0xfc),0x0000   [llvm-mc cannot encode this]
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F57CFB  lda XIX,XIX+DE
-	.byte 0x85, 0x11	; F57D00  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F57D00  ldir
 	jr	22	; F57D02  jr T,0xf57d1a
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F57D04  lda XIX,XIX+DE
 	ld	de, bc	; F57D09  ld DE,BC
 	ld	bc, wa	; F57D0B  ld BC,WA
 	sub	de, wa	; F57D0D  sub DE,WA
-	.byte 0x85, 0x11	; F57D0F  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F57D0F  ldir
 	ld	bc, de	; F57D11  ld BC,DE
 	ld	xix, xhl	; F57D13  ld XIX,XHL
 	ld	(xix-4), de	; F57D15  ld (XIX+0xfc),DE
-	.byte 0x85, 0x11	; F57D18  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F57D18  ldir
 	popw	de	; F57D1A  pop DE
 	pop	xix	; F57D1B  pop XIX
 	pop	xhl	; F57D1C  pop XHL
@@ -98585,7 +98585,7 @@ Clear_600780_98:
 	lda_24	xiy, (16088390)	; F57D1E  lda XIY,0xf57d46
 	lda_24	xix, (6293465)	; F57D23  lda XIX,0x6007d9
 	ld	xbc, 9	; F57D28  ld XBC,0x00000009
-	.byte 0x85, 0x11	; F57D2D  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F57D2D  ldir
 	ld	xbc, 89	; F57D2F  ld XBC,0x00000059
 	lda_24	xix, (6293376)	; F57D34  lda XIX,0x600780
 	xor	wa, wa	; F57D39  xor WA,WA
@@ -103881,7 +103881,7 @@ UiText_CopyLabel13_To_22F0:		; <- T_F43330
 	add	xiy, xwa	; F5B80F  add XIY,XWA
 	ld	xix, 8944	; F5B811  ld XIX,0x000022f0
 	ldw	bc, 13	; F5B816  ld BC,0x000d
-	.byte 0x85, 0x11	; F5B819  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F5B819  ldir
 	ret	; F5B81B  ret
 ; ---------------------------------------------------------------------
 ; sub_F5B81C -- push TWO records onto the list at 0x2030, via thunk T_List2030_AppendRegs
@@ -107143,7 +107143,7 @@ sub_F5D77F:
 	call	15996912	; F5D7BD  call 0xf417f0
 	ret	; F5D7C1  ret
 	.byte 0xF5, 0x27, 0x3F	; F5D7C2  db   [llvm-mc cannot encode this]
-	.byte 0x01	; F5D7C5  normal   [llvm-mc cannot encode this]
+	normal	; F5D7C5  normal
 	jr	z, 19	; F5D7C6  jr Z,0xf5d7db
 	stdi8	(9536), 0	; F5D7C8  ld (0x2540),0x00
 	ld	xiy, 15937480	; F5D7CD  ld XIY,0x00f32fc8
@@ -111376,7 +111376,7 @@ sub_F60514:
 	.byte 0xE7, 0x38, 0x04	; F6051F  push XDE3   [llvm-mc cannot encode this]
 	ldda32	xiy, (4718)	; F60522  ld XIY,(0x126e)
 	ldw	bc, 256	; F60526  ld BC,0x0100
-	.byte 0x85, 0x11	; F60529  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F60529  ldir
 	ldw_d16	iy, (13404)	; F6052B  ld IY,(0x345c)
 	ldw	wa, 1	; F6052F  ld WA,0x0001
 	call	16001160	; F60532  call 0xf42888
@@ -112753,7 +112753,7 @@ sub_F6119A:		; <- T_F4271C
 	ldw	bc, 251	; F6137F  ld BC,0x00fb
 	inc	5, xix	; F61382  inc 5,XIX
 	inc	5, xiy	; F61384  inc 5,XIY
-	.byte 0x85, 0x11	; F61386  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F61386  ldir
 	sub	xiy, 256	; F61388  sub XIY,0x00000100
 	ld	hl, (xiy+3)	; F6138E  ld HL,(XIY+0x03)
 	cp	hl, 65535	; F61391  cp HL,0xffff
@@ -112781,7 +112781,7 @@ sub_F6119A:		; <- T_F4271C
 	add	xix, 5	; F613DD  add XIX,0x00000005
 	add	xiy, 5	; F613E3  add XIY,0x00000005
 	ldw	bc, 251	; F613E9  ld BC,0x00fb
-	.byte 0x85, 0x11	; F613EC  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F613EC  ldir
 	jr	-104	; F613EE  jr T,0xf61388
 	ld	xde, 6356992	; F613F0  ld XDE,0x00610000
 	push	xbc	; F613F5  push XBC
@@ -112998,7 +112998,7 @@ sub_F615C2:
 	ldw	bc, 251	; F61643  ld BC,0x00fb
 	inc	5, xix	; F61646  inc 5,XIX
 	inc	5, xiy	; F61648  inc 5,XIY
-	.byte 0x85, 0x11	; F6164A  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6164A  ldir
 	sub	xiy, 256	; F6164C  sub XIY,0x00000100
 	ld	hl, (xiy+3)	; F61652  ld HL,(XIY+0x03)
 	cp	hl, 65535	; F61655  cp HL,0xffff
@@ -113026,7 +113026,7 @@ sub_F615C2:
 	add	xix, 5	; F616A1  add XIX,0x00000005
 	add	xiy, 5	; F616A7  add XIY,0x00000005
 	ldw	bc, 251	; F616AD  ld BC,0x00fb
-	.byte 0x85, 0x11	; F616B0  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F616B0  ldir
 	jr	-104	; F616B2  jr T,0xf6164c
 	ld	xde, 6356992	; F616B4  ld XDE,0x00610000
 	push	xbc	; F616B9  push XBC
@@ -113119,7 +113119,7 @@ sub_F615C2:
 	add	xix, xde	; F617B9  add XIX,XDE
 	add	xix, 34	; F617BB  add XIX,0x00000022
 	ldw	bc, 17	; F617C1  ld BC,0x0011
-	.byte 0x85, 0x11	; F617C4  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F617C4  ldir
 	ldb_d8	a, (3597)	; F617C6  ld A,(0x0e0d)
 	dec	1, a	; F617CA  dec 1,A
 	m_cp_rm MB16, 0x360a, 1	; F617CC  cp A,(0x360a)
@@ -113127,7 +113127,7 @@ sub_F615C2:
 	sub	xiy, 17	; F617D2  sub XIY,0x00000011
 	ld	xix, 6304802	; F617D8  ld XIX,0x00603422
 	ldw	bc, 17	; F617DD  ld BC,0x0011
-	.byte 0x85, 0x11	; F617E0  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F617E0  ldir
 	ld	xde, 6356992	; F617E2  ld XDE,0x00610000
 	push	xbc	; F617E7  push XBC
 	xor	xbc, xbc	; F617E8  xor XBC,XBC
@@ -116104,7 +116104,7 @@ BStore_CopyAcrossBlocks:		; <- T_BStore_CopyAcrossBlocks
 	extz	xiy	; F63BD1  extz XIY
 	add	xiy, xhl	; F63BD3  add XIY,XHL
 	add	xix, xde	; F63BD5  add XIX,XDE
-	.byte 0x85, 0x11	; F63BD7  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F63BD7  ldir
 	subda32	xiy, (3171)	; F63BD9  sub XIY,(0x0c63)
 	subda32	xix, (3161)	; F63BDD  sub XIX,(0x0c59)
 	pop	xhl	; F63BE1  pop XHL
@@ -117527,7 +117527,7 @@ BStore_Workspace_LoadFromBank:
 	add	xiy, xwa	; F64B52  add XIY,XWA
 	ld	xix, 6304768	; F64B54  ld XIX,0x00603400
 	ldw	bc, 3072	; F64B59  ld BC,0x0c00
-	.byte 0x85, 0x11	; F64B5C  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F64B5C  ldir
 	ldl_da	xwa, (6304798)	; F64B5E  ld XWA,(0x60341e)
 	stda32	(13836), xwa	; F64B63  ld (0x360c),XWA
 	ldw_d16	wa, (3627)	; F64B67  ld WA,(0x0e2b)
@@ -117599,7 +117599,7 @@ BStore_Workspace_SaveToBank:
 	add	xix, xhl	; F64C03  add XIX,XHL
 	ld	xiy, 6304768	; F64C05  ld XIY,0x00603400
 	ldw	bc, 3072	; F64C0A  ld BC,0x0c00
-	.byte 0x85, 0x11	; F64C0D  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F64C0D  ldir
 	ret	; F64C0F  ret
 	.fill	1008, 1, 0x0E	; F64C10-F64FFF  ret padding
 
@@ -118425,7 +118425,7 @@ sub_F65792:
 	nop	; F657A8  nop
 	push	sr	; F657A9  push SR
 	pop	sr	; F657AA  pop SR
-	.byte 0x04	; F657AB  max   [llvm-mc cannot encode this]
+	max	; F657AB  max
 	halt	; F657AC  halt
 	di	; F657AD  ei 0x00
 	nop	; F657AF  nop
@@ -118509,7 +118509,7 @@ sub_F65C27:
 	add	xix, xhl	; F65C40  add XIX,XHL
 	ld	xiy, 6304768	; F65C42  ld XIY,0x00603400
 	ldw	bc, 3072	; F65C47  ld BC,0x0c00
-	.byte 0x85, 0x11	; F65C4A  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F65C4A  ldir
 	pop	xiy	; F65C4C  pop XIY
 	pop	xix	; F65C4D  pop XIX
 	pop	xbc	; F65C4E  pop XBC
@@ -119266,7 +119266,7 @@ sub_F66123:
 	add	xix, xwa	; F66141  add XIX,XWA
 	ld	xiy, 6304768	; F66143  ld XIY,0x00603400
 	ldw	bc, 3072	; F66148  ld BC,0x0c00
-	.byte 0x85, 0x11	; F6614B  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6614B  ldir
 	ret	; F6614D  ret
 
 ; --------------------------------------------------------------------------
@@ -120196,7 +120196,7 @@ sub_F66668:
 	ld	xwa, 34	; F666C9  ld XWA,0x00000022
 	add	xix, xwa	; F666CE  add XIX,XWA
 	ldw	bc, 16	; F666D0  ld BC,0x0010
-	.byte 0x85, 0x11	; F666D3  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F666D3  ldir
 	ld	(xix), 32	; F666D5  ld (XIX),0x20
 	push	xhl	; F666D8  push XHL
 	push	xde	; F666D9  push XDE
@@ -120227,7 +120227,7 @@ sub_F66668:
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F6671A  lda XIY,XDE+HL
 	ld	xix, 6304802	; F6671F  ld XIX,0x00603422
 	ldw	bc, 16	; F66724  ld BC,0x0010
-	.byte 0x85, 0x11	; F66727  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F66727  ldir
 	ld	(xix), 32	; F66729  ld (XIX),0x20
 	ldb	a, 0	; F6672C  ld A,0x00
 	m_cp_mi8 MB16, 0x0dfd, 0x03	; F6672E  cp (0x0dfd),0x03
@@ -120248,14 +120248,14 @@ sub_F66668:
 	ld	xwa, 51	; F66762  ld XWA,0x00000033
 	add	xix, xwa	; F66767  add XIX,XWA
 	ldw	bc, 16	; F66769  ld BC,0x0010
-	.byte 0x85, 0x11	; F6676C  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6676C  ldir
 	ldb_d8	a, (3582)	; F6676E  ld A,(0x0dfe)
 	m_cp_rm MB16, 0x360a, 1	; F66772  cp A,(0x360a)
 	jr	nz, 79	; F66776  jr NZ,0xf667c7
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F66778  lda XIY,XDE+HL
 	ld	xix, 6304819	; F6677D  ld XIX,0x00603433
 	ldw	bc, 16	; F66782  ld BC,0x0010
-	.byte 0x85, 0x11	; F66785  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F66785  ldir
 	ldb_d8	a, (3582)	; F66787  ld A,(0x0dfe)
 	m_cp_rm MB16, 0x360a, 1	; F6678B  cp A,(0x360a)
 	jr	nz, 54	; F6678F  jr NZ,0xf667c7
@@ -120330,7 +120330,7 @@ sub_F6682C:
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F66844  lda XIY,XDE+HL
 	ld	xix, 6304802	; F66849  ld XIX,0x00603422
 	ldw	bc, 16	; F6684E  ld BC,0x0010
-	.byte 0x85, 0x11	; F66851  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F66851  ldir
 	ld	(xix), 32	; F66853  ld (XIX),0x20
 	ldb	a, 0	; F66856  ld A,0x00
 	m_cp_mi8 MB16, 0x0dfd, 0x03	; F66858  cp (0x0dfd),0x03
@@ -120353,7 +120353,7 @@ sub_F6682C:
 	add	xix, xwa	; F66888  add XIX,XWA
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F6688A  lda XIY,XDE+HL
 	ldw	bc, 16	; F6688F  ld BC,0x0010
-	.byte 0x85, 0x11	; F66892  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F66892  ldir
 	ld	(xix), 32	; F66894  ld (XIX),0x20
 	ld	xix, 6356992	; F66897  ld XIX,0x00610000
 	push	xbc	; F6689C  push XBC
@@ -120380,7 +120380,7 @@ sub_F6682C:
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F668D3  lda XIY,XDE+HL
 	ld	xix, 6304819	; F668D8  ld XIX,0x00603433
 	ldw	bc, 16	; F668DD  ld BC,0x0010
-	.byte 0x85, 0x11	; F668E0  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F668E0  ldir
 	.byte 0xC7, 0x34, 0xA8	; F668E2  ld RC3,0   [llvm-mc cannot encode this]
 	ld	xix, 6356992	; F668E5  ld XIX,0x00610000
 	push	xbc	; F668EA  push XBC
@@ -120397,7 +120397,7 @@ sub_F6682C:
 	add	xix, xwa	; F66904  add XIX,XWA
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F66906  lda XIY,XDE+HL
 	ldw	bc, 16	; F6690B  ld BC,0x0010
-	.byte 0x85, 0x11	; F6690E  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6690E  ldir
 	.byte 0xC7, 0x34, 0x61	; F66910  inc 1,RC3   [llvm-mc cannot encode this]
 	.byte 0xC7, 0x34, 0xCF, 0x0A	; F66913  cp RC3,0x0a   [llvm-mc cannot encode this]
 	jr	c, -52	; F66917  jr C,0xf668e5
@@ -122124,7 +122124,7 @@ sub_F67D8C:
 	ld	xiy, 16154054	; F67D9C  ld XIY,0x00f67dc6
 	ld	xix, 4079	; F67DA1  ld XIX,0x00000fef
 	ldw	bc, 9	; F67DA6  ld BC,0x0009
-	.byte 0x85, 0x11	; F67DA9  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F67DA9  ldir
 	ldb_d8	a, (4113)	; F67DAB  ld A,(0x1011)
 	exts	wa	; F67DAF  exts WA
 	push	xix	; F67DB1  push XIX
@@ -122132,7 +122132,7 @@ sub_F67D8C:
 	pop	xix	; F67DB6  pop XIX
 	ld	xiy, 9825	; F67DB7  ld XIY,0x00002661
 	ldw	bc, 3	; F67DBC  ld BC,0x0003
-	.byte 0x85, 0x11	; F67DBF  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F67DBF  ldir
 	call	16003508	; F67DC1  call 0xf431b4
 	ret	; F67DC5  ret
 	.byte 0x56	; F67DC6  db   [llvm-mc cannot encode this]
@@ -123556,7 +123556,7 @@ DispatchTable_F688D0:
 	pop	sr	; F688E2  pop SR
 	pop	sr	; F688E3  pop SR
 	nop	; F688E4  nop
-	.byte 0x01	; F688E5  normal   [llvm-mc cannot encode this]
+	normal	; F688E5  normal
 	pop	sr	; F688E6  pop SR
 	pop	sr	; F688E7  pop SR
 	nop	; F688E8  nop
@@ -127770,7 +127770,7 @@ sub_F6A7EB:
 	nop	; F6A888  nop
 	jr	f, 0	; F6A889  jr F,0xf6a88b
 	.byte 0xC0, 0x00, 0x80	; F6A88B  add W,(0x00)   [llvm-mc cannot encode this]
-	.byte 0x01	; F6A88E  normal   [llvm-mc cannot encode this]
+	normal	; F6A88E  normal
 	nop	; F6A88F  nop
 	pop	sr	; F6A890  pop SR
 	.byte 0x80, 0x04	; F6A891  push (XWA)   [llvm-mc cannot encode this]
@@ -128337,38 +128337,38 @@ sub_F6AC7E:
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6AC9D  ld A,(XHL+A)
 	stb_d8	(3683), a	; F6ACA2  ld (0x0e63),A
 	ret	; F6ACA6  ret
-	.byte 0x01	; F6ACA7  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACA8  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACA9  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACAA  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACAB  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACAC  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACAD  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACAE  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACAF  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB0  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB1  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB2  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB3  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB4  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB5  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB6  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB7  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB8  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACB9  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACBA  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACBB  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACBC  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACBD  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACBE  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACBF  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACC0  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACC1  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACC2  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACC3  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACC4  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACC5  normal   [llvm-mc cannot encode this]
-	.byte 0x01	; F6ACC6  normal   [llvm-mc cannot encode this]
+	normal	; F6ACA7  normal
+	normal	; F6ACA8  normal
+	normal	; F6ACA9  normal
+	normal	; F6ACAA  normal
+	normal	; F6ACAB  normal
+	normal	; F6ACAC  normal
+	normal	; F6ACAD  normal
+	normal	; F6ACAE  normal
+	normal	; F6ACAF  normal
+	normal	; F6ACB0  normal
+	normal	; F6ACB1  normal
+	normal	; F6ACB2  normal
+	normal	; F6ACB3  normal
+	normal	; F6ACB4  normal
+	normal	; F6ACB5  normal
+	normal	; F6ACB6  normal
+	normal	; F6ACB7  normal
+	normal	; F6ACB8  normal
+	normal	; F6ACB9  normal
+	normal	; F6ACBA  normal
+	normal	; F6ACBB  normal
+	normal	; F6ACBC  normal
+	normal	; F6ACBD  normal
+	normal	; F6ACBE  normal
+	normal	; F6ACBF  normal
+	normal	; F6ACC0  normal
+	normal	; F6ACC1  normal
+	normal	; F6ACC2  normal
+	normal	; F6ACC3  normal
+	normal	; F6ACC4  normal
+	normal	; F6ACC5  normal
+	normal	; F6ACC6  normal
 	push	sr	; F6ACC7  push SR
 
 ; --------------------------------------------------------------------------
@@ -128494,10 +128494,10 @@ sub_F6AD40:
 	nop	; F6AD56  nop
 	nop	; F6AD57  nop
 	ldio	12, 14	; F6AD58  ld (0x0c),0x0e
-	.byte 0x04	; F6AD5B  max   [llvm-mc cannot encode this]
+	max	; F6AD5B  max
 	push	sr	; F6AD5C  push SR
 	push	sr	; F6AD5D  push SR
-	.byte 0x04	; F6AD5E  max   [llvm-mc cannot encode this]
+	max	; F6AD5E  max
 
 ; --------------------------------------------------------------------------
 ; sub_F6AD5F
@@ -128517,7 +128517,7 @@ sub_F6AD5F:
 	ld	xiy, 16166335	; F6AD69  ld XIY,0x00f6adbf
 	ld	xix, 3726	; F6AD6E  ld XIX,0x00000e8e
 	push	xix	; F6AD73  push XIX
-	.byte 0x85, 0x11	; F6AD74  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6AD74  ldir
 	pop	xix	; F6AD76  pop XIX
 	ldb_da	a, (6304983)	; F6AD77  ld A,(0x6034d7)
 	cps	a, 0	; F6AD7C  cp A,0
@@ -129585,7 +129585,7 @@ sub_F6B50C:
 	popw	bc	; F6B55D  pop BC
 	ld	xix, xhl	; F6B55E  ld XIX,XHL
 	ldda32	xiy, (4722)	; F6B560  ld XIY,(0x1272)
-	.byte 0x85, 0x11	; F6B564  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6B564  ldir
 	ret	; F6B566  ret
 	ld	de, bc	; F6B567  ld DE,BC
 	ldw	wa, 256	; F6B569  ld WA,0x0100
@@ -129603,7 +129603,7 @@ sub_F6B50C:
 	ld	xix, xhl	; F6B58F  ld XIX,XHL
 	ldda32	xiy, (4722)	; F6B591  ld XIY,(0x1272)
 	.byte 0xD1, 0x72, 0x12, 0x89	; F6B595  add (0x1272),BC   [llvm-mc cannot encode this]
-	.byte 0x85, 0x11	; F6B599  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6B599  ldir
 	ld	bc, de	; F6B59B  ld BC,DE
 	sub	bc, 251	; F6B59D  sub BC,0x00fb
 	ld	xix, 13408	; F6B5A1  ld XIX,0x00003460
@@ -129625,7 +129625,7 @@ sub_F6B50C:
 	ldda32	xiy, (4722)	; F6B5DD  ld XIY,(0x1272)
 	cps	bc, 0	; F6B5E1  cp BC,0
 	jr	z, 2	; F6B5E3  jr Z,0xf6b5e7
-	.byte 0x85, 0x11	; F6B5E5  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6B5E5  ldir
 	popw	bc	; F6B5E7  pop BC
 	ret	; F6B5E8  ret
 	push	xix	; F6B5E9  push XIX
@@ -131155,13 +131155,13 @@ DispatchTable_F6C272:
 	halt	; F6C283  halt
 	halt	; F6C284  halt
 	retd	1536	; F6C285  retd 0x0600
-	.byte 0x04	; F6C288  max   [llvm-mc cannot encode this]
+	max	; F6C288  max
 	halt	; F6C289  halt
 	pop	sr	; F6C28A  pop SR
 	reti	; F6C28B  reti
 	push	sr	; F6C28C  push SR
 	reti	; F6C28D  reti
-	.byte 0x01	; F6C28E  normal   [llvm-mc cannot encode this]
+	normal	; F6C28E  normal
 	reti	; F6C28F  reti
 	reti	; F6C290  reti
 	reti	; F6C291  reti
@@ -132212,7 +132212,7 @@ sub_F6C9C7:
 	mx_lda32 MXD, ra_IY, ra_WA, 5	; F6C9EC  lda XIY,XIY+WA
 	ld	xix, 4073	; F6C9F1  ld XIX,0x00000fe9
 	ldw	bc, 10	; F6C9F6  ld BC,0x000a
-	.byte 0x85, 0x11	; F6C9F9  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6C9F9  ldir
 	xor	wa, wa	; F6C9FB  xor WA,WA
 	ldb_d8	a, (4845)	; F6C9FD  ld A,(0x12ed)
 	m_cp_mi8 MB16, 0x12ec, 0x01	; F6CA01  cp (0x12ec),0x01
@@ -132233,7 +132233,7 @@ sub_F6C9C7:
 	pop	xix	; F6CA2B  pop XIX
 	ld	xiy, 9825	; F6CA2C  ld XIY,0x00002661
 	ldw	bc, 3	; F6CA31  ld BC,0x0003
-	.byte 0x85, 0x11	; F6CA34  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6CA34  ldir
 	call	16003508	; F6CA36  call 0xf431b4
 	ret	; F6CA3A  ret
 
@@ -133722,7 +133722,7 @@ sub_F6D410:
 	ld	xiy, 16176228	; F6D424  ld XIY,0x00f6d464
 	ld	xix, 4073	; F6D429  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D42E  ld BC,0x0007
-	.byte 0x85, 0x11	; F6D431  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D431  ldir
 	ldb	a, 32	; F6D433  ld A,0x20
 	lda_dpi	xbc, 240	; F6D435  ld (XIX+),A
 	calr	673	; F6D438  calr 0xf6d6dc
@@ -133774,7 +133774,7 @@ sub_F6D447:
 	ld	xiy, 16176228	; F6D44A  ld XIY,0x00f6d464
 	ld	xix, 4073	; F6D44F  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D454  ld BC,0x0007
-	.byte 0x85, 0x11	; F6D457  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D457  ldir
 	calr	640	; F6D459  calr 0xf6d6dc
 	calr	1073	; F6D45C  calr 0xf6d890
 	call	16003508	; F6D45F  call 0xf431b4
@@ -133914,7 +133914,7 @@ sub_F6D497:
 	pop	xix	; F6D4A8  pop XIX
 	ld	xiy, 16176314	; F6D4A9  ld XIY,0x00f6d4ba
 	ldw	bc, 4	; F6D4AE  ld BC,0x0004
-	.byte 0x85, 0x11	; F6D4B1  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D4B1  ldir
 	ldb_d8	a, (9827)	; F6D4B3  ld A,(0x2663)
 	ld	(xix), a	; F6D4B7  ld (XIX),A
 	ret	; F6D4B9  ret
@@ -133960,7 +133960,7 @@ sub_F6D4C6:
 	sla	xwa, 3	; F6D4D9  sla 0x03,XWA
 	add	xiy, xwa	; F6D4DC  add XIY,XWA
 	ldw	bc, 4	; F6D4DE  ld BC,0x0004
-	.byte 0x95, 0x11	; F6D4E1  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F6D4E1  ldirw
 	ret	; F6D4E3  ret
 
 ; --------------------------------------------------------------------------
@@ -133987,7 +133987,7 @@ sub_F6D4E4:
 	ld	xiy, 16176237	; F6D4EB  ld XIY,0x00f6d46d
 	ld	xix, 4073	; F6D4F0  ld XIX,0x00000fe9
 	ldw	bc, 9	; F6D4F5  ld BC,0x0009
-	.byte 0x85, 0x11	; F6D4F8  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D4F8  ldir
 	calr	479	; F6D4FA  calr 0xf6d6dc
 	calr	65478	; F6D4FD  calr 0xf6d4c6
 	call	16003508	; F6D500  call 0xf431b4
@@ -134017,7 +134017,7 @@ sub_F6D505:
 	ld	xiy, 16176423	; F6D50D  ld XIY,0x00f6d527
 	ld	xix, 4073	; F6D512  ld XIX,0x00000fe9
 	ldw	bc, 25	; F6D517  ld BC,0x0019
-	.byte 0x85, 0x11	; F6D51A  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D51A  ldir
 	calr	445	; F6D51C  calr 0xf6d6dc
 	calr	1164	; F6D51F  calr 0xf6d9ae
 	call	16003508	; F6D522  call 0xf431b4
@@ -134067,7 +134067,7 @@ sub_F6D540:
 	ld	xiy, 16176481	; F6D547  ld XIY,0x00f6d561
 	ld	xix, 4073	; F6D54C  ld XIX,0x00000fe9
 	ldw	bc, 25	; F6D551  ld BC,0x0019
-	.byte 0x85, 0x11	; F6D554  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D554  ldir
 	calr	387	; F6D556  calr 0xf6d6dc
 	calr	1106	; F6D559  calr 0xf6d9ae
 	call	16003508	; F6D55C  call 0xf431b4
@@ -134137,7 +134137,7 @@ sub_F6D57E:
 	ld	xiy, 16176540	; F6D581  ld XIY,0x00f6d59c
 	ld	xix, 4068	; F6D586  ld XIX,0x00000fe4
 	ldw	bc, 25	; F6D58B  ld BC,0x0019
-	.byte 0x85, 0x11	; F6D58E  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D58E  ldir
 	calr	329	; F6D590  calr 0xf6d6dc
 	call	16003508	; F6D593  call 0xf431b4
 	call	16003520	; F6D597  call 0xf431c0
@@ -134315,7 +134315,7 @@ sub_F6D608:
 	stw_dpi	wa, 241	; F6D626  ld (XIX+),WA
 	stw_dpi	wa, 241	; F6D629  ld (XIX+),WA
 	ldw	bc, 4	; F6D62C  ld BC,0x0004
-	.byte 0x95, 0x11	; F6D62F  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F6D62F  ldirw
 	ldb	a, 32	; F6D631  ld A,0x20
 	ldw	bc, 3	; F6D633  ld BC,0x0003
 	lda_dpi	xbc, 240	; F6D636  ld (XIX+),A
@@ -134350,7 +134350,7 @@ sub_F6D642:
 	ld	xiy, 16176749	; F6D650  ld XIY,0x00f6d66d
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6D655  lda XIY,XIY+HL
 	ldw	bc, 4	; F6D65A  ld BC,0x0004
-	.byte 0x95, 0x11	; F6D65D  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F6D65D  ldirw
 	ldw	wa, 8224	; F6D65F  ld WA,0x2020
 	stw_dpi	wa, 241	; F6D662  ld (XIX+),WA
 	stw_dpi	wa, 241	; F6D665  ld (XIX+),WA
@@ -134561,7 +134561,7 @@ sub_F6D72F:
 	ld	(xix+2), 70	; F6D7BB  ld (XIX+0x02),0x46
 	jr	5	; F6D7BF  jr T,0xf6d7c6
 	ldw	bc, 16	; F6D7C1  ld BC,0x0010
-	.byte 0x85, 0x11	; F6D7C4  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D7C4  ldir
 	ret	; F6D7C6  ret
 
 ; --------------------------------------------------------------------------
@@ -134830,14 +134830,14 @@ sub_F6D963:
 	ld	xix, 4089	; F6D98B  ld XIX,0x00000ff9
 	ld	xiy, 9826	; F6D990  ld XIY,0x00002662
 	ldw	bc, 2	; F6D995  ld BC,0x0002
-	.byte 0x85, 0x11	; F6D998  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D998  ldir
 	ld	wa, qwa	; F6D99A  ld WA,QWA
 	push	xix	; F6D99D  push XIX
 	call	15997696	; F6D99E  call 0xf41b00
 	pop	xix	; F6D9A2  pop XIX
 	ld	xiy, 9825	; F6D9A3  ld XIY,0x00002661
 	ldw	bc, 3	; F6D9A8  ld BC,0x0003
-	.byte 0x85, 0x11	; F6D9AB  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D9AB  ldir
 	ret	; F6D9AD  ret
 
 ; --------------------------------------------------------------------------
@@ -134892,7 +134892,7 @@ sub_F6D9CB:
 	ld	xiy, 16177634	; F6D9CB  ld XIY,0x00f6d9e2
 	ld	xix, 4073	; F6D9D0  ld XIX,0x00000fe9
 	ldw	bc, 26	; F6D9D5  ld BC,0x001a
-	.byte 0x85, 0x11	; F6D9D8  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6D9D8  ldir
 	calr	65489	; F6D9DA  calr 0xf6d9ae
 	call	16003508	; F6D9DD  call 0xf431b4
 	ret	; F6D9E1  ret
@@ -135452,11 +135452,11 @@ sub_F6DDB7:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DDD8  lda XIY,XIY+HL
 	ld	xix, 4075	; F6DDDD  ld XIX,0x00000feb
 	ldw	bc, 4	; F6DDE2  ld BC,0x0004
-	.byte 0x85, 0x11	; F6DDE5  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DDE5  ldir
 	ld	xiy, 16178704	; F6DDE7  ld XIY,0x00f6de10
 	inc	1, xix	; F6DDEC  inc 1,XIX
 	ldw	bc, 7	; F6DDEE  ld BC,0x0007
-	.byte 0x85, 0x11	; F6DDF1  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DDF1  ldir
 	ldb_d8	a, (4698)	; F6DDF3  ld A,(0x125a)
 	xor	w, w	; F6DDF7  xor W,W
 	push	xix	; F6DDF9  push XIX
@@ -135465,7 +135465,7 @@ sub_F6DDB7:
 	ld	xiy, 9825	; F6DDFF  ld XIY,0x00002661
 	inc	1, xix	; F6DE04  inc 1,XIX
 	ldw	bc, 3	; F6DE06  ld BC,0x0003
-	.byte 0x85, 0x11	; F6DE09  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DE09  ldir
 	call	16003508	; F6DE0B  call 0xf431b4
 	ret	; F6DE0F  ret
 
@@ -135542,11 +135542,11 @@ sub_F6DEF7:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DF18  lda XIY,XIY+HL
 	ld	xix, 4075	; F6DF1D  ld XIX,0x00000feb
 	ldw	bc, 4	; F6DF22  ld BC,0x0004
-	.byte 0x85, 0x11	; F6DF25  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DF25  ldir
 	ld	xiy, 16179024	; F6DF27  ld XIY,0x00f6df50
 	inc	1, xix	; F6DF2C  inc 1,XIX
 	ldw	bc, 7	; F6DF2E  ld BC,0x0007
-	.byte 0x85, 0x11	; F6DF31  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DF31  ldir
 	ldb_d8	a, (4698)	; F6DF33  ld A,(0x125a)
 	xor	w, w	; F6DF37  xor W,W
 	push	xix	; F6DF39  push XIX
@@ -135555,7 +135555,7 @@ sub_F6DEF7:
 	ld	xiy, 9825	; F6DF3F  ld XIY,0x00002661
 	inc	1, xix	; F6DF44  inc 1,XIX
 	ldw	bc, 3	; F6DF46  ld BC,0x0003
-	.byte 0x85, 0x11	; F6DF49  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DF49  ldir
 	call	16003508	; F6DF4B  call 0xf431b4
 	ret	; F6DF4F  ret
 
@@ -135609,11 +135609,11 @@ sub_F6DF57:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DF78  lda XIY,XIY+HL
 	ld	xix, 4073	; F6DF7D  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6DF82  ld BC,0x0004
-	.byte 0x85, 0x11	; F6DF85  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DF85  ldir
 	ld	xiy, 16179130	; F6DF87  ld XIY,0x00f6dfba
 	inc	1, xix	; F6DF8C  inc 1,XIX
 	ldw	bc, 10	; F6DF8E  ld BC,0x000a
-	.byte 0x85, 0x11	; F6DF91  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DF91  ldir
 	ldb_d8	a, (4698)	; F6DF93  ld A,(0x125a)
 	xor	w, w	; F6DF97  xor W,W
 	ldw	de, 64	; F6DF99  ld DE,0x0040
@@ -135625,7 +135625,7 @@ sub_F6DF57:
 	lda_dpi	xbc, 240	; F6DFA8  ld (XIX+),A
 	ld	xiy, 9825	; F6DFAB  ld XIY,0x00002661
 	ldw	bc, 3	; F6DFB0  ld BC,0x0003
-	.byte 0x85, 0x11	; F6DFB3  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DFB3  ldir
 	call	16003508	; F6DFB5  call 0xf431b4
 	ret	; F6DFB9  ret
 
@@ -135679,11 +135679,11 @@ sub_F6DFC4:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DFE5  lda XIY,XIY+HL
 	ld	xix, 4073	; F6DFEA  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6DFEF  ld BC,0x0004
-	.byte 0x85, 0x11	; F6DFF2  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DFF2  ldir
 	ld	xiy, 16179239	; F6DFF4  ld XIY,0x00f6e027
 	inc	1, xix	; F6DFF9  inc 1,XIX
 	ldw	bc, 7	; F6DFFB  ld BC,0x0007
-	.byte 0x85, 0x11	; F6DFFE  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6DFFE  ldir
 	ldb_d8	a, (4698)	; F6E000  ld A,(0x125a)
 	xor	w, w	; F6E004  xor W,W
 	ldw	de, 128	; F6E006  ld DE,0x0080
@@ -135695,7 +135695,7 @@ sub_F6DFC4:
 	lda_dpi	xbc, 240	; F6E015  ld (XIX+),A
 	ld	xiy, 9825	; F6E018  ld XIY,0x00002661
 	ldw	bc, 3	; F6E01D  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E020  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E020  ldir
 	call	16003508	; F6E022  call 0xf431b4
 	ret	; F6E026  ret
 
@@ -135749,11 +135749,11 @@ sub_F6E02E:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E04F  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E054  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E059  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E05C  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E05C  ldir
 	ld	xiy, 16179335	; F6E05E  ld XIY,0x00f6e087
 	inc	1, xix	; F6E063  inc 1,XIX
 	ldw	bc, 10	; F6E065  ld BC,0x000a
-	.byte 0x85, 0x11	; F6E068  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E068  ldir
 	ldb_d8	a, (4698)	; F6E06A  ld A,(0x125a)
 	xor	w, w	; F6E06E  xor W,W
 	push	xix	; F6E070  push XIX
@@ -135762,7 +135762,7 @@ sub_F6E02E:
 	inc	1, xix	; F6E076  inc 1,XIX
 	ld	xiy, 9826	; F6E078  ld XIY,0x00002662
 	ldw	bc, 2	; F6E07D  ld BC,0x0002
-	.byte 0x85, 0x11	; F6E080  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E080  ldir
 	call	16003508	; F6E082  call 0xf431b4
 	ret	; F6E086  ret
 
@@ -135816,11 +135816,11 @@ sub_F6E091:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E0B2  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E0B7  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E0BC  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E0BF  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E0BF  ldir
 	ld	xiy, 16179435	; F6E0C1  ld XIY,0x00f6e0eb
 	inc	1, xix	; F6E0C6  inc 1,XIX
 	ldw	bc, 8	; F6E0C8  ld BC,0x0008
-	.byte 0x85, 0x11	; F6E0CB  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E0CB  ldir
 	xor	hl, hl	; F6E0CD  xor HL,HL
 	m_bit 3, MD16, 0x125a	; F6E0CF  bit 3,(0x125a)
 	jr	nz, 2	; F6E0D3  jr NZ,0xf6e0d7
@@ -135828,7 +135828,7 @@ sub_F6E091:
 	ld	xiy, 16179443	; F6E0D7  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E0DC  lda XIY,XIY+HL
 	ldw	bc, 4	; F6E0E1  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E0E4  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E0E4  ldir
 	call	16003508	; F6E0E6  call 0xf431b4
 	ret	; F6E0EA  ret
 
@@ -135891,17 +135891,17 @@ sub_F6E152:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E173  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E178  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E17D  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E180  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E180  ldir
 	ld	xiy, 16179622	; F6E182  ld XIY,0x00f6e1a6
 	inc	1, xix	; F6E187  inc 1,XIX
 	ldw	bc, 11	; F6E189  ld BC,0x000b
-	.byte 0x85, 0x11	; F6E18C  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E18C  ldir
 	xor	hl, hl	; F6E18E  xor HL,HL
 	ldb	l, 4	; F6E190  ld L,0x04
 	ld	xiy, 16179443	; F6E192  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E197  lda XIY,XIY+HL
 	ldw	bc, 4	; F6E19C  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E19F  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E19F  ldir
 	call	16003508	; F6E1A1  call 0xf431b4
 	ret	; F6E1A5  ret
 
@@ -135955,11 +135955,11 @@ sub_F6E1B1:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E1D2  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E1D7  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E1DC  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E1DF  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E1DF  ldir
 	ld	xiy, 16179723	; F6E1E1  ld XIY,0x00f6e20b
 	inc	1, xix	; F6E1E6  inc 1,XIX
 	ldw	bc, 7	; F6E1E8  ld BC,0x0007
-	.byte 0x85, 0x11	; F6E1EB  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E1EB  ldir
 	xor	hl, hl	; F6E1ED  xor HL,HL
 	m_bit 6, MD16, 0x125a	; F6E1EF  bit 6,(0x125a)
 	jr	nz, 2	; F6E1F3  jr NZ,0xf6e1f7
@@ -135967,7 +135967,7 @@ sub_F6E1B1:
 	ld	xiy, 16179443	; F6E1F7  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E1FC  lda XIY,XIY+HL
 	ldw	bc, 4	; F6E201  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E204  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E204  ldir
 	call	16003508	; F6E206  call 0xf431b4
 	ret	; F6E20A  ret
 
@@ -136018,11 +136018,11 @@ sub_F6E212:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E223  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E228  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E22D  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E230  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E230  ldir
 	ld	xiy, 16179801	; F6E232  ld XIY,0x00f6e259
 	inc	3, xix	; F6E237  inc 3,XIX
 	ldw	bc, 8	; F6E239  ld BC,0x0008
-	.byte 0x85, 0x11	; F6E23C  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E23C  ldir
 	xor	w, w	; F6E23E  xor W,W
 	ldb_d8	a, (4698)	; F6E240  ld A,(0x125a)
 	push	xix	; F6E244  push XIX
@@ -136030,7 +136030,7 @@ sub_F6E212:
 	pop	xix	; F6E249  pop XIX
 	ld	xiy, 9825	; F6E24A  ld XIY,0x00002661
 	ldw	bc, 3	; F6E24F  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E252  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E252  ldir
 	call	16003508	; F6E254  call 0xf431b4
 	ret	; F6E258  ret
 
@@ -136080,11 +136080,11 @@ sub_F6E261:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E272  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E277  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E27C  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E27F  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E27F  ldir
 	ld	xiy, 16179884	; F6E281  ld XIY,0x00f6e2ac
 	inc	1, xix	; F6E286  inc 1,XIX
 	ldw	bc, 8	; F6E288  ld BC,0x0008
-	.byte 0x85, 0x11	; F6E28B  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E28B  ldir
 	xor	w, w	; F6E28D  xor W,W
 	ld	xiy, 16179892	; F6E28F  ld XIY,0x00f6e2b4
 	ldb_d8	a, (4698)	; F6E294  ld A,(0x125a)
@@ -136092,7 +136092,7 @@ sub_F6E261:
 	jr	nc, 5	; F6E29B  jr NC,0xf6e2a2
 	ld	xiy, 16179895	; F6E29D  ld XIY,0x00f6e2b7
 	ldw	bc, 3	; F6E2A2  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E2A5  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E2A5  ldir
 	call	16003508	; F6E2A7  call 0xf431b4
 	ret	; F6E2AB  ret
 
@@ -136143,17 +136143,17 @@ sub_F6E2BA:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E2CB  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E2D0  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E2D5  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E2D8  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E2D8  ldir
 	ld	xiy, 16179967	; F6E2DA  ld XIY,0x00f6e2ff
 	inc	4, xix	; F6E2DF  inc 4,XIX
 	ldw	bc, 7	; F6E2E1  ld BC,0x0007
-	.byte 0x85, 0x11	; F6E2E4  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E2E4  ldir
 	xor	w, w	; F6E2E6  xor W,W
 	ldb_d8	a, (4698)	; F6E2E8  ld A,(0x125a)
 	call	15997680	; F6E2EC  call 0xf41af0
 	ld	xiy, 9825	; F6E2F0  ld XIY,0x00002661
 	ldw	bc, 3	; F6E2F5  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E2F8  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E2F8  ldir
 	call	16003508	; F6E2FA  call 0xf431b4
 	ret	; F6E2FE  ret
 
@@ -136207,7 +136207,7 @@ sub_F6E306:
 	ld	xiy, 16180031	; F6E31D  ld XIY,0x00f6e33f
 	ld	xix, 4073	; F6E322  ld XIX,0x00000fe9
 	ldw	bc, 13	; F6E327  ld BC,0x000d
-	.byte 0x85, 0x11	; F6E32A  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E32A  ldir
 	xor	w, w	; F6E32C  xor W,W
 	push	xix	; F6E32E  push XIX
 	call	15997680	; F6E32F  call 0xf41af0
@@ -136438,14 +136438,14 @@ Text_GAbABbBCDbDEbEFF:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E518  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E51D  ld XIX,0x00000fe9
 	ldw	bc, 16	; F6E522  ld BC,0x0010
-	.byte 0x85, 0x11	; F6E525  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E525  ldir
 	popw	wa	; F6E527  pop WA
 	xor	w, w	; F6E528  xor W,W
 	call	15997680	; F6E52A  call 0xf41af0
 	ld	xiy, 9825	; F6E52E  ld XIY,0x00002661
 	ld	xix, 4089	; F6E533  ld XIX,0x00000ff9
 	ldw	bc, 3	; F6E538  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E53B  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E53B  ldir
 	call	16003508	; F6E53D  call 0xf431b4
 	ret	; F6E541  ret
 
@@ -136538,11 +136538,11 @@ sub_F6E5A5:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E5C6  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E5CB  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E5D0  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E5D3  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E5D3  ldir
 	ld	xiy, 16180735	; F6E5D5  ld XIY,0x00f6e5ff
 	inc	1, xix	; F6E5DA  inc 1,XIX
 	ldw	bc, 8	; F6E5DC  ld BC,0x0008
-	.byte 0x85, 0x11	; F6E5DF  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E5DF  ldir
 	xor	hl, hl	; F6E5E1  xor HL,HL
 	m_bit 7, MD16, 0x125a	; F6E5E3  bit 7,(0x125a)
 	jr	nz, 2	; F6E5E7  jr NZ,0xf6e5eb
@@ -136550,7 +136550,7 @@ sub_F6E5A5:
 	ld	xiy, 16179443	; F6E5EB  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E5F0  lda XIY,XIY+HL
 	ldw	bc, 3	; F6E5F5  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E5F8  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E5F8  ldir
 	call	16003508	; F6E5FA  call 0xf431b4
 	ret	; F6E5FE  ret
 
@@ -136716,7 +136716,7 @@ sub_F6E62A:
 	ld	xix, 4075	; F6E63D  ld XIX,0x00000feb
 	ld	xiy, 16180842	; F6E642  ld XIY,0x00f6e66a
 	ldw	bc, 13	; F6E647  ld BC,0x000d
-	.byte 0x85, 0x11	; F6E64A  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E64A  ldir
 	xor	hl, hl	; F6E64C  xor HL,HL
 	m_bit 7, MD16, 0x125a	; F6E64E  bit 7,(0x125a)
 	jr	nz, 2	; F6E652  jr NZ,0xf6e656
@@ -136724,7 +136724,7 @@ sub_F6E62A:
 	ld	xiy, 16179443	; F6E656  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E65B  lda XIY,XIY+HL
 	ldw	bc, 4	; F6E660  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E663  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E663  ldir
 	call	16003508	; F6E665  call 0xf431b4
 	ret	; F6E669  ret
 
@@ -136778,7 +136778,7 @@ sub_F6E678:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E699  lda XIY,XIY+HL
 	ld	xix, 4075	; F6E69E  ld XIX,0x00000feb
 	ldw	bc, 4	; F6E6A3  ld BC,0x0004
-	.byte 0x85, 0x11	; F6E6A6  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E6A6  ldir
 	inc	1, xix	; F6E6A8  inc 1,XIX
 	ldb_d8	l, (4698)	; F6E6AA  ld L,(0x125a)
 	and	l, 192	; F6E6AE  and L,0xc0
@@ -136791,7 +136791,7 @@ sub_F6E678:
 	ld	xiy, 16180948	; F6E6C0  ld XIY,0x00f6e6d4
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E6C5  lda XIY,XIY+HL
 	ldw	bc, 6	; F6E6CA  ld BC,0x0006
-	.byte 0x85, 0x11	; F6E6CD  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E6CD  ldir
 	call	16003508	; F6E6CF  call 0xf431b4
 	ret	; F6E6D3  ret
 
@@ -136879,7 +136879,7 @@ sub_F6E706:
 	ld	xix, 4073	; F6E70B  ld XIX,0x00000fe9
 	ld	xiy, 16181032	; F6E710  ld XIY,0x00f6e728
 	ldw	bc, 9	; F6E715  ld BC,0x0009
-	.byte 0x95, 0x11	; F6E718  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F6E718  ldirw
 	inc	1, a	; F6E71A  inc 1,A
 	add	a, 48	; F6E71C  add A,0x30
 	stb_d8	(4088), a	; F6E71F  ld (0x0ff8),A
@@ -136937,11 +136937,11 @@ sub_F6E73A:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E755  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E75A  ld XIX,0x00000fe9
 	ldw	bc, 3	; F6E75F  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E762  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E762  ldir
 	inc	1, xix	; F6E764  inc 1,XIX
 	ld	xiy, 16181131	; F6E766  ld XIY,0x00f6e78b
 	ldw	bc, 12	; F6E76B  ld BC,0x000c
-	.byte 0x85, 0x11	; F6E76E  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E76E  ldir
 	xor	wa, wa	; F6E770  xor WA,WA
 	ldb_d8	a, (4698)	; F6E772  ld A,(0x125a)
 	push	xix	; F6E776  push XIX
@@ -136949,7 +136949,7 @@ sub_F6E73A:
 	pop	xix	; F6E77B  pop XIX
 	ld	xiy, 9825	; F6E77C  ld XIY,0x00002661
 	ldw	bc, 3	; F6E781  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E784  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E784  ldir
 	call	16003508	; F6E786  call 0xf431b4
 	ret	; F6E78A  ret
 
@@ -137003,11 +137003,11 @@ sub_F6E797:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E7B2  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E7B7  ld XIX,0x00000fe9
 	ldw	bc, 3	; F6E7BC  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E7BF  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E7BF  ldir
 	inc	1, xix	; F6E7C1  inc 1,XIX
 	ld	xiy, 16181224	; F6E7C3  ld XIY,0x00f6e7e8
 	ldw	bc, 11	; F6E7C8  ld BC,0x000b
-	.byte 0x85, 0x11	; F6E7CB  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E7CB  ldir
 	xor	wa, wa	; F6E7CD  xor WA,WA
 	ldb_d8	a, (4698)	; F6E7CF  ld A,(0x125a)
 	push	xix	; F6E7D3  push XIX
@@ -137015,7 +137015,7 @@ sub_F6E797:
 	pop	xix	; F6E7D8  pop XIX
 	ld	xiy, 9825	; F6E7D9  ld XIY,0x00002661
 	ldw	bc, 3	; F6E7DE  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E7E1  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E7E1  ldir
 	call	16003508	; F6E7E3  call 0xf431b4
 	ret	; F6E7E7  ret
 
@@ -137069,11 +137069,11 @@ sub_F6E7F3:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E80E  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E813  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E818  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E81B  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E81B  ldir
 	inc	8, xix	; F6E81D  inc 0,XIX
 	ld	xiy, 16181316	; F6E81F  ld XIY,0x00f6e844
 	ldw	bc, 5	; F6E824  ld BC,0x0005
-	.byte 0x85, 0x11	; F6E827  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E827  ldir
 	xor	wa, wa	; F6E829  xor WA,WA
 	ldb_d8	a, (4698)	; F6E82B  ld A,(0x125a)
 	push	xix	; F6E82F  push XIX
@@ -137081,7 +137081,7 @@ sub_F6E7F3:
 	pop	xix	; F6E834  pop XIX
 	ld	xiy, 9825	; F6E835  ld XIY,0x00002661
 	ldw	bc, 3	; F6E83A  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E83D  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E83D  ldir
 	call	16003508	; F6E83F  call 0xf431b4
 	ret	; F6E843  ret
 
@@ -137136,11 +137136,11 @@ sub_F6E849:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E864  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E869  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E86E  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E871  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E871  ldir
 	inc	1, xix	; F6E873  inc 1,XIX
 	ld	xiy, 16181402	; F6E875  ld XIY,0x00f6e89a
 	ldw	bc, 12	; F6E87A  ld BC,0x000c
-	.byte 0x85, 0x11	; F6E87D  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E87D  ldir
 	xor	wa, wa	; F6E87F  xor WA,WA
 	ldb_d8	a, (4698)	; F6E881  ld A,(0x125a)
 	push	xix	; F6E885  push XIX
@@ -137148,7 +137148,7 @@ sub_F6E849:
 	pop	xix	; F6E88A  pop XIX
 	ld	xiy, 9825	; F6E88B  ld XIY,0x00002661
 	ldw	bc, 3	; F6E890  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E893  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E893  ldir
 	call	16003508	; F6E895  call 0xf431b4
 	ret	; F6E899  ret
 
@@ -137203,11 +137203,11 @@ sub_F6E8A6:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E8C1  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E8C6  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E8CB  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E8CE  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E8CE  ldir
 	inc	1, xix	; F6E8D0  inc 1,XIX
 	ld	xiy, 16181495	; F6E8D2  ld XIY,0x00f6e8f7
 	ldw	bc, 12	; F6E8D7  ld BC,0x000c
-	.byte 0x85, 0x11	; F6E8DA  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E8DA  ldir
 	xor	wa, wa	; F6E8DC  xor WA,WA
 	ldb_d8	a, (4698)	; F6E8DE  ld A,(0x125a)
 	push	xix	; F6E8E2  push XIX
@@ -137215,7 +137215,7 @@ sub_F6E8A6:
 	pop	xix	; F6E8E7  pop XIX
 	ld	xiy, 9825	; F6E8E8  ld XIY,0x00002661
 	ldw	bc, 3	; F6E8ED  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E8F0  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E8F0  ldir
 	call	16003508	; F6E8F2  call 0xf431b4
 	ret	; F6E8F6  ret
 
@@ -137270,11 +137270,11 @@ sub_F6E903:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E91E  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E923  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E928  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E92B  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E92B  ldir
 	inc	2, xix	; F6E92D  inc 2,XIX
 	ld	xiy, 16181588	; F6E92F  ld XIY,0x00f6e954
 	ldw	bc, 11	; F6E934  ld BC,0x000b
-	.byte 0x85, 0x11	; F6E937  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E937  ldir
 	xor	wa, wa	; F6E939  xor WA,WA
 	ldb_d8	a, (4698)	; F6E93B  ld A,(0x125a)
 	push	xix	; F6E93F  push XIX
@@ -137282,7 +137282,7 @@ sub_F6E903:
 	pop	xix	; F6E944  pop XIX
 	ld	xiy, 9825	; F6E945  ld XIY,0x00002661
 	ldw	bc, 3	; F6E94A  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E94D  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E94D  ldir
 	call	16003508	; F6E94F  call 0xf431b4
 	ret	; F6E953  ret
 
@@ -137337,11 +137337,11 @@ sub_F6E95F:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E97A  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E97F  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E984  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E987  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E987  ldir
 	inc	2, xix	; F6E989  inc 2,XIX
 	ld	xiy, 16181680	; F6E98B  ld XIY,0x00f6e9b0
 	ldw	bc, 11	; F6E990  ld BC,0x000b
-	.byte 0x85, 0x11	; F6E993  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E993  ldir
 	xor	wa, wa	; F6E995  xor WA,WA
 	ldb_d8	a, (4698)	; F6E997  ld A,(0x125a)
 	push	xix	; F6E99B  push XIX
@@ -137349,7 +137349,7 @@ sub_F6E95F:
 	pop	xix	; F6E9A0  pop XIX
 	ld	xiy, 9825	; F6E9A1  ld XIY,0x00002661
 	ldw	bc, 3	; F6E9A6  ld BC,0x0003
-	.byte 0x85, 0x11	; F6E9A9  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6E9A9  ldir
 	call	16003508	; F6E9AB  call 0xf431b4
 	ret	; F6E9AF  ret
 
@@ -137693,7 +137693,7 @@ sub_F6F05E:
 	add	xiy, 202	; F6F077  add XIY,0x000000ca
 	ld	xix, 4855	; F6F07D  ld XIX,0x000012f7
 	ldw	bc, 6	; F6F082  ld BC,0x0006
-	.byte 0x85, 0x11	; F6F085  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6F085  ldir
 	ret	; F6F087  ret
 	ret	; F6F088  ret
 	m_cp_mi8 MB16, 0x207e, 0x01	; F6F089  cp (0x207e),0x01
@@ -138008,7 +138008,7 @@ sub_F6F476:
 	add	xix, xhl	; F6F496  add XIX,XHL
 	ld	xiy, 6304768	; F6F498  ld XIY,0x00603400
 	ldw	bc, 3072	; F6F49D  ld BC,0x0c00
-	.byte 0x85, 0x11	; F6F4A0  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6F4A0  ldir
 	ret	; F6F4A2  ret
 
 ; --------------------------------------------------------------------------
@@ -138039,7 +138039,7 @@ sub_F6F4A3:
 	add	xiy, xwa	; F6F4CA  add XIY,XWA
 	ld	xix, 6304768	; F6F4CC  ld XIX,0x00603400
 	ldw	bc, 3072	; F6F4D1  ld BC,0x0c00
-	.byte 0x85, 0x11	; F6F4D4  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6F4D4  ldir
 	ldw_d16	wa, (3627)	; F6F4D6  ld WA,(0x0e2b)
 	stw_da	(6304952), wa	; F6F4DA  ld (0x6034b8),WA
 	ldw_d16	wa, (3629)	; F6F4DF  ld WA,(0x0e2d)
@@ -138516,14 +138516,14 @@ sub_F6F94E:
 	ld	xiy, 16185750	; F6F95A  ld XIY,0x00f6f996
 	ld	xix, 6304802	; F6F95F  ld XIX,0x00603422
 	ldw	bc, 17	; F6F964  ld BC,0x0011
-	.byte 0x85, 0x11	; F6F967  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6F967  ldir
 	ld	xiy, 16185767	; F6F969  ld XIY,0x00f6f9a7
 	m_cp_mi8 MB16, 0x1239, 0x00	; F6F96E  cp (0x1239),0x00
 	jr	z, 5	; F6F973  jr Z,0xf6f97a
 	ld	xiy, 16185783	; F6F975  ld XIY,0x00f6f9b7
 	ld	xix, 6304819	; F6F97A  ld XIX,0x00603433
 	ldw	bc, 16	; F6F97F  ld BC,0x0010
-	.byte 0x85, 0x11	; F6F982  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F6F982  ldir
 	ret	; F6F984  ret
 
 ; --------------------------------------------------------------------------
@@ -141133,10 +141133,10 @@ sub_F70C3F:
 	ld	xiy, 1	; F70C49  ld XIY,0x00000001
 	ret	; F70C4E  ret
 	nop	; F70C4F  nop
-	.byte 0x01	; F70C50  normal   [llvm-mc cannot encode this]
+	normal	; F70C50  normal
 	push	sr	; F70C51  push SR
 	pop	sr	; F70C52  pop SR
-	.byte 0x04	; F70C53  max   [llvm-mc cannot encode this]
+	max	; F70C53  max
 	halt	; F70C54  halt
 	ei	7	; F70C55  ei 0x07
 	ldio	15, 9	; F70C57  ld (0x0f),0x09
@@ -145490,7 +145490,7 @@ sub_F72E86:
 	.byte 0xE7, 0x38, 0x04	; F72E91  push XDE3   [llvm-mc cannot encode this]
 	ldda32	xiy, (4718)	; F72E94  ld XIY,(0x126e)
 	ldw	bc, 256	; F72E98  ld BC,0x0100
-	.byte 0x85, 0x11	; F72E9B  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F72E9B  ldir
 	ldw_d16	iy, (13404)	; F72E9D  ld IY,(0x345c)
 	ldw	wa, 1	; F72EA1  ld WA,0x0001
 	call	16001160	; F72EA4  call 0xf42888
@@ -145604,13 +145604,13 @@ sub_F72F2D:
 	swi	7	; F72F3C  swi 7
 	ldb	c, 35	; F72F3D  ld C,0x23
 	ldb	c, 3	; F72F3F  ld C,0x03
-	.byte 0x01	; F72F41  normal   [llvm-mc cannot encode this]
+	normal	; F72F41  normal
 	halt	; F72F42  halt
 	reti	; F72F43  reti
 	push	sr	; F72F44  push SR
 	ldb	e, 38	; F72F45  ld E,0x26
 	ldb	l, 6	; F72F47  ld L,0x06
-	.byte 0x04	; F72F49  max   [llvm-mc cannot encode this]
+	max	; F72F49  max
 	pushw	wa	; F72F4A  push WA
 	ldb	c, 0	; F72F4B  ld C,0x00
 	pushw	2345	; F72F4D  push 0x0929
@@ -146184,7 +146184,7 @@ sub_F7335A:
 	ldda32	xiy, (4718)	; F7336D  ld XIY,(0x126e)
 	ld	xix, 6332416	; F73371  ld XIX,0x0060a000
 	ldw	bc, 256	; F73376  ld BC,0x0100
-	.byte 0x85, 0x11	; F73379  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F73379  ldir
 	pop	xhl	; F7337B  pop XHL
 	popw	bc	; F7337C  pop BC
 	ld	iy, hl	; F7337D  ld IY,HL
@@ -146944,7 +146944,7 @@ sub_F7385F:
 	ld	xiy, 16201812	; F7391A  ld XIY,0x00f73854
 	ld	xix, 8648	; F7391F  ld XIX,0x000021c8
 	ldw	bc, 11	; F73924  ld BC,0x000b
-	.byte 0x85, 0x11	; F73927  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F73927  ldir
 	stdi8	(10021), 1	; F73929  ld (0x2725),0x01
 	ldb_d8	l, (8745)	; F7392E  ld L,(0x2229)
 	pushw	hl	; F73932  push HL
@@ -146970,7 +146970,7 @@ sub_F7385F:
 	.byte 0xD1, 0xCE, 0x21, 0x04	; F73972  pushw (0x21ce)   [llvm-mc cannot encode this]
 	ld	xix, 8648	; F73976  ld XIX,0x000021c8
 	ldw	bc, 4	; F7397B  ld BC,0x0004
-	.byte 0x95, 0x11	; F7397E  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F7397E  ldirw
 	stdi8	(8656), 77	; F73980  ld (0x21d0),0x4d
 	stdi8	(8657), 73	; F73985  ld (0x21d1),0x49
 	stdi8	(8658), 68	; F7398A  ld (0x21d2),0x44
@@ -147020,10 +147020,10 @@ sub_F7385F:
 	ld	xiy, 16206143	; F73A23  ld XIY,0x00f7493f
 	ld	xix, 6334208	; F73A28  ld XIX,0x0060a700
 	ldw	bc, 7	; F73A2D  ld BC,0x0007
-	.byte 0x95, 0x11	; F73A30  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F73A30  ldirw
 	ld	xiy, 16206157	; F73A32  ld XIY,0x00f7494d
 	ldw	bc, 4	; F73A37  ld BC,0x0004
-	.byte 0x85, 0x11	; F73A3A  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F73A3A  ldir
 	ldw_d16	wa, (4292)	; F73A3C  ld WA,(0x10c4)
 	stw_dpi	wa, 241	; F73A40  ld (XIX+),WA
 	ldw_d16	wa, (4294)	; F73A43  ld WA,(0x10c6)
@@ -147032,10 +147032,10 @@ sub_F7385F:
 	ldda32	xix, (4232)	; F73A4E  ld XIX,(0x1088)
 	ld	xiy, 16206165	; F73A52  ld XIY,0x00f74955
 	ldw	bc, 11	; F73A57  ld BC,0x000b
-	.byte 0x85, 0x11	; F73A5A  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F73A5A  ldir
 	ld	xiy, 8648	; F73A5C  ld XIY,0x000021c8
 	ldw	bc, 8	; F73A61  ld BC,0x0008
-	.byte 0x85, 0x11	; F73A64  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F73A64  ldir
 	stda32	(4232), xix	; F73A66  ld (0x1088),XIX
 	stdi16	(4499), 0	; F73A6A  ld (0x1193),0x0000
 	stdi8	(4501), 0	; F73A70  ld (0x1195),0x00
@@ -148208,7 +148208,7 @@ sub_F7385F:
 	ld	xiy, 16201812	; F74797  ld XIY,0x00f73854
 	ld	xix, 8648	; F7479C  ld XIX,0x000021c8
 	ldw	bc, 8	; F747A1  ld BC,0x0008
-	.byte 0x85, 0x11	; F747A4  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F747A4  ldir
 	stdi8	(8656), 63	; F747A6  ld (0x21d0),0x3f
 	stdi8	(8657), 63	; F747AB  ld (0x21d1),0x3f
 	stdi8	(8658), 63	; F747B0  ld (0x21d2),0x3f
@@ -148434,7 +148434,7 @@ sub_F748F0:
 	ld	xiy, 16201812	; F748F0  ld XIY,0x00f73854
 	ld	xix, 8648	; F748F5  ld XIX,0x000021c8
 	ldw	bc, 11	; F748FA  ld BC,0x000b
-	.byte 0x85, 0x11	; F748FD  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F748FD  ldir
 	stdi8	(10021), 1	; F748FF  ld (0x2725),0x01
 	call	16000456	; F74904  call 0xf425c8
 	stdi8	(8656), 63	; F74908  ld (0x21d0),0x3f
@@ -148460,7 +148460,7 @@ sub_F7491F:
 	ld	xiy, 4666	; F7491F  ld XIY,0x0000123a
 	ld	xix, 8648	; F74924  ld XIX,0x000021c8
 	ldw	bc, 4	; F74929  ld BC,0x0004
-	.byte 0x95, 0x11	; F7492C  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F7492C  ldirw
 	ret	; F7492E  ret
 
 ; --------------------------------------------------------------------------
@@ -148479,7 +148479,7 @@ sub_F7492F:
 	ld	xiy, 8648	; F7492F  ld XIY,0x000021c8
 	ld	xix, 4666	; F74934  ld XIX,0x0000123a
 	ldw	bc, 4	; F74939  ld BC,0x0004
-	.byte 0x95, 0x11	; F7493C  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F7493C  ldirw
 	ret	; F7493E  ret
 
 ; --------------------------------------------------------------------------
@@ -148814,7 +148814,7 @@ sub_F74B3A:
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F74BCC  lda XIY,XIY+HL
 	ld	xix, 8648	; F74BD1  ld XIX,0x000021c8
 	ldw	bc, 4	; F74BD6  ld BC,0x0004
-	.byte 0x95, 0x11	; F74BD9  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F74BD9  ldirw
 	stdi8	(8656), 63	; F74BDB  ld (0x21d0),0x3f
 	stdi8	(8657), 63	; F74BE0  ld (0x21d1),0x3f
 	stdi8	(8658), 63	; F74BE5  ld (0x21d2),0x3f
@@ -149613,18 +149613,18 @@ sub_F75685:
 	ld	xiy, 16212159	; F756C6  ld XIY,0x00f760bf
 	ld	xix, 6334208	; F756CB  ld XIX,0x0060a700
 	ldw	bc, 7	; F756D0  ld BC,0x0007
-	.byte 0x95, 0x11	; F756D3  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F756D3  ldirw
 	ld	xiy, 16212173	; F756D5  ld XIY,0x00f760cd
 	ldw	bc, 4	; F756DA  ld BC,0x0004
-	.byte 0x95, 0x11	; F756DD  ldirw   [llvm-mc cannot encode this]
+	m_ldirw MWI+r5	; F756DD  ldirw
 	stda32	(4232), xix	; F756DF  ld (0x1088),XIX
 	ldda32	xix, (4232)	; F756E3  ld XIX,(0x1088)
 	ld	xiy, 16212181	; F756E7  ld XIY,0x00f760d5
 	ldw	bc, 11	; F756EC  ld BC,0x000b
-	.byte 0x85, 0x11	; F756EF  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F756EF  ldir
 	ld	xiy, 8648	; F756F1  ld XIY,0x000021c8
 	ldw	bc, 8	; F756F6  ld BC,0x0008
-	.byte 0x85, 0x11	; F756F9  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F756F9  ldir
 	stda32	(4232), xix	; F756FB  ld (0x1088),XIX
 	stdi16	(4499), 0	; F756FF  ld (0x1193),0x0000
 	stdi8	(4501), 0	; F75705  ld (0x1195),0x00
@@ -154719,7 +154719,7 @@ SongStore_LoadSongHeaderToDisplay:
 	add	xiy, 202	; F7AA77  add XIY,0x000000ca
 	ld	xix, 4855	; F7AA7D  ld XIX,0x000012f7
 	ldw	bc, 6	; F7AA82  ld BC,0x0006
-	.byte 0x85, 0x11	; F7AA85  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F7AA85  ldir
 	ret	; F7AA87  ret
 
 ; --------------------------------------------------------------------------
@@ -158379,7 +158379,7 @@ sub_F7C440:
 	add	xiy, xhl	; F7C455  add XIY,XHL
 	add	xiy, 202	; F7C457  add XIY,0x000000ca
 	ldw	bc, 6	; F7C45D  ld BC,0x0006
-	.byte 0x85, 0x11	; F7C460  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F7C460  ldir
 	ret	; F7C462  ret
 
 ; --------------------------------------------------------------------------
@@ -164710,7 +164710,7 @@ sub_F7E8CD:
 	ld	xiy, 6304802	; F7E8D5  ld XIY,0x00603422
 	ld	xix, 9793	; F7E8DA  ld XIX,0x00002641
 	ldw	bc, 8	; F7E8DF  ld BC,0x0008
-	.byte 0x85, 0x11	; F7E8E2  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F7E8E2  ldir
 	ld	xiy, 15971931	; F7E8E4  ld XIY,0x00f3b65b
 	ld	xix, 15972051	; F7E8E9  ld XIX,0x00f3b6d3
 	call	15996916	; F7E8EE  call 0xf417f4
@@ -164724,7 +164724,7 @@ sub_F7E8F3:
 	ld	xiy, 6304810	; F7E8FB  ld XIY,0x0060342a
 	ld	xix, 9793	; F7E900  ld XIX,0x00002641
 	ldw	bc, 8	; F7E905  ld BC,0x0008
-	.byte 0x85, 0x11	; F7E908  ldir   [llvm-mc cannot encode this]
+	m_ldir MBI+r5	; F7E908  ldir
 	ld	xiy, 15971931	; F7E90A  ld XIY,0x00f3b65b
 	ld	xix, 15972051	; F7E90F  ld XIX,0x00f3b6d3
 	call	15996916	; F7E914  call 0xf417f4
