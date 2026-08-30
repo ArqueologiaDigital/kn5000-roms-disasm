@@ -15131,120 +15131,58 @@ SeBitmap_EnvCurve5:
 	jp	0x030002
 	pushw	1629
 	retd	1280
-	.byte 0x53
-	pushw	hl
-	stb_d8	(0x4100), b
-	.byte 0x43
-	.ascii "DEFGHIJKLMNOPQRSUVWXYZLOW HIGHMONOPOLY"
-	xorcf_a_8 a
-	.byte 0xf1
-	nop
-	popw	bc
-	pushw	de
-	.byte 0xf1
-	nop
-	popw	bc
-	pushw	de
-	.byte 0xf1
-	nop
-	.byte 0x53
-	pushw	de
-	.byte 0xf1
-	nop
-	pop	xiz
-	pushw	de
-	.byte 0xf1
-	nop
-	jr	ge, 42
-	.byte 0xf1
-	nop
-	jrl	ule, -3798
-	nop
-	jrl	nz, -3798
-	nop
-	.byte 0x89
-	pushw	de
-	.byte 0xf1
-	nop
-	.byte 0x93
-	pushw	de
-	.byte 0xf1
-	nop
-	.byte 0x9e
-	pushw	de
-	.byte 0xf1
-	nop
-	.byte 0xa9
-	pushw	de
-	.byte 0xf1
-	nop
-	.byte 0xb3
-	pushw	de
-	.byte 0xf1
-	nop
-	.byte 0xbe
-	pushw	de
-	.byte 0xf1
-	nop
-	.byte 0xd1
-	pushw	bc
-	.byte 0xf1
-	nop
-	.byte 0xef
-	pushw	bc
-	.byte 0xf1
-	nop
-	decf
-	pushw	de
-	.byte 0xf1
-	nop
-	pushw	hl
-	pushw	de
-	.byte 0xf1
-	nop
-	popw	bc
-	pushw	de
-	.byte 0xf1
-	nop
-	jp	3338
-	popw	bc
-	nop
-	ldw	hl, 0xc501
-	nop
-	decf
-	nop
-	popw	bc
-	nop
-	ldw	hl, 0x6501
-	nop
-	decf
-	nop
-	popw	bc
-	nop
-	ldw	hl, 0x6501
-	nop
-	decf
-	nop
-	jr	ge, 0
-	ldw	hl, 0x8501
-	nop
-	decf
-	nop
-	.byte 0x89
-	nop
-	ldw	hl, 0xa501
-	nop
-	decf
-	nop
-	.byte 0xa9
-	nop
-	ldw	hl, 0xc501
-	nop
-	pop	sr
-	pushw	1632
-	retd	1280
-	pushw	0xf12d
-	nop
+; ** RE-FRAMED 2026-08-30 (lane B4). Was CODE territory. It is a chain of
+; records whose every boundary is confirmed twice over -- once by a length
+; field, once by a pointer from OUTSIDE the span:
+;   0xF12AD0 + 4 (this record's LE32 pointer field) = 0xF12AD4
+;   0xF12AD4 + 41 (the ASCII cells)                 = 0xF12AFD  <- 5 refs to start
+;   0xF12AFD + 76 (19 LE32 pointers)                = 0xF12B49  <- 2 refs
+;   0xF12B49 + 10 (its own length byte, 0x0a)       = 0xF12B53  <- 1 ref
+;   0xF12B53 + 40 (five 8-byte cells)               = 0xF12B7B  <- 2 refs
+;   0xF12B7B + 11 (its own length byte, 0x0b)       = 0xF12B86  <- the .incbin
+; The last record's trailing LE32 is 0x00F12D0B; the tree framed its 0x00 high
+; byte as a `nop`, and that phantom is what gave run 9 of the reachability work
+; list a STRONG fall-through seed.
+	.long 0x00f12b53
+	; 0xF12AD4: 25 one-character cells (note: no 'T')
+	.ascii "ABCDEFGHIJKLMNOPQRSUVWXYZ"
+	; 0xF12AED: two 4-byte cells -- 0xF12AED is referenced from outside
+	.ascii "LOW "
+	.ascii "HIGH"
+	; 0xF12AF5: two more 4-byte cells
+	.ascii "MONO"
+	.ascii "POLY"
+	; 0xF12AFD: 19 LE32 pointers back into the record stream above
+	.long 0x00f12ac9
+	.long 0x00f12a49
+	.long 0x00f12a49
+	.long 0x00f12a53
+	.long 0x00f12a5e
+	.long 0x00f12a69
+	.long 0x00f12a73
+	.long 0x00f12a7e
+	.long 0x00f12a89
+	.long 0x00f12a93
+	.long 0x00f12a9e
+	.long 0x00f12aa9
+	.long 0x00f12ab3
+	.long 0x00f12abe
+	.long 0x00f129d1
+	.long 0x00f129ef
+	.long 0x00f12a0d
+	.long 0x00f12a2b
+	.long 0x00f12a49
+	; 0xF12B49: record, type 0x1b, length 0x0a
+	.byte 0x1b, 0x0a, 0x0d, 0x00, 0x49, 0x00, 0x33, 0x01, 0xc5, 0x00	; |....I.3...|
+	; 0xF12B53: five 8-byte cells
+	.byte 0x0d, 0x00, 0x49, 0x00, 0x33, 0x01, 0x65, 0x00	; |..I.3.e.|
+	.byte 0x0d, 0x00, 0x49, 0x00, 0x33, 0x01, 0x65, 0x00	; |..I.3.e.|
+	.byte 0x0d, 0x00, 0x69, 0x00, 0x33, 0x01, 0x85, 0x00	; |..i.3...|
+	.byte 0x0d, 0x00, 0x89, 0x00, 0x33, 0x01, 0xa5, 0x00	; |....3...|
+	.byte 0x0d, 0x00, 0xa9, 0x00, 0x33, 0x01, 0xc5, 0x00	; |....3...|
+	; 0xF12B7B: record, type 0x03, length 0x0b, trailing pointer 0x00F12D0B
+	.byte 0x03, 0x0b, 0x60, 0x06, 0x0f, 0x00, 0x05	; |..`....|
+	.long 0x00f12d0b
 ; se_drumkit_display: 329 bytes (293 screen data + 36 DrumKit_VariantSelect_Table)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_drumkit_display.c)
 	.incbin "includes/generated/se_drumkit_display.bin"
