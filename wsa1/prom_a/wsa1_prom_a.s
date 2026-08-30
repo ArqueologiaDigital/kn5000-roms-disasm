@@ -40144,7 +40144,30 @@ sub_F96172:   ; entry: reachable-run entry
 	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0x01                    ; F961B0  f3 07 f8 f0 00 01
 	inc 1,IX                                             ; F961B6  dc 61
 	ld W,(XIY+0x7621)                                    ; F961B8  c3 f5 21 76 20
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x0161BD, 0x000034
+; ==== 0xF961BD-0xF961F1 -- STRONG-REACHABLE CODE ONLY, emitted by notes/gen_prom_a_cover_round2.py ====
+; 1 run(s), 52 bytes framed as code.  0 bytes that nothing STRONGLY reaches stay
+; `.incbin` -- this round converts REACHABLE CODE, not territory.
+; Boundaries: notes/reachability.py's walk over its STRONG seed classes only (CPU
+; vectors, prom_b routine-directory slots, branches in decoded code), frozen against
+; this file's own output.  A bare 32-bit immediate is NOT a seed here: round 1 proved
+; it paints pointer tables as instructions and passes the byte gate doing it.
+; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
+; This text was assembled and byte-compared with the ROM before printing.
+sub_F961BD:   ; entry: reachable-run entry
+	mx_st_mr8 MXD, ra_IZ, ra_IX, r0                      ; F961BD  f3 07 f8 f0 40
+	inc 1,IX                                             ; F961C2  dc 61
+	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0x7f                    ; F961C4  f3 07 f8 f0 00 7f
+	inc 1,IX                                             ; F961CA  dc 61
+	mx_st_mr8 MXD, ra_IZ, ra_IX, r4                      ; F961CC  f3 07 f8 f0 44
+	inc 1,IX                                             ; F961D1  dc 61
+	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0x00                    ; F961D3  f3 07 f8 f0 00 00
+	inc 1,IX                                             ; F961D9  dc 61
+	ld W,(XIY+0x7620)                                    ; F961DB  c3 f5 20 76 20
+	mx_st_mr8 MXD, ra_IZ, ra_IX, r0                      ; F961E0  f3 07 f8 f0 40
+	inc 1,IX                                             ; F961E5  dc 61
+	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0xff                    ; F961E7  f3 07 f8 f0 00 ff
+	inc 1,IX                                             ; F961ED  dc 61
+	jr 0x65                                              ; F961EF  68 65
 sub_F961F1:   ; entry: reachable-run entry
 	ld XHL,0x00608000                                    ; F961F1  43 00 80 60 00
 	mx_ld_rm MXB, ra_HL, ra_IY, r0                       ; F961F6  c3 07 ec f4 20
@@ -40197,7 +40220,134 @@ sub_F96428:   ; entry: prom_b routine directory
 sub_F9642D:   ; entry: prom_b routine directory
 	call 0xf9647f                                        ; F9642D  1d 7f 64 f9
 	ret                                                  ; F96431  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016432, 0x000FE6
+; ==== 0xF96432-0xF97418 -- STRONG-REACHABLE CODE ONLY, emitted by notes/gen_prom_a_cover_round2.py ====
+; 3 run(s), 259 bytes framed as code.  3811 bytes that nothing STRONGLY reaches stay
+; `.incbin` -- this round converts REACHABLE CODE, not territory.
+; Boundaries: notes/reachability.py's walk over its STRONG seed classes only (CPU
+; vectors, prom_b routine-directory slots, branches in decoded code), frozen against
+; this file's own output.  A bare 32-bit immediate is NOT a seed here: round 1 proved
+; it paints pointer tables as instructions and passes the byte gate doing it.
+; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
+; This text was assembled and byte-compared with the ROM before printing.
+.LF96432:
+sub_F96432:   ; entry: branch/call in converted code
+	ld XWA,0x00007642                                    ; F96432  40 42 76 00 00
+	push XWA                                             ; F96437  38
+	pushw 0x61                                           ; F96438  0b 61 00
+	call 0xf42f5c                                        ; F9643B  1d 5c 2f f4
+	popw wa                                              ; F9643F  48
+	pop XWA                                              ; F96440  58
+	ld XWA,0x00007682                                    ; F96441  40 82 76 00 00
+	push XWA                                             ; F96446  38
+	pushw 0x63                                           ; F96447  0b 63 00
+	call 0xf42f5c                                        ; F9644A  1d 5c 2f f4
+	popw wa                                              ; F9644E  48
+	pop XWA                                              ; F9644F  58
+	ld XIY,0x00007620                                    ; F96450  45 20 76 00 00
+	ld XIX,0x00f969dd                                    ; F96455  44 dd 69 f9 00
+	calr .LF964B9                                        ; F9645A  1e 5c 00
+	calr .LF96471                                        ; F9645D  1e 11 00
+	call 0xf407a4                                        ; F96460  1d a4 07 f4
+	call 0xf407a0                                        ; F96464  1d a0 07 f4
+	ret                                                  ; F96468  0e
+.LF96469:
+	ret                                                  ; F96469  0e
+sub_F9646A:   ; entry: branch/call in converted code
+	calr .LF96432                                        ; F9646A  1e c5 ff
+	calr .LF96469                                        ; F9646D  1e f9 ff
+	ret                                                  ; F96470  0e
+.LF96471:
+	ld XIY,0x00007620                                    ; F96471  45 20 76 00 00
+	ld XIX,0x00f96aa1                                    ; F96476  44 a1 6a f9 00
+	calr .LF964B9                                        ; F9647B  1e 3b 00
+	ret                                                  ; F9647E  0e
+sub_F9647F:   ; entry: branch/call in converted code
+	ld XIY,0x00603620                                    ; F9647F  45 20 36 60 00
+	ld XIX,0x00f969dd                                    ; F96484  44 dd 69 f9 00
+	push XIX                                             ; F96489  3c
+	push XIY                                             ; F9648A  3d
+	add XIY,0x00000022                                   ; F9648B  ed c8 22 00 00 00
+	push XIY                                             ; F96491  3d
+	pushw 0x61                                           ; F96492  0b 61 00
+	call 0xf42f5c                                        ; F96495  1d 5c 2f f4
+	popw wa                                              ; F96499  48
+	pop XIY                                              ; F9649A  5d
+	pop XIY                                              ; F9649B  5d
+	pop XIX                                              ; F9649C  5c
+	push XIX                                             ; F9649D  3c
+	push XIY                                             ; F9649E  3d
+	add XIY,0x00000062                                   ; F9649F  ed c8 62 00 00 00
+	push XIY                                             ; F964A5  3d
+	pushw 0x63                                           ; F964A6  0b 63 00
+	call 0xf42f5c                                        ; F964A9  1d 5c 2f f4
+	popw wa                                              ; F964AD  48
+	pop XIY                                              ; F964AE  5d
+	pop XIY                                              ; F964AF  5d
+	pop XIX                                              ; F964B0  5c
+	calr .LF964B9                                        ; F964B1  1e 05 00
+	call 0xf401e8                                        ; F964B4  1d e8 01 f4
+	ret                                                  ; F964B8  0e
+.LF964B9:
+	xor BC,BC                                            ; F964B9  d9 d1
+.LF964BB:
+	ld HL,BC                                             ; F964BB  d9 8b
+	mx_ld_rm MXL, ra_IX, ra_HL, r6                       ; F964BD  e3 07 f0 ec 26
+	cp XIZ,0xffffffff                                    ; F964C2  ee cf ff ff ff ff
+	jr z, .LF96503                                       ; F964C8  66 39
+	add XIZ,XIY                                          ; F964CA  ed 86
+	inc 4,BC                                             ; F964CC  d9 64
+	ld HL,BC                                             ; F964CE  d9 8b
+	push XIX                                             ; F964D0  3c
+	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; F964D1  e3 07 f0 ec 24
+	inc 4,BC                                             ; F964D6  d9 64
+.LF964D8:
+	xor H,H                                              ; F964D8  ce d6
+	ld L,(XIX)                                           ; F964DA  84 27
+	cp L,0xff                                            ; F964DC  cf cf ff
+	jr z, .LF96500                                       ; F964DF  66 1f
+	sla hl, 0x02                                         ; F964E1  db ec 02
+	extz XHL                                             ; F964E4  eb 12
+	add XHL,0x00f969a1                                   ; F964E6  eb c8 a1 69 f9 00
+	ld XDE,(XHL)                                         ; F964EC  a3 22
+	inc 1,XIX                                            ; F964EE  ec 61
+	xor XHL,XHL                                          ; F964F0  eb d3
+	ld L,(XIX)                                           ; F964F2  84 27
+	add XHL,XIZ                                          ; F964F4  ee 83
+	ld A,(XHL)                                           ; F964F6  83 21
+	inc 1,XIX                                            ; F964F8  ec 61
+	pushw bc                                             ; F964FA  29
+	call (xde)                                           ; F964FB  b2 e8
+	popw bc                                              ; F964FD  49
+	jr T,.LF964D8                                        ; F964FE  68 d8
+.LF96500:
+	pop XIX                                              ; F96500  5c
+	jr .LF964BB                                          ; F96501  68 b8
+.LF96503:
+	ret                                                  ; F96503  0e
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016504, 0x000761
+sub_F96C65:   ; entry: branch/call in converted code
+	ld XIY,0x00f96c7b                                    ; F96C65  45 7b 6c f9 00
+	ldw bc, 0x01                                         ; F96C6A  31 01 00
+.LF96C6D:
+	ld XIX,(XIY)                                         ; F96C6D  a5 24
+	inc 4,XIY                                            ; F96C6F  ed 64
+	ld A,(XIY)                                           ; F96C71  85 21
+	inc 1,XIY                                            ; F96C73  ed 61
+	and (XIX),A                                          ; F96C75  84 c9
+	djnz16 bc, .LF96C6D                                  ; F96C77  d9 1c f3
+	ret                                                  ; F96C7A  0e
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016C7B, 0x00000F
+sub_F96C8A:   ; entry: branch/call in converted code
+	ld XIY,0x00f96de6                                    ; F96C8A  45 e6 6d f9 00
+	ld XIX,0x00f96ca6                                    ; F96C8F  44 a6 6c f9 00
+	ld XBC,0x00000050                                    ; F96C94  41 50 00 00 00
+.LF96C99:
+	ld_spiw wa, 0xf5                                     ; F96C99  d5 f5 20
+	ld_spil xhl, 0xf2                                    ; F96C9C  e5 f2 23
+	ld (XHL),WA                                          ; F96C9F  b3 50
+	djnz16 bc, .LF96C99                                  ; F96CA1  d9 1c f5
+	ret                                                  ; F96CA4  0e
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016CA5, 0x000773
 sub_F97418:   ; entry: reachable-run entry
 	push XIZ                                             ; F97418  3e
 	push XIX                                             ; F97419  3c
@@ -56261,6 +56411,23 @@ sub_FA14C6:   ; entry: reachable-run entry
 	m_set 4, MD16, 0x2071                                ; FA15C7  f1 71 20 bc
 .LFA15CB:
 	ret                                                  ; FA15CB  0e
+; ==== 0xFA15CC-0xFA5400 -- STRONG-REACHABLE CODE ONLY, emitted by notes/gen_prom_a_cover_round2.py ====
+; 0 run(s), 0 bytes framed as code.  15924 bytes that nothing STRONGLY reaches stay
+; `.incbin` -- this round converts REACHABLE CODE, not territory.
+; Boundaries: notes/reachability.py's walk over its STRONG seed classes only (CPU
+; vectors, prom_b routine-directory slots, branches in decoded code), frozen against
+; this file's own output.  A bare 32-bit immediate is NOT a seed here: round 1 proved
+; it paints pointer tables as instructions and passes the byte gate doing it.
+; ⚠ A FURTHER 17 byte(s) in 1 run(s) ARE marked STRONG-reachable and are left
+; `.incbin` anyway: they fall outside the CODE_BLOCKS of notes/prom_a_fa1404_identify.py,
+; which identified this region's handler pointer tables, parameter descriptors and text.
+; NOTHING vouches for their start addresses -- no seed of any grade names them, and no
+; converted instruction falls through into them; reachability.py's walk queued them
+; while DECODING data.  `--dropped` prints this list:
+;     0xFA369A-0xFA36AB    17 bytes, as text: 'D GROUP NAMING...'
+; Framing that as instructions passes the byte gate and is still wrong.
+; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
+; This text was assembled and byte-compared with the ROM before printing.
 	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x0215CC, 0x003E34
 
 ; ==============================================================================
@@ -137676,7 +137843,27 @@ sub_FDE6AF:
 .LFDE70C:
 	unlk XIZ                                             ; FDE70C  ee 0d
 	ret                                                  ; FDE70E  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05E70F, 0x0018F1
+; ==== 0xFDE70F-0xFE0000 -- STRONG-REACHABLE CODE ONLY, emitted by notes/gen_prom_a_cover_round2.py ====
+; 1 run(s), 26 bytes framed as code.  6359 bytes that nothing STRONGLY reaches stay
+; `.incbin` -- this round converts REACHABLE CODE, not territory.
+; Boundaries: notes/reachability.py's walk over its STRONG seed classes only (CPU
+; vectors, prom_b routine-directory slots, branches in decoded code), frozen against
+; this file's own output.  A bare 32-bit immediate is NOT a seed here: round 1 proved
+; it paints pointer tables as instructions and passes the byte gate doing it.
+; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
+; This text was assembled and byte-compared with the ROM before printing.
+sub_FDE70F:   ; entry: prom_b routine directory
+	link XIZ,0xfffc                                      ; FDE70F  ee 0c fc ff
+	lda xbc, (xiz-2)                                     ; FDE713  be fe 31
+	push XBC                                             ; FDE716  39
+	lda xwa, (xiz-4)                                     ; FDE717  be fc 30
+	push XWA                                             ; FDE71A  38
+	m_push MWD+r6, 0x0a                                  ; FDE71B  9e 0a 04
+	m_push MWD+r6, 0x08                                  ; FDE71E  9e 08 04
+	call 0xfd7905                                        ; FDE721  1d 05 79 fd
+	inc 0,XSP                                            ; FDE725  ef 60
+	inc 4,XSP                                            ; FDE727  ef 64
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05E729, 0x0018D7
 
 ; ==============================================================================
 ; 0xFE0000-0xFE54B5 -- 21,686 bytes of application code, converted but NOT NAMED
