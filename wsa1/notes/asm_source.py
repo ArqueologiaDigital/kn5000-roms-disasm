@@ -32,9 +32,14 @@ bare names resolved through `-I prom_d` (`tone_database_aux.s`), mirroring
 ../kn5000-roms-disasm/table_data/.
 
 ⚠ A MISSING INCLUDE RAISES.  Skipping it would return a short listing, which is
-precisely the failure this module exists to prevent.  A file included twice
-raises too: this tree's images are laid out by emission order, so a repeated
-include would mean repeated bytes.
+precisely the failure this module exists to prevent.
+
+⚠ A `.s` INCLUDED TWICE RAISES TOO: this tree's images are laid out by emission
+order, so a repeated content part would mean repeated bytes.  A `.inc` may
+legitimately repeat -- include/tlcs900_mem_ops.inc reaches prom_a both directly
+and through kernel/kernel.s -- because it defines macros and equates and emits
+nothing where it is included.  Such a repeat is EXPANDED ONCE: counting its
+lines twice would inflate every census taken over the result.
 
 ⚠ IT RETURNS TEXT, NOT BYTES.  Nothing here certifies anything.  The gate is
 scripts/analysis/assert_byte_identical.py and it stays the only certificate.
@@ -84,9 +89,12 @@ def image_files(root, primary):
     def walk(path):
         real = os.path.normpath(path)
         if real in seen:
-            raise AssertionError(
-                "%s is included twice; in an image laid out by emission order "
-                "that would duplicate its bytes" % os.path.relpath(real, root))
+            if real.endswith(".s"):
+                raise AssertionError(
+                    "%s is included twice; in an image laid out by emission "
+                    "order that would duplicate its bytes"
+                    % os.path.relpath(real, root))
+            return                      # a definitions .inc: expand it once
         seen.add(real)
         out.append(real)
         with open(real, encoding="utf-8") as fh:
@@ -113,8 +121,13 @@ def image_lines(root, primary, expand=True):
     text = {p: open(p, encoding="utf-8").read().split("\n") for p in files}
     root_file = files[0]
 
+    done = set()
+
     def emit(path):
         out = []
+        if path in done:
+            return out                  # the repeated definitions .inc
+        done.add(path)
         for ln in text[path]:
             m = INCLUDE_RE.match(ln)
             if m:
@@ -154,6 +167,9 @@ def _selftest():
         check("%-7s every resolved file exists" % tag,
               all(os.path.isfile(f) for f in files))
         check("%-7s no file resolved twice" % tag, len(set(files)) == len(files))
+        check("%-7s every CONTENT part is a .s and appears once" % tag,
+              len({f for f in files if f.endswith(".s")})
+              == len([f for f in files if f.endswith(".s")]))
         check("%-7s the primary is first" % tag,
               os.path.normpath(files[0]) == os.path.normpath(p))
         check("%-7s expansion is a superset of the primary's own lines" % tag,
@@ -167,6 +183,27 @@ def _selftest():
                   "%d vs %d" % (len(lines), len(own)))
         print("     %-7s %d file(s), %s line(s)" % (tag, len(files),
                                                     format(len(lines), ",")))
+
+    # ★ THE REPEAT RULE, both directions: a .s repeated must RAISE, a .inc must not.
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        open(os.path.join(td, "part.s"), "w").write("; part\n")
+        open(os.path.join(td, "defs.inc"), "w").write("; defs\n")
+        open(os.path.join(td, "dup_s.s"), "w").write(
+            '\t.include "part.s"\n\t.include "part.s"\n')
+        open(os.path.join(td, "dup_inc.s"), "w").write(
+            '\t.include "defs.inc"\n\t.include "defs.inc"\n')
+        raised = False
+        try:
+            image_files(td, os.path.join(td, "dup_s.s"))
+        except AssertionError:
+            raised = True
+        check("a CONTENT part included twice RAISES", raised)
+        n = len(image_lines(td, os.path.join(td, "dup_inc.s")))
+        check("a definitions .inc included twice is expanded ONCE",
+              image_files(td, os.path.join(td, "dup_inc.s")).__len__() == 2
+              and n == 3, "%d file(s), %d line(s)"
+              % (len(image_files(td, os.path.join(td, "dup_inc.s"))), n))
 
     # a resolver that cannot fail is not a resolver
     try:

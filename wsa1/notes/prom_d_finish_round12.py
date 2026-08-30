@@ -869,7 +869,13 @@ def selftest():
         os.path.join(ROOT, "notes", "wave7_documentation_metrics.py"))
     met = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(met)
-    _n, mfr, _u, _i, _h, _e = met.scan(os.path.join("prom_d", "wsa1_prom_d.s"))
+    # ⚠ PRE-EXISTING, and it made this whole --selftest unrunnable: scan()
+    # returns SEVEN values (branch targets were split out of `internal`) and this
+    # line unpacked six, so it raised ValueError before its first check.  Round 5
+    # hit the same class of bug and left the rule -- take the values by position
+    # from whatever scan() returns, never by a fixed arity.
+    _res = met.scan(os.path.join("prom_d", "wsa1_prom_d.s"))
+    mfr = _res[1]
     check("T1 the framed set here is exactly the one wave7_documentation_metrics "
           "reads (%d)" % len(mfr),
           len(mfr) == len(rows)

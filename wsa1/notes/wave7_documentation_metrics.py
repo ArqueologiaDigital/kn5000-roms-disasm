@@ -81,6 +81,28 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_files                # noqa: E402
+
+
+def _image_lines(path):
+    """Every line of the IMAGE at `path`, `.include`s expanded -- minus any part
+    that has its own row in IMAGES (see SKIP_OWN_ROW)."""
+    out = []
+    files = image_files(ROOT, path)
+    for i, f in enumerate(files):
+        rel = os.path.relpath(f, ROOT)
+        # never skip the file that was ASKED for -- kernel/kernel.s is both an
+        # included part of two images and a row of its own.
+        if i and (rel in SKIP_OWN_ROW or rel.endswith(".inc")):
+            continue
+        # ⚠ VERBATIM, `.include` lines included.  Deleting them would join a
+        # comment block to the label after the directive instead of stopping at
+        # it, which moved prom_a's and prom_b's header counts by 3 each -- a
+        # measurement changed by the instrument, in the two images this fix was
+        # not supposed to touch.
+        out.extend(open(f, encoding="utf-8", errors="replace").read().split("\n"))
+    return out
 IMAGES = [("prom_a", "wsa1_prom_a.s", 0xF80000), ("prom_b", "wsa1_prom_b.s", 0xF00000),
           ("prom_c", "wsa1_prom_c.s", 0xF80000), ("prom_d", "wsa1_prom_d.s", 0x000000),
           # ⚠ NOT AN IMAGE.  kernel/kernel.s is ONE source that prom_a and prom_c
@@ -133,9 +155,36 @@ FRAMED = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*_'
 ADDR_COMMENT = re.compile(r';\s*([0-9A-F]{6})\b')
 
 
+# ⚠ AN IMAGE IS NOT ONE FILE ANY MORE.  On 2026-08-30 prom_c and prom_d were each
+# split into a primary plus `.include` parts, and this table went on opening the
+# primary alone: prom_c fell to 3 content labels and prom_d to 2, and prom_d's
+# LOWER/UPPER both read 100% off those two.  A headline metric quietly measuring
+# a header file is worse than no metric.  scan() now follows the includes.
+#
+# ⚠ EXCEPT a file that has its OWN ROW here.  kernel/kernel.s is included by
+# prom_a AND prom_c and is listed below as its own line precisely so its 96
+# labels are visible; expanding it into both images as well would count it three
+# times and inflate the total.  SKIP_OWN_ROW is that rule, stated once.
+#
+# ⚠ AND `include/*.inc` IS SKIPPED IN EVERY IMAGE.  Those files define macros and
+# equates rather than image content, and prom_a, prom_b and kernel/kernel.s all
+# include the same one -- counting it per image would triple-count it.  Skipping
+# them is also what keeps prom_a's and prom_b's rows nearly what they were
+# before this change, which is the control that says the fix touched only the
+# images that were broken.
+#
+# ⚠ AND ONE THING IT DOES NOT SOLVE, said here rather than left to be found: a
+# shared CONTENT part with no row of its own -- maincpu/shared/lcd_screen_redraw.s
+# and maincpu/shared/indexed_table.s, which prom_a and prom_b both include -- is
+# counted in BOTH rows.  That is why prom_a moved 1,470 -> 1,473 when this fix
+# landed: three labels that were invisible before are now visible twice.  Give
+# such a file its own row here the moment there is more than a handful.
+SKIP_OWN_ROW = {"kernel/kernel.s"}
+
+
 def scan(path, want_ev=False):
     """Walk the source once, classifying every label and the comment block above it."""
-    lines = open(os.path.join(ROOT, path)).read().split("\n")
+    lines = _image_lines(path)
     named, framed, unnamed, internal, branch, with_header, with_evidence = [], [], [], [], [], 0, 0
     run = 0                      # consecutive comment lines above
     blanks = 0                   # blank lines seen since the comment run ended
