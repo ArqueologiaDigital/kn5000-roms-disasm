@@ -269,8 +269,15 @@ class Operand:
     """A decoded memory-operand prefix: how to spell it as a macro argument, how
     unidasm prints it, and how many bytes of the row it consumed."""
 
-    def __init__(self, expr, args, text, size, n, idx8=False):
-        self.expr = expr      # e.g. "MB16" or "MXD, ra_IX, ra_HL"
+    def __init__(self, expr, args, text, size, n, idx8=False, src=None):
+        self.expr = expr      # the PREFIX name alone, e.g. "MB16"
+        self.src = src if src is not None else expr
+                              # ★ the WHOLE argument text a macro call needs:
+                              # "MB16, 0x20b8", "MBD+r6, 0x08", "MDI+r5, 0",
+                              # "MXD, ra_IX, ra_HL".  Using `expr` here dropped
+                              # the address argument and every rewritten line
+                              # failed to assemble -- caught by the byte gate on
+                              # the first batch, which is what it is for.
         self.args = args      # the numeric arguments the mirror needs
         self.text = text      # e.g. "(0x20b8)" -- must appear in unidasm's text
         self.size = size      # 'B' 'W' 'L' 'D'
@@ -297,8 +304,9 @@ def decode_operand(b):
             if len(b) < 1 + nb:
                 return None
             addr = int.from_bytes(bytes(b[1:1 + nb]), 'little')
-            return Operand("%s%d" % (PFX_NAME[size], [8, 16, 24][w]), [p, addr],
-                           "(0x%0*x)" % (nb * 2, addr), size, 1 + nb)
+            nm = "%s%d" % (PFX_NAME[size], [8, 16, 24][w])
+            return Operand(nm, [p, addr], "(0x%0*x)" % (nb * 2, addr), size,
+                           1 + nb, src="%s, 0x%0*x" % (nm, nb * 2, addr))
         # w == 3: the register-indexed operand
         if len(b) < 4 or b[1] not in (0x03, 0x07):
             return None
@@ -316,9 +324,9 @@ def decode_operand(b):
                 return None
             iname = REG8_ADDR[idx]
             iexpr = "rb_" + iname
-        return Operand("%s, ra_%s, %s" % (IDX_NAME[size], bn[1:], iexpr),
-                       [p, base, idx], "(%s+%s)" % (bn, iname), size, 4,
-                       idx8=(sub == 0x03))
+        nm = "%s, ra_%s, %s" % (IDX_NAME[size], bn[1:], iexpr)
+        return Operand(nm, [p, base, idx], "(%s+%s)" % (bn, iname), size, 4,
+                       idx8=(sub == 0x03), src=nm)
     if 0x80 <= p <= 0xBF:
         size = 'BWLD'[(p >> 4) - 8]
         r = p & 7
@@ -326,10 +334,11 @@ def decode_operand(b):
             if len(b) < 2:
                 return None
             d = b[1]
-            return Operand("%sD+r%d" % (PFX_NAME[size], r), [p, d],
-                           "(%s+0x%02x)" % (REG32[r], d), size, 2)
-        return Operand("%sI+r%d" % (PFX_NAME[size], r), [p, 0],
-                       "(%s)" % REG32[r], size, 1)
+            nm = "%sD+r%d" % (PFX_NAME[size], r)
+            return Operand(nm, [p, d], "(%s+0x%02x)" % (REG32[r], d), size, 2,
+                           src="%s, 0x%02x" % (nm, d))
+        nm = "%sI+r%d" % (PFX_NAME[size], r)
+        return Operand(nm, [p, 0], "(%s)" % REG32[r], size, 1, src="%s, 0" % nm)
     return None
 
 
@@ -579,7 +588,7 @@ def recognise(b, text):
             if not want_mem():
                 return None, 'operand %s not in text' % op.text
             if kind == 'none':
-                return build(name, op.args, op.expr)
+                return build(name, op.args, op.src)
             if kind == 'imm':
                 w = 1 if op.size == 'B' else 2 if op.size == 'W' else None
                 if w is None or len(tail) != w:
@@ -589,14 +598,14 @@ def recognise(b, text):
                 istr = "0x%0*x" % (w * 2, v)
                 if ",%s" % istr not in text:
                     return None, 'immediate %s not in text' % istr
-                return build(nm, op.args + [v], "%s, %s" % (op.expr, istr))
+                return build(nm, op.args + [v], "%s, %s" % (op.src, istr))
             if kind == 'imm16':
                 if len(tail) != 2:
                     return None, 'trailing address width'
                 v = int.from_bytes(bytes(tail), 'little')
                 if "(0x%04x)" % v not in text:
                     return None, 'trailing address not in text'
-                return build(name, op.args + [v], "%s, 0x%04x" % (op.expr, v))
+                return build(name, op.args + [v], "%s, 0x%04x" % (op.src, v))
         if base in SRC_REG_OPS and not tail:
             name, want, order = SRC_REG_OPS[base]
             if want != mn:
@@ -619,7 +628,7 @@ def recognise(b, text):
                 rn = regs[r]
             if not re.search(r'\b%s\b' % re.escape(rn), text):
                 return None, 'register %s not in text' % rn
-            return build(name, op.args + [r], "%s, %s" % (op.expr, r))
+            return build(name, op.args + [r], "%s, %s" % (op.src, r))
         return None, 'operation 0x%02X in the %s table' % (o, op.size)
 
     # ---- the destination table -------------------------------------------
@@ -631,7 +640,7 @@ def recognise(b, text):
         if not want_mem():
             return None, 'operand %s not in text' % op.text
         if kind == 'none':
-            return build(name, op.args, op.expr)
+            return build(name, op.args, op.src)
         w = 1 if kind == 'i8' else 2
         if len(tail) != w:
             return None, 'immediate width'
@@ -639,7 +648,7 @@ def recognise(b, text):
         istr = "(0x%04x)" % v if o in (0x14, 0x16) else "0x%0*x" % (w * 2, v)
         if istr not in text:
             return None, 'operand %s not in text' % istr
-        return build(name, op.args + [v], "%s, 0x%0*x" % (op.expr, w * 2, v))
+        return build(name, op.args + [v], "%s, 0x%0*x" % (op.src, w * 2, v))
     if base in DST_REG_OPS and not tail:
         name, want, order = DST_REG_OPS[base]
         if want != mn:
@@ -652,7 +661,7 @@ def recognise(b, text):
             if order.startswith('R') else {'R8': REG8, 'R16': REG16, 'R32': REG32}[order.split(',')[1]][r]
         if not re.search(r'\b%s\b' % re.escape(rn), text):
             return None, 'register %s not in text' % rn
-        return build(name, op.args + [r], "%s, %s" % (op.expr, r))
+        return build(name, op.args + [r], "%s, %s" % (op.src, r))
     if base in DST_BIT_OPS and not tail:
         name, want = DST_BIT_OPS[base]
         if want != mn:
@@ -667,7 +676,7 @@ def recognise(b, text):
             return None, 'no macro %s' % nm
         if bytes(emit(nm, [n] + op.args)) != bytes(b):
             return None, 'reemit mismatch'
-        return "%s %d, %s" % (nm, n, op.expr), nm
+        return "%s %d, %s" % (nm, n, op.src), nm
     if (o & 0xF0) in (0xD0, 0xE0) and not tail:
         name, want = ('m_jp_cc', 'jp') if (o & 0xF0) == 0xD0 else ('m_call_cc', 'call')
         if want != mn:
@@ -682,7 +691,7 @@ def recognise(b, text):
             return None, 'no macro %s' % nm
         if bytes(emit(nm, op.args + [c])) != bytes(b):
             return None, 'reemit mismatch'
-        return "%s %s, %d" % (nm, op.expr, c), nm
+        return "%s %s, %d" % (nm, op.src, c), nm
     return None, 'operation 0x%02X in the dst table' % o
 
 
@@ -964,7 +973,53 @@ def selftest(lines):
         print("    %s" % b)
     check("llvm-mc and the mirror agree on all %d sampled macros" % len(samples), not bad)
 
-    # 8. A deliberately corrupted row must be REFUSED, so the checks can fail.
+    # 8. ★★ THE PROPOSED LINE, THROUGH THE REAL ASSEMBLER.  Checks 1 and 7 prove
+    #    the macro DEFINITIONS; they say nothing about whether the line this file
+    #    writes calls one correctly.  The first batch shipped
+    #    `m_cp_mi8 MB16, 0x11` -- the address argument dropped -- and every check
+    #    above passed, including the preservation probe, because the row's prose
+    #    was untouched.  The byte gate caught it, on 2,334 lines at once.  This
+    #    check catches it here: one proposal per macro name, plus the last
+    #    proposal in the file, assembled and compared with the row's own bytes.
+    seen, sample = set(), []
+    for i, new_line, name in p:
+        if name in seen:
+            continue
+        seen.add(name)
+        sample.append((i, new_line, name))
+    if p:
+        sample.append(p[-1])
+    with tempfile.TemporaryDirectory() as td:
+        src = os.path.join(td, "s.s")
+        with open(src, "w") as f:
+            f.write('\t.text\n\t.include "include/tlcs900_mem_ops.inc"\n')
+            for _i, new_line, _n in sample:
+                f.write(new_line.split('\t;')[0] + "\n")
+        r = subprocess.run([os.path.join(llvm, "llvm-mc"), "-triple=tlcs900",
+                            "-filetype=obj", "-I", ROOT, "-o",
+                            os.path.join(td, "s.o"), src],
+                           capture_output=True, text=True)
+        bad = []
+        if r.returncode != 0:
+            bad = [r.stderr.strip().split('\n')[0][:200]]
+        else:
+            subprocess.run([os.path.join(llvm, "llvm-objcopy"), "-O", "binary",
+                            os.path.join(td, "s.o"), os.path.join(td, "s.bin")],
+                           capture_output=True)
+            got, off = open(os.path.join(td, "s.bin"), "rb").read(), 0
+            for i, _nl, name in sample:
+                want = bytes(int(x, 16) for x in
+                             BLOB.match(lines[i]).group(1).split(', '))
+                if got[off:off + len(want)] != want:
+                    bad.append("%s: llvm-mc %s vs row %s"
+                               % (name, got[off:off + len(want)].hex(), want.hex()))
+                off += len(want)
+    for b in bad[:5]:
+        print("    %s" % b)
+    check("llvm-mc assembles %d sampled proposals to their own bytes" % len(sample),
+          not bad)
+
+    # 9. A deliberately corrupted row must be REFUSED, so the checks can fail.
     line, why = recognise([0xC1, 0xB8, 0x20, 0x3F, 0x11], "cp (0x20b9),0x11")
     check("a row whose text disagrees with its bytes is refused (%s)" % why, line is None)
     line, why = recognise([0xC1, 0xB8, 0x20, 0x3F, 0x11], "or (0x20b8),0x11")
