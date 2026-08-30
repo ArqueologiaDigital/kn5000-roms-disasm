@@ -23,6 +23,15 @@ PROMS = a b c d
 KERNEL_SRC = kernel/kernel.s kernel/kernel_maincpu.inc kernel/kernel_subcpu.inc
 COMMON_INC = include/tmp95c061_sfr.inc include/tlcs900_mem_ops.inc
 
+# prom_c is no longer one file: since the per-subject split it is a master
+# listing that `.include`s 26 subject sources in address order (the split, its
+# rationale and its preservation proof are notes/prom_c_split.py).  A WILDCARD
+# is used deliberately -- a hand-kept list is the same stale-build trap the
+# comment above describes, one file further out, and it would go wrong silently.
+# ⚠ THE MASTER MUST STAY FIRST: the recipe assembles `$<`.
+PROM_C_SRC = prom_c/wsa1_prom_c.s \
+             $(filter-out prom_c/wsa1_prom_c.s,$(wildcard prom_c/*.s prom_c/*/*.s))
+
 .PHONY: all clean
 .SECONDARY:
 
@@ -48,7 +57,7 @@ rebuilt_ROMs/wsa1_prom_b.llvm.elf: rebuilt_ROMs/wsa1_prom_b.llvm.o prom_b/prom_b
 rebuilt_ROMs/wsa1_prom_b.llvm.rom: rebuilt_ROMs/wsa1_prom_b.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_c.llvm.o: prom_c/wsa1_prom_c.s $(COMMON_INC) $(KERNEL_SRC)
+rebuilt_ROMs/wsa1_prom_c.llvm.o: $(PROM_C_SRC) $(COMMON_INC) $(KERNEL_SRC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_c -o $@ $<
 
@@ -58,7 +67,14 @@ rebuilt_ROMs/wsa1_prom_c.llvm.elf: rebuilt_ROMs/wsa1_prom_c.llvm.o prom_c/prom_c
 rebuilt_ROMs/wsa1_prom_c.llvm.rom: rebuilt_ROMs/wsa1_prom_c.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_d.llvm.o: prom_d/wsa1_prom_d.s $(COMMON_INC)
+# prom_d is FOUR files: wsa1_prom_d.s is the header plus three .include lines.
+# Mirrors ../kn5000-roms-disasm/table_data/, which splits the same database the
+# same way.  All three parts are prerequisites -- see the warning above; an
+# include that is not listed here rebuilds nothing and the gate passes stale.
+PROM_D_PARTS = prom_d/tone_database_directory.s prom_d/tone_database_records.s \
+               prom_d/tone_database_aux.s
+
+rebuilt_ROMs/wsa1_prom_d.llvm.o: prom_d/wsa1_prom_d.s $(PROM_D_PARTS) $(COMMON_INC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_d -o $@ $<
 

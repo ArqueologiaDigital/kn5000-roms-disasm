@@ -117,6 +117,34 @@ def rom(img):
 SHARED_SOURCES = {"prom_a": ("kernel/kernel.s", 1), "prom_c": ("kernel/kernel.s", 2)}
 SHARED_ADDR = re.compile(r';\s*([0-9A-F]{6})/([0-9A-F]{6})\b')
 
+# ⚠⚠ A FIFTH PLACE THE LINES CAN BE, and it is the same trap one turn further
+# out.  prom_c is no longer one file either: since the per-subject split it is a
+# master listing that `.include`s 26 subject sources in address order
+# (notes/prom_c_split.py).  Reading only the master would drop 125,264 of its
+# 127,731 lines and this tool would report the whole image as unconverted --
+# LOUDLY, but for the wrong reason.  So the image's OWN `.include`s are followed
+# too.  This is deliberately a SCAN of the master rather than a hand-kept list:
+# a list is what goes stale when the next lane adds a file.
+OWN_INCLUDE = re.compile(r'^\t\.include "([^"]+\.s)"')
+
+
+def included_sources(path):
+    """Every .s file the image at `path` pulls in, in the order it names them,
+    resolved the way llvm-mc resolves them: `-I .` then `-I <the image's dir>`."""
+    out = []
+    for ln in open(os.path.join(ROOT, path)).read().split("\n"):
+        m = OWN_INCLUDE.match(ln)
+        if not m:
+            continue
+        rel = m.group(1)
+        for cand in (rel, os.path.join(os.path.dirname(path), rel)):
+            if os.path.exists(os.path.join(ROOT, cand)):
+                out.append(cand)
+                break
+        else:
+            raise FileNotFoundError(rel)
+    return out
+
 
 ROMS = {tag: rom(f) for tag, _s, f, _b in IMAGES}
 BASES = {tag: b for tag, _s, _f, b in IMAGES}
@@ -155,10 +183,12 @@ def _fingerprint(tag=None):
         if tag is None or t_ == tag:
             h.update(open(os.path.join(ROOT, s), "rb").read())
             # ⚠ AND WHAT THAT IMAGE INCLUDES.  prom_a and prom_c both pull in
-            # kernel/kernel.s; hashing only the .s would let an edit to the
-            # shared kernel validate a stale entry -- the same failure the
-            # docstring above describes, one indirection further out.
-            for rel, _col in [SHARED_SOURCES[t_]] if t_ in SHARED_SOURCES else []:
+            # kernel/kernel.s, and prom_c pulls in its 26 subject sources;
+            # hashing only the master would let an edit to any of them validate a
+            # stale entry -- the same failure the docstring above describes, one
+            # indirection further out.
+            rels = [SHARED_SOURCES[t_][0]] if t_ in SHARED_SOURCES else []
+            for rel in rels + included_sources(s):
                 h.update(open(os.path.join(ROOT, rel), "rb").read())
     h.update(open(os.path.abspath(__file__), "rb").read())
     return h.hexdigest()
@@ -293,6 +323,10 @@ INCBIN = re.compile(r'^\t\.incbin "original_ROMs/(\S+?)", (0x[0-9A-Fa-f]+), (0x[
 def source_lines(tag):
     path = dict((t, s) for t, s, _f, _b in IMAGES)[tag]
     lines = open(os.path.join(ROOT, path)).read().split("\n")
+    for rel in included_sources(path):
+        if tag in SHARED_SOURCES and rel == SHARED_SOURCES[tag][0]:
+            continue          # appended below, with its address column selected
+        lines += open(os.path.join(ROOT, rel)).read().split("\n")
     if tag in SHARED_SOURCES:
         rel, col = SHARED_SOURCES[tag]
         for ln in open(os.path.join(ROOT, rel)).read().split("\n"):

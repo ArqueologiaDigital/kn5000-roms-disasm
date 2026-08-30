@@ -39,14 +39,28 @@ IMAGES = [("a", "wsa1_prom_a.ic12"), ("b", "wsa1_prom_b.ic13"),
 # figures below happen to be unaffected today because kernel.s has no `.incbin`
 # and no `.fill` -- but a measurement whose input silently moved is exactly the
 # failure this script was written to stop, so the included file is scanned too.
-INCLUDED = {"a": ["kernel/kernel.s"], "c": ["kernel/kernel.s"]}
+# ⚠ AND SINCE THE PER-SUBJECT SPLIT, prom_c's master `.include`s 26 subject
+# sources too (notes/prom_c_split.py).  The list is not written here on purpose:
+# it is SCANNED out of the master, so a file a later lane adds is measured
+# without anyone remembering to add it.
+OWN_INCLUDE = re.compile(r'^\t\.include "([^"]+\.s)"', re.M)
+
+
+def resolve(rel, key):
+    """llvm-mc is run with `-I . -I prom_<key>`, so an include is one or the
+    other.  Resolving it the same way is what keeps this measurement reading the
+    same bytes the assembler does."""
+    for cand in (os.path.join(ROOT, rel), os.path.join(ROOT, f"prom_{key}", rel)):
+        if os.path.exists(cand):
+            return cand
+    raise FileNotFoundError(rel)
 
 
 def measure(key):
     src = os.path.join(ROOT, f"prom_{key}", f"wsa1_prom_{key}.s")
     text = open(src).read()
-    for extra in INCLUDED.get(key, []):
-        text += "\n" + open(os.path.join(ROOT, extra)).read()
+    for extra in OWN_INCLUDE.findall(text):
+        text += "\n" + open(resolve(extra, key)).read()
     inc = sum(int(m.group(2), 16) for m in
               re.finditer(r'\.incbin\s+"[^"]+",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)', text))
     whole = re.findall(r'\.incbin\s+"[^"]+"\s*$', text, re.M)
