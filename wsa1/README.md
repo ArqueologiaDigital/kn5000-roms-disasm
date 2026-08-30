@@ -23,7 +23,7 @@ Every commit must keep the gate green, and every commit message must carry the
 | `prom_a/` | `wsa1_prom_a.ic12` | `0xF80000` **established** | program, boot image of CPU 1 |
 | `prom_b/` | `wsa1_prom_b.ic13` | `0xF00000` **confirmed** | program, low half of the same 1 MiB image |
 | `prom_c/` | `wsa1_prom_c.ic28` | `0xF80000` **established** | program, boot image of CPU 2 |
-| `prom_d/` | `wsa1_prom_d.bin` | **not established** | data only |
+| `prom_d/` | `wsa1_prom_d.bin` | `0x00F00000` (CPU 2) | the tone database; data only |
 
 ## The fifth source, which is not an image
 
@@ -70,12 +70,24 @@ expansion-board probe's thunk — all land on well-formed code at exactly
 `0xF00000`, and none survives a one-byte error in it. Written out in
 `prom_b/prom_b.ld`.
 
-**D's base is still not established.** It is *strongly supported* as an image of
-the 512 KiB flash at `0xE80000` on CPU 2's bus (exact size match to the flash the
-sector-erase routine proves, erased-flash tail, 0-based offset header, no
-absolute pointers) but no byte-level tie to an instruction exists yet, so its
-linker `ORIGIN` stays 0 as a build convenience. Argument and its hole:
-`prom_d/prom_d.ld`.
+**D's base IS established: `0x00F00000` on CPU 2's bus.** ⚠ This paragraph used to
+read "still not established" and named the 512 KiB flash at `0xE80000` as the
+leading hypothesis. **Both were refuted in wave 7 round 3** and the text simply
+outlived the finding. What establishes the base, two independent ways:
+
+* `prom_c` installs `0x00F00000` in RAM `0x00D7ED`/`0x00D7F1` (the only two
+  instructions in `prom_c` that write either address, so it is a compile-time
+  constant at every use), then reads this image's 48-slot directory through it at
+  99 instruction pairs covering 33 slots.
+* independently, `prom_a` `0xF82A5F` `ld XWA,0x00F7FFF0` reads eleven bytes that
+  are this image's build tag at file `0x7FFF0`, `"wsad_54.ssf"`. The difference is
+  `0x00F00000`. Two processors, two routes, one base.
+
+The flash reading is refuted outright: `prom_c`'s own `Flash_SectorErase` bounds
+that part at `0x00E80000..0x00EFFFFF`, *below* this image, and
+`ExtBoard_ProbeAndInstallBases` installs the two addresses in **separate** slots.
+Checked by `notes/prom_d_base_checks.py` (12 checks) and written into
+`prom_d/prom_d.ld` and `prom_d/wsa1_prom_d.s`'s header.
 
 ## Provenance of the images
 
