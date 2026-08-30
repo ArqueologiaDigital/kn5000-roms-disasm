@@ -30,6 +30,8 @@ DECODE AUTHORITY
 
 RUN
     python3 notes/reachability.py                 # the coverage report
+    python3 notes/reachability.py --targets       # ★ the WORK LIST, ranked by reachable
+                                                  #   bytes with a cumulative column
     python3 notes/reachability.py --spans         # per-.incbin-span breakdown
     python3 notes/reachability.py --seeds         # where the walk starts, by class
     python3 notes/reachability.py --selftest      # checks, incl. the LAST element
@@ -78,6 +80,43 @@ def owner(addr, cpu):
         if b <= addr < b + SIZE:
             return tag
     return None
+
+
+# ------------------------------------------------------------- result cache
+# ⚠ THE WALK IS EXPENSIVE (minutes), AND LANES RE-RUN IT. Without this, two lanes
+# asking the same question spawn two full walks, and ten concurrent processes on
+# an eight-core box make every one of them slower. The result is therefore cached
+# against a fingerprint of its INPUTS -- the four .s files and this file -- so a
+# repeat question on unchanged inputs is instant and a changed .s invalidates it
+# automatically. That is the whole point of putting this work in a script.
+import hashlib
+import json as _json
+
+RESULT_CACHE = os.path.join(ROOT, "notes", ".reachability-cache.json")
+
+
+def _fingerprint():
+    h = hashlib.sha1()
+    for _t, s, _f, _b in IMAGES:
+        h.update(open(os.path.join(ROOT, s), "rb").read())
+    h.update(open(os.path.abspath(__file__), "rb").read())
+    return h.hexdigest()
+
+
+def _cache_load():
+    try:
+        c = _json.load(open(RESULT_CACHE))
+        return c["result"] if c.get("fingerprint") == _fingerprint() else None
+    except Exception:
+        return None
+
+
+def _cache_store(result):
+    try:
+        _json.dump({"fingerprint": _fingerprint(), "result": result},
+                   open(RESULT_CACHE, "w"))
+    except Exception:
+        pass
 
 
 # ----------------------------------------------------------------- decoding
@@ -251,7 +290,24 @@ def owner_word(d, base, addr):
 
 
 # ------------------------------------------------------------------ report
+_MEM = {}
+
+
 def analyse(tag, cpu):
+    """Cached: see the fingerprint note above. `seen` is returned as a set for the
+    caller, but persisted as per-span counts, which is all any caller needs."""
+    if tag in _MEM:
+        return _MEM[tag]
+    cached = _cache_load()
+    if cached and tag in cached:
+        c = cached[tag]
+        r = {"seeds": c["seeds"], "reached": c["reached"], "incbin": c["incbin"],
+             "reach_in_incbin": c["reach_in_incbin"],
+             "spans": [tuple(s) for s in c["spans"]],
+             "per_span": {tuple(k.split(",")): v for k, v in c["per_span"].items()},
+             "seen": None}
+        _MEM[tag] = r
+        return r
     proven, spans = proven_and_incbin(tag)
     sd = seeds(tag, cpu)
     seen = set()
@@ -267,15 +323,64 @@ def analyse(tag, cpu):
         done.add(a)
         walk(tag, a, seen, cpu, queue)
     incbin_bytes = sum(hi - lo for lo, hi in spans)
-    reach_in_incbin = sum(1 for lo, hi in spans for x in range(lo, hi) if x in seen)
-    return {
+    per_span = {}
+    for lo, hi in spans:
+        per_span[(lo, hi)] = sum(1 for x in range(lo, hi) if x in seen)
+    reach_in_incbin = sum(per_span.values())
+    r = {
         "seeds": {k: len(v) for k, v in sd.items()},
         "reached": len(seen),
         "incbin": incbin_bytes,
         "reach_in_incbin": reach_in_incbin,
         "spans": spans,
+        "per_span": per_span,
         "seen": seen,
     }
+    _MEM[tag] = r
+    all_c = _cache_load() or {}
+    all_c[tag] = {"seeds": r["seeds"], "reached": r["reached"], "incbin": r["incbin"],
+                  "reach_in_incbin": r["reach_in_incbin"],
+                  "spans": [list(s) for s in spans],
+                  "per_span": {"%d,%d" % k: v for k, v in per_span.items()}}
+    _cache_store(all_c)
+    return r
+
+
+CACHE = os.path.join(ROOT, "notes", "reachability-cache.json")
+
+
+def targets():
+    """Every .incbin span that holds reachable code, ranked by HOW MUCH, with a
+    running total. This is the work list for a coverage goal: convert from the
+    top and stop when the cumulative column says you are done.
+
+    ⚠ Ranking by SPAN SIZE instead sends you at the wrong spans -- prom_a's
+    0xFA1404 is 16,380 bytes and only 1,060 of them are reachable, while
+    0xF85D1C is 366 bytes and ALL of them are."""
+    import json
+    rows = []
+    for tag, _s, _f, _b in IMAGES:
+        cpu = CPU1 if tag in CPU1 else CPU2
+        r = analyse(tag, cpu)
+        for lo, hi in r["spans"]:
+            n = r["per_span"].get((lo, hi), 0)
+            if n:
+                rows.append((n, tag, lo, hi, hi - lo))
+    rows.sort(reverse=True)
+    total = sum(r[0] for r in rows)
+    print("%-8s %-21s %8s %9s %9s %7s" %
+          ("image", "span", "size", "reachable", "cumul", "of goal"))
+    run = 0
+    for n, tag, lo, hi, size in rows:
+        run += n
+        print("%-8s 0x%06X-0x%06X %8s %9s %9s %6.1f%%"
+              % (tag, lo, hi, format(size, ","), format(n, ","),
+                 format(run, ","), 100.0 * run / total))
+    print("\nTOTAL reachable-and-unconverted: %s bytes in %d spans."
+          % (format(total, ","), len(rows)))
+    json.dump([{"image": t_, "lo": l, "hi": h, "size": s, "reachable": n}
+               for n, t_, l, h, s in rows], open(CACHE, "w"), indent=1)
+    print("Work list cached to %s" % os.path.relpath(CACHE, ROOT))
 
 
 def report(mode=None):
@@ -294,7 +399,7 @@ def report(mode=None):
                 print("             seed %-14s %6d" % (k, r["seeds"][k]))
         if mode == "spans" and r["incbin"]:
             for lo, hi in sorted(r["spans"], key=lambda s: -(s[1] - s[0])):
-                n = sum(1 for x in range(lo, hi) if x in r["seen"])
+                n = r["per_span"].get((lo, hi), 0)
                 if n:
                     print("             0x%06X-0x%06X  %6d bytes, %5d reachable (%.0f%%)"
                           % (lo, hi, hi - lo, n, 100.0 * n / (hi - lo)))
@@ -352,4 +457,7 @@ def selftest():
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(selftest())
+    if "--targets" in sys.argv:
+        targets()
+        sys.exit(0)
     report("seeds" if "--seeds" in sys.argv else "spans" if "--spans" in sys.argv else None)

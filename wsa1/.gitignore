@@ -1,3 +1,8 @@
 rebuilt_ROMs/
 __pycache__/
 *.pyc
+
+# derived: the reachability walk result, keyed to a fingerprint of the .s files.
+# Regenerate with `python3 notes/reachability.py`; never commit it, because a
+# stale copy would answer a question about a tree that no longer exists.
+notes/.reachability-cache.json

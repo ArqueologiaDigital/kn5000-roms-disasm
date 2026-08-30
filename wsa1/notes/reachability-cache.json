@@ -1,0 +1,401 @@
+[
+ {
+  "image": "prom_a",
+  "lo": 16343064,
+  "hi": 16355361,
+  "size": 12297,
+  "reachable": 7097
+ },
+ {
+  "image": "prom_b",
+  "lo": 15728640,
+  "hi": 15734784,
+  "size": 6144,
+  "reachable": 1495
+ },
+ {
+  "image": "prom_a",
+  "lo": 16302080,
+  "hi": 16308736,
+  "size": 6656,
+  "reachable": 1244
+ },
+ {
+  "image": "prom_b",
+  "lo": 15751860,
+  "hi": 15753080,
+  "size": 1220,
+  "reachable": 1208
+ },
+ {
+  "image": "prom_a",
+  "lo": 16389124,
+  "hi": 16405504,
+  "size": 16380,
+  "reachable": 1060
+ },
+ {
+  "image": "prom_b",
+  "lo": 15937510,
+  "hi": 15938402,
+  "size": 892,
+  "reachable": 844
+ },
+ {
+  "image": "prom_b",
+  "lo": 15893415,
+  "hi": 15894530,
+  "size": 1115,
+  "reachable": 428
+ },
+ {
+  "image": "prom_b",
+  "lo": 15963481,
+  "hi": 15963949,
+  "size": 468,
+  "reachable": 395
+ },
+ {
+  "image": "prom_a",
+  "lo": 16276237,
+  "hi": 16276617,
+  "size": 380,
+  "reachable": 373
+ },
+ {
+  "image": "prom_a",
+  "lo": 16276764,
+  "hi": 16277130,
+  "size": 366,
+  "reachable": 366
+ },
+ {
+  "image": "prom_b",
+  "lo": 15975293,
+  "hi": 15975637,
+  "size": 344,
+  "reachable": 257
+ },
+ {
+  "image": "prom_b",
+  "lo": 15967961,
+  "hi": 15968218,
+  "size": 257,
+  "reachable": 257
+ },
+ {
+  "image": "prom_b",
+  "lo": 15749766,
+  "hi": 15749982,
+  "size": 216,
+  "reachable": 197
+ },
+ {
+  "image": "prom_b",
+  "lo": 15898528,
+  "hi": 15898723,
+  "size": 195,
+  "reachable": 195
+ },
+ {
+  "image": "prom_b",
+  "lo": 15981601,
+  "hi": 15982118,
+  "size": 517,
+  "reachable": 158
+ },
+ {
+  "image": "prom_b",
+  "lo": 15905679,
+  "hi": 15906164,
+  "size": 485,
+  "reachable": 147
+ },
+ {
+  "image": "prom_b",
+  "lo": 15976397,
+  "hi": 15976555,
+  "size": 158,
+  "reachable": 136
+ },
+ {
+  "image": "prom_b",
+  "lo": 15938452,
+  "hi": 15938588,
+  "size": 136,
+  "reachable": 109
+ },
+ {
+  "image": "prom_b",
+  "lo": 15945352,
+  "hi": 15945448,
+  "size": 96,
+  "reachable": 96
+ },
+ {
+  "image": "prom_b",
+  "lo": 15970405,
+  "hi": 15970499,
+  "size": 94,
+  "reachable": 94
+ },
+ {
+  "image": "prom_b",
+  "lo": 15938734,
+  "hi": 15938814,
+  "size": 80,
+  "reachable": 80
+ },
+ {
+  "image": "prom_b",
+  "lo": 15936135,
+  "hi": 15936215,
+  "size": 80,
+  "reachable": 80
+ },
+ {
+  "image": "prom_b",
+  "lo": 15754648,
+  "hi": 15754720,
+  "size": 72,
+  "reachable": 72
+ },
+ {
+  "image": "prom_b",
+  "lo": 15748515,
+  "hi": 15748607,
+  "size": 92,
+  "reachable": 72
+ },
+ {
+  "image": "prom_b",
+  "lo": 15969602,
+  "hi": 15969672,
+  "size": 70,
+  "reachable": 70
+ },
+ {
+  "image": "prom_b",
+  "lo": 15750989,
+  "hi": 15751104,
+  "size": 115,
+  "reachable": 69
+ },
+ {
+  "image": "prom_b",
+  "lo": 15749506,
+  "hi": 15749570,
+  "size": 64,
+  "reachable": 64
+ },
+ {
+  "image": "prom_b",
+  "lo": 15968791,
+  "hi": 15968852,
+  "size": 61,
+  "reachable": 61
+ },
+ {
+  "image": "prom_b",
+  "lo": 15974216,
+  "hi": 15974272,
+  "size": 56,
+  "reachable": 56
+ },
+ {
+  "image": "prom_b",
+  "lo": 15973720,
+  "hi": 15973776,
+  "size": 56,
+  "reachable": 56
+ },
+ {
+  "image": "prom_b",
+  "lo": 15971250,
+  "hi": 15972291,
+  "size": 1041,
+  "reachable": 53
+ },
+ {
+  "image": "prom_b",
+  "lo": 15750151,
+  "hi": 15750301,
+  "size": 150,
+  "reachable": 52
+ },
+ {
+  "image": "prom_b",
+  "lo": 15894571,
+  "hi": 15894619,
+  "size": 48,
+  "reachable": 48
+ },
+ {
+  "image": "prom_b",
+  "lo": 15935890,
+  "hi": 15936125,
+  "size": 235,
+  "reachable": 47
+ },
+ {
+  "image": "prom_b",
+  "lo": 15751169,
+  "hi": 15751214,
+  "size": 45,
+  "reachable": 45
+ },
+ {
+  "image": "prom_b",
+  "lo": 15748328,
+  "hi": 15748419,
+  "size": 91,
+  "reachable": 44
+ },
+ {
+  "image": "prom_b",
+  "lo": 15970844,
+  "hi": 15970884,
+  "size": 40,
+  "reachable": 40
+ },
+ {
+  "image": "prom_b",
+  "lo": 15969140,
+  "hi": 15969180,
+  "size": 40,
+  "reachable": 40
+ },
+ {
+  "image": "prom_b",
+  "lo": 15749117,
+  "hi": 15749219,
+  "size": 102,
+  "reachable": 40
+ },
+ {
+  "image": "prom_b",
+  "lo": 15975743,
+  "hi": 15975778,
+  "size": 35,
+  "reachable": 35
+ },
+ {
+  "image": "prom_b",
+  "lo": 15781985,
+  "hi": 15783836,
+  "size": 1851,
+  "reachable": 34
+ },
+ {
+  "image": "prom_b",
+  "lo": 15742072,
+  "hi": 15742104,
+  "size": 32,
+  "reachable": 32
+ },
+ {
+  "image": "prom_b",
+  "lo": 15894689,
+  "hi": 15894737,
+  "size": 48,
+  "reachable": 29
+ },
+ {
+  "image": "prom_a",
+  "lo": 16639759,
+  "hi": 16646144,
+  "size": 6385,
+  "reachable": 29
+ },
+ {
+  "image": "prom_b",
+  "lo": 15939648,
+  "hi": 15939672,
+  "size": 24,
+  "reachable": 24
+ },
+ {
+  "image": "prom_b",
+  "lo": 15742150,
+  "hi": 15742174,
+  "size": 24,
+  "reachable": 24
+ },
+ {
+  "image": "prom_b",
+  "lo": 15940169,
+  "hi": 15940209,
+  "size": 40,
+  "reachable": 21
+ },
+ {
+  "image": "prom_b",
+  "lo": 15894630,
+  "hi": 15894678,
+  "size": 48,
+  "reachable": 17
+ },
+ {
+  "image": "prom_b",
+  "lo": 15748896,
+  "hi": 15748914,
+  "size": 18,
+  "reachable": 16
+ },
+ {
+  "image": "prom_b",
+  "lo": 15944123,
+  "hi": 15944135,
+  "size": 12,
+  "reachable": 12
+ },
+ {
+  "image": "prom_b",
+  "lo": 15750321,
+  "hi": 15750381,
+  "size": 60,
+  "reachable": 11
+ },
+ {
+  "image": "prom_b",
+  "lo": 15945781,
+  "hi": 15945819,
+  "size": 38,
+  "reachable": 7
+ },
+ {
+  "image": "prom_b",
+  "lo": 15946556,
+  "hi": 15946562,
+  "size": 6,
+  "reachable": 6
+ },
+ {
+  "image": "prom_b",
+  "lo": 15942582,
+  "hi": 15942588,
+  "size": 6,
+  "reachable": 6
+ },
+ {
+  "image": "prom_b",
+  "lo": 15936316,
+  "hi": 15936356,
+  "size": 40,
+  "reachable": 5
+ },
+ {
+  "image": "prom_b",
+  "lo": 15963959,
+  "hi": 15964244,
+  "size": 285,
+  "reachable": 4
+ },
+ {
+  "image": "prom_b",
+  "lo": 15976563,
+  "hi": 15976605,
+  "size": 42,
+  "reachable": 1
+ }
+]
