@@ -134,6 +134,133 @@ QUESTION IT ANSWERS
   round-5 painter error -- scoping a routine to a source line instead of to its
   own `ret` -- cannot recur here.
 
+────────────────────────────────────────────────────────────────────────────────
+★★ ROUND 12 (2026-08-30) -- A GAP ROUND 4 WROTE DOWN, CLOSED; A REASON ROUND 4
+   GAVE, REFUTED; AND THE EMITTER-REVERT HAZARD, MEASURED AT 82 LABELS
+────────────────────────────────────────────────────────────────────────────────
+   ⚠ THIS FILE'S NAME SAYS "panel" AND ROUND 12'S WORK IS MIDI.  The lane was
+   assigned this filename and told to create no other, so the round-12 section
+   lives here.  It is self-contained: --midi, --deadgates, --job1, --census12,
+   --apply12, --verify12, --selftest12.
+
+   prom_a, from notes/wave7_documentation_metrics.py:
+
+              content  framed  sub_XXXX   LOWER   UPPER   headers  evidence
+     before     1,595     250     2,800   34.3%   39.7%     1,265     1,359
+     after      1,635     226     2,786   35.2%   40.0%     1,309     1,396
+
+   0 bytes converted.  ★ framed -> content is 24, the largest in this wave so
+   far, and it is not a re-spelling exercise: every one of the 24 is a member of
+   ONE family that MidiOut_ChangeRecordTable pairs off, and the pairing is
+   proved six ways before any name is written.  sub_XXXXXX falls 14 = 16 named
+   minus 2 NEW labels for routines that had none.
+
+★ JOB 1 WAS ALREADY DONE, so this round verified it instead of redoing it.
+   The five names round 10 earned and round 11 applied are all present and all
+   five re-derive from the ROM; --job1 prints the re-derivation, including the
+   dead copy's 9-of-123 byte diff, its 0-of-12 in-image pointers against the
+   live 12 of 12, and its zero references.  Nothing was re-written.
+
+★★ THE RESULT: THE ELEVEN-WAY CHANGE-RECORD FAMILY, AND SIX AGREEMENTS
+   notes/prom_a_understanding_round4.py --gaps had already reduced this to one
+   sentence: "MidiOut_PartRecordPtrs_11..15, 18..23 -- each has exactly one
+   reader and that reader is still a sub_XXXXXX.  Name those eleven routines and
+   these eleven tables name themselves."  --midi names them.  Each of the eleven
+   MidiOut_ChangeRecord_* is a 12-byte record holding [0:4] a part-list BUILDER
+   and [4:8] an outbound HANDLER, and the handler is the head of a three-routine
+   shape: head (walk the part list) -> per-part gate (look the part's record up
+   in ITS OWN copy of the 32-entry pointer table and test one bit) -> emit.
+
+   1. the head's `ld XIZ,<list>` == the record's builder's own list ..... 11/11
+   2. the gate's record bit == the (offset,mask) the builder filters on .. 10/10
+      -- and the ONE gate with no record bit is the ONE builder that passes
+      BC=0xFFFF, i.e. accepts every part.  The exception is itself a pairing.
+   3. the emit's index through MidiOut_IndexToControllerNumber == the
+      controller number already in the head's name ......................... 9/9
+   4. the two heads that send no controller build `or A,0xE0` and `or A,0xD0`
+      and stage 3- and 2-byte messages -- pitch bend and channel pressure
+   5. those two are called by MidiIn_PitchBend and MidiIn_ChannelPressure,
+      named by an earlier pass from a different table
+   6. record 9's reset value 0x4000 is the only one of the eleven outside
+      {0x7F00,0x7F40,0x7F7F}: mid-scale, i.e. pitch-bend centre
+
+   ★ AND IT EXPLAINS A ⚠ THE TREE HAD ONLY STATED.  The header above the eleven
+   records said "Indices 8 and 9 are never produced by MidiOut_ChangeIndexMap
+   ... Stated, not explained."  That map's nine live cells sit at map indices
+   0x01,0x02,0x04,0x0B,0x10,0x11,0x12,0x13,0x40 -- exactly the nine CONTROLLER
+   NUMBERS of the nine records they select (check X5) -- so the index is a
+   controller number, and records 8 and 9 are the two messages that have none.
+
+⚠⚠ AND A DOCUMENTED REASON THAT WAS WRONG.  round 4's --gaps says
+   "MidiOut_PartRecordPtrs_16/_17 -- ONE routine, MidiOut_CC40_Hold__emit, loads
+   both (0xFA790E and 0xFA793E), so a reader-derived name would collide".
+   It is not one routine.  MidiOut_CC40_Hold__emit ends at the `ret` at
+   0xFA78FE, and 0xFA78FF and 0xFA792F begin two more routines that carried NO
+   LABEL, so an address-to-nearest-label scan credited both loads to the label
+   above them -- the same mis-scoping the tree recorded once before, when a
+   painter heuristic scoped to the source line instead of the routine's own
+   `ret`.  Both are labelled now, and round 4's check is re-pinned to assert the
+   readers are DIFFERENT.
+   ⚠ THE TWO TABLES ARE STILL NOT NAMED, and that is this round's refusal:
+   nothing in either of CPU 1's ROMs reaches either routine (no 24-bit word, no
+   `jr`/`jrl`/`calr` anywhere in the 512 KiB), and each sends an index whose
+   MidiOut_IndexToControllerNumber entry is 0xFF, which MidiOut_SendController
+   drops.  All that distinguishes them is a send index, and a send index has a
+   referent only inside this ROM's own tables.
+   ⚠ DO NOT WELD THE TWO "8 AND 9"s: MidiOut_ChangeRecordTable's 8 and 9 are the
+   LIVE channel-pressure and pitch-bend records; the dead 8 and 9 are indices
+   into MidiOut_IndexToControllerNumber.  Two tables, two index rules.
+
+★★ THE HAZARD THIS ROUND FOUND BY ACCIDENT AND FIXED: 82 LABELS
+   notes/gen_prom_a_fa5aeb_module.py emits 0xFA5AEB-0xFAA000 and is meant to be
+   re-runnable.  Diffed against the listing it produced EIGHTY-TWO different
+   labels, and FORTY-THREE of those differences predate round 12: round 4's
+   controller renames (CC40_Damper -> CC40_Hold, CC10_General1 -> CC10_RTCreatX
+   and their siblings, each argued from the instrument's own on-screen list),
+   the eleven MidiOut_ChangeRecord_* and the eleven MidiOut_PartRecordPtrs_*
+   named from their readers.  Every one was applied to the .s ONLY, so a re-emit
+   would have silently restored the positional spellings AND PASSED THE BYTE
+   GATE.  The emitter now carries LABELS_FROM_LISTING with all 82, its
+   census constants are re-pinned WITH THEIR DECOMPOSITION asserted, and the
+   sentence "each veneer's name is taken from the 32-bit immediate of its own
+   first instruction" -- which this round makes false -- is withdrawn in the
+   emitter and in the .s.  The label diff is now 0.
+
+★ THE KERNEL-TWIN LEVER IS NOT SPENT; IT REOPENS ON EVERY NAMING.
+   round 4's check TW1 failed at this round's start: its prom_a side used to
+   yield zero unnamed byte-identical twins and now yields two, because round 11
+   naming LowestSetBitIndex1Based made 0xF8A508 (20 bytes, 0 differing) visible.
+   That one is named LowestSetBitIndex1Based_Copy -- from its OWN body, a
+   count-trailing-zeros loop, not by borrowing.  The other, 0xF9D3F4, is 16
+   bytes identical to Screen_DrumsMapNaming_Leave and is REFUSED: identical
+   bytes prove identical BEHAVIOUR, not identical SCREEN.
+
+★ JOB 2, THE CENSUS: still notes/prom_a_census_round8.py, and round 11's answer
+   -- point at it rather than write a second one -- stands.  Live at this
+   round's end (--census12 re-runs it):
+       S1 277  S2 47  S3 108  S4 12 | T1 1  T2 6  T3 118  T4 66  T5 66
+       C1 36  S5 35  S6 104 | N 1910 of 2786 = 68.6%   NOTHING
+   The count fell 1,921 -> 1,910 and the RATIO did not move, which is round 8's
+   own warning about that number.  What round 12 adds is not another census but
+   the thing a census cannot do: it took the one bucket a previous round had
+   already reduced to a named blocker and removed the blocker.
+
+⚠ FOUR OF THIS ROUND'S OWN ERRORS, caught by its own checks and recorded rather
+  than quietly fixed:
+   * the `ld BC` citations were the IMMEDIATE, not the opcode -- builder+9 where
+     the instruction is at builder+8.  Check M1 caught six of them BEFORE the
+     text reached the .s.  That is the wave-7-round-1 defect exactly.
+   * the send index was read by scanning forward for the first 0x20 byte, and in
+     the two dead gates the displacement of `jr UGT,+0x20` IS a 0x20 byte, so
+     the scan returned 0x44.  Check X8c caught it.
+   * the channel-pressure header was generated with pitch bend's fourth
+     agreement and told itself its reset value 0x7F00 "is the only one that is
+     not 0x7F00/..." -- a clause contradicting itself.  The count is now derived
+     from the list.
+   * verify12's first form searched the whole file for the old names and
+     reported 26 false failures, because every header this round writes says
+     "★ RENAMED FROM <old>".  It checks LABEL LINES now.
+
 RUN
     python3 notes/prom_a_panel_names_round11.py --selftest    # every check
     python3 notes/prom_a_panel_names_round11.py --tables      # the nine objects
@@ -145,6 +272,15 @@ RUN
     python3 notes/prom_a_panel_names_round11.py --emit        # the block text
     python3 notes/prom_a_panel_names_round11.py --apply       # edit the .s
     python3 notes/prom_a_panel_names_round11.py --verify      # after the gate
+
+  ROUND 12 (2026-08-30), the MIDI change-record family:
+    python3 notes/prom_a_panel_names_round11.py --job1        # re-verify round 10/11
+    python3 notes/prom_a_panel_names_round11.py --midi        # the six agreements
+    python3 notes/prom_a_panel_names_round11.py --deadgates   # the refuted collision
+    python3 notes/prom_a_panel_names_round11.py --census12    # JOB 2, live
+    python3 notes/prom_a_panel_names_round11.py --apply12     # edit the .s
+    python3 notes/prom_a_panel_names_round11.py --verify12    # read it back
+    python3 notes/prom_a_panel_names_round11.py --selftest12  # 31 checks
 """
 import os
 import re
@@ -1635,6 +1771,1173 @@ def selftest():
     return 1 if FAIL else 0
 
 
+# ===========================================================================
+# ROUND 12 (2026-08-30) -- THE ELEVEN-WAY MIDI CHANGE-RECORD FAMILY,
+# and the correction of a "collision" that was a mis-scoped extent.
+#
+# QUESTION IT ANSWERS
+#   notes/prom_a_understanding_round4.py --gaps listed four MIDI holes and said
+#   exactly what would close them:
+#       "MidiOut_PartRecordPtrs_11..15, 18..23 -- each has exactly one reader
+#        and that reader is still a sub_XXXXXX.  Name those eleven routines and
+#        these eleven tables name themselves."
+#       "MidiOut_ChangeRecord_08, _09 -- their [4:8] handlers, sub_FA77FA and
+#        sub_FA767E, have no name."
+#   This section names those eleven routines from SIX agreeing derivations, and
+#   the tables, the change records and the eleven part-list builders follow.
+#
+# ★★ THE MECHANISM.  MidiOut_ChangeRecordTable (0xFA80FE) holds eleven LE32
+#   pointers to eleven 12-byte records.  Each record is
+#       [0:4] a part-list BUILDER, [4:8] the outbound HANDLER,
+#       [8:10] the parameter id, [10:12] its reset value
+#   and the tree already read that layout.  What this round adds is that the
+#   handler at [4:8] is the head of a THREE-ROUTINE shape, and every one of the
+#   three can be named from the record:
+#       head    -- `ld XIZ,<list>` then walk the 0xFF-terminated part list,
+#                  storing each part index at (0x1959) and calling the gate
+#       gate    -- part index from (0x1959), bound 0x1F, index ITS OWN copy of
+#                  the 32-entry part-record pointer table, reject 0xFFFFFFFF,
+#                  test one bit of the record, fall through into
+#       emit    -- (0x195A) into E and a constant index into W, then either
+#                  MidiOut_SendController or MidiOut_PostStagedMessage
+#
+# ★ SIX AGREEMENTS, each from a different part of the ROM (--midi prints all):
+#   1. the head's `ld XIZ,imm32` route-list address == the record's [0:4]
+#      builder's own `ld XIX,imm32` list address, all 11 of 11
+#   2. the gate's record BIT TEST == the (offset,mask) pair the builder hands
+#      MidiIn_BuildPartList, 10 of 11 exactly; the eleventh builder passes
+#      BC=0xFFFF (accept every part) and its gate has no record bit at all
+#   3. the emit's index through MidiOut_IndexToControllerNumber == the
+#      controller number already in the head's name, 9 of 9 that send a CC
+#   4. the two heads that do NOT send a CC build their status byte with
+#      `or A,0xE0` (0xFA7706) and `or A,0xD0` (0xFA7882) -- pitch bend and
+#      channel pressure -- and stage 3 and 2 byte messages to match
+#   5. those same two are called by MidiIn_PitchBend (0xFA6E54) and
+#      MidiIn_ChannelPressure (0xFA6ED9), which the tree named independently
+#   6. record 9's reset value 0x4000 is the only one of the eleven that is not
+#      0x7F00/0x7F40/0x7F7F, and it is mid-scale -- pitch-bend centre
+#
+# ★★ AND ONE CORRECTION TO A DOCUMENTED CLAIM.  round 4's --gaps says:
+#      "MidiOut_PartRecordPtrs_16/_17 -- ONE routine, MidiOut_CC40_Hold__emit,
+#       loads both (0xFA790E and 0xFA793E), so a reader-derived name would
+#       collide."
+#   IT IS NOT ONE ROUTINE.  MidiOut_CC40_Hold__emit ends at the `ret` at
+#   0xFA78FE.  0xFA790E and 0xFA793E are inside two SEPARATE routines that
+#   begin at 0xFA78FF and 0xFA792F and carry no label at all, which is why an
+#   address-to-nearest-label census attributed them to the label above.  That
+#   is the same mis-scoping the tree already recorded once ("the painter
+#   heuristic mis-attributed 6 of 24 names by scoping to source line instead of
+#   the routine's own ret").  There is no collision; --deadgates prints what is
+#   actually there.
+#
+# ⚠ AND THE TWO ARE STILL NOT NAMED, because what distinguishes them has no
+#   referent outside the code.  They are labelled `sub_FA78FF` / `sub_FA792F`
+#   with a header that states three measured facts and stops.
+#
+# ⚠⚠ DO NOT WELD THE TWO "8 AND 9"s.  MidiOut_ChangeRecordTable's entries 8 and
+#   9 are the LIVE channel-pressure and pitch-bend records.  The 8 and 9 that
+#   are dead are indices into MidiOut_IndexToControllerNumber, a different
+#   table with a different index rule.  They are not the same pair and nothing
+#   below reads one as the other.
+# ===========================================================================
+R12_CRT = 0xFA80FE                    # MidiOut_ChangeRecordTable
+R12_NREC = 11
+R12_CMAP = 0xFA8FC8                   # MidiOut_IndexToControllerNumber
+R12_SENDCTRL = 0xFA7BF3               # MidiOut_SendController
+R12_POSTMSG = 0xFA7CE8                # MidiOut_PostStagedMessage
+R12_PARTTAB = 0xFA8FF8                # MidiOut_PartRecordPtrs block 0
+R12_BUILDPART = 0xFA82A1              # MidiIn_BuildPartList
+R12_DEAD = (0xFA78FF, 0xFA792F)
+
+
+def r12_calrs(lo, hi):
+    """Every `calr disp16` in [lo,hi), as (site, target)."""
+    return [(a, calr_target(a)) for a in range(lo, hi) if by(a) == 0x1E]
+
+
+def r12_bitsite(lo, hi):
+    """`bit n,(XIX+d)` == BC d (C8|n).  Returns (n, d, site) or None."""
+    for a in range(lo, hi):
+        if by(a) == 0xBC and 0xC8 <= by(a + 2) <= 0xCF:
+            return (by(a + 2) & 7, by(a + 1), a)
+    return None
+
+
+def r12_directbit(lo, hi):
+    """`bit n,(0xNNNN)` == F1 lo hi (C8|n).  Returns (n, addr, site) or None."""
+    for a in range(lo, hi):
+        if by(a) == 0xF1 and 0xC8 <= by(a + 3) <= 0xCF:
+            return (by(a + 3) & 7, int.from_bytes(blk(a + 1, 2), "little"), a)
+    return None
+
+
+def r12_imm32(lo, hi, op):
+    """First `ld XIX/XIY/XIZ,imm32` (op 0x44/0x45/0x46) in [lo,hi)."""
+    for a in range(lo, hi):
+        if by(a) == op:
+            return le32(a + 1), a
+    return None, None
+
+
+def r12_family():
+    """The eleven change records, fully resolved.  Everything is read out of
+    the ROM; nothing here is a table of answers."""
+    rows = []
+    for k in range(R12_NREC):
+        rec = le32(R12_CRT + 4 * k)
+        builder = le32(rec)
+        head = le32(rec + 4)
+        pid = int.from_bytes(blk(rec + 8, 2), "little")
+        val = int.from_bytes(blk(rec + 10, 2), "little")
+        # the builder is 15 bytes: ld XIX,list / ld DE,sel / ld BC,off:mask / calr / ret
+        blist, _ = r12_imm32(builder, builder + 6, 0x44)
+        # ⚠ CITE THE OPCODE, NOT THE IMMEDIATE.  The veneer is
+        #   44 <imm32>   ld XIX,list      builder+0
+        #   32 <imm16>   ld DE,selector   builder+5
+        #   31 <imm16>   ld BC,off:mask   builder+8
+        # and the first draft of this section cited builder+9 and builder+6 --
+        # the immediates -- which is the systematic off-by-one wave 7 round 1
+        # shipped ~31 times.  The citation check M1 in this same file caught it
+        # on six addresses before it reached the .s.  The opcodes are asserted,
+        # so a moved veneer fails here rather than mis-citing.
+        de_site, bc_site = builder + 5, builder + 8
+        assert by(de_site) == 0x32 and by(bc_site) == 0x31, \
+            "veneer 0x%06X is not the 15-byte shape" % builder
+        sel = int.from_bytes(blk(de_site + 1, 2), "little")
+        bc = int.from_bytes(blk(bc_site + 1, 2), "little")
+        bmask, boff = (bc >> 8) & 0xFF, bc & 0xFF
+        # the head: its route list, and its two calr targets (emit first, gate second)
+        hlist, hlist_site = r12_imm32(head, head + 0x60, 0x46)
+        cs = r12_calrs(head, head + 0x60)
+        emit, gate = cs[0][1], cs[1][1]
+        emit_site, gate_site = cs[0][0], cs[1][0]
+        # the gate: its own copy of the part-record pointer table, and its bit test
+        tbl, tbl_site = r12_imm32(gate, gate + 0x20, 0x44)
+        bit = r12_bitsite(gate, gate + 0x30)
+        dbit = None if bit else r12_directbit(gate, gate + 0x30)
+        # the emit: where it ends up and, for a controller, with which index
+        ec = r12_calrs(emit, emit + 0x40)
+        tail = ec[0][1] if ec else None
+        idx = idx_site = cc = None
+        if tail == R12_SENDCTRL:
+            # ⚠ THE INDEX IS THE `ldb W,imm8` IMMEDIATELY BEFORE THE `calr`, and it
+            # must be found that way and not by scanning forward for the first 0x20
+            # byte: in the two dead gates the displacement of `jr UGT,+0x20` IS a
+            # 0x20 byte and the forward scan read 0x44 as the send index.  The check
+            # X8c caught it, which is the whole point of asserting on a value a
+            # different table has to agree with.
+            idx_site = ec[0][0] - 2
+            assert by(idx_site) == 0x20, "no `ldb W,imm8` before 0x%06X" % ec[0][0]
+            idx = by(idx_site + 1)
+            cc = by(R12_CMAP + idx)
+        rows.append(dict(k=k, rec=rec, builder=builder, head=head, pid=pid, val=val,
+                         blist=blist, sel=sel, boff=boff, bmask=bmask,
+                         de_site=de_site, bc_site=bc_site,
+                         hlist=hlist, hlist_site=hlist_site, emit=emit, gate=gate,
+                         emit_site=emit_site, gate_site=gate_site,
+                         tbl=tbl, tbl_site=tbl_site, bit=bit, dbit=dbit,
+                         tail=tail, idx=idx, idx_site=idx_site, cc=cc))
+    return rows
+
+
+def r12_agreements():
+    """The six agreements, counted.  Returns a dict of (hits, of)."""
+    fam = r12_family()
+    a1 = sum(1 for d in fam if d["hlist"] == d["blist"])
+    a2 = sum(1 for d in fam
+             if d["bit"] and (1 << d["bit"][0]) == d["bmask"]
+             and 0x26 + d["boff"] == d["bit"][1])
+    a2_of = sum(1 for d in fam if d["bit"])
+    a3 = sum(1 for d in fam if d["cc"] is not None)
+    return dict(a1=(a1, len(fam)), a2=(a2, a2_of), a3=(a3, a3),
+                nomask=[d["k"] for d in fam if not d["bit"]])
+
+
+_R12_ENTRY_CACHE = {}
+
+
+def r12_gate_entries(gate):
+    """Every relative branch in prom_a that reaches `gate`, as (kind, site).
+    Scans jr cc,d8 (0x60-0x6F), jrl cc,d16 (0x70-0x7F) and calr d16 (0x1E)
+    across the WHOLE image, not just the routine."""
+    if gate in _R12_ENTRY_CACHE:
+        return _R12_ENTRY_CACHE[gate]
+    hits = []
+    for i in range(len(_a) - 3):
+        a = A_BASE + i
+        op = _a[i]
+        if 0x60 <= op <= 0x6F:
+            d = _a[i + 1] - 256 if _a[i + 1] > 127 else _a[i + 1]
+            if a + 2 + d == gate:
+                hits.append(("jr", a))
+        elif 0x70 <= op <= 0x7F or op == 0x1E:
+            d = int.from_bytes(_a[i + 1:i + 3], "little")
+            if d >= 0x8000:
+                d -= 0x10000
+            if a + 3 + d == gate:
+                hits.append(("calr" if op == 0x1E else "jrl", a))
+    _R12_ENTRY_CACHE[gate] = hits
+    return hits
+
+
+_R12_DEAD_CACHE = []
+
+
+def r12_dead_facts():
+    """The two unlabelled gates after MidiOut_CC40_Hold__emit's `ret`."""
+    if _R12_DEAD_CACHE:
+        return _R12_DEAD_CACHE
+    out = []
+    for g in R12_DEAD:
+        tbl, tbl_site = r12_imm32(g, g + 0x20, 0x44)
+        dbit = r12_directbit(g, g + 0x10)
+        cs = r12_calrs(g, g + 0x40)
+        tail = cs[0][1] if cs else None
+        idx_site = cs[0][0] - 2                    # see the note in r12_family()
+        assert by(idx_site) == 0x20, "no `ldb W,imm8` before 0x%06X" % cs[0][0]
+        idx = by(idx_site + 1)
+        out.append(dict(at=g, tbl=tbl, tbl_site=tbl_site, dbit=dbit, tail=tail,
+                        idx=idx, idx_site=idx_site, cc=by(R12_CMAP + idx),
+                        abs_refs=ref_scan(g), rel_refs=r12_gate_entries(g)))
+    _R12_DEAD_CACHE.extend(out)
+    return out
+
+
+# --- the names, DERIVED from the family rather than typed ------------------
+# The gloss in each name is the one ALREADY IN THE .s for the record's handler;
+# this round invents no controller word.  The two heads that have no name yet
+# are named for the MIDI status byte they build, which is the only fact about
+# them that is not positional.
+R12_HEAD_NAME = {0xFA767E: "MidiOut_PitchBend", 0xFA77FA: "MidiOut_ChannelPressure"}
+R12_TAG = {0xFA767E: "PitchBend", 0xFA77FA: "ChannelPressure"}
+
+
+def r12_head_label(head, src_names):
+    return R12_HEAD_NAME.get(head) or src_names[head]
+
+
+def r12_names(src_names):
+    """(old, new, kind) for every rename this round applies."""
+    fam = r12_family()
+    out = []
+    for d in fam:
+        head = r12_head_label(d["head"], src_names)
+        tag = R12_TAG.get(d["head"]) or head.replace("MidiOut_", "").replace("_", "")
+        if d["head"] in R12_HEAD_NAME:
+            out.append((src_names[d["head"]], head, "head"))
+            out.append((src_names[d["emit"]], head + "__emit", "emit"))
+        out.append((src_names[d["gate"]], head + "__partgate", "gate"))
+        out.append((src_names[d["tbl"]], "MidiOut_PartRecordPtrs_" + tag, "table"))
+        out.append((src_names[d["rec"]], "MidiOut_ChangeRecord_" + tag, "record")
+                   if src_names[d["rec"]].startswith("MidiOut_ChangeRecord_0") else None)
+        out.append((src_names[d["builder"]], "MidiIn_BuildList_" + tag, "builder"))
+    return [r for r in out if r and r[0] != r[1]]
+
+
+
+def r12_src_names():
+    """addr -> the one non-.L label the .s carries there."""
+    labels, _ = parse_src()
+    out = {}
+    for a, ns in labels.items():
+        tops = [n for n in ns if not n.startswith(".L")]
+        if len(tops) == 1:
+            out[a] = tops[0]
+    return out
+
+
+def r12_scan(lo, hi, pat):
+    """First site in [lo,hi) whose bytes match `pat` (None = wildcard)."""
+    for a in range(lo, hi):
+        if all(p is None or by(a + i) == p for i, p in enumerate(pat)):
+            return a
+    return None
+
+
+def r12_tag(head_name):
+    return head_name.replace("MidiOut_", "").replace("_", "")
+
+
+def r12_proposals():
+    """[(addr, current, proposed, kind, record)] for every label this round
+    touches.  Every address comes from r12_family(); none is typed here."""
+    src = r12_src_names()
+    out = []
+    for d in r12_family():
+        head = R12_HEAD_NAME.get(d["head"]) or src[d["head"]]
+        tag = R12_TAG.get(d["head"]) or r12_tag(src[d["head"]])
+        for addr, want, kind in (
+                (d["head"], head, "head"),
+                (d["emit"], head + "__emit", "emit"),
+                (d["gate"], head + "__partgate", "gate"),
+                (d["tbl"], "MidiOut_PartRecordPtrs_" + tag, "table"),
+                (d["rec"], "MidiOut_ChangeRecord_" + tag, "record"),
+                (d["builder"], "MidiIn_BuildList_" + tag, "builder")):
+            if src.get(addr) == want:
+                continue
+            out.append((addr, src.get(addr), want, kind, d["k"]))
+    return out
+
+
+def r12_conflicts():
+    """A proposal that would overwrite a name the tree ALREADY grades as
+    content is refused, never applied.  --selftest asserts this is empty; if it
+    ever is not, the family moved and this round's arithmetic is wrong."""
+    return [p for p in r12_proposals() if p[1] and grade(p[1]) == "content"]
+
+
+# ---------------------------------------------------------------------------
+# ROUND 12: the header prose, GENERATED from r12_family() so it cannot drift
+# away from the bytes.  Every address in it was read out of the ROM by the
+# functions above, and citation_check() re-decodes every one.
+# ---------------------------------------------------------------------------
+def r12_headers():
+    src = r12_src_names()
+    H = {}
+    for d in r12_family():
+        head = R12_HEAD_NAME.get(d["head"]) or src[d["head"]]
+        tag = R12_TAG.get(d["head"]) or r12_tag(src[d["head"]])
+        gate, emit = head + "__partgate", head + "__emit"
+        tbl = "MidiOut_PartRecordPtrs_" + tag
+        bld = "MidiIn_BuildList_" + tag
+        rec = "MidiOut_ChangeRecord_" + tag
+        jrs = [a for kind, a in r12_gate_entries(d["gate"]) if kind == "jr"]
+        bcimm = d["bc_site"]
+
+        # ---- the per-part gate -------------------------------------------
+        if d["bit"]:
+            bittxt = "bit %d of (record+0x%02X)" % (d["bit"][0], d["bit"][1])
+            ev = ["Evidence: the (offset,mask) pair it tests is (+0x%02X, 0x%02X), and that is"
+                  % (d["bit"][1] - 0x26, 1 << d["bit"][0]),
+                  "         EXACTLY the pair %s hands MidiIn_BuildPartList" % bld,
+                  "         to choose the parts that go in the list this gate is called for",
+                  "         (`ld BC,0x%04X` at 0x%06X).  TEN of the eleven gates agree with"
+                  % ((d["bmask"] << 8) | d["boff"], bcimm),
+                  "         their own builder that way, and --midi prints all eleven."]
+        else:
+            bittxt = ("bit %d of (0x%04X), a GLOBAL enable and not a record bit"
+                      % (d["dbit"][0], d["dbit"][1]))
+            ev = ["Evidence: this is the ONE gate of the eleven with no record-bit test, and",
+                  "         %s is the ONE builder that passes BC=0x%04X --"
+                  % (bld, (d["bmask"] << 8) | d["boff"]),
+                  "         `ld BC,0x%04X` at 0x%06X -- i.e. accepts every part."
+                  % ((d["bmask"] << 8) | d["boff"], bcimm),
+                  "         The two exceptions are the two ends of one pairing, which is",
+                  "         itself the agreement; --midi prints all eleven."]
+        H[gate] = ([
+            "%s -- emit for ONE part, if that part's record allows it" % gate,
+            "",
+            "Called from: %s, `calr` at 0x%06X, once per part in the" % (head, d["gate_site"]),
+            "         0xFF-terminated list at RAM 0x%04X; and by fall-in from that" % d["hlist"],
+            "         routine's two early rejects (`jr NZ` at %s)."
+            % ", ".join("0x%06X" % a for a in jrs),
+            "Body:    part index from (0x1959), rejected above 0x1F; index %s" % tbl,
+            "         by index*4 (`ld XIX,0x%06X` at 0x%06X); reject 0xFFFFFFFF; test"
+            % (d["tbl"], d["tbl_site"]),
+            "         %s; fall through into %s." % (bittxt, emit)] + ev)
+
+        # ---- the table ----------------------------------------------------
+        H[tbl] = [
+            "%s -- 32 part-record pointers," % tbl,
+            "                          the copy %s loads" % gate,
+            "",
+            "★ RENAMED FROM %s.  All 25 blocks are BYTE-IDENTICAL, so the"
+            % (src.get(d["tbl"]) or "?"),
+            "         number in the old name said only \"the Nth in address order\".  What",
+            "         distinguishes this block is the routine that loads it, and that",
+            "         routine now has a name -- which is exactly the condition round 4's",
+            "         --gaps set: \"Name those eleven routines and these eleven tables",
+            "         name themselves.\"",
+            "Read by: `ld XIX,0x%06X` at 0x%06X, inside %s, and"
+            % (d["tbl"], d["tbl_site"], gate),
+            "         nowhere else in either of CPU 1's ROMs.",
+            "Evidence: check X4 re-derives the reader of every one of the 25 blocks.",
+        ]
+
+        # ---- the part-list builder ----------------------------------------
+        H[bld] = [
+            "%s -- rebuild the part list %s walks" % (bld, head),
+            "",
+            "★ RENAMED FROM %s, whose suffix was the list's RAM address."
+            % (src.get(d["builder"]) or "?"),
+            "Called from: MidiIn_RebuildPartLists.",
+            "Body:    `ld XIX,0x%04X / ld DE,0x%04X / ld BC,0x%04X / calr"
+            % (d["blist"], d["sel"], (d["bmask"] << 8) | d["boff"]),
+            "         MidiIn_BuildPartList`, fifteen bytes at 0x%06X." % d["builder"],
+            "Evidence: TWO witnesses, independent of each other.",
+            "         1. change record %d at 0x%06X pairs this builder with"
+            % (d["k"], d["rec"]),
+            "            %s in one 12-byte record: [0:4] is this address." % head,
+            "         2. %s's own `ld XIZ,0x%08X` at 0x%06X walks THIS"
+            % (head, d["hlist"], d["hlist_site"]),
+            "            list, and 0x%04X is this builder's own destination." % d["blist"],
+        ]
+
+        # ---- the two records whose handler had no name --------------------
+        if src.get(d["rec"]) != rec:
+            H[rec] = [
+                "%s -- the record whose handler is %s" % (rec, head),
+                "",
+                "★ RENAMED FROM %s, whose suffix was the record's position"
+                % (src.get(d["rec"]) or "?"),
+                "         in the table and nothing else.  round 4's --gaps named this exact",
+                "         blocker -- \"their [4:8] handlers, sub_FA77FA and sub_FA767E, have",
+                "         no name\" -- and they have one now.",
+                "Body:    12 bytes at 0x%06X.  [0:4] = 0x%08X (%s),"
+                % (d["rec"], d["builder"], bld),
+                "         [4:8] = 0x%08X (%s), [8:10] = parameter number"
+                % (d["head"], head),
+                "         0x%04X, [10:12] = 0x%04X." % (d["pid"], d["val"]),
+                "Evidence: the name is the [4:8] handler's, and that handler is named",
+                "         in its own header at 0x%06X from four agreeing readings."
+                % d["head"],
+                "         The eleven records' [8:10] parameter numbers are exactly",
+                "         {0xB1..0xB5, 0xB8..0xBD}, and MidiOut_ParamNumberTable[0x%04X]"
+                % d["pid"],
+                "         is this same handler -- the pairing has two witnesses, which",
+                "         is the rule the other nine records in this table already use.",
+            ]
+
+        # ---- the two heads and their emits --------------------------------
+        if d["head"] in R12_HEAD_NAME:
+            status = 0xE0 if tag == "PitchBend" else 0xD0
+            nbytes = 3 if status == 0xE0 else 2
+            orsite = r12_scan(d["emit"], d["emit"] + 0x40, (0xC9, 0xCE, status))
+            desite = r12_scan(d["emit"], d["emit"] + 0x40, (0x32, 0x00, nbytes))
+            inbound = "MidiIn_PitchBend" if status == 0xE0 else "MidiIn_ChannelPressure"
+            shown = "PITCH BEND" if status == 0xE0 else "CHANNEL PRESSURE"
+            insite = 0xFA6E54 if status == 0xE0 else 0xFA6ED9
+            H[head] = [
+                "%s -- echo a %s message outbound, part by part" % (head, shown),
+                "",
+                "★ RENAMED FROM %s.  This message is NOT a control change, which"
+                % (src.get(d["head"]) or "?"),
+                "         is why MidiOut_ChangeIndexMap -- a map indexed by CONTROLLER",
+                "         NUMBER -- can never produce its record.  The ⚠ above",
+                "         MidiOut_ChangeRecord_CC01Modulation, \"two of the eleven records",
+                "         are unreachable through that map ... stated, not explained\", is",
+                "         explained by this name and its twin, and that ⚠ is rewritten.",
+                "Called from: MidiOut_ParamNumberTable[0x%02X] -- the listing's own inline"
+                % d["pid"],
+                "         entry comment spells that slot in decimal, %d -- and directly"
+                % d["pid"],
+                "         by %s" % inbound,
+                "         at 0x%06X, which the tree named from the inbound side." % insite,
+                "Body:    the three-routine shape of this family -- walk the 0xFF-terminated",
+                "         part list at RAM 0x%04X (`ld XIZ` at 0x%06X), call %s"
+                % (d["hlist"], d["hlist_site"], gate),
+                "         once per part, and fall into %s." % emit,
+                # ⚠ THE FOURTH AGREEMENT IS PITCH BEND'S ALONE.  The first draft
+                # printed "FOUR agreements" for both heads and then told the
+                # channel-pressure one that its reset value 0x7F00 "is the only
+                # one of the eleven that is not 0x7F00/..." -- a sentence that
+                # contradicts itself inside its own clause, which is the exact
+                # defect round 3's reviewers found.  The count is now derived
+                # from the list instead of being written above it.
+                "Evidence: %s agreements, and not one of them is adjacency."
+                % ("FOUR" if status == 0xE0 else "THREE"),
+                "         1. %s builds its status byte with `or A,0x%02X`" % (emit, status),
+                "            at 0x%06X.  0x%Xn is the %s status in MIDI 1.0."
+                % (orsite, status >> 4,
+                   "pitch-bend" if status == 0xE0 else "channel-pressure"),
+                "            ⚠ that step is a fact about the PROTOCOL, not about this ROM;",
+                "            the others are facts about these bytes.",
+                "         2. the same routine stages a %d-BYTE message -- `ld DE,0x%02X00`"
+                % (nbytes, nbytes),
+                "            at 0x%06X -- and %d bytes is that message's length."
+                % (desite, nbytes),
+                "         3. its caller at 0x%06X is %s, the INBOUND handler"
+                % (insite, inbound),
+                "            of the same message, named by a different pass from a",
+                "            different table.",
+            ] + ([
+                "         4. change record %d's reset value is 0x%04X -- the only one"
+                % (d["k"], d["val"]),
+                "            of the eleven outside {0x7F00, 0x7F40, 0x7F7F}, and the",
+                "            midpoint of the range the other ten top out at, i.e.",
+                "            pitch-bend centre (check X6).",
+            ] if status == 0xE0 else [
+                "         ⚠ AND NOT A FOURTH.  Its twin has one -- record 9's reset",
+                "            value is the only one of the eleven that is not a",
+                "            maximum -- and record %d's 0x%04X is not distinctive."
+                % (d["k"], d["val"]),
+            ]) + [
+                "Unknown: what CPU 2 does with the message.  Nothing here says.",
+            ]
+            H[emit] = [
+                "%s -- stage the %s bytes and post them" % (emit, shown),
+                "",
+                "Called from: %s at 0x%06X, and by fall-through from %s."
+                % (head, d["emit_site"], gate),
+                "Body:    status byte = (the part record's byte 0, or (0x60F007) when bit 7",
+                "         of (0x60F007) is set) & 0x0F, then `or A,0x%02X` at 0x%06X;"
+                % (status, orsite),
+                "         a length word 0x%02X00 into (0x194B) (`ld DE` at 0x%06X);"
+                % (nbytes, desite),
+                "         the data bytes into (0x1948..); then MidiOut_PostStagedMessage.",
+                "Evidence: as %s.  ★ It ends in MidiOut_PostStagedMessage and NOT in" % head,
+                "         MidiOut_SendController, which is the mechanical difference",
+                "         between this pair and the nine controller families beside them:",
+                "         SendController's job is to map an index to a CONTROLLER NUMBER",
+                "         through MidiOut_IndexToControllerNumber, and these two messages",
+                "         do not have one.",
+            ]
+    return H
+
+
+
+# ---------------------------------------------------------------------------
+# ROUND 12: the family header the eleven veneers share, REWRITTEN because this
+# round makes one of its sentences false.  It said "each veneer's name is taken
+# from the 32-bit immediate of its own first instruction"; after this round the
+# names come from the change record instead, and leaving that sentence standing
+# is exactly the shape of error round 3's reviewers found.
+# ---------------------------------------------------------------------------
+def r12_veneer_family_lines():
+    fam = r12_family()
+    src = r12_src_names()
+    rows = []
+    for d in sorted(fam, key=lambda x: x["builder"]):
+        head = R12_HEAD_NAME.get(d["head"]) or src.get(d["head"], "?")
+        rows.append("         0x%04X  record %-2d  %s" % (d["blist"], d["k"], head))
+    return [
+        "The eleven MidiIn_BuildList_* -- eleven fifteen-byte veneers",
+        "",
+        "Called from: MidiIn_RebuildPartLists, one `calr` each, in this order;",
+        "         three of them are also called directly from sub_FA7E37.",
+        "Layout:  `ld XIX,<list>` / `ld DE,<selector>` / `ld BC,<offset:mask>`",
+        "         / `calr MidiIn_BuildPartList` / `ret`, fifteen bytes, and the",
+        "         eleven list addresses are 0x19F0 in steps of 0x10.",
+        "★ RENAMED in round 12, and the OLD EVIDENCE LINE IS WITHDRAWN.  It read",
+        "         \"each veneer's name is taken from the 32-bit immediate of its own",
+        "         first instruction, not assigned by hand (check R2)\".  That was true",
+        "         of the OLD names, MidiIn_BuildList_19F0.._1A90, and it is not true",
+        "         of the new ones: each veneer is now named for the outbound handler",
+        "         that walks the list it fills, which is a fact about a DIFFERENT",
+        "         table.  check R2 still pins the eleven ADDRESSES and is unaffected.",
+        "Evidence: TWO independent witnesses per pairing, and --midi prints both.",
+        "         1. MidiOut_ChangeRecordTable's k-th record holds [0:4] = the veneer",
+        "            and [4:8] = the handler, in ONE 12-byte object.",
+        "         2. the handler's own `ld XIZ,<list>` walks the very list the veneer",
+        "            fills, so the pairing is closed without reading the record.",
+        "         list    record    handler",
+    ] + rows + [
+        "⚠ MidiIn_ModuleReset clears only the first TEN; 0x1A90 is not in",
+        "  MidiIn_ResetPointerTable.  Check R1.",
+    ]
+
+
+R12_OLD_WARN = "; ⚠ Indices 8 and 9 are never produced by MidiOut_ChangeIndexMap (its live"
+R12_NEW_WARN = [
+    "; ★ Indices 8 and 9 are never produced by MidiOut_ChangeIndexMap (its live",
+    ";   values are 0,1,2,3,4,5,6,7,10), and ROUND 12 EXPLAINS IT rather than",
+    ";   restating it.  The nine cells of that map that are NOT 0xFF sit at map",
+    ";   indices 0x01,0x02,0x04,0x0B,0x10,0x11,0x12,0x13,0x40, which are exactly",
+    ";   the nine CONTROLLER NUMBERS of the nine records they select (check X5).",
+    ";   So the index is a controller number -- and records 8 and 9 are",
+    ";   MidiOut_ChangeRecord_ChannelPressure and MidiOut_ChangeRecord_PitchBend,",
+    ";   two channel messages that HAVE no controller number.  They are reached",
+    ";   from MidiIn_ChannelPressure (0xFA6ED9) and MidiIn_PitchBend (0xFA6E54)",
+    ";   instead, which is why nothing had to produce them here.",
+    "; ⚠ These are NOT the \"8 and 9\" that are dead.  Those are indices into",
+    ";   MidiOut_IndexToControllerNumber, a different table with a different index",
+    ";   rule; see the header above sub_FA78FF.  Two families, two index rules,",
+    ";   and this file does not weld them.",
+]
+# ⚠ ROUND 4's ParamShadow_SetPitchBend HEADER CONTRADICTS ITSELF THE MOMENT THE
+# RENAME LANDS: its Unknown line said "sub_FA767E itself is still unnamed", and
+# the whole-token rename turns that into "MidiOut_PitchBend itself is still
+# unnamed" -- a header stating the opposite of its own label four lines above.
+# That is precisely the defect round 3's reviewers found, so it is fixed in the
+# SAME edit rather than left for a later pass.  Two of round 4's sentences are
+# replaced; the same replacement is made in
+# notes/prom_a_understanding_round4.py's own header table, so a re-apply of that
+# file reproduces the corrected text instead of writing the stale one back.
+R12_OLD_PB = [
+    "; Unknown:  MidiOut_PitchBend itself is still unnamed; naming it would retire",
+    ";          MidiOut_ChangeRecord_PitchBend's positional suffix as well.",
+]
+R12_NEW_PB = [
+    "; ★ CLOSED, round 12.  This Unknown line read \"sub_FA767E itself is still",
+    ";          unnamed; naming it would retire MidiOut_ChangeRecord_09's",
+    ";          positional suffix as well\".  Both happened: 0xFA767E is",
+    ";          MidiOut_PitchBend and the record is MidiOut_ChangeRecord_PitchBend.",
+    ";          ★ The two derivations are INDEPENDENT and they agree -- round 4",
+    ";          argued pitch bend from the parameter shadow's width and the 0x4000",
+    ";          reset value, round 12 from the status byte, the message length, the",
+    ";          inbound caller and the change record.  Neither was written from the",
+    ";          other; notes/prom_a_panel_names_round11.py --midi prints round 12's.",
+]
+R12_OLD_PB_WHY = ('; ★ WHY "PITCH BEND", and this one is weaker than the other two -- it has',
+                  ";          no named handler to borrow from, so it is spelled out:")
+R12_NEW_PB_WHY = ('; ★ WHY "PITCH BEND".  Round 4 called this the weakest of the three',
+                  ";          because its handler had no name to borrow.  It has one now,",
+                  ";          and round 4's three arguments stand unchanged below:")
+R12_OLD_FAMHDR = "; MidiOut_PartRecordPtrs_00 .. _24 -- 25 tables of 32 part-record pointers"
+R12_NEW_FAMHDR = "; The 25 MidiOut_PartRecordPtrs_* -- 25 tables of 32 part-record pointers"
+
+
+# ---------------------------------------------------------------------------
+# ROUND 12: the two routines that had no label, and the claim they correct.
+# ---------------------------------------------------------------------------
+def r12_dead_header(i):
+    d = r12_dead_facts()[i]
+    other = R12_DEAD[1 - i]
+    tbl = "MidiOut_PartRecordPtrs_%02d" % ((d["tbl"] - R12_PARTTAB) // 128)
+    if i == 0:
+        lead = [
+            "sub_FA78FF -- NOT NAMED.  A per-part gate of the family above whose send",
+            "              index is dead, and which nothing reaches.",
+            "",
+            "★ THIS LABEL EXISTS TO CORRECT A DOCUMENTED CLAIM.",
+            "         notes/prom_a_understanding_round4.py --gaps says",
+            "         \"MidiOut_PartRecordPtrs_16/_17 -- ONE routine,",
+            "         MidiOut_CC40_Hold__emit, loads both (0xFA790E and 0xFA793E), so a",
+            "         reader-derived name would collide\".  IT IS NOT ONE ROUTINE.",
+            "         MidiOut_CC40_Hold__emit ends at the `ret` at 0xFA78FE; 0xFA78FF and",
+            "         0xFA792F begin two MORE routines that carried no label at all, so",
+            "         an address-to-nearest-label census credited both loads to the label",
+            "         above them.  That is the same mis-scoping the tree already recorded",
+            "         once, when a painter heuristic scoped to the source line instead of",
+            "         the routine's own `ret`.  There is no collision to name around.",
+        ]
+    else:
+        lead = [
+            "sub_FA792F -- NOT NAMED.  The twin of sub_FA78FF: same shape, same three",
+            "              measurements, a different send index and a different table.",
+            "",
+        ]
+    return lead + [
+        "Body:    `bit %d,(0x%04X)` at 0x%06X and return if clear; part index from"
+        % (d["dbit"][0], d["dbit"][1], d["dbit"][2]),
+        "         (0x1959), rejected above 0x1F; index %s by index*4" % tbl,
+        "         (`ld XIX,0x%06X` at 0x%06X); reject 0xFFFFFFFF; (0x195A) into E,"
+        % (d["tbl"], d["tbl_site"]),
+        "         0x%02X into W (0x%06X), `calr MidiOut_SendController`.  It does NOT"
+        % (d["idx"], d["idx_site"]),
+        "         test a bit of the part record, which ten of the eleven live gates do.",
+        "★ THREE MEASUREMENTS, and they are why the name stops here:",
+        "         1. NOTHING REACHES IT.  0x%06X occurs as a 24-bit little-endian" % d["at"],
+        "            word NOWHERE in either of CPU 1's ROMs, and no `jr`, `jrl` or",
+        "            `calr` anywhere in prom_a resolves to it.  Check X7 re-runs both",
+        "            scans over the whole 512 KiB image.",
+        "         2. ITS SEND CANNOT EMIT.  MidiOut_SendController maps W through",
+        "            MidiOut_IndexToControllerNumber and DROPS the message when the",
+        "            entry is 0xFF (`cp W,0xff` at 0xFA7C2E, then `jr Z`).  Entry",
+        "            0x%02X of that map is 0x%02X, so this routine's message is dropped"
+        % (d["idx"], d["cc"]),
+        "            even if it ever ran.  Check X8.",
+        "         3. IT HAS NO CHANGE RECORD.  Eleven of the thirteen gates in this",
+        "            address range are the [4:8] handlers of the eleven",
+        "            MidiOut_ChangeRecord_*; these two are the two that are not.",
+        "Unknown: WHAT IT WAS FOR.  The only thing separating it from its twin at",
+        "         0x%06X is a send index, and a send index has a referent only" % other,
+        "         inside this ROM's own tables.  The tree's rule for that is",
+        "         `sub_XXXXXX` plus a stated gap; this is the stated gap.",
+    ]
+
+
+def r12_dead_table_header(i):
+    d = r12_dead_facts()[i]
+    k = (d["tbl"] - R12_PARTTAB) // 128
+    return [
+        "MidiOut_PartRecordPtrs_%02d -- 32 part-record pointers, READ ONLY BY DEAD CODE" % k,
+        "",
+        "★ DELIBERATELY STILL FRAMED, and that is this round's measured refusal.",
+        "         Its one reader is sub_%06X, which nothing in either of CPU 1's" % d["at"],
+        "         ROMs reaches and whose send index maps to 0xFF.  A name taken from",
+        "         that reader would state a send index and nothing else, and a send",
+        "         index has no referent outside this ROM's own tables.  The other",
+        "         eleven blocks in this address range ARE named this round; these two",
+        "         are the two that are not.  See the header above sub_%06X." % d["at"],
+        "Read by: `ld XIX,0x%06X` at 0x%06X, and nothing else."
+        % (d["tbl"], d["tbl_site"]),
+    ]
+
+
+# ---------------------------------------------------------------------------
+# ROUND 12b: THE KERNEL-TWIN LEVER REOPENED, and round 4's own check says so.
+#
+# The briefing lists the kernel twins among the SPENT mechanisms -- "the kernel
+# twins reached exactly ONE routine".  That was true at its barrier.  Running
+# notes/prom_a_understanding_round4.py --selftest at the start of this round,
+# its check TW1 FAILED: the lever now yields TWO prom_a `sub_XXXXXX` routines
+# that are byte-identical to a NAMED prom_a routine, where it yielded none.
+# ★ The mechanism is the one round 10 already described in the other direction:
+# a twin can only be seen once its partner has a name, so NAMING REOPENS IT.
+# Round 11 named LowestSetBitIndex1Based, and that is what made 0xF8A508 visible.
+#
+# ⚠ ONE OF THE TWO IS NAMED AND THE OTHER IS REFUSED, and the difference is the
+# whole point of the rule about borrowed names:
+#   0xF8A508  20 bytes, 0 differing, twin of LowestSetBitIndex1Based.  The name
+#             does not have to be borrowed at all -- the body IS the algorithm
+#             (`xor C,C` / `inc 1,C` / `srl E,1` / `jr NC,-7` / `ld E,C`, i.e.
+#             count trailing zeros and add one), so it is read off these bytes.
+#   0xF9D3F4  16 bytes, 0 differing, twin of Screen_DrumsMapNaming_Leave.  NOT
+#             NAMED.  Identical bytes prove identical BEHAVIOUR; they do not
+#             prove identical SCREEN, and "DrumsMapNaming" is a screen identity.
+#             Borrowing it would be the trap the tree has already paid for.
+# ---------------------------------------------------------------------------
+R12B_TWIN = 0xF8A508
+R12B_TWIN_OF = 0xF8A913          # LowestSetBitIndex1Based, named in round 11
+R12B_TWIN_LEN = 0x14
+R12B_TWIN_NAME = "LowestSetBitIndex1Based_Copy"
+R12B_REFUSED = 0xF9D3F4
+R12B_REFUSED_OF = 0xF9EFF6       # Screen_DrumsMapNaming_Leave
+R12B_REFUSED_LEN = 0x10
+
+
+def r12b_facts():
+    a = sum(1 for i in range(R12B_TWIN_LEN)
+            if by(R12B_TWIN + i) != by(R12B_TWIN_OF + i))
+    b = sum(1 for i in range(R12B_REFUSED_LEN)
+            if by(R12B_REFUSED + i) != by(R12B_REFUSED_OF + i))
+    return a, b
+
+
+def r12b_headers():
+    da, db = r12b_facts()
+    return {
+        R12B_TWIN_NAME: [
+            "%s -- a second, verbatim copy of the routine at" % R12B_TWIN_NAME,
+            "                          0x%06X" % R12B_TWIN_OF,
+            "",
+            "★ RENAMED FROM sub_%06X.  All %d bytes of 0x%06X-0x%06X are"
+            % (R12B_TWIN, R12B_TWIN_LEN, R12B_TWIN, R12B_TWIN + R12B_TWIN_LEN - 1),
+            "         identical to 0x%06X-0x%06X: %d differ (check X13)."
+            % (R12B_TWIN_OF, R12B_TWIN_OF + R12B_TWIN_LEN - 1, da),
+            "★ THE NAME IS NOT BORROWED, which is why it may be used at all.  The",
+            "         body is read here: `cp E,0` and return, else `xor C,C`, then",
+            "         `inc 1,C` / `srl E,1` / `jr NC,-7` and `ld E,C` -- count the",
+            "         trailing zeros of E and add one.  That is the algorithm, and",
+            "         it is what the twin at 0x%06X is called." % R12B_TWIN_OF,
+            "Evidence: the byte diff above plus the body; check X13 re-runs both,",
+            "         and check X14 asserts the OTHER twin this lever found is NOT",
+            "         named, for the reason in that routine's own header.",
+        ],
+        "sub_%06X" % R12B_REFUSED: [
+            "sub_%06X -- NOT NAMED, though a byte-identical twin has a name."
+            % R12B_REFUSED,
+            "",
+            "Body:    if (0x207A) == (0x207B), return; else clear (0x2806).",
+            "★ ALL %d bytes of 0x%06X-0x%06X are identical to"
+            % (R12B_REFUSED_LEN, R12B_REFUSED,
+               R12B_REFUSED + R12B_REFUSED_LEN - 1),
+            "         Screen_DrumsMapNaming_Leave at 0x%06X -- %d differ."
+            % (R12B_REFUSED_OF, db),
+            "⚠ AND THAT IS NOT ENOUGH TO BORROW THE NAME.  Identical bytes prove",
+            "         identical BEHAVIOUR; they do not prove identical SCREEN, and",
+            "         \"DrumsMapNaming\" is a screen identity, not a description of",
+            "         these five instructions.  Sixteen bytes of a two-cell compare",
+            "         and one store is a shape any screen's Leave method could",
+            "         share.  The tree's rule for a name with one witness and a",
+            "         plausible story is `sub_XXXXXX` plus a stated gap.",
+            "Unknown: WHICH screen this is the Leave method of.  A vtable walk that",
+            "         resolves the slot holding 0x%06X would settle it; this round"
+            % R12B_REFUSED,
+            "         did not run one.",
+        ],
+    }
+
+
+# ---------------------------------------------------------------------------
+# ROUND 12: --apply12 / --verify12
+# ---------------------------------------------------------------------------
+def _r12_top(lines, i):
+    """Start of the comment block immediately above line `i`, blanks kept."""
+    top = i
+    while top and (lines[top - 1].startswith(";") or lines[top - 1].strip() == ""):
+        top -= 1
+    while top < i and lines[top].strip() == "":
+        top += 1
+    return top
+
+
+def _r12_labelline(name):
+    return lambda l: l == name + ":" or l.startswith(name + ":\t") \
+        or l.startswith(name + ":   ")
+
+
+def r12_all_headers():
+    H = dict(r12_headers())
+    first = min(d["builder"] for d in r12_family())
+    src = r12_src_names()
+    for d in r12_family():
+        if d["builder"] == first:
+            head = R12_HEAD_NAME.get(d["head"]) or src[d["head"]]
+            tag = R12_TAG.get(d["head"]) or r12_tag(src[d["head"]])
+            name = "MidiIn_BuildList_" + tag
+            H[name] = r12_veneer_family_lines() + [""] + H[name]
+    for i in range(2):
+        k = (r12_dead_facts()[i]["tbl"] - R12_PARTTAB) // 128
+        H["MidiOut_PartRecordPtrs_%02d" % k] = r12_dead_table_header(i)
+    return H
+
+
+def apply12():
+    props = r12_proposals()
+    bad = r12_conflicts()
+    assert not bad, "a proposal would overwrite a content name: %s" % bad
+    heads = r12_all_headers()
+    src = open(A_SRC).read()
+    for _addr, cur, want, _kind, _k in props:
+        assert cur, "no current label to rename at that address"
+        src = re.sub(r'(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])' % re.escape(cur), want, src)
+    lines = src.split("\n")
+
+    for i, at in enumerate(R12_DEAD):
+        j = _find(lines, lambda l, a=at: l.startswith("\t") and ("; %06X  " % a) in l,
+                  "dead gate %06X" % at)
+        lines[j:j] = [""] + _block(r12_dead_header(i)) + ["sub_%06X:" % at]
+
+    # ---- round 12b: the one twin that may be named, and the one that may not
+    lines = "\n".join(lines).replace(
+        "sub_%06X:" % R12B_TWIN, R12B_TWIN_NAME + ":").split("\n")
+    heads.update(r12b_headers())
+
+    for name in sorted(heads):
+        j = _find(lines, _r12_labelline(name), "label " + name)
+        top = _r12_top(lines, j)
+        lines[top:j] = _block(heads[name])
+
+    j = _find(lines, lambda l: l == R12_OLD_WARN, "the stated-not-explained warning")
+    lines[j:j + 3] = R12_NEW_WARN
+    j = _find(lines, lambda l: l == R12_OLD_FAMHDR, "the part-table family header")
+    lines[j] = R12_NEW_FAMHDR
+    j = _find(lines, lambda l: l == R12_OLD_PB[0], "round 4's pitch-bend Unknown line")
+    assert lines[j + 1] == R12_OLD_PB[1], lines[j + 1]
+    lines[j:j + 2] = R12_NEW_PB
+    j = _find(lines, lambda l: l == R12_OLD_PB_WHY[0], "round 4's pitch-bend WHY line")
+    assert lines[j + 1] == R12_OLD_PB_WHY[1], lines[j + 1]
+    lines[j:j + 2] = list(R12_NEW_PB_WHY)
+
+    open(A_SRC, "w").write("\n".join(lines))
+    print("round 12 applied: %d family renames + 1 twin rename, 2 new labels, "
+          "%d headers, 4 texts corrected" % (len(props), len(heads)))
+
+
+def r12_old_names():
+    """What each touched label was called BEFORE this round -- derived, so
+    --verify12 works on a tree where the rename has already happened."""
+    out = []
+    for d in r12_family():
+        out.append("MidiOut_PartRecordPtrs_%02d" % ((d["tbl"] - R12_PARTTAB) // 128))
+        out.append("MidiIn_BuildList_%04X" % d["blist"])
+        if d["head"] in R12_HEAD_NAME:
+            out.append("MidiOut_ChangeRecord_%02d" % d["k"])
+            for a in (d["head"], d["emit"]):
+                out.append("sub_%06X" % a)
+        out.append("sub_%06X" % d["gate"])
+    return out
+
+
+def verify12():
+    txt = open(A_SRC).read()
+    bad = []
+    left = r12_proposals()
+    if left:
+        bad += ["not applied: %s -> %s" % (p[1], p[2]) for p in left]
+    # ⚠ THE OLD NAME MUST BE GONE AS A LABEL, NOT AS A WORD.  Every header this
+    # round writes says "★ RENAMED FROM <old>", so a whole-text search for the
+    # old spelling reports 26 false failures -- it did, on the first run.  The
+    # thing that must not survive is a LABEL LINE.
+    for old in r12_old_names():
+        if re.search(r'(?m)^%s:' % old, txt):
+            bad.append("old label still defined: " + old)
+        # a FRAMED -> CONTENT rename re-spells an object the tree already
+        # delimited, so the old spelling has to stay findable; naming a
+        # `sub_XXXXXX` is not a re-spelling and needs no such line.
+        if not old.startswith("sub_") and not re.search(r'RENAMED FROM %s\b' % old, txt):
+            bad.append("no 'RENAMED FROM' line records the old name " + old)
+    for at in R12_DEAD:
+        if ("sub_%06X:" % at) not in txt:
+            bad.append("missing dead-gate label sub_%06X" % at)
+    if R12_OLD_WARN in txt:
+        bad.append("the stated-not-explained warning survived")
+    if R12_OLD_FAMHDR in txt:
+        bad.append("the old part-table family header survived")
+    if not re.search(r'(?m)^%s:' % R12B_TWIN_NAME, txt):
+        bad.append("missing label " + R12B_TWIN_NAME)
+    if re.search(r'(?m)^sub_%06X:' % R12B_TWIN, txt):
+        bad.append("sub_%06X survived as a label" % R12B_TWIN)
+    if not re.search(r'(?m)^sub_%06X:' % R12B_REFUSED, txt):
+        bad.append("the refused twin sub_%06X lost its label" % R12B_REFUSED)
+    if R12_OLD_PB[0] in txt or R12_OLD_PB_WHY[0] in txt:
+        bad.append("round 4's pitch-bend header still says the routine is unnamed")
+    for b in bad:
+        print("  FAIL  %s" % b)
+    print("verify12: %s" % ("OK" if not bad else "%d problems" % len(bad)))
+    return not bad
+
+
+
+# ---------------------------------------------------------------------------
+# ROUND 12: the modes
+# ---------------------------------------------------------------------------
+def mode_midi():
+    src = r12_src_names()
+    fam = r12_family()
+    print("The eleven MidiOut_ChangeRecord_* families, re-derived from the ROM.\n")
+    print("%-3s %-8s %-8s %-8s %-8s %-8s %-6s %-6s %-6s"
+          % ("rec", "record", "builder", "head", "gate", "table", "list", "id", "reset"))
+    for d in fam:
+        print("%-3d %06X   %06X   %06X   %06X   %06X   %04X   %04X   %04X"
+              % (d["k"], d["rec"], d["builder"], d["head"], d["gate"], d["tbl"],
+                 d["hlist"], d["pid"], d["val"]))
+    print("\nAGREEMENT 1 -- the head's route list == the record's builder's list")
+    for d in fam:
+        print("  rec %-2d  head 0x%06X walks 0x%04X   builder 0x%06X fills 0x%04X   %s"
+              % (d["k"], d["head"], d["hlist"], d["builder"], d["blist"],
+                 "OK" if d["hlist"] == d["blist"] else "MISMATCH"))
+    print("\nAGREEMENT 2 -- the gate's record bit == the builder's (offset,mask)")
+    for d in fam:
+        if d["bit"]:
+            ok = (1 << d["bit"][0]) == d["bmask"] and 0x26 + d["boff"] == d["bit"][1]
+            print("  rec %-2d  gate tests bit %d of +0x%02X   builder BC=0x%02X%02X   %s"
+                  % (d["k"], d["bit"][0], d["bit"][1], d["bmask"], d["boff"],
+                     "OK" if ok else "MISMATCH"))
+        else:
+            print("  rec %-2d  gate tests bit %d of (0x%04X)   builder BC=0x%02X%02X"
+                  "   the ONE exception, and both ends say so"
+                  % (d["k"], d["dbit"][0], d["dbit"][1], d["bmask"], d["boff"]))
+    print("\nAGREEMENT 3 -- the emit's index maps to the controller already in the name")
+    for d in fam:
+        head = R12_HEAD_NAME.get(d["head"]) or src.get(d["head"], "?")
+        if d["cc"] is None:
+            print("  rec %-2d  %-28s posts a STAGED MESSAGE, not a controller"
+                  % (d["k"], head))
+        else:
+            print("  rec %-2d  %-28s W=0x%02X -> MidiOut_IndexToControllerNumber = 0x%02X"
+                  % (d["k"], head, d["idx"], d["cc"]))
+    a = r12_agreements()
+    print("\n  agreement 1: %d of %d      agreement 2: %d of %d (the %d without a record "
+          "bit are excluded and printed above)      agreement 3: %d of %d"
+          % (a["a1"][0], a["a1"][1], a["a2"][0], a["a2"][1], len(a["nomask"]),
+             a["a3"][0], a["a3"][1]))
+    print("\nWHAT THIS ROUND RENAMES")
+    for addr, cur, want, kind, k in r12_proposals():
+        print("  %06X  %-8s %-34s -> %s" % (addr, kind, cur, want))
+    print("\nWHAT IT REFUSES")
+    for i, d in enumerate(r12_dead_facts()):
+        print("  MidiOut_PartRecordPtrs_%02d  read only by sub_%06X, which nothing "
+              "reaches and whose\n%swrite index 0x%02X maps to 0x%02X in "
+              "MidiOut_IndexToControllerNumber."
+              % ((d["tbl"] - R12_PARTTAB) // 128, d["at"], " " * 29, d["idx"], d["cc"]))
+    print("  MidiOut_PartRecordPtrs_00  five content-named readers, one theme, and no "
+          "single reader\n%snames it.  round 4 refused it for that reason and this "
+          "round AGREES;\n%sthe refusal is not overturned for one point of a metric."
+          % (" " * 29, " " * 29))
+    return 0
+
+
+def mode_deadgates():
+    print("The two routines after MidiOut_CC40_Hold__emit's `ret` at 0xFA78FE.\n")
+    for d in r12_dead_facts():
+        print("  0x%06X" % d["at"])
+        print("     guard      bit %d of (0x%04X) at 0x%06X"
+              % (d["dbit"][0], d["dbit"][1], d["dbit"][2]))
+        print("     table      0x%06X (MidiOut_PartRecordPtrs_%02d), `ld XIX` at 0x%06X"
+              % (d["tbl"], (d["tbl"] - R12_PARTTAB) // 128, d["tbl_site"]))
+        print("     send       W=0x%02X at 0x%06X -> MidiOut_IndexToControllerNumber"
+              "[0x%02X] = 0x%02X  %s"
+              % (d["idx"], d["idx_site"], d["idx"], d["cc"],
+                 "DROPPED by MidiOut_SendController" if d["cc"] == 0xFF else "sent"))
+        print("     24-bit refs in prom_a+prom_b : %d" % len(d["abs_refs"]))
+        print("     jr/jrl/calr refs in prom_a   : %d" % len(d["rel_refs"]))
+    print("\n  round 4's --gaps calls these two loads ONE routine, MidiOut_CC40_Hold__emit.")
+    print("  That routine's extent ends at the `ret` at 0xFA78FE.  Two routines, not one;")
+    print("  the 'collision' was an address-to-nearest-label artefact.")
+    return 0
+
+
+def mode_job1():
+    """Round 10 earned five panel names and could not write them, being
+    read-only.  Round 11 wrote them.  This RE-VERIFIES them against the ROM
+    rather than trusting that they were applied correctly."""
+    src = r12_src_names()
+    want = {0xF8B446: "PanelGroupEventLists_Variant1",
+            0xF8B4B2: "PanelGroupEventLists_Variant2",
+            0xF8B74A: "PanelGroupActionTable_Variant1",
+            0xF8B7AE: "PanelGroupActionTable_Variant2",
+            0xF8A824: "PanelGroupQueue_ExpandToEvents",
+            0xF8A44B: "PanelGroupQueue_ExpandToEvents_DeadCopy"}
+    print("JOB 1 -- the five names round 10 earned, plus the dead copy.\n")
+    print("  status: ALREADY APPLIED by round 11 (commit ad7294b).  This round")
+    print("  re-derives each one instead of re-writing it.\n")
+    ok = True
+    for addr, name in sorted(want.items()):
+        got = src.get(addr)
+        print("  %06X  %-40s %s" % (addr, name, "PRESENT" if got == name else
+                                    "MISSING (found %r)" % got))
+        ok = ok and got == name
+    print("\n  re-derivation, from the ROM and not from the listing:")
+    for addr, op, target, what in LOADS:
+        if target in want:
+            print("    0x%06X %s -> %s" % (addr, what, want[target]))
+    diff, inptr, refs = stale_facts()
+    print("    dead copy 0x%06X: %d of 123 bytes differ from the live 0x%06X"
+          % (STALE, len(diff), LIVE))
+    print("    its three table immediates hold %d of 12 in-image pointers; the live "
+          "three hold %d of 12"
+          % (sum(inptr[t] for t in STALE_TABLES), sum(inptr[t] for t in LIVE_TABLES)))
+    print("    24-bit references to 0x%06X in either of CPU 1's ROMs: %d"
+          % (STALE, len(refs)))
+    return 0 if ok else 1
+
+
+
+def r12_imm32_sites(value):
+    """Every `ld XIX/XIY/XIZ,imm32` in prom_a whose operand is `value`."""
+    le = bytes([value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF,
+                (value >> 24) & 0xFF])
+    out = []
+    i = _a.find(le)
+    while i >= 0:
+        if i and _a[i - 1] in (0x44, 0x45, 0x46):
+            out.append(A_BASE + i - 1)
+        i = _a.find(le, i + 1)
+    return out
+
+
+def r12_block_readers():
+    """block index -> the `ld XIX,<block>` sites that name it."""
+    out = {}
+    for k in range(25):
+        b = R12_PARTTAB + 128 * k
+        out[k] = [a for a in r12_imm32_sites(b) if by(a) == 0x44]
+    return out
+
+
+def r12_changeindexmap():
+    """{map index: record index} for the cells that are not 0xFF."""
+    return {i: by(0xFA7FFE + i) for i in range(256) if by(0xFA7FFE + i) != 0xFF}
+
+
+def mode_census12():
+    print("JOB 2, ROUND 12 -- the census is STILL the committed one, and this is")
+    print("its live reading, not a remembered one.\n")
+    for args in (["--census"],):
+        print(subprocess.run(
+            [sys.executable, os.path.join(ROOT, "notes", "prom_a_census_round8.py")] + args,
+            capture_output=True, text=True).stdout)
+    print("  ⚠ round 11 already answered this job by pointing at the committed")
+    print("    census rather than writing a second one, and that answer stands.")
+    print("    What round 12 adds is not another census but the thing a census")
+    print("    cannot do: it took the ONE bucket round 4 had already reduced to a")
+    print("    named blocker -- \"name those eleven routines and these eleven tables")
+    print("    name themselves\" -- and named them.")
+    return 0
+
+
+def selftest12():
+    global OK, FAIL
+    fam = r12_family()
+    src = r12_src_names()
+
+    ck("X1 the eleven records tile 0xFA812A-0xFA81AD at stride 12",
+       [d["rec"] for d in fam] == [0xFA812A + 12 * k for k in range(11)])
+    ck("X1b the LAST record is 0xFA81A2 and the byte after the eleventh is "
+       "MidiIn_RebuildPartLists",
+       fam[-1]["rec"] == 0xFA81A2 and fam[-1]["rec"] + 12 == 0xFA81AE)
+
+    a = r12_agreements()
+    ck("X2 agreement 1 (head's route list == record builder's list) is 11 of 11",
+       a["a1"] == (11, 11))
+    ck("X2b it holds for the LAST record too",
+       fam[-1]["hlist"] == fam[-1]["blist"])
+
+    sites = {d["blist"]: r12_imm32_sites(d["blist"]) for d in fam}
+    ck("X3 each of the eleven list addresses is loaded at exactly two sites -- its "
+       "builder and its head",
+       all(len(v) == 2 for v in sites.values()))
+    ck("X3b and for the LAST list, 0x%04X, those two are 0x%06X and 0x%06X"
+       % (fam[-1]["blist"], min(sites[fam[-1]["blist"]]), max(sites[fam[-1]["blist"]])),
+       set(sites[fam[-1]["blist"]]) == {fam[-1]["builder"], fam[-1]["hlist_site"]})
+
+    rd = r12_block_readers()
+    ck("X4 every one of the 25 part-record blocks has at least one `ld XIX` reader",
+       all(rd[k] for k in range(25)))
+    ck("X4b block 0 has five readers and the other 24 have exactly one",
+       len(rd[0]) == 5 and all(len(rd[k]) == 1 for k in range(1, 25)))
+    ck("X4c the LAST block, 24, is read at 0x%06X" % rd[24][0], len(rd[24]) == 1)
+    ck("X4d and prom_b spells NONE of the 25 block addresses, so \"nowhere else in "
+       "either of CPU 1's ROMs\" is measured and not assumed",
+       sum(_b.count(bytes([(R12_PARTTAB + 128 * k) & 0xFF,
+                           ((R12_PARTTAB + 128 * k) >> 8) & 0xFF,
+                           ((R12_PARTTAB + 128 * k) >> 16) & 0xFF]))
+           for k in range(25)) == 0
+       and sum(len(v) for v in rd.values()) == 29)
+
+    cim = r12_changeindexmap()
+    want = {d["cc"]: d["k"] for d in fam if d["cc"] is not None}
+    ck("X5 MidiOut_ChangeIndexMap's nine non-0xFF cells sit EXACTLY at the nine "
+       "controller numbers of the nine records they select", cim == want)
+    ck("X5b so records 8 and 9 are absent from it because their message has no "
+       "controller number, not for an unknown reason",
+       sorted(set(range(11)) - set(cim.values())) == [8, 9]
+       and {fam[8]["cc"], fam[9]["cc"]} == {None})
+
+    vals = [d["val"] for d in fam]
+    ck("X6 record 9's reset value 0x%04X is the only one of the eleven outside "
+       "{0x7F00,0x7F40,0x7F7F}" % vals[9],
+       [i for i, v in enumerate(vals) if v not in (0x7F00, 0x7F40, 0x7F7F)] == [9])
+
+    dead = r12_dead_facts()
+    ck("X7 neither unlabelled gate has a 24-bit reference in either of CPU 1's ROMs",
+       all(not d["abs_refs"] for d in dead))
+    ck("X7b nor any jr/jrl/calr anywhere in prom_a",
+       all(not d["rel_refs"] for d in dead))
+    ck("X7c and the scan is not vacuous -- the same scan finds 3 entries for the "
+       "LAST live gate", len(r12_gate_entries(fam[-1]["gate"])) == 3)
+
+    ck("X8 MidiOut_IndexToControllerNumber[8] and [9] are both 0xFF",
+       by(R12_CMAP + 8) == 0xFF and by(R12_CMAP + 9) == 0xFF)
+    ck("X8b MidiOut_SendController drops on 0xFF -- `cp W,0xff` at 0xFA7C2E",
+       blk(0xFA7C2E, 3) == bytes([0xC8, 0xCF, 0xFF]))
+    ck("X8c and the two dead gates send exactly those two indices",
+       sorted(d["idx"] for d in dead) == [8, 9])
+
+    ck("X9 no proposal would overwrite a name the tree already grades as content",
+       not r12_conflicts())
+    ck("X10 exactly one of the eleven gates has no record-bit test, and it is the "
+       "one whose builder passes BC=0xFFFF",
+       len(a["nomask"]) == 1
+       and (fam[a["nomask"][0]]["bmask"] << 8 | fam[a["nomask"][0]]["boff"]) == 0xFFFF)
+    ck("X10b and the other ten agree bit-for-bit", a["a2"] == (10, 10))
+
+    ok11 = [d for d in fam if d["cc"] is not None
+            and ("CC%02X" % d["cc"]) in (src.get(d["head"]) or "")]
+    ck("X11 all nine controller heads already carry the controller number the emit "
+       "index maps to", len(ok11) == 9)
+
+    tmpl = blk(fam[0]["gate"], 4)
+    PNT = 0xFA8CC8                                  # MidiOut_ParamNumberTable
+    ck("X15 MidiOut_ParamNumberTable[pid] is the record's own [4:8] handler for "
+       "all eleven records -- the second witness the record headers cite",
+       all(le32(PNT + 4 * d["pid"]) == d["head"] for d in fam))
+    ck("X15b including the LAST record, 0x%06X: [0x%04X] -> 0x%06X"
+       % (fam[-1]["rec"], fam[-1]["pid"], fam[-1]["head"]),
+       le32(PNT + 4 * fam[-1]["pid"]) == fam[-1]["head"])
+    ck("X15c and the eleven parameter numbers are exactly {0xB1..0xB5, 0xB8..0xBD}",
+       sorted(d["pid"] for d in fam)
+       == list(range(0xB1, 0xB6)) + list(range(0xB8, 0xBE)))
+    ck("X12 both unlabelled gates open with the same `bit 3,(0x7F39)` guard",
+       all(blk(d["at"], 4) == bytes([0xF1, 0x39, 0x7F, 0xCB]) for d in dead))
+    da, db = r12b_facts()
+    ck("X13 0x%06X is byte-identical to LowestSetBitIndex1Based over all %d bytes"
+       % (R12B_TWIN, R12B_TWIN_LEN), da == 0)
+    ck("X13b and its body really is the count-trailing-zeros loop "
+       "(`srl E,1` + `jr NC,-7`)",
+       blk(R12B_TWIN + 10, 5) == bytes([0xCD, 0xEF, 0x01, 0x6F, 0xF9]))
+    ck("X14 the OTHER twin the lever found, 0x%06X, is byte-identical too (%d "
+       "differ) and is deliberately NOT named" % (R12B_REFUSED, db),
+       db == 0 and "sub_%06X:" % R12B_REFUSED in open(A_SRC).read())
+    ck("X12b and every live gate opens with `ld L,(0x1959)` instead",
+       all(blk(d["gate"], 4) == bytes([0xC1, 0x59, 0x19, 0x27]) for d in fam)
+       and tmpl == bytes([0xC1, 0x59, 0x19, 0x27]))
+    return 0
+
+
 # ---------------------------------------------------------------------------
 # 13. THE CITATION CHECK.  Round 1 of this wave shipped ~31 citations that named
 #     the imm32 instead of the opcode -- one byte past the instruction, and
@@ -1671,6 +2974,13 @@ def my_prose():
     out += DEAD_HEADER + [l.lstrip("; ") for l in WGM_NEW]
     out += [l for l in emit_block() if l.startswith(";")]
     out += [l for l in emit_bitmask_block() if l.startswith(";")]
+    for body in r12_all_headers().values():
+        out += body
+    for body in r12b_headers().values():
+        out += body
+    out += [l.lstrip("; ") for l in R12_NEW_WARN]
+    for i in range(2):
+        out += r12_dead_header(i)
     return out
 
 
@@ -1711,5 +3021,21 @@ if __name__ == "__main__":
         mode_wrappers()
     elif "--census" in a:
         mode_census()
+    elif "--midi" in a:
+        sys.exit(mode_midi())
+    elif "--deadgates" in a:
+        sys.exit(mode_deadgates())
+    elif "--job1" in a:
+        sys.exit(mode_job1())
+    elif "--census12" in a:
+        sys.exit(mode_census12())
+    elif "--apply12" in a:
+        apply12()
+    elif "--verify12" in a:
+        sys.exit(0 if verify12() else 1)
+    elif "--selftest12" in a:
+        selftest12()
+        print("\n%d checks, %d failures" % (OK + FAIL, FAIL))
+        sys.exit(1 if FAIL else 0)
     else:
         sys.exit(selftest())

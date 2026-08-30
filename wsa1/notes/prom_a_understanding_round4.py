@@ -1466,8 +1466,9 @@ HEADER_UPGRADES = [
         "         `ld (XIX+B),DE` at 0xFAD880; ParamShadow_FlushAll reads the pair",
         "         back with `ld WA,(XIY+HL)` at 0xFADAC3 and emits",
         "         {0xB1, index, A, W}.",
-        "★ WHY \"PITCH BEND\", and this one is weaker than the other two -- it has",
-        "         no named handler to borrow from, so it is spelled out:",
+        "★ WHY \"PITCH BEND\".  Round 4 called this the weakest of the three",
+        "         because its handler had no name to borrow.  It has one now,",
+        "         and round 4's three arguments stand unchanged below:",
         "         1. MidiOut_ParamNumberTable[0xB1] is sub_FA767E, and the code",
         "            that routine reaches builds its MIDI status byte with",
         "            `and A,0x0f` at 0xFA7703 and `or A,0xe0` at 0xFA7706 and sets a",
@@ -1483,8 +1484,15 @@ HEADER_UPGRADES = [
         "         0xFA7612 and `or A,0xd0` at 0xFA7882 -- program change and",
         "         channel pressure -- so the idiom is the status-byte builder and",
         "         not a coincidence (check V1).",
-        "Unknown:  sub_FA767E itself is still unnamed; naming it would retire",
-        "         MidiOut_ChangeRecord_09's positional suffix as well."]),
+        "★ CLOSED, round 12.  This Unknown line read \"sub_FA767E itself is still",
+        "         unnamed; naming it would retire MidiOut_ChangeRecord_09's",
+        "         positional suffix as well\".  Both happened: 0xFA767E is",
+        "         MidiOut_PitchBend and the record is MidiOut_ChangeRecord_PitchBend.",
+        "         ★ The two derivations are INDEPENDENT and they agree -- round 4",
+        "         argued pitch bend from the parameter shadow's width and the 0x4000",
+        "         reset value, round 12 from the status byte, the message length, the",
+        "         inbound caller and the change record.  Neither was written from the",
+        "         other; notes/prom_a_panel_names_round11.py --midi prints round 12's."]),
 ]
 
 
@@ -2000,17 +2008,32 @@ def show_gaps():
 GAPS = [
     ("MidiOut_PartRecordPtrs_00", "five routines read it -- MidiOut_ProgramChange "
      "and the four MidiOut_BankSelect_* halves -- so no single reader names it; "
-     "it keeps its positional suffix."),
-    ("MidiOut_PartRecordPtrs_16/_17", "ONE routine, MidiOut_CC40_Hold__emit, "
-     "loads both (0xFA790E and 0xFA793E), so a reader-derived name would "
-     "collide; both keep their positional suffix."),
-    ("MidiOut_PartRecordPtrs_11..15, 18..23", "each has exactly one reader and "
-     "that reader is still a sub_XXXXXX.  Name those eleven routines and these "
-     "eleven tables name themselves."),
-    ("MidiOut_ChangeRecord_08, _09", "their [4:8] handlers, sub_FA77FA and "
-     "sub_FA767E, have no name.  sub_FA767E is parameter 0xB1's outbound "
-     "handler and the code it reaches builds a MIDI status byte with "
-     "`or A,0xe0` at 0xFA7706 -- see the ParamShadow_SetPitchBend header."),
+     "it keeps its positional suffix.  ⚠ STILL OPEN, and round 12 looked at it "
+     "again and AGREED: the five readers share one theme, but naming a block "
+     "from a theme rather than from a reader is a step this tree has not taken, "
+     "and it is not worth one point of a metric."),
+    ("MidiOut_PartRecordPtrs_16/_17", "⚠⚠ THE REASON GIVEN HERE WAS WRONG and is "
+     "corrected in round 12.  It said ONE routine, MidiOut_CC40_Hold__emit, "
+     "loads both (0xFA790E and 0xFA793E) so a reader-derived name would collide. "
+     "That routine ends at the `ret` at 0xFA78FE; the two loads are inside two "
+     "SEPARATE unlabelled routines at 0xFA78FF and 0xFA792F, which this scan "
+     "resolved to the nearest label above them.  They are STILL not named, for a "
+     "different and better reason: nothing in either of CPU 1's ROMs reaches "
+     "either routine, and each sends an index whose "
+     "MidiOut_IndexToControllerNumber entry is 0xFF, so the message is dropped. "
+     "See notes/prom_a_panel_names_round11.py --deadgates."),
+    ("MidiOut_PartRecordPtrs_11..15, 18..23", "✅ CLOSED IN ROUND 12.  This entry "
+     "said \"name those eleven routines and these eleven tables name "
+     "themselves\", and that is exactly what happened: the eleven readers are "
+     "the per-part gates of the eleven MidiOut_ChangeRecord_* families, named "
+     "from six agreeing derivations (--midi in "
+     "notes/prom_a_panel_names_round11.py)."),
+    ("MidiOut_ChangeRecord_08, _09", "✅ CLOSED IN ROUND 12.  sub_FA77FA is "
+     "MidiOut_ChannelPressure and sub_FA767E is MidiOut_PitchBend -- from the "
+     "status bytes `or A,0xd0` and `or A,0xe0`, the 2- and 3-byte staged "
+     "lengths, their callers MidiIn_ChannelPressure and MidiIn_PitchBend, and "
+     "record 9's 0x4000 reset value.  The records are now "
+     "MidiOut_ChangeRecord_ChannelPressure and _PitchBend."),
     ("the 0xFA2BC3 / 0xFA2CC3 name lists", "they are inside the .incbin at "
      "0xFA1404-0xFA5400 and so cannot carry a label at all yet; --controllers "
      "prints them from the ROM."),
@@ -2266,9 +2289,23 @@ def selftest():
     # ⚠ an INVARIANT, not a pin: before --apply the prom_c side yields exactly
     # this one routine and afterwards it yields none, because the routine is no
     # longer a sub_XXXXXX.  Both states are correct; two or more would not be.
-    bad += check("TW1 ...and the whole lever yields at most that one routine, "
-                 "in either direction",
-                 (len(tw["a"]), len(tw["c"]) <= 1), (0, True))
+    #
+    # ★★ RE-PINNED, round 12 (2026-08-30), AND THE RE-PIN IS THE RESULT.  The
+    # prom_a side used to yield ZERO and now yields ONE, and that is not drift:
+    # THIS LEVER REOPENS EVERY TIME A ROUTINE IS NAMED, because a twin is only
+    # visible once its partner has a name.  Round 11 named
+    # LowestSetBitIndex1Based (0xF8A913) and that made 0xF8A508 -- 20 bytes,
+    # zero differing -- visible; round 12 named it LowestSetBitIndex1Based_Copy
+    # from its OWN body, not by borrowing.  The one that remains is 0xF9D3F4,
+    # 16 bytes identical to Screen_DrumsMapNaming_Leave, and it is REFUSED in
+    # writing: identical bytes prove identical behaviour, not identical screen.
+    # So the briefing's "the kernel twins reached exactly ONE routine" is true
+    # of the mechanism as it was run, and false as a permanent ceiling.
+    bad += check("TW1 ...and the whole lever yields at most one UNNAMED routine "
+                 "per image, in either direction",
+                 (len(tw["a"]), len(tw["c"]) <= 1), (1, True))
+    bad += check("TW1 ...and the one it still yields is 0xF9D3F4, the refused one",
+                 ["0x%06X" % r[0] for r in tw["a"]], ["0xF9D3F4"])
 
     print("Y. the two 0x2C00 drains")
     da_ = rom("a")
@@ -2382,20 +2419,45 @@ def selftest():
     ok11 = [k for k, o in enumerate(owners) if o and shared[o] == 1]
     bad += check("R1 the 25 PartRecordPtrs blocks are 128 bytes apart from "
                  "0xFA8FF8", "0x%06X" % (0xFA8FF8 + 0x80 * 24), "0xFA9BF8")
+    # ★ RE-PINNED, round 12: 11 -> 22.  Round 4 named eleven of these blocks
+    # from their readers and wrote in --gaps that the other eleven were blocked
+    # only by their readers being sub_XXXXXX; round 12 named those eleven
+    # readers, so the same scan now finds twenty-two.  The DECOMPOSITION is
+    # asserted below so this is not a constant bumped until it passed.
     bad += check("R1 ...blocks with exactly ONE reader in a named, unshared "
-                 "routine", len(ok11), 11)
+                 "routine", len(ok11), 22)
+    bad += check("R1 ...and the three blocks that are NOT in it are 0, 16 and 17",
+                 sorted(set(range(25)) - set(ok11)), [0, 16, 17])
     bad += check("R1 ...the first and the LAST of those eleven",
                  (ok11[0], ok11[-1]), (1, 24))
     bad += check("R1 ...block 0 is excluded because FIVE routines read it",
                  len(table_readers(0xFA8FF8)), 5)
-    bad += check("R1 ...blocks 16 and 17 are excluded because ONE routine reads "
-                 "both", owners[16] == owners[17] and owners[16] is not None, True)
+    # ⚠⚠ REFUTED IN ROUND 12, and the old check is kept in this comment because
+    # the refutation is more useful than the deletion.  It read:
+    #     "blocks 16 and 17 are excluded because ONE routine reads both"
+    # and it was an artefact of THIS SCAN's own method: it maps a load site to
+    # the nearest preceding label, and the two loads at 0xFA790E and 0xFA793E
+    # had no label between them and MidiOut_CC40_Hold__emit, so both resolved to
+    # that label.  That routine ends at the `ret` at 0xFA78FE.  The loads are
+    # inside two SEPARATE routines beginning at 0xFA78FF and 0xFA792F, which
+    # round 12 labelled; nothing in either of CPU 1's ROMs reaches either, and
+    # both send an index whose MidiOut_IndexToControllerNumber entry is 0xFF, so
+    # MidiOut_SendController drops the message.  They are excluded because their
+    # readers are DEAD and UNNAMED, not because they collide.
+    # notes/prom_a_panel_names_round11.py --deadgates prints the measurements.
+    bad += check("R1 ...blocks 16 and 17 have DIFFERENT readers, and both are "
+                 "still sub_XXXXXX", (owners[16], owners[17]), (None, None))
     cr = [k for k in range(11)
           if [n for n in nm_a.get(int.from_bytes(
               by("a", 0xFA812A + 12 * k + 4, 4), "little"), [])
               if not UNNAMED.match(n)]]
+    # ★ RE-PINNED, round 12: 9 -> 11, i.e. ALL of them.  The two that had no
+    # named handler were records 8 and 9, and --gaps said so; they are
+    # MidiOut_ChannelPressure and MidiOut_PitchBend now.
     bad += check("R2 ChangeRecords whose own [4:8] handler has a name",
-                 len(cr), 9)
+                 len(cr), 11)
+    bad += check("R2 ...which is all eleven, so this gap is closed",
+                 cr, list(range(11)))
     ids = sorted(int.from_bytes(by("a", 0xFA812A + 12 * k + 8, 2), "little")
                  for k in range(11))
     bad += check("R2 ...and the eleven records' parameter numbers are exactly the "

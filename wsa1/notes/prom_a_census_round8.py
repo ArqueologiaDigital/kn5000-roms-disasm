@@ -3296,8 +3296,15 @@ def mode_promote():
     for n, rd in cand:
         print("  %-30s <- %s   %s"
               % (n, ", ".join(rd), "PROMOTED" if n in done else ""))
-    print("\n  promoted %d, refused %d -- the refusals are argued in this file's "
-          "FRAMED10 section." % (len(FRAMED10), len(cand) - len(FRAMED10)))
+    still = [n for n, _rd in cand if n not in done]
+    print("\n  round 10 promoted %d; %d candidate(s) are still offered and not taken."
+          % (len(FRAMED10), len(still)))
+    print("  ⚠ THIS LIST SHRINKS WHEN THE TREE IMPROVES, not only when something is")
+    print("    promoted.  Round 12 emptied four of the five entries two ways: it")
+    print("    promoted MidiOut_ChangeRecord_08/_09, and it REFUTED the reader this")
+    print("    scan was resolving for MidiOut_PartRecordPtrs_16/_17 -- their loads")
+    print("    are inside sub_FA78FF and sub_FA792F, which had no label at all, not")
+    print("    inside MidiOut_CC40_Hold__emit.  An unnamed reader names nothing.")
     print("  ⚠ This count is LIVE. Round 9 ran the same scan and got zero, and it "
           "was right\n    at its barrier: every reader was sub_XXXXXX until this "
           "round named forty of them.")
@@ -3644,9 +3651,31 @@ def selftest10():
     # ★ THE FRAMED -> CONTENT SCAN, whose answer MOVED because this round named
     # forty routines. Round 9 got zero and was right at its barrier.
     cand = promote_candidates()
-    check("the framed -> content scan finds %d candidates, and round 10 promoted "
-          "%d of them" % (len(cand), len(FRAMED10)),
-          len(cand) >= len(FRAMED10) and len(FRAMED10) == 2, len(cand))
+    # ⚠⚠ RE-STATED IN ROUND 12, and the old form is quoted because the change is
+    # a RESULT.  It asserted `len(cand) >= len(FRAMED10)`, i.e. that the live
+    # scan still sees at least the two objects round 10 promoted.  It cannot:
+    # this scan reports FRAMED objects with a content-named reader, and both of
+    # round 10's are now CONTENT themselves, so they leave the candidate list by
+    # succeeding.  Round 12 emptied the rest of it two different ways --
+    #   * MidiOut_ChangeRecord_08 and _09 were promoted (to _ChannelPressure and
+    #     _PitchBend), so they left the same way;
+    #   * MidiOut_PartRecordPtrs_16 and _17 left because round 12 REFUTED the
+    #     reader this scan was resolving for them.  Their loads are not inside
+    #     MidiOut_CC40_Hold__emit; they are inside sub_FA78FF and sub_FA792F,
+    #     which had no label at all, and an unnamed reader names nothing.
+    # So a FALLING candidate count is what progress looks like here, and the
+    # invariant that survives is the one below: every object the scan still
+    # offers is genuinely framed and genuinely has a content-named reader.
+    _labels_now = set(re.findall(r'(?m)^([A-Za-z_][A-Za-z0-9_]*):', open(S_A).read()))
+    check("the framed -> content scan's candidates are all still FRAMED",
+          not [n for n, _ in cand if not FRAMED_RE.match(n)], len(cand))
+    check("round 10's two promotions are CONTENT in the tree now, which is why "
+          "they have left the candidate list",
+          not [o for o, _n, _w in FRAMED10 if o in _labels_now],
+          [o for o, _n, _w in FRAMED10])
+    check("...and their new names are the ones the listing carries",
+          not [n for _o, n, _w in FRAMED10 if n not in _labels_now],
+          [n for _o, n, _w in FRAMED10])
     names_now = set(re.findall(r'(?m)^([A-Za-z_][A-Za-z0-9_]*):', open(S_A).read()))
     check("ExtBoardMagic's ten bytes really are `WSA1 EXTBD`, which is why the "
           "round-9 `.ascii` scan could not see them",

@@ -19418,7 +19418,23 @@ sub_F8A500:
 sub_F8A504:
 	dec 2,XIX                                            ; F8A504  ec 6a
 	jr -5                                                ; F8A506  68 fb
-sub_F8A508:
+; ---------------------------------------------------------------------
+; LowestSetBitIndex1Based_Copy -- a second, verbatim copy of the routine at
+;                           0xF8A913
+;
+; ★ RENAMED FROM sub_F8A508.  All 20 bytes of 0xF8A508-0xF8A51B are
+;          identical to 0xF8A913-0xF8A926: 0 differ (check X13).
+; ★ THE NAME IS NOT BORROWED, which is why it may be used at all.  The
+;          body is read here: `cp E,0` and return, else `xor C,C`, then
+;          `inc 1,C` / `srl E,1` / `jr NC,-7` and `ld E,C` -- count the
+;          trailing zeros of E and add one.  That is the algorithm, and
+;          it is what the twin at 0xF8A913 is called.
+; Evidence: the byte diff above plus the body; check X13 re-runs both,
+;          and check X14 asserts the OTHER twin this lever found is NOT
+;          named, for the reason in that routine's own header.
+; ---------------------------------------------------------------------
+
+LowestSetBitIndex1Based_Copy:
 	cps e, 0x00                                          ; F8A508  cd d8
 	jr z, 0x0f                                           ; F8A50A  66 0f
 	push C                                               ; F8A50C  cb 04
@@ -45575,6 +45591,24 @@ sub_F9D3BA:
 	calr 0x0620                                          ; F9D3ED  1e 20 06
 	calr 0x07d3                                          ; F9D3F0  1e d3 07
 	ret                                                  ; F9D3F3  0e
+; ---------------------------------------------------------------------
+; sub_F9D3F4 -- NOT NAMED, though a byte-identical twin has a name.
+;
+; Body:    if (0x207A) == (0x207B), return; else clear (0x2806).
+; ★ ALL 16 bytes of 0xF9D3F4-0xF9D403 are identical to
+;          Screen_DrumsMapNaming_Leave at 0xF9EFF6 -- 0 differ.
+; ⚠ AND THAT IS NOT ENOUGH TO BORROW THE NAME.  Identical bytes prove
+;          identical BEHAVIOUR; they do not prove identical SCREEN, and
+;          "DrumsMapNaming" is a screen identity, not a description of
+;          these five instructions.  Sixteen bytes of a two-cell compare
+;          and one store is a shape any screen's Leave method could
+;          share.  The tree's rule for a name with one witness and a
+;          plausible story is `sub_XXXXXX` plus a stated gap.
+; Unknown: WHICH screen this is the Leave method of.  A vtable walk that
+;          resolves the slot holding 0xF9D3F4 would settle it; this round
+;          did not run one.
+; ---------------------------------------------------------------------
+
 sub_F9D3F4:
 	ldb_d8 c, (0x207a)                                   ; F9D3F4  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9D3F8  c1 7b 20 f3
@@ -57334,7 +57368,40 @@ MidiOut_CC78_AllSoundOff:   ; entry: MidiOut_ParamNumberTable[174]
 sub_FA767D:   ; entry: MidiOut_ParamNumberTable[176]
 	ret                                           ; FA767D  0e
 .LFA767E:
-sub_FA767E:   ; entry: MidiOut_ParamNumberTable[177]; call from 0xFA6E54, 0xFA7E5A, 0xFA7E8C
+; ---------------------------------------------------------------------
+; MidiOut_PitchBend -- echo a PITCH BEND message outbound, part by part
+;
+; ★ RENAMED FROM sub_FA767E.  This message is NOT a control change, which
+;          is why MidiOut_ChangeIndexMap -- a map indexed by CONTROLLER
+;          NUMBER -- can never produce its record.  The ⚠ above
+;          MidiOut_ChangeRecord_CC01Modulation, "two of the eleven records
+;          are unreachable through that map ... stated, not explained", is
+;          explained by this name and its twin, and that ⚠ is rewritten.
+; Called from: MidiOut_ParamNumberTable[0xB1] -- the listing's own inline
+;          entry comment spells that slot in decimal, 177 -- and directly
+;          by MidiIn_PitchBend
+;          at 0xFA6E54, which the tree named from the inbound side.
+; Body:    the three-routine shape of this family -- walk the 0xFF-terminated
+;          part list at RAM 0x19F0 (`ld XIZ` at 0xFA76A4), call MidiOut_PitchBend__partgate
+;          once per part, and fall into MidiOut_PitchBend__emit.
+; Evidence: FOUR agreements, and not one of them is adjacency.
+;          1. MidiOut_PitchBend__emit builds its status byte with `or A,0xE0`
+;             at 0xFA7706.  0xEn is the pitch-bend status in MIDI 1.0.
+;             ⚠ that step is a fact about the PROTOCOL, not about this ROM;
+;             the others are facts about these bytes.
+;          2. the same routine stages a 3-BYTE message -- `ld DE,0x0300`
+;             at 0xFA76F5 -- and 3 bytes is that message's length.
+;          3. its caller at 0xFA6E54 is MidiIn_PitchBend, the INBOUND handler
+;             of the same message, named by a different pass from a
+;             different table.
+;          4. change record 9's reset value is 0x4000 -- the only one
+;             of the eleven outside {0x7F00, 0x7F40, 0x7F7F}, and the
+;             midpoint of the range the other ten top out at, i.e.
+;             pitch-bend centre (check X6).
+; Unknown: what CPU 2 does with the message.  Nothing here says.
+; ---------------------------------------------------------------------
+
+MidiOut_PitchBend:   ; entry: MidiOut_ParamNumberTable[177]; call from 0xFA6E54, 0xFA7E5A, 0xFA7E8C
 	cps b, 0x00                                   ; FA767E  ca d8   cp B,0
 	jr nz, .LFA76BD                               ; FA7680  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7682  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -57362,7 +57429,23 @@ sub_FA767E:   ; entry: MidiOut_ParamNumberTable[177]; call from 0xFA6E54, 0xFA7E
 .LFA76BC:
 	ret                                           ; FA76BC  0e
 .LFA76BD:
-sub_FA76BD:   ; entry: call from 0xFA76B6
+; ---------------------------------------------------------------------
+; MidiOut_PitchBend__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_PitchBend, `calr` at 0xFA76B6, once per part in the
+;          0xFF-terminated list at RAM 0x19F0; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA7680, 0xFA7687).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_PitchBend
+;          by index*4 (`ld XIX,0xFA9578` at 0xFA76C6); reject 0xFFFFFFFF; test
+;          bit 6 of (record+0x26); fall through into MidiOut_PitchBend__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x00, 0x40), and that is
+;          EXACTLY the pair MidiIn_BuildList_PitchBend hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x4000` at 0xFA8204).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_PitchBend__partgate:   ; entry: call from 0xFA76B6
 	ldb_d8 l, (0x1959)                            ; FA76BD  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA76C1  cf cf 1f
 	jr ugt, .LFA771C                              ; FA76C4  6b 56
@@ -57378,7 +57461,23 @@ sub_FA76BD:   ; entry: call from 0xFA76B6
 	m_bit 7, MD24, 0x60f007                       ; FA76E7  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA76F5                               ; FA76EC  6e 07
 .LFA76EE:
-sub_FA76EE:   ; entry: call from 0xFA769F
+; ---------------------------------------------------------------------
+; MidiOut_PitchBend__emit -- stage the PITCH BEND bytes and post them
+;
+; Called from: MidiOut_PitchBend at 0xFA769F, and by fall-through from MidiOut_PitchBend__partgate.
+; Body:    status byte = (the part record's byte 0, or (0x60F007) when bit 7
+;          of (0x60F007) is set) & 0x0F, then `or A,0xE0` at 0xFA7706;
+;          a length word 0x0300 into (0x194B) (`ld DE` at 0xFA76F5);
+;          the data bytes into (0x1948..); then MidiOut_PostStagedMessage.
+; Evidence: as MidiOut_PitchBend.  ★ It ends in MidiOut_PostStagedMessage and NOT in
+;          MidiOut_SendController, which is the mechanical difference
+;          between this pair and the nine controller families beside them:
+;          SendController's job is to map an index to a CONTROLLER NUMBER
+;          through MidiOut_IndexToControllerNumber, and these two messages
+;          do not have one.
+; ---------------------------------------------------------------------
+
+MidiOut_PitchBend__emit:   ; entry: call from 0xFA769F
 	ld A,(XIX)                                    ; FA76EE  84 21
 	bit 0x06,A                                    ; FA76F0  c9 33 06
 	jr nz, .LFA771C                               ; FA76F3  6e 27
@@ -57437,7 +57536,23 @@ MidiOut_CC01_Modulation:   ; entry: MidiOut_ParamNumberTable[178]; call from 0xF
 .LFA775B:
 	ret                                           ; FA775B  0e
 .LFA775C:
-sub_FA775C:   ; entry: call from 0xFA7755
+; ---------------------------------------------------------------------
+; MidiOut_CC01_Modulation__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC01_Modulation, `calr` at 0xFA7755, once per part in the
+;          0xFF-terminated list at RAM 0x1A00; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA771F, 0xFA7726).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC01Modulation
+;          by index*4 (`ld XIX,0xFA95F8` at 0xFA7765); reject 0xFFFFFFFF; test
+;          bit 1 of (record+0x27); fall through into MidiOut_CC01_Modulation__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x01, 0x02), and that is
+;          EXACTLY the pair MidiIn_BuildList_CC01Modulation hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x0201` at 0xFA8213).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC01_Modulation__partgate:   ; entry: call from 0xFA7755
 	ldb_d8 l, (0x1959)                            ; FA775C  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7760  cf cf 1f
 	jr ugt, .LFA778A                              ; FA7763  6b 25
@@ -57506,7 +57621,23 @@ MidiOut_CC0B_Expression:   ; entry: MidiOut_ParamNumberTable[179]; call from 0xF
 .LFA77C9:
 	ret                                           ; FA77C9  0e
 .LFA77CA:
-sub_FA77CA:   ; entry: call from 0xFA77C3
+; ---------------------------------------------------------------------
+; MidiOut_CC0B_Expression__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC0B_Expression, `calr` at 0xFA77C3, once per part in the
+;          0xFF-terminated list at RAM 0x1A90; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA778D, 0xFA7794).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC0BExpression
+;          by index*4 (`ld XIX,0xFA9678` at 0xFA77D3); reject 0xFFFFFFFF; test
+;          bit 3 of (0x7F39), a GLOBAL enable and not a record bit; fall through into MidiOut_CC0B_Expression__emit.
+; Evidence: this is the ONE gate of the eleven with no record-bit test, and
+;          MidiIn_BuildList_CC0BExpression is the ONE builder that passes BC=0xFFFF --
+;          `ld BC,0xFFFF` at 0xFA829A -- i.e. accepts every part.
+;          The two exceptions are the two ends of one pairing, which is
+;          itself the agreement; --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC0B_Expression__partgate:   ; entry: call from 0xFA77C3
 	ldb_d8 l, (0x1959)                            ; FA77CA  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA77CE  cf cf 1f
 	jr ugt, .LFA77F9                              ; FA77D1  6b 26
@@ -57537,7 +57668,39 @@ MidiOut_CC0B_Expression__emit:   ; entry: call from 0xFA77AC
 .LFA77F9:
 	ret                                           ; FA77F9  0e
 .LFA77FA:
-sub_FA77FA:   ; entry: MidiOut_ParamNumberTable[180]; call from 0xFA6ED9, 0xFA7EA1, 0xFA7EBF
+; ---------------------------------------------------------------------
+; MidiOut_ChannelPressure -- echo a CHANNEL PRESSURE message outbound, part by part
+;
+; ★ RENAMED FROM sub_FA77FA.  This message is NOT a control change, which
+;          is why MidiOut_ChangeIndexMap -- a map indexed by CONTROLLER
+;          NUMBER -- can never produce its record.  The ⚠ above
+;          MidiOut_ChangeRecord_CC01Modulation, "two of the eleven records
+;          are unreachable through that map ... stated, not explained", is
+;          explained by this name and its twin, and that ⚠ is rewritten.
+; Called from: MidiOut_ParamNumberTable[0xB4] -- the listing's own inline
+;          entry comment spells that slot in decimal, 180 -- and directly
+;          by MidiIn_ChannelPressure
+;          at 0xFA6ED9, which the tree named from the inbound side.
+; Body:    the three-routine shape of this family -- walk the 0xFF-terminated
+;          part list at RAM 0x1A10 (`ld XIZ` at 0xFA7820), call MidiOut_ChannelPressure__partgate
+;          once per part, and fall into MidiOut_ChannelPressure__emit.
+; Evidence: THREE agreements, and not one of them is adjacency.
+;          1. MidiOut_ChannelPressure__emit builds its status byte with `or A,0xD0`
+;             at 0xFA7882.  0xDn is the channel-pressure status in MIDI 1.0.
+;             ⚠ that step is a fact about the PROTOCOL, not about this ROM;
+;             the others are facts about these bytes.
+;          2. the same routine stages a 2-BYTE message -- `ld DE,0x0200`
+;             at 0xFA7871 -- and 2 bytes is that message's length.
+;          3. its caller at 0xFA6ED9 is MidiIn_ChannelPressure, the INBOUND handler
+;             of the same message, named by a different pass from a
+;             different table.
+;          ⚠ AND NOT A FOURTH.  Its twin has one -- record 9's reset
+;             value is the only one of the eleven that is not a
+;             maximum -- and record 8's 0x7F00 is not distinctive.
+; Unknown: what CPU 2 does with the message.  Nothing here says.
+; ---------------------------------------------------------------------
+
+MidiOut_ChannelPressure:   ; entry: MidiOut_ParamNumberTable[180]; call from 0xFA6ED9, 0xFA7EA1, 0xFA7EBF
 	cps b, 0x00                                   ; FA77FA  ca d8   cp B,0
 	jr nz, .LFA7839                               ; FA77FC  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA77FE  f2 07 f0 60 cf   bit 7,(0x60f007)
@@ -57565,7 +57728,23 @@ sub_FA77FA:   ; entry: MidiOut_ParamNumberTable[180]; call from 0xFA6ED9, 0xFA7E
 .LFA7838:
 	ret                                           ; FA7838  0e
 .LFA7839:
-sub_FA7839:   ; entry: call from 0xFA7832
+; ---------------------------------------------------------------------
+; MidiOut_ChannelPressure__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_ChannelPressure, `calr` at 0xFA7832, once per part in the
+;          0xFF-terminated list at RAM 0x1A10; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA77FC, 0xFA7803).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_ChannelPressure
+;          by index*4 (`ld XIX,0xFA96F8` at 0xFA7842); reject 0xFFFFFFFF; test
+;          bit 5 of (record+0x26); fall through into MidiOut_ChannelPressure__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x00, 0x20), and that is
+;          EXACTLY the pair MidiIn_BuildList_ChannelPressure hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x2000` at 0xFA8222).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_ChannelPressure__partgate:   ; entry: call from 0xFA7832
 	ldb_d8 l, (0x1959)                            ; FA7839  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA783D  cf cf 1f
 	jr ugt, .LFA7890                              ; FA7840  6b 4e
@@ -57581,7 +57760,23 @@ sub_FA7839:   ; entry: call from 0xFA7832
 	m_bit 7, MD24, 0x60f007                       ; FA7863  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA7871                               ; FA7868  6e 07
 .LFA786A:
-sub_FA786A:   ; entry: call from 0xFA781B
+; ---------------------------------------------------------------------
+; MidiOut_ChannelPressure__emit -- stage the CHANNEL PRESSURE bytes and post them
+;
+; Called from: MidiOut_ChannelPressure at 0xFA781B, and by fall-through from MidiOut_ChannelPressure__partgate.
+; Body:    status byte = (the part record's byte 0, or (0x60F007) when bit 7
+;          of (0x60F007) is set) & 0x0F, then `or A,0xD0` at 0xFA7882;
+;          a length word 0x0200 into (0x194B) (`ld DE` at 0xFA7871);
+;          the data bytes into (0x1948..); then MidiOut_PostStagedMessage.
+; Evidence: as MidiOut_ChannelPressure.  ★ It ends in MidiOut_PostStagedMessage and NOT in
+;          MidiOut_SendController, which is the mechanical difference
+;          between this pair and the nine controller families beside them:
+;          SendController's job is to map an index to a CONTROLLER NUMBER
+;          through MidiOut_IndexToControllerNumber, and these two messages
+;          do not have one.
+; ---------------------------------------------------------------------
+
+MidiOut_ChannelPressure__emit:   ; entry: call from 0xFA781B
 	ld A,(XIX)                                    ; FA786A  84 21
 	bit 0x06,A                                    ; FA786C  c9 33 06
 	jr nz, .LFA7890                               ; FA786F  6e 1f
@@ -57652,7 +57847,23 @@ MidiOut_CC40_Hold:   ; entry: MidiOut_ParamNumberTable[181]; call from 0xFA64CF
 .LFA78CF:
 	ret                                           ; FA78CF  0e
 .LFA78D0:
-sub_FA78D0:   ; entry: call from 0xFA78C9
+; ---------------------------------------------------------------------
+; MidiOut_CC40_Hold__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC40_Hold, `calr` at 0xFA78C9, once per part in the
+;          0xFF-terminated list at RAM 0x1A20; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA7893, 0xFA789A).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC40Hold
+;          by index*4 (`ld XIX,0xFA9778` at 0xFA78D9); reject 0xFFFFFFFF; test
+;          bit 0 of (record+0x27); fall through into MidiOut_CC40_Hold__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x01, 0x01), and that is
+;          EXACTLY the pair MidiIn_BuildList_CC40Hold hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x0101` at 0xFA8231).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC40_Hold__partgate:   ; entry: call from 0xFA78C9
 	ldb_d8 l, (0x1959)                            ; FA78D0  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA78D4  cf cf 1f
 	jr ugt, .LFA78FE                              ; FA78D7  6b 25
@@ -57696,6 +57907,47 @@ MidiOut_CC40_Hold__emit:   ; entry: call from 0xFA78B2
 	calr .LFA7BF3                                 ; FA78FB  1e f5 02
 .LFA78FE:
 	ret                                           ; FA78FE  0e
+
+; ---------------------------------------------------------------------
+; sub_FA78FF -- NOT NAMED.  A per-part gate of the family above whose send
+;               index is dead, and which nothing reaches.
+;
+; ★ THIS LABEL EXISTS TO CORRECT A DOCUMENTED CLAIM.
+;          notes/prom_a_understanding_round4.py --gaps says
+;          "MidiOut_PartRecordPtrs_16/_17 -- ONE routine,
+;          MidiOut_CC40_Hold__emit, loads both (0xFA790E and 0xFA793E), so a
+;          reader-derived name would collide".  IT IS NOT ONE ROUTINE.
+;          MidiOut_CC40_Hold__emit ends at the `ret` at 0xFA78FE; 0xFA78FF and
+;          0xFA792F begin two MORE routines that carried no label at all, so
+;          an address-to-nearest-label census credited both loads to the label
+;          above them.  That is the same mis-scoping the tree already recorded
+;          once, when a painter heuristic scoped to the source line instead of
+;          the routine's own `ret`.  There is no collision to name around.
+; Body:    `bit 3,(0x7F39)` at 0xFA78FF and return if clear; part index from
+;          (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_16 by index*4
+;          (`ld XIX,0xFA97F8` at 0xFA790E); reject 0xFFFFFFFF; (0x195A) into E,
+;          0x09 into W (0xFA7929), `calr MidiOut_SendController`.  It does NOT
+;          test a bit of the part record, which ten of the eleven live gates do.
+; ★ THREE MEASUREMENTS, and they are why the name stops here:
+;          1. NOTHING REACHES IT.  0xFA78FF occurs as a 24-bit little-endian
+;             word NOWHERE in either of CPU 1's ROMs, and no `jr`, `jrl` or
+;             `calr` anywhere in prom_a resolves to it.  Check X7 re-runs both
+;             scans over the whole 512 KiB image.
+;          2. ITS SEND CANNOT EMIT.  MidiOut_SendController maps W through
+;             MidiOut_IndexToControllerNumber and DROPS the message when the
+;             entry is 0xFF (`cp W,0xff` at 0xFA7C2E, then `jr Z`).  Entry
+;             0x09 of that map is 0xFF, so this routine's message is dropped
+;             even if it ever ran.  Check X8.
+;          3. IT HAS NO CHANGE RECORD.  Eleven of the thirteen gates in this
+;             address range are the [4:8] handlers of the eleven
+;             MidiOut_ChangeRecord_*; these two are the two that are not.
+; Unknown: WHAT IT WAS FOR.  The only thing separating it from its twin at
+;          0xFA792F is a send index, and a send index has a referent only
+;          inside this ROM's own tables.  The tree's rule for that is
+;          `sub_XXXXXX` plus a stated gap; this is the stated gap.
+; ---------------------------------------------------------------------
+
+sub_FA78FF:
 	m_bit 3, MD16, 0x7f39                         ; FA78FF  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA792E                                ; FA7903  66 29
 	ldb_d8 l, (0x1959)                            ; FA7905  c1 59 19 27   ld L,(0x1959)
@@ -57712,6 +57964,36 @@ MidiOut_CC40_Hold__emit:   ; entry: call from 0xFA78B2
 	calr .LFA7BF3                                 ; FA792B  1e c5 02
 .LFA792E:
 	ret                                           ; FA792E  0e
+
+; ---------------------------------------------------------------------
+; sub_FA792F -- NOT NAMED.  The twin of sub_FA78FF: same shape, same three
+;               measurements, a different send index and a different table.
+;
+; Body:    `bit 3,(0x7F39)` at 0xFA792F and return if clear; part index from
+;          (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_17 by index*4
+;          (`ld XIX,0xFA9878` at 0xFA793E); reject 0xFFFFFFFF; (0x195A) into E,
+;          0x08 into W (0xFA7959), `calr MidiOut_SendController`.  It does NOT
+;          test a bit of the part record, which ten of the eleven live gates do.
+; ★ THREE MEASUREMENTS, and they are why the name stops here:
+;          1. NOTHING REACHES IT.  0xFA792F occurs as a 24-bit little-endian
+;             word NOWHERE in either of CPU 1's ROMs, and no `jr`, `jrl` or
+;             `calr` anywhere in prom_a resolves to it.  Check X7 re-runs both
+;             scans over the whole 512 KiB image.
+;          2. ITS SEND CANNOT EMIT.  MidiOut_SendController maps W through
+;             MidiOut_IndexToControllerNumber and DROPS the message when the
+;             entry is 0xFF (`cp W,0xff` at 0xFA7C2E, then `jr Z`).  Entry
+;             0x08 of that map is 0xFF, so this routine's message is dropped
+;             even if it ever ran.  Check X8.
+;          3. IT HAS NO CHANGE RECORD.  Eleven of the thirteen gates in this
+;             address range are the [4:8] handlers of the eleven
+;             MidiOut_ChangeRecord_*; these two are the two that are not.
+; Unknown: WHAT IT WAS FOR.  The only thing separating it from its twin at
+;          0xFA78FF is a send index, and a send index has a referent only
+;          inside this ROM's own tables.  The tree's rule for that is
+;          `sub_XXXXXX` plus a stated gap; this is the stated gap.
+; ---------------------------------------------------------------------
+
+sub_FA792F:
 	m_bit 3, MD16, 0x7f39                         ; FA792F  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA795E                                ; FA7933  66 29
 	ldb_d8 l, (0x1959)                            ; FA7935  c1 59 19 27   ld L,(0x1959)
@@ -57781,7 +58063,23 @@ MidiOut_CC10_RTCreatX:   ; entry: MidiOut_ParamNumberTable[184]; call from 0xFA6
 .LFA799D:
 	ret                                           ; FA799D  0e
 .LFA799E:
-sub_FA799E:   ; entry: call from 0xFA7997
+; ---------------------------------------------------------------------
+; MidiOut_CC10_RTCreatX__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC10_RTCreatX, `calr` at 0xFA7997, once per part in the
+;          0xFF-terminated list at RAM 0x1A30; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA7961, 0xFA7968).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC10RTCreatX
+;          by index*4 (`ld XIX,0xFA98F8` at 0xFA79A7); reject 0xFFFFFFFF; test
+;          bit 0 of (record+0x29); fall through into MidiOut_CC10_RTCreatX__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x03, 0x01), and that is
+;          EXACTLY the pair MidiIn_BuildList_CC10RTCreatX hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x0103` at 0xFA8240).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC10_RTCreatX__partgate:   ; entry: call from 0xFA7997
 	ldb_d8 l, (0x1959)                            ; FA799E  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA79A2  cf cf 1f
 	jr ugt, .LFA79CC                              ; FA79A5  6b 25
@@ -57878,7 +58176,23 @@ MidiOut_CC11_RTCreatY:   ; entry: MidiOut_ParamNumberTable[185]; call from 0xFA6
 .LFA7A0B:
 	ret                                           ; FA7A0B  0e
 .LFA7A0C:
-sub_FA7A0C:   ; entry: call from 0xFA7A05
+; ---------------------------------------------------------------------
+; MidiOut_CC11_RTCreatY__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC11_RTCreatY, `calr` at 0xFA7A05, once per part in the
+;          0xFF-terminated list at RAM 0x1A40; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA79CF, 0xFA79D6).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC11RTCreatY
+;          by index*4 (`ld XIX,0xFA9978` at 0xFA7A15); reject 0xFFFFFFFF; test
+;          bit 1 of (record+0x29); fall through into MidiOut_CC11_RTCreatY__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x03, 0x02), and that is
+;          EXACTLY the pair MidiIn_BuildList_CC11RTCreatY hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x0203` at 0xFA824F).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC11_RTCreatY__partgate:   ; entry: call from 0xFA7A05
 	ldb_d8 l, (0x1959)                            ; FA7A0C  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7A10  cf cf 1f
 	jr ugt, .LFA7A3A                              ; FA7A13  6b 25
@@ -57975,7 +58289,23 @@ MidiOut_CC12_RTCtrlX:   ; entry: MidiOut_ParamNumberTable[186]; call from 0xFA6A
 .LFA7A79:
 	ret                                           ; FA7A79  0e
 .LFA7A7A:
-sub_FA7A7A:   ; entry: call from 0xFA7A73
+; ---------------------------------------------------------------------
+; MidiOut_CC12_RTCtrlX__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC12_RTCtrlX, `calr` at 0xFA7A73, once per part in the
+;          0xFF-terminated list at RAM 0x1A50; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA7A3D, 0xFA7A44).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC12RTCtrlX
+;          by index*4 (`ld XIX,0xFA99F8` at 0xFA7A83); reject 0xFFFFFFFF; test
+;          bit 2 of (record+0x29); fall through into MidiOut_CC12_RTCtrlX__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x03, 0x04), and that is
+;          EXACTLY the pair MidiIn_BuildList_CC12RTCtrlX hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x0403` at 0xFA825E).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC12_RTCtrlX__partgate:   ; entry: call from 0xFA7A73
 	ldb_d8 l, (0x1959)                            ; FA7A7A  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7A7E  cf cf 1f
 	jr ugt, .LFA7AA8                              ; FA7A81  6b 25
@@ -58072,7 +58402,23 @@ MidiOut_CC13_RTCtrlY:   ; entry: MidiOut_ParamNumberTable[187]; call from 0xFA6B
 .LFA7AE7:
 	ret                                           ; FA7AE7  0e
 .LFA7AE8:
-sub_FA7AE8:   ; entry: call from 0xFA7AE1
+; ---------------------------------------------------------------------
+; MidiOut_CC13_RTCtrlY__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC13_RTCtrlY, `calr` at 0xFA7AE1, once per part in the
+;          0xFF-terminated list at RAM 0x1A60; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA7AAB, 0xFA7AB2).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC13RTCtrlY
+;          by index*4 (`ld XIX,0xFA9A78` at 0xFA7AF1); reject 0xFFFFFFFF; test
+;          bit 3 of (record+0x29); fall through into MidiOut_CC13_RTCtrlY__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x03, 0x08), and that is
+;          EXACTLY the pair MidiIn_BuildList_CC13RTCtrlY hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x0803` at 0xFA826D).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC13_RTCtrlY__partgate:   ; entry: call from 0xFA7AE1
 	ldb_d8 l, (0x1959)                            ; FA7AE8  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7AEC  cf cf 1f
 	jr ugt, .LFA7B16                              ; FA7AEF  6b 25
@@ -58169,7 +58515,23 @@ MidiOut_CC02_Modulation2:   ; entry: MidiOut_ParamNumberTable[188]; call from 0x
 .LFA7B55:
 	ret                                           ; FA7B55  0e
 .LFA7B56:
-sub_FA7B56:   ; entry: call from 0xFA7B4F
+; ---------------------------------------------------------------------
+; MidiOut_CC02_Modulation2__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC02_Modulation2, `calr` at 0xFA7B4F, once per part in the
+;          0xFF-terminated list at RAM 0x1A70; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA7B19, 0xFA7B20).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC02Modulation2
+;          by index*4 (`ld XIX,0xFA9AF8` at 0xFA7B5F); reject 0xFFFFFFFF; test
+;          bit 4 of (record+0x29); fall through into MidiOut_CC02_Modulation2__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x03, 0x10), and that is
+;          EXACTLY the pair MidiIn_BuildList_CC02Modulation2 hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x1003` at 0xFA827C).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC02_Modulation2__partgate:   ; entry: call from 0xFA7B4F
 	ldb_d8 l, (0x1959)                            ; FA7B56  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7B5A  cf cf 1f
 	jr ugt, .LFA7B84                              ; FA7B5D  6b 25
@@ -58266,7 +58628,23 @@ MidiOut_CC04_CtrlPedal:   ; entry: MidiOut_ParamNumberTable[189]; call from 0xFA
 .LFA7BC3:
 	ret                                           ; FA7BC3  0e
 .LFA7BC4:
-sub_FA7BC4:   ; entry: call from 0xFA7BBD
+; ---------------------------------------------------------------------
+; MidiOut_CC04_CtrlPedal__partgate -- emit for ONE part, if that part's record allows it
+;
+; Called from: MidiOut_CC04_CtrlPedal, `calr` at 0xFA7BBD, once per part in the
+;          0xFF-terminated list at RAM 0x1A80; and by fall-in from that
+;          routine's two early rejects (`jr NZ` at 0xFA7B87, 0xFA7B8E).
+; Body:    part index from (0x1959), rejected above 0x1F; index MidiOut_PartRecordPtrs_CC04CtrlPedal
+;          by index*4 (`ld XIX,0xFA9B78` at 0xFA7BCD); reject 0xFFFFFFFF; test
+;          bit 5 of (record+0x29); fall through into MidiOut_CC04_CtrlPedal__emit.
+; Evidence: the (offset,mask) pair it tests is (+0x03, 0x20), and that is
+;          EXACTLY the pair MidiIn_BuildList_CC04CtrlPedal hands MidiIn_BuildPartList
+;          to choose the parts that go in the list this gate is called for
+;          (`ld BC,0x2003` at 0xFA828B).  TEN of the eleven gates agree with
+;          their own builder that way, and --midi prints all eleven.
+; ---------------------------------------------------------------------
+
+MidiOut_CC04_CtrlPedal__partgate:   ; entry: call from 0xFA7BBD
 	ldb_d8 l, (0x1959)                            ; FA7BC4  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7BC8  cf cf 1f
 	jr ugt, .LFA7BF2                              ; FA7BCB  6b 25
@@ -58852,8 +59230,8 @@ MidiOut_ChangeRecordTable:
 	.long 0x00FA8166                            ; FA8112  [5]   -> MidiOut_ChangeRecord_CC12RTCtrlX
 	.long 0x00FA8172                            ; FA8116  [6]   -> MidiOut_ChangeRecord_CC13RTCtrlY
 	.long 0x00FA817E                            ; FA811A  [7]   -> MidiOut_ChangeRecord_CC40Hold
-	.long 0x00FA818A                            ; FA811E  [8]   -> MidiOut_ChangeRecord_08
-	.long 0x00FA8196                            ; FA8122  [9]   -> MidiOut_ChangeRecord_09
+	.long 0x00FA818A                            ; FA811E  [8]   -> MidiOut_ChangeRecord_ChannelPressure
+	.long 0x00FA8196                            ; FA8122  [9]   -> MidiOut_ChangeRecord_PitchBend
 	.long 0x00FA81A2                            ; FA8126  [10]   -> MidiOut_ChangeRecord_CC0BExpression
 
 ; --- 0xFA812A-0xFA81AD  12-byte records (132 bytes) ---
@@ -58871,9 +59249,20 @@ MidiOut_ChangeRecordTable:
 ;          0x0C apart, so the stride is the table's own arithmetic; 11 * 12
 ;          = 132 = 0xFA81AE - 0xFA812A, and 0xFA81AE is
 ;          MidiIn_RebuildPartLists, which prom_b names.  Both ends pinned.
-; ⚠ Indices 8 and 9 are never produced by MidiOut_ChangeIndexMap (its live
-;   values are 0,1,2,3,4,5,6,7,10), so two of the eleven records are
-;   unreachable through that map.  Stated, not explained.
+; ★ Indices 8 and 9 are never produced by MidiOut_ChangeIndexMap (its live
+;   values are 0,1,2,3,4,5,6,7,10), and ROUND 12 EXPLAINS IT rather than
+;   restating it.  The nine cells of that map that are NOT 0xFF sit at map
+;   indices 0x01,0x02,0x04,0x0B,0x10,0x11,0x12,0x13,0x40, which are exactly
+;   the nine CONTROLLER NUMBERS of the nine records they select (check X5).
+;   So the index is a controller number -- and records 8 and 9 are
+;   MidiOut_ChangeRecord_ChannelPressure and MidiOut_ChangeRecord_PitchBend,
+;   two channel messages that HAVE no controller number.  They are reached
+;   from MidiIn_ChannelPressure (0xFA6ED9) and MidiIn_PitchBend (0xFA6E54)
+;   instead, which is why nothing had to produce them here.
+; ⚠ These are NOT the "8 and 9" that are dead.  Those are indices into
+;   MidiOut_IndexToControllerNumber, a different table with a different index
+;   rule; see the header above sub_FA78FF.  Two families, two index rules,
+;   and this file does not weld them.
 ;
 ; MidiOut_ChangeRecord_CC01Modulation -- the record whose handler is MidiOut_CC01_Modulation
 ;
@@ -58891,7 +59280,7 @@ MidiOut_ChangeRecordTable:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC01Modulation:
-	.byte 0x0b, 0x82, 0xfa, 0x00, 0x1d, 0x77, 0xfa, 0x00, 0xb2, 0x00, 0x00, 0x7f   ; FA812A  MidiIn_BuildList_1A00 / MidiOut_CC01_Modulation  id 0x00B2 val 0x7F00
+	.byte 0x0b, 0x82, 0xfa, 0x00, 0x1d, 0x77, 0xfa, 0x00, 0xb2, 0x00, 0x00, 0x7f   ; FA812A  MidiIn_BuildList_CC01Modulation / MidiOut_CC01_Modulation  id 0x00B2 val 0x7F00
 ; ---------------------------------------------------------------------
 ; MidiOut_ChangeRecord_CC02Modulation2 -- the record whose handler is MidiOut_CC02_Modulation2
 ;
@@ -58909,7 +59298,7 @@ MidiOut_ChangeRecord_CC01Modulation:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC02Modulation2:
-	.byte 0x74, 0x82, 0xfa, 0x00, 0x17, 0x7b, 0xfa, 0x00, 0xbc, 0x00, 0x00, 0x7f   ; FA8136  MidiIn_BuildList_1A70 / MidiOut_CC02_Modulation2  id 0x00BC val 0x7F00
+	.byte 0x74, 0x82, 0xfa, 0x00, 0x17, 0x7b, 0xfa, 0x00, 0xbc, 0x00, 0x00, 0x7f   ; FA8136  MidiIn_BuildList_CC02Modulation2 / MidiOut_CC02_Modulation2  id 0x00BC val 0x7F00
 ; ---------------------------------------------------------------------
 ; MidiOut_ChangeRecord_CC04CtrlPedal -- the record whose handler is MidiOut_CC04_CtrlPedal
 ;
@@ -58927,7 +59316,7 @@ MidiOut_ChangeRecord_CC02Modulation2:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC04CtrlPedal:
-	.byte 0x83, 0x82, 0xfa, 0x00, 0x85, 0x7b, 0xfa, 0x00, 0xbd, 0x00, 0x00, 0x7f   ; FA8142  MidiIn_BuildList_1A80 / MidiOut_CC04_CtrlPedal  id 0x00BD val 0x7F00
+	.byte 0x83, 0x82, 0xfa, 0x00, 0x85, 0x7b, 0xfa, 0x00, 0xbd, 0x00, 0x00, 0x7f   ; FA8142  MidiIn_BuildList_CC04CtrlPedal / MidiOut_CC04_CtrlPedal  id 0x00BD val 0x7F00
 ; ---------------------------------------------------------------------
 ; MidiOut_ChangeRecord_CC10RTCreatX -- the record whose handler is MidiOut_CC10_RTCreatX
 ;
@@ -58945,7 +59334,7 @@ MidiOut_ChangeRecord_CC04CtrlPedal:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC10RTCreatX:
-	.byte 0x38, 0x82, 0xfa, 0x00, 0x5f, 0x79, 0xfa, 0x00, 0xb8, 0x00, 0x40, 0x7f   ; FA814E  MidiIn_BuildList_1A30 / MidiOut_CC10_RTCreatX  id 0x00B8 val 0x7F40
+	.byte 0x38, 0x82, 0xfa, 0x00, 0x5f, 0x79, 0xfa, 0x00, 0xb8, 0x00, 0x40, 0x7f   ; FA814E  MidiIn_BuildList_CC10RTCreatX / MidiOut_CC10_RTCreatX  id 0x00B8 val 0x7F40
 ; ---------------------------------------------------------------------
 ; MidiOut_ChangeRecord_CC11RTCreatY -- the record whose handler is MidiOut_CC11_RTCreatY
 ;
@@ -58963,7 +59352,7 @@ MidiOut_ChangeRecord_CC10RTCreatX:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC11RTCreatY:
-	.byte 0x47, 0x82, 0xfa, 0x00, 0xcd, 0x79, 0xfa, 0x00, 0xb9, 0x00, 0x40, 0x7f   ; FA815A  MidiIn_BuildList_1A40 / MidiOut_CC11_RTCreatY  id 0x00B9 val 0x7F40
+	.byte 0x47, 0x82, 0xfa, 0x00, 0xcd, 0x79, 0xfa, 0x00, 0xb9, 0x00, 0x40, 0x7f   ; FA815A  MidiIn_BuildList_CC11RTCreatY / MidiOut_CC11_RTCreatY  id 0x00B9 val 0x7F40
 ; ---------------------------------------------------------------------
 ; MidiOut_ChangeRecord_CC12RTCtrlX -- the record whose handler is MidiOut_CC12_RTCtrlX
 ;
@@ -58981,7 +59370,7 @@ MidiOut_ChangeRecord_CC11RTCreatY:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC12RTCtrlX:
-	.byte 0x56, 0x82, 0xfa, 0x00, 0x3b, 0x7a, 0xfa, 0x00, 0xba, 0x00, 0x40, 0x7f   ; FA8166  MidiIn_BuildList_1A50 / MidiOut_CC12_RTCtrlX  id 0x00BA val 0x7F40
+	.byte 0x56, 0x82, 0xfa, 0x00, 0x3b, 0x7a, 0xfa, 0x00, 0xba, 0x00, 0x40, 0x7f   ; FA8166  MidiIn_BuildList_CC12RTCtrlX / MidiOut_CC12_RTCtrlX  id 0x00BA val 0x7F40
 ; ---------------------------------------------------------------------
 ; MidiOut_ChangeRecord_CC13RTCtrlY -- the record whose handler is MidiOut_CC13_RTCtrlY
 ;
@@ -58999,7 +59388,7 @@ MidiOut_ChangeRecord_CC12RTCtrlX:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC13RTCtrlY:
-	.byte 0x65, 0x82, 0xfa, 0x00, 0xa9, 0x7a, 0xfa, 0x00, 0xbb, 0x00, 0x40, 0x7f   ; FA8172  MidiIn_BuildList_1A60 / MidiOut_CC13_RTCtrlY  id 0x00BB val 0x7F40
+	.byte 0x65, 0x82, 0xfa, 0x00, 0xa9, 0x7a, 0xfa, 0x00, 0xbb, 0x00, 0x40, 0x7f   ; FA8172  MidiIn_BuildList_CC13RTCtrlY / MidiOut_CC13_RTCtrlY  id 0x00BB val 0x7F40
 ; ---------------------------------------------------------------------
 ; MidiOut_ChangeRecord_CC40Hold -- the record whose handler is MidiOut_CC40_Hold
 ;
@@ -59017,11 +59406,47 @@ MidiOut_ChangeRecord_CC13RTCtrlY:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC40Hold:
-	.byte 0x29, 0x82, 0xfa, 0x00, 0x91, 0x78, 0xfa, 0x00, 0xb5, 0x00, 0x00, 0x7f   ; FA817E  MidiIn_BuildList_1A20 / MidiOut_CC40_Hold  id 0x00B5 val 0x7F00
-MidiOut_ChangeRecord_08:
-	.byte 0x1a, 0x82, 0xfa, 0x00, 0xfa, 0x77, 0xfa, 0x00, 0xb4, 0x00, 0x00, 0x7f   ; FA818A  MidiIn_BuildList_1A10 / sub_FA77FA  id 0x00B4 val 0x7F00
-MidiOut_ChangeRecord_09:
-	.byte 0xfc, 0x81, 0xfa, 0x00, 0x7e, 0x76, 0xfa, 0x00, 0xb1, 0x00, 0x00, 0x40   ; FA8196  MidiIn_BuildList_19F0 / sub_FA767E  id 0x00B1 val 0x4000
+	.byte 0x29, 0x82, 0xfa, 0x00, 0x91, 0x78, 0xfa, 0x00, 0xb5, 0x00, 0x00, 0x7f   ; FA817E  MidiIn_BuildList_CC40Hold / MidiOut_CC40_Hold  id 0x00B5 val 0x7F00
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_ChannelPressure -- the record whose handler is MidiOut_ChannelPressure
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_08, whose suffix was the record's position
+;          in the table and nothing else.  round 4's --gaps named this exact
+;          blocker -- "their [4:8] handlers, sub_FA77FA and sub_FA767E, have
+;          no name" -- and they have one now.
+; Body:    12 bytes at 0xFA818A.  [0:4] = 0x00FA821A (MidiIn_BuildList_ChannelPressure),
+;          [4:8] = 0x00FA77FA (MidiOut_ChannelPressure), [8:10] = parameter number
+;          0x00B4, [10:12] = 0x7F00.
+; Evidence: the name is the [4:8] handler's, and that handler is named
+;          in its own header at 0xFA77FA from four agreeing readings.
+;          The eleven records' [8:10] parameter numbers are exactly
+;          {0xB1..0xB5, 0xB8..0xBD}, and MidiOut_ParamNumberTable[0x00B4]
+;          is this same handler -- the pairing has two witnesses, which
+;          is the rule the other nine records in this table already use.
+; ---------------------------------------------------------------------
+
+MidiOut_ChangeRecord_ChannelPressure:
+	.byte 0x1a, 0x82, 0xfa, 0x00, 0xfa, 0x77, 0xfa, 0x00, 0xb4, 0x00, 0x00, 0x7f   ; FA818A  MidiIn_BuildList_ChannelPressure / MidiOut_ChannelPressure  id 0x00B4 val 0x7F00
+; ---------------------------------------------------------------------
+; MidiOut_ChangeRecord_PitchBend -- the record whose handler is MidiOut_PitchBend
+;
+; ★ RENAMED FROM MidiOut_ChangeRecord_09, whose suffix was the record's position
+;          in the table and nothing else.  round 4's --gaps named this exact
+;          blocker -- "their [4:8] handlers, sub_FA77FA and sub_FA767E, have
+;          no name" -- and they have one now.
+; Body:    12 bytes at 0xFA8196.  [0:4] = 0x00FA81FC (MidiIn_BuildList_PitchBend),
+;          [4:8] = 0x00FA767E (MidiOut_PitchBend), [8:10] = parameter number
+;          0x00B1, [10:12] = 0x4000.
+; Evidence: the name is the [4:8] handler's, and that handler is named
+;          in its own header at 0xFA767E from four agreeing readings.
+;          The eleven records' [8:10] parameter numbers are exactly
+;          {0xB1..0xB5, 0xB8..0xBD}, and MidiOut_ParamNumberTable[0x00B1]
+;          is this same handler -- the pairing has two witnesses, which
+;          is the rule the other nine records in this table already use.
+; ---------------------------------------------------------------------
+
+MidiOut_ChangeRecord_PitchBend:
+	.byte 0xfc, 0x81, 0xfa, 0x00, 0x7e, 0x76, 0xfa, 0x00, 0xb1, 0x00, 0x00, 0x40   ; FA8196  MidiIn_BuildList_PitchBend / MidiOut_PitchBend  id 0x00B1 val 0x4000
 ; ---------------------------------------------------------------------
 ; MidiOut_ChangeRecord_CC0BExpression -- the record whose handler is MidiOut_CC0B_Expression
 ;
@@ -59039,7 +59464,7 @@ MidiOut_ChangeRecord_09:
 ;          has two witnesses.  Check R2 re-derives both for all eleven.
 ; ---------------------------------------------------------------------
 MidiOut_ChangeRecord_CC0BExpression:
-	.byte 0x92, 0x82, 0xfa, 0x00, 0x8b, 0x77, 0xfa, 0x00, 0xb3, 0x00, 0x7f, 0x7f   ; FA81A2  MidiIn_BuildList_1A90 / MidiOut_CC0B_Expression  id 0x00B3 val 0x7F7F
+	.byte 0x92, 0x82, 0xfa, 0x00, 0x8b, 0x77, 0xfa, 0x00, 0xb3, 0x00, 0x7f, 0x7f   ; FA81A2  MidiIn_BuildList_CC0BExpression / MidiOut_CC0B_Expression  id 0x00B3 val 0x7F7F
 
 ; ---------------------------------------------------------------------
 ; MidiIn_RebuildPartLists -- rebuild the eleven part lists at 0x19F0..0x1A90
@@ -59079,89 +59504,264 @@ MidiIn_RebuildPartLists:   ; entry: call from 0xFA7E1A, 0xFA83AA
 .LFA81FC:
 
 ; ---------------------------------------------------------------------
-; MidiIn_BuildList_19F0 .. _1A90 -- eleven fifteen-byte veneers
+; The eleven MidiIn_BuildList_* -- eleven fifteen-byte veneers
 ;
 ; Called from: MidiIn_RebuildPartLists, one `calr` each, in this order;
 ;          three of them are also called directly from sub_FA7E37.
-; Layout:  `ld XIX,<list>` / `ld DE,<offset:mask>` / `ld BC,<mask pair>`
+; Layout:  `ld XIX,<list>` / `ld DE,<selector>` / `ld BC,<offset:mask>`
 ;          / `calr MidiIn_BuildPartList` / `ret`, fifteen bytes, and the
 ;          eleven list addresses are 0x19F0 in steps of 0x10.
-; Evidence: each veneer's name is taken from the 32-bit immediate of its
-;          own first instruction, not assigned by hand (check R2).
+; ★ RENAMED in round 12, and the OLD EVIDENCE LINE IS WITHDRAWN.  It read
+;          "each veneer's name is taken from the 32-bit immediate of its own
+;          first instruction, not assigned by hand (check R2)".  That was true
+;          of the OLD names, MidiIn_BuildList_19F0.._1A90, and it is not true
+;          of the new ones: each veneer is now named for the outbound handler
+;          that walks the list it fills, which is a fact about a DIFFERENT
+;          table.  check R2 still pins the eleven ADDRESSES and is unaffected.
+; Evidence: TWO independent witnesses per pairing, and --midi prints both.
+;          1. MidiOut_ChangeRecordTable's k-th record holds [0:4] = the veneer
+;             and [4:8] = the handler, in ONE 12-byte object.
+;          2. the handler's own `ld XIZ,<list>` walks the very list the veneer
+;             fills, so the pairing is closed without reading the record.
+;          list    record    handler
+;          0x19F0  record 9   MidiOut_PitchBend
+;          0x1A00  record 0   MidiOut_CC01_Modulation
+;          0x1A10  record 8   MidiOut_ChannelPressure
+;          0x1A20  record 7   MidiOut_CC40_Hold
+;          0x1A30  record 3   MidiOut_CC10_RTCreatX
+;          0x1A40  record 4   MidiOut_CC11_RTCreatY
+;          0x1A50  record 5   MidiOut_CC12_RTCtrlX
+;          0x1A60  record 6   MidiOut_CC13_RTCtrlY
+;          0x1A70  record 1   MidiOut_CC02_Modulation2
+;          0x1A80  record 2   MidiOut_CC04_CtrlPedal
+;          0x1A90  record 10  MidiOut_CC0B_Expression
 ; ⚠ MidiIn_ModuleReset clears only the first TEN; 0x1A90 is not in
 ;   MidiIn_ResetPointerTable.  Check R1.
+;
+; MidiIn_BuildList_PitchBend -- rebuild the part list MidiOut_PitchBend walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_19F0, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x19F0 / ld DE,0x4000 / ld BC,0x4000 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA81FC.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 9 at 0xFA8196 pairs this builder with
+;             MidiOut_PitchBend in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_PitchBend's own `ld XIZ,0x000019F0` at 0xFA76A4 walks THIS
+;             list, and 0x19F0 is this builder's own destination.
 ; ---------------------------------------------------------------------
-MidiIn_BuildList_19F0:   ; entry: call from 0xFA7E49, 0xFA7E69, 0xFA81B2
+
+MidiIn_BuildList_PitchBend:   ; entry: call from 0xFA7E49, 0xFA7E69, 0xFA81B2
 	ld XIX,0x000019f0                             ; FA81FC  44 f0 19 00 00
 	ldw de, 0x4000                                ; FA8201  32 00 40   ld DE,0x4000
 	ldw bc, 0x4000                                ; FA8204  31 00 40   ld BC,0x4000
 	calr .LFA82A1                                 ; FA8207  1e 97 00
 	ret                                           ; FA820A  0e
 .LFA820B:
-MidiIn_BuildList_1A00:   ; entry: call from 0xFA81B9
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC01Modulation -- rebuild the part list MidiOut_CC01_Modulation walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A00, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A00 / ld DE,0x0800 / ld BC,0x0201 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA820B.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 0 at 0xFA812A pairs this builder with
+;             MidiOut_CC01_Modulation in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC01_Modulation's own `ld XIZ,0x00001A00` at 0xFA7743 walks THIS
+;             list, and 0x1A00 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC01Modulation:   ; entry: call from 0xFA81B9
 	ld XIX,0x00001a00                             ; FA820B  44 00 1a 00 00
 	ldw de, 0x0800                                ; FA8210  32 00 08   ld DE,0x0800
 	ldw bc, 0x0201                                ; FA8213  31 01 02   ld BC,0x0201
 	calr .LFA82A1                                 ; FA8216  1e 88 00
 	ret                                           ; FA8219  0e
 .LFA821A:
-MidiIn_BuildList_1A10:   ; entry: call from 0xFA7E90, 0xFA7EA8, 0xFA81C0
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_ChannelPressure -- rebuild the part list MidiOut_ChannelPressure walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A10, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A10 / ld DE,0x2000 / ld BC,0x2000 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA821A.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 8 at 0xFA818A pairs this builder with
+;             MidiOut_ChannelPressure in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_ChannelPressure's own `ld XIZ,0x00001A10` at 0xFA7820 walks THIS
+;             list, and 0x1A10 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_ChannelPressure:   ; entry: call from 0xFA7E90, 0xFA7EA8, 0xFA81C0
 	ld XIX,0x00001a10                             ; FA821A  44 10 1a 00 00
 	ldw de, 0x2000                                ; FA821F  32 00 20   ld DE,0x2000
 	ldw bc, 0x2000                                ; FA8222  31 00 20   ld BC,0x2000
 	calr .LFA82A1                                 ; FA8225  1e 79 00
 	ret                                           ; FA8228  0e
 .LFA8229:
-MidiIn_BuildList_1A20:   ; entry: call from 0xFA81C7
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC40Hold -- rebuild the part list MidiOut_CC40_Hold walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A20, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A20 / ld DE,0x0800 / ld BC,0x0101 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA8229.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 7 at 0xFA817E pairs this builder with
+;             MidiOut_CC40_Hold in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC40_Hold's own `ld XIZ,0x00001A20` at 0xFA78B7 walks THIS
+;             list, and 0x1A20 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC40Hold:   ; entry: call from 0xFA81C7
 	ld XIX,0x00001a20                             ; FA8229  44 20 1a 00 00
 	ldw de, 0x0800                                ; FA822E  32 00 08   ld DE,0x0800
 	ldw bc, 0x0101                                ; FA8231  31 01 01   ld BC,0x0101
 	calr .LFA82A1                                 ; FA8234  1e 6a 00
 	ret                                           ; FA8237  0e
 .LFA8238:
-MidiIn_BuildList_1A30:   ; entry: call from 0xFA81CE
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC10RTCreatX -- rebuild the part list MidiOut_CC10_RTCreatX walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A30, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A30 / ld DE,0x0800 / ld BC,0x0103 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA8238.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 3 at 0xFA814E pairs this builder with
+;             MidiOut_CC10_RTCreatX in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC10_RTCreatX's own `ld XIZ,0x00001A30` at 0xFA7985 walks THIS
+;             list, and 0x1A30 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC10RTCreatX:   ; entry: call from 0xFA81CE
 	ld XIX,0x00001a30                             ; FA8238  44 30 1a 00 00
 	ldw de, 0x0800                                ; FA823D  32 00 08   ld DE,0x0800
 	ldw bc, 0x0103                                ; FA8240  31 03 01   ld BC,0x0103
 	calr .LFA82A1                                 ; FA8243  1e 5b 00
 	ret                                           ; FA8246  0e
 .LFA8247:
-MidiIn_BuildList_1A40:   ; entry: call from 0xFA81D5
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC11RTCreatY -- rebuild the part list MidiOut_CC11_RTCreatY walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A40, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A40 / ld DE,0x0800 / ld BC,0x0203 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA8247.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 4 at 0xFA815A pairs this builder with
+;             MidiOut_CC11_RTCreatY in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC11_RTCreatY's own `ld XIZ,0x00001A40` at 0xFA79F3 walks THIS
+;             list, and 0x1A40 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC11RTCreatY:   ; entry: call from 0xFA81D5
 	ld XIX,0x00001a40                             ; FA8247  44 40 1a 00 00
 	ldw de, 0x0800                                ; FA824C  32 00 08   ld DE,0x0800
 	ldw bc, 0x0203                                ; FA824F  31 03 02   ld BC,0x0203
 	calr .LFA82A1                                 ; FA8252  1e 4c 00
 	ret                                           ; FA8255  0e
 .LFA8256:
-MidiIn_BuildList_1A50:   ; entry: call from 0xFA81DC
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC12RTCtrlX -- rebuild the part list MidiOut_CC12_RTCtrlX walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A50, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A50 / ld DE,0x0800 / ld BC,0x0403 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA8256.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 5 at 0xFA8166 pairs this builder with
+;             MidiOut_CC12_RTCtrlX in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC12_RTCtrlX's own `ld XIZ,0x00001A50` at 0xFA7A61 walks THIS
+;             list, and 0x1A50 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC12RTCtrlX:   ; entry: call from 0xFA81DC
 	ld XIX,0x00001a50                             ; FA8256  44 50 1a 00 00
 	ldw de, 0x0800                                ; FA825B  32 00 08   ld DE,0x0800
 	ldw bc, 0x0403                                ; FA825E  31 03 04   ld BC,0x0403
 	calr .LFA82A1                                 ; FA8261  1e 3d 00
 	ret                                           ; FA8264  0e
 .LFA8265:
-MidiIn_BuildList_1A60:   ; entry: call from 0xFA81E3
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC13RTCtrlY -- rebuild the part list MidiOut_CC13_RTCtrlY walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A60, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A60 / ld DE,0x0800 / ld BC,0x0803 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA8265.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 6 at 0xFA8172 pairs this builder with
+;             MidiOut_CC13_RTCtrlY in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC13_RTCtrlY's own `ld XIZ,0x00001A60` at 0xFA7ACF walks THIS
+;             list, and 0x1A60 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC13RTCtrlY:   ; entry: call from 0xFA81E3
 	ld XIX,0x00001a60                             ; FA8265  44 60 1a 00 00
 	ldw de, 0x0800                                ; FA826A  32 00 08   ld DE,0x0800
 	ldw bc, 0x0803                                ; FA826D  31 03 08   ld BC,0x0803
 	calr .LFA82A1                                 ; FA8270  1e 2e 00
 	ret                                           ; FA8273  0e
 .LFA8274:
-MidiIn_BuildList_1A70:   ; entry: call from 0xFA81EA
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC02Modulation2 -- rebuild the part list MidiOut_CC02_Modulation2 walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A70, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A70 / ld DE,0x0800 / ld BC,0x1003 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA8274.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 1 at 0xFA8136 pairs this builder with
+;             MidiOut_CC02_Modulation2 in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC02_Modulation2's own `ld XIZ,0x00001A70` at 0xFA7B3D walks THIS
+;             list, and 0x1A70 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC02Modulation2:   ; entry: call from 0xFA81EA
 	ld XIX,0x00001a70                             ; FA8274  44 70 1a 00 00
 	ldw de, 0x0800                                ; FA8279  32 00 08   ld DE,0x0800
 	ldw bc, 0x1003                                ; FA827C  31 03 10   ld BC,0x1003
 	calr .LFA82A1                                 ; FA827F  1e 1f 00
 	ret                                           ; FA8282  0e
 .LFA8283:
-MidiIn_BuildList_1A80:   ; entry: call from 0xFA81F1
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC04CtrlPedal -- rebuild the part list MidiOut_CC04_CtrlPedal walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A80, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A80 / ld DE,0x0800 / ld BC,0x2003 / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA8283.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 2 at 0xFA8142 pairs this builder with
+;             MidiOut_CC04_CtrlPedal in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC04_CtrlPedal's own `ld XIZ,0x00001A80` at 0xFA7BAB walks THIS
+;             list, and 0x1A80 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC04CtrlPedal:   ; entry: call from 0xFA81F1
 	ld XIX,0x00001a80                             ; FA8283  44 80 1a 00 00
 	ldw de, 0x0800                                ; FA8288  32 00 08   ld DE,0x0800
 	ldw bc, 0x2003                                ; FA828B  31 03 20   ld BC,0x2003
 	calr .LFA82A1                                 ; FA828E  1e 10 00
 	ret                                           ; FA8291  0e
 .LFA8292:
-MidiIn_BuildList_1A90:   ; entry: call from 0xFA81F8
+; ---------------------------------------------------------------------
+; MidiIn_BuildList_CC0BExpression -- rebuild the part list MidiOut_CC0B_Expression walks
+;
+; ★ RENAMED FROM MidiIn_BuildList_1A90, whose suffix was the list's RAM address.
+; Called from: MidiIn_RebuildPartLists.
+; Body:    `ld XIX,0x1A90 / ld DE,0x0800 / ld BC,0xFFFF / calr
+;          MidiIn_BuildPartList`, fifteen bytes at 0xFA8292.
+; Evidence: TWO witnesses, independent of each other.
+;          1. change record 10 at 0xFA81A2 pairs this builder with
+;             MidiOut_CC0B_Expression in one 12-byte record: [0:4] is this address.
+;          2. MidiOut_CC0B_Expression's own `ld XIZ,0x00001A90` at 0xFA77B1 walks THIS
+;             list, and 0x1A90 is this builder's own destination.
+; ---------------------------------------------------------------------
+
+MidiIn_BuildList_CC0BExpression:   ; entry: call from 0xFA81F8
 	ld XIX,0x00001a90                             ; FA8292  44 90 1a 00 00
 	ldw de, 0x0800                                ; FA8297  32 00 08   ld DE,0x0800
 	ldw bc, 0xffff                                ; FA829A  31 ff ff   ld BC,0xffff
@@ -59782,10 +60382,10 @@ MidiOut_ParamNumberTable:
 	.long 0x00FA764F                            ; FA8F80  [174]   -> MidiOut_CC78_AllSoundOff
 	.long 0x00FA7129                            ; FA8F84  [175]   -> MidiOut_Param_Ignore
 	.long 0x00FA767D                            ; FA8F88  [176]   -> sub_FA767D
-	.long 0x00FA767E                            ; FA8F8C  [177]   -> sub_FA767E
+	.long 0x00FA767E                            ; FA8F8C  [177]   -> MidiOut_PitchBend
 	.long 0x00FA771D                            ; FA8F90  [178]   -> MidiOut_CC01_Modulation
 	.long 0x00FA778B                            ; FA8F94  [179]   -> MidiOut_CC0B_Expression
-	.long 0x00FA77FA                            ; FA8F98  [180]   -> sub_FA77FA
+	.long 0x00FA77FA                            ; FA8F98  [180]   -> MidiOut_ChannelPressure
 	.long 0x00FA7891                            ; FA8F9C  [181]   -> MidiOut_CC40_Hold
 	.long 0x00FA7129                            ; FA8FA0  [182]   -> MidiOut_Param_Ignore
 	.long 0x00FA7129                            ; FA8FA4  [183]   -> MidiOut_Param_Ignore
@@ -59807,7 +60407,7 @@ MidiOut_IndexToControllerNumber:
 ; --- 0xFA8FF8-0xFA9C77  RAM-address table (3200 bytes) ---
 
 ; ---------------------------------------------------------------------
-; MidiOut_PartRecordPtrs_00 .. _24 -- 25 tables of 32 part-record pointers
+; The 25 MidiOut_PartRecordPtrs_* -- 25 tables of 32 part-record pointers
 ;
 ; Read by: 29 distinct instructions.  Block 00 is named at 5 sites (0xFA71D3, 0xFA7416, 0xFA745E, 0xFA74A6, 0xFA7561)
 ;          and each of the other 24 blocks at exactly one; check B1 asserts
@@ -60358,7 +60958,22 @@ MidiOut_PartRecordPtrs_CC78AllSoundOff:
 	.long 0x00007E2F                            ; FA956C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9570  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9574  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_11:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_PitchBend -- 32 part-record pointers,
+;                           the copy MidiOut_PitchBend__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_11.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA9578` at 0xFA76C6, inside MidiOut_PitchBend__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_PitchBend:
 	.long 0x000076AF                            ; FA9578  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA957C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9580  [2]   RAM 0x772F
@@ -60391,7 +61006,22 @@ MidiOut_PartRecordPtrs_11:
 	.long 0x00007E2F                            ; FA95EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA95F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA95F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_12:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC01Modulation -- 32 part-record pointers,
+;                           the copy MidiOut_CC01_Modulation__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_12.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA95F8` at 0xFA7765, inside MidiOut_CC01_Modulation__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC01Modulation:
 	.long 0x000076AF                            ; FA95F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA95FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9600  [2]   RAM 0x772F
@@ -60424,7 +61054,22 @@ MidiOut_PartRecordPtrs_12:
 	.long 0x00007E2F                            ; FA966C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9670  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9674  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_13:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC0BExpression -- 32 part-record pointers,
+;                           the copy MidiOut_CC0B_Expression__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_13.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA9678` at 0xFA77D3, inside MidiOut_CC0B_Expression__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC0BExpression:
 	.long 0x000076AF                            ; FA9678  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA967C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9680  [2]   RAM 0x772F
@@ -60457,7 +61102,22 @@ MidiOut_PartRecordPtrs_13:
 	.long 0x00007E2F                            ; FA96EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA96F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA96F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_14:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_ChannelPressure -- 32 part-record pointers,
+;                           the copy MidiOut_ChannelPressure__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_14.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA96F8` at 0xFA7842, inside MidiOut_ChannelPressure__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_ChannelPressure:
 	.long 0x000076AF                            ; FA96F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA96FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9700  [2]   RAM 0x772F
@@ -60490,7 +61150,22 @@ MidiOut_PartRecordPtrs_14:
 	.long 0x00007E2F                            ; FA976C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9770  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9774  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_15:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC40Hold -- 32 part-record pointers,
+;                           the copy MidiOut_CC40_Hold__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_15.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA9778` at 0xFA78D9, inside MidiOut_CC40_Hold__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC40Hold:
 	.long 0x000076AF                            ; FA9778  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA977C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9780  [2]   RAM 0x772F
@@ -60523,6 +61198,19 @@ MidiOut_PartRecordPtrs_15:
 	.long 0x00007E2F                            ; FA97EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA97F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA97F4  [31]   RAM 0x7EAF
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_16 -- 32 part-record pointers, READ ONLY BY DEAD CODE
+;
+; ★ DELIBERATELY STILL FRAMED, and that is this round's measured refusal.
+;          Its one reader is sub_FA78FF, which nothing in either of CPU 1's
+;          ROMs reaches and whose send index maps to 0xFF.  A name taken from
+;          that reader would state a send index and nothing else, and a send
+;          index has no referent outside this ROM's own tables.  The other
+;          eleven blocks in this address range ARE named this round; these two
+;          are the two that are not.  See the header above sub_FA78FF.
+; Read by: `ld XIX,0xFA97F8` at 0xFA790E, and nothing else.
+; ---------------------------------------------------------------------
+
 MidiOut_PartRecordPtrs_16:
 	.long 0x000076AF                            ; FA97F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA97FC  [1]   RAM 0x76EF
@@ -60556,6 +61244,19 @@ MidiOut_PartRecordPtrs_16:
 	.long 0x00007E2F                            ; FA986C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9870  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9874  [31]   RAM 0x7EAF
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_17 -- 32 part-record pointers, READ ONLY BY DEAD CODE
+;
+; ★ DELIBERATELY STILL FRAMED, and that is this round's measured refusal.
+;          Its one reader is sub_FA792F, which nothing in either of CPU 1's
+;          ROMs reaches and whose send index maps to 0xFF.  A name taken from
+;          that reader would state a send index and nothing else, and a send
+;          index has no referent outside this ROM's own tables.  The other
+;          eleven blocks in this address range ARE named this round; these two
+;          are the two that are not.  See the header above sub_FA792F.
+; Read by: `ld XIX,0xFA9878` at 0xFA793E, and nothing else.
+; ---------------------------------------------------------------------
+
 MidiOut_PartRecordPtrs_17:
 	.long 0x000076AF                            ; FA9878  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA987C  [1]   RAM 0x76EF
@@ -60589,7 +61290,22 @@ MidiOut_PartRecordPtrs_17:
 	.long 0x00007E2F                            ; FA98EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA98F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA98F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_18:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC10RTCreatX -- 32 part-record pointers,
+;                           the copy MidiOut_CC10_RTCreatX__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_18.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA98F8` at 0xFA79A7, inside MidiOut_CC10_RTCreatX__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC10RTCreatX:
 	.long 0x000076AF                            ; FA98F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA98FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9900  [2]   RAM 0x772F
@@ -60622,7 +61338,22 @@ MidiOut_PartRecordPtrs_18:
 	.long 0x00007E2F                            ; FA996C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9970  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9974  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_19:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC11RTCreatY -- 32 part-record pointers,
+;                           the copy MidiOut_CC11_RTCreatY__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_19.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA9978` at 0xFA7A15, inside MidiOut_CC11_RTCreatY__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC11RTCreatY:
 	.long 0x000076AF                            ; FA9978  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA997C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9980  [2]   RAM 0x772F
@@ -60655,7 +61386,22 @@ MidiOut_PartRecordPtrs_19:
 	.long 0x00007E2F                            ; FA99EC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA99F0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA99F4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_20:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC12RTCtrlX -- 32 part-record pointers,
+;                           the copy MidiOut_CC12_RTCtrlX__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_20.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA99F8` at 0xFA7A83, inside MidiOut_CC12_RTCtrlX__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC12RTCtrlX:
 	.long 0x000076AF                            ; FA99F8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA99FC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9A00  [2]   RAM 0x772F
@@ -60688,7 +61434,22 @@ MidiOut_PartRecordPtrs_20:
 	.long 0x00007E2F                            ; FA9A6C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9A70  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9A74  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_21:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC13RTCtrlY -- 32 part-record pointers,
+;                           the copy MidiOut_CC13_RTCtrlY__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_21.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA9A78` at 0xFA7AF1, inside MidiOut_CC13_RTCtrlY__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC13RTCtrlY:
 	.long 0x000076AF                            ; FA9A78  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA9A7C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9A80  [2]   RAM 0x772F
@@ -60721,7 +61482,22 @@ MidiOut_PartRecordPtrs_21:
 	.long 0x00007E2F                            ; FA9AEC  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9AF0  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9AF4  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_22:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC02Modulation2 -- 32 part-record pointers,
+;                           the copy MidiOut_CC02_Modulation2__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_22.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA9AF8` at 0xFA7B5F, inside MidiOut_CC02_Modulation2__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC02Modulation2:
 	.long 0x000076AF                            ; FA9AF8  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA9AFC  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9B00  [2]   RAM 0x772F
@@ -60754,7 +61530,22 @@ MidiOut_PartRecordPtrs_22:
 	.long 0x00007E2F                            ; FA9B6C  [29]   RAM 0x7E2F
 	.long 0x00007E6F                            ; FA9B70  [30]   RAM 0x7E6F
 	.long 0x00007EAF                            ; FA9B74  [31]   RAM 0x7EAF
-MidiOut_PartRecordPtrs_23:
+; ---------------------------------------------------------------------
+; MidiOut_PartRecordPtrs_CC04CtrlPedal -- 32 part-record pointers,
+;                           the copy MidiOut_CC04_CtrlPedal__partgate loads
+;
+; ★ RENAMED FROM MidiOut_PartRecordPtrs_23.  All 25 blocks are BYTE-IDENTICAL, so the
+;          number in the old name said only "the Nth in address order".  What
+;          distinguishes this block is the routine that loads it, and that
+;          routine now has a name -- which is exactly the condition round 4's
+;          --gaps set: "Name those eleven routines and these eleven tables
+;          name themselves."
+; Read by: `ld XIX,0xFA9B78` at 0xFA7BCD, inside MidiOut_CC04_CtrlPedal__partgate, and
+;          nowhere else in either of CPU 1's ROMs.
+; Evidence: check X4 re-derives the reader of every one of the 25 blocks.
+; ---------------------------------------------------------------------
+
+MidiOut_PartRecordPtrs_CC04CtrlPedal:
 	.long 0x000076AF                            ; FA9B78  [0]   RAM 0x76AF
 	.long 0x000076EF                            ; FA9B7C  [1]   RAM 0x76EF
 	.long 0x0000772F                            ; FA9B80  [2]   RAM 0x772F
@@ -66551,9 +67342,10 @@ ParamShadow_SetExpression:
 ;          `ld (XIX+B),DE` at 0xFAD880; ParamShadow_FlushAll reads the pair
 ;          back with `ld WA,(XIY+HL)` at 0xFADAC3 and emits
 ;          {0xB1, index, A, W}.
-; ★ WHY "PITCH BEND", and this one is weaker than the other two -- it has
-;          no named handler to borrow from, so it is spelled out:
-;          1. MidiOut_ParamNumberTable[0xB1] is sub_FA767E, and the code
+; ★ WHY "PITCH BEND".  Round 4 called this the weakest of the three
+;          because its handler had no name to borrow.  It has one now,
+;          and round 4's three arguments stand unchanged below:
+;          1. MidiOut_ParamNumberTable[0xB1] is MidiOut_PitchBend, and the code
 ;             that routine reaches builds its MIDI status byte with
 ;             `and A,0x0f` at 0xFA7703 and `or A,0xe0` at 0xFA7706 and sets a
 ;             three-byte length with `ld DE,0x0300` at 0xFA76F5.  0xEn is
@@ -66568,8 +67360,15 @@ ParamShadow_SetExpression:
 ;          0xFA7612 and `or A,0xd0` at 0xFA7882 -- program change and
 ;          channel pressure -- so the idiom is the status-byte builder and
 ;          not a coincidence (check V1).
-; Unknown:  sub_FA767E itself is still unnamed; naming it would retire
-;          MidiOut_ChangeRecord_09's positional suffix as well.
+; ★ CLOSED, round 12.  This Unknown line read "sub_FA767E itself is still
+;          unnamed; naming it would retire MidiOut_ChangeRecord_09's
+;          positional suffix as well".  Both happened: 0xFA767E is
+;          MidiOut_PitchBend and the record is MidiOut_ChangeRecord_PitchBend.
+;          ★ The two derivations are INDEPENDENT and they agree -- round 4
+;          argued pitch bend from the parameter shadow's width and the 0x4000
+;          reset value, round 12 from the status byte, the message length, the
+;          inbound caller and the change record.  Neither was written from the
+;          other; notes/prom_a_panel_names_round11.py --midi prints round 12's.
 ; ---------------------------------------------------------------------
 ParamShadow_SetPitchBend:
 	cp B,0x1f

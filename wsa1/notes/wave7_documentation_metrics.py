@@ -96,6 +96,17 @@ EV_ADDRS = {}
 # ⚠ The denominator changed when this was fixed, so figures from earlier rounds are
 # not comparable to later ones. Both are printed.
 INTERNAL = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*__[0-9A-Fa-f]{4,6}$')
+# ★★ AND THE DESCRIPTIVE ONES ARE BRANCH TARGETS TOO. Round 12's prom_c lane
+# measured that 168 labels of the form Parent__word -- RESET__clear_iram,
+# DSP_ChannelRegs_Init__loop -- were being counted in the CONTENT column, 19.3%
+# of prom_c's content total. When the hex-suffixed form was excluded in round 9
+# the descriptive form was deliberately KEPT as content, on the grounds that it
+# says what the branch is for. That was half right and half wrong: it IS
+# documentation, but it is not an OBJECT awaiting a name, so scoring it beside
+# DSP_ChanFreq_CurvePool conflates a landmark inside a routine with the routine.
+# They now have their own column. This LOWERS the content percentage, which is
+# the correct direction for a measurement that was flattering.
+DESCRIPTIVE_BRANCH = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*__[A-Za-z][A-Za-z0-9_]*$')
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
 UNNAMED = re.compile(r'^sub_[0-9A-Fa-f]{6}$')
 # A "framed" name is a structural kind with an address glued on, in any of the
@@ -121,7 +132,7 @@ ADDR_COMMENT = re.compile(r';\s*([0-9A-F]{6})\b')
 def scan(path, want_ev=False):
     """Walk the source once, classifying every label and the comment block above it."""
     lines = open(os.path.join(ROOT, path)).read().split("\n")
-    named, framed, unnamed, internal, with_header, with_evidence = [], [], [], [], 0, 0
+    named, framed, unnamed, internal, branch, with_header, with_evidence = [], [], [], [], [], 0, 0
     run = 0                      # consecutive comment lines above
     blanks = 0                   # blank lines seen since the comment run ended
     last_addr = None
@@ -147,6 +158,8 @@ def scan(path, want_ev=False):
             name = lm.group(1)
             if INTERNAL.match(name):
                 internal.append((name, last_addr))
+            elif DESCRIPTIVE_BRANCH.match(name):
+                branch.append((name, last_addr))
             elif UNNAMED.match(name):
                 unnamed.append((name, last_addr))
             elif FRAMED.match(name):
@@ -159,7 +172,7 @@ def scan(path, want_ev=False):
                 with_evidence += 1
                 EV_ADDRS.setdefault(path, set()).add(last_addr)
         run, ev_in_block, blanks = 0, False, 0
-    return named, framed, unnamed, internal, with_header, with_evidence
+    return named, framed, unnamed, internal, branch, with_header, with_evidence
 
 
 def report(rng=None):
@@ -168,8 +181,8 @@ def report(rng=None):
           % ("image", "content", "framed", "sub_XXXX", "LOWER", "UPPER", "headers", "evidence",
              "internal"))
     for tag, src, _base in IMAGES:
-        named, framed, unnamed, internal, hdr, ev = scan(os.path.join(tag, src))
-        n, f, u, il = len(named), len(framed), len(unnamed), len(internal)
+        named, framed, unnamed, internal, branch, hdr, ev = scan(os.path.join(tag, src))
+        n, f, u, il = len(named), len(framed), len(unnamed), len(internal) + len(branch)
         ti += il
         tn, tf, tu, th, te = tn + n, tf + f, tu + u, th + hdr, te + ev
         tot = n + f + u
@@ -183,9 +196,12 @@ def report(rng=None):
           % ("TOTAL", format(tn, ","), format(tf, ","), format(tu, ","),
              100.0 * tn / tot if tot else 0.0, 100.0 * (tn + tf) / tot if tot else 0.0,
              format(th, ","), format(te, ","), format(ti, ",")))
-    print("\n  'internal' = <parent>__<address> branch targets, EXCLUDED from the")
-    print("  percentages. They are jump destinations inside a routine, not objects")
-    print("  awaiting a name -- the same reason .L locals are excluded.")
+    print("\n  'internal' = <parent>__<address> AND <parent>__<word> branch targets,")
+    print("  EXCLUDED from the percentages. Both are jump destinations inside a routine,")
+    print("  not objects awaiting a name -- the same reason .L locals are excluded.")
+    print("  ⚠ The DESCRIPTIVE form was counted as content until round 12, when prom_c's")
+    print("  lane measured 168 of them, 19.3% of that image's content column. Excluding")
+    print("  them LOWERS every content figure, which is the correct direction.")
     print("\n★ LOWER and UPPER BRACKET how much of the tree is UNDERSTOOD; neither alone is")
     print("  the answer, and the gap between them is the work of deciding what a name claims.")
     print("  LOWER treats every label whose distinguishing part is a number as merely FRAMED;")
@@ -199,7 +215,7 @@ def report(rng=None):
 def in_range(tag, lo, hi):
     key = tag if tag.startswith("prom_") else "prom_" + tag
     src = dict((t, s) for t, s, _b in IMAGES)[key]
-    named, framed, unnamed, _il, _h, _e = scan(os.path.join(key, src))
+    named, framed, unnamed, _il, _br, _h, _e = scan(os.path.join(key, src))
     n = [x for x in named if x[1] is not None and lo <= x[1] < hi]
     fr = [x for x in framed if x[1] is not None and lo <= x[1] < hi]
     u = [x for x in unnamed if x[1] is not None and lo <= x[1] < hi]
@@ -220,7 +236,7 @@ def selftest():
 
     tot_u = 0
     for tag, src, _b in IMAGES:
-        named, framed, unnamed, _il, hdr, ev = scan(os.path.join(tag, src))
+        named, framed, unnamed, _il, _br, hdr, ev = scan(os.path.join(tag, src))
         tot_u += len(unnamed)
         check("%s: every 'unnamed' really matches sub_ + 6 hex" % tag,
               all(UNNAMED.match(n) for n, _a in unnamed))
@@ -282,10 +298,18 @@ def selftest():
                "P7Unit_EmitChangedParams__FB0011"):
         check("classifier: %s is an INTERNAL branch target, excluded" % nm,
               bool(INTERNAL.match(nm)))
+    # ⚠ ROUND 12 REVERSED THIS. These were counted as CONTENT until prom_c's lane
+    # measured 168 of them, 19.3% of that image's content column. They document a
+    # branch, but they are not objects awaiting a name.
     for nm in ("RESET__clear_iram", "DSP_ChannelRegs_Init__loop",
                "SeqBuf_AppendMarker__done", "Kernel_InitRam__ready_queues"):
-        check("classifier: %s is a DESCRIPTIVE branch label -- still counted" % nm,
-              not INTERNAL.match(nm) and not FRAMED.match(nm) and not UNNAMED.match(nm))
+        check("classifier: %s is a DESCRIPTIVE branch label -- EXCLUDED, not content" % nm,
+              bool(DESCRIPTIVE_BRANCH.match(nm)) and not FRAMED.match(nm))
+    _br = 0
+    for _t, _s, _b in IMAGES:
+        _br += len(scan(os.path.join(_t, _s))[4])
+    check("descriptive branch labels excluded tree-wide: %s (prom_c's lane measured 168)"
+          % format(_br, ","), _br > 150)
     _tot_int = 0
     for _t, _s, _b in IMAGES:
         _tot_int += len(scan(os.path.join(_t, _s))[3])

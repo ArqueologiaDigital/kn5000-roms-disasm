@@ -366,6 +366,120 @@ def H(addr, *lines):
     HEADERS[addr] = list(lines)
 
 
+# ---- ⚠⚠ NAMES THAT LIVE IN THE .s AND WOULD BE REVERTED BY A RE-EMIT ----
+#
+# Measured 2026-08-30 (round 12): 82 labels in the address range this file
+# emits are spelled differently in prom_a/wsa1_prom_a.s than the generators
+# above produce.  FORTY-THREE of them predate round 12 -- round 4's
+# controller renames (CC40_Damper -> CC40_Hold, CC02_Breath ->
+# CC02_Modulation2, CC10_General1 -> CC10_RTCreatX and their siblings, each
+# argued from the instrument's own on-screen list at 0xFA2C13), the eleven
+# MidiOut_ChangeRecord_* and the eleven MidiOut_PartRecordPtrs_* that were
+# named from their readers.  Every one of those was applied to the LISTING
+# ONLY, so `python3 notes/gen_prom_a_fa5aeb_module.py | insert_region` would
+# have silently put the positional spellings back and the byte gate would
+# have passed.  Round 9 already paid for this exact mistake once and wrote
+# "THE FIX IS IN THE NAMES TABLE, NOT ONLY IN THE .s"; this is that fix, for
+# the whole span rather than for one name.
+#
+# ★ HOW TO REGENERATE THIS TABLE rather than hand-edit it: emit the module,
+# diff its labels against the .s over 0xFA5AEB-0xFAA000, and list every
+# address where they disagree.  Check A9 below re-runs the comparison the
+# cheap way -- it asserts that every address here is still inside the span
+# and that no two entries collide -- and
+# notes/prom_a_panel_names_round11.py --midi re-derives the round-12 half of
+# it from MidiOut_ChangeRecordTable, from six agreeing readings.
+#
+# ⚠ The HEADERS above are NOT overridden here.  They still spell the old
+# names in their prose, and the .s carries the corrected prose; a re-emit
+# would restore stale sentences even with the labels right.  That is a
+# smaller and louder failure than a silent rename, and it is stated rather
+# than half-fixed.
+LABELS_FROM_LISTING = {
+0xFA645B: "MidiIn_CC40_Hold",
+0xFA67E8: "MidiIn_CC02_Modulation2",
+0xFA6872: "MidiIn_CC04_CtrlPedal",
+0xFA68FC: "MidiIn_CC10_RTCreatX",
+0xFA6986: "MidiIn_CC11_RTCreatY",
+0xFA6A10: "MidiIn_CC12_RTCtrlX",
+0xFA6A9A: "MidiIn_CC13_RTCtrlY",
+0xFA767E: "MidiOut_PitchBend",
+0xFA76BD: "MidiOut_PitchBend__partgate",
+0xFA76EE: "MidiOut_PitchBend__emit",
+0xFA775C: "MidiOut_CC01_Modulation__partgate",
+0xFA77CA: "MidiOut_CC0B_Expression__partgate",
+0xFA77FA: "MidiOut_ChannelPressure",
+0xFA7839: "MidiOut_ChannelPressure__partgate",
+0xFA786A: "MidiOut_ChannelPressure__emit",
+0xFA7891: "MidiOut_CC40_Hold",
+0xFA78D0: "MidiOut_CC40_Hold__partgate",
+0xFA78F5: "MidiOut_CC40_Hold__emit",
+0xFA78FF: "sub_FA78FF",   # NEW LABEL in the .s
+0xFA792F: "sub_FA792F",   # NEW LABEL in the .s
+0xFA795F: "MidiOut_CC10_RTCreatX",
+0xFA799E: "MidiOut_CC10_RTCreatX__partgate",
+0xFA79C3: "MidiOut_CC10_RTCreatX__emit",
+0xFA79CD: "MidiOut_CC11_RTCreatY",
+0xFA7A0C: "MidiOut_CC11_RTCreatY__partgate",
+0xFA7A31: "MidiOut_CC11_RTCreatY__emit",
+0xFA7A3B: "MidiOut_CC12_RTCtrlX",
+0xFA7A7A: "MidiOut_CC12_RTCtrlX__partgate",
+0xFA7A9F: "MidiOut_CC12_RTCtrlX__emit",
+0xFA7AA9: "MidiOut_CC13_RTCtrlY",
+0xFA7AE8: "MidiOut_CC13_RTCtrlY__partgate",
+0xFA7B0D: "MidiOut_CC13_RTCtrlY__emit",
+0xFA7B17: "MidiOut_CC02_Modulation2",
+0xFA7B56: "MidiOut_CC02_Modulation2__partgate",
+0xFA7B7B: "MidiOut_CC02_Modulation2__emit",
+0xFA7B85: "MidiOut_CC04_CtrlPedal",
+0xFA7BC4: "MidiOut_CC04_CtrlPedal__partgate",
+0xFA7BE9: "MidiOut_CC04_CtrlPedal__emit",
+0xFA812A: "MidiOut_ChangeRecord_CC01Modulation",
+0xFA8136: "MidiOut_ChangeRecord_CC02Modulation2",
+0xFA8142: "MidiOut_ChangeRecord_CC04CtrlPedal",
+0xFA814E: "MidiOut_ChangeRecord_CC10RTCreatX",
+0xFA815A: "MidiOut_ChangeRecord_CC11RTCreatY",
+0xFA8166: "MidiOut_ChangeRecord_CC12RTCtrlX",
+0xFA8172: "MidiOut_ChangeRecord_CC13RTCtrlY",
+0xFA817E: "MidiOut_ChangeRecord_CC40Hold",
+0xFA818A: "MidiOut_ChangeRecord_ChannelPressure",
+0xFA8196: "MidiOut_ChangeRecord_PitchBend",
+0xFA81A2: "MidiOut_ChangeRecord_CC0BExpression",
+0xFA81FC: "MidiIn_BuildList_PitchBend",
+0xFA820B: "MidiIn_BuildList_CC01Modulation",
+0xFA821A: "MidiIn_BuildList_ChannelPressure",
+0xFA8229: "MidiIn_BuildList_CC40Hold",
+0xFA8238: "MidiIn_BuildList_CC10RTCreatX",
+0xFA8247: "MidiIn_BuildList_CC11RTCreatY",
+0xFA8256: "MidiIn_BuildList_CC12RTCtrlX",
+0xFA8265: "MidiIn_BuildList_CC13RTCtrlY",
+0xFA8274: "MidiIn_BuildList_CC02Modulation2",
+0xFA8283: "MidiIn_BuildList_CC04CtrlPedal",
+0xFA8292: "MidiIn_BuildList_CC0BExpression",
+0xFA9078: "MidiOut_PartRecordPtrs_CC07Volume",
+0xFA90F8: "MidiOut_PartRecordPtrs_CC5DEffect3Depth",
+0xFA9178: "MidiOut_PartRecordPtrs_CC5EEffect4Depth",
+0xFA91F8: "MidiOut_PartRecordPtrs_CC5BEffect1Depth",
+0xFA9278: "MidiOut_PartRecordPtrs_CC0APan",
+0xFA92F8: "MidiOut_PartRecordPtrs_Rpn02CoarseTune",
+0xFA9378: "MidiOut_PartRecordPtrs_Rpn01FineTune",
+0xFA93F8: "MidiOut_PartRecordPtrs_Rpn00PitchBendRange",
+0xFA9478: "MidiOut_PartRecordPtrs_CC79ResetAllCtrl",
+0xFA94F8: "MidiOut_PartRecordPtrs_CC78AllSoundOff",
+0xFA9578: "MidiOut_PartRecordPtrs_PitchBend",
+0xFA95F8: "MidiOut_PartRecordPtrs_CC01Modulation",
+0xFA9678: "MidiOut_PartRecordPtrs_CC0BExpression",
+0xFA96F8: "MidiOut_PartRecordPtrs_ChannelPressure",
+0xFA9778: "MidiOut_PartRecordPtrs_CC40Hold",
+0xFA98F8: "MidiOut_PartRecordPtrs_CC10RTCreatX",
+0xFA9978: "MidiOut_PartRecordPtrs_CC11RTCreatY",
+0xFA99F8: "MidiOut_PartRecordPtrs_CC12RTCtrlX",
+0xFA9A78: "MidiOut_PartRecordPtrs_CC13RTCtrlY",
+0xFA9AF8: "MidiOut_PartRecordPtrs_CC02Modulation2",
+0xFA9B78: "MidiOut_PartRecordPtrs_CC04CtrlPedal",
+0xFA9BF8: "MidiOut_PartRecordPtrs_CC51General6",
+}
+
 def structure():
     """Assign every label and header.  Called once, before emission."""
     if LABELS:
@@ -976,7 +1090,7 @@ def structure():
     for _i in range(PTAB_N[0xFA80FE]):
         LABELS[0xFA812A + 12 * _i] = "MidiOut_ChangeRecord_%02d" % _i
     H(0xFA812A,
-      "MidiOut_ChangeRecord_00 .. _10 -- eleven 12-byte records",
+      "The eleven MidiOut_ChangeRecord_* -- eleven 12-byte records",
       "",
       "Read by: MidiOut_RunChangeRecord, through MidiOut_ChangeRecordTable.",
       "Layout:  [0:4] a routine called with a 32-bit part mask, [4:8] a routine",
@@ -988,9 +1102,16 @@ def structure():
       "         0x0C apart, so the stride is the table's own arithmetic; 11 * 12",
       "         = 132 = 0xFA81AE - 0xFA812A, and 0xFA81AE is",
       "         MidiIn_RebuildPartLists, which prom_b names.  Both ends pinned.",
-      "⚠ Indices 8 and 9 are never produced by MidiOut_ChangeIndexMap (its live",
-      "  values are 0,1,2,3,4,5,6,7,10), so two of the eleven records are",
-      "  unreachable through that map.  Stated, not explained.")
+      "★ Indices 8 and 9 are never produced by MidiOut_ChangeIndexMap (its live",
+      "  values are 0,1,2,3,4,5,6,7,10), and round 12 EXPLAINS it: that map's nine",
+      "  non-0xFF cells sit at map indices 0x01,0x02,0x04,0x0B,0x10,0x11,0x12,0x13",
+      "  and 0x40, exactly the nine CONTROLLER NUMBERS of the nine records they",
+      "  select, so the index is a controller number -- and records 8 and 9 are",
+      "  MidiOut_ChangeRecord_ChannelPressure and MidiOut_ChangeRecord_PitchBend,",
+      "  two channel messages that have no controller number.  They are reached",
+      "  from MidiIn_ChannelPressure and MidiIn_PitchBend instead.",
+      "⚠ NOT the same 8 and 9 as the two dead indices of",
+      "  MidiOut_IndexToControllerNumber; different table, different index rule.")
 
     LABELS[0xFA81AE] = "MidiIn_RebuildPartLists"
     H(0xFA81AE,
@@ -1089,7 +1210,7 @@ def structure():
         b = PARTTAB_BASE + k * 4 * PARTTAB_N
         LABELS[b] = "MidiOut_PartRecordPtrs_%02d" % k
     H(PARTTAB_BASE,
-      "MidiOut_PartRecordPtrs_00 .. _24 -- 25 tables of 32 part-record pointers",
+      "The 25 MidiOut_PartRecordPtrs_* -- 25 tables of 32 part-record pointers",
       "",
       "Read by: %d distinct instructions.  Block 00 is named at %d sites (%s)"
       % (sum(len(named.get(PARTTAB_BASE + 128 * k, ())) for k in range(25)),
@@ -1189,15 +1310,25 @@ def structure():
         LABELS[a2] = "MidiIn_BuildList_%04X" % w32(a2 + 1)
     if _ven:
         H(_ven[0],
-          "MidiIn_BuildList_19F0 .. _1A90 -- eleven fifteen-byte veneers",
+          "The eleven MidiIn_BuildList_* -- eleven fifteen-byte veneers",
           "",
           "Called from: MidiIn_RebuildPartLists, one `calr` each, in this order;",
           "         three of them are also called directly from sub_FA7E37.",
           "Layout:  `ld XIX,<list>` / `ld DE,<offset:mask>` / `ld BC,<mask pair>`",
           "         / `calr MidiIn_BuildPartList` / `ret`, fifteen bytes, and the",
           "         eleven list addresses are 0x19F0 in steps of 0x10.",
-          "Evidence: each veneer's name is taken from the 32-bit immediate of its",
-          "         own first instruction, not assigned by hand (check R2).",
+          "★ WITHDRAWN, round 12: this header used to end \"each veneer's name is",
+          "         taken from the 32-bit immediate of its own first instruction, not",
+          "         assigned by hand\".  That was true of the OLD names",
+          "         MidiIn_BuildList_19F0.._1A90 and is FALSE of the ones the listing",
+          "         now carries: each veneer is named for the outbound handler that",
+          "         walks the list it fills, paired by MidiOut_ChangeRecordTable.  See",
+          "         LABELS_FROM_LISTING below.  check R2 pins the eleven ADDRESSES",
+          "         and is unaffected.",
+          "Evidence: notes/prom_a_panel_names_round11.py --midi prints, for each of",
+          "         the eleven, the change record that pairs the veneer with the",
+          "         handler AND the handler's own `ld XIZ` at the same list address --",
+          "         two witnesses per pairing, 11 of 11 (its checks X2 and X3).",
           "⚠ MidiIn_ModuleReset clears only the first TEN; 0x1A90 is not in",
           "  MidiIn_ResetPointerTable.  Check R1.")
 
@@ -1369,6 +1500,11 @@ def structure():
           "%s -- 32 LE16 parameter ids, one per part" % LABELS[a2],
           "",
           "Read by: %s, its only reader." % who)
+
+    # ---- round 12: the listing's names win over the generated ones -------
+    # (the table and its argument are at module scope, above structure())
+    for _a2, _n in LABELS_FROM_LISTING.items():
+        LABELS[_a2] = _n
 
 # ------------------------------------------------------------------- emission
 _SLOT = re.compile(r"^(.*)\[(\d+)\]$")
@@ -1729,15 +1865,28 @@ def selftest():
                       and t.startswith("calr")]), 11)
     print("S. the census this file ships")
     sem = sum(1 for v in LABELS.values() if not v.startswith("sub_"))
-    bad += check("S1 labels", len(LABELS), 227)
-    bad += check("S1 of which semantic", sem, 192)
+    # ⚠ RE-PINNED IN ROUND 12, and the reason is stated so the new numbers are
+    # not a tolerance chosen to pass.  LABELS_FROM_LISTING adds the two labels
+    # this file never had (sub_FA78FF, sub_FA792F) and turns fifteen sub_XXXXXX
+    # into content names, so 227 -> 229 and 192 -> 207 = 192 + 15.  The
+    # DECOMPOSITION is asserted below, not just the totals, because a bare
+    # constant bumped until it passes is not a check.
+    bad += check("S1 labels", len(LABELS), 229)
+    bad += check("S1 of which semantic", sem, 207)
+    bad += check("S1 and the two non-semantic ADDITIONS are the two dead gates",
+                 sorted(a2 for a2, v in LABELS_FROM_LISTING.items()
+                        if v.startswith("sub_")), [0xFA78FF, 0xFA792F])
     bad += check("S1 routine/object headers", len(HEADERS), 122)
     bad += check("S1 semantic labels with an Evidence: line in their header",
                  sum(1 for a2, h in HEADERS.items()
                      if not LABELS.get(a2, "sub_").startswith("sub_")
                      and any(l.startswith("Evidence:") for l in h)), 100)
-    bad += check("S2 `__emit` tails -- one per round-B promotion, = check E's 9",
-                 sum(1 for v in LABELS.values() if v.endswith("__emit")), 9)
+    _emits = sorted(v for v in LABELS.values() if v.endswith("__emit"))
+    bad += check("S2 `__emit` tails: check E's 9 controller echoes PLUS the two "
+                 "that post a staged message", len(_emits), 11)
+    bad += check("S2 and those two are exactly PitchBend and ChannelPressure",
+                 [v for v in _emits if "CC" not in v],
+                 ["MidiOut_ChannelPressure__emit", "MidiOut_PitchBend__emit"])
     print("L. every citation is at an INSTRUCTION, not at an operand")
     n, off = 0, 0
     for v in sorted(set(named) | set(calls)):

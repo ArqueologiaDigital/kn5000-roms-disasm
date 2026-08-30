@@ -279,6 +279,34 @@ if _got11 != _R8.AUDITED_R11:
     sys.exit("REFUSING TO EMIT: M10 now names %s; audited as %s.  Re-audit with "
              "notes/prom_d_inventory_round8.py Q22 before regenerating."
              % (_got11, _R8.AUDITED_R11))
+# ---------------------------------------------------------------------------
+# ★★ WAVE 7 ROUND 12.  THE COMPLETE INVENTORY OF WHAT IS STILL FRAMED, plus the
+# two mechanisms nobody had run and the one cross-image find this round refused
+# to spend.  notes/prom_d_finish_round12.py, 35 checks.
+# ⚠ THE GUARD BELOW IS ON ROM FACTS, NOT ON A LABEL COUNT.  Round 6's Q8d was
+# pinned to a framed count and went RED the moment a later round promoted a
+# label -- a guard that punishes progress.  What is pinned here is the tail-only
+# rule's zero, the size of prom_b's name table, and the phase test's direction:
+# three things that must not move unless a ROM changed.
+# ---------------------------------------------------------------------------
+_spec12 = _ilu.spec_from_file_location(
+    "prom_d_finish_round12",
+    os.path.join(ROOT, "notes", "prom_d_finish_round12.py"))
+_R12 = _ilu.module_from_spec(_spec12)
+_saved_argv, sys.argv = sys.argv, ["prom_d_finish_round12", "--quiet"]
+try:
+    _spec12.loader.exec_module(_R12)
+finally:
+    sys.argv = _saved_argv
+_m11 = _R12.m11()
+_nm12, _n12, _pre12 = _R12.name_table()
+_ph12 = _R12.pair_phase()
+if (_m11[0], _m11[1]) != (0, 64) or _n12 != 64 or _pre12 or _ph12[2] < 0.85:
+    sys.exit("REFUSING TO EMIT: a round-12 ROM fact moved -- tail-only rule %s, "
+             "prom_b name table %d rows (row -1 printable: %s), phase AUC %.3f.  "
+             "Re-audit with notes/prom_d_finish_round12.py --selftest."
+             % (_m11[:2], _n12, _pre12, _ph12[2]))
+
 GRP_LABEL = _R8.group_labels()
 GRP_SETS = _R8.selector_groups()
 GRP_NAME = _R8.group_name
@@ -994,6 +1022,59 @@ def WAVESEL_GAP(slot):
             "     WHAT IS STILL OPEN: what a preset MEANS (nothing here reads audio",
             "     state) and every byte of the record except +0x0B.",
             "  notes/prom_d_understanding_round5.py Q1a, Q4d, Q7.",
+        ]
+        # ★★ ROUND 12.  Two measurements on THIS array specifically, and a
+        # candidate that is deliberately not spent.  All three numbers come out
+        # of notes/prom_d_finish_round12.py at generation time.
+        _r12h, _r12n, _r12pop, _r12c, _x = _R12.m11()
+        _r12e, _r12o, _r12auc, _y, _z = _R12.pair_phase()
+        _r12names, _r12n64, _r12pre = _R12.name_table()
+        _r12tabs = _R12.dl_mask3f_tables()
+        _r12mine = [t for t in _r12tabs
+                    if t[2] == _R12.PROM_B_BASE + _R12.NAME_TABLE]
+        lines += [
+            "",
+            "  4. ★ ROUND 12: THE TWIN RULE RUN ON THE 30 BYTES THAT ARE ACTUALLY",
+            "     COPIED.  Point 2's zero, and round 9's Q12, compared WHOLE records.",
+            "     A preset supplies only bytes 13..42 (prom_c 0xFBC7D9 sets i = 13,",
+            "     0xFBC7E3 reads the stride word 43 as the bound), so the head has",
+            "     nothing it must match.  Compared on those 30 bytes alone against",
+            "     the %s wave-select records that are NOT this array: %d of %d."
+            % (format(_r12pop, ","), _r12h, _r12n),
+            "     The test is not inert -- %s of those %s records DO share a tail"
+            % (format(_r12c, ","), format(_r12pop, ",")),
+            "     with another record.  This array shares none.",
+            "",
+            "  5. ★ ROUND 12: THIS ARRAY IS BUILT IN EVEN-ALIGNED PAIRS.  Over records",
+            "     38..63 the mean Hamming distance of a record to its neighbour is",
+            "     %.2f of 43 bytes when the lower index is EVEN and %.2f when it is"
+            % (_r12e, _r12o),
+            "     ODD (AUC %.3f).  A positive finding about the array's own bytes,"
+            % _r12auc,
+            "     and it is a PARITY witness only -- the shift sweep in Q32 scores",
+            "     every EVEN shift the same, so it says nothing about which record",
+            "     is which.",
+            "",
+            "  6. ⚠ ROUND 12: A CANDIDATE NAME SET EXISTS AND IS NOT USED.  prom_b",
+            "     0x%06X holds exactly %d rows of %d printable bytes"
+            % (_R12.PROM_B_BASE + _R12.NAME_TABLE, _r12n64, _R12.NAME_W),
+            "     (%r .. %r),"
+            % (_r12names[0].strip(), _r12names[_r12n64 - 1].strip()),
+            "     read by exactly %d display-list records on the consecutive"
+            % len(_r12mine),
+            "     variables %s, each masking with 0x%02X --"
+            % (" ".join("0x%04X" % t[1] for t in _r12mine), _R12.DL_MASK),
+            "     the same mask prom_c applies at 0xFBC744 before indexing THIS",
+            "     array; and rows 38..63 of it are 13 `X L` / `X H` pairs, on the",
+            "     parity point 5 measures.  If the panel variable is this record's",
+            "     +0x0B, all %d labels below are named at once." % _r12n,
+            "     ⚠⚠ AND NOTHING SHOWS THAT IT IS.  The panel variable is in one",
+            "     CPU's RAM at 0x2808..0x280B; +0x0B is in a 43-byte record in the",
+            "     other CPU's RAM at 0x87D2 + 43*n; no instruction in the four",
+            "     images has been shown to carry one into the other, and a second",
+            "     %d-row table is reached with the same mask.  The names are NOT"
+            % _r12n64,
+            "     applied.  notes/prom_d_finish_round12.py Q29, Q31, Q32.",
         ]
     else:
         lines += [
@@ -3589,19 +3670,147 @@ def _round11_header_lines():
     ])
 
 
+def _round12_header_lines():
+    """The round-12 block: the complete framed inventory, two refused mechanisms,
+    and one cross-image candidate this round deliberately did not spend.
+
+    Every number below is computed by notes/prom_d_finish_round12.py at
+    generation time.  Nothing here is typed."""
+    _fr = _R12.FRAMED
+    _fam = _R12.FAMILY
+    hits, n3c, pop, ctrl, _cn = _R12.m11()
+    props, agree, disagree, _conf, _runs, _r2r = _R12.m12()
+    sg = _R8.selector_groups()
+    both = [k for k in props if sg.get(k)]
+    names, n64, _pre = _R12.name_table()
+    tabs = _R12.dl_mask3f_tables()
+    mine = [t for t in tabs if t[2] == _R12.PROM_B_BASE + _R12.NAME_TABLE]
+    e, o, auc, _ne, _no = _R12.pair_phase()
+    d18 = _R12.framed_distinctness(0x18)
+    d20 = _R12.framed_distinctness(0x20)
+    other64 = sorted(set(t[2] for t in tabs if t[4] == n64
+                         and t[2] != _R12.PROM_B_BASE + _R12.NAME_TABLE))
+    return "\n".join([
+        ";",
+        "; " + "-" * 78,
+        "; \u2605\u2605 WAVE 7 ROUND 12 -- EVERY REMAINING FRAMED LABEL, WITH A REASON EACH",
+        "; " + "-" * 78,
+        ";",
+        "; Rounds 4-11 each measured something new.  What this image did not have is",
+        "; the thing a FINISHED image needs: one table that names every object still",
+        "; carrying a kind-plus-a-number and states, per object, why.  Round 12 is",
+        "; that table -- %s objects in %d families, a reason DERIVED for each, and one"
+        % (format(len(_fr), ","), len(_fam)),
+        "; command that re-checks it:",
+        ";       python3 notes/prom_d_finish_round12.py            # the inventory",
+        ";       python3 notes/prom_d_finish_round12.py --selftest # %d checks"
+        % _R12.AUDITED_CHECKS,
+        ";",
+        "; \u2605\u2605 AND IT PROMOTES NOTHING, ON PURPOSE.  Three mechanisms were run for",
+        "; the first time and none of them is spent:",
+        ";",
+        ";   * M11, THE TAIL-ONLY TWIN RULE.  Round 9's Q12 ran the twin rule on the",
+        ";     +0x3C array over WHOLE records and got 0 of %d.  But a preset supplies" % n3c,
+        ";     only bytes 13..42 -- prom_c 0xFBC7D9 sets i = 13 and 0xFBC7E3 reads",
+        ";     the stride word 43 as the bound -- so the head has nothing it must",
+        ";     match and the old test was harder than the mechanism needs.  Run on",
+        ";     the exact 30 bytes prom_c copies, against the %s wave-select records"
+        % format(pop, ","),
+        ";     that are not this array: %d of %d.  \u2605 AND THE TEST IS NOT INERT --"
+        % (hits, n3c),
+        ";     %s of those %s records DO share a tail with another record, so a"
+        % (format(ctrl, ","), format(pop, ",")),
+        ";     30-byte match is something this corpus produces in quantity.  The",
+        ";     preset array shares none of them.",
+        ";",
+        ";   * M12, ROUND 8's M6 WITH ROUND 11's GROUP.  M6 named a no-twin record",
+        ";     from the preset RUN it sits in and was refused for want of a common",
+        ";     WORD; round 11 then supplied GROUPS, which are coarser, and nobody",
+        ";     re-ran it.  Run here it proposes %d names -- and it is REFUSED, by the"
+        % len(props),
+        ";     witness it would have to agree with: where the run route and round",
+        ";     11's map route both give exactly one group they DISAGREE on %d of %d,"
+        % (disagree, agree + disagree),
+        ";     and on the only proposal the map reaches at all (record %d) the run's"
+        % (both[0] if both else -1),
+        ";     answer, %r, is not even among the map's %d groups."
+        % (_R8.group_name(props[both[0]]).strip() if both else "-",
+           len(sg[both[0]]) if both else 0),
+        ";     \u26a0 %d of the %d proposals come from ONE run with a single identified"
+        % (max(collections.Counter(_r2r[k] for k in props).values()), len(props)),
+        ";     member.  M12 IS REFUSED; a later round need not re-invent it.",
+        ";",
+        ";   * \u2605\u2605 prom_b's 64-ENTRY NAME TABLE -- A CANDIDATE, AND THE GAP THAT",
+        ";     KEEPS IT ONE.  prom_b 0x%06X holds exactly %d rows of %d printable"
+        % (_R12.PROM_B_BASE + _R12.NAME_TABLE, n64, _R12.NAME_W),
+        ";     bytes and stops (%r .. %r).  It is read by exactly"
+        % (names[0].strip(), names[n64 - 1].strip()),
+        ";     %d display-list records, on the consecutive variables" % len(mine),
+        ";     %s, " % " ".join("0x%04X" % t[1] for t in mine),
+        ";     each masking with 0x%02X -- the same mask prom_c applies at"
+        % _R12.DL_MASK,
+        ";     0xFBC744 before indexing this image's %d-record" % n3c,
+        ";     ToneDB_WaveSelTailPresets; rows 38..63 of it are 13 `X L` /",
+        ";     `X H` pairs on the parity the paragraph below measures; and",
+        ";     prom_a clamps that variable's edit range to 0..0x3F at 0xFD4176.",
+        ";     If the panel variable IS that field, all %d framed records of the" % n3c,
+        ";     +0x3C array are named at once.",
+        ";     \u26a0\u26a0 NOTHING IN THE FOUR IMAGES SHOWS THAT IT IS.  The panel variable",
+        ";     lives in one CPU's RAM at 0x2808..0x280B; the field is byte +0x0B of",
+        ";     a 43-byte record in the other CPU's RAM at 0x87D2 + 43*n, and no",
+        ";     instruction has been shown to carry the first into the second.  Two",
+        ";     6-bit fields with the same mask and the same range are not the same",
+        ";     field.  Nor is the candidate forced by elimination: %d other table%s"
+        % (len(other64), "" if len(other64) == 1 else "s"),
+        ";     of %d rows %s reached with the same mask (%s)."
+        % (n64, "is" if len(other64) == 1 else "are",
+           ", ".join("0x%06X" % t for t in other64) or "none"),
+        ";     \u2605 WHAT WOULD CLOSE IT: an instruction chain from Arr2808_Set1",
+        ";     (prom_a 0xFDA85E) to the link message prom_c decodes into",
+        ";     (record + 0x0B).  Q31 states it so a later round can go straight at it.",
+        ";",
+        "; \u2605 WHAT DOES STAND ON THIS IMAGE'S OWN BYTES: the +0x3C array is built in",
+        "; EVEN-ALIGNED PAIRS.  Over records 38..63 a record's mean Hamming distance",
+        "; to its neighbour is %.2f of 43 bytes when the lower index is even and %.2f"
+        % (e, o),
+        "; when it is odd (AUC %.3f) -- and rows 38..63 of prom_b's table are 13"
+        % auc,
+        "; `X L` / `X H` pairs on that same parity.  \u26a0 IT IS A PARITY WITNESS AND",
+        "; NOT AN ALIGNMENT PROOF: Q32 prints the shift sweep and EVERY EVEN SHIFT",
+        "; scores the same.  Quoting it as an alignment result would be quoting it",
+        "; wrong, so the refutation is printed beside it.",
+        ";",
+        "; \u2605 AND THE UNREACHED RECORDS ARE NOT PADDING.  The easiest way to dismiss",
+        "; the %d records of the +0x18 array the selector map reaches at no entry is"
+        % len(d18[0]),
+        "; to suppose the array is over-allocated.  Measured: all %d are byte-DISTINCT"
+        % d18[1],
+        "; from one another (largest identical group %d), one run of them %d records"
+        % (d18[2], max(h - l + 1 for l, h in d18[3])),
+        "; long; the +0x20 array's %d framed records are likewise %d distinct."
+        % (len(d20[0]), d20[1]),
+        "; Padding repeats; these do not.  The hole here is real data whose selector",
+        "; this tree has not found, and saying so is the honest version of the score.",
+        ";",
+    ])
+
+
 _HDR = HEADER
 _MARK = "; Reproduce every number quoted in this file:"
 assert _MARK in _HDR
 _HDR = _HDR.replace(_MARK, _round7_header_lines() + "\n"
                     + _round8_header_lines() + "\n"
                     + _round9_header_lines() + "\n"
-                    + _round11_header_lines() + "\n" + _MARK, 1)
+                    + _round11_header_lines() + "\n"
+                    + _round12_header_lines() + "\n" + _MARK, 1)
 _HDR = _HDR.replace(
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks",
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks\n"
     ";     python3 notes/prom_d_finish_round7.py --selftest # the inventory, %d checks\n"
     ";     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, "
-    "%d checks" % (_R7.AUDITED_CHECKS, _R8.AUDITED_CHECKS), 1)
+    "%d checks\n"
+    ";     python3 notes/prom_d_finish_round12.py --selftest  # \u2605 THE FRAMED SET, "
+    "%d checks" % (_R7.AUDITED_CHECKS, _R8.AUDITED_CHECKS, _R12.AUDITED_CHECKS), 1)
 W((_HDR % (CENSUS_CHECKS, CENSUS_CHECKS)).rstrip("\n"))
 for a, b, fn in REGIONS:
     before = len(OUTBUF)

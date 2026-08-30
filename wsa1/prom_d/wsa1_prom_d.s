@@ -360,6 +360,84 @@
 ;   fail the test.  So `unreached` is now a statement about the only map
 ;   that IS a selector, not about the only map anyone tried.  (Q23)
 ;
+;
+; ------------------------------------------------------------------------------
+; ★★ WAVE 7 ROUND 12 -- EVERY REMAINING FRAMED LABEL, WITH A REASON EACH
+; ------------------------------------------------------------------------------
+;
+; Rounds 4-11 each measured something new.  What this image did not have is
+; the thing a FINISHED image needs: one table that names every object still
+; carrying a kind-plus-a-number and states, per object, why.  Round 12 is
+; that table -- 235 objects in 6 families, a reason DERIVED for each, and one
+; command that re-checks it:
+;       python3 notes/prom_d_finish_round12.py            # the inventory
+;       python3 notes/prom_d_finish_round12.py --selftest # 35 checks
+;
+; ★★ AND IT PROMOTES NOTHING, ON PURPOSE.  Three mechanisms were run for
+; the first time and none of them is spent:
+;
+;   * M11, THE TAIL-ONLY TWIN RULE.  Round 9's Q12 ran the twin rule on the
+;     +0x3C array over WHOLE records and got 0 of 64.  But a preset supplies
+;     only bytes 13..42 -- prom_c 0xFBC7D9 sets i = 13 and 0xFBC7E3 reads
+;     the stride word 43 as the bound -- so the head has nothing it must
+;     match and the old test was harder than the mechanism needs.  Run on
+;     the exact 30 bytes prom_c copies, against the 1,485 wave-select records
+;     that are not this array: 0 of 64.  ★ AND THE TEST IS NOT INERT --
+;     1,309 of those 1,485 records DO share a tail with another record, so a
+;     30-byte match is something this corpus produces in quantity.  The
+;     preset array shares none of them.
+;
+;   * M12, ROUND 8's M6 WITH ROUND 11's GROUP.  M6 named a no-twin record
+;     from the preset RUN it sits in and was refused for want of a common
+;     WORD; round 11 then supplied GROUPS, which are coarser, and nobody
+;     re-ran it.  Run here it proposes 19 names -- and it is REFUSED, by the
+;     witness it would have to agree with: where the run route and round
+;     11's map route both give exactly one group they DISAGREE on 7 of 40,
+;     and on the only proposal the map reaches at all (record 41) the run's
+;     answer, 'ETHNIC PERC.', is not even among the map's 4 groups.
+;     ⚠ 17 of the 19 proposals come from ONE run with a single identified
+;     member.  M12 IS REFUSED; a later round need not re-invent it.
+;
+;   * ★★ prom_b's 64-ENTRY NAME TABLE -- A CANDIDATE, AND THE GAP THAT
+;     KEEPS IT ONE.  prom_b 0xF03241 holds exactly 64 rows of 8 printable
+;     bytes and stops ('ORIGINAL' .. 'SPECIAL2').  It is read by exactly
+;     4 display-list records, on the consecutive variables
+;     0x2808 0x2809 0x280A 0x280B, 
+;     each masking with 0x3F -- the same mask prom_c applies at
+;     0xFBC744 before indexing this image's 64-record
+;     ToneDB_WaveSelTailPresets; rows 38..63 of it are 13 `X L` /
+;     `X H` pairs on the parity the paragraph below measures; and
+;     prom_a clamps that variable's edit range to 0..0x3F at 0xFD4176.
+;     If the panel variable IS that field, all 64 framed records of the
+;     +0x3C array are named at once.
+;     ⚠⚠ NOTHING IN THE FOUR IMAGES SHOWS THAT IT IS.  The panel variable
+;     lives in one CPU's RAM at 0x2808..0x280B; the field is byte +0x0B of
+;     a 43-byte record in the other CPU's RAM at 0x87D2 + 43*n, and no
+;     instruction has been shown to carry the first into the second.  Two
+;     6-bit fields with the same mask and the same range are not the same
+;     field.  Nor is the candidate forced by elimination: 1 other table
+;     of 64 rows is reached with the same mask (0xF33022).
+;     ★ WHAT WOULD CLOSE IT: an instruction chain from Arr2808_Set1
+;     (prom_a 0xFDA85E) to the link message prom_c decodes into
+;     (record + 0x0B).  Q31 states it so a later round can go straight at it.
+;
+; ★ WHAT DOES STAND ON THIS IMAGE'S OWN BYTES: the +0x3C array is built in
+; EVEN-ALIGNED PAIRS.  Over records 38..63 a record's mean Hamming distance
+; to its neighbour is 7.23 of 43 bytes when the lower index is even and 13.67
+; when it is odd (AUC 0.929) -- and rows 38..63 of prom_b's table are 13
+; `X L` / `X H` pairs on that same parity.  ⚠ IT IS A PARITY WITNESS AND
+; NOT AN ALIGNMENT PROOF: Q32 prints the shift sweep and EVERY EVEN SHIFT
+; scores the same.  Quoting it as an alignment result would be quoting it
+; wrong, so the refutation is printed beside it.
+;
+; ★ AND THE UNREACHED RECORDS ARE NOT PADDING.  The easiest way to dismiss
+; the 122 records of the +0x18 array the selector map reaches at no entry is
+; to suppose the array is over-allocated.  Measured: all 122 are byte-DISTINCT
+; from one another (largest identical group 1), one run of them 58 records
+; long; the +0x20 array's 37 framed records are likewise 37 distinct.
+; Padding repeats; these do not.  The hole here is real data whose selector
+; this tree has not found, and saying so is the honest version of the score.
+;
 ; Reproduce every number quoted in this file:
 ;     python3 scripts/analysis/prom_d_tone_database.py
 ;     python3 notes/prom_d_structures_round2.py        # the record framing, 78 checks
@@ -367,6 +445,7 @@
 ;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
 ;     python3 notes/prom_d_finish_round7.py --selftest # the inventory, 56 checks
 ;     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, 129 checks
+;     python3 notes/prom_d_finish_round12.py --selftest  # ★ THE FRAMED SET, 35 checks
 ; Regenerate this file:
 ;     python3 scripts/analysis/gen_prom_d_asm.py
 ; Then, always:
@@ -21168,6 +21247,39 @@ ToneDB_MixerDefaultTable_321_SelectedForGroup_PERCUSSION:
 ;      WHAT IS STILL OPEN: what a preset MEANS (nothing here reads audio
 ;      state) and every byte of the record except +0x0B.
 ;   notes/prom_d_understanding_round5.py Q1a, Q4d, Q7.
+; 
+;   4. ★ ROUND 12: THE TWIN RULE RUN ON THE 30 BYTES THAT ARE ACTUALLY
+;      COPIED.  Point 2's zero, and round 9's Q12, compared WHOLE records.
+;      A preset supplies only bytes 13..42 (prom_c 0xFBC7D9 sets i = 13,
+;      0xFBC7E3 reads the stride word 43 as the bound), so the head has
+;      nothing it must match.  Compared on those 30 bytes alone against
+;      the 1,485 wave-select records that are NOT this array: 0 of 64.
+;      The test is not inert -- 1,309 of those 1,485 records DO share a tail
+;      with another record.  This array shares none.
+; 
+;   5. ★ ROUND 12: THIS ARRAY IS BUILT IN EVEN-ALIGNED PAIRS.  Over records
+;      38..63 the mean Hamming distance of a record to its neighbour is
+;      7.23 of 43 bytes when the lower index is EVEN and 13.67 when it is
+;      ODD (AUC 0.929).  A positive finding about the array's own bytes,
+;      and it is a PARITY witness only -- the shift sweep in Q32 scores
+;      every EVEN shift the same, so it says nothing about which record
+;      is which.
+; 
+;   6. ⚠ ROUND 12: A CANDIDATE NAME SET EXISTS AND IS NOT USED.  prom_b
+;      0xF03241 holds exactly 64 rows of 8 printable bytes
+;      ('ORIGINAL' .. 'SPECIAL2'),
+;      read by exactly 4 display-list records on the consecutive
+;      variables 0x2808 0x2809 0x280A 0x280B, each masking with 0x3F --
+;      the same mask prom_c applies at 0xFBC744 before indexing THIS
+;      array; and rows 38..63 of it are 13 `X L` / `X H` pairs, on the
+;      parity point 5 measures.  If the panel variable is this record's
+;      +0x0B, all 64 labels below are named at once.
+;      ⚠⚠ AND NOTHING SHOWS THAT IT IS.  The panel variable is in one
+;      CPU's RAM at 0x2808..0x280B; +0x0B is in a 43-byte record in the
+;      other CPU's RAM at 0x87D2 + 43*n; no instruction in the four
+;      images has been shown to carry one into the other, and a second
+;      64-row table is reached with the same mask.  The names are NOT
+;      applied.  notes/prom_d_finish_round12.py Q29, Q31, Q32.
 ; ==========================================================================
 ToneDB_WaveSelTailPresets:
 

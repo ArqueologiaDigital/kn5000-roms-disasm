@@ -159,6 +159,79 @@
 ;
 ; PROVENANCE: this is not a chip read.  It is the publicly redistributed v2
 ; firmware set (../technics_roms/roms/wsa1/PROVENANCE.md).
+;
+; ==============================================================================
+; * THE ROUND-12 INVENTORY -- what is NAMED here, and what is DECLARED NAMELESS
+; ==============================================================================
+; Wave 7 round 12, 2026-08-30.  Regenerate every figure below -- do not retype it:
+;
+;     python3 notes/prom_c_finish_round12.py --inventory
+;     python3 notes/prom_c_finish_round12.py --selftest     # 35 checks
+;
+; prom_c is the first image in this tree for which the statement
+;
+;     EVERY OBJECT IS EITHER NAMED WITH EVIDENCE OR DECLARED NAMELESS WITH A
+;     DERIVED REASON
+;
+; is true and checkable.  At emission the image held 1,738 top-level objects --
+; 871 content-named, 500 framed, 367 sub_XXXXXX -- plus 4,683 <parent>__<address>
+; branch targets, which are jump destinations and not objects.  Of the 867 that are
+; not content-named, one of the wave's three naming mechanisms (name it from what it
+; CONTAINS, from what READS it, or from what it POINTS AT) fires on 192.  On 70 of
+; those the name it yields is only a FRAME.
+;
+; * AND THAT LAST NUMBER IS THE ROUND'S RESULT, not an apology for it.  A name is a
+; frame here when the object has a >=90%-identical sibling in this same image: the two
+; are separated by an IMMEDIATE, so anything that tells them apart tells them apart by
+; a number.  Round 11 settled the test -- a number may be part of a name when it has a
+; referent OUTSIDE the code, as `SoftKeyCol1` does because the legend is silkscreened
+; on the instrument.  A record field offset has no such referent.  So the seven
+; SlotRec_* / Rec_StoreConsts_* names this round shipped are spelled `_0009`, `_000C`,
+; `_003F_0041` ON PURPOSE, so that the documentation metric grades them FRAMED.
+; Spelling them `_Off09` would have moved the CONTENT column by seven and taught
+; nobody anything.
+;
+; The 675 objects no mechanism reaches, by reason (--refusals gives the rule for each):
+;
+;     374  the P7 stream pool -- CONTENT is undecoded byte-code (R2).  What would name
+;          them is stated in --refusals: not a cleverer census, a payload decoder or
+;          an outside document.  The directory's DescriptorStrings are field-LAYOUT
+;          descriptors over {b,w,v,s,h,c,B}, not names.
+;     191  every caller is itself framed or unnamed -- no name can propagate in
+;      81  the one content-named caller names a SUBSYSTEM, not this routine's job
+;      15  no literal reference of any spelling, over four independent sweeps
+;       8  not a routine at all: code reached by fall-through from the line above
+;       6  a DATA object with no citation -- its bounds rest on tiling, not on a
+;          reference, which is evidence and not a hole
+;
+; * THE NO-REFERENCE CENSUS FOUND SIX MORE THAN ROUND 7 DID, and they corroborate
+; rather than contradict the file: round 7 ran that rule only over sub_XXXXXX, so
+; it never asked it of the FRAMED objects.  Asked now, it independently reproduces
+; two statements already written in this file by another argument -- "SIX ROUTINES
+; HERE HAVE NO CALLER" above the 0xFB7B63 bank and "TWO ROUTINES HERE HAVE NO
+; CALLER" above 0xFB796E.  32 code objects and 32 data objects survive four sweeps.
+; And the census PRINTS ITS OWN BLIND SPOT beside the result: prom_c contains 49
+; register-indirect transfers (28 `jp T,XBC`, 14 `jp T,XIX`, 7 `jp T,XWA`), any one
+; of which can reach any address.  So every line of it says NOT FOUND and none of
+; them says UNREACHABLE.
+;
+; * TWO THINGS THIS ROUND REFUSED THAT LOOKED EASY.
+;   1. The six device-register writers of round 7's bucket S3.  The block extractor
+;      that reproduces 36 of 36 already-named accessors DOES fire on all six -- and
+;      those 36 run 31 to 136 bytes while these six run 188 to 545 and call other
+;      routines.  A register set names an ACCESSOR; it does not name a 545-byte
+;      routine that also retires voices.
+;   2. The ten objects that are not routines.  Renaming them to <parent>__<address>
+;      is right and round 7 said so -- and said it should be done by a lane that is
+;      not also reporting the metric it moves.  This lane reports that metric.
+;
+; DEPTH: all 367 sub_XXXXXX carry a >=3-line header AND an Evidence line -- 367 of
+; 367, which no other image in this tree can say.  Of the labels the grader sees with
+; no header, 4,849 are branch targets and 467 are entries of three self-documenting
+; ROM tables (for a preset, the LABEL IS THE DATUM).  Eight objects remain, all
+; one- and two-instruction vector stubs carrying a single Evidence line each.  The one
+; that carried none, IRQ_INTTC2, has one as of this round.
+; ==============================================================================
 
 	.include "include/tmp95c061_sfr.inc"
 
@@ -29947,7 +30020,8 @@ sub_FA237C__FA2672:
 	unlk32 xiz                                 ; FA2677  unlk XIZ
 	ret                                        ; FA2679  ret
 ; --------------------------------------------------------------------------
-; sub_FA267A -- 0xFA267A..0xFA26CA (81 bytes)
+; Rec8644_Store3Bytes_AndFlagChanged -- 0xFA267A..0xFA26CA (81 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FA267A`.)
 ;
 ; Called from: 6 site(s) outside this module:
 ;          0xFAEFDE in sub_FAEFC2, 0xFAF003 in sub_FAEFE7
@@ -29961,10 +30035,22 @@ sub_FA237C__FA2672:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: writes the three argument bytes into the 3-byte record at
+;   0x008644 + 3*slot, zeroes the countdown word (0x00F2F1) and sets bit 5 of the
+;   change byte (0x007ECC).
+; Evidence: the stride and base are `ld C,0x03` 0xFA267E / `add XBC,0x00008644`
+;          0xFA2685 for byte +0, repeated with `inc 1,XBC` 0xFA2697 and
+;          `inc 2,XBC` 0xFA26AB for bytes +1 and +2; the flag update is
+;          `ld (0x00f2f1),0x0000` 0xFA26BA and `set 5,(0x007ecc)` 0xFA26C1,
+;          bracketed by `ei 0x06` 0xFA26B8 and `ei 0x00` 0xFA26C6.
+;          0x007ECC is the "something changed" byte the Link_Ch1_WriteParamBlock
+;          block comment establishes: MAIN tests it at 0xF98C52, clears it at
+;          0xF98C5C and then signals semaphore 2.
+; Unknown:  what the 3-byte record holds.  Six call sites pass slot 0, 1 and 2 --
+;          the three arms of Voice_ApplyParamChange_Dispatch at 0xFAEFDE, 0xFAF003
+;          and 0xFAF028 -- plus three inside sub_FB6500.
 ; --------------------------------------------------------------------------
-sub_FA267A:
+Rec8644_Store3Bytes_AndFlagChanged:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA267A  link XIZ,0x0000
 	ldb	c, 3                                   ; FA267E  ld C,0x03
 	extpfx3 0x8E, 0x08, 0x43                   ; FA2680  mul BC,(XIZ+0x08)
@@ -40450,7 +40536,8 @@ sub_FA778E__FA77E2:
 	unlk32 xiz                                 ; FA77F0  unlk XIZ
 	ret                                        ; FA77F2  ret
 ; --------------------------------------------------------------------------
-; sub_FA77F3 -- 0xFA77F3..0xFA780F (29 bytes)
+; Add24_ClampTo120 -- 0xFA77F3..0xFA780F (29 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FA77F3`.)
 ;
 ; Called from: 7 site(s) outside this module:
 ;          0xFA8724 in sub_FA866B__FA8703, 0xFA8739 in sub_FA866B__FA8730
@@ -40464,21 +40551,27 @@ sub_FA778E__FA77E2:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: returns min(arg + 24, 120).
+; Evidence: `add HL,0x0018` at 0xFA77FB, `cp HL,0x0078` at 0xFA77FF and
+;          `jr LE,0xfa780a` at 0xFA7803 -- the LE arm keeps HL, the fall-through
+;          loads the constant with `ld WA,0x0078` at 0xFA7805.  0x78 = 120, the
+;          same ceiling Clamp_36_to_120 (0xFA76B2) uses.
+; Unknown:  what the quantity IS.  All five callers are arms of
+;          VoiceParam_DispatchOn_17_36 and VoiceParam_DispatchOn_17_11; nothing
+;          here gives the value a unit, so the name states the arithmetic only.
 ; --------------------------------------------------------------------------
-sub_FA77F3:
+Add24_ClampTo120:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA77F3  link XIZ,0x0000
 	pushw	hl                                   ; FA77F7  push HL
 	ld	hl, (xiz+8)                             ; FA77F8  ld HL,(XIZ+0x08)
 	add	hl, 24                                 ; FA77FB  add HL,0x0018
 	cp	hl, 0x78                                ; FA77FF  cp HL,0x0078
-	jr le, sub_FA77F3__FA780A                  ; FA7803  jr LE,0xfa780a
+	jr le, Add24_ClampTo120__FA780A                  ; FA7803  jr LE,0xfa780a
 	ldw	wa, 0x78                               ; FA7805  ld WA,0x0078
-	jr sub_FA77F3__FA780C                      ; FA7808  jr T,0xfa780c
-sub_FA77F3__FA780A:
+	jr Add24_ClampTo120__FA780C                      ; FA7808  jr T,0xfa780c
+Add24_ClampTo120__FA780A:
 	ld	wa, hl                                  ; FA780A  ld WA,HL
-sub_FA77F3__FA780C:
+Add24_ClampTo120__FA780C:
 	popw	hl                                    ; FA780C  pop HL
 	unlk32 xiz                                 ; FA780D  unlk XIZ
 	ret                                        ; FA780F  ret
@@ -40564,7 +40657,8 @@ sub_FA7810__FA789F:
 	unlk32 xiz                                 ; FA78A8  unlk XIZ
 	ret                                        ; FA78AA  ret
 ; --------------------------------------------------------------------------
-; sub_FA78AB -- 0xFA78AB..0xFA78C5 (27 bytes)
+; Rec_StoreConsts_003F_0041 -- 0xFA78AB..0xFA78C5 (27 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FA78AB`.)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFA8C1E in VoiceParam_DispatchOn_17_36__FA8C1D, 0xFA904B in VoiceParam_DispatchOn_17_11__FA904A
@@ -40576,10 +40670,17 @@ sub_FA7810__FA789F:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: stores two CONSTANT words into the argument record --
+;   rec[+0x3F] = 0x017F and rec[+0x41] = 0x7F7F.  It reads nothing.
+; Evidence: `ld (XBC+0x3f),0x017f` at 0xFA78B4 and `ld (XBC+0x41),0x7f7f` at
+;          0xFA78BE, with the record pointer reloaded from (XIZ+0x08) before each
+;          (0xFA78AF, 0xFA78B9).  Nine instructions in all.
+; Unknown:  what the two fields are and why those values.  Both callers are the
+;          dispatchers VoiceParam_DispatchOn_17_36 and VoiceParam_DispatchOn_17_11,
+;          which name a subsystem and not this routine's job; the suffix is a pair
+;          of field offsets, so this name is a FRAME.
 ; --------------------------------------------------------------------------
-sub_FA78AB:
+Rec_StoreConsts_003F_0041:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA78AB  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FA78AF  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA78B2  extz XBC
@@ -42297,7 +42398,7 @@ Voice_SelectKeyZone_Reg0040__FA8266:
 ; Outputs: writes 0x005A4F, 0x00D760
 ;          reads 0x0014FF, 0x00D7ED
 ; Calls:   0xFC3407 = sub_FC3407, 0xFC3480 = sub_FC3480
-;          0xFC355B = sub_FC355B, 0xFC3793 = sub_FC3793
+;          0xFC355B = sub_FC355B, 0xFC3793 = SlotRec_ReadWordAtArgIndex_0003
 ; Voice record: touches voice_record[+0x00(r), +0x01(rw), +0x03(r), +0x04(r), +0x0F(w), +0x1F(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA826C-0xFA8322
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -42909,7 +43010,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA8665:
 ;          0xFA8C24
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = sub_FA77F3
+; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = Add24_ClampTo120
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA866B-0xFA8758
@@ -43036,7 +43137,7 @@ sub_FA866B__FA8747:
 ;          0xFA8C2A
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = sub_FA77F3
+; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = Add24_ClampTo120
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8759-0xFA888B
@@ -43191,7 +43292,7 @@ sub_FA8759__FA8878:
 ;          0xFA8C30
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
-; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = sub_FA77F3
+; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = Add24_ClampTo120
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA888C-0xFA8996
@@ -43620,7 +43721,7 @@ sub_FA8A79__FA8BAA:
 ;          0xFB0B16 in VoiceRegs_Stage_A, 0xFB1F04 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA78AB = sub_FA78AB, 0xFA866B = sub_FA866B
+; Calls:   0xFA78AB = Rec_StoreConsts_003F_0041, 0xFA866B = sub_FA866B
 ;          0xFA8759 = sub_FA8759, 0xFA888C = sub_FA888C
 ;          0xFA8997 = sub_FA8997, 0xFA8A79 = sub_FA8A79
 ; Arms:    6 computed-goto arm(s) inside this routine: 0xFA8C1D 0xFA8C23 0xFA8C29 0xFA8C2F 0xFA8C35 0xFA8C3B
@@ -43713,7 +43814,7 @@ VoiceParam_DispatchOn_17_36__FA8C3F:
 ;          0xFA9061
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA778E = sub_FA778E, 0xFA77F3 = sub_FA77F3
+; Calls:   0xFA778E = sub_FA778E, 0xFA77F3 = Add24_ClampTo120
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8C44-0xFA8CEE
@@ -43812,7 +43913,7 @@ sub_FA8C44__FA8CBB:
 ;          0xFA9067
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA778E = sub_FA778E, 0xFA77F3 = sub_FA77F3
+; Calls:   0xFA778E = sub_FA778E, 0xFA77F3 = Add24_ClampTo120
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
 ; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8CEF-0xFA8D9A
@@ -44241,7 +44342,7 @@ sub_FA8EF7__FA8FD7:
 ;          0xFB282F in VoiceRegs_Stage_C, 0xFB2F04 in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D766, 0x00D768
-; Calls:   0xFA78AB = sub_FA78AB, 0xFA8C44 = sub_FA8C44
+; Calls:   0xFA78AB = Rec_StoreConsts_003F_0041, 0xFA8C44 = sub_FA8C44
 ;          0xFA8CEF = sub_FA8CEF, 0xFA8D9B = sub_FA8D9B
 ;          0xFA8E47 = sub_FA8E47, 0xFA8EF7 = sub_FA8EF7
 ; Arms:    6 computed-goto arm(s) inside this routine: 0xFA904A 0xFA9060 0xFA9066 0xFA906C 0xFA9072 0xFA9078
@@ -48157,7 +48258,7 @@ Voice_StageRegs_0840_0880_CD__FAACE8:
 ; Outputs: writes 0x00D776
 ;          reads 0xFDEF8E
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
-;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37E2 = sub_FC37E2
+;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37E2 = SlotRec_ReadSignedByte_000A
 ; Voice record: touches voice_record[+0x01(rw), +0x08(r), +0x0C(r), +0x13(r), +0x17(r), +0x1F(r), +0x23(r), +0x25(r), +0x39(w), +0x3B(w), +0x3D(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAACEE-0xFAB0BC
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -48619,7 +48720,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAB070:
 ; Inputs:  frame `link XIZ,-15`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D776
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
-;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37BE = sub_FC37BE
+;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37BE = SlotRec_ReadSignedByte_0009
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB0BD-0xFAB489
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -49589,10 +49690,18 @@ sub_FAB7E0__FAB80C:
 	unlk32 xiz                                 ; FAB815  unlk XIZ
 	ret                                        ; FAB817  ret
 ; --------------------------------------------------------------------------
-; Dev10C_StageRegs_0800_0840_FAB818 -- 0xFAB818..0xFAB8CB (180 bytes)
+; Dev10C_StageRegs_0800_0840_ForNoteOn -- 0xFAB818..0xFAB8CB (180 bytes)
 ;             compute the two staging words that 0xFB7345 pushes into registers
-;             0x0800+chan and 0x0840+chan.
-;             (★ NAMED in wave 7 round 2; was `sub_FAB818`.)
+;             0x0800+chan and 0x0840+chan, ON A NOTE-ON.
+;             (★ NAMED in wave 7 round 2 as `Dev10C_StageRegs_0800_0840_FAB818`;
+;             was `sub_FAB818`.  ★ PROMOTED in round 12: the address suffix was
+;             there only to tell three same-shaped producers apart, and this one is
+;             separable without it -- MidiNote_OnByPartMode (0xFB3B44) is its ONLY
+;             reference of any spelling, and it is the only one of the three the
+;             note-on path reaches.  The other two, _FAB8CC and _FAB9D8, are BOTH
+;             called from Voice_Retire_Mode08 (0xFB3E22 and 0xFB3E1C), so the caller
+;             does NOT separate them and they keep their addresses -- a refusal,
+;             re-measured by `python3 notes/prom_c_finish_round12.py --names`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB3B44 in MidiNote_OnByPartMode__FB3B29
@@ -49628,7 +49737,7 @@ sub_FAB7E0__FAB80C:
 ;          "Only located consumer", not "only consumer".
 ;          ⚠ what this routine is FOR beyond producing those two words.
 ; --------------------------------------------------------------------------
-Dev10C_StageRegs_0800_0840_FAB818:
+Dev10C_StageRegs_0800_0840_ForNoteOn:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAB818  link XIZ,0xfffc
 	pushw	hl                                   ; FAB81C  push HL
 	push	xix                                   ; FAB81D  push XIX
@@ -49640,7 +49749,7 @@ Dev10C_StageRegs_0800_0840_FAB818:
 	ld	l, (xwa+14)                             ; FAB82E  ld L,(XWA+0x0e)
 	ld	c, l                                    ; FAB831  ld C,L
 	and	c, 0x80                                ; FAB833  and C,0x80
-	jrl z, Dev10C_StageRegs_0800_0840_FAB818__FAB8C7                  ; FAB836  jrl Z,0xfab8c7
+	jrl z, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C7                  ; FAB836  jrl Z,0xfab8c7
 	res	7, l                                   ; FAB839  res 0x07,L
 	ld	c, l                                    ; FAB83C  ld C,L
 	extz	bc                                    ; FAB83E  extz BC
@@ -49665,10 +49774,10 @@ Dev10C_StageRegs_0800_0840_FAB818:
 	inc	5, xiy                                 ; FAB879  inc 5,XIY
 	ld	xix, xiy                                ; FAB87B  ld XIX,XIY
 	popw	bc                                    ; FAB87D  pop BC
-Dev10C_StageRegs_0800_0840_FAB818__FAB87E:
+Dev10C_StageRegs_0800_0840_ForNoteOn__FAB87E:
 	ld	h, (xix)                                ; FAB87E  ld H,(XIX)
 	cp	h, 64                                   ; FAB880  cp H,0x40
-	jr nc, Dev10C_StageRegs_0800_0840_FAB818__FAB8C7                  ; FAB883  jr NC,0xfab8c7
+	jr nc, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C7                  ; FAB883  jr NC,0xfab8c7
 	ldb	c, 68                                  ; FAB885  ld C,0x44
 	mul8rr	c, h                                ; FAB887  mul BC,H
 	add	bc, 19                                 ; FAB889  add BC,0x0013
@@ -49677,9 +49786,9 @@ Dev10C_StageRegs_0800_0840_FAB818__FAB87E:
 	ld	c, (xwa+14)                             ; FAB894  ld C,(XWA+0x0e)
 	res	7, c                                   ; FAB897  res 0x07,C
 	cp	l, c                                    ; FAB89A  cp L,C
-	jr nz, Dev10C_StageRegs_0800_0840_FAB818__FAB8C3                  ; FAB89C  jr NZ,0xfab8c3
+	jr nz, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C3                  ; FAB89C  jr NZ,0xfab8c3
 	extpfx3 0x8E, 0x0A, 0xF6                   ; FAB89E  cp H,(XIZ+0x0a)
-	jr z, Dev10C_StageRegs_0800_0840_FAB818__FAB8C3                   ; FAB8A1  jr Z,0xfab8c3
+	jr z, Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C3                   ; FAB8A1  jr Z,0xfab8c3
 	ldb	c, 68                                  ; FAB8A3  ld C,0x44
 	mul8rr	c, h                                ; FAB8A5  mul BC,H
 	inc	1, bc                                  ; FAB8A7  inc 1,BC
@@ -49692,10 +49801,10 @@ Dev10C_StageRegs_0800_0840_FAB818__FAB87E:
 	pushw	wa                                   ; FAB8BC  push WA
 	call	0xFB73F0                              ; FAB8BD  call 0xfb73f0
 	inc	6, xsp                                 ; FAB8C1  inc 6,XSP
-Dev10C_StageRegs_0800_0840_FAB818__FAB8C3:
+Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C3:
 	inc	1, xix                                 ; FAB8C3  inc 1,XIX
-	jr Dev10C_StageRegs_0800_0840_FAB818__FAB87E                      ; FAB8C5  jr T,0xfab87e
-Dev10C_StageRegs_0800_0840_FAB818__FAB8C7:
+	jr Dev10C_StageRegs_0800_0840_ForNoteOn__FAB87E                      ; FAB8C5  jr T,0xfab87e
+Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C7:
 	pop	xix                                    ; FAB8C7  pop XIX
 	popw	hl                                    ; FAB8C8  pop HL
 	unlk32 xiz                                 ; FAB8C9  unlk XIZ
@@ -49724,7 +49833,7 @@ Dev10C_StageRegs_0800_0840_FAB818__FAB8C7:
 ;          The six words 0x00D78A..0x00D795 sit immediately after the 22-word staging
 ;          struct 0x00D75E..0x00D789 of notes/FINDINGS-prom_c-dev10c-producers.md §2;
 ;          this routine is one of THREE producers of that word pair -- the others are
-;          Dev10C_StageRegs_0800_0840_FAB818 and _FAB9D8.
+;          Dev10C_StageRegs_0800_0840_ForNoteOn and _FAB9D8.
 ;          Everything else above is an instruction operand listed by
 ;          notes/gen_prom_c_block_headers.py; the call sites are
 ;          notes/prom_c_module_map.py's image-wide scan; the listing is the byte-
@@ -49870,7 +49979,7 @@ Dev10C_StageRegs_0800_0840_FAB8CC__FAB9BE:
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D78A, 0x00D78C
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA766C = ScaleClampedDelta_Shr5
-;          0xFC3806 = sub_FC3806
+;          0xFC3806 = SlotRec_ReadSignedByte_000B
 ; Voice record: touches voice_record[+0x08(r), +0x17(r), +0x23(r), +0x25(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
 ;          absolute stores below are the routine's only absolute-addressed output, and
@@ -49886,7 +49995,7 @@ Dev10C_StageRegs_0800_0840_FAB8CC__FAB9BE:
 ;          The six words 0x00D78A..0x00D795 sit immediately after the 22-word staging
 ;          struct 0x00D75E..0x00D789 of notes/FINDINGS-prom_c-dev10c-producers.md §2;
 ;          this routine is one of THREE producers of that word pair -- the others are
-;          Dev10C_StageRegs_0800_0840_FAB818 and _FAB8CC.
+;          Dev10C_StageRegs_0800_0840_ForNoteOn and _FAB8CC.
 ;          Everything else above is an instruction operand listed by
 ;          notes/gen_prom_c_block_headers.py; the call sites are
 ;          notes/prom_c_module_map.py's image-wide scan; the listing is the byte-
@@ -52391,7 +52500,8 @@ sub_FACAB7__FACC18:
 	unlk32 xiz                                 ; FACC3C  unlk XIZ
 	ret                                        ; FACC3E  ret
 ; --------------------------------------------------------------------------
-; sub_FACC3F -- 0xFACC3F..0xFACC59 (27 bytes)
+; PartRec_Word0006_SetBit13 -- 0xFACC3F..0xFACC59 (27 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FACC3F`.)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFAFCF0 in MidiCtrl_CC120, 0xFAFF73 in MidiCtrl_Dispatch__FAFF6F
@@ -52403,10 +52513,20 @@ sub_FACAB7__FACC18:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: sets bit 13 of the part record's word +0x06, for the part index
+;   in (XIZ+0x08).  PartRec_Word0006_ClearBit13 (0xFACC5A) is the matching clear.
+; Evidence: `mul BC,0x012c` at 0xFACC48 is the 300-byte part-record stride and
+;          `inc 6,BC` at 0xFACC4C the field offset; `or (XBC+0x1523),0x2000` at
+;          0xFACC50 is the bit, 0x2000 = 1<<13.  0x001523 is the part-record array
+;          base of notes/FINDINGS-prom_c-dev10c-register-meanings.md section 1.
+;          The two routines are 27 bytes each and differ in exactly THREE ROM bytes,
+;          at offsets 21, 22 and 23 -- the sub-opcode (0x3E `or` against 0x3C `and`)
+;          and the two immediate bytes.  Re-measured by
+;          `python3 notes/prom_c_finish_round12.py --names`.
+; Unknown:  what bit 13 of word +0x06 MEANS.  The name states the field and the
+;          operation, both instruction operands, and claims nothing else.
 ; --------------------------------------------------------------------------
-sub_FACC3F:
+PartRec_Word0006_SetBit13:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACC3F  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FACC43  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FACC46  extz BC
@@ -52417,7 +52537,8 @@ sub_FACC3F:
 	unlk32 xiz                                 ; FACC57  unlk XIZ
 	ret                                        ; FACC59  ret
 ; --------------------------------------------------------------------------
-; sub_FACC5A -- 0xFACC5A..0xFACC74 (27 bytes)
+; PartRec_Word0006_ClearBit13 -- 0xFACC5A..0xFACC74 (27 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FACC5A`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB3C09 in MidiNote_OnByPartMode__FB3C04
@@ -52428,10 +52549,14 @@ sub_FACC3F:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: clears bit 13 of the part record's word +0x06, for the part index
+;   in (XIZ+0x08).  The mirror of PartRec_Word0006_SetBit13 (0xFACC3F).
+; Evidence: `mul BC,0x012c` at 0xFACC63 / `inc 6,BC` at 0xFACC67 /
+;          `and (XBC+0x1523),0xdfff` at 0xFACC6B; 0xDFFF is ~(1<<13).
+;          27 bytes against the setter's 27, differing at offsets 21, 22, 23 only.
+; Unknown:  what bit 13 of word +0x06 MEANS.
 ; --------------------------------------------------------------------------
-sub_FACC5A:
+PartRec_Word0006_ClearBit13:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACC5A  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FACC5E  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FACC61  extz BC
@@ -55095,7 +55220,7 @@ MidiCtrl_Int97:
 ;          0xFAFFE4
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC280D = sub_FC280D
+; Calls:   0xFC280D = MidiCtrl_Int99_ApplyToSelectedPart
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAD9EE-0xFADA16
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -55133,7 +55258,7 @@ MidiCtrl_Int99:
 ;          0xFAFFF1
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC2861 = sub_FC2861
+; Calls:   0xFC2861 = MidiCtrl_Int9A_ApplyToSelectedPart
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADA17-0xFADA3F
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59097,7 +59222,7 @@ PartRec_ApplyParam_0033:
 ;          0xFAF323
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA267A = sub_FA267A
+; Calls:   0xFA267A = Rec8644_Store3Bytes_AndFlagChanged
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEFC2-0xFAEFE6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59131,7 +59256,7 @@ sub_FAEFC2:
 ;          0xFAF32C
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA267A = sub_FA267A
+; Calls:   0xFA267A = Rec8644_Store3Bytes_AndFlagChanged
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEFE7-0xFAF00B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59165,7 +59290,7 @@ sub_FAEFE7:
 ;          0xFAF335
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA267A = sub_FA267A
+; Calls:   0xFA267A = Rec8644_Store3Bytes_AndFlagChanged
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF00C-0xFAF030
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -60872,7 +60997,7 @@ sub_FAFBEC__FAFCDB:
 ;          0xFAFF5E
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFACC3F = sub_FACC3F, 0xFB3C5F = VoiceQuery_Tag80_Part
+; Calls:   0xFACC3F = PartRec_Word0006_SetBit13, 0xFB3C5F = VoiceQuery_Tag80_Part
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAFCE1-0xFAFDA4
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -61014,7 +61139,7 @@ MidiCtrl_CC120__FAFDA0:
 ;     94  sub_FAFBEC                  --                 (shared: 2 call sites)
 ;    120  MidiCtrl_CC120              --
 ;    121  sub_FB6500                  --                 (shared: 5 call sites)
-;    123  sub_FACC3F                  --                 (shared: 4 call sites)
+;    123  PartRec_Word0006_SetBit13                  --                 (shared: 4 call sites)
 ;   0x80  MidiCtrl_Int80              +0x12       byte   v, raw
 ;   0x81  MidiCtrl_Int81_FineTune     +0x13       word   (v - 0x80) * 2
 ;   0x82  MidiCtrl_Int82_Transpose    +0x15       byte   v - 0x40, signed
@@ -61053,7 +61178,7 @@ MidiCtrl_CC120__FAFDA0:
 ;          0xFB0A81 in MidiMsg_SendBootSequence
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFACC3F = sub_FACC3F, 0xFAD6EB = MidiCtrl_CC07
+; Calls:   0xFACC3F = PartRec_Word0006_SetBit13, 0xFAD6EB = MidiCtrl_CC07
 ;          0xFAD764 = MidiCtrl_CC10, 0xFAD782 = MidiCtrl_CC11
 ;          0xFAD7FB = MidiCtrl_CC64, 0xFAD844 = MidiCtrl_CC91
 ;          0xFAD862 = MidiCtrl_CC93, 0xFAD8C9 = MidiCtrl_Int80
@@ -61287,7 +61412,7 @@ MidiCtrl_Dispatch__FAFF63:                     ; controller 121   -> sub_FB6500 
 MidiCtrl_Dispatch__FAFF6B:
 	popw	bc                                    ; FAFF6B  pop BC
 	jrl MidiCtrl_Dispatch__FB000F                     ; FAFF6C  jrl T,0xfb000f
-MidiCtrl_Dispatch__FAFF6F:                     ; controller 123   -> sub_FACC3F (shared)
+MidiCtrl_Dispatch__FAFF6F:                     ; controller 123   -> PartRec_Word0006_SetBit13 (shared)
 	ld	c, (xix+1)                              ; FAFF6F  ld C,(XIX+0x01)
 	pushw	bc                                   ; FAFF72  push BC
 	call	0xFACC3F                              ; FAFF73  call 0xfacc3f
@@ -61775,7 +61900,7 @@ sub_FB0285:
 ;          0xFADAA9 0xFB045F
 ; Inputs:  frame `link XIZ,-1`; no positive frame slot is read
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFACC3F = sub_FACC3F, 0xFB47C4 = sub_FB47C4
+; Calls:   0xFACC3F = PartRec_Word0006_SetBit13, 0xFB47C4 = sub_FB47C4
 ;          0xFB6500 = sub_FB6500, 0xFB6681 = sub_FB6681
 ;          0xFB68DD = sub_FB68DD
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB029E-0xFB0337
@@ -68914,9 +69039,9 @@ sub_FB4103__FB411C:
 ;          0xFB2FB7 in sub_FB2F74, 0xFB3201 in VoiceParams_Compute_D
 ;          0xFB3408 in VoiceParams_Compute_D__FB33CE, 0xFB9BE5 in sub_FB9B69__FB9BDF
 ;          0xFBA3CC in sub_FB9B69__FBA3C6, 0xFBC779 in sub_FBC725
-;          0xFBC87B in sub_FBC80E, 0xFC031B in sub_FC02FF
-;          0xFC10C8 in sub_FC10BE, 0xFC1AC5 in sub_FC1AA1
-;          0xFC1E92 in sub_FC1BDE__FC1E72, 0xFC3881 in SoundRam_ClearFourBanks
+;          0xFBC87B in sub_FBC80E, 0xFC031B in ToneQuery_ReplyToneName
+;          0xFC10C8 in sub_FC10BE, 0xFC1AC5 in ToneQuery_ReplyWholeToneRecord
+;          0xFC1E92 in ToneQuery_Dispatch__FC1E72, 0xFC3881 in SoundRam_ClearFourBanks
 ;          0xFC395C in SoundRam_ClearFourBanks__FC3917
 ;          1 site(s) inside this module:
 ;          0xFB42DC
@@ -69182,7 +69307,7 @@ sub_FB42E3__FB431C:
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFB9C9D in sub_FB9B69__FB9C91, 0xFB9EBE in sub_FB9B69__FB9EB2
-;          0xFC1B0F in sub_FC1AA1__FC1AEF
+;          0xFC1B0F in ToneQuery_ReplyWholeToneRecord__FC1AEF
 ;          1 site(s) inside this module:
 ;          0xFB43C1
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x0E)
@@ -69415,7 +69540,7 @@ sub_FB43CB__FB44A0:
 ; Called from: 5 site(s) outside this module:
 ;          0xFB862E in sub_FB8603, 0xFB9CB2 in sub_FB9B69__FB9C91
 ;          0xFB9ED3 in sub_FB9B69__FB9EB2, 0xFBC79E in sub_FBC725
-;          0xFC1B46 in sub_FC1AA1__FC1AEF
+;          0xFC1B46 in ToneQuery_ReplyWholeToneRecord__FC1AEF
 ;          1 site(s) inside this module:
 ;          0xFB4542
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
@@ -69556,7 +69681,7 @@ sub_FB454C:
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFB28EB in sub_FB289A, 0xFB2AF8 in VoiceParams_Compute_C
-;          0xFB2CAE in VoiceParams_Compute_C__FB2C6D, 0xFC18AD in sub_FC1845
+;          0xFB2CAE in VoiceParams_Compute_C__FB2C6D, 0xFC18AD in ToneQuery_ReplyPercSourceName2AndIndex
 ;          0xFC258D in sub_FC24F6__FC252F
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
@@ -70168,8 +70293,8 @@ DrumKit_ResolveInstrumentRecord__FB49E5:
 ; Called from: 9 site(s) outside this module:
 ;          0xFB28C5 in sub_FB289A, 0xFB2AD7 in VoiceParams_Compute_C
 ;          0xFB2C8D in VoiceParams_Compute_C__FB2C6D, 0xFBD49E in sub_FBD46B
-;          0xFBD727 in sub_FBD6FC, 0xFC1743 in sub_FC1716
-;          0xFC187E in sub_FC1845, 0xFC2488 in sub_FC2430__FC2469
+;          0xFBD727 in sub_FBD6FC, 0xFC1743 in ToneQuery_ReplyPercSourceName1AndIndex
+;          0xFC187E in ToneQuery_ReplyPercSourceName2AndIndex, 0xFC2488 in sub_FC2430__FC2469
 ;          0xFC254E in sub_FC24F6__FC252F
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
@@ -73559,7 +73684,7 @@ sub_FB64C8:
 ;          0xFB6C0C 0xFB6D71
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA267A = sub_FA267A, 0xFC589E = sub_FC589E
+; Calls:   0xFA267A = Rec8644_Store3Bytes_AndFlagChanged, 0xFC589E = sub_FC589E
 ;          0xFC59EF = sub_FC59EF, 0xFC5EFB = sub_FC5EFB
 ;          0xFC6175 = sub_FC6175, 0xFC63EC = sub_FC63EC
 ;          0xFC654F = sub_FC654F, 0xFC65EC = sub_FC65EC
@@ -74304,7 +74429,7 @@ sub_FB6B5A__FB6BA4:
 ;          0xFB08D3 in MidiIn_ParseRingAndDispatch__FB086A, 0xFB0A37 in MidiMsg_SendBootSequence
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFACC3F = sub_FACC3F, 0xFB47C4 = sub_FB47C4
+; Calls:   0xFACC3F = PartRec_Word0006_SetBit13, 0xFB47C4 = sub_FB47C4
 ;          0xFB64C8 = sub_FB64C8, 0xFB6500 = sub_FB6500
 ;          0xFB6681 = sub_FB6681, 0xFB68DD = sub_FB68DD
 ;          0xFB6B5A = sub_FB6B5A, 0xFC28B5 = sub_FC28B5
@@ -75619,7 +75744,7 @@ Dev10C_WriteReg_c:
 ;   9 literal call site(s) from outside this block, 0 from inside it.
 ;          3  sub_FAC08D
 ;          2  Voice_Retire_Mode20
-;          1  Dev10C_StageRegs_0800_0840_FAB818
+;          1  Dev10C_StageRegs_0800_0840_ForNoteOn
 ;          1  sub_FADEAC
 ;          1  Voice_Retire_Mode08
 ;          1  Voice_Retire_Mode10
@@ -75784,7 +75909,7 @@ Dev10C_WriteSixChanRegs_FromD78A:
 ; Dev10C_SetChanReg_0840_0800_b -- 0xFB73F0..0xFB742B (60 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFAB8BD in Dev10C_StageRegs_0800_0840_FAB818__FAB87E
+;          0xFAB8BD in Dev10C_StageRegs_0800_0840_ForNoteOn__FAB87E
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB73F0-0xFB742B
@@ -92103,7 +92228,7 @@ sub_FBFFD4__FC02EF:
 	unlk32 xiz                                 ; FC02FC  unlk XIZ
 	ret                                        ; FC02FE  ret
 ; --------------------------------------------------------------------------
-; sub_FC02FF -- 0xFC02FF..0xFC035D (95 bytes)
+; ToneQuery_ReplyToneName -- 0xFC02FF..0xFC035D (95 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -92116,10 +92241,22 @@ sub_FBFFD4__FC02EF:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 4: latches the requested (program, bank) at
+;           0x00D75C/0x00D75D, resolves the tone record and copies its first
+;           17 bytes -- prom_d's 16-byte DISPLAYED NAME plus the byte at
+;           +0x10 -- into the reply payload. Returns 17.
+; Evidence: 0xFC0308 and 0xFC0310 store the two arguments; 0xFC031B calls
+;           ToneDB_ResolveToneRecord; 0xFC0322 `ld (XIZ+0xfa),0x0011` is
+;           both the copy bound and the value returned at 0xFC0356; the
+;           payload store is 0xFC034C `add XBC,0x0000d945` after `inc 6,XBC`
+;           at 0xFC034A. prom_d records a tone record's first 16 bytes as
+;           the displayed name (notes/FINDINGS-prom-d-tone-database.md
+;           section 2).
+; Unknown:  what tone-record byte +0x10 IS. It is copied, never interpreted
+;           here.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC02FF`.
 ; --------------------------------------------------------------------------
-sub_FC02FF:
+ToneQuery_ReplyToneName:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FC02FF  link XIZ,0xfff8
 	pushw	hl                                   ; FC0303  push HL
 	push	xix                                   ; FC0304  push XIX
@@ -92134,15 +92271,15 @@ sub_FC02FF:
 	ldw (xiz-6), 0x0011                        ; FC0322  ld (XIZ+0xfa),0x0011
 	ldw (xiz-8), 0x0000                        ; FC0327  ld (XIZ+0xf8),0x0000
 	pop	xiy                                    ; FC032C  pop XIY
-sub_FC02FF__FC032D:
+ToneQuery_ReplyToneName__FC032D:
 	ld	bc, (xiz-8)                             ; FC032D  ld BC,(XIZ+0xf8)
 	extpfx3 0x9E, 0xFA, 0xF1                   ; FC0330  cp BC,(XIZ+0xfa)
-	jr nc, sub_FC02FF__FC0356                  ; FC0333  jr NC,0xfc0356
-	jr sub_FC02FF__FC033C                      ; FC0335  jr T,0xfc033c
-sub_FC02FF__FC0337:
+	jr nc, ToneQuery_ReplyToneName__FC0356                  ; FC0333  jr NC,0xfc0356
+	jr ToneQuery_ReplyToneName__FC033C                      ; FC0335  jr T,0xfc033c
+ToneQuery_ReplyToneName__FC0337:
 	incm	1, (xiz-8)                            ; FC0337  incw 1,(XIZ+0xf8)
-	jr sub_FC02FF__FC032D                      ; FC033A  jr T,0xfc032d
-sub_FC02FF__FC033C:
+	jr ToneQuery_ReplyToneName__FC032D                      ; FC033A  jr T,0xfc032d
+ToneQuery_ReplyToneName__FC033C:
 	ld	ix, (xiz-8)                             ; FC033C  ld IX,(XIZ+0xf8)
 	extz	xix                                   ; FC033F  extz XIX
 	ld	xbc, (xiz-4)                            ; FC0341  ld XBC,(XIZ+0xfc)
@@ -92152,15 +92289,15 @@ sub_FC02FF__FC033C:
 	inc	6, xbc                                 ; FC034A  inc 6,XBC
 	add	xbc, 0xD945                            ; FC034C  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC0352  ld (XBC),H
-	jr sub_FC02FF__FC0337                      ; FC0354  jr T,0xfc0337
-sub_FC02FF__FC0356:
+	jr ToneQuery_ReplyToneName__FC0337                      ; FC0354  jr T,0xfc0337
+ToneQuery_ReplyToneName__FC0356:
 	ld	wa, (xiz-6)                             ; FC0356  ld WA,(XIZ+0xfa)
 	pop	xix                                    ; FC0359  pop XIX
 	popw	hl                                    ; FC035A  pop HL
 	unlk32 xiz                                 ; FC035B  unlk XIZ
 	ret                                        ; FC035D  ret
 ; --------------------------------------------------------------------------
-; sub_FC035E -- 0xFC035E..0xFC04EB (398 bytes)
+; ToneQuery_ReplySourceName1_ViaIndexMap -- 0xFC035E..0xFC04EB (398 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -92173,10 +92310,23 @@ sub_FC02FF__FC0356:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 5: maps (index, selector) through ONE OF THREE index maps
+;           chosen by selector bits 7:6 -- +0x44 ToneDB_SourceIndexMapA for
+;           00 and 11, +0x4C ToneDB_PercSourceIndexMapB for 01, +0x48
+;           ToneDB_SourceIndexMapB for 10 -- and replies with the 13 name
+;           characters of that row of +0x50 ToneDB_SourceNameList1. Selector
+;           bits 5:4 pick the internal image or the expansion board. Returns
+;           13.
+; Evidence: the four arms of the `cp BC,0 / 0x40 / 0x80 / 0xc0` chain at
+;           0xFC046B-0xFC047F read the slots at 0xFC03FD (+0x44), 0xFC0419
+;           (+0x4C), 0xFC0435 (+0x48) and 0xFC0450 (+0x44); 0xFC0484 `sll
+;           0x07,BC` with 0xFC048A `mul BC,0x0002` is row*128+index as LE16;
+;           0xFC049C reads +0x50; 0xFC04A8 sets the copy length 13 and
+;           0xFC04C1 `ld BC,0x0010` is the row stride.
+; Unknown:  which of the three maps the panel means by each selector value.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC035E`.
 ; --------------------------------------------------------------------------
-sub_FC035E:
+ToneQuery_ReplySourceName1_ViaIndexMap:
 	link32 0xEE, 0x0C, 0xDC, 0xFF              ; FC035E  link XIZ,0xffdc
 	pushw	hl                                   ; FC0362  push HL
 	push	xix                                   ; FC0363  push XIX
@@ -92192,95 +92342,95 @@ sub_FC035E:
 	and	wa, 48                                 ; FC0385  and WA,0x0030
 	ld	(xiz-18), wa                            ; FC0389  ld (XIZ+0xee),WA
 	ld	(xiz-30), wa                            ; FC038C  ld (XIZ+0xe2),WA
-	jr sub_FC035E__FC03D8                      ; FC038F  jr T,0xfc03d8
-sub_FC035E__FC0391:
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC03D8                      ; FC038F  jr T,0xfc03d8
+ToneQuery_ReplySourceName1_ViaIndexMap__FC0391:
 	ldl_da	xbc, (0xD7ED)                       ; FC0391  ld XBC,(0x00d7ed)
 	ld	(xiz-22), xbc                           ; FC0396  ld (XIZ+0xea),XBC
 	ldl_da	xwa, (0xD7F1)                       ; FC0399  ld XWA,(0x00d7f1)
 	ld	(xiz-28), xwa                           ; FC039E  ld (XIZ+0xe4),XWA
-	jr sub_FC035E__FC03F1                      ; FC03A1  jr T,0xfc03f1
-sub_FC035E__FC03A3:
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC03F1                      ; FC03A1  jr T,0xfc03f1
+ToneQuery_ReplySourceName1_ViaIndexMap__FC03A3:
 	ldl_da	xbc, (0xD80D)                       ; FC03A3  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC03A8  cp XBC,0x00000000
-	jr z, sub_FC035E__FC03C2                   ; FC03AE  jr Z,0xfc03c2
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC03C2                   ; FC03AE  jr Z,0xfc03c2
 	ldl_da	xbc, (0xD80D)                       ; FC03B0  ld XBC,(0x00d80d)
 	ld	(xiz-22), xbc                           ; FC03B5  ld (XIZ+0xea),XBC
 	ldl_da	xwa, (0xD811)                       ; FC03B8  ld XWA,(0x00d811)
 	ld	(xiz-28), xwa                           ; FC03BD  ld (XIZ+0xe4),XWA
-	jr sub_FC035E__FC03D6                      ; FC03C0  jr T,0xfc03d6
-sub_FC035E__FC03C2:
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC03D6                      ; FC03C0  jr T,0xfc03d6
+ToneQuery_ReplySourceName1_ViaIndexMap__FC03C2:
 	ldl_da	xbc, (0xD7ED)                       ; FC03C2  ld XBC,(0x00d7ed)
 	ld	(xiz-22), xbc                           ; FC03C7  ld (XIZ+0xea),XBC
 	ldl_da	xwa, (0xD7F1)                       ; FC03CA  ld XWA,(0x00d7f1)
 	ld	(xiz-28), xwa                           ; FC03CF  ld (XIZ+0xe4),XWA
 	ld	(xiz-23), 1                             ; FC03D2  ld (XIZ+0xe9),0x01
-sub_FC035E__FC03D6:
-	jr sub_FC035E__FC03F1                      ; FC03D6  jr T,0xfc03f1
-sub_FC035E__FC03D8:
+ToneQuery_ReplySourceName1_ViaIndexMap__FC03D6:
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC03F1                      ; FC03D6  jr T,0xfc03f1
+ToneQuery_ReplySourceName1_ViaIndexMap__FC03D8:
 	ld	bc, (xiz-30)                            ; FC03D8  ld BC,(XIZ+0xe2)
 	cps	bc, 0                                  ; FC03DB  cp BC,0
-	jr z, sub_FC035E__FC0391                   ; FC03DD  jr Z,0xfc0391
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0391                   ; FC03DD  jr Z,0xfc0391
 	cp	bc, 16                                  ; FC03DF  cp BC,0x0010
-	jr z, sub_FC035E__FC0391                   ; FC03E3  jr Z,0xfc0391
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0391                   ; FC03E3  jr Z,0xfc0391
 	cp	bc, 32                                  ; FC03E5  cp BC,0x0020
-	jr z, sub_FC035E__FC03A3                   ; FC03E9  jr Z,0xfc03a3
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC03A3                   ; FC03E9  jr Z,0xfc03a3
 	cp	bc, 48                                  ; FC03EB  cp BC,0x0030
-	jr z, sub_FC035E__FC03A3                   ; FC03EF  jr Z,0xfc03a3
-sub_FC035E__FC03F1:
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC03A3                   ; FC03EF  jr Z,0xfc03a3
+ToneQuery_ReplySourceName1_ViaIndexMap__FC03F1:
 	ld	bc, (xiz-10)                            ; FC03F1  ld BC,(XIZ+0xf6)
 	ld	(xiz-32), bc                            ; FC03F4  ld (XIZ+0xe0),BC
-	jrl sub_FC035E__FC0468                     ; FC03F7  jrl T,0xfc0468
-sub_FC035E__FC03FA:
+	jrl ToneQuery_ReplySourceName1_ViaIndexMap__FC0468                     ; FC03F7  jrl T,0xfc0468
+ToneQuery_ReplySourceName1_ViaIndexMap__FC03FA:
 	ld	xbc, (xiz-28)                           ; FC03FA  ld XBC,(XIZ+0xe4)
 	ld	xwa, (xbc+68)                           ; FC03FD  ld XWA,(XBC+0x44)
 	ld	(xiz-8), xwa                            ; FC0400  ld (XIZ+0xf8),XWA
 	cp (xiz-23), 0x00                          ; FC0403  cp (XIZ+0xe9),0x00
-	jr z, sub_FC035E__FC0413                   ; FC0407  jr Z,0xfc0413
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0413                   ; FC0407  jr Z,0xfc0413
 	ldw (xiz+8), 0x007F                        ; FC0409  ld (XIZ+0x08),0x007f
 	ldw (xiz+10), 0x0000                       ; FC040E  ld (XIZ+0x0a),0x0000
-sub_FC035E__FC0413:
-	jrl sub_FC035E__FC0481                     ; FC0413  jrl T,0xfc0481
-sub_FC035E__FC0416:
+ToneQuery_ReplySourceName1_ViaIndexMap__FC0413:
+	jrl ToneQuery_ReplySourceName1_ViaIndexMap__FC0481                     ; FC0413  jrl T,0xfc0481
+ToneQuery_ReplySourceName1_ViaIndexMap__FC0416:
 	ld	xbc, (xiz-28)                           ; FC0416  ld XBC,(XIZ+0xe4)
 	ld	xwa, (xbc+76)                           ; FC0419  ld XWA,(XBC+0x4c)
 	ld	(xiz-8), xwa                            ; FC041C  ld (XIZ+0xf8),XWA
 	cp (xiz-23), 0x00                          ; FC041F  cp (XIZ+0xe9),0x00
-	jr z, sub_FC035E__FC042F                   ; FC0423  jr Z,0xfc042f
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC042F                   ; FC0423  jr Z,0xfc042f
 	ldw (xiz+8), 0x0000                        ; FC0425  ld (XIZ+0x08),0x0000
 	ldw (xiz+10), 0x0000                       ; FC042A  ld (XIZ+0x0a),0x0000
-sub_FC035E__FC042F:
-	jrl sub_FC035E__FC0481                     ; FC042F  jrl T,0xfc0481
-sub_FC035E__FC0432:
+ToneQuery_ReplySourceName1_ViaIndexMap__FC042F:
+	jrl ToneQuery_ReplySourceName1_ViaIndexMap__FC0481                     ; FC042F  jrl T,0xfc0481
+ToneQuery_ReplySourceName1_ViaIndexMap__FC0432:
 	ld	xbc, (xiz-28)                           ; FC0432  ld XBC,(XIZ+0xe4)
 	ld	xwa, (xbc+72)                           ; FC0435  ld XWA,(XBC+0x48)
 	ld	(xiz-8), xwa                            ; FC0438  ld (XIZ+0xf8),XWA
 	cp (xiz-23), 0x00                          ; FC043B  cp (XIZ+0xe9),0x00
-	jr z, sub_FC035E__FC044B                   ; FC043F  jr Z,0xfc044b
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC044B                   ; FC043F  jr Z,0xfc044b
 	ldw (xiz+8), 0x007F                        ; FC0441  ld (XIZ+0x08),0x007f
 	ldw (xiz+10), 0x0000                       ; FC0446  ld (XIZ+0x0a),0x0000
-sub_FC035E__FC044B:
-	jr sub_FC035E__FC0481                      ; FC044B  jr T,0xfc0481
-sub_FC035E__FC044D:
+ToneQuery_ReplySourceName1_ViaIndexMap__FC044B:
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC0481                      ; FC044B  jr T,0xfc0481
+ToneQuery_ReplySourceName1_ViaIndexMap__FC044D:
 	ld	xbc, (xiz-28)                           ; FC044D  ld XBC,(XIZ+0xe4)
 	ld	xwa, (xbc+68)                           ; FC0450  ld XWA,(XBC+0x44)
 	ld	(xiz-8), xwa                            ; FC0453  ld (XIZ+0xf8),XWA
 	cp (xiz-23), 0x00                          ; FC0456  cp (XIZ+0xe9),0x00
-	jr z, sub_FC035E__FC0466                   ; FC045A  jr Z,0xfc0466
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0466                   ; FC045A  jr Z,0xfc0466
 	ldw (xiz+8), 0x007F                        ; FC045C  ld (XIZ+0x08),0x007f
 	ldw (xiz+10), 0x0000                       ; FC0461  ld (XIZ+0x0a),0x0000
-sub_FC035E__FC0466:
-	jr sub_FC035E__FC0481                      ; FC0466  jr T,0xfc0481
-sub_FC035E__FC0468:
+ToneQuery_ReplySourceName1_ViaIndexMap__FC0466:
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC0481                      ; FC0466  jr T,0xfc0481
+ToneQuery_ReplySourceName1_ViaIndexMap__FC0468:
 	ld	bc, (xiz-32)                            ; FC0468  ld BC,(XIZ+0xe0)
 	cps	bc, 0                                  ; FC046B  cp BC,0
-	jr z, sub_FC035E__FC03FA                   ; FC046D  jr Z,0xfc03fa
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC03FA                   ; FC046D  jr Z,0xfc03fa
 	cp	bc, 64                                  ; FC046F  cp BC,0x0040
-	jr z, sub_FC035E__FC0416                   ; FC0473  jr Z,0xfc0416
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0416                   ; FC0473  jr Z,0xfc0416
 	cp	bc, 0x80                                ; FC0475  cp BC,0x0080
-	jr z, sub_FC035E__FC0432                   ; FC0479  jr Z,0xfc0432
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC0432                   ; FC0479  jr Z,0xfc0432
 	cp	bc, 0xC0                                ; FC047B  cp BC,0x00c0
-	jr z, sub_FC035E__FC044D                   ; FC047F  jr Z,0xfc044d
-sub_FC035E__FC0481:
+	jr z, ToneQuery_ReplySourceName1_ViaIndexMap__FC044D                   ; FC047F  jr Z,0xfc044d
+ToneQuery_ReplySourceName1_ViaIndexMap__FC0481:
 	ld	bc, (xiz+10)                            ; FC0481  ld BC,(XIZ+0x0a)
 	sll	bc, 7                                  ; FC0484  sll 0x07,BC
 	extpfx3 0x9E, 0x08, 0x81                   ; FC0487  add BC,(XIZ+0x08)
@@ -92296,15 +92446,15 @@ sub_FC035E__FC0481:
 	ld	(xiz-4), xiy                            ; FC04A5  ld (XIZ+0xfc),XIY
 	ldw (xiz-14), 0x000D                       ; FC04A8  ld (XIZ+0xf2),0x000d
 	ldw (xiz-16), 0x0000                       ; FC04AD  ld (XIZ+0xf0),0x0000
-sub_FC035E__FC04B2:
+ToneQuery_ReplySourceName1_ViaIndexMap__FC04B2:
 	ld	bc, (xiz-16)                            ; FC04B2  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xF2, 0xF1                   ; FC04B5  cp BC,(XIZ+0xf2)
-	jr nc, sub_FC035E__FC04E4                  ; FC04B8  jr NC,0xfc04e4
-	jr sub_FC035E__FC04C1                      ; FC04BA  jr T,0xfc04c1
-sub_FC035E__FC04BC:
+	jr nc, ToneQuery_ReplySourceName1_ViaIndexMap__FC04E4                  ; FC04B8  jr NC,0xfc04e4
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC04C1                      ; FC04BA  jr T,0xfc04c1
+ToneQuery_ReplySourceName1_ViaIndexMap__FC04BC:
 	incm	1, (xiz-16)                           ; FC04BC  incw 1,(XIZ+0xf0)
-	jr sub_FC035E__FC04B2                      ; FC04BF  jr T,0xfc04b2
-sub_FC035E__FC04C1:
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC04B2                      ; FC04BF  jr T,0xfc04b2
+ToneQuery_ReplySourceName1_ViaIndexMap__FC04C1:
 	ldw	bc, 16                                 ; FC04C1  ld BC,0x0010
 	extpfx3 0x9E, 0xF4, 0x41                   ; FC04C4  mul XBC,(XIZ+0xf4)
 	ld	xix, xbc                                ; FC04C7  ld XIX,XBC
@@ -92317,15 +92467,15 @@ sub_FC035E__FC04C1:
 	inc	6, xwa                                 ; FC04D8  inc 6,XWA
 	add	xwa, 0xD945                            ; FC04DA  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC04E0  ld (XWA),H
-	jr sub_FC035E__FC04BC                      ; FC04E2  jr T,0xfc04bc
-sub_FC035E__FC04E4:
+	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC04BC                      ; FC04E2  jr T,0xfc04bc
+ToneQuery_ReplySourceName1_ViaIndexMap__FC04E4:
 	ld	wa, (xiz-14)                            ; FC04E4  ld WA,(XIZ+0xf2)
 	pop	xix                                    ; FC04E7  pop XIX
 	popw	hl                                    ; FC04E8  pop HL
 	unlk32 xiz                                 ; FC04E9  unlk XIZ
 	ret                                        ; FC04EB  ret
 ; --------------------------------------------------------------------------
-; sub_FC04EC -- 0xFC04EC..0xFC0679 (398 bytes)
+; ToneQuery_ReplySourceName2_ViaIndexMap -- 0xFC04EC..0xFC0679 (398 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -92338,10 +92488,20 @@ sub_FC035E__FC04E4:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 6: the same shape as arm 5 over the OTHER map family --
+;           +0x58 ToneDB_SourceIndexMapC for selector bits 7:6 = 00 and 11,
+;           +0x60 ToneDB_PercSourceIndexMapC for 01, +0x5C
+;           ToneDB_SourceIndexMapD for 10 -- replying with 13 name
+;           characters from +0x64 ToneDB_SourceNameList2.
+; Evidence: the `cp BC,0 / 0x40 / 0x80 / 0xc0` chain at 0xFC05F9-0xFC060D
+;           reaches the slot reads at 0xFC058B (+0x58), 0xFC05A7 (+0x60),
+;           0xFC05C3 (+0x5C) and 0xFC05DE (+0x58); 0xFC062A reads +0x64;
+;           0xFC0636 sets the length 13 and 0xFC064F `ld BC,0x0010` is the
+;           row stride.
+; Unknown:  the same as arm 5: which map each selector value means.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC04EC`.
 ; --------------------------------------------------------------------------
-sub_FC04EC:
+ToneQuery_ReplySourceName2_ViaIndexMap:
 	link32 0xEE, 0x0C, 0xDC, 0xFF              ; FC04EC  link XIZ,0xffdc
 	pushw	hl                                   ; FC04F0  push HL
 	push	xix                                   ; FC04F1  push XIX
@@ -92357,95 +92517,95 @@ sub_FC04EC:
 	and	wa, 48                                 ; FC0513  and WA,0x0030
 	ld	(xiz-18), wa                            ; FC0517  ld (XIZ+0xee),WA
 	ld	(xiz-30), wa                            ; FC051A  ld (XIZ+0xe2),WA
-	jr sub_FC04EC__FC0566                      ; FC051D  jr T,0xfc0566
-sub_FC04EC__FC051F:
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC0566                      ; FC051D  jr T,0xfc0566
+ToneQuery_ReplySourceName2_ViaIndexMap__FC051F:
 	ldl_da	xbc, (0xD7ED)                       ; FC051F  ld XBC,(0x00d7ed)
 	ld	(xiz-22), xbc                           ; FC0524  ld (XIZ+0xea),XBC
 	ldl_da	xwa, (0xD7F1)                       ; FC0527  ld XWA,(0x00d7f1)
 	ld	(xiz-28), xwa                           ; FC052C  ld (XIZ+0xe4),XWA
-	jr sub_FC04EC__FC057F                      ; FC052F  jr T,0xfc057f
-sub_FC04EC__FC0531:
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC057F                      ; FC052F  jr T,0xfc057f
+ToneQuery_ReplySourceName2_ViaIndexMap__FC0531:
 	ldl_da	xbc, (0xD80D)                       ; FC0531  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC0536  cp XBC,0x00000000
-	jr z, sub_FC04EC__FC0550                   ; FC053C  jr Z,0xfc0550
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC0550                   ; FC053C  jr Z,0xfc0550
 	ldl_da	xbc, (0xD80D)                       ; FC053E  ld XBC,(0x00d80d)
 	ld	(xiz-22), xbc                           ; FC0543  ld (XIZ+0xea),XBC
 	ldl_da	xwa, (0xD811)                       ; FC0546  ld XWA,(0x00d811)
 	ld	(xiz-28), xwa                           ; FC054B  ld (XIZ+0xe4),XWA
-	jr sub_FC04EC__FC0564                      ; FC054E  jr T,0xfc0564
-sub_FC04EC__FC0550:
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC0564                      ; FC054E  jr T,0xfc0564
+ToneQuery_ReplySourceName2_ViaIndexMap__FC0550:
 	ldl_da	xbc, (0xD7ED)                       ; FC0550  ld XBC,(0x00d7ed)
 	ld	(xiz-22), xbc                           ; FC0555  ld (XIZ+0xea),XBC
 	ldl_da	xwa, (0xD7F1)                       ; FC0558  ld XWA,(0x00d7f1)
 	ld	(xiz-28), xwa                           ; FC055D  ld (XIZ+0xe4),XWA
 	ld	(xiz-23), 1                             ; FC0560  ld (XIZ+0xe9),0x01
-sub_FC04EC__FC0564:
-	jr sub_FC04EC__FC057F                      ; FC0564  jr T,0xfc057f
-sub_FC04EC__FC0566:
+ToneQuery_ReplySourceName2_ViaIndexMap__FC0564:
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC057F                      ; FC0564  jr T,0xfc057f
+ToneQuery_ReplySourceName2_ViaIndexMap__FC0566:
 	ld	bc, (xiz-30)                            ; FC0566  ld BC,(XIZ+0xe2)
 	cps	bc, 0                                  ; FC0569  cp BC,0
-	jr z, sub_FC04EC__FC051F                   ; FC056B  jr Z,0xfc051f
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC051F                   ; FC056B  jr Z,0xfc051f
 	cp	bc, 16                                  ; FC056D  cp BC,0x0010
-	jr z, sub_FC04EC__FC051F                   ; FC0571  jr Z,0xfc051f
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC051F                   ; FC0571  jr Z,0xfc051f
 	cp	bc, 32                                  ; FC0573  cp BC,0x0020
-	jr z, sub_FC04EC__FC0531                   ; FC0577  jr Z,0xfc0531
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC0531                   ; FC0577  jr Z,0xfc0531
 	cp	bc, 48                                  ; FC0579  cp BC,0x0030
-	jr z, sub_FC04EC__FC0531                   ; FC057D  jr Z,0xfc0531
-sub_FC04EC__FC057F:
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC0531                   ; FC057D  jr Z,0xfc0531
+ToneQuery_ReplySourceName2_ViaIndexMap__FC057F:
 	ld	bc, (xiz-10)                            ; FC057F  ld BC,(XIZ+0xf6)
 	ld	(xiz-32), bc                            ; FC0582  ld (XIZ+0xe0),BC
-	jrl sub_FC04EC__FC05F6                     ; FC0585  jrl T,0xfc05f6
-sub_FC04EC__FC0588:
+	jrl ToneQuery_ReplySourceName2_ViaIndexMap__FC05F6                     ; FC0585  jrl T,0xfc05f6
+ToneQuery_ReplySourceName2_ViaIndexMap__FC0588:
 	ld	xbc, (xiz-28)                           ; FC0588  ld XBC,(XIZ+0xe4)
 	ld	xwa, (xbc+88)                           ; FC058B  ld XWA,(XBC+0x58)
 	ld	(xiz-8), xwa                            ; FC058E  ld (XIZ+0xf8),XWA
 	cp (xiz-23), 0x00                          ; FC0591  cp (XIZ+0xe9),0x00
-	jr z, sub_FC04EC__FC05A1                   ; FC0595  jr Z,0xfc05a1
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC05A1                   ; FC0595  jr Z,0xfc05a1
 	ldw (xiz+8), 0x007F                        ; FC0597  ld (XIZ+0x08),0x007f
 	ldw (xiz+10), 0x0000                       ; FC059C  ld (XIZ+0x0a),0x0000
-sub_FC04EC__FC05A1:
-	jrl sub_FC04EC__FC060F                     ; FC05A1  jrl T,0xfc060f
-sub_FC04EC__FC05A4:
+ToneQuery_ReplySourceName2_ViaIndexMap__FC05A1:
+	jrl ToneQuery_ReplySourceName2_ViaIndexMap__FC060F                     ; FC05A1  jrl T,0xfc060f
+ToneQuery_ReplySourceName2_ViaIndexMap__FC05A4:
 	ld	xbc, (xiz-28)                           ; FC05A4  ld XBC,(XIZ+0xe4)
 	ld	xwa, (xbc+96)                           ; FC05A7  ld XWA,(XBC+0x60)
 	ld	(xiz-8), xwa                            ; FC05AA  ld (XIZ+0xf8),XWA
 	cp (xiz-23), 0x00                          ; FC05AD  cp (XIZ+0xe9),0x00
-	jr z, sub_FC04EC__FC05BD                   ; FC05B1  jr Z,0xfc05bd
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC05BD                   ; FC05B1  jr Z,0xfc05bd
 	ldw (xiz+8), 0x0000                        ; FC05B3  ld (XIZ+0x08),0x0000
 	ldw (xiz+10), 0x0000                       ; FC05B8  ld (XIZ+0x0a),0x0000
-sub_FC04EC__FC05BD:
-	jrl sub_FC04EC__FC060F                     ; FC05BD  jrl T,0xfc060f
-sub_FC04EC__FC05C0:
+ToneQuery_ReplySourceName2_ViaIndexMap__FC05BD:
+	jrl ToneQuery_ReplySourceName2_ViaIndexMap__FC060F                     ; FC05BD  jrl T,0xfc060f
+ToneQuery_ReplySourceName2_ViaIndexMap__FC05C0:
 	ld	xbc, (xiz-28)                           ; FC05C0  ld XBC,(XIZ+0xe4)
 	ld	xwa, (xbc+92)                           ; FC05C3  ld XWA,(XBC+0x5c)
 	ld	(xiz-8), xwa                            ; FC05C6  ld (XIZ+0xf8),XWA
 	cp (xiz-23), 0x00                          ; FC05C9  cp (XIZ+0xe9),0x00
-	jr z, sub_FC04EC__FC05D9                   ; FC05CD  jr Z,0xfc05d9
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC05D9                   ; FC05CD  jr Z,0xfc05d9
 	ldw (xiz+8), 0x007F                        ; FC05CF  ld (XIZ+0x08),0x007f
 	ldw (xiz+10), 0x0000                       ; FC05D4  ld (XIZ+0x0a),0x0000
-sub_FC04EC__FC05D9:
-	jr sub_FC04EC__FC060F                      ; FC05D9  jr T,0xfc060f
-sub_FC04EC__FC05DB:
+ToneQuery_ReplySourceName2_ViaIndexMap__FC05D9:
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC060F                      ; FC05D9  jr T,0xfc060f
+ToneQuery_ReplySourceName2_ViaIndexMap__FC05DB:
 	ld	xbc, (xiz-28)                           ; FC05DB  ld XBC,(XIZ+0xe4)
 	ld	xwa, (xbc+88)                           ; FC05DE  ld XWA,(XBC+0x58)
 	ld	(xiz-8), xwa                            ; FC05E1  ld (XIZ+0xf8),XWA
 	cp (xiz-23), 0x00                          ; FC05E4  cp (XIZ+0xe9),0x00
-	jr z, sub_FC04EC__FC05F4                   ; FC05E8  jr Z,0xfc05f4
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC05F4                   ; FC05E8  jr Z,0xfc05f4
 	ldw (xiz+8), 0x007F                        ; FC05EA  ld (XIZ+0x08),0x007f
 	ldw (xiz+10), 0x0000                       ; FC05EF  ld (XIZ+0x0a),0x0000
-sub_FC04EC__FC05F4:
-	jr sub_FC04EC__FC060F                      ; FC05F4  jr T,0xfc060f
-sub_FC04EC__FC05F6:
+ToneQuery_ReplySourceName2_ViaIndexMap__FC05F4:
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC060F                      ; FC05F4  jr T,0xfc060f
+ToneQuery_ReplySourceName2_ViaIndexMap__FC05F6:
 	ld	bc, (xiz-32)                            ; FC05F6  ld BC,(XIZ+0xe0)
 	cps	bc, 0                                  ; FC05F9  cp BC,0
-	jr z, sub_FC04EC__FC0588                   ; FC05FB  jr Z,0xfc0588
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC0588                   ; FC05FB  jr Z,0xfc0588
 	cp	bc, 64                                  ; FC05FD  cp BC,0x0040
-	jr z, sub_FC04EC__FC05A4                   ; FC0601  jr Z,0xfc05a4
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC05A4                   ; FC0601  jr Z,0xfc05a4
 	cp	bc, 0x80                                ; FC0603  cp BC,0x0080
-	jr z, sub_FC04EC__FC05C0                   ; FC0607  jr Z,0xfc05c0
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC05C0                   ; FC0607  jr Z,0xfc05c0
 	cp	bc, 0xC0                                ; FC0609  cp BC,0x00c0
-	jr z, sub_FC04EC__FC05DB                   ; FC060D  jr Z,0xfc05db
-sub_FC04EC__FC060F:
+	jr z, ToneQuery_ReplySourceName2_ViaIndexMap__FC05DB                   ; FC060D  jr Z,0xfc05db
+ToneQuery_ReplySourceName2_ViaIndexMap__FC060F:
 	ld	bc, (xiz+10)                            ; FC060F  ld BC,(XIZ+0x0a)
 	sll	bc, 7                                  ; FC0612  sll 0x07,BC
 	extpfx3 0x9E, 0x08, 0x81                   ; FC0615  add BC,(XIZ+0x08)
@@ -92461,15 +92621,15 @@ sub_FC04EC__FC060F:
 	ld	(xiz-4), xiy                            ; FC0633  ld (XIZ+0xfc),XIY
 	ldw (xiz-14), 0x000D                       ; FC0636  ld (XIZ+0xf2),0x000d
 	ldw (xiz-16), 0x0000                       ; FC063B  ld (XIZ+0xf0),0x0000
-sub_FC04EC__FC0640:
+ToneQuery_ReplySourceName2_ViaIndexMap__FC0640:
 	ld	bc, (xiz-16)                            ; FC0640  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xF2, 0xF1                   ; FC0643  cp BC,(XIZ+0xf2)
-	jr nc, sub_FC04EC__FC0672                  ; FC0646  jr NC,0xfc0672
-	jr sub_FC04EC__FC064F                      ; FC0648  jr T,0xfc064f
-sub_FC04EC__FC064A:
+	jr nc, ToneQuery_ReplySourceName2_ViaIndexMap__FC0672                  ; FC0646  jr NC,0xfc0672
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC064F                      ; FC0648  jr T,0xfc064f
+ToneQuery_ReplySourceName2_ViaIndexMap__FC064A:
 	incm	1, (xiz-16)                           ; FC064A  incw 1,(XIZ+0xf0)
-	jr sub_FC04EC__FC0640                      ; FC064D  jr T,0xfc0640
-sub_FC04EC__FC064F:
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC0640                      ; FC064D  jr T,0xfc0640
+ToneQuery_ReplySourceName2_ViaIndexMap__FC064F:
 	ldw	bc, 16                                 ; FC064F  ld BC,0x0010
 	extpfx3 0x9E, 0xF4, 0x41                   ; FC0652  mul XBC,(XIZ+0xf4)
 	ld	xix, xbc                                ; FC0655  ld XIX,XBC
@@ -92482,15 +92642,15 @@ sub_FC04EC__FC064F:
 	inc	6, xwa                                 ; FC0666  inc 6,XWA
 	add	xwa, 0xD945                            ; FC0668  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC066E  ld (XWA),H
-	jr sub_FC04EC__FC064A                      ; FC0670  jr T,0xfc064a
-sub_FC04EC__FC0672:
+	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC064A                      ; FC0670  jr T,0xfc064a
+ToneQuery_ReplySourceName2_ViaIndexMap__FC0672:
 	ld	wa, (xiz-14)                            ; FC0672  ld WA,(XIZ+0xf2)
 	pop	xix                                    ; FC0675  pop XIX
 	popw	hl                                    ; FC0676  pop HL
 	unlk32 xiz                                 ; FC0677  unlk XIZ
 	ret                                        ; FC0679  ret
 ; --------------------------------------------------------------------------
-; sub_FC067A -- 0xFC067A..0xFC0745 (204 bytes)
+; ToneQuery_ReplySourceName1_ByRow -- 0xFC067A..0xFC0745 (204 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -92503,10 +92663,27 @@ sub_FC04EC__FC0672:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 7: replies with the 13 name characters of ROW N of +0x50
+;           ToneDB_SourceNameList1, N being the 16-bit value the arm
+;           assembles as request[+1]<<8 | request[+3]. A row at or past the
+;           internal count in +0x54 ToneDB_SourceList1_Footer is taken from
+;           the expansion board's copy with the count subtracted; with no
+;           board fitted the row falls back to ENTRY 127 of +0x44
+;           ToneDB_SourceIndexMapA. Returns 13.
+; Evidence: 0xFC0685 reads +0x54 and 0xFC0698 `ld IY,(XWA)` its count;
+;           0xFC069D `jr NC,0xfc06af` takes the board path; 0xFC069F and
+;           0xFC06C1 read +0x50 through the internal and board bases;
+;           0xFC06DE reads +0x44 and 0xFC06E4 `add XWA,0x000000fe` is entry
+;           127 of an LE16 map; 0xFC0702 sets the length 13, 0xFC071B `ld
+;           BC,0x0010` is the row stride and 0xFC0734 the payload store. The
+;           16-bit argument is built by the arm at 0xFC1CD2 `sll 0x08,HL` /
+;           0xFC1CDA `or WA,HL`.
+; Unknown:  nothing about the row's meaning beyond its name; the byte at row
+;           +0x0D that arms 9, 10, 16, 18 and 19 return is not returned
+;           here.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC067A`.
 ; --------------------------------------------------------------------------
-sub_FC067A:
+ToneQuery_ReplySourceName1_ByRow:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FC067A  link XIZ,0xffec
 	pushw	hl                                   ; FC067E  push HL
 	push	xix                                   ; FC067F  push XIX
@@ -92519,16 +92696,16 @@ sub_FC067A:
 	ld	(xiz-8), xwa                            ; FC0695  ld (XIZ+0xf8),XWA
 	ld	iy, (xwa)                               ; FC0698  ld IY,(XWA)
 	cp	(xiz+8), iy                             ; FC069A  cp (XIZ+0x08),IY
-	jr nc, sub_FC067A__FC06AF                  ; FC069D  jr NC,0xfc06af
+	jr nc, ToneQuery_ReplySourceName1_ByRow__FC06AF                  ; FC069D  jr NC,0xfc06af
 	ld	xiy, (xbc+80)                           ; FC069F  ld XIY,(XBC+0x50)
 	ld	(xiz-12), xiy                           ; FC06A2  ld (XIZ+0xf4),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FC06A5  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC06AA  ld (XIZ+0xfc),XIY
-	jr sub_FC067A__FC0702                      ; FC06AD  jr T,0xfc0702
-sub_FC067A__FC06AF:
+	jr ToneQuery_ReplySourceName1_ByRow__FC0702                      ; FC06AD  jr T,0xfc0702
+ToneQuery_ReplySourceName1_ByRow__FC06AF:
 	ldl_da	xbc, (0xD80D)                       ; FC06AF  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC06B4  cp XBC,0x00000000
-	jr z, sub_FC067A__FC06D9                   ; FC06BA  jr Z,0xfc06d9
+	jr z, ToneQuery_ReplySourceName1_ByRow__FC06D9                   ; FC06BA  jr Z,0xfc06d9
 	ldl_da	xbc, (0xD811)                       ; FC06BC  ld XBC,(0x00d811)
 	ld	xwa, (xbc+80)                           ; FC06C1  ld XWA,(XBC+0x50)
 	ld	(xiz-12), xwa                           ; FC06C4  ld (XIZ+0xf4),XWA
@@ -92537,8 +92714,8 @@ sub_FC067A__FC06AF:
 	ld	xiy, (xiz-8)                            ; FC06CF  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FC06D2  ld BC,(XIY)
 	sub	(xiz+8), bc                            ; FC06D4  sub (XIZ+0x08),BC
-	jr sub_FC067A__FC0702                      ; FC06D7  jr T,0xfc0702
-sub_FC067A__FC06D9:
+	jr ToneQuery_ReplySourceName1_ByRow__FC0702                      ; FC06D7  jr T,0xfc0702
+ToneQuery_ReplySourceName1_ByRow__FC06D9:
 	ldl_da	xbc, (0xD7F1)                       ; FC06D9  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+68)                           ; FC06DE  ld XWA,(XBC+0x44)
 	ld	(xiz-12), xwa                           ; FC06E1  ld (XIZ+0xf4),XWA
@@ -92550,18 +92727,18 @@ sub_FC067A__FC06D9:
 	ld	(xiz-12), xwa                           ; FC06F7  ld (XIZ+0xf4),XWA
 	addda32_24	xwa, (0xD7ED)                   ; FC06FA  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC06FF  ld (XIZ+0xfc),XWA
-sub_FC067A__FC0702:
+ToneQuery_ReplySourceName1_ByRow__FC0702:
 	ldw (xiz-14), 0x000D                       ; FC0702  ld (XIZ+0xf2),0x000d
 	ldw (xiz-16), 0x0000                       ; FC0707  ld (XIZ+0xf0),0x0000
-sub_FC067A__FC070C:
+ToneQuery_ReplySourceName1_ByRow__FC070C:
 	ld	bc, (xiz-16)                            ; FC070C  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xF2, 0xF1                   ; FC070F  cp BC,(XIZ+0xf2)
-	jr nc, sub_FC067A__FC073E                  ; FC0712  jr NC,0xfc073e
-	jr sub_FC067A__FC071B                      ; FC0714  jr T,0xfc071b
-sub_FC067A__FC0716:
+	jr nc, ToneQuery_ReplySourceName1_ByRow__FC073E                  ; FC0712  jr NC,0xfc073e
+	jr ToneQuery_ReplySourceName1_ByRow__FC071B                      ; FC0714  jr T,0xfc071b
+ToneQuery_ReplySourceName1_ByRow__FC0716:
 	incm	1, (xiz-16)                           ; FC0716  incw 1,(XIZ+0xf0)
-	jr sub_FC067A__FC070C                      ; FC0719  jr T,0xfc070c
-sub_FC067A__FC071B:
+	jr ToneQuery_ReplySourceName1_ByRow__FC070C                      ; FC0719  jr T,0xfc070c
+ToneQuery_ReplySourceName1_ByRow__FC071B:
 	ldw	bc, 16                                 ; FC071B  ld BC,0x0010
 	extpfx3 0x9E, 0x08, 0x41                   ; FC071E  mul XBC,(XIZ+0x08)
 	ld	xix, xbc                                ; FC0721  ld XIX,XBC
@@ -92574,15 +92751,15 @@ sub_FC067A__FC071B:
 	inc	6, xwa                                 ; FC0732  inc 6,XWA
 	add	xwa, 0xD945                            ; FC0734  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC073A  ld (XWA),H
-	jr sub_FC067A__FC0716                      ; FC073C  jr T,0xfc0716
-sub_FC067A__FC073E:
+	jr ToneQuery_ReplySourceName1_ByRow__FC0716                      ; FC073C  jr T,0xfc0716
+ToneQuery_ReplySourceName1_ByRow__FC073E:
 	ld	wa, (xiz-14)                            ; FC073E  ld WA,(XIZ+0xf2)
 	pop	xix                                    ; FC0741  pop XIX
 	popw	hl                                    ; FC0742  pop HL
 	unlk32 xiz                                 ; FC0743  unlk XIZ
 	ret                                        ; FC0745  ret
 ; --------------------------------------------------------------------------
-; sub_FC0746 -- 0xFC0746..0xFC0816 (209 bytes)
+; ToneQuery_ReplySourceName2_ByRow -- 0xFC0746..0xFC0816 (209 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -92595,10 +92772,22 @@ sub_FC067A__FC073E:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 8: arm 7's twin over +0x64 ToneDB_SourceNameList2, counted
+;           by +0x68 ToneDB_SourceList2_Footer. ONE REAL DIFFERENCE: the
+;           no-board fallback reads entry 127 of +0x58
+;           ToneDB_SourceIndexMapC and then THROWS THE VALUE AWAY --
+;           0xFC07CE `ld (XIZ+0x08),0x0000` overwrites it -- so this list's
+;           fallback row is 0, where arm 7's is the map entry. Returns 13.
+; Evidence: 0xFC0751 reads +0x68; 0xFC076B and 0xFC078D read +0x64; 0xFC07AA
+;           reads +0x58 and 0xFC07B0 `add XWA,0x000000fe` is entry 127;
+;           0xFC07BD stores the fetched value into the index slot and
+;           0xFC07CE overwrites it with 0. Arm 7 has no such overwrite: its
+;           0xFC06F1 store is the last write to the slot.
+; Unknown:  whether the dead fallback read is deliberate or a bug in the
+;           ROM. It is reported as what the bytes do, not diagnosed.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC0746`.
 ; --------------------------------------------------------------------------
-sub_FC0746:
+ToneQuery_ReplySourceName2_ByRow:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FC0746  link XIZ,0xffec
 	pushw	hl                                   ; FC074A  push HL
 	push	xix                                   ; FC074B  push XIX
@@ -92611,16 +92800,16 @@ sub_FC0746:
 	ld	(xiz-8), xwa                            ; FC0761  ld (XIZ+0xf8),XWA
 	ld	iy, (xwa)                               ; FC0764  ld IY,(XWA)
 	cp	(xiz+8), iy                             ; FC0766  cp (XIZ+0x08),IY
-	jr nc, sub_FC0746__FC077B                  ; FC0769  jr NC,0xfc077b
+	jr nc, ToneQuery_ReplySourceName2_ByRow__FC077B                  ; FC0769  jr NC,0xfc077b
 	ld	xiy, (xbc+0x64)                         ; FC076B  ld XIY,(XBC+0x64)
 	ld	(xiz-12), xiy                           ; FC076E  ld (XIZ+0xf4),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FC0771  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC0776  ld (XIZ+0xfc),XIY
-	jr sub_FC0746__FC07D3                      ; FC0779  jr T,0xfc07d3
-sub_FC0746__FC077B:
+	jr ToneQuery_ReplySourceName2_ByRow__FC07D3                      ; FC0779  jr T,0xfc07d3
+ToneQuery_ReplySourceName2_ByRow__FC077B:
 	ldl_da	xbc, (0xD80D)                       ; FC077B  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC0780  cp XBC,0x00000000
-	jr z, sub_FC0746__FC07A5                   ; FC0786  jr Z,0xfc07a5
+	jr z, ToneQuery_ReplySourceName2_ByRow__FC07A5                   ; FC0786  jr Z,0xfc07a5
 	ldl_da	xbc, (0xD811)                       ; FC0788  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x64)                         ; FC078D  ld XWA,(XBC+0x64)
 	ld	(xiz-12), xwa                           ; FC0790  ld (XIZ+0xf4),XWA
@@ -92629,8 +92818,8 @@ sub_FC0746__FC077B:
 	ld	xiy, (xiz-8)                            ; FC079B  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FC079E  ld BC,(XIY)
 	sub	(xiz+8), bc                            ; FC07A0  sub (XIZ+0x08),BC
-	jr sub_FC0746__FC07D3                      ; FC07A3  jr T,0xfc07d3
-sub_FC0746__FC07A5:
+	jr ToneQuery_ReplySourceName2_ByRow__FC07D3                      ; FC07A3  jr T,0xfc07d3
+ToneQuery_ReplySourceName2_ByRow__FC07A5:
 	ldl_da	xbc, (0xD7F1)                       ; FC07A5  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+88)                           ; FC07AA  ld XWA,(XBC+0x58)
 	ld	(xiz-12), xwa                           ; FC07AD  ld (XIZ+0xf4),XWA
@@ -92643,18 +92832,18 @@ sub_FC0746__FC07A5:
 	addda32_24	xwa, (0xD7ED)                   ; FC07C6  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC07CB  ld (XIZ+0xfc),XWA
 	ldw (xiz+8), 0x0000                        ; FC07CE  ld (XIZ+0x08),0x0000
-sub_FC0746__FC07D3:
+ToneQuery_ReplySourceName2_ByRow__FC07D3:
 	ldw (xiz-14), 0x000D                       ; FC07D3  ld (XIZ+0xf2),0x000d
 	ldw (xiz-16), 0x0000                       ; FC07D8  ld (XIZ+0xf0),0x0000
-sub_FC0746__FC07DD:
+ToneQuery_ReplySourceName2_ByRow__FC07DD:
 	ld	bc, (xiz-16)                            ; FC07DD  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xF2, 0xF1                   ; FC07E0  cp BC,(XIZ+0xf2)
-	jr nc, sub_FC0746__FC080F                  ; FC07E3  jr NC,0xfc080f
-	jr sub_FC0746__FC07EC                      ; FC07E5  jr T,0xfc07ec
-sub_FC0746__FC07E7:
+	jr nc, ToneQuery_ReplySourceName2_ByRow__FC080F                  ; FC07E3  jr NC,0xfc080f
+	jr ToneQuery_ReplySourceName2_ByRow__FC07EC                      ; FC07E5  jr T,0xfc07ec
+ToneQuery_ReplySourceName2_ByRow__FC07E7:
 	incm	1, (xiz-16)                           ; FC07E7  incw 1,(XIZ+0xf0)
-	jr sub_FC0746__FC07DD                      ; FC07EA  jr T,0xfc07dd
-sub_FC0746__FC07EC:
+	jr ToneQuery_ReplySourceName2_ByRow__FC07DD                      ; FC07EA  jr T,0xfc07dd
+ToneQuery_ReplySourceName2_ByRow__FC07EC:
 	ldw	bc, 16                                 ; FC07EC  ld BC,0x0010
 	extpfx3 0x9E, 0x08, 0x41                   ; FC07EF  mul XBC,(XIZ+0x08)
 	ld	xix, xbc                                ; FC07F2  ld XIX,XBC
@@ -92667,15 +92856,15 @@ sub_FC0746__FC07EC:
 	inc	6, xwa                                 ; FC0803  inc 6,XWA
 	add	xwa, 0xD945                            ; FC0805  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC080B  ld (XWA),H
-	jr sub_FC0746__FC07E7                      ; FC080D  jr T,0xfc07e7
-sub_FC0746__FC080F:
+	jr ToneQuery_ReplySourceName2_ByRow__FC07E7                      ; FC080D  jr T,0xfc07e7
+ToneQuery_ReplySourceName2_ByRow__FC080F:
 	ld	wa, (xiz-14)                            ; FC080F  ld WA,(XIZ+0xf2)
 	pop	xix                                    ; FC0812  pop XIX
 	popw	hl                                    ; FC0813  pop HL
 	unlk32 xiz                                 ; FC0814  unlk XIZ
 	ret                                        ; FC0816  ret
 ; --------------------------------------------------------------------------
-; sub_FC0817 -- 0xFC0817..0xFC0AD3 (701 bytes)
+; ToneQuery_ReplyPartElementSourceName1 -- 0xFC0817..0xFC0AD3 (701 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -92688,10 +92877,25 @@ sub_FC0746__FC080F:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 9: takes (part, element), follows the part record's element
+;           pointer at 0x001523 + part*0x012C + 0x88 + element*0x29, uses
+;           that block's byte +0x02 masked 0x7F as the index and +0x03 as
+;           the selector, and replies with 16 bytes: 13 name characters from
+;           +0x50 ToneDB_SourceNameList1, then the row's byte +0x0D and the
+;           row number as LE16.
+; Evidence: 0xFC082A `mul C,0x29`, 0xFC0834 `mul WA,0x012c` and 0xFC083A
+;           `add WA,0x0088` form the element pointer, read at 0xFC0840 `ld
+;           XBC,(XWA+0x1523)`; 0xFC0845 `ld A,(XBC+0x02)` with 0xFC084D `and
+;           WA,0x007f` is the index and 0xFC0871 `ld A,(XBC+0x03)` the
+;           selector; the four map slots are at 0xFC0983, 0xFC099F,
+;           0xFC09BB, 0xFC09D6; 0xFC0A22 reads +0x50; 0xFC0A2E sets 13;
+;           0xFC0A70 `add XBC,0x0000000d` fetches row +0x0D; the three `incw
+;           1,(XIZ+0xea)` at 0xFC0A8F, 0xFC0AAF and 0xFC0AC9 take the reply
+;           to 16.
+; Unknown:  what row byte +0x0D means. It is forwarded, never used here.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC0817`.
 ; --------------------------------------------------------------------------
-sub_FC0817:
+ToneQuery_ReplyPartElementSourceName1:
 	link32 0xEE, 0x0C, 0xD0, 0xFF              ; FC0817  link XIZ,0xffd0
 	pushw	hl                                   ; FC081B  push HL
 	push	xix                                   ; FC081C  push XIX
@@ -92759,19 +92963,19 @@ sub_FC0817:
 	and	wa, 48                                 ; FC08D1  and WA,0x0030
 	ld	(xiz-26), wa                            ; FC08D5  ld (XIZ+0xe6),WA
 	ld	(xiz-42), wa                            ; FC08D8  ld (XIZ+0xd6),WA
-	jrl sub_FC0817__FC095C                     ; FC08DB  jrl T,0xfc095c
-sub_FC0817__FC08DE:
+	jrl ToneQuery_ReplyPartElementSourceName1__FC095C                     ; FC08DB  jrl T,0xfc095c
+ToneQuery_ReplyPartElementSourceName1__FC08DE:
 	ldl_da	xbc, (0xD7ED)                       ; FC08DE  ld XBC,(0x00d7ed)
 	ld	(xiz-34), xbc                           ; FC08E3  ld (XIZ+0xde),XBC
 	ldl_da	xwa, (0xD7F1)                       ; FC08E6  ld XWA,(0x00d7f1)
 	ld	(xiz-40), xwa                           ; FC08EB  ld (XIZ+0xd8),XWA
 	ldw (xiz-28), 0x0000                       ; FC08EE  ld (XIZ+0xe4),0x0000
 	ld	(xiz-30), 0                             ; FC08F3  ld (XIZ+0xe2),0x00
-	jrl sub_FC0817__FC0977                     ; FC08F7  jrl T,0xfc0977
-sub_FC0817__FC08FA:
+	jrl ToneQuery_ReplyPartElementSourceName1__FC0977                     ; FC08F7  jrl T,0xfc0977
+ToneQuery_ReplyPartElementSourceName1__FC08FA:
 	ldl_da	xbc, (0xD80D)                       ; FC08FA  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC08FF  cp XBC,0x00000000
-	jr z, sub_FC0817__FC093D                   ; FC0905  jr Z,0xfc093d
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC093D                   ; FC0905  jr Z,0xfc093d
 	ldl_da	xbc, (0xD80D)                       ; FC0907  ld XBC,(0x00d80d)
 	ld	(xiz-34), xbc                           ; FC090C  ld (XIZ+0xde),XBC
 	ldl_da	xwa, (0xD811)                       ; FC090F  ld XWA,(0x00d811)
@@ -92787,8 +92991,8 @@ sub_FC0817__FC08FA:
 	ld	(xiz-28), wa                            ; FC0932  ld (XIZ+0xe4),WA
 	ld	a, (xbc+2)                              ; FC0935  ld A,(XBC+0x02)
 	ld	(xiz-30), a                             ; FC0938  ld (XIZ+0xe2),A
-	jr sub_FC0817__FC095A                      ; FC093B  jr T,0xfc095a
-sub_FC0817__FC093D:
+	jr ToneQuery_ReplyPartElementSourceName1__FC095A                      ; FC093B  jr T,0xfc095a
+ToneQuery_ReplyPartElementSourceName1__FC093D:
 	ldl_da	xbc, (0xD7ED)                       ; FC093D  ld XBC,(0x00d7ed)
 	ld	(xiz-34), xbc                           ; FC0942  ld (XIZ+0xde),XBC
 	ldl_da	xwa, (0xD7F1)                       ; FC0945  ld XWA,(0x00d7f1)
@@ -92796,73 +93000,73 @@ sub_FC0817__FC093D:
 	ldw (xiz-28), 0x0000                       ; FC094D  ld (XIZ+0xe4),0x0000
 	ld	(xiz-30), 0                             ; FC0952  ld (XIZ+0xe2),0x00
 	ld	(xiz-35), 1                             ; FC0956  ld (XIZ+0xdd),0x01
-sub_FC0817__FC095A:
-	jr sub_FC0817__FC0977                      ; FC095A  jr T,0xfc0977
-sub_FC0817__FC095C:
+ToneQuery_ReplyPartElementSourceName1__FC095A:
+	jr ToneQuery_ReplyPartElementSourceName1__FC0977                      ; FC095A  jr T,0xfc0977
+ToneQuery_ReplyPartElementSourceName1__FC095C:
 	ld	bc, (xiz-42)                            ; FC095C  ld BC,(XIZ+0xd6)
 	cps	bc, 0                                  ; FC095F  cp BC,0
-	jrl z, sub_FC0817__FC08DE                  ; FC0961  jrl Z,0xfc08de
+	jrl z, ToneQuery_ReplyPartElementSourceName1__FC08DE                  ; FC0961  jrl Z,0xfc08de
 	cp	bc, 16                                  ; FC0964  cp BC,0x0010
-	jrl z, sub_FC0817__FC08DE                  ; FC0968  jrl Z,0xfc08de
+	jrl z, ToneQuery_ReplyPartElementSourceName1__FC08DE                  ; FC0968  jrl Z,0xfc08de
 	cp	bc, 32                                  ; FC096B  cp BC,0x0020
-	jr z, sub_FC0817__FC08FA                   ; FC096F  jr Z,0xfc08fa
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC08FA                   ; FC096F  jr Z,0xfc08fa
 	cp	bc, 48                                  ; FC0971  cp BC,0x0030
-	jr z, sub_FC0817__FC08FA                   ; FC0975  jr Z,0xfc08fa
-sub_FC0817__FC0977:
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC08FA                   ; FC0975  jr Z,0xfc08fa
+ToneQuery_ReplyPartElementSourceName1__FC0977:
 	ld	bc, (xiz-18)                            ; FC0977  ld BC,(XIZ+0xee)
 	ld	(xiz-44), bc                            ; FC097A  ld (XIZ+0xd4),BC
-	jrl sub_FC0817__FC09EE                     ; FC097D  jrl T,0xfc09ee
-sub_FC0817__FC0980:
+	jrl ToneQuery_ReplyPartElementSourceName1__FC09EE                     ; FC097D  jrl T,0xfc09ee
+ToneQuery_ReplyPartElementSourceName1__FC0980:
 	ld	xbc, (xiz-40)                           ; FC0980  ld XBC,(XIZ+0xd8)
 	ld	xwa, (xbc+68)                           ; FC0983  ld XWA,(XBC+0x44)
 	ld	(xiz-12), xwa                           ; FC0986  ld (XIZ+0xf4),XWA
 	cp (xiz-35), 0x00                          ; FC0989  cp (XIZ+0xdd),0x00
-	jr z, sub_FC0817__FC0999                   ; FC098D  jr Z,0xfc0999
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC0999                   ; FC098D  jr Z,0xfc0999
 	ldw (xiz-14), 0x007F                       ; FC098F  ld (XIZ+0xf2),0x007f
 	ldw (xiz-16), 0x0000                       ; FC0994  ld (XIZ+0xf0),0x0000
-sub_FC0817__FC0999:
-	jrl sub_FC0817__FC0A07                     ; FC0999  jrl T,0xfc0a07
-sub_FC0817__FC099C:
+ToneQuery_ReplyPartElementSourceName1__FC0999:
+	jrl ToneQuery_ReplyPartElementSourceName1__FC0A07                     ; FC0999  jrl T,0xfc0a07
+ToneQuery_ReplyPartElementSourceName1__FC099C:
 	ld	xbc, (xiz-40)                           ; FC099C  ld XBC,(XIZ+0xd8)
 	ld	xwa, (xbc+76)                           ; FC099F  ld XWA,(XBC+0x4c)
 	ld	(xiz-12), xwa                           ; FC09A2  ld (XIZ+0xf4),XWA
 	cp (xiz-35), 0x00                          ; FC09A5  cp (XIZ+0xdd),0x00
-	jr z, sub_FC0817__FC09B5                   ; FC09A9  jr Z,0xfc09b5
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC09B5                   ; FC09A9  jr Z,0xfc09b5
 	ldw (xiz-14), 0x0000                       ; FC09AB  ld (XIZ+0xf2),0x0000
 	ldw (xiz-16), 0x0000                       ; FC09B0  ld (XIZ+0xf0),0x0000
-sub_FC0817__FC09B5:
-	jrl sub_FC0817__FC0A07                     ; FC09B5  jrl T,0xfc0a07
-sub_FC0817__FC09B8:
+ToneQuery_ReplyPartElementSourceName1__FC09B5:
+	jrl ToneQuery_ReplyPartElementSourceName1__FC0A07                     ; FC09B5  jrl T,0xfc0a07
+ToneQuery_ReplyPartElementSourceName1__FC09B8:
 	ld	xbc, (xiz-40)                           ; FC09B8  ld XBC,(XIZ+0xd8)
 	ld	xwa, (xbc+72)                           ; FC09BB  ld XWA,(XBC+0x48)
 	ld	(xiz-12), xwa                           ; FC09BE  ld (XIZ+0xf4),XWA
 	cp (xiz-35), 0x00                          ; FC09C1  cp (XIZ+0xdd),0x00
-	jr z, sub_FC0817__FC09D1                   ; FC09C5  jr Z,0xfc09d1
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC09D1                   ; FC09C5  jr Z,0xfc09d1
 	ldw (xiz-14), 0x007F                       ; FC09C7  ld (XIZ+0xf2),0x007f
 	ldw (xiz-16), 0x0000                       ; FC09CC  ld (XIZ+0xf0),0x0000
-sub_FC0817__FC09D1:
-	jr sub_FC0817__FC0A07                      ; FC09D1  jr T,0xfc0a07
-sub_FC0817__FC09D3:
+ToneQuery_ReplyPartElementSourceName1__FC09D1:
+	jr ToneQuery_ReplyPartElementSourceName1__FC0A07                      ; FC09D1  jr T,0xfc0a07
+ToneQuery_ReplyPartElementSourceName1__FC09D3:
 	ld	xbc, (xiz-40)                           ; FC09D3  ld XBC,(XIZ+0xd8)
 	ld	xwa, (xbc+68)                           ; FC09D6  ld XWA,(XBC+0x44)
 	ld	(xiz-12), xwa                           ; FC09D9  ld (XIZ+0xf4),XWA
 	cp (xiz-35), 0x00                          ; FC09DC  cp (XIZ+0xdd),0x00
-	jr z, sub_FC0817__FC09EC                   ; FC09E0  jr Z,0xfc09ec
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC09EC                   ; FC09E0  jr Z,0xfc09ec
 	ldw (xiz-14), 0x007F                       ; FC09E2  ld (XIZ+0xf2),0x007f
 	ldw (xiz-16), 0x0000                       ; FC09E7  ld (XIZ+0xf0),0x0000
-sub_FC0817__FC09EC:
-	jr sub_FC0817__FC0A07                      ; FC09EC  jr T,0xfc0a07
-sub_FC0817__FC09EE:
+ToneQuery_ReplyPartElementSourceName1__FC09EC:
+	jr ToneQuery_ReplyPartElementSourceName1__FC0A07                      ; FC09EC  jr T,0xfc0a07
+ToneQuery_ReplyPartElementSourceName1__FC09EE:
 	ld	bc, (xiz-44)                            ; FC09EE  ld BC,(XIZ+0xd4)
 	cps	bc, 0                                  ; FC09F1  cp BC,0
-	jr z, sub_FC0817__FC0980                   ; FC09F3  jr Z,0xfc0980
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC0980                   ; FC09F3  jr Z,0xfc0980
 	cp	bc, 64                                  ; FC09F5  cp BC,0x0040
-	jr z, sub_FC0817__FC099C                   ; FC09F9  jr Z,0xfc099c
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC099C                   ; FC09F9  jr Z,0xfc099c
 	cp	bc, 0x80                                ; FC09FB  cp BC,0x0080
-	jr z, sub_FC0817__FC09B8                   ; FC09FF  jr Z,0xfc09b8
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC09B8                   ; FC09FF  jr Z,0xfc09b8
 	cp	bc, 0xC0                                ; FC0A01  cp BC,0x00c0
-	jr z, sub_FC0817__FC09D3                   ; FC0A05  jr Z,0xfc09d3
-sub_FC0817__FC0A07:
+	jr z, ToneQuery_ReplyPartElementSourceName1__FC09D3                   ; FC0A05  jr Z,0xfc09d3
+ToneQuery_ReplyPartElementSourceName1__FC0A07:
 	ld	bc, (xiz-16)                            ; FC0A07  ld BC,(XIZ+0xf0)
 	sll	bc, 7                                  ; FC0A0A  sll 0x07,BC
 	extpfx3 0x9E, 0xF2, 0x81                   ; FC0A0D  add BC,(XIZ+0xf2)
@@ -92878,15 +93082,15 @@ sub_FC0817__FC0A07:
 	ld	(xiz-4), xiy                            ; FC0A2B  ld (XIZ+0xfc),XIY
 	ldw (xiz-22), 0x000D                       ; FC0A2E  ld (XIZ+0xea),0x000d
 	ldw (xiz-24), 0x0000                       ; FC0A33  ld (XIZ+0xe8),0x0000
-sub_FC0817__FC0A38:
+ToneQuery_ReplyPartElementSourceName1__FC0A38:
 	ld	bc, (xiz-24)                            ; FC0A38  ld BC,(XIZ+0xe8)
 	extpfx3 0x9E, 0xEA, 0xF1                   ; FC0A3B  cp BC,(XIZ+0xea)
-	jr nc, sub_FC0817__FC0A6A                  ; FC0A3E  jr NC,0xfc0a6a
-	jr sub_FC0817__FC0A47                      ; FC0A40  jr T,0xfc0a47
-sub_FC0817__FC0A42:
+	jr nc, ToneQuery_ReplyPartElementSourceName1__FC0A6A                  ; FC0A3E  jr NC,0xfc0a6a
+	jr ToneQuery_ReplyPartElementSourceName1__FC0A47                      ; FC0A40  jr T,0xfc0a47
+ToneQuery_ReplyPartElementSourceName1__FC0A42:
 	incm	1, (xiz-24)                           ; FC0A42  incw 1,(XIZ+0xe8)
-	jr sub_FC0817__FC0A38                      ; FC0A45  jr T,0xfc0a38
-sub_FC0817__FC0A47:
+	jr ToneQuery_ReplyPartElementSourceName1__FC0A38                      ; FC0A45  jr T,0xfc0a38
+ToneQuery_ReplyPartElementSourceName1__FC0A47:
 	ldw	bc, 16                                 ; FC0A47  ld BC,0x0010
 	extpfx3 0x9E, 0xEC, 0x41                   ; FC0A4A  mul XBC,(XIZ+0xec)
 	ld	xix, xbc                                ; FC0A4D  ld XIX,XBC
@@ -92899,8 +93103,8 @@ sub_FC0817__FC0A47:
 	inc	6, xwa                                 ; FC0A5E  inc 6,XWA
 	add	xwa, 0xD945                            ; FC0A60  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC0A66  ld (XWA),H
-	jr sub_FC0817__FC0A42                      ; FC0A68  jr T,0xfc0a42
-sub_FC0817__FC0A6A:
+	jr ToneQuery_ReplyPartElementSourceName1__FC0A42                      ; FC0A68  jr T,0xfc0a42
+ToneQuery_ReplyPartElementSourceName1__FC0A6A:
 	ldw	bc, 16                                 ; FC0A6A  ld BC,0x0010
 	extpfx3 0x9E, 0xEC, 0x41                   ; FC0A6D  mul XBC,(XIZ+0xec)
 	add	xbc, 13                                ; FC0A70  add XBC,0x0000000d
@@ -92940,7 +93144,7 @@ sub_FC0817__FC0A6A:
 	unlk32 xiz                                 ; FC0AD1  unlk XIZ
 	ret                                        ; FC0AD3  ret
 ; --------------------------------------------------------------------------
-; sub_FC0AD4 -- 0xFC0AD4..0xFC0DB3 (736 bytes)
+; ToneQuery_ReplyPartElementSourceName2 -- 0xFC0AD4..0xFC0DB3 (736 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -92953,10 +93157,18 @@ sub_FC0817__FC0A6A:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 10: arm 9's twin over the +0x58/+0x60/+0x5C map family and
+;           +0x64 ToneDB_SourceNameList2, counted by +0x68. Same 16-byte
+;           reply.
+; Evidence: 0xFC0AFC `mul C,0x29` and 0xFC0B06 `mul WA,0x012c` form the
+;           element pointer read at 0xFC0B12; the map slots are read at
+;           0xFC0C63 (+0x58), 0xFC0C7F (+0x60), 0xFC0C9B (+0x5C) and
+;           0xFC0CB6 (+0x58); 0xFC0D02 reads +0x64 and 0xFC0C03 the +0x68
+;           footer; the copy stride is 0xFC0D27 `ld BC,0x0010`.
+; Unknown:  the same as arm 9.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC0AD4`.
 ; --------------------------------------------------------------------------
-sub_FC0AD4:
+ToneQuery_ReplyPartElementSourceName2:
 	link32 0xEE, 0x0C, 0xCE, 0xFF              ; FC0AD4  link XIZ,0xffce
 	pushw	hl                                   ; FC0AD8  push HL
 	push	xix                                   ; FC0AD9  push XIX
@@ -93047,19 +93259,19 @@ sub_FC0AD4:
 	extz	wa                                    ; FC0BBA  extz WA
 	ld	(xiz-26), wa                            ; FC0BBC  ld (XIZ+0xe6),WA
 	ld	(xiz-44), wa                            ; FC0BBF  ld (XIZ+0xd4),WA
-	jrl sub_FC0AD4__FC0C3D                     ; FC0BC2  jrl T,0xfc0c3d
-sub_FC0AD4__FC0BC5:
+	jrl ToneQuery_ReplyPartElementSourceName2__FC0C3D                     ; FC0BC2  jrl T,0xfc0c3d
+ToneQuery_ReplyPartElementSourceName2__FC0BC5:
 	ldl_da	xbc, (0xD7ED)                       ; FC0BC5  ld XBC,(0x00d7ed)
 	ld	(xiz-36), xbc                           ; FC0BCA  ld (XIZ+0xdc),XBC
 	ldl_da	xwa, (0xD7F1)                       ; FC0BCD  ld XWA,(0x00d7f1)
 	ld	(xiz-42), xwa                           ; FC0BD2  ld (XIZ+0xd6),XWA
 	ldw (xiz-28), 0x0000                       ; FC0BD5  ld (XIZ+0xe4),0x0000
 	ld	(xiz-31), 0                             ; FC0BDA  ld (XIZ+0xe1),0x00
-	jrl sub_FC0AD4__FC0C57                     ; FC0BDE  jrl T,0xfc0c57
-sub_FC0AD4__FC0BE1:
+	jrl ToneQuery_ReplyPartElementSourceName2__FC0C57                     ; FC0BDE  jrl T,0xfc0c57
+ToneQuery_ReplyPartElementSourceName2__FC0BE1:
 	ldl_da	xbc, (0xD80D)                       ; FC0BE1  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC0BE6  cp XBC,0x00000000
-	jr z, sub_FC0AD4__FC0C1E                   ; FC0BEC  jr Z,0xfc0c1e
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0C1E                   ; FC0BEC  jr Z,0xfc0c1e
 	ldl_da	xbc, (0xD80D)                       ; FC0BEE  ld XBC,(0x00d80d)
 	ld	(xiz-36), xbc                           ; FC0BF3  ld (XIZ+0xdc),XBC
 	ldl_da	xwa, (0xD811)                       ; FC0BF6  ld XWA,(0x00d811)
@@ -93073,8 +93285,8 @@ sub_FC0AD4__FC0BE1:
 	ld	(xiz-28), wa                            ; FC0C13  ld (XIZ+0xe4),WA
 	ld	a, (xbc+2)                              ; FC0C16  ld A,(XBC+0x02)
 	ld	(xiz-31), a                             ; FC0C19  ld (XIZ+0xe1),A
-	jr sub_FC0AD4__FC0C3B                      ; FC0C1C  jr T,0xfc0c3b
-sub_FC0AD4__FC0C1E:
+	jr ToneQuery_ReplyPartElementSourceName2__FC0C3B                      ; FC0C1C  jr T,0xfc0c3b
+ToneQuery_ReplyPartElementSourceName2__FC0C1E:
 	ldl_da	xbc, (0xD7ED)                       ; FC0C1E  ld XBC,(0x00d7ed)
 	ld	(xiz-36), xbc                           ; FC0C23  ld (XIZ+0xdc),XBC
 	ldl_da	xwa, (0xD7F1)                       ; FC0C26  ld XWA,(0x00d7f1)
@@ -93082,73 +93294,73 @@ sub_FC0AD4__FC0C1E:
 	ldw (xiz-28), 0x0000                       ; FC0C2E  ld (XIZ+0xe4),0x0000
 	ld	(xiz-31), 0                             ; FC0C33  ld (XIZ+0xe1),0x00
 	ld	(xiz-37), 1                             ; FC0C37  ld (XIZ+0xdb),0x01
-sub_FC0AD4__FC0C3B:
-	jr sub_FC0AD4__FC0C57                      ; FC0C3B  jr T,0xfc0c57
-sub_FC0AD4__FC0C3D:
+ToneQuery_ReplyPartElementSourceName2__FC0C3B:
+	jr ToneQuery_ReplyPartElementSourceName2__FC0C57                      ; FC0C3B  jr T,0xfc0c57
+ToneQuery_ReplyPartElementSourceName2__FC0C3D:
 	ld	bc, (xiz-44)                            ; FC0C3D  ld BC,(XIZ+0xd4)
 	cps	bc, 0                                  ; FC0C40  cp BC,0
-	jr z, sub_FC0AD4__FC0BC5                   ; FC0C42  jr Z,0xfc0bc5
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0BC5                   ; FC0C42  jr Z,0xfc0bc5
 	cp	bc, 16                                  ; FC0C44  cp BC,0x0010
-	jrl z, sub_FC0AD4__FC0BC5                  ; FC0C48  jrl Z,0xfc0bc5
+	jrl z, ToneQuery_ReplyPartElementSourceName2__FC0BC5                  ; FC0C48  jrl Z,0xfc0bc5
 	cp	bc, 32                                  ; FC0C4B  cp BC,0x0020
-	jr z, sub_FC0AD4__FC0BE1                   ; FC0C4F  jr Z,0xfc0be1
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0BE1                   ; FC0C4F  jr Z,0xfc0be1
 	cp	bc, 48                                  ; FC0C51  cp BC,0x0030
-	jr z, sub_FC0AD4__FC0BE1                   ; FC0C55  jr Z,0xfc0be1
-sub_FC0AD4__FC0C57:
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0BE1                   ; FC0C55  jr Z,0xfc0be1
+ToneQuery_ReplyPartElementSourceName2__FC0C57:
 	ld	bc, (xiz-18)                            ; FC0C57  ld BC,(XIZ+0xee)
 	ld	(xiz-46), bc                            ; FC0C5A  ld (XIZ+0xd2),BC
-	jrl sub_FC0AD4__FC0CCE                     ; FC0C5D  jrl T,0xfc0cce
-sub_FC0AD4__FC0C60:
+	jrl ToneQuery_ReplyPartElementSourceName2__FC0CCE                     ; FC0C5D  jrl T,0xfc0cce
+ToneQuery_ReplyPartElementSourceName2__FC0C60:
 	ld	xbc, (xiz-42)                           ; FC0C60  ld XBC,(XIZ+0xd6)
 	ld	xwa, (xbc+88)                           ; FC0C63  ld XWA,(XBC+0x58)
 	ld	(xiz-12), xwa                           ; FC0C66  ld (XIZ+0xf4),XWA
 	cp (xiz-37), 0x00                          ; FC0C69  cp (XIZ+0xdb),0x00
-	jr z, sub_FC0AD4__FC0C79                   ; FC0C6D  jr Z,0xfc0c79
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0C79                   ; FC0C6D  jr Z,0xfc0c79
 	ldw (xiz-14), 0x007F                       ; FC0C6F  ld (XIZ+0xf2),0x007f
 	ldw (xiz-16), 0x0000                       ; FC0C74  ld (XIZ+0xf0),0x0000
-sub_FC0AD4__FC0C79:
-	jrl sub_FC0AD4__FC0CE7                     ; FC0C79  jrl T,0xfc0ce7
-sub_FC0AD4__FC0C7C:
+ToneQuery_ReplyPartElementSourceName2__FC0C79:
+	jrl ToneQuery_ReplyPartElementSourceName2__FC0CE7                     ; FC0C79  jrl T,0xfc0ce7
+ToneQuery_ReplyPartElementSourceName2__FC0C7C:
 	ld	xbc, (xiz-42)                           ; FC0C7C  ld XBC,(XIZ+0xd6)
 	ld	xwa, (xbc+96)                           ; FC0C7F  ld XWA,(XBC+0x60)
 	ld	(xiz-12), xwa                           ; FC0C82  ld (XIZ+0xf4),XWA
 	cp (xiz-37), 0x00                          ; FC0C85  cp (XIZ+0xdb),0x00
-	jr z, sub_FC0AD4__FC0C95                   ; FC0C89  jr Z,0xfc0c95
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0C95                   ; FC0C89  jr Z,0xfc0c95
 	ldw (xiz-14), 0x0000                       ; FC0C8B  ld (XIZ+0xf2),0x0000
 	ldw (xiz-16), 0x0000                       ; FC0C90  ld (XIZ+0xf0),0x0000
-sub_FC0AD4__FC0C95:
-	jrl sub_FC0AD4__FC0CE7                     ; FC0C95  jrl T,0xfc0ce7
-sub_FC0AD4__FC0C98:
+ToneQuery_ReplyPartElementSourceName2__FC0C95:
+	jrl ToneQuery_ReplyPartElementSourceName2__FC0CE7                     ; FC0C95  jrl T,0xfc0ce7
+ToneQuery_ReplyPartElementSourceName2__FC0C98:
 	ld	xbc, (xiz-42)                           ; FC0C98  ld XBC,(XIZ+0xd6)
 	ld	xwa, (xbc+92)                           ; FC0C9B  ld XWA,(XBC+0x5c)
 	ld	(xiz-12), xwa                           ; FC0C9E  ld (XIZ+0xf4),XWA
 	cp (xiz-37), 0x00                          ; FC0CA1  cp (XIZ+0xdb),0x00
-	jr z, sub_FC0AD4__FC0CB1                   ; FC0CA5  jr Z,0xfc0cb1
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0CB1                   ; FC0CA5  jr Z,0xfc0cb1
 	ldw (xiz-14), 0x007F                       ; FC0CA7  ld (XIZ+0xf2),0x007f
 	ldw (xiz-16), 0x0000                       ; FC0CAC  ld (XIZ+0xf0),0x0000
-sub_FC0AD4__FC0CB1:
-	jr sub_FC0AD4__FC0CE7                      ; FC0CB1  jr T,0xfc0ce7
-sub_FC0AD4__FC0CB3:
+ToneQuery_ReplyPartElementSourceName2__FC0CB1:
+	jr ToneQuery_ReplyPartElementSourceName2__FC0CE7                      ; FC0CB1  jr T,0xfc0ce7
+ToneQuery_ReplyPartElementSourceName2__FC0CB3:
 	ld	xbc, (xiz-42)                           ; FC0CB3  ld XBC,(XIZ+0xd6)
 	ld	xwa, (xbc+88)                           ; FC0CB6  ld XWA,(XBC+0x58)
 	ld	(xiz-12), xwa                           ; FC0CB9  ld (XIZ+0xf4),XWA
 	cp (xiz-37), 0x00                          ; FC0CBC  cp (XIZ+0xdb),0x00
-	jr z, sub_FC0AD4__FC0CCC                   ; FC0CC0  jr Z,0xfc0ccc
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0CCC                   ; FC0CC0  jr Z,0xfc0ccc
 	ldw (xiz-14), 0x007F                       ; FC0CC2  ld (XIZ+0xf2),0x007f
 	ldw (xiz-16), 0x0000                       ; FC0CC7  ld (XIZ+0xf0),0x0000
-sub_FC0AD4__FC0CCC:
-	jr sub_FC0AD4__FC0CE7                      ; FC0CCC  jr T,0xfc0ce7
-sub_FC0AD4__FC0CCE:
+ToneQuery_ReplyPartElementSourceName2__FC0CCC:
+	jr ToneQuery_ReplyPartElementSourceName2__FC0CE7                      ; FC0CCC  jr T,0xfc0ce7
+ToneQuery_ReplyPartElementSourceName2__FC0CCE:
 	ld	bc, (xiz-46)                            ; FC0CCE  ld BC,(XIZ+0xd2)
 	cps	bc, 0                                  ; FC0CD1  cp BC,0
-	jr z, sub_FC0AD4__FC0C60                   ; FC0CD3  jr Z,0xfc0c60
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0C60                   ; FC0CD3  jr Z,0xfc0c60
 	cp	bc, 64                                  ; FC0CD5  cp BC,0x0040
-	jr z, sub_FC0AD4__FC0C7C                   ; FC0CD9  jr Z,0xfc0c7c
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0C7C                   ; FC0CD9  jr Z,0xfc0c7c
 	cp	bc, 0x80                                ; FC0CDB  cp BC,0x0080
-	jr z, sub_FC0AD4__FC0C98                   ; FC0CDF  jr Z,0xfc0c98
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0C98                   ; FC0CDF  jr Z,0xfc0c98
 	cp	bc, 0xC0                                ; FC0CE1  cp BC,0x00c0
-	jr z, sub_FC0AD4__FC0CB3                   ; FC0CE5  jr Z,0xfc0cb3
-sub_FC0AD4__FC0CE7:
+	jr z, ToneQuery_ReplyPartElementSourceName2__FC0CB3                   ; FC0CE5  jr Z,0xfc0cb3
+ToneQuery_ReplyPartElementSourceName2__FC0CE7:
 	ld	bc, (xiz-16)                            ; FC0CE7  ld BC,(XIZ+0xf0)
 	sll	bc, 7                                  ; FC0CEA  sll 0x07,BC
 	extpfx3 0x9E, 0xF2, 0x81                   ; FC0CED  add BC,(XIZ+0xf2)
@@ -93164,15 +93376,15 @@ sub_FC0AD4__FC0CE7:
 	ld	(xiz-4), xiy                            ; FC0D0B  ld (XIZ+0xfc),XIY
 	ldw (xiz-22), 0x000D                       ; FC0D0E  ld (XIZ+0xea),0x000d
 	ldw (xiz-24), 0x0000                       ; FC0D13  ld (XIZ+0xe8),0x0000
-sub_FC0AD4__FC0D18:
+ToneQuery_ReplyPartElementSourceName2__FC0D18:
 	ld	bc, (xiz-24)                            ; FC0D18  ld BC,(XIZ+0xe8)
 	extpfx3 0x9E, 0xEA, 0xF1                   ; FC0D1B  cp BC,(XIZ+0xea)
-	jr nc, sub_FC0AD4__FC0D4A                  ; FC0D1E  jr NC,0xfc0d4a
-	jr sub_FC0AD4__FC0D27                      ; FC0D20  jr T,0xfc0d27
-sub_FC0AD4__FC0D22:
+	jr nc, ToneQuery_ReplyPartElementSourceName2__FC0D4A                  ; FC0D1E  jr NC,0xfc0d4a
+	jr ToneQuery_ReplyPartElementSourceName2__FC0D27                      ; FC0D20  jr T,0xfc0d27
+ToneQuery_ReplyPartElementSourceName2__FC0D22:
 	incm	1, (xiz-24)                           ; FC0D22  incw 1,(XIZ+0xe8)
-	jr sub_FC0AD4__FC0D18                      ; FC0D25  jr T,0xfc0d18
-sub_FC0AD4__FC0D27:
+	jr ToneQuery_ReplyPartElementSourceName2__FC0D18                      ; FC0D25  jr T,0xfc0d18
+ToneQuery_ReplyPartElementSourceName2__FC0D27:
 	ldw	bc, 16                                 ; FC0D27  ld BC,0x0010
 	extpfx3 0x9E, 0xEC, 0x41                   ; FC0D2A  mul XBC,(XIZ+0xec)
 	ld	xix, xbc                                ; FC0D2D  ld XIX,XBC
@@ -93185,8 +93397,8 @@ sub_FC0AD4__FC0D27:
 	inc	6, xwa                                 ; FC0D3E  inc 6,XWA
 	add	xwa, 0xD945                            ; FC0D40  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC0D46  ld (XWA),H
-	jr sub_FC0AD4__FC0D22                      ; FC0D48  jr T,0xfc0d22
-sub_FC0AD4__FC0D4A:
+	jr ToneQuery_ReplyPartElementSourceName2__FC0D22                      ; FC0D48  jr T,0xfc0d22
+ToneQuery_ReplyPartElementSourceName2__FC0D4A:
 	ldw	bc, 16                                 ; FC0D4A  ld BC,0x0010
 	extpfx3 0x9E, 0xEC, 0x41                   ; FC0D4D  mul XBC,(XIZ+0xec)
 	add	xbc, 13                                ; FC0D50  add XBC,0x0000000d
@@ -93226,7 +93438,7 @@ sub_FC0AD4__FC0D4A:
 	unlk32 xiz                                 ; FC0DB1  unlk XIZ
 	ret                                        ; FC0DB3  ret
 ; --------------------------------------------------------------------------
-; sub_FC0DB4 -- 0xFC0DB4..0xFC0F82 (463 bytes)
+; ToneQuery_ReplyCatalogueListFooter -- 0xFC0DB4..0xFC0F82 (463 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -93240,70 +93452,85 @@ sub_FC0AD4__FC0D4A:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 11: a 0..4 argument selects one of the FIVE catalogue-list
+;           footers -- +0x54, +0x68, +0x84, +0x90, +0x98 -- and the arm
+;           copies that footer into the reply. With an expansion board
+;           fitted it also copies the board's footer and then overwrites the
+;           first three payload bytes with the COMBINED figures: the LE16
+;           sum of the two counts at 0x00D94B/0x00D94C and the sum of the
+;           two footers' byte +0x02 at 0x00D94D.
+; Evidence: a 5-entry u32 table at 0xFC0E7A behind the guard 0xFC0E69 `cp
+;           BC,4`; its arms read +0x54 at 0xFC0DCA, +0x68 at 0xFC0DE3, +0x84
+;           at 0xFC0DFC, +0x90 at 0xFC0E19 and +0x98 at 0xFC0E35, each also
+;           through the board base at 0xFC0DD5, 0xFC0DEE, 0xFC0E09,
+;           0xFC0E26, 0xFC0E42. 0xFC0E9C `ld A,(XBC+0x02)` with 0xFC0EA1
+;           `inc 3,WA` is the copy length; the three combined stores are
+;           0xFC0F43, 0xFC0F4E and 0xFC0F6A.
+; Unknown:  what footer byte +0x02 counts. prom_d calls the object 'count N
+;           + 11 bytes' and does not decode the 11.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC0DB4`.
 ; --------------------------------------------------------------------------
-sub_FC0DB4:
+ToneQuery_ReplyCatalogueListFooter:
 	link32 0xEE, 0x0C, 0xE2, 0xFF              ; FC0DB4  link XIZ,0xffe2
 	pushw	hl                                   ; FC0DB8  push HL
 	push	xix                                   ; FC0DB9  push XIX
 	ld	bc, (xiz+8)                             ; FC0DBA  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FC0DBD  extz BC
 	ld	(xiz-26), bc                            ; FC0DBF  ld (XIZ+0xe6),BC
-	jrl sub_FC0DB4__FC0E64                     ; FC0DC2  jrl T,0xfc0e64
-sub_FC0DB4__FC0DC5:
+	jrl ToneQuery_ReplyCatalogueListFooter__FC0E64                     ; FC0DC2  jrl T,0xfc0e64
+ToneQuery_ReplyCatalogueListFooter__FC0DC5:
 	ldl_da	xbc, (0xD7F1)                       ; FC0DC5  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+84)                           ; FC0DCA  ld XWA,(XBC+0x54)
 	ld	(xiz-12), xwa                           ; FC0DCD  ld (XIZ+0xf4),XWA
 	ldl_da	xiy, (0xD811)                       ; FC0DD0  ld XIY,(0x00d811)
 	ld	xbc, (xiy+84)                           ; FC0DD5  ld XBC,(XIY+0x54)
 	ld	(xiz-16), xbc                           ; FC0DD8  ld (XIZ+0xf0),XBC
-	jrl sub_FC0DB4__FC0E8E                     ; FC0DDB  jrl T,0xfc0e8e
-sub_FC0DB4__FC0DDE:
+	jrl ToneQuery_ReplyCatalogueListFooter__FC0E8E                     ; FC0DDB  jrl T,0xfc0e8e
+ToneQuery_ReplyCatalogueListFooter__FC0DDE:
 	ldl_da	xbc, (0xD7F1)                       ; FC0DDE  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x68)                         ; FC0DE3  ld XWA,(XBC+0x68)
 	ld	(xiz-12), xwa                           ; FC0DE6  ld (XIZ+0xf4),XWA
 	ldl_da	xiy, (0xD811)                       ; FC0DE9  ld XIY,(0x00d811)
 	ld	xbc, (xiy+0x68)                         ; FC0DEE  ld XBC,(XIY+0x68)
 	ld	(xiz-16), xbc                           ; FC0DF1  ld (XIZ+0xf0),XBC
-	jrl sub_FC0DB4__FC0E8E                     ; FC0DF4  jrl T,0xfc0e8e
-sub_FC0DB4__FC0DF7:
+	jrl ToneQuery_ReplyCatalogueListFooter__FC0E8E                     ; FC0DF4  jrl T,0xfc0e8e
+ToneQuery_ReplyCatalogueListFooter__FC0DF7:
 	ldl_da	xbc, (0xD7F1)                       ; FC0DF7  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x84)                         ; FC0DFC  ld XWA,(XBC+0x0084)
 	ld	(xiz-12), xwa                           ; FC0E01  ld (XIZ+0xf4),XWA
 	ldl_da	xiy, (0xD811)                       ; FC0E04  ld XIY,(0x00d811)
 	ld	xbc, (xiy+0x84)                         ; FC0E09  ld XBC,(XIY+0x0084)
 	ld	(xiz-16), xbc                           ; FC0E0E  ld (XIZ+0xf0),XBC
-	jrl sub_FC0DB4__FC0E8E                     ; FC0E11  jrl T,0xfc0e8e
-sub_FC0DB4__FC0E14:
+	jrl ToneQuery_ReplyCatalogueListFooter__FC0E8E                     ; FC0E11  jrl T,0xfc0e8e
+ToneQuery_ReplyCatalogueListFooter__FC0E14:
 	ldl_da	xbc, (0xD7F1)                       ; FC0E14  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x90)                         ; FC0E19  ld XWA,(XBC+0x0090)
 	ld	(xiz-12), xwa                           ; FC0E1E  ld (XIZ+0xf4),XWA
 	ldl_da	xiy, (0xD811)                       ; FC0E21  ld XIY,(0x00d811)
 	ld	xbc, (xiy+0x90)                         ; FC0E26  ld XBC,(XIY+0x0090)
 	ld	(xiz-16), xbc                           ; FC0E2B  ld (XIZ+0xf0),XBC
-	jr sub_FC0DB4__FC0E8E                      ; FC0E2E  jr T,0xfc0e8e
-sub_FC0DB4__FC0E30:
+	jr ToneQuery_ReplyCatalogueListFooter__FC0E8E                      ; FC0E2E  jr T,0xfc0e8e
+ToneQuery_ReplyCatalogueListFooter__FC0E30:
 	ldl_da	xbc, (0xD7F1)                       ; FC0E30  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x98)                         ; FC0E35  ld XWA,(XBC+0x0098)
 	ld	(xiz-12), xwa                           ; FC0E3A  ld (XIZ+0xf4),XWA
 	ldl_da	xiy, (0xD811)                       ; FC0E3D  ld XIY,(0x00d811)
 	ld	xbc, (xiy+0x98)                         ; FC0E42  ld XBC,(XIY+0x0098)
 	ld	(xiz-16), xbc                           ; FC0E47  ld (XIZ+0xf0),XBC
-	jr sub_FC0DB4__FC0E8E                      ; FC0E4A  jr T,0xfc0e8e
-sub_FC0DB4__FC0E4C:
+	jr ToneQuery_ReplyCatalogueListFooter__FC0E8E                      ; FC0E4A  jr T,0xfc0e8e
+ToneQuery_ReplyCatalogueListFooter__FC0E4C:
 	ldl_da	xbc, (0xD7F1)                       ; FC0E4C  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+84)                           ; FC0E51  ld XWA,(XBC+0x54)
 	ld	(xiz-12), xwa                           ; FC0E54  ld (XIZ+0xf4),XWA
 	ldl_da	xiy, (0xD811)                       ; FC0E57  ld XIY,(0x00d811)
 	ld	xbc, (xiy+84)                           ; FC0E5C  ld XBC,(XIY+0x54)
 	ld	(xiz-16), xbc                           ; FC0E5F  ld (XIZ+0xf0),XBC
-	jr sub_FC0DB4__FC0E8E                      ; FC0E62  jr T,0xfc0e8e
-sub_FC0DB4__FC0E64:
+	jr ToneQuery_ReplyCatalogueListFooter__FC0E8E                      ; FC0E62  jr T,0xfc0e8e
+ToneQuery_ReplyCatalogueListFooter__FC0E64:
 	sub	xbc, xbc                               ; FC0E64  sub XBC,XBC
 	ld	bc, (xiz-26)                            ; FC0E66  ld BC,(XIZ+0xe6)
 	cps	bc, 4                                  ; FC0E69  cp BC,4
-	jr ugt, sub_FC0DB4__FC0E4C                 ; FC0E6B  jr UGT,0xfc0e4c
+	jr ugt, ToneQuery_ReplyCatalogueListFooter__FC0E4C                 ; FC0E6B  jr UGT,0xfc0e4c
 	sll	bc, 2                                  ; FC0E6D  sll 0x02,BC
 	add	xbc, 0xFC0E7A                          ; FC0E70  add XBC,0x00fc0e7a
 	ld	xbc, (xbc)                              ; FC0E76  ld XBC,(XBC)
@@ -93321,7 +93548,7 @@ sub_FC0DB4__FC0E64:
 	.long 0x00FC0DF7	; 0xFC0E82  entry 2 -> 0xFC0DF7
 	.long 0x00FC0E14	; 0xFC0E86  entry 3 -> 0xFC0E14
 	.long 0x00FC0E30	; 0xFC0E8A  entry 4 -> 0xFC0E30
-sub_FC0DB4__FC0E8E:
+ToneQuery_ReplyCatalogueListFooter__FC0E8E:
 	ldl_da	xbc, (0xD7ED)                       ; FC0E8E  ld XBC,(0x00d7ed)
 	extpfx3 0xAE, 0xF4, 0x81                   ; FC0E93  add XBC,(XIZ+0xf4)
 	ld	(xiz-12), xbc                           ; FC0E96  ld (XIZ+0xf4),XBC
@@ -93331,15 +93558,15 @@ sub_FC0DB4__FC0E8E:
 	inc	3, wa                                  ; FC0EA1  inc 3,WA
 	ld	(xiz-18), wa                            ; FC0EA3  ld (XIZ+0xee),WA
 	ldw (xiz-22), 0x0000                       ; FC0EA6  ld (XIZ+0xea),0x0000
-sub_FC0DB4__FC0EAB:
+ToneQuery_ReplyCatalogueListFooter__FC0EAB:
 	ld	bc, (xiz-22)                            ; FC0EAB  ld BC,(XIZ+0xea)
 	extpfx3 0x9E, 0xEE, 0xF1                   ; FC0EAE  cp BC,(XIZ+0xee)
-	jr nc, sub_FC0DB4__FC0ED8                  ; FC0EB1  jr NC,0xfc0ed8
-	jr sub_FC0DB4__FC0EBA                      ; FC0EB3  jr T,0xfc0eba
-sub_FC0DB4__FC0EB5:
+	jr nc, ToneQuery_ReplyCatalogueListFooter__FC0ED8                  ; FC0EB1  jr NC,0xfc0ed8
+	jr ToneQuery_ReplyCatalogueListFooter__FC0EBA                      ; FC0EB3  jr T,0xfc0eba
+ToneQuery_ReplyCatalogueListFooter__FC0EB5:
 	incm	1, (xiz-22)                           ; FC0EB5  incw 1,(XIZ+0xea)
-	jr sub_FC0DB4__FC0EAB                      ; FC0EB8  jr T,0xfc0eab
-sub_FC0DB4__FC0EBA:
+	jr ToneQuery_ReplyCatalogueListFooter__FC0EAB                      ; FC0EB8  jr T,0xfc0eab
+ToneQuery_ReplyCatalogueListFooter__FC0EBA:
 	ld	xix, (xiz-12)                           ; FC0EBA  ld XIX,(XIZ+0xf4)
 	ld	bc, (xiz-22)                            ; FC0EBD  ld BC,(XIZ+0xea)
 	extz	xbc                                   ; FC0EC0  extz XBC
@@ -93350,11 +93577,11 @@ sub_FC0DB4__FC0EBA:
 	inc	6, xbc                                 ; FC0ECC  inc 6,XBC
 	add	xbc, 0xD945                            ; FC0ECE  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC0ED4  ld (XBC),H
-	jr sub_FC0DB4__FC0EB5                      ; FC0ED6  jr T,0xfc0eb5
-sub_FC0DB4__FC0ED8:
+	jr ToneQuery_ReplyCatalogueListFooter__FC0EB5                      ; FC0ED6  jr T,0xfc0eb5
+ToneQuery_ReplyCatalogueListFooter__FC0ED8:
 	ldl_da	xbc, (0xD80D)                       ; FC0ED8  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC0EDD  cp XBC,0x00000000
-	jrl z, sub_FC0DB4__FC0F71                  ; FC0EE3  jrl Z,0xfc0f71
+	jrl z, ToneQuery_ReplyCatalogueListFooter__FC0F71                  ; FC0EE3  jrl Z,0xfc0f71
 	ldl_da	xbc, (0xD80D)                       ; FC0EE6  ld XBC,(0x00d80d)
 	extpfx3 0xAE, 0xF0, 0x81                   ; FC0EEB  add XBC,(XIZ+0xf0)
 	ld	(xiz-16), xbc                           ; FC0EEE  ld (XIZ+0xf0),XBC
@@ -93363,15 +93590,15 @@ sub_FC0DB4__FC0ED8:
 	extz	wa                                    ; FC0EF7  extz WA
 	ld	(xiz-20), wa                            ; FC0EF9  ld (XIZ+0xec),WA
 	ldw (xiz-22), 0x0000                       ; FC0EFC  ld (XIZ+0xea),0x0000
-sub_FC0DB4__FC0F01:
+ToneQuery_ReplyCatalogueListFooter__FC0F01:
 	ld	bc, (xiz-22)                            ; FC0F01  ld BC,(XIZ+0xea)
 	extpfx3 0x9E, 0xEC, 0xF1                   ; FC0F04  cp BC,(XIZ+0xec)
-	jr nc, sub_FC0DB4__FC0F31                  ; FC0F07  jr NC,0xfc0f31
-	jr sub_FC0DB4__FC0F10                      ; FC0F09  jr T,0xfc0f10
-sub_FC0DB4__FC0F0B:
+	jr nc, ToneQuery_ReplyCatalogueListFooter__FC0F31                  ; FC0F07  jr NC,0xfc0f31
+	jr ToneQuery_ReplyCatalogueListFooter__FC0F10                      ; FC0F09  jr T,0xfc0f10
+ToneQuery_ReplyCatalogueListFooter__FC0F0B:
 	incm	1, (xiz-22)                           ; FC0F0B  incw 1,(XIZ+0xea)
-	jr sub_FC0DB4__FC0F01                      ; FC0F0E  jr T,0xfc0f01
-sub_FC0DB4__FC0F10:
+	jr ToneQuery_ReplyCatalogueListFooter__FC0F01                      ; FC0F0E  jr T,0xfc0f01
+ToneQuery_ReplyCatalogueListFooter__FC0F10:
 	ld	ix, (xiz-22)                            ; FC0F10  ld IX,(XIZ+0xea)
 	extz	xix                                   ; FC0F13  extz XIX
 	ld	xbc, xix                                ; FC0F15  ld XBC,XIX
@@ -93384,8 +93611,8 @@ sub_FC0DB4__FC0F10:
 	inc	6, xbc                                 ; FC0F25  inc 6,XBC
 	add	xbc, 0xD945                            ; FC0F27  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC0F2D  ld (XBC),H
-	jr sub_FC0DB4__FC0F0B                      ; FC0F2F  jr T,0xfc0f0b
-sub_FC0DB4__FC0F31:
+	jr ToneQuery_ReplyCatalogueListFooter__FC0F0B                      ; FC0F2F  jr T,0xfc0f0b
+ToneQuery_ReplyCatalogueListFooter__FC0F31:
 	ld	xbc, (xiz-8)                            ; FC0F31  ld XBC,(XIZ+0xf8)
 	ld	hl, (xbc)                               ; FC0F34  ld HL,(XBC)
 	ld	xwa, (xiz-4)                            ; FC0F36  ld XWA,(XIZ+0xfc)
@@ -93407,10 +93634,10 @@ sub_FC0DB4__FC0F31:
 	add	bc, wa                                 ; FC0F65  add BC,WA
 	ld	(xiz-24), bc                            ; FC0F67  ld (XIZ+0xe8),BC
 	stb_da	(0xD94D), c                         ; FC0F6A  ld (0x00d94d),C
-	jr sub_FC0DB4__FC0F76                      ; FC0F6F  jr T,0xfc0f76
-sub_FC0DB4__FC0F71:
+	jr ToneQuery_ReplyCatalogueListFooter__FC0F76                      ; FC0F6F  jr T,0xfc0f76
+ToneQuery_ReplyCatalogueListFooter__FC0F71:
 	ldw (xiz-20), 0x0000                       ; FC0F71  ld (XIZ+0xec),0x0000
-sub_FC0DB4__FC0F76:
+ToneQuery_ReplyCatalogueListFooter__FC0F76:
 	ld	bc, (xiz-18)                            ; FC0F76  ld BC,(XIZ+0xee)
 	extpfx3 0x9E, 0xEC, 0x81                   ; FC0F79  add BC,(XIZ+0xec)
 	ld	wa, bc                                  ; FC0F7C  ld WA,BC
@@ -93434,6 +93661,15 @@ sub_FC0DB4__FC0F76:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; Refused:  REFUSED round 12.  arm 12 replies EIGHT bytes taken from one of three places -- RAM
+;           0x00D736 (0xFC0FCB `add XBC,0x00004f64` then 0xFC0FD1 `add
+;           XBC,0x000087d2`), the 8-byte ROM constant at 0xFE1365 (0xFC1077
+;           `lda XBC,0xfe1365`), or eight zeroes (0xFC10B1) -- chosen by two
+;           predicates on the current part. The ROM constant is `00 F5 00 00
+;           00 00 00 00`, which is not text and not a structure this tree
+;           has decoded, and nothing reads the eight bytes' MEANING on
+;           either side of the link. Naming it from 'eight bytes' would say
+;           only what its length already says.
 ; --------------------------------------------------------------------------
 sub_FC0F83:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FC0F83  link XIZ,0xfffa
@@ -93580,6 +93816,12 @@ sub_FC0F83__FC10B6:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; Refused:  REFUSED round 12.  arm 13 resolves the tone record for (program, bank) and replies
+;           with ONE byte, the record's +0xD0 (0xFC10CF `ld C,(XIY+0x00d0)`,
+;           stored at 0xFC10D4 and returned as length 1). prom_d names bytes
+;           +0x00..+0x0F of a tone record and nothing else; +0xD0 is inside
+;           the 217-byte head that no reader in either image interprets. A
+;           name here would be the offset spelled twice.
 ; --------------------------------------------------------------------------
 sub_FC10BE:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC10BE  link XIZ,0xfffc
@@ -93594,7 +93836,7 @@ sub_FC10BE:
 	unlk32 xiz                                 ; FC10DD  unlk XIZ
 	ret                                        ; FC10DF  ret
 ; --------------------------------------------------------------------------
-; sub_FC10E0 -- 0xFC10E0..0xFC11D7 (248 bytes)
+; DrumKit_ResolveSourceNameRow -- 0xFC10E0..0xFC11D7 (248 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -93607,10 +93849,24 @@ sub_FC10BE:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     not an arm but the worker arms 14 and 16 share: masks the note
+;           to 7 bits and the kit to 4, reads +0x7C DrumKit_NoteMapB at
+;           kit*128 + note as LE16, and returns a POINTER to that row of
+;           +0x80 ToneDB_DrumSourceNameList together with the row number
+;           through the caller's out-parameter. 0xFFFF in the map sends it
+;           to the expansion board's copy, and with no board fitted to entry
+;           0 of the internal map.
+; Evidence: 0xFC10E4 `and (XIZ+0x08),0x007f` and 0xFC10EC `and BC,0x000f`
+;           are the two masks; 0xFC10F8 reads +0x7C and 0xFC10FE `sll
+;           0x07,BC` with 0xFC1104 `mul BC,0x0002` is kit*128+note as LE16;
+;           0xFC1114 `cp BC,0xffff` is the empty-slot test; 0xFC111F and
+;           0xFC1169 read +0x80; 0xFC11C8 `ld (XWA),BC` writes the row
+;           number to the out-parameter and 0xFC11CA `ld BC,0x0010` scales
+;           the row to the returned pointer.
+; Unknown:  nothing about what a drum-source row means beyond its name.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC10E0`.
 ; --------------------------------------------------------------------------
-sub_FC10E0:
+DrumKit_ResolveSourceNameRow:
 	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FC10E0  link XIZ,0xffee
 	extpfx5 0x9E, 0x08, 0x3C, 0x7F, 0x00       ; FC10E4  and (XIZ+0x08),0x007f
 	ld	bc, (xiz+10)                            ; FC10E9  ld BC,(XIZ+0x0a)
@@ -93627,18 +93883,18 @@ sub_FC10E0:
 	ld	bc, (xiy)                               ; FC110F  ld BC,(XIY)
 	ld	(xiz-16), bc                            ; FC1111  ld (XIZ+0xf0),BC
 	cp	bc, 0xFFFF                              ; FC1114  cp BC,0xffff
-	jr z, sub_FC10E0__FC1137                   ; FC1118  jr Z,0xfc1137
+	jr z, DrumKit_ResolveSourceNameRow__FC1137                   ; FC1118  jr Z,0xfc1137
 	ldl_da	xwa, (0xD7F1)                       ; FC111A  ld XWA,(0x00d7f1)
 	ld	xiy, (xwa+0x80)                         ; FC111F  ld XIY,(XWA+0x0080)
 	ld	(xiz-12), xiy                           ; FC1124  ld (XIZ+0xf4),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FC1127  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC112C  ld (XIZ+0xfc),XIY
 	ldw (xiz-18), 0x0000                       ; FC112F  ld (XIZ+0xee),0x0000
-	jrl sub_FC10E0__FC11BF                     ; FC1134  jrl T,0xfc11bf
-sub_FC10E0__FC1137:
+	jrl DrumKit_ResolveSourceNameRow__FC11BF                     ; FC1134  jrl T,0xfc11bf
+DrumKit_ResolveSourceNameRow__FC1137:
 	ldl_da	xbc, (0xD80D)                       ; FC1137  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC113C  cp XBC,0x00000000
-	jr z, sub_FC10E0__FC1195                   ; FC1142  jr Z,0xfc1195
+	jr z, DrumKit_ResolveSourceNameRow__FC1195                   ; FC1142  jr Z,0xfc1195
 	ldl_da	xbc, (0xD811)                       ; FC1144  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x7C)                         ; FC1149  ld XWA,(XBC+0x7c)
 	ld	(xiz-12), xwa                           ; FC114C  ld (XIZ+0xf4),XWA
@@ -93661,8 +93917,8 @@ sub_FC10E0__FC1137:
 	ld	(xiz-8), xwa                            ; FC118B  ld (XIZ+0xf8),XWA
 	ld	bc, (xwa)                               ; FC118E  ld BC,(XWA)
 	ld	(xiz-18), bc                            ; FC1190  ld (XIZ+0xee),BC
-	jr sub_FC10E0__FC11BF                      ; FC1193  jr T,0xfc11bf
-sub_FC10E0__FC1195:
+	jr DrumKit_ResolveSourceNameRow__FC11BF                      ; FC1193  jr T,0xfc11bf
+DrumKit_ResolveSourceNameRow__FC1195:
 	ldl_da	xbc, (0xD7F1)                       ; FC1195  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x7C)                         ; FC119A  ld XWA,(XBC+0x7c)
 	ld	(xiz-12), xwa                           ; FC119D  ld (XIZ+0xf4),XWA
@@ -93674,7 +93930,7 @@ sub_FC10E0__FC1195:
 	addda32_24	xwa, (0xD7ED)                   ; FC11B2  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC11B7  ld (XIZ+0xfc),XWA
 	ldw (xiz-18), 0x0000                       ; FC11BA  ld (XIZ+0xee),0x0000
-sub_FC10E0__FC11BF:
+DrumKit_ResolveSourceNameRow__FC11BF:
 	ld	bc, (xiz-16)                            ; FC11BF  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xEE, 0x81                   ; FC11C2  add BC,(XIZ+0xee)
 	ld	xwa, (xiz+12)                           ; FC11C5  ld XWA,(XIZ+0x0c)
@@ -93686,7 +93942,7 @@ sub_FC10E0__FC11BF:
 	unlk32 xiz                                 ; FC11D5  unlk XIZ
 	ret                                        ; FC11D7  ret
 ; --------------------------------------------------------------------------
-; sub_FC11D8 -- 0xFC11D8..0xFC12EC (277 bytes)
+; ToneQuery_ReplyDrumNameForCurrentPart -- 0xFC11D8..0xFC12EC (277 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -93694,16 +93950,33 @@ sub_FC10E0__FC11BF:
 ; Inputs:  frame `link XIZ,-22`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D733, 0x00D735
-; Calls:   0xFC10E0 = sub_FC10E0
+; Calls:   0xFC10E0 = DrumKit_ResolveSourceNameRow
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC11D8-0xFC12EC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 14: replies with the 13-character name of the drum
+;           instrument the CURRENT part (0x00D733) maps the current index
+;           (0x00D735) to, from one of three sources -- a 150-byte record in
+;           RAM at 0x87D2+0x461+150*n when the part record's byte +0x04 has
+;           bit 0 set, a 150-byte record reached through the pointer table
+;           at RAM 0x00D7F5 when the argument's bits 5:4 are 01, and
+;           otherwise the ROM catalogue row DrumKit_ResolveSourceNameRow
+;           returns. Returns 13.
+; Evidence: 0xFC11DE and 0xFC11E6 read the two globals; 0xFC11F8 `ld
+;           WA,(XBC+0x1523)` with 0xFC11FD `and WA,0x0001` is the
+;           part-record test; 0xFC1203 `ld C,0x96` is the 150-byte
+;           drum-instrument stride prom_d gives as directory tail word
+;           +0xEE; 0xFC1280 `add XWA,0x0000d7f5` is the pointer table;
+;           0xFC1299 calls 0xFC10E0; 0xFC12B2 sets the length 13 and
+;           0xFC12DB is the payload store.
+; Unknown:  what the 150-byte RAM records at 0x87D2+0x461 ARE. Their stride
+;           matches prom_d's drum-instrument records, which is why they are
+;           called that; no producer of that RAM was traced in this pass.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC11D8`.
 ; --------------------------------------------------------------------------
-sub_FC11D8:
+ToneQuery_ReplyDrumNameForCurrentPart:
 	link32 0xEE, 0x0C, 0xEA, 0xFF              ; FC11D8  link XIZ,0xffea
 	pushw	hl                                   ; FC11DC  push HL
 	push	xix                                   ; FC11DD  push XIX
@@ -93717,21 +93990,21 @@ sub_FC11D8:
 	extz	xbc                                   ; FC11F6  extz XBC
 	ld	wa, (xbc+0x1523)                        ; FC11F8  ld WA,(XBC+0x1523)
 	and	wa, 1                                  ; FC11FD  and WA,0x0001
-	jr z, sub_FC11D8__FC121C                   ; FC1201  jr Z,0xfc121c
+	jr z, ToneQuery_ReplyDrumNameForCurrentPart__FC121C                   ; FC1201  jr Z,0xfc121c
 	ldb	c, 0x96                                ; FC1203  ld C,0x96
 	extpfx3 0x8E, 0xEC, 0x43                   ; FC1205  mul BC,(XIZ+0xec)
 	extz	xbc                                   ; FC1208  extz XBC
 	add	xbc, 0x461                             ; FC120A  add XBC,0x00000461
 	add	xbc, 0x87D2                            ; FC1210  add XBC,0x000087d2
 	ld	(xiz-4), xbc                            ; FC1216  ld (XIZ+0xfc),XBC
-	jrl sub_FC11D8__FC12B2                     ; FC1219  jrl T,0xfc12b2
-sub_FC11D8__FC121C:
+	jrl ToneQuery_ReplyDrumNameForCurrentPart__FC12B2                     ; FC1219  jrl T,0xfc12b2
+ToneQuery_ReplyDrumNameForCurrentPart__FC121C:
 	ld	bc, (xiz+10)                            ; FC121C  ld BC,(XIZ+0x0a)
 	and	bc, 48                                 ; FC121F  and BC,0x0030
 	ld	(xiz-10), bc                            ; FC1223  ld (XIZ+0xf6),BC
 	ld	(xiz-22), bc                            ; FC1226  ld (XIZ+0xea),BC
-	jrl sub_FC11D8__FC12A6                     ; FC1229  jrl T,0xfc12a6
-sub_FC11D8__FC122C:
+	jrl ToneQuery_ReplyDrumNameForCurrentPart__FC12A6                     ; FC1229  jrl T,0xfc12a6
+ToneQuery_ReplyDrumNameForCurrentPart__FC122C:
 	ld	bc, (xiz-19)                            ; FC122C  ld BC,(XIZ+0xed)
 	extz	bc                                    ; FC122F  extz BC
 	mul	bc, 0x12C                              ; FC1231  mul BC,0x012c
@@ -93763,8 +94036,8 @@ sub_FC11D8__FC122C:
 	ld	xbc, (xwa)                              ; FC1286  ld XBC,(XWA)
 	add	xbc, xix                               ; FC1288  add XBC,XIX
 	ld	(xiz-4), xbc                            ; FC128A  ld (XIZ+0xfc),XBC
-	jr sub_FC11D8__FC12B2                      ; FC128D  jr T,0xfc12b2
-sub_FC11D8__FC128F:
+	jr ToneQuery_ReplyDrumNameForCurrentPart__FC12B2                      ; FC128D  jr T,0xfc12b2
+ToneQuery_ReplyDrumNameForCurrentPart__FC128F:
 	lda	xbc, (xiz-12)                          ; FC128F  lda XBC,XIZ+0xf4
 	push	xbc                                   ; FC1292  push XBC
 	extpfx3 0x9E, 0x0A, 0x04                   ; FC1293  pushw (XIZ+0x0a)
@@ -93773,24 +94046,24 @@ sub_FC11D8__FC128F:
 	ld	(xiz-8), xiy                            ; FC129C  ld (XIZ+0xf8),XIY
 	ld	(xiz-4), xiy                            ; FC129F  ld (XIZ+0xfc),XIY
 	inc	8, xsp                                 ; FC12A2  inc 0,XSP
-	jr sub_FC11D8__FC12B2                      ; FC12A4  jr T,0xfc12b2
-sub_FC11D8__FC12A6:
+	jr ToneQuery_ReplyDrumNameForCurrentPart__FC12B2                      ; FC12A4  jr T,0xfc12b2
+ToneQuery_ReplyDrumNameForCurrentPart__FC12A6:
 	ld	bc, (xiz-22)                            ; FC12A6  ld BC,(XIZ+0xea)
 	cp	bc, 16                                  ; FC12A9  cp BC,0x0010
-	jrl z, sub_FC11D8__FC122C                  ; FC12AD  jrl Z,0xfc122c
-	jr sub_FC11D8__FC128F                      ; FC12B0  jr T,0xfc128f
-sub_FC11D8__FC12B2:
+	jrl z, ToneQuery_ReplyDrumNameForCurrentPart__FC122C                  ; FC12AD  jrl Z,0xfc122c
+	jr ToneQuery_ReplyDrumNameForCurrentPart__FC128F                      ; FC12B0  jr T,0xfc128f
+ToneQuery_ReplyDrumNameForCurrentPart__FC12B2:
 	ldw (xiz-14), 0x000D                       ; FC12B2  ld (XIZ+0xf2),0x000d
 	ldw (xiz-16), 0x0000                       ; FC12B7  ld (XIZ+0xf0),0x0000
-sub_FC11D8__FC12BC:
+ToneQuery_ReplyDrumNameForCurrentPart__FC12BC:
 	ld	bc, (xiz-16)                            ; FC12BC  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xF2, 0xF1                   ; FC12BF  cp BC,(XIZ+0xf2)
-	jr nc, sub_FC11D8__FC12E5                  ; FC12C2  jr NC,0xfc12e5
-	jr sub_FC11D8__FC12CB                      ; FC12C4  jr T,0xfc12cb
-sub_FC11D8__FC12C6:
+	jr nc, ToneQuery_ReplyDrumNameForCurrentPart__FC12E5                  ; FC12C2  jr NC,0xfc12e5
+	jr ToneQuery_ReplyDrumNameForCurrentPart__FC12CB                      ; FC12C4  jr T,0xfc12cb
+ToneQuery_ReplyDrumNameForCurrentPart__FC12C6:
 	incm	1, (xiz-16)                           ; FC12C6  incw 1,(XIZ+0xf0)
-	jr sub_FC11D8__FC12BC                      ; FC12C9  jr T,0xfc12bc
-sub_FC11D8__FC12CB:
+	jr ToneQuery_ReplyDrumNameForCurrentPart__FC12BC                      ; FC12C9  jr T,0xfc12bc
+ToneQuery_ReplyDrumNameForCurrentPart__FC12CB:
 	ld	ix, (xiz-16)                            ; FC12CB  ld IX,(XIZ+0xf0)
 	extz	xix                                   ; FC12CE  extz XIX
 	ld	xbc, (xiz-4)                            ; FC12D0  ld XBC,(XIZ+0xfc)
@@ -93800,15 +94073,15 @@ sub_FC11D8__FC12CB:
 	inc	6, xbc                                 ; FC12D9  inc 6,XBC
 	add	xbc, 0xD945                            ; FC12DB  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC12E1  ld (XBC),H
-	jr sub_FC11D8__FC12C6                      ; FC12E3  jr T,0xfc12c6
-sub_FC11D8__FC12E5:
+	jr ToneQuery_ReplyDrumNameForCurrentPart__FC12C6                      ; FC12E3  jr T,0xfc12c6
+ToneQuery_ReplyDrumNameForCurrentPart__FC12E5:
 	ld	wa, (xiz-14)                            ; FC12E5  ld WA,(XIZ+0xf2)
 	pop	xix                                    ; FC12E8  pop XIX
 	popw	hl                                    ; FC12E9  pop HL
 	unlk32 xiz                                 ; FC12EA  unlk XIZ
 	ret                                        ; FC12EC  ret
 ; --------------------------------------------------------------------------
-; sub_FC12ED -- 0xFC12ED..0xFC13B5 (201 bytes)
+; ToneQuery_ReplyDrumSourceName_ByRow -- 0xFC12ED..0xFC13B5 (201 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -93821,12 +94094,34 @@ sub_FC11D8__FC12E5:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
-; Refused:  REFUSED round 11.  reads the same three slots as sub_FC10E0 (+0x7C, +0x80, +0x84),
-;           same objection.
+; Name:     arm 15: replies with the 13 name characters of ROW N of +0x80
+;           ToneDB_DrumSourceNameList, counted by +0x84
+;           ToneDB_DrumList_Footer, with the expansion board taking rows
+;           past the internal count and entry 0 of +0x7C DrumKit_NoteMapB as
+;           the no-board fallback. Returns 13. ★ THIS RESOLVES ROUND 11's
+;           REFUSAL of the routine: round 11 could not separate it from
+;           sub_FC10E0 because the two read the SAME THREE SLOTS, and the
+;           separation is in what they PRODUCE -- this one fills the reply
+;           payload with a name, that one returns a row pointer to its
+;           caller.
+; Evidence: 0xFC12F8 reads +0x84 and 0xFC1308 its count; 0xFC130F and
+;           0xFC1333 read +0x80 through the internal and board bases;
+;           0xFC1352 reads +0x7C; 0xFC1372 sets the length 13, 0xFC138B `ld
+;           BC,0x0010` is the row stride and 0xFC13A4 the payload store into
+;           0x00D945+6+i. sub_FC10E0 has NO reference to 0x00D945 anywhere
+;           in its extent and ends `ld XIY,XBC` / `ret` at
+;           0xFC11D3-0xFC11D7.
+; Unknown:  what row byte +0x0D means -- this arm does not return it, arm 16
+;           does.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC12ED`.
+; WasRefused: ROUND 11 DECLINED this name, on the ground that it reads the
+;           same three slots as sub_FC10E0 (+0x7C, +0x80, +0x84), same
+;           objection. Every fact in that refusal still holds; what LIFTED
+;           it in round 12 is that the two routines separate by their OUTPUT
+;           and not by the slots they read -- see the Name: paragraph above.
+;           Kept, because the refusal is what made the question precise.
 ; --------------------------------------------------------------------------
-sub_FC12ED:
+ToneQuery_ReplyDrumSourceName_ByRow:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FC12ED  link XIZ,0xffec
 	pushw	hl                                   ; FC12F1  push HL
 	push	xix                                   ; FC12F2  push XIX
@@ -93837,16 +94132,16 @@ sub_FC12ED:
 	ld	(xiz-8), xwa                            ; FC1305  ld (XIZ+0xf8),XWA
 	ld	iy, (xwa)                               ; FC1308  ld IY,(XWA)
 	cp	(xiz+8), iy                             ; FC130A  cp (XIZ+0x08),IY
-	jr nc, sub_FC12ED__FC1321                  ; FC130D  jr NC,0xfc1321
+	jr nc, ToneQuery_ReplyDrumSourceName_ByRow__FC1321                  ; FC130D  jr NC,0xfc1321
 	ld	xiy, (xbc+0x80)                         ; FC130F  ld XIY,(XBC+0x0080)
 	ld	(xiz-12), xiy                           ; FC1314  ld (XIZ+0xf4),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FC1317  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC131C  ld (XIZ+0xfc),XIY
-	jr sub_FC12ED__FC1372                      ; FC131F  jr T,0xfc1372
-sub_FC12ED__FC1321:
+	jr ToneQuery_ReplyDrumSourceName_ByRow__FC1372                      ; FC131F  jr T,0xfc1372
+ToneQuery_ReplyDrumSourceName_ByRow__FC1321:
 	ldl_da	xbc, (0xD80D)                       ; FC1321  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC1326  cp XBC,0x00000000
-	jr z, sub_FC12ED__FC134D                   ; FC132C  jr Z,0xfc134d
+	jr z, ToneQuery_ReplyDrumSourceName_ByRow__FC134D                   ; FC132C  jr Z,0xfc134d
 	ldl_da	xbc, (0xD811)                       ; FC132E  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x80)                         ; FC1333  ld XWA,(XBC+0x0080)
 	ld	(xiz-12), xwa                           ; FC1338  ld (XIZ+0xf4),XWA
@@ -93855,8 +94150,8 @@ sub_FC12ED__FC1321:
 	ld	xiy, (xiz-8)                            ; FC1343  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FC1346  ld BC,(XIY)
 	sub	(xiz+8), bc                            ; FC1348  sub (XIZ+0x08),BC
-	jr sub_FC12ED__FC1372                      ; FC134B  jr T,0xfc1372
-sub_FC12ED__FC134D:
+	jr ToneQuery_ReplyDrumSourceName_ByRow__FC1372                      ; FC134B  jr T,0xfc1372
+ToneQuery_ReplyDrumSourceName_ByRow__FC134D:
 	ldl_da	xbc, (0xD7F1)                       ; FC134D  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x7C)                         ; FC1352  ld XWA,(XBC+0x7c)
 	ld	(xiz-12), xwa                           ; FC1355  ld (XIZ+0xf4),XWA
@@ -93867,18 +94162,18 @@ sub_FC12ED__FC134D:
 	ld	(xiz-12), xwa                           ; FC1367  ld (XIZ+0xf4),XWA
 	addda32_24	xwa, (0xD7ED)                   ; FC136A  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC136F  ld (XIZ+0xfc),XWA
-sub_FC12ED__FC1372:
+ToneQuery_ReplyDrumSourceName_ByRow__FC1372:
 	ldw (xiz-14), 0x000D                       ; FC1372  ld (XIZ+0xf2),0x000d
 	ldw (xiz-16), 0x0000                       ; FC1377  ld (XIZ+0xf0),0x0000
-sub_FC12ED__FC137C:
+ToneQuery_ReplyDrumSourceName_ByRow__FC137C:
 	ld	bc, (xiz-16)                            ; FC137C  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xF2, 0xF1                   ; FC137F  cp BC,(XIZ+0xf2)
-	jr nc, sub_FC12ED__FC13AE                  ; FC1382  jr NC,0xfc13ae
-	jr sub_FC12ED__FC138B                      ; FC1384  jr T,0xfc138b
-sub_FC12ED__FC1386:
+	jr nc, ToneQuery_ReplyDrumSourceName_ByRow__FC13AE                  ; FC1382  jr NC,0xfc13ae
+	jr ToneQuery_ReplyDrumSourceName_ByRow__FC138B                      ; FC1384  jr T,0xfc138b
+ToneQuery_ReplyDrumSourceName_ByRow__FC1386:
 	incm	1, (xiz-16)                           ; FC1386  incw 1,(XIZ+0xf0)
-	jr sub_FC12ED__FC137C                      ; FC1389  jr T,0xfc137c
-sub_FC12ED__FC138B:
+	jr ToneQuery_ReplyDrumSourceName_ByRow__FC137C                      ; FC1389  jr T,0xfc137c
+ToneQuery_ReplyDrumSourceName_ByRow__FC138B:
 	ldw	bc, 16                                 ; FC138B  ld BC,0x0010
 	extpfx3 0x9E, 0x08, 0x41                   ; FC138E  mul XBC,(XIZ+0x08)
 	ld	xix, xbc                                ; FC1391  ld XIX,XBC
@@ -93891,15 +94186,15 @@ sub_FC12ED__FC138B:
 	inc	6, xwa                                 ; FC13A2  inc 6,XWA
 	add	xwa, 0xD945                            ; FC13A4  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC13AA  ld (XWA),H
-	jr sub_FC12ED__FC1386                      ; FC13AC  jr T,0xfc1386
-sub_FC12ED__FC13AE:
+	jr ToneQuery_ReplyDrumSourceName_ByRow__FC1386                      ; FC13AC  jr T,0xfc1386
+ToneQuery_ReplyDrumSourceName_ByRow__FC13AE:
 	ld	wa, (xiz-14)                            ; FC13AE  ld WA,(XIZ+0xf2)
 	pop	xix                                    ; FC13B1  pop XIX
 	popw	hl                                    ; FC13B2  pop HL
 	unlk32 xiz                                 ; FC13B3  unlk XIZ
 	ret                                        ; FC13B5  ret
 ; --------------------------------------------------------------------------
-; sub_FC13B6 -- 0xFC13B6..0xFC1554 (415 bytes)
+; ToneQuery_ReplyDrumSourceNameAndIndex -- 0xFC13B6..0xFC1554 (415 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -93907,16 +94202,26 @@ sub_FC12ED__FC13AE:
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10), (XIZ+0x12)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1
-; Calls:   0xFC10E0 = sub_FC10E0
+; Calls:   0xFC10E0 = DrumKit_ResolveSourceNameRow
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC13B6-0xFC1554
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 16: the 16-byte answer for a drum source -- 13 name
+;           characters from +0x80 ToneDB_DrumSourceNameList, then the row's
+;           byte +0x0D and the row number as LE16. Also arm 21's worker,
+;           called there with a tone record the arm resolved itself.
+; Evidence: 0xFC13F5 calls DrumKit_ResolveSourceNameRow; 0xFC1491 sets the
+;           copy length 13; 0xFC14C9 reads +0x84 and 0xFC14D9 its count;
+;           0xFC14E3 `ld H,(XIY+0x0d)` is the row byte and 0xFC1500 `ld
+;           C,(XWA+0x0d)` the board's; the three `incw 1,(XIZ+0xe6)` at
+;           0xFC1516, 0xFC1530 and 0xFC154A take the reply to 16, returned
+;           at 0xFC154D.
+; Unknown:  what row byte +0x0D means.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC13B6`.
 ; --------------------------------------------------------------------------
-sub_FC13B6:
+ToneQuery_ReplyDrumSourceNameAndIndex:
 	link32 0xEE, 0x0C, 0xE0, 0xFF              ; FC13B6  link XIZ,0xffe0
 	pushw	hl                                   ; FC13BA  push HL
 	push	xix                                   ; FC13BB  push XIX
@@ -93951,21 +94256,21 @@ sub_FC13B6:
 	ld	wa, (xbc+0x1523)                        ; FC1408  ld WA,(XBC+0x1523)
 	and	wa, 1                                  ; FC140D  and WA,0x0001
 	inc	8, xsp                                 ; FC1411  inc 0,XSP
-	jr z, sub_FC13B6__FC142E                   ; FC1413  jr Z,0xfc142e
+	jr z, ToneQuery_ReplyDrumSourceNameAndIndex__FC142E                   ; FC1413  jr Z,0xfc142e
 	ldb	c, 0x96                                ; FC1415  ld C,0x96
 	extpfx3 0x8E, 0x0A, 0x43                   ; FC1417  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FC141A  extz XBC
 	add	xbc, 0x461                             ; FC141C  add XBC,0x00000461
 	add	xbc, 0x87D2                            ; FC1422  add XBC,0x000087d2
 	ld	(xiz-4), xbc                            ; FC1428  ld (XIZ+0xfc),XBC
-	jrl sub_FC13B6__FC1491                     ; FC142B  jrl T,0xfc1491
-sub_FC13B6__FC142E:
+	jrl ToneQuery_ReplyDrumSourceNameAndIndex__FC1491                     ; FC142B  jrl T,0xfc1491
+ToneQuery_ReplyDrumSourceNameAndIndex__FC142E:
 	ld	bc, (xiz-20)                            ; FC142E  ld BC,(XIZ+0xec)
 	and	bc, 48                                 ; FC1431  and BC,0x0030
 	ld	(xiz-22), bc                            ; FC1435  ld (XIZ+0xea),BC
 	ld	(xiz-32), bc                            ; FC1438  ld (XIZ+0xe0),BC
-	jr sub_FC13B6__FC1486                      ; FC143B  jr T,0xfc1486
-sub_FC13B6__FC143D:
+	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC1486                      ; FC143B  jr T,0xfc1486
+ToneQuery_ReplyDrumSourceNameAndIndex__FC143D:
 	ld	bc, (xiz+18)                            ; FC143D  ld BC,(XIZ+0x12)
 	extz	bc                                    ; FC1440  extz BC
 	sub	bc, 40                                 ; FC1442  sub BC,0x0028
@@ -93987,28 +94292,28 @@ sub_FC13B6__FC143D:
 	ld	xbc, (xbc)                              ; FC1475  ld XBC,(XBC)
 	add	xbc, xix                               ; FC1477  add XBC,XIX
 	ld	(xiz-4), xbc                            ; FC1479  ld (XIZ+0xfc),XBC
-	jr sub_FC13B6__FC1491                      ; FC147C  jr T,0xfc1491
-sub_FC13B6__FC147E:
+	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC1491                      ; FC147C  jr T,0xfc1491
+ToneQuery_ReplyDrumSourceNameAndIndex__FC147E:
 	ld	xbc, (xiz-8)                            ; FC147E  ld XBC,(XIZ+0xf8)
 	ld	(xiz-4), xbc                            ; FC1481  ld (XIZ+0xfc),XBC
-	jr sub_FC13B6__FC1491                      ; FC1484  jr T,0xfc1491
-sub_FC13B6__FC1486:
+	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC1491                      ; FC1484  jr T,0xfc1491
+ToneQuery_ReplyDrumSourceNameAndIndex__FC1486:
 	ld	bc, (xiz-32)                            ; FC1486  ld BC,(XIZ+0xe0)
 	cp	bc, 16                                  ; FC1489  cp BC,0x0010
-	jr z, sub_FC13B6__FC143D                   ; FC148D  jr Z,0xfc143d
-	jr sub_FC13B6__FC147E                      ; FC148F  jr T,0xfc147e
-sub_FC13B6__FC1491:
+	jr z, ToneQuery_ReplyDrumSourceNameAndIndex__FC143D                   ; FC148D  jr Z,0xfc143d
+	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC147E                      ; FC148F  jr T,0xfc147e
+ToneQuery_ReplyDrumSourceNameAndIndex__FC1491:
 	ldw (xiz-26), 0x000D                       ; FC1491  ld (XIZ+0xe6),0x000d
 	ldw (xiz-28), 0x0000                       ; FC1496  ld (XIZ+0xe4),0x0000
-sub_FC13B6__FC149B:
+ToneQuery_ReplyDrumSourceNameAndIndex__FC149B:
 	ld	bc, (xiz-28)                            ; FC149B  ld BC,(XIZ+0xe4)
 	extpfx3 0x9E, 0xE6, 0xF1                   ; FC149E  cp BC,(XIZ+0xe6)
-	jr nc, sub_FC13B6__FC14C4                  ; FC14A1  jr NC,0xfc14c4
-	jr sub_FC13B6__FC14AA                      ; FC14A3  jr T,0xfc14aa
-sub_FC13B6__FC14A5:
+	jr nc, ToneQuery_ReplyDrumSourceNameAndIndex__FC14C4                  ; FC14A1  jr NC,0xfc14c4
+	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC14AA                      ; FC14A3  jr T,0xfc14aa
+ToneQuery_ReplyDrumSourceNameAndIndex__FC14A5:
 	incm	1, (xiz-28)                           ; FC14A5  incw 1,(XIZ+0xe4)
-	jr sub_FC13B6__FC149B                      ; FC14A8  jr T,0xfc149b
-sub_FC13B6__FC14AA:
+	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC149B                      ; FC14A8  jr T,0xfc149b
+ToneQuery_ReplyDrumSourceNameAndIndex__FC14AA:
 	ld	ix, (xiz-28)                            ; FC14AA  ld IX,(XIZ+0xe4)
 	extz	xix                                   ; FC14AD  extz XIX
 	ld	xbc, (xiz-4)                            ; FC14AF  ld XBC,(XIZ+0xfc)
@@ -94018,8 +94323,8 @@ sub_FC13B6__FC14AA:
 	inc	6, xbc                                 ; FC14B8  inc 6,XBC
 	add	xbc, 0xD945                            ; FC14BA  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC14C0  ld (XBC),H
-	jr sub_FC13B6__FC14A5                      ; FC14C2  jr T,0xfc14a5
-sub_FC13B6__FC14C4:
+	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC14A5                      ; FC14C2  jr T,0xfc14a5
+ToneQuery_ReplyDrumSourceNameAndIndex__FC14C4:
 	ldl_da	xbc, (0xD7F1)                       ; FC14C4  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x84)                         ; FC14C9  ld XWA,(XBC+0x0084)
 	ld	(xiz-16), xwa                           ; FC14CE  ld (XIZ+0xf0),XWA
@@ -94027,7 +94332,7 @@ sub_FC13B6__FC14C4:
 	ld	(xiz-12), xwa                           ; FC14D6  ld (XIZ+0xf4),XWA
 	ld	iy, (xwa)                               ; FC14D9  ld IY,(XWA)
 	cp	(xiz-24), iy                            ; FC14DB  cp (XIZ+0xe8),IY
-	jr nc, sub_FC13B6__FC14F7                  ; FC14DE  jr NC,0xfc14f7
+	jr nc, ToneQuery_ReplyDrumSourceNameAndIndex__FC14F7                  ; FC14DE  jr NC,0xfc14f7
 	ld	xiy, (xiz-8)                            ; FC14E0  ld XIY,(XIZ+0xf8)
 	ld	h, (xiy+13)                             ; FC14E3  ld H,(XIY+0x0d)
 	ld	bc, (xiz-26)                            ; FC14E6  ld BC,(XIZ+0xe6)
@@ -94035,8 +94340,8 @@ sub_FC13B6__FC14C4:
 	inc	6, xbc                                 ; FC14EB  inc 6,XBC
 	add	xbc, 0xD945                            ; FC14ED  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC14F3  ld (XBC),H
-	jr sub_FC13B6__FC1516                      ; FC14F5  jr T,0xfc1516
-sub_FC13B6__FC14F7:
+	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC1516                      ; FC14F5  jr T,0xfc1516
+ToneQuery_ReplyDrumSourceNameAndIndex__FC14F7:
 	ld	xbc, (xiz-12)                           ; FC14F7  ld XBC,(XIZ+0xf4)
 	ld	h, (xbc+2)                              ; FC14FA  ld H,(XBC+0x02)
 	ld	xwa, (xiz-8)                            ; FC14FD  ld XWA,(XIZ+0xf8)
@@ -94048,7 +94353,7 @@ sub_FC13B6__FC14F7:
 	inc	6, xbc                                 ; FC150C  inc 6,XBC
 	add	xbc, 0xD945                            ; FC150E  add XBC,0x0000d945
 	ld	(xbc), l                                ; FC1514  ld (XBC),L
-sub_FC13B6__FC1516:
+ToneQuery_ReplyDrumSourceNameAndIndex__FC1516:
 	incm	1, (xiz-26)                           ; FC1516  incw 1,(XIZ+0xe6)
 	ld	c, (xiz-24)                             ; FC1519  ld C,(XIZ+0xe8)
 	ld	h, c                                    ; FC151C  ld H,C
@@ -94176,7 +94481,7 @@ ToneDB_PercSourceIndexMapB_Lookup__FC1634:
 	unlk32 xiz                                 ; FC164A  unlk XIZ
 	ret                                        ; FC164C  ret
 ; --------------------------------------------------------------------------
-; sub_FC164D -- 0xFC164D..0xFC1715 (201 bytes)
+; ToneQuery_ReplyPercSourceName1_ByRow -- 0xFC164D..0xFC1715 (201 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -94189,14 +94494,34 @@ ToneDB_PercSourceIndexMapB_Lookup__FC1634:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
-; Refused:  REFUSED round 11.  reads the same three slots as ToneDB_PercSourceIndexMapB_Lookup
-;           (+0x4C, +0x8C, +0x90) but is a different body -- 63 of its first
-;           64 instructions differ once addresses are blanked -- and nothing
-;           in this pass says which of the two roles is which.
+; Name:     arm 17: replies with the 13 name characters of ROW N of +0x8C
+;           ToneDB_PercSourceNameList1, counted by +0x90
+;           ToneDB_PercList1_Footer, with entry 0 of +0x4C
+;           ToneDB_PercSourceIndexMapB as the no-board fallback. Returns 13.
+;           ★ THIS RESOLVES ROUND 11's OTHER REFUSAL: round 11 saw the same
+;           three slots as ToneDB_PercSourceIndexMapB_Lookup and could not
+;           say which role was which. The roles are visible in the OUTPUT --
+;           this routine writes 13 characters into the reply payload and
+;           returns 13; the Lookup writes nothing to 0x00D945 and returns a
+;           row number.
+; Evidence: 0xFC1658 reads +0x90 and 0xFC1668 its count; 0xFC166F and
+;           0xFC1693 read +0x8C; 0xFC16B2 reads +0x4C; 0xFC16D2 sets the
+;           length 13, 0xFC16EB `ld BC,0x0010` is the row stride and
+;           0xFC1704 the payload store. ToneDB_PercSourceIndexMapB_Lookup's
+;           extent 0xFC1555-0xFC164C contains no 0x00D945 reference at all.
+; Unknown:  what row byte +0x0D means -- not returned by this arm.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC164D`.
+; WasRefused: ROUND 11 DECLINED this name, on the ground that it reads the
+;           same three slots as ToneDB_PercSourceIndexMapB_Lookup (+0x4C,
+;           +0x8C, +0x90) but is a different body -- 63 of its first 64
+;           instructions differ once addresses are blanked -- and nothing in
+;           this pass says which of the two roles is which. Every fact in
+;           that refusal still holds; what LIFTED it in round 12 is that the
+;           two routines separate by their OUTPUT and not by the slots they
+;           read -- see the Name: paragraph above. Kept, because the refusal
+;           is what made the question precise.
 ; --------------------------------------------------------------------------
-sub_FC164D:
+ToneQuery_ReplyPercSourceName1_ByRow:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FC164D  link XIZ,0xffec
 	pushw	hl                                   ; FC1651  push HL
 	push	xix                                   ; FC1652  push XIX
@@ -94207,16 +94532,16 @@ sub_FC164D:
 	ld	(xiz-8), xwa                            ; FC1665  ld (XIZ+0xf8),XWA
 	ld	iy, (xwa)                               ; FC1668  ld IY,(XWA)
 	cp	(xiz+8), iy                             ; FC166A  cp (XIZ+0x08),IY
-	jr nc, sub_FC164D__FC1681                  ; FC166D  jr NC,0xfc1681
+	jr nc, ToneQuery_ReplyPercSourceName1_ByRow__FC1681                  ; FC166D  jr NC,0xfc1681
 	ld	xiy, (xbc+0x8C)                         ; FC166F  ld XIY,(XBC+0x008c)
 	ld	(xiz-12), xiy                           ; FC1674  ld (XIZ+0xf4),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FC1677  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC167C  ld (XIZ+0xfc),XIY
-	jr sub_FC164D__FC16D2                      ; FC167F  jr T,0xfc16d2
-sub_FC164D__FC1681:
+	jr ToneQuery_ReplyPercSourceName1_ByRow__FC16D2                      ; FC167F  jr T,0xfc16d2
+ToneQuery_ReplyPercSourceName1_ByRow__FC1681:
 	ldl_da	xbc, (0xD80D)                       ; FC1681  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC1686  cp XBC,0x00000000
-	jr z, sub_FC164D__FC16AD                   ; FC168C  jr Z,0xfc16ad
+	jr z, ToneQuery_ReplyPercSourceName1_ByRow__FC16AD                   ; FC168C  jr Z,0xfc16ad
 	ldl_da	xbc, (0xD811)                       ; FC168E  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x8C)                         ; FC1693  ld XWA,(XBC+0x008c)
 	ld	(xiz-12), xwa                           ; FC1698  ld (XIZ+0xf4),XWA
@@ -94225,8 +94550,8 @@ sub_FC164D__FC1681:
 	ld	xiy, (xiz-8)                            ; FC16A3  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FC16A6  ld BC,(XIY)
 	sub	(xiz+8), bc                            ; FC16A8  sub (XIZ+0x08),BC
-	jr sub_FC164D__FC16D2                      ; FC16AB  jr T,0xfc16d2
-sub_FC164D__FC16AD:
+	jr ToneQuery_ReplyPercSourceName1_ByRow__FC16D2                      ; FC16AB  jr T,0xfc16d2
+ToneQuery_ReplyPercSourceName1_ByRow__FC16AD:
 	ldl_da	xbc, (0xD7F1)                       ; FC16AD  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+76)                           ; FC16B2  ld XWA,(XBC+0x4c)
 	ld	(xiz-12), xwa                           ; FC16B5  ld (XIZ+0xf4),XWA
@@ -94237,18 +94562,18 @@ sub_FC164D__FC16AD:
 	ld	(xiz-12), xwa                           ; FC16C7  ld (XIZ+0xf4),XWA
 	addda32_24	xwa, (0xD7ED)                   ; FC16CA  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC16CF  ld (XIZ+0xfc),XWA
-sub_FC164D__FC16D2:
+ToneQuery_ReplyPercSourceName1_ByRow__FC16D2:
 	ldw (xiz-14), 0x000D                       ; FC16D2  ld (XIZ+0xf2),0x000d
 	ldw (xiz-16), 0x0000                       ; FC16D7  ld (XIZ+0xf0),0x0000
-sub_FC164D__FC16DC:
+ToneQuery_ReplyPercSourceName1_ByRow__FC16DC:
 	ld	bc, (xiz-16)                            ; FC16DC  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xF2, 0xF1                   ; FC16DF  cp BC,(XIZ+0xf2)
-	jr nc, sub_FC164D__FC170E                  ; FC16E2  jr NC,0xfc170e
-	jr sub_FC164D__FC16EB                      ; FC16E4  jr T,0xfc16eb
-sub_FC164D__FC16E6:
+	jr nc, ToneQuery_ReplyPercSourceName1_ByRow__FC170E                  ; FC16E2  jr NC,0xfc170e
+	jr ToneQuery_ReplyPercSourceName1_ByRow__FC16EB                      ; FC16E4  jr T,0xfc16eb
+ToneQuery_ReplyPercSourceName1_ByRow__FC16E6:
 	incm	1, (xiz-16)                           ; FC16E6  incw 1,(XIZ+0xf0)
-	jr sub_FC164D__FC16DC                      ; FC16E9  jr T,0xfc16dc
-sub_FC164D__FC16EB:
+	jr ToneQuery_ReplyPercSourceName1_ByRow__FC16DC                      ; FC16E9  jr T,0xfc16dc
+ToneQuery_ReplyPercSourceName1_ByRow__FC16EB:
 	ldw	bc, 16                                 ; FC16EB  ld BC,0x0010
 	extpfx3 0x9E, 0x08, 0x41                   ; FC16EE  mul XBC,(XIZ+0x08)
 	ld	xix, xbc                                ; FC16F1  ld XIX,XBC
@@ -94261,15 +94586,15 @@ sub_FC164D__FC16EB:
 	inc	6, xwa                                 ; FC1702  inc 6,XWA
 	add	xwa, 0xD945                            ; FC1704  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC170A  ld (XWA),H
-	jr sub_FC164D__FC16E6                      ; FC170C  jr T,0xfc16e6
-sub_FC164D__FC170E:
+	jr ToneQuery_ReplyPercSourceName1_ByRow__FC16E6                      ; FC170C  jr T,0xfc16e6
+ToneQuery_ReplyPercSourceName1_ByRow__FC170E:
 	ld	wa, (xiz-14)                            ; FC170E  ld WA,(XIZ+0xf2)
 	pop	xix                                    ; FC1711  pop XIX
 	popw	hl                                    ; FC1712  pop HL
 	unlk32 xiz                                 ; FC1713  unlk XIZ
 	ret                                        ; FC1715  ret
 ; --------------------------------------------------------------------------
-; sub_FC1716 -- 0xFC1716..0xFC1844 (303 bytes)
+; ToneQuery_ReplyPercSourceName1AndIndex -- 0xFC1716..0xFC1844 (303 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -94283,10 +94608,21 @@ sub_FC164D__FC170E:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 18: the 16-byte answer for a percussion source in list 1 --
+;           13 name characters from +0x8C ToneDB_PercSourceNameList1, the
+;           row's byte +0x0D and the row number as LE16 -- for the part in
+;           request[+1] with the index latched at 0x00D735.
+; Evidence: 0xFC172A `mul BC,0x012c` with 0xFC1730 `ld XWA,(XBC+0x1523)`
+;           reads the part record; 0xFC1779 calls
+;           ToneDB_PercSourceIndexMapB_Lookup; 0xFC17B9 reads +0x90;
+;           0xFC17D3 `ld H,(XIY+0x0d)` and 0xFC17F0 `ld C,(XWA+0x0d)` are
+;           the row byte; the three `incw 1,(XIZ+0xe0)` at 0xFC1806,
+;           0xFC1820 and 0xFC183A take the reply to 16, returned at
+;           0xFC183D.
+; Unknown:  what row byte +0x0D means.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC1716`.
 ; --------------------------------------------------------------------------
-sub_FC1716:
+ToneQuery_ReplyPercSourceName1AndIndex:
 	link32 0xEE, 0x0C, 0xDD, 0xFF              ; FC1716  link XIZ,0xffdd
 	pushw	hl                                   ; FC171A  push HL
 	push	xix                                   ; FC171B  push XIX
@@ -94329,15 +94665,15 @@ sub_FC1716:
 	ldw (xiz-32), 0x000D                       ; FC177F  ld (XIZ+0xe0),0x000d
 	ldw (xiz-34), 0x0000                       ; FC1784  ld (XIZ+0xde),0x0000
 	inc	8, xsp                                 ; FC1789  inc 0,XSP
-sub_FC1716__FC178B:
+ToneQuery_ReplyPercSourceName1AndIndex__FC178B:
 	ld	bc, (xiz-34)                            ; FC178B  ld BC,(XIZ+0xde)
 	extpfx3 0x9E, 0xE0, 0xF1                   ; FC178E  cp BC,(XIZ+0xe0)
-	jr nc, sub_FC1716__FC17B4                  ; FC1791  jr NC,0xfc17b4
-	jr sub_FC1716__FC179A                      ; FC1793  jr T,0xfc179a
-sub_FC1716__FC1795:
+	jr nc, ToneQuery_ReplyPercSourceName1AndIndex__FC17B4                  ; FC1791  jr NC,0xfc17b4
+	jr ToneQuery_ReplyPercSourceName1AndIndex__FC179A                      ; FC1793  jr T,0xfc179a
+ToneQuery_ReplyPercSourceName1AndIndex__FC1795:
 	incm	1, (xiz-34)                           ; FC1795  incw 1,(XIZ+0xde)
-	jr sub_FC1716__FC178B                      ; FC1798  jr T,0xfc178b
-sub_FC1716__FC179A:
+	jr ToneQuery_ReplyPercSourceName1AndIndex__FC178B                      ; FC1798  jr T,0xfc178b
+ToneQuery_ReplyPercSourceName1AndIndex__FC179A:
 	ld	ix, (xiz-34)                            ; FC179A  ld IX,(XIZ+0xde)
 	extz	xix                                   ; FC179D  extz XIX
 	ld	xbc, (xiz-16)                           ; FC179F  ld XBC,(XIZ+0xf0)
@@ -94347,8 +94683,8 @@ sub_FC1716__FC179A:
 	inc	6, xbc                                 ; FC17A8  inc 6,XBC
 	add	xbc, 0xD945                            ; FC17AA  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC17B0  ld (XBC),H
-	jr sub_FC1716__FC1795                      ; FC17B2  jr T,0xfc1795
-sub_FC1716__FC17B4:
+	jr ToneQuery_ReplyPercSourceName1AndIndex__FC1795                      ; FC17B2  jr T,0xfc1795
+ToneQuery_ReplyPercSourceName1AndIndex__FC17B4:
 	ldl_da	xbc, (0xD7F1)                       ; FC17B4  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x90)                         ; FC17B9  ld XWA,(XBC+0x0090)
 	ld	(xiz-24), xwa                           ; FC17BE  ld (XIZ+0xe8),XWA
@@ -94356,7 +94692,7 @@ sub_FC1716__FC17B4:
 	ld	(xiz-20), xwa                           ; FC17C6  ld (XIZ+0xec),XWA
 	ld	iy, (xwa)                               ; FC17C9  ld IY,(XWA)
 	cp	(xiz-30), iy                            ; FC17CB  cp (XIZ+0xe2),IY
-	jr nc, sub_FC1716__FC17E7                  ; FC17CE  jr NC,0xfc17e7
+	jr nc, ToneQuery_ReplyPercSourceName1AndIndex__FC17E7                  ; FC17CE  jr NC,0xfc17e7
 	ld	xiy, (xiz-16)                           ; FC17D0  ld XIY,(XIZ+0xf0)
 	ld	h, (xiy+13)                             ; FC17D3  ld H,(XIY+0x0d)
 	ld	bc, (xiz-32)                            ; FC17D6  ld BC,(XIZ+0xe0)
@@ -94364,8 +94700,8 @@ sub_FC1716__FC17B4:
 	inc	6, xbc                                 ; FC17DB  inc 6,XBC
 	add	xbc, 0xD945                            ; FC17DD  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC17E3  ld (XBC),H
-	jr sub_FC1716__FC1806                      ; FC17E5  jr T,0xfc1806
-sub_FC1716__FC17E7:
+	jr ToneQuery_ReplyPercSourceName1AndIndex__FC1806                      ; FC17E5  jr T,0xfc1806
+ToneQuery_ReplyPercSourceName1AndIndex__FC17E7:
 	ld	xbc, (xiz-20)                           ; FC17E7  ld XBC,(XIZ+0xec)
 	ld	h, (xbc+2)                              ; FC17EA  ld H,(XBC+0x02)
 	ld	xwa, (xiz-16)                           ; FC17ED  ld XWA,(XIZ+0xf0)
@@ -94377,7 +94713,7 @@ sub_FC1716__FC17E7:
 	inc	6, xbc                                 ; FC17FC  inc 6,XBC
 	add	xbc, 0xD945                            ; FC17FE  add XBC,0x0000d945
 	ld	(xbc), l                                ; FC1804  ld (XBC),L
-sub_FC1716__FC1806:
+ToneQuery_ReplyPercSourceName1AndIndex__FC1806:
 	incm	1, (xiz-32)                           ; FC1806  incw 1,(XIZ+0xe0)
 	ld	c, (xiz-30)                             ; FC1809  ld C,(XIZ+0xe2)
 	ld	h, c                                    ; FC180C  ld H,C
@@ -94403,7 +94739,7 @@ sub_FC1716__FC1806:
 	unlk32 xiz                                 ; FC1842  unlk XIZ
 	ret                                        ; FC1844  ret
 ; --------------------------------------------------------------------------
-; sub_FC1845 -- 0xFC1845..0xFC1AA0 (604 bytes)
+; ToneQuery_ReplyPercSourceName2AndIndex -- 0xFC1845..0xFC1AA0 (604 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -94417,10 +94753,20 @@ sub_FC1716__FC1806:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 19: arm 18's twin for list 2 -- +0x60
+;           ToneDB_PercSourceIndexMapC into +0x94
+;           ToneDB_PercSourceNameList2, counted by +0x98
+;           ToneDB_PercList2_Footer -- with the same 16-byte reply.
+; Evidence: 0xFC1865/0xFC186B read the part record; 0xFC1904 and 0xFC1977
+;           read +0x60 through the internal and board bases; 0xFC1924 and
+;           0xFC199C read +0x94; 0xFC1952 reads +0x98; 0xFC1A3D `add
+;           XBC,0x0000000d` is the row byte and the three `incw
+;           1,(XIZ+0xdc)` at 0xFC1A5C, 0xFC1A7C and 0xFC1A96 take the reply
+;           to 16, returned at 0xFC1A99.
+; Unknown:  what row byte +0x0D means.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC1845`.
 ; --------------------------------------------------------------------------
-sub_FC1845:
+ToneQuery_ReplyPercSourceName2AndIndex:
 	link32 0xEE, 0x0C, 0xCC, 0xFF              ; FC1845  link XIZ,0xffcc
 	pushw	hl                                   ; FC1849  push HL
 	push	xix                                   ; FC184A  push XIX
@@ -94491,8 +94837,8 @@ sub_FC1845:
 	ld	(xiz-48), wa                            ; FC18F5  ld (XIZ+0xd0),WA
 	inc	8, xsp                                 ; FC18F8  inc 0,XSP
 	inc	2, xsp                                 ; FC18FA  inc 2,XSP
-	jrl sub_FC1845__FC19DE                     ; FC18FC  jrl T,0xfc19de
-sub_FC1845__FC18FF:
+	jrl ToneQuery_ReplyPercSourceName2AndIndex__FC19DE                     ; FC18FC  jrl T,0xfc19de
+ToneQuery_ReplyPercSourceName2AndIndex__FC18FF:
 	ldl_da	xbc, (0xD7F1)                       ; FC18FF  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+96)                           ; FC1904  ld XWA,(XBC+0x60)
 	ld	(xiz-28), xwa                           ; FC1907  ld (XIZ+0xe4),XWA
@@ -94510,11 +94856,11 @@ sub_FC1845__FC18FF:
 	ld	(xiz-20), xiy                           ; FC1931  ld (XIZ+0xec),XIY
 	ldw (xiz-42), 0x0000                       ; FC1934  ld (XIZ+0xd6),0x0000
 	ld	(xiz-45), 0                             ; FC1939  ld (XIZ+0xd3),0x00
-	jrl sub_FC1845__FC19FB                     ; FC193D  jrl T,0xfc19fb
-sub_FC1845__FC1940:
+	jrl ToneQuery_ReplyPercSourceName2AndIndex__FC19FB                     ; FC193D  jrl T,0xfc19fb
+ToneQuery_ReplyPercSourceName2AndIndex__FC1940:
 	ldl_da	xbc, (0xD80D)                       ; FC1940  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC1945  cp XBC,0x00000000
-	jr z, sub_FC1845__FC19AE                   ; FC194B  jr Z,0xfc19ae
+	jr z, ToneQuery_ReplyPercSourceName2AndIndex__FC19AE                   ; FC194B  jr Z,0xfc19ae
 	ldl_da	xbc, (0xD7F1)                       ; FC194D  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x98)                         ; FC1952  ld XWA,(XBC+0x0098)
 	ld	(xiz-28), xwa                           ; FC1957  ld (XIZ+0xe4),XWA
@@ -94542,8 +94888,8 @@ sub_FC1845__FC1940:
 	ld	(xiz-28), xwa                           ; FC19A1  ld (XIZ+0xe4),XWA
 	addda32_24	xwa, (0xD80D)                   ; FC19A4  add XWA,(0x00d80d)
 	ld	(xiz-20), xwa                           ; FC19A9  ld (XIZ+0xec),XWA
-	jr sub_FC1845__FC19DC                      ; FC19AC  jr T,0xfc19dc
-sub_FC1845__FC19AE:
+	jr ToneQuery_ReplyPercSourceName2AndIndex__FC19DC                      ; FC19AC  jr T,0xfc19dc
+ToneQuery_ReplyPercSourceName2AndIndex__FC19AE:
 	ldl_da	xbc, (0xD7F1)                       ; FC19AE  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+96)                           ; FC19B3  ld XWA,(XBC+0x60)
 	ld	(xiz-28), xwa                           ; FC19B6  ld (XIZ+0xe4),XWA
@@ -94556,30 +94902,30 @@ sub_FC1845__FC19AE:
 	ld	(xiz-20), xwa                           ; FC19D0  ld (XIZ+0xec),XWA
 	ldw (xiz-42), 0x0000                       ; FC19D3  ld (XIZ+0xd6),0x0000
 	ld	(xiz-45), 0                             ; FC19D8  ld (XIZ+0xd3),0x00
-sub_FC1845__FC19DC:
-	jr sub_FC1845__FC19FB                      ; FC19DC  jr T,0xfc19fb
-sub_FC1845__FC19DE:
+ToneQuery_ReplyPercSourceName2AndIndex__FC19DC:
+	jr ToneQuery_ReplyPercSourceName2AndIndex__FC19FB                      ; FC19DC  jr T,0xfc19fb
+ToneQuery_ReplyPercSourceName2AndIndex__FC19DE:
 	ld	bc, (xiz-48)                            ; FC19DE  ld BC,(XIZ+0xd0)
 	cps	bc, 0                                  ; FC19E1  cp BC,0
-	jrl z, sub_FC1845__FC18FF                  ; FC19E3  jrl Z,0xfc18ff
+	jrl z, ToneQuery_ReplyPercSourceName2AndIndex__FC18FF                  ; FC19E3  jrl Z,0xfc18ff
 	cp	bc, 16                                  ; FC19E6  cp BC,0x0010
-	jrl z, sub_FC1845__FC18FF                  ; FC19EA  jrl Z,0xfc18ff
+	jrl z, ToneQuery_ReplyPercSourceName2AndIndex__FC18FF                  ; FC19EA  jrl Z,0xfc18ff
 	cp	bc, 32                                  ; FC19ED  cp BC,0x0020
-	jrl z, sub_FC1845__FC1940                  ; FC19F1  jrl Z,0xfc1940
+	jrl z, ToneQuery_ReplyPercSourceName2AndIndex__FC1940                  ; FC19F1  jrl Z,0xfc1940
 	cp	bc, 48                                  ; FC19F4  cp BC,0x0030
-	jrl z, sub_FC1845__FC1940                  ; FC19F8  jrl Z,0xfc1940
-sub_FC1845__FC19FB:
+	jrl z, ToneQuery_ReplyPercSourceName2AndIndex__FC1940                  ; FC19F8  jrl Z,0xfc1940
+ToneQuery_ReplyPercSourceName2AndIndex__FC19FB:
 	ldw (xiz-36), 0x000D                       ; FC19FB  ld (XIZ+0xdc),0x000d
 	ldw (xiz-38), 0x0000                       ; FC1A00  ld (XIZ+0xda),0x0000
-sub_FC1845__FC1A05:
+ToneQuery_ReplyPercSourceName2AndIndex__FC1A05:
 	ld	bc, (xiz-38)                            ; FC1A05  ld BC,(XIZ+0xda)
 	extpfx3 0x9E, 0xDC, 0xF1                   ; FC1A08  cp BC,(XIZ+0xdc)
-	jr nc, sub_FC1845__FC1A37                  ; FC1A0B  jr NC,0xfc1a37
-	jr sub_FC1845__FC1A14                      ; FC1A0D  jr T,0xfc1a14
-sub_FC1845__FC1A0F:
+	jr nc, ToneQuery_ReplyPercSourceName2AndIndex__FC1A37                  ; FC1A0B  jr NC,0xfc1a37
+	jr ToneQuery_ReplyPercSourceName2AndIndex__FC1A14                      ; FC1A0D  jr T,0xfc1a14
+ToneQuery_ReplyPercSourceName2AndIndex__FC1A0F:
 	incm	1, (xiz-38)                           ; FC1A0F  incw 1,(XIZ+0xda)
-	jr sub_FC1845__FC1A05                      ; FC1A12  jr T,0xfc1a05
-sub_FC1845__FC1A14:
+	jr ToneQuery_ReplyPercSourceName2AndIndex__FC1A05                      ; FC1A12  jr T,0xfc1a05
+ToneQuery_ReplyPercSourceName2AndIndex__FC1A14:
 	ldw	bc, 16                                 ; FC1A14  ld BC,0x0010
 	extpfx3 0x9E, 0xDE, 0x41                   ; FC1A17  mul XBC,(XIZ+0xde)
 	ld	xix, xbc                                ; FC1A1A  ld XIX,XBC
@@ -94592,8 +94938,8 @@ sub_FC1845__FC1A14:
 	inc	6, xwa                                 ; FC1A2B  inc 6,XWA
 	add	xwa, 0xD945                            ; FC1A2D  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC1A33  ld (XWA),H
-	jr sub_FC1845__FC1A0F                      ; FC1A35  jr T,0xfc1a0f
-sub_FC1845__FC1A37:
+	jr ToneQuery_ReplyPercSourceName2AndIndex__FC1A0F                      ; FC1A35  jr T,0xfc1a0f
+ToneQuery_ReplyPercSourceName2AndIndex__FC1A37:
 	ldw	bc, 16                                 ; FC1A37  ld BC,0x0010
 	extpfx3 0x9E, 0xDE, 0x41                   ; FC1A3A  mul XBC,(XIZ+0xde)
 	add	xbc, 13                                ; FC1A3D  add XBC,0x0000000d
@@ -94633,7 +94979,7 @@ sub_FC1845__FC1A37:
 	unlk32 xiz                                 ; FC1A9E  unlk XIZ
 	ret                                        ; FC1AA0  ret
 ; --------------------------------------------------------------------------
-; sub_FC1AA1 -- 0xFC1AA1..0xFC1B6D (205 bytes)
+; ToneQuery_ReplyWholeToneRecord -- 0xFC1AA1..0xFC1B6D (205 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -94648,13 +94994,33 @@ sub_FC1845__FC1A37:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     arm 20: copies an ENTIRE tone record into the reply -- the
+;           217-byte head, then the four 81-byte element parameter blocks,
+;           then the four 43-byte wave-select records -- 713 bytes, and
+;           returns that length, which the arm also writes into the echoed
+;           header at 0x00D946 and 0x00D948 as high and low byte. A bank
+;           selector of 0x20 or more takes the early exit at 0xFC1AA5 and
+;           returns the length with NOTHING copied; prom_d's bank map
+;           resolves 0x20 and 0x27 as the two DRUM banks.
+; Evidence: 0xFC1AAD `lda XBC,0x00d945` with `inc 6,XBC` is the payload
+;           base; 0xFC1ACD `push 0x00d9` is 217 and 0xFC1AD5 calls
+;           MemCopyWords; 0xFC1AEF `push 0x0051` is 81 per element and
+;           0xFC1AF9 `add XBC,0x000000d9` places them after the head;
+;           0xFC1B29 `ld A,0x2b` is 43 and 0xFC1B30 `add XWA,0x00000144`
+;           places them after 4*81 = 324. The returned length is built at
+;           0xFC1B5C from prom_d's OWN stride word +0xEA: `ld
+;           WA,(XBC+0x00ea)` (43), 0xFC1B61 `sll 0x02,WA` (x4), 0xFC1B64
+;           `add WA,0x021d` (+541) = 713 -- the size prom_d independently
+;           gives ToneRec_Template_Clear from its file offsets. Re-derived
+;           by --arms12.
+; Unknown:  why the drum banks take the early exit. The bytes say they do;
+;           nothing here says what answers the panel instead.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC1AA1`.
 ; --------------------------------------------------------------------------
-sub_FC1AA1:
+ToneQuery_ReplyWholeToneRecord:
 	link32 0xEE, 0x0C, 0xF1, 0xFF              ; FC1AA1  link XIZ,0xfff1
 	cpw (xiz+10), 0x0020                       ; FC1AA5  cp (XIZ+0x0a),0x0020
-	jrl nc, sub_FC1AA1__FC1B57                 ; FC1AAA  jrl NC,0xfc1b57
+	jrl nc, ToneQuery_ReplyWholeToneRecord__FC1B57                 ; FC1AAA  jrl NC,0xfc1b57
 	lda_24	xbc, (0xD945)                       ; FC1AAD  lda XBC,0x00d945
 	inc	6, xbc                                 ; FC1AB2  inc 6,XBC
 	ld	(xiz-4), xbc                            ; FC1AB4  ld (XIZ+0xfc),XBC
@@ -94673,14 +95039,14 @@ sub_FC1AA1:
 	ld	(xiz-15), 0                             ; FC1AD9  ld (XIZ+0xf1),0x00
 	inc	8, xsp                                 ; FC1ADD  inc 0,XSP
 	inc	2, xsp                                 ; FC1ADF  inc 2,XSP
-sub_FC1AA1__FC1AE1:
+ToneQuery_ReplyWholeToneRecord__FC1AE1:
 	cp (xiz-15), 0x04                          ; FC1AE1  cp (XIZ+0xf1),0x04
-	jrl nc, sub_FC1AA1__FC1B57                 ; FC1AE5  jrl NC,0xfc1b57
-	jr sub_FC1AA1__FC1AEF                      ; FC1AE8  jr T,0xfc1aef
-sub_FC1AA1__FC1AEA:
+	jrl nc, ToneQuery_ReplyWholeToneRecord__FC1B57                 ; FC1AE5  jrl NC,0xfc1b57
+	jr ToneQuery_ReplyWholeToneRecord__FC1AEF                      ; FC1AE8  jr T,0xfc1aef
+ToneQuery_ReplyWholeToneRecord__FC1AEA:
 	incm8	1, (xiz-15)                          ; FC1AEA  inc 1,(XIZ+0xf1)
-	jr sub_FC1AA1__FC1AE1                      ; FC1AED  jr T,0xfc1ae1
-sub_FC1AA1__FC1AEF:
+	jr ToneQuery_ReplyWholeToneRecord__FC1AE1                      ; FC1AED  jr T,0xfc1ae1
+ToneQuery_ReplyWholeToneRecord__FC1AEF:
 	pushw	81                                   ; FC1AEF  push 0x0051
 	ldb	c, 81                                  ; FC1AF2  ld C,0x51
 	extpfx3 0x8E, 0xF1, 0x43                   ; FC1AF4  mul BC,(XIZ+0xf1)
@@ -94719,8 +95085,8 @@ sub_FC1AA1__FC1AEF:
 	call	0xF9A038                              ; FC1B4D  call 0xf9a038
 	inc	8, xsp                                 ; FC1B51  inc 0,XSP
 	inc	2, xsp                                 ; FC1B53  inc 2,XSP
-	jr sub_FC1AA1__FC1AEA                      ; FC1B55  jr T,0xfc1aea
-sub_FC1AA1__FC1B57:
+	jr ToneQuery_ReplyWholeToneRecord__FC1AEA                      ; FC1B55  jr T,0xfc1aea
+ToneQuery_ReplyWholeToneRecord__FC1B57:
 	ldl_da	xbc, (0xD7F1)                       ; FC1B57  ld XBC,(0x00d7f1)
 	ld	wa, (xbc+0xEA)                          ; FC1B5C  ld WA,(XBC+0x00ea)
 	sll	wa, 2                                  ; FC1B61  sll 0x02,WA
@@ -94744,6 +95110,13 @@ sub_FC1AA1__FC1B57:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; Refused:  REFUSED round 12.  arm 22 reads a part's bank and program out of its record (+0x1C
+;           at 0xFC1B84 and +0x1B at 0xFC1B94), calls sub_FB42B0 -- itself
+;           unnamed -- and replies with TWO bytes at +0x98 + 2*k and +0x99 +
+;           2*k of whatever that returns (0xFC1BAF, 0xFC1BC5). The base
+;           record is unidentified, so the two bytes have no field name to
+;           inherit; this is a chain that needs sub_FB42B0 named first, and
+;           that is the next round's lever, not a gap to paper over.
 ; --------------------------------------------------------------------------
 sub_FC1B6E:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC1B6E  link XIZ,0xfffc
@@ -94787,7 +95160,7 @@ sub_FC1B6E:
 	unlk32 xiz                                 ; FC1BDB  unlk XIZ
 	ret                                        ; FC1BDD  ret
 ; --------------------------------------------------------------------------
-; sub_FC1BDE -- 0xFC1BDE..0xFC1FC6 (1001 bytes)
+; ToneQuery_Dispatch -- 0xFC1BDE..0xFC1FC6 (1001 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -94797,15 +95170,15 @@ sub_FC1B6E:
 ;          reads 0x00D733, 0x00D735, 0x00D75C, 0x00D75D
 ; Calls:   0xF98B20 = converted, 0xFB4124 = ToneDB_ResolveToneRecord
 ;          0xFBAAA2 = sub_FBAAA2, 0xFBD858 = sub_FBD858
-;          0xFBFFD4 = sub_FBFFD4, 0xFC02FF = sub_FC02FF
-;          0xFC035E = sub_FC035E, 0xFC04EC = sub_FC04EC
-;          0xFC067A = sub_FC067A, 0xFC0746 = sub_FC0746
-;          0xFC0817 = sub_FC0817, 0xFC0AD4 = sub_FC0AD4
-;          0xFC0DB4 = sub_FC0DB4, 0xFC0F83 = sub_FC0F83
-;          0xFC10BE = sub_FC10BE, 0xFC11D8 = sub_FC11D8
-;          0xFC12ED = sub_FC12ED, 0xFC13B6 = sub_FC13B6
-;          0xFC164D = sub_FC164D, 0xFC1716 = sub_FC1716
-;          0xFC1845 = sub_FC1845, 0xFC1AA1 = sub_FC1AA1
+;          0xFBFFD4 = sub_FBFFD4, 0xFC02FF = ToneQuery_ReplyToneName
+;          0xFC035E = ToneQuery_ReplySourceName1_ViaIndexMap, 0xFC04EC = ToneQuery_ReplySourceName2_ViaIndexMap
+;          0xFC067A = ToneQuery_ReplySourceName1_ByRow, 0xFC0746 = ToneQuery_ReplySourceName2_ByRow
+;          0xFC0817 = ToneQuery_ReplyPartElementSourceName1, 0xFC0AD4 = ToneQuery_ReplyPartElementSourceName2
+;          0xFC0DB4 = ToneQuery_ReplyCatalogueListFooter, 0xFC0F83 = sub_FC0F83
+;          0xFC10BE = sub_FC10BE, 0xFC11D8 = ToneQuery_ReplyDrumNameForCurrentPart
+;          0xFC12ED = ToneQuery_ReplyDrumSourceName_ByRow, 0xFC13B6 = ToneQuery_ReplyDrumSourceNameAndIndex
+;          0xFC164D = ToneQuery_ReplyPercSourceName1_ByRow, 0xFC1716 = ToneQuery_ReplyPercSourceName1AndIndex
+;          0xFC1845 = ToneQuery_ReplyPercSourceName2AndIndex, 0xFC1AA1 = ToneQuery_ReplyWholeToneRecord
 ;          0xFC1B6E = sub_FC1B6E, 0xFC3241 = sub_FC3241
 ; Arms:    22 computed-goto arm(s) inside this routine: 0xFC1C25 0xFC1C36 0xFC1C7D 0xFC1C96 0xFC1CAF 0xFC1CC8 0xFC1CE7 0xFC1D06 0xFC1D1B 0xFC1D30 0xFC1D41 0xFC1D52 0xFC1D6B 0xFC1D84 0xFC1DA3 0xFC1DEF 0xFC1E0E 0xFC1E2A 0xFC1E46 0xFC1E72 0xFC1F19 0xFC1F2E
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC1BDE-0xFC1FC6
@@ -94813,22 +95186,38 @@ sub_FC1B6E:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     the tone- and wave-catalogue REQUEST HANDLER on the CPU-to-CPU
+;           link. It copies the request's first 6 bytes into the reply
+;           buffer at RAM 0x00D945, takes request[+2] with bit 7 cleared as
+;           the opcode, runs one of 23 arms, and sends 0x00D945 with length
+;           = the arm's return value + 6 on the channel in request[+4].
+;           Seven more handlers under the same caller share the shape.
+; Evidence: 0xFC1BE9 `cp (XIZ+0xfa),0x0006` bounds the echo loop whose store
+;           is 0xFC1C0A `ld (XBC),A`, reached from 0xFC1C03 `lda
+;           XBC,0x00d945`. 0xFC1C11 `ld A,(XBC+0x02)` then 0xFC1C17 `res
+;           0x07,A` is the opcode. 0xFC1F3A `cp BC,0x0016` guards a 23-entry
+;           u32 table at 0xFC1F4D. The tail is 0xFC1FA9 `lda XBC,0x00d945`,
+;           0xFC1FB2 `inc 6,WA`, 0xFC1FB8 `ld C,(XWA+0x04)`, 0xFC1FBC `call
+;           0xf98b20` = Link_SendBuffer. All eight servers, the 6-byte
+;           header and the +6 length are re-derived by
+;           notes/prom_c_inventory_round8.py --reply.
+; Unknown:  what CPU 1 CALLS the 23 opcodes. The request is built in
+;           prom_a/prom_b and no code in prom_c names a single one of them.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC1BDE`.
 ; --------------------------------------------------------------------------
-sub_FC1BDE:
+ToneQuery_Dispatch:
 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FC1BDE  link XIZ,0xfff2
 	push	xhl                                   ; FC1BE2  push XHL
 	push	xix                                   ; FC1BE3  push XIX
 	ldw (xiz-6), 0x0000                        ; FC1BE4  ld (XIZ+0xfa),0x0000
-sub_FC1BDE__FC1BE9:
+ToneQuery_Dispatch__FC1BE9:
 	cpw (xiz-6), 0x0006                        ; FC1BE9  cp (XIZ+0xfa),0x0006
-	jr nc, sub_FC1BDE__FC1C0E                  ; FC1BEE  jr NC,0xfc1c0e
-	jr sub_FC1BDE__FC1BF7                      ; FC1BF0  jr T,0xfc1bf7
-sub_FC1BDE__FC1BF2:
+	jr nc, ToneQuery_Dispatch__FC1C0E                  ; FC1BEE  jr NC,0xfc1c0e
+	jr ToneQuery_Dispatch__FC1BF7                      ; FC1BF0  jr T,0xfc1bf7
+ToneQuery_Dispatch__FC1BF2:
 	incm	1, (xiz-6)                            ; FC1BF2  incw 1,(XIZ+0xfa)
-	jr sub_FC1BDE__FC1BE9                      ; FC1BF5  jr T,0xfc1be9
-sub_FC1BDE__FC1BF7:
+	jr ToneQuery_Dispatch__FC1BE9                      ; FC1BF5  jr T,0xfc1be9
+ToneQuery_Dispatch__FC1BF7:
 	ld	ix, (xiz-6)                             ; FC1BF7  ld IX,(XIZ+0xfa)
 	extz	xix                                   ; FC1BFA  extz XIX
 	ld	xbc, (xiz+8)                            ; FC1BFC  ld XBC,(XIZ+0x08)
@@ -94837,8 +95226,8 @@ sub_FC1BDE__FC1BF7:
 	lda_24	xbc, (0xD945)                       ; FC1C03  lda XBC,0x00d945
 	add	xbc, xix                               ; FC1C08  add XBC,XIX
 	ld	(xbc), a                                ; FC1C0A  ld (XBC),A
-	jr sub_FC1BDE__FC1BF2                      ; FC1C0C  jr T,0xfc1bf2
-sub_FC1BDE__FC1C0E:
+	jr ToneQuery_Dispatch__FC1BF2                      ; FC1C0C  jr T,0xfc1bf2
+ToneQuery_Dispatch__FC1C0E:
 	ld	xbc, (xiz+8)                            ; FC1C0E  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+2)                              ; FC1C11  ld A,(XBC+0x02)
 	ld	(xiz-9), a                              ; FC1C14  ld (XIZ+0xf7),A
@@ -94846,16 +95235,16 @@ sub_FC1BDE__FC1C0E:
 	ld	(xiz-9), a                              ; FC1C1A  ld (XIZ+0xf7),A
 	extz	wa                                    ; FC1C1D  extz WA
 	ld	(xiz-14), wa                            ; FC1C1F  ld (XIZ+0xf2),WA
-	jrl sub_FC1BDE__FC1F35                     ; FC1C22  jrl T,0xfc1f35
-sub_FC1BDE__FC1C25:
+	jrl ToneQuery_Dispatch__FC1F35                     ; FC1C22  jrl T,0xfc1f35
+ToneQuery_Dispatch__FC1C25:
 	ld	xbc, (xiz+8)                            ; FC1C25  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1C28  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1C2B  push WA
 	calr (0xFBD858 - 0xFC1C2F)                 ; FC1C2C  calr 0xfbd858
 	ld	(xiz-8), wa                             ; FC1C2F  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1C32  pop BC
-	jrl sub_FC1BDE__FC1FA9                     ; FC1C33  jrl T,0xfc1fa9
-sub_FC1BDE__FC1C36:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1C33  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1C36:
 	ldb_da	c, (0xD733)                         ; FC1C36  ld C,(0x00d733)
 	extz	bc                                    ; FC1C3B  extz BC
 	mul	bc, 0x12C                              ; FC1C3D  mul BC,0x012c
@@ -94864,12 +95253,12 @@ sub_FC1BDE__FC1C36:
 	ld	c, (xwa+16)                             ; FC1C48  ld C,(XWA+0x10)
 	and	c, 0xC0                                ; FC1C4B  and C,0xc0
 	cp	c, 64                                   ; FC1C4E  cp C,0x40
-	jr nz, sub_FC1BDE__FC1C5E                  ; FC1C51  jr NZ,0xfc1c5e
+	jr nz, ToneQuery_Dispatch__FC1C5E                  ; FC1C51  jr NZ,0xfc1c5e
 	ldb_da	c, (0xD733)                         ; FC1C53  ld C,(0x00d733)
 	pushw	bc                                   ; FC1C58  push BC
 	call	0xFC3241                              ; FC1C59  call 0xfc3241
 	popw	bc                                    ; FC1C5D  pop BC
-sub_FC1BDE__FC1C5E:
+ToneQuery_Dispatch__FC1C5E:
 	ldb_da	c, (0xD733)                         ; FC1C5E  ld C,(0x00d733)
 	pushw	bc                                   ; FC1C63  push BC
 	calr (0xFBAAA2 - 0xFC1C67)                 ; FC1C64  calr 0xfbaaa2
@@ -94882,8 +95271,8 @@ sub_FC1BDE__FC1C5E:
 	calr (0xFBFFD4 - 0xFC1C76)                 ; FC1C73  calr 0xfbffd4
 	ld	(xiz-8), wa                             ; FC1C76  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1C79  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1C7A  jrl T,0xfc1fa9
-sub_FC1BDE__FC1C7D:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1C7A  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1C7D:
 	ld	xbc, (xiz+8)                            ; FC1C7D  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1C80  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1C83  extz WA
@@ -94894,8 +95283,8 @@ sub_FC1BDE__FC1C7D:
 	calr (0xFC02FF - 0xFC1C8F)                 ; FC1C8C  calr 0xfc02ff
 	ld	(xiz-8), wa                             ; FC1C8F  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1C92  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1C93  jrl T,0xfc1fa9
-sub_FC1BDE__FC1C96:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1C93  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1C96:
 	ld	xbc, (xiz+8)                            ; FC1C96  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1C99  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1C9C  extz WA
@@ -94906,8 +95295,8 @@ sub_FC1BDE__FC1C96:
 	calr (0xFC035E - 0xFC1CA8)                 ; FC1CA5  calr 0xfc035e
 	ld	(xiz-8), wa                             ; FC1CA8  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1CAB  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1CAC  jrl T,0xfc1fa9
-sub_FC1BDE__FC1CAF:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1CAC  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1CAF:
 	ld	xbc, (xiz+8)                            ; FC1CAF  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1CB2  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1CB5  extz WA
@@ -94918,8 +95307,8 @@ sub_FC1BDE__FC1CAF:
 	calr (0xFC04EC - 0xFC1CC1)                 ; FC1CBE  calr 0xfc04ec
 	ld	(xiz-8), wa                             ; FC1CC1  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1CC4  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1CC5  jrl T,0xfc1fa9
-sub_FC1BDE__FC1CC8:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1CC5  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1CC8:
 	ld	xbc, (xiz+8)                            ; FC1CC8  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1CCB  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1CCE  extz WA
@@ -94932,8 +95321,8 @@ sub_FC1BDE__FC1CC8:
 	calr (0xFC067A - 0xFC1CE0)                 ; FC1CDD  calr 0xfc067a
 	ld	(xiz-8), wa                             ; FC1CE0  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1CE3  pop BC
-	jrl sub_FC1BDE__FC1FA9                     ; FC1CE4  jrl T,0xfc1fa9
-sub_FC1BDE__FC1CE7:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1CE4  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1CE7:
 	ld	xbc, (xiz+8)                            ; FC1CE7  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1CEA  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1CED  extz WA
@@ -94946,8 +95335,8 @@ sub_FC1BDE__FC1CE7:
 	calr (0xFC0746 - 0xFC1CFF)                 ; FC1CFC  calr 0xfc0746
 	ld	(xiz-8), wa                             ; FC1CFF  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1D02  pop BC
-	jrl sub_FC1BDE__FC1FA9                     ; FC1D03  jrl T,0xfc1fa9
-sub_FC1BDE__FC1D06:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D03  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1D06:
 	ld	xbc, (xiz+8)                            ; FC1D06  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC1D09  ld A,(XBC+0x03)
 	pushw	wa                                   ; FC1D0C  push WA
@@ -94956,8 +95345,8 @@ sub_FC1BDE__FC1D06:
 	calr (0xFC0817 - 0xFC1D14)                 ; FC1D11  calr 0xfc0817
 	ld	(xiz-8), wa                             ; FC1D14  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1D17  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1D18  jrl T,0xfc1fa9
-sub_FC1BDE__FC1D1B:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D18  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1D1B:
 	ld	xbc, (xiz+8)                            ; FC1D1B  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC1D1E  ld A,(XBC+0x03)
 	pushw	wa                                   ; FC1D21  push WA
@@ -94966,24 +95355,24 @@ sub_FC1BDE__FC1D1B:
 	calr (0xFC0AD4 - 0xFC1D29)                 ; FC1D26  calr 0xfc0ad4
 	ld	(xiz-8), wa                             ; FC1D29  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1D2C  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1D2D  jrl T,0xfc1fa9
-sub_FC1BDE__FC1D30:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D2D  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1D30:
 	ld	xbc, (xiz+8)                            ; FC1D30  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC1D33  ld A,(XBC+0x03)
 	pushw	wa                                   ; FC1D36  push WA
 	calr (0xFC0DB4 - 0xFC1D3A)                 ; FC1D37  calr 0xfc0db4
 	ld	(xiz-8), wa                             ; FC1D3A  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1D3D  pop BC
-	jrl sub_FC1BDE__FC1FA9                     ; FC1D3E  jrl T,0xfc1fa9
-sub_FC1BDE__FC1D41:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D3E  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1D41:
 	ld	xbc, (xiz+8)                            ; FC1D41  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1D44  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1D47  push WA
 	calr (0xFC0F83 - 0xFC1D4B)                 ; FC1D48  calr 0xfc0f83
 	ld	(xiz-8), wa                             ; FC1D4B  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1D4E  pop BC
-	jrl sub_FC1BDE__FC1FA9                     ; FC1D4F  jrl T,0xfc1fa9
-sub_FC1BDE__FC1D52:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D4F  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1D52:
 	ld	xbc, (xiz+8)                            ; FC1D52  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1D55  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1D58  extz WA
@@ -94994,8 +95383,8 @@ sub_FC1BDE__FC1D52:
 	calr (0xFC10BE - 0xFC1D64)                 ; FC1D61  calr 0xfc10be
 	ld	(xiz-8), wa                             ; FC1D64  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1D67  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1D68  jrl T,0xfc1fa9
-sub_FC1BDE__FC1D6B:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D68  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1D6B:
 	ld	xbc, (xiz+8)                            ; FC1D6B  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1D6E  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1D71  extz WA
@@ -95006,8 +95395,8 @@ sub_FC1BDE__FC1D6B:
 	calr (0xFC11D8 - 0xFC1D7D)                 ; FC1D7A  calr 0xfc11d8
 	ld	(xiz-8), wa                             ; FC1D7D  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1D80  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1D81  jrl T,0xfc1fa9
-sub_FC1BDE__FC1D84:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D81  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1D84:
 	ld	xbc, (xiz+8)                            ; FC1D84  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1D87  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1D8A  extz WA
@@ -95020,8 +95409,8 @@ sub_FC1BDE__FC1D84:
 	calr (0xFC12ED - 0xFC1D9C)                 ; FC1D99  calr 0xfc12ed
 	ld	(xiz-8), wa                             ; FC1D9C  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1D9F  pop BC
-	jrl sub_FC1BDE__FC1FA9                     ; FC1DA0  jrl T,0xfc1fa9
-sub_FC1BDE__FC1DA3:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1DA0  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1DA3:
 	ld	xbc, (xiz+8)                            ; FC1DA3  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1DA6  ld A,(XBC+0x01)
 	ld	(xiz-10), a                             ; FC1DA9  ld (XIZ+0xf6),A
@@ -95049,8 +95438,8 @@ sub_FC1BDE__FC1DA3:
 	ld	(xiz-8), wa                             ; FC1DE5  ld (XIZ+0xf8),WA
 	inc	8, xsp                                 ; FC1DE8  inc 0,XSP
 	inc	4, xsp                                 ; FC1DEA  inc 4,XSP
-	jrl sub_FC1BDE__FC1FA9                     ; FC1DEC  jrl T,0xfc1fa9
-sub_FC1BDE__FC1DEF:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1DEC  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1DEF:
 	ld	xbc, (xiz+8)                            ; FC1DEF  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1DF2  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1DF5  extz WA
@@ -95063,8 +95452,8 @@ sub_FC1BDE__FC1DEF:
 	calr (0xFC164D - 0xFC1E07)                 ; FC1E04  calr 0xfc164d
 	ld	(xiz-8), wa                             ; FC1E07  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1E0A  pop BC
-	jrl sub_FC1BDE__FC1FA9                     ; FC1E0B  jrl T,0xfc1fa9
-sub_FC1BDE__FC1E0E:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1E0B  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1E0E:
 	ld	xbc, (xiz+8)                            ; FC1E0E  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC1E11  ld A,(XBC+0x03)
 	pushw	wa                                   ; FC1E14  push WA
@@ -95075,8 +95464,8 @@ sub_FC1BDE__FC1E0E:
 	calr (0xFC1716 - 0xFC1E22)                 ; FC1E1F  calr 0xfc1716
 	ld	(xiz-8), wa                             ; FC1E22  ld (XIZ+0xf8),WA
 	inc	6, xsp                                 ; FC1E25  inc 6,XSP
-	jrl sub_FC1BDE__FC1FA9                     ; FC1E27  jrl T,0xfc1fa9
-sub_FC1BDE__FC1E2A:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1E27  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1E2A:
 	ld	xbc, (xiz+8)                            ; FC1E2A  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC1E2D  ld A,(XBC+0x03)
 	pushw	wa                                   ; FC1E30  push WA
@@ -95087,8 +95476,8 @@ sub_FC1BDE__FC1E2A:
 	calr (0xFC1845 - 0xFC1E3E)                 ; FC1E3B  calr 0xfc1845
 	ld	(xiz-8), wa                             ; FC1E3E  ld (XIZ+0xf8),WA
 	inc	6, xsp                                 ; FC1E41  inc 6,XSP
-	jrl sub_FC1BDE__FC1FA9                     ; FC1E43  jrl T,0xfc1fa9
-sub_FC1BDE__FC1E46:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1E43  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1E46:
 	ld	xbc, (xiz+8)                            ; FC1E46  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1E49  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1E4C  extz WA
@@ -95104,8 +95493,8 @@ sub_FC1BDE__FC1E46:
 	and	c, 0xFF                                ; FC1E66  and C,0xff
 	stb_da	(0xD948), c                         ; FC1E69  ld (0x00d948),C
 	pop	xiy                                    ; FC1E6E  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1E6F  jrl T,0xfc1fa9
-sub_FC1BDE__FC1E72:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1E6F  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1E72:
 	ldb_da	c, (0xD733)                         ; FC1E72  ld C,(0x00d733)
 	ld	(xiz-10), c                             ; FC1E77  ld (XIZ+0xf6),C
 	ldb_da	a, (0xD75C)                         ; FC1E7A  ld A,(0x00d75c)
@@ -95127,7 +95516,7 @@ sub_FC1BDE__FC1E72:
 	ld	a, (xbc+0x1523)                         ; FC1EA8  ld A,(XBC+0x1523)
 	pop	xbc                                    ; FC1EAD  pop XBC
 	extpfx3 0x8E, 0xF5, 0xF1                   ; FC1EAE  cp A,(XIZ+0xf5)
-	jr nz, sub_FC1BDE__FC1EEF                  ; FC1EB1  jr NZ,0xfc1eef
+	jr nz, ToneQuery_Dispatch__FC1EEF                  ; FC1EB1  jr NZ,0xfc1eef
 	ld	bc, (xiz-10)                            ; FC1EB3  ld BC,(XIZ+0xf6)
 	extz	bc                                    ; FC1EB6  extz BC
 	mul	bc, 0x12C                              ; FC1EB8  mul BC,0x012c
@@ -95135,7 +95524,7 @@ sub_FC1BDE__FC1E72:
 	extz	xbc                                   ; FC1EC0  extz XBC
 	ld	a, (xbc+0x1523)                         ; FC1EC2  ld A,(XBC+0x1523)
 	extpfx3 0x8E, 0xF4, 0xF1                   ; FC1EC7  cp A,(XIZ+0xf4)
-	jr nz, sub_FC1BDE__FC1EEF                  ; FC1ECA  jr NZ,0xfc1eef
+	jr nz, ToneQuery_Dispatch__FC1EEF                  ; FC1ECA  jr NZ,0xfc1eef
 	push	0                                     ; FC1ECC  push 0x00
 	extpfx3 0x8E, 0xF4, 0x04                   ; FC1ECE  push (XIZ+0xf4)
 	push	0                                     ; FC1ED1  push 0x00
@@ -95150,8 +95539,8 @@ sub_FC1BDE__FC1E72:
 	ld	(xiz-8), wa                             ; FC1EE6  ld (XIZ+0xf8),WA
 	inc	8, xsp                                 ; FC1EE9  inc 0,XSP
 	inc	4, xsp                                 ; FC1EEB  inc 4,XSP
-	jr sub_FC1BDE__FC1F11                      ; FC1EED  jr T,0xfc1f11
-sub_FC1BDE__FC1EEF:
+	jr ToneQuery_Dispatch__FC1F11                      ; FC1EED  jr T,0xfc1f11
+ToneQuery_Dispatch__FC1EEF:
 	push	0                                     ; FC1EEF  push 0x00
 	extpfx3 0x8E, 0xF4, 0x04                   ; FC1EF1  push (XIZ+0xf4)
 	push	0                                     ; FC1EF4  push 0x00
@@ -95166,10 +95555,10 @@ sub_FC1BDE__FC1EEF:
 	ld	(xiz-8), wa                             ; FC1F0A  ld (XIZ+0xf8),WA
 	inc	8, xsp                                 ; FC1F0D  inc 0,XSP
 	inc	4, xsp                                 ; FC1F0F  inc 4,XSP
-sub_FC1BDE__FC1F11:
+ToneQuery_Dispatch__FC1F11:
 	ldw (xiz-8), 0x000D                        ; FC1F11  ld (XIZ+0xf8),0x000d
-	jrl sub_FC1BDE__FC1FA9                     ; FC1F16  jrl T,0xfc1fa9
-sub_FC1BDE__FC1F19:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1F16  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1F19:
 	ld	xbc, (xiz+8)                            ; FC1F19  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC1F1C  ld A,(XBC+0x03)
 	pushw	wa                                   ; FC1F1F  push WA
@@ -95178,15 +95567,15 @@ sub_FC1BDE__FC1F19:
 	calr (0xFC1B6E - 0xFC1F27)                 ; FC1F24  calr 0xfc1b6e
 	ld	(xiz-8), wa                             ; FC1F27  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1F2A  pop XIY
-	jrl sub_FC1BDE__FC1FA9                     ; FC1F2B  jrl T,0xfc1fa9
-sub_FC1BDE__FC1F2E:
+	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1F2B  jrl T,0xfc1fa9
+ToneQuery_Dispatch__FC1F2E:
 	ldw (xiz-8), 0x0000                        ; FC1F2E  ld (XIZ+0xf8),0x0000
-	jr sub_FC1BDE__FC1FA9                      ; FC1F33  jr T,0xfc1fa9
-sub_FC1BDE__FC1F35:
+	jr ToneQuery_Dispatch__FC1FA9                      ; FC1F33  jr T,0xfc1fa9
+ToneQuery_Dispatch__FC1F35:
 	sub	xbc, xbc                               ; FC1F35  sub XBC,XBC
 	ld	bc, (xiz-14)                            ; FC1F37  ld BC,(XIZ+0xf2)
 	cp	bc, 22                                  ; FC1F3A  cp BC,0x0016
-	jr ugt, sub_FC1BDE__FC1F2E                 ; FC1F3E  jr UGT,0xfc1f2e
+	jr ugt, ToneQuery_Dispatch__FC1F2E                 ; FC1F3E  jr UGT,0xfc1f2e
 	sll	bc, 2                                  ; FC1F40  sll 0x02,BC
 	add	xbc, 0xFC1F4D                          ; FC1F43  add XBC,0x00fc1f4d
 	ld	xbc, (xbc)                              ; FC1F49  ld XBC,(XBC)
@@ -95222,7 +95611,7 @@ sub_FC1BDE__FC1F35:
 	.long 0x00FC1E46	; 0xFC1F9D  entry 20 -> 0xFC1E46
 	.long 0x00FC1E72	; 0xFC1FA1  entry 21 -> 0xFC1E72
 	.long 0x00FC1F19	; 0xFC1FA5  entry 22 -> 0xFC1F19
-sub_FC1BDE__FC1FA9:
+ToneQuery_Dispatch__FC1FA9:
 	lda_24	xbc, (0xD945)                       ; FC1FA9  lda XBC,0x00d945
 	push	xbc                                   ; FC1FAE  push XBC
 	ld	wa, (xiz-8)                             ; FC1FAF  ld WA,(XIZ+0xf8)
@@ -95238,7 +95627,7 @@ sub_FC1BDE__FC1FA9:
 	unlk32 xiz                                 ; FC1FC4  unlk XIZ
 	ret                                        ; FC1FC6  ret
 ; --------------------------------------------------------------------------
-; sub_FC1FC7 -- 0xFC1FC7..0xFC206E (168 bytes)
+; LinkQuery_ReplyPartRecordBytes -- 0xFC1FC7..0xFC206E (168 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -95251,22 +95640,34 @@ sub_FC1BDE__FC1FA9:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     a sibling server of ToneQuery_Dispatch under the same caller,
+;           and the simplest of the eight: a GENERIC PART-RECORD READ.
+;           request[+1] is the part, request[+2] a byte offset inside its
+;           0x012C-byte record and request[+3] the length; it copies that
+;           many bytes from the record into the reply payload and sends
+;           length + 6.
+; Evidence: 0xFC1FD2 `cp (XIZ+0xfa),0x0006` bounds the header echo whose
+;           store is 0xFC1FF3; 0xFC1FFF `mul WA,0x012c` and 0xFC2005 `ld
+;           XIY,(XWA+0x1523)` are the part-record base and stride this tree
+;           already establishes; 0xFC2014 adds request[+2]; 0xFC2021 `ld
+;           A,(XBC+0x03)` is the loop bound; 0xFC203E is the payload store
+;           and 0xFC205D `inc 6,BC` the sent length.
+; Unknown:  nothing here says which offsets the panel asks for.
+; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was `sub_FC1FC7`.
 ; --------------------------------------------------------------------------
-sub_FC1FC7:
+LinkQuery_ReplyPartRecordBytes:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FC1FC7  link XIZ,0xfffa
 	pushw	hl                                   ; FC1FCB  push HL
 	push	xix                                   ; FC1FCC  push XIX
 	ldw (xiz-6), 0x0000                        ; FC1FCD  ld (XIZ+0xfa),0x0000
-sub_FC1FC7__FC1FD2:
+LinkQuery_ReplyPartRecordBytes__FC1FD2:
 	cpw (xiz-6), 0x0006                        ; FC1FD2  cp (XIZ+0xfa),0x0006
-	jr nc, sub_FC1FC7__FC1FF7                  ; FC1FD7  jr NC,0xfc1ff7
-	jr sub_FC1FC7__FC1FE0                      ; FC1FD9  jr T,0xfc1fe0
-sub_FC1FC7__FC1FDB:
+	jr nc, LinkQuery_ReplyPartRecordBytes__FC1FF7                  ; FC1FD7  jr NC,0xfc1ff7
+	jr LinkQuery_ReplyPartRecordBytes__FC1FE0                      ; FC1FD9  jr T,0xfc1fe0
+LinkQuery_ReplyPartRecordBytes__FC1FDB:
 	incm	1, (xiz-6)                            ; FC1FDB  incw 1,(XIZ+0xfa)
-	jr sub_FC1FC7__FC1FD2                      ; FC1FDE  jr T,0xfc1fd2
-sub_FC1FC7__FC1FE0:
+	jr LinkQuery_ReplyPartRecordBytes__FC1FD2                      ; FC1FDE  jr T,0xfc1fd2
+LinkQuery_ReplyPartRecordBytes__FC1FE0:
 	ld	ix, (xiz-6)                             ; FC1FE0  ld IX,(XIZ+0xfa)
 	extz	xix                                   ; FC1FE3  extz XIX
 	ld	xbc, (xiz+8)                            ; FC1FE5  ld XBC,(XIZ+0x08)
@@ -95275,8 +95676,8 @@ sub_FC1FC7__FC1FE0:
 	lda_24	xbc, (0xD945)                       ; FC1FEC  lda XBC,0x00d945
 	add	xbc, xix                               ; FC1FF1  add XBC,XIX
 	ld	(xbc), a                                ; FC1FF3  ld (XBC),A
-	jr sub_FC1FC7__FC1FDB                      ; FC1FF5  jr T,0xfc1fdb
-sub_FC1FC7__FC1FF7:
+	jr LinkQuery_ReplyPartRecordBytes__FC1FDB                      ; FC1FF5  jr T,0xfc1fdb
+LinkQuery_ReplyPartRecordBytes__FC1FF7:
 	ld	xbc, (xiz+8)                            ; FC1FF7  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1FFA  ld A,(XBC+0x01)
 	extz	wa                                    ; FC1FFD  extz WA
@@ -95290,17 +95691,17 @@ sub_FC1FC7__FC1FF7:
 	add	xiy, xwa                               ; FC2014  add XIY,XWA
 	ld	(xiz-4), xiy                            ; FC2016  ld (XIZ+0xfc),XIY
 	ldw (xiz-6), 0x0000                        ; FC2019  ld (XIZ+0xfa),0x0000
-sub_FC1FC7__FC201E:
+LinkQuery_ReplyPartRecordBytes__FC201E:
 	ld	xbc, (xiz+8)                            ; FC201E  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC2021  ld A,(XBC+0x03)
 	extz	wa                                    ; FC2024  extz WA
 	cp	(xiz-6), wa                             ; FC2026  cp (XIZ+0xfa),WA
-	jr nc, sub_FC1FC7__FC204F                  ; FC2029  jr NC,0xfc204f
-	jr sub_FC1FC7__FC2032                      ; FC202B  jr T,0xfc2032
-sub_FC1FC7__FC202D:
+	jr nc, LinkQuery_ReplyPartRecordBytes__FC204F                  ; FC2029  jr NC,0xfc204f
+	jr LinkQuery_ReplyPartRecordBytes__FC2032                      ; FC202B  jr T,0xfc2032
+LinkQuery_ReplyPartRecordBytes__FC202D:
 	incm	1, (xiz-6)                            ; FC202D  incw 1,(XIZ+0xfa)
-	jr sub_FC1FC7__FC201E                      ; FC2030  jr T,0xfc201e
-sub_FC1FC7__FC2032:
+	jr LinkQuery_ReplyPartRecordBytes__FC201E                      ; FC2030  jr T,0xfc201e
+LinkQuery_ReplyPartRecordBytes__FC2032:
 	ld	xbc, (xiz-4)                            ; FC2032  ld XBC,(XIZ+0xfc)
 	ld	h, (xbc)                                ; FC2035  ld H,(XBC)
 	ld	wa, (xiz-6)                             ; FC2037  ld WA,(XIZ+0xfa)
@@ -95311,8 +95712,8 @@ sub_FC1FC7__FC2032:
 	sub	xbc, xbc                               ; FC2046  sub XBC,XBC
 	inc	1, xbc                                 ; FC2048  inc 1,XBC
 	add	(xiz-4), xbc                           ; FC204A  add (XIZ+0xfc),XBC
-	jr sub_FC1FC7__FC202D                      ; FC204D  jr T,0xfc202d
-sub_FC1FC7__FC204F:
+	jr LinkQuery_ReplyPartRecordBytes__FC202D                      ; FC204D  jr T,0xfc202d
+LinkQuery_ReplyPartRecordBytes__FC204F:
 	lda_24	xbc, (0xD945)                       ; FC204F  lda XBC,0x00d945
 	push	xbc                                   ; FC2054  push XBC
 	ld	xwa, (xiz+8)                            ; FC2055  ld XWA,(XIZ+0x08)
@@ -96045,7 +96446,7 @@ sub_FC24F6__FC25E0:
 ;          0xFBB793 = sub_FBB793, 0xFBC39D = sub_FBC39D
 ;          0xFBC958 = sub_FBC958, 0xFBCD17 = sub_FBCD17
 ;          0xFBD46B = sub_FBD46B, 0xFBD6FC = sub_FBD6FC
-;          0xFC1BDE = sub_FC1BDE, 0xFC1FC7 = sub_FC1FC7
+;          0xFC1BDE = ToneQuery_Dispatch, 0xFC1FC7 = LinkQuery_ReplyPartRecordBytes
 ;          0xFC206F = sub_FC206F, 0xFC2160 = sub_FC2160
 ;          0xFC2251 = sub_FC2251, 0xFC2388 = sub_FC2388
 ;          0xFC2430 = sub_FC2430, 0xFC24F6 = sub_FC24F6
@@ -96319,7 +96720,8 @@ sub_FC2600__FC280A:
 	unlk32 xiz                                 ; FC280A  unlk XIZ
 	ret                                        ; FC280C  ret
 ; --------------------------------------------------------------------------
-; sub_FC280D -- 0xFC280D..0xFC2860 (84 bytes)
+; MidiCtrl_Int99_ApplyToSelectedPart -- 0xFC280D..0xFC2860 (84 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FC280D`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFADA0F in MidiCtrl_Int99
@@ -96331,14 +96733,34 @@ sub_FC2600__FC280A:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: stores the message's value byte into one of two per-part byte
+;   slots -- (0x0087F5) or (0x008ABB) -- but only when the message's part index
+;   equals the byte at 0x00D733 AND bit 0 of that part's record word +0x04 is set.
+;   Which of the two slots is written is decided by part_rec[+0x1C] < 0x20.
+; Evidence: the guard is `ld C,(0x00d733)` at 0xFC2811 followed by
+;          `cp (XIZ+0x08),C` at 0xFC2816 and `jr NZ` to the exit; the enable bit is
+;          `mul BC,0x012c` 0xFC2820 / `inc 4,BC` 0xFC2824 / `and WA,0x0001` 0xFC282D;
+;          the split is `add BC,0x001c` 0xFC283C / `cp A,0x20` 0xFC2847; the two
+;          stores are `ld (0x0087f5),C` at 0xFC284F and `ld (0x008abb),C` at 0xFC2859.
+;          The 300-byte stride and the 0x001523 base are the part-record array of
+;          notes/FINDINGS-prom_c-dev10c-register-meanings.md section 1.
+;          The controller number comes from the SOLE caller, 0xFADA0F inside
+;          MidiCtrl_Int99 -- exactly one reference, which is the rule the tree's
+;          other 23 MidiCtrl_* names obey and which round 7 used to REFUSE three
+;          names whose routines had 2, 4 and 5 references.
+; * AND IT HAS A TWIN.  MidiCtrl_Int9A_ApplyToSelectedPart (0xFC2861) is 84 bytes
+;   against these 84 and differs in EXACTLY TWO ROM bytes, at offsets 67 and 77 --
+;   the low byte of each destination (0x87F5 -> 0x87F6, 0x8ABB -> 0x8ABC).  Measured,
+;   not assumed: `python3 notes/prom_c_finish_round12.py --names`.
+; Unknown:  what 0x00D733 selects and what the two byte arrays hold.  17 code lines
+;          in prom_c name 0x00D733, 15 of them loads; 0xFB6DA1 stores 0xFF into it.
+;          "The part the guard compares against" is all this header claims.
 ; --------------------------------------------------------------------------
-sub_FC280D:
+MidiCtrl_Int99_ApplyToSelectedPart:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC280D  link XIZ,0x0000
 	ldb_da	c, (0xD733)                         ; FC2811  ld C,(0x00d733)
 	cp	(xiz+8), c                              ; FC2816  cp (XIZ+0x08),C
-	jr nz, sub_FC280D__FC285E                  ; FC2819  jr NZ,0xfc285e
+	jr nz, MidiCtrl_Int99_ApplyToSelectedPart__FC285E                  ; FC2819  jr NZ,0xfc285e
 	ld	bc, (xiz+8)                             ; FC281B  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FC281E  extz BC
 	mul	bc, 0x12C                              ; FC2820  mul BC,0x012c
@@ -96346,7 +96768,7 @@ sub_FC280D:
 	extz	xbc                                   ; FC2826  extz XBC
 	ld	wa, (xbc+0x1523)                        ; FC2828  ld WA,(XBC+0x1523)
 	and	wa, 1                                  ; FC282D  and WA,0x0001
-	jr z, sub_FC280D__FC285E                   ; FC2831  jr Z,0xfc285e
+	jr z, MidiCtrl_Int99_ApplyToSelectedPart__FC285E                   ; FC2831  jr Z,0xfc285e
 	ld	bc, (xiz+8)                             ; FC2833  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FC2836  extz BC
 	mul	bc, 0x12C                              ; FC2838  mul BC,0x012c
@@ -96354,18 +96776,19 @@ sub_FC280D:
 	extz	xbc                                   ; FC2840  extz XBC
 	ld	a, (xbc+0x1523)                         ; FC2842  ld A,(XBC+0x1523)
 	cp	a, 32                                   ; FC2847  cp A,0x20
-	jr nc, sub_FC280D__FC2856                  ; FC284A  jr NC,0xfc2856
+	jr nc, MidiCtrl_Int99_ApplyToSelectedPart__FC2856                  ; FC284A  jr NC,0xfc2856
 	ld	c, (xiz+10)                             ; FC284C  ld C,(XIZ+0x0a)
 	stb_da	(0x87F5), c                         ; FC284F  ld (0x0087f5),C
-	jr sub_FC280D__FC285E                      ; FC2854  jr T,0xfc285e
-sub_FC280D__FC2856:
+	jr MidiCtrl_Int99_ApplyToSelectedPart__FC285E                      ; FC2854  jr T,0xfc285e
+MidiCtrl_Int99_ApplyToSelectedPart__FC2856:
 	ld	c, (xiz+10)                             ; FC2856  ld C,(XIZ+0x0a)
 	stb_da	(0x8ABB), c                         ; FC2859  ld (0x008abb),C
-sub_FC280D__FC285E:
+MidiCtrl_Int99_ApplyToSelectedPart__FC285E:
 	unlk32 xiz                                 ; FC285E  unlk XIZ
 	ret                                        ; FC2860  ret
 ; --------------------------------------------------------------------------
-; sub_FC2861 -- 0xFC2861..0xFC28B4 (84 bytes)
+; MidiCtrl_Int9A_ApplyToSelectedPart -- 0xFC2861..0xFC28B4 (84 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FC2861`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFADA38 in MidiCtrl_Int9A
@@ -96377,14 +96800,22 @@ sub_FC280D__FC285E:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: the twin of MidiCtrl_Int99_ApplyToSelectedPart (0xFC280D), with
+;   the destinations (0x0087F6) and (0x008ABC).  Same guard, same enable bit, same
+;   split on part_rec[+0x1C] < 0x20.
+; Evidence: `ld C,(0x00d733)` 0xFC2865 / `cp (XIZ+0x08),C` 0xFC286A; `mul BC,0x012c`
+;          0xFC2874 / `inc 4,BC` 0xFC2878 / `and WA,0x0001` 0xFC2881;
+;          `add BC,0x001c` 0xFC2890 / `cp A,0x20` 0xFC289B; the stores
+;          `ld (0x0087f6),C` 0xFC28A3 and `ld (0x008abc),C` 0xFC28AD.
+;          84 bytes against 0xFC280D's 84, TWO differing bytes (offsets 67 and 77).
+;          Sole caller 0xFADA38 inside MidiCtrl_Int9A.
+; Unknown:  as for the twin -- what 0x00D733 selects, and what the arrays hold.
 ; --------------------------------------------------------------------------
-sub_FC2861:
+MidiCtrl_Int9A_ApplyToSelectedPart:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC2861  link XIZ,0x0000
 	ldb_da	c, (0xD733)                         ; FC2865  ld C,(0x00d733)
 	cp	(xiz+8), c                              ; FC286A  cp (XIZ+0x08),C
-	jr nz, sub_FC2861__FC28B2                  ; FC286D  jr NZ,0xfc28b2
+	jr nz, MidiCtrl_Int9A_ApplyToSelectedPart__FC28B2                  ; FC286D  jr NZ,0xfc28b2
 	ld	bc, (xiz+8)                             ; FC286F  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FC2872  extz BC
 	mul	bc, 0x12C                              ; FC2874  mul BC,0x012c
@@ -96392,7 +96823,7 @@ sub_FC2861:
 	extz	xbc                                   ; FC287A  extz XBC
 	ld	wa, (xbc+0x1523)                        ; FC287C  ld WA,(XBC+0x1523)
 	and	wa, 1                                  ; FC2881  and WA,0x0001
-	jr z, sub_FC2861__FC28B2                   ; FC2885  jr Z,0xfc28b2
+	jr z, MidiCtrl_Int9A_ApplyToSelectedPart__FC28B2                   ; FC2885  jr Z,0xfc28b2
 	ld	bc, (xiz+8)                             ; FC2887  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FC288A  extz BC
 	mul	bc, 0x12C                              ; FC288C  mul BC,0x012c
@@ -96400,14 +96831,14 @@ sub_FC2861:
 	extz	xbc                                   ; FC2894  extz XBC
 	ld	a, (xbc+0x1523)                         ; FC2896  ld A,(XBC+0x1523)
 	cp	a, 32                                   ; FC289B  cp A,0x20
-	jr nc, sub_FC2861__FC28AA                  ; FC289E  jr NC,0xfc28aa
+	jr nc, MidiCtrl_Int9A_ApplyToSelectedPart__FC28AA                  ; FC289E  jr NC,0xfc28aa
 	ld	c, (xiz+10)                             ; FC28A0  ld C,(XIZ+0x0a)
 	stb_da	(0x87F6), c                         ; FC28A3  ld (0x0087f6),C
-	jr sub_FC2861__FC28B2                      ; FC28A8  jr T,0xfc28b2
-sub_FC2861__FC28AA:
+	jr MidiCtrl_Int9A_ApplyToSelectedPart__FC28B2                      ; FC28A8  jr T,0xfc28b2
+MidiCtrl_Int9A_ApplyToSelectedPart__FC28AA:
 	ld	c, (xiz+10)                             ; FC28AA  ld C,(XIZ+0x0a)
 	stb_da	(0x8ABC), c                         ; FC28AD  ld (0x008abc),C
-sub_FC2861__FC28B2:
+MidiCtrl_Int9A_ApplyToSelectedPart__FC28B2:
 	unlk32 xiz                                 ; FC28B2  unlk XIZ
 	ret                                        ; FC28B4  ret
 ; --------------------------------------------------------------------------
@@ -98219,7 +98650,8 @@ sub_FC355B:
 	unlk32 xiz                                 ; FC3592  unlk XIZ
 	ret                                        ; FC3594  ret
 ; --------------------------------------------------------------------------
-; sub_FC3595 -- 0xFC3595..0xFC35B7 (35 bytes)
+; SlotRec_AddToArgField_000C -- 0xFC3595..0xFC35B7 (35 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FC3595`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB1F75 in VoiceRegs_Stage_B
@@ -98231,10 +98663,22 @@ sub_FC355B:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: adds the WORD at offset +0x0C of the slot record into the argument record's own
+;   word +0x0D.
+; Evidence: `ld C,(XHL)` at 0xFC359F takes the SLOT from byte +0 of the argument
+;          record, `mul C,0x04` at 0xFC35A1 scales it and `add XBC,0x0000df05` at 0xFC35A6
+;          reaches the 4-byte pointer table; `ld XBC,(XBC)` at 0xFC35AC dereferences it.
+;          0x00DF05 is the slot pointer table PartSlot_SetRecordPtr_DF05 (0xFC376C)
+;          fills, one 32-bit pointer per slot, each pointing into the 23-byte record
+;          array based at 0x0000DC0E -- both strides are that routine's `mul r,imm`
+;          operands.  The read and the accumulate are `ld WA,(XBC+0x0c)` 0xFC35AE and
+;          `add (XHL+0x0d),WA` 0xFC35B1 -- a read-modify-write on the ARGUMENT, not
+;          on the slot record.
+; Unknown:  what the field holds.  The suffix is the field OFFSET, an instruction
+;          operand with no referent outside the code, so this name is a FRAME and
+;          not a content name -- see notes/prom_c_finish_round12.py --inventory.
 ; --------------------------------------------------------------------------
-sub_FC3595:
+SlotRec_AddToArgField_000C:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC3595  link XIZ,0x0000
 	push	xhl                                   ; FC3599  push XHL
 	ld	hl, (xiz+8)                             ; FC359A  ld HL,(XIZ+0x08)
@@ -98250,7 +98694,8 @@ sub_FC3595:
 	unlk32 xiz                                 ; FC35B5  unlk XIZ
 	ret                                        ; FC35B7  ret
 ; --------------------------------------------------------------------------
-; sub_FC35B8 -- 0xFC35B8..0xFC35DA (35 bytes)
+; SlotRec_AddToArgField_000E -- 0xFC35B8..0xFC35DA (35 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FC35B8`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB2F55 in VoiceRegs_Stage_D
@@ -98262,10 +98707,21 @@ sub_FC3595:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: adds the WORD at offset +0x0E of the slot record into the argument record's own
+;   word +0x0D.
+; Evidence: `ld C,(XHL)` at 0xFC35C2 takes the SLOT from byte +0 of the argument
+;          record, `mul C,0x04` at 0xFC35C4 scales it and `add XBC,0x0000df05` at 0xFC35C9
+;          reaches the 4-byte pointer table; `ld XBC,(XBC)` at 0xFC35CF dereferences it.
+;          0x00DF05 is the slot pointer table PartSlot_SetRecordPtr_DF05 (0xFC376C)
+;          fills, one 32-bit pointer per slot, each pointing into the 23-byte record
+;          array based at 0x0000DC0E -- both strides are that routine's `mul r,imm`
+;          operands.  `ld WA,(XBC+0x0e)` 0xFC35D1 and `add (XHL+0x0d),WA` 0xFC35D4.  Same 35 bytes as
+;          SlotRec_AddToArgField_000C with the one offset changed.
+; Unknown:  what the field holds.  The suffix is the field OFFSET, an instruction
+;          operand with no referent outside the code, so this name is a FRAME and
+;          not a content name -- see notes/prom_c_finish_round12.py --inventory.
 ; --------------------------------------------------------------------------
-sub_FC35B8:
+SlotRec_AddToArgField_000E:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC35B8  link XIZ,0x0000
 	push	xhl                                   ; FC35BC  push XHL
 	ld	hl, (xiz+8)                             ; FC35BD  ld HL,(XIZ+0x08)
@@ -98555,7 +99011,8 @@ PartSlot_SetRecordPtr_DF05:
 	unlk32 xiz                                 ; FC3790  unlk XIZ
 	ret                                        ; FC3792  ret
 ; --------------------------------------------------------------------------
-; sub_FC3793 -- 0xFC3793..0xFC37BD (43 bytes)
+; SlotRec_ReadWordAtArgIndex_0003 -- 0xFC3793..0xFC37BD (43 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FC3793`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFA82CC in Voice_StageRegs_0040_B__FA82CB
@@ -98567,10 +99024,23 @@ PartSlot_SetRecordPtr_DF05:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: returns the WORD at 2 * (argument byte +0x03) inside the slot record.
+; Evidence: `ld A,(XBC)` at 0xFC37A7 takes the SLOT from byte +0 of the argument
+;          record, `mul A,0x04` at 0xFC37A9 scales it and `add XWA,0x0000df05` at 0xFC37AE
+;          reaches the 4-byte pointer table; `ld XBC,(XWA)` at 0xFC37B4 dereferences it.
+;          0x00DF05 is the slot pointer table PartSlot_SetRecordPtr_DF05 (0xFC376C)
+;          fills, one 32-bit pointer per slot, each pointing into the 23-byte record
+;          array based at 0x0000DC0E -- both strides are that routine's `mul r,imm`
+;          operands.  The index is `ld A,(XBC+0x03)` 0xFC379D and `mul A,0x02` 0xFC37A0; the fetch is
+;          `add XBC,XIX` 0xFC37B6 then `ld WA,(XBC)` 0xFC37B8.  So the record is being
+;          read as an ARRAY OF WORDS here, and as fixed byte fields by the five
+;          SlotRec_Read*/Add* routines above -- both readings are instruction operands
+;          and neither is reconciled with the other.
+; Unknown:  what the field holds.  The suffix is the field OFFSET, an instruction
+;          operand with no referent outside the code, so this name is a FRAME and
+;          not a content name -- see notes/prom_c_finish_round12.py --inventory.
 ; --------------------------------------------------------------------------
-sub_FC3793:
+SlotRec_ReadWordAtArgIndex_0003:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC3793  link XIZ,0x0000
 	push	xix                                   ; FC3797  push XIX
 	ld	bc, (xiz+8)                             ; FC3798  ld BC,(XIZ+0x08)
@@ -98590,7 +99060,8 @@ sub_FC3793:
 	unlk32 xiz                                 ; FC37BB  unlk XIZ
 	ret                                        ; FC37BD  ret
 ; --------------------------------------------------------------------------
-; sub_FC37BE -- 0xFC37BE..0xFC37E1 (36 bytes)
+; SlotRec_ReadSignedByte_0009 -- 0xFC37BE..0xFC37E1 (36 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FC37BE`.)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAB24F in Voice_StageRegs_0800_B_ModeGe3__FAB20E, 0xFAB273 in Voice_StageRegs_0800_B_ModeGe3__FAB20E
@@ -98601,10 +99072,20 @@ sub_FC3793:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: returns the byte at offset +0x09 of the slot record, sign-extended to 16 bits.
+; Evidence: `ld A,(XBC)` at 0xFC37C7 takes the SLOT from byte +0 of the argument
+;          record, `mul A,0x04` at 0xFC37C9 scales it and `add XWA,0x0000df05` at 0xFC37CE
+;          reaches the 4-byte pointer table; `ld XBC,(XWA)` at 0xFC37D4 dereferences it.
+;          0x00DF05 is the slot pointer table PartSlot_SetRecordPtr_DF05 (0xFC376C)
+;          fills, one 32-bit pointer per slot, each pointing into the 23-byte record
+;          array based at 0x0000DC0E -- both strides are that routine's `mul r,imm`
+;          operands.  The field read and its widening are `ld W,(XBC+0x09)` 0xFC37D6, `ld C,W` 0xFC37D9
+;          and `exts BC` 0xFC37DB.
+; Unknown:  what the field holds.  The suffix is the field OFFSET, an instruction
+;          operand with no referent outside the code, so this name is a FRAME and
+;          not a content name -- see notes/prom_c_finish_round12.py --inventory.
 ; --------------------------------------------------------------------------
-sub_FC37BE:
+SlotRec_ReadSignedByte_0009:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC37BE  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FC37C2  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FC37C5  extz XBC
@@ -98620,7 +99101,8 @@ sub_FC37BE:
 	unlk32 xiz                                 ; FC37DF  unlk XIZ
 	ret                                        ; FC37E1  ret
 ; --------------------------------------------------------------------------
-; sub_FC37E2 -- 0xFC37E2..0xFC3805 (36 bytes)
+; SlotRec_ReadSignedByte_000A -- 0xFC37E2..0xFC3805 (36 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FC37E2`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAAD3E in Voice_StageRegs_0800_B_ModeLt3__FAAD3B
@@ -98631,10 +99113,20 @@ sub_FC37BE:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: returns the byte at offset +0x0A of the slot record, sign-extended to 16 bits.
+; Evidence: `ld A,(XBC)` at 0xFC37EB takes the SLOT from byte +0 of the argument
+;          record, `mul A,0x04` at 0xFC37ED scales it and `add XWA,0x0000df05` at 0xFC37F2
+;          reaches the 4-byte pointer table; `ld XBC,(XWA)` at 0xFC37F8 dereferences it.
+;          0x00DF05 is the slot pointer table PartSlot_SetRecordPtr_DF05 (0xFC376C)
+;          fills, one 32-bit pointer per slot, each pointing into the 23-byte record
+;          array based at 0x0000DC0E -- both strides are that routine's `mul r,imm`
+;          operands.  `ld W,(XBC+0x0a)` 0xFC37FA, `ld C,W` 0xFC37FD, `exts BC` 0xFC37FF.  Byte-for-byte
+;          the shape of SlotRec_ReadSignedByte_0009 with a different offset.
+; Unknown:  what the field holds.  The suffix is the field OFFSET, an instruction
+;          operand with no referent outside the code, so this name is a FRAME and
+;          not a content name -- see notes/prom_c_finish_round12.py --inventory.
 ; --------------------------------------------------------------------------
-sub_FC37E2:
+SlotRec_ReadSignedByte_000A:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC37E2  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FC37E6  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FC37E9  extz XBC
@@ -98650,7 +99142,8 @@ sub_FC37E2:
 	unlk32 xiz                                 ; FC3803  unlk XIZ
 	ret                                        ; FC3805  ret
 ; --------------------------------------------------------------------------
-; sub_FC3806 -- 0xFC3806..0xFC3829 (36 bytes)
+; SlotRec_ReadSignedByte_000B -- 0xFC3806..0xFC3829 (36 bytes)
+;             (* NAMED in wave 7 round 12; was `sub_FC3806`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAB9EB in Dev10C_StageRegs_0800_0840_FAB9D8
@@ -98662,10 +99155,19 @@ sub_FC37E2:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; * WHAT IT DOES: returns the byte at offset +0x0B of the slot record, sign-extended to 16 bits.
+; Evidence: `ld A,(XBC)` at 0xFC380F takes the SLOT from byte +0 of the argument
+;          record, `mul A,0x04` at 0xFC3811 scales it and `add XWA,0x0000df05` at 0xFC3816
+;          reaches the 4-byte pointer table; `ld XBC,(XWA)` at 0xFC381C dereferences it.
+;          0x00DF05 is the slot pointer table PartSlot_SetRecordPtr_DF05 (0xFC376C)
+;          fills, one 32-bit pointer per slot, each pointing into the 23-byte record
+;          array based at 0x0000DC0E -- both strides are that routine's `mul r,imm`
+;          operands.  `ld W,(XBC+0x0b)` 0xFC381E, `ld C,W` 0xFC3821, `exts BC` 0xFC3823.
+; Unknown:  what the field holds.  The suffix is the field OFFSET, an instruction
+;          operand with no referent outside the code, so this name is a FRAME and
+;          not a content name -- see notes/prom_c_finish_round12.py --inventory.
 ; --------------------------------------------------------------------------
-sub_FC3806:
+SlotRec_ReadSignedByte_000B:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC3806  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FC380A  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FC380D  extz XBC
@@ -128765,6 +129267,9 @@ IRQ_INTT1:				; vector 0x44
 	jp 0xF99063		; -> INTT1_HANDLER, converted above: the tick
 				; counter at 0x00F2F3 and the six-phase work
 				; schedule in 0x007ED1
+; Evidence: VECTORS slot 0x7C (below) holds 0x00FFF0C0, this label's address -- the
+;          one vector stub in this table that carried no evidence line until wave 7
+;          round 12.  The slot's name is cited to tmp95c061_irq_vector_map[].
 IRQ_INTTC2:				; vector 0x7C
 	jp 0xF99CFE		; -> INTTC2_HANDLER, converted above
 ; Evidence: VECTORS slot 0x80 (below) holds 0x00FFF0C4, this label's address.
