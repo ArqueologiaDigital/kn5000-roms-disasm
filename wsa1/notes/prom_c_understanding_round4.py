@@ -288,7 +288,7 @@ def section_sites():
     found = {}
     total_lines = 0
     for tag, sname, rname in images:
-        text = open(os.path.join(ROOT, tag, sname)).read()
+        text = open(image_path(ROOT, "%s/%s" % (tag, sname))).read()
         for ln in text.split("\n"):
             if ln.startswith(";"):
                 continue

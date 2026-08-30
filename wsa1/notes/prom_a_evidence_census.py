@@ -39,8 +39,12 @@ import re
 import sys
 import os
 
-SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                   os.pardir, 'prom_a', 'wsa1_prom_a.s')
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'notes'))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
+# ⚠ prom_a `.include`s kernel/kernel.s and two shared maincpu routines; a
+# census over the primary alone misses 4,148 lines of them.
+SRC = image_path(ROOT, 'prom_a/wsa1_prom_a.s')
 
 RULE = re.compile(r'^;\s*-{5,}\s*$')
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')

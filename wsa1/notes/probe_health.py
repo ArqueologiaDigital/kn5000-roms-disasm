@@ -360,7 +360,17 @@ def run(tree, argv):
         rc, out = None, "<timeout>"
     except OSError as e:
         rc, out = None, "<oserror %s>" % e
-    return rc, out.replace(tree, "<TREE>")
+    out = out.replace(tree, "<TREE>")
+    # ⚠ NORMALISE THE MATERIALISED PATH.  asm_source.image_path() returns
+    # notes/.image-wsa1_prom_b.s when the image is several files and the primary
+    # itself when it is one -- so a probe that PRINTS the path it read differs
+    # between the trees for a reason that is about the reader, not the answer.
+    # notes/prom_b_f65000_header_audit.py was graded VACUOUS for exactly that,
+    # AFTER being migrated.  The expansion IS the image, so it is spelled as the
+    # image; nothing else is masked.
+    for tag, primary in IMAGES:
+        out = out.replace("notes/.image-" + os.path.basename(primary), primary)
+    return rc, out
 
 
 def failed(rc, out):
@@ -596,6 +606,19 @@ def selftest():
               % (nf.strip(), ns.strip()))
         check(run(trees["full"], blind)[1] == run(trees["stub"], blind)[1],
               "a probe that reads only the ROM does NOT differ")
+
+        # ★ a probe that PRINTS the path image_path() gave it must not differ
+        #   for that reason alone -- see the note in run().
+        pp = os.path.join("notes", ".health_printpath.py")
+        body = (head + "from asm_source import image_path\n"
+                       "print(os.path.relpath(image_path(r,%r), r))\n" % primary)
+        for t in trees.values():
+            with open(os.path.join(t, "notes", ".health_printpath.py"), "w") as fh:
+                fh.write(body)
+        check(run(trees["full"], [pp])[1] == run(trees["stub"], [pp])[1],
+              "printing the materialised path is not a difference (%s / %s)"
+              % (run(trees["full"], [pp])[1].strip(),
+                 run(trees["stub"], [pp])[1].strip()))
 
         # ★ THE FIX ITSELF IS UNDER TEST.  If asm_source did not really resolve
         #   the includes, every migration this tool recommends would be a

@@ -216,7 +216,7 @@ from asm_source import image_path, write_part  # noqa: E402
 # is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
 S_A_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path: write_part() guards it
 S_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")  # the READ path: the image, not the master
-S_B = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+S_B = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 ROM_A = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
 ROM_B = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
 

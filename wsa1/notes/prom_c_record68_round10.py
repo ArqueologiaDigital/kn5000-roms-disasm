@@ -751,7 +751,7 @@ XT_MIN = 15                  # instructions; below this a sequence match is nois
 
 def _seqs(path):
     cur, out = None, collections.OrderedDict()
-    for ln in open(os.path.join(ROOT, path)):
+    for ln in open(image_path(ROOT, path)):
         ln = ln.rstrip("\n")
         m = LABEL.match(ln)
         if m:

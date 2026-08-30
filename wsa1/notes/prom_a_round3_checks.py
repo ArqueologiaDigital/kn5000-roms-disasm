@@ -25,13 +25,15 @@ nothing is typed from a note.
 import os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 ROMS = {
     'prom_a': (os.path.join(ROOT, 'original_ROMs', 'wsa1_prom_a.ic12'), 0xF80000),
     'prom_b': (os.path.join(ROOT, 'original_ROMs', 'wsa1_prom_b.ic13'), 0xF00000),
     'prom_c': (os.path.join(ROOT, 'original_ROMs', 'wsa1_prom_c.ic28'), 0xF80000),
     'prom_d': (os.path.join(ROOT, 'original_ROMs', 'wsa1_prom_d.bin'),  0xF00000),
 }
-SRC_A = os.path.join(ROOT, 'prom_a', 'wsa1_prom_a.s')
+SRC_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 
 A = open(ROMS['prom_a'][0], 'rb').read()
 def rd(addr, n):

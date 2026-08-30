@@ -474,7 +474,7 @@ def a6b():
     starts = {}
     for tag, path in (("a", "prom_a/wsa1_prom_a.s"), ("c", "prom_c/wsa1_prom_c.s")):
         st = set()
-        for ln in open(os.path.join(ROOT, path)):
+        for ln in open(image_path(ROOT, path)):
             m = re.search(r";\s*([0-9A-F]{6})\b", ln)
             if m and not ln.strip().startswith(";"):
                 st.add(int(m.group(1), 16))

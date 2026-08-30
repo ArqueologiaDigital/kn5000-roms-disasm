@@ -76,9 +76,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #   os.path.join(ROOT, "prom_%s" % tag, "wsa1_prom_%s.s" % tag)     <- computed
 # The computed form matters: it is how the census scripts loop over the images,
 # so ONE site of it can put four images through a stub.
+# ⚠ BOTH QUOTE STYLES.  The first version was double-quote only, and
+# notes/prom_a_round3_checks.py spells it with single quotes -- so it stayed
+# SPLIT-FRAGILE through a migration that reported success on everything else.
+_Q = r'["\']'
 SITE = re.compile(
-    r'os\.path\.join\(\s*ROOT\s*,\s*"(prom_[abcd])"\s*,\s*"(wsa1_prom_[abcd]\.s)"\s*\)'
-    r'|os\.path\.join\(\s*ROOT\s*,\s*"(prom_[abcd])/(wsa1_prom_[abcd]\.s)"\s*\)')
+    r'os\.path\.join\(\s*ROOT\s*,\s*' + _Q + r'(prom_[abcd])' + _Q + r'\s*,\s*'
+    + _Q + r'(wsa1_prom_[abcd]\.s)' + _Q + r'\s*\)'
+    r'|os\.path\.join\(\s*ROOT\s*,\s*' + _Q
+    + r'(prom_[abcd])/(wsa1_prom_[abcd]\.s)' + _Q + r'\s*\)')
 SITE_FMT = re.compile(
     r'os\.path\.join\(\s*ROOT\s*,\s*"prom_%s"\s*%\s*([A-Za-z_][A-Za-z0-9_]*)\s*,\s*'
     r'"wsa1_prom_%s\.s"\s*%\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)')
@@ -581,6 +587,10 @@ def selftest():
           "...and the rewritten header RUNS and resolves to a real file")
     check("os.path.join(ROOT, \"prom_c\", \"wsa1_prom_c.s\")" not in out,
           "...and the old spelling is gone")
+    sq = rewrite_text(reader.replace('"prom_c", "wsa1_prom_c.s"',
+                                     "'prom_c', 'wsa1_prom_c.s'"))
+    check('image_path(ROOT, "prom_c/wsa1_prom_c.s")' in sq,
+          "the SINGLE-QUOTED spelling is rewritten too")
     compile(out, "<rewritten>", "exec")
     check(True, "...and the result still compiles")
 

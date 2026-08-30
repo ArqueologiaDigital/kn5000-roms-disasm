@@ -39,6 +39,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, image_text_at_rev  # noqa: E402  (the image, not the master)
 REL = "prom_b/wsa1_prom_b.s"
 MARKER = "   [llvm-mc cannot encode this]"
 LABEL = re.compile(r'^([A-Za-z_.][A-Za-z0-9_.$]*):')
@@ -46,12 +48,14 @@ ADDRESSED = re.compile(r'^\t(\S.*?)\s*;\s*([0-9A-F]{6})\s+(.*)$')
 
 
 def at(rev):
-    return subprocess.run(["git", "show", "%s:%s" % (rev, REL)], cwd=ROOT,
-                          capture_output=True, text=True, check=True).stdout.split('\n')
+    # ⚠ THE IMAGE at `rev`, not `git show <rev>:<primary>`: prom_b already
+    # includes two shared maincpu sources, and a split would leave the
+    # primary a header while now() returned the whole image.
+    return image_text_at_rev(ROOT, REL, rev).split('\n')
 
 
 def now():
-    return open(os.path.join(ROOT, REL)).read().split('\n')
+    return open(image_path(ROOT, REL)).read().split('\n')
 
 
 def facets(lines):

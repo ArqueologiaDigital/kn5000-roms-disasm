@@ -74,6 +74,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 PA = 0x1E   # port A, direct address, per the TMP95C061 databook
 
 IMAGES = [("prom_a", "prom_a/wsa1_prom_a.s", "wsa1_prom_a.ic12", 0xF80000),
@@ -130,7 +132,7 @@ def source_hits(srcf):
     """Pass 1: instructions in the CONVERTED source. Authoritative -- the decode
     is already proven by the byte gate."""
     hits = []
-    for lineno, line in enumerate(open(os.path.join(ROOT, srcf)), 1):
+    for lineno, line in enumerate(open(image_path(ROOT, srcf)), 1):
         m = LINE.match(line)
         if not m:
             continue
@@ -150,7 +152,7 @@ def symbolic_hits(srcf):
     line has no byte comment, so pass 1a is structurally blind to it -- which is
     how the RESET write was missed on the first draft."""
     hits = []
-    for lineno, line in enumerate(open(os.path.join(ROOT, srcf)), 1):
+    for lineno, line in enumerate(open(image_path(ROOT, srcf)), 1):
         m = SYMBOLIC.match(line)
         if m:
             txt = line.strip().split(";")[0].strip()
@@ -163,7 +165,7 @@ def symbolic_hits(srcf):
 
 def incbin_ranges(srcf, inc, base):
     """The parts of the image that pass 1 CANNOT see."""
-    text = open(os.path.join(ROOT, srcf)).read()
+    text = open(image_path(ROOT, srcf)).read()
     rx = re.compile(r'^\t\.incbin "original_ROMs/%s", (0x[0-9A-Fa-f]+), (0x[0-9A-Fa-f]+)\s*$'
                     % re.escape(inc), re.M)
     return [(int(o, 16), int(l, 16)) for o, l in rx.findall(text)]
