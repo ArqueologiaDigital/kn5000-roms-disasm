@@ -173,6 +173,61 @@ def rewrite_text(text):
     return new
 
 
+# ---------------------------------------------------------------------------
+# RETIRING THE prom_c-ONLY SHIM
+# ---------------------------------------------------------------------------
+# notes/prom_c_image.py was written while asm_source's --selftest was still red,
+# to give seven probes a read path that hour.  Its own docstring said it "should
+# not survive".  asm_source.image_path() is the same function for all four
+# images, so the seven callers move to it and the shim goes.
+SHIM_IMPORT = re.compile(r'^import prom_c_image(\s+#.*)?$', re.M)
+SHIM_CALL = re.compile(r'prom_c_image\.path\(\)')
+# ⚠ The comment above each import states a FACT that this change makes false.
+# Leaving it would be worse than the code: it would tell the next reader to go
+# looking for a shim that is not there.  It is corrected, not deleted -- the
+# sentence about the split and the vacuous pass is the part worth keeping.
+SHIM_NOTE = re.compile(
+    r'# notes/prom_c_probe_health\.py is the check; notes/prom_c_image\.py is a shim\n'
+    r'#\s*(that )?should become `from asm_source import \.\.\.` when that reader is green\.\n'
+    r'|# notes/prom_c_probe_health\.py is the check; notes/prom_c_image\.py is a shim that\n'
+    r'#\s*should become `from asm_source import \.\.\.` when that reader is green\.\n')
+SHIM_NOTE_NEW = ("# notes/probe_health.py is the check; notes/asm_source.py is the reader,\n"
+                 "# and it absorbed the prom_c-only shim that used to stand here.\n")
+
+
+def shim_rewrite(text):
+    if "prom_c_image" not in text:
+        return text
+    text = SHIM_NOTE.sub(SHIM_NOTE_NEW, text)
+    text = SHIM_IMPORT.sub(
+        "from asm_source import image_path  # noqa: E402  (the image, not the master)",
+        text)
+    text = SHIM_CALL.sub('image_path(ROOT, "prom_c/wsa1_prom_c.s")', text)
+    return text
+
+
+def shim(quiet=False):
+    n = 0
+    for rel in committed_py():
+        if rel in ("notes/prom_c_image.py", "notes/migrate_listing_readers.py"):
+            continue
+        p = os.path.join(ROOT, rel)
+        text = open(p, encoding="utf-8").read()
+        new = shim_rewrite(text)
+        if new != text:
+            open(p, "w", encoding="utf-8").write(new)
+            n += 1
+            if not quiet:
+                print("  moved %s off the shim" % rel)
+    left = [r for r in committed_py()
+            if r != "notes/prom_c_image.py"
+            and "prom_c_image" in open(os.path.join(ROOT, r), encoding="utf-8",
+                                       errors="replace").read()]
+    print("\n%d file(s) moved; %d still name the shim%s"
+          % (n, len(left), (": " + ", ".join(left)) if left else ""))
+    return 0
+
+
 def apply(only=None, quiet=False):
     changed = refused = 0
     for rel, rows in survey(only):
@@ -258,6 +313,20 @@ def selftest():
     # a file with no site is left completely alone
     check(rewrite_text("print(1)\n") == "print(1)\n",
           "a file with no site is byte-for-byte unchanged")
+
+    # the shim retirement, and the stale comment it must correct
+    shim_src = ('# notes/prom_c_probe_health.py is the check; notes/prom_c_image.py is a shim\n'
+                '# that should become `from asm_source import ...` when that reader is green.\n'
+                'import prom_c_image\n'
+                'SRC = prom_c_image.path()\n')
+    got = shim_rewrite(shim_src)
+    check("prom_c_image" not in got, "the shim import and call are both replaced")
+    check('image_path(ROOT, "prom_c/wsa1_prom_c.s")' in got,
+          "...by the general reader, named with the image it wants")
+    check("should become `from asm_source import ...`" not in got,
+          "...and the comment that would now be FALSE is corrected, not left")
+    check(shim_rewrite("print(1)\n") == "print(1)\n",
+          "a file that never used the shim is untouched")
     print("\nPASS" if ok else "\nFAIL")
     return 0 if ok else 1
 
@@ -267,8 +336,12 @@ if __name__ == "__main__":
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--only", default=None)
+    ap.add_argument("--shim", action="store_true",
+                    help="move the seven prom_c_image.py callers to asm_source")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     if a.selftest:
         sys.exit(selftest())
+    if a.shim:
+        sys.exit(shim())
     sys.exit(apply(a.only) if a.apply else listing(a.only))
