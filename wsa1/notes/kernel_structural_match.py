@@ -56,6 +56,7 @@ RUN     (each section is independent; with no flags they all run, on the sub-CPU
     python3 notes/kernel_structural_match.py --controls    # P0-P3: what a score MEANS
     python3 notes/kernel_structural_match.py --null        # N1-N5 distributions
     python3 notes/kernel_structural_match.py --negative    # ★ prom_b: code with NO kernel
+    python3 notes/kernel_structural_match.py --foil        # ★★ the reverse control
     python3 notes/kernel_structural_match.py --order       # the layout-order test
     python3 notes/kernel_structural_match.py --sweep       # name-free whole-image search
     python3 notes/kernel_structural_match.py --table       # per-routine best hit
@@ -1143,6 +1144,62 @@ def section_negative(nsamples=8000):
     return cols
 
 
+def section_foil(n=40, target=None, seed=31337):
+    """★ THE REVERSE CONTROL.  Does ANY long WSA1 routine find a 0.9 in the KN5000?
+
+    Every other section asks "does the kernel match?".  This asks the question
+    that would demolish the answer if it came out wrong: take WSA1 code that is
+    NOT the kernel, of the same lengths, and put it through the identical
+    search.  If foils scored like the kernel does, the tool would be measuring
+    something about TLCS-900 code in general and the result would be worthless.
+
+    Foils are real prom_c routines: `call`/`calr` targets outside the kernel
+    block, decoded to the same instruction counts as the kernel queries.
+    """
+    target = target or TARGET_IMAGE
+    hdr("REVERSE CONTROL -- the same search, run on WSA1 code that is NOT the kernel")
+    rows = decode_linear("wsa1:c", 0)
+    lo, hi = 0xF9816B, 0xF989EE
+    targets = set()
+    for _a, _n, t in rows:
+        if cf_kind(t) in ("call", "calr"):
+            tg = cf_target(t)
+            if tg and 0xF80000 <= tg < 0xFFFFF0 and not (lo <= tg < hi):
+                targets.add(tg)
+    lens = sorted(set(q.nq for q in kernel_queries()))
+    rnd = random.Random(seed)
+    picks = rnd.sample(sorted(targets), min(n, len(targets)))
+    cands = symbol_candidates(target, SYMS_FOR[target])
+    real = [(q.name, q.nq, score_candidates(q, target, cands)[0][0])
+            for q in kernel_queries()]
+    foils = []
+    for a in picks:
+        want = lens[rnd.randrange(len(lens))]
+        d = _unidasm(image("wsa1:c")[off_of("wsa1:c", a):
+                                     off_of("wsa1:c", a) + 8 * want + 16], a)
+        seq = Seq([(x - a, k, t) for x, k, t in d][:want], a, text_base=a)
+        if len(seq) < 8:
+            continue
+        q = Query("foil_%06X" % a, "wsa1:c", a, seq)
+        foils.append((q.nq, score_candidates(q, target, cands)[0][0]))
+    kern = [(nq, sc) for _nm, nq, sc in real if nq >= 20]
+    fo = [(nq, sc) for nq, sc in foils if nq >= 20]
+    print("  %d kernel routines and %d non-kernel prom_c routines, >= 20 instructions,"
+          % (len(kern), len(fo)))
+    print("  same search, same candidate set, same length-matched window.")
+    print()
+    for label, xs in (("KERNEL routines", kern), ("NON-kernel foils", fo)):
+        v = sorted((x[1] for x in xs), reverse=True)
+        print("  %-18s n=%3d   max %.3f   median %.3f   min %.3f   >=0.70: %d"
+              % (label, len(v), v[0], v[len(v) // 2], v[-1],
+                 sum(1 for x in v if x >= 0.70)))
+    print()
+    print("  foil scores, high to low:")
+    print("   ", "  ".join("%.2f" % x[1] for x in
+                           sorted(fo, key=lambda r: -r[1])[:20]))
+    return kern, fo
+
+
 def section_align(names=None, target=None):
     target = target or TARGET_IMAGE
     """Instruction-for-instruction alignment, and WHICH CONSTANTS DIFFER.
@@ -1350,8 +1407,8 @@ def main():
         return selftest()
     todo = [a for a in args if a.startswith("--")]
     if not todo:
-        todo = ["--controls", "--null", "--negative", "--order", "--sweep",
-                "--assign", "--constants"]
+        todo = ["--controls", "--null", "--negative", "--foil", "--order",
+                "--sweep", "--assign", "--constants"]
     if "--controls" in todo:
         section_controls()
     if "--null" in todo:
@@ -1360,6 +1417,8 @@ def main():
         section_sweep()
     if "--table" in todo:
         section_table()
+    if "--foil" in todo:
+        section_foil()
     if "--negative" in todo:
         section_negative()
     if "--assign" in todo:

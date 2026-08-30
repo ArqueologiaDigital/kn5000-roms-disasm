@@ -21,6 +21,27 @@ from, and the two copies still differ in **81 of 941 instruction slots**. Two
 processors in the same product, from the same build, are not byte-identical. A
 third and fourth, in another product, cannot be.
 
+## 0. The single strongest piece of evidence (`--foil`)
+
+Every other section asks "does the kernel match?". This one asks the question
+that would demolish the answer if it came out wrong: **run the identical search
+on WSA1 code that is NOT the kernel.** The foils are real prom_c routines —
+`call`/`calr` targets outside the kernel block — cut to the same instruction
+counts, scored against the same candidate set with the same window.
+
+| | n | max | median | min | ≥ 0.70 |
+|---|---:|---:|---:|---:|---:|
+| **KERNEL routines** (≥ 20 instructions) | 20 | **1.000** | **0.909** | **0.742** | **20** |
+| **NON-kernel prom_c foils** | 26 | 0.333 | 0.212 | 0.143 | **0** |
+
+Foil scores, high to low:
+`0.33 0.32 0.31 0.28 0.27 0.27 0.24 0.24 0.23 0.22 0.22 0.21 0.21 0.21 0.20 …`
+
+**The two distributions do not overlap, and there is a gap of 0.41 between
+them.** The foil maximum, 0.333, is exactly the P2 calibration point below —
+"same idea, independently written". Nothing in prom_c that is not the kernel
+gets anywhere near what the kernel gets.
+
 ---
 
 ## 1. The instrument, and the one decision that matters
