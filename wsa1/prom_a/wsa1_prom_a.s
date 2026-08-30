@@ -137863,7 +137863,37 @@ sub_FDE70F:   ; entry: prom_b routine directory
 	call 0xfd7905                                        ; FDE721  1d 05 79 fd
 	inc 0,XSP                                            ; FDE725  ef 60
 	inc 4,XSP                                            ; FDE727  ef 64
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05E729, 0x0018D7
+; ---------------------------------------------------------------------
+; sub_FDE729 -- reached only after round 2 converted 0xFDE70F, whose branch
+;               became a seed. Converted for COVERAGE; semantics deferred.
+; Evidence: START -- notes/reachability.py grades this a STRONG-reachable run
+;           (a branch in converted code names it). The 13 instructions tile
+;           0xFDE729-0xFDE74C exactly and end in a computed `jp (xbc)`.
+; ---------------------------------------------------------------------
+sub_FDE729:
+	cp WA,0xffff                                  ; FDE729  d8 cf ff ff
+	jr z, 0x2e                                    ; FDE72D  66 2e
+	ld bc, (xiz-2)                                ; FDE72F  9e fe 21
+	extz BC                                       ; FDE732  d9 12
+	pushw bc                                      ; FDE734  29
+	ldb c, 0x04                                   ; FDE735  23 04
+	m_mul MBD+r6, 0xfc, 3                         ; FDE737  8e fc 43
+	extz XBC                                      ; FDE73A  e9 12
+	add XBC,0x00fcf72b                            ; FDE73C  e9 c8 2b f7 fc 00
+	ld XBC,(XBC)                                  ; FDE742  a1 21
+	lda_24 xiy, (0xfde74c)                        ; FDE744  f2 4c e7 fd 35
+	push XIY                                      ; FDE749  3d
+	jp (xbc)                                      ; FDE74A  b1 d8
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05E74C, 0x000011
+; ---------------------------------------------------------------------
+; sub_FDE75D -- an epilogue: `unlk XIZ / ret`, three bytes. Reached only after
+;               round 2's conversion made its caller's branch a seed.
+;               Converted for COVERAGE; semantics deferred.
+; ---------------------------------------------------------------------
+sub_FDE75D:
+	unlk XIZ                                      ; FDE75D  ee 0d
+	ret                                           ; FDE75F  0e
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05E760, 0x0018A0
 
 ; ==============================================================================
 ; 0xFE0000-0xFE54B5 -- 21,686 bytes of application code, converted but NOT NAMED

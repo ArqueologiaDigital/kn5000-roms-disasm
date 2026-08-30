@@ -613,6 +613,13 @@ if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(selftest())
     if "--evidence" in sys.argv:
+        # ⚠ --evidence needs the per-byte reached set, which the cache does not
+        # persist (it stores per-span counts, which is all the other modes need).
+        # So this mode always re-walks. Stated rather than silently slow.
+        try:
+            os.unlink(RESULT_CACHE)
+        except OSError:
+            pass
         evidence()
         sys.exit(0)
     if "--targets" in sys.argv:
