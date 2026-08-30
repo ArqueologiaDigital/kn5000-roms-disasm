@@ -5465,9 +5465,14 @@ RESET__clear_dram_hi:
 ;   remote-flash read".
 ;
 ; ★★ GAP O -- the three power-on chords, and the VARIANT STRAP that picks
-;   between their two forms.  Variant_SetFromPB0 (0xF82882) is four
-;   instructions: `ld A,0x01 / bit 0,(PB) / jr NZ / ld A,0x02` then
-;   `ld (0xC4),A`.  So (0x00C4) -- the model-variant flag the emulator's variant
+;   between their two forms.  Variant_SetFromPB0 (0xF82882) is SIX
+;   instructions across its whole address extent 0xF82882-0xF8288E:
+;   `ld A,0x01 / bit 0,(PB) / jr NZ / ld A,0x02` then `ld (0xC4),A` and `ret`.
+;   ⚠ This paragraph said "four instructions" and then listed five; corrected
+;   2026-08-30 against the listing, and the count is now asserted by
+;   notes/prom_a_census_round8.py --selftest, which counts across the ADDRESS
+;   EXTENT because a label-bounded count stops at an internal label.
+;   So (0x00C4) -- the model-variant flag the emulator's variant
 ;   survey went looking for -- is 1 when PORT B BIT 0 reads HIGH and 2 when it
 ;   reads LOW, and it is set once, here, on the reset path.  Each of the three
 ;   chord tests then opens `cp (0xC4),0x01` and takes a different panel shadow
@@ -5495,18 +5500,18 @@ sub_F827C8:
 	ldio 0x75, 0x03                                      ; F827CE  08 75 03
 	call 0xf40144                                        ; F827D1  1d 44 01 f4
 	calr 0x04a8                                          ; F827D5  1e a8 04
-	calr sub_F82882                                      ; F827D8  1e a7 00
+	calr Variant_SetFromPB0                              ; F827D8  1e a7 00
 	ei 0x00                                              ; F827DB  06 00
 	calr sub_F82832                                      ; F827DD  1e 52 00
 	calr 0x0505                                          ; F827E0  1e 05 05
 	ei 0x06                                              ; F827E3  06 06
 	calr 0xe9                                            ; F827E5  1e e9 00
 	ei 0x00                                              ; F827E8  06 00
-	calr sub_F8288F                                      ; F827EA  1e a2 00
+	calr ExtBoard_Identify                               ; F827EA  1e a2 00
 	res_dd8 0x04, 0x13                                   ; F827ED  f0 13 b4
 	calr 0x04b8                                          ; F827F0  1e b8 04
 	ei 0x00                                              ; F827F3  06 00
-	calr sub_F8288F                                      ; F827F5  1e 97 00
+	calr ExtBoard_Identify                               ; F827F5  1e 97 00
 	call 0xf40148                                        ; F827F8  1d 48 01 f4
 	calr sub_F8283E                                      ; F827FC  1e 3f 00
 	calr sub_F82870                                      ; F827FF  1e 6e 00
@@ -5570,7 +5575,23 @@ sub_F82870:
 	call 0xf42de0                                        ; F8287B  1d e0 2d f4
 	inc 6,XSP                                            ; F8287F  ef 66
 	ret                                                  ; F82881  0e
-sub_F82882:
+; ---------------------------------------------------------------------
+; Variant_SetFromPB0 -- sets (0x00C4), the model-variant flag, from PORT B bit 0
+;
+; Evidence: 0xF82882 `ldb a, 0x01`, 0xF82884 `bit_dd8 0x00, 0x1f` (PB is
+;           0x1F in include/tmp95c061_sfr.inc), 0xF82889 `ldb a, 0x02`
+;           on the not-taken arm, 0xF8288B `st_dd8b a, 0xc4`. Six
+;           instructions counted across the routine's whole address
+;           extent 0xF82882-0xF8288E, `ret` included. This listing's own
+;           power-on-block header already states the name and the
+;           reading -- 1 when PB0 reads HIGH, 2 when it reads LOW -- and
+;           the six chord tests that branch on it are re-read from the
+;           ROM by notes/prom_a_boot_checks.py
+; Unknown:  which physical variant is 1 and which is 2. The strap is a
+;           pin state and no schematic in this tree names it
+; Was `sub_F82882`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Variant_SetFromPB0:
 	ldb a, 0x01                                          ; F82882  21 01
 	bit_dd8 0x00, 0x1f                                   ; F82884  f0 1f c8
 	jr nz, .LF8288B                                      ; F82887  6e 02
@@ -5579,23 +5600,30 @@ sub_F82882:
 	st_dd8b a, 0xc4                                      ; F8288B  f0 c4 41
 	ret                                                  ; F8288E  0e
 ; ---------------------------------------------------------------------
-; sub_F8288F -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; ExtBoard_Identify -- reads the expansion board's 10-byte header and sets
+;                      (0x00C5) to 0x5A if it matches
 ;
-; Called from: prom_a sub_F827C8 (`calr`) at 0xF827EA
-;          prom_a sub_F827C8 (`calr`) at 0xF827F5
-;
-;     0xF828B3 loads 0xF828C7, where the ROM reads:
-;        "WSA1 EXTBD"
-; Evidence: the immediate at the cited instruction, and the bytes
-;          at that address in original_ROMs/, read as printable
-;          ASCII until the first non-printable byte.
-; NOT NAMED because the text says what the routine READS, not what it DOES
-;          with it; a name taken from it would claim a role nothing here
-;          establishes. The string is recorded so the next round starts
-;          from evidence instead of a search.
-; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; Evidence: 0xF8288F `ldio 0xc5, 0x00` clears the flag; 0xF8289B `ld
+;           XWA,0x00c00000` and 0xF82898 `pushw 0x0a` are the remote
+;           address and length handed to the link block read at 0xF828A1
+;           and 0xF828A8; 0xF828AC `ldb c, 0x0a`, 0xF828AE `ld
+;           XIX,0x00002640` and 0xF828B3 `ld XIY,0x00f828c7` set up the
+;           10-byte compare whose only success path is 0xF828C3 `ldio
+;           0xc5, 0x5a`. 0xF828C7 is ExtBoardMagic_F828C7, the ASCII
+;           "WSA1 EXTBD", already labelled in this listing, and that
+;           label's own header names (0x00C5) as this routine's output.
+;           Called from prom_a 0xF827EA and 0xF827F5, both `calr`, in
+;           the reset path
+; Unknown:  what reads (0x00C5) afterwards, and what the other 0x30
+;           bytes of the board header at 0x00C00000 mean. ★ SUPERSEDES
+;           round 7's --apply-strings refusal header, which recorded
+;           only that 0xF828B3 loads the text at 0xF828C7 and declined
+;           to name the routine from it; that fact is kept above and the
+;           refusal is not, because the two headers contradicted each
+;           other in one file
+; Was `sub_F8288F`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
-sub_F8288F:
+ExtBoard_Identify:
 	ldio 0xc5, 0x00                                      ; F8288F  08 c5 00
 	ld XWA,0x00002640                                    ; F82892  40 40 26 00 00
 	push XWA                                             ; F82897  38
@@ -5804,29 +5832,37 @@ sub_F82A04:
 	cp A,0xe0                                            ; F82A1F  c9 cf e0
 	jr nz, .LF82A27                                      ; F82A22  6e 03
 .LF82A24:
-	calr sub_F82A28                                      ; F82A24  1e 01 00
+	calr VersionScreen_Show                              ; F82A24  1e 01 00
 .LF82A27:
 	ret                                                  ; F82A27  0e
 ; ---------------------------------------------------------------------
-; sub_F82A28 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; VersionScreen_Show -- reads the two 11-byte ROM tail tags over the link and
+;                       stages them for the version screen
 ;
-; Called from: prom_a sub_F82A04 (`calr`) at 0xF82A24
-;          prom_a sub_F82A28 (`jr`) at 0xF82A2D
-;
-;     0xF82A38 loads 0xFFFFF0, where the ROM reads:
-;        "wsaa_822"
-; Evidence: the immediate at the cited instruction, and the bytes
-;          at that address in original_ROMs/, read as printable
-;          ASCII until the first non-printable byte.
-; NOT NAMED because the text says what the routine READS, not what it DOES
-;          with it; a name taken from it would claim a role nothing here
-;          establishes. The string is recorded so the next round starts
-;          from evidence instead of a search.
-; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; Evidence: 0xF82A38 `ld XWA,0x00fffff0` with 0xF82A35 `pushw 0x0b` into
+;           0xF82A2F `ld XIX,0x00002640`, and 0xF82A5F `ld
+;           XWA,0x00f7fff0` with 0xF82A5C `pushw 0x0b` into 0xF82A56 `ld
+;           XIX,0x0000264c`, each through the link block read at
+;           0xF82A3E/0xF82A45 and 0xF82A65/0xF82A6C; 0xF82A28 `m_cp_mi16
+;           MW8, 0x80, 0x03e8` spins until the tick counter passes 1000
+;           before either read. This listing already names the routine
+;           in the power-on block's own header
+; ⚠ TWO CLAIMS CORRECTED IN ROUND 8, both by this file's own contents.
+;           (a) This header said "nothing here draws anything". The body RUNS
+;           THREE DISPLAY LISTS, and this same file says so ninety lines below.
+;           The two 11-byte tags are staged at 0x2640 and 0x264C AND drawn here.
+;           (b) It said 0x00FFFFF0 is "prom_a's OWN tail tag". It is not --
+;           0x00FFFFF0 is PROM_C's tag; prom_a reads its own locally at
+;           0x00FFFFF5. Calling the remote one local revived a local/remote
+;           confusion this tree had already settled, so it is named explicitly
+;           here to stop it coming back a third time.
+; Unknown:  which of the three lists carries which tag, and what the second
+;           read at 0x00F7FFF0 is for. Called from prom_a 0xF82A24 (calr)
+; Was `sub_F82A28`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
-sub_F82A28:
+VersionScreen_Show:
 	m_cp_mi16 MW8, 0x80, 0x03e8                          ; F82A28  d0 80 3f e8 03
-	jr c, sub_F82A28                                     ; F82A2D  67 f9
+	jr c, VersionScreen_Show                             ; F82A2D  67 f9
 	ld XIX,0x00002640                                    ; F82A2F  44 40 26 00 00
 	push XIX                                             ; F82A34  3c
 	pushw 0x0b                                           ; F82A35  0b 0b 00
@@ -22003,7 +22039,26 @@ sub_F8DD62:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 539, 1, 0x0E
 
-sub_F8E001:
+; ---------------------------------------------------------------------
+; Link_Init_DmaAndTimer -- points micro-DMA channel 2's DESTINATION and channel 3's
+;                          SOURCE at the link port and programs timer 2
+;
+; Evidence: 0xF8E014 `ld XIX,0x007c0000` is pushed to 0xF8E01A `call
+;           0xf8e6a2` = uDMA2_SetDest with 0xF8E011 `pushw 0x08` as the
+;           mode, and to 0xF8E022 `call 0xf8e6bc` = uDMA3_SetSource with
+;           0xF8E01E `pushw 0x00`; the timer is 0xF8E002 `res_dd8 0x02,
+;           0x20` (TRUN), 0xF8E005 T23MOD=0x0E, 0xF8E008 INTETC23=0x56,
+;           0xF8E00B INTE0AD=0x01, 0xF8E00E TREG2=0x05, with the SFR
+;           names from include/tmp95c061_sfr.inc
+; Unknown:  the two mode bytes. FINDINGS-memory-map.md reads DMAM0 =
+;           0x00 as device-to-RAM and 0x08 as RAM-to-device for the
+;           FDC's channel 0, which is the SAME register field on the
+;           same part, so 0x08 here reads as RAM-to-device and 0x00 as
+;           device-to-RAM -- ⚠ that is a transfer of a field meaning
+;           between channels, not a second measurement
+; Was `sub_F8E001`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Link_Init_DmaAndTimer:
 	push XIX                                             ; F8E001  3c
 	res_dd8 0x02, 0x20                                   ; F8E002  f0 20 b2
 	ldio 0x28, 0x0e                                      ; F8E005  08 28 0e
@@ -22033,7 +22088,7 @@ sub_F8E02C:
 	pushw 0x20                                           ; F8E03B  0b 20 00
 	push 0x00                                            ; F8E03E  09 00
 	m_push MBD+r6, 0x08                                  ; F8E040  8e 08 04
-	calr sub_F8E06C                                      ; F8E043  1e 26 00
+	calr Link_SendCountedBlock                           ; F8E043  1e 26 00
 	add XIX,0x00000020                                   ; F8E046  ec c8 20 00 00 00
 	ldw bc, 0x20                                         ; F8E04C  31 20 00
 	sub HL,BC                                            ; F8E04F  d9 a3
@@ -22046,13 +22101,34 @@ sub_F8E02C:
 	pushw bc                                             ; F8E05C  29
 	push 0x00                                            ; F8E05D  09 00
 	m_push MBD+r6, 0x08                                  ; F8E05F  8e 08 04
-	calr sub_F8E06C                                      ; F8E062  1e 07 00
+	calr Link_SendCountedBlock                           ; F8E062  1e 07 00
 	inc 0,XSP                                            ; F8E065  ef 60
 	pop XIX                                              ; F8E067  5c
 	popw hl                                              ; F8E068  4b
 	unlk XIZ                                             ; F8E069  ee 0d
 	ret                                                  ; F8E06B  0e
-sub_F8E06C:
+; ---------------------------------------------------------------------
+; Link_SendCountedBlock -- sends one command byte that CARRIES ITS OWN BYTE COUNT,
+;                          then that many bytes by micro-DMA
+;
+; Evidence: the command byte is built by 0xF8E0A0 `ld L,H` / 0xF8E0A2
+;           `dec 1,L` / 0xF8E0A4 `ld C,(XIZ+0x08)` / 0xF8E0A7 `sll
+;           c,0x05` / 0xF8E0AA `or C,L`, so it is ((XIZ+0x08) << 5) |
+;           ((XIZ+0x0a) - 1), and it is written by 0xF8E0AF `ld
+;           XBC,0x007c0000` / 0xF8E0B7 `ld (XBC),A`; the same (XIZ+0x0a)
+;           is the count pushed at 0xF8E0D7 before 0xF8E0DC `call
+;           0xf8e6af` = uDMA2_SetSource, whose buffer is 0xF8E0D8 `ld
+;           XBC,(XIZ+0x0c)`. 0xF8E076 `cps h,0x00` returns without
+;           sending anything when the count is zero
+; Unknown:  what the three-bit field at bits 7..5 selects.
+;           notes/wave7_xref_tlcs900_family.py --link reads the low five
+;           bits of a link command as (length - 1) on BOTH machines,
+;           which agrees with the arithmetic here; the top three bits it
+;           calls a selector and neither tree says what the selector
+;           means
+; Was `sub_F8E06C`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Link_SendCountedBlock:
 	link XIZ,0xfffe                                      ; F8E06C  ee 0c fe ff
 	pushw hl                                             ; F8E070  2b
 	pushw de                                             ; F8E071  2a
@@ -22118,7 +22194,32 @@ sub_F8E06C:
 	popw hl                                              ; F8E0FA  4b
 	unlk XIZ                                             ; F8E0FB  ee 0d
 	ret                                                  ; F8E0FD  0e
-sub_F8E0FE:
+; ---------------------------------------------------------------------
+; Link_SendCommandE2 -- sends command 0xE2 followed by a ten-byte record it stages
+;                       at 0x600793
+;
+; Evidence: 0xF8E12B `ld XBC,0x007c0000` / 0xF8E130 `ld (XBC),0xe2`; the
+;           record is 0xF8E14D-0xF8E15B, which writes (XIZ+0x08) as a
+;           longword at (XIX), (XIZ+0x0e) as a longword at (XIX+0x04)
+;           and (XIZ+0x0c) as a word at (XIX+0x08) with XIX = 0xF8E105
+;           `lda_24 xix,(0x600793)`; 4 + 4 + 2 = 10 and 0xF8E15E `pushw
+;           0x0a` is the count handed to 0xF8E162 `call 0xf8e6af` =
+;           uDMA2_SetSource. ★ THE THREE FIELDS ARE READ FROM THE TWO
+;           CALLERS, not from this body: ExtBoard_Identify pushes
+;           0x2640, then 0x000A, then 0x00C00000 (0xF82892, 0xF82898,
+;           0xF8289B) and VersionScreen_Show pushes 0x2640, then 0x000B,
+;           then 0x00FFFFF0 (0xF82A2F, 0xF82A35, 0xF82A38), both
+;           immediately before this call, so (XIZ+0x08) is the REMOTE
+;           address, (XIZ+0x0c) the LENGTH and (XIZ+0x0e) the LOCAL
+;           buffer, and the record is +0 remote32, +4 local32, +8 len16
+; Unknown:  what a 0xE2 MEANS to CPU 2. Both known callers use it to
+;           READ and nothing here says a 0xE2 cannot also write. ⚠ Two
+;           callers is two, not a census: the frame reading above is
+;           what those two do, and a third caller could still pass the
+;           fields in another order
+; Was `sub_F8E0FE`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Link_SendCommandE2:
 	link XIZ,0x0000                                      ; F8E0FE  ee 0c 00 00
 	pushw hl                                             ; F8E102  2b
 	pushw de                                             ; F8E103  2a
@@ -22172,7 +22273,21 @@ sub_F8E0FE:
 	popw hl                                              ; F8E17D  4b
 	unlk XIZ                                             ; F8E17E  ee 0d
 	ret                                                  ; F8E180  0e
-sub_F8E181:
+; ---------------------------------------------------------------------
+; Link_SendCommandAndLong -- sends a command byte ORed with 0xE0 and then one 32-bit
+;                            argument
+;
+; Evidence: 0xF8E1A8 `ld D,(XIZ+0x0c)` / 0xF8E1AB `or D,0xe0` / 0xF8E1AE
+;           `ld XBC,0x007c0000` / 0xF8E1B3 `ld (XBC),D`; the argument is
+;           0xF8E1CF `ld XBC,(XIZ+0x08)` stored by 0xF8E1D2 `stl_da
+;           (0x60079d),xbc` and sent as 0xF8E1D7 `pushw 0x04` bytes from
+;           0xF8E1DA `lda_24 xwa,(0x60079d)` through 0xF8E1E0 `call
+;           0xf8e6af` = uDMA2_SetSource
+; Unknown:  which commands of the 0xE0..0xFF group take a longword, and
+;           what it is
+; Was `sub_F8E181`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Link_SendCommandAndLong:
 	link XIZ,0x0000                                      ; F8E181  ee 0c 00 00
 	pushw hl                                             ; F8E185  2b
 	pushw de                                             ; F8E186  2a
@@ -22228,7 +22343,7 @@ sub_F8E1FE:
 	pushw 0x03                                           ; F8E207  0b 03 00
 	ld XBC,(XIZ+0x08)                                    ; F8E20A  ae 08 21
 	push XBC                                             ; F8E20D  39
-	calr sub_F8E181                                      ; F8E20E  1e 70 ff
+	calr Link_SendCommandAndLong                         ; F8E20E  1e 70 ff
 	inc 6,XSP                                            ; F8E211  ef 66
 .LF8E213:
 	m_ld_rm MW8, 0x80, r1                                ; F8E213  d0 80 21
@@ -22237,14 +22352,38 @@ sub_F8E1FE:
 	jr lt, .LF8E213                                      ; F8E21D  61 f4
 	unlk XIZ                                             ; F8E21F  ee 0d
 	ret                                                  ; F8E221  0e
-sub_F8E222:
+; ---------------------------------------------------------------------
+; Link_SendCommand5_WaitDone -- sends command 5 with a 32-bit argument through
+;                               Link_SendCommandAndLong, then waits for the far side to
+;                               clear bit 6 of (0x00008A)
+;
+; Evidence: 0xF8E230 `pushw 0x05` and 0xF8E233 `ld XBC,(XIZ+0x08)` are
+;           pushed to 0xF8E237 `calr Link_SendCommandAndLong`, whose own
+;           frame reads the longword at (XIZ+0x08) and the command byte
+;           at (XIZ+0x0c) -- the two pushes in that order put them
+;           exactly there, which is a second and independent check on
+;           that routine's argument frame; 0xF8E22B `m_set 6, MD24,
+;           0x00008a` arms the flag and 0xF8E23C `m_bit 6, MD24,
+;           0x00008a` polls it; the timeout is 0xF8E243, 0xF8E246 and
+;           0xF8E249, the tick counter at (0x0080) minus the copy taken
+;           at 0xF8E226, compared with 0x09C4 = 2500; on timeout
+;           0xF8E24F `ldio 0x7f, 0x00` clears DMA3V and 0xF8E265 `ldw
+;           wa, 0xffff` is the return value, otherwise 0xF8E26A `sub
+;           WA,WA` returns zero
+; Unknown:  the byte that reaches the wire is 5 | 0xE0 = 0xE5, because
+;           Link_SendCommandAndLong ORs 0xE0 in; the NAME carries the
+;           literal 5 that is in this body and not the derived 0xE5.
+;           What clears bit 6 of (0x00008A) is not in this body either
+; Was `sub_F8E222`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Link_SendCommand5_WaitDone:
 	link XIZ,0xfffe                                      ; F8E222  ee 0c fe ff
 	m_ldw_mm16 MDD+r6, 0xfe, 0x0080                      ; F8E226  be fe 16 80 00
 	m_set 6, MD24, 0x00008a                              ; F8E22B  f2 8a 00 00 be
 	pushw 0x05                                           ; F8E230  0b 05 00
 	ld XBC,(XIZ+0x08)                                    ; F8E233  ae 08 21
 	push XBC                                             ; F8E236  39
-	calr sub_F8E181                                      ; F8E237  1e 47 ff
+	calr Link_SendCommandAndLong                         ; F8E237  1e 47 ff
 	inc 6,XSP                                            ; F8E23A  ef 66
 .LF8E23C:
 	m_bit 6, MD24, 0x00008a                              ; F8E23C  f2 8a 00 00 ce
@@ -22265,7 +22404,24 @@ sub_F8E222:
 .LF8E26C:
 	unlk XIZ                                             ; F8E26C  ee 0d
 	ret                                                  ; F8E26E  0e
-sub_F8E26F:
+; ---------------------------------------------------------------------
+; Link_SendCommandE1 -- sends command 0xE1, then a six-byte header, then a second
+;                       block whose pointer and length are inside that header
+;
+; Evidence: 0xF8E29C `ld XBC,0x007c0000` / 0xF8E2A1 `ld (XBC),0xe1`; the
+;           header is 0xF8E2DA `pushw 0x06` from 0xF8E2DD `lda_24
+;           xbc,(0x6007a1)` through 0xF8E2E3 `call 0xf8e6af`; the second
+;           transfer is 0xF8E2FF `ld BC,(XIX+0x04)` as the count and
+;           0xF8E303 `ld XBC,(XIX)` as the pointer through 0xF8E306
+;           `call 0xf8e6af`, with XIX = 0xF8E276 `lda_24
+;           xix,(0x600782)`; between them 0xF8E2EF waits for (0x6007D9)
+;           to reach 1 and 0xF8E2F7 `ldb h,0xc8` spins 200 times
+; Unknown:  what commands 0xE1, 0xE4 and 0xE7 mean to the far side. All
+;           three routines have this identical shape and differ only in
+;           the command byte and the staging address
+; Was `sub_F8E26F`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Link_SendCommandE1:
 	link XIZ,0x0000                                      ; F8E26F  ee 0c 00 00
 	pushw hl                                             ; F8E273  2b
 	pushw de                                             ; F8E274  2a
@@ -22337,7 +22493,20 @@ sub_F8E26F:
 	popw hl                                              ; F8E31C  4b
 	unlk XIZ                                             ; F8E31D  ee 0d
 	ret                                                  ; F8E31F  0e
-sub_F8E320:
+; ---------------------------------------------------------------------
+; Link_SendCommandE4 -- sends command 0xE4, then a six-byte header staged at
+;                       0x6007A7, then the block that header points at -- the same
+;                       shape as Link_SendCommandE1
+;
+; Evidence: 0xF8E34D `ld XBC,0x007c0000` / 0xF8E352 `ld (XBC),0xe4`; the
+;           header is 0xF8E38B `pushw 0x06` from 0xF8E38E `lda_24
+;           xbc,(0x6007a7)` through 0xF8E394 `call 0xf8e6af`; the
+;           payload is 0xF8E3B0 `ld BC,(XIX+0x04)` and 0xF8E3B4 `ld
+;           XBC,(XIX)` through 0xF8E3B7 `call 0xf8e6af`
+; Unknown:  the meaning of command 0xE4, as above
+; Was `sub_F8E320`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Link_SendCommandE4:
 	link XIZ,0x0000                                      ; F8E320  ee 0c 00 00
 	pushw hl                                             ; F8E324  2b
 	pushw de                                             ; F8E325  2a
@@ -22409,7 +22578,23 @@ sub_F8E320:
 	popw hl                                              ; F8E3CD  4b
 	unlk XIZ                                             ; F8E3CE  ee 0d
 	ret                                                  ; F8E3D0  0e
-sub_F8E3D1:
+; ---------------------------------------------------------------------
+; Link_SendCommandE7 -- sends command 0xE7, then a six-byte header staged at
+;                       0x6007AD whose length field is FORCED to 0x0400, then that
+;                       1024-byte block
+;
+; Evidence: 0xF8E3FE `ld XBC,0x007c0000` / 0xF8E403 `ld (XBC),0xe7`; the
+;           length is 0xF8E42D `m_ld_mi16 MDD+r4, 0x04, 0x0400` and its
+;           copy 0xF8E432 `stiw_da (0x6007b1),0x0400`, so unlike E1 and
+;           E4 the caller does not choose it; the header is 0xF8E439
+;           `pushw 0x06` from 0xF8E43C `lda_24 xbc,(0x6007ad)`, the
+;           payload 0xF8E45E `ld BC,(XIX+0x04)` and 0xF8E462 `ld
+;           XBC,(XIX)`
+; Unknown:  the meaning of command 0xE7, and why its block is always 1
+;           KiB
+; Was `sub_F8E3D1`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Link_SendCommandE7:
 	link XIZ,0x0000                                      ; F8E3D1  ee 0c 00 00
 	pushw hl                                             ; F8E3D5  2b
 	pushw de                                             ; F8E3D6  2a
@@ -134559,7 +134744,27 @@ sub_FE1CE9:
 	popw hl                                              ; FE1D25  4b
 	unlk XIZ                                             ; FE1D26  ee 0d
 	ret                                                  ; FE1D28  0e
-sub_FE1D29:
+; ---------------------------------------------------------------------
+; Ring_InitTenOfFourteen -- calls the Init entry of TEN ring buffers, in one run,
+;                    and returns
+;
+; Evidence: ten consecutive `call` instructions at 0xFE1D29, 0xFE1D2D,
+;           0xFE1D31, 0xFE1D35, 0xFE1D39, 0xFE1D3D, 0xFE1D41, 0xFE1D45,
+;           0xFE1D49 and 0xFE1D4D, whose operands are prom_b directory
+;           slots T_Ring60080A_Init, T_Ring600A14_Init,
+;           T_Ring600C1E_Init, T_Ring601028_Init, T_Ring601432_Init,
+;           T_Ring60153C_Init, T_Ring601646_Init, T_Ring601850_Init,
+;           T_Ring60195A_Init and T_Ring601C6E_Init -- every
+;           `T_Ring*_Init` slot in prom_b and no other call. 0xFE1D51 is
+;           the `ret`
+; Unknown:  why the ninth call is out of address order
+;           (T_Ring60195A_Init is reached through slot 0xF41D28, below
+;           all the others), and what the ten buffers carry --
+;           FINDINGS-prom_a-ring-buffers.md has the capacities, not the
+;           traffic
+; Was `sub_FE1D29`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Ring_InitTenOfFourteen:
 	call 0xf41d70                                        ; FE1D29  1d 70 1d f4
 	call 0xf41d94                                        ; FE1D2D  1d 94 1d f4
 	call 0xf41db8                                        ; FE1D31  1d b8 1d f4
@@ -139409,7 +139614,24 @@ sub_FE4BCC:
 	pop XIZ                                              ; FE4C6F  5e
 	inc 6,XSP                                            ; FE4C70  ef 66
 	ret                                                  ; FE4C72  0e
-sub_FE4C73:
+; ---------------------------------------------------------------------
+; Dev7E_WriteByte -- writes one byte to the 0x7E0000 port at index ((n & 7) |
+;                    0x08) or | 0x10
+;
+; Evidence: index 0xFE4C73 `ld C,(XSP+0x06)` masked by 0xFE4C76 `and
+;           C,0x07`; the bank bit is 0xFE4C7F `set 0x03,C` when
+;           (XSP+0x04) is zero and 0xFE4C84 `set 0x04,C` when it is not;
+;           the window is 0xFE4C8D `add XBC,0x007e0000`; the byte moved
+;           is 0xFE4C93 `ld A,(XSP+0x08)` into 0xFE4C96 `ld (XBC),A`.
+;           FINDINGS-memory-map.md names 0x7E0008-0x7E0017 and this
+;           routine as one of its four accessors
+; Unknown:  what the two banks selected by bit 3 and bit 4 ARE. The
+;           caller's flag at (XSP+0x04) chooses between them and nothing
+;           in prom_a says what either means; FINDINGS-memory-map.md
+;           records the same gap
+; Was `sub_FE4C73`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Dev7E_WriteByte:
 	ld C,(XSP+0x06)                                      ; FE4C73  8f 06 23
 	and C,0x07                                           ; FE4C76  cb cc 07
 	cp (XSP+0x04),0x00                                   ; FE4C79  8f 04 3f 00
@@ -139426,7 +139648,17 @@ sub_FE4C73:
 	ld A,(XSP+0x08)                                      ; FE4C93  8f 08 21
 	ld (XBC),A                                           ; FE4C96  b1 41
 	ret                                                  ; FE4C98  0e
-sub_FE4C99:
+; ---------------------------------------------------------------------
+; Dev7E_WriteWord -- writes one 16-bit word to the same port, index built the
+;                    same way
+;
+; Evidence: the same five steps at
+;           0xFE4C99/0xFE4C9C/0xFE4CA5/0xFE4CAA/0xFE4CB3; the word moved
+;           is 0xFE4CB9 `ld WA,(XSP+0x08)` into 0xFE4CBC `ld (XBC),WA`
+; Unknown:  the bank meaning, as for Dev7E_WriteByte
+; Was `sub_FE4C99`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Dev7E_WriteWord:
 	ld C,(XSP+0x06)                                      ; FE4C99  8f 06 23
 	and C,0x07                                           ; FE4C9C  cb cc 07
 	cp (XSP+0x04),0x00                                   ; FE4C9F  8f 04 3f 00
@@ -139443,7 +139675,18 @@ sub_FE4C99:
 	ld WA,(XSP+0x08)                                     ; FE4CB9  9f 08 20
 	ld (XBC),WA                                          ; FE4CBC  b1 50
 	ret                                                  ; FE4CBE  0e
-sub_FE4CBF:
+; ---------------------------------------------------------------------
+; Dev7E_ReadByte -- reads one byte from the same port and index, returning it
+;                   in L
+;
+; Evidence: index 0xFE4CBF `ld A,(XSP+0x06)` masked by 0xFE4CC2 `and
+;           A,0x07`, banked by 0xFE4CCB/0xFE4CD0 `set 0x03,A`/`set
+;           0x04,A`, window 0xFE4CD7 `add XWA,0x007e0000`; the byte read
+;           is 0xFE4CDD `ld L,(XWA)`
+; Unknown:  the bank meaning, as above
+; Was `sub_FE4CBF`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Dev7E_ReadByte:
 	ld A,(XSP+0x06)                                      ; FE4CBF  8f 06 21
 	and A,0x07                                           ; FE4CC2  c9 cc 07
 	cp (XSP+0x04),0x00                                   ; FE4CC5  8f 04 3f 00
@@ -139459,7 +139702,17 @@ sub_FE4CBF:
 	add XWA,0x007e0000                                   ; FE4CD7  e8 c8 00 00 7e 00
 	ld L,(XWA)                                           ; FE4CDD  80 27
 	ret                                                  ; FE4CDF  0e
-sub_FE4CE0:
+; ---------------------------------------------------------------------
+; Dev7E_ReadWord -- reads one 16-bit word from the same port and index,
+;                   returning it in HL
+;
+; Evidence: the same steps at
+;           0xFE4CE0/0xFE4CE3/0xFE4CEC/0xFE4CF1/0xFE4CF8; the word read
+;           is 0xFE4CFE `ld HL,(XWA)`
+; Unknown:  the bank meaning, as above
+; Was `sub_FE4CE0`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+Dev7E_ReadWord:
 	ld A,(XSP+0x06)                                      ; FE4CE0  8f 06 21
 	and A,0x07                                           ; FE4CE3  c9 cc 07
 	cp (XSP+0x04),0x00                                   ; FE4CE6  8f 04 3f 00

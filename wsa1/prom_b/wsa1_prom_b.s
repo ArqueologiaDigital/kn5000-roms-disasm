@@ -156162,7 +156162,16 @@ sub_F7D2D7:
 ;     python3 notes/prom_b_f7d_tables.py
 
 ; --- table  0 of 32: 10 distinct targets; named by the `ld XIX` at 0xF7D032
-Table_F7D2D8:
+; ButtonTable_Edit_0C10Zero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D032 loads it when (0x0C10) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_Edit_0C10Zero:
 	.long 0x00F7E9C7	; [ 0]
 	.long 0x00F7E9C7	; [ 1]
 	.long 0x00F7E9C7	; [ 2]
@@ -156197,7 +156206,16 @@ Table_F7D2D8:
 	.long 0x00F7EA54	; [31]
 
 ; --- table  1 of 32: 10 distinct targets; named by the `ld XIX` at 0xF7D03E
-Table_F7D358:
+; ButtonTable_Edit_0C10NonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D032 loads it when (0x0C10) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_Edit_0C10NonZero:
 	.long 0x00F7EA56	; [ 0]
 	.long 0x00F7EA56	; [ 1]
 	.long 0x00F7EA56	; [ 2]
@@ -156232,7 +156250,16 @@ Table_F7D358:
 	.long 0x00F7EACF	; [31]
 
 ; --- table  2 of 32: 9 distinct targets; named by the `ld XIX` at 0xF7D054
-Table_F7D3D8:
+; ButtonTable_SongClear -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D054 loads it with a single `ld XIX,0x00F7D3D8`.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_SongClear:
 	.long 0x00F7EBDD	; [ 0]
 	.long 0x00F7EBDD	; [ 1]
 	.long 0x00F7EBDE	; [ 2]
@@ -156267,7 +156294,16 @@ Table_F7D3D8:
 	.long 0x00F7EC6F	; [31]
 
 ; --- table  3 of 32: 13 distinct targets; named by the `ld XIX` at 0xF7D06A
-Table_F7D458:
+; ButtonTable_TrackClear_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D06A loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_TrackClear_207EZero:
 	.long 0x00F7ECFF	; [ 0]
 	.long 0x00F7ED18	; [ 1]
 	.long 0x00F7ED31	; [ 2]
@@ -156302,7 +156338,16 @@ Table_F7D458:
 	.long 0x00F7EDE1	; [31]
 
 ; --- table  4 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D076
-Table_F7D4D8:
+; ButtonTable_TrackClear_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D06A loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_TrackClear_207ENonZero:
 	.long 0x00F7EDE2	; [ 0]
 	.long 0x00F7EDE2	; [ 1]
 	.long 0x00F7EDE2	; [ 2]
@@ -156337,7 +156382,16 @@ Table_F7D4D8:
 	.long 0x00F7EE07	; [31]
 
 ; --- table  5 of 32: 15 distinct targets; named by the `ld XIX` at 0xF7D08C
-Table_F7D558:
+; ButtonTable_TrackAssign_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D08C loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_TrackAssign_207EZero:
 	.long 0x00F7E508	; [ 0]
 	.long 0x00F7E509	; [ 1]
 	.long 0x00F7E509	; [ 2]
@@ -156372,7 +156426,16 @@ Table_F7D558:
 	.long 0x00F7E5D3	; [31]
 
 ; --- table  6 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D098
-Table_F7D5D8:
+; ButtonTable_TrackAssign_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D08C loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_TrackAssign_207ENonZero:
 	.long 0x00F7E5D4	; [ 0]
 	.long 0x00F7E5D4	; [ 1]
 	.long 0x00F7E5D4	; [ 2]
@@ -156407,7 +156470,16 @@ Table_F7D5D8:
 	.long 0x00F7E5FF	; [31]
 
 ; --- table  7 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D0AE
-Table_F7D658:
+; ButtonTable_TrackAssignPresets -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D0AE loads it with a single `ld XIX,0x00F7D658`.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_TrackAssignPresets:
 	.long 0x00F7E687	; [ 0]
 	.long 0x00F7E68F	; [ 1]
 	.long 0x00F7E6A0	; [ 2]
@@ -156442,7 +156514,16 @@ Table_F7D658:
 	.long 0x00F7E76E	; [31]
 
 ; --- table  8 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0C6
-Table_F7D6D8:
+; ButtonTable_TrackMerge_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D0C6 loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_TrackMerge_207EZero:
 	.long 0x00F7EE9B	; [ 0]
 	.long 0x00F7EE9C	; [ 1]
 	.long 0x00F7EE9D	; [ 2]
@@ -156477,7 +156558,16 @@ Table_F7D6D8:
 	.long 0x00F7EF4B	; [31]
 
 ; --- table  9 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0D2
-Table_F7D758:
+; ButtonTable_TrackMerge_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D0C6 loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_TrackMerge_207ENonZero:
 	.long 0x00F7EF4C	; [ 0]
 	.long 0x00F7EF4D	; [ 1]
 	.long 0x00F7EF4E	; [ 2]
@@ -156512,7 +156602,16 @@ Table_F7D758:
 	.long 0x00F7EF7B	; [31]
 
 ; --- table 10 of 32: 20 distinct targets; named by the `ld XIX` at 0xF7D0E7
-Table_F7D7D8:
+; ButtonTable_MeasureDelete_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D0E7 loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_MeasureDelete_207EZero:
 	.long 0x00F7F036	; [ 0]
 	.long 0x00F7F037	; [ 1]
 	.long 0x00F7F038	; [ 2]
@@ -156547,7 +156646,16 @@ Table_F7D7D8:
 	.long 0x00F7F113	; [31]
 
 ; --- table 11 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0F3
-Table_F7D858:
+; ButtonTable_MeasureDelete_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D0E7 loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_MeasureDelete_207ENonZero:
 	.long 0x00F7F205	; [ 0]
 	.long 0x00F7F206	; [ 1]
 	.long 0x00F7F207	; [ 2]
@@ -156582,7 +156690,16 @@ Table_F7D858:
 	.long 0x00F7F236	; [31]
 
 ; --- table 12 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D108
-Table_F7D8D8:
+; ButtonTable_MeasureErase_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D108 loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_MeasureErase_207EZero:
 	.long 0x00F7F2DA	; [ 0]
 	.long 0x00F7F2DB	; [ 1]
 	.long 0x00F7F2DC	; [ 2]
@@ -156617,7 +156734,16 @@ Table_F7D8D8:
 	.long 0x00F7F40E	; [31]
 
 ; --- table 13 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D114
-Table_F7D958:
+; ButtonTable_MeasureErase_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D108 loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_MeasureErase_207ENonZero:
 	.long 0x00F7F40F	; [ 0]
 	.long 0x00F7F410	; [ 1]
 	.long 0x00F7F411	; [ 2]
@@ -156652,7 +156778,16 @@ Table_F7D958:
 	.long 0x00F7F43F	; [31]
 
 ; --- table 14 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D139
-Table_F7D9D8:
+; ButtonTable_Quantize_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D139 loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_Quantize_207EZero:
 	.long 0x00F7F608	; [ 0]
 	.long 0x00F7F609	; [ 1]
 	.long 0x00F7F60A	; [ 2]
@@ -156687,7 +156822,16 @@ Table_F7D9D8:
 	.long 0x00F7F77A	; [31]
 
 ; --- table 15 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D145
-Table_F7DA58:
+; ButtonTable_Quantize_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D139 loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_Quantize_207ENonZero:
 	.long 0x00F7F77B	; [ 0]
 	.long 0x00F7F77C	; [ 1]
 	.long 0x00F7F77D	; [ 2]
@@ -156722,7 +156866,16 @@ Table_F7DA58:
 	.long 0x00F7F7AA	; [31]
 
 ; --- table 16 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D15A
-Table_F7DAD8:
+; ButtonTable_Vel0cityChange_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D15A loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_Vel0cityChange_207EZero:
 	.long 0x00F7F954	; [ 0]
 	.long 0x00F7F955	; [ 1]
 	.long 0x00F7F956	; [ 2]
@@ -156757,7 +156910,16 @@ Table_F7DAD8:
 	.long 0x00F7FA6F	; [31]
 
 ; --- table 17 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D166
-Table_F7DB58:
+; ButtonTable_Vel0cityChange_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D15A loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_Vel0cityChange_207ENonZero:
 	.long 0x00F7FA70	; [ 0]
 	.long 0x00F7FA71	; [ 1]
 	.long 0x00F7FA72	; [ 2]
@@ -156792,7 +156954,16 @@ Table_F7DB58:
 	.long 0x00F7FAA0	; [31]
 
 ; --- table 18 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D17B
-Table_F7DBD8:
+; ButtonTable_Transp0se_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D17B loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_Transp0se_207EZero:
 	.long 0x00F7FC9E	; [ 0]
 	.long 0x00F7FC9F	; [ 1]
 	.long 0x00F7FCA0	; [ 2]
@@ -156827,7 +156998,16 @@ Table_F7DBD8:
 	.long 0x00F7FDB6	; [31]
 
 ; --- table 19 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D187
-Table_F7DC58:
+; ButtonTable_Transp0se_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D17B loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_Transp0se_207ENonZero:
 	.long 0x00F7FDB7	; [ 0]
 	.long 0x00F7FDB8	; [ 1]
 	.long 0x00F7FDB9	; [ 2]
@@ -156862,7 +157042,16 @@ Table_F7DC58:
 	.long 0x00F7FDE7	; [31]
 
 ; --- table 20 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D1DF
-Table_F7DCD8:
+; ButtonTable_AdvanceDelay_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D1DF loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_AdvanceDelay_207EZero:
 	.long 0x00F7FFCD	; [ 0]
 	.long 0x00F7FFCE	; [ 1]
 	.long 0x00F7FFCF	; [ 2]
@@ -156897,7 +157086,16 @@ Table_F7DCD8:
 	.long 0x00F800FC	; [31]
 
 ; --- table 21 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D1EB
-Table_F7DD58:
+; ButtonTable_AdvanceDelay_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D1DF loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_AdvanceDelay_207ENonZero:
 	.long 0x00F800FD	; [ 0]
 	.long 0x00F800FE	; [ 1]
 	.long 0x00F800FF	; [ 2]
@@ -156932,7 +157130,16 @@ Table_F7DD58:
 	.long 0x00F8012D	; [31]
 
 ; --- table 22 of 32: 13 distinct targets; named by the `ld XIX` at 0xF7D200
-Table_F7DDD8:
+; ButtonTable_S0ngC0py_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D200 loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_S0ngC0py_207EZero:
 	.long 0x00F803C9	; [ 0]
 	.long 0x00F803D2	; [ 1]
 	.long 0x00F803DB	; [ 2]
@@ -156967,7 +157174,16 @@ Table_F7DDD8:
 	.long 0x00F80426	; [31]
 
 ; --- table 23 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D20C
-Table_F7DE58:
+; ButtonTable_S0ngC0py_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D200 loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_S0ngC0py_207ENonZero:
 	.long 0x00F80427	; [ 0]
 	.long 0x00F80427	; [ 1]
 	.long 0x00F80427	; [ 2]
@@ -157002,7 +157218,16 @@ Table_F7DE58:
 	.long 0x00F80438	; [31]
 
 ; --- table 24 of 32: 20 distinct targets; named by the `ld XIX` at 0xF7D221
-Table_F7DED8:
+; ButtonTable_N0teChange_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D221 loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_N0teChange_207EZero:
 	.long 0x00F804F1	; [ 0]
 	.long 0x00F804F2	; [ 1]
 	.long 0x00F804F3	; [ 2]
@@ -157037,7 +157262,16 @@ Table_F7DED8:
 	.long 0x00F8060D	; [31]
 
 ; --- table 25 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D22D
-Table_F7DF58:
+; ButtonTable_N0teChange_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D221 loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_N0teChange_207ENonZero:
 	.long 0x00F8060E	; [ 0]
 	.long 0x00F8060E	; [ 1]
 	.long 0x00F8060E	; [ 2]
@@ -157072,7 +157306,16 @@ Table_F7DF58:
 	.long 0x00F80629	; [31]
 
 ; --- table 26 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D242
-Table_F7DFD8:
+; ButtonTable_MeasureC0py_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D242 loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_MeasureC0py_207EZero:
 	.long 0x00F8080E	; [ 0]
 	.long 0x00F8080F	; [ 1]
 	.long 0x00F80810	; [ 2]
@@ -157107,7 +157350,16 @@ Table_F7DFD8:
 	.long 0x00F8096C	; [31]
 
 ; --- table 27 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D24E
-Table_F7E058:
+; ButtonTable_MeasureC0py_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D242 loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_MeasureC0py_207ENonZero:
 	.long 0x00F8096D	; [ 0]
 	.long 0x00F8096E	; [ 1]
 	.long 0x00F8096F	; [ 2]
@@ -157142,7 +157394,16 @@ Table_F7E058:
 	.long 0x00F8099C	; [31]
 
 ; --- table 28 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D263
-Table_F7E0D8:
+; ButtonTable_MeasureInsert_207EZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D263 loads it when (0x207E) is zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_MeasureInsert_207EZero:
 	.long 0x00F80B6B	; [ 0]
 	.long 0x00F80B6C	; [ 1]
 	.long 0x00F80B6D	; [ 2]
@@ -157177,7 +157438,16 @@ Table_F7E0D8:
 	.long 0x00F80CC9	; [31]
 
 ; --- table 29 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D26F
-Table_F7E158:
+; ButtonTable_MeasureInsert_207ENonZero -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D263 loads it when (0x207E) is non-zero.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_MeasureInsert_207ENonZero:
 	.long 0x00F80CCA	; [ 0]
 	.long 0x00F80CCB	; [ 1]
 	.long 0x00F80CCC	; [ 2]
@@ -157212,7 +157482,16 @@ Table_F7E158:
 	.long 0x00F80CFA	; [31]
 
 ; --- table 30 of 32: 12 distinct targets; named by the `ld XIX` at 0xF7D294
-Table_F7E1D8:
+; ButtonTable_StepRecordPartSelect -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D294 loads it with a single `ld XIX,0x00F7E1D8`.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_StepRecordPartSelect:
 	.long 0x00F80FC5	; [ 0]
 	.long 0x00F80FCE	; [ 1]
 	.long 0x00F80FD7	; [ 2]
@@ -157247,7 +157526,16 @@ Table_F7E1D8:
 	.long 0x00F8101D	; [31]
 
 ; --- table 31 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D2A9
-Table_F7E258:
+; ButtonTable_SequencerMedley -- the 32 panel-button handlers of this screen
+; Evidence: the +8 Button stub at 0xF7D2A9 loads it with a single `ld XIX,0x00F7E258`.
+;           Round 7 established that the 32 tables are indexed
+;           by the panel BUTTON NUMBER (two independent 5-bit masks
+;           over a 128-byte table), so what the object needs is the
+;           SCREEN that owns the map -- which is this name.  ⚠ What
+;           the selector byte MEANS is still not established.
+;           Promoted from the framed `Table_<address>` spelling by
+;           notes/prom_b_screens_round8.py --promote --apply
+ButtonTable_SequencerMedley:
 	.long 0x00F81101	; [ 0]
 	.long 0x00F81102	; [ 1]
 	.long 0x00F8111E	; [ 2]
@@ -157281,6 +157569,3746 @@ Table_F7E258:
 	.long 0x00F81235	; [30]
 	.long 0x00F81235	; [31]
 
-; --- 0xF7E2D8-0xF7FFFF: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x07E2D8, 0x001D28
+; ==============================================================================
+; 0xF7E2D8-0xF7FFFF -- THE PANEL-SCREEN METHOD BLOCK: 15 Enter bodies, 15 Leave
+; targets (three of them a bare `ret`), one Button body, 124 button handlers,
+; and five blink-template pointer tables
+; ==============================================================================
+;
+; 7464 bytes.  This is the other half of the block above it: 0xF7D000-0xF7E2D7
+; holds the 25 screens' four-word method STUBS and their 32 button tables,
+; and every stub is a one-line forwarder into the bytes below.
+;
+; ★ THE NAMES.  A screen's Enter body draws the screen, and the leading run
+; of op-0x1C records in the display list it hands the interpreter spells the
+; screen's own title.  That is round 7's rule and it is CALIBRATED, not
+; asserted: seven screens whose Enter body is in prom_a carry names prom_a
+; derived independently months earlier, and the rule reproduces all seven as
+; a prefix and six exactly.  Re-run it with
+;     python3 notes/prom_b_screens_round8.py --calibrate
+; 14 routines here draw a titled list and are named Paint_<Title>, keeping
+; the ROM's own spelling -- VEL0CITY, TRANSP0SE, zeros for O's included.
+;
+; ★ TWO ROUTINES ARE prom_a ROUTINES.  0xF7E2D9 is byte-identical to prom_a's
+; LCD_ScreenRedraw_Begin (0xF999F0) over both whole extents -- 14 bytes, 0
+; differing -- and 0xF7E2E7 to LCD_ScreenRedraw_End (0xF999FE), 6 bytes, 0
+; differing.  They keep prom_a's spelling so the pair reads as one object.
+;
+; ⚠ 180 OF THE 210 ROUTINES KEEP sub_XXXXXX, AND THE REASON IS ONE FACT.
+; The 32 tables at 0xF7D2D8 are indexed by the PANEL BUTTON NUMBER (round 7
+; established that: two independent 5-bit masks over a 128-byte table).  So
+; what distinguishes one handler from the next is a bare number, and a name
+; built on it -- ScreenBtn_Quantize_11 -- would grade as content while
+; stating nothing.  Round 6 refused exactly that shape (Write3602_Index5)
+; and this block refuses it again.  The ROM names only THREE of the 32
+; codes, in prom_a's PanelButton_Route: 0x0D the data dial, 0x0E and 0x0F.
+; The service screen that would be the natural place for a switch list,
+; Paint_PanelSwLedCheck, draws "Please push a any button." and no per-switch
+; text.  There is nothing to map an index onto, so the gap is stated instead
+; of filled.  Each handler's own Evidence line names its screen and index.
+;
+; ⚠ 190 ADDRESSES IN HERE ARE ENTRY POINTS AND CARRY NO LABEL, ON PURPOSE.
+; 510 of the 649 button-table slots that land in this span (78.6%) point at a
+; single `ret` BYTE -- an unused button on that screen, pointed at whatever
+; `ret` happens to end the routine above it.  They are annotated where they
+; fall, as a trailing comment on the `ret` line, because 190 framed labels
+; saying one thing 190 times is not documentation.
+;
+; ★ THE FIVE POINTER TABLES ARE FOUND BY THEIR OWN READERS.  Each is the
+; immediate of an `ld XIY,imm32` inside this span, followed by
+; `ld XIY,(XIY+WA)`, `push XIY` and `call 0xF42E20` = T_Blink_Command ->
+; prom_b 0xF0E9CF (notes/FINDINGS-prom_b-field-blink.md).  Same shape, same
+; callee and the same two leading NULL entries as prom_a's BlinkArgPtrs_F8024D.
+; ⚠ NOTHING BOUNDS THE INDEX, so the entry counts below are 'words that fit
+; before the code resumes' -- the same claim prom_a's header makes -- and the
+; tables keep FRAMED names.
+;
+; ★ THE FOUR SCREENS ROUND 7 LEFT UNNAMED STAY UNNAMED, and now the reason is
+; exact: 0xF43040's Enter (0xF7E971, three instructions, here) draws no display
+; list at all; 0xF43048's is prom_a sub_F80F3A and draws none; and 0xF43160
+; and 0xF431D0 SHARE ONE ENTER METHOD, prom_a sub_F8101E -- so a rule that
+; names a screen after what its Enter draws cannot separate those two even in
+; principle.  `--screens4` prints it from the ROM.
+;
+; Re-derive all of it, and the naming cost, with
+;     python3 notes/prom_b_screens_round8.py --selftest --buttons --cost
+;     python3 notes/gen_prom_b_f7e2d8_module.py --selftest --cost
+; ==============================================================================
+
+	ret	; F7E2D8  ret
+
+; ---------------------------------------------------------------------
+; LCD_ScreenRedraw_Begin -- blank the panel, re-issue SYSTEM SET for three
+;                           layers, select layer 0 -- prom_b's own copy of
+;                           the prom_a routine of this name
+;
+; Called from: call from prom_b 0xF7E3F9; call from prom_b 0xF7E619; call
+;              from prom_a 0xF80265; calr from prom_b 0xF7E47B; calr from
+;              prom_b 0xF7E997; calr from prom_b 0xF7EAE6; and 10 more
+; Evidence: byte-identical to prom_a's LCD_ScreenRedraw_Begin (0xF999F0)
+;           over BOTH whole extents: 14 bytes here, 14 bytes there,
+;           differing in 0 of 14 positions. Each ends at its own `ret`, so
+;           this is not a prefix match. --selftest re-reads both from the
+;           ROM images and re-compares them.
+; ---------------------------------------------------------------------
+LCD_ScreenRedraw_Begin:
+	ldb	c, 0	; F7E2D9  ld C,0x00
+	ldb	a, 12	; F7E2DB  ld A,0x0c
+	swi	7	; F7E2DD  swi 7
+	ldb	a, 16	; F7E2DE  ld A,0x10
+	swi	7	; F7E2E0  swi 7
+	stdi8	(9536), 0	; F7E2E1  ld (0x2540),0x00
+	ret	; F7E2E6  ret
+
+; ---------------------------------------------------------------------
+; LCD_ScreenRedraw_End -- make all three layers visible again -- prom_b's
+;                         own copy of the prom_a routine of this name
+;
+; Called from: call from prom_b 0xF7E41C; call from prom_b 0xF7E675; call
+;              from prom_a 0xF802E7; call from prom_a 0xF80E96; calr from
+;              prom_b 0xF7E4A7; calr from prom_b 0xF7E4F5; and 12 more
+; Evidence: byte-identical to prom_a's LCD_ScreenRedraw_End (0xF999FE) over
+;           BOTH whole extents: 6 bytes here, 6 bytes there, differing in 0
+;           of 6 positions. Each ends at its own `ret`, so this is not a
+;           prefix match. --selftest re-reads both from the ROM images and
+;           re-compares them.
+; ---------------------------------------------------------------------
+LCD_ScreenRedraw_End:
+	ldb	c, 7	; F7E2E7  ld C,0x07
+	ldb	a, 12	; F7E2E9  ld A,0x0c
+	swi	7	; F7E2EB  swi 7
+	ret	; F7E2EC  ret
+
+; Evidence: reached from call from prom_b 0xF7EEF4, and from nothing else
+;           the scans see.
+sub_F7E2ED:
+	ld	xiy, 15963473	; F7E2ED  ld XIY,0x00f39551
+	ld	xix, 15963481	; F7E2F2  ld XIX,0x00f39559
+	call	15996912	; F7E2F7  call 0xf417f0
+	ret	; F7E2FB  ret
+
+; Evidence: reached from call from prom_b 0xF7E57C; calr from prom_b
+;           0xF7E4A4, and from nothing else the scans see.
+sub_F7E2FC:
+	.byte 0xC0, 0xC6, 0x3E, 0x01	; F7E2FC  or (0xc6),0x01   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7E300  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(9536), 0	; F7E305  ld (0x2540),0x00
+	ldb_d8	a, (3078)	; F7E30A  ld A,(0x0c06)
+	stb_d8	(4859), a	; F7E30E  ld (0x12fb),A
+	ld	xiy, 15963959	; F7E312  ld XIY,0x00f39737
+	ldb_d8	l, (3075)	; F7E317  ld L,(0x0c03)
+	xor	h, h	; F7E31B  xor H,H
+	muls	hl, 15	; F7E31D  muls HL,0x000f
+	add	xiy, xhl	; F7E321  add XIY,XHL
+	call	15996920	; F7E323  call 0xf417f8
+	stdi8	(9536), 0	; F7E327  ld (0x2540),0x00
+	ldb_d8	a, (3520)	; F7E32C  ld A,(0x0dc0)
+	and	a, 1	; F7E330  and A,0x01
+	jr	z, 16	; F7E333  jr Z,0xf7e345
+	ld	xiy, 15964244	; F7E335  ld XIY,0x00f39854
+	ld	xix, 15964272	; F7E33A  ld XIX,0x00f39870
+	call	15996912	; F7E33F  call 0xf417f0
+	jr	14	; F7E343  jr T,0xf7e353
+	ld	xiy, 15964272	; F7E345  ld XIY,0x00f39870
+	ld	xix, 15964282	; F7E34A  ld XIX,0x00f3987a
+	call	15996912	; F7E34F  call 0xf417f0
+	ret	; F7E353  ret
+
+; Evidence: reached from call from prom_b 0xF7EC9C; call from prom_b
+;           0xF7ECD5, and from nothing else the scans see.
+sub_F7E354:
+	ld	xiy, 6304802	; F7E354  ld XIY,0x00603422
+	ld	xix, 4854	; F7E359  ld XIX,0x000012f6
+	ldb	c, 16	; F7E35E  ld C,0x10
+	ld	a, (xiy)	; F7E360  ld A,(XIY)
+	ldb_d8	e, (8316)	; F7E362  ld E,(0x207c)
+	cp	e, 18	; F7E366  cp E,0x12
+	jr	z, 19	; F7E369  jr Z,0xf7e37e
+	cp	e, 28	; F7E36B  cp E,0x1c
+	jr	z, 14	; F7E36E  jr Z,0xf7e37e
+	cp	e, 15	; F7E370  cp E,0x0f
+	jr	nz, 2	; F7E373  jr NZ,0xf7e377
+	jr	7	; F7E375  jr T,0xf7e37e
+	cp	a, 13	; F7E377  cp A,0x0d
+	jr	nz, 2	; F7E37A  jr NZ,0xf7e37e
+	inc	1, a	; F7E37C  inc 1,A
+	ld	(xix), a	; F7E37E  ld (XIX),A
+	dec	1, c	; F7E380  dec 1,C
+	jr	z, 6	; F7E382  jr Z,0xf7e38a
+	inc	1, xiy	; F7E384  inc 1,XIY
+	inc	1, xix	; F7E386  inc 1,XIX
+	jr	-42	; F7E388  jr T,0xf7e360
+	ld	xiy, 15966671	; F7E38A  ld XIY,0x00f3a1cf
+	ld	xix, 15966911	; F7E38F  ld XIX,0x00f3a2bf
+	call	15996916	; F7E394  call 0xf417f4
+	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F7E398  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	ret	; F7E39C  ret
+	ret	; F7E39D  ret
+	ret	; F7E39E  ret
+
+; Evidence: reached from call from prom_b 0xF7ECF0; calr from prom_b
+;           0xF7ECB7, and from nothing else the scans see.
+sub_F7E39F:
+	stdi8	(9536), 1	; F7E39F  ld (0x2540),0x01
+	ld	xiy, 15966417	; F7E3A4  ld XIY,0x00f3a0d1
+	ld	xix, 15966425	; F7E3A9  ld XIX,0x00f3a0d9
+	pushw	hl	; F7E3AE  push HL
+	call	15996912	; F7E3AF  call 0xf417f0
+	popw	hl	; F7E3B3  pop HL
+	cps	hl, 0	; F7E3B4  cp HL,0
+	jr	nz, 2	; F7E3B6  jr NZ,0xf7e3ba
+	jr	57	; F7E3B8  jr T,0xf7e3f3
+	ldw	wa, 1	; F7E3BA  ld WA,0x0001
+	xor	c, c	; F7E3BD  xor C,C
+	pushw	wa	; F7E3BF  push WA
+	calr	65301	; F7E3C0  calr 0xf7e2d8
+	popw	wa	; F7E3C3  pop WA
+	stb_d8	(4854), c	; F7E3C4  ld (0x12f6),C
+	pushw	wa	; F7E3C8  push WA
+	pushw	hl	; F7E3C9  push HL
+	pushw	bc	; F7E3CA  push BC
+	.byte 0xD7, 0x3C, 0x9B	; F7E3CB  ld RHL3,HL   [llvm-mc cannot encode this]
+	and	hl, wa	; F7E3CE  and HL,WA
+	.byte 0xD7, 0x3C, 0x8B	; F7E3D0  ld HL,RHL3   [llvm-mc cannot encode this]
+	jr	z, 11	; F7E3D3  jr Z,0xf7e3e0
+	ld	xiy, 15966425	; F7E3D5  ld XIY,0x00f3a0d9
+	call	15996956	; F7E3DA  call 0xf4181c
+	jr	9	; F7E3DE  jr T,0xf7e3e9
+	ld	xiy, 15966436	; F7E3E0  ld XIY,0x00f3a0e4
+	call	15996964	; F7E3E5  call 0xf41824
+	popw	bc	; F7E3E9  pop BC
+	popw	hl	; F7E3EA  pop HL
+	popw	wa	; F7E3EB  pop WA
+	inc	1, c	; F7E3EC  inc 1,C
+	sla	wa, 1	; F7E3EE  sla 0x01,WA
+	jr	nc, -52	; F7E3F1  jr NC,0xf7e3bf
+	ret	; F7E3F3  ret
+	ret	; F7E3F4  ret
+
+; ---------------------------------------------------------------------
+; Paint_AfterT0uchSetting -- paints the panel screen whose own title text
+;                            reads "AFTER T0UCH SETTING"
+;
+; Reached by: the +0 method stub of screen object 0xF43180, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D192
+; Evidence: the routine loads XIY = 0xF3BAB9 and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "AFTER T0UCH SETTING", and the name is that text
+;           CamelCased, with the ROM's own spelling kept (zeros for O's
+;           included). The rule is round 7's, calibrated on seven screens
+;           prom_a had named independently: notes/prom_b_screens_round8.py
+;           --calibrate.
+; ---------------------------------------------------------------------
+Paint_AfterT0uchSetting:
+	call	16002688	; F7E3F5  call 0xf42e80
+	call	16245465	; F7E3F9  call 0xf7e2d9
+	stdi8	(9536), 0	; F7E3FD  ld (0x2540),0x00
+	ld	xiy, 15973049	; F7E402  ld XIY,0x00f3bab9
+	ld	xix, 15973246	; F7E407  ld XIX,0x00f3bb7e
+	call	15996912	; F7E40C  call 0xf417f0
+	ldb_d8	a, (32706)	; F7E410  ld A,(0x7fc2)
+	stb_d8	(4854), a	; F7E414  ld (0x12f6),A
+	call	16245793	; F7E418  call 0xf7e421
+	call	16245479	; F7E41C  call 0xf7e2e7
+	ret	; F7E420  ret
+
+; Evidence: reached from call from prom_b 0xF7D1C0; call from prom_b
+;           0xF7E418, and from nothing else the scans see.
+sub_F7E421:
+	ld	xiy, 15973246	; F7E421  ld XIY,0x00f3bb7e
+	ld	xix, 15973261	; F7E426  ld XIX,0x00f3bb8d
+	call	15996916	; F7E42B  call 0xf417f4
+	ret	; F7E42F  ret
+
+; Evidence: reached from call from prom_b 0xF7D1B4, and from nothing else
+;           the scans see.
+sub_F7E430:
+	ld	xiy, 15973261	; F7E430  ld XIY,0x00f3bb8d
+	ld	xix, 15973271	; F7E435  ld XIX,0x00f3bb97
+	call	15996912	; F7E43A  call 0xf417f0
+	ret	; F7E43E  ret
+	ret	; F7E43F  ret
+
+; ---------------------------------------------------------------------
+; Paint_TrackAssign -- paints the panel screen whose own title text reads
+;                      "TRACK ASSIGN"
+;
+; Reached by: the +0 method stub of screen object 0xF43140, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D084
+; Evidence: the routine loads XIY = 0xF3B3DA and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "TRACK ASSIGN", and the name is that text CamelCased,
+;           with the ROM's own spelling kept (zeros for O's included). The
+;           rule is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_TrackAssign:
+	ldb_d8	a, (8314)	; F7E440  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F7E444  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	z, 5	; F7E448  jr Z,0xf7e44f
+	stdi8	(3075), 0	; F7E44A  ld (0x0c03),0x00
+	call	16002688	; F7E44F  call 0xf42e80
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7E453  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 33	; F7E458  jr NZ,0xf7e47b
+	call	16002020	; F7E45A  call 0xf42be4
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7E45E  or (0x2075),0x01   [llvm-mc cannot encode this]
+	stdi16	(8347), 35208	; F7E463  ld (0x209b),0x8988
+	stdi16	(9830), 65535	; F7E469  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7E46F  ld (0x266a),0xffff
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F7E475  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 38	; F7E479  jr NZ,0xf7e4a1
+	calr	65115	; F7E47B  calr 0xf7e2d9
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7E47E  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 39	; F7E483  jr NZ,0xf7e4ac
+	ld	xiy, 15971290	; F7E485  ld XIY,0x00f3b3da
+	ld	xix, 15971753	; F7E48A  ld XIX,0x00f3b5a9
+	call	15996912	; F7E48F  call 0xf417f0
+	ld	xiy, 15971753	; F7E493  ld XIY,0x00f3b5a9
+	ld	xix, 15971793	; F7E498  ld XIX,0x00f3b5d1
+	call	15996912	; F7E49D  call 0xf417f0
+	calr	740	; F7E4A1  calr 0xf7e788
+	calr	65109	; F7E4A4  calr 0xf7e2fc
+	calr	65085	; F7E4A7  calr 0xf7e2e7
+	jr	76	; F7E4AA  jr T,0xf7e4f8
+	stdi8	(9536), 0	; F7E4AC  ld (0x2540),0x00
+	ld	xiy, 15972765	; F7E4B1  ld XIY,0x00f3b99d
+	ld	xix, 15973009	; F7E4B6  ld XIX,0x00f3ba91
+	call	15996912	; F7E4BB  call 0xf417f0
+	ldb_d8	a, (3075)	; F7E4BF  ld A,(0x0c03)
+	stb_d8	(4854), a	; F7E4C3  ld (0x12f6),A
+	push	xix	; F7E4C7  push XIX
+	pushw	hl	; F7E4C8  push HL
+	ld	xix, 6304802	; F7E4C9  ld XIX,0x00603422
+	xor	hl, hl	; F7E4CE  xor HL,HL
+	ldb_d8	l, (3075)	; F7E4D0  ld L,(0x0c03)
+	.byte 0xC3, 0x07, 0xF0, 0xEC, 0x21	; F7E4D4  ld A,(XIX+HL)   [llvm-mc cannot encode this]
+	stb_d8	(4855), a	; F7E4D9  ld (0x12f7),A
+	popw	hl	; F7E4DD  pop HL
+	pop	xix	; F7E4DE  pop XIX
+	ldb_d8	a, (3078)	; F7E4DF  ld A,(0x0c06)
+	stb_d8	(4856), a	; F7E4E3  ld (0x12f8),A
+	ld	xiy, 15973009	; F7E4E7  ld XIY,0x00f3ba91
+	ld	xix, 15973049	; F7E4EC  ld XIX,0x00f3bab9
+	call	15996916	; F7E4F1  call 0xf417f4
+	calr	65007	; F7E4F5  calr 0xf7e2e7
+	ret	; F7E4F8  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_TrackAssign -- the whole body of the TrackAssign screen's
+;                                Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF43140, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D088
+; Evidence: the whole body of screen object 0xF43140's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D088 is `call
+;           0xF7E4F9` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_TrackAssign:
+	stdi8	(8318), 0	; F7E4F9  ld (0x207e),0x00
+	.byte 0xC1, 0xC0, 0x0D, 0x3C, 0xFE	; F7E4FE  and (0x0dc0),0xfe   [llvm-mc cannot encode this]
+	call	16002024	; F7E503  call 0xf42be8
+	ret	; F7E507  ret
+	ret	; F7E508  ret   <- button table 0xF7D558 entry 0 (TRACK ASSIGN)
+	ret	; F7E509  ret   <- button table 0xF7D558 entry 1 (TRACK ASSIGN) and 1 more slot(s)
+
+; Evidence: table 0xF7D558 entry 3, screen TRACK ASSIGN (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7E50A:
+	bit	7, w	; F7E50A  bit 0x07,W
+	jr	nz, 9	; F7E50D  jr NZ,0xf7e518
+	.byte 0xC1, 0x06, 0x0C, 0x3F, 0x1F	; F7E50F  cp (0x0c06),0x1f   [llvm-mc cannot encode this]
+	jr	z, 19	; F7E514  jr Z,0xf7e529
+	jr	7	; F7E516  jr T,0xf7e51f
+	.byte 0xC1, 0x06, 0x0C, 0x3F, 0x00	; F7E518  cp (0x0c06),0x00   [llvm-mc cannot encode this]
+	jr	z, 10	; F7E51D  jr Z,0xf7e529
+	call	16001952	; F7E51F  call 0xf42ba0
+	calr	610	; F7E523  calr 0xf7e788
+	calr	64979	; F7E526  calr 0xf7e2fc
+	ret	; F7E529  ret
+
+; Evidence: table 0xF7D558 entry 4, screen TRACK ASSIGN (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7E52A:
+	call	16001960	; F7E52A  call 0xf42ba8
+	calr	599	; F7E52E  calr 0xf7e788
+	calr	64968	; F7E531  calr 0xf7e2fc
+	ret	; F7E534  ret
+	ret	; F7E535  ret   <- button table 0xF7D558 entry 5 (TRACK ASSIGN) and 1 more slot(s)
+
+; Evidence: table 0xF7D558 entry 6, screen TRACK ASSIGN (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7E536:
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7E536  or (0x2075),0x08   [llvm-mc cannot encode this]
+	call	16001964	; F7E53B  call 0xf42bac
+	calr	582	; F7E53F  calr 0xf7e788
+	calr	64951	; F7E542  calr 0xf7e2fc
+	ret	; F7E545  ret
+	ret	; F7E546  ret   <- button table 0xF7D558 entry 7 (TRACK ASSIGN)
+
+; Evidence: table 0xF7D558 entry 8, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E547:
+	bit	7, w	; F7E547  bit 0x07,W
+	jr	z, 22	; F7E54A  jr Z,0xf7e562
+	.byte 0xC1, 0x03, 0x0C, 0x3F, 0x00	; F7E54C  cp (0x0c03),0x00   [llvm-mc cannot encode this]
+	jr	z, 12	; F7E551  jr Z,0xf7e55f
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7E553  or (0x2075),0x09   [llvm-mc cannot encode this]
+	call	16001936	; F7E558  call 0xf42b90
+	calr	553	; F7E55C  calr 0xf7e788
+	calr	64922	; F7E55F  calr 0xf7e2fc
+	ret	; F7E562  ret
+
+; Evidence: table 0xF7D558 entry 9, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E563:
+	bit	7, w	; F7E563  bit 0x07,W
+	jr	z, 24	; F7E566  jr Z,0xf7e580
+	.byte 0xC1, 0x03, 0x0C, 0x3F, 0x0F	; F7E568  cp (0x0c03),0x0f   [llvm-mc cannot encode this]
+	jr	z, 17	; F7E56D  jr Z,0xf7e580
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7E56F  or (0x2075),0x09   [llvm-mc cannot encode this]
+	call	16001932	; F7E574  call 0xf42b8c
+	call	16246664	; F7E578  call 0xf7e788
+	call	16245500	; F7E57C  call 0xf7e2fc
+	ret	; F7E580  ret
+
+; Evidence: table 0xF7D558 entry 10, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E581:
+	bit	7, w	; F7E581  bit 0x07,W
+	jr	nz, 15	; F7E584  jr NZ,0xf7e595
+	ldb_d8	l, (3520)	; F7E586  ld L,(0x0dc0)
+	and	l, 1	; F7E58A  and L,0x01
+	jr	z, 21	; F7E58D  jr Z,0xf7e5a4
+	call	16001956	; F7E58F  call 0xf42ba4
+	jr	15	; F7E593  jr T,0xf7e5a4
+	.byte 0xC1, 0x03, 0x0C, 0x3F, 0x07	; F7E595  cp (0x0c03),0x07   [llvm-mc cannot encode this]
+	jr	ule, 8	; F7E59A  jr ULE,0xf7e5a4
+	call	16001940	; F7E59C  call 0xf42b94
+	call	16246664	; F7E5A0  call 0xf7e788
+	ret	; F7E5A4  ret
+
+; Evidence: table 0xF7D558 entry 11, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E5A5:
+	bit	7, w	; F7E5A5  bit 0x07,W
+	jr	z, 15	; F7E5A8  jr Z,0xf7e5b9
+	.byte 0xC1, 0x03, 0x0C, 0x3F, 0x07	; F7E5AA  cp (0x0c03),0x07   [llvm-mc cannot encode this]
+	jr	ugt, 8	; F7E5AF  jr UGT,0xf7e5b9
+	call	16001940	; F7E5B1  call 0xf42b94
+	call	16246664	; F7E5B5  call 0xf7e788
+	ret	; F7E5B9  ret
+
+; Evidence: table 0xF7D558 entry 12, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E5BA:
+	bit	7, w	; F7E5BA  bit 0x07,W
+	jr	z, 4	; F7E5BD  jr Z,0xf7e5c3
+	call	16002036	; F7E5BF  call 0xf42bf4
+	ret	; F7E5C3  ret
+	ret	; F7E5C4  ret   <- button table 0xF7D558 entry 13 (TRACK ASSIGN) and 1 more slot(s)
+
+; Evidence: table 0xF7D558 entry 15, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E5C5:
+	bit	7, w	; F7E5C5  bit 0x07,W
+	jr	nz, 8	; F7E5C8  jr NZ,0xf7e5d2
+	stdi16	(8304), 32772	; F7E5CA  ld (0x2070),0x8004
+	jr	0	; F7E5D0  jr T,0xf7e5d2
+	ret	; F7E5D2  ret
+	ret	; F7E5D3  ret   <- button table 0xF7D558 entry 16 (TRACK ASSIGN) and 11 more slot(s)
+	ret	; F7E5D4  ret   <- button table 0xF7D5D8 entry 0 (TRACK ASSIGN) and 8 more slot(s)
+
+; Evidence: table 0xF7D5D8 entry 9, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E5D5:
+	bit	7, w	; F7E5D5  bit 0x07,W
+	jr	nz, 11	; F7E5D8  jr NZ,0xf7e5e5
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7E5DA  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001968	; F7E5DF  call 0xf42bb0
+	jr	0	; F7E5E3  jr T,0xf7e5e5
+	ret	; F7E5E5  ret
+
+; Evidence: table 0xF7D5D8 entry 10, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E5E6:
+	bit	7, w	; F7E5E6  bit 0x07,W
+	jr	nz, 6	; F7E5E9  jr NZ,0xf7e5f1
+	call	16001984	; F7E5EB  call 0xf42bc0
+	jr	0	; F7E5EF  jr T,0xf7e5f1
+	ret	; F7E5F1  ret
+	ret	; F7E5F2  ret   <- button table 0xF7D5D8 entry 11 (TRACK ASSIGN) and 3 more slot(s)
+
+; Evidence: table 0xF7D5D8 entry 15, screen TRACK ASSIGN. A bare button
+;           number, so no name; see the banner.
+sub_F7E5F3:
+	bit	7, w	; F7E5F3  bit 0x07,W
+	jr	nz, 6	; F7E5F6  jr NZ,0xf7e5fe
+	call	16001984	; F7E5F8  call 0xf42bc0
+	jr	0	; F7E5FC  jr T,0xf7e5fe
+	ret	; F7E5FE  ret
+	ret	; F7E5FF  ret   <- button table 0xF7D5D8 entry 16 (TRACK ASSIGN) and 15 more slot(s)
+	ret	; F7E600  ret
+
+; ---------------------------------------------------------------------
+; Paint_TrackAssignPresets -- paints the panel screen whose own title text
+;                             reads "TRACK ASSIGN PRESETS"
+;
+; Reached by: the +0 method stub of screen object 0xF43190, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D0A6
+; Evidence: the routine loads XIY = 0xF3A2BF and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "TRACK ASSIGN PRESETS", and the name is that text
+;           CamelCased, with the ROM's own spelling kept (zeros for O's
+;           included). The rule is round 7's, calibrated on seven screens
+;           prom_a had named independently: notes/prom_b_screens_round8.py
+;           --calibrate.
+; ---------------------------------------------------------------------
+Paint_TrackAssignPresets:
+	call	16002688	; F7E601  call 0xf42e80
+	ldb_d8	a, (8314)	; F7E605  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F7E609  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	z, 0	; F7E60D  jr Z,0xf7e60f
+	call	16002040	; F7E60F  call 0xf42bf8
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F7E613  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 18	; F7E617  jr NZ,0xf7e62b
+	call	16245465	; F7E619  call 0xf7e2d9
+	ld	xiy, 15966911	; F7E61D  ld XIY,0x00f3a2bf
+	ld	xix, 15967245	; F7E622  ld XIX,0x00f3a40d
+	call	15996912	; F7E627  call 0xf417f0
+	stdi8	(9536), 0	; F7E62B  ld (0x2540),0x00
+	.byte 0xC1, 0xFE, 0x0D, 0x3F, 0x0A	; F7E630  cp (0x0dfe),0x0a   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7E635  jr NZ,0xf7e647
+	ld	xiy, 15967263	; F7E637  ld XIY,0x00f3a41f
+	ld	xix, 15967273	; F7E63C  ld XIX,0x00f3a429
+	call	15996912	; F7E641  call 0xf417f0
+	jr	28	; F7E645  jr T,0xf7e663
+	ld	xiy, 15967273	; F7E647  ld XIY,0x00f3a429
+	ld	xix, 15967283	; F7E64C  ld XIX,0x00f3a433
+	call	15996916	; F7E651  call 0xf417f4
+	ld	xiy, 15967255	; F7E655  ld XIY,0x00f3a417
+	ld	xix, 15967263	; F7E65A  ld XIX,0x00f3a41f
+	call	15996912	; F7E65F  call 0xf417f0
+	ld	xiy, 15967245	; F7E663  ld XIY,0x00f3a40d
+	ld	xix, 15967255	; F7E668  ld XIX,0x00f3a417
+	call	15996912	; F7E66D  call 0xf417f0
+	call	16246640	; F7E671  call 0xf7e770
+	call	16245479	; F7E675  call 0xf7e2e7
+	ret	; F7E679  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_TrackAssignPresets -- the whole body of the
+;                                       TrackAssignPresets screen's Leave
+;                                       method
+;
+; Reached by: the +4 method stub of screen object 0xF43190, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D0AA
+; Evidence: the whole body of screen object 0xF43190's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D0AA is `call
+;           0xF7E67A` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_TrackAssignPresets:
+	.byte 0xC1, 0x7A, 0x20, 0x3F, 0x11	; F7E67A  cp (0x207a),0x11   [llvm-mc cannot encode this]
+	jr	z, 5	; F7E67F  jr Z,0xf7e686
+	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F7E681  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	ret	; F7E686  ret
+
+; Evidence: table 0xF7D658 entry 0, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E687:
+	bit	7, w	; F7E687  bit 0x07,W
+	jr	nz, 2	; F7E68A  jr NZ,0xf7e68e
+	jr	0	; F7E68C  jr T,0xf7e68e
+	ret	; F7E68E  ret
+
+; Evidence: table 0xF7D658 entry 1, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E68F:
+	bit	7, w	; F7E68F  bit 0x07,W
+	jr	nz, 2	; F7E692  jr NZ,0xf7e696
+	jr	0	; F7E694  jr T,0xf7e696
+	call	16002064	; F7E696  call 0xf42c10
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7E69A  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F7E69F  ret
+
+; Evidence: table 0xF7D658 entry 2, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E6A0:
+	bit	7, w	; F7E6A0  bit 0x07,W
+	jr	nz, 2	; F7E6A3  jr NZ,0xf7e6a7
+	jr	0	; F7E6A5  jr T,0xf7e6a7
+	call	16002060	; F7E6A7  call 0xf42c0c
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7E6AB  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F7E6B0  ret
+
+; Evidence: table 0xF7D658 entry 3, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E6B1:
+	bit	7, w	; F7E6B1  bit 0x07,W
+	jr	nz, 2	; F7E6B4  jr NZ,0xf7e6b8
+	jr	0	; F7E6B6  jr T,0xf7e6b8
+	ret	; F7E6B8  ret
+
+; Evidence: table 0xF7D658 entry 4, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E6B9:
+	bit	7, w	; F7E6B9  bit 0x07,W
+	jr	nz, 2	; F7E6BC  jr NZ,0xf7e6c0
+	jr	0	; F7E6BE  jr T,0xf7e6c0
+	ret	; F7E6C0  ret
+
+; Evidence: table 0xF7D658 entry 5, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E6C1:
+	bit	7, w	; F7E6C1  bit 0x07,W
+	jr	nz, 2	; F7E6C4  jr NZ,0xf7e6c8
+	jr	0	; F7E6C6  jr T,0xf7e6c8
+	call	16002068	; F7E6C8  call 0xf42c14
+	ret	; F7E6CC  ret
+
+; Evidence: table 0xF7D658 entry 6, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E6CD:
+	bit	7, w	; F7E6CD  bit 0x07,W
+	jr	nz, 2	; F7E6D0  jr NZ,0xf7e6d4
+	jr	0	; F7E6D2  jr T,0xf7e6d4
+	ret	; F7E6D4  ret
+
+; Evidence: table 0xF7D658 entry 7, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E6D5:
+	bit	7, w	; F7E6D5  bit 0x07,W
+	jr	nz, 2	; F7E6D8  jr NZ,0xf7e6dc
+	jr	0	; F7E6DA  jr T,0xf7e6dc
+	ret	; F7E6DC  ret
+
+; Evidence: table 0xF7D658 entry 8, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E6DD:
+	bit	7, w	; F7E6DD  bit 0x07,W
+	jr	nz, 2	; F7E6E0  jr NZ,0xf7e6e4
+	jr	25	; F7E6E2  jr T,0xf7e6fd
+	.byte 0xC1, 0xFD, 0x0D, 0x3F, 0x01	; F7E6E4  cp (0x0dfd),0x01   [llvm-mc cannot encode this]
+	jr	z, 18	; F7E6E9  jr Z,0xf7e6fd
+	ldb_d8	a, (3581)	; F7E6EB  ld A,(0x0dfd)
+	dec	1, a	; F7E6EF  dec 1,A
+	stb_d8	(4856), a	; F7E6F1  ld (0x12f8),A
+	call	16002048	; F7E6F5  call 0xf42c00
+	call	16246640	; F7E6F9  call 0xf7e770
+	ret	; F7E6FD  ret
+
+; Evidence: table 0xF7D658 entry 9, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E6FE:
+	bit	7, w	; F7E6FE  bit 0x07,W
+	jr	nz, 2	; F7E701  jr NZ,0xf7e705
+	jr	25	; F7E703  jr T,0xf7e71e
+	.byte 0xC1, 0xFD, 0x0D, 0x3F, 0x02	; F7E705  cp (0x0dfd),0x02   [llvm-mc cannot encode this]
+	jr	z, 18	; F7E70A  jr Z,0xf7e71e
+	ldb_d8	a, (3581)	; F7E70C  ld A,(0x0dfd)
+	dec	1, a	; F7E710  dec 1,A
+	stb_d8	(4856), a	; F7E712  ld (0x12f8),A
+	call	16002052	; F7E716  call 0xf42c04
+	call	16246640	; F7E71A  call 0xf7e770
+	ret	; F7E71E  ret
+
+; Evidence: table 0xF7D658 entry 10, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E71F:
+	bit	7, w	; F7E71F  bit 0x07,W
+	jr	nz, 2	; F7E722  jr NZ,0xf7e726
+	jr	25	; F7E724  jr T,0xf7e73f
+	.byte 0xC1, 0xFD, 0x0D, 0x3F, 0x03	; F7E726  cp (0x0dfd),0x03   [llvm-mc cannot encode this]
+	jr	z, 18	; F7E72B  jr Z,0xf7e73f
+	ldb_d8	a, (3581)	; F7E72D  ld A,(0x0dfd)
+	dec	1, a	; F7E731  dec 1,A
+	stb_d8	(4856), a	; F7E733  ld (0x12f8),A
+	call	16002056	; F7E737  call 0xf42c08
+	call	16246640	; F7E73B  call 0xf7e770
+	ret	; F7E73F  ret
+
+; Evidence: table 0xF7D658 entry 11, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E740:
+	bit	7, w	; F7E740  bit 0x07,W
+	jr	nz, 2	; F7E743  jr NZ,0xf7e747
+	jr	0	; F7E745  jr T,0xf7e747
+	ret	; F7E747  ret
+
+; Evidence: table 0xF7D658 entry 12, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E748:
+	bit	7, w	; F7E748  bit 0x07,W
+	jr	nz, 2	; F7E74B  jr NZ,0xf7e74f
+	jr	0	; F7E74D  jr T,0xf7e74f
+	ret	; F7E74F  ret
+
+; Evidence: table 0xF7D658 entry 13, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E750:
+	bit	7, w	; F7E750  bit 0x07,W
+	jr	nz, 2	; F7E753  jr NZ,0xf7e757
+	jr	0	; F7E755  jr T,0xf7e757
+	ret	; F7E757  ret
+
+; Evidence: table 0xF7D658 entry 14, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E758:
+	bit	7, w	; F7E758  bit 0x07,W
+	jr	nz, 2	; F7E75B  jr NZ,0xf7e75f
+	jr	0	; F7E75D  jr T,0xf7e75f
+	ret	; F7E75F  ret
+
+; Evidence: table 0xF7D658 entry 15, screen TRACK ASSIGN PRESETS. A bare
+;           button number, so no name; see the banner.
+sub_F7E760:
+	bit	7, w	; F7E760  bit 0x07,W
+	jr	nz, 8	; F7E763  jr NZ,0xf7e76d
+	stdi16	(8304), 32784	; F7E765  ld (0x2070),0x8010
+	jr	0	; F7E76B  jr T,0xf7e76d
+	ret	; F7E76D  ret
+	ret	; F7E76E  ret   <- button table 0xF7D658 entry 16 (TRACK ASSIGN PRESETS) and 15 more slot(s)
+	ret	; F7E76F  ret
+
+; Evidence: reached from call from prom_b 0xF7E671; call from prom_b
+;           0xF7E6F9, and from nothing else the scans see.
+sub_F7E770:
+	stdi8	(9536), 1	; F7E770  ld (0x2540),0x01
+	ld	xiy, 15967294	; F7E775  ld XIY,0x00f3a43e
+	call	15996960	; F7E77A  call 0xf41820
+	ld	xiy, 15967283	; F7E77E  ld XIY,0x00f3a433
+	call	15996956	; F7E783  call 0xf4181c
+	ret	; F7E787  ret
+
+; Evidence: reached from call from prom_b 0xF7E578; call from prom_b
+;           0xF7E5A0, and from nothing else the scans see.
+sub_F7E788:
+	.byte 0xC0, 0xC6, 0x3E, 0x01	; F7E788  or (0xc6),0x01   [llvm-mc cannot encode this]
+	calr	64329	; F7E78C  calr 0xf7e2d8
+	ldb_d8	a, (13834)	; F7E78F  ld A,(0x360a)
+	inc	1, a	; F7E793  inc 1,A
+	stb_d8	(9792), a	; F7E795  ld (0x2640),A
+	ld	xiy, 15971921	; F7E799  ld XIY,0x00f3b651
+	ld	xix, 15971931	; F7E79E  ld XIX,0x00f3b65b
+	call	15996916	; F7E7A3  call 0xf417f4
+	calr	407	; F7E7A7  calr 0xf7e941
+	calr	364	; F7E7AA  calr 0xf7e919
+	stdi8	(9536), 0	; F7E7AD  ld (0x2540),0x00
+	.byte 0xF1, 0x07, 0x0C, 0xC8	; F7E7B2  bit 0,(0x0c07)   [llvm-mc cannot encode this]
+	jr	nz, 28	; F7E7B6  jr NZ,0xf7e7d4
+	calr	228	; F7E7B8  calr 0xf7e89f
+	calr	271	; F7E7BB  calr 0xf7e8cd
+	ldb_da	l, (6304852)	; F7E7BE  ld L,(0x603454)
+	xor	a, a	; F7E7C3  xor A,A
+	calr	138	; F7E7C5  calr 0xf7e852
+	ld	xhl, 6304819	; F7E7C8  ld XHL,0x00603433
+	xor	a, a	; F7E7CD  xor A,A
+	calr	77	; F7E7CF  calr 0xf7e81f
+	jr	26	; F7E7D2  jr T,0xf7e7ee
+	calr	223	; F7E7D4  calr 0xf7e8b6
+	calr	281	; F7E7D7  calr 0xf7e8f3
+	ldb_da	l, (6304853)	; F7E7DA  ld L,(0x603455)
+	ldb	a, 8	; F7E7DF  ld A,0x08
+	calr	110	; F7E7E1  calr 0xf7e852
+	ld	xhl, 6304827	; F7E7E4  ld XHL,0x0060343b
+	ldb	a, 8	; F7E7E9  ld A,0x08
+	calr	49	; F7E7EB  calr 0xf7e81f
+	stdi8	(9536), 2	; F7E7EE  ld (0x2540),0x02
+	ldb_d8	a, (3520)	; F7E7F3  ld A,(0x0dc0)
+	and	a, 1	; F7E7F7  and A,0x01
+	jr	z, 16	; F7E7FA  jr Z,0xf7e80c
+	ld	xiy, 15964244	; F7E7FC  ld XIY,0x00f39854
+	ld	xix, 15964272	; F7E801  ld XIX,0x00f39870
+	call	15996912	; F7E806  call 0xf417f0
+	jr	14	; F7E80A  jr T,0xf7e81a
+	ld	xiy, 15964272	; F7E80C  ld XIY,0x00f39870
+	ld	xix, 15964282	; F7E811  ld XIX,0x00f3987a
+	call	15996912	; F7E816  call 0xf417f0
+	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F7E81A  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	ret	; F7E81E  ret
+
+; Evidence: reached from calr from prom_b 0xF7E7CF; calr from prom_b
+;           0xF7E7EB, and from nothing else the scans see.
+sub_F7E81F:
+	ld	xiy, 15972171	; F7E81F  ld XIY,0x00f3b74b
+	xor	bc, bc	; F7E824  xor BC,BC
+	pushw	wa	; F7E826  push WA
+	push	xhl	; F7E827  push XHL
+	push	xiy	; F7E828  push XIY
+	call	16001944	; F7E829  call 0xf42b98
+	pop	xiy	; F7E82D  pop XIY
+	pop	xhl	; F7E82E  pop XHL
+	ld	b, (xhl)	; F7E82F  ld B,(XHL)
+	stb_d8	(4854), b	; F7E831  ld (0x12f6),B
+	push	xiy	; F7E835  push XIY
+	push	xhl	; F7E836  push XHL
+	pushw	bc	; F7E837  push BC
+	call	15996920	; F7E838  call 0xf417f8
+	popw	bc	; F7E83C  pop BC
+	pop	xhl	; F7E83D  pop XHL
+	pop	xiy	; F7E83E  pop XIY
+	popw	wa	; F7E83F  pop WA
+	add	xiy, 15	; F7E840  add XIY,0x0000000f
+	inc	1, a	; F7E846  inc 1,A
+	inc	1, xhl	; F7E848  inc 1,XHL
+	inc	1, c	; F7E84A  inc 1,C
+	cp	c, 8	; F7E84C  cp C,0x08
+	jr	c, -43	; F7E84F  jr C,0xf7e826
+	ret	; F7E851  ret
+
+; Evidence: reached from calr from prom_b 0xF7E7C5; calr from prom_b
+;           0xF7E7E1, and from nothing else the scans see.
+sub_F7E852:
+	ld	xiy, 15972051	; F7E852  ld XIY,0x00f3b6d3
+	ldb	c, 1	; F7E857  ld C,0x01
+	pushw	wa	; F7E859  push WA
+	push	xhl	; F7E85A  push XHL
+	push	xiy	; F7E85B  push XIY
+	call	16001948	; F7E85C  call 0xf42b9c
+	cp	a, 85	; F7E860  cp A,0x55
+	pop	xiy	; F7E863  pop XIY
+	pop	xhl	; F7E864  pop XHL
+	popw	wa	; F7E865  pop WA
+	jr	nz, 7	; F7E866  jr NZ,0xf7e86f
+	stdi8	(4854), 2	; F7E868  ld (0x12f6),0x02
+	jr	22	; F7E86D  jr T,0xf7e885
+	.byte 0xC7, 0x3C, 0x9F	; F7E86F  ld RL3,L   [llvm-mc cannot encode this]
+	and	l, c	; F7E872  and L,C
+	.byte 0xC7, 0x3C, 0x8F	; F7E874  ld L,RL3   [llvm-mc cannot encode this]
+	jr	nz, 7	; F7E877  jr NZ,0xf7e880
+	stdi8	(4854), 0	; F7E879  ld (0x12f6),0x00
+	jr	5	; F7E87E  jr T,0xf7e885
+	stdi8	(4854), 1	; F7E880  ld (0x12f6),0x01
+	push	xiy	; F7E885  push XIY
+	pushw	wa	; F7E886  push WA
+	push	xhl	; F7E887  push XHL
+	pushw	bc	; F7E888  push BC
+	call	15996920	; F7E889  call 0xf417f8
+	popw	bc	; F7E88D  pop BC
+	pop	xhl	; F7E88E  pop XHL
+	popw	wa	; F7E88F  pop WA
+	pop	xiy	; F7E890  pop XIY
+	add	xiy, 15	; F7E891  add XIY,0x0000000f
+	inc	1, a	; F7E897  inc 1,A
+	sla	c, 1	; F7E899  sla 0x01,C
+	jr	nc, -69	; F7E89C  jr NC,0xf7e859
+	ret	; F7E89E  ret
+
+; ---------------------------------------------------------------------
+; Paint_TrackLabels1To8 -- draws the eight track labels its own list spells
+;
+; Called from: calr from prom_b 0xF7E7B8
+; Evidence: the routine's one display list, 0xF3B5D1, holds eight op-0x06
+;           records -- LCD_Svc_06_DrawText8x14 -- and their text bytes spell
+;           "TR 1" through "TR 8", read from the ROM. The name is that text;
+;           TR is the ROM own abbreviation for a sequencer track, and the
+;           screen that reaches this row is the one whose title spells TRACK
+;           ASSIGN.
+; ---------------------------------------------------------------------
+Paint_TrackLabels1To8:
+	stdi8	(9536), 0	; F7E89F  ld (0x2540),0x00
+	calr	64049	; F7E8A4  calr 0xf7e2d8
+	ld	xiy, 15971793	; F7E8A7  ld XIY,0x00f3b5d1
+	ld	xix, 15971857	; F7E8AC  ld XIX,0x00f3b611
+	call	15996912	; F7E8B1  call 0xf417f0
+	ret	; F7E8B5  ret
+
+; ---------------------------------------------------------------------
+; Paint_TrackLabels9To16 -- draws the eight track labels its own list spells
+;
+; Called from: calr from prom_b 0xF7E7D4
+; Evidence: the routine's one display list, 0xF3B611, holds eight op-0x06
+;           records -- LCD_Svc_06_DrawText8x14 -- and their text bytes spell
+;           "TR 9" through "TR16", read from the ROM. The name is that text;
+;           TR is the ROM own abbreviation for a sequencer track, and the
+;           screen that reaches this row is the one whose title spells TRACK
+;           ASSIGN.
+; ---------------------------------------------------------------------
+Paint_TrackLabels9To16:
+	stdi8	(9536), 0	; F7E8B6  ld (0x2540),0x00
+	calr	64026	; F7E8BB  calr 0xf7e2d8
+	ld	xiy, 15971857	; F7E8BE  ld XIY,0x00f3b611
+	ld	xix, 15971921	; F7E8C3  ld XIX,0x00f3b651
+	call	15996912	; F7E8C8  call 0xf417f0
+	ret	; F7E8CC  ret
+
+; Evidence: reached from calr from prom_b 0xF7E7BB, and from nothing else
+;           the scans see.
+sub_F7E8CD:
+	stdi8	(9536), 0	; F7E8CD  ld (0x2540),0x00
+	calr	64003	; F7E8D2  calr 0xf7e2d8
+	ld	xiy, 6304802	; F7E8D5  ld XIY,0x00603422
+	ld	xix, 9793	; F7E8DA  ld XIX,0x00002641
+	ldw	bc, 8	; F7E8DF  ld BC,0x0008
+	.byte 0x85, 0x11	; F7E8E2  ldir   [llvm-mc cannot encode this]
+	ld	xiy, 15971931	; F7E8E4  ld XIY,0x00f3b65b
+	ld	xix, 15972051	; F7E8E9  ld XIX,0x00f3b6d3
+	call	15996916	; F7E8EE  call 0xf417f4
+	ret	; F7E8F2  ret
+
+; Evidence: reached from calr from prom_b 0xF7E7D7, and from nothing else
+;           the scans see.
+sub_F7E8F3:
+	stdi8	(9536), 0	; F7E8F3  ld (0x2540),0x00
+	calr	63965	; F7E8F8  calr 0xf7e2d8
+	ld	xiy, 6304810	; F7E8FB  ld XIY,0x0060342a
+	ld	xix, 9793	; F7E900  ld XIX,0x00002641
+	ldw	bc, 8	; F7E905  ld BC,0x0008
+	.byte 0x85, 0x11	; F7E908  ldir   [llvm-mc cannot encode this]
+	ld	xiy, 15971931	; F7E90A  ld XIY,0x00f3b65b
+	ld	xix, 15972051	; F7E90F  ld XIX,0x00f3b6d3
+	call	15996916	; F7E914  call 0xf417f4
+	ret	; F7E918  ret
+
+; Evidence: reached from calr from prom_b 0xF7E7AA, and from nothing else
+;           the scans see.
+sub_F7E919:
+	stdi8	(9536), 1	; F7E919  ld (0x2540),0x01
+	calr	63927	; F7E91E  calr 0xf7e2d8
+	ld	xiy, 15972291	; F7E921  ld XIY,0x00f3b7c3
+	ld	xix, 15972301	; F7E926  ld XIX,0x00f3b7cd
+	call	15996912	; F7E92B  call 0xf417f0
+	ldb_d8	a, (3079)	; F7E92F  ld A,(0x0c07)
+	stb_d8	(4858), a	; F7E933  ld (0x12fa),A
+	ld	xiy, 15972301	; F7E937  ld XIY,0x00f3b7cd
+	call	15996956	; F7E93C  call 0xf4181c
+	ret	; F7E940  ret
+
+; Evidence: reached from calr from prom_b 0xF7E7A7, and from nothing else
+;           the scans see.
+sub_F7E941:
+	stdi8	(9536), 1	; F7E941  ld (0x2540),0x01
+	calr	63887	; F7E946  calr 0xf7e2d8
+	ld	xiy, 15963949	; F7E949  ld XIY,0x00f3972d
+	ld	xix, 15963959	; F7E94E  ld XIX,0x00f39737
+	call	15996912	; F7E953  call 0xf417f0
+	ldb_d8	a, (3075)	; F7E957  ld A,(0x0c03)
+	cp	a, 8	; F7E95B  cp A,0x08
+	jr	c, 3	; F7E95E  jr C,0xf7e963
+	sub	a, 8	; F7E960  sub A,0x08
+	stb_d8	(9792), a	; F7E963  ld (0x2640),A
+	ld	xiy, 15963874	; F7E967  ld XIY,0x00f396e2
+	call	15996956	; F7E96C  call 0xf4181c
+	ret	; F7E970  ret
+
+; Evidence: screen 0xF43040's Enter method body; that screen's Enter draws
+;           no titled list, so it has no name.
+sub_F7E971:
+	.byte 0xD1, 0x34, 0x21, 0x3E, 0x02, 0x00	; F7E971  or (0x2134),0x0002   [llvm-mc cannot encode this]
+	call	16001200	; F7E977  call 0xf428b0
+	ret	; F7E97B  ret
+
+; Evidence: screen 0xF43040's Leave method body; that screen's Enter draws
+;           no titled list, so it has no name.
+sub_F7E97C:
+	.byte 0xD1, 0x34, 0x21, 0x3E, 0x02, 0x00	; F7E97C  or (0x2134),0x0002   [llvm-mc cannot encode this]
+	call	16001204	; F7E982  call 0xf428b4
+	ret	; F7E986  ret
+
+; ---------------------------------------------------------------------
+; Paint_Edit -- paints the panel screen whose own title text reads "EDIT"
+;
+; Reached by: the +0 method stub of screen object 0xF43050, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D02A
+; Evidence: the routine loads XIY = 0xF39D3E and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "EDIT", and the name is that text CamelCased, with the
+;           ROM's own spelling kept (zeros for O's included). The rule is
+;           round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_Edit:
+	.byte 0xC1, 0x7B, 0x20, 0x3F, 0x1A	; F7E987  cp (0x207b),0x1a   [llvm-mc cannot encode this]
+	jr	z, 5	; F7E98C  jr Z,0xf7e993
+	stdi8	(3088), 0	; F7E98E  ld (0x0c10),0x00
+	call	16002688	; F7E993  call 0xf42e80
+	calr	63807	; F7E997  calr 0xf7e2d9
+	.byte 0xC1, 0x10, 0x0C, 0x3F, 0x00	; F7E99A  cp (0x0c10),0x00   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7E99F  jr NZ,0xf7e9b1
+	ld	xiy, 15965502	; F7E9A1  ld XIY,0x00f39d3e
+	ld	xix, 15965831	; F7E9A6  ld XIX,0x00f39e87
+	call	15996912	; F7E9AB  call 0xf417f0
+	jr	14	; F7E9AF  jr T,0xf7e9bf
+	ld	xiy, 15965831	; F7E9B1  ld XIY,0x00f39e87
+	ld	xix, 15966090	; F7E9B6  ld XIX,0x00f39f8a
+	call	15996912	; F7E9BB  call 0xf417f0
+	call	16002588	; F7E9BF  call 0xf42e1c
+	calr	63777	; F7E9C3  calr 0xf7e2e7
+	ret	; F7E9C6  ret
+	ret	; F7E9C7  ret   <- button table 0xF7D2D8 entry 0 (EDIT) and 7 more slot(s)
+
+; Evidence: table 0xF7D2D8 entry 8, screen EDIT. A bare button number, so no
+;           name; see the banner.
+sub_F7E9C8:
+	bit	7, w	; F7E9C8  bit 0x07,W
+	jr	nz, 8	; F7E9CB  jr NZ,0xf7e9d5
+	stdi16	(8304), 32795	; F7E9CD  ld (0x2070),0x801b
+	jr	6	; F7E9D3  jr T,0xf7e9db
+	stdi16	(8304), 32804	; F7E9D5  ld (0x2070),0x8024
+	ret	; F7E9DB  ret
+
+; Evidence: table 0xF7D2D8 entry 9, screen EDIT. A bare button number, so no
+;           name; see the banner.
+sub_F7E9DC:
+	bit	7, w	; F7E9DC  bit 0x07,W
+	jr	nz, 8	; F7E9DF  jr NZ,0xf7e9e9
+	stdi16	(8304), 32796	; F7E9E1  ld (0x2070),0x801c
+	jr	6	; F7E9E7  jr T,0xf7e9ef
+	stdi16	(8304), 32807	; F7E9E9  ld (0x2070),0x8027
+	ret	; F7E9EF  ret
+
+; Evidence: table 0xF7D2D8 entry 10, screen EDIT. A bare button number, so
+;           no name; see the banner.
+sub_F7E9F0:
+	bit	7, w	; F7E9F0  bit 0x07,W
+	jr	nz, 8	; F7E9F3  jr NZ,0xf7e9fd
+	stdi16	(8304), 32813	; F7E9F5  ld (0x2070),0x802d
+	jr	6	; F7E9FB  jr T,0xf7ea03
+	stdi16	(8304), 32798	; F7E9FD  ld (0x2070),0x801e
+	ret	; F7EA03  ret
+
+; Evidence: table 0xF7D2D8 entry 11, screen EDIT. A bare button number, so
+;           no name; see the banner.
+sub_F7EA04:
+	bit	7, w	; F7EA04  bit 0x07,W
+	jr	nz, 8	; F7EA07  jr NZ,0xf7ea11
+	stdi16	(8304), 32812	; F7EA09  ld (0x2070),0x802c
+	jr	6	; F7EA0F  jr T,0xf7ea17
+	stdi16	(8304), 32811	; F7EA11  ld (0x2070),0x802b
+	ret	; F7EA17  ret
+
+; Evidence: table 0xF7D2D8 entry 12, screen EDIT. A bare button number, so
+;           no name; see the banner.
+sub_F7EA18:
+	bit	7, w	; F7EA18  bit 0x07,W
+	jr	nz, 8	; F7EA1B  jr NZ,0xf7ea25
+	stdi16	(8304), 32814	; F7EA1D  ld (0x2070),0x802e
+	jr	6	; F7EA23  jr T,0xf7ea2b
+	stdi16	(8304), 32797	; F7EA25  ld (0x2070),0x801d
+	ret	; F7EA2B  ret
+	ret	; F7EA2C  ret   <- button table 0xF7D2D8 entry 13 (EDIT) and 1 more slot(s)
+
+; Evidence: table 0xF7D2D8 entry 15, screen EDIT. A bare button number, so
+;           no name; see the banner.
+sub_F7EA2D:
+	bit	7, w	; F7EA2D  bit 0x07,W
+	jr	nz, 8	; F7EA30  jr NZ,0xf7ea3a
+	stdi16	(8304), 515	; F7EA32  ld (0x2070),0x0203
+	jr	0	; F7EA38  jr T,0xf7ea3a
+	ret	; F7EA3A  ret
+
+; Evidence: table 0xF7D2D8 entry 16, screen EDIT (+1 more slots). A bare
+;           button number, so no name; see the banner.
+sub_F7EA3B:
+	bit	7, w	; F7EA3B  bit 0x07,W
+	jr	nz, 2	; F7EA3E  jr NZ,0xf7ea42
+	jr	0	; F7EA40  jr T,0xf7ea42
+	.byte 0xC1, 0x10, 0x0C, 0x3F, 0x01	; F7EA42  cp (0x0c10),0x01   [llvm-mc cannot encode this]
+	jr	z, 10	; F7EA47  jr Z,0xf7ea53
+	stdi8	(3088), 1	; F7EA49  ld (0x0c10),0x01
+	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7EA4E  or (0x2071),0x10   [llvm-mc cannot encode this]
+	ret	; F7EA53  ret
+	ret	; F7EA54  ret   <- button table 0xF7D2D8 entry 17 (EDIT) and 13 more slot(s)
+	ret	; F7EA55  ret
+	ret	; F7EA56  ret   <- button table 0xF7D358 entry 0 (EDIT) and 7 more slot(s)
+
+; Evidence: table 0xF7D358 entry 8, screen EDIT. A bare button number, so no
+;           name; see the banner.
+sub_F7EA57:
+	bit	7, w	; F7EA57  bit 0x07,W
+	jr	nz, 8	; F7EA5A  jr NZ,0xf7ea64
+	stdi16	(8304), 32801	; F7EA5C  ld (0x2070),0x8021
+	jr	6	; F7EA62  jr T,0xf7ea6a
+	stdi16	(8304), 32810	; F7EA64  ld (0x2070),0x802a
+	ret	; F7EA6A  ret
+
+; Evidence: table 0xF7D358 entry 9, screen EDIT. A bare button number, so no
+;           name; see the banner.
+sub_F7EA6B:
+	bit	7, w	; F7EA6B  bit 0x07,W
+	jr	nz, 8	; F7EA6E  jr NZ,0xf7ea78
+	stdi16	(8304), 32800	; F7EA70  ld (0x2070),0x8020
+	jr	0	; F7EA76  jr T,0xf7ea78
+	ret	; F7EA78  ret
+
+; Evidence: table 0xF7D358 entry 10, screen EDIT. A bare button number, so
+;           no name; see the banner.
+sub_F7EA79:
+	bit	7, w	; F7EA79  bit 0x07,W
+	jr	nz, 8	; F7EA7C  jr NZ,0xf7ea86
+	stdi16	(8304), 32803	; F7EA7E  ld (0x2070),0x8023
+	jr	6	; F7EA84  jr T,0xf7ea8c
+	stdi16	(8304), 32799	; F7EA86  ld (0x2070),0x801f
+	ret	; F7EA8C  ret
+
+; Evidence: table 0xF7D358 entry 11, screen EDIT. A bare button number, so
+;           no name; see the banner.
+sub_F7EA8D:
+	bit	7, w	; F7EA8D  bit 0x07,W
+	jr	nz, 8	; F7EA90  jr NZ,0xf7ea9a
+	stdi16	(8304), 32802	; F7EA92  ld (0x2070),0x8022
+	jr	0	; F7EA98  jr T,0xf7ea9a
+	ret	; F7EA9A  ret
+
+; Evidence: table 0xF7D358 entry 12, screen EDIT. A bare button number, so
+;           no name; see the banner.
+sub_F7EA9B:
+	bit	7, w	; F7EA9B  bit 0x07,W
+	jr	nz, 2	; F7EA9E  jr NZ,0xf7eaa2
+	jr	0	; F7EAA0  jr T,0xf7eaa2
+	ret	; F7EAA2  ret
+	ret	; F7EAA3  ret   <- button table 0xF7D358 entry 13 (EDIT) and 1 more slot(s)
+
+; Evidence: table 0xF7D358 entry 15, screen EDIT. A bare button number, so
+;           no name; see the banner.
+sub_F7EAA4:
+	bit	7, w	; F7EAA4  bit 0x07,W
+	jr	nz, 12	; F7EAA7  jr NZ,0xf7eab5
+	stdi8	(3088), 0	; F7EAA9  ld (0x0c10),0x00
+	stdi8	(8305), 16	; F7EAAE  ld (0x2071),0x10
+	jr	0	; F7EAB3  jr T,0xf7eab5
+	ret	; F7EAB5  ret
+
+; Evidence: table 0xF7D358 entry 16, screen EDIT (+1 more slots). A bare
+;           button number, so no name; see the banner.
+sub_F7EAB6:
+	bit	7, w	; F7EAB6  bit 0x07,W
+	jr	nz, 2	; F7EAB9  jr NZ,0xf7eabd
+	jr	0	; F7EABB  jr T,0xf7eabd
+	.byte 0xC1, 0x10, 0x0C, 0x3F, 0x00	; F7EABD  cp (0x0c10),0x00   [llvm-mc cannot encode this]
+	jr	z, 10	; F7EAC2  jr Z,0xf7eace
+	stdi8	(3088), 0	; F7EAC4  ld (0x0c10),0x00
+	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7EAC9  or (0x2071),0x10   [llvm-mc cannot encode this]
+	ret	; F7EACE  ret
+	ret	; F7EACF  ret   <- button table 0xF7D358 entry 17 (EDIT) and 13 more slot(s)
+
+; ---------------------------------------------------------------------
+; Paint_SongClear -- paints the panel screen whose own title text reads
+;                    "SONG CLEAR"
+;
+; Reached by: the +0 method stub of screen object 0xF43060, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D04C
+; Evidence: the routine loads XIY = 0xF399D5 and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "SONG CLEAR", and the name is that text CamelCased, with
+;           the ROM's own spelling kept (zeros for O's included). The rule
+;           is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_SongClear:
+	call	16002688	; F7EAD0  call 0xf42e80
+	call	16001208	; F7EAD4  call 0xf428b8
+	.byte 0xC1, 0x80, 0x28, 0x3F, 0x23	; F7EAD8  cp (0x2880),0x23   [llvm-mc cannot encode this]
+	jrl	z, 239	; F7EADD  jrl Z,0xf7ebcf
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F7EAE0  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 48	; F7EAE4  jr NZ,0xf7eb16
+	calr	63472	; F7EAE6  calr 0xf7e2d9
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EAE9  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jrl	nz, 137	; F7EAEE  jrl NZ,0xf7eb7a
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EAF1  or (0x2075),0x09   [llvm-mc cannot encode this]
+	stdi16	(8347), 770	; F7EAF6  ld (0x209b),0x0302
+	stdi16	(9830), 65535	; F7EAFC  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7EB02  ld (0x266a),0xffff
+	ld	xiy, 15964629	; F7EB08  ld XIY,0x00f399d5
+	ld	xix, 15964787	; F7EB0D  ld XIX,0x00f39a73
+	call	15996912	; F7EB12  call 0xf417f0
+	ldb_d8	a, (3586)	; F7EB16  ld A,(0x0e02)
+	cp	a, 10	; F7EB1A  cp A,0x0a
+	jr	z, 24	; F7EB1D  jr Z,0xf7eb37
+	stb_d8	(3634), a	; F7EB1F  ld (0x0e32),A
+	call	16259561	; F7EB23  call 0xf819e9
+	ldw_d16	wa, (3631)	; F7EB27  ld WA,(0x0e2f)
+	stda16	(4862), wa	; F7EB2B  ld (0x12fe),WA
+	ldb_d8	a, (3633)	; F7EB2F  ld A,(0x0e31)
+	stb_d8	(4861), a	; F7EB33  ld (0x12fd),A
+	ld	xiy, 15964787	; F7EB37  ld XIY,0x00f39a73
+	ld	xix, 15964797	; F7EB3C  ld XIX,0x00f39a7d
+	call	15996912	; F7EB41  call 0xf417f0
+	.byte 0xC1, 0x02, 0x0E, 0x3F, 0x0A	; F7EB45  cp (0x0e02),0x0a   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7EB4A  jr NZ,0xf7eb5c
+	ld	xiy, 15970884	; F7EB4C  ld XIY,0x00f3b244
+	ld	xix, 15970924	; F7EB51  ld XIX,0x00f3b26c
+	call	15996912	; F7EB56  call 0xf417f0
+	jr	115	; F7EB5A  jr T,0xf7ebcf
+	ld	xiy, 15964629	; F7EB5C  ld XIY,0x00f399d5
+	ld	xix, 15964787	; F7EB61  ld XIX,0x00f39a73
+	call	15996912	; F7EB66  call 0xf417f0
+	ld	xiy, 15964558	; F7EB6A  ld XIY,0x00f3998e
+	ld	xix, 15964609	; F7EB6F  ld XIX,0x00f399c1
+	call	15996916	; F7EB74  call 0xf417f4
+	jr	85	; F7EB78  jr T,0xf7ebcf
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F7EB7A  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 14	; F7EB7E  jr NZ,0xf7eb8e
+	ld	xiy, 15964797	; F7EB80  ld XIY,0x00f39a7d
+	ld	xix, 15965176	; F7EB85  ld XIX,0x00f39bf8
+	call	15996912	; F7EB8A  call 0xf417f0
+	ld	xiy, 15965176	; F7EB8E  ld XIY,0x00f39bf8
+	ld	xix, 15965186	; F7EB93  ld XIX,0x00f39c02
+	call	15996912	; F7EB98  call 0xf417f0
+	.byte 0xC1, 0x02, 0x0E, 0x3F, 0x0A	; F7EB9C  cp (0x0e02),0x0a   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7EBA1  jr NZ,0xf7ebb3
+	ld	xiy, 15970924	; F7EBA3  ld XIY,0x00f3b26c
+	ld	xix, 15970964	; F7EBA8  ld XIX,0x00f3b294
+	call	15996912	; F7EBAD  call 0xf417f0
+	jr	28	; F7EBB1  jr T,0xf7ebcf
+	ld	xiy, 15964797	; F7EBB3  ld XIY,0x00f39a7d
+	ld	xix, 15965176	; F7EBB8  ld XIX,0x00f39bf8
+	call	15996912	; F7EBBD  call 0xf417f0
+	ld	xiy, 15965186	; F7EBC1  ld XIY,0x00f39c02
+	ld	xix, 15965237	; F7EBC6  ld XIX,0x00f39c35
+	call	15996916	; F7EBCB  call 0xf417f4
+	calr	63253	; F7EBCF  calr 0xf7e2e7
+	stdi8	(10368), 255	; F7EBD2  ld (0x2880),0xff
+	ret	; F7EBD7  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_SongClear -- the whole body of the SongClear screen's
+;                              Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF43060, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D050
+; Evidence: the whole body of screen object 0xF43060's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D050 is `call
+;           0xF7EBD8` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_SongClear:
+	call	16001212	; F7EBD8  call 0xf428bc
+	ret	; F7EBDC  ret
+	ret	; F7EBDD  ret   <- button table 0xF7D3D8 entry 0 (SONG CLEAR) and 1 more slot(s)
+
+; Evidence: table 0xF7D3D8 entry 2, screen SONG CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7EBDE:
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EBDE  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 42	; F7EBE3  jr NZ,0xf7ec0f
+	call	16001220	; F7EBE5  call 0xf428c4
+	ldb_d8	a, (3586)	; F7EBE9  ld A,(0x0e02)
+	cp	a, 10	; F7EBED  cp A,0x0a
+	jr	z, 24	; F7EBF0  jr Z,0xf7ec0a
+	stb_d8	(3634), a	; F7EBF2  ld (0x0e32),A
+	call	16259561	; F7EBF6  call 0xf819e9
+	ldw_d16	wa, (3631)	; F7EBFA  ld WA,(0x0e2f)
+	stda16	(4862), wa	; F7EBFE  ld (0x12fe),WA
+	ldb_d8	a, (3633)	; F7EC02  ld A,(0x0e31)
+	stb_d8	(4861), a	; F7EC06  ld (0x12fd),A
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7EC0A  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F7EC0F  ret
+
+; Evidence: table 0xF7D3D8 entry 3, screen SONG CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7EC10:
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EC10  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 42	; F7EC15  jr NZ,0xf7ec41
+	call	16001216	; F7EC17  call 0xf428c0
+	ldb_d8	a, (3586)	; F7EC1B  ld A,(0x0e02)
+	cp	a, 10	; F7EC1F  cp A,0x0a
+	jr	z, 24	; F7EC22  jr Z,0xf7ec3c
+	stb_d8	(3634), a	; F7EC24  ld (0x0e32),A
+	call	16259561	; F7EC28  call 0xf819e9
+	ldw_d16	wa, (3631)	; F7EC2C  ld WA,(0x0e2f)
+	stda16	(4862), wa	; F7EC30  ld (0x12fe),WA
+	ldb_d8	a, (3633)	; F7EC34  ld A,(0x0e31)
+	stb_d8	(4861), a	; F7EC38  ld (0x12fd),A
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7EC3C  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F7EC41  ret
+	ret	; F7EC42  ret   <- button table 0xF7D3D8 entry 4 (SONG CLEAR) and 6 more slot(s)
+
+; Evidence: table 0xF7D3D8 entry 11, screen SONG CLEAR. A bare button
+;           number, so no name; see the banner.
+sub_F7EC43:
+	bit	7, w	; F7EC43  bit 0x07,W
+	jr	nz, 11	; F7EC46  jr NZ,0xf7ec53
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7EC48  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001228	; F7EC4D  call 0xf428cc
+	jr	0	; F7EC51  jr T,0xf7ec53
+	ret	; F7EC53  ret
+
+; Evidence: table 0xF7D3D8 entry 12, screen SONG CLEAR. A bare button
+;           number, so no name; see the banner.
+sub_F7EC54:
+	bit	7, w	; F7EC54  bit 0x07,W
+	jr	nz, 6	; F7EC57  jr NZ,0xf7ec5f
+	call	16001224	; F7EC59  call 0xf428c8
+	jr	0	; F7EC5D  jr T,0xf7ec5f
+	ret	; F7EC5F  ret
+	ret	; F7EC60  ret   <- button table 0xF7D3D8 entry 13 (SONG CLEAR) and 1 more slot(s)
+
+; Evidence: table 0xF7D3D8 entry 15, screen SONG CLEAR. A bare button
+;           number, so no name; see the banner.
+sub_F7EC61:
+	bit	7, w	; F7EC61  bit 0x07,W
+	jr	nz, 8	; F7EC64  jr NZ,0xf7ec6e
+	stdi16	(8304), 32794	; F7EC66  ld (0x2070),0x801a
+	jr	0	; F7EC6C  jr T,0xf7ec6e
+	ret	; F7EC6E  ret
+	ret	; F7EC6F  ret   <- button table 0xF7D3D8 entry 16 (SONG CLEAR) and 13 more slot(s)
+	ret	; F7EC70  ret
+
+; ---------------------------------------------------------------------
+; Paint_TrackClear -- paints the panel screen whose own title text reads
+;                     "TRACK CLEAR"
+;
+; Reached by: the +0 method stub of screen object 0xF43070, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D062
+; Evidence: the routine loads XIY = 0xF39F8A and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "TRACK CLEAR", and the name is that text CamelCased, with
+;           the ROM's own spelling kept (zeros for O's included). The rule
+;           is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_TrackClear:
+	call	16002688	; F7EC71  call 0xf42e80
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F7EC75  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 56	; F7EC79  jr NZ,0xf7ecb3
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EC7B  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 61	; F7EC80  jr NZ,0xf7ecbf
+	call	16001232	; F7EC82  call 0xf428d0
+	calr	63056	; F7EC86  calr 0xf7e2d9
+	stdi8	(9536), 2	; F7EC89  ld (0x2540),0x02
+	ld	xiy, 15966090	; F7EC8E  ld XIY,0x00f39f8a
+	ld	xix, 15966373	; F7EC93  ld XIX,0x00f3a0a5
+	call	15996912	; F7EC98  call 0xf417f0
+	call	16245588	; F7EC9C  call 0xf7e354
+	stdi8	(9536), 0	; F7ECA0  ld (0x2540),0x00
+	ld	xiy, 15962956	; F7ECA5  ld XIY,0x00f3934c
+	ld	xix, 15963363	; F7ECAA  ld XIX,0x00f394e3
+	call	15996912	; F7ECAF  call 0xf417f0
+	ldw_d16	hl, (3518)	; F7ECB3  ld HL,(0x0dbe)
+	calr	63205	; F7ECB7  calr 0xf7e39f
+	calr	63018	; F7ECBA  calr 0xf7e2e7
+	jr	58	; F7ECBD  jr T,0xf7ecf9
+	calr	62999	; F7ECBF  calr 0xf7e2d9
+	stdi8	(9536), 2	; F7ECC2  ld (0x2540),0x02
+	ld	xiy, 15965237	; F7ECC7  ld XIY,0x00f39c35
+	ld	xix, 15965502	; F7ECCC  ld XIX,0x00f39d3e
+	call	15996912	; F7ECD1  call 0xf417f0
+	call	16245588	; F7ECD5  call 0xf7e354
+	stdi8	(9536), 0	; F7ECD9  ld (0x2540),0x00
+	ld	xiy, 15962956	; F7ECDE  ld XIY,0x00f3934c
+	ld	xix, 15963363	; F7ECE3  ld XIX,0x00f394e3
+	call	15996912	; F7ECE8  call 0xf417f0
+	ldw_d16	hl, (3518)	; F7ECEC  ld HL,(0x0dbe)
+	call	16245663	; F7ECF0  call 0xf7e39f
+	jr	0	; F7ECF4  jr T,0xf7ecf6
+	calr	62958	; F7ECF6  calr 0xf7e2e7
+	ret	; F7ECF9  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_TrackClear -- the whole body of the TrackClear screen's
+;                               Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF43070, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: calr from prom_b 0xF7D066
+; Evidence: the whole body of screen object 0xF43070's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D066 is `call
+;           0xF7ECFA` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_TrackClear:
+	call	16001236	; F7ECFA  call 0xf428d4
+	ret	; F7ECFE  ret
+
+; Evidence: table 0xF7D458 entry 0, screen TRACK CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7ECFF:
+	bit	7, w	; F7ECFF  bit 0x07,W
+	jr	nz, 7	; F7ED02  jr NZ,0xf7ed0b
+	stdi8	(13826), 0	; F7ED04  ld (0x3602),0x00
+	jr	8	; F7ED09  jr T,0xf7ed13
+	add	c, 8	; F7ED0B  add C,0x08
+	stdi8	(13826), 8	; F7ED0E  ld (0x3602),0x08
+	call	15994052	; F7ED13  call 0xf40cc4
+	ret	; F7ED17  ret
+
+; Evidence: table 0xF7D458 entry 1, screen TRACK CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7ED18:
+	bit	7, w	; F7ED18  bit 0x07,W
+	jr	nz, 7	; F7ED1B  jr NZ,0xf7ed24
+	stdi8	(13826), 1	; F7ED1D  ld (0x3602),0x01
+	jr	8	; F7ED22  jr T,0xf7ed2c
+	add	c, 8	; F7ED24  add C,0x08
+	stdi8	(13826), 9	; F7ED27  ld (0x3602),0x09
+	call	15994052	; F7ED2C  call 0xf40cc4
+	ret	; F7ED30  ret
+
+; Evidence: table 0xF7D458 entry 2, screen TRACK CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7ED31:
+	bit	7, w	; F7ED31  bit 0x07,W
+	jr	nz, 7	; F7ED34  jr NZ,0xf7ed3d
+	stdi8	(13826), 2	; F7ED36  ld (0x3602),0x02
+	jr	8	; F7ED3B  jr T,0xf7ed45
+	add	c, 8	; F7ED3D  add C,0x08
+	stdi8	(13826), 10	; F7ED40  ld (0x3602),0x0a
+	call	15994052	; F7ED45  call 0xf40cc4
+	ret	; F7ED49  ret
+
+; Evidence: table 0xF7D458 entry 3, screen TRACK CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7ED4A:
+	bit	7, w	; F7ED4A  bit 0x07,W
+	jr	nz, 7	; F7ED4D  jr NZ,0xf7ed56
+	stdi8	(13826), 3	; F7ED4F  ld (0x3602),0x03
+	jr	8	; F7ED54  jr T,0xf7ed5e
+	add	c, 8	; F7ED56  add C,0x08
+	stdi8	(13826), 11	; F7ED59  ld (0x3602),0x0b
+	call	15994052	; F7ED5E  call 0xf40cc4
+	ret	; F7ED62  ret
+
+; Evidence: table 0xF7D458 entry 4, screen TRACK CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7ED63:
+	bit	7, w	; F7ED63  bit 0x07,W
+	jr	nz, 7	; F7ED66  jr NZ,0xf7ed6f
+	stdi8	(13826), 4	; F7ED68  ld (0x3602),0x04
+	jr	8	; F7ED6D  jr T,0xf7ed77
+	add	c, 8	; F7ED6F  add C,0x08
+	stdi8	(13826), 12	; F7ED72  ld (0x3602),0x0c
+	call	15994052	; F7ED77  call 0xf40cc4
+	ret	; F7ED7B  ret
+
+; Evidence: table 0xF7D458 entry 5, screen TRACK CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7ED7C:
+	bit	7, w	; F7ED7C  bit 0x07,W
+	jr	nz, 7	; F7ED7F  jr NZ,0xf7ed88
+	stdi8	(13826), 5	; F7ED81  ld (0x3602),0x05
+	jr	8	; F7ED86  jr T,0xf7ed90
+	add	c, 8	; F7ED88  add C,0x08
+	stdi8	(13826), 13	; F7ED8B  ld (0x3602),0x0d
+	call	15994052	; F7ED90  call 0xf40cc4
+	ret	; F7ED94  ret
+
+; Evidence: table 0xF7D458 entry 6, screen TRACK CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7ED95:
+	bit	7, w	; F7ED95  bit 0x07,W
+	jr	nz, 7	; F7ED98  jr NZ,0xf7eda1
+	stdi8	(13826), 6	; F7ED9A  ld (0x3602),0x06
+	jr	8	; F7ED9F  jr T,0xf7eda9
+	add	c, 8	; F7EDA1  add C,0x08
+	stdi8	(13826), 14	; F7EDA4  ld (0x3602),0x0e
+	call	15994052	; F7EDA9  call 0xf40cc4
+	ret	; F7EDAD  ret
+
+; Evidence: table 0xF7D458 entry 7, screen TRACK CLEAR (+1 more slots). A
+;           bare button number, so no name; see the banner.
+sub_F7EDAE:
+	bit	7, w	; F7EDAE  bit 0x07,W
+	jr	nz, 7	; F7EDB1  jr NZ,0xf7edba
+	stdi8	(13826), 7	; F7EDB3  ld (0x3602),0x07
+	jr	8	; F7EDB8  jr T,0xf7edc2
+	add	c, 8	; F7EDBA  add C,0x08
+	stdi8	(13826), 15	; F7EDBD  ld (0x3602),0x0f
+	call	15994052	; F7EDC2  call 0xf40cc4
+	ret	; F7EDC6  ret
+	ret	; F7EDC7  ret   <- button table 0xF7D458 entry 8 (TRACK CLEAR)
+
+; Evidence: table 0xF7D458 entry 9, screen TRACK CLEAR. A bare button
+;           number, so no name; see the banner.
+sub_F7EDC8:
+	bit	7, w	; F7EDC8  bit 0x07,W
+	jr	nz, 4	; F7EDCB  jr NZ,0xf7edd1
+	call	16001244	; F7EDCD  call 0xf428dc
+	ret	; F7EDD1  ret
+	ret	; F7EDD2  ret   <- button table 0xF7D458 entry 10 (TRACK CLEAR) and 4 more slot(s)
+
+; Evidence: table 0xF7D458 entry 15, screen TRACK CLEAR. A bare button
+;           number, so no name; see the banner.
+sub_F7EDD3:
+	bit	7, w	; F7EDD3  bit 0x07,W
+	jr	nz, 8	; F7EDD6  jr NZ,0xf7ede0
+	stdi16	(8304), 32794	; F7EDD8  ld (0x2070),0x801a
+	jr	0	; F7EDDE  jr T,0xf7ede0
+	ret	; F7EDE0  ret
+	ret	; F7EDE1  ret   <- button table 0xF7D458 entry 16 (TRACK CLEAR) and 7 more slot(s)
+	ret	; F7EDE2  ret   <- button table 0xF7D4D8 entry 0 (TRACK CLEAR) and 8 more slot(s)
+
+; Evidence: table 0xF7D4D8 entry 9, screen TRACK CLEAR. A bare button
+;           number, so no name; see the banner.
+sub_F7EDE3:
+	bit	7, w	; F7EDE3  bit 0x07,W
+	jr	nz, 9	; F7EDE6  jr NZ,0xf7edf1
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7EDE8  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001244	; F7EDED  call 0xf428dc
+	ret	; F7EDF1  ret
+
+; Evidence: table 0xF7D4D8 entry 10, screen TRACK CLEAR. A bare button
+;           number, so no name; see the banner.
+sub_F7EDF2:
+	bit	7, w	; F7EDF2  bit 0x07,W
+	jr	nz, 4	; F7EDF5  jr NZ,0xf7edfb
+	call	16001240	; F7EDF7  call 0xf428d8
+	ret	; F7EDFB  ret
+	ret	; F7EDFC  ret   <- button table 0xF7D4D8 entry 11 (TRACK CLEAR) and 3 more slot(s)
+
+; Evidence: table 0xF7D4D8 entry 15, screen TRACK CLEAR. A bare button
+;           number, so no name; see the banner.
+sub_F7EDFD:
+	bit	7, w	; F7EDFD  bit 0x07,W
+	jr	nz, 4	; F7EE00  jr NZ,0xf7ee06
+	call	16001240	; F7EE02  call 0xf428d8
+	ret	; F7EE06  ret
+	ret	; F7EE07  ret   <- button table 0xF7D4D8 entry 16 (TRACK CLEAR) and 15 more slot(s)
+
+; ---------------------------------------------------------------------
+; Paint_TrackMerge -- paints the panel screen whose own title text reads
+;                     "TRACK MERGE"
+;
+; Reached by: the +0 method stub of screen object 0xF430A0, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D0BC
+; Evidence: the routine loads XIY = 0xF3A47F and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "TRACK MERGE", and the name is that text CamelCased, with
+;           the ROM's own spelling kept (zeros for O's included). The rule
+;           is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_TrackMerge:
+	call	16002688	; F7EE08  call 0xf42e80
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EE0C  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 35	; F7EE11  jr NZ,0xf7ee36
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EE13  or (0x2075),0x09   [llvm-mc cannot encode this]
+	stdi16	(8347), 1156	; F7EE18  ld (0x209b),0x0484
+	stdi16	(9830), 65535	; F7EE1E  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7EE24  ld (0x266a),0xffff
+	call	16001336	; F7EE2A  call 0xf42938
+	ldb_d8	a, (3514)	; F7EE2E  ld A,(0x0dba)
+	stb_d8	(4857), a	; F7EE32  ld (0x12f9),A
+	calr	62624	; F7EE36  calr 0xf7e2d9
+	stdi8	(9536), 0	; F7EE39  ld (0x2540),0x00
+	ld	xiy, 15967359	; F7EE3E  ld XIY,0x00f3a47f
+	ld	xix, 15967526	; F7EE43  ld XIX,0x00f3a526
+	call	15996912	; F7EE48  call 0xf417f0
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EE4C  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7EE51  jr NZ,0xf7ee63
+	ld	xiy, 15967526	; F7EE53  ld XIY,0x00f3a526
+	ld	xix, 15967585	; F7EE58  ld XIX,0x00f3a561
+	call	15996912	; F7EE5D  call 0xf417f0
+	jr	28	; F7EE61  jr T,0xf7ee7f
+	ld	xiy, 15967658	; F7EE63  ld XIY,0x00f3a5aa
+	ld	xix, 15967721	; F7EE68  ld XIX,0x00f3a5e9
+	call	15996912	; F7EE6D  call 0xf417f0
+	ld	xiy, 15967329	; F7EE71  ld XIY,0x00f3a461
+	ld	xix, 15967359	; F7EE76  ld XIX,0x00f3a47f
+	call	15996912	; F7EE7B  call 0xf417f0
+	stdi8	(9536), 0	; F7EE7F  ld (0x2540),0x00
+	ld	xiy, 15967585	; F7EE84  ld XIY,0x00f3a561
+	ld	xix, 15967626	; F7EE89  ld XIX,0x00f3a58a
+	call	15996916	; F7EE8E  call 0xf417f4
+	calr	62546	; F7EE92  calr 0xf7e2e7
+	ret	; F7EE95  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_TrackMerge -- the whole body of the TrackMerge screen's
+;                               Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF430A0, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D0C1
+; Evidence: the whole body of screen object 0xF430A0's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D0C1 is `call
+;           0xF7EE96` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_TrackMerge:
+	call	16001340	; F7EE96  call 0xf4293c
+	ret	; F7EE9A  ret
+	ret	; F7EE9B  ret   <- button table 0xF7D6D8 entry 0 (TRACK MERGE)
+	ret	; F7EE9C  ret   <- button table 0xF7D6D8 entry 1 (TRACK MERGE)
+	ret	; F7EE9D  ret   <- button table 0xF7D6D8 entry 2 (TRACK MERGE)
+	ret	; F7EE9E  ret   <- button table 0xF7D6D8 entry 3 (TRACK MERGE)
+
+; Evidence: table 0xF7D6D8 entry 4, screen TRACK MERGE. A bare button
+;           number, so no name; see the banner.
+sub_F7EE9F:
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7EE9F  or (0x2075),0x08   [llvm-mc cannot encode this]
+	bit	7, w	; F7EEA4  bit 0x07,W
+	jr	z, 6	; F7EEA7  jr Z,0xf7eeaf
+	call	16001360	; F7EEA9  call 0xf42950
+	jr	4	; F7EEAD  jr T,0xf7eeb3
+	call	16001356	; F7EEAF  call 0xf4294c
+	stdi8	(9536), 0	; F7EEB3  ld (0x2540),0x00
+	calr	62493	; F7EEB8  calr 0xf7e2d8
+	ld	xiy, 15967585	; F7EEBB  ld XIY,0x00f3a561
+	ld	xix, 15967615	; F7EEC0  ld XIX,0x00f3a57f
+	call	15996916	; F7EEC5  call 0xf417f4
+	ret	; F7EEC9  ret
+	ret	; F7EECA  ret   <- button table 0xF7D6D8 entry 5 (TRACK MERGE)
+	ret	; F7EECB  ret   <- button table 0xF7D6D8 entry 6 (TRACK MERGE)
+	ret	; F7EECC  ret   <- button table 0xF7D6D8 entry 7 (TRACK MERGE) and 1 more slot(s)
+
+; Evidence: table 0xF7D6D8 entry 9, screen TRACK MERGE. A bare button
+;           number, so no name; see the banner.
+sub_F7EECD:
+	bit	7, w	; F7EECD  bit 0x07,W
+	jr	z, 24	; F7EED0  jr Z,0xf7eeea
+	.byte 0xC1, 0xBA, 0x0D, 0x3F, 0x01	; F7EED2  cp (0x0dba),0x01   [llvm-mc cannot encode this]
+	jr	z, 21	; F7EED7  jr Z,0xf7eeee
+	call	16001344	; F7EED9  call 0xf42940
+	ldb_d8	a, (3514)	; F7EEDD  ld A,(0x0dba)
+	stb_d8	(4857), a	; F7EEE1  ld (0x12f9),A
+	calr	7	; F7EEE5  calr 0xf7eeef
+	jr	4	; F7EEE8  jr T,0xf7eeee
+	call	16001368	; F7EEEA  call 0xf42958
+	ret	; F7EEEE  ret
+
+; Evidence: reached from calr from prom_b 0xF7EEE5; calr from prom_b
+;           0xF7EF1A, and from nothing else the scans see.
+sub_F7EEEF:
+	stdi8	(9536), 1	; F7EEEF  ld (0x2540),0x01
+	call	16245485	; F7EEF4  call 0xf7e2ed
+	ld	xiy, 15967615	; F7EEF8  ld XIY,0x00f3a57f
+	call	15996956	; F7EEFD  call 0xf4181c
+	ret	; F7EF01  ret
+
+; Evidence: table 0xF7D6D8 entry 10, screen TRACK MERGE. A bare button
+;           number, so no name; see the banner.
+sub_F7EF02:
+	bit	7, w	; F7EF02  bit 0x07,W
+	jr	nz, 22	; F7EF05  jr NZ,0xf7ef1d
+	.byte 0xC1, 0xBA, 0x0D, 0x3F, 0x03	; F7EF07  cp (0x0dba),0x03   [llvm-mc cannot encode this]
+	jr	z, 15	; F7EF0C  jr Z,0xf7ef1d
+	call	16001352	; F7EF0E  call 0xf42948
+	ldb_d8	a, (3514)	; F7EF12  ld A,(0x0dba)
+	stb_d8	(4857), a	; F7EF16  ld (0x12f9),A
+	calr	65490	; F7EF1A  calr 0xf7eeef
+	ret	; F7EF1D  ret
+
+; Evidence: table 0xF7D6D8 entry 11, screen TRACK MERGE. A bare button
+;           number, so no name; see the banner.
+sub_F7EF1E:
+	bit	7, w	; F7EF1E  bit 0x07,W
+	jr	z, 22	; F7EF21  jr Z,0xf7ef39
+	.byte 0xC1, 0xBA, 0x0D, 0x3F, 0x02	; F7EF23  cp (0x0dba),0x02   [llvm-mc cannot encode this]
+	jr	z, 15	; F7EF28  jr Z,0xf7ef39
+	call	16001348	; F7EF2A  call 0xf42944
+	ldb_d8	a, (3514)	; F7EF2E  ld A,(0x0dba)
+	stb_d8	(4857), a	; F7EF32  ld (0x12f9),A
+	calr	65462	; F7EF36  calr 0xf7eeef
+	ret	; F7EF39  ret
+	ret	; F7EF3A  ret   <- button table 0xF7D6D8 entry 12 (TRACK MERGE)
+	ret	; F7EF3B  ret   <- button table 0xF7D6D8 entry 13 (TRACK MERGE)
+	ret	; F7EF3C  ret   <- button table 0xF7D6D8 entry 14 (TRACK MERGE)
+
+; Evidence: table 0xF7D6D8 entry 15, screen TRACK MERGE. A bare button
+;           number, so no name; see the banner.
+sub_F7EF3D:
+	bit	7, w	; F7EF3D  bit 0x07,W
+	jr	z, 2	; F7EF40  jr Z,0xf7ef44
+	jr	6	; F7EF42  jr T,0xf7ef4a
+	stdi16	(8304), 32794	; F7EF44  ld (0x2070),0x801a
+	ret	; F7EF4A  ret
+	ret	; F7EF4B  ret   <- button table 0xF7D6D8 entry 16 (TRACK MERGE) and 15 more slot(s)
+	ret	; F7EF4C  ret   <- button table 0xF7D758 entry 0 (TRACK MERGE)
+	ret	; F7EF4D  ret   <- button table 0xF7D758 entry 1 (TRACK MERGE)
+	ret	; F7EF4E  ret   <- button table 0xF7D758 entry 2 (TRACK MERGE)
+	ret	; F7EF4F  ret   <- button table 0xF7D758 entry 3 (TRACK MERGE)
+	ret	; F7EF50  ret   <- button table 0xF7D758 entry 4 (TRACK MERGE)
+	ret	; F7EF51  ret   <- button table 0xF7D758 entry 5 (TRACK MERGE)
+	ret	; F7EF52  ret   <- button table 0xF7D758 entry 6 (TRACK MERGE)
+	ret	; F7EF53  ret   <- button table 0xF7D758 entry 7 (TRACK MERGE) and 1 more slot(s)
+
+; Evidence: table 0xF7D758 entry 9, screen TRACK MERGE. A bare button
+;           number, so no name; see the banner.
+sub_F7EF54:
+	bit	7, w	; F7EF54  bit 0x07,W
+	jr	nz, 9	; F7EF57  jr NZ,0xf7ef62
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7EF59  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001368	; F7EF5E  call 0xf42958
+	ret	; F7EF62  ret
+	ret	; F7EF63  ret   <- button table 0xF7D758 entry 10 (TRACK MERGE)
+
+; Evidence: table 0xF7D758 entry 11, screen TRACK MERGE. A bare button
+;           number, so no name; see the banner.
+sub_F7EF64:
+	bit	7, w	; F7EF64  bit 0x07,W
+	jr	nz, 4	; F7EF67  jr NZ,0xf7ef6d
+	call	16001364	; F7EF69  call 0xf42954
+	ret	; F7EF6D  ret
+	ret	; F7EF6E  ret   <- button table 0xF7D758 entry 12 (TRACK MERGE)
+	ret	; F7EF6F  ret   <- button table 0xF7D758 entry 13 (TRACK MERGE)
+	ret	; F7EF70  ret   <- button table 0xF7D758 entry 14 (TRACK MERGE)
+
+; Evidence: table 0xF7D758 entry 15, screen TRACK MERGE. A bare button
+;           number, so no name; see the banner.
+sub_F7EF71:
+	bit	7, w	; F7EF71  bit 0x07,W
+	jr	nz, 4	; F7EF74  jr NZ,0xf7ef7a
+	call	16001364	; F7EF76  call 0xf42954
+	ret	; F7EF7A  ret
+	ret	; F7EF7B  ret   <- button table 0xF7D758 entry 16 (TRACK MERGE) and 15 more slot(s)
+
+; ---------------------------------------------------------------------
+; Paint_MeasureDelete -- paints the panel screen whose own title text reads
+;                        "MEASURE DELETE"
+;
+; Reached by: the +0 method stub of screen object 0xF430E0, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D0DD
+; Evidence: the routine loads XIY = 0xF3A5E9 and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "MEASURE DELETE", and the name is that text CamelCased,
+;           with the ROM's own spelling kept (zeros for O's included). The
+;           rule is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_MeasureDelete:
+	call	16002688	; F7EF7C  call 0xf42e80
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EF80  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 27	; F7EF85  jr NZ,0xf7efa2
+	call	16001372	; F7EF87  call 0xf4295c
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EF8B  or (0x2075),0x09   [llvm-mc cannot encode this]
+	stdi16	(8347), 1156	; F7EF90  ld (0x209b),0x0484
+	stdi16	(9830), 65535	; F7EF96  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7EF9C  ld (0x266a),0xffff
+	calr	62260	; F7EFA2  calr 0xf7e2d9
+	ld	xiy, 15967721	; F7EFA5  ld XIY,0x00f3a5e9
+	ld	xix, 15967854	; F7EFAA  ld XIX,0x00f3a66e
+	call	15996912	; F7EFAF  call 0xf417f0
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EFB3  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 18	; F7EFB8  jr NZ,0xf7efcc
+	ld	xiy, 15967854	; F7EFBA  ld XIY,0x00f3a66e
+	ld	xix, 15967915	; F7EFBF  ld XIX,0x00f3a6ab
+	call	15996912	; F7EFC4  call 0xf417f0
+	jr	30	; F7EFC8  jr T,0xf7efe8
+	jr	28	; F7EFCA  jr T,0xf7efe8
+	ld	xiy, 15968218	; F7EFCC  ld XIY,0x00f3a7da
+	ld	xix, 15968501	; F7EFD1  ld XIX,0x00f3a8f5
+	call	15996912	; F7EFD6  call 0xf417f0
+	ld	xiy, 15967329	; F7EFDA  ld XIY,0x00f3a461
+	ld	xix, 15967359	; F7EFDF  ld XIX,0x00f3a47f
+	call	15996912	; F7EFE4  call 0xf417f0
+	ld	xiy, 15967915	; F7EFE8  ld XIY,0x00f3a6ab
+	ld	xix, 15967961	; F7EFED  ld XIX,0x00f3a6d9
+	call	15996916	; F7EFF2  call 0xf417f4
+	calr	62190	; F7EFF6  calr 0xf7e2e7
+	ret	; F7EFF9  ret
+
+; Evidence: reached from calr from prom_b 0xF7F082; calr from prom_b
+;           0xF7F0A6, and from nothing else the scans see.
+sub_F7EFFA:
+	calr	62171	; F7EFFA  calr 0xf7e2d8
+	stdi8	(9536), 1	; F7EFFD  ld (0x2540),0x01
+	ld	xiy, 15963473	; F7F002  ld XIY,0x00f39551
+	ld	xix, 15963481	; F7F007  ld XIX,0x00f39559
+	call	15996912	; F7F00C  call 0xf417f0
+	ld	xiy, 15967950	; F7F010  ld XIY,0x00f3a6ce
+	call	15996956	; F7F015  call 0xf4181c
+	ret	; F7F019  ret
+
+; Evidence: reached from calr from prom_b 0xF7F05D; calr from prom_b
+;           0xF7F07F, and from nothing else the scans see.
+sub_F7F01A:
+	calr	62139	; F7F01A  calr 0xf7e2d8
+	stdi8	(9536), 0	; F7F01D  ld (0x2540),0x00
+	ld	xiy, 15967915	; F7F022  ld XIY,0x00f3a6ab
+	ld	xix, 15967950	; F7F027  ld XIX,0x00f3a6ce
+	call	15996916	; F7F02C  call 0xf417f4
+	ret	; F7F030  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_MeasureDelete -- the whole body of the MeasureDelete
+;                                  screen's Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF430E0, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D0E2
+; Evidence: the whole body of screen object 0xF430E0's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D0E2 is `call
+;           0xF7F031` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_MeasureDelete:
+	call	16001376	; F7F031  call 0xf42960
+	ret	; F7F035  ret
+	ret	; F7F036  ret   <- button table 0xF7D7D8 entry 0 (MEASURE DELETE)
+	ret	; F7F037  ret   <- button table 0xF7D7D8 entry 1 (MEASURE DELETE)
+	ret	; F7F038  ret   <- button table 0xF7D7D8 entry 2 (MEASURE DELETE)
+	ret	; F7F039  ret   <- button table 0xF7D7D8 entry 3 (MEASURE DELETE)
+
+; Evidence: table 0xF7D7D8 entry 4, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F03A:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F03A  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7F03E  jr Z,0xf7f044
+	call	16002596	; F7F040  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F044  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 1	; F7F049  ld (0x0e18),0x01
+	bit	7, w	; F7F04E  bit 0x07,W
+	jr	z, 6	; F7F051  jr Z,0xf7f059
+	call	16001396	; F7F053  call 0xf42974
+	jr	4	; F7F057  jr T,0xf7f05d
+	call	16001392	; F7F059  call 0xf42970
+	calr	65466	; F7F05D  calr 0xf7f01a
+	ret	; F7F060  ret
+	ret	; F7F061  ret   <- button table 0xF7D7D8 entry 5 (MEASURE DELETE)
+	ret	; F7F062  ret   <- button table 0xF7D7D8 entry 6 (MEASURE DELETE)
+	ret	; F7F063  ret   <- button table 0xF7D7D8 entry 7 (MEASURE DELETE) and 1 more slot(s)
+
+; Evidence: table 0xF7D7D8 entry 9, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F064:
+	bit	7, w	; F7F064  bit 0x07,W
+	jr	z, 30	; F7F067  jr Z,0xf7f087
+	.byte 0xC1, 0xD4, 0x0D, 0x3F, 0x01	; F7F069  cp (0x0dd4),0x01   [llvm-mc cannot encode this]
+	jr	z, 23	; F7F06E  jr Z,0xf7f087
+	calr	466	; F7F070  calr 0xf7f245
+	call	16001380	; F7F073  call 0xf42964
+	ldb_d8	a, (3540)	; F7F077  ld A,(0x0dd4)
+	stb_d8	(4859), a	; F7F07B  ld (0x12fb),A
+	calr	65432	; F7F07F  calr 0xf7f01a
+	calr	65397	; F7F082  calr 0xf7effa
+	jr	0	; F7F085  jr T,0xf7f087
+	ret	; F7F087  ret
+
+; Evidence: table 0xF7D7D8 entry 10, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F088:
+	bit	7, w	; F7F088  bit 0x07,W
+	jr	z, 30	; F7F08B  jr Z,0xf7f0ab
+	.byte 0xC1, 0xD4, 0x0D, 0x3F, 0x02	; F7F08D  cp (0x0dd4),0x02   [llvm-mc cannot encode this]
+	jr	z, 30	; F7F092  jr Z,0xf7f0b2
+	calr	416	; F7F094  calr 0xf7f237
+	call	16001384	; F7F097  call 0xf42968
+	ldb_d8	a, (3540)	; F7F09B  ld A,(0x0dd4)
+	stb_d8	(4859), a	; F7F09F  ld (0x12fb),A
+	calr	65396	; F7F0A3  calr 0xf7f01a
+	calr	65361	; F7F0A6  calr 0xf7effa
+	jr	7	; F7F0A9  jr T,0xf7f0b2
+	calr	407	; F7F0AB  calr 0xf7f245
+	call	16001400	; F7F0AE  call 0xf42978
+	ret	; F7F0B2  ret
+
+; Evidence: table 0xF7D7D8 entry 11, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F0B3:
+	bit	7, w	; F7F0B3  bit 0x07,W
+	jr	z, 28	; F7F0B6  jr Z,0xf7f0d4
+	.byte 0xC1, 0xD4, 0x0D, 0x3F, 0x03	; F7F0B8  cp (0x0dd4),0x03   [llvm-mc cannot encode this]
+	jr	z, 21	; F7F0BD  jr Z,0xf7f0d4
+	calr	373	; F7F0BF  calr 0xf7f237
+	call	16001388	; F7F0C2  call 0xf4296c
+	ldb_d8	a, (3540)	; F7F0C6  ld A,(0x0dd4)
+	stb_d8	(4859), a	; F7F0CA  ld (0x12fb),A
+	calr	65353	; F7F0CE  calr 0xf7f01a
+	calr	65318	; F7F0D1  calr 0xf7effa
+	ret	; F7F0D4  ret
+	ret	; F7F0D5  ret   <- button table 0xF7D7D8 entry 12 (MEASURE DELETE)
+	ret	; F7F0D6  ret   <- button table 0xF7D7D8 entry 13 (MEASURE DELETE)
+	ret	; F7F0D7  ret   <- button table 0xF7D7D8 entry 14 (MEASURE DELETE)
+
+; Evidence: table 0xF7D7D8 entry 15, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F0D8:
+	bit	7, w	; F7F0D8  bit 0x07,W
+	jr	z, 2	; F7F0DB  jr Z,0xf7f0df
+	jr	6	; F7F0DD  jr T,0xf7f0e5
+	stdi16	(8304), 32794	; F7F0DF  ld (0x2070),0x801a
+	ret	; F7F0E5  ret
+	ret	; F7F0E6  ret   <- button table 0xF7D7D8 entry 16 (MEASURE DELETE) and 4 more slot(s)
+
+; Evidence: table 0xF7D7D8 entry 21, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F0E7:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F0E7  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7F0EB  jr Z,0xf7f0f1
+	call	16002596	; F7F0ED  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F0F1  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 4	; F7F0F6  ld (0x0e18),0x04
+	bit	7, w	; F7F0FB  bit 0x07,W
+	jr	z, 6	; F7F0FE  jr Z,0xf7f106
+	call	16001396	; F7F100  call 0xf42974
+	jr	4	; F7F104  jr T,0xf7f10a
+	call	16001392	; F7F106  call 0xf42970
+	calr	65293	; F7F10A  calr 0xf7f01a
+	ret	; F7F10D  ret
+	ret	; F7F10E  ret   <- button table 0xF7D7D8 entry 22 (MEASURE DELETE) and 4 more slot(s)
+
+; Evidence: table 0xF7D7D8 entry 27, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F10F:
+	calr	2	; F7F10F  calr 0xf7f114
+	ret	; F7F112  ret
+	ret	; F7F113  ret   <- button table 0xF7D7D8 entry 28 (MEASURE DELETE) and 3 more slot(s)
+
+; Evidence: reached from calr from prom_b 0xF7F10F, and from nothing else
+;           the scans see.
+sub_F7F114:
+	ldb_d8	a, (8807)	; F7F114  ld A,(0x2267)
+	cp	a, 15	; F7F118  cp A,0x0f
+	jr	z, 17	; F7F11B  jr Z,0xf7f12e
+	cp	a, 128	; F7F11D  cp A,0x80
+	jr	z, 17	; F7F120  jr Z,0xf7f133
+	cp	a, 9	; F7F122  cp A,0x09
+	jr	ule, 2	; F7F125  jr ULE,0xf7f129
+	jr	13	; F7F127  jr T,0xf7f136
+	calr	14	; F7F129  calr 0xf7f13a
+	jr	8	; F7F12C  jr T,0xf7f136
+	calr	19	; F7F12E  calr 0xf7f144
+	jr	3	; F7F131  jr T,0xf7f136
+	calr	140	; F7F133  calr 0xf7f1c2
+	calr	143	; F7F136  calr 0xf7f1c8
+	ret	; F7F139  ret
+
+; Evidence: reached from calr from prom_b 0xF7F129, and from nothing else
+;           the scans see.
+sub_F7F13A:
+	pushw	1	; F7F13A  push 0x0001
+	call	16002600	; F7F13D  call 0xf42e28
+	inc	2, xsp	; F7F141  inc 2,XSP
+	ret	; F7F143  ret
+
+; Evidence: reached from calr from prom_b 0xF7F12E, and from nothing else
+;           the scans see.
+sub_F7F144:
+	stdi8	(10278), 3	; F7F144  ld (0x2826),0x03
+	call	16003824	; F7F149  call 0xf432f0
+	cps	wa, 1	; F7F14D  cp WA,1
+	jr	c, 112	; F7F14F  jr C,0xf7f1c1
+	cp	wa, 999	; F7F151  cp WA,0x03e7
+	jr	ugt, 106	; F7F155  jr UGT,0xf7f1c1
+	.byte 0xC1, 0xD4, 0x0D, 0x3F, 0x02	; F7F157  cp (0x0dd4),0x02   [llvm-mc cannot encode this]
+	jr	z, 9	; F7F15C  jr Z,0xf7f167
+	.byte 0xC1, 0xD4, 0x0D, 0x3F, 0x03	; F7F15E  cp (0x0dd4),0x03   [llvm-mc cannot encode this]
+	jr	z, 35	; F7F163  jr Z,0xf7f188
+	jr	90	; F7F165  jr T,0xf7f1c1
+	stda16	(3096), wa	; F7F167  ld (0x0c18),WA
+	stw_da	(6304861), wa	; F7F16B  ld (0x60345d),WA
+	.byte 0xD1, 0xD8, 0x0D, 0xF0	; F7F170  cp WA,(0x0dd8)   [llvm-mc cannot encode this]
+	jr	ule, 8	; F7F174  jr ULE,0xf7f17e
+	stda16	(3544), wa	; F7F176  ld (0x0dd8),WA
+	stda16	(4857), wa	; F7F17A  ld (0x12f9),WA
+	stda16	(3542), wa	; F7F17E  ld (0x0dd6),WA
+	stda16	(4855), wa	; F7F182  ld (0x12f7),WA
+	jr	35	; F7F186  jr T,0xf7f1ab
+	stda16	(3544), wa	; F7F188  ld (0x0dd8),WA
+	stda16	(4857), wa	; F7F18C  ld (0x12f9),WA
+	.byte 0xD1, 0xD6, 0x0D, 0xF0	; F7F190  cp WA,(0x0dd6)   [llvm-mc cannot encode this]
+	jr	nc, 17	; F7F194  jr NC,0xf7f1a7
+	stda16	(3542), wa	; F7F196  ld (0x0dd6),WA
+	stda16	(4855), wa	; F7F19A  ld (0x12f7),WA
+	stda16	(3096), wa	; F7F19E  ld (0x0c18),WA
+	stw_da	(6304861), wa	; F7F1A2  ld (0x60345d),WA
+	stda16	(3544), wa	; F7F1A7  ld (0x0dd8),WA
+	ldw_d16	wa, (3544)	; F7F1AB  ld WA,(0x0dd8)
+	.byte 0xD1, 0xD6, 0x0D, 0xA0	; F7F1AF  sub WA,(0x0dd6)   [llvm-mc cannot encode this]
+	inc	1, wa	; F7F1B3  inc 1,WA
+	stw_da	(6304863), wa	; F7F1B5  ld (0x60345f),WA
+	call	16002596	; F7F1BA  call 0xf42e24
+	calr	65113	; F7F1BE  calr 0xf7f01a
+	ret	; F7F1C1  ret
+
+; Evidence: reached from calr from prom_b 0xF7F133, and from nothing else
+;           the scans see.
+sub_F7F1C2:
+	stdi8	(10272), 43	; F7F1C2  ld (0x2820),0x2b
+	ret	; F7F1C7  ret
+
+; Evidence: reached from calr from prom_b 0xF7F136, and from nothing else
+;           the scans see.
+sub_F7F1C8:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F1C8  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 38	; F7F1CC  jr Z,0xf7f1f4
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F7F1CE  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 31	; F7F1D3  jr Z,0xf7f1f4
+	xor	xwa, xwa	; F7F1D5  xor XWA,XWA
+	ldb_d8	a, (3540)	; F7F1D7  ld A,(0x0dd4)
+	sla	xwa, 2	; F7F1DB  sla 0x02,XWA
+	stdi8	(9536), 0	; F7F1DE  ld (0x2540),0x00
+	ld	xiy, 16249333	; F7F1E3  ld XIY,0x00f7f1f5
+	.byte 0xE3, 0x07, 0xF4, 0xE0, 0x25	; F7F1E8  ld XIY,(XIY+WA)   [llvm-mc cannot encode this]
+	push	xiy	; F7F1ED  push XIY
+	call	16002592	; F7F1EE  call 0xf42e20
+	inc	4, xsp	; F7F1F2  inc 4,XSP
+	ret	; F7F1F4  ret
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F7F1F5 -- pointers to blink templates, read through
+;                        Blink_Command
+;
+; Evidence: read by `ld XIY,0x00F7F1F5` at 0xF7F1E3 followed by `ld
+;           XIY,(XIY+WA)`, `push XIY` and `call 0xF42E20` --
+;           T_Blink_Command, prom_b 0xF0E9CF
+;           (notes/FINDINGS-prom_b-field-blink.md). Same shape, same callee
+;           and the same two leading NULL entries as prom_a's
+;           BlinkArgPtrs_F8024D. FRAMED on purpose: nothing bounds the
+;           index, and what the 2 templates it names are for is not
+;           established.
+; ---------------------------------------------------------------------
+BlinkArgPtrs_F7F1F5:
+	.long 0x00000000	; F7F1F5  [0]  NULL
+	.long 0x00000000	; F7F1F9  [1]  NULL
+	.long 0x00F3A6BA	; F7F1FD  [2]
+	.long 0x00F3A6C4	; F7F201  [3]
+
+	ret	; F7F205  ret   <- button table 0xF7D858 entry 0 (MEASURE DELETE)
+	ret	; F7F206  ret   <- button table 0xF7D858 entry 1 (MEASURE DELETE)
+	ret	; F7F207  ret   <- button table 0xF7D858 entry 2 (MEASURE DELETE)
+	ret	; F7F208  ret   <- button table 0xF7D858 entry 3 (MEASURE DELETE)
+	ret	; F7F209  ret   <- button table 0xF7D858 entry 4 (MEASURE DELETE)
+	ret	; F7F20A  ret   <- button table 0xF7D858 entry 5 (MEASURE DELETE)
+	ret	; F7F20B  ret   <- button table 0xF7D858 entry 6 (MEASURE DELETE)
+	ret	; F7F20C  ret   <- button table 0xF7D858 entry 7 (MEASURE DELETE)
+	ret	; F7F20D  ret   <- button table 0xF7D858 entry 8 (MEASURE DELETE) and 1 more slot(s)
+
+; Evidence: table 0xF7D858 entry 10, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F20E:
+	bit	7, w	; F7F20E  bit 0x07,W
+	jr	nz, 9	; F7F211  jr NZ,0xf7f21c
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7F213  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001400	; F7F218  call 0xf42978
+	ret	; F7F21C  ret
+
+; Evidence: table 0xF7D858 entry 11, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F21D:
+	bit	7, w	; F7F21D  bit 0x07,W
+	jr	nz, 6	; F7F220  jr NZ,0xf7f228
+	call	16001392	; F7F222  call 0xf42970
+	jr	0	; F7F226  jr T,0xf7f228
+	ret	; F7F228  ret
+	ret	; F7F229  ret   <- button table 0xF7D858 entry 12 (MEASURE DELETE)
+	ret	; F7F22A  ret   <- button table 0xF7D858 entry 13 (MEASURE DELETE)
+	ret	; F7F22B  ret   <- button table 0xF7D858 entry 14 (MEASURE DELETE)
+
+; Evidence: table 0xF7D858 entry 15, screen MEASURE DELETE. A bare button
+;           number, so no name; see the banner.
+sub_F7F22C:
+	bit	7, w	; F7F22C  bit 0x07,W
+	jr	nz, 4	; F7F22F  jr NZ,0xf7f235
+	call	16001392	; F7F231  call 0xf42970
+	ret	; F7F235  ret
+	ret	; F7F236  ret   <- button table 0xF7D858 entry 16 (MEASURE DELETE) and 15 more slot(s)
+
+; Evidence: reached from calr from prom_b 0xF7F094; calr from prom_b
+;           0xF7F0BF, and from nothing else the scans see.
+sub_F7F237:
+	pushw	1	; F7F237  push 0x0001
+	call	16002600	; F7F23A  call 0xf42e28
+	inc	2, xsp	; F7F23E  inc 2,XSP
+	call	16002596	; F7F240  call 0xf42e24
+	ret	; F7F244  ret
+
+; Evidence: reached from calr from prom_b 0xF7F070; calr from prom_b
+;           0xF7F0AB, and from nothing else the scans see.
+sub_F7F245:
+	pushw	0	; F7F245  push 0x0000
+	call	16002600	; F7F248  call 0xf42e28
+	inc	2, xsp	; F7F24C  inc 2,XSP
+	call	16002596	; F7F24E  call 0xf42e24
+	ret	; F7F252  ret
+	ret	; F7F253  ret
+
+; ---------------------------------------------------------------------
+; Paint_MeasureErase -- paints the panel screen whose own title text reads
+;                       "MEASURE ERASE"
+;
+; Reached by: the +0 method stub of screen object 0xF430B0, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D0FE
+; Evidence: the routine loads XIY = 0xF3A8F5 and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "MEASURE ERASE", and the name is that text CamelCased,
+;           with the ROM's own spelling kept (zeros for O's included). The
+;           rule is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_MeasureErase:
+	call	16002688	; F7F254  call 0xf42e80
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7F258  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 27	; F7F25D  jr NZ,0xf7f27a
+	call	16001408	; F7F25F  call 0xf42980
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7F263  or (0x2075),0x09   [llvm-mc cannot encode this]
+	stdi16	(8347), 1156	; F7F268  ld (0x209b),0x0484
+	stdi16	(9830), 65535	; F7F26E  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7F274  ld (0x266a),0xffff
+	calr	61532	; F7F27A  calr 0xf7e2d9
+	stdi8	(9536), 0	; F7F27D  ld (0x2540),0x00
+	ld	xiy, 15968501	; F7F282  ld XIY,0x00f3a8f5
+	ld	xix, 15968669	; F7F287  ld XIX,0x00f3a99d
+	call	15996912	; F7F28C  call 0xf417f0
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7F290  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7F295  jr NZ,0xf7f2a7
+	ld	xiy, 15968669	; F7F297  ld XIY,0x00f3a99d
+	ld	xix, 15968730	; F7F29C  ld XIX,0x00f3a9da
+	call	15996912	; F7F2A1  call 0xf417f0
+	jr	28	; F7F2A5  jr T,0xf7f2c3
+	ld	xiy, 15969180	; F7F2A7  ld XIY,0x00f3ab9c
+	ld	xix, 15969243	; F7F2AC  ld XIX,0x00f3abdb
+	call	15996912	; F7F2B1  call 0xf417f0
+	ld	xiy, 15967329	; F7F2B5  ld XIY,0x00f3a461
+	ld	xix, 15967359	; F7F2BA  ld XIX,0x00f3a47f
+	call	15996912	; F7F2BF  call 0xf417f0
+	ld	xiy, 15968730	; F7F2C3  ld XIY,0x00f3a9da
+	ld	xix, 15968791	; F7F2C8  ld XIX,0x00f3aa17
+	call	15996916	; F7F2CD  call 0xf417f4
+	calr	61459	; F7F2D1  calr 0xf7e2e7
+	ret	; F7F2D4  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_MeasureErase -- the whole body of the MeasureErase
+;                                 screen's Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF430B0, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D103
+; Evidence: the whole body of screen object 0xF430B0's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D103 is `call
+;           0xF7F2D5` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_MeasureErase:
+	call	16001412	; F7F2D5  call 0xf42984
+	ret	; F7F2D9  ret
+	ret	; F7F2DA  ret   <- button table 0xF7D8D8 entry 0 (MEASURE ERASE)
+	ret	; F7F2DB  ret   <- button table 0xF7D8D8 entry 1 (MEASURE ERASE)
+	ret	; F7F2DC  ret   <- button table 0xF7D8D8 entry 2 (MEASURE ERASE)
+	ret	; F7F2DD  ret   <- button table 0xF7D8D8 entry 3 (MEASURE ERASE)
+
+; Evidence: table 0xF7D8D8 entry 4, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F2DE:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F2DE  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7F2E2  jr Z,0xf7f2e8
+	call	16002596	; F7F2E4  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F2E8  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 1	; F7F2ED  ld (0x0e18),0x01
+	bit	7, w	; F7F2F2  bit 0x07,W
+	jr	nz, 6	; F7F2F5  jr NZ,0xf7f2fd
+	call	16001432	; F7F2F7  call 0xf42998
+	jr	4	; F7F2FB  jr T,0xf7f301
+	call	16001436	; F7F2FD  call 0xf4299c
+	calr	147	; F7F301  calr 0xf7f397
+	ret	; F7F304  ret
+	ret	; F7F305  ret   <- button table 0xF7D8D8 entry 5 (MEASURE ERASE)
+	ret	; F7F306  ret   <- button table 0xF7D8D8 entry 6 (MEASURE ERASE)
+	ret	; F7F307  ret   <- button table 0xF7D8D8 entry 7 (MEASURE ERASE)
+
+; Evidence: table 0xF7D8D8 entry 8, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F308:
+	bit	7, w	; F7F308  bit 0x07,W
+	jr	z, 28	; F7F30B  jr Z,0xf7f329
+	.byte 0xC1, 0xBB, 0x0D, 0x3F, 0x01	; F7F30D  cp (0x0dbb),0x01   [llvm-mc cannot encode this]
+	jr	z, 21	; F7F312  jr Z,0xf7f329
+	calr	65326	; F7F314  calr 0xf7f245
+	call	16001416	; F7F317  call 0xf42988
+	ldb_d8	a, (3515)	; F7F31B  ld A,(0x0dbb)
+	stb_d8	(4860), a	; F7F31F  ld (0x12fc),A
+	calr	113	; F7F323  calr 0xf7f397
+	calr	1	; F7F326  calr 0xf7f32a
+	ret	; F7F329  ret
+
+; Evidence: reached from calr from prom_b 0xF7F326; calr from prom_b
+;           0xF7F368, and from nothing else the scans see.
+sub_F7F32A:
+	stdi8	(9536), 1	; F7F32A  ld (0x2540),0x01
+	calr	61350	; F7F32F  calr 0xf7e2d8
+	ld	xiy, 15963473	; F7F332  ld XIY,0x00f39551
+	ld	xix, 15963481	; F7F337  ld XIX,0x00f39559
+	call	15996912	; F7F33C  call 0xf417f0
+	ld	xiy, 15968780	; F7F340  ld XIY,0x00f3aa0c
+	call	15996956	; F7F345  call 0xf4181c
+	ret	; F7F349  ret
+
+; Evidence: table 0xF7D8D8 entry 9, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F34A:
+	bit	7, w	; F7F34A  bit 0x07,W
+	jr	z, 30	; F7F34D  jr Z,0xf7f36d
+	.byte 0xC1, 0xBB, 0x0D, 0x3F, 0x02	; F7F34F  cp (0x0dbb),0x02   [llvm-mc cannot encode this]
+	jr	z, 30	; F7F354  jr Z,0xf7f374
+	calr	65246	; F7F356  calr 0xf7f237
+	call	16001420	; F7F359  call 0xf4298c
+	ldb_d8	a, (3515)	; F7F35D  ld A,(0x0dbb)
+	stb_d8	(4860), a	; F7F361  ld (0x12fc),A
+	calr	47	; F7F365  calr 0xf7f397
+	calr	65471	; F7F368  calr 0xf7f32a
+	jr	7	; F7F36B  jr T,0xf7f374
+	calr	65237	; F7F36D  calr 0xf7f245
+	call	16001440	; F7F370  call 0xf429a0
+	ret	; F7F374  ret
+
+; Evidence: table 0xF7D8D8 entry 10, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F375:
+	bit	7, w	; F7F375  bit 0x07,W
+	jr	z, 28	; F7F378  jr Z,0xf7f396
+	.byte 0xC1, 0xBB, 0x0D, 0x3F, 0x03	; F7F37A  cp (0x0dbb),0x03   [llvm-mc cannot encode this]
+	jr	z, 21	; F7F37F  jr Z,0xf7f396
+	calr	65203	; F7F381  calr 0xf7f237
+	call	16001424	; F7F384  call 0xf42990
+	ldb_d8	a, (3515)	; F7F388  ld A,(0x0dbb)
+	stb_d8	(4860), a	; F7F38C  ld (0x12fc),A
+	calr	4	; F7F390  calr 0xf7f397
+	calr	65428	; F7F393  calr 0xf7f32a
+	ret	; F7F396  ret
+
+; Evidence: reached from calr from prom_b 0xF7F301; calr from prom_b
+;           0xF7F323, and from nothing else the scans see.
+sub_F7F397:
+	stdi8	(9536), 0	; F7F397  ld (0x2540),0x00
+	calr	61241	; F7F39C  calr 0xf7e2d8
+	ld	xiy, 15968730	; F7F39F  ld XIY,0x00f3a9da
+	ld	xix, 15968780	; F7F3A4  ld XIX,0x00f3aa0c
+	call	15996916	; F7F3A9  call 0xf417f4
+	ret	; F7F3AD  ret
+
+; Evidence: table 0xF7D8D8 entry 11, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F3AE:
+	bit	7, w	; F7F3AE  bit 0x07,W
+	jr	z, 28	; F7F3B1  jr Z,0xf7f3cf
+	.byte 0xC1, 0xBB, 0x0D, 0x3F, 0x04	; F7F3B3  cp (0x0dbb),0x04   [llvm-mc cannot encode this]
+	jr	z, 21	; F7F3B8  jr Z,0xf7f3cf
+	calr	65160	; F7F3BA  calr 0xf7f245
+	call	16001428	; F7F3BD  call 0xf42994
+	ldb_d8	a, (3515)	; F7F3C1  ld A,(0x0dbb)
+	stb_d8	(4860), a	; F7F3C5  ld (0x12fc),A
+	calr	65483	; F7F3C9  calr 0xf7f397
+	calr	65371	; F7F3CC  calr 0xf7f32a
+	ret	; F7F3CF  ret
+	ret	; F7F3D0  ret   <- button table 0xF7D8D8 entry 12 (MEASURE ERASE)
+	ret	; F7F3D1  ret   <- button table 0xF7D8D8 entry 13 (MEASURE ERASE)
+	ret	; F7F3D2  ret   <- button table 0xF7D8D8 entry 14 (MEASURE ERASE)
+
+; Evidence: table 0xF7D8D8 entry 15, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F3D3:
+	bit	7, w	; F7F3D3  bit 0x07,W
+	jr	z, 2	; F7F3D6  jr Z,0xf7f3da
+	jr	6	; F7F3D8  jr T,0xf7f3e0
+	stdi16	(8304), 32794	; F7F3DA  ld (0x2070),0x801a
+	ret	; F7F3E0  ret
+	ret	; F7F3E1  ret   <- button table 0xF7D8D8 entry 16 (MEASURE ERASE) and 4 more slot(s)
+
+; Evidence: table 0xF7D8D8 entry 21, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F3E2:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F3E2  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7F3E6  jr Z,0xf7f3ec
+	call	16002596	; F7F3E8  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F3EC  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 4	; F7F3F1  ld (0x0e18),0x04
+	bit	7, w	; F7F3F6  bit 0x07,W
+	jr	nz, 6	; F7F3F9  jr NZ,0xf7f401
+	call	16001432	; F7F3FB  call 0xf42998
+	jr	4	; F7F3FF  jr T,0xf7f405
+	call	16001436	; F7F401  call 0xf4299c
+	calr	65423	; F7F405  calr 0xf7f397
+	ret	; F7F408  ret
+	ret	; F7F409  ret   <- button table 0xF7D8D8 entry 22 (MEASURE ERASE) and 4 more slot(s)
+
+; Evidence: table 0xF7D8D8 entry 27, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F40A:
+	calr	51	; F7F40A  calr 0xf7f440
+	ret	; F7F40D  ret
+	ret	; F7F40E  ret   <- button table 0xF7D8D8 entry 28 (MEASURE ERASE) and 3 more slot(s)
+	ret	; F7F40F  ret   <- button table 0xF7D958 entry 0 (MEASURE ERASE)
+	ret	; F7F410  ret   <- button table 0xF7D958 entry 1 (MEASURE ERASE)
+	ret	; F7F411  ret   <- button table 0xF7D958 entry 2 (MEASURE ERASE)
+	ret	; F7F412  ret   <- button table 0xF7D958 entry 3 (MEASURE ERASE)
+	ret	; F7F413  ret   <- button table 0xF7D958 entry 4 (MEASURE ERASE)
+	ret	; F7F414  ret   <- button table 0xF7D958 entry 5 (MEASURE ERASE)
+	ret	; F7F415  ret   <- button table 0xF7D958 entry 6 (MEASURE ERASE)
+	ret	; F7F416  ret   <- button table 0xF7D958 entry 7 (MEASURE ERASE)
+	ret	; F7F417  ret   <- button table 0xF7D958 entry 8 (MEASURE ERASE)
+
+; Evidence: table 0xF7D958 entry 9, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F418:
+	bit	7, w	; F7F418  bit 0x07,W
+	jr	nz, 9	; F7F41B  jr NZ,0xf7f426
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7F41D  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001440	; F7F422  call 0xf429a0
+	ret	; F7F426  ret
+
+; Evidence: table 0xF7D958 entry 10, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F427:
+	bit	7, w	; F7F427  bit 0x07,W
+	jr	nz, 4	; F7F42A  jr NZ,0xf7f430
+	call	16001432	; F7F42C  call 0xf42998
+	ret	; F7F430  ret
+	ret	; F7F431  ret   <- button table 0xF7D958 entry 11 (MEASURE ERASE)
+	ret	; F7F432  ret   <- button table 0xF7D958 entry 12 (MEASURE ERASE)
+	ret	; F7F433  ret   <- button table 0xF7D958 entry 13 (MEASURE ERASE)
+	ret	; F7F434  ret   <- button table 0xF7D958 entry 14 (MEASURE ERASE)
+
+; Evidence: table 0xF7D958 entry 15, screen MEASURE ERASE. A bare button
+;           number, so no name; see the banner.
+sub_F7F435:
+	bit	7, w	; F7F435  bit 0x07,W
+	jr	nz, 4	; F7F438  jr NZ,0xf7f43e
+	call	16001432	; F7F43A  call 0xf42998
+	ret	; F7F43E  ret
+	ret	; F7F43F  ret   <- button table 0xF7D958 entry 16 (MEASURE ERASE) and 15 more slot(s)
+
+; Evidence: reached from calr from prom_b 0xF7F40A, and from nothing else
+;           the scans see.
+sub_F7F440:
+	ldb_d8	a, (8807)	; F7F440  ld A,(0x2267)
+	cp	a, 9	; F7F444  cp A,0x09
+	jr	le, 12	; F7F447  jr LE,0xf7f455
+	cp	a, 15	; F7F449  cp A,0x0f
+	jr	z, 12	; F7F44C  jr Z,0xf7f45a
+	cp	a, 128	; F7F44E  cp A,0x80
+	jr	z, 12	; F7F451  jr Z,0xf7f45f
+	jr	13	; F7F453  jr T,0xf7f462
+	calr	14	; F7F455  calr 0xf7f466
+	jr	8	; F7F458  jr T,0xf7f462
+	calr	19	; F7F45A  calr 0xf7f470
+	jr	3	; F7F45D  jr T,0xf7f462
+	calr	140	; F7F45F  calr 0xf7f4ee
+	calr	143	; F7F462  calr 0xf7f4f4
+	ret	; F7F465  ret
+
+; Evidence: reached from calr from prom_b 0xF7F455, and from nothing else
+;           the scans see.
+sub_F7F466:
+	pushw	1	; F7F466  push 0x0001
+	call	16002600	; F7F469  call 0xf42e28
+	inc	2, xsp	; F7F46D  inc 2,XSP
+	ret	; F7F46F  ret
+
+; Evidence: reached from calr from prom_b 0xF7F45A, and from nothing else
+;           the scans see.
+sub_F7F470:
+	stdi8	(10278), 3	; F7F470  ld (0x2826),0x03
+	call	16003824	; F7F475  call 0xf432f0
+	cps	wa, 1	; F7F479  cp WA,1
+	jr	lt, 112	; F7F47B  jr LT,0xf7f4ed
+	cp	wa, 999	; F7F47D  cp WA,0x03e7
+	jr	gt, 106	; F7F481  jr GT,0xf7f4ed
+	.byte 0xC1, 0xBB, 0x0D, 0x3F, 0x02	; F7F483  cp (0x0dbb),0x02   [llvm-mc cannot encode this]
+	jr	z, 9	; F7F488  jr Z,0xf7f493
+	.byte 0xC1, 0xBB, 0x0D, 0x3F, 0x03	; F7F48A  cp (0x0dbb),0x03   [llvm-mc cannot encode this]
+	jr	z, 35	; F7F48F  jr Z,0xf7f4b4
+	jr	90	; F7F491  jr T,0xf7f4ed
+	stda16	(3096), wa	; F7F493  ld (0x0c18),WA
+	stw_da	(6304866), wa	; F7F497  ld (0x603462),WA
+	.byte 0xD1, 0x2C, 0x0C, 0xF0	; F7F49C  cp WA,(0x0c2c)   [llvm-mc cannot encode this]
+	jr	ule, 8	; F7F4A0  jr ULE,0xf7f4aa
+	stda16	(3116), wa	; F7F4A2  ld (0x0c2c),WA
+	stda16	(4857), wa	; F7F4A6  ld (0x12f9),WA
+	stda16	(3114), wa	; F7F4AA  ld (0x0c2a),WA
+	stda16	(4855), wa	; F7F4AE  ld (0x12f7),WA
+	jr	35	; F7F4B2  jr T,0xf7f4d7
+	stda16	(3116), wa	; F7F4B4  ld (0x0c2c),WA
+	stda16	(4857), wa	; F7F4B8  ld (0x12f9),WA
+	.byte 0xD1, 0x2A, 0x0C, 0xF0	; F7F4BC  cp WA,(0x0c2a)   [llvm-mc cannot encode this]
+	jr	nc, 17	; F7F4C0  jr NC,0xf7f4d3
+	stda16	(3114), wa	; F7F4C2  ld (0x0c2a),WA
+	stda16	(4855), wa	; F7F4C6  ld (0x12f7),WA
+	stda16	(3096), wa	; F7F4CA  ld (0x0c18),WA
+	stw_da	(6304866), wa	; F7F4CE  ld (0x603462),WA
+	stda16	(3116), wa	; F7F4D3  ld (0x0c2c),WA
+	ldw_d16	wa, (3116)	; F7F4D7  ld WA,(0x0c2c)
+	.byte 0xD1, 0x2A, 0x0C, 0xA0	; F7F4DB  sub WA,(0x0c2a)   [llvm-mc cannot encode this]
+	inc	1, wa	; F7F4DF  inc 1,WA
+	stw_da	(6304868), wa	; F7F4E1  ld (0x603464),WA
+	call	16002596	; F7F4E6  call 0xf42e24
+	calr	65194	; F7F4EA  calr 0xf7f397
+	ret	; F7F4ED  ret
+
+; Evidence: reached from calr from prom_b 0xF7F45F, and from nothing else
+;           the scans see.
+sub_F7F4EE:
+	stdi8	(10272), 43	; F7F4EE  ld (0x2820),0x2b
+	ret	; F7F4F3  ret
+
+; Evidence: reached from calr from prom_b 0xF7F462, and from nothing else
+;           the scans see.
+sub_F7F4F4:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F4F4  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 38	; F7F4F8  jr Z,0xf7f520
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F7F4FA  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 31	; F7F4FF  jr Z,0xf7f520
+	xor	xwa, xwa	; F7F501  xor XWA,XWA
+	ldb_d8	a, (3515)	; F7F503  ld A,(0x0dbb)
+	sla	xwa, 2	; F7F507  sla 0x02,XWA
+	stdi8	(9536), 0	; F7F50A  ld (0x2540),0x00
+	ld	xiy, 16250145	; F7F50F  ld XIY,0x00f7f521
+	.byte 0xE3, 0x07, 0xF4, 0xE0, 0x25	; F7F514  ld XIY,(XIY+WA)   [llvm-mc cannot encode this]
+	push	xiy	; F7F519  push XIY
+	call	16002592	; F7F51A  call 0xf42e20
+	inc	4, xsp	; F7F51E  inc 4,XSP
+	ret	; F7F520  ret
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F7F521 -- pointers to blink templates, read through
+;                        Blink_Command
+;
+; Evidence: read by `ld XIY,0x00F7F521` at 0xF7F50F followed by `ld
+;           XIY,(XIY+WA)`, `push XIY` and `call 0xF42E20` --
+;           T_Blink_Command, prom_b 0xF0E9CF
+;           (notes/FINDINGS-prom_b-field-blink.md). Same shape, same callee
+;           and the same two leading NULL entries as prom_a's
+;           BlinkArgPtrs_F8024D. FRAMED on purpose: nothing bounds the
+;           index, and what the 2 templates it names are for is not
+;           established.
+; ---------------------------------------------------------------------
+BlinkArgPtrs_F7F521:
+	.long 0x00000000	; F7F521  [0]  NULL
+	.long 0x00000000	; F7F525  [1]  NULL
+	.long 0x00F3A9F8	; F7F529  [2]
+	.long 0x00F3AA02	; F7F52D  [3]
+	.long 0x00000000	; F7F531  [4]  NULL
+
+	.fill	1, 1, 0x0E	; F7F535-F7F535  `ret` padding below the table above
+
+
+; ---------------------------------------------------------------------
+; Paint_PanelWrite -- paints the panel screen whose own title text reads
+;                     "PANEL WRITE"
+;
+; Reached by: the +0 method stub of screen object 0xF43130, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D11F
+; Evidence: the routine loads XIY = 0xF3AD88 and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "PANEL WRITE", and the name is that text CamelCased, with
+;           the ROM's own spelling kept (zeros for O's included). The rule
+;           is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_PanelWrite:
+	call	16002688	; F7F536  call 0xf42e80
+	call	16001716	; F7F53A  call 0xf42ab4
+	calr	60824	; F7F53E  calr 0xf7e2d9
+	stdi8	(9536), 0	; F7F541  ld (0x2540),0x00
+	ld	xiy, 15969672	; F7F546  ld XIY,0x00f3ad88
+	ld	xix, 15969967	; F7F54B  ld XIX,0x00f3aeaf
+	call	15996912	; F7F550  call 0xf417f0
+	calr	60816	; F7F554  calr 0xf7e2e7
+	ret	; F7F557  ret
+	ret	; F7F558  ret
+
+; ---------------------------------------------------------------------
+; ScreenButtonBody_PanelWrite -- the whole body of the PanelWrite screen's
+;                                Button method
+;
+; Reached by: the +8 method stub of screen object 0xF43130, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D129
+; Evidence: the whole body of screen object 0xF43130's +8 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D129 is `call
+;           0xF7F559` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenButtonBody_PanelWrite:
+	cps	hl, 6	; F7F559  cp HL,6
+	jr	z, 6	; F7F55B  jr Z,0xf7f563
+	cp	hl, 23	; F7F55D  cp HL,0x0017
+	jr	nz, 6	; F7F561  jr NZ,0xf7f569
+	call	16001724	; F7F563  call 0xf42abc
+	jr	10	; F7F567  jr T,0xf7f573
+	cp	hl, 15	; F7F569  cp HL,0x000f
+	jr	nz, 4	; F7F56D  jr NZ,0xf7f573
+	call	16250228	; F7F56F  call 0xf7f574
+	ret	; F7F573  ret
+
+; Evidence: reached from call from prom_b 0xF7F56F, and from nothing else
+;           the scans see.
+sub_F7F574:
+	bit	7, w	; F7F574  bit 0x07,W
+	jr	z, 2	; F7F577  jr Z,0xf7f57b
+	jr	6	; F7F579  jr T,0xf7f581
+	stdi16	(8304), 32794	; F7F57B  ld (0x2070),0x801a
+	ret	; F7F581  ret
+
+; ---------------------------------------------------------------------
+; Paint_Quantize -- paints the panel screen whose own title text reads
+;                   "QUANTIZE"
+;
+; Reached by: the +0 method stub of screen object 0xF43090, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D12F
+; Evidence: the routine loads XIY = 0xF3ABDB and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "QUANTIZE", and the name is that text CamelCased, with
+;           the ROM's own spelling kept (zeros for O's included). The rule
+;           is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_Quantize:
+	call	16002688	; F7F582  call 0xf42e80
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7F586  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 27	; F7F58B  jr NZ,0xf7f5a8
+	call	16001288	; F7F58D  call 0xf42908
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7F591  or (0x2075),0x01   [llvm-mc cannot encode this]
+	stdi16	(8347), 1156	; F7F596  ld (0x209b),0x0484
+	stdi16	(9830), 65535	; F7F59C  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7F5A2  ld (0x266a),0xffff
+	calr	60718	; F7F5A8  calr 0xf7e2d9
+	stdi8	(9536), 0	; F7F5AB  ld (0x2540),0x00
+	ld	xiy, 15969243	; F7F5B0  ld XIY,0x00f3abdb
+	ld	xix, 15969459	; F7F5B5  ld XIX,0x00f3acb3
+	call	15996912	; F7F5BA  call 0xf417f0
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7F5BE  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7F5C3  jr NZ,0xf7f5d5
+	ld	xiy, 15969459	; F7F5C5  ld XIY,0x00f3acb3
+	ld	xix, 15969520	; F7F5CA  ld XIX,0x00f3acf0
+	call	15996912	; F7F5CF  call 0xf417f0
+	jr	28	; F7F5D3  jr T,0xf7f5f1
+	ld	xiy, 15968218	; F7F5D5  ld XIY,0x00f3a7da
+	ld	xix, 15968501	; F7F5DA  ld XIX,0x00f3a8f5
+	call	15996912	; F7F5DF  call 0xf417f0
+	ld	xiy, 15967329	; F7F5E3  ld XIY,0x00f3a461
+	ld	xix, 15967359	; F7F5E8  ld XIX,0x00f3a47f
+	call	15996912	; F7F5ED  call 0xf417f0
+	ld	xiy, 15969520	; F7F5F1  ld XIY,0x00f3acf0
+	ld	xix, 15969602	; F7F5F6  ld XIX,0x00f3ad42
+	call	15996916	; F7F5FB  call 0xf417f4
+	calr	60645	; F7F5FF  calr 0xf7e2e7
+	ret	; F7F602  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_Quantize -- the whole body of the Quantize screen's Leave
+;                             method
+;
+; Reached by: the +4 method stub of screen object 0xF43090, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D134
+; Evidence: the whole body of screen object 0xF43090's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D134 is `call
+;           0xF7F603` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_Quantize:
+	call	16001292	; F7F603  call 0xf4290c
+	ret	; F7F607  ret
+	ret	; F7F608  ret   <- button table 0xF7D9D8 entry 0 (QUANTIZE)
+	ret	; F7F609  ret   <- button table 0xF7D9D8 entry 1 (QUANTIZE)
+	ret	; F7F60A  ret   <- button table 0xF7D9D8 entry 2 (QUANTIZE)
+	ret	; F7F60B  ret   <- button table 0xF7D9D8 entry 3 (QUANTIZE)
+
+; Evidence: table 0xF7D9D8 entry 4, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F60C:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F60C  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7F610  jr Z,0xf7f616
+	call	16002596	; F7F612  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F616  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 1	; F7F61B  ld (0x0e18),0x01
+	bit	7, w	; F7F620  bit 0x07,W
+	jr	z, 6	; F7F623  jr Z,0xf7f62b
+	call	16001324	; F7F625  call 0xf4292c
+	jr	4	; F7F629  jr T,0xf7f62f
+	call	16001320	; F7F62B  call 0xf42928
+	calr	179	; F7F62F  calr 0xf7f6e5
+	ret	; F7F632  ret
+	ret	; F7F633  ret   <- button table 0xF7D9D8 entry 5 (QUANTIZE)
+	ret	; F7F634  ret   <- button table 0xF7D9D8 entry 6 (QUANTIZE)
+	ret	; F7F635  ret   <- button table 0xF7D9D8 entry 7 (QUANTIZE)
+
+; Evidence: table 0xF7D9D8 entry 8, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F636:
+	bit	7, w	; F7F636  bit 0x07,W
+	jr	z, 16	; F7F639  jr Z,0xf7f64b
+	.byte 0xC1, 0xB9, 0x0D, 0x3F, 0x01	; F7F63B  cp (0x0db9),0x01   [llvm-mc cannot encode this]
+	jr	z, 37	; F7F640  jr Z,0xf7f667
+	calr	64512	; F7F642  calr 0xf7f245
+	call	16001296	; F7F645  call 0xf42910
+	jr	14	; F7F649  jr T,0xf7f659
+	.byte 0xC1, 0xB9, 0x0D, 0x3F, 0x05	; F7F64B  cp (0x0db9),0x05   [llvm-mc cannot encode this]
+	jr	z, 21	; F7F650  jr Z,0xf7f667
+	calr	64496	; F7F652  calr 0xf7f245
+	call	16001312	; F7F655  call 0xf42920
+	ldb_d8	a, (3513)	; F7F659  ld A,(0x0db9)
+	stb_d8	(4862), a	; F7F65D  ld (0x12fe),A
+	calr	129	; F7F661  calr 0xf7f6e5
+	calr	1	; F7F664  calr 0xf7f668
+	ret	; F7F667  ret
+
+; Evidence: reached from calr from prom_b 0xF7F664; calr from prom_b
+;           0xF7F6B6, and from nothing else the scans see.
+sub_F7F668:
+	stdi8	(9536), 1	; F7F668  ld (0x2540),0x01
+	calr	60520	; F7F66D  calr 0xf7e2d8
+	ld	xiy, 15963473	; F7F670  ld XIY,0x00f39551
+	ld	xix, 15963481	; F7F675  ld XIX,0x00f39559
+	call	15996912	; F7F67A  call 0xf417f0
+	ld	xiy, 15969591	; F7F67E  ld XIY,0x00f3ad37
+	call	15996956	; F7F683  call 0xf4181c
+	ret	; F7F687  ret
+
+; Evidence: table 0xF7D9D8 entry 9, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F688:
+	bit	7, w	; F7F688  bit 0x07,W
+	jr	z, 16	; F7F68B  jr Z,0xf7f69d
+	.byte 0xC1, 0xB9, 0x0D, 0x3F, 0x02	; F7F68D  cp (0x0db9),0x02   [llvm-mc cannot encode this]
+	jr	z, 37	; F7F692  jr Z,0xf7f6b9
+	calr	64416	; F7F694  calr 0xf7f237
+	call	16001300	; F7F697  call 0xf42914
+	jr	14	; F7F69B  jr T,0xf7f6ab
+	.byte 0xC1, 0xB9, 0x0D, 0x3F, 0x06	; F7F69D  cp (0x0db9),0x06   [llvm-mc cannot encode this]
+	jr	z, 21	; F7F6A2  jr Z,0xf7f6b9
+	calr	64414	; F7F6A4  calr 0xf7f245
+	call	16001316	; F7F6A7  call 0xf42924
+	ldb_d8	a, (3513)	; F7F6AB  ld A,(0x0db9)
+	stb_d8	(4862), a	; F7F6AF  ld (0x12fe),A
+	calr	47	; F7F6B3  calr 0xf7f6e5
+	calr	65455	; F7F6B6  calr 0xf7f668
+	ret	; F7F6B9  ret
+
+; Evidence: table 0xF7D9D8 entry 10, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F6BA:
+	bit	7, w	; F7F6BA  bit 0x07,W
+	jr	z, 30	; F7F6BD  jr Z,0xf7f6dd
+	.byte 0xC1, 0xB9, 0x0D, 0x3F, 0x03	; F7F6BF  cp (0x0db9),0x03   [llvm-mc cannot encode this]
+	jr	z, 30	; F7F6C4  jr Z,0xf7f6e4
+	calr	64366	; F7F6C6  calr 0xf7f237
+	call	16001304	; F7F6C9  call 0xf42918
+	ldb_d8	a, (3513)	; F7F6CD  ld A,(0x0db9)
+	stb_d8	(4862), a	; F7F6D1  ld (0x12fe),A
+	calr	13	; F7F6D5  calr 0xf7f6e5
+	calr	65421	; F7F6D8  calr 0xf7f668
+	jr	7	; F7F6DB  jr T,0xf7f6e4
+	calr	64357	; F7F6DD  calr 0xf7f245
+	call	16001328	; F7F6E0  call 0xf42930
+	ret	; F7F6E4  ret
+
+; Evidence: reached from calr from prom_b 0xF7F62F; calr from prom_b
+;           0xF7F661, and from nothing else the scans see.
+sub_F7F6E5:
+	stdi8	(9536), 0	; F7F6E5  ld (0x2540),0x00
+	calr	60395	; F7F6EA  calr 0xf7e2d8
+	ld	xiy, 15969520	; F7F6ED  ld XIY,0x00f3acf0
+	ld	xix, 15969591	; F7F6F2  ld XIX,0x00f3ad37
+	call	15996916	; F7F6F7  call 0xf417f4
+	ret	; F7F6FB  ret
+
+; Evidence: table 0xF7D9D8 entry 11, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F6FC:
+	bit	7, w	; F7F6FC  bit 0x07,W
+	jr	z, 28	; F7F6FF  jr Z,0xf7f71d
+	.byte 0xC1, 0xB9, 0x0D, 0x3F, 0x04	; F7F701  cp (0x0db9),0x04   [llvm-mc cannot encode this]
+	jr	z, 21	; F7F706  jr Z,0xf7f71d
+	calr	64314	; F7F708  calr 0xf7f245
+	call	16001308	; F7F70B  call 0xf4291c
+	ldb_d8	a, (3513)	; F7F70F  ld A,(0x0db9)
+	stb_d8	(4862), a	; F7F713  ld (0x12fe),A
+	calr	65483	; F7F717  calr 0xf7f6e5
+	calr	65355	; F7F71A  calr 0xf7f668
+	ret	; F7F71D  ret
+	ret	; F7F71E  ret   <- button table 0xF7D9D8 entry 12 (QUANTIZE)
+	ret	; F7F71F  ret   <- button table 0xF7D9D8 entry 13 (QUANTIZE)
+	ret	; F7F720  ret   <- button table 0xF7D9D8 entry 14 (QUANTIZE)
+
+; Evidence: table 0xF7D9D8 entry 15, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F721:
+	bit	7, w	; F7F721  bit 0x07,W
+	jr	z, 2	; F7F724  jr Z,0xf7f728
+	jr	36	; F7F726  jr T,0xf7f74c
+	.byte 0xC1, 0x3F, 0x13, 0x3F, 0x1A	; F7F728  cp (0x133f),0x1a   [llvm-mc cannot encode this]
+	jr	z, 23	; F7F72D  jr Z,0xf7f746
+	bit_dd8	2, 150	; F7F72F  bit 2,(0x96)
+	jr	nz, 24	; F7F732  jr NZ,0xf7f74c
+	xor	xwa, xwa	; F7F734  xor XWA,XWA
+	stda32	(12296), xwa	; F7F736  ld (0x3008),XWA
+	stda32	(12300), xwa	; F7F73A  ld (0x300c),XWA
+	stdi16	(8304), 32774	; F7F73E  ld (0x2070),0x8006
+	jr	6	; F7F744  jr T,0xf7f74c
+	stdi16	(8304), 32794	; F7F746  ld (0x2070),0x801a
+	ret	; F7F74C  ret
+	ret	; F7F74D  ret   <- button table 0xF7D9D8 entry 16 (QUANTIZE) and 4 more slot(s)
+
+; Evidence: table 0xF7D9D8 entry 21, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F74E:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F74E  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7F752  jr Z,0xf7f758
+	call	16002596	; F7F754  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F758  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 4	; F7F75D  ld (0x0e18),0x04
+	bit	7, w	; F7F762  bit 0x07,W
+	jr	z, 6	; F7F765  jr Z,0xf7f76d
+	call	16001324	; F7F767  call 0xf4292c
+	jr	4	; F7F76B  jr T,0xf7f771
+	call	16001320	; F7F76D  call 0xf42928
+	calr	65393	; F7F771  calr 0xf7f6e5
+	ret	; F7F774  ret
+	ret	; F7F775  ret   <- button table 0xF7D9D8 entry 22 (QUANTIZE) and 4 more slot(s)
+
+; Evidence: table 0xF7D9D8 entry 27, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F776:
+	calr	51	; F7F776  calr 0xf7f7ac
+	ret	; F7F779  ret
+	ret	; F7F77A  ret   <- button table 0xF7D9D8 entry 28 (QUANTIZE) and 3 more slot(s)
+	ret	; F7F77B  ret   <- button table 0xF7DA58 entry 0 (QUANTIZE)
+	ret	; F7F77C  ret   <- button table 0xF7DA58 entry 1 (QUANTIZE)
+	ret	; F7F77D  ret   <- button table 0xF7DA58 entry 2 (QUANTIZE)
+	ret	; F7F77E  ret   <- button table 0xF7DA58 entry 3 (QUANTIZE)
+	ret	; F7F77F  ret   <- button table 0xF7DA58 entry 4 (QUANTIZE)
+	ret	; F7F780  ret   <- button table 0xF7DA58 entry 5 (QUANTIZE)
+	ret	; F7F781  ret   <- button table 0xF7DA58 entry 6 (QUANTIZE)
+	ret	; F7F782  ret   <- button table 0xF7DA58 entry 7 (QUANTIZE)
+	ret	; F7F783  ret   <- button table 0xF7DA58 entry 8 (QUANTIZE) and 1 more slot(s)
+
+; Evidence: table 0xF7DA58 entry 10, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F784:
+	bit	7, w	; F7F784  bit 0x07,W
+	jr	nz, 9	; F7F787  jr NZ,0xf7f792
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7F789  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001328	; F7F78E  call 0xf42930
+	ret	; F7F792  ret
+
+; Evidence: table 0xF7DA58 entry 11, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F793:
+	bit	7, w	; F7F793  bit 0x07,W
+	jr	nz, 4	; F7F796  jr NZ,0xf7f79c
+	call	16001320	; F7F798  call 0xf42928
+	ret	; F7F79C  ret
+	ret	; F7F79D  ret   <- button table 0xF7DA58 entry 12 (QUANTIZE)
+	ret	; F7F79E  ret   <- button table 0xF7DA58 entry 13 (QUANTIZE)
+	ret	; F7F79F  ret   <- button table 0xF7DA58 entry 14 (QUANTIZE)
+
+; Evidence: table 0xF7DA58 entry 15, screen QUANTIZE. A bare button number,
+;           so no name; see the banner.
+sub_F7F7A0:
+	bit	7, w	; F7F7A0  bit 0x07,W
+	jr	nz, 4	; F7F7A3  jr NZ,0xf7f7a9
+	call	16001320	; F7F7A5  call 0xf42928
+	ret	; F7F7A9  ret
+	ret	; F7F7AA  ret   <- button table 0xF7DA58 entry 16 (QUANTIZE) and 15 more slot(s)
+	ret	; F7F7AB  ret
+
+; Evidence: reached from calr from prom_b 0xF7F776, and from nothing else
+;           the scans see.
+sub_F7F7AC:
+	ldb_d8	a, (8807)	; F7F7AC  ld A,(0x2267)
+	cp	a, 9	; F7F7B0  cp A,0x09
+	jr	le, 12	; F7F7B3  jr LE,0xf7f7c1
+	cp	a, 15	; F7F7B5  cp A,0x0f
+	jr	z, 12	; F7F7B8  jr Z,0xf7f7c6
+	cp	a, 128	; F7F7BA  cp A,0x80
+	jr	z, 12	; F7F7BD  jr Z,0xf7f7cb
+	jr	13	; F7F7BF  jr T,0xf7f7ce
+	calr	14	; F7F7C1  calr 0xf7f7d2
+	jr	8	; F7F7C4  jr T,0xf7f7ce
+	calr	19	; F7F7C6  calr 0xf7f7dc
+	jr	3	; F7F7C9  jr T,0xf7f7ce
+	calr	140	; F7F7CB  calr 0xf7f85a
+	calr	143	; F7F7CE  calr 0xf7f860
+	ret	; F7F7D1  ret
+
+; Evidence: reached from calr from prom_b 0xF7F7C1, and from nothing else
+;           the scans see.
+sub_F7F7D2:
+	pushw	1	; F7F7D2  push 0x0001
+	call	16002600	; F7F7D5  call 0xf42e28
+	inc	2, xsp	; F7F7D9  inc 2,XSP
+	ret	; F7F7DB  ret
+
+; Evidence: reached from calr from prom_b 0xF7F7C6, and from nothing else
+;           the scans see.
+sub_F7F7DC:
+	stdi8	(10278), 3	; F7F7DC  ld (0x2826),0x03
+	call	16003824	; F7F7E1  call 0xf432f0
+	cps	wa, 1	; F7F7E5  cp WA,1
+	jr	lt, 112	; F7F7E7  jr LT,0xf7f859
+	cp	wa, 999	; F7F7E9  cp WA,0x03e7
+	jr	gt, 106	; F7F7ED  jr GT,0xf7f859
+	.byte 0xC1, 0xB9, 0x0D, 0x3F, 0x02	; F7F7EF  cp (0x0db9),0x02   [llvm-mc cannot encode this]
+	jr	z, 9	; F7F7F4  jr Z,0xf7f7ff
+	.byte 0xC1, 0xB9, 0x0D, 0x3F, 0x03	; F7F7F6  cp (0x0db9),0x03   [llvm-mc cannot encode this]
+	jr	z, 35	; F7F7FB  jr Z,0xf7f820
+	jr	90	; F7F7FD  jr T,0xf7f859
+	stw_da	(6304888), wa	; F7F7FF  ld (0x603478),WA
+	stda16	(3146), wa	; F7F804  ld (0x0c4a),WA
+	.byte 0xD1, 0x28, 0x0C, 0xF0	; F7F808  cp WA,(0x0c28)   [llvm-mc cannot encode this]
+	jr	ule, 8	; F7F80C  jr ULE,0xf7f816
+	stda16	(3112), wa	; F7F80E  ld (0x0c28),WA
+	stda16	(4857), wa	; F7F812  ld (0x12f9),WA
+	stda16	(3110), wa	; F7F816  ld (0x0c26),WA
+	stda16	(4855), wa	; F7F81A  ld (0x12f7),WA
+	jr	35	; F7F81E  jr T,0xf7f843
+	stda16	(3112), wa	; F7F820  ld (0x0c28),WA
+	stda16	(4857), wa	; F7F824  ld (0x12f9),WA
+	.byte 0xD1, 0x26, 0x0C, 0xF0	; F7F828  cp WA,(0x0c26)   [llvm-mc cannot encode this]
+	jr	nc, 17	; F7F82C  jr NC,0xf7f83f
+	stda16	(3110), wa	; F7F82E  ld (0x0c26),WA
+	stda16	(4855), wa	; F7F832  ld (0x12f7),WA
+	stw_da	(6304888), wa	; F7F836  ld (0x603478),WA
+	stda16	(3146), wa	; F7F83B  ld (0x0c4a),WA
+	stda16	(3112), wa	; F7F83F  ld (0x0c28),WA
+	ldw_d16	wa, (3112)	; F7F843  ld WA,(0x0c28)
+	.byte 0xD1, 0x26, 0x0C, 0xA0	; F7F847  sub WA,(0x0c26)   [llvm-mc cannot encode this]
+	inc	1, wa	; F7F84B  inc 1,WA
+	stw_da	(6304890), wa	; F7F84D  ld (0x60347a),WA
+	call	16002596	; F7F852  call 0xf42e24
+	calr	65164	; F7F856  calr 0xf7f6e5
+	ret	; F7F859  ret
+
+; Evidence: reached from calr from prom_b 0xF7F7CB, and from nothing else
+;           the scans see.
+sub_F7F85A:
+	stdi8	(10272), 43	; F7F85A  ld (0x2820),0x2b
+	ret	; F7F85F  ret
+
+; Evidence: reached from calr from prom_b 0xF7F7CE, and from nothing else
+;           the scans see.
+sub_F7F860:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F860  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 38	; F7F864  jr Z,0xf7f88c
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F7F866  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 31	; F7F86B  jr Z,0xf7f88c
+	xor	xwa, xwa	; F7F86D  xor XWA,XWA
+	ldb_d8	a, (3513)	; F7F86F  ld A,(0x0db9)
+	sla	xwa, 2	; F7F873  sla 0x02,XWA
+	stdi8	(9536), 0	; F7F876  ld (0x2540),0x00
+	ld	xiy, 16251021	; F7F87B  ld XIY,0x00f7f88d
+	.byte 0xE3, 0x07, 0xF4, 0xE0, 0x25	; F7F880  ld XIY,(XIY+WA)   [llvm-mc cannot encode this]
+	push	xiy	; F7F885  push XIY
+	call	16002592	; F7F886  call 0xf42e20
+	inc	4, xsp	; F7F88A  inc 4,XSP
+	ret	; F7F88C  ret
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F7F88D -- pointers to blink templates, read through
+;                        Blink_Command
+;
+; Evidence: read by `ld XIY,0x00F7F88D` at 0xF7F87B followed by `ld
+;           XIY,(XIY+WA)`, `push XIY` and `call 0xF42E20` --
+;           T_Blink_Command, prom_b 0xF0E9CF
+;           (notes/FINDINGS-prom_b-field-blink.md). Same shape, same callee
+;           and the same two leading NULL entries as prom_a's
+;           BlinkArgPtrs_F8024D. FRAMED on purpose: nothing bounds the
+;           index, and what the 2 templates it names are for is not
+;           established.
+; ---------------------------------------------------------------------
+BlinkArgPtrs_F7F88D:
+	.long 0x00000000	; F7F88D  [0]  NULL
+	.long 0x00000000	; F7F891  [1]  NULL
+	.long 0x00F3AD0E	; F7F895  [2]
+	.long 0x00F3AD18	; F7F899  [3]
+	.long 0x00000000	; F7F89D  [4]  NULL
+	.long 0x00000000	; F7F8A1  [5]  NULL
+	.long 0x00000000	; F7F8A5  [6]  NULL
+
+
+; ---------------------------------------------------------------------
+; Paint_Vel0cityChange -- paints the panel screen whose own title text reads
+;                         "VEL0CITY CHANGE"
+;
+; Reached by: the +0 method stub of screen object 0xF43080, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D150
+; Evidence: the routine loads XIY = 0xF3AA54 and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "VEL0CITY CHANGE", and the name is that text CamelCased,
+;           with the ROM's own spelling kept (zeros for O's included). The
+;           rule is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_Vel0cityChange:
+	call	16002688	; F7F8A9  call 0xf42e80
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7F8AD  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 27	; F7F8B2  jr NZ,0xf7f8cf
+	call	16001248	; F7F8B4  call 0xf428e0
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7F8B8  or (0x2075),0x01   [llvm-mc cannot encode this]
+	stdi16	(8347), 1156	; F7F8BD  ld (0x209b),0x0484
+	stdi16	(9830), 65535	; F7F8C3  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7F8C9  ld (0x266a),0xffff
+	calr	59911	; F7F8CF  calr 0xf7e2d9
+	stdi8	(9536), 0	; F7F8D2  ld (0x2540),0x00
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7F8D7  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7F8DC  jr NZ,0xf7f8ee
+	ld	xiy, 15968852	; F7F8DE  ld XIY,0x00f3aa54
+	ld	xix, 15969083	; F7F8E3  ld XIX,0x00f3ab3b
+	call	15996912	; F7F8E8  call 0xf417f0
+	jr	42	; F7F8EC  jr T,0xf7f918
+	ld	xiy, 15968852	; F7F8EE  ld XIY,0x00f3aa54
+	ld	xix, 15969022	; F7F8F3  ld XIX,0x00f3aafe
+	call	15996912	; F7F8F8  call 0xf417f0
+	ld	xiy, 15969180	; F7F8FC  ld XIY,0x00f3ab9c
+	ld	xix, 15969243	; F7F901  ld XIX,0x00f3abdb
+	call	15996912	; F7F906  call 0xf417f0
+	ld	xiy, 15967329	; F7F90A  ld XIY,0x00f3a461
+	ld	xix, 15967359	; F7F90F  ld XIX,0x00f3a47f
+	call	15996912	; F7F914  call 0xf417f0
+	stdi8	(9536), 0	; F7F918  ld (0x2540),0x00
+	calr	59832	; F7F91D  calr 0xf7e2d8
+	calr	18	; F7F920  calr 0xf7f935
+	ld	xiy, 15969083	; F7F923  ld XIY,0x00f3ab3b
+	ld	xix, 15969140	; F7F928  ld XIX,0x00f3ab74
+	call	15996916	; F7F92D  call 0xf417f4
+	calr	59827	; F7F931  calr 0xf7e2e7
+	ret	; F7F934  ret
+
+; Evidence: reached from calr from prom_b 0xF7F920; calr from prom_b
+;           0xF7FA03, and from nothing else the scans see.
+sub_F7F935:
+	ldb_d8	a, (3108)	; F7F935  ld A,(0x0c24)
+	xor	w, w	; F7F939  xor W,W
+	ldw	de, 127	; F7F93B  ld DE,0x007f
+	call	15997688	; F7F93E  call 0xf41af8
+	ldw	bc, 4	; F7F942  ld BC,0x0004
+	xor	hl, hl	; F7F945  xor HL,HL
+	ld	xiy, 9824	; F7F947  ld XIY,0x00002660
+	ldb	a, 7	; F7F94C  ld A,0x07
+	ret	; F7F94E  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_Vel0cityChange -- the whole body of the Vel0cityChange
+;                                   screen's Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF43080, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D155
+; Evidence: the whole body of screen object 0xF43080's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D155 is `call
+;           0xF7F94F` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_Vel0cityChange:
+	call	16001252	; F7F94F  call 0xf428e4
+	ret	; F7F953  ret
+	ret	; F7F954  ret   <- button table 0xF7DAD8 entry 0 (VEL0CITY CHANGE)
+	ret	; F7F955  ret   <- button table 0xF7DAD8 entry 1 (VEL0CITY CHANGE)
+	ret	; F7F956  ret   <- button table 0xF7DAD8 entry 2 (VEL0CITY CHANGE)
+	ret	; F7F957  ret   <- button table 0xF7DAD8 entry 3 (VEL0CITY CHANGE)
+
+; Evidence: table 0xF7DAD8 entry 4, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7F958:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F958  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7F95C  jr Z,0xf7f962
+	call	16002596	; F7F95E  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F962  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 1	; F7F967  ld (0x0e18),0x01
+	bit	7, w	; F7F96C  bit 0x07,W
+	jr	z, 6	; F7F96F  jr Z,0xf7f977
+	call	16001276	; F7F971  call 0xf428fc
+	jr	4	; F7F975  jr T,0xf7f97b
+	call	16001272	; F7F977  call 0xf428f8
+	calr	125	; F7F97B  calr 0xf7f9fb
+	ret	; F7F97E  ret
+	ret	; F7F97F  ret   <- button table 0xF7DAD8 entry 5 (VEL0CITY CHANGE)
+	ret	; F7F980  ret   <- button table 0xF7DAD8 entry 6 (VEL0CITY CHANGE)
+	ret	; F7F981  ret   <- button table 0xF7DAD8 entry 7 (VEL0CITY CHANGE)
+
+; Evidence: table 0xF7DAD8 entry 8, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7F982:
+	bit	7, w	; F7F982  bit 0x07,W
+	jr	z, 20	; F7F985  jr Z,0xf7f99b
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x01	; F7F987  cp (0x0db8),0x01   [llvm-mc cannot encode this]
+	jr	z, 13	; F7F98C  jr Z,0xf7f99b
+	calr	63668	; F7F98E  calr 0xf7f245
+	call	16001256	; F7F991  call 0xf428e8
+	calr	99	; F7F995  calr 0xf7f9fb
+	calr	1	; F7F998  calr 0xf7f99c
+	ret	; F7F99B  ret
+
+; Evidence: reached from calr from prom_b 0xF7F998; calr from prom_b
+;           0xF7F9D2, and from nothing else the scans see.
+sub_F7F99C:
+	stdi8	(9536), 1	; F7F99C  ld (0x2540),0x01
+	calr	59700	; F7F9A1  calr 0xf7e2d8
+	ld	xiy, 15963473	; F7F9A4  ld XIY,0x00f39551
+	ld	xix, 15963481	; F7F9A9  ld XIX,0x00f39559
+	call	15996912	; F7F9AE  call 0xf417f0
+	ld	xiy, 15969129	; F7F9B2  ld XIY,0x00f3ab69
+	call	15996956	; F7F9B7  call 0xf4181c
+	ret	; F7F9BB  ret
+
+; Evidence: table 0xF7DAD8 entry 9, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7F9BC:
+	bit	7, w	; F7F9BC  bit 0x07,W
+	jr	z, 22	; F7F9BF  jr Z,0xf7f9d7
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x02	; F7F9C1  cp (0x0db8),0x02   [llvm-mc cannot encode this]
+	jr	z, 22	; F7F9C6  jr Z,0xf7f9de
+	calr	63596	; F7F9C8  calr 0xf7f237
+	call	16001260	; F7F9CB  call 0xf428ec
+	calr	41	; F7F9CF  calr 0xf7f9fb
+	calr	65479	; F7F9D2  calr 0xf7f99c
+	jr	7	; F7F9D5  jr T,0xf7f9de
+	calr	63595	; F7F9D7  calr 0xf7f245
+	call	16001280	; F7F9DA  call 0xf42900
+	ret	; F7F9DE  ret
+
+; Evidence: table 0xF7DAD8 entry 10, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7F9DF:
+	bit	7, w	; F7F9DF  bit 0x07,W
+	jr	z, 22	; F7F9E2  jr Z,0xf7f9fa
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x03	; F7F9E4  cp (0x0db8),0x03   [llvm-mc cannot encode this]
+	jr	z, 15	; F7F9E9  jr Z,0xf7f9fa
+	calr	63561	; F7F9EB  calr 0xf7f237
+	call	16001264	; F7F9EE  call 0xf428f0
+	calr	6	; F7F9F2  calr 0xf7f9fb
+	calr	65444	; F7F9F5  calr 0xf7f99c
+	jr	0	; F7F9F8  jr T,0xf7f9fa
+	ret	; F7F9FA  ret
+
+; Evidence: reached from calr from prom_b 0xF7F97B; calr from prom_b
+;           0xF7F995, and from nothing else the scans see.
+sub_F7F9FB:
+	stdi8	(9536), 0	; F7F9FB  ld (0x2540),0x00
+	calr	59605	; F7FA00  calr 0xf7e2d8
+	calr	65327	; F7FA03  calr 0xf7f935
+	ld	xiy, 15969083	; F7FA06  ld XIY,0x00f3ab3b
+	ld	xix, 15969129	; F7FA0B  ld XIX,0x00f3ab69
+	call	15996916	; F7FA10  call 0xf417f4
+	ret	; F7FA14  ret
+
+; Evidence: table 0xF7DAD8 entry 11, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7FA15:
+	bit	7, w	; F7FA15  bit 0x07,W
+	jr	z, 22	; F7FA18  jr Z,0xf7fa30
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x04	; F7FA1A  cp (0x0db8),0x04   [llvm-mc cannot encode this]
+	jr	z, 15	; F7FA1F  jr Z,0xf7fa30
+	calr	63507	; F7FA21  calr 0xf7f237
+	call	16001268	; F7FA24  call 0xf428f4
+	calr	65488	; F7FA28  calr 0xf7f9fb
+	calr	65390	; F7FA2B  calr 0xf7f99c
+	jr	0	; F7FA2E  jr T,0xf7fa30
+	ret	; F7FA30  ret
+	ret	; F7FA31  ret   <- button table 0xF7DAD8 entry 12 (VEL0CITY CHANGE)
+	ret	; F7FA32  ret   <- button table 0xF7DAD8 entry 13 (VEL0CITY CHANGE)
+	ret	; F7FA33  ret   <- button table 0xF7DAD8 entry 14 (VEL0CITY CHANGE)
+
+; Evidence: table 0xF7DAD8 entry 15, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7FA34:
+	bit	7, w	; F7FA34  bit 0x07,W
+	jr	z, 2	; F7FA37  jr Z,0xf7fa3b
+	jr	6	; F7FA39  jr T,0xf7fa41
+	stdi16	(8304), 32794	; F7FA3B  ld (0x2070),0x801a
+	ret	; F7FA41  ret
+	ret	; F7FA42  ret   <- button table 0xF7DAD8 entry 16 (VEL0CITY CHANGE) and 4 more slot(s)
+
+; Evidence: table 0xF7DAD8 entry 21, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7FA43:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FA43  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7FA47  jr Z,0xf7fa4d
+	call	16002596	; F7FA49  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7FA4D  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 4	; F7FA52  ld (0x0e18),0x04
+	bit	7, w	; F7FA57  bit 0x07,W
+	jr	z, 6	; F7FA5A  jr Z,0xf7fa62
+	call	16001276	; F7FA5C  call 0xf428fc
+	jr	4	; F7FA60  jr T,0xf7fa66
+	call	16001272	; F7FA62  call 0xf428f8
+	calr	65426	; F7FA66  calr 0xf7f9fb
+	ret	; F7FA69  ret
+	ret	; F7FA6A  ret   <- button table 0xF7DAD8 entry 22 (VEL0CITY CHANGE) and 4 more slot(s)
+
+; Evidence: table 0xF7DAD8 entry 27, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7FA6B:
+	calr	52	; F7FA6B  calr 0xf7faa2
+	ret	; F7FA6E  ret
+	ret	; F7FA6F  ret   <- button table 0xF7DAD8 entry 28 (VEL0CITY CHANGE) and 3 more slot(s)
+	ret	; F7FA70  ret   <- button table 0xF7DB58 entry 0 (VEL0CITY CHANGE)
+	ret	; F7FA71  ret   <- button table 0xF7DB58 entry 1 (VEL0CITY CHANGE)
+	ret	; F7FA72  ret   <- button table 0xF7DB58 entry 2 (VEL0CITY CHANGE)
+	ret	; F7FA73  ret   <- button table 0xF7DB58 entry 3 (VEL0CITY CHANGE)
+	ret	; F7FA74  ret   <- button table 0xF7DB58 entry 4 (VEL0CITY CHANGE)
+	ret	; F7FA75  ret   <- button table 0xF7DB58 entry 5 (VEL0CITY CHANGE)
+	ret	; F7FA76  ret   <- button table 0xF7DB58 entry 6 (VEL0CITY CHANGE)
+	ret	; F7FA77  ret   <- button table 0xF7DB58 entry 7 (VEL0CITY CHANGE)
+	ret	; F7FA78  ret   <- button table 0xF7DB58 entry 8 (VEL0CITY CHANGE)
+
+; Evidence: table 0xF7DB58 entry 9, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7FA79:
+	bit	7, w	; F7FA79  bit 0x07,W
+	jr	nz, 9	; F7FA7C  jr NZ,0xf7fa87
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7FA7E  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001280	; F7FA83  call 0xf42900
+	ret	; F7FA87  ret
+
+; Evidence: table 0xF7DB58 entry 10, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7FA88:
+	bit	7, w	; F7FA88  bit 0x07,W
+	jr	nz, 4	; F7FA8B  jr NZ,0xf7fa91
+	call	16001272	; F7FA8D  call 0xf428f8
+	ret	; F7FA91  ret
+	ret	; F7FA92  ret   <- button table 0xF7DB58 entry 11 (VEL0CITY CHANGE)
+	ret	; F7FA93  ret   <- button table 0xF7DB58 entry 12 (VEL0CITY CHANGE)
+	ret	; F7FA94  ret   <- button table 0xF7DB58 entry 13 (VEL0CITY CHANGE)
+	ret	; F7FA95  ret   <- button table 0xF7DB58 entry 14 (VEL0CITY CHANGE)
+
+; Evidence: table 0xF7DB58 entry 15, screen VEL0CITY CHANGE. A bare button
+;           number, so no name; see the banner.
+sub_F7FA96:
+	bit	7, w	; F7FA96  bit 0x07,W
+	jr	nz, 4	; F7FA99  jr NZ,0xf7fa9f
+	call	16001272	; F7FA9B  call 0xf428f8
+	ret	; F7FA9F  ret
+	ret	; F7FAA0  ret   <- button table 0xF7DB58 entry 16 (VEL0CITY CHANGE) and 15 more slot(s)
+	ret	; F7FAA1  ret
+
+; Evidence: reached from calr from prom_b 0xF7FA6B, and from nothing else
+;           the scans see.
+sub_F7FAA2:
+	ldb_d8	a, (8807)	; F7FAA2  ld A,(0x2267)
+	cp	a, 9	; F7FAA6  cp A,0x09
+	jr	ule, 12	; F7FAA9  jr ULE,0xf7fab7
+	cp	a, 15	; F7FAAB  cp A,0x0f
+	jr	z, 12	; F7FAAE  jr Z,0xf7fabc
+	cp	a, 128	; F7FAB0  cp A,0x80
+	jr	z, 12	; F7FAB3  jr Z,0xf7fac1
+	jr	13	; F7FAB5  jr T,0xf7fac4
+	calr	14	; F7FAB7  calr 0xf7fac8
+	jr	8	; F7FABA  jr T,0xf7fac4
+	calr	19	; F7FABC  calr 0xf7fad2
+	jr	3	; F7FABF  jr T,0xf7fac4
+	calr	224	; F7FAC1  calr 0xf7fba4
+	calr	240	; F7FAC4  calr 0xf7fbb7
+	ret	; F7FAC7  ret
+
+; Evidence: reached from calr from prom_b 0xF7FAB7, and from nothing else
+;           the scans see.
+sub_F7FAC8:
+	pushw	1	; F7FAC8  push 0x0001
+	call	16002600	; F7FACB  call 0xf42e28
+	inc	2, xsp	; F7FACF  inc 2,XSP
+	ret	; F7FAD1  ret
+
+; Evidence: reached from calr from prom_b 0xF7FABC, and from nothing else
+;           the scans see.
+sub_F7FAD2:
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x04	; F7FAD2  cp (0x0db8),0x04   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7FAD7  jr NZ,0xf7fae9
+	stdi8	(10278), 3	; F7FAD9  ld (0x2826),0x03
+	stdi8	(10276), 0	; F7FADE  ld (0x2824),0x00
+	call	16003828	; F7FAE3  call 0xf432f4
+	jr	9	; F7FAE7  jr T,0xf7faf2
+	stdi8	(10278), 3	; F7FAE9  ld (0x2826),0x03
+	call	16003824	; F7FAEE  call 0xf432f0
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x02	; F7FAF2  cp (0x0db8),0x02   [llvm-mc cannot encode this]
+	jr	z, 18	; F7FAF7  jr Z,0xf7fb0b
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x03	; F7FAF9  cp (0x0db8),0x03   [llvm-mc cannot encode this]
+	jr	z, 56	; F7FAFE  jr Z,0xf7fb38
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x04	; F7FB00  cp (0x0db8),0x04   [llvm-mc cannot encode this]
+	jrl	z, 110	; F7FB05  jrl Z,0xf7fb76
+	jrl	152	; F7FB08  jrl T,0xf7fba3
+	cps	wa, 1	; F7FB0B  cp WA,1
+	jrl	lt, 147	; F7FB0D  jrl LT,0xf7fba3
+	cp	wa, 999	; F7FB10  cp WA,0x03e7
+	jrl	gt, 140	; F7FB14  jrl GT,0xf7fba3
+	stda16	(3096), wa	; F7FB17  ld (0x0c18),WA
+	stw_da	(6304946), wa	; F7FB1B  ld (0x6034b2),WA
+	stda16	(4855), wa	; F7FB20  ld (0x12f7),WA
+	.byte 0xD1, 0x22, 0x0C, 0xF0	; F7FB24  cp WA,(0x0c22)   [llvm-mc cannot encode this]
+	jr	ule, 8	; F7FB28  jr ULE,0xf7fb32
+	stda16	(3106), wa	; F7FB2A  ld (0x0c22),WA
+	stda16	(4857), wa	; F7FB2E  ld (0x12f9),WA
+	stda16	(3104), wa	; F7FB32  ld (0x0c20),WA
+	jr	45	; F7FB36  jr T,0xf7fb65
+	cps	wa, 1	; F7FB38  cp WA,1
+	jr	lt, 103	; F7FB3A  jr LT,0xf7fba3
+	cp	wa, 999	; F7FB3C  cp WA,0x03e7
+	jr	gt, 97	; F7FB40  jr GT,0xf7fba3
+	stda16	(3106), wa	; F7FB42  ld (0x0c22),WA
+	stda16	(4857), wa	; F7FB46  ld (0x12f9),WA
+	.byte 0xD1, 0x20, 0x0C, 0xF0	; F7FB4A  cp WA,(0x0c20)   [llvm-mc cannot encode this]
+	jr	nc, 17	; F7FB4E  jr NC,0xf7fb61
+	stda16	(3104), wa	; F7FB50  ld (0x0c20),WA
+	stda16	(3096), wa	; F7FB54  ld (0x0c18),WA
+	stw_da	(6304946), wa	; F7FB58  ld (0x6034b2),WA
+	stda16	(4855), wa	; F7FB5D  ld (0x12f7),WA
+	stda16	(3106), wa	; F7FB61  ld (0x0c22),WA
+	ldw_d16	wa, (3106)	; F7FB65  ld WA,(0x0c22)
+	.byte 0xD1, 0x20, 0x0C, 0xA0	; F7FB69  sub WA,(0x0c20)   [llvm-mc cannot encode this]
+	inc	1, wa	; F7FB6D  inc 1,WA
+	stw_da	(6304948), wa	; F7FB6F  ld (0x6034b4),WA
+	jr	38	; F7FB74  jr T,0xf7fb9c
+	.byte 0xC1, 0x20, 0x28, 0x3F, 0x2B	; F7FB76  cp (0x2820),0x2b   [llvm-mc cannot encode this]
+	jr	z, 8	; F7FB7B  jr Z,0xf7fb85
+	cp	wa, 65409	; F7FB7D  cp WA,0xff81
+	jr	lt, 32	; F7FB81  jr LT,0xf7fba3
+	jr	6	; F7FB83  jr T,0xf7fb8b
+	cp	wa, 127	; F7FB85  cp WA,0x007f
+	jr	gt, 24	; F7FB89  jr GT,0xf7fba3
+	stb_d8	(3102), a	; F7FB8B  ld (0x0c1e),A
+	stb_da	(6304956), a	; F7FB8F  ld (0x6034bc),A
+	stb_d8	(3108), a	; F7FB94  ld (0x0c24),A
+	stb_d8	(4859), a	; F7FB98  ld (0x12fb),A
+	call	16002596	; F7FB9C  call 0xf42e24
+	calr	65112	; F7FBA0  calr 0xf7f9fb
+	ret	; F7FBA3  ret
+
+; Evidence: reached from calr from prom_b 0xF7FAC1, and from nothing else
+;           the scans see.
+sub_F7FBA4:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FBA4  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 12	; F7FBA8  jr Z,0xf7fbb6
+	.byte 0xC1, 0xB8, 0x0D, 0x3F, 0x04	; F7FBAA  cp (0x0db8),0x04   [llvm-mc cannot encode this]
+	jr	z, 5	; F7FBAF  jr Z,0xf7fbb6
+	stdi8	(10272), 43	; F7FBB1  ld (0x2820),0x2b
+	ret	; F7FBB6  ret
+
+; Evidence: reached from calr from prom_b 0xF7FAC4, and from nothing else
+;           the scans see.
+sub_F7FBB7:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FBB7  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 38	; F7FBBB  jr Z,0xf7fbe3
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F7FBBD  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 31	; F7FBC2  jr Z,0xf7fbe3
+	xor	xwa, xwa	; F7FBC4  xor XWA,XWA
+	ldb_d8	a, (3512)	; F7FBC6  ld A,(0x0db8)
+	sla	xwa, 2	; F7FBCA  sla 0x02,XWA
+	stdi8	(9536), 0	; F7FBCD  ld (0x2540),0x00
+	ld	xiy, 16251876	; F7FBD2  ld XIY,0x00f7fbe4
+	.byte 0xE3, 0x07, 0xF4, 0xE0, 0x25	; F7FBD7  ld XIY,(XIY+WA)   [llvm-mc cannot encode this]
+	push	xiy	; F7FBDC  push XIY
+	call	16002592	; F7FBDD  call 0xf42e20
+	inc	4, xsp	; F7FBE1  inc 4,XSP
+	ret	; F7FBE3  ret
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F7FBE4 -- pointers to blink templates, read through
+;                        Blink_Command
+;
+; Evidence: read by `ld XIY,0x00F7FBE4` at 0xF7FBD2 followed by `ld
+;           XIY,(XIY+WA)`, `push XIY` and `call 0xF42E20` --
+;           T_Blink_Command, prom_b 0xF0E9CF
+;           (notes/FINDINGS-prom_b-field-blink.md). Same shape, same callee
+;           and the same two leading NULL entries as prom_a's
+;           BlinkArgPtrs_F8024D. FRAMED on purpose: nothing bounds the
+;           index, and what the 3 templates it names are for is not
+;           established.
+; ---------------------------------------------------------------------
+BlinkArgPtrs_F7FBE4:
+	.long 0x00000000	; F7FBE4  [0]  NULL
+	.long 0x00000000	; F7FBE8  [1]  NULL
+	.long 0x00F3AB4A	; F7FBEC  [2]
+	.long 0x00F3AB54	; F7FBF0  [3]
+	.long 0x00F3AB5E	; F7FBF4  [4]
+
+
+; ---------------------------------------------------------------------
+; Paint_Transp0se -- paints the panel screen whose own title text reads
+;                    "TRANSP0SE"
+;
+; Reached by: the +0 method stub of screen object 0xF43100, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D171
+; Evidence: the routine loads XIY = 0xF3B102 and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "TRANSP0SE", and the name is that text CamelCased, with
+;           the ROM's own spelling kept (zeros for O's included). The rule
+;           is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_Transp0se:
+	call	16002688	; F7FBF8  call 0xf42e80
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7FBFC  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 51	; F7FC01  jr NZ,0xf7fc36
+	call	16001592	; F7FC03  call 0xf42a38
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7FC07  or (0x2075),0x01   [llvm-mc cannot encode this]
+	stdi16	(8347), 1156	; F7FC0C  ld (0x209b),0x0484
+	stdi16	(9830), 65535	; F7FC12  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7FC18  ld (0x266a),0xffff
+	ldb_d8	a, (3574)	; F7FC1E  ld A,(0x0df6)
+	cps	a, 2	; F7FC22  cp A,2
+	jr	z, 13	; F7FC24  jr Z,0xf7fc33
+	cps	a, 3	; F7FC26  cp A,3
+	jr	z, 9	; F7FC28  jr Z,0xf7fc33
+	cps	a, 4	; F7FC2A  cp A,4
+	jr	z, 5	; F7FC2C  jr Z,0xf7fc33
+	calr	62996	; F7FC2E  calr 0xf7f245
+	jr	3	; F7FC31  jr T,0xf7fc36
+	calr	62977	; F7FC33  calr 0xf7f237
+	calr	59040	; F7FC36  calr 0xf7e2d9
+	stdi8	(9536), 0	; F7FC39  ld (0x2540),0x00
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7FC3E  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7FC43  jr NZ,0xf7fc55
+	ld	xiy, 15970562	; F7FC45  ld XIY,0x00f3b102
+	ld	xix, 15970787	; F7FC4A  ld XIX,0x00f3b1e3
+	call	15996912	; F7FC4F  call 0xf417f0
+	jr	42	; F7FC53  jr T,0xf7fc7f
+	ld	xiy, 15970562	; F7FC55  ld XIY,0x00f3b102
+	ld	xix, 15970726	; F7FC5A  ld XIX,0x00f3b1a6
+	call	15996912	; F7FC5F  call 0xf417f0
+	ld	xiy, 15969180	; F7FC63  ld XIY,0x00f3ab9c
+	ld	xix, 15969243	; F7FC68  ld XIX,0x00f3abdb
+	call	15996912	; F7FC6D  call 0xf417f0
+	ld	xiy, 15967329	; F7FC71  ld XIY,0x00f3a461
+	ld	xix, 15967359	; F7FC76  ld XIX,0x00f3a47f
+	call	15996912	; F7FC7B  call 0xf417f0
+	stdi8	(9536), 0	; F7FC7F  ld (0x2540),0x00
+	calr	58961	; F7FC84  calr 0xf7e2d8
+	ld	xiy, 15970787	; F7FC87  ld XIY,0x00f3b1e3
+	ld	xix, 15970844	; F7FC8C  ld XIX,0x00f3b21c
+	call	15996916	; F7FC91  call 0xf417f4
+	calr	58959	; F7FC95  calr 0xf7e2e7
+	ret	; F7FC98  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_Transp0se -- the whole body of the Transp0se screen's
+;                              Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF43100, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D176
+; Evidence: the whole body of screen object 0xF43100's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D176 is `call
+;           0xF7FC99` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_Transp0se:
+	call	16001596	; F7FC99  call 0xf42a3c
+	ret	; F7FC9D  ret
+	ret	; F7FC9E  ret   <- button table 0xF7DBD8 entry 0 (TRANSP0SE)
+	ret	; F7FC9F  ret   <- button table 0xF7DBD8 entry 1 (TRANSP0SE)
+	ret	; F7FCA0  ret   <- button table 0xF7DBD8 entry 2 (TRANSP0SE)
+	ret	; F7FCA1  ret   <- button table 0xF7DBD8 entry 3 (TRANSP0SE)
+
+; Evidence: table 0xF7DBD8 entry 4, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FCA2:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FCA2  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7FCA6  jr Z,0xf7fcac
+	call	16002596	; F7FCA8  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7FCAC  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 1	; F7FCB1  ld (0x0e18),0x01
+	bit	7, w	; F7FCB6  bit 0x07,W
+	jr	z, 6	; F7FCB9  jr Z,0xf7fcc1
+	call	16001620	; F7FCBB  call 0xf42a54
+	jr	4	; F7FCBF  jr T,0xf7fcc5
+	call	16001616	; F7FCC1  call 0xf42a50
+	calr	125	; F7FCC5  calr 0xf7fd45
+	ret	; F7FCC8  ret
+	ret	; F7FCC9  ret   <- button table 0xF7DBD8 entry 5 (TRANSP0SE)
+	ret	; F7FCCA  ret   <- button table 0xF7DBD8 entry 6 (TRANSP0SE)
+	ret	; F7FCCB  ret   <- button table 0xF7DBD8 entry 7 (TRANSP0SE)
+
+; Evidence: table 0xF7DBD8 entry 8, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FCCC:
+	bit	7, w	; F7FCCC  bit 0x07,W
+	jr	z, 20	; F7FCCF  jr Z,0xf7fce5
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x01	; F7FCD1  cp (0x0df6),0x01   [llvm-mc cannot encode this]
+	jr	z, 13	; F7FCD6  jr Z,0xf7fce5
+	calr	62826	; F7FCD8  calr 0xf7f245
+	call	16001600	; F7FCDB  call 0xf42a40
+	calr	99	; F7FCDF  calr 0xf7fd45
+	calr	1	; F7FCE2  calr 0xf7fce6
+	ret	; F7FCE5  ret
+
+; Evidence: reached from calr from prom_b 0xF7FCE2; calr from prom_b
+;           0xF7FD1C, and from nothing else the scans see.
+sub_F7FCE6:
+	stdi8	(9536), 1	; F7FCE6  ld (0x2540),0x01
+	calr	58858	; F7FCEB  calr 0xf7e2d8
+	ld	xiy, 15963473	; F7FCEE  ld XIY,0x00f39551
+	ld	xix, 15963481	; F7FCF3  ld XIX,0x00f39559
+	call	15996912	; F7FCF8  call 0xf417f0
+	ld	xiy, 15970833	; F7FCFC  ld XIY,0x00f3b211
+	call	15996956	; F7FD01  call 0xf4181c
+	ret	; F7FD05  ret
+
+; Evidence: table 0xF7DBD8 entry 9, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FD06:
+	bit	7, w	; F7FD06  bit 0x07,W
+	jr	z, 22	; F7FD09  jr Z,0xf7fd21
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x02	; F7FD0B  cp (0x0df6),0x02   [llvm-mc cannot encode this]
+	jr	z, 22	; F7FD10  jr Z,0xf7fd28
+	calr	62754	; F7FD12  calr 0xf7f237
+	call	16001604	; F7FD15  call 0xf42a44
+	calr	41	; F7FD19  calr 0xf7fd45
+	calr	65479	; F7FD1C  calr 0xf7fce6
+	jr	7	; F7FD1F  jr T,0xf7fd28
+	calr	62753	; F7FD21  calr 0xf7f245
+	call	16001624	; F7FD24  call 0xf42a58
+	ret	; F7FD28  ret
+
+; Evidence: table 0xF7DBD8 entry 10, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FD29:
+	bit	7, w	; F7FD29  bit 0x07,W
+	jr	z, 22	; F7FD2C  jr Z,0xf7fd44
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x03	; F7FD2E  cp (0x0df6),0x03   [llvm-mc cannot encode this]
+	jr	z, 15	; F7FD33  jr Z,0xf7fd44
+	calr	62719	; F7FD35  calr 0xf7f237
+	call	16001608	; F7FD38  call 0xf42a48
+	calr	6	; F7FD3C  calr 0xf7fd45
+	calr	65444	; F7FD3F  calr 0xf7fce6
+	jr	0	; F7FD42  jr T,0xf7fd44
+	ret	; F7FD44  ret
+
+; Evidence: reached from calr from prom_b 0xF7FCC5; calr from prom_b
+;           0xF7FCDF, and from nothing else the scans see.
+sub_F7FD45:
+	stdi8	(9536), 0	; F7FD45  ld (0x2540),0x00
+	calr	58763	; F7FD4A  calr 0xf7e2d8
+	ld	xiy, 15970787	; F7FD4D  ld XIY,0x00f3b1e3
+	ld	xix, 15970833	; F7FD52  ld XIX,0x00f3b211
+	call	15996916	; F7FD57  call 0xf417f4
+	ret	; F7FD5B  ret
+
+; Evidence: table 0xF7DBD8 entry 11, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FD5C:
+	bit	7, w	; F7FD5C  bit 0x07,W
+	jr	z, 22	; F7FD5F  jr Z,0xf7fd77
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x04	; F7FD61  cp (0x0df6),0x04   [llvm-mc cannot encode this]
+	jr	z, 15	; F7FD66  jr Z,0xf7fd77
+	calr	62668	; F7FD68  calr 0xf7f237
+	call	16001612	; F7FD6B  call 0xf42a4c
+	calr	65491	; F7FD6F  calr 0xf7fd45
+	calr	65393	; F7FD72  calr 0xf7fce6
+	jr	0	; F7FD75  jr T,0xf7fd77
+	ret	; F7FD77  ret
+	ret	; F7FD78  ret   <- button table 0xF7DBD8 entry 12 (TRANSP0SE)
+	ret	; F7FD79  ret   <- button table 0xF7DBD8 entry 13 (TRANSP0SE)
+	ret	; F7FD7A  ret   <- button table 0xF7DBD8 entry 14 (TRANSP0SE)
+
+; Evidence: table 0xF7DBD8 entry 15, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FD7B:
+	bit	7, w	; F7FD7B  bit 0x07,W
+	jr	z, 2	; F7FD7E  jr Z,0xf7fd82
+	jr	6	; F7FD80  jr T,0xf7fd88
+	stdi16	(8304), 32794	; F7FD82  ld (0x2070),0x801a
+	ret	; F7FD88  ret
+	ret	; F7FD89  ret   <- button table 0xF7DBD8 entry 16 (TRANSP0SE) and 4 more slot(s)
+
+; Evidence: table 0xF7DBD8 entry 21, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FD8A:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FD8A  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7FD8E  jr Z,0xf7fd94
+	call	16002596	; F7FD90  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7FD94  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 4	; F7FD99  ld (0x0e18),0x04
+	bit	7, w	; F7FD9E  bit 0x07,W
+	jr	z, 6	; F7FDA1  jr Z,0xf7fda9
+	call	16001620	; F7FDA3  call 0xf42a54
+	jr	4	; F7FDA7  jr T,0xf7fdad
+	call	16001616	; F7FDA9  call 0xf42a50
+	calr	65429	; F7FDAD  calr 0xf7fd45
+	ret	; F7FDB0  ret
+	ret	; F7FDB1  ret   <- button table 0xF7DBD8 entry 22 (TRANSP0SE) and 4 more slot(s)
+
+; Evidence: table 0xF7DBD8 entry 27, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FDB2:
+	calr	52	; F7FDB2  calr 0xf7fde9
+	ret	; F7FDB5  ret
+	ret	; F7FDB6  ret   <- button table 0xF7DBD8 entry 28 (TRANSP0SE) and 3 more slot(s)
+	ret	; F7FDB7  ret   <- button table 0xF7DC58 entry 0 (TRANSP0SE)
+	ret	; F7FDB8  ret   <- button table 0xF7DC58 entry 1 (TRANSP0SE)
+	ret	; F7FDB9  ret   <- button table 0xF7DC58 entry 2 (TRANSP0SE)
+	ret	; F7FDBA  ret   <- button table 0xF7DC58 entry 3 (TRANSP0SE)
+	ret	; F7FDBB  ret   <- button table 0xF7DC58 entry 4 (TRANSP0SE)
+	ret	; F7FDBC  ret   <- button table 0xF7DC58 entry 5 (TRANSP0SE)
+	ret	; F7FDBD  ret   <- button table 0xF7DC58 entry 6 (TRANSP0SE)
+	ret	; F7FDBE  ret   <- button table 0xF7DC58 entry 7 (TRANSP0SE)
+	ret	; F7FDBF  ret   <- button table 0xF7DC58 entry 8 (TRANSP0SE)
+
+; Evidence: table 0xF7DC58 entry 9, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FDC0:
+	bit	7, w	; F7FDC0  bit 0x07,W
+	jr	nz, 9	; F7FDC3  jr NZ,0xf7fdce
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7FDC5  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	call	16001624	; F7FDCA  call 0xf42a58
+	ret	; F7FDCE  ret
+
+; Evidence: table 0xF7DC58 entry 10, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FDCF:
+	bit	7, w	; F7FDCF  bit 0x07,W
+	jr	nz, 4	; F7FDD2  jr NZ,0xf7fdd8
+	call	16001628	; F7FDD4  call 0xf42a5c
+	ret	; F7FDD8  ret
+	ret	; F7FDD9  ret   <- button table 0xF7DC58 entry 11 (TRANSP0SE)
+	ret	; F7FDDA  ret   <- button table 0xF7DC58 entry 12 (TRANSP0SE)
+	ret	; F7FDDB  ret   <- button table 0xF7DC58 entry 13 (TRANSP0SE)
+	ret	; F7FDDC  ret   <- button table 0xF7DC58 entry 14 (TRANSP0SE)
+
+; Evidence: table 0xF7DC58 entry 15, screen TRANSP0SE. A bare button number,
+;           so no name; see the banner.
+sub_F7FDDD:
+	bit	7, w	; F7FDDD  bit 0x07,W
+	jr	nz, 4	; F7FDE0  jr NZ,0xf7fde6
+	call	16001628	; F7FDE2  call 0xf42a5c
+	ret	; F7FDE6  ret
+	ret	; F7FDE7  ret   <- button table 0xF7DC58 entry 16 (TRANSP0SE) and 15 more slot(s)
+	ret	; F7FDE8  ret
+
+; Evidence: reached from calr from prom_b 0xF7FDB2, and from nothing else
+;           the scans see.
+sub_F7FDE9:
+	ldb_d8	a, (8807)	; F7FDE9  ld A,(0x2267)
+	cp	a, 9	; F7FDED  cp A,0x09
+	jr	ule, 12	; F7FDF0  jr ULE,0xf7fdfe
+	cp	a, 15	; F7FDF2  cp A,0x0f
+	jr	z, 12	; F7FDF5  jr Z,0xf7fe03
+	cp	a, 128	; F7FDF7  cp A,0x80
+	jr	z, 12	; F7FDFA  jr Z,0xf7fe08
+	jr	13	; F7FDFC  jr T,0xf7fe0b
+	calr	14	; F7FDFE  calr 0xf7fe0f
+	jr	8	; F7FE01  jr T,0xf7fe0b
+	calr	19	; F7FE03  calr 0xf7fe19
+	jr	3	; F7FE06  jr T,0xf7fe0b
+	calr	200	; F7FE08  calr 0xf7fed3
+	calr	216	; F7FE0B  calr 0xf7fee6
+	ret	; F7FE0E  ret
+
+; Evidence: reached from calr from prom_b 0xF7FDFE, and from nothing else
+;           the scans see.
+sub_F7FE0F:
+	pushw	1	; F7FE0F  push 0x0001
+	call	16002600	; F7FE12  call 0xf42e28
+	inc	2, xsp	; F7FE16  inc 2,XSP
+	ret	; F7FE18  ret
+
+; Evidence: reached from calr from prom_b 0xF7FE03, and from nothing else
+;           the scans see.
+sub_F7FE19:
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x04	; F7FE19  cp (0x0df6),0x04   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7FE1E  jr NZ,0xf7fe30
+	stdi8	(10278), 3	; F7FE20  ld (0x2826),0x03
+	stdi8	(10276), 0	; F7FE25  ld (0x2824),0x00
+	call	16003828	; F7FE2A  call 0xf432f4
+	jr	9	; F7FE2E  jr T,0xf7fe39
+	stdi8	(10278), 3	; F7FE30  ld (0x2826),0x03
+	call	16003824	; F7FE35  call 0xf432f0
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x02	; F7FE39  cp (0x0df6),0x02   [llvm-mc cannot encode this]
+	jr	z, 17	; F7FE3E  jr Z,0xf7fe51
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x03	; F7FE40  cp (0x0df6),0x03   [llvm-mc cannot encode this]
+	jr	z, 44	; F7FE45  jr Z,0xf7fe73
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x04	; F7FE47  cp (0x0df6),0x04   [llvm-mc cannot encode this]
+	jr	z, 89	; F7FE4C  jr Z,0xf7fea7
+	jrl	129	; F7FE4E  jrl T,0xf7fed2
+	cps	wa, 1	; F7FE51  cp WA,1
+	jr	lt, 125	; F7FE53  jr LT,0xf7fed2
+	cp	wa, 999	; F7FE55  cp WA,0x03e7
+	jr	gt, 119	; F7FE59  jr GT,0xf7fed2
+	stda16	(3576), wa	; F7FE5B  ld (0x0df8),WA
+	stda16	(4855), wa	; F7FE5F  ld (0x12f7),WA
+	.byte 0xD1, 0xFA, 0x0D, 0xF0	; F7FE63  cp WA,(0x0dfa)   [llvm-mc cannot encode this]
+	jr	ule, 8	; F7FE67  jr ULE,0xf7fe71
+	stda16	(3578), wa	; F7FE69  ld (0x0dfa),WA
+	stda16	(4857), wa	; F7FE6D  ld (0x12f9),WA
+	jr	32	; F7FE71  jr T,0xf7fe93
+	cps	wa, 1	; F7FE73  cp WA,1
+	jr	lt, 91	; F7FE75  jr LT,0xf7fed2
+	cp	wa, 999	; F7FE77  cp WA,0x03e7
+	jr	gt, 85	; F7FE7B  jr GT,0xf7fed2
+	stda16	(3578), wa	; F7FE7D  ld (0x0dfa),WA
+	stda16	(4857), wa	; F7FE81  ld (0x12f9),WA
+	.byte 0xD1, 0xF8, 0x0D, 0xF0	; F7FE85  cp WA,(0x0df8)   [llvm-mc cannot encode this]
+	jr	nc, 8	; F7FE89  jr NC,0xf7fe93
+	stda16	(3576), wa	; F7FE8B  ld (0x0df8),WA
+	stda16	(4855), wa	; F7FE8F  ld (0x12f7),WA
+	ldw_d16	wa, (3578)	; F7FE93  ld WA,(0x0dfa)
+	.byte 0xD1, 0xF8, 0x0D, 0xA0	; F7FE97  sub WA,(0x0df8)   [llvm-mc cannot encode this]
+	inc	1, wa	; F7FE9B  inc 1,WA
+	stda16	(3592), wa	; F7FE9D  ld (0x0e08),WA
+	stda16	(3584), wa	; F7FEA1  ld (0x0e00),WA
+	jr	36	; F7FEA5  jr T,0xf7fecb
+	.byte 0xC1, 0x20, 0x28, 0x3F, 0x2B	; F7FEA7  cp (0x2820),0x2b   [llvm-mc cannot encode this]
+	jr	z, 8	; F7FEAC  jr Z,0xf7feb6
+	cp	wa, 65409	; F7FEAE  cp WA,0xff81
+	jr	lt, 30	; F7FEB2  jr LT,0xf7fed2
+	jr	6	; F7FEB4  jr T,0xf7febc
+	cp	wa, 127	; F7FEB6  cp WA,0x007f
+	jr	gt, 22	; F7FEBA  jr GT,0xf7fed2
+	stb_d8	(3580), a	; F7FEBC  ld (0x0dfc),A
+	stb_d8	(4859), a	; F7FEC0  ld (0x12fb),A
+	stb_d8	(4764), a	; F7FEC4  ld (0x129c),A
+	ldw	de, 127	; F7FEC8  ld DE,0x007f
+	call	16002596	; F7FECB  call 0xf42e24
+	calr	65139	; F7FECF  calr 0xf7fd45
+	ret	; F7FED2  ret
+
+; Evidence: reached from calr from prom_b 0xF7FE08, and from nothing else
+;           the scans see.
+sub_F7FED3:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FED3  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 12	; F7FED7  jr Z,0xf7fee5
+	.byte 0xC1, 0xF6, 0x0D, 0x3F, 0x04	; F7FED9  cp (0x0df6),0x04   [llvm-mc cannot encode this]
+	jr	z, 5	; F7FEDE  jr Z,0xf7fee5
+	stdi8	(10272), 43	; F7FEE0  ld (0x2820),0x2b
+	ret	; F7FEE5  ret
+
+; Evidence: reached from calr from prom_b 0xF7FE0B, and from nothing else
+;           the scans see.
+sub_F7FEE6:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FEE6  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 38	; F7FEEA  jr Z,0xf7ff12
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F7FEEC  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 31	; F7FEF1  jr Z,0xf7ff12
+	xor	xwa, xwa	; F7FEF3  xor XWA,XWA
+	ldb_d8	a, (3574)	; F7FEF5  ld A,(0x0df6)
+	sla	xwa, 2	; F7FEF9  sla 0x02,XWA
+	stdi8	(9536), 0	; F7FEFC  ld (0x2540),0x00
+	ld	xiy, 16252691	; F7FF01  ld XIY,0x00f7ff13
+	.byte 0xE3, 0x07, 0xF4, 0xE0, 0x25	; F7FF06  ld XIY,(XIY+WA)   [llvm-mc cannot encode this]
+	push	xiy	; F7FF0B  push XIY
+	call	16002592	; F7FF0C  call 0xf42e20
+	inc	4, xsp	; F7FF10  inc 4,XSP
+	ret	; F7FF12  ret
+; ---------------------------------------------------------------------
+; BlinkArgPtrs_F7FF13 -- pointers to blink templates, read through
+;                        Blink_Command
+;
+; Evidence: read by `ld XIY,0x00F7FF13` at 0xF7FF01 followed by `ld
+;           XIY,(XIY+WA)`, `push XIY` and `call 0xF42E20` --
+;           T_Blink_Command, prom_b 0xF0E9CF
+;           (notes/FINDINGS-prom_b-field-blink.md). Same shape, same callee
+;           and the same two leading NULL entries as prom_a's
+;           BlinkArgPtrs_F8024D. FRAMED on purpose: nothing bounds the
+;           index, and what the 3 templates it names are for is not
+;           established.
+; ---------------------------------------------------------------------
+BlinkArgPtrs_F7FF13:
+	.long 0x00000000	; F7FF13  [0]  NULL
+	.long 0x00000000	; F7FF17  [1]  NULL
+	.long 0x00F3B1F2	; F7FF1B  [2]
+	.long 0x00F3B1FC	; F7FF1F  [3]
+	.long 0x00F3B206	; F7FF23  [4]
+
+
+; ---------------------------------------------------------------------
+; Paint_AdvanceDelay -- paints the panel screen whose own title text reads
+;                       "ADVANCE/DELAY"
+;
+; Reached by: the +0 method stub of screen object 0xF43110, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D1D5
+; Evidence: the routine loads XIY = 0xF3B294 and calls the display-list
+;           interpreter; the leading run of op-0x1C records in that list
+;           spells "ADVANCE/DELAY", and the name is that text CamelCased,
+;           with the ROM's own spelling kept (zeros for O's included). The
+;           rule is round 7's, calibrated on seven screens prom_a had named
+;           independently: notes/prom_b_screens_round8.py --calibrate.
+; ---------------------------------------------------------------------
+Paint_AdvanceDelay:
+	call	16002688	; F7FF27  call 0xf42e80
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7FF2B  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 51	; F7FF30  jr NZ,0xf7ff65
+	call	16001632	; F7FF32  call 0xf42a60
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7FF36  or (0x2075),0x01   [llvm-mc cannot encode this]
+	stdi16	(8347), 1156	; F7FF3B  ld (0x209b),0x0484
+	stdi16	(9830), 65535	; F7FF41  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F7FF47  ld (0x266a),0xffff
+	ldb_d8	a, (3557)	; F7FF4D  ld A,(0x0de5)
+	cps	a, 2	; F7FF51  cp A,2
+	jr	z, 13	; F7FF53  jr Z,0xf7ff62
+	cps	a, 3	; F7FF55  cp A,3
+	jr	z, 9	; F7FF57  jr Z,0xf7ff62
+	cps	a, 4	; F7FF59  cp A,4
+	jr	z, 5	; F7FF5B  jr Z,0xf7ff62
+	calr	62181	; F7FF5D  calr 0xf7f245
+	jr	3	; F7FF60  jr T,0xf7ff65
+	calr	62162	; F7FF62  calr 0xf7f237
+	calr	58225	; F7FF65  calr 0xf7e2d9
+	stdi8	(9536), 0	; F7FF68  ld (0x2540),0x00
+	ld	xiy, 15970964	; F7FF6D  ld XIY,0x00f3b294
+	ld	xix, 15971132	; F7FF72  ld XIX,0x00f3b33c
+	call	15996912	; F7FF77  call 0xf417f0
+	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7FF7B  cp (0x207e),0x00   [llvm-mc cannot encode this]
+	jr	nz, 16	; F7FF80  jr NZ,0xf7ff92
+	ld	xiy, 15971132	; F7FF82  ld XIY,0x00f3b33c
+	ld	xix, 15971193	; F7FF87  ld XIX,0x00f3b379
+	call	15996912	; F7FF8C  call 0xf417f0
+	jr	28	; F7FF90  jr T,0xf7ffae
+	ld	xiy, 15968218	; F7FF92  ld XIY,0x00f3a7da
+	ld	xix, 15968501	; F7FF97  ld XIX,0x00f3a8f5
+	call	15996912	; F7FF9C  call 0xf417f0
+	ld	xiy, 15967329	; F7FFA0  ld XIY,0x00f3a461
+	ld	xix, 15967359	; F7FFA5  ld XIX,0x00f3a47f
+	call	15996912	; F7FFAA  call 0xf417f0
+	stdi8	(9536), 0	; F7FFAE  ld (0x2540),0x00
+	calr	58146	; F7FFB3  calr 0xf7e2d8
+	ld	xiy, 15971193	; F7FFB6  ld XIY,0x00f3b379
+	ld	xix, 15971250	; F7FFBB  ld XIX,0x00f3b3b2
+	call	15996916	; F7FFC0  call 0xf417f4
+	calr	58144	; F7FFC4  calr 0xf7e2e7
+	ret	; F7FFC7  ret
+
+; ---------------------------------------------------------------------
+; ScreenLeaveBody_AdvanceDelay -- the whole body of the AdvanceDelay
+;                                 screen's Leave method
+;
+; Reached by: the +4 method stub of screen object 0xF43110, which prom_a's
+;             PanelScreen_VtableTable names.
+; Called from: call from prom_b 0xF7D1DA
+; Evidence: the whole body of screen object 0xF43110's +4 method. prom_a's
+;           PanelScreen_VtableTable names that object, and its readers take
+;           +0 Enter, +4 Leave, +8 Button; the stub at 0xF7D1DA is `call
+;           0xF7FFC8` then `ret` and nothing else calls this address. The
+;           screen's own name is round 7's, from its title text.
+; ---------------------------------------------------------------------
+ScreenLeaveBody_AdvanceDelay:
+	call	16001636	; F7FFC8  call 0xf42a64
+	ret	; F7FFCC  ret
+	ret	; F7FFCD  ret   <- button table 0xF7DCD8 entry 0 (ADVANCE/DELAY)
+	ret	; F7FFCE  ret   <- button table 0xF7DCD8 entry 1 (ADVANCE/DELAY)
+	ret	; F7FFCF  ret   <- button table 0xF7DCD8 entry 2 (ADVANCE/DELAY)
+	ret	; F7FFD0  ret   <- button table 0xF7DCD8 entry 3 (ADVANCE/DELAY)
+
+; Evidence: table 0xF7DCD8 entry 4, screen ADVANCE/DELAY. A bare button
+;           number, so no name; see the banner.
+sub_F7FFD1:
+	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FFD1  bit 1,(0x2075)   [llvm-mc cannot encode this]
+	jr	z, 4	; F7FFD5  jr Z,0xf7ffdb
+	call	16002596	; F7FFD7  call 0xf42e24
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7FFDB  or (0x2075),0x08   [llvm-mc cannot encode this]
+	stdi8	(3608), 1	; F7FFE0  ld (0x0e18),0x01
+	bit	7, w	; F7FFE5  bit 0x07,W
+	jr	z, 6	; F7FFE8  jr Z,0xf7fff0
+	call	16001660	; F7FFEA  call 0xf42a7c
+	jr	4	; F7FFEE  jr T,0xf7fff4
+	call	16001656	; F7FFF0  call 0xf42a78
+	calr	143	; F7FFF4  calr 0xf80086
+	ret	; F7FFF7  ret
+	ret	; F7FFF8  ret   <- button table 0xF7DCD8 entry 5 (ADVANCE/DELAY)
+	ret	; F7FFF9  ret   <- button table 0xF7DCD8 entry 6 (ADVANCE/DELAY)
+	ret	; F7FFFA  ret   <- button table 0xF7DCD8 entry 7 (ADVANCE/DELAY)
+
+; Evidence: table 0xF7DCD8 entry 8, screen ADVANCE/DELAY. A bare button
+;           number, so no name; see the banner.
+sub_F7FFFB:
+	bit	7, w	; F7FFFB  bit 0x07,W
+	jr	z, 25	; F7FFFE  jr Z,0xf80019
+
 end:

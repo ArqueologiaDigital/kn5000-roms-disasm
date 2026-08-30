@@ -138,9 +138,9 @@
 ;
 ;     python3 notes/prom_d_finish_round7.py
 ;
-;   witnessed  3,361   the name has a route: the object's own ASCII, an
+;   witnessed  3,392   the name has a route: the object's own ASCII, an
 ;                      Evidence: line, or a witnessed object it is part of
-;   nameless     303   NOT named -- and the reason is stated PER OBJECT, in
+;   nameless     272   NOT named -- and the reason is stated PER OBJECT, in
 ;                      this file, next to the object it is about
 ;   boundary       1   prom_d_end, a zero-length end marker, not an object
 ;   ★ NO WITNESS AT ALL: 0
@@ -153,20 +153,61 @@
 ;                            it sits in hangs off.  The slots, in full:
 ;                            +0x0C +0x10 +0x14 +0x18 +0x20 +0x24
 ;                            +0x28 +0x2C +0x30 +0x38 +0x48 +0x5C
-;   image-internal      306  a relation measured inside this image
+;   image-internal      337  a relation measured inside this image
 ;   reader-backed        49  prom_c reads the slot and the read says what it is
-;   nameless            303  the 303 above, kept in the same denominator
+;   nameless            272  the 272 above, kept in the same denominator
 ; So a reader who wants only what THIS machine's firmware confirms should
 ; discount 1,298 of the 3,665 labels below.  That is the number, said once, here.
 ;
-; ⚠ AND THE 91.7% CONTENT FIGURE THIS FILE SCORES ON
+; ⚠ AND THE 92.6% CONTENT FIGURE THIS FILE SCORES ON
 ; notes/wave7_documentation_metrics.py IS NOT ROBUST TO SPELLING.  491 of the
 ; labels it grades CONTENT are <stem>_<Word><digits> whose digits run 0..n-1
 ; over three or more siblings with no self-named ancestor -- the same shape as
 ; `PercInst_17`, which the same metric grades FRAMED.  The difference is an
 ; underscore before the number.  Counting those as framed instead, this file
-; reads 78.3%.  Both are true of a stated rule and neither is quoted without
+; reads 79.2%.  Both are true of a stated rule and neither is quoted without
 ; the other.  notes/prom_d_finish_round7.py Q1, Q2, Q8; 56 checks.
+;
+; ------------------------------------------------------------------------------
+; ★ WAVE 7 ROUND 8 -- THE THREE QUESTIONS, AND WHAT SURVIVES THEM
+; ------------------------------------------------------------------------------
+; Round 7 gave every label a verdict.  What it did not do is ask the same
+; three questions of each, so a nameless object was nameless because ONE
+; naming rule had failed on it.  Round 8 asks, of all 3,665:
+;     A  does the object CONTAIN a name -- its own ASCII?
+;     B  does a prom_c READER reach the region it is in?
+;     C  does anything POINT AT it -- a stored index, one of this image's
+;        own 1,281 pointer fields, or an address spelling?
+; 3,393 NAMED, 272 NAMELESS -- and every nameless object carries all three
+; answers below, not one mechanism's failure.
+;
+; ⚠ AND THE TABLE ADMITS ITS OWN GAP: 819 objects are NAMED while answering
+; NO to all three.  They are named by round 6's fourth route -- the object
+; CONTAINS A COPY of a named object's bytes -- which is why the three answers
+; are printed as facts about routes and NOT as a verdict.
+;
+; ★ WHAT ROUND 8 NAMED: 31 records whose bytes are carried by two or three
+; DIFFERENTLY NAMED records.  Round 6 gave them no label because `nothing
+; picks one of them`; round 8 states all of them instead of stating none, and
+; `_Or_` is what says no owner was picked.  The bound is 3 names.
+;
+; ★ WHAT THE STORED-INDEX CENSUS SETTLED, and it is the census round 7's own
+; conclusion implied: a record here is reached by an INDEX, so the question
+; is which stored index values exist.  Only one field in the image can select
+; a wave-select preset, and over all 1,549 wave-select records it takes 7
+; distinct values -- so 57 of the 64 records of ToneDB_WaveSelTailPresets are
+; selected by NOTHING STORED in this image, and each says so on itself.
+;
+; ⚠ FOUR MORE MECHANISMS MEASURED AND REJECTED (Q4), including the strongest
+; one this image offers: the +0x20 array is in its owners' index order with
+; 0 backward steps over 106 anchors, so an ambiguous record's owner is
+; confined to an interval -- and the interval leaves exactly one candidate 0
+; times.  Refuted by its own measurement, and written down so it is not
+; re-invented.
+;
+; ⚠ ORIGIN in prom_d/prom_d.ld is NOT changed.  Round 8 re-attacked it from
+; the image's own pointers: 1,281 directory slots, tone-record offsets and
+; descriptor pointers, and 0 of them is an absolute address.
 ;
 ; Reproduce every number quoted in this file:
 ;     python3 scripts/analysis/prom_d_tone_database.py
@@ -174,6 +215,7 @@
 ;     python3 notes/prom_d_documentation_round3.py     # who READS it, 62 checks
 ;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
 ;     python3 notes/prom_d_finish_round7.py --selftest # the inventory, 56 checks
+;     python3 notes/prom_d_inventory_round8.py --selftest # the three questions, 42 checks
 ; Regenerate this file:
 ;     python3 scripts/analysis/gen_prom_d_asm.py
 ; Then, always:
@@ -473,12 +515,21 @@ ToneDB_ToneNumBanks:
 ; --- row 0 (melodic) ---
 ; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
 ; entries select a melodic tone (index < 0x100), which is what
-; `Melodic` states, and 0 of the 128 differ from row 0's -- so the
-; rows are NOT copies of one another either.  Nothing in this image
-; says what the variation between them means, and the BankMap at
-; 0x00100 maps bank-select value 0 to this row, which is what the
-; suffix already says.  round 6 Q1, verdict
-; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
+; `Melodic` states.
+; This is the row the other seven are compared against; they
+; differ from it in 36, 37, 25, 18, 9, 9, 6 of their 128 entries
+; respectively, so the eight rows are not copies of one another.
+; Nothing in this image says what the variation between them means,
+; and the BankMap at 0x00100 maps bank-select value 0 to this row,
+; which is what the suffix already says.
+; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left
+; standing by not testing it: that the rows are an ORDERED LADDER,
+; row r being the r-th alternative wherever one exists.  If they
+; were, the programs at which row r+1 differs would be a SUBSET of
+; those at which row r does.  They are not, at 6 of the 6 steps
+; -- row 2 differs at program 0 where row 1 does not.
+; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;
+; notes/prom_d_inventory_round8.py Q6.
 ToneNumBank_Melodic_0:
 	.short 0x0000	; 00180  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00182  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -612,12 +663,20 @@ ToneNumBank_Melodic_0:
 ; --- row 1 (melodic) ---
 ; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
 ; entries select a melodic tone (index < 0x100), which is what
-; `Melodic` states, and 36 of the 128 differ from row 0's -- so the
-; rows are NOT copies of one another either.  Nothing in this image
-; says what the variation between them means, and the BankMap at
-; 0x00100 maps bank-select value 1 to this row, which is what the
-; suffix already says.  round 6 Q1, verdict
-; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
+; `Melodic` states.
+; 36 of the 128 differ from row 0's, so this row is not a copy of
+; it.
+; Nothing in this image says what the variation between them means,
+; and the BankMap at 0x00100 maps bank-select value 1 to this row,
+; which is what the suffix already says.
+; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left
+; standing by not testing it: that the rows are an ORDERED LADDER,
+; row r being the r-th alternative wherever one exists.  If they
+; were, the programs at which row r+1 differs would be a SUBSET of
+; those at which row r does.  They are not, at 6 of the 6 steps
+; -- row 2 differs at program 0 where row 1 does not.
+; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;
+; notes/prom_d_inventory_round8.py Q6.
 ToneNumBank_Melodic_1:
 	.short 0x0000	; 00280  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00282  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -751,12 +810,20 @@ ToneNumBank_Melodic_1:
 ; --- row 2 (melodic) ---
 ; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
 ; entries select a melodic tone (index < 0x100), which is what
-; `Melodic` states, and 37 of the 128 differ from row 0's -- so the
-; rows are NOT copies of one another either.  Nothing in this image
-; says what the variation between them means, and the BankMap at
-; 0x00100 maps bank-select value 2 to this row, which is what the
-; suffix already says.  round 6 Q1, verdict
-; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
+; `Melodic` states.
+; 37 of the 128 differ from row 0's, so this row is not a copy of
+; it.
+; Nothing in this image says what the variation between them means,
+; and the BankMap at 0x00100 maps bank-select value 2 to this row,
+; which is what the suffix already says.
+; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left
+; standing by not testing it: that the rows are an ORDERED LADDER,
+; row r being the r-th alternative wherever one exists.  If they
+; were, the programs at which row r+1 differs would be a SUBSET of
+; those at which row r does.  They are not, at 6 of the 6 steps
+; -- row 2 differs at program 0 where row 1 does not.
+; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;
+; notes/prom_d_inventory_round8.py Q6.
 ToneNumBank_Melodic_2:
 	.short 0x0005	; 00380  [  0] prog   0 -> tone 0x005 '  Midi Grand 1  '
 	.short 0x0003	; 00382  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -890,12 +957,20 @@ ToneNumBank_Melodic_2:
 ; --- row 3 (melodic) ---
 ; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
 ; entries select a melodic tone (index < 0x100), which is what
-; `Melodic` states, and 25 of the 128 differ from row 0's -- so the
-; rows are NOT copies of one another either.  Nothing in this image
-; says what the variation between them means, and the BankMap at
-; 0x00100 maps bank-select value 3 to this row, which is what the
-; suffix already says.  round 6 Q1, verdict
-; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
+; `Melodic` states.
+; 25 of the 128 differ from row 0's, so this row is not a copy of
+; it.
+; Nothing in this image says what the variation between them means,
+; and the BankMap at 0x00100 maps bank-select value 3 to this row,
+; which is what the suffix already says.
+; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left
+; standing by not testing it: that the rows are an ORDERED LADDER,
+; row r being the r-th alternative wherever one exists.  If they
+; were, the programs at which row r+1 differs would be a SUBSET of
+; those at which row r does.  They are not, at 6 of the 6 steps
+; -- row 2 differs at program 0 where row 1 does not.
+; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;
+; notes/prom_d_inventory_round8.py Q6.
 ToneNumBank_Melodic_3:
 	.short 0x0000	; 00480  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0007	; 00482  [  1] prog   1 -> tone 0x007 '  Jangle Piano  '
@@ -1029,12 +1104,20 @@ ToneNumBank_Melodic_3:
 ; --- row 4 (melodic) ---
 ; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
 ; entries select a melodic tone (index < 0x100), which is what
-; `Melodic` states, and 18 of the 128 differ from row 0's -- so the
-; rows are NOT copies of one another either.  Nothing in this image
-; says what the variation between them means, and the BankMap at
-; 0x00100 maps bank-select value 4 to this row, which is what the
-; suffix already says.  round 6 Q1, verdict
-; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
+; `Melodic` states.
+; 18 of the 128 differ from row 0's, so this row is not a copy of
+; it.
+; Nothing in this image says what the variation between them means,
+; and the BankMap at 0x00100 maps bank-select value 4 to this row,
+; which is what the suffix already says.
+; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left
+; standing by not testing it: that the rows are an ORDERED LADDER,
+; row r being the r-th alternative wherever one exists.  If they
+; were, the programs at which row r+1 differs would be a SUBSET of
+; those at which row r does.  They are not, at 6 of the 6 steps
+; -- row 2 differs at program 0 where row 1 does not.
+; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;
+; notes/prom_d_inventory_round8.py Q6.
 ToneNumBank_Melodic_4:
 	.short 0x0006	; 00580  [  0] prog   0 -> tone 0x006 '  Midi Grand 2  '
 	.short 0x0003	; 00582  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -1168,12 +1251,20 @@ ToneNumBank_Melodic_4:
 ; --- row 5 (melodic) ---
 ; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
 ; entries select a melodic tone (index < 0x100), which is what
-; `Melodic` states, and 9 of the 128 differ from row 0's -- so the
-; rows are NOT copies of one another either.  Nothing in this image
-; says what the variation between them means, and the BankMap at
-; 0x00100 maps bank-select value 5 to this row, which is what the
-; suffix already says.  round 6 Q1, verdict
-; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
+; `Melodic` states.
+; 9 of the 128 differ from row 0's, so this row is not a copy of
+; it.
+; Nothing in this image says what the variation between them means,
+; and the BankMap at 0x00100 maps bank-select value 5 to this row,
+; which is what the suffix already says.
+; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left
+; standing by not testing it: that the rows are an ORDERED LADDER,
+; row r being the r-th alternative wherever one exists.  If they
+; were, the programs at which row r+1 differs would be a SUBSET of
+; those at which row r does.  They are not, at 6 of the 6 steps
+; -- row 2 differs at program 0 where row 1 does not.
+; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;
+; notes/prom_d_inventory_round8.py Q6.
 ToneNumBank_Melodic_5:
 	.short 0x0000	; 00680  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00682  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -1307,12 +1398,20 @@ ToneNumBank_Melodic_5:
 ; --- row 6 (melodic) ---
 ; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
 ; entries select a melodic tone (index < 0x100), which is what
-; `Melodic` states, and 9 of the 128 differ from row 0's -- so the
-; rows are NOT copies of one another either.  Nothing in this image
-; says what the variation between them means, and the BankMap at
-; 0x00100 maps bank-select value 6 to this row, which is what the
-; suffix already says.  round 6 Q1, verdict
-; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
+; `Melodic` states.
+; 9 of the 128 differ from row 0's, so this row is not a copy of
+; it.
+; Nothing in this image says what the variation between them means,
+; and the BankMap at 0x00100 maps bank-select value 6 to this row,
+; which is what the suffix already says.
+; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left
+; standing by not testing it: that the rows are an ORDERED LADDER,
+; row r being the r-th alternative wherever one exists.  If they
+; were, the programs at which row r+1 differs would be a SUBSET of
+; those at which row r does.  They are not, at 6 of the 6 steps
+; -- row 2 differs at program 0 where row 1 does not.
+; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;
+; notes/prom_d_inventory_round8.py Q6.
 ToneNumBank_Melodic_6:
 	.short 0x0000	; 00780  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00782  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -1446,12 +1545,20 @@ ToneNumBank_Melodic_6:
 ; --- row 7 (melodic) ---
 ; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
 ; entries select a melodic tone (index < 0x100), which is what
-; `Melodic` states, and 6 of the 128 differ from row 0's -- so the
-; rows are NOT copies of one another either.  Nothing in this image
-; says what the variation between them means, and the BankMap at
-; 0x00100 maps bank-select value 7 to this row, which is what the
-; suffix already says.  round 6 Q1, verdict
-; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
+; `Melodic` states.
+; 6 of the 128 differ from row 0's, so this row is not a copy of
+; it.
+; Nothing in this image says what the variation between them means,
+; and the BankMap at 0x00100 maps bank-select value 7 to this row,
+; which is what the suffix already says.
+; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left
+; standing by not testing it: that the rows are an ORDERED LADDER,
+; row r being the r-th alternative wherever one exists.  If they
+; were, the programs at which row r+1 differs would be a SUBSET of
+; those at which row r does.  They are not, at 6 of the 6 steps
+; -- row 2 differs at program 0 where row 1 does not.
+; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;
+; notes/prom_d_inventory_round8.py Q6.
 ToneNumBank_Melodic_7:
 	.short 0x0000	; 00880  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00882  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -14398,7 +14505,9 @@ ToneDB_ToneIndexMapB:
 ;      `_SameAs_<name>`: these bytes and that record's bytes are the same.
 ;      It does NOT say this record BELONGS to that tone or instrument --
 ;      nothing here reaches this array with an index whose meaning is
-;      known.  Where the twins disagree on the name, no label is given.
+;      known.  ⚠ CORRECTED IN ROUND 8: this line used to end `Where the
+;      twins disagree on the name, no label is given`, and point 5 below
+;      is why that is no longer true of every such record.
 ;   notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.
 ; 
 ;   4. ★ ROUND 7 -- ROUND 6's RULE, STATED CORRECTLY, NAMES 0 MORE.
@@ -14417,6 +14526,50 @@ ToneDB_ToneIndexMapB:
 ;      drop a WORD rather than a variant.  notes/prom_d_finish_round7.py Q4
 ;      prints what every bound from 1 to 8 would have named.
 ;   notes/prom_d_finish_round7.py Q4, and 56 checks in that file.
+; 
+;   5. ★ ROUND 8 -- THE DISJUNCTION NAMES 11 MORE, BY REFUSING TO CHOOSE.
+;      Round 6 gave no label when the records carrying these 43 bytes
+;      disagreed on the name, because `nothing here picks one of them`.
+;      It does not have to pick.  The banner over each such record ALREADY
+;      PRINTS the candidate names, derived by the same code, so keeping
+;      them out of the label withheld a fact that had been measured and
+;      left the object identified only by its position.  A label of the
+;      form `_SameAs_A_Or_B` claims exactly the measurement: these bytes
+;      are the wave-select block A carries and the one B carries.  It
+;      picks no owner, and `_Or_` is what says so.
+;      THE BOUND IS 3 NAMES.  notes/prom_d_inventory_round8.py Q3 prints
+;      what every bound from 1 to 12 would have named; at 4 the longest
+;      label passes 100 characters, and at 6 one label enumerates twelve
+;      hi-hats -- a whole family, which is what round 7's stem rule
+;      already refused to compress into one word.
+;      4 records of this array still carry a number: their candidate
+;      sets are larger than 3.
+; 
+;   5b. ★ AND FOUR MORE MECHANISMS MEASURED AND REJECTED IN ROUND 8, for
+;      the same reason round 7 wrote its three down here: so the next
+;      round finds them before re-inventing them.
+;      M4  the CROSS-FAMILY twin -- matching this array against the OTHER
+;          family's records, which round 6 never did.  0 matches, on both
+;          arrays, over 155 records with no twin in their own family.
+;      M5  widening round 6's mask to byte +0x0C as well.  It would name 3
+;          more records at slot +0x18 and 0 at +0x20.  Refused by the same
+;          instruction that refused M2: prom_c writes byte 11 and bytes
+;          13..42, so byte 12 is content and a record differing in it is a
+;          different record.
+;      M6  naming a no-twin record from the run of consecutive records that
+;          share its +0x0B.  The runs are real -- see the region banner --
+;          but no run has a word common to every one of its named members,
+;          including the 16-record run whose twins are all brass.
+;      M7  ★ THE MONOTONE INTERVAL, the strongest of the four.  This array
+;          has 152 records whose bytes name exactly one owner, and reading
+;          their owner indices in array order gives 28 backward steps out
+;          of 151.  Where that is 0 the array is SORTED, so an ambiguous
+;          record's owner is confined to the interval between its
+;          neighbours -- which would break the tie with a mechanism.
+;          Measured, it leaves exactly one candidate 0 times: where the
+;          order holds every candidate is inside the interval, and where it
+;          does not, none is.  Refuted by its own measurement.
+;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 42 checks.
 ; 
 ;   4b. ★ AND THREE MECHANISMS ROUND 7 MEASURED AND REJECTED, recorded
 ;      next to the records they would have named so they are not
@@ -14474,10 +14627,14 @@ ToneDB_MixerDefaultTable_000:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x01
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
-; 3 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_001:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block HappyEnsemble carries and the blocks PopOrgan and SynthGlocken
+; carry.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_001_SameAs_HappyEnsemble_Or_PopOrgan_Or_SynthGlocken:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x01, 0x5E, 0x01, 0x5E, 0x01, 0x5E, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1D990  |...^.^.^.^...}.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_002 -- file 0x1D9BB..0x1D9E5
@@ -15113,10 +15270,14 @@ ToneDB_MixerDefaultTable_063_SameAs_ClassicalGuitar_WaveSel0:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x01
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
-; 3 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_064:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block ClassicalStrings carries and the blocks SlowStrings and SymphonicStrings
+; carry.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_064_SameAs_ClassicalStrings_Or_SlowStrings_Or_SymphonicStrings:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x00, 0x64, 0x00, 0x64, 0x00, 0x64, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E425  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_065 -- file 0x1E450..0x1E47A
@@ -15133,8 +15294,10 @@ ToneDB_MixerDefaultTable_065:
 ; preset number prom_c writes over.  This record holds 0x01
 ; there; the tone's own block holds 0x00.
 ; ⚠ NO LABEL: the 10 blocks that carry these bytes belong to
-; 8 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; 8 DIFFERENTLY NAMED tone records -- more than round 8's
+; bound of 3, so a disjunction would enumerate a family
+; rather than name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_MixerDefaultTable_066:
 	.byte 0x7F, 0x7F, 0x7F, 0x6B, 0x01, 0x6B, 0x01, 0x6B, 0x01, 0x6B, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E47B  |...k.k.k.k...}.T....d0...B$`...0.d...B$`...|
 
@@ -15144,8 +15307,10 @@ ToneDB_MixerDefaultTable_066:
 ; preset number prom_c writes over.  This record holds 0x01
 ; there; the tone's own block holds 0x00.
 ; ⚠ NO LABEL: the 5 blocks that carry these bytes belong to
-; 4 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; 4 DIFFERENTLY NAMED tone records -- more than round 8's
+; bound of 3, so a disjunction would enumerate a family
+; rather than name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_MixerDefaultTable_067:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x04, 0x64, 0x04, 0x64, 0x04, 0x64, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E4A6  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
 
@@ -15173,10 +15338,14 @@ ToneDB_MixerDefaultTable_069_SameAs_PizzicatoStr:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x01
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
-; 2 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_070:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block Fiddle carries and the block Violin
+; carries.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_070_SameAs_Fiddle_Or_Violin:
 	.byte 0x7F, 0x7F, 0x7F, 0x60, 0x00, 0x60, 0x00, 0x60, 0x00, 0x60, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x30, 0xCE, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xCE, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1E527  |...`.`.`.`...}.T....d0...B$T...0.d...B$T...|
 
 ; ToneDB_MixerDefaultTable_071 -- file 0x1E552..0x1E57C
@@ -15228,10 +15397,14 @@ ToneDB_MixerDefaultTable_074_SameAs_BowedBass_WaveSel0:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x03
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
-; 3 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_075:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block AirVox carries and the blocks EchoDrops and VocalAh
+; carry.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_075_SameAs_AirVox_Or_EchoDrops_Or_VocalAh:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x04, 0x68, 0x04, 0x68, 0x04, 0x68, 0x04, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 1E5FE  |...h.h.h.h...}.T....d0...B$T...0.d...B$T...|
 
 ; ToneDB_MixerDefaultTable_076 -- file 0x1E629..0x1E653
@@ -15239,10 +15412,14 @@ ToneDB_MixerDefaultTable_075:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x03
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
-; 2 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_076:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block PopVocalAh carries and the block VocalDaa
+; carries.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_076_SameAs_PopVocalAh_Or_VocalDaa:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x02, 0x68, 0x02, 0x68, 0x02, 0x68, 0x02, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 1E629  |...h.h.h.h...}.T....d0...B$T...0.d...B$T...|
 
 ; ToneDB_MixerDefaultTable_077 -- file 0x1E654..0x1E67E
@@ -15612,10 +15789,14 @@ ToneDB_MixerDefaultTable_113_SameAs_PipeOrgan2:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x03
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
-; 2 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_114:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block Bandoneon carries and the block MellowAccordion
+; carries.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_114_SameAs_Bandoneon_Or_MellowAccordion:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x00, 0x51, 0x00, 0x51, 0x00, 0x51, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1EC8B  |...Q.Q.Q.Q...}.T....d0...B$T...0.d...B$T...|
 
 ; ToneDB_MixerDefaultTable_115 -- file 0x1ECB6..0x1ECE0
@@ -15746,8 +15927,10 @@ ToneDB_MixerDefaultTable_127:
 ; preset number prom_c writes over.  This record holds 0x01
 ; there; the tone's own block holds 0x00.
 ; ⚠ NO LABEL: the 6 blocks that carry these bytes belong to
-; 5 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; 5 DIFFERENTLY NAMED tone records -- more than round 8's
+; bound of 3, so a disjunction would enumerate a family
+; rather than name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_MixerDefaultTable_128:
 	.byte 0x7F, 0x7F, 0x7F, 0x76, 0x00, 0x76, 0x00, 0x76, 0x00, 0x76, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC6, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EEE5  |...v.v.v.v...}.T....d0...B$`...0.d...B$`...|
 
@@ -16674,10 +16857,14 @@ ToneDB_MixerDefaultTable_236:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x01
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
-; 3 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_237:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block BrightSolidGtr carries and the blocks MuteGuitar and SynthSolidGtr
+; carry.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_237_SameAs_BrightSolidGtr_Or_MuteGuitar_Or_SynthSolidGtr:
 	.byte 0x60, 0x7F, 0x7F, 0x10, 0x80, 0x10, 0x81, 0x10, 0x80, 0x10, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xD3, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00, 0x00, 0xD3, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00	; 20134  |`............}.T....d....B$T.....d...B$T...|
 
 ; ToneDB_MixerDefaultTable_238 -- file 0x2015F..0x20189
@@ -16729,10 +16916,14 @@ ToneDB_MixerDefaultTable_241_SameAs_MuteGuitar_WaveSel0:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x01
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
-; 2 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_242:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block FunkMuteGuitar carries and the block MuteGuitar
+; carries.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_242_SameAs_FunkMuteGuitar_Or_MuteGuitar:
 	.byte 0x7F, 0x7F, 0x7F, 0x11, 0x80, 0x11, 0x80, 0x11, 0x80, 0x11, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xCA, 0x00, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00, 0x00, 0xCA, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00	; 2020B  |.............}.T....d....B$T.....d...B$T...|
 
 ; ToneDB_MixerDefaultTable_243 -- file 0x20236..0x20260
@@ -16828,10 +17019,14 @@ ToneDB_MixerDefaultTable_250_SameAs_HawaiianGuitar2_WaveSel0:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x03
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
-; 2 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_251:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block AltoSax carries and the block SopranoSax
+; carries.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_251_SameAs_AltoSax_Or_SopranoSax:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x80, 0x07, 0x80, 0x07, 0x80, 0x07, 0x80, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2038E  |.............}.T....d....B$`.....d...B$`...|
 
 ; ToneDB_MixerDefaultTable_252 -- file 0x203B9..0x203E3
@@ -16856,8 +17051,10 @@ ToneDB_MixerDefaultTable_253:
 ; preset number prom_c writes over.  This record holds 0x02
 ; there; the tone's own block holds 0x00.
 ; ⚠ NO LABEL: the 5 blocks that carry these bytes belong to
-; 5 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; 5 DIFFERENTLY NAMED tone records -- more than round 8's
+; bound of 3, so a disjunction would enumerate a family
+; rather than name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_MixerDefaultTable_254:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x80, 0x05, 0x80, 0x05, 0x80, 0x05, 0x80, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 2040F  |.............}.T....d....N0`.....d...N0`...|
 
@@ -16914,10 +17111,14 @@ ToneDB_MixerDefaultTable_260:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x03
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
-; 3 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_261:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block MidiGrand2 carries and the blocks VocalDoo and VocalOoh
+; carry.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_261_SameAs_MidiGrand2_Or_VocalDoo_Or_VocalOoh:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x01, 0x68, 0x01, 0x68, 0x01, 0x68, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 2053C  |...h.h.h.h...}.T....d0...B$T...0.d...B$T...|
 
 ; ToneDB_MixerDefaultTable_262 -- file 0x20567..0x20591
@@ -17303,10 +17504,14 @@ ToneDB_MixerDefaultTable_297_SameAs_EnglishHorn_WaveSel0:
 ; with ONE byte changed: +0x0B, which round 5 proved is the
 ; preset number prom_c writes over.  This record holds 0x03
 ; there; the tone's own block holds 0x00.
-; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
-; 2 DIFFERENTLY NAMED tone records, so nothing here picks
-; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_MixerDefaultTable_298:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`: these
+; 43 bytes are the block Bagpipe carries and the block Bassoon
+; carries.  Nothing here picks one, and the label does not
+; pretend to.  round 8 Q3, bound 3 names.
+; Evidence: the 43-byte runs, compared byte for byte;
+; each name in the label is that TONE record's own 16
+; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_MixerDefaultTable_298_SameAs_Bagpipe_Or_Bassoon:
 	.byte 0x7F, 0x7F, 0x7F, 0x46, 0x00, 0x46, 0x00, 0x46, 0x00, 0x46, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xBE, 0xE2, 0x00, 0x36, 0x18, 0x54, 0x10, 0x00, 0x00, 0x46, 0xBE, 0x64, 0xE2, 0x00, 0x00, 0x36, 0x18, 0x54, 0x10, 0x00, 0x00	; 20B73  |...F.F.F.F...}.T....dF...6.T...F.d...6.T...|
 
 ; ToneDB_MixerDefaultTable_299 -- file 0x20B9E..0x20BC8
@@ -17659,6 +17864,9 @@ ToneDB_WaveSelTailPresets:
 ; This is the ONE record of the 64 that does not carry its own
 ; index, and prom_c's 0xFBC74E `jr NZ` can never reach it:
 ; index 0 takes the other arm.  round 5 Q7b.
+; ★ 1164 stored records in this image hold 0 in the low 6
+; bits of their own +0x0B, so they select this record.  The
+; first is tone record 0 element 0.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x20F86 and
 ; holds 0x01; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 1, the index into this array.
@@ -17669,6 +17877,9 @@ ToneDB_WaveSelTailPresets_000:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 1.
 ; This record's own +0x0B is 0x01, and 0x01 & 0x3F = 1 --
 ; it carries its own index.
+; ★ 152 stored records in this image hold 1 in the low 6
+; bits of their own +0x0B, so they select this record.  The
+; first is ToneDB_MixerDefaultTable_001.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x20FB1 and
 ; holds 0x01; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 1, the index into this array.
@@ -17679,6 +17890,9 @@ ToneDB_WaveSelTailPresets_001:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 2.
 ; This record's own +0x0B is 0x02, and 0x02 & 0x3F = 2 --
 ; it carries its own index.
+; ★ 21 stored records in this image hold 2 in the low 6
+; bits of their own +0x0B, so they select this record.  The
+; first is ToneDB_MixerDefaultTable_005.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x20FDC and
 ; holds 0x02; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 2, the index into this array.
@@ -17689,6 +17903,9 @@ ToneDB_WaveSelTailPresets_002:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 3.
 ; This record's own +0x0B is 0x03, and 0x03 & 0x3F = 3 --
 ; it carries its own index.
+; ★ 35 stored records in this image hold 3 in the low 6
+; bits of their own +0x0B, so they select this record.  The
+; first is ToneDB_MixerDefaultTable_019.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21007 and
 ; holds 0x03; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 3, the index into this array.
@@ -17699,6 +17916,9 @@ ToneDB_WaveSelTailPresets_003:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 4.
 ; This record's own +0x0B is 0x04, and 0x04 & 0x3F = 4 --
 ; it carries its own index.
+; ★ 16 stored records in this image hold 4 in the low 6
+; bits of their own +0x0B, so they select this record.  The
+; first is ToneDB_MixerDefaultTable_265.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21032 and
 ; holds 0x04; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 4, the index into this array.
@@ -17709,6 +17929,9 @@ ToneDB_WaveSelTailPresets_004:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 5.
 ; This record's own +0x0B is 0x45, and 0x45 & 0x3F = 5 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ★ 61 stored records in this image hold 5 in the low 6
+; bits of their own +0x0B, so they select this record.  The
+; first is ToneDB_MixerDefaultTable_033.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2105D and
 ; holds 0x45; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 5, the index into this array.
@@ -17719,6 +17942,12 @@ ToneDB_WaveSelTailPresets_005:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 6.
 ; This record's own +0x0B is 0x46, and 0x46 & 0x3F = 6 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 6 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21088 and
 ; holds 0x46; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 6, the index into this array.
@@ -17729,6 +17958,9 @@ ToneDB_WaveSelTailPresets_006:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 7.
 ; This record's own +0x0B is 0x47, and 0x47 & 0x3F = 7 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ★ 36 stored records in this image hold 7 in the low 6
+; bits of their own +0x0B, so they select this record.  The
+; first is ToneDB_MixerDefaultTable_032.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x210B3 and
 ; holds 0x47; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 7, the index into this array.
@@ -17739,6 +17971,12 @@ ToneDB_WaveSelTailPresets_007:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 8.
 ; This record's own +0x0B is 0x48, and 0x48 & 0x3F = 8 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 8 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x210DE and
 ; holds 0x48; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 8, the index into this array.
@@ -17749,6 +17987,12 @@ ToneDB_WaveSelTailPresets_008:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 9.
 ; This record's own +0x0B is 0x09, and 0x09 & 0x3F = 9 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 9 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21109 and
 ; holds 0x09; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 9, the index into this array.
@@ -17759,6 +18003,12 @@ ToneDB_WaveSelTailPresets_009:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 10.
 ; This record's own +0x0B is 0x0A, and 0x0A & 0x3F = 10 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 10 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21134 and
 ; holds 0x0A; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 10, the index into this array.
@@ -17769,6 +18019,12 @@ ToneDB_WaveSelTailPresets_010:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 11.
 ; This record's own +0x0B is 0x0B, and 0x0B & 0x3F = 11 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 11 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2115F and
 ; holds 0x0B; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 11, the index into this array.
@@ -17779,6 +18035,12 @@ ToneDB_WaveSelTailPresets_011:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 12.
 ; This record's own +0x0B is 0x0C, and 0x0C & 0x3F = 12 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 12 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2118A and
 ; holds 0x0C; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 12, the index into this array.
@@ -17789,6 +18051,12 @@ ToneDB_WaveSelTailPresets_012:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 13.
 ; This record's own +0x0B is 0x0D, and 0x0D & 0x3F = 13 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 13 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x211B5 and
 ; holds 0x0D; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 13, the index into this array.
@@ -17799,6 +18067,12 @@ ToneDB_WaveSelTailPresets_013:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 14.
 ; This record's own +0x0B is 0x0E, and 0x0E & 0x3F = 14 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 14 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x211E0 and
 ; holds 0x0E; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 14, the index into this array.
@@ -17809,6 +18083,12 @@ ToneDB_WaveSelTailPresets_014:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 15.
 ; This record's own +0x0B is 0x0F, and 0x0F & 0x3F = 15 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 15 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2120B and
 ; holds 0x0F; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 15, the index into this array.
@@ -17819,6 +18099,12 @@ ToneDB_WaveSelTailPresets_015:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 16.
 ; This record's own +0x0B is 0x10, and 0x10 & 0x3F = 16 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 16 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21236 and
 ; holds 0x10; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 16, the index into this array.
@@ -17829,6 +18115,12 @@ ToneDB_WaveSelTailPresets_016:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 17.
 ; This record's own +0x0B is 0x11, and 0x11 & 0x3F = 17 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 17 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21261 and
 ; holds 0x11; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 17, the index into this array.
@@ -17839,6 +18131,12 @@ ToneDB_WaveSelTailPresets_017:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 18.
 ; This record's own +0x0B is 0x12, and 0x12 & 0x3F = 18 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 18 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2128C and
 ; holds 0x12; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 18, the index into this array.
@@ -17849,6 +18147,12 @@ ToneDB_WaveSelTailPresets_018:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 19.
 ; This record's own +0x0B is 0x13, and 0x13 & 0x3F = 19 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 19 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x212B7 and
 ; holds 0x13; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 19, the index into this array.
@@ -17859,6 +18163,12 @@ ToneDB_WaveSelTailPresets_019:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 20.
 ; This record's own +0x0B is 0x14, and 0x14 & 0x3F = 20 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 20 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x212E2 and
 ; holds 0x14; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 20, the index into this array.
@@ -17869,6 +18179,12 @@ ToneDB_WaveSelTailPresets_020:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 21.
 ; This record's own +0x0B is 0x15, and 0x15 & 0x3F = 21 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 21 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2130D and
 ; holds 0x15; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 21, the index into this array.
@@ -17879,6 +18195,12 @@ ToneDB_WaveSelTailPresets_021:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 22.
 ; This record's own +0x0B is 0x16, and 0x16 & 0x3F = 22 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 22 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21338 and
 ; holds 0x16; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 22, the index into this array.
@@ -17889,6 +18211,12 @@ ToneDB_WaveSelTailPresets_022:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 23.
 ; This record's own +0x0B is 0x17, and 0x17 & 0x3F = 23 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 23 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21363 and
 ; holds 0x17; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 23, the index into this array.
@@ -17899,6 +18227,12 @@ ToneDB_WaveSelTailPresets_023:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 24.
 ; This record's own +0x0B is 0x18, and 0x18 & 0x3F = 24 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 24 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2138E and
 ; holds 0x18; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 24, the index into this array.
@@ -17909,6 +18243,12 @@ ToneDB_WaveSelTailPresets_024:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 25.
 ; This record's own +0x0B is 0x19, and 0x19 & 0x3F = 25 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 25 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x213B9 and
 ; holds 0x19; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 25, the index into this array.
@@ -17919,6 +18259,12 @@ ToneDB_WaveSelTailPresets_025:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 26.
 ; This record's own +0x0B is 0x1A, and 0x1A & 0x3F = 26 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 26 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x213E4 and
 ; holds 0x1A; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 26, the index into this array.
@@ -17929,6 +18275,12 @@ ToneDB_WaveSelTailPresets_026:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 27.
 ; This record's own +0x0B is 0x1B, and 0x1B & 0x3F = 27 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 27 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2140F and
 ; holds 0x1B; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 27, the index into this array.
@@ -17939,6 +18291,12 @@ ToneDB_WaveSelTailPresets_027:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 28.
 ; This record's own +0x0B is 0x1C, and 0x1C & 0x3F = 28 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 28 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2143A and
 ; holds 0x1C; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 28, the index into this array.
@@ -17949,6 +18307,12 @@ ToneDB_WaveSelTailPresets_028:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 29.
 ; This record's own +0x0B is 0x1D, and 0x1D & 0x3F = 29 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 29 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21465 and
 ; holds 0x1D; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 29, the index into this array.
@@ -17959,6 +18323,12 @@ ToneDB_WaveSelTailPresets_029:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 30.
 ; This record's own +0x0B is 0x1E, and 0x1E & 0x3F = 30 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 30 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21490 and
 ; holds 0x1E; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 30, the index into this array.
@@ -17969,6 +18339,12 @@ ToneDB_WaveSelTailPresets_030:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 31.
 ; This record's own +0x0B is 0x1F, and 0x1F & 0x3F = 31 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 31 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x214BB and
 ; holds 0x1F; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 31, the index into this array.
@@ -17979,6 +18355,12 @@ ToneDB_WaveSelTailPresets_031:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 32.
 ; This record's own +0x0B is 0x20, and 0x20 & 0x3F = 32 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 32 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x214E6 and
 ; holds 0x20; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 32, the index into this array.
@@ -17989,6 +18371,12 @@ ToneDB_WaveSelTailPresets_032:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 33.
 ; This record's own +0x0B is 0x21, and 0x21 & 0x3F = 33 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 33 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21511 and
 ; holds 0x21; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 33, the index into this array.
@@ -17999,6 +18387,12 @@ ToneDB_WaveSelTailPresets_033:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 34.
 ; This record's own +0x0B is 0x22, and 0x22 & 0x3F = 34 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 34 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2153C and
 ; holds 0x22; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 34, the index into this array.
@@ -18009,6 +18403,12 @@ ToneDB_WaveSelTailPresets_034:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 35.
 ; This record's own +0x0B is 0x23, and 0x23 & 0x3F = 35 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 35 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21567 and
 ; holds 0x23; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 35, the index into this array.
@@ -18019,6 +18419,12 @@ ToneDB_WaveSelTailPresets_035:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 36.
 ; This record's own +0x0B is 0x24, and 0x24 & 0x3F = 36 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 36 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21592 and
 ; holds 0x24; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 36, the index into this array.
@@ -18029,6 +18435,12 @@ ToneDB_WaveSelTailPresets_036:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 37.
 ; This record's own +0x0B is 0x25, and 0x25 & 0x3F = 37 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 37 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x215BD and
 ; holds 0x25; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 37, the index into this array.
@@ -18039,6 +18451,12 @@ ToneDB_WaveSelTailPresets_037:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 38.
 ; This record's own +0x0B is 0x66, and 0x66 & 0x3F = 38 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 38 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x215E8 and
 ; holds 0x66; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 38, the index into this array.
@@ -18049,6 +18467,12 @@ ToneDB_WaveSelTailPresets_038:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 39.
 ; This record's own +0x0B is 0x67, and 0x67 & 0x3F = 39 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 39 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21613 and
 ; holds 0x67; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 39, the index into this array.
@@ -18059,6 +18483,12 @@ ToneDB_WaveSelTailPresets_039:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 40.
 ; This record's own +0x0B is 0x68, and 0x68 & 0x3F = 40 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 40 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2163E and
 ; holds 0x68; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 40, the index into this array.
@@ -18069,6 +18499,12 @@ ToneDB_WaveSelTailPresets_040:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 41.
 ; This record's own +0x0B is 0x69, and 0x69 & 0x3F = 41 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 41 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21669 and
 ; holds 0x69; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 41, the index into this array.
@@ -18079,6 +18515,12 @@ ToneDB_WaveSelTailPresets_041:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 42.
 ; This record's own +0x0B is 0x6A, and 0x6A & 0x3F = 42 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 42 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21694 and
 ; holds 0x6A; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 42, the index into this array.
@@ -18089,6 +18531,12 @@ ToneDB_WaveSelTailPresets_042:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 43.
 ; This record's own +0x0B is 0x6B, and 0x6B & 0x3F = 43 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 43 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x216BF and
 ; holds 0x6B; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 43, the index into this array.
@@ -18099,6 +18547,12 @@ ToneDB_WaveSelTailPresets_043:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 44.
 ; This record's own +0x0B is 0x6C, and 0x6C & 0x3F = 44 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 44 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x216EA and
 ; holds 0x6C; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 44, the index into this array.
@@ -18109,6 +18563,12 @@ ToneDB_WaveSelTailPresets_044:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 45.
 ; This record's own +0x0B is 0x6D, and 0x6D & 0x3F = 45 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 45 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21715 and
 ; holds 0x6D; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 45, the index into this array.
@@ -18119,6 +18579,12 @@ ToneDB_WaveSelTailPresets_045:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 46.
 ; This record's own +0x0B is 0x6E, and 0x6E & 0x3F = 46 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 46 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21740 and
 ; holds 0x6E; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 46, the index into this array.
@@ -18129,6 +18595,12 @@ ToneDB_WaveSelTailPresets_046:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 47.
 ; This record's own +0x0B is 0x6F, and 0x6F & 0x3F = 47 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 47 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2176B and
 ; holds 0x6F; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 47, the index into this array.
@@ -18139,6 +18611,12 @@ ToneDB_WaveSelTailPresets_047:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 48.
 ; This record's own +0x0B is 0x70, and 0x70 & 0x3F = 48 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 48 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21796 and
 ; holds 0x70; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 48, the index into this array.
@@ -18149,6 +18627,12 @@ ToneDB_WaveSelTailPresets_048:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 49.
 ; This record's own +0x0B is 0x71, and 0x71 & 0x3F = 49 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 49 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x217C1 and
 ; holds 0x71; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 49, the index into this array.
@@ -18159,6 +18643,12 @@ ToneDB_WaveSelTailPresets_049:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 50.
 ; This record's own +0x0B is 0x72, and 0x72 & 0x3F = 50 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 50 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x217EC and
 ; holds 0x72; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 50, the index into this array.
@@ -18169,6 +18659,12 @@ ToneDB_WaveSelTailPresets_050:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 51.
 ; This record's own +0x0B is 0x73, and 0x73 & 0x3F = 51 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 51 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21817 and
 ; holds 0x73; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 51, the index into this array.
@@ -18179,6 +18675,12 @@ ToneDB_WaveSelTailPresets_051:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 52.
 ; This record's own +0x0B is 0x74, and 0x74 & 0x3F = 52 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 52 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21842 and
 ; holds 0x74; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 52, the index into this array.
@@ -18189,6 +18691,12 @@ ToneDB_WaveSelTailPresets_052:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 53.
 ; This record's own +0x0B is 0x75, and 0x75 & 0x3F = 53 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 53 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2186D and
 ; holds 0x75; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 53, the index into this array.
@@ -18199,6 +18707,12 @@ ToneDB_WaveSelTailPresets_053:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 54.
 ; This record's own +0x0B is 0x76, and 0x76 & 0x3F = 54 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 54 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21898 and
 ; holds 0x76; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 54, the index into this array.
@@ -18209,6 +18723,12 @@ ToneDB_WaveSelTailPresets_054:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 55.
 ; This record's own +0x0B is 0x77, and 0x77 & 0x3F = 55 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 55 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x218C3 and
 ; holds 0x77; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 55, the index into this array.
@@ -18219,6 +18739,12 @@ ToneDB_WaveSelTailPresets_055:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 56.
 ; This record's own +0x0B is 0x78, and 0x78 & 0x3F = 56 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 56 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x218EE and
 ; holds 0x78; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 56, the index into this array.
@@ -18229,6 +18755,12 @@ ToneDB_WaveSelTailPresets_056:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 57.
 ; This record's own +0x0B is 0x79, and 0x79 & 0x3F = 57 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 57 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21919 and
 ; holds 0x79; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 57, the index into this array.
@@ -18239,6 +18771,12 @@ ToneDB_WaveSelTailPresets_057:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 58.
 ; This record's own +0x0B is 0x7A, and 0x7A & 0x3F = 58 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 58 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21944 and
 ; holds 0x7A; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 58, the index into this array.
@@ -18249,6 +18787,12 @@ ToneDB_WaveSelTailPresets_058:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 59.
 ; This record's own +0x0B is 0x7B, and 0x7B & 0x3F = 59 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 59 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2196F and
 ; holds 0x7B; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 59, the index into this array.
@@ -18259,6 +18803,12 @@ ToneDB_WaveSelTailPresets_059:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 60.
 ; This record's own +0x0B is 0x7C, and 0x7C & 0x3F = 60 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 60 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x2199A and
 ; holds 0x7C; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 60, the index into this array.
@@ -18269,6 +18819,12 @@ ToneDB_WaveSelTailPresets_060:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 61.
 ; This record's own +0x0B is 0x7D, and 0x7D & 0x3F = 61 --
 ; it carries its own index.  Bit 6 is SET and the mask strips it.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 61 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x219C5 and
 ; holds 0x7D; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 61, the index into this array.
@@ -18279,6 +18835,12 @@ ToneDB_WaveSelTailPresets_061:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 62.
 ; This record's own +0x0B is 0x3E, and 0x3E & 0x3F = 62 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 62 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x219F0 and
 ; holds 0x3E; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 62, the index into this array.
@@ -18289,6 +18851,12 @@ ToneDB_WaveSelTailPresets_062:
 ; Selected when a wave-select record's field +0x0B & 0x3F == 63.
 ; This record's own +0x0B is 0x3F, and 0x3F & 0x3F = 63 --
 ; it carries its own index.
+; ⚠ AND NO STORED RECORD EVER DOES.  Every
+; wave-select record in prom_d was read -- the three 43-byte
+; arrays, the tone records' per-element blocks and the drum
+; records' tails -- and none holds 63 in the low 6 bits of
+; its +0x0B.  Only a value written at runtime can reach this
+; record.  round 8 Q2.
 ; Evidence: this record's own byte +0x0B is at file 0x21A1B and
 ; holds 0x3F; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is
 ; what makes its low 6 bits, 63, the index into this array.
@@ -40218,7 +40786,9 @@ PercInst_503_SlapShot:
 ;      `_SameAs_<name>`: these bytes and that record's bytes are the same.
 ;      It does NOT say this record BELONGS to that tone or instrument --
 ;      nothing here reaches this array with an index whose meaning is
-;      known.  Where the twins disagree on the name, no label is given.
+;      known.  ⚠ CORRECTED IN ROUND 8: this line used to end `Where the
+;      twins disagree on the name, no label is given`, and point 5 below
+;      is why that is no longer true of every such record.
 ;   notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.
 ; 
 ;   4. ★ ROUND 7 -- ROUND 6's RULE, STATED CORRECTLY, NAMES 10 MORE.
@@ -40246,6 +40816,50 @@ PercInst_503_SlapShot:
 ;      drop a WORD rather than a variant.  notes/prom_d_finish_round7.py Q4
 ;      prints what every bound from 1 to 8 would have named.
 ;   notes/prom_d_finish_round7.py Q4, and 56 checks in that file.
+; 
+;   5. ★ ROUND 8 -- THE DISJUNCTION NAMES 20 MORE, BY REFUSING TO CHOOSE.
+;      Round 6 gave no label when the records carrying these 43 bytes
+;      disagreed on the name, because `nothing here picks one of them`.
+;      It does not have to pick.  The banner over each such record ALREADY
+;      PRINTS the candidate names, derived by the same code, so keeping
+;      them out of the label withheld a fact that had been measured and
+;      left the object identified only by its position.  A label of the
+;      form `_SameAs_A_Or_B` claims exactly the measurement: these bytes
+;      are the wave-select block A carries and the one B carries.  It
+;      picks no owner, and `_Or_` is what says so.
+;      THE BOUND IS 3 NAMES.  notes/prom_d_inventory_round8.py Q3 prints
+;      what every bound from 1 to 12 would have named; at 4 the longest
+;      label passes 100 characters, and at 6 one label enumerates twelve
+;      hi-hats -- a whole family, which is what round 7's stem rule
+;      already refused to compress into one word.
+;      25 records of this array still carry a number: their candidate
+;      sets are larger than 3.
+; 
+;   5b. ★ AND FOUR MORE MECHANISMS MEASURED AND REJECTED IN ROUND 8, for
+;      the same reason round 7 wrote its three down here: so the next
+;      round finds them before re-inventing them.
+;      M4  the CROSS-FAMILY twin -- matching this array against the OTHER
+;          family's records, which round 6 never did.  0 matches, on both
+;          arrays, over 12 records with no twin in their own family.
+;      M5  widening round 6's mask to byte +0x0C as well.  It would name 3
+;          more records at slot +0x18 and 0 at +0x20.  Refused by the same
+;          instruction that refused M2: prom_c writes byte 11 and bytes
+;          13..42, so byte 12 is content and a record differing in it is a
+;          different record.
+;      M6  naming a no-twin record from the run of consecutive records that
+;          share its +0x0B.  The runs are real -- see the region banner --
+;          but no run has a word common to every one of its named members,
+;          including the 16-record run whose twins are all brass.
+;      M7  ★ THE MONOTONE INTERVAL, the strongest of the four.  This array
+;          has 106 records whose bytes name exactly one owner, and reading
+;          their owner indices in array order gives 0 backward steps out
+;          of 105.  Where that is 0 the array is SORTED, so an ambiguous
+;          record's owner is confined to the interval between its
+;          neighbours -- which would break the tie with a mechanism.
+;          Measured, it leaves exactly one candidate 0 times: where the
+;          order holds every candidate is inside the interval, and where it
+;          does not, none is.  Refuted by its own measurement.
+;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 42 checks.
 ; 
 ;   5. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what
@@ -40965,10 +41579,14 @@ ToneDB_PercMixerDefaultTable_032_SameAs_ModelSnare3:
 ; Evidence: drum-instrument record 45 at file 0x309BA, its
 ; bytes +107..+149 (file 0x30A25..0x30A4F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_033:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_033_SameAs_FunkSnare1_Or_FunkSnare2_Or_SynthRim:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41C37  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_034 -- file 0x41C62..0x41C8C
@@ -41071,10 +41689,14 @@ ToneDB_PercMixerDefaultTable_037_SameAs_ReverseSnare:
 ; Evidence: drum-instrument record 56 at file 0x3102C, its
 ; bytes +107..+149 (file 0x31097..0x310C1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_038:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_038_SameAs_SynRevSnare_Or_SynthSnare3:
 	.byte 0x7F, 0x7F, 0x7F, 0x1C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D0E  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_039 -- file 0x41D39..0x41D63
@@ -41143,10 +41765,14 @@ ToneDB_PercMixerDefaultTable_041_SameAs_BrushShort:
 ; Evidence: drum-instrument record 61 at file 0x3131A, its
 ; bytes +107..+149 (file 0x31385..0x313AF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_042:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_042_SameAs_MetronomeClik_Or_RockRim:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41DBA  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_043 -- file 0x41DE5..0x41E0F
@@ -41204,8 +41830,10 @@ ToneDB_PercMixerDefaultTable_045_SameAs_DanceRim:
 ; bytes +107..+149 (file 0x31709..0x31733), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 10 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_046:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E66  |..."@.@.@.@..}.T....d............d.........|
 
@@ -41216,8 +41844,10 @@ ToneDB_PercMixerDefaultTable_046:
 ; bytes +107..+149 (file 0x31CE5..0x31D0F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 8 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_047:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E91  |..."D.@.@.@..}.T....d............d.........|
 
@@ -41255,8 +41885,10 @@ ToneDB_PercMixerDefaultTable_048_SameAs_RockBassTom:
 ; bytes +107..+149 (file 0x322C1..0x322EB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_049:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41EE7  |...#D.@.@.@..}.T....d............d.........|
 
@@ -41275,8 +41907,10 @@ ToneDB_PercMixerDefaultTable_050:
 ; bytes +107..+149 (file 0x32519..0x32543), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 11 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_051:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41F3D  |...$A.@.@.@..}.T....d............d.........|
 
@@ -41322,8 +41956,10 @@ ToneDB_PercMixerDefaultTable_053_SameAs_ModelingTom:
 ; bytes +107..+149 (file 0x32DE3..0x32E0D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_054:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41FBE  |...%@.@.@.@..}.T....d............d.........|
 
@@ -41361,8 +41997,10 @@ ToneDB_PercMixerDefaultTable_055_SameAs_ModelBassTom:
 ; bytes +107..+149 (file 0x33167..0x33191), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 11 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_056:
 	.byte 0x7F, 0x7F, 0x7F, 0x26, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42014  |...&@.@.@.@..}.T....d............d.........|
 
@@ -41372,10 +42010,14 @@ ToneDB_PercMixerDefaultTable_056:
 ; Evidence: drum-instrument record 125 at file 0x3389A, its
 ; bytes +107..+149 (file 0x33905..0x3392F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_057:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_057_SameAs_ElectBassTomH_Or_ElectBassTomL_Or_SynOrchSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x27, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4203F  |...'@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_058 -- file 0x4206A..0x42094
@@ -41385,8 +42027,10 @@ ToneDB_PercMixerDefaultTable_057:
 ; bytes +107..+149 (file 0x33AC7..0x33AF1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 11 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_058:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4206A  |...(@.@.@.@..}.T....d............d.........|
 
@@ -41397,8 +42041,10 @@ ToneDB_PercMixerDefaultTable_058:
 ; bytes +107..+149 (file 0x34139..0x34163), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 7 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_059:
 	.byte 0x7F, 0x7F, 0x7F, 0x29, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42095  |...)@.@.@.@..}.T....d............d.........|
 
@@ -41409,8 +42055,10 @@ ToneDB_PercMixerDefaultTable_059:
 ; bytes +107..+149 (file 0x34553..0x3457D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 6 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_060:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 420C0  |...*@.@.@.@..}.T....d............d.........|
 
@@ -41495,8 +42143,10 @@ ToneDB_PercMixerDefaultTable_063_SameAs_DanceHHClose:
 ; bytes +107..+149 (file 0x35237..0x35261), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_064:
 	.byte 0x7F, 0x7F, 0x7F, 0x2D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4216C  |...-@.@.@.@..}.T....d............d.........|
 
@@ -41507,8 +42157,10 @@ ToneDB_PercMixerDefaultTable_064:
 ; bytes +107..+149 (file 0x3548F..0x354B9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 12 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_065:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42197  |....@.@.@.@..}.T....d............d.........|
 
@@ -41518,10 +42170,14 @@ ToneDB_PercMixerDefaultTable_065:
 ; Evidence: drum-instrument record 184 at file 0x35B2C, its
 ; bytes +107..+149 (file 0x35B97..0x35BC1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_066:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_066_SameAs_ModelHHHfOpn_Or_ModelHHOpen:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xF6, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 421C2  |....@.@.@.@..x.T....d(@........(@d.........|
 
 ; ToneDB_PercMixerDefaultTable_067 -- file 0x421ED..0x42217
@@ -41550,10 +42206,14 @@ ToneDB_PercMixerDefaultTable_067_SameAs_DanceHHOpen:
 ; Evidence: drum-instrument record 187 at file 0x35CEE, its
 ; bytes +107..+149 (file 0x35D59..0x35D83), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_068:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_068_SameAs_SynHHHfOpen_Or_SynthHHOpen:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42218  |...0@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_069 -- file 0x42243..0x4226D
@@ -41657,8 +42317,10 @@ ToneDB_PercMixerDefaultTable_072_SameAs_ModelHHAccent:
 ; bytes +107..+149 (file 0x3658D..0x365B7), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 7 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_073:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 422EF  |...3@.@.@.@..}.T....d............d.........|
 
@@ -41889,8 +42551,10 @@ ToneDB_PercMixerDefaultTable_085_SameAs_SynOrchCymbal:
 ; bytes +107..+149 (file 0x377B7..0x377E1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 10 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_086:
 	.byte 0x7F, 0x7F, 0x7F, 0x37, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4251E  |...7@.@.@.@..}.T....d............d.........|
 
@@ -41968,8 +42632,10 @@ ToneDB_PercMixerDefaultTable_089_SameAs_ModelRideCym1:
 ; bytes +107..+149 (file 0x382D9..0x38303), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 11 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_090:
 	.byte 0x7F, 0x7F, 0x7F, 0x39, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 425CA  |...9@.@.@.@..}.T....d............d.........|
 
@@ -42027,8 +42693,10 @@ ToneDB_PercMixerDefaultTable_092_SameAs_ReverseCymbl:
 ; bytes +107..+149 (file 0x38CCF..0x38CF9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_093:
 	.byte 0x7F, 0x7F, 0x7F, 0x3B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4264B  |...;@.@.@.@..}.T....d............d.........|
 
@@ -42159,10 +42827,14 @@ ToneDB_PercMixerDefaultTable_098_SameAs_ModelCowbell:
 ; Evidence: drum-instrument record 284 at file 0x395C4, its
 ; bytes +107..+149 (file 0x3962F..0x39659), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_099:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_099_SameAs_SynWindChime_Or_WindChime:
 	.byte 0x7F, 0x7F, 0x7F, 0x3E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4274D  |...>@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_100 -- file 0x42778..0x427A2
@@ -42192,8 +42864,10 @@ ToneDB_PercMixerDefaultTable_100_SameAs_MdlWindChime:
 ; bytes +107..+149 (file 0x397F1..0x3981B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_101:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 427A3  |...?@.@.@.@..}.T....d............d.........|
 
@@ -42223,10 +42897,14 @@ ToneDB_PercMixerDefaultTable_102_SameAs_MdlTriangleO:
 ; Evidence: drum-instrument record 292 at file 0x39A74, its
 ; bytes +107..+149 (file 0x39ADF..0x39B09), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_103:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_103_SameAs_SynTimbPaila_Or_SynTriangleM_Or_TriangleMute:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 427F9  |...?A.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_104 -- file 0x42824..0x4284E
@@ -42283,10 +42961,14 @@ ToneDB_PercMixerDefaultTable_106:
 ; Evidence: drum-instrument record 297 at file 0x39D62, its
 ; bytes +107..+149 (file 0x39DCD..0x39DF7), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_107:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_107_SameAs_FingerCymH_Or_FingerCymL_Or_FingerCymbal:
 	.byte 0x7F, 0x7F, 0x7F, 0x6A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 428A5  |...j@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_108 -- file 0x428D0..0x428FA
@@ -42322,10 +43004,14 @@ ToneDB_PercMixerDefaultTable_108_SameAs_TublarBell:
 ; Evidence: drum-instrument record 324 at file 0x3AD34, its
 ; bytes +107..+149 (file 0x3AD9F..0x3ADC9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_109:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_109_SameAs_BongoMute1_Or_SynSmalCongaH_Or_SynSmalCongaL:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 428FB  |...B@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_110 -- file 0x42926..0x42950
@@ -42535,8 +43221,10 @@ ToneDB_PercMixerDefaultTable_119_SameAs_MdlCngMtCrash:
 ; bytes +107..+149 (file 0x3B53D..0x3B567), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_120:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42AD4  |...CC.@.@.@..}.T....d............d.........|
 
@@ -42547,8 +43235,10 @@ ToneDB_PercMixerDefaultTable_120:
 ; bytes +107..+149 (file 0x3B795..0x3B7BF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_121:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42AFF  |...CD.@.@.@..}.T....d............d.........|
 
@@ -42559,8 +43249,10 @@ ToneDB_PercMixerDefaultTable_121:
 ; bytes +107..+149 (file 0x3B9ED..0x3BA17), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_122:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xFF, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x30, 0x44, 0xE7, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6, 0x30, 0x44, 0x64, 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 42B2A  |...CD.@.@.@....T....d0D........0Dd.........|
 
@@ -42778,10 +43470,14 @@ ToneDB_PercMixerDefaultTable_131_SameAs_Timpani:
 ; Evidence: drum-instrument record 385 at file 0x3D0F2, its
 ; bytes +107..+149 (file 0x3D15D..0x3D187), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_132:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_132_SameAs_CuicaHigh_Or_LittleDog:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42CD8  |...G@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_133 -- file 0x42D03..0x42D2D
@@ -42810,10 +43506,14 @@ ToneDB_PercMixerDefaultTable_133_SameAs_MdlCuicaHi:
 ; Evidence: drum-instrument record 388 at file 0x3D2B4, its
 ; bytes +107..+149 (file 0x3D31F..0x3D349), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_134:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_134_SameAs_Bullfrog_Or_CuicaLow:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42D2E  |...GA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_135 -- file 0x42D59..0x42D83
@@ -42842,10 +43542,14 @@ ToneDB_PercMixerDefaultTable_135_SameAs_MdlCuicaLow:
 ; Evidence: drum-instrument record 391 at file 0x3D476, its
 ; bytes +107..+149 (file 0x3D4E1..0x3D50B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_136:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_136_SameAs_GuiroLong1_Or_GuiroLong2_Or_HeartBeat:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42D84  |...H@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_137 -- file 0x42DAF..0x42DD9
@@ -42962,8 +43666,10 @@ ToneDB_PercMixerDefaultTable_141_SameAs_MdlHandClaps:
 ; bytes +107..+149 (file 0x3DA27..0x3DA51), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_142:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42E86  |...J@.@.@.@..}.T....d............d.........|
 
@@ -42973,10 +43679,14 @@ ToneDB_PercMixerDefaultTable_142:
 ; Evidence: drum-instrument record 404 at file 0x3DC14, its
 ; bytes +107..+149 (file 0x3DC7F..0x3DCA9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_143:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_143_SameAs_MdlShakerOff_Or_MdlShakerOn:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x87, 0x99, 0x54, 0xE2, 0x03, 0x01, 0x7F, 0x64, 0x30, 0x44, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF9, 0x01, 0x30, 0x44, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 42EB1  |...J@.@.@.@....T....d0D........0Dd.........|
 
 ; ToneDB_PercMixerDefaultTable_144 -- file 0x42EDC..0x42F06
@@ -43073,8 +43783,10 @@ ToneDB_PercMixerDefaultTable_147_SameAs_ModelCabasa:
 ; bytes +107..+149 (file 0x3E099..0x3E0C3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_148:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42F88  |...L@.@.@.@..}.T....d............d.........|
 
@@ -43084,10 +43796,14 @@ ToneDB_PercMixerDefaultTable_148:
 ; Evidence: drum-instrument record 415 at file 0x3E286, its
 ; bytes +107..+149 (file 0x3E2F1..0x3E31B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_149:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_149_SameAs_MdlMaracasOff_Or_MdlMaracasOn:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xFF, 0x54, 0xEA, 0x1E, 0x80, 0x7F, 0x64, 0x30, 0x44, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x44, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 42FB3  |...L@.@.@.@....T....d0D........0Dd.........|
 
 ; ToneDB_PercMixerDefaultTable_150 -- file 0x42FDE..0x43008
@@ -43137,8 +43853,10 @@ ToneDB_PercMixerDefaultTable_151_SameAs_CaxixiOff:
 ; bytes +107..+149 (file 0x3E549..0x3E573), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_152:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43034  |...M@.@.@.@..}.T....d............d.........|
 
@@ -43149,8 +43867,10 @@ ToneDB_PercMixerDefaultTable_152:
 ; bytes +107..+149 (file 0x3E7A1..0x3E7CB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_153:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x35, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0x60, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05, 0x30, 0x60, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 4305F  |...M@.@.@.@..}5T....d0`........0`d.........|
 
@@ -43161,8 +43881,10 @@ ToneDB_PercMixerDefaultTable_153:
 ; bytes +107..+149 (file 0x3E9F9..0x3EA23), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_154:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4308A  |...MA.@.@.@..}.T....d............d.........|
 
@@ -43486,10 +44208,14 @@ ToneDB_PercMixerDefaultTable_169_SameAs_RainStick:
 ; Evidence: drum-instrument record 448 at file 0x3F5DC, its
 ; bytes +107..+149 (file 0x3F647..0x3F671), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_170:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_170_SameAs_Rattle_Or_SynVibraslap_Or_Vibraslap:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4333A  |...Q@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_171 -- file 0x43365..0x4338F
@@ -43519,8 +44245,10 @@ ToneDB_PercMixerDefaultTable_171_SameAs_MdlVibraslap:
 ; bytes +107..+149 (file 0x3F89F..0x3F8C9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
 ; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
+; carry these same bytes -- more than round 8's bound of 3,
+; so a disjunction would enumerate a family rather than
+; name an object.  round 6 Q1, verdict
+; NAMELESS-AMBIGUOUS; round 8 Q3.
 ToneDB_PercMixerDefaultTable_172:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43390  |...R@.@.@.@..}.T....d............d.........|
 
@@ -43530,10 +44258,14 @@ ToneDB_PercMixerDefaultTable_172:
 ; Evidence: drum-instrument record 456 at file 0x3FA8C, its
 ; bytes +107..+149 (file 0x3FAF7..0x3FB21), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_173:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_173_SameAs_MdlWdBlockHi2_Or_MdlWdBlockLow_Or_MdlWdblockHi:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x32, 0x9E, 0x54, 0x14, 0x09, 0x01, 0x7F, 0x64, 0x1E, 0x43, 0x14, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14, 0x1E, 0x43, 0x64, 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 433BB  |...R@.@.@.@..2.T....d.C.........Cd.........|
 
 ; ToneDB_PercMixerDefaultTable_174 -- file 0x433E6..0x43410
@@ -43582,10 +44314,14 @@ ToneDB_PercMixerDefaultTable_175_SameAs_ModelCastanet:
 ; Evidence: drum-instrument record 64 at file 0x314DC, its
 ; bytes +107..+149 (file 0x31547..0x31571), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_176:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_176_SameAs_Claves_Or_ModelingRim_Or_SynthClaves:
 	.byte 0x7F, 0x7F, 0x7F, 0x54, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4343C  |...T@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_177 -- file 0x43467..0x43491
@@ -43942,10 +44678,14 @@ ToneDB_PercMixerDefaultTable_192_SameAs_VoiceUh:
 ; Evidence: drum-instrument record 484 at file 0x40AF4, its
 ; bytes +107..+149 (file 0x40B5F..0x40B89), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_193:
+; ★ THE LABEL NAMES ALL 2 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 2 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_193_SameAs_Helicopter_Or_Train:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43717  |...[@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_194 -- file 0x43742..0x4376C
@@ -43974,10 +44714,14 @@ ToneDB_PercMixerDefaultTable_194_SameAs_Telephone:
 ; Evidence: drum-instrument record 487 at file 0x40CB6, its
 ; bytes +107..+149 (file 0x40D21..0x40D4B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_195:
+; ★ THE LABEL NAMES ALL 3 OF THEM, joined by `_Or_`.
+; Round 6 gave no label here because the 3 names disagree;
+; round 8 states them all instead of stating none.  The
+; label picks no owner and `_Or_` is what says so.
+; Evidence: the 43-byte runs, compared byte for byte;
+; every name in the label is a drum-instrument record's
+; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.
+ToneDB_PercMixerDefaultTable_195_SameAs_Explosion_Or_GunShot_Or_SynHandClaps:
 	.byte 0x7F, 0x7F, 0x7F, 0x5D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4376D  |...]@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_196 -- file 0x43798..0x437C2

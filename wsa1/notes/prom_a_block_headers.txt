@@ -3565,3 +3565,168 @@
 ;          uses for it, 1 for Digits_FEF999 and 6 here.
 ; Unknown:  which screen this is drawn on.
 ; ---------------------------------------------------------------------
+
+@@NAME 0xF8E001 Link_Init_DmaAndTimer
+; ---------------------------------------------------------------------
+; Link_Init_DmaAndTimer -- points micro-DMA channel 2's DESTINATION and channel 3's
+;                          SOURCE at the link port and programs timer 2
+;
+; Evidence: 0xF8E014 `ld XIX,0x007c0000` is pushed to 0xF8E01A `call
+;           0xf8e6a2` = uDMA2_SetDest with 0xF8E011 `pushw 0x08` as the
+;           mode, and to 0xF8E022 `call 0xf8e6bc` = uDMA3_SetSource with
+;           0xF8E01E `pushw 0x00`; the timer is 0xF8E002 `res_dd8 0x02,
+;           0x20` (TRUN), 0xF8E005 T23MOD=0x0E, 0xF8E008 INTETC23=0x56,
+;           0xF8E00B INTE0AD=0x01, 0xF8E00E TREG2=0x05, with the SFR
+;           names from include/tmp95c061_sfr.inc
+; Unknown:  the two mode bytes. FINDINGS-memory-map.md reads DMAM0 =
+;           0x00 as device-to-RAM and 0x08 as RAM-to-device for the
+;           FDC's channel 0, which is the SAME register field on the
+;           same part, so 0x08 here reads as RAM-to-device and 0x00 as
+;           device-to-RAM -- ⚠ that is a transfer of a field meaning
+;           between channels, not a second measurement
+; Was `sub_F8E001`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8E06C Link_SendCountedBlock
+; ---------------------------------------------------------------------
+; Link_SendCountedBlock -- sends one command byte that CARRIES ITS OWN BYTE COUNT,
+;                          then that many bytes by micro-DMA
+;
+; Evidence: the command byte is built by 0xF8E0A0 `ld L,H` / 0xF8E0A2
+;           `dec 1,L` / 0xF8E0A4 `ld C,(XIZ+0x08)` / 0xF8E0A7 `sll
+;           c,0x05` / 0xF8E0AA `or C,L`, so it is ((XIZ+0x08) << 5) |
+;           ((XIZ+0x0a) - 1), and it is written by 0xF8E0AF `ld
+;           XBC,0x007c0000` / 0xF8E0B7 `ld (XBC),A`; the same (XIZ+0x0a)
+;           is the count pushed at 0xF8E0D7 before 0xF8E0DC `call
+;           0xf8e6af` = uDMA2_SetSource, whose buffer is 0xF8E0D8 `ld
+;           XBC,(XIZ+0x0c)`. 0xF8E076 `cps h,0x00` returns without
+;           sending anything when the count is zero
+; Unknown:  what the three-bit field at bits 7..5 selects.
+;           notes/wave7_xref_tlcs900_family.py --link reads the low five
+;           bits of a link command as (length - 1) on BOTH machines,
+;           which agrees with the arithmetic here; the top three bits it
+;           calls a selector and neither tree says what the selector
+;           means
+; Was `sub_F8E06C`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8E0FE Link_SendCommandE2
+; ---------------------------------------------------------------------
+; Link_SendCommandE2 -- sends command 0xE2 followed by a ten-byte record it stages
+;                       at 0x600793
+;
+; Evidence: 0xF8E12B `ld XBC,0x007c0000` / 0xF8E130 `ld (XBC),0xe2`; the
+;           record is 0xF8E14D-0xF8E15B, which writes (XIZ+0x08) as a
+;           longword at (XIX), (XIZ+0x0e) as a longword at (XIX+0x04)
+;           and (XIZ+0x0c) as a word at (XIX+0x08) with XIX = 0xF8E105
+;           `lda_24 xix,(0x600793)`; 4 + 4 + 2 = 10 and 0xF8E15E `pushw
+;           0x0a` is the count handed to 0xF8E162 `call 0xf8e6af` =
+;           uDMA2_SetSource. ★ THE THREE FIELDS ARE READ FROM THE TWO
+;           CALLERS, not from this body: ExtBoard_Identify pushes
+;           0x2640, then 0x000A, then 0x00C00000 (0xF82892, 0xF82898,
+;           0xF8289B) and VersionScreen_Show pushes 0x2640, then 0x000B,
+;           then 0x00FFFFF0 (0xF82A2F, 0xF82A35, 0xF82A38), both
+;           immediately before this call, so (XIZ+0x08) is the REMOTE
+;           address, (XIZ+0x0c) the LENGTH and (XIZ+0x0e) the LOCAL
+;           buffer, and the record is +0 remote32, +4 local32, +8 len16
+; Unknown:  what a 0xE2 MEANS to CPU 2. Both known callers use it to
+;           READ and nothing here says a 0xE2 cannot also write. ⚠ Two
+;           callers is two, not a census: the frame reading above is
+;           what those two do, and a third caller could still pass the
+;           fields in another order
+; Was `sub_F8E0FE`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8E181 Link_SendCommandAndLong
+; ---------------------------------------------------------------------
+; Link_SendCommandAndLong -- sends a command byte ORed with 0xE0 and then one 32-bit
+;                            argument
+;
+; Evidence: 0xF8E1A8 `ld D,(XIZ+0x0c)` / 0xF8E1AB `or D,0xe0` / 0xF8E1AE
+;           `ld XBC,0x007c0000` / 0xF8E1B3 `ld (XBC),D`; the argument is
+;           0xF8E1CF `ld XBC,(XIZ+0x08)` stored by 0xF8E1D2 `stl_da
+;           (0x60079d),xbc` and sent as 0xF8E1D7 `pushw 0x04` bytes from
+;           0xF8E1DA `lda_24 xwa,(0x60079d)` through 0xF8E1E0 `call
+;           0xf8e6af` = uDMA2_SetSource
+; Unknown:  which commands of the 0xE0..0xFF group take a longword, and
+;           what it is
+; Was `sub_F8E181`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8E26F Link_SendCommandE1
+; ---------------------------------------------------------------------
+; Link_SendCommandE1 -- sends command 0xE1, then a six-byte header, then a second
+;                       block whose pointer and length are inside that header
+;
+; Evidence: 0xF8E29C `ld XBC,0x007c0000` / 0xF8E2A1 `ld (XBC),0xe1`; the
+;           header is 0xF8E2DA `pushw 0x06` from 0xF8E2DD `lda_24
+;           xbc,(0x6007a1)` through 0xF8E2E3 `call 0xf8e6af`; the second
+;           transfer is 0xF8E2FF `ld BC,(XIX+0x04)` as the count and
+;           0xF8E303 `ld XBC,(XIX)` as the pointer through 0xF8E306
+;           `call 0xf8e6af`, with XIX = 0xF8E276 `lda_24
+;           xix,(0x600782)`; between them 0xF8E2EF waits for (0x6007D9)
+;           to reach 1 and 0xF8E2F7 `ldb h,0xc8` spins 200 times
+; Unknown:  what commands 0xE1, 0xE4 and 0xE7 mean to the far side. All
+;           three routines have this identical shape and differ only in
+;           the command byte and the staging address
+; Was `sub_F8E26F`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8E320 Link_SendCommandE4
+; ---------------------------------------------------------------------
+; Link_SendCommandE4 -- sends command 0xE4, then a six-byte header staged at
+;                       0x6007A7, then the block that header points at -- the same
+;                       shape as Link_SendCommandE1
+;
+; Evidence: 0xF8E34D `ld XBC,0x007c0000` / 0xF8E352 `ld (XBC),0xe4`; the
+;           header is 0xF8E38B `pushw 0x06` from 0xF8E38E `lda_24
+;           xbc,(0x6007a7)` through 0xF8E394 `call 0xf8e6af`; the
+;           payload is 0xF8E3B0 `ld BC,(XIX+0x04)` and 0xF8E3B4 `ld
+;           XBC,(XIX)` through 0xF8E3B7 `call 0xf8e6af`
+; Unknown:  the meaning of command 0xE4, as above
+; Was `sub_F8E320`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8E3D1 Link_SendCommandE7
+; ---------------------------------------------------------------------
+; Link_SendCommandE7 -- sends command 0xE7, then a six-byte header staged at
+;                       0x6007AD whose length field is FORCED to 0x0400, then that
+;                       1024-byte block
+;
+; Evidence: 0xF8E3FE `ld XBC,0x007c0000` / 0xF8E403 `ld (XBC),0xe7`; the
+;           length is 0xF8E42D `m_ld_mi16 MDD+r4, 0x04, 0x0400` and its
+;           copy 0xF8E432 `stiw_da (0x6007b1),0x0400`, so unlike E1 and
+;           E4 the caller does not choose it; the header is 0xF8E439
+;           `pushw 0x06` from 0xF8E43C `lda_24 xbc,(0x6007ad)`, the
+;           payload 0xF8E45E `ld BC,(XIX+0x04)` and 0xF8E462 `ld
+;           XBC,(XIX)`
+; Unknown:  the meaning of command 0xE7, and why its block is always 1
+;           KiB
+; Was `sub_F8E3D1`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8E222 Link_SendCommand5_WaitDone
+; ---------------------------------------------------------------------
+; Link_SendCommand5_WaitDone -- sends command 5 with a 32-bit argument through
+;                               Link_SendCommandAndLong, then waits for the far side to
+;                               clear bit 6 of (0x00008A)
+;
+; Evidence: 0xF8E230 `pushw 0x05` and 0xF8E233 `ld XBC,(XIZ+0x08)` are
+;           pushed to 0xF8E237 `calr Link_SendCommandAndLong`, whose own
+;           frame reads the longword at (XIZ+0x08) and the command byte
+;           at (XIZ+0x0c) -- the two pushes in that order put them
+;           exactly there, which is a second and independent check on
+;           that routine's argument frame; 0xF8E22B `m_set 6, MD24,
+;           0x00008a` arms the flag and 0xF8E23C `m_bit 6, MD24,
+;           0x00008a` polls it; the timeout is 0xF8E243, 0xF8E246 and
+;           0xF8E249, the tick counter at (0x0080) minus the copy taken
+;           at 0xF8E226, compared with 0x09C4 = 2500; on timeout
+;           0xF8E24F `ldio 0x7f, 0x00` clears DMA3V and 0xF8E265 `ldw
+;           wa, 0xffff` is the return value, otherwise 0xF8E26A `sub
+;           WA,WA` returns zero
+; Unknown:  the byte that reaches the wire is 5 | 0xE0 = 0xE5, because
+;           Link_SendCommandAndLong ORs 0xE0 in; the NAME carries the
+;           literal 5 that is in this body and not the derived 0xE5.
+;           What clears bit 6 of (0x00008A) is not in this body either
+; Was `sub_F8E222`, named by notes/prom_a_census_round8.py (bucket T1).
+; ---------------------------------------------------------------------

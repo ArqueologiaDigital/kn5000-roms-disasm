@@ -680,20 +680,38 @@ def q3():
     # would compare those against needles with four significant bytes and would
     # manufacture a result.  So each null address is the SAME address perturbed
     # by up to +/-2 KiB.
+    # ⚠ CORRECTED IN WAVE 7 ROUND 8.  This null was ONE DRAW, and Q3a compared
+    # the real count against it directly.  That check was decided by the seed:
+    # when round 8 named 31 of the framed labels the sample shrank from 303
+    # objects to 272, the single null draw moved from 8 objects to 5, and a check
+    # that had passed for two rounds FAILED without a single byte of the ROM
+    # changing.  A one-draw null is a coin, not a calibration.  It is now DRAWS
+    # draws, and the check compares the real count against the null's RANGE.
+    DRAWS = 10
     rnd = random.Random(20260830)
-    n_off = n_abs = n_offo = n_abso = 0
-    for l in framed:
-        d = 0
-        while d == 0:
-            d = rnd.randrange(-2048, 2049)
-        o, a = census_address(max(0, min(len(D) - 1, l.addr + d)))
-        n_off += o
-        n_abs += a
-        n_offo += 1 if o else 0
-        n_abso += 1 if a else 0
-    say("  NULL -- the same census on each address perturbed by up to +/-2 KiB:")
-    say("      as an OFFSET:   %3d of %d (%d occurrences)" % (n_offo, len(framed), n_off))
-    say("      as an ADDRESS:  %3d of %d (%d occurrences)" % (n_abso, len(framed), n_abs))
+    draws_off, draws_abs = [], []
+    n_off = n_abs = 0
+    for _t in range(DRAWS):
+        d_offo = d_abso = 0
+        for l in framed:
+            d = 0
+            while d == 0:
+                d = rnd.randrange(-2048, 2049)
+            o, a = census_address(max(0, min(len(D) - 1, l.addr + d)))
+            n_off += o
+            n_abs += a
+            d_offo += 1 if o else 0
+            d_abso += 1 if a else 0
+        draws_off.append(d_offo)
+        draws_abs.append(d_abso)
+    n_offo = sum(draws_off) / float(DRAWS)
+    n_abso = sum(draws_abs) / float(DRAWS)
+    say("  NULL -- the same census on each address perturbed by up to +/-2 KiB,")
+    say("  drawn %d times so the comparison is against a RANGE and not a coin:" % DRAWS)
+    say("      as an OFFSET:   mean %5.1f of %d, range %d..%d (%d occurrences)"
+        % (n_offo, len(framed), min(draws_off), max(draws_off), n_off))
+    say("      as an ADDRESS:  mean %5.1f of %d, range %d..%d (%d occurrences)"
+        % (n_abso, len(framed), min(draws_abs), max(draws_abs), n_abs))
     say("  ⚠ QUOTE THE OBJECT COUNTS, NOT THE OCCURRENCE SUMS.  One degenerate needle")
     say("    dominates a sum: perturbing a small offset can produce a value whose LE32")
     say("    is four zero bytes, which occurs ~200,000 times.  The per-object rate is")
@@ -718,9 +736,10 @@ def q3():
     say("    addressed by an index, never by a stored address -- which is why the")
     say("    byte census above had nothing to find, and why saying so needed the")
     say("    instruction census and not the byte census.")
-    check("Q3a  the byte census is calibrated: the real rate is not above the null",
-          abs_hits <= max(1, n_abso), "%d of %d objects against a null of %d of %d"
-          % (abs_hits, len(framed), n_abso, len(framed)))
+    check("Q3a  the byte census is calibrated: the real rate is inside the null's range",
+          abs_hits <= max(draws_abs),
+          "%d of %d objects against a null of %d..%d over %d draws (mean %.1f)"
+          % (abs_hits, len(framed), min(draws_abs), max(draws_abs), DRAWS, n_abso))
     check("Q3b  the census is not vacuous -- a POSITIVE control IS found",
           sum(img.count(struct.pack("<I", PROM_D_BASE)) for img in IMG.values()) > 0,
           "the base itself, 0x%06X, occurs %d times as LE32"

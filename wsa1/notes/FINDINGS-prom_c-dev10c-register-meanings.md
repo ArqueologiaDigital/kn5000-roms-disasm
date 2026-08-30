@@ -143,15 +143,27 @@ Dev10C_SetChanReg_0400        -> the same field, on its own, from the two contro
 
 In order: `note*256 + 0x80`; the global word at RAM `0x001505`; `part[+0x15] << 8`;
 `part[+0x13]`; the return of `0xFA72E9(voice[+0x04], (voice[+0x13])[+0x55])`; then **one** of
-four key-dependent corrections selected by the byte at `0x00150A` (or by
-`(voice[+0x13])[+0x13]` on the other arm):
+four key-dependent corrections selected by the byte at `0x00150A` (on the GLOBAL arm) or by
+`(voice[+0x13])[+0x13]` (on the PER-TONE arm), the two being chosen by global-setup flag bit 9:
 
 | selector | correction |
 |---|---|
 | `0x40` | a pseudo-random detune, `(0xFA7F04() * 13) >> 7` |
 | `0x41` | `Voice_KeyBend_Curve_0[pitch >> 8]` (`0xFDD3AB`, signed bytes) |
 | `0x42` | `Voice_KeyBend_Curve_1[pitch >> 8]` (`0xFDD3AB + 0x80`) |
-| else | a table at `0xFDF2C3` indexed by `12*H + note/12`, doubled |
+| `0x80` | GLOBAL path: **nothing** — the `jr Z,0xfa7fbb` at `0xFA7FB9` targets the next instruction, so it falls into the `else` arm. PER-TONE path: the join at `0xFA8072`, i.e. no correction. |
+| else | GLOBAL path: the twelve-entry **user scale in RAM**, `0x00150B + (note mod 12)`, sign-extended and doubled (`0xFA7FD2`-`0xFA7FDB`). PER-TONE path: ROM `0xFDF2C3 + 12*mode + (note mod 12)`, doubled (`0xFA8064`) — a *bank* of such scales indexed by the mode. |
+
+⚠ **CORRECTED 2026-08-30 (wave 7 round 8).** This table used to give ONE `else` arm, the ROM
+table at `0xFDF2C3`, for both selectors, and did not say what chooses between the two selectors
+in the first place. **Global-setup flag bit 9 does** (`ld BC,(0x14ff) / and BC,0x0200 / jr Z` at
+`0xFA7F81`-`0xFA7F8A`): set → the global byte `0x00150A` and the RAM scale; clear → the per-tone
+byte `(voice[+0x13])[+0x13]` and the ROM scale bank. The global path has never read `0xFDF2C3`.
+The bit is written by `GlobalScale_SelectGlobalOrPerTone` and the RAM scale by
+`GlobalScale_StorePitchClassDetune`, both arms of the status-0xF0 message; see the block comment
+above `sub_FADA7C` in `prom_c/wsa1_prom_c.s` and
+`python3 notes/prom_c_inventory_round8.py --record`, whose `--claims` asserts every instruction
+quoted here.
 
 and finally a **key-follow** stage with `H = (voice[+0x17])[+0x06] & 7`:
 

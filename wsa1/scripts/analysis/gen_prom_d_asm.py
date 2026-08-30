@@ -233,7 +233,35 @@ for _slot, _aud in _R7.AUDITED_R7.items():
                  "now %s (round-6 names, round-7 names); audited as %s.  Re-audit "
                  "with notes/prom_d_finish_round7.py Q4."
                  % (_slot, _got, _aud))
-TWIN_LABEL = {_s: _R7.wavesel_labels_r7(_s) for _s in (0x18, 0x20)}
+# ★ WAVE 7 ROUND 8.  The DISJUNCTION: where the records carrying a mixer
+# record's 43 bytes disagree on the name, the label now states ALL of them
+# rather than none, when there are at most three.  It is the same measurement
+# round 6 made and the same relation `_SameAs_` already claims; what changes is
+# that the measured fact is in the label instead of only in the banner.
+_spec8 = _ilu.spec_from_file_location(
+    "prom_d_inventory_round8",
+    os.path.join(ROOT, "notes", "prom_d_inventory_round8.py"))
+_R8 = _ilu.module_from_spec(_spec8)
+_saved_argv, sys.argv = sys.argv, ["prom_d_inventory_round8", "--quiet"]
+try:
+    _spec8.loader.exec_module(_R8)
+finally:
+    sys.argv = _saved_argv
+for _slot, _aud in _R8.AUDITED_R8.items():
+    _got = _R8._r8_shape(_slot)
+    if _got != _aud:
+        sys.exit("REFUSING TO EMIT: the round-8 label shape at slot +0x%02X is now "
+                 "%s (round-7 names, round-8 names); audited as %s.  Re-audit with "
+                 "notes/prom_d_inventory_round8.py Q3."
+                 % (_slot, _got, _aud))
+TWIN_LABEL = {_s: _R8.wavesel_labels_r8(_s) for _s in (0x18, 0x20)}
+DISJ = {_s: _R8.disjunction_labels(_s) for _s in (0x18, 0x20)}
+MAX_NAMES = _R8.MAX_NAMES
+PRESET_REFS = _R8.preset_referrers()
+ROW_DIFFS = {_r: _d for _r, _d in _R8.melodic_rows()}
+ROW_NESTING = _R8.rows_are_nested()
+MONOTONE = {_s: _R8.monotonicity(_s) for _s in (0x18, 0x20)}
+ROUND8_CHECKS = _R8.AUDITED_CHECKS
 ROUND7_LABELS = {_s: sorted(set(_R7.wavesel_labels_r7(_s)) - set(_R6.wavesel_labels(_s)))
                  for _s in (0x18, 0x20)}
 ROUND7_CHECKS = _R7.NCHECK[0]
@@ -564,7 +592,7 @@ def WAVESEL_GAP(slot):
         lines += [
             "",
             "  3. ★★ CORRECTED IN ROUND 6 -- %d OF THESE %d RECORDS DO HAVE A NAME,"
-            % (len(_lab) - len(ROUND7_LABELS[slot]), _n),
+            % (len(_R6.wavesel_labels(slot)), _n),
             "     and point 2 above is why it was missed.  That test asked whether a",
             "     record's 43 bytes occur ELSEWHERE IN THE IMAGE and compared all 43.",
             "     Round 5 had just proved that byte +0x0B is a preset number prom_c",
@@ -627,7 +655,9 @@ def WAVESEL_GAP(slot):
             "     `_SameAs_<name>`: these bytes and that record's bytes are the same.",
             "     It does NOT say this record BELONGS to that tone or instrument --",
             "     nothing here reaches this array with an index whose meaning is",
-            "     known.  Where the twins disagree on the name, no label is given.",
+            "     known.  ⚠ CORRECTED IN ROUND 8: this line used to end `Where the",
+            "     twins disagree on the name, no label is given`, and point 5 below",
+            "     is why that is no longer true of every such record.",
             "  notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.",
         ]
         # ★ ROUND 7.  Round 6's stem rule was stated as a CHARACTER CLASS (trailing
@@ -635,7 +665,11 @@ def WAVESEL_GAP(slot):
         # Saying it correctly names more records here and none at slot +0x18, and
         # both halves of that are printed rather than only the half that gained.
         _r7 = ROUND7_LABELS[slot]
-        _amb = sum(1 for _k, _v in _tw.items() if _v and _k not in _lab)
+        # ⚠ THE AMBIGUOUS COUNT ROUND 7 FACED, not the one round 8 leaves.  A
+        # sentence about round 7 that quotes round 8's residue would be a
+        # number drifting under its own paragraph.
+        _amb = sum(1 for _k, _v in _tw.items()
+                   if _v and _k not in _R6.wavesel_labels(slot))
         lines += [
             "",
             "  4. ★ ROUND 7 -- ROUND 6's RULE, STATED CORRECTLY, NAMES %d MORE." % len(_r7),
@@ -668,6 +702,63 @@ def WAVESEL_GAP(slot):
             "  notes/prom_d_finish_round7.py Q4, and %d checks in that file."
             % _R7.AUDITED_CHECKS,
         ]
+        # ★ ROUND 8.  The DISJUNCTION, and the four mechanisms it refused.
+        _dj = DISJ[slot]
+        _left = sum(1 for _k, _v in _tw.items() if _v and _k not in _lab)
+        _anch, _viol = MONOTONE[slot]
+        lines += [
+            "",
+            "  5. ★ ROUND 8 -- THE DISJUNCTION NAMES %d MORE, BY REFUSING TO CHOOSE."
+            % len(_dj),
+            "     Round 6 gave no label when the records carrying these 43 bytes",
+            "     disagreed on the name, because `nothing here picks one of them`.",
+            "     It does not have to pick.  The banner over each such record ALREADY",
+            "     PRINTS the candidate names, derived by the same code, so keeping",
+            "     them out of the label withheld a fact that had been measured and",
+            "     left the object identified only by its position.  A label of the",
+            "     form `_SameAs_A_Or_B` claims exactly the measurement: these bytes",
+            "     are the wave-select block A carries and the one B carries.  It",
+            "     picks no owner, and `_Or_` is what says so.",
+            "     THE BOUND IS %d NAMES.  notes/prom_d_inventory_round8.py Q3 prints"
+            % MAX_NAMES,
+            "     what every bound from 1 to 12 would have named; at 4 the longest",
+            "     label passes 100 characters, and at 6 one label enumerates twelve",
+            "     hi-hats -- a whole family, which is what round 7's stem rule",
+            "     already refused to compress into one word.",
+            "     %d record%s of this array still carr%s a number: their candidate"
+            % (_left, "" if _left == 1 else "s", "ies" if _left == 1 else "y"),
+            "     sets are larger than %d." % MAX_NAMES,
+            "",
+            "  5b. ★ AND FOUR MORE MECHANISMS MEASURED AND REJECTED IN ROUND 8, for",
+            "     the same reason round 7 wrote its three down here: so the next",
+            "     round finds them before re-inventing them.",
+            "     M4  the CROSS-FAMILY twin -- matching this array against the OTHER",
+            "         family's records, which round 6 never did.  0 matches, on both",
+            "         arrays, over %d records with no twin in their own family."
+            % sum(1 for _v in _tw.values() if not _v),
+            "     M5  widening round 6's mask to byte +0x0C as well.  It would name 3",
+            "         more records at slot +0x18 and 0 at +0x20.  Refused by the same",
+            "         instruction that refused M2: prom_c writes byte 11 and bytes",
+            "         13..42, so byte 12 is content and a record differing in it is a",
+            "         different record.",
+            "     M6  naming a no-twin record from the run of consecutive records that",
+            "         share its +0x0B.  The runs are real -- see the region banner --",
+            "         but no run has a word common to every one of its named members,",
+            "         including the 16-record run whose twins are all brass.",
+            "     M7  ★ THE MONOTONE INTERVAL, the strongest of the four.  This array",
+            "         has %d records whose bytes name exactly one owner, and reading" % _anch,
+            "         their owner indices in array order gives %d backward steps out"
+            % _viol,
+            "         of %d.  Where that is 0 the array is SORTED, so an ambiguous"
+            % (_anch - 1),
+            "         record's owner is confined to the interval between its",
+            "         neighbours -- which would break the tie with a mechanism.",
+            "         Measured, it leaves exactly one candidate 0 times: where the",
+            "         order holds every candidate is inside the interval, and where it",
+            "         does not, none is.  Refuted by its own measurement.",
+            "  notes/prom_d_inventory_round8.py Q3, Q4, Q5; %d checks."
+            % ROUND8_CHECKS,
+        ]
         if slot == 0x18:
             # ★ ROUND 7's REFUSALS.  Three mechanisms that would each have named
             # some of the records still numbered below, measured and rejected.
@@ -686,7 +777,7 @@ def WAVESEL_GAP(slot):
                 "         lands on a twinned record far more often than chance, so it",
                 "         looks like the thing that could pick one of the several tone",
                 "         names an ambiguous record matches.  CALIBRATED on the %d"
-                % len(TWIN_LABEL[slot]),
+                % (_ag + _dis + _nv),
                 "         records where the byte identity already gives ONE name, it",
                 "         agrees %d times, DISAGREES %d and has no vote %d times -- so"
                 % (_ag, _dis, _nv),
@@ -1194,17 +1285,41 @@ def emit_numbanks():
             W("; %d distinct tone indices in the row.  round 5 Q2 row_names()."
               % len(_uniq))
         else:
+            # ⚠ CORRECTED IN ROUND 8.  This banner used to say, for EVERY row
+            # including row 0, "%d of the 128 differ from row 0's -- so the rows
+            # are NOT copies of one another".  On row 0 that reads "0 of the 128
+            # differ ... so the rows are NOT copies", a sentence refuted by its
+            # own number four words earlier.  It is the shape a round-3 reviewer
+            # found twice in prom_a, and notes/prom_d_inventory_round8.py Q8 is
+            # the detector that now fires on it.
             _d = sum(1 for i in range(128) if u16(base + 2 * i) != u16(0x180 + 2 * i))
             W("; ⚠ NO NAME, and the gap is measured rather than assumed: all 128")
             W("; entries select a melodic tone (index < 0x100), which is what")
-            W("; `Melodic` states, and %d of the 128 differ from row 0's -- so the"
-              % _d)
-            W("; rows are NOT copies of one another either.  Nothing in this image")
-            W("; says what the variation between them means, and the BankMap at")
-            W("; 0x%05X maps bank-select value %d to this row, which is what the"
+            W("; `Melodic` states.")
+            if b == 0:
+                W("; This is the row the other seven are compared against; they")
+                W("; differ from it in %s of their 128 entries"
+                  % ", ".join(str(len(ROW_DIFFS[r])) for r in range(1, 8)))
+                W("; respectively, so the eight rows are not copies of one another.")
+            else:
+                W("; %d of the 128 differ from row 0's, so this row is not a copy of"
+                  % _d)
+                W("; it.")
+            W("; Nothing in this image says what the variation between them means,")
+            W("; and the BankMap at 0x%05X maps bank-select value %d to this row,"
               % (S(0x6C), b))
-            W("; suffix already says.  round 6 Q1, verdict")
-            W("; NAMELESS-UNDIFFERENTIATED; round 7 Q1.")
+            W("; which is what the suffix already says.")
+            # ★ ROUND 8: the reading that had never been TESTED, tested.
+            W("; ★ ROUND 8 RULES OUT THE OBVIOUS READING, which round 6 left")
+            W("; standing by not testing it: that the rows are an ORDERED LADDER,")
+            W("; row r being the r-th alternative wherever one exists.  If they")
+            W("; were, the programs at which row r+1 differs would be a SUBSET of")
+            W("; those at which row r does.  They are not, at %d of the 6 steps"
+              % len(ROW_NESTING))
+            W("; -- row %d differs at program %d where row %d does not."
+              % (ROW_NESTING[0][0], ROW_NESTING[0][2][0], ROW_NESTING[0][1]))
+            W("; round 6 Q1, verdict NAMELESS-UNDIFFERENTIATED; round 7 Q1;")
+            W("; notes/prom_d_inventory_round8.py Q6.")
         W("ToneNumBank_%s:" % ROW_NAME[b])
         e_shorts(base, base + 0x100,
                  comment=lambda i, base=base: "prog %3d -> tone 0x%03X %r"
@@ -1775,6 +1890,23 @@ def mk_wavesel_array(slot):
                       % n)
                     W("; index, and prom_c's 0xFBC74E `jr NZ` can never reach it:")
                     W("; index 0 takes the other arm.  round 5 Q7b.")
+                # ★ ROUND 8: what SELECTS this preset, counted over the whole
+                # image rather than asserted.  The only stored field that can is
+                # +0x0B of a wave-select record, so the census is exact.
+                _who = PRESET_REFS.get(i, [])
+                if _who:
+                    W("; ★ %d stored record%s in this image hold%s %d in the low 6"
+                      % (len(_who), "" if len(_who) == 1 else "s",
+                         "s" if len(_who) == 1 else "", i))
+                    W("; bits of their own +0x0B, so they select this record.  The")
+                    W("; first is %s.  round 8 Q2." % _who[0])
+                else:
+                    W("; ⚠ AND NO STORED RECORD EVER DOES.  Every")
+                    W("; wave-select record in prom_d was read -- the three 43-byte")
+                    W("; arrays, the tone records' per-element blocks and the drum")
+                    W("; records' tails -- and none holds %d in the low 6 bits of" % i)
+                    W("; its +0x0B.  Only a value written at runtime can reach this")
+                    W("; record.  round 8 Q2.")
                 W("; Evidence: this record's own byte +0x0B is at file 0x%05X and"
                   % (a + 43 * i + 0x0B))
                 W("; holds 0x%02X; prom_c 0xFBC744 `and A,0x3f` (bytes c9 cc 3f) is"
@@ -1799,16 +1931,31 @@ def mk_wavesel_array(slot):
                       % D[a + 43 * i + 0x0B])
                     W("; there; the tone's own block holds 0x%02X."
                       % _tone_wavesel_byte(t[0]))
-                    if TWIN_LABEL[slot].get(i):
+                    if DISJ[slot].get(i):
+                        W("; ★ THE LABEL NAMES ALL %d OF THEM, joined by `_Or_`: these"
+                          % len(_who))
+                        W("; 43 bytes are the block %s carries and the block%s %s"
+                          % (_who[0], "" if len(_who) == 2 else "s",
+                             " and ".join(_who[1:])))
+                        W("; carr%s.  Nothing here picks one, and the label does not"
+                          % ("ies" if len(_who) == 2 else "y"))
+                        W("; pretend to.  round 8 Q3, bound %d names." % MAX_NAMES)
+                        W("; Evidence: the 43-byte runs, compared byte for byte;")
+                        W("; each name in the label is that TONE record's own 16")
+                        W("; ASCII bytes.  notes/prom_d_inventory_round8.py Q3.")
+                    elif TWIN_LABEL[slot].get(i):
                         W("; Evidence: the two 43-byte runs, compared byte for byte;")
                         W("; the tone name is that record's own 16 ASCII bytes.")
                         W("; notes/prom_d_understanding_round6.py Q2.")
                     else:
                         W("; ⚠ NO LABEL: the %d blocks that carry these bytes belong to"
                           % len(t))
-                        W("; %d DIFFERENTLY NAMED tone records, so nothing here picks"
+                        W("; %d DIFFERENTLY NAMED tone records -- more than round 8's"
                           % len(_who))
-                        W("; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.")
+                        W("; bound of %d, so a disjunction would enumerate a family"
+                          % MAX_NAMES)
+                        W("; rather than name an object.  round 6 Q1, verdict")
+                        W("; NAMELESS-AMBIGUOUS; round 8 Q3.")
                 else:
                     W("; ⚠ NO tone wave-select block is within one byte of these 43")
                     W("; bytes -- one of the %d records of this array with no twin,"
@@ -1840,7 +1987,18 @@ def mk_wavesel_array(slot):
                     # label the same record now carries.  What round 5 refused, and
                     # round 6 still refuses, is the POSITIONAL transfer from the
                     # +0x8C catalogue -- not the byte identity.
-                    if TWIN_LABEL[slot].get(i):
+                    if DISJ[slot].get(i):
+                        _nm = sorted(set(perc_name(k) if k else "Silent" for k in ks))
+                        W("; ★ THE LABEL NAMES ALL %d OF THEM, joined by `_Or_`."
+                          % len(_nm))
+                        W("; Round 6 gave no label here because the %d names disagree;"
+                          % len(_nm))
+                        W("; round 8 states them all instead of stating none.  The")
+                        W("; label picks no owner and `_Or_` is what says so.")
+                        W("; Evidence: the 43-byte runs, compared byte for byte;")
+                        W("; every name in the label is a drum-instrument record's")
+                        W("; own 13 ASCII bytes.  notes/prom_d_inventory_round8.py Q3.")
+                    elif TWIN_LABEL[slot].get(i):
                         _nm = sorted(set(perc_name(k) if k else "Silent" for k in ks))
                         if len(_nm) > 1:
                             # ⚠ CORRECTED IN ROUND 7.  These two lines used to read
@@ -1877,10 +2035,14 @@ def mk_wavesel_array(slot):
                           % ALIGN[3])
                         W("; LIST.  round 6 Q3e.")
                     else:
+                        _nm2 = sorted(set(perc_name(k) if k else "Silent" for k in ks))
                         W("; ⚠ NO LABEL: %d differently named drum-instrument records"
-                          % len(set(perc_name(k) if k else "Silent" for k in ks)))
-                        W("; carry these same bytes, so nothing here picks one of")
-                        W("; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.")
+                          % len(_nm2))
+                        W("; carry these same bytes -- more than round 8's bound of %d,"
+                          % MAX_NAMES)
+                        W("; so a disjunction would enumerate a family rather than")
+                        W("; name an object.  round 6 Q1, verdict")
+                        W("; NAMELESS-AMBIGUOUS; round 8 Q3.")
                 else:
                     W("; NO drum-instrument record carries these bytes -- one of the")
                     W("; %d records of this array with no carrier at all, against %d"
@@ -2758,15 +2920,79 @@ def _round7_header_lines():
     return "\n".join(L)
 
 
+def _round8_header_lines():
+    """The round-8 block: the three questions, and what is left after them."""
+    rows = _R8.three_questions()
+    named = [r for r in rows if r.verdict == "NAMED"]
+    nameless = [r for r in rows if r.verdict == "NAMELESS"]
+    fourth = sum(1 for r in named if not r.a and not r.b and not r.c)
+    dj = sum(len(_R8.disjunction_labels(_s)) for _s in (0x18, 0x20))
+    refs = _R8.preset_referrers()
+    npre = _R6.array_records(0x3C)[1]
+    unref = [k for k in range(npre) if k not in refs]
+    return "\n".join([
+        "; " + "-" * 78,
+        "; ★ WAVE 7 ROUND 8 -- THE THREE QUESTIONS, AND WHAT SURVIVES THEM",
+        "; " + "-" * 78,
+        "; Round 7 gave every label a verdict.  What it did not do is ask the same",
+        "; three questions of each, so a nameless object was nameless because ONE",
+        "; naming rule had failed on it.  Round 8 asks, of all %s:" % format(len(rows), ","),
+        ";     A  does the object CONTAIN a name -- its own ASCII?",
+        ";     B  does a prom_c READER reach the region it is in?",
+        ";     C  does anything POINT AT it -- a stored index, one of this image's",
+        ";        own %s pointer fields, or an address spelling?"
+        % format(len(_R8.pointer_fields()), ","),
+        "; %s NAMED, %s NAMELESS -- and every nameless object carries all three"
+        % (format(len(named), ","), format(len(nameless), ",")),
+        "; answers below, not one mechanism's failure.",
+        ";",
+        "; ⚠ AND THE TABLE ADMITS ITS OWN GAP: %d objects are NAMED while answering" % fourth,
+        "; NO to all three.  They are named by round 6's fourth route -- the object",
+        "; CONTAINS A COPY of a named object's bytes -- which is why the three answers",
+        "; are printed as facts about routes and NOT as a verdict.",
+        ";",
+        "; ★ WHAT ROUND 8 NAMED: %d records whose bytes are carried by two or three" % dj,
+        "; DIFFERENTLY NAMED records.  Round 6 gave them no label because `nothing",
+        "; picks one of them`; round 8 states all of them instead of stating none, and",
+        "; `_Or_` is what says no owner was picked.  The bound is %d names."
+        % _R8.MAX_NAMES,
+        ";",
+        "; ★ WHAT THE STORED-INDEX CENSUS SETTLED, and it is the census round 7's own",
+        "; conclusion implied: a record here is reached by an INDEX, so the question",
+        "; is which stored index values exist.  Only one field in the image can select",
+        "; a wave-select preset, and over all %s wave-select records it takes %d"
+        % (format(len(_R8.wavesel_preset_fields()), ","), len(refs)),
+        "; distinct values -- so %d of the %d records of ToneDB_WaveSelTailPresets are"
+        % (len(unref), npre),
+        "; selected by NOTHING STORED in this image, and each says so on itself.",
+        ";",
+        "; ⚠ FOUR MORE MECHANISMS MEASURED AND REJECTED (Q4), including the strongest",
+        "; one this image offers: the +0x20 array is in its owners' index order with",
+        "; %d backward steps over %d anchors, so an ambiguous record's owner is"
+        % (_R8.monotonicity(0x20)[1], _R8.monotonicity(0x20)[0]),
+        "; confined to an interval -- and the interval leaves exactly one candidate 0",
+        "; times.  Refuted by its own measurement, and written down so it is not",
+        "; re-invented.",
+        ";",
+        "; ⚠ ORIGIN in prom_d/prom_d.ld is NOT changed.  Round 8 re-attacked it from",
+        "; the image's own pointers: %s directory slots, tone-record offsets and"
+        % format(len(_R8.pointer_fields()), ","),
+        "; descriptor pointers, and 0 of them is an absolute address.",
+        ";",
+    ])
+
+
 _HDR = HEADER
 _MARK = "; Reproduce every number quoted in this file:"
 assert _MARK in _HDR
-_HDR = _HDR.replace(_MARK, _round7_header_lines() + "\n" + _MARK, 1)
+_HDR = _HDR.replace(_MARK, _round7_header_lines() + "\n"
+                    + _round8_header_lines() + "\n" + _MARK, 1)
 _HDR = _HDR.replace(
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks",
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks\n"
-    ";     python3 notes/prom_d_finish_round7.py --selftest # the inventory, %d checks"
-    % _R7.AUDITED_CHECKS, 1)
+    ";     python3 notes/prom_d_finish_round7.py --selftest # the inventory, %d checks\n"
+    ";     python3 notes/prom_d_inventory_round8.py --selftest # the three questions, "
+    "%d checks" % (_R7.AUDITED_CHECKS, _R8.AUDITED_CHECKS), 1)
 W((_HDR % (CENSUS_CHECKS, CENSUS_CHECKS)).rstrip("\n"))
 for a, b, fn in REGIONS:
     before = len(OUTBUF)

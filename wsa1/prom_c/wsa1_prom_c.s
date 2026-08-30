@@ -16462,8 +16462,8 @@ MemCopyWords__words:
 ;         29  (caller not yet converted)
 ;          3  sub_FB6500
 ;          1  Analog_ScanAndReport
-;          1  sub_FADAB1
-;          1  sub_FADACA
+;          1  P7Mixer_SetGainIndex1
+;          1  P7Mixer_SetGainIndex2
 ;          1  sub_FAEFC2
 ;          1  sub_FAEFE7
 ;          1  sub_FAF00C
@@ -30904,7 +30904,7 @@ P7Unit_SendParamValue:
 ; P7Mixer_RequestGain -- 0xFA2DCD..0xFA2DEB (31 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFADAC2 in sub_FADAB1, 0xFADADF in sub_FADACA
+;          0xFADAC2 in P7Mixer_SetGainIndex1, 0xFADADF in P7Mixer_SetGainIndex2
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00F3B3, 0x00F3B4
 ; Calls:   0xF98510 = Kernel_SemaSignal_StackArg
@@ -41805,12 +41805,27 @@ Rand_FromTickSquared:
 ;          the register's range is exactly the 128 notes.
 ; Terms it sums, in order: note*256 + 0x80 ; the global word at RAM 0x001505 ;
 ;          part[+0x15]<<8 ; part[+0x13] ; the return of 0xFA72E9(voice[+0x04], ...) ; then
-;          ONE of four key-dependent corrections selected by (0x00150A) or by
-;          (voice[+0x13])[+0x13]:
+;          ONE of four key-dependent corrections, selected by a mode byte that is
+;          itself chosen by global-setup FLAG BIT 9 at 0xFA7F81 -- and the two paths
+;          do NOT share their `else` arm:
+;             bit 9 SET   -> mode = the GLOBAL byte (0x00150A), written by
+;                            GlobalScale_StoreMode
+;             bit 9 CLEAR -> mode = the PER-TONE byte (voice[+0x13])[+0x13]
 ;             0x40  a pseudo-random detune, (0xFA7F04 result * 13) >> 7
 ;             0x41  Voice_KeyBend_Curve_0[pitch >> 8]     (0xFDD3AB, signed bytes)
 ;             0x42  Voice_KeyBend_Curve_1[pitch >> 8]     (0xFDD3AB + 0x80)
-;             else  a table at 0xFDF2C3 indexed by 12*H + note/12, doubled
+;             0x80  GLOBAL path: nothing -- `jr Z,0xfa7fbb` at 0xFA7FB9 targets the
+;                   NEXT instruction, so it falls into the else arm.  PER-TONE path:
+;                   the join at 0xFA8072, i.e. no correction at all.
+;             else  GLOBAL path: the twelve-entry USER SCALE in RAM, 0x00150B +
+;                   (note mod 12), sign-extended and doubled (0xFA7FD2-0xFA7FDB) --
+;                   written by GlobalScale_StorePitchClassDetune.
+;                   PER-TONE path: ROM 0xFDF2C3 + 12*mode + (note mod 12), doubled
+;                   (0xFA8064) -- a BANK of such scales, indexed by the mode.
+;          * CORRECTED 2026-08-30 (round 8).  This block used to give ONE `else` arm,
+;          the ROM table, for both selectors.  The global path has never read that
+;          table; it reads RAM.  notes/prom_c_inventory_round8.py --claims asserts
+;          both arms' instructions.
 ;          and finally a KEY-FOLLOW stage: with H = (voice[+0x17])[+0x06] & 7,
 ;             H == 7  -> the pitch is forced to the constant 0x4280
 ;             H != 7  -> pitch = 0x4280 + ((pitch - 0x4280) >> H)
@@ -42410,7 +42425,7 @@ Voice_PitchAddZoneOffset_AB:
 ; Voice_StagePitch_Reg0400_AB -- 0xFA8347..0xFA83A7 (97 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFADD03 in sub_FADCC3__FADD02, 0xFADDA1 in sub_FADD29__FADDA0
+;          0xFADD03 in Voice_RestagePitchReg0400_ForList__FADD02, 0xFADDA1 in sub_FADD29__FADDA0
 ;          0xFB0B0C in VoiceRegs_Stage_A, 0xFB1EFA in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D76C
@@ -42523,7 +42538,7 @@ Voice_PitchAddZoneOffset_CD:
 ; Voice_StagePitch_Reg0400_CD -- 0xFA83CC..0xFA842C (97 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFADD0A in sub_FADCC3__FADD09, 0xFADDA8 in sub_FADD29__FADDA7
+;          0xFADD0A in Voice_RestagePitchReg0400_ForList__FADD09, 0xFADDA8 in sub_FADD29__FADDA7
 ;          0xFB282A in VoiceRegs_Stage_C, 0xFB2EFF in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D76C
@@ -55126,6 +55141,75 @@ MidiCtrl_Int9C:
 	ld	(xbc+0x1523), a                         ; FADA74  ld (XBC+0x1523),A
 	unlk32 xiz                                 ; FADA79  unlk XIZ
 	ret                                        ; FADA7B  ret
+
+; ==============================================================================
+; ** THE GLOBAL SETUP RECORD -- RAM 0x0014FE..0x001522, 37 bytes
+; ==============================================================================
+;
+; The instrument's part-less settings, read by the voice engine on every note.  It
+; ends where the part records begin, at 0x001523 (their base and 0x012C stride are in
+; the module header below; the record COUNT there carries its own warning and is not
+; leaned on here).  EIGHTEEN routines write into
+; it.  THIRTEEN are arms of GlobalSetup_Dispatch, the status-0xF0 message handler at
+; 0xFB0338; a fourteenth, GlobalTune_StoreFineTune, sits one level below arm 0x82.
+; The remaining FOUR are outside that message entirely:
+; ExtBoard_ProbeAndInstallBases, Toggle14FE_AndDispatch, sub_FB6CEE, and sub_FAC34D,
+; which decrements the countdown at +0x1E.
+; `python3 notes/prom_c_inventory_round8.py --record` lists every writer and every
+; reader per field, and asserts the last row.
+;
+;   off   addr    w  writer                              reader
+;   +00  0x14FE   1  ExtBoard_ProbeAndInstallBases       Toggle14FE_AndDispatch
+;                    (0xFB05E0, = 0)                     (0xFB05F1, then xor 0xFF)
+;   +01  0x14FF   2  the FLAG WORD, bit by bit:
+;                    bit 0  sub_FADA7C          (arm 0x09)  sub_FA72E9 0xFA72F0,
+;                                                           Voice_StageRegs_0800_A 0xFAA4DB
+;                    bit 1  sub_FADBFC          (arm 0x99)  only with bit 0, as `and 0x0003`:
+;                                                           MidiCtrl_CC07 0xFAD700,
+;                                                           MidiCtrl_CC11 0xFAD797
+;                    bit 2  ExtBoard_ProbeAndInstallBases   Voice_SelectKeyZone_Reg0040 0xFA8233,
+;                           (set 0xFB0518, clear 0xFB0510)  Voice_StageRegs_0040_B 0xFA82F0
+;                    bit 9  GlobalScale_SelectGlobalOrPerTone (arm 0xB1)
+;                                                           Voice_ComputePitch 0xFA7F81
+;                    bits 11..15  sub_FADB0F     (arm 0x85)  NO READER FOUND
+;   +03  0x1501   1  P7Mixer_SetGainIndex1       (arm 0x80)  P7Mixer_SetGainIndex2 0xFADAD8
+;   +04  0x1502   1  P7Mixer_SetGainIndex2       (arm 0x81)  NO READER FOUND
+;   +05  0x1503   2  GlobalTune_StoreFineTune    (arm 0x82)  Voice_StagePitch_Reg0400_AB 0xFA8356,
+;                    master fine tune, 1/256 semitone        _CD 0xFA83DB
+;   +07  0x1505   2  GlobalTune_StoreTranspose   (arm 0x83)  Voice_ComputePitch 0xFA7F4C,
+;                    master transpose, semitones * 256       sub_FC36BE 0xFC36FD
+;   +09  0x1507   1  sub_FADBEE                  (arm 0x91)  NO READER FOUND
+;   +0A  0x1508   1  sub_FADC3E                  (arm 0xB0)  NO READER FOUND
+;   +0B  0x1509   1  Dev10C_SetReg0201_FromNibblePair (0xB2) NO READER FOUND
+;                    also written 0x11 by sub_FB6CEE__FB6D83 (0xFB6DA7)
+;   +0C  0x150A   1  GlobalScale_StoreMode       (arm 0x86)  Voice_ComputePitch 0xFA7F9B
+;   +0D  0x150B  12  GlobalScale_StorePitchClassDetune       Voice_ComputePitch 0xFA7FD2
+;         ..0x1516   (arms 0xA4..0xAF, index 0..11)          -- the USER SCALE, one
+;                                                           signed detune per pitch class
+;   +1B  0x1519   2  sub_FADB0F                  (arm 0x85)  sub_FADB0F itself,
+;                    (cleared at 0xFADB66)                   0xFADB4E
+;   +1D  0x151B   1  VoiceDefaults_StoreFromPackedByte (0x87) sub_FAC34D 0xFAC35A
+;   +1E  0x151C   1  VoiceDefaults_StoreFromPackedByte       sub_FAC34D 0xFAC364/0xFAC367
+;   +1F  0x151D   2  VoiceDefaults_StoreFromPackedByte       VoiceRecords_InitFromAlloc
+;                                                           0xFB3FAA/0xFB3FF1/0xFB3FFA/0xFB4027,
+;                                                           sub_FAC2AE 0xFAC2BD
+;   +21  0x151F   2  VoiceDefaults_StoreFromPackedByte       sub_FAC2AE 0xFAC314, 0xFAC31B
+;   +23  0x1521   2  VoiceDefaults_StoreFromPackedByte       sub_FAC2AE 0xFAC322
+;
+; * HOW THE EXTENT IS FIXED, since a record boundary asserted from nothing is how this
+;   tree has been wrong before.  The BASE is not chosen: 0x14FE is the literal seven
+;   routines load with `lda XIX,0x14fe`, and Voice_ComputePitch reads the scale table
+;   through the SAME base, `ld A,(XBC+0x14fe)` at 0xFA7FD2 with XBC = 13 + note mod 12.
+;   The END is the part records, whose base 0x001523 and 0x012C stride are established
+;   in the module header below.  Between them every byte listed above has a located
+;   writer; the offsets reached through a register are exactly
+;   +0x00, +0x01, +0x0D, +0x1B, +0x1D, +0x1E, +0x1F, +0x21, +0x23 and the rest are absolute stores.
+; * "NO READER FOUND" is a census result, not a guess: `python3
+;   notes/prom_c_inventory_round8.py --record` re-derives every row of this table from
+;   the source text and asserts the last one.  It is blind to a read through a register
+;   this scan does not track, so it says "not found", never "dead".
+; ==============================================================================
+
 ; --------------------------------------------------------------------------
 ; sub_FADA7C -- 0xFADA7C..0xFADAB0 (53 bytes)
 ;
@@ -55141,8 +55225,20 @@ MidiCtrl_Int9C:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Named:   NO -- and the reason is derived, not asserted.  What it DOES is exact:
+;          `lda XIX,0x14fe` at 0xFADA81, then `cp (XIZ+0x08),0x01` at 0xFADA85 selecting
+;          `or (XIX+0x01),0x0001` at 0xFADA8D or `and (XIX+0x01),0xfffe` at 0xFADA99 --
+;          so v == 1 SETS global-setup flag bit 0 and anything else clears it -- and it
+;          then re-runs VoiceSubsystem_Init with the same 0/1, sub_FB6CEE and sub_FB029E.
+;          It is arm 0x09 of GlobalSetup_Dispatch (0xFB0409).
+; Refused: bit 0 has two readers and neither says what it MEANS.  sub_FA72E9 tests it
+;          (`ld HL,(0x14ff) / and BC,0x0001 / jr Z` at 0xFA72F0) and so does
+;          Voice_StageRegs_0800_A (0xFAA4DB, branching the other way), and both are
+;          themselves unnamed or named for their register rather than their purpose.
+;          MidiCtrl_CC07 and MidiCtrl_CC11 read bits 0 and 1 TOGETHER (`and BC,0x0003`
+;          at 0xFAD700 and 0xFAD797), so the bit is not even separable from bit 1 there.
+;          A name built on "the mode bit 0 selects" would be naming a thing this image
+;          does not define.
 ; --------------------------------------------------------------------------
 sub_FADA7C:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADA7C  link XIZ,0x0000
@@ -55167,7 +55263,9 @@ sub_FADA7C__FADAA1:
 	unlk32 xiz                                 ; FADAAE  unlk XIZ
 	ret                                        ; FADAB0  ret
 ; --------------------------------------------------------------------------
-; sub_FADAB1 -- 0xFADAB1..0xFADAC9 (25 bytes)
+; P7Mixer_SetGainIndex1 -- 0xFADAB1..0xFADAC9 (25 bytes)
+;             store global-setup byte +0x03 (RAM 0x001501) and request the mixer gain
+;             pair (v, 0x7F).   (* NAMED in wave 7 round 3; was `sub_FADAB1`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55180,10 +55278,19 @@ sub_FADA7C__FADAA1:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    `ld (0x1501),C` at 0xFADAB8, then `push 0x007f` at 0xFADABC and `push BC /
+;          call 0xFA2DCD` at 0xFADAC1-0xFADAC2: it sets the FIRST of the two mixer-gain
+;          indices and forces the second to 0x7F.  Its one reference is arm 0x80 of
+;          GlobalSetup_Dispatch, at 0xFB0413.
+; Evidence: P7Mixer_RequestGain (0xFA2DCD) stores argument 1 in RAM 0x00F3B3 and
+;          argument 2 in 0x00F3B4 and signals semaphore 2; the byte is kept in 0x001501
+;          because P7Mixer_SetGainIndex2 reads it back at 0xFADAD8 as argument 1 of the
+;          next request.
+; Unknown:  which signal the gain scales.  P7Mixer_RequestGain's own header states that
+;          gap -- the two indices select rows of DSP_MixerGain_Curve_B and _A -- and
+;          nothing in this routine closes it.
 ; --------------------------------------------------------------------------
-sub_FADAB1:
+P7Mixer_SetGainIndex1:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADAB1  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADAB5  ld C,(XIZ+0x08)
 	stb_d8	(0x1501), c                         ; FADAB8  ld (0x1501),C
@@ -55195,7 +55302,9 @@ sub_FADAB1:
 	unlk32 xiz                                 ; FADAC7  unlk XIZ
 	ret                                        ; FADAC9  ret
 ; --------------------------------------------------------------------------
-; sub_FADACA -- 0xFADACA..0xFADAE6 (29 bytes)
+; P7Mixer_SetGainIndex2 -- 0xFADACA..0xFADAE6 (29 bytes)
+;             store global-setup byte +0x04 (RAM 0x001502) and request the mixer gain
+;             pair ((0x001501), v).   (* NAMED in wave 7 round 3; was `sub_FADACA`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55209,10 +55318,16 @@ sub_FADAB1:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    `ld (0x1502),C` at 0xFADAD1, then `ld C,(0x1501)` at 0xFADAD8 and `call
+;          0xFA2DCD` at 0xFADADF: it sets the SECOND mixer-gain index and re-sends the
+;          FIRST from the byte P7Mixer_SetGainIndex1 left at 0x001501.  Its one
+;          reference is arm 0x81 of GlobalSetup_Dispatch, at 0xFB041D.
+; Evidence: the two pushes at 0xFADAD7 and 0xFADADE are in that order, so the stored
+;          0x001501 is argument 1 and the new value argument 2 -- the same order
+;          P7Mixer_SetGainIndex1 uses.
+; Unknown:  which signal the gain scales; see P7Mixer_RequestGain.
 ; --------------------------------------------------------------------------
-sub_FADACA:
+P7Mixer_SetGainIndex2:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADACA  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADACE  ld C,(XIZ+0x08)
 	stb_d8	(0x1502), c                         ; FADAD1  ld (0x1502),C
@@ -55226,7 +55341,9 @@ sub_FADACA:
 	unlk32 xiz                                 ; FADAE4  unlk XIZ
 	ret                                        ; FADAE6  ret
 ; --------------------------------------------------------------------------
-; sub_FADAE7 -- 0xFADAE7..0xFADAFB (21 bytes)
+; GlobalTune_StoreFineTune -- 0xFADAE7..0xFADAFB (21 bytes)
+;             store global-setup word +0x05 (RAM 0x001503), the MASTER FINE TUNE, in
+;             units of 1/256 semitone.   (* NAMED in wave 7 round 3; was `sub_FADAE7`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55238,10 +55355,21 @@ sub_FADACA:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    `ld C,(XIZ+0x08) / sub C,0x40 / add C,C / exts BC / ld (0x1503),BC`
+;          (0xFADAEB-0xFADAF5): the byte is centred on 0x40, doubled in EIGHT-BIT
+;          arithmetic, and only then sign-extended, so v = 0x00..0x7F maps exactly onto
+;          -128..+126 and nothing wraps inside the MIDI data range.
+; Evidence: Voice_StagePitch_Reg0400_AB (`ld BC,(0x1503)` at 0xFA8356) and _CD (at
+;          0xFA83DB) are the ONLY readers of 0x001503 anywhere in the image, and both
+;          add it to the word they stage into register 0x0400+chan, whose unit is
+;          1/256 semitone (FINDINGS-prom_c-dev10c-register-meanings.md sec 2).  So the
+;          control's full swing is -128..+126 * 1/256 semitone, i.e. just under a
+;          quarter tone either way, and the shape is the same one
+;          MidiCtrl_Int81_FineTune uses per part, `(v - 0x80) * 2` into part[+0x13].
+; Unknown:  nothing outstanding about the arithmetic.  Whether CPU 1 ever sends a value
+;          above 0x7F is not established here; the byte-wide doubling would wrap.
 ; --------------------------------------------------------------------------
-sub_FADAE7:
+GlobalTune_StoreFineTune:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADAE7  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADAEB  ld C,(XIZ+0x08)
 	sub	c, 64                                  ; FADAEE  sub C,0x40
@@ -55251,7 +55379,10 @@ sub_FADAE7:
 	unlk32 xiz                                 ; FADAF9  unlk XIZ
 	ret                                        ; FADAFB  ret
 ; --------------------------------------------------------------------------
-; sub_FADAFC -- 0xFADAFC..0xFADB0E (19 bytes)
+; GlobalTune_StoreTranspose -- 0xFADAFC..0xFADB0E (19 bytes)
+;             store global-setup word +0x07 (RAM 0x001505), the MASTER TRANSPOSE, as a
+;             signed semitone count times 256.
+;             (* NAMED in wave 7 round 3; was `sub_FADAFC`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55263,10 +55394,20 @@ sub_FADAE7:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    `ld BC,(XIZ+0x08) / exts BC / sll 0x08,BC / ld (0x1505),BC`
+;          (0xFADB00-0xFADB08).  The `sll 8` shifts the argument byte into the high half
+;          and discards whatever the `exts` put there, so the stored word is v * 256 --
+;          v read as a two's-complement SEMITONE count.
+; Evidence: Voice_ComputePitch reads 0x001505 at 0xFA7F4C and adds it, unshifted, to an
+;          accumulator seeded `note * 256 + 0x80` at 0xFA7F3A-0xFA7F48, i.e. in units of
+;          1/256 semitone.  The per-part transpose does the identical thing one field
+;          later: part[+0x15], which MidiCtrl_Int82_Transpose stores as a signed
+;          semitone count, is added SHIFTED LEFT EIGHT at 0xFA7F5A.  Here the shift is
+;          done once in the setter instead of on every note.
+;          The only other reader of 0x001505 is sub_FC36BE (0xFC36FD).
+; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
-sub_FADAFC:
+GlobalTune_StoreTranspose:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADAFC  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FADB00  ld BC,(XIZ+0x08)
 	exts	bc                                    ; FADB03  exts BC
@@ -55287,8 +55428,22 @@ sub_FADAFC:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Named:   NO.  What it DOES is exact: with XIX = 0x14FE (0xFADB15) it edits the
+;          global-setup flag word +0x01 and the word +0x1B.  v != 0 takes 0xFADB1F:
+;          if flag bit 12 (0x1000) is already set it returns unchanged, otherwise it
+;          sets bit 11 (`set 0x0b,BC` at 0xFADB2E).  v == 0 takes 0xFADB38: it returns
+;          unless bit 12 is set, then masks the word to 0x2FFF, sets bit 13, and sets
+;          bit 15 or bit 14 according to whether (XIX+0x1B) exceeds 0x0014 (0xFADB51),
+;          finally clearing (XIX+0x1B) at 0xFADB66.
+; Refused: NOTHING IN THE IMAGE READS BITS 11..15 OF 0x0014FF.  Every located reader of
+;          that word masks a low bit -- 0x0001 (0xFA72F0, 0xFAA4DB), 0x0003 (0xFAD700,
+;          0xFAD797), 0x0004 (0xFA8233, 0xFA82F0) or 0x0200 (0xFA7F81) -- and the word
+;          at 0x001519 is read by NOTHING BUT THIS ROUTINE: `ld BC,(XIX+0x1b)` at
+;          0xFADB4E, only to pick bit 15 over bit 14, and then cleared at 0xFADB66.
+;          So this routine's effect is fully decoded
+;          and its PURPOSE has no evidence anywhere; a name would have to invent one.
+;          It is arm 0x85 of GlobalSetup_Dispatch (0xFB043B) and is also called from
+;          sub_FB0285.
 ; --------------------------------------------------------------------------
 sub_FADB0F:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB0F  link XIZ,0x0000
@@ -55335,7 +55490,10 @@ sub_FADB0F__FADB6B:
 	unlk32 xiz                                 ; FADB6D  unlk XIZ
 	ret                                        ; FADB6F  ret
 ; --------------------------------------------------------------------------
-; sub_FADB70 -- 0xFADB70..0xFADB7D (14 bytes)
+; GlobalScale_StoreMode -- 0xFADB70..0xFADB7D (14 bytes)
+;             store global-setup byte +0x0C (RAM 0x00150A), the selector that decides
+;             WHICH key-dependent pitch correction Voice_ComputePitch applies.
+;             (* NAMED in wave 7 round 3; was `sub_FADB70`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55347,17 +55505,32 @@ sub_FADB0F__FADB6B:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    `ld C,(XIZ+0x08) / ld (0x150a),C` (0xFADB74-0xFADB77) is the whole body, and
+;          0x00150A is the byte Voice_ComputePitch branches on at 0xFA7F9B.
+; Evidence: Voice_ComputePitch reads it ONLY on the path guarded by global-setup flag
+;          bit 9 (`ld BC,(0x14ff) / and BC,0x0200 / jr Z` at 0xFA7F81-0xFA7F8A), and
+;          then compares it against 0x40 (0xFA7FA1 -> the pseudo-random detune at
+;          0xFA8006), 0x41 (0xFA7FA7 -> Voice_KeyBend_Curve_0), 0x42 (0xFA7FAE ->
+;          Voice_KeyBend_Curve_1) and 0x80 (0xFA7FB5), otherwise falling into the
+;          twelve-entry RAM scale table at 0xFA7FBB.
+;          * THE 0x80 ARM IS DEGENERATE ON THIS PATH: `jr Z,0xfa7fbb` at 0xFA7FB9 jumps
+;          to the very next instruction, so 0x80 takes the table arm like any other
+;          value.  On the PER-TONE path the same comparison at 0xFA7FFE jumps to
+;          0xFA8072, the join, and really does mean "no correction".  Stated as measured;
+;          why the two differ is not established.
+; Unknown:  what the mode numbers are called on the panel.
 ; --------------------------------------------------------------------------
-sub_FADB70:
+GlobalScale_StoreMode:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB70  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADB74  ld C,(XIZ+0x08)
 	stb_d8	(0x150A), c                         ; FADB77  ld (0x150a),C
 	unlk32 xiz                                 ; FADB7B  unlk XIZ
 	ret                                        ; FADB7D  ret
 ; --------------------------------------------------------------------------
-; sub_FADB7E -- 0xFADB7E..0xFADBED (112 bytes)
+; VoiceDefaults_StoreFromPackedByte -- 0xFADB7E..0xFADBED (112 bytes)
+;             unpack four bit-fields of one byte into five global-setup fields that
+;             seed every newly allocated voice.
+;             (* NAMED in wave 7 round 3; was `sub_FADB7E`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55369,10 +55542,26 @@ sub_FADB70:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    five stores into the global-setup record (XIX = 0x14FE, loaded at 0xFADB84),
+;          each driven by a different bit-field of the one argument byte:
+;              (XIX+0x1D) = 0x001                    3 if v & 0x08 else 1   (0xFADB8D)
+;              (XIX+0x1E) = 0x001C     always 1                             (0xFADBA2)
+;              (XIX+0x1F) = 0x001D     ROM word at 0xFE128E + 2*(v >> 4)    (0xFADBA8)
+;              (XIX+0x21) = 0x001F     0x8000 if v & 0x04 else 0xA000       (0xFADBC0)
+;              (XIX+0x23) = 0x0021     0xA8 - ((v & 3) << 3)                (0xFADBD7)
+; Evidence: three of the five are VOICE DEFAULTS, read only when a voice is built:
+;          VoiceRecords_InitFromAlloc reads 0x00151D four times (0xFB3FAA, 0xFB3FF1,
+;          0xFB3FFA, 0xFB4027) into voice[+0x00], [+0x06], [+0x08] and [+0x05], and
+;          sub_FAC2AE seeds the 0x00D75E staging block from 0x00151D (0xFAC2BD),
+;          0x00151F twice (0xFAC314, 0xFAC31B) and 0x001521 (0xFAC322).  The remaining
+;          two are a gate and a countdown: sub_FAC34D tests 0x00151B at 0xFAC35A and
+;          decrements 0x00151C at 0xFAC364, calling VoiceRecords_InitFromAlloc only when
+;          the counter reaches zero.
+;          Its one reference is arm 0x87 of GlobalSetup_Dispatch, at 0xFB044F.
+; Unknown:  what each of the four bit-fields is called, and what the 0xFE128E word table
+;          holds -- it is indexed by v >> 4 and nothing else reads it.
 ; --------------------------------------------------------------------------
-sub_FADB7E:
+VoiceDefaults_StoreFromPackedByte:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB7E  link XIZ,0x0000
 	pushw	hl                                   ; FADB82  push HL
 	push	xix                                   ; FADB83  push XIX
@@ -55380,14 +55569,14 @@ sub_FADB7E:
 	ld	h, (xiz+8)                              ; FADB88  ld H,(XIZ+0x08)
 	ld	c, h                                    ; FADB8B  ld C,H
 	and	c, 8                                   ; FADB8D  and C,0x08
-	jr z, sub_FADB7E__FADB9A                   ; FADB90  jr Z,0xfadb9a
+	jr z, VoiceDefaults_StoreFromPackedByte__FADB9A                   ; FADB90  jr Z,0xfadb9a
 	extz	xix                                   ; FADB92  extz XIX
 	ld	(xix+29), 3                             ; FADB94  ld (XIX+0x1d),0x03
-	jr sub_FADB7E__FADBA0                      ; FADB98  jr T,0xfadba0
-sub_FADB7E__FADB9A:
+	jr VoiceDefaults_StoreFromPackedByte__FADBA0                      ; FADB98  jr T,0xfadba0
+VoiceDefaults_StoreFromPackedByte__FADB9A:
 	extz	xix                                   ; FADB9A  extz XIX
 	ld	(xix+29), 1                             ; FADB9C  ld (XIX+0x1d),0x01
-sub_FADB7E__FADBA0:
+VoiceDefaults_StoreFromPackedByte__FADBA0:
 	extz	xix                                   ; FADBA0  extz XIX
 	ld	(xix+30), 1                             ; FADBA2  ld (XIX+0x1e),0x01
 	ld	c, h                                    ; FADBA6  ld C,H
@@ -55400,14 +55589,14 @@ sub_FADB7E__FADBA0:
 	ld	(xix+31), bc                            ; FADBBB  ld (XIX+0x1f),BC
 	ld	c, h                                    ; FADBBE  ld C,H
 	and	c, 4                                   ; FADBC0  and C,0x04
-	jr z, sub_FADB7E__FADBCE                   ; FADBC3  jr Z,0xfadbce
+	jr z, VoiceDefaults_StoreFromPackedByte__FADBCE                   ; FADBC3  jr Z,0xfadbce
 	extz	xix                                   ; FADBC5  extz XIX
 	extpfx5 0xBC, 0x21, 0x02, 0x00, 0x80       ; FADBC7  ld (XIX+0x21),0x8000
-	jr sub_FADB7E__FADBD5                      ; FADBCC  jr T,0xfadbd5
-sub_FADB7E__FADBCE:
+	jr VoiceDefaults_StoreFromPackedByte__FADBD5                      ; FADBCC  jr T,0xfadbd5
+VoiceDefaults_StoreFromPackedByte__FADBCE:
 	extz	xix                                   ; FADBCE  extz XIX
 	extpfx5 0xBC, 0x21, 0x02, 0x00, 0xA0       ; FADBD0  ld (XIX+0x21),0xa000
-sub_FADB7E__FADBD5:
+VoiceDefaults_StoreFromPackedByte__FADBD5:
 	ld	c, h                                    ; FADBD5  ld C,H
 	and	c, 3                                   ; FADBD7  and C,0x03
 	sll	c, 3                                   ; FADBDA  sll 0x03,C
@@ -55433,8 +55622,15 @@ sub_FADB7E__FADBD5:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Named:   NO.  The body is three instructions: `ld C,(XIZ+0x08) / ld (0x1507),C`
+;          (0xFADBF2-0xFADBF5).  It is arm 0x91 of GlobalSetup_Dispatch (0xFB0459).
+; Refused: global-setup byte +0x09 (RAM 0x001507) IS NEVER READ.  The census is over
+;          both spellings the record is reached by: `(0x1507)` appears exactly once in
+;          prom_c's source, at this store, and every access the record gets through a
+;          register lands on
+;          +0x00, +0x01, +0x0D, +0x1B, +0x1D, +0x1E, +0x1F, +0x21, +0x23 -- never +0x09.  A field with a writer and no reader can be named for
+;          the message that writes it and for nothing else, which is a number, so the
+;          name stays an address.  (`python3 notes/prom_c_inventory_round8.py --record`)
 ; --------------------------------------------------------------------------
 sub_FADBEE:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADBEE  link XIZ,0x0000
@@ -55455,8 +55651,15 @@ sub_FADBEE:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Named:   NO.  What it DOES is exact: `cp (XIZ+0x08),0x00` at 0xFADC05 selecting
+;          `or (XIX+0x01),0x0002` at 0xFADC0D or `and (XIX+0x01),0xfffd` at 0xFADC16,
+;          with XIX = 0x14FE -- v != 0 sets global-setup flag bit 1, v == 0 clears it.
+;          It is arm 0x99 of GlobalSetup_Dispatch (0xFB0469).
+; Refused: bit 1 is never read ALONE.  Its only readers are MidiCtrl_CC07 (0xFAD700)
+;          and MidiCtrl_CC11 (0xFAD797), and both mask `0x0003` -- bit 1 together with
+;          bit 0, which sub_FADA7C owns.  So the image gives the PAIR a meaning and
+;          neither bit one of its own, and a name for this setter would be splitting a
+;          condition the hardware path never splits.
 ; --------------------------------------------------------------------------
 sub_FADBFC:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADBFC  link XIZ,0x0000
@@ -55475,7 +55678,10 @@ sub_FADBFC__FADC1B:
 	unlk32 xiz                                 ; FADC1C  unlk XIZ
 	ret                                        ; FADC1E  ret
 ; --------------------------------------------------------------------------
-; sub_FADC1F -- 0xFADC1F..0xFADC3D (31 bytes)
+; GlobalScale_StorePitchClassDetune -- 0xFADC1F..0xFADC3D (31 bytes)
+;             store one of the TWELVE per-pitch-class detunes at global-setup +0x0D
+;             (RAM 0x00150B..0x001516) -- the user scale / temperament table.
+;             (* NAMED in wave 7 round 3; was `sub_FADC1F`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55487,10 +55693,23 @@ sub_FADBFC__FADC1B:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    `ld H,(XIZ+0x0a) / sub H,0x80` then `ld BC,(XIZ+0x08) / add BC,13 /
+;          ld (XBC+0x14fe),H` (0xFADC24-0xFADC35): argument 1 is an index 0..11 and
+;          argument 2 the value, stored centred on 0x80 at RAM 0x14FE + 13 + index =
+;          0x00150B + index.
+; Evidence: the index is not inferred -- GlobalSetup_Dispatch's twelve arms 0xA4..0xAF
+;          push it as a literal, 0x0000 at 0xFB0479 rising by one to 0x000B at 0xFB04DD,
+;          and all twelve then `calr 0xfadc1f` through the single site 0xFB04E0.
+;          The reader is Voice_ComputePitch__FA7FBB: it takes the note byte
+;          (`ld C,(XIX+0x05) / res 7,C` at 0xFA7FBD), divides by twelve and keeps the
+;          REMAINDER (`div C,0x0c / ld C,B` at 0xFA7FC5-0xFA7FC8), adds 13, and reads
+;          `(XBC+0x14fe)` at 0xFA7FD2 -- the same base and the same +13 -- then sign-
+;          extends and DOUBLES it (`add WA,WA` at 0xFA7FD9) into the pitch accumulator.
+;          So entry i is the detune of pitch class i, one unit = 2/256 semitone, and the
+;          signed byte range -128..+127 is +/- one semitone.
+; Unknown:  whether the panel calls this a scale, a temperament or a tuning table.
 ; --------------------------------------------------------------------------
-sub_FADC1F:
+GlobalScale_StorePitchClassDetune:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC1F  link XIZ,0x0000
 	pushw	hl                                   ; FADC23  push HL
 	ld	h, (xiz+10)                             ; FADC24  ld H,(XIZ+0x0a)
@@ -55516,8 +55735,11 @@ sub_FADC1F:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Named:   NO.  The body is three instructions: `ld C,(XIZ+0x08) / ld (0x1508),C`
+;          (0xFADC42-0xFADC45).  It is arm 0xB0 of GlobalSetup_Dispatch (0xFB04EA).
+; Refused: global-setup byte +0x0A (RAM 0x001508) IS NEVER READ -- same census as
+;          sub_FADBEE's, same result: one appearance of `(0x1508)` in the whole source,
+;          this store, and no +0x0A among the offsets reached through the 0x14FE base.
 ; --------------------------------------------------------------------------
 sub_FADC3E:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC3E  link XIZ,0x0000
@@ -55526,7 +55748,10 @@ sub_FADC3E:
 	unlk32 xiz                                 ; FADC49  unlk XIZ
 	ret                                        ; FADC4B  ret
 ; --------------------------------------------------------------------------
-; sub_FADC4C -- 0xFADC4C..0xFADC6E (35 bytes)
+; GlobalScale_SelectGlobalOrPerTone -- 0xFADC4C..0xFADC6E (35 bytes)
+;             set or clear global-setup flag bit 9, which chooses between the GLOBAL
+;             scale above and the PER-TONE scale in ROM.
+;             (* NAMED in wave 7 round 3; was `sub_FADC4C`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55538,27 +55763,39 @@ sub_FADC3E:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    `cp (XIZ+0x08),0x00 / jr NZ` at 0xFADC55-0xFADC59 then `or (XIX+0x01),0x0200`
+;          at 0xFADC5D or `and (XIX+0x01),0xfdff` at 0xFADC66, with XIX = 0x14FE loaded
+;          at 0xFADC51: v == 0 SETS global-setup flag bit 9, v != 0 CLEARS it.
+; Evidence: Voice_ComputePitch tests exactly that bit at 0xFA7F81-0xFA7F8A and the two
+;          arms are a matched pair.  With the bit SET it takes the GLOBAL scale: mode
+;          byte 0x00150A, table RAM 0x00150B + note mod 12 (0xFA7F9B, 0xFA7FD2).  With
+;          the bit CLEAR it takes the PER-TONE scale: mode byte (voice[+0x13])[+0x13],
+;          table ROM 0xFDF2C3 + 12 * mode + note mod 12 (0xFA7FE5, 0xFA8064).  Same
+;          four mode numbers, same doubling, different source -- which is what makes
+;          "global or per-tone" the meaning of the bit rather than a guess about it.
+; Unknown:  why v == 0 is the GLOBAL case rather than the other way round.
 ; --------------------------------------------------------------------------
-sub_FADC4C:
+GlobalScale_SelectGlobalOrPerTone:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC4C  link XIZ,0x0000
 	push	xix                                   ; FADC50  push XIX
 	lda_d16	xix, (0x14FE)                      ; FADC51  lda XIX,0x14fe
 	cp (xiz+8), 0x00                           ; FADC55  cp (XIZ+0x08),0x00
-	jr nz, sub_FADC4C__FADC64                  ; FADC59  jr NZ,0xfadc64
+	jr nz, GlobalScale_SelectGlobalOrPerTone__FADC64                  ; FADC59  jr NZ,0xfadc64
 	extz	xix                                   ; FADC5B  extz XIX
 	extpfx5 0x9C, 0x01, 0x3E, 0x00, 0x02       ; FADC5D  or (XIX+0x01),0x0200
-	jr sub_FADC4C__FADC6B                      ; FADC62  jr T,0xfadc6b
-sub_FADC4C__FADC64:
+	jr GlobalScale_SelectGlobalOrPerTone__FADC6B                      ; FADC62  jr T,0xfadc6b
+GlobalScale_SelectGlobalOrPerTone__FADC64:
 	extz	xix                                   ; FADC64  extz XIX
 	extpfx5 0x9C, 0x01, 0x3C, 0xFF, 0xFD       ; FADC66  and (XIX+0x01),0xfdff
-sub_FADC4C__FADC6B:
+GlobalScale_SelectGlobalOrPerTone__FADC6B:
 	pop	xix                                    ; FADC6B  pop XIX
 	unlk32 xiz                                 ; FADC6C  unlk XIZ
 	ret                                        ; FADC6E  ret
 ; --------------------------------------------------------------------------
-; sub_FADC6F -- 0xFADC6F..0xFADCC2 (84 bytes)
+; Dev10C_SetReg0201_FromNibblePair -- 0xFADC6F..0xFADCC2 (84 bytes)
+;             store global-setup byte +0x0B (RAM 0x001509) and rebuild device register
+;             0x0201 from its two nibbles and a ROM default word.
+;             (* NAMED in wave 7 round 3; was `sub_FADC6F`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -55572,10 +55809,22 @@ sub_FADC4C__FADC6B:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    `ld D,(XIZ+0x08) / ld (0x1509),D` at 0xFADC76-0xFADC79 keeps the byte, and
+;          the rest of the body splits it into two nibbles and rebuilds one device
+;          register word: the low nibble, non-zero, contributes (n - 1) << 5
+;          (0xFADC7F-0xFADC8E); the high nibble, non-zero, contributes (n - 0x10) << 8
+;          (0xFADC95-0xFADCA6); both are OR-ed at 0xFADCB4/0xFADCB6 onto
+;          `(0xFE12B7) & 0x0F9F`, a ROM word masked to the bits the two fields do not
+;          occupy, and the result is passed to Dev10C_WriteReg_0201 at 0xFADCB9.
+; Evidence: the two shift amounts and the mask are immediates in the listing below, and
+;          0x0F9F is the exact complement of the two fields the nibbles fill -- bits
+;          5..6 and 8..11 -- which is what makes "rebuild, do not overwrite" the reading.
+;          Its one reference is arm 0xB2 of GlobalSetup_Dispatch, at 0xFB04FC.
+; Unknown:  what register 0x0201 of the 0x0010C000 device controls.  It is not one of
+;          the per-channel blocks; Dev10C_WriteReg_0201 is its only writer and this is
+;          its only caller.
 ; --------------------------------------------------------------------------
-sub_FADC6F:
+Dev10C_SetReg0201_FromNibblePair:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC6F  link XIZ,0x0000
 	pushw	hl                                   ; FADC73  push HL
 	pushw	de                                   ; FADC74  push DE
@@ -55587,23 +55836,23 @@ sub_FADC6F:
 	extz	bc                                    ; FADC82  extz BC
 	ld	ix, bc                                  ; FADC84  ld IX,BC
 	cps	bc, 0                                  ; FADC86  cp BC,0
-	jr z, sub_FADC6F__FADC93                   ; FADC88  jr Z,0xfadc93
+	jr z, Dev10C_SetReg0201_FromNibblePair__FADC93                   ; FADC88  jr Z,0xfadc93
 	dec	1, bc                                  ; FADC8A  dec 1,BC
 	ld	ix, bc                                  ; FADC8C  ld IX,BC
 	sll	bc, 5                                  ; FADC8E  sll 0x05,BC
 	ld	ix, bc                                  ; FADC91  ld IX,BC
-sub_FADC6F__FADC93:
+Dev10C_SetReg0201_FromNibblePair__FADC93:
 	ld	c, d                                    ; FADC93  ld C,D
 	and	c, 0xF0                                ; FADC95  and C,0xf0
 	extz	bc                                    ; FADC98  extz BC
 	ld	hl, bc                                  ; FADC9A  ld HL,BC
 	cps	bc, 0                                  ; FADC9C  cp BC,0
-	jr z, sub_FADC6F__FADCAB                   ; FADC9E  jr Z,0xfadcab
+	jr z, Dev10C_SetReg0201_FromNibblePair__FADCAB                   ; FADC9E  jr Z,0xfadcab
 	sub	bc, 16                                 ; FADCA0  sub BC,0x0010
 	ld	hl, bc                                  ; FADCA4  ld HL,BC
 	sll	bc, 8                                  ; FADCA6  sll 0x08,BC
 	ld	hl, bc                                  ; FADCA9  ld HL,BC
-sub_FADC6F__FADCAB:
+Dev10C_SetReg0201_FromNibblePair__FADCAB:
 	ldw_da	bc, (0xFE12B7)                      ; FADCAB  ld BC,(0xfe12b7)
 	and	bc, 0xF9F                              ; FADCB0  and BC,0x0f9f
 	or	bc, ix                                  ; FADCB4  or BC,IX
@@ -55617,7 +55866,10 @@ sub_FADC6F__FADCAB:
 	unlk32 xiz                                 ; FADCC0  unlk XIZ
 	ret                                        ; FADCC2  ret
 ; --------------------------------------------------------------------------
-; sub_FADCC3 -- 0xFADCC3..0xFADD28 (102 bytes)
+; Voice_RestagePitchReg0400_ForList -- 0xFADCC3..0xFADD28 (102 bytes)
+;             for every voice index in a caller-supplied list, restage and re-send
+;             register 0x0400+chan -- the pitch.
+;             (* NAMED in wave 7 round 3; was `sub_FADCC3`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFBC448 in sub_FBC39D__FBC43A
@@ -55632,10 +55884,23 @@ sub_FADC6F__FADCAB:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    it walks the caller's byte list at (XIZ+0x08), starting at offset +5
+;          (`inc 5,XIX` at 0xFADCD0) and stopping at the first entry >= 0x40
+;          (`cp H,0x40 / jr NC` at 0xFADCD4) -- 0x40 being the channel count of the
+;          0x0010C000 device -- and for each entry it restages and re-sends that voice's
+;          pitch register.
+; Evidence: the record it forms is the VOICE record: `ld DE,0x3bcf` at 0xFADCCA,
+;          `ld C,0x44 / mul BC,H` at 0xFADCD9, the base and stride
+;          FINDINGS-prom_c-dev10c-register-meanings.md sec 2 establishes for the 64
+;          voice records.  It then selects on (record+1) & 0x003C and calls
+;          Voice_StagePitch_Reg0400_AB (0xFADD03) or _CD (0xFADD0A) -- the two routines
+;          that write the 0x0400 staging word -- and finishes with
+;          Dev10C_SetChanPitch_Reg0400 (0xFADD1A), passing the voice index and the
+;          staging block at 0x00D75E.
+; Unknown:  what the four values 4 / 8 / 0x10 / 0x20 of (record+1) & 0x3C denote.  Three
+;          of them route to _AB and one to _CD; nothing here says what the split means.
 ; --------------------------------------------------------------------------
-sub_FADCC3:
+Voice_RestagePitchReg0400_ForList:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADCC3  link XIZ,0x0000
 	push	xhl                                   ; FADCC7  push XHL
 	pushw	de                                   ; FADCC8  push DE
@@ -55643,10 +55908,10 @@ sub_FADCC3:
 	ldw	de, 0x3BCF                             ; FADCCA  ld DE,0x3bcf
 	ld	xix, (xiz+8)                            ; FADCCD  ld XIX,(XIZ+0x08)
 	inc	5, xix                                 ; FADCD0  inc 5,XIX
-sub_FADCC3__FADCD2:
+Voice_RestagePitchReg0400_ForList__FADCD2:
 	ld	h, (xix)                                ; FADCD2  ld H,(XIX)
 	cp	h, 64                                   ; FADCD4  cp H,0x40
-	jr nc, sub_FADCC3__FADD23                  ; FADCD7  jr NC,0xfadd23
+	jr nc, Voice_RestagePitchReg0400_ForList__FADD23                  ; FADCD7  jr NC,0xfadd23
 	ldb	c, 68                                  ; FADCD9  ld C,0x44
 	mul8rr	c, h                                ; FADCDB  mul BC,H
 	ld	hl, bc                                  ; FADCDD  ld HL,BC
@@ -55655,22 +55920,22 @@ sub_FADCC3__FADCD2:
 	ld	bc, (xhl+1)                             ; FADCE3  ld BC,(XHL+0x01)
 	and	bc, 60                                 ; FADCE6  and BC,0x003c
 	cps	bc, 4                                  ; FADCEA  cp BC,4
-	jr z, sub_FADCC3__FADD02                   ; FADCEC  jr Z,0xfadd02
+	jr z, Voice_RestagePitchReg0400_ForList__FADD02                   ; FADCEC  jr Z,0xfadd02
 	cp	bc, 8                                   ; FADCEE  cp BC,0x0008
-	jr z, sub_FADCC3__FADD02                   ; FADCF2  jr Z,0xfadd02
+	jr z, Voice_RestagePitchReg0400_ForList__FADD02                   ; FADCF2  jr Z,0xfadd02
 	cp	bc, 16                                  ; FADCF4  cp BC,0x0010
-	jr z, sub_FADCC3__FADD09                   ; FADCF8  jr Z,0xfadd09
+	jr z, Voice_RestagePitchReg0400_ForList__FADD09                   ; FADCF8  jr Z,0xfadd09
 	cp	bc, 32                                  ; FADCFA  cp BC,0x0020
-	jr z, sub_FADCC3__FADD02                   ; FADCFE  jr Z,0xfadd02
-	jr sub_FADCC3__FADD1F                      ; FADD00  jr T,0xfadd1f
-sub_FADCC3__FADD02:
+	jr z, Voice_RestagePitchReg0400_ForList__FADD02                   ; FADCFE  jr Z,0xfadd02
+	jr Voice_RestagePitchReg0400_ForList__FADD1F                      ; FADD00  jr T,0xfadd1f
+Voice_RestagePitchReg0400_ForList__FADD02:
 	pushw	hl                                   ; FADD02  push HL
 	call	0xFA8347                              ; FADD03  call 0xfa8347
-	jr sub_FADCC3__FADD0E                      ; FADD07  jr T,0xfadd0e
-sub_FADCC3__FADD09:
+	jr Voice_RestagePitchReg0400_ForList__FADD0E                      ; FADD07  jr T,0xfadd0e
+Voice_RestagePitchReg0400_ForList__FADD09:
 	pushw	hl                                   ; FADD09  push HL
 	call	0xFA83CC                              ; FADD0A  call 0xfa83cc
-sub_FADCC3__FADD0E:
+Voice_RestagePitchReg0400_ForList__FADD0E:
 	popw	bc                                    ; FADD0E  pop BC
 	lda_24	xbc, (0xD75E)                       ; FADD0F  lda XBC,0x00d75e
 	push	xbc                                   ; FADD14  push XBC
@@ -55679,10 +55944,10 @@ sub_FADCC3__FADD0E:
 	pushw	wa                                   ; FADD19  push WA
 	calr (0xFACE67 - 0xFADD1D)                 ; FADD1A  calr 0xface67
 	inc	6, xsp                                 ; FADD1D  inc 6,XSP
-sub_FADCC3__FADD1F:
+Voice_RestagePitchReg0400_ForList__FADD1F:
 	inc	1, xix                                 ; FADD1F  inc 1,XIX
-	jr sub_FADCC3__FADCD2                      ; FADD21  jr T,0xfadcd2
-sub_FADCC3__FADD23:
+	jr Voice_RestagePitchReg0400_ForList__FADCD2                      ; FADD21  jr T,0xfadcd2
+Voice_RestagePitchReg0400_ForList__FADD23:
 	pop	xix                                    ; FADD23  pop XIX
 	popw	de                                    ; FADD24  pop DE
 	pop	xhl                                    ; FADD25  pop XHL
@@ -60656,7 +60921,7 @@ MidiCtrl_CC120__FAFDA0:
 ;          0xFAD987 = MidiCtrl_Int95, 0xFAD9D0 = MidiCtrl_Int97
 ;          0xFAD9EE = MidiCtrl_Int99, 0xFADA17 = MidiCtrl_Int9A
 ;          0xFADA40 = MidiCtrl_Int9B, 0xFADA5E = MidiCtrl_Int9C
-;          0xFADCC3 = sub_FADCC3, 0xFADDC8 = sub_FADDC8
+;          0xFADCC3 = Voice_RestagePitchReg0400_ForList, 0xFADDC8 = sub_FADDC8
 ;          0xFADEAC = sub_FADEAC, 0xFAF3CC = MidiCtrl_CC01
 ;          0xFAF4DD = MidiCtrl_CC02, 0xFAF5EE = MidiCtrl_CC04
 ;          0xFAF6FC = MidiCtrl_CC16, 0xFAF873 = MidiCtrl_CC17
@@ -61285,24 +61550,34 @@ Dev10C_QuiesceListedChans_0800_0840__FB0267:
 	unlk32 xiz                                 ; FB0269  unlk XIZ
 	ret                                        ; FB026B  ret
 ; --------------------------------------------------------------------------
-; sub_FB026C -- 0xFB026C..0xFB0284 (25 bytes)
+; GlobalTune_SetFineTune_AndRestageAll -- 0xFB026C..0xFB0284 (25 bytes)
+;             store the master fine tune, then re-send the pitch register of every
+;             voice the query returns.   (* NAMED in wave 7 round 3; was `sub_FB026C`.)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFB0427
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFADAE7 = sub_FADAE7, 0xFADCC3 = sub_FADCC3
+; Calls:   0xFADAE7 = GlobalTune_StoreFineTune, 0xFADCC3 = Voice_RestagePitchReg0400_ForList
 ;          0xFB3D09 = VoiceQuery_Tag00_All
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB026C-0xFB0284
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    three calls in order (0xFB0275, 0xFB0278, 0xFB027D): store the new master
+;          fine tune, ask VoiceQuery_Tag00_All for the list of voices, then hand that
+;          list to Voice_RestagePitchReg0400_ForList.  Its one reference is arm 0x82 of
+;          GlobalSetup_Dispatch, at 0xFB0427.
+; Evidence: `push 0x00 / push (XIZ+0x08)` at 0xFB0270-0xFB0272 is the two-word argument
+;          GlobalTune_StoreFineTune reads at (XIZ+0x08); `push XIY` at 0xFB027C forwards
+;          the query's result register.  So the value takes effect on notes ALREADY
+;          SOUNDING, not only on the next one -- which is why the arm is not just the
+;          store.
+; Unknown:  what tag 0x00 selects in VoiceQuery_Tag00_All.
 ; --------------------------------------------------------------------------
-sub_FB026C:
+GlobalTune_SetFineTune_AndRestageAll:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB026C  link XIZ,0x0000
 	push	0                                     ; FB0270  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB0272  push (XIZ+0x08)
@@ -61322,15 +61597,24 @@ sub_FB026C:
 ;          scan, so this is "not found", not "dead".
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFADB0F = sub_FADB0F, 0xFADCC3 = sub_FADCC3
+; Calls:   0xFADB0F = sub_FADB0F, 0xFADCC3 = Voice_RestagePitchReg0400_ForList
 ;          0xFB3D09 = VoiceQuery_Tag00_All
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB0285-0xFB029D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Named:   NO, but it is now placed.  It is the exact shape of
+;          GlobalTune_SetFineTune_AndRestageAll with ONE substitution: store, query,
+;          restage -- `calr 0xfadb0f` at 0xFB028E where the named routine has
+;          `calr 0xfadae7`, then `call 0xFB3D09` (VoiceQuery_Tag00_All) and
+;          `calr 0xfadcc3` (Voice_RestagePitchReg0400_ForList) in the same order at the
+;          same offsets.
+; Refused: it inherits sub_FADB0F's gap.  The routine it stores through edits flag bits
+;          11..15 of 0x0014FF, which nothing in the image reads, so "what this applies"
+;          is undefined; and NOTHING REFERENCES THIS ROUTINE -- no literal call, calr or
+;          jp, and no 24-bit pointer in the 512 KiB image.  GlobalSetup_Dispatch has no
+;          arm for it.  It is reached, if at all, through a register.
 ; --------------------------------------------------------------------------
 sub_FB0285:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB0285  link XIZ,0x0000
@@ -61427,225 +61711,248 @@ sub_FB029E__FB031D:
 	unlk32 xiz                                 ; FB0335  unlk XIZ
 	ret                                        ; FB0337  ret
 ; --------------------------------------------------------------------------
-; sub_FB0338 -- 0xFB0338..0xFB0503 (460 bytes)
+; GlobalSetup_Dispatch -- 0xFB0338..0xFB0503 (460 bytes)
+;             the status-0xF0 arm of the internal message protocol -- 27 codes, each
+;             writing one field of the GLOBAL SETUP record at RAM 0x0014FE.
+;             (* NAMED in wave 7 round 3; was `sub_FB0338`.)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB09E6 in MidiIn_ParseRingAndDispatch__FB0992
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFADA7C = sub_FADA7C, 0xFADAB1 = sub_FADAB1
-;          0xFADACA = sub_FADACA, 0xFADAFC = sub_FADAFC
-;          0xFADB0F = sub_FADB0F, 0xFADB70 = sub_FADB70
-;          0xFADB7E = sub_FADB7E, 0xFADBEE = sub_FADBEE
-;          0xFADBFC = sub_FADBFC, 0xFADC1F = sub_FADC1F
-;          0xFADC3E = sub_FADC3E, 0xFADC4C = sub_FADC4C
-;          0xFADC6F = sub_FADC6F, 0xFB0200 = Dev10C_QuiesceListedChans_0800_0840
-;          0xFB026C = sub_FB026C, 0xFB029E = sub_FB029E
+; Calls:   0xFADA7C = sub_FADA7C, 0xFADAB1 = P7Mixer_SetGainIndex1
+;          0xFADACA = P7Mixer_SetGainIndex2, 0xFADAFC = GlobalTune_StoreTranspose
+;          0xFADB0F = sub_FADB0F, 0xFADB70 = GlobalScale_StoreMode
+;          0xFADB7E = VoiceDefaults_StoreFromPackedByte, 0xFADBEE = sub_FADBEE
+;          0xFADBFC = sub_FADBFC, 0xFADC1F = GlobalScale_StorePitchClassDetune
+;          0xFADC3E = sub_FADC3E, 0xFADC4C = GlobalScale_SelectGlobalOrPerTone
+;          0xFADC6F = Dev10C_SetReg0201_FromNibblePair, 0xFB0200 = Dev10C_QuiesceListedChans_0800_0840
+;          0xFB026C = GlobalTune_SetFineTune_AndRestageAll, 0xFB029E = sub_FB029E
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB0338-0xFB0503
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:    this is the handler MidiIn_ParseRingAndDispatch reaches for status nibble
+;          0xF0 (`cp BC,0x00f0` at 0xFB0678 selecting 0xFB0992, which pushes the packet
+;          address 0x00D7E9 and calls 0xFB0338 at 0xFB09E6).  It selects on packet byte
+;          [2] through 27 `cp BC,imm / jrl Z` arms running 0xFB0345..0xFB03FF -- the
+;          FIRST code is 0x09 and the LAST is 0xB2 -- and hands packet byte [3],
+;          `ld C,(XIX+0x03)`, to the arm's setter.
+; Evidence: that the record it writes is GLOBAL and not per-part is measured over the
+;          whole 460-byte body, three independent ways: there is NO read of (XIX+0x01),
+;          the byte every other four-byte status uses as its PART index; there is NO
+;          `mul BC,0x012c`, the part-record stride; and every setter it calls writes a
+;          fixed absolute address inside 0x0014FE..0x001522 -- the 37 bytes that end
+;          exactly where the part records begin, at 0x001523.
+;          The twelve arms 0xA4..0xAF all call ONE setter and differ only in the
+;          immediate they push first, 0x0000 at 0xFB0479 through 0x000B at 0xFB04DD.
+;          Reproduced, with the last arm asserted, by
+;          `python3 notes/prom_c_inventory_round8.py --dispatch`.
+; Unknown:  what CPU 1 calls each of the 27 codes.  These packets arrive over link
+;          channel 0 (Link_Ch0_AppendToRing -> the ring at 0x00E2F1 -> MAIN's
+;          `lda XBC,0x00E2EB / call 0xFB060A` at 0xF98CA4), so the panel's own names for
+;          these parameters are in prom_a; a scan of prom_a's converted text for a
+;          builder that emits a 0xF0 status together with three or more of these codes
+;          found none, so the naming lever is in prom_a's unconverted bytes.
 ; --------------------------------------------------------------------------
-sub_FB0338:
+GlobalSetup_Dispatch:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB0338  link XIZ,0x0000
 	push	xix                                   ; FB033C  push XIX
 	ld	xix, (xiz+8)                            ; FB033D  ld XIX,(XIZ+0x08)
 	ld	c, (xix+2)                              ; FB0340  ld C,(XIX+0x02)
 	extz	bc                                    ; FB0343  extz BC
 	cp	bc, 9                                   ; FB0345  cp BC,0x0009
-	jrl z, sub_FB0338__FB0405                  ; FB0349  jrl Z,0xfb0405
+	jrl z, GlobalSetup_Dispatch__FB0405                  ; FB0349  jrl Z,0xfb0405
 	cp	bc, 0x80                                ; FB034C  cp BC,0x0080
-	jrl z, sub_FB0338__FB040F                  ; FB0350  jrl Z,0xfb040f
+	jrl z, GlobalSetup_Dispatch__FB040F                  ; FB0350  jrl Z,0xfb040f
 	cp	bc, 0x81                                ; FB0353  cp BC,0x0081
-	jrl z, sub_FB0338__FB0419                  ; FB0357  jrl Z,0xfb0419
+	jrl z, GlobalSetup_Dispatch__FB0419                  ; FB0357  jrl Z,0xfb0419
 	cp	bc, 0x82                                ; FB035A  cp BC,0x0082
-	jrl z, sub_FB0338__FB0423                  ; FB035E  jrl Z,0xfb0423
+	jrl z, GlobalSetup_Dispatch__FB0423                  ; FB035E  jrl Z,0xfb0423
 	cp	bc, 0x83                                ; FB0361  cp BC,0x0083
-	jrl z, sub_FB0338__FB042D                  ; FB0365  jrl Z,0xfb042d
+	jrl z, GlobalSetup_Dispatch__FB042D                  ; FB0365  jrl Z,0xfb042d
 	cp	bc, 0x85                                ; FB0368  cp BC,0x0085
-	jrl z, sub_FB0338__FB0437                  ; FB036C  jrl Z,0xfb0437
+	jrl z, GlobalSetup_Dispatch__FB0437                  ; FB036C  jrl Z,0xfb0437
 	cp	bc, 0x86                                ; FB036F  cp BC,0x0086
-	jrl z, sub_FB0338__FB0441                  ; FB0373  jrl Z,0xfb0441
+	jrl z, GlobalSetup_Dispatch__FB0441                  ; FB0373  jrl Z,0xfb0441
 	cp	bc, 0x87                                ; FB0376  cp BC,0x0087
-	jrl z, sub_FB0338__FB044B                  ; FB037A  jrl Z,0xfb044b
+	jrl z, GlobalSetup_Dispatch__FB044B                  ; FB037A  jrl Z,0xfb044b
 	cp	bc, 0x91                                ; FB037D  cp BC,0x0091
-	jrl z, sub_FB0338__FB0455                  ; FB0381  jrl Z,0xfb0455
+	jrl z, GlobalSetup_Dispatch__FB0455                  ; FB0381  jrl Z,0xfb0455
 	cp	bc, 0x92                                ; FB0384  cp BC,0x0092
-	jrl z, sub_FB0338__FB045F                  ; FB0388  jrl Z,0xfb045f
+	jrl z, GlobalSetup_Dispatch__FB045F                  ; FB0388  jrl Z,0xfb045f
 	cp	bc, 0x99                                ; FB038B  cp BC,0x0099
-	jrl z, sub_FB0338__FB0465                  ; FB038F  jrl Z,0xfb0465
+	jrl z, GlobalSetup_Dispatch__FB0465                  ; FB038F  jrl Z,0xfb0465
 	cp	bc, 0xA3                                ; FB0392  cp BC,0x00a3
-	jrl z, sub_FB0338__FB046F                  ; FB0396  jrl Z,0xfb046f
+	jrl z, GlobalSetup_Dispatch__FB046F                  ; FB0396  jrl Z,0xfb046f
 	cp	bc, 0xA4                                ; FB0399  cp BC,0x00a4
-	jrl z, sub_FB0338__FB0475                  ; FB039D  jrl Z,0xfb0475
+	jrl z, GlobalSetup_Dispatch__FB0475                  ; FB039D  jrl Z,0xfb0475
 	cp	bc, 0xA5                                ; FB03A0  cp BC,0x00a5
-	jrl z, sub_FB0338__FB047F                  ; FB03A4  jrl Z,0xfb047f
+	jrl z, GlobalSetup_Dispatch__FB047F                  ; FB03A4  jrl Z,0xfb047f
 	cp	bc, 0xA6                                ; FB03A7  cp BC,0x00a6
-	jrl z, sub_FB0338__FB0488                  ; FB03AB  jrl Z,0xfb0488
+	jrl z, GlobalSetup_Dispatch__FB0488                  ; FB03AB  jrl Z,0xfb0488
 	cp	bc, 0xA7                                ; FB03AE  cp BC,0x00a7
-	jrl z, sub_FB0338__FB0491                  ; FB03B2  jrl Z,0xfb0491
+	jrl z, GlobalSetup_Dispatch__FB0491                  ; FB03B2  jrl Z,0xfb0491
 	cp	bc, 0xA8                                ; FB03B5  cp BC,0x00a8
-	jrl z, sub_FB0338__FB049A                  ; FB03B9  jrl Z,0xfb049a
+	jrl z, GlobalSetup_Dispatch__FB049A                  ; FB03B9  jrl Z,0xfb049a
 	cp	bc, 0xA9                                ; FB03BC  cp BC,0x00a9
-	jrl z, sub_FB0338__FB04A3                  ; FB03C0  jrl Z,0xfb04a3
+	jrl z, GlobalSetup_Dispatch__FB04A3                  ; FB03C0  jrl Z,0xfb04a3
 	cp	bc, 0xAA                                ; FB03C3  cp BC,0x00aa
-	jrl z, sub_FB0338__FB04AC                  ; FB03C7  jrl Z,0xfb04ac
+	jrl z, GlobalSetup_Dispatch__FB04AC                  ; FB03C7  jrl Z,0xfb04ac
 	cp	bc, 0xAB                                ; FB03CA  cp BC,0x00ab
-	jrl z, sub_FB0338__FB04B5                  ; FB03CE  jrl Z,0xfb04b5
+	jrl z, GlobalSetup_Dispatch__FB04B5                  ; FB03CE  jrl Z,0xfb04b5
 	cp	bc, 0xAC                                ; FB03D1  cp BC,0x00ac
-	jrl z, sub_FB0338__FB04BE                  ; FB03D5  jrl Z,0xfb04be
+	jrl z, GlobalSetup_Dispatch__FB04BE                  ; FB03D5  jrl Z,0xfb04be
 	cp	bc, 0xAD                                ; FB03D8  cp BC,0x00ad
-	jrl z, sub_FB0338__FB04C7                  ; FB03DC  jrl Z,0xfb04c7
+	jrl z, GlobalSetup_Dispatch__FB04C7                  ; FB03DC  jrl Z,0xfb04c7
 	cp	bc, 0xAE                                ; FB03DF  cp BC,0x00ae
-	jrl z, sub_FB0338__FB04D0                  ; FB03E3  jrl Z,0xfb04d0
+	jrl z, GlobalSetup_Dispatch__FB04D0                  ; FB03E3  jrl Z,0xfb04d0
 	cp	bc, 0xAF                                ; FB03E6  cp BC,0x00af
-	jrl z, sub_FB0338__FB04D9                  ; FB03EA  jrl Z,0xfb04d9
+	jrl z, GlobalSetup_Dispatch__FB04D9                  ; FB03EA  jrl Z,0xfb04d9
 	cp	bc, 0xB0                                ; FB03ED  cp BC,0x00b0
-	jrl z, sub_FB0338__FB04E6                  ; FB03F1  jrl Z,0xfb04e6
+	jrl z, GlobalSetup_Dispatch__FB04E6                  ; FB03F1  jrl Z,0xfb04e6
 	cp	bc, 0xB1                                ; FB03F4  cp BC,0x00b1
-	jrl z, sub_FB0338__FB04EF                  ; FB03F8  jrl Z,0xfb04ef
+	jrl z, GlobalSetup_Dispatch__FB04EF                  ; FB03F8  jrl Z,0xfb04ef
 	cp	bc, 0xB2                                ; FB03FB  cp BC,0x00b2
-	jrl z, sub_FB0338__FB04F8                  ; FB03FF  jrl Z,0xfb04f8
-	jrl sub_FB0338__FB0500                     ; FB0402  jrl T,0xfb0500
-sub_FB0338__FB0405:
+	jrl z, GlobalSetup_Dispatch__FB04F8                  ; FB03FF  jrl Z,0xfb04f8
+	jrl GlobalSetup_Dispatch__FB0500                     ; FB0402  jrl T,0xfb0500
+GlobalSetup_Dispatch__FB0405:
 	ld	c, (xix+3)                              ; FB0405  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0408  push BC
 	calr (0xFADA7C - 0xFB040C)                 ; FB0409  calr 0xfada7c
-	jrl sub_FB0338__FB04FF                     ; FB040C  jrl T,0xfb04ff
-sub_FB0338__FB040F:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB040C  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB040F:
 	ld	c, (xix+3)                              ; FB040F  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0412  push BC
 	calr (0xFADAB1 - 0xFB0416)                 ; FB0413  calr 0xfadab1
-	jrl sub_FB0338__FB04FF                     ; FB0416  jrl T,0xfb04ff
-sub_FB0338__FB0419:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB0416  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB0419:
 	ld	c, (xix+3)                              ; FB0419  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB041C  push BC
 	calr (0xFADACA - 0xFB0420)                 ; FB041D  calr 0xfadaca
-	jrl sub_FB0338__FB04FF                     ; FB0420  jrl T,0xfb04ff
-sub_FB0338__FB0423:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB0420  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB0423:
 	ld	c, (xix+3)                              ; FB0423  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0426  push BC
 	calr (0xFB026C - 0xFB042A)                 ; FB0427  calr 0xfb026c
-	jrl sub_FB0338__FB04FF                     ; FB042A  jrl T,0xfb04ff
-sub_FB0338__FB042D:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB042A  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB042D:
 	ld	c, (xix+3)                              ; FB042D  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0430  push BC
 	calr (0xFADAFC - 0xFB0434)                 ; FB0431  calr 0xfadafc
-	jrl sub_FB0338__FB04FF                     ; FB0434  jrl T,0xfb04ff
-sub_FB0338__FB0437:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB0434  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB0437:
 	ld	c, (xix+3)                              ; FB0437  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB043A  push BC
 	calr (0xFADB0F - 0xFB043E)                 ; FB043B  calr 0xfadb0f
-	jrl sub_FB0338__FB04FF                     ; FB043E  jrl T,0xfb04ff
-sub_FB0338__FB0441:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB043E  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB0441:
 	ld	c, (xix+3)                              ; FB0441  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0444  push BC
 	calr (0xFADB70 - 0xFB0448)                 ; FB0445  calr 0xfadb70
-	jrl sub_FB0338__FB04FF                     ; FB0448  jrl T,0xfb04ff
-sub_FB0338__FB044B:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB0448  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB044B:
 	ld	c, (xix+3)                              ; FB044B  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB044E  push BC
 	calr (0xFADB7E - 0xFB0452)                 ; FB044F  calr 0xfadb7e
-	jrl sub_FB0338__FB04FF                     ; FB0452  jrl T,0xfb04ff
-sub_FB0338__FB0455:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB0452  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB0455:
 	ld	c, (xix+3)                              ; FB0455  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0458  push BC
 	calr (0xFADBEE - 0xFB045C)                 ; FB0459  calr 0xfadbee
-	jrl sub_FB0338__FB04FF                     ; FB045C  jrl T,0xfb04ff
-sub_FB0338__FB045F:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB045C  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB045F:
 	calr (0xFB029E - 0xFB0462)                 ; FB045F  calr 0xfb029e
-	jrl sub_FB0338__FB0500                     ; FB0462  jrl T,0xfb0500
-sub_FB0338__FB0465:
+	jrl GlobalSetup_Dispatch__FB0500                     ; FB0462  jrl T,0xfb0500
+GlobalSetup_Dispatch__FB0465:
 	ld	c, (xix+3)                              ; FB0465  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0468  push BC
 	calr (0xFADBFC - 0xFB046C)                 ; FB0469  calr 0xfadbfc
-	jrl sub_FB0338__FB04FF                     ; FB046C  jrl T,0xfb04ff
-sub_FB0338__FB046F:
+	jrl GlobalSetup_Dispatch__FB04FF                     ; FB046C  jrl T,0xfb04ff
+GlobalSetup_Dispatch__FB046F:
 	calr (0xFB0200 - 0xFB0472)                 ; FB046F  calr 0xfb0200
-	jrl sub_FB0338__FB0500                     ; FB0472  jrl T,0xfb0500
-sub_FB0338__FB0475:
+	jrl GlobalSetup_Dispatch__FB0500                     ; FB0472  jrl T,0xfb0500
+GlobalSetup_Dispatch__FB0475:
 	ld	c, (xix+3)                              ; FB0475  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0478  push BC
 	pushw	0                                    ; FB0479  push 0x0000
-	jrl sub_FB0338__FB04E0                     ; FB047C  jrl T,0xfb04e0
-sub_FB0338__FB047F:
+	jrl GlobalSetup_Dispatch__FB04E0                     ; FB047C  jrl T,0xfb04e0
+GlobalSetup_Dispatch__FB047F:
 	ld	c, (xix+3)                              ; FB047F  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0482  push BC
 	pushw	1                                    ; FB0483  push 0x0001
-	jr sub_FB0338__FB04E0                      ; FB0486  jr T,0xfb04e0
-sub_FB0338__FB0488:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB0486  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB0488:
 	ld	c, (xix+3)                              ; FB0488  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB048B  push BC
 	pushw	2                                    ; FB048C  push 0x0002
-	jr sub_FB0338__FB04E0                      ; FB048F  jr T,0xfb04e0
-sub_FB0338__FB0491:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB048F  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB0491:
 	ld	c, (xix+3)                              ; FB0491  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB0494  push BC
 	pushw	3                                    ; FB0495  push 0x0003
-	jr sub_FB0338__FB04E0                      ; FB0498  jr T,0xfb04e0
-sub_FB0338__FB049A:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB0498  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB049A:
 	ld	c, (xix+3)                              ; FB049A  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB049D  push BC
 	pushw	4                                    ; FB049E  push 0x0004
-	jr sub_FB0338__FB04E0                      ; FB04A1  jr T,0xfb04e0
-sub_FB0338__FB04A3:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB04A1  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB04A3:
 	ld	c, (xix+3)                              ; FB04A3  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04A6  push BC
 	pushw	5                                    ; FB04A7  push 0x0005
-	jr sub_FB0338__FB04E0                      ; FB04AA  jr T,0xfb04e0
-sub_FB0338__FB04AC:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB04AA  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB04AC:
 	ld	c, (xix+3)                              ; FB04AC  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04AF  push BC
 	pushw	6                                    ; FB04B0  push 0x0006
-	jr sub_FB0338__FB04E0                      ; FB04B3  jr T,0xfb04e0
-sub_FB0338__FB04B5:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB04B3  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB04B5:
 	ld	c, (xix+3)                              ; FB04B5  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04B8  push BC
 	pushw	7                                    ; FB04B9  push 0x0007
-	jr sub_FB0338__FB04E0                      ; FB04BC  jr T,0xfb04e0
-sub_FB0338__FB04BE:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB04BC  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB04BE:
 	ld	c, (xix+3)                              ; FB04BE  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04C1  push BC
 	pushw	8                                    ; FB04C2  push 0x0008
-	jr sub_FB0338__FB04E0                      ; FB04C5  jr T,0xfb04e0
-sub_FB0338__FB04C7:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB04C5  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB04C7:
 	ld	c, (xix+3)                              ; FB04C7  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04CA  push BC
 	pushw	9                                    ; FB04CB  push 0x0009
-	jr sub_FB0338__FB04E0                      ; FB04CE  jr T,0xfb04e0
-sub_FB0338__FB04D0:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB04CE  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB04D0:
 	ld	c, (xix+3)                              ; FB04D0  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04D3  push BC
 	pushw	10                                   ; FB04D4  push 0x000a
-	jr sub_FB0338__FB04E0                      ; FB04D7  jr T,0xfb04e0
-sub_FB0338__FB04D9:
+	jr GlobalSetup_Dispatch__FB04E0                      ; FB04D7  jr T,0xfb04e0
+GlobalSetup_Dispatch__FB04D9:
 	ld	c, (xix+3)                              ; FB04D9  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04DC  push BC
 	pushw	11                                   ; FB04DD  push 0x000b
-sub_FB0338__FB04E0:
+GlobalSetup_Dispatch__FB04E0:
 	calr (0xFADC1F - 0xFB04E3)                 ; FB04E0  calr 0xfadc1f
 	pop	xiy                                    ; FB04E3  pop XIY
-	jr sub_FB0338__FB0500                      ; FB04E4  jr T,0xfb0500
-sub_FB0338__FB04E6:
+	jr GlobalSetup_Dispatch__FB0500                      ; FB04E4  jr T,0xfb0500
+GlobalSetup_Dispatch__FB04E6:
 	ld	c, (xix+3)                              ; FB04E6  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04E9  push BC
 	calr (0xFADC3E - 0xFB04ED)                 ; FB04EA  calr 0xfadc3e
-	jr sub_FB0338__FB04FF                      ; FB04ED  jr T,0xfb04ff
-sub_FB0338__FB04EF:
+	jr GlobalSetup_Dispatch__FB04FF                      ; FB04ED  jr T,0xfb04ff
+GlobalSetup_Dispatch__FB04EF:
 	ld	c, (xix+3)                              ; FB04EF  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04F2  push BC
 	calr (0xFADC4C - 0xFB04F6)                 ; FB04F3  calr 0xfadc4c
-	jr sub_FB0338__FB04FF                      ; FB04F6  jr T,0xfb04ff
-sub_FB0338__FB04F8:
+	jr GlobalSetup_Dispatch__FB04FF                      ; FB04F6  jr T,0xfb04ff
+GlobalSetup_Dispatch__FB04F8:
 	ld	c, (xix+3)                              ; FB04F8  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB04FB  push BC
 	calr (0xFADC6F - 0xFB04FF)                 ; FB04FC  calr 0xfadc6f
-sub_FB0338__FB04FF:
+GlobalSetup_Dispatch__FB04FF:
 	popw	bc                                    ; FB04FF  pop BC
-sub_FB0338__FB0500:
+GlobalSetup_Dispatch__FB0500:
 	pop	xix                                    ; FB0500  pop XIX
 	unlk32 xiz                                 ; FB0501  unlk XIZ
 	ret                                        ; FB0503  ret
@@ -84660,7 +84967,7 @@ sub_FBC31B__FBC398:
 ;          0xFC2677 0xFC2685 0xFC26C4 0xFC26D2
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFADCC3 = sub_FADCC3, 0xFADDC8 = sub_FADDC8
+; Calls:   0xFADCC3 = Voice_RestagePitchReg0400_ForList, 0xFADDC8 = sub_FADDC8
 ;          0xFADEAC = sub_FADEAC, 0xFB3C8B = VoiceQuery_Tag40_Part
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part, 0xFB4D45 = sub_FB4D45
 ;          0xFB501F = sub_FB501F, 0xFB5103 = sub_FB5103
