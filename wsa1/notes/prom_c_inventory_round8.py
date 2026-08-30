@@ -334,6 +334,7 @@ ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 # reads and writes, so `--selftest` died with NameError: S_A before reaching a
 # single round-10 check.  The section itself is fine; only the constant was
 # missing.  Reproduce the old failure by commenting the next line out.
+S_A_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path
 S_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
 BASE = 0xF80000
 
@@ -2651,7 +2652,9 @@ def apply11():
     cites = citation_defects()
     pairs = sorted(set(("0x%06X" % c[1], "0x%06X" % c[2]) for c in cites))
     n_c = 0
-    for path in (SRC, os.path.join(ROOT, "notes", "gen_prom_c_tables.py")):
+    # ⚠ SRC_MASTER, not SRC: SRC is the EXPANSION (a derived cache file) since
+    # the migration, and writing citations into it would correct nothing.
+    for path in (SRC_MASTER, os.path.join(ROOT, "notes", "gen_prom_c_tables.py")):
         lines = open(path, encoding="utf-8", errors="replace").read().split("\n")
         for i, ln in enumerate(lines):
             if "Referenc" not in ln:
@@ -2663,7 +2666,7 @@ def apply11():
             if new != ln:
                 lines[i] = new
                 n_c += 1
-        write_part(path_MASTER, "\n".join(lines))
+        write_part(path, "\n".join(lines))
     print("  citations: %d defects, %d lines rewritten across the listing and the "
           "generator" % (len(cites), n_c))
 

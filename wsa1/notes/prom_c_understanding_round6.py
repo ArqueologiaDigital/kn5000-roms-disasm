@@ -1536,7 +1536,9 @@ def do_apply(check_only=False):
         for old, new, _ev in RENAMES:
             t = rename_token(t, old, new)
         if t != orig:
-            write_part(p_MASTER, t)
+            # ⚠ a committed SCRIPT, not a listing: a plain write, and the
+            # migration should never have touched it.
+            open(p, "w", encoding="utf-8").write(t)
             moved += 1
             print("  patched %s" % rel)
     if todo or moved:

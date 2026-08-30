@@ -190,6 +190,10 @@ sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path, write_part  # noqa: E402
 ARGV = list(sys.argv)
 A_BASE, B_BASE = 0xF80000, 0xF00000
+# ⚠ THE WRITE PATH, kept separate from SRC.  --apply splices prose into prom_a's
+# listing; SRC is (or will become) the resolved IMAGE, which is a derived file.
+SRC_MASTER = {k: os.path.join(ROOT, "prom_%s" % k, "wsa1_prom_%s.s" % k)
+              for k in "abcd"}
 SRC = {"a": os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"),
        "b": os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"),
        "c": os.path.join(ROOT, "prom_c", "wsa1_prom_c.s"),
@@ -1989,7 +1993,7 @@ def apply():
         out.append(ln)
     if hdr:
         sys.exit("REFUSING TO APPLY: no label found for %s" % ", ".join(sorted(hdr)))
-    write_part(src_a_MASTER, "\n".join(out))
+    write_part(SRC_MASTER["a"], "\n".join(out))
     print("%d prose corrections applied elsewhere in prom_a" % fixed)
     print("%d labels renamed (%d textual references), %d new labels inserted"
           % (len(ren), nref, len(ins)))

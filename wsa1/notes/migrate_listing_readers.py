@@ -385,14 +385,26 @@ ASSIGN = ('%s_MASTER = os.path.join(ROOT, "%s")%s'
 
 
 def writers_rewrite(text):
-    names = writer_names(text)
+    # ⚠ ONLY names that can hold the LISTING.  Taking every write target turned
+    # `open(s, "w")` on a TEMP FILE into `write_part(s_MASTER, ...)` -- a name
+    # that does not exist.  It compiled perfectly and would have raised
+    # NameError in three tools the moment they assembled a fragment.
+    ms = list(SITE.finditer(text)) + fmt_sites(text)
+    names = writer_names(text) & listing_aliases(text, ms)
     if not names:
         return text
     new = text
+    split = set()
     for m in list(SITE.finditer(new)):
         v = assigned_name(new, m)
         if v is None or v not in names:
             continue
+        if v.endswith("_MASTER"):
+            # ★ already split by an earlier run.  Splitting it again makes
+            #   SRC_MASTER_MASTER hold the file and points SRC_MASTER -- which
+            #   every write in the file now names -- at the EXPANSION.
+            continue
+        split.add(v)
         img = site_image(m)
         line_start = new.rfind("\n", 0, m.start()) + 1
         line_end = new.find("\n", m.end())
@@ -408,10 +420,15 @@ def writers_rewrite(text):
                  '  # the READ path: the image, not the master')
                 % (v, img, v, img))
         new = new[:line_start] + repl + new[line_end:]
-    for v in sorted(names):
+    # ⚠ ONLY the names a _MASTER was actually DEFINED for.  The first version
+    # rewrote every name in `names`, including ones assigned from a computed
+    # path or a dict subscript, and produced `write_part(S_A_MASTER, ...)` with
+    # no S_A_MASTER anywhere -- a clean compile and a NameError on the first run
+    # of --apply, in four committed files.
+    for v in sorted(split):
         new = re.sub(r'open\(\s*%s\s*,\s*["\']w["\'][^)]*\)\.write\(' % re.escape(v),
                      'write_part(%s_MASTER, ' % v, new)
-    if new == text:
+    if not split or new == text:
         return text
     if "from asm_source import image_path, write_part" not in new:
         ins = ('sys.path.insert(0, os.path.join(ROOT, "notes"))\n'
@@ -628,6 +645,20 @@ def selftest():
     compile(wo, "<writers>", "exec")
     check(writers_rewrite('SRC = 1\n') == 'SRC = 1\n',
           "writers: a file that writes nothing is untouched")
+    tmpw = w.replace('open(SRC, "w", encoding="utf-8").write(text)',
+                     'tmp = "/tmp/t.s"\nopen(tmp, "w").write(text)')
+    check("tmp_MASTER" not in writers_rewrite(tmpw),
+          "writers: a TEMP file's write is left alone -- it cannot hold a listing")
+    noassign = ('import os\nimport sys\n'
+                'ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n'
+                'SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")\n'
+                'S_A = SRC\n'
+                'open(S_A, "w").write("x")\n')
+    check("S_A_MASTER" not in writers_rewrite(noassign),
+          "writers: a name with no site of its own never gets a bare _MASTER")
+    once = writers_rewrite(w)
+    check(writers_rewrite(once) == once,
+          "writers: a second run is idempotent -- no SRC_MASTER_MASTER")
 
     # a file with no site is left completely alone
     check(rewrite_text("print(1)\n") == "print(1)\n",
