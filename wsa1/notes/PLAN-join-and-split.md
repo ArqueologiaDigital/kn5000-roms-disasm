@@ -219,3 +219,113 @@ the whole premise of aligning the two trees.
 ⚠ **What does not change:** neither tree's gate may go red, neither tree's existing comments and
 semantic labels may be overwritten, and a name still does not transfer without a byte diff and a
 differing count.
+
+---
+
+## 9. AMENDMENT 2: four constraints from review, three of them measured before answering
+
+### 9.1 ⚠ DO NOT FLATTEN KN5000 — and the work is SYMMETRIC, not one-way
+
+Accepted without reservation, and the measurement makes it sharper than a rule about my behaviour:
+**KN5000 is not uniformly split either.** It has 511 `.s` files and 36.2 MB, which sounds finished,
+but two of them are monoliths:
+
+    1,394 KB   v142/subcpu/kn5000_subprogram_v142.s     <- subcpu core, INLINE
+    1,256 KB   subcpu/boot/kn5000_subcpu_boot.s
+    1,451 KB   table_data/style_records.s               (data, legitimately one file)
+
+Its subcpu splits out only `subcpu_vectors.s`, `subcpu_data_tables.s` and `subcpu_fp_math.s`; the
+whole core -- RESET, main loop, voice management, tone generation, DSP protocol -- sits inline in
+the top-level file. Its maincpu trees are better split (`sequencer/accompaniment_engine.s`,
+`sequencer/sequencer_engine.s`).
+
+**So "split into dedicated per-subject files" is a job on BOTH trees**, and KN5000's subcpu core
+needs the same treatment WSA1's does: `subcpu_dsp.s`, `subcpu_voice.s`, `subcpu_tonegen.s`,
+`subcpu_main.s`. Flattening is not a risk I am guarding against — splitting KN5000 further is part
+of the deliverable.
+
+### 9.2 ★★ THE SHARED KERNEL GETS ONE SOURCE, AND IT GOES FIRST
+
+Accepted, and it should go first for a reason the data makes plain.
+`python3 notes/prom_c_kernel_map.py --pairs`:
+
+    routine                          slots   same  operand   STRUCTURAL
+    Kernel_ResumeTask                    9      9        0        0
+    Kernel_StartTask                    45     40        5        0
+    Kernel_YieldRotate                  33     30        3        0
+    Kernel_ServiceSoftTimers            28     23        5        0
+    IRQ_Epilogue                        20     18        2        0
+    Kernel_InitRam                      84     51       31        2
+    ...
+
+★ **35 of the 36 pairs have ZERO structural differences.** Every difference outside `Kernel_InitRam`
+is an OPERAND -- overwhelmingly a peripheral base, the same substitution the tree already documented
+when it found a routine 80 of 81 bytes identical to the KN5000's where the single differing byte was
+the peripheral base.
+
+That is exactly the shape `.if/.else/.endif` is for, and it is the right first move:
+
+    kernel/kernel.s          one source, assembled twice
+    kernel/kernel_maincpu.inc   .equ CPU_MAINCPU, 1   + this CPU's peripheral bases
+    kernel/kernel_subcpu.inc    .equ CPU_SUBCPU, 1    + its bases
+
+⚠ **The byte gate makes this honest in a way prose never could.** If the conditionals are wrong by
+one byte, both images stop rebuilding. A shared kernel source that assembles to the SAME BYTES in
+both CPUs is proof the sharing is real -- not a claim that two listings look alike.
+⚠ `Kernel_InitRam` has the only 2 structural differences, both inside an 8-byte inline data block.
+It gets the conditional treatment or stays duplicated, whichever the gate accepts; it does not get
+forced.
+
+### 9.3 Is the kernel ALSO in KN5000? MEASURED, AND THE ANSWER IS "NOT YET KNOWN"
+
+I tested it rather than assume, and the test is **underpowered** -- which I would rather report than
+dress up. `notes/kernel_three_way.py` takes each kernel routine's bytes straight from prom_c and
+searches all 41 KN5000 images for that exact run:
+
+    0 kernel routines found in a KN5000 image, 5 not found, 32 TOO SHORT TO COUNT (<24 B)
+
+**Only five routines were long enough to be evidence**, so "0 of 5" is not a negative result about
+the machine. The instrument itself is sound -- its negative control (a synthetic 32-byte run) is
+absent from all 41 images and its positive control (the already-measured shared run at `0xFDE32B`)
+is FOUND -- so a miss would mean something if the sample were bigger.
+
+**First job, before any renaming:** redo this against `prom_c_kernel_map.py`'s actual pair extents
+rather than my label heuristic, and allow structural matching (same mnemonic sequence, different
+operands) rather than byte-identity alone -- because §9.2 shows the differences between two WSA1
+CPUs are already operand-only, so a third processor would differ at least that much.
+**If it lands, one kernel source serves three processors across two instruments and it is the
+strongest possible starting point. If it does not, we know, and the two trees converge elsewhere.**
+
+### 9.4 Would "full disassembly before semantics" work on KN5000? YES, and I would make it a prerequisite
+
+    11,143 .incbin directives across 130 KN5000 source files
+
+So the same question that reframed the WSA1 work applies with force: **how many of those bytes are
+reachable code, and how many are data?** On WSA1 the answer was 16.4%, which turned a 107,371-byte
+job into a 17,558-byte one and stopped two rounds from converting data that nothing executes.
+
+`notes/reachability.py` should port with modest work:
+
+* Both machines are TLCS-900 (WSA1 TMP95C061, KN5000 TMP94C241), so `unidasm -arch tlcs900` is the
+  decode authority for both -- the KN5000 tree already ships `.unidasm` files.
+* ⚠ Its `IMAGES`/`CPU1`/`CPU2` tables and the routine-directory scan are WSA1-specific and must be
+  re-derived, not copied. The KN5000 has its own indirection structures.
+* ⚠ Its source-line regex already had to learn that prom_a and prom_b write different line shapes;
+  KN5000 will be a third. That bug emptied three of five seed classes for prom_b, so it is the
+  first thing to check, not the last.
+
+**Recommendation: make this P-1, ahead of the join.** Splitting a tree into per-subject files while
+11,143 `.incbin` directives remain means every future conversion lands in a file chosen before
+anyone knew what the bytes were. Getting KN5000's reachable code converted first makes the split
+durable -- and the same tool then reports both trees' coverage in one number.
+
+### 9.5 Revised phase order
+
+    P-1  port reachability.py to KN5000; report its reachable-vs-data split       (new, first)
+    P0   prove one source can emit two byte-exact images                           (unchanged)
+    P0.5 the three-way kernel test, done properly                                  (new)
+    P1   ★ ONE SHARED KERNEL SOURCE for WSA1 maincpu+subcpu, .if/.else, gate green (promoted)
+    P2   join maincpu; subcpu = prom_c; prom_d separate
+    P3   split BOTH trees into per-subject files -- including KN5000's two monoliths
+    P4   name transfer, bidirectional, every name with its byte diff
+    P5   reconcile the disagreements both trees already record
