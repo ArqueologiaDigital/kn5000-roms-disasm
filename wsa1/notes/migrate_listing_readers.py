@@ -62,6 +62,7 @@ RUN
   only the three-tree comparison does.
 """
 import argparse
+import concurrent.futures
 import os
 import re
 import subprocess
@@ -461,30 +462,35 @@ def writers(only=None, quiet=False):
     return 0
 
 
-def smoke(timeout=90):
+def smoke(timeout=90, jobs=6):
     """Run every migrated script once and look for the failure a COMPILE MISSES.
 
     ⚠ THIS EXISTS BECAUSE A CLEAN COMPILE PROVED NOTHING.  Two versions of the
     import placement above compiled perfectly and died at run time -- once with
     ImportError, once with NameError -- in eight files each.
     """
-    bad = []
     scripts = [r for r in committed_py()
                if r not in EXCLUDE
-               and "image_path(ROOT," in open(os.path.join(ROOT, r),
-                                              encoding="utf-8",
-                                              errors="replace").read()]
-    for rel in scripts:
+               and ("image_path(ROOT," in open(os.path.join(ROOT, r),
+                                               encoding="utf-8",
+                                               errors="replace").read()
+                    or "write_part(" in open(os.path.join(ROOT, r),
+                                             encoding="utf-8",
+                                             errors="replace").read())]
+
+    def one(rel):
         try:
             r = subprocess.run([sys.executable, rel], cwd=ROOT, timeout=timeout,
                                stdin=subprocess.DEVNULL, capture_output=True,
                                text=True)
             out = r.stdout + r.stderr
         except subprocess.TimeoutExpired:
-            continue                        # slow is not broken
+            return None                     # slow is not broken
         m = re.search(r'(ImportError|NameError|ModuleNotFoundError)[^\n]*', out)
-        if m:
-            bad.append((rel, m.group(0)[:90]))
+        return (rel, m.group(0)[:90]) if m else None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as ex:
+        bad = [x for x in ex.map(one, scripts) if x]
     for rel, why in bad:
         print("  BROKEN  %-52s %s" % (rel, why))
     print("\n%d migrated script(s) run; %d broken" % (len(scripts), len(bad)))
