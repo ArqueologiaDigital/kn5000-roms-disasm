@@ -19,7 +19,9 @@ The findings, in the order the sections below check them:
   A2  the same note's "18 of the 64 slots have a prom_b caller" is right; the "74 prom_b
       call sites" that goes with it is 72, and no check in the census sums them.
 
-  C1  prom_c/wsa1_prom_c.s:44434 and FINDINGS-prom_c-dev10c-sibling-register-map.md:220 say
+  C1  prom_c 0xFA9C8B (prom_c/voice/voice_parameters.s:4507, was
+      prom_c/wsa1_prom_c.s:44434 before the per-subject split) and
+      FINDINGS-prom_c-dev10c-sibling-register-map.md:220 say
       register 0x0500's high byte is `... + DetuneCurve_LookupSigned(...)`.  The addend at
       0xFA9691 is HL, and HL was loaded from DetuneCurve_LookupUNsigned (0xFA7654) at
       0xFA9654/0xFA966A.  BOTH DetuneCurve_LookupSigned results reach word 15 (register

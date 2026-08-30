@@ -116,7 +116,8 @@ check("...highest LABELLED entry",
 print()
 
 # ---------------------------------------------------------------- 4
-print("4. prom_c/wsa1_prom_c.s:36999 -- ChanRec_Release's second list head")
+print("4. prom_c 0xFA6CE3 (prom_c/voice/voice_leaf_helpers.s:3008, was "
+      "prom_c/wsa1_prom_c.s:36999) -- ChanRec_Release's second list head")
 print("   Instructions read off the GATE-VERIFIED source; operands re-read from the ROM.")
 check("0xFA6557 mnemonic", srcline(0xFA6557, "c"), "ldw\tbc, 0x200")
 check("...its 16-bit operand in the ROM", "0x%04X" % int.from_bytes(c(0xFA6558, 2), "little"), "0x0200")

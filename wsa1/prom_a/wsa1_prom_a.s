@@ -157188,8 +157188,12 @@ RecordNameSource_Select:
 ;          RECORD", and the two are ~33 entries each, so a reader met two "part
 ;          records" of different sizes on different processors with nothing
 ;          saying whether they were the same object.  They are not known to be.
-;          ⚠ prom_c/wsa1_prom_c.s:58817 still cross-references this table under
-;          its OLD name; that file belongs to another lane and was not edited.
+;          ⚠ prom_c still cross-references this table under its OLD name, at
+;          prom_c/midi/midi_controllers.s:6906 (0xFAF87F); that file belongs to
+;          another lane and was not edited.  ⚠ THE CITATION WAS
+;          `prom_c/wsa1_prom_c.s:58817` and pointed nowhere after the
+;          per-subject split moved the body out of that file -- cite the
+;          ADDRESS, which does not move.
 ; ---------------------------------------------------------------------
 RecordPtrs_RAM76A2:
 	.long 0x000076a2                               ; FEB330  [ 0] RAM record 0
