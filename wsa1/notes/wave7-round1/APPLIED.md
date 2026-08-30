@@ -68,3 +68,38 @@ above are exactly the ones nothing has attacked.
 **prom_b is still the frontier**: 159,459 bytes in 124 spans, and the three audited spans
 (`0xF17559`, `0xF4F000`, and a4's `0xF85FF9` in prom_a) are all cleared for conversion but not
 converted. That is round 3's work, and b1 needs its eight corrections applied first.
+
+## Coordinator decision, round 11: the 90 position-named panel proposals are ACCEPTED
+
+Two lanes disagreed and only one reading could be applied, so this is decided here rather than by
+silence.
+
+**Lane X1** proposed 117 names for the panel handlers, of which 90 end in a position number —
+`SoftKeyCol1`…`SoftKeyCol8`, `LcdKeyRow1`…`LcdKeyRow5`. **The prom_b writer lane refused exactly
+those**, calling them round 6's `Write3602_Index5` shape: a name whose distinguishing part is a bare
+number, which grades as content while stating nothing.
+
+**The refusal does not apply here, and the difference is checkable.** Run:
+
+```
+python3 notes/wave7_panel_button_codes.py --physical
+```
+
+The service manual's own legends for those switches are, verbatim:
+
+```
+3.0  SW25  LCD RIGHT 1 (top)      4.0  SW33  SOFT KEY col 1 lower
+3.4  SW29  LCD RIGHT 5 (bottom)   4.1  SW34  SOFT KEY col 1 upper
+```
+
+★ **The number is printed on the instrument.** `Write3602_Index5` named a position in a RAM array
+that nothing outside the code refers to; `LcdKeyRow1` names the key the manual calls "LCD RIGHT 1",
+which a person can point at. A legend that happens to contain a digit is still a legend.
+
+So: **tier B is accepted**, on the condition that each Evidence line cites the manual legend it
+comes from rather than the slot number alone. Tier A (the 27 legend-named `Exit`, `NumberPad`,
+`Page`) was never in dispute and is applied.
+
+⚠ The reasoning, not just the verdict, matters for the next round: the test is **whether the number
+has a referent outside the code**, not whether the name ends in a digit. `SoftKeyCol1` passes;
+`Dispatch_F54248_Arm3` still does not.
