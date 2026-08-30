@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """Is the WSA1's shared kernel ALSO in the KN5000? A three-way byte comparison.
 
+⚠⚠ SUPERSEDED 2026-08-30 by notes/kernel_structural_match.py, and its ANSWER
+    WAS WRONG.  This file's "0 matches" is a true statement about BYTES and a
+    false answer to the question in its own title: the kernel IS in the KN5000,
+    in BOTH of its processors, and every one of its per-CPU constants is a RAM
+    address, so no byte test could ever have seen it.  Do not quote the "0"
+    as absence.  See notes/FINDINGS-kernel-in-the-kn5000.md.
+
 QUESTION IT ANSWERS
     "prom_a and prom_c run the same kernel -- 36 routine pairs, 35 structurally
      identical to the byte. Do those same bytes appear in the KN5000's images?"
