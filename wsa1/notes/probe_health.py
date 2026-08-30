@@ -63,6 +63,16 @@ THE GRADES
     BY-DESIGN      a tool whose SUBJECT is the layout (asm_source, the split
                    probes, this file).  It is meant to differ; see LAYOUT_TOOLS.
 
+★ TWO SHAPES THIS METHOD CANNOT GRADE, both listed separately rather than
+  silently bucketed:
+    GIT-BLIND         reads the listing through `git show <rev>:<primary>`,
+                      which the tree flip cannot reach.  Since the split IS
+                      committed, such a probe is reading a header today.  The
+                      fix is asm_source.image_text_at_rev.
+    WORKING-TREE DIFF compares the tree with HEAD.  This tool works by handing
+                      the probe a different tree, so such a probe MUST differ;
+                      the difference is the measurement, not the probe.
+
 THE FIX, in every case, is notes/asm_source.py -- one reader that resolves an
 image the way llvm-mc does:
 
@@ -192,6 +202,26 @@ def readers(primary):
 # reading a stub today.  They are detected statically and listed separately,
 # because a bucket the instrument is blind to must not be reported as green.
 GIT_READ_RE = re.compile(r'git[^\n]{0,40}show[^\n]{0,40}[:"\']([A-Za-z0-9_/]*%s)')
+
+
+# ★★ AND THE OTHER THING THIS METHOD CANNOT GRADE.  Six review probes compare
+# the WORKING TREE with HEAD -- `git diff -- prom_b/`.  The instrument's whole
+# method is to hand the probe a different working tree, so such a probe MUST
+# report a different diff in each; the difference is caused by the measurement
+# and says nothing about whether the probe reads the image.  They are detected
+# statically and labelled, because a bucket the instrument cannot see into must
+# not be reported as green OR as broken.
+#
+# ⚠ A probe of this shape can only pass in the session that made the edit it
+# measures; once the round is committed the diff is empty.  That is a property
+# of the probe, not of this tool.
+WORKTREE_DIFF_RE = re.compile(r'"git"[^\n]{0,40}"diff"|git\s+diff\b')
+
+
+def worktree_diff(script):
+    txt = open(os.path.join(ROOT, script), encoding="utf-8",
+               errors="replace").read()
+    return bool(WORKTREE_DIFF_RE.search(txt))
 
 
 def git_blind_text(txt, primary):
@@ -516,6 +546,13 @@ def main(argv=None):
                   "python3 notes/migrate_listing_readers.py --list:")
             for s in sorted(set(map(tuple, skipped))):
                 print("      %s" % " ".join(s))
+        wt = sorted({r["argv"][0] for r in rows if r["grade"] not in
+                     ("UNAFFECTED", "BY-DESIGN") and worktree_diff(r["argv"][0])})
+        if wt:
+            print("  ★ WORKING-TREE DIFF -- compares the tree with HEAD, so it MUST "
+                  "differ between trees that differ; not gradable here:")
+            for s in wt:
+                print("      %s" % s)
         blind = [s for s in scripts if git_blind(s, primary)]
         if blind:
             print("  ★ GIT-BLIND -- reads the listing through `git show`, where the "
@@ -523,7 +560,7 @@ def main(argv=None):
             for s in blind:
                 print("      %s" % s)
         report[tag] = {"rows": rows, "skipped": sorted(set(map(tuple, skipped))),
-                       "git_blind": blind}
+                       "git_blind": blind, "worktree_diff": wt}
     if a.json:
         with open(a.json, "w") as fh:
             json.dump(report, fh, indent=1)
@@ -699,6 +736,10 @@ def selftest():
                      'git show 8ff84e5:prom_d/wsa1_prom_d.s'):
             check(git_blind_text(form, "prom_d/wsa1_prom_d.s"),
                   "git_blind SEES %r" % form[:46])
+        check(worktree_diff("notes/wave7_round5_review_wb_prom_b.py"),
+              "worktree_diff SEES a probe that diffs the working tree")
+        check(not worktree_diff("notes/asm_source.py"),
+              "worktree_diff does NOT fire on a probe that does not")
         for form in ('SRC = image_path(ROOT, "prom_d/wsa1_prom_d.s")',
                      '# see prom_d/wsa1_prom_d.s for the directory'):
             check(not git_blind_text(form, "prom_d/wsa1_prom_d.s"),

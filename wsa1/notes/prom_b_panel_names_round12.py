@@ -932,7 +932,7 @@ def zero_d():
     lits, bad = [], []
     for path in ("prom_a/wsa1_prom_a.s", "prom_b/wsa1_prom_b.s", "prom_c/wsa1_prom_c.s",
                  "prom_d/wsa1_prom_d.s"):
-        t = open(os.path.join(ROOT, path), encoding="utf-8", errors="replace").read()
+        t = open(image_path(ROOT, path), encoding="utf-8", errors="replace").read()
         for m in re.finditer(r"ld \(0x209[bc]\),0x([0-9a-f]{2,4})\b", t):
             v = int(m.group(1), 16)
             vals = [v & 0xFF, (v >> 8) & 0xFF] if len(m.group(1)) == 4 else [v]
@@ -949,7 +949,7 @@ def zero_d():
     print("\n  ⚠ THE PATH THAT IS NOT CLOSED: PanelButton_SweepHeld routes bit")
     print("      0x0D of (0x2088) if it is ever set, and PanelButton_Accept sets it")
     print("      when 0x0D is accepted with bit 0 of (0x2075) clear. prom_b contains")
-    b = open(os.path.join(ROOT, "prom_b/wsa1_prom_b.s"), encoding="utf-8",
+    b = open(image_path(ROOT, "prom_b/wsa1_prom_b.s"), encoding="utf-8",
              errors="replace").read()
     print("      %d `or (0x2075),0x09` sites, each of which SETS that bit."
           % len(re.findall(r"or \(0x2075\),0x09", b)))
