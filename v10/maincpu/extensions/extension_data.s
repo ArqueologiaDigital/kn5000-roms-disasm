@@ -1522,46 +1522,54 @@ SplitNoteStr_D:
 	ldb	w, 0
 	swi	7
 SplitNoteStr_DFlat:	aligned_string "D~a0"
-SplitNoteStr_C:
-	ld	xhl, 0xeaff0020
-	jp	NakaData_PartConfig
-	jp	Bitmap_SplitPoint_Gb_0x2B
-	jp	Bitmap_Dredt0d_0xA8D
-	jp	SepaOut_FormatData_Tail
-	jp	FILETYPE_SIG_TABLE_2_0x15
-	jp	0xde00ed
-	jp	0xdc00ed
-	jp	0xda00ed
-	jp	0xd800ed
-	jp	0xd600ed
-	.byte 0x1b, 0xed
-	nop
-OctaveDigitStr_8:
-	push	xwa
-	nop
-	.byte 0x37
-	nop
-OctaveDigitStr_6:
-	.byte 0x36
-	nop
-OctaveDigitStr_5:
-	.byte 0x35
-	nop
-OctaveDigitStr_4:
-	ldw	ix, 0x3300
-	nop
-OctaveDigitStr_2:
-	.byte 0x32
-	nop
-OctaveDigitStr_1:
-	.byte 0x31
-	nop
-OctaveDigitStr_0A:
-	ldw	wa, 0x3000
-	nop
-OctaveDigitStr_0B:
-	.byte 0x30
-	nop
+; -----------------------------------------------------------------------------
+; ** RE-FRAMED 2026-08-30 (lane B4): this was CODE territory and it is DATA.
+; The tree read the pointer table below ONE BYTE LATE, from 0xED1BAB, which
+; turned each 4-byte pointer into a `jp` whose high byte was the LOW byte of
+; the NEXT entry -- so the phantom entry points marched downward in steps of
+; exactly 0x020000. An arithmetic progression of entry points 128 KiB apart is
+; not a jump table.
+;
+; It is a table because:
+;   * all 11 entries land on the 2-byte NUL-terminated digit cells right below
+;     it, and the last entry (0x00ED1BD6) is exactly the first byte past the
+;     table's own end (0xED1BAA + 11*4);
+;   * display/graphics_text_vga.s indexes THIS address -- `divs hl, 0xc` then
+;     `sla hl, 2` then `lda_24 xbc, (SplitNoteStr_C_0x4)` at 0xFC2DE2 and
+;     0xFC2E67. Note number / 12, scaled by 4 = the pointer width.
+; The five phantom `jp` operands (NakaData_PartConfig,
+; Bitmap_SplitPoint_Gb_0x2B, Bitmap_Dredt0d_0xA8D, SepaOut_FormatData_Tail,
+; FILETYPE_SIG_TABLE_2_0x15) were REFERENCES to labels defined elsewhere, not
+; definitions here; nothing lost a name.
+; -----------------------------------------------------------------------------
+SplitNoteStr_C:	aligned_string "C "
+	; 0xED1BAA = SplitNoteStr_C_0x4: octave-digit pointers, index = note / 12
+	.long OctaveDigitStr_0B
+	.long OctaveDigitStr_0C
+	.long OctaveDigitStr_0A
+	.long OctaveDigitStr_1
+	.long OctaveDigitStr_2
+	.long OctaveDigitStr_3
+	.long OctaveDigitStr_4
+	.long OctaveDigitStr_5
+	.long OctaveDigitStr_6
+	.long OctaveDigitStr_7
+	.long OctaveDigitStr_8
+	; the cells themselves, 2 bytes each, in DESCENDING digit order
+OctaveDigitStr_8:	.asciz "8"
+OctaveDigitStr_7:	.asciz "7"
+OctaveDigitStr_6:	.asciz "6"
+OctaveDigitStr_5:	.asciz "5"
+OctaveDigitStr_4:	.asciz "4"
+OctaveDigitStr_3:	.asciz "3"
+OctaveDigitStr_2:	.asciz "2"
+OctaveDigitStr_1:	.asciz "1"
+OctaveDigitStr_0A:	.asciz "0"
+; ** 0xED1BE8 only became visible when the table above stopped being framed as
+; code, so it could not be called _0B: that name (0xED1BEA) is already in use
+; and is aliased by positional_labels.s. Hence A, C, B in address order.
+OctaveDigitStr_0C:	.asciz "0"
+OctaveDigitStr_0B:	.asciz "0"
 	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
 	aligned_string "          "
