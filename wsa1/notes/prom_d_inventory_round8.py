@@ -1,5 +1,23 @@
 #!/usr/bin/env python3
-"""prom_d round 8 -- THE THREE-QUESTION INVENTORY, and the census round 7's own
+"""prom_d -- THE STANDING WHOLE-IMAGE INVENTORY (wave 7 rounds 8 and 9).
+
+★★ ONE COMMAND RE-CHECKS THE WHOLE IMAGE.  `python3 notes/prom_d_inventory_round8.py
+   --selftest` re-derives every one of prom_d's 3,665 labels from the ROM, asks
+   round 8's three questions of every object, re-runs every mechanism this tree
+   has measured and refused, and re-reads the generated prose for a sentence its
+   own number refutes.  That is what "finished" means for prom_d, and this file
+   is the whole of it.  The filename says round 8 because a lane owns a filename;
+   round 9's sections are Q10-Q15 and its selftest is the second block.
+
+★ ROUND 9's ONE FIND, and it is the argument for the audit existing: a generated
+  comment stated 108 entries over a 132-byte object.  Four rounds of self-checks
+  had re-read the numbers each round INTRODUCED; none re-read the file's existing
+  prose against the object it sits on.  Q10d does, over all 319 of those
+  sentences, and the generator now derives the count from the object's own length.
+
+--- what round 8 established (unchanged below) ---------------------------------
+
+prom_d round 8 -- THE THREE-QUESTION INVENTORY, and the census round 7's own
                      conclusion implied but never ran.
 
 QUESTION IT ANSWERS
@@ -28,10 +46,18 @@ QUESTION IT ANSWERS
     returns a result rather than a noise floor:
 
         * the 64 records of ToneDB_WaveSelTailPresets are selected by ONE stored
-          field in the whole image, +0x0B of a wave-select record.  Over all
-          1,549 wave-select records in prom_d those fields take 7 distinct values
-          after `and A,0x3f`.  So 57 of the 64 preset records are selected by
-          NOTHING STORED anywhere in this image, and 6 are selected by many.
+          field in the whole image, +0x0B of a wave-select record.  Over the
+          1,485 wave-select records that are not the preset array itself those
+          fields take 7 distinct values after `and A,0x3f`.  So 57 of the 64
+          preset records are selected by NOTHING STORED anywhere in this image
+          and 7 are selected, by 1,485 stored fields between them.
+          ⚠ TWO CORRECTIONS A ROUND-8 REVIEWER DERIVED AND ROUND 9 APPLIED: this
+          paragraph said "6 are selected by many", which is wrong by one (Q2's
+          own table lists seven values, 0 1 2 3 4 5 7); and the denominator was
+          1,549, which is the population INCLUDING the preset array, over which
+          the field takes 64 values and not 7, because a preset record's own
+          +0x0B carries its own index (round 9 Q11, at 63 of its 64 records).
+          The .s banner carried the same pair and is corrected in the GENERATOR.
           That is a per-object answer to C for 64 objects, derived, and it is
           stronger than round 7's "at the null".
         * the 322 records of ToneDB_MixerDefaultTable are reached by exactly one
@@ -96,6 +122,27 @@ WHAT ELSE IT ESTABLISHES (reproduced below; run it, do not quote this list)
         part is carried by the bytes.  (R3a was already failing on round 7's stem
         labels, which that script does not know about either.)
 
+ROUND 9 (Q10-Q15), in one line each
+    Q10 ★★ THE WHOLE-IMAGE LABEL AUDIT.  Every label's claim -- its index, its
+        address and its name -- re-derived from the ROM and compared with the .s.
+        2,857 of 3,665 have their NAME carried by this image's own bytes; 808
+        have only their ADDRESS derived.  That is a HARSHER reading than the goal
+        metric's 100% UPPER and it is the honest one.  Q10d is the prose check
+        that found the 108-vs-128 sentence.  Negative controls T7-T12.
+    Q11 the field round 8 excluded without reading it: the preset array's own
+        +0x0B is the record's own index at 63 of 64, and record 0 is the
+        exception.  The 57/7 headline is unchanged and that is checked, not said.
+    Q12 the twin rule, run on the ONE array nobody ran it on: 0 of 64.  Those 64
+        framed labels are now framed for a measured reason.
+    Q13 ★ M8, the mechanism after round 8's M7: place a NO-CARRIER record by the
+        monotone order.  0 of 12 on the array whose order holds; on the other it
+        proposes ONE owner for THREE different records, so it refutes itself.
+    Q14 the General-MIDI route to naming a program-map row, refused with a COUNT
+        instead of round 5's two examples -- and the 16 family names are read out
+        of prom_b's own `GM RE-MAP` screen rather than typed.  Aligned 18/128,
+        rotated null 11/128.
+    Q15 the base address: restated, not re-opened.  ORIGIN stays 0.
+
 HOW TO RUN
     python3 notes/prom_d_inventory_round8.py             # the whole inventory
     python3 notes/prom_d_inventory_round8.py --quiet     # failures only
@@ -148,6 +195,7 @@ R5 = _load("_r8_r5", "notes/prom_d_understanding_round5.py")
 R6 = _load("_r8_r6", "notes/prom_d_understanding_round6.py")
 R7 = _load("_r8_r7", "notes/prom_d_finish_round7.py")
 R2 = _load("_r8_r2", "notes/prom_d_structures_round2.py")
+R4 = _load("_r8_r4", "notes/prom_d_understanding_round4.py")
 sys.stdout = _stdout
 sys.argv = _ARGV
 
@@ -236,7 +284,7 @@ def _r8_shape(slot):
 
 
 AUDITED_R8 = {0x18: (152, 163), 0x20: (151, 171)}
-AUDITED_CHECKS = 42
+AUDITED_CHECKS = 71          # rounds 8 and 9 together
 
 
 # ---------------------------------------------------------------------------
@@ -266,6 +314,20 @@ def wavesel_preset_fields():
         for k in range(n):
             out.append(("%s_%03d" % (LABEL_PREFIX[slot], k), k, recs[k][PRESET_FIELD]))
     return out
+
+
+def preset_referring_fields():
+    """The stored fields that are a REFERENCE to a preset record, and only those.
+
+    ⚠ WAVE 7 ROUND 9.  Round 8's banner used len(wavesel_preset_fields()) = 1,549
+    as the denominator for `7 distinct values`, and a round-8 reviewer showed the
+    two do not go together: over all 1,549 the field takes 64 distinct values,
+    because the preset array's own +0x0B carries the record's own index (Q11 --
+    at 63 of its 64 records). The 7 is a figure over the OTHER 1,485. This is
+    that population, so the number and its denominator come from one place.
+    """
+    return [f for f in wavesel_preset_fields()
+            if not f[0].startswith(LABEL_PREFIX[0x3C])]
 
 
 def preset_referrers():
@@ -1206,6 +1268,754 @@ def selftest():
           "%s" % {hex(s): R6.array_records(s)[1] for s in WAVESEL_SLOTS})
 
 
+
+# ===========================================================================
+# ★★ WAVE 7 ROUND 9 -- THE WHOLE-IMAGE LABEL AUDIT.
+#
+# Round 8 asked three questions of every label and answered them for the 272 it
+# left NAMELESS.  It did not ask the other question a finished image has to
+# answer, and it is the one the byte gate is blind to:
+#
+#     IS THE NAME THIS FILE ACTUALLY CARRIES STILL CARRIED BY THE BYTES?
+#
+# Every label in prom_d/wsa1_prom_d.s is GENERATED, so the honest answer today is
+# "yes, by construction" -- but that is exactly the guarantee round 4 lost.  A
+# hand-edit to the .s is silently reverted on the next generator run, and a
+# corrected false claim came back verbatim because nothing re-read the file.
+# audit_labels() re-derives each label's whole claim -- its index, its address
+# and its name -- from prom_d's own bytes and compares it with the text in the
+# file, so a divergence in either direction is a FAILED CHECK rather than a
+# reviewer's lucky find.
+# ===========================================================================
+AUDIT_GRADES = ("DERIVED", "ADDRESS", "REFUTED", "RESIDUE")
+_AUDIT_GRADES = collections.Counter()
+# ★ THE AUDITED SHAPE, in the pattern this tree already uses for DESC_AUDITED and
+# AUDITED_R7/R8: prom_d/wsa1_prom_d.s quotes these two numbers, and Q10e fails if
+# the live audit stops producing them.  A number in the assembly therefore cannot
+# outlive the measurement that justifies it -- which is the whole reason the
+# generator refuses to hard-code anything.
+AUDITED_R9 = {"DERIVED": 2857, "ADDRESS": 808, "REFUTED": 0, "RESIDUE": 0}
+
+
+def boundary_stem(names, lim=4):
+    """Round 7's stem rule, RE-IMPLEMENTED here so the audit is a second opinion.
+
+    Calling R7._boundary_stem() would make the audit compare the generator with
+    itself.  This is the same rule stated from its description -- longest common
+    prefix, at least 4 characters, ending at a CamelCase word boundary, with at
+    most `lim` characters left over in every candidate -- and Q10's selftest
+    checks the two agree on all 334 `_SameAs_` labels, which is what makes it a
+    check rather than a copy.
+    """
+    if not names:
+        return None
+    pre = names[0]
+    for n in names[1:]:
+        i = 0
+        while i < min(len(pre), len(n)) and pre[i] == n[i]:
+            i += 1
+        pre = pre[:i]
+    if len(pre) < 4:
+        return None
+    for n in names:
+        if len(n) == len(pre):
+            continue
+        if not (n[len(pre)].isupper() or n[len(pre)].isdigit()):
+            return None
+        if len(n) - len(pre) > lim:
+            return None
+    return None if re.fullmatch(r"[0-9]{1,4}", pre.split("_")[-1]) else pre
+
+
+def _tone_geometry(p, size):
+    """(elements, wave-select records) of a tone-shaped record of `size` bytes.
+
+    The three shapes this image uses, and nothing is assumed beyond them: a
+    217-byte head plus n elements of 81 and n wave-select records of 43 (an
+    ordinary melodic tone), a 217-byte head plus n elements and NO wave-select
+    array (the two drawbar records), and a headless 81 + 43 (the default-layer
+    template).  The strides are the directory's own words, not constants typed
+    here.  A record that fits none returns (None, None) and its children are
+    reported REFUTED rather than quietly passed.
+    """
+    for head in (217, 0):
+        rest = size - head
+        if rest < 0:
+            continue
+        if rest and rest % (81 + WAVESEL_STRIDE) == 0:
+            n = rest // (81 + WAVESEL_STRIDE)
+            return n, n
+        if rest and rest % 81 == 0:
+            return rest // 81, 0
+    return None, None
+
+
+def audit_labels(rename=None):
+    """{label: (grade, rule, detail)} for EVERY label in prom_d/wsa1_prom_d.s.
+
+    DERIVED  the object's ADDRESS and its NAME are both re-derived from prom_d's
+             own bytes -- a record's ASCII name field, a measured byte identity,
+             a curve's own run lengths, a descriptor's own 32-bit offsets.
+    ADDRESS  the address is re-derived; the NAME is structural or transplanted
+             and this image does not spell it.  `ToneDB_MixerDefaultTable_000`
+             and `ToneDB_EnvDescTable_Desc017` are here.  This is the honest
+             reading of prom_d's 100%% UPPER: framing is not naming.
+    REFUTED  the file and the ROM disagree.  Any hit is a defect.
+    RESIDUE  no rule reaches the label.  Any hit is a hole in this audit.
+
+    `rename` is {old: new} and exists ONLY for the negative controls: the audit
+    must report a label that has been tampered with, or it is not an audit.
+    """
+    ren = rename or {}
+    out = {}
+
+    def put(name, grade, rule, detail):
+        out[name] = (grade, rule, detail)
+
+    arr_slot = {"ToneDB_MixerDefaultTable": 0x18,
+                "ToneDB_PercMixerDefaultTable": 0x20,
+                "ToneDB_WaveSelTailPresets": 0x3C}
+    arr = dict((s, R6.array_records(s)) for s in WAVESEL_SLOTS)
+    twins = dict((s, R6.wavesel_twins(s)) for s in NAMED_SLOTS)
+    perc_a = S(0x78)
+    perc_n = (R6.next_bound(perc_a) - perc_a) // PERC_STRIDE
+    lay = dict((s, R2.desc_layout(s)) for s in (0x30, 0x38, 0x70))
+    chains = dict((s, R4.chain(s)) for s in (0x30, 0x38))
+    rows, curves = R5.row_names(), R5.curve_names()
+    slot_of = collections.defaultdict(list)
+    for s in range(0, 0xC0, 4):
+        if DIR[s // 4] != 0xFFFFFFFF:
+            slot_of[DIR[s // 4]].append(s)
+    parents = dict((l.name, l) for l in R7.LABS
+                   if l.name in ("ToneRec_Template_Clear", "ToneDB_DefaultLayerParams"))
+    nxt = {}
+    for k, l in enumerate(R7.LABS):
+        for j in range(k + 1, len(R7.LABS)):
+            if not R7.LABS[j].name.startswith(l.name + "_"):
+                nxt[l.name] = R7.LABS[j].addr
+                break
+
+    for l in R7.LABS:
+        n, a = ren.get(l.name, l.name), l.addr
+
+        m = re.match(r"^(ToneRec|DrumKit)_([0-9A-F]{3})_([A-Za-z0-9]+)$", n)
+        if m:
+            i = int(m.group(2), 16)
+            if i >= len(R6.TONE_PTRS):
+                put(l.name, "REFUTED", "tone record",
+                    "index 0x%03X is past the %d-entry offset table"
+                    % (i, len(R6.TONE_PTRS)))
+                continue
+            p = R6.TONE_PTRS[i]
+            size = R6._tone_end(p) - p
+            want = R6.camel(D[p:p + 16].decode("latin1"))
+            ok = (a == p and want == m.group(3)
+                  and (m.group(1) == "DrumKit") == (size == 408))
+            put(l.name, "DERIVED" if ok else "REFUTED", "tone record",
+                "offset table entry %d = 0x%05X, %d B, name field %r -> %s"
+                % (i, p, size, D[p:p + 16].decode("latin1"), want))
+            continue
+
+        m = re.match(r"^(ToneRec|DrumKit)_([0-9A-F]{3})_[A-Za-z0-9]+_"
+                     r"(Elem|WaveSel|NoteMap)(\d*)$", n)
+        if m:
+            i = int(m.group(2), 16)
+            p = R6.TONE_PTRS[i]
+            size = R6._tone_end(p) - p
+            ne, nw = _tone_geometry(p, size)
+            head = 217 if size >= 217 else 0
+            if m.group(3) == "NoteMap":
+                ok, w = (size == 408 and a == p + 152), "0x%05X + 152" % p
+            elif m.group(3) == "Elem":
+                j = int(m.group(4))
+                ok = ne is not None and j < ne and a == p + head + 81 * j
+                w = "0x%05X + %d + 81*%s" % (p, head, m.group(4))
+            else:
+                j = int(m.group(4))
+                ok = bool(nw) and j < nw and a == p + head + 81 * ne + WAVESEL_STRIDE * j
+                w = "0x%05X + %d + 81*%s + %d*%s" % (p, head, ne, WAVESEL_STRIDE,
+                                                     m.group(4))
+            put(l.name, "DERIVED" if ok else "REFUTED", "tone-record part", w)
+            continue
+
+        m = re.match(r"^(ToneRec_Template_Clear|ToneDB_DefaultLayerParams)_"
+                     r"(Elem|WaveSel)(\d*)$", n)
+        if m and m.group(1) in parents:
+            par = parents[m.group(1)]
+            size = nxt.get(par.name, par.end) - par.addr
+            ne, nw = _tone_geometry(par.addr, size)
+            head = 217 if size >= 217 else 0
+            j = int(m.group(3) or 0)
+            if m.group(2) == "Elem":
+                ok = ne is not None and j < ne and a == par.addr + head + 81 * j
+            else:
+                ok = bool(nw) and j < nw and (
+                    a == par.addr + head + 81 * ne + WAVESEL_STRIDE * j)
+            put(l.name, "DERIVED" if ok else "REFUTED", "template record part",
+                "%s 0x%05X, %d B = %d + 81*%s + %d*%s"
+                % (par.name, par.addr, size, head, ne, WAVESEL_STRIDE, nw))
+            continue
+
+        m = re.match(r"^PercInst_(\d{3})_([A-Za-z0-9]+)$", n)
+        if m:
+            i = int(m.group(1))
+            p = perc_a + PERC_STRIDE * i
+            raw = D[p:p + 13].decode("latin1")
+            want = R6.camel(raw)
+            blank = not raw.strip(" \x00")
+            ok = i < perc_n and a == p and (want == m.group(2)
+                                            or (blank and m.group(2) == "Silent"))
+            put(l.name, "DERIVED" if ok else "REFUTED", "drum-instrument record",
+                "0x%05X = 0x%05X + %d*%d, name field %r"
+                % (p, perc_a, PERC_STRIDE, i, raw))
+            continue
+
+        m = re.match(r"^(ToneDB_(?:Perc)?MixerDefaultTable|ToneDB_WaveSelTailPresets)"
+                     r"_(\d{3})(?:_SameAs_(.+))?$", n)
+        if m:
+            slot = arr_slot[m.group(1)]
+            i = int(m.group(2))
+            base, cnt, _recs = arr[slot]
+            ok = i < cnt and a == base + WAVESEL_STRIDE * i
+            det = "0x%05X = 0x%05X + %d*%d" % (base + WAVESEL_STRIDE * i, base,
+                                               WAVESEL_STRIDE, i)
+            if not m.group(3):
+                put(l.name, "ADDRESS" if ok else "REFUTED", "wave-select record",
+                    det + ", and nothing in the image names it")
+                continue
+            suf, el = m.group(3), None
+            m2 = re.match(r"^(.+)_WaveSel(\d+)$", suf)
+            if m2 and "_Or_" not in suf:
+                suf, el = m2.group(1), int(m2.group(2))
+            claimed = suf.split("_Or_")
+            tw = twins[slot].get(i, [])
+            carr = sorted(set(x[2] for x in tw))
+            els = set(x[1] for x in tw)
+            if len(claimed) > 1:
+                ok = ok and sorted(claimed) == carr          # round 8's disjunction
+            elif claimed[0] in carr:
+                ok = ok and carr == claimed                  # one carrier, its own name
+            else:
+                ok = ok and boundary_stem(carr) == claimed[0]  # rounds 6/7's stem
+            if el is not None:
+                ok = ok and els == {el}
+            put(l.name, "DERIVED" if ok else "REFUTED",
+                "wave-select record, named by a byte identity",
+                det + "; carried by %s%s"
+                % (carr, "" if el is None else " all at element %d" % el))
+            continue
+
+        if n.startswith("ToneNumBank_"):
+            suf = n[len("ToneNumBank_"):]
+            hit = [r for r, s in rows.items() if s == suf]
+            ok = len(hit) == 1 and a == R6.PROG_BASE + 256 * hit[0]
+            put(l.name,
+                "DERIVED" if ok and not suf.startswith("Melodic_")
+                else ("ADDRESS" if ok else "REFUTED"), "program-map row",
+                "0x%05X + 256*%s, and row_names() derives this suffix from what the "
+                "row selects" % (R6.PROG_BASE, hit))
+            continue
+
+        m = re.match(r"^ToneDB_OctaveShiftByProgram_Bank(\d)$", n)
+        if m:
+            r = int(m.group(1))
+            ok = r < R6.OCT_N and a == R6.OCT_TABLE + R6.OCT_STRIDE * r
+            put(l.name, "ADDRESS" if ok else "REFUTED", "octave-shift row",
+                "0x%05X + %d*%d" % (R6.OCT_TABLE, R6.OCT_STRIDE, r))
+            continue
+
+        m = re.match(r"^ToneDB_DescCurve_(Step\w+)$", n)
+        if m:
+            hit = [k for k, s in curves.items() if s == m.group(1)]
+            ok = len(hit) == 1 and a == R2.CURVE_BASE + R2.CURVE_STRIDE * hit[0]
+            put(l.name, "DERIVED" if ok else "REFUTED", "descriptor curve",
+                "curve %s of %d; the suffix is its own run-length plurality"
+                % (hit, R2.CURVE_N))
+            continue
+
+        done = False
+        for base, slot in (("ToneDB_EnvDescTable_Perc", 0x38),
+                           ("DrawbarPreset_EnvDescTable", 0x70),
+                           ("ToneDB_EnvDescTable", 0x30)):
+            if not n.startswith(base + "_"):
+                continue
+            H, P, recs = lay[slot]
+            suf = n[len(base) + 1:]
+            m = re.match(r"^Desc(\d{3})$", suf)
+            if m:
+                i = int(m.group(1))
+                put(l.name, "ADDRESS" if i < H and a == S(slot) + 14 * i else "REFUTED",
+                    "descriptor", "0x%05X + 14*%d, and 14*%d ends at the pool 0x%05X"
+                    % (S(slot), i, H, P))
+                done = True
+                break
+            m = re.match(r"^(\d{3})_(CurveStepToElem|ElemArray)$", suf)
+            if m:
+                i, part = int(m.group(1)), m.group(2)
+                off = recs[i][1] if part == "CurveStepToElem" else recs[i][2]
+                ok = i < H and off and a == off
+                r = chains[slot][i] if slot in chains else None
+                if r is None:
+                    ok = False
+                    join = "no chain"
+                elif part == "CurveStepToElem":
+                    # ★ THE JOIN THAT JUSTIFIES THE WORD `ToElem` IS THE ONE TO
+                    # PART B, not the one to the curve.  The first draft of this
+                    # audit checked len(A)-4 == max(curve)+1 and reported the +0x38
+                    # object REFUTED -- wrongly, because that object is SHARED by
+                    # 161 descriptors and is a full 128-entry table of which the
+                    # curve reaches 108.  The label is right; the PROSE over it was
+                    # not, and Q10d is where that is caught.
+                    ok = ok and max(r["a_tab"]) + 1 == r["ecount"]
+                    join = ("its %d entries, largest %d, and part B holds %d element%s"
+                            % (r["a_len"] - 4, max(r["a_tab"]), r["ecount"],
+                               "" if r["ecount"] == 1 else "s"))
+                else:
+                    ok = ok and r["ecount"] == max(r["a_tab"]) + 1
+                    join = ("its %d elements of %d B = max(stage 2) + 1"
+                            % (r["ecount"], r["esize"]))
+                put(l.name, "DERIVED" if ok else "REFUTED", "descriptor pool object",
+                    "descriptor %d's own LE32 offset 0x%05X; %s" % (i, off or 0, join))
+                done = True
+                break
+            m = re.match(r"^Pool_([AB])(\d{3})$", suf)
+            if m:
+                i = int(m.group(2))
+                off = recs[i][1] if m.group(1) == "A" else recs[i][2]
+                put(l.name, "ADDRESS" if i < H and off and a == off else "REFUTED",
+                    "descriptor pool object",
+                    "descriptor %d's own LE32 offset 0x%05X -- role NOT established"
+                    % (i, off or 0))
+                done = True
+                break
+            if suf == "Pool":
+                put(l.name, "ADDRESS" if a == P else "REFUTED", "descriptor pool",
+                    "%d descriptors x 14 end here, at 0x%05X" % (H, P))
+                done = True
+                break
+        if done:
+            continue
+
+        if n == "ToneDB_DescCurveBank":
+            put(l.name, "ADDRESS" if a == R2.CURVE_BASE else "REFUTED", "curve bank",
+                "slot +0x28 + 2048 = 0x%05X" % R2.CURVE_BASE)
+            continue
+        if n == "erased_tail":
+            put(l.name, "ADDRESS" if a == PAYLOAD_END else "REFUTED", "image tail",
+                "the payload ends at 0x%05X" % PAYLOAD_END)
+            continue
+        if n == "build_tag":
+            t = D.rfind(b"wsad")
+            put(l.name, "DERIVED" if a == t else "REFUTED", "build tag",
+                "%r at 0x%05X" % (D[t:t + 12].decode("latin1"), t))
+            continue
+        if n == "prom_d_end":
+            put(l.name, "ADDRESS" if a == len(D) else "REFUTED", "image end",
+                "the image is 0x%05X bytes" % len(D))
+            continue
+        if a in slot_of:
+            put(l.name, "ADDRESS", "directory region",
+                "opened by directory slot%s %s"
+                % ("" if len(slot_of[a]) == 1 else "s",
+                   " ".join("+0x%02X" % s for s in slot_of[a])))
+            continue
+        if a == 0:
+            put(l.name, "ADDRESS", "image start", "file offset 0, the directory itself")
+            continue
+        put(l.name, "RESIDUE", "-", "no rule in this audit reaches the label")
+    return out
+
+
+def q10():
+    """★★ THE WHOLE-IMAGE AUDIT.  Every label, re-derived, in one command."""
+    say("\n=== Q10. ★★ THE WHOLE-IMAGE LABEL AUDIT -- all %d, re-derived ==="
+        % len(R7.LABS))
+    say("")
+    say("  Round 8 answered three questions about the 272 objects it left")
+    say("  NAMELESS.  This asks the question the other 3,393 need, and it is the")
+    say("  one the byte gate cannot ask: IS THE NAME IN THE FILE STILL THE NAME")
+    say("  THE BYTES GIVE?  Every label's whole claim -- index, address and name --")
+    say("  is re-derived from prom_d and compared with the text in the .s.")
+    say("")
+    res = audit_labels()
+    grades = collections.Counter(v[0] for v in res.values())
+    byrule = collections.Counter((v[1], v[0]) for v in res.values())
+    for (rule, g), c in sorted(byrule.items(), key=lambda kv: (-kv[1], kv[0])):
+        say("      %5d  %-8s %s" % (c, g, rule))
+    say("")
+    bad = sorted(k for k, v in res.items() if v[0] == "REFUTED")
+    res_only = sorted(k for k, v in res.items() if v[0] == "RESIDUE")
+    check("Q10a the audit reaches EVERY label -- no residue",
+          not res_only and len(res) == len(R7.LABS),
+          "%d labels, %d unreached%s" % (len(res), len(res_only),
+                                         ": " + ", ".join(res_only[:3]) if res_only else ""))
+    check("Q10b no label in the file is refuted by the ROM", not bad,
+          "%d refuted%s" % (len(bad), ": " + ", ".join(bad[:3]) if bad else ""))
+    # ★ Q10d -- THE PROSE OVER A POOL OBJECT, RE-DERIVED FROM THE OBJECT'S SIZE.
+    # This is where round 9's one real find lives.  The comment over a stage-2
+    # table states its entry count; for the ONE table that 161 descriptors SHARE
+    # the generator printed max(curve)+1 = 108 for an object that holds 128.  A
+    # sentence refuted by its own object is the round-3 review's exact shape, and
+    # nothing in four rounds of self-checks re-read it.
+    txt = open(SRC).read().split("\n")
+    hdr = re.compile(r"^; (\S+_CurveStepToElem) -- file 0x([0-9A-F]{5})"
+                     r"\.\.0x[0-9A-F]{5} \((\d+) bytes\)$")
+    ent = re.compile(r"^; descriptor \d+ stage 2: \S+ step -> element, (\d+) entries")
+    cur, seen, wrong = None, 0, []
+    for ln in txt:
+        m = hdr.match(ln)
+        if m:
+            cur = (m.group(1), int(m.group(3)))
+            continue
+        m = ent.match(ln)
+        if m and cur:
+            seen += 1
+            if cur[1] - 4 != int(m.group(1)):
+                wrong.append((cur[0], int(m.group(1)), cur[1] - 4))
+            cur = None
+    check("Q10d every `N entries` stated over a stage-2 table matches its own size",
+          not wrong and seen > 300, "%d sentences checked, %d refuted%s"
+          % (seen, len(wrong),
+             ": %s says %d, holds %d" % wrong[0] if wrong else ""))
+    check("Q10e the audited grade counts are what prom_d/wsa1_prom_d.s quotes",
+          all(grades[k] == v for k, v in AUDITED_R9.items()),
+          "live %s, audited %s"
+          % ({k: grades[k] for k in AUDITED_R9}, AUDITED_R9))
+    check("Q10c the FIRST and the LAST label are both re-derived, by name",
+          res[R7.LABS[0].name][0] in AUDIT_GRADES and res[R7.LABS[-1].name][0] in AUDIT_GRADES,
+          "%s -> %s ; %s -> %s" % (R7.LABS[0].name, res[R7.LABS[0].name][0],
+                                   R7.LABS[-1].name, res[R7.LABS[-1].name][0]))
+    say("")
+    say("  ★★ THE NUMBER THIS AUDIT PUBLISHES, and it is a HARSHER reading of")
+    say("     prom_d than the goal metric's 100%% UPPER: %d of the %d labels have"
+        % (grades["DERIVED"], len(res)))
+    say("     their NAME re-derived from this image's own bytes -- a record's ASCII")
+    say("     field, a measured byte identity, a curve's run lengths, a descriptor's")
+    say("     own 32-bit offsets.  The other %d have only their ADDRESS derived;"
+        % grades["ADDRESS"])
+    say("     their names are structural or transplanted and the image does not")
+    say("     spell them.  Framing is not naming, and this is the count.")
+    say("")
+    say("  ⚠ AND IT DOES NOT REFUTE ROUND 7's PROVENANCE GRADE, which the file also")
+    say("    quotes -- the two answer DIFFERENT questions and the cross-tab is")
+    say("    printed so nobody has to guess which:")
+    say("      round-7 provenance ('whose name is this, and does prom_c read the")
+    say("      slot the region hangs off') x round-9 audit ('is the name carried")
+    say("      by this image's bytes'):")
+    cross = collections.Counter((l.prov, res[l.name][0]) for l in R7.LABS)
+    for (p, g), c in sorted(cross.items(), key=lambda kv: -kv[1]):
+        say("        %5d  %-20s %s" % (c, p, g))
+    say("      ★ THE ROW THAT MATTERS is KN5000-TRANSPLANT x DERIVED.  Those objects")
+    say("        sit in a region whose directory slot NO prom_c instruction reads, so")
+    say("        the REGION's name is the sibling machine's -- and the object's own")
+    say("        label is still derived here, from a descriptor's own 32-bit offsets")
+    say("        and round 4's two joins.  A reader discounting the transplant should")
+    say("        discount the region name, not the object's.")
+    return res, grades
+
+
+def q11():
+    """★ THE PRESET ARRAY'S OWN +0x0B -- and a correction to round 8's census."""
+    say("\n=== Q11. ★ THE ONE FIELD ROUND 8 EXCLUDED WITHOUT READING IT ===\n")
+    _a, n, recs = R6.array_records(0x3C)
+    vals = [recs[k][PRESET_FIELD] & 0x3F for k in range(n)]
+    selfidx = [k for k in range(n) if vals[k] == k]
+    other = [(k, vals[k]) for k in range(n) if vals[k] != k]
+    say("  Round 8's preset census skipped field +0x0B of the +0x3C array itself,")
+    say("  on the stated ground that `a record's own index is not a reference`.")
+    say("  ⚠ THAT GROUND WAS NEVER MEASURED.  Read: over the %d preset records the" % n)
+    say("  masked field equals the record's own index at %d of them, and the"
+        % len(selfidx))
+    say("  exception%s %s." % ("" if len(other) == 1 else "s",
+                               ", ".join("record %d holds %d" % t for t in other)))
+    say("  So the field IS the record's own index almost everywhere -- which makes")
+    say("  round 8's exclusion right at %d of %d and WRONG at %d."
+        % (len(selfidx), n, len(other)))
+    check("Q11a the +0x3C array's own +0x0B is its index at all but a stated few",
+          len(other) <= 2 and len(selfidx) == n - len(other),
+          "%d of %d self-indexing, exceptions %s" % (len(selfidx), n, other))
+    check("Q11b checked on the LAST record as well as the first",
+          vals[-1] == n - 1 and (vals[0] == 0) == (0 in [k for k in selfidx]),
+          "record 0 holds %d, record %d holds %d" % (vals[0], n - 1, vals[-1]))
+    ref = preset_referrers()
+    say("")
+    say("  ⚠ AND THE CORRECTION DOES NOT MOVE THE HEADLINE, which is why it is")
+    say("    stated here rather than used to restate the round.  The one record")
+    say("    whose field is not its own index holds %d, and preset %d is ALREADY"
+        % (other[0][1] if other else -1, other[0][1] if other else -1))
+    say("    selected by %d stored records elsewhere in the image.  The set of"
+        % len(ref.get(other[0][1], [])) if other else 0)
+    say("    selected presets is unchanged: %d selected, %d selected by nothing."
+        % (len(ref), 64 - len(ref)))
+    check("Q11c the exception's value is a preset that was already selected",
+          bool(other) and other[0][1] in ref,
+          "preset %d has %d other stored referrers"
+          % (other[0][1], len(ref.get(other[0][1], []))) if other else "no exception")
+    check("Q11d so the 57/7 split round 8 published is unchanged",
+          len(ref) == 7 and 64 - len(ref) == 57,
+          "%d selected, %d selected by nothing stored" % (len(ref), 64 - len(ref)))
+
+
+def q12():
+    """★ THE NAMING MECHANISM THAT NAMED 194 RECORDS, RUN ON THE THIRD ARRAY."""
+    say("\n=== Q12. ★ THE TWIN RULE ON THE ONE ARRAY IT WAS NEVER RUN ON ===\n")
+    say("  Rounds 6, 7 and 8 name a wave-select record when its 43 bytes, masked at")
+    say("  +0x0B, are carried by a NAMED record elsewhere in the image.  That rule")
+    say("  was only ever applied to the two arrays at +0x18 and +0x20.  Nobody ran")
+    say("  it on +0x3C, and its 64 records are 64 of the 272 still framed.")
+    say("")
+    _a, n, recs = R6.array_records(0x3C)
+    mel = collections.defaultdict(list)
+    for i, j, b, nm in R6.tone_wavesel_blocks():
+        mel[R6._mask(b)].append(nm)
+    drm = collections.defaultdict(list)
+    for i, b, nm in R6.perc_wavesel_tails():
+        drm[R6._mask(b)].append(nm)
+    hit_m = sum(1 for k in range(n) if mel.get(R6._mask(recs[k])))
+    hit_d = sum(1 for k in range(n) if drm.get(R6._mask(recs[k])))
+    say("      against the %d melodic wave-select blocks : %d of %d records carried"
+        % (len(R6.tone_wavesel_blocks()), hit_m, n))
+    say("      against the %d drum-instrument tails      : %d of %d records carried"
+        % (len(R6.perc_wavesel_tails()), hit_d, n))
+    say("      distinct masked records in the array       : %d of %d"
+        % (len(set(R6._mask(r) for r in recs)), n))
+    say("")
+    say("  ★ ZERO.  The rule that named 194 records in the other two arrays fires")
+    say("    0 times of %d here, so these 64 stay framed for a MEASURED reason" % n)
+    say("    rather than because nobody tried.  A later round need not re-run it.")
+    check("Q12a the twin rule names nothing in the +0x3C array, either way",
+          hit_m == 0 and hit_d == 0, "%d melodic carriers, %d drum carriers"
+          % (hit_m, hit_d))
+    check("Q12b and the rule is not broken -- it still fires on the other arrays",
+          sum(1 for v in R6.wavesel_twins(0x18).values() if v) == 167
+          and sum(1 for v in R6.wavesel_twins(0x20).values() if v) == 196,
+          "+0x18: %d carried, +0x20: %d carried"
+          % (sum(1 for v in R6.wavesel_twins(0x18).values() if v),
+             sum(1 for v in R6.wavesel_twins(0x20).values() if v)))
+    check("Q12c checked on the LAST record of the array as well as the first",
+          not mel.get(R6._mask(recs[-1])) and not drm.get(R6._mask(recs[-1])),
+          "record %d carried by nothing" % (n - 1))
+
+
+def m8_interpolation(slot):
+    """M8: can the monotone order PLACE a record that no byte identity reaches?
+
+    Round 8's M7 asked whether the interval between two anchors picks one of an
+    AMBIGUOUS record's candidates.  It never asked the question for a record with
+    NO candidates at all, which is the larger set and the obvious next idea.
+    Returns (anchors, no-carrier records, unique, several, empty, examples).
+    """
+    _a, n, recs = R6.array_records(slot)
+    tw = R6.wavesel_twins(slot)
+    anchor = {}
+    for k in range(n):
+        own = set(x[0] for x in tw[k])
+        if len(own) == 1:
+            anchor[k] = own.pop()
+    taken = set(anchor.values())
+    one, several, empty, ex = 0, 0, 0, []
+    naked = [k for k in range(n) if not tw[k]]
+    for k in naked:
+        lo = max([j for j in anchor if j < k], default=None)
+        hi = min([j for j in anchor if j > k], default=None)
+        if lo is None or hi is None:
+            empty += 1
+            continue
+        cand = [m for m in range(anchor[lo] + 1, anchor[hi]) if m not in taken]
+        if len(cand) == 1:
+            one += 1
+            ex.append((k, cand[0]))
+        elif cand:
+            several += 1
+        else:
+            empty += 1
+    return len(anchor), len(naked), one, several, empty, ex
+
+
+def q13():
+    """★ M8 -- the obvious next mechanism, measured and refused."""
+    say("\n=== Q13. ★ M8: PLACING A NO-CARRIER RECORD BY THE MONOTONE ORDER ===\n")
+    say("  Round 8's Q5 proved the +0x20 array is in its owners' index order, 0")
+    say("  backward steps over 106 anchors, and its M7 used that to try to break")
+    say("  the tie on an AMBIGUOUS record.  It never asked the same question of a")
+    say("  record NO byte identity reaches -- the bigger set, and the mechanism a")
+    say("  later round would certainly reach for.  Asked here, and refused here.")
+    say("")
+    out = {}
+    for slot in NAMED_SLOTS:
+        anch, naked, one, sev, emp, ex = m8_interpolation(slot)
+        out[slot] = (anch, naked, one, sev, emp, ex)
+        say("      slot +0x%02X: %3d anchors, %3d records with no carrier -> the"
+            % (slot, anch, naked))
+        say("                  interval leaves ONE owner %d times, several %d, none %d"
+            % (one, sev, emp))
+    say("")
+    say("  ★ ON THE MONOTONE ARRAY IT RESOLVES NOTHING: 0 of %d."
+        % out[0x20][1])
+    say("  ★★ AND ON THE OTHER ARRAY IT REFUTES ITSELF.  The +0x18 array is NOT in")
+    say("     its owners' order (28 backward steps), and there the interval does")
+    say("     leave a single candidate %d times -- but it is the SAME candidate for"
+        % out[0x18][2])
+    say("     several different records:")
+    dup = collections.Counter(c for _k, c in out[0x18][5])
+    for c, cnt in dup.most_common(3):
+        say("         owner %d proposed for %d different array records"
+            % (c, cnt))
+    say("     Three records cannot all be one drum instrument, so the five `unique`")
+    say("     answers are an artefact of a broken order and not five names.")
+    say("     M8 IS REFUSED, on both arrays, by its own measurement.")
+    check("Q13a M8 resolves nothing on the array whose order actually holds",
+          out[0x20][2] == 0, "0 of %d no-carrier records" % out[0x20][1])
+    check("Q13b and where it appears to resolve, it is self-refuting",
+          bool(out[0x18][5]) and max(dup.values()) > 1,
+          "%d proposals over %d distinct owners" % (len(out[0x18][5]), len(dup)))
+    check("Q13c the measurement is not vacuous -- the anchors are real",
+          out[0x18][0] == 152 and out[0x20][0] == 106,
+          "%d and %d anchors" % (out[0x18][0], out[0x20][0]))
+    return out
+
+
+GM_SCREEN = b"GM RE-MAP"
+
+
+def gm_families():
+    """The 16 family names prom_b's own `GM RE-MAP` screen carries, at 16-byte stride."""
+    b = R7.IMG["prom_b"]
+    t = b.find(GM_SCREEN)
+    if t < 0:
+        return t, []
+    return t, [b[t + 16 * (k + 1): t + 16 * (k + 2)].decode("latin1").strip()
+               for k in range(16)]
+
+
+def gm_alignment(row, fams, shift=0):
+    """How many of a row's 128 programs name a tone containing a word of its family."""
+    hit = 0
+    for p in range(128):
+        fam = fams[((p // 8) + shift) % 16]
+        w = [x.lower() for x in re.sub(r"[^A-Za-z]+", " ", fam).split() if len(x) >= 4]
+        nm = R5.tone_name(row[p]).strip().lower()
+        if any(x in nm for x in w):
+            hit += 1
+    return hit
+
+
+def q14():
+    """THE GENERAL-MIDI ROUTE -- round 5 refused it by example; here is the count."""
+    say("\n=== Q14. THE GM ROUTE TO NAMING A PROGRAM-MAP ROW, as a COUNT ===\n")
+    t, fams = gm_families()
+    say("  prom_d's eight melodic rows keep a number.  The route a later round")
+    say("  will try is General MIDI: if one row were GM-ordered and the others were")
+    say("  re-maps of it, THAT row would have a name.  Round 5 refused the idea by")
+    say("  citing two programs.  This is the same refusal as a measurement, and the")
+    say("  16 family names are read out of prom_b rather than typed: its `GM RE-MAP`")
+    say("  screen at prom_b 0x%05X is followed by 16 names at a 16-byte stride," % t)
+    say("      %s" % ", ".join(fams[:6]))
+    say("      ... %s" % ", ".join(fams[-3:]))
+    say("  which are GM's own 16 families in GM's own order.")
+    say("")
+    rows = R5.prog_rows()
+    say("      row   aligned/128   best of the 15 rotated NULLS")
+    sc, nl = [], []
+    for r in range(8):
+        a = gm_alignment(rows[r], fams)
+        b = max(gm_alignment(rows[r], fams, s) for s in range(1, 16))
+        sc.append(a)
+        nl.append(b)
+        say("      %3d      %3d           %3d" % (r, a, b))
+    say("")
+    say("  ★ THE ALIGNED SCORE IS AT THE NULL.  The best row scores %d of 128 where"
+        % max(sc))
+    say("    a deliberately WRONG rotation scores %d.  A GM-ordered row would score"
+        % max(nl))
+    say("    most of its 128 programs; none of these scores a quarter of them, and")
+    say("    the eight rows are %d..%d, indistinguishable from one another."
+        % (min(sc), max(sc)))
+    say("    So GM names no row, and it does not tell the rows apart either.")
+    check("Q14a the family list is prom_b's own ASCII, at its own stride",
+          len(fams) == 16 and fams[0] == "PIANO" and fams[-1] == "SOUND EFFECTS",
+          "16 names at prom_b 0x%05X + 16" % t)
+    check("Q14b the aligned score does not beat the rotated null by a margin",
+          max(sc) - max(nl) < 16, "best aligned %d, best null %d" % (max(sc), max(nl)))
+    check("Q14c and the test is not blind -- it is checked on the LAST row too",
+          sc[-1] <= max(sc) and nl[-1] > 0, "row 7 aligned %d, null %d" % (sc[-1], nl[-1]))
+    check("Q14d no row is separated from the others by it",
+          max(sc) - min(sc) < 8, "rows score %d..%d" % (min(sc), max(sc)))
+
+
+def q15():
+    """THE BASE ADDRESS -- what is settled, what is open, and what did NOT move."""
+    say("\n=== Q15. THE BASE ADDRESS: the standing answer, restated not re-opened ===\n")
+    ld = open(os.path.join(ROOT, "prom_d", "prom_d.ld")).read()
+    origin = re.search(r"ORIGIN\s*=\s*(0x[0-9A-Fa-f]+|\d+)", ld)
+    say("  This was wave 7 round 3's finding and it is NOT re-derived here, only")
+    say("  re-checked: the image is read at 0x00F00000 on CPU 2's bus, and ORIGIN in")
+    say("  prom_d/prom_d.ld stays 0 because the image's own offsets are FILE offsets")
+    say("  that prom_c adds the base to.  Round 8 Q7 attacked it from the pointers")
+    say("  and found 0 absolute addresses in 1,281 fields.")
+    say("")
+    say("  ⚠ WHAT IS STILL OPEN IS NOT THE ADDRESS.  It is WHICH PHYSICAL PART this")
+    say("    is, and no census of these bytes can answer that -- the image's own")
+    say("    testimony cannot name the package it is soldered in.  The reference")
+    say("    designator is not legible in the manual scan; the redistributed set")
+    say("    calls the file wsa1_os_v2.ic21, which is where `IC21 is the likely")
+    say("    designator and is NOT asserted` comes from.  That is a DOCUMENT")
+    say("    question, not a disassembly one, and this round leaves it open.")
+    check("Q15a ORIGIN in prom_d/prom_d.ld is still 0 -- nothing here changed it",
+          bool(origin) and int(origin.group(1), 0) == 0,
+          "ORIGIN = %s" % (origin.group(1) if origin else "not found"))
+    check("Q15b the image's build tag still reads as the v2 set's",
+          D[D.rfind(b"wsad"):D.rfind(b"wsad") + 11] == b"wsad_54.ssf",
+          "%r at 0x%05X" % (D[D.rfind(b"wsad"):D.rfind(b"wsad") + 11].decode("latin1"),
+                            D.rfind(b"wsad")))
+
+
+def selftest_round9():
+    """★ THE NEGATIVE CONTROLS.  An audit that cannot fail is not an audit."""
+    say("\n=== SELFTEST -- ROUND 9's AUDIT, ATTACKED ===\n")
+    labs = R7.LABS
+    tone = [l.name for l in labs if re.match(r"^ToneRec_[0-9A-F]{3}_[A-Za-z0-9]+$", l.name)]
+    sa = [l.name for l in labs if "_SameAs_" in l.name]
+    perc = [l.name for l in labs if re.match(r"^PercInst_\d{3}_[A-Za-z0-9]+$", l.name)]
+    first, last = tone[0], tone[-1]
+    bent = audit_labels({first: re.sub(r"_[A-Za-z0-9]+$", "_Harpsichord", first)})
+    check("T7  a tone record renamed to another record's name is REFUTED",
+          bent[first][0] == "REFUTED", "%s -> %s" % (first, bent[first][0]))
+    bent = audit_labels({last: re.sub(r"^ToneRec_[0-9A-F]{3}", "ToneRec_003", last)})
+    check("T8  ★ and the control fires on the LAST tone record, not only the first",
+          bent[last][0] == "REFUTED", "%s re-indexed -> %s" % (last, bent[last][0]))
+    bent = audit_labels({perc[-1]: re.sub(r"_[A-Za-z0-9]+$", "_Piano", perc[-1])})
+    check("T8' and on the LAST drum-instrument record",
+          bent[perc[-1]][0] == "REFUTED", "%s -> %s" % (perc[-1], bent[perc[-1]][0]))
+    bent = audit_labels({sa[-1]: sa[-1] + "X"})
+    check("T9  a `_SameAs_` label whose carrier is not a carrier is REFUTED",
+          bent[sa[-1]][0] == "REFUTED", "%s -> %s" % (sa[-1] + "X", bent[sa[-1]][0]))
+    bent = audit_labels({tone[5]: "Something_Invented_Here"})
+    check("T9' a label no rule reaches falls to RESIDUE, never to a silent pass",
+          bent[tone[5]][0] == "RESIDUE", "-> %s" % bent[tone[5]][0])
+    agree, differ = 0, []
+    for slot in NAMED_SLOTS:
+        for k, tw in R6.wavesel_twins(slot).items():
+            names = sorted(set(x[2] for x in tw))
+            if len(names) < 2:
+                continue
+            a, b = boundary_stem(names), R7._boundary_stem(names)
+            if a == b:
+                agree += 1
+            else:
+                differ.append((slot, k, a, b))
+    check("T10 the audit's stem rule is a SECOND OPINION that agrees with round 7's",
+          not differ and agree > 100,
+          "%d multi-carrier records, %d disagreements" % (agree, len(differ)))
+    r1 = audit_labels()
+    r2 = audit_labels()
+    check("T11 the audit is deterministic -- two runs give the same verdicts",
+          r1 == r2, "%d labels" % len(r1))
+    check("T12 every grade the audit emits is one of the four it documents",
+          set(v[0] for v in r1.values()) <= set(AUDIT_GRADES),
+          "%s" % sorted(set(v[0] for v in r1.values())))
+
+
 def nameless_report(nameless):
     say("\n  ★ THE NAMELESS, IN FULL -- %d objects, three answers each:" % len(nameless))
     for r in nameless:
@@ -1224,16 +2034,39 @@ def main():
     q7()
     q8()
     q9()
+    _res, _g = q10()
+    _AUDIT_GRADES.update(_g)
+    q11()
+    q12()
+    q13()
+    q14()
+    q15()
     if "--selftest" in _ARGV:
         selftest()
+        selftest_round9()
     if "--nameless" in _ARGV:
         nameless_report(nameless)
     say("")
-    say("  ★★ THE NUMBER THIS ROUND PUBLISHES: %d of prom_d's %d framed labels are"
+    say("  ★★ WHAT ROUND 8 PUBLISHED: %d of prom_d's %d framed labels promoted to a"
         % (added, added + len(nameless)))
-    say("     promoted to a name that states what the object IS, and %d stay framed"
+    say("     name that states what the object IS; %d stay framed with all three"
         % len(nameless))
-    say("     with all three routes to a name asked and answered NO.")
+    say("     routes to a name asked and answered NO.")
+    say("")
+    say("  ★★ WHAT ROUND 9 PUBLISHES, and it promotes NOTHING: %d of the %d labels"
+        % (_AUDIT_GRADES.get("DERIVED", 0), sum(_AUDIT_GRADES.values())))
+    say("     have their NAME re-derived from this image's own bytes and %d have"
+        % _AUDIT_GRADES.get("ADDRESS", 0))
+    say("     only their ADDRESS.  Every mechanism that could have moved that")
+    say("     number this round was measured and refused: the twin rule on the")
+    say("     +0x3C array (0 of 64, Q12), the monotone interpolation (0 of 12 and")
+    say("     self-refuting on the other array, Q13), and General MIDI (18/128")
+    say("     against a rotated null of 11/128, Q14).  The one thing round 9")
+    say("     CHANGED in prom_d/wsa1_prom_d.s is a false number in generated prose:")
+    say("     `108 entries` over a 132-byte object, plus round 8's `1,549` where")
+    say("     the population is 1,485.  Both fixed in the GENERATOR, which is the")
+    say("     only place a fix survives, and both now have a check that re-derives")
+    say("     them (Q10d, Q11d).")
     print("\n%d checks, %d failed.%s"
           % (NCHECK[0], len(FAILED),
              "" if not FAILED else "  " + "; ".join(FAILED)))

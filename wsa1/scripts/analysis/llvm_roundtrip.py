@@ -33,6 +33,7 @@ RUN
 """
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -78,15 +79,30 @@ def unidasm(data, base):
 
 
 def assemble(lines):
+    # ⚠ THE `finally` IS LOAD-BEARING, not tidiness.  Until 2026-08-30 this
+    # function called mkdtemp() and never removed the directory, on ANY path --
+    # including the early `return None, p.stderr` above, which is the one the
+    # force loop takes repeatedly.  Each leak is 4 inodes (the directory plus
+    # t.s/t.o/t.bin), the callers run it thousands of times per round, and it
+    # accumulates on a tmpfs that is never swept: a wave-7 lane found /tmp at
+    # 261,907 leaked directories and 1,048,576 of 1,048,576 inodes used, which
+    # fails every later mkdtemp AND the shell's own cwd file, with a message
+    # ("No space left on device") that names a full disk when 13G was free.
+    # The bytes are read into memory before the return, so removing the
+    # directory here cannot affect any caller.
     d = tempfile.mkdtemp()
-    s, o, b = (os.path.join(d, n) for n in ("t.s", "t.o", "t.bin"))
-    open(s, "w").write("\t.text\n" + "".join(lines))
-    p = subprocess.run([os.path.join(LLVM, "llvm-mc"), "-triple=tlcs900",
-                        "-filetype=obj", "-o", o, s], capture_output=True, text=True)
-    if p.returncode:
-        return None, p.stderr
-    subprocess.run([os.path.join(LLVM, "llvm-objcopy"), "-O", "binary", o, b], check=True)
-    return open(b, "rb").read(), ""
+    try:
+        s, o, b = (os.path.join(d, n) for n in ("t.s", "t.o", "t.bin"))
+        open(s, "w").write("\t.text\n" + "".join(lines))
+        p = subprocess.run([os.path.join(LLVM, "llvm-mc"), "-triple=tlcs900",
+                            "-filetype=obj", "-o", o, s], capture_output=True, text=True)
+        if p.returncode:
+            return None, p.stderr
+        subprocess.run([os.path.join(LLVM, "llvm-objcopy"), "-O", "binary", o, b],
+                       check=True)
+        return open(b, "rb").read(), ""
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
 
 
 def main():

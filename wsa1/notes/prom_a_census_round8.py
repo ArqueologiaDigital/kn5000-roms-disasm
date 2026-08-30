@@ -79,6 +79,49 @@ WHY A SECOND CENSUS, WHEN ROUND 7 ALREADY WROTE ONE
     to pass.  A tolerance chosen to pass is not a check.
 
 ────────────────────────────────────────────────────────────────────────────────
+★★ ROUND 9 (2026-08-30) -- WHAT THIS FILE GAINED, IN ONE PAGE
+────────────────────────────────────────────────────────────────────────────────
+    TWENTY names, one refusal, two corrections, and one lever measured and
+    DECLINED.  prom_a moved
+
+        content  framed  sub_XXXX   LOWER   UPPER   headers  evidence
+ before    1,497     253     2,882   32.3%   37.8%     1,173     1,265
+ after     1,517     253     2,862   32.8%   38.2%     1,193     1,285
+
+    0 bytes converted.  0 framed -> content, and `--framed` is the measurement
+    that says why rather than an apology: ZERO of prom_a's 253 framed objects
+    hold a ROM string of even three characters, so the lever prom_b's lanes are
+    using does not exist in this image.
+
+    THE NEW AXIS is `--wrappers`.  Round 8 asked what a body TOUCHES; this asks
+    whether the touch is the WHOLE body.  220 routines have exactly one distinct
+    CONTENT-named callee and 15 or fewer instructions; 47 of those have a callee
+    no other such wrapper shares -- and only where that is true can a name be
+    anything but "the callee plus an address", which is framed.  13 of the 47
+    are named, and the other 34 are refused for a printed, mechanical reason
+    (R1..R5).  The remaining 7 of the 20 come from bucket T4 and from the
+    eight-slot jump block at 0xFE3000.
+
+    THE TWO CORRECTIONS, both to work this file itself shipped:
+      * `Ring_InitTenOfFourteen`'s Evidence line still said its ten calls were
+        "every `T_Ring*_Init` slot in prom_b".  prom_b has FOURTEEN; the
+        routine at 0xF825D4 -- now `Ring_InitAllFourteen` -- calls all of them.
+        ★ THE FIX IS IN THE NAMES TABLE, NOT ONLY IN THE .s: round 8 changed
+        the label and left the table saying `Ring_InitAllTen`, so the script's
+        own --selftest was FAILING in the committed tree and a re-run of
+        --apply would have written the refuted sentence back.
+      * a `re.match` object was being stored as `endflow`, so `--dump` printed
+        `<re.Match object ...>` in the `end` column for two routines.  Bool-
+        equivalent, so no count ever moved; only the printing was wrong.
+
+    AND ONE CORRECTION THIS LANE CANNOT APPLY, because prom_b is another lane's
+    file this round: prom_b's `GroupMaxMemberIndex_ToneGroupsCopy` header says
+    `Read by: prom_a sub_FC2222 ... ld XIX,0x00F06EE4`.  0x00F06EE4 is loaded
+    ONCE in all of prom_a, at 0xFC22A3, which is past sub_FC2222's extent end
+    0xFC2281 and inside what is now `SoundGroup_MaxMemberIndex_GetToneCopy`.
+    Two --selftest checks pin it.
+
+────────────────────────────────────────────────────────────────────────────────
 WHAT `--dump` PRINTS FOR EVERY ONE OF THEM
 ────────────────────────────────────────────────────────────────────────────────
     addr        from the LABEL, not from the listing.  61 of these routines sit
@@ -255,6 +298,10 @@ THE BUCKETS (first match wins; `--census` prints all of them with sizes)
 ────────────────────────────────────────────────────────────────────────────────
 ★ WHAT THE NEXT ROUND SHOULD TAKE, AND WHAT IT MUST NOT DO
 ────────────────────────────────────────────────────────────────────────────────
+    ⚠ ROUND 9 UPDATE: six of the T4 routines below ARE now named
+      (sub_FC2222, sub_FC2282, sub_FC22E0, sub_FC2422, sub_FEB2D4 and
+      sub_F825D4), so the bucket is 81 minus those; `--bucket T4` prints the
+      live list.  T5 (66) and C1 (27) are still untouched.
     * `--bucket T4` is 81 routines that each load a DISTINCTIVE CONTENT-named
       ROM object, already enumerated with the object beside them: `sub_FEB2D4`
       reaches DrumKitNameBlockPtrs and DrumKitNames, `sub_FC2222` three
@@ -308,6 +355,14 @@ RUN
     python3 notes/prom_a_census_round8.py --apply       # write them into the .s
     python3 notes/prom_a_census_round8.py --verify      # they are in the .s
     python3 notes/prom_a_census_round8.py --selftest    # 59 checks
+
+  ROUND 9 (2026-08-30), the WRAPPER lever:
+    python3 notes/prom_a_census_round8.py --wrappers    # the 220, the 47, the 20
+    python3 notes/prom_a_census_round8.py --applied9    # round 9's 20 headers
+    python3 notes/prom_a_census_round8.py --emitters    # which names a re-emit reverts
+    python3 notes/prom_a_census_round8.py --framed      # why framed -> content is 0 here
+    python3 notes/prom_a_census_round8.py --apply9      # write them into the .s
+    python3 notes/prom_a_census_round8.py --verify9     # read them back
 """
 import bisect
 import collections
@@ -532,10 +587,14 @@ def build():
         r.n_ext = len(ext_lines)
         flow = flow_body(r.addr, r.end, ext_lines)
         r.n_flow = len(flow)
-        r.endflow = bool(ext_lines) and (ext_lines[-1][1] in RETS or
-                                         (ext_lines[-1][1] in JUMPS and
-                                          re.match(r'^\s*(jp|jr|jrl)\s+[^,]*$',
-                                                   " " + ext_lines[-1][2])))
+        # ⚠ bool(): the second arm is an `re.match` OBJECT, and returning it made
+        # --dump print `<re.Match object ...>` in the `end` column for the two
+        # routines whose last instruction is a bare `jp`.  Bool-equivalent, so no
+        # count ever moved; it was the PRINTING that was wrong.
+        r.endflow = bool(ext_lines) and bool(ext_lines[-1][1] in RETS or
+                                            (ext_lines[-1][1] in JUMPS and
+                                             re.match(r'^\s*(jp|jr|jrl)\s+[^,]*$',
+                                                      " " + ext_lines[-1][2])))
         # --- what the FLOW-REACHABLE body touches ---------------------------
         r.leaf, r.unresolved_exit = True, False
         r.sfr, r.dev, r.dram = set(), set(), set()
@@ -1011,19 +1070,33 @@ NAMES = [
      "part's identity and the second (0x00F7FFF0) fetches prom_d's; the "
      "refusal itself contradicted the power-on block's own header and is "
      "removed. Called from prom_a 0xF82A24 (`calr`)"),
-    ("sub_FE1D29", "Ring_InitAllTen",
-     "calls the Init entry of all ten ring buffers, in one run, and returns",
+    # ⚠ CORRECTED IN ROUND 9, IN THIS TABLE AND NOT ONLY IN THE LISTING.
+    # Round 8 shipped this routine as `Ring_InitAllTen`, a reviewer showed the
+    # ROM refutes the completeness claim, and the LABEL was changed to
+    # `Ring_InitTenOfFourteen` -- while THIS TABLE kept the old name and the
+    # Evidence line kept saying "every `T_Ring*_Init` slot in prom_b".  Two
+    # consequences, both real: the script's own --selftest failed in the
+    # committed tree ("sub_FE1D29 has been renamed to Ring_InitAllTen"), and a
+    # re-run of --apply would have rewritten the refuted sentence back into the
+    # listing.  Correcting the .s without correcting the generator that emits it
+    # is not a correction.
+    ("sub_FE1D29", "Ring_InitTenOfFourteen",
+     "calls the Init entry of TEN of the fourteen ring buffers, in one run, and "
+     "returns",
      "ten consecutive `call` instructions at 0xFE1D29, 0xFE1D2D, 0xFE1D31, "
      "0xFE1D35, 0xFE1D39, 0xFE1D3D, 0xFE1D41, 0xFE1D45, 0xFE1D49 and 0xFE1D4D, "
      "whose operands are prom_b directory slots T_Ring60080A_Init, "
      "T_Ring600A14_Init, T_Ring600C1E_Init, T_Ring601028_Init, "
      "T_Ring601432_Init, T_Ring60153C_Init, T_Ring601646_Init, "
-     "T_Ring601850_Init, T_Ring60195A_Init and T_Ring601C6E_Init -- every "
-     "`T_Ring*_Init` slot in prom_b and no other call. 0xFE1D51 is the `ret`",
+     "T_Ring601850_Init, T_Ring60195A_Init and T_Ring601C6E_Init -- TEN of the "
+     "FOURTEEN `T_Ring*_Init` slots in prom_b, and no other call. 0xFE1D51 is "
+     "the `ret`. The four it does NOT call are T_Ring60000C_Init, "
+     "T_Ring601B64_Init, T_Ring60480A_Init and T_Ring608A0A_Init, and "
+     "Ring_InitAllFourteen (0xF825D4) calls all fourteen",
      "why the ninth call is out of address order (T_Ring60195A_Init is reached "
-     "through slot 0xF41D28, below all the others), and what the ten buffers "
-     "carry -- FINDINGS-prom_a-ring-buffers.md has the capacities, not the "
-     "traffic"),
+     "through slot 0xF41D28, below all the others), why these ten and not the "
+     "fourteen, and what the buffers carry -- FINDINGS-prom_a-ring-buffers.md "
+     "has the capacities, not the traffic"),
 ]
 
 
@@ -1255,7 +1328,7 @@ def _wrap(s, n, indent=""):
     return out
 
 
-def _header(old, new, what, ev, unk):
+def _header(old, new, what, ev, unk, bucket="T1"):
     """The house style used around Dev7F_WriteAllFourSlots in this listing.
 
     ⚠ ONE STATEMENT PER FACT.  The first draft printed the `what` line as the
@@ -1278,7 +1351,8 @@ def _header(old, new, what, ev, unk):
     for c in _wrap(unk, 60):
         w.append("; " + ("Unknown:  " if first else "          ") + c)
         first = False
-    w.append("; Was `%s`, named by notes/prom_a_census_round8.py (bucket T1)." % old)
+    w.append("; Was `%s`, named by notes/prom_a_census_round8.py (bucket %s)."
+             % (old, bucket))
     w.append(RULE)
     return w
 
@@ -1456,6 +1530,828 @@ def verify():
     print("  %d names and %d refusals verified, %d problems"
           % (len(NAMES) + len(LINK_NAMES), len(REFUSALS), bad))
     return bad
+
+
+# ===========================================================================
+# 7. ROUND 9 -- the WRAPPER lever, its 47, and the 20 that survived it
+# ===========================================================================
+# ★ WHAT THIS ROUND ADDED TO THE CENSUS, and it is one axis, not a new census.
+# Round 8's buckets ask what a routine's body TOUCHES.  They do not ask whether
+# the touch is the routine's WHOLE body.  A routine that saves four registers,
+# makes ONE call to a CONTENT-named routine and restores them is not merely
+# "touching" that routine -- it IS that routine, seen through a different
+# calling convention, and the brief's own mechanism covers it: name a pointer
+# from what it points at.
+#
+# THE LEVER, stated so it can be argued with:
+#     W = { r : r has exactly ONE distinct CONTENT-named callee,
+#               no display-list / swi entry among its exits,
+#               and n_flow <= 15 instructions }
+# and then the part that decides whether a NAME comes out of it:
+#     W1 = { r in W : no OTHER member of W has the same callee }
+# because when six wrappers share a callee, the only thing that could tell them
+# apart is an address, and "callee name plus an address" is a FRAMED label --
+# the exact trade round 8 measured and declined.
+#
+#     |W|  = 220      of 2,882      (7.6%)
+#     |W1| =  47      of 2,882      (1.6%)
+#
+# `--wrappers` prints both live, with the crowded callees and their counts, so
+# the 173 that W1 throws away are visible rather than quietly dropped.
+#
+# ★★ AND THE ARITHMETIC OF THE 47, WHICH IS THE HONEST PART OF THIS ROUND.
+# THIRTEEN of them are named below (round 9 ships twenty names in all; the other
+# seven come from the T4 bucket and from the jump block at 0xFE3000).  The rest
+# are refused, mechanically, for five stated reasons, and `--wrappers` prints
+# the reason beside each one and the tally at the end:
+#     R1  the listing ALREADY carries a refusal header for it (round 7's
+#         --apply-strings wrote several).  Overwriting another round's evidence
+#         to raise a name count is the trade this wave keeps catching.
+#     R2  it lies inside an emitter's declared range that has NO name side-car,
+#         so a name written into the .s is reverted the next time that emitter
+#         runs.  Only gen_prom_a_block.py and the ring-buffer emitter carry one.
+#     R3  it does not end in a flow end -- it falls THROUGH into the next label
+#         -- so "wrapper" is not established; the call may belong to a routine
+#         whose entry is elsewhere.
+#     R4  it is a TWO-INSTRUCTION forwarder -- `calr X` then `ret` -- so the
+#         only name it could carry is a second spelling of a name that is
+#         already three lines away.  This is round 7's own standard, the one
+#         that declined to re-spell `Ring_Get_0080` as `Ring_Get_Cap0080`.
+#     R5  its body was NOT READ this round.  It is a bound on the effort spent,
+#         not a claim about the routine, and it is printed rather than folded
+#         into one of the others.  `--wrappers` prints how many are here; they
+#         are where the next round should start.
+# ⚠ AND THE ONE PLACE THIS ROUND CROSSED ITS OWN R4 LINE, argued rather than
+# hidden: `INT5_Dev7B_Receive_Alias` and `INTTC0_uDMA0Done_Alias` are ONE-
+# instruction forwarders and they ARE named, because the fact they record is
+# not the callee's identity but the SHAPE OF THE BLOCK THEY SIT IN -- eight
+# `jp` slots at 0xFE3000 on a 4-byte stride, of which two enter named
+# interrupt handlers and one (slot 3) enters an `reti` wrapper.  A `calr X /
+# ret` in the middle of ordinary code records nothing comparable.
+# ★ Every routine named here is ALSO given a body reading that a bare
+# "<callee>_Veneer" would not carry: which flag gates it, which cursor pair the
+# predicate it calls compares, how many times it retries.  A derivative name
+# with no reading behind it is a re-spelling, and this file does not ship one.
+
+# (lo, hi, emitter, has a name side-car)
+EMITTERS = [
+    (0xF830C6, 0xF85600, "notes/gen_prom_a_ringbuf_module.py", True),
+    (0xF85FF9, 0xF89800, "notes/gen_prom_a_f85ff9_module.py", False),
+    (0xF89800, 0xF8A000, "notes/gen_prom_a_ctrl_module.py", False),
+    (0xF8A000, 0xF8BC00, "notes/gen_prom_a_f8a000_module.py", False),
+    (0xF8BC00, 0xF8E480, "notes/gen_prom_a_block.py", True),
+    (0xF90989, 0xF92C62, "notes/gen_prom_a_f90989_module.py", False),
+    (0xFA5AEB, 0xFAA000, "notes/gen_prom_a_fa5aeb_module.py", False),
+    (0xFAD800, 0xFB2000, "notes/gen_prom_a_fad800_module.py", False),
+    (0xFE54EC, 0xFE6850, "notes/gen_prom_a_fdc_module.py", False),
+    (0xFE8000, 0xFEB330, "notes/gen_prom_a_fe8000_module.py", False),
+    (0xFEB330, 0xFEF746, "notes/gen_prom_a_drumnames.py", False),
+    (0xFEF746, 0xFF3800, "notes/gen_prom_a_screens.py", False),
+    (0xFF8000, 0xFFFF00, "notes/gen_prom_a_splash.py", False),
+]
+
+
+def emitter_of(addr):
+    """Which generator OWNS this address, and does it carry a name side-car?
+
+    ⚠ A name written into the .s inside a side-car-less emitter's range is
+    reverted the next time that emitter runs.  Round 6 already shipped
+    LCD_DrawVRuleLeft_Layer1 inside gen_prom_a_screens.py's range, so the tree
+    accepts the risk; it does not record it anywhere, which is what this does.
+    """
+    for lo, hi, script, side in EMITTERS:
+        if lo <= addr < hi:
+            return script, side
+    return None, None
+
+
+# ---------------------------------------------------------------------------
+# The twenty names.  (old, new, what, evidence, unknown)
+# ---------------------------------------------------------------------------
+RING_NAMES = [
+    ("sub_F825D4", "Ring_InitAllFourteen",
+     "initialises ALL FOURTEEN of CPU 1's ring buffers, between five stores "
+     "nothing in this tree names",
+     "fourteen consecutive `call` instructions at 0xF825E5, 0xF825E9, "
+     "0xF825ED, 0xF825F1, 0xF825F5, 0xF825F9, 0xF825FD, 0xF82601, 0xF82605, "
+     "0xF82609, 0xF8260D, 0xF82611, 0xF82615 and 0xF82619, whose operands are "
+     "the prom_b slots T_Ring608A0A_Init, T_Ring60480A_Init, "
+     "T_Ring60000C_Init, T_Ring601B64_Init, T_Ring60080A_Init, "
+     "T_Ring600A14_Init, T_Ring600C1E_Init, T_Ring601028_Init, "
+     "T_Ring601432_Init, T_Ring60153C_Init, T_Ring601646_Init, "
+     "T_Ring601850_Init, T_Ring60195A_Init and T_Ring601C6E_Init -- that is "
+     "EVERY `T_Ring*_Init` label in prom_b, each exactly once, and prom_b has "
+     "exactly fourteen of them (`grep -c '^T_Ring[0-9A-F]*_Init:' "
+     "prom_b/wsa1_prom_b.s`). Around them: 0xF825D4-0xF825DE writes 0xFF to "
+     "(0x88) and (0x98) and zeroes the longword at (0x80), 0xF825E1 calls "
+     "sub_F831B3, and 0xF8261D/0xF82622 write 0xFF to (0x2E00) and (0x2000). "
+     "Entered by the `jp` at 0xF82010, the first of six jump slots "
+     "that follow Data_F82000",
+     "what the five stores mean -- (0x80), (0x88), (0x98), (0x2000) and "
+     "(0x2E00) are named by nothing in this tree -- and what sub_F831B3 does, "
+     "which this file already refuses to say because device 0x7F's role is "
+     "open. ★ THE NAME COUNTS THE CALLS, NOT THE RINGS: it claims fourteen "
+     "Init entries are called, which is checked, and nothing about whether "
+     "fourteen is all the machine has"),
+    ("sub_F825C7", "Ring601850_ServiceIfNotEmpty",
+     "runs sub_FC87AE exactly when ring 0x601850 holds data",
+     "0xF825C7 `call 0xF41E68` = prom_b slot T_Ring601850_IsEmpty; 0xF825CB "
+     "`and WA,WA` and 0xF825CD `jr z,.LF825D3` skip the body when it returns "
+     "zero; 0xF825CF `call 0xF413B8` = prom_b slot T_F413B8 -> prom_a "
+     "sub_FC87AE runs when it does not. ★ POLARITY, and it is the opposite of "
+     "what the callee's name suggests: Ring601850_IsEmpty (0xF84B6E) loads "
+     "WA=0, compares the read cursor (0x601848) with the write cursor "
+     "(0x60184C) and loads 0xFFFF only when they DIFFER -- so it returns ZERO "
+     "when the ring IS empty. Reached only through prom_b slot T_F40020",
+     "what sub_FC87AE does with the ring and what the ring carries. ⚠ AND THE "
+     "POLARITY ABOVE IS A FACT ABOUT ALL FOURTEEN `Ring*_IsEmpty` ROUTINES, "
+     "not just this one; none of them is renamed here, because renaming "
+     "fourteen prom_a labels and their fourteen prom_b slots is a mass rename "
+     "and this wave has measured what those cost"),
+    ("sub_FB6084", "Ring601432_SpinUntilEmpty",
+     "polls ring 0x601432 until it is empty, or 65535 times, whichever comes "
+     "first",
+     "0xFB6085 `ldw HL,0xFFFF` seeds the bound; 0xFB6088 `cps HL,0x00` and "
+     "0xFB608A `jr z` leave on exhaustion; 0xFB608C `dec 1,HL` counts down; "
+     "0xFB608E `call 0xF41DFC` = prom_b slot T_Ring601432_IsEmpty; 0xFB6092 "
+     "`cps WA,0x00` and 0xFB6094 `jr nz` go round again while the result is "
+     "non-zero. Ring601432_IsEmpty (0xF8483F) returns 0 only when the read "
+     "cursor (0x60142A) equals the write cursor (0x60142E), so a non-zero "
+     "result means the ring still holds data. Called by `calr` at 0xFB6069 "
+     "(in sub_FB6026) and 0xFB6076 (in sub_FB6072)",
+     "what the 65535-poll bound is for: the routine returns no value, so "
+     "neither caller can tell a drained ring from an exhausted count"),
+    ("sub_FC1D70", "Ring60000C_GetWithRetry",
+     "calls ring 0x60000C's Get until it yields a byte, up to 65535 times, "
+     "and flags exhaustion in XIY",
+     "0xFC1D71 `ldw BC,0xFFFF`; 0xFC1D79 `call 0xF41E80` = prom_b slot "
+     "T_Ring60000C_Get, with XIY, XIX, DE and HL saved across it by 0xFC1D74-"
+     "0xFC1D78 and restored at 0xFC1D7D-0xFC1D81; 0xFC1D82 `cp WA,0xFFFF` and "
+     "0xFC1D86 `jr nz` return as soon as the result is not 0xFFFF; 0xFC1D88 "
+     "`djnz16 BC` retries otherwise; 0xFC1D8B `ld XIY,0xFFFFFFFF` on "
+     "exhaustion. Ring_Get_0400 (0xF8405D), the class routine every 0x400-"
+     "capacity Get reaches, loads WA=0xFFFF exactly when the read cursor "
+     "equals the write cursor, so 0xFFFF is its empty marker. All seven call "
+     "sites are inside sub_FC1D92, the first at 0xFC1D9B",
+     "why exhaustion is reported in XIY when the byte itself comes back in "
+     "WA, and whether any caller reads XIY"),
+    ("sub_FD2504", "Ring608A0A_DrainAll",
+     "calls sub_FD2014 once per item until ring 0x608A0A is empty",
+     "0xFD2504 `call 0xF41CDC` = prom_b slot T_Ring608A0A_IsEmpty; 0xFD2508 "
+     "`cps WA,0x00` and 0xFD250A `jr z` return when it reads zero; 0xFD250C "
+     "`calr sub_FD2014` otherwise, and 0xFD250F `jr` re-tests. "
+     "Ring608A0A_IsEmpty (0xF84327) returns 0 only when the read cursor "
+     "(0x608A02) equals the write cursor (0x608A06). sub_FD2014's own body "
+     "reaches T_Ring608A0A_Get, so the loop consumes what it tests. Published "
+     "by prom_b slot T_F42380 and reached from `call 0xF42380` at 0xF8213E, "
+     "inside sub_F82028",
+     "what sub_FD2014 does with each item"),
+    ("sub_FB7EFD", "Ring600C1E_InitIfPanelMode79",
+     "re-initialises ring 0x600C1E, with interrupts masked, only while the "
+     "panel mode byte reads 0x79",
+     "0xFB7EFD `m_cp_mi8 MB16, 0x207a, 0x79` and 0xFB7F02 `jr nz` gate the "
+     "whole body; 0xFB7F04 `ei 0x06` raises the mask, 0xFB7F06 `call "
+     "0xF41DB8` = prom_b slot T_Ring600C1E_Init, 0xFB7F0A `ei 0x00` lowers "
+     "it. (0x207A) is this listing's panel mode byte -- PanelState_Update207A "
+     "(0xF863F5) is headed `(0x207A) := (0x207C) unless the mode is "
+     "unchanged`. Called by `call` at 0xFB2058, 0xFB20F2, 0xFB21EF and "
+     "0xFB607F",
+     "what mode 0x79 is. The listing tests (0x207A) against 0x0D, 0x13, 0x79, "
+     "0xB7 and 0xDB in five different modules and names none of the values"),
+    ("sub_FB7F0D", "Ring601646_InitIrqMasked",
+     "re-initialises ring 0x601646 with the interrupt mask raised to 6",
+     "0xFB7F0D `ei 0x06`, 0xFB7F0F `call 0xF41E48` = prom_b slot "
+     "T_Ring601646_Init, 0xFB7F13 `ei 0x00`, 0xFB7F15 `ret`. Called by `call` "
+     "at 0xFB7769, inside sub_FB775F. ★ THE EXTENT HOLDS A SECOND ROUTINE "
+     "THIS LABEL DOES NOT COVER: 0xFB7F16-0xFB7F1E is the same four "
+     "instructions for T_Ring601432_Init (slot 0xF41E00) and carries no label "
+     "because nothing in either image references it -- which is why it is "
+     "described here and not labelled",
+     "why this ring's Init is masked when Ring_InitAllFourteen calls all "
+     "fourteen unmasked"),
+]
+
+SOUND_NAMES = [
+    ("sub_FC2222", "SoundGroup_MaxMemberIndex_Get",
+     "returns the max-member-index byte for a sound group, from one of three "
+     "ROM maps or a RAM one, chosen by the group selector in W",
+     "a `cp W` ladder at 0xFC2226-0xFC225A picks exactly one base: "
+     "0xFC225C `ld XIX,0x00F06EB4` = GroupMaxMemberIndex_ToneGroups, 0xFC2263 "
+     "`ld XIX,0x00F06EC4` = GroupMaxMemberIndex_DrumGroups, 0xFC226A `ld "
+     "XIX,0x00F06ED4` = GroupMaxMemberIndex_DrumGroupsSecondWindow and "
+     "0xFC2271 `ld XIX,0x000008C0`, a RAM base; 0xFC2276 `xor W,W` and "
+     "0xFC2278 `ld A,(XIX+WA)` then read one byte at the index in A. Those "
+     "three ROM objects carry the reciprocal citation in prom_b: each of their "
+     "headers says `Read by: prom_a sub_FC2222 (0xFC2222-0xFC2281)` and "
+     "quotes the same `ld XIX` immediate. Published by prom_b slot T_F4101C, "
+     "which eleven prom_a sites call",
+     "the RAM base 0x08C0, which no header in this tree describes; and "
+     "'MEMBER' is this tree's word for the second index, not the ROM's -- the "
+     "string occurs zero times in prom_a and prom_b"),
+    ("sub_FC2282", "SoundGroup_MaxMemberIndex_GetToneCopy",
+     "the same lookup against GroupMaxMemberIndex_ToneGroupsCopy and a "
+     "different RAM base, over a SHORTER selector ladder",
+     "0xFC22A3 `ld XIX,0x00F06EE4` = GroupMaxMemberIndex_ToneGroupsCopy and "
+     "0xFC22AA `ld XIX,0x000008D0`; 0xFC22AF `xor W,W` / 0xFC22B1 `ld "
+     "A,(XIX+WA)` is the same two-instruction read as "
+     "SoundGroup_MaxMemberIndex_Get's. Published by prom_b slot T_F41034, "
+     "which seven prom_a sites call. ⚠ AND THIS CORRECTS A COMMITTED "
+     "CITATION: prom_b's GroupMaxMemberIndex_ToneGroupsCopy header says `Read "
+     "by: prom_a sub_FC2222 ... ld XIX,0x00F06EE4`. It is not: 0x00F06EE4 is "
+     "loaded ONCE in all of prom_a, at 0xFC22A3, which is past sub_FC2222's "
+     "extent end 0xFC2281 and inside THIS routine. prom_b is another lane's "
+     "file this round, so the fix is reported and not applied",
+     "what distinguishes this arm from SoundGroup_MaxMemberIndex_Get's: the "
+     "two ladders test overlapping selector ranges and this one has four "
+     "fewer tests, and nothing decoded here says which caller wants which"),
+    ("sub_FC22E0", "SoundCode_FromGroupMember_ModeOffset",
+     "reads the (group, member) pair at (0x60F010)/(0x60F011), looks the pair "
+     "up in SoundCodeByGroupMember_ModeOffsetGroup with the group biased by "
+     "the mode, and stores the word to (0x60F014)/(0x60F015)",
+     "0xFC22E0 `ld A,(0x60F010)`; 0xFC22E5-0xFC2307 add 0x10, 0x20 or 0x22 to "
+     "it according to (0x60F013) and bit 2 of (0x7F4D) -- that bias is what "
+     "`ModeOffset` names; 0xFC230C `mul WA,0x0010` is the 16-byte row stride, "
+     "0xFC2310 `ld C,(0x60F011)` and 0xFC2317 `mul BC,0x0002` the 2-byte "
+     "column; 0xFC231D `add XBC,0x00F06EF4` is the table base, which is "
+     "SoundCodeByGroupMember_ModeOffsetGroup; 0xFC2325 and 0xFC232A store the "
+     "two halves. prom_b's header for that table carries the reciprocal "
+     "citation, `Read by: prom_a sub_FC22E0 (0xFC22E0-0xFC232F)`, with the "
+     "same arithmetic. One call site, 0xFC22D3",
+     "what the 16-bit word ENCODES -- prom_b's own header says the low byte "
+     "is a kind and the high byte a value, and neither is decoded"),
+    ("sub_FC2422", "SoundCode_FromGroupMember_ByteGroup",
+     "the same (group, member) -> (0x60F014)/(0x60F015) lookup, against "
+     "SoundCodeByGroupMember_ByteGroup, with a RAM table searched first when "
+     "bit 2 of (0x7F4D) is set",
+     "0xFC2422 `m_bit 2, MD16, 0x7f4d` chooses the arm. RAM arm: 0xFC2432 `ld "
+     "XIX,0x00005760` and the 0xFC243B loop compare the BC pair against 127 "
+     "16-bit entries (0xFC2446 `cp WA,0x00FE`). ROM arm: 0xFC245D/0xFC2462 "
+     "read the same two cells, 0xFC2467 or's 0x80 into the group when bit 5 "
+     "of (0x60F011) is set -- the FULL BYTE index that `ByteGroup` names -- "
+     "0xFC246F `and C,0x07` masks the column, and 0xFC2472 `ld "
+     "XIX,0x00F07134` is SoundCodeByGroupMember_ByteGroup's base; 0xFC24B1 "
+     "and 0xFC24B6 store the halves. prom_b's header for that table cites "
+     "`prom_a 0xFC245D-0xFC2489` for exactly this arithmetic. One call site, "
+     "0xFC241A",
+     "what the RAM table at 0x5760 holds and who fills it, and what the "
+     "0x1A/0x01/0x20 values loaded into C on the way out select"),
+]
+
+VENEER_NAMES = [
+    ("sub_FE0039", "Disk_FormatSelectedMedia_Veneer",
+     "calls Disk_FormatSelectedMedia with XDE, XHL, XIX and XIZ preserved",
+     "0xFE0039-0xFE003C push XDE, XHL, XIX and XIZ; 0xFE003D `call 0xF43460` "
+     "is prom_b slot T_Disk_FormatSelectedMedia, whose `jp` target 0xFE7200 "
+     "carries the label Disk_FormatSelectedMedia; 0xFE0041-0xFE0044 pop the "
+     "same four in reverse and 0xFE0045 returns. No other call or jump is in "
+     "the extent. Called by `calr` at 0xFE0A29 and 0xFE0A59, both inside "
+     "sub_FE09BE. DERIVATIVE: the name is the callee's, and the routine's own "
+     "contribution is the register save",
+     "why the four registers need saving here when the callee is reached "
+     "directly elsewhere"),
+    ("sub_FE00D1", "MidiIn_ServiceDeferred_Veneer",
+     "calls MidiIn_ServiceDeferred with XDE, XHL, XIX and XIZ preserved",
+     "0xFE00D1-0xFE00D4 push the four; 0xFE00D5 `call 0xF40758` is prom_b "
+     "slot T_MidiIn_ServiceDeferred, whose `jp` target carries the label "
+     "MidiIn_ServiceDeferred; 0xFE00D9-0xFE00DC pop them and 0xFE00DD "
+     "returns. Called by `calr` at 0xFE201F. DERIVATIVE, as above",
+     "as above"),
+    ("sub_FE00DE", "UiEventList_Publish_Veneer",
+     "calls UiEventList_Publish with XDE, XHL, XIX and XIZ preserved",
+     "0xFE00DE-0xFE00E1 push the four; 0xFE00E2 `call 0xF40F50` is prom_b "
+     "slot T_UiEventList_Publish; 0xFE00E6-0xFE00E9 pop them and 0xFE00EA "
+     "returns. Called by `calr` at 0xFE2022, three bytes after the site that "
+     "reaches MidiIn_ServiceDeferred_Veneer -- the two veneers are a pair in "
+     "one caller. DERIVATIVE, as above",
+     "as above"),
+    ("sub_FF7656", "DLB_Handler_StringTable_Veneer",
+     "calls display-list-B's string-table handler with the list pointer taken "
+     "from the caller's frame at +8",
+     "0xFF7656/0xFF7657 build a frame with XIZ; 0xFF765C `ld "
+     "XIY,(XIZ+0x08)` loads the argument the handler reads; 0xFF765F `call "
+     "0xF417F8` is prom_b slot T_DLB_Handler_StringTable, whose `jp` target "
+     "0xF31B21 carries the label DLB_Handler_StringTable in prom_b; "
+     "0xFF7663-0xFF7666 restore XDE, XHL, XIX and XIZ. Seven call sites, the "
+     "first at 0xFF691D. DERIVATIVE",
+     "what the +8 argument is beyond a list pointer"),
+    ("sub_FF7668", "DLB_Handler_Decimal_Veneer",
+     "the same veneer for display-list-B's decimal handler, and it clears "
+     "(0x2540) first",
+     "0xFF766E `stdi8 (0x2540), 0x00` -- the layer select this module writes "
+     "before every draw -- then 0xFF7673 `ld XIY,(XIZ+0x08)` and 0xFF7676 "
+     "`call 0xF41800` = prom_b slot T_F41800, whose `jp` target 0xF31BA1 "
+     "carries the label DLB_Handler_Decimal. Ten call sites, the first at "
+     "0xFF4BC1. DERIVATIVE, and the (0x2540) store is the one thing it adds",
+     "as above"),
+    ("sub_FE30D8", "Fdc_ServiceDataByte_Isr",
+     "the interrupt entry that calls Fdc_ServiceDataByte and returns with "
+     "`reti`",
+     "the whole body is 0xFE30D8 `call 0xFE67F9` and 0xFE30DC `reti`; "
+     "0xFE67F9 carries the label Fdc_ServiceDataByte. `reti` and not `ret` is "
+     "what makes this an interrupt entry rather than a veneer. Reached by the "
+     "`jp` at 0xFE300C, slot 3 of the eight-slot jump block at "
+     "0xFE3000",
+     "which interrupt. The vector that reaches 0xFE300C is not identified "
+     "here; slots 2 and 4 of the same block jump straight at INT5_Dev7B_Receive "
+     "and INTTC0_uDMA0Done, so the block is an interrupt indirection, but "
+     "which line drives slot 3 is open"),
+    ("sub_FE3008", "INT5_Dev7B_Receive_Alias",
+     "a one-instruction jump slot that enters INT5_Dev7B_Receive",
+     "the whole body is 0xFE3008 `jp 0xFE6866`, and 0xFE6866 carries the "
+     "label INT5_Dev7B_Receive. It is slot 2 of the eight `jp` slots at "
+     "0xFE3000-0xFE301C, a 4-byte stride; slot 7 (0xFE301C, unlabelled) "
+     "jumps at the same handler. DERIVATIVE",
+     "why the handler is entered through a slot at all, and what distinguishes "
+     "slot 2 from the identical slot 7"),
+    ("sub_FE3010", "INTTC0_uDMA0Done_Alias",
+     "a one-instruction jump slot that enters INTTC0_uDMA0Done",
+     "the whole body is 0xFE3010 `jp 0xFE6851`, and 0xFE6851 carries the "
+     "label INTTC0_uDMA0Done. Slot 4 of the same eight-slot block. "
+     "DERIVATIVE",
+     "as above"),
+]
+
+RECORD_NAMES = [
+    ("sub_FEB2D4", "RecordNameSource_Select",
+     "returns, in XIY, the name source for the record selected by "
+     "(0x601F00) -- a drum-kit name block, a RAM buffer, or the name table "
+     "itself -- according to the record's +0x01 byte",
+     "0xFEB2D4 `ld XIX,0x00603422` and 0xFEB2D9 `ld A,(0x601F00)` pick the "
+     "record; 0xFEB2E3 `ld XIY,0x00FEB330` with 0xFEB2EA `sll WA,0x02` and "
+     "0xFEB2ED `ld XIX,(XIY+WA)` indexes RecordPtrs_RAM76A2 at a stride of 4; "
+     "0xFEB2F2 `ld A,(XIX+0x01)` reads the selector and 0xFEB2F5-0xFEB309 "
+     "branch on 0x20, 0x28, 0x29 and 0x30. The four arms: 0xFEB30B-0xFEB318 "
+     "returns DrumKitNameBlockPtrs[record+0x00], 0xFEB31E and 0xFEB324 return "
+     "the RAM buffer 0x603FF6, and 0xFEB32A returns DrumKitNames. Those five "
+     "arm addresses and their targets are exactly what this listing's own "
+     "drum-name block header already states, under `WHAT A RECORD'S +0x01 "
+     "BYTE SELECTS`; only the label was still sub_XXXXXX. One call site, "
+     "`calr` at 0xFEB2C9",
+     "what (0x601F00) indexes and what the RAM buffer at 0x603FF6 holds. "
+     "⚠ EMITTER RISK: this label is inside gen_prom_a_fe8000_module.py's "
+     "declared range 0xFE8000-0xFEB330 and that emitter has NO name side-car, "
+     "so re-running it would revert this name; `--emitters` prints the check"),
+]
+
+NAMES9 = RING_NAMES + SOUND_NAMES + VENEER_NAMES + RECORD_NAMES
+
+# ⚠ REFUSED, with the reason, and NOT written into the listing where a refusal
+# header already stands there.
+REFUSALS9 = [
+    ("sub_FC2035",
+     "Round 7's --apply-strings already refused it and this round confirms the "
+     "refusal from a different direction. Its `cp W` ladder is the SAME ladder "
+     "that SoundGroup_MaxMemberIndex_Get uses, and four of its arms do return "
+     "a 16-byte row inside the ToneGroupNames windows (0xFC2070, 0xFC2077, "
+     "0xFC207E, 0xFC2085, then 0xFC208D `mul WA,0x0010`) -- but five more arms "
+     "return something else entirely: 0xFC2095 and 0xFC20A2 form addresses in "
+     "the expansion-board windows 0xE80000 and 0xE90000, 0xFC20A9 and 0xFC20B6 "
+     "0xEA0000 and 0xEB0000, and 0xFC20F4/0xFC20FB/0xFC2102 return RAM bases "
+     "0x5240, 0x5450 and 0x5660. A name taken from the four ROM-text arms "
+     "would claim the routine returns a tone-group name row, and for five of "
+     "its nine arms it does not."),
+]
+
+# ⚠ ONE COMMITTED EVIDENCE LINE IS CORRECTED, in this listing, by exact text
+# replacement.  Round 8 renamed `Ring_InitAllTen` to `Ring_InitTenOfFourteen`
+# because the ROM refutes the completeness claim -- and left the Evidence line
+# under it still saying `every T_Ring*_Init slot in prom_b`.  Two statements in
+# one header contradicting each other is the round-3 reviewers' finding,
+# reproduced by the very commit that was fixing it.
+# The stale sentence this round removes from the listing.  It is quoted here so
+# --verify9 can prove it is gone, and NOT patched as literal text: the header it
+# lives in is generated by _header() from the NAMES table above, so the fix
+# belongs in the table and the listing is re-emitted from it.
+STALE9 = "`T_Ring*_Init` slot in prom_b and no other call"
+FIXED9 = "TEN of the FOURTEEN `T_Ring*_Init` slots in prom_b"
+
+
+def _rewrite_round8_header(lines, old, new, bucket="T1"):
+    """Delete the header this file wrote above `new` and emit it again from the
+    (now corrected) NAMES table.  Returns True if it rewrote anything."""
+    MINE8 = "named by notes/prom_a_census_round8.py"
+    ent = [t for t in NAMES + LINK_NAMES if t[1] == new]
+    if not ent:
+        return False
+    for i, ln in enumerate(lines):
+        if not ln.startswith(new + ":"):
+            continue
+        j = i - 1
+        while j >= 0 and lines[j].startswith(";"):
+            j -= 1
+        block = lines[j + 1:i]
+        if not any(MINE8 in b for b in block):
+            return False
+        lines[j + 1:i] = _header(ent[0][0], new, ent[0][2], ent[0][3], ent[0][4],
+                                 bucket)
+        return True
+    return False
+
+
+# ---------------------------------------------------------------------------
+# ★★ THE OTHER HALF OF THE GOAL METRIC, MEASURED AND THEN DECLINED
+# ---------------------------------------------------------------------------
+# prom_a carries 253 FRAMED labels -- a structural kind with an address glued
+# on, `DisplayList_FE829B`, `JumpTable_...`, `BlinkArgPtrs_F8024D`.  Promoting
+# one of those to a CONTENT name is worth more per label than naming a
+# `sub_XXXXXX`, because it moves LOWER without moving UPPER, and prom_b's lanes
+# have been doing exactly that.  So this round measured whether prom_a has the
+# same lever, with the two mechanisms the brief allows for an object -- name it
+# from WHAT IT CONTAINS, or from WHAT READS IT -- and the answer is NO.
+#
+#   1. WHAT IT CONTAINS.  ZERO of the 253 carry a printable ROM string of even
+#      three characters inside their own extent.  Thirteen contain a `.ascii`
+#      at all and the longest is TWO characters ("14", " $", " '").  prom_b's
+#      display lists carry captions -- `DL_C0mbinati0nM0dePage22Sound`,
+#      `DL_TransmissionDesDonnEsDeSyst` -- and prom_a's do not: its 86
+#      `DisplayList_*` objects are single five-byte records.
+#      ⚠ AND A SCAN THAT LOOKED FOR PRINTABLE RUNS IN COMMENTS INSTEAD FOUND
+#      ELEVEN HITS, EVERY ONE OF THEM ENGLISH PROSE FROM A NEARBY HEADER
+#      ("s, not this routine", " ABCDEFGHIJ...").  That is the round-3 "Home"
+#      failure with the polarity reversed -- a scan that reads the tree's own
+#      writing back as if it were ROM text -- and it is recorded here so the
+#      next round does not re-run it and believe it.
+#
+#   2. WHAT READS IT.  The framed objects whose header already names a single
+#      reader are read by UNNAMED routines: DisplayListPtrs_F92726 by
+#      sub_F92718, DisplayListPtrs_F93557 by the site at 0xF93549, and so on --
+#      and each of those headers already ends `Unknown: what the 32 slots
+#      select between`.  A content name would have to answer that question,
+#      not restate the pointer count.
+#
+# So this lane's framed -> content count is ZERO, deliberately, and
+# `--framed` prints the measurement that says why.  ★ The five `Ring_Get_0080`-
+# family labels are a separate and already-settled case: round 7 declined to
+# re-spell them because the number IS the capacity, which is content; this
+# round agrees and did not touch them.
+FRAMED_RE = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*_'
+                       r'(?:[0-9A-Fa-f]{2}x[0-9A-Fa-f]{2}_)?'
+                       r'(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$')
+
+
+def framed_objects():
+    """(name, family, longest .ascii run inside its own extent) for every FRAMED
+    label in prom_a.  The extent is label-to-next-top-label, which is what the
+    documentation metric itself uses."""
+    lines = open(S_A).read().split("\n")
+    top = [(i, m.group(1)) for i, ln in enumerate(lines)
+           for m in [re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', ln)]
+           if m and not m.group(1).startswith(".L")]
+    out = []
+    for k, (i, n) in enumerate(top):
+        if not FRAMED_RE.match(n) or re.match(r'^sub_[0-9A-Fa-f]{6}$', n) \
+                or re.match(r'^[A-Za-z_][A-Za-z0-9_]*__[0-9A-Fa-f]{4,6}$', n):
+            continue
+        end = top[k + 1][0] if k + 1 < len(top) else len(lines)
+        body = "\n".join(lines[i:end])
+        runs = re.findall(r'\.ascii\s+"([^"]*)"', body)
+        fam = re.sub(r'_[0-9]{1,4}$', '', re.sub(r'_[0-9A-Fa-f]{4,6}$', '', n))
+        out.append((n, fam, max([len(x) for x in runs], default=0)))
+    return out
+
+
+def mode_framed():
+    objs = framed_objects()
+    fams = collections.Counter(f for _n, f, _l in objs)
+    print("prom_a FRAMED labels: %d\n" % len(objs))
+    print("  %-30s %6s %8s" % ("family", "count", "max .ascii"))
+    for f, c in fams.most_common(14):
+        m = max(l for n, ff, l in objs if ff == f)
+        print("  %-30s %6d %8d" % (f, c, m))
+    print("  %-30s %6d" % ("... and %d more families" % (len(fams) - 14),
+                           len(objs) - sum(c for _f, c in fams.most_common(14))))
+    longest = max(objs, key=lambda x: x[2])
+    with3 = [o for o in objs if o[2] >= 3]
+    print("\n  framed objects containing a >=3-character ROM string: %d of %d"
+          % (len(with3), len(objs)))
+    print("  the LONGEST .ascii inside any framed object is %d character(s), in %s"
+          % (longest[2], longest[0]))
+    print("\n  ★ framed -> content promotions this round: 0, and that is the")
+    print("    measurement above, not an omission.  prom_b's lanes have this")
+    print("    lever because prom_b's display lists carry captions; prom_a's")
+    print("    do not.")
+
+
+def wrappers(k=3):
+    """The W lever: small routines with exactly ONE distinct CONTENT-named
+    callee. Returns (W, W1, popularity-of-callee-within-W)."""
+    W = [r for r in build() if len(r.callees) == 1 and not r.gfx and r.n_flow <= 15]
+    by = collections.Counter(list(r.callees)[0] for r in W)
+    W1 = [r for r in W if by[list(r.callees)[0]] == 1]
+    return W, W1, by
+
+
+def wrapper_reason(r, shipped):
+    """Why a W1 member did NOT get a name. One of R1..R4, or '' if it shipped."""
+    if r.name in shipped:
+        return ""
+    text = _listing_header_above(r.name)
+    if "NOT NAMED" in text or "REFUSED" in text:
+        return "R1 a refusal header already stands above it"
+    script, side = emitter_of(r.addr)
+    if script and not side:
+        return "R2 inside %s, which has no name side-car" % script
+    if not r.endflow:
+        return "R3 falls through into the next label; not established as a wrapper"
+    if r.n_flow <= 2:
+        return ("R4 a two-instruction forwarder: the name would be a second "
+                "spelling of a name already on screen")
+    return "R5 body not read this round"
+
+
+def _listing_header_above(label):
+    if "hdrs" not in _C:
+        d, block = {}, []
+        for ln in open(S_A):
+            if ln.startswith(";"):
+                block.append(ln)
+                continue
+            m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', ln)
+            if m:
+                d[m.group(1)] = "".join(block)
+            if ln.strip() == "" or m:
+                block = []
+        _C["hdrs"] = d
+    return _C["hdrs"].get(label, "")
+
+
+def mode_wrappers(k=3):
+    W, W1, by = wrappers(k)
+    shipped = set(o for o, _n, _w, _e, _u in NAMES9)
+    n = len(build())
+    print("prom_a ROUND 9 -- the WRAPPER lever\n")
+    print("  W  = one distinct CONTENT-named callee, no gfx exit, n_flow <= 15")
+    print("       %4d of %d  (%.1f%%)" % (len(W), n, 100.0 * len(W) / n))
+    print("  W1 = and no OTHER member of W shares that callee")
+    print("       %4d of %d  (%.1f%%)" % (len(W1), n, 100.0 * len(W1) / n))
+    print("\n  the callees W1 throws away, and how many wrappers claim each:")
+    for cal, c in by.most_common():
+        if c >= 2:
+            print("      %4d  %s" % (c, cal))
+    print("\n  W1, one line each:")
+    reasons = collections.Counter()
+    for r in sorted(W1, key=lambda x: x.addr):
+        why = wrapper_reason(r, shipped)
+        reasons["SHIPPED" if not why else why[:2]] += 1
+        print("      %-12s %-38s %s"
+              % (r.name, list(r.callees)[0], why or "SHIPPED"))
+    print("\n  outcome:")
+    for kk, v in sorted(reasons.items()):
+        print("      %-4s %d" % (kk, v))
+    print("\n  ★ %d of the %d W1 members are named by this round; the rest are"
+          % (reasons["SHIPPED"], len(W1)))
+    print("    refused for a stated, mechanical reason printed above.")
+
+
+def mode_emitters():
+    """Which round-9 names sit inside a generator that would revert them."""
+    bad = 0
+    for old, new, _w, _e, _u in NAMES9:
+        script, side = emitter_of(int(old[4:], 16))
+        if script and not side:
+            print("  ⚠ %-38s (was %s) is inside %s -- NO side-car"
+                  % (new, old, script))
+            bad += 1
+        elif script:
+            print("    %-38s inside %s, which HAS a side-car" % (new, script))
+    print("  %d of %d round-9 names would be reverted by a re-emit" % (bad, len(NAMES9)))
+    return bad
+
+
+def mode_applied9():
+    for old, new, what, ev, unk in NAMES9:
+        print("\n".join(_header(old, new, what, ev, unk, "round 9")))
+        print()
+    for old, why in REFUSALS9:
+        print("\n".join(_refusal_header(old, why)))
+        print()
+
+
+def apply9():
+    """Round 9: rename, write a header above each, and correct one committed
+    Evidence line. Byte-neutral -- labels and comments only."""
+    text = open(S_A).read()
+    lines = text.split("\n")
+    if _rewrite_round8_header(lines, "sub_FE1D29", "Ring_InitTenOfFourteen"):
+        print("  re-emitted Ring_InitTenOfFourteen's header from the corrected "
+              "NAMES entry")
+    text = "\n".join(lines)
+    renamed = []
+    for old, new, _w, _e, _u in NAMES9:
+        if re.search(r'^' + new + r':', text, re.M):
+            continue
+        if not re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  MISSING  %s is not a label in the listing" % old)
+            continue
+        renamed.append((old, new))
+    if renamed:
+        table = dict(renamed)
+        pat = re.compile(r'\b(' + "|".join(re.escape(o) for o, _n in renamed) + r')\b')
+        lines = [pat.sub(lambda m: table[m.group(1)], ln) for ln in lines]
+    # refresh our own headers, never anybody else's
+    MINE = "named by notes/prom_a_census_round8.py (bucket round 9)"
+    keep, i = [], 0
+    while i < len(lines):
+        m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', lines[i])
+        if m and m.group(1) in set(n for _o, n, _w, _e, _u in NAMES9):
+            j = len(keep) - 1
+            while j >= 0 and keep[j].startswith(";"):
+                j -= 1
+            if any(MINE in b for b in keep[j + 1:]):
+                del keep[j + 1:]
+        keep.append(lines[i])
+        i += 1
+    lines = keep
+    out, done = [], set()
+    for ln in lines:
+        m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', ln)
+        if m:
+            for old, new, what, ev, unk in NAMES9:
+                if m.group(1) == new and new not in done and (out and out[-1] != RULE):
+                    done.add(new)
+                    out.extend(_header(old, new, what, ev, unk, "round 9"))
+            for old, why in REFUSALS9:
+                if m.group(1) == old and old not in done and (out and out[-1] != RULE):
+                    done.add(old)
+                    out.extend(_refusal_header(old, why))
+        out.append(ln)
+    open(S_A, "w").write("\n".join(out))
+    print("  round 9: renamed %d labels, wrote %d header blocks"
+          % (len(renamed), len(done)))
+
+
+def verify9():
+    text = open(S_A).read()
+    bad = 0
+    for old, new, _w, _e, _u in NAMES9:
+        if not re.search(r'^' + new + r':', text, re.M):
+            print("  MISSING  %s" % new)
+            bad += 1
+        if re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  STALE    %s still defined" % old)
+            bad += 1
+        m = re.search(r'((?:^;.*\n)+)' + new + r':', text, re.M)
+        if m and "NOT NAMED" in m.group(1):
+            print("  CONTRADICTION  a 'NOT NAMED' header sits above %s" % new)
+            bad += 1
+    for old, _why in REFUSALS9:
+        if not re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  REFUSAL LOST  %s" % old)
+            bad += 1
+    # ⚠ NORMALISE FIRST.  _header() wraps at 60 columns and prefixes every line
+    # with `; `, so a quoted sentence is split across lines in the listing and a
+    # plain `in text` test reads MISSING for a phrase that is there -- which is
+    # exactly what the first run of this check reported.
+    flat = re.sub(r'\s+', ' ', re.sub(r'(?m)^;\s*', ' ', text))
+    if re.sub(r'\s+', ' ', FIXED9) not in flat:
+        print("  CORRECTION MISSING  Ring_InitTenOfFourteen's Evidence line")
+        bad += 1
+    if re.sub(r'\s+', ' ', STALE9) in flat:
+        print("  CORRECTION STALE    the 'every slot' claim is still in the listing")
+        bad += 1
+    print("  round 9: %d names, %d refusals, %d problems"
+          % (len(NAMES9), len(REFUSALS9), bad))
+    return bad
+
+
+def selftest9():
+    """Round 9's own checks, run from selftest(). Tested on the LAST element of
+    every list, not only the first."""
+    import subprocess
+    # --- the claim the name Ring_InitAllFourteen makes -----------------------
+    g = subprocess.run("grep -c '^T_Ring[0-9A-F]*_Init:' prom_b/wsa1_prom_b.s",
+                       shell=True, cwd=ROOT, capture_output=True, text=True)
+    n_slots = int(g.stdout.strip())
+    check("prom_b has exactly fourteen T_Ring*_Init slots", n_slots == 14, n_slots)
+    recs = {r.name: r for r in build()}
+    # ★ READ FROM THE LISTING TEXT, NOT FROM build(): once --apply9 has run the
+    # label is no longer a `sub_XXXXXX` and build() cannot see it at all.  A
+    # check that only passes before its own tool runs is not a check.
+    a_lines = open(S_A).read().split("\n")
+    body, on = [], False
+    for ln in a_lines:
+        m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', ln)
+        if m:
+            on = m.group(1) in ("sub_F825D4", "Ring_InitAllFourteen")
+            continue
+        if on:
+            if re.match(r'^\s*ret\b', ln):
+                break
+            body.append(ln)
+    ops = [m.group(1).lower() for m in
+           (re.match(r'^\s*call 0x([0-9a-fA-F]{6})', b) for b in body) if m]
+    slots = R7.thunk_slots()
+    cobj = R7.content_objects()
+    init_slots = set()
+    for o in ops:
+        t = slots.get(int(o, 16), (int(o, 16), None))[0]
+        n = cobj.get(t)
+        if n and n.endswith("_Init") and n.startswith("Ring"):
+            init_slots.add(n)
+    check("the routine at 0xF825D4 calls fourteen DISTINCT Ring*_Init entries, "
+          "read off the listing text",
+          len(init_slots) == 14, len(init_slots))
+    check("and it calls each of them exactly once (fourteen call operands, no "
+          "repeat)", len(ops) == 15 and len(set(ops)) == 15,
+          "%d operands, %d distinct" % (len(ops), len(set(ops))))
+    check("Ring_InitTenOfFourteen is still a LABEL in the listing, so the "
+          "ten-call routine and the fourteen-call one are different objects",
+          bool(re.search(r'^Ring_InitTenOfFourteen:', open(S_A).read(), re.M)))
+    # --- the corrected citation ---------------------------------------------
+    a_text = open(S_A).read()
+    n_ee4 = a_text.count("0x00f06ee4")
+    check("0x00F06EE4 is loaded exactly once in prom_a (prom_b says sub_FC2222 "
+          "loads it; the one site is 0xFC22A3, past sub_FC2222's extent)",
+          n_ee4 == 1, n_ee4)
+    check("that one site is at 0xFC22A3, inside sub_FC2282's extent, not "
+          "sub_FC2222's (which ends at 0xFC2281)",
+          bool(re.search(r'ld XIX,0x00f06ee4\s*;\s*FC22A3', a_text)))
+    # --- the lever's own arithmetic -----------------------------------------
+    W, W1, by = wrappers()
+    check("W1 members are exactly those whose callee no other W member shares",
+          all(by[list(x.callees)[0]] == 1 for x in W1))
+    check("W1 is a strict subset of W and smaller than it",
+          set(x.name for x in W1) <= set(x.name for x in W) and len(W1) < len(W),
+          "%d of %d" % (len(W1), len(W)))
+    shipped = set(o for o, _n, _w, _e, _u in NAMES9)
+    # ⚠ AFTER --apply9 the shipped labels are gone from the population, so W1
+    # can no longer contain them.  The check that survives both states is that
+    # W1 and the shipped set are consistent with each other: before apply the
+    # thirteen W-lever names are IN W1; after it, none of the twenty is.
+    inW1 = set(x.name for x in W1) & shipped
+    check("W1 and the shipped set agree: either the thirteen W-lever names are "
+          "still in W1 (pre-apply) or none of the twenty is (post-apply)",
+          len(inW1) in (0, 13), "%d of %d shipped still in W1"
+          % (len(inW1), len(shipped)))
+    reasons = set()
+    for r in W1:
+        reasons.add(wrapper_reason(r, shipped)[:2] or "OK")
+    check("wrapper_reason() returns exactly one of R1..R5 (or empty) for every "
+          "W1 member, including the LAST", reasons <= {"OK", "R1", "R2", "R3",
+                                                       "R4", "R5"}, sorted(reasons))
+    # --- LAST ELEMENT of every table ----------------------------------------
+    for tag, tbl in (("RING", RING_NAMES), ("SOUND", SOUND_NAMES),
+                     ("VENEER", VENEER_NAMES), ("RECORD", RECORD_NAMES)):
+        last = tbl[-1]
+        check("%s table's LAST entry (%s) names a routine that exists"
+              % (tag, last[1]),
+              last[0] in recs or bool(re.search(r'^' + last[1] + r':', a_text, re.M)))
+        # ⚠ NOT .upper(): _cited_addrs matches a literal lowercase `0x`, so
+        # upper-casing the text made this check read ZERO citations in every
+        # table and pass nothing.  The first draft did exactly that.
+        cited = _cited_addrs(last[3])
+        check("%s table's LAST entry cites at least three addresses" % tag,
+              len(cited) >= 3, len(cited))
+    # every cited address in every round-9 evidence line must be an instruction
+    # or object start SOMEWHERE in the tree -- the round-1 "one byte past" bug
+    starts = set()
+    for tag in "ab":
+        for ln in open(os.path.join(ROOT, "prom_%s" % tag, "wsa1_prom_%s.s" % tag)):
+            m = re.search(r';\s*([0-9A-F]{6})\b', ln)
+            if m:
+                starts.add(int(m.group(1), 16))
+    # prom_b's thunk lines mostly carry no `; ADDR` column, so add the slot
+    # addresses the census already resolves from the ROM image itself.
+    starts |= set(R7.thunk_slots().keys())
+    missing = []
+    for old, new, _w, ev, _u in NAMES9:
+        for a in _cited_addrs(ev):
+            if a < 0xF00000:          # RAM and SFR cells are not line starts
+                continue
+            if a not in starts:
+                missing.append((new, "%06X" % a))
+    check("every ROM address cited by a round-9 Evidence line is a line START "
+          "in prom_a or prom_b, or a prom_b thunk slot -- the round-1 'one "
+          "byte past the instruction' bug", not missing, missing[:6])
+    # --- the quantified claims inside round 9's own headers ------------------
+    # ⚠ Every number a header states needs a check, and these are the ones this
+    # round states: two indirect call-site counts and two direct ones.
+    ind = R7.indirect_refs()
+    a_txt = open(S_A).read()
+    for label, want in (("SoundGroup_MaxMemberIndex_Get", 11),
+                        ("SoundGroup_MaxMemberIndex_GetToneCopy", 7)):
+        got = len(ind.get(label, []))
+        check("%s's header says %d prom_a sites call its slot" % (label, want),
+              got == want, got)
+    for label, want in (("DLB_Handler_StringTable_Veneer", 7),
+                        ("DLB_Handler_Decimal_Veneer", 10)):
+        got = len(re.findall(r'\bcall %s\b' % label, a_txt))
+        check("%s's header says %d call sites" % (label, want), got == want, got)
+
+    # --- the framed -> content lever, measured and declined -----------------
+    objs = framed_objects()
+    check("prom_a's framed population is the 253 the documentation metric counts",
+          len(objs) == 253, len(objs))
+    with3 = [o for o in objs if o[2] >= 3]
+    check("ZERO framed objects in prom_a hold a >=3-character ROM string, which "
+          "is why framed -> content is 0 this round", not with3, with3[:4])
+    check("the longest .ascii inside any framed object is 2 characters",
+          max(o[2] for o in objs) == 2, max(o[2] for o in objs))
+    # --- emitter risk, stated rather than discovered later -------------------
+    risky = [n for o, n, _w, _e, _u in NAMES9
+             if (lambda s: s[0] and not s[1])(emitter_of(int(o[4:], 16)))]
+    check("exactly one round-9 name sits inside a side-car-less emitter range, "
+          "and its header says so", len(risky) == 1, risky)
 
 
 # ===========================================================================
@@ -1689,6 +2585,7 @@ def selftest():
     check("this round proposes %d names and %d refusal" % (len(NAMES) + len(LINK_NAMES),
                                                            len(REFUSALS)),
           len(NAMES) + len(LINK_NAMES) == 16 and len(REFUSALS) == 1)
+    selftest9()
     print("\n%d checks, %d failures" % (OK + FAIL, FAIL))
     return 1 if FAIL else 0
 
@@ -1700,7 +2597,19 @@ if __name__ == "__main__":
         k = int(a[a.index("--k") + 1])
     if "--selftest" in a:
         sys.exit(selftest())
-    if "--apply" in a:
+    if "--apply9" in a:
+        apply9()
+    elif "--verify9" in a:
+        sys.exit(1 if verify9() else 0)
+    elif "--applied9" in a:
+        mode_applied9()
+    elif "--wrappers" in a:
+        mode_wrappers(k)
+    elif "--emitters" in a:
+        mode_emitters()
+    elif "--framed" in a:
+        mode_framed()
+    elif "--apply" in a:
         apply()
     elif "--verify" in a:
         sys.exit(1 if verify() else 0)

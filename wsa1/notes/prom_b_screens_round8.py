@@ -105,8 +105,27 @@ WHAT IS IN THE SPAN
   Round 7's calibration: seven screens' Enter methods land in prom_a, where
   prom_a had independently named them `Paint_<X>` months earlier from the same
   screens' text; the rule's derived title was a PREFIX of all seven and EXACT on
-  six.  This pass re-runs that same check and gets the same 7/7 prefix, 6/7
-  exact -- `--calibrate` prints the table.
+  six.  This pass re-runs that same check -- `--calibrate` prints the table.
+
+  ⚠⚠ CORRECTION, ROUND 9.  The paragraph above used to end "and gets the same
+  7/7 prefix, 6/7 exact".  THAT IS NOT WHAT THE COMMITTED SCRIPT PRINTS, and it
+  was not what it printed when round 8 shipped it: run at the round-8 revision
+  against the round-8 tree it reports **21 of 21 prefix, 20 of 21 exact**.  The
+  set is not round 7's seven screens; it is every screen whose Enter method
+  lands in prom_a AND whose painter prom_a had already named, and that set had
+  grown to 21.  The prose was quoting round 7's number for round 8's run.  The
+  one non-exact point is 0xF43170: the rule derives `StepRecord` where prom_a
+  says `Paint_StepRecordPartSelect` -- a prefix, because the screen's own title
+  text is "STEP RECORD" and the "PartSelect" half came from somewhere else.
+
+  ⚠ AND WHAT 20/21 DOES NOT PROVE.  prom_a's `Paint_<X>` names were read from
+  THE SAME ROM BYTES by THE SAME transcription convention.  Agreement between
+  two readings of one source is a check on the RULE, not on the READING -- which
+  is why every one of `Paint_MeasureC0py`, `Paint_S0ngC0py`, `Paint_Transp0se`,
+  `Paint_Vel0cityChange`, `Paint_N0teChange`, `Paint_AfterT0uchSetting` and
+  `Paint_S0ngSelectName` scores EXACT while both sides spell a letter O as the
+  byte 0x30.  See the ROUND 9 section: the machine's own font cannot tell those
+  two codes apart, and a calibration built on one convention can never catch it.
 
   ⚠ AND IT SAYS PLAINLY WHAT THAT RE-RUN DOES NOT DO.  Converting this span adds
   no new calibration point, because a calibration point needs a name derived
@@ -144,6 +163,98 @@ WHAT IS IN THE SPAN
   and six sentences of existing prose at risk.  So this pass measures and stops,
   and says why rather than quietly not doing it.
 
+────────────────────────────────────────────────────────────────────────────────
+★★ ROUND 9 -- WHAT THIS FILE ANSWERS ON TOP OF THE ABOVE
+────────────────────────────────────────────────────────────────────────────────
+  Round 9's brief asked this lane to convert 0xF7E2D8-0xF80000 and then apply
+  round 6's four mechanical shapes.  BOTH WERE ALREADY DONE, by round 8, by this
+  very file and notes/gen_prom_b_f7e2d8_module.py -- the brief was written from
+  the wave-7 resume frontier table, which the briefing itself warns is stale
+  ("Derive every target from the tree, never from a prose paragraph").  The span
+  carries no `.incbin`; notes/wave7_frontier_table.py no longer lists it; prom_b
+  is down to 51,246 unconverted bytes from 159,459.  So round 9 went looking for
+  what was actually left, and found two things.
+
+  ★ (1) THE THUNK DIRECTORY HAD GROWN NEW HEADROOM, and nobody had re-measured.
+  Round 6 promoted 273+4 slots from `T_<address>` to `T_<target's name>` on the
+  rule "take a name ONLY from a CONTENT-graded target".  Rounds 7 and 8 then
+  NAMED MORE TARGETS.  Re-running notes/prom_b_thunks_round6.py finds 392
+  content-named targets where round 6 found 285, so 103 slots were promotable
+  and still spelled as an address.  Applied.  Measured on the whole image:
+
+      prom_b   content  framed  sub_XXXX   LOWER   UPPER  headers  evidence
+      before     1,015   3,060     2,031   16.6%   66.7%    3,299     3,304
+      after      1,118   2,957     2,031   18.3%   66.7%    3,299     3,407
+
+  ⚠ AND THE NUMBER IS STILL RISING, WHICH IS A HANDOFF, NOT A GAP.  Re-running
+  the census after this round's edits reports 386 promotable, not 380: two other
+  lanes named prom_a and prom_c targets WHILE this lane worked (prom_a's content
+  count moved 1,497 -> 1,517 in the same window).  Those last 6 --
+  T_Ring601850_ServiceIfNotEmpty, T_SoundGroup_MaxMemberIndex_Get,
+  T_SoundGroup_MaxMemberIndex_GetToneCopy, T_Ring608A0A_DrainAll,
+  T_INT5_Dev7B_Receive_Alias, T_INTTC0_uDMA0Done_Alias -- were deliberately NOT
+  taken: a derivative name copied out of a file another lane is still editing is
+  a name taken before it settled.  `--apply` is idempotent and costs seconds, so
+  the right place to harvest them is the round barrier, after prom_a is stable.
+  ★ Verified that the 103 already applied did NOT go stale in the meantime: all
+  103 still equal `T_` + their target's current label, 0 disagreements.
+
+  ⚠ EVERY ONE OF THE 103 IS DERIVATIVE -- it is the target's own name, given by
+  another lane.  103 pointers made readable, not 103 new facts.  And note what
+  did NOT move: sub_XXXXXX is unchanged, because no span was converted, and
+  `headers` is unchanged, because the two-line evidence block round 6 chose
+  deliberately falls one line short of the metric's header threshold.  A round
+  that reported +103 headers here would be repeating the "+35 headers that were
+  35 blank lines" error.
+
+  ★★ (2) THE WSA1 CANNOT DRAW A '0' DIFFERENTLY FROM AN 'O', AND THE TREE HAS
+  BEEN TRANSCRIBING THE BYTE INSTEAD OF THE GLYPH.  `--glyphs`.
+
+  In six of the machine's seven Latin faces, cells 0x30 and 0x4F hold BYTE-
+  IDENTICAL bitmaps, and in each of those six that pair is the ONLY duplicate
+  among the 94 non-blank cells of 0x21-0x7F.  The seventh, the 8x8 proportional
+  face at 0xF1E470 (SWI7 0x17), is the single exception: there 0x30 carries a
+  diagonal stroke through the bowl and differs in 3 of its 8 bytes.
+
+  So on every other WSA1 screen "S0NG" and "SONG" are the same picture, and the
+  firmware's string tables use 0x30 for the letter O in 75 distinct prom_b
+  literals (98 occurrences): L0AD, 0PTI0N, ERR0R, F0RMAT, FL0PPY, CURS0R,
+  MEM0RY, PR0GRAM, REC0RD, S0UND, TRANSP0SE, VEL0CITY, ATTENTI0N!, and
+  'Select the F0RMAT type for your disk.'  ★ THE INTERNAL CONTROL IS 'R0M1',
+  which holds a 0-for-O AND a real digit in four characters -- so this is not a
+  face that lacks a zero, it is a face in which the two are interchangeable.
+
+  ⚠ The tree has already baked the misreading into 122 prom_b labels and 6
+  prom_a ones -- DL_S0ng, Paint_S0ngC0py, ScreenEnter_Transp0se,
+  DL_Err0rTheS0undOrC0mbinati0n.  Thirty of prom_b's 122 arrived THIS ROUND
+  from the 103 promotions, which take their targets' names verbatim, as a
+  derivative rename must.
+
+  ★ AND THIS PASS DOES NOT FIX THEM, on purpose.  The fix is CONTENT -> CONTENT,
+  so it moves the metric by exactly zero; the names reach into prom_a and two
+  other lanes' scripts, which this lane does not own; and the cost of getting it
+  wrong is round 6's measured four broken range shorthands and six tautologies.
+  The size is stated honestly rather than inflated -- 6 label definitions and 28
+  lines of prose outside prom_b, which is SMALL.  Small is a reason to do it as
+  ONE cross-lane commit, not a reason to reach across a lane boundary and do
+  half of it.  `--glyphs` prints the recipe, and the point that matters most is
+  the last line of it: fix the GENERATORS that emit these names, or the next
+  conversion re-introduces the defect.
+
+  ★ (3) WHERE THE REST OF THE FRAMING IS, AND WHY IT IS NOT HEADROOM.
+  `--framed` censuses prom_b's 2,957 remaining framed labels into 82 clusters
+  and measures the three biggest.  T_ (1,622) is 1,432 slots pointing at a
+  sub_XXXXXX plus 119 into `.incbin` -- an honest INDEX of work that lives
+  elsewhere, not work here.  DL_ (415) is exhausted: the calibrated title rule
+  reports 40 lists with text and 0 unique proposals, because all 40 collide with
+  a name another list already owns -- NINE different lists draw only "OK".
+  ⚠ A naive label-to-label `.ascii` walk says 102 there; it runs past each
+  list's own extent into the next object, and `--framed --naive` prints both
+  numbers so the overcount is not repeated.  ScreenFieldList_ (127) is refused
+  because the only distinguishing fact is a slot index -- and the table is
+  many-to-one: 125 of its 256 slots point at the SAME empty list 0xF2D408, so
+  125 different index names would each claim to name it.
+
 RUN
     python3 notes/prom_b_screens_round8.py               # the summary
     python3 notes/prom_b_screens_round8.py --entries     # entry points + source
@@ -155,6 +266,10 @@ RUN
     python3 notes/prom_b_screens_round8.py --buttons     # the button-table census
     python3 notes/prom_b_screens_round8.py --refused     # what was NOT named, why
     python3 notes/prom_b_screens_round8.py --shapes      # JOB 2: the four shapes
+    python3 notes/prom_b_screens_round8.py --glyphs      # ★ the 0/O glyph finding
+    python3 notes/prom_b_screens_round8.py --glyphs --all
+    python3 notes/prom_b_screens_round8.py --framed      # framed clusters + headroom
+    python3 notes/prom_b_screens_round8.py --framed --naive
     python3 notes/prom_b_screens_round8.py --promote     # the 32 framed->content
     python3 notes/prom_b_screens_round8.py --promote --apply
     python3 notes/prom_b_screens_round8.py --selftest    # checks, incl. the LAST
@@ -696,6 +811,32 @@ def print_names():
           % (g["content"], g["framed"], g["unnamed"]))
 
 
+def calibration_score():
+    """(total, prefix, exact, the non-exact bases) for round 7's title rule,
+    re-run over every screen whose painter prom_a named independently.
+    ★ Factored out of print_calibrate in round 9 SO THAT A CHECK CAN PIN IT:
+    round 8's prose said 7/7 and 6/7 while the code printed 21/21 and 20/21,
+    and nothing in the file could catch the disagreement because the number
+    existed only inside a print loop."""
+    R7 = screen_runs()
+    tot = pre_n = ex_n = 0
+    notex = []
+    for base, _slots in R7.runs():
+        pl = R7.painter_label(base)
+        if not pl:
+            continue
+        title, _l = R7.screen_title(base)
+        derived = R7.slug(title) if title else ""
+        tot += 1
+        pre = pl.startswith(derived) and derived != ""
+        ex = pl == derived
+        pre_n += pre
+        ex_n += ex
+        if not ex:
+            notex.append(base)
+    return tot, pre_n, ex_n, notex
+
+
 def print_calibrate():
     """Round 7's calibration, re-run, plus the transcription check this pass adds."""
     R7 = screen_runs()
@@ -1095,6 +1236,269 @@ def print_cost():
 
 
 # ------------------------------------------------------------------ checks
+# ===================================================================== ROUND 9
+# ★★ THE GLYPH FINDING: the WSA1's Latin faces CANNOT DISTINGUISH '0' FROM 'O',
+# and the firmware exploits it.  See this file's docstring, section ROUND 9.
+#
+# base, bytes/glyph, geometry -- the seven LATIN faces of the twelve tables
+# established by notes/font_layout_check.py / notes/FINDINGS-fonts.md.  The
+# three kana and two kanji faces are excluded: they hold no Latin letters, so
+# "is 0 the same picture as O" is not a question about them.
+LATIN_FACES = [(0xF1B400, 14, "8x14"), (0xF1BEF0, 16, "8x16"),
+               (0xF1CB70, 32, "16x16"), (0xF1E470, 8, "8x8 proportional"),
+               (0xF1EAB0, 32, "11x16 proportional"), (0xF24DC0, 10, "8x10"),
+               (0xF25590, 48, "16x24")]
+GLYPH_LO, GLYPH_HI = 0x21, 0x80         # the printable Latin block of each face
+
+
+def glyph(base, pitch, code):
+    """The raw bitmap bytes of one cell.  Cell n is at base + n*pitch -- the
+    indexing notes/font_sheet.py uses and notes/render_font.py documents."""
+    a = base + code * pitch
+    return bytes(byte(a + i) for i in range(pitch))
+
+
+def glyph_dupes():
+    """For each Latin face, the groups of DISTINCT codes in 0x21-0x7F that share
+    one bitmap byte-for-byte.  Blank cells are skipped: a face that leaves a code
+    undefined stores zeros, and 'all the blanks match' is not a confusion."""
+    out = []
+    for base, pitch, geom in LATIN_FACES:
+        cells = collections.OrderedDict()
+        for code in range(GLYPH_LO, GLYPH_HI):
+            g = glyph(base, pitch, code)
+            if not any(g):
+                continue
+            cells.setdefault(g, []).append(code)
+        groups = [v for v in cells.values() if len(v) > 1]
+        out.append((base, pitch, geom, len(cells), groups))
+    return out
+
+
+def zero_for_o():
+    """prom_b's own `.ascii` literals, split by whether they spell a letter O
+    with the byte 0x30.  Two patterns, reported separately because they are
+    different strengths of evidence:
+        INFIX   a 0 with an ASCII letter on BOTH sides   -- 'S0NG', 'ERR0R'
+        INITIAL a 0 that STARTS a run of >= 2 letters    -- '0PTI0N', '0K'
+    INFIX cannot be a digit in any reading.  INITIAL could in principle be a
+    numbered item, so it is counted apart and never merged into the headline."""
+    text = open(SRCB).read()
+    lits = re.findall(r'\.ascii\s+"((?:[^"\\]|\\.)*)"', text)
+    infix = re.compile(r"[A-Za-z]0[A-Za-z]")
+    initial = re.compile(r"(?:^|[^0-9A-Za-z])0[A-Za-z]{2}")
+    a = sorted({l for l in lits if infix.search(l)})
+    b = sorted({l for l in lits if initial.search(l) and l not in set(a)})
+    return lits, a, b
+
+
+def zero_for_o_labels():
+    """Labels the misreading has already been baked into.  The test is a 0 with
+    a letter before it and a LOWERCASE letter after it: that is a CamelCase word
+    ('S0ng', 'Transp0se'), and it cannot match a trailing hex address, whose
+    digits are uppercase ('sub_F0A0B1')."""
+    pat = re.compile(r"[A-Za-z]0[a-z]")
+    lab = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
+    out = {}
+    for path, tag in ((SRCB, "prom_b"), (SRCA, "prom_a")):
+        got = set()
+        for ln in open(path):
+            m = lab.match(ln)
+            if m and pat.search(m.group(1)):
+                got.add(m.group(1))
+        out[tag] = sorted(got)
+    return out
+
+
+def zero_for_o_prose(labs=None):
+    """How many LINES outside prom_b's own label definitions mention one of the
+    misspelled names.  This -- not the label count -- is what a rename has to
+    rewrite, and it is why the fix is a cross-lane operation."""
+    labs = labs or zero_for_o_labels()
+    names = set(labs["prom_b"]) | set(labs["prom_a"])
+    if not names:
+        return {}
+    rx = re.compile(r"\b(?:%s)\b" % "|".join(re.escape(n) for n in sorted(names)))
+    out = {}
+    for rel in ("prom_b/wsa1_prom_b.s", "prom_a/wsa1_prom_a.s",
+                "notes/prom_a_understanding_round6.py",
+                "notes/wave7_round5_review_wb_prom_b.py"):
+        path = os.path.join(ROOT, rel)
+        if not os.path.exists(path):
+            continue
+        n = sum(1 for ln in open(path) if rx.search(ln))
+        out[rel] = n
+    return out
+
+
+def print_glyphs():
+    print("★★ CAN THE WSA1 TELL '0' FROM 'O'?  IN SIX OF ITS SEVEN LATIN FACES, NO.\n")
+    print("  Duplicate bitmaps among codes 0x%02X-0x%02X, per face:\n" % (GLYPH_LO, GLYPH_HI - 1))
+    for base, pitch, geom, ncells, groups in glyph_dupes():
+        g = "  ".join("{%s}" % " ".join("0x%02X '%s'" % (c, chr(c)) for c in grp)
+                      for grp in groups) or "(none)"
+        print("    0x%06X  %-18s pitch %2d  %3d non-blank  %d group(s)  %s"
+              % (base, geom, pitch, ncells, len(groups), g))
+    d = [g for _b, _p, _g, _n, gr in glyph_dupes() for g in gr]
+    n0o = sum(1 for g in d if g == [0x30, 0x4F])
+    print("\n  ★ %d of the %d faces have EXACTLY ONE duplicate pair and it is 0/O."
+          % (n0o, len(LATIN_FACES)))
+    b8 = [f for f in glyph_dupes() if f[0] == 0xF1E470][0]
+    diff = sum(1 for x, y in zip(glyph(0xF1E470, 8, 0x30), glyph(0xF1E470, 8, 0x4F)) if x != y)
+    print("    The one exception is 0xF1E470, the 8x8 proportional face (SWI7 0x17):")
+    print("    there 0x30 differs from 0x4F in %d of its 8 bytes -- a diagonal stroke" % diff)
+    print("    through the bowl -- and its single duplicate pair is %s instead."
+          % ("{%s}" % " ".join("'%s'" % chr(c) for c in b8[4][0])))
+    print("\n  ⚠ SO THE FIRMWARE MAY SPELL THE LETTER O AS 0x30 AND NO USER CAN TELL.")
+    lits, infix, init = zero_for_o()
+    inf_occ = sum(1 for l in lits if re.search(r"[A-Za-z]0[A-Za-z]", l))
+    print("    prom_b `.ascii` literals: %d total" % len(lits))
+    print("      %3d DISTINCT spell a letter O between two letters ('S0NG', 'ERR0R'),"
+          % len(infix))
+    print("          in %d literal occurrences" % inf_occ)
+    print("      %3d further distinct start a word with it          ('0PTI0N', '0K')"
+          % len(init))
+    for l in infix[:6]:
+        print("        %r" % l)
+    print("        ... and %d more (--glyphs --all for every one)" % max(0, len(infix) - 6))
+    if "--all" in sys.argv:
+        for l in infix[6:] + init:
+            print("        %r" % l)
+    labs = zero_for_o_labels()
+    prose = zero_for_o_prose(labs)
+    print("\n  ★ AND IT IS ALREADY IN THE TREE'S NAMES -- %d labels in prom_b and %d in"
+          % (len(labs["prom_b"]), len(labs["prom_a"])))
+    print("    prom_a carry a CamelCase 0-for-O: DL_S0ng, Paint_S0ngC0py,")
+    print("    ScreenEnter_Transp0se, DL_Err0rTheS0undOrC0mbinati0n.  Nobody greps those.")
+    print("    ⚠ %d of prom_b's %d are new THIS ROUND: the 103 thunk promotions took"
+          % (30, len(labs["prom_b"])))
+    print("      their targets' names verbatim, which is what a derivative rename must")
+    print("      do -- correcting the copy and not the original would split the pair.")
+    print("\n  ★ THE REAL COST OF THE FIX IS NOT THE LABELS, IT IS THE PROSE:")
+    for tag in sorted(prose):
+        print("      %-38s %4d lines mention one of those names" % (tag, prose[tag]))
+    print("\n  ⚠⚠ THIS PASS DOES NOT RENAME THEM, AND THE REASON IS ARITHMETIC:")
+    print("     * the fix is CONTENT -> CONTENT.  Every one of those %d labels already"
+          % (len(labs["prom_b"]) + len(labs["prom_a"])))
+    print("       grades CONTENT, so the documentation metric would not move one point.")
+    outside = sum(v for k, v in prose.items() if "wsa1_prom_b" not in k)
+    print("     * the names reach into prom_a and into two other lanes' scripts, and")
+    print("       THIS LANE OWNS prom_b ONLY.  The wave's lane rule is absolute, not")
+    print("       proportional, so the size is stated honestly rather than inflated:")
+    print("       %d label definitions and %d lines of prose outside prom_b -- SMALL."
+          % (len(labs["prom_a"]), outside))
+    print("       Small is an argument for doing it in ONE commit, not an argument for")
+    print("       reaching across a lane boundary to do half of it.  A prom_b-only")
+    print("       rename would leave prom_b")
+    print("       saying DL_Song where prom_a's cross-reference prose says DL_S0ng --")
+    print("       strictly worse than one consistent misspelling, and it would strand")
+    print("       the very references round 6 went to trouble to keep alive.")
+    print("     * round 6 measured what a mass rename costs: four broken range")
+    print("       shorthands and six tautologies, for names that were already right.")
+    print("     So it is handed over as ONE cross-lane operation, with the evidence")
+    print("     above and this recipe: rename in prom_a and prom_b in the SAME commit,")
+    print("     rewrite the generators that emit these names")
+    print("     (gen_prom_b_f067a6_module.py --dl-names and this file's title rule) so")
+    print("     the next conversion does not re-introduce it, and re-run --stale.")
+
+
+def framed_clusters():
+    """prom_b's FRAMED labels grouped by the part of the name before the final
+    `_`, so a round can see WHERE the remaining framing is before deciding to
+    attack any of it.  Grading is wave7_documentation_metrics.py's, imported,
+    never re-implemented."""
+    import wave7_documentation_metrics as M
+    lab = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
+    c = collections.Counter()
+    for ln in open(SRCB):
+        m = lab.match(ln)
+        if not m:
+            continue
+        n = m.group(1)
+        # ⚠ EXCLUDE <parent>__<address> exactly as the metric does.  Without this
+        # the count reads 2,959 against the metric's 2,957: DL_Inter__F19E4F and
+        # DL_Inter__F19EA4 end in six hex digits, so the FRAMED regex matches
+        # them, but they are internal branch targets and the metric excludes
+        # them from every percentage.  A cluster census that disagreed with the
+        # instrument by two would have been quoted as if it agreed.
+        if M.INTERNAL.match(n):
+            continue
+        if grade(n) == "framed":
+            c[n.rsplit("_", 1)[0]] += 1
+    return c
+
+
+def screenfieldlist_headroom():
+    """The 256-slot ScreenFieldListPtrs table: how many DISTINCT lists it names,
+    and how many slots name the most-shared one.  This is the number that
+    decides whether `ScreenFieldList_<index>` could ever be a name."""
+    src = open(SRCB).read().split("\n")
+    i = [n for n, l in enumerate(src) if l.startswith("ScreenFieldListPtrs")]
+    if not i:
+        return (0, 0, 0, None)
+    c = collections.Counter()
+    j = i[0] + 1
+    while j < len(src) and not re.match(r"^[A-Za-z_][A-Za-z0-9_]*:", src[j]):
+        m = re.search(r"\.long 0x00([0-9A-F]{6})", src[j])
+        if m:
+            c[int(m.group(1), 16)] += 1
+        j += 1
+    top, n = c.most_common(1)[0]
+    return (sum(c.values()), len(c), n, top)
+
+
+def print_framed():
+    c = framed_clusters()
+    print("prom_b FRAMED labels by prefix -- %d labels in %d clusters\n"
+          % (sum(c.values()), len(c)))
+    for k, v in c.most_common(12):
+        print("    %6d  %s_<address>" % (v, k))
+    print("\n★ HEADROOM IN THE THREE BIGGEST, MEASURED RATHER THAN ASSUMED:\n")
+    print("  T_<address>   -- the routine directory.  notes/prom_b_thunks_round6.py")
+    print("    is the instrument and it was RE-RUN this round: 392 of 2,002 slots now")
+    print("    point at a CONTENT-named target, against 285 when round 6 ran it, because")
+    print("    rounds 7 and 8 named the targets.  103 of those were still spelled")
+    print("    T_<address> and this round promoted them.  The rest is not headroom:")
+    print("    1,432 slots point at a sub_XXXXXX, 119 into a span still .incbin, 48 at")
+    print("    a FRAMED target (R2: the rename would not change the grade), 12 are R3")
+    print("    alias pairs and 2 point INTO a display list rather than at its head.")
+    print()
+    n_dl = c.get("DL", 0)
+    print("  DL_<address>  -- %d display lists.  The calibrated title rule" % n_dl)
+    print("    (gen_prom_b_f067a6_module.py --dl-names) is ALREADY EXHAUSTED on them:")
+    print("    it reports 40 with text records and 0 unique proposals, because every")
+    print("    one of the 40 collides with a name another list already has -- NINE")
+    print("    different lists draw only \"OK\".  Naming them would produce nine")
+    print("    DL_Ok's separated by an address, which is the framed spelling again.")
+    print("    ⚠ A NAIVE COUNT SAYS 102 HERE AND IT IS WRONG: walking `.ascii` lines")
+    print("    from a label to the next label runs past the list's own extent into the")
+    print("    next object.  The rule's own record walk says 40.  Both numbers are")
+    print("    printed by --framed --naive so the overcount cannot be repeated.")
+    if "--naive" in sys.argv:
+        src = open(SRCB).read().split("\n")
+        idx = [n for n, l in enumerate(src) if re.match(r"^DL_[0-9A-F]{6}:", l)]
+        naive = 0
+        for i in idx:
+            j = i + 1
+            while j < len(src) and not re.match(r"^[A-Za-z_][A-Za-z0-9_]*:", src[j]):
+                if ".ascii" in src[j]:
+                    naive += 1
+                    break
+                j += 1
+        print("      naive label-to-label walk: %d   rule's record walk: 40" % naive)
+    print()
+    slots, distinct, top_n, top_a = screenfieldlist_headroom()
+    print("  ScreenFieldList_<address> -- %d lists reached from a %d-slot pointer table."
+          % (distinct, slots))
+    print("    The ONLY fact that distinguishes one from another is its SLOT INDEX, a")
+    print("    bare number -- what round 6 refused for Write3602_Index5.  And an index")
+    print("    name would be false as well as empty: %d of the %d slots point at the"
+          % (top_n, slots))
+    print("    SAME list, 0x%06X, so %d different indices would each claim to name it."
+          % (top_a, top_n))
+    print("    Refused.")
+
+
 def c(desc, got, want, verbose=True):
     ok = got == want
     if not ok:
@@ -1196,6 +1600,56 @@ def checks(verbose=True):
       sorted({grade(n) for n, _e in promotions().values()}), ["content"], verbose)
     c("PROM  ★ the prose detector FIRES on a corpus built to break it (D1 and D2)",
       detector_selftest(), True, verbose)
+    tot, pre_n, ex_n, notex = calibration_score()
+    c("CAL   ★ THE TITLE RULE SCORES %d of %d prefix, %d of %d exact -- NOT the"
+      " 7/7 and 6/7 this file's prose claimed until round 9" % (pre_n, tot, ex_n, tot),
+      (tot, pre_n, ex_n), (21, 21, 20), verbose)
+    c("CAL   the single non-exact point is 0xF43170 (derived 'StepRecord' is a"
+      " PREFIX of prom_a's Paint_StepRecordPartSelect)", notex, [0xF43170], verbose)
+    # ---- ROUND 9: the 0/O glyph finding, and the framed-cluster headroom ----
+    gd = glyph_dupes()
+    c("GLY   seven Latin faces, and EVERY ONE has exactly one duplicate pair",
+      [len(g[4]) for g in gd], [1] * 7, verbose)
+    c("GLY   ★ six of the seven duplicate pairs are 0x30/0x4F -- '0' and 'O'",
+      sum(1 for g in gd if g[4][0] == [0x30, 0x4F]), 6, verbose)
+    b8 = [g for g in gd if g[0] == 0xF1E470][0]
+    c("GLY   the exception is the 8x8 proportional face, whose pair is 'l'/'|'",
+      (b8[2], b8[4][0]), ("8x8 proportional", [0x6C, 0x7C]), verbose)
+    c("GLY   ...and there 0x30 and 0x4F differ, in 3 of 8 bytes (the slashed zero)",
+      sum(1 for x, y in zip(glyph(0xF1E470, 8, 0x30), glyph(0xF1E470, 8, 0x4F)) if x != y),
+      3, verbose)
+    lastf = LATIN_FACES[-1]
+    c("GLY   ★ TESTED ON THE LAST FACE 0x%06X (%s, pitch %d): all %d bytes of"
+      " 0x30 and 0x4F are equal" % (lastf[0], lastf[2], lastf[1], lastf[1]),
+      glyph(lastf[0], lastf[1], 0x30) == glyph(lastf[0], lastf[1], 0x4F), True, verbose)
+    c("GLY   CONTROL -- a rule that fired on anything would be worthless: the nine"
+      " real digits 0x31-0x39 match NO letter in the last face",
+      [d for d in range(0x31, 0x3A)
+       if any(glyph(lastf[0], lastf[1], d) == glyph(lastf[0], lastf[1], L)
+              for L in list(range(0x41, 0x5B)) + list(range(0x61, 0x7B)))],
+      [], verbose)
+    _l, infix, _i = zero_for_o()
+    c("STR   75 distinct prom_b literals spell an O between two letters",
+      len(infix), 75, verbose)
+    c("STR   ★ TESTED ON THE LAST of them, sorted", infix[-1], "VEL0CITY CHANGE", verbose)
+    c("STR   ★ THE INTERNAL CONTROL: 'R0M1' holds BOTH a 0-for-O and a REAL digit,"
+      " so the firmware is not simply missing the digit glyph",
+      ("R0M1" in infix, [c2 for c2 in "R0M1" if c2.isdigit()]), (True, ["0", "1"]), verbose)
+    labs = zero_for_o_labels()
+    c("STR   the misreading is baked into %d prom_b and %d prom_a labels"
+      % (len(labs["prom_b"]), len(labs["prom_a"])),
+      (len(labs["prom_b"]), len(labs["prom_a"])), (122, 6), verbose)
+    fc = framed_clusters()
+    c("FRM   prom_b's framed labels, after this round's 103 promotions",
+      sum(fc.values()), 2957, verbose)
+    c("FRM   the three biggest clusters are T_, DL_ and ScreenFieldList_",
+      [k for k, _v in fc.most_common(3)], ["T", "DL", "ScreenFieldList"], verbose)
+    slots, distinct, top_n, top_a = screenfieldlist_headroom()
+    c("FRM   ScreenFieldListPtrs: %d slots naming %d distinct lists" % (slots, distinct),
+      (slots, distinct), (256, 127), verbose)
+    c("FRM   ★ AND IT IS MANY-TO-ONE: %d of the %d slots point at ONE empty list"
+      " 0x%06X, so a slot-index name would be false %d times over"
+      % (top_n, slots, top_a, top_n), (top_n, top_a), (125, 0xF2D408), verbose)
     if verbose and FAIL:
         print("\n%d FAILED:\n%s" % (len(FAIL), "\n".join("  " + f for f in FAIL)))
     return not FAIL
@@ -1211,6 +1665,7 @@ def main():
                      ("--calibrate", print_calibrate), ("--screens4", print_screens4),
                      ("--buttons", print_buttons), ("--refused", print_refused),
                      ("--shapes", print_shapes), ("--promote", print_promote),
+                     ("--glyphs", print_glyphs), ("--framed", print_framed),
                      ("--cost", print_cost)):
         if flag in a:
             fn()

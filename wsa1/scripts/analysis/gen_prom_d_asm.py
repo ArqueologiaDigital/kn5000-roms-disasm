@@ -2251,9 +2251,20 @@ def desc_pool_labels(slot):
         r = ch[i]
         if kind == "A":
             name = "%s_%03d_CurveStepToElem" % (base, i)
-            note = ("descriptor %d stage 2: %s step -> element, "
-                    "%d entries = max(curve)+1"
-                    % (i, CURVE_LABEL(r["curve_k"]), r["curve_max"] + 1))
+            # ⚠ WAVE 7 ROUND 9.  This line used to state max(curve)+1 as THE ENTRY
+            # COUNT.  That is true only where each descriptor has its own part A
+            # (all 318 at slot +0x30).  The ONE part-A table that slot +0x38's 161
+            # descriptors SHARE holds 128 entries and the curve reaches 108, so the
+            # sentence stated 108 over a 132-byte object -- a number refuted by its
+            # own object, which is the exact shape of the round-3 review failures.
+            # The count is now the object's OWN length, and the curve's reach is a
+            # second clause.  notes/prom_d_inventory_round8.py Q10d re-derives every
+            # one of these sentences from the pool tiling and fails if one drifts.
+            n_ent = r["a_len"] - 4
+            note = ("descriptor %d stage 2: %s step -> element, %d entries"
+                    % (i, CURVE_LABEL(r["curve_k"]), n_ent))
+            note += (" = max(curve)+1" if n_ent == r["curve_max"] + 1 else
+                     ", of which the curve reaches %d (max(curve)+1)" % (r["curve_max"] + 1))
         else:
             name = "%s_%03d_ElemArray" % (base, i)
             note = ("descriptor %d stage 3: %d element%s of %d B = max(stage 2)+1, "
@@ -2301,6 +2312,7 @@ def mk_desc_block(slot, extra):
             W("; %s" % note)
             if ch is not None and name.endswith("_CurveStepToElem"):
                 r = ch[int(name.split("_")[-2])]
+                sharers = sorted(k for k, q in ch.items() if q["a_at"] == p)
                 W("; Its entries index %s_%03d_ElemArray, and they reach every"
                   % (slot_label(slot), r["i"]))
                 W("; element of it and no further.")
@@ -2308,6 +2320,21 @@ def mk_desc_block(slot, extra):
                   % (max(r["a_tab"]), r["b_len"]))
                 W("; bytes / %d = %d elements, and %d + 1 = %d."
                   % (r["esize"], r["ecount"], max(r["a_tab"]), r["ecount"]))
+                if len(sharers) > 1:
+                    # ⚠ WAVE 7 ROUND 9.  The two lines above name ONE descriptor's
+                    # part B.  Where a table is shared, saying only that reads as a
+                    # claim about the table and is true only of that descriptor, so
+                    # the sharing and the range are stated instead of implied.
+                    W("; ⚠ AND THIS TABLE IS SHARED by descriptors %d..%d, so the"
+                      % (min(sharers), max(sharers)))
+                    W("; sentence above is descriptor %d's join, not the table's."
+                      % r["i"])
+                    W("; The same join holds for all %d of them: their part-B arrays"
+                      % len(sharers))
+                    _ec = sorted({ch[q]["ecount"] for q in sharers})
+                    W("; hold %s element%s each."
+                      % ("/".join(str(x) for x in _ec),
+                         "" if _ec == [1] else "s"))
                 W("; notes/prom_d_understanding_round4.py Q1, join 2.")
             elif ch is not None and name.endswith("_ElemArray"):
                 r = ch[int(name.split("_")[-2])]
@@ -2960,10 +2987,15 @@ def _round8_header_lines():
         "; ★ WHAT THE STORED-INDEX CENSUS SETTLED, and it is the census round 7's own",
         "; conclusion implied: a record here is reached by an INDEX, so the question",
         "; is which stored index values exist.  Only one field in the image can select",
-        "; a wave-select preset, and over all %s wave-select records it takes %d"
-        % (format(len(_R8.wavesel_preset_fields()), ","), len(refs)),
-        "; distinct values -- so %d of the %d records of ToneDB_WaveSelTailPresets are"
-        % (len(unref), npre),
+        "; a wave-select preset.  ⚠ WAVE 7 ROUND 9 CORRECTED THIS SENTENCE'S",
+        "; DENOMINATOR: over all %s wave-select records the field takes %d distinct"
+        % (format(len(_R8.wavesel_preset_fields()), ","),
+           len(set(v & 0x3F for _w, _k, v in _R8.wavesel_preset_fields()))),
+        "; values, because the preset array's OWN +0x0B carries each record's own",
+        "; index.  Over the %s records that are not the preset array itself it takes"
+        % format(len(_R8.preset_referring_fields()), ","),
+        "; %d -- so %d of the %d records of ToneDB_WaveSelTailPresets are"
+        % (len(refs), len(unref), npre),
         "; selected by NOTHING STORED in this image, and each says so on itself.",
         ";",
         "; ⚠ FOUR MORE MECHANISMS MEASURED AND REJECTED (Q4), including the strongest",
@@ -2982,16 +3014,104 @@ def _round8_header_lines():
     ])
 
 
+# ---------------------------------------------------------------------------
+# ★★ WAVE 7 ROUND 9.  The image is territorially complete and every label has a
+# verdict; what it did NOT have was anything that re-reads the FILE against the
+# ROM.  Round 9's audit does, in one command, and this block records what it
+# reports plus the two false numbers it found in prose that four rounds of
+# self-checks had left standing.  Every figure comes out of
+# notes/prom_d_inventory_round8.py at generation time.
+# ---------------------------------------------------------------------------
+def _round9_header_lines():
+    a = _R8.AUDITED_R9
+    tot = sum(a.values())
+    anch18, back18 = _R8.monotonicity(0x18)
+    _a3c, n3c, _r3c = _R6.array_records(0x3C)
+    return "\n".join([
+        ";",
+        "; " + "-" * 78,
+        "; ★★ WAVE 7 ROUND 9 -- THE WHOLE-IMAGE LABEL AUDIT, AND WHAT IT FOUND",
+        "; " + "-" * 78,
+        ";",
+        "; Rounds 2-8 each measured something new and wrote it here.  None of them",
+        "; ever re-read THIS FILE against the ROM.  That is the gap round 9 closes,",
+        "; and it is the gap the byte gate is blind to by construction: the gate",
+        "; certifies the .byte directives and says nothing about the label above them",
+        "; or the sentence above that.",
+        ";",
+        "; ★ ONE COMMAND NOW RE-CHECKS THE WHOLE IMAGE:",
+        ";       python3 notes/prom_d_inventory_round8.py --selftest",
+        "; It re-derives every one of the %s labels below -- its INDEX, its ADDRESS"
+        % format(tot, ","),
+        "; and its NAME -- from prom_d's own bytes and compares the result with the",
+        "; text in this file.  %d are REFUTED and %d are unreached." % (a["REFUTED"], a["RESIDUE"]),
+        ";",
+        "; ★★ AND IT PUBLISHES A HARSHER NUMBER THAN THE GOAL METRIC'S UPPER BOUND",
+        "; OF 100 PER CENT:",
+        ";       %s of %s labels have their NAME re-derived from this image's own"
+        % (format(a["DERIVED"], ","), format(tot, ",")),
+        ";       bytes -- a record's ASCII name field, a measured byte identity, a",
+        ";       curve's own run lengths, a descriptor's own 32-bit offsets;",
+        ";       %s have only their ADDRESS derived.  Those names are structural"
+        % format(a["ADDRESS"], ","),
+        ";       or transplanted and this image does not spell them.",
+        ";     Framing is not naming, and that split is the honest reading of a",
+        ";     file with zero sub_XXXXXX.",
+        ";",
+        "; ⚠ WHAT THE AUDIT FOUND IN ALREADY-COMMITTED PROSE -- both corrected in",
+        ";   scripts/analysis/gen_prom_d_asm.py, which is the only place a fix",
+        ";   survives a regeneration:",
+        ";     * the stage-2 table shared by descriptors 0..160 of slot +0x38 is 132",
+        ";       bytes -- 128 entries -- and its comment said `108 entries`, which is",
+        ";       max(curve)+1 and true only where each descriptor has its OWN table.",
+        ";       A sentence refuted by its own object.  The count is now the object's",
+        ";       length and the curve's reach is a second clause; Q10d re-derives all",
+        ";       319 of these sentences from the pool tiling.",
+        ";     * the stored-index census above quoted 1,549 as the denominator for",
+        ";       `7 distinct values`.  Over 1,549 the field takes 64, because a",
+        ";       preset record's own +0x0B is its own index at 63 of its 64 records",
+        ";       (round 9 Q11).  7 is the figure over the other 1,485.",
+        ";",
+        "; ⚠ AND ROUND 9 PROMOTED NOTHING.  Three mechanisms that would have moved",
+        ";   the count were measured and refused, so a later round need not re-invent",
+        ";   them:",
+        ";     * the twin rule -- the one that named 194 records in the +0x18 and",
+        ";       +0x20 arrays -- run for the first time on the %d records of" % n3c,
+        ";       ToneDB_WaveSelTailPresets: 0 carried, against the melodic blocks",
+        ";       AND against the drum tails.  Those %d labels stay framed for a" % n3c,
+        ";       measured reason now, not for want of trying.  (Q12)",
+        ";     * M8, the mechanism after round 8's M7: place a record NO byte",
+        ";       identity reaches by the monotone owner order.  0 of 12 on the +0x20",
+        ";       array, whose order holds; on the +0x18 array, which has %d backward"
+        % back18,
+        ";       steps over %d anchors, it proposes ONE owner for THREE different"
+        % anch18,
+        ";       records, which refutes it.  (Q13)",
+        ";     * General MIDI, the obvious route to naming a program-map row.  Round",
+        ";       5 refused it by citing two programs; round 9 refuses it with a count",
+        ";       and reads the 16 family names out of prom_b's own `GM RE-MAP` screen",
+        ";       instead of typing them: the best row aligns on 18 of 128 programs",
+        ";       where a deliberately rotated null aligns on 11, and the eight rows",
+        ";       score 15..18, so it does not tell them apart either.  (Q14)",
+        ";",
+        "; ⚠ ORIGIN STAYS 0 and round 9 proposes no change to it.  What is still open",
+        ";   is WHICH PHYSICAL PART this is -- a document question, not a disassembly",
+        ";   one, and no census of these bytes can answer it.",
+        ";",
+    ])
+
+
 _HDR = HEADER
 _MARK = "; Reproduce every number quoted in this file:"
 assert _MARK in _HDR
 _HDR = _HDR.replace(_MARK, _round7_header_lines() + "\n"
-                    + _round8_header_lines() + "\n" + _MARK, 1)
+                    + _round8_header_lines() + "\n"
+                    + _round9_header_lines() + "\n" + _MARK, 1)
 _HDR = _HDR.replace(
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks",
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks\n"
     ";     python3 notes/prom_d_finish_round7.py --selftest # the inventory, %d checks\n"
-    ";     python3 notes/prom_d_inventory_round8.py --selftest # the three questions, "
+    ";     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, "
     "%d checks" % (_R7.AUDITED_CHECKS, _R8.AUDITED_CHECKS), 1)
 W((_HDR % (CENSUS_CHECKS, CENSUS_CHECKS)).rstrip("\n"))
 for a, b, fn in REGIONS:

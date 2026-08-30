@@ -91,6 +91,22 @@ RUN
     python3 notes/prom_c_inventory_round8.py --refusals   # 5: framed->content, refused
     python3 notes/prom_c_inventory_round8.py --depth      # 6: what header depth really is
     python3 notes/prom_c_inventory_round8.py --selftest   # all of it, exit 1 on a failure
+
+★ ROUND 9 (2026-08-30) APPENDED THREE MORE SECTIONS to this file; the round-8 text
+  above is unchanged and its 59 checks still run first.
+
+    python3 notes/prom_c_inventory_round8.py --pool8      # 7: the eight-slot note pool
+    python3 notes/prom_c_inventory_round8.py --framed     # 8: what `framed` really is
+    python3 notes/prom_c_inventory_round8.py --refused9   # 9: round 9's refusals
+
+  ROUND 9's ANSWER, in one line: round 8 shipped ZERO framed->content promotions and
+  said the honest count might be zero.  It was six -- the note pool's five tables and
+  its 68-byte device image, every one named from what READS it -- and after them
+  prom_c's framed column has a PROMOTABLE REMAINDER OF SEVEN LABELS, all seven
+  already carrying a refusal a committed round derived (--framed).  That is the
+  finished state the brief asked for: every framed object in prom_c is now either
+  named, inside a region a findings doc declares framed by decision, carrying a
+  number that IS the meaning, or individually refused with a reason.
 """
 import collections
 import os
@@ -787,10 +803,570 @@ def depth_quiet():
     return _quiet(show_depth)
 
 
+# ============================================================================
+# ROUND 9 (2026-08-30), writer-C -- THE EIGHT-SLOT NOTE POOL, AND WHAT `framed` IS
+# ============================================================================
+# Appended below round 8; nothing above this line was changed.  Three sections:
+#
+#   --pool8      every citation the note-pool module's twelve headers make,
+#                checked AT the cited address; the 68-byte device image against
+#                its reset twin, word by word; and the two-sweep census that
+#                turns "the pool state is private" into a measurement.
+#   --framed     what prom_c's `framed` column actually contains.  This round's
+#                headline number is framed->content promotions, and a promotion
+#                only means anything for a label that is a KIND PLUS ITS OWN
+#                ADDRESS.  The partition is derived, so the promotable population
+#                is a measurement rather than an impression.
+#   --refused9   this round's refusals, each with its arithmetic.
+#
+# THE QUESTION: "round 8 shipped ZERO framed->content promotions in prom_c.  Was
+# that because there is nothing to promote, or because nobody looked?"  Both, in
+# measurable parts.  Six were there and are shipped -- the note pool's five
+# tables and its 68-byte device image, every one named from what READS it.  What
+# is left in the column is, by --framed, almost entirely labels whose number IS
+# the meaning; the promotable remainder is eight labels, named one by one.
+
+POOL8_ENTRY = 0xFC3E02
+POOL8_LO, POOL8_HI = 0xFC3CB9, 0xFC3FAD
+POOL_ROTOR, POOL_NOTES = 0x00E005, 0x00E006
+RESET_IMAGE, POOL_IMAGE, IMAGE_LEN = 0xFE12CF, 0xFE1540, 68
+LEVEL_FIELD_TOP = 0x0FF4        # 2*Voice_OutputLevel_Table[255]: the 0x0080 field max
+
+POOL8_CLAIMS = [
+    (0xFB07FD, "cp H,0xf0"), (0xFB0800, "jr NC,0xfb0808"),
+    (0xFB0802, "call 0xfb3f36"), (0xFB0808, "call 0xfc3e02"),
+    (0xFC3E17, "and L,0x0f"), (0xFC3E1A, "cp L,6"), (0xFC3E1E, "ld L,0x00"),
+    (0xFC3E25, "inc 1,C"), (0xFC3E27, "and C,0x07"), (0xFC3E2A, "ld (0x00e005),C"),
+    (0xFC3E35, "res 0x07,D"), (0xFC3E3B, "res 0x07,H"),
+    (0xFC3E3E, "cp D,0"), (0xFC3E40, "jrl Z,0xfc3f47"),
+    (0xFC3E4C, "add IX,0x0840"), (0xFC3E58, "ld (XWA),IX"),
+    (0xFC3E5D, "ld (XBC+0x02),0xff00"),
+    (0xFC3E70, "add IX,0x0800"), (0xFC3E7C, "ld (XBC),IX"),
+    (0xFC3E81, "ld (XBC+0x02),0xff80"),
+    (0xFC3EA1, "call 0xfb7a58"), (0xFC3EA9, "call 0xfc571a"), (0xFC3ECD, "call 0xfb77ef"),
+    (0xFC3ED1, "push 0x0044"), (0xFC3ED8, "lda XWA,0xfe1540"), (0xFC3EDE, "call 0xf9a038"),
+    (0xFC3EEC, "cp L,1"), (0xFC3EEE, "jr NZ,0xfc3efb"),
+    (0xFC3EF4, "calr 0xfc3daf"), (0xFC3F04, "calr 0xfc3d26"),
+    (0xFC3F17, "call 0xfb713a"), (0xFC3F1B, "ld BC,(XIZ+0x92)"),
+    (0xFC3F1F, "ld BC,(0x00e005)"), (0xFC3F27, "call 0xfb732c"),
+    (0xFC3F2D, "set 0x07,L"), (0xFC3F39, "add XBC,0x0000e006"),
+    (0xFC3F47, "set 0x07,H"), (0xFC3F63, "cp A,H"),
+    (0xFC3F74, "ld (XBC+0x02),0xa200"), (0xFC3F8B, "ld (XBC+0x02),0xa280"),
+    (0xFC3F98, "and (XBC),0x7f"),
+    (0xFC3FA1, "inc 1,L"), (0xFC3FA3, "cp L,0x08"), (0xFC3FA6, "jr C,0xfc3f52"),
+    (0xFC3D35, "add XBC,0x00fe1584"), (0xFC3D3D, "add A,(XIZ+0x0a)"),
+    (0xFC3D42, "res 0x07,L"), (0xFC3D49, "sll 0x08,BC"), (0xFC3D4F, "or (XWA+0x0e),BC"),
+    (0xFC3D58, "or (XBC),WA"), (0xFC3D60, "or (XBC+0x06),WA"),
+    (0xFC3D73, "or (XBC+0x04),WA"),
+    (0xFC3D7A, "div C,0x0c"), (0xFC3D7D, "ld A,B"), (0xFC3D7F, "mul A,0x02"),
+    (0xFC3D87, "cp H,6"), (0xFC3D8B, "add XWA,0x00fe1599"), (0xFC3D96, "ld (XWA+0x02),BC"),
+    (0xFC3D9B, "lda XBC,0xfe15b1"), (0xFC3DA7, "ld (XBC+0x02),WA"),
+    (0xFC3DBD, "div C,0x0c"), (0xFC3DC0, "ld H,B"), (0xFC3DC5, "sub C,B"),
+    (0xFC3DCC, "sll 0x08,BC"), (0xFC3DCF, "or (XIX+0x0e),BC"),
+    (0xFC3DD4, "mul BC,H"), (0xFC3DD8, "add XBC,0x00fe15c9"), (0xFC3DE0, "or (XIX),BC"),
+    (0xFC3DE5, "or (XIX+0x06),WA"), (0xFC3DE8, "push 0x0001"), (0xFC3DEB, "push 0x007f"),
+    (0xFC3DF1, "or (XIX+0x04),WA"), (0xFC3DF4, "ld BC,(0xfe1599)"),
+    (0xFC3DF9, "ld (XIX+0x02),BC"),
+    (0xFC3CC2, "cp D,4"), (0xFC3CC9, "sll 0x05,BC"), (0xFC3CCE, "add BC,0x001f"),
+    (0xFC3CE2, "cp BC,WA"), (0xFC3CE4, "jr LE,0xfc3cf4"), (0xFC3CE6, "ld C,0x02"),
+    (0xFC3CFC, "ld C,(0x1533)"), (0xFC3D04, "sll 0x08,HL"),
+    (0xFC3D07, "ld C,(0x1534)"), (0xFC3D0D, "or BC,HL"),
+    (0xFC3D13, "ld C,(0x153c)"), (0xFC3D17, "srl 0x04,C"), (0xFC3D1A, "cp C,5"),
+    (0xFC3D1E, "ld WA,0x0c00"), (0xFC3D23, "sub WA,WA"),
+    (0xFAA0D3, "ld C,(XHL+0x11)"), (0xFAA12E, "ld C,(XDE+0x10)"),
+    (0xFAA110, "cp IX,0x007f"), (0xFAA181, "cp HL,0x007f"),
+    (0xFAA18C, "sll 0x08,BC"), (0xFAA19A, "ld (0x00d764),BC"),
+    (0xFB0C29, "mul WA,0x012c"), (0xFB0C8A, "ld BC,0x1523"),
+    (0xFB0CD3, "add BC,(XIZ+0xfa)"), (0xFB0CD6, "ld (XHL+0x23),BC"),
+    (0xFAD851, "add BC,0x0010"), (0xFAD85A, "ld (XBC+0x1523),A"),
+    (0xFAD86F, "add BC,0x0011"), (0xFAD878, "ld (XBC+0x1523),A"),
+    (0xFA7F48, "add HL,0x0080"), (0xFA7FC5, "div C,0x0c"),
+    (0xFB814F, "lda XWA,0xfe12cf"), (0xFB8155, "call 0xf9a038"),
+    (0xFB817E, "calr 0xfb713a"),
+]
+
+POOL8_NAMES = [
+    ("NotePool8_LevelFromVelocity", 0xFC3CB9),
+    ("NotePool8_Reg00C0_FromPart0Ctrl91And93", 0xFC3CFB),
+    ("NotePool8_Word0Bits_FromPart0Ctrl9B", 0xFC3D13),
+    ("NotePool8_StageVoice", 0xFC3D26),
+    ("NotePool8_StageVoice_Var1", 0xFC3DAF),
+    ("NotePool8_NoteOnOff", 0xFC3E02),
+]
+POOL8_TABLES = [
+    ("Dev10C_StagingStruct_NotePool8Image", 0xFE1540, 68),
+    ("NotePool8_TransposeByVariant", 0xFE1584, 7),
+    ("NotePool8_LevelCapByVariant", 0xFE158B, 14),
+    ("NotePool8_Reg0040_ByPitchClass", 0xFE1599, 24),
+    ("NotePool8_Reg0040_ByPitchClass_Var6", 0xFE15B1, 24),
+    ("NotePool8_Word0_ByPitchClass_Var1", 0xFE15C9, 24),
+]
+OLD_POOL8_NAMES = ["sub_FC3CB9", "sub_FC3CFB", "sub_FC3D13", "sub_FC3D26",
+                   "sub_FC3DAF", "sub_FC3E02", "Table_FE1540", "Table_FE1584",
+                   "Table_FE158B", "Table_FE1599", "Table_FE15B1", "Table_FE15C9"]
+# staging word -> 0x0010C000 register, as notes/prom_c_tg_chanmap.py 0xFB713A
+# 0x1F2 --pairs prints it.  22 words, 0x00 unsent by that routine.
+WORD2REG = {1: 0x0040, 2: 0x0080, 3: 0x00C0, 4: 0x0100, 5: 0x0140, 6: 0x0180,
+            7: 0x0400, 8: 0x0440, 9: 0x0480, 10: 0x04C0, 11: 0x0500, 12: 0x0800,
+            13: 0x0840, 14: 0x0880, 15: 0x08C0, 16: 0x0900, 17: 0x0940,
+            18: 0x0980, 19: 0x09C0, 20: 0x0A00, 21: 0x0A40}
+P7R = re.compile(r'^P7Stream_[0-9A-Fa-f]{6}$')
+DEV_BLOCKS = set(range(0x0000, 0x0A80, 0x40))     # block*0x40, the device's stride
+
+
+def rom_bytes():
+    if "rom9" not in _C:
+        _C["rom9"] = open(ROM, "rb").read()
+    return _C["rom9"]
+
+
+def w16(a):
+    r = rom_bytes()
+    return r[a - BASE] | (r[a - BASE + 1] << 8)
+
+
+def image_diff():
+    """The reset staging image against the note-pool one, word by word, straight
+    out of the ROM.  If either image moves, this moves with it."""
+    r = rom_bytes()
+    diff = [(i, w16(RESET_IMAGE + 2 * i), w16(POOL_IMAGE + 2 * i), WORD2REG.get(i))
+            for i in range(IMAGE_LEN // 2)
+            if w16(RESET_IMAGE + 2 * i) != w16(POOL_IMAGE + 2 * i)]
+    nb = sum(1 for i in range(IMAGE_LEN)
+             if r[RESET_IMAGE - BASE + i] != r[POOL_IMAGE - BASE + i])
+    return diff, nb
+
+
+def pool_state_census():
+    """Two independent sweeps for anything naming the pool's two RAM cells:
+    (a) every ADDRESSED source line whose disassembly text spells the address;
+    (b) every 24-bit little-endian occurrence in all 524,288 ROM bytes.
+    Both are blind to a reach through a register.  The result is 'nothing else
+    in the image names it', never 'dead'."""
+    d = load()["dis"]
+    src_hits = [(a, t) for a, t in sorted(d.items())
+                if re.search(r'0x0*e00[56]\b', t, re.I)]
+    rom_hits = []
+    r = rom_bytes()
+    for target in (POOL_ROTOR, POOL_NOTES):
+        pat = target.to_bytes(3, "little")
+        i = r.find(pat)
+        while i != -1:
+            rom_hits.append((BASE + i, target))
+            i = r.find(pat, i + 1)
+    return src_hits, sorted(rom_hits)
+
+
+def mnemonic(a):
+    """The disassembly text at `a` with any leading raw-byte run stripped.  Some
+    listing lines read `f2 cf 12 fe 30    lda XWA,0xfe12cf`; the citation names the
+    instruction, not the bytes."""
+    t = (load()["dis"].get(a) or "")
+    return re.sub(r'^(?:[0-9a-f]{2}\s+)+', '', t).strip()
+
+
+def pool8_bad_claims():
+    return [(a, t, mnemonic(a)) for a, t in POOL8_CLAIMS
+            if not mnemonic(a).lower().startswith(t.lower())]
+
+
+def source_labels():
+    return set(m.group(1) for m in (LABEL.match(l) for l in load()["src"]) if m)
+
+
+def show_pool8():
+    print("=== 7. THE EIGHT-SLOT NOTE POOL -- every claim, re-derived ===\n")
+    print("  The 0x90 (note-on) arm of MidiIn_ParseRingAndDispatch branches on packet")
+    print("  byte [1]: below 0xF0 to MidiNote_Dispatch and the 33 part records, at 0xF0")
+    print("  or above to NotePool8_NoteOnOff.  That second path is this module, and it")
+    print("  was the '⚠ what packet byte [1] >= 0xF0 means' line in that routine's own")
+    print("  Unknown section.\n")
+    bad = pool8_bad_claims()
+    d = load()["dis"]
+    print("  citations checked AT the cited address: %d, mismatching: %d"
+          % (len(POOL8_CLAIMS), len(bad)))
+    for a, t, got in bad:
+        print("    MISMATCH %06X  want %-26r got %r" % (a, t, got))
+    la, lt = POOL8_CLAIMS[-1]
+    print("  the LAST citation, 0x%06X, wants %r and decodes as %r"
+          % (la, lt, mnemonic(la)))
+
+    print("\n  -- the module's twelve objects --")
+    lab = source_labels()
+    for n, a in POOL8_NAMES:
+        print("    %-40s 0x%06X            %s"
+              % (n, a, "defined" if n in lab else "MISSING"))
+    for n, a, ln in POOL8_TABLES:
+        print("    %-40s 0x%06X  %3d B     %s"
+              % (n, a, ln, "defined" if n in lab else "MISSING"))
+
+    print("\n  -- the 68-byte device image against its reset twin --")
+    diff, nb = image_diff()
+    print("    bytes differing %d of %d ; words differing %d of %d"
+          % (nb, IMAGE_LEN, len(diff), IMAGE_LEN // 2))
+    for i, x, y, reg in diff:
+        where = ("register chan+0x%04X" % reg) if reg is not None else (
+            "staging word 0 -- the word Dev10C_WriteAllChanRegs never sends"
+            if i == 0 else "beyond the 0x2C struct")
+        print("      word %2d  reset 0x%04X  pool 0x%04X   %s" % (i, x, y, where))
+
+    print("\n  -- is the pool state private?  two sweeps --")
+    src_hits, rom_hits = pool_state_census()
+    ins = [a for a, _t in src_hits if POOL8_ENTRY <= a <= POOL8_HI]
+    rin = [a for a, _t in rom_hits if POOL8_ENTRY <= a <= POOL8_HI]
+    print("    addressed source lines naming 0x%06X / 0x%06X : %d, inside"
+          " NotePool8_NoteOnOff %d" % (POOL_ROTOR, POOL_NOTES, len(src_hits), len(ins)))
+    print("    24-bit LE occurrences in the 512 KiB image      : %d, inside it %d"
+          % (len(rom_hits), len(rin)))
+    print("    ⚠ both sweeps are blind to a reach through a register.")
+
+    print("\n  -- the five tables, read out of the ROM --")
+    r = rom_bytes()
+    tv = [r[0xFE1584 - BASE + i] for i in range(7)]
+    print("    NotePool8_TransposeByVariant        : %s" % tv)
+    print("      as signed semitones               : %s"
+          % [v - 256 if v > 127 else v for v in tv])
+    for nm, a, cnt in (("NotePool8_LevelCapByVariant", 0xFE158B, 7),
+                       ("NotePool8_Reg0040_ByPitchClass", 0xFE1599, 12),
+                       ("NotePool8_Reg0040_ByPitchClass_Var6", 0xFE15B1, 12),
+                       ("NotePool8_Word0_ByPitchClass_Var1", 0xFE15C9, 12)):
+        print("    %-36s: %s"
+              % (nm, " ".join("%04X" % w16(a + 2 * i) for i in range(cnt))))
+    for v in sorted(set(w16(0xFE158B + 2 * i) for i in range(7))):
+        print("    level cap 0x%04X : %4d counts below 0x%04X -> %.1f dB at 256/octave"
+              % (v, LEVEL_FIELD_TOP - v, LEVEL_FIELD_TOP,
+                 (LEVEL_FIELD_TOP - v) * 6.0206 / 256.0))
+
+    print("\n  -- what the module does NOT establish --")
+    print("    * what the seven variants are.  The packets arrive over link channel 0")
+    print("      from CPU 1, so any name for them lives in prom_a; prom_c spells")
+    print("      0xF0..0xF6 as a part selector nowhere else.")
+    print("    * whether the note-off pair 0xA200/0xA280 is a release envelope or a")
+    print("      second quiescent state.  Nothing in this image reads either back.")
+    print("    * what staging word 0's bit fields mean.")
+    return bad, diff, nb, src_hits, rom_hits
+
+
+# ------------------------------------------ 8. WHAT prom_c's `framed` COLUMN IS
+def framed_labels():
+    """(name, address) for every prom_c label the metric grades FRAMED."""
+    addr = {}
+    for a, n in sorted(labels_by_addr().items()):
+        addr.setdefault(n, a)
+    return sorted(((n, addr[n]) for n in addr
+                   if not INTERNAL.match(n) and not UNNAMED.match(n)
+                   and FRAMED.match(n)), key=lambda t: t[1])
+
+
+def own_address_framed():
+    """Framed labels that really are A KIND PLUS THEIR OWN ADDRESS -- the only
+    population for which the word `promotion` means anything.  Derived: the
+    trailing 4-6 hex digits equal the low bits of the label's own address."""
+    out = []
+    for n, a in framed_labels():
+        m = re.search(r'_([0-9A-Fa-f]{4,6})$', n)
+        if not m:
+            continue
+        if a & ((1 << (4 * len(m.group(1)))) - 1) == int(m.group(1), 16):
+            out.append((n, a))
+    return out
+
+
+# The two regions of prom_c that a committed findings doc declares framed BY
+# DECISION.  Neither is typed as a guess: the first is the extent
+# FINDINGS-prom_c-p7-byte-stream-pool.md gives for the byte-stream pool and its
+# directory, the second runs from the pool's end to the last byte of the image's
+# data tail (gen_prom_c_tail_tables.py's R1_LO..R3_HI plus the curves below it).
+P7_POOL = (0xFCD0F7, 0xFDD2AB)
+DATA_TAIL = (0xFDD2AB, 0xFE21E6)
+
+
+def framed_partition():
+    """Every prom_c framed label in exactly one DERIVED class.  The split that
+    matters is whether the suffix is the object's OWN ADDRESS -- only then is
+    'promotion' the right word -- and, for those, which declared-framed region
+    the object sits in."""
+    own = set(n for n, _a in own_address_framed())
+    part = collections.OrderedDict(
+        [("own address, inside the P7 byte-stream pool", []),
+         ("own address, inside the data tail", []),
+         ("own address, ELSEWHERE -- the promotable remainder", []),
+         ("the suffix is NOT this object's address: the number IS the meaning", [])])
+    for n, a in framed_labels():
+        if n not in own:
+            part["the suffix is NOT this object's address: the number IS the "
+                 "meaning"].append((n, a))
+        elif P7_POOL[0] <= a < P7_POOL[1]:
+            part["own address, inside the P7 byte-stream pool"].append((n, a))
+        elif DATA_TAIL[0] <= a < DATA_TAIL[1]:
+            part["own address, inside the data tail"].append((n, a))
+        else:
+            part["own address, ELSEWHERE -- the promotable remainder"].append((n, a))
+    return part
+
+
+# The promotable remainder, one line each.  Every one carries a REFUSAL that a
+# committed round already derived; --selftest asserts the set is exactly these
+# seven, so a new one appearing anywhere in prom_c fails the check instead of
+# slipping past.
+REMAINDER_STANDING = {
+    "Dev10C_StageRegs_0800_0840_FAB818":
+        "REFUSED round 8.  One of three producers of the SAME word pair "
+        "(0x00D78A/0x00D78C); promoting one means saying what its two values MEAN, "
+        "which the round-2 header declares unknown.",
+    "Dev10C_StageRegs_0800_0840_FAB8CC": "REFUSED round 8, same reason.",
+    "Dev10C_StageRegs_0800_0840_FAB9D8": "REFUSED round 8, same reason.",
+    "Clamp_ToRange_LowByte_FBD88E":
+        "REFUSED round 8, and correctly framed.  The suffix records a SEPARATELY "
+        "COMPILED copy of Clamp_ToRange_LowByte -- 42 bytes against 34, 36 of the "
+        "first 42 differing.  Dropping it would claim a twin the byte diff denies.",
+    "unexplained_FCC5BE":
+        "REFUSED round 8.  It needs a SPLIT (0xFCC5BE..0xFCC5C1 are the last four "
+        "bytes of the boot RAM image; 0xFCC5C2..0xFCC5C8 are five constants read in "
+        "place) and the label is emitted by notes/gen_prom_c_tables.py, which the "
+        "round-8 lane did not own.",
+    "unexplained_FCCB6E":
+        "REFUSED round 5, in the source, with an Evidence line.  Three bytes 00 01 "
+        "00 indexed by the port-P7 UNIT number at 0xFA2C1F / 0xFA2CD7 / 0xFA2D8A; "
+        "the fetched byte reaches sub_F9E0B7 and nothing reads that routine's "
+        "meaning, so it keeps its address.",
+    "fp_constant_pool_FCC81A":
+        "NOT A PROMOTION.  The suffix is the pool's own address because the pool is "
+        "what the name is FOR; notes/gen_prom_c_fp_pool.py emits it and --verify "
+        "checks its 76 doubles and 2 longs.",
+}
+
+
+def show_framed():
+    print("=== 8. WHAT prom_c's `framed` COLUMN ACTUALLY CONTAINS ===\n")
+    print("  This round's headline number is framed->content promotions, so the first")
+    print("  question is how many of the column could even BE promoted.  A promotion")
+    print("  means something only for a label that is a KIND PLUS ITS OWN ADDRESS.  A")
+    print("  label whose suffix is a device register, a MIDI controller number, a")
+    print("  saturation bound or a table length is already as specific as it can be,")
+    print("  and a word in place of the number would say LESS.  The test is mechanical:")
+    print("  do the trailing 4-6 hex digits equal the low bits of the label's own")
+    print("  address?\n")
+    part = framed_partition()
+    tot = 0
+    for k, v in part.items():
+        tot += len(v)
+        print("    %-58s %4d" % (k[:58], len(v)))
+    print("    %-58s %4d" % ("TOTAL framed in prom_c", tot))
+
+    rem = part["own address, ELSEWHERE -- the promotable remainder"]
+    print("\n  ★ THE WHOLE PROMOTABLE REMAINDER IS %d LABELS, and every one of them"
+          % len(rem))
+    print("  already carries a refusal that a committed round derived:\n")
+    for n, a in rem:
+        print("    %-38s 0x%06X" % (n, a))
+        for line in re.findall(r'.{1,68}(?:\s|$)',
+                               REMAINDER_STANDING.get(n, "NOT ADJUDICATED")):
+            if line.strip():
+                print("        %s" % line.rstrip())
+    print("\n  The two big classes are declared framed BY DECISION, in the tree, with a")
+    print("  reason that is a census result rather than a shrug:")
+    print("    * the P7 byte-stream pool, 0x%06X-0x%06X: the objects' CONTENT is"
+          % (P7_POOL[0], P7_POOL[1] - 1))
+    print("      undecoded byte-code for the port-P7 device, so a name would be naming")
+    print("      a blob (FINDINGS-prom_c-p7-byte-stream-pool.md sec 0).")
+    print("    * the data tail, 0x%06X-0x%06X: shape and reader known, ROLE NOT"
+          % (DATA_TAIL[0], DATA_TAIL[1] - 1))
+    print("      claimed (FINDINGS-prom_c-tail-data-zone.md sec 7).  Six of them left")
+    print("      that class this round, because their reader finally gave them a role.")
+    print("\n  ⚠ SO prom_c's framed COLUMN IS NOT A BACKLOG.  It is one declared-blob")
+    print("  region, one declared-shape-only region, %d names whose number is the"
+          % len(part["the suffix is NOT this object's address: the number IS the "
+                     "meaning"]))
+    print("  meaning, and %d adjudicated leftovers.  Any report of the column that does"
+          % len(rem))
+    print("  not say so is misleading about where the number comes from.")
+    return part
+
+
+# --------------------------------------------------- 9. ROUND 9's REFUSALS
+REFUSALS9 = [
+ ("THE TEN BUCKET-S1 LABELS STAY sub_XXXXXX, and that is the arithmetic talking.", [
+  "They are not routines.  Nothing in the image references them at any spelling and",
+  "the instruction above each is not a control transfer, so the code above walks",
+  "into them (prom_c_finish_round7.py --noref, ten of twenty-six).  Renaming them to",
+  "the tree's <parent>__<address> convention would be CORRECT -- and would move ten",
+  "labels out of the sub_XXXXXX column into `internal`, which the metric excludes",
+  "from both sides, so LOWER and UPPER would both rise while nobody understood one",
+  "more thing.  Round 7 left the job to 'a lane that is not also reporting the metric",
+  "it would move'.  This lane reports the metric.  Refused; the list stays in",
+  "--noref for a lane that does not."]),
+ ("Voice_StageRegs_00C0_AB IS NOT RENAMED, although its register is now named.", [
+  "Register chan+0x00C0 is established this round as (MIDI controller 91 << 8) |",
+  "MIDI controller 93.  A promotion to Voice_StageCtrl91And93_Reg00C0_AB was drafted",
+  "and dropped for three measured reasons: the label and its interior labels occur",
+  "35 times in prom_c/wsa1_prom_c.s -- 33 before this round added two mentions of it",
+  "to its own header; the name belongs to a family",
+  "(Voice_StageRegs_0500_08C0_AB, Voice_StageRegs_0180_AB, Voice_StageRegs_CD) whose",
+  "value is that they are spelled alike; and its suffix is a DEVICE REGISTER, where",
+  "the number is the meaning.  The finding went into the routine's header and into",
+  "the 0x0010C000 block comment, which is where a reader meets it."]),
+ ("THE BRIEF'S ITEM 4 -- 'prom_c has 1,096 headers for 6,421 labels, add headers'.", [
+  "Refused as stated; round 8 measured why and this round re-ran it (--depth).  6,421",
+  "counts every branch target in the image.  Per grade, EVERY remaining sub_XXXXXX",
+  "already carries a header AND an Evidence line, and the content labels with no",
+  "header are 127 PresetBank_* records plus seven two-instruction interrupt stubs.",
+  "New header text there is padding.  What this round did instead is REWRITE headers",
+  "that already existed: six routine headers whose `Unknown: what the routine is FOR.",
+  "Nothing here reads the meaning of a field' became a decoded field map, and three",
+  "more -- MidiIn_ParseRingAndDispatch, Dev10C_WriteAllChanRegs and",
+  "Voice_StageRegs_00C0_AB -- had a flagged Unknown closed.  The instrument cannot",
+  "see any of that: it counts the PRESENCE of a header, not what it says."]),
+ ("A COMMITTED SELFTEST HAS BEEN FAILING SINCE ROUND 7, and it is not this "
+  "round's doing.", [
+  "`python3 notes/prom_c_understanding_round6.py --selftest` prints 110 ok and FOUR",
+  "failures.  Three of them are round 6's own before/after ledger -- 'prom_c content",
+  "is 757 + 37 = 794', 'framed is 489 - 2 = 487', 'sub_XXXXXX is 492 - 35 = 457' --",
+  "and rounds 7 and 8 moved all three numbers before this lane started (round 8 left",
+  "prom_c at 821 / 500 / 417).  The fourth, 'every framed label matched exactly one",
+  "rule', is broken by the twelve PartRec_ApplyParam_00XX labels ROUND 7 shipped,",
+  "which its classifier has no rule for.  VERIFIED, not assumed: checked out with",
+  "`git show HEAD:notes/prom_c_understanding_round6.py` and",
+  "`git show HEAD:prom_c/wsa1_prom_c.s` into a scratch tree and re-run there, where",
+  "it prints the same '110 ok, FAILURES: 4' with the same four lines.",
+  "NOT FIXED HERE: three of the four are another round's before/after",
+  "record and rewriting them would destroy the ledger they exist to be.  Reported so",
+  "that the next lane does not read the failure as fresh damage."]),
+ ("THE BRIEF'S ITEM 5 -- 'gap A is still open: 0x0440, 0x0480, 0x04C0, 0x0500'.", [
+  "Stale.  Round 4 gave all four an accessor and notes/prom_c_gapA_remaining_regs.py",
+  "(16 sections plus 8 negative controls) establishes that the low bits of 0x0440,",
+  "0x0480 and 0x04C0 are a 0x0010C000 CHANNEL NUMBER -- the same number the producer",
+  "hands to a Dev10C_Slot* accessor a few instructions later -- and that 0x0500 is a",
+  "decoded byte pair.  notes/WSA1-EMULATION-DISASM-GAPS.md carries the retraction,",
+  "and prom_c_finish_round7.py --gapA already reported the brief as stale a round",
+  "ago.  Re-deriving it would be a lane spending itself on a closed question.  What",
+  "gap A still wants is a register with a MUSICAL meaning, and this round added one:",
+  "chan+0x00C0 = (controller 91 << 8) | controller 93, from two unrelated producers",
+  "that agree on the split."]),
+]
+
+
+def show_refused9():
+    print("=== 9. ROUND 9's REFUSALS, each with its arithmetic ===\n")
+    for title, body in REFUSALS9:
+        print("  %s" % title)
+        for l in body:
+            print("      %s" % l)
+        print()
+
+
+def selftest9():
+    """Round 9's checks.  --selftest runs these after round 8's."""
+    print("\n--- round 9 ---")
+    d = load()["dis"]
+    bad = pool8_bad_claims()
+    check(not bad, "all %d note-pool citations decode AT the cited address"
+          % len(POOL8_CLAIMS))
+    la, lt = POOL8_CLAIMS[-1]
+    check(mnemonic(la).lower().startswith(lt.lower()),
+          "...tested on the LAST citation too (0x%06X wants %r)" % (la, lt))
+
+    lab = source_labels()
+    src = open(SRC).read()
+    for n, _a in POOL8_NAMES:
+        check(n in lab, "%s is defined in the source" % n)
+        blk = header_block(n)
+        check(blk is not None and "Evidence:" in blk,
+              "...and its header carries an Evidence: line")
+    for n, _a, _l in POOL8_TABLES:
+        check(n in lab, "%s is defined in the source" % n)
+        # the emitted data block is  <SEP> ... <SEP> <label>: ; take the text
+        # between the OPENING separator and the label, i.e. skip the closing one.
+        i = src.index("\n%s:\n" % n)
+        head = src[max(0, i - 6000):i]
+        j = head.rfind("; ---")
+        j = head.rfind("; ---", 0, j)
+        check("Evidence:" in head[j:], "...and its block carries an Evidence: line")
+    for old in OLD_POOL8_NAMES:
+        check(old not in src, "the old name %s is gone from the source" % old)
+
+    diff, nb = image_diff()
+    check(nb == 9, "the note-pool image differs from the reset image in 9 of 68 bytes")
+    check(len(diff) == 8, "...which is 8 of its 34 words")
+    check(diff[0][:3] == (0, 0x1200, 0xF000),
+          "the FIRST differing word is word 0, 0x1200 -> 0xF000")
+    check(diff[-1][:3] == (23, 0xFF00, 0xA000),
+          "the LAST differing word is word 23, 0xFF00 -> 0xA000")
+    check(w16(POOL_IMAGE + 2 * 7) == 0x0080,
+          "the pool image seeds word 7 (register 0x0400) with the pitch centring 0x0080")
+    check(w16(POOL_IMAGE + 2 * 2) == 0x8000,
+          "and word 2 (register 0x0080) with the gate bit and a zero level field")
+
+    src_hits, rom_hits = pool_state_census()
+    check(len(src_hits) == 13, "13 addressed source lines name the pool's two RAM cells")
+    check(all(POOL8_ENTRY <= a <= POOL8_HI for a, _t in src_hits),
+          "...every one of them inside NotePool8_NoteOnOff")
+    check(len(rom_hits) == 13, "13 24-bit LE ROM occurrences of the same two addresses")
+    check(all(POOL8_ENTRY <= a <= POOL8_HI for a, _t in rom_hits),
+          "...every one of them inside NotePool8_NoteOnOff too")
+
+    r = rom_bytes()
+    tv = [r[0xFE1584 - BASE + i] for i in range(7)]
+    check(tv == [0, 0, 0x18, 0xE8, 0, 0, 0],
+          "NotePool8_TransposeByVariant is 0,0,+24,-24,0,0,0 as signed bytes")
+    caps = [w16(0xFE158B + 2 * i) for i in range(7)]
+    check(len(caps) == 7 and max(caps) < LEVEL_FIELD_TOP,
+          "all seven level caps are below the 0x0080 field's top 0x0FF4")
+    check(caps[-1] == 0x0B42, "...and the LAST cap, variant 6, is 0x0B42")
+    pc = [w16(0xFE1599 + 2 * i) for i in range(12)]
+    check(all((v & 0x0FFF) == 0 for v in pc),
+          "every NotePool8_Reg0040_ByPitchClass entry has a ZERO 12-bit payload")
+    check(pc[-1] == 0x0000, "...tested on the LAST entry as well as the first")
+    pc6 = [w16(0xFE15B1 + 2 * i) for i in range(12)]
+    check(all((v & 0x0FFF) == 0 for v in pc6) and pc6[-1] == 0xC000,
+          "the _Var6 table too, LAST entry 0xC000")
+
+    part = framed_partition()
+    tot = sum(len(v) for v in part.values())
+    check(tot == len(framed_labels()), "every framed label lands in exactly one class")
+    rem = part["own address, ELSEWHERE -- the promotable remainder"]
+    check(set(n for n, _a in rem) == set(REMAINDER_STANDING),
+          "the promotable remainder is EXACTLY the %d labels with a recorded refusal"
+          % len(REMAINDER_STANDING))
+    check(len(rem) == 7, "...and there are seven of them")
+    check(len(part["own address, inside the P7 byte-stream pool"]) == 374,
+          "374 own-address labels are inside the P7 byte-stream pool")
+    check(len(part["own address, inside the data tail"]) == 28,
+          "28 are inside the data tail")
+    nk = part["the suffix is NOT this object's address: the number IS the meaning"]
+    check(len(nk) == 85, "85 framed labels do NOT spell their own address")
+    check(all(not re.search(r'_([0-9A-Fa-f]{4,6})$', n)
+              or a & ((1 << (4 * len(re.search(r'_([0-9A-Fa-f]{4,6})$', n).group(1)))) - 1)
+              != int(re.search(r'_([0-9A-Fa-f]{4,6})$', n).group(1), 16)
+              for n, a in nk),
+          "...and not one of those 85 accidentally spells it after all")
+
+    check(mnemonic(0xFAD851).startswith("add BC,0x0010")
+          and mnemonic(0xFAD85A).startswith("ld (XBC+0x1523),A"),
+          "MidiCtrl_CC91 writes part[+0x10] (0xFAD851 / 0xFAD85A)")
+    check(mnemonic(0xFAD86F).startswith("add BC,0x0011")
+          and mnemonic(0xFAD878).startswith("ld (XBC+0x1523),A"),
+          "MidiCtrl_CC93 writes part[+0x11] (0xFAD86F / 0xFAD878)")
+    check(mnemonic(0xFB0C8A).startswith("ld BC,0x1523")
+          and mnemonic(0xFB0CD6).startswith("ld (XHL+0x23),BC"),
+          "voice_record[+0x23] is 0x1523 + 0x012C*part -- it IS the part record")
+    check(0x1523 + 0x10 == 0x1533 and 0x1523 + 0x11 == 0x1534,
+          "so RAM 0x001533/0x001534 are part 0's +0x10 and +0x11")
+    check(0x1523 + 0x19 == 0x153C,
+          "and 0x00153C is part 0's +0x19, the field MidiCtrl_Int9B writes")
+    # the one number REFUSALS9 quotes that nothing else re-derives
+    check(src.count("Voice_StageRegs_00C0_AB") == 35,
+          "Voice_StageRegs_00C0_AB and its interior labels occur 35 times in the "
+          "source -- the count the rename refusal rests on")
+
+
 def main():
     args = sys.argv[1:]
     if "--selftest" in args:
-        sys.exit(selftest())
+        rc = selftest()
+        selftest9()
+        print("\n%d checks, %d failures (rounds 8 and 9)" % (CHECKS[0], len(FAILS)))
+        sys.exit(1 if FAILS else rc)
     run_all = not args
     if run_all or "--dispatch" in args:
         show_dispatch()
@@ -809,6 +1385,14 @@ def main():
     if run_all or "--depth" in args:
         show_depth()
         print()
+    if run_all or "--pool8" in args:
+        show_pool8()
+        print()
+    if run_all or "--framed" in args:
+        show_framed()
+        print()
+    if run_all or "--refused9" in args:
+        show_refused9()
 
 
 if __name__ == "__main__":

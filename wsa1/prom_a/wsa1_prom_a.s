@@ -4422,7 +4422,7 @@ Data_F82000:
 	.long 0x00000080                                 ; F82004  [  1]
 	.long 0x00000080                                 ; F82008  [  2]
 	.long 0x00000080                                 ; F8200C  [  3]
-	jp sub_F825D4                                        ; F82010  1b d4 25 f8
+	jp Ring_InitAllFourteen                                        ; F82010  1b d4 25 f8
 	jp sub_F8262F                                        ; F82014  1b 2f 26 f8
 	jp Var7FC1_Clear                                        ; F82018  1b 28 26 f8
 	jp sub_F8262F                                        ; F8201C  1b 2f 26 f8
@@ -5065,14 +5065,65 @@ sub_F825A0:
 	popw hl                                              ; F825C4  4b
 	pop XIX                                              ; F825C5  5c
 	ret                                                  ; F825C6  0e
-sub_F825C7:
+; ---------------------------------------------------------------------
+; Ring601850_ServiceIfNotEmpty -- runs sub_FC87AE exactly when ring 0x601850 holds data
+;
+; Evidence: 0xF825C7 `call 0xF41E68` = prom_b slot T_Ring601850_IsEmpty;
+;           0xF825CB `and WA,WA` and 0xF825CD `jr z,.LF825D3` skip the
+;           body when it returns zero; 0xF825CF `call 0xF413B8` = prom_b
+;           slot T_F413B8 -> prom_a sub_FC87AE runs when it does not. ★
+;           POLARITY, and it is the opposite of what the callee's name
+;           suggests: Ring601850_IsEmpty (0xF84B6E) loads WA=0, compares
+;           the read cursor (0x601848) with the write cursor (0x60184C)
+;           and loads 0xFFFF only when they DIFFER -- so it returns ZERO
+;           when the ring IS empty. Reached only through prom_b slot
+;           T_F40020
+; Unknown:  what sub_FC87AE does with the ring and what the ring
+;           carries. ⚠ AND THE POLARITY ABOVE IS A FACT ABOUT ALL
+;           FOURTEEN `Ring*_IsEmpty` ROUTINES, not just this one; none
+;           of them is renamed here, because renaming fourteen prom_a
+;           labels and their fourteen prom_b slots is a mass rename and
+;           this wave has measured what those cost
+; Was `sub_F825C7`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Ring601850_ServiceIfNotEmpty:
 	call 0xf41e68                                        ; F825C7  1d 68 1e f4
 	and WA,WA                                            ; F825CB  d8 c0
 	jr z, .LF825D3                                       ; F825CD  66 04
 	call 0xf413b8                                        ; F825CF  1d b8 13 f4
 .LF825D3:
 	ret                                                  ; F825D3  0e
-sub_F825D4:
+; ---------------------------------------------------------------------
+; Ring_InitAllFourteen -- initialises ALL FOURTEEN of CPU 1's ring buffers, between
+;                         five stores nothing in this tree names
+;
+; Evidence: fourteen consecutive `call` instructions at 0xF825E5,
+;           0xF825E9, 0xF825ED, 0xF825F1, 0xF825F5, 0xF825F9, 0xF825FD,
+;           0xF82601, 0xF82605, 0xF82609, 0xF8260D, 0xF82611, 0xF82615
+;           and 0xF82619, whose operands are the prom_b slots
+;           T_Ring608A0A_Init, T_Ring60480A_Init, T_Ring60000C_Init,
+;           T_Ring601B64_Init, T_Ring60080A_Init, T_Ring600A14_Init,
+;           T_Ring600C1E_Init, T_Ring601028_Init, T_Ring601432_Init,
+;           T_Ring60153C_Init, T_Ring601646_Init, T_Ring601850_Init,
+;           T_Ring60195A_Init and T_Ring601C6E_Init -- that is EVERY
+;           `T_Ring*_Init` label in prom_b, each exactly once, and
+;           prom_b has exactly fourteen of them (`grep -c
+;           '^T_Ring[0-9A-F]*_Init:' prom_b/wsa1_prom_b.s`). Around
+;           them: 0xF825D4-0xF825DE writes 0xFF to (0x88) and (0x98) and
+;           zeroes the longword at (0x80), 0xF825E1 calls sub_F831B3,
+;           and 0xF8261D/0xF82622 write 0xFF to (0x2E00) and (0x2000).
+;           Entered by the `jp` at 0xF82010, the first of six jump slots
+;           that follow Data_F82000
+; Unknown:  what the five stores mean -- (0x80), (0x88), (0x98),
+;           (0x2000) and (0x2E00) are named by nothing in this tree --
+;           and what sub_F831B3 does, which this file already refuses to
+;           say because device 0x7F's role is open. ★ THE NAME COUNTS
+;           THE CALLS, NOT THE RINGS: it claims fourteen Init entries
+;           are called, which is checked, and nothing about whether
+;           fourteen is all the machine has
+; Was `sub_F825D4`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Ring_InitAllFourteen:
 	ldb a, 0xff                                          ; F825D4  21 ff
 	st_dd8b a, 0x88                                      ; F825D6  f0 88 41
 	st_dd8b a, 0x98                                      ; F825D9  f0 98 41
@@ -11685,8 +11736,22 @@ PanelButton_Route:   ; entry: calr from 0xF861A8, 0xF8687E
 ; Outputs: DE = 0x0170 and WA = {A, 0x03} are handed to List2030_AppendRegs,
 ;          which stores E,D,A,W at +0..+3 -- so the record is
 ;          0x70, 0x01, A, 0x03, and 0x70 is the event class.
-;          A is 3 when (0x208C) & 0x4000, else 1 when bit 7 of W is set
-;          (button RELEASED), else 2.
+;          A is 3 when (0x208C) & 0x4000, else 1 when bit 7 of W is set,
+;          else 2.
+; ⚠ CORRECTED IN ROUND 9: this line used to gloss bit 7 of W as
+;          "(button RELEASED)". IT IS NOT A RELEASE FLAG, and two independent
+;          sites show it:
+;            * prom_a sub_F8BDC5 picks between TWO 32-bit enable masks on that
+;              bit -- (0x2666) when clear, (0x266A) when set, at
+;              0xF8BDD2-0xF8BDDE.
+;            * prom_b's eight handlers at 0xF7ECFF-0xF7EDC6 use it to select
+;              item i versus item i+8. A RELEASE would pick a different item
+;              than its own press, which is not how a button works.
+;          RELEASE is tested separately, as (0x20B9) & (0x20BA) == 0 at
+;          0xF866F8. What bit 7 DOES mean is NOT established: the i / i+8 shape
+;          resembles the LCD soft keys' 8 columns x 2 rows, but that is a
+;          resemblance and nothing pins it.
+;          Derived by notes/wave7_panel_button_codes.py (--selftest 31/31).
 ; Evidence: class 0x70 is one of the 121 ids that has its own handler list
 ;          in all three class tables (UiEventClass_ListTable_A/B/C).
 ; ---------------------------------------------------------------------
@@ -70352,7 +70417,7 @@ sub_FB2049:
 	and C,0x80                                           ; FB204E  cb cc 80
 	jr z, 0x70                                           ; FB2051  66 70
 	m_set 6, MD24, 0x60fd40                              ; FB2053  f2 40 fd 60 be
-	call sub_FB7EFD                                      ; FB2058  1d fd 7e fb
+	call Ring600C1E_InitIfPanelMode79                                      ; FB2058  1d fd 7e fb
 	call sub_FB7B0B                                      ; FB205C  1d 0b 7b fb
 	call sub_FB2323                                      ; FB2060  1d 23 23 fb
 	ldb_da c, (0x60f802)                                 ; FB2064  c2 02 f8 60 23
@@ -70420,7 +70485,7 @@ sub_FB20CE:
 	cp WA,0xffff                                         ; FB20E9  d8 cf ff ff
 	jrl z, .LFB215C                                      ; FB20ED  76 6c 00
 	ld H,A                                               ; FB20F0  c9 8e
-	call sub_FB7EFD                                      ; FB20F2  1d fd 7e fb
+	call Ring600C1E_InitIfPanelMode79                                      ; FB20F2  1d fd 7e fb
 	ld C,(XIX)                                           ; FB20F6  84 23
 	extz BC                                              ; FB20F8  d9 12
 	cps bc, 0x00                                         ; FB20FA  d9 d8
@@ -70531,7 +70596,7 @@ sub_FB21CB:
 	cp WA,0xffff                                         ; FB21E6  d8 cf ff ff
 	jrl z, .LFB2259                                      ; FB21EA  76 6c 00
 	ld H,A                                               ; FB21ED  c9 8e
-	call sub_FB7EFD                                      ; FB21EF  1d fd 7e fb
+	call Ring600C1E_InitIfPanelMode79                                      ; FB21EF  1d fd 7e fb
 	ld C,(XIX)                                           ; FB21F3  84 23
 	extz BC                                              ; FB21F5  d9 12
 	cps bc, 0x00                                         ; FB21F7  d9 d8
@@ -77223,7 +77288,7 @@ sub_FB6026:
 	ld (XBC+0x04),0x18                                   ; FB6063  b9 04 00 18
 	jr .LFB606F                                          ; FB6067  68 06
 .LFB6069:
-	calr sub_FB6084                                      ; FB6069  1e 18 00
+	calr Ring601432_SpinUntilEmpty                                      ; FB6069  1e 18 00
 	calr 0x1758                                          ; FB606C  1e 58 17
 .LFB606F:
 	pop XIX                                              ; FB606F  5c
@@ -77231,12 +77296,31 @@ sub_FB6026:
 	ret                                                  ; FB6071  0e
 sub_FB6072:
 	call sub_FB8028                                      ; FB6072  1d 28 80 fb
-	calr sub_FB6084                                      ; FB6076  1e 0b 00
+	calr Ring601432_SpinUntilEmpty                                      ; FB6076  1e 0b 00
 	calr sub_FB6098                                      ; FB6079  1e 1c 00
 	calr 0x0330                                          ; FB607C  1e 30 03
-	call sub_FB7EFD                                      ; FB607F  1d fd 7e fb
+	call Ring600C1E_InitIfPanelMode79                                      ; FB607F  1d fd 7e fb
 	ret                                                  ; FB6083  0e
-sub_FB6084:
+; ---------------------------------------------------------------------
+; Ring601432_SpinUntilEmpty -- polls ring 0x601432 until it is empty, or 65535 times,
+;                              whichever comes first
+;
+; Evidence: 0xFB6085 `ldw HL,0xFFFF` seeds the bound; 0xFB6088 `cps
+;           HL,0x00` and 0xFB608A `jr z` leave on exhaustion; 0xFB608C
+;           `dec 1,HL` counts down; 0xFB608E `call 0xF41DFC` = prom_b
+;           slot T_Ring601432_IsEmpty; 0xFB6092 `cps WA,0x00` and
+;           0xFB6094 `jr nz` go round again while the result is
+;           non-zero. Ring601432_IsEmpty (0xF8483F) returns 0 only when
+;           the read cursor (0x60142A) equals the write cursor
+;           (0x60142E), so a non-zero result means the ring still holds
+;           data. Called by `calr` at 0xFB6069 (in sub_FB6026) and
+;           0xFB6076 (in sub_FB6072)
+; Unknown:  what the 65535-poll bound is for: the routine returns no
+;           value, so neither caller can tell a drained ring from an
+;           exhausted count
+; Was `sub_FB6084`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Ring601432_SpinUntilEmpty:
 	pushw hl                                             ; FB6084  2b
 	ldw hl, 0xffff                                       ; FB6085  33 ff ff
 .LFB6088:
@@ -79797,7 +79881,7 @@ sub_FB775F:
 	ld_sd8b c, 0x9e                                      ; FB7761  c0 9e 23
 	and C,0x2c                                           ; FB7764  cb cc 2c
 	jr z, .LFB7782                                       ; FB7767  66 19
-	call sub_FB7F0D                                      ; FB7769  1d 0d 7f fb
+	call Ring601646_InitIrqMasked                                      ; FB7769  1d 0d 7f fb
 	pushw 0x04                                           ; FB776D  0b 04 00
 	pushw 0x04                                           ; FB7770  0b 04 00
 	ldl_da xbc, (0x60fcd8)                               ; FB7773  e2 d8 fc 60 21
@@ -80666,7 +80750,24 @@ sub_FB7EE5:
 	pop XHL                                              ; FB7EFA  5b
 	pop XDE                                              ; FB7EFB  5a
 	ret                                                  ; FB7EFC  0e
-sub_FB7EFD:
+; ---------------------------------------------------------------------
+; Ring600C1E_InitIfPanelMode79 -- re-initialises ring 0x600C1E, with interrupts masked, only
+;                                 while the panel mode byte reads 0x79
+;
+; Evidence: 0xFB7EFD `m_cp_mi8 MB16, 0x207a, 0x79` and 0xFB7F02 `jr nz`
+;           gate the whole body; 0xFB7F04 `ei 0x06` raises the mask,
+;           0xFB7F06 `call 0xF41DB8` = prom_b slot T_Ring600C1E_Init,
+;           0xFB7F0A `ei 0x00` lowers it. (0x207A) is this listing's
+;           panel mode byte -- PanelState_Update207A (0xF863F5) is
+;           headed `(0x207A) := (0x207C) unless the mode is unchanged`.
+;           Called by `call` at 0xFB2058, 0xFB20F2, 0xFB21EF and
+;           0xFB607F
+; Unknown:  what mode 0x79 is. The listing tests (0x207A) against 0x0D,
+;           0x13, 0x79, 0xB7 and 0xDB in five different modules and
+;           names none of the values
+; Was `sub_FB7EFD`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Ring600C1E_InitIfPanelMode79:
 	m_cp_mi8 MB16, 0x207a, 0x79                          ; FB7EFD  c1 7a 20 3f 79
 	jr nz, .LFB7F0C                                      ; FB7F02  6e 08
 	ei 0x06                                              ; FB7F04  06 06
@@ -80674,7 +80775,23 @@ sub_FB7EFD:
 	ei 0x00                                              ; FB7F0A  06 00
 .LFB7F0C:
 	ret                                                  ; FB7F0C  0e
-sub_FB7F0D:
+; ---------------------------------------------------------------------
+; Ring601646_InitIrqMasked -- re-initialises ring 0x601646 with the interrupt mask
+;                             raised to 6
+;
+; Evidence: 0xFB7F0D `ei 0x06`, 0xFB7F0F `call 0xF41E48` = prom_b slot
+;           T_Ring601646_Init, 0xFB7F13 `ei 0x00`, 0xFB7F15 `ret`.
+;           Called by `call` at 0xFB7769, inside sub_FB775F. ★ THE
+;           EXTENT HOLDS A SECOND ROUTINE THIS LABEL DOES NOT COVER:
+;           0xFB7F16-0xFB7F1E is the same four instructions for
+;           T_Ring601432_Init (slot 0xF41E00) and carries no label
+;           because nothing in either image references it -- which is
+;           why it is described here and not labelled
+; Unknown:  why this ring's Init is masked when Ring_InitAllFourteen
+;           calls all fourteen unmasked
+; Was `sub_FB7F0D`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Ring601646_InitIrqMasked:
 	ei 0x06                                              ; FB7F0D  06 06
 	call 0xf41e48                                        ; FB7F0F  1d 48 1e f4
 	ei 0x00                                              ; FB7F13  06 00
@@ -94996,7 +95113,26 @@ sub_FC1D49:
 	popw bc                                              ; FC1D6D  49
 	popw de                                              ; FC1D6E  4a
 	ret                                                  ; FC1D6F  0e
-sub_FC1D70:
+; ---------------------------------------------------------------------
+; Ring60000C_GetWithRetry -- calls ring 0x60000C's Get until it yields a byte, up to
+;                            65535 times, and flags exhaustion in XIY
+;
+; Evidence: 0xFC1D71 `ldw BC,0xFFFF`; 0xFC1D79 `call 0xF41E80` = prom_b
+;           slot T_Ring60000C_Get, with XIY, XIX, DE and HL saved across
+;           it by 0xFC1D74-0xFC1D78 and restored at 0xFC1D7D-0xFC1D81;
+;           0xFC1D82 `cp WA,0xFFFF` and 0xFC1D86 `jr nz` return as soon
+;           as the result is not 0xFFFF; 0xFC1D88 `djnz16 BC` retries
+;           otherwise; 0xFC1D8B `ld XIY,0xFFFFFFFF` on exhaustion.
+;           Ring_Get_0400 (0xF8405D), the class routine every
+;           0x400-capacity Get reaches, loads WA=0xFFFF exactly when the
+;           read cursor equals the write cursor, so 0xFFFF is its empty
+;           marker. All seven call sites are inside sub_FC1D92, the
+;           first at 0xFC1D9B
+; Unknown:  why exhaustion is reported in XIY when the byte itself comes
+;           back in WA, and whether any caller reads XIY
+; Was `sub_FC1D70`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Ring60000C_GetWithRetry:
 	pushw bc                                             ; FC1D70  29
 	ldw bc, 0xffff                                       ; FC1D71  31 ff ff
 .LFC1D74:
@@ -95023,7 +95159,7 @@ sub_FC1D92:
 	cps wa, 0x00                                         ; FC1D96  d8 d8
 	jrl z, .LFC1E67                                      ; FC1D98  76 cc 00
 .LFC1D9B:
-	call sub_FC1D70                                      ; FC1D9B  1d 70 1d fc
+	call Ring60000C_GetWithRetry                                      ; FC1D9B  1d 70 1d fc
 	cp XIY,0xffffffff                                    ; FC1D9F  ed cf ff ff ff ff
 	jrl z, .LFC1E64                                      ; FC1DA5  76 bc 00
 	cp A,0x81                                            ; FC1DA8  c9 cf 81
@@ -95033,27 +95169,27 @@ sub_FC1D92:
 	jr .LFC1D9B                                          ; FC1DB2  68 e7
 .LFC1DB4:
 	ld D,A                                               ; FC1DB4  c9 8c
-	call sub_FC1D70                                      ; FC1DB6  1d 70 1d fc
+	call Ring60000C_GetWithRetry                                      ; FC1DB6  1d 70 1d fc
 	cp XIY,0xffffffff                                    ; FC1DBA  ed cf ff ff ff ff
 	jrl z, .LFC1E64                                      ; FC1DC0  76 a1 00
 	ld B,A                                               ; FC1DC3  c9 8a
-	call sub_FC1D70                                      ; FC1DC5  1d 70 1d fc
+	call Ring60000C_GetWithRetry                                      ; FC1DC5  1d 70 1d fc
 	cp XIY,0xffffffff                                    ; FC1DC9  ed cf ff ff ff ff
 	jrl z, .LFC1E64                                      ; FC1DCF  76 92 00
 	ld C,A                                               ; FC1DD2  c9 8b
-	call sub_FC1D70                                      ; FC1DD4  1d 70 1d fc
+	call Ring60000C_GetWithRetry                                      ; FC1DD4  1d 70 1d fc
 	cp XIY,0xffffffff                                    ; FC1DD8  ed cf ff ff ff ff
 	jrl z, .LFC1E64                                      ; FC1DDE  76 83 00
 	ld E,A                                               ; FC1DE1  c9 8d
-	call sub_FC1D70                                      ; FC1DE3  1d 70 1d fc
+	call Ring60000C_GetWithRetry                                      ; FC1DE3  1d 70 1d fc
 	cp XIY,0xffffffff                                    ; FC1DE7  ed cf ff ff ff ff
 	jrl z, .LFC1E64                                      ; FC1DED  76 74 00
-	call sub_FC1D70                                      ; FC1DF0  1d 70 1d fc
+	call Ring60000C_GetWithRetry                                      ; FC1DF0  1d 70 1d fc
 	cp XIY,0xffffffff                                    ; FC1DF4  ed cf ff ff ff ff
 	jrl z, .LFC1E64                                      ; FC1DFA  76 67 00
 	ld XIY,0x00000860                                    ; FC1DFD  45 60 08 00 00
 .LFC1E02:
-	call sub_FC1D70                                      ; FC1E02  1d 70 1d fc
+	call Ring60000C_GetWithRetry                                      ; FC1E02  1d 70 1d fc
 	cp XIY,0xffffffff                                    ; FC1E06  ed cf ff ff ff ff
 	jr z, .LFC1E64                                       ; FC1E0C  66 56
 	lda_dpi xbc, 0xf4                                    ; FC1E0E  f5 f4 41
@@ -95571,7 +95707,30 @@ sub_FC2213:
 	ldb_da a, (0x60a000)                                 ; FC2213  c2 00 a0 60 21
 	ldb_da b, (0x60a002)                                 ; FC2218  c2 02 a0 60 22
 	ldb_da w, (0x60a003)                                 ; FC221D  c2 03 a0 60 20
-sub_FC2222:
+; ---------------------------------------------------------------------
+; SoundGroup_MaxMemberIndex_Get -- returns the max-member-index byte for a sound group, from
+;                                  one of three ROM maps or a RAM one, chosen by the group
+;                                  selector in W
+;
+; Evidence: a `cp W` ladder at 0xFC2226-0xFC225A picks exactly one base:
+;           0xFC225C `ld XIX,0x00F06EB4` =
+;           GroupMaxMemberIndex_ToneGroups, 0xFC2263 `ld XIX,0x00F06EC4`
+;           = GroupMaxMemberIndex_DrumGroups, 0xFC226A `ld
+;           XIX,0x00F06ED4` = GroupMaxMemberIndex_DrumGroupsSecondWindow
+;           and 0xFC2271 `ld XIX,0x000008C0`, a RAM base; 0xFC2276 `xor
+;           W,W` and 0xFC2278 `ld A,(XIX+WA)` then read one byte at the
+;           index in A. Those three ROM objects carry the reciprocal
+;           citation in prom_b: each of their headers says `Read by:
+;           prom_a sub_FC2222 (0xFC2222-0xFC2281)` and quotes the same
+;           `ld XIX` immediate. Published by prom_b slot T_F4101C, which
+;           eleven prom_a sites call
+; Unknown:  the RAM base 0x08C0, which no header in this tree describes;
+;           and 'MEMBER' is this tree's word for the second index, not
+;           the ROM's -- the string occurs zero times in prom_a and
+;           prom_b
+; Was `sub_FC2222`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+SoundGroup_MaxMemberIndex_Get:
 	push XIX                                             ; FC2222  3c
 	pushw hl                                             ; FC2223  2b
 	push W                                               ; FC2224  c8 04
@@ -95615,7 +95774,31 @@ sub_FC2222:
 	popw hl                                              ; FC227F  4b
 	pop XIX                                              ; FC2280  5c
 	ret                                                  ; FC2281  0e
-sub_FC2282:
+; ---------------------------------------------------------------------
+; SoundGroup_MaxMemberIndex_GetToneCopy -- the same lookup against GroupMaxMemberIndex_ToneGroupsCopy
+;                                          and a different RAM base, over a SHORTER selector ladder
+;
+; Evidence: 0xFC22A3 `ld XIX,0x00F06EE4` =
+;           GroupMaxMemberIndex_ToneGroupsCopy and 0xFC22AA `ld
+;           XIX,0x000008D0`; 0xFC22AF `xor W,W` / 0xFC22B1 `ld
+;           A,(XIX+WA)` is the same two-instruction read as
+;           SoundGroup_MaxMemberIndex_Get's. Published by prom_b slot
+;           T_F41034, which seven prom_a sites call. ⚠ AND THIS CORRECTS
+;           A COMMITTED CITATION: prom_b's
+;           GroupMaxMemberIndex_ToneGroupsCopy header says `Read by:
+;           prom_a sub_FC2222 ... ld XIX,0x00F06EE4`. It is not:
+;           0x00F06EE4 is loaded ONCE in all of prom_a, at 0xFC22A3,
+;           which is past sub_FC2222's extent end 0xFC2281 and inside
+;           THIS routine. prom_b is another lane's file this round, so
+;           the fix is reported and not applied
+; Unknown:  what distinguishes this arm from
+;           SoundGroup_MaxMemberIndex_Get's: the two ladders test
+;           overlapping selector ranges and this one has four fewer
+;           tests, and nothing decoded here says which caller wants
+;           which
+; Was `sub_FC2282`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+SoundGroup_MaxMemberIndex_GetToneCopy:
 	push XIX                                             ; FC2282  3c
 	push W                                               ; FC2283  c8 04
 	cp W,0x08                                            ; FC2285  c8 cf 08
@@ -95653,7 +95836,7 @@ sub_FC22BA:
 	call sub_FC2330                                      ; FC22CD  1d 30 23 fc
 	jr .LFC22DD                                          ; FC22D1  68 0a
 .LFC22D3:
-	call sub_FC22E0                                      ; FC22D3  1d e0 22 fc
+	call SoundCode_FromGroupMember_ModeOffset                                      ; FC22D3  1d e0 22 fc
 	jr .LFC22DD                                          ; FC22D7  68 04
 .LFC22D9:
 	call sub_FC234F                                      ; FC22D9  1d 4f 23 fc
@@ -95661,7 +95844,30 @@ sub_FC22BA:
 	pop XBC                                              ; FC22DD  59
 	pop XWA                                              ; FC22DE  58
 	ret                                                  ; FC22DF  0e
-sub_FC22E0:
+; ---------------------------------------------------------------------
+; SoundCode_FromGroupMember_ModeOffset -- reads the (group, member) pair at (0x60F010)/(0x60F011),
+;                                         looks the pair up in
+;                                         SoundCodeByGroupMember_ModeOffsetGroup with the group
+;                                         biased by the mode, and stores the word to
+;                                         (0x60F014)/(0x60F015)
+;
+; Evidence: 0xFC22E0 `ld A,(0x60F010)`; 0xFC22E5-0xFC2307 add 0x10, 0x20
+;           or 0x22 to it according to (0x60F013) and bit 2 of (0x7F4D)
+;           -- that bias is what `ModeOffset` names; 0xFC230C `mul
+;           WA,0x0010` is the 16-byte row stride, 0xFC2310 `ld
+;           C,(0x60F011)` and 0xFC2317 `mul BC,0x0002` the 2-byte
+;           column; 0xFC231D `add XBC,0x00F06EF4` is the table base,
+;           which is SoundCodeByGroupMember_ModeOffsetGroup; 0xFC2325
+;           and 0xFC232A store the two halves. prom_b's header for that
+;           table carries the reciprocal citation, `Read by: prom_a
+;           sub_FC22E0 (0xFC22E0-0xFC232F)`, with the same arithmetic.
+;           One call site, 0xFC22D3
+; Unknown:  what the 16-bit word ENCODES -- prom_b's own header says the
+;           low byte is a kind and the high byte a value, and neither is
+;           decoded
+; Was `sub_FC22E0`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+SoundCode_FromGroupMember_ModeOffset:
 	ldb_da a, (0x60f010)                                 ; FC22E0  c2 10 f0 60 21
 	m_cp_mi8 MB24, 0x60f013, 0x01                        ; FC22E5  c2 13 f0 60 3f 01
 	jr z, .LFC22F7                                       ; FC22EB  66 0a
@@ -95780,13 +95986,35 @@ sub_FC2403:
 	call sub_FC24C1                                      ; FC2414  1d c1 24 fc
 	jr .LFC241E                                          ; FC2418  68 04
 .LFC241A:
-	call sub_FC2422                                      ; FC241A  1d 22 24 fc
+	call SoundCode_FromGroupMember_ByteGroup                                      ; FC241A  1d 22 24 fc
 .LFC241E:
 	pop XIX                                              ; FC241E  5c
 	pop XBC                                              ; FC241F  59
 	pop XWA                                              ; FC2420  58
 	ret                                                  ; FC2421  0e
-sub_FC2422:
+; ---------------------------------------------------------------------
+; SoundCode_FromGroupMember_ByteGroup -- the same (group, member) -> (0x60F014)/(0x60F015) lookup,
+;                                        against SoundCodeByGroupMember_ByteGroup, with a RAM table
+;                                        searched first when bit 2 of (0x7F4D) is set
+;
+; Evidence: 0xFC2422 `m_bit 2, MD16, 0x7f4d` chooses the arm. RAM arm:
+;           0xFC2432 `ld XIX,0x00005760` and the 0xFC243B loop compare
+;           the BC pair against 127 16-bit entries (0xFC2446 `cp
+;           WA,0x00FE`). ROM arm: 0xFC245D/0xFC2462 read the same two
+;           cells, 0xFC2467 or's 0x80 into the group when bit 5 of
+;           (0x60F011) is set -- the FULL BYTE index that `ByteGroup`
+;           names -- 0xFC246F `and C,0x07` masks the column, and
+;           0xFC2472 `ld XIX,0x00F07134` is
+;           SoundCodeByGroupMember_ByteGroup's base; 0xFC24B1 and
+;           0xFC24B6 store the halves. prom_b's header for that table
+;           cites `prom_a 0xFC245D-0xFC2489` for exactly this
+;           arithmetic. One call site, 0xFC241A
+; Unknown:  what the RAM table at 0x5760 holds and who fills it, and
+;           what the 0x1A/0x01/0x20 values loaded into C on the way out
+;           select
+; Was `sub_FC2422`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+SoundCode_FromGroupMember_ByteGroup:
 	m_bit 2, MD16, 0x7f4d                                ; FC2422  f1 4d 7f ca
 	jr z, .LFC245D                                       ; FC2426  66 35
 	ldb_da c, (0x60f010)                                 ; FC2428  c2 10 f0 60 23
@@ -109092,12 +109320,28 @@ sub_FD21E9:
 	pop XHL                                              ; FD2500  5b
 	unlk XIZ                                             ; FD2501  ee 0d
 	ret                                                  ; FD2503  0e
-sub_FD2504:
+; ---------------------------------------------------------------------
+; Ring608A0A_DrainAll -- calls sub_FD2014 once per item until ring 0x608A0A is
+;                        empty
+;
+; Evidence: 0xFD2504 `call 0xF41CDC` = prom_b slot T_Ring608A0A_IsEmpty;
+;           0xFD2508 `cps WA,0x00` and 0xFD250A `jr z` return when it
+;           reads zero; 0xFD250C `calr sub_FD2014` otherwise, and
+;           0xFD250F `jr` re-tests. Ring608A0A_IsEmpty (0xF84327)
+;           returns 0 only when the read cursor (0x608A02) equals the
+;           write cursor (0x608A06). sub_FD2014's own body reaches
+;           T_Ring608A0A_Get, so the loop consumes what it tests.
+;           Published by prom_b slot T_F42380 and reached from `call
+;           0xF42380` at 0xF8213E, inside sub_F82028
+; Unknown:  what sub_FD2014 does with each item
+; Was `sub_FD2504`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Ring608A0A_DrainAll:
 	call 0xf41cdc                                        ; FD2504  1d dc 1c f4
 	cps wa, 0x00                                         ; FD2508  d8 d8
 	jr z, .LFD2511                                       ; FD250A  66 05
 	calr sub_FD2014                                      ; FD250C  1e 05 fb
-	jr sub_FD2504                                        ; FD250F  68 f3
+	jr Ring608A0A_DrainAll                                        ; FD250F  68 f3
 .LFD2511:
 	ret                                                  ; FD2511  0e
 sub_FD2512:
@@ -131378,7 +131622,24 @@ sub_FE0019:
 	pop XIX                                              ; FE0036  5c
 	pop XIZ                                              ; FE0037  5e
 	ret                                                  ; FE0038  0e
-sub_FE0039:
+; ---------------------------------------------------------------------
+; Disk_FormatSelectedMedia_Veneer -- calls Disk_FormatSelectedMedia with XDE, XHL, XIX and XIZ
+;                                    preserved
+;
+; Evidence: 0xFE0039-0xFE003C push XDE, XHL, XIX and XIZ; 0xFE003D `call
+;           0xF43460` is prom_b slot T_Disk_FormatSelectedMedia, whose
+;           `jp` target 0xFE7200 carries the label
+;           Disk_FormatSelectedMedia; 0xFE0041-0xFE0044 pop the same
+;           four in reverse and 0xFE0045 returns. No other call or jump
+;           is in the extent. Called by `calr` at 0xFE0A29 and 0xFE0A59,
+;           both inside sub_FE09BE. DERIVATIVE: the name is the
+;           callee's, and the routine's own contribution is the register
+;           save
+; Unknown:  why the four registers need saving here when the callee is
+;           reached directly elsewhere
+; Was `sub_FE0039`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Disk_FormatSelectedMedia_Veneer:
 	push XDE                                             ; FE0039  3a
 	push XHL                                             ; FE003A  3b
 	push XIX                                             ; FE003B  3c
@@ -131509,7 +131770,19 @@ sub_FE00C4:
 	pop XHL                                              ; FE00CE  5b
 	pop XDE                                              ; FE00CF  5a
 	ret                                                  ; FE00D0  0e
-sub_FE00D1:
+; ---------------------------------------------------------------------
+; MidiIn_ServiceDeferred_Veneer -- calls MidiIn_ServiceDeferred with XDE, XHL, XIX and XIZ
+;                                  preserved
+;
+; Evidence: 0xFE00D1-0xFE00D4 push the four; 0xFE00D5 `call 0xF40758` is
+;           prom_b slot T_MidiIn_ServiceDeferred, whose `jp` target
+;           carries the label MidiIn_ServiceDeferred; 0xFE00D9-0xFE00DC
+;           pop them and 0xFE00DD returns. Called by `calr` at 0xFE201F.
+;           DERIVATIVE, as above
+; Unknown:  as above
+; Was `sub_FE00D1`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+MidiIn_ServiceDeferred_Veneer:
 	push XDE                                             ; FE00D1  3a
 	push XHL                                             ; FE00D2  3b
 	push XIX                                             ; FE00D3  3c
@@ -131520,7 +131793,20 @@ sub_FE00D1:
 	pop XHL                                              ; FE00DB  5b
 	pop XDE                                              ; FE00DC  5a
 	ret                                                  ; FE00DD  0e
-sub_FE00DE:
+; ---------------------------------------------------------------------
+; UiEventList_Publish_Veneer -- calls UiEventList_Publish with XDE, XHL, XIX and XIZ
+;                               preserved
+;
+; Evidence: 0xFE00DE-0xFE00E1 push the four; 0xFE00E2 `call 0xF40F50` is
+;           prom_b slot T_UiEventList_Publish; 0xFE00E6-0xFE00E9 pop
+;           them and 0xFE00EA returns. Called by `calr` at 0xFE2022,
+;           three bytes after the site that reaches
+;           MidiIn_ServiceDeferred_Veneer -- the two veneers are a pair
+;           in one caller. DERIVATIVE, as above
+; Unknown:  as above
+; Was `sub_FE00DE`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+UiEventList_Publish_Veneer:
 	push XDE                                             ; FE00DE  3a
 	push XHL                                             ; FE00DF  3b
 	push XIX                                             ; FE00E0  3c
@@ -134745,8 +135031,8 @@ sub_FE1CE9:
 	unlk XIZ                                             ; FE1D26  ee 0d
 	ret                                                  ; FE1D28  0e
 ; ---------------------------------------------------------------------
-; Ring_InitTenOfFourteen -- calls the Init entry of TEN ring buffers, in one run,
-;                    and returns
+; Ring_InitTenOfFourteen -- calls the Init entry of TEN of the fourteen ring buffers,
+;                           in one run, and returns
 ;
 ; Evidence: ten consecutive `call` instructions at 0xFE1D29, 0xFE1D2D,
 ;           0xFE1D31, 0xFE1D35, 0xFE1D39, 0xFE1D3D, 0xFE1D41, 0xFE1D45,
@@ -134754,14 +135040,17 @@ sub_FE1CE9:
 ;           slots T_Ring60080A_Init, T_Ring600A14_Init,
 ;           T_Ring600C1E_Init, T_Ring601028_Init, T_Ring601432_Init,
 ;           T_Ring60153C_Init, T_Ring601646_Init, T_Ring601850_Init,
-;           T_Ring60195A_Init and T_Ring601C6E_Init -- every
-;           `T_Ring*_Init` slot in prom_b and no other call. 0xFE1D51 is
-;           the `ret`
+;           T_Ring60195A_Init and T_Ring601C6E_Init -- TEN of the
+;           FOURTEEN `T_Ring*_Init` slots in prom_b, and no other call.
+;           0xFE1D51 is the `ret`. The four it does NOT call are
+;           T_Ring60000C_Init, T_Ring601B64_Init, T_Ring60480A_Init and
+;           T_Ring608A0A_Init, and Ring_InitAllFourteen (0xF825D4) calls
+;           all fourteen
 ; Unknown:  why the ninth call is out of address order
 ;           (T_Ring60195A_Init is reached through slot 0xF41D28, below
-;           all the others), and what the ten buffers carry --
-;           FINDINGS-prom_a-ring-buffers.md has the capacities, not the
-;           traffic
+;           all the others), why these ten and not the fourteen, and
+;           what the buffers carry -- FINDINGS-prom_a-ring-buffers.md
+;           has the capacities, not the traffic
 ; Was `sub_FE1D29`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
 Ring_InitTenOfFourteen:
@@ -136823,11 +137112,32 @@ sub_FE3000:
 	jp sub_FE3020                                        ; FE3000  1b 20 30 fe
 sub_FE3004:
 	jp sub_FE3032                                        ; FE3004  1b 32 30 fe
-sub_FE3008:
+; ---------------------------------------------------------------------
+; INT5_Dev7B_Receive_Alias -- a one-instruction jump slot that enters INT5_Dev7B_Receive
+;
+; Evidence: the whole body is 0xFE3008 `jp 0xFE6866`, and 0xFE6866
+;           carries the label INT5_Dev7B_Receive. It is slot 2 of the
+;           eight `jp` slots at 0xFE3000-0xFE301C, a 4-byte stride; slot
+;           7 (0xFE301C, unlabelled) jumps at the same handler.
+;           DERIVATIVE
+; Unknown:  why the handler is entered through a slot at all, and what
+;           distinguishes slot 2 from the identical slot 7
+; Was `sub_FE3008`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+INT5_Dev7B_Receive_Alias:
 	jp 0xfe6866                                          ; FE3008  1b 66 68 fe
 sub_FE300C:
-	jp sub_FE30D8                                        ; FE300C  1b d8 30 fe
-sub_FE3010:
+	jp Fdc_ServiceDataByte_Isr                                        ; FE300C  1b d8 30 fe
+; ---------------------------------------------------------------------
+; INTTC0_uDMA0Done_Alias -- a one-instruction jump slot that enters INTTC0_uDMA0Done
+;
+; Evidence: the whole body is 0xFE3010 `jp 0xFE6851`, and 0xFE6851
+;           carries the label INTTC0_uDMA0Done. Slot 4 of the same
+;           eight-slot block. DERIVATIVE
+; Unknown:  as above
+; Was `sub_FE3010`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+INTTC0_uDMA0Done_Alias:
 	jp 0xfe6851                                          ; FE3010  1b 51 68 fe
 sub_FE3014:
 	jp sub_FE3042                                        ; FE3014  1b 42 30 fe
@@ -136892,7 +137202,23 @@ sub_FE308D:
 	ldl_da xiy, (0x605d88)                               ; FE30CD  e2 88 5d 60 25
 	ldl_da xix, (0x605d84)                               ; FE30D2  e2 84 5d 60 24
 	ret                                                  ; FE30D7  0e
-sub_FE30D8:
+; ---------------------------------------------------------------------
+; Fdc_ServiceDataByte_Isr -- the interrupt entry that calls Fdc_ServiceDataByte and
+;                            returns with `reti`
+;
+; Evidence: the whole body is 0xFE30D8 `call 0xFE67F9` and 0xFE30DC
+;           `reti`; 0xFE67F9 carries the label Fdc_ServiceDataByte.
+;           `reti` and not `ret` is what makes this an interrupt entry
+;           rather than a veneer. Reached by the `jp` at 0xFE300C, slot
+;           3 of the eight-slot jump block at 0xFE3000
+; Unknown:  which interrupt. The vector that reaches 0xFE300C is not
+;           identified here; slots 2 and 4 of the same block jump
+;           straight at INT5_Dev7B_Receive and INTTC0_uDMA0Done, so the
+;           block is an interrupt indirection, but which line drives
+;           slot 3 is open
+; Was `sub_FE30D8`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+Fdc_ServiceDataByte_Isr:
 	call 0xfe67f9                                        ; FE30D8  1d f9 67 fe
 	reti                                                 ; FE30DC  07
 sub_FE30DD:
@@ -152417,13 +152743,40 @@ sub_FEB290:
 	add DE,0x002b                                        ; FEB2C0  da c8 2b 00
 	stda16 (0x2532), de                                  ; FEB2C4  f1 32 25 52
 	pushw hl                                             ; FEB2C8  2b
-	calr sub_FEB2D4                                      ; FEB2C9  1e 08 00
+	calr RecordNameSource_Select                                      ; FEB2C9  1e 08 00
 	popw hl                                              ; FEB2CC  4b
 	ldw bc, 0x0a                                         ; FEB2CD  31 0a 00
 	ldb a, 0x17                                          ; FEB2D0  21 17
 	swi 7                                                ; FEB2D2  ff
 	ret                                                  ; FEB2D3  0e
-sub_FEB2D4:
+; ---------------------------------------------------------------------
+; RecordNameSource_Select -- returns, in XIY, the name source for the record selected
+;                            by (0x601F00) -- a drum-kit name block, a RAM buffer, or
+;                            the name table itself -- according to the record's +0x01
+;                            byte
+;
+; Evidence: 0xFEB2D4 `ld XIX,0x00603422` and 0xFEB2D9 `ld A,(0x601F00)`
+;           pick the record; 0xFEB2E3 `ld XIY,0x00FEB330` with 0xFEB2EA
+;           `sll WA,0x02` and 0xFEB2ED `ld XIX,(XIY+WA)` indexes
+;           RecordPtrs_RAM76A2 at a stride of 4; 0xFEB2F2 `ld
+;           A,(XIX+0x01)` reads the selector and 0xFEB2F5-0xFEB309
+;           branch on 0x20, 0x28, 0x29 and 0x30. The four arms:
+;           0xFEB30B-0xFEB318 returns DrumKitNameBlockPtrs[record+0x00],
+;           0xFEB31E and 0xFEB324 return the RAM buffer 0x603FF6, and
+;           0xFEB32A returns DrumKitNames. Those five arm addresses and
+;           their targets are exactly what this listing's own drum-name
+;           block header already states, under `WHAT A RECORD'S +0x01
+;           BYTE SELECTS`; only the label was still sub_XXXXXX. One call
+;           site, `calr` at 0xFEB2C9
+; Unknown:  what (0x601F00) indexes and what the RAM buffer at 0x603FF6
+;           holds. ⚠ EMITTER RISK: this label is inside
+;           gen_prom_a_fe8000_module.py's declared range
+;           0xFE8000-0xFEB330 and that emitter has NO name side-car, so
+;           re-running it would revert this name; `--emitters` prints
+;           the check
+; Was `sub_FEB2D4`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+RecordNameSource_Select:
 	ld XIX,0x00603422                                    ; FEB2D4  44 22 34 60 00
 	ldb_da a, (0x601f00)                                 ; FEB2D9  c2 00 1f 60 21
 	mx8_ld_rm MXB, ra_IX, rb_A, r1                       ; FEB2DE  c3 03 f0 e0 21
@@ -159954,7 +160307,7 @@ sub_FF4ACB:
 	stb_d8 (0x2733), c                                   ; FF4BB7  f1 33 27 43
 	lda_24 xbc, (0xf58415)                               ; FF4BBB  f2 15 84 f5 31
 	push XBC                                             ; FF4BC0  39
-	call sub_FF7668                                      ; FF4BC1  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF4BC1  1d 68 76 ff
 	pop XIY                                              ; FF4BC5  5d
 	jrl .LFF4CED                                         ; FF4BC6  78 24 01
 .LFF4BC9:
@@ -160250,7 +160603,7 @@ sub_FF4D5D:
 	stb_d8 (0x2733), c                                   ; FF4E4A  f1 33 27 43
 	lda_24 xbc, (0xf58415)                               ; FF4E4E  f2 15 84 f5 31
 	push XBC                                             ; FF4E53  39
-	call sub_FF7668                                      ; FF4E54  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF4E54  1d 68 76 ff
 	pop XIY                                              ; FF4E58  5d
 	jrl .LFF4F83                                         ; FF4E59  78 27 01
 .LFF4E5C:
@@ -160507,7 +160860,7 @@ Paint_MidiFileL0ad:
 	stb_d8 (0x2733), c                                   ; FF50A8  f1 33 27 43
 	lda_24 xbc, (0xf59948)                               ; FF50AC  f2 48 99 f5 31
 	push XBC                                             ; FF50B1  39
-	call sub_FF7668                                      ; FF50B2  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF50B2  1d 68 76 ff
 	add XSP,0x00000024                                   ; FF50B6  ef c8 24 00 00 00
 	pushw 0x06                                           ; FF50BC  0b 06 00
 	pushw 0x03                                           ; FF50BF  0b 03 00
@@ -160793,7 +161146,7 @@ sub_FF52E2:
 	stb_d8 (0x2733), c                                   ; FF5372  f1 33 27 43
 	lda_24 xbc, (0xf59948)                               ; FF5376  f2 48 99 f5 31
 	push XBC                                             ; FF537B  39
-	call sub_FF7668                                      ; FF537C  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF537C  1d 68 76 ff
 	jr .LFF53C1                                          ; FF5380  68 3f
 .LFF5382:
 	m_cp_mi8 MB16, 0x2732, 0x00                          ; FF5382  c1 32 27 3f 00
@@ -160862,7 +161215,7 @@ sub_FF52E2:
 	stb_d8 (0x2733), c                                   ; FF541B  f1 33 27 43
 	lda_24 xbc, (0xf59948)                               ; FF541F  f2 48 99 f5 31
 	push XBC                                             ; FF5424  39
-	call sub_FF7668                                      ; FF5425  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF5425  1d 68 76 ff
 	jr .LFF546A                                          ; FF5429  68 3f
 .LFF542B:
 	m_cp_mi8 MB16, 0x2732, 0xff                          ; FF542B  c1 32 27 3f ff
@@ -161741,7 +162094,7 @@ sub_FF5C3E:
 	stb_d8 (0x2733), c                                   ; FF5DB6  f1 33 27 43
 	lda_24 xbc, (0xf5993e)                               ; FF5DBA  f2 3e 99 f5 31
 	push XBC                                             ; FF5DBF  39
-	call sub_FF7668                                      ; FF5DC0  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF5DC0  1d 68 76 ff
 	ldb_d8 c, (0x133e)                                   ; FF5DC4  c1 3e 13 23
 	stb_d8 (0x2731), c                                   ; FF5DC8  f1 31 27 43
 	lda_24 xbc, (0xf5993e)                               ; FF5DCC  f2 3e 99 f5 31
@@ -162148,7 +162501,7 @@ sub_FF5FA0:
 	stb_d8 (0x2733), c                                   ; FF6249  f1 33 27 43
 	lda_24 xbc, (0xf5993e)                               ; FF624D  f2 3e 99 f5 31
 	push XBC                                             ; FF6252  39
-	call sub_FF7668                                      ; FF6253  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF6253  1d 68 76 ff
 	jr .LFF62AB                                          ; FF6257  68 52
 .LFF6259:
 	ld C,(XIX)                                           ; FF6259  84 23
@@ -162236,7 +162589,7 @@ sub_FF5FA0:
 	stb_d8 (0x2733), c                                   ; FF6321  f1 33 27 43
 	lda_24 xbc, (0xf5993e)                               ; FF6325  f2 3e 99 f5 31
 	push XBC                                             ; FF632A  39
-	call sub_FF7668                                      ; FF632B  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF632B  1d 68 76 ff
 	jr .LFF6383                                          ; FF632F  68 52
 .LFF6331:
 	ld C,(XIX)                                           ; FF6331  84 23
@@ -162880,7 +163233,7 @@ sub_FF68D8:
 	call sub_FF7776                                      ; FF6913  1d 76 77 ff
 	lda_24 xbc, (0xf5910f)                               ; FF6917  f2 0f 91 f5 31
 	push XBC                                             ; FF691C  39
-	call sub_FF7656                                      ; FF691D  1d 56 76 ff
+	call DLB_Handler_StringTable_Veneer                                      ; FF691D  1d 56 76 ff
 	inc 0,XSP                                            ; FF6921  ef 60
 	ret                                                  ; FF6923  0e
 	link XIZ,0x0000                                      ; FF6924  ee 0c 00 00
@@ -162906,10 +163259,10 @@ sub_FF68D8:
 .LFF6952:
 	lda_24 xbc, (0xf590f1)                               ; FF6952  f2 f1 90 f5 31
 	push XBC                                             ; FF6957  39
-	call sub_FF7656                                      ; FF6958  1d 56 76 ff
+	call DLB_Handler_StringTable_Veneer                                      ; FF6958  1d 56 76 ff
 	lda_24 xbc, (0xf59100)                               ; FF695C  f2 00 91 f5 31
 	push XBC                                             ; FF6961  39
-	call sub_FF7656                                      ; FF6962  1d 56 76 ff
+	call DLB_Handler_StringTable_Veneer                                      ; FF6962  1d 56 76 ff
 	push 0x00                                            ; FF6966  09 00
 	m_push MB16, 0x273a                                  ; FF6968  c1 3a 27 04
 	calr sub_FF7153                                      ; FF696C  1e e4 07
@@ -162928,7 +163281,7 @@ sub_FF68D8:
 	stdi8 (0x2730), 0x01                                 ; FF6998  f1 30 27 00 01
 	lda_24 xbc, (0xf5911e)                               ; FF699D  f2 1e 91 f5 31
 	push XBC                                             ; FF69A2  39
-	call sub_FF7668                                      ; FF69A3  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF69A3  1d 68 76 ff
 	lda_24 xbc, (0xf59150)                               ; FF69A7  f2 50 91 f5 31
 	push XBC                                             ; FF69AC  39
 	call sub_FF763F                                      ; FF69AD  1d 3f 76 ff
@@ -162977,7 +163330,7 @@ sub_FF68D8:
 	stb_d8 (0x2730), c                                   ; FF6A02  f1 30 27 43
 	lda_24 xbc, (0xf5911e)                               ; FF6A06  f2 1e 91 f5 31
 	push XBC                                             ; FF6A0B  39
-	call sub_FF7668                                      ; FF6A0C  1d 68 76 ff
+	call DLB_Handler_Decimal_Veneer                                      ; FF6A0C  1d 68 76 ff
 	pop XBC                                              ; FF6A10  59
 	pop XIX                                              ; FF6A11  5c
 	popw de                                              ; FF6A12  4a
@@ -163013,7 +163366,7 @@ sub_FF68D8:
 .LFF6A53:
 	lda_24 xbc, (0xf59100)                               ; FF6A53  f2 00 91 f5 31
 	push XBC                                             ; FF6A58  39
-	call sub_FF7656                                      ; FF6A59  1d 56 76 ff
+	call DLB_Handler_StringTable_Veneer                                      ; FF6A59  1d 56 76 ff
 	push 0x00                                            ; FF6A5D  09 00
 	m_push MB16, 0x273a                                  ; FF6A5F  c1 3a 27 04
 	calr sub_FF7153                                      ; FF6A63  1e ed 06
@@ -163142,7 +163495,7 @@ sub_FF68D8:
 .LFF6B7E:
 	lda_24 xbc, (0xf590f1)                               ; FF6B7E  f2 f1 90 f5 31
 	push XBC                                             ; FF6B83  39
-	call sub_FF7656                                      ; FF6B84  1d 56 76 ff
+	call DLB_Handler_StringTable_Veneer                                      ; FF6B84  1d 56 76 ff
 	pop XIY                                              ; FF6B88  5d
 	cps h, 0x00                                          ; FF6B89  ce d8
 	jr z, .LFF6BB2                                       ; FF6B8B  66 25
@@ -163159,7 +163512,7 @@ sub_FF68D8:
 .LFF6BB2:
 	lda_24 xbc, (0xf59100)                               ; FF6BB2  f2 00 91 f5 31
 	push XBC                                             ; FF6BB7  39
-	call sub_FF7656                                      ; FF6BB8  1d 56 76 ff
+	call DLB_Handler_StringTable_Veneer                                      ; FF6BB8  1d 56 76 ff
 	calr sub_FF7224                                      ; FF6BBC  1e 65 06
 	calr sub_FF7296                                      ; FF6BBF  1e d4 06
 	push 0x00                                            ; FF6BC2  09 00
@@ -163243,7 +163596,7 @@ sub_FF68D8:
 .LFF6C61:
 	lda_24 xbc, (0xf59100)                               ; FF6C61  f2 00 91 f5 31
 	push XBC                                             ; FF6C66  39
-	call sub_FF7656                                      ; FF6C67  1d 56 76 ff
+	call DLB_Handler_StringTable_Veneer                                      ; FF6C67  1d 56 76 ff
 	calr sub_FF7224                                      ; FF6C6B  1e b6 05
 	ld C,(XIX)                                           ; FF6C6E  84 23
 	mul C,0x02                                           ; FF6C70  cb 08 02
@@ -164424,7 +164777,21 @@ sub_FF763F:
 	pop XIX                                              ; FF7653  5c
 	pop XIZ                                              ; FF7654  5e
 	ret                                                  ; FF7655  0e
-sub_FF7656:
+; ---------------------------------------------------------------------
+; DLB_Handler_StringTable_Veneer -- calls display-list-B's string-table handler with the list
+;                                   pointer taken from the caller's frame at +8
+;
+; Evidence: 0xFF7656/0xFF7657 build a frame with XIZ; 0xFF765C `ld
+;           XIY,(XIZ+0x08)` loads the argument the handler reads;
+;           0xFF765F `call 0xF417F8` is prom_b slot
+;           T_DLB_Handler_StringTable, whose `jp` target 0xF31B21
+;           carries the label DLB_Handler_StringTable in prom_b;
+;           0xFF7663-0xFF7666 restore XDE, XHL, XIX and XIZ. Seven call
+;           sites, the first at 0xFF691D. DERIVATIVE
+; Unknown:  what the +8 argument is beyond a list pointer
+; Was `sub_FF7656`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+DLB_Handler_StringTable_Veneer:
 	push XIZ                                             ; FF7656  3e
 	ld XIZ,XSP                                           ; FF7657  ef 8e
 	push XIX                                             ; FF7659  3c
@@ -164437,7 +164804,20 @@ sub_FF7656:
 	pop XIX                                              ; FF7665  5c
 	pop XIZ                                              ; FF7666  5e
 	ret                                                  ; FF7667  0e
-sub_FF7668:
+; ---------------------------------------------------------------------
+; DLB_Handler_Decimal_Veneer -- the same veneer for display-list-B's decimal handler, and
+;                               it clears (0x2540) first
+;
+; Evidence: 0xFF766E `stdi8 (0x2540), 0x00` -- the layer select this
+;           module writes before every draw -- then 0xFF7673 `ld
+;           XIY,(XIZ+0x08)` and 0xFF7676 `call 0xF41800` = prom_b slot
+;           T_F41800, whose `jp` target 0xF31BA1 carries the label
+;           DLB_Handler_Decimal. Ten call sites, the first at 0xFF4BC1.
+;           DERIVATIVE, and the (0x2540) store is the one thing it adds
+; Unknown:  as above
+; Was `sub_FF7668`, named by notes/prom_a_census_round8.py (bucket round 9).
+; ---------------------------------------------------------------------
+DLB_Handler_Decimal_Veneer:
 	push XIZ                                             ; FF7668  3e
 	ld XIZ,XSP                                           ; FF7669  ef 8e
 	push XIX                                             ; FF766B  3c

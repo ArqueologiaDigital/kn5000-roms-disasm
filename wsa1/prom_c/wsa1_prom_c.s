@@ -46483,7 +46483,26 @@ Voice_StageChanSel_Reg04C0__FAA0B6:
 ;          defence against it.
 ;          The shape is the one Voice_StageRegs_0500_08C0_AB already documents for register
 ;          0x0500: a byte pair, each half clamped to 0..0x7F, assembled with `sll 8 / or`.
-;          Unknown: what P is, what the bit-7/bit-8 pair selects, and what 0x00C0 carries.
+;          ★ ROUND 9: P IS THE PART RECORD, AND THE TWO HALVES ARE MIDI CONTROLLERS
+;          91 AND 93.
+;          voice_record[+0x23] is assembled as 0x1523 + 0x012C*part: `ld BC,0x1523`
+;          at 0xFB0C8A into (XIZ+0xe4), `mul WA,0x012c` at 0xFB0C29 into (XIZ+0xfa),
+;          `add BC,(XIZ+0xfa)` at 0xFB0CD3 and `ld (XHL+0x23),BC` at 0xFB0CD6 -- and
+;          0x001523 with stride 0x012C is the part-record array.  So P[+0x11] is the
+;          byte MidiCtrl_CC93 writes (`add BC,0x0011` at 0xFAD86F, `ld
+;          (XBC+0x1523),A` at 0xFAD878) and P[+0x10] is the byte MidiCtrl_CC91
+;          writes (`add BC,0x0010` at 0xFAD851, `ld (XBC+0x1523),A` at 0xFAD85A).
+;          Register chan+0x00C0 is therefore (controller 91 << 8) | controller 93,
+;          each half offset by a per-tone depth and clamped to 0..0x7F.
+;          ★ SECOND, INDEPENDENT PRODUCER: NotePool8_Reg00C0_FromPart0Ctrl91And93
+;          (0xFC3CFB) builds the same register for the note pool straight out of
+;          RAM 0x001533 and 0x001534 -- part 0's +0x10 and +0x11 -- with the same
+;          high/low split and no modulation at all.  Two unrelated call paths, one
+;          field layout.
+;          Unknown: what the bit-7/bit-8 pair selects, and what the device DOES with
+;          the pair.  Controllers 91 and 93 are 'effects depth 1 and 3' in the MIDI
+;          allocation, but this firmware corroborates only 7, 64 and 120 of its own
+;          controller numbers, so no effect is named here.
 ; --------------------------------------------------------------------------
 Voice_StageRegs_00C0_AB:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FAA0BC  link XIZ,0xfffe
@@ -62301,8 +62320,18 @@ Toggle14FE_AndDispatch__FB0605:
 ;          handlers are unexplained (⚠ CORRECTED 2026-08-25: "still .incbin" --
 ;          they are converted) -- and the 0x80 arm in particular is NOT the
 ;          MIDI note-off it looks like, since it takes a six-byte packet and calls
-;          0xFC2600.  ⚠ what packet byte [1] >= 0xF0 means -- it is a real branch
-;          (0xFB07FD) with its own handler, not a guard.
+;          0xFC2600.
+;          ✔ CLOSED 2026-08-30 (round 9): what packet byte [1] >= 0xF0 means.  It
+;          is a real branch -- `cp H,0xf0` at 0xFB07FD and `jr NC,0xfb0808` at
+;          0xFB0800 -- and its handler is NotePool8_NoteOnOff (0xFC3E02), a
+;          note-on/note-off engine over a PRIVATE EIGHT-SLOT VOICE POOL with
+;          nothing in common with the 33 part records MidiNote_Dispatch drives:
+;          its own round-robin allocator at RAM 0x00E005, its own eight-byte
+;          sounding-note table at 0x00E006, and its own 68-byte device image
+;          Dev10C_StagingStruct_NotePool8Image.  Byte [1] is 0xF0 + a VARIANT the
+;          handler masks to 0..6.  ⚠ STILL OPEN: what the seven variants are, and
+;          what sends the packets -- they arrive over link channel 0 from CPU 1,
+;          so any name for them lives in prom_a.
 ;          ✔ CLOSED 2026-08-25: the call to 0xFA5949 at 0xFB061F, made with the
 ;          byte count pushed before any parsing happens, is sub_FA5949, converted
 ;          above.  Its whole body is `ld BC,(XIZ+0x08) / ld (0x008678),BC / ret` --
@@ -74914,6 +74943,26 @@ sub_FB707E:
 ;                                                               0x40 = centre.  ⚠ the
 ;                                                               READ is a different
 ;                                                               quantity entirely
+;   -- added round 9, 2026-08-30 -----------------------------------------------
+;   chan + 0x00C0   word 3   Voice_StageRegs_00C0_AB         (MIDI CONTROLLER 91 << 8)
+;                            NotePool8_Reg00C0_FromPart0-      | MIDI CONTROLLER 93.
+;                              Ctrl91And93                     Each half 0..0x7F.  The
+;                                                              two producers are
+;                                                              unrelated code paths and
+;                                                              agree on the split; the
+;                                                              main one offsets each
+;                                                              half by a per-tone depth
+;                                                              and clamps, the pool one
+;                                                              copies part 0's two bytes
+;                                                              straight through.
+;                                                              ⚠ WHAT the two depths do
+;                                                              is NOT established: the
+;                                                              MIDI allocation calls 91
+;                                                              and 93 'effects depth 1
+;                                                              and 3', and this firmware
+;                                                              corroborates only
+;                                                              controllers 7, 64 and 120
+;                                                              of its own numbers.
 ;
 ;
 ; ============================================================================
@@ -75080,9 +75129,17 @@ sub_FB707E:
 ;          Register block 0 gets the literal 0x8100 (0xFB7239) and no struct field
 ;          -- the same constant three routines of the second accessor bank write,
 ;          per §5 of that note.
-; Unknown:  what any register does; what struct word 0 (offset 0x00) is for --
-;          this routine never writes it, while Dev104_WriteAllChanRegs writes its
-;          word 0 LAST.
+; Unknown:  what any register does.
+;          ✔ PARTLY CLOSED 2026-08-30 (round 9): what struct word 0 (offset 0x00)
+;          is for.  This routine never writes it and puts the literal 0x8100 in
+;          register block 0 instead (0xFB7234).  But one of its seven callers,
+;          NotePool8_NoteOnOff, fills word 0 of its own buffer and then sends that
+;          word to register chan+0x0000 through Dev10C_WriteReg_c immediately
+;          after this burst returns -- `ld BC,(XIZ+0x92)` at 0xFC3F1B, the channel
+;          pushed at 0xFC3F1F, `call 0xfb732c` at 0xFC3F27.  On THAT path word 0
+;          is the value for register block 0.  ⚠ One caller's usage is not a
+;          statement about the field: the other six callers were not traced, and
+;          Dev104_WriteAllChanRegs writes ITS word 0 LAST.
 ; --------------------------------------------------------------------------
 Dev10C_WriteAllChanRegs:
 	link32 0xEE, 0x0C, 0xF8, 0xFF          ; FB713A  link XIZ,0xfff8   [llvm-mc cannot encode this]
@@ -98848,8 +98905,56 @@ sub_FC3B24__FC3C3D:
 ; --------------------------------------------------------------------------
 sub_FC3CB8:
 	ret                                        ; FC3CB8  ret
+
+; ============================================================================
+; ★★ THE EIGHT-SLOT NOTE POOL -- 0xFC3CB9-0xFC3FAD, and its five tables
+;    (round 9, 2026-08-30)
+; ============================================================================
+; A note engine that is NOT the 33-part voice engine.  MidiIn_ParseRingAndDispatch's
+; 0x90 arm assembles a 4-byte packet at 0x00D7D4 and then branches on byte [1], the
+; part selector: below 0xF0 it calls MidiNote_Dispatch, at 0xF0 or above it calls
+; NotePool8_NoteOnOff (`cp H,0xf0` at 0xFB07FD, `jr NC,0xfb0808` at 0xFB0800).  Every
+; routine and table below belongs to that second path and to nothing else.
+;
+;   0xFC3CB9  NotePool8_LevelFromVelocity              register chan+0x0080
+;   0xFC3CFB  NotePool8_Reg00C0_FromPart0Ctrl91And93   register chan+0x00C0
+;   0xFC3D13  NotePool8_Word0Bits_FromPart0Ctrl9B      staging word 0
+;   0xFC3D26  NotePool8_StageVoice                     words 0,1,2,3,7
+;   0xFC3DAF  NotePool8_StageVoice_Var1                words 0,1,2,3,7, variant 1
+;   0xFC3E02  NotePool8_NoteOnOff                      the entry point
+;   0xFE1540  Dev10C_StagingStruct_NotePool8Image      the 68-byte device template
+;   0xFE1584  NotePool8_TransposeByVariant             7 signed semitones
+;   0xFE158B  NotePool8_LevelCapByVariant              7 level caps
+;   0xFE1599  NotePool8_Reg0040_ByPitchClass           12 words, note mod 12
+;   0xFE15B1  NotePool8_Reg0040_ByPitchClass_Var6      12 words, variant 6 only
+;   0xFE15C9  NotePool8_Word0_ByPitchClass_Var1        12 words, variant 1 only
+;
+; ★ WHAT MAKES IT A POOL AND NOT A PART.  The slot is a round-robin counter at RAM
+; 0x00E005 masked with `and C,0x07` (0xFC3E27); the note sounding in each slot is
+; kept in an eight-byte table at 0x00E006 with bit 7 as the in-use flag; the release
+; path is a linear scan bounded by `cp L,0x08` (0xFC3FA3).  Nothing anywhere else in
+; the image names either address -- 13 addressed source lines and 13 24-bit
+; little-endian ROM occurrences, all inside NotePool8_NoteOnOff.  The 33 part records
+; at 0x001523, the 0x012C stride and the voice records at 0x003BCF play no part in
+; it; the ONLY part-record fields it reads are part 0's +0x10, +0x11 and +0x19.
+;
+; ★ IT DRIVES BOTH DEVICES WITH THE SAME SLOT NUMBER.  0x0010C000 through
+; Dev10C_WriteAllChanRegs (0xFC3F17) and Dev10C_WriteReg_c (0xFC3F27); 0x00104000
+; through Dev104_WriteChanReg0 (0xFC3EA1), Dev104_LoadStageBImage (0xFC3EA9) and
+; Dev104_WriteAllChanRegs (0xFC3ECD).
+;
+; ⚠ WHAT IS NOT ESTABLISHED.  What the seven variants are -- the packets come over
+; link channel 0 from CPU 1, so their names are in prom_a, and prom_c spells
+; 0xF0..0xF6 as a part selector nowhere else.  Whether the note-off pair
+; 0xA200/0xA280 is a release envelope or a second quiescent state; nothing in this
+; image reads either register back.  What staging word 0's bit fields mean.
+;
+; Every address quoted here and in the six headers below is checked AT THE CITED
+; ADDRESS by `python3 notes/prom_c_inventory_round8.py --pool8`.
+; ============================================================================
+
 ; --------------------------------------------------------------------------
-; sub_FC3CB9 -- 0xFC3CB9..0xFC3CFA (66 bytes)
+; NotePool8_LevelFromVelocity -- 0xFC3CB9..0xFC3CFA (66 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -98861,16 +98966,28 @@ sub_FC3CB8:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 9).  THE LEVEL A POOL-8 NOTE IS STAGED AT.  Returns
+;          min(velocity*32 + 31, NotePool8_LevelCapByVariant[variant]) for variant 4
+;          and the cap unchanged for every other variant; the caller ORs the result
+;          into staging word 2, which Dev10C_WriteAllChanRegs sends to register
+;          chan+0x0080 -- the OUTPUT LEVEL (FINDINGS-prom_c-dev10c-register-meanings.md
+;          sec.3).
+; Inputs:  (XIZ+0x08) = the 7-bit velocity, (XIZ+0x0A) = the variant 0..6.
+; Evidence: `cp D,4` at 0xFC3CC2 is the only variant that takes the velocity arm;
+;          `sll 0x05,BC` at 0xFC3CC9 and `add BC,0x001f` at 0xFC3CCE build
+;          velocity*32+31; `cp BC,WA / jr LE` at 0xFC3CE2/0xFC3CE4 keeps the smaller of
+;          that and the table entry, and the other arm at 0xFC3CE6 loads the entry
+;          alone.  Both callers OR the return into (buf+0x04): 0xFC3D73 and 0xFC3DF1.
+; Unknown:  WHAT the seven variants are.  The velocity law and the caps are measured;
+;          nothing here says which instrument or function a variant selects.
 ; --------------------------------------------------------------------------
-sub_FC3CB9:
+NotePool8_LevelFromVelocity:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC3CB9  link XIZ,0x0000
 	pushw	hl                                   ; FC3CBD  push HL
 	pushw	de                                   ; FC3CBE  push DE
 	ld	d, (xiz+10)                             ; FC3CBF  ld D,(XIZ+0x0a)
 	cps	d, 4                                   ; FC3CC2  cp D,4
-	jr nz, sub_FC3CB9__FC3CE6                  ; FC3CC4  jr NZ,0xfc3ce6
+	jr nz, NotePool8_LevelFromVelocity__FC3CE6                  ; FC3CC4  jr NZ,0xfc3ce6
 	ld	bc, (xiz+8)                             ; FC3CC6  ld BC,(XIZ+0x08)
 	sll	bc, 5                                  ; FC3CC9  sll 0x05,BC
 	ld	hl, bc                                  ; FC3CCC  ld HL,BC
@@ -98882,21 +98999,21 @@ sub_FC3CB9:
 	add	xwa, 0xFE158B                          ; FC3CDA  add XWA,0x00fe158b
 	ld	wa, (xwa)                               ; FC3CE0  ld WA,(XWA)
 	cp	bc, wa                                  ; FC3CE2  cp BC,WA
-	jr le, sub_FC3CB9__FC3CF4                  ; FC3CE4  jr LE,0xfc3cf4
-sub_FC3CB9__FC3CE6:
+	jr le, NotePool8_LevelFromVelocity__FC3CF4                  ; FC3CE4  jr LE,0xfc3cf4
+NotePool8_LevelFromVelocity__FC3CE6:
 	ldb	c, 2                                   ; FC3CE6  ld C,0x02
 	mul8rr	c, d                                ; FC3CE8  mul BC,D
 	extz	xbc                                   ; FC3CEA  extz XBC
 	add	xbc, 0xFE158B                          ; FC3CEC  add XBC,0x00fe158b
 	ld	hl, (xbc)                               ; FC3CF2  ld HL,(XBC)
-sub_FC3CB9__FC3CF4:
+NotePool8_LevelFromVelocity__FC3CF4:
 	ld	wa, hl                                  ; FC3CF4  ld WA,HL
 	popw	de                                    ; FC3CF6  pop DE
 	popw	hl                                    ; FC3CF7  pop HL
 	unlk32 xiz                                 ; FC3CF8  unlk XIZ
 	ret                                        ; FC3CFA  ret
 ; --------------------------------------------------------------------------
-; sub_FC3CFB -- 0xFC3CFB..0xFC3D12 (24 bytes)
+; NotePool8_Reg00C0_FromPart0Ctrl91And93 -- 0xFC3CFB..0xFC3D12 (24 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -98909,10 +99026,28 @@ sub_FC3CB9__FC3CF4:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 9).  BUILDS REGISTER chan+0x00C0 FOR A POOL-8 NOTE, as the byte
+;          pair (part0[+0x10] << 8) | part0[+0x11] -- the values MIDI controllers 91
+;          and 93 write into the part record (FINDINGS-prom_c-dev10c-register-
+;          meanings.md sec.1).  RAM 0x001533 and 0x001534 are exactly part 0's +0x10
+;          and +0x11: the part array starts at 0x001523 with stride 0x012C.
+; Evidence: `ld C,(0x1533)` at 0xFC3CFC, `sll 0x08,HL` at 0xFC3D04,
+;          `ld C,(0x1534)` at 0xFC3D07 and `or BC,HL` at 0xFC3D0D; the caller ORs the
+;          return into (buf+0x06) at 0xFC3D60, and prom_c_tg_chanmap.py --pairs shows
+;          Dev10C_WriteAllChanRegs sending struct+0x06 to register chan+0x00C0
+;          (0xFB718F).
+; ★          THE MAIN VOICE PATH AGREES, independently: Voice_StageRegs_00C0_AB
+;          (0xFAA0BC) builds the SAME word for the same register out of the SAME two
+;          part fields -- `ld C,(XHL+0x11)` at 0xFC3CFB's counterpart 0xFAA0D3 for the
+;          low byte and `ld C,(XDE+0x10)` at 0xFAA12E for the high byte, each clamped
+;          to 0..0x7F (0xFAA110/0xFAA181) and each offset by a per-tone amount from
+;          part[+0x27] / part[+0x29], before `sll 0x08` at 0xFAA18C and the store to
+;          the staging struct at 0xFAA19A.  Two unrelated producers, one field split.
+; Unknown:  what the two depths DO.  Controllers 91 and 93 are "effects depth 1 and 3"
+;          in the MIDI allocation, and this firmware corroborates only 7, 64 and 120
+;          of its controller numbers, so no effect is named here.
 ; --------------------------------------------------------------------------
-sub_FC3CFB:
+NotePool8_Reg00C0_FromPart0Ctrl91And93:
 	pushw	hl                                   ; FC3CFB  push HL
 	ldb_d8	c, (0x1533)                         ; FC3CFC  ld C,(0x1533)
 	extz	bc                                    ; FC3D00  extz BC
@@ -98925,7 +99060,7 @@ sub_FC3CFB:
 	popw	hl                                    ; FC3D11  pop HL
 	ret                                        ; FC3D12  ret
 ; --------------------------------------------------------------------------
-; sub_FC3D13 -- 0xFC3D13..0xFC3D25 (19 bytes)
+; NotePool8_Word0Bits_FromPart0Ctrl9B -- 0xFC3D13..0xFC3D25 (19 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -98938,39 +99073,65 @@ sub_FC3CFB:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 9).  Returns 0x0C00 when the high nibble of part 0's +0x19 byte is
+;          5, and 0 otherwise; the caller ORs it into staging word 0.  RAM 0x00153C is
+;          part 0's +0x19 (array base 0x001523, stride 0x012C), the field
+;          MidiCtrl_Int9B writes (`add BC,0x0019` in that handler).
+; Evidence: `ld C,(0x153c)` at 0xFC3D13, `srl 0x04,C` at 0xFC3D17, `cp C,5` at
+;          0xFC3D1A, `ld WA,0x0c00` at 0xFC3D1E, `sub WA,WA` at 0xFC3D23; the caller's
+;          `or (XBC),WA` is at 0xFC3D58.
+; Unknown:  what bits 11..10 of staging word 0 mean, and what the 0x9B message carries.
 ; --------------------------------------------------------------------------
-sub_FC3D13:
+NotePool8_Word0Bits_FromPart0Ctrl9B:
 	ldb_d8	c, (0x153C)                         ; FC3D13  ld C,(0x153c)
 	srl	c, 4                                   ; FC3D17  srl 0x04,C
 	cps	c, 5                                   ; FC3D1A  cp C,5
-	jr nz, sub_FC3D13__FC3D23                  ; FC3D1C  jr NZ,0xfc3d23
+	jr nz, NotePool8_Word0Bits_FromPart0Ctrl9B__FC3D23                  ; FC3D1C  jr NZ,0xfc3d23
 	ldw	wa, 0xC00                              ; FC3D1E  ld WA,0x0c00
-	jr sub_FC3D13__FC3D25                      ; FC3D21  jr T,0xfc3d25
-sub_FC3D13__FC3D23:
+	jr NotePool8_Word0Bits_FromPart0Ctrl9B__FC3D25                      ; FC3D21  jr T,0xfc3d25
+NotePool8_Word0Bits_FromPart0Ctrl9B__FC3D23:
 	sub	wa, wa                                 ; FC3D23  sub WA,WA
-sub_FC3D13__FC3D25:
+NotePool8_Word0Bits_FromPart0Ctrl9B__FC3D25:
 	ret                                        ; FC3D25  ret
 ; --------------------------------------------------------------------------
-; sub_FC3D26 -- 0xFC3D26..0xFC3DAE (137 bytes)
+; NotePool8_StageVoice -- 0xFC3D26..0xFC3DAE (137 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFC3F04
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC3CB9 = sub_FC3CB9, 0xFC3CFB = sub_FC3CFB
-;          0xFC3D13 = sub_FC3D13
+; Calls:   0xFC3CB9 = NotePool8_LevelFromVelocity, 0xFC3CFB = NotePool8_Reg00C0_FromPart0Ctrl91And93
+;          0xFC3D13 = NotePool8_Word0Bits_FromPart0Ctrl9B
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3D26-0xFC3DAE
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 9).  STAGES ONE POOL-8 NOTE INTO THE 0x0010C000 STAGING STRUCT.
+;          It writes five words of the buffer NotePool8_NoteOnOff copied from
+;          Dev10C_StagingStruct_NotePool8Image, and every one of the five is a
+;          register whose meaning is already established:
+;            word 7 (reg 0x0400, PITCH)  |= (note + NotePool8_TransposeByVariant
+;                                            [variant]) & 0x7F, shifted left 8
+;            word 2 (reg 0x0080, LEVEL)  |= NotePool8_LevelFromVelocity(vel, variant)
+;            word 3 (reg 0x00C0)         |= NotePool8_Reg00C0_FromPart0Ctrl91And93()
+;            word 0                      |= NotePool8_Word0Bits_FromPart0Ctrl9B()
+;            word 1 (reg 0x0040)          = NotePool8_Reg0040_ByPitchClass[note % 12],
+;                                           or the _Var6 table when variant == 6
+; Inputs:  (XIZ+0x08) variant 0..6, (XIZ+0x0A) 7-bit note, (XIZ+0x0C) 7-bit velocity,
+;          (XIZ+0x0E) the 68-byte staging buffer.
+; Evidence: the transpose read and add are 0xFC3D35/0xFC3D3D, the mask 0xFC3D42, the
+;          `sll 0x08,BC` 0xFC3D49 and the `or (XWA+0x0e),BC` 0xFC3D4F; the two helper
+;          returns land at 0xFC3D58 and 0xFC3D60; the level OR is 0xFC3D73; the
+;          pitch-class index is `div C,0x0c` at 0xFC3D7A with the REMAINDER taken at
+;          0xFC3D7D and doubled at 0xFC3D7F -- the same idiom as the `note mod 12`
+;          user-scale read at 0xFA7FC5-0xFA7FD2 -- and the variant-6 fork is
+;          `cp H,6 / jr Z` at 0xFC3D87.  The word->register map is
+;          notes/prom_c_tg_chanmap.py --pairs.
+; Unknown:  what the seven variants are, and what staging word 0's bits mean.
 ; --------------------------------------------------------------------------
-sub_FC3D26:
+NotePool8_StageVoice:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC3D26  link XIZ,0x0000
 	pushw	hl                                   ; FC3D2A  push HL
 	push	xix                                   ; FC3D2B  push XIX
@@ -99011,25 +99172,25 @@ sub_FC3D26:
 	ld	xix, xwa                                ; FC3D84  ld XIX,XWA
 	pop	xiy                                    ; FC3D86  pop XIY
 	cps	h, 6                                   ; FC3D87  cp H,6
-	jr z, sub_FC3D26__FC3D9B                   ; FC3D89  jr Z,0xfc3d9b
+	jr z, NotePool8_StageVoice__FC3D9B                   ; FC3D89  jr Z,0xfc3d9b
 	add	xwa, 0xFE1599                          ; FC3D8B  add XWA,0x00fe1599
 	ld	bc, (xwa)                               ; FC3D91  ld BC,(XWA)
 	ld	xwa, (xiz+14)                           ; FC3D93  ld XWA,(XIZ+0x0e)
 	ld	(xwa+2), bc                             ; FC3D96  ld (XWA+0x02),BC
-	jr sub_FC3D26__FC3DAA                      ; FC3D99  jr T,0xfc3daa
-sub_FC3D26__FC3D9B:
+	jr NotePool8_StageVoice__FC3DAA                      ; FC3D99  jr T,0xfc3daa
+NotePool8_StageVoice__FC3D9B:
 	lda_24	xbc, (0xFE15B1)                     ; FC3D9B  lda XBC,0xfe15b1
 	add	xbc, xix                               ; FC3DA0  add XBC,XIX
 	ld	wa, (xbc)                               ; FC3DA2  ld WA,(XBC)
 	ld	xbc, (xiz+14)                           ; FC3DA4  ld XBC,(XIZ+0x0e)
 	ld	(xbc+2), wa                             ; FC3DA7  ld (XBC+0x02),WA
-sub_FC3D26__FC3DAA:
+NotePool8_StageVoice__FC3DAA:
 	pop	xix                                    ; FC3DAA  pop XIX
 	popw	hl                                    ; FC3DAB  pop HL
 	unlk32 xiz                                 ; FC3DAC  unlk XIZ
 	ret                                        ; FC3DAE  ret
 ; --------------------------------------------------------------------------
-; sub_FC3DAF -- 0xFC3DAF..0xFC3E01 (83 bytes)
+; NotePool8_StageVoice_Var1 -- 0xFC3DAF..0xFC3E01 (83 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -99037,16 +99198,30 @@ sub_FC3D26__FC3DAA:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFE1599
-; Calls:   0xFC3CB9 = sub_FC3CB9, 0xFC3CFB = sub_FC3CFB
+; Calls:   0xFC3CB9 = NotePool8_LevelFromVelocity, 0xFC3CFB = NotePool8_Reg00C0_FromPart0Ctrl91And93
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3DAF-0xFC3E01
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 9).  THE VARIANT-1 STAGING PATH, called INSTEAD of
+;          NotePool8_StageVoice when the variant is 1 (`cp L,1 / jr NZ` at
+;          0xFC3EEC/0xFC3EEE in NotePool8_NoteOnOff), and then the general path runs
+;          on the same buffer as well.
+;          It differs from NotePool8_StageVoice in three measured ways: the pitch it
+;          stages is the note with its pitch class REMOVED -- `div C,0x0c` at 0xFC3DBD
+;          then `sub C,B` at 0xFC3DC5, i.e. note - (note mod 12), the octave root --
+;          the level is taken at a FIXED velocity 0x7F (pushed at 0xFC3DEB) with the
+;          variant fixed at 1 (0xFC3DE8), and staging word 1 is entry 0 of
+;          NotePool8_Reg0040_ByPitchClass read directly (`ld BC,(0xfe1599)` at
+;          0xFC3DF4), never indexed.
+; Evidence: the pitch OR is `sll 0x08,BC` at 0xFC3DCC and `or (XIX+0x0e),BC` at
+;          0xFC3DCF; NotePool8_Word0_ByPitchClass_Var1 is read at 0xFC3DD8 and OR'd
+;          into word 0 at 0xFC3DE0; word 3 at 0xFC3DE5; word 2 at 0xFC3DF1; word 1 at
+;          0xFC3DF9.
+; Unknown:  what variant 1 is, and why it stages twice.
 ; --------------------------------------------------------------------------
-sub_FC3DAF:
+NotePool8_StageVoice_Var1:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC3DAF  link XIZ,0x0000
 	pushw	hl                                   ; FC3DB3  push HL
 	push	xix                                   ; FC3DB4  push XIX
@@ -99081,7 +99256,7 @@ sub_FC3DAF:
 	unlk32 xiz                                 ; FC3DFF  unlk XIZ
 	ret                                        ; FC3E01  ret
 ; --------------------------------------------------------------------------
-; sub_FC3E02 -- 0xFC3E02..0xFC3FAD (428 bytes)
+; NotePool8_NoteOnOff -- 0xFC3E02..0xFC3FAD (428 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB0808 in MidiIn_ParseRingAndDispatch__FB0808
@@ -99089,18 +99264,68 @@ sub_FC3DAF:
 ; Outputs: writes 0x00E005
 ; Calls:   0xF9A038 = MemCopyWords, 0xFB713A = Dev10C_WriteAllChanRegs
 ;          0xFB732C = Dev10C_WriteReg_c, 0xFB77EF = Dev104_WriteAllChanRegs
-;          0xFB7A58 = Dev104_WriteChanReg0, 0xFC3D26 = sub_FC3D26
-;          0xFC3DAF = sub_FC3DAF, 0xFC571A = Dev104_LoadStageBImage
+;          0xFB7A58 = Dev104_WriteChanReg0, 0xFC3D26 = NotePool8_StageVoice
+;          0xFC3DAF = NotePool8_StageVoice_Var1, 0xFC571A = Dev104_LoadStageBImage
 ;          0xFC7DAF = sub_FC7DAF
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3E02-0xFC3FAD
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★★ NAMED (round 9).  THE NOTE ENGINE OF A PRIVATE EIGHT-SLOT VOICE POOL.
+;          It is the handler MidiIn_ParseRingAndDispatch's 0x90 (note-on) arm calls
+;          when the packet's byte [1] -- the PART SELECTOR every other 0x90 packet
+;          carries -- is >= 0xF0: `cp H,0xf0` at 0xFB07FD and `jr NC,0xfb0808` choose
+;          between MidiNote_Dispatch (the 33 part records) and this routine.
+;          ★ THAT CLOSES the "⚠ what packet byte [1] >= 0xF0 means" line in
+;          MidiIn_ParseRingAndDispatch's own Unknown section.
+; Inputs:  (XIZ+0x08) = the 4-byte packet the arm assembled at 0x00D7D4:
+;          [0] status, [1] 0xF0 + variant, [2] note, [3] velocity.  Byte [2] and byte
+;          [3] are masked to 7 bits at 0xFC3E35 and 0xFC3E3B; the variant is
+;          `and L,0x0f` (0xFC3E17) clamped to 0..6 by `cp L,6 / jr ULE` (0xFC3E1A)
+;          with an else-arm `ld L,0x00` (0xFC3E1E).
+; Evidence: ★ THE POOL IS EIGHT SLOTS, AND IT IS PRIVATE.  The allocator is a
+;          round-robin counter at RAM 0x00E005 -- `inc 1,C` / `and C,0x07` at
+;          0xFC3E25/0xFC3E27 -- and each slot's sounding note is remembered in an
+;          eight-byte table at 0x00E006 (`add XBC,0x0000e006` at 0xFC3F39) with bit 7
+;          set while it sounds (`set 7,L` at 0xFC3F2D) and cleared on release
+;          (`and (XBC),0x7f` at 0xFC3F98).  The release scan bounds the table at eight:
+;          `inc 1,L` / `cp L,0x08` / `jr C` at 0xFC3FA1-0xFC3FA6.
+;          ⚠ THE POOL STATE IS PRIVATE, BY TWO INDEPENDENT SWEEPS.  0x00E005 and
+;          0x00E006 appear on THIRTEEN addressed source lines in prom_c and all
+;          thirteen are inside this routine (0xFC3E20..0xFC3F90); and the raw ROM
+;          holds thirteen 24-bit little-endian occurrences of the two addresses --
+;          ten of 0x00E005, three of 0x00E006 -- every one of them the operand of
+;          one of those same thirteen instructions.  Both sweeps are blind to a
+;          reach through a register; neither says 'dead', both say 'nothing else
+;          in the image names it'.
+;          ★ VELOCITY 0 IS THE NOTE-OFF.  `cp D,0 / jrl Z,0xfc3f47` at
+;          0xFC3E3E/0xFC3E40 splits the two paths.
+;          ★ NOTE-ON STEALS THE SLOT WITH THE DOCUMENTED QUIESCENT PAIR: register
+;          chan+0x0840 = 0xFF00 (select 0xFC3E58, data 0xFC3E5D) and chan+0x0800 =
+;          0xFF80 (select 0xFC3E7C, data 0xFC3E81) -- exactly the two values
+;          Dev10C_ResetAllChannels and Dev10C_QuiesceListedChans_0800_0840 write
+;          (FINDINGS-prom_c-dev10c-register-meanings.md sec.5).  It then programs the
+;          0x00104000 device for the same slot number (0xFC3E91, 0xFC3EA1, 0xFC3EA9,
+;          0xFC3ECD), copies Dev10C_StagingStruct_NotePool8Image into a stack buffer
+;          (0xFC3ED1-0xFC3EDE), fills it through NotePool8_StageVoice_Var1 and/or
+;          NotePool8_StageVoice (0xFC3EF4, 0xFC3F04), bursts it with
+;          Dev10C_WriteAllChanRegs (0xFC3F17), and finally sends the buffer's word 0
+;          to register chan+0x0000 through Dev10C_WriteReg_c (0xFC3F1B-0xFC3F27).
+;          ★ THAT LAST CALL ANSWERS Dev10C_WriteAllChanRegs' OWN "Unknown: what
+;          struct word 0 is for" -- on this path word 0 is the value for register
+;          block 0, the register that routine instead writes with the literal 0x8100.
+;          ★ NOTE-OFF IS A LINEAR SEARCH for the slot whose remembered byte equals
+;          note|0x80 (`set 7,H` at 0xFC3F47, `cp A,H` at 0xFC3F63) and writes a
+;          DIFFERENT pair to the same two blocks: chan+0x0840 = 0xA200 (0xFC3F74) and
+;          chan+0x0800 = 0xA280 (0xFC3F8B).
+; Unknown:  ⚠ WHAT THE SEVEN VARIANTS ARE, and what sends these packets.  They arrive
+;          over link channel 0 from CPU 1, so the names live in prom_a; nothing in
+;          prom_c spells 0xF0..0xF6 as a part selector anywhere else.
+;          ⚠ Whether 0xA200/0xA280 is a release envelope or a second quiescent state.
+;          Nothing in this image reads either register back.
 ; --------------------------------------------------------------------------
-sub_FC3E02:
+NotePool8_NoteOnOff:
 	link32 0xEE, 0x0C, 0x8E, 0xFF              ; FC3E02  link XIZ,0xff8e
 	pushw	hl                                   ; FC3E06  push HL
 	pushw	de                                   ; FC3E07  push DE
@@ -99108,13 +99333,13 @@ sub_FC3E02:
 	ld	xbc, (xiz+8)                            ; FC3E09  ld XBC,(XIZ+0x08)
 	ld	h, (xbc+1)                              ; FC3E0C  ld H,(XBC+0x01)
 	cp	h, 0xF0                                 ; FC3E0F  cp H,0xf0
-	jrl c, sub_FC3E02__FC3FA8                  ; FC3E12  jrl C,0xfc3fa8
+	jrl c, NotePool8_NoteOnOff__FC3FA8                  ; FC3E12  jrl C,0xfc3fa8
 	ld	l, h                                    ; FC3E15  ld L,H
 	and	l, 15                                  ; FC3E17  and L,0x0f
 	cps	l, 6                                   ; FC3E1A  cp L,6
-	jr ule, sub_FC3E02__FC3E20                 ; FC3E1C  jr ULE,0xfc3e20
+	jr ule, NotePool8_NoteOnOff__FC3E20                 ; FC3E1C  jr ULE,0xfc3e20
 	ldb	l, 0                                   ; FC3E1E  ld L,0x00
-sub_FC3E02__FC3E20:
+NotePool8_NoteOnOff__FC3E20:
 	ldb_da	c, (0xE005)                         ; FC3E20  ld C,(0x00e005)
 	inc	1, c                                   ; FC3E25  inc 1,C
 	and	c, 7                                   ; FC3E27  and C,0x07
@@ -99125,7 +99350,7 @@ sub_FC3E02__FC3E20:
 	ld	h, (xbc+2)                              ; FC3E38  ld H,(XBC+0x02)
 	res	7, h                                   ; FC3E3B  res 0x07,H
 	cps	d, 0                                   ; FC3E3E  cp D,0
-	jrl z, sub_FC3E02__FC3F47                  ; FC3E40  jrl Z,0xfc3f47
+	jrl z, NotePool8_NoteOnOff__FC3F47                  ; FC3E40  jrl Z,0xfc3f47
 	ldw_da	wa, (0xE005)                        ; FC3E43  ld WA,(0x00e005)
 	extz	wa                                    ; FC3E48  extz WA
 	ld	ix, wa                                  ; FC3E4A  ld IX,WA
@@ -99183,13 +99408,13 @@ sub_FC3E02__FC3E20:
 	lda	xbc, (xiz-0x6E)                        ; FC3EE8  lda XBC,XIZ+0x92
 	push	xbc                                   ; FC3EEB  push XBC
 	cps	l, 1                                   ; FC3EEC  cp L,1
-	jr nz, sub_FC3E02__FC3EFB                  ; FC3EEE  jr NZ,0xfc3efb
+	jr nz, NotePool8_NoteOnOff__FC3EFB                  ; FC3EEE  jr NZ,0xfc3efb
 	push	0                                     ; FC3EF0  push 0x00
 	push	h                                     ; FC3EF2  push H
 	calr (0xFC3DAF - 0xFC3EF7)                 ; FC3EF4  calr 0xfc3daf
 	inc	6, xsp                                 ; FC3EF7  inc 6,XSP
-	jr sub_FC3E02__FC3F0B                      ; FC3EF9  jr T,0xfc3f0b
-sub_FC3E02__FC3EFB:
+	jr NotePool8_NoteOnOff__FC3F0B                      ; FC3EF9  jr T,0xfc3f0b
+NotePool8_NoteOnOff__FC3EFB:
 	push	0                                     ; FC3EFB  push 0x00
 	push	d                                     ; FC3EFD  push D
 	push	0                                     ; FC3EFF  push 0x00
@@ -99198,7 +99423,7 @@ sub_FC3E02__FC3EFB:
 	calr (0xFC3D26 - 0xFC3F07)                 ; FC3F04  calr 0xfc3d26
 	inc	8, xsp                                 ; FC3F07  inc 0,XSP
 	inc	2, xsp                                 ; FC3F09  inc 2,XSP
-sub_FC3E02__FC3F0B:
+NotePool8_NoteOnOff__FC3F0B:
 	lda	xbc, (xiz-0x6E)                        ; FC3F0B  lda XBC,XIZ+0x92
 	push	xbc                                   ; FC3F0E  push XBC
 	ldw_da	wa, (0xE005)                        ; FC3F0F  ld WA,(0x00e005)
@@ -99220,13 +99445,13 @@ sub_FC3E02__FC3F0B:
 	ld	(xbc), l                                ; FC3F3F  ld (XBC),L
 	inc	8, xsp                                 ; FC3F41  inc 0,XSP
 	inc	2, xsp                                 ; FC3F43  inc 2,XSP
-	jr sub_FC3E02__FC3FA8                      ; FC3F45  jr T,0xfc3fa8
-sub_FC3E02__FC3F47:
+	jr NotePool8_NoteOnOff__FC3FA8                      ; FC3F45  jr T,0xfc3fa8
+NotePool8_NoteOnOff__FC3F47:
 	set	7, h                                   ; FC3F47  set 0x07,H
 	ldb	l, 0                                   ; FC3F4A  ld L,0x00
 	ldw	de, 0x840                              ; FC3F4C  ld DE,0x0840
 	ldw	ix, 0x800                              ; FC3F4F  ld IX,0x0800
-sub_FC3E02__FC3F52:
+NotePool8_NoteOnOff__FC3F52:
 	ld	c, l                                    ; FC3F52  ld C,L
 	extz	bc                                    ; FC3F54  extz BC
 	extz	xbc                                   ; FC3F56  extz XBC
@@ -99234,7 +99459,7 @@ sub_FC3E02__FC3F52:
 	add	xbc, 0xE006                            ; FC3F5B  add XBC,0x0000e006
 	ld	a, (xbc)                                ; FC3F61  ld A,(XBC)
 	cp	a, h                                    ; FC3F63  cp A,H
-	jr nz, sub_FC3E02__FC3F9D                  ; FC3F65  jr NZ,0xfc3f9d
+	jr nz, NotePool8_NoteOnOff__FC3F9D                  ; FC3F65  jr NZ,0xfc3f9d
 	ld	xbc, 0x10C000                           ; FC3F67  ld XBC,0x0010c000
 	ld	(xiz-0x72), xbc                         ; FC3F6C  ld (XIZ+0x8e),XBC
 	ld	(xbc), de                               ; FC3F6F  ld (XBC),DE
@@ -99253,14 +99478,14 @@ sub_FC3E02__FC3F52:
 	lda_24	xbc, (0xE006)                       ; FC3F90  lda XBC,0x00e006
 	extpfx3 0xAE, 0xFC, 0x81                   ; FC3F95  add XBC,(XIZ+0xfc)
 	extpfx3 0x81, 0x3C, 0x7F                   ; FC3F98  and (XBC),0x7f
-	jr sub_FC3E02__FC3FA8                      ; FC3F9B  jr T,0xfc3fa8
-sub_FC3E02__FC3F9D:
+	jr NotePool8_NoteOnOff__FC3FA8                      ; FC3F9B  jr T,0xfc3fa8
+NotePool8_NoteOnOff__FC3F9D:
 	inc	1, de                                  ; FC3F9D  inc 1,DE
 	inc	1, ix                                  ; FC3F9F  inc 1,IX
 	inc	1, l                                   ; FC3FA1  inc 1,L
 	cp	l, 8                                    ; FC3FA3  cp L,0x08
-	jr c, sub_FC3E02__FC3F52                   ; FC3FA6  jr C,0xfc3f52
-sub_FC3E02__FC3FA8:
+	jr c, NotePool8_NoteOnOff__FC3F52                   ; FC3FA6  jr C,0xfc3f52
+NotePool8_NoteOnOff__FC3FA8:
 	popw	ix                                    ; FC3FA8  pop IX
 	popw	de                                    ; FC3FA9  pop DE
 	popw	hl                                    ; FC3FAA  pop HL
@@ -127175,15 +127400,32 @@ Str_ClearBanner:
 	.asciz	"  --(Clear)--   "   ; 0xFE152F
 
 ; ----------------------------------------------------------------------------
-; Table_FE1540 -- 0xFE1540-0xFE1583  (68 bytes)
+; Dev10C_StagingStruct_NotePool8Image -- 0xFE1540-0xFE1583  (68 bytes)
 ;
-; 34 u16 beginning 0x F000, 0x0000, 0x0080, 0x0000, 0x017C, 0x7F7C, 0x0040, 0x0080 and
-; ending in zeroes.  Cited once, `lda XIX,<this>` at 0xFC3ED8.  Same 34-word shape as
-; Table_FE1168 / Table_FE11AC but a different reader.
+; ★ A SECOND 68-byte image of the 0x0010C000 staging struct -- the twin of
+; Dev10C_StagingStruct_ResetImage (0xFE12CF), same length, same 34 words.
+; NotePool8_NoteOnOff copies it into a stack buffer (`push 0x0044` at 0xFC3ED1,
+; `lda XWA,<this>` at 0xFC3ED8, `call MemCopyWords` at 0xFC3EDE), fills five of its
+; words from the note, and hands that buffer to Dev10C_WriteAllChanRegs at 0xFC3F17.
+; Dev10C_ResetAllChannels does exactly the same with 0xFE12CF at 0xFB814F / 0xFB8155
+; / 0xFB817E, which is what makes the two images twins rather than lookalikes.
+; ★ IT DIFFERS FROM THE RESET IMAGE IN 9 OF 68 BYTES, 8 of 34 words: word 0
+; 0x1200->0xF000; word 1 (reg 0x0040) 0x0002->0x0000; word 4 (reg 0x0100)
+; 0x257C->0x017C; word 7 (reg 0x0400) 0x0000->0x0080; words 12/13/14 (regs 0x0800 /
+; 0x0840 / 0x0880) 0xFF80/0xFF00/0xFF00 -> 0xA07F/0xFF7F/0xFF7F; word 23
+; 0xFF00->0xA000.  The word->register map is notes/prom_c_tg_chanmap.py --pairs.
+; ★ Word 7 = 0x0080 is the pitch register's own half-semitone centring constant,
+; the `add HL,0x0080` at 0xFA7F48 in Voice_ComputePitch; NotePool8_StageVoice ORs
+; note*256 on top of it.  Word 2 = 0x8000 is register 0x0080 with the gate bit set
+; and a zero level field, which the level cap is then OR'd into.
+; Evidence: `push 0x0044` 0xFC3ED1, `lda XWA,0xfe1540` 0xFC3ED8, `call MemCopyWords`
+; 0xFC3EDE, `call Dev10C_WriteAllChanRegs` 0xFC3F17; the reset twin at 0xFB814F /
+; 0xFB8155 / 0xFB817E.  The 9-of-68 byte diff is recomputed from the ROM by
+; notes/prom_c_inventory_round8.py --pool8, which prints every differing word.
 ;
 ; Cited by: 0xFC3ED8 [lda <X..>,addr24]
 ; ----------------------------------------------------------------------------
-Table_FE1540:
+Dev10C_StagingStruct_NotePool8Image:
 	.short	0xF000, 0x0000, 0x8000, 0x0000, 0x017C, 0x7F7C, 0x0040, 0x0080   ; 0xFE1540
 	.short	0x0000, 0x0000, 0x0000, 0x0000, 0xA07F, 0xFF7F, 0xFF7F, 0x0000   ; 0xFE1550
 	.short	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xA080, 0xA000   ; 0xFE1560
@@ -127191,57 +127433,107 @@ Table_FE1540:
 	.short	0x0000, 0x0000   ; 0xFE1580
 
 ; ----------------------------------------------------------------------------
-; Table_FE1584 -- 0xFE1584-0xFE158A  (7 bytes)
+; NotePool8_TransposeByVariant -- 0xFE1584-0xFE158A  (7 bytes)
 ;
-; 7 u8: 00 00 18 E8 00 00 00.  Cited from 0xFC3D35.
+; 7 SIGNED BYTES, one per variant 0..6: 0, 0, +24, -24, 0, 0, 0 -- two octaves up for
+; variant 2, two octaves down for variant 3.
+; COUNT 7 from the reader, not from the next cited base: NotePool8_NoteOnOff forms the
+; variant as `and L,0x0f` (0xFC3E17) clamped by `cp L,6 / jr ULE` (0xFC3E1A) with an
+; else-arm `ld L,0x00` (0xFC3E1E), so the index is 0..6 exactly.
+; NotePool8_StageVoice reads this table at 0xFC3D35, adds the entry to the note byte
+; at 0xFC3D3D, clears bit 7 at 0xFC3D42, shifts left 8 at 0xFC3D49 and ORs the result
+; into staging word 7 at 0xFC3D4F -- the word Dev10C_WriteAllChanRegs sends to register
+; chan+0x0400, whose unit is 1/256 semitone (FINDINGS-prom_c-dev10c-register-meanings.md
+; sec.2).  A shift of 8 on that register is therefore one SEMITONE per count.
+; Evidence: 0xFC3D35 the read, 0xFC3D3D the add, 0xFC3D42 the mask, 0xFC3D49 the
+; shift, 0xFC3D4F the OR into word 7; the index bound is 0xFC3E17/0xFC3E1A/0xFC3E1E.
 ;
 ; Cited by: 0xFC3D35 [add <X..>,#imm32]
 ; ----------------------------------------------------------------------------
-Table_FE1584:
+NotePool8_TransposeByVariant:
 	.byte	0x00, 0x00, 0x18, 0xe8, 0x00, 0x00, 0x00   ; 0xFE1584
 
 ; ----------------------------------------------------------------------------
-; Table_FE158B -- 0xFE158B-0xFE1598  (14 bytes)
+; NotePool8_LevelCapByVariant -- 0xFE158B-0xFE1598  (14 bytes)
 ;
-; 7 u16: 0x0DFF, 0x0B42, 0x0DFF, 0x0DFF, 0x0DFF, 0x0B42, 0x0B42 -- two values in a
-; seven-slot pattern.  Cited twice, 0xFC3CDA and 0xFC3CEC.
+; 7 u16 on the same variant index: 0x0DFF, 0x0B42, 0x0DFF, 0x0DFF, 0x0DFF, 0x0B42,
+; 0x0B42.  NotePool8_LevelFromVelocity returns min(velocity*32 + 31, this[variant]) for
+; variant 4 (`cp D,4` at 0xFC3CC2, `sll 0x05,BC` at 0xFC3CC9, `add BC,0x001f` at
+; 0xFC3CCE, `cp BC,WA / jr LE` at 0xFC3CE2) and this[variant] unchanged for every other
+; variant; the result is OR'd into staging word 2 at 0xFC3D73 and 0xFC3DF1, the word
+; Dev10C_WriteAllChanRegs sends to register chan+0x0080.
+; Both distinct values fall inside that register's measured 12-bit level span,
+; 0x0000-0x0FF4: 0x0DFF is 501 counts and 0x0B42 is 1202 counts below the top, and at
+; the measured 256 counts per octave that is 11.8 dB and 28.3 dB down.  So they are
+; LEVEL CAPS on the register's own log scale, one per variant.
+; Evidence: 0xFC3CDA and 0xFC3CEC the two reads, 0xFC3CC2 the variant-4 test,
+; 0xFC3CC9/0xFC3CCE the velocity law, 0xFC3CE2/0xFC3CE4 the minimum, 0xFC3D73 and
+; 0xFC3DF1 the OR into word 2.
 ;
 ; Cited by: 0xFC3CDA [add <X..>,#imm32], 0xFC3CEC [add <X..>,#imm32]
 ; ----------------------------------------------------------------------------
-Table_FE158B:
+NotePool8_LevelCapByVariant:
 	.short	0x0DFF, 0x0B42, 0x0DFF, 0x0DFF, 0x0DFF, 0x0B42, 0x0B42   ; 0xFE158B
 
 ; ----------------------------------------------------------------------------
-; Table_FE1599 -- 0xFE1599-0xFE15B0  (24 bytes)
+; NotePool8_Reg0040_ByPitchClass -- 0xFE1599-0xFE15B0  (24 bytes)
 ;
-; 12 u16: 0x0000, 0x2000, 0x4000, then nine zeroes.  Cited from 0xFC3D8B and 0xFC3DF4.
+; 12 u16 indexed by PITCH CLASS: 0x0000, 0x2000, 0x4000, then nine zeroes.
+; NotePool8_StageVoice forms the index with `div C,0x0c` at 0xFC3D7A and takes the
+; REMAINDER (`ld A,B` at 0xFC3D7D, doubled by `mul A,0x02` at 0xFC3D7F) -- the same
+; idiom the user-scale read at 0xFA7FC5-0xFA7FD2 uses for `note mod 12`, where the
+; remainder indexes RAM 0x00150B.  The word is stored into staging word 1 at 0xFC3D96,
+; which Dev10C_WriteAllChanRegs sends to register chan+0x0040, and only its top nibble
+; is ever non-zero: 0, 2, 4 in the 4-bit top field over a zero 12-bit payload
+; (FINDINGS-prom_c-dev10c-register-meanings.md sec.4).
+; NotePool8_StageVoice_Var1 reads ENTRY 0 of it directly, `ld BC,(0xfe1599)` at
+; 0xFC3DF4, and so always stages 0x0000 there.
+; Evidence: 0xFC3D7A the divide, 0xFC3D7D the remainder, 0xFC3D7F the doubling,
+; 0xFC3D8B the read, 0xFC3D96 the store into word 1; 0xFA7FC5-0xFA7FD2 is the
+; already-documented `note mod 12` use of the same idiom.
 ;
 ; Cited by: 0xFC3D8B [add <X..>,#imm32], 0xFC3DF4 [direct-address prefix 0xD2]
 ; ----------------------------------------------------------------------------
-Table_FE1599:
+NotePool8_Reg0040_ByPitchClass:
 	.short	0x0000, 0x2000, 0x4000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000   ; 0xFE1599
 	.short	0x0000, 0x0000, 0x0000, 0x0000   ; 0xFE15A9
 
 ; ----------------------------------------------------------------------------
-; Table_FE15B1 -- 0xFE15B1-0xFE15C8  (24 bytes)
+; NotePool8_Reg0040_ByPitchClass_Var6 -- 0xFE15B1-0xFE15C8  (24 bytes)
 ;
-; 12 u16: 0xC000, 0xE000, then ten times 0xC000.  Cited from 0xFC3D9B.
+; 12 u16 on the same pitch-class index, used INSTEAD of NotePool8_Reg0040_ByPitchClass
+; when the variant is 6 (`cp H,6 / jr Z` at 0xFC3D87): 0xC000, 0xE000, then ten times
+; 0xC000.  Read at 0xFC3D9B-0xFC3DA2 and stored into staging word 1 at 0xFC3DA7.
+; Same field split as the other table: top nibble C or E, 12-bit payload zero.
+; Evidence: 0xFC3D87 the variant test, 0xFC3D9B the read, 0xFC3DA7 the store.
 ;
 ; Cited by: 0xFC3D9B [lda <X..>,addr24]
 ; ----------------------------------------------------------------------------
-Table_FE15B1:
+NotePool8_Reg0040_ByPitchClass_Var6:
 	.short	0xC000, 0xE000, 0xC000, 0xC000, 0xC000, 0xC000, 0xC000, 0xC000   ; 0xFE15B1
 	.short	0xC000, 0xC000, 0xC000, 0xC000   ; 0xFE15C1
 
 ; ----------------------------------------------------------------------------
-; Table_FE15C9 -- 0xFE15C9-0xFE15E0  (24 bytes)
+; NotePool8_Word0_ByPitchClass_Var1 -- 0xFE15C9-0xFE15E0  (24 bytes)
 ;
-; 12 u16: 0x0000, 0x0200, 0x0400 ... 0x0E00 then 0x0E00 four more times.  Cited from
-; 0xFC3DD8.  Its last byte, 0xFE15E0, is where copy A ends.
+; 12 u16 on the pitch-class index: 0x0000, 0x0200, 0x0400 ... 0x0E00, then 0x0E00 four
+; more times.  NotePool8_StageVoice_Var1 reads it at 0xFC3DD8 with 2*(note mod 12) --
+; `div C,0x0c` / `ld H,B` at 0xFC3DBD-0xFC3DC0, doubled at 0xFC3DD4 -- and ORs the word
+; into staging word 0 at 0xFC3DE0.
+; ★ Staging word 0 is the one Dev10C_WriteAllChanRegs never sends, and whose purpose
+; its header records as unknown.  This call path answers it: NotePool8_NoteOnOff hands
+; word 0 to Dev10C_WriteReg_c as the VALUE for register chan+0x0000 immediately after
+; the burst (`ld BC,(XIZ+0x92)` at 0xFC3F1B, the channel pushed at 0xFC3F1F, `call
+; 0xFB732C` at 0xFC3F27).  Dev10C_WriteAllChanRegs writes that same register with the
+; literal 0x8100 instead.
+; Evidence: 0xFC3DBD/0xFC3DC0 the pitch-class index, 0xFC3DD4 the doubling, 0xFC3DD8
+; the read, 0xFC3DE0 the OR into word 0, 0xFC3F1B-0xFC3F27 the hand-off of word 0 to
+; Dev10C_WriteReg_c.
+; Its last byte, 0xFE15E0, is where copy A ends.
 ;
 ; Cited by: 0xFC3DD8 [add <X..>,#imm32]
 ; ----------------------------------------------------------------------------
-Table_FE15C9:
+NotePool8_Word0_ByPitchClass_Var1:
 	.short	0x0000, 0x0200, 0x0400, 0x0600, 0x0800, 0x0A00, 0x0C00, 0x0E00   ; 0xFE15C9
 	.short	0x0E00, 0x0E00, 0x0E00, 0x0E00   ; 0xFE15D9
 
@@ -127877,12 +128169,12 @@ Str_ClearBanner_B:
 	.asciz	"  --(Clear)--   "   ; 0xFE2134
 
 ; ----------------------------------------------------------------------------
-; Table_FE1540_B -- 0xFE2145-0xFE2188  (68 bytes)
+; Dev10C_StagingStruct_NotePool8Image_B -- 0xFE2145-0xFE2188  (68 bytes)
 ;
-; Byte-identical to Table_FE1540 (0xFE1540), 68 bytes, except 0 byte(s).
+; Byte-identical to Dev10C_StagingStruct_NotePool8Image (0xFE1540), 68 bytes, except 0 byte(s).
 ; Copy-B address = copy-A address + 0xC05.
 ; ----------------------------------------------------------------------------
-Table_FE1540_B:
+Dev10C_StagingStruct_NotePool8Image_B:
 	.short	0xF000, 0x0000, 0x8000, 0x0000, 0x017C, 0x7F7C, 0x0040, 0x0080   ; 0xFE2145
 	.short	0x0000, 0x0000, 0x0000, 0x0000, 0xA07F, 0xFF7F, 0xFF7F, 0x0000   ; 0xFE2155
 	.short	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xA080, 0xA000   ; 0xFE2165
@@ -127890,50 +128182,50 @@ Table_FE1540_B:
 	.short	0x0000, 0x0000   ; 0xFE2185
 
 ; ----------------------------------------------------------------------------
-; Table_FE1584_B -- 0xFE2189-0xFE218F  (7 bytes)
+; NotePool8_TransposeByVariant_B -- 0xFE2189-0xFE218F  (7 bytes)
 ;
-; Byte-identical to Table_FE1584 (0xFE1584), 7 bytes, except 0 byte(s).
+; Byte-identical to NotePool8_TransposeByVariant (0xFE1584), 7 bytes, except 0 byte(s).
 ; Copy-B address = copy-A address + 0xC05.
 ; ----------------------------------------------------------------------------
-Table_FE1584_B:
+NotePool8_TransposeByVariant_B:
 	.byte	0x00, 0x00, 0x18, 0xe8, 0x00, 0x00, 0x00   ; 0xFE2189
 
 ; ----------------------------------------------------------------------------
-; Table_FE158B_B -- 0xFE2190-0xFE219D  (14 bytes)
+; NotePool8_LevelCapByVariant_B -- 0xFE2190-0xFE219D  (14 bytes)
 ;
-; Byte-identical to Table_FE158B (0xFE158B), 14 bytes, except 0 byte(s).
+; Byte-identical to NotePool8_LevelCapByVariant (0xFE158B), 14 bytes, except 0 byte(s).
 ; Copy-B address = copy-A address + 0xC05.
 ; ----------------------------------------------------------------------------
-Table_FE158B_B:
+NotePool8_LevelCapByVariant_B:
 	.short	0x0DFF, 0x0B42, 0x0DFF, 0x0DFF, 0x0DFF, 0x0B42, 0x0B42   ; 0xFE2190
 
 ; ----------------------------------------------------------------------------
-; Table_FE1599_B -- 0xFE219E-0xFE21B5  (24 bytes)
+; NotePool8_Reg0040_ByPitchClass_B -- 0xFE219E-0xFE21B5  (24 bytes)
 ;
-; Byte-identical to Table_FE1599 (0xFE1599), 24 bytes, except 0 byte(s).
+; Byte-identical to NotePool8_Reg0040_ByPitchClass (0xFE1599), 24 bytes, except 0 byte(s).
 ; Copy-B address = copy-A address + 0xC05.
 ; ----------------------------------------------------------------------------
-Table_FE1599_B:
+NotePool8_Reg0040_ByPitchClass_B:
 	.short	0x0000, 0x2000, 0x4000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000   ; 0xFE219E
 	.short	0x0000, 0x0000, 0x0000, 0x0000   ; 0xFE21AE
 
 ; ----------------------------------------------------------------------------
-; Table_FE15B1_B -- 0xFE21B6-0xFE21CD  (24 bytes)
+; NotePool8_Reg0040_ByPitchClass_Var6_B -- 0xFE21B6-0xFE21CD  (24 bytes)
 ;
-; Byte-identical to Table_FE15B1 (0xFE15B1), 24 bytes, except 0 byte(s).
+; Byte-identical to NotePool8_Reg0040_ByPitchClass_Var6 (0xFE15B1), 24 bytes, except 0 byte(s).
 ; Copy-B address = copy-A address + 0xC05.
 ; ----------------------------------------------------------------------------
-Table_FE15B1_B:
+NotePool8_Reg0040_ByPitchClass_Var6_B:
 	.short	0xC000, 0xE000, 0xC000, 0xC000, 0xC000, 0xC000, 0xC000, 0xC000   ; 0xFE21B6
 	.short	0xC000, 0xC000, 0xC000, 0xC000   ; 0xFE21C6
 
 ; ----------------------------------------------------------------------------
-; Table_FE15C9_B -- 0xFE21CE-0xFE21E5  (24 bytes)
+; NotePool8_Word0_ByPitchClass_Var1_B -- 0xFE21CE-0xFE21E5  (24 bytes)
 ;
-; Byte-identical to Table_FE15C9 (0xFE15C9), 24 bytes, except 0 byte(s).
+; Byte-identical to NotePool8_Word0_ByPitchClass_Var1 (0xFE15C9), 24 bytes, except 0 byte(s).
 ; Copy-B address = copy-A address + 0xC05.
 ; ----------------------------------------------------------------------------
-Table_FE15C9_B:
+NotePool8_Word0_ByPitchClass_Var1_B:
 	.short	0x0000, 0x0200, 0x0400, 0x0600, 0x0800, 0x0A00, 0x0C00, 0x0E00   ; 0xFE21CE
 	.short	0x0E00, 0x0E00, 0x0E00, 0x0E00   ; 0xFE21DE
 

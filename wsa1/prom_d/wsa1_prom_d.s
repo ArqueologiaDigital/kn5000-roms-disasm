@@ -194,8 +194,11 @@
 ; ★ WHAT THE STORED-INDEX CENSUS SETTLED, and it is the census round 7's own
 ; conclusion implied: a record here is reached by an INDEX, so the question
 ; is which stored index values exist.  Only one field in the image can select
-; a wave-select preset, and over all 1,549 wave-select records it takes 7
-; distinct values -- so 57 of the 64 records of ToneDB_WaveSelTailPresets are
+; a wave-select preset.  ⚠ WAVE 7 ROUND 9 CORRECTED THIS SENTENCE'S
+; DENOMINATOR: over all 1,549 wave-select records the field takes 64 distinct
+; values, because the preset array's OWN +0x0B carries each record's own
+; index.  Over the 1,485 records that are not the preset array itself it takes
+; 7 -- so 57 of the 64 records of ToneDB_WaveSelTailPresets are
 ; selected by NOTHING STORED in this image, and each says so on itself.
 ;
 ; ⚠ FOUR MORE MECHANISMS MEASURED AND REJECTED (Q4), including the strongest
@@ -209,13 +212,78 @@
 ; the image's own pointers: 1,281 directory slots, tone-record offsets and
 ; descriptor pointers, and 0 of them is an absolute address.
 ;
+;
+; ------------------------------------------------------------------------------
+; ★★ WAVE 7 ROUND 9 -- THE WHOLE-IMAGE LABEL AUDIT, AND WHAT IT FOUND
+; ------------------------------------------------------------------------------
+;
+; Rounds 2-8 each measured something new and wrote it here.  None of them
+; ever re-read THIS FILE against the ROM.  That is the gap round 9 closes,
+; and it is the gap the byte gate is blind to by construction: the gate
+; certifies the .byte directives and says nothing about the label above them
+; or the sentence above that.
+;
+; ★ ONE COMMAND NOW RE-CHECKS THE WHOLE IMAGE:
+;       python3 notes/prom_d_inventory_round8.py --selftest
+; It re-derives every one of the 3,665 labels below -- its INDEX, its ADDRESS
+; and its NAME -- from prom_d's own bytes and compares the result with the
+; text in this file.  0 are REFUTED and 0 are unreached.
+;
+; ★★ AND IT PUBLISHES A HARSHER NUMBER THAN THE GOAL METRIC'S UPPER BOUND
+; OF 100 PER CENT:
+;       2,857 of 3,665 labels have their NAME re-derived from this image's own
+;       bytes -- a record's ASCII name field, a measured byte identity, a
+;       curve's own run lengths, a descriptor's own 32-bit offsets;
+;       808 have only their ADDRESS derived.  Those names are structural
+;       or transplanted and this image does not spell them.
+;     Framing is not naming, and that split is the honest reading of a
+;     file with zero sub_XXXXXX.
+;
+; ⚠ WHAT THE AUDIT FOUND IN ALREADY-COMMITTED PROSE -- both corrected in
+;   scripts/analysis/gen_prom_d_asm.py, which is the only place a fix
+;   survives a regeneration:
+;     * the stage-2 table shared by descriptors 0..160 of slot +0x38 is 132
+;       bytes -- 128 entries -- and its comment said `108 entries`, which is
+;       max(curve)+1 and true only where each descriptor has its OWN table.
+;       A sentence refuted by its own object.  The count is now the object's
+;       length and the curve's reach is a second clause; Q10d re-derives all
+;       319 of these sentences from the pool tiling.
+;     * the stored-index census above quoted 1,549 as the denominator for
+;       `7 distinct values`.  Over 1,549 the field takes 64, because a
+;       preset record's own +0x0B is its own index at 63 of its 64 records
+;       (round 9 Q11).  7 is the figure over the other 1,485.
+;
+; ⚠ AND ROUND 9 PROMOTED NOTHING.  Three mechanisms that would have moved
+;   the count were measured and refused, so a later round need not re-invent
+;   them:
+;     * the twin rule -- the one that named 194 records in the +0x18 and
+;       +0x20 arrays -- run for the first time on the 64 records of
+;       ToneDB_WaveSelTailPresets: 0 carried, against the melodic blocks
+;       AND against the drum tails.  Those 64 labels stay framed for a
+;       measured reason now, not for want of trying.  (Q12)
+;     * M8, the mechanism after round 8's M7: place a record NO byte
+;       identity reaches by the monotone owner order.  0 of 12 on the +0x20
+;       array, whose order holds; on the +0x18 array, which has 28 backward
+;       steps over 152 anchors, it proposes ONE owner for THREE different
+;       records, which refutes it.  (Q13)
+;     * General MIDI, the obvious route to naming a program-map row.  Round
+;       5 refused it by citing two programs; round 9 refuses it with a count
+;       and reads the 16 family names out of prom_b's own `GM RE-MAP` screen
+;       instead of typing them: the best row aligns on 18 of 128 programs
+;       where a deliberately rotated null aligns on 11, and the eight rows
+;       score 15..18, so it does not tell them apart either.  (Q14)
+;
+; ⚠ ORIGIN STAYS 0 and round 9 proposes no change to it.  What is still open
+;   is WHICH PHYSICAL PART this is -- a document question, not a disassembly
+;   one, and no census of these bytes can answer it.
+;
 ; Reproduce every number quoted in this file:
 ;     python3 scripts/analysis/prom_d_tone_database.py
 ;     python3 notes/prom_d_structures_round2.py        # the record framing, 78 checks
 ;     python3 notes/prom_d_documentation_round3.py     # who READS it, 62 checks
 ;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
 ;     python3 notes/prom_d_finish_round7.py --selftest # the inventory, 56 checks
-;     python3 notes/prom_d_inventory_round8.py --selftest # the three questions, 42 checks
+;     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, 71 checks
 ; Regenerate this file:
 ;     python3 scripts/analysis/gen_prom_d_asm.py
 ; Then, always:
@@ -14569,7 +14637,7 @@ ToneDB_ToneIndexMapB:
 ;          Measured, it leaves exactly one candidate 0 times: where the
 ;          order holds every candidate is inside the interval, and where it
 ;          does not, none is.  Refuted by its own measurement.
-;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 42 checks.
+;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 71 checks.
 ; 
 ;   4b. ★ AND THREE MECHANISMS ROUND 7 MEASURED AND REJECTED, recorded
 ;      next to the records they would have named so they are not
@@ -40859,7 +40927,7 @@ PercInst_503_SlapShot:
 ;          Measured, it leaves exactly one candidate 0 times: where the
 ;          order holds every candidate is inside the interval, and where it
 ;          does not, none is.  Refuted by its own measurement.
-;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 42 checks.
+;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 71 checks.
 ; 
 ;   5. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what
@@ -45407,11 +45475,15 @@ ToneDB_EnvDescTable_Perc_Desc160:		; tag 0x40  A=0x4426A  B=0x446AE
 ToneDB_EnvDescTable_Perc_Pool:
 
 ; ToneDB_EnvDescTable_Perc_000_CurveStepToElem -- file 0x4426A..0x442ED (132 bytes)
-; descriptor 0 stage 2: ToneDB_DescCurve_Step1 step -> element, 108 entries = max(curve)+1 (shared by 161 descriptors)
+; descriptor 0 stage 2: ToneDB_DescCurve_Step1 step -> element, 128 entries, of which the curve reaches 108 (max(curve)+1) (shared by 161 descriptors)
 ; Its entries index ToneDB_EnvDescTable_Perc_000_ElemArray, and they reach every
 ; element of it and no further.
 ; Evidence: this table's largest entry is 0; that array is 6
 ; bytes / 6 = 1 elements, and 0 + 1 = 1.
+; ⚠ AND THIS TABLE IS SHARED by descriptors 0..160, so the
+; sentence above is descriptor 0's join, not the table's.
+; The same join holds for all 161 of them: their part-B arrays
+; hold 1 element each.
 ; notes/prom_d_understanding_round4.py Q1, join 2.
 ToneDB_EnvDescTable_Perc_000_CurveStepToElem:
 	.byte 0xBB, 0x2C, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 4426A  |.,..............|

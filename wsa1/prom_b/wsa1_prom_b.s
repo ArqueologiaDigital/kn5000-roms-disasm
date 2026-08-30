@@ -62980,19 +62980,27 @@ T_SWI7_ServiceCall_Dispatch:	jp 0xF8E9A5  ; F400A4 (was T_F400A4) -> prom_a 0x0E
 				; with 0x3F and indexes the 64-entry service
 				; table at prom_a 0xF8E9C6.
 	.fill 0x28, 1, 0x0E  ; 0xF400A8: 40 x ret
-T_F400D0:	jp 0xF95734  ; -> prom_a 0x15734
+; Evidence: slot 0xF400D0 is `jp 0xF95734`; prom_a 0xF95734 carries the label
+;           Paint_GateArrayCheck (graded CONTENT).  DERIVATIVE name.
+T_Paint_GateArrayCheck:	jp 0xF95734  ; F400D0 (was T_F400D0) -> prom_a 0x15734
 T_F400D4:	jp 0xF95765  ; -> prom_a 0x15765
 T_F400D8:	jp 0xF95766  ; -> prom_a 0x15766
 T_F400DC:	jp 0xF95767  ; -> prom_a 0x15767
-T_F400E0:	jp 0xF95768  ; -> prom_a 0x15768
+; Evidence: slot 0xF400E0 is `jp 0xF95768`; prom_a 0xF95768 carries the label
+;           Paint_PanelCpuCheck (graded CONTENT).  DERIVATIVE name.
+T_Paint_PanelCpuCheck:	jp 0xF95768  ; F400E0 (was T_F400E0) -> prom_a 0x15768
 T_F400E4:	jp 0xF95795  ; -> prom_a 0x15795
 T_F400E8:	jp 0xF95796  ; -> prom_a 0x15796
 T_F400EC:	jp 0xF95797  ; -> prom_a 0x15797
-T_F400F0:	jp 0xF95798  ; -> prom_a 0x15798
+; Evidence: slot 0xF400F0 is `jp 0xF95798`; prom_a 0xF95798 carries the label
+;           Paint_SineWaveCheckMode (graded CONTENT).  DERIVATIVE name.
+T_Paint_SineWaveCheckMode:	jp 0xF95798  ; F400F0 (was T_F400F0) -> prom_a 0x15798
 T_F400F4:	jp 0xF95890  ; -> prom_a 0x15890
 T_F400F8:	jp 0xF95891  ; -> prom_a 0x15891
 T_F400FC:	jp 0xF9598F  ; -> prom_a 0x1598F
-T_F40100:	jp 0xF95990  ; -> prom_a 0x15990
+; Evidence: slot 0xF40100 is `jp 0xF95990`; prom_a 0xF95990 carries the label
+;           Paint_PanelSwLedCheck (graded CONTENT).  DERIVATIVE name.
+T_Paint_PanelSwLedCheck:	jp 0xF95990  ; F40100 (was T_F40100) -> prom_a 0x15990
 T_F40104:	jp 0xF959BD  ; -> prom_a 0x159BD
 T_F40108:	jp 0xF959BE  ; -> prom_a 0x159BE
 T_F4010C:	jp 0xF959BF  ; -> prom_a 0x159BF
@@ -63492,8 +63500,12 @@ T_INTTC2_uDMA2Done:	jp 0xF8E52D  ; F40EE4 (was T_F40EE4) -> prom_a 0x0E52D
 ; Evidence: slot 0xF40EE8 is `jp 0xF8E54F`; prom_a 0xF8E54F carries the label
 ;           INTTC3_LinkDmaDone, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_INTTC3_LinkDmaDone:	jp 0xF8E54F  ; F40EE8 (was T_F40EE8) -> prom_a 0x0E54F
-T_F40EEC:	jp 0xF8E26F  ; -> prom_a 0x0E26F   x2
-T_F40EF0:	jp 0xF8E0FE  ; -> prom_a 0x0E0FE   x23  the 0xE2 remote-read entry the
+; Evidence: slot 0xF40EEC is `jp 0xF8E26F`; prom_a 0xF8E26F carries the label
+;           Link_SendCommandE1 (graded CONTENT).  DERIVATIVE name.
+T_Link_SendCommandE1:	jp 0xF8E26F  ; F40EEC (was T_F40EEC) -> prom_a 0x0E26F   x2
+; Evidence: slot 0xF40EF0 is `jp 0xF8E0FE`; prom_a 0xF8E0FE carries the label
+;           Link_SendCommandE2 (graded CONTENT).  DERIVATIVE name.
+T_Link_SendCommandE2:	jp 0xF8E0FE  ; F40EF0 (was T_F40EF0) -> prom_a 0x0E0FE   x23  the 0xE2 remote-read entry the
 				; expansion-board probe calls (prom_b/prom_b.ld)
 	.fill 0xC, 1, 0x0E  ; 0xF40EF4: 12 x ret
 ; Evidence: slot 0xF40F00 is `ptr 0xF5A800`; prom_b 0xF5A800 carries the label
@@ -63733,13 +63745,19 @@ T_F411E4:	jp 0xFC5B25  ; -> prom_a 0x45B25
 T_F411E8:	jp 0xFC596C  ; -> prom_a 0x4596C
 T_F411EC:	jp 0xFC5566  ; -> prom_a 0x45566   x7
 	.fill 0x40, 1, 0x0E  ; 0xF411F0: 64 x ret
-T_F41230:	jp 0xF8E320  ; -> prom_a 0x0E320   x10
+; Evidence: slot 0xF41230 is `jp 0xF8E320`; prom_a 0xF8E320 carries the label
+;           Link_SendCommandE4 (graded CONTENT).  DERIVATIVE name.
+T_Link_SendCommandE4:	jp 0xF8E320  ; F41230 (was T_F41230) -> prom_a 0x0E320   x10
 T_F41234:	jp 0xF8E1FE  ; -> prom_a 0x0E1FE   x10
-T_F41238:	jp 0xF8E222  ; -> prom_a 0x0E222   x7
+; Evidence: slot 0xF41238 is `jp 0xF8E222`; prom_a 0xF8E222 carries the label
+;           Link_SendCommand5_WaitDone (graded CONTENT).  DERIVATIVE name.
+T_Link_SendCommand5_WaitDone:	jp 0xF8E222  ; F41238 (was T_F41238) -> prom_a 0x0E222   x7
 ; Evidence: slot 0xF4123C is `jp 0xF8E66D`; prom_a 0xF8E66D carries the label
 ;           Link_WaitBlockDone, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Link_WaitBlockDone:	jp 0xF8E66D  ; F4123C (was T_F4123C) -> prom_a 0x0E66D   x22
-T_F41240:	jp 0xF8E3D1  ; -> prom_a 0x0E3D1   x4
+; Evidence: slot 0xF41240 is `jp 0xF8E3D1`; prom_a 0xF8E3D1 carries the label
+;           Link_SendCommandE7 (graded CONTENT).  DERIVATIVE name.
+T_Link_SendCommandE7:	jp 0xF8E3D1  ; F41240 (was T_F41240) -> prom_a 0x0E3D1   x4
 	.fill 0xC, 1, 0x0E  ; 0xF41244: 12 x ret
 T_F41250:	jp 0xF36E21  ; -> prom_b 0x36E21   x1
 T_F41254:	jp 0xF36F8C  ; -> prom_b 0x36F8C   x1
@@ -63857,7 +63875,9 @@ T_F41680:	jp 0xF99826  ; -> prom_a 0x19826
 T_F41684:	jp 0xF99826  ; -> prom_a 0x19826
 T_F41688:	jp 0xF99826  ; -> prom_a 0x19826
 T_F4168C:	jp 0xF99826  ; -> prom_a 0x19826
-T_F41690:	jp 0xF9A6C0  ; -> prom_a 0x1A6C0
+; Evidence: slot 0xF41690 is `jp 0xF9A6C0`; prom_a 0xF9A6C0 carries the label
+;           Paint_MidiRealtimeMessages (graded CONTENT).  DERIVATIVE name.
+T_Paint_MidiRealtimeMessages:	jp 0xF9A6C0  ; F41690 (was T_F41690) -> prom_a 0x1A6C0
 T_F41694:	jp 0xF9A754  ; -> prom_a 0x1A754
 T_F41698:	jp 0xF9A756  ; -> prom_a 0x1A756
 T_F4169C:	jp 0xF9A755  ; -> prom_a 0x1A755
@@ -63900,15 +63920,21 @@ T_F4172C:	jp 0xF9985A  ; -> prom_a 0x1985A
 T_F41730:	jp 0xF9985B  ; -> prom_a 0x1985B   x1
 T_F41734:	jp 0xF9985F  ; -> prom_a 0x1985F   x1
 T_F41738:	jp 0xF99863  ; -> prom_a 0x19863
-T_F4173C:	jp 0xF9A1A8  ; -> prom_a 0x1A1A8
+; Evidence: slot 0xF4173C is `jp 0xF9A1A8`; prom_a 0xF9A1A8 carries the label
+;           Paint_MidiTotalMode (graded CONTENT).  DERIVATIVE name.
+T_Paint_MidiTotalMode:	jp 0xF9A1A8  ; F4173C (was T_F4173C) -> prom_a 0x1A1A8
 T_F41740:	jp 0xF9A26D  ; -> prom_a 0x1A26D
 T_F41744:	jp 0xF9A26F  ; -> prom_a 0x1A26F
 T_F41748:	jp 0xF9A26E  ; -> prom_a 0x1A26E
-T_F4174C:	jp 0xF9A998  ; -> prom_a 0x1A998
+; Evidence: slot 0xF4174C is `jp 0xF9A998`; prom_a 0xF9A998 carries the label
+;           Paint_MidiInputOutputFilter (graded CONTENT).  DERIVATIVE name.
+T_Paint_MidiInputOutputFilter:	jp 0xF9A998  ; F4174C (was T_F4174C) -> prom_a 0x1A998
 T_F41750:	jp 0xF9AA4F  ; -> prom_a 0x1AA4F
 T_F41754:	jp 0xF9AA51  ; -> prom_a 0x1AA51
 T_F41758:	jp 0xF9AA50  ; -> prom_a 0x1AA50
-T_F4175C:	jp 0xF9AF61  ; -> prom_a 0x1AF61
+; Evidence: slot 0xF4175C is `jp 0xF9AF61`; prom_a 0xF9AF61 carries the label
+;           Paint_MidiOutProgramChange (graded CONTENT).  DERIVATIVE name.
+T_Paint_MidiOutProgramChange:	jp 0xF9AF61  ; F4175C (was T_F4175C) -> prom_a 0x1AF61
 T_F41760:	jp 0xF9B05E  ; -> prom_a 0x1B05E
 T_F41764:	jp 0xF9B060  ; -> prom_a 0x1B060
 T_F41768:	jp 0xF9B05F  ; -> prom_a 0x1B05F
@@ -64689,7 +64715,9 @@ T_F42264:	jp 0xFF42CD  ; -> prom_a 0x742CD
 T_F42268:	jp 0xFF431B  ; -> prom_a 0x7431B
 T_F4226C:	jp 0xFF431C  ; -> prom_a 0x7431C
 T_F42270:	jp 0xFF4407  ; -> prom_a 0x74407
-T_F42274:	jp 0xFF4408  ; -> prom_a 0x74408
+; Evidence: slot 0xF42274 is `jp 0xFF4408`; prom_a 0xFF4408 carries the label
+;           Paint_MidiFileDirectPlay (graded CONTENT).  DERIVATIVE name.
+T_Paint_MidiFileDirectPlay:	jp 0xFF4408  ; F42274 (was T_F42274) -> prom_a 0x74408
 T_F42278:	jp 0xFF457C  ; -> prom_a 0x7457C
 T_F4227C:	jp 0xFF4596  ; -> prom_a 0x74596
 T_F42280:	jp 0xFF475B  ; -> prom_a 0x7475B
@@ -64720,7 +64748,9 @@ T_F42378:	jp 0xF0A9BF  ; -> prom_b 0x0A9BF
 T_F4237C:	jp 0xFDE2DD  ; -> prom_a 0x5E2DD
 T_F42380:	jp 0xFD2504  ; -> prom_a 0x52504   x2
 	.fill 0x1C, 1, 0x0E  ; 0xF42384: 28 x ret
-T_F423A0:	jp 0xFF4786  ; -> prom_a 0x74786
+; Evidence: slot 0xF423A0 is `jp 0xFF4786`; prom_a 0xFF4786 carries the label
+;           Paint_DiskL0adFile (graded CONTENT).  DERIVATIVE name.
+T_Paint_DiskL0adFile:	jp 0xFF4786  ; F423A0 (was T_F423A0) -> prom_a 0x74786
 T_F423A4:	jp 0xFF4986  ; -> prom_a 0x74986
 T_F423A8:	jp 0xFF4995  ; -> prom_a 0x74995
 T_F423AC:	jp 0xFF4FF9  ; -> prom_a 0x74FF9
@@ -64732,7 +64762,9 @@ T_F423C0:	jp 0xFF5C3E  ; -> prom_a 0x75C3E
 T_F423C4:	jp 0xFF5EAE  ; -> prom_a 0x75EAE
 T_F423C8:	jp 0xFF5ED1  ; -> prom_a 0x75ED1
 T_F423CC:	jp 0xFF6511  ; -> prom_a 0x76511
-T_F423D0:	jp 0xFF6512  ; -> prom_a 0x76512
+; Evidence: slot 0xF423D0 is `jp 0xFF6512`; prom_a 0xFF6512 carries the label
+;           Paint_FloppyDiskFormatSelectType (graded CONTENT).  DERIVATIVE name.
+T_Paint_FloppyDiskFormatSelectType:	jp 0xFF6512  ; F423D0 (was T_F423D0) -> prom_a 0x76512
 T_F423D4:	jp 0xFF654F  ; -> prom_a 0x7654F
 T_F423D8:	jp 0xFF6550  ; -> prom_a 0x76550
 T_F423DC:	jp 0xFF6612  ; -> prom_a 0x76612
@@ -64740,11 +64772,15 @@ T_F423E0:	jp 0xFF672D  ; -> prom_a 0x7672D
 T_F423E4:	jp 0xFF68CA  ; -> prom_a 0x768CA
 T_F423E8:	jp 0xFF68D8  ; -> prom_a 0x768D8
 T_F423EC:	jp 0xFF6DB6  ; -> prom_a 0x76DB6
-T_F423F0:	jp 0xFF6613  ; -> prom_a 0x76613
+; Evidence: slot 0xF423F0 is `jp 0xFF6613`; prom_a 0xFF6613 carries the label
+;           Paint_FloppyDiskFormatAreYouSure (graded CONTENT).  DERIVATIVE name.
+T_Paint_FloppyDiskFormatAreYouSure:	jp 0xFF6613  ; F423F0 (was T_F423F0) -> prom_a 0x76613
 T_F423F4:	jp 0xFF66A9  ; -> prom_a 0x766A9
 T_F423F8:	jp 0xFF66AA  ; -> prom_a 0x766AA
 T_F423FC:	jp 0xFF672C  ; -> prom_a 0x7672C
-T_F42400:	jp 0xFF4FFA  ; -> prom_a 0x74FFA
+; Evidence: slot 0xF42400 is `jp 0xFF4FFA`; prom_a 0xFF4FFA carries the label
+;           Paint_MidiFileL0ad (graded CONTENT).  DERIVATIVE name.
+T_Paint_MidiFileL0ad:	jp 0xFF4FFA  ; F42400 (was T_F42400) -> prom_a 0x74FFA
 T_F42404:	jp 0xFF520C  ; -> prom_a 0x7520C
 T_F42408:	jp 0xFF522F  ; -> prom_a 0x7522F
 T_F4240C:	jp 0xFF5489  ; -> prom_a 0x75489
@@ -65428,97 +65464,267 @@ T_F43040:	jp 0xF7D018  ; -> prom_b 0x7D018
 T_F43044:	jp 0xF7D01C  ; -> prom_b 0x7D01C
 T_F43048:	jp 0xF7D020  ; -> prom_b 0x7D020
 T_F4304C:	jp 0xF7D025  ; -> prom_b 0x7D025
-T_F43050:	jp 0xF7D02A  ; -> prom_b 0x7D02A
-T_F43054:	jp 0xF7D02E  ; -> prom_b 0x7D02E
-T_F43058:	jp 0xF7D032  ; -> prom_b 0x7D032
-T_F4305C:	jp 0xF7D048  ; -> prom_b 0x7D048
-T_F43060:	jp 0xF7D04C  ; -> prom_b 0x7D04C
-T_F43064:	jp 0xF7D050  ; -> prom_b 0x7D050
-T_F43068:	jp 0xF7D054  ; -> prom_b 0x7D054
-T_F4306C:	jp 0xF7D05E  ; -> prom_b 0x7D05E
-T_F43070:	jp 0xF7D062  ; -> prom_b 0x7D062
-T_F43074:	jp 0xF7D066  ; -> prom_b 0x7D066
-T_F43078:	jp 0xF7D06A  ; -> prom_b 0x7D06A
-T_F4307C:	jp 0xF7D080  ; -> prom_b 0x7D080
-T_F43080:	jp 0xF7D150  ; -> prom_b 0x7D150
-T_F43084:	jp 0xF7D155  ; -> prom_b 0x7D155
-T_F43088:	jp 0xF7D15A  ; -> prom_b 0x7D15A
-T_F4308C:	jp 0xF7D170  ; -> prom_b 0x7D170
-T_F43090:	jp 0xF7D12F  ; -> prom_b 0x7D12F
-T_F43094:	jp 0xF7D134  ; -> prom_b 0x7D134
-T_F43098:	jp 0xF7D139  ; -> prom_b 0x7D139
-T_F4309C:	jp 0xF7D14F  ; -> prom_b 0x7D14F
-T_F430A0:	jp 0xF7D0BC  ; -> prom_b 0x7D0BC
-T_F430A4:	jp 0xF7D0C1  ; -> prom_b 0x7D0C1
-T_F430A8:	jp 0xF7D0C6  ; -> prom_b 0x7D0C6
-T_F430AC:	jp 0xF7D0DC  ; -> prom_b 0x7D0DC
-T_F430B0:	jp 0xF7D0FE  ; -> prom_b 0x7D0FE
-T_F430B4:	jp 0xF7D103  ; -> prom_b 0x7D103
-T_F430B8:	jp 0xF7D108  ; -> prom_b 0x7D108
-T_F430BC:	jp 0xF7D11E  ; -> prom_b 0x7D11E
-T_F430C0:	jp 0xF7D238  ; -> prom_b 0x7D238
-T_F430C4:	jp 0xF7D23D  ; -> prom_b 0x7D23D
-T_F430C8:	jp 0xF7D242  ; -> prom_b 0x7D242
-T_F430CC:	jp 0xF7D258  ; -> prom_b 0x7D258
-T_F430D0:	jp 0xF7D259  ; -> prom_b 0x7D259
-T_F430D4:	jp 0xF7D25E  ; -> prom_b 0x7D25E
-T_F430D8:	jp 0xF7D263  ; -> prom_b 0x7D263
-T_F430DC:	jp 0xF7D279  ; -> prom_b 0x7D279
-T_F430E0:	jp 0xF7D0DD  ; -> prom_b 0x7D0DD
-T_F430E4:	jp 0xF7D0E2  ; -> prom_b 0x7D0E2
-T_F430E8:	jp 0xF7D0E7  ; -> prom_b 0x7D0E7
-T_F430EC:	jp 0xF7D0FD  ; -> prom_b 0x7D0FD
-T_F430F0:	jp 0xF7D1F6  ; -> prom_b 0x7D1F6
-T_F430F4:	jp 0xF7D1FB  ; -> prom_b 0x7D1FB
-T_F430F8:	jp 0xF7D200  ; -> prom_b 0x7D200
-T_F430FC:	jp 0xF7D216  ; -> prom_b 0x7D216
-T_F43100:	jp 0xF7D171  ; -> prom_b 0x7D171
-T_F43104:	jp 0xF7D176  ; -> prom_b 0x7D176
-T_F43108:	jp 0xF7D17B  ; -> prom_b 0x7D17B
-T_F4310C:	jp 0xF7D191  ; -> prom_b 0x7D191
-T_F43110:	jp 0xF7D1D5  ; -> prom_b 0x7D1D5
-T_F43114:	jp 0xF7D1DA  ; -> prom_b 0x7D1DA
-T_F43118:	jp 0xF7D1DF  ; -> prom_b 0x7D1DF
-T_F4311C:	jp 0xF7D1F5  ; -> prom_b 0x7D1F5
-T_F43120:	jp 0xF7D217  ; -> prom_b 0x7D217
-T_F43124:	jp 0xF7D21C  ; -> prom_b 0x7D21C
-T_F43128:	jp 0xF7D221  ; -> prom_b 0x7D221
-T_F4312C:	jp 0xF7D237  ; -> prom_b 0x7D237
-T_F43130:	jp 0xF7D11F  ; -> prom_b 0x7D11F
-T_F43134:	jp 0xF7D124  ; -> prom_b 0x7D124
-T_F43138:	jp 0xF7D129  ; -> prom_b 0x7D129
-T_F4313C:	jp 0xF7D12E  ; -> prom_b 0x7D12E
-T_F43140:	jp 0xF7D084  ; -> prom_b 0x7D084
-T_F43144:	jp 0xF7D088  ; -> prom_b 0x7D088
-T_F43148:	jp 0xF7D08C  ; -> prom_b 0x7D08C
-T_F4314C:	jp 0xF7D0A2  ; -> prom_b 0x7D0A2
-T_F43150:	jp 0xF7D29F  ; -> prom_b 0x7D29F
-T_F43154:	jp 0xF7D2A4  ; -> prom_b 0x7D2A4
-T_F43158:	jp 0xF7D2A9  ; -> prom_b 0x7D2A9
-T_F4315C:	jp 0xF7D2B3  ; -> prom_b 0x7D2B3
+; Evidence: slot 0xF43050 is `jp 0xF7D02A`; prom_b 0xF7D02A carries the label
+;           ScreenEnter_Edit (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_Edit:	jp 0xF7D02A  ; F43050 (was T_F43050) -> prom_b 0x7D02A
+; Evidence: slot 0xF43054 is `jp 0xF7D02E`; prom_b 0xF7D02E carries the label
+;           ScreenLeave_Edit (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_Edit:	jp 0xF7D02E  ; F43054 (was T_F43054) -> prom_b 0x7D02E
+; Evidence: slot 0xF43058 is `jp 0xF7D032`; prom_b 0xF7D032 carries the label
+;           ScreenButton_Edit (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_Edit:	jp 0xF7D032  ; F43058 (was T_F43058) -> prom_b 0x7D032
+; Evidence: slot 0xF4305C is `jp 0xF7D048`; prom_b 0xF7D048 carries the label
+;           ScreenNull_Edit (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_Edit:	jp 0xF7D048  ; F4305C (was T_F4305C) -> prom_b 0x7D048
+; Evidence: slot 0xF43060 is `jp 0xF7D04C`; prom_b 0xF7D04C carries the label
+;           ScreenEnter_SongClear (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_SongClear:	jp 0xF7D04C  ; F43060 (was T_F43060) -> prom_b 0x7D04C
+; Evidence: slot 0xF43064 is `jp 0xF7D050`; prom_b 0xF7D050 carries the label
+;           ScreenLeave_SongClear (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_SongClear:	jp 0xF7D050  ; F43064 (was T_F43064) -> prom_b 0x7D050
+; Evidence: slot 0xF43068 is `jp 0xF7D054`; prom_b 0xF7D054 carries the label
+;           ScreenButton_SongClear (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_SongClear:	jp 0xF7D054  ; F43068 (was T_F43068) -> prom_b 0x7D054
+; Evidence: slot 0xF4306C is `jp 0xF7D05E`; prom_b 0xF7D05E carries the label
+;           ScreenNull_SongClear (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_SongClear:	jp 0xF7D05E  ; F4306C (was T_F4306C) -> prom_b 0x7D05E
+; Evidence: slot 0xF43070 is `jp 0xF7D062`; prom_b 0xF7D062 carries the label
+;           ScreenEnter_TrackClear (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_TrackClear:	jp 0xF7D062  ; F43070 (was T_F43070) -> prom_b 0x7D062
+; Evidence: slot 0xF43074 is `jp 0xF7D066`; prom_b 0xF7D066 carries the label
+;           ScreenLeave_TrackClear (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_TrackClear:	jp 0xF7D066  ; F43074 (was T_F43074) -> prom_b 0x7D066
+; Evidence: slot 0xF43078 is `jp 0xF7D06A`; prom_b 0xF7D06A carries the label
+;           ScreenButton_TrackClear (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_TrackClear:	jp 0xF7D06A  ; F43078 (was T_F43078) -> prom_b 0x7D06A
+; Evidence: slot 0xF4307C is `jp 0xF7D080`; prom_b 0xF7D080 carries the label
+;           ScreenNull_TrackClear (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_TrackClear:	jp 0xF7D080  ; F4307C (was T_F4307C) -> prom_b 0x7D080
+; Evidence: slot 0xF43080 is `jp 0xF7D150`; prom_b 0xF7D150 carries the label
+;           ScreenEnter_Vel0cityChange (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_Vel0cityChange:	jp 0xF7D150  ; F43080 (was T_F43080) -> prom_b 0x7D150
+; Evidence: slot 0xF43084 is `jp 0xF7D155`; prom_b 0xF7D155 carries the label
+;           ScreenLeave_Vel0cityChange (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_Vel0cityChange:	jp 0xF7D155  ; F43084 (was T_F43084) -> prom_b 0x7D155
+; Evidence: slot 0xF43088 is `jp 0xF7D15A`; prom_b 0xF7D15A carries the label
+;           ScreenButton_Vel0cityChange (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_Vel0cityChange:	jp 0xF7D15A  ; F43088 (was T_F43088) -> prom_b 0x7D15A
+; Evidence: slot 0xF4308C is `jp 0xF7D170`; prom_b 0xF7D170 carries the label
+;           ScreenNull_Vel0cityChange (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_Vel0cityChange:	jp 0xF7D170  ; F4308C (was T_F4308C) -> prom_b 0x7D170
+; Evidence: slot 0xF43090 is `jp 0xF7D12F`; prom_b 0xF7D12F carries the label
+;           ScreenEnter_Quantize (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_Quantize:	jp 0xF7D12F  ; F43090 (was T_F43090) -> prom_b 0x7D12F
+; Evidence: slot 0xF43094 is `jp 0xF7D134`; prom_b 0xF7D134 carries the label
+;           ScreenLeave_Quantize (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_Quantize:	jp 0xF7D134  ; F43094 (was T_F43094) -> prom_b 0x7D134
+; Evidence: slot 0xF43098 is `jp 0xF7D139`; prom_b 0xF7D139 carries the label
+;           ScreenButton_Quantize (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_Quantize:	jp 0xF7D139  ; F43098 (was T_F43098) -> prom_b 0x7D139
+; Evidence: slot 0xF4309C is `jp 0xF7D14F`; prom_b 0xF7D14F carries the label
+;           ScreenNull_Quantize (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_Quantize:	jp 0xF7D14F  ; F4309C (was T_F4309C) -> prom_b 0x7D14F
+; Evidence: slot 0xF430A0 is `jp 0xF7D0BC`; prom_b 0xF7D0BC carries the label
+;           ScreenEnter_TrackMerge (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_TrackMerge:	jp 0xF7D0BC  ; F430A0 (was T_F430A0) -> prom_b 0x7D0BC
+; Evidence: slot 0xF430A4 is `jp 0xF7D0C1`; prom_b 0xF7D0C1 carries the label
+;           ScreenLeave_TrackMerge (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_TrackMerge:	jp 0xF7D0C1  ; F430A4 (was T_F430A4) -> prom_b 0x7D0C1
+; Evidence: slot 0xF430A8 is `jp 0xF7D0C6`; prom_b 0xF7D0C6 carries the label
+;           ScreenButton_TrackMerge (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_TrackMerge:	jp 0xF7D0C6  ; F430A8 (was T_F430A8) -> prom_b 0x7D0C6
+; Evidence: slot 0xF430AC is `jp 0xF7D0DC`; prom_b 0xF7D0DC carries the label
+;           ScreenNull_TrackMerge (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_TrackMerge:	jp 0xF7D0DC  ; F430AC (was T_F430AC) -> prom_b 0x7D0DC
+; Evidence: slot 0xF430B0 is `jp 0xF7D0FE`; prom_b 0xF7D0FE carries the label
+;           ScreenEnter_MeasureErase (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_MeasureErase:	jp 0xF7D0FE  ; F430B0 (was T_F430B0) -> prom_b 0x7D0FE
+; Evidence: slot 0xF430B4 is `jp 0xF7D103`; prom_b 0xF7D103 carries the label
+;           ScreenLeave_MeasureErase (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_MeasureErase:	jp 0xF7D103  ; F430B4 (was T_F430B4) -> prom_b 0x7D103
+; Evidence: slot 0xF430B8 is `jp 0xF7D108`; prom_b 0xF7D108 carries the label
+;           ScreenButton_MeasureErase (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_MeasureErase:	jp 0xF7D108  ; F430B8 (was T_F430B8) -> prom_b 0x7D108
+; Evidence: slot 0xF430BC is `jp 0xF7D11E`; prom_b 0xF7D11E carries the label
+;           ScreenNull_MeasureErase (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_MeasureErase:	jp 0xF7D11E  ; F430BC (was T_F430BC) -> prom_b 0x7D11E
+; Evidence: slot 0xF430C0 is `jp 0xF7D238`; prom_b 0xF7D238 carries the label
+;           ScreenEnter_MeasureC0py (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_MeasureC0py:	jp 0xF7D238  ; F430C0 (was T_F430C0) -> prom_b 0x7D238
+; Evidence: slot 0xF430C4 is `jp 0xF7D23D`; prom_b 0xF7D23D carries the label
+;           ScreenLeave_MeasureC0py (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_MeasureC0py:	jp 0xF7D23D  ; F430C4 (was T_F430C4) -> prom_b 0x7D23D
+; Evidence: slot 0xF430C8 is `jp 0xF7D242`; prom_b 0xF7D242 carries the label
+;           ScreenButton_MeasureC0py (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_MeasureC0py:	jp 0xF7D242  ; F430C8 (was T_F430C8) -> prom_b 0x7D242
+; Evidence: slot 0xF430CC is `jp 0xF7D258`; prom_b 0xF7D258 carries the label
+;           ScreenNull_MeasureC0py (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_MeasureC0py:	jp 0xF7D258  ; F430CC (was T_F430CC) -> prom_b 0x7D258
+; Evidence: slot 0xF430D0 is `jp 0xF7D259`; prom_b 0xF7D259 carries the label
+;           ScreenEnter_MeasureInsert (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_MeasureInsert:	jp 0xF7D259  ; F430D0 (was T_F430D0) -> prom_b 0x7D259
+; Evidence: slot 0xF430D4 is `jp 0xF7D25E`; prom_b 0xF7D25E carries the label
+;           ScreenLeave_MeasureInsert (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_MeasureInsert:	jp 0xF7D25E  ; F430D4 (was T_F430D4) -> prom_b 0x7D25E
+; Evidence: slot 0xF430D8 is `jp 0xF7D263`; prom_b 0xF7D263 carries the label
+;           ScreenButton_MeasureInsert (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_MeasureInsert:	jp 0xF7D263  ; F430D8 (was T_F430D8) -> prom_b 0x7D263
+; Evidence: slot 0xF430DC is `jp 0xF7D279`; prom_b 0xF7D279 carries the label
+;           ScreenNull_MeasureInsert (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_MeasureInsert:	jp 0xF7D279  ; F430DC (was T_F430DC) -> prom_b 0x7D279
+; Evidence: slot 0xF430E0 is `jp 0xF7D0DD`; prom_b 0xF7D0DD carries the label
+;           ScreenEnter_MeasureDelete (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_MeasureDelete:	jp 0xF7D0DD  ; F430E0 (was T_F430E0) -> prom_b 0x7D0DD
+; Evidence: slot 0xF430E4 is `jp 0xF7D0E2`; prom_b 0xF7D0E2 carries the label
+;           ScreenLeave_MeasureDelete (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_MeasureDelete:	jp 0xF7D0E2  ; F430E4 (was T_F430E4) -> prom_b 0x7D0E2
+; Evidence: slot 0xF430E8 is `jp 0xF7D0E7`; prom_b 0xF7D0E7 carries the label
+;           ScreenButton_MeasureDelete (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_MeasureDelete:	jp 0xF7D0E7  ; F430E8 (was T_F430E8) -> prom_b 0x7D0E7
+; Evidence: slot 0xF430EC is `jp 0xF7D0FD`; prom_b 0xF7D0FD carries the label
+;           ScreenNull_MeasureDelete (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_MeasureDelete:	jp 0xF7D0FD  ; F430EC (was T_F430EC) -> prom_b 0x7D0FD
+; Evidence: slot 0xF430F0 is `jp 0xF7D1F6`; prom_b 0xF7D1F6 carries the label
+;           ScreenEnter_S0ngC0py (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_S0ngC0py:	jp 0xF7D1F6  ; F430F0 (was T_F430F0) -> prom_b 0x7D1F6
+; Evidence: slot 0xF430F4 is `jp 0xF7D1FB`; prom_b 0xF7D1FB carries the label
+;           ScreenLeave_S0ngC0py (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_S0ngC0py:	jp 0xF7D1FB  ; F430F4 (was T_F430F4) -> prom_b 0x7D1FB
+; Evidence: slot 0xF430F8 is `jp 0xF7D200`; prom_b 0xF7D200 carries the label
+;           ScreenButton_S0ngC0py (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_S0ngC0py:	jp 0xF7D200  ; F430F8 (was T_F430F8) -> prom_b 0x7D200
+; Evidence: slot 0xF430FC is `jp 0xF7D216`; prom_b 0xF7D216 carries the label
+;           ScreenNull_S0ngC0py (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_S0ngC0py:	jp 0xF7D216  ; F430FC (was T_F430FC) -> prom_b 0x7D216
+; Evidence: slot 0xF43100 is `jp 0xF7D171`; prom_b 0xF7D171 carries the label
+;           ScreenEnter_Transp0se (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_Transp0se:	jp 0xF7D171  ; F43100 (was T_F43100) -> prom_b 0x7D171
+; Evidence: slot 0xF43104 is `jp 0xF7D176`; prom_b 0xF7D176 carries the label
+;           ScreenLeave_Transp0se (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_Transp0se:	jp 0xF7D176  ; F43104 (was T_F43104) -> prom_b 0x7D176
+; Evidence: slot 0xF43108 is `jp 0xF7D17B`; prom_b 0xF7D17B carries the label
+;           ScreenButton_Transp0se (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_Transp0se:	jp 0xF7D17B  ; F43108 (was T_F43108) -> prom_b 0x7D17B
+; Evidence: slot 0xF4310C is `jp 0xF7D191`; prom_b 0xF7D191 carries the label
+;           ScreenNull_Transp0se (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_Transp0se:	jp 0xF7D191  ; F4310C (was T_F4310C) -> prom_b 0x7D191
+; Evidence: slot 0xF43110 is `jp 0xF7D1D5`; prom_b 0xF7D1D5 carries the label
+;           ScreenEnter_AdvanceDelay (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_AdvanceDelay:	jp 0xF7D1D5  ; F43110 (was T_F43110) -> prom_b 0x7D1D5
+; Evidence: slot 0xF43114 is `jp 0xF7D1DA`; prom_b 0xF7D1DA carries the label
+;           ScreenLeave_AdvanceDelay (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_AdvanceDelay:	jp 0xF7D1DA  ; F43114 (was T_F43114) -> prom_b 0x7D1DA
+; Evidence: slot 0xF43118 is `jp 0xF7D1DF`; prom_b 0xF7D1DF carries the label
+;           ScreenButton_AdvanceDelay (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_AdvanceDelay:	jp 0xF7D1DF  ; F43118 (was T_F43118) -> prom_b 0x7D1DF
+; Evidence: slot 0xF4311C is `jp 0xF7D1F5`; prom_b 0xF7D1F5 carries the label
+;           ScreenNull_AdvanceDelay (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_AdvanceDelay:	jp 0xF7D1F5  ; F4311C (was T_F4311C) -> prom_b 0x7D1F5
+; Evidence: slot 0xF43120 is `jp 0xF7D217`; prom_b 0xF7D217 carries the label
+;           ScreenEnter_N0teChange (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_N0teChange:	jp 0xF7D217  ; F43120 (was T_F43120) -> prom_b 0x7D217
+; Evidence: slot 0xF43124 is `jp 0xF7D21C`; prom_b 0xF7D21C carries the label
+;           ScreenLeave_N0teChange (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_N0teChange:	jp 0xF7D21C  ; F43124 (was T_F43124) -> prom_b 0x7D21C
+; Evidence: slot 0xF43128 is `jp 0xF7D221`; prom_b 0xF7D221 carries the label
+;           ScreenButton_N0teChange (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_N0teChange:	jp 0xF7D221  ; F43128 (was T_F43128) -> prom_b 0x7D221
+; Evidence: slot 0xF4312C is `jp 0xF7D237`; prom_b 0xF7D237 carries the label
+;           ScreenNull_N0teChange (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_N0teChange:	jp 0xF7D237  ; F4312C (was T_F4312C) -> prom_b 0x7D237
+; Evidence: slot 0xF43130 is `jp 0xF7D11F`; prom_b 0xF7D11F carries the label
+;           ScreenEnter_PanelWrite (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_PanelWrite:	jp 0xF7D11F  ; F43130 (was T_F43130) -> prom_b 0x7D11F
+; Evidence: slot 0xF43134 is `jp 0xF7D124`; prom_b 0xF7D124 carries the label
+;           ScreenLeave_PanelWrite (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_PanelWrite:	jp 0xF7D124  ; F43134 (was T_F43134) -> prom_b 0x7D124
+; Evidence: slot 0xF43138 is `jp 0xF7D129`; prom_b 0xF7D129 carries the label
+;           ScreenButton_PanelWrite (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_PanelWrite:	jp 0xF7D129  ; F43138 (was T_F43138) -> prom_b 0x7D129
+; Evidence: slot 0xF4313C is `jp 0xF7D12E`; prom_b 0xF7D12E carries the label
+;           ScreenNull_PanelWrite (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_PanelWrite:	jp 0xF7D12E  ; F4313C (was T_F4313C) -> prom_b 0x7D12E
+; Evidence: slot 0xF43140 is `jp 0xF7D084`; prom_b 0xF7D084 carries the label
+;           ScreenEnter_TrackAssign (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_TrackAssign:	jp 0xF7D084  ; F43140 (was T_F43140) -> prom_b 0x7D084
+; Evidence: slot 0xF43144 is `jp 0xF7D088`; prom_b 0xF7D088 carries the label
+;           ScreenLeave_TrackAssign (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_TrackAssign:	jp 0xF7D088  ; F43144 (was T_F43144) -> prom_b 0x7D088
+; Evidence: slot 0xF43148 is `jp 0xF7D08C`; prom_b 0xF7D08C carries the label
+;           ScreenButton_TrackAssign (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_TrackAssign:	jp 0xF7D08C  ; F43148 (was T_F43148) -> prom_b 0x7D08C
+; Evidence: slot 0xF4314C is `jp 0xF7D0A2`; prom_b 0xF7D0A2 carries the label
+;           ScreenNull_TrackAssign (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_TrackAssign:	jp 0xF7D0A2  ; F4314C (was T_F4314C) -> prom_b 0x7D0A2
+; Evidence: slot 0xF43150 is `jp 0xF7D29F`; prom_b 0xF7D29F carries the label
+;           ScreenEnter_SequencerMedley (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_SequencerMedley:	jp 0xF7D29F  ; F43150 (was T_F43150) -> prom_b 0x7D29F
+; Evidence: slot 0xF43154 is `jp 0xF7D2A4`; prom_b 0xF7D2A4 carries the label
+;           ScreenLeave_SequencerMedley (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_SequencerMedley:	jp 0xF7D2A4  ; F43154 (was T_F43154) -> prom_b 0x7D2A4
+; Evidence: slot 0xF43158 is `jp 0xF7D2A9`; prom_b 0xF7D2A9 carries the label
+;           ScreenButton_SequencerMedley (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_SequencerMedley:	jp 0xF7D2A9  ; F43158 (was T_F43158) -> prom_b 0x7D2A9
+; Evidence: slot 0xF4315C is `jp 0xF7D2B3`; prom_b 0xF7D2B3 carries the label
+;           ScreenNull_SequencerMedley (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_SequencerMedley:	jp 0xF7D2B3  ; F4315C (was T_F4315C) -> prom_b 0x7D2B3
 T_F43160:	jp 0xF7D2B4  ; -> prom_b 0x7D2B4
 T_F43164:	jp 0xF7D2B9  ; -> prom_b 0x7D2B9
 T_F43168:	jp 0xF7D2BE  ; -> prom_b 0x7D2BE
 T_F4316C:	jp 0xF7D2C5  ; -> prom_b 0x7D2C5
-T_F43170:	jp 0xF7D28A  ; -> prom_b 0x7D28A
-T_F43174:	jp 0xF7D28F  ; -> prom_b 0x7D28F
-T_F43178:	jp 0xF7D294  ; -> prom_b 0x7D294
-T_F4317C:	jp 0xF7D29E  ; -> prom_b 0x7D29E
-T_F43180:	jp 0xF7D192  ; -> prom_b 0x7D192
-T_F43184:	jp 0xF7D197  ; -> prom_b 0x7D197
-T_F43188:	jp 0xF7D19C  ; -> prom_b 0x7D19C
-T_F4318C:	jp 0xF7D1D4  ; -> prom_b 0x7D1D4
-T_F43190:	jp 0xF7D0A6  ; -> prom_b 0x7D0A6
-T_F43194:	jp 0xF7D0AA  ; -> prom_b 0x7D0AA
-T_F43198:	jp 0xF7D0AE  ; -> prom_b 0x7D0AE
-T_F4319C:	jp 0xF7D0B8  ; -> prom_b 0x7D0B8
-T_F431A0:	jp 0xF7D27A  ; -> prom_b 0x7D27A
-T_F431A4:	jp 0xF7D27F  ; -> prom_b 0x7D27F
-T_F431A8:	jp 0xF7D284  ; -> prom_b 0x7D284
-T_F431AC:	jp 0xF7D289  ; -> prom_b 0x7D289
+; Evidence: slot 0xF43170 is `jp 0xF7D28A`; prom_b 0xF7D28A carries the label
+;           ScreenEnter_StepRecordPartSelect (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_StepRecordPartSelect:	jp 0xF7D28A  ; F43170 (was T_F43170) -> prom_b 0x7D28A
+; Evidence: slot 0xF43174 is `jp 0xF7D28F`; prom_b 0xF7D28F carries the label
+;           ScreenLeave_StepRecordPartSelect (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_StepRecordPartSelect:	jp 0xF7D28F  ; F43174 (was T_F43174) -> prom_b 0x7D28F
+; Evidence: slot 0xF43178 is `jp 0xF7D294`; prom_b 0xF7D294 carries the label
+;           ScreenButton_StepRecordPartSelect (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_StepRecordPartSelect:	jp 0xF7D294  ; F43178 (was T_F43178) -> prom_b 0x7D294
+; Evidence: slot 0xF4317C is `jp 0xF7D29E`; prom_b 0xF7D29E carries the label
+;           ScreenNull_StepRecordPartSelect (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_StepRecordPartSelect:	jp 0xF7D29E  ; F4317C (was T_F4317C) -> prom_b 0x7D29E
+; Evidence: slot 0xF43180 is `jp 0xF7D192`; prom_b 0xF7D192 carries the label
+;           ScreenEnter_AfterT0uchSetting (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_AfterT0uchSetting:	jp 0xF7D192  ; F43180 (was T_F43180) -> prom_b 0x7D192
+; Evidence: slot 0xF43184 is `jp 0xF7D197`; prom_b 0xF7D197 carries the label
+;           ScreenLeave_AfterT0uchSetting (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_AfterT0uchSetting:	jp 0xF7D197  ; F43184 (was T_F43184) -> prom_b 0x7D197
+; Evidence: slot 0xF43188 is `jp 0xF7D19C`; prom_b 0xF7D19C carries the label
+;           ScreenButton_AfterT0uchSetting (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_AfterT0uchSetting:	jp 0xF7D19C  ; F43188 (was T_F43188) -> prom_b 0x7D19C
+; Evidence: slot 0xF4318C is `jp 0xF7D1D4`; prom_b 0xF7D1D4 carries the label
+;           ScreenNull_AfterT0uchSetting (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_AfterT0uchSetting:	jp 0xF7D1D4  ; F4318C (was T_F4318C) -> prom_b 0x7D1D4
+; Evidence: slot 0xF43190 is `jp 0xF7D0A6`; prom_b 0xF7D0A6 carries the label
+;           ScreenEnter_TrackAssignPresets (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_TrackAssignPresets:	jp 0xF7D0A6  ; F43190 (was T_F43190) -> prom_b 0x7D0A6
+; Evidence: slot 0xF43194 is `jp 0xF7D0AA`; prom_b 0xF7D0AA carries the label
+;           ScreenLeave_TrackAssignPresets (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_TrackAssignPresets:	jp 0xF7D0AA  ; F43194 (was T_F43194) -> prom_b 0x7D0AA
+; Evidence: slot 0xF43198 is `jp 0xF7D0AE`; prom_b 0xF7D0AE carries the label
+;           ScreenButton_TrackAssignPresets (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_TrackAssignPresets:	jp 0xF7D0AE  ; F43198 (was T_F43198) -> prom_b 0x7D0AE
+; Evidence: slot 0xF4319C is `jp 0xF7D0B8`; prom_b 0xF7D0B8 carries the label
+;           ScreenNull_TrackAssignPresets (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_TrackAssignPresets:	jp 0xF7D0B8  ; F4319C (was T_F4319C) -> prom_b 0x7D0B8
+; Evidence: slot 0xF431A0 is `jp 0xF7D27A`; prom_b 0xF7D27A carries the label
+;           ScreenEnter_S0ngSelectName (graded CONTENT).  DERIVATIVE name.
+T_ScreenEnter_S0ngSelectName:	jp 0xF7D27A  ; F431A0 (was T_F431A0) -> prom_b 0x7D27A
+; Evidence: slot 0xF431A4 is `jp 0xF7D27F`; prom_b 0xF7D27F carries the label
+;           ScreenLeave_S0ngSelectName (graded CONTENT).  DERIVATIVE name.
+T_ScreenLeave_S0ngSelectName:	jp 0xF7D27F  ; F431A4 (was T_F431A4) -> prom_b 0x7D27F
+; Evidence: slot 0xF431A8 is `jp 0xF7D284`; prom_b 0xF7D284 carries the label
+;           ScreenButton_S0ngSelectName (graded CONTENT).  DERIVATIVE name.
+T_ScreenButton_S0ngSelectName:	jp 0xF7D284  ; F431A8 (was T_F431A8) -> prom_b 0x7D284
+; Evidence: slot 0xF431AC is `jp 0xF7D289`; prom_b 0xF7D289 carries the label
+;           ScreenNull_S0ngSelectName (graded CONTENT).  DERIVATIVE name.
+T_ScreenNull_S0ngSelectName:	jp 0xF7D289  ; F431AC (was T_F431AC) -> prom_b 0x7D289
 T_F431B0:	jp 0xF7D000  ; -> prom_b 0x7D000   x53
 T_F431B4:	jp 0xF7D006  ; -> prom_b 0x7D006   x57
-T_F431B8:	jp 0xF7D003  ; -> prom_b 0x7D003
+; Evidence: slot 0xF431B8 is `jp 0xF7D003`; prom_b 0xF7D003 carries the label
+;           Veneer_Paint_StepRecordTrackClrMeas (graded CONTENT).  DERIVATIVE name.
+T_Veneer_Paint_StepRecordTrackClrMeas:	jp 0xF7D003  ; F431B8 (was T_F431B8) -> prom_b 0x7D003
 T_F431BC:	jp 0xF7D009  ; -> prom_b 0x7D009
 T_F431C0:	jp 0xF7D00C  ; -> prom_b 0x7D00C   x5
 T_F431C4:	jp 0xF7D00F  ; -> prom_b 0x7D00F   x2
@@ -72275,7 +72481,7 @@ Table_WsaSoundRamS0Wsa1:
 ; Called from: T_F43430 (x1)
 ; Touches: (0x207C) (0x2229) (0x2736) (0x2737) (0x2738) (0x2880)  |
 ;          0x000400 0xE80000 0xEC0000
-; Calls:   T_F41600 sub_F49033 sub_F48F19 T_F41234 T_F41230 T_F41238
+; Calls:   T_F41600 sub_F49033 sub_F48F19 T_F41234 T_Link_SendCommandE4 T_Link_SendCommand5_WaitDone
 ;          sub_F48F75 sub_F48F9F sub_F48FD8 T_IndexedTable_GetPtr T_F43454
 ; Evidence: thunk slot T_F43430 holds `jp 0x00F48C1A`, and 0xF48C1A is an
 ;           instruction boundary of this transcription (re-asserted on every
