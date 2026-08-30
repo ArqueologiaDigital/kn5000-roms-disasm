@@ -194,10 +194,15 @@ def readers(primary):
 GIT_READ_RE = re.compile(r'git[^\n]{0,40}show[^\n]{0,40}[:"\']([A-Za-z0-9_/]*%s)')
 
 
-def git_blind(script, primary):
-    txt = open(os.path.join(ROOT, script), encoding="utf-8", errors="replace").read()
+def git_blind_text(txt, primary):
     return bool(re.search(GIT_READ_RE.pattern % re.escape(os.path.basename(primary)),
                           txt))
+
+
+def git_blind(script, primary):
+    return git_blind_text(
+        open(os.path.join(ROOT, script), encoding="utf-8", errors="replace").read(),
+        primary)
 
 
 def citation_index():
@@ -662,12 +667,19 @@ def selftest():
                     "notes/prom_c_header_audit.py") == "VACUOUS",
               "...and an ordinary probe with the same numbers is still VACUOUS")
 
-        # the git-blind detector, both directions
-        check(git_blind("notes/wave7_round8_review_wd3_prom_d.py",
-                        "prom_d/wsa1_prom_d.s"),
-              "git_blind SEES `git show HEAD:prom_d/wsa1_prom_d.s`")
-        check(not git_blind("notes/asm_source.py", "prom_d/wsa1_prom_d.s"),
-              "git_blind does NOT fire on a script that merely names the path")
+        # The git-blind detector, both directions.  ⚠ Tested on SYNTHETIC text,
+        # not on a named file: the first version pinned
+        # notes/wave7_round8_review_wd3_prom_d.py, and went red the moment that
+        # file was migrated off `git show` -- a check that punishes the fix.
+        for form in ('h = subprocess.run(["git", "show", "HEAD:prom_d/wsa1_prom_d.s"])',
+                     'os.popen("cd %s && git show HEAD:prom_d/wsa1_prom_d.s" % ROOT)',
+                     'git show 8ff84e5:prom_d/wsa1_prom_d.s'):
+            check(git_blind_text(form, "prom_d/wsa1_prom_d.s"),
+                  "git_blind SEES %r" % form[:46])
+        for form in ('SRC = image_path(ROOT, "prom_d/wsa1_prom_d.s")',
+                     '# see prom_d/wsa1_prom_d.s for the directory'):
+            check(not git_blind_text(form, "prom_d/wsa1_prom_d.s"),
+                  "git_blind does NOT fire on %r" % form[:46])
     finally:
         for name in os.listdir(base):
             _thaw(os.path.join(base, name))
