@@ -77,6 +77,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_text_at_rev  # noqa: E402  (the image at HEAD)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
 D = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_d.bin"), "rb").read()
 SRC = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read().split("\n")
@@ -324,8 +326,10 @@ def w6_reverted():
     false_claim = ('; 0x2223B, which is directory slot +0x28\'s value, and ends at 0x22A3B,')
     correction = "0x22A3B is not a directory value at all"
     text = "\n".join(SRC)
-    head = subprocess.run(["git", "show", "HEAD:prom_d/wsa1_prom_d.s"], cwd=ROOT,
-                          capture_output=True, text=True).stdout
+    # ⚠ THROUGH asm_source, NOT `git show` ALONE: the split is committed, so
+    # `git show HEAD:prom_d/wsa1_prom_d.s` returns the 494-line header while
+    # SRC is the whole image, and the two sides stop being the same object.
+    head = image_text_at_rev(ROOT, "prom_d/wsa1_prom_d.s", "HEAD")
     dirvals = {U32(s) for s in range(0, 0xC0, 4)}
     check("W6a  0x22A3B really is NOT a directory value", 0x22A3B not in dirvals,
           "next value after 0x2223B is 0x%05X" % min(v for v in dirvals if v > 0x2223B))
@@ -442,12 +446,13 @@ def w7_pool_headers():
 
 def w8_prose():
     say("\n=== W8.  are the +1,572 headers NEW PROSE or removed whitespace? ===\n")
-    diff = subprocess.run(["git", "diff", "-U0", "prom_d/wsa1_prom_d.s"], cwd=ROOT,
+    # ⚠ THE WHOLE IMAGE DIRECTORY.  A diff of the master alone is blind to
+    # every line of prom_d's body, which now lives in three included sources.
+    diff = subprocess.run(["git", "diff", "-U0", "--", "prom_d/"], cwd=ROOT,
                           capture_output=True, text=True).stdout.split("\n")
     add_c = sum(1 for l in diff if l.startswith("+;"))
     del_c = sum(1 for l in diff if l.startswith("-;"))
-    head = subprocess.run(["git", "show", "HEAD:prom_d/wsa1_prom_d.s"], cwd=ROOT,
-                          capture_output=True, text=True).stdout.split("\n")
+    head = image_text_at_rev(ROOT, "prom_d/wsa1_prom_d.s", "HEAD").split("\n")
     ob = sum(1 for l in head if not l.strip())
     nb = sum(1 for l in SRC if not l.strip())
     check("W8a  added comment lines vastly exceed deleted ones", add_c > 20 * del_c,

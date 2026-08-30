@@ -404,7 +404,8 @@ def r7():
 def r8():
     print("\n=== R8.  IS THE HEADER GAIN NEW PROSE? ===\n")
     import subprocess
-    d = subprocess.run(["git", "-C", ROOT, "diff", "--", "prom_d/wsa1_prom_d.s"],
+    # ⚠ the image DIRECTORY: a diff of the master alone cannot see prom_d's body.
+    d = subprocess.run(["git", "-C", ROOT, "diff", "--", "prom_d/"],
                        capture_output=True, text=True).stdout.split("\n")
     add = [l for l in d if l.startswith("+;")]
     rem = [l for l in d if l.startswith("-;")]

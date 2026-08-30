@@ -78,6 +78,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_text_at_rev  # noqa: E402  (the image at HEAD)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
 D = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_d.bin"), "rb").read()
 IMGS = {t: open(os.path.join(ROOT, "original_ROMs", f), "rb").read() for t, f in
@@ -289,7 +291,7 @@ def a4():
     check("A4b  the drum no-carrier/carrier split is the 12/196 the banners state",
           hist_p[0] == 12 and sum(v for k, v in hist_p.items() if k) == 196,
           "%d with no carrier, %d with one" % (hist_p[0], sum(v for k, v in hist_p.items() if k)))
-    head = os.popen("cd %s && git show HEAD:prom_d/wsa1_prom_d.s" % ROOT).read().split("\n")
+    head = image_text_at_rev(ROOT, "prom_d/wsa1_prom_d.s", "HEAD").split("\n")
     bare = set()
     for ln in head:
         m = re.match(r"^(ToneDB_(?:Perc)?MixerDefaultTable)_(\d{3}):$", ln)
@@ -500,7 +502,7 @@ def a6b():
     check("A6b3  the %d non-code citations are window/base bounds, not claimed as code"
           % len(non), set(non) <= {0xF00000, 0xF7FFFF, 0xFFFFFF}, "%s" % [hex(a) for a in non])
     claim = re.compile(r"drum-instrument record (\d+) at file 0x([0-9A-F]+)")
-    head = os.popen("cd %s && git show HEAD:prom_d/wsa1_prom_d.s" % ROOT).read().split("\n")
+    head = image_text_at_rev(ROOT, "prom_d/wsa1_prom_d.s", "HEAD").split("\n")
     added = [ln for ln in set(SRC_NOW) - set(head) if ln.startswith(";")]
     n = wrong = 0
     for ln in SRC_NOW:
@@ -515,14 +517,15 @@ def a6b():
 
 def a7():
     print("\n=== A7.  IS THE GAIN NEW PROSE, OR ROUND 3's WHITESPACE? ===\n")
-    head = os.popen("cd %s && git show HEAD:prom_d/wsa1_prom_d.s" % ROOT).read().split("\n")
+    head = image_text_at_rev(ROOT, "prom_d/wsa1_prom_d.s", "HEAD").split("\n")
     add_c = sum(1 for ln in SRC_NOW if ln.startswith(";"))
     old_c = sum(1 for ln in head if ln.startswith(";"))
     add_ev = sum(1 for ln in SRC_NOW if "Evidence:" in ln)
     old_ev = sum(1 for ln in head if "Evidence:" in ln)
     words = lambda L: sum(1 for x in L if re.search(r"[A-Za-z]+ +[A-Za-z]+ +[A-Za-z]+", x))
     import subprocess
-    d = subprocess.run(["git", "-C", ROOT, "diff", "--", "prom_d/wsa1_prom_d.s"],
+    # ⚠ the image DIRECTORY: a diff of the master alone cannot see prom_d's body.
+    d = subprocess.run(["git", "-C", ROOT, "diff", "--", "prom_d/"],
                        capture_output=True, text=True).stdout.split("\n")
     add = [l for l in d if l.startswith("+;")]
     rem = [l for l in d if l.startswith("-;")]
@@ -545,7 +548,7 @@ def a8():
                 if re.search(r"KN\d|Technics|SX_", w)]
     check("A8a  no promoted name is borrowed from a sibling tree", not borrowed,
           "%s" % borrowed[:5])
-    head = os.popen("cd %s && git show HEAD:prom_d/wsa1_prom_d.s" % ROOT).read().split("\n")
+    head = image_text_at_rev(ROOT, "prom_d/wsa1_prom_d.s", "HEAD").split("\n")
     added = [ln for ln in set(SRC_NOW) - set(head) if ln.startswith(";")]
     kn = [ln for ln in added if re.search(r"KN\s*\d|kn5000|kn7000", ln, re.I)]
     check("A8b  round 8 adds no new cross-tree claim", not kn, "%s" % kn[:3])

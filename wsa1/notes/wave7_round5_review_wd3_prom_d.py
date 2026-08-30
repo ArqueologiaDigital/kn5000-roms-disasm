@@ -41,7 +41,7 @@ import itertools, os, re, struct, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
-from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import image_path, image_text_at_rev  # noqa: E402
 IMG = {k: open(os.path.join(ROOT, "original_ROMs", v), "rb").read() for k, v in
        (("a", "wsa1_prom_a.ic12"), ("b", "wsa1_prom_b.ic13"),
         ("c", "wsa1_prom_c.ic28"), ("d", "wsa1_prom_d.bin"))}
@@ -59,8 +59,11 @@ def check(name, ok, detail=""):
 
 
 def head_of(path):
-    return subprocess.run(["git", "show", "HEAD:" + path], cwd=ROOT,
-                          capture_output=True, text=True).stdout
+    # ⚠ THE IMAGE AT HEAD, not `git show HEAD:<master>` alone.  The split is
+    # committed, so the plain command returns the 494-line header while SRC is
+    # the whole image; the comparison then has an image on one side and a
+    # header on the other and reports 3,663 labels that nobody added.
+    return image_text_at_rev(ROOT, path, "HEAD")
 
 
 # --- R1 ------------------------------------------------------------------
