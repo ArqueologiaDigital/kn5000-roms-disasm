@@ -122,7 +122,7 @@ sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import wave7_documentation_metrics as M                            # noqa: E402
 import prom_b_thunk_table as TT                                    # noqa: E402
 
-SRCA = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+SRCA = image_path(ROOT, "prom_a/wsa1_prom_a.s")   # READ only; SRCB_MASTER is the write path
 # ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
 # it is handed is the whole image: write_part() sees the master's
 # .include lines disappear.  That refusal is correct and is not the fix.
@@ -336,8 +336,8 @@ def show_stale():
     keep, _drop, _rows = proposals()
     bsrc = open(SRCB).read()
     bad = 0
-    for path in (SRCA, SRCB, os.path.join(ROOT, "prom_c", "wsa1_prom_c.s"),
-                 os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")):
+    for path in (SRCA, SRCB, image_path(ROOT, "prom_c/wsa1_prom_c.s"),
+                 image_path(ROOT, "prom_d/wsa1_prom_d.s")):
         refs = collections.Counter(TREF.findall(open(path).read()))
         miss = [k for k in refs if k not in bsrc]
         print("  %-28s %4d distinct T_ spellings referenced, %d not present in prom_b"
@@ -697,8 +697,8 @@ def selftest():
 def show_stale_quiet():
     bsrc = open(SRCB).read()
     bad = 0
-    for path in (SRCA, SRCB, os.path.join(ROOT, "prom_c", "wsa1_prom_c.s"),
-                 os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")):
+    for path in (SRCA, SRCB, image_path(ROOT, "prom_c/wsa1_prom_c.s"),
+                 image_path(ROOT, "prom_d/wsa1_prom_d.s")):
         for k in set(TREF.findall(open(path).read())):
             if k not in bsrc:
                 bad += 1

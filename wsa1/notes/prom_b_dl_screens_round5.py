@@ -351,8 +351,10 @@ def operand_tables(name):
 
 # ------------------------------------------------------- the call-site census
 def code_labels(img):
-    src = open(os.path.join(ROOT, "prom_%s" % img,
-                            "wsa1_prom_%s.s" % img)).read().split("\n")
+    # ⚠ image_path: the computed join spans two lines, which the mechanical
+    # rewriter's single-line pattern cannot see.
+    src = open(image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (img, img))
+               ).read().split("\n")
     order, pend = [], []
     for ln in src:
         m = LAB.match(ln)

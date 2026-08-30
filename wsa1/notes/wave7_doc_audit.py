@@ -577,11 +577,18 @@ def check_targets(quiet):
         for i, l in enumerate(readlines(d), 1):
             m = re.search(r'top span is now `(0x[0-9A-F]{6})-(0x[0-9A-F]{6})`\s*\(([0-9,]+) B\)', l)
             if m and (int(m.group(1), 16), int(m.group(2), 16)) != top:
+                # ⚠ 0xF0D061 IS A HARD-CODED SPAN, and it has since been
+                # converted, so this list is empty and indexing it raised an
+                # IndexError -- INSIDE the message of a finding the audit had
+                # already made.  The whole audit died there, on a run that had
+                # found something.  A detail that is gone is now said to be gone.
+                rest = [x for x in sp["b"] if x[0] == 0xF0D061]
+                tail = ("; the quoted range was split in two, the second piece "
+                        "being 0x%06X-0x%06X" % rest[0] if rest else
+                        "; the quoted range no longer exists as a span at all")
                 finding("%s:%d" % (d, i), l.strip()[:110],
-                        "the largest prom_b span is 0x%06X-0x%06X, %s B; the quoted range has "
-                        "since been split in two (the second piece is 0x%06X-0x%06X)"
-                        % (top[0], top[1], f"{top[1]-top[0]:,}",
-                           *[x for x in sp["b"] if x[0] == 0xF0D061][0]))
+                        "the largest prom_b span is 0x%06X-0x%06X, %s B%s"
+                        % (top[0], top[1], f"{top[1]-top[0]:,}", tail))
                 n += 1
     # 3. the 838-byte table at 0xFF047F: what is it called in the tree?
     m = re.search(r'^([A-Za-z_][A-Za-z0-9_]*):\n\t\.byte[^;]*;\s*FF047F', src("a"), re.M)
