@@ -189,7 +189,13 @@
 	_mem \pfx, \addr
 	.byte 0x58 + (\r)
 .endm
-.macro m_pushw pfx, addr		; pushw (addr)			op 0x06
+; ⚠ RENAMED 2026-08-30, and the old name was wrong.  This macro was called
+; `m_pushw`, but mnemonic_c0[0x06] is `rld A,(mem)` -- `pushw (mem)` is
+; mnemonic_d0[0x04], which is what `m_push MW16, ...` already emits, and that is
+; how every `pushw` row in prom_b is spelled.  Nothing ever used the old name:
+; prom_a has 0 instances and prom_b has 0.  Found by reading dasm900.cpp's tables
+; while correcting the carry-flag group below.
+.macro m_rld_am pfx, addr		; rld A,(addr)			op 0x06
 	_mem \pfx, \addr
 	.byte 0x06
 .endm
@@ -534,19 +540,33 @@
 	_mem \pfx, \addr
 	.byte 0x19, (\dst) & 0xFF, ((\dst) >> 8) & 0xFF
 .endm
-.macro m_ldw_m16m pfx, addr, dst	; ldw (dst16),(addr)		op 0x1B
-	_mem \pfx, \addr
-	.byte 0x1B, (\dst) & 0xFF, ((\dst) >> 8) & 0xFF
-.endm
+; ⚠ THERE IS NO SEPARATE `ldw` FORM HERE.  0x19 is `ld` under a byte-size prefix
+; and `ldw` under a word-size one -- mnemonic_c0[0x19] against mnemonic_d0[0x19]
+; -- so m_ld_m16m spells both.  A m_ldw_m16m on op 0x1B was drafted and removed:
+; 0x1B is M_DB, an undefined byte, in every one of these tables.
 
-; --- the CARRY-FLAG group, ops 0x28-0x2C, in both operand tables --------------
-; `ldcf A,(addr)` and its four siblings take the bit number from A rather than
+; --- the CARRY-FLAG group, ops 0x28-0x2C ------------------------------------
+; `andcf A,(addr)` and its four siblings take the bit number from A rather than
 ; from the operation byte, which is why they have no bit-number argument.
-.macro m_ldcf_a pfx, addr		; ldcf  A,(addr)		op 0x28
+;
+; ⚠ CORRECTED before any of them shipped.  This block first read
+;   0x28 ldcf / 0x29 andcf / 0x2B orcf, which is WRONG.  mnemonic_f0 and
+;   mnemonic_c8/d8/e8 (dasm900.cpp) both read
+;       0x28 ANDCF   0x29 ORCF   0x2A XORCF   0x2B LDCF   0x2C STCF
+;   -- so three of the five names were transposed.  Nothing was emitted under a
+;   wrong name, because notes/promb_macro_rewrite.py refuses a row whose
+;   mnemonic disagrees with the macro it picked, and it duly refused the two
+;   `ldcf A,RH3` rows at 0xF6880E and 0xF68825 rather than calling them `orcf`.
+;   That refusal is what sent this pass to MAME's tables.
+;
+; ⚠ These five exist ONLY in the destination and register-direct tables.
+;   mnemonic_c0/d0/e0 hold M_DB at 0x28-0x2C -- an undefined byte -- so an
+;   `MB*`/`MW*`/`ML*` prefix must never be used with them.
+.macro m_andcf_a pfx, addr		; andcf A,(addr)		op 0x28
 	_mem \pfx, \addr
 	.byte 0x28
 .endm
-.macro m_andcf_a pfx, addr		; andcf A,(addr)		op 0x29
+.macro m_orcf_a pfx, addr		; orcf  A,(addr)		op 0x29
 	_mem \pfx, \addr
 	.byte 0x29
 .endm
@@ -554,7 +574,7 @@
 	_mem \pfx, \addr
 	.byte 0x2A
 .endm
-.macro m_orcf_a pfx, addr		; orcf  A,(addr)		op 0x2B
+.macro m_ldcf_a pfx, addr		; ldcf  A,(addr)		op 0x2B
 	_mem \pfx, \addr
 	.byte 0x2B
 .endm
@@ -717,16 +737,16 @@
 .macro m_rd_pop rp			; pop  r			op 0x05
 	.byte \rp, 0x05
 .endm
-.macro m_rd_ldcf_a rp			; ldcf  A,r			op 0x28
+.macro m_rd_andcf_a rp			; andcf A,r			op 0x28
 	.byte \rp, 0x28
 .endm
-.macro m_rd_andcf_a rp			; andcf A,r			op 0x29
+.macro m_rd_orcf_a rp			; orcf  A,r			op 0x29
 	.byte \rp, 0x29
 .endm
 .macro m_rd_xorcf_a rp			; xorcf A,r			op 0x2A
 	.byte \rp, 0x2A
 .endm
-.macro m_rd_orcf_a rp			; orcf  A,r			op 0x2B
+.macro m_rd_ldcf_a rp			; ldcf  A,r			op 0x2B
 	.byte \rp, 0x2B
 .endm
 .macro m_rd_stcf_a rp			; stcf  A,r			op 0x2C
@@ -748,16 +768,16 @@
 .macro m_rd_popx rp, reg		; pop  <reg>			op 0x05
 	.byte \rp, \reg, 0x05
 .endm
-.macro m_rd_ldcf_ax rp, reg		; ldcf  A,<reg>			op 0x28
+.macro m_rd_andcf_ax rp, reg		; andcf A,<reg>			op 0x28
 	.byte \rp, \reg, 0x28
 .endm
-.macro m_rd_andcf_ax rp, reg		; andcf A,<reg>			op 0x29
+.macro m_rd_orcf_ax rp, reg		; orcf  A,<reg>			op 0x29
 	.byte \rp, \reg, 0x29
 .endm
 .macro m_rd_xorcf_ax rp, reg		; xorcf A,<reg>			op 0x2A
 	.byte \rp, \reg, 0x2A
 .endm
-.macro m_rd_orcf_ax rp, reg		; orcf  A,<reg>			op 0x2B
+.macro m_rd_ldcf_ax rp, reg		; ldcf  A,<reg>			op 0x2B
 	.byte \rp, \reg, 0x2B
 .endm
 .macro m_rd_stcf_ax rp, reg		; stcf  A,<reg>			op 0x2C

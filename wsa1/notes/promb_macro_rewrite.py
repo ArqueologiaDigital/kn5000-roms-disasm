@@ -39,6 +39,7 @@ WHY IT IS SAFE TO RUN
 RUN
     python3 notes/promb_macro_rewrite.py --census          # what is convertible, by macro
     python3 notes/promb_macro_rewrite.py --left            # what is NOT, by shape, with the reason
+    python3 notes/promb_macro_rewrite.py --left --detail   # ... every remaining row, by address
     python3 notes/promb_macro_rewrite.py --apply --only m_cp_mi8,m_cp_mi16
     python3 notes/promb_macro_rewrite.py --selftest        # the invariants
 
@@ -114,7 +115,7 @@ def _i16(v):
 # than one mnemonic (m_push is `push` at byte size and `pushw` at word size).
 MIRROR = {
     'm_push':      lambda p, a: _mem(p, a) + [0x04],
-    'm_pushw':     lambda p, a: _mem(p, a) + [0x06],
+    'm_rld_am':    lambda p, a: _mem(p, a) + [0x06],
     'm_pop':       lambda p, a: _mem(p, a) + [0x04],
     'm_popw':      lambda p, a: _mem(p, a) + [0x06],
     'm_ld_rm':     lambda p, a, r: _mem(p, a) + [0x20 + r],
@@ -168,12 +169,11 @@ MIRROR = {
     'm_ldc_reg_cr': lambda rp, cr: [rp, 0x2F, cr],
     # --- added by this pass; see NEW_MACROS below for the argument they carry
     'm_ld_m16m':   lambda p, a, d: _mem(p, a) + [0x19] + _i16(d),
-    'm_ldw_m16m':  lambda p, a, d: _mem(p, a) + [0x1B] + _i16(d),
     'm_stcf_a':    lambda p, a: _mem(p, a) + [0x2C],
-    'm_ldcf_a':    lambda p, a: _mem(p, a) + [0x28],
-    'm_andcf_a':   lambda p, a: _mem(p, a) + [0x29],
+    'm_andcf_a':   lambda p, a: _mem(p, a) + [0x28],
+    'm_orcf_a':    lambda p, a: _mem(p, a) + [0x29],
     'm_xorcf_a':   lambda p, a: _mem(p, a) + [0x2A],
-    'm_orcf_a':    lambda p, a: _mem(p, a) + [0x2B],
+    'm_ldcf_a':    lambda p, a: _mem(p, a) + [0x2B],
     'm_jp_cc':     lambda p, a, c: _mem(p, a) + [0xD0 + (c & 15)],
     'm_call_cc':   lambda p, a, c: _mem(p, a) + [0xE0 + (c & 15)],
     'm_ldir':      lambda p: [p, 0x11],
@@ -189,10 +189,10 @@ MIRROR = {
     # --- register-direct: one prefix byte (RB/RW/RL + index)
     'm_rd_push':      lambda p: [p, 0x04],
     'm_rd_pop':       lambda p: [p, 0x05],
-    'm_rd_ldcf_a':    lambda p: [p, 0x28],
-    'm_rd_andcf_a':   lambda p: [p, 0x29],
+    'm_rd_andcf_a':   lambda p: [p, 0x28],
+    'm_rd_orcf_a':    lambda p: [p, 0x29],
     'm_rd_xorcf_a':   lambda p: [p, 0x2A],
-    'm_rd_orcf_a':    lambda p: [p, 0x2B],
+    'm_rd_ldcf_a':    lambda p: [p, 0x2B],
     'm_rd_stcf_a':    lambda p: [p, 0x2C],
     'm_rd_add_rr':    lambda p, r: [p, 0x80 + r],
     'm_rd_ld_rr':     lambda p, r: [p, 0x88 + r],
@@ -200,10 +200,10 @@ MIRROR = {
     # --- register-direct: prefix plus a REGISTER-ADDRESS byte (any bank)
     'm_rd_pushx':     lambda p, g: [p, g, 0x04],
     'm_rd_popx':      lambda p, g: [p, g, 0x05],
-    'm_rd_ldcf_ax':   lambda p, g: [p, g, 0x28],
-    'm_rd_andcf_ax':  lambda p, g: [p, g, 0x29],
+    'm_rd_andcf_ax':  lambda p, g: [p, g, 0x28],
+    'm_rd_orcf_ax':   lambda p, g: [p, g, 0x29],
     'm_rd_xorcf_ax':  lambda p, g: [p, g, 0x2A],
-    'm_rd_orcf_ax':   lambda p, g: [p, g, 0x2B],
+    'm_rd_ldcf_ax':   lambda p, g: [p, g, 0x2B],
     'm_rd_stcf_ax':   lambda p, g: [p, g, 0x2C],
     'm_rd_add_rrx':   lambda p, g, r: [p, g, 0x80 + r],
     'm_rd_ld_rrx':    lambda p, g, r: [p, g, 0x88 + r],
@@ -245,7 +245,7 @@ MIRROR = {
 # entry with no macro behind it would fail the build, but only on the batch that
 # first used it, which is late.
 NEW_MACROS = ['m_sub_mi8', 'm_sub_mi16', 'm_and_mi16', 'm_or_mi16', 'm_xor_mi16',
-              'm_and_mr', 'm_xor_mr', 'm_or_mr', 'm_ld_m16m', 'm_ldw_m16m',
+              'm_and_mr', 'm_xor_mr', 'm_or_mr', 'm_ld_m16m',
               'm_stcf_a', 'm_ldcf_a', 'm_andcf_a', 'm_xorcf_a', 'm_orcf_a',
               'm_jp_cc', 'm_call_cc', 'm_ldir', 'm_ldirw',
               'm_rlc_m', 'm_rrc_m', 'm_rl_m', 'm_rr_m',
@@ -358,11 +358,6 @@ def is_dst_family(op):
 SRC_OPS = {
     0x04: ('m_push', {'B': 'push', 'W': 'pushw'}, 'none', 'M'),
     0x19: ('m_ld_m16m', {'B': 'ld', 'W': 'ldw'}, 'imm16', 'A16,M'),
-    0x28: ('m_ldcf_a', {'B': 'ldcf'}, 'none', 'A,M'),
-    0x29: ('m_andcf_a', {'B': 'andcf'}, 'none', 'A,M'),
-    0x2A: ('m_xorcf_a', {'B': 'xorcf'}, 'none', 'A,M'),
-    0x2B: ('m_orcf_a', {'B': 'orcf'}, 'none', 'A,M'),
-    0x2C: ('m_stcf_a', {'B': 'stcf'}, 'none', 'A,M'),
     0x38: ('m_add_mi', 'add', 'imm', 'M,I'),
     0x3A: ('m_sub_mi', 'sub', 'imm', 'M,I'),
     0x3C: ('m_and_mi', 'and', 'imm', 'M,I'),
@@ -407,10 +402,10 @@ DST_OPS = {
     0x06: ('m_popw', 'popw', 'none', 'M'),
     0x14: ('m_ld_mm16', 'ld', 'i16', 'M,A16'),
     0x16: ('m_ldw_mm16', 'ldw', 'i16', 'M,A16'),
-    0x28: ('m_ldcf_a', 'ldcf', 'none', 'A,M'),
-    0x29: ('m_andcf_a', 'andcf', 'none', 'A,M'),
+    0x28: ('m_andcf_a', 'andcf', 'none', 'A,M'),
+    0x29: ('m_orcf_a', 'orcf', 'none', 'A,M'),
     0x2A: ('m_xorcf_a', 'xorcf', 'none', 'A,M'),
-    0x2B: ('m_orcf_a', 'orcf', 'none', 'A,M'),
+    0x2B: ('m_ldcf_a', 'ldcf', 'none', 'A,M'),
     0x2C: ('m_stcf_a', 'stcf', 'none', 'A,M'),
 }
 DST_REG_OPS = {
@@ -471,8 +466,8 @@ RD_PFX = {'B': 0xC8, 'W': 0xD8, 'L': 0xE8}
 RD_PFX_X = {0xC7: 'B', 0xD7: 'W', 0xE7: 'L'}
 RD_NAME = {'B': 'RB', 'W': 'RW', 'L': 'RL'}
 RD_OPS = {0x04: ('m_rd_push', 'push', None), 0x05: ('m_rd_pop', 'pop', None),
-          0x28: ('m_rd_ldcf_a', 'ldcf', None), 0x29: ('m_rd_andcf_a', 'andcf', None),
-          0x2A: ('m_rd_xorcf_a', 'xorcf', None), 0x2B: ('m_rd_orcf_a', 'orcf', None),
+          0x28: ('m_rd_andcf_a', 'andcf', None), 0x29: ('m_rd_orcf_a', 'orcf', None),
+          0x2A: ('m_rd_xorcf_a', 'xorcf', None), 0x2B: ('m_rd_ldcf_a', 'ldcf', None),
           0x2C: ('m_rd_stcf_a', 'stcf', None)}
 RD_REG_OPS = {0x80: ('m_rd_add_rr', 'add', 'R,r'), 0x88: ('m_rd_ld_rr', 'ld', 'R,r'),
               0x98: ('m_rd_ld_rr2', 'ld', 'r,R')}
@@ -742,6 +737,15 @@ def main():
         print("\n  %6d  LEFT AS A BLOB" % (total - len(p)))
         return 0
     if '--left' in args:
+        if '--detail' in args:
+            # ★ SMALL ENOUGH TO ENUMERATE.  Every row this tool will not touch,
+            # with its address, its decode and the reason -- so "left as a blob"
+            # is a list a reader can audit, not a number to be trusted.
+            for i, b, addr, text in rows(lines):
+                _l, why = recognise(b, text)
+                if _l is None:
+                    print("  %s  %-34s %s" % (addr, text, why))
+            return 0
         for k, v in refused.most_common(60):
             print("  %6d  %s" % (v, k))
         return 0

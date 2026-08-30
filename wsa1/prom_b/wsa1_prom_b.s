@@ -123456,7 +123456,7 @@ sub_F687ED:
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F68806  ld RL3,A
 	m_rd_ld_rr2x RBX, 0x3D, r1	; F68809  ld RH3,A
 	ld	a, c	; F6880C  ld A,C
-	.byte 0xC7, 0x3D, 0x2B	; F6880E  ldcf A,RH3   [llvm-mc cannot encode this]
+	m_rd_ldcf_ax RBX, 0x3D	; F6880E  ldcf A,RH3
 	ccf	; F68811  ccf
 	m_rd_stcf_ax RBX, 0x3D	; F68812  stcf A,RH3
 	m_rd_ld_rrx RBX, 0x3C, r1	; F68815  ld A,RL3
@@ -123465,7 +123465,7 @@ sub_F687ED:
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F6881D  ld RL3,A
 	m_rd_ld_rr2x RBX, 0x3D, r1	; F68820  ld RH3,A
 	ld	a, c	; F68823  ld A,C
-	.byte 0xC7, 0x3D, 0x2B	; F68825  ldcf A,RH3   [llvm-mc cannot encode this]
+	m_rd_ldcf_ax RBX, 0x3D	; F68825  ldcf A,RH3
 	ccf	; F68828  ccf
 	m_rd_stcf_ax RBX, 0x3D	; F68829  stcf A,RH3
 	m_rd_ld_rrx RBX, 0x3C, r1	; F6882C  ld A,RL3
