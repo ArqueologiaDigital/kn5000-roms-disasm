@@ -169,3 +169,37 @@ separates "any two TLCS-900 schedulers look alike" from a real result.
 maincpu is split across 15 subject directories / 156 files. The monoliths are the SUB-CPUs:
 `v142/subcpu/kn5000_subprogram_v142.s` (1.43 MB) and `subcpu/boot/kn5000_subcpu_boot.s` (1.29 MB).
 That is A4's target, and both are territorially complete (0 .incbin), so they can be split now.
+
+---
+
+## LANE ASSIGNMENT (2026-08-30) -- file ownership, to prevent collisions
+
+| lane | owns | job |
+|---|---|---|
+| A2 | `kernel/` (read), KN5000 tree (READ-ONLY) | structural three-way kernel test + null over ~3,874 named v142 routines |
+| A4 | `prom_c/` | split the sub-CPU into per-subject files; identify P7Stream*/Dev10C/Dev104 |
+| A5 | `prom_d/` | split the tone database into KN5000's three names; settle P5 |
+| B2 | KN5000 `v10/maincpu/` | drive STRONG-with-evidence (176 bytes) to zero, converting or REFUSING |
+| B3 | `prom_a/`, `prom_b/`, `include/` | join the maincpu; retire prom_b's 7,310 llvm-mc blobs with prom_a's macros |
+
+★ B3's second half is the largest legibility win available: prom_b has **7,310** `.byte` lines marked
+"llvm-mc cannot encode this"; prom_a has **0**, because it built a macro set (`m_cp_mr`, `m_ld_rm`,
+`m_bit`, `m_lda32`, ...) for exactly those forms. prom_c has 181, prom_d 0. Every substitution is
+byte-gate verifiable.
+
+★ The 4 prom_a/prom_b label collisions are `IndexedTable_GetPtr`, `LCD_ScreenRedraw_Begin`,
+`LCD_ScreenRedraw_End`, `end`. Two were checked by hand and are **byte-identical routines duplicated
+at two addresses in the same CPU's address space** (IndexedTable_GetPtr: prom_a 0xFB77D8 / prom_b
+0xF55321, identical bytes, both referencing RAM 0x60F018). Candidate for the A1 shared-source
+treatment. The "each bank carries its own copy to avoid a bank switch" explanation is a GUESS and is
+labelled as one.
+
+⚠ TRAP FOR ANY LANE CHANGING A LINE SHAPE: `notes/reachability.py` parses each image with a
+per-image regex and the images do NOT share a line shape (its own comment, ~line 271). Changing
+prom_b's spelling without updating that tool silently empties its input and makes the coverage
+number a lie. Re-run its `--selftest`.
+
+Checked and disproven this session: the soft-float runtime (`Float32_*`/`Double_*`) is sub-CPU-ONLY
+(prom_a/prom_b/prom_d have zero), so it is NOT a second shared-source candidate beside the kernel.
+prom_d is correctly excluded from the walk: data-only, 0 `.incbin`, no vector table, base
+0x00F00000 established two independent ways (`notes/prom_d_base_checks.py`, 12 checks).
