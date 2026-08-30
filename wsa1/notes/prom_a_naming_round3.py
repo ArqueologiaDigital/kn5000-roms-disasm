@@ -88,11 +88,13 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 A_BASE, B_BASE, C_BASE = 0xF80000, 0xF00000, 0xF80000
-SRC = {"a": os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"),
-       "b": os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"),
-       "c": os.path.join(ROOT, "prom_c", "wsa1_prom_c.s"),
-       "d": os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")}
+SRC = {"a": image_path(ROOT, "prom_a/wsa1_prom_a.s"),
+       "b": image_path(ROOT, "prom_b/wsa1_prom_b.s"),
+       "c": image_path(ROOT, "prom_c/wsa1_prom_c.s"),
+       "d": image_path(ROOT, "prom_d/wsa1_prom_d.s")}
 ARGV = list(sys.argv)
 
 

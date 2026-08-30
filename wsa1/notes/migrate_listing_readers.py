@@ -155,10 +155,19 @@ def rewrite_text(text):
     if new == text:
         return text
     if IMPORT_LINE not in new:
-        ins = ""
-        if not SYSPATH_RE.search(new):
-            ins += 'sys.path.insert(0, os.path.join(ROOT, "notes"))\n'
-        ins += IMPORT_LINE + "  # noqa: E402  (the image, not the master)\n"
+        # ⚠⚠ THE IMPORT GOES IMMEDIATELY AFTER `ROOT =`, AND SO DOES ITS OWN
+        # sys.path.insert -- unconditionally, even when the file already has one
+        # further down.  Two earlier versions got this wrong in ways a COMPILE
+        # CANNOT SEE, and both shipped into eight files before being caught:
+        #   * no sys.path.insert, because the file had one lower down
+        #     -> ImportError the moment the file was run;
+        #   * anchored just after that lower sys.path.insert, which in these
+        #     files sits BELOW the first use of SRC -> NameError.
+        # ROOT is defined before any site that mentions ROOT, by construction,
+        # so this is the one anchor that is always early enough.  A duplicated
+        # `sys.path.insert(0, <notes>)` is harmless; a missing one is not.
+        ins = ('sys.path.insert(0, os.path.join(ROOT, "notes"))\n'
+               + IMPORT_LINE + "  # noqa: E402  (the image, not the master)\n")
         m = ROOT_ASSIGN.search(new)
         if not m:
             raise AssertionError("no `ROOT =` line to anchor the import to")
@@ -257,6 +266,36 @@ def apply(only=None, quiet=False):
     return 0
 
 
+def smoke(timeout=90):
+    """Run every migrated script once and look for the failure a COMPILE MISSES.
+
+    ⚠ THIS EXISTS BECAUSE A CLEAN COMPILE PROVED NOTHING.  Two versions of the
+    import placement above compiled perfectly and died at run time -- once with
+    ImportError, once with NameError -- in eight files each.
+    """
+    bad = []
+    scripts = [r for r in committed_py()
+               if r not in EXCLUDE
+               and "image_path(ROOT," in open(os.path.join(ROOT, r),
+                                              encoding="utf-8",
+                                              errors="replace").read()]
+    for rel in scripts:
+        try:
+            r = subprocess.run([sys.executable, rel], cwd=ROOT, timeout=timeout,
+                               stdin=subprocess.DEVNULL, capture_output=True,
+                               text=True)
+            out = r.stdout + r.stderr
+        except subprocess.TimeoutExpired:
+            continue                        # slow is not broken
+        m = re.search(r'(ImportError|NameError|ModuleNotFoundError)[^\n]*', out)
+        if m:
+            bad.append((rel, m.group(0)[:90]))
+    for rel, why in bad:
+        print("  BROKEN  %-52s %s" % (rel, why))
+    print("\n%d migrated script(s) run; %d broken" % (len(scripts), len(bad)))
+    return 1 if bad else 0
+
+
 def listing(only=None):
     n = {"REWRITE": 0, "REFUSED": 0, "SKIP": 0}
     for rel, rows in survey(only):
@@ -298,6 +337,26 @@ def selftest():
     solo = rewrite_text(reader)
     check(re.search(r'^import sys$', solo, re.M) is not None,
           "...and a file with no sys import gets one")
+
+    # ★ ORDER, not just presence.  An import above the sys.path.insert that
+    #   resolves it, or below the first use, compiles clean and dies at run time.
+    later = ('import os\nimport sys\n'
+             'ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n'
+             'SRC = os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")\n'
+             'sys.path.insert(0, os.path.join(ROOT, "notes"))\n'
+             'from asm_source import image_lines  # noqa: E402\n')
+    out2 = rewrite_text(later)
+    check(out2.index("sys.path.insert") < out2.index(IMPORT_LINE),
+          "the new import lands after a sys.path.insert that makes it work")
+    check(out2.index(IMPORT_LINE) < out2.index('image_path(ROOT, "prom_d'),
+          "...and BEFORE the first use, even when the file's own path setup "
+          "sits below it")
+    # ★ and it must RUN, not merely compile.  Executed against the real tree,
+    #   from notes/, which is where these scripts live.
+    ns = {"__file__": os.path.join(ROOT, "notes", "_selftest_probe.py")}
+    exec(compile(out2, "<rewritten>", "exec"), ns)
+    check(str(ns.get("SRC", "")).endswith(".s") and os.path.isfile(ns["SRC"]),
+          "...and the rewritten header RUNS and resolves to a real file")
     check("os.path.join(ROOT, \"prom_c\", \"wsa1_prom_c.s\")" not in out,
           "...and the old spelling is gone")
     compile(out, "<rewritten>", "exec")
@@ -349,12 +408,16 @@ if __name__ == "__main__":
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--only", default=None)
+    ap.add_argument("--smoke", action="store_true",
+                    help="run every migrated script and look for ImportError")
     ap.add_argument("--shim", action="store_true",
                     help="move the seven prom_c_image.py callers to asm_source")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     if a.selftest:
         sys.exit(selftest())
+    if a.smoke:
+        sys.exit(smoke())
     if a.shim:
         sys.exit(shim())
     sys.exit(apply(a.only) if a.apply else listing(a.only))

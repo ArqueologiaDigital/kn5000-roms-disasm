@@ -250,6 +250,8 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 
 
 def _load(name, path):
@@ -754,7 +756,7 @@ def pointer_fields():
 # see 0 labels and every census below would report a tree that had lost its
 # payload -- which is exactly how the split announced itself elsewhere.
 # asm_source.image_lines resolves the includes the way llvm-mc does.
-SRC = os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")
+SRC = image_path(ROOT, "prom_d/wsa1_prom_d.s")
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_lines, image_text   # noqa: E402
 

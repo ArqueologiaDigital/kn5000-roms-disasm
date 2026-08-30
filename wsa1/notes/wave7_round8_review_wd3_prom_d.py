@@ -77,11 +77,13 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 D = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_d.bin"), "rb").read()
 IMGS = {t: open(os.path.join(ROOT, "original_ROMs", f), "rb").read() for t, f in
         (("a", "wsa1_prom_a.ic12"), ("b", "wsa1_prom_b.ic13"),
          ("c", "wsa1_prom_c.ic28"), ("d", "wsa1_prom_d.bin"))}
-SRC_NOW = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")).read().split("\n")
+SRC_NOW = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read().split("\n")
 
 OK = FAIL = 0
 FINDINGS = []

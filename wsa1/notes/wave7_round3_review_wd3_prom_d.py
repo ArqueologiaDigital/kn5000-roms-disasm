@@ -44,6 +44,8 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 R = lambda n: open(os.path.join(ROOT, "original_ROMs", n), "rb").read()
 D, C, A = R("wsa1_prom_d.bin"), R("wsa1_prom_c.ic28"), R("wsa1_prom_a.ic12")
 u16 = lambda o: struct.unpack_from("<H", D, o)[0]
@@ -63,7 +65,7 @@ def check(label, cond, detail=""):
         FAILED.append(label)
 
 
-SRC = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")).read().split("\n")
+SRC = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read().split("\n")
 ADDR = re.compile(r';\s([0-9A-F]{6})\s\s')
 
 

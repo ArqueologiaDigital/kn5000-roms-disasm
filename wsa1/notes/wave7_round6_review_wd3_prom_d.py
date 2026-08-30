@@ -61,6 +61,8 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 IMG = {"prom_a": "wsa1_prom_a.ic12", "prom_b": "wsa1_prom_b.ic13",
        "prom_c": "wsa1_prom_c.ic28", "prom_d": "wsa1_prom_d.bin"}
 D = open(os.path.join(ROOT, "original_ROMs", IMG["prom_d"]), "rb").read()
@@ -224,7 +226,7 @@ def r3():
     for i, b, nm in TAILS:
         perc[nm].append((i, b))
     base = {"ToneDB_MixerDefaultTable": S(0x18), "ToneDB_PercMixerDefaultTable": S(0x20)}
-    src = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")).read().split("\n")
+    src = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read().split("\n")
     labs = []
     for ln in src:
         m = re.match(r"^(ToneDB_(?:Perc)?MixerDefaultTable)_(\d{3})_SameAs_([A-Za-z0-9_]+):", ln)
@@ -327,7 +329,7 @@ def r5():
     check("R5c  the two shifts differ ONLY in the count",
           C[0xFA7351 - PROM_C_BASE:][:2] == C[0xFA735F - PROM_C_BASE:][:2],
           "d9 ee 07 vs d9 ee 08 -- so a byte table read with a word load loses the high byte")
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read().split("\n")
+    src = open(image_path(ROOT, "prom_c/wsa1_prom_c.s")).read().split("\n")
     calls = [ln for ln in src if "calr" in ln and "0xFA72E9" in ln]
     check("R5d  sub_FA72E9 has exactly ONE call site in the whole tree", len(calls) == 1,
           "%s" % (calls[0].split(";")[-1].strip() if calls else "none"))
@@ -369,7 +371,7 @@ def r6():
             "inherited from round 1-2, NOT this round's -- and the block banner says so "
             "outright: 'Readers: NONE FOUND ... NOTHING in the WSA1 firmware confirms it'. "
             "All 293 new labels hang off it.")
-    src = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")).read()
+    src = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read()
     names = set(re.findall(r"_SameAs_([A-Za-z0-9]+?)(?:_WaveSel\d)?:", src))
     have = set(b[3] for b in BLOCKS) | set(t2[2] for t2 in TAILS)
     have |= set(stem(x) for x in have)
@@ -381,7 +383,7 @@ def r6():
 # --- R7 --------------------------------------------------------------------
 def r7():
     print("\n=== R7.  THE CITATIONS ===\n")
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read().split("\n")
+    src = open(image_path(ROOT, "prom_c/wsa1_prom_c.s")).read().split("\n")
     addrs = set()
     for ln in src:
         m = re.search(r";\s*([0-9A-F]{6})\s\s", ln)
@@ -455,7 +457,7 @@ def r9():
             "measured = 18 LABEL NAMES ABSENT FROM THE CATALOGUE; "
             "catalogue-wide the sentence's own reading gives %d, and at those 18 "
             "indices it gives %d.  Neither is 18." % (reading_a, reading_b))
-    src = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")).read()
+    src = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read()
     finding("R9d  and it ships %d times in prom_d/wsa1_prom_d.s"
             % src.count("names something no"),
             "1 block banner + %d per-record headers" % (src.count("names something no") - 1))
@@ -464,7 +466,7 @@ def r9():
 # --- R10: the typed numbers ------------------------------------------------
 def r10():
     print("\n=== R10.  TYPED NUMBERS THAT CONTRADICT DERIVED ONES ===\n")
-    s = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")).read()
+    s = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read()
     finding("R10a  '.s: The 84 marks ... 85 marks placed at random' -- one sentence, "
             "two counts",
             "84 is derived from the image (R4a); 85 is typed.  Also in "

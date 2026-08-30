@@ -40,11 +40,13 @@ HOW TO RUN
 import itertools, os, re, struct, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 IMG = {k: open(os.path.join(ROOT, "original_ROMs", v), "rb").read() for k, v in
        (("a", "wsa1_prom_a.ic12"), ("b", "wsa1_prom_b.ic13"),
         ("c", "wsa1_prom_c.ic28"), ("d", "wsa1_prom_d.bin"))}
 D = IMG["d"]
-SRC = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")).read()
+SRC = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read()
 FAILED = []
 RAN = []
 
@@ -211,7 +213,7 @@ check("R8c' ⚠ so the SpecialSound label is taken from 1 of 128 entries",
 
 # --- R9 ------------------------------------------------------------------
 print("\n=== R9.  the base-address search, re-run over prom_c's assembly ===\n")
-CS = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read().split("\n")
+CS = open(image_path(ROOT, "prom_c/wsa1_prom_c.s")).read().split("\n")
 DIRECTIVES = {"byte", "short", "long", "ascii", "asciz", "space", "align", "fill", "word"}
 
 

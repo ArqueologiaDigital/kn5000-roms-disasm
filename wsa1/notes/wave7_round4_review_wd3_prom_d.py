@@ -76,8 +76,10 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 D = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_d.bin"), "rb").read()
-SRC = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")).read().split("\n")
+SRC = open(image_path(ROOT, "prom_d/wsa1_prom_d.s")).read().split("\n")
 KN7000 = ("/home/fsanches/compartilhado/technics_roms/roms/kn7000/kn7000_table.rom")
 
 NFAIL = [0]
