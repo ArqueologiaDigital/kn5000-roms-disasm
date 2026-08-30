@@ -3,7 +3,14 @@
 Written at 99% context. Everything needed to continue is here or in a committed script; nothing
 load-bearing lives only in a transcript.
 
-## Status: PLAN APPROVED, execution started, A1 not yet written
+## Status: A1 DONE (c3b3623), B1 tool ported (kn5000 32ef2db), A2 OPEN
+
+★ A1 SHIPPED: kernel/kernel.s + kernel_maincpu.inc + kernel_subcpu.inc. ONE source assembles to
+2,180 bytes of prom_a AND 2,180 of prom_c, both byte-identical to the EPROMs -- which is the proof
+the sharing is real. 21 equates, no .if/.else. notes/kernel_join_probe.py --selftest is 28 checks.
+⚠ Headers 8,216 -> 8,190 is DE-DUPLICATION (46 labels were defined twice, one per image); distinct
+label names 20,979 -> 20,979, 0 lost.
+NEXT: A2 (structural three-way test), A4 (split both sub-CPUs), B2 (convert KN5000 maincpu).
 
 `notes/PLAN-join-and-split.md` is the approved plan (§0–§10). This file is the operational state.
 
@@ -34,7 +41,10 @@ load-bearing lives only in a transcript.
 −2 ×9, −596 ×8, −544 ×5, −556 ×5. Three kinds:
 
     ld XSP,0x0060eb80  vs  ld XSP,0x0000fa00    STACK TOP -- different RAM maps
-    ld (0xbf),WA       vs  ld (0x91),WA         an SFR ADDRESS, delta -0x2E
+    ld (0xbf),WA       vs  ld (0x91),WA         a LOW-RAM CELL, delta -0x2E
+      ⚠ CORRECTED after A1: this said "an SFR ADDRESS". It is not. Both linker scripts put
+        internal I/O at 0x000000-0x00007F, so 0xBF and 0x91 are LOW RAM, and the shipped
+        kernel_*.inc files say "cell". Named KERNEL_CURRENT_TASK from headers already in both trees.
     ld HL,0x0330       vs  ld HL,0x0124         a SIZING CONSTANT
 
 ★ **DESIGN: symbolic `.equ` per CPU, NOT `.if/.else` wrapped round code.** The body then stays
@@ -97,6 +107,11 @@ So the KN5000 coverage pass gates only the **maincpu** split. All sub-CPU work c
 `notes/kernel_three_way.py`: 0 kernel routines found in any of 41 KN5000 images, **but only 5 were
 long enough (≥24 B) to count and 32 were too short.** The instrument is sound — negative control
 absent from all 41, positive control (the known shared run at `0xFDE32B`) FOUND.
+★ **A1 SHARPENED THIS.** The instrument was repaired (extent() wanted hex bytes prom_c never
+wrote), so 23 routines are now long enough to count instead of 5 -- and it still finds **0
+byte-identical matches in all 41 KN5000 images**. But A1 proved two processors running the SAME
+kernel differ on **81 of 941 slots**, so byte-identity was always the wrong instrument and a third
+processor would differ at least that much.
 **Redo it** against `prom_c_kernel_map.py`'s real pair extents, with STRUCTURAL matching (same
 mnemonic sequence, different operands) — because §A1 shows two WSA1 CPUs already differ by operands,
 so a third processor would differ at least that much.
