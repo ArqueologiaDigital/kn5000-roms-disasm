@@ -60,6 +60,23 @@ SIZE = 0x80000
 CPU1 = ("prom_a", "prom_b")
 CPU2 = ("prom_c",)
 
+# ★★ SEED STRENGTH, and it is the difference between code and painted data.
+# A DIRECTORY slot is `jp imm24`: its target is an entry point, full stop. A
+# BRANCH in decoded code is an edge the CPU takes. A VECTOR is entered by
+# hardware. Those are STRONG.
+# An IMMEDIATE that lands in an image, or an entry of a framed `.long` table, is
+# a POINTER -- and a pointer is as likely to name a TABLE as a routine. Those are
+# WEAK, and walking from them paints data as code:
+#   * prom_a: a splice built on weak seeds framed 701 bytes of handler pointer
+#     tables and parameter descriptors as instructions. THE BYTE GATE PASSED. It
+#     took three independent witnesses to catch it.
+#   * prom_b: of 10,314 bytes converted on the combined figure, 8,819 were caption
+#     blocks and coordinate arrays that a `.long` happened to name. A seed landing
+#     in text paints everything up to the first 0x0E byte.
+# So the tool now reports BOTH numbers and the strong one is the one to convert on.
+STRONG = ("vector", "directory", "branch")
+WEAK = ("immediate", "pointer_table")
+
 LINE = re.compile(r'^\s*([0-9a-f]{6}):\s+((?:[0-9a-f]{2} )+)\s*(.*)$')
 FLOW_END = re.compile(r'^\s*(ret|reti|retd|jp\s|jr\s+0x|halt|swi)', re.I)
 BRANCH = re.compile(r'\b(?:jr|jp|call|calr)\b[^;]*?0x([0-9a-f]{6})', re.I)
@@ -95,28 +112,37 @@ import json as _json
 RESULT_CACHE = os.path.join(ROOT, "notes", ".reachability-cache.json")
 
 
-def _fingerprint():
+def _fingerprint(tag=None):
+    """PER IMAGE. ⚠ The first version hashed all three .s files together, so a run
+    that computed prom_a, then had another lane splice prom_b, then stored, left a
+    STALE prom_a under a fingerprint that still validated. analyse() stores as it
+    goes, so that window is real and a lane hit it. Each image is now keyed on its
+    OWN source plus this tool, and an image whose key does not match is re-walked."""
     h = hashlib.sha1()
-    for _t, s, _f, _b in IMAGES:
-        h.update(open(os.path.join(ROOT, s), "rb").read())
+    for t_, s, _f, _b in IMAGES:
+        if tag is None or t_ == tag:
+            h.update(open(os.path.join(ROOT, s), "rb").read())
     h.update(open(os.path.abspath(__file__), "rb").read())
     return h.hexdigest()
 
 
 def _cache_load():
     try:
-        c = _json.load(open(RESULT_CACHE))
-        return c["result"] if c.get("fingerprint") == _fingerprint() else None
+        return _json.load(open(RESULT_CACHE))
     except Exception:
-        return None
+        return {}
 
 
-def _cache_store(result):
+def _cache_store(all_c):
     try:
-        _json.dump({"fingerprint": _fingerprint(), "result": result},
-                   open(RESULT_CACHE, "w"))
+        _json.dump(all_c, open(RESULT_CACHE, "w"))
     except Exception:
         pass
+
+
+def _cache_get(tag):
+    e = _cache_load().get(tag)
+    return e if e and e.get("fingerprint") == _fingerprint(tag) else None
 
 
 # ----------------------------------------------------------------- decoding
@@ -204,7 +230,14 @@ def walk(tag, start, seen, cpu, queue):
 
 
 # ------------------------------------------------------------------- seeds
-SRC_LINE = re.compile(r'^\t(\S.*?)\s*;\s*([0-9A-F]{6})\s+((?:[0-9a-f]{2} )*[0-9a-f]{2})(\s|$)')
+# ⚠ THE IMAGES DO NOT SHARE A LINE SHAPE, and assuming they did emptied three of
+# the five seed classes for prom_b. prom_a writes `<text> ; ADDR hh hh hh`;
+# prom_b writes `<llvm-mc text> ; ADDR <mame text>`, where the llvm operand is in
+# DECIMAL and useless for a seed scan -- the MAME text after the address is the
+# one to read. This regex takes the address and EVERYTHING after it, and callers
+# scan that tail. Measured: the old pattern matched 8,473 of prom_b's 78,022
+# addressed lines; this one matches all of them.
+SRC_LINE = re.compile(r'^\t(\S.*?)\s*;\s*([0-9A-F]{6})\s+(.*)$')
 LONG_DIR = re.compile(r'^\t\.long\s+0x([0-9A-Fa-f]{8})')
 INCBIN = re.compile(r'^\t\.incbin "original_ROMs/(\S+?)", (0x[0-9A-Fa-f]+), (0x[0-9A-Fa-f]+)\s*$')
 
@@ -260,7 +293,7 @@ def seeds(tag, cpu):
         m = SRC_LINE.match(ln)
         if not m:
             continue
-        text = m.group(1)
+        text = m.group(1) + " " + m.group(3)
         for mm in BRANCH.finditer(text):
             t = int(mm.group(1), 16)
             if owner(t, cpu):
@@ -293,40 +326,55 @@ def owner_word(d, base, addr):
 _MEM = {}
 
 
-def analyse(tag, cpu):
-    """Cached: see the fingerprint note above. `seen` is returned as a set for the
-    caller, but persisted as per-span counts, which is all any caller needs."""
-    if tag in _MEM:
-        return _MEM[tag]
-    cached = _cache_load()
-    if cached and tag in cached:
-        c = cached[tag]
-        r = {"seeds": c["seeds"], "reached": c["reached"], "incbin": c["incbin"],
-             "reach_in_incbin": c["reach_in_incbin"],
-             "spans": [tuple(s) for s in c["spans"]],
-             "per_span": {tuple(k.split(",")): v for k, v in c["per_span"].items()},
-             "seen": None}
-        _MEM[tag] = r
-        return r
-    proven, spans = proven_and_incbin(tag)
-    sd = seeds(tag, cpu)
-    seen = set()
-    queue = []
-    for cls in sd:
-        queue.extend(sorted(sd[cls]))
-    queue.extend(sorted(proven))          # every proven instruction is reachable
-    done = set()
+def _walk_from(tag, cpu, sd, classes, proven=()):
+    seen, queue, done = set(), [], set()
+    for cls in classes:
+        queue.extend(sorted(sd.get(cls, ())))
+    queue.extend(sorted(proven))
     while queue:
         a = queue.pop()
         if a in done:
             continue
         done.add(a)
         walk(tag, a, seen, cpu, queue)
+    return seen
+
+
+def analyse(tag, cpu):
+    """Cached: see the fingerprint note above. `seen` is returned as a set for the
+    caller, but persisted as per-span counts, which is all any caller needs."""
+    if tag in _MEM:
+        return _MEM[tag]
+    c = _cache_get(tag)
+    if c:
+        r = {"seeds": c["seeds"], "reached": c["reached"], "incbin": c["incbin"],
+             "reach_in_incbin": c["reach_in_incbin"],
+             "spans": [tuple(s) for s in c["spans"]],
+             # ⚠ ints, not strings. The first version rehydrated these as
+             # tuple(k.split(",")) -- a tuple of STRINGS -- which matched no
+             # (lo, hi) lookup, so --targets printed an empty list and OVERWROTE
+             # the tracked work list with []. Caught by a verifier, not by me.
+             "per_span": {(int(k.split(",")[0]), int(k.split(",")[1])): v
+                          for k, v in c["per_span"].items()},
+             "per_span_strong": {(int(k.split(",")[0]), int(k.split(",")[1])): v
+                                 for k, v in c.get("per_span_strong", {}).items()},
+             "reach_strong": c.get("reach_strong", 0),
+             "seen": None}
+        _MEM[tag] = r
+        return r
+    proven, spans = proven_and_incbin(tag)
+    sd = seeds(tag, cpu)
+    # STRONG first -- these are the bytes worth converting.
+    strong = _walk_from(tag, cpu, sd, STRONG, proven)
+    # then everything, so the difference is attributable to the weak classes.
+    seen = _walk_from(tag, cpu, sd, list(sd), proven)
     incbin_bytes = sum(hi - lo for lo, hi in spans)
-    per_span = {}
+    per_span, per_span_strong = {}, {}
     for lo, hi in spans:
         per_span[(lo, hi)] = sum(1 for x in range(lo, hi) if x in seen)
+        per_span_strong[(lo, hi)] = sum(1 for x in range(lo, hi) if x in strong)
     reach_in_incbin = sum(per_span.values())
+    reach_strong = sum(per_span_strong.values())
     r = {
         "seeds": {k: len(v) for k, v in sd.items()},
         "reached": len(seen),
@@ -334,14 +382,19 @@ def analyse(tag, cpu):
         "reach_in_incbin": reach_in_incbin,
         "spans": spans,
         "per_span": per_span,
+        "per_span_strong": per_span_strong,
+        "reach_strong": reach_strong,
         "seen": seen,
     }
     _MEM[tag] = r
-    all_c = _cache_load() or {}
-    all_c[tag] = {"seeds": r["seeds"], "reached": r["reached"], "incbin": r["incbin"],
+    all_c = _cache_load()
+    all_c[tag] = {"fingerprint": _fingerprint(tag),
+                  "seeds": r["seeds"], "reached": r["reached"], "incbin": r["incbin"],
                   "reach_in_incbin": r["reach_in_incbin"],
                   "spans": [list(s) for s in spans],
-                  "per_span": {"%d,%d" % k: v for k, v in per_span.items()}}
+                  "reach_strong": r["reach_strong"],
+                  "per_span": {"%d,%d" % k: v for k, v in per_span.items()},
+                  "per_span_strong": {"%d,%d" % k: v for k, v in per_span_strong.items()}}
     _cache_store(all_c)
     return r
 
@@ -365,21 +418,27 @@ def targets():
         for lo, hi in r["spans"]:
             n = r["per_span"].get((lo, hi), 0)
             if n:
-                rows.append((n, tag, lo, hi, hi - lo))
+                rows.append((r["per_span_strong"].get((lo, hi), 0), n, tag, lo, hi, hi - lo))
     rows.sort(reverse=True)
-    total = sum(r[0] for r in rows)
-    print("%-8s %-21s %8s %9s %9s %7s" %
-          ("image", "span", "size", "reachable", "cumul", "of goal"))
+    total_s = sum(x[0] for x in rows)
+    total_a = sum(x[1] for x in rows)
+    print("%-8s %-21s %8s %8s %8s %9s %7s" %
+          ("image", "span", "size", "STRONG", "any", "cumul(S)", "of goal"))
     run = 0
-    for n, tag, lo, hi, size in rows:
-        run += n
-        print("%-8s 0x%06X-0x%06X %8s %9s %9s %6.1f%%"
-              % (tag, lo, hi, format(size, ","), format(n, ","),
-                 format(run, ","), 100.0 * run / total))
-    print("\nTOTAL reachable-and-unconverted: %s bytes in %d spans."
-          % (format(total, ","), len(rows)))
-    json.dump([{"image": t_, "lo": l, "hi": h, "size": s, "reachable": n}
-               for n, t_, l, h, s in rows], open(CACHE, "w"), indent=1)
+    for s, n, tag, lo, hi, size in rows:
+        run += s
+        print("%-8s 0x%06X-0x%06X %8s %8s %8s %9s %6.1f%%"
+              % (tag, lo, hi, format(size, ","), format(s, ","), format(n, ","),
+                 format(run, ","), 100.0 * run / total_s if total_s else 0.0))
+    print("\nTOTAL reachable-and-unconverted: STRONG %s bytes, ANY %s, in %d spans."
+          % (format(total_s, ","), format(total_a, ","), len(rows)))
+    print("★ CONVERT ON THE **STRONG** COLUMN. `any` includes bytes reached only from a")
+    print("  32-bit immediate or a framed .long entry, and a pointer is as likely to name")
+    print("  a TABLE as a routine -- walking from one paints data as code. Round 1 framed")
+    print("  701 bytes of pointer tables as instructions that way and the byte gate PASSED.")
+    json.dump([{"image": t_, "lo": l, "hi": h, "size": s,
+                "reachable_strong": st, "reachable_any": n}
+               for st, n, t_, l, h, s in rows], open(CACHE, "w"), indent=1)
     print("Work list cached to %s" % os.path.relpath(CACHE, ROOT))
 
 
