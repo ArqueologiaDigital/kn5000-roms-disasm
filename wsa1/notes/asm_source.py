@@ -49,6 +49,7 @@ scripts/analysis/assert_byte_identical.py and it stays the only certificate.
 """
 import os
 import re
+import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -182,6 +183,76 @@ def image_path(root, primary):
             fh.write(image_text(root, primary))
         os.replace(tmp, cache)             # atomic; concurrent lanes are safe
     return cache
+
+
+# ---------------------------------------------------------------------------
+# THE SAME IMAGE, AT A GIT REVISION
+# ---------------------------------------------------------------------------
+# ★ THE ONE PLACE A LAYOUT FLIP CANNOT REACH.  Several review probes compare the
+# working tree with `git show HEAD:prom_X/wsa1_prom_X.s`.  Since the split IS
+# committed, that command returns the 494-line or 2,517-line MASTER while the
+# working-tree side, once migrated, returns the whole image -- so the comparison
+# has an image on one side and a header on the other and reports thousands of
+# added labels that nobody added.  Before the migration BOTH sides were headers,
+# which compared nothing with nothing.  Neither is a measurement.
+#
+#     old = image_text_at_rev(ROOT, "prom_d/wsa1_prom_d.s", "HEAD")
+#
+# resolves the includes THROUGH GIT, so both sides are the same object.
+
+
+def _git_show(root, rev, rel):
+    r = subprocess.run(["git", "show", "%s:%s" % (rev, rel)], cwd=root,
+                       capture_output=True)
+    if r.returncode:
+        raise FileNotFoundError(
+            "%s:%s does not exist -- returning a short listing instead of "
+            "raising is the bug this module prevents (%s)"
+            % (rev, rel, r.stderr.decode("utf-8", "replace").strip()))
+    return r.stdout.decode("utf-8", "replace")
+
+
+def image_lines_at_rev(root, primary, rev="HEAD"):
+    """The image's lines as they stood at `rev`, `.include`s resolved via git.
+
+    Same rules as image_lines(): a missing include RAISES, a content `.s`
+    included twice RAISES, a definitions `.inc` is expanded once.
+    """
+    seen = set()
+
+    def emit(rel):
+        if rel in seen:
+            if rel.endswith(".s"):
+                raise AssertionError(
+                    "%s is included twice at %s; in an image laid out by "
+                    "emission order that would duplicate its bytes" % (rel, rev))
+            return []
+        seen.add(rel)
+        out = []
+        for ln in _git_show(root, rev, rel).split("\n"):
+            m = INCLUDE_RE.match(ln)
+            if not m:
+                out.append(ln)
+                continue
+            spec = m.group(1)
+            here = os.path.normpath(os.path.join(os.path.dirname(rel), spec))
+            for cand in (spec, here.replace(os.sep, "/")):
+                try:
+                    out.extend(emit(cand))
+                    break
+                except FileNotFoundError:
+                    continue
+            else:
+                raise FileNotFoundError(
+                    "%s: .include %r resolves to nothing at %s"
+                    % (rel, spec, rev))
+        return out
+
+    return emit(primary)
+
+
+def image_text_at_rev(root, primary, rev="HEAD"):
+    return "\n".join(image_lines_at_rev(root, primary, rev))
 
 
 # ---------------------------------------------------------------------------
@@ -341,6 +412,21 @@ def _selftest():
                   "image is split" % tag,
                   os.path.realpath(pth) != os.path.realpath(
                       os.path.join(ROOT, primary)))
+
+    # ---- the same image, at a git revision -------------------------------
+    for tag, primary in IMAGES:
+        if not os.path.isfile(os.path.join(ROOT, primary)):
+            continue
+        at = image_lines_at_rev(ROOT, primary, "HEAD")
+        check("%-7s no .include survives the git-side expansion either" % tag,
+              not any(INCLUDE_RE.match(l) for l in at))
+        check("%-7s the git side is an IMAGE, not the master alone" % tag,
+              len(at) >= len(image_lines(ROOT, primary, expand=False)))
+    try:
+        image_lines_at_rev(ROOT, "prom_c/no_such_file.s", "HEAD")
+        check("a missing file at a revision RAISES", False)
+    except FileNotFoundError:
+        check("a missing file at a revision RAISES", True)
 
     # ---- the write path, and the accident it exists to refuse ------------
     with tempfile.TemporaryDirectory() as td:
