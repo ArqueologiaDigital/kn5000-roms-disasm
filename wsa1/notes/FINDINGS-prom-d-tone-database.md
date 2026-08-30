@@ -156,7 +156,7 @@ the source of every "KN5000 label" below.
 | `+0x04` / `+0x6C` | `+0x04` names the bank map, `+0x6C` a second bank map | `+0x6C` = 0x100 (bank map), `+0x04` = 0x180 (tone-number banks, exactly 0x80 above it) | the same **pair** of tables, but the two slots name opposite ends of it, and prom_d has only one copy |
 | `+0x3C` / `+0x40` | unused | a third 64-record array of 43-byte wave-select records | prom_d uses two slots the KN5000 leaves empty |
 | `+0x88` | the scalar **338** (a DSP1 stream-index bias) | `0x125` | **unresolved.** 0x125 is both a plausible scalar (293) and a valid file offset. 293 exceeds the 274-entry offset table, so the KN5000's reading does not carry over. Nothing here decides it. |
-| `+0xA8` | unused | 0x0FC8, eight 128-byte records | no name to transplant, and none is invented |
+| `+0xA8` | unused | 0x0FC8, eight 128-byte records | ★ round 6: **ToneDB_OctaveShiftByProgram**, named by its reader (§10) |
 | `+0xB0` | `PercName_Pack` (packed 10-char names) | a 713-byte 4-element tone record named `     Clear      ` | different content, so the KN5000 name is **not** used |
 | `+0xB4` | unused | one 150-byte drum-instrument record named `Silent       ` | byte-identical to drum-instrument record 0 |
 | `+0xE0`, `+0xEA`, `+0xEC`, `+0xEE`, `+0xF0`, `+0xF2` | 28, 11, 15, 58, 11, 15 | 24, **43**, 14, **150**, 43, 14 | same *slots*, different values. Two of prom_d's are independently confirmed by its own geometry: 43 is the wave-select record size and 150 is the drum-instrument record size |
@@ -205,7 +205,7 @@ the source of every "KN5000 label" below.
 | `+0x94` | `0x4F8EA` | 2576 | **ToneDB_PercSourceNameList2** — 161 × 16 | same |
 | `+0x98` | `0x50AFA` | 14 (+1) | ToneDB_PercList2_Footer — count **161** | same |
 | `+0x9C`/`+0xA0`/`+0xA4` | | — | aliases of `+0x24`/`+0x28`/`+0x2C` | identical aliasing |
-| `+0xA8` | `0x00FC8` | 1024 | **Unk_0FC8_Table** — 8 × 128, purpose unknown | *unused* |
+| `+0xA8` | `0x00FC8` | 1024 | **ToneDB_OctaveShiftByProgram** — 8 × 128 (⚠ was `Unk_0FC8_Table`, "purpose unknown", until round 6) | *unused* |
 | `+0xAC` | `0x1C58A` | 124 | **ToneDB_DefaultLayerParams** — 81 + 43 | same |
 | `+0xB0` | `0x1C606` | 713 | tone-record template `Clear` | `PercName_Pack` (**different**) |
 | `+0xB4` | `0x1C8CF` | 150 | drum-instrument template `Silent` | *unused* |
@@ -492,15 +492,30 @@ because they pin which array each map can possibly address:
   renamed from `ToneDB_DescCurve_0..5` to names derived from their own run
   lengths (`Step12`, `Step6`, `Step4`, `Step3`, `Step4And2`, `Step1`);
   `notes/prom_d_understanding_round5.py` Q3.
-* **`Unk_0FC8_Table` at `+0xA8`.** Eight 128-byte records, almost entirely zero:
-  the only non-zero bytes sit at record-relative +0x0E, +0x58..+0x5F, +0x7A and
-  +0x7E, values 0xF4 (and 0x0C at +0x7A in five of the eight), repeating on a
-  0x80 grid in all eight records. The KN5000 leaves this slot unused, so there is
-  no name to transplant and none is invented. ★ Round 5 adds the two facts a
-  per-record label cannot carry: the eight records are only **three** distinct
-  byte strings ({0,4,5,6,7}, {1,3}, {2}), and **0 of the 1,024 bytes are
-  printable**, so the round-4 "the record contains its own name" mechanism has
-  nothing to work with here.
+* **`ToneDB_OctaveShiftByProgram` at `+0xA8`** (was `Unk_0FC8_Table`). Eight
+  128-byte records, almost entirely zero: the only non-zero bytes sit at
+  record-relative +0x0E, +0x58..+0x5F, +0x7A and +0x7E, values 0xF4 (and 0x0C at
+  +0x7A in five of the eight), repeating on a 0x80 grid in all eight records. The
+  KN5000 leaves this slot unused, so there is no name to transplant. ★ Round 5
+  adds the two facts a per-record label could not then carry: the eight records
+  are only **three** distinct byte strings ({0,4,5,6,7}, {1,3}, {2}), and **0 of
+  the 1,024 bytes are printable**, so the round-4 "the record contains its own
+  name" mechanism has nothing to work with here.
+  ⚠ **SUPERSEDED IN WAVE 7 ROUND 6 — this block is not "purpose unknown" and it
+  was never nameless, only unnamed by its CONTENT.** It is named by its READER.
+  `sub_FA72E9`, its only reader, is called from one place, `Voice_ComputePitch`,
+  and its other arm reads a 16-entry table at prom_c `0xFDF22A` holding
+  −96,−84,…,+84 — every entry a multiple of 12, entry 8 = 0, an octave select.
+  Both arms return the value `sll 8`, so the two encodings are the same, and this
+  table holds only 0xF4 (−12) and 0x0C (+12). The two indices are a **bank** (via
+  `ToneDB_BankMap` at `+0x6C`, then `sll 0x07` = ×128 = the record size = the
+  program map's row width) and a **program** (0..127, which is the only range that
+  fits a 128-byte record — a tone index runs 0..273). And the 84 marked cells fall
+  in only **11 columns of 128** where 85 random marks would fill about 62, eight
+  of them one consecutive run: programs 88‑95, the drawbar/organ family in all
+  eight banks, plus 14 (Tubular Bells / Gamelan / Digi Bells), 126 (Timpani) and
+  122 (Agogo, the only +12 in the image). The three distinct byte strings differ
+  only at programs 14 and 122. `notes/prom_d_understanding_round6.py` Q4, Q8c.
 * **Directory slot `+0x88` = 0x125.** Scalar or offset — see §1.
 * **One stray byte.** The `+0x98` footer is 14 bytes (`3 + 11`, consistent with
   the other four), and then there is a single 0x08 at 0x50B08 before the erased
@@ -534,7 +549,7 @@ none?** `notes/prom_d_understanding_round5.py` (65 checks) answers it:
 |---|---|---|
 | 594 | 43-byte wave-select records (`+0x18`, `+0x20`, `+0x3C`) | **no name field.** Widest printable run in any record: 4, 4, 5 bytes, against the 13 of the narrowest name field this image uses. Stay framed |
 | 10 | program-map rows (128 LE16 each) | no name field, but **2 of the 10 are named by what they select** |
-| 8 | `Unk_0FC8` records | no name field; 0 printable bytes of 1,024 |
+| 8 | `Unk_0FC8` records | no name field; 0 printable bytes of 1,024. ⚠ round 6 names all 8 from their READER |
 | 6 | descriptor curves | no name field, but **each states its own shape** |
 | 3 | `+0x70` pool objects | the round-4 refusal, re-measured and still refused |
 | 1 | `ToneRec_05D_161` | ★ a **metric artefact**: this record IS named from its own bytes, `"    16' & 1'    "`, and the camel form of an organ registration is all digits. NOT renamed — the camel rule is round 4's and an independent reviewer re-derived all 778 names with it at 0 mismatches |
@@ -643,3 +658,127 @@ here instead.
   `.s` is silently reverted the next time it runs — which is exactly how a
   corrected false claim came back verbatim in wave 7 round 4. Every prose change
   to prom_d goes in the generator, and a claim is better DERIVED than asserted.
+
+
+---
+
+## 10. Wave 7 round 6 — the 614 classified, and 301 of them named after all
+
+Round 5 left prom_d at **83.2% content / 614 framed** and said of 594 of the 614
+that they sit on 43-byte wave-select records with no name field. That is still
+true. It was the wrong question.
+
+`notes/prom_d_understanding_round6.py` (38 checks) gives **every one of the 614 a
+verdict**, and the verdicts partition the set:
+
+| verdict | labels |
+|---|---|
+| `NAMED-BY-CONTENT` | 293 |
+| `NAMED-BY-READER` | 8 |
+| `NAMELESS-NO-TWIN` | 167 |
+| `NAMELESS-AMBIGUOUS` | 70 |
+| `NAMELESS-NUMBER-IS-THE-MEANING` | 64 |
+| `NAMELESS-UNDIFFERENTIATED` | 8 |
+| `NAMELESS-REFUSED` | 3 |
+| `METRIC-ARTEFACT` | 1 |
+
+**301 nameable, 313 not**, and the 313 is the answer this pass was asked for
+rather than a shortfall. prom_d reads **91.5% content / 313 framed** after it.
+
+### The mechanism, and why round 5 got a zero from it
+
+Round 5 asked whether a wave-select record's 43 bytes occur anywhere else in the
+image and got **0 of 322**, comparing all 43 bytes. Round 5 had *also* just
+proved that byte **+0x0B is a preset number prom_c writes over** (`0xFBC7D6`). A
+copy may therefore differ there and nowhere else. Excluding that one field — not
+a free parameter, but the field the firmware is known to rewrite — turns the zero
+into **167**:
+
+* **167 of the 322** records at `+0x18` equal a **named tone record's own
+  wave-select block** in 42 of 43 bytes;
+* the differing byte is **+0x0B in 167 of 167** — no record of the array differs
+  from a tone block in exactly one byte at any other position, at any of the 43;
+* the tone side carries +0x0B = 0 ("no preset") in **214 of 215** blocks and the
+  array's copies carry 1..7 — round 5's semantics, read off the data;
+* **0 of 3,000** random 43-byte windows match under the same rule (both sets
+  excluded from the null corpus);
+* and excluding any **other** single byte instead scores **0**.
+
+**152** of the 167 resolve to exactly one tone name and are labelled
+`ToneDB_MixerDefaultTable_<n>_SameAs_<Tone>_WaveSel<j>`. The other 15 match
+several differently-named tones and keep the number.
+
+### A second, independent witness — and what selects the array
+
+The 1,024-entry map at slot `+0x0C` is the **only** map in the image whose range
+reaches **321**, this array's last index. 911 of its entries land on a twinned
+record, and in **637 (69.9%)** the program map's tone at the same position is
+exactly the tone the byte test assigned. The same map shuffled scores 1.0–1.3%;
+the other twelve 1,024-entry maps score 0.0–3.3%. ⚠ 69.9% is not 100% (one map
+entry cannot name all four records of a four-element tone) and **no label is
+changed on it** — the `+0x0C` banner is not renamed.
+
+### The drum side, and round 5's contradiction resolved the right way
+
+**196 of the 208** records at `+0x20` are byte-identical to the wave-select tail
+of a named drum-instrument record — round 5's proposal (b), which it refused
+because proposal (a), the positional transfer from the 208-row catalogue at
+`+0x8C`, disagreed. ★ Round 6 says **why** they disagree: the catalogue is a
+**different list**. Row 1 is `Square Wave` where the identical bytes come from
+`Square Click`; rows 7 and 8 are `PowerBassDrmL`/`PowerBassDrmR` where array
+record 7 matches nothing and record 8 matches `PowerBassDrm1/2`. Over the 141
+resolvable rows the catalogue carries the same name at the same index **61**
+times, carries it at a *different* index **62** times, and **18** times names
+something no drum record has; the alignment is **not monotone**, so it is not a
+drift either. (`catalogue_alignment()`; the generator quotes that function, not
+this paragraph.) The
+melodic side, where no competing catalogue exists at all, is what tells the two
+proposals apart. **The positional transfer stays REFUSED**; 141 records take the
+byte identity (106 outright, 35 where the carriers differ only by a trailing
+digit and the shared stem is one name).
+
+⚠ **What a `_SameAs_` label claims is exactly what was measured**: these bytes and
+that record's bytes are the same. It does **not** say the record belongs to that
+tone or instrument — nothing reaches either array with an index whose meaning is
+known.
+
+### Mechanisms measured and REJECTED (so a later round does not re-invent them)
+
+* **Renaming `ToneDB_WaveSelTailPresets_063` to `..._Preset63`.** It would move 64
+  labels from framed to content on the goal metric and add nothing: the number
+  already *is* the preset number (round 5 Q7) and the word is already in the block
+  label. A metric that moves when you rewrite a suffix is measuring the suffix.
+* **Naming the 64 presets from a tone block they match.** Measured with the same
+  rule: their minimum distance to any of the 451 tone wave-select blocks is **6**,
+  and none is at 0 or 1. A preset supplies bytes 13..42 only, so it has no head to
+  match a whole record with. The mechanism genuinely does not reach them.
+
+### Refusals kept
+
+`+0x70`'s three pool objects (0 of 3 on the round-4 index chain), the 161 perc
+catalogue transfer (maps agree 988/1024), and the positional catalogue transfer
+above. None was weakened to raise a number.
+
+### The base address
+
+Round 5's search for an **absolute** prom_d address in prom_c found exactly one
+literal in `0x00F00000-0x00F7FFFF`, the base itself. Round 6 adds the **converse**,
+which is positive evidence rather than an absence: prom_c holds **46**
+`add <Xrr>,(0x00D7ED|0x00D7F1)` instructions over 6 distinct 4 KiB pages
+(`0xFA7322` … `0xFC29A5`), every one adding the base to a value computed from
+prom_d's own words. And §10's octave table is a **content-level** tie of the kind
+the round-6 brief asked for: `0xFA7332` reads slot `+0xA8`, `0xFA7351` scales by
+128, `0xFA7358` adds the base — and the bytes at the resulting **file offsets** are
+a coherent octave table keyed by the program map at slot `+0x04`. If the directory
+held addresses, that add would double the base and the cells would land in the
+erased tail. ⚠ **`ORIGIN` in `prom_d/prom_d.ld` is NOT changed** and nothing here
+proposes changing it; the limit is unchanged too — a pointer hidden in the
+undecoded byte-code stream at `0xFCD0F7-0xFDD2AA` would be seen by neither search.
+
+### Script added by this pass
+
+* **`notes/prom_d_understanding_round6.py`** — *"Are the 614 remaining framed
+  labels nameable at all, and which?"* 38 checks, ⚠ **run it before quoting any
+  number in §10**. Exports `wavesel_twins()`, `wavesel_labels()`, `octave_rows()`,
+  `oct_sibling()` and `tone_wavesel_blocks()` to the generator, which **refuses to
+  emit** if the twin census or the octave table's shape moved.

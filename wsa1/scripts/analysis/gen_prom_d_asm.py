@@ -170,6 +170,51 @@ if PERC_OVERLAP != _R5.AUDITED_PERC:
     sys.exit("REFUSING TO EMIT: the slot +0x20 / drum-instrument overlap is now %s; "
              "audited as %s.  Re-audit with notes/prom_d_understanding_round5.py."
              % (PERC_OVERLAP, _R5.AUDITED_PERC))
+# ---------------------------------------------------------------------------
+# ★ WAVE 7 ROUND 6.  notes/prom_d_understanding_round6.py classifies ALL 614 of
+# the labels round 5 left framed, and finds that 301 of them CAN be named after
+# all -- by a mechanism round 5 ran and got a zero from.  Round 5 asked whether a
+# wave-select record's 43 bytes occur anywhere else in the image and got 0 of 322,
+# comparing all 43 bytes.  Round 5 had ALSO just proved that byte +0x0B is a
+# preset number prom_c WRITES OVER.  Excluding that one field turns the zero into
+# 167 records that are otherwise byte-identical to a NAMED tone record's own
+# wave-select block -- and the difference is at +0x0B in 167 of 167, at no other
+# position in any record, with 0 of 3,000 random windows matching.
+# The same relation gives the +0x20 array 196 twins among the drum-instrument
+# records, and prom_c's sub_FA72E9 names the +0xA8 table outright.
+# This emitter refuses to run if any of the three shapes moved.
+# ---------------------------------------------------------------------------
+_spec6 = _ilu.spec_from_file_location(
+    "prom_d_understanding_round6",
+    os.path.join(ROOT, "notes", "prom_d_understanding_round6.py"))
+_R6 = _ilu.module_from_spec(_spec6)
+_saved_argv, sys.argv = sys.argv, ["prom_d_understanding_round6", "--quiet"]
+try:
+    _spec6.loader.exec_module(_R6)
+finally:
+    sys.argv = _saved_argv
+for _slot, _aud in _R6.AUDITED_TWINS.items():
+    _got = _R6._twin_shape(_slot)
+    if _got != _aud:
+        sys.exit("REFUSING TO EMIT: the wave-select twin census at slot +0x%02X is now "
+                 "%s (records, twins, nameable); audited as %s.  Re-audit with "
+                 "notes/prom_d_understanding_round6.py." % (_slot, _got, _aud))
+if _R6._octave_shape() != _R6.AUDITED_OCTAVE:
+    sys.exit("REFUSING TO EMIT: the +0xA8 octave table is now %s (rows, marked cells, "
+             "values); audited as %s.  Re-audit with "
+             "notes/prom_d_understanding_round6.py Q4."
+             % (_R6._octave_shape(), _R6.AUDITED_OCTAVE))
+TWIN = {_s: _R6.wavesel_twins(_s) for _s in (0x18, 0x20)}
+TWIN_LABEL = {_s: _R6.wavesel_labels(_s) for _s in (0x18, 0x20)}
+OCTAVE_ROWS = _R6.octave_rows()
+ALIGN = _R6.catalogue_alignment()
+if ALIGN != _R6.AUDITED_ALIGNMENT:
+    sys.exit("REFUSING TO EMIT: the +0x8C catalogue alignment is now %s; audited as "
+             "%s.  Re-audit with notes/prom_d_understanding_round6.py Q3e."
+             % (ALIGN, _R6.AUDITED_ALIGNMENT))
+ROUND6_CHECKS = _R6.NCHECK[0]
+
+
 PRESET_IDX = _R5.wavesel_preset_index()
 if PRESET_IDX != _R5.AUDITED_SELFIDX:
     sys.exit("REFUSING TO EMIT: the +0x3C array's self-index shape is now %s; audited "
@@ -476,6 +521,84 @@ def WAVESEL_GAP(slot):
             "     slot +0x20 is different -- see its own banner -- and that",
             "     difference is what makes this zero informative.)",
         ]
+    if slot in (0x18, 0x20):
+        # ★★ ROUND 6.  The heading above says "WHY EVERY RECORD BELOW IS A NUMBER"
+        # and for this array that is no longer true of every record.  The paragraph
+        # is kept, because its measurements are still correct AS MEASURED, and it is
+        # CORRECTED here rather than deleted -- the tree's rule is that a superseded
+        # claim and the evidence that supersedes it live side by side.
+        _lab, _tw = TWIN_LABEL[slot], TWIN[slot]
+        _n = len(_tw)
+        _twinned = sum(1 for v in _tw.values() if v)
+        lines += [
+            "",
+            "  3. ★★ CORRECTED IN ROUND 6 -- %d OF THESE %d RECORDS DO HAVE A NAME,"
+            % (len(_lab), _n),
+            "     and point 2 above is why it was missed.  That test asked whether a",
+            "     record's 43 bytes occur ELSEWHERE IN THE IMAGE and compared all 43.",
+            "     Round 5 had just proved that byte +0x0B is a preset number prom_c",
+            "     WRITES OVER (0xFBC7D6).  A copy of a record may therefore differ",
+            "     there and nowhere else, and excluding that one field is not a free",
+            "     parameter -- it is the field the firmware is known to rewrite.",
+            "",
+        ]
+        if slot == 0x18:
+            lines += [
+                "     Excluding it, %d of the %d records are identical to the" % (_twinned, _n),
+                "     WAVE-SELECT BLOCK OF A NAMED TONE RECORD in the other 42 bytes.",
+                "     The evidence that this is a relation and not a coincidence:",
+                "       * the differing byte is +0x0B in %d of %d -- NO record of this"
+                % (_twinned, _twinned),
+                "         array differs from a tone's block in exactly one byte at any",
+                "         other position, at any of the 43 positions;",
+                "       * the tone side of a twin carries +0x0B = 0 (`no preset`) in",
+                "         214 of 215 blocks, and this array's copies carry 1..7;",
+                "       * 0 of 3,000 random 43-byte windows of the payload match under",
+                "         the same rule, with both sets excluded from the corpus;",
+                "       * and the 1,024-entry map at slot +0x0C -- the ONLY map in the",
+                "         image whose range reaches %d, this array's last index -- puts"
+                % (_n - 1),
+                "         911 entries on a twinned record, and in 637 of those the",
+                "         program map's tone at the same position is the tone the byte",
+                "         test assigned (69.9%, against 1.0-1.3% for the same map",
+                "         shuffled and 0.0-3.3% for the other twelve maps).",
+                "     ⚠ THE MAP IS CORROBORATION, NOT THE NAME: 69.9% is not 100%, one",
+                "     map entry cannot name all four records of a four-element tone,",
+                "     and the slot +0x0C banner is NOT renamed on it.",
+            ]
+        else:
+            lines += [
+                "     %d of the %d records are byte-identical to the wave-select tail"
+                % (_twinned, _n),
+                "     of a named drum-instrument record -- which is point 2's proposal",
+                "     (b), and round 5 refused it because proposal (a) contradicted it.",
+                "     ★ WHAT ROUND 6 ADDS is the reason the two disagree, and it is not",
+                "     that either match is wrong: THE CATALOGUE IS A DIFFERENT LIST.",
+                "     Row 1 of it is 'Square Wave' where the identical bytes come from",
+                "     'Square Click'; rows 7 and 8 are 'PowerBassDrmL' and",
+                "     'PowerBassDrmR' where record 7 of this array matches NOTHING and",
+                "     record 8 matches 'PowerBassDrm1/2'.  Across the %d rows this"
+                % ALIGN[0],
+                "     round can resolve, the catalogue carries the same name at the",
+                "     same index %d times, carries it at a DIFFERENT index %d times,"
+                % (ALIGN[1], ALIGN[2]),
+                "     and %d times names something no drum record has; the alignment"
+                % ALIGN[3],
+                "     is not monotone, so it is not a simple drift either.",
+                "     ★ AND THE MELODIC SIDE IS WHAT TELLS THEM APART.  The same",
+                "     relation holds at slot +0x18, where there is NO competing",
+                "     catalogue at all.  The POSITIONAL transfer stays REFUSED; the",
+                "     byte identity is what the labels below use.",
+            ]
+        lines += [
+            "",
+            "     ⚠ AND WHAT A LABEL CLAIMS IS EXACTLY WHAT WAS MEASURED.  It reads",
+            "     `_SameAs_<name>`: these bytes and that record's bytes are the same.",
+            "     It does NOT say this record BELONGS to that tone or instrument --",
+            "     nothing here reaches this array with an index whose meaning is",
+            "     known.  Where the twins disagree on the name, no label is given.",
+            "  notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.",
+        ]
     if slot == 0x3C:
         lines += [
             "",
@@ -716,7 +839,10 @@ SLOT = {
     0x9C: ("ToneDB_ToneIndexMapC", "(alias of +0x24, exactly as in the KN5000)", "ToneDB_ToneIndexMapC alias"),
     0xA0: ("ToneDB_ToneIndexMapD", "(alias of +0x28, exactly as in the KN5000)", "ToneDB_ToneIndexMapD alias"),
     0xA4: ("ToneDB_DrumToneIndexMap", "(alias of +0x2C, exactly as in the KN5000)", "ToneDB_DrumToneIndexMap alias"),
-    0xA8: ("Unk_0FC8_Table", "8 x 128-byte records, purpose UNKNOWN", "UNUSED in the KN5000"),
+    # ★ ROUND 6: named by its READER, not transplanted and not invented -- see
+    # emit_unk_fc8().  It was "Unk_0FC8_Table, purpose UNKNOWN" from round 1 to 5.
+    0xA8: ("ToneDB_OctaveShiftByProgram", "8 banks x 128 programs, signed octave shift",
+           "UNUSED in the KN5000"),
     0xAC: ("ToneDB_DefaultLayerParams", "one 81-byte element block + one 43-byte wave-select record",
            "ToneDB_DefaultLayerParams"),
     0xB0: ("ToneRec_Template_Clear", "a 713-byte 4-element tone record named 'Clear'", "PercName_Pack (DIFFERENT)"),
@@ -948,17 +1074,23 @@ region(0xB80, 0xFC8, emit_offtable)
 
 
 # --- 0x0FC8 unknown --------------------------------------------------------
+OCTAVE_LABEL = SLOT[0xA8][0]
+
+
 def emit_unk_fc8():
-    banner("Unk_0FC8_Table -- directory slot +0xA8, PURPOSE UNKNOWN", 0xFC8, 0x13C8, [
+    banner("%s -- directory slot +0xA8" % OCTAVE_LABEL, 0xFC8, 0x13C8, [
         "8 records of 128 bytes.  The period is not assumed: the only non-zero",
         "bytes sit at record-relative +0x0E, +0x58..+0x5F, +0x7A and +0x7E, and",
         "they repeat on a 0x80 grid in all 8 records.  Values are 0xF4 (and 0x0C",
         "at +0x7A in five of the eight).  Everything else is zero.",
         "",
         "⚠ The KN5000 leaves directory slot +0xA8 UNUSED, so there is no name to",
-        "transplant and none is invented here.",
+        "transplant.  ⚠ CORRECTED IN ROUND 6: this sentence used to end 'and none is",
+        "invented here', and the block was called Unk_0FC8_Table.  The name it now",
+        "carries is not invented and not transplanted either -- it is DERIVED from",
+        "the one prom_c routine that reads the block; see the round-6 section below.",
         "",
-        "★ ROUND 5 adds the two facts that a per-record label cannot carry.",
+        "★ ROUND 5 adds the two facts that a per-record label could not then carry.",
         "  (a) THE EIGHT RECORDS ARE ONLY %d DISTINCT BYTE STRINGS: %s."
         % (len(_R5.fc8_classes()),
            "; ".join("{%s}" % ",".join(str(k) for k in g) for g in _R5.fc8_classes())),
@@ -967,6 +1099,10 @@ def emit_unk_fc8():
         "  (b) AND THERE IS NO NAME IN IT TO TAKE: 0 of the %d bytes are printable"
         % (8 * 128),
         "      at all, so the round-4 mechanism has nothing to work with here.",
+        "      ⚠ (b) IS STILL TRUE and round 6 does not overturn it: this block is",
+        "      named by its READER, not by its content.  And (a) now has a reading --",
+        "      the three classes differ only at programs 14 and 122, which is what",
+        "      the per-record comments below list.",
         "  notes/prom_d_understanding_round5.py Q1c.",
     ] + ev_slot(0xA8, [
         "",
@@ -980,13 +1116,78 @@ def emit_unk_fc8():
         "    0xFA735D  ld BC,(XIY)          a 16-bit word out of the record",
         "notes/prom_d_documentation_round3.py Q4f decodes all of it from bytes.",
         "",
-        "⚠ STILL NOT ESTABLISHED: what a record MEANS, what selects one, or what",
-        "the 16-bit word at the computed offset is for.  What round 3 adds is the",
-        "RECORD SIZE and the fact that the block is reached at all.",
+        "⚠ THE THREE LINES ABOVE ARE ROUND 3'S AND ARE NOW SUPERSEDED: they ended",
+        "'STILL NOT ESTABLISHED: what a record MEANS, what selects one, or what the",
+        "16-bit word at the computed offset is for.'  Round 6 answers all three, out",
+        "of the SAME routine, by reading what it does with the value and what its",
+        "other arm does instead.",
+        "",
+        "★★ THE BLOCK IS AN OCTAVE-SHIFT TABLE, INDEXED [BANK][PROGRAM].",
+        "",
+        "  * sub_FA72E9 is called from ONE place, Voice_ComputePitch (0xFA7F7A), and",
+        "    both of its arms return a pitch offset in WA.",
+        "  * ITS OTHER ARM reads a 16-entry table at prom_c 0xFDF22A --",
+        "        %s" % ", ".join("%+d" % v for v in _R6.oct_sibling()),
+        "    -- with `and C,0x0f` (0xFA7375), `ld A,(XBC)`, `exts WA`, `sll 0x08,WA`.",
+        "    Every entry is a multiple of 12.  It is an OCTAVE SELECT, centred on",
+        "    entry 8 = 0.",
+        "  * THIS ARM produces the value the same way: 0xFA735D `ld BC,(XIY)` then",
+        "    0xFA735F `sll 0x08,BC`.  The shift discards the word's high byte, which",
+        "    is why a byte table can be read with a word instruction -- and why the",
+        "    0xF4 at +0x58..+0x5F reads as -12 eight times over rather than as",
+        "    0xF4F4.  The two shifts are the SAME opcode with a different count:",
+        "    prom_c bytes d9 ee 07 at 0xFA7351 and d9 ee 08 at 0xFA735F.",
+        "  * SO THE VALUES ARE OCTAVES.  This table holds only 0xF4 (-12) and 0x0C",
+        "    (+12), in %d cells of %d." % (_R6.AUDITED_OCTAVE[1], 8 * 128),
+        "  * AND THE TWO INDICES ARE A BANK AND A PROGRAM.  0xFA7301 reads directory",
+        "    slot +0x6C -- ToneDB_BankMap -- and turns a byte from the voice's RAM",
+        "    block into a bank ROW; 0xFA7351 `sll 0x07,BC` scales that row by 128,",
+        "    which is this table's record size AND the program map's row width; the",
+        "    within-record byte comes from the ADJACENT byte of the same RAM block",
+        "    (+27 against +28).  A tone index cannot be the second index: it runs",
+        "    0..273 and would address the next bank's record for 146 of 274 tones.",
+        "",
+        "★ AND THE MARKED CELLS NAME THEMSELVES, which is what makes the reading",
+        "checkable rather than merely consistent.  The %d marks fall in only %d"
+        % (_R6.AUDITED_OCTAVE[1], len(set(p for r in OCTAVE_ROWS.values()
+                                          for p, _v, _n in r))),
+        "columns of 128 -- 85 marks placed at random would fill about 62 -- and eight",
+        "of the eleven columns are ONE CONSECUTIVE RUN, programs 88-95, which the",
+        "program map fills with the drawbar/organ family in every one of the 8 banks:",
+        "",
+    ] + ["    prog %3d  %s  %s"
+         % (_p,
+            ", ".join("%+d" % x for x in sorted(set(
+                w for r in OCTAVE_ROWS.values() for q, w, _n in r if q == _p))),
+            ", ".join(sorted(set(
+                n for r in OCTAVE_ROWS.values() for q, _w, n in r if q == _p))))
+         for _p in sorted(set(q for r in OCTAVE_ROWS.values()
+                              for q, _v, _n in r))] + [
+        "",
+        "Program 122 is the only +12 in the image.  The column structure and the",
+        "values are MEASURED; notes/prom_d_understanding_round6.py Q4 and Q8c, where",
+        "the shift bytes are re-decoded from prom_c's ROM.",
+        "⚠ That these particular instruments are ones a player expects an octave away",
+        "from written pitch is an INTERPRETATION of the list and is not measured.  It",
+        "is why the list is printed in full rather than summarised: a reader who",
+        "disagrees with it can see exactly what the table marks.",
+        "",
+        "⚠ NOT established: the numeric UNIT.  What is measured is that the two arms",
+        "encode identically and that prom_c's arm holds only multiples of 12.  Also",
+        "NOT established: what the RAM byte at voice+27 is set from -- the reading",
+        "'program number' comes from the record size, the BankMap and the marked",
+        "columns, not from a write to that byte.",
     ]))
-    W("Unk_0FC8_Table:")
+    W("%s:" % OCTAVE_LABEL)
     for k in range(8):
-        W("Unk_0FC8_Rec_%d:" % k)
+        W("")
+        W("; --- bank %d: the octave shift for each of the 128 programs of"
+          " ToneNumBank_Melodic_%d ---" % (k, k))
+        marks = OCTAVE_ROWS[k]
+        W("; %d nonzero cell%s: %s"
+          % (len(marks), "" if len(marks) == 1 else "s",
+             "; ".join("prog %d %+d %r" % (p, v, n) for p, v, n in marks)))
+        W("%s_Bank%d:" % (OCTAVE_LABEL, k))
         e_bytes(0xFC8 + 128 * k, 0xFC8 + 128 * (k + 1))
 
 
@@ -1313,6 +1514,25 @@ def mk_indexmap(slot, extra_note=None):
     return fn
 
 
+
+_WS_BLOCKS = _R6.tone_wavesel_blocks()
+_WS_BY_KEY = {(t, j): b for t, j, b, _nm in _WS_BLOCKS}
+
+
+def _tone_wavesel_byte(twin_entry):
+    """The tone side's own +0x0B, for the one-byte difference a header states."""
+    return _WS_BY_KEY[(twin_entry[0], twin_entry[1])][0x0B]
+
+
+def _nearest_tone_distance(off):
+    """Hamming distance from a 43-byte record to the closest tone wave-select block.
+
+    Stated per record so "no twin" is a MEASUREMENT and not an absence of one.
+    """
+    r = D[off:off + 43]
+    return min(sum(1 for x, y in zip(r, b) if x != y) for _t, _j, b, _n in _WS_BLOCKS)
+
+
 def mk_wavesel_array(slot):
     def fn():
         a, b = S(slot), NEXT[S(slot)]
@@ -1343,6 +1563,13 @@ def mk_wavesel_array(slot):
         # anywhere in the payload") is the same 322 and 64 times over and repeating
         # it would be padding, not prose.  That asymmetry is deliberate.
         car = _R5.perc_carriers() if slot == 0x20 else None
+        # ★ ROUND 6 makes the +0x18 array per-record-headed too.  Round 5's reason
+        # for leaving it bare was that the only true statement about a record ("no
+        # copy anywhere in the payload") was the same 322 times over.  That is no
+        # longer the only true statement: 167 of them now have a DIFFERENT fact
+        # each -- which tone's wave-select block they duplicate -- and the other
+        # 155 have the measured distance that says no tone's does.
+        twin = TWIN.get(slot)
         for i in range(n):
             if slot == 0x3C:
                 # ★ ROUND 5: this array's records SELF-IDENTIFY.  Each header states
@@ -1381,6 +1608,42 @@ def mk_wavesel_array(slot):
                   % _b)
                 W("; what makes its low 6 bits, %d, the index into this array."
                   % (_b & 0x3F))
+            if slot == 0x18:
+                t = twin[i]
+                W("")
+                W("; %s_%03d -- file 0x%05X..0x%05X"
+                  % (slot_label(slot), i, a + 43 * i, a + 43 * (i + 1) - 1))
+                if t:
+                    _who = sorted(set(x[2] for x in t))
+                    W("; These 43 bytes are the wave-select block of %s,"
+                      % ("tone record %s, element %d" % (t[0][2], t[0][1])
+                         if len(t) == 1 else
+                         "%d tone-record elements (%s%s)"
+                         % (len(t), ", ".join(_who[:3]),
+                            ", +%d more" % (len(_who) - 3) if len(_who) > 3 else "")))
+                    W("; with ONE byte changed: +0x0B, which round 5 proved is the")
+                    W("; preset number prom_c writes over.  This record holds 0x%02X"
+                      % D[a + 43 * i + 0x0B])
+                    W("; there; the tone's own block holds 0x%02X."
+                      % _tone_wavesel_byte(t[0]))
+                    if TWIN_LABEL[slot].get(i):
+                        W("; Evidence: the two 43-byte runs, compared byte for byte;")
+                        W("; the tone name is that record's own 16 ASCII bytes.")
+                        W("; notes/prom_d_understanding_round6.py Q2.")
+                    else:
+                        W("; ⚠ NO LABEL: the %d blocks that carry these bytes belong to"
+                          % len(t))
+                        W("; %d DIFFERENTLY NAMED tone records, so nothing here picks"
+                          % len(_who))
+                        W("; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.")
+                else:
+                    W("; ⚠ NO tone wave-select block is within one byte of these 43")
+                    W("; bytes -- one of the %d records of this array with no twin,"
+                      % sum(1 for v in twin.values() if not v))
+                    W("; against %d that have one.  The nearest tone block differs in"
+                      % sum(1 for v in twin.values() if v))
+                    W("; %d of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN."
+                      % _nearest_tone_distance(a + 43 * i))
             if car is not None:
                 ks = car[i]
                 W("")
@@ -1399,18 +1662,49 @@ def mk_wavesel_array(slot):
                     W("; bytes +107..+149 (file 0x%05X..0x%05X), compared byte for"
                       % (_pb + 107, _pb + 149))
                     W("; byte against this record.  round 5 perc_carriers().")
-                    W("; ⚠ A carrier is NOT a name for this record: see the banner --"
-                      " where")
-                    W("; the carrier is unique the positional proposal disagrees with"
-                      " it %d" % (PERC_OVERLAP[2] - PERC_OVERLAP[3]))
-                    W("; times in %d.  notes/prom_d_understanding_round5.py Q4c."
-                      % PERC_OVERLAP[2])
+                    # ⚠ CORRECTED IN ROUND 6.  These three lines used to read "A
+                    # carrier is NOT a name for this record", which contradicts the
+                    # label the same record now carries.  What round 5 refused, and
+                    # round 6 still refuses, is the POSITIONAL transfer from the
+                    # +0x8C catalogue -- not the byte identity.
+                    if TWIN_LABEL[slot].get(i):
+                        if len(set(perc_name(k) if k else "Silent" for k in ks)) > 1:
+                            W("; The %d names differ only by a trailing digit, so the"
+                              % len(ks))
+                            W("; label uses the shared stem `%s`."
+                              % TWIN_LABEL[slot][i])
+                        W("; ★ THE LABEL USES THIS, and it claims only what was")
+                        W("; measured: `_SameAs_` means these bytes and that record's")
+                        W("; bytes are the same, NOT that this record belongs to that")
+                        W("; instrument.  ⚠ CORRECTED in round 6: these lines used to")
+                        W("; say a carrier is not a name.  What is refused is the")
+                        W("; POSITIONAL transfer from the %d-row catalogue at slot"
+                          % PERC_OVERLAP[0])
+                        W("; +0x8C, which names the same thing at the same index in")
+                        W("; only %d of the %d rows the byte identity resolves, names"
+                          % (ALIGN[1], ALIGN[0]))
+                        W("; it at a DIFFERENT index %d times and names something no"
+                          % ALIGN[2])
+                        W("; drum record has %d times -- because it is a DIFFERENT"
+                          % ALIGN[3])
+                        W("; LIST.  round 6 Q3e.")
+                    else:
+                        W("; ⚠ NO LABEL: %d differently named drum-instrument records"
+                          % len(set(perc_name(k) if k else "Silent" for k in ks)))
+                        W("; carry these same bytes, so nothing here picks one of")
+                        W("; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.")
                 else:
                     W("; NO drum-instrument record carries these bytes -- one of the")
                     W("; %d records of this array with no carrier at all, against %d"
                       % (sum(1 for v in car.values() if not v), PERC_OVERLAP[1]))
-                    W("; that have one.  round 5 Q4c.")
-            W("%s_%03d:" % (slot_label(slot), i))
+                    W("; that have one.  round 5 Q4c; round 6 Q1, verdict")
+                    W("; NAMELESS-NO-TWIN.")
+            # ★ ROUND 6: the label carries the twin's own name when the twins
+            # agree on one, and stays a number when they do not.  Neither half is
+            # typed here: both come from notes/prom_d_understanding_round6.py.
+            _suffix = TWIN_LABEL.get(slot, {}).get(i)
+            W("%s_%03d%s:" % (slot_label(slot), i,
+                              "_SameAs_" + _suffix if _suffix else ""))
             e_bytes(a + 43 * i, a + 43 * (i + 1), per=43)
     return fn
 

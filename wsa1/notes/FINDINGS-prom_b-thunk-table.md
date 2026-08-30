@@ -138,3 +138,42 @@ a bare `ret` fills 6 of the first table's slots and 7 of the second's
   asserted.
 * What the three `0x00`-filled stretches meant to the tool that emitted them.
 * What any individual routine does, beyond the handful named above.
+
+---
+
+## ⚠ THE `T_<address>` CONVENTION IS NO LONGER UNIVERSAL (wave 7 round 6)
+
+This document describes every directory slot as `T_<address>`. **277 of the 2,002 slots now carry
+`T_<TargetName>` instead** — `T_F42E0C` is `T_DisplayListB_RunOne_Stack`. Each renamed line keeps
+`; F42E0C (was T_F42E0C)` in its comment, so a grep for the old spelling or for the slot address
+still finds it, and prom_a's 206 cross-references were rewritten to `NewName (T_OldName)` for the
+same reason: the slot NUMBER is what the directory is indexed by and must not disappear.
+
+★ **A slot is a POINTER, so the rename is DERIVATIVE** — it repeats on the pointer a name another
+lane earned on the target. It makes the directory readable; it is not 277 new facts.
+
+★★ **And the census that came with it is the more useful result: 1,672 of the 2,002 slots (83.5 %)
+point at something nobody has named.**
+
+| where the slot points | count |
+|---|---:|
+| a `sub_XXXXXX` routine | 1,438 |
+| an address the `.s` disassembles but never labelled | **115** |
+| into a span still `.incbin` | 119 |
+| a named target (these are the 277 renamed) | 277 |
+| alias pairs and other refusals | 53 |
+
+So the directory is not 2,002 pieces of missing documentation — it is a faithful **index of 1,672
+pieces of missing documentation that live elsewhere**. The **115** are the actionable ones: entry
+points the machine's own directory says exist, sitting in already-converted code with no label at
+all. `python3 notes/prom_b_thunks_round6.py --unnamed` lists them.
+
+Three relaxations were measured and **rejected**, and `--rejected` re-measures all three so a later
+round does not re-invent them:
+
+* take the name from a `sub_XXXXXX` target (+1,435 slots) — rejected: it would launder an unnamed
+  routine into a named-looking pointer, and the stripped form re-grades framed anyway, so the
+  number it buys is exactly the remaining-work number.
+* take it from a **framed** target (+9) — rejected: changes 0 of 9 grades, pure churn.
+* suffix the six alias pairs (12 slots) — rejected: it would have to invent which of two slots
+  sharing one target address is primary.

@@ -230,8 +230,12 @@ def c2_lookupsigned_callers():
             k = max(i for i, v in enumerate(idx) if v < n)
             owners.add(names[k])
     check("distinct enclosing routines -- the note says four", sorted(owners),
-          ["Voice_StageRegs_0500_08C0_AB", "sub_FA842D", "sub_FA93AF",
-           "sub_FABAE3", "sub_FABBFB"])
+          # ⚠ sub_FABAE3 / sub_FABBFB were renamed by a LATER round than this audit and
+          # neither label exists in prom_c/wsa1_prom_c.s any more, so this check had been
+          # failing on stale text; corrected 2026-08-30 with the two current names.
+          ["Dev10C_StageRegs_0900_0940", "Dev10C_StageRegs_09C0_0A00",
+           "Voice_StageRegs_0500_08C0_AB", "Voice_StageRegs_0900_0940_0980_AB",
+           "Voice_StageRegs_09C0_0A00_0A40_AB"])
     check("that is", len(owners), 5)
     us = {n for n, line in enumerate(SRC_C.splitlines())
           if re.search(r"calr \(0xFA7654 - ", line)}

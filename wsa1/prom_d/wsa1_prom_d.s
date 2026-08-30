@@ -277,7 +277,7 @@ ToneDB_Directory:
 					;        KN5000: ToneDB_ToneIndexMapD alias
 	.long 0x0002E75C			; +0xA4  ToneDB_DrumToneIndexMap      (alias of +0x2C, exactly as in the KN5000)
 					;        KN5000: ToneDB_DrumToneIndexMap alias
-	.long 0x00000FC8			; +0xA8  Unk_0FC8_Table               8 x 128-byte records, purpose UNKNOWN
+	.long 0x00000FC8			; +0xA8  ToneDB_OctaveShiftByProgram  8 banks x 128 programs, signed octave shift
 					;        KN5000: UNUSED in the KN5000
 	.long 0x0001C58A			; +0xAC  ToneDB_DefaultLayerParams    one 81-byte element block + one 43-byte wave-select record
 					;        KN5000: ToneDB_DefaultLayerParams
@@ -2050,7 +2050,7 @@ ToneDB_ToneOffsetTable:
 	.long 0x0002CDC4	; tone 0x111  'GM Orchestra Kit'
 
 ; ==========================================================================
-; Unk_0FC8_Table -- directory slot +0xA8, PURPOSE UNKNOWN
+; ToneDB_OctaveShiftByProgram -- directory slot +0xA8
 ; file 0x00FC8 .. 0x013C7   (1024 bytes)
 ; --------------------------------------------------------------------------
 ; 8 records of 128 bytes.  The period is not assumed: the only non-zero
@@ -2059,14 +2059,21 @@ ToneDB_ToneOffsetTable:
 ; at +0x7A in five of the eight).  Everything else is zero.
 ; 
 ; ⚠ The KN5000 leaves directory slot +0xA8 UNUSED, so there is no name to
-; transplant and none is invented here.
+; transplant.  ⚠ CORRECTED IN ROUND 6: this sentence used to end 'and none is
+; invented here', and the block was called Unk_0FC8_Table.  The name it now
+; carries is not invented and not transplanted either -- it is DERIVED from
+; the one prom_c routine that reads the block; see the round-6 section below.
 ; 
-; ★ ROUND 5 adds the two facts that a per-record label cannot carry.
+; ★ ROUND 5 adds the two facts that a per-record label could not then carry.
 ;   (a) THE EIGHT RECORDS ARE ONLY 3 DISTINCT BYTE STRINGS: {0,4,5,6,7}; {1,3}; {2}.
 ;       A table whose eight rows take three values is not eight independent
 ;       settings, whatever it is.
 ;   (b) AND THERE IS NO NAME IN IT TO TAKE: 0 of the 1024 bytes are printable
 ;       at all, so the round-4 mechanism has nothing to work with here.
+;       ⚠ (b) IS STILL TRUE and round 6 does not overturn it: this block is
+;       named by its READER, not by its content.  And (a) now has a reading --
+;       the three classes differ only at programs 14 and 122, which is what
+;       the per-record comments below list.
 ;   notes/prom_d_understanding_round5.py Q1c.
 ; 
 ; Evidence: prom_c reads directory slot +0xA8 at 1 site.  The first is
@@ -2088,12 +2095,74 @@ ToneDB_ToneOffsetTable:
 ;     0xFA735D  ld BC,(XIY)          a 16-bit word out of the record
 ; notes/prom_d_documentation_round3.py Q4f decodes all of it from bytes.
 ; 
-; ⚠ STILL NOT ESTABLISHED: what a record MEANS, what selects one, or what
-; the 16-bit word at the computed offset is for.  What round 3 adds is the
-; RECORD SIZE and the fact that the block is reached at all.
+; ⚠ THE THREE LINES ABOVE ARE ROUND 3'S AND ARE NOW SUPERSEDED: they ended
+; 'STILL NOT ESTABLISHED: what a record MEANS, what selects one, or what the
+; 16-bit word at the computed offset is for.'  Round 6 answers all three, out
+; of the SAME routine, by reading what it does with the value and what its
+; other arm does instead.
+; 
+; ★★ THE BLOCK IS AN OCTAVE-SHIFT TABLE, INDEXED [BANK][PROGRAM].
+; 
+;   * sub_FA72E9 is called from ONE place, Voice_ComputePitch (0xFA7F7A), and
+;     both of its arms return a pitch offset in WA.
+;   * ITS OTHER ARM reads a 16-entry table at prom_c 0xFDF22A --
+;         -96, -84, -72, -60, -48, -36, -24, -12, +0, +12, +24, +36, +48, +60, +72, +84
+;     -- with `and C,0x0f` (0xFA7375), `ld A,(XBC)`, `exts WA`, `sll 0x08,WA`.
+;     Every entry is a multiple of 12.  It is an OCTAVE SELECT, centred on
+;     entry 8 = 0.
+;   * THIS ARM produces the value the same way: 0xFA735D `ld BC,(XIY)` then
+;     0xFA735F `sll 0x08,BC`.  The shift discards the word's high byte, which
+;     is why a byte table can be read with a word instruction -- and why the
+;     0xF4 at +0x58..+0x5F reads as -12 eight times over rather than as
+;     0xF4F4.  The two shifts are the SAME opcode with a different count:
+;     prom_c bytes d9 ee 07 at 0xFA7351 and d9 ee 08 at 0xFA735F.
+;   * SO THE VALUES ARE OCTAVES.  This table holds only 0xF4 (-12) and 0x0C
+;     (+12), in 84 cells of 1024.
+;   * AND THE TWO INDICES ARE A BANK AND A PROGRAM.  0xFA7301 reads directory
+;     slot +0x6C -- ToneDB_BankMap -- and turns a byte from the voice's RAM
+;     block into a bank ROW; 0xFA7351 `sll 0x07,BC` scales that row by 128,
+;     which is this table's record size AND the program map's row width; the
+;     within-record byte comes from the ADJACENT byte of the same RAM block
+;     (+27 against +28).  A tone index cannot be the second index: it runs
+;     0..273 and would address the next bank's record for 146 of 274 tones.
+; 
+; ★ AND THE MARKED CELLS NAME THEMSELVES, which is what makes the reading
+; checkable rather than merely consistent.  The 84 marks fall in only 11
+; columns of 128 -- 85 marks placed at random would fill about 62 -- and eight
+; of the eleven columns are ONE CONSECUTIVE RUN, programs 88-95, which the
+; program map fills with the drawbar/organ family in every one of the 8 banks:
+; 
+;     prog  14  -12  Digi Bells, Gamelan 1, Gamelan 2, Tubular Bells
+;     prog  88  -12  Jazz Organ
+;     prog  89  -12  Full Drawbars, Pop Organ
+;     prog  90  -12  Pop Organ
+;     prog  91  -12  16' & 1'
+;     prog  92  -12  Rock Organ
+;     prog  93  -12  <<< Drawbar 1>>>, <<< Drawbar 2>>>, Jazz Drawbars
+;     prog  94  -12  Sine Lead
+;     prog  95  -12  Rock Organ
+;     prog 122  +12  Agogo
+;     prog 126  -12  Timpani
+; 
+; Program 122 is the only +12 in the image.  The column structure and the
+; values are MEASURED; notes/prom_d_understanding_round6.py Q4 and Q8c, where
+; the shift bytes are re-decoded from prom_c's ROM.
+; ⚠ That these particular instruments are ones a player expects an octave away
+; from written pitch is an INTERPRETATION of the list and is not measured.  It
+; is why the list is printed in full rather than summarised: a reader who
+; disagrees with it can see exactly what the table marks.
+; 
+; ⚠ NOT established: the numeric UNIT.  What is measured is that the two arms
+; encode identically and that prom_c's arm holds only multiples of 12.  Also
+; NOT established: what the RAM byte at voice+27 is set from -- the reading
+; 'program number' comes from the record size, the BankMap and the marked
+; columns, not from a write to that byte.
 ; ==========================================================================
-Unk_0FC8_Table:
-Unk_0FC8_Rec_0:
+ToneDB_OctaveShiftByProgram:
+
+; --- bank 0: the octave shift for each of the 128 programs of ToneNumBank_Melodic_0 ---
+; 11 nonzero cells: prog 14 -12 'Tubular Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+ToneDB_OctaveShiftByProgram_Bank0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 00FC8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 00FD8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 00FE8  |................|
@@ -2102,7 +2171,10 @@ Unk_0FC8_Rec_0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4	; 01018  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01028  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01038  |................|
-Unk_0FC8_Rec_1:
+
+; --- bank 1: the octave shift for each of the 128 programs of ToneNumBank_Melodic_1 ---
+; 10 nonzero cells: prog 14 -12 'Tubular Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 126 -12 'Timpani'
+ToneDB_OctaveShiftByProgram_Bank1:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01048  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01058  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01068  |................|
@@ -2111,7 +2183,10 @@ Unk_0FC8_Rec_1:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4	; 01098  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 010A8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 010B8  |................|
-Unk_0FC8_Rec_2:
+
+; --- bank 2: the octave shift for each of the 128 programs of ToneNumBank_Melodic_2 ---
+; 9 nonzero cells: prog 88 -12 'Jazz Organ'; prog 89 -12 'Pop Organ'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 126 -12 'Timpani'
+ToneDB_OctaveShiftByProgram_Bank2:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 010C8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 010D8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 010E8  |................|
@@ -2120,7 +2195,10 @@ Unk_0FC8_Rec_2:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4	; 01118  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01128  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01138  |................|
-Unk_0FC8_Rec_3:
+
+; --- bank 3: the octave shift for each of the 128 programs of ToneNumBank_Melodic_3 ---
+; 10 nonzero cells: prog 14 -12 'Gamelan 1'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 126 -12 'Timpani'
+ToneDB_OctaveShiftByProgram_Bank3:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01148  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01158  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01168  |................|
@@ -2129,7 +2207,10 @@ Unk_0FC8_Rec_3:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4	; 01198  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 011A8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 011B8  |................|
-Unk_0FC8_Rec_4:
+
+; --- bank 4: the octave shift for each of the 128 programs of ToneNumBank_Melodic_4 ---
+; 11 nonzero cells: prog 14 -12 'Tubular Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+ToneDB_OctaveShiftByProgram_Bank4:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 011C8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 011D8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 011E8  |................|
@@ -2138,7 +2219,10 @@ Unk_0FC8_Rec_4:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4	; 01218  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01228  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01238  |................|
-Unk_0FC8_Rec_5:
+
+; --- bank 5: the octave shift for each of the 128 programs of ToneNumBank_Melodic_5 ---
+; 11 nonzero cells: prog 14 -12 'Tubular Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+ToneDB_OctaveShiftByProgram_Bank5:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01248  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01258  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01268  |................|
@@ -2147,7 +2231,10 @@ Unk_0FC8_Rec_5:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4	; 01298  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 012A8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xF4, 0x00	; 012B8  |................|
-Unk_0FC8_Rec_6:
+
+; --- bank 6: the octave shift for each of the 128 programs of ToneNumBank_Melodic_6 ---
+; 11 nonzero cells: prog 14 -12 'Digi Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 '<<< Drawbar 2>>>'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+ToneDB_OctaveShiftByProgram_Bank6:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 012C8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 012D8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 012E8  |................|
@@ -2156,7 +2243,10 @@ Unk_0FC8_Rec_6:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4, 0xF4	; 01318  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01328  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01338  |................|
-Unk_0FC8_Rec_7:
+
+; --- bank 7: the octave shift for each of the 128 programs of ToneNumBank_Melodic_7 ---
+; 11 nonzero cells: prog 14 -12 'Gamelan 2'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 '<<< Drawbar 1>>>'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+ToneDB_OctaveShiftByProgram_Bank7:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01348  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01358  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01368  |................|
@@ -14159,6 +14249,41 @@ ToneDB_ToneIndexMapB:
 ;      slot +0x20 is different -- see its own banner -- and that
 ;      difference is what makes this zero informative.)
 ; 
+;   3. ★★ CORRECTED IN ROUND 6 -- 152 OF THESE 322 RECORDS DO HAVE A NAME,
+;      and point 2 above is why it was missed.  That test asked whether a
+;      record's 43 bytes occur ELSEWHERE IN THE IMAGE and compared all 43.
+;      Round 5 had just proved that byte +0x0B is a preset number prom_c
+;      WRITES OVER (0xFBC7D6).  A copy of a record may therefore differ
+;      there and nowhere else, and excluding that one field is not a free
+;      parameter -- it is the field the firmware is known to rewrite.
+; 
+;      Excluding it, 167 of the 322 records are identical to the
+;      WAVE-SELECT BLOCK OF A NAMED TONE RECORD in the other 42 bytes.
+;      The evidence that this is a relation and not a coincidence:
+;        * the differing byte is +0x0B in 167 of 167 -- NO record of this
+;          array differs from a tone's block in exactly one byte at any
+;          other position, at any of the 43 positions;
+;        * the tone side of a twin carries +0x0B = 0 (`no preset`) in
+;          214 of 215 blocks, and this array's copies carry 1..7;
+;        * 0 of 3,000 random 43-byte windows of the payload match under
+;          the same rule, with both sets excluded from the corpus;
+;        * and the 1,024-entry map at slot +0x0C -- the ONLY map in the
+;          image whose range reaches 321, this array's last index -- puts
+;          911 entries on a twinned record, and in 637 of those the
+;          program map's tone at the same position is the tone the byte
+;          test assigned (69.9%, against 1.0-1.3% for the same map
+;          shuffled and 0.0-3.3% for the other twelve maps).
+;      ⚠ THE MAP IS CORROBORATION, NOT THE NAME: 69.9% is not 100%, one
+;      map entry cannot name all four records of a four-element tone,
+;      and the slot +0x0C banner is NOT renamed on it.
+; 
+;      ⚠ AND WHAT A LABEL CLAIMS IS EXACTLY WHAT WAS MEASURED.  It reads
+;      `_SameAs_<name>`: these bytes and that record's bytes are the same.
+;      It does NOT say this record BELONGS to that tone or instrument --
+;      nothing here reaches this array with an index whose meaning is
+;      known.  Where the twins disagree on the name, no label is given.
+;   notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.
+; 
 ;   3. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what
 ;      round 5 Q7 found for the array at slot +0x3C and did NOT find here.
@@ -14167,648 +14292,3081 @@ ToneDB_ToneIndexMapB:
 ;   notes/prom_d_understanding_round5.py Q1a, Q4c, Q4d.
 ; ==========================================================================
 ToneDB_MixerDefaultTable:
+
+; ToneDB_MixerDefaultTable_000 -- file 0x1D965..0x1D98F
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_000:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x00, 0x7F, 0x00, 0x00, 0x40, 0x00, 0x00, 0x42, 0x0C, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x42, 0x0C, 0x7F, 0x00, 0x00, 0x00	; 1D965  |.............}.T......@..B......@....B.....|
+
+; ToneDB_MixerDefaultTable_001 -- file 0x1D990..0x1D9BA
+; These 43 bytes are the wave-select block of 3 tone-record elements (HappyEnsemble, PopOrgan, SynthGlocken),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
+; 3 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_001:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x01, 0x5E, 0x01, 0x5E, 0x01, 0x5E, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1D990  |...^.^.^.^...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_002 -- file 0x1D9BB..0x1D9E5
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_002:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1D9BB  |.............}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_003:
+
+; ToneDB_MixerDefaultTable_003 -- file 0x1D9E6..0x1DA10
+; These 43 bytes are the wave-select block of tone record Piano, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_003_SameAs_Piano_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xCC, 0xEC, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x3C, 0xCC, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1D9E6  |.............}.T....d<...B.`...<.d...B.`...|
+
+; ToneDB_MixerDefaultTable_004 -- file 0x1DA11..0x1DA3B
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_004:
 	.byte 0x7F, 0x7F, 0x7F, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1DA11  |.............}.T....d0...B.`...0.d...B.`...|
-ToneDB_MixerDefaultTable_005:
+
+; ToneDB_MixerDefaultTable_005 -- file 0x1DA3C..0x1DA66
+; These 43 bytes are the wave-select block of tone record Piccolo, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_005_SameAs_Piccolo_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xC4, 0xE2, 0x00, 0x5A, 0x3C, 0x6C, 0x08, 0x00, 0x00, 0x3C, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x5A, 0x3C, 0x6C, 0x08, 0x00, 0x00	; 1DA3C  |...@.@.@.@...}.T....d<...Z<l...<.d...Z<l...|
-ToneDB_MixerDefaultTable_006:
+
+; ToneDB_MixerDefaultTable_006 -- file 0x1DA67..0x1DA91
+; These 43 bytes are the wave-select block of tone record JazzFlute, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_006_SameAs_JazzFlute_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x41, 0x00, 0x41, 0x00, 0x41, 0x00, 0x41, 0x00, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xD8, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xD8, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 1DA67  |...A.A.A.A...}.T....dF...N0`...F.d...N0`...|
-ToneDB_MixerDefaultTable_007:
+
+; ToneDB_MixerDefaultTable_007 -- file 0x1DA92..0x1DABC
+; These 43 bytes are the wave-select block of tone record ClassicalFlute, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_007_SameAs_ClassicalFlute_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x41, 0x01, 0x41, 0x01, 0x41, 0x01, 0x41, 0x01, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 1DA92  |...A.A.A.A...}.T....dF...N0`...F.d...N0`...|
-ToneDB_MixerDefaultTable_008:
+
+; ToneDB_MixerDefaultTable_008 -- file 0x1DABD..0x1DAE7
+; These 43 bytes are the wave-select block of tone record AltoFlute, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_008_SameAs_AltoFlute_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x40, 0x01, 0x40, 0x01, 0x40, 0x01, 0x40, 0x01, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC0, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 1DABD  |...@.@.@.@...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_009:
+
+; ToneDB_MixerDefaultTable_009 -- file 0x1DAE8..0x1DB12
+; These 43 bytes are the wave-select block of tone record PanFlute, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_009_SameAs_PanFlute_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x00, 0x48, 0x00, 0x48, 0x00, 0x48, 0x00, 0x02, 0x02, 0xFA, 0xB0, 0x41, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xD8, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xD8, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 1DAE8  |...H.H.H.H.....A....dF...N0`...F.d...N0`...|
-ToneDB_MixerDefaultTable_010:
+
+; ToneDB_MixerDefaultTable_010 -- file 0x1DB13..0x1DB3D
+; These 43 bytes are the wave-select block of tone record Recorder, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_010_SameAs_Recorder_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x00, 0x4A, 0x00, 0x4A, 0x00, 0x4A, 0x00, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 1DB13  |...J.J.J.J...}.T....dF...N0`...F.d...N0`...|
-ToneDB_MixerDefaultTable_011:
+
+; ToneDB_MixerDefaultTable_011 -- file 0x1DB3E..0x1DB68
+; These 43 bytes are the wave-select block of tone record Ocarina, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_011_SameAs_Ocarina_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x01, 0x4A, 0x01, 0x4A, 0x01, 0x4A, 0x01, 0x02, 0x02, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xC0, 0xD8, 0x00, 0x4E, 0x30, 0x6C, 0x08, 0x00, 0x00, 0x46, 0xC0, 0x64, 0xD8, 0x00, 0x00, 0x4E, 0x30, 0x6C, 0x08, 0x00, 0x00	; 1DB3E  |...J.J.J.J...}.T....dF...N0l...F.d...N0l...|
-ToneDB_MixerDefaultTable_012:
+
+; ToneDB_MixerDefaultTable_012 -- file 0x1DB69..0x1DB93
+; These 43 bytes are the wave-select block of tone record Whistle, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_012_SameAs_Whistle_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x6F, 0x00, 0x6F, 0x00, 0x6F, 0x00, 0x6F, 0x00, 0x02, 0x02, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x1E, 0xC0, 0xE2, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x1E, 0xC0, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1DB69  |...o.o.o.o...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_013:
+
+; ToneDB_MixerDefaultTable_013 -- file 0x1DB94..0x1DBBE
+; These 43 bytes are the wave-select block of tone record Shakuhachi, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_013_SameAs_Shakuhachi_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4B, 0x00, 0x4B, 0x00, 0x4B, 0x00, 0x4B, 0x00, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC0, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x08, 0x00, 0x00, 0x46, 0xC0, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x08, 0x00, 0x00	; 1DB94  |...K.K.K.K...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_014:
+
+; ToneDB_MixerDefaultTable_014 -- file 0x1DBBF..0x1DBE9
+; These 43 bytes are the wave-select block of tone record Ney, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_014_SameAs_Ney_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x49, 0x02, 0x41, 0x00, 0x41, 0x00, 0x41, 0x00, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xD8, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xD8, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 1DBBF  |...I.A.A.A...}.T....dF...N0`...F.d...N0`...|
-ToneDB_MixerDefaultTable_015:
+
+; ToneDB_MixerDefaultTable_015 -- file 0x1DBEA..0x1DC14
+; These 43 bytes are the wave-select block of tone record AnalogBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_015_SameAs_AnalogBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x01, 0x2E, 0x01, 0x2E, 0x01, 0x2E, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xB8, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x3C, 0xB8, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 1DBEA  |.............}.T....d<...*.H...<.d...*.H...|
-ToneDB_MixerDefaultTable_016:
+
+; ToneDB_MixerDefaultTable_016 -- file 0x1DC15..0x1DC3F
+; These 43 bytes are the wave-select block of tone record DanceBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_016_SameAs_DanceBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x03, 0x2F, 0x03, 0x2F, 0x03, 0x2F, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xA7, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x02, 0x00, 0x00, 0x46, 0xA7, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x02, 0x00, 0x00	; 1DC15  |..././././...}.T....dF...*.H...F.d...*.H...|
-ToneDB_MixerDefaultTable_017:
+
+; ToneDB_MixerDefaultTable_017 -- file 0x1DC40..0x1DC6A
+; These 43 bytes are the wave-select block of tone record HouseBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_017_SameAs_HouseBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x02, 0x2F, 0x02, 0x2F, 0x02, 0x2F, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xB0, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x08, 0x00, 0x00, 0x46, 0xB0, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x08, 0x00, 0x00	; 1DC40  |..././././...}.T....dF...*.H...F.d...*.H...|
-ToneDB_MixerDefaultTable_018:
+
+; ToneDB_MixerDefaultTable_018 -- file 0x1DC6B..0x1DC95
+; These 43 bytes are the wave-select block of tone record PopOrgan, element 2,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_018_SameAs_PopOrgan_WaveSel2:
 	.byte 0x7F, 0x7F, 0x7F, 0x18, 0x80, 0x18, 0x80, 0x18, 0x80, 0x18, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1DC6B  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_019 -- file 0x1DC96..0x1DCC0
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_019:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x01, 0x5B, 0x01, 0x5B, 0x01, 0x5B, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1DC96  |...[.[.[.[...}.T....d0...B$`...0.d...B$`...|
+
+; ToneDB_MixerDefaultTable_020 -- file 0x1DCC1..0x1DCEB
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_020:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x02, 0x5B, 0x02, 0x5B, 0x02, 0x5B, 0x02, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1DCC1  |...[.[.[.[...}.T....d0...B$`...0.d...B$`...|
+
+; ToneDB_MixerDefaultTable_021 -- file 0x1DCEC..0x1DD16
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_021:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1DCEC  |.............}.T....d0...B.`...0.d...B.`...|
+
+; ToneDB_MixerDefaultTable_022 -- file 0x1DD17..0x1DD41
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_022:
 	.byte 0x7F, 0x7F, 0x7F, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1DD17  |.............}.T....d0...B.`...0.d...B.`...|
+
+; ToneDB_MixerDefaultTable_023 -- file 0x1DD42..0x1DD6C
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 11 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_023:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x03, 0x05, 0x03, 0x05, 0x03, 0x05, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC5, 0x00, 0x00, 0x42, 0x24, 0x58, 0x10, 0x00, 0x00, 0x30, 0xC5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x58, 0x10, 0x00, 0x00	; 1DD42  |.............}.T....d0...B$X...0.d...B$X...|
-ToneDB_MixerDefaultTable_024:
+
+; ToneDB_MixerDefaultTable_024 -- file 0x1DD6D..0x1DD97
+; These 43 bytes are the wave-select block of tone record EPiano2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_024_SameAs_EPiano2_WaveSel0:
 	.byte 0x59, 0x7F, 0x7F, 0x05, 0x03, 0x05, 0x01, 0x05, 0x01, 0x05, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xCD, 0xF6, 0xF6, 0x42, 0x24, 0x58, 0x10, 0x00, 0x00, 0x3C, 0xCD, 0x64, 0xF6, 0xF6, 0x00, 0x42, 0x24, 0x58, 0x10, 0x00, 0x00	; 1DD6D  |Y............}.T....d<...B$X...<.d...B$X...|
-ToneDB_MixerDefaultTable_025:
+
+; ToneDB_MixerDefaultTable_025 -- file 0x1DD98..0x1DDC2
+; These 43 bytes are the wave-select block of tone record ModernEP3, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_025_SameAs_ModernEP3_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x01, 0x06, 0x01, 0x06, 0x01, 0x06, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xCE, 0xF6, 0xF6, 0x42, 0x24, 0x54, 0x0E, 0x00, 0x00, 0x3C, 0xCE, 0x64, 0xF6, 0xF6, 0x00, 0x42, 0x24, 0x54, 0x0E, 0x00, 0x00	; 1DD98  |.............}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_026:
+
+; ToneDB_MixerDefaultTable_026 -- file 0x1DDC3..0x1DDED
+; These 43 bytes are the wave-select block of tone record BellPiano, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_026_SameAs_BellPiano_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x02, 0x06, 0x02, 0x06, 0x02, 0x06, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x0A, 0x86, 0x7F, 0x64, 0x32, 0xC3, 0xEC, 0xEC, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00, 0x32, 0xC3, 0x64, 0xEC, 0xEC, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00	; 1DDC3  |.............}.T....d2...B$`...2.d...B$`...|
+
+; ToneDB_MixerDefaultTable_027 -- file 0x1DDEE..0x1DE18
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_027:
 	.byte 0x7F, 0x7F, 0x7F, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCE, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00, 0x30, 0xCE, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00	; 1DDEE  |...t.t.t.t...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_028:
+
+; ToneDB_MixerDefaultTable_028 -- file 0x1DE19..0x1DE43
+; These 43 bytes are the wave-select block of tone record Banjo, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_028_SameAs_Banjo_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x21, 0x00, 0x21, 0x00, 0x21, 0x00, 0x21, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x80, 0x7F, 0x64, 0x3C, 0xD0, 0xE2, 0x00, 0x42, 0x30, 0x54, 0x16, 0x00, 0x00, 0x3C, 0xD0, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x30, 0x54, 0x16, 0x00, 0x00	; 1DE19  |...!.!.!.!...}.T....d<...B0T...<.d...B0T...|
-ToneDB_MixerDefaultTable_029:
+
+; ToneDB_MixerDefaultTable_029 -- file 0x1DE44..0x1DE6E
+; These 43 bytes are the wave-select block of tone record Mandolin, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_029_SameAs_Mandolin_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x00, 0x23, 0x00, 0x23, 0x00, 0x23, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x1E, 0x80, 0x7F, 0x64, 0x37, 0xD2, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x09, 0x00, 0x00, 0x37, 0xD2, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x09, 0x00, 0x00	; 1DE44  |...#.#.#.#...}.T....d7...B$T...7.d...B$T...|
-ToneDB_MixerDefaultTable_030:
+
+; ToneDB_MixerDefaultTable_030 -- file 0x1DE6F..0x1DE99
+; These 43 bytes are the wave-select block of tone record Harp, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_030_SameAs_Harp_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x20, 0x00, 0x20, 0x00, 0x20, 0x00, 0x20, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xE2, 0x0A, 0x80, 0x7F, 0x64, 0x46, 0xC8, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC8, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1DE6F  |... . . . ...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_031:
+
+; ToneDB_MixerDefaultTable_031 -- file 0x1DE9A..0x1DEC4
+; These 43 bytes are the wave-select block of tone record OrchestraHit1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_031_SameAs_OrchestraHit1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x01, 0x7F, 0x01, 0x7F, 0x01, 0x7F, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x38, 0x55, 0xE2, 0x00, 0x42, 0x24, 0x4D, 0x08, 0x00, 0x00, 0x38, 0x55, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x4D, 0x08, 0x00, 0x00	; 1DE9A  |.............}.T....d8U..B$M...8Ud...B$M...|
-ToneDB_MixerDefaultTable_032:
+
+; ToneDB_MixerDefaultTable_032 -- file 0x1DEC5..0x1DEEF
+; These 43 bytes are the wave-select block of tone record Timpani, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x07
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_032_SameAs_Timpani_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x7E, 0x00, 0x7E, 0x00, 0x7E, 0x00, 0x7E, 0x00, 0x07, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x3C, 0xC4, 0xEC, 0x00, 0x2A, 0x18, 0x3C, 0x10, 0x00, 0x00, 0x3C, 0xC4, 0x64, 0xEC, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x10, 0x00, 0x00	; 1DEC5  |...~.~.~.~...}.T....d<...*.<...<.d...*.<...|
-ToneDB_MixerDefaultTable_033:
+
+; ToneDB_MixerDefaultTable_033 -- file 0x1DEF0..0x1DF1A
+; These 43 bytes are the wave-select block of tone record MusicBox, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_033_SameAs_MusicBox_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x00, 0x07, 0x00, 0x07, 0x00, 0x07, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x1E, 0x8A, 0x7F, 0x64, 0x50, 0xD8, 0xF6, 0x00, 0x4E, 0x3C, 0x60, 0x04, 0x00, 0x00, 0x50, 0xD8, 0x64, 0xF6, 0x00, 0x00, 0x4E, 0x3C, 0x60, 0x04, 0x00, 0x00	; 1DEF0  |.............}.T....dP...N<`...P.d...N<`...|
-ToneDB_MixerDefaultTable_034:
+
+; ToneDB_MixerDefaultTable_034 -- file 0x1DF1B..0x1DF45
+; These 43 bytes are the wave-select block of tone record Koto, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_034_SameAs_Koto_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x00, 0x25, 0x00, 0x25, 0x00, 0x25, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xD2, 0xE2, 0x00, 0x42, 0x24, 0x54, 0x0B, 0x00, 0x00, 0x46, 0xD2, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0B, 0x00, 0x00	; 1DF1B  |...%.%.%.%...}.T....dF...B$T...F.d...B$T...|
-ToneDB_MixerDefaultTable_035:
+
+; ToneDB_MixerDefaultTable_035 -- file 0x1DF46..0x1DF70
+; These 43 bytes are the wave-select block of tone record Shamisen, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_035_SameAs_Shamisen_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x00, 0x24, 0x00, 0x24, 0x00, 0x24, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xD0, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x16, 0x00, 0x00, 0x46, 0xD0, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x16, 0x00, 0x00	; 1DF46  |...$.$.$.$...}.T....dF...B$T...F.d...B$T...|
-ToneDB_MixerDefaultTable_036:
+
+; ToneDB_MixerDefaultTable_036 -- file 0x1DF71..0x1DF9B
+; These 43 bytes are the wave-select block of tone record Kalimba, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_036_SameAs_Kalimba_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x27, 0x00, 0x27, 0x00, 0x27, 0x00, 0x27, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xC9, 0xE2, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x46, 0xC9, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 1DF71  |...'.'.'.'...}.T....dF...B$T...F.d...B$T...|
-ToneDB_MixerDefaultTable_037:
+
+; ToneDB_MixerDefaultTable_037 -- file 0x1DF9C..0x1DFC6
+; These 43 bytes are the wave-select block of tone record Sitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_037_SameAs_Sitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x50, 0xD8, 0xD8, 0x00, 0x42, 0x24, 0x48, 0x02, 0x00, 0x00, 0x50, 0xD8, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x48, 0x02, 0x00, 0x00	; 1DF9C  |...&.&.&.&...}.T....dP...B$H...P.d...B$H...|
-ToneDB_MixerDefaultTable_038:
+
+; ToneDB_MixerDefaultTable_038 -- file 0x1DFC7..0x1DFF1
+; These 43 bytes are the wave-select block of 2 tone-record elements (Dulcimer),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_038_SameAs_Dulcimer:
 	.byte 0x7F, 0x7F, 0x7F, 0x26, 0x01, 0x26, 0x01, 0x26, 0x01, 0x26, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x06, 0x7F, 0x64, 0x46, 0xD2, 0xD8, 0x00, 0x42, 0x24, 0x56, 0x05, 0x00, 0x00, 0x46, 0xD2, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x56, 0x05, 0x00, 0x00	; 1DFC7  |...&.&.&.&...}.T....dF...B$V...F.d...B$V...|
-ToneDB_MixerDefaultTable_039:
+
+; ToneDB_MixerDefaultTable_039 -- file 0x1DFF2..0x1E01C
+; These 43 bytes are the wave-select block of tone record Gamelan1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_039_SameAs_Gamelan1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x00, 0x70, 0x00, 0x70, 0x00, 0x70, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xD6, 0xD8, 0x00, 0x4E, 0x24, 0x60, 0x18, 0x00, 0x00, 0x46, 0xD6, 0x64, 0xD8, 0x00, 0x00, 0x4E, 0x24, 0x60, 0x18, 0x00, 0x00	; 1DFF2  |...p.p.p.p...}.T....dF...N$`...F.d...N$`...|
+
+; ToneDB_MixerDefaultTable_040 -- file 0x1E01D..0x1E047
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_040:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x01, 0x70, 0x01, 0x70, 0x01, 0x70, 0x01, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E01D  |...p.p.p.p...}.T.(..d<...Z0l...<.d...Z0l...|
+
+; ToneDB_MixerDefaultTable_041 -- file 0x1E048..0x1E072
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_041:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x02, 0x70, 0x02, 0x70, 0x02, 0x70, 0x02, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E048  |...p.p.p.p...}.T.(..d<...Z0l...<.d...Z0l...|
+
+; ToneDB_MixerDefaultTable_042 -- file 0x1E073..0x1E09D
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_042:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x03, 0x70, 0x03, 0x70, 0x03, 0x70, 0x03, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD6, 0x00, 0x00, 0x4E, 0x24, 0x60, 0x18, 0x00, 0x00, 0x30, 0xD6, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x24, 0x60, 0x18, 0x00, 0x00	; 1E073  |...p.p.p.p...}.T....d0...N$`...0.d...N$`...|
-ToneDB_MixerDefaultTable_043:
+
+; ToneDB_MixerDefaultTable_043 -- file 0x1E09E..0x1E0C8
+; These 43 bytes are the wave-select block of tone record FunkyEBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_043_SameAs_FunkyEBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x03, 0x28, 0x03, 0x28, 0x03, 0x28, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xE2, 0x14, 0x86, 0x7F, 0x64, 0x3C, 0xB8, 0xEC, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x3C, 0xB8, 0x64, 0xEC, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 1E09E  |...(.(.(.(...}.T....d<...*.H...<.d...*.H...|
-ToneDB_MixerDefaultTable_044:
+
+; ToneDB_MixerDefaultTable_044 -- file 0x1E0C9..0x1E0F3
+; These 43 bytes are the wave-select block of tone record FretlessBass1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_044_SameAs_FretlessBass1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x02, 0x28, 0x02, 0x28, 0x02, 0x28, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xE2, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xB8, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x30, 0xB8, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 1E0C9  |...(.(.(.(...}.T....d0...*.H...0.d...*.H...|
-ToneDB_MixerDefaultTable_045:
+
+; ToneDB_MixerDefaultTable_045 -- file 0x1E0F4..0x1E11E
+; These 43 bytes are the wave-select block of tone record FretlessBass2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_045_SameAs_FretlessBass2_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x05, 0x28, 0x05, 0x28, 0x05, 0x28, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xE2, 0x0A, 0x97, 0x7F, 0x64, 0x3C, 0xB8, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x3C, 0xB8, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 1E0F4  |...(.(.(.(...}.T....d<...*.H...<.d...*.H...|
+
+; ToneDB_MixerDefaultTable_046 -- file 0x1E11F..0x1E149
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_046:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x80, 0x25, 0x80, 0x25, 0x80, 0x25, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E11F  |...%.%.%.%...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_047 -- file 0x1E14A..0x1E174
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_047:
 	.byte 0x7F, 0x7F, 0x7F, 0x29, 0x80, 0x29, 0x80, 0x29, 0x80, 0x29, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E14A  |...).).).)...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_048 -- file 0x1E175..0x1E19F
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_048:
 	.byte 0x7F, 0x7F, 0x7F, 0x27, 0x82, 0x27, 0x82, 0x27, 0x82, 0x27, 0x82, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E175  |...'.'.'.'...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_049 -- file 0x1E1A0..0x1E1CA
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_049:
 	.byte 0x7F, 0x7F, 0x7F, 0x27, 0x80, 0x27, 0x80, 0x27, 0x80, 0x27, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E1A0  |...'.'.'.'...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_050 -- file 0x1E1CB..0x1E1F5
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_050:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x80, 0x28, 0x80, 0x28, 0x80, 0x28, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E1CB  |...(.(.(.(...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_051 -- file 0x1E1F6..0x1E220
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_051:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x81, 0x28, 0x81, 0x28, 0x81, 0x28, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E1F6  |...(.(.(.(...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_052:
+
+; ToneDB_MixerDefaultTable_052 -- file 0x1E221..0x1E24B
+; These 43 bytes are the wave-select block of tone record Harpsichord, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_052_SameAs_Harpsichord_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x10, 0x02, 0x10, 0x02, 0x10, 0x02, 0x10, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x14, 0x14, 0x80, 0x7F, 0x64, 0x30, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00, 0x30, 0xD8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00	; 1E221  |.............}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_053:
+
+; ToneDB_MixerDefaultTable_053 -- file 0x1E24C..0x1E276
+; These 43 bytes are the wave-select block of tone record Harpsichord, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_053_SameAs_Harpsichord_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x14, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00, 0x30, 0xD8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00	; 1E24C  |.............}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_054:
+
+; ToneDB_MixerDefaultTable_054 -- file 0x1E277..0x1E2A1
+; These 43 bytes are the wave-select block of tone record Clavi, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_054_SameAs_Clavi_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x11, 0x00, 0x11, 0x00, 0x11, 0x00, 0x11, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x14, 0x80, 0x7F, 0x64, 0x3C, 0xCC, 0xE2, 0x00, 0x42, 0x24, 0x54, 0x0E, 0x00, 0x00, 0x3C, 0xCC, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0E, 0x00, 0x00	; 1E277  |.............}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_055:
+
+; ToneDB_MixerDefaultTable_055 -- file 0x1E2A2..0x1E2CC
+; These 43 bytes are the wave-select block of tone record SynthClavi, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_055_SameAs_SynthClavi_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x73, 0x00, 0x73, 0x00, 0x73, 0x00, 0x73, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x80, 0x7F, 0x64, 0x3C, 0xDF, 0xEC, 0xF6, 0x42, 0x24, 0x56, 0x09, 0x00, 0x00, 0x3C, 0xDF, 0x64, 0xEC, 0xF6, 0x00, 0x42, 0x24, 0x56, 0x09, 0x00, 0x00	; 1E2A2  |...s.s.s.s...}.T....d<...B$V...<.d...B$V...|
-ToneDB_MixerDefaultTable_056:
+
+; ToneDB_MixerDefaultTable_056 -- file 0x1E2CD..0x1E2F7
+; These 43 bytes are the wave-select block of tone record Vibraphone, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_056_SameAs_Vibraphone_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x14, 0x1E, 0x80, 0x7F, 0x64, 0x38, 0xC8, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00, 0x38, 0xC8, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00	; 1E2CD  |.............}.T....d8...B$T...8.d...B$T...|
-ToneDB_MixerDefaultTable_057:
+
+; ToneDB_MixerDefaultTable_057 -- file 0x1E2F8..0x1E322
+; These 43 bytes are the wave-select block of tone record Marimba, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_057_SameAs_Marimba_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x00, 0x0A, 0x00, 0x0A, 0x00, 0x0A, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x1E, 0x80, 0x7F, 0x64, 0x46, 0xD7, 0xE2, 0xF6, 0x42, 0x30, 0x54, 0x03, 0x00, 0x00, 0x46, 0xD7, 0x64, 0xE2, 0xF6, 0x00, 0x42, 0x30, 0x54, 0x03, 0x00, 0x00	; 1E2F8  |.............}.T....dF...B0T...F.d...B0T...|
-ToneDB_MixerDefaultTable_058:
+
+; ToneDB_MixerDefaultTable_058 -- file 0x1E323..0x1E34D
+; These 43 bytes are the wave-select block of tone record Xylophone, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_058_SameAs_Xylophone_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x0B, 0x00, 0x0B, 0x00, 0x0B, 0x00, 0x0B, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x1E, 0x80, 0x7F, 0x64, 0x46, 0xE1, 0xE2, 0xF6, 0x4E, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x46, 0xE1, 0x64, 0xE2, 0xF6, 0x00, 0x4E, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E323  |.............}.T....dF...N0l...F.d...N0l...|
-ToneDB_MixerDefaultTable_059:
+
+; ToneDB_MixerDefaultTable_059 -- file 0x1E34E..0x1E378
+; These 43 bytes are the wave-select block of tone record Celesta, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_059_SameAs_Celesta_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x0C, 0x00, 0x0C, 0x00, 0x0C, 0x00, 0x0C, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x14, 0x80, 0x7F, 0x64, 0x46, 0xD5, 0xEC, 0x00, 0x4E, 0x30, 0x6C, 0x06, 0x00, 0x00, 0x46, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x4E, 0x30, 0x6C, 0x06, 0x00, 0x00	; 1E34E  |.............}.T....dF...N0l...F.d...N0l...|
+
+; ToneDB_MixerDefaultTable_060 -- file 0x1E379..0x1E3A3
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_060:
 	.byte 0x7F, 0x7F, 0x7F, 0x0E, 0x01, 0x0E, 0x01, 0x0E, 0x01, 0x0E, 0x01, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E379  |.............}.T.(..d<...Z0l...<.d...Z0l...|
-ToneDB_MixerDefaultTable_061:
+
+; ToneDB_MixerDefaultTable_061 -- file 0x1E3A4..0x1E3CE
+; These 43 bytes are the wave-select block of tone record BottleMarimba, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_061_SameAs_BottleMarimba_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x0D, 0x00, 0x0D, 0x00, 0x0D, 0x00, 0x0D, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x14, 0x1E, 0x80, 0x7F, 0x64, 0x46, 0xD7, 0xE2, 0xF6, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00, 0x46, 0xD7, 0x64, 0xE2, 0xF6, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00	; 1E3A4  |.............}.T....dF...B$T...F.d...B$T...|
-ToneDB_MixerDefaultTable_062:
+
+; ToneDB_MixerDefaultTable_062 -- file 0x1E3CF..0x1E3F9
+; These 43 bytes are the wave-select block of tone record AfricanMallet, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_062_SameAs_AfricanMallet_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x71, 0x00, 0x71, 0x00, 0x71, 0x00, 0x71, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x14, 0x14, 0x80, 0x7F, 0x64, 0x46, 0xD7, 0x00, 0xF6, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00, 0x46, 0xD7, 0x64, 0x00, 0xF6, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00	; 1E3CF  |...q.q.q.q...}.T....dF...B$T...F.d...B$T...|
-ToneDB_MixerDefaultTable_063:
+
+; ToneDB_MixerDefaultTable_063 -- file 0x1E3FA..0x1E424
+; These 43 bytes are the wave-select block of tone record ClassicalGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_063_SameAs_ClassicalGuitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x14, 0x00, 0x14, 0x00, 0x14, 0x00, 0x14, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC8, 0xE2, 0x00, 0x42, 0x24, 0x54, 0x02, 0x00, 0x00, 0x3C, 0xC8, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x54, 0x02, 0x00, 0x00	; 1E3FA  |.............}.T....d<...B$T...<.d...B$T...|
+
+; ToneDB_MixerDefaultTable_064 -- file 0x1E425..0x1E44F
+; These 43 bytes are the wave-select block of 3 tone-record elements (ClassicalStrings, SlowStrings, SymphonicStrings),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
+; 3 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_064:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x00, 0x64, 0x00, 0x64, 0x00, 0x64, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E425  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
+
+; ToneDB_MixerDefaultTable_065 -- file 0x1E450..0x1E47A
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_065:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x02, 0x64, 0x02, 0x64, 0x02, 0x64, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E450  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
+
+; ToneDB_MixerDefaultTable_066 -- file 0x1E47B..0x1E4A5
+; These 43 bytes are the wave-select block of 10 tone-record elements (BellPad, Dream, IceRain, +5 more),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 10 blocks that carry these bytes belong to
+; 8 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_066:
 	.byte 0x7F, 0x7F, 0x7F, 0x6B, 0x01, 0x6B, 0x01, 0x6B, 0x01, 0x6B, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E47B  |...k.k.k.k...}.T....d0...B$`...0.d...B$`...|
+
+; ToneDB_MixerDefaultTable_067 -- file 0x1E4A6..0x1E4D0
+; These 43 bytes are the wave-select block of 5 tone-record elements (MarcatoStrings, SymphonicStrings, SynthStrings1, +1 more),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 5 blocks that carry these bytes belong to
+; 4 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_067:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x04, 0x64, 0x04, 0x64, 0x04, 0x64, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E4A6  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
+
+; ToneDB_MixerDefaultTable_068 -- file 0x1E4D1..0x1E4FB
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_068:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x05, 0x64, 0x05, 0x64, 0x05, 0x64, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E4D1  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_069:
+
+; ToneDB_MixerDefaultTable_069 -- file 0x1E4FC..0x1E526
+; These 43 bytes are the wave-select block of 2 tone-record elements (PizzicatoStr),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_069_SameAs_PizzicatoStr:
 	.byte 0x7F, 0x7F, 0x7F, 0x63, 0x00, 0x63, 0x00, 0x63, 0x00, 0x63, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00	; 1E4FC  |...c.c.c.c...}.T....d0...B$T...0.d...B$T...|
+
+; ToneDB_MixerDefaultTable_070 -- file 0x1E527..0x1E551
+; These 43 bytes are the wave-select block of 2 tone-record elements (Fiddle, Violin),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
+; 2 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_070:
 	.byte 0x7F, 0x7F, 0x7F, 0x60, 0x00, 0x60, 0x00, 0x60, 0x00, 0x60, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x30, 0xCE, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xCE, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1E527  |...`.`.`.`...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_071:
+
+; ToneDB_MixerDefaultTable_071 -- file 0x1E552..0x1E57C
+; These 43 bytes are the wave-select block of tone record JazzViolin, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_071_SameAs_JazzViolin_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x60, 0x01, 0x60, 0x01, 0x60, 0x01, 0x60, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x30, 0xCA, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xCA, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1E552  |...`.`.`.`...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_072:
+
+; ToneDB_MixerDefaultTable_072 -- file 0x1E57D..0x1E5A7
+; These 43 bytes are the wave-select block of tone record Viola, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_072_SameAs_Viola_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x61, 0x01, 0x61, 0x01, 0x61, 0x01, 0x61, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1E57D  |...a.a.a.a...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_073:
+
+; ToneDB_MixerDefaultTable_073 -- file 0x1E5A8..0x1E5D2
+; These 43 bytes are the wave-select block of tone record Cello, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_073_SameAs_Cello_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x61, 0x00, 0x61, 0x00, 0x61, 0x00, 0x61, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1E5A8  |...a.a.a.a...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_074:
+
+; ToneDB_MixerDefaultTable_074 -- file 0x1E5D3..0x1E5FD
+; These 43 bytes are the wave-select block of tone record BowedBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_074_SameAs_BowedBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x00, 0x62, 0x00, 0x62, 0x00, 0x62, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x30, 0xB8, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x30, 0xB8, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 1E5D3  |...b.b.b.b...}.T....d0...*.H...0.d...*.H...|
+
+; ToneDB_MixerDefaultTable_075 -- file 0x1E5FE..0x1E628
+; These 43 bytes are the wave-select block of 3 tone-record elements (AirVox, EchoDrops, VocalAh),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
+; 3 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_075:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x04, 0x68, 0x04, 0x68, 0x04, 0x68, 0x04, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 1E5FE  |...h.h.h.h...}.T....d0...B$T...0.d...B$T...|
+
+; ToneDB_MixerDefaultTable_076 -- file 0x1E629..0x1E653
+; These 43 bytes are the wave-select block of 2 tone-record elements (PopVocalAh, VocalDaa),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
+; 2 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_076:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x02, 0x68, 0x02, 0x68, 0x02, 0x68, 0x02, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 1E629  |...h.h.h.h...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_077:
+
+; ToneDB_MixerDefaultTable_077 -- file 0x1E654..0x1E67E
+; These 43 bytes are the wave-select block of tone record VocalDoo, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_077_SameAs_VocalDoo_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x00, 0x6D, 0x00, 0x6D, 0x00, 0x6D, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xC0, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00, 0x30, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00	; 1E654  |...m.m.m.m...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_078:
+
+; ToneDB_MixerDefaultTable_078 -- file 0x1E67F..0x1E6A9
+; These 43 bytes are the wave-select block of tone record SteamyKeys, element 2,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_078_SameAs_SteamyKeys_WaveSel2:
 	.byte 0x7F, 0x7F, 0x7F, 0x6B, 0x02, 0x6B, 0x02, 0x6B, 0x02, 0x6B, 0x02, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xBC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xBC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1E67F  |...k.k.k.k...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_079:
+
+; ToneDB_MixerDefaultTable_079 -- file 0x1E6AA..0x1E6D4
+; These 43 bytes are the wave-select block of tone record AcousticBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_079_SameAs_AcousticBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2B, 0x00, 0x2B, 0x00, 0x2B, 0x00, 0x2B, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xB9, 0xE2, 0x00, 0x2A, 0x18, 0x54, 0x09, 0x00, 0x00, 0x46, 0xB9, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x09, 0x00, 0x00	; 1E6AA  |...+.+.+.+...}.T....dF...*.T...F.d...*.T...|
-ToneDB_MixerDefaultTable_080:
+
+; ToneDB_MixerDefaultTable_080 -- file 0x1E6D5..0x1E6FF
+; These 43 bytes are the wave-select block of tone record BrightEBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_080_SameAs_BrightEBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x01, 0x28, 0x01, 0x28, 0x01, 0x28, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xC3, 0xE2, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00, 0x46, 0xC3, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00	; 1E6D5  |...(.(.(.(...}.T....dF...*.< ..F.d...*.< ..|
-ToneDB_MixerDefaultTable_081:
+
+; ToneDB_MixerDefaultTable_081 -- file 0x1E700..0x1E72A
+; These 43 bytes are the wave-select block of tone record PickedEBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_081_SameAs_PickedEBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x00, 0x2A, 0x00, 0x2A, 0x00, 0x2A, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC4, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x20, 0x00, 0x00, 0x3C, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x20, 0x00, 0x00	; 1E700  |...*.*.*.*...}.T....d<...*.H ..<.d...*.H ..|
-ToneDB_MixerDefaultTable_082:
+
+; ToneDB_MixerDefaultTable_082 -- file 0x1E72B..0x1E755
+; These 43 bytes are the wave-select block of tone record MuteBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_082_SameAs_MuteBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x00, 0x2F, 0x00, 0x2F, 0x00, 0x2F, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x30, 0xC0, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x18, 0x00, 0x00, 0x30, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x18, 0x00, 0x00	; 1E72B  |..././././...}.T....d0...*.H...0.d...*.H...|
-ToneDB_MixerDefaultTable_083:
+
+; ToneDB_MixerDefaultTable_083 -- file 0x1E756..0x1E780
+; These 43 bytes are the wave-select block of tone record WowBass2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_083_SameAs_WowBass2_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2C, 0x02, 0x2C, 0x02, 0x2C, 0x02, 0x2C, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 1E756  |...,.,.,.,...}.T....d0...*.H...0.d...*.H...|
-ToneDB_MixerDefaultTable_084:
+
+; ToneDB_MixerDefaultTable_084 -- file 0x1E781..0x1E7AB
+; These 43 bytes are the wave-select block of tone record PlasticBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_084_SameAs_PlasticBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x02, 0x2E, 0x02, 0x2E, 0x02, 0x2E, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x20, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x20, 0x00, 0x00	; 1E781  |.............}.T....d0...*.H ..0.d...*.H ..|
+
+; ToneDB_MixerDefaultTable_085 -- file 0x1E7AC..0x1E7D6
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_085:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E7AC  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_086 -- file 0x1E7D7..0x1E801
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_086:
 	.byte 0x7F, 0x7F, 0x7F, 0x02, 0x80, 0x02, 0x80, 0x02, 0x80, 0x02, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E7D7  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_087 -- file 0x1E802..0x1E82C
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_087:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x80, 0x1F, 0x80, 0x1F, 0x80, 0x1F, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00, 0x00, 0xD8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00	; 1E802  |.............}.T....d....B$T.....d...B$T...|
-ToneDB_MixerDefaultTable_088:
+
+; ToneDB_MixerDefaultTable_088 -- file 0x1E82D..0x1E857
+; These 43 bytes are the wave-select block of tone record Clavi, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_088_SameAs_Clavi_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x84, 0x1F, 0x84, 0x1F, 0x84, 0x1F, 0x84, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xCC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0E, 0x00, 0x00, 0x00, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0E, 0x00, 0x00	; 1E82D  |.............}.T....d....B$T.....d...B$T...|
+
+; ToneDB_MixerDefaultTable_089 -- file 0x1E858..0x1E882
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_089:
 	.byte 0x7F, 0x7F, 0x7F, 0x19, 0x80, 0x19, 0x80, 0x19, 0x80, 0x19, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xBE, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00, 0x00, 0xBE, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00	; 1E858  |.............}.T....d....*.H.....d...*.H...|
+
+; ToneDB_MixerDefaultTable_090 -- file 0x1E883..0x1E8AD
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_090:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x80, 0x17, 0x80, 0x17, 0x80, 0x17, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E883  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_091 -- file 0x1E8AE..0x1E8D8
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_091:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x81, 0x17, 0x81, 0x17, 0x81, 0x17, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E8AE  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_092 -- file 0x1E8D9..0x1E903
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_092:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x80, 0x16, 0x80, 0x16, 0x80, 0x16, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E8D9  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_093 -- file 0x1E904..0x1E92E
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_093:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x81, 0x16, 0x81, 0x16, 0x81, 0x16, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E904  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_094 -- file 0x1E92F..0x1E959
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_094:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x82, 0x16, 0x82, 0x16, 0x82, 0x16, 0x82, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E92F  |.............}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_095:
+
+; ToneDB_MixerDefaultTable_095 -- file 0x1E95A..0x1E984
+; These 43 bytes are the wave-select block of tone record BirdTweet, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_095_SameAs_BirdTweet_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x61, 0x80, 0x61, 0x80, 0x61, 0x80, 0x61, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E95A  |...a.a.a.a...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_096:
+
+; ToneDB_MixerDefaultTable_096 -- file 0x1E985..0x1E9AF
+; These 43 bytes are the wave-select block of tone record BirdTweet, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_096_SameAs_BirdTweet_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x80, 0x62, 0x80, 0x62, 0x80, 0x62, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E985  |...b.b.b.b...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_097:
+
+; ToneDB_MixerDefaultTable_097 -- file 0x1E9B0..0x1E9DA
+; These 43 bytes are the wave-select block of 2 tone-record elements (Seashore),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_097_SameAs_Seashore:
 	.byte 0x7F, 0x7F, 0x7F, 0x76, 0x80, 0x76, 0x80, 0x76, 0x80, 0x76, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E9B0  |...v.v.v.v...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_098:
+
+; ToneDB_MixerDefaultTable_098 -- file 0x1E9DB..0x1EA05
+; These 43 bytes are the wave-select block of tone record Telephone, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_098_SameAs_Telephone_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x72, 0x80, 0x72, 0x80, 0x72, 0x80, 0x72, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E9DB  |...r.r.r.r...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_099:
+
+; ToneDB_MixerDefaultTable_099 -- file 0x1EA06..0x1EA30
+; These 43 bytes are the wave-select block of tone record Helicopter, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_099_SameAs_Helicopter_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x80, 0x70, 0x80, 0x70, 0x80, 0x70, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EA06  |...p.p.p.p...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_100:
+
+; ToneDB_MixerDefaultTable_100 -- file 0x1EA31..0x1EA5B
+; These 43 bytes are the wave-select block of 3 tone-record elements (GunShot),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_100_SameAs_GunShot:
 	.byte 0x7F, 0x7F, 0x7F, 0x66, 0x80, 0x66, 0x80, 0x66, 0x80, 0x66, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EA31  |...f.f.f.f...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_101:
+
+; ToneDB_MixerDefaultTable_101 -- file 0x1EA5C..0x1EA86
+; These 43 bytes are the wave-select block of 2 tone-record elements (Applause),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_101_SameAs_Applause:
 	.byte 0x7F, 0x7F, 0x7F, 0x74, 0x80, 0x74, 0x80, 0x74, 0x80, 0x74, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EA5C  |...t.t.t.t...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_102 -- file 0x1EA87..0x1EAB1
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_102:
 	.byte 0x7F, 0x7F, 0x7F, 0x20, 0x80, 0x20, 0x80, 0x20, 0x80, 0x20, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EA87  |... . . . ...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_103 -- file 0x1EAB2..0x1EADC
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_103:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x80, 0x23, 0x80, 0x23, 0x80, 0x23, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EAB2  |...#.#.#.#...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_104 -- file 0x1EADD..0x1EB07
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_104:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x82, 0x22, 0x82, 0x22, 0x82, 0x22, 0x82, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EADD  |..."."."."...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_105 -- file 0x1EB08..0x1EB32
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_105:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x81, 0x22, 0x81, 0x22, 0x81, 0x22, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EB08  |..."."."."...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_106 -- file 0x1EB33..0x1EB5D
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_106:
 	.byte 0x7F, 0x7F, 0x7F, 0x20, 0x81, 0x20, 0x81, 0x20, 0x81, 0x20, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EB33  |... . . . ...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_107 -- file 0x1EB5E..0x1EB88
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_107:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x04, 0x5E, 0x04, 0x5E, 0x04, 0x5E, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EB5E  |...^.^.^.^...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_108:
+
+; ToneDB_MixerDefaultTable_108 -- file 0x1EB89..0x1EBB3
+; These 43 bytes are the wave-select block of tone record JazzOrgan, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_108_SameAs_JazzOrgan_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x58, 0x00, 0x58, 0x00, 0x58, 0x00, 0x58, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EB89  |...X.X.X.X...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_109:
+
+; ToneDB_MixerDefaultTable_109 -- file 0x1EBB4..0x1EBDE
+; These 43 bytes are the wave-select block of tone record FullDrawbars, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_109_SameAs_FullDrawbars_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x00, 0x59, 0x00, 0x59, 0x00, 0x59, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EBB4  |...Y.Y.Y.Y...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_110:
+
+; ToneDB_MixerDefaultTable_110 -- file 0x1EBDF..0x1EC09
+; These 43 bytes are the wave-select block of tone record JazzDrawbars, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_110_SameAs_JazzDrawbars_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x5D, 0x00, 0x5D, 0x00, 0x5D, 0x00, 0x5D, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC0, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EBDF  |...].].].]...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_111:
+
+; ToneDB_MixerDefaultTable_111 -- file 0x1EC0A..0x1EC34
+; These 43 bytes are the wave-select block of tone record 161, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_111_SameAs_161_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x00, 0x5B, 0x00, 0x5B, 0x00, 0x5B, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EC0A  |...[.[.[.[...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_112:
+
+; ToneDB_MixerDefaultTable_112 -- file 0x1EC35..0x1EC5F
+; These 43 bytes are the wave-select block of 2 tone-record elements (PipeOrgan1),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_112_SameAs_PipeOrgan1:
 	.byte 0x7F, 0x7F, 0x7F, 0x54, 0x00, 0x54, 0x00, 0x54, 0x00, 0x54, 0x00, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x3C, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1EC35  |...T.T.T.T...}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_113:
+
+; ToneDB_MixerDefaultTable_113 -- file 0x1EC60..0x1EC8A
+; These 43 bytes are the wave-select block of 2 tone-record elements (PipeOrgan2),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_113_SameAs_PipeOrgan2:
 	.byte 0x7F, 0x7F, 0x7F, 0x55, 0x00, 0x55, 0x00, 0x55, 0x00, 0x55, 0x00, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC0, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1EC60  |...U.U.U.U...}.T....d0...B$T...0.d...B$T...|
+
+; ToneDB_MixerDefaultTable_114 -- file 0x1EC8B..0x1ECB5
+; These 43 bytes are the wave-select block of 3 tone-record elements (Bandoneon, MellowAccordion),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
+; 2 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_114:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x00, 0x51, 0x00, 0x51, 0x00, 0x51, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1EC8B  |...Q.Q.Q.Q...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_115:
+
+; ToneDB_MixerDefaultTable_115 -- file 0x1ECB6..0x1ECE0
+; These 43 bytes are the wave-select block of tone record BrightAccordion, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_115_SameAs_BrightAccordion_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x50, 0x00, 0x50, 0x00, 0x50, 0x00, 0x50, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1ECB6  |...P.P.P.P...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_116:
+
+; ToneDB_MixerDefaultTable_116 -- file 0x1ECE1..0x1ED0B
+; These 43 bytes are the wave-select block of 2 tone-record elements (Musette),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_116_SameAs_Musette:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x00, 0x52, 0x00, 0x52, 0x00, 0x52, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xCA, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xCA, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 1ECE1  |...R.R.R.R...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_117:
+
+; ToneDB_MixerDefaultTable_117 -- file 0x1ED0C..0x1ED36
+; These 43 bytes are the wave-select block of tone record TheatreOrgan, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_117_SameAs_TheatreOrgan_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x01, 0x78, 0x01, 0x78, 0x01, 0x78, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1ED0C  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_118:
+
+; ToneDB_MixerDefaultTable_118 -- file 0x1ED37..0x1ED61
+; These 43 bytes are the wave-select block of tone record SynthStrings1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_118_SameAs_SynthStrings1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1ED37  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_119:
+
+; ToneDB_MixerDefaultTable_119 -- file 0x1ED62..0x1ED8C
+; These 43 bytes are the wave-select block of tone record DrMBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_119_SameAs_DrMBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x79, 0x01, 0x79, 0x01, 0x79, 0x01, 0x79, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1ED62  |...y.y.y.y...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_120:
+
+; ToneDB_MixerDefaultTable_120 -- file 0x1ED8D..0x1EDB7
+; These 43 bytes are the wave-select block of tone record StarTheme, element 2,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_120_SameAs_StarTheme_WaveSel2:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x02, 0x78, 0x02, 0x78, 0x02, 0x78, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1ED8D  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_121 -- file 0x1EDB8..0x1EDE2
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_121:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x03, 0x78, 0x03, 0x78, 0x03, 0x78, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EDB8  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_122 -- file 0x1EDE3..0x1EE0D
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_122:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x04, 0x78, 0x04, 0x78, 0x04, 0x78, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EDE3  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_123 -- file 0x1EE0E..0x1EE38
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_123:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x05, 0x78, 0x05, 0x78, 0x05, 0x78, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE0E  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_124 -- file 0x1EE39..0x1EE63
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_124:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x06, 0x78, 0x06, 0x78, 0x06, 0x78, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE39  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_125 -- file 0x1EE64..0x1EE8E
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_125:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x00, 0x7B, 0x00, 0x7B, 0x00, 0x7B, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE64  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_126 -- file 0x1EE8F..0x1EEB9
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_126:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x01, 0x7B, 0x01, 0x7B, 0x01, 0x7B, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE8F  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_127 -- file 0x1EEBA..0x1EEE4
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_127:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x02, 0x7B, 0x02, 0x7B, 0x02, 0x7B, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EEBA  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_128 -- file 0x1EEE5..0x1EF0F
+; These 43 bytes are the wave-select block of 6 tone-record elements (EchoDrops, PolySynth, SynthStrings1, +2 more),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 6 blocks that carry these bytes belong to
+; 5 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_128:
 	.byte 0x7F, 0x7F, 0x7F, 0x76, 0x00, 0x76, 0x00, 0x76, 0x00, 0x76, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC6, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EEE5  |...v.v.v.v...}.T....d0...B$`...0.d...B$`...|
+
+; ToneDB_MixerDefaultTable_129 -- file 0x1EF10..0x1EF3A
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_129:
 	.byte 0x7F, 0x7F, 0x7F, 0x76, 0x04, 0x76, 0x04, 0x76, 0x04, 0x76, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC6, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EF10  |...v.v.v.v...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_130:
+
+; ToneDB_MixerDefaultTable_130 -- file 0x1EF3B..0x1EF65
+; These 43 bytes are the wave-select block of tone record FusionEBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_130_SameAs_FusionEBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x04, 0x28, 0x04, 0x28, 0x04, 0x28, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xE2, 0x14, 0x86, 0x7F, 0x64, 0x3C, 0xC3, 0xE2, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00, 0x3C, 0xC3, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00	; 1EF3B  |...(.(.(.(...}.T....d<...*.< ..<.d...*.< ..|
+
+; ToneDB_MixerDefaultTable_131 -- file 0x1EF66..0x1EF90
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_131:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x80, 0x2A, 0x80, 0x2A, 0x80, 0x2A, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EF66  |...*.*.*.*...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_132 -- file 0x1EF91..0x1EFBB
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_132:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x80, 0x2E, 0x80, 0x2E, 0x80, 0x2E, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EF91  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_133 -- file 0x1EFBC..0x1EFE6
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 4 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_133:
 	.byte 0x7F, 0x7F, 0x7F, 0x2C, 0x80, 0x2C, 0x80, 0x2C, 0x80, 0x2C, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EFBC  |...,.,.,.,...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_134 -- file 0x1EFE7..0x1F011
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_134:
 	.byte 0x7F, 0x7F, 0x7F, 0x2D, 0x80, 0x2D, 0x80, 0x2D, 0x80, 0x2D, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EFE7  |...-.-.-.-...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_135 -- file 0x1F012..0x1F03C
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_135:
 	.byte 0x7F, 0x7F, 0x7F, 0x2C, 0x81, 0x2C, 0x81, 0x2C, 0x81, 0x2C, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F012  |...,.,.,.,...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_136 -- file 0x1F03D..0x1F067
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_136:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x80, 0x33, 0x80, 0x33, 0x80, 0x33, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F03D  |...3.3.3.3...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_137 -- file 0x1F068..0x1F092
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_137:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x80, 0x34, 0x80, 0x34, 0x80, 0x34, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F068  |...4.4.4.4...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_138 -- file 0x1F093..0x1F0BD
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_138:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x80, 0x35, 0x80, 0x35, 0x80, 0x35, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F093  |...5.5.5.5...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_139 -- file 0x1F0BE..0x1F0E8
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_139:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x80, 0x30, 0x80, 0x30, 0x80, 0x30, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F0BE  |...0.0.0.0...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_140 -- file 0x1F0E9..0x1F113
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_140:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x80, 0x2F, 0x80, 0x2F, 0x80, 0x2F, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F0E9  |..././././...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_141 -- file 0x1F114..0x1F13E
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_141:
 	.byte 0x7F, 0x7F, 0x7F, 0x37, 0x80, 0x37, 0x80, 0x37, 0x80, 0x37, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F114  |...7.7.7.7...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_142 -- file 0x1F13F..0x1F169
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_142:
 	.byte 0x7F, 0x7F, 0x7F, 0x36, 0x81, 0x36, 0x81, 0x36, 0x81, 0x36, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F13F  |...6.6.6.6...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_143 -- file 0x1F16A..0x1F194
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_143:
 	.byte 0x7F, 0x7F, 0x7F, 0x39, 0x80, 0x39, 0x80, 0x39, 0x80, 0x39, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F16A  |...9.9.9.9...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_144 -- file 0x1F195..0x1F1BF
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_144:
 	.byte 0x7F, 0x7F, 0x7F, 0x38, 0x81, 0x38, 0x81, 0x38, 0x81, 0x38, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F195  |...8.8.8.8...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_145 -- file 0x1F1C0..0x1F1EA
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_145:
 	.byte 0x7F, 0x7F, 0x7F, 0x3C, 0x80, 0x3C, 0x80, 0x3C, 0x80, 0x3C, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F1C0  |...<.<.<.<...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_146 -- file 0x1F1EB..0x1F215
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_146:
 	.byte 0x7F, 0x7F, 0x7F, 0x3D, 0x80, 0x3D, 0x80, 0x3D, 0x80, 0x3D, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F1EB  |...=.=.=.=...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_147 -- file 0x1F216..0x1F240
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_147:
 	.byte 0x7F, 0x7F, 0x7F, 0x3E, 0x80, 0x3E, 0x80, 0x3E, 0x80, 0x3E, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F216  |...>.>.>.>...}.T....d....B.x.....d...B.x...|
-ToneDB_MixerDefaultTable_148:
+
+; ToneDB_MixerDefaultTable_148 -- file 0x1F241..0x1F26B
+; These 43 bytes are the wave-select block of tone record ReverseCymbal, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_148_SameAs_ReverseCymbal_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x80, 0x3F, 0x80, 0x3F, 0x80, 0x3F, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F241  |...?.?.?.?...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_149 -- file 0x1F26C..0x1F296
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_149:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x81, 0x3F, 0x81, 0x3F, 0x81, 0x3F, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F26C  |...?.?.?.?...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_150 -- file 0x1F297..0x1F2C1
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_150:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x80, 0x3A, 0x80, 0x3A, 0x80, 0x3A, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F297  |...:.:.:.:...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_151 -- file 0x1F2C2..0x1F2EC
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_151:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x81, 0x3A, 0x81, 0x3A, 0x81, 0x3A, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F2C2  |...:.:.:.:...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_152 -- file 0x1F2ED..0x1F317
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_152:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x84, 0x3A, 0x84, 0x3A, 0x84, 0x3A, 0x84, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F2ED  |...:.:.:.:...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_153 -- file 0x1F318..0x1F342
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_153:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x85, 0x3A, 0x85, 0x3A, 0x85, 0x3A, 0x85, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F318  |...:.:.:.:...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_154 -- file 0x1F343..0x1F36D
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_154:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x80, 0x59, 0x80, 0x59, 0x80, 0x59, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F343  |...Y.Y.Y.Y...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_155 -- file 0x1F36E..0x1F398
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_155:
 	.byte 0x7F, 0x7F, 0x7F, 0x53, 0x80, 0x53, 0x80, 0x53, 0x80, 0x53, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F36E  |...S.S.S.S...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_156 -- file 0x1F399..0x1F3C3
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_156:
 	.byte 0x7F, 0x7F, 0x7F, 0x5A, 0x80, 0x5A, 0x80, 0x5A, 0x80, 0x5A, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F399  |...Z.Z.Z.Z...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_157 -- file 0x1F3C4..0x1F3EE
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_157:
 	.byte 0x7F, 0x7F, 0x7F, 0x5F, 0x80, 0x5F, 0x80, 0x5F, 0x80, 0x5F, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F3C4  |..._._._._...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_158 -- file 0x1F3EF..0x1F419
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_158:
 	.byte 0x7F, 0x7F, 0x7F, 0x5F, 0x81, 0x5F, 0x81, 0x5F, 0x81, 0x5F, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F3EF  |..._._._._...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_159 -- file 0x1F41A..0x1F444
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_159:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x80, 0x43, 0x80, 0x43, 0x80, 0x43, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F41A  |...C.C.C.C...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_160 -- file 0x1F445..0x1F46F
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_160:
 	.byte 0x7F, 0x7F, 0x7F, 0x40, 0x80, 0x40, 0x80, 0x40, 0x80, 0x40, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F445  |...@.@.@.@...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_161 -- file 0x1F470..0x1F49A
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_161:
 	.byte 0x7F, 0x7F, 0x7F, 0x41, 0x80, 0x41, 0x80, 0x41, 0x80, 0x41, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F470  |...A.A.A.A...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_162 -- file 0x1F49B..0x1F4C5
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_162:
 	.byte 0x7F, 0x7F, 0x7F, 0x56, 0x80, 0x56, 0x80, 0x56, 0x80, 0x56, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F49B  |...V.V.V.V...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_163 -- file 0x1F4C6..0x1F4F0
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_163:
 	.byte 0x7F, 0x7F, 0x7F, 0x56, 0x81, 0x56, 0x81, 0x56, 0x81, 0x56, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F4C6  |...V.V.V.V...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_164 -- file 0x1F4F1..0x1F51B
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_164:
 	.byte 0x7F, 0x7F, 0x7F, 0x55, 0x80, 0x55, 0x80, 0x55, 0x80, 0x55, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F4F1  |...U.U.U.U...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_165 -- file 0x1F51C..0x1F546
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_165:
 	.byte 0x7F, 0x7F, 0x7F, 0x54, 0x80, 0x54, 0x80, 0x54, 0x80, 0x54, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F51C  |...T.T.T.T...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_166 -- file 0x1F547..0x1F571
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_166:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x80, 0x4F, 0x80, 0x4F, 0x80, 0x4F, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F547  |...O.O.O.O...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_167 -- file 0x1F572..0x1F59C
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_167:
 	.byte 0x7F, 0x7F, 0x7F, 0x21, 0x81, 0x21, 0x81, 0x21, 0x81, 0x21, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F572  |...!.!.!.!...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_168 -- file 0x1F59D..0x1F5C7
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_168:
 	.byte 0x7F, 0x7F, 0x7F, 0x26, 0x81, 0x26, 0x81, 0x26, 0x81, 0x26, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F59D  |...&.&.&.&...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_169 -- file 0x1F5C8..0x1F5F2
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_169:
 	.byte 0x7F, 0x7F, 0x7F, 0x3B, 0x80, 0x3B, 0x80, 0x3B, 0x80, 0x3B, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F5C8  |...;.;.;.;...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_170 -- file 0x1F5F3..0x1F61D
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_170:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x81, 0x5B, 0x81, 0x5B, 0x81, 0x5B, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F5F3  |...[.[.[.[...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_171 -- file 0x1F61E..0x1F648
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_171:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x80, 0x52, 0x80, 0x52, 0x80, 0x52, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F61E  |...R.R.R.R...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_172 -- file 0x1F649..0x1F673
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_172:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x80, 0x51, 0x80, 0x51, 0x80, 0x51, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F649  |...Q.Q.Q.Q...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_173 -- file 0x1F674..0x1F69E
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_173:
 	.byte 0x7F, 0x7F, 0x7F, 0x50, 0x80, 0x50, 0x80, 0x50, 0x80, 0x50, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F674  |...P.P.P.P...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_174 -- file 0x1F69F..0x1F6C9
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_174:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x80, 0x5E, 0x80, 0x5E, 0x80, 0x5E, 0x80, 0x03, 0x03, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F69F  |...^.^.^.^...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_175 -- file 0x1F6CA..0x1F6F4
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_175:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x80, 0x4E, 0x80, 0x4E, 0x80, 0x4E, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F6CA  |...N.N.N.N...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_176 -- file 0x1F6F5..0x1F71F
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_176:
 	.byte 0x7F, 0x7F, 0x7F, 0x45, 0x80, 0x45, 0x80, 0x45, 0x80, 0x45, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F6F5  |...E.E.E.E...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_177 -- file 0x1F720..0x1F74A
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_177:
 	.byte 0x7F, 0x7F, 0x7F, 0x46, 0x80, 0x46, 0x80, 0x46, 0x80, 0x46, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F720  |...F.F.F.F...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_178 -- file 0x1F74B..0x1F775
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_178:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x80, 0x48, 0x80, 0x48, 0x80, 0x48, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F74B  |...H.H.H.H...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_179 -- file 0x1F776..0x1F7A0
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_179:
 	.byte 0x7F, 0x7F, 0x7F, 0x49, 0x80, 0x49, 0x80, 0x49, 0x80, 0x49, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F776  |...I.I.I.I...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_180 -- file 0x1F7A1..0x1F7CB
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_180:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x80, 0x5B, 0x80, 0x5B, 0x80, 0x5B, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F7A1  |...[.[.[.[...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_181 -- file 0x1F7CC..0x1F7F6
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_181:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x82, 0x5B, 0x82, 0x5B, 0x82, 0x5B, 0x82, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F7CC  |...[.[.[.[...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_182 -- file 0x1F7F7..0x1F821
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_182:
 	.byte 0x7F, 0x7F, 0x7F, 0x58, 0x80, 0x58, 0x80, 0x58, 0x80, 0x58, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F7F7  |...X.X.X.X...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_183 -- file 0x1F822..0x1F84C
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_183:
 	.byte 0x7F, 0x7F, 0x7F, 0x57, 0x80, 0x57, 0x80, 0x57, 0x80, 0x57, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F822  |...W.W.W.W...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_184 -- file 0x1F84D..0x1F877
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_184:
 	.byte 0x7F, 0x7F, 0x7F, 0x5D, 0x80, 0x5D, 0x80, 0x5D, 0x80, 0x5D, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F84D  |...].].].]...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_185 -- file 0x1F878..0x1F8A2
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_185:
 	.byte 0x7F, 0x7F, 0x7F, 0x4B, 0x80, 0x4B, 0x80, 0x4B, 0x80, 0x4B, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F878  |...K.K.K.K...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_186 -- file 0x1F8A3..0x1F8CD
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_186:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x80, 0x4D, 0x80, 0x4D, 0x80, 0x4D, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F8A3  |...M.M.M.M...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_187 -- file 0x1F8CE..0x1F8F8
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_187:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x80, 0x4C, 0x80, 0x4C, 0x80, 0x4C, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F8CE  |...L.L.L.L...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_188 -- file 0x1F8F9..0x1F923
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_188:
 	.byte 0x7F, 0x7F, 0x7F, 0x5C, 0x80, 0x5C, 0x80, 0x5C, 0x80, 0x5C, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F8F9  |...\.\.\.\...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_189 -- file 0x1F924..0x1F94E
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_189:
 	.byte 0x7F, 0x7F, 0x7F, 0x5C, 0x82, 0x5C, 0x82, 0x5C, 0x82, 0x5C, 0x82, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F924  |...\.\.\.\...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_190 -- file 0x1F94F..0x1F979
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_190:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x80, 0x44, 0x80, 0x44, 0x80, 0x44, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F94F  |...D.D.D.D...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_191 -- file 0x1F97A..0x1F9A4
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_191:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x81, 0x44, 0x81, 0x44, 0x81, 0x44, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F97A  |...D.D.D.D...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_192 -- file 0x1F9A5..0x1F9CF
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_192:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x80, 0x47, 0x80, 0x47, 0x80, 0x47, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F9A5  |...G.G.G.G...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_193 -- file 0x1F9D0..0x1F9FA
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_193:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x81, 0x47, 0x81, 0x47, 0x81, 0x47, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F9D0  |...G.G.G.G...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_194 -- file 0x1F9FB..0x1FA25
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_194:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x84, 0x48, 0x84, 0x48, 0x84, 0x48, 0x84, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F9FB  |...H.H.H.H...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_195 -- file 0x1FA26..0x1FA50
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_195:
 	.byte 0x7F, 0x7F, 0x7F, 0x50, 0x84, 0x50, 0x84, 0x50, 0x84, 0x50, 0x84, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FA26  |...P.P.P.P...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_196 -- file 0x1FA51..0x1FA7B
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_196:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x84, 0x52, 0x84, 0x52, 0x84, 0x52, 0x84, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FA51  |...R.R.R.R...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_197 -- file 0x1FA7C..0x1FAA6
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_197:
 	.byte 0x7F, 0x7F, 0x7F, 0x21, 0x84, 0x21, 0x84, 0x21, 0x84, 0x21, 0x84, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FA7C  |...!.!.!.!...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_198 -- file 0x1FAA7..0x1FAD1
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_198:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x84, 0x17, 0x84, 0x17, 0x84, 0x17, 0x84, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FAA7  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_199 -- file 0x1FAD2..0x1FAFC
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_199:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x85, 0x17, 0x85, 0x17, 0x85, 0x17, 0x85, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FAD2  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_200 -- file 0x1FAFD..0x1FB27
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_200:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x80, 0x0A, 0x80, 0x0A, 0x80, 0x0A, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FAFD  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_201 -- file 0x1FB28..0x1FB52
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_201:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x84, 0x0A, 0x84, 0x0A, 0x84, 0x0A, 0x84, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FB28  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_202 -- file 0x1FB53..0x1FB7D
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_202:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x85, 0x0A, 0x85, 0x0A, 0x85, 0x0A, 0x85, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FB53  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_203 -- file 0x1FB7E..0x1FBA8
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_203:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x84, 0x59, 0x84, 0x59, 0x84, 0x59, 0x84, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xDA, 0x00, 0x00, 0x5A, 0x24, 0x78, 0x03, 0x00, 0x00, 0x30, 0xDA, 0x64, 0x00, 0x00, 0x00, 0x5A, 0x24, 0x78, 0x03, 0x00, 0x00	; 1FB7E  |...Y.Y.Y.Y...}.T....d0...Z$x...0.d...Z$x...|
+
+; ToneDB_MixerDefaultTable_204 -- file 0x1FBA9..0x1FBD3
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_204:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x85, 0x59, 0x85, 0x59, 0x85, 0x59, 0x85, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xDA, 0x00, 0x00, 0x5A, 0x24, 0x78, 0x03, 0x00, 0x00, 0x30, 0xDA, 0x64, 0x00, 0x00, 0x00, 0x5A, 0x24, 0x78, 0x03, 0x00, 0x00	; 1FBA9  |...Y.Y.Y.Y...}.T....d0...Z$x...0.d...Z$x...|
+
+; ToneDB_MixerDefaultTable_205 -- file 0x1FBD4..0x1FBFE
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_205:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x80, 0x32, 0x80, 0x32, 0x80, 0x32, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x08, 0x00, 0x00	; 1FBD4  |...2.2.2.2...}.T....d0...*.T...0.d...*.T...|
+
+; ToneDB_MixerDefaultTable_206 -- file 0x1FBFF..0x1FC29
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 12 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_206:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x81, 0x32, 0x81, 0x32, 0x81, 0x32, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x08, 0x00, 0x00	; 1FBFF  |...2.2.2.2...}.T....d0...*.T...0.d...*.T...|
-ToneDB_MixerDefaultTable_207:
+
+; ToneDB_MixerDefaultTable_207 -- file 0x1FC2A..0x1FC54
+; These 43 bytes are the wave-select block of tone record ElectricGrand, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_207_SameAs_ElectricGrand_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xEB, 0xEC, 0x0A, 0x42, 0x24, 0x58, 0x0F, 0x00, 0x00, 0x3C, 0xEB, 0x64, 0xEC, 0x0A, 0x00, 0x42, 0x24, 0x58, 0x0F, 0x00, 0x00	; 1FC2A  |.............}.T....d<...B$X...<.d...B$X...|
+
+; ToneDB_MixerDefaultTable_208 -- file 0x1FC55..0x1FC7F
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 12 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_208:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x02, 0x05, 0x02, 0x05, 0x02, 0x05, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00	; 1FC55  |.............}.T....d0...B$`...0.d...B$`...|
+
+; ToneDB_MixerDefaultTable_209 -- file 0x1FC80..0x1FCAA
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_209:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x04, 0x05, 0x04, 0x05, 0x04, 0x05, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00	; 1FC80  |.............}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_210:
+
+; ToneDB_MixerDefaultTable_210 -- file 0x1FCAB..0x1FCD5
+; These 43 bytes are the wave-select block of tone record EPiano1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_210_SameAs_EPiano1_WaveSel0:
 	.byte 0x3C, 0x50, 0x64, 0x05, 0x02, 0x05, 0x04, 0x05, 0x00, 0x05, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x0A, 0x86, 0x7F, 0x64, 0x32, 0xD7, 0xF6, 0xF6, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00, 0x32, 0xD7, 0x64, 0xF6, 0xF6, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00	; 1FCAB  |<Pd..........}.T....d2...B$`...2.d...B$`...|
+
+; ToneDB_MixerDefaultTable_211 -- file 0x1FCD6..0x1FD00
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_211:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x06, 0x05, 0x06, 0x05, 0x06, 0x05, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00	; 1FCD6  |.............}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_212:
+
+; ToneDB_MixerDefaultTable_212 -- file 0x1FD01..0x1FD2B
+; These 43 bytes are the wave-select block of tone record SuitcaseEP, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_212_SameAs_SuitcaseEP_WaveSel0:
 	.byte 0x59, 0x68, 0x7F, 0x04, 0x00, 0x04, 0x04, 0x05, 0x01, 0x04, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC9, 0xF6, 0x00, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00, 0x3C, 0xC9, 0x64, 0xF6, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00	; 1FD01  |Yh...........}.T....d<...B$T...<.d...B$T...|
+
+; ToneDB_MixerDefaultTable_213 -- file 0x1FD2C..0x1FD56
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 11 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_213:
 	.byte 0x7F, 0x7F, 0x7F, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC6, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00, 0x30, 0xC6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00	; 1FD2C  |.............}.T....d0...B$T...0.d...B$T...|
+
+; ToneDB_MixerDefaultTable_214 -- file 0x1FD57..0x1FD81
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_214:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x04, 0x06, 0x04, 0x06, 0x04, 0x06, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCB, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x30, 0xCB, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FD57  |.............}.T....d0...B$V...0.d...B$V...|
+
+; ToneDB_MixerDefaultTable_215 -- file 0x1FD82..0x1FDAC
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_215:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x05, 0x06, 0x05, 0x06, 0x05, 0x06, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCB, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x30, 0xCB, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FD82  |.............}.T....d0...B$V...0.d...B$V...|
-ToneDB_MixerDefaultTable_216:
+
+; ToneDB_MixerDefaultTable_216 -- file 0x1FDAD..0x1FDD7
+; These 43 bytes are the wave-select block of tone record ModernEP1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_216_SameAs_ModernEP1_WaveSel0:
 	.byte 0x3B, 0x4F, 0x63, 0x06, 0x04, 0x06, 0x05, 0x06, 0x00, 0x06, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xCB, 0xF6, 0xFB, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x3C, 0xCB, 0x64, 0xF6, 0xFB, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FDAD  |;Oc..........}.T....d<...B$V...<.d...B$V...|
+
+; ToneDB_MixerDefaultTable_217 -- file 0x1FDD8..0x1FE02
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_217:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCB, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x30, 0xCB, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FDD8  |.............}.T....d0...B$V...0.d...B$V...|
+
+; ToneDB_MixerDefaultTable_218 -- file 0x1FE03..0x1FE2D
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_218:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x07, 0x06, 0x07, 0x06, 0x07, 0x06, 0x07, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCB, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x30, 0xCB, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FE03  |.............}.T....d0...B$V...0.d...B$V...|
-ToneDB_MixerDefaultTable_219:
+
+; ToneDB_MixerDefaultTable_219 -- file 0x1FE2E..0x1FE58
+; These 43 bytes are the wave-select block of tone record Glockenspiel, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_219_SameAs_Glockenspiel_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x09, 0x00, 0x09, 0x00, 0x09, 0x00, 0x09, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1FE2E  |.............}.T.(..d<...Z0l...<.d...Z0l...|
-ToneDB_MixerDefaultTable_220:
+
+; ToneDB_MixerDefaultTable_220 -- file 0x1FE59..0x1FE83
+; These 43 bytes are the wave-select block of tone record SteelDrum, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_220_SameAs_SteelDrum_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x0F, 0x00, 0x0F, 0x00, 0x0F, 0x00, 0x0F, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x0A, 0x14, 0x80, 0x7F, 0x64, 0x50, 0xE1, 0xD8, 0xF6, 0x42, 0x24, 0x54, 0x16, 0x00, 0x00, 0x50, 0xE1, 0x64, 0xD8, 0xF6, 0x00, 0x42, 0x24, 0x54, 0x16, 0x00, 0x00	; 1FE59  |.............}.T....dP...B$T...P.d...B$T...|
-ToneDB_MixerDefaultTable_221:
+
+; ToneDB_MixerDefaultTable_221 -- file 0x1FE84..0x1FEAE
+; These 43 bytes are the wave-select block of tone record TubularBells, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x05
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_221_SameAs_TubularBells_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x0E, 0x00, 0x0E, 0x00, 0x0E, 0x00, 0x0E, 0x00, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x1E, 0x80, 0x7F, 0x64, 0x1E, 0xD8, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x00, 0x00, 0x00, 0x1E, 0xD8, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x00, 0x00, 0x00	; 1FE84  |.............}.T....d....B$`.....d...B$`...|
-ToneDB_MixerDefaultTable_222:
+
+; ToneDB_MixerDefaultTable_222 -- file 0x1FEAF..0x1FED9
+; These 43 bytes are the wave-select block of tone record SpanishGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_222_SameAs_SpanishGuitar_WaveSel0:
 	.byte 0x63, 0x7F, 0x7F, 0x14, 0x02, 0x14, 0x01, 0x14, 0x01, 0x14, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xD4, 0xE2, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00, 0x3C, 0xD4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00	; 1FEAF  |c............}.T....d<...B$T...<.d...B$T...|
+
+; ToneDB_MixerDefaultTable_223 -- file 0x1FEDA..0x1FF04
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_223:
 	.byte 0x7F, 0x7F, 0x7F, 0x14, 0x02, 0x14, 0x02, 0x14, 0x02, 0x14, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00	; 1FEDA  |.............}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_224:
+
+; ToneDB_MixerDefaultTable_224 -- file 0x1FF05..0x1FF2F
+; These 43 bytes are the wave-select block of tone record JazzAcGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_224_SameAs_JazzAcGuitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x4A, 0x20, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x4A, 0x20, 0x00, 0x00	; 1FF05  |.............}.T....d0...B$J ..0.d...B$J ..|
-ToneDB_MixerDefaultTable_225:
+
+; ToneDB_MixerDefaultTable_225 -- file 0x1FF30..0x1FF5A
+; These 43 bytes are the wave-select block of tone record GuitarHarmonics, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_225_SameAs_GuitarHarmonics_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1B, 0x03, 0x1B, 0x03, 0x1B, 0x03, 0x1B, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x50, 0xEB, 0xEC, 0x1E, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x50, 0xEB, 0x64, 0xEC, 0x1E, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FF30  |.............}.T....dP...B$T...P.d...B$T...|
+
+; ToneDB_MixerDefaultTable_226 -- file 0x1FF5B..0x1FF85
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_226:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x80, 0x12, 0x80, 0x12, 0x80, 0x12, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x00, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FF5B  |.............}.T....d....B$T.....d...B$T...|
+
+; ToneDB_MixerDefaultTable_227 -- file 0x1FF86..0x1FFB0
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_227:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x81, 0x12, 0x81, 0x12, 0x81, 0x12, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x00, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FF86  |.............}.T....d....B$T.....d...B$T...|
+
+; ToneDB_MixerDefaultTable_228 -- file 0x1FFB1..0x1FFDB
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_228:
 	.byte 0x7F, 0x7F, 0x7F, 0x13, 0x80, 0x13, 0x80, 0x13, 0x80, 0x13, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x00, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FFB1  |.............}.T....d....B$T.....d...B$T...|
+
+; ToneDB_MixerDefaultTable_229 -- file 0x1FFDC..0x20006
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_229:
 	.byte 0x7F, 0x7F, 0x7F, 0x13, 0x81, 0x13, 0x81, 0x13, 0x81, 0x13, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x00, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FFDC  |.............}.T....d....B$T.....d...B$T...|
-ToneDB_MixerDefaultTable_230:
+
+; ToneDB_MixerDefaultTable_230 -- file 0x20007..0x20031
+; These 43 bytes are the wave-select block of tone record FolkGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_230_SameAs_FolkGuitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x00, 0x16, 0x00, 0x16, 0x00, 0x16, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xE1, 0x00, 0xF6, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x30, 0xE1, 0x64, 0x00, 0xF6, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 20007  |.............}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_231:
+
+; ToneDB_MixerDefaultTable_231 -- file 0x20032..0x2005C
+; These 43 bytes are the wave-select block of tone record FolkGuitar, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_231_SameAs_FolkGuitar_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x0F, 0x80, 0x0F, 0x80, 0x0F, 0x80, 0x0F, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xD6, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00, 0x00, 0xD6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x10, 0x00, 0x00	; 20032  |.............}.T....d....B$T.....d...B$T...|
-ToneDB_MixerDefaultTable_232:
+
+; ToneDB_MixerDefaultTable_232 -- file 0x2005D..0x20087
+; These 43 bytes are the wave-select block of tone record ElectroAcGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_232_SameAs_ElectroAcGuitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x19, 0x01, 0x19, 0x01, 0x19, 0x01, 0x19, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x3C, 0xE1, 0xEC, 0x14, 0x42, 0x24, 0x4D, 0x13, 0x00, 0x00, 0x3C, 0xE1, 0x64, 0xEC, 0x14, 0x00, 0x42, 0x24, 0x4D, 0x13, 0x00, 0x00	; 2005D  |.............}.T....d<...B$M...<.d...B$M...|
-ToneDB_MixerDefaultTable_233:
+
+; ToneDB_MixerDefaultTable_233 -- file 0x20088..0x200B2
+; These 43 bytes are the wave-select block of tone record JazzGuitar1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_233_SameAs_JazzGuitar1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x19, 0x00, 0x19, 0x00, 0x19, 0x00, 0x19, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x32, 0xD7, 0xF6, 0xF6, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00, 0x32, 0xD7, 0x64, 0xF6, 0xF6, 0x00, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00	; 20088  |.............}.T....d2...B$T...2.d...B$T...|
-ToneDB_MixerDefaultTable_234:
+
+; ToneDB_MixerDefaultTable_234 -- file 0x200B3..0x200DD
+; These 43 bytes are the wave-select block of tone record BrightSolidGtr, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_234_SameAs_BrightSolidGtr_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1A, 0x00, 0x1A, 0x00, 0x1A, 0x00, 0x1A, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x38, 0xD3, 0xEC, 0x00, 0x42, 0x18, 0x54, 0x19, 0x00, 0x00, 0x38, 0xD3, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x18, 0x54, 0x19, 0x00, 0x00	; 200B3  |.............}.T....d8...B.T...8.d...B.T...|
-ToneDB_MixerDefaultTable_235:
+
+; ToneDB_MixerDefaultTable_235 -- file 0x200DE..0x20108
+; These 43 bytes are the wave-select block of tone record FretNoise, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_235_SameAs_FretNoise_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x15, 0x80, 0x15, 0x80, 0x15, 0x80, 0x15, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xD3, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00, 0x00, 0xD3, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00	; 200DE  |.............}.T....d....B$T.....d...B$T...|
+
+; ToneDB_MixerDefaultTable_236 -- file 0x20109..0x20133
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_236:
 	.byte 0x7F, 0x7F, 0x7F, 0x10, 0x81, 0x10, 0x81, 0x10, 0x81, 0x10, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xD3, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00, 0x00, 0xD3, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00	; 20109  |.............}.T....d....B$T.....d...B$T...|
+
+; ToneDB_MixerDefaultTable_237 -- file 0x20134..0x2015E
+; These 43 bytes are the wave-select block of 3 tone-record elements (BrightSolidGtr, MuteGuitar, SynthSolidGtr),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
+; 3 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_237:
 	.byte 0x60, 0x7F, 0x7F, 0x10, 0x80, 0x10, 0x81, 0x10, 0x80, 0x10, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xD3, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00, 0x00, 0xD3, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00	; 20134  |`............}.T....d....B$T.....d...B$T...|
-ToneDB_MixerDefaultTable_238:
+
+; ToneDB_MixerDefaultTable_238 -- file 0x2015F..0x20189
+; These 43 bytes are the wave-select block of tone record MellowSolidGtr, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_238_SameAs_MellowSolidGtr_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1C, 0x00, 0x1C, 0x00, 0x1C, 0x00, 0x1C, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xE1, 0xEC, 0x0A, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00, 0x3C, 0xE1, 0x64, 0xEC, 0x0A, 0x00, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00	; 2015F  |.............}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_239:
+
+; ToneDB_MixerDefaultTable_239 -- file 0x2018A..0x201B4
+; These 43 bytes are the wave-select block of tone record CleanSolidGtr, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_239_SameAs_CleanSolidGtr_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1A, 0x01, 0x1A, 0x01, 0x1A, 0x01, 0x1A, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xD7, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x16, 0x00, 0x00, 0x3C, 0xD7, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x16, 0x00, 0x00	; 2018A  |.............}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_240:
+
+; ToneDB_MixerDefaultTable_240 -- file 0x201B5..0x201DF
+; These 43 bytes are the wave-select block of tone record FusionSolidGtr, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_240_SameAs_FusionSolidGtr_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1A, 0x02, 0x1A, 0x02, 0x1A, 0x02, 0x1A, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x0A, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xD0, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00, 0x3C, 0xD0, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00	; 201B5  |.............}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_241:
+
+; ToneDB_MixerDefaultTable_241 -- file 0x201E0..0x2020A
+; These 43 bytes are the wave-select block of tone record MuteGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_241_SameAs_MuteGuitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1D, 0x00, 0x1D, 0x00, 0x1D, 0x00, 0x1D, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xCA, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00, 0x30, 0xCA, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00	; 201E0  |.............}.T....d0...B$T...0.d...B$T...|
+
+; ToneDB_MixerDefaultTable_242 -- file 0x2020B..0x20235
+; These 43 bytes are the wave-select block of 2 tone-record elements (FunkMuteGuitar, MuteGuitar),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
+; 2 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_242:
 	.byte 0x7F, 0x7F, 0x7F, 0x11, 0x80, 0x11, 0x80, 0x11, 0x80, 0x11, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xCA, 0x00, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00, 0x00, 0xCA, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00	; 2020B  |.............}.T....d....B$T.....d...B$T...|
-ToneDB_MixerDefaultTable_243:
+
+; ToneDB_MixerDefaultTable_243 -- file 0x20236..0x20260
+; These 43 bytes are the wave-select block of tone record FunkMuteGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_243_SameAs_FunkMuteGuitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1D, 0x02, 0x1D, 0x02, 0x1D, 0x02, 0x1D, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xCA, 0xE2, 0x00, 0x42, 0x24, 0x54, 0x1E, 0x00, 0x00, 0x46, 0xCA, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x54, 0x1E, 0x00, 0x00	; 20236  |.............}.T....dF...B$T...F.d...B$T...|
-ToneDB_MixerDefaultTable_244:
+
+; ToneDB_MixerDefaultTable_244 -- file 0x20261..0x2028B
+; These 43 bytes are the wave-select block of tone record DistortionGtr1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_244_SameAs_DistortionGtr1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1E, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xD2, 0xE2, 0x14, 0x42, 0x24, 0x54, 0x06, 0x00, 0x00, 0x46, 0xD2, 0x64, 0xE2, 0x14, 0x00, 0x42, 0x24, 0x54, 0x06, 0x00, 0x00	; 20261  |.............}.T....dF...B$T...F.d...B$T...|
-ToneDB_MixerDefaultTable_245:
+
+; ToneDB_MixerDefaultTable_245 -- file 0x2028C..0x202B6
+; These 43 bytes are the wave-select block of tone record DistortionGtr2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_245_SameAs_DistortionGtr2_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1E, 0x02, 0x1E, 0x02, 0x1E, 0x02, 0x1E, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xE2, 0x14, 0x86, 0x7F, 0x64, 0x30, 0xD6, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xD6, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 2028C  |.............}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_246:
+
+; ToneDB_MixerDefaultTable_246 -- file 0x202B7..0x202E1
+; These 43 bytes are the wave-select block of tone record OverdriveGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_246_SameAs_OverdriveGuitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1B, 0x02, 0x1B, 0x02, 0x1B, 0x02, 0x1B, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x3C, 0xD6, 0xE2, 0x00, 0x42, 0x24, 0x54, 0x0C, 0x00, 0x00, 0x3C, 0xD6, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0C, 0x00, 0x00	; 202B7  |.............}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_247:
+
+; ToneDB_MixerDefaultTable_247 -- file 0x202E2..0x2030C
+; These 43 bytes are the wave-select block of tone record RockHarmonics, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_247_SameAs_RockHarmonics_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1B, 0x01, 0x1B, 0x01, 0x1B, 0x01, 0x1B, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x3C, 0x56, 0xEC, 0x00, 0x42, 0x24, 0x60, 0x00, 0x00, 0x00, 0x3C, 0x56, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x60, 0x00, 0x00, 0x00	; 202E2  |.............}.T....d<V..B$`...<Vd...B$`...|
-ToneDB_MixerDefaultTable_248:
+
+; ToneDB_MixerDefaultTable_248 -- file 0x2030D..0x20337
+; These 43 bytes are the wave-select block of tone record CountryGuitar, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_248_SameAs_CountryGuitar_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x01, 0x1F, 0x01, 0x1F, 0x01, 0x1F, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x14, 0x14, 0x86, 0x7F, 0x64, 0x3C, 0xC9, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00, 0x3C, 0xC9, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00	; 2030D  |.............}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_249:
+
+; ToneDB_MixerDefaultTable_249 -- file 0x20338..0x20362
+; These 43 bytes are the wave-select block of tone record HawaiianGuitar1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_249_SameAs_HawaiianGuitar1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x02, 0x1F, 0x02, 0x1F, 0x02, 0x1F, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x14, 0x14, 0x06, 0x7F, 0x64, 0x3C, 0xC8, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00, 0x3C, 0xC8, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x18, 0x00, 0x00	; 20338  |.............}.T....d<...B$T...<.d...B$T...|
-ToneDB_MixerDefaultTable_250:
+
+; ToneDB_MixerDefaultTable_250 -- file 0x20363..0x2038D
+; These 43 bytes are the wave-select block of tone record HawaiianGuitar2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_250_SameAs_HawaiianGuitar2_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x1E, 0x14, 0x86, 0x7F, 0x64, 0x3C, 0xC8, 0xEC, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00, 0x3C, 0xC8, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00	; 20363  |.............}.T....d<...B$T...<.d...B$T...|
+
+; ToneDB_MixerDefaultTable_251 -- file 0x2038E..0x203B8
+; These 43 bytes are the wave-select block of 2 tone-record elements (AltoSax, SopranoSax),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
+; 2 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_251:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x80, 0x07, 0x80, 0x07, 0x80, 0x07, 0x80, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2038E  |.............}.T....d....B$`.....d...B$`...|
+
+; ToneDB_MixerDefaultTable_252 -- file 0x203B9..0x203E3
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_252:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x81, 0x07, 0x81, 0x07, 0x81, 0x07, 0x81, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 203B9  |.............}.T....d....B$`.....d...B$`...|
+
+; ToneDB_MixerDefaultTable_253 -- file 0x203E4..0x2040E
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_253:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x82, 0x07, 0x82, 0x07, 0x82, 0x07, 0x82, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 203E4  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_254 -- file 0x2040F..0x20439
+; These 43 bytes are the wave-select block of 5 tone-record elements (AltoFlute, BlownBottle, BreathNoise, +2 more),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 5 blocks that carry these bytes belong to
+; 5 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_254:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x80, 0x05, 0x80, 0x05, 0x80, 0x05, 0x80, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 2040F  |.............}.T....d....N0`.....d...N0`...|
+
+; ToneDB_MixerDefaultTable_255 -- file 0x2043A..0x20464
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_255:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x84, 0x05, 0x84, 0x05, 0x84, 0x05, 0x84, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 2043A  |.............}.T....d....N0`.....d...N0`...|
+
+; ToneDB_MixerDefaultTable_256 -- file 0x20465..0x2048F
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_256:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x80, 0x06, 0x80, 0x06, 0x80, 0x06, 0x80, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 20465  |.............}.T....d....N0`.....d...N0`...|
+
+; ToneDB_MixerDefaultTable_257 -- file 0x20490..0x204BA
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_257:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x81, 0x06, 0x81, 0x06, 0x81, 0x06, 0x81, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 20490  |.............}.T....d....N0`.....d...N0`...|
+
+; ToneDB_MixerDefaultTable_258 -- file 0x204BB..0x204E5
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_258:
 	.byte 0x7F, 0x7F, 0x7F, 0x0C, 0x81, 0x0C, 0x81, 0x0C, 0x81, 0x0C, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 204BB  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_259 -- file 0x204E6..0x20510
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_259:
 	.byte 0x7F, 0x7F, 0x7F, 0x0C, 0x80, 0x0C, 0x80, 0x0C, 0x80, 0x0C, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 204E6  |.............}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_260 -- file 0x20511..0x2053B
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_260:
 	.byte 0x7F, 0x7F, 0x7F, 0x79, 0x80, 0x79, 0x80, 0x79, 0x80, 0x79, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20511  |...y.y.y.y...}.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_261 -- file 0x2053C..0x20566
+; These 43 bytes are the wave-select block of 3 tone-record elements (MidiGrand2, VocalDoo, VocalOoh),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 3 blocks that carry these bytes belong to
+; 3 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_261:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x01, 0x68, 0x01, 0x68, 0x01, 0x68, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 2053C  |...h.h.h.h...}.T....d0...B$T...0.d...B$T...|
+
+; ToneDB_MixerDefaultTable_262 -- file 0x20567..0x20591
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_262:
 	.byte 0x7F, 0x7F, 0x7F, 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 20567  |...i.i.i.i...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_263:
+
+; ToneDB_MixerDefaultTable_263 -- file 0x20592..0x205BC
+; These 43 bytes are the wave-select block of tone record VocalMmm, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_263_SameAs_VocalMmm_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x6E, 0x00, 0x6E, 0x00, 0x6E, 0x00, 0x6E, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x97, 0x7F, 0x64, 0x30, 0xC0, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00, 0x30, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00	; 20592  |...n.n.n.n...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_264:
+
+; ToneDB_MixerDefaultTable_264 -- file 0x205BD..0x205E7
+; These 43 bytes are the wave-select block of tone record VocalDaa, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_264_SameAs_VocalDaa_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x01, 0x6D, 0x01, 0x6D, 0x01, 0x6D, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x97, 0x7F, 0x64, 0x30, 0xC0, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00, 0x30, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00	; 205BD  |...m.m.m.m...}.T....d0...B$T...0.d...B$T...|
-ToneDB_MixerDefaultTable_265:
+
+; ToneDB_MixerDefaultTable_265 -- file 0x205E8..0x20612
+; These 43 bytes are the wave-select block of tone record Brass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_265_SameAs_Brass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x38, 0x00, 0x38, 0x00, 0x38, 0x00, 0x38, 0x00, 0x04, 0x04, 0x14, 0x18, 0x46, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC6, 0xE2, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00, 0x3C, 0xC6, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x18, 0x60, 0x10, 0x00, 0x00	; 205E8  |...8.8.8.8.....F....d<...B.`...<.d...B.`...|
-ToneDB_MixerDefaultTable_266:
+
+; ToneDB_MixerDefaultTable_266 -- file 0x20613..0x2063D
+; These 43 bytes are the wave-select block of tone record Trumpet1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_266_SameAs_Trumpet1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x30, 0x00, 0x04, 0x04, 0x14, 0x18, 0x41, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC6, 0xCE, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC6, 0x64, 0xCE, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20613  |...0.0.0.0.....A....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_267:
+
+; ToneDB_MixerDefaultTable_267 -- file 0x2063E..0x20668
+; These 43 bytes are the wave-select block of tone record Trumpet2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_267_SameAs_Trumpet2_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x02, 0x30, 0x02, 0x30, 0x02, 0x30, 0x02, 0x04, 0x04, 0x14, 0x18, 0x43, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC6, 0xCE, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC6, 0x64, 0xCE, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2063E  |...0.0.0.0.....C....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_268:
+
+; ToneDB_MixerDefaultTable_268 -- file 0x20669..0x20693
+; These 43 bytes are the wave-select block of tone record OrchestTrumpet, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_268_SameAs_OrchestTrumpet_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x01, 0x30, 0x01, 0x30, 0x01, 0x30, 0x01, 0x04, 0x04, 0x14, 0x18, 0x43, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC6, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x3C, 0xC6, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20669  |...0.0.0.0.....C....d<...B$`...<.d...B$`...|
-ToneDB_MixerDefaultTable_269:
+
+; ToneDB_MixerDefaultTable_269 -- file 0x20694..0x206BE
+; These 43 bytes are the wave-select block of tone record HarmonMuteTpt, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_269_SameAs_HarmonMuteTpt_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x00, 0x32, 0x00, 0x32, 0x00, 0x32, 0x00, 0x04, 0x04, 0x14, 0x18, 0x43, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC6, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x3C, 0xC6, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20694  |...2.2.2.2.....C....d<...B$`...<.d...B$`...|
-ToneDB_MixerDefaultTable_270:
+
+; ToneDB_MixerDefaultTable_270 -- file 0x206BF..0x206E9
+; These 43 bytes are the wave-select block of tone record StraightMuteTpt, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_270_SameAs_StraightMuteTpt_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x01, 0x32, 0x01, 0x32, 0x01, 0x32, 0x01, 0x04, 0x04, 0x14, 0x18, 0x46, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC6, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x3C, 0xC6, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 206BF  |...2.2.2.2.....F....d<...B$`...<.d...B$`...|
-ToneDB_MixerDefaultTable_271:
+
+; ToneDB_MixerDefaultTable_271 -- file 0x206EA..0x20714
+; These 43 bytes are the wave-select block of tone record FlugelHorn, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_271_SameAs_FlugelHorn_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x00, 0x33, 0x00, 0x33, 0x00, 0x33, 0x00, 0x04, 0x04, 0x14, 0x08, 0x43, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC2, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC2, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 206EA  |...3.3.3.3.....C....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_272:
+
+; ToneDB_MixerDefaultTable_272 -- file 0x20715..0x2073F
+; These 43 bytes are the wave-select block of tone record Cornet, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_272_SameAs_Cornet_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x31, 0x00, 0x31, 0x00, 0x31, 0x00, 0x31, 0x00, 0x04, 0x04, 0x14, 0x18, 0x41, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xCE, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xCE, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20715  |...1.1.1.1.....A....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_273:
+
+; ToneDB_MixerDefaultTable_273 -- file 0x20740..0x2076A
+; These 43 bytes are the wave-select block of tone record BrightTrombone, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_273_SameAs_BrightTrombone_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x00, 0x34, 0x00, 0x34, 0x00, 0x34, 0x00, 0x04, 0x04, 0x14, 0x18, 0x43, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC6, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC6, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20740  |...4.4.4.4.....C....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_274:
+
+; ToneDB_MixerDefaultTable_274 -- file 0x2076B..0x20795
+; These 43 bytes are the wave-select block of tone record Brass, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_274_SameAs_Brass_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x38, 0x01, 0x38, 0x01, 0x38, 0x01, 0x38, 0x01, 0x04, 0x04, 0x1B, 0x18, 0x43, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC6, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x3C, 0xC6, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2076B  |...8.8.8.8.....C....d<...B$`...<.d...B$`...|
-ToneDB_MixerDefaultTable_275:
+
+; ToneDB_MixerDefaultTable_275 -- file 0x20796..0x207C0
+; These 43 bytes are the wave-select block of tone record MellowTrombone, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_275_SameAs_MellowTrombone_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x00, 0x35, 0x00, 0x35, 0x00, 0x35, 0x00, 0x04, 0x04, 0x14, 0x18, 0x46, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC6, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC6, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20796  |...5.5.5.5.....F....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_276:
+
+; ToneDB_MixerDefaultTable_276 -- file 0x207C1..0x207EB
+; These 43 bytes are the wave-select block of tone record CupMuteTrombone, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_276_SameAs_CupMuteTrombone_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x03, 0x34, 0x03, 0x34, 0x03, 0x34, 0x03, 0x04, 0x04, 0x14, 0x18, 0x43, 0xF6, 0x0A, 0x06, 0x7F, 0x64, 0x46, 0xC6, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC6, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 207C1  |...4.4.4.4.....C....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_277:
+
+; ToneDB_MixerDefaultTable_277 -- file 0x207EC..0x20816
+; These 43 bytes are the wave-select block of tone record ClosedFrHorn, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_277_SameAs_ClosedFrHorn_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x36, 0x00, 0x36, 0x00, 0x36, 0x00, 0x36, 0x00, 0x04, 0x04, 0x7D, 0x00, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC2, 0xEC, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC2, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 207EC  |...6.6.6.6...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_278:
+
+; ToneDB_MixerDefaultTable_278 -- file 0x20817..0x20841
+; These 43 bytes are the wave-select block of tone record OpenFrHorn, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_278_SameAs_OpenFrHorn_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x36, 0x01, 0x36, 0x01, 0x36, 0x01, 0x36, 0x01, 0x04, 0x04, 0x7D, 0x00, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC2, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC2, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20817  |...6.6.6.6...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_279:
+
+; ToneDB_MixerDefaultTable_279 -- file 0x20842..0x2086C
+; These 43 bytes are the wave-select block of tone record OrchestralTuba, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_279_SameAs_OrchestralTuba_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x37, 0x00, 0x37, 0x00, 0x37, 0x00, 0x37, 0x00, 0x04, 0x04, 0x7D, 0x00, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xB8, 0xD8, 0x00, 0x2A, 0x18, 0x54, 0x10, 0x00, 0x00, 0x46, 0xB8, 0x64, 0xD8, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x10, 0x00, 0x00	; 20842  |...7.7.7.7...}.T....dF...*.T...F.d...*.T...|
-ToneDB_MixerDefaultTable_280:
+
+; ToneDB_MixerDefaultTable_280 -- file 0x2086D..0x20897
+; These 43 bytes are the wave-select block of tone record SynthBrass2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x04
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_280_SameAs_SynthBrass2_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x3C, 0x01, 0x3C, 0x01, 0x3C, 0x01, 0x3C, 0x01, 0x04, 0x04, 0x7D, 0x00, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC6, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC6, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2086D  |...<.<.<.<...}.T....dF...B$`...F.d...B$`...|
+
+; ToneDB_MixerDefaultTable_281 -- file 0x20898..0x208C2
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_281:
 	.byte 0x7F, 0x7F, 0x7F, 0x3D, 0x03, 0x3D, 0x03, 0x3D, 0x03, 0x3D, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 20898  |...=.=.=.=...}.T....d0...B.`...0.d...B.`...|
-ToneDB_MixerDefaultTable_282:
+
+; ToneDB_MixerDefaultTable_282 -- file 0x208C3..0x208ED
+; These 43 bytes are the wave-select block of tone record SopranoSax, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_282_SameAs_SopranoSax_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x04, 0x4C, 0x04, 0x4C, 0x04, 0x4C, 0x04, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 208C3  |...L.L.L.L...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_283:
+
+; ToneDB_MixerDefaultTable_283 -- file 0x208EE..0x20918
+; These 43 bytes are the wave-select block of tone record MellowAltoSax, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_283_SameAs_MellowAltoSax_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x01, 0x4C, 0x01, 0x4C, 0x01, 0x4C, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 208EE  |...L.L.L.L...}.T....dF...B$`...F.d...B$`...|
+
+; ToneDB_MixerDefaultTable_284 -- file 0x20919..0x20943
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_284:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x00, 0x4C, 0x00, 0x4C, 0x00, 0x4C, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20919  |...L.L.L.L...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_285:
+
+; ToneDB_MixerDefaultTable_285 -- file 0x20944..0x2096E
+; These 43 bytes are the wave-select block of tone record AltoSax, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_285_SameAs_AltoSax_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x00, 0x4D, 0x00, 0x4D, 0x00, 0x4D, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20944  |...M.M.M.M...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_286:
+
+; ToneDB_MixerDefaultTable_286 -- file 0x2096F..0x20999
+; These 43 bytes are the wave-select block of tone record TenorSax, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_286_SameAs_TenorSax_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x01, 0x4E, 0x01, 0x4E, 0x01, 0x4E, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xD8, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2096F  |...N.N.N.N...}.T....dF...B$`...F.d...B$`...|
+
+; ToneDB_MixerDefaultTable_287 -- file 0x2099A..0x209C4
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_287:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x02, 0x4E, 0x02, 0x4E, 0x02, 0x4E, 0x02, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2099A  |...N.N.N.N...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_288:
+
+; ToneDB_MixerDefaultTable_288 -- file 0x209C5..0x209EF
+; These 43 bytes are the wave-select block of tone record BreathyTenor, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_288_SameAs_BreathyTenor_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x00, 0x4E, 0x00, 0x4E, 0x00, 0x4E, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 209C5  |...N.N.N.N...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_289:
+
+; ToneDB_MixerDefaultTable_289 -- file 0x209F0..0x20A1A
+; These 43 bytes are the wave-select block of tone record RockTenorSax, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_289_SameAs_RockTenorSax_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x00, 0x4F, 0x00, 0x4F, 0x00, 0x4F, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 209F0  |...O.O.O.O...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_290:
+
+; ToneDB_MixerDefaultTable_290 -- file 0x20A1B..0x20A45
+; These 43 bytes are the wave-select block of tone record BaritoneSax, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_290_SameAs_BaritoneSax_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x01, 0x4F, 0x01, 0x4F, 0x01, 0x4F, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x36, 0x18, 0x54, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x36, 0x18, 0x54, 0x10, 0x00, 0x00	; 20A1B  |...O.O.O.O...}.T....dF...6.T...F.d...6.T...|
-ToneDB_MixerDefaultTable_291:
+
+; ToneDB_MixerDefaultTable_291 -- file 0x20A46..0x20A70
+; These 43 bytes are the wave-select block of tone record JazzClarinet1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_291_SameAs_JazzClarinet1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x44, 0x00, 0x02, 0x02, 0xFA, 0xA8, 0x33, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20A46  |...D.D.D.D.....3....dF...B$`...F.d...B$`...|
+
+; ToneDB_MixerDefaultTable_292 -- file 0x20A71..0x20A9B
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_292:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x01, 0x44, 0x01, 0x44, 0x01, 0x44, 0x01, 0x02, 0x02, 0xFA, 0xA0, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20A71  |...D.D.D.D.....T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_293:
+
+; ToneDB_MixerDefaultTable_293 -- file 0x20A9C..0x20AC6
+; These 43 bytes are the wave-select block of tone record JazzClarinet2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_293_SameAs_JazzClarinet2_WaveSel0:
 	.byte 0x50, 0x7F, 0x7F, 0x44, 0x00, 0x44, 0x02, 0x44, 0x02, 0x44, 0x02, 0x02, 0x02, 0xFA, 0xA8, 0x35, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20A9C  |P..D.D.D.D.....5....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_294:
+
+; ToneDB_MixerDefaultTable_294 -- file 0x20AC7..0x20AF1
+; These 43 bytes are the wave-select block of tone record ClassicClarinet, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x02
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_294_SameAs_ClassicClarinet_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x45, 0x00, 0x45, 0x00, 0x45, 0x00, 0x45, 0x00, 0x02, 0x02, 0xFA, 0xA0, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20AC7  |...E.E.E.E.....T....dF...B$`...F.d...B$`...|
+
+; ToneDB_MixerDefaultTable_295 -- file 0x20AF2..0x20B1C
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_295:
 	.byte 0x7F, 0x7F, 0x7F, 0x45, 0x01, 0x45, 0x01, 0x45, 0x01, 0x45, 0x01, 0x02, 0x02, 0xFA, 0xA0, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20AF2  |...E.E.E.E.....T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_296:
+
+; ToneDB_MixerDefaultTable_296 -- file 0x20B1D..0x20B47
+; These 43 bytes are the wave-select block of tone record Oboe, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_296_SameAs_Oboe_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x42, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20B1D  |...B.B.B.B...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_297:
+
+; ToneDB_MixerDefaultTable_297 -- file 0x20B48..0x20B72
+; These 43 bytes are the wave-select block of tone record EnglishHorn, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_297_SameAs_EnglishHorn_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x00, 0x43, 0x00, 0x43, 0x00, 0x43, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20B48  |...C.C.C.C...}.T....dF...B$`...F.d...B$`...|
+
+; ToneDB_MixerDefaultTable_298 -- file 0x20B73..0x20B9D
+; These 43 bytes are the wave-select block of 2 tone-record elements (Bagpipe, Bassoon),
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; ⚠ NO LABEL: the 2 blocks that carry these bytes belong to
+; 2 DIFFERENTLY NAMED tone records, so nothing here picks
+; one of them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_MixerDefaultTable_298:
 	.byte 0x7F, 0x7F, 0x7F, 0x46, 0x00, 0x46, 0x00, 0x46, 0x00, 0x46, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xBE, 0xE2, 0x00, 0x36, 0x18, 0x54, 0x10, 0x00, 0x00, 0x46, 0xBE, 0x64, 0xE2, 0x00, 0x00, 0x36, 0x18, 0x54, 0x10, 0x00, 0x00	; 20B73  |...F.F.F.F...}.T....dF...6.T...F.d...6.T...|
-ToneDB_MixerDefaultTable_299:
+
+; ToneDB_MixerDefaultTable_299 -- file 0x20B9E..0x20BC8
+; These 43 bytes are the wave-select block of tone record Harmonica, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_299_SameAs_Harmonica_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x53, 0x00, 0x53, 0x00, 0x53, 0x00, 0x53, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xE2, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xCC, 0xD8, 0x00, 0x4E, 0x30, 0x60, 0x04, 0x00, 0x00, 0x46, 0xCC, 0x64, 0xD8, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x04, 0x00, 0x00	; 20B9E  |...S.S.S.S...}.T....dF...N0`...F.d...N0`...|
-ToneDB_MixerDefaultTable_300:
+
+; ToneDB_MixerDefaultTable_300 -- file 0x20BC9..0x20BF3
+; These 43 bytes are the wave-select block of tone record BluesHarmonica, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_300_SameAs_BluesHarmonica_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x53, 0x01, 0x53, 0x01, 0x53, 0x01, 0x53, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xCC, 0xD8, 0x00, 0x4E, 0x30, 0x60, 0x04, 0x00, 0x00, 0x46, 0xCC, 0x64, 0xD8, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x04, 0x00, 0x00	; 20BC9  |...S.S.S.S...}.T....dF...N0`...F.d...N0`...|
-ToneDB_MixerDefaultTable_301:
+
+; ToneDB_MixerDefaultTable_301 -- file 0x20BF4..0x20C1E
+; These 43 bytes are the wave-select block of tone record Bagpipe, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x03
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_301_SameAs_Bagpipe_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x49, 0x00, 0x49, 0x00, 0x49, 0x00, 0x49, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20BF4  |...I.I.I.I...}.T....dF...B$`...F.d...B$`...|
-ToneDB_MixerDefaultTable_302:
+
+; ToneDB_MixerDefaultTable_302 -- file 0x20C1F..0x20C49
+; These 43 bytes are the wave-select block of tone record MellowAcBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_302_SameAs_MellowAcBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2B, 0x01, 0x2B, 0x01, 0x2B, 0x01, 0x2B, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xE2, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xB8, 0xE2, 0x00, 0x2A, 0x18, 0x54, 0x1B, 0x00, 0x00, 0x46, 0xB8, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x1B, 0x00, 0x00	; 20C1F  |...+.+.+.+...}.T....dF...*.T...F.d...*.T...|
-ToneDB_MixerDefaultTable_303:
+
+; ToneDB_MixerDefaultTable_303 -- file 0x20C4A..0x20C74
+; These 43 bytes are the wave-select block of tone record ElectricBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_303_SameAs_ElectricBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x00, 0x28, 0x00, 0x28, 0x00, 0x28, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xE2, 0x14, 0x86, 0x7F, 0x64, 0x3C, 0xC0, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x20, 0x00, 0x00, 0x3C, 0xC0, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x20, 0x00, 0x00	; 20C4A  |...(.(.(.(...}.T....d<...*.H ..<.d...*.H ..|
-ToneDB_MixerDefaultTable_304:
+
+; ToneDB_MixerDefaultTable_304 -- file 0x20C75..0x20C9F
+; These 43 bytes are the wave-select block of tone record SlapBass1, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_304_SameAs_SlapBass1_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x29, 0x00, 0x29, 0x00, 0x29, 0x00, 0x29, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xBE, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x3C, 0xBE, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 20C75  |...).).).)...}.T....d<...*.H...<.d...*.H...|
-ToneDB_MixerDefaultTable_305:
+
+; ToneDB_MixerDefaultTable_305 -- file 0x20CA0..0x20CCA
+; These 43 bytes are the wave-select block of tone record SlapBass1, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_305_SameAs_SlapBass1_WaveSel1:
 	.byte 0x60, 0x7F, 0x7F, 0x29, 0x00, 0x29, 0x04, 0x29, 0x04, 0x29, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xBE, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x3C, 0xBE, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 20CA0  |`..).).).)...}.T....d<...*.H...<.d...*.H...|
+
+; ToneDB_MixerDefaultTable_306 -- file 0x20CCB..0x20CF5
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 11 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_306:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x06, 0x2A, 0x06, 0x2A, 0x06, 0x2A, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xBE, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x30, 0xBE, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 20CCB  |...*.*.*.*...}.T....d0...*.H...0.d...*.H...|
-ToneDB_MixerDefaultTable_307:
+
+; ToneDB_MixerDefaultTable_307 -- file 0x20CF6..0x20D20
+; These 43 bytes are the wave-select block of tone record SlapBass2, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_307_SameAs_SlapBass2_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x29, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xBE, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00, 0x3C, 0xBE, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00	; 20CF6  |...).).).)...}.T....d<...*.H...<.d...*.H...|
-ToneDB_MixerDefaultTable_308:
+
+; ToneDB_MixerDefaultTable_308 -- file 0x20D21..0x20D4B
+; These 43 bytes are the wave-select block of tone record SlapBass2, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_308_SameAs_SlapBass2_WaveSel1:
 	.byte 0x60, 0x7F, 0x7F, 0x29, 0x01, 0x29, 0x05, 0x29, 0x05, 0x29, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xBE, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00, 0x3C, 0xBE, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00	; 20D21  |`..).).).)...}.T....d<...*.H...<.d...*.H...|
+
+; ToneDB_MixerDefaultTable_309 -- file 0x20D4C..0x20D76
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_309:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x04, 0x2A, 0x04, 0x2A, 0x04, 0x2A, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xBE, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00, 0x30, 0xBE, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00	; 20D4C  |...*.*.*.*...}.T....d0...*.H...0.d...*.H...|
-ToneDB_MixerDefaultTable_310:
+
+; ToneDB_MixerDefaultTable_310 -- file 0x20D77..0x20DA1
+; These 43 bytes are the wave-select block of tone record SlapBass3, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_310_SameAs_SlapBass3_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x29, 0x06, 0x29, 0x06, 0x29, 0x06, 0x29, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x06, 0x7F, 0x64, 0x3C, 0xC4, 0xE2, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00, 0x3C, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00	; 20D77  |...).).).)...}.T....d<...*.< ..<.d...*.< ..|
-ToneDB_MixerDefaultTable_311:
+
+; ToneDB_MixerDefaultTable_311 -- file 0x20DA2..0x20DCC
+; These 43 bytes are the wave-select block of tone record SlapBass3, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_311_SameAs_SlapBass3_WaveSel1:
 	.byte 0x60, 0x7F, 0x7F, 0x29, 0x06, 0x29, 0x07, 0x29, 0x07, 0x29, 0x07, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x3C, 0xC4, 0xE2, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00, 0x3C, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00	; 20DA2  |`..).).).)...}.T....d<...*.< ..<.d...*.< ..|
+
+; ToneDB_MixerDefaultTable_312 -- file 0x20DCD..0x20DF7
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 11 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_312:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x05, 0x2A, 0x05, 0x2A, 0x05, 0x2A, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00	; 20DCD  |...*.*.*.*...}.T....d0...*.< ..0.d...*.< ..|
-ToneDB_MixerDefaultTable_313:
+
+; ToneDB_MixerDefaultTable_313 -- file 0x20DF8..0x20E22
+; These 43 bytes are the wave-select block of tone record SoulBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_313_SameAs_SoulBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x04, 0x2F, 0x04, 0x2F, 0x04, 0x2F, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xBC, 0xEC, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x46, 0xBC, 0x64, 0xEC, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 20DF8  |..././././...}.T....dF...*.H...F.d...*.H...|
-ToneDB_MixerDefaultTable_314:
+
+; ToneDB_MixerDefaultTable_314 -- file 0x20E23..0x20E4D
+; These 43 bytes are the wave-select block of tone record SynthChopper, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_314_SameAs_SynthChopper_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2D, 0x00, 0x2D, 0x00, 0x2D, 0x00, 0x2D, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0xEC, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xBC, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x46, 0xBC, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 20E23  |...-.-.-.-...}.T....dF...*.H...F.d...*.H...|
-ToneDB_MixerDefaultTable_315:
+
+; ToneDB_MixerDefaultTable_315 -- file 0x20E4E..0x20E78
+; These 43 bytes are the wave-select block of tone record MetallicBass, element 0,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_315_SameAs_MetallicBass_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x05, 0x2A, 0x00, 0x2A, 0x00, 0x2A, 0x00, 0x01, 0x01, 0x32, 0xFF, 0x54, 0x00, 0x14, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x2A, 0x18, 0x48, 0x20, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x20, 0x00, 0x00	; 20E4E  |.../.*.*.*...2.T....dF...*.H ..F.d...*.H ..|
+
+; ToneDB_MixerDefaultTable_316 -- file 0x20E79..0x20EA3
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_316:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x80, 0x4A, 0x80, 0x4A, 0x80, 0x4A, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC5, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00, 0x30, 0xC5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00	; 20E79  |...J.J.J.J...}.T....d0...B$`...0.d...B$`...|
-ToneDB_MixerDefaultTable_317:
+
+; ToneDB_MixerDefaultTable_317 -- file 0x20EA4..0x20ECE
+; These 43 bytes are the wave-select block of tone record Piano, element 1,
+; with ONE byte changed: +0x0B, which round 5 proved is the
+; preset number prom_c writes over.  This record holds 0x01
+; there; the tone's own block holds 0x00.
+; Evidence: the two 43-byte runs, compared byte for byte;
+; the tone name is that record's own 16 ASCII bytes.
+; notes/prom_d_understanding_round6.py Q2.
+ToneDB_MixerDefaultTable_317_SameAs_Piano_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x05, 0x00, 0x05, 0x00, 0x05, 0x00, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x3C, 0xCC, 0xEC, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x3C, 0xCC, 0x64, 0xEC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 20EA4  |.............}.T....d<...B.`...<.d...B.`...|
+
+; ToneDB_MixerDefaultTable_318 -- file 0x20ECF..0x20EF9
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_318:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x96, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20ECF  |...x.x.x.x.....T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_319 -- file 0x20EFA..0x20F24
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_319:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x64, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20EFA  |...x.x.x.x...d.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_320 -- file 0x20F25..0x20F4F
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_320:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x32, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20F25  |...x.x.x.x...2.T....d....B.x.....d...B.x...|
+
+; ToneDB_MixerDefaultTable_321 -- file 0x20F50..0x20F7A
+; ⚠ NO tone wave-select block is within one byte of these 43
+; bytes -- one of the 155 records of this array with no twin,
+; against 167 that have one.  The nearest tone block differs in
+; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
 ToneDB_MixerDefaultTable_321:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x19, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20F50  |...x.x.x.x.....T....d....B.x.....d...B.x...|
 
@@ -37462,6 +40020,39 @@ PercInst_503_SlapShot:
 ;      fact about the image worth having.  What is refused is naming an
 ;      object after a different object that happens to hold equal bytes.
 ; 
+;   3. ★★ CORRECTED IN ROUND 6 -- 141 OF THESE 208 RECORDS DO HAVE A NAME,
+;      and point 2 above is why it was missed.  That test asked whether a
+;      record's 43 bytes occur ELSEWHERE IN THE IMAGE and compared all 43.
+;      Round 5 had just proved that byte +0x0B is a preset number prom_c
+;      WRITES OVER (0xFBC7D6).  A copy of a record may therefore differ
+;      there and nowhere else, and excluding that one field is not a free
+;      parameter -- it is the field the firmware is known to rewrite.
+; 
+;      196 of the 208 records are byte-identical to the wave-select tail
+;      of a named drum-instrument record -- which is point 2's proposal
+;      (b), and round 5 refused it because proposal (a) contradicted it.
+;      ★ WHAT ROUND 6 ADDS is the reason the two disagree, and it is not
+;      that either match is wrong: THE CATALOGUE IS A DIFFERENT LIST.
+;      Row 1 of it is 'Square Wave' where the identical bytes come from
+;      'Square Click'; rows 7 and 8 are 'PowerBassDrmL' and
+;      'PowerBassDrmR' where record 7 of this array matches NOTHING and
+;      record 8 matches 'PowerBassDrm1/2'.  Across the 141 rows this
+;      round can resolve, the catalogue carries the same name at the
+;      same index 61 times, carries it at a DIFFERENT index 62 times,
+;      and 18 times names something no drum record has; the alignment
+;      is not monotone, so it is not a simple drift either.
+;      ★ AND THE MELODIC SIDE IS WHAT TELLS THEM APART.  The same
+;      relation holds at slot +0x18, where there is NO competing
+;      catalogue at all.  The POSITIONAL transfer stays REFUSED; the
+;      byte identity is what the labels below use.
+; 
+;      ⚠ AND WHAT A LABEL CLAIMS IS EXACTLY WHAT WAS MEASURED.  It reads
+;      `_SameAs_<name>`: these bytes and that record's bytes are the same.
+;      It does NOT say this record BELONGS to that tone or instrument --
+;      nothing here reaches this array with an index whose meaning is
+;      known.  Where the twins disagree on the name, no label is given.
+;   notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.
+; 
 ;   3. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what
 ;      round 5 Q7 found for the array at slot +0x3C and did NOT find here.
@@ -37477,10 +40068,18 @@ ToneDB_PercMixerDefaultTable:
 ; Evidence: drum-instrument record 0 at file 0x2EF5C, its
 ; bytes +107..+149 (file 0x2EFC7..0x2EFF1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_000:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_000_SameAs_Silent:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 416AC  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_001 -- file 0x416D7..0x41701
@@ -37489,10 +40088,18 @@ ToneDB_PercMixerDefaultTable_000:
 ; Evidence: drum-instrument record 1 at file 0x2EFF2, its
 ; bytes +107..+149 (file 0x2F05D..0x2F087), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_001:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_001_SameAs_SquareClick:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 416D7  |....A.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_002 -- file 0x41702..0x4172C
@@ -37501,10 +40108,18 @@ ToneDB_PercMixerDefaultTable_001:
 ; Evidence: drum-instrument record 2 at file 0x2F088, its
 ; bytes +107..+149 (file 0x2F0F3..0x2F11D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_002:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_002_SameAs_RockBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x01, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41702  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_003 -- file 0x4172D..0x41757
@@ -37513,10 +40128,20 @@ ToneDB_PercMixerDefaultTable_002:
 ; Evidence: drum-instrument record 3 at file 0x2F11E, its
 ; bytes +107..+149 (file 0x2F189..0x2F1B3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_003:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `RoomBassDrm`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_003_SameAs_RoomBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x02, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4172D  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_004 -- file 0x41758..0x41782
@@ -37525,10 +40150,20 @@ ToneDB_PercMixerDefaultTable_003:
 ; Evidence: drum-instrument record 5 at file 0x2F24A, its
 ; bytes +107..+149 (file 0x2F2B5..0x2F2DF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_004:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `JazzBassDrm`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_004_SameAs_JazzBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x03, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41758  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_005 -- file 0x41783..0x417AD
@@ -37537,10 +40172,20 @@ ToneDB_PercMixerDefaultTable_004:
 ; Evidence: drum-instrument record 7 at file 0x2F376, its
 ; bytes +107..+149 (file 0x2F3E1..0x2F40B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_005:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `TradBassDrm`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_005_SameAs_TradBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x04, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41783  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_006 -- file 0x417AE..0x417D8
@@ -37549,16 +40194,25 @@ ToneDB_PercMixerDefaultTable_005:
 ; Evidence: drum-instrument record 9 at file 0x2F4A2, its
 ; bytes +107..+149 (file 0x2F50D..0x2F537), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_006:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_006_SameAs_LtRockBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 417AE  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_007 -- file 0x417D9..0x41803
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_007:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 417D9  |....@.@.@.@..}.T....d............d.........|
 
@@ -37568,16 +40222,27 @@ ToneDB_PercMixerDefaultTable_007:
 ; Evidence: drum-instrument record 10 at file 0x2F538, its
 ; bytes +107..+149 (file 0x2F5A3..0x2F5CD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_008:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `PowerBassDrm`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_008_SameAs_PowerBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41804  |....A.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_009 -- file 0x4182F..0x41859
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_009:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x96, 0x8A, 0x54, 0xF1, 0x0F, 0x01, 0x32, 0x64, 0xA8, 0x39, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05, 0xA8, 0x39, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05	; 4182F  |....@.@.@.@....T...2d.9.........9d.........|
 
@@ -37587,10 +40252,18 @@ ToneDB_PercMixerDefaultTable_009:
 ; Evidence: drum-instrument record 12 at file 0x2F664, its
 ; bytes +107..+149 (file 0x2F6CF..0x2F6F9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_010:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_010_SameAs_ModelBassDrm1:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x96, 0x8A, 0x54, 0xF1, 0x0F, 0x01, 0x32, 0x64, 0xA8, 0x39, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05, 0xA8, 0x39, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05	; 4185A  |....A.@.@.@....T...2d.9.........9d.........|
 
 ; ToneDB_PercMixerDefaultTable_011 -- file 0x41885..0x418AF
@@ -37599,10 +40272,18 @@ ToneDB_PercMixerDefaultTable_010:
 ; Evidence: drum-instrument record 13 at file 0x2F6FA, its
 ; bytes +107..+149 (file 0x2F765..0x2F78F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_011:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_011_SameAs_HouseBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41885  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_012 -- file 0x418B0..0x418DA
@@ -37611,10 +40292,18 @@ ToneDB_PercMixerDefaultTable_011:
 ; Evidence: drum-instrument record 14 at file 0x2F790, its
 ; bytes +107..+149 (file 0x2F7FB..0x2F825), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_012:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_012_SameAs_SoulBassDrm1:
 	.byte 0x7F, 0x7F, 0x7F, 0x08, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 418B0  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_013 -- file 0x418DB..0x41905
@@ -37623,10 +40312,18 @@ ToneDB_PercMixerDefaultTable_012:
 ; Evidence: drum-instrument record 15 at file 0x2F826, its
 ; bytes +107..+149 (file 0x2F891..0x2F8BB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_013:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_013_SameAs_DanceBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x09, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 418DB  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_014 -- file 0x41906..0x41930
@@ -37635,10 +40332,20 @@ ToneDB_PercMixerDefaultTable_013:
 ; Evidence: drum-instrument record 16 at file 0x2F8BC, its
 ; bytes +107..+149 (file 0x2F927..0x2F951), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_014:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `ElectBassDrm`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_014_SameAs_ElectBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41906  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_015 -- file 0x41931..0x4195B
@@ -37647,10 +40354,18 @@ ToneDB_PercMixerDefaultTable_014:
 ; Evidence: drum-instrument record 18 at file 0x2F9E8, its
 ; bytes +107..+149 (file 0x2FA53..0x2FA7D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_015:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_015_SameAs_ModelBassDrm2:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x7D, 0x87, 0x54, 0x00, 0x00, 0x01, 0x5F, 0x64, 0x25, 0x1B, 0xEC, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xDC, 0xA6, 0x25, 0x1B, 0x64, 0xEC, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xDC, 0xA6	; 41931  |....@.@.@.@@.}.T..._d%.........%.d.........|
 
 ; ToneDB_PercMixerDefaultTable_016 -- file 0x4195C..0x41986
@@ -37659,10 +40374,18 @@ ToneDB_PercMixerDefaultTable_015:
 ; Evidence: drum-instrument record 19 at file 0x2FA7E, its
 ; bytes +107..+149 (file 0x2FAE9..0x2FB13), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_016:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_016_SameAs_FunkBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x0B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4195C  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_017 -- file 0x41987..0x419B1
@@ -37671,10 +40394,20 @@ ToneDB_PercMixerDefaultTable_016:
 ; Evidence: drum-instrument record 20 at file 0x2FB14, its
 ; bytes +107..+149 (file 0x2FB7F..0x2FBA9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_017:
+; The 3 names differ only by a trailing digit, so the
+; label uses the shared stem `OrchBassDrm`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_017_SameAs_OrchBassDrm:
 	.byte 0x7F, 0x7F, 0x7F, 0x0C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41987  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_018 -- file 0x419B2..0x419DC
@@ -37683,10 +40416,18 @@ ToneDB_PercMixerDefaultTable_017:
 ; Evidence: drum-instrument record 23 at file 0x2FCD6, its
 ; bytes +107..+149 (file 0x2FD41..0x2FD6B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_018:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_018_SameAs_RockSnare1:
 	.byte 0x6E, 0x7F, 0x7F, 0x0D, 0x40, 0x0D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 419B2  |n...@.A.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_019 -- file 0x419DD..0x41A07
@@ -37695,10 +40436,18 @@ ToneDB_PercMixerDefaultTable_018:
 ; Evidence: drum-instrument record 25 at file 0x2FE02, its
 ; bytes +107..+149 (file 0x2FE6D..0x2FE97), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_019:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_019_SameAs_RoomSnare1:
 	.byte 0x64, 0x73, 0x7F, 0x0E, 0x40, 0x0E, 0x41, 0x0E, 0x42, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 419DD  |ds..@.A.B.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_020 -- file 0x41A08..0x41A32
@@ -37707,10 +40456,18 @@ ToneDB_PercMixerDefaultTable_019:
 ; Evidence: drum-instrument record 27 at file 0x2FF2E, its
 ; bytes +107..+149 (file 0x2FF99..0x2FFC3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_020:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_020_SameAs_ModelSnare4:
 	.byte 0x64, 0x73, 0x7F, 0x0E, 0x40, 0x0E, 0x41, 0x0E, 0x42, 0x00, 0x40, 0x40, 0x07, 0x96, 0x82, 0x54, 0xFE, 0x0A, 0x86, 0x64, 0x64, 0xA8, 0x43, 0xE2, 0xE2, 0x80, 0xFF, 0xDE, 0x00, 0xE9, 0x03, 0xA8, 0x43, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0xE9, 0x03	; 41A08  |ds..@.A.B.@@...T...dd.C.........Cd.........|
 
 ; ToneDB_PercMixerDefaultTable_021 -- file 0x41A33..0x41A5D
@@ -37719,10 +40476,18 @@ ToneDB_PercMixerDefaultTable_020:
 ; Evidence: drum-instrument record 28 at file 0x2FFC4, its
 ; bytes +107..+149 (file 0x3002F..0x30059), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_021:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_021_SameAs_JazzSnare:
 	.byte 0x6E, 0x7F, 0x7F, 0x0F, 0x40, 0x0F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41A33  |n...@.A.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_022 -- file 0x41A5E..0x41A88
@@ -37731,10 +40496,18 @@ ToneDB_PercMixerDefaultTable_021:
 ; Evidence: drum-instrument record 29 at file 0x3005A, its
 ; bytes +107..+149 (file 0x300C5..0x300EF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_022:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_022_SameAs_TradSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x10, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41A5E  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_023 -- file 0x41A89..0x41AB3
@@ -37743,16 +40516,27 @@ ToneDB_PercMixerDefaultTable_022:
 ; Evidence: drum-instrument record 30 at file 0x300F0, its
 ; bytes +107..+149 (file 0x3015B..0x30185), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_023:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `LtRockSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_023_SameAs_LtRockSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x11, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41A89  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_024 -- file 0x41AB4..0x41ADE
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_024:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41AB4  |....@.@.@.@..}.T....d............d.........|
 
@@ -37762,16 +40546,27 @@ ToneDB_PercMixerDefaultTable_024:
 ; Evidence: drum-instrument record 32 at file 0x3021C, its
 ; bytes +107..+149 (file 0x30287..0x302B1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_025:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `PowerSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_025_SameAs_PowerSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41ADF  |....A.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_026 -- file 0x41B0A..0x41B34
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_026:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0xAA, 0x8A, 0x54, 0xF6, 0x14, 0x86, 0x50, 0x64, 0x9E, 0x2F, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB, 0x9E, 0x2F, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB	; 41B0A  |....@.@.@.@@...T...Pd./........./d.........|
 
@@ -37781,10 +40576,20 @@ ToneDB_PercMixerDefaultTable_026:
 ; Evidence: drum-instrument record 34 at file 0x30348, its
 ; bytes +107..+149 (file 0x303B3..0x303DD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_027:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `ModelSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_027_SameAs_ModelSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0xAA, 0x8A, 0x54, 0xF6, 0x14, 0x86, 0x50, 0x64, 0x9E, 0x2F, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB, 0x9E, 0x2F, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB	; 41B35  |....A.@.@.@@...T...Pd./........./d.........|
 
 ; ToneDB_PercMixerDefaultTable_028 -- file 0x41B60..0x41B8A
@@ -37793,10 +40598,20 @@ ToneDB_PercMixerDefaultTable_027:
 ; Evidence: drum-instrument record 36 at file 0x30474, its
 ; bytes +107..+149 (file 0x304DF..0x30509), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_028:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `HouseSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_028_SameAs_HouseSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x13, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41B60  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_029 -- file 0x41B8B..0x41BB5
@@ -37805,10 +40620,20 @@ ToneDB_PercMixerDefaultTable_028:
 ; Evidence: drum-instrument record 38 at file 0x305A0, its
 ; bytes +107..+149 (file 0x3060B..0x30635), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_029:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `SoulSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_029_SameAs_SoulSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x14, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41B8B  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_030 -- file 0x41BB6..0x41BE0
@@ -37817,10 +40642,20 @@ ToneDB_PercMixerDefaultTable_029:
 ; Evidence: drum-instrument record 40 at file 0x306CC, its
 ; bytes +107..+149 (file 0x30737..0x30761), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_030:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `DanceSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_030_SameAs_DanceSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x15, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41BB6  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_031 -- file 0x41BE1..0x41C0B
@@ -37829,10 +40664,20 @@ ToneDB_PercMixerDefaultTable_030:
 ; Evidence: drum-instrument record 42 at file 0x307F8, its
 ; bytes +107..+149 (file 0x30863..0x3088D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_031:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `ElectSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_031_SameAs_ElectSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41BE1  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_032 -- file 0x41C0C..0x41C36
@@ -37841,10 +40686,18 @@ ToneDB_PercMixerDefaultTable_031:
 ; Evidence: drum-instrument record 44 at file 0x30924, its
 ; bytes +107..+149 (file 0x3098F..0x309B9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_032:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_032_SameAs_ModelSnare3:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x7D, 0x8A, 0x54, 0xF6, 0x14, 0x80, 0x27, 0x64, 0xA1, 0x2F, 0xE2, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xEA, 0xC8, 0xA1, 0x2F, 0x64, 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEA, 0xC8	; 41C0C  |....@.@.@.@@.}.T...'d./........./d.........|
 
 ; ToneDB_PercMixerDefaultTable_033 -- file 0x41C37..0x41C61
@@ -37853,9 +40706,9 @@ ToneDB_PercMixerDefaultTable_032:
 ; Evidence: drum-instrument record 45 at file 0x309BA, its
 ; bytes +107..+149 (file 0x30A25..0x30A4F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_033:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41C37  |....@.@.@.@..}.T....d............d.........|
 
@@ -37865,10 +40718,18 @@ ToneDB_PercMixerDefaultTable_033:
 ; Evidence: drum-instrument record 48 at file 0x30B7C, its
 ; bytes +107..+149 (file 0x30BE7..0x30C11), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_034:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_034_SameAs_AnalogSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x18, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41C62  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_035 -- file 0x41C8D..0x41CB7
@@ -37877,10 +40738,18 @@ ToneDB_PercMixerDefaultTable_034:
 ; Evidence: drum-instrument record 49 at file 0x30C12, its
 ; bytes +107..+149 (file 0x30C7D..0x30CA7), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_035:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_035_SameAs_PiccoloSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x19, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41C8D  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_036 -- file 0x41CB8..0x41CE2
@@ -37889,10 +40758,20 @@ ToneDB_PercMixerDefaultTable_035:
 ; Evidence: drum-instrument record 50 at file 0x30CA8, its
 ; bytes +107..+149 (file 0x30D13..0x30D3D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_036:
+; The 3 names differ only by a trailing digit, so the
+; label uses the shared stem `OrchSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_036_SameAs_OrchSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x1A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41CB8  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_037 -- file 0x41CE3..0x41D0D
@@ -37901,10 +40780,20 @@ ToneDB_PercMixerDefaultTable_036:
 ; Evidence: drum-instrument record 53 at file 0x30E6A, its
 ; bytes +107..+149 (file 0x30ED5..0x30EFF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_037:
+; The 3 names differ only by a trailing digit, so the
+; label uses the shared stem `ReverseSnare`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_037_SameAs_ReverseSnare:
 	.byte 0x7F, 0x7F, 0x7F, 0x1B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41CE3  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_038 -- file 0x41D0E..0x41D38
@@ -37913,9 +40802,9 @@ ToneDB_PercMixerDefaultTable_037:
 ; Evidence: drum-instrument record 56 at file 0x3102C, its
 ; bytes +107..+149 (file 0x31097..0x310C1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_038:
 	.byte 0x7F, 0x7F, 0x7F, 0x1C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D0E  |....@.@.@.@..}.T....d............d.........|
 
@@ -37925,10 +40814,18 @@ ToneDB_PercMixerDefaultTable_038:
 ; Evidence: drum-instrument record 58 at file 0x31158, its
 ; bytes +107..+149 (file 0x311C3..0x311ED), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_039:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_039_SameAs_BrushLong:
 	.byte 0x7F, 0x7F, 0x7F, 0x1D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D39  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_040 -- file 0x41D64..0x41D8E
@@ -37937,10 +40834,18 @@ ToneDB_PercMixerDefaultTable_039:
 ; Evidence: drum-instrument record 59 at file 0x311EE, its
 ; bytes +107..+149 (file 0x31259..0x31283), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_040:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_040_SameAs_BrushHit:
 	.byte 0x7F, 0x7F, 0x7F, 0x1D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D64  |....A.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_041 -- file 0x41D8F..0x41DB9
@@ -37949,10 +40854,18 @@ ToneDB_PercMixerDefaultTable_040:
 ; Evidence: drum-instrument record 60 at file 0x31284, its
 ; bytes +107..+149 (file 0x312EF..0x31319), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_041:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_041_SameAs_BrushShort:
 	.byte 0x7F, 0x7F, 0x7F, 0x1E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41D8F  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_042 -- file 0x41DBA..0x41DE4
@@ -37961,16 +40874,17 @@ ToneDB_PercMixerDefaultTable_041:
 ; Evidence: drum-instrument record 61 at file 0x3131A, its
 ; bytes +107..+149 (file 0x31385..0x313AF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_042:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41DBA  |....@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_043 -- file 0x41DE5..0x41E0F
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_043:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xC8, 0xC6, 0x54, 0x0E, 0x0A, 0x80, 0x7F, 0x64, 0x99, 0x25, 0xCE, 0xE2, 0x80, 0x00, 0x00, 0x00, 0x0B, 0x32, 0xDA, 0x33, 0x64, 0xCE, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x32	; 41DE5  |....@.@.@.@....T....d.%.......2.3d........2|
 
@@ -37980,10 +40894,18 @@ ToneDB_PercMixerDefaultTable_043:
 ; Evidence: drum-instrument record 65 at file 0x31572, its
 ; bytes +107..+149 (file 0x315DD..0x31607), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_044:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_044_SameAs_SoulRim:
 	.byte 0x7F, 0x7F, 0x7F, 0x20, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E10  |... @.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_045 -- file 0x41E3B..0x41E65
@@ -37992,10 +40914,18 @@ ToneDB_PercMixerDefaultTable_044:
 ; Evidence: drum-instrument record 66 at file 0x31608, its
 ; bytes +107..+149 (file 0x31673..0x3169D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_045:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_045_SameAs_DanceRim:
 	.byte 0x7F, 0x7F, 0x7F, 0x21, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E3B  |...!@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_046 -- file 0x41E66..0x41E90
@@ -38004,9 +40934,9 @@ ToneDB_PercMixerDefaultTable_045:
 ; Evidence: drum-instrument record 67 at file 0x3169E, its
 ; bytes +107..+149 (file 0x31709..0x31733), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 10 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_046:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E66  |..."@.@.@.@..}.T....d............d.........|
 
@@ -38016,9 +40946,9 @@ ToneDB_PercMixerDefaultTable_046:
 ; Evidence: drum-instrument record 77 at file 0x31C7A, its
 ; bytes +107..+149 (file 0x31CE5..0x31D0F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 8 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_047:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41E91  |..."D.@.@.@..}.T....d............d.........|
 
@@ -38028,9 +40958,9 @@ ToneDB_PercMixerDefaultTable_047:
 ; Evidence: drum-instrument record 85 at file 0x3212A, its
 ; bytes +107..+149 (file 0x32195..0x321BF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_048:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41EBC  |...#@.@.@.@..}.T....d............d.........|
 
@@ -38040,16 +40970,17 @@ ToneDB_PercMixerDefaultTable_048:
 ; Evidence: drum-instrument record 87 at file 0x32256, its
 ; bytes +107..+149 (file 0x322C1..0x322EB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_049:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41EE7  |...#D.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_050 -- file 0x41F12..0x41F3C
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_050:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41F12  |...$@.@.@.@..}.T....d............d.........|
 
@@ -38059,16 +40990,17 @@ ToneDB_PercMixerDefaultTable_050:
 ; Evidence: drum-instrument record 91 at file 0x324AE, its
 ; bytes +107..+149 (file 0x32519..0x32543), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 11 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_051:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41F3D  |...$A.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_052 -- file 0x41F68..0x41F92
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_052:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x87, 0x8A, 0x54, 0xFA, 0x0A, 0x80, 0x5A, 0x64, 0xAC, 0x43, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D, 0xAC, 0x43, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 41F68  |...$@.@.@.@@...T...Zd.C.........Cd.........|
 
@@ -38078,9 +41010,9 @@ ToneDB_PercMixerDefaultTable_052:
 ; Evidence: drum-instrument record 102 at file 0x32B20, its
 ; bytes +107..+149 (file 0x32B8B..0x32BB5), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_053:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x87, 0x8A, 0x54, 0xFA, 0x0A, 0x80, 0x5A, 0x64, 0xAC, 0x43, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D, 0xAC, 0x43, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 41F93  |...$A.@.@.@@...T...Zd.C.........Cd.........|
 
@@ -38090,9 +41022,9 @@ ToneDB_PercMixerDefaultTable_053:
 ; Evidence: drum-instrument record 106 at file 0x32D78, its
 ; bytes +107..+149 (file 0x32DE3..0x32E0D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_054:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41FBE  |...%@.@.@.@..}.T....d............d.........|
 
@@ -38102,9 +41034,9 @@ ToneDB_PercMixerDefaultTable_054:
 ; Evidence: drum-instrument record 108 at file 0x32EA4, its
 ; bytes +107..+149 (file 0x32F0F..0x32F39), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_055:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x8C, 0x86, 0x54, 0xFA, 0x0A, 0x86, 0x5A, 0x64, 0xB2, 0x43, 0xD8, 0xE2, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5, 0xB2, 0x43, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5	; 41FE9  |...%@.@.@.@@...T...Zd.C.........Cd.........|
 
@@ -38114,9 +41046,9 @@ ToneDB_PercMixerDefaultTable_055:
 ; Evidence: drum-instrument record 112 at file 0x330FC, its
 ; bytes +107..+149 (file 0x33167..0x33191), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 11 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_056:
 	.byte 0x7F, 0x7F, 0x7F, 0x26, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42014  |...&@.@.@.@..}.T....d............d.........|
 
@@ -38126,9 +41058,9 @@ ToneDB_PercMixerDefaultTable_056:
 ; Evidence: drum-instrument record 125 at file 0x3389A, its
 ; bytes +107..+149 (file 0x33905..0x3392F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_057:
 	.byte 0x7F, 0x7F, 0x7F, 0x27, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4203F  |...'@.@.@.@..}.T....d............d.........|
 
@@ -38138,9 +41070,9 @@ ToneDB_PercMixerDefaultTable_057:
 ; Evidence: drum-instrument record 128 at file 0x33A5C, its
 ; bytes +107..+149 (file 0x33AC7..0x33AF1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 11 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_058:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4206A  |...(@.@.@.@..}.T....d............d.........|
 
@@ -38150,9 +41082,9 @@ ToneDB_PercMixerDefaultTable_058:
 ; Evidence: drum-instrument record 139 at file 0x340CE, its
 ; bytes +107..+149 (file 0x34139..0x34163), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 7 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_059:
 	.byte 0x7F, 0x7F, 0x7F, 0x29, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42095  |...)@.@.@.@..}.T....d............d.........|
 
@@ -38162,9 +41094,9 @@ ToneDB_PercMixerDefaultTable_059:
 ; Evidence: drum-instrument record 146 at file 0x344E8, its
 ; bytes +107..+149 (file 0x34553..0x3457D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 6 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_060:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 420C0  |...*@.@.@.@..}.T....d............d.........|
 
@@ -38174,10 +41106,18 @@ ToneDB_PercMixerDefaultTable_060:
 ; Evidence: drum-instrument record 152 at file 0x3486C, its
 ; bytes +107..+149 (file 0x348D7..0x34901), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_061:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_061_SameAs_HiHatClosed1:
 	.byte 0x64, 0x7F, 0x7F, 0x2B, 0x40, 0x2B, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 420EB  |d..+@+A.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_062 -- file 0x42116..0x42140
@@ -38186,10 +41126,20 @@ ToneDB_PercMixerDefaultTable_061:
 ; Evidence: drum-instrument record 164 at file 0x34F74, its
 ; bytes +107..+149 (file 0x34FDF..0x35009), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_062:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `ModelHHClose`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_062_SameAs_ModelHHClose:
 	.byte 0x7F, 0x7F, 0x7F, 0x2B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xEC, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 42116  |...+@.@.@.@..x.T....d(@........(@d.........|
 
 ; ToneDB_PercMixerDefaultTable_063 -- file 0x42141..0x4216B
@@ -38198,10 +41148,20 @@ ToneDB_PercMixerDefaultTable_062:
 ; Evidence: drum-instrument record 166 at file 0x350A0, its
 ; bytes +107..+149 (file 0x3510B..0x35135), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_063:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `DanceHHClose`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_063_SameAs_DanceHHClose:
 	.byte 0x7F, 0x7F, 0x7F, 0x2C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42141  |...,@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_064 -- file 0x4216C..0x42196
@@ -38210,9 +41170,9 @@ ToneDB_PercMixerDefaultTable_063:
 ; Evidence: drum-instrument record 168 at file 0x351CC, its
 ; bytes +107..+149 (file 0x35237..0x35261), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_064:
 	.byte 0x7F, 0x7F, 0x7F, 0x2D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4216C  |...-@.@.@.@..}.T....d............d.........|
 
@@ -38222,9 +41182,9 @@ ToneDB_PercMixerDefaultTable_064:
 ; Evidence: drum-instrument record 172 at file 0x35424, its
 ; bytes +107..+149 (file 0x3548F..0x354B9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 12 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_065:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42197  |....@.@.@.@..}.T....d............d.........|
 
@@ -38234,9 +41194,9 @@ ToneDB_PercMixerDefaultTable_065:
 ; Evidence: drum-instrument record 184 at file 0x35B2C, its
 ; bytes +107..+149 (file 0x35B97..0x35BC1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_066:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xF6, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 421C2  |....@.@.@.@..x.T....d(@........(@d.........|
 
@@ -38246,10 +41206,18 @@ ToneDB_PercMixerDefaultTable_066:
 ; Evidence: drum-instrument record 186 at file 0x35C58, its
 ; bytes +107..+149 (file 0x35CC3..0x35CED), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_067:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_067_SameAs_DanceHHOpen:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 421ED  |.../@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_068 -- file 0x42218..0x42242
@@ -38258,9 +41226,9 @@ ToneDB_PercMixerDefaultTable_067:
 ; Evidence: drum-instrument record 187 at file 0x35CEE, its
 ; bytes +107..+149 (file 0x35D59..0x35D83), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_068:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42218  |...0@.@.@.@..}.T....d............d.........|
 
@@ -38270,10 +41238,20 @@ ToneDB_PercMixerDefaultTable_068:
 ; Evidence: drum-instrument record 189 at file 0x35E1A, its
 ; bytes +107..+149 (file 0x35E85..0x35EAF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_069:
+; The 4 names differ only by a trailing digit, so the
+; label uses the shared stem `HiHatPedal`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_069_SameAs_HiHatPedal:
 	.byte 0x7F, 0x7F, 0x7F, 0x31, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42243  |...1@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_070 -- file 0x4226E..0x42298
@@ -38282,10 +41260,18 @@ ToneDB_PercMixerDefaultTable_069:
 ; Evidence: drum-instrument record 193 at file 0x36072, its
 ; bytes +107..+149 (file 0x360DD..0x36107), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_070:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_070_SameAs_ModelHHPedal:
 	.byte 0x7F, 0x7F, 0x7F, 0x31, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xEC, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 4226E  |...1@.@.@.@..x.T....d(@........(@d.........|
 
 ; ToneDB_PercMixerDefaultTable_071 -- file 0x42299..0x422C3
@@ -38294,10 +41280,20 @@ ToneDB_PercMixerDefaultTable_070:
 ; Evidence: drum-instrument record 194 at file 0x36108, its
 ; bytes +107..+149 (file 0x36173..0x3619D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_071:
+; The 6 names differ only by a trailing digit, so the
+; label uses the shared stem `HiHatAccent`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_071_SameAs_HiHatAccent:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42299  |...2@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_072 -- file 0x422C4..0x422EE
@@ -38306,10 +41302,18 @@ ToneDB_PercMixerDefaultTable_071:
 ; Evidence: drum-instrument record 200 at file 0x3648C, its
 ; bytes +107..+149 (file 0x364F7..0x36521), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_072:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_072_SameAs_ModelHHAccent:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x78, 0xD0, 0x54, 0xEC, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x40, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x00, 0x28, 0x40, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 422C4  |...2@.@.@.@..x.T....d(@........(@d.........|
 
 ; ToneDB_PercMixerDefaultTable_073 -- file 0x422EF..0x42319
@@ -38318,16 +41322,17 @@ ToneDB_PercMixerDefaultTable_072:
 ; Evidence: drum-instrument record 201 at file 0x36522, its
 ; bytes +107..+149 (file 0x3658D..0x365B7), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 7 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_073:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 422EF  |...3@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_074 -- file 0x4231A..0x42344
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_074:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x7B, 0x9E, 0x54, 0xFA, 0x0A, 0x01, 0x7F, 0x64, 0x24, 0x7F, 0xDD, 0x00, 0x80, 0xFD, 0x24, 0x00, 0xF0, 0xF4, 0x3E, 0x7F, 0x64, 0xD0, 0x00, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0xFC, 0xEF	; 4231A  |...3@.@.@.@@.{.T....d$.....$...>.d.........|
 
@@ -38337,16 +41342,27 @@ ToneDB_PercMixerDefaultTable_074:
 ; Evidence: drum-instrument record 210 at file 0x36A68, its
 ; bytes +107..+149 (file 0x36AD3..0x36AFD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_075:
+; The 6 names differ only by a trailing digit, so the
+; label uses the shared stem `CrashCymbal`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_075_SameAs_CrashCymbal:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42345  |...3D.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_076 -- file 0x42370..0x4239A
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_076:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x96, 0xA8, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x26, 0x00, 0xE7, 0x00, 0x80, 0x01, 0xB4, 0x00, 0x14, 0x00, 0x0D, 0x4D, 0x64, 0xE7, 0x00, 0x00, 0x80, 0x03, 0x98, 0x00, 0x1C, 0x00	; 42370  |...3D.@.@.@@...T....d&..........Md.........|
 
@@ -38356,10 +41372,18 @@ ToneDB_PercMixerDefaultTable_076:
 ; Evidence: drum-instrument record 216 at file 0x36DEC, its
 ; bytes +107..+149 (file 0x36E57..0x36E81), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_077:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_077_SameAs_MdlCrashCym2:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x06, 0x7D, 0x80, 0x54, 0xEC, 0x0A, 0x80, 0x7F, 0x74, 0x32, 0x60, 0xE2, 0x00, 0x80, 0x03, 0x43, 0x00, 0x2A, 0x03, 0x32, 0x50, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x01, 0xB4, 0x00, 0x3A, 0x1B	; 4239B  |...3D.@.@.@@.}.T....t2`....C.*.2Pd.......:.|
 
 ; ToneDB_PercMixerDefaultTable_078 -- file 0x423C6..0x423F0
@@ -38368,16 +41392,27 @@ ToneDB_PercMixerDefaultTable_077:
 ; Evidence: drum-instrument record 217 at file 0x36E82, its
 ; bytes +107..+149 (file 0x36EED..0x36F17), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_078:
+; The 5 names differ only by a trailing digit, so the
+; label uses the shared stem `SplashCymbal`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_078_SameAs_SplashCymbal:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 423C6  |...4@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_079 -- file 0x423F1..0x4241B
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_079:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x7D, 0x8A, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x40, 0x60, 0xEC, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0x24, 0x03, 0x40, 0x50, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0x38, 0x1B	; 423F1  |...4@.@.@.@@.}.T....d@`......$.@Pd.......8.|
 
@@ -38387,10 +41422,18 @@ ToneDB_PercMixerDefaultTable_079:
 ; Evidence: drum-instrument record 222 at file 0x37170, its
 ; bytes +107..+149 (file 0x371DB..0x37205), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_080:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_080_SameAs_MdlSplashCym:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x06, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x74, 0x40, 0x60, 0xEC, 0x00, 0x80, 0x03, 0x98, 0x00, 0x00, 0x53, 0x40, 0x50, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x04, 0xCD, 0x00, 0x10, 0x6F	; 4241C  |...4@.@.@.@@.}.T....t@`.......S@Pd........o|
 
 ; ToneDB_PercMixerDefaultTable_081 -- file 0x42447..0x42471
@@ -38399,16 +41442,27 @@ ToneDB_PercMixerDefaultTable_080:
 ; Evidence: drum-instrument record 223 at file 0x37206, its
 ; bytes +107..+149 (file 0x37271..0x3729B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_081:
+; The 5 names differ only by a trailing digit, so the
+; label uses the shared stem `ChinaCymbal`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_081_SameAs_ChinaCymbal:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42447  |...5@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_082 -- file 0x42472..0x4249C
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_082:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x7D, 0xB8, 0x54, 0xEC, 0x0A, 0x80, 0x7F, 0x64, 0x40, 0x60, 0xEC, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0x18, 0x03, 0x40, 0x50, 0x64, 0xEC, 0x00, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0x28, 0x1B	; 42472  |...5@.@.@.@@.}.T....d@`........@Pd.......(.|
 
@@ -38418,10 +41472,18 @@ ToneDB_PercMixerDefaultTable_082:
 ; Evidence: drum-instrument record 228 at file 0x374F4, its
 ; bytes +107..+149 (file 0x3755F..0x37589), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_083:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_083_SameAs_ModelChinaCym:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x02, 0x7D, 0xB8, 0x54, 0xEC, 0x0A, 0x80, 0x7F, 0x64, 0x40, 0x60, 0xEC, 0x00, 0x80, 0x01, 0x43, 0x00, 0xFA, 0x53, 0x40, 0x50, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x0A, 0x6F	; 4249D  |...5@.@.@.@@.}.T....d@`....C..S@Pd........o|
 
 ; ToneDB_PercMixerDefaultTable_084 -- file 0x424C8..0x424F2
@@ -38430,10 +41492,20 @@ ToneDB_PercMixerDefaultTable_083:
 ; Evidence: drum-instrument record 229 at file 0x3758A, its
 ; bytes +107..+149 (file 0x375F5..0x3761F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_084:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `OrchCymbal`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_084_SameAs_OrchCymbal:
 	.byte 0x7F, 0x7F, 0x7F, 0x36, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 424C8  |...6@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_085 -- file 0x424F3..0x4251D
@@ -38442,10 +41514,18 @@ ToneDB_PercMixerDefaultTable_084:
 ; Evidence: drum-instrument record 231 at file 0x376B6, its
 ; bytes +107..+149 (file 0x37721..0x3774B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_085:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_085_SameAs_SynOrchCymbal:
 	.byte 0x7F, 0x7F, 0x7F, 0x36, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0F, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 424F3  |...6A.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_086 -- file 0x4251E..0x42548
@@ -38454,9 +41534,9 @@ ToneDB_PercMixerDefaultTable_085:
 ; Evidence: drum-instrument record 232 at file 0x3774C, its
 ; bytes +107..+149 (file 0x377B7..0x377E1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 10 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_086:
 	.byte 0x7F, 0x7F, 0x7F, 0x37, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4251E  |...7@.@.@.@..}.T....d............d.........|
 
@@ -38466,10 +41546,18 @@ ToneDB_PercMixerDefaultTable_086:
 ; Evidence: drum-instrument record 242 at file 0x37D28, its
 ; bytes +107..+149 (file 0x37D93..0x37DBD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_087:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_087_SameAs_ModelRideCym2:
 	.byte 0x7F, 0x7F, 0x7F, 0x37, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x99, 0xA8, 0x54, 0xF2, 0x1A, 0x01, 0x7F, 0x64, 0x28, 0x00, 0xE1, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF0, 0xD4, 0x28, 0x00, 0x64, 0xE1, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCC	; 42549  |...7@.@.@.@....T....d(.........(.d.........|
 
 ; ToneDB_PercMixerDefaultTable_088 -- file 0x42574..0x4259E
@@ -38478,10 +41566,20 @@ ToneDB_PercMixerDefaultTable_087:
 ; Evidence: drum-instrument record 243 at file 0x37DBE, its
 ; bytes +107..+149 (file 0x37E29..0x37E53), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_088:
+; The 7 names differ only by a trailing digit, so the
+; label uses the shared stem `RideCymbal`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_088_SameAs_RideCymbal:
 	.byte 0x7F, 0x7F, 0x7F, 0x38, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42574  |...8@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_089 -- file 0x4259F..0x425C9
@@ -38490,10 +41588,18 @@ ToneDB_PercMixerDefaultTable_088:
 ; Evidence: drum-instrument record 250 at file 0x381D8, its
 ; bytes +107..+149 (file 0x38243..0x3826D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_089:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_089_SameAs_ModelRideCym1:
 	.byte 0x7F, 0x7F, 0x7F, 0x38, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x05, 0x96, 0xBC, 0x54, 0x0A, 0x14, 0x80, 0x46, 0x64, 0x28, 0x25, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xF6, 0xEB, 0x28, 0x25, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF6, 0xEB	; 4259F  |...8@.@.@.@@...T...Fd(%........(%d.........|
 
 ; ToneDB_PercMixerDefaultTable_090 -- file 0x425CA..0x425F4
@@ -38502,9 +41608,9 @@ ToneDB_PercMixerDefaultTable_089:
 ; Evidence: drum-instrument record 251 at file 0x3826E, its
 ; bytes +107..+149 (file 0x382D9..0x38303), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 11 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_090:
 	.byte 0x7F, 0x7F, 0x7F, 0x39, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x14, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 425CA  |...9@.@.@.@..}.T....d............d.........|
 
@@ -38514,10 +41620,18 @@ ToneDB_PercMixerDefaultTable_090:
 ; Evidence: drum-instrument record 262 at file 0x388E0, its
 ; bytes +107..+149 (file 0x3894B..0x38975), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_091:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_091_SameAs_ModelRideBell:
 	.byte 0x7F, 0x7F, 0x7F, 0x39, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x85, 0x9E, 0x54, 0xF6, 0x14, 0x80, 0x7F, 0x64, 0x28, 0x29, 0xEE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF6, 0x11, 0x28, 0x29, 0x64, 0xEE, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF5, 0xF4	; 425F5  |...9@.@.@.@....T....d()........()d.........|
 
 ; ToneDB_PercMixerDefaultTable_092 -- file 0x42620..0x4264A
@@ -38526,10 +41640,20 @@ ToneDB_PercMixerDefaultTable_091:
 ; Evidence: drum-instrument record 263 at file 0x38976, its
 ; bytes +107..+149 (file 0x389E1..0x38A0B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_092:
+; The 5 names differ only by a trailing digit, so the
+; label uses the shared stem `ReverseCymbl`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_092_SameAs_ReverseCymbl:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42620  |...:@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_093 -- file 0x4264B..0x42675
@@ -38538,9 +41662,9 @@ ToneDB_PercMixerDefaultTable_092:
 ; Evidence: drum-instrument record 268 at file 0x38C64, its
 ; bytes +107..+149 (file 0x38CCF..0x38CF9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_093:
 	.byte 0x7F, 0x7F, 0x7F, 0x3B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4264B  |...;@.@.@.@..}.T....d............d.........|
 
@@ -38550,9 +41674,9 @@ ToneDB_PercMixerDefaultTable_093:
 ; Evidence: drum-instrument record 272 at file 0x38EBC, its
 ; bytes +107..+149 (file 0x38F27..0x38F51), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_094:
 	.byte 0x7F, 0x7F, 0x7F, 0x3B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x64, 0x8A, 0x54, 0x14, 0x0A, 0x80, 0x7F, 0x64, 0xBC, 0x61, 0x1E, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14, 0xBC, 0x61, 0x64, 0x1E, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14	; 42676  |...;@.@.@.@..d.T....d.a.........ad.........|
 
@@ -38562,10 +41686,18 @@ ToneDB_PercMixerDefaultTable_094:
 ; Evidence: drum-instrument record 274 at file 0x38FE8, its
 ; bytes +107..+149 (file 0x39053..0x3907D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_095:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_095_SameAs_SleighBell:
 	.byte 0x7F, 0x7F, 0x7F, 0x3C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 426A1  |...<@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_096 -- file 0x426CC..0x426F6
@@ -38574,10 +41706,18 @@ ToneDB_PercMixerDefaultTable_095:
 ; Evidence: drum-instrument record 275 at file 0x3907E, its
 ; bytes +107..+149 (file 0x390E9..0x39113), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_096:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_096_SameAs_MdlSleighBel:
 	.byte 0x7F, 0x7F, 0x7F, 0x3C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xA1, 0xFF, 0x54, 0xEC, 0x0A, 0x01, 0x7F, 0x64, 0x3C, 0x7F, 0xE7, 0x00, 0x80, 0x00, 0x00, 0x00, 0x05, 0x23, 0x3C, 0x7F, 0x64, 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x13, 0xE7	; 426CC  |...<@.@.@.@....T....d<........#<.d.........|
 
 ; ToneDB_PercMixerDefaultTable_097 -- file 0x426F7..0x42721
@@ -38586,10 +41726,20 @@ ToneDB_PercMixerDefaultTable_096:
 ; Evidence: drum-instrument record 276 at file 0x39114, its
 ; bytes +107..+149 (file 0x3917F..0x391A9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_097:
+; The 4 names differ only by a trailing digit, so the
+; label uses the shared stem `Cowbell`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_097_SameAs_Cowbell:
 	.byte 0x7F, 0x7F, 0x7F, 0x3D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 426F7  |...=@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_098 -- file 0x42722..0x4274C
@@ -38598,10 +41748,20 @@ ToneDB_PercMixerDefaultTable_097:
 ; Evidence: drum-instrument record 280 at file 0x3936C, its
 ; bytes +107..+149 (file 0x393D7..0x39401), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_098:
+; The 4 names differ only by a trailing digit, so the
+; label uses the shared stem `ModelCowbell`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_098_SameAs_ModelCowbell:
 	.byte 0x7F, 0x7F, 0x7F, 0x3D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x1E, 0xC6, 0x54, 0x32, 0x0A, 0x01, 0x7F, 0x64, 0x41, 0x4D, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF9, 0xF6, 0x24, 0x7F, 0x64, 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 42722  |...=@.@.@.@....T2...dAM........$.d.........|
 
 ; ToneDB_PercMixerDefaultTable_099 -- file 0x4274D..0x42777
@@ -38610,9 +41770,9 @@ ToneDB_PercMixerDefaultTable_098:
 ; Evidence: drum-instrument record 284 at file 0x395C4, its
 ; bytes +107..+149 (file 0x3962F..0x39659), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_099:
 	.byte 0x7F, 0x7F, 0x7F, 0x3E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4274D  |...>@.@.@.@..}.T....d............d.........|
 
@@ -38622,10 +41782,18 @@ ToneDB_PercMixerDefaultTable_099:
 ; Evidence: drum-instrument record 286 at file 0x396F0, its
 ; bytes +107..+149 (file 0x3975B..0x39785), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_100:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_100_SameAs_MdlWindChime:
 	.byte 0x7F, 0x7F, 0x7F, 0x3E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xA1, 0xFF, 0x54, 0xEC, 0x0A, 0x01, 0x7F, 0x64, 0x40, 0x7F, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF8, 0x23, 0x40, 0x7F, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x0F, 0xE7	; 42778  |...>@.@.@.@....T....d@........#@.d.........|
 
 ; ToneDB_PercMixerDefaultTable_101 -- file 0x427A3..0x427CD
@@ -38634,9 +41802,9 @@ ToneDB_PercMixerDefaultTable_100:
 ; Evidence: drum-instrument record 287 at file 0x39786, its
 ; bytes +107..+149 (file 0x397F1..0x3981B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_101:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 427A3  |...?@.@.@.@..}.T....d............d.........|
 
@@ -38646,10 +41814,18 @@ ToneDB_PercMixerDefaultTable_101:
 ; Evidence: drum-instrument record 291 at file 0x399DE, its
 ; bytes +107..+149 (file 0x39A49..0x39A73), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_102:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_102_SameAs_MdlTriangleO:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xA1, 0xFF, 0x54, 0xEC, 0x0A, 0x01, 0x7F, 0x64, 0x53, 0x7F, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x29, 0x51, 0x7F, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0xED	; 427CE  |...?@.@.@.@....T....dS........)Q.d.........|
 
 ; ToneDB_PercMixerDefaultTable_103 -- file 0x427F9..0x42823
@@ -38658,9 +41834,9 @@ ToneDB_PercMixerDefaultTable_102:
 ; Evidence: drum-instrument record 292 at file 0x39A74, its
 ; bytes +107..+149 (file 0x39ADF..0x39B09), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_103:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 427F9  |...?A.@.@.@..}.T....d............d.........|
 
@@ -38670,10 +41846,18 @@ ToneDB_PercMixerDefaultTable_103:
 ; Evidence: drum-instrument record 295 at file 0x39C36, its
 ; bytes +107..+149 (file 0x39CA1..0x39CCB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_104:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_104_SameAs_MdlTriangleM:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x8E, 0xFF, 0x54, 0xEC, 0x0A, 0x01, 0x7F, 0x64, 0x39, 0x7F, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x29, 0x37, 0x7F, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0xED	; 42824  |...?A.@.@.@....T....d9........)7.d.........|
 
 ; ToneDB_PercMixerDefaultTable_105 -- file 0x4284F..0x42879
@@ -38682,16 +41866,25 @@ ToneDB_PercMixerDefaultTable_104:
 ; Evidence: drum-instrument record 296 at file 0x39CCC, its
 ; bytes +107..+149 (file 0x39D37..0x39D61), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_105:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_105_SameAs_SmallBell:
 	.byte 0x7F, 0x7F, 0x7F, 0x40, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4284F  |...@@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_106 -- file 0x4287A..0x428A4
 ; NO drum-instrument record carries these bytes -- one of the
 ; 12 records of this array with no carrier at all, against 196
-; that have one.  round 5 Q4c.
+; that have one.  round 5 Q4c; round 6 Q1, verdict
+; NAMELESS-NO-TWIN.
 ToneDB_PercMixerDefaultTable_106:
 	.byte 0x7F, 0x7F, 0x7F, 0x40, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4287A  |...@A.@.@.@..}.T....d............d.........|
 
@@ -38701,9 +41894,9 @@ ToneDB_PercMixerDefaultTable_106:
 ; Evidence: drum-instrument record 297 at file 0x39D62, its
 ; bytes +107..+149 (file 0x39DCD..0x39DF7), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_107:
 	.byte 0x7F, 0x7F, 0x7F, 0x6A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 428A5  |...j@.@.@.@..}.T....d............d.........|
 
@@ -38713,9 +41906,9 @@ ToneDB_PercMixerDefaultTable_107:
 ; Evidence: drum-instrument record 300 at file 0x39F24, its
 ; bytes +107..+149 (file 0x39F8F..0x39FB9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 7 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_108:
 	.byte 0x7F, 0x7F, 0x7F, 0x41, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x1E, 0x01, 0x7F, 0x64, 0x00, 0x58, 0xD8, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58, 0x64, 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 428D0  |...A@.@.@.@..}.T....d.X.........Xd.........|
 
@@ -38725,9 +41918,9 @@ ToneDB_PercMixerDefaultTable_108:
 ; Evidence: drum-instrument record 324 at file 0x3AD34, its
 ; bytes +107..+149 (file 0x3AD9F..0x3ADC9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_109:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 428FB  |...B@.@.@.@..}.T....d............d.........|
 
@@ -38737,10 +41930,18 @@ ToneDB_PercMixerDefaultTable_109:
 ; Evidence: drum-instrument record 327 at file 0x3AEF6, its
 ; bytes +107..+149 (file 0x3AF61..0x3AF8B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_110:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_110_SameAs_BongoMute2:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42926  |...BA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_111 -- file 0x42951..0x4297B
@@ -38749,10 +41950,18 @@ ToneDB_PercMixerDefaultTable_110:
 ; Evidence: drum-instrument record 328 at file 0x3AF8C, its
 ; bytes +107..+149 (file 0x3AFF7..0x3B021), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_111:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_111_SameAs_BongoMute3:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42951  |...BB.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_112 -- file 0x4297C..0x429A6
@@ -38761,10 +41970,18 @@ ToneDB_PercMixerDefaultTable_111:
 ; Evidence: drum-instrument record 329 at file 0x3B022, its
 ; bytes +107..+149 (file 0x3B08D..0x3B0B7), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_112:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_112_SameAs_BongoHigh:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4297C  |...BC.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_113 -- file 0x429A7..0x429D1
@@ -38773,10 +41990,18 @@ ToneDB_PercMixerDefaultTable_112:
 ; Evidence: drum-instrument record 330 at file 0x3B0B8, its
 ; bytes +107..+149 (file 0x3B123..0x3B14D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_113:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_113_SameAs_ModelBongoH:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x5D, 0x9E, 0x54, 0x09, 0x28, 0x01, 0x7F, 0x64, 0x23, 0x7A, 0x15, 0xCE, 0x80, 0x00, 0x00, 0x00, 0xFF, 0xFB, 0x32, 0x27, 0x64, 0xF2, 0xE8, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0x04	; 429A7  |...BC.@.@.@..].T.(..d#z........2'd.........|
 
 ; ToneDB_PercMixerDefaultTable_114 -- file 0x429D2..0x429FC
@@ -38785,10 +42010,18 @@ ToneDB_PercMixerDefaultTable_113:
 ; Evidence: drum-instrument record 331 at file 0x3B14E, its
 ; bytes +107..+149 (file 0x3B1B9..0x3B1E3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_114:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_114_SameAs_ModelBongoL:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xFF, 0x54, 0xF3, 0x0A, 0x01, 0x7F, 0x64, 0x25, 0x27, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x25, 0x27, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 429D2  |...BC.@.@.@....T....d%'........%'d.........|
 
 ; ToneDB_PercMixerDefaultTable_115 -- file 0x429FD..0x42A27
@@ -38797,10 +42030,18 @@ ToneDB_PercMixerDefaultTable_114:
 ; Evidence: drum-instrument record 332 at file 0x3B1E4, its
 ; bytes +107..+149 (file 0x3B24F..0x3B279), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_115:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_115_SameAs_BongoLow:
 	.byte 0x7F, 0x7F, 0x7F, 0x42, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 429FD  |...BD.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_116 -- file 0x42A28..0x42A52
@@ -38809,10 +42050,18 @@ ToneDB_PercMixerDefaultTable_115:
 ; Evidence: drum-instrument record 333 at file 0x3B27A, its
 ; bytes +107..+149 (file 0x3B2E5..0x3B30F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_116:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_116_SameAs_CongaMuteOn:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42A28  |...C@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_117 -- file 0x42A53..0x42A7D
@@ -38821,10 +42070,18 @@ ToneDB_PercMixerDefaultTable_116:
 ; Evidence: drum-instrument record 334 at file 0x3B310, its
 ; bytes +107..+149 (file 0x3B37B..0x3B3A5), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_117:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_117_SameAs_CongaMuteOff:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42A53  |...CA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_118 -- file 0x42A7E..0x42AA8
@@ -38833,10 +42090,18 @@ ToneDB_PercMixerDefaultTable_117:
 ; Evidence: drum-instrument record 335 at file 0x3B3A6, its
 ; bytes +107..+149 (file 0x3B411..0x3B43B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_118:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_118_SameAs_CongaMutCrash:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42A7E  |...CB.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_119 -- file 0x42AA9..0x42AD3
@@ -38845,10 +42110,18 @@ ToneDB_PercMixerDefaultTable_118:
 ; Evidence: drum-instrument record 336 at file 0x3B43C, its
 ; bytes +107..+149 (file 0x3B4A7..0x3B4D1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_119:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_119_SameAs_MdlCngMtCrash:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x8F, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x1E, 0x3F, 0xF2, 0xE1, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05, 0x1E, 0x3F, 0x64, 0xF2, 0xE1, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 42AA9  |...CB.@.@.@..}.T....d.?.........?d.........|
 
 ; ToneDB_PercMixerDefaultTable_120 -- file 0x42AD4..0x42AFE
@@ -38857,9 +42130,9 @@ ToneDB_PercMixerDefaultTable_119:
 ; Evidence: drum-instrument record 337 at file 0x3B4D2, its
 ; bytes +107..+149 (file 0x3B53D..0x3B567), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_120:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42AD4  |...CC.@.@.@..}.T....d............d.........|
 
@@ -38869,9 +42142,9 @@ ToneDB_PercMixerDefaultTable_120:
 ; Evidence: drum-instrument record 341 at file 0x3B72A, its
 ; bytes +107..+149 (file 0x3B795..0x3B7BF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_121:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42AFF  |...CD.@.@.@..}.T....d............d.........|
 
@@ -38881,9 +42154,9 @@ ToneDB_PercMixerDefaultTable_121:
 ; Evidence: drum-instrument record 345 at file 0x3B982, its
 ; bytes +107..+149 (file 0x3B9ED..0x3BA17), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_122:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xFF, 0x54, 0xF6, 0x0A, 0x80, 0x7F, 0x64, 0x30, 0x44, 0xE7, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6, 0x30, 0x44, 0x64, 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 42B2A  |...CD.@.@.@....T....d0D........0Dd.........|
 
@@ -38893,10 +42166,18 @@ ToneDB_PercMixerDefaultTable_122:
 ; Evidence: drum-instrument record 349 at file 0x3BBDA, its
 ; bytes +107..+149 (file 0x3BC45..0x3BC6F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_123:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_123_SameAs_CongaCrash:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x45, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42B55  |...CE.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_124 -- file 0x42B80..0x42BAA
@@ -38905,9 +42186,9 @@ ToneDB_PercMixerDefaultTable_123:
 ; Evidence: drum-instrument record 350 at file 0x3BC70, its
 ; bytes +107..+149 (file 0x3BCDB..0x3BD05), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_124:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42B80  |...D@.@.@.@..}.T....d............d.........|
 
@@ -38917,9 +42198,9 @@ ToneDB_PercMixerDefaultTable_124:
 ; Evidence: drum-instrument record 352 at file 0x3BD9C, its
 ; bytes +107..+149 (file 0x3BE07..0x3BE31), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_125:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0xC8, 0x35, 0x54, 0xF1, 0x0A, 0x80, 0x7F, 0x64, 0x3C, 0x23, 0xE2, 0xCE, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8, 0x3C, 0x23, 0x64, 0xE2, 0xCE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8	; 42BAB  |...D@.@.@.@...5T....d<#........<#d.........|
 
@@ -38929,10 +42210,18 @@ ToneDB_PercMixerDefaultTable_125:
 ; Evidence: drum-instrument record 354 at file 0x3BEC8, its
 ; bytes +107..+149 (file 0x3BF33..0x3BF5D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_126:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_126_SameAs_TimblsOpenRim:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42BD6  |...DA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_127 -- file 0x42C01..0x42C2B
@@ -38941,10 +42230,18 @@ ToneDB_PercMixerDefaultTable_126:
 ; Evidence: drum-instrument record 355 at file 0x3BF5E, its
 ; bytes +107..+149 (file 0x3BFC9..0x3BFF3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_127:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_127_SameAs_MdlTimbOpenRm:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x64, 0x8A, 0x54, 0xF6, 0x0A, 0x01, 0x7F, 0x64, 0x32, 0x33, 0xE6, 0xD2, 0x80, 0x00, 0x00, 0x00, 0xEE, 0x28, 0x32, 0x33, 0x64, 0xE6, 0xD2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEE, 0x28	; 42C01  |...DA.@.@.@..d.T....d23.......(23d........(|
 
 ; ToneDB_PercMixerDefaultTable_128 -- file 0x42C2C..0x42C56
@@ -38953,9 +42250,9 @@ ToneDB_PercMixerDefaultTable_127:
 ; Evidence: drum-instrument record 356 at file 0x3BFF4, its
 ; bytes +107..+149 (file 0x3C05F..0x3C089), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_128:
 	.byte 0x7F, 0x7F, 0x7F, 0x45, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42C2C  |...E@.@.@.@..}.T....d............d.........|
 
@@ -38965,10 +42262,18 @@ ToneDB_PercMixerDefaultTable_128:
 ; Evidence: drum-instrument record 359 at file 0x3C1B6, its
 ; bytes +107..+149 (file 0x3C221..0x3C24B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_129:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_129_SameAs_BataDrumSlap:
 	.byte 0x7F, 0x7F, 0x7F, 0x65, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42C57  |...e@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_130 -- file 0x42C82..0x42CAC
@@ -38977,10 +42282,18 @@ ToneDB_PercMixerDefaultTable_129:
 ; Evidence: drum-instrument record 360 at file 0x3C24C, its
 ; bytes +107..+149 (file 0x3C2B7..0x3C2E1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_130:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_130_SameAs_BataDrumOpen:
 	.byte 0x7F, 0x7F, 0x7F, 0x65, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFB, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42C82  |...eA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_131 -- file 0x42CAD..0x42CD7
@@ -38989,9 +42302,9 @@ ToneDB_PercMixerDefaultTable_130:
 ; Evidence: drum-instrument record 361 at file 0x3C2E2, its
 ; bytes +107..+149 (file 0x3C34D..0x3C377), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 7 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_131:
 	.byte 0x7F, 0x7F, 0x7F, 0x46, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x06, 0x7F, 0x64, 0x37, 0x27, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0xDE, 0x37, 0x27, 0x64, 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 42CAD  |...F@.@.@.@..}.T....d7'........7'd.........|
 
@@ -39001,9 +42314,9 @@ ToneDB_PercMixerDefaultTable_131:
 ; Evidence: drum-instrument record 385 at file 0x3D0F2, its
 ; bytes +107..+149 (file 0x3D15D..0x3D187), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_132:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42CD8  |...G@.@.@.@..}.T....d............d.........|
 
@@ -39013,10 +42326,18 @@ ToneDB_PercMixerDefaultTable_132:
 ; Evidence: drum-instrument record 387 at file 0x3D21E, its
 ; bytes +107..+149 (file 0x3D289..0x3D2B3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_133:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_133_SameAs_MdlCuicaHi:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0xEE, 0x32, 0x54, 0x0A, 0x0F, 0x01, 0x7F, 0x64, 0x51, 0x60, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x4C, 0x51, 0x60, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x4C	; 42D03  |...G@.@.@.@...2T....dQ`.......LQ`d........L|
 
 ; ToneDB_PercMixerDefaultTable_134 -- file 0x42D2E..0x42D58
@@ -39025,9 +42346,9 @@ ToneDB_PercMixerDefaultTable_133:
 ; Evidence: drum-instrument record 388 at file 0x3D2B4, its
 ; bytes +107..+149 (file 0x3D31F..0x3D349), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_134:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42D2E  |...GA.@.@.@..}.T....d............d.........|
 
@@ -39037,10 +42358,18 @@ ToneDB_PercMixerDefaultTable_134:
 ; Evidence: drum-instrument record 390 at file 0x3D3E0, its
 ; bytes +107..+149 (file 0x3D44B..0x3D475), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_135:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_135_SameAs_MdlCuicaLow:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0xEE, 0x32, 0x54, 0x0A, 0x0F, 0x01, 0x7F, 0x64, 0x51, 0x60, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCB, 0x51, 0x60, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCB	; 42D59  |...GA.@.@.@...2T....dQ`........Q`d.........|
 
 ; ToneDB_PercMixerDefaultTable_136 -- file 0x42D84..0x42DAE
@@ -39049,9 +42378,9 @@ ToneDB_PercMixerDefaultTable_135:
 ; Evidence: drum-instrument record 391 at file 0x3D476, its
 ; bytes +107..+149 (file 0x3D4E1..0x3D50B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_136:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42D84  |...H@.@.@.@..}.T....d............d.........|
 
@@ -39061,10 +42390,18 @@ ToneDB_PercMixerDefaultTable_136:
 ; Evidence: drum-instrument record 394 at file 0x3D638, its
 ; bytes +107..+149 (file 0x3D6A3..0x3D6CD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_137:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_137_SameAs_MdlGuiroLong:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xE0, 0xB2, 0x54, 0xE2, 0x14, 0x80, 0x7F, 0x64, 0x3C, 0x39, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x04, 0x00, 0x3C, 0x39, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x04, 0x00	; 42DAF  |...H@.@.@.@....T....d<9........<9d.........|
 
 ; ToneDB_PercMixerDefaultTable_138 -- file 0x42DDA..0x42E04
@@ -39073,10 +42410,20 @@ ToneDB_PercMixerDefaultTable_137:
 ; Evidence: drum-instrument record 395 at file 0x3D6CE, its
 ; bytes +107..+149 (file 0x3D739..0x3D763), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_138:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `GuiroShort`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_138_SameAs_GuiroShort:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42DDA  |...HA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_139 -- file 0x42E05..0x42E2F
@@ -39085,10 +42432,18 @@ ToneDB_PercMixerDefaultTable_138:
 ; Evidence: drum-instrument record 397 at file 0x3D7FA, its
 ; bytes +107..+149 (file 0x3D865..0x3D88F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_139:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_139_SameAs_MdlGuiroShort:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xE0, 0xB2, 0x54, 0xE2, 0x14, 0x01, 0x7F, 0x64, 0x3C, 0x39, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x08, 0x00, 0x3C, 0x39, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x08, 0x00	; 42E05  |...HA.@.@.@....T....d<9........<9d.........|
 
 ; ToneDB_PercMixerDefaultTable_140 -- file 0x42E30..0x42E5A
@@ -39097,10 +42452,18 @@ ToneDB_PercMixerDefaultTable_139:
 ; Evidence: drum-instrument record 398 at file 0x3D890, its
 ; bytes +107..+149 (file 0x3D8FB..0x3D925), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_140:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_140_SameAs_HandClaps:
 	.byte 0x7F, 0x7F, 0x7F, 0x49, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42E30  |...I@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_141 -- file 0x42E5B..0x42E85
@@ -39109,10 +42472,18 @@ ToneDB_PercMixerDefaultTable_140:
 ; Evidence: drum-instrument record 399 at file 0x3D926, its
 ; bytes +107..+149 (file 0x3D991..0x3D9BB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_141:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_141_SameAs_MdlHandClaps:
 	.byte 0x7F, 0x7F, 0x7F, 0x49, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xB2, 0x54, 0xF6, 0x14, 0x01, 0x7F, 0x64, 0x28, 0x44, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x28, 0x44, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 42E5B  |...I@.@.@.@....T....d(D........(Dd.........|
 
 ; ToneDB_PercMixerDefaultTable_142 -- file 0x42E86..0x42EB0
@@ -39121,9 +42492,9 @@ ToneDB_PercMixerDefaultTable_141:
 ; Evidence: drum-instrument record 400 at file 0x3D9BC, its
 ; bytes +107..+149 (file 0x3DA27..0x3DA51), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_142:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42E86  |...J@.@.@.@..}.T....d............d.........|
 
@@ -39133,9 +42504,9 @@ ToneDB_PercMixerDefaultTable_142:
 ; Evidence: drum-instrument record 404 at file 0x3DC14, its
 ; bytes +107..+149 (file 0x3DC7F..0x3DCA9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_143:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x87, 0x99, 0x54, 0xE2, 0x03, 0x01, 0x7F, 0x64, 0x30, 0x44, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF9, 0x01, 0x30, 0x44, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 42EB1  |...J@.@.@.@....T....d0D........0Dd.........|
 
@@ -39145,10 +42516,18 @@ ToneDB_PercMixerDefaultTable_143:
 ; Evidence: drum-instrument record 406 at file 0x3DD40, its
 ; bytes +107..+149 (file 0x3DDAB..0x3DDD5), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_144:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_144_SameAs_ShekeleOn:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42EDC  |...h@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_145 -- file 0x42F07..0x42F31
@@ -39157,10 +42536,18 @@ ToneDB_PercMixerDefaultTable_144:
 ; Evidence: drum-instrument record 407 at file 0x3DDD6, its
 ; bytes +107..+149 (file 0x3DE41..0x3DE6B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_145:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_145_SameAs_ShekeleOff:
 	.byte 0x7F, 0x7F, 0x7F, 0x68, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42F07  |...hA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_146 -- file 0x42F32..0x42F5C
@@ -39169,10 +42556,20 @@ ToneDB_PercMixerDefaultTable_145:
 ; Evidence: drum-instrument record 408 at file 0x3DE6C, its
 ; bytes +107..+149 (file 0x3DED7..0x3DF01), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_146:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `Cabasa`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_146_SameAs_Cabasa:
 	.byte 0x7F, 0x7F, 0x7F, 0x4B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42F32  |...K@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_147 -- file 0x42F5D..0x42F87
@@ -39181,10 +42578,18 @@ ToneDB_PercMixerDefaultTable_146:
 ; Evidence: drum-instrument record 410 at file 0x3DF98, its
 ; bytes +107..+149 (file 0x3E003..0x3E02D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_147:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_147_SameAs_ModelCabasa:
 	.byte 0x7F, 0x7F, 0x7F, 0x4B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x87, 0x99, 0x54, 0xE2, 0x03, 0x01, 0x7F, 0x64, 0x30, 0x44, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF9, 0x01, 0x30, 0x44, 0x64, 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 42F5D  |...K@.@.@.@....T....d0D........0Dd.........|
 
 ; ToneDB_PercMixerDefaultTable_148 -- file 0x42F88..0x42FB2
@@ -39193,9 +42598,9 @@ ToneDB_PercMixerDefaultTable_147:
 ; Evidence: drum-instrument record 411 at file 0x3E02E, its
 ; bytes +107..+149 (file 0x3E099..0x3E0C3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_148:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42F88  |...L@.@.@.@..}.T....d............d.........|
 
@@ -39205,9 +42610,9 @@ ToneDB_PercMixerDefaultTable_148:
 ; Evidence: drum-instrument record 415 at file 0x3E286, its
 ; bytes +107..+149 (file 0x3E2F1..0x3E31B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_149:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0xFA, 0xFF, 0x54, 0xEA, 0x1E, 0x80, 0x7F, 0x64, 0x30, 0x44, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x44, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 42FB3  |...L@.@.@.@....T....d0D........0Dd.........|
 
@@ -39217,10 +42622,18 @@ ToneDB_PercMixerDefaultTable_149:
 ; Evidence: drum-instrument record 417 at file 0x3E3B2, its
 ; bytes +107..+149 (file 0x3E41D..0x3E447), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_150:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_150_SameAs_CaxixiOn:
 	.byte 0x7F, 0x7F, 0x7F, 0x67, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42FDE  |...g@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_151 -- file 0x43009..0x43033
@@ -39229,10 +42642,18 @@ ToneDB_PercMixerDefaultTable_150:
 ; Evidence: drum-instrument record 418 at file 0x3E448, its
 ; bytes +107..+149 (file 0x3E4B3..0x3E4DD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_151:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_151_SameAs_CaxixiOff:
 	.byte 0x7F, 0x7F, 0x7F, 0x67, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43009  |...gA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_152 -- file 0x43034..0x4305E
@@ -39241,9 +42662,9 @@ ToneDB_PercMixerDefaultTable_151:
 ; Evidence: drum-instrument record 419 at file 0x3E4DE, its
 ; bytes +107..+149 (file 0x3E549..0x3E573), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_152:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43034  |...M@.@.@.@..}.T....d............d.........|
 
@@ -39253,9 +42674,9 @@ ToneDB_PercMixerDefaultTable_152:
 ; Evidence: drum-instrument record 423 at file 0x3E736, its
 ; bytes +107..+149 (file 0x3E7A1..0x3E7CB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_153:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x35, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0x60, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05, 0x30, 0x60, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 4305F  |...M@.@.@.@..}5T....d0`........0`d.........|
 
@@ -39265,9 +42686,9 @@ ToneDB_PercMixerDefaultTable_153:
 ; Evidence: drum-instrument record 427 at file 0x3E98E, its
 ; bytes +107..+149 (file 0x3E9F9..0x3EA23), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_154:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4308A  |...MA.@.@.@..}.T....d............d.........|
 
@@ -39277,10 +42698,18 @@ ToneDB_PercMixerDefaultTable_154:
 ; Evidence: drum-instrument record 431 at file 0x3EBE6, its
 ; bytes +107..+149 (file 0x3EC51..0x3EC7B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_155:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_155_SameAs_SambaDrumOn:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 430B5  |...N@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_156 -- file 0x430E0..0x4310A
@@ -39289,10 +42718,18 @@ ToneDB_PercMixerDefaultTable_155:
 ; Evidence: drum-instrument record 432 at file 0x3EC7C, its
 ; bytes +107..+149 (file 0x3ECE7..0x3ED11), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_156:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_156_SameAs_SambaDrumOff:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 430E0  |...NA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_157 -- file 0x4310B..0x43135
@@ -39301,10 +42738,18 @@ ToneDB_PercMixerDefaultTable_156:
 ; Evidence: drum-instrument record 433 at file 0x3ED12, its
 ; bytes +107..+149 (file 0x3ED7D..0x3EDA7), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_157:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_157_SameAs_DarbukaSlap:
 	.byte 0x7F, 0x7F, 0x7F, 0x66, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4310B  |...f@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_158 -- file 0x43136..0x43160
@@ -39313,10 +42758,18 @@ ToneDB_PercMixerDefaultTable_157:
 ; Evidence: drum-instrument record 434 at file 0x3EDA8, its
 ; bytes +107..+149 (file 0x3EE13..0x3EE3D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_158:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_158_SameAs_DarbukaOpen:
 	.byte 0x7F, 0x7F, 0x7F, 0x66, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xF6, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43136  |...fA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_159 -- file 0x43161..0x4318B
@@ -39325,10 +42778,18 @@ ToneDB_PercMixerDefaultTable_158:
 ; Evidence: drum-instrument record 435 at file 0x3EE3E, its
 ; bytes +107..+149 (file 0x3EEA9..0x3EED3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_159:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_159_SameAs_SurdoOpen:
 	.byte 0x7F, 0x7F, 0x7F, 0x69, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43161  |...i@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_160 -- file 0x4318C..0x431B6
@@ -39337,10 +42798,18 @@ ToneDB_PercMixerDefaultTable_159:
 ; Evidence: drum-instrument record 436 at file 0x3EED4, its
 ; bytes +107..+149 (file 0x3EF3F..0x3EF69), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_160:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_160_SameAs_SurdoMute:
 	.byte 0x7F, 0x7F, 0x7F, 0x69, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4318C  |...iA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_161 -- file 0x431B7..0x431E1
@@ -39349,10 +42818,18 @@ ToneDB_PercMixerDefaultTable_160:
 ; Evidence: drum-instrument record 437 at file 0x3EF6A, its
 ; bytes +107..+149 (file 0x3EFD5..0x3EFFF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_161:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_161_SameAs_SurdoLeftHand:
 	.byte 0x7F, 0x7F, 0x7F, 0x69, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 431B7  |...iB.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_162 -- file 0x431E2..0x4320C
@@ -39361,10 +42838,20 @@ ToneDB_PercMixerDefaultTable_161:
 ; Evidence: drum-instrument record 438 at file 0x3F000, its
 ; bytes +107..+149 (file 0x3F06B..0x3F095), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_162:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `TambourinAcc`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_162_SameAs_TambourinAcc:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 431E2  |...O@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_163 -- file 0x4320D..0x43237
@@ -39373,10 +42860,18 @@ ToneDB_PercMixerDefaultTable_162:
 ; Evidence: drum-instrument record 440 at file 0x3F12C, its
 ; bytes +107..+149 (file 0x3F197..0x3F1C1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_163:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_163_SameAs_MdlTamburnAcc:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x96, 0x8F, 0x54, 0xE2, 0x0A, 0x01, 0x7F, 0x74, 0x2B, 0x6A, 0xE2, 0xEC, 0x80, 0x00, 0x00, 0x00, 0x00, 0x53, 0x2B, 0x5A, 0x64, 0xE2, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0x6F	; 4320D  |...O@.@.@.@....T....t+j.......S+Zd........o|
 
 ; ToneDB_PercMixerDefaultTable_164 -- file 0x43238..0x43262
@@ -39385,10 +42880,20 @@ ToneDB_PercMixerDefaultTable_163:
 ; Evidence: drum-instrument record 441 at file 0x3F1C2, its
 ; bytes +107..+149 (file 0x3F22D..0x3F257), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_164:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `TambourineBt`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_164_SameAs_TambourineBt:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43238  |...OA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_165 -- file 0x43263..0x4328D
@@ -39397,10 +42902,18 @@ ToneDB_PercMixerDefaultTable_164:
 ; Evidence: drum-instrument record 443 at file 0x3F2EE, its
 ; bytes +107..+149 (file 0x3F359..0x3F383), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_165:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_165_SameAs_MdlTamburnBt:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x96, 0x8F, 0x54, 0xE2, 0x0A, 0x01, 0x7F, 0x74, 0x2B, 0x6A, 0xE2, 0xEC, 0x80, 0x00, 0x00, 0x00, 0x00, 0x53, 0x2B, 0x5A, 0x64, 0xE2, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0x6F	; 43263  |...OA.@.@.@....T....t+j.......S+Zd........o|
 
 ; ToneDB_PercMixerDefaultTable_166 -- file 0x4328E..0x432B8
@@ -39409,10 +42922,18 @@ ToneDB_PercMixerDefaultTable_165:
 ; Evidence: drum-instrument record 444 at file 0x3F384, its
 ; bytes +107..+149 (file 0x3F3EF..0x3F419), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_166:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_166_SameAs_OrchTambourin:
 	.byte 0x7F, 0x7F, 0x7F, 0x50, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4328E  |...P@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_167 -- file 0x432B9..0x432E3
@@ -39421,10 +42942,18 @@ ToneDB_PercMixerDefaultTable_166:
 ; Evidence: drum-instrument record 445 at file 0x3F41A, its
 ; bytes +107..+149 (file 0x3F485..0x3F4AF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_167:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_167_SameAs_NutshellTree:
 	.byte 0x7F, 0x7F, 0x7F, 0x6B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 432B9  |...k@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_168 -- file 0x432E4..0x4330E
@@ -39433,10 +42962,18 @@ ToneDB_PercMixerDefaultTable_167:
 ; Evidence: drum-instrument record 446 at file 0x3F4B0, its
 ; bytes +107..+149 (file 0x3F51B..0x3F545), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_168:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_168_SameAs_Crikets:
 	.byte 0x7F, 0x7F, 0x7F, 0x6E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 432E4  |...n@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_169 -- file 0x4330F..0x43339
@@ -39445,10 +42982,18 @@ ToneDB_PercMixerDefaultTable_168:
 ; Evidence: drum-instrument record 447 at file 0x3F546, its
 ; bytes +107..+149 (file 0x3F5B1..0x3F5DB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_169:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_169_SameAs_RainStick:
 	.byte 0x7F, 0x7F, 0x7F, 0x6C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4330F  |...l@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_170 -- file 0x4333A..0x43364
@@ -39457,9 +43002,9 @@ ToneDB_PercMixerDefaultTable_169:
 ; Evidence: drum-instrument record 448 at file 0x3F5DC, its
 ; bytes +107..+149 (file 0x3F647..0x3F671), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_170:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xFD, 0x05, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4333A  |...Q@.@.@.@..}.T....d............d.........|
 
@@ -39469,10 +43014,18 @@ ToneDB_PercMixerDefaultTable_170:
 ; Evidence: drum-instrument record 451 at file 0x3F79E, its
 ; bytes +107..+149 (file 0x3F809..0x3F833), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_171:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_171_SameAs_MdlVibraslap:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0xE0, 0xB2, 0x54, 0xD8, 0x14, 0x01, 0x7F, 0x64, 0x30, 0x4F, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x00, 0x30, 0x4F, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x00	; 43365  |...Q@.@.@.@....T....d0O........0Od.........|
 
 ; ToneDB_PercMixerDefaultTable_172 -- file 0x43390..0x433BA
@@ -39481,9 +43034,9 @@ ToneDB_PercMixerDefaultTable_171:
 ; Evidence: drum-instrument record 452 at file 0x3F834, its
 ; bytes +107..+149 (file 0x3F89F..0x3F8C9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 4 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_172:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43390  |...R@.@.@.@..}.T....d............d.........|
 
@@ -39493,9 +43046,9 @@ ToneDB_PercMixerDefaultTable_172:
 ; Evidence: drum-instrument record 456 at file 0x3FA8C, its
 ; bytes +107..+149 (file 0x3FAF7..0x3FB21), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_173:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x32, 0x9E, 0x54, 0x14, 0x09, 0x01, 0x7F, 0x64, 0x1E, 0x43, 0x14, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14, 0x1E, 0x43, 0x64, 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 433BB  |...R@.@.@.@..2.T....d.C.........Cd.........|
 
@@ -39505,10 +43058,18 @@ ToneDB_PercMixerDefaultTable_173:
 ; Evidence: drum-instrument record 459 at file 0x3FC4E, its
 ; bytes +107..+149 (file 0x3FCB9..0x3FCE3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_174:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_174_SameAs_Castanets:
 	.byte 0x7F, 0x7F, 0x7F, 0x53, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 433E6  |...S@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_175 -- file 0x43411..0x4343B
@@ -39517,10 +43078,18 @@ ToneDB_PercMixerDefaultTable_174:
 ; Evidence: drum-instrument record 460 at file 0x3FCE4, its
 ; bytes +107..+149 (file 0x3FD4F..0x3FD79), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_175:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_175_SameAs_ModelCastanet:
 	.byte 0x7F, 0x7F, 0x7F, 0x53, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x4F, 0xE3, 0x54, 0x03, 0x0A, 0x01, 0x7F, 0x64, 0x3A, 0x47, 0xD6, 0x00, 0x80, 0x00, 0x00, 0x00, 0x11, 0x89, 0x3A, 0x47, 0x64, 0xD6, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x11, 0x89	; 43411  |...S@.@.@.@..O.T....d:G........:Gd.........|
 
 ; ToneDB_PercMixerDefaultTable_176 -- file 0x4343C..0x43466
@@ -39529,9 +43098,9 @@ ToneDB_PercMixerDefaultTable_175:
 ; Evidence: drum-instrument record 64 at file 0x314DC, its
 ; bytes +107..+149 (file 0x31547..0x31571), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_176:
 	.byte 0x7F, 0x7F, 0x7F, 0x54, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4343C  |...T@.@.@.@..}.T....d............d.........|
 
@@ -39541,10 +43110,18 @@ ToneDB_PercMixerDefaultTable_176:
 ; Evidence: drum-instrument record 463 at file 0x3FEA6, its
 ; bytes +107..+149 (file 0x3FF11..0x3FF3B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_177:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_177_SameAs_ModelClaves:
 	.byte 0x7F, 0x7F, 0x7F, 0x54, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x32, 0xB2, 0x54, 0x0A, 0x04, 0x80, 0x7F, 0x64, 0x1E, 0x55, 0x14, 0x0D, 0x80, 0x00, 0x00, 0x00, 0x06, 0x42, 0x1E, 0x55, 0x64, 0x14, 0x0D, 0x00, 0x80, 0x00, 0x00, 0x00, 0x06, 0x42	; 43467  |...T@.@.@.@..2.T....d.U.......B.Ud........B|
 
 ; ToneDB_PercMixerDefaultTable_178 -- file 0x43492..0x434BC
@@ -39553,10 +43130,20 @@ ToneDB_PercMixerDefaultTable_177:
 ; Evidence: drum-instrument record 464 at file 0x3FF3C, its
 ; bytes +107..+149 (file 0x3FFA7..0x3FFD1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_178:
+; The 3 names differ only by a trailing digit, so the
+; label uses the shared stem `Slap`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_178_SameAs_Slap:
 	.byte 0x7F, 0x7F, 0x7F, 0x55, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43492  |...U@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_179 -- file 0x434BD..0x434E7
@@ -39565,10 +43152,20 @@ ToneDB_PercMixerDefaultTable_178:
 ; Evidence: drum-instrument record 467 at file 0x400FE, its
 ; bytes +107..+149 (file 0x40169..0x40193), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_179:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `Scratch`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_179_SameAs_Scratch:
 	.byte 0x7F, 0x7F, 0x7F, 0x56, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 434BD  |...V@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_180 -- file 0x434E8..0x43512
@@ -39577,10 +43174,20 @@ ToneDB_PercMixerDefaultTable_179:
 ; Evidence: drum-instrument record 469 at file 0x4022A, its
 ; bytes +107..+149 (file 0x40295..0x402BF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_180:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `Scratch`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_180_SameAs_Scratch:
 	.byte 0x7F, 0x7F, 0x7F, 0x56, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 434E8  |...VA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_181 -- file 0x43513..0x4353D
@@ -39589,10 +43196,18 @@ ToneDB_PercMixerDefaultTable_180:
 ; Evidence: drum-instrument record 471 at file 0x40356, its
 ; bytes +107..+149 (file 0x403C1..0x403EB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_181:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_181_SameAs_Zap1:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43513  |...m@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_182 -- file 0x4353E..0x43568
@@ -39601,10 +43216,18 @@ ToneDB_PercMixerDefaultTable_181:
 ; Evidence: drum-instrument record 472 at file 0x403EC, its
 ; bytes +107..+149 (file 0x40457..0x40481), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_182:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_182_SameAs_ElectroUnizon:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4353E  |...mA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_183 -- file 0x43569..0x43593
@@ -39613,10 +43236,18 @@ ToneDB_PercMixerDefaultTable_182:
 ; Evidence: drum-instrument record 473 at file 0x40482, its
 ; bytes +107..+149 (file 0x404ED..0x40517), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_183:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_183_SameAs_ElectroShot1:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43569  |...mB.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_184 -- file 0x43594..0x435BE
@@ -39625,10 +43256,18 @@ ToneDB_PercMixerDefaultTable_183:
 ; Evidence: drum-instrument record 474 at file 0x40518, its
 ; bytes +107..+149 (file 0x40583..0x405AD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_184:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_184_SameAs_ElectroShot2:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43594  |...mC.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_185 -- file 0x435BF..0x435E9
@@ -39637,10 +43276,18 @@ ToneDB_PercMixerDefaultTable_184:
 ; Evidence: drum-instrument record 475 at file 0x405AE, its
 ; bytes +107..+149 (file 0x40619..0x40643), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_185:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_185_SameAs_Zap2:
 	.byte 0x7F, 0x7F, 0x7F, 0x6D, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 435BF  |...mD.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_186 -- file 0x435EA..0x43614
@@ -39649,10 +43296,18 @@ ToneDB_PercMixerDefaultTable_185:
 ; Evidence: drum-instrument record 476 at file 0x40644, its
 ; bytes +107..+149 (file 0x406AF..0x406D9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_186:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_186_SameAs_AmbientHammer:
 	.byte 0x7F, 0x7F, 0x7F, 0x57, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 435EA  |...W@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_187 -- file 0x43615..0x4363F
@@ -39661,10 +43316,18 @@ ToneDB_PercMixerDefaultTable_186:
 ; Evidence: drum-instrument record 477 at file 0x406DA, its
 ; bytes +107..+149 (file 0x40745..0x4076F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_187:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_187_SameAs_Wave1:
 	.byte 0x7F, 0x7F, 0x7F, 0x58, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43615  |...X@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_188 -- file 0x43640..0x4366A
@@ -39673,10 +43336,18 @@ ToneDB_PercMixerDefaultTable_187:
 ; Evidence: drum-instrument record 478 at file 0x40770, its
 ; bytes +107..+149 (file 0x407DB..0x40805), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_188:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_188_SameAs_Wave2:
 	.byte 0x7F, 0x7F, 0x7F, 0x58, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43640  |...XA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_189 -- file 0x4366B..0x43695
@@ -39685,10 +43356,20 @@ ToneDB_PercMixerDefaultTable_188:
 ; Evidence: drum-instrument record 479 at file 0x40806, its
 ; bytes +107..+149 (file 0x40871..0x4089B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_189:
+; The 2 names differ only by a trailing digit, so the
+; label uses the shared stem `Applause`.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_189_SameAs_Applause:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4366B  |...Y@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_190 -- file 0x43696..0x436C0
@@ -39697,10 +43378,18 @@ ToneDB_PercMixerDefaultTable_189:
 ; Evidence: drum-instrument record 481 at file 0x40932, its
 ; bytes +107..+149 (file 0x4099D..0x409C7), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_190:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_190_SameAs_VoiceAh:
 	.byte 0x7F, 0x7F, 0x7F, 0x5A, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43696  |...Z@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_191 -- file 0x436C1..0x436EB
@@ -39709,10 +43398,18 @@ ToneDB_PercMixerDefaultTable_190:
 ; Evidence: drum-instrument record 482 at file 0x409C8, its
 ; bytes +107..+149 (file 0x40A33..0x40A5D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_191:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_191_SameAs_VoiceYeh:
 	.byte 0x7F, 0x7F, 0x7F, 0x5A, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 436C1  |...ZA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_192 -- file 0x436EC..0x43716
@@ -39721,10 +43418,18 @@ ToneDB_PercMixerDefaultTable_191:
 ; Evidence: drum-instrument record 483 at file 0x40A5E, its
 ; bytes +107..+149 (file 0x40AC9..0x40AF3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_192:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_192_SameAs_VoiceUh:
 	.byte 0x7F, 0x7F, 0x7F, 0x5A, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 436EC  |...ZB.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_193 -- file 0x43717..0x43741
@@ -39733,9 +43438,9 @@ ToneDB_PercMixerDefaultTable_192:
 ; Evidence: drum-instrument record 484 at file 0x40AF4, its
 ; bytes +107..+149 (file 0x40B5F..0x40B89), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_193:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43717  |...[@.@.@.@..}.T....d............d.........|
 
@@ -39745,10 +43450,18 @@ ToneDB_PercMixerDefaultTable_193:
 ; Evidence: drum-instrument record 486 at file 0x40C20, its
 ; bytes +107..+149 (file 0x40C8B..0x40CB5), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_194:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_194_SameAs_Telephone:
 	.byte 0x7F, 0x7F, 0x7F, 0x5C, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43742  |...\@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_195 -- file 0x4376D..0x43797
@@ -39757,9 +43470,9 @@ ToneDB_PercMixerDefaultTable_194:
 ; Evidence: drum-instrument record 487 at file 0x40CB6, its
 ; bytes +107..+149 (file 0x40D21..0x40D4B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 3 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_195:
 	.byte 0x7F, 0x7F, 0x7F, 0x5D, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4376D  |...]@.@.@.@..}.T....d............d.........|
 
@@ -39769,9 +43482,9 @@ ToneDB_PercMixerDefaultTable_195:
 ; Evidence: drum-instrument record 490 at file 0x40E78, its
 ; bytes +107..+149 (file 0x40EE3..0x40F0D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
+; ⚠ NO LABEL: 2 differently named drum-instrument records
+; carry these same bytes, so nothing here picks one of
+; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
 ToneDB_PercMixerDefaultTable_196:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x38, 0x55, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x38, 0x55, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 43798  |...^@.@.@.@..}.T....d8U........8Ud.........|
 
@@ -39781,10 +43494,18 @@ ToneDB_PercMixerDefaultTable_196:
 ; Evidence: drum-instrument record 492 at file 0x40FA4, its
 ; bytes +107..+149 (file 0x4100F..0x41039), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_197:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_197_SameAs_Wind:
 	.byte 0x7F, 0x7F, 0x7F, 0x5F, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 437C3  |..._@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_198 -- file 0x437EE..0x43818
@@ -39793,10 +43514,18 @@ ToneDB_PercMixerDefaultTable_197:
 ; Evidence: drum-instrument record 493 at file 0x4103A, its
 ; bytes +107..+149 (file 0x410A5..0x410CF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_198:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_198_SameAs_Bird1:
 	.byte 0x7F, 0x7F, 0x7F, 0x60, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 437EE  |...`@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_199 -- file 0x43819..0x43843
@@ -39805,10 +43534,18 @@ ToneDB_PercMixerDefaultTable_198:
 ; Evidence: drum-instrument record 494 at file 0x410D0, its
 ; bytes +107..+149 (file 0x4113B..0x41165), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_199:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_199_SameAs_Bird2:
 	.byte 0x7F, 0x7F, 0x7F, 0x60, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43819  |...`A.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_200 -- file 0x43844..0x4386E
@@ -39817,10 +43554,18 @@ ToneDB_PercMixerDefaultTable_199:
 ; Evidence: drum-instrument record 495 at file 0x41166, its
 ; bytes +107..+149 (file 0x411D1..0x411FB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_200:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_200_SameAs_SaxBreath:
 	.byte 0x7F, 0x7F, 0x7F, 0x61, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43844  |...a@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_201 -- file 0x4386F..0x43899
@@ -39829,10 +43574,18 @@ ToneDB_PercMixerDefaultTable_200:
 ; Evidence: drum-instrument record 496 at file 0x411FC, its
 ; bytes +107..+149 (file 0x41267..0x41291), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_201:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_201_SameAs_FluteBreath:
 	.byte 0x7F, 0x7F, 0x7F, 0x61, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4386F  |...aA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_202 -- file 0x4389A..0x438C4
@@ -39841,10 +43594,18 @@ ToneDB_PercMixerDefaultTable_201:
 ; Evidence: drum-instrument record 497 at file 0x41292, its
 ; bytes +107..+149 (file 0x412FD..0x41327), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_202:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_202_SameAs_PickNoise4:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4389A  |...bA.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_203 -- file 0x438C5..0x438EF
@@ -39853,10 +43614,18 @@ ToneDB_PercMixerDefaultTable_202:
 ; Evidence: drum-instrument record 498 at file 0x41328, its
 ; bytes +107..+149 (file 0x41393..0x413BD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_203:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_203_SameAs_PickNoise2:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x42, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 438C5  |...bB.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_204 -- file 0x438F0..0x4391A
@@ -39865,10 +43634,18 @@ ToneDB_PercMixerDefaultTable_203:
 ; Evidence: drum-instrument record 499 at file 0x413BE, its
 ; bytes +107..+149 (file 0x41429..0x41453), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_204:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_204_SameAs_PickNoise1:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x43, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 438F0  |...bC.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_205 -- file 0x4391B..0x43945
@@ -39877,10 +43654,18 @@ ToneDB_PercMixerDefaultTable_204:
 ; Evidence: drum-instrument record 500 at file 0x41454, its
 ; bytes +107..+149 (file 0x414BF..0x414E9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_205:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_205_SameAs_PickNoise3:
 	.byte 0x7F, 0x7F, 0x7F, 0x62, 0x44, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4391B  |...bD.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_206 -- file 0x43946..0x43970
@@ -39889,10 +43674,18 @@ ToneDB_PercMixerDefaultTable_205:
 ; Evidence: drum-instrument record 501 at file 0x414EA, its
 ; bytes +107..+149 (file 0x41555..0x4157F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_206:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_206_SameAs_FretNoise:
 	.byte 0x7F, 0x7F, 0x7F, 0x63, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43946  |...c@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_207 -- file 0x43971..0x4399B
@@ -39901,10 +43694,18 @@ ToneDB_PercMixerDefaultTable_206:
 ; Evidence: drum-instrument record 503 at file 0x41616, its
 ; bytes +107..+149 (file 0x41681..0x416AB), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ A carrier is NOT a name for this record: see the banner -- where
-; the carrier is unique the positional proposal disagrees with it 61
-; times in 106.  notes/prom_d_understanding_round5.py Q4c.
-ToneDB_PercMixerDefaultTable_207:
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 43971  |...d@.@.@.@..}.T....d............d.........|
 
 ; ==========================================================================

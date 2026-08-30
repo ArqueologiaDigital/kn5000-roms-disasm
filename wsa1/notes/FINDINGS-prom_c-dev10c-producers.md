@@ -73,6 +73,42 @@ python3 notes/prom_c_dev10c_field_sources.py --dev104   # the 0x00104000 packer'
 ```
 
 
+### Names the producer table below now has (wave 7, round 6 — 2026-08-30)
+
+Twelve more of the `sub_XXXXXX` labels in section 2 are now named, for the register block
+each one stages.  The mapping, so the table below stays followable:
+
+| here | now |
+|---|---|
+| `sub_FA826C` | `Voice_StageRegs_0040_B` |
+| `sub_FAA0BC` | `Voice_StageRegs_00C0_AB` |
+| `sub_FAA1A5` | `Voice_StageRegs_00C0_CD` |
+| `sub_FA9C60` | `Voice_StageRegs_0180_AB` |
+| `sub_FAA4C3` | `Voice_StageRegs_0800_A` |
+| `sub_FAACEE` | `Voice_StageRegs_0800_B_ModeLt3` |
+| `sub_FAB0BD` | `Voice_StageRegs_0800_B_ModeGe3` |
+| `sub_FAA96C` | `Voice_StageRegs_0800_CD` |
+| `sub_FAA87E` | `Voice_StageRegs_0840_0880_AB` |
+| `sub_FAAC00` | `Voice_StageRegs_0840_0880_CD` |
+| `sub_FA842D` | `Voice_StageRegs_0900_0940_0980_AB` |
+| `sub_FA93AF` | `Voice_StageRegs_09C0_0A00_0A40_AB` |
+| `sub_FC4DBD` | `Dev104_PackStagingStruct` |
+| `sub_FC4BB6` | `Pack104_SetInputs_PartRecord` |
+| `sub_FC4C85` | `Pack104_SetInputs_SubRecordPair` |
+
+⚠ **AND ONE CORRECTION TO §3.**  This file says `sub_FC4DBD` "writes **19 offsets** in
+`0x00..0x24`".  Nineteen is the number of WRITE SITES; the distinct offsets are **16**, of
+which 15 are even (whole words) and one (`+0x1D`) is a high-byte write.  Four of the
+nineteen even fields — `+0x06`, `+0x08`, `+0x12` and `+0x16` — are not written by the
+packer's own instructions at all.  Re-derived by
+`python3 notes/prom_c_understanding_round6.py --packer`, which counts them with this
+file's own scanner (`notes/prom_c_dev10c_field_sources.py --dev104`).
+
+⚠ **AND ONE THING §3 DOES NOT SAY.**  `VoiceRegs_Stage_B` never calls the packer.
+Stage_A, Stage_C and Stage_D do; Stage_B calls `Dev104_LoadStageBImage` (was `sub_FC571A`)
+at `0xFB1F42`, which block-copies a fixed 19-word image from `0xFE1315` into the same
+struct and patches five fields.  Same section, same check.
+
 ### Names the producer table below now has (round 7)
 
 The `sub_XXXXXX` labels in section 2 are still the addresses this pass indexed; nine of them

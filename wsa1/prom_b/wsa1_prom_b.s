@@ -2396,7 +2396,7 @@ DL_Solo:
 ; It is also a START.
 ; Evidence: UiPaint_Solo loads `ld XIY,0x00F02FD9` at 0xF5BAD9 and
 ;   `ld XIX,0x00F02FE3` at 0xF5BADE, then calls DisplayList_Run through thunk
-;   T_F417F0 at 0xF5BAF4 -- exactly the (start, end) pair this block spans.  So
+;   T_DisplayList_Run at 0xF5BAF4 -- exactly the (start, end) pair this block spans.  So
 ;   the entry point is READ OFF THE CODE, not inferred from the byte pattern,
 ;   and the record's own length byte (0x0A at 0xF02FDA) closes it on 0xF02FE3.
 ;   Both facts are asserted by `python3 notes/prom_b_f5b800_checks.py`.
@@ -8727,7 +8727,7 @@ SoundCodeByGroupMember_SevenBitGroup:
 ; Called from: table 0xF5B8F8[45]
 ; Touches: (0x2540) (0x27F5)  |  0xF32D2C 0xF32E71 0xF32F43 0xF32FA0 0xF32FC8
 ;          0xF32FE6
-; Calls:   SoundEditController_PaintHeader T_F42E18 T_F417F0 T_F417F4
+; Calls:   SoundEditController_PaintHeader T_F42E18 T_DisplayList_Run T_DisplayListB_Run
 ; Draws:   4 display-list call sites naming 4 distinct lists; their printable
 ;          runs: 0xF32D2C-0xF32E71 "PAGE1/2"; 0xF32F43-0xF32FA0;
 ;          0xF32FC8-0xF32FE6; 0xF32FA0-0xF32FC8
@@ -8764,7 +8764,7 @@ SoundEditController_PaintPage1:
 ; Called from: table 0xF5B8F8[27]
 ; Touches: (0x2540) (0x27F5)  |  0xF32E71 0xF32F43 0xF32FA0 0xF32FC8 0xF32FE6
 ;          0xF3341C +1 more
-; Calls:   SoundEditController_PaintHeader T_F42E18 T_F417F0 T_F417F4
+; Calls:   SoundEditController_PaintHeader T_F42E18 T_DisplayList_Run T_DisplayListB_Run
 ; Draws:   4 display-list call sites naming 4 distinct lists; their printable
 ;          runs: 0xF32E71-0xF32F43 "PAGE2/2 / AFTER TOUCH / CTRL PEDAL";
 ;          0xF3341C-0xF334AE; 0xF32FC8-0xF32FE6; 0xF32FA0-0xF32FC8
@@ -8798,7 +8798,7 @@ SoundEditController_PaintPage2:
 ; SoundEditController_PaintHeader
 ; Called from: in-module: 0xF09800 0xF0985C
 ; Touches: (0x2540) (0x27F5)  |  0xF32C2A 0xF32CC8 0xF32D03 0xF32D2C
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Draws:   3 display-list call sites naming 3 distinct lists; their printable
 ;          runs: 0xF32C2A-0xF32D03 "C0NTR0LLER / SOUND EDIT / g DEPTH /
 ;          K!FUNCTION / o 1st 2nd 3"; 0xF32C2A-0xF32CC8 "C0NTR0LLER / SOUND
@@ -8830,7 +8830,7 @@ SoundEditController_PaintHeader:
 ; SoundEditController_RepaintFieldPage1
 ; Called from: table 0xF5B9F8[45]
 ; Touches: (0x2540)  |  0xF32F43 0xF32FA0 0xF32FE6 0xF33362 0xF3338A 0xF33394
-; Calls:   sub_F099C7 T_F417F0 T_F417F4 RunDisplayListBFromPointerArray
+; Calls:   sub_F099C7 T_DisplayList_Run T_DisplayListB_Run RunDisplayListBFromPointerArray
 ; Draws:   3 display-list call sites naming 3 distinct lists; their printable
 ;          runs: 0xF33362-0xF3338A; 0xF3338A-0xF33394; 0xF32F43-0xF32FA0
 ; Evidence: entry [45] of DispatchTable_F5B9F8, the table PARALLEL to
@@ -8872,7 +8872,7 @@ SoundEditController_RepaintFieldPage1:
 ; SoundEditController_RepaintFieldPage2
 ; Called from: table 0xF5B9F8[27]
 ; Touches: (0x2540)  |  0xF3341C 0xF334AE 0xF334FE 0xF33508
-; Calls:   sub_F099C7 T_F417F0 T_F417F4 RunDisplayListBFromPointerArray
+; Calls:   sub_F099C7 T_DisplayList_Run T_DisplayListB_Run RunDisplayListBFromPointerArray
 ; Draws:   3 display-list call sites naming 2 distinct lists; their printable
 ;          runs: 0xF334FE-0xF33508; 0xF3341C-0xF334AE
 ; Evidence: entry [27] of DispatchTable_F5B9F8 -- the parallel of the PAGE2/2
@@ -8913,7 +8913,7 @@ SoundEditController_RepaintFieldPage2:
 ; sub_F099C7
 ; Called from: in-module: 0xF09909 0xF0994C 0xF0996F 0xF099B2
 ; Touches: (0x2540) (0x27F5)  |  0xF32FA0 0xF32FC8 0xF32FE6
-; Calls:   T_F417F4
+; Calls:   T_DisplayListB_Run
 ; Draws:   2 display-list call sites naming 2 distinct lists; their printable
 ;          runs: 0xF32FC8-0xF32FE6; 0xF32FA0-0xF32FC8
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription (the
@@ -8939,7 +8939,7 @@ sub_F099C7:
 ; Called from: table 0xF5B8F8[26]
 ; Touches: (0x27A6) (0x27B6)  |  0xFC4000 0xFC40B4 0xFC40D2 0xFC40F0 0xFC410F
 ;          0xFC420F +5 more
-; Calls:   T_F417F0 T_F417F4
+; Calls:   T_DisplayList_Run T_DisplayListB_Run
 ; Draws:   2 display-list call sites naming 2 distinct lists; their printable
 ;          runs: 0xFC40F0-0xFC420F "INTENSITY / INTENS.# / DIGITAL EFFECT /
 ;          SOUND EDIT / TYPE / "; 0xFC40B4-0xFC40F0
@@ -9005,7 +9005,7 @@ SoundEditDigitalEffect_Paint:
 ; SoundEditDigitalEffect_RepaintField
 ; Called from: table 0xF5B9F8[26]
 ; Touches: (0x2540) (0x27B6)  |  0xFC45A1 0xFC45BF 0xFC46BD 0xFC47CF
-; Calls:   T_F417F4 RunDisplayListBFromPointerArray
+; Calls:   T_DisplayListB_Run RunDisplayListBFromPointerArray
 ; Draws:   1 display-list call site naming 1 distinct list; their printable
 ;          runs: 0xFC45A1-0xFC45BF
 ; Evidence: entry [26] of DispatchTable_F5B9F8 -- the parallel slot of the
@@ -9037,10 +9037,10 @@ SoundEditDigitalEffect_RepaintField:
 ; Called from: in-module: 0xF0995C 0xF099C2 0xF09ADC 0xF09C5E 0xF09D00
 ;              0xF09D8C 0xF09E1B
 ; Touches: (0x2540)
-; Calls:   T_F41830
+; Calls:   T_DisplayListB_RunOne
 ; Evidence: `extz XWA / xor W,W / sla 2,WA / add XIY,XWA / ld XIY,(XIY) / call
 ;           0xF41830`: XIY is an array of 32-bit display-list pointers, A is
-;           the index, and 0xF41830 is thunk slot T_F41830, which holds `jp
+;           the index, and 0xF41830 is thunk slot T_DisplayListB_RunOne, which holds `jp
 ;           DisplayListB_RunOne`.  The name states exactly that.
 ; --------------------------------------------------------------------------
 RunDisplayListBFromPointerArray:
@@ -9140,7 +9140,7 @@ PtrTable_F09B7B:
 ; Called from: table 0xF5B8F8[29]
 ; Touches: (0x2540) (0x27F5)  |  0xFC4BA7 0xFC4D77 0xFC4DEB 0xFC4E54 0xFC4E8C
 ;          0xFC4EC4
-; Calls:   T_F417F0 T_F417F4 sub_F09C63
+; Calls:   T_DisplayList_Run T_DisplayListB_Run sub_F09C63
 ; Draws:   5 display-list call sites naming 5 distinct lists; their printable
 ;          runs: 0xFC4BA7-0xFC4D77 "COPY / SOUND EDIT / FROM / TO  / TONE:  /
 ;          OPTION / COPY  / F"; 0xFC4D77-0xFC4DEB "BANK:  / 1st TONE  / 2nd
@@ -9183,7 +9183,7 @@ SoundEditCopy_Paint:
 ; SoundEditCopy_RepaintField
 ; Called from: table 0xF5B9F8[29]
 ; Touches: (0x2540) (0x27F5)  |  0xFC4EC4 0xFC4EE2 0xFC4EEC 0xFC4FA6 0xFC4FB6
-; Calls:   T_F417F0 sub_F09C63 T_F417F4 RunDisplayListBFromPointerArray
+; Calls:   T_DisplayList_Run sub_F09C63 T_DisplayListB_Run RunDisplayListBFromPointerArray
 ; Draws:   2 display-list call sites naming 2 distinct lists; their printable
 ;          runs: 0xFC4EE2-0xFC4EEC; 0xFC4EC4-0xFC4EE2
 ; Evidence: entry [29] of DispatchTable_F5B9F8, the parallel slot of the COPY
@@ -9259,7 +9259,7 @@ sub_F09C63:
 ; Called from: table 0xF5B9F8[0]
 ; Touches: (0x2540)  |  0xFC517E 0xFC51B1 0xFC51D3 0xFC51F9 0xFC521B 0xFC524D
 ;          +4 more
-; Calls:   T_F417F4 sub_F09DED T_F417F0 RunDisplayListBFromPointerArray
+; Calls:   T_DisplayListB_Run sub_F09DED T_DisplayList_Run RunDisplayListBFromPointerArray
 ;          0xF5BF8A sub_F09D91
 ; Draws:   7 display-list call sites naming 5 distinct lists; their printable
 ;          runs: 0xFC524D-0xFC526F; 0xFC52AA-0xFC52B4; 0xFC517E-0xFC527A;
@@ -9337,7 +9337,7 @@ sub_F09CA9:
 ; sub_F09D91
 ; Called from: in-module: 0xF09D1C 0xF09D65
 ; Touches: (0x2540) (0x27A4)  |  0xF03B6F 0xF03BA9
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription (the
 ;           sites are listed above), so 0xF09D91 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -9399,7 +9399,7 @@ sub_F09DED:
 ; sub_F09E02
 ; Called from: in-module: 0xF09DF5
 ; Touches: (0x2540)  |  0xF03B6F 0xFC52B4
-; Calls:   RunDisplayListBFromPointerArray T_F417F0 sub_F09E67
+; Calls:   RunDisplayListBFromPointerArray T_DisplayList_Run sub_F09E67
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription (the
 ;           sites are listed above), so 0xF09E02 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -9894,7 +9894,7 @@ sub_F0A240:
 ; sub_F0A2AB
 ; Called from: table 0xFCF21B[95]
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD7C2D 0xFD6CE1 0xFD6C65 0xFDA777 0xFD616A T_F41ED4
+; Calls:   0xFD6C7B 0xFD7C2D 0xFD6CE1 0xFD6C65 0xFDA777 0xFD616A T_Dispatch_Code80
 ;          0xFD7435 0xFD7C01
 ; Evidence: word [95] of the pointer table at 0xFCF21B reads 0x00F0A2AB, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0A2AB is an
@@ -10071,7 +10071,7 @@ sub_F0A3DB:
 ; sub_F0A404
 ; Called from: table 0xFCF21B[101]
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 T_F41ED4 0xFD9863
+; Calls:   0xFD6C7B 0xFD6C65 T_Dispatch_Code80 0xFD9863
 ; Evidence: word [101] of the pointer table at 0xFCF21B reads 0x00F0A404, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0A404 is an
 ;           instruction boundary of this transcription.
@@ -10112,7 +10112,7 @@ sub_F0A404:
 ; sub_F0A451
 ; Called from: table 0xFCF21B[102]
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 T_F41ED4 0xFD9863
+; Calls:   0xFD6C7B 0xFD6C65 T_Dispatch_Code80 0xFD9863
 ; Evidence: word [102] of the pointer table at 0xFCF21B reads 0x00F0A451, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0A451 is an
 ;           instruction boundary of this transcription.
@@ -12783,7 +12783,7 @@ sub_F0B36C:
 ; sub_F0B39C
 ; Called from: table 0xFCF80C[261]
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 0xFD616A 0xFD608B 0xFD6122 T_F41ED4 0xFDA467
+; Calls:   0xFD6C7B 0xFD6C65 0xFD616A 0xFD608B 0xFD6122 T_Dispatch_Code80 0xFDA467
 ; Evidence: word [261] of the pointer table at 0xFCF80C reads 0x00F0B39C, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B39C is an
 ;           instruction boundary of this transcription.
@@ -12869,7 +12869,7 @@ sub_F0B39C:
 ; sub_F0B462
 ; Called from: table 0xFCF80C[262]
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 0xFD616A 0xFD608B T_F41ED4 0xFDA467
+; Calls:   0xFD6C7B 0xFD6C65 0xFD616A 0xFD608B T_Dispatch_Code80 0xFDA467
 ; Evidence: word [262] of the pointer table at 0xFCF80C reads 0x00F0B462, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B462 is an
 ;           instruction boundary of this transcription.
@@ -13009,7 +13009,7 @@ sub_F0B533:
 ; sub_F0B578
 ; Called from: table 0xFCF80C[226]
 ; Touches: nothing with an absolute address
-; Calls:   0xFD7B6B 0xFDA0CA 0xFD7B7B 0xFD6C65 T_F41ED4
+; Calls:   0xFD7B6B 0xFDA0CA 0xFD7B7B 0xFD6C65 T_Dispatch_Code80
 ; Evidence: word [226] of the pointer table at 0xFCF80C reads 0x00F0B578, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B578 is an
 ;           instruction boundary of this transcription.
@@ -13094,7 +13094,7 @@ sub_F0B578:
 ; sub_F0B62F
 ; Called from: table 0xFCF80C[227]
 ; Touches: nothing with an absolute address
-; Calls:   0xFD7B6B 0xFD7B7B 0xFDA0CA 0xFD6C65 T_F41ED4
+; Calls:   0xFD7B6B 0xFD7B7B 0xFDA0CA 0xFD6C65 T_Dispatch_Code80
 ; Evidence: word [227] of the pointer table at 0xFCF80C reads 0x00F0B62F, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B62F is an
 ;           instruction boundary of this transcription.
@@ -13587,7 +13587,7 @@ sub_F0B81D:
 ; sub_F0B91C
 ; Called from: T_F42F80 (x6)
 ; Touches: nothing with an absolute address
-; Calls:   T_F42E80 0xFD7BA5 0xFD7C83 T_F41ED0 0xFD7BC3 0xFD7BDE
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 0xFD7BA5 0xFD7C83 T_Dispatch_Code80_Bracketed 0xFD7BC3 0xFD7BDE
 ; Evidence: thunk slot T_F42F80 holds `jp 0x00F0B91C`, and 0xF0B91C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -13656,7 +13656,7 @@ sub_F0B91C:		; <- T_F42F80
 ; sub_F0B9B3
 ; Called from: T_F42F84 (x3); in-module: 0xF0B70F
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 0xFD7BA5 0xFD7C83 T_F41ED4
+; Calls:   0xFD6C7B 0xFD6C65 0xFD7BA5 0xFD7C83 T_Dispatch_Code80
 ; Evidence: thunk slot T_F42F84 holds `jp 0x00F0B9B3`, and 0xF0B9B3 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -13709,7 +13709,7 @@ sub_F0B9B3:		; <- T_F42F84
 ; sub_F0BA20
 ; Called from: T_F42F88 (x3); in-module: 0xF0B713
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 0xFD7BA5 0xFD7C83 T_F41ED4
+; Calls:   0xFD6C7B 0xFD6C65 0xFD7BA5 0xFD7C83 T_Dispatch_Code80
 ; Evidence: thunk slot T_F42F88 holds `jp 0x00F0BA20`, and 0xF0BA20 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -13775,7 +13775,7 @@ sub_F0BA20:		; <- T_F42F88
 ; sub_F0BAA8
 ; Called from: T_F42F8C (x3); in-module: 0xF0B717
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD7BA5 0xFD77B3 0xFD7C83 0xFD6C65 T_F41ED4
+; Calls:   0xFD6C7B 0xFD7BA5 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
 ; Evidence: thunk slot T_F42F8C holds `jp 0x00F0BAA8`, and 0xF0BAA8 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -13899,7 +13899,7 @@ sub_F0BAA8:		; <- T_F42F8C
 ; sub_F0BBB4
 ; Called from: T_F42F90 (x3); in-module: 0xF0B71B
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD7BA5 0xFD77B3 0xFD7C83 0xFD6C65 T_F41ED4
+; Calls:   0xFD6C7B 0xFD7BA5 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
 ; Evidence: thunk slot T_F42F90 holds `jp 0x00F0BBB4`, and 0xF0BBB4 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -14007,7 +14007,7 @@ sub_F0BBB4:		; <- T_F42F90
 ; sub_F0BC98
 ; Called from: T_F42F94 (x3); in-module: 0xF0B71F
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD7BA5 0xFD7B89 0xFD7C83 0xFD6C65 T_F41ED4
+; Calls:   0xFD6C7B 0xFD7BA5 0xFD7B89 0xFD7C83 0xFD6C65 T_Dispatch_Code80
 ; Evidence: thunk slot T_F42F94 holds `jp 0x00F0BC98`, and 0xF0BC98 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -14083,7 +14083,7 @@ sub_F0BC98:		; <- T_F42F94
 ; sub_F0BD31
 ; Called from: T_F42F98 (x3); in-module: 0xF0B723
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 0xFDAC5B T_F41ED4
+; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 0xFDAC5B T_Dispatch_Code80
 ; Evidence: thunk slot T_F42F98 holds `jp 0x00F0BD31`, and 0xF0BD31 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -14140,7 +14140,7 @@ sub_F0BD31:		; <- T_F42F98
 ; sub_F0BDAC
 ; Called from: T_F42F9C (x3); in-module: 0xF0B73F
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 T_F41ED4
+; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 T_Dispatch_Code80
 ; Evidence: thunk slot T_F42F9C holds `jp 0x00F0BDAC`, and 0xF0BDAC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -14210,7 +14210,7 @@ sub_F0BDAC:		; <- T_F42F9C
 ; sub_F0BE44
 ; Called from: T_F42FA0 (x3); in-module: 0xF0B747
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 0xFDAC5B T_F41ED4
+; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 0xFDAC5B T_Dispatch_Code80
 ; Evidence: thunk slot T_F42FA0 holds `jp 0x00F0BE44`, and 0xF0BE44 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -14267,7 +14267,7 @@ sub_F0BE44:		; <- T_F42FA0
 ; sub_F0BEBF
 ; Called from: T_F42FA4 (x6); in-module: 0xF0B757
 ; Touches: nothing with an absolute address
-; Calls:   0xFD7B89 0xFD6C65 T_F41ED4
+; Calls:   0xFD7B89 0xFD6C65 T_Dispatch_Code80
 ; Evidence: thunk slot T_F42FA4 holds `jp 0x00F0BEBF`, and 0xF0BEBF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -14307,7 +14307,7 @@ sub_F0BEBF:		; <- T_F42FA4
 ; sub_F0BF04
 ; Called from: T_F42FA8 (x4); in-module: 0xF0B817
 ; Touches: nothing with an absolute address
-; Calls:   0xFD6C7B 0xFD7BA5 0xFD79DC 0xFD77B3 0xFD7C83 0xFD6C65 T_F41ED4
+; Calls:   0xFD6C7B 0xFD7BA5 0xFD79DC 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
 ; Evidence: thunk slot T_F42FA8 holds `jp 0x00F0BF04`, and 0xF0BF04 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -14499,7 +14499,7 @@ sub_F0BF04:		; <- T_F42FA8
 ; sub_F0C0BB
 ; Called from: table 0xFCF80C[270]
 ; Touches: nothing with an absolute address
-; Calls:   0xFDA0CA 0xFD6C7B T_F41ED4 sub_F0C291 0xFD7ADD T_F40FFC 0xFD7B00
+; Calls:   0xFDA0CA 0xFD6C7B T_Dispatch_Code80 sub_F0C291 0xFD7ADD T_F40FFC 0xFD7B00
 ;          0xFD648D 0xFD7C01
 ; Evidence: word [270] of the pointer table at 0xFCF80C reads 0x00F0C0BB, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0C0BB is an
@@ -14697,7 +14697,7 @@ sub_F0C0BB:
 ; sub_F0C291
 ; Called from: in-module: 0xF0C131 0xF0C3B8
 ; Touches:   |  0xFCFCD4
-; Calls:   0xFD6C7B 0xFD7ADD T_F40FFC 0xFD7B00 T_F41ED4
+; Calls:   0xFD6C7B 0xFD7ADD T_F40FFC 0xFD7B00 T_Dispatch_Code80
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription (the
 ;           sites are listed above), so 0xF0C291 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -14862,7 +14862,7 @@ sub_F0C35D:
 ; sub_F0C3F9
 ; Called from: table 0xFCF80C[272]
 ; Touches: nothing with an absolute address
-; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 T_F41ED4
+; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 T_Dispatch_Code80
 ; Evidence: word [272] of the pointer table at 0xFCF80C reads 0x00F0C3F9, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0C3F9 is an
 ;           instruction boundary of this transcription.
@@ -14927,7 +14927,7 @@ sub_F0C3F9:
 ; sub_F0C47B
 ; Called from: table 0xFCF80C[273]
 ; Touches: nothing with an absolute address
-; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 T_F41ED4
+; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 T_Dispatch_Code80
 ; Evidence: word [273] of the pointer table at 0xFCF80C reads 0x00F0C47B, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0C47B is an
 ;           instruction boundary of this transcription.
@@ -15013,7 +15013,7 @@ sub_F0C47B:
 ; sub_F0C528
 ; Called from: table 0xFCF80C[275]
 ; Touches: nothing with an absolute address
-; Calls:   0xFDA0CA 0xFD6C7B T_F41ED4
+; Calls:   0xFDA0CA 0xFD6C7B T_Dispatch_Code80
 ; Evidence: word [275] of the pointer table at 0xFCF80C reads 0x00F0C528, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0C528 is an
 ;           instruction boundary of this transcription.
@@ -16684,13 +16684,16 @@ DL_GeneralMidiMidiYesNo:
 ; 0xF0E800-0xF0EA9E -- THE FIELD-BLINK ENGINE
 ; =============================================================================
 ;
-; Five consecutive thunk slots T_F42E20/24/28/2C/30 name five consecutive
+; Five consecutive thunk slots (0xF42E20, 24, 28, 2C, 30) name five consecutive
 ; routines starting at 0xF0E800, and the byte before 0xF0E800 is the last of a
 ; long run of 0x0E (`ret`) fill -- so this is one linker input file, exported in
 ; address order, with a hard lower boundary.  Reference upper bounds:
-;   T_F42E20 x41 -> 0xF0E9CF   T_F42E24 x85 -> 0xF0E82B (the 2nd busiest
-;   T_F42E28 x21 -> 0xF0E800     prom_b-targeting slot that was still .incbin)
-;   T_F42E2C x1  -> 0xF0E83A   T_F42E30 x2  -> 0xF0E835
+;   0xF42E20 T_Blink_Command    x41 -> 0xF0E9CF
+;   0xF42E24 T_Blink_Stop       x85 -> 0xF0E82B  (the 2nd busiest prom_b-targeting
+;                                                 slot that was still .incbin)
+;   0xF42E28 T_Blink_SetEnable  x21 -> 0xF0E800
+;   0xF42E2C T_Blink_Tick       x1  -> 0xF0E83A
+;   0xF42E30 T_Blink_GetState   x2  -> 0xF0E835
 ; (python3 notes/prom_b_call_graph.py -- opcode-anchored, an upper bound that
 ; RANKS slots; never quote one as a call count.)
 ;
@@ -16715,7 +16718,7 @@ DL_GeneralMidiMidiYesNo:
 ; HOW IT DRAWS: not by calling a text service directly.  0xF0E926 and 0xF0E978
 ; each COPY A DISPLAY-LIST RECORD TEMPLATE OUT OF ROM INTO A STACK FRAME, patch
 ; four or five of its fields with live values, and run the one record through
-; interpreter B (`call 0xF3183D` = DisplayListB_RunOne_Stack, thunk T_F42E0C).
+; interpreter B (`call 0xF3183D` = DisplayListB_RunOne_Stack, thunk T_DisplayListB_RunOne_Stack).
 ; The templates are at 0xF78000 and 0xF7800F, converted below:
 ;     0xF78000: 02 0F 00 00 00 00 20 C0 28 00 00 03 00 00 00
 ;     0xF7800F: 07 0F 00 00 00 00 20 C0 28 00 00 03 00 00 00 00 00
@@ -16762,7 +16765,7 @@ DL_GeneralMidiMidiYesNo:
 
 ; ---------------------------------------------------------------------
 ; Blink_SetEnable -- turn field-blinking on or off, and reset it on a change
-; Called from: thunk T_F42E28 (x21, an upper bound)
+; Called from: thunk T_Blink_SetEnable (x21, an upper bound)
 ; Inputs:  (XIZ+8) = a boolean; non-zero enables
 ; Outputs: bit 1 of (0x2075) := the boolean.  If and only if the bit CHANGED,
 ;          calls Blink_Stop, which zeroes (0x28D2).
@@ -16797,14 +16800,14 @@ Blink_SetEnable:
 
 ; ---------------------------------------------------------------------
 ; Blink_Stop -- stop the blink
-; Called from: thunk T_F42E24 (x85 -- the busiest prom_b-targeting slot that was
+; Called from: thunk T_Blink_Stop (x85 -- the busiest prom_b-targeting slot that was
 ;          still unconverted), and from Blink_SetEnable at 0xF0E824
 ; Inputs:  none
 ; Outputs: (0x28D2) := 0, which is the value Blink_Tick refuses to run on;
 ;          plus whatever 0xF8BC78 does
 ; Evidence: two instructions and a `ret`.  The name is from its one side effect
 ;          and from Blink_Tick's gate on the same byte.
-; Unknown:  what prom_a 0xF8BC78 (reached through thunk T_F432F8) does; it is
+; Unknown:  what prom_a 0xF8BC78 (reached through thunk T_AsciiField_Clear) does; it is
 ;          not converted in this tree.  Because it runs FIRST, "stop" describes
 ;          this routine's own effect only.
 ; ---------------------------------------------------------------------
@@ -16815,7 +16818,7 @@ Blink_Stop:
 
 ; ---------------------------------------------------------------------
 ; Blink_GetState -- read the blink state byte
-; Called from: thunk T_F42E30 (x2): prom_a 0xFA0D22 and prom_a 0xFBD003
+; Called from: thunk T_Blink_GetState (x2): prom_a 0xFA0D22 and prom_a 0xFBD003
 ; Inputs:  none
 ; Outputs: A = (0x28D2)
 ; Evidence: `ld A,(0x28d2) / ret`, five bytes.
@@ -16826,7 +16829,7 @@ Blink_GetState:
 
 ; ---------------------------------------------------------------------
 ; Blink_Tick -- one blink phase; draws at phase 0 and blanks at phase 4
-; Called from: thunk T_F42E2C (x1): prom_a 0xF8218B, inside the main loop's
+; Called from: thunk T_Blink_Tick (x1): prom_a 0xF8218B, inside the main loop's
 ;          `tset 7,(0x88) / jr NZ` arm, so it runs once per rota clear of that
 ;          bit -- 10.17 times a second (notes/prom_b_blink_rate.py)
 ; Inputs:  (0x2075) bit 1, (0x28D2), (0x28D3), (0x28C9), (0x28D1)
@@ -16849,8 +16852,8 @@ Blink_GetState:
 ;          op-07 renderer at 0xF0E978, anything else the op-02 one at 0xF0E926.
 ;          When (0x28D3) is 0 the renderer is called inline; otherwise the
 ;          address of one of the four trampolines below is pushed and handed to
-;          thunk T_F42E84 (prom_a 0xF8DA16, the 128-slot ring-buffer enqueue)
-;          followed by T_F42DC0 (prom_a 0xF859AB), and the six pushed bytes are
+;          thunk T_CallbackQueue_Post (prom_a 0xF8DA16, the 128-slot ring-buffer enqueue)
+;          followed by T_Kernel_SemaSignal_StackArg (prom_a 0xF859AB), and the six pushed bytes are
 ;          released with `inc 6,XSP`.
 ; Unknown:  why phase 4 and not phase 1 -- 50% duty is the effect, intent is not
 ;          established.  What 0x17 and 0x1C are as swi 7 functions.
@@ -16936,7 +16939,7 @@ Blink_Tick:
 ; ---------------------------------------------------------------------
 ; Blink_Deferred_* -- four 8-byte trampolines, one per (renderer, argument) pair
 ; Called from: never directly.  Their ADDRESSES are loaded with `lda XBC` in
-;          Blink_Tick and pushed to the ring-buffer enqueue T_F42E84, so
+;          Blink_Tick and pushed to the ring-buffer enqueue T_CallbackQueue_Post, so
 ;          whatever drains that ring calls them later.
 ; Inputs:  none (each supplies its own immediate argument)
 ; Outputs: as the renderer it wraps
@@ -17070,7 +17073,7 @@ Blink_DrawField_Op07:
 
 ; ---------------------------------------------------------------------
 ; Blink_Command -- 12-way command dispatch that sets the blink state
-; Called from: thunk T_F42E20 (x41, an upper bound)
+; Called from: thunk T_Blink_Command (x41, an upper bound)
 ; Inputs:  (XIZ+8) = a pointer; the byte at *(XIZ+8) is the command, 0x00-0x0B
 ; Outputs: (0x28C8) := (0x2540) (the current LCD layer is captured for the
 ;          renderers); (0x28D3) := 1 or 0; XIX := 0x28D2 for the arms; then a
@@ -17348,7 +17351,7 @@ Blink_CmdArm_Ret:
 ; these lists have none.  What they have instead is in THIS block:
 ;     0xF110B9  add XBC,0x00f157a8 / push XBC / call 0xf42e0c
 ;     0xF11154  add XBC,0x00f15820 / push XBC / call 0xf42e0c
-; and T_F42E0C is `jp DisplayListB_RunOne_Stack` (0xF3183D), already converted.
+; and slot 0xF42E0C is `jp DisplayListB_RunOne_Stack` (0xF3183D), already converted.
 ; Walking record lengths from those two bases gives 16 and 8 records of opcode
 ; 0x02, 15 bytes each, BOTH ending at 0xF15898, with the bases 8 x 15 apart --
 ; two entry points into one array (`python3 notes/prom_b_dlb_record_arrays.py`).
@@ -17555,7 +17558,7 @@ sub_F0EA9F:
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x2823) (0x2826) (0x28C9) (0x28CA) (0x28CC) (0x28CE) (0x28D0)
 ;          (0x28D1) (0x28D2) (0x28D4)
-; Calls:   T_F432F0 0xF0E978 0xF0E926
+; Calls:   T_AsciiDigits3_ToValue 0xF0E978 0xF0E926
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -19506,7 +19509,7 @@ sub_F0F570:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2797)
-; Calls:   T_F42C8C sub_F1156B sub_F1018F
+; Calls:   T_IndexedTable_GetPtr sub_F1156B sub_F1018F
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -20205,8 +20208,8 @@ sub_F0F75B:
 ; Called from: in-module: 0xF0F16A
 ; Touches: (0x2075) (0x2076) (0x2095) (0x209B) (0x209C) (0x2540) (0x2640)
 ;          (0x2791) (0x2797) (0x2798) +1 more
-; Calls:   T_F42E80 T_F42E84 T_F42DC0 sub_F11329 T_F42E10 T_F42E6C T_F42E0C
-;          T_F42E00 T_F42E04 T_F42E08 sub_F0FD2F T_F42C90 +1 more
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329 T_F42E10 T_F42E6C T_DisplayListB_RunOne_Stack
+;          T_DisplayList_Run_Stack T_DisplayListB_Run_Stack T_DisplayList_RunOne_Stack sub_F0FD2F T_IndexedTable_GetByte +1 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF0F788 is an instruction boundary of this
@@ -20718,7 +20721,7 @@ sub_F0F788:
 ; sub_F0FD2F
 ; Called from: in-module: 0xF0F9FB 0xF0FF2D
 ; Touches: (0x2540) (0x2797)
-; Calls:   T_F42C90 T_F42E08
+; Calls:   T_IndexedTable_GetByte T_DisplayList_RunOne_Stack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF0FD2F is an instruction boundary of this
@@ -20752,7 +20755,7 @@ sub_F0FD2F:
 ; Called from: in-module: 0xF0F174
 ; Touches: (0x2075) (0x2076) (0x209B) (0x209C) (0x2540) (0x2640) (0x2790)
 ;          (0x2791) (0x2797) (0x2799)
-; Calls:   T_F42E80 T_F42E84 T_F42DC0 sub_F11329 T_F42E10 T_F42E0C T_F42E04
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329 T_F42E10 T_DisplayListB_RunOne_Stack T_DisplayListB_Run_Stack
 ;          sub_F11296 sub_F11200 sub_F0FD2F sub_F0FF3F T_F42E14
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -20931,7 +20934,7 @@ sub_F0FD5F:
 ; sub_F0FF3F
 ; Called from: in-module: 0xF0FF30 0xF1244B
 ; Touches: (0x207C) (0x2540) (0x2640) (0x2641) (0x2642) (0x2643) (0x2797)
-; Calls:   T_F42E08 T_F42C90 T_F42E00
+; Calls:   T_DisplayList_RunOne_Stack T_IndexedTable_GetByte T_DisplayList_Run_Stack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF0FF3F is an instruction boundary of this
@@ -21066,7 +21069,7 @@ sub_F0FF3F:
 ; Called from: in-module: 0xF0F16F
 ; Touches: (0x2075) (0x2095) (0x209B) (0x209C) (0x2791) (0x2792) (0x2793)
 ;          (0x2794) (0x2795) (0x2796) +1 more
-; Calls:   T_F42E80 T_F42C90 T_F42E84 T_F42DC0 sub_F11329
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_IndexedTable_GetByte T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF1008E is an instruction boundary of this
@@ -21156,7 +21159,7 @@ sub_F1008E:
 ; sub_F10175
 ; Called from: in-module: 0xF0F570
 ; Touches: (0x7634)
-; Calls:   T_F42C80
+; Calls:   T_Queue2C00_Append4
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF10175 is an instruction boundary of this
@@ -21180,7 +21183,7 @@ sub_F10175:
 ; sub_F1018F
 ; Called from: in-module: 0xF0F59B
 ; Touches: (0x2797)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF1018F is an instruction boundary of this
@@ -21217,7 +21220,7 @@ sub_F1018F:
 ; sub_F101C8
 ; Called from: in-module: 0xF0F480
 ; Touches: (0x2797)
-; Calls:   T_F42C94
+; Calls:   T_IndexedParam_AdjustField
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF101C8 is an instruction boundary of this
@@ -21243,7 +21246,7 @@ sub_F101C8:
 ; sub_F101E7
 ; Called from: in-module: 0xF0F4E3
 ; Touches: (0x2797)
-; Calls:   T_F42C90 T_F42C94
+; Calls:   T_IndexedTable_GetByte T_IndexedParam_AdjustField
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF101E7 is an instruction boundary of this
@@ -21317,7 +21320,7 @@ sub_F10222:
 ; sub_F10252
 ; Called from: in-module: 0xF0F31B 0xF0F430 0xF12374 0xF1239E
 ; Touches: (0x2075) (0x207C) (0x2797) (0x28B0)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF10252 is an instruction boundary of this
@@ -21472,7 +21475,7 @@ sub_F10252:
 ; sub_F103AB
 ; Called from: in-module: 0xF0F382 0xF0F493 0xF12389 0xF123B3
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF103AB is an instruction boundary of this
@@ -21573,7 +21576,7 @@ sub_F103AB:
 ; sub_F10476
 ; Called from: in-module: 0xF0F366 0xF10713
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_F42C8C sub_F11365
+; Calls:   T_IndexedTable_GetPtr sub_F11365
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF10476 is an instruction boundary of this
@@ -21720,7 +21723,7 @@ sub_F10476:
 ; sub_F105B8
 ; Called from: in-module: 0xF0F2DB 0xF0F310 0xF0F377 0xF0F3E8
 ; Touches: (0x2075) (0x2095) (0x2792) (0x2796) (0x2797) (0x28B0)
-; Calls:   T_F42C90
+; Calls:   T_IndexedTable_GetByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF105B8 is an instruction boundary of this
@@ -21820,7 +21823,7 @@ sub_F105B8:
 ; sub_F1069A
 ; Called from: in-module: 0xF0F422 0xF0F485 0xF0F4F5 0xF0F52E
 ; Touches: (0x2792) (0x2794) (0x2796) (0x2797)
-; Calls:   T_F42C90 sub_F10476
+; Calls:   T_IndexedTable_GetByte sub_F10476
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF1069A is an instruction boundary of this
@@ -21887,7 +21890,7 @@ sub_F1069A:
 ; sub_F1071B
 ; Called from: in-module: 0xF10CBD
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -21980,7 +21983,7 @@ sub_F1071B:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -22073,7 +22076,7 @@ sub_F107D0:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -22192,7 +22195,7 @@ sub_F10885:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -22318,7 +22321,7 @@ sub_F10985:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -22444,7 +22447,7 @@ sub_F10A97:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
-; Calls:   T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -22592,7 +22595,7 @@ sub_F10CAF:
 ; sub_F10CC4
 ; Called from: in-module: 0xF0F753
 ; Touches: (0x2792) (0x2794) (0x2796) (0x2797)
-; Calls:   T_F42C90 T_F42C8C T_F42C80
+; Calls:   T_IndexedTable_GetByte T_IndexedTable_GetPtr T_Queue2C00_Append4
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF10CC4 is an instruction boundary of this
@@ -22827,7 +22830,7 @@ Data_F10E0F:
 ; sub_F10FF1
 ; Called from: in-module: 0xF10F55
 ; Touches: (0x2540) (0x2792) (0x2796)
-; Calls:   T_F42E04
+; Calls:   T_DisplayListB_Run_Stack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF10FF1 is an instruction boundary of this
@@ -22884,7 +22887,7 @@ sub_F10FF1:
 ; sub_F11057
 ; Called from: in-module: 0xF10FBE
 ; Touches: (0x2540) (0x2640) (0x2792) (0x2797)  |  0xF157A8 0xF15820
-; Calls:   T_F42C90 T_F42E0C
+; Calls:   T_IndexedTable_GetByte T_DisplayListB_RunOne_Stack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF11057 is an instruction boundary of this
@@ -23004,7 +23007,7 @@ sub_F11057:
 ; sub_F11171
 ; Called from: in-module: 0xF112E6
 ; Touches: (0x2640) (0x2797)
-; Calls:   T_F42C90
+; Calls:   T_IndexedTable_GetByte
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -23034,7 +23037,7 @@ sub_F11171:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2640) (0x2797)
-; Calls:   T_F42C90
+; Calls:   T_IndexedTable_GetByte
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -23065,7 +23068,7 @@ sub_F11191:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2797)
-; Calls:   T_F42C90
+; Calls:   T_IndexedTable_GetByte
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -23112,7 +23115,7 @@ sub_F111B4:
 ; sub_F11200
 ; Called from: in-module: 0xF0FF0C 0xF0FF1A 0xF1242A 0xF12438
 ; Touches: (0x2640) (0x2797)
-; Calls:   T_F42C90
+; Calls:   T_IndexedTable_GetByte
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -23159,7 +23162,7 @@ sub_F11200:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2640) (0x2797)
-; Calls:   T_F42C90
+; Calls:   T_IndexedTable_GetByte
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -23205,7 +23208,7 @@ sub_F1124B:
 ; sub_F11296
 ; Called from: in-module: 0xF0FEEE 0xF0FEFE 0xF1240C 0xF1241C
 ; Touches: (0x2640) (0x2797)
-; Calls:   T_F42C90
+; Calls:   T_IndexedTable_GetByte
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -23347,7 +23350,7 @@ sub_F11329:
 ; sub_F11365
 ; Called from: T_F42F60 (x0); in-module: 0xF105AC 0xF11DCD
 ; Touches: nothing with an absolute address
-; Calls:   T_F42C8C T_F42C84
+; Calls:   T_IndexedTable_GetPtr T_Queue2E00_Append4
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF11365 is an instruction boundary of this
@@ -23511,7 +23514,7 @@ sub_F11365:		; <- T_F42F60
 ; sub_F114DA
 ; Called from: T_F42F58 (x8)
 ; Touches: nothing with an absolute address
-; Calls:   T_F42C8C sub_F1162E
+; Calls:   T_IndexedTable_GetPtr sub_F1162E
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF114DA is an instruction boundary of this
@@ -24541,7 +24544,7 @@ sub_F11C10:
 ; sub_F11C30
 ; Called from: T_F434A0 (x2)
 ; Touches: (0x279A) (0x279B)
-; Calls:   T_F42C8C sub_F11365 T_F42C90 T_F42C84 sub_F1156B
+; Calls:   T_IndexedTable_GetPtr sub_F11365 T_IndexedTable_GetByte T_Queue2E00_Append4 sub_F1156B
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF11C30 is an instruction boundary of this
@@ -25127,7 +25130,7 @@ sub_F11C30:		; <- T_F434A0
 ; sub_F1220B
 ; Called from: T_F434A4 (x2)
 ; Touches: nothing with an absolute address
-; Calls:   T_F42C90
+; Calls:   T_IndexedTable_GetByte
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF1220B is an instruction boundary of this
@@ -25218,7 +25221,7 @@ sub_F1220B:		; <- T_F434A4
 ; sub_F122C5
 ; Called from: T_F42F68 (x1)
 ; Touches: (0x2075) (0x207C) (0x207D) (0x209B) (0x209C) (0x2797)
-; Calls:   T_F42E80 T_F42E84 T_F42DC0
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF122C5 is an instruction boundary of this
@@ -25397,7 +25400,7 @@ sub_F12398:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2540) (0x2799)
-; Calls:   sub_F103AB T_F42E10 T_F42E00 sub_F11296 sub_F11200 T_F42E04
+; Calls:   sub_F103AB T_F42E10 T_DisplayList_Run_Stack sub_F11296 sub_F11200 T_DisplayListB_Run_Stack
 ;          sub_F0FF3F T_F42E14
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
@@ -25474,7 +25477,7 @@ sub_F123AD:
 ; sub_F1245A
 ; Called from: in-module: 0xF0F1B3
 ; Touches: nothing with an absolute address
-; Calls:   T_F42E6C T_F42C90 T_F40ED4
+; Calls:   T_F42E6C T_IndexedTable_GetByte T_F40ED4
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -27442,7 +27445,7 @@ DLTable_HzHzHzHzHzSSSSMsMsMs:
 ; editor screen -- the third of four parallel 32-entry arrays sharing a row index
 ; (0xF131E4, 0xF13264, 0xF132E4, 0xF13364; one reference each, at 0xF10700,
 ; 0xF110EA, 0xF110FA, 0xF1172A).  0xF110FA fetches the row's array, adds a byte
-; offset and calls T_F42E0C = DisplayListB_RunOne_Stack (0xF3183D), which sets
+; offset and calls slot 0xF42E0C = T_DisplayListB_RunOne_Stack (0xF3183D), which sets
 ; XIX = XIY+1 so interpreter B draws EXACTLY ONE record.  Records are therefore
 ; addressed individually, and every one is padded with 0xFF to a 15-byte STRIDE
 ; so that `base + 15*line` reaches each of them.  Rows 0 and 31 of the 0xF132E4
@@ -34468,7 +34471,7 @@ DL_F1A02D:
 ;                  XIX,XWA` at 0xFBF7D6 -- so 0xF1A048 is 0xF1A037 plus ONE
 ;                  RECORD, computed to get the stride 17, and not an object
 ;                  boundary.  The loop then runs each record through `call
-;                  0xf42e0c` (T_F42E0C, DisplayListB_RunOne_Stack) at
+;                  0xf42e0c` (slot T_DisplayListB_RunOne_Stack) at
 ;                  0xFBF7EA.  0xF1A037 + 8*17 = 0xF1A0BF lands on the next
 ;                  proven run.  The halves are merged.
 ; --------------------------------------------------------------------------
@@ -44034,7 +44037,7 @@ DL_SineWaveCheckCheckMode1SineWaveRomCheck:
 ; ------------------------------------------------------------------
 ; 0xF2C9C2-0xF2C9CC -- ONE interpreter-B record, run on its own
 ;   prom_a 0xF9585C: `lda XBC,0xF2C9C2 / push XBC / call 0xF42E0C`,
-;   and T_F42E0C is DisplayListB_RunOne_Stack -- one record, no end
+;   and slot 0xF42E0C is T_DisplayListB_RunOne_Stack -- one record, no end
 ;   pointer, so no framing walk reaches this byte from anywhere.
 ; ------------------------------------------------------------------
 DLRec_F2C9C2:
@@ -44074,7 +44077,7 @@ DL_F2CA0D:
 ; ------------------------------------------------------------------
 ; 0xF2CA15-0xF2CA25 -- ONE interpreter-B record, run on its own
 ;   prom_a 0xF95866: `lda XBC,0xF2CA15 / push XBC / call 0xF42E0C`,
-;   and T_F42E0C is DisplayListB_RunOne_Stack -- one record, no end
+;   and slot 0xF42E0C is T_DisplayListB_RunOne_Stack -- one record, no end
 ;   pointer, so no framing walk reaches this byte from anywhere.
 ; ------------------------------------------------------------------
 DLRec_F2CA15:
@@ -44091,7 +44094,7 @@ DLRec_F2CA15:
 ; ------------------------------------------------------------------
 ; 0xF2CA26-0xF2CA36 -- ONE interpreter-B record, run on its own
 ;   prom_a 0xF95870: `lda XBC,0xF2CA26 / push XBC / call 0xF42E0C`,
-;   and T_F42E0C is DisplayListB_RunOne_Stack -- one record, no end
+;   and slot 0xF42E0C is T_DisplayListB_RunOne_Stack -- one record, no end
 ;   pointer, so no framing walk reaches this byte from anywhere.
 ; ------------------------------------------------------------------
 DLRec_F2CA26:
@@ -44108,7 +44111,7 @@ DLRec_F2CA26:
 ; ------------------------------------------------------------------
 ; 0xF2CA37-0xF2CA47 -- ONE interpreter-B record, run on its own
 ;   prom_a 0xF9587A: `lda XBC,0xF2CA37 / push XBC / call 0xF42E0C`,
-;   and T_F42E0C is DisplayListB_RunOne_Stack -- one record, no end
+;   and slot 0xF42E0C is T_DisplayListB_RunOne_Stack -- one record, no end
 ;   pointer, so no framing walk reaches this byte from anywhere.
 ; ------------------------------------------------------------------
 DLRec_F2CA37:
@@ -48800,7 +48803,7 @@ DL_TransmissionDesDonnEsDeSyst:
 ; function number (handler 0xF31A3A: `ld A,(XIY)` then `swi 7`).
 ;
 ; `swi 7` IS THE SYSTEM CALL.  Its vector (prom_a 0xFFFF1C) is 0x00F400A4, i.e.
-; the thunk T_F400A4 in this image, which jumps to prom_a 0xF8E9A5.  That
+; the thunk T_SWI7_ServiceCall_Dispatch in this image, which jumps to prom_a 0xF8E9A5.  That
 ; routine masks A with 0x3F, scales by 4 and indexes a 64-entry table at
 ; prom_a 0xF8E9C6.  Entries 0x00-0x22 span 35 slots, but slot 0x18 also points at the
 ; shared ret stub 0xF8EAC6, so there are 34 LIVE services and the first dead slot is
@@ -49168,7 +49171,7 @@ hex_shift_pairs:
 ; ---------------------------------------------------------------------
 ; DisplayList_Run -- THE display-list interpreter (opcode space 0x00-0x23)
 ;
-; Called from: everywhere, through thunk T_F417F0 -- the most-referenced slot in
+; Called from: everywhere, through thunk T_DisplayList_Run -- the most-referenced slot in
 ;          the whole thunk table
 ; Inputs:  XIY = first record, XIX = one past the last record
 ; Outputs: draws; XIY and XIX are saved across each handler call
@@ -49353,7 +49356,7 @@ DLHandler_Ignore:
 ; ---------------------------------------------------------------------
 ; DisplayListB_RunOne / DisplayListB_Run -- the SECOND interpreter
 ;
-; Called from: through thunk T_F417F4 (the second-most-referenced slot)
+; Called from: through thunk T_DisplayListB_Run (the second-most-referenced slot)
 ; Inputs:  XIY = first record, XIX = one past the last
 ; Notes:   identical shape to DisplayList_Run but bound 0x0F and handler table
 ;          0xF31DB1 (15 entries -- again exactly the bound).  Its handlers below
@@ -57217,8 +57220,8 @@ sub_F38800:		; <- T_F42660
 ; sub_F38843
 ; Called from: T_F42664 (x1); far site 0xF42664
 ; Touches: (0x21E7) (0x2250) (0x7EE2) (0x7EE3) (0x7F05) (0x7FC0)  |  0x603422
-; Calls:   T_F4025C sub_F38A79 sub_F38B8E T_F40258 T_F40038 T_F40F4C T_F407A4
-;          T_F407A0 T_F40F50 sub_F389A2
+; Calls:   T_F4025C sub_F38A79 sub_F38B8E T_F40258 T_Queue2C00_DrainPassB T_F40F4C T_F407A4
+;          T_F407A0 T_UiEventList_Publish sub_F389A2
 ; Evidence: thunk slot T_F42664 holds `jp 0x00F38843`, and 0xF38843 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -62872,12 +62875,25 @@ DL_MasterTrackClearAttention:
 ; 1 MiB of undifferentiated bytes -- which is exactly why it is the first thing
 ; converted here.
 ;
-; LABELS.  Each slot is labelled `T_<its own address>`, e.g. `T_F42E24`.  This is
-; deliberately an ADDRESS name, not a semantic one: the slot's address is what
-; callers name, and nothing in the table itself says what the routine does.
-; Semantic names belong on the TARGET, once the target has been read.  A handful
-; of targets have been read and are named in the block comments below; the rest
-; are honestly anonymous.
+; LABELS.  A slot is labelled `T_<its own address>` -- `T_F42E24` -- UNLESS the
+; routine it points at already carries a CONTENT name, in which case the slot is
+; labelled `T_<that name>` and its own address moves into the line comment, as
+; `; F42E24 (was T_F42E24)`.  A pointer's meaning is exactly what it points at,
+; so that is not a guess -- but it is DERIVATIVE: it repeats a name another lane
+; earned on the target and adds no new fact about the slot.
+;   273 of the 2,002 slots are spelled that way.  The other 1,729 are not, and
+; the reason is the interesting number: 1,708 of them point at something NOBODY
+; HAS NAMED -- 1,435 at a `sub_XXXXXX` routine, 115 at an address this file does
+; disassemble but never labelled, 158 into a span that is still `.incbin` -- and
+; 12 more are alias pairs, two slots sharing one target address, which no name
+; can tell apart.  Those 1,708 are the directory's honest report of how much of
+; the image is still unread; naming the pointers cannot change it.
+;   Every number here, and the rename itself, is reproduced by
+; notes/prom_b_thunks_round6.py (--selftest, 23 checks).
+; ⚠ A slot's ADDRESS is what callers name (`call 0xF42E24`), and prom_a carries
+; 328 cross-references spelled `T_F4xxxx`.  So the old spelling is kept verbatim
+; in each renamed line's comment: `grep -rn T_F42E24` still lands on exactly one
+; line, this one.  `--stale` re-checks all four images for a dangling one.
 ;
 ; ANNOTATIONS.  `x<N>` on a slot is the number of opcode-anchored references to
 ; that slot found by scanning prom_a and prom_b for `1D lo mid hi` (call nnn) and
@@ -62895,7 +62911,7 @@ DL_MasterTrackClearAttention:
 ; by EXACTLY SIX and then by something else, one (0xF57C00) by eight, one
 ; (0xF53000) by three, and one (0xFF75B6) by none -- 0xFF75B6 is code, not a
 ; table.  So 23 of these pointers name a 24-byte group of six thunks.  Example
-; at both ends: T_F400A0 = 0x00F8E800, and prom_a 0xF8E800 reads
+; at both ends: T_LCD_EntryThunks = 0x00F8E800, and prom_a 0xF8E800 reads
 ; `jp 0xF8E819` / `jp 0xF8E818` / `jp 0xF8E99F` / three more.
 ;
 ; ⚠ What READS these pointers has not been traced, so what a six-thunk group
@@ -62909,12 +62925,22 @@ DL_MasterTrackClearAttention:
 ;
 
 T_F40000:	.long 0x00F82010	; ptr -> 0xF82010 (prom_a 0x02010)
-T_F40004:	jp 0xF83171  ; -> prom_a 0x03171   x7
-T_F40008:	jp 0xF83179  ; -> prom_a 0x03179   x7
-T_F4000C:	jp 0xF83181  ; -> prom_a 0x03181   x7
-T_F40010:	jp 0xF83189  ; -> prom_a 0x03189   x7
+; Evidence: slot 0xF40004 is `jp 0xF83171`; prom_a 0xF83171 carries the label
+;           Dev7F_WriteSlot8_Slot0, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Dev7F_WriteSlot8_Slot0:	jp 0xF83171  ; F40004 (was T_F40004) -> prom_a 0x03171   x7
+; Evidence: slot 0xF40008 is `jp 0xF83179`; prom_a 0xF83179 carries the label
+;           Dev7F_WriteSlot8_Slot1, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Dev7F_WriteSlot8_Slot1:	jp 0xF83179  ; F40008 (was T_F40008) -> prom_a 0x03179   x7
+; Evidence: slot 0xF4000C is `jp 0xF83181`; prom_a 0xF83181 carries the label
+;           Dev7F_WriteSlot8_Slot2, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Dev7F_WriteSlot8_Slot2:	jp 0xF83181  ; F4000C (was T_F4000C) -> prom_a 0x03181   x7
+; Evidence: slot 0xF40010 is `jp 0xF83189`; prom_a 0xF83189 carries the label
+;           Dev7F_WriteSlot8_Slot3, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Dev7F_WriteSlot8_Slot3:	jp 0xF83189  ; F40010 (was T_F40010) -> prom_a 0x03189   x7
 T_F40014:	jp 0xF82028  ; -> prom_a 0x02028
-T_F40018:	jp 0xF823AC  ; -> prom_a 0x023AC   x16
+; Evidence: slot 0xF40018 is `jp 0xF823AC`; prom_a 0xF823AC carries the label
+;           Queue2C00_DrainPassAB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Queue2C00_DrainPassAB:	jp 0xF823AC  ; F40018 (was T_F40018) -> prom_a 0x023AC   x16
 T_F4001C:	jp 0xF8262E  ; -> prom_a 0x0262E
 T_F40020:	jp 0xF825C7  ; -> prom_a 0x025C7
 T_F40024:	jp 0xF82557  ; -> prom_a 0x02557   x2
@@ -62922,7 +62948,9 @@ T_F40028:	jp 0xF8262E  ; -> prom_a 0x0262E
 T_F4002C:	jp 0xF82630  ; -> prom_a 0x02630
 T_F40030:	jp 0xF82634  ; -> prom_a 0x02634
 T_F40034:	jp 0xF82638  ; -> prom_a 0x02638   x2
-T_F40038:	jp 0xF823C8  ; -> prom_a 0x023C8   x21
+; Evidence: slot 0xF40038 is `jp 0xF823C8`; prom_a 0xF823C8 carries the label
+;           Queue2C00_DrainPassB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Queue2C00_DrainPassB:	jp 0xF823C8  ; F40038 (was T_F40038) -> prom_a 0x023C8   x21
 T_F4003C:	jp 0xF82407  ; -> prom_a 0x02407
 T_F40040:	jp 0xF8262E  ; -> prom_a 0x0262E
 T_F40044:	jp 0xF8262E  ; -> prom_a 0x0262E
@@ -62936,9 +62964,13 @@ T_F4005C:	jp 0xF827C8  ; -> prom_a 0x027C8
 ; --- the SWI7 pair.  prom_a's vector table sends SWI7 (0xFFFF1C) here, not to a
 ;     routine: the vector value IS 0x00F400A4.  See the display-list block at
 ;     0xF31800 for what the service does and how its 64-entry table was found.
-T_F400A0:	.long 0x00F8E800	; ptr -> 0xF8E800 (prom_a 0x0E800), itself a run of
+; Evidence: slot 0xF400A0 is `ptr 0xF8E800`; prom_a 0xF8E800 carries the label
+;           LCD_EntryThunks, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_LCD_EntryThunks:	.long 0x00F8E800	; F400A0 (was T_F400A0) ptr -> 0xF8E800 (prom_a 0x0E800), itself a run of
 				; `jp` thunks
-T_F400A4:	jp 0xF8E9A5  ; -> prom_a 0x0E9A5   SWI7 SYSTEM-CALL ENTRY.  Masks A
+; Evidence: slot 0xF400A4 is `jp 0xF8E9A5`; prom_a 0xF8E9A5 carries the label
+;           SWI7_ServiceCall_Dispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SWI7_ServiceCall_Dispatch:	jp 0xF8E9A5  ; F400A4 (was T_F400A4) -> prom_a 0x0E9A5   SWI7 SYSTEM-CALL ENTRY.  Masks A
 				; with 0x3F and indexes the 64-entry service
 				; table at prom_a 0xF8E9C6.
 	.fill 0x28, 1, 0x0E  ; 0xF400A8: 40 x ret
@@ -63017,11 +63049,15 @@ T_F40290:	jp 0xF99400  ; -> prom_a 0x19400
 T_F402A0:	.long 0x00FE8046	; ptr -> 0xFE8046 (prom_a 0x68046)
 T_F402A4:	jp 0xFE810B  ; -> prom_a 0x6810B
 T_F402A8:	jp 0xFE8116  ; -> prom_a 0x68116
-T_F402AC:	jp 0xFE812C  ; -> prom_a 0x6812C
+; Evidence: slot 0xF402AC is `jp 0xFE812C`; prom_a 0xFE812C carries the label
+;           Paint_Sequencer, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Paint_Sequencer:	jp 0xFE812C  ; F402AC (was T_F402AC) -> prom_a 0x6812C
 T_F402B0:	jp 0xFE8165  ; -> prom_a 0x68165
 T_F402B4:	jp 0xFE8060  ; -> prom_a 0x68060
 T_F402B8:	jp 0xFE805F  ; -> prom_a 0x6805F
-T_F402BC:	jp 0xFE836F  ; -> prom_a 0x6836F
+; Evidence: slot 0xF402BC is `jp 0xFE836F`; prom_a 0xFE836F carries the label
+;           ShowScreen_NoteEditPartSelect (graded CONTENT).  DERIVATIVE name.
+T_ShowScreen_NoteEditPartSelect:	jp 0xFE836F  ; F402BC (was T_F402BC) -> prom_a 0x6836F
 T_F402C0:	jp 0xFE8564  ; -> prom_a 0x68564
 T_F402C4:	jp 0xFE8565  ; -> prom_a 0x68565
 T_F402C8:	jp 0xFE8564  ; -> prom_a 0x68564
@@ -63029,7 +63065,9 @@ T_F402CC:	jp 0xFE88AA  ; -> prom_a 0x688AA
 T_F402D0:	jp 0xFE8C3A  ; -> prom_a 0x68C3A
 T_F402D4:	jp 0xFE9A33  ; -> prom_a 0x69A33
 T_F402D8:	jp 0xFE8CB3  ; -> prom_a 0x68CB3
-T_F402DC:	jp 0xFE83A3  ; -> prom_a 0x683A3
+; Evidence: slot 0xF402DC is `jp 0xFE83A3`; prom_a 0xFE83A3 carries the label
+;           ShowScreen_DrumEditPartSelect (graded CONTENT).  DERIVATIVE name.
+T_ShowScreen_DrumEditPartSelect:	jp 0xFE83A3  ; F402DC (was T_F402DC) -> prom_a 0x683A3
 T_F402E0:	jp 0xFE8045  ; -> prom_a 0x68045
 T_F402E4:	jp 0xFE8565  ; -> prom_a 0x68565
 T_F402E8:	jp 0xFE8045  ; -> prom_a 0x68045
@@ -63043,8 +63081,12 @@ T_F40304:	jp 0xFE8026  ; -> prom_a 0x68026   x2
 T_F40308:	jp 0xFE8000  ; -> prom_a 0x68000   x1
 T_F4030C:	jp 0xFE8005  ; -> prom_a 0x68005   x1
 	.fill 0x2E0, 1, 0x0E  ; 0xF40310: 736 x ret
-T_F405F0:	jp 0xF89800  ; -> prom_a 0x09800   x10
-T_F405F4:	jp 0xF89804  ; -> prom_a 0x09804
+; Evidence: slot 0xF405F0 is `jp 0xF89800`; prom_a 0xF89800 carries the label
+;           Ctrl_Normalise, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ctrl_Normalise:	jp 0xF89800  ; F405F0 (was T_F405F0) -> prom_a 0x09800   x10
+; Evidence: slot 0xF405F4 is `jp 0xF89804`; prom_a 0xF89804 carries the label
+;           Ctrl_Nop_Ret, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ctrl_Nop_Ret:	jp 0xF89804  ; F405F4 (was T_F405F4) -> prom_a 0x09804
 	.fill 0x18, 1, 0x0E  ; 0xF405F8: 24 x ret
 T_F40610:	.long 0x00F8A000	; ptr -> 0xF8A000 (prom_a 0x0A000)
 T_F40614:	jp 0xF8A023  ; -> prom_a 0x0A023   x1
@@ -63071,24 +63113,56 @@ T_F40698:	jp 0xF8C04E  ; -> prom_a 0x0C04E
 T_F4069C:	jp 0xF8C0D0  ; -> prom_a 0x0C0D0
 T_F406A0:	jp 0xF8C3FB  ; -> prom_a 0x0C3FB   x2
 	.fill 0x6C, 1, 0x0E  ; 0xF406A4: 108 x ret
-T_F40710:	.long 0x00FA5400	; ptr -> 0xFA5400 (prom_a 0x25400)
-T_F40714:	jp 0xFA5496  ; -> prom_a 0x25496
-T_F40718:	jp 0xFA542F  ; -> prom_a 0x2542F
-T_F4071C:	jp 0xFA5418  ; -> prom_a 0x25418
+; Evidence: slot 0xF40710 is `ptr 0xFA5400`; prom_a 0xFA5400 carries the label
+;           MIDI_EntryThunks, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_EntryThunks:	.long 0x00FA5400	; F40710 (was T_F40710) ptr -> 0xFA5400 (prom_a 0x25400)
+; Evidence: slot 0xF40714 is `jp 0xFA5496`; prom_a 0xFA5496 carries the label
+;           MIDI_RX_Byte, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_RX_Byte:	jp 0xFA5496  ; F40714 (was T_F40714) -> prom_a 0x25496
+; Evidence: slot 0xF40718 is `jp 0xFA542F`; prom_a 0xFA542F carries the label
+;           MIDI_TX_Ready, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_TX_Ready:	jp 0xFA542F  ; F40718 (was T_F40718) -> prom_a 0x2542F
+; Evidence: slot 0xF4071C is `jp 0xFA5418`; prom_a 0xFA5418 carries the label
+;           MIDI_RX_ErrorReset, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_RX_ErrorReset:	jp 0xFA5418  ; F4071C (was T_F4071C) -> prom_a 0x25418
 T_F40720:	jp 0xFA55F4  ; -> prom_a 0x255F4   x1
-T_F40724:	jp 0xFA590F  ; -> prom_a 0x2590F   x15
-T_F40728:	jp 0xFA5942  ; -> prom_a 0x25942   x1
-T_F4072C:	jp 0xFA5B5F  ; -> prom_a 0x25B5F   x1
-T_F40730:	jp 0xFA5C12  ; -> prom_a 0x25C12   x5
-T_F40734:	jp 0xFA5C54  ; -> prom_a 0x25C54   x1
+; Evidence: slot 0xF40724 is `jp 0xFA590F`; prom_a 0xFA590F carries the label
+;           MIDI_PostSendWork, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_PostSendWork:	jp 0xFA590F  ; F40724 (was T_F40724) -> prom_a 0x2590F   x15
+; Evidence: slot 0xF40728 is `jp 0xFA5942`; prom_a 0xFA5942 carries the label
+;           MIDI_DrainQueue, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_DrainQueue:	jp 0xFA5942  ; F40728 (was T_F40728) -> prom_a 0x25942   x1
+; Evidence: slot 0xF4072C is `jp 0xFA5B5F`; prom_a 0xFA5B5F carries the label
+;           MIDI_SendBankAndProgram, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_SendBankAndProgram:	jp 0xFA5B5F  ; F4072C (was T_F4072C) -> prom_a 0x25B5F   x1
+; Evidence: slot 0xF40730 is `jp 0xFA5C12`; prom_a 0xFA5C12 carries the label
+;           MIDI_PostSendWork_PortB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_PostSendWork_PortB:	jp 0xFA5C12  ; F40730 (was T_F40730) -> prom_a 0x25C12   x5
+; Evidence: slot 0xF40734 is `jp 0xFA5C54`; prom_a 0xFA5C54 carries the label
+;           MIDI_SendAllNotesOff_AllChannels, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MIDI_SendAllNotesOff_AllChannels:	jp 0xFA5C54  ; F40734 (was T_F40734) -> prom_a 0x25C54   x1
 	.fill 0x8, 1, 0x0E  ; 0xF40738: 8 x ret
-T_F40740:	.long 0x00FA6000	; ptr -> 0xFA6000 (prom_a 0x26000)
-T_F40744:	jp 0xFA6018  ; -> prom_a 0x26018   x1
-T_F40748:	jp 0xFA70F5  ; -> prom_a 0x270F5   x9
-T_F4074C:	jp 0xFA7D92  ; -> prom_a 0x27D92   x1
-T_F40750:	jp 0xFA7D95  ; -> prom_a 0x27D95   x2
-T_F40754:	jp 0xFA6EEF  ; -> prom_a 0x26EEF
-T_F40758:	jp 0xFA6F04  ; -> prom_a 0x26F04   x1
+; Evidence: slot 0xF40740 is `ptr 0xFA6000`; prom_a 0xFA6000 carries the label
+;           MidiIn_EntryThunks, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiIn_EntryThunks:	.long 0x00FA6000	; F40740 (was T_F40740) ptr -> 0xFA6000 (prom_a 0x26000)
+; Evidence: slot 0xF40744 is `jp 0xFA6018`; prom_a 0xFA6018 carries the label
+;           MidiIn_PumpPortA, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiIn_PumpPortA:	jp 0xFA6018  ; F40744 (was T_F40744) -> prom_a 0x26018   x1
+; Evidence: slot 0xF40748 is `jp 0xFA70F5`; prom_a 0xFA70F5 carries the label
+;           MidiOut_ParamChanged, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiOut_ParamChanged:	jp 0xFA70F5  ; F40748 (was T_F40748) -> prom_a 0x270F5   x9
+; Evidence: slot 0xF4074C is `jp 0xFA7D92`; prom_a 0xFA7D92 carries the label
+;           MidiOut_PutByteA_SetStatus, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiOut_PutByteA_SetStatus:	jp 0xFA7D92  ; F4074C (was T_F4074C) -> prom_a 0x27D92   x1
+; Evidence: slot 0xF40750 is `jp 0xFA7D95`; prom_a 0xFA7D95 carries the label
+;           MidiOut_PutByteA, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiOut_PutByteA:	jp 0xFA7D95  ; F40750 (was T_F40750) -> prom_a 0x27D95   x2
+; Evidence: slot 0xF40754 is `jp 0xFA6EEF`; prom_a 0xFA6EEF carries the label
+;           MidiIn_ReqRouteRebuild_Msg0D, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiIn_ReqRouteRebuild_Msg0D:	jp 0xFA6EEF  ; F40754 (was T_F40754) -> prom_a 0x26EEF
+; Evidence: slot 0xF40758 is `jp 0xFA6F04`; prom_a 0xFA6F04 carries the label
+;           MidiIn_ServiceDeferred, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiIn_ServiceDeferred:	jp 0xFA6F04  ; F40758 (was T_F40758) -> prom_a 0x26F04   x1
 T_F4075C:	jp 0xFA7DA3  ; -> prom_a 0x27DA3   x1
 T_F40760:	jp 0xFA7E0C  ; -> prom_a 0x27E0C   x1
 	.fill 0xC, 1, 0x0E  ; 0xF40764: 12 x ret
@@ -63110,16 +63184,28 @@ T_F407A4:	jp 0xFAA7AB  ; -> prom_a 0x2A7AB   x6
 T_F407A8:	jp 0xFAB5E9  ; -> prom_a 0x2B5E9
 T_F407AC:	jp 0xFAAB28  ; -> prom_a 0x2AB28   x2
 T_F407B0:	jp 0xFAAAB5  ; -> prom_a 0x2AAB5   x2
-T_F407B4:	jp 0xFAA4A0  ; -> prom_a 0x2A4A0   x31
-T_F407B8:	jp 0xFAA550  ; -> prom_a 0x2A550   x11
+; Evidence: slot 0xF407B4 is `jp 0xFAA4A0`; prom_a 0xFAA4A0 carries the label
+;           Queue2C00_PublishStagedIfPending, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Queue2C00_PublishStagedIfPending:	jp 0xFAA4A0  ; F407B4 (was T_F407B4) -> prom_a 0x2A4A0   x31
+; Evidence: slot 0xF407B8 is `jp 0xFAA550`; prom_a 0xFAA550 carries the label
+;           Queue2C00_PublishStagedDrainPassB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Queue2C00_PublishStagedDrainPassB:	jp 0xFAA550  ; F407B8 (was T_F407B8) -> prom_a 0x2A550   x11
 T_F407BC:	jp 0xFAA5A4  ; -> prom_a 0x2A5A4
 T_F407C0:	jp 0xFAA5A5  ; -> prom_a 0x2A5A5
 T_F407C4:	jp 0xFAB657  ; -> prom_a 0x2B657
 T_F407C8:	jp 0xFAA5A6  ; -> prom_a 0x2A5A6
-T_F407CC:	jp 0xFAA5FE  ; -> prom_a 0x2A5FE   x26
-T_F407D0:	jp 0xFAA604  ; -> prom_a 0x2A604   x18
-T_F407D4:	jp 0xFAA623  ; -> prom_a 0x2A623   x9
-T_F407D8:	jp 0xFAA66A  ; -> prom_a 0x2A66A   x2
+; Evidence: slot 0xF407CC is `jp 0xFAA5FE`; prom_a 0xFAA5FE carries the label
+;           ParamChange_NotifyClearSource, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_ParamChange_NotifyClearSource:	jp 0xFAA5FE  ; F407CC (was T_F407CC) -> prom_a 0x2A5FE   x26
+; Evidence: slot 0xF407D0 is `jp 0xFAA604`; prom_a 0xFAA604 carries the label
+;           ParamChange_Notify, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_ParamChange_Notify:	jp 0xFAA604  ; F407D0 (was T_F407D0) -> prom_a 0x2A604   x18
+; Evidence: slot 0xF407D4 is `jp 0xFAA623`; prom_a 0xFAA623 carries the label
+;           ParamRecord_WriteFieldAndStage, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_ParamRecord_WriteFieldAndStage:	jp 0xFAA623  ; F407D4 (was T_F407D4) -> prom_a 0x2A623   x9
+; Evidence: slot 0xF407D8 is `jp 0xFAA66A`; prom_a 0xFAA66A carries the label
+;           ParamRecord_WriteFieldAndStage_Copy, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_ParamRecord_WriteFieldAndStage_Copy:	jp 0xFAA66A  ; F407D8 (was T_F407D8) -> prom_a 0x2A66A   x2
 T_F407DC:	jp 0xFAA6B1  ; -> prom_a 0x2A6B1
 T_F407E0:	jp 0xFAA71C  ; -> prom_a 0x2A71C
 T_F407E4:	jp 0xFAA71E  ; -> prom_a 0x2A71E
@@ -63381,54 +63467,122 @@ T_F40E10:	jp 0xF55D90  ; -> prom_b 0x55D90   x6
 T_F40E14:	jp 0xF55882  ; -> prom_b 0x55882
 T_F40E18:	jp 0xF56525  ; -> prom_b 0x56525   x2
 	.fill 0xB4, 1, 0x0E  ; 0xF40E1C: 180 x ret
-T_F40ED0:	.long 0x00F57C00	; ptr -> 0xF57C00 (prom_b 0x57C00)
+; Evidence: slot 0xF40ED0 is `ptr 0xF57C00`; prom_b 0xF57C00 carries the label
+;           RingPutBlock_EntryThunks (graded CONTENT).  DERIVATIVE name.
+T_RingPutBlock_EntryThunks:	.long 0x00F57C00	; F40ED0 (was T_F40ED0) ptr -> 0xF57C00 (prom_b 0x57C00)
 T_F40ED4:	jp 0xF8E02C  ; -> prom_a 0x0E02C   x46
-T_F40ED8:	jp 0xF8E5F6  ; -> prom_a 0x0E5F6   x1
-T_F40EDC:	jp 0xF8E47F  ; -> prom_a 0x0E47F   INT0 vector target (prom_a 0xFFFF28)
-T_F40EE0:	jp 0xF57D45  ; -> prom_b 0x57D45
-T_F40EE4:	jp 0xF8E52D  ; -> prom_a 0x0E52D
-T_F40EE8:	jp 0xF8E54F  ; -> prom_a 0x0E54F
+; Evidence: slot 0xF40ED8 is `jp 0xF8E5F6`; prom_a 0xF8E5F6 carries the label
+;           Link_ServiceTask, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Link_ServiceTask:	jp 0xF8E5F6  ; F40ED8 (was T_F40ED8) -> prom_a 0x0E5F6   x1
+; Evidence: slot 0xF40EDC is `jp 0xF8E47F`; prom_a 0xF8E47F carries the label
+;           INT0_LinkByte, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_INT0_LinkByte:	jp 0xF8E47F  ; F40EDC (was T_F40EDC) -> prom_a 0x0E47F   INT0 vector target (prom_a 0xFFFF28)
+; Evidence: slot 0xF40EE0 is `jp 0xF57D45`; prom_b 0xF57D45 carries the label
+;           INTT2_Reti, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_INTT2_Reti:	jp 0xF57D45  ; F40EE0 (was T_F40EE0) -> prom_b 0x57D45
+; Evidence: slot 0xF40EE4 is `jp 0xF8E52D`; prom_a 0xF8E52D carries the label
+;           INTTC2_uDMA2Done, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_INTTC2_uDMA2Done:	jp 0xF8E52D  ; F40EE4 (was T_F40EE4) -> prom_a 0x0E52D
+; Evidence: slot 0xF40EE8 is `jp 0xF8E54F`; prom_a 0xF8E54F carries the label
+;           INTTC3_LinkDmaDone, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_INTTC3_LinkDmaDone:	jp 0xF8E54F  ; F40EE8 (was T_F40EE8) -> prom_a 0x0E54F
 T_F40EEC:	jp 0xF8E26F  ; -> prom_a 0x0E26F   x2
 T_F40EF0:	jp 0xF8E0FE  ; -> prom_a 0x0E0FE   x23  the 0xE2 remote-read entry the
 				; expansion-board probe calls (prom_b/prom_b.ld)
 	.fill 0xC, 1, 0x0E  ; 0xF40EF4: 12 x ret
-T_F40F00:	.long 0x00F5A800	; ptr -> 0xF5A800 (prom_b 0x5A800)
-T_F40F04:	jp 0xF5A832  ; -> prom_b 0x5A832   x1
-T_F40F08:	jp 0xF5A836  ; -> prom_b 0x5A836   x6
-T_F40F0C:	jp 0xF5AC0A  ; -> prom_b 0x5AC0A
-T_F40F10:	jp 0xF5ACBB  ; -> prom_b 0x5ACBB
-T_F40F14:	jp 0xF5AC93  ; -> prom_b 0x5AC93
-T_F40F18:	jp 0xF5A83A  ; -> prom_b 0x5A83A   x1
+; Evidence: slot 0xF40F00 is `ptr 0xF5A800`; prom_b 0xF5A800 carries the label
+;           SC1_Vtable, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SC1_Vtable:	.long 0x00F5A800	; F40F00 (was T_F40F00) ptr -> 0xF5A800 (prom_b 0x5A800)
+; Evidence: slot 0xF40F04 is `jp 0xF5A832`; prom_b 0xF5A832 carries the label
+;           SC1_Service, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SC1_Service:	jp 0xF5A832  ; F40F04 (was T_F40F04) -> prom_b 0x5A832   x1
+; Evidence: slot 0xF40F08 is `jp 0xF5A836`; prom_b 0xF5A836 carries the label
+;           SC1_TxFlush, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SC1_TxFlush:	jp 0xF5A836  ; F40F08 (was T_F40F08) -> prom_b 0x5A836   x6
+; Evidence: slot 0xF40F0C is `jp 0xF5AC0A`; prom_b 0xF5AC0A carries the label
+;           INT6_SC1_PeerRequest, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_INT6_SC1_PeerRequest:	jp 0xF5AC0A  ; F40F0C (was T_F40F0C) -> prom_b 0x5AC0A
+; Evidence: slot 0xF40F10 is `jp 0xF5ACBB`; prom_b 0xF5ACBB carries the label
+;           INTRX1_SC1_Dispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_INTRX1_SC1_Dispatch:	jp 0xF5ACBB  ; F40F10 (was T_F40F10) -> prom_b 0x5ACBB
+; Evidence: slot 0xF40F14 is `jp 0xF5AC93`; prom_b 0xF5AC93 carries the label
+;           INTTX1_SC1_Dispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_INTTX1_SC1_Dispatch:	jp 0xF5AC93  ; F40F14 (was T_F40F14) -> prom_b 0x5AC93
+; Evidence: slot 0xF40F18 is `jp 0xF5A83A`; prom_b 0xF5A83A carries the label
+;           SC1_Entry_F40F18_Ret, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SC1_Entry_F40F18_Ret:	jp 0xF5A83A  ; F40F18 (was T_F40F18) -> prom_b 0x5A83A   x1
 T_F40F1C:	jp 0xF5A83B  ; -> prom_b 0x5A83B   x3
 T_F40F20:	jp 0xF5A847  ; -> prom_b 0x5A847   x1
 T_F40F24:	jp 0xF5A84B  ; -> prom_b 0x5A84B
 	.fill 0x8, 1, 0x0E  ; 0xF40F28: 8 x ret
-T_F40F30:	.long 0x00F86000	; ptr -> 0xF86000 (prom_a 0x06000)
-T_F40F34:	jp 0xF86066  ; -> prom_a 0x06066   x1
-T_F40F38:	jp 0xF86A81  ; -> prom_a 0x06A81   x14
-T_F40F3C:	jp 0xF86AA3  ; -> prom_a 0x06AA3   x81
-T_F40F40:	jp 0xF86AC7  ; -> prom_a 0x06AC7   x18
-T_F40F44:	jp 0xF86903  ; -> prom_a 0x06903   x1
+; Evidence: slot 0xF40F30 is `ptr 0xF86000`; prom_a 0xF86000 carries the label
+;           PanelTask_EntryVectors, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelTask_EntryVectors:	.long 0x00F86000	; F40F30 (was T_F40F30) ptr -> 0xF86000 (prom_a 0x06000)
+; Evidence: slot 0xF40F34 is `jp 0xF86066`; prom_a 0xF86066 carries the label
+;           PanelTask_Step, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelTask_Step:	jp 0xF86066  ; F40F34 (was T_F40F34) -> prom_a 0x06066   x1
+; Evidence: slot 0xF40F38 is `jp 0xF86A81`; prom_a 0xF86A81 carries the label
+;           Queue2C00_AppendRegs, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Queue2C00_AppendRegs:	jp 0xF86A81  ; F40F38 (was T_F40F38) -> prom_a 0x06A81   x14
+; Evidence: slot 0xF40F3C is `jp 0xF86AA3`; prom_a 0xF86AA3 carries the label
+;           Queue2E00_AppendRegs, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Queue2E00_AppendRegs:	jp 0xF86AA3  ; F40F3C (was T_F40F3C) -> prom_a 0x06AA3   x81
+; Evidence: slot 0xF40F40 is `jp 0xF86AC7`; prom_a 0xF86AC7 carries the label
+;           List2030_AppendRegs, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_List2030_AppendRegs:	jp 0xF86AC7  ; F40F40 (was T_F40F40) -> prom_a 0x06AC7   x18
+; Evidence: slot 0xF40F44 is `jp 0xF86903`; prom_a 0xF86903 carries the label
+;           PanelTimers_Step, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelTimers_Step:	jp 0xF86903  ; F40F44 (was T_F40F44) -> prom_a 0x06903   x1
 T_F40F48:	jp 0xF86AE9  ; -> prom_a 0x06AE9
 T_F40F4C:	jp 0xF86AE9  ; -> prom_a 0x06AE9   x3
-T_F40F50:	jp 0xF860A6  ; -> prom_a 0x060A6   x7
+; Evidence: slot 0xF40F50 is `jp 0xF860A6`; prom_a 0xF860A6 carries the label
+;           UiEventList_Publish, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_UiEventList_Publish:	jp 0xF860A6  ; F40F50 (was T_F40F50) -> prom_a 0x060A6   x7
 	.fill 0x4, 1, 0x0E  ; 0xF40F54: 4 x ret
-T_F40F58:	jp 0xF8659B  ; -> prom_a 0x0659B
-T_F40F5C:	jp 0xF8697E  ; -> prom_a 0x0697E   x1
-T_F40F60:	jp 0xF8699D  ; -> prom_a 0x0699D   x2
-T_F40F64:	jp 0xF869BC  ; -> prom_a 0x069BC   x1
-T_F40F68:	jp 0xF86B43  ; -> prom_a 0x06B43
-T_F40F6C:	jp 0xF86B6F  ; -> prom_a 0x06B6F
-T_F40F70:	jp 0xF86B7F  ; -> prom_a 0x06B7F
-T_F40F74:	jp 0xF86C5C  ; -> prom_a 0x06C5C   x2
+; Evidence: slot 0xF40F58 is `jp 0xF8659B`; prom_a 0xF8659B carries the label
+;           UiEvent_RouteByCode, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_UiEvent_RouteByCode:	jp 0xF8659B  ; F40F58 (was T_F40F58) -> prom_a 0x0659B
+; Evidence: slot 0xF40F5C is `jp 0xF8697E`; prom_a 0xF8697E carries the label
+;           UiEventList_RunPassA, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_UiEventList_RunPassA:	jp 0xF8697E  ; F40F5C (was T_F40F5C) -> prom_a 0x0697E   x1
+; Evidence: slot 0xF40F60 is `jp 0xF8699D`; prom_a 0xF8699D carries the label
+;           UiEventList_RunPassB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_UiEventList_RunPassB:	jp 0xF8699D  ; F40F60 (was T_F40F60) -> prom_a 0x0699D   x2
+; Evidence: slot 0xF40F64 is `jp 0xF869BC`; prom_a 0xF869BC carries the label
+;           UiEventList_RunPassC, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_UiEventList_RunPassC:	jp 0xF869BC  ; F40F64 (was T_F40F64) -> prom_a 0x069BC   x1
+; Evidence: slot 0xF40F68 is `jp 0xF86B43`; prom_a 0xF86B43 carries the label
+;           EditValue_ApplyStep, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_EditValue_ApplyStep:	jp 0xF86B43  ; F40F68 (was T_F40F68) -> prom_a 0x06B43
+; Evidence: slot 0xF40F6C is `jp 0xF86B6F`; prom_a 0xF86B6F carries the label
+;           EditStep_UseCurveA, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_EditStep_UseCurveA:	jp 0xF86B6F  ; F40F6C (was T_F40F6C) -> prom_a 0x06B6F
+; Evidence: slot 0xF40F70 is `jp 0xF86B7F`; prom_a 0xF86B7F carries the label
+;           EditStep_UseCurveC, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_EditStep_UseCurveC:	jp 0xF86B7F  ; F40F70 (was T_F40F70) -> prom_a 0x06B7F
+; Evidence: slot 0xF40F74 is `jp 0xF86C5C`; prom_a 0xF86C5C carries the label
+;           PanelHold_Tick, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelHold_Tick:	jp 0xF86C5C  ; F40F74 (was T_F40F74) -> prom_a 0x06C5C   x2
 T_F40F78:	jp 0xF86BF4  ; -> prom_a 0x06BF4
-T_F40F7C:	jp 0xF86BC0  ; -> prom_a 0x06BC0
+; Evidence: slot 0xF40F7C is `jp 0xF86BC0`; prom_a 0xF86BC0 carries the label
+;           PanelEvent_Code01_ArmHold, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelEvent_Code01_ArmHold:	jp 0xF86BC0  ; F40F7C (was T_F40F7C) -> prom_a 0x06BC0
 T_F40F80:	jp 0xF86C01  ; -> prom_a 0x06C01
-T_F40F84:	jp 0xF86C0E  ; -> prom_a 0x06C0E
-T_F40F88:	jp 0xF86C59  ; -> prom_a 0x06C59
-T_F40F8C:	jp 0xF86C5A  ; -> prom_a 0x06C5A
-T_F40F90:	jp 0xF865BC  ; -> prom_a 0x065BC
-T_F40F94:	jp 0xF86C5B  ; -> prom_a 0x06C5B
+; Evidence: slot 0xF40F84 is `jp 0xF86C0E`; prom_a 0xF86C0E carries the label
+;           PanelEvent_Code20_ArmHold, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelEvent_Code20_ArmHold:	jp 0xF86C0E  ; F40F84 (was T_F40F84) -> prom_a 0x06C0E
+; Evidence: slot 0xF40F88 is `jp 0xF86C59`; prom_a 0xF86C59 carries the label
+;           PanelEvent_NoOp_T40F88, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelEvent_NoOp_T40F88:	jp 0xF86C59  ; F40F88 (was T_F40F88) -> prom_a 0x06C59
+; Evidence: slot 0xF40F8C is `jp 0xF86C5A`; prom_a 0xF86C5A carries the label
+;           PanelEvent_NoOp_T40F8C, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelEvent_NoOp_T40F8C:	jp 0xF86C5A  ; F40F8C (was T_F40F8C) -> prom_a 0x06C5A
+; Evidence: slot 0xF40F90 is `jp 0xF865BC`; prom_a 0xF865BC carries the label
+;           PanelEvent_Code03, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelEvent_Code03:	jp 0xF865BC  ; F40F90 (was T_F40F90) -> prom_a 0x065BC
+; Evidence: slot 0xF40F94 is `jp 0xF86C5B`; prom_a 0xF86C5B carries the label
+;           PanelEvent_NoOp_T40F94, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_PanelEvent_NoOp_T40F94:	jp 0xF86C5B  ; F40F94 (was T_F40F94) -> prom_a 0x06C5B
 	.fill 0x18, 1, 0x0E  ; 0xF40F98: 24 x ret
 T_F40FB0:	.long 0x00FC0000	; ptr -> 0xFC0000 (prom_a 0x40000)
 T_F40FB4:	jp 0xFC0E56  ; -> prom_a 0x40E56
@@ -63576,7 +63730,9 @@ T_F411EC:	jp 0xFC5566  ; -> prom_a 0x45566   x7
 T_F41230:	jp 0xF8E320  ; -> prom_a 0x0E320   x10
 T_F41234:	jp 0xF8E1FE  ; -> prom_a 0x0E1FE   x10
 T_F41238:	jp 0xF8E222  ; -> prom_a 0x0E222   x7
-T_F4123C:	jp 0xF8E66D  ; -> prom_a 0x0E66D   x22
+; Evidence: slot 0xF4123C is `jp 0xF8E66D`; prom_a 0xF8E66D carries the label
+;           Link_WaitBlockDone, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Link_WaitBlockDone:	jp 0xF8E66D  ; F4123C (was T_F4123C) -> prom_a 0x0E66D   x22
 T_F41240:	jp 0xF8E3D1  ; -> prom_a 0x0E3D1   x4
 	.fill 0xC, 1, 0x0E  ; 0xF41244: 12 x ret
 T_F41250:	jp 0xF36E21  ; -> prom_b 0x36E21   x1
@@ -63594,7 +63750,9 @@ T_F413C0:	jp 0xFC8A8D  ; -> prom_a 0x48A8D   x6
 T_F413C4:	jp 0xFC8B36  ; -> prom_a 0x48B36   x3
 T_F413C8:	jp 0xFC8CE0  ; -> prom_a 0x48CE0   x11
 T_F413CC:	jp 0xFC8D45  ; -> prom_a 0x48D45   x1
-T_F413D0:	jp 0xFC807D  ; -> prom_a 0x4807D   x1
+; Evidence: slot 0xF413D0 is `jp 0xFC807D`; prom_a 0xFC807D carries the label
+;           Ram3800_InitDataImage, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ram3800_InitDataImage:	jp 0xFC807D  ; F413D0 (was T_F413D0) -> prom_a 0x4807D   x1
 T_F413D4:	jp 0xFC8D49  ; -> prom_a 0x48D49   x2
 T_F413D8:	jp 0xFCB2F0  ; -> prom_a 0x4B2F0   x1
 T_F413DC:	jp 0xFCAD7C  ; -> prom_a 0x4AD7C   x2
@@ -63752,24 +63910,48 @@ T_F4176C:	.long 0x00F99800	; ptr -> 0xF99800 (prom_a 0x19800)
 	.fill 0x80, 1, 0x0E  ; 0xF41770: 128 x ret
 ; --- the two display-list interpreters.  These are the two busiest slots in the
 ;     whole table; both targets are converted below at 0xF31800.
-T_F417F0:	jp DisplayList_Run  ; -> prom_b 0x31A09   x392  THE UI ENGINE
-T_F417F4:	jp DisplayListB_Run  ; -> prom_b 0x31AF0   x269  the second interpreter
-T_F417F8:	jp 0xF31B21  ; -> prom_b 0x31B21   x15
-T_F417FC:	jp 0xF31B39  ; -> prom_b 0x31B39   x16
+; Evidence: slot 0xF417F0 is `jp 0xF31A09`; prom_b 0xF31A09 carries the label
+;           DisplayList_Run, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DisplayList_Run:	jp DisplayList_Run  ; F417F0 (was T_F417F0) -> prom_b 0x31A09   x392  THE UI ENGINE
+; Evidence: slot 0xF417F4 is `jp 0xF31AF0`; prom_b 0xF31AF0 carries the label
+;           DisplayListB_Run, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DisplayListB_Run:	jp DisplayListB_Run  ; F417F4 (was T_F417F4) -> prom_b 0x31AF0   x269  the second interpreter
+; Evidence: slot 0xF417F8 is `jp 0xF31B21`; prom_b 0xF31B21 carries the label
+;           DLB_Handler_StringTable, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DLB_Handler_StringTable:	jp 0xF31B21  ; F417F8 (was T_F417F8) -> prom_b 0x31B21   x15
+; Evidence: slot 0xF417FC is `jp 0xF31B39`; prom_b 0xF31B39 carries the label
+;           DLB_Handler_StringTable2, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DLB_Handler_StringTable2:	jp 0xF31B39  ; F417FC (was T_F417FC) -> prom_b 0x31B39   x16
 T_F41800:	jp 0xF31BA1  ; -> prom_b 0x31BA1   x3
 T_F41804:	jp 0xF31BA1  ; -> prom_b 0x31BA1   x3
-T_F41808:	jp 0xF31BD7  ; -> prom_b 0x31BD7
+; Evidence: slot 0xF41808 is `jp 0xF31BD7`; prom_b 0xF31BD7 carries the label
+;           DLB_Handler_DecimalSigned, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DLB_Handler_DecimalSigned:	jp 0xF31BD7  ; F41808 (was T_F41808) -> prom_b 0x31BD7
 T_F4180C:	jp 0xF31C14  ; -> prom_b 0x31C14   x8
 T_F41810:	jp 0xF31C14  ; -> prom_b 0x31C14
-T_F41814:	jp 0xF31C56  ; -> prom_b 0x31C56   x1
-T_F41818:	jp 0xF31C9E  ; -> prom_b 0x31C9E
+; Evidence: slot 0xF41814 is `jp 0xF31C56`; prom_b 0xF31C56 carries the label
+;           DLB_Handler_DecimalSigned2Words, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DLB_Handler_DecimalSigned2Words:	jp 0xF31C56  ; F41814 (was T_F41814) -> prom_b 0x31C56   x1
+; Evidence: slot 0xF41818 is `jp 0xF31C9E`; prom_b 0xF31C9E carries the label
+;           DLB_Handler_CentredSpan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DLB_Handler_CentredSpan:	jp 0xF31C9E  ; F41818 (was T_F41818) -> prom_b 0x31C9E
 T_F4181C:	jp 0xF31B57  ; -> prom_b 0x31B57   x53
 T_F41820:	jp 0xF31B57  ; -> prom_b 0x31B57   x15
-T_F41824:	jp 0xF31B86  ; -> prom_b 0x31B86   x7
-T_F41828:	jp 0xF31ACE  ; -> prom_b 0x31ACE
-T_F4182C:	jp 0xF31A3A  ; -> prom_b 0x31A3A   x6
-T_F41830:	jp 0xF31AEC  ; -> prom_b 0x31AEC   x5
-T_F41834:	jp 0xF31873  ; -> prom_b 0x31873   x10
+; Evidence: slot 0xF41824 is `jp 0xF31B86`; prom_b 0xF31B86 carries the label
+;           DLB_Handler_Array6, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DLB_Handler_Array6:	jp 0xF31B86  ; F41824 (was T_F41824) -> prom_b 0x31B86   x7
+; Evidence: slot 0xF41828 is `jp 0xF31ACE`; prom_b 0xF31ACE carries the label
+;           DLHandler_Glyph24x24, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DLHandler_Glyph24x24:	jp 0xF31ACE  ; F41828 (was T_F41828) -> prom_b 0x31ACE
+; Evidence: slot 0xF4182C is `jp 0xF31A3A`; prom_b 0xF31A3A carries the label
+;           DLHandler_IX_Text, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DLHandler_IX_Text:	jp 0xF31A3A  ; F4182C (was T_F4182C) -> prom_b 0x31A3A   x6
+; Evidence: slot 0xF41830 is `jp 0xF31AEC`; prom_b 0xF31AEC carries the label
+;           DisplayListB_RunOne, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DisplayListB_RunOne:	jp 0xF31AEC  ; F41830 (was T_F41830) -> prom_b 0x31AEC   x5
+; Evidence: slot 0xF41834 is `jp 0xF31873`; prom_b 0xF31873 carries the label
+;           DrawValueGlyph_24x24, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DrawValueGlyph_24x24:	jp 0xF31873  ; F41834 (was T_F41834) -> prom_b 0x31873   x10
 	.fill 0x8, 1, 0x0E  ; 0xF41838: 8 x ret
 T_F41840:	jp 0xFBCB06  ; -> prom_a 0x3CB06
 T_F41844:	jp 0xFBCB31  ; -> prom_a 0x3CB31
@@ -63905,7 +64087,9 @@ T_F41AF0:	jp 0xF8BCAF  ; -> prom_a 0x0BCAF   x35
 T_F41AF4:	jp 0xF8BC8A  ; -> prom_a 0x0BC8A   x2
 T_F41AF8:	jp 0xF8BCC9  ; -> prom_a 0x0BCC9   x7
 T_F41AFC:	jp 0xF8BCD0  ; -> prom_a 0x0BCD0
-T_F41B00:	jp 0xF8BCD7  ; -> prom_a 0x0BCD7   x10
+; Evidence: slot 0xF41B00 is `jp 0xF8BCD7`; prom_a 0xF8BCD7 carries the label
+;           Value_ToAsciiDigits3, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Value_ToAsciiDigits3:	jp 0xF8BCD7  ; F41B00 (was T_F41B00) -> prom_a 0x0BCD7   x10
 T_F41B04:	jp 0xF8BD73  ; -> prom_a 0x0BD73   x9
 T_F41B08:	jp 0xF8BDC5  ; -> prom_a 0x0BDC5   x32
 T_F41B0C:	jp 0xF8BDF8  ; -> prom_a 0x0BDF8   x2
@@ -63914,142 +64098,410 @@ T_F41B14:	jp 0xF8BC04  ; -> prom_a 0x0BC04   x12
 T_F41B18:	jp 0xF8BC08  ; -> prom_a 0x0BC08   x34
 	.fill 0x14, 1, 0x0E  ; 0xF41B1C: 20 x ret
 T_F41B30:	.long 0x00F8DC00	; ptr -> 0xF8DC00 (prom_a 0x0DC00)
-T_F41B34:	jp 0xF8DC25  ; -> prom_a 0x0DC25   x1
+; Evidence: slot 0xF41B34 is `jp 0xF8DC25`; prom_a 0xF8DC25 carries the label
+;           AnalogScan_All, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_AnalogScan_All:	jp 0xF8DC25  ; F41B34 (was T_F41B34) -> prom_a 0x0DC25   x1
 	.fill 0x198, 1, 0x0E  ; 0xF41B38: 408 x ret
-T_F41CD0:	jp 0xF842DF  ; -> prom_a 0x042DF   x6
-T_F41CD4:	jp 0xF842ED  ; -> prom_a 0x042ED
-T_F41CD8:	jp 0xF84304  ; -> prom_a 0x04304
-T_F41CDC:	jp 0xF84327  ; -> prom_a 0x04327   x3
-T_F41CE0:	jp 0xF8433C  ; -> prom_a 0x0433C   x1
-T_F41CE4:	jp 0xF8434A  ; -> prom_a 0x0434A
-T_F41CE8:	jp 0xF84357  ; -> prom_a 0x04357
-T_F41CEC:	jp 0xF84366  ; -> prom_a 0x04366
-T_F41CF0:	jp 0xF84375  ; -> prom_a 0x04375
-T_F41CF4:	jp 0xF84382  ; -> prom_a 0x04382   x1
-T_F41CF8:	jp 0xF84390  ; -> prom_a 0x04390
-T_F41CFC:	jp 0xF843A7  ; -> prom_a 0x043A7
-T_F41D00:	jp 0xF843CA  ; -> prom_a 0x043CA
-T_F41D04:	jp 0xF843DF  ; -> prom_a 0x043DF   x1
-T_F41D08:	jp 0xF843ED  ; -> prom_a 0x043ED
-T_F41D0C:	jp 0xF843FA  ; -> prom_a 0x043FA
-T_F41D10:	jp 0xF84409  ; -> prom_a 0x04409
-T_F41D14:	jp 0xF84418  ; -> prom_a 0x04418
-T_F41D18:	jp 0xF8493D  ; -> prom_a 0x0493D   x1
-T_F41D1C:	jp 0xF8494B  ; -> prom_a 0x0494B
-T_F41D20:	jp 0xF84962  ; -> prom_a 0x04962
-T_F41D24:	jp 0xF84985  ; -> prom_a 0x04985   x1
-T_F41D28:	jp 0xF8499A  ; -> prom_a 0x0499A   x2
-T_F41D2C:	jp 0xF849A8  ; -> prom_a 0x049A8
-T_F41D30:	jp 0xF849B5  ; -> prom_a 0x049B5
-T_F41D34:	jp 0xF849C4  ; -> prom_a 0x049C4
-T_F41D38:	jp 0xF849D3  ; -> prom_a 0x049D3
-T_F41D3C:	jp 0xF84425  ; -> prom_a 0x04425
-T_F41D40:	jp 0xF84433  ; -> prom_a 0x04433
-T_F41D44:	jp 0xF8444A  ; -> prom_a 0x0444A
-T_F41D48:	jp 0xF8446D  ; -> prom_a 0x0446D
-T_F41D4C:	jp 0xF84482  ; -> prom_a 0x04482   x1
-T_F41D50:	jp 0xF84490  ; -> prom_a 0x04490
-T_F41D54:	jp 0xF8449D  ; -> prom_a 0x0449D
-T_F41D58:	jp 0xF844AC  ; -> prom_a 0x044AC
-T_F41D5C:	jp 0xF844BB  ; -> prom_a 0x044BB
-T_F41D60:	jp 0xF8456B  ; -> prom_a 0x0456B   x1
-T_F41D64:	jp 0xF84579  ; -> prom_a 0x04579   x67
-T_F41D68:	jp 0xF84590  ; -> prom_a 0x04590
-T_F41D6C:	jp 0xF845B3  ; -> prom_a 0x045B3
-T_F41D70:	jp 0xF845C8  ; -> prom_a 0x045C8   x2
-T_F41D74:	jp 0xF845D6  ; -> prom_a 0x045D6   x2
-T_F41D78:	jp 0xF845E3  ; -> prom_a 0x045E3   x6
-T_F41D7C:	jp 0xF845F2  ; -> prom_a 0x045F2
-T_F41D80:	jp 0xF84601  ; -> prom_a 0x04601
-T_F41D84:	jp 0xF8460E  ; -> prom_a 0x0460E   x48
-T_F41D88:	jp 0xF8461C  ; -> prom_a 0x0461C
-T_F41D8C:	jp 0xF84633  ; -> prom_a 0x04633   x2
-T_F41D90:	jp 0xF84656  ; -> prom_a 0x04656   x7
-T_F41D94:	jp 0xF8466B  ; -> prom_a 0x0466B   x4
-T_F41D98:	jp 0xF84679  ; -> prom_a 0x04679
-T_F41D9C:	jp 0xF84686  ; -> prom_a 0x04686
-T_F41DA0:	jp 0xF84695  ; -> prom_a 0x04695
-T_F41DA4:	jp 0xF846A4  ; -> prom_a 0x046A4
-T_F41DA8:	jp 0xF846B1  ; -> prom_a 0x046B1
-T_F41DAC:	jp 0xF846BF  ; -> prom_a 0x046BF   x5
-T_F41DB0:	jp 0xF846D6  ; -> prom_a 0x046D6   x1
-T_F41DB4:	jp 0xF846F9  ; -> prom_a 0x046F9   x1
-T_F41DB8:	jp 0xF8470E  ; -> prom_a 0x0470E   x4
-T_F41DBC:	jp 0xF8471C  ; -> prom_a 0x0471C   x2
-T_F41DC0:	jp 0xF84729  ; -> prom_a 0x04729   x4
-T_F41DC4:	jp 0xF84738  ; -> prom_a 0x04738
-T_F41DC8:	jp 0xF84747  ; -> prom_a 0x04747
-T_F41DCC:	jp 0xF84754  ; -> prom_a 0x04754
-T_F41DD0:	jp 0xF84762  ; -> prom_a 0x04762
-T_F41DD4:	jp 0xF84779  ; -> prom_a 0x04779   x2
-T_F41DD8:	jp 0xF8479C  ; -> prom_a 0x0479C   x1
-T_F41DDC:	jp 0xF847B1  ; -> prom_a 0x047B1   x2
-T_F41DE0:	jp 0xF847BF  ; -> prom_a 0x047BF   x2
-T_F41DE4:	jp 0xF847CC  ; -> prom_a 0x047CC   x4
-T_F41DE8:	jp 0xF847DB  ; -> prom_a 0x047DB
-T_F41DEC:	jp 0xF847EA  ; -> prom_a 0x047EA
-T_F41DF0:	jp 0xF847F7  ; -> prom_a 0x047F7   x1
-T_F41DF4:	jp 0xF84805  ; -> prom_a 0x04805   x1
-T_F41DF8:	jp 0xF8481C  ; -> prom_a 0x0481C   x10
-T_F41DFC:	jp 0xF8483F  ; -> prom_a 0x0483F   x2
-T_F41E00:	jp 0xF84854  ; -> prom_a 0x04854   x4
-T_F41E04:	jp 0xF84862  ; -> prom_a 0x04862
-T_F41E08:	jp 0xF8486F  ; -> prom_a 0x0486F
-T_F41E0C:	jp 0xF8487E  ; -> prom_a 0x0487E
-T_F41E10:	jp 0xF8488D  ; -> prom_a 0x0488D
-T_F41E14:	jp 0xF8489A  ; -> prom_a 0x0489A   x1
-T_F41E18:	jp 0xF848A8  ; -> prom_a 0x048A8
-T_F41E1C:	jp 0xF848BF  ; -> prom_a 0x048BF   x5
-T_F41E20:	jp 0xF848E2  ; -> prom_a 0x048E2
-T_F41E24:	jp 0xF848F7  ; -> prom_a 0x048F7   x2
-T_F41E28:	jp 0xF84905  ; -> prom_a 0x04905
-T_F41E2C:	jp 0xF84912  ; -> prom_a 0x04912
-T_F41E30:	jp 0xF84921  ; -> prom_a 0x04921
-T_F41E34:	jp 0xF84930  ; -> prom_a 0x04930
-T_F41E38:	jp 0xF849E0  ; -> prom_a 0x049E0   x2
-T_F41E3C:	jp 0xF849EE  ; -> prom_a 0x049EE   x4
-T_F41E40:	jp 0xF84A05  ; -> prom_a 0x04A05   x2
-T_F41E44:	jp 0xF84A28  ; -> prom_a 0x04A28
-T_F41E48:	jp 0xF84A3D  ; -> prom_a 0x04A3D   x3
-T_F41E4C:	jp 0xF84A4B  ; -> prom_a 0x04A4B
-T_F41E50:	jp 0xF84A58  ; -> prom_a 0x04A58
-T_F41E54:	jp 0xF84A67  ; -> prom_a 0x04A67
-T_F41E58:	jp 0xF84A76  ; -> prom_a 0x04A76
-T_F41E5C:	jp 0xF84B26  ; -> prom_a 0x04B26   x2
-T_F41E60:	jp 0xF84B34  ; -> prom_a 0x04B34
-T_F41E64:	jp 0xF84B4B  ; -> prom_a 0x04B4B   x3
-T_F41E68:	jp 0xF84B6E  ; -> prom_a 0x04B6E   x3
-T_F41E6C:	jp 0xF84B83  ; -> prom_a 0x04B83   x5
-T_F41E70:	jp 0xF84B91  ; -> prom_a 0x04B91
-T_F41E74:	jp 0xF84B9E  ; -> prom_a 0x04B9E
-T_F41E78:	jp 0xF84BAD  ; -> prom_a 0x04BAD
-T_F41E7C:	jp 0xF84BBC  ; -> prom_a 0x04BBC
-T_F41E80:	jp 0xF844C8  ; -> prom_a 0x044C8   x1
-T_F41E84:	jp 0xF844D6  ; -> prom_a 0x044D6
-T_F41E88:	jp 0xF844ED  ; -> prom_a 0x044ED
-T_F41E8C:	jp 0xF84510  ; -> prom_a 0x04510   x2
-T_F41E90:	jp 0xF84525  ; -> prom_a 0x04525   x1
-T_F41E94:	jp 0xF84533  ; -> prom_a 0x04533
-T_F41E98:	jp 0xF84540  ; -> prom_a 0x04540
-T_F41E9C:	jp 0xF8454F  ; -> prom_a 0x0454F
-T_F41EA0:	jp 0xF8455E  ; -> prom_a 0x0455E
-T_F41EA4:	jp 0xF84A83  ; -> prom_a 0x04A83   x1
-T_F41EA8:	jp 0xF84A91  ; -> prom_a 0x04A91   x2
-T_F41EAC:	jp 0xF84AA8  ; -> prom_a 0x04AA8   x1
-T_F41EB0:	jp 0xF84ACB  ; -> prom_a 0x04ACB   x1
-T_F41EB4:	jp 0xF84AE0  ; -> prom_a 0x04AE0   x2
-T_F41EB8:	jp 0xF84AEE  ; -> prom_a 0x04AEE
-T_F41EBC:	jp 0xF84AFB  ; -> prom_a 0x04AFB
-T_F41EC0:	jp 0xF84B0A  ; -> prom_a 0x04B0A
-T_F41EC4:	jp 0xF84B19  ; -> prom_a 0x04B19
+; Evidence: slot 0xF41CD0 is `jp 0xF842DF`; prom_a 0xF842DF carries the label
+;           Ring608A0A_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_Get:	jp 0xF842DF  ; F41CD0 (was T_F41CD0) -> prom_a 0x042DF   x6
+; Evidence: slot 0xF41CD4 is `jp 0xF842ED`; prom_a 0xF842ED carries the label
+;           Ring608A0A_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_Put:	jp 0xF842ED  ; F41CD4 (was T_F41CD4) -> prom_a 0x042ED
+; Evidence: slot 0xF41CD8 is `jp 0xF84304`; prom_a 0xF84304 carries the label
+;           Ring608A0A_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_PutBlock:	jp 0xF84304  ; F41CD8 (was T_F41CD8) -> prom_a 0x04304
+; Evidence: slot 0xF41CDC is `jp 0xF84327`; prom_a 0xF84327 carries the label
+;           Ring608A0A_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_IsEmpty:	jp 0xF84327  ; F41CDC (was T_F41CDC) -> prom_a 0x04327   x3
+; Evidence: slot 0xF41CE0 is `jp 0xF8433C`; prom_a 0xF8433C carries the label
+;           Ring608A0A_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_Init:	jp 0xF8433C  ; F41CE0 (was T_F41CE0) -> prom_a 0x0433C   x1
+; Evidence: slot 0xF41CE4 is `jp 0xF8434A`; prom_a 0xF8434A carries the label
+;           Ring608A0A_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_ScanRewind:	jp 0xF8434A  ; F41CE4 (was T_F41CE4) -> prom_a 0x0434A
+; Evidence: slot 0xF41CE8 is `jp 0xF84357`; prom_a 0xF84357 carries the label
+;           Ring608A0A_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_Scan:	jp 0xF84357  ; F41CE8 (was T_F41CE8) -> prom_a 0x04357
+; Evidence: slot 0xF41CEC is `jp 0xF84366`; prom_a 0xF84366 carries the label
+;           Ring608A0A_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_ScanToPut:	jp 0xF84366  ; F41CEC (was T_F41CEC) -> prom_a 0x04366
+; Evidence: slot 0xF41CF0 is `jp 0xF84375`; prom_a 0xF84375 carries the label
+;           Ring608A0A_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring608A0A_GetCommit:	jp 0xF84375  ; F41CF0 (was T_F41CF0) -> prom_a 0x04375
+; Evidence: slot 0xF41CF4 is `jp 0xF84382`; prom_a 0xF84382 carries the label
+;           Ring60480A_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_Get:	jp 0xF84382  ; F41CF4 (was T_F41CF4) -> prom_a 0x04382   x1
+; Evidence: slot 0xF41CF8 is `jp 0xF84390`; prom_a 0xF84390 carries the label
+;           Ring60480A_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_Put:	jp 0xF84390  ; F41CF8 (was T_F41CF8) -> prom_a 0x04390
+; Evidence: slot 0xF41CFC is `jp 0xF843A7`; prom_a 0xF843A7 carries the label
+;           Ring60480A_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_PutBlock:	jp 0xF843A7  ; F41CFC (was T_F41CFC) -> prom_a 0x043A7
+; Evidence: slot 0xF41D00 is `jp 0xF843CA`; prom_a 0xF843CA carries the label
+;           Ring60480A_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_IsEmpty:	jp 0xF843CA  ; F41D00 (was T_F41D00) -> prom_a 0x043CA
+; Evidence: slot 0xF41D04 is `jp 0xF843DF`; prom_a 0xF843DF carries the label
+;           Ring60480A_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_Init:	jp 0xF843DF  ; F41D04 (was T_F41D04) -> prom_a 0x043DF   x1
+; Evidence: slot 0xF41D08 is `jp 0xF843ED`; prom_a 0xF843ED carries the label
+;           Ring60480A_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_ScanRewind:	jp 0xF843ED  ; F41D08 (was T_F41D08) -> prom_a 0x043ED
+; Evidence: slot 0xF41D0C is `jp 0xF843FA`; prom_a 0xF843FA carries the label
+;           Ring60480A_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_Scan:	jp 0xF843FA  ; F41D0C (was T_F41D0C) -> prom_a 0x043FA
+; Evidence: slot 0xF41D10 is `jp 0xF84409`; prom_a 0xF84409 carries the label
+;           Ring60480A_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_ScanToPut:	jp 0xF84409  ; F41D10 (was T_F41D10) -> prom_a 0x04409
+; Evidence: slot 0xF41D14 is `jp 0xF84418`; prom_a 0xF84418 carries the label
+;           Ring60480A_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60480A_GetCommit:	jp 0xF84418  ; F41D14 (was T_F41D14) -> prom_a 0x04418
+; Evidence: slot 0xF41D18 is `jp 0xF8493D`; prom_a 0xF8493D carries the label
+;           Ring60195A_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_Get:	jp 0xF8493D  ; F41D18 (was T_F41D18) -> prom_a 0x0493D   x1
+; Evidence: slot 0xF41D1C is `jp 0xF8494B`; prom_a 0xF8494B carries the label
+;           Ring60195A_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_Put:	jp 0xF8494B  ; F41D1C (was T_F41D1C) -> prom_a 0x0494B
+; Evidence: slot 0xF41D20 is `jp 0xF84962`; prom_a 0xF84962 carries the label
+;           Ring60195A_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_PutBlock:	jp 0xF84962  ; F41D20 (was T_F41D20) -> prom_a 0x04962
+; Evidence: slot 0xF41D24 is `jp 0xF84985`; prom_a 0xF84985 carries the label
+;           Ring60195A_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_IsEmpty:	jp 0xF84985  ; F41D24 (was T_F41D24) -> prom_a 0x04985   x1
+; Evidence: slot 0xF41D28 is `jp 0xF8499A`; prom_a 0xF8499A carries the label
+;           Ring60195A_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_Init:	jp 0xF8499A  ; F41D28 (was T_F41D28) -> prom_a 0x0499A   x2
+; Evidence: slot 0xF41D2C is `jp 0xF849A8`; prom_a 0xF849A8 carries the label
+;           Ring60195A_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_ScanRewind:	jp 0xF849A8  ; F41D2C (was T_F41D2C) -> prom_a 0x049A8
+; Evidence: slot 0xF41D30 is `jp 0xF849B5`; prom_a 0xF849B5 carries the label
+;           Ring60195A_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_Scan:	jp 0xF849B5  ; F41D30 (was T_F41D30) -> prom_a 0x049B5
+; Evidence: slot 0xF41D34 is `jp 0xF849C4`; prom_a 0xF849C4 carries the label
+;           Ring60195A_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_ScanToPut:	jp 0xF849C4  ; F41D34 (was T_F41D34) -> prom_a 0x049C4
+; Evidence: slot 0xF41D38 is `jp 0xF849D3`; prom_a 0xF849D3 carries the label
+;           Ring60195A_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60195A_GetCommit:	jp 0xF849D3  ; F41D38 (was T_F41D38) -> prom_a 0x049D3
+; Evidence: slot 0xF41D3C is `jp 0xF84425`; prom_a 0xF84425 carries the label
+;           Ring601B64_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_Get:	jp 0xF84425  ; F41D3C (was T_F41D3C) -> prom_a 0x04425
+; Evidence: slot 0xF41D40 is `jp 0xF84433`; prom_a 0xF84433 carries the label
+;           Ring601B64_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_Put:	jp 0xF84433  ; F41D40 (was T_F41D40) -> prom_a 0x04433
+; Evidence: slot 0xF41D44 is `jp 0xF8444A`; prom_a 0xF8444A carries the label
+;           Ring601B64_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_PutBlock:	jp 0xF8444A  ; F41D44 (was T_F41D44) -> prom_a 0x0444A
+; Evidence: slot 0xF41D48 is `jp 0xF8446D`; prom_a 0xF8446D carries the label
+;           Ring601B64_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_IsEmpty:	jp 0xF8446D  ; F41D48 (was T_F41D48) -> prom_a 0x0446D
+; Evidence: slot 0xF41D4C is `jp 0xF84482`; prom_a 0xF84482 carries the label
+;           Ring601B64_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_Init:	jp 0xF84482  ; F41D4C (was T_F41D4C) -> prom_a 0x04482   x1
+; Evidence: slot 0xF41D50 is `jp 0xF84490`; prom_a 0xF84490 carries the label
+;           Ring601B64_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_ScanRewind:	jp 0xF84490  ; F41D50 (was T_F41D50) -> prom_a 0x04490
+; Evidence: slot 0xF41D54 is `jp 0xF8449D`; prom_a 0xF8449D carries the label
+;           Ring601B64_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_Scan:	jp 0xF8449D  ; F41D54 (was T_F41D54) -> prom_a 0x0449D
+; Evidence: slot 0xF41D58 is `jp 0xF844AC`; prom_a 0xF844AC carries the label
+;           Ring601B64_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_ScanToPut:	jp 0xF844AC  ; F41D58 (was T_F41D58) -> prom_a 0x044AC
+; Evidence: slot 0xF41D5C is `jp 0xF844BB`; prom_a 0xF844BB carries the label
+;           Ring601B64_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601B64_GetCommit:	jp 0xF844BB  ; F41D5C (was T_F41D5C) -> prom_a 0x044BB
+; Evidence: slot 0xF41D60 is `jp 0xF8456B`; prom_a 0xF8456B carries the label
+;           Ring60080A_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_Get:	jp 0xF8456B  ; F41D60 (was T_F41D60) -> prom_a 0x0456B   x1
+; Evidence: slot 0xF41D64 is `jp 0xF84579`; prom_a 0xF84579 carries the label
+;           Ring60080A_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_Put:	jp 0xF84579  ; F41D64 (was T_F41D64) -> prom_a 0x04579   x67
+; Evidence: slot 0xF41D68 is `jp 0xF84590`; prom_a 0xF84590 carries the label
+;           Ring60080A_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_PutBlock:	jp 0xF84590  ; F41D68 (was T_F41D68) -> prom_a 0x04590
+; Evidence: slot 0xF41D6C is `jp 0xF845B3`; prom_a 0xF845B3 carries the label
+;           Ring60080A_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_IsEmpty:	jp 0xF845B3  ; F41D6C (was T_F41D6C) -> prom_a 0x045B3
+; Evidence: slot 0xF41D70 is `jp 0xF845C8`; prom_a 0xF845C8 carries the label
+;           Ring60080A_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_Init:	jp 0xF845C8  ; F41D70 (was T_F41D70) -> prom_a 0x045C8   x2
+; Evidence: slot 0xF41D74 is `jp 0xF845D6`; prom_a 0xF845D6 carries the label
+;           Ring60080A_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_ScanRewind:	jp 0xF845D6  ; F41D74 (was T_F41D74) -> prom_a 0x045D6   x2
+; Evidence: slot 0xF41D78 is `jp 0xF845E3`; prom_a 0xF845E3 carries the label
+;           Ring60080A_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_Scan:	jp 0xF845E3  ; F41D78 (was T_F41D78) -> prom_a 0x045E3   x6
+; Evidence: slot 0xF41D7C is `jp 0xF845F2`; prom_a 0xF845F2 carries the label
+;           Ring60080A_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_ScanToPut:	jp 0xF845F2  ; F41D7C (was T_F41D7C) -> prom_a 0x045F2
+; Evidence: slot 0xF41D80 is `jp 0xF84601`; prom_a 0xF84601 carries the label
+;           Ring60080A_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60080A_GetCommit:	jp 0xF84601  ; F41D80 (was T_F41D80) -> prom_a 0x04601
+; Evidence: slot 0xF41D84 is `jp 0xF8460E`; prom_a 0xF8460E carries the label
+;           Ring600A14_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_Get:	jp 0xF8460E  ; F41D84 (was T_F41D84) -> prom_a 0x0460E   x48
+; Evidence: slot 0xF41D88 is `jp 0xF8461C`; prom_a 0xF8461C carries the label
+;           Ring600A14_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_Put:	jp 0xF8461C  ; F41D88 (was T_F41D88) -> prom_a 0x0461C
+; Evidence: slot 0xF41D8C is `jp 0xF84633`; prom_a 0xF84633 carries the label
+;           Ring600A14_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_PutBlock:	jp 0xF84633  ; F41D8C (was T_F41D8C) -> prom_a 0x04633   x2
+; Evidence: slot 0xF41D90 is `jp 0xF84656`; prom_a 0xF84656 carries the label
+;           Ring600A14_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_IsEmpty:	jp 0xF84656  ; F41D90 (was T_F41D90) -> prom_a 0x04656   x7
+; Evidence: slot 0xF41D94 is `jp 0xF8466B`; prom_a 0xF8466B carries the label
+;           Ring600A14_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_Init:	jp 0xF8466B  ; F41D94 (was T_F41D94) -> prom_a 0x0466B   x4
+; Evidence: slot 0xF41D98 is `jp 0xF84679`; prom_a 0xF84679 carries the label
+;           Ring600A14_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_ScanRewind:	jp 0xF84679  ; F41D98 (was T_F41D98) -> prom_a 0x04679
+; Evidence: slot 0xF41D9C is `jp 0xF84686`; prom_a 0xF84686 carries the label
+;           Ring600A14_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_Scan:	jp 0xF84686  ; F41D9C (was T_F41D9C) -> prom_a 0x04686
+; Evidence: slot 0xF41DA0 is `jp 0xF84695`; prom_a 0xF84695 carries the label
+;           Ring600A14_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_ScanToPut:	jp 0xF84695  ; F41DA0 (was T_F41DA0) -> prom_a 0x04695
+; Evidence: slot 0xF41DA4 is `jp 0xF846A4`; prom_a 0xF846A4 carries the label
+;           Ring600A14_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600A14_GetCommit:	jp 0xF846A4  ; F41DA4 (was T_F41DA4) -> prom_a 0x046A4
+; Evidence: slot 0xF41DA8 is `jp 0xF846B1`; prom_a 0xF846B1 carries the label
+;           Ring600C1E_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_Get:	jp 0xF846B1  ; F41DA8 (was T_F41DA8) -> prom_a 0x046B1
+; Evidence: slot 0xF41DAC is `jp 0xF846BF`; prom_a 0xF846BF carries the label
+;           Ring600C1E_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_Put:	jp 0xF846BF  ; F41DAC (was T_F41DAC) -> prom_a 0x046BF   x5
+; Evidence: slot 0xF41DB0 is `jp 0xF846D6`; prom_a 0xF846D6 carries the label
+;           Ring600C1E_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_PutBlock:	jp 0xF846D6  ; F41DB0 (was T_F41DB0) -> prom_a 0x046D6   x1
+; Evidence: slot 0xF41DB4 is `jp 0xF846F9`; prom_a 0xF846F9 carries the label
+;           Ring600C1E_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_IsEmpty:	jp 0xF846F9  ; F41DB4 (was T_F41DB4) -> prom_a 0x046F9   x1
+; Evidence: slot 0xF41DB8 is `jp 0xF8470E`; prom_a 0xF8470E carries the label
+;           Ring600C1E_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_Init:	jp 0xF8470E  ; F41DB8 (was T_F41DB8) -> prom_a 0x0470E   x4
+; Evidence: slot 0xF41DBC is `jp 0xF8471C`; prom_a 0xF8471C carries the label
+;           Ring600C1E_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_ScanRewind:	jp 0xF8471C  ; F41DBC (was T_F41DBC) -> prom_a 0x0471C   x2
+; Evidence: slot 0xF41DC0 is `jp 0xF84729`; prom_a 0xF84729 carries the label
+;           Ring600C1E_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_Scan:	jp 0xF84729  ; F41DC0 (was T_F41DC0) -> prom_a 0x04729   x4
+; Evidence: slot 0xF41DC4 is `jp 0xF84738`; prom_a 0xF84738 carries the label
+;           Ring600C1E_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_ScanToPut:	jp 0xF84738  ; F41DC4 (was T_F41DC4) -> prom_a 0x04738
+; Evidence: slot 0xF41DC8 is `jp 0xF84747`; prom_a 0xF84747 carries the label
+;           Ring600C1E_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring600C1E_GetCommit:	jp 0xF84747  ; F41DC8 (was T_F41DC8) -> prom_a 0x04747
+; Evidence: slot 0xF41DCC is `jp 0xF84754`; prom_a 0xF84754 carries the label
+;           Ring601028_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_Get:	jp 0xF84754  ; F41DCC (was T_F41DCC) -> prom_a 0x04754
+; Evidence: slot 0xF41DD0 is `jp 0xF84762`; prom_a 0xF84762 carries the label
+;           Ring601028_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_Put:	jp 0xF84762  ; F41DD0 (was T_F41DD0) -> prom_a 0x04762
+; Evidence: slot 0xF41DD4 is `jp 0xF84779`; prom_a 0xF84779 carries the label
+;           Ring601028_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_PutBlock:	jp 0xF84779  ; F41DD4 (was T_F41DD4) -> prom_a 0x04779   x2
+; Evidence: slot 0xF41DD8 is `jp 0xF8479C`; prom_a 0xF8479C carries the label
+;           Ring601028_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_IsEmpty:	jp 0xF8479C  ; F41DD8 (was T_F41DD8) -> prom_a 0x0479C   x1
+; Evidence: slot 0xF41DDC is `jp 0xF847B1`; prom_a 0xF847B1 carries the label
+;           Ring601028_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_Init:	jp 0xF847B1  ; F41DDC (was T_F41DDC) -> prom_a 0x047B1   x2
+; Evidence: slot 0xF41DE0 is `jp 0xF847BF`; prom_a 0xF847BF carries the label
+;           Ring601028_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_ScanRewind:	jp 0xF847BF  ; F41DE0 (was T_F41DE0) -> prom_a 0x047BF   x2
+; Evidence: slot 0xF41DE4 is `jp 0xF847CC`; prom_a 0xF847CC carries the label
+;           Ring601028_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_Scan:	jp 0xF847CC  ; F41DE4 (was T_F41DE4) -> prom_a 0x047CC   x4
+; Evidence: slot 0xF41DE8 is `jp 0xF847DB`; prom_a 0xF847DB carries the label
+;           Ring601028_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_ScanToPut:	jp 0xF847DB  ; F41DE8 (was T_F41DE8) -> prom_a 0x047DB
+; Evidence: slot 0xF41DEC is `jp 0xF847EA`; prom_a 0xF847EA carries the label
+;           Ring601028_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601028_GetCommit:	jp 0xF847EA  ; F41DEC (was T_F41DEC) -> prom_a 0x047EA
+; Evidence: slot 0xF41DF0 is `jp 0xF847F7`; prom_a 0xF847F7 carries the label
+;           Ring601432_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_Get:	jp 0xF847F7  ; F41DF0 (was T_F41DF0) -> prom_a 0x047F7   x1
+; Evidence: slot 0xF41DF4 is `jp 0xF84805`; prom_a 0xF84805 carries the label
+;           Ring601432_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_Put:	jp 0xF84805  ; F41DF4 (was T_F41DF4) -> prom_a 0x04805   x1
+; Evidence: slot 0xF41DF8 is `jp 0xF8481C`; prom_a 0xF8481C carries the label
+;           Ring601432_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_PutBlock:	jp 0xF8481C  ; F41DF8 (was T_F41DF8) -> prom_a 0x0481C   x10
+; Evidence: slot 0xF41DFC is `jp 0xF8483F`; prom_a 0xF8483F carries the label
+;           Ring601432_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_IsEmpty:	jp 0xF8483F  ; F41DFC (was T_F41DFC) -> prom_a 0x0483F   x2
+; Evidence: slot 0xF41E00 is `jp 0xF84854`; prom_a 0xF84854 carries the label
+;           Ring601432_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_Init:	jp 0xF84854  ; F41E00 (was T_F41E00) -> prom_a 0x04854   x4
+; Evidence: slot 0xF41E04 is `jp 0xF84862`; prom_a 0xF84862 carries the label
+;           Ring601432_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_ScanRewind:	jp 0xF84862  ; F41E04 (was T_F41E04) -> prom_a 0x04862
+; Evidence: slot 0xF41E08 is `jp 0xF8486F`; prom_a 0xF8486F carries the label
+;           Ring601432_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_Scan:	jp 0xF8486F  ; F41E08 (was T_F41E08) -> prom_a 0x0486F
+; Evidence: slot 0xF41E0C is `jp 0xF8487E`; prom_a 0xF8487E carries the label
+;           Ring601432_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_ScanToPut:	jp 0xF8487E  ; F41E0C (was T_F41E0C) -> prom_a 0x0487E
+; Evidence: slot 0xF41E10 is `jp 0xF8488D`; prom_a 0xF8488D carries the label
+;           Ring601432_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601432_GetCommit:	jp 0xF8488D  ; F41E10 (was T_F41E10) -> prom_a 0x0488D
+; Evidence: slot 0xF41E14 is `jp 0xF8489A`; prom_a 0xF8489A carries the label
+;           Ring60153C_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_Get:	jp 0xF8489A  ; F41E14 (was T_F41E14) -> prom_a 0x0489A   x1
+; Evidence: slot 0xF41E18 is `jp 0xF848A8`; prom_a 0xF848A8 carries the label
+;           Ring60153C_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_Put:	jp 0xF848A8  ; F41E18 (was T_F41E18) -> prom_a 0x048A8
+; Evidence: slot 0xF41E1C is `jp 0xF848BF`; prom_a 0xF848BF carries the label
+;           Ring60153C_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_PutBlock:	jp 0xF848BF  ; F41E1C (was T_F41E1C) -> prom_a 0x048BF   x5
+; Evidence: slot 0xF41E20 is `jp 0xF848E2`; prom_a 0xF848E2 carries the label
+;           Ring60153C_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_IsEmpty:	jp 0xF848E2  ; F41E20 (was T_F41E20) -> prom_a 0x048E2
+; Evidence: slot 0xF41E24 is `jp 0xF848F7`; prom_a 0xF848F7 carries the label
+;           Ring60153C_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_Init:	jp 0xF848F7  ; F41E24 (was T_F41E24) -> prom_a 0x048F7   x2
+; Evidence: slot 0xF41E28 is `jp 0xF84905`; prom_a 0xF84905 carries the label
+;           Ring60153C_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_ScanRewind:	jp 0xF84905  ; F41E28 (was T_F41E28) -> prom_a 0x04905
+; Evidence: slot 0xF41E2C is `jp 0xF84912`; prom_a 0xF84912 carries the label
+;           Ring60153C_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_Scan:	jp 0xF84912  ; F41E2C (was T_F41E2C) -> prom_a 0x04912
+; Evidence: slot 0xF41E30 is `jp 0xF84921`; prom_a 0xF84921 carries the label
+;           Ring60153C_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_ScanToPut:	jp 0xF84921  ; F41E30 (was T_F41E30) -> prom_a 0x04921
+; Evidence: slot 0xF41E34 is `jp 0xF84930`; prom_a 0xF84930 carries the label
+;           Ring60153C_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60153C_GetCommit:	jp 0xF84930  ; F41E34 (was T_F41E34) -> prom_a 0x04930
+; Evidence: slot 0xF41E38 is `jp 0xF849E0`; prom_a 0xF849E0 carries the label
+;           Ring601646_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_Get:	jp 0xF849E0  ; F41E38 (was T_F41E38) -> prom_a 0x049E0   x2
+; Evidence: slot 0xF41E3C is `jp 0xF849EE`; prom_a 0xF849EE carries the label
+;           Ring601646_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_Put:	jp 0xF849EE  ; F41E3C (was T_F41E3C) -> prom_a 0x049EE   x4
+; Evidence: slot 0xF41E40 is `jp 0xF84A05`; prom_a 0xF84A05 carries the label
+;           Ring601646_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_PutBlock:	jp 0xF84A05  ; F41E40 (was T_F41E40) -> prom_a 0x04A05   x2
+; Evidence: slot 0xF41E44 is `jp 0xF84A28`; prom_a 0xF84A28 carries the label
+;           Ring601646_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_IsEmpty:	jp 0xF84A28  ; F41E44 (was T_F41E44) -> prom_a 0x04A28
+; Evidence: slot 0xF41E48 is `jp 0xF84A3D`; prom_a 0xF84A3D carries the label
+;           Ring601646_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_Init:	jp 0xF84A3D  ; F41E48 (was T_F41E48) -> prom_a 0x04A3D   x3
+; Evidence: slot 0xF41E4C is `jp 0xF84A4B`; prom_a 0xF84A4B carries the label
+;           Ring601646_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_ScanRewind:	jp 0xF84A4B  ; F41E4C (was T_F41E4C) -> prom_a 0x04A4B
+; Evidence: slot 0xF41E50 is `jp 0xF84A58`; prom_a 0xF84A58 carries the label
+;           Ring601646_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_Scan:	jp 0xF84A58  ; F41E50 (was T_F41E50) -> prom_a 0x04A58
+; Evidence: slot 0xF41E54 is `jp 0xF84A67`; prom_a 0xF84A67 carries the label
+;           Ring601646_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_ScanToPut:	jp 0xF84A67  ; F41E54 (was T_F41E54) -> prom_a 0x04A67
+; Evidence: slot 0xF41E58 is `jp 0xF84A76`; prom_a 0xF84A76 carries the label
+;           Ring601646_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601646_GetCommit:	jp 0xF84A76  ; F41E58 (was T_F41E58) -> prom_a 0x04A76
+; Evidence: slot 0xF41E5C is `jp 0xF84B26`; prom_a 0xF84B26 carries the label
+;           Ring601850_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_Get:	jp 0xF84B26  ; F41E5C (was T_F41E5C) -> prom_a 0x04B26   x2
+; Evidence: slot 0xF41E60 is `jp 0xF84B34`; prom_a 0xF84B34 carries the label
+;           Ring601850_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_Put:	jp 0xF84B34  ; F41E60 (was T_F41E60) -> prom_a 0x04B34
+; Evidence: slot 0xF41E64 is `jp 0xF84B4B`; prom_a 0xF84B4B carries the label
+;           Ring601850_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_PutBlock:	jp 0xF84B4B  ; F41E64 (was T_F41E64) -> prom_a 0x04B4B   x3
+; Evidence: slot 0xF41E68 is `jp 0xF84B6E`; prom_a 0xF84B6E carries the label
+;           Ring601850_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_IsEmpty:	jp 0xF84B6E  ; F41E68 (was T_F41E68) -> prom_a 0x04B6E   x3
+; Evidence: slot 0xF41E6C is `jp 0xF84B83`; prom_a 0xF84B83 carries the label
+;           Ring601850_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_Init:	jp 0xF84B83  ; F41E6C (was T_F41E6C) -> prom_a 0x04B83   x5
+; Evidence: slot 0xF41E70 is `jp 0xF84B91`; prom_a 0xF84B91 carries the label
+;           Ring601850_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_ScanRewind:	jp 0xF84B91  ; F41E70 (was T_F41E70) -> prom_a 0x04B91
+; Evidence: slot 0xF41E74 is `jp 0xF84B9E`; prom_a 0xF84B9E carries the label
+;           Ring601850_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_Scan:	jp 0xF84B9E  ; F41E74 (was T_F41E74) -> prom_a 0x04B9E
+; Evidence: slot 0xF41E78 is `jp 0xF84BAD`; prom_a 0xF84BAD carries the label
+;           Ring601850_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_ScanToPut:	jp 0xF84BAD  ; F41E78 (was T_F41E78) -> prom_a 0x04BAD
+; Evidence: slot 0xF41E7C is `jp 0xF84BBC`; prom_a 0xF84BBC carries the label
+;           Ring601850_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601850_GetCommit:	jp 0xF84BBC  ; F41E7C (was T_F41E7C) -> prom_a 0x04BBC
+; Evidence: slot 0xF41E80 is `jp 0xF844C8`; prom_a 0xF844C8 carries the label
+;           Ring60000C_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_Get:	jp 0xF844C8  ; F41E80 (was T_F41E80) -> prom_a 0x044C8   x1
+; Evidence: slot 0xF41E84 is `jp 0xF844D6`; prom_a 0xF844D6 carries the label
+;           Ring60000C_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_Put:	jp 0xF844D6  ; F41E84 (was T_F41E84) -> prom_a 0x044D6
+; Evidence: slot 0xF41E88 is `jp 0xF844ED`; prom_a 0xF844ED carries the label
+;           Ring60000C_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_PutBlock:	jp 0xF844ED  ; F41E88 (was T_F41E88) -> prom_a 0x044ED
+; Evidence: slot 0xF41E8C is `jp 0xF84510`; prom_a 0xF84510 carries the label
+;           Ring60000C_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_IsEmpty:	jp 0xF84510  ; F41E8C (was T_F41E8C) -> prom_a 0x04510   x2
+; Evidence: slot 0xF41E90 is `jp 0xF84525`; prom_a 0xF84525 carries the label
+;           Ring60000C_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_Init:	jp 0xF84525  ; F41E90 (was T_F41E90) -> prom_a 0x04525   x1
+; Evidence: slot 0xF41E94 is `jp 0xF84533`; prom_a 0xF84533 carries the label
+;           Ring60000C_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_ScanRewind:	jp 0xF84533  ; F41E94 (was T_F41E94) -> prom_a 0x04533
+; Evidence: slot 0xF41E98 is `jp 0xF84540`; prom_a 0xF84540 carries the label
+;           Ring60000C_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_Scan:	jp 0xF84540  ; F41E98 (was T_F41E98) -> prom_a 0x04540
+; Evidence: slot 0xF41E9C is `jp 0xF8454F`; prom_a 0xF8454F carries the label
+;           Ring60000C_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_ScanToPut:	jp 0xF8454F  ; F41E9C (was T_F41E9C) -> prom_a 0x0454F
+; Evidence: slot 0xF41EA0 is `jp 0xF8455E`; prom_a 0xF8455E carries the label
+;           Ring60000C_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring60000C_GetCommit:	jp 0xF8455E  ; F41EA0 (was T_F41EA0) -> prom_a 0x0455E
+; Evidence: slot 0xF41EA4 is `jp 0xF84A83`; prom_a 0xF84A83 carries the label
+;           Ring601C6E_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_Get:	jp 0xF84A83  ; F41EA4 (was T_F41EA4) -> prom_a 0x04A83   x1
+; Evidence: slot 0xF41EA8 is `jp 0xF84A91`; prom_a 0xF84A91 carries the label
+;           Ring601C6E_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_Put:	jp 0xF84A91  ; F41EA8 (was T_F41EA8) -> prom_a 0x04A91   x2
+; Evidence: slot 0xF41EAC is `jp 0xF84AA8`; prom_a 0xF84AA8 carries the label
+;           Ring601C6E_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_PutBlock:	jp 0xF84AA8  ; F41EAC (was T_F41EAC) -> prom_a 0x04AA8   x1
+; Evidence: slot 0xF41EB0 is `jp 0xF84ACB`; prom_a 0xF84ACB carries the label
+;           Ring601C6E_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_IsEmpty:	jp 0xF84ACB  ; F41EB0 (was T_F41EB0) -> prom_a 0x04ACB   x1
+; Evidence: slot 0xF41EB4 is `jp 0xF84AE0`; prom_a 0xF84AE0 carries the label
+;           Ring601C6E_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_Init:	jp 0xF84AE0  ; F41EB4 (was T_F41EB4) -> prom_a 0x04AE0   x2
+; Evidence: slot 0xF41EB8 is `jp 0xF84AEE`; prom_a 0xF84AEE carries the label
+;           Ring601C6E_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_ScanRewind:	jp 0xF84AEE  ; F41EB8 (was T_F41EB8) -> prom_a 0x04AEE
+; Evidence: slot 0xF41EBC is `jp 0xF84AFB`; prom_a 0xF84AFB carries the label
+;           Ring601C6E_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_Scan:	jp 0xF84AFB  ; F41EBC (was T_F41EBC) -> prom_a 0x04AFB
+; Evidence: slot 0xF41EC0 is `jp 0xF84B0A`; prom_a 0xF84B0A carries the label
+;           Ring601C6E_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_ScanToPut:	jp 0xF84B0A  ; F41EC0 (was T_F41EC0) -> prom_a 0x04B0A
+; Evidence: slot 0xF41EC4 is `jp 0xF84B19`; prom_a 0xF84B19 carries the label
+;           Ring601C6E_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Ring601C6E_GetCommit:	jp 0xF84B19  ; F41EC4 (was T_F41EC4) -> prom_a 0x04B19
 	.fill 0x8, 1, 0x0E  ; 0xF41EC8: 8 x ret
-T_F41ED0:	jp 0xF5B8B6  ; -> prom_b 0x5B8B6   x39
-T_F41ED4:	jp 0xF5B9B8  ; -> prom_b 0x5B9B8   x109
-T_F41ED8:	jp 0xF5BAB8  ; -> prom_b 0x5BAB8   x1
-T_F41EDC:	jp 0xF5BB00  ; -> prom_b 0x5BB00
-T_F41EE0:	jp 0xF5BBB2  ; -> prom_b 0x5BBB2   x7
-T_F41EE4:	jp 0xF5B84C  ; -> prom_b 0x5B84C   x23
-T_F41EE8:	jp 0xF5B881  ; -> prom_b 0x5B881   x9
+; Evidence: slot 0xF41ED0 is `jp 0xF5B8B6`; prom_b 0xF5B8B6 carries the label
+;           Dispatch_Code80_Bracketed, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Dispatch_Code80_Bracketed:	jp 0xF5B8B6  ; F41ED0 (was T_F41ED0) -> prom_b 0x5B8B6   x39
+; Evidence: slot 0xF41ED4 is `jp 0xF5B9B8`; prom_b 0xF5B9B8 carries the label
+;           Dispatch_Code80, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Dispatch_Code80:	jp 0xF5B9B8  ; F41ED4 (was T_F41ED4) -> prom_b 0x5B9B8   x109
+; Evidence: slot 0xF41ED8 is `jp 0xF5BAB8`; prom_b 0xF5BAB8 carries the label
+;           UiPaint_Solo, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_UiPaint_Solo:	jp 0xF5BAB8  ; F41ED8 (was T_F41ED8) -> prom_b 0x5BAB8   x1
+; Evidence: slot 0xF41EDC is `jp 0xF5BB00`; prom_b 0xF5BB00 carries the label
+;           UiPaint_Ordinals, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_UiPaint_Ordinals:	jp 0xF5BB00  ; F41EDC (was T_F41EDC) -> prom_b 0x5BB00
+; Evidence: slot 0xF41EE0 is `jp 0xF5BBB2`; prom_b 0xF5BBB2 carries the label
+;           Gfx_EraseRect, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Gfx_EraseRect:	jp 0xF5BBB2  ; F41EE0 (was T_F41EE0) -> prom_b 0x5BBB2   x7
+; Evidence: slot 0xF41EE4 is `jp 0xF5B84C`; prom_b 0xF5B84C carries the label
+;           Gfx_DrawLine_Solid, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Gfx_DrawLine_Solid:	jp 0xF5B84C  ; F41EE4 (was T_F41EE4) -> prom_b 0x5B84C   x23
+; Evidence: slot 0xF41EE8 is `jp 0xF5B881`; prom_b 0xF5B881 carries the label
+;           Gfx_DrawLine_Dashed, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Gfx_DrawLine_Dashed:	jp 0xF5B881  ; F41EE8 (was T_F41EE8) -> prom_b 0x5B881   x9
 T_F41EEC:	jp 0xF5B81C  ; -> prom_b 0x5B81C   x1
 	.fill 0x8, 1, 0x0E  ; 0xF41EF0: 8 x ret
 T_F41EF8:	jp 0xFBAC00  ; -> prom_a 0x3AC00   x1
@@ -64438,28 +64890,46 @@ T_F42718:	jp 0xF60D3E  ; -> prom_b 0x60D3E   x1
 T_F4271C:	jp 0xF6119A  ; -> prom_b 0x6119A   x1
 T_F42720:	jp 0xF61A16  ; -> prom_b 0x61A16   x1
 	.fill 0x4C, 1, 0x0E  ; 0xF42724: 76 x ret
-T_F42770:	jp 0xF62C7E  ; -> prom_b 0x62C7E   x11
+; Evidence: slot 0xF42770 is `jp 0xF62C7E`; prom_b 0xF62C7E carries the label
+;           BStore_ValidateSavedCursor, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_ValidateSavedCursor:	jp 0xF62C7E  ; F42770 (was T_F42770) -> prom_b 0x62C7E   x11
 T_F42774:	jp 0xF62CFE  ; -> prom_b 0x62CFE   x29
 T_F42778:	jp 0xF62DC9  ; -> prom_b 0x62DC9   x8
 T_F4277C:	jp 0xF6306A  ; -> prom_b 0x6306A   x13
 T_F42780:	jp 0xF63317  ; -> prom_b 0x63317   x4
 T_F42784:	jp 0xF63383  ; -> prom_b 0x63383   x6
 T_F42788:	jp 0xF633F5  ; -> prom_b 0x633F5
-T_F4278C:	jp 0xF6342C  ; -> prom_b 0x6342C   x5
+; Evidence: slot 0xF4278C is `jp 0xF6342C`; prom_b 0xF6342C carries the label
+;           BStore_ErrorToStatusByte, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_ErrorToStatusByte:	jp 0xF6342C  ; F4278C (was T_F4278C) -> prom_b 0x6342C   x5
 T_F42790:	jp 0xF63489  ; -> prom_b 0x63489   x8
 T_F42794:	jp 0xF63510  ; -> prom_b 0x63510   x10
 T_F42798:	jp 0xF6353E  ; -> prom_b 0x6353E   x7
-T_F4279C:	jp 0xF635C9  ; -> prom_b 0x635C9   x43
+; Evidence: slot 0xF4279C is `jp 0xF635C9`; prom_b 0xF635C9 carries the label
+;           BStore_CursorAdvance, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_CursorAdvance:	jp 0xF635C9  ; F4279C (was T_F4279C) -> prom_b 0x635C9   x43
 T_F427A0:	jp 0xF6360E  ; -> prom_b 0x6360E   x16
 T_F427A4:	jp 0xF6364D  ; -> prom_b 0x6364D   x1
 T_F427A8:	jp 0xF63749  ; -> prom_b 0x63749   x10
-T_F427AC:	jp 0xF638BB  ; -> prom_b 0x638BB   x3
-T_F427B0:	jp 0xF63924  ; -> prom_b 0x63924   x20
-T_F427B4:	jp 0xF63988  ; -> prom_b 0x63988   x8
+; Evidence: slot 0xF427AC is `jp 0xF638BB`; prom_b 0xF638BB carries the label
+;           BStore_OpenChain, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_OpenChain:	jp 0xF638BB  ; F427AC (was T_F427AC) -> prom_b 0x638BB   x3
+; Evidence: slot 0xF427B0 is `jp 0xF63924`; prom_b 0xF63924 carries the label
+;           BStore_SaveCursor, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_SaveCursor:	jp 0xF63924  ; F427B0 (was T_F427B0) -> prom_b 0x63924   x20
+; Evidence: slot 0xF427B4 is `jp 0xF63988`; prom_b 0xF63988 carries the label
+;           BStore_AllocChain, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_AllocChain:	jp 0xF63988  ; F427B4 (was T_F427B4) -> prom_b 0x63988   x8
 T_F427B8:	jp 0xF63A59  ; -> prom_b 0x63A59   x1
-T_F427BC:	jp 0xF63BAE  ; -> prom_b 0x63BAE   x42
-T_F427C0:	jp 0xF63BC0  ; -> prom_b 0x63BC0   x12
-T_F427C4:	jp 0xF63BE5  ; -> prom_b 0x63BE5   x13
+; Evidence: slot 0xF427BC is `jp 0xF63BAE`; prom_b 0xF63BAE carries the label
+;           BStore_SeekBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_SeekBlock:	jp 0xF63BAE  ; F427BC (was T_F427BC) -> prom_b 0x63BAE   x42
+; Evidence: slot 0xF427C0 is `jp 0xF63BC0`; prom_b 0xF63BC0 carries the label
+;           BStore_CopyAcrossBlocks, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_CopyAcrossBlocks:	jp 0xF63BC0  ; F427C0 (was T_F427C0) -> prom_b 0x63BC0   x12
+; Evidence: slot 0xF427C4 is `jp 0xF63BE5`; prom_b 0xF63BE5 carries the label
+;           BStore_LoadGeometry, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_LoadGeometry:	jp 0xF63BE5  ; F427C4 (was T_F427C4) -> prom_b 0x63BE5   x13
 T_F427C8:	jp 0xF63C02  ; -> prom_b 0x63C02
 T_F427CC:	jp 0xF63C41  ; -> prom_b 0x63C41
 T_F427D0:	jp 0xF6452B  ; -> prom_b 0x6452B   x2
@@ -64467,14 +64937,18 @@ T_F427D4:	jp 0xF64594  ; -> prom_b 0x64594   x1
 T_F427D8:	jp 0xF6466E  ; -> prom_b 0x6466E   x1
 T_F427DC:	jp 0xF647DD  ; -> prom_b 0x647DD
 T_F427E0:	jp 0xF64838  ; -> prom_b 0x64838
-T_F427E4:	jp 0xF62C08  ; -> prom_b 0x62C08   x9
+; Evidence: slot 0xF427E4 is `jp 0xF62C08`; prom_b 0xF62C08 carries the label
+;           BStore_StubTable, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_StubTable:	jp 0xF62C08  ; F427E4 (was T_F427E4) -> prom_b 0x62C08   x9
 T_F427E8:	jp 0xF62C0C  ; -> prom_b 0x62C0C   x3
 T_F427EC:	jp 0xF62C10  ; -> prom_b 0x62C10   x4
 T_F427F0:	jp 0xF62C14  ; -> prom_b 0x62C14   x3
 T_F427F4:	jp 0xF62C18  ; -> prom_b 0x62C18   x3
 T_F427F8:	jp 0xF62C1C  ; -> prom_b 0x62C1C   x4
 T_F427FC:	jp 0xF62C20  ; -> prom_b 0x62C20   x6
-T_F42800:	jp 0xF62C00  ; -> prom_b 0x62C00   x2
+; Evidence: slot 0xF42800 is `jp 0xF62C00`; prom_b 0xF62C00 carries the label
+;           BStore_Veneers, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_Veneers:	jp 0xF62C00  ; F42800 (was T_F42800) -> prom_b 0x62C00   x2
 T_F42804:	jp 0xF6418E  ; -> prom_b 0x6418E   x1
 T_F42808:	jp 0xF6487D  ; -> prom_b 0x6487D   x1
 T_F4280C:	jp 0xF63C06  ; -> prom_b 0x63C06   x1
@@ -64493,7 +64967,9 @@ T_F42884:	jp 0xF7A402  ; -> prom_b 0x7A402   x17
 T_F42888:	jp 0xF7A404  ; -> prom_b 0x7A404   x7
 T_F4288C:	jp 0xF7A406  ; -> prom_b 0x7A406
 T_F42890:	jp 0xF7A408  ; -> prom_b 0x7A408   x1
-T_F42894:	jp 0xF7A613  ; -> prom_b 0x7A613   x8
+; Evidence: slot 0xF42894 is `jp 0xF7A613`; prom_b 0xF7A613 carries the label
+;           BStore_AppendBytes_Veneer, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_BStore_AppendBytes_Veneer:	jp 0xF7A613  ; F42894 (was T_F42894) -> prom_b 0x7A613   x8
 	.fill 0x18, 1, 0x0E  ; 0xF42898: 24 x ret
 T_F428B0:	jp 0xF7AA00  ; -> prom_b 0x7AA00   x1
 T_F428B4:	jp 0xF7AA02  ; -> prom_b 0x7AA02   x1
@@ -64692,17 +65168,33 @@ T_F42C70:	jp 0xF55018  ; -> prom_b 0x55018   never CALLED, but the 4 bytes
 T_F42C74:	jp 0xF55019  ; -> prom_b 0x55019   x28
 T_F42C78:	jp 0xF550A6  ; -> prom_b 0x550A6   x77
 T_F42C7C:	jp 0xF5517B  ; -> prom_b 0x5517B   x8
-T_F42C80:	jp 0xF55231  ; -> prom_b 0x55231   x31
-T_F42C84:	jp 0xF5527E  ; -> prom_b 0x5527E   x13
-T_F42C88:	jp 0xF552CC  ; -> prom_b 0x552CC   x4
-T_F42C8C:	jp 0xF55321  ; -> prom_b 0x55321   x45
-T_F42C90:	jp 0xF5533C  ; -> prom_b 0x5533C   x119
-T_F42C94:	jp 0xF5535B  ; -> prom_b 0x5535B   x23
-T_F42C98:	jp 0xF5547B  ; -> prom_b 0x5547B   x35
+; Evidence: slot 0xF42C80 is `jp 0xF55231`; prom_b 0xF55231 carries the label
+;           Queue2C00_Append4, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Queue2C00_Append4:	jp 0xF55231  ; F42C80 (was T_F42C80) -> prom_b 0x55231   x31
+; Evidence: slot 0xF42C84 is `jp 0xF5527E`; prom_b 0xF5527E carries the label
+;           Queue2E00_Append4, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Queue2E00_Append4:	jp 0xF5527E  ; F42C84 (was T_F42C84) -> prom_b 0x5527E   x13
+; Evidence: slot 0xF42C88 is `jp 0xF552CC`; prom_b 0xF552CC carries the label
+;           List2030_Append4, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_List2030_Append4:	jp 0xF552CC  ; F42C88 (was T_F42C88) -> prom_b 0x552CC   x4
+; Evidence: slot 0xF42C8C is `jp 0xF55321`; prom_b 0xF55321 carries the label
+;           IndexedTable_GetPtr, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_IndexedTable_GetPtr:	jp 0xF55321  ; F42C8C (was T_F42C8C) -> prom_b 0x55321   x45
+; Evidence: slot 0xF42C90 is `jp 0xF5533C`; prom_b 0xF5533C carries the label
+;           IndexedTable_GetByte, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_IndexedTable_GetByte:	jp 0xF5533C  ; F42C90 (was T_F42C90) -> prom_b 0x5533C   x119
+; Evidence: slot 0xF42C94 is `jp 0xF5535B`; prom_b 0xF5535B carries the label
+;           IndexedParam_AdjustField, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_IndexedParam_AdjustField:	jp 0xF5535B  ; F42C94 (was T_F42C94) -> prom_b 0x5535B   x23
+; Evidence: slot 0xF42C98 is `jp 0xF5547B`; prom_b 0xF5547B carries the label
+;           IndexedParam_SetBit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_IndexedParam_SetBit:	jp 0xF5547B  ; F42C98 (was T_F42C98) -> prom_b 0x5547B   x35
 T_F42C9C:	jp 0xF556D2  ; -> prom_b 0x556D2   x13
 T_F42CA0:	jp 0xF556EA  ; -> prom_b 0x556EA   x5
 T_F42CA4:	jp 0xF551E7  ; -> prom_b 0x551E7
-T_F42CA8:	jp 0xF5553F  ; -> prom_b 0x5553F   x15
+; Evidence: slot 0xF42CA8 is `jp 0xF5553F`; prom_b 0xF5553F carries the label
+;           IndexedParam_SetFieldFromAsciiEntry (graded CONTENT).  DERIVATIVE name.
+T_IndexedParam_SetFieldFromAsciiEntry:	jp 0xF5553F  ; F42CA8 (was T_F42CA8) -> prom_b 0x5553F   x15
 	.fill 0x74, 1, 0x0E  ; 0xF42CAC: 116 x ret
 T_F42D20:	jp 0xFE3000  ; -> prom_a 0x63000
 T_F42D24:	jp 0xFE3004  ; -> prom_a 0x63004
@@ -64712,66 +65204,126 @@ T_F42D30:	jp 0xFE3010  ; -> prom_a 0x63010
 T_F42D34:	jp 0xFE3014  ; -> prom_a 0x63014   x23
 T_F42D38:	jp 0xFE3018  ; -> prom_a 0x63018   x17
 	.fill 0x24, 1, 0x0E  ; 0xF42D3C: 36 x ret
-T_F42D60:	jp 0xF85606  ; -> prom_a 0x05606   x1  the RESET path's landing slot:
+; Evidence: slot 0xF42D60 is `jp 0xF85606`; prom_a 0xF85606 carries the label
+;           Kernel_InitRam, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_InitRam:	jp 0xF85606  ; F42D60 (was T_F42D60) -> prom_a 0x05606   x1  the RESET path's landing slot:
 				; prom_a 0xF827C4 `jp 0xF42D60`, and 0xF85606
 				; is `ld XSP,0x0060EB80`, the first stack
-T_F42D64:	jp 0xF85600  ; -> prom_a 0x05600
-T_F42D68:	jp 0xF857B7  ; -> prom_a 0x057B7   x2
-T_F42D6C:	jp 0xF857D9  ; -> prom_a 0x057D9   x2
+; Evidence: slot 0xF42D64 is `jp 0xF85600`; prom_a 0xF85600 carries the label
+;           INTT3_KernelTick, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_INTT3_KernelTick:	jp 0xF85600  ; F42D64 (was T_F42D64) -> prom_a 0x05600
+; Evidence: slot 0xF42D68 is `jp 0xF857B7`; prom_a 0xF857B7 carries the label
+;           IRQ_Epilogue, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_IRQ_Epilogue:	jp 0xF857B7  ; F42D68 (was T_F42D68) -> prom_a 0x057B7   x2
+; Evidence: slot 0xF42D6C is `jp 0xF857D9`; prom_a 0xF857D9 carries the label
+;           Kernel_StartTask, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_StartTask:	jp 0xF857D9  ; F42D6C (was T_F42D6C) -> prom_a 0x057D9   x2
 T_F42D70:	jp 0xF8584A  ; -> prom_a 0x0584A
-T_F42D74:	jp 0xF85877  ; -> prom_a 0x05877
-T_F42D78:	jp 0xF858C0  ; -> prom_a 0x058C0
+; Evidence: slot 0xF42D74 is `jp 0xF85877`; prom_a 0xF85877 carries the label
+;           Kernel_YieldRotate, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_YieldRotate:	jp 0xF85877  ; F42D74 (was T_F42D74) -> prom_a 0x05877
+; Evidence: slot 0xF42D78 is `jp 0xF858C0`; prom_a 0xF858C0 carries the label
+;           Kernel_RotateQueue, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_RotateQueue:	jp 0xF858C0  ; F42D78 (was T_F42D78) -> prom_a 0x058C0
 T_F42D7C:	jp 0xF85904  ; -> prom_a 0x05904
-T_F42D80:	jp 0xF8592D  ; -> prom_a 0x0592D
-T_F42D84:	jp 0xF8596D  ; -> prom_a 0x0596D
-T_F42D88:	jp 0xF859AE  ; -> prom_a 0x059AE   x98  A selects a 4-byte descriptor
+; Evidence: slot 0xF42D80 is `jp 0xF8592D`; prom_a 0xF8592D carries the label
+;           Kernel_ReadyTask, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_ReadyTask:	jp 0xF8592D  ; F42D80 (was T_F42D80) -> prom_a 0x0592D
+; Evidence: slot 0xF42D84 is `jp 0xF8596D`; prom_a 0xF8596D carries the label
+;           Kernel_ReadyTask_NoDispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_ReadyTask_NoDispatch:	jp 0xF8596D  ; F42D84 (was T_F42D84) -> prom_a 0x0596D
+; Evidence: slot 0xF42D88 is `jp 0xF859AE`; prom_a 0xF859AE carries the label
+;           Kernel_SemaSignal, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_SemaSignal:	jp 0xF859AE  ; F42D88 (was T_F42D88) -> prom_a 0x059AE   x98  A selects a 4-byte descriptor
 				; at 0x0338 + A*4 and a saturating byte counter
 				; at 0x035B + A, under `ei 6`.  A kernel object
 				; operation; WHICH one is not established.
-T_F42D8C:	jp 0xF85A22  ; -> prom_a 0x05A22
-T_F42D90:	jp 0xF85A96  ; -> prom_a 0x05A96   x9
+; Evidence: slot 0xF42D8C is `jp 0xF85A22`; prom_a 0xF85A22 carries the label
+;           Kernel_SemaSignal_NoDispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_SemaSignal_NoDispatch:	jp 0xF85A22  ; F42D8C (was T_F42D8C) -> prom_a 0x05A22
+; Evidence: slot 0xF42D90 is `jp 0xF85A96`; prom_a 0xF85A96 carries the label
+;           Kernel_SemaWait, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_SemaWait:	jp 0xF85A96  ; F42D90 (was T_F42D90) -> prom_a 0x05A96   x9
 T_F42D94:	jp 0xF85B1F  ; -> prom_a 0x05B1F
 T_F42D98:	jp 0xF85BD4  ; -> prom_a 0x05BD4
 T_F42D9C:	jp 0xF85C8C  ; -> prom_a 0x05C8C
 T_F42DA0:	jp 0xF85DA8  ; -> prom_a 0x05DA8
 T_F42DA4:	jp 0xF85E02  ; -> prom_a 0x05E02
 T_F42DA8:	jp 0xF85E5E  ; -> prom_a 0x05E5E   x1
-T_F42DAC:	jp 0xF857D6  ; -> prom_a 0x057D6   x1
+; Evidence: slot 0xF42DAC is `jp 0xF857D6`; prom_a 0xF857D6 carries the label
+;           Kernel_StartTask_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_StartTask_StackArg:	jp 0xF857D6  ; F42DAC (was T_F42DAC) -> prom_a 0x057D6   x1
 T_F42DB0:	jp 0xF8584A  ; -> prom_a 0x0584A   x1
-T_F42DB4:	jp 0xF85874  ; -> prom_a 0x05874
+; Evidence: slot 0xF42DB4 is `jp 0xF85874`; prom_a 0xF85874 carries the label
+;           Kernel_YieldRotate_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_YieldRotate_StackArg:	jp 0xF85874  ; F42DB4 (was T_F42DB4) -> prom_a 0x05874
 T_F42DB8:	jp 0xF85904  ; -> prom_a 0x05904
-T_F42DBC:	jp 0xF8592A  ; -> prom_a 0x0592A
-T_F42DC0:	jp 0xF859AB  ; -> prom_a 0x059AB   x98  the same routine entered three
+; Evidence: slot 0xF42DBC is `jp 0xF8592A`; prom_a 0xF8592A carries the label
+;           Kernel_ReadyTask_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_ReadyTask_StackArg:	jp 0xF8592A  ; F42DBC (was T_F42DBC) -> prom_a 0x0592A
+; Evidence: slot 0xF42DC0 is `jp 0xF859AB`; prom_a 0xF859AB carries the label
+;           Kernel_SemaSignal_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_SemaSignal_StackArg:	jp 0xF859AB  ; F42DC0 (was T_F42DC0) -> prom_a 0x059AB   x98  the same routine entered three
 				; bytes earlier, which first does
 				; `ld A,(XSP+4)` -- the stack-argument form
-T_F42DC4:	jp 0xF85A93  ; -> prom_a 0x05A93   x1
+; Evidence: slot 0xF42DC4 is `jp 0xF85A93`; prom_a 0xF85A93 carries the label
+;           Kernel_SemaWait_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_SemaWait_StackArg:	jp 0xF85A93  ; F42DC4 (was T_F42DC4) -> prom_a 0x05A93   x1
 T_F42DC8:	jp 0xF85B0D  ; -> prom_a 0x05B0D   x7
-T_F42DCC:	jp 0xF85C89  ; -> prom_a 0x05C89   x2
+; Evidence: slot 0xF42DCC is `jp 0xF85C89`; prom_a 0xF85C89 carries the label
+;           MsgQueue_ReceiveBlocking, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MsgQueue_ReceiveBlocking:	jp 0xF85C89  ; F42DCC (was T_F42DCC) -> prom_a 0x05C89   x2
 T_F42DD0:	jp 0xF85DA2  ; -> prom_a 0x05DA2
 T_F42DD4:	jp 0xF85E5B  ; -> prom_a 0x05E5B
-T_F42DD8:	jp 0xF85AEF  ; -> prom_a 0x05AEF   x1
+; Evidence: slot 0xF42DD8 is `jp 0xF85AEF`; prom_a 0xF85AEF carries the label
+;           Kernel_SemaTryWait, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Kernel_SemaTryWait:	jp 0xF85AEF  ; F42DD8 (was T_F42DD8) -> prom_a 0x05AEF   x1
 T_F42DDC:	jp 0xF85D1C  ; -> prom_a 0x05D1C
-T_F42DE0:	jp 0xF85F59  ; -> prom_a 0x05F59   x1
-T_F42DE4:	jp 0xF85F7C  ; -> prom_a 0x05F7C
+; Evidence: slot 0xF42DE0 is `jp 0xF85F59`; prom_a 0xF85F59 carries the label
+;           DSP_WriteChannelRegs_FromTable, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DSP_WriteChannelRegs_FromTable:	jp 0xF85F59  ; F42DE0 (was T_F42DE0) -> prom_a 0x05F59   x1
+; Evidence: slot 0xF42DE4 is `jp 0xF85F7C`; prom_a 0xF85F7C carries the label
+;           DSP_WriteAllChannelRegs, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DSP_WriteAllChannelRegs:	jp 0xF85F7C  ; F42DE4 (was T_F42DE4) -> prom_a 0x05F7C
 	.fill 0x18, 1, 0x0E  ; 0xF42DE8: 24 x ret
-T_F42E00:	jp DisplayList_Run_Stack  ; -> prom_b 0x31800   x85
-T_F42E04:	jp DisplayListB_Run_Stack  ; -> prom_b 0x31814   x104
-T_F42E08:	jp DisplayList_RunOne_Stack  ; -> prom_b 0x31828   x47
-T_F42E0C:	jp DisplayListB_RunOne_Stack  ; -> prom_b 0x3183D   x107
+; Evidence: slot 0xF42E00 is `jp 0xF31800`; prom_b 0xF31800 carries the label
+;           DisplayList_Run_Stack, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DisplayList_Run_Stack:	jp DisplayList_Run_Stack  ; F42E00 (was T_F42E00) -> prom_b 0x31800   x85
+; Evidence: slot 0xF42E04 is `jp 0xF31814`; prom_b 0xF31814 carries the label
+;           DisplayListB_Run_Stack, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DisplayListB_Run_Stack:	jp DisplayListB_Run_Stack  ; F42E04 (was T_F42E04) -> prom_b 0x31814   x104
+; Evidence: slot 0xF42E08 is `jp 0xF31828`; prom_b 0xF31828 carries the label
+;           DisplayList_RunOne_Stack, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DisplayList_RunOne_Stack:	jp DisplayList_RunOne_Stack  ; F42E08 (was T_F42E08) -> prom_b 0x31828   x47
+; Evidence: slot 0xF42E0C is `jp 0xF3183D`; prom_b 0xF3183D carries the label
+;           DisplayListB_RunOne_Stack, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DisplayListB_RunOne_Stack:	jp DisplayListB_RunOne_Stack  ; F42E0C (was T_F42E0C) -> prom_b 0x3183D   x107
 T_F42E10:	jp sub_F31852  ; -> prom_b 0x31852   x37  services 0x0C and 0x10, C = 0
 T_F42E14:	jp sub_F31863  ; -> prom_b 0x31863   x39  service 0x0C, C = 7
 T_F42E18:	jp 0xF31899  ; -> prom_b 0x31899   x9
 T_F42E1C:	jp 0xF3190E  ; -> prom_b 0x3190E   x1
-T_F42E20:	jp 0xF0E9CF  ; -> prom_b 0x0E9CF   x41
-T_F42E24:	jp 0xF0E82B  ; -> prom_b 0x0E82B   x85
-T_F42E28:	jp 0xF0E800  ; -> prom_b 0x0E800   x21
-T_F42E2C:	jp 0xF0E83A  ; -> prom_b 0x0E83A   x1
-T_F42E30:	jp 0xF0E835  ; -> prom_b 0x0E835   x2
+; Evidence: slot 0xF42E20 is `jp 0xF0E9CF`; prom_b 0xF0E9CF carries the label
+;           Blink_Command, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Blink_Command:	jp 0xF0E9CF  ; F42E20 (was T_F42E20) -> prom_b 0x0E9CF   x41
+; Evidence: slot 0xF42E24 is `jp 0xF0E82B`; prom_b 0xF0E82B carries the label
+;           Blink_Stop, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Blink_Stop:	jp 0xF0E82B  ; F42E24 (was T_F42E24) -> prom_b 0x0E82B   x85
+; Evidence: slot 0xF42E28 is `jp 0xF0E800`; prom_b 0xF0E800 carries the label
+;           Blink_SetEnable, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Blink_SetEnable:	jp 0xF0E800  ; F42E28 (was T_F42E28) -> prom_b 0x0E800   x21
+; Evidence: slot 0xF42E2C is `jp 0xF0E83A`; prom_b 0xF0E83A carries the label
+;           Blink_Tick, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Blink_Tick:	jp 0xF0E83A  ; F42E2C (was T_F42E2C) -> prom_b 0x0E83A   x1
+; Evidence: slot 0xF42E30 is `jp 0xF0E835`; prom_b 0xF0E835 carries the label
+;           Blink_GetState, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Blink_GetState:	jp 0xF0E835  ; F42E30 (was T_F42E30) -> prom_b 0x0E835   x2
 	.fill 0xC, 1, 0x0E  ; 0xF42E34: 12 x ret
 T_F42E40:	.long 0x00F53000	; ptr -> 0xF53000 (prom_b 0x53000)
 T_F42E44:	jp 0xF53025  ; -> prom_b 0x53025
 T_F42E48:	jp 0xF53029  ; -> prom_b 0x53029
-T_F42E4C:	jp 0xF5302A  ; -> prom_b 0x5302A
+; Evidence: slot 0xF42E4C is `jp 0xF5302A`; prom_b 0xF5302A carries the label
+;           DrawbarScreen_Dispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DrawbarScreen_Dispatch:	jp 0xF5302A  ; F42E4C (was T_F42E4C) -> prom_b 0x5302A
 T_F42E50:	jp 0xF53051  ; -> prom_b 0x53051
 T_F42E54:	jp 0xF53DCC  ; -> prom_b 0x53DCC
 T_F42E58:	jp 0xF5301A  ; -> prom_b 0x5301A
@@ -64781,13 +65333,19 @@ T_F42E64:	jp 0xF53E04  ; -> prom_b 0x53E04   x1
 T_F42E68:	jp 0xF541FF  ; -> prom_b 0x541FF   x3
 T_F42E6C:	jp 0xF54210  ; -> prom_b 0x54210   x12
 	.fill 0x10, 1, 0x0E  ; 0xF42E70: 16 x ret
-T_F42E80:	jp 0xF8DA83  ; -> prom_a 0x0DA83   x141
-T_F42E84:	jp 0xF8DA16  ; -> prom_a 0x0DA16   x188  ENQUEUE one 32-bit word on the
+; Evidence: slot 0xF42E80 is `jp 0xF8DA83`; prom_a 0xF8DA83 carries the label
+;           CallbackQueue_ResetAndRestartTask2, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_CallbackQueue_ResetAndRestartTask2:	jp 0xF8DA83  ; F42E80 (was T_F42E80) -> prom_a 0x0DA83   x141
+; Evidence: slot 0xF42E84 is `jp 0xF8DA16`; prom_a 0xF8DA16 carries the label
+;           CallbackQueue_Post, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_CallbackQueue_Post:	jp 0xF8DA16  ; F42E84 (was T_F42E84) -> prom_a 0x0DA16   x188  ENQUEUE one 32-bit word on the
 				; ring buffer at 0x600416: write index at +0xFC,
 				; free count at +0xFE, `minc4 0x01FC` wrap ->
 				; 128 slots.  Returns 0xFFFF when fewer than 5
 				; free.  Runs under `ei 6`.
-T_F42E88:	jp 0xF8DA00  ; -> prom_a 0x0DA00
+; Evidence: slot 0xF42E88 is `jp 0xF8DA00`; prom_a 0xF8DA00 carries the label
+;           Task2_CallbackDispatcher, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Task2_CallbackDispatcher:	jp 0xF8DA00  ; F42E88 (was T_F42E88) -> prom_a 0x0DA00
 	.fill 0x4, 1, 0x0E  ; 0xF42E8C: 4 x ret
 T_F42E90:	jp 0xFB9DA0  ; -> prom_a 0x39DA0   x2
 T_F42E94:	jp 0xFB9D2C  ; -> prom_a 0x39D2C   x3
@@ -64970,15 +65528,25 @@ T_F432C4:	jp 0xF65003  ; -> prom_b 0x65003   x2
 T_F432C8:	jp 0xF65006  ; -> prom_b 0x65006   x2
 T_F432CC:	jp 0xF65009  ; -> prom_b 0x65009   x2
 	.fill 0x20, 1, 0x0E  ; 0xF432D0: 32 x ret
-T_F432F0:	jp 0xF8BC0C  ; -> prom_a 0x0BC0C   x21
-T_F432F4:	jp 0xF8BC67  ; -> prom_a 0x0BC67   x4
-T_F432F8:	jp 0xF8BC78  ; -> prom_a 0x0BC78   x2
+; Evidence: slot 0xF432F0 is `jp 0xF8BC0C`; prom_a 0xF8BC0C carries the label
+;           AsciiDigits3_ToValue, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_AsciiDigits3_ToValue:	jp 0xF8BC0C  ; F432F0 (was T_F432F0) -> prom_a 0x0BC0C   x21
+; Evidence: slot 0xF432F4 is `jp 0xF8BC67`; prom_a 0xF8BC67 carries the label
+;           AsciiField_ToSignedValue, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_AsciiField_ToSignedValue:	jp 0xF8BC67  ; F432F4 (was T_F432F4) -> prom_a 0x0BC67   x4
+; Evidence: slot 0xF432F8 is `jp 0xF8BC78`; prom_a 0xF8BC78 carries the label
+;           AsciiField_Clear, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_AsciiField_Clear:	jp 0xF8BC78  ; F432F8 (was T_F432F8) -> prom_a 0x0BC78   x2
 	.fill 0x34, 1, 0x0E  ; 0xF432FC: 52 x ret
 T_F43330:	jp 0xF5B800  ; -> prom_b 0x5B800   x8
 	.fill 0x1C, 1, 0x0E  ; 0xF43334: 28 x ret
 T_F43350:	jp 0xFA835E  ; -> prom_a 0x2835E
-T_F43354:	jp 0xFA8378  ; -> prom_a 0x28378
-T_F43358:	jp 0xFA60C2  ; -> prom_a 0x260C2   x1
+; Evidence: slot 0xF43354 is `jp 0xFA8378`; prom_a 0xFA8378 carries the label
+;           MidiIn_ReqRebuild_Msg03_0A, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiIn_ReqRebuild_Msg03_0A:	jp 0xFA8378  ; F43354 (was T_F43354) -> prom_a 0x28378
+; Evidence: slot 0xF43358 is `jp 0xFA60C2`; prom_a 0xFA60C2 carries the label
+;           MidiIn_PumpPortB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiIn_PumpPortB:	jp 0xFA60C2  ; F43358 (was T_F43358) -> prom_a 0x260C2   x1
 	.fill 0x24, 1, 0x0E  ; 0xF4335C: 36 x ret
 T_F43380:	jp 0xF6F400  ; -> prom_b 0x6F400   x1
 T_F43384:	jp 0xF6F404  ; -> prom_b 0x6F404   x2
@@ -65013,7 +65581,9 @@ T_F4344C:	jp 0xFAC7C4  ; -> prom_a 0x2C7C4   x3
 T_F43450:	jp 0xFAABB3  ; -> prom_a 0x2ABB3   x1
 T_F43454:	jp 0xFAC80F  ; -> prom_a 0x2C80F   x3
 	.fill 0x8, 1, 0x0E  ; 0xF43458: 8 x ret
-T_F43460:	jp 0xFE7200  ; -> prom_a 0x67200   x1
+; Evidence: slot 0xF43460 is `jp 0xFE7200`; prom_a 0xFE7200 carries the label
+;           Disk_FormatSelectedMedia, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_Disk_FormatSelectedMedia:	jp 0xFE7200  ; F43460 (was T_F43460) -> prom_a 0x67200   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43464: 12 x ret
 T_F43470:	jp 0xFD616A  ; -> prom_a 0x5616A   x1
 T_F43474:	jp 0xFD61CF  ; -> prom_a 0x561CF   x1
@@ -66241,7 +66811,7 @@ sub_F44809:
 ; sub_F448A3
 ; Called from: in-module: 0xF4488D 0xF45144
 ; Touches: (0x7EE2)  |  0x0008C2 0x603620
-; Calls:   T_F40F3C T_F40794
+; Calls:   T_Queue2E00_AppendRegs T_F40794
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF448A3 is an instruction boundary.
 ;           The name IS the address.
@@ -66767,7 +67337,7 @@ sub_F44C51:
 ; sub_F44CA7
 ; Called from: in-module: 0xF44893 0xF44C9C 0xF45C0F 0xF45C93
 ; Touches: (0x0922) (0x7F34)
-; Calls:   T_F4074C T_F40750
+; Calls:   T_MidiOut_PutByteA_SetStatus T_MidiOut_PutByteA
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44CA7 is an instruction boundary.
 ;           The name IS the address.
@@ -66940,7 +67510,7 @@ sub_F44D94:
 ; sub_F44E58
 ; Called from: in-module: 0xF44E3C
 ; Touches: nothing with an absolute address
-; Calls:   T_F41D64
+; Calls:   T_Ring60080A_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44E58 is an instruction boundary.
 ;           The name IS the address.
@@ -67152,7 +67722,7 @@ sub_F44F67:		; <- T_F40ABC
 ; sub_F4503D
 ; Called from: in-module: 0xF450F2
 ; Touches: (0x3616) (0x3617) (0x3618) (0x3619) (0x361A) (0x361B) (0x361C)
-; Calls:   T_F41D64
+; Calls:   T_Ring60080A_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4503D is an instruction boundary.
 ;           The name IS the address.
@@ -67263,7 +67833,7 @@ sub_F450F7:		; <- T_F409CC
 ; sub_F45119
 ; Called from: in-module: 0xF45101
 ; Touches: (0x124C) (0x207A) (0x220B) (0x34BB) (0x7F4D)  |  0x000000
-; Calls:   sub_F4598A T_F40CB4 T_F42578 sub_F448A3 T_F40F38 T_F40018
+; Calls:   sub_F4598A T_F40CB4 T_F42578 sub_F448A3 T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45119 is an instruction boundary.
 ;           The name IS the address.
@@ -67890,7 +68460,7 @@ sub_F45524:		; <- T_F40A0C
 ; sub_F455A0
 ; Called from: T_F40A18 (x2)
 ; Touches: (0x7EE2)
-; Calls:   sub_F44260 sub_F440A0 T_F40F3C T_F40794
+; Calls:   sub_F44260 sub_F440A0 T_Queue2E00_AppendRegs T_F40794
 ; Evidence: thunk slot T_F40A18 holds `jp 0x00F455A0`, and 0xF455A0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -68103,7 +68673,7 @@ sub_F456EC:		; <- T_F40A24
 ; sub_F456F0
 ; Called from: in-module: 0xF456EC
 ; Touches: (0x3000) (0x3004) (0x34D4) (0x3614) (0x7F32)  |  0x000000
-; Calls:   T_F41D90 sub_F45761 sub_F45FAE T_F409B4 sub_F458EA
+; Calls:   T_Ring600A14_IsEmpty sub_F45761 sub_F45FAE T_F409B4 sub_F458EA
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF456F0 is an instruction boundary.
 ;           The name IS the address.
@@ -68647,7 +69217,7 @@ sub_F45B48:
 ; sub_F45B6E
 ; Called from: in-module: 0xF44F60 0xF45039
 ; Touches: (0x349F)
-; Calls:   T_F41D64
+; Calls:   T_Ring60080A_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45B6E is an instruction boundary.
 ;           The name IS the address.
@@ -68718,7 +69288,7 @@ sub_F45BCD:		; <- T_F40AB0
 ; Touches: (0x0C90) (0x0D4A) (0x3456) (0x3458) (0x345E) (0x349A) (0x349C)
 ;          (0x349F) (0x34BB) (0x34D4) +6 more  |  0x000000
 ; Calls:   sub_F45B1F sub_F45B48 sub_F44CA7 sub_F455E6 T_F40C5C T_F40B54
-;          sub_F45B0A sub_F45D04
+;          sub_F45B0A Nop_CallsEmptyDirectorySlot
 ; Evidence: thunk slot T_F409DC holds `jp 0x00F45BD3`, and 0xF45BD3 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -68837,17 +69407,23 @@ sub_F45CC4:		; <- T_F40A9C
 	ret	; F45D03  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45D04
+; Nop_CallsEmptyDirectorySlot -- prom_b 0xF45D04.  Five bytes, and it does nothing.
 ; Called from: in-module: 0xF45CB3
 ; Touches: nothing with an absolute address
 ; Calls:   T_F414E0
-; Evidence: reached by a `call`/`calr` decoded in this transcription (the
-;           sites are listed above), so 0xF45D04 is an instruction boundary.
-;           The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+;   `call 0xF414E0` then `ret`.  0xF414E0 is a slot of the 0xF40000
+;   directory and its four bytes are `0E 0E 0E 0E`; 0x0E is RET
+;   (mame dasm900.cpp:1267).  So the call returns immediately and the
+;   routine returns.  No register, no memory and no device is touched;
+;   the only effect is the push and pop of a return address.
+; Evidence: prom_b file 0x45D04 = `1d e0 14 f4 0e`, file 0x414E0 = `0e`.
+;           notes/prom_b_thunks_round6.py --fillcalls re-reads both and
+;           shows this is the ONLY decoded call into any of the 2,100
+;           fill slots -- one site, so an observation, not a mechanism.
+; Unknown: what it was FOR.  A stubbed-out feature is the obvious guess
+;          and is NOT asserted; the name states what the code does.
 ; --------------------------------------------------------------------------
-sub_F45D04:
+Nop_CallsEmptyDirectorySlot:
 	call	15996128	; F45D04  call 0xf414e0
 	ret	; F45D08  ret
 
@@ -68959,7 +69535,7 @@ sub_F45D80:		; <- T_F40A30
 ; sub_F45D9B
 ; Called from: in-module: 0xF44BD3
 ; Touches: (0x349F) (0x34BB)  |  0x603422
-; Calls:   T_F41D64
+; Calls:   T_Ring60080A_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45D9B is an instruction boundary.
 ;           The name IS the address.
@@ -70074,7 +70650,7 @@ sub_F47A73:
 ; Called from: in-module: 0xF47ABB
 ; Touches: (0x33DA) (0x33DD) (0x33DE) (0x33DF) (0x33E0) (0x33E2) (0x3454)
 ;          (0x349F) (0x34A0) (0x34D1)  |  0x003015 0x003038
-; Calls:   sub_F47A41 sub_F47A5D T_F40C6C T_F41D64
+; Calls:   sub_F47A41 sub_F47A5D T_F40C6C T_Ring60080A_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF47AD0 is an instruction boundary.
 ;           The name IS the address.
@@ -70852,7 +71428,7 @@ sub_F4812F:
 ; Called from: in-module: 0xF47EAF
 ; Touches: (0x33DA) (0x33DB) (0x33DE) (0x33DF) (0x33E0) (0x349E) (0x349F)
 ;          (0x34A0) (0x34A5) (0x34A6) +2 more  |  0x003015 0x003038
-; Calls:   sub_F47A5D sub_F48318 T_F41D64 sub_F47A41
+; Calls:   sub_F47A5D sub_F48318 T_Ring60080A_Put sub_F47A41
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF481B5 is an instruction boundary.
 ;           The name IS the address.
@@ -70979,7 +71555,7 @@ sub_F482B0:
 ; sub_F482C0
 ; Called from: in-module: 0xF47EC1
 ; Touches: (0x349F) (0x34A4) (0x34A5) (0x34D0) (0x7EE2)  |  0x603422
-; Calls:   T_F40F3C T_F40794 sub_F48309
+; Calls:   T_Queue2E00_AppendRegs T_F40794 sub_F48309
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF482C0 is an instruction boundary.
 ;           The name IS the address.
@@ -71018,7 +71594,7 @@ sub_F482C0:
 ; Called from: in-module: 0xF47EC7 0xF47ECD 0xF47EE5 0xF482AC 0xF482B7
 ;              0xF482BC 0xF48305
 ; Touches: (0x349F)
-; Calls:   sub_F48318 T_F41D64
+; Calls:   sub_F48318 T_Ring60080A_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48309 is an instruction boundary.
 ;           The name IS the address.
@@ -71037,7 +71613,7 @@ sub_F48309:
 ; sub_F48318
 ; Called from: in-module: 0xF48202 0xF48309
 ; Touches: (0x3454) (0x349E) (0x34A0)  |  0x0034A5
-; Calls:   T_F41D64
+; Calls:   T_Ring60080A_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48318 is an instruction boundary.
 ;           The name IS the address.
@@ -71074,7 +71650,7 @@ sub_F48318:
 ; sub_F48358
 ; Called from: in-module: 0xF47F31
 ; Touches: (0x3454) (0x349F) (0x34A0) (0x36C6) (0x36C8)
-; Calls:   T_F41D64 T_F40AA4
+; Calls:   T_Ring60080A_Put T_F40AA4
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48358 is an instruction boundary.
 ;           The name IS the address.
@@ -71694,7 +72270,7 @@ Table_WsaSoundRamS0Wsa1:
 ; Touches: (0x207C) (0x2229) (0x2736) (0x2737) (0x2738) (0x2880)  |
 ;          0x000400 0xE80000 0xEC0000
 ; Calls:   T_F41600 sub_F49033 sub_F48F19 T_F41234 T_F41230 T_F41238
-;          sub_F48F75 sub_F48F9F sub_F48FD8 T_F42C8C T_F43454
+;          sub_F48F75 sub_F48F9F sub_F48FD8 T_IndexedTable_GetPtr T_F43454
 ; Evidence: thunk slot T_F43430 holds `jp 0x00F48C1A`, and 0xF48C1A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -72124,7 +72700,7 @@ sub_F48F9F:
 ; sub_F48FD8
 ; Called from: in-module: 0xF48EB9 0xF48FCB
 ; Touches: nothing with an absolute address
-; Calls:   T_F42C8C T_F42C84
+; Calls:   T_IndexedTable_GetPtr T_Queue2E00_Append4
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48FD8 is an instruction boundary.
 ;           The name IS the address.
@@ -72761,7 +73337,7 @@ sub_F49861:
 ; Called from: in-module: 0xF4986D 0xF49892
 ; Touches: (0x349F) (0x34AA) (0x34AB) (0x34AD) (0x34AE) (0x34B0) (0x34D4)
 ;          (0x34DD) (0x36F0)  |  0x0034AA 0x600A0A 0x600A14
-; Calls:   T_F41D90 sub_F49ADE sub_F49AFD sub_F49CA9 sub_F49A3D sub_F4A2B6
+; Calls:   T_Ring600A14_IsEmpty sub_F49ADE sub_F49AFD sub_F49CA9 sub_F49A3D sub_F4A2B6
 ;          sub_F49CE6 sub_F49C7D sub_F4A0FF sub_F49F6D sub_F49CC2 sub_F4A2C8
 ;          +4 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -73203,7 +73779,7 @@ sub_F49BFA:
 ; sub_F49C7D
 ; Called from: in-module: 0xF49931
 ; Touches:   |  0x600A0A 0x600A14
-; Calls:   T_F41D90 T_F41D84
+; Calls:   T_Ring600A14_IsEmpty T_Ring600A14_Get
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49C7D is an instruction boundary.
 ;           The name IS the address.
@@ -73231,7 +73807,7 @@ sub_F49C7D:
 ; Called from: in-module: 0xF498F2 0xF4993A 0xF49980 0xF499CE 0xF499DD
 ;              0xF49A0E
 ; Touches:   |  0x0034AA
-; Calls:   T_F41D84
+; Calls:   T_Ring600A14_Get
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49CA9 is an instruction boundary.
 ;           The name IS the address.
@@ -74777,7 +75353,7 @@ sub_F4A90A:
 ; sub_F4A91E
 ; Called from: in-module: 0xF4A914 0xF4B1E0
 ; Touches: (0x0D4A) (0x36D6)  |  0x0036E0
-; Calls:   sub_F4A93C T_F42894
+; Calls:   sub_F4A93C T_BStore_AppendBytes_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A91E is an instruction boundary.
 ;           The name IS the address.
@@ -75037,7 +75613,7 @@ sub_F4AB0C:
 ; sub_F4AB42
 ; Called from: in-module: 0xF4AA55
 ; Touches: (0x0D4A) (0x36D6)  |  0x0036E0
-; Calls:   sub_F4AB60 T_F42894
+; Calls:   sub_F4AB60 T_BStore_AppendBytes_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4AB42 is an instruction boundary.
 ;           The name IS the address.
@@ -75461,7 +76037,7 @@ sub_F4AEDD:
 ; sub_F4AEEE
 ; Called from: in-module: 0xF4AC3C 0xF4AC95 0xF4AF30
 ; Touches: (0x0D4A) (0x36D6) (0x36F0)  |  0x0036E8
-; Calls:   T_F42894
+; Calls:   T_BStore_AppendBytes_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4AEEE is an instruction boundary.
 ;           The name IS the address.
@@ -76144,7 +76720,7 @@ sub_F4B433:
 ; Called from: in-module: 0xF4AA16 0xF4AAC0 0xF4B32E
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C63) (0x0C67) (0x0C6B)
 ;          (0x0C96) (0x0C98) (0x0C9A) +4 more
-; Calls:   sub_F4B75F T_F427C0 sub_F4B726 sub_F4B69F
+; Calls:   sub_F4B75F T_BStore_CopyAcrossBlocks sub_F4B726 sub_F4B69F
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B462 is an instruction boundary.
 ;           The name IS the address.
@@ -76747,7 +77323,7 @@ sub_F4C42E:		; <- T_F434F4
 ; sub_F4C46A
 ; Called from: T_F434E0 (x0)
 ; Touches: (0x207C) (0x207D) (0x2095) (0x2870)
-; Calls:   T_F42E80 T_F42E84 T_F42DC0 sub_F4C684
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F4C684
 ; Evidence: thunk slot T_F434E0 holds `jp 0x00F4C46A`, and 0xF4C46A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -76827,7 +77403,7 @@ sub_F4C4B5:		; <- T_F434E8
 ; Called from: T_F434EC (x0)
 ; Touches: (0x2070) (0x2071) (0x2075) (0x2092) (0x209A) (0x2250) (0x2540)
 ;          (0x2640) (0x2870) (0x28B0) +1 more
-; Calls:   T_F42C8C T_F42C90 T_F42C88 T_F42E10 T_F42E00 T_F42E04 T_F42E14
+; Calls:   T_IndexedTable_GetPtr T_IndexedTable_GetByte T_List2030_Append4 T_F42E10 T_DisplayList_Run_Stack T_DisplayListB_Run_Stack T_F42E14
 ; Evidence: thunk slot T_F434EC holds `jp 0x00F4C4DC`, and 0xF4C4DC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -77000,7 +77576,7 @@ sub_F4C4DC:		; <- T_F434EC
 ; sub_F4C684
 ; Called from: in-module: 0xF4C499
 ; Touches: (0x2250) (0x2870)
-; Calls:   T_F42C8C sub_F4C6E0
+; Calls:   T_IndexedTable_GetPtr sub_F4C6E0
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4C684 is an instruction boundary.
 ;           The name IS the address.
@@ -78191,7 +78767,7 @@ sub_F4D238:
 ; Touches: (0x0C55) (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C70)
 ;          (0x0D1C) (0x0D1D) (0x0D4A) +11 more  |  0x003460 0x003482
 ;          0x0034EE 0x003510 0x003532 0x60347E +4 more
-; Calls:   sub_F4D89D T_F427FC T_F427E8 T_F42894 T_F427F8 T_F427F0 T_F427F4
+; Calls:   sub_F4D89D T_F427FC T_F427E8 T_BStore_AppendBytes_Veneer T_F427F8 T_F427F0 T_F427F4
 ;          sub_F4D758
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4D346 is an instruction boundary.
@@ -79114,7 +79690,7 @@ sub_F4E1B2:		; <- T_F40CC0
 ; sub_F4E1B6
 ; Called from: in-module: 0xF4E1AE 0xF4E1B2 0xF4E30B
 ; Touches: (0x0DB5) (0x2250) (0x3000)  |  0x000000 0x603422
-; Calls:   T_F40F3C
+; Calls:   T_Queue2E00_AppendRegs
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4E1B6 is an instruction boundary.
 ;           The name IS the address.
@@ -79855,7 +80431,7 @@ sub_F4EC2F:
 ; sub_F4EC56
 ; Called from: T_F40CEC (x2)
 ; Touches: (0x0DB5) (0x0DE4) (0x2250) (0x34D3)
-; Calls:   T_F40F3C T_F409D8 T_F409AC T_F40CB4 T_F40A10
+; Calls:   T_Queue2E00_AppendRegs T_F409D8 T_F409AC T_F40CB4 T_F40A10
 ; Evidence: thunk slot T_F40CEC holds `jp 0x00F4EC56`, and 0xF4EC56 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -80437,7 +81013,7 @@ sub_F4F000:
 ; Called from: prom_a 0xFBE7D4 `call 0xf4f017`; prom_a 0xFBE8E4 `call 0xf4f017`; prom_a 0xFBE96C `call 0xf4f017`
 ; Inputs:  (XIZ+8) = position -> IX, (XIZ+10) = value -> L
 ; Evidence: the body is `ld IX,(XIZ+0x08) / extz XIX / ld L,(XIZ+0x0a) /
-;           call 0xf41834`, and thunk slot T_F41834 holds `jp 0x00F31873`.
+;           call 0xf41834`, and thunk slot T_DrawValueGlyph_24x24 holds `jp 0x00F31873`.
 ;           0xF31873 is DrawValueGlyph_24x24 in this file, whose stated
 ;           inputs are exactly `L = value; IX = position`.  Both halves of
 ;           the name come from a label the tree already carries.
@@ -82934,7 +83510,7 @@ sub_F53029:		; <- T_F42E48
 
 ; --------------------------------------------------------------------------
 ; DrawbarScreen_Dispatch -- the module's message entry
-; Called from: T_F42E4C
+; Called from: T_DrawbarScreen_Dispatch
 ; What it does: `link XIZ,0 / pushw (XIZ+0x0A) / pushw (XIZ+0x08) / call
 ;               0xf42c74 / mul A,4 / add XWA,0x00f54248 / ld XBC,(XWA) / jp
 ;               (XBC)` -- the image-wide message-dispatch idiom, here
@@ -82944,7 +83520,7 @@ sub_F53029:		; <- T_F42E48
 ;           thing this file adds is WHICH table.  The name states the
 ;           mechanism and the table, not a purpose.
 ; --------------------------------------------------------------------------
-DrawbarScreen_Dispatch:		; <- T_F42E4C
+DrawbarScreen_Dispatch:		; <- T_DrawbarScreen_Dispatch
 	.byte 0xEE, 0x0C, 0x00, 0x00	; F5302A  link XIZ,0x0000   [llvm-mc cannot encode this]
 	.byte 0x9E, 0x0A, 0x04	; F5302E  pushw (XIZ+0x0a)   [llvm-mc cannot encode this]
 	.byte 0x9E, 0x08, 0x04	; F53031  pushw (XIZ+0x08)   [llvm-mc cannot encode this]
@@ -86233,9 +86809,9 @@ Bitmap_F54D7E_Duplicate:
 ;
 ; Four of the nine are named by thunk slots that the census ranks near the top of
 ; the whole table (`python3 scripts/analysis/prom_b_thunk_table.py --census`):
-;   T_F42C90 -> 0xF5533C  119 opcode-anchored references
+;   T_IndexedTable_GetByte -> 0xF5533C  119 opcode-anchored references
 ;   T_F42C78 -> 0xF550A6   77
-;   T_F42C8C -> 0xF55321   45
+;   T_IndexedTable_GetPtr -> 0xF55321   45
 ;   T_F42C70 -> 0xF55018  never called, but its 4-byte slot ADDRESS (`70 2C F4
 ;                         00`) occurs 397 times in prom_a+prom_b, 222 of them in
 ;                         one run at prom_a 0x216B4.  This block settles what it
@@ -86280,9 +86856,18 @@ Stub_Ret_F55018:
 ;             bit 2 <- index in 0x11..0x19, and the index has 0x11 subtracted
 ;             bit 5 <- index == 0x1B and (0x2267) == 0x0F
 ;           an index >= 0x1A additionally has 9 subtracted.
-; Unknown:  what the index enumerates, what 0x208C and 0x2267 hold, and what the
-;           32-bit mask table at 0xF55755 is.  That table is NOT converted here:
-;           nothing bounds its length.
+; Unknown:  what the index enumerates, and what 0x208C and 0x2267 hold.
+; ⚠ CORRECTED 2026-08-30.  This paragraph used to end "...and what the 32-bit
+;           mask table at 0xF55755 is.  That table is NOT converted here:
+;           nothing bounds its length."  BOTH halves are now wrong.  The table
+;           IS converted, as Bit32MaskTable at 0xF55755, and its word i is
+;           EXACTLY 1 << i for i = 0..31 -- so it is a power-of-two mask indexed
+;           by the selector, and `and XBC,(0x208c)` at 0xF55055 is a membership
+;           test against a 32-bit set.  And its length WAS bounded, by this very
+;           routine: the `cp HL,0x001f / jrl UGT,0xF550A1` at 0xF55026 rejects a
+;           selector above 31 before anything is read, so the index space is
+;           0..31 and the table is 32 words = 128 bytes.  Measured and emitted by
+;           notes/gen_prom_b_f5553f_module.py (--selftest re-reads all 32 words).
 ; ---------------------------------------------------------------------
 sub_F55019:
 	.byte 0xEE, 0x0C, 0x00, 0x00	; F55019  link XIZ,0x0000   [llvm-mc cannot encode this]
@@ -86713,7 +87298,7 @@ List2030_Append4:
 ; ---------------------------------------------------------------------
 ; IndexedTable_GetPtr -- pointer n of the table whose base is the word at
 ;                        0x60F018
-; Called from: thunk T_F42C8C (0xF42C8C), 45 opcode-anchored references
+; Called from: thunk T_IndexedTable_GetPtr (0xF42C8C), 45 opcode-anchored references
 ; Inputs:  (XIZ+8) = 16-bit index
 ; Outputs: XIY = the 32-bit pointer at base + 4*index
 ; Evidence: `ld XIX,(0x60F018)` loads the base from RAM, `ld C,4 / mul BC,(XIZ+8)
@@ -86736,7 +87321,7 @@ IndexedTable_GetPtr:
 
 ; ---------------------------------------------------------------------
 ; IndexedTable_GetByte -- byte m of pointer n of the same table
-; Called from: thunk T_F42C90 (0xF42C90), 119 opcode-anchored references -- the
+; Called from: thunk T_IndexedTable_GetByte (0xF42C90), 119 opcode-anchored references -- the
 ;              third-busiest prom_b-resident slot in the thunk table
 ; Inputs:  (XIZ+8) = table index, (XIZ+0x0A) = byte offset
 ; Outputs: A = the byte; XIX = the entry pointer; XIY = the byte's address
@@ -86766,7 +87351,7 @@ IndexedTable_GetByte:
 ; ---------------------------------------------------------------------
 ; IndexedParam_AdjustField -- step one packed parameter field up or down,
 ;                             clamp it, write it back and journal the change
-; Called from: thunk T_F42C94 (0xF42C94), 23 opcode-anchored references
+; Called from: thunk T_IndexedParam_AdjustField (0xF42C94), 23 opcode-anchored references
 ;          (an upper bound that ranks slots; not a call count)
 ; Inputs:  (XIZ+0x08) = a 16-bit INDEX -- not a pointer;
 ;          (XIZ+0x0A) = 32-bit pointer to the 8-byte descriptor already
@@ -86937,7 +87522,7 @@ IndexedParam_AdjustField:
 ; ---------------------------------------------------------------------
 ; IndexedParam_SetBit -- set or clear one flag field of an indexed object and
 ;                        journal the change
-; Called from: thunk T_F42C98 (0xF42C98), 35 opcode-anchored references -- the
+; Called from: thunk T_IndexedParam_SetBit (0xF42C98), 35 opcode-anchored references -- the
 ;          busiest of this group
 ; Inputs:  (XIZ+0x08) = the 16-bit index; (XIZ+0x0A) = the 8-byte descriptor.
 ;          Only +0 (byte offset), +1 (mask) and +2 (XORed into (0x28B0)) are
@@ -87060,10 +87645,5894 @@ IndexedParam_SetBit:
 	popw	hl	; F5553B  pop HL
 	.byte 0xEE, 0x0D	; F5553C  unlk XIZ   [llvm-mc cannot encode this]
 	ret	; F5553E  ret
+; ==============================================================================
+; 0xF5553F-0xF57D1D -- THE 32-SELECTOR ROUTINE BANK, THE PARAMETER-FIELD WRITER
+;   ABOVE IT, AND SIX RING-BUFFER BLOCK PUTS BELOW IT.  10,207 bytes, of which
+;   1721 are 0x0E padding.
+; ==============================================================================
+;
+; ⚠ THE BANK.  0xF55800-0xF558AD is a veneer block of 35 stubs, one per thunk
+; slot in the run T_F40D90-T_F40E18, and 0xF558AE-0xF55C2D is SEVEN tables of 32
+; 32-bit routine pointers.  Seven of the stubs are `ld XIX,<table> / call
+; 0xF41B08 / ret`; the rest are `calr <routine> / ret` one-line forwarders.
+; T_F41B08 is `jp 0x00F8BDC5`, and prom_a 0xF8BDC5 is
+;     cp HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L /
+;     ld XIX,(XIX+L) / call XIX
+; -- a bounds-checked call of entry HL of the table in XIX.  32 entries, 4 bytes
+; each, 128 bytes per table.  ★ THIS IS THE SAME SHAPE AS 0xF7D000, already
+; converted in this file, and the same three independent counts fix the number
+; of tables at seven: the veneers hold exactly seven `ld XIX,imm32` naming these
+; seven bases; the first seven 128-byte blocks are entirely ROM-range words and
+; the eighth (0xF55C2E) is not; and 0xF55BAE + 0x80 = 0xF55C2E, where code
+; resumes.
+;
+; ⚠ Bit32MaskTable (0xF55755) IS SETTLED, AND IT CLOSES AN OPEN QUESTION.  Word
+; i is exactly 1 << i for i = 0..31.  The block above this span, converted
+; earlier, reads it at 0xF55047 and its header says "That table is NOT converted
+; here: nothing bounds its length."  The bound was in the reader all along:
+; `cp HL,0x001f / jrl UGT` at 0xF55026 admits 0..31, so the table is 32 words =
+; 128 bytes, which is exactly the segment the content rules found.
+;
+; ⚠ SIX RING-BUFFER BLOCK PUTS (0xF57C2D-0xF57D1D).  Each veneer loads a ring's
+; DATA BASE into XHL and that ring's CAPACITY into WA and falls into one shared
+; tail, Ring_PutBlockWrapped, which copies C bytes from XIY with an explicit wrap
+; split.  All six base/capacity pairs match notes/FINDINGS-prom_a-ring-buffers.md
+; ring for ring, and the tail reads prom_a's own control block -- the write index
+; at base-4 and the free count at base-2, the two words prom_a's Ring_Put_0400
+; uses at 0xF84225.  ⚠ NOT a copy of prom_a's PutBlock: that one is a
+; byte-at-a-time `djnz` loop, this one a bounded `ldir`.
+;
+; ⚠ WHAT IS NOT KNOWN.  What the 32 selectors are; what the STATE BYTES that
+; index the four 5-entry dispatch tables enumerate -- (0x36CE) for two of them
+; and (0x3627) for the other two, which is not the same byte; what the 8-byte
+; descriptor the routines at 0xF5553F use describes.  So the seven tables and the
+; four dispatch tables keep FRAMED names, no table entry is named, and 96 of the
+; 202 labels are sub_XXXXXX with the gap stated.
+;
+; ⚠ WHERE THE BOUNDARIES COME FROM.  notes/prom_b_f067a6_layout.py, re-derived
+; on EVERY run of this file with LO/HI moved to this span and its `seeds()`
+; replaced (its defaults were bound to the other span at import time).  17
+; segments, 0 conflicts between the barrier rules and the code walk.  Not from a
+; linear decode -- notes/prom_a_linear_decode_check.py records why one pins
+; nothing.
+;
+; ⚠ ONE RUN LEFT UNCLAIMED.  0xF57453-0xF57571 decodes as code, but no 32-bit
+; spelling of any address inside it occurs anywhere in prom_a or prom_b, at any
+; byte offset, so it is emitted as `.byte` with the decode stated rather than
+; promoted to code.  Same rule as 0xF38C4F in the 0xF353AB block and 0xF09E85 in
+; the 0xF067A6 block.
+;
+; LAYOUT.  17 segments: 8 code (7095 bytes), 5 pointer tables (976 bytes),
+; 1 bit table (128 bytes), 1 unclaimed run (287 bytes) and 2 runs of 0x0E `ret`
+; padding (1721 bytes).  Substantive: 8486 of 10207.
+;
+; LABELS.  202, of which 106 carry a name derived from something and 96 are
+; sub_XXXXXX with the gap stated.
+;
+; WHAT THE BLOCK TOUCHES, measured over the transcription itself.
+; Heaviest 16-bit RAM words: (0x3628) x46 (0x3602) x32 (0x2540) x28 (0x360B) x25 (0x3627) x24 (0x3629) x20.
+; That is a measurement of what the code ADDRESSES, not a claim about what it IS.
+;
+; REGENERATE:  python3 notes/gen_prom_b_f5553f_module.py
+; CHECKS:      python3 notes/gen_prom_b_f5553f_module.py --selftest
+; ==============================================================================
 
-; --- 0xF5553F-0xF57D1D: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x05553F, 0x0027DF
 
+; --------------------------------------------------------------------------
+; IndexedParam_SetFieldFromAsciiEntry
+; Called from: T_IndexedParam_SetFieldFromAsciiEntry (0xF42CA8, x15)
+; Touches: (0x2824) (0x2826) (0x28B0)
+; Calls:   T_Blink_SetEnable T_AsciiField_ToSignedValue T_AsciiDigits3_ToValue
+;          0xF552CC 0xF55321 0xF55231
+; Evidence: the third member of the descriptor family the block above this
+;           span converted, and it is the ENTRY-FIELD one.  It takes the same
+;           two arguments as IndexedParam_AdjustField -- (XIZ+0x08) a 16-bit
+;           INDEX, (XIZ+0x0A) a pointer to the 8-byte descriptor (+0 byte
+;           offset, +1 field mask, +2 shift, +3 upper bound, +4 lower bound,
+;           +7 XORed into (0x28B0)) -- and the same bit-4 rule (`add
+;           (XIZ+0x08),0x20` at 0xF55580 when (0x28B0) bit 4 is set).  What is
+;           new is where the VALUE comes from: descriptor +8 is split into two
+;           nibbles, the low one stored to (0x2826) and the high one selecting
+;           a bias into (0x2824) -- 0x10 -> 0x0040, 0x20 -> 0x0080, 0x30 ->
+;           0x0018, anything else -> 0x0000 -- and then `call 0xF432F4` =
+;           T_AsciiField_ToSignedValue reads the 0x2820-0x2826 ASCII ENTRY
+;           FIELD, or `call 0xF432F0` = T_AsciiDigits3_ToValue when the high
+;           nibble is zero.  prom_a's headers for those two say (0x2826) is
+;           the live-cell count and (0x2824) the bias, which is exactly what
+;           this routine writes into them.  The value is then masked into the
+;           field through IndexedTable_GetPtr + descriptor +0 (`and (XIY),A /
+;           or A,H`) and the change is journalled to List2030_Append4 when
+;           (0x28B0) bit 3 is set and to Queue2C00_Append4 otherwise -- the
+;           same two journals, chosen by the same bit, as
+;           IndexedParam_AdjustField.  It returns A = 1.
+; Unknown: what the descriptor describes, and so which parameter is being set.
+;          The already-converted sub_F550A6 and IndexedParam_AdjustField say
+;          the same and this file does not improve on them.  Also unknown:
+;          what bit 6 of (0x28B0) selects -- when it is set the routine
+;          instead pushes 0 or 1 and calls T_Blink_SetEnable, clears the bit
+;          and returns.
+; --------------------------------------------------------------------------
+IndexedParam_SetFieldFromAsciiEntry:		; <- T_IndexedParam_SetFieldFromAsciiEntry
+	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F5553F  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	pushw	hl	; F55543  push HL
+	pushw	de	; F55544  push DE
+	push	xix	; F55545  push XIX
+	ldb_d8	c, (10416)	; F55546  ld C,(0x28b0)
+	and	c, 64	; F5554A  and C,0x40
+	jr	z, 30	; F5554D  jr Z,0xf5556d
+	ld	xbc, (xiz+10)	; F5554F  ld XBC,(XIZ+0x0a)
+	ld	a, (xbc+8)	; F55552  ld A,(XBC+0x08)
+	cps	a, 0	; F55555  cp A,0
+	jr	z, 5	; F55557  jr Z,0xf5555e
+	pushw	1	; F55559  push 0x0001
+	jr	3	; F5555C  jr T,0xf55561
+	pushw	0	; F5555E  push 0x0000
+	call	16002600	; F55561  call 0xf42e28
+	.byte 0xF1, 0xB0, 0x28, 0xB6	; F55565  res 6,(0x28b0)   [llvm-mc cannot encode this]
+	popw	bc	; F55569  pop BC
+	jrl	116	; F5556A  jrl T,0xf555e1
+	ld	xbc, (xiz+10)	; F5556D  ld XBC,(XIZ+0x0a)
+	ld	a, (xbc+7)	; F55570  ld A,(XBC+0x07)
+	xordm8	(10416), a	; F55573  xor (0x28b0),A
+	ldb_d8	a, (10416)	; F55577  ld A,(0x28b0)
+	and	a, 16	; F5557B  and A,0x10
+	jr	z, 4	; F5557E  jr Z,0xf55584
+	.byte 0x8E, 0x08, 0x38, 0x20	; F55580  add (XIZ+0x08),0x20   [llvm-mc cannot encode this]
+	ld	xbc, (xiz+10)	; F55584  ld XBC,(XIZ+0x0a)
+	ld	h, (xbc+8)	; F55587  ld H,(XBC+0x08)
+	and	h, 15	; F5558A  and H,0x0f
+	jr	z, 82	; F5558D  jr Z,0xf555e1
+	stb_d8	(10278), h	; F5558F  ld (0x2826),H
+	ld	h, (xbc+8)	; F55593  ld H,(XBC+0x08)
+	and	h, 240	; F55596  and H,0xf0
+	jr	z, 62	; F55599  jr Z,0xf555d9
+	ld	a, h	; F5559B  ld A,H
+	extz	wa	; F5559D  extz WA
+	cp	wa, 16	; F5559F  cp WA,0x0010
+	jr	z, 14	; F555A3  jr Z,0xf555b3
+	cp	wa, 32	; F555A5  cp WA,0x0020
+	jr	z, 16	; F555A9  jr Z,0xf555bb
+	cp	wa, 48	; F555AB  cp WA,0x0030
+	jr	z, 18	; F555AF  jr Z,0xf555c3
+	jr	24	; F555B1  jr T,0xf555cb
+	stdi16	(10276), 64	; F555B3  ld (0x2824),0x0040
+	jr	22	; F555B9  jr T,0xf555d1
+	stdi16	(10276), 128	; F555BB  ld (0x2824),0x0080
+	jr	14	; F555C1  jr T,0xf555d1
+	stdi16	(10276), 24	; F555C3  ld (0x2824),0x0018
+	jr	6	; F555C9  jr T,0xf555d1
+	stdi16	(10276), 0	; F555CB  ld (0x2824),0x0000
+	call	16003828	; F555D1  call 0xf432f4
+	ld	hl, wa	; F555D5  ld HL,WA
+	jr	13	; F555D7  jr T,0xf555e6
+	call	16003824	; F555D9  call 0xf432f0
+	ld	hl, wa	; F555DD  ld HL,WA
+	jr	5	; F555DF  jr T,0xf555e6
+	sub	a, a	; F555E1  sub A,A
+	jrl	230	; F555E3  jrl T,0xf556cc
+	ldb_d8	c, (10416)	; F555E6  ld C,(0x28b0)
+	and	c, 128	; F555EA  and C,0x80
+	jr	z, 2	; F555ED  jr Z,0xf555f1
+	dec	1, hl	; F555EF  dec 1,HL
+	ld	ix, hl	; F555F1  ld IX,HL
+	ldb	h, 0	; F555F3  ld H,0x00
+	ld	xbc, (xiz+10)	; F555F5  ld XBC,(XIZ+0x0a)
+	ld	l, (xbc+2)	; F555F8  ld L,(XBC+0x02)
+	cp	h, l	; F555FB  cp H,L
+	jr	nc, 11	; F555FD  jr NC,0xf5560a
+	ld	bc, ix	; F555FF  ld BC,IX
+	srl	bc, 1	; F55601  srl 0x01,BC
+	ld	ix, bc	; F55604  ld IX,BC
+	inc	1, h	; F55606  inc 1,H
+	jr	-15	; F55608  jr T,0xf555fb
+	ld	de, ix	; F5560A  ld DE,IX
+	ld	xbc, (xiz+10)	; F5560C  ld XBC,(XIZ+0x0a)
+	ld	a, (xbc+4)	; F5560F  ld A,(XBC+0x04)
+	extz	wa	; F55612  extz WA
+	ld	hl, wa	; F55614  ld HL,WA
+	cp	ix, wa	; F55616  cp IX,WA
+	jr	nc, 2	; F55618  jr NC,0xf5561c
+	ld	de, wa	; F5561A  ld DE,WA
+	ld	xbc, (xiz+10)	; F5561C  ld XBC,(XIZ+0x0a)
+	ld	a, (xbc+3)	; F5561F  ld A,(XBC+0x03)
+	extz	wa	; F55622  extz WA
+	ld	hl, wa	; F55624  ld HL,WA
+	cp	de, wa	; F55626  cp DE,WA
+	jr	ule, 2	; F55628  jr ULE,0xf5562c
+	ld	de, wa	; F5562A  ld DE,WA
+	cp	de, ix	; F5562C  cp DE,IX
+	jr	z, 22	; F5562E  jr Z,0xf55646
+	ldb	h, 0	; F55630  ld H,0x00
+	ld	xbc, (xiz+10)	; F55632  ld XBC,(XIZ+0x0a)
+	ld	l, (xbc+2)	; F55635  ld L,(XBC+0x02)
+	cp	h, l	; F55638  cp H,L
+	jr	nc, -91	; F5563A  jr NC,0xf555e1
+	ld	bc, de	; F5563C  ld BC,DE
+	add	bc, de	; F5563E  add BC,DE
+	ld	de, bc	; F55640  ld DE,BC
+	inc	1, h	; F55642  inc 1,H
+	jr	-14	; F55644  jr T,0xf55638
+	ldb	h, 0	; F55646  ld H,0x00
+	ld	xbc, (xiz+10)	; F55648  ld XBC,(XIZ+0x0a)
+	ld	l, (xbc+2)	; F5564B  ld L,(XBC+0x02)
+	cp	h, l	; F5564E  cp H,L
+	jr	nc, 10	; F55650  jr NC,0xf5565c
+	ld	bc, de	; F55652  ld BC,DE
+	add	bc, de	; F55654  add BC,DE
+	ld	de, bc	; F55656  ld DE,BC
+	inc	1, h	; F55658  inc 1,H
+	jr	-14	; F5565A  jr T,0xf5564e
+	ld	xbc, (xiz+10)	; F5565C  ld XBC,(XIZ+0x0a)
+	ld	h, (xbc+1)	; F5565F  ld H,(XBC+0x01)
+	ld	a, h	; F55662  ld A,H
+	extz	wa	; F55664  extz WA
+	and	de, wa	; F55666  and DE,WA
+	ldb_d8	a, (10416)	; F55668  ld A,(0x28b0)
+	and	a, 8	; F5566C  and A,0x08
+	jr	z, 22	; F5566F  jr Z,0xf55687
+	push	0	; F55671  push 0x00
+	push	h	; F55673  push H
+	ld	a, e	; F55675  ld A,E
+	pushw	wa	; F55677  push WA
+	ld	a, (xbc)	; F55678  ld A,(XBC)
+	pushw	wa	; F5567A  push WA
+	push	0	; F5567B  push 0x00
+	.byte 0x8E, 0x08, 0x04	; F5567D  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	calr	64585	; F55680  calr 0xf552cc
+	inc	8, xsp	; F55683  inc 0,XSP
+	jr	67	; F55685  jr T,0xf556ca
+	push	0	; F55687  push 0x00
+	.byte 0x8E, 0x08, 0x04	; F55689  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	calr	64658	; F5568C  calr 0xf55321
+	ld	xix, xiy	; F5568F  ld XIX,XIY
+	ld	xbc, (xiz+10)	; F55691  ld XBC,(XIZ+0x0a)
+	ld	a, (xbc)	; F55694  ld A,(XBC)
+	extz	wa	; F55696  extz WA
+	extz	xwa	; F55698  extz XWA
+	add	xiy, xwa	; F5569A  add XIY,XWA
+	ld	(xiz-4), xiy	; F5569C  ld (XIZ+0xfc),XIY
+	ld	a, (xbc+1)	; F5569F  ld A,(XBC+0x01)
+	cpl	a	; F556A2  cpl A
+	and	(xiy), a	; F556A4  and (XIY),A
+	ld	xbc, (xiz-4)	; F556A6  ld XBC,(XIZ+0xfc)
+	ld	h, (xbc)	; F556A9  ld H,(XBC)
+	ld	l, e	; F556AB  ld L,E
+	ld	a, l	; F556AD  ld A,L
+	or	a, h	; F556AF  or A,H
+	ld	(xbc), a	; F556B1  ld (XBC),A
+	ld	xbc, (xiz+10)	; F556B3  ld XBC,(XIZ+0x0a)
+	ld	a, (xbc+1)	; F556B6  ld A,(XBC+0x01)
+	pushw	wa	; F556B9  push WA
+	pushw	hl	; F556BA  push HL
+	ld	a, (xbc)	; F556BB  ld A,(XBC)
+	pushw	wa	; F556BD  push WA
+	push	0	; F556BE  push 0x00
+	.byte 0x8E, 0x08, 0x04	; F556C0  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	calr	64363	; F556C3  calr 0xf55231
+	inc	8, xsp	; F556C6  inc 0,XSP
+	inc	2, xsp	; F556C8  inc 2,XSP
+	ldb	a, 1	; F556CA  ld A,0x01
+	pop	xix	; F556CC  pop XIX
+	popw	de	; F556CD  pop DE
+	popw	hl	; F556CE  pop HL
+	.byte 0xEE, 0x0D	; F556CF  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F556D1  ret
+
+; --------------------------------------------------------------------------
+; sub_F556D2
+; Called from: T_F42C9C (0xF42C9C, x13)
+; Touches: (0x2250)
+; Calls:   0xF55231 T_F411BC
+; Evidence: thunk slot T_F42C9C holds `jp 0x00F556D2`, and 0xF556D2 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F556D2:		; <- T_F42C9C
+	pushw	255	; F556D2  push 0x00ff
+	ldb_d8	c, (8784)	; F556D5  ld C,(0x2250)
+	pushw	bc	; F556D9  push BC
+	pushw	16	; F556DA  push 0x0010
+	pushw	144	; F556DD  push 0x0090
+	calr	64334	; F556E0  calr 0xf55231
+	call	15995324	; F556E3  call 0xf411bc
+	inc	8, xsp	; F556E7  inc 0,XSP
+	ret	; F556E9  ret
+
+; --------------------------------------------------------------------------
+; sub_F556EA
+; Called from: T_F42CA0 (0xF42CA0, x5)
+; Touches: (0x2640) (0x2641) (0x2642)
+; Calls:   0xF5533C T_F41010
+; Evidence: thunk slot T_F42CA0 holds `jp 0x00F556EA`, and 0xF556EA is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F556EA:		; <- T_F42CA0
+	.byte 0xEE, 0x0C, 0xFC, 0xFF	; F556EA  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	pushw	hl	; F556EE  push HL
+	push	xix	; F556EF  push XIX
+	ld	l, (xiz+8)	; F556F0  ld L,(XIZ+0x08)
+	pushw	1	; F556F3  push 0x0001
+	pushw	hl	; F556F6  push HL
+	calr	64578	; F556F7  calr 0xf5533c
+	stb_d8	(9792), a	; F556FA  ld (0x2640),A
+	pushw	0	; F556FE  push 0x0000
+	pushw	hl	; F55701  push HL
+	calr	64567	; F55702  calr 0xf5533c
+	stb_d8	(9793), a	; F55705  ld (0x2641),A
+	stb_d8	(9794), l	; F55709  ld (0x2642),L
+	inc	8, xsp	; F5570D  inc 0,XSP
+	push	xde	; F5570F  push XDE
+	push	xhl	; F55710  push XHL
+	push	xix	; F55711  push XIX
+	push	xiz	; F55712  push XIZ
+	ldb_d8	w, (9792)	; F55713  ld W,(0x2640)
+	ldb_d8	a, (9793)	; F55717  ld A,(0x2641)
+	ldb_d8	b, (9794)	; F5571B  ld B,(0x2642)
+	call	15994896	; F5571F  call 0xf41010
+	stda32	(9792), xiy	; F55723  ld (0x2640),XIY
+	pop	xiz	; F55727  pop XIZ
+	pop	xix	; F55728  pop XIX
+	pop	xhl	; F55729  pop XHL
+	pop	xde	; F5572A  pop XDE
+	lda_d16	xbc, (9792)	; F5572B  lda XBC,0x2640
+	ld	(xiz-4), xbc	; F5572F  ld (XIZ+0xfc),XBC
+	ldda32	xwa, (9792)	; F55732  ld XWA,(0x2640)
+	ld	xix, xwa	; F55736  ld XIX,XWA
+	ldb	h, 4	; F55738  ld H,0x04
+	ld	xbc, (xix)	; F5573A  ld XBC,(XIX)
+	ld	xwa, (xiz-4)	; F5573C  ld XWA,(XIZ+0xfc)
+	ld	(xwa), xbc	; F5573F  ld (XWA),XBC
+	inc	4, xix	; F55741  inc 4,XIX
+	sub	xbc, xbc	; F55743  sub XBC,XBC
+	inc	4, xbc	; F55745  inc 4,XBC
+	add	(xiz-4), xbc	; F55747  add (XIZ+0xfc),XBC
+	dec	1, h	; F5574A  dec 1,H
+	cps	h, 0	; F5574C  cp H,0
+	jr	nz, -22	; F5574E  jr NZ,0xf5573a
+	pop	xix	; F55750  pop XIX
+	popw	hl	; F55751  pop HL
+	.byte 0xEE, 0x0D	; F55752  unlk XIZ   [llvm-mc cannot encode this]
+	ret	; F55754  ret
+
+; --------------------------------------------------------------------------
+; Bit32MaskTable -- 32 32-bit words, and word i is EXACTLY 1 << i.  A power-
+;                   of-two mask indexed by a 5-bit selector.
+; Read by: sub_F55019 at 0xF55047, in the already-converted block above this
+;          span: `ld C,0x04 / mul BC,(0x28b1) / extz XBC / add XBC,0x00F55755
+;          / ld XBC,(XBC) / and XBC,(0x208c)` -- word (0x28B1) of this table
+;          is AND-ed with the 32-bit word at (0x208C) and the result sets bit
+;          1 of the flag byte (0x28B0).  So (0x208C) is a 32-bit SET and this
+;          table turns the selector into its membership mask.
+; Evidence: THE EXTENT IS PROVED BY THE READER'S OWN BOUND, not by the
+;           segment: `cp HL,0x001f / jrl UGT,0xF550A1` at 0xF55026 rejects a
+;           selector above 31 before anything is read, so the index space is
+;           0..31, four bytes each, 128 bytes -- exactly this segment.  And
+;           every word is re-read on each emit and asserted equal to 1 << i.
+;           ⚠ The block above this span says of this table "nothing bounds its
+;           length"; that is now wrong, and the bound was in its reader.
+; Unknown: what the 32 selectors ARE, and what the 32-bit set at (0x208C)
+;          means.  The table is named for what it CONTAINS, which is all that
+;          is established.
+; --------------------------------------------------------------------------
+Bit32MaskTable:
+	.long	0x00000001	; F55755  [ 0]  1 << 0
+	.long	0x00000002	; F55759  [ 1]  1 << 1
+	.long	0x00000004	; F5575D  [ 2]  1 << 2
+	.long	0x00000008	; F55761  [ 3]  1 << 3
+	.long	0x00000010	; F55765  [ 4]  1 << 4
+	.long	0x00000020	; F55769  [ 5]  1 << 5
+	.long	0x00000040	; F5576D  [ 6]  1 << 6
+	.long	0x00000080	; F55771  [ 7]  1 << 7
+	.long	0x00000100	; F55775  [ 8]  1 << 8
+	.long	0x00000200	; F55779  [ 9]  1 << 9
+	.long	0x00000400	; F5577D  [10]  1 << 10
+	.long	0x00000800	; F55781  [11]  1 << 11
+	.long	0x00001000	; F55785  [12]  1 << 12
+	.long	0x00002000	; F55789  [13]  1 << 13
+	.long	0x00004000	; F5578D  [14]  1 << 14
+	.long	0x00008000	; F55791  [15]  1 << 15
+	.long	0x00010000	; F55795  [16]  1 << 16
+	.long	0x00020000	; F55799  [17]  1 << 17
+	.long	0x00040000	; F5579D  [18]  1 << 18
+	.long	0x00080000	; F557A1  [19]  1 << 19
+	.long	0x00100000	; F557A5  [20]  1 << 20
+	.long	0x00200000	; F557A9  [21]  1 << 21
+	.long	0x00400000	; F557AD  [22]  1 << 22
+	.long	0x00800000	; F557B1  [23]  1 << 23
+	.long	0x01000000	; F557B5  [24]  1 << 24
+	.long	0x02000000	; F557B9  [25]  1 << 25
+	.long	0x04000000	; F557BD  [26]  1 << 26
+	.long	0x08000000	; F557C1  [27]  1 << 27
+	.long	0x10000000	; F557C5  [28]  1 << 28
+	.long	0x20000000	; F557C9  [29]  1 << 29
+	.long	0x40000000	; F557CD  [30]  1 << 30
+	.long	0x80000000	; F557D1  [31]  1 << 31
+
+	.fill	43, 1, 0x0E	; F557D5-F557FF  `ret` padding (asserted pure 0x0E)
+
+
+; --------------------------------------------------------------------------
+; Fwd_F55800
+; Called from: T_F40D98 (0xF40D98, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F5602C
+; Evidence: thunk slot T_F40D98 holds `jp 0x00F55800`, and 0xF55800 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF5602C` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55800:		; <- T_F40D98
+	calr	2089	; F55800  calr 0xf5602c
+	ret	; F55803  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55804
+; Called from: T_F40D9C (0xF40D9C, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F5603C
+; Evidence: thunk slot T_F40D9C holds `jp 0x00F55804`, and 0xF55804 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF5603C` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55804:		; <- T_F40D9C
+	calr	2101	; F55804  calr 0xf5603c
+	ret	; F55807  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55808
+; Called from: T_F40D90 (0xF40D90, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F56B5F
+; Evidence: thunk slot T_F40D90 holds `jp 0x00F55808`, and 0xF55808 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56B5F` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55808:		; <- T_F40D90
+	calr	4948	; F55808  calr 0xf56b5f
+	ret	; F5580B  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5580C
+; Called from: T_F40D94 (0xF40D94, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F56B67
+; Evidence: thunk slot T_F40D94 holds `jp 0x00F5580C`, and 0xF5580C is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56B67` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5580C:		; <- T_F40D94
+	calr	4952	; F5580C  calr 0xf56b67
+	ret	; F5580F  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55810
+; Called from: T_F40DC0 (0xF40DC0, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F56058
+; Evidence: thunk slot T_F40DC0 holds `jp 0x00F55810`, and 0xF55810 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56058` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55810:		; <- T_F40DC0
+	calr	2117	; F55810  calr 0xf56058
+	ret	; F55813  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55814
+; Called from: T_F40DC4 (0xF40DC4, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F56129
+; Evidence: thunk slot T_F40DC4 holds `jp 0x00F55814`, and 0xF55814 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56129` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55814:		; <- T_F40DC4
+	calr	2322	; F55814  calr 0xf56129
+	ret	; F55817  ret
+
+; --------------------------------------------------------------------------
+; CallSelectorTable_F558AE
+; Called from: T_F40DC8 (0xF40DC8, x0)
+; Touches: nothing with an absolute address
+; Calls:   T_F41B08
+; Evidence: thunk slot T_F40DC8 holds `jp 0x00F55818`, and 0xF55818 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `ld XIX,0x00F558AE / call 0xF41B08 / ret` -- call entry HL of that
+;          32-entry routine table, bounds-checked by prom_a 0xF8BDC5.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+CallSelectorTable_F558AE:		; <- T_F40DC8
+	ld	xix, 16079022	; F55818  ld XIX,0x00f558ae
+	call	15997704	; F5581D  call 0xf41b08
+	ret	; F55821  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55822
+; Called from: T_F40DCC (0xF40DCC, x0)
+; Touches: nothing with an absolute address
+; Calls:   Nop_Ret_F56524
+; Evidence: thunk slot T_F40DCC holds `jp 0x00F55822`, and 0xF55822 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56524` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55822:		; <- T_F40DCC
+	calr	3327	; F55822  calr 0xf56524
+	ret	; F55825  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55826
+; Called from: T_F40E00 (0xF40E00, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F5658C
+; Evidence: thunk slot T_F40E00 holds `jp 0x00F55826`, and 0xF55826 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF5658C` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55826:		; <- T_F40E00
+	calr	3427	; F55826  calr 0xf5658c
+	ret	; F55829  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5582A
+; Called from: T_F40E04 (0xF40E04, x0)
+; Touches: nothing with an absolute address
+; Calls:   Nop_Ret_F56649
+; Evidence: thunk slot T_F40E04 holds `jp 0x00F5582A`, and 0xF5582A is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56649` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5582A:		; <- T_F40E04
+	calr	3612	; F5582A  calr 0xf56649
+	ret	; F5582D  ret
+
+; --------------------------------------------------------------------------
+; CallSelectorTable_F5592E
+; Called from: T_F40E08 (0xF40E08, x0)
+; Touches: nothing with an absolute address
+; Calls:   T_F41B08
+; Evidence: thunk slot T_F40E08 holds `jp 0x00F5582E`, and 0xF5582E is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `ld XIX,0x00F5592E / call 0xF41B08 / ret` -- call entry HL of that
+;          32-entry routine table, bounds-checked by prom_a 0xF8BDC5.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+CallSelectorTable_F5592E:		; <- T_F40E08
+	ld	xix, 16079150	; F5582E  ld XIX,0x00f5592e
+	call	15997704	; F55833  call 0xf41b08
+	ret	; F55837  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55838
+; Called from: T_F40E0C (0xF40E0C, x0)
+; Touches: nothing with an absolute address
+; Calls:   Nop_Ret_F56649
+; Evidence: thunk slot T_F40E0C holds `jp 0x00F55838`, and 0xF55838 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56649` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55838:		; <- T_F40E0C
+	calr	3598	; F55838  calr 0xf56649
+	ret	; F5583B  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5583C
+; Called from: T_F40DD0 (0xF40DD0, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F5664A
+; Evidence: thunk slot T_F40DD0 holds `jp 0x00F5583C`, and 0xF5583C is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF5664A` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5583C:		; <- T_F40DD0
+	calr	3595	; F5583C  calr 0xf5664a
+	ret	; F5583F  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55840
+; Called from: T_F40DD4 (0xF40DD4, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F5670C
+; Evidence: thunk slot T_F40DD4 holds `jp 0x00F55840`, and 0xF55840 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF5670C` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55840:		; <- T_F40DD4
+	calr	3785	; F55840  calr 0xf5670c
+	ret	; F55843  ret
+
+; --------------------------------------------------------------------------
+; CallSelectorTable_F559AE
+; Called from: T_F40DD8 (0xF40DD8, x0)
+; Touches: nothing with an absolute address
+; Calls:   T_F41B08
+; Evidence: thunk slot T_F40DD8 holds `jp 0x00F55844`, and 0xF55844 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `ld XIX,0x00F559AE / call 0xF41B08 / ret` -- call entry HL of that
+;          32-entry routine table, bounds-checked by prom_a 0xF8BDC5.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+CallSelectorTable_F559AE:		; <- T_F40DD8
+	ld	xix, 16079278	; F55844  ld XIX,0x00f559ae
+	call	15997704	; F55849  call 0xf41b08
+	ret	; F5584D  ret
+
+; --------------------------------------------------------------------------
+; sub_F5584E
+; Called from: T_F40DDC (0xF40DDC, x0)
+; Touches: nothing with an absolute address
+; Calls:   Nop_Ret_F568AA
+; Evidence: thunk slot T_F40DDC holds `jp 0x00F5584E`, and 0xF5584E is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5584E:		; <- T_F40DDC
+	calr	4185	; F5584E  calr 0xf568aa
+	ret	; F55851  ret
+	ret	; F55852  ret
+	ret	; F55853  ret
+	ret	; F55854  ret
+	ret	; F55855  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55856
+; Called from: T_F40DA0 (0xF40DA0, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F56B95
+; Evidence: thunk slot T_F40DA0 holds `jp 0x00F55856`, and 0xF55856 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56B95` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55856:		; <- T_F40DA0
+	calr	4924	; F55856  calr 0xf56b95
+	ret	; F55859  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5585A
+; Called from: T_F40DA4 (0xF40DA4, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F56C35
+; Evidence: thunk slot T_F40DA4 holds `jp 0x00F5585A`, and 0xF5585A is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56C35` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5585A:		; <- T_F40DA4
+	calr	5080	; F5585A  calr 0xf56c35
+	ret	; F5585D  ret
+
+; --------------------------------------------------------------------------
+; CallSelectorTable_F55A2E
+; Called from: T_F40DA8 (0xF40DA8, x0)
+; Touches: nothing with an absolute address
+; Calls:   T_F41B08
+; Evidence: thunk slot T_F40DA8 holds `jp 0x00F5585E`, and 0xF5585E is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `ld XIX,0x00F55A2E / call 0xF41B08 / ret` -- call entry HL of that
+;          32-entry routine table, bounds-checked by prom_a 0xF8BDC5.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+CallSelectorTable_F55A2E:		; <- T_F40DA8
+	ld	xix, 16079406	; F5585E  ld XIX,0x00f55a2e
+	call	15997704	; F55863  call 0xf41b08
+	ret	; F55867  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55868
+; Called from: T_F40DAC (0xF40DAC, x0)
+; Touches: nothing with an absolute address
+; Calls:   Nop_Ret_F56DF0
+; Evidence: thunk slot T_F40DAC holds `jp 0x00F55868`, and 0xF55868 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56DF0` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55868:		; <- T_F40DAC
+	calr	5509	; F55868  calr 0xf56df0
+	ret	; F5586B  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5586C
+; Called from: T_F40DB0 (0xF40DB0, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F56DF1
+; Evidence: thunk slot T_F40DB0 holds `jp 0x00F5586C`, and 0xF5586C is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56DF1` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5586C:		; <- T_F40DB0
+	calr	5506	; F5586C  calr 0xf56df1
+	ret	; F5586F  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55870
+; Called from: T_F40DB4 (0xF40DB4, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F56E99
+; Evidence: thunk slot T_F40DB4 holds `jp 0x00F55870`, and 0xF55870 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56E99` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55870:		; <- T_F40DB4
+	calr	5670	; F55870  calr 0xf56e99
+	ret	; F55873  ret
+
+; --------------------------------------------------------------------------
+; CallSelectorTable_F55AAE
+; Called from: T_F40DB8 (0xF40DB8, x0)
+; Touches: nothing with an absolute address
+; Calls:   T_F41B08
+; Evidence: thunk slot T_F40DB8 holds `jp 0x00F55874`, and 0xF55874 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `ld XIX,0x00F55AAE / call 0xF41B08 / ret` -- call entry HL of that
+;          32-entry routine table, bounds-checked by prom_a 0xF8BDC5.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+CallSelectorTable_F55AAE:		; <- T_F40DB8
+	ld	xix, 16079534	; F55874  ld XIX,0x00f55aae
+	call	15997704	; F55879  call 0xf41b08
+	ret	; F5587D  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5587E
+; Called from: T_F40DBC (0xF40DBC, x0)
+; Touches: nothing with an absolute address
+; Calls:   Nop_Ret_F56FD5
+; Evidence: thunk slot T_F40DBC holds `jp 0x00F5587E`, and 0xF5587E is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF56FD5` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5587E:		; <- T_F40DBC
+	calr	5972	; F5587E  calr 0xf56fd5
+	ret	; F55881  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55882
+; Called from: T_F40DE0 (0xF40DE0, x0), T_F40E14 (0xF40E14, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F57286
+; Evidence: thunk slot T_F40DE0 holds `jp 0x00F55882`, and 0xF55882 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF57286` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55882:		; <- T_F40DE0, T_F40E14
+	calr	6657	; F55882  calr 0xf57286
+	ret	; F55885  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55886
+; Called from: T_F40DE4 (0xF40DE4, x0)
+; Touches: nothing with an absolute address
+; Calls:   sub_F57311
+; Evidence: thunk slot T_F40DE4 holds `jp 0x00F55886`, and 0xF55886 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF57311` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55886:		; <- T_F40DE4
+	calr	6792	; F55886  calr 0xf57311
+	ret	; F55889  ret
+
+; --------------------------------------------------------------------------
+; CallSelectorTable_F55B2E
+; Called from: T_F40DE8 (0xF40DE8, x0)
+; Touches: nothing with an absolute address
+; Calls:   T_F41B08
+; Evidence: thunk slot T_F40DE8 holds `jp 0x00F5588A`, and 0xF5588A is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `ld XIX,0x00F55B2E / call 0xF41B08 / ret` -- call entry HL of that
+;          32-entry routine table, bounds-checked by prom_a 0xF8BDC5.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+CallSelectorTable_F55B2E:		; <- T_F40DE8
+	ld	xix, 16079662	; F5588A  ld XIX,0x00f55b2e
+	call	15997704	; F5588F  call 0xf41b08
+	ret	; F55893  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55894
+; Called from: T_F40DEC (0xF40DEC, x0)
+; Touches: nothing with an absolute address
+; Calls:   Nop_Ret_F57381
+; Evidence: thunk slot T_F40DEC holds `jp 0x00F55894`, and 0xF55894 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF57381` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55894:		; <- T_F40DEC
+	calr	6890	; F55894  calr 0xf57381
+	ret	; F55897  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F55898
+; Called from: T_F40DF0 (0xF40DF0, x0)
+; Touches: nothing with an absolute address
+; Calls:   Fwd_F57410
+; Evidence: thunk slot T_F40DF0 holds `jp 0x00F55898`, and 0xF55898 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF57410` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F55898:		; <- T_F40DF0
+	calr	7029	; F55898  calr 0xf57410
+	ret	; F5589B  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5589C
+; Called from: T_F40DF4 (0xF40DF4, x0)
+; Touches: nothing with an absolute address
+; Calls:   Fwd_F57414
+; Evidence: thunk slot T_F40DF4 holds `jp 0x00F5589C`, and 0xF5589C is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF57414` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5589C:		; <- T_F40DF4
+	calr	7029	; F5589C  calr 0xf57414
+	ret	; F5589F  ret
+
+; --------------------------------------------------------------------------
+; CallSelectorTable_F55BAE
+; Called from: T_F40DF8 (0xF40DF8, x0)
+; Touches: nothing with an absolute address
+; Calls:   T_F41B08
+; Evidence: thunk slot T_F40DF8 holds `jp 0x00F558A0`, and 0xF558A0 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `ld XIX,0x00F55BAE / call 0xF41B08 / ret` -- call entry HL of that
+;          32-entry routine table, bounds-checked by prom_a 0xF8BDC5.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+CallSelectorTable_F55BAE:		; <- T_F40DF8
+	ld	xix, 16079790	; F558A0  ld XIX,0x00f55bae
+	call	15997704	; F558A5  call 0xf41b08
+	ret	; F558A9  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F558AA
+; Called from: T_F40DFC (0xF40DFC, x0)
+; Touches: nothing with an absolute address
+; Calls:   Nop_Ret_F57432
+; Evidence: thunk slot T_F40DFC holds `jp 0x00F558AA`, and 0xF558AA is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Shape:   `calr`/`call 0xF57432` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F558AA:		; <- T_F40DFC
+	calr	7045	; F558AA  calr 0xf57432
+	ret	; F558AD  ret
+
+; --------------------------------------------------------------------------
+; SelectorRoutines_F558AE -- 32 32-bit routine pointers, table 0 of the seven
+;                            in this bank.  All 32 land inside this span
+;                            (0xF56142-0xF56524) and 22 of the 32 are
+;                            distinct.
+; Read by: the veneer at 0xF55818 -- `ld XIX,0x00F558AE / call 0xF41B08 /
+;          ret`.  T_F41B08 is `jp 0x00F8BDC5`, and prom_a 0xF8BDC5 is `cp
+;          HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L / ld
+;          XIX,(XIX+L) / call XIX` -- a bounds-checked call of entry HL of the
+;          table in XIX.
+; Evidence: the ENTRY COUNT IS THE INDEXER'S BOUND (32, from `and L,0x1F`),
+;           and the NUMBER OF TABLES is settled by three counts that agree,
+;           all re-measured on every emit: the veneer block holds exactly
+;           seven `ld XIX,imm32` and their immediates are these seven bases;
+;           the first seven 128-byte blocks from 0xF558AE are entirely ROM-
+;           range words and the eighth is not; and 0xF55BAE + 0x80 = 0xF55C2E,
+;           where the code resumes.  ★ Same shape, same evidence, as the 32
+;           tables at 0xF7D000 already converted in this file.
+; Unknown: WHICH selector each index is -- so this name is FRAMED, a kind plus
+;          an address, not content.  The index space is bounded at 31 by the
+;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
+;          the BOUND and not a claim that the two enumerate the same things.
+; --------------------------------------------------------------------------
+SelectorRoutines_F558AE:
+	.long	0x00F56142	; F558AE  [ 0] -> Write3602_ThenNotify_F56142
+	.long	0x00F56158	; F558B2  [ 1] -> Write3602_ThenNotify_F56158
+	.long	0x00F5616E	; F558B6  [ 2] -> Write3602_ThenNotify_F5616E
+	.long	0x00F56184	; F558BA  [ 3] -> Write3602_ThenNotify_F56184
+	.long	0x00F5619A	; F558BE  [ 4] -> Write3602_ThenNotify_F5619A
+	.long	0x00F561B0	; F558C2  [ 5] -> Write3602_ThenNotify_F561B0
+	.long	0x00F561C6	; F558C6  [ 6] -> Write3602_ThenNotify_F561C6
+	.long	0x00F561DC	; F558CA  [ 7] -> Write3602_ThenNotify_F561DC
+	.long	0x00F56342	; F558CE  [ 8] -> sub_F56342
+	.long	0x00F563DD	; F558D2  [ 9] -> sub_F563DD
+	.long	0x00F56474	; F558D6  [10] -> sub_F56474
+	.long	0x00F56510	; F558DA  [11] -> Nop_Ret_F56510
+	.long	0x00F56510	; F558DE  [12] -> Nop_Ret_F56510
+	.long	0x00F56510	; F558E2  [13] -> Nop_Ret_F56510
+	.long	0x00F56510	; F558E6  [14] -> Nop_Ret_F56510
+	.long	0x00F56511	; F558EA  [15] -> sub_F56511
+	.long	0x00F56524	; F558EE  [16] -> Nop_Ret_F56524
+	.long	0x00F561F2	; F558F2  [17] -> Write3602_IfBit2088_F561F2
+	.long	0x00F5621C	; F558F6  [18] -> Write3602_IfBit2088_F5621C
+	.long	0x00F56246	; F558FA  [19] -> Write3602_IfBit2088_F56246
+	.long	0x00F56270	; F558FE  [20] -> Write3602_IfBit2088_F56270
+	.long	0x00F5629A	; F55902  [21] -> Write3602_IfBit2088_F5629A
+	.long	0x00F562C4	; F55906  [22] -> Write3602_IfBit2088_F562C4
+	.long	0x00F562EE	; F5590A  [23] -> Write3602_IfBit2088_F562EE
+	.long	0x00F56318	; F5590E  [24] -> Write3602_IfBit2088_F56318
+	.long	0x00F56524	; F55912  [25] -> Nop_Ret_F56524
+	.long	0x00F56524	; F55916  [26] -> Nop_Ret_F56524
+	.long	0x00F56524	; F5591A  [27] -> Nop_Ret_F56524
+	.long	0x00F56524	; F5591E  [28] -> Nop_Ret_F56524
+	.long	0x00F56524	; F55922  [29] -> Nop_Ret_F56524
+	.long	0x00F56524	; F55926  [30] -> Nop_Ret_F56524
+	.long	0x00F56524	; F5592A  [31] -> Nop_Ret_F56524
+
+
+; --------------------------------------------------------------------------
+; SelectorRoutines_F5592E -- 32 32-bit routine pointers, table 1 of the seven
+;                            in this bank.  All 32 land inside this span
+;                            (0xF565BD-0xF56649) and 4 of the 32 are distinct.
+; Read by: the veneer at 0xF5582E -- `ld XIX,0x00F5592E / call 0xF41B08 /
+;          ret`.  T_F41B08 is `jp 0x00F8BDC5`, and prom_a 0xF8BDC5 is `cp
+;          HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L / ld
+;          XIX,(XIX+L) / call XIX` -- a bounds-checked call of entry HL of the
+;          table in XIX.
+; Evidence: the ENTRY COUNT IS THE INDEXER'S BOUND (32, from `and L,0x1F`),
+;           and the NUMBER OF TABLES is settled by three counts that agree,
+;           all re-measured on every emit: the veneer block holds exactly
+;           seven `ld XIX,imm32` and their immediates are these seven bases;
+;           the first seven 128-byte blocks from 0xF558AE are entirely ROM-
+;           range words and the eighth is not; and 0xF55BAE + 0x80 = 0xF55C2E,
+;           where the code resumes.  ★ Same shape, same evidence, as the 32
+;           tables at 0xF7D000 already converted in this file.
+; Unknown: WHICH selector each index is -- so this name is FRAMED, a kind plus
+;          an address, not content.  The index space is bounded at 31 by the
+;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
+;          the BOUND and not a claim that the two enumerate the same things.
+; --------------------------------------------------------------------------
+SelectorRoutines_F5592E:
+	.long	0x00F56649	; F5592E  [ 0] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55932  [ 1] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55936  [ 2] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5593A  [ 3] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5593E  [ 4] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55942  [ 5] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55946  [ 6] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5594A  [ 7] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5594E  [ 8] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55952  [ 9] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55956  [10] -> Nop_Ret_F56649
+	.long	0x00F565BD	; F5595A  [11] -> sub_F565BD
+	.long	0x00F565FD	; F5595E  [12] -> sub_F565FD
+	.long	0x00F56649	; F55962  [13] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55966  [14] -> Nop_Ret_F56649
+	.long	0x00F5663C	; F5596A  [15] -> sub_F5663C
+	.long	0x00F56649	; F5596E  [16] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55972  [17] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55976  [18] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5597A  [19] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5597E  [20] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55982  [21] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55986  [22] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5598A  [23] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5598E  [24] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55992  [25] -> Nop_Ret_F56649
+	.long	0x00F56649	; F55996  [26] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5599A  [27] -> Nop_Ret_F56649
+	.long	0x00F56649	; F5599E  [28] -> Nop_Ret_F56649
+	.long	0x00F56649	; F559A2  [29] -> Nop_Ret_F56649
+	.long	0x00F56649	; F559A6  [30] -> Nop_Ret_F56649
+	.long	0x00F56649	; F559AA  [31] -> Nop_Ret_F56649
+
+
+; --------------------------------------------------------------------------
+; SelectorRoutines_F559AE -- 32 32-bit routine pointers, table 2 of the seven
+;                            in this bank.  All 32 land inside this span
+;                            (0xF5672A-0xF568AA) and 10 of the 32 are
+;                            distinct.
+; Read by: the veneer at 0xF55844 -- `ld XIX,0x00F559AE / call 0xF41B08 /
+;          ret`.  T_F41B08 is `jp 0x00F8BDC5`, and prom_a 0xF8BDC5 is `cp
+;          HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L / ld
+;          XIX,(XIX+L) / call XIX` -- a bounds-checked call of entry HL of the
+;          table in XIX.
+; Evidence: the ENTRY COUNT IS THE INDEXER'S BOUND (32, from `and L,0x1F`),
+;           and the NUMBER OF TABLES is settled by three counts that agree,
+;           all re-measured on every emit: the veneer block holds exactly
+;           seven `ld XIX,imm32` and their immediates are these seven bases;
+;           the first seven 128-byte blocks from 0xF558AE are entirely ROM-
+;           range words and the eighth is not; and 0xF55BAE + 0x80 = 0xF55C2E,
+;           where the code resumes.  ★ Same shape, same evidence, as the 32
+;           tables at 0xF7D000 already converted in this file.
+; Unknown: WHICH selector each index is -- so this name is FRAMED, a kind plus
+;          an address, not content.  The index space is bounded at 31 by the
+;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
+;          the BOUND and not a claim that the two enumerate the same things.
+; --------------------------------------------------------------------------
+SelectorRoutines_F559AE:
+	.long	0x00F5672A	; F559AE  [ 0] -> Nop_Ret_F5672A
+	.long	0x00F5672A	; F559B2  [ 1] -> Nop_Ret_F5672A
+	.long	0x00F5672A	; F559B6  [ 2] -> Nop_Ret_F5672A
+	.long	0x00F5672A	; F559BA  [ 3] -> Nop_Ret_F5672A
+	.long	0x00F5672A	; F559BE  [ 4] -> Nop_Ret_F5672A
+	.long	0x00F5672A	; F559C2  [ 5] -> Nop_Ret_F5672A
+	.long	0x00F5672A	; F559C6  [ 6] -> Nop_Ret_F5672A
+	.long	0x00F5672A	; F559CA  [ 7] -> Nop_Ret_F5672A
+	.long	0x00F5672B	; F559CE  [ 8] -> sub_F5672B
+	.long	0x00F56752	; F559D2  [ 9] -> sub_F56752
+	.long	0x00F5676B	; F559D6  [10] -> sub_F5676B
+	.long	0x00F56791	; F559DA  [11] -> sub_F56791
+	.long	0x00F5679B	; F559DE  [12] -> sub_F5679B
+	.long	0x00F567C8	; F559E2  [13] -> Nop_Ret_F567C8
+	.long	0x00F567C8	; F559E6  [14] -> Nop_Ret_F567C8
+	.long	0x00F567C9	; F559EA  [15] -> sub_F567C9
+	.long	0x00F568AA	; F559EE  [16] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F559F2  [17] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F559F6  [18] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F559FA  [19] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F559FE  [20] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A02  [21] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A06  [22] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A0A  [23] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A0E  [24] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A12  [25] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A16  [26] -> Nop_Ret_F568AA
+	.long	0x00F567DE	; F55A1A  [27] -> sub_F567DE
+	.long	0x00F568AA	; F55A1E  [28] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A22  [29] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A26  [30] -> Nop_Ret_F568AA
+	.long	0x00F568AA	; F55A2A  [31] -> Nop_Ret_F568AA
+
+
+; --------------------------------------------------------------------------
+; SelectorRoutines_F55A2E -- 32 32-bit routine pointers, table 3 of the seven
+;                            in this bank.  All 32 land inside this span
+;                            (0xF56142-0xF56DF0) and 22 of the 32 are
+;                            distinct.
+; Read by: the veneer at 0xF5585E -- `ld XIX,0x00F55A2E / call 0xF41B08 /
+;          ret`.  T_F41B08 is `jp 0x00F8BDC5`, and prom_a 0xF8BDC5 is `cp
+;          HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L / ld
+;          XIX,(XIX+L) / call XIX` -- a bounds-checked call of entry HL of the
+;          table in XIX.
+; Evidence: the ENTRY COUNT IS THE INDEXER'S BOUND (32, from `and L,0x1F`),
+;           and the NUMBER OF TABLES is settled by three counts that agree,
+;           all re-measured on every emit: the veneer block holds exactly
+;           seven `ld XIX,imm32` and their immediates are these seven bases;
+;           the first seven 128-byte blocks from 0xF558AE are entirely ROM-
+;           range words and the eighth is not; and 0xF55BAE + 0x80 = 0xF55C2E,
+;           where the code resumes.  ★ Same shape, same evidence, as the 32
+;           tables at 0xF7D000 already converted in this file.
+; Unknown: WHICH selector each index is -- so this name is FRAMED, a kind plus
+;          an address, not content.  The index space is bounded at 31 by the
+;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
+;          the BOUND and not a claim that the two enumerate the same things.
+; --------------------------------------------------------------------------
+SelectorRoutines_F55A2E:
+	.long	0x00F56142	; F55A2E  [ 0] -> Write3602_ThenNotify_F56142
+	.long	0x00F56158	; F55A32  [ 1] -> Write3602_ThenNotify_F56158
+	.long	0x00F5616E	; F55A36  [ 2] -> Write3602_ThenNotify_F5616E
+	.long	0x00F56184	; F55A3A  [ 3] -> Write3602_ThenNotify_F56184
+	.long	0x00F5619A	; F55A3E  [ 4] -> Write3602_ThenNotify_F5619A
+	.long	0x00F561B0	; F55A42  [ 5] -> Write3602_ThenNotify_F561B0
+	.long	0x00F561C6	; F55A46  [ 6] -> Write3602_ThenNotify_F561C6
+	.long	0x00F561DC	; F55A4A  [ 7] -> Write3602_ThenNotify_F561DC
+	.long	0x00F56C57	; F55A4E  [ 8] -> sub_F56C57
+	.long	0x00F56CD6	; F55A52  [ 9] -> sub_F56CD6
+	.long	0x00F56D1D	; F55A56  [10] -> sub_F56D1D
+	.long	0x00F56DD8	; F55A5A  [11] -> Nop_Ret_F56DD8
+	.long	0x00F56DD8	; F55A5E  [12] -> Nop_Ret_F56DD8
+	.long	0x00F56DD8	; F55A62  [13] -> Nop_Ret_F56DD8
+	.long	0x00F56DD8	; F55A66  [14] -> Nop_Ret_F56DD8
+	.long	0x00F56DD9	; F55A6A  [15] -> sub_F56DD9
+	.long	0x00F56DF0	; F55A6E  [16] -> Nop_Ret_F56DF0
+	.long	0x00F561F2	; F55A72  [17] -> Write3602_IfBit2088_F561F2
+	.long	0x00F5621C	; F55A76  [18] -> Write3602_IfBit2088_F5621C
+	.long	0x00F56246	; F55A7A  [19] -> Write3602_IfBit2088_F56246
+	.long	0x00F56270	; F55A7E  [20] -> Write3602_IfBit2088_F56270
+	.long	0x00F5629A	; F55A82  [21] -> Write3602_IfBit2088_F5629A
+	.long	0x00F562C4	; F55A86  [22] -> Write3602_IfBit2088_F562C4
+	.long	0x00F562EE	; F55A8A  [23] -> Write3602_IfBit2088_F562EE
+	.long	0x00F56318	; F55A8E  [24] -> Write3602_IfBit2088_F56318
+	.long	0x00F56DF0	; F55A92  [25] -> Nop_Ret_F56DF0
+	.long	0x00F56DF0	; F55A96  [26] -> Nop_Ret_F56DF0
+	.long	0x00F56DF0	; F55A9A  [27] -> Nop_Ret_F56DF0
+	.long	0x00F56DF0	; F55A9E  [28] -> Nop_Ret_F56DF0
+	.long	0x00F56DF0	; F55AA2  [29] -> Nop_Ret_F56DF0
+	.long	0x00F56DF0	; F55AA6  [30] -> Nop_Ret_F56DF0
+	.long	0x00F56DF0	; F55AAA  [31] -> Nop_Ret_F56DF0
+
+
+; --------------------------------------------------------------------------
+; SelectorRoutines_F55AAE -- 32 32-bit routine pointers, table 4 of the seven
+;                            in this bank.  All 32 land inside this span
+;                            (0xF56EB7-0xF56FD5) and 9 of the 32 are distinct.
+; Read by: the veneer at 0xF55874 -- `ld XIX,0x00F55AAE / call 0xF41B08 /
+;          ret`.  T_F41B08 is `jp 0x00F8BDC5`, and prom_a 0xF8BDC5 is `cp
+;          HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L / ld
+;          XIX,(XIX+L) / call XIX` -- a bounds-checked call of entry HL of the
+;          table in XIX.
+; Evidence: the ENTRY COUNT IS THE INDEXER'S BOUND (32, from `and L,0x1F`),
+;           and the NUMBER OF TABLES is settled by three counts that agree,
+;           all re-measured on every emit: the veneer block holds exactly
+;           seven `ld XIX,imm32` and their immediates are these seven bases;
+;           the first seven 128-byte blocks from 0xF558AE are entirely ROM-
+;           range words and the eighth is not; and 0xF55BAE + 0x80 = 0xF55C2E,
+;           where the code resumes.  ★ Same shape, same evidence, as the 32
+;           tables at 0xF7D000 already converted in this file.
+; Unknown: WHICH selector each index is -- so this name is FRAMED, a kind plus
+;          an address, not content.  The index space is bounded at 31 by the
+;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
+;          the BOUND and not a claim that the two enumerate the same things.
+; --------------------------------------------------------------------------
+SelectorRoutines_F55AAE:
+	.long	0x00F56EB7	; F55AAE  [ 0] -> Nop_Ret_F56EB7
+	.long	0x00F56EB7	; F55AB2  [ 1] -> Nop_Ret_F56EB7
+	.long	0x00F56EB7	; F55AB6  [ 2] -> Nop_Ret_F56EB7
+	.long	0x00F56EB7	; F55ABA  [ 3] -> Nop_Ret_F56EB7
+	.long	0x00F56EB7	; F55ABE  [ 4] -> Nop_Ret_F56EB7
+	.long	0x00F56EB7	; F55AC2  [ 5] -> Nop_Ret_F56EB7
+	.long	0x00F56EB7	; F55AC6  [ 6] -> Nop_Ret_F56EB7
+	.long	0x00F56EB7	; F55ACA  [ 7] -> Nop_Ret_F56EB7
+	.long	0x00F56EB7	; F55ACE  [ 8] -> Nop_Ret_F56EB7
+	.long	0x00F56EB8	; F55AD2  [ 9] -> sub_F56EB8
+	.long	0x00F56EC6	; F55AD6  [10] -> sub_F56EC6
+	.long	0x00F56ED4	; F55ADA  [11] -> sub_F56ED4
+	.long	0x00F56EDE	; F55ADE  [12] -> sub_F56EDE
+	.long	0x00F56EF3	; F55AE2  [13] -> Nop_Ret_F56EF3
+	.long	0x00F56EF3	; F55AE6  [14] -> Nop_Ret_F56EF3
+	.long	0x00F56EF4	; F55AEA  [15] -> sub_F56EF4
+	.long	0x00F56FD5	; F55AEE  [16] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55AF2  [17] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55AF6  [18] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55AFA  [19] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55AFE  [20] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B02  [21] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B06  [22] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B0A  [23] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B0E  [24] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B12  [25] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B16  [26] -> Nop_Ret_F56FD5
+	.long	0x00F56F09	; F55B1A  [27] -> sub_F56F09
+	.long	0x00F56FD5	; F55B1E  [28] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B22  [29] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B26  [30] -> Nop_Ret_F56FD5
+	.long	0x00F56FD5	; F55B2A  [31] -> Nop_Ret_F56FD5
+
+
+; --------------------------------------------------------------------------
+; SelectorRoutines_F55B2E -- 32 32-bit routine pointers, table 5 of the seven
+;                            in this bank.  All 32 land inside this span
+;                            (0xF57337-0xF57381) and 9 of the 32 are distinct.
+; Read by: the veneer at 0xF5588A -- `ld XIX,0x00F55B2E / call 0xF41B08 /
+;          ret`.  T_F41B08 is `jp 0x00F8BDC5`, and prom_a 0xF8BDC5 is `cp
+;          HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L / ld
+;          XIX,(XIX+L) / call XIX` -- a bounds-checked call of entry HL of the
+;          table in XIX.
+; Evidence: the ENTRY COUNT IS THE INDEXER'S BOUND (32, from `and L,0x1F`),
+;           and the NUMBER OF TABLES is settled by three counts that agree,
+;           all re-measured on every emit: the veneer block holds exactly
+;           seven `ld XIX,imm32` and their immediates are these seven bases;
+;           the first seven 128-byte blocks from 0xF558AE are entirely ROM-
+;           range words and the eighth is not; and 0xF55BAE + 0x80 = 0xF55C2E,
+;           where the code resumes.  ★ Same shape, same evidence, as the 32
+;           tables at 0xF7D000 already converted in this file.
+; Unknown: WHICH selector each index is -- so this name is FRAMED, a kind plus
+;          an address, not content.  The index space is bounded at 31 by the
+;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
+;          the BOUND and not a claim that the two enumerate the same things.
+; --------------------------------------------------------------------------
+SelectorRoutines_F55B2E:
+	.long	0x00F57337	; F55B2E  [ 0] -> Nop_Ret_F57337
+	.long	0x00F57337	; F55B32  [ 1] -> Nop_Ret_F57337
+	.long	0x00F57337	; F55B36  [ 2] -> Nop_Ret_F57337
+	.long	0x00F57337	; F55B3A  [ 3] -> Nop_Ret_F57337
+	.long	0x00F57337	; F55B3E  [ 4] -> Nop_Ret_F57337
+	.long	0x00F57337	; F55B42  [ 5] -> Nop_Ret_F57337
+	.long	0x00F57337	; F55B46  [ 6] -> Nop_Ret_F57337
+	.long	0x00F57337	; F55B4A  [ 7] -> Nop_Ret_F57337
+	.long	0x00F57338	; F55B4E  [ 8] -> sub_F57338
+	.long	0x00F5734A	; F55B52  [ 9] -> sub_F5734A
+	.long	0x00F57358	; F55B56  [10] -> sub_F57358
+	.long	0x00F57366	; F55B5A  [11] -> Fwd_F57366
+	.long	0x00F5736A	; F55B5E  [12] -> Nop_Ret_F5736A
+	.long	0x00F5736A	; F55B62  [13] -> Nop_Ret_F5736A
+	.long	0x00F5736A	; F55B66  [14] -> Nop_Ret_F5736A
+	.long	0x00F5736B	; F55B6A  [15] -> sub_F5736B
+	.long	0x00F57381	; F55B6E  [16] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B72  [17] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B76  [18] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B7A  [19] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B7E  [20] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B82  [21] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B86  [22] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B8A  [23] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B8E  [24] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B92  [25] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55B96  [26] -> Nop_Ret_F57381
+	.long	0x00F5737D	; F55B9A  [27] -> Fwd_F5737D
+	.long	0x00F57381	; F55B9E  [28] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55BA2  [29] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55BA6  [30] -> Nop_Ret_F57381
+	.long	0x00F57381	; F55BAA  [31] -> Nop_Ret_F57381
+
+
+; --------------------------------------------------------------------------
+; SelectorRoutines_F55BAE -- 32 32-bit routine pointers, table 6 of the seven
+;                            in this bank.  All 32 land inside this span
+;                            (0xF57418-0xF57432) and 9 of the 32 are distinct.
+; Read by: the veneer at 0xF558A0 -- `ld XIX,0x00F55BAE / call 0xF41B08 /
+;          ret`.  T_F41B08 is `jp 0x00F8BDC5`, and prom_a 0xF8BDC5 is `cp
+;          HL,0x1F / jr UGT,<ret> / ... / and L,0x1F / sla 2,L / ld
+;          XIX,(XIX+L) / call XIX` -- a bounds-checked call of entry HL of the
+;          table in XIX.
+; Evidence: the ENTRY COUNT IS THE INDEXER'S BOUND (32, from `and L,0x1F`),
+;           and the NUMBER OF TABLES is settled by three counts that agree,
+;           all re-measured on every emit: the veneer block holds exactly
+;           seven `ld XIX,imm32` and their immediates are these seven bases;
+;           the first seven 128-byte blocks from 0xF558AE are entirely ROM-
+;           range words and the eighth is not; and 0xF55BAE + 0x80 = 0xF55C2E,
+;           where the code resumes.  ★ Same shape, same evidence, as the 32
+;           tables at 0xF7D000 already converted in this file.
+; Unknown: WHICH selector each index is -- so this name is FRAMED, a kind plus
+;          an address, not content.  The index space is bounded at 31 by the
+;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
+;          the BOUND and not a claim that the two enumerate the same things.
+; --------------------------------------------------------------------------
+SelectorRoutines_F55BAE:
+	.long	0x00F57418	; F55BAE  [ 0] -> Nop_Ret_F57418
+	.long	0x00F57418	; F55BB2  [ 1] -> Nop_Ret_F57418
+	.long	0x00F57418	; F55BB6  [ 2] -> Nop_Ret_F57418
+	.long	0x00F57418	; F55BBA  [ 3] -> Nop_Ret_F57418
+	.long	0x00F57418	; F55BBE  [ 4] -> Nop_Ret_F57418
+	.long	0x00F57418	; F55BC2  [ 5] -> Nop_Ret_F57418
+	.long	0x00F57418	; F55BC6  [ 6] -> Nop_Ret_F57418
+	.long	0x00F57418	; F55BCA  [ 7] -> Nop_Ret_F57418
+	.long	0x00F57419	; F55BCE  [ 8] -> Fwd_F57419
+	.long	0x00F5741D	; F55BD2  [ 9] -> Fwd_F5741D
+	.long	0x00F57421	; F55BD6  [10] -> Fwd_F57421
+	.long	0x00F57425	; F55BDA  [11] -> Fwd_F57425
+	.long	0x00F57429	; F55BDE  [12] -> Nop_Ret_F57429
+	.long	0x00F57429	; F55BE2  [13] -> Nop_Ret_F57429
+	.long	0x00F57429	; F55BE6  [14] -> Nop_Ret_F57429
+	.long	0x00F5742A	; F55BEA  [15] -> Fwd_F5742A
+	.long	0x00F57432	; F55BEE  [16] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55BF2  [17] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55BF6  [18] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55BFA  [19] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55BFE  [20] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C02  [21] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C06  [22] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C0A  [23] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C0E  [24] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C12  [25] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C16  [26] -> Nop_Ret_F57432
+	.long	0x00F5742E	; F55C1A  [27] -> Fwd_F5742E
+	.long	0x00F57432	; F55C1E  [28] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C22  [29] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C26  [30] -> Nop_Ret_F57432
+	.long	0x00F57432	; F55C2A  [31] -> Nop_Ret_F57432
+
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F55C2E
+; Called from: in-module: 0xF55DEC 0xF55E45
+; Touches: nothing with an absolute address
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF55C2E is an instruction boundary.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F55C2E:
+	ret	; F55C2E  ret
+
+; --------------------------------------------------------------------------
+; sub_F55C2F
+; Called from: in-module: 0xF55C61 0xF55CB6 0xF55CE7 0xF55D12 0xF55E7D
+;              0xF55ED8 0xF55F33
+; Touches: (0x2540)
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF55C2F is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F55C2F:
+	ldb	c, 0	; F55C2F  ld C,0x00
+	ldb	a, 12	; F55C31  ld A,0x0c
+	swi	7	; F55C33  swi 7
+	ldb	a, 16	; F55C34  ld A,0x10
+	swi	7	; F55C36  swi 7
+	stdi8	(9536), 0	; F55C37  ld (0x2540),0x00
+	ret	; F55C3C  ret
+
+; --------------------------------------------------------------------------
+; sub_F55C3D
+; Called from: in-module: 0xF55CB2 0xF55CE3 0xF55D63 0xF55ED4 0xF55F2F
+;              0xF55F9B
+; Touches: nothing with an absolute address
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF55C3D is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F55C3D:
+	ldb	c, 7	; F55C3D  ld C,0x07
+	ldb	a, 12	; F55C3F  ld A,0x0c
+	swi	7	; F55C41  swi 7
+	ret	; F55C42  ret
+	ret	; F55C43  ret
+
+; --------------------------------------------------------------------------
+; sub_F55C44
+; Called from: in-module: 0xF55CAB 0xF55D5C 0xF55F6D
+; Touches: (0x12F6) (0x2540) (0x2652) (0x3552) (0x3753)  |  0xF341B6 0xF34256
+;          0xF3434C 0xF34361 0xF343B6 0xF343BC +9 more
+; Calls:   T_DLB_Handler_StringTable sub_F55C2F T_DisplayList_Run sub_F55D67
+;          sub_F55D90 Unclaimed_F57453 T_DisplayListB_Run sub_F55C44 T_F415BC
+;          sub_F55C3D 0xF57498
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF55C44 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F55C44:
+	cp	wa, 32770	; F55C44  cp WA,0x8002
+	jr	nz, 7	; F55C48  jr NZ,0xf55c51
+	stdi8	(4854), 1	; F55C4A  ld (0x12f6),0x01
+	jr	11	; F55C4F  jr T,0xf55c5c
+	cp	wa, 32769	; F55C51  cp WA,0x8001
+	jr	nz, 9	; F55C55  jr NZ,0xf55c60
+	stdi8	(4854), 0	; F55C57  ld (0x12f6),0x00
+	call	15996920	; F55C5C  call 0xf417f8
+	ret	; F55C60  ret
+	calr	65483	; F55C61  calr 0xf55c2f
+	ld	xiy, 15944135	; F55C64  ld XIY,0x00f349c7
+	ld	xix, 15944814	; F55C69  ld XIX,0x00f34c6e
+	call	15996912	; F55C6E  call 0xf417f0
+	ld	xiy, 15942070	; F55C72  ld XIY,0x00f341b6
+	ld	xix, 15942230	; F55C77  ld XIX,0x00f34256
+	call	15996912	; F55C7C  call 0xf417f0
+	stdi8	(9536), 2	; F55C80  ld (0x2540),0x02
+	calr	223	; F55C85  calr 0xf55d67
+	calr	261	; F55C88  calr 0xf55d90
+	ret	; F55C8B  ret
+	calr	6084	; F55C8C  calr 0xf57453
+	stdi8	(9536), 2	; F55C8F  ld (0x2540),0x02
+	ld	xiy, 15944048	; F55C94  ld XIY,0x00f34970
+	ld	xix, 15944123	; F55C99  ld XIX,0x00f349bb
+	call	15996916	; F55C9E  call 0xf417f4
+	ldw_d16	wa, (13650)	; F55CA2  ld WA,(0x3552)
+	ld	xiy, 15942476	; F55CA6  ld XIY,0x00f3434c
+	calr	65430	; F55CAB  calr 0xf55c44
+	call	15996348	; F55CAE  call 0xf415bc
+	calr	65416	; F55CB2  calr 0xf55c3d
+	ret	; F55CB5  ret
+	calr	65398	; F55CB6  calr 0xf55c2f
+	ld	xiy, 15946562	; F55CB9  ld XIY,0x00f35342
+	ld	xix, 15946655	; F55CBE  ld XIX,0x00f3539f
+	call	15996912	; F55CC3  call 0xf417f0
+	ret	; F55CC7  ret
+	ldb_d8	a, (14163)	; F55CC8  ld A,(0x3753)
+	stb_d8	(9810), a	; F55CCC  ld (0x2652),A
+	stdi8	(9536), 0	; F55CD0  ld (0x2540),0x00
+	ld	xiy, 15946655	; F55CD5  ld XIY,0x00f3539f
+	ld	xix, 15946667	; F55CDA  ld XIX,0x00f353ab
+	call	15996916	; F55CDF  call 0xf417f4
+	calr	65367	; F55CE3  calr 0xf55c3d
+	ret	; F55CE6  ret
+	calr	65349	; F55CE7  calr 0xf55c2f
+	ld	xiy, 15943297	; F55CEA  ld XIY,0x00f34681
+	ld	xix, 15944040	; F55CEF  ld XIX,0x00f34968
+	call	15996912	; F55CF4  call 0xf417f0
+	ld	xiy, 15942070	; F55CF8  ld XIY,0x00f341b6
+	ld	xix, 15942230	; F55CFD  ld XIX,0x00f34256
+	call	15996912	; F55D02  call 0xf417f0
+	stdi8	(9536), 2	; F55D06  ld (0x2540),0x02
+	calr	89	; F55D0B  calr 0xf55d67
+	calr	127	; F55D0E  calr 0xf55d90
+	ret	; F55D11  ret
+	calr	65306	; F55D12  calr 0xf55c2f
+	ld	xiy, 15942588	; F55D15  ld XIY,0x00f343bc
+	ld	xix, 15943297	; F55D1A  ld XIX,0x00f34681
+	call	15996912	; F55D1F  call 0xf417f0
+	ld	xiy, 15942070	; F55D23  ld XIY,0x00f341b6
+	ld	xix, 15942230	; F55D28  ld XIX,0x00f34256
+	call	15996912	; F55D2D  call 0xf417f0
+	stdi8	(9536), 2	; F55D31  ld (0x2540),0x02
+	calr	46	; F55D36  calr 0xf55d67
+	calr	84	; F55D39  calr 0xf55d90
+	ret	; F55D3C  ret
+	calr	5976	; F55D3D  calr 0xf57498
+	stdi8	(9536), 2	; F55D40  ld (0x2540),0x02
+	ld	xiy, 15942497	; F55D45  ld XIY,0x00f34361
+	ld	xix, 15942582	; F55D4A  ld XIX,0x00f343b6
+	call	15996916	; F55D4F  call 0xf417f4
+	ldw_d16	wa, (13650)	; F55D53  ld WA,(0x3552)
+	ld	xiy, 15942476	; F55D57  ld XIY,0x00f3434c
+	calr	65253	; F55D5C  calr 0xf55c44
+	call	15996348	; F55D5F  call 0xf415bc
+	calr	65239	; F55D63  calr 0xf55c3d
+	ret	; F55D66  ret
+
+; --------------------------------------------------------------------------
+; sub_F55D67
+; Called from: in-module: 0xF55C85 0xF55D0B 0xF55D36
+; Touches:   |  0x603422 0xF34D98 0xF34E88
+; Calls:   T_DisplayListB_Run
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF55D67 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F55D67:
+	ld	xiy, 6304802	; F55D67  ld XIY,0x00603422
+	ld	xix, 4854	; F55D6C  ld XIX,0x000012f6
+	ldb	c, 16	; F55D71  ld C,0x10
+	ld	a, (xiy)	; F55D73  ld A,(XIY)
+	ld	(xix), a	; F55D75  ld (XIX),A
+	dec	1, c	; F55D77  dec 1,C
+	jr	z, 6	; F55D79  jr Z,0xf55d81
+	inc	1, iy	; F55D7B  inc 1,IY
+	inc	1, ix	; F55D7D  inc 1,IX
+	jr	-14	; F55D7F  jr T,0xf55d73
+	ld	xiy, 15945112	; F55D81  ld XIY,0x00f34d98
+	ld	xix, 15945352	; F55D86  ld XIX,0x00f34e88
+	call	15996916	; F55D8B  call 0xf417f4
+	ret	; F55D8F  ret
+
+; --------------------------------------------------------------------------
+; sub_F55D90
+; Called from: T_F40E10 (0xF40E10, x6); in-module: 0xF55C88 0xF55D0E 0xF55D39
+;              0xF56574
+; Touches: (0x207C) (0x2540) (0x3000) (0x3740)  |  0xF34C6E 0xF34C7A
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal Nop_Ret_F55C2E sub_F55E20
+; Evidence: thunk slot T_F40E10 holds `jp 0x00F55D90`, and 0xF55D90 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F55D90:		; <- T_F40E10
+	ldb_d8	a, (8316)	; F55D90  ld A,(0x207c)
+	cps	a, 6	; F55D94  cp A,6
+	jr	z, 10	; F55D96  jr Z,0xf55da2
+	cp	a, 9	; F55D98  cp A,0x09
+	jr	z, 5	; F55D9B  jr Z,0xf55da2
+	cp	a, 18	; F55D9D  cp A,0x12
+	jr	nz, 27	; F55DA0  jr NZ,0xf55dbd
+	ldw_da	wa, (6304798)	; F55DA2  ld WA,(0x60341e)
+	stda16	(14144), wa	; F55DA7  ld (0x3740),WA
+	ld	xwa, 16080318	; F55DAB  ld XWA,0x00f55dbe
+	push	xwa	; F55DB0  push XWA
+	call	16002692	; F55DB1  call 0xf42e84
+	inc	4, xsp	; F55DB5  inc 4,XSP
+	ldb	a, 1	; F55DB7  ld A,0x01
+	call	16002440	; F55DB9  call 0xf42d88
+	ret	; F55DBD  ret
+	ldw	wa, 1	; F55DBE  ld WA,0x0001
+	xor	bc, bc	; F55DC1  xor BC,BC
+	ldw_d16	hl, (12288)	; F55DC3  ld HL,(0x3000)
+	.byte 0xD7, 0x3C, 0x9B	; F55DC7  ld RHL3,HL   [llvm-mc cannot encode this]
+	and	hl, wa	; F55DCA  and HL,WA
+	.byte 0xD7, 0x3C, 0x8B	; F55DCC  ld HL,RHL3   [llvm-mc cannot encode this]
+	jr	z, 4	; F55DCF  jr Z,0xf55dd5
+	xor	hl, hl	; F55DD1  xor HL,HL
+	jr	22	; F55DD3  jr T,0xf55deb
+	ldw_d16	hl, (14144)	; F55DD5  ld HL,(0x3740)
+	.byte 0xD7, 0x3C, 0x9B	; F55DD9  ld RHL3,HL   [llvm-mc cannot encode this]
+	and	hl, wa	; F55DDC  and HL,WA
+	.byte 0xD7, 0x3C, 0x8B	; F55DDE  ld HL,RHL3   [llvm-mc cannot encode this]
+	jr	z, 5	; F55DE1  jr Z,0xf55de8
+	ldw	hl, 1	; F55DE3  ld HL,0x0001
+	jr	3	; F55DE6  jr T,0xf55deb
+	ldw	hl, 2	; F55DE8  ld HL,0x0002
+	pushw	wa	; F55DEB  push WA
+	calr	65087	; F55DEC  calr 0xf55c2e
+	ld	xiy, 15944826	; F55DEF  ld XIY,0x00f34c7a
+	add	iy, bc	; F55DF4  add IY,BC
+	ld	ix, (xiy)	; F55DF6  ld IX,(XIY)
+	ld	xiy, 15944814	; F55DF8  ld XIY,0x00f34c6e
+	pushw	bc	; F55DFD  push BC
+	ldw	bc, 4	; F55DFE  ld BC,0x0004
+	ldb	a, 6	; F55E01  ld A,0x06
+	stdi8	(9536), 2	; F55E03  ld (0x2540),0x02
+	swi	7	; F55E08  swi 7
+	popw	bc	; F55E09  pop BC
+	popw	wa	; F55E0A  pop WA
+	add	bc, 2	; F55E0B  add BC,0x0002
+	sla	wa, 1	; F55E0F  sla 0x01,WA
+	jr	nc, -81	; F55E12  jr NC,0xf55dc3
+	ldw_d16	hl, (14144)	; F55E14  ld HL,(0x3740)
+	.byte 0xD1, 0x00, 0x30, 0xE3	; F55E18  or HL,(0x3000)   [llvm-mc cannot encode this]
+	calr	1	; F55E1C  calr 0xf55e20
+	ret	; F55E1F  ret
+
+; --------------------------------------------------------------------------
+; sub_F55E20
+; Called from: in-module: 0xF55E1C
+; Touches: (0x12F6) (0x2540) (0x3552) (0x3627) (0x36CE) (0x3755) (0x3756)  |
+;          0xF3437F 0xF3438E 0xF343A2 0xF343AC 0xF34C9A 0xF34CA2 +18 more
+; Calls:   T_DisplayList_Run Nop_Ret_F55C2E T_F4181C T_DLB_Handler_Array6
+;          sub_F55C2F 0xF5750C T_DisplayListB_Run T_F41820 sub_F55C3D 0xF574DE
+;          0xF57537 sub_F55C44 +1 more
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF55E20 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F55E20:
+	stdi8	(9536), 1	; F55E20  ld (0x2540),0x01
+	.byte 0xC0, 0xC6, 0x3E, 0x01	; F55E25  or (0xc6),0x01   [llvm-mc cannot encode this]
+	ld	xiy, 15944858	; F55E29  ld XIY,0x00f34c9a
+	ld	xix, 15944866	; F55E2E  ld XIX,0x00f34ca2
+	pushw	hl	; F55E33  push HL
+	call	15996912	; F55E34  call 0xf417f0
+	popw	hl	; F55E38  pop HL
+	cps	hl, 0	; F55E39  cp HL,0
+	jr	nz, 2	; F55E3B  jr NZ,0xf55e3f
+	jr	57	; F55E3D  jr T,0xf55e78
+	ldw	wa, 1	; F55E3F  ld WA,0x0001
+	xor	c, c	; F55E42  xor C,C
+	pushw	wa	; F55E44  push WA
+	calr	64998	; F55E45  calr 0xf55c2e
+	popw	wa	; F55E48  pop WA
+	stb_d8	(4854), c	; F55E49  ld (0x12f6),C
+	pushw	wa	; F55E4D  push WA
+	pushw	hl	; F55E4E  push HL
+	pushw	bc	; F55E4F  push BC
+	.byte 0xD7, 0x3C, 0x9B	; F55E50  ld RHL3,HL   [llvm-mc cannot encode this]
+	and	hl, wa	; F55E53  and HL,WA
+	.byte 0xD7, 0x3C, 0x8B	; F55E55  ld HL,RHL3   [llvm-mc cannot encode this]
+	jr	z, 11	; F55E58  jr Z,0xf55e65
+	ld	xiy, 15944866	; F55E5A  ld XIY,0x00f34ca2
+	call	15996956	; F55E5F  call 0xf4181c
+	jr	9	; F55E63  jr T,0xf55e6e
+	ld	xiy, 15944877	; F55E65  ld XIY,0x00f34cad
+	call	15996964	; F55E6A  call 0xf41824
+	popw	bc	; F55E6E  pop BC
+	popw	hl	; F55E6F  pop HL
+	popw	wa	; F55E70  pop WA
+	inc	1, c	; F55E71  inc 1,C
+	sla	wa, 1	; F55E73  sla 0x01,WA
+	jr	nc, -52	; F55E76  jr NC,0xf55e44
+	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F55E78  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	ret	; F55E7C  ret
+	calr	64943	; F55E7D  calr 0xf55c2f
+	ld	xiy, 15946248	; F55E80  ld XIY,0x00f35208
+	ld	xix, 15946489	; F55E85  ld XIX,0x00f352f9
+	call	15996912	; F55E8A  call 0xf417f0
+	ret	; F55E8E  ret
+	calr	5754	; F55E8F  calr 0xf5750c
+	stdi8	(9536), 0	; F55E92  ld (0x2540),0x00
+	.byte 0xC0, 0xC6, 0x3E, 0x01	; F55E97  or (0xc6),0x01   [llvm-mc cannot encode this]
+	ld	xiy, 15946489	; F55E9B  ld XIY,0x00f352f9
+	ld	xix, 15946556	; F55EA0  ld XIX,0x00f3533c
+	call	15996916	; F55EA5  call 0xf417f4
+	stdi8	(9536), 1	; F55EA9  ld (0x2540),0x01
+	ldb_d8	a, (14166)	; F55EAE  ld A,(0x3756)
+	stb_d8	(4854), a	; F55EB2  ld (0x12f6),A
+	ld	xiy, 15945770	; F55EB6  ld XIY,0x00f3502a
+	call	15996960	; F55EBB  call 0xf41820
+	ldb_d8	a, (13863)	; F55EBF  ld A,(0x3627)
+	stb_d8	(4854), a	; F55EC3  ld (0x12f6),A
+	ld	xiy, 15945759	; F55EC7  ld XIY,0x00f3501f
+	call	15996956	; F55ECC  call 0xf4181c
+	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F55ED0  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	calr	64870	; F55ED4  calr 0xf55c3d
+	ret	; F55ED7  ret
+	calr	64852	; F55ED8  calr 0xf55c2f
+	ld	xiy, 15945448	; F55EDB  ld XIY,0x00f34ee8
+	ld	xix, 15945714	; F55EE0  ld XIX,0x00f34ff2
+	call	15996912	; F55EE5  call 0xf417f0
+	ret	; F55EE9  ret
+	calr	5617	; F55EEA  calr 0xf574de
+	stdi8	(9536), 0	; F55EED  ld (0x2540),0x00
+	.byte 0xC0, 0xC6, 0x3E, 0x01	; F55EF2  or (0xc6),0x01   [llvm-mc cannot encode this]
+	ld	xiy, 15945714	; F55EF6  ld XIY,0x00f34ff2
+	ld	xix, 15945781	; F55EFB  ld XIX,0x00f35035
+	call	15996916	; F55F00  call 0xf417f4
+	stdi8	(9536), 1	; F55F04  ld (0x2540),0x01
+	ldb_d8	a, (14166)	; F55F09  ld A,(0x3756)
+	stb_d8	(4854), a	; F55F0D  ld (0x12f6),A
+	ld	xiy, 15945770	; F55F11  ld XIY,0x00f3502a
+	call	15996960	; F55F16  call 0xf41820
+	ldb_d8	a, (13863)	; F55F1A  ld A,(0x3627)
+	stb_d8	(4854), a	; F55F1E  ld (0x12f6),A
+	ld	xiy, 15945759	; F55F22  ld XIY,0x00f3501f
+	call	15996956	; F55F27  call 0xf4181c
+	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F55F2B  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	calr	64779	; F55F2F  calr 0xf55c3d
+	ret	; F55F32  ret
+	calr	64761	; F55F33  calr 0xf55c2f
+	ld	xiy, 15945819	; F55F36  ld XIY,0x00f3505b
+	ld	xix, 15946151	; F55F3B  ld XIX,0x00f351a7
+	call	15996912	; F55F40  call 0xf417f0
+	ret	; F55F44  ret
+	calr	5615	; F55F45  calr 0xf57537
+	stdi8	(9536), 0	; F55F48  ld (0x2540),0x00
+	.byte 0xC0, 0xC6, 0x3E, 0x01	; F55F4D  or (0xc6),0x01   [llvm-mc cannot encode this]
+	ld	xiy, 15946151	; F55F51  ld XIY,0x00f351a7
+	ld	xix, 15946233	; F55F56  ld XIX,0x00f351f9
+	call	15996916	; F55F5B  call 0xf417f4
+	stdi8	(9536), 0	; F55F5F  ld (0x2540),0x00
+	ldw_d16	wa, (13650)	; F55F64  ld WA,(0x3552)
+	ld	xiy, 15946233	; F55F68  ld XIY,0x00f351f9
+	calr	64724	; F55F6D  calr 0xf55c44
+	stdi8	(9536), 1	; F55F70  ld (0x2540),0x01
+	ldb_d8	a, (14165)	; F55F75  ld A,(0x3755)
+	stb_d8	(4854), a	; F55F79  ld (0x12f6),A
+	ld	xiy, 15945770	; F55F7D  ld XIY,0x00f3502a
+	call	15996960	; F55F82  call 0xf41820
+	ldb_d8	a, (14030)	; F55F86  ld A,(0x36ce)
+	stb_d8	(4854), a	; F55F8A  ld (0x12f6),A
+	ld	xiy, 15945759	; F55F8E  ld XIY,0x00f3501f
+	call	15996956	; F55F93  call 0xf4181c
+	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F55F97  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	calr	64671	; F55F9B  calr 0xf55c3d
+	ret	; F55F9E  ret
+	stdi8	(9536), 0	; F55F9F  ld (0x2540),0x00
+	ld	xiy, 15945714	; F55FA4  ld XIY,0x00f34ff2
+	ld	xix, 15945729	; F55FA9  ld XIX,0x00f35001
+	call	15996916	; F55FAE  call 0xf417f4
+	ret	; F55FB2  ret
+	stdi8	(9536), 0	; F55FB3  ld (0x2540),0x00
+	ld	xiy, 15946191	; F55FB8  ld XIY,0x00f351cf
+	push	xiy	; F55FBD  push XIY
+	call	16002592	; F55FBE  call 0xf42e20
+	inc	4, xsp	; F55FC2  inc 4,XSP
+	ld	xiy, 15946201	; F55FC4  ld XIY,0x00f351d9
+	push	xiy	; F55FC9  push XIY
+	call	16002592	; F55FCA  call 0xf42e20
+	inc	4, xsp	; F55FCE  inc 4,XSP
+	ret	; F55FD0  ret
+	stdi8	(9536), 0	; F55FD1  ld (0x2540),0x00
+	ld	xiy, 15945739	; F55FD6  ld XIY,0x00f3500b
+	push	xiy	; F55FDB  push XIY
+	call	16002592	; F55FDC  call 0xf42e20
+	inc	4, xsp	; F55FE0  inc 4,XSP
+	ld	xiy, 15945749	; F55FE2  ld XIY,0x00f35015
+	push	xiy	; F55FE7  push XIY
+	call	16002592	; F55FE8  call 0xf42e20
+	inc	4, xsp	; F55FEC  inc 4,XSP
+	ret	; F55FEE  ret
+	stdi8	(9536), 0	; F55FEF  ld (0x2540),0x00
+	ld	xiy, 15946489	; F55FF4  ld XIY,0x00f352f9
+	ld	xix, 15946504	; F55FF9  ld XIX,0x00f35308
+	call	15996916	; F55FFE  call 0xf417f4
+	ret	; F56002  ret
+	stdi8	(9536), 2	; F56003  ld (0x2540),0x02
+	ld	xiy, 15942562	; F56008  ld XIY,0x00f343a2
+	ld	xix, 15942572	; F5600D  ld XIX,0x00f343ac
+	call	15996916	; F56012  call 0xf417f4
+	ret	; F56016  ret
+	stdi8	(9536), 2	; F56017  ld (0x2540),0x02
+	ld	xiy, 15942527	; F5601C  ld XIY,0x00f3437f
+	ld	xix, 15942542	; F56021  ld XIX,0x00f3438e
+	call	15996916	; F56026  call 0xf417f4
+	ret	; F5602A  ret
+	ret	; F5602B  ret
+
+; --------------------------------------------------------------------------
+; sub_F5602C
+; Called from: in-module: 0xF55800
+; Touches: nothing with an absolute address
+; Calls:   T_F40CF0 sub_F57433 T_F40CE8 T_F40BD8
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5602C is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5602C:
+	call	15994096	; F5602C  call 0xf40cf0
+	calr	5120	; F56030  calr 0xf57433
+	call	15994088	; F56033  call 0xf40ce8
+	call	15993816	; F56037  call 0xf40bd8
+	ret	; F5603B  ret
+
+; --------------------------------------------------------------------------
+; sub_F5603C
+; Called from: in-module: 0xF55804
+; Touches: (0x34D1) (0x36C6) (0x36CA) (0x3758)
+; Calls:   T_F40CEC sub_F57443
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5603C is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5603C:
+	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xEF	; F5603C  and (0x34d1),0xef   [llvm-mc cannot encode this]
+	call	15994092	; F56041  call 0xf40cec
+	xor	xwa, xwa	; F56045  xor XWA,XWA
+	stda32	(14026), xwa	; F56047  ld (0x36ca),XWA
+	stda32	(14022), xwa	; F5604B  ld (0x36c6),XWA
+	calr	5105	; F5604F  calr 0xf57443
+	.byte 0xC1, 0x58, 0x37, 0x3C, 0xFE	; F56052  and (0x3758),0xfe   [llvm-mc cannot encode this]
+	ret	; F56057  ret
+
+; --------------------------------------------------------------------------
+; sub_F56058
+; Called from: in-module: 0xF55810
+; Touches: (0x2070) (0x2071) (0x207A) (0x207B) (0x207C) (0x207D) (0x2095)
+;          (0x2250) (0x34D1) (0x34D9) +5 more
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40CF8 T_F40B60 T_F40B5C
+;          T_F40AC4 T_F40BDC T_F40D00 T_Queue2E00_AppendRegs T_F411BC
+;          T_CallbackQueue_Post T_Kernel_SemaSignal T_F42704
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56058 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56058:
+	ldb_d8	a, (8314)	; F56058  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F5605C  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 17	; F56060  jr NZ,0xf56073
+	ldb_d8	a, (8316)	; F56062  ld A,(0x207c)
+	.byte 0xC1, 0x7D, 0x20, 0xF1	; F56066  cp A,(0x207d)   [llvm-mc cannot encode this]
+	jr	nz, 53	; F5606A  jr NZ,0xf560a1
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F5606C  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jrl	nz, 159	; F56070  jrl NZ,0xf56112
+	.byte 0xC1, 0x7B, 0x20, 0x3F, 0x08	; F56073  cp (0x207b),0x08   [llvm-mc cannot encode this]
+	jr	z, 65	; F56078  jr Z,0xf560bb
+	bit_dd8	2, 150	; F5607A  bit 2,(0x96)
+	jr	nz, 34	; F5607D  jr NZ,0xf560a1
+	call	16002688	; F5607F  call 0xf42e80
+	call	15994104	; F56083  call 0xf40cf8
+	.byte 0xF1, 0x0B, 0x36, 0xC9	; F56087  bit 1,(0x360b)   [llvm-mc cannot encode this]
+	jr	z, 16	; F5608B  jr Z,0xf5609d
+	call	15993696	; F5608D  call 0xf40b60
+	call	15993692	; F56091  call 0xf40b5c
+	call	15993540	; F56095  call 0xf40ac4
+	call	15993820	; F56099  call 0xf40bdc
+	call	15994112	; F5609D  call 0xf40d00
+	.byte 0xF1, 0xD1, 0x34, 0xCC	; F560A1  bit 4,(0x34d1)   [llvm-mc cannot encode this]
+	jr	z, 20	; F560A5  jr Z,0xf560bb
+	stdi8	(8304), 1	; F560A7  ld (0x2070),0x01
+	stdi8	(8305), 2	; F560AC  ld (0x2071),0x02
+	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xEF	; F560B1  and (0x34d1),0xef   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x14, 0x36, 0x3C, 0xFE	; F560B6  and (0x3614),0xfe   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x58, 0x37, 0xC8	; F560BB  bit 0,(0x3758)   [llvm-mc cannot encode this]
+	jr	z, 26	; F560BF  jr Z,0xf560db
+	ldb_d8	a, (14167)	; F560C1  ld A,(0x3757)
+	stb_d8	(8784), a	; F560C5  ld (0x2250),A
+	.byte 0xC1, 0x58, 0x37, 0x3C, 0xFE	; F560C9  and (0x3758),0xfe   [llvm-mc cannot encode this]
+	ldb	w, 255	; F560CE  ld W,0xff
+	ldw	de, 4240	; F560D0  ld DE,0x1090
+	call	15994684	; F560D3  call 0xf40f3c
+	call	15995324	; F560D7  call 0xf411bc
+	.byte 0xF1, 0x32, 0x7F, 0xCA	; F560DB  bit 2,(0x7f32)   [llvm-mc cannot encode this]
+	jr	z, 5	; F560DF  jr Z,0xf560e6
+	.byte 0xC1, 0xD9, 0x34, 0x3C, 0xFE	; F560E1  and (0x34d9),0xfe   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x0B, 0x36, 0xC9	; F560E6  bit 1,(0x360b)   [llvm-mc cannot encode this]
+	jr	nz, 20	; F560EA  jr NZ,0xf56100
+	ld	xwa, 16080146	; F560EC  ld XWA,0x00f55d12
+	push	xwa	; F560F1  push XWA
+	call	16002692	; F560F2  call 0xf42e84
+	inc	4, xsp	; F560F6  inc 4,XSP
+	ldb	a, 1	; F560F8  ld A,0x01
+	call	16002440	; F560FA  call 0xf42d88
+	jr	18	; F560FE  jr T,0xf56112
+	ld	xwa, 16080103	; F56100  ld XWA,0x00f55ce7
+	push	xwa	; F56105  push XWA
+	call	16002692	; F56106  call 0xf42e84
+	inc	4, xsp	; F5610A  inc 4,XSP
+	ldb	a, 1	; F5610C  ld A,0x01
+	call	16002440	; F5610E  call 0xf42d88
+	call	16000772	; F56112  call 0xf42704
+	ld	xwa, 16080189	; F56116  ld XWA,0x00f55d3d
+	push	xwa	; F5611B  push XWA
+	call	16002692	; F5611C  call 0xf42e84
+	inc	4, xsp	; F56120  inc 4,XSP
+	ldb	a, 1	; F56122  ld A,0x01
+	call	16002440	; F56124  call 0xf42d88
+	ret	; F56128  ret
+
+; --------------------------------------------------------------------------
+; sub_F56129
+; Called from: in-module: 0xF55814
+; Touches: (0x2078) (0x207A) (0x207B) (0x20A9)
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56129 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56129:
+	ldb_d8	a, (8314)	; F56129  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F5612D  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F56131  jr NZ,0xf56135
+	jr	12	; F56133  jr T,0xf56141
+	.byte 0xC1, 0x78, 0x20, 0x3F, 0x08	; F56135  cp (0x2078),0x08   [llvm-mc cannot encode this]
+	jr	z, 5	; F5613A  jr Z,0xf56141
+	.byte 0xC1, 0xA9, 0x20, 0x3C, 0xFE	; F5613C  and (0x20a9),0xfe   [llvm-mc cannot encode this]
+	ret	; F56141  ret
+
+; --------------------------------------------------------------------------
+; Write3602_ThenNotify_F56142
+; Called from: table 0xF558AE[0], 0xF55A2E[0]
+; Touches: (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [0] of the table at 0xF558AE reads 0x00F56142, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56142
+;           is an instruction boundary of this transcription.
+; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x00 on
+;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          The +8 is the only difference between the two arms, so bit 7 of W
+;          selects between two halves of one 16-value space.  What the halves
+;          are is not established.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_ThenNotify_F56142:
+	bit	7, w	; F56142  bit 0x07,W
+	jr	nz, 7	; F56145  jr NZ,0xf5614e
+	stdi8	(13826), 0	; F56147  ld (0x3602),0x00
+	jr	5	; F5614C  jr T,0xf56153
+	stdi8	(13826), 8	; F5614E  ld (0x3602),0x08
+	call	15994052	; F56153  call 0xf40cc4
+	ret	; F56157  ret
+
+; --------------------------------------------------------------------------
+; Write3602_ThenNotify_F56158
+; Called from: table 0xF558AE[1], 0xF55A2E[1]
+; Touches: (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [1] of the table at 0xF558AE reads 0x00F56158, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56158
+;           is an instruction boundary of this transcription.
+; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x01 on
+;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          The +8 is the only difference between the two arms, so bit 7 of W
+;          selects between two halves of one 16-value space.  What the halves
+;          are is not established.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_ThenNotify_F56158:
+	bit	7, w	; F56158  bit 0x07,W
+	jr	nz, 7	; F5615B  jr NZ,0xf56164
+	stdi8	(13826), 1	; F5615D  ld (0x3602),0x01
+	jr	5	; F56162  jr T,0xf56169
+	stdi8	(13826), 9	; F56164  ld (0x3602),0x09
+	call	15994052	; F56169  call 0xf40cc4
+	ret	; F5616D  ret
+
+; --------------------------------------------------------------------------
+; Write3602_ThenNotify_F5616E
+; Called from: table 0xF558AE[2], 0xF55A2E[2]
+; Touches: (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [2] of the table at 0xF558AE reads 0x00F5616E, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5616E
+;           is an instruction boundary of this transcription.
+; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x02 on
+;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          The +8 is the only difference between the two arms, so bit 7 of W
+;          selects between two halves of one 16-value space.  What the halves
+;          are is not established.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_ThenNotify_F5616E:
+	bit	7, w	; F5616E  bit 0x07,W
+	jr	nz, 7	; F56171  jr NZ,0xf5617a
+	stdi8	(13826), 2	; F56173  ld (0x3602),0x02
+	jr	5	; F56178  jr T,0xf5617f
+	stdi8	(13826), 10	; F5617A  ld (0x3602),0x0a
+	call	15994052	; F5617F  call 0xf40cc4
+	ret	; F56183  ret
+
+; --------------------------------------------------------------------------
+; Write3602_ThenNotify_F56184
+; Called from: table 0xF558AE[3], 0xF55A2E[3]
+; Touches: (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [3] of the table at 0xF558AE reads 0x00F56184, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56184
+;           is an instruction boundary of this transcription.
+; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x03 on
+;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          The +8 is the only difference between the two arms, so bit 7 of W
+;          selects between two halves of one 16-value space.  What the halves
+;          are is not established.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_ThenNotify_F56184:
+	bit	7, w	; F56184  bit 0x07,W
+	jr	nz, 7	; F56187  jr NZ,0xf56190
+	stdi8	(13826), 3	; F56189  ld (0x3602),0x03
+	jr	5	; F5618E  jr T,0xf56195
+	stdi8	(13826), 11	; F56190  ld (0x3602),0x0b
+	call	15994052	; F56195  call 0xf40cc4
+	ret	; F56199  ret
+
+; --------------------------------------------------------------------------
+; Write3602_ThenNotify_F5619A
+; Called from: table 0xF558AE[4], 0xF55A2E[4]
+; Touches: (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [4] of the table at 0xF558AE reads 0x00F5619A, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5619A
+;           is an instruction boundary of this transcription.
+; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x04 on
+;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          The +8 is the only difference between the two arms, so bit 7 of W
+;          selects between two halves of one 16-value space.  What the halves
+;          are is not established.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_ThenNotify_F5619A:
+	bit	7, w	; F5619A  bit 0x07,W
+	jr	nz, 7	; F5619D  jr NZ,0xf561a6
+	stdi8	(13826), 4	; F5619F  ld (0x3602),0x04
+	jr	5	; F561A4  jr T,0xf561ab
+	stdi8	(13826), 12	; F561A6  ld (0x3602),0x0c
+	call	15994052	; F561AB  call 0xf40cc4
+	ret	; F561AF  ret
+
+; --------------------------------------------------------------------------
+; Write3602_ThenNotify_F561B0
+; Called from: table 0xF558AE[5], 0xF55A2E[5]
+; Touches: (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [5] of the table at 0xF558AE reads 0x00F561B0, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF561B0
+;           is an instruction boundary of this transcription.
+; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x05 on
+;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          The +8 is the only difference between the two arms, so bit 7 of W
+;          selects between two halves of one 16-value space.  What the halves
+;          are is not established.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_ThenNotify_F561B0:
+	bit	7, w	; F561B0  bit 0x07,W
+	jr	nz, 7	; F561B3  jr NZ,0xf561bc
+	stdi8	(13826), 5	; F561B5  ld (0x3602),0x05
+	jr	5	; F561BA  jr T,0xf561c1
+	stdi8	(13826), 13	; F561BC  ld (0x3602),0x0d
+	call	15994052	; F561C1  call 0xf40cc4
+	ret	; F561C5  ret
+
+; --------------------------------------------------------------------------
+; Write3602_ThenNotify_F561C6
+; Called from: table 0xF558AE[6], 0xF55A2E[6]
+; Touches: (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [6] of the table at 0xF558AE reads 0x00F561C6, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF561C6
+;           is an instruction boundary of this transcription.
+; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x06 on
+;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          The +8 is the only difference between the two arms, so bit 7 of W
+;          selects between two halves of one 16-value space.  What the halves
+;          are is not established.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_ThenNotify_F561C6:
+	bit	7, w	; F561C6  bit 0x07,W
+	jr	nz, 7	; F561C9  jr NZ,0xf561d2
+	stdi8	(13826), 6	; F561CB  ld (0x3602),0x06
+	jr	5	; F561D0  jr T,0xf561d7
+	stdi8	(13826), 14	; F561D2  ld (0x3602),0x0e
+	call	15994052	; F561D7  call 0xf40cc4
+	ret	; F561DB  ret
+
+; --------------------------------------------------------------------------
+; Write3602_ThenNotify_F561DC
+; Called from: table 0xF558AE[7], 0xF55A2E[7]
+; Touches: (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [7] of the table at 0xF558AE reads 0x00F561DC, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF561DC
+;           is an instruction boundary of this transcription.
+; Shape:   guarded by `bit 0x07,W`, it writes ONE index to (0x3602) -- 0x07 on
+;          one arm and that value plus 8 on the other -- and calls T_F40CC4.
+;          The +8 is the only difference between the two arms, so bit 7 of W
+;          selects between two halves of one 16-value space.  What the halves
+;          are is not established.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_ThenNotify_F561DC:
+	bit	7, w	; F561DC  bit 0x07,W
+	jr	nz, 7	; F561DF  jr NZ,0xf561e8
+	stdi8	(13826), 7	; F561E1  ld (0x3602),0x07
+	jr	5	; F561E6  jr T,0xf561ed
+	stdi8	(13826), 15	; F561E8  ld (0x3602),0x0f
+	call	15994052	; F561ED  call 0xf40cc4
+	ret	; F561F1  ret
+
+; --------------------------------------------------------------------------
+; Write3602_IfBit2088_F561F2
+; Called from: table 0xF558AE[17], 0xF55A2E[17]
+; Touches: (0x2088) (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [17] of the table at 0xF558AE reads 0x00F561F2, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF561F2 is an instruction boundary of this transcription.
+; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+;          0x00, but reached only when one bit of the 32-bit word at (0x2088)
+;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
+;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_IfBit2088_F561F2:
+	push	xbc	; F561F2  push XBC
+	ldda32	xbc, (8328)	; F561F3  ld XBC,(0x2088)
+	and	xbc, 1	; F561F7  and XBC,0x00000001
+	cp	xbc, 0	; F561FD  cp XBC,0x00000000
+	jr	nz, 21	; F56203  jr NZ,0xf5621a
+	bit	7, w	; F56205  bit 0x07,W
+	jr	nz, 7	; F56208  jr NZ,0xf56211
+	stdi8	(13826), 0	; F5620A  ld (0x3602),0x00
+	jr	5	; F5620F  jr T,0xf56216
+	stdi8	(13826), 8	; F56211  ld (0x3602),0x08
+	call	15994052	; F56216  call 0xf40cc4
+	pop	xbc	; F5621A  pop XBC
+	ret	; F5621B  ret
+
+; --------------------------------------------------------------------------
+; Write3602_IfBit2088_F5621C
+; Called from: table 0xF558AE[18], 0xF55A2E[18]
+; Touches: (0x2088) (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [18] of the table at 0xF558AE reads 0x00F5621C, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5621C is an instruction boundary of this transcription.
+; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+;          0x01, but reached only when one bit of the 32-bit word at (0x2088)
+;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
+;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_IfBit2088_F5621C:
+	push	xbc	; F5621C  push XBC
+	ldda32	xbc, (8328)	; F5621D  ld XBC,(0x2088)
+	and	xbc, 2	; F56221  and XBC,0x00000002
+	cp	xbc, 0	; F56227  cp XBC,0x00000000
+	jr	nz, 21	; F5622D  jr NZ,0xf56244
+	bit	7, w	; F5622F  bit 0x07,W
+	jr	nz, 7	; F56232  jr NZ,0xf5623b
+	stdi8	(13826), 1	; F56234  ld (0x3602),0x01
+	jr	5	; F56239  jr T,0xf56240
+	stdi8	(13826), 9	; F5623B  ld (0x3602),0x09
+	call	15994052	; F56240  call 0xf40cc4
+	pop	xbc	; F56244  pop XBC
+	ret	; F56245  ret
+
+; --------------------------------------------------------------------------
+; Write3602_IfBit2088_F56246
+; Called from: table 0xF558AE[19], 0xF55A2E[19]
+; Touches: (0x2088) (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [19] of the table at 0xF558AE reads 0x00F56246, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56246 is an instruction boundary of this transcription.
+; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+;          0x02, but reached only when one bit of the 32-bit word at (0x2088)
+;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
+;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_IfBit2088_F56246:
+	push	xbc	; F56246  push XBC
+	ldda32	xbc, (8328)	; F56247  ld XBC,(0x2088)
+	and	xbc, 4	; F5624B  and XBC,0x00000004
+	cp	xbc, 0	; F56251  cp XBC,0x00000000
+	jr	nz, 21	; F56257  jr NZ,0xf5626e
+	bit	7, w	; F56259  bit 0x07,W
+	jr	nz, 7	; F5625C  jr NZ,0xf56265
+	stdi8	(13826), 2	; F5625E  ld (0x3602),0x02
+	jr	5	; F56263  jr T,0xf5626a
+	stdi8	(13826), 10	; F56265  ld (0x3602),0x0a
+	call	15994052	; F5626A  call 0xf40cc4
+	pop	xbc	; F5626E  pop XBC
+	ret	; F5626F  ret
+
+; --------------------------------------------------------------------------
+; Write3602_IfBit2088_F56270
+; Called from: table 0xF558AE[20], 0xF55A2E[20]
+; Touches: (0x2088) (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [20] of the table at 0xF558AE reads 0x00F56270, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56270 is an instruction boundary of this transcription.
+; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+;          0x03, but reached only when one bit of the 32-bit word at (0x2088)
+;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
+;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_IfBit2088_F56270:
+	push	xbc	; F56270  push XBC
+	ldda32	xbc, (8328)	; F56271  ld XBC,(0x2088)
+	and	xbc, 8	; F56275  and XBC,0x00000008
+	cp	xbc, 0	; F5627B  cp XBC,0x00000000
+	jr	nz, 21	; F56281  jr NZ,0xf56298
+	bit	7, w	; F56283  bit 0x07,W
+	jr	nz, 7	; F56286  jr NZ,0xf5628f
+	stdi8	(13826), 3	; F56288  ld (0x3602),0x03
+	jr	5	; F5628D  jr T,0xf56294
+	stdi8	(13826), 11	; F5628F  ld (0x3602),0x0b
+	call	15994052	; F56294  call 0xf40cc4
+	pop	xbc	; F56298  pop XBC
+	ret	; F56299  ret
+
+; --------------------------------------------------------------------------
+; Write3602_IfBit2088_F5629A
+; Called from: table 0xF558AE[21], 0xF55A2E[21]
+; Touches: (0x2088) (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [21] of the table at 0xF558AE reads 0x00F5629A, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5629A is an instruction boundary of this transcription.
+; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+;          0x04, but reached only when one bit of the 32-bit word at (0x2088)
+;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
+;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_IfBit2088_F5629A:
+	push	xbc	; F5629A  push XBC
+	ldda32	xbc, (8328)	; F5629B  ld XBC,(0x2088)
+	and	xbc, 16	; F5629F  and XBC,0x00000010
+	cp	xbc, 0	; F562A5  cp XBC,0x00000000
+	jr	nz, 21	; F562AB  jr NZ,0xf562c2
+	bit	7, w	; F562AD  bit 0x07,W
+	jr	nz, 7	; F562B0  jr NZ,0xf562b9
+	stdi8	(13826), 4	; F562B2  ld (0x3602),0x04
+	jr	5	; F562B7  jr T,0xf562be
+	stdi8	(13826), 12	; F562B9  ld (0x3602),0x0c
+	call	15994052	; F562BE  call 0xf40cc4
+	pop	xbc	; F562C2  pop XBC
+	ret	; F562C3  ret
+
+; --------------------------------------------------------------------------
+; Write3602_IfBit2088_F562C4
+; Called from: table 0xF558AE[22], 0xF55A2E[22]
+; Touches: (0x2088) (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [22] of the table at 0xF558AE reads 0x00F562C4, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF562C4 is an instruction boundary of this transcription.
+; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+;          0x05, but reached only when one bit of the 32-bit word at (0x2088)
+;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
+;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_IfBit2088_F562C4:
+	push	xbc	; F562C4  push XBC
+	ldda32	xbc, (8328)	; F562C5  ld XBC,(0x2088)
+	and	xbc, 32	; F562C9  and XBC,0x00000020
+	cp	xbc, 0	; F562CF  cp XBC,0x00000000
+	jr	nz, 21	; F562D5  jr NZ,0xf562ec
+	bit	7, w	; F562D7  bit 0x07,W
+	jr	nz, 7	; F562DA  jr NZ,0xf562e3
+	stdi8	(13826), 5	; F562DC  ld (0x3602),0x05
+	jr	5	; F562E1  jr T,0xf562e8
+	stdi8	(13826), 13	; F562E3  ld (0x3602),0x0d
+	call	15994052	; F562E8  call 0xf40cc4
+	pop	xbc	; F562EC  pop XBC
+	ret	; F562ED  ret
+
+; --------------------------------------------------------------------------
+; Write3602_IfBit2088_F562EE
+; Called from: table 0xF558AE[23], 0xF55A2E[23]
+; Touches: (0x2088) (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [23] of the table at 0xF558AE reads 0x00F562EE, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF562EE is an instruction boundary of this transcription.
+; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+;          0x06, but reached only when one bit of the 32-bit word at (0x2088)
+;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
+;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_IfBit2088_F562EE:
+	push	xbc	; F562EE  push XBC
+	ldda32	xbc, (8328)	; F562EF  ld XBC,(0x2088)
+	and	xbc, 64	; F562F3  and XBC,0x00000040
+	cp	xbc, 0	; F562F9  cp XBC,0x00000000
+	jr	nz, 21	; F562FF  jr NZ,0xf56316
+	bit	7, w	; F56301  bit 0x07,W
+	jr	nz, 7	; F56304  jr NZ,0xf5630d
+	stdi8	(13826), 6	; F56306  ld (0x3602),0x06
+	jr	5	; F5630B  jr T,0xf56312
+	stdi8	(13826), 14	; F5630D  ld (0x3602),0x0e
+	call	15994052	; F56312  call 0xf40cc4
+	pop	xbc	; F56316  pop XBC
+	ret	; F56317  ret
+
+; --------------------------------------------------------------------------
+; Write3602_IfBit2088_F56318
+; Called from: table 0xF558AE[24], 0xF55A2E[24]
+; Touches: (0x2088) (0x3602)
+; Calls:   T_F40CC4
+; Evidence: entry [24] of the table at 0xF558AE reads 0x00F56318, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56318 is an instruction boundary of this transcription.
+; Shape:   the same (0x3602) write and T_F40CC4 call as its siblings, index
+;          0x07, but reached only when one bit of the 32-bit word at (0x2088)
+;          is CLEAR -- `ld XBC,(0x2088) / and XBC,<one bit> / cp XBC,0 / jr
+;          NZ,<skip>`.  So (0x2088) is a 32-bit MASK OF SUPPRESSED indices.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Write3602_IfBit2088_F56318:
+	push	xbc	; F56318  push XBC
+	ldda32	xbc, (8328)	; F56319  ld XBC,(0x2088)
+	and	xbc, 128	; F5631D  and XBC,0x00000080
+	cp	xbc, 0	; F56323  cp XBC,0x00000000
+	jr	nz, 21	; F56329  jr NZ,0xf56340
+	bit	7, w	; F5632B  bit 0x07,W
+	jr	nz, 7	; F5632E  jr NZ,0xf56337
+	stdi8	(13826), 7	; F56330  ld (0x3602),0x07
+	jr	5	; F56335  jr T,0xf5633c
+	stdi8	(13826), 15	; F56337  ld (0x3602),0x0f
+	call	15994052	; F5633C  call 0xf40cc4
+	pop	xbc	; F56340  pop XBC
+	ret	; F56341  ret
+
+; --------------------------------------------------------------------------
+; sub_F56342
+; Called from: table 0xF558AE[8]
+; Touches: (0x2070) (0x3000) (0x34D9) (0x360B) (0x3622) (0x3624) (0x36D6)
+;          (0x7F32)
+; Calls:   T_F40CFC T_F42704 T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: entry [8] of the table at 0xF558AE reads 0x00F56342, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56342
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56342:
+	bit	7, w	; F56342  bit 0x07,W
+	jr	nz, 57	; F56345  jr NZ,0xf56380
+	.byte 0xF1, 0xD9, 0x34, 0xC8	; F56347  bit 0,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 9	; F5634B  jr NZ,0xf56356
+	.byte 0xF1, 0x32, 0x7F, 0xCA	; F5634D  bit 2,(0x7f32)   [llvm-mc cannot encode this]
+	jr	z, 3	; F56351  jr Z,0xf56356
+	jrl	134	; F56353  jrl T,0xf563dc
+	call	15994108	; F56356  call 0xf40cfc
+	.byte 0xF1, 0xD9, 0x34, 0xC8	; F5635A  bit 0,(0x34d9)   [llvm-mc cannot encode this]
+	jr	z, 8	; F5635E  jr Z,0xf56368
+	stdi16	(8304), 16396	; F56360  ld (0x2070),0x400c
+	jr	116	; F56366  jr T,0xf563dc
+	call	16000772	; F56368  call 0xf42704
+	ld	xwa, 16080189	; F5636C  ld XWA,0x00f55d3d
+	push	xwa	; F56371  push XWA
+	call	16002692	; F56372  call 0xf42e84
+	inc	4, xsp	; F56376  inc 4,XSP
+	ldb	a, 1	; F56378  ld A,0x01
+	call	16002440	; F5637A  call 0xf42d88
+	jr	92	; F5637E  jr T,0xf563dc
+	bit_dd8	2, 150	; F56380  bit 2,(0x96)
+	jr	nz, 87	; F56383  jr NZ,0xf563dc
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F56385  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 81	; F56389  jr NZ,0xf563dc
+	.byte 0xF1, 0x0B, 0x36, 0xC9	; F5638B  bit 1,(0x360b)   [llvm-mc cannot encode this]
+	jr	z, 69	; F5638F  jr Z,0xf563d6
+	.byte 0xD1, 0x00, 0x30, 0x3F, 0x00, 0x00	; F56391  cp (0x3000),0x0000   [llvm-mc cannot encode this]
+	jr	z, 35	; F56397  jr Z,0xf563bc
+	ldb_d8	a, (14038)	; F56399  ld A,(0x36d6)
+	stb_da	(6304887), a	; F5639D  ld (0x603477),A
+	ldw_d16	wa, (13858)	; F563A2  ld WA,(0x3622)
+	stw_da	(6304888), wa	; F563A6  ld (0x603478),WA
+	ldw_d16	wa, (13860)	; F563AB  ld WA,(0x3624)
+	inc	1, wa	; F563AF  inc 1,WA
+	.byte 0xD1, 0x22, 0x36, 0xA0	; F563B1  sub WA,(0x3622)   [llvm-mc cannot encode this]
+	stw_da	(6304890), wa	; F563B5  ld (0x60347a),WA
+	jr	26	; F563BA  jr T,0xf563d6
+	ldw_d16	wa, (13858)	; F563BC  ld WA,(0x3622)
+	stw_da	(6304888), wa	; F563C0  ld (0x603478),WA
+	ldw_d16	wa, (13860)	; F563C5  ld WA,(0x3624)
+	inc	1, wa	; F563C9  inc 1,WA
+	.byte 0xD1, 0x22, 0x36, 0xA0	; F563CB  sub WA,(0x3622)   [llvm-mc cannot encode this]
+	stw_da	(6304890), wa	; F563CF  ld (0x60347a),WA
+	jr	0	; F563D4  jr T,0xf563d6
+	stdi16	(8304), 32798	; F563D6  ld (0x2070),0x801e
+	ret	; F563DC  ret
+
+; --------------------------------------------------------------------------
+; sub_F563DD
+; Called from: table 0xF558AE[9]
+; Touches: (0x2070) (0x3008) (0x300C) (0x34D9) (0x360B) (0x36C6) (0x36CA)
+;          (0x36CE)
+; Calls:   T_F40CC8 T_F40BDC T_F40C04 T_F40BF4 T_F40BF8 T_CallbackQueue_Post
+;          T_Kernel_SemaSignal T_F40BE0 T_F40BFC
+; Evidence: entry [9] of the table at 0xF558AE reads 0x00F563DD, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF563DD
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F563DD:
+	bit	7, w	; F563DD  bit 0x07,W
+	jr	nz, 122	; F563E0  jr NZ,0xf5645c
+	bit_dd8	2, 150	; F563E2  bit 2,(0x96)
+	jrl	nz, 139	; F563E5  jrl NZ,0xf56473
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F563E8  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jrl	nz, 132	; F563EC  jrl NZ,0xf56473
+	.byte 0xF1, 0x0B, 0x36, 0xC9	; F563EF  bit 1,(0x360b)   [llvm-mc cannot encode this]
+	jr	nz, 25	; F563F3  jr NZ,0xf5640e
+	call	15994056	; F563F5  call 0xf40cc8
+	.byte 0xF1, 0x0B, 0x36, 0xB9	; F563F9  set 1,(0x360b)   [llvm-mc cannot encode this]
+	call	15993820	; F563FD  call 0xf40bdc
+	stdi8	(14030), 1	; F56401  ld (0x36ce),0x01
+	stdi16	(8304), 32776	; F56406  ld (0x2070),0x8008
+	jr	101	; F5640C  jr T,0xf56473
+	.byte 0xF1, 0x0B, 0x36, 0xB1	; F5640E  res 1,(0x360b)   [llvm-mc cannot encode this]
+	xor	xwa, xwa	; F56412  xor XWA,XWA
+	stda32	(14026), xwa	; F56414  ld (0x36ca),XWA
+	stda32	(14022), xwa	; F56418  ld (0x36c6),XWA
+	call	15993860	; F5641C  call 0xf40c04
+	call	15993844	; F56420  call 0xf40bf4
+	call	15993848	; F56424  call 0xf40bf8
+	xor	xwa, xwa	; F56428  xor XWA,XWA
+	stda32	(12296), xwa	; F5642A  ld (0x3008),XWA
+	stda32	(12300), xwa	; F5642E  ld (0x300c),XWA
+	ld	xwa, 16080146	; F56432  ld XWA,0x00f55d12
+	push	xwa	; F56437  push XWA
+	call	16002692	; F56438  call 0xf42e84
+	inc	4, xsp	; F5643C  inc 4,XSP
+	ldb	a, 1	; F5643E  ld A,0x01
+	call	16002440	; F56440  call 0xf42d88
+	ld	xwa, 16080189	; F56444  ld XWA,0x00f55d3d
+	push	xwa	; F56449  push XWA
+	call	16002692	; F5644A  call 0xf42e84
+	inc	4, xsp	; F5644E  inc 4,XSP
+	ldb	a, 1	; F56450  ld A,0x01
+	call	16002440	; F56452  call 0xf42d88
+	call	15993824	; F56456  call 0xf40be0
+	jr	23	; F5645A  jr T,0xf56473
+	.byte 0xF1, 0x0B, 0x36, 0xC9	; F5645C  bit 1,(0x360b)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F56460  jr NZ,0xf56464
+	jr	15	; F56462  jr T,0xf56473
+	bit_dd8	2, 150	; F56464  bit 2,(0x96)
+	jr	nz, 6	; F56467  jr NZ,0xf5646f
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F56469  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 4	; F5646D  jr NZ,0xf56473
+	call	15993852	; F5646F  call 0xf40bfc
+	ret	; F56473  ret
+
+; --------------------------------------------------------------------------
+; sub_F56474
+; Called from: table 0xF558AE[10]
+; Touches: (0x2070) (0x2250) (0x3757) (0x3758)
+; Calls:   sub_F56492
+; Evidence: entry [10] of the table at 0xF558AE reads 0x00F56474, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56474 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56474:
+	bit	7, w	; F56474  bit 0x07,W
+	jr	nz, 5	; F56477  jr NZ,0xf5647e
+	calr	22	; F56479  calr 0xf56492
+	jr	19	; F5647C  jr T,0xf56491
+	ldb_d8	a, (8784)	; F5647E  ld A,(0x2250)
+	stb_d8	(14167), a	; F56482  ld (0x3757),A
+	.byte 0xC1, 0x58, 0x37, 0x3E, 0x01	; F56486  or (0x3758),0x01   [llvm-mc cannot encode this]
+	stdi16	(8304), 16567	; F5648B  ld (0x2070),0x40b7
+	ret	; F56491  ret
+
+; --------------------------------------------------------------------------
+; sub_F56492
+; Called from: in-module: 0xF56479
+; Touches: (0x0DE3) (0x1309) (0x2646) (0x3458) (0x34D9) (0x3752)
+; Calls:   sub_F56DA8 T_CallbackQueue_Post T_Kernel_SemaSignal T_F40CCC
+;          T_F40BDC
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56492 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56492:
+	bit_dd8	2, 150	; F56492  bit 2,(0x96)
+	jr	nz, 120	; F56495  jr NZ,0xf5650f
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F56497  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 114	; F5649B  jr NZ,0xf5650f
+	.byte 0xC1, 0x52, 0x37, 0x3F, 0x00	; F5649D  cp (0x3752),0x00   [llvm-mc cannot encode this]
+	jr	z, 29	; F564A2  jr Z,0xf564c1
+	calr	2305	; F564A4  calr 0xf56da8
+	ldb_d8	a, (14162)	; F564A7  ld A,(0x3752)
+	stb_d8	(4873), a	; F564AB  ld (0x1309),A
+	ld	xwa, 16080919	; F564AF  ld XWA,0x00f56017
+	push	xwa	; F564B4  push XWA
+	call	16002692	; F564B5  call 0xf42e84
+	inc	4, xsp	; F564B9  inc 4,XSP
+	ldb	a, 1	; F564BB  ld A,0x01
+	call	16002440	; F564BD  call 0xf42d88
+	.byte 0xC2, 0xD7, 0x34, 0x60, 0x3F, 0x08	; F564C1  cp (0x6034d7),0x08   [llvm-mc cannot encode this]
+	jr	nc, 7	; F564C7  jr NC,0xf564d0
+	incdi8_24	1, (6304983)	; F564C9  inc 1,(0x6034d7)
+	jr	6	; F564CE  jr T,0xf564d6
+	stib_da	(6304983), 1	; F564D0  ld (0x6034d7),0x01
+	ldb_da	a, (6304983)	; F564D6  ld A,(0x6034d7)
+	stb_da	(6311936), a	; F564DB  ld (0x605000),A
+	st_dd8b	a, 195	; F564E0  ld (0xc3),A
+	stb_d8	(13400), a	; F564E3  ld (0x3458),A
+	pushw	wa	; F564E7  push WA
+	call	15994060	; F564E8  call 0xf40ccc
+	cps	a, 0	; F564EC  cp A,0
+	jr	nz, 4	; F564EE  jr NZ,0xf564f4
+	call	15993820	; F564F0  call 0xf40bdc
+	popw	wa	; F564F4  pop WA
+	stb_d8	(3555), a	; F564F5  ld (0x0de3),A
+	stb_d8	(9798), a	; F564F9  ld (0x2646),A
+	ld	xwa, 16080899	; F564FD  ld XWA,0x00f56003
+	push	xwa	; F56502  push XWA
+	call	16002692	; F56503  call 0xf42e84
+	inc	4, xsp	; F56507  inc 4,XSP
+	ldb	a, 1	; F56509  ld A,0x01
+	call	16002440	; F5650B  call 0xf42d88
+	ret	; F5650F  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F56510
+; Called from: table 0xF558AE[11], 0xF558AE[12], 0xF558AE[13], 0xF558AE[14]
+; Touches: nothing with an absolute address
+; Evidence: entry [11] of the table at 0xF558AE reads 0x00F56510, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56510 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F56510:
+	ret	; F56510  ret
+
+; --------------------------------------------------------------------------
+; sub_F56511
+; Called from: table 0xF558AE[15]
+; Touches: (0x2070)
+; Evidence: entry [15] of the table at 0xF558AE reads 0x00F56511, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56511 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56511:
+	bit	7, w	; F56511  bit 0x07,W
+	jr	nz, 13	; F56514  jr NZ,0xf56523
+	bit_dd8	2, 150	; F56516  bit 2,(0x96)
+	jr	nz, 8	; F56519  jr NZ,0xf56523
+	stdi16	(8304), 515	; F5651B  ld (0x2070),0x0203
+	jr	0	; F56521  jr T,0xf56523
+	ret	; F56523  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F56524
+; Called from: table 0xF558AE[16], 0xF558AE[25], 0xF558AE[26], 0xF558AE[27],
+;              0xF558AE[28], 0xF558AE[29] +2 more; in-module: 0xF55822
+; Touches: nothing with an absolute address
+; Evidence: entry [16] of the table at 0xF558AE reads 0x00F56524, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56524 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F56524:
+	ret	; F56524  ret
+
+; --------------------------------------------------------------------------
+; sub_F56525
+; Called from: T_F40E18 (0xF40E18, x2)
+; Touches: (0x34D3) (0x34D4) (0x3614)
+; Calls:   T_F40CEC sub_F56579 T_F42578 T_F409C8 T_F40CCC T_F40BD8 T_F411B8
+;          T_F40B60 T_F40B5C T_F40AC4 sub_F55D90
+; Evidence: thunk slot T_F40E18 holds `jp 0x00F56525`, and 0xF56525 is an
+;           instruction boundary of this transcription (re-asserted on every
+;           emit).  That is ALL the name rests on.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56525:		; <- T_F40E18
+	.byte 0xF1, 0x14, 0x36, 0xB9	; F56525  set 1,(0x3614)   [llvm-mc cannot encode this]
+	call	15994092	; F56529  call 0xf40cec
+	.byte 0xF1, 0x14, 0x36, 0xB1	; F5652D  res 1,(0x3614)   [llvm-mc cannot encode this]
+	calr	69	; F56531  calr 0xf56579
+	call	16000376	; F56534  call 0xf42578
+	call	15993288	; F56538  call 0xf409c8
+	call	15994060	; F5653C  call 0xf40ccc
+	cps	a, 0	; F56540  cp A,0
+	jr	z, 19	; F56542  jr Z,0xf56557
+	.byte 0xF1, 0xD3, 0x34, 0xB9	; F56544  set 1,(0x34d3)   [llvm-mc cannot encode this]
+	call	15993816	; F56548  call 0xf40bd8
+	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F5654C  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	call	15995320	; F56551  call 0xf411b8
+	jr	29	; F56555  jr T,0xf56574
+	.byte 0xF1, 0xD3, 0x34, 0xB9	; F56557  set 1,(0x34d3)   [llvm-mc cannot encode this]
+	call	15993816	; F5655B  call 0xf40bd8
+	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F5655F  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	call	15993696	; F56564  call 0xf40b60
+	call	15993692	; F56568  call 0xf40b5c
+	call	15993540	; F5656C  call 0xf40ac4
+	call	15995320	; F56570  call 0xf411b8
+	call	16080272	; F56574  call 0xf55d90
+	ret	; F56578  ret
+
+; --------------------------------------------------------------------------
+; sub_F56579
+; Called from: in-module: 0xF56531 0xF57327
+; Touches: nothing with an absolute address
+; Calls:   T_F409AC
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56579 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56579:
+	call	15993260	; F56579  call 0xf409ac
+	ldw	wa, 65535	; F5657D  ld WA,0xffff
+	bit_dd8	2, 149	; F56580  bit 2,(0x95)
+	jr	z, 6	; F56583  jr Z,0xf5658b
+	nop	; F56585  nop
+	nop	; F56586  nop
+	nop	; F56587  nop
+	djnz16	wa, -11	; F56588  djnz WA,0xf56580
+	ret	; F5658B  ret
+
+; --------------------------------------------------------------------------
+; sub_F5658C
+; Called from: in-module: 0xF55826
+; Touches: (0x3753) (0x7F05)
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post
+;          T_Kernel_SemaSignal
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5658C is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5658C:
+	call	16002688	; F5658C  call 0xf42e80
+	ldb_d8	a, (32517)	; F56590  ld A,(0x7f05)
+	stb_d8	(14163), a	; F56594  ld (0x3753),A
+	ld	xwa, 16080054	; F56598  ld XWA,0x00f55cb6
+	push	xwa	; F5659D  push XWA
+	call	16002692	; F5659E  call 0xf42e84
+	inc	4, xsp	; F565A2  inc 4,XSP
+	ldb	a, 1	; F565A4  ld A,0x01
+	call	16002440	; F565A6  call 0xf42d88
+	ld	xwa, 16080072	; F565AA  ld XWA,0x00f55cc8
+	push	xwa	; F565AF  push XWA
+	call	16002692	; F565B0  call 0xf42e84
+	inc	4, xsp	; F565B4  inc 4,XSP
+	ldb	a, 1	; F565B6  ld A,0x01
+	call	16002440	; F565B8  call 0xf42d88
+	ret	; F565BC  ret
+
+; --------------------------------------------------------------------------
+; sub_F565BD
+; Called from: table 0xF5592E[11]
+; Touches: (0x2075)
+; Calls:   sub_F565DF T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: entry [11] of the table at 0xF5592E reads 0x00F565BD, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF565BD is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F565BD:
+	bit	7, w	; F565BD  bit 0x07,W
+	jr	nz, 28	; F565C0  jr NZ,0xf565de
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F565C2  or (0x2075),0x08   [llvm-mc cannot encode this]
+	calr	21	; F565C7  calr 0xf565df
+	ld	xwa, 16080072	; F565CA  ld XWA,0x00f55cc8
+	push	xwa	; F565CF  push XWA
+	call	16002692	; F565D0  call 0xf42e84
+	inc	4, xsp	; F565D4  inc 4,XSP
+	ldb	a, 1	; F565D6  ld A,0x01
+	call	16002440	; F565D8  call 0xf42d88
+	jr	0	; F565DC  jr T,0xf565de
+	ret	; F565DE  ret
+
+; --------------------------------------------------------------------------
+; sub_F565DF
+; Called from: in-module: 0xF565C7
+; Touches: (0x3753) (0x7F05)
+; Calls:   T_Queue2E00_AppendRegs
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF565DF is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F565DF:
+	ldb_d8	a, (32517)	; F565DF  ld A,(0x7f05)
+	cp	a, 127	; F565E3  cp A,0x7f
+	jr	nc, 20	; F565E6  jr NC,0xf565fc
+	inc	1, a	; F565E8  inc 1,A
+	stb_d8	(14163), a	; F565EA  ld (0x3753),A
+	stb_d8	(32517), a	; F565EE  ld (0x7f05),A
+	ldb	e, 152	; F565F2  ld E,0x98
+	ldb	d, 3	; F565F4  ld D,0x03
+	ldb	w, 127	; F565F6  ld W,0x7f
+	call	15994684	; F565F8  call 0xf40f3c
+	ret	; F565FC  ret
+
+; --------------------------------------------------------------------------
+; sub_F565FD
+; Called from: table 0xF5592E[12]
+; Touches: (0x2075)
+; Calls:   sub_F5661F T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: entry [12] of the table at 0xF5592E reads 0x00F565FD, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF565FD is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F565FD:
+	bit	7, w	; F565FD  bit 0x07,W
+	jr	nz, 28	; F56600  jr NZ,0xf5661e
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F56602  or (0x2075),0x08   [llvm-mc cannot encode this]
+	calr	21	; F56607  calr 0xf5661f
+	ld	xwa, 16080072	; F5660A  ld XWA,0x00f55cc8
+	push	xwa	; F5660F  push XWA
+	call	16002692	; F56610  call 0xf42e84
+	inc	4, xsp	; F56614  inc 4,XSP
+	ldb	a, 1	; F56616  ld A,0x01
+	call	16002440	; F56618  call 0xf42d88
+	jr	0	; F5661C  jr T,0xf5661e
+	ret	; F5661E  ret
+
+; --------------------------------------------------------------------------
+; sub_F5661F
+; Called from: in-module: 0xF56607
+; Touches: (0x3753) (0x7F05)
+; Calls:   T_Queue2E00_AppendRegs
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5661F is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5661F:
+	ldb_d8	a, (32517)	; F5661F  ld A,(0x7f05)
+	cps	a, 0	; F56623  cp A,0
+	jr	ule, 20	; F56625  jr ULE,0xf5663b
+	dec	1, a	; F56627  dec 1,A
+	stb_d8	(14163), a	; F56629  ld (0x3753),A
+	stb_d8	(32517), a	; F5662D  ld (0x7f05),A
+	ldb	e, 152	; F56631  ld E,0x98
+	ldb	d, 3	; F56633  ld D,0x03
+	ldb	w, 127	; F56635  ld W,0x7f
+	call	15994684	; F56637  call 0xf40f3c
+	ret	; F5663B  ret
+
+; --------------------------------------------------------------------------
+; sub_F5663C
+; Called from: table 0xF5592E[15]
+; Touches: (0x209A)
+; Evidence: entry [15] of the table at 0xF5592E reads 0x00F5663C, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5663C is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5663C:
+	bit	7, w	; F5663C  bit 0x07,W
+	jr	nz, 7	; F5663F  jr NZ,0xf56648
+	stdi8	(8346), 1	; F56641  ld (0x209a),0x01
+	jr	0	; F56646  jr T,0xf56648
+	ret	; F56648  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F56649
+; Called from: table 0xF5592E[0], 0xF5592E[1], 0xF5592E[2], 0xF5592E[3],
+;              0xF5592E[4], 0xF5592E[5] +23 more; in-module: 0xF5582A 0xF55838
+; Touches: nothing with an absolute address
+; Evidence: entry [0] of the table at 0xF5592E reads 0x00F56649, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56649
+;           is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F56649:
+	ret	; F56649  ret
+
+; --------------------------------------------------------------------------
+; sub_F5664A
+; Called from: in-module: 0xF5583C
+; Touches: (0x2070) (0x2071) (0x207A) (0x207B) (0x207C) (0x207D) (0x2095)
+;          (0x34D1) (0x34D9) (0x3614) +3 more
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40B60 T_F40B5C T_F40AC4
+;          T_F40BDC T_CallbackQueue_Post T_Kernel_SemaSignal T_Blink_Stop
+;          sub_F566E0
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5664A is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5664A:
+	ldb_d8	a, (8314)	; F5664A  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F5664E  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 16	; F56652  jr NZ,0xf56664
+	ldb_d8	a, (8316)	; F56654  ld A,(0x207c)
+	.byte 0xC1, 0x7D, 0x20, 0xF1	; F56658  cp A,(0x207d)   [llvm-mc cannot encode this]
+	jr	nz, 49	; F5665C  jr NZ,0xf5668f
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F5665E  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 98	; F56662  jr NZ,0xf566c6
+	bit_dd8	2, 150	; F56664  bit 2,(0x96)
+	jr	nz, 38	; F56667  jr NZ,0xf5668f
+	call	16002688	; F56669  call 0xf42e80
+	ldw_d16	wa, (13858)	; F5666D  ld WA,(0x3622)
+	.byte 0xD1, 0x24, 0x36, 0xF0	; F56671  cp WA,(0x3624)   [llvm-mc cannot encode this]
+	jr	ule, 8	; F56675  jr ULE,0xf5667f
+	ldw_d16	wa, (13858)	; F56677  ld WA,(0x3622)
+	stda16	(13860), wa	; F5667B  ld (0x3624),WA
+	call	15993696	; F5667F  call 0xf40b60
+	call	15993692	; F56683  call 0xf40b5c
+	call	15993540	; F56687  call 0xf40ac4
+	call	15993820	; F5668B  call 0xf40bdc
+	.byte 0xF1, 0xD1, 0x34, 0xCC	; F5668F  bit 4,(0x34d1)   [llvm-mc cannot encode this]
+	jr	z, 20	; F56693  jr Z,0xf566a9
+	stdi8	(8304), 1	; F56695  ld (0x2070),0x01
+	stdi8	(8305), 2	; F5669A  ld (0x2071),0x02
+	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xEF	; F5669F  and (0x34d1),0xef   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x14, 0x36, 0x3C, 0xFE	; F566A4  and (0x3614),0xfe   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x32, 0x7F, 0xCA	; F566A9  bit 2,(0x7f32)   [llvm-mc cannot encode this]
+	jr	z, 5	; F566AD  jr Z,0xf566b4
+	.byte 0xC1, 0xD9, 0x34, 0x3C, 0xFE	; F566AF  and (0x34d9),0xfe   [llvm-mc cannot encode this]
+	ld	xwa, 16080691	; F566B4  ld XWA,0x00f55f33
+	push	xwa	; F566B9  push XWA
+	call	16002692	; F566BA  call 0xf42e84
+	inc	4, xsp	; F566BE  inc 4,XSP
+	ldb	a, 1	; F566C0  ld A,0x01
+	call	16002440	; F566C2  call 0xf42d88
+	ld	xwa, 16080709	; F566C6  ld XWA,0x00f55f45
+	push	xwa	; F566CB  push XWA
+	call	16002692	; F566CC  call 0xf42e84
+	inc	4, xsp	; F566D0  inc 4,XSP
+	ldb	a, 1	; F566D2  ld A,0x01
+	call	16002440	; F566D4  call 0xf42d88
+	call	16002596	; F566D8  call 0xf42e24
+	calr	1	; F566DC  calr 0xf566e0
+	ret	; F566DF  ret
+
+; --------------------------------------------------------------------------
+; sub_F566E0
+; Called from: in-module: 0xF566DC
+; Touches: (0x36CE)
+; Calls:   T_Blink_SetEnable
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF566E0 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F566E0:
+	.byte 0xC1, 0xCE, 0x36, 0x3F, 0x00	; F566E0  cp (0x36ce),0x00   [llvm-mc cannot encode this]
+	jr	z, 27	; F566E5  jr Z,0xf56702
+	.byte 0xC1, 0xCE, 0x36, 0x3F, 0x01	; F566E7  cp (0x36ce),0x01   [llvm-mc cannot encode this]
+	jr	z, 9	; F566EC  jr Z,0xf566f7
+	.byte 0xC1, 0xCE, 0x36, 0x3F, 0x02	; F566EE  cp (0x36ce),0x02   [llvm-mc cannot encode this]
+	jr	z, 2	; F566F3  jr Z,0xf566f7
+	jr	11	; F566F5  jr T,0xf56702
+	pushw	1	; F566F7  push 0x0001
+	call	16002600	; F566FA  call 0xf42e28
+	inc	2, xsp	; F566FE  inc 2,XSP
+	jr	9	; F56700  jr T,0xf5670b
+	pushw	0	; F56702  push 0x0000
+	call	16002600	; F56705  call 0xf42e28
+	inc	2, xsp	; F56709  inc 2,XSP
+	ret	; F5670B  ret
+
+; --------------------------------------------------------------------------
+; sub_F5670C
+; Called from: in-module: 0xF55840
+; Touches: (0x207A) (0x207B) (0x34BB) (0x3628)
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5670C is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5670C:
+	ldb_d8	a, (8314)	; F5670C  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F56710  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F56714  jr NZ,0xf56718
+	jr	17	; F56716  jr T,0xf56729
+	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F56718  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F5671D  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F56722  jr Z,0xf56729
+	stdi8	(13864), 0	; F56724  ld (0x3628),0x00
+	ret	; F56729  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F5672A
+; Called from: table 0xF559AE[0], 0xF559AE[1], 0xF559AE[2], 0xF559AE[3],
+;              0xF559AE[4], 0xF559AE[5] +2 more
+; Touches: nothing with an absolute address
+; Evidence: entry [0] of the table at 0xF559AE reads 0x00F5672A, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5672A
+;           is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F5672A:
+	ret	; F5672A  ret
+
+; --------------------------------------------------------------------------
+; sub_F5672B
+; Called from: table 0xF559AE[8]
+; Touches: (0x2095) (0x34D9) (0x7F32)
+; Calls:   T_Blink_Stop T_F40CFC T_F42704
+; Evidence: entry [8] of the table at 0xF559AE reads 0x00F5672B, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5672B
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5672B:
+	bit	7, w	; F5672B  bit 0x07,W
+	jr	nz, 33	; F5672E  jr NZ,0xf56751
+	.byte 0xF1, 0xD9, 0x34, 0xC8	; F56730  bit 0,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 8	; F56734  jr NZ,0xf5673e
+	.byte 0xF1, 0x32, 0x7F, 0xCA	; F56736  bit 2,(0x7f32)   [llvm-mc cannot encode this]
+	jr	z, 2	; F5673A  jr Z,0xf5673e
+	jr	19	; F5673C  jr T,0xf56751
+	call	16002596	; F5673E  call 0xf42e24
+	call	15994108	; F56742  call 0xf40cfc
+	call	16000772	; F56746  call 0xf42704
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F5674A  or (0x2095),0x10   [llvm-mc cannot encode this]
+	jr	0	; F5674F  jr T,0xf56751
+	ret	; F56751  ret
+
+; --------------------------------------------------------------------------
+; sub_F56752
+; Called from: table 0xF559AE[9]
+; Touches: (0x34D9)
+; Calls:   DispatchState36CE_F56925 Select36CE_F568AB
+; Evidence: entry [9] of the table at 0xF559AE reads 0x00F56752, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56752
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56752:
+	bit	7, w	; F56752  bit 0x07,W
+	jr	nz, 16	; F56755  jr NZ,0xf56767
+	bit_dd8	2, 150	; F56757  bit 2,(0x96)
+	jr	nz, 14	; F5675A  jr NZ,0xf5676a
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F5675C  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 8	; F56760  jr NZ,0xf5676a
+	calr	448	; F56762  calr 0xf56925
+	jr	3	; F56765  jr T,0xf5676a
+	calr	321	; F56767  calr 0xf568ab
+	ret	; F5676A  ret
+
+; --------------------------------------------------------------------------
+; sub_F5676B
+; Called from: table 0xF559AE[10]
+; Touches: (0x34D9) (0x36CE)
+; Calls:   DispatchState36CE_F56A5F T_F40BE0 Select36CE_F568E9
+; Evidence: entry [10] of the table at 0xF559AE reads 0x00F5676B, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5676B is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5676B:
+	bit	7, w	; F5676B  bit 0x07,W
+	jr	nz, 29	; F5676E  jr NZ,0xf5678d
+	bit_dd8	2, 150	; F56770  bit 2,(0x96)
+	jr	nz, 27	; F56773  jr NZ,0xf56790
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F56775  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 21	; F56779  jr NZ,0xf56790
+	calr	737	; F5677B  calr 0xf56a5f
+	.byte 0xC1, 0xCE, 0x36, 0x3F, 0x00	; F5677E  cp (0x36ce),0x00   [llvm-mc cannot encode this]
+	jr	z, 2	; F56783  jr Z,0xf56787
+	jr	9	; F56785  jr T,0xf56790
+	call	15993824	; F56787  call 0xf40be0
+	jr	3	; F5678B  jr T,0xf56790
+	calr	345	; F5678D  calr 0xf568e9
+	ret	; F56790  ret
+
+; --------------------------------------------------------------------------
+; sub_F56791
+; Called from: table 0xF559AE[11]
+; Touches: nothing with an absolute address
+; Calls:   Select36CE_F56907
+; Evidence: entry [11] of the table at 0xF559AE reads 0x00F56791, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56791 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56791:
+	bit	7, w	; F56791  bit 0x07,W
+	jr	nz, 1	; F56794  jr NZ,0xf56797
+	ret	; F56796  ret
+	calr	365	; F56797  calr 0xf56907
+	ret	; F5679A  ret
+
+; --------------------------------------------------------------------------
+; sub_F5679B
+; Called from: table 0xF559AE[12]
+; Touches: (0x2070) (0x2095) (0x34D9) (0x3628)
+; Calls:   T_Blink_Stop T_F40BFC
+; Evidence: entry [12] of the table at 0xF559AE reads 0x00F5679B, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5679B is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5679B:
+	bit	7, w	; F5679B  bit 0x07,W
+	jr	nz, 15	; F5679E  jr NZ,0xf567af
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F567A0  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 32	; F567A5  jr NZ,0xf567c7
+	stdi16	(8304), 32774	; F567A7  ld (0x2070),0x8006
+	jr	24	; F567AD  jr T,0xf567c7
+	call	16002596	; F567AF  call 0xf42e24
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F567B3  or (0x2095),0x10   [llvm-mc cannot encode this]
+	bit_dd8	2, 150	; F567B8  bit 2,(0x96)
+	jr	nz, 6	; F567BB  jr NZ,0xf567c3
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F567BD  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 4	; F567C1  jr NZ,0xf567c7
+	call	15993852	; F567C3  call 0xf40bfc
+	ret	; F567C7  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F567C8
+; Called from: table 0xF559AE[13], 0xF559AE[14]
+; Touches: nothing with an absolute address
+; Evidence: entry [13] of the table at 0xF559AE reads 0x00F567C8, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF567C8 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F567C8:
+	ret	; F567C8  ret
+
+; --------------------------------------------------------------------------
+; sub_F567C9
+; Called from: table 0xF559AE[15]
+; Touches: (0x2070) (0x3628)
+; Evidence: entry [15] of the table at 0xF559AE reads 0x00F567C9, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF567C9 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F567C9:
+	bit	7, w	; F567C9  bit 0x07,W
+	jr	nz, 15	; F567CC  jr NZ,0xf567dd
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F567CE  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 8	; F567D3  jr NZ,0xf567dd
+	stdi16	(8304), 32774	; F567D5  ld (0x2070),0x8006
+	jr	0	; F567DB  jr T,0xf567dd
+	ret	; F567DD  ret
+
+; --------------------------------------------------------------------------
+; sub_F567DE
+; Called from: table 0xF559AE[27]
+; Touches: (0x2267) (0x2826) (0x34D9) (0x3622) (0x3624) (0x36CE)
+; Calls:   T_AsciiDigits3_ToValue T_Blink_Stop sub_F569AF sub_F56850
+;          sub_F56B14 sub_F5687D
+; Evidence: entry [27] of the table at 0xF559AE reads 0x00F567DE, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF567DE is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F567DE:
+	bit_dd8	2, 150	; F567DE  bit 2,(0x96)
+	jr	nz, 108	; F567E1  jr NZ,0xf5684f
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F567E3  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 102	; F567E7  jr NZ,0xf5684f
+	.byte 0xC1, 0xCE, 0x36, 0x3F, 0x01	; F567E9  cp (0x36ce),0x01   [llvm-mc cannot encode this]
+	jr	z, 9	; F567EE  jr Z,0xf567f9
+	.byte 0xC1, 0xCE, 0x36, 0x3F, 0x02	; F567F0  cp (0x36ce),0x02   [llvm-mc cannot encode this]
+	jr	z, 46	; F567F5  jr Z,0xf56825
+	jr	86	; F567F7  jr T,0xf5684f
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F567F9  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 2	; F567FE  jr Z,0xf56802
+	jr	30	; F56800  jr T,0xf56820
+	stdi8	(10278), 3	; F56802  ld (0x2826),0x03
+	call	16003824	; F56807  call 0xf432f0
+	cps	wa, 1	; F5680B  cp WA,1
+	jr	c, 17	; F5680D  jr C,0xf56820
+	cp	wa, 999	; F5680F  cp WA,0x03e7
+	jr	ugt, 11	; F56813  jr UGT,0xf56820
+	stda16	(13858), wa	; F56815  ld (0x3622),WA
+	call	16002596	; F56819  call 0xf42e24
+	calr	399	; F5681D  calr 0xf569af
+	calr	45	; F56820  calr 0xf56850
+	jr	42	; F56823  jr T,0xf5684f
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F56825  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 2	; F5682A  jr Z,0xf5682e
+	jr	30	; F5682C  jr T,0xf5684c
+	stdi8	(10278), 3	; F5682E  ld (0x2826),0x03
+	call	16003824	; F56833  call 0xf432f0
+	cps	wa, 1	; F56837  cp WA,1
+	jr	c, 17	; F56839  jr C,0xf5684c
+	cp	wa, 999	; F5683B  cp WA,0x03e7
+	jr	ugt, 11	; F5683F  jr UGT,0xf5684c
+	stda16	(13860), wa	; F56841  ld (0x3624),WA
+	call	16002596	; F56845  call 0xf42e24
+	calr	712	; F56849  calr 0xf56b14
+	calr	46	; F5684C  calr 0xf5687d
+	ret	; F5684F  ret
+
+; --------------------------------------------------------------------------
+; sub_F56850
+; Called from: in-module: 0xF56820
+; Touches: (0x2540) (0x2656) (0x3622)  |  0xF351CF
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal T_Blink_Command
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56850 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56850:
+	ldw_d16	wa, (13858)	; F56850  ld WA,(0x3622)
+	stda16	(9814), wa	; F56854  ld (0x2656),WA
+	ld	xwa, 16083051	; F56858  ld XWA,0x00f5686b
+	push	xwa	; F5685D  push XWA
+	call	16002692	; F5685E  call 0xf42e84
+	inc	4, xsp	; F56862  inc 4,XSP
+	ldb	a, 1	; F56864  ld A,0x01
+	call	16002440	; F56866  call 0xf42d88
+	ret	; F5686A  ret
+	stdi8	(9536), 0	; F5686B  ld (0x2540),0x00
+	ld	xiy, 15946191	; F56870  ld XIY,0x00f351cf
+	push	xiy	; F56875  push XIY
+	call	16002592	; F56876  call 0xf42e20
+	inc	4, xsp	; F5687A  inc 4,XSP
+	ret	; F5687C  ret
+
+; --------------------------------------------------------------------------
+; sub_F5687D
+; Called from: in-module: 0xF5684C
+; Touches: (0x2540) (0x2658) (0x3624)  |  0xF351D9
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal T_Blink_Command
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5687D is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5687D:
+	ldw_d16	wa, (13860)	; F5687D  ld WA,(0x3624)
+	stda16	(9816), wa	; F56881  ld (0x2658),WA
+	ld	xwa, 16083096	; F56885  ld XWA,0x00f56898
+	push	xwa	; F5688A  push XWA
+	call	16002692	; F5688B  call 0xf42e84
+	inc	4, xsp	; F5688F  inc 4,XSP
+	ldb	a, 1	; F56891  ld A,0x01
+	call	16002440	; F56893  call 0xf42d88
+	ret	; F56897  ret
+	stdi8	(9536), 0	; F56898  ld (0x2540),0x00
+	ld	xiy, 15946201	; F5689D  ld XIY,0x00f351d9
+	push	xiy	; F568A2  push XIY
+	call	16002592	; F568A3  call 0xf42e20
+	inc	4, xsp	; F568A7  inc 4,XSP
+	ret	; F568A9  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F568AA
+; Called from: table 0xF559AE[16], 0xF559AE[17], 0xF559AE[18], 0xF559AE[19],
+;              0xF559AE[20], 0xF559AE[21] +9 more; in-module: 0xF5584E
+; Touches: nothing with an absolute address
+; Evidence: entry [16] of the table at 0xF559AE reads 0x00F568AA, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF568AA is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F568AA:
+	ret	; F568AA  ret
+
+; --------------------------------------------------------------------------
+; Select36CE_F568AB
+; Called from: in-module: 0xF56767
+; Touches: (0x12F6) (0x2095) (0x2540) (0x3628) (0x36CE) (0x3755)  |  0xF3501F
+;          0xF3502A
+; Calls:   T_Blink_Stop T_F41820 T_F4181C
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF568AB is an instruction boundary.
+; Shape:   saves the current (0x36CE) to (0x3755) and writes 0x00 into it,
+;          then calls T_Blink_Stop and sets bit 4 of (0x2095) -- and does none
+;          of that unless (0x3628) is zero.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Select36CE_F568AB:
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F568AB  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 22	; F568B0  jr NZ,0xf568c8
+	ldb_d8	a, (14030)	; F568B2  ld A,(0x36ce)
+	stb_d8	(14165), a	; F568B6  ld (0x3755),A
+	stdi8	(14030), 0	; F568BA  ld (0x36ce),0x00
+	call	16002596	; F568BF  call 0xf42e24
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F568C3  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F568C8  ret
+	stdi8	(9536), 1	; F568C9  ld (0x2540),0x01
+	ld	xiy, 15945770	; F568CE  ld XIY,0x00f3502a
+	call	15996960	; F568D3  call 0xf41820
+	ldb_d8	a, (14030)	; F568D7  ld A,(0x36ce)
+	stb_d8	(4854), a	; F568DB  ld (0x12f6),A
+	ld	xiy, 15945759	; F568DF  ld XIY,0x00f3501f
+	call	15996956	; F568E4  call 0xf4181c
+	ret	; F568E8  ret
+
+; --------------------------------------------------------------------------
+; Select36CE_F568E9
+; Called from: in-module: 0xF5678D
+; Touches: (0x2095) (0x3628) (0x36CE) (0x3755)
+; Calls:   T_Blink_Stop
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF568E9 is an instruction boundary.
+; Shape:   saves the current (0x36CE) to (0x3755) and writes 0x01 into it,
+;          then calls T_Blink_Stop and sets bit 4 of (0x2095) -- and does none
+;          of that unless (0x3628) is zero.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Select36CE_F568E9:
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F568E9  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 22	; F568EE  jr NZ,0xf56906
+	ldb_d8	a, (14030)	; F568F0  ld A,(0x36ce)
+	stb_d8	(14165), a	; F568F4  ld (0x3755),A
+	stdi8	(14030), 1	; F568F8  ld (0x36ce),0x01
+	call	16002596	; F568FD  call 0xf42e24
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F56901  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F56906  ret
+
+; --------------------------------------------------------------------------
+; Select36CE_F56907
+; Called from: in-module: 0xF56797
+; Touches: (0x2095) (0x3628) (0x36CE) (0x3755)
+; Calls:   T_Blink_Stop
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56907 is an instruction boundary.
+; Shape:   saves the current (0x36CE) to (0x3755) and writes 0x02 into it,
+;          then calls T_Blink_Stop and sets bit 4 of (0x2095) -- and does none
+;          of that unless (0x3628) is zero.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Select36CE_F56907:
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F56907  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 22	; F5690C  jr NZ,0xf56924
+	ldb_d8	a, (14030)	; F5690E  ld A,(0x36ce)
+	stb_d8	(14165), a	; F56912  ld (0x3755),A
+	stdi8	(14030), 2	; F56916  ld (0x36ce),0x02
+	call	16002596	; F5691B  call 0xf42e24
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F5691F  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F56924  ret
+
+; --------------------------------------------------------------------------
+; DispatchState36CE_F56925
+; Called from: in-module: 0xF56762
+; Touches: (0x2075) (0x36CE)
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56925 is an instruction boundary.
+; Shape:   `ld XIX,0x00F5693F / ld A,(0x36CE) / sll 0x02,XWA / add XIX,XWA /
+;          ld XIX,(XIX) / call T,XIX` -- entry (0x36CE) of that 5-entry table,
+;          with NO bound on the index.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+DispatchState36CE_F56925:
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F56925  or (0x2075),0x08   [llvm-mc cannot encode this]
+	xor	xwa, xwa	; F5692A  xor XWA,XWA
+	ld	xix, 16083263	; F5692C  ld XIX,0x00f5693f
+	ldb_d8	a, (14030)	; F56931  ld A,(0x36ce)
+	sll	xwa, 2	; F56935  sll 0x02,XWA
+	add	xix, xwa	; F56938  add XIX,XWA
+	ld	xix, (xix)	; F5693A  ld XIX,(XIX)
+	call	(xix)	; F5693C  call T,XIX
+	ret	; F5693E  ret
+
+; --------------------------------------------------------------------------
+; StateDispatchTable_F5693F -- five 32-bit routine pointers, entered with
+;                              `call (XIX)`.
+; Read by: 0xF5692C: `xor XWA,XWA / ld XIX,0x00F5693F / ld A,(0x36CE) / sll
+;          0x02,XWA / add XIX,XWA / ld XIX,(XIX) / call T,XIX` -- entry
+;          (0x36CE) of this table, UNBOUNDED: nothing here range-checks the
+;          byte.  ⚠ THE STATE BYTE IS NOT THE SAME FOR ALL FOUR TABLES:
+;          0xF5693F and 0xF56A79 are indexed by (0x36CE), 0xF5706A and
+;          0xF571A6 by (0x3627).  This file assumed one byte for all four and
+;          --selftest refused it.
+; Evidence: the entry count rests on two facts, both re-read on every emit:
+;           entry [0] is 0xF56953, which is the byte immediately AFTER the
+;           table, so the table frames itself; and the word at [5] is
+;           0xC9360BF1, which is not a 0x00F00000-0x00FFFFFF pointer, while
+;           [0]..[4] all are.  Same first-non-pointer rule the 0xF7D000 block
+;           used.
+; Unknown: what the byte at (0x36CE) enumerates.  Nothing decoded here says
+;          what its values mean, so the name is FRAMED and no entry is given a
+;          name.  ⚠ AND NOTHING BOUNDS IT: a value above 4 would index past
+;          the table.  That is what the bytes say; whether the callers
+;          guarantee the range is not established here.
+; --------------------------------------------------------------------------
+StateDispatchTable_F5693F:
+	.long	0x00F56953	; F5693F  [0] -> sub_F56953
+	.long	0x00F5698E	; F56943  [1] -> sub_F5698E
+	.long	0x00F56A1D	; F56947  [2] -> sub_F56A1D
+	.long	0x00F56953	; F5694B  [3] -> sub_F56953
+	.long	0x00F56953	; F5694F  [4] -> sub_F56953
+
+
+; --------------------------------------------------------------------------
+; sub_F56953
+; Called from: table 0xF5693F[0], 0xF5693F[3], 0xF5693F[4]
+; Touches: (0x360B)
+; Calls:   sub_F5696D T_F40B60 T_F40B5C T_F40AC4
+; Evidence: entry [0] of the table at 0xF5693F reads 0x00F56953, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56953
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56953:
+	.byte 0xF1, 0x0B, 0x36, 0xC9	; F56953  bit 1,(0x360b)   [llvm-mc cannot encode this]
+	jr	nz, 19	; F56957  jr NZ,0xf5696c
+	.byte 0xF1, 0x0B, 0x36, 0xB9	; F56959  set 1,(0x360b)   [llvm-mc cannot encode this]
+	calr	13	; F5695D  calr 0xf5696d
+	call	15993696	; F56960  call 0xf40b60
+	call	15993692	; F56964  call 0xf40b5c
+	call	15993540	; F56968  call 0xf40ac4
+	ret	; F5696C  ret
+
+; --------------------------------------------------------------------------
+; sub_F5696D
+; Called from: in-module: 0xF5695D 0xF56AAD
+; Touches: (0x2647) (0x360B)
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5696D is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5696D:
+	ldb_d8	a, (13835)	; F5696D  ld A,(0x360b)
+	and	a, 2	; F56971  and A,0x02
+	srl	a, 1	; F56974  srl 0x01,A
+	stb_d8	(9799), a	; F56977  ld (0x2647),A
+	ld	xwa, 16080799	; F5697B  ld XWA,0x00f55f9f
+	push	xwa	; F56980  push XWA
+	call	16002692	; F56981  call 0xf42e84
+	inc	4, xsp	; F56985  inc 4,XSP
+	ldb	a, 1	; F56987  ld A,0x01
+	call	16002440	; F56989  call 0xf42d88
+	ret	; F5698D  ret
+
+; --------------------------------------------------------------------------
+; sub_F5698E
+; Called from: table 0xF5693F[1]
+; Touches: (0x3622)
+; Calls:   T_Blink_Stop sub_F569FA sub_F569AF
+; Evidence: entry [1] of the table at 0xF5693F reads 0x00F5698E, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5698E
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5698E:
+	bit_dd8	2, 150	; F5698E  bit 2,(0x96)
+	jr	nz, 27	; F56991  jr NZ,0xf569ae
+	call	16002596	; F56993  call 0xf42e24
+	.byte 0xD1, 0x22, 0x36, 0x3F, 0xE7, 0x03	; F56997  cp (0x3622),0x03e7   [llvm-mc cannot encode this]
+	jr	c, 5	; F5699D  jr C,0xf569a4
+	calr	88	; F5699F  calr 0xf569fa
+	jr	10	; F569A2  jr T,0xf569ae
+	incdi16	1, (13858)	; F569A4  incw 1,(0x3622)
+	calr	79	; F569A8  calr 0xf569fa
+	calr	1	; F569AB  calr 0xf569af
+	ret	; F569AE  ret
+
+; --------------------------------------------------------------------------
+; sub_F569AF
+; Called from: in-module: 0xF5681D 0xF569AB
+; Touches: (0x34BB) (0x3622) (0x3624) (0x3628) (0x3629)
+; Calls:   sub_F569FA
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF569AF is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F569AF:
+	ldw_d16	wa, (13858)	; F569AF  ld WA,(0x3622)
+	.byte 0xD1, 0x24, 0x36, 0xF0	; F569B3  cp WA,(0x3624)   [llvm-mc cannot encode this]
+	jr	ule, 28	; F569B7  jr ULE,0xf569d5
+	ldw_d16	wa, (13858)	; F569B9  ld WA,(0x3622)
+	stda16	(13860), wa	; F569BD  ld (0x3624),WA
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F569C1  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	stdi8	(13864), 131	; F569C6  ld (0x3628),0x83
+	stdi8	(13865), 2	; F569CB  ld (0x3629),0x02
+	calr	39	; F569D0  calr 0xf569fa
+	jr	36	; F569D3  jr T,0xf569f9
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F569D5  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F569DA  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F569DF  jr Z,0xf569ef
+	.byte 0xC1, 0x29, 0x36, 0x3F, 0x02	; F569E1  cp (0x3629),0x02   [llvm-mc cannot encode this]
+	jr	nz, 7	; F569E6  jr NZ,0xf569ef
+	stdi8	(13864), 131	; F569E8  ld (0x3628),0x83
+	jr	10	; F569ED  jr T,0xf569f9
+	stdi8	(13864), 131	; F569EF  ld (0x3628),0x83
+	stdi8	(13865), 0	; F569F4  ld (0x3629),0x00
+	ret	; F569F9  ret
+
+; --------------------------------------------------------------------------
+; sub_F569FA
+; Called from: in-module: 0xF5699F 0xF569A8 0xF569D0 0xF56A2E 0xF56A37
+;              0xF56AC2 0xF56ACB 0xF56B04 +2 more
+; Touches: (0x2656) (0x2658) (0x3622) (0x3624)
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF569FA is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F569FA:
+	ldw_d16	wa, (13858)	; F569FA  ld WA,(0x3622)
+	stda16	(9814), wa	; F569FE  ld (0x2656),WA
+	ldw_d16	wa, (13860)	; F56A02  ld WA,(0x3624)
+	stda16	(9816), wa	; F56A06  ld (0x2658),WA
+	ld	xwa, 16080819	; F56A0A  ld XWA,0x00f55fb3
+	push	xwa	; F56A0F  push XWA
+	call	16002692	; F56A10  call 0xf42e84
+	inc	4, xsp	; F56A14  inc 4,XSP
+	ldb	a, 1	; F56A16  ld A,0x01
+	call	16002440	; F56A18  call 0xf42d88
+	ret	; F56A1C  ret
+
+; --------------------------------------------------------------------------
+; sub_F56A1D
+; Called from: table 0xF5693F[2]
+; Touches: (0x34BB) (0x3624) (0x3628) (0x3629)
+; Calls:   T_Blink_Stop sub_F569FA
+; Evidence: entry [2] of the table at 0xF5693F reads 0x00F56A1D, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56A1D
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56A1D:
+	bit_dd8	2, 150	; F56A1D  bit 2,(0x96)
+	jr	nz, 60	; F56A20  jr NZ,0xf56a5e
+	call	16002596	; F56A22  call 0xf42e24
+	.byte 0xD1, 0x24, 0x36, 0x3F, 0xE7, 0x03	; F56A26  cp (0x3624),0x03e7   [llvm-mc cannot encode this]
+	jr	c, 5	; F56A2C  jr C,0xf56a33
+	calr	65481	; F56A2E  calr 0xf569fa
+	jr	43	; F56A31  jr T,0xf56a5e
+	incdi16	1, (13860)	; F56A33  incw 1,(0x3624)
+	calr	65472	; F56A37  calr 0xf569fa
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F56A3A  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F56A3F  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F56A44  jr Z,0xf56a54
+	.byte 0xC1, 0x29, 0x36, 0x3F, 0x02	; F56A46  cp (0x3629),0x02   [llvm-mc cannot encode this]
+	jr	nz, 7	; F56A4B  jr NZ,0xf56a54
+	stdi8	(13864), 131	; F56A4D  ld (0x3628),0x83
+	jr	10	; F56A52  jr T,0xf56a5e
+	stdi8	(13864), 131	; F56A54  ld (0x3628),0x83
+	stdi8	(13865), 1	; F56A59  ld (0x3629),0x01
+	ret	; F56A5E  ret
+
+; --------------------------------------------------------------------------
+; DispatchState36CE_F56A5F
+; Called from: in-module: 0xF5677B
+; Touches: (0x2075) (0x36CE)
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56A5F is an instruction boundary.
+; Shape:   `ld XIX,0x00F56A79 / ld A,(0x36CE) / sll 0x02,XWA / add XIX,XWA /
+;          ld XIX,(XIX) / call T,XIX` -- entry (0x36CE) of that 5-entry table,
+;          with NO bound on the index.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+DispatchState36CE_F56A5F:
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F56A5F  or (0x2075),0x08   [llvm-mc cannot encode this]
+	xor	xwa, xwa	; F56A64  xor XWA,XWA
+	ld	xix, 16083577	; F56A66  ld XIX,0x00f56a79
+	ldb_d8	a, (14030)	; F56A6B  ld A,(0x36ce)
+	sll	xwa, 2	; F56A6F  sll 0x02,XWA
+	add	xix, xwa	; F56A72  add XIX,XWA
+	ld	xix, (xix)	; F56A74  ld XIX,(XIX)
+	call	(xix)	; F56A76  call T,XIX
+	ret	; F56A78  ret
+
+; --------------------------------------------------------------------------
+; StateDispatchTable_F56A79 -- five 32-bit routine pointers, entered with
+;                              `call (XIX)`.
+; Read by: 0xF56A66: `xor XWA,XWA / ld XIX,0x00F56A79 / ld A,(0x36CE) / sll
+;          0x02,XWA / add XIX,XWA / ld XIX,(XIX) / call T,XIX` -- entry
+;          (0x36CE) of this table, UNBOUNDED: nothing here range-checks the
+;          byte.  ⚠ THE STATE BYTE IS NOT THE SAME FOR ALL FOUR TABLES:
+;          0xF5693F and 0xF56A79 are indexed by (0x36CE), 0xF5706A and
+;          0xF571A6 by (0x3627).  This file assumed one byte for all four and
+;          --selftest refused it.
+; Evidence: the entry count rests on two facts, both re-read on every emit:
+;           entry [0] is 0xF56A8D, which is the byte immediately AFTER the
+;           table, so the table frames itself; and the word at [5] is
+;           0xC9360BF1, which is not a 0x00F00000-0x00FFFFFF pointer, while
+;           [0]..[4] all are.  Same first-non-pointer rule the 0xF7D000 block
+;           used.
+; Unknown: what the byte at (0x36CE) enumerates.  Nothing decoded here says
+;          what its values mean, so the name is FRAMED and no entry is given a
+;          name.  ⚠ AND NOTHING BOUNDS IT: a value above 4 would index past
+;          the table.  That is what the bytes say; whether the callers
+;          guarantee the range is not established here.
+; --------------------------------------------------------------------------
+StateDispatchTable_F56A79:
+	.long	0x00F56A8D	; F56A79  [0] -> sub_F56A8D
+	.long	0x00F56AB1	; F56A7D  [1] -> sub_F56AB1
+	.long	0x00F56AF3	; F56A81  [2] -> sub_F56AF3
+	.long	0x00F56A8D	; F56A85  [3] -> sub_F56A8D
+	.long	0x00F56A8D	; F56A89  [4] -> sub_F56A8D
+
+
+; --------------------------------------------------------------------------
+; sub_F56A8D
+; Called from: table 0xF56A79[0], 0xF56A79[3], 0xF56A79[4]
+; Touches: (0x360B) (0x36C6) (0x36CA)
+; Calls:   T_F40C04 T_F40BF4 T_F40BF8 sub_F5696D
+; Evidence: entry [0] of the table at 0xF56A79 reads 0x00F56A8D, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56A8D
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56A8D:
+	.byte 0xF1, 0x0B, 0x36, 0xC9	; F56A8D  bit 1,(0x360b)   [llvm-mc cannot encode this]
+	jr	z, 29	; F56A91  jr Z,0xf56ab0
+	.byte 0xF1, 0x0B, 0x36, 0xB1	; F56A93  res 1,(0x360b)   [llvm-mc cannot encode this]
+	xor	xwa, xwa	; F56A97  xor XWA,XWA
+	stda32	(14026), xwa	; F56A99  ld (0x36ca),XWA
+	stda32	(14022), xwa	; F56A9D  ld (0x36c6),XWA
+	call	15993860	; F56AA1  call 0xf40c04
+	call	15993844	; F56AA5  call 0xf40bf4
+	call	15993848	; F56AA9  call 0xf40bf8
+	calr	65213	; F56AAD  calr 0xf5696d
+	ret	; F56AB0  ret
+
+; --------------------------------------------------------------------------
+; sub_F56AB1
+; Called from: table 0xF56A79[1]
+; Touches: (0x34BB) (0x3622) (0x3628) (0x3629)
+; Calls:   T_Blink_Stop sub_F569FA
+; Evidence: entry [1] of the table at 0xF56A79 reads 0x00F56AB1, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56AB1
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56AB1:
+	bit_dd8	2, 150	; F56AB1  bit 2,(0x96)
+	jr	nz, 60	; F56AB4  jr NZ,0xf56af2
+	call	16002596	; F56AB6  call 0xf42e24
+	.byte 0xD1, 0x22, 0x36, 0x3F, 0x01, 0x00	; F56ABA  cp (0x3622),0x0001   [llvm-mc cannot encode this]
+	jr	ugt, 5	; F56AC0  jr UGT,0xf56ac7
+	calr	65333	; F56AC2  calr 0xf569fa
+	jr	43	; F56AC5  jr T,0xf56af2
+	decdi16	1, (13858)	; F56AC7  decw 1,(0x3622)
+	calr	65324	; F56ACB  calr 0xf569fa
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F56ACE  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F56AD3  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F56AD8  jr Z,0xf56ae8
+	.byte 0xC1, 0x29, 0x36, 0x3F, 0x02	; F56ADA  cp (0x3629),0x02   [llvm-mc cannot encode this]
+	jr	nz, 7	; F56ADF  jr NZ,0xf56ae8
+	stdi8	(13864), 131	; F56AE1  ld (0x3628),0x83
+	jr	10	; F56AE6  jr T,0xf56af2
+	stdi8	(13864), 131	; F56AE8  ld (0x3628),0x83
+	stdi8	(13865), 0	; F56AED  ld (0x3629),0x00
+	ret	; F56AF2  ret
+
+; --------------------------------------------------------------------------
+; sub_F56AF3
+; Called from: table 0xF56A79[2]
+; Touches: (0x3624)
+; Calls:   T_Blink_Stop sub_F569FA sub_F56B14
+; Evidence: entry [2] of the table at 0xF56A79 reads 0x00F56AF3, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56AF3
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56AF3:
+	bit_dd8	2, 150	; F56AF3  bit 2,(0x96)
+	jr	nz, 27	; F56AF6  jr NZ,0xf56b13
+	call	16002596	; F56AF8  call 0xf42e24
+	.byte 0xD1, 0x24, 0x36, 0x3F, 0x01, 0x00	; F56AFC  cp (0x3624),0x0001   [llvm-mc cannot encode this]
+	jr	ugt, 5	; F56B02  jr UGT,0xf56b09
+	calr	65267	; F56B04  calr 0xf569fa
+	jr	10	; F56B07  jr T,0xf56b13
+	decdi16	1, (13860)	; F56B09  decw 1,(0x3624)
+	calr	65258	; F56B0D  calr 0xf569fa
+	calr	1	; F56B10  calr 0xf56b14
+	ret	; F56B13  ret
+
+; --------------------------------------------------------------------------
+; sub_F56B14
+; Called from: in-module: 0xF56849 0xF56B10
+; Touches: (0x34BB) (0x3622) (0x3624) (0x3628) (0x3629)
+; Calls:   sub_F569FA
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56B14 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56B14:
+	ldw_d16	wa, (13858)	; F56B14  ld WA,(0x3622)
+	.byte 0xD1, 0x24, 0x36, 0xF0	; F56B18  cp WA,(0x3624)   [llvm-mc cannot encode this]
+	jr	ule, 28	; F56B1C  jr ULE,0xf56b3a
+	ldw_d16	wa, (13860)	; F56B1E  ld WA,(0x3624)
+	stda16	(13858), wa	; F56B22  ld (0x3622),WA
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F56B26  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	stdi8	(13864), 131	; F56B2B  ld (0x3628),0x83
+	stdi8	(13865), 2	; F56B30  ld (0x3629),0x02
+	calr	65218	; F56B35  calr 0xf569fa
+	jr	36	; F56B38  jr T,0xf56b5e
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F56B3A  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F56B3F  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F56B44  jr Z,0xf56b54
+	.byte 0xC1, 0x29, 0x36, 0x3F, 0x02	; F56B46  cp (0x3629),0x02   [llvm-mc cannot encode this]
+	jr	nz, 7	; F56B4B  jr NZ,0xf56b54
+	stdi8	(13864), 131	; F56B4D  ld (0x3628),0x83
+	jr	10	; F56B52  jr T,0xf56b5e
+	stdi8	(13864), 131	; F56B54  ld (0x3628),0x83
+	stdi8	(13865), 1	; F56B59  ld (0x3629),0x01
+	ret	; F56B5E  ret
+
+; --------------------------------------------------------------------------
+; sub_F56B5F
+; Called from: in-module: 0xF55808
+; Touches: nothing with an absolute address
+; Calls:   sub_F57433 T_F415C8
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56B5F is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56B5F:
+	calr	2257	; F56B5F  calr 0xf57433
+	call	15996360	; F56B62  call 0xf415c8
+	ret	; F56B66  ret
+
+; --------------------------------------------------------------------------
+; sub_F56B67
+; Called from: in-module: 0xF5580C
+; Touches: (0x2250) (0x36C6) (0x36CA) (0x3757) (0x3758)
+; Calls:   sub_F57443 T_Queue2E00_AppendRegs T_F411BC
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56B67 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56B67:
+	xor	xwa, xwa	; F56B67  xor XWA,XWA
+	stda32	(14026), xwa	; F56B69  ld (0x36ca),XWA
+	stda32	(14022), xwa	; F56B6D  ld (0x36c6),XWA
+	calr	2255	; F56B71  calr 0xf57443
+	.byte 0xF1, 0x58, 0x37, 0xC8	; F56B74  bit 0,(0x3758)   [llvm-mc cannot encode this]
+	jr	z, 26	; F56B78  jr Z,0xf56b94
+	ldb_d8	a, (14167)	; F56B7A  ld A,(0x3757)
+	stb_d8	(8784), a	; F56B7E  ld (0x2250),A
+	.byte 0xC1, 0x58, 0x37, 0x3C, 0xFE	; F56B82  and (0x3758),0xfe   [llvm-mc cannot encode this]
+	ldb	w, 255	; F56B87  ld W,0xff
+	ldw	de, 4240	; F56B89  ld DE,0x1090
+	call	15994684	; F56B8C  call 0xf40f3c
+	call	15995324	; F56B90  call 0xf411bc
+	ret	; F56B94  ret
+
+; --------------------------------------------------------------------------
+; sub_F56B95
+; Called from: in-module: 0xF55856
+; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x2250) (0x2666)
+;          (0x266A) (0x360B) (0x3757) +1 more
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40D04 T_F40B60 T_F40B5C
+;          T_F40AC4 T_F40D00 T_Queue2E00_AppendRegs T_F411BC
+;          T_CallbackQueue_Post T_Kernel_SemaSignal T_F42704
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56B95 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56B95:
+	ldb_d8	a, (8314)	; F56B95  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F56B99  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 16	; F56B9D  jr NZ,0xf56baf
+	ldb_d8	a, (8316)	; F56B9F  ld A,(0x207c)
+	.byte 0xC1, 0x7D, 0x20, 0xF1	; F56BA3  cp A,(0x207d)   [llvm-mc cannot encode this]
+	jr	nz, 67	; F56BA7  jr NZ,0xf56bec
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F56BA9  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 111	; F56BAD  jr NZ,0xf56c1e
+	.byte 0xC1, 0x7B, 0x20, 0x3F, 0x14	; F56BAF  cp (0x207b),0x14   [llvm-mc cannot encode this]
+	jr	z, 54	; F56BB4  jr Z,0xf56bec
+	call	16002688	; F56BB6  call 0xf42e80
+	call	15994116	; F56BBA  call 0xf40d04
+	.byte 0xF1, 0x0B, 0x36, 0xC8	; F56BBE  bit 0,(0x360b)   [llvm-mc cannot encode this]
+	jr	z, 24	; F56BC2  jr Z,0xf56bdc
+	bit_dd8	2, 150	; F56BC4  bit 2,(0x96)
+	jr	z, 7	; F56BC7  jr Z,0xf56bd0
+	.byte 0xC1, 0x0B, 0x36, 0x3C, 0xFE	; F56BC9  and (0x360b),0xfe   [llvm-mc cannot encode this]
+	jr	12	; F56BCE  jr T,0xf56bdc
+	call	15993696	; F56BD0  call 0xf40b60
+	call	15993692	; F56BD4  call 0xf40b5c
+	call	15993540	; F56BD8  call 0xf40ac4
+	call	15994112	; F56BDC  call 0xf40d00
+	stdi16	(9830), 65535	; F56BE0  ld (0x2666),0xffff
+	stdi16	(9834), 65535	; F56BE6  ld (0x266a),0xffff
+	.byte 0xF1, 0x58, 0x37, 0xC8	; F56BEC  bit 0,(0x3758)   [llvm-mc cannot encode this]
+	jr	z, 26	; F56BF0  jr Z,0xf56c0c
+	ldb_d8	a, (14167)	; F56BF2  ld A,(0x3757)
+	stb_d8	(8784), a	; F56BF6  ld (0x2250),A
+	.byte 0xC1, 0x58, 0x37, 0x3C, 0xFE	; F56BFA  and (0x3758),0xfe   [llvm-mc cannot encode this]
+	ldb	w, 255	; F56BFF  ld W,0xff
+	ldw	de, 4240	; F56C01  ld DE,0x1090
+	call	15994684	; F56C04  call 0xf40f3c
+	call	15995324	; F56C08  call 0xf411bc
+	ld	xwa, 16079969	; F56C0C  ld XWA,0x00f55c61
+	push	xwa	; F56C11  push XWA
+	call	16002692	; F56C12  call 0xf42e84
+	inc	4, xsp	; F56C16  inc 4,XSP
+	ldb	a, 1	; F56C18  ld A,0x01
+	call	16002440	; F56C1A  call 0xf42d88
+	call	16000772	; F56C1E  call 0xf42704
+	ld	xwa, 16080012	; F56C22  ld XWA,0x00f55c8c
+	push	xwa	; F56C27  push XWA
+	call	16002692	; F56C28  call 0xf42e84
+	inc	4, xsp	; F56C2C  inc 4,XSP
+	ldb	a, 1	; F56C2E  ld A,0x01
+	call	16002440	; F56C30  call 0xf42d88
+	ret	; F56C34  ret
+
+; --------------------------------------------------------------------------
+; sub_F56C35
+; Called from: in-module: 0xF5585A
+; Touches: (0x2078) (0x207A) (0x207B) (0x20A9)
+; Calls:   T_F40D18
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56C35 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56C35:
+	ldb_d8	a, (8314)	; F56C35  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F56C39  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F56C3D  jr NZ,0xf56c41
+	jr	21	; F56C3F  jr T,0xf56c56
+	.byte 0xC1, 0x78, 0x20, 0x3F, 0x01	; F56C41  cp (0x2078),0x01   [llvm-mc cannot encode this]
+	jr	z, 5	; F56C46  jr Z,0xf56c4d
+	.byte 0xC1, 0xA9, 0x20, 0x3C, 0xFE	; F56C48  and (0x20a9),0xfe   [llvm-mc cannot encode this]
+	bit_dd8	2, 150	; F56C4D  bit 2,(0x96)
+	jr	nz, 4	; F56C50  jr NZ,0xf56c56
+	call	15994136	; F56C52  call 0xf40d18
+	ret	; F56C56  ret
+
+; --------------------------------------------------------------------------
+; sub_F56C57
+; Called from: table 0xF55A2E[8]
+; Touches: (0x2070) (0x2075) (0x209B) (0x2647) (0x360B) (0x3627) (0x36C6)
+;          (0x36CA) (0x3731)
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal T_F40D0C T_F42704
+; Evidence: entry [8] of the table at 0xF55A2E reads 0x00F56C57, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56C57
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56C57:
+	bit	7, w	; F56C57  bit 0x07,W
+	jr	nz, 84	; F56C5A  jr NZ,0xf56cb0
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F56C5C  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x0B, 0x36, 0xC8	; F56C61  bit 0,(0x360b)   [llvm-mc cannot encode this]
+	jr	nz, 22	; F56C65  jr NZ,0xf56c7d
+	bit_dd8	2, 150	; F56C67  bit 2,(0x96)
+	jr	nz, 105	; F56C6A  jr NZ,0xf56cd5
+	.byte 0xF1, 0x0B, 0x36, 0xB8	; F56C6C  set 0,(0x360b)   [llvm-mc cannot encode this]
+	stdi8	(13863), 1	; F56C70  ld (0x3627),0x01
+	stdi16	(8304), 32788	; F56C75  ld (0x2070),0x8014
+	jr	88	; F56C7B  jr T,0xf56cd5
+	.byte 0xF1, 0x31, 0x37, 0xCA	; F56C7D  bit 2,(0x3731)   [llvm-mc cannot encode this]
+	jr	nz, 82	; F56C81  jr NZ,0xf56cd5
+	.byte 0xF1, 0x0B, 0x36, 0xB0	; F56C83  res 0,(0x360b)   [llvm-mc cannot encode this]
+	xor	xwa, xwa	; F56C87  xor XWA,XWA
+	stda32	(14026), xwa	; F56C89  ld (0x36ca),XWA
+	stda32	(14022), xwa	; F56C8D  ld (0x36c6),XWA
+	ldb_d8	a, (13835)	; F56C91  ld A,(0x360b)
+	and	a, 1	; F56C95  and A,0x01
+	stb_d8	(9799), a	; F56C98  ld (0x2647),A
+	ld	xwa, 16080012	; F56C9C  ld XWA,0x00f55c8c
+	push	xwa	; F56CA1  push XWA
+	call	16002692	; F56CA2  call 0xf42e84
+	inc	4, xsp	; F56CA6  inc 4,XSP
+	ldb	a, 1	; F56CA8  ld A,0x01
+	call	16002440	; F56CAA  call 0xf42d88
+	jr	37	; F56CAE  jr T,0xf56cd5
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F56CB0  or (0x2075),0x09   [llvm-mc cannot encode this]
+	stdi16	(8347), 34953	; F56CB5  ld (0x209b),0x8889
+	call	15994124	; F56CBB  call 0xf40d0c
+	call	16000772	; F56CBF  call 0xf42704
+	ld	xwa, 16080012	; F56CC3  ld XWA,0x00f55c8c
+	push	xwa	; F56CC8  push XWA
+	call	16002692	; F56CC9  call 0xf42e84
+	inc	4, xsp	; F56CCD  inc 4,XSP
+	ldb	a, 1	; F56CCF  ld A,0x01
+	call	16002440	; F56CD1  call 0xf42d88
+	ret	; F56CD5  ret
+
+; --------------------------------------------------------------------------
+; sub_F56CD6
+; Called from: table 0xF55A2E[9]
+; Touches: (0x2070) (0x2075) (0x209B) (0x3008) (0x300C)
+; Calls:   T_F40D10 T_F42704 T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: entry [9] of the table at 0xF55A2E reads 0x00F56CD6, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56CD6
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56CD6:
+	bit	7, w	; F56CD6  bit 0x07,W
+	jr	nz, 28	; F56CD9  jr NZ,0xf56cf7
+	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F56CDB  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	bit_dd8	2, 150	; F56CE0  bit 2,(0x96)
+	jr	nz, 55	; F56CE3  jr NZ,0xf56d1c
+	xor	xwa, xwa	; F56CE5  xor XWA,XWA
+	stda32	(12296), xwa	; F56CE7  ld (0x3008),XWA
+	stda32	(12300), xwa	; F56CEB  ld (0x300c),XWA
+	stdi16	(8304), 517	; F56CEF  ld (0x2070),0x0205
+	jr	37	; F56CF5  jr T,0xf56d1c
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F56CF7  or (0x2075),0x09   [llvm-mc cannot encode this]
+	stdi16	(8347), 34953	; F56CFC  ld (0x209b),0x8889
+	call	15994128	; F56D02  call 0xf40d10
+	call	16000772	; F56D06  call 0xf42704
+	ld	xwa, 16080012	; F56D0A  ld XWA,0x00f55c8c
+	push	xwa	; F56D0F  push XWA
+	call	16002692	; F56D10  call 0xf42e84
+	inc	4, xsp	; F56D14  inc 4,XSP
+	ldb	a, 1	; F56D16  ld A,0x01
+	call	16002440	; F56D18  call 0xf42d88
+	ret	; F56D1C  ret
+
+; --------------------------------------------------------------------------
+; sub_F56D1D
+; Called from: table 0xF55A2E[10]
+; Touches: (0x2070) (0x2250) (0x360B) (0x3757) (0x3758)
+; Calls:   sub_F56D46
+; Evidence: entry [10] of the table at 0xF55A2E reads 0x00F56D1D, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56D1D is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56D1D:
+	bit	7, w	; F56D1D  bit 0x07,W
+	jr	nz, 16	; F56D20  jr NZ,0xf56d32
+	bit_dd8	2, 150	; F56D22  bit 2,(0x96)
+	jr	z, 6	; F56D25  jr Z,0xf56d2d
+	.byte 0xF1, 0x0B, 0x36, 0xC8	; F56D27  bit 0,(0x360b)   [llvm-mc cannot encode this]
+	jr	nz, 24	; F56D2B  jr NZ,0xf56d45
+	calr	22	; F56D2D  calr 0xf56d46
+	jr	19	; F56D30  jr T,0xf56d45
+	ldb_d8	a, (8784)	; F56D32  ld A,(0x2250)
+	stb_d8	(14167), a	; F56D36  ld (0x3757),A
+	.byte 0xC1, 0x58, 0x37, 0x3E, 0x01	; F56D3A  or (0x3758),0x01   [llvm-mc cannot encode this]
+	stdi16	(8304), 16567	; F56D3F  ld (0x2070),0x40b7
+	ret	; F56D45  ret
+
+; --------------------------------------------------------------------------
+; sub_F56D46
+; Called from: in-module: 0xF56D2D
+; Touches: (0x360B) (0x3752)
+; Calls:   sub_F56D7E sub_F56DA8 T_CallbackQueue_Post T_Kernel_SemaSignal
+;          T_F411B8 T_F40B60 T_F40B5C T_F40AC4
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56D46 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56D46:
+	.byte 0xC1, 0x52, 0x37, 0x3F, 0x01	; F56D46  cp (0x3752),0x01   [llvm-mc cannot encode this]
+	jr	z, 5	; F56D4B  jr Z,0xf56d52
+	calr	46	; F56D4D  calr 0xf56d7e
+	jr	3	; F56D50  jr T,0xf56d55
+	calr	83	; F56D52  calr 0xf56da8
+	ld	xwa, 16080012	; F56D55  ld XWA,0x00f55c8c
+	push	xwa	; F56D5A  push XWA
+	call	16002692	; F56D5B  call 0xf42e84
+	inc	4, xsp	; F56D5F  inc 4,XSP
+	ldb	a, 1	; F56D61  ld A,0x01
+	call	16002440	; F56D63  call 0xf42d88
+	call	15995320	; F56D67  call 0xf411b8
+	.byte 0xF1, 0x0B, 0x36, 0xC8	; F56D6B  bit 0,(0x360b)   [llvm-mc cannot encode this]
+	jr	z, 12	; F56D6F  jr Z,0xf56d7d
+	call	15993696	; F56D71  call 0xf40b60
+	call	15993692	; F56D75  call 0xf40b5c
+	call	15993540	; F56D79  call 0xf40ac4
+	ret	; F56D7D  ret
+
+; --------------------------------------------------------------------------
+; sub_F56D7E
+; Called from: in-module: 0xF56D4D
+; Touches: (0x360C) (0x3736) (0x3752)
+; Calls:   T_F40D68 T_F40D60
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56D7E is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56D7E:
+	stdi8	(14162), 1	; F56D7E  ld (0x3752),0x01
+	ld	xwa, 65536	; F56D83  ld XWA,0x00010000
+	.byte 0xE1, 0x0C, 0x36, 0xE8	; F56D88  or (0x360c),XWA   [llvm-mc cannot encode this]
+	bit_dd8	2, 150	; F56D8C  bit 2,(0x96)
+	jr	z, 12	; F56D8F  jr Z,0xf56d9d
+	ldb	c, 16	; F56D91  ld C,0x10
+	stb_d8	(14134), c	; F56D93  ld (0x3736),C
+	call	15994216	; F56D97  call 0xf40d68
+	jr	10	; F56D9B  jr T,0xf56da7
+	ldb	c, 16	; F56D9D  ld C,0x10
+	stb_d8	(14134), c	; F56D9F  ld (0x3736),C
+	call	15994208	; F56DA3  call 0xf40d60
+	ret	; F56DA7  ret
+
+; --------------------------------------------------------------------------
+; sub_F56DA8
+; Called from: in-module: 0xF564A4 0xF56D52
+; Touches: (0x360C) (0x3736) (0x3752)
+; Calls:   T_F40D6C T_F40D64
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56DA8 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56DA8:
+	stdi8	(14162), 0	; F56DA8  ld (0x3752),0x00
+	ld	xwa, 65536	; F56DAD  ld XWA,0x00010000
+	xor	xwa, 4294967295	; F56DB2  xor XWA,0xffffffff
+	.byte 0xE1, 0x0C, 0x36, 0xC8	; F56DB8  and (0x360c),XWA   [llvm-mc cannot encode this]
+	bit_dd8	2, 150	; F56DBC  bit 2,(0x96)
+	jr	z, 12	; F56DBF  jr Z,0xf56dcd
+	ldb	c, 16	; F56DC1  ld C,0x10
+	stb_d8	(14134), c	; F56DC3  ld (0x3736),C
+	call	15994220	; F56DC7  call 0xf40d6c
+	jr	10	; F56DCB  jr T,0xf56dd7
+	ldb	c, 16	; F56DCD  ld C,0x10
+	stb_d8	(14134), c	; F56DCF  ld (0x3736),C
+	call	15994212	; F56DD3  call 0xf40d64
+	ret	; F56DD7  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F56DD8
+; Called from: table 0xF55A2E[11], 0xF55A2E[12], 0xF55A2E[13], 0xF55A2E[14]
+; Touches: nothing with an absolute address
+; Evidence: entry [11] of the table at 0xF55A2E reads 0x00F56DD8, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56DD8 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F56DD8:
+	ret	; F56DD8  ret
+
+; --------------------------------------------------------------------------
+; sub_F56DD9
+; Called from: table 0xF55A2E[15]
+; Touches: (0x2070)
+; Calls:   T_F40D18
+; Evidence: entry [15] of the table at 0xF55A2E reads 0x00F56DD9, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56DD9 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56DD9:
+	bit	7, w	; F56DD9  bit 0x07,W
+	jr	nz, 17	; F56DDC  jr NZ,0xf56def
+	bit_dd8	2, 150	; F56DDE  bit 2,(0x96)
+	jr	nz, 12	; F56DE1  jr NZ,0xf56def
+	call	15994136	; F56DE3  call 0xf40d18
+	stdi16	(8304), 513	; F56DE7  ld (0x2070),0x0201
+	jr	0	; F56DED  jr T,0xf56def
+	ret	; F56DEF  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F56DF0
+; Called from: table 0xF55A2E[16], 0xF55A2E[25], 0xF55A2E[26], 0xF55A2E[27],
+;              0xF55A2E[28], 0xF55A2E[29] +2 more; in-module: 0xF55868
+; Touches: nothing with an absolute address
+; Evidence: entry [16] of the table at 0xF55A2E reads 0x00F56DF0, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56DF0 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F56DF0:
+	ret	; F56DF0  ret
+
+; --------------------------------------------------------------------------
+; sub_F56DF1
+; Called from: in-module: 0xF5586C
+; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x361E) (0x3620)
+;          (0x3627)
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40B60 T_F40B5C T_F40AC4
+;          T_CallbackQueue_Post T_Kernel_SemaSignal sub_F56E66
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56DF1 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56DF1:
+	ldb_d8	a, (8314)	; F56DF1  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F56DF5  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 16	; F56DF9  jr NZ,0xf56e0b
+	ldb_d8	a, (8316)	; F56DFB  ld A,(0x207c)
+	.byte 0xC1, 0x7D, 0x20, 0xF1	; F56DFF  cp A,(0x207d)   [llvm-mc cannot encode this]
+	jr	nz, 57	; F56E03  jr NZ,0xf56e3e
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F56E05  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 69	; F56E09  jr NZ,0xf56e50
+	bit_dd8	2, 150	; F56E0B  bit 2,(0x96)
+	jr	nz, 46	; F56E0E  jr NZ,0xf56e3e
+	call	16002688	; F56E10  call 0xf42e80
+	.byte 0xC1, 0x27, 0x36, 0x3F, 0x03	; F56E14  cp (0x3627),0x03   [llvm-mc cannot encode this]
+	jr	nz, 5	; F56E19  jr NZ,0xf56e20
+	stdi8	(13863), 1	; F56E1B  ld (0x3627),0x01
+	ldw_d16	wa, (13854)	; F56E20  ld WA,(0x361e)
+	.byte 0xD1, 0x20, 0x36, 0xF0	; F56E24  cp WA,(0x3620)   [llvm-mc cannot encode this]
+	jr	ule, 8	; F56E28  jr ULE,0xf56e32
+	ldw_d16	wa, (13854)	; F56E2A  ld WA,(0x361e)
+	stda16	(13856), wa	; F56E2E  ld (0x3620),WA
+	call	15993696	; F56E32  call 0xf40b60
+	call	15993692	; F56E36  call 0xf40b5c
+	call	15993540	; F56E3A  call 0xf40ac4
+	ld	xwa, 16080600	; F56E3E  ld XWA,0x00f55ed8
+	push	xwa	; F56E43  push XWA
+	call	16002692	; F56E44  call 0xf42e84
+	inc	4, xsp	; F56E48  inc 4,XSP
+	ldb	a, 1	; F56E4A  ld A,0x01
+	call	16002440	; F56E4C  call 0xf42d88
+	ld	xwa, 16080618	; F56E50  ld XWA,0x00f55eea
+	push	xwa	; F56E55  push XWA
+	call	16002692	; F56E56  call 0xf42e84
+	inc	4, xsp	; F56E5A  inc 4,XSP
+	ldb	a, 1	; F56E5C  ld A,0x01
+	call	16002440	; F56E5E  call 0xf42d88
+	calr	1	; F56E62  calr 0xf56e66
+	ret	; F56E65  ret
+
+; --------------------------------------------------------------------------
+; sub_F56E66
+; Called from: in-module: 0xF56E62 0xF5730D
+; Touches: (0x3627)
+; Calls:   T_Blink_SetEnable
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56E66 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56E66:
+	.byte 0xC1, 0x27, 0x36, 0x3F, 0x00	; F56E66  cp (0x3627),0x00   [llvm-mc cannot encode this]
+	jr	z, 34	; F56E6B  jr Z,0xf56e8f
+	.byte 0xC1, 0x27, 0x36, 0x3F, 0x03	; F56E6D  cp (0x3627),0x03   [llvm-mc cannot encode this]
+	jr	z, 27	; F56E72  jr Z,0xf56e8f
+	.byte 0xC1, 0x27, 0x36, 0x3F, 0x01	; F56E74  cp (0x3627),0x01   [llvm-mc cannot encode this]
+	jr	z, 9	; F56E79  jr Z,0xf56e84
+	.byte 0xC1, 0x27, 0x36, 0x3F, 0x02	; F56E7B  cp (0x3627),0x02   [llvm-mc cannot encode this]
+	jr	z, 2	; F56E80  jr Z,0xf56e84
+	jr	11	; F56E82  jr T,0xf56e8f
+	pushw	1	; F56E84  push 0x0001
+	call	16002600	; F56E87  call 0xf42e28
+	inc	2, xsp	; F56E8B  inc 2,XSP
+	jr	9	; F56E8D  jr T,0xf56e98
+	pushw	0	; F56E8F  push 0x0000
+	call	16002600	; F56E92  call 0xf42e28
+	inc	2, xsp	; F56E96  inc 2,XSP
+	ret	; F56E98  ret
+
+; --------------------------------------------------------------------------
+; sub_F56E99
+; Called from: in-module: 0xF55870
+; Touches: (0x207A) (0x207B) (0x34BB) (0x3628)
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56E99 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56E99:
+	ldb_d8	a, (8314)	; F56E99  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F56E9D  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F56EA1  jr NZ,0xf56ea5
+	jr	17	; F56EA3  jr T,0xf56eb6
+	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F56EA5  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F56EAA  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F56EAF  jr Z,0xf56eb6
+	stdi8	(13864), 0	; F56EB1  ld (0x3628),0x00
+	ret	; F56EB6  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F56EB7
+; Called from: table 0xF55AAE[0], 0xF55AAE[1], 0xF55AAE[2], 0xF55AAE[3],
+;              0xF55AAE[4], 0xF55AAE[5] +3 more
+; Touches: nothing with an absolute address
+; Evidence: entry [0] of the table at 0xF55AAE reads 0x00F56EB7, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56EB7
+;           is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F56EB7:
+	ret	; F56EB7  ret
+
+; --------------------------------------------------------------------------
+; sub_F56EB8
+; Called from: table 0xF55AAE[9]
+; Touches: nothing with an absolute address
+; Calls:   DispatchState3627_F57050 sub_F56FD6
+; Evidence: entry [9] of the table at 0xF55AAE reads 0x00F56EB8, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF56EB8
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56EB8:
+	bit	7, w	; F56EB8  bit 0x07,W
+	jr	nz, 5	; F56EBB  jr NZ,0xf56ec2
+	calr	400	; F56EBD  calr 0xf57050
+	jr	3	; F56EC0  jr T,0xf56ec5
+	calr	273	; F56EC2  calr 0xf56fd6
+	ret	; F56EC5  ret
+
+; --------------------------------------------------------------------------
+; sub_F56EC6
+; Called from: table 0xF55AAE[10]
+; Touches: nothing with an absolute address
+; Calls:   DispatchState3627_F5718C sub_F57014
+; Evidence: entry [10] of the table at 0xF55AAE reads 0x00F56EC6, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56EC6 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56EC6:
+	bit	7, w	; F56EC6  bit 0x07,W
+	jr	nz, 5	; F56EC9  jr NZ,0xf56ed0
+	calr	702	; F56ECB  calr 0xf5718c
+	jr	3	; F56ECE  jr T,0xf56ed3
+	calr	321	; F56ED0  calr 0xf57014
+	ret	; F56ED3  ret
+
+; --------------------------------------------------------------------------
+; sub_F56ED4
+; Called from: table 0xF55AAE[11]; in-module: 0xF57366
+; Touches: nothing with an absolute address
+; Calls:   sub_F57032
+; Evidence: entry [11] of the table at 0xF55AAE reads 0x00F56ED4, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56ED4 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56ED4:
+	bit	7, w	; F56ED4  bit 0x07,W
+	jr	nz, 1	; F56ED7  jr NZ,0xf56eda
+	ret	; F56ED9  ret
+	calr	341	; F56EDA  calr 0xf57032
+	ret	; F56EDD  ret
+
+; --------------------------------------------------------------------------
+; sub_F56EDE
+; Called from: table 0xF55AAE[12]
+; Touches: (0x2070) (0x3628)
+; Evidence: entry [12] of the table at 0xF55AAE reads 0x00F56EDE, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56EDE is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56EDE:
+	bit	7, w	; F56EDE  bit 0x07,W
+	jr	nz, 15	; F56EE1  jr NZ,0xf56ef2
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F56EE3  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 8	; F56EE8  jr NZ,0xf56ef2
+	stdi16	(8304), 32786	; F56EEA  ld (0x2070),0x8012
+	jr	0	; F56EF0  jr T,0xf56ef2
+	ret	; F56EF2  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F56EF3
+; Called from: table 0xF55AAE[13], 0xF55AAE[14]
+; Touches: nothing with an absolute address
+; Evidence: entry [13] of the table at 0xF55AAE reads 0x00F56EF3, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56EF3 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F56EF3:
+	ret	; F56EF3  ret
+
+; --------------------------------------------------------------------------
+; sub_F56EF4
+; Called from: table 0xF55AAE[15]
+; Touches: (0x2070) (0x3628)
+; Evidence: entry [15] of the table at 0xF55AAE reads 0x00F56EF4, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56EF4 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56EF4:
+	bit	7, w	; F56EF4  bit 0x07,W
+	jr	nz, 15	; F56EF7  jr NZ,0xf56f08
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F56EF9  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 8	; F56EFE  jr NZ,0xf56f08
+	stdi16	(8304), 32786	; F56F00  ld (0x2070),0x8012
+	jr	0	; F56F06  jr T,0xf56f08
+	ret	; F56F08  ret
+
+; --------------------------------------------------------------------------
+; sub_F56F09
+; Called from: table 0xF55AAE[27]; in-module: 0xF5737D
+; Touches: (0x2267) (0x2826) (0x34D9) (0x361E) (0x3620) (0x3627)
+; Calls:   T_AsciiDigits3_ToValue T_Blink_Stop sub_F570DC sub_F56F7B
+;          sub_F5723B sub_F56FA8
+; Evidence: entry [27] of the table at 0xF55AAE reads 0x00F56F09, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56F09 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56F09:
+	bit_dd8	2, 150	; F56F09  bit 2,(0x96)
+	jr	nz, 108	; F56F0C  jr NZ,0xf56f7a
+	.byte 0xF1, 0xD9, 0x34, 0xCA	; F56F0E  bit 2,(0x34d9)   [llvm-mc cannot encode this]
+	jr	nz, 102	; F56F12  jr NZ,0xf56f7a
+	.byte 0xC1, 0x27, 0x36, 0x3F, 0x01	; F56F14  cp (0x3627),0x01   [llvm-mc cannot encode this]
+	jr	z, 9	; F56F19  jr Z,0xf56f24
+	.byte 0xC1, 0x27, 0x36, 0x3F, 0x02	; F56F1B  cp (0x3627),0x02   [llvm-mc cannot encode this]
+	jr	z, 46	; F56F20  jr Z,0xf56f50
+	jr	86	; F56F22  jr T,0xf56f7a
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F56F24  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 2	; F56F29  jr Z,0xf56f2d
+	jr	30	; F56F2B  jr T,0xf56f4b
+	stdi8	(10278), 3	; F56F2D  ld (0x2826),0x03
+	call	16003824	; F56F32  call 0xf432f0
+	cps	wa, 1	; F56F36  cp WA,1
+	jr	c, 17	; F56F38  jr C,0xf56f4b
+	cp	wa, 999	; F56F3A  cp WA,0x03e7
+	jr	ugt, 11	; F56F3E  jr UGT,0xf56f4b
+	stda16	(13854), wa	; F56F40  ld (0x361e),WA
+	call	16002596	; F56F44  call 0xf42e24
+	calr	401	; F56F48  calr 0xf570dc
+	calr	45	; F56F4B  calr 0xf56f7b
+	jr	42	; F56F4E  jr T,0xf56f7a
+	.byte 0xC1, 0x67, 0x22, 0x3F, 0x0F	; F56F50  cp (0x2267),0x0f   [llvm-mc cannot encode this]
+	jr	z, 2	; F56F55  jr Z,0xf56f59
+	jr	30	; F56F57  jr T,0xf56f77
+	stdi8	(10278), 3	; F56F59  ld (0x2826),0x03
+	call	16003824	; F56F5E  call 0xf432f0
+	cps	wa, 1	; F56F62  cp WA,1
+	jr	c, 17	; F56F64  jr C,0xf56f77
+	cp	wa, 999	; F56F66  cp WA,0x03e7
+	jr	ugt, 11	; F56F6A  jr UGT,0xf56f77
+	stda16	(13856), wa	; F56F6C  ld (0x3620),WA
+	call	16002596	; F56F70  call 0xf42e24
+	calr	708	; F56F74  calr 0xf5723b
+	calr	46	; F56F77  calr 0xf56fa8
+	ret	; F56F7A  ret
+
+; --------------------------------------------------------------------------
+; sub_F56F7B
+; Called from: in-module: 0xF56F4B
+; Touches: (0x2540) (0x2652) (0x361E)  |  0xF3500B
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal T_Blink_Command
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56F7B is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56F7B:
+	ldw_d16	wa, (13854)	; F56F7B  ld WA,(0x361e)
+	stda16	(9810), wa	; F56F7F  ld (0x2652),WA
+	ld	xwa, 16084886	; F56F83  ld XWA,0x00f56f96
+	push	xwa	; F56F88  push XWA
+	call	16002692	; F56F89  call 0xf42e84
+	inc	4, xsp	; F56F8D  inc 4,XSP
+	ldb	a, 1	; F56F8F  ld A,0x01
+	call	16002440	; F56F91  call 0xf42d88
+	ret	; F56F95  ret
+	stdi8	(9536), 0	; F56F96  ld (0x2540),0x00
+	ld	xiy, 15945739	; F56F9B  ld XIY,0x00f3500b
+	push	xiy	; F56FA0  push XIY
+	call	16002592	; F56FA1  call 0xf42e20
+	inc	4, xsp	; F56FA5  inc 4,XSP
+	ret	; F56FA7  ret
+
+; --------------------------------------------------------------------------
+; sub_F56FA8
+; Called from: in-module: 0xF56F77
+; Touches: (0x2540) (0x2654) (0x3620)  |  0xF35015
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal T_Blink_Command
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56FA8 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56FA8:
+	ldw_d16	wa, (13856)	; F56FA8  ld WA,(0x3620)
+	stda16	(9812), wa	; F56FAC  ld (0x2654),WA
+	ld	xwa, 16084931	; F56FB0  ld XWA,0x00f56fc3
+	push	xwa	; F56FB5  push XWA
+	call	16002692	; F56FB6  call 0xf42e84
+	inc	4, xsp	; F56FBA  inc 4,XSP
+	ldb	a, 1	; F56FBC  ld A,0x01
+	call	16002440	; F56FBE  call 0xf42d88
+	ret	; F56FC2  ret
+	stdi8	(9536), 0	; F56FC3  ld (0x2540),0x00
+	ld	xiy, 15945749	; F56FC8  ld XIY,0x00f35015
+	push	xiy	; F56FCD  push XIY
+	call	16002592	; F56FCE  call 0xf42e20
+	inc	4, xsp	; F56FD2  inc 4,XSP
+	ret	; F56FD4  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F56FD5
+; Called from: table 0xF55AAE[16], 0xF55AAE[17], 0xF55AAE[18], 0xF55AAE[19],
+;              0xF55AAE[20], 0xF55AAE[21] +9 more; in-module: 0xF5587E
+; Touches: nothing with an absolute address
+; Evidence: entry [16] of the table at 0xF55AAE reads 0x00F56FD5, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF56FD5 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F56FD5:
+	ret	; F56FD5  ret
+
+; --------------------------------------------------------------------------
+; sub_F56FD6
+; Called from: in-module: 0xF56EC2
+; Touches: (0x12F6) (0x2095) (0x2540) (0x3627) (0x3628) (0x3756)  |  0xF3501F
+;          0xF3502A
+; Calls:   T_Blink_Stop T_F41820 T_F4181C
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF56FD6 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F56FD6:
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F56FD6  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 22	; F56FDB  jr NZ,0xf56ff3
+	ldb_d8	a, (13863)	; F56FDD  ld A,(0x3627)
+	stb_d8	(14166), a	; F56FE1  ld (0x3756),A
+	stdi8	(13863), 0	; F56FE5  ld (0x3627),0x00
+	call	16002596	; F56FEA  call 0xf42e24
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F56FEE  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F56FF3  ret
+	stdi8	(9536), 1	; F56FF4  ld (0x2540),0x01
+	ld	xiy, 15945770	; F56FF9  ld XIY,0x00f3502a
+	call	15996960	; F56FFE  call 0xf41820
+	ldb_d8	a, (13863)	; F57002  ld A,(0x3627)
+	stb_d8	(4854), a	; F57006  ld (0x12f6),A
+	ld	xiy, 15945759	; F5700A  ld XIY,0x00f3501f
+	call	15996956	; F5700F  call 0xf4181c
+	ret	; F57013  ret
+
+; --------------------------------------------------------------------------
+; sub_F57014
+; Called from: in-module: 0xF56ED0 0xF57362
+; Touches: (0x2095) (0x3627) (0x3628) (0x3756)
+; Calls:   T_Blink_Stop
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57014 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57014:
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F57014  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 22	; F57019  jr NZ,0xf57031
+	ldb_d8	a, (13863)	; F5701B  ld A,(0x3627)
+	stb_d8	(14166), a	; F5701F  ld (0x3756),A
+	stdi8	(13863), 1	; F57023  ld (0x3627),0x01
+	call	16002596	; F57028  call 0xf42e24
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F5702C  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F57031  ret
+
+; --------------------------------------------------------------------------
+; sub_F57032
+; Called from: in-module: 0xF56EDA
+; Touches: (0x2095) (0x3627) (0x3628) (0x3756)
+; Calls:   T_Blink_Stop
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57032 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57032:
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F57032  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 22	; F57037  jr NZ,0xf5704f
+	ldb_d8	a, (13863)	; F57039  ld A,(0x3627)
+	stb_d8	(14166), a	; F5703D  ld (0x3756),A
+	stdi8	(13863), 2	; F57041  ld (0x3627),0x02
+	call	16002596	; F57046  call 0xf42e24
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F5704A  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F5704F  ret
+
+; --------------------------------------------------------------------------
+; DispatchState3627_F57050
+; Called from: in-module: 0xF56EBD 0xF5734F
+; Touches: (0x2075) (0x3627)
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57050 is an instruction boundary.
+; Shape:   `ld XIX,0x00F5706A / ld A,(0x3627) / sll 0x02,XWA / add XIX,XWA /
+;          ld XIX,(XIX) / call T,XIX` -- entry (0x3627) of that 5-entry table,
+;          with NO bound on the index.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+DispatchState3627_F57050:
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F57050  or (0x2075),0x08   [llvm-mc cannot encode this]
+	xor	xwa, xwa	; F57055  xor XWA,XWA
+	ld	xix, 16085098	; F57057  ld XIX,0x00f5706a
+	ldb_d8	a, (13863)	; F5705C  ld A,(0x3627)
+	sll	xwa, 2	; F57060  sll 0x02,XWA
+	add	xix, xwa	; F57063  add XIX,XWA
+	ld	xix, (xix)	; F57065  ld XIX,(XIX)
+	call	(xix)	; F57067  call T,XIX
+	ret	; F57069  ret
+
+; --------------------------------------------------------------------------
+; StateDispatchTable_F5706A -- five 32-bit routine pointers, entered with
+;                              `call (XIX)`.
+; Read by: 0xF57057: `xor XWA,XWA / ld XIX,0x00F5706A / ld A,(0x3627) / sll
+;          0x02,XWA / add XIX,XWA / ld XIX,(XIX) / call T,XIX` -- entry
+;          (0x3627) of this table, UNBOUNDED: nothing here range-checks the
+;          byte.  ⚠ THE STATE BYTE IS NOT THE SAME FOR ALL FOUR TABLES:
+;          0xF5693F and 0xF56A79 are indexed by (0x36CE), 0xF5706A and
+;          0xF571A6 by (0x3627).  This file assumed one byte for all four and
+;          --selftest refused it.
+; Evidence: the entry count rests on two facts, both re-read on every emit:
+;           entry [0] is 0xF5707E, which is the byte immediately AFTER the
+;           table, so the table frames itself; and the word at [5] is
+;           0xC8360BF1, which is not a 0x00F00000-0x00FFFFFF pointer, while
+;           [0]..[4] all are.  Same first-non-pointer rule the 0xF7D000 block
+;           used.
+; Unknown: what the byte at (0x3627) enumerates.  Nothing decoded here says
+;          what its values mean, so the name is FRAMED and no entry is given a
+;          name.  ⚠ AND NOTHING BOUNDS IT: a value above 4 would index past
+;          the table.  That is what the bytes say; whether the callers
+;          guarantee the range is not established here.
+; --------------------------------------------------------------------------
+StateDispatchTable_F5706A:
+	.long	0x00F5707E	; F5706A  [0] -> sub_F5707E
+	.long	0x00F570BB	; F5706E  [1] -> sub_F570BB
+	.long	0x00F5714A	; F57072  [2] -> sub_F5714A
+	.long	0x00F573BA	; F57076  [3] -> sub_F573BA
+	.long	0x00F5707E	; F5707A  [4] -> sub_F5707E
+
+
+; --------------------------------------------------------------------------
+; sub_F5707E
+; Called from: table 0xF5706A[0], 0xF5706A[4]
+; Touches: (0x360B)
+; Calls:   sub_F5709D T_F40B60 T_F40B5C T_F40AC4
+; Evidence: entry [0] of the table at 0xF5706A reads 0x00F5707E, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5707E
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5707E:
+	.byte 0xF1, 0x0B, 0x36, 0xC8	; F5707E  bit 0,(0x360b)   [llvm-mc cannot encode this]
+	jr	nz, 24	; F57082  jr NZ,0xf5709c
+	bit_dd8	2, 150	; F57084  bit 2,(0x96)
+	jr	nz, 19	; F57087  jr NZ,0xf5709c
+	.byte 0xF1, 0x0B, 0x36, 0xB8	; F57089  set 0,(0x360b)   [llvm-mc cannot encode this]
+	calr	13	; F5708D  calr 0xf5709d
+	call	15993696	; F57090  call 0xf40b60
+	call	15993692	; F57094  call 0xf40b5c
+	call	15993540	; F57098  call 0xf40ac4
+	ret	; F5709C  ret
+
+; --------------------------------------------------------------------------
+; sub_F5709D
+; Called from: in-module: 0xF5708D 0xF571D4
+; Touches: (0x2647) (0x360B)
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5709D is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5709D:
+	ldb_d8	a, (13835)	; F5709D  ld A,(0x360b)
+	and	a, 1	; F570A1  and A,0x01
+	stb_d8	(9799), a	; F570A4  ld (0x2647),A
+	ld	xwa, 16080799	; F570A8  ld XWA,0x00f55f9f
+	push	xwa	; F570AD  push XWA
+	call	16002692	; F570AE  call 0xf42e84
+	inc	4, xsp	; F570B2  inc 4,XSP
+	ldb	a, 1	; F570B4  ld A,0x01
+	call	16002440	; F570B6  call 0xf42d88
+	ret	; F570BA  ret
+
+; --------------------------------------------------------------------------
+; sub_F570BB
+; Called from: table 0xF5706A[1]
+; Touches: (0x361E)
+; Calls:   T_Blink_Stop sub_F57127 sub_F570DC
+; Evidence: entry [1] of the table at 0xF5706A reads 0x00F570BB, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF570BB
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F570BB:
+	bit_dd8	2, 150	; F570BB  bit 2,(0x96)
+	jr	nz, 27	; F570BE  jr NZ,0xf570db
+	call	16002596	; F570C0  call 0xf42e24
+	.byte 0xD1, 0x1E, 0x36, 0x3F, 0xE7, 0x03	; F570C4  cp (0x361e),0x03e7   [llvm-mc cannot encode this]
+	jr	c, 5	; F570CA  jr C,0xf570d1
+	calr	88	; F570CC  calr 0xf57127
+	jr	10	; F570CF  jr T,0xf570db
+	incdi16	1, (13854)	; F570D1  incw 1,(0x361e)
+	calr	79	; F570D5  calr 0xf57127
+	calr	1	; F570D8  calr 0xf570dc
+	ret	; F570DB  ret
+
+; --------------------------------------------------------------------------
+; sub_F570DC
+; Called from: in-module: 0xF56F48 0xF570D8
+; Touches: (0x34BB) (0x361E) (0x3620) (0x3628) (0x3629)
+; Calls:   sub_F57127
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF570DC is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F570DC:
+	ldw_d16	wa, (13854)	; F570DC  ld WA,(0x361e)
+	.byte 0xD1, 0x20, 0x36, 0xF0	; F570E0  cp WA,(0x3620)   [llvm-mc cannot encode this]
+	jr	ule, 28	; F570E4  jr ULE,0xf57102
+	ldw_d16	wa, (13854)	; F570E6  ld WA,(0x361e)
+	stda16	(13856), wa	; F570EA  ld (0x3620),WA
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F570EE  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	stdi8	(13864), 131	; F570F3  ld (0x3628),0x83
+	stdi8	(13865), 2	; F570F8  ld (0x3629),0x02
+	calr	39	; F570FD  calr 0xf57127
+	jr	36	; F57100  jr T,0xf57126
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F57102  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F57107  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F5710C  jr Z,0xf5711c
+	.byte 0xC1, 0x29, 0x36, 0x3F, 0x02	; F5710E  cp (0x3629),0x02   [llvm-mc cannot encode this]
+	jr	nz, 7	; F57113  jr NZ,0xf5711c
+	stdi8	(13864), 131	; F57115  ld (0x3628),0x83
+	jr	10	; F5711A  jr T,0xf57126
+	stdi8	(13864), 131	; F5711C  ld (0x3628),0x83
+	stdi8	(13865), 0	; F57121  ld (0x3629),0x00
+	ret	; F57126  ret
+
+; --------------------------------------------------------------------------
+; sub_F57127
+; Called from: in-module: 0xF570CC 0xF570D5 0xF570FD 0xF5715B 0xF57164
+;              0xF571E9 0xF571F2 0xF5722B +2 more
+; Touches: (0x2652) (0x2654) (0x361E) (0x3620)
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57127 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57127:
+	ldw_d16	wa, (13854)	; F57127  ld WA,(0x361e)
+	stda16	(9810), wa	; F5712B  ld (0x2652),WA
+	ldw_d16	wa, (13856)	; F5712F  ld WA,(0x3620)
+	stda16	(9812), wa	; F57133  ld (0x2654),WA
+	ld	xwa, 16080849	; F57137  ld XWA,0x00f55fd1
+	push	xwa	; F5713C  push XWA
+	call	16002692	; F5713D  call 0xf42e84
+	inc	4, xsp	; F57141  inc 4,XSP
+	ldb	a, 1	; F57143  ld A,0x01
+	call	16002440	; F57145  call 0xf42d88
+	ret	; F57149  ret
+
+; --------------------------------------------------------------------------
+; sub_F5714A
+; Called from: table 0xF5706A[2]
+; Touches: (0x34BB) (0x3620) (0x3628) (0x3629)
+; Calls:   T_Blink_Stop sub_F57127
+; Evidence: entry [2] of the table at 0xF5706A reads 0x00F5714A, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5714A
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5714A:
+	bit_dd8	2, 150	; F5714A  bit 2,(0x96)
+	jr	nz, 60	; F5714D  jr NZ,0xf5718b
+	call	16002596	; F5714F  call 0xf42e24
+	.byte 0xD1, 0x20, 0x36, 0x3F, 0xE7, 0x03	; F57153  cp (0x3620),0x03e7   [llvm-mc cannot encode this]
+	jr	c, 5	; F57159  jr C,0xf57160
+	calr	65481	; F5715B  calr 0xf57127
+	jr	43	; F5715E  jr T,0xf5718b
+	incdi16	1, (13856)	; F57160  incw 1,(0x3620)
+	calr	65472	; F57164  calr 0xf57127
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F57167  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F5716C  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F57171  jr Z,0xf57181
+	.byte 0xC1, 0x29, 0x36, 0x3F, 0x02	; F57173  cp (0x3629),0x02   [llvm-mc cannot encode this]
+	jr	nz, 7	; F57178  jr NZ,0xf57181
+	stdi8	(13864), 131	; F5717A  ld (0x3628),0x83
+	jr	10	; F5717F  jr T,0xf5718b
+	stdi8	(13864), 131	; F57181  ld (0x3628),0x83
+	stdi8	(13865), 1	; F57186  ld (0x3629),0x01
+	ret	; F5718B  ret
+
+; --------------------------------------------------------------------------
+; DispatchState3627_F5718C
+; Called from: in-module: 0xF56ECB 0xF5735D
+; Touches: (0x2075) (0x3627)
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5718C is an instruction boundary.
+; Shape:   `ld XIX,0x00F571A6 / ld A,(0x3627) / sll 0x02,XWA / add XIX,XWA /
+;          ld XIX,(XIX) / call T,XIX` -- entry (0x3627) of that 5-entry table,
+;          with NO bound on the index.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+DispatchState3627_F5718C:
+	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F5718C  or (0x2075),0x08   [llvm-mc cannot encode this]
+	xor	xwa, xwa	; F57191  xor XWA,XWA
+	ld	xix, 16085414	; F57193  ld XIX,0x00f571a6
+	ldb_d8	a, (13863)	; F57198  ld A,(0x3627)
+	sll	xwa, 2	; F5719C  sll 0x02,XWA
+	add	xix, xwa	; F5719F  add XIX,XWA
+	ld	xix, (xix)	; F571A1  ld XIX,(XIX)
+	call	(xix)	; F571A3  call T,XIX
+	ret	; F571A5  ret
+
+; --------------------------------------------------------------------------
+; StateDispatchTable_F571A6 -- five 32-bit routine pointers, entered with
+;                              `call (XIX)`.
+; Read by: 0xF57193: `xor XWA,XWA / ld XIX,0x00F571A6 / ld A,(0x3627) / sll
+;          0x02,XWA / add XIX,XWA / ld XIX,(XIX) / call T,XIX` -- entry
+;          (0x3627) of this table, UNBOUNDED: nothing here range-checks the
+;          byte.  ⚠ THE STATE BYTE IS NOT THE SAME FOR ALL FOUR TABLES:
+;          0xF5693F and 0xF56A79 are indexed by (0x36CE), 0xF5706A and
+;          0xF571A6 by (0x3627).  This file assumed one byte for all four and
+;          --selftest refused it.
+; Evidence: the entry count rests on two facts, both re-read on every emit:
+;           entry [0] is 0xF571BA, which is the byte immediately AFTER the
+;           table, so the table frames itself; and the word at [5] is
+;           0xC8360BF1, which is not a 0x00F00000-0x00FFFFFF pointer, while
+;           [0]..[4] all are.  Same first-non-pointer rule the 0xF7D000 block
+;           used.
+; Unknown: what the byte at (0x3627) enumerates.  Nothing decoded here says
+;          what its values mean, so the name is FRAMED and no entry is given a
+;          name.  ⚠ AND NOTHING BOUNDS IT: a value above 4 would index past
+;          the table.  That is what the bytes say; whether the callers
+;          guarantee the range is not established here.
+; --------------------------------------------------------------------------
+StateDispatchTable_F571A6:
+	.long	0x00F571BA	; F571A6  [0] -> sub_F571BA
+	.long	0x00F571D8	; F571AA  [1] -> sub_F571D8
+	.long	0x00F5721A	; F571AE  [2] -> sub_F5721A
+	.long	0x00F573F3	; F571B2  [3] -> sub_F573F3
+	.long	0x00F571BA	; F571B6  [4] -> sub_F571BA
+
+
+; --------------------------------------------------------------------------
+; sub_F571BA
+; Called from: table 0xF571A6[0], 0xF571A6[4]
+; Touches: (0x360B) (0x36C6) (0x36CA) (0x3731)
+; Calls:   sub_F5709D
+; Evidence: entry [0] of the table at 0xF571A6 reads 0x00F571BA, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF571BA
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F571BA:
+	.byte 0xF1, 0x0B, 0x36, 0xC8	; F571BA  bit 0,(0x360b)   [llvm-mc cannot encode this]
+	jr	z, 23	; F571BE  jr Z,0xf571d7
+	.byte 0xF1, 0x31, 0x37, 0xCA	; F571C0  bit 2,(0x3731)   [llvm-mc cannot encode this]
+	jr	nz, 17	; F571C4  jr NZ,0xf571d7
+	.byte 0xF1, 0x0B, 0x36, 0xB0	; F571C6  res 0,(0x360b)   [llvm-mc cannot encode this]
+	xor	xwa, xwa	; F571CA  xor XWA,XWA
+	stda32	(14026), xwa	; F571CC  ld (0x36ca),XWA
+	stda32	(14022), xwa	; F571D0  ld (0x36c6),XWA
+	calr	65222	; F571D4  calr 0xf5709d
+	ret	; F571D7  ret
+
+; --------------------------------------------------------------------------
+; sub_F571D8
+; Called from: table 0xF571A6[1]
+; Touches: (0x34BB) (0x361E) (0x3628) (0x3629)
+; Calls:   T_Blink_Stop sub_F57127
+; Evidence: entry [1] of the table at 0xF571A6 reads 0x00F571D8, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF571D8
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F571D8:
+	bit_dd8	2, 150	; F571D8  bit 2,(0x96)
+	jr	nz, 60	; F571DB  jr NZ,0xf57219
+	call	16002596	; F571DD  call 0xf42e24
+	.byte 0xD1, 0x1E, 0x36, 0x3F, 0x01, 0x00	; F571E1  cp (0x361e),0x0001   [llvm-mc cannot encode this]
+	jr	ugt, 5	; F571E7  jr UGT,0xf571ee
+	calr	65339	; F571E9  calr 0xf57127
+	jr	43	; F571EC  jr T,0xf57219
+	decdi16	1, (13854)	; F571EE  decw 1,(0x361e)
+	calr	65330	; F571F2  calr 0xf57127
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F571F5  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F571FA  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F571FF  jr Z,0xf5720f
+	.byte 0xC1, 0x29, 0x36, 0x3F, 0x02	; F57201  cp (0x3629),0x02   [llvm-mc cannot encode this]
+	jr	nz, 7	; F57206  jr NZ,0xf5720f
+	stdi8	(13864), 131	; F57208  ld (0x3628),0x83
+	jr	10	; F5720D  jr T,0xf57219
+	stdi8	(13864), 131	; F5720F  ld (0x3628),0x83
+	stdi8	(13865), 0	; F57214  ld (0x3629),0x00
+	ret	; F57219  ret
+
+; --------------------------------------------------------------------------
+; sub_F5721A
+; Called from: table 0xF571A6[2]
+; Touches: (0x3620)
+; Calls:   T_Blink_Stop sub_F57127 sub_F5723B
+; Evidence: entry [2] of the table at 0xF571A6 reads 0x00F5721A, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5721A
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5721A:
+	bit_dd8	2, 150	; F5721A  bit 2,(0x96)
+	jr	nz, 27	; F5721D  jr NZ,0xf5723a
+	call	16002596	; F5721F  call 0xf42e24
+	.byte 0xD1, 0x20, 0x36, 0x3F, 0x01, 0x00	; F57223  cp (0x3620),0x0001   [llvm-mc cannot encode this]
+	jr	ugt, 5	; F57229  jr UGT,0xf57230
+	calr	65273	; F5722B  calr 0xf57127
+	jr	10	; F5722E  jr T,0xf5723a
+	decdi16	1, (13856)	; F57230  decw 1,(0x3620)
+	calr	65264	; F57234  calr 0xf57127
+	calr	1	; F57237  calr 0xf5723b
+	ret	; F5723A  ret
+
+; --------------------------------------------------------------------------
+; sub_F5723B
+; Called from: in-module: 0xF56F74 0xF57237
+; Touches: (0x34BB) (0x361E) (0x3620) (0x3628) (0x3629)
+; Calls:   sub_F57127
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5723B is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5723B:
+	ldw_d16	wa, (13854)	; F5723B  ld WA,(0x361e)
+	.byte 0xD1, 0x20, 0x36, 0xF0	; F5723F  cp WA,(0x3620)   [llvm-mc cannot encode this]
+	jr	ule, 28	; F57243  jr ULE,0xf57261
+	ldw_d16	wa, (13856)	; F57245  ld WA,(0x3620)
+	stda16	(13854), wa	; F57249  ld (0x361e),WA
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F5724D  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	stdi8	(13864), 131	; F57252  ld (0x3628),0x83
+	stdi8	(13865), 2	; F57257  ld (0x3629),0x02
+	calr	65224	; F5725C  calr 0xf57127
+	jr	36	; F5725F  jr T,0xf57285
+	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F57261  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F57266  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	z, 14	; F5726B  jr Z,0xf5727b
+	.byte 0xC1, 0x29, 0x36, 0x3F, 0x02	; F5726D  cp (0x3629),0x02   [llvm-mc cannot encode this]
+	jr	nz, 7	; F57272  jr NZ,0xf5727b
+	stdi8	(13864), 131	; F57274  ld (0x3628),0x83
+	jr	10	; F57279  jr T,0xf57285
+	stdi8	(13864), 131	; F5727B  ld (0x3628),0x83
+	stdi8	(13865), 1	; F57280  ld (0x3629),0x01
+	ret	; F57285  ret
+
+; --------------------------------------------------------------------------
+; sub_F57286
+; Called from: in-module: 0xF55882 0xF57410
+; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x360C) (0x361E)
+;          (0x3620) (0x3626) (0x3627)
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F411B8 T_F40B60 T_F40B5C
+;          T_F40AC4 T_CallbackQueue_Post T_Kernel_SemaSignal sub_F56E66
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57286 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57286:
+	ldb_d8	a, (8314)	; F57286  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F5728A  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 16	; F5728E  jr NZ,0xf572a0
+	ldb_d8	a, (8316)	; F57290  ld A,(0x207c)
+	.byte 0xC1, 0x7D, 0x20, 0xF1	; F57294  cp A,(0x207d)   [llvm-mc cannot encode this]
+	jr	nz, 79	; F57298  jr NZ,0xf572e9
+	.byte 0xF1, 0x95, 0x20, 0xCC	; F5729A  bit 4,(0x2095)   [llvm-mc cannot encode this]
+	jr	nz, 91	; F5729E  jr NZ,0xf572fb
+	call	16002688	; F572A0  call 0xf42e80
+	push	xwa	; F572A4  push XWA
+	ldda32	xwa, (13836)	; F572A5  ld XWA,(0x360c)
+	.byte 0xC1, 0x26, 0x36, 0x3F, 0x00	; F572A9  cp (0x3626),0x00   [llvm-mc cannot encode this]
+	jr	z, 5	; F572AE  jr Z,0xf572b5
+	ldl_da	xwa, (6299393)	; F572B0  ld XWA,(0x601f01)
+	stl_da	(6304798), xwa	; F572B5  ld (0x60341e),XWA
+	call	15995320	; F572BA  call 0xf411b8
+	pop	xwa	; F572BE  pop XWA
+	.byte 0xC1, 0x27, 0x36, 0x3F, 0x00	; F572BF  cp (0x3627),0x00   [llvm-mc cannot encode this]
+	jr	nz, 5	; F572C4  jr NZ,0xf572cb
+	stdi8	(13863), 1	; F572C6  ld (0x3627),0x01
+	ldw_d16	wa, (13854)	; F572CB  ld WA,(0x361e)
+	.byte 0xD1, 0x20, 0x36, 0xF0	; F572CF  cp WA,(0x3620)   [llvm-mc cannot encode this]
+	jr	ule, 8	; F572D3  jr ULE,0xf572dd
+	ldw_d16	wa, (13854)	; F572D5  ld WA,(0x361e)
+	stda16	(13856), wa	; F572D9  ld (0x3620),WA
+	call	15993696	; F572DD  call 0xf40b60
+	call	15993692	; F572E1  call 0xf40b5c
+	call	15993540	; F572E5  call 0xf40ac4
+	ld	xwa, 16080509	; F572E9  ld XWA,0x00f55e7d
+	push	xwa	; F572EE  push XWA
+	call	16002692	; F572EF  call 0xf42e84
+	inc	4, xsp	; F572F3  inc 4,XSP
+	ldb	a, 1	; F572F5  ld A,0x01
+	call	16002440	; F572F7  call 0xf42d88
+	ld	xwa, 16080527	; F572FB  ld XWA,0x00f55e8f
+	push	xwa	; F57300  push XWA
+	call	16002692	; F57301  call 0xf42e84
+	inc	4, xsp	; F57305  inc 4,XSP
+	ldb	a, 1	; F57307  ld A,0x01
+	call	16002440	; F57309  call 0xf42d88
+	calr	64342	; F5730D  calr 0xf56e66
+	ret	; F57310  ret
+
+; --------------------------------------------------------------------------
+; sub_F57311
+; Called from: in-module: 0xF55886 0xF57414
+; Touches: (0x207A) (0x207B) (0x3628)
+; Calls:   sub_F56579 T_F413C8 T_F41F18 T_F411B8
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57311 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57311:
+	ldb_d8	a, (8314)	; F57311  ld A,(0x207a)
+	.byte 0xC1, 0x7B, 0x20, 0xF1	; F57315  cp A,(0x207b)   [llvm-mc cannot encode this]
+	jr	nz, 2	; F57319  jr NZ,0xf5731d
+	jr	25	; F5731B  jr T,0xf57336
+	stdi8	(13864), 0	; F5731D  ld (0x3628),0x00
+	bit_dd8	2, 150	; F57322  bit 2,(0x96)
+	jr	z, 11	; F57325  jr Z,0xf57332
+	calr	62031	; F57327  calr 0xf56579
+	call	15995848	; F5732A  call 0xf413c8
+	call	15998744	; F5732E  call 0xf41f18
+	call	15995320	; F57332  call 0xf411b8
+	ret	; F57336  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F57337
+; Called from: table 0xF55B2E[0], 0xF55B2E[1], 0xF55B2E[2], 0xF55B2E[3],
+;              0xF55B2E[4], 0xF55B2E[5] +2 more
+; Touches: nothing with an absolute address
+; Evidence: entry [0] of the table at 0xF55B2E reads 0x00F57337, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF57337
+;           is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F57337:
+	ret	; F57337  ret
+
+; --------------------------------------------------------------------------
+; sub_F57338
+; Called from: table 0xF55B2E[8]; in-module: 0xF57419
+; Touches: (0x3628)
+; Calls:   sub_F57382
+; Evidence: entry [8] of the table at 0xF55B2E reads 0x00F57338, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF57338
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57338:
+	bit	7, w	; F57338  bit 0x07,W
+	jr	nz, 12	; F5733B  jr NZ,0xf57349
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F5733D  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 5	; F57342  jr NZ,0xf57349
+	calr	59	; F57344  calr 0xf57382
+	jr	0	; F57347  jr T,0xf57349
+	ret	; F57349  ret
+
+; --------------------------------------------------------------------------
+; sub_F5734A
+; Called from: table 0xF55B2E[9]; in-module: 0xF5741D
+; Touches: nothing with an absolute address
+; Calls:   DispatchState3627_F57050 sub_F5739C
+; Evidence: entry [9] of the table at 0xF55B2E reads 0x00F5734A, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5734A
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5734A:
+	bit	7, w	; F5734A  bit 0x07,W
+	jr	nz, 5	; F5734D  jr NZ,0xf57354
+	calr	64766	; F5734F  calr 0xf57050
+	jr	3	; F57352  jr T,0xf57357
+	calr	69	; F57354  calr 0xf5739c
+	ret	; F57357  ret
+
+; --------------------------------------------------------------------------
+; sub_F57358
+; Called from: table 0xF55B2E[10]; in-module: 0xF57421
+; Touches: nothing with an absolute address
+; Calls:   DispatchState3627_F5718C sub_F57014
+; Evidence: entry [10] of the table at 0xF55B2E reads 0x00F57358, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF57358 is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57358:
+	bit	7, w	; F57358  bit 0x07,W
+	jr	nz, 5	; F5735B  jr NZ,0xf57362
+	calr	65068	; F5735D  calr 0xf5718c
+	jr	3	; F57360  jr T,0xf57365
+	calr	64687	; F57362  calr 0xf57014
+	ret	; F57365  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F57366
+; Called from: table 0xF55B2E[11]; in-module: 0xF57425
+; Touches: nothing with an absolute address
+; Calls:   sub_F56ED4
+; Evidence: entry [11] of the table at 0xF55B2E reads 0x00F57366, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF57366 is an instruction boundary of this transcription.
+; Shape:   `calr`/`call 0xF56ED4` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F57366:
+	calr	64363	; F57366  calr 0xf56ed4
+	ret	; F57369  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F5736A
+; Called from: table 0xF55B2E[12], 0xF55B2E[13], 0xF55B2E[14]
+; Touches: nothing with an absolute address
+; Evidence: entry [12] of the table at 0xF55B2E reads 0x00F5736A, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5736A is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F5736A:
+	ret	; F5736A  ret
+
+; --------------------------------------------------------------------------
+; sub_F5736B
+; Called from: table 0xF55B2E[15]; in-module: 0xF5742A
+; Touches: (0x3628)
+; Calls:   sub_F57382
+; Evidence: entry [15] of the table at 0xF55B2E reads 0x00F5736B, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5736B is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5736B:
+	bit	7, w	; F5736B  bit 0x07,W
+	jr	nz, 12	; F5736E  jr NZ,0xf5737c
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F57370  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 5	; F57375  jr NZ,0xf5737c
+	calr	8	; F57377  calr 0xf57382
+	jr	0	; F5737A  jr T,0xf5737c
+	ret	; F5737C  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5737D
+; Called from: table 0xF55B2E[27]; in-module: 0xF5742E
+; Touches: nothing with an absolute address
+; Calls:   sub_F56F09
+; Evidence: entry [27] of the table at 0xF55B2E reads 0x00F5737D, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5737D is an instruction boundary of this transcription.
+; Shape:   `calr`/`call 0xF56F09` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5737D:
+	calr	64393	; F5737D  calr 0xf56f09
+	ret	; F57380  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F57381
+; Called from: table 0xF55B2E[16], 0xF55B2E[17], 0xF55B2E[18], 0xF55B2E[19],
+;              0xF55B2E[20], 0xF55B2E[21] +9 more; in-module: 0xF55894
+; Touches: nothing with an absolute address
+; Evidence: entry [16] of the table at 0xF55B2E reads 0x00F57381, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF57381 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F57381:
+	ret	; F57381  ret
+
+; --------------------------------------------------------------------------
+; sub_F57382
+; Called from: in-module: 0xF57344 0xF57377
+; Touches: (0x2070) (0x207C)
+; Calls:   T_F409AC
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57382 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57382:
+	call	15993260	; F57382  call 0xf409ac
+	.byte 0xC1, 0x7C, 0x20, 0x3F, 0x26	; F57386  cp (0x207c),0x26   [llvm-mc cannot encode this]
+	jr	z, 8	; F5738B  jr Z,0xf57395
+	stdi16	(8304), 32808	; F5738D  ld (0x2070),0x8028
+	jr	6	; F57393  jr T,0xf5739b
+	stdi16	(8304), 32805	; F57395  ld (0x2070),0x8025
+	ret	; F5739B  ret
+
+; --------------------------------------------------------------------------
+; sub_F5739C
+; Called from: in-module: 0xF57354
+; Touches: (0x2095) (0x3627) (0x3628) (0x3756)
+; Calls:   T_Blink_Stop
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF5739C is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F5739C:
+	.byte 0xC1, 0x28, 0x36, 0x3F, 0x00	; F5739C  cp (0x3628),0x00   [llvm-mc cannot encode this]
+	jr	nz, 22	; F573A1  jr NZ,0xf573b9
+	ldb_d8	a, (13863)	; F573A3  ld A,(0x3627)
+	stb_d8	(14166), a	; F573A7  ld (0x3756),A
+	stdi8	(13863), 3	; F573AB  ld (0x3627),0x03
+	call	16002596	; F573B0  call 0xf42e24
+	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F573B4  or (0x2095),0x10   [llvm-mc cannot encode this]
+	ret	; F573B9  ret
+
+; --------------------------------------------------------------------------
+; sub_F573BA
+; Called from: table 0xF5706A[3]
+; Touches: (0x3626)
+; Calls:   T_F411B8 sub_F573D8
+; Evidence: entry [3] of the table at 0xF5706A reads 0x00F573BA, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF573BA
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F573BA:
+	.byte 0xC1, 0x26, 0x36, 0x3F, 0x01	; F573BA  cp (0x3626),0x01   [llvm-mc cannot encode this]
+	jr	z, 22	; F573BF  jr Z,0xf573d7
+	stdi8	(13862), 1	; F573C1  ld (0x3626),0x01
+	ldl_da	xwa, (6299393)	; F573C6  ld XWA,(0x601f01)
+	stl_da	(6304798), xwa	; F573CB  ld (0x60341e),XWA
+	call	15995320	; F573D0  call 0xf411b8
+	calr	1	; F573D4  calr 0xf573d8
+	ret	; F573D7  ret
+
+; --------------------------------------------------------------------------
+; sub_F573D8
+; Called from: in-module: 0xF573D4 0xF5740C
+; Touches: (0x1308) (0x3626)
+; Calls:   T_CallbackQueue_Post T_Kernel_SemaSignal
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF573D8 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F573D8:
+	ldb_d8	a, (13862)	; F573D8  ld A,(0x3626)
+	stb_d8	(4872), a	; F573DC  ld (0x1308),A
+	ld	xwa, 16080879	; F573E0  ld XWA,0x00f55fef
+	push	xwa	; F573E5  push XWA
+	call	16002692	; F573E6  call 0xf42e84
+	inc	4, xsp	; F573EA  inc 4,XSP
+	ldb	a, 1	; F573EC  ld A,0x01
+	call	16002440	; F573EE  call 0xf42d88
+	ret	; F573F2  ret
+
+; --------------------------------------------------------------------------
+; sub_F573F3
+; Called from: table 0xF571A6[3]
+; Touches: (0x360C) (0x3626)
+; Calls:   T_F411B8 sub_F573D8
+; Evidence: entry [3] of the table at 0xF571A6 reads 0x00F573F3, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF573F3
+;           is an instruction boundary of this transcription.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F573F3:
+	.byte 0xC1, 0x26, 0x36, 0x3F, 0x00	; F573F3  cp (0x3626),0x00   [llvm-mc cannot encode this]
+	jr	z, 21	; F573F8  jr Z,0xf5740f
+	stdi8	(13862), 0	; F573FA  ld (0x3626),0x00
+	ldda32	xwa, (13836)	; F573FF  ld XWA,(0x360c)
+	stl_da	(6304798), xwa	; F57403  ld (0x60341e),XWA
+	call	15995320	; F57408  call 0xf411b8
+	calr	65481	; F5740C  calr 0xf573d8
+	ret	; F5740F  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F57410
+; Called from: in-module: 0xF55898
+; Touches: nothing with an absolute address
+; Calls:   sub_F57286
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57410 is an instruction boundary.
+; Shape:   `calr`/`call 0xF57286` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F57410:
+	calr	65139	; F57410  calr 0xf57286
+	ret	; F57413  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F57414
+; Called from: in-module: 0xF5589C
+; Touches: nothing with an absolute address
+; Calls:   sub_F57311
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57414 is an instruction boundary.
+; Shape:   `calr`/`call 0xF57311` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F57414:
+	calr	65274	; F57414  calr 0xf57311
+	ret	; F57417  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F57418
+; Called from: table 0xF55BAE[0], 0xF55BAE[1], 0xF55BAE[2], 0xF55BAE[3],
+;              0xF55BAE[4], 0xF55BAE[5] +2 more
+; Touches: nothing with an absolute address
+; Evidence: entry [0] of the table at 0xF55BAE reads 0x00F57418, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF57418
+;           is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F57418:
+	ret	; F57418  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F57419
+; Called from: table 0xF55BAE[8]
+; Touches: nothing with an absolute address
+; Calls:   sub_F57338
+; Evidence: entry [8] of the table at 0xF55BAE reads 0x00F57419, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF57419
+;           is an instruction boundary of this transcription.
+; Shape:   `calr`/`call 0xF57338` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F57419:
+	calr	65308	; F57419  calr 0xf57338
+	ret	; F5741C  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5741D
+; Called from: table 0xF55BAE[9]
+; Touches: nothing with an absolute address
+; Calls:   sub_F5734A
+; Evidence: entry [9] of the table at 0xF55BAE reads 0x00F5741D, that table is
+;           entered with `call XIX` after a bounds-checked index, and 0xF5741D
+;           is an instruction boundary of this transcription.
+; Shape:   `calr`/`call 0xF5734A` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5741D:
+	calr	65322	; F5741D  calr 0xf5734a
+	ret	; F57420  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F57421
+; Called from: table 0xF55BAE[10]
+; Touches: nothing with an absolute address
+; Calls:   sub_F57358
+; Evidence: entry [10] of the table at 0xF55BAE reads 0x00F57421, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF57421 is an instruction boundary of this transcription.
+; Shape:   `calr`/`call 0xF57358` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F57421:
+	calr	65332	; F57421  calr 0xf57358
+	ret	; F57424  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F57425
+; Called from: table 0xF55BAE[11]
+; Touches: nothing with an absolute address
+; Calls:   Fwd_F57366
+; Evidence: entry [11] of the table at 0xF55BAE reads 0x00F57425, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF57425 is an instruction boundary of this transcription.
+; Shape:   `calr`/`call 0xF57366` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F57425:
+	calr	65342	; F57425  calr 0xf57366
+	ret	; F57428  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F57429
+; Called from: table 0xF55BAE[12], 0xF55BAE[13], 0xF55BAE[14]
+; Touches: nothing with an absolute address
+; Evidence: entry [12] of the table at 0xF55BAE reads 0x00F57429, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF57429 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F57429:
+	ret	; F57429  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5742A
+; Called from: table 0xF55BAE[15]
+; Touches: nothing with an absolute address
+; Calls:   sub_F5736B
+; Evidence: entry [15] of the table at 0xF55BAE reads 0x00F5742A, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5742A is an instruction boundary of this transcription.
+; Shape:   `calr`/`call 0xF5736B` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5742A:
+	calr	65342	; F5742A  calr 0xf5736b
+	ret	; F5742D  ret
+
+; --------------------------------------------------------------------------
+; Fwd_F5742E
+; Called from: table 0xF55BAE[27]
+; Touches: nothing with an absolute address
+; Calls:   Fwd_F5737D
+; Evidence: entry [27] of the table at 0xF55BAE reads 0x00F5742E, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF5742E is an instruction boundary of this transcription.
+; Shape:   `calr`/`call 0xF5737D` then `ret` -- a one-instruction forwarder,
+;          the shape of a linker veneer.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Fwd_F5742E:
+	calr	65356	; F5742E  calr 0xf5737d
+	ret	; F57431  ret
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F57432
+; Called from: table 0xF55BAE[16], 0xF55BAE[17], 0xF55BAE[18], 0xF55BAE[19],
+;              0xF55BAE[20], 0xF55BAE[21] +9 more; in-module: 0xF558AA
+; Touches: nothing with an absolute address
+; Evidence: entry [16] of the table at 0xF55BAE reads 0x00F57432, that table
+;           is entered with `call XIX` after a bounds-checked index, and
+;           0xF57432 is an instruction boundary of this transcription.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F57432:
+	ret	; F57432  ret
+
+; --------------------------------------------------------------------------
+; sub_F57433
+; Called from: in-module: 0xF56030 0xF56B5F
+; Touches: (0x360C)
+; Calls:   T_F411B8
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57433 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57433:
+	push	xwa	; F57433  push XWA
+	ldda32	xwa, (13836)	; F57434  ld XWA,(0x360c)
+	stl_da	(6304798), xwa	; F57438  ld (0x60341e),XWA
+	pop	xwa	; F5743D  pop XWA
+	call	15995320	; F5743E  call 0xf411b8
+	ret	; F57442  ret
+
+; --------------------------------------------------------------------------
+; sub_F57443
+; Called from: in-module: 0xF5604F 0xF56B71
+; Touches: (0x360C)
+; Calls:   T_F411B8
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57443 is an instruction boundary.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+;          per this tree's rule that a stated gap beats a plausible guess.
+; --------------------------------------------------------------------------
+sub_F57443:
+	push	xwa	; F57443  push XWA
+	ldl_da	xwa, (6304798)	; F57444  ld XWA,(0x60341e)
+	stda32	(13836), xwa	; F57449  ld (0x360c),XWA
+	pop	xwa	; F5744D  pop XWA
+	call	15995320	; F5744E  call 0xf411b8
+	ret	; F57452  ret
+
+; --------------------------------------------------------------------------
+; Unclaimed_F57453 -- 287 bytes that decode as code and are deliberately NOT
+;                     claimed as code.  Nothing in either image references any
+;                     address inside them, so the layout has no entry point to
+;                     start a walk from, and this tree does not promote a run
+;                     to code on the strength of a decode alone.
+; Decodes as: 0 `link XIZ` prologues (none) and 0 `unlk XIZ` opcode pairs
+;             (none), both re-scanned over 0xF57453-0xF57571 on every emit.
+; Evidence: the reference scan is over BOTH images and over every byte offset,
+;           not only 4-aligned ones: no 32-bit little-endian spelling of any
+;           address in 0xF57453-0xF57571 occurs anywhere in prom_a or prom_b.
+;           What this region needs is a REFERENCE, not a better decoder.
+; Unknown: who calls any of it.  Kept as `.byte` and a FRAMED name.
+; --------------------------------------------------------------------------
+Unclaimed_F57453:
+	.byte	0x3C, 0x3D, 0x28, 0x29, 0xD1, 0x52, 0x35, 0x20, 0xF1, 0x44, 0x26, 0x50, 0xC1, 0xE3, 0x0D, 0x21	; F57453  |<=().R5 .D&P...!|
+	.byte	0xF1, 0x46, 0x26, 0x41, 0xC1, 0x0B, 0x36, 0x21, 0xC9, 0xCC, 0x01, 0xF1, 0x47, 0x26, 0x41, 0xC1	; F57463  |.F&A..6!....G&A.|
+	.byte	0x52, 0x37, 0x21, 0xF1, 0x09, 0x13, 0x41, 0xC1, 0x0A, 0x36, 0x21, 0xC9, 0x61, 0xF1, 0x4B, 0x26	; F57473  |R7!...A..6!.a.K&|
+	.byte	0x41, 0x31, 0x03, 0x00, 0x44, 0x4C, 0x26, 0x00, 0x00, 0x45, 0xCA, 0x34, 0x60, 0x00, 0x95, 0x11	; F57483  |A1..DL&..E.4`...|
+	.byte	0x49, 0x48, 0x5D, 0x5C, 0x0E, 0x28, 0xD1, 0x52, 0x35, 0x20, 0xF1, 0x44, 0x26, 0x50, 0xC1, 0xE3	; F57493  |IH]\.(.R5 .D&P..|
+	.byte	0x0D, 0x21, 0xF1, 0x46, 0x26, 0x41, 0xC1, 0x0B, 0x36, 0x21, 0xC9, 0xCC, 0x02, 0xC9, 0xEF, 0x01	; F574A3  |.!.F&A..6!......|
+	.byte	0xF1, 0x47, 0x26, 0x41, 0xC1, 0xD9, 0x34, 0x21, 0xC9, 0xCC, 0x01, 0xF1, 0x48, 0x26, 0x41, 0xD1	; F574B3  |.G&A..4!....H&A.|
+	.byte	0x08, 0x0C, 0x20, 0xF1, 0x49, 0x26, 0x50, 0xC1, 0x52, 0x37, 0x21, 0xF1, 0x09, 0x13, 0x41, 0xC1	; F574C3  |.. .I&P.R7!...A.|
+	.byte	0x0A, 0x36, 0x21, 0xC9, 0x61, 0xF1, 0x4B, 0x26, 0x41, 0x48, 0x0E, 0x28, 0xC1, 0x27, 0x36, 0x21	; F574D3  |.6!.a.K&AH.(.'6!|
+	.byte	0xF1, 0xF6, 0x12, 0x41, 0xD1, 0x52, 0x35, 0x20, 0xF1, 0x44, 0x26, 0x50, 0xC1, 0x0B, 0x36, 0x21	; F574E3  |...A.R5 .D&P..6!|
+	.byte	0xC9, 0xCC, 0x01, 0xF1, 0x47, 0x26, 0x41, 0xD1, 0x1E, 0x36, 0x20, 0xF1, 0x52, 0x26, 0x50, 0xD1	; F574F3  |....G&A..6 .R&P.|
+	.byte	0x20, 0x36, 0x20, 0xF1, 0x54, 0x26, 0x50, 0x48, 0x0E, 0x28, 0xC1, 0x27, 0x36, 0x21, 0xF1, 0xF6	; F57503  | 6 .T&PH.(.'6!..|
+	.byte	0x12, 0x41, 0xD1, 0x52, 0x35, 0x20, 0xF1, 0x44, 0x26, 0x50, 0xD1, 0x1E, 0x36, 0x20, 0xF1, 0x52	; F57513  |.A.R5 .D&P..6 .R|
+	.byte	0x26, 0x50, 0xD1, 0x20, 0x36, 0x20, 0xF1, 0x54, 0x26, 0x50, 0xC1, 0x26, 0x36, 0x21, 0xF1, 0x08	; F57523  |&P. 6 .T&P.&6!..|
+	.byte	0x13, 0x41, 0x48, 0x0E, 0x28, 0xC1, 0x27, 0x36, 0x21, 0xF1, 0xF6, 0x12, 0x41, 0xD1, 0x52, 0x35	; F57533  |.AH.(.'6!...A.R5|
+	.byte	0x20, 0xF1, 0x44, 0x26, 0x50, 0xC1, 0x0B, 0x36, 0x21, 0xC9, 0xCC, 0x02, 0xC9, 0xEF, 0x01, 0xF1	; F57543  | .D&P..6!.......|
+	.byte	0x47, 0x26, 0x41, 0xC1, 0xD9, 0x34, 0x21, 0xC9, 0xCC, 0x01, 0xF1, 0x48, 0x26, 0x41, 0xD1, 0x22	; F57553  |G&A..4!....H&A."|
+	.byte	0x36, 0x20, 0xF1, 0x56, 0x26, 0x50, 0xD1, 0x24, 0x36, 0x20, 0xF1, 0x58, 0x26, 0x50, 0x48	; F57563  |6 .V&P.$6 .X&PH|
+
+	.fill	1678, 1, 0x0E	; F57572-F57BFF  `ret` padding (asserted pure 0x0E)
+
+
+; --------------------------------------------------------------------------
+; RingPutBlock_EntryThunks
+; Called from: T_RingPutBlock_EntryThunks (0xF40ED0, x0)
+; Touches: nothing with an absolute address
+; Evidence: prom_b's thunk table reaches this address through a POINTER slot,
+;           not a `jp` slot: the slot at 0xF40ED0 holds the 32-bit value
+;           0x00F57C00.  The eight 4-byte slots here are `jp` instructions --
+;           slot 0 to 0xF57C21 and slots 1..7 all to the bare `ret` at
+;           0xF57C20 -- which is the six-thunk-group shape notes/FINDINGS-
+;           prom_b-thunk-table.md records for the 26 pointer slots, here eight
+;           slots wide.  Only entry 0 does anything.
+; Unknown: what the group is FOR.  Seven of its eight entries return
+;          immediately, and nothing decoded here says what the other seven
+;          were meant to be.
+; --------------------------------------------------------------------------
+RingPutBlock_EntryThunks:		; <- T_RingPutBlock_EntryThunks
+	jp	16088097	; F57C00  jp 0xf57c21
+	jp	16088096	; F57C04  jp 0xf57c20
+	jp	16088096	; F57C08  jp 0xf57c20
+	jp	16088096	; F57C0C  jp 0xf57c20
+	jp	16088096	; F57C10  jp 0xf57c20
+	jp	16088096	; F57C14  jp 0xf57c20
+	jp	16088096	; F57C18  jp 0xf57c20
+	jp	16088096	; F57C1C  jp 0xf57c20
+
+; --------------------------------------------------------------------------
+; Nop_Ret_F57C20
+; Called from: in-module: 0xF57C04 0xF57C08 0xF57C0C 0xF57C10 0xF57C14
+;              0xF57C18 0xF57C1C
+; Touches: nothing with an absolute address
+; Evidence: reached by a branch decoded in this transcription (the sites are
+;           listed above), so 0xF57C20 is an instruction boundary.
+; Shape:   the whole body is one byte, 0x0E = RET (mame dasm900.cpp:1267).
+;          The routine does nothing, and the table slots that point at it are
+;          selectors with no handler.
+; Unknown: what the routine is FOR.  The name states what it DOES, which is
+;          why it keeps an address and grades FRAMED, not content: the thing
+;          that would distinguish it from its siblings is a bare index into
+;          something nobody has named.
+; --------------------------------------------------------------------------
+Nop_Ret_F57C20:
+	ret	; F57C20  ret
+
+; --------------------------------------------------------------------------
+; RingPutBlock_InitRing601850
+; Called from: in-module: 0xF57C00
+; Touches: nothing with an absolute address
+; Calls:   0xF57D1E T_Ring601850_Init 0xF8E001
+; Evidence: `calr 0xF57D1E` (the INTT2 handler block immediately below this
+;           span), then `call 0xF41E6C` = T_Ring601850_Init, then `call
+;           0xF8E001`, then `ret`.  The name says which ring the one live
+;           entry of the group above initialises, and nothing more.
+; Unknown: what `call 0xF8E001` in prom_a does, and why the ring init is
+;          bracketed the way it is.
+; --------------------------------------------------------------------------
+RingPutBlock_InitRing601850:
+	calr	250	; F57C21  calr 0xf57d1e
+	call	15998572	; F57C24  call 0xf41e6c
+	call	16310273	; F57C28  call 0xf8e001
+	ret	; F57C2C  ret
+
+; --------------------------------------------------------------------------
+; Ring608A0A_PutBlock_Ldir
+; Called from: no thunk slot, no arm-table entry and no in-module branch that
+;              this census sees -- reached only by falling through from the
+;              code above, or by a computed transfer nothing here decodes
+; Touches:   |  0x608A0A
+; Evidence: `ld XHL,0x00608A0A / ld WA,0x0400` and a jump into
+;           Ring_PutBlockWrapped: the ring's data base and its capacity, side
+;           by side.  0x608A0A's capacity is 0x400 in notes/FINDINGS-prom_a-
+;           ring-buffers.md's table, which was derived independently in prom_a
+;           from the nine veneers of that ring's group agreeing on one class
+;           routine.  All six veneers here match that table.  ⚠ This is NOT
+;           prom_a's Ring608A0A_PutBlock: that one is a byte-at-a-time `djnz`
+;           loop calling Ring_Put_0400, this one is a bounded `ldir`.  The
+;           `_Ldir` suffix is the difference.
+; Unknown: what this ring carries.  The name states the ring and the
+;          operation, which is all the bytes here say.
+; --------------------------------------------------------------------------
+Ring608A0A_PutBlock_Ldir:
+	ld	c, (xsp+4)	; F57C2D  ld C,(XSP+0x04)
+	ld	xiy, (xsp+6)	; F57C30  ld XIY,(XSP+0x06)
+	push	xhl	; F57C33  push XHL
+	ld	xhl, 6326794	; F57C34  ld XHL,0x00608a0a
+	ldw	wa, 1024	; F57C39  ld WA,0x0400
+	jrl	142	; F57C3C  jrl T,0xf57ccd
+
+; --------------------------------------------------------------------------
+; Ring60480A_PutBlock_Ldir
+; Called from: no thunk slot, no arm-table entry and no in-module branch that
+;              this census sees -- reached only by falling through from the
+;              code above, or by a computed transfer nothing here decodes
+; Touches:   |  0x60480A
+; Evidence: `ld XHL,0x0060480A / ld WA,0x0100` and a jump into
+;           Ring_PutBlockWrapped: the ring's data base and its capacity, side
+;           by side.  0x60480A's capacity is 0x100 in notes/FINDINGS-prom_a-
+;           ring-buffers.md's table, which was derived independently in prom_a
+;           from the nine veneers of that ring's group agreeing on one class
+;           routine.  All six veneers here match that table.  ⚠ This is NOT
+;           prom_a's Ring60480A_PutBlock: that one is a byte-at-a-time `djnz`
+;           loop calling Ring_Put_0400, this one is a bounded `ldir`.  The
+;           `_Ldir` suffix is the difference.
+; Unknown: what this ring carries.  The name states the ring and the
+;          operation, which is all the bytes here say.
+; --------------------------------------------------------------------------
+Ring60480A_PutBlock_Ldir:
+	ld	c, (xsp+4)	; F57C3F  ld C,(XSP+0x04)
+	ld	xiy, (xsp+6)	; F57C42  ld XIY,(XSP+0x06)
+	push	xhl	; F57C45  push XHL
+	ld	xhl, 6309898	; F57C46  ld XHL,0x0060480a
+	ldw	wa, 256	; F57C4B  ld WA,0x0100
+	jr	125	; F57C4E  jr T,0xf57ccd
+
+; --------------------------------------------------------------------------
+; Ring601B64_PutBlock_Ldir
+; Called from: no thunk slot, no arm-table entry and no in-module branch that
+;              this census sees -- reached only by falling through from the
+;              code above, or by a computed transfer nothing here decodes
+; Touches:   |  0x601B64
+; Evidence: `ld XHL,0x00601B64 / ld WA,0x0100` and a jump into
+;           Ring_PutBlockWrapped: the ring's data base and its capacity, side
+;           by side.  0x601B64's capacity is 0x100 in notes/FINDINGS-prom_a-
+;           ring-buffers.md's table, which was derived independently in prom_a
+;           from the nine veneers of that ring's group agreeing on one class
+;           routine.  All six veneers here match that table.  ⚠ This is NOT
+;           prom_a's Ring601B64_PutBlock: that one is a byte-at-a-time `djnz`
+;           loop calling Ring_Put_0400, this one is a bounded `ldir`.  The
+;           `_Ldir` suffix is the difference.
+; Unknown: what this ring carries.  The name states the ring and the
+;          operation, which is all the bytes here say.
+; --------------------------------------------------------------------------
+Ring601B64_PutBlock_Ldir:
+	ld	c, (xsp+4)	; F57C50  ld C,(XSP+0x04)
+	ld	xiy, (xsp+6)	; F57C53  ld XIY,(XSP+0x06)
+	push	xhl	; F57C56  push XHL
+	ld	xhl, 6298468	; F57C57  ld XHL,0x00601b64
+	ldw	wa, 256	; F57C5C  ld WA,0x0100
+	jr	108	; F57C5F  jr T,0xf57ccd
+
+; --------------------------------------------------------------------------
+; Ring60000C_PutBlock_Ldir
+; Called from: no thunk slot, no arm-table entry and no in-module branch that
+;              this census sees -- reached only by falling through from the
+;              code above, or by a computed transfer nothing here decodes
+; Touches:   |  0x60000C
+; Evidence: `ld XHL,0x0060000C / ld WA,0x0400` and a jump into
+;           Ring_PutBlockWrapped: the ring's data base and its capacity, side
+;           by side.  0x60000C's capacity is 0x400 in notes/FINDINGS-prom_a-
+;           ring-buffers.md's table, which was derived independently in prom_a
+;           from the nine veneers of that ring's group agreeing on one class
+;           routine.  All six veneers here match that table.  ⚠ This is NOT
+;           prom_a's Ring60000C_PutBlock: that one is a byte-at-a-time `djnz`
+;           loop calling Ring_Put_0400, this one is a bounded `ldir`.  The
+;           `_Ldir` suffix is the difference.
+; Unknown: what this ring carries.  The name states the ring and the
+;          operation, which is all the bytes here say.
+; --------------------------------------------------------------------------
+Ring60000C_PutBlock_Ldir:
+	ld	c, (xsp+4)	; F57C61  ld C,(XSP+0x04)
+	ld	xiy, (xsp+6)	; F57C64  ld XIY,(XSP+0x06)
+	push	xhl	; F57C67  push XHL
+	ld	xhl, 6291468	; F57C68  ld XHL,0x0060000c
+	ldw	wa, 1024	; F57C6D  ld WA,0x0400
+	jr	91	; F57C70  jr T,0xf57ccd
+
+; --------------------------------------------------------------------------
+; Ring60195A_PutBlock_Ldir
+; Called from: no thunk slot, no arm-table entry and no in-module branch that
+;              this census sees -- reached only by falling through from the
+;              code above, or by a computed transfer nothing here decodes
+; Touches:   |  0x60195A
+; Evidence: `ld XHL,0x0060195A / ld WA,0x0200` and a jump into
+;           Ring_PutBlockWrapped: the ring's data base and its capacity, side
+;           by side.  0x60195A's capacity is 0x200 in notes/FINDINGS-prom_a-
+;           ring-buffers.md's table, which was derived independently in prom_a
+;           from the nine veneers of that ring's group agreeing on one class
+;           routine.  All six veneers here match that table.  ⚠ This is NOT
+;           prom_a's Ring60195A_PutBlock: that one is a byte-at-a-time `djnz`
+;           loop calling Ring_Put_0400, this one is a bounded `ldir`.  The
+;           `_Ldir` suffix is the difference.
+; Unknown: what this ring carries.  The name states the ring and the
+;          operation, which is all the bytes here say.
+; --------------------------------------------------------------------------
+Ring60195A_PutBlock_Ldir:
+	ld	c, (xsp+4)	; F57C72  ld C,(XSP+0x04)
+	ld	xiy, (xsp+6)	; F57C75  ld XIY,(XSP+0x06)
+	push	xhl	; F57C78  push XHL
+	ld	xhl, 6297946	; F57C79  ld XHL,0x0060195a
+	ldw	wa, 512	; F57C7E  ld WA,0x0200
+	jr	74	; F57C81  jr T,0xf57ccd
+	inc	1, xiy	; F57C83  inc 1,XIY
+	ld	a, (xiy)	; F57C85  ld A,(XIY)
+	stb_da	(6291456), a	; F57C87  ld (0x600000),A
+	ret	; F57C8C  ret
+	inc	1, xiy	; F57C8D  inc 1,XIY
+	ld	a, (xiy)	; F57C8F  ld A,(XIY)
+	stb_da	(6291457), a	; F57C91  ld (0x600001),A
+	ret	; F57C96  ret
+
+; --------------------------------------------------------------------------
+; Ring601850_PutBlock_Drop1In3
+; Called from: no thunk slot, no arm-table entry and no in-module branch that
+;              this census sees -- reached only by falling through from the
+;              code above, or by a computed transfer nothing here decodes
+; Touches:   |  0x601850
+; Evidence: the loop at 0xF57CAF is `inc 1,XIY / ld WA,(XIY+) / ld (XHL+),WA`,
+;           so the source advances THREE bytes and the destination TWO on
+;           every iteration, and the counters agree -- `inc 3,D` against `inc
+;           2,E`, with D compared to the caller's byte count C.  It rewrites
+;           the buffer in place, dropping the first byte of every three, and
+;           then falls into Ring_PutBlockWrapped with XHL = 0x00601850 and WA
+;           = 0x0100 -- ring 0x601850, whose capacity in notes/FINDINGS-
+;           prom_a-ring-buffers.md is 0x100.  Two lead bytes never reach the
+;           ring: `cp A,0xb0` and `cp A,0xb1` divert to single stores at
+;           (0x600000) and (0x600001).
+; Unknown: what the three-byte records ARE.  0xB0/0xB1 are the MIDI status
+;          bytes for Control Change on channels 1 and 2, which is SUGGESTIVE
+;          and is NOT asserted: nothing decoded here says the buffer is MIDI,
+;          and the routine treats every other lead byte identically.
+; --------------------------------------------------------------------------
+Ring601850_PutBlock_Drop1In3:
+	ld	c, (xsp+4)	; F57C97  ld C,(XSP+0x04)
+	ld	xiy, (xsp+6)	; F57C9A  ld XIY,(XSP+0x06)
+	ld	a, (xiy)	; F57C9D  ld A,(XIY)
+	cp	a, 176	; F57C9F  cp A,0xb0
+	jr	z, -33	; F57CA2  jr Z,0xf57c83
+	cp	a, 177	; F57CA4  cp A,0xb1
+	jr	z, -28	; F57CA7  jr Z,0xf57c8d
+	push	xhl	; F57CA9  push XHL
+	pushw	de	; F57CAA  push DE
+	ld	xhl, xiy	; F57CAB  ld XHL,XIY
+	xor	de, de	; F57CAD  xor DE,DE
+	inc	1, xiy	; F57CAF  inc 1,XIY
+	ld_spiw	wa, 245	; F57CB1  ld WA,(XIY+)
+	stw_dpi	wa, 237	; F57CB4  ld (XHL+),WA
+	inc	3, d	; F57CB7  inc 3,D
+	inc	2, e	; F57CB9  inc 2,E
+	cp	d, c	; F57CBB  cp D,C
+	jr	nz, -16	; F57CBD  jr NZ,0xf57caf
+	ld	c, e	; F57CBF  ld C,E
+	ld	xiy, (xsp+12)	; F57CC1  ld XIY,(XSP+0x0c)
+	ld	xhl, 6297680	; F57CC4  ld XHL,0x00601850
+	ldw	wa, 256	; F57CC9  ld WA,0x0100
+	popw	de	; F57CCC  pop DE
+
+; --------------------------------------------------------------------------
+; Ring_PutBlockWrapped
+; Called from: no thunk slot, no arm-table entry and no in-module branch that
+;              this census sees -- reached only by falling through from the
+;              code above, or by a computed transfer nothing here decodes
+; Touches: nothing with an absolute address
+; Evidence: the shared tail of the six veneers above it, and it is prom_a's
+;           RING CONTROL BLOCK read by a different implementation.  XHL is a
+;           ring's data base, WA its capacity, C a byte count, XIY the source.
+;           `cp (XIX+0xfe),BC / jr C` drops the whole block if the FREE COUNT
+;           at base-2 is smaller than the count -- all or nothing; `ld
+;           DE,(XIX+0xfc)` takes the WRITE INDEX at base-4; `sub
+;           (XIX+0xfe),BC` spends the free count; `sub WA,DE` gives the bytes
+;           left before the end of the buffer and is compared with the count,
+;           so a block that would run past the end is copied in TWO `ldir`s
+;           with the index wrapped to 0 in between.  base-4 and base-2 are
+;           exactly the two words prom_a's `Ring_Put_0400` uses at
+;           0xF84225-0xF84237.
+; --------------------------------------------------------------------------
+Ring_PutBlockWrapped:
+	push	xix	; F57CCD  push XIX
+	pushw	de	; F57CCE  push DE
+	or	c, c	; F57CCF  or C,C
+	jr	z, 71	; F57CD1  jr Z,0xf57d1a
+	extz	bc	; F57CD3  extz BC
+	ld	xix, xhl	; F57CD5  ld XIX,XHL
+	cp	(xix-2), bc	; F57CD7  cp (XIX+0xfe),BC
+	jr	c, 62	; F57CDA  jr C,0xf57d1a
+	ld	de, (xix-4)	; F57CDC  ld DE,(XIX+0xfc)
+	sub	(xix-2), bc	; F57CDF  sub (XIX+0xfe),BC
+	sub	wa, de	; F57CE2  sub WA,DE
+	cp	wa, bc	; F57CE4  cp WA,BC
+	jr	c, 28	; F57CE6  jr C,0xf57d04
+	jr	z, 12	; F57CE8  jr Z,0xf57cf6
+	add	(xix-4), bc	; F57CEA  add (XIX+0xfc),BC
+	.byte 0xF3, 0x07, 0xF0, 0xE8, 0x34	; F57CED  lda XIX,XIX+DE   [llvm-mc cannot encode this]
+	.byte 0x85, 0x11	; F57CF2  ldir   [llvm-mc cannot encode this]
+	jr	36	; F57CF4  jr T,0xf57d1a
+	.byte 0xBC, 0xFC, 0x02, 0x00, 0x00	; F57CF6  ld (XIX+0xfc),0x0000   [llvm-mc cannot encode this]
+	.byte 0xF3, 0x07, 0xF0, 0xE8, 0x34	; F57CFB  lda XIX,XIX+DE   [llvm-mc cannot encode this]
+	.byte 0x85, 0x11	; F57D00  ldir   [llvm-mc cannot encode this]
+	jr	22	; F57D02  jr T,0xf57d1a
+	.byte 0xF3, 0x07, 0xF0, 0xE8, 0x34	; F57D04  lda XIX,XIX+DE   [llvm-mc cannot encode this]
+	ld	de, bc	; F57D09  ld DE,BC
+	ld	bc, wa	; F57D0B  ld BC,WA
+	sub	de, wa	; F57D0D  sub DE,WA
+	.byte 0x85, 0x11	; F57D0F  ldir   [llvm-mc cannot encode this]
+	ld	bc, de	; F57D11  ld BC,DE
+	ld	xix, xhl	; F57D13  ld XIX,XHL
+	ld	(xix-4), de	; F57D15  ld (XIX+0xfc),DE
+	.byte 0x85, 0x11	; F57D18  ldir   [llvm-mc cannot encode this]
+	popw	de	; F57D1A  pop DE
+	pop	xix	; F57D1B  pop XIX
+	pop	xhl	; F57D1C  pop XHL
+	ret	; F57D1D  ret
 ; ==============================================================================
 ; 0xF57D1E-0xF57D4E -- INTT2's HANDLER, AND THE ROUTINE IT IS WEDGED INTO
 ; ==============================================================================
@@ -87108,7 +93577,7 @@ Clear_600780_98:
 ;
 ; Called from: vector slot 0x48.  prom_a file 0x7FF48 reads `E0 0E F4 00`, i.e.
 ;          0xFFFF48 holds 0x00F40EE0; prom_b file 0x40EE0 reads `1B 45 7D F5`,
-;          i.e. thunk T_F40EE0 is `jp 0xF57D45`; and prom_b file 0x57D45 is the
+;          i.e. thunk T_INTT2_Reti is `jp 0xF57D45`; and prom_b file 0x57D45 is the
 ;          single byte 0x07, RETI.  Every link re-read from the images here.
 ; Inputs:  none
 ; Outputs: none
@@ -87174,7 +93643,7 @@ Zero9:
 ;
 ; ★ IT ALSO ANSWERS `DisplayList_Run_Stack`'s OWN HEADER, which said "Called
 ;   from: through the thunk table; not yet traced to a specific caller".  It is
-;   called 38 times from prom_a through `lda XIX,T_F42E00` + `jp (XIX)`, and
+;   called 38 times from prom_a through `lda XIX,T_DisplayList_Run_Stack` + `jp (XIX)`, and
 ;   `DisplayListB_Run_Stack` 19 times the same way.
 ;
 ; WHAT IS IN IT -- and this is the answer gap V of
@@ -90395,7 +96864,7 @@ DL_F59C53:
 ;      record at 0xF59C53 (opcode 0x0E, handler 0xF31A9F, three words = eight
 ;      bytes).  So the PAD is 2,981 and the source emits it as such.  Nothing
 ;      here depends on which of the two the boundary is called.
-;   2. The thunk table.  Slots T_F40F00..T_F40F24 are one run bracketed by
+;   2. The thunk table.  Slots 0xF40F00..0xF40F24 are one run bracketed by
 ;      `0E 0E 0E 0E` fill at T_F40EFC and T_F40F28, and EVERY one of their ten
 ;      targets is inside 0xF5A800-0xF5B44D.  The first slot is a POINTER (not a
 ;      `jp`) and it names 0xF5A800, the six-`jp` vtable below -- the shape
@@ -90499,7 +96968,7 @@ DL_F59C53:
 ; ---------------------------------------------------------------------
 ; SC1_Vtable -- the module's six-entry object table
 ;
-; Called from: nothing calls it; thunk slot T_F40F00 holds its ADDRESS
+; Called from: nothing calls it; thunk slot T_SC1_Vtable holds its ADDRESS
 ;          (`00 A8 F5 00`), which is the only occurrence of that word in either
 ;          image.  Whatever reads the 26 pointer slots of the thunk table reads
 ;          this.
@@ -90564,13 +97033,13 @@ SC1_Vtable_3_Ret:
 ; SC1_Service / SC1_TxFlush / SC1_Entry_F40F18_Ret / SC1_Entry_F40F1C /
 ; SC1_Entry_F40F20 / SC1_Entry_F40F24 -- the module's public entry points
 ;
-; Called from: the thunk slots T_F40F04, T_F40F08, T_F40F18, T_F40F1C,
+; Called from: the thunk slots T_SC1_Service, T_SC1_TxFlush, T_SC1_Entry_F40F18_Ret, T_F40F1C,
 ;          T_F40F20 and T_F40F24 respectively.  Scanning both images at every
 ;          byte offset for `1D`/`1B` with each slot as operand finds:
-;            T_F40F04 x1  (prom_a 0xF82048)
-;            T_F40F08 x6  (prom_a 0xF82158, 0xF8217E, 0xF829EF, 0xF8C423,
+;            T_SC1_Service x1  (prom_a 0xF82048)
+;            T_SC1_TxFlush x6  (prom_a 0xF82158, 0xF8217E, 0xF829EF, 0xF8C423,
 ;                          0xF8C8A5, 0xF95681)
-;            T_F40F18 x1  (prom_a 0xF82991)
+;            T_SC1_Entry_F40F18_Ret x1  (prom_a 0xF82991)
 ;            T_F40F1C x3  (prom_a 0xF99AB9, 0xFE01C1, 0xFF795D)
 ;            T_F40F20 x1  (prom_a 0xF94DFC)
 ;            T_F40F24 x0
@@ -90578,7 +97047,7 @@ SC1_Vtable_3_Ret:
 ;          reason notes/FINDINGS-prom_b-thunk-table.md gives.
 ; Inputs:  none of the six takes a register argument
 ; Outputs: SC1_Entry_F40F20 returns the status byte in A
-; Evidence: each is a `calr` to one body and a `ret`, except T_F40F18's, which
+; Evidence: each is a `calr` to one body and a `ret`, except T_SC1_Entry_F40F18_Ret's, which
 ;          is a bare `ret`, and T_F40F1C's, which saves XIX/XIZ/XHL/XDE first.
 ; Unknown: the roles.  SC1_Service is named for what it does (it runs the
 ;          receive decoder), SC1_TxFlush likewise; the other four keep
@@ -91051,7 +97520,7 @@ SC1_StartWordTx:
 ; ---------------------------------------------------------------------
 ; INT6_SC1_PeerRequest -- external interrupt 6: the peer wants the link
 ;
-; Called from: vector slot 0x34 (0xFFFF34 holds 0x00F40F0C) via thunk T_F40F0C
+; Called from: vector slot 0x34 (0xFFFF34 holds 0x00F40F0C) via thunk T_INT6_SC1_PeerRequest
 ;          -> 0xF5AC0A.  Verified byte by byte: prom_a file 0x7FF34 reads
 ;          `0C 0F F4 00` and prom_b file 0x40F0C reads `1B 0A AC F5`.
 ; Inputs:  (0x2A81) -- zero means no message is in progress
@@ -91136,7 +97605,7 @@ SC1_Irq_Exit_1_Delayed:
 ;          the ROM and resolves each to the label the .s puts at that address.
 ;          ENTRY COUNT: 11, and the bound is ABUTMENT -- the byte after the
 ;          last entry, 0xF5AC93, is INTTX1_SC1_Dispatch, which vector slot 0x6C
-;          reaches through thunk T_F40F14.  LAST-ENTRY TEST: entry [10] is at
+;          reaches through thunk T_INTTX1_SC1_Dispatch.  LAST-ENTRY TEST: entry [10] is at
 ;          0xF5AC8F, holds 0x00F5AFD3, and is state 0x28; `--selftest` asserts
 ;          exactly that, plus that entries [0], [7] and [10] are ONE target.
 ;          Nine distinct targets for eleven slots.
@@ -91165,8 +97634,8 @@ SC1_StateTable:
 ; ---------------------------------------------------------------------
 ; INTTX1_SC1_Dispatch / INTRX1_SC1_Dispatch -- the two serial-1 vectors
 ;
-; Called from: vector slot 0x6C (0xFFFF6C -> T_F40F14 -> 0xF5AC93) and slot
-;          0x68 (0xFFFF68 -> T_F40F10 -> 0xF5ACBB).  Both chains verified byte
+; Called from: vector slot 0x6C (0xFFFF6C -> T_INTTX1_SC1_Dispatch -> 0xF5AC93) and slot
+;          0x68 (0xFFFF68 -> T_INTRX1_SC1_Dispatch -> 0xF5ACBB).  Both chains verified byte
 ;          by byte in the ROM images.
 ; Inputs:  (0x2A80), the state byte
 ; Outputs: whatever the dispatched state handler does
@@ -91253,7 +97722,7 @@ SC1_Irq_Exit_3_Delayed:
 ; The full argument for BOTH dispatchers is in the INTTX1_SC1_Dispatch header
 ; above; this stub exists only because the exit-stub header now sits between
 ; the two and a reader arriving here would otherwise see the wrong header.
-; Called from: vector slot 0x68 (0xFFFF68 -> T_F40F10 -> 0xF5ACBB).
+; Called from: vector slot 0x68 (0xFFFF68 -> T_INTRX1_SC1_Dispatch -> 0xF5ACBB).
 ; Evidence: the two preambles' first 0x14 bytes are IDENTICAL and the handlers
 ;          differ in exactly one byte over 40 -- both printed by
 ;          `python3 notes/prom_b_sc1_states.py --dispatch` and asserted by
@@ -91610,7 +98079,7 @@ SC1_AbortToIdle:
 ; ---------------------------------------------------------------------
 ; SC1_TxFlush_Body -- encode the outbound queue and start a transfer if idle
 ;
-; Called from: SC1_TxFlush (0xF5A836), i.e. thunk T_F40F08, the module's
+; Called from: SC1_TxFlush (0xF5A836), i.e. thunk T_SC1_TxFlush, the module's
 ;          busiest public entry (6 call sites in prom_a)
 ; Inputs:  the outbound queue at 0x2BA0 and the tx ring
 ; Outputs: on success the same register writes SC1_StartWordTx makes, with the
@@ -91680,7 +98149,7 @@ SC1_TxFlush_Exit:
 ; SC1_Service_SetBit2 / SC1_Service_ClearBit2 / SC1_RxDecode -- drain the rx
 ; ring into the inbound message queue
 ;
-; Called from: SC1_Service (thunk T_F40F04) enters at SC1_Service_ClearBit2;
+; Called from: SC1_Service (thunk T_SC1_Service) enters at SC1_Service_ClearBit2;
 ;          SC1_Cmd_EF enters at SC1_Service_SetBit2 (twice).  The two differ in
 ;          one instruction -- `or (0x2A82),0x04` versus `and (0x2A82),0xFB` --
 ;          and then fall into the same body.
@@ -92292,8 +98761,8 @@ SC1_DeadTail:
 ; The four, and their opcode-anchored reference upper bounds:
 ;   0xF5B800  T_F43330  x8   copy a 13-byte label into the RAM text buffer
 ;   0xF5B81C  T_F41EEC  x1   push two records onto the list at 0x2030
-;   0xF5B84C  T_F41EE4  x23  SWI7 service 0x00 -- draw a solid line
-;   0xF5B881  T_F41EE8  x9   SWI7 service 0x15 -- draw a dashed line
+;   0xF5B84C  T_Gfx_DrawLine_Solid  x23  SWI7 service 0x00 -- draw a solid line
+;   0xF5B881  T_Gfx_DrawLine_Dashed  x9   SWI7 service 0x15 -- draw a dashed line
 ; ⚠ Those counts are BYTE-SCAN UPPER BOUNDS on `1D`/`1B` + slot address across
 ; prom_a+prom_b, not instruction-anchored call counts.  They rank; they do not
 ; prove.  That is the same caveat notes/prom_b_call_graph.py states.  What IS
@@ -92356,7 +98825,7 @@ UiText_CopyLabel13_To_22F0:		; <- T_F43330
 	.byte 0x85, 0x11	; F5B819  ldir   [llvm-mc cannot encode this]
 	ret	; F5B81B  ret
 ; ---------------------------------------------------------------------
-; sub_F5B81C -- push TWO records onto the list at 0x2030, via thunk T_F40F40
+; sub_F5B81C -- push TWO records onto the list at 0x2030, via thunk T_List2030_AppendRegs
 ;
 ; NAMED sub_XXXXXX ON PURPOSE.  What the records MEAN is not established, and
 ; the tree's rule is that a stated gap beats a plausible guess.  The mechanism
@@ -92364,7 +98833,7 @@ UiText_CopyLabel13_To_22F0:		; <- T_F43330
 ;
 ; Called from: thunk slot T_F41EEC; ONE opcode-anchored reference, in prom_a.
 ; Inputs:  three 16-bit stack arguments -- (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C).
-; Outputs: two calls to T_F40F40, each with XDE = 0 and a packed XWA:
+; Outputs: two calls to T_List2030_AppendRegs, each with XDE = 0 and a packed XWA:
 ;            call 1:  W = 0x3F              A = low byte of (XIZ+0x08)
 ;            call 2:  W = L of (XIZ+0x0C)   A = low byte of (XIZ+0x0A)
 ;          All registers restored.
@@ -92374,7 +98843,7 @@ UiText_CopyLabel13_To_22F0:		; <- T_F43330
 ;          argument's top byte; the second call does the same with
 ;          `ld HL,(XIZ+0x0C) / ld W,L`.  The `push XIZ / call / pop XIZ` around
 ;          the first call and not the second says the callee clobbers XIZ.
-; What T_F40F40 is: it jumps to prom_a 0xF86AC7, which is in prom_a's
+; What T_List2030_AppendRegs is: it jumps to prom_a 0xF86AC7, which is in prom_a's
 ;          `.incbin` -- UNCONVERTED, another lane's territory.  Disassembled
 ;          from the thunk target (so the instruction boundary is certain, not
 ;          guessed), it walks 0x2030 in steps of 4 looking for a 0xFF marker,
@@ -92422,7 +98891,7 @@ sub_F5B81C:		; <- T_F41EEC
 ; ---------------------------------------------------------------------
 ; Gfx_DrawLine_Solid -- SWI7 service 0x00 with its four coordinates
 ;
-; Called from: thunk slot T_F41EE4; 23 opcode-anchored references, ALL of them
+; Called from: thunk slot T_Gfx_DrawLine_Solid; 23 opcode-anchored references, ALL of them
 ;          in prom_a, none in prom_b.  Upper bound, not a call count -- but it
 ;          is the largest count of the four routines in this block.
 ; Inputs:  four 16-bit stack arguments: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C),
@@ -92446,7 +98915,7 @@ sub_F5B81C:		; <- T_F41EEC
 ;          veneer only ever writes 0, so nothing HERE distinguishes "layer 0"
 ;          from "the field this caller does not use".
 ; ---------------------------------------------------------------------
-Gfx_DrawLine_Solid:		; <- T_F41EE4
+Gfx_DrawLine_Solid:		; <- T_Gfx_DrawLine_Solid
 	push	xiz	; F5B84C  push XIZ
 	ld	xiz, xsp	; F5B84D  ld XIZ,XSP
 	push	xwa	; F5B84F  push XWA
@@ -92477,7 +98946,7 @@ Gfx_DrawLine_Solid:		; <- T_F41EE4
 ; ---------------------------------------------------------------------
 ; Gfx_DrawLine_Dashed -- the same veneer, for SWI7 service 0x15
 ;
-; Called from: thunk slot T_F41EE8; 9 opcode-anchored references, all in prom_a.
+; Called from: thunk slot T_Gfx_DrawLine_Dashed; 9 opcode-anchored references, all in prom_a.
 ; Inputs / Outputs: identical to Gfx_DrawLine_Solid above.
 ; Evidence, and it is a BYTE DIFF rather than a reading: 0xF5B84C and 0xF5B881
 ;          are 53 bytes each and differ in EXACTLY ONE byte -- offset 43, the
@@ -92491,7 +98960,7 @@ Gfx_DrawLine_Solid:		; <- T_F41EE4
 ;          nothing in prom_b says "dashed".
 ; Unknown: the same (0x2540) question as above.
 ; ---------------------------------------------------------------------
-Gfx_DrawLine_Dashed:		; <- T_F41EE8
+Gfx_DrawLine_Dashed:		; <- T_Gfx_DrawLine_Dashed
 	push	xiz	; F5B881  push XIZ
 	ld	xiz, xsp	; F5B882  ld XIZ,XSP
 	push	xwa	; F5B884  push XWA
@@ -92526,8 +98995,8 @@ Gfx_DrawLine_Dashed:		; <- T_F41EE8
 ; ==============================================================================
 ;
 ; Both are reached through the thunk table and are among the busiest slots in it:
-; T_F41ED0 -> 0xF5B8B6 (opcode-anchored upper bound 39 references) and
-; T_F41ED4 -> 0xF5B9B8 (109), ranked by
+; T_Dispatch_Code80_Bracketed -> 0xF5B8B6 (opcode-anchored upper bound 39 references) and
+; T_Dispatch_Code80 -> 0xF5B9B8 (109), ranked by
 ; `python3 scripts/analysis/prom_b_thunk_table.py --census`.
 ;
 ; Both take a 16-bit selector on the stack and index a table of 32-bit routine
@@ -92563,7 +99032,7 @@ Gfx_DrawLine_Dashed:		; <- T_F41EE8
 ; ---------------------------------------------------------------------
 ; Dispatch_Code80_Bracketed -- run selector table entry, bracketed by two
 ;                              display service calls
-; Called from: thunk T_F41ED0 (0xF41ED0), 39 opcode-anchored references
+; Called from: thunk T_Dispatch_Code80_Bracketed (0xF41ED0), 39 opcode-anchored references
 ; Inputs:  (XIZ+8) = 16-bit selector, >= 0x80
 ; Outputs: whatever the selected routine does; all registers restored
 ; Evidence: the `sub HL,0xC0 / ld XIY,0x00F5B978` and `sub HL,0x80 /
@@ -92662,7 +99131,7 @@ DispatchTable_F5B8F8:
 
 ; ---------------------------------------------------------------------
 ; Dispatch_Code80 -- the same selector table mechanism, no display bracket
-; Called from: thunk T_F41ED4 (0xF41ED4), 109 opcode-anchored references -- the
+; Called from: thunk T_Dispatch_Code80 (0xF41ED4), 109 opcode-anchored references -- the
 ;              busiest prom_b-resident slot in the thunk table after the two
 ;              display-list interpreters
 ; Inputs:  (XIZ+8) = 16-bit selector >= 0x80; (XIZ+0x0A) = a byte loaded into A
@@ -92764,7 +99233,7 @@ DispatchTable_F5B9F8:
 ; 303 bytes, three thunk entry points, continuing straight on from the selector
 ; dispatchers above.  The first two are UI painters: they set the layer byte
 ; (0x2540) and hand (start, end) pairs to DisplayList_Run through thunk
-; T_F417F0, which carries the HIGHEST reference count of any annotated slot in
+; T_DisplayList_Run, which carries the HIGHEST reference count of any annotated slot in
 ; the table -- 392, rank 1 of the 818 slots that carry a count -- and is
 ; labelled `THE UI ENGINE` where it is defined.  (Ranked by re-reading the
 ; counts already written into this file's own thunk-table listing.  ⚠ Watch the
@@ -92776,9 +99245,9 @@ DispatchTable_F5B9F8:
 ; same 53-byte SWI7 veneer already converted twice at 0xF5B84C and 0xF5B881.
 ;
 ; Reference upper bounds (byte scan of `1D`/`1B` + slot, so a RANK not a count):
-;   0xF5BAB8  T_F41ED8  x1   prom_a
-;   0xF5BB00  T_F41EDC  x0   -- NO reference in either image; see its header
-;   0xF5BBB2  T_F41EE0  x7   prom_a
+;   0xF5BAB8  T_UiPaint_Solo  x1   prom_a
+;   0xF5BB00  T_UiPaint_Ordinals  x0   -- NO reference in either image; see its header
+;   0xF5BBB2  T_Gfx_EraseRect  x7   prom_a
 ;
 ; ★ (0x2540) IS A LAYER SELECTOR, AND THIS BLOCK IS WHERE THAT BECOMES VISIBLE
 ; IN prom_b.  The three veneers converted above only ever write 0 to it, so
@@ -92796,7 +99265,7 @@ DispatchTable_F5B9F8:
 ; ---------------------------------------------------------------------
 ; UiPaint_Solo -- paint the "SOLO" panel, then one of two state overlays
 ;
-; Called from: thunk slot T_F41ED8; ONE opcode-anchored reference, in prom_a.
+; Called from: thunk slot T_UiPaint_Solo; ONE opcode-anchored reference, in prom_a.
 ; Inputs:  (0x27A2), a byte, tested against 0.  No register arguments -- this
 ;          routine takes none off the stack (it never builds an XIZ frame).
 ; Outputs: two display lists painted; (0x2540) left at 0 or 1; all seven
@@ -92811,7 +99280,7 @@ DispatchTable_F5B9F8:
 ; Evidence: every one of those six addresses is a 32-bit literal in the
 ;          instruction stream (`ld XIY,0x00F02FB2` at 0xF5BAC4 and so on), and
 ;          each pair is (start, end) because that is the argument convention of
-;          DisplayList_Run, which T_F417F0 names.  The branch is
+;          DisplayList_Run, which slot 0xF417F0 names.  The branch is
 ;          `cp (0x27A2),0x00 / jr Z,0xF5BAE5`.
 ; ★ The two overlays draw the SAME RECTANGLE with different ops on different
 ;          layers: DL_F02FD9 is `op 05` with operands 0x0008, 0x0021, 0x0028,
@@ -92824,7 +99293,7 @@ DispatchTable_F5B9F8:
 ; Unknown: what (0x27A2) holds -- nothing in this block writes it.  What ops
 ;          0x05 and 0x1B do differs by interpreter-A handler, both 0xF31A75.
 ; ---------------------------------------------------------------------
-UiPaint_Solo:		; <- T_F41ED8
+UiPaint_Solo:		; <- T_UiPaint_Solo
 	push	xwa	; F5BAB8  push XWA
 	push	xbc	; F5BAB9  push XBC
 	push	xde	; F5BABA  push XDE
@@ -92856,7 +99325,7 @@ UiPaint_Solo:		; <- T_F41ED8
 ; ---------------------------------------------------------------------
 ; UiPaint_Ordinals -- paint two or four list rows, each from one of two tables
 ;
-; Called from: thunk slot T_F41EDC -- and NOTHING references that slot.  The
+; Called from: thunk slot T_UiPaint_Ordinals -- and NOTHING references that slot.  The
 ;          byte scan for `1D`/`1B` + 0xF41EDC finds 0 hits in prom_a and 0 in
 ;          prom_b.  Since that scan runs at every byte offset and can only
 ;          OVER-count, zero is a real zero: nothing this tree can see calls it.
@@ -92913,7 +99382,7 @@ UiPaint_Solo:		; <- T_F41ED8
 ; Unknown: what (0x27F5) and (0x27A4) mean; what the 0xF019xx targets are; and
 ;          what thunk T_F4181C does with 0xF02FF7 after the last paint.
 ; ---------------------------------------------------------------------
-UiPaint_Ordinals:		; <- T_F41EDC
+UiPaint_Ordinals:		; <- T_UiPaint_Ordinals
 	push	xwa	; F5BB00  push XWA
 	push	xbc	; F5BB01  push XBC
 	push	xde	; F5BB02  push XDE
@@ -92977,7 +99446,7 @@ UiPaint_Ordinals:		; <- T_F41EDC
 ; ---------------------------------------------------------------------
 ; Gfx_EraseRect -- SWI7 service 0x1B with its four coordinates
 ;
-; Called from: thunk slot T_F41EE0; 7 opcode-anchored references, all in prom_a.
+; Called from: thunk slot T_Gfx_EraseRect; 7 opcode-anchored references, all in prom_a.
 ; Inputs:  four 16-bit stack arguments at (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C),
 ;          (XIZ+0x0E) -- X0, Y0, X1, Y1.
 ; Outputs: (0x2530) (0x2532) (0x2534) (0x2536) = those four; (0x2540) = 0;
@@ -92995,7 +99464,7 @@ UiPaint_Ordinals:		; <- T_F41EDC
 ;          nothing in prom_b says "erase".
 ; Unknown: nothing beyond what prom_a's own service header leaves open.
 ; ---------------------------------------------------------------------
-Gfx_EraseRect:		; <- T_F41EE0
+Gfx_EraseRect:		; <- T_Gfx_EraseRect
 	push	xiz	; F5BBB2  push XIZ
 	ld	xiz, xsp	; F5BBB3  ld XIZ,XSP
 	push	xwa	; F5BBB5  push XWA
@@ -93277,7 +99746,7 @@ sub_F5BCE8:
 ; Called from: in-module: 0xF5C6F3 0xF5CFEE 0xF5CFF9
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27A3) (0x27F5)  |  0x00002A
 ;          0x0027AB 0x0027AE 0xF0402E 0xF04038 0xF04042 +4 more
-; Calls:   T_F417F0 sub_F5BE5A
+; Calls:   T_DisplayList_Run sub_F5BE5A
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5BDBB is an instruction boundary.
 ;           The name IS the address.
@@ -93338,7 +99807,7 @@ sub_F5BDBB:
 ; Touches: (0x2350) (0x2352) (0x2530) (0x2532) (0x2534) (0x2536) (0x2540)
 ;          (0x27F5)  |  0xF01800 0xF01873 0xF0191A 0xF33BD8 0xF33F01
 ;          0xFC517E +1 more
-; Calls:   T_F417F0 0xF09D91 T_F417F4 0xF09DED
+; Calls:   T_DisplayList_Run 0xF09D91 T_DisplayListB_Run 0xF09DED
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5BE5A is an instruction boundary.
 ;           The name IS the address.
@@ -93486,7 +99955,7 @@ sub_F5BF9F:
 ;              0xF5C6C9 0xF5C74D 0xF5C89B +5 more
 ; Touches: (0x2540) (0x27F5)  |  0xF02064 0xF020AA 0xF021E4 0xF02469
 ;          0xF02671 0xF027AF +17 more
-; Calls:   T_F42E18 sub_F5C338 sub_F5C360 T_F417F0 T_F417F4 0xF09AF1
+; Calls:   T_F42E18 sub_F5C338 sub_F5C360 T_DisplayList_Run T_DisplayListB_Run 0xF09AF1
 ;          0xF5BAB8 sub_F5C424 sub_F5CBD9 0xF5BB00 sub_F5CC64 sub_F5C374 +4
 ;          more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -93603,7 +100072,7 @@ sub_F5BFBD:
 ;              0xF5CDEB
 ; Touches: (0x2540) (0x27B5) (0x27F5)  |  0xF02D08 0xF02DFB 0xF02EF9
 ;          0xF02F22 0xF03595 0xF0359F +15 more
-; Calls:   T_F417F0 T_F417F4 sub_F5C34C sub_F5C388 sub_F5BFBD 0xF5BAB8
+; Calls:   T_DisplayList_Run T_DisplayListB_Run sub_F5C34C sub_F5C388 sub_F5BFBD 0xF5BAB8
 ;          0xF5BB00 sub_F5C144 sub_F5C27D sub_F5BF8A
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C144 is an instruction boundary.
@@ -93694,7 +100163,7 @@ sub_F5C144:
 ; Called from: in-module: 0xF5C274 0xF5CE60
 ; Touches: (0x2540) (0x27AB) (0x27F5)  |  0xF022F7 0xF02329 0xF0245F
 ;          0xF02469 0xF06481 0xF06495 +7 more
-; Calls:   T_F417F0 sub_F5C338 sub_F5C360 0xF5BAB8 sub_F5C39C T_F417F4
+; Calls:   T_DisplayList_Run sub_F5C338 sub_F5C360 0xF5BAB8 sub_F5C39C T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C27D is an instruction boundary.
 ;           The name IS the address.
@@ -93751,7 +100220,7 @@ sub_F5C27D:
 ; sub_F5C338
 ; Called from: in-module: 0xF5BFC7 0xF5C06C 0xF5C09E 0xF5C0D4 0xF5C2A8
 ; Touches: (0x2540)  |  0xF01F96 0xF02064
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C338 is an instruction boundary.
 ;           The name IS the address.
@@ -93769,7 +100238,7 @@ sub_F5C338:
 ; sub_F5C34C
 ; Called from: in-module: 0xF5C10A 0xF5C172 0xF5C1AC
 ; Touches: (0x2540)  |  0xF01F96 0xF0203E
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C34C is an instruction boundary.
 ;           The name IS the address.
@@ -93787,7 +100256,7 @@ sub_F5C34C:
 ; sub_F5C360
 ; Called from: in-module: 0xF5BFCB 0xF5C2AC
 ; Touches: (0x2540)  |  0xF021E4 0xF02295
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C360 is an instruction boundary.
 ;           The name IS the address.
@@ -93805,7 +100274,7 @@ sub_F5C360:
 ; sub_F5C374
 ; Called from: in-module: 0xF5C0A2 0xF5C0D8
 ; Touches: (0x2540)  |  0xF027AF 0xF02942
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C374 is an instruction boundary.
 ;           The name IS the address.
@@ -93823,7 +100292,7 @@ sub_F5C374:
 ; sub_F5C388
 ; Called from: in-module: 0xF5C10E 0xF5C176 0xF5C1B0
 ; Touches: (0x2540)  |  0xF02B47 0xF02D08
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C388 is an instruction boundary.
 ;           The name IS the address.
@@ -93842,7 +100311,7 @@ sub_F5C388:
 ; Called from: in-module: 0xF5C2EA 0xF5C4E7 0xF5C6EF 0xF5D466
 ; Touches: (0x2540) (0x27A4) (0x27F5)  |  0xF039D9 0xF039E3 0xF039ED
 ;          0xF03A09 0xF03A51
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C39C is an instruction boundary.
 ;           The name IS the address.
@@ -93896,7 +100365,7 @@ sub_F5C39C:
 ; Called from: in-module: 0xF5C063 0xF5CB8B
 ; Touches: (0x2540) (0x27A4) (0x27F5)  |  0xF039A9 0xF039D9 0xF03C05
 ;          0xF03C7D
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C424 is an instruction boundary.
 ;           The name IS the address.
@@ -93947,7 +100416,7 @@ sub_F5C424:
 ; sub_F5C49F
 ; Called from: in-module: 0xF5D40E
 ; Touches: (0x2540)  |  0xF03892 0xF03943
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C49F is an instruction boundary.
 ;           The name IS the address.
@@ -93967,7 +100436,7 @@ sub_F5C49F:
 ; Called from: in-module: 0xF5D4C3 0xF5D519
 ; Touches: (0x2540)  |  0xF03892 0xF039A9 0xF03D68 0xF03F31 0xF051C2
 ;          0xF05286
-; Calls:   T_F417F0 sub_F5C4FF 0xF5BAB8 sub_F5C39C T_F417F4
+; Calls:   T_DisplayList_Run sub_F5C4FF 0xF5BAB8 sub_F5C39C T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C4B8 is an instruction boundary.
 ;           The name IS the address.
@@ -93997,7 +100466,7 @@ sub_F5C4B8:
 ; sub_F5C4FF
 ; Called from: in-module: 0xF5C4D1 0xF5C513 0xF5D55F 0xF5D57A
 ; Touches: (0x2540)  |  0xF03C95 0xF03D4A
-; Calls:   T_F417F0 sub_F5C4FF
+; Calls:   T_DisplayList_Run sub_F5C4FF
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C4FF is an instruction boundary.
 ;           The name IS the address.
@@ -94016,7 +100485,7 @@ sub_F5C4FF:
 ; sub_F5C517
 ; Called from: in-module: 0xF5D61D 0xF5D626
 ; Touches: (0x2540)  |  0xF053B6 0xF05407 0xF06601 0xF067A6
-; Calls:   T_F417F0 sub_F5C549 0xF5BAB8 sub_F5C5A5 sub_F5CFA4 T_F417F4
+; Calls:   T_DisplayList_Run sub_F5C549 0xF5BAB8 sub_F5C5A5 sub_F5CFA4 T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C517 is an instruction boundary.
 ;           The name IS the address.
@@ -94041,7 +100510,7 @@ sub_F5C517:
 ; sub_F5C549
 ; Called from: in-module: 0xF5C525 0xF5CF70
 ; Touches: (0x2540) (0x27A4)  |  0xF3281C 0xF32864
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C549 is an instruction boundary.
 ;           The name IS the address.
@@ -94084,8 +100553,8 @@ sub_F5C549:
 ; Called from: in-module: 0xF5C52D 0xF5CF52 0xF5CF78
 ; Touches: (0x2540) (0x27F5)  |  0x000001 0x000007 0x00000A 0x000014
 ;          0x0027AB 0xF0417E +17 more
-; Calls:   T_F417F0 T_F41830 sub_F5C727 sub_F5BFBD 0xF5BAB8 sub_F5C39C
-;          sub_F5BDBB T_F417F4
+; Calls:   T_DisplayList_Run T_DisplayListB_RunOne sub_F5C727 sub_F5BFBD 0xF5BAB8 sub_F5C39C
+;          sub_F5BDBB T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C5A5 is an instruction boundary.
 ;           The name IS the address.
@@ -94216,7 +100685,7 @@ sub_F5C5A5:
 ; Called from: in-module: 0xF5C6BE 0xF5C749 0xF5C79E 0xF5C876 0xF5D622
 ; Touches: (0x2540) (0x27F5)  |  0xF03F77 0xF03FF3 0xF0402E 0xF0426B
 ;          0xF04344 0xF04358
-; Calls:   T_F417F0 sub_F5C727 sub_F5BFBD
+; Calls:   T_DisplayList_Run sub_F5C727 sub_F5BFBD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C727 is an instruction boundary.
 ;           The name IS the address.
@@ -94248,7 +100717,7 @@ sub_F5C727:
 ; Called from: in-module: 0xF5D5BF
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27F5)  |  0xF04358 0xF04370
 ;          0xF04415 0xF049DD 0xF049E7 0xF05063 +7 more
-; Calls:   sub_F5BBE7 0xF5BAB8 0xF5BB00 T_F417F4 sub_F5C727 T_F417F0
+; Calls:   sub_F5BBE7 0xF5BAB8 0xF5BB00 T_DisplayListB_Run sub_F5C727 T_DisplayList_Run
 ;          sub_F5C916 sub_F5C823
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C772 is an instruction boundary.
@@ -94305,7 +100774,7 @@ sub_F5C772:
 ; Called from: in-module: 0xF5C81E 0xF5D08A
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27A6) (0x27F5)  |  0xF04415
 ;          0xF04560 0xF04574 0xF0467D 0xF047CA 0xF047DF +11 more
-; Calls:   T_F417F4 T_F417F0 sub_F5C727 sub_F5BFBD sub_F5BBE7 0xF5BAB8
+; Calls:   T_DisplayListB_Run T_DisplayList_Run sub_F5C727 sub_F5BFBD sub_F5BBE7 0xF5BAB8
 ;          0xF5BB00 sub_F5C929 sub_F5C916 sub_F5C94B
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C823 is an instruction boundary.
@@ -94377,7 +100846,7 @@ sub_F5C823:
 ; Called from: in-module: 0xF5C7B7 0xF5C8F2 0xF5C9AA 0xF5C9F5 0xF5CA40
 ;              0xF5CA7D 0xF5CABA
 ; Touches:   |  0xF04672 0xF0467D
-; Calls:   T_F417F0 sub_F5BFBD
+; Calls:   T_DisplayList_Run sub_F5BFBD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C916 is an instruction boundary.
 ;           The name IS the address.
@@ -94396,7 +100865,7 @@ sub_F5C916:
 ; Called from: in-module: 0xF5C8CB 0xF5C983 0xF5C9CE 0xF5CA19 0xF5CA64
 ;              0xF5CAA1 0xF5CACB 0xF5D583 +2 more
 ; Touches: (0x2540) (0x27F5)  |  0xF04574 0xF0459F 0xF04632
-; Calls:   T_F417F0
+; Calls:   T_DisplayList_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C929 is an instruction boundary.
 ;           The name IS the address.
@@ -94420,8 +100889,8 @@ sub_F5C929:
 ;              0xF5CAC6
 ; Touches: (0x207A) (0x2540) (0x27BE) (0x27F5)  |  0xF04650 0xF04668
 ;          0xF04672 0xF0467D 0xF047CA 0xF047DF +15 more
-; Calls:   T_F417F0 T_F41830 sub_F5C929 sub_F5C916 0xF5BAB8 0xF5BB00
-;          sub_F5C94B T_F417F4
+; Calls:   T_DisplayList_Run T_DisplayListB_RunOne sub_F5C929 sub_F5C916 0xF5BAB8 0xF5BB00
+;          sub_F5C94B T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C94B is an instruction boundary.
 ;           The name IS the address.
@@ -94533,7 +101002,7 @@ sub_F5C94B:
 ; Called from: in-module: 0xF5D575
 ; Touches: (0x2540)  |  0x0027D6 0xF030E6 0xF03107 0xF03173 0xF031BF
 ;          0xF031C9 +7 more
-; Calls:   T_F417F0 sub_F5BFBD 0xF5BAB8 0xF5BB00 T_F417F4 0xF09AF1
+; Calls:   T_DisplayList_Run sub_F5BFBD 0xF5BAB8 0xF5BB00 T_DisplayListB_Run 0xF09AF1
 ;          sub_F5C424 sub_F5CBD9 0xF09AE1
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CADD is an instruction boundary.
@@ -94621,7 +101090,7 @@ sub_F5CADD:
 ; Called from: in-module: 0xF5C067 0xF5CB91
 ; Touches: (0x2540) (0x27AC)  |  0xF03107 0xF03133 0xF0315F 0xF03169
 ;          0xF03173 0xF338EB +2 more
-; Calls:   T_F417F0 sub_F5CC64 T_F41830
+; Calls:   T_DisplayList_Run sub_F5CC64 T_DisplayListB_RunOne
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CBD9 is an instruction boundary.
 ;           The name IS the address.
@@ -94674,7 +101143,7 @@ sub_F5CBD9:
 ; Called from: in-module: 0xF5C099 0xF5CC41
 ; Touches: (0x2540)  |  0x000001 0x000005 0x000014 0x000032 0x0027AA
 ;          0xF03455 +40 more
-; Calls:   T_F417F0 T_F417F4 0xF09AE1 sub_F5C144 sub_F5BF8A sub_F5C27D
+; Calls:   T_DisplayList_Run T_DisplayListB_Run 0xF09AE1 sub_F5C144 sub_F5BF8A sub_F5C27D
 ;          sub_F5CFA4 sub_F5C5A5 sub_F5C549 0xF5BAB8
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CC64 is an instruction boundary.
@@ -94928,7 +101397,7 @@ sub_F5CC64:
 ; Called from: in-module: 0xF5C531 0xF5CF21 0xF5CF7C
 ; Touches: (0x2540) (0x27A6) (0x27F5)  |  0x000014 0xF04D85 0xF04DA3
 ;          0xF04E32 0xF04E93 0xF04F32 +22 more
-; Calls:   T_F417F0 sub_F5BDBB T_F417F4 0xF09AE1 sub_F5C823 sub_F5D199
+; Calls:   T_DisplayList_Run sub_F5BDBB T_DisplayListB_Run 0xF09AE1 sub_F5C823 sub_F5D199
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CFA4 is an instruction boundary.
 ;           The name IS the address.
@@ -95081,8 +101550,8 @@ sub_F5CFA4:
 ; Called from: in-module: 0xF5D194 0xF5D30E
 ; Touches: (0x207A) (0x2540) (0x27A6) (0x27A7) (0x27A8) (0x27F5) (0x27F6)  |
 ;          0xF01800 0xF01873 0xF01E72 0xF01F96 0xF057C0 0xF057E3 +16 more
-; Calls:   T_F41010 T_F417F0 T_F417F4 sub_F5D3C6 sub_F5D199 T_F417F8
-;          T_F41830
+; Calls:   T_F41010 T_DisplayList_Run T_DisplayListB_Run sub_F5D3C6 sub_F5D199 T_DLB_Handler_StringTable
+;          T_DisplayListB_RunOne
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D199 is an instruction boundary.
 ;           The name IS the address.
@@ -95247,7 +101716,7 @@ sub_F5D199:
 ;              0xF5D3C1
 ; Touches: (0x2530) (0x2532) (0x2534) (0x2536) (0x2540) (0x27A7)  |
 ;          0xF05B34 0xF05B54 0xF05F78 0xF06048 0xF060DA 0xF328DC +2 more
-; Calls:   sub_F5C49F T_F417F0 T_F417F4 sub_F5D497 sub_F5D46B 0xF5BAB8
+; Calls:   sub_F5C49F T_DisplayList_Run T_DisplayListB_Run sub_F5D497 sub_F5D46B 0xF5BAB8
 ;          sub_F5C39C
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D3C6 is an instruction boundary.
@@ -95374,8 +101843,8 @@ sub_F5D497:
 ; Called from: in-module: 0xF5D49A
 ; Touches: (0x2350) (0x2352) (0x2540)  |  0xF03F31 0xF03F77 0xF0426B
 ;          0xF04323 0xF04344 0xF04358 +11 more
-; Calls:   0xF09AE1 sub_F5C4B8 T_F417F0 sub_F5BBE7 0xF5BAB8 0xF5BB00
-;          T_F417F4 sub_F5C4FF sub_F5BFBD sub_F5CADD sub_F5D5C8 sub_F5C929
+; Calls:   0xF09AE1 sub_F5C4B8 T_DisplayList_Run sub_F5BBE7 0xF5BAB8 0xF5BB00
+;          T_DisplayListB_Run sub_F5C4FF sub_F5BFBD sub_F5CADD sub_F5D5C8 sub_F5C929
 ;          +1 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D4A7 is an instruction boundary.
@@ -95461,7 +101930,7 @@ sub_F5D4A7:
 ; Called from: in-module: 0xF5D57E
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27F5)  |  0xF04B6C 0xF04CA9
 ;          0xF04CBD 0xF328DC 0xF32918 0xF3294B +18 more
-; Calls:   T_F417F0 sub_F5BFBD sub_F5BBE7 0xF5BAB8 0xF5BB00 T_F417F4
+; Calls:   T_DisplayList_Run sub_F5BFBD sub_F5BBE7 0xF5BAB8 0xF5BB00 T_DisplayListB_Run
 ;          sub_F5C929 sub_F5C517 sub_F5C727 sub_F5D497 sub_F5D46B 0xF09AE1
 ;          +2 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -95590,7 +102059,7 @@ sub_F5D5C8:
 ; Called from: in-module: 0xF5D723
 ; Touches: (0x2540) (0x27F5)  |  0xF32C2A 0xF32CC8 0xF32D03 0xF32D2C
 ;          0xF32FA0 0xF32FC8 +1 more
-; Calls:   T_F417F0 T_F417F4
+; Calls:   T_DisplayList_Run T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D77F is an instruction boundary.
 ;           The name IS the address.
@@ -95875,7 +102344,7 @@ RoundMap_8:
 ; Called from: T_F42700 (x1)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0C7F) (0x0C8A) (0x0C8E) (0x0CA2)
 ;          (0x0CA3) (0x0D18) (0x0D4A)  |  0x603422
-; Calls:   T_F427C4 sub_F5DB97
+; Calls:   T_BStore_LoadGeometry sub_F5DB97
 ; Evidence: thunk slot T_F42700 holds `jp 0x00F5DAA2`, and 0xF5DAA2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -96032,7 +102501,7 @@ RoundMap_Table:
 ;              branch from the routine above, or by a computed transfer
 ; Touches: (0x0C73) (0x0C77) (0x0C8A) (0x0C8E) (0x0C90) (0x0D0A) (0x0D14)
 ;          (0x0D1C) (0x0D4A) (0x0E04) +7 more
-; Calls:   T_F427A0 T_F42774 T_F4279C sub_F5DDB2 sub_F5E0BD sub_F5E01D
+; Calls:   T_F427A0 T_F42774 T_BStore_CursorAdvance sub_F5DDB2 sub_F5E0BD sub_F5E01D
 ;          T_F427A8 T_F42810 T_F40A1C
 ; Evidence: the label is here because it is the target of `jr T,0xF5DBD0` at
 ;           0xF5DBB2, the jump that steps over the 28 bytes of
@@ -96451,7 +102920,7 @@ sub_F5DDB2:
 ; sub_F5E01D
 ; Called from: in-module: 0xF5DD64
 ; Touches: (0x0C8A) (0x0D0A) (0x0D14) (0x0D4A) (0x126E)
-; Calls:   T_F4279C
+; Calls:   T_BStore_CursorAdvance
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E01D is an instruction boundary.
 ;           The name IS the address.
@@ -96517,7 +102986,7 @@ sub_F5E01D:
 ; Called from: in-module: 0xF5DD61 0xF62003 0xF620AA
 ; Touches: (0x0D0A) (0x0D14) (0x0D20) (0x0D21) (0x0D22) (0x0D24) (0x0D28)
 ;          (0x0D2A) (0x0D4A) (0x126E)
-; Calls:   T_F4279C sub_F5E370 sub_F5E1A1 sub_F5E306
+; Calls:   T_BStore_CursorAdvance sub_F5E370 sub_F5E1A1 sub_F5E306
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E0BD is an instruction boundary.
 ;           The name IS the address.
@@ -96595,7 +103064,7 @@ sub_F5E0BD:
 ; Called from: in-module: 0xF5E130
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0D21)
 ;          (0x0D22) (0x0D24) (0x0D28) +6 more  |  0x000D36
-; Calls:   T_F4279C sub_F5E2B9 sub_F5E2F0 T_F4277C T_F427BC
+; Calls:   T_BStore_CursorAdvance sub_F5E2B9 sub_F5E2F0 T_F4277C T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E1A1 is an instruction boundary.
 ;           The name IS the address.
@@ -96688,7 +103157,7 @@ sub_F5E1A1:
 ; sub_F5E2B9
 ; Called from: in-module: 0xF5E1D8 0xF5E207 0xF5E288 0xF5E2A1 0xF61D88
 ; Touches: (0x0CA4) (0x0D4A) (0x126E)
-; Calls:   T_F427BC
+; Calls:   T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E2B9 is an instruction boundary.
 ;           The name IS the address.
@@ -96740,7 +103209,7 @@ sub_F5E2F0:
 ; sub_F5E306
 ; Called from: in-module: 0xF5E15E
 ; Touches: (0x0D20) (0x0D22) (0x0D24) (0x0D4A) (0x126E)
-; Calls:   T_F4279C
+; Calls:   T_BStore_CursorAdvance
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E306 is an instruction boundary.
 ;           The name IS the address.
@@ -96784,7 +103253,7 @@ sub_F5E306:
 ; sub_F5E370
 ; Called from: in-module: 0xF5E107 0xF5E142 0xF5E186
 ; Touches: (0x0D21) (0x0D28) (0x0D2A) (0x0D4A) (0x126E)
-; Calls:   T_F4279C
+; Calls:   T_BStore_CursorAdvance
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E370 is an instruction boundary.
 ;           The name IS the address.
@@ -96829,7 +103298,7 @@ sub_F5E370:
 ; Called from: T_F426EC (x1)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0C8A) (0x0C8E) (0x0CA2) (0x0CA3)
 ;          (0x0D18) (0x0D1D) (0x0D4A)  |  0x603422
-; Calls:   T_F427C4 T_F42790 T_F432C0 sub_F5E570 T_F432CC T_F427D0 T_F4278C
+; Calls:   T_BStore_LoadGeometry T_F42790 T_F432C0 sub_F5E570 T_F432CC T_F427D0 T_BStore_ErrorToStatusByte
 ;          T_F40A1C
 ; Evidence: thunk slot T_F426EC holds `jp 0x00F5E3DA`, and 0xF5E3DA is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -96978,8 +103447,8 @@ sub_F5E3DA:		; <- T_F426EC
 ; Called from: in-module: 0xF5E480 0xF5E51A
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C70) (0x0C73)
 ;          (0x0C77) (0x0C8E) (0x0C90) +13 more
-; Calls:   T_F42770 T_F427A0 T_F42774 sub_F6079E T_F42798 T_F4279C T_F42778
-;          T_F427BC T_F427B0 T_F42794
+; Calls:   T_BStore_ValidateSavedCursor T_F427A0 T_F42774 sub_F6079E T_F42798 T_BStore_CursorAdvance T_F42778
+;          T_BStore_SeekBlock T_BStore_SaveCursor T_F42794
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E570 is an instruction boundary.
 ;           The name IS the address.
@@ -97110,7 +103579,7 @@ sub_F5E570:
 ; Called from: T_F426F0 (x1)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0C79) (0x0C8A) (0x0C8E) (0x0CA2)
 ;          (0x0CA3) (0x0D18) (0x0D4A)  |  0x603422
-; Calls:   T_F427C4 T_F42790 sub_F5E83A T_F427D0 T_F4278C T_F40A1C
+; Calls:   T_BStore_LoadGeometry T_F42790 sub_F5E83A T_F427D0 T_BStore_ErrorToStatusByte T_F40A1C
 ; Evidence: thunk slot T_F426F0 holds `jp 0x00F5E708`, and 0xF5E708 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -97226,8 +103695,8 @@ sub_F5E708:		; <- T_F426F0
 ; Called from: in-module: 0xF5E79E 0xF5E7FD
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C73) (0x0C77)
 ;          (0x0C79) (0x0C8E) (0x0C90) +13 more
-; Calls:   T_F42770 T_F427A0 T_F42774 sub_F5EBD4 sub_F5EB9C T_F427A8
-;          T_F42778 T_F427BC T_F427B0 T_F42794
+; Calls:   T_BStore_ValidateSavedCursor T_F427A0 T_F42774 sub_F5EBD4 sub_F5EB9C T_F427A8
+;          T_F42778 T_BStore_SeekBlock T_BStore_SaveCursor T_F42794
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E83A is an instruction boundary.
 ;           The name IS the address.
@@ -97537,7 +104006,7 @@ sub_F5E83A:
 ; Called from: in-module: 0xF5E90A 0xF5E927 0xF5E94A 0xF5E9BC 0xF5E9EE
 ;              0xF5EA11 0xF5EA92 0xF5EAB5 +2 more
 ; Touches: (0x0CBC) (0x0D4A) (0x126E)
-; Calls:   T_F427BC
+; Calls:   T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5EB9C is an instruction boundary.
 ;           The name IS the address.
@@ -97584,7 +104053,7 @@ sub_F5EBD0:		; <- T_F4270C
 ; Called from: in-module: 0xF5E8FF 0xF5E93D 0xF5E9E1 0xF5EA04 0xF5EAA8
 ;              0xF5EAE5 0xF5EC0E
 ; Touches: (0x0CB4) (0x0CB6) (0x0D4A) (0x126E)
-; Calls:   T_F427BC
+; Calls:   T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5EBD4 is an instruction boundary.
 ;           The name IS the address.
@@ -97634,7 +104103,7 @@ sub_F5EC0E:		; <- T_F42710
 ; Called from: T_F426F4 (x2)
 ; Touches: (0x0C70) (0x0C71) (0x0C73) (0x0C75) (0x0C77) (0x0C83) (0x0C8A)
 ;          (0x0C8E) (0x0C8F) (0x0CA2) +8 more  |  0x603422
-; Calls:   T_F427C4 T_F42790 sub_F5EE9A sub_F5EE95 T_F432C4 sub_F5F02C
+; Calls:   T_BStore_LoadGeometry T_F42790 sub_F5EE9A sub_F5EE95 T_F432C4 sub_F5F02C
 ;          T_F427D4 T_F42814 T_F40A1C
 ; Evidence: thunk slot T_F426F4 holds `jp 0x00F5EC12`, and 0xF5EC12 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -97892,8 +104361,8 @@ sub_F5EE95:
 ; Called from: in-module: 0xF5ED09 0xF5F038
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C73) (0x0C75)
 ;          (0x0C8A) (0x0C8E) (0x0C8F) +21 more
-; Calls:   T_F42770 T_F427A0 T_F42774 T_F42798 T_F427B4 T_F427B0 T_F4277C
-;          T_F427BC T_F42794
+; Calls:   T_BStore_ValidateSavedCursor T_F427A0 T_F42774 T_F42798 T_BStore_AllocChain T_BStore_SaveCursor T_F4277C
+;          T_BStore_SeekBlock T_F42794
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5EE9A is an instruction boundary.
 ;           The name IS the address.
@@ -98014,8 +104483,8 @@ sub_F5EE9A:
 ; Called from: in-module: 0xF5ED9C 0xF5EE2E
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C73) (0x0C75)
 ;          (0x0C8A) (0x0C8E) (0x0C8F) +21 more
-; Calls:   sub_F5EE9A T_F42770 T_F427A0 T_F42774 T_F42798 T_F427B4 T_F427B0
-;          T_F4277C T_F42780 T_F42778 T_F427BC T_F42794
+; Calls:   sub_F5EE9A T_BStore_ValidateSavedCursor T_F427A0 T_F42774 T_F42798 T_BStore_AllocChain T_BStore_SaveCursor
+;          T_F4277C T_F42780 T_F42778 T_BStore_SeekBlock T_F42794
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5F02C is an instruction boundary.
 ;           The name IS the address.
@@ -98164,7 +104633,7 @@ sub_F5F02C:
 ; Called from: T_F426F8 (x2)
 ; Touches: (0x0C70) (0x0C71) (0x0C73) (0x0C75) (0x0C77) (0x0C83) (0x0C8A)
 ;          (0x0C8E) (0x0C8F) (0x0CA2) +8 more  |  0x603422
-; Calls:   T_F427C4 T_F42790 sub_F5F476 sub_F5EE95 T_F432C8 sub_F5FB04
+; Calls:   T_BStore_LoadGeometry T_F42790 sub_F5F476 sub_F5EE95 T_F432C8 sub_F5FB04
 ;          T_F427D8 T_F42818 T_F40A1C
 ; Evidence: thunk slot T_F426F8 holds `jp 0x00F5F221`, and 0xF5F221 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -98373,8 +104842,8 @@ sub_F5F221:		; <- T_F426F8
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C70) (0x0C71)
 ;          (0x0C73) (0x0C75) (0x0C8A) +32 more  |  0x000D50 0x000D70
 ;          0x60347E 0x6034A0 0x603500
-; Calls:   T_F427AC T_F42884 T_F427BC T_F42770 T_F427A0 T_F42774 T_F42798
-;          T_F42808 sub_F5F9C1 T_F427B4 T_F427B0 T_F4277C +4 more
+; Calls:   T_BStore_OpenChain T_F42884 T_BStore_SeekBlock T_BStore_ValidateSavedCursor T_F427A0 T_F42774 T_F42798
+;          T_F42808 sub_F5F9C1 T_BStore_AllocChain T_BStore_SaveCursor T_F4277C +4 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5F476 is an instruction boundary.
 ;           The name IS the address.
@@ -98779,7 +105248,7 @@ sub_F5F476:
 ; Called from: in-module: 0xF5F5F5 0xF5F6C9
 ; Touches: (0x0C57) (0x0C70) (0x0C8F) (0x0CCC) (0x0CCE) (0x0D1A) (0x126E)  |
 ;          0x000D50 0x000D70 0x603500
-; Calls:   T_F427BC T_F427B0 T_F42794
+; Calls:   T_BStore_SeekBlock T_BStore_SaveCursor T_F42794
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5F9C1 is an instruction boundary.
 ;           The name IS the address.
@@ -98909,8 +105378,8 @@ sub_F5F9C1:
 ; Called from: in-module: 0xF5F3AC 0xF5F439
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C73) (0x0C75)
 ;          (0x0C77) (0x0C8A) (0x0C8E) +31 more  |  0x603500
-; Calls:   sub_F5F476 T_F427A0 T_F42774 T_F42770 T_F42798 T_F427B4 T_F427B0
-;          T_F4277C T_F42780 T_F42784 T_F42778 T_F427BC +1 more
+; Calls:   sub_F5F476 T_F427A0 T_F42774 T_BStore_ValidateSavedCursor T_F42798 T_BStore_AllocChain T_BStore_SaveCursor
+;          T_F4277C T_F42780 T_F42784 T_F42778 T_BStore_SeekBlock +1 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5FB04 is an instruction boundary.
 ;           The name IS the address.
@@ -99283,7 +105752,7 @@ sub_F5FB04:
 ; Touches: (0x0C06) (0x0C70) (0x0C71) (0x0C72) (0x0C83) (0x0C8A) (0x0C8B)
 ;          (0x0C94) (0x0CA2) (0x0CB6) +11 more  |  0x603422 0x603500
 ;          0x60A000 0x60A100
-; Calls:   T_F427C4 T_F4280C T_F427AC sub_F6079E sub_F60548 T_F427BC
+; Calls:   T_BStore_LoadGeometry T_F4280C T_BStore_OpenChain sub_F6079E sub_F60548 T_BStore_SeekBlock
 ;          sub_F60514 T_F42884 sub_F60338 sub_F602F0 sub_F60267 sub_F6027D
 ;          +5 more
 ; Evidence: thunk slot T_F426E8 holds `jp 0x00F60012`, and 0xF60012 is an
@@ -99521,7 +105990,7 @@ sub_F60272:
 ; Called from: in-module: 0xF60222
 ; Touches: (0x0C57) (0x0C72) (0x0C8B) (0x0CFA) (0x0D00) (0x0D04) (0x0D1A)
 ;          (0x126E)  |  0x60A000 0x60A100
-; Calls:   T_F427B0 sub_F60457 sub_F604B7 sub_F60338 sub_F602F0
+; Calls:   T_BStore_SaveCursor sub_F60457 sub_F604B7 sub_F60338 sub_F602F0
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF6027D is an instruction boundary.
 ;           The name IS the address.
@@ -99736,7 +106205,7 @@ sub_F603E9:
 ; sub_F60457
 ; Called from: in-module: 0xF602B3 0xF6038F 0xF603B3 0xF603F8 0xF60421
 ; Touches: (0x0CA4) (0x0D04) (0x0D4A) (0x126E)
-; Calls:   T_F42884 T_F427BC
+; Calls:   T_F42884 T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF60457 is an instruction boundary.
 ;           The name IS the address.
@@ -99785,7 +106254,7 @@ sub_F60457:
 ; Called from: in-module: 0xF602C6 0xF602DF 0xF6031E 0xF60366 0xF603AB
 ;              0xF60418
 ; Touches: (0x0CA4) (0x0D4A) (0x126E) (0x345C)
-; Calls:   T_F427BC sub_F60514
+; Calls:   T_BStore_SeekBlock sub_F60514
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF604B7 is an instruction boundary.
 ;           The name IS the address.
@@ -99898,7 +106367,7 @@ sub_F60548:
 ; Called from: T_F426FC (x1)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0C7A) (0x0C7B) (0x0C8A) (0x0C8E)
 ;          (0x0CA2) (0x0CA3) (0x0D18) +1 more  |  0x603422
-; Calls:   T_F427C4 sub_F6068D
+; Calls:   T_BStore_LoadGeometry sub_F6068D
 ; Evidence: thunk slot T_F426FC holds `jp 0x00F60598`, and 0xF60598 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -99997,7 +106466,7 @@ sub_F60598:		; <- T_F426FC
 ; Called from: in-module: 0xF60629 0xF6065D
 ; Touches: (0x0C73) (0x0C77) (0x0C7A) (0x0C7B) (0x0C8E) (0x0C90) (0x0D1C)
 ;          (0x0D4A) (0x126E)
-; Calls:   T_F427A0 T_F42774 T_F4279C T_F427A8 T_F42820 T_F40A1C
+; Calls:   T_F427A0 T_F42774 T_BStore_CursorAdvance T_F427A8 T_F42820 T_F40A1C
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF6068D is an instruction boundary.
 ;           The name IS the address.
@@ -100120,7 +106589,7 @@ sub_F6079A:		; <- T_F426E4
 ; Called from: in-module: 0xF5E609 0xF5F9BD 0xF6014F 0xF6079A
 ; Touches: (0x0C70) (0x0CA2) (0x0CA4) (0x0D4A) (0x360A)  |  0x00007E
 ;          0x0000A0 0x000100 0x000D50 0x000D70 0x003460 +5 more
-; Calls:   T_F427C4 T_F42888 T_F40A1C
+; Calls:   T_BStore_LoadGeometry T_F42888 T_F40A1C
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF6079E is an instruction boundary.
 ;           The name IS the address.
@@ -100226,7 +106695,7 @@ sub_F6079E:
 ; Called from: T_F426E0 (x3); in-module: 0xF60B19
 ; Touches: (0x0CA2) (0x0E02) (0x360A)  |  0x00001C 0x000100 0x000D50
 ;          0x000D70 0x603500 0x610000
-; Calls:   T_F427C4 sub_F610E3 sub_F60F4F T_F42880 sub_F609B6 T_F40A1C
+; Calls:   T_BStore_LoadGeometry sub_F610E3 sub_F60F4F T_F42880 sub_F609B6 T_F40A1C
 ; Evidence: thunk slot T_F426E0 holds `jp 0x00F608D0`, and 0xF608D0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -100441,7 +106910,7 @@ sub_F60B22:		; <- T_F42704
 ; Called from: T_F42714 (x1)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0C8E) (0x0CA3) (0x0D18) (0x0D4A)  |
 ;          0x603422
-; Calls:   T_F427C4 sub_F60C2C T_F4278C T_F40A1C
+; Calls:   T_BStore_LoadGeometry sub_F60C2C T_BStore_ErrorToStatusByte T_F40A1C
 ; Evidence: thunk slot T_F42714 holds `jp 0x00F60B4E`, and 0xF60B4E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -100531,7 +107000,7 @@ sub_F60B4E:		; <- T_F42714
 ; Called from: in-module: 0xF60BC2 0xF60BEE
 ; Touches: (0x0C73) (0x0C77) (0x0C8E) (0x0C90) (0x0CB4) (0x0CBA) (0x0CBC)
 ;          (0x0CBE) (0x0CCC) (0x0CCE) +6 more
-; Calls:   T_F42770 T_F427A0 T_F42774 T_F4279C T_F427A8
+; Calls:   T_BStore_ValidateSavedCursor T_F427A0 T_F42774 T_BStore_CursorAdvance T_F427A8
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF60C2C is an instruction boundary.
 ;           The name IS the address.
@@ -100633,7 +107102,7 @@ sub_F60C2C:
 ; Called from: T_F42718 (x1)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0C8E) (0x0CA3) (0x0D18) (0x0D4A)
 ;          (0x0DF4) (0x0DF5)  |  0x603422
-; Calls:   T_F427C4 sub_F60E40 T_F4278C T_F40A1C
+; Calls:   T_BStore_LoadGeometry sub_F60E40 T_BStore_ErrorToStatusByte T_F40A1C
 ; Evidence: thunk slot T_F42718 holds `jp 0x00F60D3E`, and 0xF60D3E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -100735,7 +107204,7 @@ sub_F60D3E:		; <- T_F42718
 ; Called from: in-module: 0xF60DD5 0xF60E02
 ; Touches: (0x0C73) (0x0C77) (0x0C8E) (0x0C90) (0x0CB4) (0x0CBA) (0x0CBC)
 ;          (0x0CBE) (0x0CCC) (0x0CCE) +9 more
-; Calls:   T_F42770 T_F427A0 T_F42774 T_F4279C T_F427A8 sub_F60F4F
+; Calls:   T_BStore_ValidateSavedCursor T_F427A0 T_F42774 T_BStore_CursorAdvance T_F427A8 sub_F60F4F
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF60E40 is an instruction boundary.
 ;           The name IS the address.
@@ -100836,7 +107305,7 @@ sub_F60E40:
 ; Called from: in-module: 0xF608E2 0xF6099B 0xF60F45 0xF611C0 0xF61871
 ; Touches: (0x0C70) (0x0CA4) (0x0E02) (0x360A) (0x360C) (0x3752)  |
 ;          0x00001C 0x00001E 0x00007E 0x0000A0 0x000100 0x000D50 +7 more
-; Calls:   T_F427C4 T_F42888
+; Calls:   T_BStore_LoadGeometry T_F42888
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF60F4F is an instruction boundary.
 ;           The name IS the address.
@@ -101059,7 +107528,7 @@ sub_F610E3:
 ; Touches: (0x0C70) (0x0E02) (0x0E0C) (0x0E0D) (0x0E0E) (0x0E0F) (0x0E10)
 ;          (0x0E19) (0x126E) (0x134C) +8 more  |  0x000005 0x00001E 0x000022
 ;          0x00007E 0x0000A0 0x000100 +5 more
-; Calls:   sub_F60F4F sub_F615C2 sub_F61907 sub_F61880 T_F427BC T_F42884
+; Calls:   sub_F60F4F sub_F615C2 sub_F61907 sub_F61880 T_BStore_SeekBlock T_F42884
 ; Evidence: thunk slot T_F4271C holds `jp 0x00F6119A`, and 0xF6119A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -101416,7 +107885,7 @@ sub_F6119A:		; <- T_F4271C
 ; Touches: (0x0C70) (0x0E02) (0x0E0C) (0x0E0D) (0x126E) (0x2880) (0x345C)
 ;          (0x360A) (0x360C) (0x360E) +1 more  |  0x000005 0x000011 0x00001E
 ;          0x000022 0x00007E 0x0000A0 +7 more
-; Calls:   sub_F61880 T_F427BC T_F42884 sub_F60F4F
+; Calls:   sub_F61880 T_BStore_SeekBlock T_F42884 sub_F60F4F
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF615C2 is an instruction boundary.
 ;           The name IS the address.
@@ -101662,7 +108131,7 @@ sub_F615C2:
 ; Called from: in-module: 0xF6136C 0xF61632
 ; Touches: (0x0C70) (0x0E0D) (0x126E) (0x345C) (0x360A)  |  0x000100
 ;          0x603500 0x610000
-; Calls:   T_F42884 T_F427BC
+; Calls:   T_F42884 T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF61880 is an instruction boundary.
 ;           The name IS the address.
@@ -101817,7 +108286,7 @@ sub_F61907:
 ; Called from: T_F42720 (x1)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0C8A) (0x0C8E) (0x0CA3) (0x0D18)
 ;          (0x0D4A)  |  0x603422
-; Calls:   T_F427C4 sub_F61AF7 T_F4278C T_F40A1C
+; Calls:   T_BStore_LoadGeometry sub_F61AF7 T_BStore_ErrorToStatusByte T_F40A1C
 ; Evidence: thunk slot T_F42720 holds `jp 0x00F61A16`, and 0xF61A16 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -101906,7 +108375,7 @@ sub_F61A16:		; <- T_F42720
 ; Called from: in-module: 0xF61A8A 0xF61AC0
 ; Touches: (0x0C73) (0x0C77) (0x0C8A) (0x0C8E) (0x0C90) (0x0D0A) (0x0D14)
 ;          (0x0D1C) (0x0D4A) (0x0DEC) +3 more
-; Calls:   T_F427A0 T_F42774 sub_F620AF T_F4279C sub_F61C0C T_F427A8
+; Calls:   T_F427A0 T_F42774 sub_F620AF T_BStore_CursorAdvance sub_F61C0C T_F427A8
 ;          sub_F62089 sub_F61FBA
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF61AF7 is an instruction boundary.
@@ -102039,7 +108508,7 @@ sub_F61C0C:
 ; Called from: in-module: 0xF61C19
 ; Touches: (0x0C8A) (0x0D0A) (0x0D14) (0x0D4A) (0x0E1A) (0x0E1B) (0x0E1F)
 ;          (0x126E)
-; Calls:   T_F4279C
+; Calls:   T_BStore_CursorAdvance
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF61C24 is an instruction boundary.
 ;           The name IS the address.
@@ -102172,7 +108641,7 @@ sub_F61C24:
 ; Called from: in-module: 0xF61C1F
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C73)
 ;          (0x0C8A) (0x0D0A) (0x0D14) +10 more  |  0x617800
-; Calls:   sub_F5E2B9 T_F4279C sub_F61F7B T_F427E8
+; Calls:   sub_F5E2B9 T_BStore_CursorAdvance sub_F61F7B T_F427E8
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF61D65 is an instruction boundary.
 ;           The name IS the address.
@@ -102402,7 +108871,7 @@ sub_F61F7B:
 ; Called from: in-module: 0xF61C07
 ; Touches: (0x0C73) (0x0C8E) (0x0C90) (0x0D0A) (0x0D14) (0x0D4A) (0x0FD4)
 ;          (0x0FD6) (0x126E) (0x345C)
-; Calls:   T_F42774 sub_F62008 T_F4279C sub_F5E0BD
+; Calls:   T_F42774 sub_F62008 T_BStore_CursorAdvance sub_F5E0BD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF61FBA is an instruction boundary.
 ;           The name IS the address.
@@ -102486,7 +108955,7 @@ sub_F62030:
 ; sub_F62042
 ; Called from: in-module: 0xF62030
 ; Touches: (0x0FD4) (0x0FD6) (0x126E)
-; Calls:   T_F427BC
+; Calls:   T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF62042 is an instruction boundary.
 ;           The name IS the address.
@@ -102517,7 +108986,7 @@ sub_F62042:
 ; sub_F62073
 ; Called from: in-module: 0xF62038
 ; Touches: (0x0FD4) (0x0FD6) (0x126E)
-; Calls:   T_F427BC
+; Calls:   T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF62073 is an instruction boundary.
 ;           The name IS the address.
@@ -102561,7 +109030,7 @@ sub_F62089:
 ; Called from: in-module: 0xF61B54
 ; Touches: (0x0C8A) (0x0D0A) (0x0D14) (0x0D4A) (0x0DEC) (0x0E1A) (0x0E1B)
 ;          (0x0E1F) (0x126E)
-; Calls:   T_F4279C sub_F62201
+; Calls:   T_BStore_CursorAdvance sub_F62201
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF620AF is an instruction boundary.
 ;           The name IS the address.
@@ -102773,7 +109242,7 @@ sub_F62201:
 ; sub_F6220D
 ; Called from: in-module: 0xF62209
 ; Touches: (0x0C8E) (0x126E)  |  0x60347E 0x6034A0 0x617800
-; Calls:   T_F42884 T_F427BC
+; Calls:   T_F42884 T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF6220D is an instruction boundary.
 ;           The name IS the address.
@@ -102839,7 +109308,7 @@ sub_F6220D:
 ; sub_F622AA
 ; Called from: in-module: 0xF62201
 ; Touches: (0x0FD6) (0x126E)
-; Calls:   T_F427BC
+; Calls:   T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF622AA is an instruction boundary.
 ;           The name IS the address.
@@ -102875,9 +109344,9 @@ sub_F622AA:
 ;
 ; WHY THIS BLOCK.  notes/prom_b_call_graph.py ranks unconverted prom_b thunk
 ; targets by an opcode-anchored reference upper bound.  The top two in the whole
-; image are BOTH in this module -- T_F4279C -> 0xF635C9 (x43) and
-; T_F427BC -> 0xF63BAE (x42) -- and 49 thunk slots, the contiguous run
-; T_F42770-T_F42830, point into it.  None of it was converted before.
+; image are BOTH in this module -- T_BStore_CursorAdvance -> 0xF635C9 (x43) and
+; T_BStore_SeekBlock -> 0xF63BAE (x42) -- and 49 thunk slots, the contiguous run
+; 0xF42770-0xF42830, point into it.  None of it was converted before.
 ;
 ; EXTENT.  0xF62C00-0xF64C0F is code and data; 0xF64C10-0xF64FFF is 1008 bytes
 ; of 0x0E (`ret`) padding to the 4 KiB boundary, where the next module starts.
@@ -102994,14 +109463,14 @@ sub_F622AA:
 ; BStore_Veneers -- three long-branch veneers
 ;
 ; Called from:
-;   thunk slots T_F42800
+;   thunk slots T_BStore_Veneers
 ;   (both lists are emitted by this script, not typed)
 ; Evidence: three unconditional branches and nothing else -- `jr T,0xF62C66`,
 ;   `jrl T,0xF64A7A`, `jrl T,0xF64A9F`.
 ; Unknown: why the module needs veneers at all when the thunk table could
 ;   name the three targets directly.
 ; --------------------------------------------------------------------------
-BStore_Veneers:		; <- T_F42800
+BStore_Veneers:		; <- T_BStore_Veneers
 	jr	100	; F62C00  jr T,0xf62c66
 sub_F62C02:
 	jrl	7797	; F62C02  jrl T,0xf64a7a
@@ -103012,7 +109481,7 @@ sub_F62C05:		; <- T_F42828
 ; BStore_StubTable -- 28 `calr <routine> / ret` entry stubs
 ;
 ; Called from:
-;   thunk slots T_F427E4
+;   thunk slots T_BStore_StubTable
 ;   (both lists are emitted by this script, not typed)
 ; Layout, counted by this script from the transcription's own instruction
 ;   boundaries: 26 stubs of 4 bytes, 1 stub of 5 bytes, 1 stub of 9 bytes.
@@ -103029,7 +109498,7 @@ sub_F62C05:		; <- T_F42828
 ; Evidence: every `calr` target in the table is also an entry point that
 ;   something else reaches.
 ; --------------------------------------------------------------------------
-BStore_StubTable:		; <- T_F427E4
+BStore_StubTable:		; <- T_BStore_StubTable
 	calr	243	; F62C08  calr 0xf62cfe
 	ret	; F62C0B  ret
 sub_F62C0C:		; <- T_F427E8
@@ -103099,7 +109568,7 @@ sub_F62C20:		; <- T_F427FC
 ; BStore_ValidateSavedCursor -- is entry n's saved cursor still valid?
 ;
 ; Called from:
-;   thunk slots T_F42770
+;   thunk slots T_BStore_ValidateSavedCursor
 ;   4 call sites inside the module:
 ;     0xF62C31 0xF6453C 0xF645B1 0xF64695
 ;   (both lists are emitted by this script, not typed)
@@ -103119,7 +109588,7 @@ sub_F62C20:		; <- T_F427FC
 ;   UPPER bound is odd: BC was cleared with `xor BC,BC` before the byte was
 ;   loaded into C, so `cp BC,0x00FF` can never fail.  Dead as written.
 ; --------------------------------------------------------------------------
-BStore_ValidateSavedCursor:		; <- T_F42770
+BStore_ValidateSavedCursor:		; <- T_BStore_ValidateSavedCursor
 	pushw	wa	; F62C7E  push WA
 	calr	3129	; F62C7F  calr 0xf638bb
 	popw	wa	; F62C82  pop WA
@@ -103787,7 +110256,7 @@ sub_F63423:		; <- T_F42820
 ; BStore_ErrorToStatusByte -- (0x2880) = ErrorStatusTable[(0x0D4A)]
 ;
 ; Called from:
-;   thunk slots T_F4278C
+;   thunk slots T_BStore_ErrorToStatusByte
 ;   1 call site inside the module:
 ;     0xF62C42
 ;   (both lists are emitted by this script, not typed)
@@ -103798,7 +110267,7 @@ sub_F63423:		; <- T_F42820
 ; Unknown: what (0x2880) is consumed by.  No interpreter-B display-list record
 ;   names it (notes/prom_b_var_screens.py --var 0x2880 prints nothing).
 ; --------------------------------------------------------------------------
-BStore_ErrorToStatusByte:		; <- T_F4278C
+BStore_ErrorToStatusByte:		; <- T_BStore_ErrorToStatusByte
 	ld	xiy, 16135233	; F6342C  ld XIY,0x00f63441
 	xor	hl, hl	; F63431  xor HL,HL
 	ldb_d8	l, (3402)	; F63433  ld L,(0x0d4a)
@@ -103947,7 +110416,7 @@ sub_F6353E:		; <- T_F42798
 ; BStore_CursorAdvance -- ++cursor, following the chain at a block end
 ;
 ; Called from:
-;   thunk slots T_F4279C
+;   thunk slots T_BStore_CursorAdvance
 ;   15 call sites inside the module:
 ;     0xF62C24 0xF62DAC 0xF62DBA 0xF6356B 0xF636B2 0xF636D9 0xF636E4 0xF6371E
 ;     0xF63796 0xF637B9 0xF637CB 0xF6380B 0xF63857 0xF63872 0xF649C9
@@ -103967,7 +110436,7 @@ sub_F6353E:		; <- T_F42798
 ;   UNREACHABLE.  Error 8 is still produced -- by BStore_CountMarkersForward
 ;   and 0xF62DA0 -- so the code is dead, not the code path.
 ; --------------------------------------------------------------------------
-BStore_CursorAdvance:		; <- T_F4279C
+BStore_CursorAdvance:		; <- T_BStore_CursorAdvance
 	inc	1, iy	; F635C9  inc 1,IY
 	cp	iy, 255	; F635CB  cp IY,0x00ff
 	jr	le, 60	; F635CF  jr LE,0xf6360d
@@ -104220,7 +110689,7 @@ sub_F6382B:
 ; BStore_OpenChain -- directory lookup: entry n -> cursor at its head
 ;
 ; Called from:
-;   thunk slots T_F427AC
+;   thunk slots T_BStore_OpenChain
 ;   5 call sites inside the module:
 ;     0xF62C1C 0xF62C7F 0xF62D07 0xF6348A 0xF6366A
 ;   (both lists are emitted by this script, not typed)
@@ -104245,7 +110714,7 @@ sub_F6382B:
 ;   the INITIALISED extent; (0x0C90) is still a separate unknown.
 ;   Check: python3 notes/prom_b_songstore_checks.py --arrays
 ; --------------------------------------------------------------------------
-BStore_OpenChain:		; <- T_F427AC
+BStore_OpenChain:		; <- T_BStore_OpenChain
 	xor	w, w	; F638BB  xor W,W
 	cps	a, 0	; F638BD  cp A,0
 	jr	nz, 7	; F638BF  jr NZ,0xf638c8
@@ -104287,7 +110756,7 @@ BStore_OpenChain:		; <- T_F427AC
 ; BStore_SaveCursor -- store entry n's cursor, in RAM and in its bank
 ;
 ; Called from:
-;   thunk slots T_F427B0
+;   thunk slots T_BStore_SaveCursor
 ;   4 call sites inside the module:
 ;     0xF62C56 0xF63F81 0xF64524 0xF648EE
 ;   (both lists are emitted by this script, not typed)
@@ -104303,7 +110772,7 @@ BStore_OpenChain:		; <- T_F427AC
 ;   it is written here from a live block number and offset, and read back by
 ;   BStore_ValidateSavedCursor.
 ; --------------------------------------------------------------------------
-BStore_SaveCursor:		; <- T_F427B0
+BStore_SaveCursor:		; <- T_BStore_SaveCursor
 	push	xde	; F63924  push XDE
 	push	xiz	; F63925  push XIZ
 	ldw_d16	hl, (3354)	; F63926  ld HL,(0x0d1a)
@@ -104343,7 +110812,7 @@ BStore_SaveCursor:		; <- T_F427B0
 ; BStore_AllocChain -- allocate a chain long enough for N bytes
 ;
 ; Called from:
-;   thunk slots T_F427B4
+;   thunk slots T_BStore_AllocChain
 ;   2 call sites inside the module:
 ;     0xF62C5A 0xF648B2
 ;   (both lists are emitted by this script, not typed)
@@ -104366,7 +110835,7 @@ BStore_SaveCursor:		; <- T_F427B0
 ; Unknown: the allocator itself is not here -- 0xF63A18 calls thunk T_F42884
 ;   -> 0xF7A402, in another module.
 ; --------------------------------------------------------------------------
-BStore_AllocChain:		; <- T_F427B4
+BStore_AllocChain:		; <- T_BStore_AllocChain
 	ldw	wa, 255	; F63988  ld WA,0x00ff
 	.byte 0xD1, 0xC6, 0x0C, 0xA0	; F6398B  sub WA,(0x0cc6)   [llvm-mc cannot encode this]
 	.byte 0xD1, 0xAE, 0x0C, 0xF8	; F6398F  cp (0x0cae),WA   [llvm-mc cannot encode this]
@@ -104514,7 +110983,7 @@ sub_F63A59:		; <- T_F427B8
 ; BStore_SeekBlock -- point the cursor at block n
 ;
 ; Called from:
-;   thunk slots T_F427BC
+;   thunk slots T_BStore_SeekBlock
 ;   17 call sites inside the module:
 ;     0xF62CD4 0xF62DD2 0xF62DE2 0xF63073 0xF63082 0xF63341 0xF6335E 0xF633B2
 ;     0xF633CF 0xF634EE 0xF63512 0xF6354F 0xF635F8 0xF63913 0xF63A00 0xF63A3F
@@ -104534,7 +111003,7 @@ sub_F63A59:		; <- T_F427B8
 ;   notes/FINDINGS-memory-map.md already had `0x617800 + n*0x100 -- a 256-byte
 ;   record array' from 0xF61F5B; this identifies the array.
 ; --------------------------------------------------------------------------
-BStore_SeekBlock:		; <- T_F427BC
+BStore_SeekBlock:		; <- T_BStore_SeekBlock
 	dec	1, hl	; F63BAE  dec 1,HL
 	extz	xhl	; F63BB0  extz XHL
 	sla	xhl, 8	; F63BB2  sla 0x08,XHL
@@ -104547,7 +111016,7 @@ BStore_SeekBlock:		; <- T_F427BC
 ; BStore_CopyAcrossBlocks -- ldir between two blocks, by block number
 ;
 ; Called from:
-;   thunk slots T_F427C0
+;   thunk slots T_BStore_CopyAcrossBlocks
 ;   13 call sites inside the module:
 ;     0xF62C5E 0xF62E5B 0xF62E78 0xF62E8D 0xF62EC3 0xF62EF1 0xF62F52 0xF62F67
 ;     0xF62F84 0xF62F99 0xF62FD5 0xF62FDE 0xF62FF6
@@ -104564,7 +111033,7 @@ BStore_SeekBlock:		; <- T_F427BC
 ;   0xF62DC9 sets them: (0x0C63) from block (0x0C61), (0x0C59) from block
 ;   (0x0C57).
 ; --------------------------------------------------------------------------
-BStore_CopyAcrossBlocks:		; <- T_F427C0
+BStore_CopyAcrossBlocks:		; <- T_BStore_CopyAcrossBlocks
 	pushw	wa	; F63BC0  push WA
 	push	xde	; F63BC1  push XDE
 	push	xhl	; F63BC2  push XHL
@@ -104588,7 +111057,7 @@ BStore_CopyAcrossBlocks:		; <- T_F427C0
 ; BStore_LoadGeometry -- copy the store's geometry into the 0x0Cxx page
 ;
 ; Called from:
-;   thunk slots T_F427C4
+;   thunk slots T_BStore_LoadGeometry
 ;   3 call sites inside the module:
 ;     0xF62C20 0xF63C10 0xF63C46
 ;   (both lists are emitted by this script, not typed)
@@ -104601,7 +111070,7 @@ BStore_CopyAcrossBlocks:		; <- T_F427C0
 ;   16-byte array at 0x00603422 (0xF63620 `cp L,(0x0CA3)`), so 0x10 = 16
 ;   entries there; 0x11 has no established use.
 ; --------------------------------------------------------------------------
-BStore_LoadGeometry:		; <- T_F427C4
+BStore_LoadGeometry:		; <- T_BStore_LoadGeometry
 	push	xiy	; F63BE5  push XIY
 	stdi8	(3234), 17	; F63BE6  ld (0x0ca2),0x11
 	ldw_d16	iy, (13832)	; F63BEB  ld IY,(0x3608)
@@ -106242,8 +112711,8 @@ sub_F65009:		; <- T_F432CC
 ; Called from: in-module: 0xF65027 0xF65191 0xF65286
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C73) (0x0C75)
 ;          (0x0C77) (0x0C90) (0x0CAE) +27 more  |  0x60347E 0x6034A0
-; Calls:   sub_F6500C T_F427A0 T_F42770 T_F42774 sub_F653A5 sub_F65792
-;          T_F427B4 T_F427B0 T_F4277C sub_F65761 sub_F65489
+; Calls:   sub_F6500C T_F427A0 T_BStore_ValidateSavedCursor T_F42774 sub_F653A5 sub_F65792
+;          T_BStore_AllocChain T_BStore_SaveCursor T_F4277C sub_F65761 sub_F65489
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6500C is an instruction
 ;           boundary.  The name IS the address.
@@ -106631,7 +113100,7 @@ sub_F6547E:
 ; Called from: in-module: 0xF6527F 0xF6539E
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0CAE) (0x0CBC)
 ;          (0x0CC0) (0x0CC6) (0x0CCC) +16 more  |  0x60347E 0x6034A0
-; Calls:   T_F427B4 T_F427B0 T_F4277C sub_F65761 T_F427BC sub_F65792
+; Calls:   T_BStore_AllocChain T_BStore_SaveCursor T_F4277C sub_F65761 T_BStore_SeekBlock sub_F65792
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF65489 is an instruction
 ;           boundary.  The name IS the address.
@@ -106847,7 +113316,7 @@ sub_F65489:
 ; sub_F65761
 ; Called from: in-module: 0xF6518A 0xF65534 0xF655C3 0xF656B4 0xF6575A
 ; Touches: (0x0D4A) (0x126E)
-; Calls:   T_F427BC T_F4270C sub_F65792
+; Calls:   T_BStore_SeekBlock T_F4270C sub_F65792
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF65761 is an instruction
 ;           boundary.  The name IS the address.
@@ -107114,7 +113583,7 @@ sub_F65CD6:		; <- T_F42B94
 ; sub_F65D26
 ; Called from: in-module: 0xF65C5E 0xF65C9A 0xF65CE3 0xF65CF7 0xF66564
 ; Touches: (0x0C03) (0x0C06) (0x0C83) (0x0DCF)  |  0x603422
-; Calls:   T_F42800 T_F411B8
+; Calls:   T_BStore_Veneers T_F411B8
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF65D26 is an instruction
 ;           boundary.  The name IS the address.
@@ -107369,7 +113838,7 @@ sub_F65E94:		; <- T_F42BA4
 ; Called from: in-module: 0xF65E94
 ; Touches: (0x0C03) (0x0C06) (0x0C0D) (0x0C83) (0x0DCF) (0x2071) (0x2075)
 ;          (0x207E)  |  0x603422
-; Calls:   T_F42800 T_F411B8
+; Calls:   T_BStore_Veneers T_F411B8
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF65E98 is an instruction
 ;           boundary.  The name IS the address.
@@ -107817,7 +114286,7 @@ sub_F66191:		; <- T_F42BD4
 ; sub_F661F3
 ; Called from: in-module: 0xF6611F 0xF661EA
 ; Touches: nothing with an absolute address
-; Calls:   T_F42E28 T_F42E24
+; Calls:   T_Blink_SetEnable T_Blink_Stop
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF661F3 is an instruction
 ;           boundary.  The name IS the address.
@@ -108627,7 +115096,7 @@ sub_F66658:		; <- T_F42C14
 ; Called from: in-module: 0xF66658
 ; Touches: (0x0DFD) (0x0DFE) (0x0E02) (0x124C) (0x360A) (0x7F4D)  |
 ;          0x603422 0x603433 0x610000
-; Calls:   sub_F6682C T_F426E0 T_F40F38 T_F40018 T_F411B8
+; Calls:   sub_F6682C T_F426E0 T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB T_F411B8
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF66668 is an instruction
 ;           boundary.  The name IS the address.
@@ -108784,7 +115253,7 @@ IndexMap_F667CC:
 ; sub_F6682C
 ; Called from: in-module: 0xF6667D
 ; Touches: (0x0DFD) (0x124C) (0x7F4D)  |  0x603422 0x603433 0x610000
-; Calls:   T_F42880 sub_F66950 T_F40F38 T_F40018
+; Calls:   T_F42880 sub_F66950 T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6682C is an instruction
 ;           boundary.  The name IS the address.
@@ -111117,7 +117586,7 @@ sub_F6833E:
 ; Called from: in-module: 0xF6833E
 ; Touches: (0x0C90) (0x0E5C) (0x0F5E) (0x0F64) (0x0FD4) (0x0FD6) (0x1006)
 ;          (0x106C) (0x12B2) (0x345C)
-; Calls:   sub_F68575 sub_F684FA T_F427E4 sub_F6746C sub_F68574 sub_F68504
+; Calls:   sub_F68575 sub_F684FA T_BStore_StubTable sub_F6746C sub_F68574 sub_F68504
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68354 is an instruction
 ;           boundary.  The name IS the address.
@@ -111170,7 +117639,7 @@ sub_F68354:
 ; Called from: in-module: 0xF68331 0xF68341
 ; Touches: (0x0C90) (0x0E5C) (0x0F60) (0x0F65) (0x0FD4) (0x0FD6) (0x1006)
 ;          (0x1008) (0x106C) (0x12B2)
-; Calls:   sub_F6A20F sub_F6857E sub_F684FA T_F427E4 sub_F6746C sub_F68574
+; Calls:   sub_F6A20F sub_F6857E sub_F684FA T_BStore_StubTable sub_F6746C sub_F68574
 ;          sub_F68504
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF683D4 is an instruction
@@ -111233,7 +117702,7 @@ sub_F683D4:
 ; Called from: in-module: 0xF68344
 ; Touches: (0x0C90) (0x0D4A) (0x0E59) (0x0E5C) (0x0F62) (0x0F66) (0x0FD4)
 ;          (0x0FD6) (0x1006) (0x106C) +2 more
-; Calls:   sub_F68587 sub_F684FA T_F427E4 sub_F6746C sub_F68574 sub_F68504
+; Calls:   sub_F68587 sub_F684FA T_BStore_StubTable sub_F6746C sub_F68574 sub_F68504
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68473 is an instruction
 ;           boundary.  The name IS the address.
@@ -112009,8 +118478,8 @@ DispatchTable_F68972:
 ; sub_F689F5
 ; Called from: in-module: 0xF689A8
 ; Touches: (0x0EC2) (0x1008) (0x1071) (0x12A7) (0x34D4)  |  0x60080A
-; Calls:   T_F431C0 sub_F6B8BD sub_F6C292 T_F41D60 sub_F6A304 sub_F6B96F
-;          sub_F6B9B9 T_F41D64 sub_F6BA11 sub_F6B97B sub_F6C2E5
+; Calls:   T_F431C0 sub_F6B8BD sub_F6C292 T_Ring60080A_Get sub_F6A304 sub_F6B96F
+;          sub_F6B9B9 T_Ring60080A_Put sub_F6BA11 sub_F6B97B sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF689F5 is an instruction
 ;           boundary.  The name IS the address.
@@ -112111,7 +118580,7 @@ sub_F689F5:
 ; sub_F68AD0
 ; Called from: in-module: 0xF67544
 ; Touches: (0x1008) (0x106E) (0x34D4)  |  0x60080A
-; Calls:   sub_F6B8BD sub_F6A304 sub_F6C292 sub_F68B3A T_F41D64 sub_F6C2E5
+; Calls:   sub_F6B8BD sub_F6A304 sub_F6C292 sub_F68B3A T_Ring60080A_Put sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68AD0 is an instruction
 ;           boundary.  The name IS the address.
@@ -113771,7 +120240,7 @@ sub_F69692:
 ; Called from: in-module: 0xF69653
 ; Touches: (0x0E4F) (0x0E53) (0x0E5A) (0x0E63) (0x0ED7) (0x0EE8) (0x106D)
 ;          (0x12AF) (0x12B0) (0x12E7) +3 more  |  0x603422
-; Calls:   sub_F6A908 T_F41D84 sub_F69780 sub_F6A7EB sub_F6BBD4 T_F413E4
+; Calls:   sub_F6A908 T_Ring600A14_Get sub_F69780 sub_F6A7EB sub_F6BBD4 T_F413E4
 ;          sub_F6B387 sub_F6C43C 0xF6A895 sub_F6A7C5 sub_F69811
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69697 is an instruction
@@ -113871,7 +120340,7 @@ sub_F69697:
 ; Called from: in-module: 0xF696A6
 ; Touches: (0x0E4F) (0x0ED5) (0x0ED6) (0x0ED7) (0x0EE8) (0x12E7) (0x12E8)  |
 ;          0x600A14
-; Calls:   T_F41D84
+; Calls:   T_Ring600A14_Get
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69780 is an instruction
 ;           boundary.  The name IS the address.
@@ -114885,7 +121354,7 @@ sub_F69DBD:
 ; Called from: in-module: 0xF69D89
 ; Touches: (0x0C90) (0x0D4A) (0x0E58) (0x0E5C) (0x0E63) (0x0F5E) (0x0F64)
 ;          (0x0FD3) (0x0FD4) (0x0FD6) +2 more  |  0x603500
-; Calls:   0xF6EC6A sub_F684FA T_F427E4 0xF6EC43 sub_F6C877
+; Calls:   0xF6EC6A sub_F684FA T_BStore_StubTable 0xF6EC43 sub_F6C877
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69F5B is an instruction
 ;           boundary.  The name IS the address.
@@ -114990,7 +121459,7 @@ sub_F69F5B:
 ; Called from: in-module: 0xF67420
 ; Touches: (0x0C90) (0x0D4A) (0x0E58) (0x0E59) (0x0E5C) (0x0E63) (0x0F62)
 ;          (0x0F66) (0x0FD3) (0x0FD4) +4 more  |  0x603500
-; Calls:   0xF6EC6A sub_F684FA T_F427E4 0xF6EC43 sub_F6C877 sub_F6B075
+; Calls:   0xF6EC6A sub_F684FA T_BStore_StubTable 0xF6EC43 sub_F6C877 sub_F6B075
 ;          sub_F6B1EA sub_F6B0C4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A097 is an instruction
@@ -115295,7 +121764,7 @@ sub_F6A2FF:
 ; sub_F6A304
 ; Called from: in-module: 0xF68A57 0xF68AE6 0xF6AE74 0xF6AFBB
 ; Touches: (0x1008) (0x34D4)  |  0x60080A
-; Calls:   T_F41D64
+; Calls:   T_Ring60080A_Put
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A304 is an instruction
 ;           boundary.  The name IS the address.
@@ -115336,7 +121805,7 @@ sub_F6A304:
 ; sub_F6A344
 ; Called from: in-module: 0xF67424
 ; Touches: (0x0E53) (0x0E5A) (0x0E63) (0x0ECB) (0x0EF7) (0x12B8)
-; Calls:   sub_F6C4DF T_F41D84 sub_F6A406 sub_F6CE26 sub_F6CED0 sub_F6CF7A
+; Calls:   sub_F6C4DF T_Ring600A14_Get sub_F6A406 sub_F6CE26 sub_F6CED0 sub_F6CF7A
 ;          0xF6D024 0xF6D0CE 0xF6D178 0xF6D222 0xF6D2CC 0xF6D36C +4 more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A344 is an instruction
@@ -115563,7 +122032,7 @@ sub_F6A4D6:
 ; Called from: in-module: 0xF6965F
 ; Touches: (0x0E53) (0x0E5A) (0x0E63) (0x0EF5) (0x0F59) (0x100E) (0x100F)
 ;          (0x12B5) (0x12B6) (0x12B7) +5 more
-; Calls:   T_F41D84 T_F40790 sub_F6908B sub_F6B387 sub_F67481 0xF6D86B
+; Calls:   T_Ring600A14_Get T_F40790 sub_F6908B sub_F6B387 sub_F67481 0xF6D86B
 ;          sub_F6C4DF 0xF6D5F0 0xF6D46C
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A4D9 is an instruction
@@ -115696,7 +122165,7 @@ sub_F6A4D9:
 ; sub_F6A5FF
 ; Called from: in-module: 0xF6966A
 ; Touches: (0x0E4E) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x100C)
-; Calls:   T_F41D84 T_F431B0 0xF6D505
+; Calls:   T_Ring600A14_Get T_F431B0 0xF6D505
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A5FF is an instruction
 ;           boundary.  The name IS the address.
@@ -115760,7 +122229,7 @@ sub_F6A674:
 ; sub_F6A67D
 ; Called from: in-module: 0xF67428
 ; Touches: (0x0E53) (0x0E5A) (0x12C0)
-; Calls:   sub_F6A6BB T_F41D84 sub_F6A6BC sub_F6B387 sub_F67481
+; Calls:   sub_F6A6BB T_Ring600A14_Get sub_F6A6BC sub_F6B387 sub_F67481
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A67D is an instruction
 ;           boundary.  The name IS the address.
@@ -115870,7 +122339,7 @@ DispatchTable_F6A6DB:
 ; Called from: in-module: 0xF69681
 ; Touches: (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED6) (0x0EF5) (0x12B8)
 ;          (0x12B9)
-; Calls:   T_F41D84 0xF6D447 0xF6D443
+; Calls:   T_Ring600A14_Get 0xF6D447 0xF6D443
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A704 is an instruction
 ;           boundary.  The name IS the address.
@@ -115909,7 +122378,7 @@ sub_F6A704:
 ; Called from: in-module: 0xF6968C
 ; Touches: (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED6) (0x0EF5) (0x12B8)
 ;          (0x12B9) (0x12EB)
-; Calls:   T_F41D84 0xF6D447 0xF6D443
+; Calls:   T_Ring600A14_Get 0xF6D447 0xF6D443
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A75F is an instruction
 ;           boundary.  The name IS the address.
@@ -116752,7 +123221,7 @@ sub_F6AD24:
 ; sub_F6AD30
 ; Called from: in-module: 0xF689C0 0xF6AA25
 ; Touches:   |  0x600A14
-; Calls:   T_F41D84
+; Calls:   T_Ring600A14_Get
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6AD30 is an instruction
 ;           boundary.  The name IS the address.
@@ -119813,7 +126282,7 @@ sub_F6C4A5:
 ; sub_F6C4DF
 ; Called from: in-module: 0xF695F0 0xF6964D 0xF6A34B 0xF6A5C0
 ; Touches: nothing with an absolute address
-; Calls:   T_F41D84 sub_F6C4FC
+; Calls:   T_Ring600A14_Get sub_F6C4FC
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C4DF is an instruction
 ;           boundary.  The name IS the address.
@@ -119853,7 +126322,7 @@ sub_F6C4FC:
 ; sub_F6C507
 ; Called from: in-module: 0xF68987 0xF689B2 0xF689E5 0xF695F8
 ; Touches: nothing with an absolute address
-; Calls:   T_F41D90
+; Calls:   T_Ring600A14_IsEmpty
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C507 is an instruction
 ;           boundary.  The name IS the address.
@@ -123081,7 +129550,7 @@ Text_PBendMod1ExpPMemAftOnoff:
 ; sub_F6D963
 ; Called from: in-module: 0xF6D8CC
 ; Touches: (0x12B9) (0x12EB)
-; Calls:   T_F41AF0 T_F41B00
+; Calls:   T_F41AF0 T_Value_ToAsciiDigits3
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -126190,7 +132659,7 @@ sub_F6F404:		; <- T_F43384
 ; sub_F6F408
 ; Called from: in-module: 0xF6F400
 ; Touches: (0x272B) (0x360A) (0x360B)
-; Calls:   sub_F6F476 sub_F6F4A3 T_F40AC8 sub_F6F526 T_F41E6C T_F41D94
+; Calls:   sub_F6F476 sub_F6F4A3 T_F40AC8 sub_F6F526 T_Ring601850_Init T_Ring600A14_Init
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -126227,8 +132696,8 @@ sub_F6F408:
 ; sub_F6F440
 ; Called from: in-module: 0xF6F404
 ; Touches: (0x272B) (0x360A)
-; Calls:   sub_F6F476 sub_F6F4A3 sub_F6F4F2 T_F40AC8 sub_F73840 T_F41E6C
-;          T_F41D94
+; Calls:   sub_F6F476 sub_F6F4A3 sub_F6F4F2 T_F40AC8 sub_F73840 T_Ring601850_Init
+;          T_Ring600A14_Init
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -126332,7 +132801,7 @@ sub_F6F4A3:
 ; sub_F6F4F2
 ; Called from: in-module: 0xF6F45E
 ; Touches: (0x124C) (0x7F4D)
-; Calls:   T_F409E0 T_F40F38 T_F40018 T_F42578
+; Calls:   T_F409E0 T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB T_F42578
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6F4F2 is an instruction boundary of this
@@ -141104,7 +147573,7 @@ DLB_BlankField_8:
 ; target extent.  T_F428B0-T_F42ABC comes out with the most unconverted prom_b
 ; targets of any run in the image -- 132, every one of them inside ONE .incbin
 ; span, 8,906 bytes of extent, summed reference upper bound 172.  Immediately
-; below it in the same span sits T_F42880-T_F42894 (6 slots), whose target
+; below it in the same span sits 0xF42880-0xF42894 (6 slots), whose target
 ; notes/FINDINGS-prom_b-block-store.md had already singled out:
 ;     "T_F42884 -> 0xF7A402 is the block allocator itself -- it is what
 ;      BStore_AllocChain calls at 0xF63A18 for each block of a new chain.
@@ -141535,17 +148004,17 @@ BStore_SeekBlock_Alloc:
 
 ; --------------------------------------------------------------------------
 ; BStore_AppendBytes_Veneer
-; Called from: T_F42894 (x8)
+; Called from: T_BStore_AppendBytes_Veneer (x8)
 ; Touches: nothing with an absolute address
 ; Calls:   BStore_AppendBytes
-; Evidence: thunk slot T_F42894 holds `jp 0x00F7A613`, and 0xF7A613 is an
+; Evidence: thunk slot T_BStore_AppendBytes_Veneer holds `jp 0x00F7A613`, and 0xF7A613 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-BStore_AppendBytes_Veneer:		; <- T_F42894
+BStore_AppendBytes_Veneer:		; <- T_BStore_AppendBytes_Veneer
 	calr	1	; F7A613  calr 0xf7a617
 	ret	; F7A616  ret
 

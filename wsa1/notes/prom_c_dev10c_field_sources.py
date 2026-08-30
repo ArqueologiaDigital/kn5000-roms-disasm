@@ -33,7 +33,7 @@ WHAT THIS DOES NOT ESTABLISH
   * A routine that writes a field is not necessarily the routine that DECIDES it -- the
     value may arrive as an argument.  The listing prints the value operand so that is
     visible.
-  * The 0x00104000 twin struct at 0x00D7A2 is filled by ONE routine, sub_FC4DBD, which
+  * The 0x00104000 twin struct at 0x00D7A2 is filled by ONE routine, Dev104_PackStagingStruct, which
     writes 19 struct offsets through its (XIZ+0x08) pointer argument; `--dev104` prints
     those.  That asymmetry -- one packer there, many small writers here -- is itself a
     finding.
@@ -55,7 +55,7 @@ SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
 STRUCT = 0x00D75E          # the 0x0010C000 staging struct
 NWORD = 22                 # Dev10C_WriteAllChanRegs moves 22 words
 D104 = 0x00D7A2            # the 0x00104000 staging struct
-PACKER = ("sub_FC4DBD", 0xFC4DBD, 0xFC56C3)
+PACKER = ("Dev104_PackStagingStruct", 0xFC4DBD, 0xFC56C3)
 
 # struct WORD index -> register block, from notes/prom_c_tg_chanmap.py 0xFB713A --groups
 #   run: blocks 0x0040..0x0040 (index 1..1)   <- struct words 1..1
@@ -116,7 +116,7 @@ def scan():
 
 
 def dev104():
-    """The writes sub_FC4DBD makes through its (XIZ+0x08) struct-pointer argument."""
+    """The writes Dev104_PackStagingStruct makes through its (XIZ+0x08) struct-pointer argument."""
     lines = open(SRC).read().splitlines()
     i = next(k for k, l in enumerate(lines) if l.startswith(PACKER[0] + ":"))
     ptr, out = set(), []
@@ -202,7 +202,7 @@ def verify():
                       + ", ".join(sorted({h[3] for h in last})))
     d = dev104()
     offs = sorted({o for _, o, _ in d})
-    check(len(d) == 19, f"sub_FC4DBD makes {len(d)} writes through its struct pointer")
+    check(len(d) == 19, f"Dev104_PackStagingStruct makes {len(d)} writes through its struct pointer")
     check(max(offs) == 0x24,
           f"...at offsets 0x{min(offs):02X}..0x{max(offs):02X}, which is exactly the span "
           "Dev104_WriteAllChanRegs reads (word 0 .. word 0x24 -> blocks 0..0x12)")

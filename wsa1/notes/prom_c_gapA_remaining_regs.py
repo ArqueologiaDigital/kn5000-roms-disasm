@@ -20,7 +20,7 @@ QUESTION ANSWERED
   ★ AND A FOURTH REGISTER JOINS THEM, WHICH IS OUTSIDE THIS SCRIPT'S BRIEF (sec.3b).
   `0x0180 + chan` -- the one `FINDINGS-prom_c-dev10c-sibling-register-map.md` sec.4 decoded
   as a 0..0x7F value with 0x80 = "randomise", and whose high byte that section could only
-  call "the high-byte flags sub_FA9C60 accumulates in (XIZ+0xfa)" -- carries **the SLOT-1
+  call "the high-byte flags Voice_StageRegs_0180_AB accumulates in (XIZ+0xfa)" -- carries **the SLOT-1
   channel number in bits 13..8**, assembled by exactly the same idiom, from exactly the same
   allocator, as 0x0440 does for slot 2 and 0x04C0 for slot 3.  So the family is four
   registers, not three, and the four fields of 0x0180 tile its sixteen bits with no overlap.
@@ -216,7 +216,7 @@ def section_0():
 GROUPS = [
     # routine   slot  tone2  toneobj  subrec  bound  reg      class arms
     ("sub_FA9915", 2, 0x1E, 0x59, 0x00, 0x80, 0x0440, "k|0x20 / k"),
-    ("sub_FA9C60", 1, 0x20, 0x69, 0x09, 0x40, None,   "k|0x24 / k|0x04"),
+    ("Voice_StageRegs_0180_AB", 1, 0x20, 0x69, 0x09, 0x40, None,   "k|0x24 / k|0x04"),
     ("sub_FA9F19", 3, 0x22, 0x79, 0x12, 0x80, 0x04C0, "k|0x28 / k|0x08"),
 ]
 
@@ -300,7 +300,7 @@ def section_3b():
     print("\n3b. ★ AND THE SAME IDIOM FILLS 0x0180 + chan -- ITS HIGH BYTE IS THE SLOT-1")
     print("    CHANNEL.  (Not a gap-A register; it is the fourth member of the family, and")
     print("    it is what FINDINGS-prom_c-dev10c-sibling-register-map.md sec.4 could only")
-    print("    call 'the high-byte flags sub_FA9C60 accumulates in (XIZ+0xfa)'.)")
+    print("    call 'the high-byte flags Voice_StageRegs_0180_AB accumulates in (XIZ+0xfa)'.)")
     code(0xFA9C81, "be fa 02 00 00", "ld (XIZ+0xfa),0x0000   the accumulator, zeroed")
     code(0xFA9CB5, "cb ce 24", "or C,0x24              class k|0x24 (group 1)")
     code(0xFA9CE1, "cb 31 02", "set 0x02,C             class k|0x04 (group 1)")
@@ -379,7 +379,7 @@ def section_4():
     print("   the widest field each of the three touches on its cursor is +8, which is")
     print("   what makes 9 the sub-record size rather than an arithmetic coincidence:")
     code(0xFA9A6F, "bc 08 00 00", "ld (XIX+0x08),0x00   in sub_FA9915  (cursor +0)")
-    code(0xFA9DB5, "ba 08 00 00", "ld (XDE+0x08),0x00   in sub_FA9C60  (cursor +9)")
+    code(0xFA9DB5, "ba 08 00 00", "ld (XDE+0x08),0x00   in Voice_StageRegs_0180_AB  (cursor +9)")
     code(0xFAA05A, "ba 08 00 00", "ld (XDE+0x08),0x00   in sub_FA9F19  (cursor +18)")
 
 
@@ -602,7 +602,7 @@ def section_9():
     check("the two shift arms differ by exactly one bit position (8 vs 9)",
           (b(0xFC80B8, 3)[2], b(0xFC809D, 3)[2]), (8, 9))
     print("   and the order inside VoiceRegs_Stage_A is what makes the `or` at 0xFA96D4")
-    print("   safe: sub_FA842D (which calls sub_FC7FCA) runs BEFORE sub_FA95D4.")
+    print("   safe: Voice_StageRegs_0900_0940_0980_AB (which calls sub_FC7FCA) runs BEFORE sub_FA95D4.")
     code(0xFB0B11, "1d 2d 84 fa", "call 0xFA842D  -- calls sub_FC7FCA, seeds word 11")
     code(0xFB0B25, "1d d4 95 fa", "call 0xFA95D4  -- Voice_StageRegs_0500_08C0_AB")
     check("0xFB0B11 precedes 0xFB0B25 in the same routine", 0xFB0B11 < 0xFB0B25, True)
@@ -628,7 +628,7 @@ def section_9b():
 def section_9c():
     print("\n9c. ON THE C AND D STAGING PATHS NO CHANNEL CROSS-REFERENCE IS EVER COMPUTED")
     print("    0x0440/0x0480 come only from sub_FA9915, 0x04C0 only from sub_FA9F19 and")
-    print("    0x0180's high byte only from sub_FA9C60; none of the three is reachable")
+    print("    0x0180's high byte only from Voice_StageRegs_0180_AB; none of the three is reachable")
     print("    from VoiceRegs_Stage_C or _D, which call sub_FA96F7 instead.  sub_FA96F7")
     print("    clears words 8, 9, 10 and stages word 6 with a ZERO high byte -- so on C/D")
     print("    0x0180 is a bare 0..0x7F value.  Call-site census, over the whole 512 KiB,")

@@ -16294,6 +16294,21 @@ Link_WaitBlockDone__ret:
 
 ; Evidence: writes CR_DMAD2 (0x18) then CR_DMAM2 (0x2A); both `.equ`s above are
 ;          cited to mame/src/devices/cpu/tlcs900/tmp95c061.cpp:1394-1398.
+; ★ ROUND 6 ------------------------------------------------------------
+; uDMA2_SetDest -- micro-DMA channel 2 SETTER.  It has no `link`
+;          frame, so its arguments sit on the stack above the return address: (XSP+4) is a
+;          32-bit address and (XSP+8) the second argument, and the routine copies them into
+;          the CPU control registers CR_DMAD2 and CR_DMAM2.
+;          Evidence: the `ldc` operands at 0xF99FFB, 0xF9A001; the register numbers are the `.equ`s at the
+;          head of this group, each cited to mame/src/devices/cpu/tlcs900/tmp95c061.cpp.
+;          ⚠ CHANNELS 2 AND 3 PAIR THEIR REGISTERS THE OPPOSITE WAY ROUND, which is a
+;          property of the ROM and not a typo here: on channel 2 the DESTINATION setter also
+;          writes the MODE register and the SOURCE setter writes the COUNT; on channel 3 the
+;          SOURCE setter writes the mode and the DESTINATION setter writes the count.
+;          `python3 notes/prom_c_understanding_round6.py --udma` asserts that pairing from
+;          the listing, so if either routine is ever re-read it fails rather than drifting.
+;          Unknown: what either channel transfers.  Channel 3's count is read by
+;          Link_ServiceTask; nothing here says what channel 2 is for.
 uDMA2_SetDest:
 	ld xbc, (xsp+4)                            ; F99FF8  af 04 21
 	ldc_cr32 xbc, CR_DMAD2                     ; F99FFB  e9 2e 18
@@ -16302,6 +16317,21 @@ uDMA2_SetDest:
 	ret                                        ; F9A004  0e
 ; Evidence: writes CR_DMAS2 (0x08) then CR_DMAC2 (0x28) -- source address and
 ;          transfer count of micro-DMA channel 2; `.equ`s cited above.
+; ★ ROUND 6 ------------------------------------------------------------
+; uDMA2_SetSource -- micro-DMA channel 2 SETTER.  It has no `link`
+;          frame, so its arguments sit on the stack above the return address: (XSP+4) is a
+;          32-bit address and (XSP+8) the second argument, and the routine copies them into
+;          the CPU control registers CR_DMAS2 and CR_DMAC2.
+;          Evidence: the `ldc` operands at 0xF9A008, 0xF9A00E; the register numbers are the `.equ`s at the
+;          head of this group, each cited to mame/src/devices/cpu/tlcs900/tmp95c061.cpp.
+;          ⚠ CHANNELS 2 AND 3 PAIR THEIR REGISTERS THE OPPOSITE WAY ROUND, which is a
+;          property of the ROM and not a typo here: on channel 2 the DESTINATION setter also
+;          writes the MODE register and the SOURCE setter writes the COUNT; on channel 3 the
+;          SOURCE setter writes the mode and the DESTINATION setter writes the count.
+;          `python3 notes/prom_c_understanding_round6.py --udma` asserts that pairing from
+;          the listing, so if either routine is ever re-read it fails rather than drifting.
+;          Unknown: what either channel transfers.  Channel 3's count is read by
+;          Link_ServiceTask; nothing here says what channel 2 is for.
 uDMA2_SetSource:
 	ld xbc, (xsp+4)                            ; F9A005  af 04 21
 	ldc_cr32 xbc, CR_DMAS2                     ; F9A008  e9 2e 08
@@ -16309,6 +16339,21 @@ uDMA2_SetSource:
 	ldc_cr16 bc, CR_DMAC2                      ; F9A00E  d9 2e 28
 	ret                                        ; F9A011  0e
 ; Evidence: writes CR_DMAS3 (0x0C) then CR_DMAM3 (0x2E); `.equ`s cited above.
+; ★ ROUND 6 ------------------------------------------------------------
+; uDMA3_SetSource -- micro-DMA channel 3 SETTER.  It has no `link`
+;          frame, so its arguments sit on the stack above the return address: (XSP+4) is a
+;          32-bit address and (XSP+8) the second argument, and the routine copies them into
+;          the CPU control registers CR_DMAS3 and CR_DMAM3.
+;          Evidence: the `ldc` operands at 0xF9A015, 0xF9A01B; the register numbers are the `.equ`s at the
+;          head of this group, each cited to mame/src/devices/cpu/tlcs900/tmp95c061.cpp.
+;          ⚠ CHANNELS 2 AND 3 PAIR THEIR REGISTERS THE OPPOSITE WAY ROUND, which is a
+;          property of the ROM and not a typo here: on channel 2 the DESTINATION setter also
+;          writes the MODE register and the SOURCE setter writes the COUNT; on channel 3 the
+;          SOURCE setter writes the mode and the DESTINATION setter writes the count.
+;          `python3 notes/prom_c_understanding_round6.py --udma` asserts that pairing from
+;          the listing, so if either routine is ever re-read it fails rather than drifting.
+;          Unknown: what either channel transfers.  Channel 3's count is read by
+;          Link_ServiceTask; nothing here says what channel 2 is for.
 uDMA3_SetSource:
 	ld xbc, (xsp+4)                            ; F9A012  af 04 21
 	ldc_cr32 xbc, CR_DMAS3                     ; F9A015  e9 2e 0c
@@ -16316,6 +16361,21 @@ uDMA3_SetSource:
 	ldc_cr8 c, CR_DMAM3                        ; F9A01B  cb 2e 2e
 	ret                                        ; F9A01E  0e
 ; Evidence: writes CR_DMAD3 (0x1C) then CR_DMAC3 (0x2C); `.equ`s cited above.
+; ★ ROUND 6 ------------------------------------------------------------
+; uDMA3_SetDest -- micro-DMA channel 3 SETTER.  It has no `link`
+;          frame, so its arguments sit on the stack above the return address: (XSP+4) is a
+;          32-bit address and (XSP+8) the second argument, and the routine copies them into
+;          the CPU control registers CR_DMAD3 and CR_DMAC3.
+;          Evidence: the `ldc` operands at 0xF9A022, 0xF9A028; the register numbers are the `.equ`s at the
+;          head of this group, each cited to mame/src/devices/cpu/tlcs900/tmp95c061.cpp.
+;          ⚠ CHANNELS 2 AND 3 PAIR THEIR REGISTERS THE OPPOSITE WAY ROUND, which is a
+;          property of the ROM and not a typo here: on channel 2 the DESTINATION setter also
+;          writes the MODE register and the SOURCE setter writes the COUNT; on channel 3 the
+;          SOURCE setter writes the mode and the DESTINATION setter writes the count.
+;          `python3 notes/prom_c_understanding_round6.py --udma` asserts that pairing from
+;          the listing, so if either routine is ever re-read it fails rather than drifting.
+;          Unknown: what either channel transfers.  Channel 3's count is read by
+;          Link_ServiceTask; nothing here says what channel 2 is for.
 uDMA3_SetDest:
 	ld xbc, (xsp+4)                            ; F9A01F  af 04 21
 	ldc_cr32 xbc, CR_DMAD3                     ; F9A022  e9 2e 1c
@@ -16323,15 +16383,36 @@ uDMA3_SetDest:
 	ldc_cr16 bc, CR_DMAC3                      ; F9A028  d9 2e 2c
 	ret                                        ; F9A02B  0e
 ; Evidence: one `ldc WA,CR_DMAC2` and a `ret`; `.equ` cited above.
+; ★ ROUND 6 ------------------------------------------------------------
+; uDMA2_GetCount -- micro-DMA channel 2 GETTER.  It takes NO argument
+;          and has no frame: one `ldc` from CR_DMAC2 and a `ret`, returning the value in the
+;          register the instruction names.
+;          Evidence: the `ldc` operand at 0xF9A02C; the register number is the `.equ` at the head
+;          of this group, cited to mame/src/devices/cpu/tlcs900/tmp95c061.cpp.
+;          Unknown: what the channel transfers.
 uDMA2_GetCount:
 	ldc_16_cr wa, CR_DMAC2                     ; F9A02C  d8 2f 28
 	ret                                        ; F9A02F  0e
 ; Evidence: one `ldc WA,CR_DMAC3` and a `ret`; `.equ` cited above.  This is the
 ;          0xF9A030 that Link_ServiceTask calls to read the remaining count.
+; ★ ROUND 6 ------------------------------------------------------------
+; uDMA3_GetCount -- micro-DMA channel 3 GETTER.  It takes NO argument
+;          and has no frame: one `ldc` from CR_DMAC3 and a `ret`, returning the value in the
+;          register the instruction names.
+;          Evidence: the `ldc` operand at 0xF9A030; the register number is the `.equ` at the head
+;          of this group, cited to mame/src/devices/cpu/tlcs900/tmp95c061.cpp.
+;          Unknown: what the channel transfers.
 uDMA3_GetCount:
 	ldc_16_cr wa, CR_DMAC3                     ; F9A030  d8 2f 2c
 	ret                                        ; F9A033  0e
 ; Evidence: one `ldc XIY,CR_DMAD3` and a `ret`; `.equ` cited above.
+; ★ ROUND 6 ------------------------------------------------------------
+; uDMA3_GetDest -- micro-DMA channel 3 GETTER.  It takes NO argument
+;          and has no frame: one `ldc` from CR_DMAD3 and a `ret`, returning the value in the
+;          register the instruction names.
+;          Evidence: the `ldc` operand at 0xF9A034; the register number is the `.equ` at the head
+;          of this group, cited to mame/src/devices/cpu/tlcs900/tmp95c061.cpp.
+;          Unknown: what the channel transfers.
 uDMA3_GetDest:
 	ldc_32_cr xiy, CR_DMAD3                    ; F9A034  ed 2f 1c
 	ret                                        ; F9A037  0e
@@ -35520,11 +35601,11 @@ P7Units_ResolveProgramsAndReload__FA58DD:
 ;
 ; ★ IT IS A LEAF LAYER, and the call census says so: 254 literal call sites reach it
 ;   from outside, 54 from inside, and the outside ones are dominated by the block
-;   below -- sub_FAB0BD (17), sub_FAA4C3 (15), sub_FAACEE (15), sub_FA93AF (13),
-;   sub_FA842D (10), sub_FAA96C (9), Voice_StageChanSel_Reg0440_Reg0480 (8), Voice_StageRegs_0500_08C0_AB (8),
+;   below -- Voice_StageRegs_0800_B_ModeGe3 (17), Voice_StageRegs_0800_A (15), Voice_StageRegs_0800_B_ModeLt3 (15), Voice_StageRegs_09C0_0A00_0A40_AB (13),
+;   Voice_StageRegs_0900_0940_0980_AB (10), Voice_StageRegs_0800_CD (9), Voice_StageChanSel_Reg0440_Reg0480 (8), Voice_StageRegs_0500_08C0_AB (8),
 ;   VoiceParams_Compute_A (7) and so on.  ⚠ An earlier draft of this list named
 ;   sub_FAA61A (10); that address was a BYTE-PATTERN false entry, and with the
-;   filter its sites belong to sub_FAA4C3.
+;   filter its sites belong to Voice_StageRegs_0800_A.
 ;   ✔ Re-measured at the end of round 3: ALL 256 are now in converted code
 ;   (46 were still `.incbin` when this block was converted).  The tally is
 ;   `python3 notes/prom_c_module_map.py 0xFA5949 0xFA7E2C`.  ⚠ The figures were
@@ -36432,8 +36513,8 @@ sub_FA5E82__FA5ECE:
 ; Called from: 9 site(s) outside this module:
 ;          0xFA9992 in Voice_StageChanSel_Reg0440_Reg0480, 0xFA99B9 in Voice_StageChanSel_Reg0440_Reg0480__FA99A7
 ;          0xFA9B04 in Voice_StageChanSel_Reg0440_Reg0480__FA9ACB, 0xFA9BAD in Voice_StageChanSel_Reg0440_Reg0480__FA9B74
-;          0xFA9CC9 in sub_FA9C60, 0xFA9CF2 in sub_FA9C60__FA9CDE
-;          0xFA9E47 in sub_FA9C60__FA9E12, 0xFA9F7C in Voice_StageChanSel_Reg04C0
+;          0xFA9CC9 in Voice_StageRegs_0180_AB, 0xFA9CF2 in Voice_StageRegs_0180_AB__FA9CDE
+;          0xFA9E47 in Voice_StageRegs_0180_AB__FA9E12, 0xFA9F7C in Voice_StageChanSel_Reg04C0
 ;          0xFA9FA3 in Voice_StageChanSel_Reg04C0__FA9F94
 ;          1 site(s) inside this module:
 ;          0xFA6071
@@ -36828,11 +36909,11 @@ sub_FA607B__FA60F9:
 ;          0xFACCA7 in sub_FACC75, 0xFACCE8 in sub_FACC75__FACCD4
 ;          0xFACD4D in sub_FACD1B, 0xFACD8E in sub_FACD1B__FACD7A
 ;          0xFACDE1 in sub_FACDC1, 0xFACE34 in sub_FACE14
-;          0xFAE3E9 in sub_FAE34A__FAE3DC, 0xFAE523 in sub_FAE484__FAE516
-;          0xFAE668 in sub_FAE5C7__FAE659, 0xFAE7A4 in sub_FAE703__FAE795
-;          0xFAE8E9 in sub_FAE848__FAE8DA, 0xFAEA27 in sub_FAE986__FAEA18
-;          0xFB8A56 in sub_FB89F8__FB8A49, 0xFB8B56 in sub_FB8AF6__FB8B47
-;          0xFB8C56 in sub_FB8BF6__FB8C47
+;          0xFAE3E9 in Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3DC, 0xFAE523 in Voice_Restage_Reg0440_ValueCurve_ForPart__FAE516
+;          0xFAE668 in Voice_Restage_Reg0180_BaseCurve_ForPart__FAE659, 0xFAE7A4 in Voice_Restage_Reg0180_ValueCurve_ForPart__FAE795
+;          0xFAE8E9 in Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE8DA, 0xFAEA27 in Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA18
+;          0xFB8A56 in Voice_RecomputeEnv_AndWriteSlot2__FB8A49, 0xFB8B56 in Voice_RecomputeEnv_AndWriteSlot1__FB8B47
+;          0xFB8C56 in Voice_RecomputeEnv_AndWriteSlot1or3__FB8C47
 ; Inputs:  frame `link XIZ,-7`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA598C = sub_FA598C
@@ -39791,33 +39872,33 @@ Sat16_0_to_7FFF__FA7591:
 ; Clamp_ToRange_Word -- 0xFA7598..0xFA75B9 (34 bytes)
 ;
 ; Called from: 60 site(s) outside this module:
-;          0xFA85A4 in sub_FA842D__FA859D, 0xFA85F7 in sub_FA842D__FA859D
-;          0xFA8615 in sub_FA842D__FA860E, 0xFA8623 in sub_FA842D__FA8623
-;          0xFA94BA in sub_FA93AF__FA94B3, 0xFA94DA in sub_FA93AF__FA94B3
-;          0xFA952A in sub_FA93AF__FA94B3, 0xFA9548 in sub_FA93AF__FA9541
-;          0xFA9556 in sub_FA93AF__FA9556, 0xFA9573 in sub_FA93AF__FA9556
-;          0xFA9596 in sub_FA93AF__FA9556, 0xFA9604 in Voice_StageRegs_0500_08C0_AB
-;          0xFA969D in Voice_StageRegs_0500_08C0_AB__FA9676, 0xFAA552 in sub_FAA4C3__FAA552
-;          0xFAA60B in sub_FAA4C3__FAA60B, 0xFAA697 in sub_FAA4C3__FAA624
-;          0xFAA6C5 in sub_FAA4C3__FAA6C0, 0xFAA6EC in sub_FAA4C3__FAA6EC
-;          0xFAA794 in sub_FAA4C3__FAA706, 0xFAA7B8 in sub_FAA4C3__FAA7AD
-;          0xFAA7F8 in sub_FAA4C3__FAA7CC, 0xFAA80C in sub_FAA4C3__FAA80C
-;          0xFAA8FC in sub_FAA87E__FAA8F5, 0xFAA908 in sub_FAA87E__FAA8F5
-;          0xFAA9D0 in sub_FAA96C__FAA9D0, 0xFAAA1D in sub_FAA96C__FAA9E3
-;          0xFAAA7F in sub_FAA96C__FAAA26, 0xFAAAAD in sub_FAA96C__FAAAA8
-;          0xFAAAD4 in sub_FAA96C__FAAAD4, 0xFAAB41 in sub_FAA96C__FAAAEE
-;          0xFAAB51 in sub_FAA96C__FAAAEE, 0xFAAC7E in sub_FAAC00__FAAC77
-;          0xFAAC8A in sub_FAAC00__FAAC77, 0xFAAD9A in sub_FAACEE__FAAD9A
-;          0xFAAE45 in sub_FAACEE__FAAE45, 0xFAAED6 in sub_FAACEE__FAAE63
-;          0xFAAF04 in sub_FAACEE__FAAEFF, 0xFAAF2B in sub_FAACEE__FAAF2B
-;          0xFAAFD3 in sub_FAACEE__FAAF45, 0xFAAFF7 in sub_FAACEE__FAAFEC
-;          0xFAB037 in sub_FAACEE__FAB00B, 0xFAB04B in sub_FAACEE__FAB04B
-;          0xFAB137 in sub_FAB0BD__FAB137, 0xFAB1F0 in sub_FAB0BD__FAB1F0
-;          0xFAB263 in sub_FAB0BD__FAB20E, 0xFAB287 in sub_FAB0BD__FAB20E
-;          0xFAB2C8 in sub_FAB0BD__FAB20E, 0xFAB2EE in sub_FAB0BD__FAB2E9
-;          0xFAB30B in sub_FAB0BD__FAB30B, 0xFAB3A0 in sub_FAB0BD__FAB312
-;          0xFAB3C4 in sub_FAB0BD__FAB3B9, 0xFAB404 in sub_FAB0BD__FAB3D8
-;          0xFAB418 in sub_FAB0BD__FAB418, 0xFAB91B in Dev10C_StageRegs_0800_0840_FAB8CC__FAB91B
+;          0xFA85A4 in Voice_StageRegs_0900_0940_0980_AB__FA859D, 0xFA85F7 in Voice_StageRegs_0900_0940_0980_AB__FA859D
+;          0xFA8615 in Voice_StageRegs_0900_0940_0980_AB__FA860E, 0xFA8623 in Voice_StageRegs_0900_0940_0980_AB__FA8623
+;          0xFA94BA in Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3, 0xFA94DA in Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3
+;          0xFA952A in Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3, 0xFA9548 in Voice_StageRegs_09C0_0A00_0A40_AB__FA9541
+;          0xFA9556 in Voice_StageRegs_09C0_0A00_0A40_AB__FA9556, 0xFA9573 in Voice_StageRegs_09C0_0A00_0A40_AB__FA9556
+;          0xFA9596 in Voice_StageRegs_09C0_0A00_0A40_AB__FA9556, 0xFA9604 in Voice_StageRegs_0500_08C0_AB
+;          0xFA969D in Voice_StageRegs_0500_08C0_AB__FA9676, 0xFAA552 in Voice_StageRegs_0800_A__FAA552
+;          0xFAA60B in Voice_StageRegs_0800_A__FAA60B, 0xFAA697 in Voice_StageRegs_0800_A__FAA624
+;          0xFAA6C5 in Voice_StageRegs_0800_A__FAA6C0, 0xFAA6EC in Voice_StageRegs_0800_A__FAA6EC
+;          0xFAA794 in Voice_StageRegs_0800_A__FAA706, 0xFAA7B8 in Voice_StageRegs_0800_A__FAA7AD
+;          0xFAA7F8 in Voice_StageRegs_0800_A__FAA7CC, 0xFAA80C in Voice_StageRegs_0800_A__FAA80C
+;          0xFAA8FC in Voice_StageRegs_0840_0880_AB__FAA8F5, 0xFAA908 in Voice_StageRegs_0840_0880_AB__FAA8F5
+;          0xFAA9D0 in Voice_StageRegs_0800_CD__FAA9D0, 0xFAAA1D in Voice_StageRegs_0800_CD__FAA9E3
+;          0xFAAA7F in Voice_StageRegs_0800_CD__FAAA26, 0xFAAAAD in Voice_StageRegs_0800_CD__FAAAA8
+;          0xFAAAD4 in Voice_StageRegs_0800_CD__FAAAD4, 0xFAAB41 in Voice_StageRegs_0800_CD__FAAAEE
+;          0xFAAB51 in Voice_StageRegs_0800_CD__FAAAEE, 0xFAAC7E in Voice_StageRegs_0840_0880_CD__FAAC77
+;          0xFAAC8A in Voice_StageRegs_0840_0880_CD__FAAC77, 0xFAAD9A in Voice_StageRegs_0800_B_ModeLt3__FAAD9A
+;          0xFAAE45 in Voice_StageRegs_0800_B_ModeLt3__FAAE45, 0xFAAED6 in Voice_StageRegs_0800_B_ModeLt3__FAAE63
+;          0xFAAF04 in Voice_StageRegs_0800_B_ModeLt3__FAAEFF, 0xFAAF2B in Voice_StageRegs_0800_B_ModeLt3__FAAF2B
+;          0xFAAFD3 in Voice_StageRegs_0800_B_ModeLt3__FAAF45, 0xFAAFF7 in Voice_StageRegs_0800_B_ModeLt3__FAAFEC
+;          0xFAB037 in Voice_StageRegs_0800_B_ModeLt3__FAB00B, 0xFAB04B in Voice_StageRegs_0800_B_ModeLt3__FAB04B
+;          0xFAB137 in Voice_StageRegs_0800_B_ModeGe3__FAB137, 0xFAB1F0 in Voice_StageRegs_0800_B_ModeGe3__FAB1F0
+;          0xFAB263 in Voice_StageRegs_0800_B_ModeGe3__FAB20E, 0xFAB287 in Voice_StageRegs_0800_B_ModeGe3__FAB20E
+;          0xFAB2C8 in Voice_StageRegs_0800_B_ModeGe3__FAB20E, 0xFAB2EE in Voice_StageRegs_0800_B_ModeGe3__FAB2E9
+;          0xFAB30B in Voice_StageRegs_0800_B_ModeGe3__FAB30B, 0xFAB3A0 in Voice_StageRegs_0800_B_ModeGe3__FAB312
+;          0xFAB3C4 in Voice_StageRegs_0800_B_ModeGe3__FAB3B9, 0xFAB404 in Voice_StageRegs_0800_B_ModeGe3__FAB3D8
+;          0xFAB418 in Voice_StageRegs_0800_B_ModeGe3__FAB418, 0xFAB91B in Dev10C_StageRegs_0800_0840_FAB8CC__FAB91B
 ;          0xFAB9B5 in Dev10C_StageRegs_0800_0840_FAB8CC__FAB987, 0xFABA42 in Dev10C_StageRegs_0800_0840_FAB9D8__FABA42
 ;          0xFABAC0 in Dev10C_StageRegs_0800_0840_FAB9D8__FABA92, 0xFABBB6 in Dev10C_StageRegs_0900_0940__FABBAF
 ;          0xFABCB2 in Dev10C_StageRegs_09C0_0A00__FABCAB, 0xFABCD1 in Dev10C_StageRegs_09C0_0A00__FABCB9
@@ -39863,15 +39944,15 @@ Clamp_ToRange_Word__FA75B6:
 ; ScaleCoeff_TimesAbsDepth_Shr -- 0xFA75BA..0xFA7601 (72 bytes)
 ;
 ; Called from: 20 site(s) outside this module:
-;          0xFA84BE in sub_FA842D__FA84A3, 0xFA93D4 in sub_FA93AF
+;          0xFA84BE in Voice_StageRegs_0900_0940_0980_AB__FA84A3, 0xFA93D4 in Voice_StageRegs_09C0_0A00_0A40_AB
 ;          0xFA95F4 in Voice_StageRegs_0500_08C0_AB, 0xFA968E in Voice_StageRegs_0500_08C0_AB__FA9676
-;          0xFAA5BD in sub_FAA4C3__FAA565, 0xFAA5FB in sub_FAA4C3__FAA5E1
-;          0xFAA781 in sub_FAA4C3__FAA706, 0xFAA7EA in sub_FAA4C3__FAA7CC
-;          0xFAAA0F in sub_FAA96C__FAA9E3, 0xFAAB33 in sub_FAA96C__FAAAEE
-;          0xFAADF7 in sub_FAACEE__FAAD9A, 0xFAAE35 in sub_FAACEE__FAAE1B
-;          0xFAAFC0 in sub_FAACEE__FAAF45, 0xFAB029 in sub_FAACEE__FAB00B
-;          0xFAB1A2 in sub_FAB0BD__FAB14A, 0xFAB1E0 in sub_FAB0BD__FAB1C6
-;          0xFAB38D in sub_FAB0BD__FAB312, 0xFAB3F6 in sub_FAB0BD__FAB3D8
+;          0xFAA5BD in Voice_StageRegs_0800_A__FAA565, 0xFAA5FB in Voice_StageRegs_0800_A__FAA5E1
+;          0xFAA781 in Voice_StageRegs_0800_A__FAA706, 0xFAA7EA in Voice_StageRegs_0800_A__FAA7CC
+;          0xFAAA0F in Voice_StageRegs_0800_CD__FAA9E3, 0xFAAB33 in Voice_StageRegs_0800_CD__FAAAEE
+;          0xFAADF7 in Voice_StageRegs_0800_B_ModeLt3__FAAD9A, 0xFAAE35 in Voice_StageRegs_0800_B_ModeLt3__FAAE1B
+;          0xFAAFC0 in Voice_StageRegs_0800_B_ModeLt3__FAAF45, 0xFAB029 in Voice_StageRegs_0800_B_ModeLt3__FAB00B
+;          0xFAB1A2 in Voice_StageRegs_0800_B_ModeGe3__FAB14A, 0xFAB1E0 in Voice_StageRegs_0800_B_ModeGe3__FAB1C6
+;          0xFAB38D in Voice_StageRegs_0800_B_ModeGe3__FAB312, 0xFAB3F6 in Voice_StageRegs_0800_B_ModeGe3__FAB3D8
 ;          0xFABBA8 in Dev10C_StageRegs_0900_0940__FABB98, 0xFABCA4 in Dev10C_StageRegs_09C0_0A00__FABC94
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
@@ -39956,9 +40037,9 @@ ScaleCoeff_TimesAbsDepth_Shr__FA75E4:
 ; DetuneCurve_LookupSigned -- 0xFA7602..0xFA7653 (82 bytes)
 ;
 ; Called from: 10 site(s) outside this module:
-;          0xFA85AD in sub_FA842D__FA859D, 0xFA862B in sub_FA842D__FA8623
-;          0xFA8633 in sub_FA842D__FA8623, 0xFA94DE in sub_FA93AF__FA94B3
-;          0xFA9577 in sub_FA93AF__FA9556, 0xFA959A in sub_FA93AF__FA9556
+;          0xFA85AD in Voice_StageRegs_0900_0940_0980_AB__FA859D, 0xFA862B in Voice_StageRegs_0900_0940_0980_AB__FA8623
+;          0xFA8633 in Voice_StageRegs_0900_0940_0980_AB__FA8623, 0xFA94DE in Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3
+;          0xFA9577 in Voice_StageRegs_09C0_0A00_0A40_AB__FA9556, 0xFA959A in Voice_StageRegs_09C0_0A00_0A40_AB__FA9556
 ;          0xFA961F in Voice_StageRegs_0500_08C0_AB, 0xFA9676 in Voice_StageRegs_0500_08C0_AB__FA9676
 ;          0xFABBD6 in Dev10C_StageRegs_0900_0940__FABBD6, 0xFABCD5 in Dev10C_StageRegs_09C0_0A00__FABCB9
 ; Inputs:  (XIZ+0x08) = a SIGNED value.
@@ -40052,11 +40133,11 @@ DetuneCurve_LookupUnsigned:
 ;             (★ NAMED in wave 7 round 2; was `sub_FA766C`.)
 ;
 ; Called from: 14 site(s) outside this module:
-;          0xFA8594 in sub_FA842D__FA8570, 0xFA85E8 in sub_FA842D__FA859D
-;          0xFA94AA in sub_FA93AF__FA9486, 0xFA951B in sub_FA93AF__FA94B3
-;          0xFAA59A in sub_FAA4C3__FAA565, 0xFAA75A in sub_FAA4C3__FAA706
-;          0xFAADD4 in sub_FAACEE__FAAD9A, 0xFAAF99 in sub_FAACEE__FAAF45
-;          0xFAB17F in sub_FAB0BD__FAB14A, 0xFAB366 in sub_FAB0BD__FAB312
+;          0xFA8594 in Voice_StageRegs_0900_0940_0980_AB__FA8570, 0xFA85E8 in Voice_StageRegs_0900_0940_0980_AB__FA859D
+;          0xFA94AA in Voice_StageRegs_09C0_0A00_0A40_AB__FA9486, 0xFA951B in Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3
+;          0xFAA59A in Voice_StageRegs_0800_A__FAA565, 0xFAA75A in Voice_StageRegs_0800_A__FAA706
+;          0xFAADD4 in Voice_StageRegs_0800_B_ModeLt3__FAAD9A, 0xFAAF99 in Voice_StageRegs_0800_B_ModeLt3__FAAF45
+;          0xFAB17F in Voice_StageRegs_0800_B_ModeGe3__FAB14A, 0xFAB366 in Voice_StageRegs_0800_B_ModeGe3__FAB312
 ;          0xFAB9A7 in Dev10C_StageRegs_0800_0840_FAB8CC__FAB987, 0xFABAB2 in Dev10C_StageRegs_0800_0840_FAB9D8__FABA92
 ;          0xFABB7F in Dev10C_StageRegs_0900_0940__FABB61, 0xFABC75 in Dev10C_StageRegs_09C0_0A00__FABC57
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
@@ -40517,7 +40598,7 @@ sub_FA78C6__FA78E4:
 ; sub_FA78E8 -- 0xFA78E8..0xFA7926 (63 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFA9B23 in Voice_StageChanSel_Reg0440_Reg0480__FA9ACB, 0xFA9E65 in sub_FA9C60__FA9E12
+;          0xFA9B23 in Voice_StageChanSel_Reg0440_Reg0480__FA9ACB, 0xFA9E65 in Voice_StageRegs_0180_AB__FA9E12
 ;          0xFB6D8D in sub_FB6CEE__FB6D83
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
@@ -40607,11 +40688,11 @@ sub_FA7927__FA7969:
 	unlk32 xiz                                 ; FA796A  unlk XIZ
 	ret                                        ; FA796C  ret
 ; --------------------------------------------------------------------------
-; sub_FA796D -- 0xFA796D..0xFA79F3 (135 bytes)
+; EGEnv_Eval_BaseCurveA -- 0xFA796D..0xFA79F3 (135 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFA9AB2 in Voice_StageChanSel_Reg0440_Reg0480__FA9AAF, 0xFABE60 in sub_FABE30__FABE3F
-;          0xFAE45F in sub_FAE34A__FAE45B, 0xFB8AC9 in sub_FB89F8__FB8A85
+;          0xFA9AB2 in Voice_StageChanSel_Reg0440_Reg0480__FA9AAF, 0xFABE60 in Voice_RecomputeAllThreeBaseCurves__FABE3F
+;          0xFAE45F in Voice_Restage_Reg0440_BaseCurve_ForPart__FAE45B, 0xFB8AC9 in Voice_RecomputeEnv_AndWriteSlot2__FB8A85
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA7927 = sub_FA7927, 0xFCB11B = Multiply32
@@ -40620,10 +40701,28 @@ sub_FA7927__FA7969:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; EGEnv_Eval_BaseCurveA -- one of SIX evaluators of the
+;          27-byte record array at RAM 0x4CCF (`ld C,0x1b` 0xFA7974, `ld HL,0x4ccf` 0xFA797C).
+;          value = ((EGEnv_BaseCurve_A[rec+1] * rec[+2]) - correction) >> 7, clamped to
+;          0x1FFF, OR'd with EGEnv_ModeBits_Table[rec[+0] & 3].
+;          0xFA798B  add XBC,0x00FDE12B   the curve, indexed by rec[+1]*2
+;          0xFA79C2  srl 0x07,XIY         the >> 7
+;          0xFA79C7  cp XIY,0x1FFF        the clamp
+;          0xFA79E2  add XBC,0x00FDEBEC   EGEnv_ModeBits_Table, indexed by rec[+0]&3
+;          The correction (skipped when rec[+5] == 0) is sub_FA7927(product, rec[+6], rec[+5]).
+;          Evidence: `python3 notes/prom_c_understanding_round6.py --blocks`, which reads all
+;          six evaluators out of the listing and asserts that each indexes exactly one base
+;          curve, that the base evaluators clamp to 0x1FFF and the value evaluators to
+;          0x3FFF, and that only the base evaluators touch the mode-bit table.
+;          ★ THIS IS BLOCK A OF THREE.  A/B/C are THIS TREE'S labels for three groups that
+;          differ in one operand -- which of the three 256-byte base curves at 0xFDE12B,
+;          0xFDE22B and 0xFDE32B they index.  Block A's stager writes registers 0x0440 and
+;          0x0480; block B's writes 0x0180; block C's writes 0x04C0.  No ROM byte spells "A".
+;          Unknown: what the record at 0x4CCF is, what its index selects, and what the block
+;          modulates.
 ; --------------------------------------------------------------------------
-sub_FA796D:
+EGEnv_Eval_BaseCurveA:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FA796D  link XIZ,0xfffa
 	push	xhl                                   ; FA7971  push XHL
 	pushw	de                                   ; FA7972  push DE
@@ -40650,7 +40749,7 @@ sub_FA796D:
 	ld	xix, xiy                                ; FA79A5  ld XIX,XIY
 	ld	d, (xhl+5)                              ; FA79A7  ld D,(XHL+0x05)
 	cps	d, 0                                   ; FA79AA  cp D,0
-	jr z, sub_FA796D__FA79C0                   ; FA79AC  jr Z,0xfa79c0
+	jr z, EGEnv_Eval_BaseCurveA__FA79C0                   ; FA79AC  jr Z,0xfa79c0
 	push	0                                     ; FA79AE  push 0x00
 	push	d                                     ; FA79B0  push D
 	extz	xhl                                   ; FA79B2  extz XHL
@@ -40660,14 +40759,14 @@ sub_FA796D:
 	calr (0xFA7927 - 0xFA79BC)                 ; FA79B9  calr 0xfa7927
 	sub	xix, xiy                               ; FA79BC  sub XIX,XIY
 	inc	8, xsp                                 ; FA79BE  inc 0,XSP
-sub_FA796D__FA79C0:
+EGEnv_Eval_BaseCurveA__FA79C0:
 	ld	xiy, xix                                ; FA79C0  ld XIY,XIX
 	srl	xiy, 7                                 ; FA79C2  srl 0x07,XIY
 	ld	xix, xiy                                ; FA79C5  ld XIX,XIY
 	cp	xiy, 0x1FFF                             ; FA79C7  cp XIY,0x00001fff
-	jr ule, sub_FA796D__FA79D4                 ; FA79CD  jr ULE,0xfa79d4
+	jr ule, EGEnv_Eval_BaseCurveA__FA79D4                 ; FA79CD  jr ULE,0xfa79d4
 	ld	xix, 0x1FFF                             ; FA79CF  ld XIX,0x00001fff
-sub_FA796D__FA79D4:
+EGEnv_Eval_BaseCurveA__FA79D4:
 	ld	de, ix                                  ; FA79D4  ld DE,IX
 	extz	xhl                                   ; FA79D6  extz XHL
 	ld	c, (xhl)                                ; FA79D8  ld C,(XHL)
@@ -40684,11 +40783,11 @@ sub_FA796D__FA79D4:
 	unlk32 xiz                                 ; FA79F1  unlk XIZ
 	ret                                        ; FA79F3  ret
 ; --------------------------------------------------------------------------
-; sub_FA79F4 -- 0xFA79F4..0xFA7A4A (87 bytes)
+; EGEnv_Eval_ValueCurve_WithBaseCurveA -- 0xFA79F4..0xFA7A4A (87 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFA9A34 in Voice_StageChanSel_Reg0440_Reg0480__FA9A14, 0xFAE5A3 in sub_FAE484__FAE59F
-;          0xFB8AD7 in sub_FB89F8__FB8A85
+;          0xFA9A34 in Voice_StageChanSel_Reg0440_Reg0480__FA9A14, 0xFAE5A3 in Voice_Restage_Reg0440_ValueCurve_ForPart__FAE59F
+;          0xFB8AD7 in Voice_RecomputeEnv_AndWriteSlot2__FB8A85
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFCB11B = Multiply32
@@ -40697,10 +40796,24 @@ sub_FA796D__FA79D4:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; EGEnv_Eval_ValueCurve_WithBaseCurveA -- the
+;          other half of block A.  value = (EGEnv_ValueCurve_Simple[rec[+3]] * rec[+4]) >> 7,
+;          clamped to 0x3FFF, with NO mode bits.
+;          0xFA7A13  add XBC,0x00FDE02B   EGEnv_ValueCurve_Simple, indexed by rec[+3]*2
+;          0xFA7A2F  srl 0x07,XIY
+;          0xFA7A34  cp XIY,0x3FFF
+;          ★ THE PAIRING IS MEASURED, NOT ASSUMED.  All three value evaluators read the SAME
+;          table with the SAME fields, so what makes this one block A's is CO-OCCURRENCE: over
+;          the thirteen routines in the image that call any of the six evaluators, none calls
+;          one block's value evaluator beside another block's base evaluator, and none calls
+;          two blocks' value evaluators.  The one routine that spans blocks --
+;          Voice_RecomputeAllThreeBaseCurves -- calls all three BASE evaluators and no value
+;          evaluator, and is named rather than smoothed away.
+;          Evidence: notes/prom_c_understanding_round6.py --blocks prints the whole caller
+;          table and asserts both properties.
 ; --------------------------------------------------------------------------
-sub_FA79F4:
+EGEnv_Eval_ValueCurve_WithBaseCurveA:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA79F4  link XIZ,0xfffc
 	pushw	hl                                   ; FA79F8  push HL
 	push	xde                                   ; FA79F9  push XDE
@@ -40729,9 +40842,9 @@ sub_FA79F4:
 	srl	xiy, 7                                 ; FA7A2F  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7A32  ld XIX,XIY
 	cp	xiy, 0x3FFF                             ; FA7A34  cp XIY,0x00003fff
-	jr ule, sub_FA79F4__FA7A41                 ; FA7A3A  jr ULE,0xfa7a41
+	jr ule, EGEnv_Eval_ValueCurve_WithBaseCurveA__FA7A41                 ; FA7A3A  jr ULE,0xfa7a41
 	ld	xix, 0x3FFF                             ; FA7A3C  ld XIX,0x00003fff
-sub_FA79F4__FA7A41:
+EGEnv_Eval_ValueCurve_WithBaseCurveA__FA7A41:
 	ld	bc, ix                                  ; FA7A41  ld BC,IX
 	ld	wa, bc                                  ; FA7A43  ld WA,BC
 	pop	xix                                    ; FA7A45  pop XIX
@@ -40740,11 +40853,11 @@ sub_FA79F4__FA7A41:
 	unlk32 xiz                                 ; FA7A48  unlk XIZ
 	ret                                        ; FA7A4A  ret
 ; --------------------------------------------------------------------------
-; sub_FA7A4B -- 0xFA7A4B..0xFA7AD5 (139 bytes)
+; EGEnv_Eval_BaseCurveB -- 0xFA7A4B..0xFA7AD5 (139 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFA9DF9 in sub_FA9C60__FA9DF5, 0xFABEEB in sub_FABE30__FABECC
-;          0xFAE6DE in sub_FAE5C7__FAE6DA, 0xFB8BC9 in sub_FB8AF6__FB8B85
+;          0xFA9DF9 in Voice_StageRegs_0180_AB__FA9DF5, 0xFABEEB in Voice_RecomputeAllThreeBaseCurves__FABECC
+;          0xFAE6DE in Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6DA, 0xFB8BC9 in Voice_RecomputeEnv_AndWriteSlot1__FB8B85
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA7927 = sub_FA7927, 0xFCB11B = Multiply32
@@ -40753,10 +40866,14 @@ sub_FA79F4__FA7A41:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; EGEnv_Eval_BaseCurveB -- block B's base evaluator: the same
+;          shape as EGEnv_Eval_BaseCurveA with ONE operand changed, EGEnv_BaseCurve_B
+;          (`add XBC,0x00FDE22B` at 0xFA7A6D instead of 0x00FDE12B).  Same record array, same
+;          fields +0/+1/+2/+5/+6, same 0x1FFF clamp, same EGEnv_ModeBits_Table OR.
+;          Evidence: notes/prom_c_understanding_round6.py --blocks.
 ; --------------------------------------------------------------------------
-sub_FA7A4B:
+EGEnv_Eval_BaseCurveB:
 	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FA7A4B  link XIZ,0xfffa
 	push	xhl                                   ; FA7A4F  push XHL
 	pushw	de                                   ; FA7A50  push DE
@@ -40784,7 +40901,7 @@ sub_FA7A4B:
 	ld	xix, xiy                                ; FA7A87  ld XIX,XIY
 	ld	d, (xhl+5)                              ; FA7A89  ld D,(XHL+0x05)
 	cps	d, 0                                   ; FA7A8C  cp D,0
-	jr z, sub_FA7A4B__FA7AA2                   ; FA7A8E  jr Z,0xfa7aa2
+	jr z, EGEnv_Eval_BaseCurveB__FA7AA2                   ; FA7A8E  jr Z,0xfa7aa2
 	push	0                                     ; FA7A90  push 0x00
 	push	d                                     ; FA7A92  push D
 	extz	xhl                                   ; FA7A94  extz XHL
@@ -40794,14 +40911,14 @@ sub_FA7A4B:
 	calr (0xFA7927 - 0xFA7A9E)                 ; FA7A9B  calr 0xfa7927
 	sub	xix, xiy                               ; FA7A9E  sub XIX,XIY
 	inc	8, xsp                                 ; FA7AA0  inc 0,XSP
-sub_FA7A4B__FA7AA2:
+EGEnv_Eval_BaseCurveB__FA7AA2:
 	ld	xiy, xix                                ; FA7AA2  ld XIY,XIX
 	srl	xiy, 7                                 ; FA7AA4  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7AA7  ld XIX,XIY
 	cp	xiy, 0x1FFF                             ; FA7AA9  cp XIY,0x00001fff
-	jr ule, sub_FA7A4B__FA7AB6                 ; FA7AAF  jr ULE,0xfa7ab6
+	jr ule, EGEnv_Eval_BaseCurveB__FA7AB6                 ; FA7AAF  jr ULE,0xfa7ab6
 	ld	xix, 0x1FFF                             ; FA7AB1  ld XIX,0x00001fff
-sub_FA7A4B__FA7AB6:
+EGEnv_Eval_BaseCurveB__FA7AB6:
 	ld	de, ix                                  ; FA7AB6  ld DE,IX
 	extz	xhl                                   ; FA7AB8  extz XHL
 	ld	c, (xhl)                                ; FA7ABA  ld C,(XHL)
@@ -40818,11 +40935,11 @@ sub_FA7A4B__FA7AB6:
 	unlk32 xiz                                 ; FA7AD3  unlk XIZ
 	ret                                        ; FA7AD5  ret
 ; --------------------------------------------------------------------------
-; sub_FA7AD6 -- 0xFA7AD6..0xFA7B30 (91 bytes)
+; EGEnv_Eval_ValueCurve_WithBaseCurveB -- 0xFA7AD6..0xFA7B30 (91 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFA9D7A in sub_FA9C60__FA9D5B, 0xFAE824 in sub_FAE703__FAE820
-;          0xFB8BD7 in sub_FB8AF6__FB8B85
+;          0xFA9D7A in Voice_StageRegs_0180_AB__FA9D5B, 0xFAE824 in Voice_Restage_Reg0180_ValueCurve_ForPart__FAE820
+;          0xFB8BD7 in Voice_RecomputeEnv_AndWriteSlot1__FB8B85
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFCB11B = Multiply32
@@ -40831,10 +40948,13 @@ sub_FA7A4B__FA7AB6:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; EGEnv_Eval_ValueCurve_WithBaseCurveB -- block
+;          B's value evaluator; `add XBC,0x00FDE02B` at 0xFA7AF9, clamp 0x3FFF at 0xFA7B1A.
+;          Paired with EGEnv_Eval_BaseCurveB by the co-occurrence census
+;          (notes/prom_c_understanding_round6.py --blocks).
 ; --------------------------------------------------------------------------
-sub_FA7AD6:
+EGEnv_Eval_ValueCurve_WithBaseCurveB:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA7AD6  link XIZ,0xfffc
 	pushw	hl                                   ; FA7ADA  push HL
 	push	xde                                   ; FA7ADB  push XDE
@@ -40864,9 +40984,9 @@ sub_FA7AD6:
 	srl	xiy, 7                                 ; FA7B15  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7B18  ld XIX,XIY
 	cp	xiy, 0x3FFF                             ; FA7B1A  cp XIY,0x00003fff
-	jr ule, sub_FA7AD6__FA7B27                 ; FA7B20  jr ULE,0xfa7b27
+	jr ule, EGEnv_Eval_ValueCurve_WithBaseCurveB__FA7B27                 ; FA7B20  jr ULE,0xfa7b27
 	ld	xix, 0x3FFF                             ; FA7B22  ld XIX,0x00003fff
-sub_FA7AD6__FA7B27:
+EGEnv_Eval_ValueCurve_WithBaseCurveB__FA7B27:
 	ld	bc, ix                                  ; FA7B27  ld BC,IX
 	ld	wa, bc                                  ; FA7B29  ld WA,BC
 	pop	xix                                    ; FA7B2B  pop XIX
@@ -40875,11 +40995,11 @@ sub_FA7AD6__FA7B27:
 	unlk32 xiz                                 ; FA7B2E  unlk XIZ
 	ret                                        ; FA7B30  ret
 ; --------------------------------------------------------------------------
-; sub_FA7B31 -- 0xFA7B31..0xFA7C39 (265 bytes)
+; EGEnv_Eval_FreqWriteBaseCurve -- 0xFA7B31..0xFA7C39 (265 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFAA0A5 in Voice_StageChanSel_Reg04C0__FAA0A1, 0xFABF7E in sub_FABE30__FABF5D
-;          0xFAE966 in sub_FAE848__FAE962, 0xFB8CC9 in sub_FB8BF6__FB8C85
+;          0xFAA0A5 in Voice_StageChanSel_Reg04C0__FAA0A1, 0xFABF7E in Voice_RecomputeAllThreeBaseCurves__FABF5D
+;          0xFAE966 in Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE962, 0xFB8CC9 in Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D796, 0x00D7A0
 ; Calls:   0xFA7927 = sub_FA7927, 0xFCB11B = Multiply32
@@ -40888,10 +41008,22 @@ sub_FA7AD6__FA7B27:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; EGEnv_Eval_FreqWriteBaseCurve -- block C's base
+;          evaluator: the same shape again, indexing Voice_FreqWrite_BaseCurve (0xFDE32B) at
+;          0xFA7B5B and 0xFA7BCE, and it evaluates the record TWICE, storing 0x00D796 and
+;          0x00D7A0.
+;          ⚠ WHY NOT `EGEnv_Eval_BaseCurveC`.  0xFDE32B is the third of three 256-byte tables
+;          0x100 apart read by three routines that differ in nothing else, so
+;          `Voice_FreqWrite_BaseCurve` beside `EGEnv_BaseCurve_A` and `_B` looks like an
+;          inconsistency -- and renaming it was considered and REJECTED this round.  All three
+;          names are KN5000 sub-CPU transplants onto BYTE-IDENTICAL tables (prom_c 0xFDE12B /
+;          0xFDE22B / 0xFDE32B <- kn5000 sub-CPU 0x10A64 / 0x10B64 / 0x10C64,
+;          notes/FINDINGS-kn5000-transplant-offset.md).  The asymmetry is the SIBLING'S;
+;          erasing it would destroy what makes the transplant checkable.
+;          Evidence: notes/prom_c_understanding_round6.py --blocks.
 ; --------------------------------------------------------------------------
-sub_FA7B31:
+EGEnv_Eval_FreqWriteBaseCurve:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA7B31  link XIZ,0xfffc
 	pushw	hl                                   ; FA7B35  push HL
 	push	xde                                   ; FA7B36  push XDE
@@ -40904,7 +41036,7 @@ sub_FA7B31:
 	ld	bc, hl                                  ; FA7B46  ld BC,HL
 	add	de, bc                                 ; FA7B48  add DE,BC
 	cp (xiz+8), 0x40                           ; FA7B4A  cp (XIZ+0x08),0x40
-	jrl nc, sub_FA7B31__FA7BC4                 ; FA7B4E  jrl NC,0xfa7bc4
+	jrl nc, EGEnv_Eval_FreqWriteBaseCurve__FA7BC4                 ; FA7B4E  jrl NC,0xfa7bc4
 	extz	xde                                   ; FA7B51  extz XDE
 	ld	c, (xde+1)                              ; FA7B53  ld C,(XDE+0x01)
 	mul	c, 2                                   ; FA7B56  mul C,0x02
@@ -40922,7 +41054,7 @@ sub_FA7B31:
 	ld	xix, xiy                                ; FA7B75  ld XIX,XIY
 	ld	h, (xde+5)                              ; FA7B77  ld H,(XDE+0x05)
 	cps	h, 0                                   ; FA7B7A  cp H,0
-	jr z, sub_FA7B31__FA7B90                   ; FA7B7C  jr Z,0xfa7b90
+	jr z, EGEnv_Eval_FreqWriteBaseCurve__FA7B90                   ; FA7B7C  jr Z,0xfa7b90
 	push	0                                     ; FA7B7E  push 0x00
 	push	h                                     ; FA7B80  push H
 	extz	xde                                   ; FA7B82  extz XDE
@@ -40932,14 +41064,14 @@ sub_FA7B31:
 	calr (0xFA7927 - 0xFA7B8C)                 ; FA7B89  calr 0xfa7927
 	sub	xix, xiy                               ; FA7B8C  sub XIX,XIY
 	inc	8, xsp                                 ; FA7B8E  inc 0,XSP
-sub_FA7B31__FA7B90:
+EGEnv_Eval_FreqWriteBaseCurve__FA7B90:
 	ld	xiy, xix                                ; FA7B90  ld XIY,XIX
 	srl	xiy, 7                                 ; FA7B92  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7B95  ld XIX,XIY
 	cp	xiy, 0x1FFF                             ; FA7B97  cp XIY,0x00001fff
-	jr ule, sub_FA7B31__FA7BA4                 ; FA7B9D  jr ULE,0xfa7ba4
+	jr ule, EGEnv_Eval_FreqWriteBaseCurve__FA7BA4                 ; FA7B9D  jr ULE,0xfa7ba4
 	ld	xix, 0x1FFF                             ; FA7B9F  ld XIX,0x00001fff
-sub_FA7B31__FA7BA4:
+EGEnv_Eval_FreqWriteBaseCurve__FA7BA4:
 	ld	hl, ix                                  ; FA7BA4  ld HL,IX
 	extz	xde                                   ; FA7BA6  extz XDE
 	ld	c, (xde)                                ; FA7BA8  ld C,(XDE)
@@ -40950,8 +41082,8 @@ sub_FA7B31__FA7BA4:
 	ld	bc, (xbc)                               ; FA7BB8  ld BC,(XBC)
 	or	bc, hl                                  ; FA7BBA  or BC,HL
 	stw_da	(0xD796), bc                        ; FA7BBC  ld (0x00d796),BC
-	jrl sub_FA7B31__FA7C34                     ; FA7BC1  jrl T,0xfa7c34
-sub_FA7B31__FA7BC4:
+	jrl EGEnv_Eval_FreqWriteBaseCurve__FA7C34                     ; FA7BC1  jrl T,0xfa7c34
+EGEnv_Eval_FreqWriteBaseCurve__FA7BC4:
 	extz	xde                                   ; FA7BC4  extz XDE
 	ld	c, (xde+1)                              ; FA7BC6  ld C,(XDE+0x01)
 	mul	c, 2                                   ; FA7BC9  mul C,0x02
@@ -40969,7 +41101,7 @@ sub_FA7B31__FA7BC4:
 	ld	xix, xiy                                ; FA7BE8  ld XIX,XIY
 	ld	h, (xde+5)                              ; FA7BEA  ld H,(XDE+0x05)
 	cps	h, 0                                   ; FA7BED  cp H,0
-	jr z, sub_FA7B31__FA7C03                   ; FA7BEF  jr Z,0xfa7c03
+	jr z, EGEnv_Eval_FreqWriteBaseCurve__FA7C03                   ; FA7BEF  jr Z,0xfa7c03
 	push	0                                     ; FA7BF1  push 0x00
 	push	h                                     ; FA7BF3  push H
 	extz	xde                                   ; FA7BF5  extz XDE
@@ -40979,14 +41111,14 @@ sub_FA7B31__FA7BC4:
 	calr (0xFA7927 - 0xFA7BFF)                 ; FA7BFC  calr 0xfa7927
 	sub	xix, xiy                               ; FA7BFF  sub XIX,XIY
 	inc	8, xsp                                 ; FA7C01  inc 0,XSP
-sub_FA7B31__FA7C03:
+EGEnv_Eval_FreqWriteBaseCurve__FA7C03:
 	ld	xiy, xix                                ; FA7C03  ld XIY,XIX
 	srl	xiy, 7                                 ; FA7C05  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7C08  ld XIX,XIY
 	cp	xiy, 0x1FFF                             ; FA7C0A  cp XIY,0x00001fff
-	jr ule, sub_FA7B31__FA7C17                 ; FA7C10  jr ULE,0xfa7c17
+	jr ule, EGEnv_Eval_FreqWriteBaseCurve__FA7C17                 ; FA7C10  jr ULE,0xfa7c17
 	ld	xix, 0x1FFF                             ; FA7C12  ld XIX,0x00001fff
-sub_FA7B31__FA7C17:
+EGEnv_Eval_FreqWriteBaseCurve__FA7C17:
 	ld	hl, ix                                  ; FA7C17  ld HL,IX
 	extz	xde                                   ; FA7C19  extz XDE
 	ld	c, (xde)                                ; FA7C1B  ld C,(XDE)
@@ -40997,18 +41129,18 @@ sub_FA7B31__FA7C17:
 	ld	bc, (xbc)                               ; FA7C2B  ld BC,(XBC)
 	or	bc, hl                                  ; FA7C2D  or BC,HL
 	stw_da	(0xD7A0), bc                        ; FA7C2F  ld (0x00d7a0),BC
-sub_FA7B31__FA7C34:
+EGEnv_Eval_FreqWriteBaseCurve__FA7C34:
 	pop	xix                                    ; FA7C34  pop XIX
 	pop	xde                                    ; FA7C35  pop XDE
 	popw	hl                                    ; FA7C36  pop HL
 	unlk32 xiz                                 ; FA7C37  unlk XIZ
 	ret                                        ; FA7C39  ret
 ; --------------------------------------------------------------------------
-; sub_FA7C3A -- 0xFA7C3A..0xFA7CC8 (143 bytes)
+; EGEnv_Eval_ValueCurve_WithFreqWriteCurve -- 0xFA7C3A..0xFA7CC8 (143 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFAA024 in Voice_StageChanSel_Reg04C0__FAA00A, 0xFAEAAF in sub_FAE986__FAEAAB
-;          0xFB8CD2 in sub_FB8BF6__FB8C85
+;          0xFAA024 in Voice_StageChanSel_Reg04C0__FAA00A, 0xFAEAAF in Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAAB
+;          0xFB8CD2 in Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D798, 0x00D79C
 ; Calls:   0xFCB11B = Multiply32
@@ -41017,10 +41149,14 @@ sub_FA7B31__FA7C34:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; EGEnv_Eval_ValueCurve_WithFreqWriteCurve --
+;          block C's value evaluator; `add XBC,0x00FDE02B` at 0xFA7C5D, clamp 0x3FFF at
+;          0xFA7C84.  It also tests bit 5 of rec[+0] (`and C,0x20` at 0xFA7C95) and writes the
+;          globals 0x00D798 and 0x00D79C, which the other two value evaluators do not.
+;          Paired with EGEnv_Eval_FreqWriteBaseCurve by the co-occurrence census.
 ; --------------------------------------------------------------------------
-sub_FA7C3A:
+EGEnv_Eval_ValueCurve_WithFreqWriteCurve:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA7C3A  link XIZ,0xfffc
 	push	xhl                                   ; FA7C3E  push XHL
 	pushw	de                                   ; FA7C3F  push DE
@@ -41050,31 +41186,31 @@ sub_FA7C3A:
 	srl	xiy, 7                                 ; FA7C79  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7C7C  ld XIX,XIY
 	cp (xiz+8), 0x40                           ; FA7C7E  cp (XIZ+0x08),0x40
-	jr nc, sub_FA7C3A__FA7CAF                  ; FA7C82  jr NC,0xfa7caf
+	jr nc, EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CAF                  ; FA7C82  jr NC,0xfa7caf
 	cp	xiy, 0x3FFF                             ; FA7C84  cp XIY,0x00003fff
-	jr ule, sub_FA7C3A__FA7C91                 ; FA7C8A  jr ULE,0xfa7c91
+	jr ule, EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7C91                 ; FA7C8A  jr ULE,0xfa7c91
 	ld	xix, 0x3FFF                             ; FA7C8C  ld XIX,0x00003fff
-sub_FA7C3A__FA7C91:
+EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7C91:
 	extz	xhl                                   ; FA7C91  extz XHL
 	ld	c, (xhl)                                ; FA7C93  ld C,(XHL)
 	and	c, 32                                  ; FA7C95  and C,0x20
-	jr z, sub_FA7C3A__FA7CA6                   ; FA7C98  jr Z,0xfa7ca6
+	jr z, EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CA6                   ; FA7C98  jr Z,0xfa7ca6
 	ld	bc, ix                                  ; FA7C9A  ld BC,IX
 	set	15, bc                                 ; FA7C9C  set 0x0f,BC
 	stw_da	(0xD798), bc                        ; FA7C9F  ld (0x00d798),BC
-	jr sub_FA7C3A__FA7CC3                      ; FA7CA4  jr T,0xfa7cc3
-sub_FA7C3A__FA7CA6:
+	jr EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CC3                      ; FA7CA4  jr T,0xfa7cc3
+EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CA6:
 	ld	bc, ix                                  ; FA7CA6  ld BC,IX
 	stw_da	(0xD798), bc                        ; FA7CA8  ld (0x00d798),BC
-	jr sub_FA7C3A__FA7CC3                      ; FA7CAD  jr T,0xfa7cc3
-sub_FA7C3A__FA7CAF:
+	jr EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CC3                      ; FA7CAD  jr T,0xfa7cc3
+EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CAF:
 	cp	xix, 0x3FFF                             ; FA7CAF  cp XIX,0x00003fff
-	jr ule, sub_FA7C3A__FA7CBC                 ; FA7CB5  jr ULE,0xfa7cbc
+	jr ule, EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CBC                 ; FA7CB5  jr ULE,0xfa7cbc
 	ld	xix, 0x3FFF                             ; FA7CB7  ld XIX,0x00003fff
-sub_FA7C3A__FA7CBC:
+EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CBC:
 	ld	bc, ix                                  ; FA7CBC  ld BC,IX
 	stw_da	(0xD79C), bc                        ; FA7CBE  ld (0x00d79c),BC
-sub_FA7C3A__FA7CC3:
+EGEnv_Eval_ValueCurve_WithFreqWriteCurve__FA7CC3:
 	pop	xix                                    ; FA7CC3  pop XIX
 	popw	de                                    ; FA7CC4  pop DE
 	pop	xhl                                    ; FA7CC5  pop XHL
@@ -41974,7 +42110,7 @@ sub_FA814C:
 ; ★ AND THEN IT REWRITES THE TOP NIBBLE.  When (0x0014FF) & 4 is set and the staged word's
 ;          bits 15..12 are below 6, those four bits are DOUBLED while bits 11..0 pass through
 ;          unchanged (0xFA8244-0xFA8261; the identical fix-up is at 0xFA82F0-0xFA8318 in
-;          sub_FA826C).  So the register is read by the firmware as a 4-bit field plus a
+;          Voice_StageRegs_0040_B).  So the register is read by the firmware as a 4-bit field plus a
 ;          12-bit payload, and the 4-bit field is remapped by a global configuration bit.
 ;          [INFERENCE, stated as such] a small top field that a configuration bit doubles,
 ;          over a 12-bit index, is the shape of a memory-bank selector over a wave number.
@@ -42096,7 +42232,7 @@ Voice_SelectKeyZone_Reg0040__FA8266:
 	unlk32 xiz                                 ; FA8269  unlk XIZ
 	ret                                        ; FA826B  ret
 ; --------------------------------------------------------------------------
-; sub_FA826C -- 0xFA826C..0xFA8322 (183 bytes)
+; Voice_StageRegs_0040_B -- 0xFA826C..0xFA8322 (183 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB1EF0 in VoiceRegs_Stage_B
@@ -42110,10 +42246,24 @@ Voice_SelectKeyZone_Reg0040__FA8266:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0040_B -- stages word 1 (register 0x0040 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFA82E4, 0xFA830F, 0xFA8318.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_B.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0040 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FA826C:
+Voice_StageRegs_0040_B:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA826C  link XIZ,0xfffc
 	pushw	hl                                   ; FA8270  push HL
 	push	xde                                   ; FA8271  push XDE
@@ -42127,7 +42277,7 @@ sub_FA826C:
 	add	xix, xwa                               ; FA8286  add XIX,XWA
 	ld	h, (xde+3)                              ; FA8288  ld H,(XDE+0x03)
 	cps	h, 0                                   ; FA828B  cp H,0
-	jr nz, sub_FA826C__FA82A4                  ; FA828D  jr NZ,0xfa82a4
+	jr nz, Voice_StageRegs_0040_B__FA82A4                  ; FA828D  jr NZ,0xfa82a4
 	push	0                                     ; FA828F  push 0x00
 	push	h                                     ; FA8291  push H
 	extz	xde                                   ; FA8293  extz XDE
@@ -42137,10 +42287,10 @@ sub_FA826C:
 	pushw	bc                                   ; FA829B  push BC
 	call	0xFC3407                              ; FA829C  call 0xfc3407
 	ld	hl, wa                                  ; FA82A0  ld HL,WA
-	jr sub_FA826C__FA82BB                      ; FA82A2  jr T,0xfa82bb
-sub_FA826C__FA82A4:
+	jr Voice_StageRegs_0040_B__FA82BB                      ; FA82A2  jr T,0xfa82bb
+Voice_StageRegs_0040_B__FA82A4:
 	cps	h, 3                                   ; FA82A4  cp H,3
-	jr nc, sub_FA826C__FA82CB                  ; FA82A6  jr NC,0xfa82cb
+	jr nc, Voice_StageRegs_0040_B__FA82CB                  ; FA82A6  jr NC,0xfa82cb
 	push	0                                     ; FA82A8  push 0x00
 	push	h                                     ; FA82AA  push H
 	extz	xde                                   ; FA82AC  extz XDE
@@ -42150,22 +42300,22 @@ sub_FA826C__FA82A4:
 	pushw	bc                                   ; FA82B4  push BC
 	call	0xFC3480                              ; FA82B5  call 0xfc3480
 	ld	hl, wa                                  ; FA82B9  ld HL,WA
-sub_FA826C__FA82BB:
+Voice_StageRegs_0040_B__FA82BB:
 	inc	6, xsp                                 ; FA82BB  inc 6,XSP
 	pushw	hl                                   ; FA82BD  push HL
 	call	0xFC355B                              ; FA82BE  call 0xfc355b
 	mul	wa, 6                                  ; FA82C2  mul WA,0x0006
 	add	xix, xwa                               ; FA82C6  add XIX,XWA
-sub_FA826C__FA82C8:
+Voice_StageRegs_0040_B__FA82C8:
 	popw	bc                                    ; FA82C8  pop BC
-	jr sub_FA826C__FA82D8                      ; FA82C9  jr T,0xfa82d8
-sub_FA826C__FA82CB:
+	jr Voice_StageRegs_0040_B__FA82D8                      ; FA82C9  jr T,0xfa82d8
+Voice_StageRegs_0040_B__FA82CB:
 	pushw	de                                   ; FA82CB  push DE
 	call	0xFC3793                              ; FA82CC  call 0xfc3793
 	mul	wa, 6                                  ; FA82D0  mul WA,0x0006
 	add	xix, xwa                               ; FA82D4  add XIX,XWA
-	jr sub_FA826C__FA82C8                      ; FA82D6  jr T,0xfa82c8
-sub_FA826C__FA82D8:
+	jr Voice_StageRegs_0040_B__FA82C8                      ; FA82D6  jr T,0xfa82c8
+Voice_StageRegs_0040_B__FA82D8:
 	extz	xde                                   ; FA82D8  extz XDE
 	ld	(xde+15), xix                           ; FA82DA  ld (XDE+0x0f),XIX
 	extpfx5 0x9A, 0x01, 0x3E, 0x00, 0x40       ; FA82DD  or (XDE+0x01),0x4000
@@ -42175,7 +42325,7 @@ sub_FA826C__FA82D8:
 	stda16	(0x5A4F), bc                        ; FA82EC  ld (0x5a4f),BC
 	ldw_d16	bc, (0x14FF)                       ; FA82F0  ld BC,(0x14ff)
 	and	bc, 4                                  ; FA82F4  and BC,0x0004
-	jr z, sub_FA826C__FA831D                   ; FA82F8  jr Z,0xfa831d
+	jr z, Voice_StageRegs_0040_B__FA831D                   ; FA82F8  jr Z,0xfa831d
 	ldw_da	hl, (0xD760)                        ; FA82FA  ld HL,(0x00d760)
 	ld	bc, hl                                  ; FA82FF  ld BC,HL
 	and	bc, 0xF000                             ; FA8301  and BC,0xf000
@@ -42187,7 +42337,7 @@ sub_FA826C__FA82D8:
 	ld	bc, de                                  ; FA8314  ld BC,DE
 	or	bc, ix                                  ; FA8316  or BC,IX
 	stw_da	(0xD760), bc                        ; FA8318  ld (0x00d760),BC
-sub_FA826C__FA831D:
+Voice_StageRegs_0040_B__FA831D:
 	pop	xix                                    ; FA831D  pop XIX
 	pop	xde                                    ; FA831E  pop XDE
 	popw	hl                                    ; FA831F  pop HL
@@ -42259,7 +42409,7 @@ Voice_PitchAddZoneOffset_AB:
 ;          Voice_PitchAddZoneOffset_AB -> voice[+0x0A]  (+ the zone's tuning offset)
 ;          this routine       -> staging word 7 (+ the global word at 0x001503)
 ;          Dev10C_WriteAllChanRegs at 0xFB71D4/0xFB71DD sends staging word 7 to register
-;          `chan + 0x0400`, and the single-register accessor Dev10C_SetChanReg_0400 sends
+;          `chan + 0x0400`, and the single-register accessor Dev10C_SetChanPitch_Reg0400 sends
 ;          the SAME field on its own -- which is what the two controller-driven refresh
 ;          loops at 0xFADD1A and 0xFADDB8 call after this routine runs.
 ; Evidence: `ld HL,(XIX+0x0A)` / `ld BC,(0x1503)` at 0xFA8353, the Sat16 call at 0xFA8399 and
@@ -42413,7 +42563,7 @@ Voice_StagePitch_Reg0400_CD__FA841D:
 	unlk32 xiz                                 ; FA842A  unlk XIZ
 	ret                                        ; FA842C  ret
 ; --------------------------------------------------------------------------
-; sub_FA842D -- 0xFA842D..0xFA866A (574 bytes)
+; Voice_StageRegs_0900_0940_0980_AB -- 0xFA842D..0xFA866A (574 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB0B11 in VoiceRegs_Stage_A, 0xFB1EFF in VoiceRegs_Stage_B
@@ -42427,8 +42577,6 @@ Voice_StagePitch_Reg0400_CD__FA841D:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
 ; ★ ROUND 2, 2026-08-25.  IT BUILDS REGISTERS 0x0900 / 0x0940 / 0x0980 OF BLOCK GROUP 0x20-0x29.
 ;          Each is written as `(hi << 8) | (lo & 0xFF)`: the HIGH byte comes from
 ;          Voice_EnvelopeLevel_Curve (this routine makes SIX of prom_c's thirty
@@ -42438,8 +42586,24 @@ Voice_StagePitch_Reg0400_CD__FA841D:
 ;          is NOT asserted.  See the 0x0800..0x0A40 block comment in front of
 ;          Dev10C_WriteAllChanRegs; census by notes/prom_c_reg_bytepair_check.py.
 ;          ⚠ This says what THREE of the routine's outputs are, not what it is.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0900_0940_0980_AB -- stages word 16 (register 0x0900 + chan), word 17 (register 0x0940 + chan), word 18 (register 0x0980 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFA85C0, 0xFA8649, 0xFA865C.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_A, VoiceRegs_Stage_B.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0900 / 0x0940 / 0x0980 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FA842D:
+Voice_StageRegs_0900_0940_0980_AB:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FA842D  link XIZ,0xffec
 	pushw	hl                                   ; FA8431  push HL
 	pushw	de                                   ; FA8432  push DE
@@ -42450,18 +42614,18 @@ sub_FA842D:
 	ld	(xiz-16), xwa                           ; FA843C  ld (XIZ+0xf0),XWA
 	ld	iy, (xbc+1)                             ; FA843F  ld IY,(XBC+0x01)
 	and	iy, 0x200                              ; FA8442  and IY,0x0200
-	jr z, sub_FA842D__FA8458                   ; FA8446  jr Z,0xfa8458
+	jr z, Voice_StageRegs_0900_0940_0980_AB__FA8458                   ; FA8446  jr Z,0xfa8458
 	lda_24	xiy, (0xD75E)                       ; FA8448  lda XIY,0x00d75e
 	push	xiy                                   ; FA844D  push XIY
 	pushw	bc                                   ; FA844E  push BC
 	call	0xFC7FCA                              ; FA844F  call 0xfc7fca
 	inc	6, xsp                                 ; FA8453  inc 6,XSP
-	jrl sub_FA842D__FA8665                     ; FA8455  jrl T,0xfa8665
-sub_FA842D__FA8458:
+	jrl Voice_StageRegs_0900_0940_0980_AB__FA8665                     ; FA8455  jrl T,0xfa8665
+Voice_StageRegs_0900_0940_0980_AB__FA8458:
 	ld	xbc, (xiz-16)                           ; FA8458  ld XBC,(XIZ+0xf0)
 	ld	a, (xbc+7)                              ; FA845B  ld A,(XBC+0x07)
 	cps	a, 0                                   ; FA845E  cp A,0
-	jr ge, sub_FA842D__FA8488                  ; FA8460  jr GE,0xfa8488
+	jr ge, Voice_StageRegs_0900_0940_0980_AB__FA8488                  ; FA8460  jr GE,0xfa8488
 	ld	a, (xbc+10)                             ; FA8462  ld A,(XBC+0x0a)
 	exts	wa                                    ; FA8465  exts WA
 	cpl	wa                                     ; FA8467  cpl WA
@@ -42477,8 +42641,8 @@ sub_FA842D__FA8458:
 	cpl	wa                                     ; FA847F  cpl WA
 	inc	1, wa                                  ; FA8481  inc 1,WA
 	ld	(xiz-8), wa                             ; FA8483  ld (XIZ+0xf8),WA
-	jr sub_FA842D__FA84A3                      ; FA8486  jr T,0xfa84a3
-sub_FA842D__FA8488:
+	jr Voice_StageRegs_0900_0940_0980_AB__FA84A3                      ; FA8486  jr T,0xfa84a3
+Voice_StageRegs_0900_0940_0980_AB__FA8488:
 	ld	xbc, (xiz-16)                           ; FA8488  ld XBC,(XIZ+0xf0)
 	ld	a, (xbc+10)                             ; FA848B  ld A,(XBC+0x0a)
 	exts	wa                                    ; FA848E  exts WA
@@ -42489,11 +42653,11 @@ sub_FA842D__FA8488:
 	ld	a, (xbc+14)                             ; FA849B  ld A,(XBC+0x0e)
 	exts	wa                                    ; FA849E  exts WA
 	ld	(xiz-8), wa                             ; FA84A0  ld (XIZ+0xf8),WA
-sub_FA842D__FA84A3:
+Voice_StageRegs_0900_0940_0980_AB__FA84A3:
 	ld	xbc, (xiz-16)                           ; FA84A3  ld XBC,(XIZ+0xf0)
 	ld	h, (xbc+17)                             ; FA84A6  ld H,(XBC+0x11)
 	cps	h, 0                                   ; FA84A9  cp H,0
-	jrl z, sub_FA842D__FA8530                  ; FA84AB  jrl Z,0xfa8530
+	jrl z, Voice_StageRegs_0900_0940_0980_AB__FA8530                  ; FA84AB  jrl Z,0xfa8530
 	pushw	4                                    ; FA84AE  push 0x0004
 	ld	wa, (xiz+8)                             ; FA84B1  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FA84B4  extz XWA
@@ -42514,10 +42678,10 @@ sub_FA842D__FA84A3:
 	ld	de, bc                                  ; FA84DB  ld DE,BC
 	inc	6, xsp                                 ; FA84DD  inc 6,XSP
 	cps	h, 0                                   ; FA84DF  cp H,0
-	jr z, sub_FA842D__FA84E7                   ; FA84E1  jr Z,0xfa84e7
+	jr z, Voice_StageRegs_0900_0940_0980_AB__FA84E7                   ; FA84E1  jr Z,0xfa84e7
 	add	bc, wa                                 ; FA84E3  add BC,WA
 	ld	de, bc                                  ; FA84E5  ld DE,BC
-sub_FA842D__FA84E7:
+Voice_StageRegs_0900_0940_0980_AB__FA84E7:
 	ld	xbc, (xiz-16)                           ; FA84E7  ld XBC,(XIZ+0xf0)
 	ld	a, (xbc+11)                             ; FA84EA  ld A,(XBC+0x0b)
 	ld	(xiz-18), a                             ; FA84ED  ld (XIZ+0xee),A
@@ -42528,15 +42692,15 @@ sub_FA842D__FA84E7:
 	ld	l, w                                    ; FA84FC  ld L,W
 	extz	hl                                    ; FA84FE  extz HL
 	cp (xiz-18), 0x00                          ; FA8500  cp (XIZ+0xee),0x00
-	jr z, sub_FA842D__FA850B                   ; FA8504  jr Z,0xfa850b
+	jr z, Voice_StageRegs_0900_0940_0980_AB__FA850B                   ; FA8504  jr Z,0xfa850b
 	ld	wa, (xiz-4)                             ; FA8506  ld WA,(XIZ+0xfc)
 	add	hl, wa                                 ; FA8509  add HL,WA
-sub_FA842D__FA850B:
+Voice_StageRegs_0900_0940_0980_AB__FA850B:
 	ld	xbc, (xiz-16)                           ; FA850B  ld XBC,(XIZ+0xf0)
 	ld	a, (xbc+13)                             ; FA850E  ld A,(XBC+0x0d)
 	ld	(xiz-1), a                              ; FA8511  ld (XIZ+0xff),A
 	cps	a, 0                                   ; FA8514  cp A,0
-	jr z, sub_FA842D__FA8559                   ; FA8516  jr Z,0xfa8559
+	jr z, Voice_StageRegs_0900_0940_0980_AB__FA8559                   ; FA8516  jr Z,0xfa8559
 	extz	wa                                    ; FA8518  extz WA
 	extz	xwa                                   ; FA851A  extz XWA
 	add	xwa, 0xFDEFD9                          ; FA851C  add XWA,0x00fdefd9
@@ -42545,8 +42709,8 @@ sub_FA842D__FA850B:
 	extz	ix                                    ; FA8527  extz IX
 	ld	wa, (xiz-4)                             ; FA8529  ld WA,(XIZ+0xfc)
 	add	ix, wa                                 ; FA852C  add IX,WA
-	jr sub_FA842D__FA8570                      ; FA852E  jr T,0xfa8570
-sub_FA842D__FA8530:
+	jr Voice_StageRegs_0900_0940_0980_AB__FA8570                      ; FA852E  jr T,0xfa8570
+Voice_StageRegs_0900_0940_0980_AB__FA8530:
 	ld	xbc, (xiz-16)                           ; FA8530  ld XBC,(XIZ+0xf0)
 	ld	a, (xbc+9)                              ; FA8533  ld A,(XBC+0x09)
 	extz	wa                                    ; FA8536  extz WA
@@ -42562,7 +42726,7 @@ sub_FA842D__FA8530:
 	ld	w, (xwa)                                ; FA8553  ld W,(XWA)
 	ld	l, w                                    ; FA8555  ld L,W
 	extz	hl                                    ; FA8557  extz HL
-sub_FA842D__FA8559:
+Voice_StageRegs_0900_0940_0980_AB__FA8559:
 	ld	xbc, (xiz-16)                           ; FA8559  ld XBC,(XIZ+0xf0)
 	ld	a, (xbc+13)                             ; FA855C  ld A,(XBC+0x0d)
 	extz	wa                                    ; FA855F  extz WA
@@ -42571,12 +42735,12 @@ sub_FA842D__FA8559:
 	ld	w, (xwa)                                ; FA8569  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FA856B  ld IXL,W
 	extz	ix                                    ; FA856E  extz IX
-sub_FA842D__FA8570:
+Voice_StageRegs_0900_0940_0980_AB__FA8570:
 	ld	xbc, (xiz-16)                           ; FA8570  ld XBC,(XIZ+0xf0)
 	ld	a, (xbc+20)                             ; FA8573  ld A,(XBC+0x14)
 	ld	(xiz-5), a                              ; FA8576  ld (XIZ+0xfb),A
 	cps	a, 0                                   ; FA8579  cp A,0
-	jr z, sub_FA842D__FA859D                   ; FA857B  jr Z,0xfa859d
+	jr z, Voice_StageRegs_0900_0940_0980_AB__FA859D                   ; FA857B  jr Z,0xfa859d
 	pushw	wa                                   ; FA857D  push WA
 	pushw	0x7F                                 ; FA857E  push 0x007f
 	pushw	0                                    ; FA8581  push 0x0000
@@ -42591,7 +42755,7 @@ sub_FA842D__FA8570:
 	add	de, wa                                 ; FA8597  add DE,WA
 	inc	8, xsp                                 ; FA8599  inc 0,XSP
 	inc	2, xsp                                 ; FA859B  inc 2,XSP
-sub_FA842D__FA859D:
+Voice_StageRegs_0900_0940_0980_AB__FA859D:
 	pushw	0                                    ; FA859D  push 0x0000
 	pushw	0xFF                                 ; FA85A0  push 0x00ff
 	pushw	de                                   ; FA85A3  push DE
@@ -42609,7 +42773,7 @@ sub_FA842D__FA859D:
 	ld	d, (xbc+21)                             ; FA85C8  ld D,(XBC+0x15)
 	inc	8, xsp                                 ; FA85CB  inc 0,XSP
 	cps	d, 0                                   ; FA85CD  cp D,0
-	jr z, sub_FA842D__FA860E                   ; FA85CF  jr Z,0xfa860e
+	jr z, Voice_StageRegs_0900_0940_0980_AB__FA860E                   ; FA85CF  jr Z,0xfa860e
 	push	0                                     ; FA85D1  push 0x00
 	push	d                                     ; FA85D3  push D
 	pushw	0x7F                                 ; FA85D5  push 0x007f
@@ -42635,8 +42799,8 @@ sub_FA842D__FA859D:
 	ld	bc, ix                                  ; FA8606  ld BC,IX
 	extpfx3 0x9E, 0xEE, 0x81                   ; FA8608  add BC,(XIZ+0xee)
 	pushw	bc                                   ; FA860B  push BC
-	jr sub_FA842D__FA8623                      ; FA860C  jr T,0xfa8623
-sub_FA842D__FA860E:
+	jr Voice_StageRegs_0900_0940_0980_AB__FA8623                      ; FA860C  jr T,0xfa8623
+Voice_StageRegs_0900_0940_0980_AB__FA860E:
 	pushw	0                                    ; FA860E  push 0x0000
 	pushw	0xFF                                 ; FA8611  push 0x00ff
 	pushw	hl                                   ; FA8614  push HL
@@ -42646,7 +42810,7 @@ sub_FA842D__FA860E:
 	pushw	0                                    ; FA861C  push 0x0000
 	pushw	0xFF                                 ; FA861F  push 0x00ff
 	pushw	ix                                   ; FA8622  push IX
-sub_FA842D__FA8623:
+Voice_StageRegs_0900_0940_0980_AB__FA8623:
 	calr (0xFA7598 - 0xFA8626)                 ; FA8623  calr 0xfa7598
 	ld	ix, wa                                  ; FA8626  ld IX,WA
 	extpfx3 0x9E, 0xF4, 0x04                   ; FA8628  pushw (XIZ+0xf4)
@@ -42670,7 +42834,7 @@ sub_FA842D__FA8623:
 	stw_da	(0xD782), bc                        ; FA865C  ld (0x00d782),BC
 	inc	8, xsp                                 ; FA8661  inc 0,XSP
 	inc	2, xsp                                 ; FA8663  inc 2,XSP
-sub_FA842D__FA8665:
+Voice_StageRegs_0900_0940_0980_AB__FA8665:
 	popw	ix                                    ; FA8665  pop IX
 	popw	de                                    ; FA8666  pop DE
 	popw	hl                                    ; FA8667  pop HL
@@ -44602,7 +44766,7 @@ Voice_StagePair_Reg0100_0140_CD__FA93A9:
 	unlk32 xiz                                 ; FA93AC  unlk XIZ
 	ret                                        ; FA93AE  ret
 ; --------------------------------------------------------------------------
-; sub_FA93AF -- 0xFA93AF..0xFA95D3 (549 bytes)
+; Voice_StageRegs_09C0_0A00_0A40_AB -- 0xFA93AF..0xFA95D3 (549 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB0B20 in VoiceRegs_Stage_A, 0xFB1F0E in VoiceRegs_Stage_B
@@ -44615,8 +44779,6 @@ Voice_StagePair_Reg0100_0140_CD__FA93A9:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
 ; ★ ROUND 2, 2026-08-25.  IT BUILDS REGISTERS 0x09C0 / 0x0A00 / 0x0A40 OF BLOCK GROUP 0x20-0x29.
 ;          Each is written as `(hi << 8) | (lo & 0xFF)`: the HIGH byte comes from
 ;          Voice_EnvelopeLevel_Curve (this routine makes SIX of prom_c's thirty
@@ -44626,8 +44788,24 @@ Voice_StagePair_Reg0100_0140_CD__FA93A9:
 ;          is NOT asserted.  See the 0x0800..0x0A40 block comment in front of
 ;          Dev10C_WriteAllChanRegs; census by notes/prom_c_reg_bytepair_check.py.
 ;          ⚠ This says what THREE of the routine's outputs are, not what it is.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_09C0_0A00_0A40_AB -- stages word 19 (register 0x09C0 + chan), word 20 (register 0x0A00 + chan), word 21 (register 0x0A40 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFA94F1, 0xFA95B0, 0xFA95C3.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_A, VoiceRegs_Stage_B.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x09C0 / 0x0A00 / 0x0A40 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FA93AF:
+Voice_StageRegs_09C0_0A00_0A40_AB:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FA93AF  link XIZ,0xfff0
 	pushw	hl                                   ; FA93B3  push HL
 	pushw	de                                   ; FA93B4  push DE
@@ -44638,7 +44816,7 @@ sub_FA93AF:
 	ld	(xiz-10), xwa                           ; FA93BE  ld (XIZ+0xf6),XWA
 	ld	h, (xwa+71)                             ; FA93C1  ld H,(XWA+0x47)
 	cps	h, 0                                   ; FA93C4  cp H,0
-	jrl z, sub_FA93AF__FA9446                  ; FA93C6  jrl Z,0xfa9446
+	jrl z, Voice_StageRegs_09C0_0A00_0A40_AB__FA9446                  ; FA93C6  jrl Z,0xfa9446
 	pushw	4                                    ; FA93C9  push 0x0004
 	ld	a, (xbc+12)                             ; FA93CC  ld A,(XBC+0x0c)
 	pushw	wa                                   ; FA93CF  push WA
@@ -44657,10 +44835,10 @@ sub_FA93AF:
 	ld	de, bc                                  ; FA93F1  ld DE,BC
 	inc	6, xsp                                 ; FA93F3  inc 6,XSP
 	cps	h, 0                                   ; FA93F5  cp H,0
-	jr z, sub_FA93AF__FA93FD                   ; FA93F7  jr Z,0xfa93fd
+	jr z, Voice_StageRegs_09C0_0A00_0A40_AB__FA93FD                   ; FA93F7  jr Z,0xfa93fd
 	add	bc, wa                                 ; FA93F9  add BC,WA
 	ld	de, bc                                  ; FA93FB  ld DE,BC
-sub_FA93AF__FA93FD:
+Voice_StageRegs_09C0_0A00_0A40_AB__FA93FD:
 	ld	xbc, (xiz-10)                           ; FA93FD  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc+65)                             ; FA9400  ld A,(XBC+0x41)
 	ld	(xiz-12), a                             ; FA9403  ld (XIZ+0xf4),A
@@ -44671,15 +44849,15 @@ sub_FA93AF__FA93FD:
 	ld	l, w                                    ; FA9412  ld L,W
 	extz	hl                                    ; FA9414  extz HL
 	cp (xiz-12), 0x00                          ; FA9416  cp (XIZ+0xf4),0x00
-	jr z, sub_FA93AF__FA9421                   ; FA941A  jr Z,0xfa9421
+	jr z, Voice_StageRegs_09C0_0A00_0A40_AB__FA9421                   ; FA941A  jr Z,0xfa9421
 	ld	wa, (xiz-4)                             ; FA941C  ld WA,(XIZ+0xfc)
 	add	hl, wa                                 ; FA941F  add HL,WA
-sub_FA93AF__FA9421:
+Voice_StageRegs_09C0_0A00_0A40_AB__FA9421:
 	ld	xbc, (xiz-10)                           ; FA9421  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc+67)                             ; FA9424  ld A,(XBC+0x43)
 	ld	(xiz-1), a                              ; FA9427  ld (XIZ+0xff),A
 	cps	a, 0                                   ; FA942A  cp A,0
-	jr z, sub_FA93AF__FA946F                   ; FA942C  jr Z,0xfa946f
+	jr z, Voice_StageRegs_09C0_0A00_0A40_AB__FA946F                   ; FA942C  jr Z,0xfa946f
 	extz	wa                                    ; FA942E  extz WA
 	extz	xwa                                   ; FA9430  extz XWA
 	add	xwa, 0xFDEFD9                          ; FA9432  add XWA,0x00fdefd9
@@ -44688,8 +44866,8 @@ sub_FA93AF__FA9421:
 	extz	ix                                    ; FA943D  extz IX
 	ld	wa, (xiz-4)                             ; FA943F  ld WA,(XIZ+0xfc)
 	add	ix, wa                                 ; FA9442  add IX,WA
-	jr sub_FA93AF__FA9486                      ; FA9444  jr T,0xfa9486
-sub_FA93AF__FA9446:
+	jr Voice_StageRegs_09C0_0A00_0A40_AB__FA9486                      ; FA9444  jr T,0xfa9486
+Voice_StageRegs_09C0_0A00_0A40_AB__FA9446:
 	ld	xbc, (xiz-10)                           ; FA9446  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc+63)                             ; FA9449  ld A,(XBC+0x3f)
 	extz	wa                                    ; FA944C  extz WA
@@ -44705,7 +44883,7 @@ sub_FA93AF__FA9446:
 	ld	w, (xwa)                                ; FA9469  ld W,(XWA)
 	ld	l, w                                    ; FA946B  ld L,W
 	extz	hl                                    ; FA946D  extz HL
-sub_FA93AF__FA946F:
+Voice_StageRegs_09C0_0A00_0A40_AB__FA946F:
 	ld	xbc, (xiz-10)                           ; FA946F  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc+67)                             ; FA9472  ld A,(XBC+0x43)
 	extz	wa                                    ; FA9475  extz WA
@@ -44714,12 +44892,12 @@ sub_FA93AF__FA946F:
 	ld	w, (xwa)                                ; FA947F  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FA9481  ld IXL,W
 	extz	ix                                    ; FA9484  extz IX
-sub_FA93AF__FA9486:
+Voice_StageRegs_09C0_0A00_0A40_AB__FA9486:
 	ld	xbc, (xiz-10)                           ; FA9486  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc+74)                             ; FA9489  ld A,(XBC+0x4a)
 	ld	(xiz-5), a                              ; FA948C  ld (XIZ+0xfb),A
 	cps	a, 0                                   ; FA948F  cp A,0
-	jr z, sub_FA93AF__FA94B3                   ; FA9491  jr Z,0xfa94b3
+	jr z, Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3                   ; FA9491  jr Z,0xfa94b3
 	pushw	wa                                   ; FA9493  push WA
 	pushw	0x7F                                 ; FA9494  push 0x007f
 	pushw	0                                    ; FA9497  push 0x0000
@@ -44734,7 +44912,7 @@ sub_FA93AF__FA9486:
 	add	de, wa                                 ; FA94AD  add DE,WA
 	inc	8, xsp                                 ; FA94AF  inc 0,XSP
 	inc	2, xsp                                 ; FA94B1  inc 2,XSP
-sub_FA93AF__FA94B3:
+Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3:
 	pushw	0                                    ; FA94B3  push 0x0000
 	pushw	0xFF                                 ; FA94B6  push 0x00ff
 	pushw	de                                   ; FA94B9  push DE
@@ -44764,7 +44942,7 @@ sub_FA93AF__FA94B3:
 	inc	8, xsp                                 ; FA94FC  inc 0,XSP
 	inc	6, xsp                                 ; FA94FE  inc 6,XSP
 	cps	d, 0                                   ; FA9500  cp D,0
-	jr z, sub_FA93AF__FA9541                   ; FA9502  jr Z,0xfa9541
+	jr z, Voice_StageRegs_09C0_0A00_0A40_AB__FA9541                   ; FA9502  jr Z,0xfa9541
 	push	0                                     ; FA9504  push 0x00
 	push	d                                     ; FA9506  push D
 	pushw	0x7F                                 ; FA9508  push 0x007f
@@ -44790,8 +44968,8 @@ sub_FA93AF__FA94B3:
 	ld	bc, ix                                  ; FA9539  ld BC,IX
 	extpfx3 0x9E, 0xF4, 0x81                   ; FA953B  add BC,(XIZ+0xf4)
 	pushw	bc                                   ; FA953E  push BC
-	jr sub_FA93AF__FA9556                      ; FA953F  jr T,0xfa9556
-sub_FA93AF__FA9541:
+	jr Voice_StageRegs_09C0_0A00_0A40_AB__FA9556                      ; FA953F  jr T,0xfa9556
+Voice_StageRegs_09C0_0A00_0A40_AB__FA9541:
 	pushw	0                                    ; FA9541  push 0x0000
 	pushw	0xFF                                 ; FA9544  push 0x00ff
 	pushw	hl                                   ; FA9547  push HL
@@ -44801,7 +44979,7 @@ sub_FA93AF__FA9541:
 	pushw	0                                    ; FA954F  push 0x0000
 	pushw	0xFF                                 ; FA9552  push 0x00ff
 	pushw	ix                                   ; FA9555  push IX
-sub_FA93AF__FA9556:
+Voice_StageRegs_09C0_0A00_0A40_AB__FA9556:
 	calr (0xFA7598 - 0xFA9559)                 ; FA9556  calr 0xfa7598
 	ld	ix, wa                                  ; FA9559  ld IX,WA
 	pushw	0xFFCE                               ; FA955B  push 0xffce
@@ -45161,11 +45339,11 @@ Voice_StageRegs_CD__FA9801:
 ; sub_FA981B -- 0xFA981B..0xFA9914 (250 bytes)
 ;
 ; Called from: 9 site(s) outside this module:
-;          0xFAE436 in sub_FAE34A__FAE404, 0xFAE56A in sub_FAE484__FAE53D
-;          0xFAE6B5 in sub_FAE5C7__FAE683, 0xFAE7EB in sub_FAE703__FAE7BE
-;          0xFAE936 in sub_FAE848__FAE904, 0xFAEA6F in sub_FAE986__FAEA41
-;          0xFB8ABD in sub_FB89F8__FB8A85, 0xFB8BBD in sub_FB8AF6__FB8B85
-;          0xFB8CBD in sub_FB8BF6__FB8C85
+;          0xFAE436 in Voice_Restage_Reg0440_BaseCurve_ForPart__FAE404, 0xFAE56A in Voice_Restage_Reg0440_ValueCurve_ForPart__FAE53D
+;          0xFAE6B5 in Voice_Restage_Reg0180_BaseCurve_ForPart__FAE683, 0xFAE7EB in Voice_Restage_Reg0180_ValueCurve_ForPart__FAE7BE
+;          0xFAE936 in Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE904, 0xFAEA6F in Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA41
+;          0xFB8ABD in Voice_RecomputeEnv_AndWriteSlot2__FB8A85, 0xFB8BBD in Voice_RecomputeEnv_AndWriteSlot1__FB8B85
+;          0xFB8CBD in Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85
 ;          3 site(s) inside this module:
 ;          0xFA9A2C 0xFA9D72 0xFAA01C
 ; Inputs:  frame `link XIZ,-20`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
@@ -45288,13 +45466,13 @@ sub_FA981B__FA98E9:
 ; Voice_StageChanSel_Reg0440_Reg0480 -- 0xFA9915..0xFA9C5F (843 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFAE3C4 in sub_FAE34A__FAE3B5, 0xFAE4FE in sub_FAE484__FAE4EF
+;          0xFAE3C4 in Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3B5, 0xFAE4FE in Voice_Restage_Reg0440_ValueCurve_ForPart__FAE4EF
 ;          0xFB0B2A in VoiceRegs_Stage_A, 0xFB1F18 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-12`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D76E, 0x00D770, 0x00D79A, 0x00D79C, 0x00D79E, 0x00D7A0
 ; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA78E8 = sub_FA78E8
-;          0xFA7927 = sub_FA7927, 0xFA796D = sub_FA796D
-;          0xFA79F4 = sub_FA79F4, 0xFA981B = sub_FA981B
+;          0xFA7927 = sub_FA7927, 0xFA796D = EGEnv_Eval_BaseCurveA
+;          0xFA79F4 = EGEnv_Eval_ValueCurve_WithBaseCurveA, 0xFA981B = sub_FA981B
 ;          0xFB5B56 = sub_FB5B56, 0xFB5E39 = Dev10C_ChanSelHighBits
 ;          0xFB7C27 = Dev10C_Slot2_WriteGateAndValue, 0xFB7C8F = Dev10C_SetChanReg_0600_b
 ;          0xFB7CB1 = Dev10C_Slot2_StrobeGate, 0xFB7CFF = Dev10C_Slot2_WriteGate8100
@@ -45691,15 +45869,15 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9C5A:
 	unlk32 xiz                                 ; FA9C5D  unlk XIZ
 	ret                                        ; FA9C5F  ret
 ; --------------------------------------------------------------------------
-; sub_FA9C60 -- 0xFA9C60..0xFA9F18 (697 bytes)
+; Voice_StageRegs_0180_AB -- 0xFA9C60..0xFA9F18 (697 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFAE641 in sub_FAE5C7__FAE632, 0xFAE77D in sub_FAE703__FAE76E
+;          0xFAE641 in Voice_Restage_Reg0180_BaseCurve_ForPart__FAE632, 0xFAE77D in Voice_Restage_Reg0180_ValueCurve_ForPart__FAE76E
 ;          0xFB0B2F in VoiceRegs_Stage_A, 0xFB1F1D in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D76A, 0x00D796, 0x00D798
 ; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA78E8 = sub_FA78E8
-;          0xFA7A4B = sub_FA7A4B, 0xFA7AD6 = sub_FA7AD6
+;          0xFA7A4B = EGEnv_Eval_BaseCurveB, 0xFA7AD6 = EGEnv_Eval_ValueCurve_WithBaseCurveB
 ;          0xFA7F04 = Rand_FromTickSquared, 0xFA981B = sub_FA981B
 ;          0xFB5F91 = sub_FB5F91, 0xFB7E13 = Dev10C_Slot1_WriteGateAndValue
 ;          0xFB7E7B = Dev10C_SetChanReg_01C0_b, 0xFB7E9D = Dev10C_Slot1_StrobeGate
@@ -45709,10 +45887,24 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9C5A:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0180_AB -- stages word 6 (register 0x0180 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFA9F0E.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_A, VoiceRegs_Stage_B, Voice_Restage_Reg0180_BaseCurve_ForPart, Voice_Restage_Reg0180_ValueCurve_ForPart.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0180 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FA9C60:
+Voice_StageRegs_0180_AB:
 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FA9C60  link XIZ,0xfff6
 	pushw	hl                                   ; FA9C64  push HL
 	push	xde                                   ; FA9C65  push XDE
@@ -45730,7 +45922,7 @@ sub_FA9C60:
 	extz	xiy                                   ; FA9C86  extz XIY
 	ld	wa, (xiy+32)                            ; FA9C88  ld WA,(XIY+0x20)
 	cps	wa, 0                                  ; FA9C8B  cp WA,0
-	jrl z, sub_FA9C60__FA9E12                  ; FA9C8D  jrl Z,0xfa9e12
+	jrl z, Voice_StageRegs_0180_AB__FA9E12                  ; FA9C8D  jrl Z,0xfa9e12
 	ld	a, (xiy+32)                             ; FA9C90  ld A,(XIY+0x20)
 	and	a, 3                                   ; FA9C93  and A,0x03
 	ld	(xiz-1), a                              ; FA9C96  ld (XIZ+0xff),A
@@ -45742,7 +45934,7 @@ sub_FA9C60:
 	add	xwa, xix                               ; FA9CA9  add XWA,XIX
 	ld	c, (xwa)                                ; FA9CAB  ld C,(XWA)
 	and	c, 0x80                                ; FA9CAD  and C,0x80
-	jr z, sub_FA9C60__FA9CDE                   ; FA9CB0  jr Z,0xfa9cde
+	jr z, Voice_StageRegs_0180_AB__FA9CDE                   ; FA9CB0  jr Z,0xfa9cde
 	ld	c, (xiz-1)                              ; FA9CB2  ld C,(XIZ+0xff)
 	or	c, 36                                   ; FA9CB5  or C,0x24
 	pushw	bc                                   ; FA9CB8  push BC
@@ -45760,8 +45952,8 @@ sub_FA9C60:
 	pushw	ix                                   ; FA9CD5  push IX
 	call	0xFB7EEB                              ; FA9CD6  call 0xfb7eeb
 	inc	8, xsp                                 ; FA9CDA  inc 0,XSP
-	jr sub_FA9C60__FA9D00                      ; FA9CDC  jr T,0xfa9d00
-sub_FA9C60__FA9CDE:
+	jr Voice_StageRegs_0180_AB__FA9D00                      ; FA9CDC  jr T,0xfa9d00
+Voice_StageRegs_0180_AB__FA9CDE:
 	ld	c, (xiz-1)                              ; FA9CDE  ld C,(XIZ+0xff)
 	set	2, c                                   ; FA9CE1  set 0x02,C
 	pushw	bc                                   ; FA9CE4  push BC
@@ -45776,7 +45968,7 @@ sub_FA9C60__FA9CDE:
 	ld	ix, wa                                  ; FA9CF8  ld IX,WA
 	and	ix, 63                                 ; FA9CFA  and IX,0x003f
 	inc	6, xsp                                 ; FA9CFE  inc 6,XSP
-sub_FA9C60__FA9D00:
+Voice_StageRegs_0180_AB__FA9D00:
 	ldw	bc, 27                                 ; FA9D00  ld BC,0x001b
 	mul	xbc, xix                               ; FA9D03  mul XBC,IX
 	add	bc, 9                                  ; FA9D05  add BC,0x0009
@@ -45791,7 +45983,7 @@ sub_FA9C60__FA9D00:
 	ld	bc, hl                                  ; FA9D1E  ld BC,HL
 	and	bc, 0xFF                               ; FA9D20  and BC,0x00ff
 	cp	bc, 64                                  ; FA9D24  cp BC,0x0040
-	jrl nc, sub_FA9C60__FA9EB5                 ; FA9D28  jrl NC,0xfa9eb5
+	jrl nc, Voice_StageRegs_0180_AB__FA9EB5                 ; FA9D28  jrl NC,0xfa9eb5
 	ld	bc, (xiz-8)                             ; FA9D2B  ld BC,(XIZ+0xf8)
 	extz	xbc                                   ; FA9D2E  extz XBC
 	ld	wa, (xbc+32)                            ; FA9D30  ld WA,(XBC+0x20)
@@ -45803,13 +45995,13 @@ sub_FA9C60__FA9D00:
 	ld	(xiz-6), iy                             ; FA9D42  ld (XIZ+0xfa),IY
 	ld	wa, hl                                  ; FA9D45  ld WA,HL
 	and	wa, 0x8000                             ; FA9D47  and WA,0x8000
-	jr z, sub_FA9C60__FA9D5B                   ; FA9D4B  jr Z,0xfa9d5b
+	jr z, Voice_StageRegs_0180_AB__FA9D5B                   ; FA9D4B  jr Z,0xfa9d5b
 	ld	wa, (xiz-4)                             ; FA9D4D  ld WA,(XIZ+0xfc)
 	extz	xwa                                   ; FA9D50  extz XWA
 	ld	bc, (xwa+4)                             ; FA9D52  ld BC,(XWA+0x04)
 	and	bc, 12                                 ; FA9D55  and BC,0x000c
-	jr z, sub_FA9C60__FA9D93                   ; FA9D59  jr Z,0xfa9d93
-sub_FA9C60__FA9D5B:
+	jr z, Voice_StageRegs_0180_AB__FA9D93                   ; FA9D59  jr Z,0xfa9d93
+Voice_StageRegs_0180_AB__FA9D5B:
 	extpfx3 0xC7, 0xF0, 0x8B                   ; FA9D5B  ld C,IXL
 	ld	(xiz-10), c                             ; FA9D5E  ld (XIZ+0xf6),C
 	pushw	bc                                   ; FA9D61  push BC
@@ -45829,22 +46021,22 @@ sub_FA9C60__FA9D5B:
 	pushw	ix                                   ; FA9D88  push IX
 	call	0xFB7E9D                              ; FA9D89  call 0xfb7e9d
 	add	xsp, 18                                ; FA9D8D  add XSP,0x00000012
-sub_FA9C60__FA9D93:
+Voice_StageRegs_0180_AB__FA9D93:
 	extz	xde                                   ; FA9D93  extz XDE
 	ld	c, (xde+7)                              ; FA9D95  ld C,(XDE+0x07)
 	cps	c, 0                                   ; FA9D98  cp C,0
-	jr z, sub_FA9C60__FA9DAA                   ; FA9D9A  jr Z,0xfa9daa
+	jr z, Voice_StageRegs_0180_AB__FA9DAA                   ; FA9D9A  jr Z,0xfa9daa
 	ld	bc, (xiz-4)                             ; FA9D9C  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA9D9F  extz XBC
 	ld	wa, (xbc+6)                             ; FA9DA1  ld WA,(XBC+0x06)
 	and	wa, 0x2000                             ; FA9DA4  and WA,0x2000
-	jr nz, sub_FA9C60__FA9DB3                  ; FA9DA8  jr NZ,0xfa9db3
-sub_FA9C60__FA9DAA:
+	jr nz, Voice_StageRegs_0180_AB__FA9DB3                  ; FA9DA8  jr NZ,0xfa9db3
+Voice_StageRegs_0180_AB__FA9DAA:
 	extz	xde                                   ; FA9DAA  extz XDE
 	ld	c, (xde)                                ; FA9DAC  ld C,(XDE)
 	and	c, 32                                  ; FA9DAE  and C,0x20
-	jr z, sub_FA9C60__FA9DCC                   ; FA9DB1  jr Z,0xfa9dcc
-sub_FA9C60__FA9DB3:
+	jr z, Voice_StageRegs_0180_AB__FA9DCC                   ; FA9DB1  jr Z,0xfa9dcc
+Voice_StageRegs_0180_AB__FA9DB3:
 	extz	xde                                   ; FA9DB3  extz XDE
 	ld	(xde+8), 0                              ; FA9DB5  ld (XDE+0x08),0x00
 	extpfx3 0x82, 0x3C, 0xF3                   ; FA9DB9  and (XDE),0xf3
@@ -45852,46 +46044,46 @@ sub_FA9C60__FA9DB3:
 	set	4, c                                   ; FA9DBE  set 0x04,C
 	ld	(xde), c                                ; FA9DC1  ld (XDE),C
 	stiw_da	(0xD796), 0                        ; FA9DC3  ld (0x00d796),0x0000
-	jr sub_FA9C60__FA9E02                      ; FA9DCA  jr T,0xfa9e02
-sub_FA9C60__FA9DCC:
+	jr Voice_StageRegs_0180_AB__FA9E02                      ; FA9DCA  jr T,0xfa9e02
+Voice_StageRegs_0180_AB__FA9DCC:
 	extz	xde                                   ; FA9DCC  extz XDE
 	ld	c, (xde+5)                              ; FA9DCE  ld C,(XDE+0x05)
 	cps	c, 0                                   ; FA9DD1  cp C,0
-	jr nz, sub_FA9C60__FA9DDD                  ; FA9DD3  jr NZ,0xfa9ddd
+	jr nz, Voice_StageRegs_0180_AB__FA9DDD                  ; FA9DD3  jr NZ,0xfa9ddd
 	ld	bc, hl                                  ; FA9DD5  ld BC,HL
 	and	bc, 0x8000                             ; FA9DD7  and BC,0x8000
-	jr nz, sub_FA9C60__FA9DE6                  ; FA9DDB  jr NZ,0xfa9de6
-sub_FA9C60__FA9DDD:
+	jr nz, Voice_StageRegs_0180_AB__FA9DE6                  ; FA9DDB  jr NZ,0xfa9de6
+Voice_StageRegs_0180_AB__FA9DDD:
 	extz	xde                                   ; FA9DDD  extz XDE
 	ld	c, (xde)                                ; FA9DDF  ld C,(XDE)
 	and	c, 56                                  ; FA9DE1  and C,0x38
-	jr z, sub_FA9C60__FA9DF5                   ; FA9DE4  jr Z,0xfa9df5
-sub_FA9C60__FA9DE6:
+	jr z, Voice_StageRegs_0180_AB__FA9DF5                   ; FA9DE4  jr Z,0xfa9df5
+Voice_StageRegs_0180_AB__FA9DE6:
 	ld	bc, (xiz-4)                             ; FA9DE6  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA9DE9  extz XBC
 	ld	wa, (xbc+4)                             ; FA9DEB  ld WA,(XBC+0x04)
 	and	wa, 12                                 ; FA9DEE  and WA,0x000c
-	jrl z, sub_FA9C60__FA9EB5                  ; FA9DF2  jrl Z,0xfa9eb5
-sub_FA9C60__FA9DF5:
+	jrl z, Voice_StageRegs_0180_AB__FA9EB5                  ; FA9DF2  jrl Z,0xfa9eb5
+Voice_StageRegs_0180_AB__FA9DF5:
 	extpfx3 0xC7, 0xF0, 0x8B                   ; FA9DF5  ld C,IXL
 	pushw	bc                                   ; FA9DF8  push BC
 	calr (0xFA7A4B - 0xFA9DFC)                 ; FA9DF9  calr 0xfa7a4b
 	stw_da	(0xD796), wa                        ; FA9DFC  ld (0x00d796),WA
 	popw	bc                                    ; FA9E01  pop BC
-sub_FA9C60__FA9E02:
+Voice_StageRegs_0180_AB__FA9E02:
 	lda_24	xbc, (0xD75E)                       ; FA9E02  lda XBC,0x00d75e
 	push	xbc                                   ; FA9E07  push XBC
 	pushw	ix                                   ; FA9E08  push IX
 	call	0xFB7E7B                              ; FA9E09  call 0xfb7e7b
-sub_FA9C60__FA9E0D:
+Voice_StageRegs_0180_AB__FA9E0D:
 	inc	6, xsp                                 ; FA9E0D  inc 6,XSP
-	jrl sub_FA9C60__FA9EB5                     ; FA9E0F  jrl T,0xfa9eb5
-sub_FA9C60__FA9E12:
+	jrl Voice_StageRegs_0180_AB__FA9EB5                     ; FA9E0F  jrl T,0xfa9eb5
+Voice_StageRegs_0180_AB__FA9E12:
 	ld	bc, (xiz-4)                             ; FA9E12  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA9E15  extz XBC
 	ld	wa, (xbc+9)                             ; FA9E17  ld WA,(XBC+0x09)
 	and	wa, 0x8000                             ; FA9E1A  and WA,0x8000
-	jrl z, sub_FA9C60__FA9EB5                  ; FA9E1E  jrl Z,0xfa9eb5
+	jrl z, Voice_StageRegs_0180_AB__FA9EB5                  ; FA9E1E  jrl Z,0xfa9eb5
 	push	0                                     ; FA9E21  push 0x00
 	push	h                                     ; FA9E23  push H
 	push	0                                     ; FA9E25  push 0x00
@@ -45900,7 +46092,7 @@ sub_FA9C60__FA9E12:
 	ld	(xiz-6), wa                             ; FA9E2E  ld (XIZ+0xfa),WA
 	pop	xiy                                    ; FA9E31  pop XIY
 	cps	wa, 0                                  ; FA9E32  cp WA,0
-	jrl z, sub_FA9C60__FA9EB5                  ; FA9E34  jrl Z,0xfa9eb5
+	jrl z, Voice_StageRegs_0180_AB__FA9EB5                  ; FA9E34  jrl Z,0xfa9eb5
 	pushw	16                                   ; FA9E37  push 0x0010
 	ld	bc, (xiz+8)                             ; FA9E3A  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9E3D  extz XBC
@@ -45913,7 +46105,7 @@ sub_FA9C60__FA9E12:
 	and	wa, 0xFF                               ; FA9E4D  and WA,0x00ff
 	inc	6, xsp                                 ; FA9E51  inc 6,XSP
 	cp	wa, 64                                  ; FA9E53  cp WA,0x0040
-	jr nc, sub_FA9C60__FA9EB5                  ; FA9E57  jr NC,0xfa9eb5
+	jr nc, Voice_StageRegs_0180_AB__FA9EB5                  ; FA9E57  jr NC,0xfa9eb5
 	ld	de, hl                                  ; FA9E59  ld DE,HL
 	and	de, 63                                 ; FA9E5B  and DE,0x003f
 	ld	c, e                                    ; FA9E5F  ld C,E
@@ -45926,13 +46118,13 @@ sub_FA9C60__FA9E12:
 	ld	bc, hl                                  ; FA9E70  ld BC,HL
 	and	bc, 0x8000                             ; FA9E72  and BC,0x8000
 	pop	xiy                                    ; FA9E76  pop XIY
-	jr z, sub_FA9C60__FA9E87                   ; FA9E77  jr Z,0xfa9e87
+	jr z, Voice_StageRegs_0180_AB__FA9E87                   ; FA9E77  jr Z,0xfa9e87
 	ld	bc, (xiz-4)                             ; FA9E79  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA9E7C  extz XBC
 	ld	wa, (xbc+4)                             ; FA9E7E  ld WA,(XBC+0x04)
 	and	wa, 4                                  ; FA9E81  and WA,0x0004
-	jr z, sub_FA9C60__FA9EB5                   ; FA9E85  jr Z,0xfa9eb5
-sub_FA9C60__FA9E87:
+	jr z, Voice_StageRegs_0180_AB__FA9EB5                   ; FA9E85  jr Z,0xfa9eb5
+Voice_StageRegs_0180_AB__FA9E87:
 	ld	bc, (xiz-4)                             ; FA9E87  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA9E8A  extz XBC
 	ld	wa, (xbc+0x6D)                          ; FA9E8C  ld WA,(XBC+0x6d)
@@ -45947,8 +46139,8 @@ sub_FA9C60__FA9E87:
 	and	wa, 63                                 ; FA9EA9  and WA,0x003f
 	pushw	wa                                   ; FA9EAD  push WA
 	call	0xFB7E13                              ; FA9EAE  call 0xfb7e13
-	jrl sub_FA9C60__FA9E0D                     ; FA9EB2  jrl T,0xfa9e0d
-sub_FA9C60__FA9EB5:
+	jrl Voice_StageRegs_0180_AB__FA9E0D                     ; FA9EB2  jrl T,0xfa9e0d
+Voice_StageRegs_0180_AB__FA9EB5:
 	ld	bc, (xiz+8)                             ; FA9EB5  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9EB8  extz XBC
 	ld	wa, (xbc+37)                            ; FA9EBA  ld WA,(XBC+0x25)
@@ -45963,7 +46155,7 @@ sub_FA9C60__FA9EB5:
 	ld	xwa, (xbc+23)                           ; FA9ED1  ld XWA,(XBC+0x17)
 	ld	c, (xwa+1)                              ; FA9ED4  ld C,(XWA+0x01)
 	cp	c, 0x80                                 ; FA9ED7  cp C,0x80
-	jr nz, sub_FA9C60__FA9EF1                  ; FA9EDA  jr NZ,0xfa9ef1
+	jr nz, Voice_StageRegs_0180_AB__FA9EF1                  ; FA9EDA  jr NZ,0xfa9ef1
 	calr (0xFA7F04 - 0xFA9EDF)                 ; FA9EDC  calr 0xfa7f04
 	res	7, a                                   ; FA9EDF  res 0x07,A
 	exts	wa                                    ; FA9EE2  exts WA
@@ -45971,8 +46163,8 @@ sub_FA9C60__FA9EB5:
 	ld	bc, (xiz+8)                             ; FA9EE7  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9EEA  extz XBC
 	ld	(xbc+39), wa                            ; FA9EEC  ld (XBC+0x27),WA
-	jr sub_FA9C60__FA9F06                      ; FA9EEF  jr T,0xfa9f06
-sub_FA9C60__FA9EF1:
+	jr Voice_StageRegs_0180_AB__FA9F06                      ; FA9EEF  jr T,0xfa9f06
+Voice_StageRegs_0180_AB__FA9EF1:
 	ld	bc, (xiz-8)                             ; FA9EF1  ld BC,(XIZ+0xf8)
 	extz	xbc                                   ; FA9EF4  extz XBC
 	ld	a, (xbc+39)                             ; FA9EF6  ld A,(XBC+0x27)
@@ -45981,7 +46173,7 @@ sub_FA9C60__FA9EF1:
 	ld	bc, (xiz+8)                             ; FA9EFE  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9F01  extz XBC
 	ld	(xbc+39), wa                            ; FA9F03  ld (XBC+0x27),WA
-sub_FA9C60__FA9F06:
+Voice_StageRegs_0180_AB__FA9F06:
 	ld	bc, (xiz+8)                             ; FA9F06  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9F09  extz XBC
 	ld	wa, (xbc+39)                            ; FA9F0B  ld WA,(XBC+0x27)
@@ -45995,12 +46187,12 @@ sub_FA9C60__FA9F06:
 ; Voice_StageChanSel_Reg04C0 -- 0xFA9F19..0xFAA0BB (419 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFAE8C2 in sub_FAE848__FAE8B3, 0xFAEA00 in sub_FAE986__FAE9F1
+;          0xFAE8C2 in Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE8B3, 0xFAEA00 in Voice_Restage_Reg04C0_ValueCurve_ForPart__FAE9F1
 ;          0xFB0B34 in VoiceRegs_Stage_A, 0xFB1F22 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D772, 0x00D796, 0x00D7A0
-; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA7B31 = sub_FA7B31
-;          0xFA7C3A = sub_FA7C3A, 0xFA981B = sub_FA981B
+; Calls:   0xFA5ED3 = Voice_LookupDev10CChanIndex, 0xFA7B31 = EGEnv_Eval_FreqWriteBaseCurve
+;          0xFA7C3A = EGEnv_Eval_ValueCurve_WithFreqWriteCurve, 0xFA981B = sub_FA981B
 ;          0xFB7FCE = Dev10C_SetChanReg_01C0_or_0600_b, 0xFB8012 = Dev10C_Slot1or3_StrobeGate
 ;          0xFB80A9 = Dev10C_Slot1or3_WriteGate8100
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA9F19-0xFAA0BB
@@ -46209,7 +46401,7 @@ Voice_StageChanSel_Reg04C0__FAA0B6:
 	unlk32 xiz                                 ; FAA0B9  unlk XIZ
 	ret                                        ; FAA0BB  ret
 ; --------------------------------------------------------------------------
-; sub_FAA0BC -- 0xFAA0BC..0xFAA1A4 (233 bytes)
+; Voice_StageRegs_00C0_AB -- 0xFAA0BC..0xFAA1A4 (233 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB0B39 in VoiceRegs_Stage_A, 0xFB1F27 in VoiceRegs_Stage_B
@@ -46220,10 +46412,43 @@ Voice_StageChanSel_Reg04C0__FAA0B6:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_00C0_AB -- stages word 3 (register 0x00C0 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFAA19A.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_A, VoiceRegs_Stage_B.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x00C0 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
+;          ★ AND THIS ONE DECODES TO A FORMULA.  Staging word 3 is a PAIR of 7-bit fields:
+;          low  = clamp( P[+0x11] +- P[+0x27], 0, 0x7F )
+;          high = clamp( P[+0x10] +- P[+0x29] + (int8)P[+0x74], 0, 0x7F )
+;          word = (high << 8) | low
+;          where P = voice_record[+0x23].  The +- is chosen by TWO BIT PAIRS in one object:
+;          with Q = voice_record[+0x25], bit 7 of Q[+0x1A] enables the LOW field's
+;          modulation and bit 7 of Q[+0x1C] makes it subtract; bit 8 of the SAME TWO BYTES
+;          does the same for the HIGH field.
+;          0xFAA0C8 P   0xFAA0D3 low base   0xFAA0CD low depth  0xFAA0EF/0xFAA0FA bit 7
+;          0xFAA12E high base   0xFAA128 high depth  0xFAA14A/0xFAA155 bit 8
+;          0xFAA171 signed trim P[+0x74]   0xFAA110/0xFAA181 the two clamps
+;          0xFAA18C sll 8   0xFAA198 or   0xFAA19A the store
+;          Every one of those 15 citations is checked AT THE CITED ADDRESS by
+;          `python3 notes/prom_c_understanding_round6.py --reg00c0` -- this tree has published
+;          a whole class of citations one byte past the instruction, and that check is the
+;          defence against it.
+;          The shape is the one Voice_StageRegs_0500_08C0_AB already documents for register
+;          0x0500: a byte pair, each half clamped to 0..0x7F, assembled with `sll 8 / or`.
+;          Unknown: what P is, what the bit-7/bit-8 pair selects, and what 0x00C0 carries.
 ; --------------------------------------------------------------------------
-sub_FAA0BC:
+Voice_StageRegs_00C0_AB:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FAA0BC  link XIZ,0xfffe
 	push	xhl                                   ; FAA0C0  push XHL
 	push	xde                                   ; FAA0C1  push XDE
@@ -46238,37 +46463,37 @@ sub_FAA0BC:
 	extz	bc                                    ; FAA0D6  extz BC
 	ld	ix, bc                                  ; FAA0D8  ld IX,BC
 	cps	bc, 0                                  ; FAA0DA  cp BC,0
-	jr nz, sub_FAA0BC__FAA0E2                  ; FAA0DC  jr NZ,0xfaa0e2
+	jr nz, Voice_StageRegs_00C0_AB__FAA0E2                  ; FAA0DC  jr NZ,0xfaa0e2
 	cps	wa, 0                                  ; FAA0DE  cp WA,0
-	jr z, sub_FAA0BC__FAA11B                   ; FAA0E0  jr Z,0xfaa11b
-sub_FAA0BC__FAA0E2:
+	jr z, Voice_StageRegs_00C0_AB__FAA11B                   ; FAA0E0  jr Z,0xfaa11b
+Voice_StageRegs_00C0_AB__FAA0E2:
 	ld	hl, (xiz+8)                             ; FAA0E2  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FAA0E5  extz XHL
 	ld	hl, (xhl+37)                            ; FAA0E7  ld HL,(XHL+0x25)
 	extz	xhl                                   ; FAA0EA  extz XHL
 	ld	bc, (xhl+26)                            ; FAA0EC  ld BC,(XHL+0x1a)
 	and	bc, 0x80                               ; FAA0EF  and BC,0x0080
-	jr z, sub_FAA0BC__FAA10C                   ; FAA0F3  jr Z,0xfaa10c
+	jr z, Voice_StageRegs_00C0_AB__FAA10C                   ; FAA0F3  jr Z,0xfaa10c
 	extz	xhl                                   ; FAA0F5  extz XHL
 	ld	bc, (xhl+28)                            ; FAA0F7  ld BC,(XHL+0x1c)
 	and	bc, 0x80                               ; FAA0FA  and BC,0x0080
-	jr z, sub_FAA0BC__FAA107                   ; FAA0FE  jr Z,0xfaa107
+	jr z, Voice_StageRegs_00C0_AB__FAA107                   ; FAA0FE  jr Z,0xfaa107
 	ld	bc, (xiz-2)                             ; FAA100  ld BC,(XIZ+0xfe)
 	sub	ix, bc                                 ; FAA103  sub IX,BC
-	jr sub_FAA0BC__FAA10C                      ; FAA105  jr T,0xfaa10c
-sub_FAA0BC__FAA107:
+	jr Voice_StageRegs_00C0_AB__FAA10C                      ; FAA105  jr T,0xfaa10c
+Voice_StageRegs_00C0_AB__FAA107:
 	ld	bc, (xiz-2)                             ; FAA107  ld BC,(XIZ+0xfe)
 	add	ix, bc                                 ; FAA10A  add IX,BC
-sub_FAA0BC__FAA10C:
+Voice_StageRegs_00C0_AB__FAA10C:
 	cps	ix, 0                                  ; FAA10C  cp IX,0
-	jr lt, sub_FAA0BC__FAA11B                  ; FAA10E  jr LT,0xfaa11b
+	jr lt, Voice_StageRegs_00C0_AB__FAA11B                  ; FAA10E  jr LT,0xfaa11b
 	cp	ix, 0x7F                                ; FAA110  cp IX,0x007f
-	jr le, sub_FAA0BC__FAA11E                  ; FAA114  jr LE,0xfaa11e
+	jr le, Voice_StageRegs_00C0_AB__FAA11E                  ; FAA114  jr LE,0xfaa11e
 	ldw	ix, 0x7F                               ; FAA116  ld IX,0x007f
-	jr sub_FAA0BC__FAA11E                      ; FAA119  jr T,0xfaa11e
-sub_FAA0BC__FAA11B:
+	jr Voice_StageRegs_00C0_AB__FAA11E                      ; FAA119  jr T,0xfaa11e
+Voice_StageRegs_00C0_AB__FAA11B:
 	ldw	ix, 0                                  ; FAA11B  ld IX,0x0000
-sub_FAA0BC__FAA11E:
+Voice_StageRegs_00C0_AB__FAA11E:
 	ld	bc, (xiz+8)                             ; FAA11E  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAA121  extz XBC
 	ld	de, (xbc+35)                            ; FAA123  ld DE,(XBC+0x23)
@@ -46279,28 +46504,28 @@ sub_FAA0BC__FAA11E:
 	extz	bc                                    ; FAA131  extz BC
 	ld	hl, bc                                  ; FAA133  ld HL,BC
 	cps	bc, 0                                  ; FAA135  cp BC,0
-	jr nz, sub_FAA0BC__FAA13D                  ; FAA137  jr NZ,0xfaa13d
+	jr nz, Voice_StageRegs_00C0_AB__FAA13D                  ; FAA137  jr NZ,0xfaa13d
 	cps	wa, 0                                  ; FAA139  cp WA,0
-	jr z, sub_FAA0BC__FAA193                   ; FAA13B  jr Z,0xfaa193
-sub_FAA0BC__FAA13D:
+	jr z, Voice_StageRegs_00C0_AB__FAA193                   ; FAA13B  jr Z,0xfaa193
+Voice_StageRegs_00C0_AB__FAA13D:
 	ld	de, (xiz+8)                             ; FAA13D  ld DE,(XIZ+0x08)
 	extz	xde                                   ; FAA140  extz XDE
 	ld	de, (xde+37)                            ; FAA142  ld DE,(XDE+0x25)
 	extz	xde                                   ; FAA145  extz XDE
 	ld	bc, (xde+26)                            ; FAA147  ld BC,(XDE+0x1a)
 	and	bc, 0x100                              ; FAA14A  and BC,0x0100
-	jr z, sub_FAA0BC__FAA167                   ; FAA14E  jr Z,0xfaa167
+	jr z, Voice_StageRegs_00C0_AB__FAA167                   ; FAA14E  jr Z,0xfaa167
 	extz	xde                                   ; FAA150  extz XDE
 	ld	bc, (xde+28)                            ; FAA152  ld BC,(XDE+0x1c)
 	and	bc, 0x100                              ; FAA155  and BC,0x0100
-	jr z, sub_FAA0BC__FAA162                   ; FAA159  jr Z,0xfaa162
+	jr z, Voice_StageRegs_00C0_AB__FAA162                   ; FAA159  jr Z,0xfaa162
 	ld	bc, (xiz-2)                             ; FAA15B  ld BC,(XIZ+0xfe)
 	sub	hl, bc                                 ; FAA15E  sub HL,BC
-	jr sub_FAA0BC__FAA167                      ; FAA160  jr T,0xfaa167
-sub_FAA0BC__FAA162:
+	jr Voice_StageRegs_00C0_AB__FAA167                      ; FAA160  jr T,0xfaa167
+Voice_StageRegs_00C0_AB__FAA162:
 	ld	bc, (xiz-2)                             ; FAA162  ld BC,(XIZ+0xfe)
 	add	hl, bc                                 ; FAA165  add HL,BC
-sub_FAA0BC__FAA167:
+Voice_StageRegs_00C0_AB__FAA167:
 	ld	bc, (xiz+8)                             ; FAA167  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAA16A  extz XBC
 	ld	wa, (xbc+35)                            ; FAA16C  ld WA,(XBC+0x23)
@@ -46309,21 +46534,21 @@ sub_FAA0BC__FAA167:
 	exts	bc                                    ; FAA174  exts BC
 	add	hl, bc                                 ; FAA176  add HL,BC
 	cps	hl, 0                                  ; FAA178  cp HL,0
-	jr ge, sub_FAA0BC__FAA181                  ; FAA17A  jr GE,0xfaa181
+	jr ge, Voice_StageRegs_00C0_AB__FAA181                  ; FAA17A  jr GE,0xfaa181
 	ldw	hl, 0                                  ; FAA17C  ld HL,0x0000
-	jr sub_FAA0BC__FAA18A                      ; FAA17F  jr T,0xfaa18a
-sub_FAA0BC__FAA181:
+	jr Voice_StageRegs_00C0_AB__FAA18A                      ; FAA17F  jr T,0xfaa18a
+Voice_StageRegs_00C0_AB__FAA181:
 	cp	hl, 0x7F                                ; FAA181  cp HL,0x007f
-	jr le, sub_FAA0BC__FAA18A                  ; FAA185  jr LE,0xfaa18a
+	jr le, Voice_StageRegs_00C0_AB__FAA18A                  ; FAA185  jr LE,0xfaa18a
 	ldw	hl, 0x7F                               ; FAA187  ld HL,0x007f
-sub_FAA0BC__FAA18A:
+Voice_StageRegs_00C0_AB__FAA18A:
 	ld	bc, hl                                  ; FAA18A  ld BC,HL
 	sll	bc, 8                                  ; FAA18C  sll 0x08,BC
 	ld	hl, bc                                  ; FAA18F  ld HL,BC
-	jr sub_FAA0BC__FAA196                      ; FAA191  jr T,0xfaa196
-sub_FAA0BC__FAA193:
+	jr Voice_StageRegs_00C0_AB__FAA196                      ; FAA191  jr T,0xfaa196
+Voice_StageRegs_00C0_AB__FAA193:
 	ldw	hl, 0                                  ; FAA193  ld HL,0x0000
-sub_FAA0BC__FAA196:
+Voice_StageRegs_00C0_AB__FAA196:
 	ld	bc, hl                                  ; FAA196  ld BC,HL
 	or	bc, ix                                  ; FAA198  or BC,IX
 	stw_da	(0xD764), bc                        ; FAA19A  ld (0x00d764),BC
@@ -46333,7 +46558,7 @@ sub_FAA0BC__FAA196:
 	unlk32 xiz                                 ; FAA1A2  unlk XIZ
 	ret                                        ; FAA1A4  ret
 ; --------------------------------------------------------------------------
-; sub_FAA1A5 -- 0xFAA1A5..0xFAA2B5 (273 bytes)
+; Voice_StageRegs_00C0_CD -- 0xFAA1A5..0xFAA2B5 (273 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFB2839 in VoiceRegs_Stage_C, 0xFB2F0E in VoiceRegs_Stage_D
@@ -46344,10 +46569,29 @@ sub_FAA0BC__FAA196:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_00C0_CD -- stages word 3 (register 0x00C0 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFAA2AB.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_C, VoiceRegs_Stage_D.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x00C0 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
+;          The C/D-path twin of Voice_StageRegs_00C0_AB: same staging word, same pointer
+;          voice_record[+0x23], same 0x80/0x100 bit pair at voice_record[+0x25].
+;          ⚠ Its arithmetic was NOT decoded in this round -- only the A/B twin was (section
+;          3b).  It is NOT asserted to be the same formula; the two routines are 233 and 216
+;          bytes and no byte comparison was made.
 ; --------------------------------------------------------------------------
-sub_FAA1A5:
+Voice_StageRegs_00C0_CD:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAA1A5  link XIZ,0xfffc
 	push	xhl                                   ; FAA1A9  push XHL
 	push	xde                                   ; FAA1AA  push XDE
@@ -46364,13 +46608,13 @@ sub_FAA1A5:
 	extz	bc                                    ; FAA1C4  extz BC
 	ld	(xiz-2), bc                             ; FAA1C6  ld (XIZ+0xfe),BC
 	cps	bc, 0                                  ; FAA1C9  cp BC,0
-	jr nz, sub_FAA1A5__FAA1D8                  ; FAA1CB  jr NZ,0xfaa1d8
+	jr nz, Voice_StageRegs_00C0_CD__FAA1D8                  ; FAA1CB  jr NZ,0xfaa1d8
 	ld	c, (xwa+16)                             ; FAA1CD  ld C,(XWA+0x10)
 	cps	c, 0                                   ; FAA1D0  cp C,0
-	jr nz, sub_FAA1A5__FAA1D8                  ; FAA1D2  jr NZ,0xfaa1d8
+	jr nz, Voice_StageRegs_00C0_CD__FAA1D8                  ; FAA1D2  jr NZ,0xfaa1d8
 	cps	iy, 0                                  ; FAA1D4  cp IY,0
-	jr z, sub_FAA1A5__FAA228                   ; FAA1D6  jr Z,0xfaa228
-sub_FAA1A5__FAA1D8:
+	jr z, Voice_StageRegs_00C0_CD__FAA228                   ; FAA1D6  jr Z,0xfaa228
+Voice_StageRegs_00C0_CD__FAA1D8:
 	ld	c, (xix+16)                             ; FAA1D8  ld C,(XIX+0x10)
 	extz	bc                                    ; FAA1DB  extz BC
 	extpfx3 0x9E, 0xFE, 0x81                   ; FAA1DD  add BC,(XIZ+0xfe)
@@ -46382,27 +46626,27 @@ sub_FAA1A5__FAA1D8:
 	extz	xhl                                   ; FAA1EF  extz XHL
 	ld	wa, (xhl+26)                            ; FAA1F1  ld WA,(XHL+0x1a)
 	and	wa, 0x80                               ; FAA1F4  and WA,0x0080
-	jr z, sub_FAA1A5__FAA213                   ; FAA1F8  jr Z,0xfaa213
+	jr z, Voice_StageRegs_00C0_CD__FAA213                   ; FAA1F8  jr Z,0xfaa213
 	extz	xhl                                   ; FAA1FA  extz XHL
 	ld	wa, (xhl+28)                            ; FAA1FC  ld WA,(XHL+0x1c)
 	and	wa, 0x80                               ; FAA1FF  and WA,0x0080
-	jr z, sub_FAA1A5__FAA20D                   ; FAA203  jr Z,0xfaa20d
+	jr z, Voice_StageRegs_00C0_CD__FAA20D                   ; FAA203  jr Z,0xfaa20d
 	extpfx3 0x9E, 0xFC, 0xA1                   ; FAA205  sub BC,(XIZ+0xfc)
 	ld	(xiz-2), bc                             ; FAA208  ld (XIZ+0xfe),BC
-	jr sub_FAA1A5__FAA213                      ; FAA20B  jr T,0xfaa213
-sub_FAA1A5__FAA20D:
+	jr Voice_StageRegs_00C0_CD__FAA213                      ; FAA20B  jr T,0xfaa213
+Voice_StageRegs_00C0_CD__FAA20D:
 	ld	bc, (xiz-4)                             ; FAA20D  ld BC,(XIZ+0xfc)
 	add	(xiz-2), bc                            ; FAA210  add (XIZ+0xfe),BC
-sub_FAA1A5__FAA213:
+Voice_StageRegs_00C0_CD__FAA213:
 	cpw (xiz-2), 0x0000                        ; FAA213  cp (XIZ+0xfe),0x0000
-	jr lt, sub_FAA1A5__FAA228                  ; FAA218  jr LT,0xfaa228
+	jr lt, Voice_StageRegs_00C0_CD__FAA228                  ; FAA218  jr LT,0xfaa228
 	cpw (xiz-2), 0x007F                        ; FAA21A  cp (XIZ+0xfe),0x007f
-	jr le, sub_FAA1A5__FAA22D                  ; FAA21F  jr LE,0xfaa22d
+	jr le, Voice_StageRegs_00C0_CD__FAA22D                  ; FAA21F  jr LE,0xfaa22d
 	ldw (xiz-2), 0x007F                        ; FAA221  ld (XIZ+0xfe),0x007f
-	jr sub_FAA1A5__FAA22D                      ; FAA226  jr T,0xfaa22d
-sub_FAA1A5__FAA228:
+	jr Voice_StageRegs_00C0_CD__FAA22D                      ; FAA226  jr T,0xfaa22d
+Voice_StageRegs_00C0_CD__FAA228:
 	ldw (xiz-2), 0x0000                        ; FAA228  ld (XIZ+0xfe),0x0000
-sub_FAA1A5__FAA22D:
+Voice_StageRegs_00C0_CD__FAA22D:
 	ld	bc, (xiz+8)                             ; FAA22D  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAA230  extz XBC
 	ld	de, (xbc+35)                            ; FAA232  ld DE,(XBC+0x23)
@@ -46413,13 +46657,13 @@ sub_FAA1A5__FAA22D:
 	extz	bc                                    ; FAA240  extz BC
 	ld	hl, bc                                  ; FAA242  ld HL,BC
 	cps	bc, 0                                  ; FAA244  cp BC,0
-	jr nz, sub_FAA1A5__FAA253                  ; FAA246  jr NZ,0xfaa253
+	jr nz, Voice_StageRegs_00C0_CD__FAA253                  ; FAA246  jr NZ,0xfaa253
 	ld	c, (xix+17)                             ; FAA248  ld C,(XIX+0x11)
 	cps	c, 0                                   ; FAA24B  cp C,0
-	jr nz, sub_FAA1A5__FAA253                  ; FAA24D  jr NZ,0xfaa253
+	jr nz, Voice_StageRegs_00C0_CD__FAA253                  ; FAA24D  jr NZ,0xfaa253
 	cps	wa, 0                                  ; FAA24F  cp WA,0
-	jr z, sub_FAA1A5__FAA2A3                   ; FAA251  jr Z,0xfaa2a3
-sub_FAA1A5__FAA253:
+	jr z, Voice_StageRegs_00C0_CD__FAA2A3                   ; FAA251  jr Z,0xfaa2a3
+Voice_StageRegs_00C0_CD__FAA253:
 	ld	c, (xix+17)                             ; FAA253  ld C,(XIX+0x11)
 	extz	bc                                    ; FAA256  extz BC
 	add	hl, bc                                 ; FAA258  add HL,BC
@@ -46430,34 +46674,34 @@ sub_FAA1A5__FAA253:
 	extz	xde                                   ; FAA266  extz XDE
 	ld	bc, (xde+26)                            ; FAA268  ld BC,(XDE+0x1a)
 	and	bc, 0x100                              ; FAA26B  and BC,0x0100
-	jr z, sub_FAA1A5__FAA288                   ; FAA26F  jr Z,0xfaa288
+	jr z, Voice_StageRegs_00C0_CD__FAA288                   ; FAA26F  jr Z,0xfaa288
 	extz	xde                                   ; FAA271  extz XDE
 	ld	bc, (xde+28)                            ; FAA273  ld BC,(XDE+0x1c)
 	and	bc, 0x100                              ; FAA276  and BC,0x0100
-	jr z, sub_FAA1A5__FAA283                   ; FAA27A  jr Z,0xfaa283
+	jr z, Voice_StageRegs_00C0_CD__FAA283                   ; FAA27A  jr Z,0xfaa283
 	ld	bc, (xiz-4)                             ; FAA27C  ld BC,(XIZ+0xfc)
 	sub	hl, bc                                 ; FAA27F  sub HL,BC
-	jr sub_FAA1A5__FAA288                      ; FAA281  jr T,0xfaa288
-sub_FAA1A5__FAA283:
+	jr Voice_StageRegs_00C0_CD__FAA288                      ; FAA281  jr T,0xfaa288
+Voice_StageRegs_00C0_CD__FAA283:
 	ld	bc, (xiz-4)                             ; FAA283  ld BC,(XIZ+0xfc)
 	add	hl, bc                                 ; FAA286  add HL,BC
-sub_FAA1A5__FAA288:
+Voice_StageRegs_00C0_CD__FAA288:
 	cps	hl, 0                                  ; FAA288  cp HL,0
-	jr ge, sub_FAA1A5__FAA291                  ; FAA28A  jr GE,0xfaa291
+	jr ge, Voice_StageRegs_00C0_CD__FAA291                  ; FAA28A  jr GE,0xfaa291
 	ldw	hl, 0                                  ; FAA28C  ld HL,0x0000
-	jr sub_FAA1A5__FAA29A                      ; FAA28F  jr T,0xfaa29a
-sub_FAA1A5__FAA291:
+	jr Voice_StageRegs_00C0_CD__FAA29A                      ; FAA28F  jr T,0xfaa29a
+Voice_StageRegs_00C0_CD__FAA291:
 	cp	hl, 0x7F                                ; FAA291  cp HL,0x007f
-	jr le, sub_FAA1A5__FAA29A                  ; FAA295  jr LE,0xfaa29a
+	jr le, Voice_StageRegs_00C0_CD__FAA29A                  ; FAA295  jr LE,0xfaa29a
 	ldw	hl, 0x7F                               ; FAA297  ld HL,0x007f
-sub_FAA1A5__FAA29A:
+Voice_StageRegs_00C0_CD__FAA29A:
 	ld	bc, hl                                  ; FAA29A  ld BC,HL
 	sll	bc, 8                                  ; FAA29C  sll 0x08,BC
 	ld	hl, bc                                  ; FAA29F  ld HL,BC
-	jr sub_FAA1A5__FAA2A6                      ; FAA2A1  jr T,0xfaa2a6
-sub_FAA1A5__FAA2A3:
+	jr Voice_StageRegs_00C0_CD__FAA2A6                      ; FAA2A1  jr T,0xfaa2a6
+Voice_StageRegs_00C0_CD__FAA2A3:
 	ldw	hl, 0                                  ; FAA2A3  ld HL,0x0000
-sub_FAA1A5__FAA2A6:
+Voice_StageRegs_00C0_CD__FAA2A6:
 	ld	bc, hl                                  ; FAA2A6  ld BC,HL
 	extpfx3 0x9E, 0xFE, 0xE1                   ; FAA2A8  or BC,(XIZ+0xfe)
 	stw_da	(0xD764), bc                        ; FAA2AB  ld (0x00d764),BC
@@ -46765,7 +47009,7 @@ sub_FAA3EB__FAA478:
 	unlk32 xiz                                 ; FAA4C0  unlk XIZ
 	ret                                        ; FAA4C2  ret
 ; --------------------------------------------------------------------------
-; sub_FAA4C3 -- 0xFAA4C3..0xFAA87D (955 bytes)
+; Voice_StageRegs_0800_A -- 0xFAA4C3..0xFAA87D (955 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB0B43 in VoiceRegs_Stage_A
@@ -46779,8 +47023,6 @@ sub_FAA3EB__FAA478:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
 ; ★ ROUND 2, 2026-08-25.  ONE OF THE FOUR ROUTINES THAT BUILD REGISTER
 ;          `chan + 0x0800`.  It writes staging word 12 (RAM 0x00D776) as
 ;          `(level << 8) | rate`: the LOW byte is Voice_EnvelopeRate_Table[tone[+0x28]]
@@ -46792,8 +47034,24 @@ sub_FAA3EB__FAA478:
 ;          register 0x800".  See the 0x0800..0x0A40 block comment in front of
 ;          Dev10C_WriteAllChanRegs; census by notes/prom_c_reg_bytepair_check.py.
 ;          ⚠ This says what ONE of the routine's outputs is, not what the routine is.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0800_A -- stages word 12 (register 0x0800 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFAA649.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_A.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0800 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FAA4C3:
+Voice_StageRegs_0800_A:
 	link32 0xEE, 0x0C, 0xF1, 0xFF              ; FAA4C3  link XIZ,0xfff1
 	push	xhl                                   ; FAA4C7  push XHL
 	pushw	de                                   ; FAA4C8  push DE
@@ -46806,30 +47064,30 @@ sub_FAA4C3:
 	ld	(xiz-10), xiy                           ; FAA4D8  ld (XIZ+0xf6),XIY
 	ldw_d16	bc, (0x14FF)                       ; FAA4DB  ld BC,(0x14ff)
 	and	bc, 1                                  ; FAA4DF  and BC,0x0001
-	jr nz, sub_FAA4C3__FAA4F5                  ; FAA4E3  jr NZ,0xfaa4f5
+	jr nz, Voice_StageRegs_0800_A__FAA4F5                  ; FAA4E3  jr NZ,0xfaa4f5
 	ld	bc, (xiz+8)                             ; FAA4E5  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAA4E8  extz XBC
 	ld	xwa, (xbc+19)                           ; FAA4EA  ld XWA,(XBC+0x13)
 	ld	c, (xwa+16)                             ; FAA4ED  ld C,(XWA+0x10)
 	and	c, 16                                  ; FAA4F0  and C,0x10
-	jr z, sub_FAA4C3__FAA501                   ; FAA4F3  jr Z,0xfaa501
-sub_FAA4C3__FAA4F5:
+	jr z, Voice_StageRegs_0800_A__FAA501                   ; FAA4F3  jr Z,0xfaa501
+Voice_StageRegs_0800_A__FAA4F5:
 	ld	bc, (xiz+8)                             ; FAA4F5  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAA4F8  extz XBC
 	extpfx5 0x99, 0x01, 0x3C, 0xFF, 0x7F       ; FAA4FA  and (XBC+0x01),0x7fff
-	jr sub_FAA4C3__FAA50B                      ; FAA4FF  jr T,0xfaa50b
-sub_FAA4C3__FAA501:
+	jr Voice_StageRegs_0800_A__FAA50B                      ; FAA4FF  jr T,0xfaa50b
+Voice_StageRegs_0800_A__FAA501:
 	ld	bc, (xiz+8)                             ; FAA501  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAA504  extz XBC
 	extpfx5 0x99, 0x01, 0x3E, 0x00, 0x80       ; FAA506  or (XBC+0x01),0x8000
-sub_FAA4C3__FAA50B:
+Voice_StageRegs_0800_A__FAA50B:
 	ld	hl, (xiz+8)                             ; FAA50B  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FAA50E  extz XHL
 	ld	hl, (xhl+37)                            ; FAA510  ld HL,(XHL+0x25)
 	extz	xhl                                   ; FAA513  extz XHL
 	ld	bc, (xhl+26)                            ; FAA515  ld BC,(XHL+0x1a)
 	and	bc, 0x400                              ; FAA518  and BC,0x0400
-	jr z, sub_FAA4C3__FAA55B                   ; FAA51C  jr Z,0xfaa55b
+	jr z, Voice_StageRegs_0800_A__FAA55B                   ; FAA51C  jr Z,0xfaa55b
 	extz	xhl                                   ; FAA51E  extz XHL
 	ld	bc, (xhl+28)                            ; FAA520  ld BC,(XHL+0x1c)
 	ld	ix, bc                                  ; FAA523  ld IX,BC
@@ -46845,25 +47103,25 @@ sub_FAA4C3__FAA50B:
 	ld	iy, (xbc+35)                            ; FAA53E  ld IY,(XBC+0x23)
 	extz	xiy                                   ; FAA541  extz XIY
 	ld	de, (xiy+45)                            ; FAA543  ld DE,(XIY+0x2d)
-	jr z, sub_FAA4C3__FAA54D                   ; FAA546  jr Z,0xfaa54d
+	jr z, Voice_StageRegs_0800_A__FAA54D                   ; FAA546  jr Z,0xfaa54d
 	sub	wa, de                                 ; FAA548  sub WA,DE
 	pushw	wa                                   ; FAA54A  push WA
-	jr sub_FAA4C3__FAA552                      ; FAA54B  jr T,0xfaa552
-sub_FAA4C3__FAA54D:
+	jr Voice_StageRegs_0800_A__FAA552                      ; FAA54B  jr T,0xfaa552
+Voice_StageRegs_0800_A__FAA54D:
 	ld	bc, hl                                  ; FAA54D  ld BC,HL
 	add	bc, de                                 ; FAA54F  add BC,DE
 	pushw	bc                                   ; FAA551  push BC
-sub_FAA4C3__FAA552:
+Voice_StageRegs_0800_A__FAA552:
 	calr (0xFA7598 - 0xFAA555)                 ; FAA552  calr 0xfa7598
 	ld	hl, wa                                  ; FAA555  ld HL,WA
 	inc	6, xsp                                 ; FAA557  inc 6,XSP
-	jr sub_FAA4C3__FAA565                      ; FAA559  jr T,0xfaa565
-sub_FAA4C3__FAA55B:
+	jr Voice_StageRegs_0800_A__FAA565                      ; FAA559  jr T,0xfaa565
+Voice_StageRegs_0800_A__FAA55B:
 	ld	xbc, (xiz-6)                            ; FAA55B  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+39)                             ; FAA55E  ld A,(XBC+0x27)
 	extz	wa                                    ; FAA561  extz WA
 	ld	hl, wa                                  ; FAA563  ld HL,WA
-sub_FAA4C3__FAA565:
+Voice_StageRegs_0800_A__FAA565:
 	ld	c, l                                    ; FAA565  ld C,L
 	extz	bc                                    ; FAA567  extz BC
 	extz	xbc                                   ; FAA569  extz XBC
@@ -46874,7 +47132,7 @@ sub_FAA4C3__FAA565:
 	ld	xbc, (xiz-6)                            ; FAA577  ld XBC,(XIZ+0xfa)
 	ld	d, (xbc+51)                             ; FAA57A  ld D,(XBC+0x33)
 	cps	d, 0                                   ; FAA57D  cp D,0
-	jr z, sub_FAA4C3__FAA5E1                   ; FAA57F  jr Z,0xfaa5e1
+	jr z, Voice_StageRegs_0800_A__FAA5E1                   ; FAA57F  jr Z,0xfaa5e1
 	push	0                                     ; FAA581  push 0x00
 	push	d                                     ; FAA583  push D
 	ld	a, (xbc+50)                             ; FAA585  ld A,(XBC+0x32)
@@ -46894,7 +47152,7 @@ sub_FAA4C3__FAA565:
 	inc	8, xsp                                 ; FAA5A5  inc 0,XSP
 	inc	2, xsp                                 ; FAA5A7  inc 2,XSP
 	cps	d, 0                                   ; FAA5A9  cp D,0
-	jr z, sub_FAA4C3__FAA5D4                   ; FAA5AB  jr Z,0xfaa5d4
+	jr z, Voice_StageRegs_0800_A__FAA5D4                   ; FAA5AB  jr Z,0xfaa5d4
 	pushw	4                                    ; FAA5AD  push 0x0004
 	ld	bc, (xiz+8)                             ; FAA5B0  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAA5B3  extz XBC
@@ -46911,19 +47169,19 @@ sub_FAA4C3__FAA565:
 	add	bc, ix                                 ; FAA5CD  add BC,IX
 	add	bc, wa                                 ; FAA5CF  add BC,WA
 	pushw	bc                                   ; FAA5D1  push BC
-	jr sub_FAA4C3__FAA60B                      ; FAA5D2  jr T,0xfaa60b
-sub_FAA4C3__FAA5D4:
+	jr Voice_StageRegs_0800_A__FAA60B                      ; FAA5D2  jr T,0xfaa60b
+Voice_StageRegs_0800_A__FAA5D4:
 	pushw	0                                    ; FAA5D4  push 0x0000
 	pushw	0xFF                                 ; FAA5D7  push 0x00ff
 	ld	bc, hl                                  ; FAA5DA  ld BC,HL
 	add	bc, ix                                 ; FAA5DC  add BC,IX
 	pushw	bc                                   ; FAA5DE  push BC
-	jr sub_FAA4C3__FAA60B                      ; FAA5DF  jr T,0xfaa60b
-sub_FAA4C3__FAA5E1:
+	jr Voice_StageRegs_0800_A__FAA60B                      ; FAA5DF  jr T,0xfaa60b
+Voice_StageRegs_0800_A__FAA5E1:
 	ld	xbc, (xiz-6)                            ; FAA5E1  ld XBC,(XIZ+0xfa)
 	ld	d, (xbc+46)                             ; FAA5E4  ld D,(XBC+0x2e)
 	cps	d, 0                                   ; FAA5E7  cp D,0
-	jr z, sub_FAA4C3__FAA612                   ; FAA5E9  jr Z,0xfaa612
+	jr z, Voice_StageRegs_0800_A__FAA612                   ; FAA5E9  jr Z,0xfaa612
 	pushw	4                                    ; FAA5EB  push 0x0004
 	ld	wa, (xiz+8)                             ; FAA5EE  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAA5F1  extz XWA
@@ -46938,19 +47196,19 @@ sub_FAA4C3__FAA5E1:
 	pushw	0xFF                                 ; FAA605  push 0x00ff
 	add	wa, hl                                 ; FAA608  add WA,HL
 	pushw	wa                                   ; FAA60A  push WA
-sub_FAA4C3__FAA60B:
+Voice_StageRegs_0800_A__FAA60B:
 	calr (0xFA7598 - 0xFAA60E)                 ; FAA60B  calr 0xfa7598
 	ld	hl, wa                                  ; FAA60E  ld HL,WA
 	inc	6, xsp                                 ; FAA610  inc 6,XSP
-sub_FAA4C3__FAA612:
+Voice_StageRegs_0800_A__FAA612:
 	ld	xbc, (xiz-10)                           ; FAA612  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc)                                ; FAA615  ld A,(XBC)
 	and	a, 1                                   ; FAA617  and A,0x01
-	jr z, sub_FAA4C3__FAA624                   ; FAA61A  jr Z,0xfaa624
+	jr z, Voice_StageRegs_0800_A__FAA624                   ; FAA61A  jr Z,0xfaa624
 	cp	hl, 0xFF                                ; FAA61C  cp HL,0x00ff
-	jr nz, sub_FAA4C3__FAA624                  ; FAA620  jr NZ,0xfaa624
+	jr nz, Voice_StageRegs_0800_A__FAA624                  ; FAA620  jr NZ,0xfaa624
 	dec	1, hl                                  ; FAA622  dec 1,HL
-sub_FAA4C3__FAA624:
+Voice_StageRegs_0800_A__FAA624:
 	ld	xbc, (xiz-6)                            ; FAA624  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+40)                             ; FAA627  ld A,(XBC+0x28)
 	extz	wa                                    ; FAA62A  extz WA
@@ -46975,7 +47233,7 @@ sub_FAA4C3__FAA624:
 	extz	xhl                                   ; FAA65E  extz XHL
 	ld	bc, (xhl+26)                            ; FAA660  ld BC,(XHL+0x1a)
 	and	bc, 0x800                              ; FAA663  and BC,0x0800
-	jrl z, sub_FAA4C3__FAA6F5                  ; FAA667  jrl Z,0xfaa6f5
+	jrl z, Voice_StageRegs_0800_A__FAA6F5                  ; FAA667  jrl Z,0xfaa6f5
 	extz	xhl                                   ; FAA66A  extz XHL
 	ld	bc, (xhl+28)                            ; FAA66C  ld BC,(XHL+0x1c)
 	ld	ix, bc                                  ; FAA66F  ld IX,BC
@@ -46991,7 +47249,7 @@ sub_FAA4C3__FAA624:
 	ld	iy, (xbc+35)                            ; FAA68A  ld IY,(XBC+0x23)
 	extz	xiy                                   ; FAA68D  extz XIY
 	ld	hl, (xiy+47)                            ; FAA68F  ld HL,(XIY+0x2f)
-	jr z, sub_FAA4C3__FAA6C0                   ; FAA692  jr Z,0xfaa6c0
+	jr z, Voice_StageRegs_0800_A__FAA6C0                   ; FAA692  jr Z,0xfaa6c0
 	sub	wa, hl                                 ; FAA694  sub WA,HL
 	pushw	wa                                   ; FAA696  push WA
 	calr (0xFA7598 - 0xFAA69A)                 ; FAA697  calr 0xfa7598
@@ -47010,8 +47268,8 @@ sub_FAA4C3__FAA624:
 	ld	bc, (xiy+47)                            ; FAA6B8  ld BC,(XIY+0x2f)
 	sub	wa, bc                                 ; FAA6BB  sub WA,BC
 	pushw	wa                                   ; FAA6BD  push WA
-	jr sub_FAA4C3__FAA6EC                      ; FAA6BE  jr T,0xfaa6ec
-sub_FAA4C3__FAA6C0:
+	jr Voice_StageRegs_0800_A__FAA6EC                      ; FAA6BE  jr T,0xfaa6ec
+Voice_StageRegs_0800_A__FAA6C0:
 	ld	bc, de                                  ; FAA6C0  ld BC,DE
 	add	bc, hl                                 ; FAA6C2  add BC,HL
 	pushw	bc                                   ; FAA6C4  push BC
@@ -47031,12 +47289,12 @@ sub_FAA4C3__FAA6C0:
 	ld	bc, (xiy+47)                            ; FAA6E6  ld BC,(XIY+0x2f)
 	add	wa, bc                                 ; FAA6E9  add WA,BC
 	pushw	wa                                   ; FAA6EB  push WA
-sub_FAA4C3__FAA6EC:
+Voice_StageRegs_0800_A__FAA6EC:
 	calr (0xFA7598 - 0xFAA6EF)                 ; FAA6EC  calr 0xfa7598
 	ld	de, wa                                  ; FAA6EF  ld DE,WA
 	inc	6, xsp                                 ; FAA6F1  inc 6,XSP
-	jr sub_FAA4C3__FAA706                      ; FAA6F3  jr T,0xfaa706
-sub_FAA4C3__FAA6F5:
+	jr Voice_StageRegs_0800_A__FAA706                      ; FAA6F3  jr T,0xfaa706
+Voice_StageRegs_0800_A__FAA6F5:
 	ld	xbc, (xiz-6)                            ; FAA6F5  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+41)                             ; FAA6F8  ld A,(XBC+0x29)
 	extz	wa                                    ; FAA6FB  extz WA
@@ -47044,7 +47302,7 @@ sub_FAA4C3__FAA6F5:
 	ld	a, (xbc+43)                             ; FAA6FF  ld A,(XBC+0x2b)
 	extz	wa                                    ; FAA702  extz WA
 	ld	de, wa                                  ; FAA704  ld DE,WA
-sub_FAA4C3__FAA706:
+Voice_StageRegs_0800_A__FAA706:
 	ld	c, l                                    ; FAA706  ld C,L
 	extz	bc                                    ; FAA708  extz BC
 	extz	xbc                                   ; FAA70A  extz XBC
@@ -47064,7 +47322,7 @@ sub_FAA4C3__FAA706:
 	ld	c, (xiy+52)                             ; FAA730  ld C,(XIY+0x34)
 	ld	(xiz-11), c                             ; FAA733  ld (XIZ+0xf5),C
 	cps	c, 0                                   ; FAA736  cp C,0
-	jrl z, sub_FAA4C3__FAA7CC                  ; FAA738  jrl Z,0xfaa7cc
+	jrl z, Voice_StageRegs_0800_A__FAA7CC                  ; FAA738  jrl Z,0xfaa7cc
 	pushw	bc                                   ; FAA73B  push BC
 	ld	b, (xiy+50)                             ; FAA73C  ld B,(XIY+0x32)
 	push	0                                     ; FAA73F  push 0x00
@@ -47087,7 +47345,7 @@ sub_FAA4C3__FAA706:
 	inc	8, xsp                                 ; FAA768  inc 0,XSP
 	inc	2, xsp                                 ; FAA76A  inc 2,XSP
 	cps	a, 0                                   ; FAA76C  cp A,0
-	jr z, sub_FAA4C3__FAA7AD                   ; FAA76E  jr Z,0xfaa7ad
+	jr z, Voice_StageRegs_0800_A__FAA7AD                   ; FAA76E  jr Z,0xfaa7ad
 	pushw	4                                    ; FAA770  push 0x0004
 	ld	wa, (xiz+8)                             ; FAA773  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAA776  extz XWA
@@ -47113,8 +47371,8 @@ sub_FAA4C3__FAA706:
 	add	bc, ix                                 ; FAA7A5  add BC,IX
 	extpfx3 0x9E, 0xF3, 0x81                   ; FAA7A7  add BC,(XIZ+0xf3)
 	pushw	bc                                   ; FAA7AA  push BC
-	jr sub_FAA4C3__FAA80C                      ; FAA7AB  jr T,0xfaa80c
-sub_FAA4C3__FAA7AD:
+	jr Voice_StageRegs_0800_A__FAA80C                      ; FAA7AB  jr T,0xfaa80c
+Voice_StageRegs_0800_A__FAA7AD:
 	pushw	0                                    ; FAA7AD  push 0x0000
 	pushw	0xFF                                 ; FAA7B0  push 0x00ff
 	ld	bc, hl                                  ; FAA7B3  ld BC,HL
@@ -47128,13 +47386,13 @@ sub_FAA4C3__FAA7AD:
 	ld	bc, de                                  ; FAA7C5  ld BC,DE
 	add	bc, ix                                 ; FAA7C7  add BC,IX
 	pushw	bc                                   ; FAA7C9  push BC
-	jr sub_FAA4C3__FAA80C                      ; FAA7CA  jr T,0xfaa80c
-sub_FAA4C3__FAA7CC:
+	jr Voice_StageRegs_0800_A__FAA80C                      ; FAA7CA  jr T,0xfaa80c
+Voice_StageRegs_0800_A__FAA7CC:
 	ld	xbc, (xiz-6)                            ; FAA7CC  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+47)                             ; FAA7CF  ld A,(XBC+0x2f)
 	ld	(xiz-2), a                              ; FAA7D2  ld (XIZ+0xfe),A
 	cps	a, 0                                   ; FAA7D5  cp A,0
-	jr z, sub_FAA4C3__FAA813                   ; FAA7D7  jr Z,0xfaa813
+	jr z, Voice_StageRegs_0800_A__FAA813                   ; FAA7D7  jr Z,0xfaa813
 	pushw	4                                    ; FAA7D9  push 0x0004
 	ld	wa, (xiz+8)                             ; FAA7DC  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAA7DF  extz XWA
@@ -47157,11 +47415,11 @@ sub_FAA4C3__FAA7CC:
 	ld	bc, de                                  ; FAA807  ld BC,DE
 	add	bc, ix                                 ; FAA809  add BC,IX
 	pushw	bc                                   ; FAA80B  push BC
-sub_FAA4C3__FAA80C:
+Voice_StageRegs_0800_A__FAA80C:
 	calr (0xFA7598 - 0xFAA80F)                 ; FAA80C  calr 0xfa7598
 	ld	de, wa                                  ; FAA80F  ld DE,WA
 	inc	6, xsp                                 ; FAA811  inc 6,XSP
-sub_FAA4C3__FAA813:
+Voice_StageRegs_0800_A__FAA813:
 	ld	xbc, (xiz-6)                            ; FAA813  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+42)                             ; FAA816  ld A,(XBC+0x2a)
 	extz	wa                                    ; FAA819  extz WA
@@ -47171,9 +47429,9 @@ sub_FAA4C3__FAA813:
 	extpfx3 0xC7, 0xF0, 0x98                   ; FAA825  ld IXL,W
 	extz	ix                                    ; FAA828  extz IX
 	cps	ix, 4                                  ; FAA82A  cp IX,4
-	jr ge, sub_FAA4C3__FAA831                  ; FAA82C  jr GE,0xfaa831
+	jr ge, Voice_StageRegs_0800_A__FAA831                  ; FAA82C  jr GE,0xfaa831
 	ldw	ix, 4                                  ; FAA82E  ld IX,0x0004
-sub_FAA4C3__FAA831:
+Voice_StageRegs_0800_A__FAA831:
 	ld	xbc, (xiz-6)                            ; FAA831  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+44)                             ; FAA834  ld A,(XBC+0x2c)
 	extz	wa                                    ; FAA837  extz WA
@@ -47206,7 +47464,7 @@ sub_FAA4C3__FAA831:
 	unlk32 xiz                                 ; FAA87B  unlk XIZ
 	ret                                        ; FAA87D  ret
 ; --------------------------------------------------------------------------
-; sub_FAA87E -- 0xFAA87E..0xFAA96B (238 bytes)
+; Voice_StageRegs_0840_0880_AB -- 0xFAA87E..0xFAA96B (238 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFAE061 in sub_FAE013__FAE053, 0xFB0B4B in VoiceRegs_Stage_A
@@ -47219,10 +47477,24 @@ sub_FAA4C3__FAA831:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0840_0880_AB -- stages word 13 (register 0x0840 + chan), word 14 (register 0x0880 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFAA94D, 0xFAA959, 0xFAA91A, 0xFAA935, 0xFAA961.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_A, VoiceRegs_Stage_B, sub_FAE013.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0840 / 0x0880 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FAA87E:
+Voice_StageRegs_0840_0880_AB:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAA87E  link XIZ,0xfffc
 	pushw	hl                                   ; FAA882  push HL
 	push	xde                                   ; FAA883  push XDE
@@ -47233,11 +47505,11 @@ sub_FAA87E:
 	extz	xbc                                   ; FAA88D  extz XBC
 	ld	wa, (xbc+24)                            ; FAA88F  ld WA,(XBC+0x18)
 	and	wa, 0x100                              ; FAA892  and WA,0x0100
-	jrl z, sub_FAA87E__FAA954                  ; FAA896  jrl Z,0xfaa954
+	jrl z, Voice_StageRegs_0840_0880_AB__FAA954                  ; FAA896  jrl Z,0xfaa954
 	extz	xde                                   ; FAA899  extz XDE
 	ld	bc, (xde+61)                            ; FAA89B  ld BC,(XDE+0x3d)
 	and	bc, 0xFF                               ; FAA89E  and BC,0x00ff
-	jrl z, sub_FAA87E__FAA954                  ; FAA8A2  jrl Z,0xfaa954
+	jrl z, Voice_StageRegs_0840_0880_AB__FAA954                  ; FAA8A2  jrl Z,0xfaa954
 	extz	xde                                   ; FAA8A5  extz XDE
 	ld	bc, (xde+37)                            ; FAA8A7  ld BC,(XDE+0x25)
 	extz	xbc                                   ; FAA8AA  extz XBC
@@ -47252,7 +47524,7 @@ sub_FAA87E:
 	ld	wa, (xbc+31)                            ; FAA8C3  ld WA,(XBC+0x1f)
 	ld	(xiz-2), wa                             ; FAA8C6  ld (XIZ+0xfe),WA
 	cps	ix, 0                                  ; FAA8C9  cp IX,0
-	jr z, sub_FAA87E__FAA8E0                   ; FAA8CB  jr Z,0xfaa8e0
+	jr z, Voice_StageRegs_0840_0880_AB__FAA8E0                   ; FAA8CB  jr Z,0xfaa8e0
 	ld	ix, hl                                  ; FAA8CD  ld IX,HL
 	sub	ix, wa                                 ; FAA8CF  sub IX,WA
 	extz	xde                                   ; FAA8D1  extz XDE
@@ -47260,8 +47532,8 @@ sub_FAA87E:
 	ld	hl, bc                                  ; FAA8D6  ld HL,BC
 	and	hl, 0x7F                               ; FAA8D8  and HL,0x007f
 	sub	hl, wa                                 ; FAA8DC  sub HL,WA
-	jr sub_FAA87E__FAA8F5                      ; FAA8DE  jr T,0xfaa8f5
-sub_FAA87E__FAA8E0:
+	jr Voice_StageRegs_0840_0880_AB__FAA8F5                      ; FAA8DE  jr T,0xfaa8f5
+Voice_StageRegs_0840_0880_AB__FAA8E0:
 	ld	ix, hl                                  ; FAA8E0  ld IX,HL
 	extpfx3 0x9E, 0xFE, 0x84                   ; FAA8E2  add IX,(XIZ+0xfe)
 	extz	xde                                   ; FAA8E5  extz XDE
@@ -47270,7 +47542,7 @@ sub_FAA87E__FAA8E0:
 	and	hl, 0x7F                               ; FAA8EC  and HL,0x007f
 	ld	bc, (xiz-2)                             ; FAA8F0  ld BC,(XIZ+0xfe)
 	add	hl, bc                                 ; FAA8F3  add HL,BC
-sub_FAA87E__FAA8F5:
+Voice_StageRegs_0840_0880_AB__FAA8F5:
 	pushw	4                                    ; FAA8F5  push 0x0004
 	pushw	0x7F                                 ; FAA8F8  push 0x007f
 	pushw	ix                                   ; FAA8FB  push IX
@@ -47284,11 +47556,11 @@ sub_FAA87E__FAA8F5:
 	inc	8, xsp                                 ; FAA90D  inc 0,XSP
 	inc	4, xsp                                 ; FAA90F  inc 4,XSP
 	cp (xiz+10), 0x00                          ; FAA911  cp (XIZ+0x0a),0x00
-	jr z, sub_FAA87E__FAA921                   ; FAA915  jr Z,0xfaa921
+	jr z, Voice_StageRegs_0840_0880_AB__FAA921                   ; FAA915  jr Z,0xfaa921
 	set	15, wa                                 ; FAA917  set 0x0f,WA
 	stw_da	(0xD77A), wa                        ; FAA91A  ld (0x00d77a),WA
-	jr sub_FAA87E__FAA93A                      ; FAA91F  jr T,0xfaa93a
-sub_FAA87E__FAA921:
+	jr Voice_StageRegs_0840_0880_AB__FAA93A                      ; FAA91F  jr T,0xfaa93a
+Voice_StageRegs_0840_0880_AB__FAA921:
 	extz	xde                                   ; FAA921  extz XDE
 	ld	bc, (xde+61)                            ; FAA923  ld BC,(XDE+0x3d)
 	and	bc, 0xFF00                             ; FAA926  and BC,0xff00
@@ -47297,7 +47569,7 @@ sub_FAA87E__FAA921:
 	and	wa, 0xFF                               ; FAA92F  and WA,0x00ff
 	or	bc, wa                                  ; FAA933  or BC,WA
 	stw_da	(0xD77A), bc                        ; FAA935  ld (0x00d77a),BC
-sub_FAA87E__FAA93A:
+Voice_StageRegs_0840_0880_AB__FAA93A:
 	extz	xde                                   ; FAA93A  extz XDE
 	ld	bc, (xde+59)                            ; FAA93C  ld BC,(XDE+0x3b)
 	ld	hl, bc                                  ; FAA93F  ld HL,BC
@@ -47306,21 +47578,21 @@ sub_FAA87E__FAA93A:
 	and	bc, 0xFF                               ; FAA947  and BC,0x00ff
 	or	bc, hl                                  ; FAA94B  or BC,HL
 	stw_da	(0xD778), bc                        ; FAA94D  ld (0x00d778),BC
-	jr sub_FAA87E__FAA966                      ; FAA952  jr T,0xfaa966
-sub_FAA87E__FAA954:
+	jr Voice_StageRegs_0840_0880_AB__FAA966                      ; FAA952  jr T,0xfaa966
+Voice_StageRegs_0840_0880_AB__FAA954:
 	extz	xde                                   ; FAA954  extz XDE
 	ld	bc, (xde+59)                            ; FAA956  ld BC,(XDE+0x3b)
 	stw_da	(0xD778), bc                        ; FAA959  ld (0x00d778),BC
 	ld	bc, (xde+61)                            ; FAA95E  ld BC,(XDE+0x3d)
 	stw_da	(0xD77A), bc                        ; FAA961  ld (0x00d77a),BC
-sub_FAA87E__FAA966:
+Voice_StageRegs_0840_0880_AB__FAA966:
 	popw	ix                                    ; FAA966  pop IX
 	pop	xde                                    ; FAA967  pop XDE
 	popw	hl                                    ; FAA968  pop HL
 	unlk32 xiz                                 ; FAA969  unlk XIZ
 	ret                                        ; FAA96B  ret
 ; --------------------------------------------------------------------------
-; sub_FAA96C -- 0xFAA96C..0xFAABFF (660 bytes)
+; Voice_StageRegs_0800_CD -- 0xFAA96C..0xFAABFF (660 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xFADE84 in sub_FADE2F__FADE6F, 0xFAE0E1 in sub_FAE0A1__FAE0E0
@@ -47333,8 +47605,6 @@ sub_FAA87E__FAA966:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
 ; ★ ROUND 2, 2026-08-25.  ONE OF THE FOUR ROUTINES THAT BUILD REGISTER
 ;          `chan + 0x0800`.  It writes staging word 12 (RAM 0x00D776) as
 ;          `(level << 8) | rate`: the LOW byte is Voice_EnvelopeRate_Table[tone[+0x28]]
@@ -47346,8 +47616,24 @@ sub_FAA87E__FAA966:
 ;          register 0x800".  See the 0x0800..0x0A40 block comment in front of
 ;          Dev10C_WriteAllChanRegs; census by notes/prom_c_reg_bytepair_check.py.
 ;          ⚠ This says what ONE of the routine's outputs is, not what the routine is.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0800_CD -- stages word 12 (register 0x0800 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFAAA31.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_C, VoiceRegs_Stage_D, sub_FADE2F, sub_FAE0A1.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0800 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FAA96C:
+Voice_StageRegs_0800_CD:
 	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAA96C  link XIZ,0xfff5
 	push	xhl                                   ; FAA970  push XHL
 	pushw	de                                   ; FAA971  push DE
@@ -47365,7 +47651,7 @@ sub_FAA96C:
 	extz	xhl                                   ; FAA991  extz XHL
 	ld	bc, (xhl+26)                            ; FAA993  ld BC,(XHL+0x1a)
 	and	bc, 0x400                              ; FAA996  and BC,0x0400
-	jr z, sub_FAA96C__FAA9D9                   ; FAA99A  jr Z,0xfaa9d9
+	jr z, Voice_StageRegs_0800_CD__FAA9D9                   ; FAA99A  jr Z,0xfaa9d9
 	extz	xhl                                   ; FAA99C  extz XHL
 	ld	bc, (xhl+28)                            ; FAA99E  ld BC,(XHL+0x1c)
 	ld	ix, bc                                  ; FAA9A1  ld IX,BC
@@ -47381,25 +47667,25 @@ sub_FAA96C:
 	ld	iy, (xbc+35)                            ; FAA9BC  ld IY,(XBC+0x23)
 	extz	xiy                                   ; FAA9BF  extz XIY
 	ld	hl, (xiy+45)                            ; FAA9C1  ld HL,(XIY+0x2d)
-	jr z, sub_FAA96C__FAA9CB                   ; FAA9C4  jr Z,0xfaa9cb
+	jr z, Voice_StageRegs_0800_CD__FAA9CB                   ; FAA9C4  jr Z,0xfaa9cb
 	sub	wa, hl                                 ; FAA9C6  sub WA,HL
 	pushw	wa                                   ; FAA9C8  push WA
-	jr sub_FAA96C__FAA9D0                      ; FAA9C9  jr T,0xfaa9d0
-sub_FAA96C__FAA9CB:
+	jr Voice_StageRegs_0800_CD__FAA9D0                      ; FAA9C9  jr T,0xfaa9d0
+Voice_StageRegs_0800_CD__FAA9CB:
 	ld	bc, de                                  ; FAA9CB  ld BC,DE
 	add	bc, hl                                 ; FAA9CD  add BC,HL
 	pushw	bc                                   ; FAA9CF  push BC
-sub_FAA96C__FAA9D0:
+Voice_StageRegs_0800_CD__FAA9D0:
 	calr (0xFA7598 - 0xFAA9D3)                 ; FAA9D0  calr 0xfa7598
 	ld	hl, wa                                  ; FAA9D3  ld HL,WA
 	inc	6, xsp                                 ; FAA9D5  inc 6,XSP
-	jr sub_FAA96C__FAA9E3                      ; FAA9D7  jr T,0xfaa9e3
-sub_FAA96C__FAA9D9:
+	jr Voice_StageRegs_0800_CD__FAA9E3                      ; FAA9D7  jr T,0xfaa9e3
+Voice_StageRegs_0800_CD__FAA9D9:
 	ld	xbc, (xiz-8)                            ; FAA9D9  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+9)                              ; FAA9DC  ld A,(XBC+0x09)
 	extz	wa                                    ; FAA9DF  extz WA
 	ld	hl, wa                                  ; FAA9E1  ld HL,WA
-sub_FAA96C__FAA9E3:
+Voice_StageRegs_0800_CD__FAA9E3:
 	ld	c, l                                    ; FAA9E3  ld C,L
 	extz	bc                                    ; FAA9E5  extz BC
 	extz	xbc                                   ; FAA9E7  extz XBC
@@ -47410,7 +47696,7 @@ sub_FAA96C__FAA9E3:
 	ld	xbc, (xiz-8)                            ; FAA9F5  ld XBC,(XIZ+0xf8)
 	ld	d, (xbc+15)                             ; FAA9F8  ld D,(XBC+0x0f)
 	cps	d, 0                                   ; FAA9FB  cp D,0
-	jr z, sub_FAA96C__FAAA26                   ; FAA9FD  jr Z,0xfaaa26
+	jr z, Voice_StageRegs_0800_CD__FAAA26                   ; FAA9FD  jr Z,0xfaaa26
 	pushw	4                                    ; FAA9FF  push 0x0004
 	ld	bc, (xiz+8)                             ; FAAA02  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAAA05  extz XBC
@@ -47428,7 +47714,7 @@ sub_FAA96C__FAA9E3:
 	ld	hl, wa                                  ; FAAA20  ld HL,WA
 	inc	8, xsp                                 ; FAAA22  inc 0,XSP
 	inc	4, xsp                                 ; FAAA24  inc 4,XSP
-sub_FAA96C__FAAA26:
+Voice_StageRegs_0800_CD__FAAA26:
 	ld	bc, hl                                  ; FAAA26  ld BC,HL
 	sll	bc, 8                                  ; FAAA28  sll 0x08,BC
 	ld	de, bc                                  ; FAAA2B  ld DE,BC
@@ -47443,7 +47729,7 @@ sub_FAA96C__FAAA26:
 	extz	xhl                                   ; FAAA46  extz XHL
 	ld	bc, (xhl+26)                            ; FAAA48  ld BC,(XHL+0x1a)
 	and	bc, 0x800                              ; FAAA4B  and BC,0x0800
-	jrl z, sub_FAA96C__FAAADD                  ; FAAA4F  jrl Z,0xfaaadd
+	jrl z, Voice_StageRegs_0800_CD__FAAADD                  ; FAAA4F  jrl Z,0xfaaadd
 	extz	xhl                                   ; FAAA52  extz XHL
 	ld	bc, (xhl+28)                            ; FAAA54  ld BC,(XHL+0x1c)
 	ld	ix, bc                                  ; FAAA57  ld IX,BC
@@ -47459,7 +47745,7 @@ sub_FAA96C__FAAA26:
 	ld	iy, (xbc+35)                            ; FAAA72  ld IY,(XBC+0x23)
 	extz	xiy                                   ; FAAA75  extz XIY
 	ld	hl, (xiy+47)                            ; FAAA77  ld HL,(XIY+0x2f)
-	jr z, sub_FAA96C__FAAAA8                   ; FAAA7A  jr Z,0xfaaaa8
+	jr z, Voice_StageRegs_0800_CD__FAAAA8                   ; FAAA7A  jr Z,0xfaaaa8
 	sub	wa, hl                                 ; FAAA7C  sub WA,HL
 	pushw	wa                                   ; FAAA7E  push WA
 	calr (0xFA7598 - 0xFAAA82)                 ; FAAA7F  calr 0xfa7598
@@ -47478,8 +47764,8 @@ sub_FAA96C__FAAA26:
 	ld	bc, (xiy+47)                            ; FAAAA0  ld BC,(XIY+0x2f)
 	sub	wa, bc                                 ; FAAAA3  sub WA,BC
 	pushw	wa                                   ; FAAAA5  push WA
-	jr sub_FAA96C__FAAAD4                      ; FAAAA6  jr T,0xfaaad4
-sub_FAA96C__FAAAA8:
+	jr Voice_StageRegs_0800_CD__FAAAD4                      ; FAAAA6  jr T,0xfaaad4
+Voice_StageRegs_0800_CD__FAAAA8:
 	ld	bc, de                                  ; FAAAA8  ld BC,DE
 	add	bc, hl                                 ; FAAAAA  add BC,HL
 	pushw	bc                                   ; FAAAAC  push BC
@@ -47499,12 +47785,12 @@ sub_FAA96C__FAAAA8:
 	ld	bc, (xiy+47)                            ; FAAACE  ld BC,(XIY+0x2f)
 	add	wa, bc                                 ; FAAAD1  add WA,BC
 	pushw	wa                                   ; FAAAD3  push WA
-sub_FAA96C__FAAAD4:
+Voice_StageRegs_0800_CD__FAAAD4:
 	calr (0xFA7598 - 0xFAAAD7)                 ; FAAAD4  calr 0xfa7598
 	ld	de, wa                                  ; FAAAD7  ld DE,WA
 	inc	6, xsp                                 ; FAAAD9  inc 6,XSP
-	jr sub_FAA96C__FAAAEE                      ; FAAADB  jr T,0xfaaaee
-sub_FAA96C__FAAADD:
+	jr Voice_StageRegs_0800_CD__FAAAEE                      ; FAAADB  jr T,0xfaaaee
+Voice_StageRegs_0800_CD__FAAADD:
 	ld	xbc, (xiz-8)                            ; FAAADD  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+10)                             ; FAAAE0  ld A,(XBC+0x0a)
 	extz	wa                                    ; FAAAE3  extz WA
@@ -47512,7 +47798,7 @@ sub_FAA96C__FAAADD:
 	ld	a, (xbc+12)                             ; FAAAE7  ld A,(XBC+0x0c)
 	extz	wa                                    ; FAAAEA  extz WA
 	ld	de, wa                                  ; FAAAEC  ld DE,WA
-sub_FAA96C__FAAAEE:
+Voice_StageRegs_0800_CD__FAAAEE:
 	ld	c, l                                    ; FAAAEE  ld C,L
 	extz	bc                                    ; FAAAF0  extz BC
 	extz	xbc                                   ; FAAAF2  extz XBC
@@ -47532,7 +47818,7 @@ sub_FAA96C__FAAAEE:
 	ld	c, (xiy+16)                             ; FAAB18  ld C,(XIY+0x10)
 	ld	(xiz-9), c                              ; FAAB1B  ld (XIZ+0xf7),C
 	cps	c, 0                                   ; FAAB1E  cp C,0
-	jr z, sub_FAA96C__FAAB5C                   ; FAAB20  jr Z,0xfaab5c
+	jr z, Voice_StageRegs_0800_CD__FAAB5C                   ; FAAB20  jr Z,0xfaab5c
 	pushw	4                                    ; FAAB22  push 0x0004
 	ld	bc, (xiz+8)                             ; FAAB25  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAAB28  extz XBC
@@ -47556,7 +47842,7 @@ sub_FAA96C__FAAAEE:
 	calr (0xFA7598 - 0xFAAB54)                 ; FAAB51  calr 0xfa7598
 	ld	de, wa                                  ; FAAB54  ld DE,WA
 	add	xsp, 18                                ; FAAB56  add XSP,0x00000012
-sub_FAA96C__FAAB5C:
+Voice_StageRegs_0800_CD__FAAB5C:
 	ld	xbc, (xiz-8)                            ; FAAB5C  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+11)                             ; FAAB5F  ld A,(XBC+0x0b)
 	extz	wa                                    ; FAAB62  extz WA
@@ -47566,9 +47852,9 @@ sub_FAA96C__FAAB5C:
 	extpfx3 0xC7, 0xF0, 0x98                   ; FAAB6E  ld IXL,W
 	extz	ix                                    ; FAAB71  extz IX
 	cps	ix, 4                                  ; FAAB73  cp IX,4
-	jr ge, sub_FAA96C__FAAB7A                  ; FAAB75  jr GE,0xfaab7a
+	jr ge, Voice_StageRegs_0800_CD__FAAB7A                  ; FAAB75  jr GE,0xfaab7a
 	ldw	ix, 4                                  ; FAAB77  ld IX,0x0004
-sub_FAA96C__FAAB7A:
+Voice_StageRegs_0800_CD__FAAB7A:
 	ld	bc, ix                                  ; FAAB7A  ld BC,IX
 	and	bc, 0xFF                               ; FAAB7C  and BC,0x00ff
 	ld	(xiz-11), bc                            ; FAAB80  ld (XIZ+0xf5),BC
@@ -47581,7 +47867,7 @@ sub_FAA96C__FAAB7A:
 	ld	xbc, (xiz-4)                            ; FAAB92  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+13)                             ; FAAB95  ld A,(XBC+0x0d)
 	and	a, 32                                  ; FAAB98  and A,0x20
-	jr z, sub_FAA96C__FAABE4                   ; FAAB9B  jr Z,0xfaabe4
+	jr z, Voice_StageRegs_0800_CD__FAABE4                   ; FAAB9B  jr Z,0xfaabe4
 	ld	xwa, (xiz-8)                            ; FAAB9D  ld XWA,(XIZ+0xf8)
 	ld	c, (xwa+13)                             ; FAABA0  ld C,(XWA+0x0d)
 	extz	bc                                    ; FAABA3  extz BC
@@ -47607,8 +47893,8 @@ sub_FAA96C__FAAB7A:
 	ld	bc, (xiz+8)                             ; FAABDA  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAABDD  extz XBC
 	ld	(xbc+67), w                             ; FAABDF  ld (XBC+0x43),W
-	jr sub_FAA96C__FAABFA                      ; FAABE2  jr T,0xfaabfa
-sub_FAA96C__FAABE4:
+	jr Voice_StageRegs_0800_CD__FAABFA                      ; FAABE2  jr T,0xfaabfa
+Voice_StageRegs_0800_CD__FAABE4:
 	ld	bc, de                                  ; FAABE4  ld BC,DE
 	sll	bc, 8                                  ; FAABE6  sll 0x08,BC
 	ld	wa, (xiz+8)                             ; FAABE9  ld WA,(XIZ+0x08)
@@ -47617,14 +47903,14 @@ sub_FAA96C__FAABE4:
 	ld	bc, (xiz+8)                             ; FAABF1  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAABF4  extz XBC
 	ld	(xbc+67), 0                             ; FAABF6  ld (XBC+0x43),0x00
-sub_FAA96C__FAABFA:
+Voice_StageRegs_0800_CD__FAABFA:
 	popw	ix                                    ; FAABFA  pop IX
 	popw	de                                    ; FAABFB  pop DE
 	pop	xhl                                    ; FAABFC  pop XHL
 	unlk32 xiz                                 ; FAABFD  unlk XIZ
 	ret                                        ; FAABFF  ret
 ; --------------------------------------------------------------------------
-; sub_FAAC00 -- 0xFAAC00..0xFAACED (238 bytes)
+; Voice_StageRegs_0840_0880_CD -- 0xFAAC00..0xFAACED (238 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFADE8C in sub_FADE2F__FADE6F, 0xFAE082 in sub_FAE013__FAE07E
@@ -47638,10 +47924,24 @@ sub_FAA96C__FAABFA:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0840_0880_CD -- stages word 13 (register 0x0840 + chan), word 14 (register 0x0880 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFAACCF, 0xFAACDB, 0xFAAC9C, 0xFAACB7, 0xFAACE3.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_C, VoiceRegs_Stage_D, sub_FADE2F, sub_FAE013, sub_FAE0A1.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0840 / 0x0880 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FAAC00:
+Voice_StageRegs_0840_0880_CD:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAAC00  link XIZ,0xfffc
 	pushw	hl                                   ; FAAC04  push HL
 	push	xde                                   ; FAAC05  push XDE
@@ -47652,11 +47952,11 @@ sub_FAAC00:
 	extz	xbc                                   ; FAAC0F  extz XBC
 	ld	wa, (xbc+24)                            ; FAAC11  ld WA,(XBC+0x18)
 	and	wa, 0x100                              ; FAAC14  and WA,0x0100
-	jrl z, sub_FAAC00__FAACD6                  ; FAAC18  jrl Z,0xfaacd6
+	jrl z, Voice_StageRegs_0840_0880_CD__FAACD6                  ; FAAC18  jrl Z,0xfaacd6
 	extz	xde                                   ; FAAC1B  extz XDE
 	ld	bc, (xde+61)                            ; FAAC1D  ld BC,(XDE+0x3d)
 	and	bc, 0xFF                               ; FAAC20  and BC,0x00ff
-	jrl z, sub_FAAC00__FAACD6                  ; FAAC24  jrl Z,0xfaacd6
+	jrl z, Voice_StageRegs_0840_0880_CD__FAACD6                  ; FAAC24  jrl Z,0xfaacd6
 	extz	xde                                   ; FAAC27  extz XDE
 	ld	bc, (xde+37)                            ; FAAC29  ld BC,(XDE+0x25)
 	extz	xbc                                   ; FAAC2C  extz XBC
@@ -47671,7 +47971,7 @@ sub_FAAC00:
 	ld	wa, (xbc+31)                            ; FAAC45  ld WA,(XBC+0x1f)
 	ld	(xiz-2), wa                             ; FAAC48  ld (XIZ+0xfe),WA
 	cps	ix, 0                                  ; FAAC4B  cp IX,0
-	jr z, sub_FAAC00__FAAC62                   ; FAAC4D  jr Z,0xfaac62
+	jr z, Voice_StageRegs_0840_0880_CD__FAAC62                   ; FAAC4D  jr Z,0xfaac62
 	ld	ix, hl                                  ; FAAC4F  ld IX,HL
 	sub	ix, wa                                 ; FAAC51  sub IX,WA
 	extz	xde                                   ; FAAC53  extz XDE
@@ -47679,8 +47979,8 @@ sub_FAAC00:
 	ld	hl, bc                                  ; FAAC58  ld HL,BC
 	and	hl, 0x7F                               ; FAAC5A  and HL,0x007f
 	sub	hl, wa                                 ; FAAC5E  sub HL,WA
-	jr sub_FAAC00__FAAC77                      ; FAAC60  jr T,0xfaac77
-sub_FAAC00__FAAC62:
+	jr Voice_StageRegs_0840_0880_CD__FAAC77                      ; FAAC60  jr T,0xfaac77
+Voice_StageRegs_0840_0880_CD__FAAC62:
 	ld	ix, hl                                  ; FAAC62  ld IX,HL
 	extpfx3 0x9E, 0xFE, 0x84                   ; FAAC64  add IX,(XIZ+0xfe)
 	extz	xde                                   ; FAAC67  extz XDE
@@ -47689,7 +47989,7 @@ sub_FAAC00__FAAC62:
 	and	hl, 0x7F                               ; FAAC6E  and HL,0x007f
 	ld	bc, (xiz-2)                             ; FAAC72  ld BC,(XIZ+0xfe)
 	add	hl, bc                                 ; FAAC75  add HL,BC
-sub_FAAC00__FAAC77:
+Voice_StageRegs_0840_0880_CD__FAAC77:
 	pushw	4                                    ; FAAC77  push 0x0004
 	pushw	0x7F                                 ; FAAC7A  push 0x007f
 	pushw	ix                                   ; FAAC7D  push IX
@@ -47703,11 +48003,11 @@ sub_FAAC00__FAAC77:
 	inc	8, xsp                                 ; FAAC8F  inc 0,XSP
 	inc	4, xsp                                 ; FAAC91  inc 4,XSP
 	cp (xiz+10), 0x00                          ; FAAC93  cp (XIZ+0x0a),0x00
-	jr z, sub_FAAC00__FAACA3                   ; FAAC97  jr Z,0xfaaca3
+	jr z, Voice_StageRegs_0840_0880_CD__FAACA3                   ; FAAC97  jr Z,0xfaaca3
 	set	15, wa                                 ; FAAC99  set 0x0f,WA
 	stw_da	(0xD77A), wa                        ; FAAC9C  ld (0x00d77a),WA
-	jr sub_FAAC00__FAACBC                      ; FAACA1  jr T,0xfaacbc
-sub_FAAC00__FAACA3:
+	jr Voice_StageRegs_0840_0880_CD__FAACBC                      ; FAACA1  jr T,0xfaacbc
+Voice_StageRegs_0840_0880_CD__FAACA3:
 	extz	xde                                   ; FAACA3  extz XDE
 	ld	bc, (xde+61)                            ; FAACA5  ld BC,(XDE+0x3d)
 	and	bc, 0xFF00                             ; FAACA8  and BC,0xff00
@@ -47716,7 +48016,7 @@ sub_FAAC00__FAACA3:
 	and	wa, 0xFF                               ; FAACB1  and WA,0x00ff
 	or	bc, wa                                  ; FAACB5  or BC,WA
 	stw_da	(0xD77A), bc                        ; FAACB7  ld (0x00d77a),BC
-sub_FAAC00__FAACBC:
+Voice_StageRegs_0840_0880_CD__FAACBC:
 	extz	xde                                   ; FAACBC  extz XDE
 	ld	bc, (xde+59)                            ; FAACBE  ld BC,(XDE+0x3b)
 	ld	hl, bc                                  ; FAACC1  ld HL,BC
@@ -47725,21 +48025,21 @@ sub_FAAC00__FAACBC:
 	and	bc, 0xFF                               ; FAACC9  and BC,0x00ff
 	or	bc, hl                                  ; FAACCD  or BC,HL
 	stw_da	(0xD778), bc                        ; FAACCF  ld (0x00d778),BC
-	jr sub_FAAC00__FAACE8                      ; FAACD4  jr T,0xfaace8
-sub_FAAC00__FAACD6:
+	jr Voice_StageRegs_0840_0880_CD__FAACE8                      ; FAACD4  jr T,0xfaace8
+Voice_StageRegs_0840_0880_CD__FAACD6:
 	extz	xde                                   ; FAACD6  extz XDE
 	ld	bc, (xde+59)                            ; FAACD8  ld BC,(XDE+0x3b)
 	stw_da	(0xD778), bc                        ; FAACDB  ld (0x00d778),BC
 	ld	bc, (xde+61)                            ; FAACE0  ld BC,(XDE+0x3d)
 	stw_da	(0xD77A), bc                        ; FAACE3  ld (0x00d77a),BC
-sub_FAAC00__FAACE8:
+Voice_StageRegs_0840_0880_CD__FAACE8:
 	popw	ix                                    ; FAACE8  pop IX
 	pop	xde                                    ; FAACE9  pop XDE
 	popw	hl                                    ; FAACEA  pop HL
 	unlk32 xiz                                 ; FAACEB  unlk XIZ
 	ret                                        ; FAACED  ret
 ; --------------------------------------------------------------------------
-; sub_FAACEE -- 0xFAACEE..0xFAB0BC (975 bytes)
+; Voice_StageRegs_0800_B_ModeLt3 -- 0xFAACEE..0xFAB0BC (975 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB1F63 in VoiceRegs_Stage_B
@@ -47753,8 +48053,6 @@ sub_FAAC00__FAACE8:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
 ; ★ ROUND 2, 2026-08-25.  ONE OF THE FOUR ROUTINES THAT BUILD REGISTER
 ;          `chan + 0x0800`.  It writes staging word 12 (RAM 0x00D776) as
 ;          `(level << 8) | rate`: the LOW byte is Voice_EnvelopeRate_Table[tone[+0x28]]
@@ -47766,8 +48064,24 @@ sub_FAAC00__FAACE8:
 ;          register 0x800".  See the 0x0800..0x0A40 block comment in front of
 ;          Dev10C_WriteAllChanRegs; census by notes/prom_c_reg_bytepair_check.py.
 ;          ⚠ This says what ONE of the routine's outputs is, not what the routine is.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0800_B_ModeLt3 -- stages word 12 (register 0x0800 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFAAE88.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_B.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0800 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FAACEE:
+Voice_StageRegs_0800_B_ModeLt3:
 	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAACEE  link XIZ,0xfff5
 	push	xhl                                   ; FAACF2  push XHL
 	push	xde                                   ; FAACF3  push XDE
@@ -47779,26 +48093,26 @@ sub_FAACEE:
 	ld	xiy, (xbc+19)                           ; FAAD00  ld XIY,(XBC+0x13)
 	ld	c, (xiy+16)                             ; FAAD03  ld C,(XIY+0x10)
 	and	c, 16                                  ; FAAD06  and C,0x10
-	jr z, sub_FAACEE__FAAD17                   ; FAAD09  jr Z,0xfaad17
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAD17                   ; FAAD09  jr Z,0xfaad17
 	ld	bc, (xiz+8)                             ; FAAD0B  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAAD0E  extz XBC
 	extpfx5 0x99, 0x01, 0x3C, 0xFF, 0x7F       ; FAAD10  and (XBC+0x01),0x7fff
-	jr sub_FAACEE__FAAD21                      ; FAAD15  jr T,0xfaad21
-sub_FAACEE__FAAD17:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAAD21                      ; FAAD15  jr T,0xfaad21
+Voice_StageRegs_0800_B_ModeLt3__FAAD17:
 	ld	bc, (xiz+8)                             ; FAAD17  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAAD1A  extz XBC
 	extpfx5 0x99, 0x01, 0x3E, 0x00, 0x80       ; FAAD1C  or (XBC+0x01),0x8000
-sub_FAACEE__FAAD21:
+Voice_StageRegs_0800_B_ModeLt3__FAAD21:
 	ld	bc, (xiz+8)                             ; FAAD21  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAAD24  extz XBC
 	ld	wa, (xbc+1)                             ; FAAD26  ld WA,(XBC+0x01)
 	and	wa, 0x800                              ; FAAD29  and WA,0x0800
-	jr z, sub_FAACEE__FAAD3B                   ; FAAD2D  jr Z,0xfaad3b
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAD3B                   ; FAAD2D  jr Z,0xfaad3b
 	ldb_da	a, (0xFDEF8E)                       ; FAAD2F  ld A,(0xfdef8e)
 	extz	wa                                    ; FAAD34  extz WA
 	ld	hl, wa                                  ; FAAD36  ld HL,WA
-	jrl sub_FAACEE__FAAE4C                     ; FAAD38  jrl T,0xfaae4c
-sub_FAACEE__FAAD3B:
+	jrl Voice_StageRegs_0800_B_ModeLt3__FAAE4C                     ; FAAD38  jrl T,0xfaae4c
+Voice_StageRegs_0800_B_ModeLt3__FAAD3B:
 	extpfx3 0x9E, 0x08, 0x04                   ; FAAD3B  pushw (XIZ+0x08)
 	call	0xFC37E2                              ; FAAD3E  call 0xfc37e2
 	ld	ix, wa                                  ; FAAD42  ld IX,WA
@@ -47815,7 +48129,7 @@ sub_FAACEE__FAAD3B:
 	ld	iy, (xde+26)                            ; FAAD5C  ld IY,(XDE+0x1a)
 	and	iy, 0x400                              ; FAAD5F  and IY,0x0400
 	inc	2, xsp                                 ; FAAD63  inc 2,XSP
-	jr z, sub_FAACEE__FAAD93                   ; FAAD65  jr Z,0xfaad93
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAD93                   ; FAAD65  jr Z,0xfaad93
 	extz	xde                                   ; FAAD67  extz XDE
 	ld	iy, (xde+28)                            ; FAAD69  ld IY,(XDE+0x1c)
 	ld	ix, iy                                  ; FAAD6C  ld IX,IY
@@ -47827,20 +48141,20 @@ sub_FAACEE__FAAD3B:
 	ld	iy, (xbc+35)                            ; FAAD7D  ld IY,(XBC+0x23)
 	extz	xiy                                   ; FAAD80  extz XIY
 	ld	de, (xiy+45)                            ; FAAD82  ld DE,(XIY+0x2d)
-	jr z, sub_FAACEE__FAAD8C                   ; FAAD85  jr Z,0xfaad8c
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAD8C                   ; FAAD85  jr Z,0xfaad8c
 	sub	wa, de                                 ; FAAD87  sub WA,DE
 	pushw	wa                                   ; FAAD89  push WA
-	jr sub_FAACEE__FAAD9A                      ; FAAD8A  jr T,0xfaad9a
-sub_FAACEE__FAAD8C:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAAD9A                      ; FAAD8A  jr T,0xfaad9a
+Voice_StageRegs_0800_B_ModeLt3__FAAD8C:
 	ld	bc, hl                                  ; FAAD8C  ld BC,HL
 	add	bc, de                                 ; FAAD8E  add BC,DE
 	pushw	bc                                   ; FAAD90  push BC
-	jr sub_FAACEE__FAAD9A                      ; FAAD91  jr T,0xfaad9a
-sub_FAACEE__FAAD93:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAAD9A                      ; FAAD91  jr T,0xfaad9a
+Voice_StageRegs_0800_B_ModeLt3__FAAD93:
 	pushw	0                                    ; FAAD93  push 0x0000
 	pushw	0x64                                 ; FAAD96  push 0x0064
 	pushw	hl                                   ; FAAD99  push HL
-sub_FAACEE__FAAD9A:
+Voice_StageRegs_0800_B_ModeLt3__FAAD9A:
 	calr (0xFA7598 - 0xFAAD9D)                 ; FAAD9A  calr 0xfa7598
 	ld	hl, wa                                  ; FAAD9D  ld HL,WA
 	extz	wa                                    ; FAAD9F  extz WA
@@ -47853,7 +48167,7 @@ sub_FAACEE__FAAD9A:
 	ld	d, (xwa+51)                             ; FAADB2  ld D,(XWA+0x33)
 	inc	6, xsp                                 ; FAADB5  inc 6,XSP
 	cps	d, 0                                   ; FAADB7  cp D,0
-	jr z, sub_FAACEE__FAAE1B                   ; FAADB9  jr Z,0xfaae1b
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAE1B                   ; FAADB9  jr Z,0xfaae1b
 	push	0                                     ; FAADBB  push 0x00
 	push	d                                     ; FAADBD  push D
 	ld	c, (xwa+50)                             ; FAADBF  ld C,(XWA+0x32)
@@ -47873,7 +48187,7 @@ sub_FAACEE__FAAD9A:
 	inc	8, xsp                                 ; FAADDF  inc 0,XSP
 	inc	2, xsp                                 ; FAADE1  inc 2,XSP
 	cps	d, 0                                   ; FAADE3  cp D,0
-	jr z, sub_FAACEE__FAAE0E                   ; FAADE5  jr Z,0xfaae0e
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAE0E                   ; FAADE5  jr Z,0xfaae0e
 	pushw	4                                    ; FAADE7  push 0x0004
 	ld	bc, (xiz+8)                             ; FAADEA  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAADED  extz XBC
@@ -47890,19 +48204,19 @@ sub_FAACEE__FAAD9A:
 	add	bc, ix                                 ; FAAE07  add BC,IX
 	add	bc, wa                                 ; FAAE09  add BC,WA
 	pushw	bc                                   ; FAAE0B  push BC
-	jr sub_FAACEE__FAAE45                      ; FAAE0C  jr T,0xfaae45
-sub_FAACEE__FAAE0E:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAAE45                      ; FAAE0C  jr T,0xfaae45
+Voice_StageRegs_0800_B_ModeLt3__FAAE0E:
 	pushw	0                                    ; FAAE0E  push 0x0000
 	pushw	0xFF                                 ; FAAE11  push 0x00ff
 	ld	bc, hl                                  ; FAAE14  ld BC,HL
 	add	bc, ix                                 ; FAAE16  add BC,IX
 	pushw	bc                                   ; FAAE18  push BC
-	jr sub_FAACEE__FAAE45                      ; FAAE19  jr T,0xfaae45
-sub_FAACEE__FAAE1B:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAAE45                      ; FAAE19  jr T,0xfaae45
+Voice_StageRegs_0800_B_ModeLt3__FAAE1B:
 	ld	xbc, (xiz-6)                            ; FAAE1B  ld XBC,(XIZ+0xfa)
 	ld	d, (xbc+46)                             ; FAAE1E  ld D,(XBC+0x2e)
 	cps	d, 0                                   ; FAAE21  cp D,0
-	jr z, sub_FAACEE__FAAE4C                   ; FAAE23  jr Z,0xfaae4c
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAE4C                   ; FAAE23  jr Z,0xfaae4c
 	pushw	4                                    ; FAAE25  push 0x0004
 	ld	wa, (xiz+8)                             ; FAAE28  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAAE2B  extz XWA
@@ -47917,21 +48231,21 @@ sub_FAACEE__FAAE1B:
 	pushw	0xFF                                 ; FAAE3F  push 0x00ff
 	add	wa, hl                                 ; FAAE42  add WA,HL
 	pushw	wa                                   ; FAAE44  push WA
-sub_FAACEE__FAAE45:
+Voice_StageRegs_0800_B_ModeLt3__FAAE45:
 	calr (0xFA7598 - 0xFAAE48)                 ; FAAE45  calr 0xfa7598
 	ld	hl, wa                                  ; FAAE48  ld HL,WA
 	inc	6, xsp                                 ; FAAE4A  inc 6,XSP
-sub_FAACEE__FAAE4C:
+Voice_StageRegs_0800_B_ModeLt3__FAAE4C:
 	ld	bc, (xiz+8)                             ; FAAE4C  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAAE4F  extz XBC
 	ld	xwa, (xbc+31)                           ; FAAE51  ld XWA,(XBC+0x1f)
 	ld	c, (xwa)                                ; FAAE54  ld C,(XWA)
 	and	c, 1                                   ; FAAE56  and C,0x01
-	jr z, sub_FAACEE__FAAE63                   ; FAAE59  jr Z,0xfaae63
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAE63                   ; FAAE59  jr Z,0xfaae63
 	cp	hl, 0xFF                                ; FAAE5B  cp HL,0x00ff
-	jr nz, sub_FAACEE__FAAE63                  ; FAAE5F  jr NZ,0xfaae63
+	jr nz, Voice_StageRegs_0800_B_ModeLt3__FAAE63                  ; FAAE5F  jr NZ,0xfaae63
 	dec	1, hl                                  ; FAAE61  dec 1,HL
-sub_FAACEE__FAAE63:
+Voice_StageRegs_0800_B_ModeLt3__FAAE63:
 	ld	xbc, (xiz-6)                            ; FAAE63  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+40)                             ; FAAE66  ld A,(XBC+0x28)
 	extz	wa                                    ; FAAE69  extz WA
@@ -47956,7 +48270,7 @@ sub_FAACEE__FAAE63:
 	extz	xhl                                   ; FAAE9D  extz XHL
 	ld	bc, (xhl+26)                            ; FAAE9F  ld BC,(XHL+0x1a)
 	and	bc, 0x800                              ; FAAEA2  and BC,0x0800
-	jrl z, sub_FAACEE__FAAF34                  ; FAAEA6  jrl Z,0xfaaf34
+	jrl z, Voice_StageRegs_0800_B_ModeLt3__FAAF34                  ; FAAEA6  jrl Z,0xfaaf34
 	extz	xhl                                   ; FAAEA9  extz XHL
 	ld	bc, (xhl+28)                            ; FAAEAB  ld BC,(XHL+0x1c)
 	ld	ix, bc                                  ; FAAEAE  ld IX,BC
@@ -47972,7 +48286,7 @@ sub_FAACEE__FAAE63:
 	ld	iy, (xbc+35)                            ; FAAEC9  ld IY,(XBC+0x23)
 	extz	xiy                                   ; FAAECC  extz XIY
 	ld	hl, (xiy+47)                            ; FAAECE  ld HL,(XIY+0x2f)
-	jr z, sub_FAACEE__FAAEFF                   ; FAAED1  jr Z,0xfaaeff
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAEFF                   ; FAAED1  jr Z,0xfaaeff
 	sub	wa, hl                                 ; FAAED3  sub WA,HL
 	pushw	wa                                   ; FAAED5  push WA
 	calr (0xFA7598 - 0xFAAED9)                 ; FAAED6  calr 0xfa7598
@@ -47991,8 +48305,8 @@ sub_FAACEE__FAAE63:
 	ld	bc, (xiy+47)                            ; FAAEF7  ld BC,(XIY+0x2f)
 	sub	wa, bc                                 ; FAAEFA  sub WA,BC
 	pushw	wa                                   ; FAAEFC  push WA
-	jr sub_FAACEE__FAAF2B                      ; FAAEFD  jr T,0xfaaf2b
-sub_FAACEE__FAAEFF:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAAF2B                      ; FAAEFD  jr T,0xfaaf2b
+Voice_StageRegs_0800_B_ModeLt3__FAAEFF:
 	ld	bc, de                                  ; FAAEFF  ld BC,DE
 	add	bc, hl                                 ; FAAF01  add BC,HL
 	pushw	bc                                   ; FAAF03  push BC
@@ -48012,12 +48326,12 @@ sub_FAACEE__FAAEFF:
 	ld	bc, (xiy+47)                            ; FAAF25  ld BC,(XIY+0x2f)
 	add	wa, bc                                 ; FAAF28  add WA,BC
 	pushw	wa                                   ; FAAF2A  push WA
-sub_FAACEE__FAAF2B:
+Voice_StageRegs_0800_B_ModeLt3__FAAF2B:
 	calr (0xFA7598 - 0xFAAF2E)                 ; FAAF2B  calr 0xfa7598
 	ld	de, wa                                  ; FAAF2E  ld DE,WA
 	inc	6, xsp                                 ; FAAF30  inc 6,XSP
-	jr sub_FAACEE__FAAF45                      ; FAAF32  jr T,0xfaaf45
-sub_FAACEE__FAAF34:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAAF45                      ; FAAF32  jr T,0xfaaf45
+Voice_StageRegs_0800_B_ModeLt3__FAAF34:
 	ld	xbc, (xiz-6)                            ; FAAF34  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+41)                             ; FAAF37  ld A,(XBC+0x29)
 	extz	wa                                    ; FAAF3A  extz WA
@@ -48025,7 +48339,7 @@ sub_FAACEE__FAAF34:
 	ld	a, (xbc+43)                             ; FAAF3E  ld A,(XBC+0x2b)
 	extz	wa                                    ; FAAF41  extz WA
 	ld	de, wa                                  ; FAAF43  ld DE,WA
-sub_FAACEE__FAAF45:
+Voice_StageRegs_0800_B_ModeLt3__FAAF45:
 	ld	c, l                                    ; FAAF45  ld C,L
 	extz	bc                                    ; FAAF47  extz BC
 	extz	xbc                                   ; FAAF49  extz XBC
@@ -48045,7 +48359,7 @@ sub_FAACEE__FAAF45:
 	ld	c, (xiy+52)                             ; FAAF6F  ld C,(XIY+0x34)
 	ld	(xiz-7), c                              ; FAAF72  ld (XIZ+0xf9),C
 	cps	c, 0                                   ; FAAF75  cp C,0
-	jrl z, sub_FAACEE__FAB00B                  ; FAAF77  jrl Z,0xfab00b
+	jrl z, Voice_StageRegs_0800_B_ModeLt3__FAB00B                  ; FAAF77  jrl Z,0xfab00b
 	pushw	bc                                   ; FAAF7A  push BC
 	ld	b, (xiy+50)                             ; FAAF7B  ld B,(XIY+0x32)
 	push	0                                     ; FAAF7E  push 0x00
@@ -48068,7 +48382,7 @@ sub_FAACEE__FAAF45:
 	inc	8, xsp                                 ; FAAFA7  inc 0,XSP
 	inc	2, xsp                                 ; FAAFA9  inc 2,XSP
 	cps	a, 0                                   ; FAAFAB  cp A,0
-	jr z, sub_FAACEE__FAAFEC                   ; FAAFAD  jr Z,0xfaafec
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAFEC                   ; FAAFAD  jr Z,0xfaafec
 	pushw	4                                    ; FAAFAF  push 0x0004
 	ld	wa, (xiz+8)                             ; FAAFB2  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAAFB5  extz XWA
@@ -48094,8 +48408,8 @@ sub_FAACEE__FAAF45:
 	add	bc, ix                                 ; FAAFE4  add BC,IX
 	extpfx3 0x9E, 0xF7, 0x81                   ; FAAFE6  add BC,(XIZ+0xf7)
 	pushw	bc                                   ; FAAFE9  push BC
-	jr sub_FAACEE__FAB04B                      ; FAAFEA  jr T,0xfab04b
-sub_FAACEE__FAAFEC:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAB04B                      ; FAAFEA  jr T,0xfab04b
+Voice_StageRegs_0800_B_ModeLt3__FAAFEC:
 	pushw	0                                    ; FAAFEC  push 0x0000
 	pushw	0xFF                                 ; FAAFEF  push 0x00ff
 	ld	bc, hl                                  ; FAAFF2  ld BC,HL
@@ -48109,13 +48423,13 @@ sub_FAACEE__FAAFEC:
 	ld	bc, de                                  ; FAB004  ld BC,DE
 	add	bc, ix                                 ; FAB006  add BC,IX
 	pushw	bc                                   ; FAB008  push BC
-	jr sub_FAACEE__FAB04B                      ; FAB009  jr T,0xfab04b
-sub_FAACEE__FAB00B:
+	jr Voice_StageRegs_0800_B_ModeLt3__FAB04B                      ; FAB009  jr T,0xfab04b
+Voice_StageRegs_0800_B_ModeLt3__FAB00B:
 	ld	xbc, (xiz-6)                            ; FAB00B  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+47)                             ; FAB00E  ld A,(XBC+0x2f)
 	ld	(xiz-2), a                              ; FAB011  ld (XIZ+0xfe),A
 	cps	a, 0                                   ; FAB014  cp A,0
-	jr z, sub_FAACEE__FAB052                   ; FAB016  jr Z,0xfab052
+	jr z, Voice_StageRegs_0800_B_ModeLt3__FAB052                   ; FAB016  jr Z,0xfab052
 	pushw	4                                    ; FAB018  push 0x0004
 	ld	wa, (xiz+8)                             ; FAB01B  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAB01E  extz XWA
@@ -48138,11 +48452,11 @@ sub_FAACEE__FAB00B:
 	ld	bc, de                                  ; FAB046  ld BC,DE
 	add	bc, ix                                 ; FAB048  add BC,IX
 	pushw	bc                                   ; FAB04A  push BC
-sub_FAACEE__FAB04B:
+Voice_StageRegs_0800_B_ModeLt3__FAB04B:
 	calr (0xFA7598 - 0xFAB04E)                 ; FAB04B  calr 0xfa7598
 	ld	de, wa                                  ; FAB04E  ld DE,WA
 	inc	6, xsp                                 ; FAB050  inc 6,XSP
-sub_FAACEE__FAB052:
+Voice_StageRegs_0800_B_ModeLt3__FAB052:
 	ld	xbc, (xiz-6)                            ; FAB052  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+42)                             ; FAB055  ld A,(XBC+0x2a)
 	extz	wa                                    ; FAB058  extz WA
@@ -48152,9 +48466,9 @@ sub_FAACEE__FAB052:
 	extpfx3 0xC7, 0xF0, 0x98                   ; FAB064  ld IXL,W
 	extz	ix                                    ; FAB067  extz IX
 	cps	ix, 4                                  ; FAB069  cp IX,4
-	jr ge, sub_FAACEE__FAB070                  ; FAB06B  jr GE,0xfab070
+	jr ge, Voice_StageRegs_0800_B_ModeLt3__FAB070                  ; FAB06B  jr GE,0xfab070
 	ldw	ix, 4                                  ; FAB06D  ld IX,0x0004
-sub_FAACEE__FAB070:
+Voice_StageRegs_0800_B_ModeLt3__FAB070:
 	ld	xbc, (xiz-6)                            ; FAB070  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+44)                             ; FAB073  ld A,(XBC+0x2c)
 	extz	wa                                    ; FAB076  extz WA
@@ -48187,7 +48501,7 @@ sub_FAACEE__FAB070:
 	unlk32 xiz                                 ; FAB0BA  unlk XIZ
 	ret                                        ; FAB0BC  ret
 ; --------------------------------------------------------------------------
-; sub_FAB0BD -- 0xFAB0BD..0xFAB489 (973 bytes)
+; Voice_StageRegs_0800_B_ModeGe3 -- 0xFAB0BD..0xFAB489 (973 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB1F7B in VoiceRegs_Stage_B__FB1F7B
@@ -48200,8 +48514,6 @@ sub_FAACEE__FAB070:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
 ; ★ ROUND 2, 2026-08-25.  ONE OF THE FOUR ROUTINES THAT BUILD REGISTER
 ;          `chan + 0x0800`.  It writes staging word 12 (RAM 0x00D776) as
 ;          `(level << 8) | rate`: the LOW byte is Voice_EnvelopeRate_Table[tone[+0x28]]
@@ -48213,8 +48525,24 @@ sub_FAACEE__FAB070:
 ;          register 0x800".  See the 0x0800..0x0A40 block comment in front of
 ;          Dev10C_WriteAllChanRegs; census by notes/prom_c_reg_bytepair_check.py.
 ;          ⚠ This says what ONE of the routine's outputs is, not what the routine is.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_StageRegs_0800_B_ModeGe3 -- stages word 12 (register 0x0800 + chan) of the 0x0010C000 per-channel
+;          staging struct at RAM 0x00D75E, and nothing else in that struct.
+;          Write site(s): 0xFAB236.
+;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
+;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
+;          VoiceRegs_Stage_*), immediately before the call.
+;          Called from: VoiceRegs_Stage_B.
+;          Evidence: the write addresses above are instruction operands, listed by
+;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
+;          this routine writes EXACTLY the register block(s) its name claims and no other.
+;          The struct-word -> register-block map is Dev10C_WriteAllChanRegs's own
+;          (notes/prom_c_tg_chanmap.py), cross-checked against
+;          notes/prom_c_dev10c_field_sources.py by the same section.
+;          Unknown: what register 0x0800 carries.  The name states WHICH register this
+;          routine produces, never what the register means.
 ; --------------------------------------------------------------------------
-sub_FAB0BD:
+Voice_StageRegs_0800_B_ModeGe3:
 	link32 0xEE, 0x0C, 0xF1, 0xFF              ; FAB0BD  link XIZ,0xfff1
 	push	xhl                                   ; FAB0C1  push XHL
 	pushw	de                                   ; FAB0C2  push DE
@@ -48226,23 +48554,23 @@ sub_FAB0BD:
 	ld	xiy, (xbc+19)                           ; FAB0CF  ld XIY,(XBC+0x13)
 	ld	c, (xiy+16)                             ; FAB0D2  ld C,(XIY+0x10)
 	and	c, 16                                  ; FAB0D5  and C,0x10
-	jr z, sub_FAB0BD__FAB0E6                   ; FAB0D8  jr Z,0xfab0e6
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB0E6                   ; FAB0D8  jr Z,0xfab0e6
 	ld	bc, (xiz+8)                             ; FAB0DA  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAB0DD  extz XBC
 	extpfx5 0x99, 0x01, 0x3C, 0xFF, 0x7F       ; FAB0DF  and (XBC+0x01),0x7fff
-	jr sub_FAB0BD__FAB0F0                      ; FAB0E4  jr T,0xfab0f0
-sub_FAB0BD__FAB0E6:
+	jr Voice_StageRegs_0800_B_ModeGe3__FAB0F0                      ; FAB0E4  jr T,0xfab0f0
+Voice_StageRegs_0800_B_ModeGe3__FAB0E6:
 	ld	bc, (xiz+8)                             ; FAB0E6  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAB0E9  extz XBC
 	extpfx5 0x99, 0x01, 0x3E, 0x00, 0x80       ; FAB0EB  or (XBC+0x01),0x8000
-sub_FAB0BD__FAB0F0:
+Voice_StageRegs_0800_B_ModeGe3__FAB0F0:
 	ld	hl, (xiz+8)                             ; FAB0F0  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FAB0F3  extz XHL
 	ld	hl, (xhl+37)                            ; FAB0F5  ld HL,(XHL+0x25)
 	extz	xhl                                   ; FAB0F8  extz XHL
 	ld	bc, (xhl+26)                            ; FAB0FA  ld BC,(XHL+0x1a)
 	and	bc, 0x400                              ; FAB0FD  and BC,0x0400
-	jr z, sub_FAB0BD__FAB140                   ; FAB101  jr Z,0xfab140
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB140                   ; FAB101  jr Z,0xfab140
 	extz	xhl                                   ; FAB103  extz XHL
 	ld	bc, (xhl+28)                            ; FAB105  ld BC,(XHL+0x1c)
 	ld	ix, bc                                  ; FAB108  ld IX,BC
@@ -48258,25 +48586,25 @@ sub_FAB0BD__FAB0F0:
 	ld	iy, (xbc+35)                            ; FAB123  ld IY,(XBC+0x23)
 	extz	xiy                                   ; FAB126  extz XIY
 	ld	hl, (xiy+45)                            ; FAB128  ld HL,(XIY+0x2d)
-	jr z, sub_FAB0BD__FAB132                   ; FAB12B  jr Z,0xfab132
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB132                   ; FAB12B  jr Z,0xfab132
 	sub	wa, hl                                 ; FAB12D  sub WA,HL
 	pushw	wa                                   ; FAB12F  push WA
-	jr sub_FAB0BD__FAB137                      ; FAB130  jr T,0xfab137
-sub_FAB0BD__FAB132:
+	jr Voice_StageRegs_0800_B_ModeGe3__FAB137                      ; FAB130  jr T,0xfab137
+Voice_StageRegs_0800_B_ModeGe3__FAB132:
 	ld	bc, de                                  ; FAB132  ld BC,DE
 	add	bc, hl                                 ; FAB134  add BC,HL
 	pushw	bc                                   ; FAB136  push BC
-sub_FAB0BD__FAB137:
+Voice_StageRegs_0800_B_ModeGe3__FAB137:
 	calr (0xFA7598 - 0xFAB13A)                 ; FAB137  calr 0xfa7598
 	ld	hl, wa                                  ; FAB13A  ld HL,WA
 	inc	6, xsp                                 ; FAB13C  inc 6,XSP
-	jr sub_FAB0BD__FAB14A                      ; FAB13E  jr T,0xfab14a
-sub_FAB0BD__FAB140:
+	jr Voice_StageRegs_0800_B_ModeGe3__FAB14A                      ; FAB13E  jr T,0xfab14a
+Voice_StageRegs_0800_B_ModeGe3__FAB140:
 	ld	xbc, (xiz-6)                            ; FAB140  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+39)                             ; FAB143  ld A,(XBC+0x27)
 	extz	wa                                    ; FAB146  extz WA
 	ld	hl, wa                                  ; FAB148  ld HL,WA
-sub_FAB0BD__FAB14A:
+Voice_StageRegs_0800_B_ModeGe3__FAB14A:
 	ld	c, l                                    ; FAB14A  ld C,L
 	extz	bc                                    ; FAB14C  extz BC
 	extz	xbc                                   ; FAB14E  extz XBC
@@ -48287,7 +48615,7 @@ sub_FAB0BD__FAB14A:
 	ld	xbc, (xiz-6)                            ; FAB15C  ld XBC,(XIZ+0xfa)
 	ld	d, (xbc+51)                             ; FAB15F  ld D,(XBC+0x33)
 	cps	d, 0                                   ; FAB162  cp D,0
-	jr z, sub_FAB0BD__FAB1C6                   ; FAB164  jr Z,0xfab1c6
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB1C6                   ; FAB164  jr Z,0xfab1c6
 	push	0                                     ; FAB166  push 0x00
 	push	d                                     ; FAB168  push D
 	ld	a, (xbc+50)                             ; FAB16A  ld A,(XBC+0x32)
@@ -48307,7 +48635,7 @@ sub_FAB0BD__FAB14A:
 	inc	8, xsp                                 ; FAB18A  inc 0,XSP
 	inc	2, xsp                                 ; FAB18C  inc 2,XSP
 	cps	d, 0                                   ; FAB18E  cp D,0
-	jr z, sub_FAB0BD__FAB1B9                   ; FAB190  jr Z,0xfab1b9
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB1B9                   ; FAB190  jr Z,0xfab1b9
 	pushw	4                                    ; FAB192  push 0x0004
 	ld	bc, (xiz+8)                             ; FAB195  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAB198  extz XBC
@@ -48324,19 +48652,19 @@ sub_FAB0BD__FAB14A:
 	add	bc, ix                                 ; FAB1B2  add BC,IX
 	add	bc, wa                                 ; FAB1B4  add BC,WA
 	pushw	bc                                   ; FAB1B6  push BC
-	jr sub_FAB0BD__FAB1F0                      ; FAB1B7  jr T,0xfab1f0
-sub_FAB0BD__FAB1B9:
+	jr Voice_StageRegs_0800_B_ModeGe3__FAB1F0                      ; FAB1B7  jr T,0xfab1f0
+Voice_StageRegs_0800_B_ModeGe3__FAB1B9:
 	pushw	0                                    ; FAB1B9  push 0x0000
 	pushw	0xFF                                 ; FAB1BC  push 0x00ff
 	ld	bc, hl                                  ; FAB1BF  ld BC,HL
 	add	bc, ix                                 ; FAB1C1  add BC,IX
 	pushw	bc                                   ; FAB1C3  push BC
-	jr sub_FAB0BD__FAB1F0                      ; FAB1C4  jr T,0xfab1f0
-sub_FAB0BD__FAB1C6:
+	jr Voice_StageRegs_0800_B_ModeGe3__FAB1F0                      ; FAB1C4  jr T,0xfab1f0
+Voice_StageRegs_0800_B_ModeGe3__FAB1C6:
 	ld	xbc, (xiz-6)                            ; FAB1C6  ld XBC,(XIZ+0xfa)
 	ld	d, (xbc+46)                             ; FAB1C9  ld D,(XBC+0x2e)
 	cps	d, 0                                   ; FAB1CC  cp D,0
-	jr z, sub_FAB0BD__FAB1F7                   ; FAB1CE  jr Z,0xfab1f7
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB1F7                   ; FAB1CE  jr Z,0xfab1f7
 	pushw	4                                    ; FAB1D0  push 0x0004
 	ld	wa, (xiz+8)                             ; FAB1D3  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAB1D6  extz XWA
@@ -48351,21 +48679,21 @@ sub_FAB0BD__FAB1C6:
 	pushw	0xFF                                 ; FAB1EA  push 0x00ff
 	add	wa, hl                                 ; FAB1ED  add WA,HL
 	pushw	wa                                   ; FAB1EF  push WA
-sub_FAB0BD__FAB1F0:
+Voice_StageRegs_0800_B_ModeGe3__FAB1F0:
 	calr (0xFA7598 - 0xFAB1F3)                 ; FAB1F0  calr 0xfa7598
 	ld	hl, wa                                  ; FAB1F3  ld HL,WA
 	inc	6, xsp                                 ; FAB1F5  inc 6,XSP
-sub_FAB0BD__FAB1F7:
+Voice_StageRegs_0800_B_ModeGe3__FAB1F7:
 	ld	bc, (xiz+8)                             ; FAB1F7  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAB1FA  extz XBC
 	ld	xwa, (xbc+31)                           ; FAB1FC  ld XWA,(XBC+0x1f)
 	ld	c, (xwa)                                ; FAB1FF  ld C,(XWA)
 	and	c, 1                                   ; FAB201  and C,0x01
-	jr z, sub_FAB0BD__FAB20E                   ; FAB204  jr Z,0xfab20e
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB20E                   ; FAB204  jr Z,0xfab20e
 	cp	hl, 0xFF                                ; FAB206  cp HL,0x00ff
-	jr nz, sub_FAB0BD__FAB20E                  ; FAB20A  jr NZ,0xfab20e
+	jr nz, Voice_StageRegs_0800_B_ModeGe3__FAB20E                  ; FAB20A  jr NZ,0xfab20e
 	dec	1, hl                                  ; FAB20C  dec 1,HL
-sub_FAB0BD__FAB20E:
+Voice_StageRegs_0800_B_ModeGe3__FAB20E:
 	ld	xbc, (xiz-6)                            ; FAB20E  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+40)                             ; FAB211  ld A,(XBC+0x28)
 	extz	wa                                    ; FAB214  extz WA
@@ -48419,7 +48747,7 @@ sub_FAB0BD__FAB20E:
 	ld	bc, (xix+26)                            ; FAB296  ld BC,(XIX+0x1a)
 	and	bc, 0x800                              ; FAB299  and BC,0x0800
 	inc	6, xsp                                 ; FAB29D  inc 6,XSP
-	jrl z, sub_FAB0BD__FAB312                  ; FAB29F  jrl Z,0xfab312
+	jrl z, Voice_StageRegs_0800_B_ModeGe3__FAB312                  ; FAB29F  jrl Z,0xfab312
 	extz	xix                                   ; FAB2A2  extz XIX
 	ld	bc, (xix+28)                            ; FAB2A4  ld BC,(XIX+0x1c)
 	and	bc, 0x800                              ; FAB2A7  and BC,0x0800
@@ -48431,7 +48759,7 @@ sub_FAB0BD__FAB20E:
 	ld	iy, (xbc+35)                            ; FAB2B9  ld IY,(XBC+0x23)
 	extz	xiy                                   ; FAB2BC  extz XIY
 	ld	ix, (xiy+47)                            ; FAB2BE  ld IX,(XIY+0x2f)
-	jr z, sub_FAB0BD__FAB2E9                   ; FAB2C1  jr Z,0xfab2e9
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB2E9                   ; FAB2C1  jr Z,0xfab2e9
 	ld	iy, hl                                  ; FAB2C3  ld IY,HL
 	sub	iy, ix                                 ; FAB2C5  sub IY,IX
 	pushw	iy                                   ; FAB2C7  push IY
@@ -48448,8 +48776,8 @@ sub_FAB0BD__FAB20E:
 	ld	iy, de                                  ; FAB2E2  ld IY,DE
 	sub	iy, bc                                 ; FAB2E4  sub IY,BC
 	pushw	iy                                   ; FAB2E6  push IY
-	jr sub_FAB0BD__FAB30B                      ; FAB2E7  jr T,0xfab30b
-sub_FAB0BD__FAB2E9:
+	jr Voice_StageRegs_0800_B_ModeGe3__FAB30B                      ; FAB2E7  jr T,0xfab30b
+Voice_StageRegs_0800_B_ModeGe3__FAB2E9:
 	ld	bc, hl                                  ; FAB2E9  ld BC,HL
 	add	bc, ix                                 ; FAB2EB  add BC,IX
 	pushw	bc                                   ; FAB2ED  push BC
@@ -48465,11 +48793,11 @@ sub_FAB0BD__FAB2E9:
 	ld	bc, (xiy+47)                            ; FAB305  ld BC,(XIY+0x2f)
 	add	bc, de                                 ; FAB308  add BC,DE
 	pushw	bc                                   ; FAB30A  push BC
-sub_FAB0BD__FAB30B:
+Voice_StageRegs_0800_B_ModeGe3__FAB30B:
 	calr (0xFA7598 - 0xFAB30E)                 ; FAB30B  calr 0xfa7598
 	ld	de, wa                                  ; FAB30E  ld DE,WA
 	inc	6, xsp                                 ; FAB310  inc 6,XSP
-sub_FAB0BD__FAB312:
+Voice_StageRegs_0800_B_ModeGe3__FAB312:
 	ld	c, l                                    ; FAB312  ld C,L
 	extz	bc                                    ; FAB314  extz BC
 	extz	xbc                                   ; FAB316  extz XBC
@@ -48489,7 +48817,7 @@ sub_FAB0BD__FAB312:
 	ld	c, (xiy+52)                             ; FAB33C  ld C,(XIY+0x34)
 	ld	(xiz-7), c                              ; FAB33F  ld (XIZ+0xf9),C
 	cps	c, 0                                   ; FAB342  cp C,0
-	jrl z, sub_FAB0BD__FAB3D8                  ; FAB344  jrl Z,0xfab3d8
+	jrl z, Voice_StageRegs_0800_B_ModeGe3__FAB3D8                  ; FAB344  jrl Z,0xfab3d8
 	pushw	bc                                   ; FAB347  push BC
 	ld	b, (xiy+50)                             ; FAB348  ld B,(XIY+0x32)
 	push	0                                     ; FAB34B  push 0x00
@@ -48512,7 +48840,7 @@ sub_FAB0BD__FAB312:
 	inc	8, xsp                                 ; FAB374  inc 0,XSP
 	inc	2, xsp                                 ; FAB376  inc 2,XSP
 	cps	a, 0                                   ; FAB378  cp A,0
-	jr z, sub_FAB0BD__FAB3B9                   ; FAB37A  jr Z,0xfab3b9
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB3B9                   ; FAB37A  jr Z,0xfab3b9
 	pushw	4                                    ; FAB37C  push 0x0004
 	ld	wa, (xiz+8)                             ; FAB37F  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAB382  extz XWA
@@ -48538,8 +48866,8 @@ sub_FAB0BD__FAB312:
 	add	bc, ix                                 ; FAB3B1  add BC,IX
 	extpfx3 0x9E, 0xF7, 0x81                   ; FAB3B3  add BC,(XIZ+0xf7)
 	pushw	bc                                   ; FAB3B6  push BC
-	jr sub_FAB0BD__FAB418                      ; FAB3B7  jr T,0xfab418
-sub_FAB0BD__FAB3B9:
+	jr Voice_StageRegs_0800_B_ModeGe3__FAB418                      ; FAB3B7  jr T,0xfab418
+Voice_StageRegs_0800_B_ModeGe3__FAB3B9:
 	pushw	0                                    ; FAB3B9  push 0x0000
 	pushw	0xFF                                 ; FAB3BC  push 0x00ff
 	ld	bc, hl                                  ; FAB3BF  ld BC,HL
@@ -48553,13 +48881,13 @@ sub_FAB0BD__FAB3B9:
 	ld	bc, de                                  ; FAB3D1  ld BC,DE
 	add	bc, ix                                 ; FAB3D3  add BC,IX
 	pushw	bc                                   ; FAB3D5  push BC
-	jr sub_FAB0BD__FAB418                      ; FAB3D6  jr T,0xfab418
-sub_FAB0BD__FAB3D8:
+	jr Voice_StageRegs_0800_B_ModeGe3__FAB418                      ; FAB3D6  jr T,0xfab418
+Voice_StageRegs_0800_B_ModeGe3__FAB3D8:
 	ld	xbc, (xiz-6)                            ; FAB3D8  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+47)                             ; FAB3DB  ld A,(XBC+0x2f)
 	ld	(xiz-2), a                              ; FAB3DE  ld (XIZ+0xfe),A
 	cps	a, 0                                   ; FAB3E1  cp A,0
-	jr z, sub_FAB0BD__FAB41F                   ; FAB3E3  jr Z,0xfab41f
+	jr z, Voice_StageRegs_0800_B_ModeGe3__FAB41F                   ; FAB3E3  jr Z,0xfab41f
 	pushw	4                                    ; FAB3E5  push 0x0004
 	ld	wa, (xiz+8)                             ; FAB3E8  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FAB3EB  extz XWA
@@ -48582,11 +48910,11 @@ sub_FAB0BD__FAB3D8:
 	ld	bc, de                                  ; FAB413  ld BC,DE
 	add	bc, ix                                 ; FAB415  add BC,IX
 	pushw	bc                                   ; FAB417  push BC
-sub_FAB0BD__FAB418:
+Voice_StageRegs_0800_B_ModeGe3__FAB418:
 	calr (0xFA7598 - 0xFAB41B)                 ; FAB418  calr 0xfa7598
 	ld	de, wa                                  ; FAB41B  ld DE,WA
 	inc	6, xsp                                 ; FAB41D  inc 6,XSP
-sub_FAB0BD__FAB41F:
+Voice_StageRegs_0800_B_ModeGe3__FAB41F:
 	ld	xbc, (xiz-6)                            ; FAB41F  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+42)                             ; FAB422  ld A,(XBC+0x2a)
 	extz	wa                                    ; FAB425  extz WA
@@ -48596,9 +48924,9 @@ sub_FAB0BD__FAB41F:
 	extpfx3 0xC7, 0xF0, 0x98                   ; FAB431  ld IXL,W
 	extz	ix                                    ; FAB434  extz IX
 	cps	ix, 4                                  ; FAB436  cp IX,4
-	jr ge, sub_FAB0BD__FAB43D                  ; FAB438  jr GE,0xfab43d
+	jr ge, Voice_StageRegs_0800_B_ModeGe3__FAB43D                  ; FAB438  jr GE,0xfab43d
 	ldw	ix, 4                                  ; FAB43A  ld IX,0x0004
-sub_FAB0BD__FAB43D:
+Voice_StageRegs_0800_B_ModeGe3__FAB43D:
 	ld	xbc, (xiz-6)                            ; FAB43D  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+44)                             ; FAB440  ld A,(XBC+0x2c)
 	extz	wa                                    ; FAB443  extz WA
@@ -49999,8 +50327,8 @@ sub_FABD50__FABD9E:
 ; sub_FABDAC -- 0xFABDAC..0xFABE2F (132 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFABE52 in sub_FABE30__FABE3F, 0xFABEDD in sub_FABE30__FABECC
-;          0xFABF6F in sub_FABE30__FABF5D
+;          0xFABE52 in Voice_RecomputeAllThreeBaseCurves__FABE3F, 0xFABEDD in Voice_RecomputeAllThreeBaseCurves__FABECC
+;          0xFABF6F in Voice_RecomputeAllThreeBaseCurves__FABF5D
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFABDAC-0xFABE2F
@@ -50128,15 +50456,15 @@ sub_FABDAC__FABE2B:
 ;     python3 notes/prom_c_verify_fragment.py c 0xFABE30 /tmp/b.final.s
 ; ==============================================================================
 ; --------------------------------------------------------------------------
-; sub_FABE30 -- 0xFABE30..0xFAC025 (502 bytes)
+; Voice_RecomputeAllThreeBaseCurves -- 0xFABE30..0xFAC025 (502 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFACA43
 ; Inputs:  frame `link XIZ,-12`; no positive frame slot is read
 ; Outputs: writes 0x00D796, 0x00D79E, 0x00D7A0
-; Calls:   0xFA796D = sub_FA796D, 0xFA7A4B = sub_FA7A4B
-;          0xFA7B31 = sub_FA7B31, 0xFABDAC = sub_FABDAC
+; Calls:   0xFA796D = EGEnv_Eval_BaseCurveA, 0xFA7A4B = EGEnv_Eval_BaseCurveB
+;          0xFA7B31 = EGEnv_Eval_FreqWriteBaseCurve, 0xFABDAC = sub_FABDAC
 ;          0xFB7C8F = Dev10C_SetChanReg_0600_b, 0xFB7E7B = Dev10C_SetChanReg_01C0_b
 ;          0xFB7FCE = Dev10C_SetChanReg_01C0_or_0600_b, 0xFCB11B = Multiply32
 ; Evidence: the listing below is the byte-identical round-trip of 0xFABE30-0xFAC025
@@ -50144,17 +50472,23 @@ sub_FABDAC__FABE2B:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_RecomputeAllThreeBaseCurves -- the ONE
+;          routine in the image that calls all three BASE evaluators (0xFABE60, 0xFABEEB,
+;          0xFABF7E) and none of the three value evaluators, writing 0x00D796, 0x00D79E and
+;          0x00D7A0 and then Dev10C_SetChanReg_01C0_b / _0600_b / _01C0_or_0600_b.
+;          Evidence: the co-occurrence census in notes/prom_c_understanding_round6.py --blocks
+;          enumerates every caller of every evaluator; this is the only row with more than one
+;          block letter, and the check that says so names it explicitly.
 ; --------------------------------------------------------------------------
-sub_FABE30:
+Voice_RecomputeAllThreeBaseCurves:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FABE30  link XIZ,0xfff4
 	push	xhl                                   ; FABE34  push XHL
 	pushw	de                                   ; FABE35  push DE
 	pushw	ix                                   ; FABE36  push IX
 	ldw (xiz-2), 0x0000                        ; FABE37  ld (XIZ+0xfe),0x0000
 	ldw	de, 0                                  ; FABE3C  ld DE,0x0000
-sub_FABE30__FABE3F:
+Voice_RecomputeAllThreeBaseCurves__FABE3F:
 	ld	ix, de                                  ; FABE3F  ld IX,DE
 	ldw	hl, 0x4CCF                             ; FABE41  ld HL,0x4ccf
 	ld	bc, ix                                  ; FABE44  ld BC,IX
@@ -50162,20 +50496,20 @@ sub_FABE30__FABE3F:
 	extz	xhl                                   ; FABE48  extz XHL
 	ld	c, (xhl)                                ; FABE4A  ld C,(XHL)
 	and	c, 24                                  ; FABE4C  and C,0x18
-	jr z, sub_FABE30__FABEB3                   ; FABE4F  jr Z,0xfabeb3
+	jr z, Voice_RecomputeAllThreeBaseCurves__FABEB3                   ; FABE4F  jr Z,0xfabeb3
 	pushw	hl                                   ; FABE51  push HL
 	calr (0xFABDAC - 0xFABE55)                 ; FABE52  calr 0xfabdac
 	ld	hl, wa                                  ; FABE55  ld HL,WA
 	popw	bc                                    ; FABE57  pop BC
 	cps	wa, 0                                  ; FABE58  cp WA,0
-	jr z, sub_FABE30__FABEB3                   ; FABE5A  jr Z,0xfabeb3
+	jr z, Voice_RecomputeAllThreeBaseCurves__FABEB3                   ; FABE5A  jr Z,0xfabeb3
 	ld	c, (xiz-2)                              ; FABE5C  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABE5F  push BC
 	calr (0xFA796D - 0xFABE63)                 ; FABE60  calr 0xfa796d
 	stw_da	(0xD79E), wa                        ; FABE63  ld (0x00d79e),WA
 	popw	bc                                    ; FABE68  pop BC
 	cp	hl, 0x100                               ; FABE69  cp HL,0x0100
-	jr z, sub_FABE30__FABEA4                   ; FABE6D  jr Z,0xfabea4
+	jr z, Voice_RecomputeAllThreeBaseCurves__FABEA4                   ; FABE6D  jr Z,0xfabea4
 	ldw_da	ix, (0xD79E)                        ; FABE6F  ld IX,(0x00d79e)
 	ld	bc, ix                                  ; FABE74  ld BC,IX
 	and	bc, 0x1FFF                             ; FABE76  and BC,0x1fff
@@ -50194,41 +50528,41 @@ sub_FABE30__FABE3F:
 	srl	xiy, 8                                 ; FABE9A  srl 0x08,XIY
 	or	iy, hl                                  ; FABE9D  or IY,HL
 	stw_da	(0xD79E), iy                        ; FABE9F  ld (0x00d79e),IY
-sub_FABE30__FABEA4:
+Voice_RecomputeAllThreeBaseCurves__FABEA4:
 	lda_24	xbc, (0xD75E)                       ; FABEA4  lda XBC,0x00d75e
 	push	xbc                                   ; FABEA9  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FABEAA  pushw (XIZ+0xfe)
 	call	0xFB7C8F                              ; FABEAD  call 0xfb7c8f
 	inc	6, xsp                                 ; FABEB1  inc 6,XSP
-sub_FABE30__FABEB3:
+Voice_RecomputeAllThreeBaseCurves__FABEB3:
 	add	de, 27                                 ; FABEB3  add DE,0x001b
 	incm	1, (xiz-2)                            ; FABEB7  incw 1,(XIZ+0xfe)
 	cp	de, 0xD80                               ; FABEBA  cp DE,0x0d80
-	jrl c, sub_FABE30__FABE3F                  ; FABEBE  jrl C,0xfabe3f
+	jrl c, Voice_RecomputeAllThreeBaseCurves__FABE3F                  ; FABEBE  jrl C,0xfabe3f
 	ldw (xiz-2), 0x0000                        ; FABEC1  ld (XIZ+0xfe),0x0000
 	ldw	de, 0                                  ; FABEC6  ld DE,0x0000
 	ldw	ix, 9                                  ; FABEC9  ld IX,0x0009
-sub_FABE30__FABECC:
+Voice_RecomputeAllThreeBaseCurves__FABECC:
 	ldw	hl, 0x4CCF                             ; FABECC  ld HL,0x4ccf
 	ld	bc, ix                                  ; FABECF  ld BC,IX
 	add	hl, bc                                 ; FABED1  add HL,BC
 	extz	xhl                                   ; FABED3  extz XHL
 	ld	a, (xhl)                                ; FABED5  ld A,(XHL)
 	and	a, 24                                  ; FABED7  and A,0x18
-	jr z, sub_FABE30__FABF40                   ; FABEDA  jr Z,0xfabf40
+	jr z, Voice_RecomputeAllThreeBaseCurves__FABF40                   ; FABEDA  jr Z,0xfabf40
 	pushw	hl                                   ; FABEDC  push HL
 	calr (0xFABDAC - 0xFABEE0)                 ; FABEDD  calr 0xfabdac
 	ld	hl, wa                                  ; FABEE0  ld HL,WA
 	popw	bc                                    ; FABEE2  pop BC
 	cps	wa, 0                                  ; FABEE3  cp WA,0
-	jr z, sub_FABE30__FABF40                   ; FABEE5  jr Z,0xfabf40
+	jr z, Voice_RecomputeAllThreeBaseCurves__FABF40                   ; FABEE5  jr Z,0xfabf40
 	ld	c, (xiz-2)                              ; FABEE7  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABEEA  push BC
 	calr (0xFA7A4B - 0xFABEEE)                 ; FABEEB  calr 0xfa7a4b
 	stw_da	(0xD796), wa                        ; FABEEE  ld (0x00d796),WA
 	popw	bc                                    ; FABEF3  pop BC
 	cp	hl, 0x100                               ; FABEF4  cp HL,0x0100
-	jr z, sub_FABE30__FABF31                   ; FABEF8  jr Z,0xfabf31
+	jr z, Voice_RecomputeAllThreeBaseCurves__FABF31                   ; FABEF8  jr Z,0xfabf31
 	ldw_da	bc, (0xD796)                        ; FABEFA  ld BC,(0x00d796)
 	ld	(xiz-4), bc                             ; FABEFF  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABF02  and BC,0x1fff
@@ -50247,43 +50581,43 @@ sub_FABE30__FABECC:
 	srl	xiy, 8                                 ; FABF27  srl 0x08,XIY
 	or	iy, hl                                  ; FABF2A  or IY,HL
 	stw_da	(0xD796), iy                        ; FABF2C  ld (0x00d796),IY
-sub_FABE30__FABF31:
+Voice_RecomputeAllThreeBaseCurves__FABF31:
 	lda_24	xbc, (0xD75E)                       ; FABF31  lda XBC,0x00d75e
 	push	xbc                                   ; FABF36  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FABF37  pushw (XIZ+0xfe)
 	call	0xFB7E7B                              ; FABF3A  call 0xfb7e7b
 	inc	6, xsp                                 ; FABF3E  inc 6,XSP
-sub_FABE30__FABF40:
+Voice_RecomputeAllThreeBaseCurves__FABF40:
 	add	de, 27                                 ; FABF40  add DE,0x001b
 	add	ix, 27                                 ; FABF44  add IX,0x001b
 	incm	1, (xiz-2)                            ; FABF48  incw 1,(XIZ+0xfe)
 	cp	de, 0x6C0                               ; FABF4B  cp DE,0x06c0
-	jrl c, sub_FABE30__FABECC                  ; FABF4F  jrl C,0xfabecc
+	jrl c, Voice_RecomputeAllThreeBaseCurves__FABECC                  ; FABF4F  jrl C,0xfabecc
 	ldw (xiz-2), 0x0000                        ; FABF52  ld (XIZ+0xfe),0x0000
 	ldw	de, 0                                  ; FABF57  ld DE,0x0000
 	ldw	ix, 18                                 ; FABF5A  ld IX,0x0012
-sub_FABE30__FABF5D:
+Voice_RecomputeAllThreeBaseCurves__FABF5D:
 	ldw	hl, 0x4CCF                             ; FABF5D  ld HL,0x4ccf
 	ld	bc, ix                                  ; FABF60  ld BC,IX
 	add	hl, bc                                 ; FABF62  add HL,BC
 	extz	xhl                                   ; FABF64  extz XHL
 	ld	a, (xhl)                                ; FABF66  ld A,(XHL)
 	and	a, 24                                  ; FABF68  and A,0x18
-	jrl z, sub_FABE30__FAC00E                  ; FABF6B  jrl Z,0xfac00e
+	jrl z, Voice_RecomputeAllThreeBaseCurves__FAC00E                  ; FABF6B  jrl Z,0xfac00e
 	pushw	hl                                   ; FABF6E  push HL
 	calr (0xFABDAC - 0xFABF72)                 ; FABF6F  calr 0xfabdac
 	ld	hl, wa                                  ; FABF72  ld HL,WA
 	popw	bc                                    ; FABF74  pop BC
 	cps	wa, 0                                  ; FABF75  cp WA,0
-	jrl z, sub_FABE30__FAC00E                  ; FABF77  jrl Z,0xfac00e
+	jrl z, Voice_RecomputeAllThreeBaseCurves__FAC00E                  ; FABF77  jrl Z,0xfac00e
 	ld	c, (xiz-2)                              ; FABF7A  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABF7D  push BC
 	calr (0xFA7B31 - 0xFABF81)                 ; FABF7E  calr 0xfa7b31
 	popw	bc                                    ; FABF81  pop BC
 	cp	hl, 0x100                               ; FABF82  cp HL,0x0100
-	jrl z, sub_FABE30__FABFFF                  ; FABF86  jrl Z,0xfabfff
+	jrl z, Voice_RecomputeAllThreeBaseCurves__FABFFF                  ; FABF86  jrl Z,0xfabfff
 	cp	de, 0x6C0                               ; FABF89  cp DE,0x06c0
-	jr nc, sub_FABE30__FABFC8                  ; FABF8D  jr NC,0xfabfc8
+	jr nc, Voice_RecomputeAllThreeBaseCurves__FABFC8                  ; FABF8D  jr NC,0xfabfc8
 	ldw_da	bc, (0xD796)                        ; FABF8F  ld BC,(0x00d796)
 	ld	(xiz-4), bc                             ; FABF94  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABF97  and BC,0x1fff
@@ -50302,8 +50636,8 @@ sub_FABE30__FABF5D:
 	srl	xiy, 8                                 ; FABFBC  srl 0x08,XIY
 	or	iy, hl                                  ; FABFBF  or IY,HL
 	stw_da	(0xD796), iy                        ; FABFC1  ld (0x00d796),IY
-	jr sub_FABE30__FABFFF                      ; FABFC6  jr T,0xfabfff
-sub_FABE30__FABFC8:
+	jr Voice_RecomputeAllThreeBaseCurves__FABFFF                      ; FABFC6  jr T,0xfabfff
+Voice_RecomputeAllThreeBaseCurves__FABFC8:
 	ldw_da	bc, (0xD7A0)                        ; FABFC8  ld BC,(0x00d7a0)
 	ld	(xiz-4), bc                             ; FABFCD  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABFD0  and BC,0x1fff
@@ -50322,18 +50656,18 @@ sub_FABE30__FABFC8:
 	srl	xiy, 8                                 ; FABFF5  srl 0x08,XIY
 	or	iy, hl                                  ; FABFF8  or IY,HL
 	stw_da	(0xD7A0), iy                        ; FABFFA  ld (0x00d7a0),IY
-sub_FABE30__FABFFF:
+Voice_RecomputeAllThreeBaseCurves__FABFFF:
 	lda_24	xbc, (0xD75E)                       ; FABFFF  lda XBC,0x00d75e
 	push	xbc                                   ; FAC004  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FAC005  pushw (XIZ+0xfe)
 	call	0xFB7FCE                              ; FAC008  call 0xfb7fce
 	inc	6, xsp                                 ; FAC00C  inc 6,XSP
-sub_FABE30__FAC00E:
+Voice_RecomputeAllThreeBaseCurves__FAC00E:
 	add	de, 27                                 ; FAC00E  add DE,0x001b
 	add	ix, 27                                 ; FAC012  add IX,0x001b
 	incm	1, (xiz-2)                            ; FAC016  incw 1,(XIZ+0xfe)
 	cp	de, 0xD80                               ; FAC019  cp DE,0x0d80
-	jrl c, sub_FABE30__FABF5D                  ; FAC01D  jrl C,0xfabf5d
+	jrl c, Voice_RecomputeAllThreeBaseCurves__FABF5D                  ; FAC01D  jrl C,0xfabf5d
 	popw	ix                                    ; FAC020  pop IX
 	popw	de                                    ; FAC021  pop DE
 	pop	xhl                                    ; FAC022  pop XHL
@@ -50721,7 +51055,7 @@ sub_FAC2AE:
 ; Calls:   0xFAC2AE = sub_FAC2AE, 0xFB3FA0 = VoiceRecords_InitFromAlloc
 ;          0xFB713A = Dev10C_WriteAllChanRegs, 0xFB732C = Dev10C_WriteReg_c
 ;          0xFB77EF = Dev104_WriteAllChanRegs, 0xFB7A58 = Dev104_WriteChanReg0
-;          0xFC571A = sub_FC571A, 0xFC7DAF = sub_FC7DAF
+;          0xFC571A = Dev104_LoadStageBImage, 0xFC7DAF = sub_FC7DAF
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAC34D-0xFAC42B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -51660,7 +51994,7 @@ sub_FAC9A6__FAC9E6:
 ;          0xFB05F7 in Toggle14FE_AndDispatch
 ; Inputs:  no frame and no argument slot read.
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFABE30 = sub_FABE30
+; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFABE30 = Voice_RecomputeAllThreeBaseCurves
 ;          0xFAC026 = sub_FAC026, 0xFB3D09 = VoiceQuery_Tag00_All
 ;          0xFB3D26 = Voice_Retire_Mode20, 0xFB6F2C = sub_FB6F2C
 ; Evidence: the listing below is the byte-identical round-trip of 0xFACA40-0xFACAB6
@@ -52374,12 +52708,12 @@ sub_FACE14__FACE61:
 ; ★ CORRECTED 2026-08-25 (round 7): four of the registers this bank writes DO have a meaning
 ; now, established elsewhere and never from these accessors -- `chan + 0x0400` is the PITCH
 ; (1/256 semitone), `chan + 0x0080` the OUTPUT LEVEL, `chan + 0x0040` the key-zone word, and
-; `chan + 0x0800`/`0x0840` have a quiescent pair.  `Dev10C_SetChanReg_0400` below is the
+; `chan + 0x0800`/`0x0840` have a quiescent pair.  `Dev10C_SetChanPitch_Reg0400` below is the
 ; single-register PITCH writer, called from the two controller-driven refresh loops at
 ; 0xFADD1A and 0xFADDB8.  See notes/FINDINGS-prom_c-dev10c-register-meanings.md.
 
 ; --------------------------------------------------------------------------
-; Dev10C_SetChanReg_0400 -- register (chan + 0x0400) = staging->0x0E.
+; Dev10C_SetChanPitch_Reg0400 -- register (chan + 0x0400) = staging->0x0E.
 ;
 ; Called from: 0xFADD1A, 0xFADDB8 (notes/prom_c_tg_regmap.py --callers).
 ; Inputs:  (XIZ+8) = chan, 16-bit.  (XIZ+10) = pointer to the staging struct.
@@ -52393,8 +52727,14 @@ sub_FACE14__FACE61:
 ;          staging word 7 at 0x00D76C, is what Voice_StagePitch_Reg0400_AB/_CD computes.
 ;          Evidence and the whole chain: notes/FINDINGS-prom_c-dev10c-register-meanings.md,
 ;          asserted by notes/prom_c_dev10c_meaning_checks.py sections 7 and 8.
+; ★ ROUND 6 ------------------------------------------------------------
+; ⚠ RENAMED (was Dev10C_SetChanReg_0400).  Register
+;          0x0400 + chan of the 0x0010C000 device is the PITCH, in 1/256 of a semitone --
+;          established by notes/FINDINGS-prom_c-dev10c-register-meanings.md and re-derived by
+;          `python3 notes/prom_c_dev10c_meaning_checks.py`, NOT by this round.  The register
+;          number is kept in the name so the claim stays checkable against that finding.
 ; --------------------------------------------------------------------------
-Dev10C_SetChanReg_0400:
+Dev10C_SetChanPitch_Reg0400:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACE67  ee 0c 00 00
 	pushw hl                                   ; FACE6B  2b
 	push xix                                   ; FACE6C  3c
@@ -55162,7 +55502,7 @@ sub_FADC6F__FADCAB:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA8347 = Voice_StagePitch_Reg0400_AB, 0xFA83CC = Voice_StagePitch_Reg0400_CD
-;          0xFACE67 = Dev10C_SetChanReg_0400
+;          0xFACE67 = Dev10C_SetChanPitch_Reg0400
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADCC3-0xFADD28
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -55233,7 +55573,7 @@ sub_FADCC3__FADD23:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA8347 = Voice_StagePitch_Reg0400_AB, 0xFA83CC = Voice_StagePitch_Reg0400_CD
-;          0xFACE67 = Dev10C_SetChanReg_0400, 0xFB707E = sub_FB707E
+;          0xFACE67 = Dev10C_SetChanPitch_Reg0400, 0xFB707E = sub_FB707E
 ;          0xFC7E79 = sub_FC7E79, 0xFC7FCA = sub_FC7FCA
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADD29-0xFADDC7
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -55399,7 +55739,7 @@ sub_FADDC8__FADE29:
 ;          0xFAEF16
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAA96C = sub_FAA96C, 0xFAAC00 = sub_FAAC00
+; Calls:   0xFAA96C = Voice_StageRegs_0800_CD, 0xFAAC00 = Voice_StageRegs_0840_0880_CD
 ;          0xFACEA2 = Dev10C_SetChanReg_0840_0880
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADE2F-0xFADEAB
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -55686,7 +56026,7 @@ sub_FADFAD__FAE00D:
 ;          0xFAE238
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAA87E = sub_FAA87E, 0xFAAC00 = sub_FAAC00
+; Calls:   0xFAA87E = Voice_StageRegs_0840_0880_AB, 0xFAAC00 = Voice_StageRegs_0840_0880_CD
 ;          0xFACF78 = Dev10C_SetChanReg_0840_0880_dup
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE013-0xFAE0A0
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -55772,7 +56112,7 @@ sub_FAE013__FAE09B:
 ;          0xFBD5EB in sub_FBD46B__FBD5DB
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAA96C = sub_FAA96C, 0xFAAC00 = sub_FAAC00
+; Calls:   0xFAA96C = Voice_StageRegs_0800_CD, 0xFAAC00 = Voice_StageRegs_0840_0880_CD
 ;          0xFACF78 = Dev10C_SetChanReg_0840_0880_dup
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE0A1-0xFAE108
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -56026,7 +56366,7 @@ sub_FAE1B2__FAE237:
 	unlk32 xiz                                 ; FAE23F  unlk XIZ
 	ret                                        ; FAE241  ret
 ; --------------------------------------------------------------------------
-; sub_FAE242 -- 0xFAE242..0xFAE2C5 (132 bytes)
+; Voice_RestageArm_BaseCurve_Shared -- 0xFAE242..0xFAE2C5 (132 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -56040,10 +56380,23 @@ sub_FAE1B2__FAE237:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_RestageArm_BaseCurve_Shared -- the body
+;          the three BASE restage arms share.  Its ONLY call sites are 0xFAE386 in
+;          Voice_Restage_Reg0440_BaseCurve_ForPart, 0xFAE603 in
+;          Voice_Restage_Reg0180_BaseCurve_ForPart and 0xFAE884 in
+;          Voice_Restage_Reg04C0_BaseCurve_ForPart -- three of three, and nothing else in the
+;          512 KiB.  Its value-curve counterpart is Voice_RestageArm_ValueCurve_Shared, whose
+;          three call sites are the other three arms.
+;          The two are 132 bytes each and differ in which helper they call (0xFAD37E and
+;          0xFB501F here, 0xFAD43E and 0xFB5103 there); they share 0xFB53C5.
+;          ⚠ NOT ESTABLISHED: what any of those helpers computes.  The name records the
+;          PARTITION -- base arms here, value arms there -- which is a call census, and
+;          nothing else.
+;          Evidence: the call sites are the routine's own Called-from census, reproduced by
+;          `python3 notes/prom_c_understanding_round6.py --names`.
 ; --------------------------------------------------------------------------
-sub_FAE242:
+Voice_RestageArm_BaseCurve_Shared:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FAE242  link XIZ,0xfffe
 	pushw	hl                                   ; FAE246  push HL
 	pushw	de                                   ; FAE247  push DE
@@ -56083,7 +56436,7 @@ sub_FAE242:
 	call	0xFB501F                              ; FAE296  call 0xfb501f
 	ldb	h, 0                                   ; FAE29A  ld H,0x00
 	add	xsp, 18                                ; FAE29C  add XSP,0x00000012
-sub_FAE242__FAE2A2:
+Voice_RestageArm_BaseCurve_Shared__FAE2A2:
 	pushw	de                                   ; FAE2A2  push DE
 	ld	(xiz-2), h                              ; FAE2A3  ld (XIZ+0xfe),H
 	push	0                                     ; FAE2A6  push 0x00
@@ -56095,7 +56448,7 @@ sub_FAE242__FAE2A2:
 	inc	1, h                                   ; FAE2B6  inc 1,H
 	inc	6, xsp                                 ; FAE2B8  inc 6,XSP
 	cps	h, 4                                   ; FAE2BA  cp H,4
-	jr c, sub_FAE242__FAE2A2                   ; FAE2BC  jr C,0xfae2a2
+	jr c, Voice_RestageArm_BaseCurve_Shared__FAE2A2                   ; FAE2BC  jr C,0xfae2a2
 	ld	a, l                                    ; FAE2BE  ld A,L
 	popw	ix                                    ; FAE2C0  pop IX
 	popw	de                                    ; FAE2C1  pop DE
@@ -56103,7 +56456,7 @@ sub_FAE242__FAE2A2:
 	unlk32 xiz                                 ; FAE2C3  unlk XIZ
 	ret                                        ; FAE2C5  ret
 ; --------------------------------------------------------------------------
-; sub_FAE2C6 -- 0xFAE2C6..0xFAE349 (132 bytes)
+; Voice_RestageArm_ValueCurve_Shared -- 0xFAE2C6..0xFAE349 (132 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -56117,10 +56470,13 @@ sub_FAE242__FAE2A2:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_RestageArm_ValueCurve_Shared -- the body
+;          the three VALUE restage arms share; call sites 0xFAE4C0, 0xFAE73F and 0xFAE9C2,
+;          three of three and nothing else.  See Voice_RestageArm_BaseCurve_Shared above for
+;          the partition and for what it does NOT establish.
 ; --------------------------------------------------------------------------
-sub_FAE2C6:
+Voice_RestageArm_ValueCurve_Shared:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FAE2C6  link XIZ,0xfffe
 	pushw	hl                                   ; FAE2CA  push HL
 	pushw	de                                   ; FAE2CB  push DE
@@ -56160,7 +56516,7 @@ sub_FAE2C6:
 	call	0xFB5103                              ; FAE31A  call 0xfb5103
 	ldb	h, 0                                   ; FAE31E  ld H,0x00
 	add	xsp, 18                                ; FAE320  add XSP,0x00000012
-sub_FAE2C6__FAE326:
+Voice_RestageArm_ValueCurve_Shared__FAE326:
 	pushw	de                                   ; FAE326  push DE
 	ld	(xiz-2), h                              ; FAE327  ld (XIZ+0xfe),H
 	push	0                                     ; FAE32A  push 0x00
@@ -56172,7 +56528,7 @@ sub_FAE2C6__FAE326:
 	inc	1, h                                   ; FAE33A  inc 1,H
 	inc	6, xsp                                 ; FAE33C  inc 6,XSP
 	cps	h, 4                                   ; FAE33E  cp H,4
-	jr c, sub_FAE2C6__FAE326                   ; FAE340  jr C,0xfae326
+	jr c, Voice_RestageArm_ValueCurve_Shared__FAE326                   ; FAE340  jr C,0xfae326
 	ld	a, l                                    ; FAE342  ld A,L
 	popw	ix                                    ; FAE344  pop IX
 	popw	de                                    ; FAE345  pop DE
@@ -56180,26 +56536,37 @@ sub_FAE2C6__FAE326:
 	unlk32 xiz                                 ; FAE347  unlk XIZ
 	ret                                        ; FAE349  ret
 ; --------------------------------------------------------------------------
-; sub_FAE34A -- 0xFAE34A..0xFAE483 (314 bytes)
+; Voice_Restage_Reg0440_BaseCurve_ForPart -- 0xFAE34A..0xFAE483 (314 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF191
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D79E
-; Calls:   0xFA6110 = sub_FA6110, 0xFA796D = sub_FA796D
+; Calls:   0xFA6110 = sub_FA6110, 0xFA796D = EGEnv_Eval_BaseCurveA
 ;          0xFA981B = sub_FA981B, 0xFA9915 = Voice_StageChanSel_Reg0440_Reg0480
 ;          0xFACFD6 = Dev10C_SetChanReg_0440, 0xFAD01A = Dev10C_SetChanReg_0600
-;          0xFAE242 = sub_FAE242, 0xFB3CE0 = VoiceQuery_Tag00_Part
+;          0xFAE242 = Voice_RestageArm_BaseCurve_Shared, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE34A-0xFAE483
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_Restage_Reg0440_BaseCurve_ForPart -- one of the 49 arms of
+;          Voice_ApplyParamChange_Dispatch (its ONLY caller, at 0xFAF191), and the one that
+;          refreshes register 0x0440 + chan for every voice the part owns.
+;          It obtains the part's voice list from VoiceQuery_Tag00_Part (0xFB3CE0), walks it
+;          while the voice number is below 0x40, forms voice_record = 0x003BCF + 0x44*voice,
+;          and per voice calls Voice_StageChanSel_Reg0440_Reg0480 (0xFA9915) and then Dev10C_SetChanReg_0440 (0xFACFD6).
+;          Evidence: the callee addresses are instruction operands;
+;          `python3 notes/prom_c_understanding_round6.py --dispatch` asserts that this arm has
+;          exactly one call site and that it is inside the dispatcher, and --blocks asserts
+;          which envelope block its evaluator belongs to.
+;          Unknown: what register 0x0440 carries, and what the dispatcher's target code
+;          for this arm means.
 ; --------------------------------------------------------------------------
-sub_FAE34A:
+Voice_Restage_Reg0440_BaseCurve_ForPart:
 	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAE34A  link XIZ,0xfff5
 	pushw	hl                                   ; FAE34E  push HL
 	pushw	de                                   ; FAE34F  push DE
@@ -56229,7 +56596,7 @@ sub_FAE34A:
 	inc	8, xsp                                 ; FAE38C  inc 0,XSP
 	inc	4, xsp                                 ; FAE38E  inc 4,XSP
 	cps	d, 0                                   ; FAE390  cp D,0
-	jr nz, sub_FAE34A__FAE3DC                  ; FAE392  jr NZ,0xfae3dc
+	jr nz, Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3DC                  ; FAE392  jr NZ,0xfae3dc
 	push	0                                     ; FAE394  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAE396  push (XIZ+0x08)
 	call	0xFB3CE0                              ; FAE399  call 0xfb3ce0
@@ -56242,10 +56609,10 @@ sub_FAE34A:
 	ld	xix, xiy                                ; FAE3B0  ld XIX,XIY
 	inc	5, xix                                 ; FAE3B2  inc 5,XIX
 	popw	bc                                    ; FAE3B4  pop BC
-sub_FAE34A__FAE3B5:
+Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3B5:
 	ld	h, (xix)                                ; FAE3B5  ld H,(XIX)
 	cp	h, 64                                   ; FAE3B7  cp H,0x40
-	jrl nc, sub_FAE34A__FAE47E                 ; FAE3BA  jrl NC,0xfae47e
+	jrl nc, Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47E                 ; FAE3BA  jrl NC,0xfae47e
 	ldb	c, 68                                  ; FAE3BD  ld C,0x44
 	mul8rr	c, h                                ; FAE3BF  mul BC,H
 	add	bc, de                                 ; FAE3C1  add BC,DE
@@ -56259,8 +56626,8 @@ sub_FAE34A__FAE3B5:
 	calr (0xFACFD6 - 0xFAE3D6)                 ; FAE3D3  calr 0xfacfd6
 	inc	1, xix                                 ; FAE3D6  inc 1,XIX
 	inc	8, xsp                                 ; FAE3D8  inc 0,XSP
-	jr sub_FAE34A__FAE3B5                      ; FAE3DA  jr T,0xfae3b5
-sub_FAE34A__FAE3DC:
+	jr Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3B5                      ; FAE3DA  jr T,0xfae3b5
+Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3DC:
 	pushw	32                                   ; FAE3DC  push 0x0020
 	push	0                                     ; FAE3DF  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FAE3E1  push (XIZ+0x10)
@@ -56274,15 +56641,15 @@ sub_FAE34A__FAE3DC:
 	ld	bc, ix                                  ; FAE3F9  ld BC,IX
 	extpfx3 0x9E, 0xFC, 0x81                   ; FAE3FB  add BC,(XIZ+0xfc)
 	ld	(xiz-2), bc                             ; FAE3FE  ld (XIZ+0xfe),BC
-	jrl sub_FAE34A__FAE47A                     ; FAE401  jrl T,0xfae47a
-sub_FAE34A__FAE404:
+	jrl Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47A                     ; FAE401  jrl T,0xfae47a
+Voice_Restage_Reg0440_BaseCurve_ForPart__FAE404:
 	ld	bc, (xiz-6)                             ; FAE404  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FAE407  extz XBC
 	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE409  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE40E  ld WA,HL
 	and	wa, 0xFF                               ; FAE410  and WA,0x00ff
 	cp	wa, 0x80                                ; FAE414  cp WA,0x0080
-	jr nc, sub_FAE34A__FAE47E                  ; FAE418  jr NC,0xfae47e
+	jr nc, Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47E                  ; FAE418  jr NC,0xfae47e
 	ld	ix, hl                                  ; FAE41A  ld IX,HL
 	and	ix, 0x7F                               ; FAE41C  and IX,0x007f
 	extpfx3 0xC7, 0xF0, 0x89                   ; FAE420  ld A,IXL
@@ -56298,20 +56665,20 @@ sub_FAE34A__FAE404:
 	inc	8, xsp                                 ; FAE43A  inc 0,XSP
 	inc	2, xsp                                 ; FAE43C  inc 2,XSP
 	cp (xiz-7), 0x00                           ; FAE43E  cp (XIZ+0xf9),0x00
-	jr nz, sub_FAE34A__FAE45B                  ; FAE442  jr NZ,0xfae45b
+	jr nz, Voice_Restage_Reg0440_BaseCurve_ForPart__FAE45B                  ; FAE442  jr NZ,0xfae45b
 	ld	bc, (xiz-4)                             ; FAE444  ld BC,(XIZ+0xfc)
 	inc	4, bc                                  ; FAE447  inc 4,BC
 	extz	xbc                                   ; FAE449  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE44B  or (XBC+0x1523),0x0008
 	stiw_da	(0xD79E), 0                        ; FAE452  ld (0x00d79e),0x0000
-	jr sub_FAE34A__FAE469                      ; FAE459  jr T,0xfae469
-sub_FAE34A__FAE45B:
+	jr Voice_Restage_Reg0440_BaseCurve_ForPart__FAE469                      ; FAE459  jr T,0xfae469
+Voice_Restage_Reg0440_BaseCurve_ForPart__FAE45B:
 	push	0                                     ; FAE45B  push 0x00
 	push	h                                     ; FAE45D  push H
 	call	0xFA796D                              ; FAE45F  call 0xfa796d
 	stw_da	(0xD79E), wa                        ; FAE463  ld (0x00d79e),WA
 	popw	bc                                    ; FAE468  pop BC
-sub_FAE34A__FAE469:
+Voice_Restage_Reg0440_BaseCurve_ForPart__FAE469:
 	lda_24	xbc, (0xD75E)                       ; FAE469  lda XBC,0x00d75e
 	push	xbc                                   ; FAE46E  push XBC
 	extpfx3 0xC7, 0xF0, 0x89                   ; FAE46F  ld A,IXL
@@ -56319,37 +56686,48 @@ sub_FAE34A__FAE469:
 	pushw	wa                                   ; FAE474  push WA
 	calr (0xFAD01A - 0xFAE478)                 ; FAE475  calr 0xfad01a
 	inc	2, de                                  ; FAE478  inc 2,DE
-sub_FAE34A__FAE47A:
+Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47A:
 	inc	6, xsp                                 ; FAE47A  inc 6,XSP
-	jr sub_FAE34A__FAE404                      ; FAE47C  jr T,0xfae404
-sub_FAE34A__FAE47E:
+	jr Voice_Restage_Reg0440_BaseCurve_ForPart__FAE404                      ; FAE47C  jr T,0xfae404
+Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47E:
 	pop	xix                                    ; FAE47E  pop XIX
 	popw	de                                    ; FAE47F  pop DE
 	popw	hl                                    ; FAE480  pop HL
 	unlk32 xiz                                 ; FAE481  unlk XIZ
 	ret                                        ; FAE483  ret
 ; --------------------------------------------------------------------------
-; sub_FAE484 -- 0xFAE484..0xFAE5C6 (323 bytes)
+; Voice_Restage_Reg0440_ValueCurve_ForPart -- 0xFAE484..0xFAE5C6 (323 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF1F3
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D79A, 0x00D79E
-; Calls:   0xFA6110 = sub_FA6110, 0xFA79F4 = sub_FA79F4
+; Calls:   0xFA6110 = sub_FA6110, 0xFA79F4 = EGEnv_Eval_ValueCurve_WithBaseCurveA
 ;          0xFA981B = sub_FA981B, 0xFA9915 = Voice_StageChanSel_Reg0440_Reg0480
 ;          0xFACFD6 = Dev10C_SetChanReg_0440, 0xFAD01A = Dev10C_SetChanReg_0600
-;          0xFAD03C = Dev10C_SetChanReg_0580, 0xFAE2C6 = sub_FAE2C6
+;          0xFAD03C = Dev10C_SetChanReg_0580, 0xFAE2C6 = Voice_RestageArm_ValueCurve_Shared
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE484-0xFAE5C6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_Restage_Reg0440_ValueCurve_ForPart -- one of the 49 arms of
+;          Voice_ApplyParamChange_Dispatch (its ONLY caller, at 0xFAF1F3), and the one that
+;          refreshes register 0x0440 + chan for every voice the part owns.
+;          It obtains the part's voice list from VoiceQuery_Tag00_Part (0xFB3CE0), walks it
+;          while the voice number is below 0x40, forms voice_record = 0x003BCF + 0x44*voice,
+;          and per voice calls EGEnv_Eval_ValueCurve_WithBaseCurveA (0xFA79F4) and then Dev10C_SetChanReg_0440 (0xFACFD6) / _0580 / _0600.
+;          Evidence: the callee addresses are instruction operands;
+;          `python3 notes/prom_c_understanding_round6.py --dispatch` asserts that this arm has
+;          exactly one call site and that it is inside the dispatcher, and --blocks asserts
+;          which envelope block its evaluator belongs to.
+;          Unknown: what register 0x0440 carries, and what the dispatcher's target code
+;          for this arm means.
 ; --------------------------------------------------------------------------
-sub_FAE484:
+Voice_Restage_Reg0440_ValueCurve_ForPart:
 	link32 0xEE, 0x0C, 0xF7, 0xFF              ; FAE484  link XIZ,0xfff7
 	pushw	hl                                   ; FAE488  push HL
 	pushw	de                                   ; FAE489  push DE
@@ -56379,7 +56757,7 @@ sub_FAE484:
 	inc	8, xsp                                 ; FAE4C6  inc 0,XSP
 	inc	4, xsp                                 ; FAE4C8  inc 4,XSP
 	cps	d, 0                                   ; FAE4CA  cp D,0
-	jr nz, sub_FAE484__FAE516                  ; FAE4CC  jr NZ,0xfae516
+	jr nz, Voice_Restage_Reg0440_ValueCurve_ForPart__FAE516                  ; FAE4CC  jr NZ,0xfae516
 	push	0                                     ; FAE4CE  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAE4D0  push (XIZ+0x08)
 	call	0xFB3CE0                              ; FAE4D3  call 0xfb3ce0
@@ -56392,10 +56770,10 @@ sub_FAE484:
 	ld	xix, xiy                                ; FAE4EA  ld XIX,XIY
 	inc	5, xix                                 ; FAE4EC  inc 5,XIX
 	popw	bc                                    ; FAE4EE  pop BC
-sub_FAE484__FAE4EF:
+Voice_Restage_Reg0440_ValueCurve_ForPart__FAE4EF:
 	ld	h, (xix)                                ; FAE4EF  ld H,(XIX)
 	cp	h, 64                                   ; FAE4F1  cp H,0x40
-	jrl nc, sub_FAE484__FAE5C1                 ; FAE4F4  jrl NC,0xfae5c1
+	jrl nc, Voice_Restage_Reg0440_ValueCurve_ForPart__FAE5C1                 ; FAE4F4  jrl NC,0xfae5c1
 	ldb	c, 68                                  ; FAE4F7  ld C,0x44
 	mul8rr	c, h                                ; FAE4F9  mul BC,H
 	add	bc, de                                 ; FAE4FB  add BC,DE
@@ -56409,8 +56787,8 @@ sub_FAE484__FAE4EF:
 	calr (0xFACFD6 - 0xFAE510)                 ; FAE50D  calr 0xfacfd6
 	inc	1, xix                                 ; FAE510  inc 1,XIX
 	inc	8, xsp                                 ; FAE512  inc 0,XSP
-	jr sub_FAE484__FAE4EF                      ; FAE514  jr T,0xfae4ef
-sub_FAE484__FAE516:
+	jr Voice_Restage_Reg0440_ValueCurve_ForPart__FAE4EF                      ; FAE514  jr T,0xfae4ef
+Voice_Restage_Reg0440_ValueCurve_ForPart__FAE516:
 	pushw	32                                   ; FAE516  push 0x0020
 	push	0                                     ; FAE519  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FAE51B  push (XIZ+0x10)
@@ -56425,14 +56803,14 @@ sub_FAE484__FAE516:
 	ld	ix, bc                                  ; FAE536  ld IX,BC
 	extpfx3 0x9E, 0xFE, 0x84                   ; FAE538  add IX,(XIZ+0xfe)
 	inc	6, xsp                                 ; FAE53B  inc 6,XSP
-sub_FAE484__FAE53D:
+Voice_Restage_Reg0440_ValueCurve_ForPart__FAE53D:
 	ld	bc, (xiz-4)                             ; FAE53D  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FAE540  extz XBC
 	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE542  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE547  ld WA,HL
 	and	wa, 0xFF                               ; FAE549  and WA,0x00ff
 	cp	wa, 0x80                                ; FAE54D  cp WA,0x0080
-	jr nc, sub_FAE484__FAE5C1                  ; FAE551  jr NC,0xfae5c1
+	jr nc, Voice_Restage_Reg0440_ValueCurve_ForPart__FAE5C1                  ; FAE551  jr NC,0xfae5c1
 	ld	wa, hl                                  ; FAE553  ld WA,HL
 	and	wa, 0x7F                               ; FAE555  and WA,0x007f
 	ld	h, a                                    ; FAE559  ld H,A
@@ -56447,7 +56825,7 @@ sub_FAE484__FAE53D:
 	inc	8, xsp                                 ; FAE56E  inc 0,XSP
 	inc	2, xsp                                 ; FAE570  inc 2,XSP
 	cp (xiz-5), 0x00                           ; FAE572  cp (XIZ+0xfb),0x00
-	jr nz, sub_FAE484__FAE59F                  ; FAE576  jr NZ,0xfae59f
+	jr nz, Voice_Restage_Reg0440_ValueCurve_ForPart__FAE59F                  ; FAE576  jr NZ,0xfae59f
 	ld	bc, (xiz-2)                             ; FAE578  ld BC,(XIZ+0xfe)
 	inc	4, bc                                  ; FAE57B  inc 4,BC
 	extz	xbc                                   ; FAE57D  extz XBC
@@ -56460,8 +56838,8 @@ sub_FAE484__FAE53D:
 	pushw	wa                                   ; FAE597  push WA
 	calr (0xFAD01A - 0xFAE59B)                 ; FAE598  calr 0xfad01a
 	inc	6, xsp                                 ; FAE59B  inc 6,XSP
-	jr sub_FAE484__FAE5BC                      ; FAE59D  jr T,0xfae5bc
-sub_FAE484__FAE59F:
+	jr Voice_Restage_Reg0440_ValueCurve_ForPart__FAE5BC                      ; FAE59D  jr T,0xfae5bc
+Voice_Restage_Reg0440_ValueCurve_ForPart__FAE59F:
 	push	0                                     ; FAE59F  push 0x00
 	push	h                                     ; FAE5A1  push H
 	call	0xFA79F4                              ; FAE5A3  call 0xfa79f4
@@ -56473,36 +56851,47 @@ sub_FAE484__FAE59F:
 	pushw	wa                                   ; FAE5B6  push WA
 	calr (0xFAD03C - 0xFAE5BA)                 ; FAE5B7  calr 0xfad03c
 	inc	8, xsp                                 ; FAE5BA  inc 0,XSP
-sub_FAE484__FAE5BC:
+Voice_Restage_Reg0440_ValueCurve_ForPart__FAE5BC:
 	inc	2, de                                  ; FAE5BC  inc 2,DE
-	jrl sub_FAE484__FAE53D                     ; FAE5BE  jrl T,0xfae53d
-sub_FAE484__FAE5C1:
+	jrl Voice_Restage_Reg0440_ValueCurve_ForPart__FAE53D                     ; FAE5BE  jrl T,0xfae53d
+Voice_Restage_Reg0440_ValueCurve_ForPart__FAE5C1:
 	pop	xix                                    ; FAE5C1  pop XIX
 	popw	de                                    ; FAE5C2  pop DE
 	popw	hl                                    ; FAE5C3  pop HL
 	unlk32 xiz                                 ; FAE5C4  unlk XIZ
 	ret                                        ; FAE5C6  ret
 ; --------------------------------------------------------------------------
-; sub_FAE5C7 -- 0xFAE5C7..0xFAE702 (316 bytes)
+; Voice_Restage_Reg0180_BaseCurve_ForPart -- 0xFAE5C7..0xFAE702 (316 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF1B5
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7A4B = sub_FA7A4B
-;          0xFA981B = sub_FA981B, 0xFA9C60 = sub_FA9C60
+; Calls:   0xFA6110 = sub_FA6110, 0xFA7A4B = EGEnv_Eval_BaseCurveB
+;          0xFA981B = sub_FA981B, 0xFA9C60 = Voice_StageRegs_0180_AB
 ;          0xFACFB4 = Dev10C_SetChanReg_0180, 0xFAD05E = Dev10C_SetChanReg_01C0
-;          0xFAE242 = sub_FAE242, 0xFB3CE0 = VoiceQuery_Tag00_Part
+;          0xFAE242 = Voice_RestageArm_BaseCurve_Shared, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE5C7-0xFAE702
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_Restage_Reg0180_BaseCurve_ForPart -- one of the 49 arms of
+;          Voice_ApplyParamChange_Dispatch (its ONLY caller, at 0xFAF1B5), and the one that
+;          refreshes register 0x0180 + chan for every voice the part owns.
+;          It obtains the part's voice list from VoiceQuery_Tag00_Part (0xFB3CE0), walks it
+;          while the voice number is below 0x40, forms voice_record = 0x003BCF + 0x44*voice,
+;          and per voice calls EGEnv_Eval_BaseCurveB (0xFA7A4B) and then Dev10C_SetChanReg_0180 (0xFACFB4) / _01C0.
+;          Evidence: the callee addresses are instruction operands;
+;          `python3 notes/prom_c_understanding_round6.py --dispatch` asserts that this arm has
+;          exactly one call site and that it is inside the dispatcher, and --blocks asserts
+;          which envelope block its evaluator belongs to.
+;          Unknown: what register 0x0180 carries, and what the dispatcher's target code
+;          for this arm means.
 ; --------------------------------------------------------------------------
-sub_FAE5C7:
+Voice_Restage_Reg0180_BaseCurve_ForPart:
 	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAE5C7  link XIZ,0xfff5
 	pushw	hl                                   ; FAE5CB  push HL
 	pushw	de                                   ; FAE5CC  push DE
@@ -56532,7 +56921,7 @@ sub_FAE5C7:
 	inc	8, xsp                                 ; FAE609  inc 0,XSP
 	inc	4, xsp                                 ; FAE60B  inc 4,XSP
 	cps	d, 0                                   ; FAE60D  cp D,0
-	jr nz, sub_FAE5C7__FAE659                  ; FAE60F  jr NZ,0xfae659
+	jr nz, Voice_Restage_Reg0180_BaseCurve_ForPart__FAE659                  ; FAE60F  jr NZ,0xfae659
 	push	0                                     ; FAE611  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAE613  push (XIZ+0x08)
 	call	0xFB3CE0                              ; FAE616  call 0xfb3ce0
@@ -56545,10 +56934,10 @@ sub_FAE5C7:
 	ld	xix, xiy                                ; FAE62D  ld XIX,XIY
 	inc	5, xix                                 ; FAE62F  inc 5,XIX
 	popw	bc                                    ; FAE631  pop BC
-sub_FAE5C7__FAE632:
+Voice_Restage_Reg0180_BaseCurve_ForPart__FAE632:
 	ld	h, (xix)                                ; FAE632  ld H,(XIX)
 	cp	h, 64                                   ; FAE634  cp H,0x40
-	jrl nc, sub_FAE5C7__FAE6FD                 ; FAE637  jrl NC,0xfae6fd
+	jrl nc, Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6FD                 ; FAE637  jrl NC,0xfae6fd
 	ldb	c, 68                                  ; FAE63A  ld C,0x44
 	mul8rr	c, h                                ; FAE63C  mul BC,H
 	add	bc, de                                 ; FAE63E  add BC,DE
@@ -56562,8 +56951,8 @@ sub_FAE5C7__FAE632:
 	calr (0xFACFB4 - 0xFAE653)                 ; FAE650  calr 0xfacfb4
 	inc	1, xix                                 ; FAE653  inc 1,XIX
 	inc	8, xsp                                 ; FAE655  inc 0,XSP
-	jr sub_FAE5C7__FAE632                      ; FAE657  jr T,0xfae632
-sub_FAE5C7__FAE659:
+	jr Voice_Restage_Reg0180_BaseCurve_ForPart__FAE632                      ; FAE657  jr T,0xfae632
+Voice_Restage_Reg0180_BaseCurve_ForPart__FAE659:
 	pushw	32                                   ; FAE659  push 0x0020
 	ld	c, (xiz+16)                             ; FAE65C  ld C,(XIZ+0x10)
 	set	2, c                                   ; FAE65F  set 0x02,C
@@ -56578,15 +56967,15 @@ sub_FAE5C7__FAE659:
 	ld	bc, ix                                  ; FAE678  ld BC,IX
 	extpfx3 0x9E, 0xFC, 0x81                   ; FAE67A  add BC,(XIZ+0xfc)
 	ld	(xiz-2), bc                             ; FAE67D  ld (XIZ+0xfe),BC
-	jrl sub_FAE5C7__FAE6F9                     ; FAE680  jrl T,0xfae6f9
-sub_FAE5C7__FAE683:
+	jrl Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6F9                     ; FAE680  jrl T,0xfae6f9
+Voice_Restage_Reg0180_BaseCurve_ForPart__FAE683:
 	ld	bc, (xiz-6)                             ; FAE683  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FAE686  extz XBC
 	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE688  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE68D  ld WA,HL
 	and	wa, 0xFF                               ; FAE68F  and WA,0x00ff
 	cp	wa, 64                                  ; FAE693  cp WA,0x0040
-	jr nc, sub_FAE5C7__FAE6FD                  ; FAE697  jr NC,0xfae6fd
+	jr nc, Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6FD                  ; FAE697  jr NC,0xfae6fd
 	ld	ix, hl                                  ; FAE699  ld IX,HL
 	and	ix, 63                                 ; FAE69B  and IX,0x003f
 	extpfx3 0xC7, 0xF0, 0x89                   ; FAE69F  ld A,IXL
@@ -56602,20 +56991,20 @@ sub_FAE5C7__FAE683:
 	inc	8, xsp                                 ; FAE6B9  inc 0,XSP
 	inc	2, xsp                                 ; FAE6BB  inc 2,XSP
 	cp (xiz-7), 0x00                           ; FAE6BD  cp (XIZ+0xf9),0x00
-	jr nz, sub_FAE5C7__FAE6DA                  ; FAE6C1  jr NZ,0xfae6da
+	jr nz, Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6DA                  ; FAE6C1  jr NZ,0xfae6da
 	ld	bc, (xiz-4)                             ; FAE6C3  ld BC,(XIZ+0xfc)
 	inc	4, bc                                  ; FAE6C6  inc 4,BC
 	extz	xbc                                   ; FAE6C8  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE6CA  or (XBC+0x1523),0x0008
 	stiw_da	(0xD796), 0                        ; FAE6D1  ld (0x00d796),0x0000
-	jr sub_FAE5C7__FAE6E8                      ; FAE6D8  jr T,0xfae6e8
-sub_FAE5C7__FAE6DA:
+	jr Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6E8                      ; FAE6D8  jr T,0xfae6e8
+Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6DA:
 	push	0                                     ; FAE6DA  push 0x00
 	push	h                                     ; FAE6DC  push H
 	call	0xFA7A4B                              ; FAE6DE  call 0xfa7a4b
 	stw_da	(0xD796), wa                        ; FAE6E2  ld (0x00d796),WA
 	popw	bc                                    ; FAE6E7  pop BC
-sub_FAE5C7__FAE6E8:
+Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6E8:
 	lda_24	xbc, (0xD75E)                       ; FAE6E8  lda XBC,0x00d75e
 	push	xbc                                   ; FAE6ED  push XBC
 	extpfx3 0xC7, 0xF0, 0x89                   ; FAE6EE  ld A,IXL
@@ -56623,37 +57012,48 @@ sub_FAE5C7__FAE6E8:
 	pushw	wa                                   ; FAE6F3  push WA
 	calr (0xFAD05E - 0xFAE6F7)                 ; FAE6F4  calr 0xfad05e
 	inc	2, de                                  ; FAE6F7  inc 2,DE
-sub_FAE5C7__FAE6F9:
+Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6F9:
 	inc	6, xsp                                 ; FAE6F9  inc 6,XSP
-	jr sub_FAE5C7__FAE683                      ; FAE6FB  jr T,0xfae683
-sub_FAE5C7__FAE6FD:
+	jr Voice_Restage_Reg0180_BaseCurve_ForPart__FAE683                      ; FAE6FB  jr T,0xfae683
+Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6FD:
 	pop	xix                                    ; FAE6FD  pop XIX
 	popw	de                                    ; FAE6FE  pop DE
 	popw	hl                                    ; FAE6FF  pop HL
 	unlk32 xiz                                 ; FAE700  unlk XIZ
 	ret                                        ; FAE702  ret
 ; --------------------------------------------------------------------------
-; sub_FAE703 -- 0xFAE703..0xFAE847 (325 bytes)
+; Voice_Restage_Reg0180_ValueCurve_ForPart -- 0xFAE703..0xFAE847 (325 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF212
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796, 0x00D798
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7AD6 = sub_FA7AD6
-;          0xFA981B = sub_FA981B, 0xFA9C60 = sub_FA9C60
+; Calls:   0xFA6110 = sub_FA6110, 0xFA7AD6 = EGEnv_Eval_ValueCurve_WithBaseCurveB
+;          0xFA981B = sub_FA981B, 0xFA9C60 = Voice_StageRegs_0180_AB
 ;          0xFACFB4 = Dev10C_SetChanReg_0180, 0xFAD05E = Dev10C_SetChanReg_01C0
-;          0xFAD080 = Dev10C_SetChanReg_0540, 0xFAE2C6 = sub_FAE2C6
+;          0xFAD080 = Dev10C_SetChanReg_0540, 0xFAE2C6 = Voice_RestageArm_ValueCurve_Shared
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE703-0xFAE847
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_Restage_Reg0180_ValueCurve_ForPart -- one of the 49 arms of
+;          Voice_ApplyParamChange_Dispatch (its ONLY caller, at 0xFAF212), and the one that
+;          refreshes register 0x0180 + chan for every voice the part owns.
+;          It obtains the part's voice list from VoiceQuery_Tag00_Part (0xFB3CE0), walks it
+;          while the voice number is below 0x40, forms voice_record = 0x003BCF + 0x44*voice,
+;          and per voice calls EGEnv_Eval_ValueCurve_WithBaseCurveB (0xFA7AD6) and then Dev10C_SetChanReg_0180 (0xFACFB4) / _01C0 / _0540.
+;          Evidence: the callee addresses are instruction operands;
+;          `python3 notes/prom_c_understanding_round6.py --dispatch` asserts that this arm has
+;          exactly one call site and that it is inside the dispatcher, and --blocks asserts
+;          which envelope block its evaluator belongs to.
+;          Unknown: what register 0x0180 carries, and what the dispatcher's target code
+;          for this arm means.
 ; --------------------------------------------------------------------------
-sub_FAE703:
+Voice_Restage_Reg0180_ValueCurve_ForPart:
 	link32 0xEE, 0x0C, 0xF7, 0xFF              ; FAE703  link XIZ,0xfff7
 	pushw	hl                                   ; FAE707  push HL
 	pushw	de                                   ; FAE708  push DE
@@ -56683,7 +57083,7 @@ sub_FAE703:
 	inc	8, xsp                                 ; FAE745  inc 0,XSP
 	inc	4, xsp                                 ; FAE747  inc 4,XSP
 	cps	d, 0                                   ; FAE749  cp D,0
-	jr nz, sub_FAE703__FAE795                  ; FAE74B  jr NZ,0xfae795
+	jr nz, Voice_Restage_Reg0180_ValueCurve_ForPart__FAE795                  ; FAE74B  jr NZ,0xfae795
 	push	0                                     ; FAE74D  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAE74F  push (XIZ+0x08)
 	call	0xFB3CE0                              ; FAE752  call 0xfb3ce0
@@ -56696,10 +57096,10 @@ sub_FAE703:
 	ld	xix, xiy                                ; FAE769  ld XIX,XIY
 	inc	5, xix                                 ; FAE76B  inc 5,XIX
 	popw	bc                                    ; FAE76D  pop BC
-sub_FAE703__FAE76E:
+Voice_Restage_Reg0180_ValueCurve_ForPart__FAE76E:
 	ld	h, (xix)                                ; FAE76E  ld H,(XIX)
 	cp	h, 64                                   ; FAE770  cp H,0x40
-	jrl nc, sub_FAE703__FAE842                 ; FAE773  jrl NC,0xfae842
+	jrl nc, Voice_Restage_Reg0180_ValueCurve_ForPart__FAE842                 ; FAE773  jrl NC,0xfae842
 	ldb	c, 68                                  ; FAE776  ld C,0x44
 	mul8rr	c, h                                ; FAE778  mul BC,H
 	add	bc, de                                 ; FAE77A  add BC,DE
@@ -56713,8 +57113,8 @@ sub_FAE703__FAE76E:
 	calr (0xFACFB4 - 0xFAE78F)                 ; FAE78C  calr 0xfacfb4
 	inc	1, xix                                 ; FAE78F  inc 1,XIX
 	inc	8, xsp                                 ; FAE791  inc 0,XSP
-	jr sub_FAE703__FAE76E                      ; FAE793  jr T,0xfae76e
-sub_FAE703__FAE795:
+	jr Voice_Restage_Reg0180_ValueCurve_ForPart__FAE76E                      ; FAE793  jr T,0xfae76e
+Voice_Restage_Reg0180_ValueCurve_ForPart__FAE795:
 	pushw	32                                   ; FAE795  push 0x0020
 	ld	c, (xiz+16)                             ; FAE798  ld C,(XIZ+0x10)
 	set	2, c                                   ; FAE79B  set 0x02,C
@@ -56730,14 +57130,14 @@ sub_FAE703__FAE795:
 	ld	ix, bc                                  ; FAE7B7  ld IX,BC
 	extpfx3 0x9E, 0xFE, 0x84                   ; FAE7B9  add IX,(XIZ+0xfe)
 	inc	6, xsp                                 ; FAE7BC  inc 6,XSP
-sub_FAE703__FAE7BE:
+Voice_Restage_Reg0180_ValueCurve_ForPart__FAE7BE:
 	ld	bc, (xiz-4)                             ; FAE7BE  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FAE7C1  extz XBC
 	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE7C3  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE7C8  ld WA,HL
 	and	wa, 0xFF                               ; FAE7CA  and WA,0x00ff
 	cp	wa, 64                                  ; FAE7CE  cp WA,0x0040
-	jr nc, sub_FAE703__FAE842                  ; FAE7D2  jr NC,0xfae842
+	jr nc, Voice_Restage_Reg0180_ValueCurve_ForPart__FAE842                  ; FAE7D2  jr NC,0xfae842
 	ld	wa, hl                                  ; FAE7D4  ld WA,HL
 	and	wa, 63                                 ; FAE7D6  and WA,0x003f
 	ld	h, a                                    ; FAE7DA  ld H,A
@@ -56752,7 +57152,7 @@ sub_FAE703__FAE7BE:
 	inc	8, xsp                                 ; FAE7EF  inc 0,XSP
 	inc	2, xsp                                 ; FAE7F1  inc 2,XSP
 	cp (xiz-5), 0x00                           ; FAE7F3  cp (XIZ+0xfb),0x00
-	jr nz, sub_FAE703__FAE820                  ; FAE7F7  jr NZ,0xfae820
+	jr nz, Voice_Restage_Reg0180_ValueCurve_ForPart__FAE820                  ; FAE7F7  jr NZ,0xfae820
 	ld	bc, (xiz-2)                             ; FAE7F9  ld BC,(XIZ+0xfe)
 	inc	4, bc                                  ; FAE7FC  inc 4,BC
 	extz	xbc                                   ; FAE7FE  extz XBC
@@ -56765,8 +57165,8 @@ sub_FAE703__FAE7BE:
 	pushw	wa                                   ; FAE818  push WA
 	calr (0xFAD05E - 0xFAE81C)                 ; FAE819  calr 0xfad05e
 	inc	6, xsp                                 ; FAE81C  inc 6,XSP
-	jr sub_FAE703__FAE83D                      ; FAE81E  jr T,0xfae83d
-sub_FAE703__FAE820:
+	jr Voice_Restage_Reg0180_ValueCurve_ForPart__FAE83D                      ; FAE81E  jr T,0xfae83d
+Voice_Restage_Reg0180_ValueCurve_ForPart__FAE820:
 	push	0                                     ; FAE820  push 0x00
 	push	h                                     ; FAE822  push H
 	call	0xFA7AD6                              ; FAE824  call 0xfa7ad6
@@ -56778,36 +57178,47 @@ sub_FAE703__FAE820:
 	pushw	wa                                   ; FAE837  push WA
 	calr (0xFAD080 - 0xFAE83B)                 ; FAE838  calr 0xfad080
 	inc	8, xsp                                 ; FAE83B  inc 0,XSP
-sub_FAE703__FAE83D:
+Voice_Restage_Reg0180_ValueCurve_ForPart__FAE83D:
 	inc	2, de                                  ; FAE83D  inc 2,DE
-	jrl sub_FAE703__FAE7BE                     ; FAE83F  jrl T,0xfae7be
-sub_FAE703__FAE842:
+	jrl Voice_Restage_Reg0180_ValueCurve_ForPart__FAE7BE                     ; FAE83F  jrl T,0xfae7be
+Voice_Restage_Reg0180_ValueCurve_ForPart__FAE842:
 	pop	xix                                    ; FAE842  pop XIX
 	popw	de                                    ; FAE843  pop DE
 	popw	hl                                    ; FAE844  pop HL
 	unlk32 xiz                                 ; FAE845  unlk XIZ
 	ret                                        ; FAE847  ret
 ; --------------------------------------------------------------------------
-; sub_FAE848 -- 0xFAE848..0xFAE985 (318 bytes)
+; Voice_Restage_Reg04C0_BaseCurve_ForPart -- 0xFAE848..0xFAE985 (318 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF1D4
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796, 0x00D7A0
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7B31 = sub_FA7B31
+; Calls:   0xFA6110 = sub_FA6110, 0xFA7B31 = EGEnv_Eval_FreqWriteBaseCurve
 ;          0xFA981B = sub_FA981B, 0xFA9F19 = Voice_StageChanSel_Reg04C0
 ;          0xFACFF8 = Dev10C_SetChanReg_04C0, 0xFAD0A2 = Dev10C_SetChanReg_01C0_or_0600
-;          0xFAE242 = sub_FAE242, 0xFB3CE0 = VoiceQuery_Tag00_Part
+;          0xFAE242 = Voice_RestageArm_BaseCurve_Shared, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE848-0xFAE985
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_Restage_Reg04C0_BaseCurve_ForPart -- one of the 49 arms of
+;          Voice_ApplyParamChange_Dispatch (its ONLY caller, at 0xFAF1D4), and the one that
+;          refreshes register 0x04C0 + chan for every voice the part owns.
+;          It obtains the part's voice list from VoiceQuery_Tag00_Part (0xFB3CE0), walks it
+;          while the voice number is below 0x40, forms voice_record = 0x003BCF + 0x44*voice,
+;          and per voice calls EGEnv_Eval_FreqWriteBaseCurve (0xFA7B31) and then Dev10C_SetChanReg_04C0 (0xFACFF8) / _01C0_or_0600.
+;          Evidence: the callee addresses are instruction operands;
+;          `python3 notes/prom_c_understanding_round6.py --dispatch` asserts that this arm has
+;          exactly one call site and that it is inside the dispatcher, and --blocks asserts
+;          which envelope block its evaluator belongs to.
+;          Unknown: what register 0x04C0 carries, and what the dispatcher's target code
+;          for this arm means.
 ; --------------------------------------------------------------------------
-sub_FAE848:
+Voice_Restage_Reg04C0_BaseCurve_ForPart:
 	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAE848  link XIZ,0xfff5
 	pushw	hl                                   ; FAE84C  push HL
 	pushw	de                                   ; FAE84D  push DE
@@ -56837,7 +57248,7 @@ sub_FAE848:
 	inc	8, xsp                                 ; FAE88A  inc 0,XSP
 	inc	4, xsp                                 ; FAE88C  inc 4,XSP
 	cps	d, 0                                   ; FAE88E  cp D,0
-	jr nz, sub_FAE848__FAE8DA                  ; FAE890  jr NZ,0xfae8da
+	jr nz, Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE8DA                  ; FAE890  jr NZ,0xfae8da
 	push	0                                     ; FAE892  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAE894  push (XIZ+0x08)
 	call	0xFB3CE0                              ; FAE897  call 0xfb3ce0
@@ -56850,10 +57261,10 @@ sub_FAE848:
 	ld	xix, xiy                                ; FAE8AE  ld XIX,XIY
 	inc	5, xix                                 ; FAE8B0  inc 5,XIX
 	popw	bc                                    ; FAE8B2  pop BC
-sub_FAE848__FAE8B3:
+Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE8B3:
 	ld	h, (xix)                                ; FAE8B3  ld H,(XIX)
 	cp	h, 64                                   ; FAE8B5  cp H,0x40
-	jrl nc, sub_FAE848__FAE980                 ; FAE8B8  jrl NC,0xfae980
+	jrl nc, Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE980                 ; FAE8B8  jrl NC,0xfae980
 	ldb	c, 68                                  ; FAE8BB  ld C,0x44
 	mul8rr	c, h                                ; FAE8BD  mul BC,H
 	add	bc, de                                 ; FAE8BF  add BC,DE
@@ -56867,8 +57278,8 @@ sub_FAE848__FAE8B3:
 	calr (0xFACFF8 - 0xFAE8D4)                 ; FAE8D1  calr 0xfacff8
 	inc	1, xix                                 ; FAE8D4  inc 1,XIX
 	inc	8, xsp                                 ; FAE8D6  inc 0,XSP
-	jr sub_FAE848__FAE8B3                      ; FAE8D8  jr T,0xfae8b3
-sub_FAE848__FAE8DA:
+	jr Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE8B3                      ; FAE8D8  jr T,0xfae8b3
+Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE8DA:
 	pushw	32                                   ; FAE8DA  push 0x0020
 	ld	c, (xiz+16)                             ; FAE8DD  ld C,(XIZ+0x10)
 	set	3, c                                   ; FAE8E0  set 0x03,C
@@ -56883,15 +57294,15 @@ sub_FAE848__FAE8DA:
 	ld	bc, ix                                  ; FAE8F9  ld BC,IX
 	extpfx3 0x9E, 0xFC, 0x81                   ; FAE8FB  add BC,(XIZ+0xfc)
 	ld	(xiz-2), bc                             ; FAE8FE  ld (XIZ+0xfe),BC
-	jrl sub_FAE848__FAE97C                     ; FAE901  jrl T,0xfae97c
-sub_FAE848__FAE904:
+	jrl Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE97C                     ; FAE901  jrl T,0xfae97c
+Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE904:
 	ld	bc, (xiz-6)                             ; FAE904  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FAE907  extz XBC
 	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE909  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE90E  ld WA,HL
 	and	wa, 0xFF                               ; FAE910  and WA,0x00ff
 	cp	wa, 0x80                                ; FAE914  cp WA,0x0080
-	jr nc, sub_FAE848__FAE980                  ; FAE918  jr NC,0xfae980
+	jr nc, Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE980                  ; FAE918  jr NC,0xfae980
 	ld	ix, hl                                  ; FAE91A  ld IX,HL
 	and	ix, 0x7F                               ; FAE91C  and IX,0x007f
 	extpfx3 0xC7, 0xF0, 0x89                   ; FAE920  ld A,IXL
@@ -56907,20 +57318,20 @@ sub_FAE848__FAE904:
 	inc	8, xsp                                 ; FAE93A  inc 0,XSP
 	inc	2, xsp                                 ; FAE93C  inc 2,XSP
 	cp (xiz-7), 0x00                           ; FAE93E  cp (XIZ+0xf9),0x00
-	jr nz, sub_FAE848__FAE962                  ; FAE942  jr NZ,0xfae962
+	jr nz, Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE962                  ; FAE942  jr NZ,0xfae962
 	ld	bc, (xiz-4)                             ; FAE944  ld BC,(XIZ+0xfc)
 	inc	4, bc                                  ; FAE947  inc 4,BC
 	extz	xbc                                   ; FAE949  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE94B  or (XBC+0x1523),0x0008
 	stiw_da	(0xD796), 0                        ; FAE952  ld (0x00d796),0x0000
 	stiw_da	(0xD7A0), 0                        ; FAE959  ld (0x00d7a0),0x0000
-	jr sub_FAE848__FAE96B                      ; FAE960  jr T,0xfae96b
-sub_FAE848__FAE962:
+	jr Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE96B                      ; FAE960  jr T,0xfae96b
+Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE962:
 	push	0                                     ; FAE962  push 0x00
 	push	h                                     ; FAE964  push H
 	call	0xFA7B31                              ; FAE966  call 0xfa7b31
 	popw	bc                                    ; FAE96A  pop BC
-sub_FAE848__FAE96B:
+Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE96B:
 	lda_24	xbc, (0xD75E)                       ; FAE96B  lda XBC,0x00d75e
 	push	xbc                                   ; FAE970  push XBC
 	extpfx3 0xC7, 0xF0, 0x89                   ; FAE971  ld A,IXL
@@ -56928,37 +57339,48 @@ sub_FAE848__FAE96B:
 	pushw	wa                                   ; FAE976  push WA
 	calr (0xFAD0A2 - 0xFAE97A)                 ; FAE977  calr 0xfad0a2
 	inc	2, de                                  ; FAE97A  inc 2,DE
-sub_FAE848__FAE97C:
+Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE97C:
 	inc	6, xsp                                 ; FAE97C  inc 6,XSP
-	jr sub_FAE848__FAE904                      ; FAE97E  jr T,0xfae904
-sub_FAE848__FAE980:
+	jr Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE904                      ; FAE97E  jr T,0xfae904
+Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE980:
 	pop	xix                                    ; FAE980  pop XIX
 	popw	de                                    ; FAE981  pop DE
 	popw	hl                                    ; FAE982  pop HL
 	unlk32 xiz                                 ; FAE983  unlk XIZ
 	ret                                        ; FAE985  ret
 ; --------------------------------------------------------------------------
-; sub_FAE986 -- 0xFAE986..0xFAEACD (328 bytes)
+; Voice_Restage_Reg04C0_ValueCurve_ForPart -- 0xFAE986..0xFAEACD (328 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF232
 ; Inputs:  frame `link XIZ,-9`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x10)
 ; Outputs: writes 0x00D796, 0x00D7A0
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7C3A = sub_FA7C3A
+; Calls:   0xFA6110 = sub_FA6110, 0xFA7C3A = EGEnv_Eval_ValueCurve_WithFreqWriteCurve
 ;          0xFA981B = sub_FA981B, 0xFA9F19 = Voice_StageChanSel_Reg04C0
 ;          0xFACFF8 = Dev10C_SetChanReg_04C0, 0xFAD0A2 = Dev10C_SetChanReg_01C0_or_0600
-;          0xFAD0E6 = Dev10C_SetChanReg_0540_or_0580, 0xFAE2C6 = sub_FAE2C6
+;          0xFAD0E6 = Dev10C_SetChanReg_0540_or_0580, 0xFAE2C6 = Voice_RestageArm_ValueCurve_Shared
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE986-0xFAEACD
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_Restage_Reg04C0_ValueCurve_ForPart -- one of the 49 arms of
+;          Voice_ApplyParamChange_Dispatch (its ONLY caller, at 0xFAF232), and the one that
+;          refreshes register 0x04C0 + chan for every voice the part owns.
+;          It obtains the part's voice list from VoiceQuery_Tag00_Part (0xFB3CE0), walks it
+;          while the voice number is below 0x40, forms voice_record = 0x003BCF + 0x44*voice,
+;          and per voice calls EGEnv_Eval_ValueCurve_WithFreqWriteCurve (0xFA7C3A) and then Dev10C_SetChanReg_04C0 (0xFACFF8) / _0540_or_0580.
+;          Evidence: the callee addresses are instruction operands;
+;          `python3 notes/prom_c_understanding_round6.py --dispatch` asserts that this arm has
+;          exactly one call site and that it is inside the dispatcher, and --blocks asserts
+;          which envelope block its evaluator belongs to.
+;          Unknown: what register 0x04C0 carries, and what the dispatcher's target code
+;          for this arm means.
 ; --------------------------------------------------------------------------
-sub_FAE986:
+Voice_Restage_Reg04C0_ValueCurve_ForPart:
 	link32 0xEE, 0x0C, 0xF7, 0xFF              ; FAE986  link XIZ,0xfff7
 	pushw	hl                                   ; FAE98A  push HL
 	pushw	de                                   ; FAE98B  push DE
@@ -56988,7 +57410,7 @@ sub_FAE986:
 	inc	8, xsp                                 ; FAE9C8  inc 0,XSP
 	inc	4, xsp                                 ; FAE9CA  inc 4,XSP
 	cps	d, 0                                   ; FAE9CC  cp D,0
-	jr nz, sub_FAE986__FAEA18                  ; FAE9CE  jr NZ,0xfaea18
+	jr nz, Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA18                  ; FAE9CE  jr NZ,0xfaea18
 	push	0                                     ; FAE9D0  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAE9D2  push (XIZ+0x08)
 	call	0xFB3CE0                              ; FAE9D5  call 0xfb3ce0
@@ -57001,10 +57423,10 @@ sub_FAE986:
 	ld	xix, xiy                                ; FAE9EC  ld XIX,XIY
 	inc	5, xix                                 ; FAE9EE  inc 5,XIX
 	popw	bc                                    ; FAE9F0  pop BC
-sub_FAE986__FAE9F1:
+Voice_Restage_Reg04C0_ValueCurve_ForPart__FAE9F1:
 	ld	h, (xix)                                ; FAE9F1  ld H,(XIX)
 	cp	h, 64                                   ; FAE9F3  cp H,0x40
-	jrl nc, sub_FAE986__FAEAC8                 ; FAE9F6  jrl NC,0xfaeac8
+	jrl nc, Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC8                 ; FAE9F6  jrl NC,0xfaeac8
 	ldb	c, 68                                  ; FAE9F9  ld C,0x44
 	mul8rr	c, h                                ; FAE9FB  mul BC,H
 	add	bc, de                                 ; FAE9FD  add BC,DE
@@ -57018,8 +57440,8 @@ sub_FAE986__FAE9F1:
 	calr (0xFACFF8 - 0xFAEA12)                 ; FAEA0F  calr 0xfacff8
 	inc	1, xix                                 ; FAEA12  inc 1,XIX
 	inc	8, xsp                                 ; FAEA14  inc 0,XSP
-	jr sub_FAE986__FAE9F1                      ; FAEA16  jr T,0xfae9f1
-sub_FAE986__FAEA18:
+	jr Voice_Restage_Reg04C0_ValueCurve_ForPart__FAE9F1                      ; FAEA16  jr T,0xfae9f1
+Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA18:
 	pushw	32                                   ; FAEA18  push 0x0020
 	ld	c, (xiz+16)                             ; FAEA1B  ld C,(XIZ+0x10)
 	set	3, c                                   ; FAEA1E  set 0x03,C
@@ -57035,14 +57457,14 @@ sub_FAE986__FAEA18:
 	ld	ix, bc                                  ; FAEA3A  ld IX,BC
 	extpfx3 0x9E, 0xFE, 0x84                   ; FAEA3C  add IX,(XIZ+0xfe)
 	inc	6, xsp                                 ; FAEA3F  inc 6,XSP
-sub_FAE986__FAEA41:
+Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA41:
 	ld	bc, (xiz-4)                             ; FAEA41  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FAEA44  extz XBC
 	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAEA46  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAEA4B  ld WA,HL
 	and	wa, 0xFF                               ; FAEA4D  and WA,0x00ff
 	cp	wa, 0x80                                ; FAEA51  cp WA,0x0080
-	jrl nc, sub_FAE986__FAEAC8                 ; FAEA55  jrl NC,0xfaeac8
+	jrl nc, Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC8                 ; FAEA55  jrl NC,0xfaeac8
 	ld	wa, hl                                  ; FAEA58  ld WA,HL
 	and	wa, 0x7F                               ; FAEA5A  and WA,0x007f
 	ld	h, a                                    ; FAEA5E  ld H,A
@@ -57057,7 +57479,7 @@ sub_FAE986__FAEA41:
 	inc	8, xsp                                 ; FAEA73  inc 0,XSP
 	inc	2, xsp                                 ; FAEA75  inc 2,XSP
 	cp (xiz-5), 0x00                           ; FAEA77  cp (XIZ+0xfb),0x00
-	jr nz, sub_FAE986__FAEAAB                  ; FAEA7B  jr NZ,0xfaeaab
+	jr nz, Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAAB                  ; FAEA7B  jr NZ,0xfaeaab
 	ld	bc, (xiz-2)                             ; FAEA7D  ld BC,(XIZ+0xfe)
 	inc	4, bc                                  ; FAEA80  inc 4,BC
 	extz	xbc                                   ; FAEA82  extz XBC
@@ -57071,8 +57493,8 @@ sub_FAE986__FAEA41:
 	pushw	wa                                   ; FAEAA3  push WA
 	calr (0xFAD0A2 - 0xFAEAA7)                 ; FAEAA4  calr 0xfad0a2
 	inc	6, xsp                                 ; FAEAA7  inc 6,XSP
-	jr sub_FAE986__FAEAC3                      ; FAEAA9  jr T,0xfaeac3
-sub_FAE986__FAEAAB:
+	jr Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC3                      ; FAEAA9  jr T,0xfaeac3
+Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAAB:
 	push	0                                     ; FAEAAB  push 0x00
 	push	h                                     ; FAEAAD  push H
 	call	0xFA7C3A                              ; FAEAAF  call 0xfa7c3a
@@ -57083,10 +57505,10 @@ sub_FAE986__FAEAAB:
 	pushw	wa                                   ; FAEABD  push WA
 	calr (0xFAD0E6 - 0xFAEAC1)                 ; FAEABE  calr 0xfad0e6
 	inc	8, xsp                                 ; FAEAC1  inc 0,XSP
-sub_FAE986__FAEAC3:
+Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC3:
 	inc	2, de                                  ; FAEAC3  inc 2,DE
-	jrl sub_FAE986__FAEA41                     ; FAEAC5  jrl T,0xfaea41
-sub_FAE986__FAEAC8:
+	jrl Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA41                     ; FAEAC5  jrl T,0xfaea41
+Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC8:
 	pop	xix                                    ; FAEAC8  pop XIX
 	popw	de                                    ; FAEAC9  pop DE
 	popw	hl                                    ; FAEACA  pop HL
@@ -58070,7 +58492,7 @@ sub_FAF00C:
 	unlk32 xiz                                 ; FAF02E  unlk XIZ
 	ret                                        ; FAF030  ret
 ; --------------------------------------------------------------------------
-; sub_FAF031 -- 0xFAF031..0xFAF33F (783 bytes)
+; Voice_ApplyParamChange_Dispatch -- 0xFAF031..0xFAF33F (783 bytes)
 ;
 ; Called from: 50 site(s) outside this module:
 ;          0xFB8DE4 in sub_FB8CEC__FB8DCC, 0xFB8E02 in sub_FB8CEC__FB8DCC
@@ -58105,10 +58527,10 @@ sub_FAF00C:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAE109 = sub_FAE109, 0xFAE15F = sub_FAE15F
-;          0xFAE1B2 = sub_FAE1B2, 0xFAE34A = sub_FAE34A
-;          0xFAE484 = sub_FAE484, 0xFAE5C7 = sub_FAE5C7
-;          0xFAE703 = sub_FAE703, 0xFAE848 = sub_FAE848
-;          0xFAE986 = sub_FAE986, 0xFAEACE = sub_FAEACE
+;          0xFAE1B2 = sub_FAE1B2, 0xFAE34A = Voice_Restage_Reg0440_BaseCurve_ForPart
+;          0xFAE484 = Voice_Restage_Reg0440_ValueCurve_ForPart, 0xFAE5C7 = Voice_Restage_Reg0180_BaseCurve_ForPart
+;          0xFAE703 = Voice_Restage_Reg0180_ValueCurve_ForPart, 0xFAE848 = Voice_Restage_Reg04C0_BaseCurve_ForPart
+;          0xFAE986 = Voice_Restage_Reg04C0_ValueCurve_ForPart, 0xFAEACE = sub_FAEACE
 ;          0xFAEAF9 = sub_FAEAF9, 0xFAEB65 = sub_FAEB65
 ;          0xFAEBD1 = sub_FAEBD1, 0xFAEC21 = sub_FAEC21
 ;          0xFAEC71 = sub_FAEC71, 0xFAEC9C = sub_FAEC9C
@@ -58125,10 +58547,31 @@ sub_FAF00C:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; ★★ Voice_ApplyParamChange_Dispatch -- the routine
+;          that pushes ONE changed parameter back out to the hardware.  68 call sites in
+;          prom_c, seven of them inside named MIDI controller handlers (MidiCtrl_CC01, CC02,
+;          CC04, CC16, CC17, CC18, CC19).
+;          H  = (XIZ+0x08)   a part or voice selector
+;          DE = (XIZ+0x0a)   the new value
+;          XIX= (XIZ+0x0c)   a record whose byte +1 carries the 6-bit TARGET CODE
+;          `ld L,(XIX+0x01) / and L,0x3f` at 0xFAF041 and 0xFAF044 takes the code; the value is
+;          then normalised -- for code 1, `DE & 0x8000 ? DE &= 0x7FFF : DE <<= 7`
+;          (0xFAF04D-0xFAF05A); for every other code, `DE & 0x8000 ? DE = (DE & 0x7FFF) >> 7`
+;          (0xFAF063-0xFAF06E).  Then `dec 1,BC / cp BC,0x30 / jrl UGT` (0xFAF079-0xFAF07F)
+;          bounds the index to 0..48 and `sll 2,BC / add XBC,0x00FAF08F / ld XBC,(XBC) /
+;          jp (XBC)` dispatches through a 49-entry table.
+;          ★ THE TABLE IS 49 ENTRIES AND 48 DISTINCT ARMS, and the two facts are independent:
+;          0xFAF08F + 4*49 = 0xFAF153, which is exactly where the first arm begins, and entry
+;          0 and the out-of-range path both reach 0xFAF33A.
+;          Evidence: every address above is an instruction operand; the table is read out of
+;          the ROM bytes and the arm count, the last entry and the 68 call sites are asserted
+;          by `python3 notes/prom_c_understanding_round6.py --dispatch`.
+;          Unknown: what the 6-bit target code MEANS, i.e. what parameter each of the 49
+;          entries is.  The arms are named for the REGISTER each one refreshes, which is an
+;          instruction operand, and for nothing else.
 ; --------------------------------------------------------------------------
-sub_FAF031:
+Voice_ApplyParamChange_Dispatch:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAF031  link XIZ,0x0000
 	pushw	hl                                   ; FAF035  push HL
 	pushw	de                                   ; FAF036  push DE
@@ -58139,32 +58582,32 @@ sub_FAF031:
 	ld	l, (xix+1)                              ; FAF041  ld L,(XIX+0x01)
 	and	l, 63                                  ; FAF044  and L,0x3f
 	cps	l, 1                                   ; FAF047  cp L,1
-	jr nz, sub_FAF031__FAF061                  ; FAF049  jr NZ,0xfaf061
+	jr nz, Voice_ApplyParamChange_Dispatch__FAF061                  ; FAF049  jr NZ,0xfaf061
 	ld	bc, de                                  ; FAF04B  ld BC,DE
 	and	bc, 0x8000                             ; FAF04D  and BC,0x8000
-	jr z, sub_FAF031__FAF058                   ; FAF051  jr Z,0xfaf058
+	jr z, Voice_ApplyParamChange_Dispatch__FAF058                   ; FAF051  jr Z,0xfaf058
 	res	15, de                                 ; FAF053  res 0x0f,DE
-	jr sub_FAF031__FAF073                      ; FAF056  jr T,0xfaf073
-sub_FAF031__FAF058:
+	jr Voice_ApplyParamChange_Dispatch__FAF073                      ; FAF056  jr T,0xfaf073
+Voice_ApplyParamChange_Dispatch__FAF058:
 	ld	bc, de                                  ; FAF058  ld BC,DE
 	sll	bc, 7                                  ; FAF05A  sll 0x07,BC
 	ld	de, bc                                  ; FAF05D  ld DE,BC
-	jr sub_FAF031__FAF073                      ; FAF05F  jr T,0xfaf073
-sub_FAF031__FAF061:
+	jr Voice_ApplyParamChange_Dispatch__FAF073                      ; FAF05F  jr T,0xfaf073
+Voice_ApplyParamChange_Dispatch__FAF061:
 	ld	bc, de                                  ; FAF061  ld BC,DE
 	and	bc, 0x8000                             ; FAF063  and BC,0x8000
-	jr z, sub_FAF031__FAF073                   ; FAF067  jr Z,0xfaf073
+	jr z, Voice_ApplyParamChange_Dispatch__FAF073                   ; FAF067  jr Z,0xfaf073
 	res	15, de                                 ; FAF069  res 0x0f,DE
 	ld	bc, de                                  ; FAF06C  ld BC,DE
 	srl	bc, 7                                  ; FAF06E  srl 0x07,BC
 	ld	de, bc                                  ; FAF071  ld DE,BC
-sub_FAF031__FAF073:
+Voice_ApplyParamChange_Dispatch__FAF073:
 	ld	c, l                                    ; FAF073  ld C,L
 	extz	bc                                    ; FAF075  extz BC
 	extz	xbc                                   ; FAF077  extz XBC
 	dec	1, bc                                  ; FAF079  dec 1,BC
 	cp	bc, 48                                  ; FAF07B  cp BC,0x0030
-	jrl ugt, sub_FAF031__FAF33A                ; FAF07F  jrl UGT,0xfaf33a
+	jrl ugt, Voice_ApplyParamChange_Dispatch__FAF33A                ; FAF07F  jrl UGT,0xfaf33a
 	sll	bc, 2                                  ; FAF082  sll 0x02,BC
 	add	xbc, 0xFAF08F                          ; FAF085  add XBC,0x00faf08f
 	ld	xbc, (xbc)                              ; FAF08B  ld XBC,(XBC)
@@ -58226,302 +58669,302 @@ sub_FAF031__FAF073:
 	.long 0x00FAF31F	; 0xFAF147  entry 46 -> 0xFAF31F
 	.long 0x00FAF328	; 0xFAF14B  entry 47 -> 0xFAF328
 	.long 0x00FAF331	; 0xFAF14F  entry 48 -> 0xFAF331
-sub_FAF031__FAF153:
+Voice_ApplyParamChange_Dispatch__FAF153:
 	push	xix                                   ; FAF153  push XIX
 	pushw	de                                   ; FAF154  push DE
 	push	0                                     ; FAF155  push 0x00
 	push	h                                     ; FAF157  push H
 	calr (0xFAE109 - 0xFAF15C)                 ; FAF159  calr 0xfae109
-	jrl sub_FAF031__FAF31B                     ; FAF15C  jrl T,0xfaf31b
-sub_FAF031__FAF15F:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF15C  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF15F:
 	push	xix                                   ; FAF15F  push XIX
 	pushw	de                                   ; FAF160  push DE
 	push	0                                     ; FAF161  push 0x00
 	push	h                                     ; FAF163  push H
 	calr (0xFAE1B2 - 0xFAF168)                 ; FAF165  calr 0xfae1b2
-	jrl sub_FAF031__FAF31B                     ; FAF168  jrl T,0xfaf31b
-sub_FAF031__FAF16B:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF168  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF16B:
 	push	xix                                   ; FAF16B  push XIX
 	pushw	de                                   ; FAF16C  push DE
 	push	0                                     ; FAF16D  push 0x00
 	push	h                                     ; FAF16F  push H
 	calr (0xFAE15F - 0xFAF174)                 ; FAF171  calr 0xfae15f
-	jrl sub_FAF031__FAF31B                     ; FAF174  jrl T,0xfaf31b
-sub_FAF031__FAF177:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF174  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF177:
 	pushw	0                                    ; FAF177  push 0x0000
-	jr sub_FAF031__FAF189                      ; FAF17A  jr T,0xfaf189
-sub_FAF031__FAF17C:
+	jr Voice_ApplyParamChange_Dispatch__FAF189                      ; FAF17A  jr T,0xfaf189
+Voice_ApplyParamChange_Dispatch__FAF17C:
 	pushw	1                                    ; FAF17C  push 0x0001
-	jr sub_FAF031__FAF189                      ; FAF17F  jr T,0xfaf189
-sub_FAF031__FAF181:
+	jr Voice_ApplyParamChange_Dispatch__FAF189                      ; FAF17F  jr T,0xfaf189
+Voice_ApplyParamChange_Dispatch__FAF181:
 	pushw	2                                    ; FAF181  push 0x0002
-	jr sub_FAF031__FAF189                      ; FAF184  jr T,0xfaf189
-sub_FAF031__FAF186:
+	jr Voice_ApplyParamChange_Dispatch__FAF189                      ; FAF184  jr T,0xfaf189
+Voice_ApplyParamChange_Dispatch__FAF186:
 	pushw	3                                    ; FAF186  push 0x0003
-sub_FAF031__FAF189:
+Voice_ApplyParamChange_Dispatch__FAF189:
 	push	xix                                   ; FAF189  push XIX
 	ld	c, e                                    ; FAF18A  ld C,E
 	pushw	bc                                   ; FAF18C  push BC
 	push	0                                     ; FAF18D  push 0x00
 	push	h                                     ; FAF18F  push H
 	calr (0xFAE34A - 0xFAF194)                 ; FAF191  calr 0xfae34a
-sub_FAF031__FAF194:
+Voice_ApplyParamChange_Dispatch__FAF194:
 	inc	8, xsp                                 ; FAF194  inc 0,XSP
 	inc	2, xsp                                 ; FAF196  inc 2,XSP
-	jrl sub_FAF031__FAF33A                     ; FAF198  jrl T,0xfaf33a
-sub_FAF031__FAF19B:
+	jrl Voice_ApplyParamChange_Dispatch__FAF33A                     ; FAF198  jrl T,0xfaf33a
+Voice_ApplyParamChange_Dispatch__FAF19B:
 	pushw	0                                    ; FAF19B  push 0x0000
-	jr sub_FAF031__FAF1AD                      ; FAF19E  jr T,0xfaf1ad
-sub_FAF031__FAF1A0:
+	jr Voice_ApplyParamChange_Dispatch__FAF1AD                      ; FAF19E  jr T,0xfaf1ad
+Voice_ApplyParamChange_Dispatch__FAF1A0:
 	pushw	1                                    ; FAF1A0  push 0x0001
-	jr sub_FAF031__FAF1AD                      ; FAF1A3  jr T,0xfaf1ad
-sub_FAF031__FAF1A5:
+	jr Voice_ApplyParamChange_Dispatch__FAF1AD                      ; FAF1A3  jr T,0xfaf1ad
+Voice_ApplyParamChange_Dispatch__FAF1A5:
 	pushw	2                                    ; FAF1A5  push 0x0002
-	jr sub_FAF031__FAF1AD                      ; FAF1A8  jr T,0xfaf1ad
-sub_FAF031__FAF1AA:
+	jr Voice_ApplyParamChange_Dispatch__FAF1AD                      ; FAF1A8  jr T,0xfaf1ad
+Voice_ApplyParamChange_Dispatch__FAF1AA:
 	pushw	3                                    ; FAF1AA  push 0x0003
-sub_FAF031__FAF1AD:
+Voice_ApplyParamChange_Dispatch__FAF1AD:
 	push	xix                                   ; FAF1AD  push XIX
 	ld	c, e                                    ; FAF1AE  ld C,E
 	pushw	bc                                   ; FAF1B0  push BC
 	push	0                                     ; FAF1B1  push 0x00
 	push	h                                     ; FAF1B3  push H
 	calr (0xFAE5C7 - 0xFAF1B8)                 ; FAF1B5  calr 0xfae5c7
-	jr sub_FAF031__FAF194                      ; FAF1B8  jr T,0xfaf194
-sub_FAF031__FAF1BA:
+	jr Voice_ApplyParamChange_Dispatch__FAF194                      ; FAF1B8  jr T,0xfaf194
+Voice_ApplyParamChange_Dispatch__FAF1BA:
 	pushw	0                                    ; FAF1BA  push 0x0000
-	jr sub_FAF031__FAF1CC                      ; FAF1BD  jr T,0xfaf1cc
-sub_FAF031__FAF1BF:
+	jr Voice_ApplyParamChange_Dispatch__FAF1CC                      ; FAF1BD  jr T,0xfaf1cc
+Voice_ApplyParamChange_Dispatch__FAF1BF:
 	pushw	1                                    ; FAF1BF  push 0x0001
-	jr sub_FAF031__FAF1CC                      ; FAF1C2  jr T,0xfaf1cc
-sub_FAF031__FAF1C4:
+	jr Voice_ApplyParamChange_Dispatch__FAF1CC                      ; FAF1C2  jr T,0xfaf1cc
+Voice_ApplyParamChange_Dispatch__FAF1C4:
 	pushw	2                                    ; FAF1C4  push 0x0002
-	jr sub_FAF031__FAF1CC                      ; FAF1C7  jr T,0xfaf1cc
-sub_FAF031__FAF1C9:
+	jr Voice_ApplyParamChange_Dispatch__FAF1CC                      ; FAF1C7  jr T,0xfaf1cc
+Voice_ApplyParamChange_Dispatch__FAF1C9:
 	pushw	3                                    ; FAF1C9  push 0x0003
-sub_FAF031__FAF1CC:
+Voice_ApplyParamChange_Dispatch__FAF1CC:
 	push	xix                                   ; FAF1CC  push XIX
 	ld	c, e                                    ; FAF1CD  ld C,E
 	pushw	bc                                   ; FAF1CF  push BC
 	push	0                                     ; FAF1D0  push 0x00
 	push	h                                     ; FAF1D2  push H
 	calr (0xFAE848 - 0xFAF1D7)                 ; FAF1D4  calr 0xfae848
-	jr sub_FAF031__FAF194                      ; FAF1D7  jr T,0xfaf194
-sub_FAF031__FAF1D9:
+	jr Voice_ApplyParamChange_Dispatch__FAF194                      ; FAF1D7  jr T,0xfaf194
+Voice_ApplyParamChange_Dispatch__FAF1D9:
 	pushw	0                                    ; FAF1D9  push 0x0000
-	jr sub_FAF031__FAF1EB                      ; FAF1DC  jr T,0xfaf1eb
-sub_FAF031__FAF1DE:
+	jr Voice_ApplyParamChange_Dispatch__FAF1EB                      ; FAF1DC  jr T,0xfaf1eb
+Voice_ApplyParamChange_Dispatch__FAF1DE:
 	pushw	1                                    ; FAF1DE  push 0x0001
-	jr sub_FAF031__FAF1EB                      ; FAF1E1  jr T,0xfaf1eb
-sub_FAF031__FAF1E3:
+	jr Voice_ApplyParamChange_Dispatch__FAF1EB                      ; FAF1E1  jr T,0xfaf1eb
+Voice_ApplyParamChange_Dispatch__FAF1E3:
 	pushw	2                                    ; FAF1E3  push 0x0002
-	jr sub_FAF031__FAF1EB                      ; FAF1E6  jr T,0xfaf1eb
-sub_FAF031__FAF1E8:
+	jr Voice_ApplyParamChange_Dispatch__FAF1EB                      ; FAF1E6  jr T,0xfaf1eb
+Voice_ApplyParamChange_Dispatch__FAF1E8:
 	pushw	3                                    ; FAF1E8  push 0x0003
-sub_FAF031__FAF1EB:
+Voice_ApplyParamChange_Dispatch__FAF1EB:
 	push	xix                                   ; FAF1EB  push XIX
 	ld	c, e                                    ; FAF1EC  ld C,E
 	pushw	bc                                   ; FAF1EE  push BC
 	push	0                                     ; FAF1EF  push 0x00
 	push	h                                     ; FAF1F1  push H
 	calr (0xFAE484 - 0xFAF1F6)                 ; FAF1F3  calr 0xfae484
-	jr sub_FAF031__FAF194                      ; FAF1F6  jr T,0xfaf194
-sub_FAF031__FAF1F8:
+	jr Voice_ApplyParamChange_Dispatch__FAF194                      ; FAF1F6  jr T,0xfaf194
+Voice_ApplyParamChange_Dispatch__FAF1F8:
 	pushw	0                                    ; FAF1F8  push 0x0000
-	jr sub_FAF031__FAF20A                      ; FAF1FB  jr T,0xfaf20a
-sub_FAF031__FAF1FD:
+	jr Voice_ApplyParamChange_Dispatch__FAF20A                      ; FAF1FB  jr T,0xfaf20a
+Voice_ApplyParamChange_Dispatch__FAF1FD:
 	pushw	1                                    ; FAF1FD  push 0x0001
-	jr sub_FAF031__FAF20A                      ; FAF200  jr T,0xfaf20a
-sub_FAF031__FAF202:
+	jr Voice_ApplyParamChange_Dispatch__FAF20A                      ; FAF200  jr T,0xfaf20a
+Voice_ApplyParamChange_Dispatch__FAF202:
 	pushw	2                                    ; FAF202  push 0x0002
-	jr sub_FAF031__FAF20A                      ; FAF205  jr T,0xfaf20a
-sub_FAF031__FAF207:
+	jr Voice_ApplyParamChange_Dispatch__FAF20A                      ; FAF205  jr T,0xfaf20a
+Voice_ApplyParamChange_Dispatch__FAF207:
 	pushw	3                                    ; FAF207  push 0x0003
-sub_FAF031__FAF20A:
+Voice_ApplyParamChange_Dispatch__FAF20A:
 	push	xix                                   ; FAF20A  push XIX
 	ld	c, e                                    ; FAF20B  ld C,E
 	pushw	bc                                   ; FAF20D  push BC
 	push	0                                     ; FAF20E  push 0x00
 	push	h                                     ; FAF210  push H
 	calr (0xFAE703 - 0xFAF215)                 ; FAF212  calr 0xfae703
-	jrl sub_FAF031__FAF194                     ; FAF215  jrl T,0xfaf194
-sub_FAF031__FAF218:
+	jrl Voice_ApplyParamChange_Dispatch__FAF194                     ; FAF215  jrl T,0xfaf194
+Voice_ApplyParamChange_Dispatch__FAF218:
 	pushw	0                                    ; FAF218  push 0x0000
-	jr sub_FAF031__FAF22A                      ; FAF21B  jr T,0xfaf22a
-sub_FAF031__FAF21D:
+	jr Voice_ApplyParamChange_Dispatch__FAF22A                      ; FAF21B  jr T,0xfaf22a
+Voice_ApplyParamChange_Dispatch__FAF21D:
 	pushw	1                                    ; FAF21D  push 0x0001
-	jr sub_FAF031__FAF22A                      ; FAF220  jr T,0xfaf22a
-sub_FAF031__FAF222:
+	jr Voice_ApplyParamChange_Dispatch__FAF22A                      ; FAF220  jr T,0xfaf22a
+Voice_ApplyParamChange_Dispatch__FAF222:
 	pushw	2                                    ; FAF222  push 0x0002
-	jr sub_FAF031__FAF22A                      ; FAF225  jr T,0xfaf22a
-sub_FAF031__FAF227:
+	jr Voice_ApplyParamChange_Dispatch__FAF22A                      ; FAF225  jr T,0xfaf22a
+Voice_ApplyParamChange_Dispatch__FAF227:
 	pushw	3                                    ; FAF227  push 0x0003
-sub_FAF031__FAF22A:
+Voice_ApplyParamChange_Dispatch__FAF22A:
 	push	xix                                   ; FAF22A  push XIX
 	ld	c, e                                    ; FAF22B  ld C,E
 	pushw	bc                                   ; FAF22D  push BC
 	push	0                                     ; FAF22E  push 0x00
 	push	h                                     ; FAF230  push H
 	calr (0xFAE986 - 0xFAF235)                 ; FAF232  calr 0xfae986
-	jrl sub_FAF031__FAF194                     ; FAF235  jrl T,0xfaf194
-sub_FAF031__FAF238:
+	jrl Voice_ApplyParamChange_Dispatch__FAF194                     ; FAF235  jrl T,0xfaf194
+Voice_ApplyParamChange_Dispatch__FAF238:
 	push	xix                                   ; FAF238  push XIX
 	ld	c, e                                    ; FAF239  ld C,E
 	pushw	bc                                   ; FAF23B  push BC
 	push	0                                     ; FAF23C  push 0x00
 	push	h                                     ; FAF23E  push H
 	calr (0xFAEACE - 0xFAF243)                 ; FAF240  calr 0xfaeace
-	jrl sub_FAF031__FAF31B                     ; FAF243  jrl T,0xfaf31b
-sub_FAF031__FAF246:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF243  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF246:
 	push	xix                                   ; FAF246  push XIX
 	ld	c, e                                    ; FAF247  ld C,E
 	pushw	bc                                   ; FAF249  push BC
 	push	0                                     ; FAF24A  push 0x00
 	push	h                                     ; FAF24C  push H
 	calr (0xFAEAF9 - 0xFAF251)                 ; FAF24E  calr 0xfaeaf9
-	jrl sub_FAF031__FAF31B                     ; FAF251  jrl T,0xfaf31b
-sub_FAF031__FAF254:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF251  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF254:
 	push	xix                                   ; FAF254  push XIX
 	ld	c, e                                    ; FAF255  ld C,E
 	pushw	bc                                   ; FAF257  push BC
 	push	0                                     ; FAF258  push 0x00
 	push	h                                     ; FAF25A  push H
 	calr (0xFAEB65 - 0xFAF25F)                 ; FAF25C  calr 0xfaeb65
-	jrl sub_FAF031__FAF31B                     ; FAF25F  jrl T,0xfaf31b
-sub_FAF031__FAF262:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF25F  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF262:
 	push	xix                                   ; FAF262  push XIX
 	ld	c, e                                    ; FAF263  ld C,E
 	pushw	bc                                   ; FAF265  push BC
 	push	0                                     ; FAF266  push 0x00
 	push	h                                     ; FAF268  push H
 	calr (0xFAEBD1 - 0xFAF26D)                 ; FAF26A  calr 0xfaebd1
-	jrl sub_FAF031__FAF31B                     ; FAF26D  jrl T,0xfaf31b
-sub_FAF031__FAF270:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF26D  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF270:
 	push	xix                                   ; FAF270  push XIX
 	ld	c, e                                    ; FAF271  ld C,E
 	pushw	bc                                   ; FAF273  push BC
 	push	0                                     ; FAF274  push 0x00
 	push	h                                     ; FAF276  push H
 	calr (0xFAEC21 - 0xFAF27B)                 ; FAF278  calr 0xfaec21
-	jrl sub_FAF031__FAF31B                     ; FAF27B  jrl T,0xfaf31b
-sub_FAF031__FAF27E:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF27B  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF27E:
 	push	xix                                   ; FAF27E  push XIX
 	ld	c, e                                    ; FAF27F  ld C,E
 	pushw	bc                                   ; FAF281  push BC
 	push	0                                     ; FAF282  push 0x00
 	push	h                                     ; FAF284  push H
 	calr (0xFAEC71 - 0xFAF289)                 ; FAF286  calr 0xfaec71
-	jrl sub_FAF031__FAF31B                     ; FAF289  jrl T,0xfaf31b
-sub_FAF031__FAF28C:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF289  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF28C:
 	push	xix                                   ; FAF28C  push XIX
 	ld	c, e                                    ; FAF28D  ld C,E
 	pushw	bc                                   ; FAF28F  push BC
 	push	0                                     ; FAF290  push 0x00
 	push	h                                     ; FAF292  push H
 	calr (0xFAEC9C - 0xFAF297)                 ; FAF294  calr 0xfaec9c
-	jrl sub_FAF031__FAF31B                     ; FAF297  jrl T,0xfaf31b
-sub_FAF031__FAF29A:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF297  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF29A:
 	push	xix                                   ; FAF29A  push XIX
 	ld	c, e                                    ; FAF29B  ld C,E
 	pushw	bc                                   ; FAF29D  push BC
 	push	0                                     ; FAF29E  push 0x00
 	push	h                                     ; FAF2A0  push H
 	calr (0xFAECC7 - 0xFAF2A5)                 ; FAF2A2  calr 0xfaecc7
-	jrl sub_FAF031__FAF31B                     ; FAF2A5  jrl T,0xfaf31b
-sub_FAF031__FAF2A8:
+	jrl Voice_ApplyParamChange_Dispatch__FAF31B                     ; FAF2A5  jrl T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF2A8:
 	push	xix                                   ; FAF2A8  push XIX
 	ld	c, e                                    ; FAF2A9  ld C,E
 	pushw	bc                                   ; FAF2AB  push BC
 	push	0                                     ; FAF2AC  push 0x00
 	push	h                                     ; FAF2AE  push H
 	calr (0xFAED33 - 0xFAF2B3)                 ; FAF2B0  calr 0xfaed33
-	jr sub_FAF031__FAF31B                      ; FAF2B3  jr T,0xfaf31b
-sub_FAF031__FAF2B5:
+	jr Voice_ApplyParamChange_Dispatch__FAF31B                      ; FAF2B3  jr T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF2B5:
 	push	xix                                   ; FAF2B5  push XIX
 	ld	c, e                                    ; FAF2B6  ld C,E
 	pushw	bc                                   ; FAF2B8  push BC
 	push	0                                     ; FAF2B9  push 0x00
 	push	h                                     ; FAF2BB  push H
 	calr (0xFAED76 - 0xFAF2C0)                 ; FAF2BD  calr 0xfaed76
-	jr sub_FAF031__FAF31B                      ; FAF2C0  jr T,0xfaf31b
-sub_FAF031__FAF2C2:
+	jr Voice_ApplyParamChange_Dispatch__FAF31B                      ; FAF2C0  jr T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF2C2:
 	push	xix                                   ; FAF2C2  push XIX
 	ld	c, e                                    ; FAF2C3  ld C,E
 	pushw	bc                                   ; FAF2C5  push BC
 	push	0                                     ; FAF2C6  push 0x00
 	push	h                                     ; FAF2C8  push H
 	calr (0xFAEDC4 - 0xFAF2CD)                 ; FAF2CA  calr 0xfaedc4
-	jr sub_FAF031__FAF31B                      ; FAF2CD  jr T,0xfaf31b
-sub_FAF031__FAF2CF:
+	jr Voice_ApplyParamChange_Dispatch__FAF31B                      ; FAF2CD  jr T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF2CF:
 	push	xix                                   ; FAF2CF  push XIX
 	ld	c, e                                    ; FAF2D0  ld C,E
 	pushw	bc                                   ; FAF2D2  push BC
 	push	0                                     ; FAF2D3  push 0x00
 	push	h                                     ; FAF2D5  push H
 	calr (0xFAEE07 - 0xFAF2DA)                 ; FAF2D7  calr 0xfaee07
-	jr sub_FAF031__FAF31B                      ; FAF2DA  jr T,0xfaf31b
-sub_FAF031__FAF2DC:
+	jr Voice_ApplyParamChange_Dispatch__FAF31B                      ; FAF2DA  jr T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF2DC:
 	push	xix                                   ; FAF2DC  push XIX
 	ld	c, e                                    ; FAF2DD  ld C,E
 	pushw	bc                                   ; FAF2DF  push BC
 	push	0                                     ; FAF2E0  push 0x00
 	push	h                                     ; FAF2E2  push H
 	calr (0xFAEE4A - 0xFAF2E7)                 ; FAF2E4  calr 0xfaee4a
-	jr sub_FAF031__FAF31B                      ; FAF2E7  jr T,0xfaf31b
-sub_FAF031__FAF2E9:
+	jr Voice_ApplyParamChange_Dispatch__FAF31B                      ; FAF2E7  jr T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF2E9:
 	push	xix                                   ; FAF2E9  push XIX
 	ld	c, e                                    ; FAF2EA  ld C,E
 	pushw	bc                                   ; FAF2EC  push BC
 	push	0                                     ; FAF2ED  push 0x00
 	push	h                                     ; FAF2EF  push H
 	calr (0xFAEE8D - 0xFAF2F4)                 ; FAF2F1  calr 0xfaee8d
-	jr sub_FAF031__FAF31B                      ; FAF2F4  jr T,0xfaf31b
-sub_FAF031__FAF2F6:
+	jr Voice_ApplyParamChange_Dispatch__FAF31B                      ; FAF2F4  jr T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF2F6:
 	push	xix                                   ; FAF2F6  push XIX
 	ld	c, e                                    ; FAF2F7  ld C,E
 	pushw	bc                                   ; FAF2F9  push BC
 	push	0                                     ; FAF2FA  push 0x00
 	push	h                                     ; FAF2FC  push H
 	calr (0xFAEED0 - 0xFAF301)                 ; FAF2FE  calr 0xfaeed0
-	jr sub_FAF031__FAF31B                      ; FAF301  jr T,0xfaf31b
-sub_FAF031__FAF303:
+	jr Voice_ApplyParamChange_Dispatch__FAF31B                      ; FAF301  jr T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF303:
 	push	xix                                   ; FAF303  push XIX
 	ld	c, e                                    ; FAF304  ld C,E
 	pushw	bc                                   ; FAF306  push BC
 	push	0                                     ; FAF307  push 0x00
 	push	h                                     ; FAF309  push H
 	calr (0xFAEF24 - 0xFAF30E)                 ; FAF30B  calr 0xfaef24
-	jr sub_FAF031__FAF31B                      ; FAF30E  jr T,0xfaf31b
-sub_FAF031__FAF310:
+	jr Voice_ApplyParamChange_Dispatch__FAF31B                      ; FAF30E  jr T,0xfaf31b
+Voice_ApplyParamChange_Dispatch__FAF310:
 	push	xix                                   ; FAF310  push XIX
 	ld	c, e                                    ; FAF311  ld C,E
 	pushw	bc                                   ; FAF313  push BC
 	push	0                                     ; FAF314  push 0x00
 	push	h                                     ; FAF316  push H
 	calr (0xFAEF7F - 0xFAF31B)                 ; FAF318  calr 0xfaef7f
-sub_FAF031__FAF31B:
+Voice_ApplyParamChange_Dispatch__FAF31B:
 	inc	8, xsp                                 ; FAF31B  inc 0,XSP
-	jr sub_FAF031__FAF33A                      ; FAF31D  jr T,0xfaf33a
-sub_FAF031__FAF31F:
+	jr Voice_ApplyParamChange_Dispatch__FAF33A                      ; FAF31D  jr T,0xfaf33a
+Voice_ApplyParamChange_Dispatch__FAF31F:
 	push	xix                                   ; FAF31F  push XIX
 	ld	c, e                                    ; FAF320  ld C,E
 	pushw	bc                                   ; FAF322  push BC
 	calr (0xFAEFC2 - 0xFAF326)                 ; FAF323  calr 0xfaefc2
-	jr sub_FAF031__FAF338                      ; FAF326  jr T,0xfaf338
-sub_FAF031__FAF328:
+	jr Voice_ApplyParamChange_Dispatch__FAF338                      ; FAF326  jr T,0xfaf338
+Voice_ApplyParamChange_Dispatch__FAF328:
 	push	xix                                   ; FAF328  push XIX
 	ld	c, e                                    ; FAF329  ld C,E
 	pushw	bc                                   ; FAF32B  push BC
 	calr (0xFAEFE7 - 0xFAF32F)                 ; FAF32C  calr 0xfaefe7
-	jr sub_FAF031__FAF338                      ; FAF32F  jr T,0xfaf338
-sub_FAF031__FAF331:
+	jr Voice_ApplyParamChange_Dispatch__FAF338                      ; FAF32F  jr T,0xfaf338
+Voice_ApplyParamChange_Dispatch__FAF331:
 	push	xix                                   ; FAF331  push XIX
 	ld	c, e                                    ; FAF332  ld C,E
 	pushw	bc                                   ; FAF334  push BC
 	calr (0xFAF00C - 0xFAF338)                 ; FAF335  calr 0xfaf00c
-sub_FAF031__FAF338:
+Voice_ApplyParamChange_Dispatch__FAF338:
 	inc	6, xsp                                 ; FAF338  inc 6,XSP
-sub_FAF031__FAF33A:
+Voice_ApplyParamChange_Dispatch__FAF33A:
 	pop	xix                                    ; FAF33A  pop XIX
 	popw	de                                    ; FAF33B  pop DE
 	popw	hl                                    ; FAF33C  pop HL
@@ -58648,7 +59091,7 @@ PartRec_ResetSlotValues_ByTag__FAF3B5:
 ;          0xFAFE74
 ; Inputs:  frame `link XIZ,-20`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF3CC-0xFAF4DC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -58777,7 +59220,7 @@ MidiCtrl_CC01__FAF4D8:
 ;          0xFAFE82
 ; Inputs:  frame `link XIZ,-20`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF4DD-0xFAF5ED
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -58906,7 +59349,7 @@ MidiCtrl_CC02__FAF5E9:
 ;          0xFAFE90
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF5EE-0xFAF6FB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59037,7 +59480,7 @@ MidiCtrl_CC04__FAF6F6:
 ;          0xFAFEDD
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF6FC-0xFAF872
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59199,7 +59642,7 @@ MidiCtrl_CC16__FAF85F:
 ;          0xFAFEEB
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF873-0xFAF9E5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59357,7 +59800,7 @@ MidiCtrl_CC17__FAF9D2:
 ;          0xFAFEF9
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAF9E6-0xFAFAE8
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -59482,7 +59925,7 @@ MidiCtrl_CC18__FAFADA:
 ;          0xFAFF07
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAFAE9-0xFAFBEB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -60237,7 +60680,7 @@ MidiCtrl_Dispatch__FB000F:
 ;          0xFB092F in MidiIn_ParseRingAndDispatch__FB08DA
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB0013-0xFB0131
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -60368,7 +60811,7 @@ sub_FB0013__FB012C:
 ;          0xFB098B in MidiIn_ParseRingAndDispatch__FB0936
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAF340 = PartRec_ResetSlotValues_ByTag
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAF340 = PartRec_ResetSlotValues_ByTag
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB0132-0xFB01FF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -61804,7 +62247,7 @@ Dev10C_ChanReset:
 ;          it takes the struct POINTER as its only argument and writes 19 offsets
 ;          0x00..0x24 through it -- exactly the span Dev104_WriteAllChanRegs reads.
 ;          Its inputs are the pointer block at RAM 0x00E082-0x00E08D, which
-;          sub_FC4BB6 / sub_FC4C85 / Pack104_SetInputs_E088_E089_E08A / Pack104_SetInputs_Rec0E_E08D set from the part and
+;          Pack104_SetInputs_PartRecord / Pack104_SetInputs_SubRecordPair / Pack104_SetInputs_E088_E089_E08A / Pack104_SetInputs_Rec0E_E08D set from the part and
 ;          voice records.  See notes/FINDINGS-prom_c-dev10c-producers.md.
 ;          ⚠ "_A" is a label for "the variant part mode 0x00 uses", nothing more.
 VoiceRegs_Stage_A:
@@ -69535,8 +69978,8 @@ sub_FB4D45__FB5019:
 ; sub_FB501F -- 0xFB501F..0xFB5102 (228 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
-;          0xFAE296 in sub_FAE242, 0xFB8A0A in sub_FB89F8
-;          0xFB8B08 in sub_FB8AF6, 0xFB8C08 in sub_FB8BF6
+;          0xFAE296 in Voice_RestageArm_BaseCurve_Shared, 0xFB8A0A in Voice_RecomputeEnv_AndWriteSlot2
+;          0xFB8B08 in Voice_RecomputeEnv_AndWriteSlot1, 0xFB8C08 in Voice_RecomputeEnv_AndWriteSlot1or3
 ;          0xFBC481 in sub_FBC39D__FBC463, 0xFBC4F6 in sub_FBC39D__FBC4D8
 ;          0xFBC58B in sub_FBC39D__FBC56D
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
@@ -69652,8 +70095,8 @@ sub_FB501F__FB50FD:
 ; sub_FB5103 -- 0xFB5103..0xFB519B (153 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
-;          0xFAE31A in sub_FAE2C6, 0xFB8A1D in sub_FB89F8
-;          0xFB8B1B in sub_FB8AF6, 0xFB8C1B in sub_FB8BF6
+;          0xFAE31A in Voice_RestageArm_ValueCurve_Shared, 0xFB8A1D in Voice_RecomputeEnv_AndWriteSlot2
+;          0xFB8B1B in Voice_RecomputeEnv_AndWriteSlot1, 0xFB8C1B in Voice_RecomputeEnv_AndWriteSlot1or3
 ;          0xFBC46F in sub_FBC39D__FBC463, 0xFBC4E4 in sub_FBC39D__FBC4D8
 ;          0xFBC579 in sub_FBC39D__FBC56D
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
@@ -70059,9 +70502,9 @@ sub_FB5364__FB53C0:
 ; sub_FB53C5 -- 0xFB53C5..0xFB5635 (625 bytes)
 ;
 ; Called from: 8 site(s) outside this module:
-;          0xFAE2AF in sub_FAE242__FAE2A2, 0xFAE333 in sub_FAE2C6__FAE326
-;          0xFB8A41 in sub_FB89F8__FB8A34, 0xFB8B3F in sub_FB8AF6__FB8B32
-;          0xFB8C3F in sub_FB8BF6__FB8C32, 0xFBC496 in sub_FBC39D__FBC489
+;          0xFAE2AF in Voice_RestageArm_BaseCurve_Shared__FAE2A2, 0xFAE333 in Voice_RestageArm_ValueCurve_Shared__FAE326
+;          0xFB8A41 in Voice_RecomputeEnv_AndWriteSlot2__FB8A34, 0xFB8B3F in Voice_RecomputeEnv_AndWriteSlot1__FB8B32
+;          0xFB8C3F in Voice_RecomputeEnv_AndWriteSlot1or3__FB8C32, 0xFBC496 in sub_FBC39D__FBC489
 ;          0xFBC50B in sub_FBC39D__FBC4FE, 0xFBC5A0 in sub_FBC39D__FBC593
 ;          2 site(s) inside this module:
 ;          0xFB6833 0xFB6AAE
@@ -71493,7 +71936,7 @@ Dev10C_ChanSelHighBits__FB5F8B:
 ; sub_FB5F91 -- 0xFB5F91..0xFB6019 (137 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFA9E2A in sub_FA9C60__FA9E12
+;          0xFA9E2A in Voice_StageRegs_0180_AB__FA9E12
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB5F91-0xFB6019
@@ -73652,18 +74095,18 @@ sub_FB6F2C__FB7010:
 	ret                                    ; FB7015  ret
 
 ; --------------------------------------------------------------------------
-; Dev10C_SetChanReg_0400_c -- register (chan + 0x0400) = struct->0x0E.
+; Dev10C_SetChanPitch_Reg0400_c -- register (chan + 0x0400) = struct->0x0E.
 ;
 ; Called from: NOT FOUND (notes/prom_c_xrefs.py 0xFB7016: no literal, no calr).
 ; Inputs:  (XIZ+0x08) chan, (XIZ+0x0a) struct pointer.
-; Evidence: ★ BYTE-IDENTICAL, all 34 bytes, to Dev10C_SetChanReg_0400 at 0xFACE67 in
+; Evidence: ★ BYTE-IDENTICAL, all 34 bytes, to Dev10C_SetChanPitch_Reg0400 at 0xFACE67 in
 ;          the first accessor bank above.  `python3 notes/prom_c_tg_regmap.py
 ;          --dups` prints the pair (0xFACE67 -> 0xFB7016).  The name is that
 ;          routine's, with `_c` to keep the label unique; `_b` is the suffix this
 ;          file already uses for the copies in the bank at 0xFB7B63 onward.
 ; Unknown:  as for the original -- what register block 0x0400 does.
 ; --------------------------------------------------------------------------
-Dev10C_SetChanReg_0400_c:
+Dev10C_SetChanPitch_Reg0400_c:
 	link32 0xEE, 0x0C, 0x00, 0x00          ; FB7016  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB701A  push HL
 	push	xix                               ; FB701B  push XIX
@@ -73862,7 +74305,7 @@ sub_FB707E:
 ;                                                               KN5000 sibling calls
 ;                                                               0x100 the TVF cutoff and
 ;                                                               0x140 its depth/bias
-;   chan + 0x0180   word 6   Voice_StageRegs_CD / sub_FA9C60         WRITE side: a 0..0x7F
+;   chan + 0x0180   word 6   Voice_StageRegs_CD / Voice_StageRegs_0180_AB         WRITE side: a 0..0x7F
 ;                                                               control, tone byte 0x80
 ;                                                               = choose at random.  The
 ;                                                               sibling calls it pan,
@@ -73888,8 +74331,8 @@ sub_FB707E:
 ; stores put a 7-bit value with bit 15 set.  There is no other idiom.
 ;
 ; ★★ `chan + 0x0800` IS NAMED, AND BY TWO INDEPENDENT DERIVATIONS.
-;   * In THIS image: staging word 12 has exactly four producers -- sub_FAA4C3,
-;     sub_FAA96C, sub_FAACEE and sub_FAB0BD -- and those are EXACTLY the four
+;   * In THIS image: staging word 12 has exactly four producers -- Voice_StageRegs_0800_A,
+;     Voice_StageRegs_0800_CD, Voice_StageRegs_0800_B_ModeLt3 and Voice_StageRegs_0800_B_ModeGe3 -- and those are EXACTLY the four
 ;     routines in prom_c that read `Voice_LevelPair_AttackCurve` (0xFDEF74, 101
 ;     bytes descending 0xFF..0x09).  Its LOW byte is
 ;     `Voice_EnvelopeRate_Table[tone[+0x28]]` (`add XWA,0x00fdf03e` at 0xFAA62E,
@@ -73909,7 +74352,7 @@ sub_FB707E:
 ;   sibling's word and is carried over with that caveat.
 ;
 ; ★ THE OTHER SIX OF THE GROUP -- 0x0900, 0x0940, 0x0980, 0x09C0, 0x0A00, 0x0A40 --
-; are written by exactly two routines, sub_FA842D and sub_FA93AF (three registers
+; are written by exactly two routines, Voice_StageRegs_0900_0940_0980_AB and Voice_StageRegs_09C0_0A00_0A40_AB (three registers
 ; each), and those two make TWELVE `Voice_EnvelopeLevel_Curve` lookups between them
 ; ⚠ CORRECTED round 3, 2026-08-25: "exactly two" counts only the routines the
 ; producer census can see.  sub_FC7FCA also writes 0x0900, 0x0940 and 0x0980 -- all
@@ -77693,15 +78136,15 @@ sub_FB86BB__FB89F3:
 	unlk32 xiz                                 ; FB89F5  unlk XIZ
 	ret                                        ; FB89F7  ret
 ; --------------------------------------------------------------------------
-; sub_FB89F8 -- 0xFB89F8..0xFB8AF5 (254 bytes)
+; Voice_RecomputeEnv_AndWriteSlot2 -- 0xFB89F8..0xFB8AF5 (254 bytes)
 ;
 ; Called from: no site outside this module.
 ;          4 site(s) inside this module:
 ;          0xFBBB99 0xFBBBA8 0xFBBBB7 0xFBBBC6
 ; Inputs:  frame `link XIZ,-7`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D79A, 0x00D79E
-; Calls:   0xFA6110 = sub_FA6110, 0xFA796D = sub_FA796D
-;          0xFA79F4 = sub_FA79F4, 0xFA981B = sub_FA981B
+; Calls:   0xFA6110 = sub_FA6110, 0xFA796D = EGEnv_Eval_BaseCurveA
+;          0xFA79F4 = EGEnv_Eval_ValueCurve_WithBaseCurveA, 0xFA981B = sub_FA981B
 ;          0xFB501F = sub_FB501F, 0xFB5103 = sub_FB5103
 ;          0xFB53C5 = sub_FB53C5, 0xFB7C27 = Dev10C_Slot2_WriteGateAndValue
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB89F8-0xFB8AF5
@@ -77709,10 +78152,16 @@ sub_FB86BB__FB89F3:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_RecomputeEnv_AndWriteSlot2 -- re-evaluates
+;          BLOCK A's envelope record (EGEnv_Eval_BaseCurveA at 0xFB8AC9 and
+;          EGEnv_Eval_ValueCurve_WithBaseCurveA at 0xFB8AD7) and pushes the result straight at
+;          the device through Dev10C_Slot2_WriteGateAndValue (0xFB7C27), without going through
+;          the 22-word staging struct.  Called from four consecutive sites 0xFBBB99-0xFBBBC6.
+;          Evidence: the callee addresses are instruction operands; the block letter is the
+;          co-occurrence census in notes/prom_c_understanding_round6.py --blocks.
 ; --------------------------------------------------------------------------
-sub_FB89F8:
+Voice_RecomputeEnv_AndWriteSlot2:
 	link32 0xEE, 0x0C, 0xF9, 0xFF              ; FB89F8  link XIZ,0xfff9
 	pushw	hl                                   ; FB89FC  push HL
 	push	0                                     ; FB89FD  push 0x00
@@ -77730,14 +78179,14 @@ sub_FB89F8:
 	call	0xFB5103                              ; FB8A1D  call 0xfb5103
 	ld	(xiz-7), 0                              ; FB8A21  ld (XIZ+0xf9),0x00
 	inc	6, xsp                                 ; FB8A25  inc 6,XSP
-sub_FB89F8__FB8A27:
+Voice_RecomputeEnv_AndWriteSlot2__FB8A27:
 	cp (xiz-7), 0x04                           ; FB8A27  cp (XIZ+0xf9),0x04
-	jr nc, sub_FB89F8__FB8A49                  ; FB8A2B  jr NC,0xfb8a49
-	jr sub_FB89F8__FB8A34                      ; FB8A2D  jr T,0xfb8a34
-sub_FB89F8__FB8A2F:
+	jr nc, Voice_RecomputeEnv_AndWriteSlot2__FB8A49                  ; FB8A2B  jr NC,0xfb8a49
+	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A34                      ; FB8A2D  jr T,0xfb8a34
+Voice_RecomputeEnv_AndWriteSlot2__FB8A2F:
 	incm8	1, (xiz-7)                           ; FB8A2F  inc 1,(XIZ+0xf9)
-	jr sub_FB89F8__FB8A27                      ; FB8A32  jr T,0xfb8a27
-sub_FB89F8__FB8A34:
+	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A27                      ; FB8A32  jr T,0xfb8a27
+Voice_RecomputeEnv_AndWriteSlot2__FB8A34:
 	pushw	0                                    ; FB8A34  push 0x0000
 	push	0                                     ; FB8A37  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FB8A39  push (XIZ+0xf9)
@@ -77745,8 +78194,8 @@ sub_FB89F8__FB8A34:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8A3E  push (XIZ+0x08)
 	call	0xFB53C5                              ; FB8A41  call 0xfb53c5
 	inc	6, xsp                                 ; FB8A45  inc 6,XSP
-	jr sub_FB89F8__FB8A2F                      ; FB8A47  jr T,0xfb8a2f
-sub_FB89F8__FB8A49:
+	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A2F                      ; FB8A47  jr T,0xfb8a2f
+Voice_RecomputeEnv_AndWriteSlot2__FB8A49:
 	pushw	0                                    ; FB8A49  push 0x0000
 	push	0                                     ; FB8A4C  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB8A4E  push (XIZ+0x0a)
@@ -77756,7 +78205,7 @@ sub_FB89F8__FB8A49:
 	ld	(xiz-2), iy                             ; FB8A5A  ld (XIZ+0xfe),IY
 	ldw (xiz-4), 0x0000                        ; FB8A5D  ld (XIZ+0xfc),0x0000
 	inc	6, xsp                                 ; FB8A62  inc 6,XSP
-sub_FB89F8__FB8A64:
+Voice_RecomputeEnv_AndWriteSlot2__FB8A64:
 	ld	bc, (xiz-4)                             ; FB8A64  ld BC,(XIZ+0xfc)
 	add	bc, bc                                 ; FB8A67  add BC,BC
 	ld	wa, (xiz-2)                             ; FB8A69  ld WA,(XIZ+0xfe)
@@ -77764,12 +78213,12 @@ sub_FB89F8__FB8A64:
 	extpfx5 0xD3, 0x07, 0xE0, 0xE4, 0x25       ; FB8A6E  ld IY,(XWA+BC)
 	and	iy, 0xFF                               ; FB8A73  and IY,0x00ff
 	cp	iy, 0x80                                ; FB8A77  cp IY,0x0080
-	jrl nc, sub_FB89F8__FB8AF2                 ; FB8A7B  jrl NC,0xfb8af2
-	jr sub_FB89F8__FB8A85                      ; FB8A7E  jr T,0xfb8a85
-sub_FB89F8__FB8A80:
+	jrl nc, Voice_RecomputeEnv_AndWriteSlot2__FB8AF2                 ; FB8A7B  jrl NC,0xfb8af2
+	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A85                      ; FB8A7E  jr T,0xfb8a85
+Voice_RecomputeEnv_AndWriteSlot2__FB8A80:
 	incm	1, (xiz-4)                            ; FB8A80  incw 1,(XIZ+0xfc)
-	jr sub_FB89F8__FB8A64                      ; FB8A83  jr T,0xfb8a64
-sub_FB89F8__FB8A85:
+	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A64                      ; FB8A83  jr T,0xfb8a64
+Voice_RecomputeEnv_AndWriteSlot2__FB8A85:
 	ld	bc, (xiz-4)                             ; FB8A85  ld BC,(XIZ+0xfc)
 	add	bc, bc                                 ; FB8A88  add BC,BC
 	ld	wa, (xiz-2)                             ; FB8A8A  ld WA,(XIZ+0xfe)
@@ -77809,21 +78258,21 @@ sub_FB89F8__FB8A85:
 	extpfx3 0x9E, 0xFA, 0x04                   ; FB8AE7  pushw (XIZ+0xfa)
 	call	0xFB7C27                              ; FB8AEA  call 0xfb7c27
 	inc	6, xsp                                 ; FB8AEE  inc 6,XSP
-	jr sub_FB89F8__FB8A80                      ; FB8AF0  jr T,0xfb8a80
-sub_FB89F8__FB8AF2:
+	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A80                      ; FB8AF0  jr T,0xfb8a80
+Voice_RecomputeEnv_AndWriteSlot2__FB8AF2:
 	popw	hl                                    ; FB8AF2  pop HL
 	unlk32 xiz                                 ; FB8AF3  unlk XIZ
 	ret                                        ; FB8AF5  ret
 ; --------------------------------------------------------------------------
-; sub_FB8AF6 -- 0xFB8AF6..0xFB8BF5 (256 bytes)
+; Voice_RecomputeEnv_AndWriteSlot1 -- 0xFB8AF6..0xFB8BF5 (256 bytes)
 ;
 ; Called from: no site outside this module.
 ;          4 site(s) inside this module:
 ;          0xFBBBD5 0xFBBBE4 0xFBBBF3 0xFBBC02
 ; Inputs:  frame `link XIZ,-7`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D796, 0x00D798
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7A4B = sub_FA7A4B
-;          0xFA7AD6 = sub_FA7AD6, 0xFA981B = sub_FA981B
+; Calls:   0xFA6110 = sub_FA6110, 0xFA7A4B = EGEnv_Eval_BaseCurveB
+;          0xFA7AD6 = EGEnv_Eval_ValueCurve_WithBaseCurveB, 0xFA981B = sub_FA981B
 ;          0xFB501F = sub_FB501F, 0xFB5103 = sub_FB5103
 ;          0xFB53C5 = sub_FB53C5, 0xFB7E13 = Dev10C_Slot1_WriteGateAndValue
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB8AF6-0xFB8BF5
@@ -77831,10 +78280,13 @@ sub_FB89F8__FB8AF2:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_RecomputeEnv_AndWriteSlot1 -- block B's twin
+;          of the routine above: EGEnv_Eval_BaseCurveB (0xFB8BC9),
+;          EGEnv_Eval_ValueCurve_WithBaseCurveB (0xFB8BD7), then
+;          Dev10C_Slot1_WriteGateAndValue (0xFB7E13).  Four call sites 0xFBBBD5-0xFBBC02.
 ; --------------------------------------------------------------------------
-sub_FB8AF6:
+Voice_RecomputeEnv_AndWriteSlot1:
 	link32 0xEE, 0x0C, 0xF9, 0xFF              ; FB8AF6  link XIZ,0xfff9
 	pushw	hl                                   ; FB8AFA  push HL
 	push	0                                     ; FB8AFB  push 0x00
@@ -77852,14 +78304,14 @@ sub_FB8AF6:
 	call	0xFB5103                              ; FB8B1B  call 0xfb5103
 	ld	(xiz-7), 0                              ; FB8B1F  ld (XIZ+0xf9),0x00
 	inc	6, xsp                                 ; FB8B23  inc 6,XSP
-sub_FB8AF6__FB8B25:
+Voice_RecomputeEnv_AndWriteSlot1__FB8B25:
 	cp (xiz-7), 0x04                           ; FB8B25  cp (XIZ+0xf9),0x04
-	jr nc, sub_FB8AF6__FB8B47                  ; FB8B29  jr NC,0xfb8b47
-	jr sub_FB8AF6__FB8B32                      ; FB8B2B  jr T,0xfb8b32
-sub_FB8AF6__FB8B2D:
+	jr nc, Voice_RecomputeEnv_AndWriteSlot1__FB8B47                  ; FB8B29  jr NC,0xfb8b47
+	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B32                      ; FB8B2B  jr T,0xfb8b32
+Voice_RecomputeEnv_AndWriteSlot1__FB8B2D:
 	incm8	1, (xiz-7)                           ; FB8B2D  inc 1,(XIZ+0xf9)
-	jr sub_FB8AF6__FB8B25                      ; FB8B30  jr T,0xfb8b25
-sub_FB8AF6__FB8B32:
+	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B25                      ; FB8B30  jr T,0xfb8b25
+Voice_RecomputeEnv_AndWriteSlot1__FB8B32:
 	pushw	1                                    ; FB8B32  push 0x0001
 	push	0                                     ; FB8B35  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FB8B37  push (XIZ+0xf9)
@@ -77867,8 +78319,8 @@ sub_FB8AF6__FB8B32:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8B3C  push (XIZ+0x08)
 	call	0xFB53C5                              ; FB8B3F  call 0xfb53c5
 	inc	6, xsp                                 ; FB8B43  inc 6,XSP
-	jr sub_FB8AF6__FB8B2D                      ; FB8B45  jr T,0xfb8b2d
-sub_FB8AF6__FB8B47:
+	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B2D                      ; FB8B45  jr T,0xfb8b2d
+Voice_RecomputeEnv_AndWriteSlot1__FB8B47:
 	pushw	0                                    ; FB8B47  push 0x0000
 	ld	c, (xiz+10)                             ; FB8B4A  ld C,(XIZ+0x0a)
 	set	2, c                                   ; FB8B4D  set 0x02,C
@@ -77879,7 +78331,7 @@ sub_FB8AF6__FB8B47:
 	ld	(xiz-2), iy                             ; FB8B5A  ld (XIZ+0xfe),IY
 	ldw (xiz-4), 0x0000                        ; FB8B5D  ld (XIZ+0xfc),0x0000
 	inc	6, xsp                                 ; FB8B62  inc 6,XSP
-sub_FB8AF6__FB8B64:
+Voice_RecomputeEnv_AndWriteSlot1__FB8B64:
 	ld	bc, (xiz-4)                             ; FB8B64  ld BC,(XIZ+0xfc)
 	add	bc, bc                                 ; FB8B67  add BC,BC
 	ld	wa, (xiz-2)                             ; FB8B69  ld WA,(XIZ+0xfe)
@@ -77887,12 +78339,12 @@ sub_FB8AF6__FB8B64:
 	extpfx5 0xD3, 0x07, 0xE0, 0xE4, 0x25       ; FB8B6E  ld IY,(XWA+BC)
 	and	iy, 0xFF                               ; FB8B73  and IY,0x00ff
 	cp	iy, 64                                  ; FB8B77  cp IY,0x0040
-	jrl nc, sub_FB8AF6__FB8BF2                 ; FB8B7B  jrl NC,0xfb8bf2
-	jr sub_FB8AF6__FB8B85                      ; FB8B7E  jr T,0xfb8b85
-sub_FB8AF6__FB8B80:
+	jrl nc, Voice_RecomputeEnv_AndWriteSlot1__FB8BF2                 ; FB8B7B  jrl NC,0xfb8bf2
+	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B85                      ; FB8B7E  jr T,0xfb8b85
+Voice_RecomputeEnv_AndWriteSlot1__FB8B80:
 	incm	1, (xiz-4)                            ; FB8B80  incw 1,(XIZ+0xfc)
-	jr sub_FB8AF6__FB8B64                      ; FB8B83  jr T,0xfb8b64
-sub_FB8AF6__FB8B85:
+	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B64                      ; FB8B83  jr T,0xfb8b64
+Voice_RecomputeEnv_AndWriteSlot1__FB8B85:
 	ld	bc, (xiz-4)                             ; FB8B85  ld BC,(XIZ+0xfc)
 	add	bc, bc                                 ; FB8B88  add BC,BC
 	ld	wa, (xiz-2)                             ; FB8B8A  ld WA,(XIZ+0xfe)
@@ -77932,21 +78384,21 @@ sub_FB8AF6__FB8B85:
 	extpfx3 0x9E, 0xFA, 0x04                   ; FB8BE7  pushw (XIZ+0xfa)
 	call	0xFB7E13                              ; FB8BEA  call 0xfb7e13
 	inc	6, xsp                                 ; FB8BEE  inc 6,XSP
-	jr sub_FB8AF6__FB8B80                      ; FB8BF0  jr T,0xfb8b80
-sub_FB8AF6__FB8BF2:
+	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B80                      ; FB8BF0  jr T,0xfb8b80
+Voice_RecomputeEnv_AndWriteSlot1__FB8BF2:
 	popw	hl                                    ; FB8BF2  pop HL
 	unlk32 xiz                                 ; FB8BF3  unlk XIZ
 	ret                                        ; FB8BF5  ret
 ; --------------------------------------------------------------------------
-; sub_FB8BF6 -- 0xFB8BF6..0xFB8CEB (246 bytes)
+; Voice_RecomputeEnv_AndWriteSlot1or3 -- 0xFB8BF6..0xFB8CEB (246 bytes)
 ;
 ; Called from: no site outside this module.
 ;          4 site(s) inside this module:
 ;          0xFBBC11 0xFBBC20 0xFBBC2F 0xFBBC3E
 ; Inputs:  frame `link XIZ,-7`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA6110 = sub_FA6110, 0xFA7B31 = sub_FA7B31
-;          0xFA7C3A = sub_FA7C3A, 0xFA981B = sub_FA981B
+; Calls:   0xFA6110 = sub_FA6110, 0xFA7B31 = EGEnv_Eval_FreqWriteBaseCurve
+;          0xFA7C3A = EGEnv_Eval_ValueCurve_WithFreqWriteCurve, 0xFA981B = sub_FA981B
 ;          0xFB501F = sub_FB501F, 0xFB5103 = sub_FB5103
 ;          0xFB53C5 = sub_FB53C5, 0xFB7F09 = Dev10C_Slot1or3_WriteGateAndValue
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB8BF6-0xFB8CEB
@@ -77954,10 +78406,13 @@ sub_FB8AF6__FB8BF2:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Voice_RecomputeEnv_AndWriteSlot1or3 -- block C's
+;          twin: EGEnv_Eval_FreqWriteBaseCurve (0xFB8CC9),
+;          EGEnv_Eval_ValueCurve_WithFreqWriteCurve (0xFB8CD2), then
+;          Dev10C_Slot1or3_WriteGateAndValue (0xFB7F09).  Four call sites 0xFBBC11-0xFBBC3E.
 ; --------------------------------------------------------------------------
-sub_FB8BF6:
+Voice_RecomputeEnv_AndWriteSlot1or3:
 	link32 0xEE, 0x0C, 0xF9, 0xFF              ; FB8BF6  link XIZ,0xfff9
 	pushw	hl                                   ; FB8BFA  push HL
 	push	0                                     ; FB8BFB  push 0x00
@@ -77975,14 +78430,14 @@ sub_FB8BF6:
 	call	0xFB5103                              ; FB8C1B  call 0xfb5103
 	ld	(xiz-7), 0                              ; FB8C1F  ld (XIZ+0xf9),0x00
 	inc	6, xsp                                 ; FB8C23  inc 6,XSP
-sub_FB8BF6__FB8C25:
+Voice_RecomputeEnv_AndWriteSlot1or3__FB8C25:
 	cp (xiz-7), 0x04                           ; FB8C25  cp (XIZ+0xf9),0x04
-	jr nc, sub_FB8BF6__FB8C47                  ; FB8C29  jr NC,0xfb8c47
-	jr sub_FB8BF6__FB8C32                      ; FB8C2B  jr T,0xfb8c32
-sub_FB8BF6__FB8C2D:
+	jr nc, Voice_RecomputeEnv_AndWriteSlot1or3__FB8C47                  ; FB8C29  jr NC,0xfb8c47
+	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C32                      ; FB8C2B  jr T,0xfb8c32
+Voice_RecomputeEnv_AndWriteSlot1or3__FB8C2D:
 	incm8	1, (xiz-7)                           ; FB8C2D  inc 1,(XIZ+0xf9)
-	jr sub_FB8BF6__FB8C25                      ; FB8C30  jr T,0xfb8c25
-sub_FB8BF6__FB8C32:
+	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C25                      ; FB8C30  jr T,0xfb8c25
+Voice_RecomputeEnv_AndWriteSlot1or3__FB8C32:
 	pushw	2                                    ; FB8C32  push 0x0002
 	push	0                                     ; FB8C35  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FB8C37  push (XIZ+0xf9)
@@ -77990,8 +78445,8 @@ sub_FB8BF6__FB8C32:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8C3C  push (XIZ+0x08)
 	call	0xFB53C5                              ; FB8C3F  call 0xfb53c5
 	inc	6, xsp                                 ; FB8C43  inc 6,XSP
-	jr sub_FB8BF6__FB8C2D                      ; FB8C45  jr T,0xfb8c2d
-sub_FB8BF6__FB8C47:
+	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C2D                      ; FB8C45  jr T,0xfb8c2d
+Voice_RecomputeEnv_AndWriteSlot1or3__FB8C47:
 	pushw	0                                    ; FB8C47  push 0x0000
 	ld	c, (xiz+10)                             ; FB8C4A  ld C,(XIZ+0x0a)
 	set	3, c                                   ; FB8C4D  set 0x03,C
@@ -78002,7 +78457,7 @@ sub_FB8BF6__FB8C47:
 	ld	(xiz-2), iy                             ; FB8C5A  ld (XIZ+0xfe),IY
 	ldw (xiz-4), 0x0000                        ; FB8C5D  ld (XIZ+0xfc),0x0000
 	inc	6, xsp                                 ; FB8C62  inc 6,XSP
-sub_FB8BF6__FB8C64:
+Voice_RecomputeEnv_AndWriteSlot1or3__FB8C64:
 	ld	bc, (xiz-4)                             ; FB8C64  ld BC,(XIZ+0xfc)
 	add	bc, bc                                 ; FB8C67  add BC,BC
 	ld	wa, (xiz-2)                             ; FB8C69  ld WA,(XIZ+0xfe)
@@ -78010,12 +78465,12 @@ sub_FB8BF6__FB8C64:
 	extpfx5 0xD3, 0x07, 0xE0, 0xE4, 0x25       ; FB8C6E  ld IY,(XWA+BC)
 	and	iy, 0xFF                               ; FB8C73  and IY,0x00ff
 	cp	iy, 0x80                                ; FB8C77  cp IY,0x0080
-	jrl nc, sub_FB8BF6__FB8CE8                 ; FB8C7B  jrl NC,0xfb8ce8
-	jr sub_FB8BF6__FB8C85                      ; FB8C7E  jr T,0xfb8c85
-sub_FB8BF6__FB8C80:
+	jrl nc, Voice_RecomputeEnv_AndWriteSlot1or3__FB8CE8                 ; FB8C7B  jrl NC,0xfb8ce8
+	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85                      ; FB8C7E  jr T,0xfb8c85
+Voice_RecomputeEnv_AndWriteSlot1or3__FB8C80:
 	incm	1, (xiz-4)                            ; FB8C80  incw 1,(XIZ+0xfc)
-	jr sub_FB8BF6__FB8C64                      ; FB8C83  jr T,0xfb8c64
-sub_FB8BF6__FB8C85:
+	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C64                      ; FB8C83  jr T,0xfb8c64
+Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85:
 	ld	bc, (xiz-4)                             ; FB8C85  ld BC,(XIZ+0xfc)
 	add	bc, bc                                 ; FB8C88  add BC,BC
 	ld	wa, (xiz-2)                             ; FB8C8A  ld WA,(XIZ+0xfe)
@@ -78053,8 +78508,8 @@ sub_FB8BF6__FB8C85:
 	extpfx3 0x9E, 0xFA, 0x04                   ; FB8CDD  pushw (XIZ+0xfa)
 	call	0xFB7F09                              ; FB8CE0  call 0xfb7f09
 	inc	6, xsp                                 ; FB8CE4  inc 6,XSP
-	jr sub_FB8BF6__FB8C80                      ; FB8CE6  jr T,0xfb8c80
-sub_FB8BF6__FB8CE8:
+	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C80                      ; FB8CE6  jr T,0xfb8c80
+Voice_RecomputeEnv_AndWriteSlot1or3__FB8CE8:
 	popw	hl                                    ; FB8CE8  pop HL
 	unlk32 xiz                                 ; FB8CE9  unlk XIZ
 	ret                                        ; FB8CEB  ret
@@ -78067,7 +78522,7 @@ sub_FB8BF6__FB8CE8:
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D733
-; Calls:   0xFAF031 = sub_FAF031, 0xFB47C4 = sub_FB47C4
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFB47C4 = sub_FB47C4
 ;          0xFB6681 = sub_FB6681, 0xFB68DD = sub_FB68DD
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB8CEC-0xFB90B2
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -82620,12 +83075,12 @@ sub_FBB765__FBB790:
 ;          0xFC263C
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFAFBEC = sub_FAFBEC
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFAFBEC = sub_FAFBEC
 ;          0xFB4A9F = sub_FB4A9F, 0xFB4D45 = sub_FB4D45
 ;          0xFB5636 = sub_FB5636, 0xFB5E00 = sub_FB5E00
 ;          0xFB639A = sub_FB639A, 0xFB6487 = sub_FB6487
-;          0xFB89F8 = sub_FB89F8, 0xFB8AF6 = sub_FB8AF6
-;          0xFB8BF6 = sub_FB8BF6, 0xFBB39F = sub_FBB39F
+;          0xFB89F8 = Voice_RecomputeEnv_AndWriteSlot2, 0xFB8AF6 = Voice_RecomputeEnv_AndWriteSlot1
+;          0xFB8BF6 = Voice_RecomputeEnv_AndWriteSlot1or3, 0xFBB39F = sub_FBB39F
 ;          0xFBB4BF = sub_FBB4BF, 0xFBB57C = sub_FBB57C
 ;          0xFBB645 = sub_FBB645, 0xFBB6F8 = sub_FBB6F8
 ;          0xFC6803 = sub_FC6803, 0xFC7481 = sub_FC7481
@@ -84904,7 +85359,7 @@ sub_FBCBA7__FBCD05:
 ;          0xFC270E
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAF031 = sub_FAF031, 0xFBCBA7 = sub_FBCBA7
+; Calls:   0xFAF031 = Voice_ApplyParamChange_Dispatch, 0xFBCBA7 = sub_FBCBA7
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBCD17-0xFBD0A1
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -96467,7 +96922,7 @@ sub_FC3241__FC33EB:
 ;   the end of round 3: ALL 173 are in converted code (95 were still `.incbin` when
 ;   this block was converted).  The named ones are the note path again --
 ;   MidiNote_OnByPartMode (9), VoiceParams_Compute_A/C/D (19 between them), the four
-;   VoiceRegs_Stage_* (20) -- plus sub_FA826C from the block converted above and
+;   VoiceRegs_Stage_* (20) -- plus Voice_StageRegs_0040_B from the block converted above and
 ;   sub_FB6500 (8) and sub_FBB793 (6) from the blocks converted after it.
 ;   Full tally: `python3 notes/prom_c_module_map.py 0xFC3407 0xFC856C`.  ⚠ The
 ;   figures were 180/88 for most of round 3, before the tool filtered byte-pattern
@@ -96528,7 +96983,7 @@ sub_FC3241__FC33EB:
 ; sub_FC3407 -- 0xFC3407..0xFC347F (121 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFA829C in sub_FA826C
+;          0xFA829C in Voice_StageRegs_0040_B
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3407-0xFC347F
@@ -96597,7 +97052,7 @@ sub_FC3407__FC347A:
 ; sub_FC3480 -- 0xFC3480..0xFC355A (219 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFA82B5 in sub_FA826C__FA82A4
+;          0xFA82B5 in Voice_StageRegs_0040_B__FA82A4
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3480-0xFC355A
@@ -96711,7 +97166,7 @@ sub_FC3480__FC3555:
 ; sub_FC355B -- 0xFC355B..0xFC3594 (58 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFA82BE in sub_FA826C__FA82BB
+;          0xFA82BE in Voice_StageRegs_0040_B__FA82BB
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC355B-0xFC3594
@@ -97085,7 +97540,7 @@ PartSlot_SetRecordPtr_DF05:
 ; sub_FC3793 -- 0xFC3793..0xFC37BD (43 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFA82CC in sub_FA826C__FA82CB
+;          0xFA82CC in Voice_StageRegs_0040_B__FA82CB
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3793-0xFC37BD
@@ -97119,7 +97574,7 @@ sub_FC3793:
 ; sub_FC37BE -- 0xFC37BE..0xFC37E1 (36 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
-;          0xFAB24F in sub_FAB0BD__FAB20E, 0xFAB273 in sub_FAB0BD__FAB20E
+;          0xFAB24F in Voice_StageRegs_0800_B_ModeGe3__FAB20E, 0xFAB273 in Voice_StageRegs_0800_B_ModeGe3__FAB20E
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC37BE-0xFC37E1
@@ -97149,7 +97604,7 @@ sub_FC37BE:
 ; sub_FC37E2 -- 0xFC37E2..0xFC3805 (36 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
-;          0xFAAD3E in sub_FAACEE__FAAD3B
+;          0xFAAD3E in Voice_StageRegs_0800_B_ModeLt3__FAAD3B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC37E2-0xFC3805
@@ -98005,7 +98460,7 @@ sub_FC3DAF:
 ; Calls:   0xF9A038 = MemCopyWords, 0xFB713A = Dev10C_WriteAllChanRegs
 ;          0xFB732C = Dev10C_WriteReg_c, 0xFB77EF = Dev104_WriteAllChanRegs
 ;          0xFB7A58 = Dev104_WriteChanReg0, 0xFC3D26 = sub_FC3D26
-;          0xFC3DAF = sub_FC3DAF, 0xFC571A = sub_FC571A
+;          0xFC3DAF = sub_FC3DAF, 0xFC571A = Dev104_LoadStageBImage
 ;          0xFC7DAF = sub_FC7DAF
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3E02-0xFC3FAD
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -99818,7 +100273,7 @@ sub_FC4B2E__FC4BB0:
 	unlk32 xiz                                 ; FC4BB3  unlk XIZ
 	ret                                        ; FC4BB5  ret
 ; --------------------------------------------------------------------------
-; sub_FC4BB6 -- 0xFC4BB6..0xFC4C84 (207 bytes)
+; Pack104_SetInputs_PartRecord -- 0xFC4BB6..0xFC4C84 (207 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFB369D in MidiNote_OnTail, 0xFB37AA in MidiNote_OffTail
@@ -99831,10 +100286,16 @@ sub_FC4B2E__FC4BB0:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Pack104_SetInputs_PartRecord -- sets the global
+;          0x00E082 to 0x005D23 + 0xBB*arg, i.e. selects one 187-byte PART RECORD as the one
+;          Dev104_PackStagingStruct will read, and also writes 0x00E08F-0x00E092.
+;          Called from the five MidiNote_* sites 0xFB369D, 0xFB37AA, 0xFB38BF, 0xFB3A0A and
+;          0xFB3B09, so "the part this note-on belongs to" is what it selects.
+;          Evidence: the stride 0xBB and the base 0x005D23 are instruction operands; the
+;          caller list is the routine's own Called-from census.
 ; --------------------------------------------------------------------------
-sub_FC4BB6:
+Pack104_SetInputs_PartRecord:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC4BB6  link XIZ,0xfffc
 	push	xhl                                   ; FC4BBA  push XHL
 	push	xde                                   ; FC4BBB  push XDE
@@ -99853,7 +100314,7 @@ sub_FC4BB6:
 	extz	xbc                                   ; FC4BEB  extz XBC
 	ld	a, (xbc)                                ; FC4BED  ld A,(XBC)
 	cps	a, 0                                   ; FC4BEF  cp A,0
-	jrl z, sub_FC4BB6__FC4C7F                  ; FC4BF1  jrl Z,0xfc4c7f
+	jrl z, Pack104_SetInputs_PartRecord__FC4C7F                  ; FC4BF1  jrl Z,0xfc4c7f
 	ld	de, bc                                  ; FC4BF4  ld DE,BC
 	add	bc, 19                                 ; FC4BF6  add BC,0x0013
 	ld	de, bc                                  ; FC4BFA  ld DE,BC
@@ -99870,11 +100331,11 @@ sub_FC4BB6:
 	ld	xix, xwa                                ; FC4C1B  ld XIX,XWA
 	ld	c, (xiy+11)                             ; FC4C1D  ld C,(XIY+0x0b)
 	and	c, 0xC0                                ; FC4C20  and C,0xc0
-	jr nz, sub_FC4BB6__FC4C2D                  ; FC4C23  jr NZ,0xfc4c2d
+	jr nz, Pack104_SetInputs_PartRecord__FC4C2D                  ; FC4C23  jr NZ,0xfc4c2d
 	ld	c, (xwa+11)                             ; FC4C25  ld C,(XWA+0x0b)
 	and	c, 0xC0                                ; FC4C28  and C,0xc0
-	jr z, sub_FC4BB6__FC4C69                   ; FC4C2B  jr Z,0xfc4c69
-sub_FC4BB6__FC4C2D:
+	jr z, Pack104_SetInputs_PartRecord__FC4C69                   ; FC4C2B  jr Z,0xfc4c69
+Pack104_SetInputs_PartRecord__FC4C2D:
 	extz	xde                                   ; FC4C2D  extz XDE
 	ld	(xde+9), 0                              ; FC4C2F  ld (XDE+0x09),0x00
 	extpfx5 0x9A, 0x07, 0x3C, 0x8F, 0xFF       ; FC4C33  and (XDE+0x07),0xff8f
@@ -99884,35 +100345,35 @@ sub_FC4BB6__FC4C2D:
 	ld	bc, de                                  ; FC4C41  ld BC,DE
 	extz	xde                                   ; FC4C43  extz XDE
 	extpfx2 0xB2, 0xCF                         ; FC4C45  bit 7,(XDE)
-	jr z, sub_FC4BB6__FC4C51                   ; FC4C47  jr Z,0xfc4c51
+	jr z, Pack104_SetInputs_PartRecord__FC4C51                   ; FC4C47  jr Z,0xfc4c51
 	extz	xhl                                   ; FC4C49  extz XHL
 	ld	(xhl+9), 0                              ; FC4C4B  ld (XHL+0x09),0x00
-	jr sub_FC4BB6__FC4C57                      ; FC4C4F  jr T,0xfc4c57
-sub_FC4BB6__FC4C51:
+	jr Pack104_SetInputs_PartRecord__FC4C57                      ; FC4C4F  jr T,0xfc4c57
+Pack104_SetInputs_PartRecord__FC4C51:
 	extz	xhl                                   ; FC4C51  extz XHL
 	ld	(xhl+9), 1                              ; FC4C53  ld (XHL+0x09),0x01
-sub_FC4BB6__FC4C57:
+Pack104_SetInputs_PartRecord__FC4C57:
 	extz	xhl                                   ; FC4C57  extz XHL
 	extpfx5 0x9B, 0x07, 0x3C, 0x8F, 0xFF       ; FC4C59  and (XHL+0x07),0xff8f
 	ld	bc, (xhl+7)                             ; FC4C5E  ld BC,(XHL+0x07)
 	set	4, bc                                  ; FC4C61  set 0x04,BC
 	ld	(xhl+7), bc                             ; FC4C64  ld (XHL+0x07),BC
-	jr sub_FC4BB6__FC4C7F                      ; FC4C67  jr T,0xfc4c7f
-sub_FC4BB6__FC4C69:
+	jr Pack104_SetInputs_PartRecord__FC4C7F                      ; FC4C67  jr T,0xfc4c7f
+Pack104_SetInputs_PartRecord__FC4C69:
 	extz	xde                                   ; FC4C69  extz XDE
 	ld	(xde+9), 0                              ; FC4C6B  ld (XDE+0x09),0x00
 	extpfx5 0x9A, 0x07, 0x3C, 0x8F, 0xFF       ; FC4C6F  and (XDE+0x07),0xff8f
 	extz	xhl                                   ; FC4C74  extz XHL
 	ld	(xhl+9), 1                              ; FC4C76  ld (XHL+0x09),0x01
 	extpfx5 0x9B, 0x07, 0x3C, 0x8F, 0xFF       ; FC4C7A  and (XHL+0x07),0xff8f
-sub_FC4BB6__FC4C7F:
+Pack104_SetInputs_PartRecord__FC4C7F:
 	pop	xix                                    ; FC4C7F  pop XIX
 	pop	xde                                    ; FC4C80  pop XDE
 	pop	xhl                                    ; FC4C81  pop XHL
 	unlk32 xiz                                 ; FC4C82  unlk XIZ
 	ret                                        ; FC4C84  ret
 ; --------------------------------------------------------------------------
-; sub_FC4C85 -- 0xFC4C85..0xFC4D62 (222 bytes)
+; Pack104_SetInputs_SubRecordPair -- 0xFC4C85..0xFC4D62 (222 bytes)
 ;
 ; Called from: 5 site(s) outside this module:
 ;          0xFB36F5 in MidiNote_OnTail, 0xFB3802 in MidiNote_OffTail
@@ -99927,10 +100388,16 @@ sub_FC4BB6__FC4C7F:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; Pack104_SetInputs_SubRecordPair -- sets the two
+;          sub-record pointers the packer reads: 0x00E084 = (0x00E082) + 0x2A*arg + 0x13 (a
+;          42-byte sub-record at +0x13 inside the part record; 187 - 19 = 168 = 4 x 42) and
+;          0x00E086 = 0x00753E + 0x25*arg (a 37-byte record array), the latter through
+;          `lda XIX,0x00e086` at 0xFC4C8C.
+;          Called from the same five MidiNote_* paths as Pack104_SetInputs_PartRecord.
+;          Unknown: what either sub-record IS.
 ; --------------------------------------------------------------------------
-sub_FC4C85:
+Pack104_SetInputs_SubRecordPair:
 	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FC4C85  link XIZ,0xfff8
 	pushw	hl                                   ; FC4C89  push HL
 	push	xde                                   ; FC4C8A  push XDE
@@ -99969,30 +100436,30 @@ sub_FC4C85:
 	extz	xbc                                   ; FC4CE2  extz XBC
 	ld	h, (xbc+7)                              ; FC4CE4  ld H,(XBC+0x07)
 	cp	h, 64                                   ; FC4CE7  cp H,0x40
-	jr nc, sub_FC4C85__FC4CF4                  ; FC4CEA  jr NC,0xfc4cf4
+	jr nc, Pack104_SetInputs_SubRecordPair__FC4CF4                  ; FC4CEA  jr NC,0xfc4cf4
 	push	0                                     ; FC4CEC  push 0x00
 	push	h                                     ; FC4CEE  push H
 	calr (0xFC40A9 - 0xFC4CF3)                 ; FC4CF0  calr 0xfc40a9
 	popw	bc                                    ; FC4CF3  pop BC
-sub_FC4C85__FC4CF4:
+Pack104_SetInputs_SubRecordPair__FC4CF4:
 	ldw_da	bc, (0xE084)                        ; FC4CF4  ld BC,(0x00e084)
 	extz	xbc                                   ; FC4CF9  extz XBC
 	ld	h, (xbc+9)                              ; FC4CFB  ld H,(XBC+0x09)
 	cp	h, l                                    ; FC4CFE  cp H,L
-	jr z, sub_FC4C85__FC4D1B                   ; FC4D00  jr Z,0xfc4d1b
+	jr z, Pack104_SetInputs_SubRecordPair__FC4D1B                   ; FC4D00  jr Z,0xfc4d1b
 	ld	a, h                                    ; FC4D02  ld A,H
 	extz	wa                                    ; FC4D04  extz WA
 	extz	xwa                                   ; FC4D06  extz XWA
 	add	xwa, 0xE08F                            ; FC4D08  add XWA,0x0000e08f
 	ld	h, (xwa)                                ; FC4D0E  ld H,(XWA)
 	cp	h, 64                                   ; FC4D10  cp H,0x40
-	jr nc, sub_FC4C85__FC4D1B                  ; FC4D13  jr NC,0xfc4d1b
+	jr nc, Pack104_SetInputs_SubRecordPair__FC4D1B                  ; FC4D13  jr NC,0xfc4d1b
 	push	0                                     ; FC4D15  push 0x00
 	push	h                                     ; FC4D17  push H
-	jr sub_FC4C85__FC4D1E                      ; FC4D19  jr T,0xfc4d1e
-sub_FC4C85__FC4D1B:
+	jr Pack104_SetInputs_SubRecordPair__FC4D1E                      ; FC4D19  jr T,0xfc4d1e
+Pack104_SetInputs_SubRecordPair__FC4D1B:
 	pushw	0xFF                                 ; FC4D1B  push 0x00ff
-sub_FC4C85__FC4D1E:
+Pack104_SetInputs_SubRecordPair__FC4D1E:
 	calr (0xFC405E - 0xFC4D21)                 ; FC4D1E  calr 0xfc405e
 	ld	h, a                                    ; FC4D21  ld H,A
 	ld	bc, (xix)                               ; FC4D23  ld BC,(XIX)
@@ -100134,7 +100601,7 @@ Pack104_SetInputs_Rec0E_E08D:
 	unlk32 xiz                                 ; FC4DBA  unlk XIZ
 	ret                                        ; FC4DBC  ret
 ; --------------------------------------------------------------------------
-; sub_FC4DBD -- 0xFC4DBD..0xFC56C3 (2311 bytes)
+; Dev104_PackStagingStruct -- 0xFC4DBD..0xFC56C3 (2311 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFB0B61 in VoiceRegs_Stage_A, 0xFB2866 in VoiceRegs_Stage_C
@@ -100149,10 +100616,25 @@ Pack104_SetInputs_Rec0E_E08D:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; ★ Dev104_PackStagingStruct -- the ONE routine that fills the
+;          0x00104000 staging struct.  Its only argument is the struct pointer, and it makes
+;          19 WRITE SITES over 16 DISTINCT OFFSETS inside 0x00..0x24 -- the same span
+;          Dev104_WriteAllChanRegs reads as 19 consecutive words.
+;          ⚠ CORRECTION: notes/FINDINGS-prom_c-dev10c-producers.md §3 says "writes 19 offsets
+;          in 0x00..0x24".  Nineteen is the number of WRITE SITES; the distinct offsets are
+;          16, of which 15 are even (whole words) and one (+0x1D) is a high-byte write.  Four
+;          of the nineteen even fields -- +0x06, +0x08, +0x12 and +0x16 -- are not written by
+;          this routine's own instructions at all; +0x06 and +0x08 come from sub_FC49AD, which
+;          it calls at 0xFC56AA.
+;          Its inputs are the globals 0x00E082-0x00E08D, set by Pack104_SetInputs_PartRecord,
+;          Pack104_SetInputs_SubRecordPair, Pack104_SetInputs_E088_E089_E08A and
+;          Pack104_SetInputs_Rec0E_E08D.
+;          Evidence: `python3 notes/prom_c_understanding_round6.py --packer`, which counts the
+;          sites and the offsets with notes/prom_c_dev10c_field_sources.py's own scanner and
+;          asserts 19/16/15.
 ; --------------------------------------------------------------------------
-sub_FC4DBD:
+Dev104_PackStagingStruct:
 	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FC4DBD  link XIZ,0xffee
 	pushw	hl                                   ; FC4DC1  push HL
 	pushw	de                                   ; FC4DC2  push DE
@@ -100180,26 +100662,26 @@ sub_FC4DBD:
 	ld	hl, ix                                  ; FC4E00  ld HL,IX
 	add	hl, de                                 ; FC4E02  add HL,DE
 	cps	hl, 0                                  ; FC4E04  cp HL,0
-	jr ge, sub_FC4DBD__FC4E13                  ; FC4E06  jr GE,0xfc4e13
+	jr ge, Dev104_PackStagingStruct__FC4E13                  ; FC4E06  jr GE,0xfc4e13
 	cps	ix, 0                                  ; FC4E08  cp IX,0
-	jr lt, sub_FC4DBD__FC4E13                  ; FC4E0A  jr LT,0xfc4e13
+	jr lt, Dev104_PackStagingStruct__FC4E13                  ; FC4E0A  jr LT,0xfc4e13
 	cps	de, 0                                  ; FC4E0C  cp DE,0
-	jr lt, sub_FC4DBD__FC4E13                  ; FC4E0E  jr LT,0xfc4e13
+	jr lt, Dev104_PackStagingStruct__FC4E13                  ; FC4E0E  jr LT,0xfc4e13
 	ldw	hl, 0x7FFF                             ; FC4E10  ld HL,0x7fff
-sub_FC4DBD__FC4E13:
+Dev104_PackStagingStruct__FC4E13:
 	cps	hl, 0                                  ; FC4E13  cp HL,0
-	jr le, sub_FC4DBD__FC4E22                  ; FC4E15  jr LE,0xfc4e22
+	jr le, Dev104_PackStagingStruct__FC4E22                  ; FC4E15  jr LE,0xfc4e22
 	cps	ix, 0                                  ; FC4E17  cp IX,0
-	jr ge, sub_FC4DBD__FC4E22                  ; FC4E19  jr GE,0xfc4e22
+	jr ge, Dev104_PackStagingStruct__FC4E22                  ; FC4E19  jr GE,0xfc4e22
 	cps	de, 0                                  ; FC4E1B  cp DE,0
-	jr ge, sub_FC4DBD__FC4E22                  ; FC4E1D  jr GE,0xfc4e22
+	jr ge, Dev104_PackStagingStruct__FC4E22                  ; FC4E1D  jr GE,0xfc4e22
 	ldw	hl, 0                                  ; FC4E1F  ld HL,0x0000
-sub_FC4DBD__FC4E22:
+Dev104_PackStagingStruct__FC4E22:
 	ld	(xiz-6), hl                             ; FC4E22  ld (XIZ+0xfa),HL
 	ld	xbc, (xiz-4)                            ; FC4E25  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+22)                             ; FC4E28  ld A,(XBC+0x16)
 	and	a, 0x80                                ; FC4E2B  and A,0x80
-	jr z, sub_FC4DBD__FC4E66                   ; FC4E2E  jr Z,0xfc4e66
+	jr z, Dev104_PackStagingStruct__FC4E66                   ; FC4E2E  jr Z,0xfc4e66
 	ldw_da	de, (0xE08A)                        ; FC4E30  ld DE,(0x00e08a)
 	ldw_da	wa, (0xE08D)                        ; FC4E35  ld WA,(0x00e08d)
 	sub	de, wa                                 ; FC4E3A  sub DE,WA
@@ -100208,23 +100690,23 @@ sub_FC4DBD__FC4E22:
 	ld	iy, de                                  ; FC4E42  ld IY,DE
 	add	hl, iy                                 ; FC4E44  add HL,IY
 	cps	hl, 0                                  ; FC4E46  cp HL,0
-	jr ge, sub_FC4DBD__FC4E55                  ; FC4E48  jr GE,0xfc4e55
+	jr ge, Dev104_PackStagingStruct__FC4E55                  ; FC4E48  jr GE,0xfc4e55
 	cps	ix, 0                                  ; FC4E4A  cp IX,0
-	jr lt, sub_FC4DBD__FC4E55                  ; FC4E4C  jr LT,0xfc4e55
+	jr lt, Dev104_PackStagingStruct__FC4E55                  ; FC4E4C  jr LT,0xfc4e55
 	cps	iy, 0                                  ; FC4E4E  cp IY,0
-	jr lt, sub_FC4DBD__FC4E55                  ; FC4E50  jr LT,0xfc4e55
+	jr lt, Dev104_PackStagingStruct__FC4E55                  ; FC4E50  jr LT,0xfc4e55
 	ldw	hl, 0x7FFF                             ; FC4E52  ld HL,0x7fff
-sub_FC4DBD__FC4E55:
+Dev104_PackStagingStruct__FC4E55:
 	cps	hl, 0                                  ; FC4E55  cp HL,0
-	jr le, sub_FC4DBD__FC4E64                  ; FC4E57  jr LE,0xfc4e64
+	jr le, Dev104_PackStagingStruct__FC4E64                  ; FC4E57  jr LE,0xfc4e64
 	cps	ix, 0                                  ; FC4E59  cp IX,0
-	jr ge, sub_FC4DBD__FC4E64                  ; FC4E5B  jr GE,0xfc4e64
+	jr ge, Dev104_PackStagingStruct__FC4E64                  ; FC4E5B  jr GE,0xfc4e64
 	cps	de, 0                                  ; FC4E5D  cp DE,0
-	jr ge, sub_FC4DBD__FC4E64                  ; FC4E5F  jr GE,0xfc4e64
+	jr ge, Dev104_PackStagingStruct__FC4E64                  ; FC4E5F  jr GE,0xfc4e64
 	ldw	hl, 0                                  ; FC4E61  ld HL,0x0000
-sub_FC4DBD__FC4E64:
-	jr sub_FC4DBD__FC4E9C                      ; FC4E64  jr T,0xfc4e9c
-sub_FC4DBD__FC4E66:
+Dev104_PackStagingStruct__FC4E64:
+	jr Dev104_PackStagingStruct__FC4E9C                      ; FC4E64  jr T,0xfc4e9c
+Dev104_PackStagingStruct__FC4E66:
 	ldw_da	bc, (0xE086)                        ; FC4E66  ld BC,(0x00e086)
 	extz	xbc                                   ; FC4E6B  extz XBC
 	ld	de, (xbc+12)                            ; FC4E6D  ld DE,(XBC+0x0c)
@@ -100235,21 +100717,21 @@ sub_FC4DBD__FC4E66:
 	ld	hl, (xiz-6)                             ; FC4E79  ld HL,(XIZ+0xfa)
 	add	hl, wa                                 ; FC4E7C  add HL,WA
 	cps	hl, 0                                  ; FC4E7E  cp HL,0
-	jr ge, sub_FC4DBD__FC4E8D                  ; FC4E80  jr GE,0xfc4e8d
+	jr ge, Dev104_PackStagingStruct__FC4E8D                  ; FC4E80  jr GE,0xfc4e8d
 	cps	ix, 0                                  ; FC4E82  cp IX,0
-	jr lt, sub_FC4DBD__FC4E8D                  ; FC4E84  jr LT,0xfc4e8d
+	jr lt, Dev104_PackStagingStruct__FC4E8D                  ; FC4E84  jr LT,0xfc4e8d
 	cps	wa, 0                                  ; FC4E86  cp WA,0
-	jr lt, sub_FC4DBD__FC4E8D                  ; FC4E88  jr LT,0xfc4e8d
+	jr lt, Dev104_PackStagingStruct__FC4E8D                  ; FC4E88  jr LT,0xfc4e8d
 	ldw	hl, 0x7FFF                             ; FC4E8A  ld HL,0x7fff
-sub_FC4DBD__FC4E8D:
+Dev104_PackStagingStruct__FC4E8D:
 	cps	hl, 0                                  ; FC4E8D  cp HL,0
-	jr le, sub_FC4DBD__FC4E9C                  ; FC4E8F  jr LE,0xfc4e9c
+	jr le, Dev104_PackStagingStruct__FC4E9C                  ; FC4E8F  jr LE,0xfc4e9c
 	cps	ix, 0                                  ; FC4E91  cp IX,0
-	jr ge, sub_FC4DBD__FC4E9C                  ; FC4E93  jr GE,0xfc4e9c
+	jr ge, Dev104_PackStagingStruct__FC4E9C                  ; FC4E93  jr GE,0xfc4e9c
 	cps	de, 0                                  ; FC4E95  cp DE,0
-	jr ge, sub_FC4DBD__FC4E9C                  ; FC4E97  jr GE,0xfc4e9c
+	jr ge, Dev104_PackStagingStruct__FC4E9C                  ; FC4E97  jr GE,0xfc4e9c
 	ldw	hl, 0                                  ; FC4E99  ld HL,0x0000
-sub_FC4DBD__FC4E9C:
+Dev104_PackStagingStruct__FC4E9C:
 	ld	xbc, (xiz+8)                            ; FC4E9C  ld XBC,(XIZ+0x08)
 	ld	(xbc+2), hl                             ; FC4E9F  ld (XBC+0x02),HL
 	ldw_da	bc, (0xE084)                        ; FC4EA2  ld BC,(0x00e084)
@@ -100259,26 +100741,26 @@ sub_FC4DBD__FC4E9C:
 	ld	hl, ix                                  ; FC4EAF  ld HL,IX
 	add	hl, de                                 ; FC4EB1  add HL,DE
 	cps	hl, 0                                  ; FC4EB3  cp HL,0
-	jr ge, sub_FC4DBD__FC4EC2                  ; FC4EB5  jr GE,0xfc4ec2
+	jr ge, Dev104_PackStagingStruct__FC4EC2                  ; FC4EB5  jr GE,0xfc4ec2
 	cps	ix, 0                                  ; FC4EB7  cp IX,0
-	jr lt, sub_FC4DBD__FC4EC2                  ; FC4EB9  jr LT,0xfc4ec2
+	jr lt, Dev104_PackStagingStruct__FC4EC2                  ; FC4EB9  jr LT,0xfc4ec2
 	cps	de, 0                                  ; FC4EBB  cp DE,0
-	jr lt, sub_FC4DBD__FC4EC2                  ; FC4EBD  jr LT,0xfc4ec2
+	jr lt, Dev104_PackStagingStruct__FC4EC2                  ; FC4EBD  jr LT,0xfc4ec2
 	ldw	hl, 0x7FFF                             ; FC4EBF  ld HL,0x7fff
-sub_FC4DBD__FC4EC2:
+Dev104_PackStagingStruct__FC4EC2:
 	cps	hl, 0                                  ; FC4EC2  cp HL,0
-	jr le, sub_FC4DBD__FC4ED1                  ; FC4EC4  jr LE,0xfc4ed1
+	jr le, Dev104_PackStagingStruct__FC4ED1                  ; FC4EC4  jr LE,0xfc4ed1
 	cps	ix, 0                                  ; FC4EC6  cp IX,0
-	jr ge, sub_FC4DBD__FC4ED1                  ; FC4EC8  jr GE,0xfc4ed1
+	jr ge, Dev104_PackStagingStruct__FC4ED1                  ; FC4EC8  jr GE,0xfc4ed1
 	cps	de, 0                                  ; FC4ECA  cp DE,0
-	jr ge, sub_FC4DBD__FC4ED1                  ; FC4ECC  jr GE,0xfc4ed1
+	jr ge, Dev104_PackStagingStruct__FC4ED1                  ; FC4ECC  jr GE,0xfc4ed1
 	ldw	hl, 0                                  ; FC4ECE  ld HL,0x0000
-sub_FC4DBD__FC4ED1:
+Dev104_PackStagingStruct__FC4ED1:
 	ld	(xiz-6), hl                             ; FC4ED1  ld (XIZ+0xfa),HL
 	ld	xbc, (xiz-4)                            ; FC4ED4  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+32)                             ; FC4ED7  ld A,(XBC+0x20)
 	and	a, 0x80                                ; FC4EDA  and A,0x80
-	jr z, sub_FC4DBD__FC4F15                   ; FC4EDD  jr Z,0xfc4f15
+	jr z, Dev104_PackStagingStruct__FC4F15                   ; FC4EDD  jr Z,0xfc4f15
 	ldw_da	de, (0xE08A)                        ; FC4EDF  ld DE,(0x00e08a)
 	ldw_da	wa, (0xE08D)                        ; FC4EE4  ld WA,(0x00e08d)
 	sub	de, wa                                 ; FC4EE9  sub DE,WA
@@ -100287,23 +100769,23 @@ sub_FC4DBD__FC4ED1:
 	ld	iy, de                                  ; FC4EF1  ld IY,DE
 	add	hl, iy                                 ; FC4EF3  add HL,IY
 	cps	hl, 0                                  ; FC4EF5  cp HL,0
-	jr ge, sub_FC4DBD__FC4F04                  ; FC4EF7  jr GE,0xfc4f04
+	jr ge, Dev104_PackStagingStruct__FC4F04                  ; FC4EF7  jr GE,0xfc4f04
 	cps	ix, 0                                  ; FC4EF9  cp IX,0
-	jr lt, sub_FC4DBD__FC4F04                  ; FC4EFB  jr LT,0xfc4f04
+	jr lt, Dev104_PackStagingStruct__FC4F04                  ; FC4EFB  jr LT,0xfc4f04
 	cps	iy, 0                                  ; FC4EFD  cp IY,0
-	jr lt, sub_FC4DBD__FC4F04                  ; FC4EFF  jr LT,0xfc4f04
+	jr lt, Dev104_PackStagingStruct__FC4F04                  ; FC4EFF  jr LT,0xfc4f04
 	ldw	hl, 0x7FFF                             ; FC4F01  ld HL,0x7fff
-sub_FC4DBD__FC4F04:
+Dev104_PackStagingStruct__FC4F04:
 	cps	hl, 0                                  ; FC4F04  cp HL,0
-	jr le, sub_FC4DBD__FC4F13                  ; FC4F06  jr LE,0xfc4f13
+	jr le, Dev104_PackStagingStruct__FC4F13                  ; FC4F06  jr LE,0xfc4f13
 	cps	ix, 0                                  ; FC4F08  cp IX,0
-	jr ge, sub_FC4DBD__FC4F13                  ; FC4F0A  jr GE,0xfc4f13
+	jr ge, Dev104_PackStagingStruct__FC4F13                  ; FC4F0A  jr GE,0xfc4f13
 	cps	de, 0                                  ; FC4F0C  cp DE,0
-	jr ge, sub_FC4DBD__FC4F13                  ; FC4F0E  jr GE,0xfc4f13
+	jr ge, Dev104_PackStagingStruct__FC4F13                  ; FC4F0E  jr GE,0xfc4f13
 	ldw	hl, 0                                  ; FC4F10  ld HL,0x0000
-sub_FC4DBD__FC4F13:
-	jr sub_FC4DBD__FC4F4B                      ; FC4F13  jr T,0xfc4f4b
-sub_FC4DBD__FC4F15:
+Dev104_PackStagingStruct__FC4F13:
+	jr Dev104_PackStagingStruct__FC4F4B                      ; FC4F13  jr T,0xfc4f4b
+Dev104_PackStagingStruct__FC4F15:
 	ldw_da	bc, (0xE086)                        ; FC4F15  ld BC,(0x00e086)
 	extz	xbc                                   ; FC4F1A  extz XBC
 	ld	de, (xbc+12)                            ; FC4F1C  ld DE,(XBC+0x0c)
@@ -100314,21 +100796,21 @@ sub_FC4DBD__FC4F15:
 	ld	hl, (xiz-6)                             ; FC4F28  ld HL,(XIZ+0xfa)
 	add	hl, wa                                 ; FC4F2B  add HL,WA
 	cps	hl, 0                                  ; FC4F2D  cp HL,0
-	jr ge, sub_FC4DBD__FC4F3C                  ; FC4F2F  jr GE,0xfc4f3c
+	jr ge, Dev104_PackStagingStruct__FC4F3C                  ; FC4F2F  jr GE,0xfc4f3c
 	cps	ix, 0                                  ; FC4F31  cp IX,0
-	jr lt, sub_FC4DBD__FC4F3C                  ; FC4F33  jr LT,0xfc4f3c
+	jr lt, Dev104_PackStagingStruct__FC4F3C                  ; FC4F33  jr LT,0xfc4f3c
 	cps	wa, 0                                  ; FC4F35  cp WA,0
-	jr lt, sub_FC4DBD__FC4F3C                  ; FC4F37  jr LT,0xfc4f3c
+	jr lt, Dev104_PackStagingStruct__FC4F3C                  ; FC4F37  jr LT,0xfc4f3c
 	ldw	hl, 0x7FFF                             ; FC4F39  ld HL,0x7fff
-sub_FC4DBD__FC4F3C:
+Dev104_PackStagingStruct__FC4F3C:
 	cps	hl, 0                                  ; FC4F3C  cp HL,0
-	jr le, sub_FC4DBD__FC4F4B                  ; FC4F3E  jr LE,0xfc4f4b
+	jr le, Dev104_PackStagingStruct__FC4F4B                  ; FC4F3E  jr LE,0xfc4f4b
 	cps	ix, 0                                  ; FC4F40  cp IX,0
-	jr ge, sub_FC4DBD__FC4F4B                  ; FC4F42  jr GE,0xfc4f4b
+	jr ge, Dev104_PackStagingStruct__FC4F4B                  ; FC4F42  jr GE,0xfc4f4b
 	cps	de, 0                                  ; FC4F44  cp DE,0
-	jr ge, sub_FC4DBD__FC4F4B                  ; FC4F46  jr GE,0xfc4f4b
+	jr ge, Dev104_PackStagingStruct__FC4F4B                  ; FC4F46  jr GE,0xfc4f4b
 	ldw	hl, 0                                  ; FC4F48  ld HL,0x0000
-sub_FC4DBD__FC4F4B:
+Dev104_PackStagingStruct__FC4F4B:
 	ld	xbc, (xiz+8)                            ; FC4F4B  ld XBC,(XIZ+0x08)
 	ld	(xbc+4), hl                             ; FC4F4E  ld (XBC+0x04),HL
 	lda_24	xix, (0xFE0116)                     ; FC4F51  lda XIX,0xfe0116
@@ -100338,12 +100820,12 @@ sub_FC4DBD__FC4F4B:
 	ld	hl, wa                                  ; FC4F5E  ld HL,WA
 	ldb_da	d, (0xE088)                         ; FC4F60  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC4F65  cp WA,0
-	jr nz, sub_FC4DBD__FC4F70                  ; FC4F67  jr NZ,0xfc4f70
+	jr nz, Dev104_PackStagingStruct__FC4F70                  ; FC4F67  jr NZ,0xfc4f70
 	ldw (xiz-8), 0x0000                        ; FC4F69  ld (XIZ+0xf8),0x0000
-	jr sub_FC4DBD__FC4F99                      ; FC4F6E  jr T,0xfc4f99
-sub_FC4DBD__FC4F70:
+	jr Dev104_PackStagingStruct__FC4F99                      ; FC4F6E  jr T,0xfc4f99
+Dev104_PackStagingStruct__FC4F70:
 	cps	hl, 0                                  ; FC4F70  cp HL,0
-	jr ge, sub_FC4DBD__FC4F85                  ; FC4F72  jr GE,0xfc4f85
+	jr ge, Dev104_PackStagingStruct__FC4F85                  ; FC4F72  jr GE,0xfc4f85
 	ld	c, d                                    ; FC4F74  ld C,D
 	extz	bc                                    ; FC4F76  extz BC
 	ldw	wa, 0x7F                               ; FC4F78  ld WA,0x007f
@@ -100352,7 +100834,7 @@ sub_FC4DBD__FC4F70:
 	ld	bc, hl                                  ; FC4F7F  ld BC,HL
 	neg	bc                                     ; FC4F81  neg BC
 	ld	hl, bc                                  ; FC4F83  ld HL,BC
-sub_FC4DBD__FC4F85:
+Dev104_PackStagingStruct__FC4F85:
 	ld	c, d                                    ; FC4F85  ld C,D
 	extz	bc                                    ; FC4F87  extz BC
 	extz	xbc                                   ; FC4F89  extz XBC
@@ -100362,7 +100844,7 @@ sub_FC4DBD__FC4F85:
 	muls	xwa, xhl                              ; FC4F91  muls XWA,HL
 	sra	wa, 5                                  ; FC4F93  sra 0x05,WA
 	ld	(xiz-8), wa                             ; FC4F96  ld (XIZ+0xf8),WA
-sub_FC4DBD__FC4F99:
+Dev104_PackStagingStruct__FC4F99:
 	ldw_da	bc, (0xE084)                        ; FC4F99  ld BC,(0x00e084)
 	extz	xbc                                   ; FC4F9E  extz XBC
 	ld	wa, (xbc+22)                            ; FC4FA0  ld WA,(XBC+0x16)
@@ -100376,36 +100858,36 @@ sub_FC4DBD__FC4F99:
 	ldw_da	ix, (0xE08C)                        ; FC4FB7  ld IX,(0x00e08c)
 	exts	ix                                    ; FC4FBC  exts IX
 	cp	(xiz-8), bc                             ; FC4FBE  cp (XIZ+0xf8),BC
-	jr le, sub_FC4DBD__FC4FC7                  ; FC4FC1  jr LE,0xfc4fc7
+	jr le, Dev104_PackStagingStruct__FC4FC7                  ; FC4FC1  jr LE,0xfc4fc7
 	ld	hl, bc                                  ; FC4FC3  ld HL,BC
-	jr sub_FC4DBD__FC4FCE                      ; FC4FC5  jr T,0xfc4fce
-sub_FC4DBD__FC4FC7:
+	jr Dev104_PackStagingStruct__FC4FCE                      ; FC4FC5  jr T,0xfc4fce
+Dev104_PackStagingStruct__FC4FC7:
 	cps	hl, 0                                  ; FC4FC7  cp HL,0
-	jr ge, sub_FC4DBD__FC4FCE                  ; FC4FC9  jr GE,0xfc4fce
+	jr ge, Dev104_PackStagingStruct__FC4FCE                  ; FC4FC9  jr GE,0xfc4fce
 	ldw	hl, 0                                  ; FC4FCB  ld HL,0x0000
-sub_FC4DBD__FC4FCE:
+Dev104_PackStagingStruct__FC4FCE:
 	cp	hl, 48                                  ; FC4FCE  cp HL,0x0030
-	jr ge, sub_FC4DBD__FC4FE1                  ; FC4FD2  jr GE,0xfc4fe1
+	jr ge, Dev104_PackStagingStruct__FC4FE1                  ; FC4FD2  jr GE,0xfc4fe1
 	ld	bc, hl                                  ; FC4FD4  ld BC,HL
 	sra	bc, 1                                  ; FC4FD6  sra 0x01,BC
 	ld	hl, bc                                  ; FC4FD9  ld HL,BC
 	add	bc, 24                                 ; FC4FDB  add BC,0x0018
 	ld	hl, bc                                  ; FC4FDF  ld HL,BC
-sub_FC4DBD__FC4FE1:
+Dev104_PackStagingStruct__FC4FE1:
 	ldw	bc, 0xCF                               ; FC4FE1  ld BC,0x00cf
 	sub	bc, hl                                 ; FC4FE4  sub BC,HL
 	ld	hl, bc                                  ; FC4FE6  ld HL,BC
 	add	bc, ix                                 ; FC4FE8  add BC,IX
 	ld	hl, bc                                  ; FC4FEA  ld HL,BC
 	cp	bc, 0xFF                                ; FC4FEC  cp BC,0x00ff
-	jr le, sub_FC4DBD__FC4FF7                  ; FC4FF0  jr LE,0xfc4ff7
+	jr le, Dev104_PackStagingStruct__FC4FF7                  ; FC4FF0  jr LE,0xfc4ff7
 	ldw	hl, 0xFF                               ; FC4FF2  ld HL,0x00ff
-	jr sub_FC4DBD__FC4FFE                      ; FC4FF5  jr T,0xfc4ffe
-sub_FC4DBD__FC4FF7:
+	jr Dev104_PackStagingStruct__FC4FFE                      ; FC4FF5  jr T,0xfc4ffe
+Dev104_PackStagingStruct__FC4FF7:
 	cps	hl, 0                                  ; FC4FF7  cp HL,0
-	jr ge, sub_FC4DBD__FC4FFE                  ; FC4FF9  jr GE,0xfc4ffe
+	jr ge, Dev104_PackStagingStruct__FC4FFE                  ; FC4FF9  jr GE,0xfc4ffe
 	ldw	hl, 0                                  ; FC4FFB  ld HL,0x0000
-sub_FC4DBD__FC4FFE:
+Dev104_PackStagingStruct__FC4FFE:
 	ldw	bc, 2                                  ; FC4FFE  ld BC,0x0002
 	muls	xbc, xhl                              ; FC5001  muls XBC,HL
 	add	xbc, 0xFDF7E0                          ; FC5003  add XBC,0x00fdf7e0
@@ -100418,12 +100900,12 @@ sub_FC4DBD__FC4FFE:
 	ld	hl, bc                                  ; FC501B  ld HL,BC
 	ldb_da	d, (0xE088)                         ; FC501D  ld D,(0x00e088)
 	cps	bc, 0                                  ; FC5022  cp BC,0
-	jr nz, sub_FC4DBD__FC502D                  ; FC5024  jr NZ,0xfc502d
+	jr nz, Dev104_PackStagingStruct__FC502D                  ; FC5024  jr NZ,0xfc502d
 	ldw (xiz-12), 0x0000                       ; FC5026  ld (XIZ+0xf4),0x0000
-	jr sub_FC4DBD__FC5056                      ; FC502B  jr T,0xfc5056
-sub_FC4DBD__FC502D:
+	jr Dev104_PackStagingStruct__FC5056                      ; FC502B  jr T,0xfc5056
+Dev104_PackStagingStruct__FC502D:
 	cps	hl, 0                                  ; FC502D  cp HL,0
-	jr ge, sub_FC4DBD__FC5042                  ; FC502F  jr GE,0xfc5042
+	jr ge, Dev104_PackStagingStruct__FC5042                  ; FC502F  jr GE,0xfc5042
 	ld	c, d                                    ; FC5031  ld C,D
 	extz	bc                                    ; FC5033  extz BC
 	ldw	wa, 0x7F                               ; FC5035  ld WA,0x007f
@@ -100432,7 +100914,7 @@ sub_FC4DBD__FC502D:
 	ld	bc, hl                                  ; FC503C  ld BC,HL
 	neg	bc                                     ; FC503E  neg BC
 	ld	hl, bc                                  ; FC5040  ld HL,BC
-sub_FC4DBD__FC5042:
+Dev104_PackStagingStruct__FC5042:
 	ld	c, d                                    ; FC5042  ld C,D
 	extz	bc                                    ; FC5044  extz BC
 	extz	xbc                                   ; FC5046  extz XBC
@@ -100442,7 +100924,7 @@ sub_FC4DBD__FC5042:
 	muls	xwa, xhl                              ; FC504E  muls XWA,HL
 	sra	wa, 5                                  ; FC5050  sra 0x05,WA
 	ld	(xiz-12), wa                            ; FC5053  ld (XIZ+0xf4),WA
-sub_FC4DBD__FC5056:
+Dev104_PackStagingStruct__FC5056:
 	ldw_da	bc, (0xE084)                        ; FC5056  ld BC,(0x00e084)
 	extz	xbc                                   ; FC505B  extz XBC
 	ld	wa, (xbc+24)                            ; FC505D  ld WA,(XBC+0x18)
@@ -100456,43 +100938,43 @@ sub_FC4DBD__FC5056:
 	ldw_da	ix, (0xE08C)                        ; FC5074  ld IX,(0x00e08c)
 	exts	ix                                    ; FC5079  exts IX
 	cp	(xiz-12), bc                            ; FC507B  cp (XIZ+0xf4),BC
-	jr le, sub_FC4DBD__FC5084                  ; FC507E  jr LE,0xfc5084
+	jr le, Dev104_PackStagingStruct__FC5084                  ; FC507E  jr LE,0xfc5084
 	ld	hl, bc                                  ; FC5080  ld HL,BC
-	jr sub_FC4DBD__FC508B                      ; FC5082  jr T,0xfc508b
-sub_FC4DBD__FC5084:
+	jr Dev104_PackStagingStruct__FC508B                      ; FC5082  jr T,0xfc508b
+Dev104_PackStagingStruct__FC5084:
 	cps	hl, 0                                  ; FC5084  cp HL,0
-	jr ge, sub_FC4DBD__FC508B                  ; FC5086  jr GE,0xfc508b
+	jr ge, Dev104_PackStagingStruct__FC508B                  ; FC5086  jr GE,0xfc508b
 	ldw	hl, 0                                  ; FC5088  ld HL,0x0000
-sub_FC4DBD__FC508B:
+Dev104_PackStagingStruct__FC508B:
 	cp	hl, 48                                  ; FC508B  cp HL,0x0030
-	jr ge, sub_FC4DBD__FC509E                  ; FC508F  jr GE,0xfc509e
+	jr ge, Dev104_PackStagingStruct__FC509E                  ; FC508F  jr GE,0xfc509e
 	ld	bc, hl                                  ; FC5091  ld BC,HL
 	sra	bc, 1                                  ; FC5093  sra 0x01,BC
 	ld	hl, bc                                  ; FC5096  ld HL,BC
 	add	bc, 24                                 ; FC5098  add BC,0x0018
 	ld	hl, bc                                  ; FC509C  ld HL,BC
-sub_FC4DBD__FC509E:
+Dev104_PackStagingStruct__FC509E:
 	ldw	bc, 0xCF                               ; FC509E  ld BC,0x00cf
 	sub	bc, hl                                 ; FC50A1  sub BC,HL
 	ld	hl, bc                                  ; FC50A3  ld HL,BC
 	add	bc, ix                                 ; FC50A5  add BC,IX
 	ld	hl, bc                                  ; FC50A7  ld HL,BC
 	cp	bc, 0xFF                                ; FC50A9  cp BC,0x00ff
-	jr le, sub_FC4DBD__FC50B4                  ; FC50AD  jr LE,0xfc50b4
+	jr le, Dev104_PackStagingStruct__FC50B4                  ; FC50AD  jr LE,0xfc50b4
 	ldw	hl, 0xFF                               ; FC50AF  ld HL,0x00ff
-	jr sub_FC4DBD__FC50BB                      ; FC50B2  jr T,0xfc50bb
-sub_FC4DBD__FC50B4:
+	jr Dev104_PackStagingStruct__FC50BB                      ; FC50B2  jr T,0xfc50bb
+Dev104_PackStagingStruct__FC50B4:
 	cps	hl, 0                                  ; FC50B4  cp HL,0
-	jr ge, sub_FC4DBD__FC50BB                  ; FC50B6  jr GE,0xfc50bb
+	jr ge, Dev104_PackStagingStruct__FC50BB                  ; FC50B6  jr GE,0xfc50bb
 	ldw	hl, 0                                  ; FC50B8  ld HL,0x0000
-sub_FC4DBD__FC50BB:
+Dev104_PackStagingStruct__FC50BB:
 	ldw	bc, 2                                  ; FC50BB  ld BC,0x0002
 	muls	xbc, xhl                              ; FC50BE  muls XBC,HL
 	add	xbc, 0xFDF7E0                          ; FC50C0  add XBC,0x00fdf7e0
 	ld	hl, (xbc)                               ; FC50C6  ld HL,(XBC)
 	ldb_da	a, (0xE089)                         ; FC50C8  ld A,(0x00e089)
 	and	a, 1                                   ; FC50CD  and A,0x01
-	jr z, sub_FC4DBD__FC510D                   ; FC50D0  jr Z,0xfc510d
+	jr z, Dev104_PackStagingStruct__FC510D                   ; FC50D0  jr Z,0xfc510d
 	ld	xbc, (xiz+8)                            ; FC50D2  ld XBC,(XIZ+0x08)
 	extpfx5 0xB9, 0x0A, 0x02, 0x00, 0x00       ; FC50D5  ld (XBC+0x0a),0x0000
 	ld	xbc, (xiz+8)                            ; FC50DA  ld XBC,(XIZ+0x08)
@@ -100509,8 +100991,8 @@ sub_FC4DBD__FC50BB:
 	ldw_da	wa, (0xE086)                        ; FC5101  ld WA,(0x00e086)
 	extz	xwa                                   ; FC5106  extz XWA
 	ld	(xwa+10), bc                            ; FC5108  ld (XWA+0x0a),BC
-	jr sub_FC4DBD__FC513E                      ; FC510B  jr T,0xfc513e
-sub_FC4DBD__FC510D:
+	jr Dev104_PackStagingStruct__FC513E                      ; FC510B  jr T,0xfc513e
+Dev104_PackStagingStruct__FC510D:
 	ld	bc, (xiz-10)                            ; FC510D  ld BC,(XIZ+0xf6)
 	and	bc, 0xFFF8                             ; FC5110  and BC,0xfff8
 	ld	xwa, (xiz+8)                            ; FC5114  ld XWA,(XIZ+0x08)
@@ -100525,7 +101007,7 @@ sub_FC4DBD__FC510D:
 	ldw_da	bc, (0xE086)                        ; FC5132  ld BC,(0x00e086)
 	extz	xbc                                   ; FC5137  extz XBC
 	extpfx5 0xB9, 0x0A, 0x02, 0x00, 0x00       ; FC5139  ld (XBC+0x0a),0x0000
-sub_FC4DBD__FC513E:
+Dev104_PackStagingStruct__FC513E:
 	lda_24	xix, (0xFE0216)                     ; FC513E  lda XIX,0xfe0216
 	ld	xbc, (xiz-4)                            ; FC5143  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+36)                             ; FC5146  ld A,(XBC+0x24)
@@ -100533,12 +101015,12 @@ sub_FC4DBD__FC513E:
 	ld	hl, wa                                  ; FC514B  ld HL,WA
 	ldb_da	d, (0xE088)                         ; FC514D  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC5152  cp WA,0
-	jr nz, sub_FC4DBD__FC515B                  ; FC5154  jr NZ,0xfc515b
+	jr nz, Dev104_PackStagingStruct__FC515B                  ; FC5154  jr NZ,0xfc515b
 	ldw	hl, 0                                  ; FC5156  ld HL,0x0000
-	jr sub_FC4DBD__FC5185                      ; FC5159  jr T,0xfc5185
-sub_FC4DBD__FC515B:
+	jr Dev104_PackStagingStruct__FC5185                      ; FC5159  jr T,0xfc5185
+Dev104_PackStagingStruct__FC515B:
 	cps	hl, 0                                  ; FC515B  cp HL,0
-	jr ge, sub_FC4DBD__FC5170                  ; FC515D  jr GE,0xfc5170
+	jr ge, Dev104_PackStagingStruct__FC5170                  ; FC515D  jr GE,0xfc5170
 	ld	c, d                                    ; FC515F  ld C,D
 	extz	bc                                    ; FC5161  extz BC
 	ldw	wa, 0x7F                               ; FC5163  ld WA,0x007f
@@ -100547,7 +101029,7 @@ sub_FC4DBD__FC515B:
 	ld	bc, hl                                  ; FC516A  ld BC,HL
 	neg	bc                                     ; FC516C  neg BC
 	ld	hl, bc                                  ; FC516E  ld HL,BC
-sub_FC4DBD__FC5170:
+Dev104_PackStagingStruct__FC5170:
 	ld	c, d                                    ; FC5170  ld C,D
 	extz	bc                                    ; FC5172  extz BC
 	extz	xbc                                   ; FC5174  extz XBC
@@ -100558,7 +101040,7 @@ sub_FC4DBD__FC5170:
 	ld	hl, wa                                  ; FC517E  ld HL,WA
 	sra	wa, 5                                  ; FC5180  sra 0x05,WA
 	ld	hl, wa                                  ; FC5183  ld HL,WA
-sub_FC4DBD__FC5185:
+Dev104_PackStagingStruct__FC5185:
 	ldw_da	bc, (0xE086)                        ; FC5185  ld BC,(0x00e086)
 	extz	xbc                                   ; FC518A  extz XBC
 	ld	(xbc+16), hl                            ; FC518C  ld (XBC+0x10),HL
@@ -100577,7 +101059,7 @@ sub_FC4DBD__FC5185:
 	ld	wa, (xbc)                               ; FC51B5  ld WA,(XBC)
 	and	wa, 0x70                               ; FC51B7  and WA,0x0070
 	pop	xiy                                    ; FC51BB  pop XIY
-	jr z, sub_FC4DBD__FC51EC                   ; FC51BC  jr Z,0xfc51ec
+	jr z, Dev104_PackStagingStruct__FC51EC                   ; FC51BC  jr Z,0xfc51ec
 	ld	xwa, (xiz-4)                            ; FC51BE  ld XWA,(XIZ+0xfc)
 	ld	c, (xwa+19)                             ; FC51C1  ld C,(XWA+0x13)
 	extz	bc                                    ; FC51C4  extz BC
@@ -100594,18 +101076,18 @@ sub_FC4DBD__FC5185:
 	ld	(xbc+24), de                            ; FC51E0  ld (XBC+0x18),DE
 	ld	xbc, (xiz+8)                            ; FC51E3  ld XBC,(XIZ+0x08)
 	extpfx4 0x91, 0x3C, 0x7F, 0xFF             ; FC51E6  and (XBC),0xff7f
-	jr sub_FC4DBD__FC51F4                      ; FC51EA  jr T,0xfc51f4
-sub_FC4DBD__FC51EC:
+	jr Dev104_PackStagingStruct__FC51F4                      ; FC51EA  jr T,0xfc51f4
+Dev104_PackStagingStruct__FC51EC:
 	ld	xbc, (xiz+8)                            ; FC51EC  ld XBC,(XIZ+0x08)
 	extpfx5 0xB9, 0x18, 0x02, 0x00, 0x00       ; FC51EF  ld (XBC+0x18),0x0000
-sub_FC4DBD__FC51F4:
+Dev104_PackStagingStruct__FC51F4:
 	ld	xbc, (xiz-4)                            ; FC51F4  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+25)                             ; FC51F7  ld A,(XBC+0x19)
 	and	a, 0x80                                ; FC51FA  and A,0x80
-	jr z, sub_FC4DBD__FC5206                   ; FC51FD  jr Z,0xfc5206
+	jr z, Dev104_PackStagingStruct__FC5206                   ; FC51FD  jr Z,0xfc5206
 	ldw (xiz-14), 0x0000                       ; FC51FF  ld (XIZ+0xf2),0x0000
-	jr sub_FC4DBD__FC5249                      ; FC5204  jr T,0xfc5249
-sub_FC4DBD__FC5206:
+	jr Dev104_PackStagingStruct__FC5249                      ; FC5204  jr T,0xfc5249
+Dev104_PackStagingStruct__FC5206:
 	ldw_da	hl, (0xE08A)                        ; FC5206  ld HL,(0x00e08a)
 	sra	hl, 8                                  ; FC520B  sra 0x08,HL
 	ld	xbc, (xiz-4)                            ; FC520E  ld XBC,(XIZ+0xfc)
@@ -100613,18 +101095,18 @@ sub_FC4DBD__FC5206:
 	extz	wa                                    ; FC5214  extz WA
 	ld	de, wa                                  ; FC5216  ld DE,WA
 	cp	hl, wa                                  ; FC5218  cp HL,WA
-	jr ule, sub_FC4DBD__FC5220                 ; FC521A  jr ULE,0xfc5220
+	jr ule, Dev104_PackStagingStruct__FC5220                 ; FC521A  jr ULE,0xfc5220
 	ld	hl, wa                                  ; FC521C  ld HL,WA
-	jr sub_FC4DBD__FC5230                      ; FC521E  jr T,0xfc5230
-sub_FC4DBD__FC5220:
+	jr Dev104_PackStagingStruct__FC5230                      ; FC521E  jr T,0xfc5230
+Dev104_PackStagingStruct__FC5220:
 	ld	xbc, (xiz-4)                            ; FC5220  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+26)                             ; FC5223  ld A,(XBC+0x1a)
 	extz	wa                                    ; FC5226  extz WA
 	ld	de, wa                                  ; FC5228  ld DE,WA
 	cp	hl, wa                                  ; FC522A  cp HL,WA
-	jr nc, sub_FC4DBD__FC5230                  ; FC522C  jr NC,0xfc5230
+	jr nc, Dev104_PackStagingStruct__FC5230                  ; FC522C  jr NC,0xfc5230
 	ld	hl, wa                                  ; FC522E  ld HL,WA
-sub_FC4DBD__FC5230:
+Dev104_PackStagingStruct__FC5230:
 	ld	xbc, (xiz-4)                            ; FC5230  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+25)                             ; FC5233  ld A,(XBC+0x19)
 	extz	wa                                    ; FC5236  extz WA
@@ -100635,7 +101117,7 @@ sub_FC4DBD__FC5230:
 	muls	xwa, xde                              ; FC5241  muls XWA,DE
 	sra	wa, 5                                  ; FC5243  sra 0x05,WA
 	ld	(xiz-14), wa                            ; FC5246  ld (XIZ+0xf2),WA
-sub_FC4DBD__FC5249:
+Dev104_PackStagingStruct__FC5249:
 	lda_24	xix, (0xFE0196)                     ; FC5249  lda XIX,0xfe0196
 	ld	xbc, (xiz-4)                            ; FC524E  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+24)                             ; FC5251  ld A,(XBC+0x18)
@@ -100643,12 +101125,12 @@ sub_FC4DBD__FC5249:
 	ld	hl, wa                                  ; FC5256  ld HL,WA
 	ldb_da	d, (0xE088)                         ; FC5258  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC525D  cp WA,0
-	jr nz, sub_FC4DBD__FC5266                  ; FC525F  jr NZ,0xfc5266
+	jr nz, Dev104_PackStagingStruct__FC5266                  ; FC525F  jr NZ,0xfc5266
 	ldw	hl, 0                                  ; FC5261  ld HL,0x0000
-	jr sub_FC4DBD__FC5290                      ; FC5264  jr T,0xfc5290
-sub_FC4DBD__FC5266:
+	jr Dev104_PackStagingStruct__FC5290                      ; FC5264  jr T,0xfc5290
+Dev104_PackStagingStruct__FC5266:
 	cps	hl, 0                                  ; FC5266  cp HL,0
-	jr ge, sub_FC4DBD__FC527B                  ; FC5268  jr GE,0xfc527b
+	jr ge, Dev104_PackStagingStruct__FC527B                  ; FC5268  jr GE,0xfc527b
 	ld	c, d                                    ; FC526A  ld C,D
 	extz	bc                                    ; FC526C  extz BC
 	ldw	wa, 0x7F                               ; FC526E  ld WA,0x007f
@@ -100657,7 +101139,7 @@ sub_FC4DBD__FC5266:
 	ld	bc, hl                                  ; FC5275  ld BC,HL
 	neg	bc                                     ; FC5277  neg BC
 	ld	hl, bc                                  ; FC5279  ld HL,BC
-sub_FC4DBD__FC527B:
+Dev104_PackStagingStruct__FC527B:
 	ld	c, d                                    ; FC527B  ld C,D
 	extz	bc                                    ; FC527D  extz BC
 	extz	xbc                                   ; FC527F  extz XBC
@@ -100668,7 +101150,7 @@ sub_FC4DBD__FC527B:
 	ld	hl, wa                                  ; FC5289  ld HL,WA
 	sra	wa, 5                                  ; FC528B  sra 0x05,WA
 	ld	hl, wa                                  ; FC528E  ld HL,WA
-sub_FC4DBD__FC5290:
+Dev104_PackStagingStruct__FC5290:
 	ld	bc, (xiz-14)                            ; FC5290  ld BC,(XIZ+0xf2)
 	add	bc, hl                                 ; FC5293  add BC,HL
 	ld	(xiz-16), bc                            ; FC5295  ld (XIZ+0xf0),BC
@@ -100690,14 +101172,14 @@ sub_FC4DBD__FC5290:
 	extz	wa                                    ; FC52C6  extz WA
 	ld	de, wa                                  ; FC52C8  ld DE,WA
 	cp	hl, wa                                  ; FC52CA  cp HL,WA
-	jr le, sub_FC4DBD__FC52D2                  ; FC52CC  jr LE,0xfc52d2
+	jr le, Dev104_PackStagingStruct__FC52D2                  ; FC52CC  jr LE,0xfc52d2
 	ld	hl, wa                                  ; FC52CE  ld HL,WA
-	jr sub_FC4DBD__FC52D8                      ; FC52D0  jr T,0xfc52d8
-sub_FC4DBD__FC52D2:
+	jr Dev104_PackStagingStruct__FC52D8                      ; FC52D0  jr T,0xfc52d8
+Dev104_PackStagingStruct__FC52D2:
 	cp	hl, ix                                  ; FC52D2  cp HL,IX
-	jr ge, sub_FC4DBD__FC52D8                  ; FC52D4  jr GE,0xfc52d8
+	jr ge, Dev104_PackStagingStruct__FC52D8                  ; FC52D4  jr GE,0xfc52d8
 	ld	hl, ix                                  ; FC52D6  ld HL,IX
-sub_FC4DBD__FC52D8:
+Dev104_PackStagingStruct__FC52D8:
 	ld	de, hl                                  ; FC52D8  ld DE,HL
 	ldw	bc, 2                                  ; FC52DA  ld BC,0x0002
 	muls	xbc, xde                              ; FC52DD  muls XBC,DE
@@ -100715,19 +101197,19 @@ sub_FC4DBD__FC52D8:
 	ld	hl, (xbc+32)                            ; FC5301  ld HL,(XBC+0x20)
 	ld	wa, hl                                  ; FC5304  ld WA,HL
 	and	wa, 0x8000                             ; FC5306  and WA,0x8000
-	jr z, sub_FC4DBD__FC531F                   ; FC530A  jr Z,0xfc531f
+	jr z, Dev104_PackStagingStruct__FC531F                   ; FC530A  jr Z,0xfc531f
 	ld	wa, hl                                  ; FC530C  ld WA,HL
 	res	15, wa                                 ; FC530E  res 0x0f,WA
 	extz	xwa                                   ; FC5311  extz XWA
 	ld	(xiz-18), xwa                           ; FC5313  ld (XIZ+0xee),XWA
 	ld	xix, 0x8000                             ; FC5316  ld XIX,0x00008000
 	sub	xix, xwa                               ; FC531B  sub XIX,XWA
-	jr sub_FC4DBD__FC5329                      ; FC531D  jr T,0xfc5329
-sub_FC4DBD__FC531F:
+	jr Dev104_PackStagingStruct__FC5329                      ; FC531D  jr T,0xfc5329
+Dev104_PackStagingStruct__FC531F:
 	ld	ix, hl                                  ; FC531F  ld IX,HL
 	extz	xix                                   ; FC5321  extz XIX
 	add	xix, 0x8000                            ; FC5323  add XIX,0x00008000
-sub_FC4DBD__FC5329:
+Dev104_PackStagingStruct__FC5329:
 	ldw_da	bc, (0xE082)                        ; FC5329  ld BC,(0x00e082)
 	extz	xbc                                   ; FC532E  extz XBC
 	ld	a, (xbc+17)                             ; FC5330  ld A,(XBC+0x11)
@@ -100735,14 +101217,14 @@ sub_FC4DBD__FC5329:
 	ld	de, wa                                  ; FC5335  ld DE,WA
 	ld	hl, (xiz-8)                             ; FC5337  ld HL,(XIZ+0xf8)
 	cp	(xiz-8), wa                             ; FC533A  cp (XIZ+0xf8),WA
-	jr le, sub_FC4DBD__FC5343                  ; FC533D  jr LE,0xfc5343
+	jr le, Dev104_PackStagingStruct__FC5343                  ; FC533D  jr LE,0xfc5343
 	ld	hl, wa                                  ; FC533F  ld HL,WA
-	jr sub_FC4DBD__FC534A                      ; FC5341  jr T,0xfc534a
-sub_FC4DBD__FC5343:
+	jr Dev104_PackStagingStruct__FC534A                      ; FC5341  jr T,0xfc534a
+Dev104_PackStagingStruct__FC5343:
 	cps	hl, 0                                  ; FC5343  cp HL,0
-	jr ge, sub_FC4DBD__FC534A                  ; FC5345  jr GE,0xfc534a
+	jr ge, Dev104_PackStagingStruct__FC534A                  ; FC5345  jr GE,0xfc534a
 	ldw	hl, 0                                  ; FC5347  ld HL,0x0000
-sub_FC4DBD__FC534A:
+Dev104_PackStagingStruct__FC534A:
 	ldw	bc, 2                                  ; FC534A  ld BC,0x0002
 	muls	xbc, xhl                              ; FC534D  muls XBC,HL
 	add	xbc, 0xFDF9E0                          ; FC534F  add XBC,0x00fdf9e0
@@ -100758,10 +101240,10 @@ sub_FC4DBD__FC534A:
 	ld	xbc, (xiz-4)                            ; FC536A  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+37)                             ; FC536D  ld A,(XBC+0x25)
 	and	a, 0x80                                ; FC5370  and A,0x80
-	jr z, sub_FC4DBD__FC537C                   ; FC5373  jr Z,0xfc537c
+	jr z, Dev104_PackStagingStruct__FC537C                   ; FC5373  jr Z,0xfc537c
 	ldw (xiz-14), 0x0000                       ; FC5375  ld (XIZ+0xf2),0x0000
-	jr sub_FC4DBD__FC53BF                      ; FC537A  jr T,0xfc53bf
-sub_FC4DBD__FC537C:
+	jr Dev104_PackStagingStruct__FC53BF                      ; FC537A  jr T,0xfc53bf
+Dev104_PackStagingStruct__FC537C:
 	ldw_da	hl, (0xE08A)                        ; FC537C  ld HL,(0x00e08a)
 	sra	hl, 8                                  ; FC5381  sra 0x08,HL
 	ld	xbc, (xiz-4)                            ; FC5384  ld XBC,(XIZ+0xfc)
@@ -100769,18 +101251,18 @@ sub_FC4DBD__FC537C:
 	extz	wa                                    ; FC538A  extz WA
 	ld	de, wa                                  ; FC538C  ld DE,WA
 	cp	hl, wa                                  ; FC538E  cp HL,WA
-	jr ule, sub_FC4DBD__FC5396                 ; FC5390  jr ULE,0xfc5396
+	jr ule, Dev104_PackStagingStruct__FC5396                 ; FC5390  jr ULE,0xfc5396
 	ld	hl, wa                                  ; FC5392  ld HL,WA
-	jr sub_FC4DBD__FC53A6                      ; FC5394  jr T,0xfc53a6
-sub_FC4DBD__FC5396:
+	jr Dev104_PackStagingStruct__FC53A6                      ; FC5394  jr T,0xfc53a6
+Dev104_PackStagingStruct__FC5396:
 	ld	xbc, (xiz-4)                            ; FC5396  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+38)                             ; FC5399  ld A,(XBC+0x26)
 	extz	wa                                    ; FC539C  extz WA
 	ld	de, wa                                  ; FC539E  ld DE,WA
 	cp	hl, wa                                  ; FC53A0  cp HL,WA
-	jr nc, sub_FC4DBD__FC53A6                  ; FC53A2  jr NC,0xfc53a6
+	jr nc, Dev104_PackStagingStruct__FC53A6                  ; FC53A2  jr NC,0xfc53a6
 	ld	hl, wa                                  ; FC53A4  ld HL,WA
-sub_FC4DBD__FC53A6:
+Dev104_PackStagingStruct__FC53A6:
 	ld	xbc, (xiz-4)                            ; FC53A6  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+37)                             ; FC53A9  ld A,(XBC+0x25)
 	extz	wa                                    ; FC53AC  extz WA
@@ -100791,7 +101273,7 @@ sub_FC4DBD__FC53A6:
 	muls	xwa, xde                              ; FC53B7  muls XWA,DE
 	sra	wa, 5                                  ; FC53B9  sra 0x05,WA
 	ld	(xiz-14), wa                            ; FC53BC  ld (XIZ+0xf2),WA
-sub_FC4DBD__FC53BF:
+Dev104_PackStagingStruct__FC53BF:
 	lda_24	xix, (0xFE0196)                     ; FC53BF  lda XIX,0xfe0196
 	ld	xbc, (xiz-4)                            ; FC53C4  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+35)                             ; FC53C7  ld A,(XBC+0x23)
@@ -100799,12 +101281,12 @@ sub_FC4DBD__FC53BF:
 	ld	hl, wa                                  ; FC53CC  ld HL,WA
 	ldb_da	d, (0xE088)                         ; FC53CE  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC53D3  cp WA,0
-	jr nz, sub_FC4DBD__FC53DC                  ; FC53D5  jr NZ,0xfc53dc
+	jr nz, Dev104_PackStagingStruct__FC53DC                  ; FC53D5  jr NZ,0xfc53dc
 	ldw	hl, 0                                  ; FC53D7  ld HL,0x0000
-	jr sub_FC4DBD__FC5406                      ; FC53DA  jr T,0xfc5406
-sub_FC4DBD__FC53DC:
+	jr Dev104_PackStagingStruct__FC5406                      ; FC53DA  jr T,0xfc5406
+Dev104_PackStagingStruct__FC53DC:
 	cps	hl, 0                                  ; FC53DC  cp HL,0
-	jr ge, sub_FC4DBD__FC53F1                  ; FC53DE  jr GE,0xfc53f1
+	jr ge, Dev104_PackStagingStruct__FC53F1                  ; FC53DE  jr GE,0xfc53f1
 	ld	c, d                                    ; FC53E0  ld C,D
 	extz	bc                                    ; FC53E2  extz BC
 	ldw	wa, 0x7F                               ; FC53E4  ld WA,0x007f
@@ -100813,7 +101295,7 @@ sub_FC4DBD__FC53DC:
 	ld	bc, hl                                  ; FC53EB  ld BC,HL
 	neg	bc                                     ; FC53ED  neg BC
 	ld	hl, bc                                  ; FC53EF  ld HL,BC
-sub_FC4DBD__FC53F1:
+Dev104_PackStagingStruct__FC53F1:
 	ld	c, d                                    ; FC53F1  ld C,D
 	extz	bc                                    ; FC53F3  extz BC
 	extz	xbc                                   ; FC53F5  extz XBC
@@ -100824,7 +101306,7 @@ sub_FC4DBD__FC53F1:
 	ld	hl, wa                                  ; FC53FF  ld HL,WA
 	sra	wa, 5                                  ; FC5401  sra 0x05,WA
 	ld	hl, wa                                  ; FC5404  ld HL,WA
-sub_FC4DBD__FC5406:
+Dev104_PackStagingStruct__FC5406:
 	ld	bc, (xiz-14)                            ; FC5406  ld BC,(XIZ+0xf2)
 	add	bc, hl                                 ; FC5409  add BC,HL
 	ld	(xiz-16), bc                            ; FC540B  ld (XIZ+0xf0),BC
@@ -100846,14 +101328,14 @@ sub_FC4DBD__FC5406:
 	extz	wa                                    ; FC543C  extz WA
 	ld	de, wa                                  ; FC543E  ld DE,WA
 	cp	hl, wa                                  ; FC5440  cp HL,WA
-	jr le, sub_FC4DBD__FC5448                  ; FC5442  jr LE,0xfc5448
+	jr le, Dev104_PackStagingStruct__FC5448                  ; FC5442  jr LE,0xfc5448
 	ld	hl, wa                                  ; FC5444  ld HL,WA
-	jr sub_FC4DBD__FC544E                      ; FC5446  jr T,0xfc544e
-sub_FC4DBD__FC5448:
+	jr Dev104_PackStagingStruct__FC544E                      ; FC5446  jr T,0xfc544e
+Dev104_PackStagingStruct__FC5448:
 	cp	hl, ix                                  ; FC5448  cp HL,IX
-	jr ge, sub_FC4DBD__FC544E                  ; FC544A  jr GE,0xfc544e
+	jr ge, Dev104_PackStagingStruct__FC544E                  ; FC544A  jr GE,0xfc544e
 	ld	hl, ix                                  ; FC544C  ld HL,IX
-sub_FC4DBD__FC544E:
+Dev104_PackStagingStruct__FC544E:
 	ld	de, hl                                  ; FC544E  ld DE,HL
 	ldw	bc, 2                                  ; FC5450  ld BC,0x0002
 	muls	xbc, xde                              ; FC5453  muls XBC,DE
@@ -100871,19 +101353,19 @@ sub_FC4DBD__FC544E:
 	ld	hl, (xbc+34)                            ; FC5477  ld HL,(XBC+0x22)
 	ld	wa, hl                                  ; FC547A  ld WA,HL
 	and	wa, 0x8000                             ; FC547C  and WA,0x8000
-	jr z, sub_FC4DBD__FC5495                   ; FC5480  jr Z,0xfc5495
+	jr z, Dev104_PackStagingStruct__FC5495                   ; FC5480  jr Z,0xfc5495
 	ld	wa, hl                                  ; FC5482  ld WA,HL
 	res	15, wa                                 ; FC5484  res 0x0f,WA
 	extz	xwa                                   ; FC5487  extz XWA
 	ld	(xiz-18), xwa                           ; FC5489  ld (XIZ+0xee),XWA
 	ld	xix, 0x8000                             ; FC548C  ld XIX,0x00008000
 	sub	xix, xwa                               ; FC5491  sub XIX,XWA
-	jr sub_FC4DBD__FC549F                      ; FC5493  jr T,0xfc549f
-sub_FC4DBD__FC5495:
+	jr Dev104_PackStagingStruct__FC549F                      ; FC5493  jr T,0xfc549f
+Dev104_PackStagingStruct__FC5495:
 	ld	ix, hl                                  ; FC5495  ld IX,HL
 	extz	xix                                   ; FC5497  extz XIX
 	add	xix, 0x8000                            ; FC5499  add XIX,0x00008000
-sub_FC4DBD__FC549F:
+Dev104_PackStagingStruct__FC549F:
 	ldw_da	bc, (0xE082)                        ; FC549F  ld BC,(0x00e082)
 	extz	xbc                                   ; FC54A4  extz XBC
 	ld	a, (xbc+17)                             ; FC54A6  ld A,(XBC+0x11)
@@ -100891,14 +101373,14 @@ sub_FC4DBD__FC549F:
 	ld	de, wa                                  ; FC54AB  ld DE,WA
 	ld	hl, (xiz-12)                            ; FC54AD  ld HL,(XIZ+0xf4)
 	cp	(xiz-12), wa                            ; FC54B0  cp (XIZ+0xf4),WA
-	jr le, sub_FC4DBD__FC54B9                  ; FC54B3  jr LE,0xfc54b9
+	jr le, Dev104_PackStagingStruct__FC54B9                  ; FC54B3  jr LE,0xfc54b9
 	ld	hl, wa                                  ; FC54B5  ld HL,WA
-	jr sub_FC4DBD__FC54C0                      ; FC54B7  jr T,0xfc54c0
-sub_FC4DBD__FC54B9:
+	jr Dev104_PackStagingStruct__FC54C0                      ; FC54B7  jr T,0xfc54c0
+Dev104_PackStagingStruct__FC54B9:
 	cps	hl, 0                                  ; FC54B9  cp HL,0
-	jr ge, sub_FC4DBD__FC54C0                  ; FC54BB  jr GE,0xfc54c0
+	jr ge, Dev104_PackStagingStruct__FC54C0                  ; FC54BB  jr GE,0xfc54c0
 	ldw	hl, 0                                  ; FC54BD  ld HL,0x0000
-sub_FC4DBD__FC54C0:
+Dev104_PackStagingStruct__FC54C0:
 	ldw	bc, 2                                  ; FC54C0  ld BC,0x0002
 	muls	xbc, xhl                              ; FC54C3  muls XBC,HL
 	add	xbc, 0xFDF9E0                          ; FC54C5  add XBC,0x00fdf9e0
@@ -100914,39 +101396,39 @@ sub_FC4DBD__FC54C0:
 	ld	xbc, (xiz-4)                            ; FC54E0  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+18)                             ; FC54E3  ld A,(XBC+0x12)
 	and	a, 0x80                                ; FC54E6  and A,0x80
-	jr z, sub_FC4DBD__FC5506                   ; FC54E9  jr Z,0xfc5506
+	jr z, Dev104_PackStagingStruct__FC5506                   ; FC54E9  jr Z,0xfc5506
 	ldw_da	wa, (0xE084)                        ; FC54EB  ld WA,(0x00e084)
 	extz	xwa                                   ; FC54F0  extz XWA
 	ld	c, (xwa+40)                             ; FC54F2  ld C,(XWA+0x28)
 	cps	c, 0                                   ; FC54F5  cp C,0
-	jr z, sub_FC4DBD__FC5528                   ; FC54F7  jr Z,0xfc5528
+	jr z, Dev104_PackStagingStruct__FC5528                   ; FC54F7  jr Z,0xfc5528
 	ldw_da	bc, (0xE086)                        ; FC54F9  ld BC,(0x00e086)
 	extz	xbc                                   ; FC54FE  extz XBC
 	ld	(xbc+28), 2                             ; FC5500  ld (XBC+0x1c),0x02
-	jr sub_FC4DBD__FC5533                      ; FC5504  jr T,0xfc5533
-sub_FC4DBD__FC5506:
+	jr Dev104_PackStagingStruct__FC5533                      ; FC5504  jr T,0xfc5533
+Dev104_PackStagingStruct__FC5506:
 	ldw_da	bc, (0xE084)                        ; FC5506  ld BC,(0x00e084)
 	extz	xbc                                   ; FC550B  extz XBC
 	ld	a, (xbc+41)                             ; FC550D  ld A,(XBC+0x29)
 	cps	a, 0                                   ; FC5510  cp A,0
-	jr z, sub_FC4DBD__FC5528                   ; FC5512  jr Z,0xfc5528
+	jr z, Dev104_PackStagingStruct__FC5528                   ; FC5512  jr Z,0xfc5528
 	ld	a, (xbc+40)                             ; FC5514  ld A,(XBC+0x28)
 	cps	a, 0                                   ; FC5517  cp A,0
-	jr z, sub_FC4DBD__FC5528                   ; FC5519  jr Z,0xfc5528
+	jr z, Dev104_PackStagingStruct__FC5528                   ; FC5519  jr Z,0xfc5528
 	ldw_da	wa, (0xE086)                        ; FC551B  ld WA,(0x00e086)
 	extz	xwa                                   ; FC5520  extz XWA
 	ld	(xwa+28), 1                             ; FC5522  ld (XWA+0x1c),0x01
-	jr sub_FC4DBD__FC5533                      ; FC5526  jr T,0xfc5533
-sub_FC4DBD__FC5528:
+	jr Dev104_PackStagingStruct__FC5533                      ; FC5526  jr T,0xfc5533
+Dev104_PackStagingStruct__FC5528:
 	ldw_da	bc, (0xE086)                        ; FC5528  ld BC,(0x00e086)
 	extz	xbc                                   ; FC552D  extz XBC
 	ld	(xbc+28), 0                             ; FC552F  ld (XBC+0x1c),0x00
-sub_FC4DBD__FC5533:
+Dev104_PackStagingStruct__FC5533:
 	ldw_da	bc, (0xE086)                        ; FC5533  ld BC,(0x00e086)
 	extz	xbc                                   ; FC5538  extz XBC
 	ld	a, (xbc+28)                             ; FC553A  ld A,(XBC+0x1c)
 	cps	a, 2                                   ; FC553D  cp A,2
-	jr nz, sub_FC4DBD__FC559C                  ; FC553F  jr NZ,0xfc559c
+	jr nz, Dev104_PackStagingStruct__FC559C                  ; FC553F  jr NZ,0xfc559c
 	ei	6                                       ; FC5541  ei 0x06
 	ldw_da	hl, (0xF2F3)                        ; FC5543  ld HL,(0x00f2f3)
 	and	hl, 0x1FF                              ; FC5548  and HL,0x01ff
@@ -100978,8 +101460,8 @@ sub_FC4DBD__FC5533:
 	ldw_da	bc, (0xE086)                        ; FC5590  ld BC,(0x00e086)
 	extz	xbc                                   ; FC5595  extz XBC
 	ld	(xbc+33), wa                            ; FC5597  ld (XBC+0x21),WA
-	jr sub_FC4DBD__FC55E0                      ; FC559A  jr T,0xfc55e0
-sub_FC4DBD__FC559C:
+	jr Dev104_PackStagingStruct__FC55E0                      ; FC559A  jr T,0xfc55e0
+Dev104_PackStagingStruct__FC559C:
 	ldw_da	bc, (0xE084)                        ; FC559C  ld BC,(0x00e084)
 	extz	xbc                                   ; FC55A1  extz XBC
 	ld	a, (xbc+40)                             ; FC55A3  ld A,(XBC+0x28)
@@ -101000,7 +101482,7 @@ sub_FC4DBD__FC559C:
 	ldw_da	bc, (0xE086)                        ; FC55D4  ld BC,(0x00e086)
 	extz	xbc                                   ; FC55D9  extz XBC
 	extpfx5 0xB9, 0x21, 0x02, 0x00, 0x00       ; FC55DB  ld (XBC+0x21),0x0000
-sub_FC4DBD__FC55E0:
+Dev104_PackStagingStruct__FC55E0:
 	lda_24	xix, (0xFE0096)                     ; FC55E0  lda XIX,0xfe0096
 	ld	xbc, (xiz-4)                            ; FC55E5  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+16)                             ; FC55E8  ld A,(XBC+0x10)
@@ -101008,12 +101490,12 @@ sub_FC4DBD__FC55E0:
 	ld	hl, wa                                  ; FC55ED  ld HL,WA
 	ldb_da	d, (0xE088)                         ; FC55EF  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC55F4  cp WA,0
-	jr nz, sub_FC4DBD__FC55FD                  ; FC55F6  jr NZ,0xfc55fd
+	jr nz, Dev104_PackStagingStruct__FC55FD                  ; FC55F6  jr NZ,0xfc55fd
 	ldw	hl, 0                                  ; FC55F8  ld HL,0x0000
-	jr sub_FC4DBD__FC5627                      ; FC55FB  jr T,0xfc5627
-sub_FC4DBD__FC55FD:
+	jr Dev104_PackStagingStruct__FC5627                      ; FC55FB  jr T,0xfc5627
+Dev104_PackStagingStruct__FC55FD:
 	cps	hl, 0                                  ; FC55FD  cp HL,0
-	jr ge, sub_FC4DBD__FC5612                  ; FC55FF  jr GE,0xfc5612
+	jr ge, Dev104_PackStagingStruct__FC5612                  ; FC55FF  jr GE,0xfc5612
 	ld	c, d                                    ; FC5601  ld C,D
 	extz	bc                                    ; FC5603  extz BC
 	ldw	wa, 0x7F                               ; FC5605  ld WA,0x007f
@@ -101022,7 +101504,7 @@ sub_FC4DBD__FC55FD:
 	ld	bc, hl                                  ; FC560C  ld BC,HL
 	neg	bc                                     ; FC560E  neg BC
 	ld	hl, bc                                  ; FC5610  ld HL,BC
-sub_FC4DBD__FC5612:
+Dev104_PackStagingStruct__FC5612:
 	ld	c, d                                    ; FC5612  ld C,D
 	extz	bc                                    ; FC5614  extz BC
 	extz	xbc                                   ; FC5616  extz XBC
@@ -101033,7 +101515,7 @@ sub_FC4DBD__FC5612:
 	ld	hl, wa                                  ; FC5620  ld HL,WA
 	sra	wa, 5                                  ; FC5622  sra 0x05,WA
 	ld	hl, wa                                  ; FC5625  ld HL,WA
-sub_FC4DBD__FC5627:
+Dev104_PackStagingStruct__FC5627:
 	ldw_da	bc, (0xE086)                        ; FC5627  ld BC,(0x00e086)
 	extz	xbc                                   ; FC562C  extz XBC
 	ld	(xbc+18), hl                            ; FC562E  ld (XBC+0x12),HL
@@ -101041,19 +101523,19 @@ sub_FC4DBD__FC5627:
 	extz	xbc                                   ; FC5636  extz XBC
 	ld	hl, (xbc+18)                            ; FC5638  ld HL,(XBC+0x12)
 	cps	hl, 0                                  ; FC563B  cp HL,0
-	jr ge, sub_FC4DBD__FC564B                  ; FC563D  jr GE,0xfc564b
+	jr ge, Dev104_PackStagingStruct__FC564B                  ; FC563D  jr GE,0xfc564b
 	ld	wa, hl                                  ; FC563F  ld WA,HL
 	neg	wa                                     ; FC5641  neg WA
 	sra	wa, 2                                  ; FC5643  sra 0x02,WA
 	ld	(xbc+20), wa                            ; FC5646  ld (XBC+0x14),WA
-	jr sub_FC4DBD__FC565A                      ; FC5649  jr T,0xfc565a
-sub_FC4DBD__FC564B:
+	jr Dev104_PackStagingStruct__FC565A                      ; FC5649  jr T,0xfc565a
+Dev104_PackStagingStruct__FC564B:
 	ld	bc, hl                                  ; FC564B  ld BC,HL
 	sra	bc, 2                                  ; FC564D  sra 0x02,BC
 	ldw_da	wa, (0xE086)                        ; FC5650  ld WA,(0x00e086)
 	extz	xwa                                   ; FC5655  extz XWA
 	ld	(xwa+20), bc                            ; FC5657  ld (XWA+0x14),BC
-sub_FC4DBD__FC565A:
+Dev104_PackStagingStruct__FC565A:
 	ldw_da	bc, (0xE084)                        ; FC565A  ld BC,(0x00e084)
 	extz	xbc                                   ; FC565F  extz XBC
 	ld	wa, (xbc+32)                            ; FC5661  ld WA,(XBC+0x20)
@@ -101149,7 +101631,7 @@ sub_FC56C4__FC5714:
 	unlk32 xiz                                 ; FC5717  unlk XIZ
 	ret                                        ; FC5719  ret
 ; --------------------------------------------------------------------------
-; sub_FC571A -- 0xFC571A..0xFC578B (114 bytes)
+; Dev104_LoadStageBImage -- 0xFC571A..0xFC578B (114 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFAC3E1 in sub_FAC34D, 0xFB1F42 in VoiceRegs_Stage_B
@@ -101164,10 +101646,28 @@ sub_FC56C4__FC5714:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ ROUND 6 ------------------------------------------------------------
+; ★ Dev104_LoadStageBImage -- and the finding that goes with it:
+;          VoiceRegs_Stage_B NEVER RUNS THE 0x00104000 PACKER.  Stage_A, Stage_C and Stage_D
+;          all call Dev104_PackStagingStruct; Stage_B calls this instead, at 0xFB1F42, with the
+;          same struct pointer 0x00D7A2.
+;          It zeroes four fields of the record at (0x00E086) (+5, +8, +0x0A, +0x1C), block-
+;          copies 38 bytes = 19 words from Dev104_StagingStruct_StageBImage (0xFE1315) through
+;          MemCopyWords (`push 0x0026` at 0xFC5751, `call 0xF9A038` at 0xFC575B), and then
+;          patches five fields of the struct:
+;          (+0x00) = (0x00E086)[+7] << 8      0xFC576E
+;          (+0x0A) = 0x05A8                   0xFC5770
+;          (+0x0C) = 0x05A8                   0xFC5775
+;          (+0x14) = 0x8000                   0xFC577F
+;          (+0x16) = 0xFF00                   0xFC577A
+;          Evidence: `python3 notes/prom_c_understanding_round6.py --packer` asserts the
+;          packer/loader split across all four VoiceRegs_Stage_* routines, the copy count, and
+;          that exactly five fields are patched.
+;          ⚠ WHAT THIS IS WORTH TO THE EMULATOR: on the Stage_B path the nineteen 0x00104000
+;          registers of a voice are a CONSTANT image plus five patched words, not a computed
+;          packing.  Unknown: what selects the Stage_B path.
 ; --------------------------------------------------------------------------
-sub_FC571A:
+Dev104_LoadStageBImage:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC571A  link XIZ,0x0000
 	push	xix                                   ; FC571E  push XIX
 	ld	xix, (xiz+8)                            ; FC571F  ld XIX,(XIZ+0x08)
@@ -105954,7 +106454,7 @@ sub_FC7F7A__FC7FB4:
 ; sub_FC7FCA -- 0xFC7FCA..0xFC810B (322 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFA844F in sub_FA842D, 0xFA9760 in Voice_StageRegs_CD
+;          0xFA844F in Voice_StageRegs_0900_0940_0980_AB, 0xFA9760 in Voice_StageRegs_CD
 ;          0xFADD69 in sub_FADD29__FADD3B
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
@@ -125713,7 +126213,7 @@ Dev10C_StagingStruct_ResetImage:
 Dev104_Reg0800_ResetValue:
 	.short	0x1100			; 0xFE1313
 ; ------------------------------------------------------------------------------
-; unexplained_FE1315 -- 0xFE1315, 38 bytes = 19 words.  NOT NAMED.
+; Dev104_StagingStruct_StageBImage -- 0xFE1315, 38 bytes = 19 words.  NOT NAMED.
 ;
 ; Same size and same shape as Dev104_StagingStruct_ResetImage below -- 19 words, four
 ; of them repeated in pairs -- and it is cited once, at 0xFC5755
@@ -125721,8 +126221,27 @@ Dev104_Reg0800_ResetValue:
 ; is Dev104_Reg0800_ResetValue and the object after it is the 38-byte block
 ; Dev10C_ResetAllChannels copies.  ⚠ Nothing establishes that it is a staging image
 ; for the same device, so it keeps its address for a name.
+; ★ ROUND 6 ------------------------------------------------------------
+; ★ Dev104_StagingStruct_StageBImage -- 0xFE1315,
+;          38 bytes = NINETEEN 16-bit words, and 19 is the number of registers
+;          Dev104_WriteAllChanRegs writes from 19 consecutive words of the 0x00104000 staging
+;          struct.  Dev104_LoadStageBImage block-copies it there (`push 0x0026` at 0xFC5751,
+;          `lda XBC,0xfe1315` at 0xFC5755, `call 0xF9A038` = MemCopyWords at 0xFC575B) on the
+;          VoiceRegs_Stage_B path, which does not run the packer at all.
+;          It ends exactly where Dev104_StagingStruct_ResetImage (0xFE133B) begins -- two
+;          19-word images of the same struct, back to back, one loaded per note by Stage_B and
+;          one loaded per channel by Dev10C_ResetAllChannels.  ⚠ THEY ARE NOT TWINS: 15 of the
+;          19 words differ (the first draft of this round's check guessed "one" and the check
+;          caught it).  Nine of this image's words are ZERO where the reset image has a value,
+;          and FOUR of those nine -- words 5, 6, 10 and 11 -- are exactly the words
+;          Dev104_LoadStageBImage patches after the copy, so the ROM image is deliberately
+;          incomplete and the loader finishes it.
+;          ⚠ WAS `unexplained_FE1315`.  The count 19 and the copy are instruction operands;
+;          `python3 notes/prom_c_understanding_round6.py --packer` asserts both, and that the
+;          object abuts the reset image.
+;          Unknown: what any of the nineteen words means -- the same gap the reset image has.
 ; ------------------------------------------------------------------------------
-unexplained_FE1315:
+Dev104_StagingStruct_StageBImage:
 	.short	0x0004			; 0xFE1315  word  0
 	.short	0x0000			; 0xFE1317  word  1
 	.short	0x0000			; 0xFE1319  word  2
@@ -126514,12 +127033,12 @@ Dev104_Reg0800_ResetValue_B:
 	.short	0x1100   ; 0xFE1F3E
 
 ; ----------------------------------------------------------------------------
-; unexplained_FE1315_B -- 0xFE1F40-0xFE1F65  (38 bytes)
+; Dev104_StagingStruct_StageBImage_B -- 0xFE1F40-0xFE1F65  (38 bytes)
 ;
-; Byte-identical to unexplained_FE1315 (0xFE1315), 38 bytes, except 0 byte(s).
+; Byte-identical to Dev104_StagingStruct_StageBImage (0xFE1315), 38 bytes, except 0 byte(s).
 ; Copy-B address = copy-A address + 0xC2B.
 ; ----------------------------------------------------------------------------
-unexplained_FE1315_B:
+Dev104_StagingStruct_StageBImage_B:
 	.short	0x0004, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000   ; 0xFE1F40
 	.short	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0xE150, 0xE150, 0xE150   ; 0xFE1F50
 	.short	0xD71B, 0xD71B, 0xD71B   ; 0xFE1F60

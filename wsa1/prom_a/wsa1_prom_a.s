@@ -84,7 +84,7 @@
 ;                            of the 25 have no reference anywhere
 ;   0xF842DF-0xF84C6B  2445  the INSTANCE BANK: 15 groups of 11 veneers over 14
 ;                            distinct rings, 126 of them published through the
-;                            prom_b directory module T_F41CD0
+;                            prom_b directory module T_Ring608A0A_Get (T_F41CD0)
 ;                            (notes/FINDINGS-prom_a-ring-buffers.md)
 ;   0xF8BC00-0xF8BF21   802  the ASCII numeric field -- parse, format, clear --
 ;                            and SignedNibbleDelta_Table, 32 bytes of signed
@@ -94,7 +94,7 @@
 ;                            prom_a: 329 references into 131 bytes
 ;   0xF8DC00-0xF8DDE5   486  the ANALOGUE CONTROL SCAN: four A/D channels and
 ;                            two software ones, one deadband filter.  ⚠ EIGHT
-;                            call sites of T_F405F0 for SIX channels: two of its
+;                            call sites of T_Ctrl_Normalise (T_F405F0) for SIX channels: two of its
 ;                            routines are emitted twice, byte for byte
 ;   0xF89800-0xF89FBE  1983  ★★ the CONTINUOUS-CONTROL NORMALISER -- the routine
 ;                            emulation gap E.3 asks about.  A 32-slot dispatcher
@@ -858,7 +858,7 @@ wsa1_prom_a:
 ;   (0x0DBC), (0x0DDA) and (0x0C0F) in that order.
 ; Evidence: the eight sites of `ld XIY,imm32 / ld XIY,(XIY+WA)` in the whole of
 ;   prom_a are censused by notes/prom_a_boot_checks.py; five are here and their
-;   tables are these five.  T_F42E20 -> prom_b 0xF0E9CF is `Blink_Command`
+;   tables are these five.  T_Blink_Command (T_F42E20) -> prom_b 0xF0E9CF is `Blink_Command`
 ;   (notes/FINDINGS-prom_b-field-blink.md), which takes one pushed pointer.
 ; ENTRY COUNTS 5, 6, 7, 7 and 3, and how they are established: read LE32 words
 ;   from the base until one is neither 0 nor an address inside 0xF00000-0xFFFFFF.
@@ -1153,7 +1153,7 @@ sub_F80220:
 ; Read by: ONE site, `ld XIY,0x00F8024D / ld XIY,(XIY+WA)` at 0xF8023B-0xF80244.
 ; Inputs:  WA = (0x0DE5) * 4  (`ld A,(0x0de5) / sla 0x02,XWA` at 0xF8022F).
 ; Outputs: the selected pointer is pushed and handed to prom_b's Blink_Command
-;          (`call 0xf42e20`, T_F42E20 -> 0xF0E9CF).
+;          (`call 0xf42e20`, T_Blink_Command (T_F42E20) -> 0xF0E9CF).
 ; ENTRY COUNT 5: words 0..4 are 0, 0, 0x00F3B388, 0x00F3B392, 0x00F3B39C; word 5
 ;          is 0xF42E801D, which is the `call 0xF42E80` the code resumes with.
 ;          ★ LAST-ENTRY TEST: 0xF8024D + 5*4 = 0xF80261 = that instruction.
@@ -2577,7 +2577,7 @@ Paint_S0ngSelectName:
 .LF80E69:
 	call sub_F8147D                                      ; F80E69  1d 7d 14 f8
 	call sub_F80E9B                                      ; F80E6D  1d 9b 0e f8
-	call sub_F8165E                                      ; F80E71  1d 5e 16 f8
+	call SongName_Draw6Chars                                      ; F80E71  1d 5e 16 f8
 	stdi8 (0x2540), 0x01                                 ; F80E75  f1 40 25 00 01
 	ld XIY,0x00f3c351                                    ; F80E7A  45 51 c3 f3 00
 	ld XIX,0x00f3c35c                                    ; F80E7F  44 5c c3 f3 00
@@ -3405,7 +3405,7 @@ sub_F815D6:
 	ldb_d8 a, (0x21f9)                                   ; F815F5  c1 f9 21 21
 	stb_d8 (0x1302), a                                   ; F815F9  f1 02 13 41
 	stdi8 (0x2540), 0x00                                 ; F815FD  f1 40 25 00 00
-	call sub_F8165E                                      ; F81602  1d 5e 16 f8
+	call SongName_Draw6Chars                                      ; F81602  1d 5e 16 f8
 	stdi8 (0x2540), 0x01                                 ; F81606  f1 40 25 00 01
 	ld XIY,0x00f3c35c                                    ; F8160B  45 5c c3 f3 00
 	ld XIX,0x00f3c367                                    ; F81610  44 67 c3 f3 00
@@ -3422,13 +3422,30 @@ sub_F8161A:
 	ldb_d8 a, (0x21f9)                                   ; F81639  c1 f9 21 21
 	stb_d8 (0x1302), a                                   ; F8163D  f1 02 13 41
 	stdi8 (0x2540), 0x00                                 ; F81641  f1 40 25 00 00
-	call sub_F8165E                                      ; F81646  1d 5e 16 f8
+	call SongName_Draw6Chars                                      ; F81646  1d 5e 16 f8
 	stdi8 (0x2540), 0x01                                 ; F8164A  f1 40 25 00 01
 	ld XIY,0x00f3c35c                                    ; F8164F  45 5c c3 f3 00
 	ld XIX,0x00f3c367                                    ; F81654  44 67 c3 f3 00
 	call 0xf4181c                                        ; F81659  1d 1c 18 f4
 	ret                                                  ; F8165D  0e
-sub_F8165E:
+; ---------------------------------------------------------------------
+; SongName_Draw6Chars -- draw the six-character name buffer at 0x6034CA
+;
+; Called from: prom_a Paint_S0ngSelectName (`call`) at 0xF80E71
+;          prom_a sub_F815D6 (`call`) at 0xF81602
+;          prom_a sub_F8161A (`call`) at 0xF81646
+; Issues:  SWI7 service 0x08 at 0xF8166E -- LCD_Svc_08_DrawText16x16, draw 16x16 text
+; Evidence: `ld HL,0x0000` + `ld BC,0x0006` + `ld XIY,0x006034CA` + `ld IX,0x0998` +
+;           service 0x08, the 16x16 text service, so it draws six characters from that
+;           buffer at screen offset 0x998.  The buffer is six bytes wide because
+;           SongName_ResetToUnderscores fills it with the six ROM bytes at 0xF81948,
+;           which are `5F 5F 5F 5F 5F 5F` = `______`, and the 37 characters that can
+;           stand in it are CharSet_F81768 = `_` + `A`-`Z` + `0`-`9`.  `Song` is the
+;           ROM's own word: this routine's caller at 0xF80E71 is Paint_S0ngSelectName.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+SongName_Draw6Chars:
 	ldw hl, 0x00                                         ; F8165E  33 00 00
 	ldw bc, 0x06                                         ; F81661  31 06 00
 	ld XIY,0x006034ca                                    ; F81664  45 ca 34 60 00
@@ -3457,7 +3474,7 @@ sub_F81670:
 	ld XIY,0x00f3c367                                    ; F81675  45 67 c3 f3 00
 	ld XIX,0x00f3c372                                    ; F8167A  44 72 c3 f3 00
 	call 0xf417f4                                        ; F8167F  1d f4 17 f4
-	call sub_F818EA                                      ; F81683  1d ea 18 f8
+	call SongName_ResetToUnderscores                                      ; F81683  1d ea 18 f8
 	ret                                                  ; F81687  0e
 sub_F81688:
 	ldb_d8 l, (0x222d)                                   ; F81688  c1 2d 22 27
@@ -3670,7 +3687,19 @@ sub_F81812:
 	call 0xf40ac8                                        ; F818E0  1d c8 0a f4
 	m_and_mi8 MB16, 0x360b, 0xfe                         ; F818E4  c1 0b 36 3c fe
 	ret                                                  ; F818E9  0e
-sub_F818EA:
+; ---------------------------------------------------------------------
+; SongName_ResetToUnderscores -- blank all three copies of the six-character name buffer
+;
+; Called from: prom_a sub_F81670 (`call`) at 0xF81683
+; Evidence: three `ldir` runs of BC = 6 from the same source 0xF81948 (`______`) to
+;           0x006034CA, to 0x00610000 + ((0x360A) << 11) + ((0x360A) << 10) + 0xCA, and
+;           to 0x0012F6.  The destinations are read straight off the three `ld XIX`
+;           sequences; that the second is indexed by (0x360A) is why this routine, and
+;           not the drawer, is where the buffer's aliases are visible.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+SongName_ResetToUnderscores:
 	ld XIX,0x006034ca                                    ; F818EA  44 ca 34 60 00
 	ld XIY,0x00f81948                                    ; F818EF  45 48 19 f8 00
 	ldw bc, 0x06                                         ; F818F4  31 06 00
@@ -4167,7 +4196,7 @@ Paint_StepRecordTrackClrMeas:
 	ld XIY,0x00f3dc00                                    ; F81DE8  45 00 dc f3 00
 	ld XIX,0x00f3dc21                                    ; F81DED  44 21 dc f3 00
 	call 0xf417f4                                        ; F81DF2  1d f4 17 f4
-	calr sub_F81E17                                      ; F81DF6  1e 1e 00
+	calr LCD_DrawEndOrClear                                      ; F81DF6  1e 1e 00
 .LF81DF9:
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81DF9  c0 c6 3c fe
 	ret                                                  ; F81DFD  0e
@@ -4186,7 +4215,21 @@ sub_F81DFE:
 	pop XIX                                              ; F81E14  5c
 	pop XIY                                              ; F81E15  5d
 	ret                                                  ; F81E16  0e
-sub_F81E17:
+; ---------------------------------------------------------------------
+; LCD_DrawEndOrClear -- draw END on layer 2, or clear the three blocks it would stand in
+;
+; Called from: prom_a Paint_StepRecordTrackClrMeas (`calr`) at 0xF81DF6
+; Issues:  SWI7 service 0x06 at 0xF81E4E -- LCD_Svc_06_DrawText8x14, draw 8x14 text
+; Evidence: the arm at 0xF81E4E is `ld (0x2540),0x02` + `ld XIY,0x00F81E79` +
+;           `ld BC,0x0003` + service 0x06, and the three ROM bytes at 0xF81E79 are
+;           `45 4E 44` = `END` (checked by --selftest).  The other arm calls
+;           LCD_ClearLayer2_32Cols10Rows three times, with IY = 0x0821, 0x0F29 and
+;           0x1631.  Which arm runs is decided by (0x1075) and (0x1076) both being
+;           non-zero; what those two counters COUNT is not established.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_DrawEndOrClear:
 	m_cp_mi8 MB16, 0x1075, 0x00                          ; F81E17  c1 75 10 3f 00
 	jr z, .LF81E51                                       ; F81E1C  66 33
 	ld XIX,0x00000820                                    ; F81E1E  44 20 08 00 00
@@ -4209,14 +4252,25 @@ sub_F81E17:
 	jr .LF81E69                                          ; F81E4F  68 18
 .LF81E51:
 	ld XIY,0x00000821                                    ; F81E51  45 21 08 00 00
-	calr sub_F81E6A                                      ; F81E56  1e 11 00
+	calr LCD_ClearLayer2_32Cols10Rows                                      ; F81E56  1e 11 00
 	ld XIY,0x00000f29                                    ; F81E59  45 29 0f 00 00
-	calr sub_F81E6A                                      ; F81E5E  1e 09 00
+	calr LCD_ClearLayer2_32Cols10Rows                                      ; F81E5E  1e 09 00
 	ld XIY,0x00001631                                    ; F81E61  45 31 16 00 00
-	calr sub_F81E6A                                      ; F81E66  1e 01 00
+	calr LCD_ClearLayer2_32Cols10Rows                                      ; F81E66  1e 01 00
 .LF81E69:
 	ret                                                  ; F81E69  0e
-sub_F81E6A:
+; ---------------------------------------------------------------------
+; LCD_ClearLayer2_32Cols10Rows -- zero a 32-column by 10-row block of layer 2 at the caller's IY
+;
+; Called from: prom_a LCD_DrawEndOrClear (`calr`) at 0xF81E56, 0xF81E5E, 0xF81E66
+; Issues:  SWI7 service 0x0E at 0xF81E77 -- LCD_Svc_0E_ClearColumns, zero BC columns x HL bytes at IY in the current layer
+; Evidence: `ld (0x2540),0x02`, `ld BC,0x0020`, `ld HL,0x000A`, service 0x0E.  IY is NOT
+;           loaded anywhere in the body, so the block's position is the caller's and
+;           only its SIZE is fixed here: 32 byte-columns = 256 pixels wide, 10 rows.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ClearLayer2_32Cols10Rows:
 	stdi8 (0x2540), 0x02                                 ; F81E6A  f1 40 25 00 02
 	ldw bc, 0x20                                         ; F81E6F  31 20 00
 	ldw hl, 0x0a                                         ; F81E72  33 0a 00
@@ -4708,13 +4762,13 @@ sub_F823AB:
 ; Queue2C00_DrainPassAB -- run pass A and pass B over the 0x2C00 event
 ;                           queue, then empty it
 ;
-; Called from: prom_b directory slot T_F40018.
+; Called from: prom_b directory slot T_Queue2C00_DrainPassAB (T_F40018).
 ; Body:    return at once when (0x2C00) is already 0xFF (empty).
 ;          Otherwise `call 0xf40f5c` and `call 0xf40f60`, then write 0xFF
 ;          to 0x2C00 and zero the cursor (0x60F000).
 ; Evidence: `cp (0x2c00),0xff` at 0xF823AC; `call 0xf40f5c` at 0xF823B3 and
 ;          `call 0xf40f60` at 0xF823B7, and prom_b's directory says
-;          T_F40F5C is UiEventList_RunPassA (0xF8697E) and T_F40F60 is
+;          T_UiEventList_RunPassA (T_F40F5C) is UiEventList_RunPassA (0xF8697E) and T_UiEventList_RunPassB (T_F40F60) is
 ;          UiEventList_RunPassB (0xF8699D) -- both already named, both
 ;          setting (0x20AD) to 0x2C00, i.e. running over THIS queue.
 ;          `ld (0x2c00),0xff` at 0xF823BB and `ld (0x60f000),0x0000` at
@@ -4732,7 +4786,7 @@ Queue2C00_DrainPassAB:
 ; ---------------------------------------------------------------------
 ; Queue2C00_DrainPassB -- the same, running pass B ONLY
 ;
-; Called from: prom_b directory slot T_F40038.
+; Called from: prom_b directory slot T_Queue2C00_DrainPassB (T_F40038).
 ; ★ BORROWED SHAPE, WITH THE DIFF: 0xF823AC and 0xF823C8 do the same four
 ;          things and 0xF823C8 omits ONE call.  They are 28 and 24 bytes;
 ;          the difference is the four bytes `1d 5c 0f f4` (`call 0xf40f5c`,
@@ -5762,10 +5816,10 @@ sub_F82A28:
 ; display-list records, and the three labels that name prom_a, prom_c and prom_d
 ;
 ; Read by: THREE sites, all in VersionScreen_Show:
-;          0xF82AB5-0xF82AC1  (start 0xF82B03, end 0xF82B6C) -> T_F42E00
-;          0xF82AD0-0xF82AE8  (start 0xF82B6C, end 0xF82B9F) -> T_F42E04
-;          0xF82ADC-0xF82AE8  (start 0xF82B7D, end 0xF82BB0) -> T_F42E04
-;          T_F42E00 -> prom_b 0xF31800 and T_F42E04 -> 0xF31814 are the two
+;          0xF82AB5-0xF82AC1  (start 0xF82B03, end 0xF82B6C) -> T_DisplayList_Run_Stack (T_F42E00)
+;          0xF82AD0-0xF82AE8  (start 0xF82B6C, end 0xF82B9F) -> T_DisplayListB_Run_Stack (T_F42E04)
+;          0xF82ADC-0xF82AE8  (start 0xF82B7D, end 0xF82BB0) -> T_DisplayListB_Run_Stack (T_F42E04)
+;          T_DisplayList_Run_Stack (T_F42E00) -> prom_b 0xF31800 and T_DisplayListB_Run_Stack (T_F42E04) -> 0xF31814 are the two
 ;          display-list draw entries (notes/FINDINGS-ui-display-list.md).
 ; Layout:  the (opcode, length) record format of that note.  The ASCII in it,
 ;          in order: "ROM VERSION", "WSA-A:", "WSA-C:", "WSA-D:",
@@ -6648,7 +6702,7 @@ PowerFail_Checksum512__loop:
 ;   0xF84C6C-0xF855FF  2452  0x0E pad
 ;
 ; Why this span and not another: notes/prom_a_call_graph.py --modules ranks the
-; prom_b directory module T_F41CD0-T_F41EC4 (126 slots, reference upper bound
+; prom_b directory module T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (126 slots, reference upper bound
 ; 245) as the largest heavily-referenced prom_a module still unconverted, and
 ; all 126 of its slots land in 0xF842DF-0xF84BBC.
 ;
@@ -6808,8 +6862,8 @@ INTTR4_SequencerTick_Alt:
 ; Dev7F_WriteSlot8_Slot0 .. _Slot3, and Dev7F_WriteSlot8 -- the driver for the
 ; 0x7F0000 address/data register pair
 ;
-; Called from: the four entries are prom_b directory slots T_F40004, T_F40008,
-;          T_F4000C and T_F40010 (notes/prom_a_xref.py on each).  The common
+; Called from: the four entries are prom_b directory slots T_Dev7F_WriteSlot8_Slot0 (T_F40004), T_Dev7F_WriteSlot8_Slot1 (T_F40008),
+;          T_Dev7F_WriteSlot8_Slot2 (T_F4000C) and T_Dev7F_WriteSlot8_Slot3 (T_F40010) (notes/prom_a_xref.py on each).  The common
 ;          body 0xF83197 is named by five PC-relative `calr` sites and nothing
 ;          else -- 0xF8318F, and the four inside sub_F831B3 -- re-derived by
 ;          notes/prom_a_ringbuf_map.py.
@@ -7440,10 +7494,10 @@ Ring_Init_1000:
 ; ---------------------------------------------------------------------
 ; Ring608A0A_Get and its group -- the eleven veneers of ring 0x608A0A
 ;
-; Called from: prom_b directory slot T_F41CD0 (`jp 0xf842df`), which is the ONLY
+; Called from: prom_b directory slot T_Ring608A0A_Get (T_F41CD0) (`jp 0xf842df`), which is the ONLY
 ;          slot naming this veneer; 6 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -7546,10 +7600,10 @@ Ring608A0A_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring60480A_Get and its group -- the eleven veneers of ring 0x60480A
 ;
-; Called from: prom_b directory slot T_F41CF4 (`jp 0xf84382`), which is the ONLY
+; Called from: prom_b directory slot T_Ring60480A_Get (T_F41CF4) (`jp 0xf84382`), which is the ONLY
 ;          slot naming this veneer; 1 call site reaches that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -7652,10 +7706,10 @@ Ring60480A_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring601B64_Get and its group -- the eleven veneers of ring 0x601B64
 ;
-; Called from: prom_b directory slot T_F41D3C (`jp 0xf84425`), which is the ONLY
+; Called from: prom_b directory slot T_Ring601B64_Get (T_F41D3C) (`jp 0xf84425`), which is the ONLY
 ;          slot naming this veneer; 0 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -7758,10 +7812,10 @@ Ring601B64_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring60000C_Get and its group -- the eleven veneers of ring 0x60000C
 ;
-; Called from: prom_b directory slot T_F41E80 (`jp 0xf844c8`), which is the ONLY
+; Called from: prom_b directory slot T_Ring60000C_Get (T_F41E80) (`jp 0xf844c8`), which is the ONLY
 ;          slot naming this veneer; 1 call site reaches that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -7864,10 +7918,10 @@ Ring60000C_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring60080A_Get and its group -- the eleven veneers of ring 0x60080A
 ;
-; Called from: prom_b directory slot T_F41D60 (`jp 0xf8456b`), which is the ONLY
+; Called from: prom_b directory slot T_Ring60080A_Get (T_F41D60) (`jp 0xf8456b`), which is the ONLY
 ;          slot naming this veneer; 1 call site reaches that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -7970,10 +8024,10 @@ Ring60080A_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring600A14_Get and its group -- the eleven veneers of ring 0x600A14
 ;
-; Called from: prom_b directory slot T_F41D84 (`jp 0xf8460e`), which is the ONLY
+; Called from: prom_b directory slot T_Ring600A14_Get (T_F41D84) (`jp 0xf8460e`), which is the ONLY
 ;          slot naming this veneer; 48 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8076,10 +8130,10 @@ Ring600A14_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring600C1E_Get and its group -- the eleven veneers of ring 0x600C1E
 ;
-; Called from: prom_b directory slot T_F41DA8 (`jp 0xf846b1`), which is the ONLY
+; Called from: prom_b directory slot T_Ring600C1E_Get (T_F41DA8) (`jp 0xf846b1`), which is the ONLY
 ;          slot naming this veneer; 0 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8182,10 +8236,10 @@ Ring600C1E_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring601028_Get and its group -- the eleven veneers of ring 0x601028
 ;
-; Called from: prom_b directory slot T_F41DCC (`jp 0xf84754`), which is the ONLY
+; Called from: prom_b directory slot T_Ring601028_Get (T_F41DCC) (`jp 0xf84754`), which is the ONLY
 ;          slot naming this veneer; 0 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8288,10 +8342,10 @@ Ring601028_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring601432_Get and its group -- the eleven veneers of ring 0x601432
 ;
-; Called from: prom_b directory slot T_F41DF0 (`jp 0xf847f7`), which is the ONLY
+; Called from: prom_b directory slot T_Ring601432_Get (T_F41DF0) (`jp 0xf847f7`), which is the ONLY
 ;          slot naming this veneer; 1 call site reaches that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8394,10 +8448,10 @@ Ring601432_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring60153C_Get and its group -- the eleven veneers of ring 0x60153C
 ;
-; Called from: prom_b directory slot T_F41E14 (`jp 0xf8489a`), which is the ONLY
+; Called from: prom_b directory slot T_Ring60153C_Get (T_F41E14) (`jp 0xf8489a`), which is the ONLY
 ;          slot naming this veneer; 1 call site reaches that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8500,10 +8554,10 @@ Ring60153C_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring60195A_Get and its group -- the eleven veneers of ring 0x60195A
 ;
-; Called from: prom_b directory slot T_F41D18 (`jp 0xf8493d`), which is the ONLY
+; Called from: prom_b directory slot T_Ring60195A_Get (T_F41D18) (`jp 0xf8493d`), which is the ONLY
 ;          slot naming this veneer; 1 call site reaches that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8606,10 +8660,10 @@ Ring60195A_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring601646_Get and its group -- the eleven veneers of ring 0x601646
 ;
-; Called from: prom_b directory slot T_F41E38 (`jp 0xf849e0`), which is the ONLY
+; Called from: prom_b directory slot T_Ring601646_Get (T_F41E38) (`jp 0xf849e0`), which is the ONLY
 ;          slot naming this veneer; 2 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8712,10 +8766,10 @@ Ring601646_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring601C6E_Get and its group -- the eleven veneers of ring 0x601C6E
 ;
-; Called from: prom_b directory slot T_F41EA4 (`jp 0xf84a83`), which is the ONLY
+; Called from: prom_b directory slot T_Ring601C6E_Get (T_F41EA4) (`jp 0xf84a83`), which is the ONLY
 ;          slot naming this veneer; 1 call site reaches that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8818,10 +8872,10 @@ Ring601C6E_GetCommit:
 ; ---------------------------------------------------------------------
 ; Ring601850_Get and its group -- the eleven veneers of ring 0x601850
 ;
-; Called from: prom_b directory slot T_F41E5C (`jp 0xf84b26`), which is the ONLY
+; Called from: prom_b directory slot T_Ring601850_Get (T_F41E5C) (`jp 0xf84b26`), which is the ONLY
 ;          slot naming this veneer; 2 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
-;          T_F41CD0-T_F41EC4 (`python3 notes/prom_a_call_graph.py --module
+;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
 ;          0xF41CD0`).  CORRECTED 2026-08-25 (audit F9): every one of these
 ;          fourteen headers used to cite 0xF41CD0, which is Ring608A0A_Get's
 ;          slot and nobody else's.  Asserted by notes/prom_a_ring_slots.py.
@@ -8930,7 +8984,7 @@ Ring601850_GetCommit:
 ;          as the converted tree can see -- it is a second copy of the
 ;          0x601850 veneers, which is why it carries `_Copy_` in its name.
 ;          CORRECTED 2026-08-25 (audit F9): this header used to claim the
-;          group "owns nine slots" of module T_F41CD0-T_F41EC4; it owns none.
+;          group "owns nine slots" of module T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4); it owns none.
 ;          Asserted by notes/prom_a_ring_slots.py.
 ; Inputs / Outputs: as the class routine each veneer calls; see the five class
 ;          headers above.
@@ -11077,7 +11131,7 @@ DSP_WriteChannelRegs_Inner:
 ; Unknown:  who calls the six slots.  No `call`/`jp` in either image names
 ;          0xF86000-0xF86014; they are reached the way prom_b's directory
 ;          reaches everything else, and this module's published entry is the
-;          thunk run T_F40F34-T_F40F94, not this block.
+;          thunk run T_PanelTask_Step (T_F40F34)-T_PanelEvent_NoOp_T40F94 (T_F40F94), not this block.
 ; ---------------------------------------------------------------------
 PanelTask_EntryVectors:
 	jp 0xf86018                                   ; F86000  1b 18 60 f8
@@ -11156,7 +11210,7 @@ sub_F8605C:
 ; ---------------------------------------------------------------------
 ; PanelTask_Step -- one pass of the panel/screen state machine
 ;
-; Called from: thunk slot T_F40F34 (`jp 0x00F86066`), whose one proven call
+; Called from: thunk slot T_PanelTask_Step (T_F40F34) (`jp 0x00F86066`), whose one proven call
 ;          site is prom_a 0xF8210E; also `calr` from PanelTask_StepAndCheckRequest
 ;          0xF8601C.
 ; Body, in order: PanelState_CheckRequestAllowed, PanelState_Sync2095,
@@ -11170,7 +11224,7 @@ sub_F8605C:
 ;          the order above IS the ROM's order.
 ; ---------------------------------------------------------------------
 .LF86066:
-PanelTask_Step:   ; entry: calr from 0xF8601C, prom_b directory slot T_F40F34
+PanelTask_Step:   ; entry: calr from 0xF8601C, prom_b directory slot T_PanelTask_Step (T_F40F34)
 	calr 0x0a80                                   ; F86066  1e 80 0a   calr 0xf86ae9
 	calr .LF86553                                 ; F86069  1e e7 04
 	calr .LF860D9                                 ; F8606C  1e 6a 00
@@ -11221,7 +11275,7 @@ PanelState_TakePendingHoldTime:   ; entry: calr from 0xF8608F
 ; ---------------------------------------------------------------------
 ; UiEventList_Publish -- make the pending event list the current one
 ;
-; Called from: thunk slot T_F40F50 (`jp 0x00F860A6`); 5 proven call sites
+; Called from: thunk slot T_UiEventList_Publish (T_F40F50) (`jp 0x00F860A6`); 5 proven call sites
 ;          (prom_a 0xF820FC, 0xFB3151, 0xFB59CA, 0xFE00E2, 0xFE70CF).
 ; Outputs: RAM 0x2C00.. := RAM 0x2E00.., (0x60F004) bytes of it;
 ;          0xFF written one byte past; (0x60F000) := the byte count;
@@ -11239,7 +11293,7 @@ PanelState_TakePendingHoldTime:   ; entry: calr from 0xF8608F
 ;          published from 0x2E00 by this routine and walked by
 ;          UiEventList_Run.
 ; ---------------------------------------------------------------------
-UiEventList_Publish:   ; entry: prom_b directory slot T_F40F50
+UiEventList_Publish:   ; entry: prom_b directory slot T_UiEventList_Publish (T_F40F50)
 	ld XIY,0x00002e00                             ; F860A6  45 00 2e 00 00
 	ld XIX,0x00002c00                             ; F860AB  44 00 2c 00 00
 	ldw_da bc, (0x60f004)                         ; F860B0  d2 04 f0 60 21   ld BC,(0x60f004)
@@ -12095,7 +12149,7 @@ PanelScreen_RunRedraw:   ; entry: calr from 0xF86062, 0xF86084
 ; ---------------------------------------------------------------------
 ; UiEvent_RouteByCode -- split a class-0xA9 event on its code byte (0x20B8)
 ;
-; Called from: thunk slot T_F40F58 (`jp 0x00F8659B`), which has NO proven
+; Called from: thunk slot T_UiEvent_RouteByCode (T_F40F58) (`jp 0x00F8659B`), which has NO proven
 ;          `call` site -- and from UiEventLists_C's list for class 0xA9
 ;          (0xF89362), whose first LE32 entry is 0x00F8659B.  ★ That list is
 ;          the answer to `who calls this`: an event {0xA9, code, b2, b3}
@@ -12107,7 +12161,7 @@ PanelScreen_RunRedraw:   ; entry: calr from 0xF86062, 0xF86084
 ;          PanelButton_Accept applies at 0xF8660D agree: codes 0x00-0x1F are
 ;          the 32 buttons PanelButton_BitMask32 spans.
 ; ---------------------------------------------------------------------
-UiEvent_RouteByCode:   ; entry: prom_b directory slot T_F40F58
+UiEvent_RouteByCode:   ; entry: prom_b directory slot T_UiEvent_RouteByCode (T_F40F58)
 	ldb_d8 a, (0x20b8)                            ; F8659B  c1 b8 20 21   ld A,(0x20b8)
 	cp A,0x20                                     ; F8659F  c9 cf 20
 	jr nc, .LF865A9                               ; F865A2  6f 05
@@ -12128,7 +12182,7 @@ UiEvent_RouteByCode:   ; entry: prom_b directory slot T_F40F58
 ; ---------------------------------------------------------------------
 ; PanelEvent_Code03 -- toggle bit 4 of (0x2075) on event code 3
 ;
-; Called from: thunk slot T_F40F90 (`jp 0x00F865BC`); no proven call site,
+; Called from: thunk slot T_PanelEvent_Code03 (T_F40F90) (`jp 0x00F865BC`); no proven call site,
 ;          and no list in any of the three class tables names it.
 ; Inputs:  (0x20B8) must be 3; L = (0x20B9), H = (0x20BA), and bit 0 of
 ;          (L & H) must be set.
@@ -12140,7 +12194,7 @@ UiEvent_RouteByCode:   ; entry: prom_b directory slot T_F40F58
 ;          366 lists of the three class tables points at this address, so
 ;          the only published way in is the thunk slot.
 ; ---------------------------------------------------------------------
-PanelEvent_Code03:   ; entry: prom_b directory slot T_F40F90
+PanelEvent_Code03:   ; entry: prom_b directory slot T_PanelEvent_Code03 (T_F40F90)
 	ldb_d8 l, (0x20b9)                            ; F865BC  c1 b9 20 27   ld L,(0x20b9)
 	ldb_d8 h, (0x20ba)                            ; F865C0  c1 ba 20 26   ld H,(0x20ba)
 	ldb_d8 a, (0x20b8)                            ; F865C4  c1 b8 20 21   ld A,(0x20b8)
@@ -12545,7 +12599,7 @@ PanelDial_ApplyStep:   ; entry: calr from 0xF861D9, 0xF86867
 ; Outputs: A = C, W = B & 1, DE = 0x007A, then List2030_AppendRegs -- so the
 ;          record is 0x7A, 0x00, low byte, bit 8.
 ; Evidence: prom_b 0xF448A3 posts the SAME class 0x7A with E=0x7A, D=0x00
-;          through T_F40F3C and then writes (0x7EE2) itself, which is a
+;          through T_Queue2E00_AppendRegs (T_F40F3C) and then writes (0x7EE2) itself, which is a
 ;          second, independent witness that class 0x7A carries this value.
 ;          The 9-bit split (low byte, then bit 8 alone) is the same split
 ;          prom_b 0xF6AD98-0xF6ADB6 makes when it packs the cell for the
@@ -12604,14 +12658,14 @@ PanelDial_StepSizes:
 ; ---------------------------------------------------------------------
 ; PanelTimers_Step -- run the screen timers, or the button repeat timer
 ;
-; Called from: thunk slot T_F40F44 (`jp 0x00F86903`), whose one proven call
+; Called from: thunk slot T_PanelTimers_Step (T_F40F44) (`jp 0x00F86903`), whose one proven call
 ;          site is prom_a 0xF821ED.
 ; Body:    (0x2088) == 0 (no button held) -> PanelTimer_Screen2073 and
 ;          PanelTimer_Repeat20AB;  otherwise PanelTimer_Button2074.
 ; Evidence: the discriminator is a 32-bit compare of (0x2088) with zero at
 ;          0xF86907, the same bitmap PanelButton_Accept maintains.
 ; ---------------------------------------------------------------------
-PanelTimers_Step:   ; entry: prom_b directory slot T_F40F44
+PanelTimers_Step:   ; entry: prom_b directory slot T_PanelTimers_Step (T_F40F44)
 	ldda32 xwa, (0x2088)                          ; F86903  e1 88 20 20   ld XWA,(0x2088)
 	cp XWA,0x00000000                             ; F86907  e8 cf 00 00 00 00
 	jr nz, .LF86917                               ; F8690D  6e 08
@@ -12709,13 +12763,13 @@ PanelTimer_Button2074:   ; entry: calr from 0xF86917
 ; ---------------------------------------------------------------------
 ; UiEventList_RunPassA -- run pass A over the event list at 0x2C00
 ;
-; Called from: thunk slot T_F40F5C (`jp 0x00F8697E`).
+; Called from: thunk slot T_UiEventList_RunPassA (T_F40F5C) (`jp 0x00F8697E`).
 ; Outputs: (0x20C0) = UiEventClass_ListTable_A, (0x20C4) = UiEventPassA_TailList,
 ;          (0x20AD) = 0x2C00; then `calr UiEventList_Run`.
 ; Evidence: the three passes differ ONLY in those three immediates -- check P1
 ;          re-derives all nine from the ROM and compares them with this table.
 ; ---------------------------------------------------------------------
-UiEventList_RunPassA:   ; entry: prom_b directory slot T_F40F5C
+UiEventList_RunPassA:   ; entry: prom_b directory slot T_UiEventList_RunPassA (T_F40F5C)
 	ld XIY,0x00f87681                             ; F8697E  45 81 76 f8 00
 	stda32 (0x20c0), xiy                          ; F86983  f1 c0 20 65   ld (0x20c0),XIY
 	ld XIY,0x00f87e81                             ; F86987  45 81 7e f8 00
@@ -12728,13 +12782,13 @@ UiEventList_RunPassA:   ; entry: prom_b directory slot T_F40F5C
 ; ---------------------------------------------------------------------
 ; UiEventList_RunPassB -- run pass B over the event list at 0x2C00
 ;
-; Called from: thunk slot T_F40F60 (`jp 0x00F8699D`).
+; Called from: thunk slot T_UiEventList_RunPassB (T_F40F60) (`jp 0x00F8699D`).
 ; Outputs: (0x20C0) = UiEventClass_ListTable_B, (0x20C4) = UiEventPassB_TailList,
 ;          (0x20AD) = 0x2C00; then `calr UiEventList_Run`.
 ; Evidence: the three passes differ ONLY in those three immediates -- check P1
 ;          re-derives all nine from the ROM and compares them with this table.
 ; ---------------------------------------------------------------------
-UiEventList_RunPassB:   ; entry: prom_b directory slot T_F40F60
+UiEventList_RunPassB:   ; entry: prom_b directory slot T_UiEventList_RunPassB (T_F40F60)
 	ld XIY,0x00f87e91                             ; F8699D  45 91 7e f8 00
 	stda32 (0x20c0), xiy                          ; F869A2  f1 c0 20 65   ld (0x20c0),XIY
 	ld XIY,0x00f88e91                             ; F869A6  45 91 8e f8 00
@@ -12747,13 +12801,13 @@ UiEventList_RunPassB:   ; entry: prom_b directory slot T_F40F60
 ; ---------------------------------------------------------------------
 ; UiEventList_RunPassC -- run pass C over the event list at 0x2030
 ;
-; Called from: thunk slot T_F40F64 (`jp 0x00F869BC`).
+; Called from: thunk slot T_UiEventList_RunPassC (T_F40F64) (`jp 0x00F869BC`).
 ; Outputs: (0x20C0) = UiEventClass_ListTable_C, (0x20C4) = UiEventPassC_TailList,
 ;          (0x20AD) = 0x2030; then `calr UiEventList_Run`.
 ; Evidence: the three passes differ ONLY in those three immediates -- check P1
 ;          re-derives all nine from the ROM and compares them with this table.
 ; ---------------------------------------------------------------------
-UiEventList_RunPassC:   ; entry: prom_b directory slot T_F40F64
+UiEventList_RunPassC:   ; entry: prom_b directory slot T_UiEventList_RunPassC (T_F40F64)
 	ld XIY,0x00f88ec1                             ; F869BC  45 c1 8e f8 00
 	stda32 (0x20c0), xiy                          ; F869C1  f1 c0 20 65   ld (0x20c0),XIY
 	ld XIY,0x00f89671                             ; F869C5  45 71 96 f8 00
@@ -12860,7 +12914,7 @@ UiEventList_Run:   ; entry: calr from 0xF86999, 0xF869B8, 0xF869D7
 ; ---------------------------------------------------------------------
 ; Queue2C00_AppendRegs -- append {E, D, A, W} to the event list at 0x2C00
 ;
-; Called from: thunk slot T_F40F38 (`jp 0x00F86A81`); 7 proven call sites
+; Called from: thunk slot T_Queue2C00_AppendRegs (T_F40F38) (`jp 0x00F86A81`); 7 proven call sites
 ;          (prom_a 0xF818CB, 0xF8BEFE, 0xF90C3F, 0xF90C8F, 0xF99EB7,
 ;          0xFB901A and one more -- --sites lists them all).
 ; Inputs:  DE and WA; the record stored is E at +0, D at +1, A at +2, W at
@@ -12882,7 +12936,7 @@ UiEventList_Run:   ; entry: calr from 0xF86999, 0xF869B8, 0xF869D7
 ;          `ld (XHL+0x04),0xff` at 0xF86A93-0xF86A98, `add (0x60f000),0x04`
 ;          at 0xF86A9C.
 ; ---------------------------------------------------------------------
-Queue2C00_AppendRegs:   ; entry: prom_b directory slot T_F40F38
+Queue2C00_AppendRegs:   ; entry: prom_b directory slot T_Queue2C00_AppendRegs (T_F40F38)
 	m_cp_mi8 MB24, 0x60f000, 0xfb                 ; F86A81  c2 00 f0 60 3f fb   cp (0x60f000),0xfb
 	jr ugt, .LF86AA2                              ; F86A87  6b 19
 	ld XHL,0x00002c00                             ; F86A89  43 00 2c 00 00
@@ -12897,7 +12951,7 @@ Queue2C00_AppendRegs:   ; entry: prom_b directory slot T_F40F38
 ; ---------------------------------------------------------------------
 ; Queue2E00_AppendRegs -- append {E, D, A, W} to the PENDING list at 0x2E00
 ;
-; Called from: thunk slot T_F40F3C (`jp 0x00F86AA3`); 59 proven call sites,
+; Called from: thunk slot T_Queue2E00_AppendRegs (T_F40F3C) (`jp 0x00F86AA3`); 59 proven call sites,
 ;          the most heavily referenced address in this span.  --sites lists
 ;          them; they are spread over prom_a 0xF8BF19..0xFEnnnn and are the
 ;          reason this span was picked.
@@ -12916,7 +12970,7 @@ Queue2C00_AppendRegs:   ; entry: prom_b directory slot T_F40F38
 ;          the two routines are the same code with the two constants
 ;          swapped and the compare widened.
 ; ---------------------------------------------------------------------
-Queue2E00_AppendRegs:   ; entry: prom_b directory slot T_F40F3C
+Queue2E00_AppendRegs:   ; entry: prom_b directory slot T_Queue2E00_AppendRegs (T_F40F3C)
 	m_cp_mi16 MW24, 0x60f004, 0x00fb              ; F86AA3  d2 04 f0 60 3f fb 00   cp (0x60f004),0x00fb
 	jr ugt, .LF86AC6                              ; F86AAA  6b 1a
 	ld XHL,0x00002e00                             ; F86AAC  43 00 2e 00 00
@@ -12931,7 +12985,7 @@ Queue2E00_AppendRegs:   ; entry: prom_b directory slot T_F40F3C
 ; ---------------------------------------------------------------------
 ; List2030_AppendRegs -- append {E, D, A, W} to the fixed list at 0x2030
 ;
-; Called from: thunk slot T_F40F40 (`jp 0x00F86AC7`); 14 proven call sites;
+; Called from: thunk slot T_List2030_AppendRegs (T_F40F40) (`jp 0x00F86AC7`); 14 proven call sites;
 ;          and in-span from PanelButton_PostClass70 0xF8625A and
 ;          PanelDial_PostClass7A 0xF868D7.
 ; Body:    scan from 0x2030 in steps of 4 for the 0xFF terminator, refuse if
@@ -12948,7 +13002,7 @@ Queue2E00_AppendRegs:   ; entry: prom_b directory slot T_F40F3C
 ; Evidence: `ld XHL,0x00002030` at 0xF86AC7, `cp (XHL),0xff` at 0xF86ACC,
 ;          `add HL,0x0004` at 0xF86AD1, `cp XHL,0x0000206b` at 0xF86AD7.
 ; ---------------------------------------------------------------------
-List2030_AppendRegs:   ; entry: calr from 0xF8625A, 0xF868D7, prom_b directory slot T_F40F40
+List2030_AppendRegs:   ; entry: calr from 0xF8625A, 0xF868D7, prom_b directory slot T_List2030_AppendRegs (T_F40F40)
 	ld XHL,0x00002030                             ; F86AC7  43 30 20 00 00
 .LF86ACC:
 	cp (XHL),0xff                                 ; F86ACC  83 3f ff
@@ -13022,7 +13076,7 @@ PanelState_CheckRequestAllowed:   ; entry: calr from 0xF8601F, 0xF86066, prom_b 
 ; ---------------------------------------------------------------------
 ; EditValue_ApplyStep -- add or subtract (0x20CE) from (0x20CC), clamped
 ;
-; Called from: thunk slot T_F40F68 (`jp 0x00F86B43`); no proven call site.
+; Called from: thunk slot T_EditValue_ApplyStep (T_F40F68) (`jp 0x00F86B43`); no proven call site.
 ; Inputs:  W -- bit 7 is the direction.  (0x20C8) is the ceiling, (0x20CA)
 ;          the floor, (0x20CE) the step, (0x20CC) the value.
 ; Outputs: DE = the new value; it is NOT stored back.
@@ -13030,7 +13084,7 @@ PanelState_CheckRequestAllowed:   ; entry: calr from 0xF8601F, 0xF86066, prom_b 
 ;          overflow before the limit compare, so the four cells are SIGNED
 ;          16-bit.
 ; ---------------------------------------------------------------------
-EditValue_ApplyStep:   ; entry: prom_b directory slot T_F40F68
+EditValue_ApplyStep:   ; entry: prom_b directory slot T_EditValue_ApplyStep (T_F40F68)
 	ldw_d16 de, (0x20cc)                          ; F86B43  d1 cc 20 22   ld DE,(0x20cc)
 	bit 0x07,W                                    ; F86B47  c8 33 07
 	jr nz, .LF86B5E                               ; F86B4A  6e 12
@@ -13054,11 +13108,11 @@ EditValue_ApplyStep:   ; entry: prom_b directory slot T_F40F68
 ; ---------------------------------------------------------------------
 ; EditStep_UseCurveA -- (0x20CE) := EditStep_CurveA[W & 0x7F]
 ;
-; Called from: thunk slot T_F40F6C (`jp 0x00F86B6F`); no proven call site.
+; Called from: thunk slot T_EditStep_UseCurveA (T_F40F6C) (`jp 0x00F86B6F`); no proven call site.
 ; Evidence: `ld XIY,0x00f86ba0` at 0xF86B71, then `jr T,0xf86b8d` into the
 ;          shared tail -- so the only thing this entry decides is the base.
 ; ---------------------------------------------------------------------
-EditStep_UseCurveA:   ; entry: prom_b directory slot T_F40F6C
+EditStep_UseCurveA:   ; entry: prom_b directory slot T_EditStep_UseCurveA (T_F40F6C)
 	push XIY                                      ; F86B6F  3d
 	push XHL                                      ; F86B70  3b
 	ld XIY,0x00f86ba0                             ; F86B71  45 a0 6b f8 00
@@ -13069,14 +13123,14 @@ EditStep_UseCurveA:   ; entry: prom_b directory slot T_F40F6C
 ; ---------------------------------------------------------------------
 ; EditStep_UseCurveC -- (0x20CE) := EditStep_CurveC[W & 0x7F]
 ;
-; Called from: thunk slot T_F40F70 (`jp 0x00F86B7F`); no proven call site.
+; Called from: thunk slot T_EditStep_UseCurveC (T_F40F70) (`jp 0x00F86B7F`); no proven call site.
 ; ⚠ 0xF86B78 (`ld XIY,0x00F86BA8`) and 0xF86B88 (`ld XIY,0x00F86BB8`) are
 ;          UNREACHABLE: 0xF86B76 and 0xF86B86 are `jr T,0xF86B8D`, which
 ;          jumps straight over them.  Curves B and D are therefore named by
 ;          dead code and by nothing else.  Check C3.
 ; Evidence: `ld XIY,0x00f86bb0` at 0xF86B81, then `jr T,0xf86b8d`.
 ; ---------------------------------------------------------------------
-EditStep_UseCurveC:   ; entry: prom_b directory slot T_F40F70
+EditStep_UseCurveC:   ; entry: prom_b directory slot T_EditStep_UseCurveC (T_F40F70)
 	push XIY                                      ; F86B7F  3d
 	push XHL                                      ; F86B80  3b
 	ld XIY,0x00f86bb0                             ; F86B81  45 b0 6b f8 00
@@ -13122,7 +13176,7 @@ EditStep_Lookup:
 ; ---------------------------------------------------------------------
 ; PanelEvent_Code01_ArmHold -- arm the hold timer with request 2
 ;
-; Called from: thunk slot T_F40F7C (`jp 0x00F86BC0`); no proven call site,
+; Called from: thunk slot T_PanelEvent_Code01_ArmHold (T_F40F7C) (`jp 0x00F86BC0`); no proven call site,
 ;          and no list in any class table names it.
 ; Body:    (0x20B8) must be 1 and bit 7 of ((0x20B9) & (0x20BA)) set;
 ;          then, unless bit 1 of (0x60F020) is set, (0x2096) = 2 and
@@ -13131,7 +13185,7 @@ EditStep_Lookup:
 ; Evidence: (0x20A7) is the counter PanelHold_Tick decrements and (0x2096)
 ;          the index it then looks up, so `arm` is exactly what this is.
 ; ---------------------------------------------------------------------
-PanelEvent_Code01_ArmHold:   ; entry: prom_b directory slot T_F40F7C
+PanelEvent_Code01_ArmHold:   ; entry: prom_b directory slot T_PanelEvent_Code01_ArmHold (T_F40F7C)
 	ldb_d8 l, (0x20b9)                            ; F86BC0  c1 b9 20 27   ld L,(0x20b9)
 	ldb_d8 h, (0x20ba)                            ; F86BC4  c1 ba 20 26   ld H,(0x20ba)
 	ldb_d8 a, (0x20b8)                            ; F86BC8  c1 b8 20 21   ld A,(0x20b8)
@@ -13186,7 +13240,7 @@ PanelEvent_ReadPayload_F86C01:   ; entry: prom_b directory slot T_F40F80
 ; ---------------------------------------------------------------------
 ; PanelEvent_Code20_ArmHold -- arm the hold timer with request 7, or cancel
 ;
-; Called from: thunk slot T_F40F84 (`jp 0x00F86C0E`); no proven call site.
+; Called from: thunk slot T_PanelEvent_Code20_ArmHold (T_F40F84) (`jp 0x00F86C0E`); no proven call site.
 ; Body:    (0x20B8) must be 0x20.  L = (0x20B9) & (0x20BA).
 ;          L == 0x15, (0x2078) != 0x15, bit 1 of (0x60F020) clear ->
 ;            (0x2096) = 7, (0x20A7) = 0x30.
@@ -13202,7 +13256,7 @@ PanelEvent_ReadPayload_F86C01:   ; entry: prom_b directory slot T_F40F80
 ;          0xF86C34 and `ld (0x20a7),0x30` at 0xF86C3A are the arm; the
 ;          cancel path is `ld (0x2096),0x0000` at 0xF86C4E.
 ; ---------------------------------------------------------------------
-PanelEvent_Code20_ArmHold:   ; entry: prom_b directory slot T_F40F84
+PanelEvent_Code20_ArmHold:   ; entry: prom_b directory slot T_PanelEvent_Code20_ArmHold (T_F40F84)
 	ldb_d8 l, (0x20b9)                            ; F86C0E  c1 b9 20 27   ld L,(0x20b9)
 	ldb_d8 h, (0x20ba)                            ; F86C12  c1 ba 20 26   ld H,(0x20ba)
 	ldb_d8 a, (0x20b8)                            ; F86C16  c1 b8 20 21   ld A,(0x20b8)
@@ -13231,38 +13285,38 @@ PanelEvent_Code20_ArmHold:   ; entry: prom_b directory slot T_F40F84
 	ret                                           ; F86C58  0e
 
 ; ---------------------------------------------------------------------
-; PanelEvent_NoOp_T40F88 -- one `ret`, published as thunk slot T_F40F88
+; PanelEvent_NoOp_T40F88 -- one `ret`, published as thunk slot T_PanelEvent_NoOp_T40F88 (T_F40F88)
 ;
-; Called from: thunk slot T_F40F88 only; no proven call site.
+; Called from: thunk slot T_PanelEvent_NoOp_T40F88 (T_F40F88) only; no proven call site.
 ; Evidence: 0xF86C59, 0xF86C5A and 0xF86C5B are three CONSECUTIVE single
 ;          `ret` bytes, and prom_b's directory publishes each of them as its
-;          own slot (T_F40F88, T_F40F8C, T_F40F94).  Three distinct
+;          own slot (T_PanelEvent_NoOp_T40F88 (T_F40F88), T_PanelEvent_NoOp_T40F8C (T_F40F8C), T_PanelEvent_NoOp_T40F94 (T_F40F94)).  Three distinct
 ;          published entry points that all do nothing -- which is why they
 ;          are three labels and not one.
 ; ---------------------------------------------------------------------
-PanelEvent_NoOp_T40F88:   ; entry: prom_b directory slot T_F40F88
+PanelEvent_NoOp_T40F88:   ; entry: prom_b directory slot T_PanelEvent_NoOp_T40F88 (T_F40F88)
 	ret                                           ; F86C59  0e
 
 ; ---------------------------------------------------------------------
-; PanelEvent_NoOp_T40F8C -- one `ret`, published as thunk slot T_F40F8C
+; PanelEvent_NoOp_T40F8C -- one `ret`, published as thunk slot T_PanelEvent_NoOp_T40F8C (T_F40F8C)
 ;
 ; Evidence: prom_b 0xF40F8C holds `jp 0x00F86C5A` and ROM[0xF86C5A] is 0x0E.
 ; ---------------------------------------------------------------------
-PanelEvent_NoOp_T40F8C:   ; entry: prom_b directory slot T_F40F8C
+PanelEvent_NoOp_T40F8C:   ; entry: prom_b directory slot T_PanelEvent_NoOp_T40F8C (T_F40F8C)
 	ret                                           ; F86C5A  0e
 
 ; ---------------------------------------------------------------------
-; PanelEvent_NoOp_T40F94 -- one `ret`, published as thunk slot T_F40F94
+; PanelEvent_NoOp_T40F94 -- one `ret`, published as thunk slot T_PanelEvent_NoOp_T40F94 (T_F40F94)
 ;
 ; Evidence: prom_b 0xF40F94 holds `jp 0x00F86C5B` and ROM[0xF86C5B] is 0x0E.
 ; ---------------------------------------------------------------------
-PanelEvent_NoOp_T40F94:   ; entry: prom_b directory slot T_F40F94
+PanelEvent_NoOp_T40F94:   ; entry: prom_b directory slot T_PanelEvent_NoOp_T40F94 (T_F40F94)
 	ret                                           ; F86C5B  0e
 
 ; ---------------------------------------------------------------------
 ; PanelHold_Tick -- count (0x20A7) down and, at zero, request a screen
 ;
-; Called from: thunk slot T_F40F74 (`jp 0x00F86C5C`); 2 proven call sites
+; Called from: thunk slot T_PanelHold_Tick (T_F40F74) (`jp 0x00F86C5C`); 2 proven call sites
 ;          (prom_a 0xF8209C, 0xF821F1).
 ; Body:    (0x20A7) == 0 -> nothing.  Decrement; while it is still non-zero,
 ;          nothing.  At zero: WA = PanelHold_ScreenRequest[(0x2096)]; a low
@@ -13272,7 +13326,7 @@ PanelEvent_NoOp_T40F94:   ; entry: prom_b directory slot T_F40F94
 ; Evidence: the index is `ld WA,(0x2096) / sla 0x01,WA` at 0xF86C6C -- a
 ;          16-bit index doubled, i.e. a table of WORDS.
 ; ---------------------------------------------------------------------
-PanelHold_Tick:   ; entry: prom_b directory slot T_F40F74
+PanelHold_Tick:   ; entry: prom_b directory slot T_PanelHold_Tick (T_F40F74)
 	ldb_d8 a, (0x20a7)                            ; F86C5C  c1 a7 20 21   ld A,(0x20a7)
 	cps a, 0x00                                   ; F86C60  c9 d8   cp A,0
 	jr z, .LF86C8B                                ; F86C62  66 27
@@ -17734,7 +17788,7 @@ UiEventPassC_TailList:
 ; WHAT IT IS.  One routine that turns a RAW 8-bit reading of a continuous
 ; control into a COOKED value through a per-channel response curve, remembers
 ; the cooked value, and returns CARRY SET only when it changed.  That is why
-; every caller is `call T_F405F0 / jr nc,skip`: the carry means "this control
+; every caller is `call T_Ctrl_Normalise (T_F405F0) / jr nc,skip`: the carry means "this control
 ; actually moved".
 ;
 ; THE CHANNEL SELECTOR is in W, the raw reading in A.  The dispatcher builds
@@ -17751,7 +17805,7 @@ UiEventPassC_TailList:
 ; 0xF8DD4D-0xF8DD76, so AnalogScan carries two copies of the scan routine for
 ; channel 4 and two for channel 5.  Stated as measured (the two 21-byte runs
 ; compare equal); nothing here says why.  notes/FINDINGS-prom_a-ring-buffers.md
-; already said "all six report through directory slot T_F405F0"; this is the
+; already said "all six report through directory slot T_Ctrl_Normalise (T_F405F0)"; this is the
 ; other end of that sentence.
 ;
 ; ★ GROUP 3 IS FOUR MORE CONTROLS OF THE SAME KIND, with their own raw slots
@@ -17815,8 +17869,8 @@ UiEventPassC_TailList:
 ; ---------------------------------------------------------------------
 ; Ctrl_Normalise -- the published entry: normalise one control reading
 ;
-; Called from: prom_b thunk slots T_F405F0 (`jp 0xF89800`) and T_F405F4
-;          (`jp 0xF89804`).  The eight converted call sites of T_F405F0 are all
+; Called from: prom_b thunk slots T_Ctrl_Normalise (T_F405F0) (`jp 0xF89800`) and T_Ctrl_Nop_Ret (T_F405F4)
+;          (`jp 0xF89804`).  The eight converted call sites of T_Ctrl_Normalise (T_F405F0) are all
 ;          in AnalogScan and there are EIGHT of them, not six: 0xF8DC63 (W=0),
 ;          0xF8DC96 (1), 0xF8DCC9 (2), 0xF8DCFC (3), 0xF8DD54 (4), 0xF8DD69 (5),
 ;          0xF8DDC3 (4) and 0xF8DDD8 (5) -- the last two inside a byte-identical
@@ -17836,7 +17890,7 @@ Ctrl_Normalise:
 	calr .LF89805                                 ; F89800  1e 02 00
 	ret                                           ; F89803  0e
 
-; Ctrl_Nop_Ret -- T_F405F4's target: a bare RET.  Kept as a label because the
+; Ctrl_Nop_Ret -- T_Ctrl_Nop_Ret (T_F405F4)'s target: a bare RET.  Kept as a label because the
 ; thunk table publishes it separately.
 Ctrl_Nop_Ret:
 	ret                                           ; F89804  0e
@@ -20913,7 +20967,7 @@ PanelTables_F8B325:
 ;
 ; Chosen because notes/prom_a_call_graph.py --modules ranks its two directory
 ; modules -- T_F41AF0-T_F41B18 (11 slots, reference upper bound 146) and
-; T_F432F0-T_F432F8 (3 slots, 27) -- fourth and fifteenth in prom_a, and they
+; T_AsciiDigits3_ToValue (T_F432F0)-T_AsciiField_Clear (T_F432F8) (3 slots, 27) -- fourth and fifteenth in prom_a, and they
 ; both land here.  0xF8BC00, 0xF8BC04 and 0xF8BC08 are three `calr`-and-return
 ; veneers onto routines at the top of the module, the shape the linker gives a
 ; module's published entry points.
@@ -20947,7 +21001,7 @@ sub_F8BC08:
 ; ---------------------------------------------------------------------
 ; AsciiDigits3_ToValue -- three ASCII digit cells at 0x2821 -> WA
 ;
-; Called from: directory slot T_F432F0 (21 references, the module's second
+; Called from: directory slot T_AsciiDigits3_ToValue (T_F432F0) (21 references, the module's second
 ;          busiest), and by `calr` from AsciiField_ToSignedValue.
 ; Inputs:  (0x2821),(0x2822),(0x2823) ASCII; (0x2826) = how many are live.
 ; Outputs: WA = the value; XIX, BC, DE preserved by push/pop.
@@ -21471,7 +21525,7 @@ Task2_CallbackDispatcher:
 ; ---------------------------------------------------------------------
 ; CallbackQueue_Post -- append one 32-bit callback to the queue
 ;
-; Called from: directory slot T_F42E84, which carries the highest reference
+; Called from: directory slot T_CallbackQueue_Post (T_F42E84), which carries the highest reference
 ;          upper bound of any prom_a slot: 188.
 ; Inputs:  one 32-bit stack argument at (XIZ+0x08) -- the callback.
 ; Outputs: WA = 0 on success, 0xFFFF when the queue is full and nothing was
@@ -21558,7 +21612,7 @@ CallbackQueue_Init:
 ; ---------------------------------------------------------------------
 ; CallbackQueue_ResetAndRestartTask2 -- throw the queue away and restart its task
 ;
-; Called from: directory slot T_F42E80, reference upper bound 141.
+; Called from: directory slot T_CallbackQueue_ResetAndRestartTask2 (T_F42E80), reference upper bound 141.
 ; Inputs:  none.
 ; Outputs: the queue empty, semaphore 1 drained to zero, and task 2 started
 ;          again from its entry record.
@@ -33512,7 +33566,22 @@ PtrTable_F93444:
 	nop                                                  ; F93479  00
 	nop                                                  ; F9347A  00
 	nop                                                  ; F9347B  00
-sub_F9347C:
+; ---------------------------------------------------------------------
+; LCD_ClearLayer0_Rows29To235 -- zero the full width of layer 0 from row 29 to row 235
+;
+; Called from: prom_a sub_F92F7F (`calr`) at 0xF9302B, 0xF93037, 0xF93043, 0xF9304F
+;          prom_a sub_F93B33 (`calr`) at 0xF93BDA, 0xF93BE6, 0xF93BF2, 0xF93BFE
+; Issues:  SWI7 service 0x0E at 0xF9348C -- LCD_Svc_0E_ClearColumns, zero BC columns x HL bytes at IY in the current layer
+; Evidence: `ld (0x2540),0x00`, `ld IY,0x0488`, `ld BC,0x0028`, `ld HL,0x00CF`, service
+;           0x0E.  Service 0x0E takes IY as a byte offset inside the current layer, BC
+;           as columns and HL as bytes down each column.  AP is 40 = 0x28, so BC = 40
+;           is the full 320-pixel width and 0x0488 = 1160 = 29 x 40 EXACTLY -- the
+;           offset is the start of row 29.  0xCF = 207 rows, so the last row cleared is
+;           235.  ★ Service 0x0E's header also says `Unknown: callers`.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ClearLayer0_Rows29To235:
 	stdi8 (0x2540), 0x00                                 ; F9347C  f1 40 25 00 00
 	ldw iy, 0x0488                                       ; F93481  35 88 04
 	ldw bc, 0x28                                         ; F93484  31 28 00
@@ -33520,7 +33589,21 @@ sub_F9347C:
 	ldb a, 0x0e                                          ; F9348A  21 0e
 	swi 7                                                ; F9348C  ff
 	ret                                                  ; F9348D  0e
-sub_F9348E:
+; ---------------------------------------------------------------------
+; LCD_EraseLayer1_FixedRect -- erase one compile-time rectangle of layer 1
+;
+; Called from: prom_a sub_F93398 (`calr`) at 0xF93398
+;          prom_a sub_F93E28 (`calr`) at 0xF93E28
+; Issues:  SWI7 service 0x1B at 0xF934AD -- LCD_Svc_1B_EraseRect, erase the rectangle in (0x2530..0x2536)
+; Evidence: `ld (0x2540),0x01` then the four coordinate words written as immediates --
+;           (0x2530)=0x000D, (0x2532)=0x0022, (0x2534)=0x0132, (0x2536)=0x00A7 -- and
+;           service 0x1B, which erases the rectangle those four words hold.  So the
+;           rectangle is x 13..306, y 34..167 and nothing about it comes from the
+;           caller.  ★ Service 0x1B's header says `Unknown: callers`.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_EraseLayer1_FixedRect:
 	stdi8 (0x2540), 0x01                                 ; F9348E  f1 40 25 00 01
 	stdi16 (0x2530), 0x0d                                ; F93493  f1 30 25 02 0d 00
 	stdi16 (0x2532), 0x22                                ; F93499  f1 32 25 02 22 00
@@ -34873,7 +34956,7 @@ sub_F94112:
 	jr z, .LF94122                                       ; F94115  66 0b
 	bit_dd8 0x04, 0x97                                   ; F94117  f0 97 cc
 	jr nz, .LF94122                                      ; F9411A  6e 06
-	calr sub_F94210                                      ; F9411C  1e f1 00
+	calr LCD_DrawAllInitialSettingMessage                                      ; F9411C  1e f1 00
 	jrl .LF941F3                                         ; F9411F  78 d1 00
 .LF94122:
 	ldb_d8 a, (0x207c)                                   ; F94122  c1 7c 20 21
@@ -34912,11 +34995,11 @@ sub_F94112:
 	jr c, .LF941A7                                       ; F94188  67 1d
 	m_cp_mi16 MW16, 0x2541, 0x0000                       ; F9418A  d1 41 25 3f 00 00
 	jr ule, .LF94195                                     ; F94190  63 03
-	calr sub_F941F4                                      ; F94192  1e 5f 00
+	calr LCD_ScrollLayer0_Back3Lines                                      ; F94192  1e 5f 00
 .LF94195:
 	m_cp_mi16 MW16, 0x2545, 0x4c00                       ; F94195  d1 45 25 3f 00 4c
 	jr nc, .LF941B9                                      ; F9419B  6f 1c
-	calr sub_F94202                                      ; F9419D  1e 62 00
+	calr LCD_ScrollLayer2_Forward3Lines                                      ; F9419D  1e 62 00
 	m_ld_rm MW8, 0x80, r0                                ; F941A0  d0 80 20
 	stda16 (0x2680), wa                                  ; F941A3  f1 80 26 50
 .LF941A7:
@@ -34949,21 +35032,59 @@ sub_F94112:
 	jr z, .LF941F3                                       ; F941F1  66 00
 .LF941F3:
 	ret                                                  ; F941F3  0e
-sub_F941F4:
+; ---------------------------------------------------------------------
+; LCD_ScrollLayer0_Back3Lines -- hardware-scroll layer 0 back by three scan lines
+;
+; Called from: prom_a sub_F94112 (`calr`) at 0xF94192
+; Issues:  SWI7 service 0x1E at 0xF94200 -- LCD_Svc_1E_ScrollCurrentLayer, move the current layer's window
+; Evidence: `ld (0x2540),0x00` selects layer 0; `ld C,0x40` + `or C,0x03` makes C =
+;           0x43; service 0x1E reads bits 7:6 as the arm and bits 3:0 as the amount,
+;           and arm 0x40 is `base := base - n*0x28` with 0x28 = AP = 40 bytes per scan
+;           line.  n = 3.  ★ Service 0x1E's own header says `Unknown: callers`; this
+;           routine and LCD_ScrollLayer2_Forward3Lines are two of them.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ScrollLayer0_Back3Lines:
 	stdi8 (0x2540), 0x00                                 ; F941F4  f1 40 25 00 00
 	ldb c, 0x40                                          ; F941F9  23 40
 	or C,0x03                                            ; F941FB  cb ce 03
 	ldb a, 0x1e                                          ; F941FE  21 1e
 	swi 7                                                ; F94200  ff
 	ret                                                  ; F94201  0e
-sub_F94202:
+; ---------------------------------------------------------------------
+; LCD_ScrollLayer2_Forward3Lines -- hardware-scroll layer 2 forward by three scan lines
+;
+; Called from: prom_a sub_F94112 (`calr`) at 0xF9419D
+; Issues:  SWI7 service 0x1E at 0xF9420E -- LCD_Svc_1E_ScrollCurrentLayer, move the current layer's window
+; Evidence: `ld (0x2540),0x02`, then C = 0x00 | 0x03 = 0x03: arm 0x00 of service 0x1E is
+;           `base := base + n*0x28`, n = 3.  Same routine as the one above with the two
+;           immediates changed, which is what makes the pair readable.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ScrollLayer2_Forward3Lines:
 	stdi8 (0x2540), 0x02                                 ; F94202  f1 40 25 00 02
 	ldb c, 0x00                                          ; F94207  23 00
 	or C,0x03                                            ; F94209  cb ce 03
 	ldb a, 0x1e                                          ; F9420C  21 1e
 	swi 7                                                ; F9420E  ff
 	ret                                                  ; F9420F  0e
-sub_F94210:
+; ---------------------------------------------------------------------
+; LCD_DrawAllInitialSettingMessage -- draw the 20-character message ALL INITIAL SETTING! and light layer 1
+;
+; Called from: prom_a sub_F94112 (`calr`) at 0xF9411C
+; Issues:  SWI7 service 0x08 at 0xF94225 -- LCD_Svc_08_DrawText16x16, draw 16x16 text
+; Issues:  SWI7 service 0x0C at 0xF9422A -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: `ld XIY,0x00F9422C` + `ld BC,0x0014` + `ld IX,0x07D0` + service 0x08, and
+;           the twenty ROM bytes at 0xF9422C are the ASCII `ALL INITIAL SETTING!`
+;           (checked byte for byte by --selftest).  It then issues service 0x0C with
+;           C = 1, leaving layer 1 alone visible.  Every morpheme of the name is that
+;           ROM string; `Draw` and `Message` are structural.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_DrawAllInitialSettingMessage:
 	stdi8 (0x2540), 0x00                                 ; F94210  f1 40 25 00 00
 	ld XIY,0x00f9422c                                    ; F94215  45 2c 42 f9 00
 	ldw hl, 0x00                                         ; F9421A  33 00 00
@@ -35462,7 +35583,24 @@ sub_F94C18:
 	ld XWA,0x00002420                                    ; F94C21  40 20 24 00 00
 	stda32 (0x2846), xwa                                 ; F94C26  f1 46 28 60
 	ret                                                  ; F94C2A  0e
-sub_F94C2B:
+; ---------------------------------------------------------------------
+; LCD_BlankThenSetPanel2Layer -- blank the panel and re-issue SYSTEM SET for TWO layers
+;
+; Called from: prom_a sub_F95734 (`call`) at 0xF95745
+;          prom_a sub_F95768 (`call`) at 0xF95772
+;          prom_a sub_F95798 (`call`) at 0xF957FF
+;          prom_a sub_F95990 (`call`) at 0xF9599A
+;          prom_a sub_F959C8 (`call`) at 0xF959D1
+; Issues:  SWI7 service 0x0C at 0xF94C33 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Issues:  SWI7 service 0x0F at 0xF94C36 -- service 0x0F, not in this file's table
+; Evidence: `xor C,C` + service 0x0C blanks; service 0x0F follows.  0x0F is the
+;           TWO-layer SYSTEM SET and 0x10 the three-layer one, which is the whole
+;           difference between this routine and LCD_ScreenRedraw_Begin -- the pair is
+;           why the layer count belongs in both names.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_BlankThenSetPanel2Layer:
 	push XIZ                                             ; F94C2B  3e
 	push XIX                                             ; F94C2C  3c
 	push XHL                                             ; F94C2D  3b
@@ -35477,7 +35615,23 @@ sub_F94C2B:
 	pop XIX                                              ; F94C39  5c
 	pop XIZ                                              ; F94C3A  5e
 	ret                                                  ; F94C3B  0e
-sub_F94C3C:
+; ---------------------------------------------------------------------
+; LCD_ShowLayers1And2_StackFrame -- service 0x0C with C = 3, from inside a stack frame
+;
+; Called from: prom_a sub_F95734 (`call`) at 0xF9575E
+;          prom_a sub_F95768 (`call`) at 0xF9578B
+;          prom_a sub_F95798 (`call`) at 0xF95884
+;          prom_a sub_F95990 (`call`) at 0xF959B3
+;          prom_a sub_F959C8 (`call`) at 0xF959DC
+; Issues:  SWI7 service 0x0C at 0xF94C46 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: same three instructions as LCD_ShowLayers1And2_SaveRegs (`ld C,0x03`,
+;           service 0x0C) but preceded by `push XIZ` + `ld XIZ,XSP`, so it builds a
+;           frame the other one does not.  The two are NOT byte-identical and are not
+;           named as copies of each other.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ShowLayers1And2_StackFrame:
 	push XIZ                                             ; F94C3C  3e
 	ld XIZ,XSP                                           ; F94C3D  ef 8e
 	push XIX                                             ; F94C3F  3c
@@ -35499,7 +35653,7 @@ sub_F94C4C:
 	ld XWA,0x00000000                                    ; F94C50  40 00 00 00 00
 	stda32 (0x284f), xwa                                 ; F94C55  f1 4f 28 60
 	ld XIY,0x00f94c67                                    ; F94C59  45 67 4c f9 00
-	call sub_F94D82                                      ; F94C5E  1d 82 4d f9
+	call LCD_PrintLine40_AdvanceRow                                      ; F94C5E  1d 82 4d f9
 	pop XDE                                              ; F94C62  5a
 	pop XHL                                              ; F94C63  5b
 	pop XIX                                              ; F94C64  5c
@@ -35542,7 +35696,7 @@ sub_F94C4C:
 	pop C                                                ; F94CA8  cb 05
 	djnz16 bc, -15                                       ; F94CAA  d9 1c f1
 	ld XIY,0x0060a000                                    ; F94CAD  45 00 a0 60 00
-	call sub_F94D82                                      ; F94CB2  1d 82 4d f9
+	call LCD_PrintLine40_AdvanceRow                                      ; F94CB2  1d 82 4d f9
 	pop XDE                                              ; F94CB6  5a
 	pop XHL                                              ; F94CB7  5b
 	pop XIX                                              ; F94CB8  5c
@@ -35633,7 +35787,7 @@ sub_F94CDE:
 	ld (XIX),A                                           ; F94D65  b4 41
 	inc 1,XIX                                            ; F94D67  ec 61
 	ld XIY,0x0060a000                                    ; F94D69  45 00 a0 60 00
-	call sub_F94D82                                      ; F94D6E  1d 82 4d f9
+	call LCD_PrintLine40_AdvanceRow                                      ; F94D6E  1d 82 4d f9
 	ret                                                  ; F94D72  0e
 sub_F94D73:
 	and L,0x0f                                           ; F94D73  cf cc 0f
@@ -35643,7 +35797,21 @@ sub_F94D73:
 	add L,0x07                                           ; F94D7E  cf c8 07
 .LF94D81:
 	ret                                                  ; F94D81  0e
-sub_F94D82:
+; ---------------------------------------------------------------------
+; LCD_PrintLine40_AdvanceRow -- draw a 40-character line at the cursor and advance the cursor one row
+;
+; Called from: prom_a sub_F94C4C (`call`) at 0xF94C5E, 0xF94CB2
+;          prom_a sub_F94CDE (`call`) at 0xF94D6E
+; Issues:  SWI7 service 0x06 at 0xF94D91 -- LCD_Svc_06_DrawText8x14, draw 8x14 text
+; Evidence: `ld HL,0x0000` + `ld BC,0x0028` + `ld IX,(0x284F)` + service 0x06, then
+;           `add (0x284F),0x01B8`.  BC = 40 characters; the cursor is the RAM word
+;           (0x284F); and 0x01B8 = 440 = 11 x 40, i.e. eleven scan lines at AP = 40,
+;           the height of one 8x14 row plus leading.  XIY, the string, is the
+;           caller's.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_PrintLine40_AdvanceRow:
 	push XIZ                                             ; F94D82  3e
 	push XIX                                             ; F94D83  3c
 	push XHL                                             ; F94D84  3b
@@ -35675,7 +35843,23 @@ sub_F94D9D:
 	pop XIX                                              ; F94DBA  5c
 	pop XIZ                                              ; F94DBB  5e
 	ret                                                  ; F94DBC  0e
-sub_F94DBD:
+; ---------------------------------------------------------------------
+; LCD_FlashWholePanel -- blank, fill the whole panel, show it, blank again
+;
+; Called from: prom_a sub_F955F8 (`call`) at 0xF95603, 0xF95607
+; Issues:  SWI7 service 0x0C at 0xF94DC5 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Issues:  SWI7 service 0x05 at 0xF94DE0 -- LCD_Svc_05_FillRect, fill the rectangle in (0x2530..0x2536)
+; Issues:  SWI7 service 0x0C at 0xF94DE5 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Issues:  SWI7 service 0x0C at 0xF94DEE -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: the four coordinate words are written as immediates -- (0x2530)=0,
+;           (0x2532)=0, (0x2534)=0x013F, (0x2536)=0x00EF -- which is exactly the
+;           320x240 panel SYSTEM SET programs, so the service-0x05 fill covers all of
+;           it.  It is bracketed by service 0x0C with C = 0, then C = 7, then C = 0,
+;           with sub_F95128 called after each of the last two.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_FlashWholePanel:
 	push XIZ                                             ; F94DBD  3e
 	push XIX                                             ; F94DBE  3c
 	push XHL                                             ; F94DBF  3b
@@ -36740,8 +36924,8 @@ sub_F955F8:
 	ld C,(XIX)                                           ; F955FD  84 23
 	cps c, 0x00                                          ; F955FF  cb d8
 	jr nz, 0x0a                                          ; F95601  6e 0a
-	call sub_F94DBD                                      ; F95603  1d bd 4d f9
-	call sub_F94DBD                                      ; F95607  1d bd 4d f9
+	call LCD_FlashWholePanel                                      ; F95603  1d bd 4d f9
+	call LCD_FlashWholePanel                                      ; F95607  1d bd 4d f9
 	jr 0x2f                                              ; F9560B  68 2f
 .LF9560D:
 	m_cp_mi8 MB16, 0x2843, 0x00                          ; F9560D  c1 43 28 3f 00
@@ -36894,14 +37078,14 @@ sub_F95734:
 	ldb_d8 c, (0x207d)                                   ; F9573B  c1 7d 20 23
 	m_cp_rm MB16, 0x207c, r3                             ; F9573F  c1 7c 20 f3
 	jr z, 0x1f                                           ; F95743  66 1f
-	call sub_F94C2B                                      ; F95745  1d 2b 4c f9
+	call LCD_BlankThenSetPanel2Layer                                      ; F95745  1d 2b 4c f9
 	stdi8 (0x2540), 0x00                                 ; F95749  f1 40 25 00 00
 	lda_24 xbc, (0xf2c84d)                               ; F9574E  f2 4d c8 f2 31
 	push XBC                                             ; F95753  39
 	lda_24 xwa, (0xf2c800)                               ; F95754  f2 00 c8 f2 30
 	push XWA                                             ; F95759  38
 	call 0xf42e00                                        ; F9575A  1d 00 2e f4
-	call sub_F94C3C                                      ; F9575E  1d 3c 4c f9
+	call LCD_ShowLayers1And2_StackFrame                                      ; F9575E  1d 3c 4c f9
 	inc 0,XSP                                            ; F95762  ef 60
 .LF95764:
 	ret                                                  ; F95764  0e
@@ -36915,14 +37099,14 @@ sub_F95768:
 	ldb_d8 c, (0x207d)                                   ; F95768  c1 7d 20 23
 	m_cp_rm MB16, 0x207c, r3                             ; F9576C  c1 7c 20 f3
 	jr z, 0x22                                           ; F95770  66 22
-	call sub_F94C2B                                      ; F95772  1d 2b 4c f9
+	call LCD_BlankThenSetPanel2Layer                                      ; F95772  1d 2b 4c f9
 	stdi8 (0x2540), 0x00                                 ; F95776  f1 40 25 00 00
 	lda_24 xbc, (0xf2c88b)                               ; F9577B  f2 8b c8 f2 31
 	push XBC                                             ; F95780  39
 	lda_24 xwa, (0xf2c84d)                               ; F95781  f2 4d c8 f2 30
 	push XWA                                             ; F95786  38
 	call 0xf42e00                                        ; F95787  1d 00 2e f4
-	call sub_F94C3C                                      ; F9578B  1d 3c 4c f9
+	call LCD_ShowLayers1And2_StackFrame                                      ; F9578B  1d 3c 4c f9
 	calr 0xfeb6                                          ; F9578F  1e b6 fe
 	inc 0,XSP                                            ; F95792  ef 60
 .LF95794:
@@ -36966,7 +37150,7 @@ sub_F95798:
 	add XSP,0x00000018                                   ; F957F6  ef c8 18 00 00 00
 .LF957FC:
 	calr 0xfe5b                                          ; F957FC  1e 5b fe
-	call sub_F94C2B                                      ; F957FF  1d 2b 4c f9
+	call LCD_BlankThenSetPanel2Layer                                      ; F957FF  1d 2b 4c f9
 	stdi8 (0x2540), 0x00                                 ; F95803  f1 40 25 00 00
 	lda_24 xbc, (0xf2c9c2)                               ; F95808  f2 c2 c9 f2 31
 	push XBC                                             ; F9580D  39
@@ -37009,7 +37193,7 @@ sub_F95798:
 	lda_24 xbc, (0xf2ca37)                               ; F9587A  f2 37 ca f2 31
 	push XBC                                             ; F9587F  39
 	call 0xf42e0c                                        ; F95880  1d 0c 2e f4
-	call sub_F94C3C                                      ; F95884  1d 3c 4c f9
+	call LCD_ShowLayers1And2_StackFrame                                      ; F95884  1d 3c 4c f9
 	add XSP,0x00000020                                   ; F95888  ef c8 20 00 00 00
 	pop XIX                                              ; F9588E  5c
 	ret                                                  ; F9588F  0e
@@ -37129,14 +37313,14 @@ sub_F95990:
 	ldb_d8 c, (0x207d)                                   ; F95990  c1 7d 20 23
 	m_cp_rm MB16, 0x207c, r3                             ; F95994  c1 7c 20 f3
 	jr z, 0x1f                                           ; F95998  66 1f
-	call sub_F94C2B                                      ; F9599A  1d 2b 4c f9
+	call LCD_BlankThenSetPanel2Layer                                      ; F9599A  1d 2b 4c f9
 	stdi8 (0x2540), 0x00                                 ; F9599E  f1 40 25 00 00
 	lda_24 xbc, (0xf2cac3)                               ; F959A3  f2 c3 ca f2 31
 	push XBC                                             ; F959A8  39
 	lda_24 xwa, (0xf2ca54)                               ; F959A9  f2 54 ca f2 30
 	push XWA                                             ; F959AE  38
 	call 0xf42e00                                        ; F959AF  1d 00 2e f4
-	call sub_F94C3C                                      ; F959B3  1d 3c 4c f9
+	call LCD_ShowLayers1And2_StackFrame                                      ; F959B3  1d 3c 4c f9
 	inc 0,XSP                                            ; F959B7  ef 60
 .LF959B9:
 	calr 0xfcae                                          ; F959B9  1e ae fc
@@ -37167,11 +37351,11 @@ sub_F959C8:
 	ldb_d8 c, (0x2095)                                   ; F959C8  c1 95 20 23
 	and C,0x10                                           ; F959CC  cb cc 10
 	jr nz, 0x08                                          ; F959CF  6e 08
-	call sub_F94C2B                                      ; F959D1  1d 2b 4c f9
+	call LCD_BlankThenSetPanel2Layer                                      ; F959D1  1d 2b 4c f9
 	m_set 7, MD16, 0x2075                                ; F959D5  f1 75 20 bf
 .LF959D9:
 	calr 0x0251                                          ; F959D9  1e 51 02
-	call sub_F94C3C                                      ; F959DC  1d 3c 4c f9
+	call LCD_ShowLayers1And2_StackFrame                                      ; F959DC  1d 3c 4c f9
 	ret                                                  ; F959E0  0e
 sub_F959E1:
 	ret                                                  ; F959E1  0e
@@ -37566,9 +37750,9 @@ PtrTables_F95C95:
 ; --offenders`.
 ;
 ; ★ WHAT IT IS.  Screen-drawing code, and nothing else.  Counting the thunk
-; calls in the converted text: T_F42C78 x61, T_F42E04 x43, T_F42E00 x43,
-; T_F42E0C x38, T_F42E84 x32, T_F42E08 x28 -- the display-list draw entries
-; (T_F42E00 -> prom_b 0xF31800 and T_F42E04 -> 0xF31814 are the two
+; calls in the converted text: T_F42C78 x61, T_DisplayListB_Run_Stack (T_F42E04) x43, T_DisplayList_Run_Stack (T_F42E00) x43,
+; T_DisplayListB_RunOne_Stack (T_F42E0C) x38, T_CallbackQueue_Post (T_F42E84) x32, T_DisplayList_RunOne_Stack (T_F42E08) x28 -- the display-list draw entries
+; (T_DisplayList_Run_Stack (T_F42E00) -> prom_b 0xF31800 and T_DisplayListB_Run_Stack (T_F42E04) -> 0xF31814 are the two
 ; interpreters of notes/FINDINGS-ui-display-list.md).  ★ AND IT TOUCHES NO
 ; DEVICE: the only operand anywhere in the span in 0x600000-0x7FFFFF is the RAM
 ; staging buffer 0x60A000.  So nothing here can answer an emulation gap, and the
@@ -37702,7 +37886,7 @@ sub_F99098:
 ;          is `add XBC,0x00F99321 / ld XBC,(XBC)` and 0xF99108 is
 ;          `inc 4,XWA / add XWA,0x00F99321 / ld XWA,(XWA)`, so it reads a
 ;          CONSECUTIVE PAIR from 0xF99321 -- entry 128 of this run -- and hands
-;          (start, end) to T_F42E04, the display-list interpreter.  What indexes
+;          (start, end) to T_DisplayListB_Run_Stack (T_F42E04), the display-list interpreter.  What indexes
 ;          entries 0..127 is NOT ESTABLISHED.
 ; Extent:  0xF99121-0xF993C4.  Both ends are pinned by something other than the
 ;          run: 0xF99120 is a `ret` that ends the routine above, and the four
@@ -38016,7 +38200,26 @@ DisplayListPtrs_F99870:
 	.long 0x00f99f01                                 ; F999E4  [ 93]
 	.long 0x00f99f02                                 ; F999E8  [ 94]
 	.long 0x00f99f03                                 ; F999EC  [ 95]
-sub_F999F0:
+; ---------------------------------------------------------------------
+; LCD_ScreenRedraw_Begin -- blank the panel, re-issue SYSTEM SET, select layer 0
+;
+; Called from: prom_a Paint_SysexBulkDump (`calr`) at 0xF99A25
+;          prom_a Paint_Sending (`calr`) at 0xF99B89
+;          prom_a Paint_SystemExclusivePleaseWait (`calr`) at 0xF99CA8
+;          prom_a Paint_GeneralMidiMode (`calr`) at 0xF99D3F
+; Issues:  SWI7 service 0x0C at 0xF999F4 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Issues:  SWI7 service 0x10 at 0xF999F7 -- LCD_Svc_10_SetPanel3Layer, re-issue SYSTEM SET for a three-layer panel
+; Evidence: its four instructions before the `ret` are `ld C,0x00` + service 0x0C, then
+;           service 0x10, then `ld (0x2540),0x00`.  Service 0x0C REBUILDS the DISP ON
+;           byte from C, so C = 0 turns all three layers off and sets bit 0 of (0xC6),
+;           the driver's do-not-poll-BUSY flag; 0x10 re-issues SYSTEM SET for a
+;           three-layer panel; (0x2540) is the current-layer number.  It is called
+;           FIRST by every one of its callers and LCD_ScreenRedraw_End LAST by the same
+;           callers -- checked at all ten sites by --services.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ScreenRedraw_Begin:
 	ldb c, 0x00                                          ; F999F0  23 00
 	ldb a, 0x0c                                          ; F999F2  21 0c
 	swi 7                                                ; F999F4  ff
@@ -38024,28 +38227,49 @@ sub_F999F0:
 	swi 7                                                ; F999F7  ff
 	stdi8 (0x2540), 0x00                                 ; F999F8  f1 40 25 00 00
 	ret                                                  ; F999FD  0e
-sub_F999FE:
+; ---------------------------------------------------------------------
+; LCD_ScreenRedraw_End -- make all three layers visible again
+;
+; Called from: prom_a Paint_SysexBulkDump (`calr`) at 0xF99A4A
+;          prom_a Paint_Sending (`calr`) at 0xF99BE9
+;          prom_a Paint_SystemExclusivePleaseWait (`calr`) at 0xF99D08
+;          prom_a Paint_GeneralMidiMode (`calr`) at 0xF99DC2
+; Issues:  SWI7 service 0x0C at 0xF99A02 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: `ld C,0x07` + `ld A,0x0C` + `swi 7` + `ret`, six bytes.  In service 0x0C's
+;           own documented convention C bits 0/1/2 select layers 1/2/3, so 0x07 is all
+;           three steady on, and a non-zero DISP byte also clears (0xC6) bit 0.  It is
+;           the LAST call of each of its four callers.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ScreenRedraw_End:
 	ldb c, 0x07                                          ; F999FE  23 07
 	ldb a, 0x0c                                          ; F99A00  21 0c
 	swi 7                                                ; F99A02  ff
 	ret                                                  ; F99A03  0e
-; sub_F99A04 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 19
-; instructions to its first `ret`:
-;     site 0xF99A3D  interpreter A  list 0xF0D6AF-0xF0D77F
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_F99A04:
+; Paint_SysexBulkDump -- paint the SYSEX BULK DUMP menu
+;
+; Called from: prom_a sub_F9982D (`calr`) at 0xF9982D
+; Evidence: one interpreter-A site at 0xF99A3D, list 0xF0D6AF-0xF0D77F, which FRAMES
+;           exactly and whose text records read `SYSEX BULK DUMP`, `MIDI`,
+;           ` TOTAL KEYBOARD`, ` SEND`, ` SOUND`, ` COMBINATION`,
+;           ` SYSTEM,PART & MIDI`.  ⚠ 0xF0D6AF carries NO label in prom_b's listing --
+;           it is inside a span that is still `.incbin` -- so round 5's label-based
+;           painter rule could not see it.  The text is walked out of
+;           original_ROMs/wsa1_prom_b.ic13 by this file's dl_walk(); --selftest checks
+;           both the framing and the absence of the label.
+;           ⚠⚠ THIS CORRECTS THE HEADER ROUND 5 LEFT HERE, which said `Not one of these
+;           lists holds an .ascii record`.  It does: seven text records, quoted above.
+;           The claim was true of the LABELS round 5 could search and false of the ROM.
+;           The bounds themselves are derived exactly as round 5 derived them -- the
+;           LAST `ld XIY,imm32` and `ld XIX,imm32` before the cited `call`, with
+;           0xF417F0 entering interpreter A and 0xF417F4 interpreter B
+;           (notes/FINDINGS-ui-display-list.md).
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_SysexBulkDump:
 	call 0xf42e80                                        ; F99A04  1d 80 2e f4
 	ldb_d8 a, (0x207a)                                   ; F99A08  c1 7a 20 21
 	cpdm8 (0x207b), a                                    ; F99A0C  c1 7b 20 f9
@@ -38055,7 +38279,7 @@ sub_F99A04:
 	m_or_mi8 MB16, 0x2094, 0x40                          ; F99A1B  c1 94 20 3e 40
 	stdi8 (0x2720), 0x00                                 ; F99A20  f1 20 27 00 00
 .LF99A25:
-	calr sub_F999F0                                      ; F99A25  1e c8 ff
+	calr LCD_ScreenRedraw_Begin                                      ; F99A25  1e c8 ff
 	ld XIY,0x00f0d6af                                    ; F99A28  45 af d6 f0 00
 	ld XIX,0x00f0d79c                                    ; F99A2D  44 9c d7 f0 00
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F99A32  c0 c4 3f 02
@@ -38065,7 +38289,7 @@ sub_F99A04:
 	call 0xf417f0                                        ; F99A3D  1d f0 17 f4
 	ld XIY,0x00f0d9a4                                    ; F99A41  45 a4 d9 f0 00
 	call 0xf4181c                                        ; F99A46  1d 1c 18 f4
-	calr sub_F999FE                                      ; F99A4A  1e b1 ff
+	calr LCD_ScreenRedraw_End                                      ; F99A4A  1e b1 ff
 	ret                                                  ; F99A4D  0e
 sub_F99A4E:
 	ldb_d8 a, (0x207a)                                   ; F99A4E  c1 7a 20 21
@@ -38208,7 +38432,7 @@ sub_F99A4E:
 Paint_Sending:
 	m_bit 0, MD24, 0x60f810                              ; F99B82  f2 10 f8 60 c8
 	jr z, .LF99BA0                                       ; F99B87  66 17
-	calr sub_F999F0                                      ; F99B89  1e 64 fe
+	calr LCD_ScreenRedraw_Begin                                      ; F99B89  1e 64 fe
 	ld XIY,0x00f0d79c                                    ; F99B8C  45 9c d7 f0 00
 	ld XIX,0x00f0d7d5                                    ; F99B91  44 d5 d7 f0 00
 	call 0xf417f0                                        ; F99B96  1d f0 17 f4
@@ -38234,10 +38458,10 @@ Paint_Sending:
 	bit 0x07,L                                           ; F99BD6  cf 33 07
 	jr z, .LF99BE9                                       ; F99BD9  66 0e
 	ld XIY,0x00f0d942                                    ; F99BDB  45 42 d9 f0 00
-	calr sub_F99C5C                                      ; F99BE0  1e 79 00
+	calr Paint_SysPartMidiSoundCombination                                      ; F99BE0  1e 79 00
 	m_and_mi8 MB24, 0x60f804, 0x7f                       ; F99BE3  c2 04 f8 60 3c 7f
 .LF99BE9:
-	calr sub_F999FE                                      ; F99BE9  1e 12 fe
+	calr LCD_ScreenRedraw_End                                      ; F99BE9  1e 12 fe
 	ret                                                  ; F99BEC  0e
 ; sub_F99BED -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -38311,23 +38535,21 @@ sub_F99C32:
 	jr .LF99C3D                                          ; F99C59  68 e2
 .LF99C5B:
 	ret                                                  ; F99C5B  0e
-; sub_F99C5C -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 23
-; instructions to its first `ret`:
-;     site 0xF99C76  interpreter A  list 0xF0D7E2-0xF0D81B
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_F99C5C:
+; Paint_SysPartMidiSoundCombination -- paint the three-row label block of that menu
+;
+; Called from: prom_a Paint_Sending (`calr`) at 0xF99BE0
+;          prom_a Paint_SystemExclusivePleaseWait (`calr`) at 0xF99CFF
+; Evidence: one interpreter-A site at 0xF99C76, list 0xF0D7E2-0xF0D81B, which FRAMES
+;           exactly and draws `SYS,PART&MIDI :`, `SOUND         :` and
+;           `COMBINATION   :`.  Every morpheme of the name is in that text.  ⚠ What the
+;           three rows' VALUES are is not established -- they are drawn elsewhere.
+;           ⚠⚠ THIS TOO CORRECTS ROUND 5's `Not one of these lists holds an .ascii
+;           record` on this label; it holds three.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_SysPartMidiSoundCombination:
 	and L,0x7f                                           ; F99C5C  cf cc 7f
 	jr nz, .LF99C7C                                      ; F99C5F  6e 1b
 	ld XIY,0x00f0d7e2                                    ; F99C61  45 e2 d7 f0 00
@@ -38380,7 +38602,7 @@ sub_F99C5C:
 Paint_SystemExclusivePleaseWait:
 	m_bit 1, MD24, 0x60f810                              ; F99CA1  f2 10 f8 60 c9
 	jr z, .LF99CBF                                       ; F99CA6  66 17
-	calr sub_F999F0                                      ; F99CA8  1e 45 fd
+	calr LCD_ScreenRedraw_Begin                                      ; F99CA8  1e 45 fd
 	ld XIY,0x00f0d7a7                                    ; F99CAB  45 a7 d7 f0 00
 	ld XIX,0x00f0d7e2                                    ; F99CB0  44 e2 d7 f0 00
 	call 0xf417f0                                        ; F99CB5  1d f0 17 f4
@@ -38406,10 +38628,10 @@ Paint_SystemExclusivePleaseWait:
 	bit 0x07,L                                           ; F99CF5  cf 33 07
 	jr z, .LF99D08                                       ; F99CF8  66 0e
 	ld XIY,0x00f0d96e                                    ; F99CFA  45 6e d9 f0 00
-	calr sub_F99C5C                                      ; F99CFF  1e 5a ff
+	calr Paint_SysPartMidiSoundCombination                                      ; F99CFF  1e 5a ff
 	m_and_mi8 MB24, 0x60f80a, 0x7f                       ; F99D02  c2 0a f8 60 3c 7f
 .LF99D08:
-	calr sub_F999FE                                      ; F99D08  1e f3 fc
+	calr LCD_ScreenRedraw_End                                      ; F99D08  1e f3 fc
 	ret                                                  ; F99D0B  0e
 ; Paint_GeneralMidiMode -- paints the screen whose own text reads "GENERAL MIDI", "MIDI", " GENERAL MIDI MODE  :  "
 ;
@@ -38451,7 +38673,7 @@ Paint_GeneralMidiMode:
 	stdi16 (0x2070), 0x0201                              ; F99D36  f1 70 20 02 01 02
 	jrl .LF99DC5                                         ; F99D3C  78 86 00
 .LF99D3F:
-	calr sub_F999F0                                      ; F99D3F  1e ae fc
+	calr LCD_ScreenRedraw_Begin                                      ; F99D3F  1e ae fc
 	m_cp_mi8 MB16, 0x2740, 0x00                          ; F99D42  c1 40 27 3f 00
 	jr nz, .LF99D76                                      ; F99D47  6e 2d
 	m_bit 1, MD16, 0x274c                                ; F99D49  f1 4c 27 c9
@@ -38488,7 +38710,7 @@ Paint_GeneralMidiMode:
 	mx_ld_rm MXL, ra_HL, ra_BC, r4                       ; F99DB9  e3 07 ec e4 24
 	call 0xf417f4                                        ; F99DBE  1d f4 17 f4
 .LF99DC2:
-	calr sub_F999FE                                      ; F99DC2  1e 39 fc
+	calr LCD_ScreenRedraw_End                                      ; F99DC2  1e 39 fc
 .LF99DC5:
 	ret                                                  ; F99DC5  0e
 sub_F99DC6:
@@ -41225,7 +41447,19 @@ sub_F9B652:
 	pop XIX                                              ; F9C02B  5c
 	pop XIZ                                              ; F9C02C  5e
 	ret                                                  ; F9C02D  0e
-sub_F9C02E:
+; ---------------------------------------------------------------------
+; LCD_ShowLayers1And2_SaveRegs -- service 0x0C with C = 3 -- layers 1 and 2 on, layer 3 off
+;
+; Called from: prom_a sub_FA0525 (`call`) at 0xFA064A
+; Issues:  SWI7 service 0x0C at 0xF9C036 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: identical in shape to LCD_ShowAllThreeLayers_SaveRegs except for the
+;           immediate: `ld C,0x03`, so bits 0 and 1 are set and bit 2 is not.  Service
+;           0x0C rebuilds the whole DISP byte, so layer 3 is turned OFF here, not left
+;           alone -- that is the documented difference between services 0x0C and 0x0D.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ShowLayers1And2_SaveRegs:
 	push XIZ                                             ; F9C02E  3e
 	push XIX                                             ; F9C02F  3c
 	push XHL                                             ; F9C030  3b
@@ -48633,7 +48867,7 @@ sub_FA0525:
 	lda_24 xbc, (0xfa2522)                               ; FA0640  f2 22 25 fa 31
 	push XBC                                             ; FA0645  39
 	call 0xf42e08                                        ; FA0646  1d 08 2e f4
-	call sub_F9C02E                                      ; FA064A  1d 2e c0 f9
+	call LCD_ShowLayers1And2_SaveRegs                                      ; FA064A  1d 2e c0 f9
 	pop XIY                                              ; FA064E  5d
 .LFA064F:
 	pop XIX                                              ; FA064F  5c
@@ -51679,7 +51913,7 @@ MIDI_Fg_SysExData:
 ; ---------------------------------------------------------------------
 ; MIDI_SendBankAndProgram -- transmit Bank Select + Program Change
 ;
-; Called from: prom_b directory slot T_F4072C (`jp 0xFA5B5F`).
+; Called from: prom_b directory slot T_MIDI_SendBankAndProgram (T_F4072C) (`jp 0xFA5B5F`).
 ; Inputs:  (XIZ+0x08) channel in bits 0-3 and the port select in bit 4;
 ;          (XIZ+0x0A) the program number; (XIZ+0x0C) a 16-bit bank number,
 ;          or 0xFFFF for `program change only`.
@@ -51696,7 +51930,7 @@ MIDI_Fg_SysExData:
 ;          with MIDI_PostSendWork; set sends through 0xF40ED4, the block
 ;          sender that carries port B's stream to the other CPU.
 ; ---------------------------------------------------------------------
-MIDI_SendBankAndProgram:   ; entry: prom_b directory slot T_F4072C
+MIDI_SendBankAndProgram:   ; entry: prom_b directory slot T_MIDI_SendBankAndProgram (T_F4072C)
 	link XIZ,0xfff4                               ; FA5B5F  ee 0c f4 ff
 	pushw hl                                      ; FA5B63  2b   push HL
 	pushw de                                      ; FA5B64  2a   push DE
@@ -51790,7 +52024,7 @@ MIDI_SendStart_PortB:
 ; ---------------------------------------------------------------------
 ; MIDI_PostSendWork_PortB -- drain port B's queue and forward it
 ;
-; Called from: prom_b directory slot T_F40730 (`jp 0xFA5C12`).
+; Called from: prom_b directory slot T_MIDI_PostSendWork_PortB (T_F40730) (`jp 0xFA5C12`).
 ; Outputs: every byte ring 0x60153C will give up, copied into a 256-byte
 ;          stack buffer and handed to 0xF40ED4 as one block, stream 2.
 ; Evidence: it loops on 0xF41E14 (Ring60153C_Get) until that returns
@@ -51802,7 +52036,7 @@ MIDI_SendStart_PortB:
 ;          Ring601432_PutBlock and Ring60153C_PutBlock ten instructions
 ;          earlier.
 ; ---------------------------------------------------------------------
-MIDI_PostSendWork_PortB:   ; entry: prom_b directory slot T_F40730
+MIDI_PostSendWork_PortB:   ; entry: prom_b directory slot T_MIDI_PostSendWork_PortB (T_F40730)
 	link XIZ,0xfefe                               ; FA5C12  ee 0c fe fe
 	pushw hl                                      ; FA5C16  2b   push HL
 	pushw de                                      ; FA5C17  2a   push DE
@@ -51838,7 +52072,7 @@ MIDI_PostSendWork_PortB:   ; entry: prom_b directory slot T_F40730
 ; MIDI_SendAllNotesOff_AllChannels -- CC 123 + CC 121 on all 16 channels,
 ; both ports
 ;
-; Called from: prom_b directory slot T_F40734 (`jp 0xFA5C54`).
+; Called from: prom_b directory slot T_MIDI_SendAllNotesOff_AllChannels (T_F40734) (`jp 0xFA5C54`).
 ; Outputs: `Bn 7B 00 79 00` for n = 0..0x0F, first through 0xF41DF8
 ;          (Ring601432_PutBlock, port A) with MIDI_PostSendWork after each,
 ;          then again through 0xF40ED4 (port B).  Finally (0x9B) and
@@ -51848,7 +52082,7 @@ MIDI_PostSendWork_PortB:   ; entry: prom_b directory slot T_F40730
 ;          All Controllers.  The two loops both run `ld H,0x00` .. `cp
 ;          H,0x0F / jr ULE`, and `or C,0xB0` builds the status byte.
 ; ---------------------------------------------------------------------
-MIDI_SendAllNotesOff_AllChannels:   ; entry: prom_b directory slot T_F40734
+MIDI_SendAllNotesOff_AllChannels:   ; entry: prom_b directory slot T_MIDI_SendAllNotesOff_AllChannels (T_F40734)
 	link XIZ,0xfffb                               ; FA5C54  ee 0c fb ff
 	pushw hl                                      ; FA5C58  2b   push HL
 	push XIX                                      ; FA5C59  3c
@@ -51948,8 +52182,8 @@ MIDI_AllNotesOffTemplate:
 ; MidiIn_EntryThunks -- the module's six-slot entry table
 ;
 ; Read by: prom_b's directory, which holds the BARE pointer 0x00FA6000 at
-;          T_F40740 and follows it with the run of live `jp` slots
-;          T_F40744-T_F40760.  Same idiom as MIDI_EntryThunks at 0xFA5400.
+;          T_MidiIn_EntryThunks (T_F40740) and follows it with the run of live `jp` slots
+;          T_MidiIn_PumpPortA (T_F40744)-T_F40760.  Same idiom as MIDI_EntryThunks at 0xFA5400.
 ; Layout:  slot 0 is `1b ae 83 fa` = `jp MidiIn_ModuleReset`; slots 1-5 are
 ;          `0e 00 00 00`, i.e. a bare RET followed by three pad bytes.
 ; ---------------------------------------------------------------------
@@ -51960,7 +52194,7 @@ MidiIn_EntryThunks:
 ; ---------------------------------------------------------------------
 ; MidiIn_PumpPortA -- drain MIDI IN port A and dispatch every message
 ;
-; Called from: prom_b directory slot T_F40744 (`jp 0xFA6018`).
+; Called from: prom_b directory slot T_MidiIn_PumpPortA (T_F40744) (`jp 0xFA6018`).
 ; Inputs:  ring 0x600C1E; (0x60F000) is zeroed on entry and used as a count.
 ; Outputs: for each message, the 0x1940 staging record is filled and one
 ;          entry of MidiIn_StatusClassTable is called; on exhaustion
@@ -51972,7 +52206,7 @@ MidiIn_EntryThunks:
 ; Twin:    MidiIn_PumpPortB is the same 97 bytes with FOUR bytes different
 ;          (measured, check T1): the ring base and the two thunk slots.
 ; ---------------------------------------------------------------------
-MidiIn_PumpPortA:   ; entry: prom_b directory slot T_F40744
+MidiIn_PumpPortA:   ; entry: prom_b directory slot T_MidiIn_PumpPortA (T_F40744)
 	call 0xf41dbc                                 ; FA6018  1d bc 1d f4
 	stiw_da (0x60f000), 0x00                      ; FA601C  f2 00 f0 60 02 00 00   ld (0x60f000),0x0000
 .LFA6023:
@@ -52062,12 +52296,12 @@ MidiIn_FetchMessage_PortA:   ; entry: call from 0xFA6034
 ; ---------------------------------------------------------------------
 ; MidiIn_PumpPortB -- drain MIDI IN port B and dispatch every message
 ;
-; Called from: prom_b directory slot T_F43358 (`jp 0xFA60C2`).
+; Called from: prom_b directory slot T_MidiIn_PumpPortB (T_F43358) (`jp 0xFA60C2`).
 ; Evidence: 97 bytes, of which FOUR differ from MidiIn_PumpPortA (check T1
 ;          re-derives the count): ring 0x601028 for 0x600C1E, and the
 ;          Ring601028 veneers 0xF41DE0/0xF41DE4 for 0xF41DBC/0xF41DC0.
 ; ---------------------------------------------------------------------
-MidiIn_PumpPortB:   ; entry: prom_b directory slot T_F43358
+MidiIn_PumpPortB:   ; entry: prom_b directory slot T_MidiIn_PumpPortB (T_F43358)
 	call 0xf41de0                                 ; FA60C2  1d e0 1d f4
 	stiw_da (0x60f000), 0x00                      ; FA60C6  f2 00 f0 60 02 00 00   ld (0x60f000),0x0000
 .LFA60CD:
@@ -53914,7 +54148,7 @@ MidiIn_ChannelPressure:   ; entry: MidiIn_ChannelStatusTable[5]
 ; ---------------------------------------------------------------------
 ; MidiIn_ReqRouteRebuild_Msg0D -- ask for a channel-route rebuild
 ;
-; Called from: prom_b directory slot T_F40754 (`jp 0xFA6EEF`).
+; Called from: prom_b directory slot T_MidiIn_ReqRouteRebuild_Msg0D (T_F40754) (`jp 0xFA6EEF`).
 ; Outputs: bit 0 of (0x1978) set, but only when (0x20B8) == 0x0D and
 ;          (0x20BA) & 0xDF is non-zero.
 ; Evidence: (0x20B8) is the message/page number the 0xFC0000 module
@@ -53922,7 +54156,7 @@ MidiIn_ChannelPressure:   ; entry: MidiIn_ChannelStatusTable[5]
 ;          is a hook on one UI message.  Bit 0 of (0x1978) is exactly what
 ;          MidiIn_ServiceRouteRebuild tests and clears.
 ; ---------------------------------------------------------------------
-MidiIn_ReqRouteRebuild_Msg0D:   ; entry: prom_b directory slot T_F40754
+MidiIn_ReqRouteRebuild_Msg0D:   ; entry: prom_b directory slot T_MidiIn_ReqRouteRebuild_Msg0D (T_F40754)
 	m_cp_mi8 MB16, 0x20b8, 0x0d                   ; FA6EEF  c1 b8 20 3f 0d   cp (0x20b8),0x0d
 	jr nz, .LFA6F03                               ; FA6EF4  6e 0d
 	ldb_d8 a, (0x20ba)                            ; FA6EF6  c1 ba 20 21   ld A,(0x20ba)
@@ -53935,11 +54169,11 @@ MidiIn_ReqRouteRebuild_Msg0D:   ; entry: prom_b directory slot T_F40754
 ; ---------------------------------------------------------------------
 ; MidiIn_ServiceDeferred -- run whatever (0x1978) has queued
 ;
-; Called from: prom_b directory slot T_F40758 (`jp 0xFA6F04`).
+; Called from: prom_b directory slot T_MidiIn_ServiceDeferred (T_F40758) (`jp 0xFA6F04`).
 ; Evidence: two calls and a return -- MidiIn_ServiceRouteRebuild for bit 0
 ;          and MidiIn_ServicePartLists for bit 1.
 ; ---------------------------------------------------------------------
-MidiIn_ServiceDeferred:   ; entry: prom_b directory slot T_F40758
+MidiIn_ServiceDeferred:   ; entry: prom_b directory slot T_MidiIn_ServiceDeferred (T_F40758)
 	calr .LFA6F0B                                 ; FA6F04  1e 04 00
 	calr 0x1496                                   ; FA6F07  1e 96 14   calr 0xfa83a0
 	ret                                           ; FA6F0A  0e
@@ -54173,7 +54407,7 @@ MidiIn_ResetChannelRouteTable:   ; entry: MidiIn_AfterRebuildTable[2]
 ; ---------------------------------------------------------------------
 ; MidiOut_ParamChanged -- a parameter changed; maybe echo it as MIDI
 ;
-; Called from: prom_b directory slot T_F40748 (`jp 0xFA70F5`).
+; Called from: prom_b directory slot T_MidiOut_ParamChanged (T_F40748) (`jp 0xFA70F5`).
 ; Inputs:  BC = the parameter id (C the number, B the class), DE the value.
 ; Outputs: (0x1958..0x195B) = BC,DE, then MidiOut_ParamNumberTable[C] is
 ;          called; bit 7 of (0x60F007) is cleared on the way out.
@@ -54182,7 +54416,7 @@ MidiIn_ResetChannelRouteTable:   ; entry: MidiIn_AfterRebuildTable[2]
 ;          0xFA8FC8, the base of the next object.  The whole routine is
 ;          skipped when bit 0 of (0x0922) is set and bit 1 is clear.
 ; ---------------------------------------------------------------------
-MidiOut_ParamChanged:   ; entry: prom_b directory slot T_F40748
+MidiOut_ParamChanged:   ; entry: prom_b directory slot T_MidiOut_ParamChanged (T_F40748)
 	m_ld_rm MB16, 0x0922, r1                      ; FA70F5  c1 22 09 21   ld A,(0x0922)
 	bit 0x00,A                                    ; FA70F9  c9 33 00
 	.byte 0x66, 0x05                              ; FA70FC  66 05   jr Z,0xfa7103
@@ -56140,25 +56374,25 @@ MidiOut_PostStagedMessage:   ; entry: call from 0xFA721E, 0xFA75D3, 0xFA75E1, 0x
 ; ---------------------------------------------------------------------
 ; sub_FA7D92 -- set the port-A running-status mailbox, then fall through
 ;
-; Called from: prom_b directory slot T_F4074C (`jp 0xFA7D92`).
+; Called from: prom_b directory slot T_MidiOut_PutByteA_SetStatus (T_F4074C) (`jp 0xFA7D92`).
 ; Evidence: three bytes, `ld (0x9B),A`, falling into sub_FA7D95.  (0x9B) is
 ;          the mailbox MIDI_PostSendWork and MidiOut_PostStagedMessage both
 ;          use for port A's running status.
 ; ---------------------------------------------------------------------
-MidiOut_PutByteA_SetStatus:   ; entry: prom_b directory slot T_F4074C
+MidiOut_PutByteA_SetStatus:   ; entry: prom_b directory slot T_MidiOut_PutByteA_SetStatus (T_F4074C)
 	st_dd8b a, 0x9b                               ; FA7D92  f0 9b 41   ld (0x9b),A
 
 ; ---------------------------------------------------------------------
 ; MidiOut_PutByteA -- push one byte into port A's transmit ring
 ;
-; Called from: prom_b directory slot T_F40750, and by fall-through from
-;          MidiOut_PutByteA_SetStatus (T_F4074C), which is the same routine
+; Called from: prom_b directory slot T_MidiOut_PutByteA (T_F40750), and by fall-through from
+;          MidiOut_PutByteA_SetStatus (T_MidiOut_PutByteA_SetStatus (T_F4074C)), which is the same routine
 ;          with `ld (0x9B),A` in front of it -- (0x9B) is port A's
 ;          running-status mailbox.
 ; Evidence: it pushes A zero-extended and calls 0xF41DF4, which prom_b's
 ;          directory resolves to Ring601432_Put, inside `ei 6` / `ei 0`.
 ; ---------------------------------------------------------------------
-MidiOut_PutByteA:   ; entry: prom_b directory slot T_F40750
+MidiOut_PutByteA:   ; entry: prom_b directory slot T_MidiOut_PutByteA (T_F40750)
 	extz WA                                       ; FA7D95  d8 12
 	pushw wa                                      ; FA7D97  28   push WA
 	ei 0x06                                       ; FA7D98  06 06
@@ -56870,12 +57104,12 @@ MidiIn_ReqListRebuild_Msg13_16:   ; entry: prom_b directory slot T_F43350
 ; ---------------------------------------------------------------------
 ; MidiIn_ReqRebuild_Msg03_0A -- ask for either rebuild, by message number
 ;
-; Called from: prom_b directory slot T_F43354 (`jp 0xFA8378`).
+; Called from: prom_b directory slot T_MidiIn_ReqRebuild_Msg03_0A (T_F43354) (`jp 0xFA8378`).
 ; Evidence: (0x20B8) == 3 or 4 sets bit 0 of (0x1978), the channel-route
 ;          rebuild; 7..0x0A with (0x20BA) non-zero sets bit 1, the part-list
 ;          rebuild.  Same two bits as the two hooks above.
 ; ---------------------------------------------------------------------
-MidiIn_ReqRebuild_Msg03_0A:   ; entry: prom_b directory slot T_F43354
+MidiIn_ReqRebuild_Msg03_0A:   ; entry: prom_b directory slot T_MidiIn_ReqRebuild_Msg03_0A (T_F43354)
 	ld XIX,0x00001978                             ; FA8378  44 78 19 00 00
 	ldb_d8 a, (0x20b8)                            ; FA837D  c1 b8 20 21   ld A,(0x20b8)
 	cps a, 0x03                                   ; FA8381  c9 db   cp A,3
@@ -59107,10 +59341,10 @@ sub_FAA47E:
 ;                           (0x60F080..0x60F083) to the 0x2C00 queue, but
 ;                           only when (0x60F083) is non-zero
 ;
-; Called from: prom_b directory slot T_F407B4.
+; Called from: prom_b directory slot T_Queue2C00_PublishStagedIfPending (T_F407B4).
 ; Body:    return at once when (0x60F083) == 0.  Otherwise: if the queue
 ;          cursor (0x60F000) has reached 0x01FC, drain the queue through
-;          T_F40018 and restart the cursor at 0; then store (0x60F080) and
+;          T_Queue2C00_DrainPassAB (T_F40018) and restart the cursor at 0; then store (0x60F080) and
 ;          (0x60F082) as two 16-bit words at 0x2C00 + cursor, write 0xFF
 ;          one past, advance the cursor by 4 and clear (0x60F083).
 ; Evidence: `cp (0x60f083),0x00` at 0xFAA4A0, `cp HL,0x01fc` at 0xFAA4B0,
@@ -59119,7 +59353,7 @@ sub_FAA47E:
 ;          0xFAA4F2.  The record shape -- four bytes plus an 0xFF one past
 ;          and a cursor step of 4 -- is the shape Queue2C00_AppendRegs
 ;          (0xF86A81) already documents for the same buffer and the same
-;          cursor cell, and T_F40018 is sub_F823AC, which empties 0x2C00
+;          cursor cell, and T_Queue2C00_DrainPassAB (T_F40018) is sub_F823AC, which empties 0x2C00
 ;          and rezeroes (0x60F000).
 ; Note:    (0x60F083) is the record's mask byte, so "a mask of 0" is what
 ;          "nothing staged" means here; the writers that stage a record
@@ -59224,16 +59458,16 @@ Queue2C00_PublishStaged:
 ;                           Queue2C00_DrainPassB instead of
 ;                           Queue2C00_DrainPassAB
 ;
-; Called from: prom_b directory slot T_F407B8.
+; Called from: prom_b directory slot T_Queue2C00_PublishStagedDrainPassB (T_F407B8).
 ; Evidence: `call 0xf40038` at 0xFAA565 where the other two call
-;          0xf40018.  T_F40018 is Queue2C00_DrainPassAB and T_F40038 is
+;          0xf40018.  T_Queue2C00_DrainPassAB (T_F40018) is Queue2C00_DrainPassAB and T_Queue2C00_DrainPassB (T_F40038) is
 ;          Queue2C00_DrainPassB; the only difference between those two is
 ;          the `call 0xf40f5c` -- UiEventList_RunPassA -- that the second
 ;          omits.  So what this entry point skips is PASS A over the
 ;          queue, and nothing else.
 ; ⚠ CORRECTION: an earlier header of this same pass called this routine
 ;          `Queue2C00_PublishStagedDrainQuiet` and said `the difference is
-;          one notification`.  It is not a notification; T_F40F5C is
+;          one notification`.  It is not a notification; T_UiEventList_RunPassA (T_F40F5C) is
 ;          UiEventList_RunPassA, which prom_a already names, and the
 ;          earlier header simply had not looked it up.
 ; ---------------------------------------------------------------------
@@ -59333,7 +59567,7 @@ ParamRecord_WriteFieldIfChanged:
 ; ---------------------------------------------------------------------
 ; ParamChange_NotifyClearSource -- clear (0x60F007), then notify
 ;
-; Called from: prom_b directory slot T_F407CC, and it is the target of
+; Called from: prom_b directory slot T_ParamChange_NotifyClearSource (T_F407CC), and it is the target of
 ;          all eleven Evt2030_ClassXX_Fwd forwarders.
 ; Body:    `ld (0x60f007),0x00` and then falls straight into
 ;          ParamChange_Notify -- the two are one routine with two entry
@@ -59352,13 +59586,13 @@ ParamChange_NotifyClearSource:
 ; ParamChange_Notify -- hand the register-face parameter change to
 ;                           MidiOut_ParamChanged, unless it is gated off
 ;
-; Called from: prom_b directory slot T_F407D0, and by falling in from
+; Called from: prom_b directory slot T_ParamChange_Notify (T_F407D0), and by falling in from
 ;          ParamChange_NotifyClearSource.
 ; Body:    return when bit 0 of (0x0922) is set AND bit 1 is clear;
 ;          otherwise save all seven register pairs, `call 0xf40748`, and
 ;          restore them.
 ; Evidence: `bit 0,(0x0922)` at 0xFAA604 and `bit 1,(0x0922)` at 0xFAA60A;
-;          T_F40748 is MidiOut_ParamChanged (prom_a 0xFA70F5), already
+;          T_MidiOut_ParamChanged (T_F40748) is MidiOut_ParamChanged (prom_a 0xFA70F5), already
 ;          named, and that routine opens with the SAME two bit tests on
 ;          the SAME cell -- so the gate is duplicated, not delegated.
 ; ---------------------------------------------------------------------
@@ -59389,7 +59623,7 @@ ParamChange_Notify:
 ; ParamRecord_WriteFieldAndStage -- write masked bits into one byte of a
 ;                           parameter's record and stage the change
 ;
-; Called from: prom_b directory slot T_F407D4.
+; Called from: prom_b directory slot T_ParamRecord_WriteFieldAndStage (T_F407D4).
 ; Inputs:  C = the parameter number, B = the byte offset inside that
 ;          parameter's record, E = the new value, D = the bit mask.
 ; Body:    return when D == 0; XIX = ParamNumber_RecordPtrs[C] through
@@ -59440,7 +59674,7 @@ ParamRecord_WriteFieldAndStage:
 ; ParamRecord_WriteFieldAndStage_Copy -- a second copy of the routine
 ;                           above, published as its own directory slot
 ;
-; Called from: prom_b directory slot T_F407D8.
+; Called from: prom_b directory slot T_ParamRecord_WriteFieldAndStage_Copy (T_F407D8).
 ; ★ BORROWED NAME, WITH THE DIFF: 0xFAA623 and 0xFAA66A are 71 bytes with
 ;          exactly TWO differing -- offset +2 (0x3B `push XHL` against
 ;          0x2B `push HL`) and offset +67 (0x5B `pop XHL` against 0x4B
@@ -63990,8 +64224,8 @@ DuplicateTail_FAD3EB:
 ;          labels only what its own descent reaches, and a `jp` in prom_b
 ;          is invisible to it.
 ; Inputs:  C, B, E, D, passed straight through in registers.
-; Body:    `ld (0x60f01e),0xff`, then T_F407D8
-;          (ParamRecord_WriteFieldAndStage_Copy) and T_F407B4
+; Body:    `ld (0x60f01e),0xff`, then T_ParamRecord_WriteFieldAndStage_Copy (T_F407D8)
+;          (ParamRecord_WriteFieldAndStage_Copy) and T_Queue2C00_PublishStagedIfPending (T_F407B4)
 ;          (Queue2C00_PublishStagedIfPending).
 ; Evidence: the three instructions at 0xFAD80A, 0xFAD810 and 0xFAD814.
 ; Unknown:  what (0x60F01E) means.  Every entry point of this module
@@ -64159,7 +64393,7 @@ ParamShadow_SetModulation1:
 ;
 ; Called from: prom_b directory slot T_F40878.
 ; Body:    `ld (0x60f01e),0xff`, BC = (0x1950), DE = (0x1952), then
-;          T_F407D4 (ParamRecord_WriteFieldAndStage) and T_F407B4.
+;          T_ParamRecord_WriteFieldAndStage (T_F407D4) (ParamRecord_WriteFieldAndStage) and T_Queue2C00_PublishStagedIfPending (T_F407B4).
 ; Evidence: the six instructions at 0xFAD8A1-0xFAD8B3.
 ; ★ (0x1950..0x1953) is the four-byte staging area the MIDI-in handlers
 ;          fill: MidiIn_CC5B_Effect1Depth and its neighbours end in
@@ -64182,7 +64416,7 @@ ParamApply_WriteStagedAndPublish:
 ;
 ; Called from: prom_b directory slot T_F40884.
 ; Body:    `ld (0x60f01e),0xff`; (0x60F080) = (0x1950); (0x60F082) =
-;          (0x1952); T_F407B4.  Nothing reads ParamNumber_RecordPtrs on
+;          (0x1952); T_Queue2C00_PublishStagedIfPending (T_F407B4).  Nothing reads ParamNumber_RecordPtrs on
 ;          this path, so a parameter number with no record can use it.
 ; Evidence: the six instructions at 0xFAD8BC-0xFAD8D8; the absence of any
 ;          `call 0xf407d4`/`0xf407d8` between them.
@@ -64225,7 +64459,7 @@ ParamApply_PublishStagedPair_Copy:
 ;
 ; Called from: prom_b directory slot T_F4087C.
 ; Body:    the ParamApply_PublishStagedPair sequence, then seven
-;          Queue2E00_AppendRegs (T_F40F3C) calls with E = 0xB1, 0xB4,
+;          Queue2E00_AppendRegs (T_Queue2E00_AppendRegs (T_F40F3C)) calls with E = 0xB1, 0xB4,
 ;          0xB2, 0xB3, 0xB5, 0xB6, 0xB7 in that order, D = (0x1951) each
 ;          time and WA = 0x4000, 0x7F00, 0x7F00, 0x7F7F, 0x7F00, 0x7F00,
 ;          0x7F00; then (0x1980 + 2*(0x1951)) = 0x7F7F.
@@ -64287,7 +64521,7 @@ ParamApply_PublishStagedAndPostSeven:
 ;
 ; Called from: prom_b directory slot T_F40880.
 ; Body:    BC = (0x1950); DE = (0x1952); `ld (0x60f01e),0xff`;
-;          (0x60F080) = BC; (0x60F082) = DE; T_F407B4.  Same effect as
+;          (0x60F080) = BC; (0x60F082) = DE; T_Queue2C00_PublishStagedIfPending (T_F407B4).  Same effect as
 ;          ParamApply_PublishStagedPair, different register file and a
 ;          different order, so the two are NOT a byte match -- the name
 ;          says which spelling this is and claims nothing more.
@@ -64405,9 +64639,9 @@ OrdinalToBitMask6:
 ;                               T_F407EC
 ;            0x60F5B0[0..0x1F]  as parameter 0xB2, mask 0x7F
 ;            0x60F5D0[0..0x1F]  as parameter 0xB1, 16-bit: the stored high
-;                               byte becomes the mask (T_F407B8)
+;                               byte becomes the mask (T_Queue2C00_PublishStagedDrainPassB (T_F407B8))
 ;            0x60F610[0..0x1F]  as parameter <index>, field 3, mask 0x7F
-;                               (T_F407D4 then T_F407B4)
+;                               (T_ParamRecord_WriteFieldAndStage (T_F407D4) then T_Queue2C00_PublishStagedIfPending (T_F407B4))
 ;          Each sweep tests bit 7, clears it, writes the record and calls
 ;          a publish entry.
 ; Evidence: `ld XIY,0x0060f590` at 0xFADA26, `ld W,0xb3` at 0xFADA2B,
@@ -64664,7 +64898,7 @@ sub_FADBDA:   ; entry: pointer-table entry
 ;
 ; Called from: `jp XIX` at 0xFADBA7; table index 3 -- check N2.
 ; Body:    HL = C * 4; XIX = ((0x60F018))[HL]; E = (XIX + B) & 0x7F;
-;          D = 0x7F; `call T_F407CC`.
+;          D = 0x7F; `call T_ParamChange_NotifyClearSource (T_F407CC)`.
 ; Evidence: (0x60F018) is the table base prom_b's IndexedTable_GetPtr
 ;          (0xF55321) reads, and prom_a's byte-identical twin of that
 ;          routine is at 0xFB77D8 -- so the class byte C indexes a table
@@ -65120,7 +65354,7 @@ sub_FADE55:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassB1_Fwd -- event class 0xB1: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB1]
 ;          is the only entry holding 0x00FADE56 -- check N5.
@@ -65137,7 +65371,7 @@ Evt2030_ClassB1_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassB2_Fwd -- event class 0xB2: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB2]
 ;          is the only entry holding 0x00FADE5B -- check N5.
@@ -65154,7 +65388,7 @@ Evt2030_ClassB2_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassB3_Fwd -- event class 0xB3: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB3]
 ;          is the only entry holding 0x00FADE60 -- check N5.
@@ -65171,7 +65405,7 @@ Evt2030_ClassB3_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassB4_Fwd -- event class 0xB4: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB4]
 ;          is the only entry holding 0x00FADE65 -- check N5.
@@ -65188,7 +65422,7 @@ Evt2030_ClassB4_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassB5_Fwd -- event class 0xB5: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB5]
 ;          is the only entry holding 0x00FADE6A -- check N5.
@@ -65205,7 +65439,7 @@ Evt2030_ClassB5_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassB8_Fwd -- event class 0xB8: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB8]
 ;          is the only entry holding 0x00FADE6F -- check N5.
@@ -65222,7 +65456,7 @@ Evt2030_ClassB8_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassB9_Fwd -- event class 0xB9: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xB9]
 ;          is the only entry holding 0x00FADE74 -- check N5.
@@ -65239,7 +65473,7 @@ Evt2030_ClassB9_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassBA_Fwd -- event class 0xBA: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xBA]
 ;          is the only entry holding 0x00FADE79 -- check N5.
@@ -65256,7 +65490,7 @@ Evt2030_ClassBA_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassBB_Fwd -- event class 0xBB: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xBB]
 ;          is the only entry holding 0x00FADE7E -- check N5.
@@ -65273,7 +65507,7 @@ Evt2030_ClassBB_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassBC_Fwd -- event class 0xBC: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xBC]
 ;          is the only entry holding 0x00FADE83 -- check N5.
@@ -65290,7 +65524,7 @@ Evt2030_ClassBC_Fwd:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassBD_Fwd -- event class 0xBD: hand the record straight
-;                         to T_F407CC (prom_a 0xFAA5FE)
+;                         to T_ParamChange_NotifyClearSource (T_F407CC) (prom_a 0xFAA5FE)
 ;
 ; Called from: `call XIY` at 0xFADB87; Evt2030_ClassHandlers[0xBD]
 ;          is the only entry holding 0x00FADE88 -- check N5.
@@ -69179,7 +69413,7 @@ sub_FAF771:   ; entry: pointer-table entry
 ;   The two link entries it uses are prom_b directory slots and both resolve
 ;   into prom_a's already-converted link block:
 ;       T_F40EF0 -> 0xF8E0FE  the remote-read packet builder (gap D names it)
-;       T_F4123C -> 0xF8E66D  Link_WaitBlockDone, which is what releases P7 bit 1
+;       T_Link_WaitBlockDone (T_F4123C) -> 0xF8E66D  Link_WaitBlockDone, which is what releases P7 bit 1
 ;   ⚠ CORRECTED 2026-08-25 (round-2 audit F1).  This header used to say the
 ;   ~1 s deadline loop at 0xF8E671 is entered "from HERE, and from the sibling
 ;   at 0xFB248A, and from nowhere else that is converted", and concluded that
@@ -96707,12 +96941,12 @@ MixedTables_FC6626:
 ;   byte-identical to 0xFC8020 over 46 bytes -- exactly the .data-image and the
 ;   empty-.bss blocks -- and then returns instead of going on to the 0x602054
 ;   pair.  46 is maximal: byte 47 is 0x41 there and 0x0E here.  It is the SHORT
-;   copy that the directory publishes -- as T_F413D0 -- while 0xFC8020, the full
+;   copy that the directory publishes -- as T_Ram3800_InitDataImage (T_F413D0) -- while 0xFC8020, the full
 ;   one, is reached only by `calr` from the module's own entry.  So a caller can
 ;   reset the 0x3800 image WITHOUT touching 0x602000.
 ;   ⚠ Corrected before it shipped: this paragraph first said T_F413B4 and called
 ;   it the module's highest reference count.  T_F413B4 is the module's FIRST
-;   slot and it targets 0xFC80E2; T_F413D0 is the one that targets 0xFC807D, and
+;   slot and it targets 0xFC80E2; T_Ram3800_InitDataImage (T_F413D0) is the one that targets 0xFC807D, and
 ;   its reference upper bound is 1.  The module's busiest single slot is
 ;   T_F413C8 at 11, targeting 0xFC8CE0.  52 is the module TOTAL, which is what
 ;   `--modules` ranks by.
@@ -96721,16 +96955,16 @@ MixedTables_FC6626:
 ; all but three targets are already converted in this file, so they can be named
 ; rather than guessed:
 ;
-;   T_F41D74/T_F41D78  Ring60080A_ScanRewind / _Scan       1 + 5 calls
-;   T_F41D8C           Ring600A14_PutBlock                 1
-;   T_F41DBC/T_F41DC0  Ring600C1E_ScanRewind / _Scan       1 + 3
-;   T_F41DE0/T_F41DE4  Ring601028_ScanRewind / _Scan       1 + 3
-;   T_F41DF8           Ring601432_PutBlock                 3
-;   T_F41E1C           Ring60153C_PutBlock                 3
-;   T_F41E5C           Ring601850_Get                      2
-;   T_F40724           MIDI_PostSendWork (prom_a 0xFA590F)  3
+;   T_Ring60080A_ScanRewind (T_F41D74)/T_Ring60080A_Scan (T_F41D78)  Ring60080A_ScanRewind / _Scan       1 + 5 calls
+;   T_Ring600A14_PutBlock (T_F41D8C)           Ring600A14_PutBlock                 1
+;   T_Ring600C1E_ScanRewind (T_F41DBC)/T_Ring600C1E_Scan (T_F41DC0)  Ring600C1E_ScanRewind / _Scan       1 + 3
+;   T_Ring601028_ScanRewind (T_F41DE0)/T_Ring601028_Scan (T_F41DE4)  Ring601028_ScanRewind / _Scan       1 + 3
+;   T_Ring601432_PutBlock (T_F41DF8)           Ring601432_PutBlock                 3
+;   T_Ring60153C_PutBlock (T_F41E1C)           Ring60153C_PutBlock                 3
+;   T_Ring601850_Get (T_F41E5C)           Ring601850_Get                      2
+;   T_MIDI_PostSendWork (T_F40724)           MIDI_PostSendWork (prom_a 0xFA590F)  3
 ;   T_F40ED4           prom_a 0xF8E02C, the 0x7C0000 link block sender  10
-;   T_F40F3C           prom_a 0xF86AA3, still `.incbin`     1
+;   T_Queue2E00_AppendRegs (T_F40F3C)           prom_a 0xF86AA3, still `.incbin`     1
 ;
 ;   Seven distinct ring instances, three of them scanned (non-consuming reads)
 ;   and three written by block -- the shape of something that PARSES one stream
@@ -96855,7 +97089,7 @@ Ram3800_InitAll:
 ; ---------------------------------------------------------------------
 ; Ram3800_InitDataImage -- reload the 0x3800 image only, and return
 ;
-; Called from: directory slot T_F413D0 (reference upper bound 1).  ⚠ NOT
+; Called from: directory slot T_Ram3800_InitDataImage (T_F413D0) (reference upper bound 1).  ⚠ NOT
 ;          T_F413B4, which is this module's first slot and targets 0xFC80E2;
 ;          and 52 is the whole module's summed bound, not this entry's.
 ; Inputs:  none.  Outputs: RAM 0x003800-0x004365 reloaded from ROM 0xFCB3D3.
@@ -145854,7 +146088,19 @@ ScreenDispatch_FE8077:
 	.long 0x00fe81e5                                 ; FE80EB  [ 29]
 	.long 0x00fe81e5                                 ; FE80EF  [ 30]
 	.long 0x00fe81e5                                 ; FE80F3  [ 31]
-sub_FE80F7:
+; ---------------------------------------------------------------------
+; LCD_ScreenRedraw_Begin_Copy -- a second, byte-identical copy of LCD_ScreenRedraw_Begin
+;
+; Called from: prom_a Paint_Sequencer (`calr`) at 0xFE8130
+; Issues:  SWI7 service 0x0C at 0xFE80FB -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Issues:  SWI7 service 0x10 at 0xFE80FE -- LCD_Svc_10_SetPanel3Layer, re-issue SYSTEM SET for a three-layer panel
+; Evidence: the fourteen ROM bytes at 0xFE80F7 equal the fourteen at 0xF999F0 exactly
+;           (checked byte for byte by --selftest).  Its one caller, Paint_Sequencer,
+;           calls it at 0xFE8130 and the End copy at 0xFE8161, in that order.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ScreenRedraw_Begin_Copy:
 	ldb c, 0x00                                          ; FE80F7  23 00
 	ldb a, 0x0c                                          ; FE80F9  21 0c
 	swi 7                                                ; FE80FB  ff
@@ -145862,7 +146108,16 @@ sub_FE80F7:
 	swi 7                                                ; FE80FE  ff
 	stdi8 (0x2540), 0x00                                 ; FE80FF  f1 40 25 00 00
 	ret                                                  ; FE8104  0e
-sub_FE8105:
+; ---------------------------------------------------------------------
+; LCD_ScreenRedraw_End_Copy -- a second, byte-identical copy of LCD_ScreenRedraw_End
+;
+; Called from: prom_a Paint_Sequencer (`calr`) at 0xFE8161
+; Issues:  SWI7 service 0x0C at 0xFE8109 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: the six ROM bytes at 0xFE8105 equal the six at 0xF999FE exactly.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ScreenRedraw_End_Copy:
 	ldb c, 0x07                                          ; FE8105  23 07
 	ldb a, 0x0c                                          ; FE8107  21 0c
 	swi 7                                                ; FE8109  ff
@@ -145901,7 +146156,7 @@ sub_FE8116:
 ; ---------------------------------------------------------------------
 Paint_Sequencer:
 	call 0xf42e80                                        ; FE812C  1d 80 2e f4
-	calr sub_FE80F7                                      ; FE8130  1e c4 ff
+	calr LCD_ScreenRedraw_Begin_Copy                                      ; FE8130  1e c4 ff
 	stdi8 (0x2540), 0x00                                 ; FE8133  f1 40 25 00 00
 	ld XIY,0x00ff0e2b                                    ; FE8138  45 2b 0e ff 00
 	ld XIX,0x00ff0f11                                    ; FE813D  44 11 0f ff 00
@@ -145915,7 +146170,7 @@ Paint_Sequencer:
 	calr sub_FE8250                                      ; FE8158  1e f5 00
 	calr sub_FE825F                                      ; FE815B  1e 01 01
 	calr sub_FE826E                                      ; FE815E  1e 0d 01
-	calr sub_FE8105                                      ; FE8161  1e a1 ff
+	calr LCD_ScreenRedraw_End_Copy                                      ; FE8161  1e a1 ff
 	ret                                                  ; FE8164  0e
 sub_FE8165:
 	ret                                                  ; FE8165  0e
@@ -146330,7 +146585,22 @@ sub_FE833F:
 	stiw_da (0x601f73), 0x05                             ; FE8361  f2 73 1f 60 02 05 00
 	stib_da (0x601f46), 0x64                             ; FE8368  f2 46 1f 60 00 64
 	ret                                                  ; FE836E  0e
-sub_FE836F:
+; ---------------------------------------------------------------------
+; ShowScreen_NoteEditPartSelect -- blank, re-init the panel, run the NOTE EDIT part-select painter, show it
+;
+; Called from: prom_b T_ShowScreen_NoteEditPartSelect (T_F402BC) (`jp`) at 
+; Issues:  SWI7 service 0x0C at 0xFE8381 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Issues:  SWI7 service 0x10 at 0xFE8384 -- LCD_Svc_10_SetPanel3Layer, re-issue SYSTEM SET for a three-layer panel
+; Issues:  SWI7 service 0x0C at 0xFE8392 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: `xor C,C` + service 0x0C, service 0x10, then `calr Paint_NoteEditPartSelect`
+;           -- a name this tree already carries -- and finally `ld C,0x07` + service
+;           0x0C.  The bracket is LCD_ScreenRedraw_Begin's and _End's, written out
+;           inline.  ⚠ It also clears bit 0 of (0x601F70); what that bit selects is not
+;           established, and ShowScreen_DrumEditPartSelect SETS the same bit.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+ShowScreen_NoteEditPartSelect:
 	m_or_mi8 MB16, 0x34bb, 0x04                          ; FE836F  c1 bb 34 3e 04
 	call 0xf42e80                                        ; FE8374  1d 80 2e f4
 	m_res 0, MD24, 0x601f70                              ; FE8378  f2 70 1f 60 b0
@@ -146373,7 +146643,21 @@ Paint_NoteEditPartSelect:
 	ld XIX,0x00ff158a                                    ; FE8399  44 8a 15 ff 00
 	call 0xf417f0                                        ; FE839E  1d f0 17 f4
 	ret                                                  ; FE83A2  0e
-sub_FE83A3:
+; ---------------------------------------------------------------------
+; ShowScreen_DrumEditPartSelect -- the same sequence around the DRUM EDIT part-select painter
+;
+; Called from: prom_b T_ShowScreen_DrumEditPartSelect (T_F402DC) (`jp`) at 
+; Issues:  SWI7 service 0x0C at 0xFE83BA -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Issues:  SWI7 service 0x10 at 0xFE83BD -- LCD_Svc_10_SetPanel3Layer, re-issue SYSTEM SET for a three-layer panel
+; Issues:  SWI7 service 0x0C at 0xFE83CB -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: identical in shape to ShowScreen_NoteEditPartSelect, calling
+;           Paint_DrumEditPartSelect instead, and SETTING bit 0 of (0x601F70) where
+;           the other clears it.  It also clears bit 0 of (0x601F77), which the note
+;           one does not touch.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+ShowScreen_DrumEditPartSelect:
 	m_res 0, MD24, 0x601f77                              ; FE83A3  f2 77 1f 60 b0
 	m_or_mi8 MB16, 0x34bb, 0x04                          ; FE83A8  c1 bb 34 3e 04
 	call 0xf42e80                                        ; FE83AD  1d 80 2e f4
@@ -154036,12 +154320,24 @@ sub_FEFE59:
 	m_bit 0, MD24, 0x601f70                              ; FEFE59  f2 70 1f 60 c8
 	jr z, .LFEFE65                                       ; FEFE5E  66 05
 	ret                                                  ; FEFE60  0e
-	calr sub_FEFE94                                      ; FEFE61  1e 30 00
+	calr LCD_DrawVRuleRight_Layer1                                      ; FEFE61  1e 30 00
 	ret                                                  ; FEFE64  0e
 .LFEFE65:
-	calr sub_FEFE69                                      ; FEFE65  1e 01 00
+	calr LCD_DrawVRuleLeft_Layer1                                      ; FEFE65  1e 01 00
 	ret                                                  ; FEFE68  0e
-sub_FEFE69:
+; ---------------------------------------------------------------------
+; LCD_DrawVRuleLeft_Layer1 -- a vertical rule on layer 1 whose column tracks (0x601F54)
+;
+; Called from: prom_a sub_FEFE59 (`calr`) at 0xFEFE65
+; Issues:  SWI7 service 0x02 at 0xFEFE92 -- LCD_Svc_02_DrawVLine, a solid vertical run of pixels
+; Evidence: `ld (0x2540),0x01`; (0x2532)=0x0029 and (0x2536)=0x00A8 fix the ends;
+;           X0 and X1 are BOTH set to (0x601F54)/4 + 0x10, so the rectangle is one
+;           pixel wide, and service 0x02 draws a vertical run.  `Left` is relative to
+;           LCD_DrawVRuleRight_Layer1 below, which adds 0x59 to the same quantity.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_DrawVRuleLeft_Layer1:
 	stdi8 (0x2540), 0x01                                 ; FEFE69  f1 40 25 00 01
 	stdi16 (0x2532), 0x29                                ; FEFE6E  f1 32 25 02 29 00
 	stdi16 (0x2536), 0xa8                                ; FEFE74  f1 36 25 02 a8 00
@@ -154054,7 +154350,18 @@ sub_FEFE69:
 	ldb a, 0x02                                          ; FEFE90  21 02
 	swi 7                                                ; FEFE92  ff
 	ret                                                  ; FEFE93  0e
-sub_FEFE94:
+; ---------------------------------------------------------------------
+; LCD_DrawVRuleRight_Layer1 -- the companion vertical rule, 73 pixels to the right
+;
+; Called from: prom_a sub_FEFE59 (`calr`) at 0xFEFE61
+; Issues:  SWI7 service 0x02 at 0xFEFEBD -- LCD_Svc_02_DrawVLine, a solid vertical run of pixels
+; Evidence: the same nine instructions as LCD_DrawVRuleLeft_Layer1 with three
+;           immediates changed: Y0 0x2A, Y1 0xA1, and X = (0x601F54)/4 + 0x59.  0x59 -
+;           0x10 = 0x49 = 73, which is what `Right` claims and all it claims.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_DrawVRuleRight_Layer1:
 	stdi8 (0x2540), 0x01                                 ; FEFE94  f1 40 25 00 01
 	stdi16 (0x2532), 0x2a                                ; FEFE99  f1 32 25 02 2a 00
 	stdi16 (0x2536), 0xa1                                ; FEFE9F  f1 36 25 02 a1 00
@@ -154367,7 +154674,7 @@ sub_FF019D:
 	stdi8 (0x2540), 0x01                                 ; FF01D7  f1 40 25 00 01
 	m_bit 0, MD24, 0x601f70                              ; FF01DC  f2 70 1f 60 c8
 	jr z, .LFF01E8                                       ; FF01E1  66 05
-	calr sub_FF01F2                                      ; FF01E3  1e 0c 00
+	calr LCD_FillRect_Grown2Rows                                      ; FF01E3  1e 0c 00
 	jr .LFF01EE                                          ; FF01E6  68 06
 .LFF01E8:
 	calr 0xfe23                                          ; FF01E8  1e 23 fe
@@ -154377,7 +154684,21 @@ sub_FF019D:
 	calr 0x8b24                                          ; FF01EE  1e 24 8b
 .LFF01F1:
 	ret                                                  ; FF01F1  0e
-sub_FF01F2:
+; ---------------------------------------------------------------------
+; LCD_FillRect_Grown2Rows -- grow the pending rectangle by two rows each way and fill it
+;
+; Called from: prom_a sub_FF019D (`calr`) at 0xFF01E3
+;          prom_a sub_FF0243 (`calr`) at 0xFF0288
+; Issues:  SWI7 service 0x05 at 0xFF0203 -- LCD_Svc_05_FillRect, fill the rectangle in (0x2530..0x2536)
+; Evidence: `sub (0x2532),0x0002` and `add (0x2536),0x0002` move Y0 up and Y1 down by
+;           two before service 0x05 fills (0x2530..0x2536).  This routine's own
+;           instructions never touch X0 or X1, so all IT contributes is four rows of
+;           height.  ⚠ Where the rectangle comes from is NOT established: the `calr`
+;           at 0xFF01F2 resolves to sub_FF0092, which this round did not trace.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_FillRect_Grown2Rows:
 	calr 0xfe9d                                          ; FF01F2  1e 9d fe
 	.byte 0xd1, 0x32, 0x25, 0x3a, 0x02, 0x00             ; FF01F5  d1 32 25 3a 02 00   sub (0x2532),0x0002
 	m_add_mi16 MW16, 0x2536, 0x0002                      ; FF01FB  d1 36 25 38 02 00
@@ -154429,7 +154750,7 @@ sub_FF0243:
 	stdi8 (0x2540), 0x01                                 ; FF027C  f1 40 25 00 01
 	m_bit 0, MD24, 0x601f70                              ; FF0281  f2 70 1f 60 c8
 	jr z, .LFF028D                                       ; FF0286  66 05
-	calr sub_FF01F2                                      ; FF0288  1e 67 ff
+	calr LCD_FillRect_Grown2Rows                                      ; FF0288  1e 67 ff
 	jr .LFF0293                                          ; FF028B  68 06
 .LFF028D:
 	calr 0xfd7e                                          ; FF028D  1e 7e fd
@@ -157518,7 +157839,7 @@ sub_FF42CD:
 	push XWA                                             ; FF430D  38
 .LFF430E:
 	call sub_FF75D3                                      ; FF430E  1d d3 75 ff
-	call sub_FF7615                                      ; FF4312  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF4312  1d 15 76 ff
 	inc 0,XSP                                            ; FF4316  ef 60
 	inc 2,XSP                                            ; FF4318  ef 62
 	ret                                                  ; FF431A  0e
@@ -157745,7 +158066,7 @@ sub_FF4408:
 	lda_24 xiy, (0xff4572)                               ; FF456A  f2 72 45 ff 35
 	push XIY                                             ; FF456F  3d
 	jp (xix)                                             ; FF4570  b4 d8
-	call sub_FF7615                                      ; FF4572  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF4572  1d 15 76 ff
 	inc 0,XSP                                            ; FF4576  ef 60
 	inc 2,XSP                                            ; FF4578  ef 62
 .LFF457A:
@@ -158070,7 +158391,7 @@ sub_FF4786:
 	jp (xix)                                             ; FF48E2  b4 d8
 	add XSP,0x00000014                                   ; FF48E4  ef c8 14 00 00 00
 .LFF48EA:
-	call sub_FF7615                                      ; FF48EA  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF48EA  1d 15 76 ff
 	pop XIX                                              ; FF48EE  5c
 	ret                                                  ; FF48EF  0e
 sub_FF48F0:
@@ -158252,7 +158573,7 @@ sub_FF4995:
 	lda_24 xbc, (0xf583e5)                               ; FF4A6D  f2 e5 83 f5 31
 	push XBC                                             ; FF4A72  39
 	call sub_FF763F                                      ; FF4A73  1d 3f 76 ff
-	call sub_FF7615                                      ; FF4A77  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF4A77  1d 15 76 ff
 	inc 0,XSP                                            ; FF4A7B  ef 60
 	inc 4,XSP                                            ; FF4A7D  ef 64
 .LFF4A7F:
@@ -158280,7 +158601,7 @@ sub_FF4A91:
 	lda_24 xbc, (0xf583e5)                               ; FF4AB6  f2 e5 83 f5 31
 	push XBC                                             ; FF4ABB  39
 	call sub_FF763F                                      ; FF4ABC  1d 3f 76 ff
-	call sub_FF7615                                      ; FF4AC0  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF4AC0  1d 15 76 ff
 	inc 0,XSP                                            ; FF4AC4  ef 60
 	inc 4,XSP                                            ; FF4AC6  ef 64
 .LFF4AC8:
@@ -158541,7 +158862,7 @@ sub_FF4ACB:
 .LFF4D52:
 	inc 0,XSP                                            ; FF4D52  ef 60
 .LFF4D54:
-	call sub_FF7615                                      ; FF4D54  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF4D54  1d 15 76 ff
 	pop XIX                                              ; FF4D58  5c
 	popw hl                                              ; FF4D59  4b
 	unlk XIZ                                             ; FF4D5A  ee 0d
@@ -158792,7 +159113,7 @@ sub_FF4D5D:
 .LFF4FD4:
 	inc 0,XSP                                            ; FF4FD4  ef 60
 .LFF4FD6:
-	call sub_FF7615                                      ; FF4FD6  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF4FD6  1d 15 76 ff
 	pop XIX                                              ; FF4FDA  5c
 	popw hl                                              ; FF4FDB  4b
 	unlk XIZ                                             ; FF4FDC  ee 0d
@@ -158882,7 +159203,7 @@ sub_FF4FFA:
 	push XBC                                             ; FF50D9  39
 .LFF50DA:
 	call sub_FF7895                                      ; FF50DA  1d 95 78 ff
-	call sub_FF7615                                      ; FF50DE  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF50DE  1d 15 76 ff
 	inc 0,XSP                                            ; FF50E2  ef 60
 	inc 2,XSP                                            ; FF50E4  ef 62
 .LFF50E6:
@@ -159323,7 +159644,7 @@ sub_FF548A:
 	lda_24 xwa, (0xf58786)                               ; FF5530  f2 86 87 f5 30
 	push XWA                                             ; FF5535  38
 	call 0xf42e04                                        ; FF5536  1d 04 2e f4
-	call sub_FF7615                                      ; FF553A  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF553A  1d 15 76 ff
 	add XSP,0x00000016                                   ; FF553E  ef c8 16 00 00 00
 	pop XHL                                              ; FF5544  5b
 	ret                                                  ; FF5545  0e
@@ -159364,7 +159685,7 @@ sub_FF557A:
 	lda_24 xwa, (0xf583e5)                               ; FF55A9  f2 e5 83 f5 30
 	push XWA                                             ; FF55AE  38
 	call sub_FF75EF                                      ; FF55AF  1d ef 75 ff
-	call sub_FF7615                                      ; FF55B3  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF55B3  1d 15 76 ff
 	add XSP,0x0000001c                                   ; FF55B7  ef c8 1c 00 00 00
 	ret                                                  ; FF55BD  0e
 	push XIX                                             ; FF55BE  3c
@@ -159396,7 +159717,7 @@ sub_FF557A:
 	lda_24 xiy, (0xff5615)                               ; FF560D  f2 15 56 ff 35
 	push XIY                                             ; FF5612  3d
 	jp (xix)                                             ; FF5613  b4 d8
-	call sub_FF7615                                      ; FF5615  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF5615  1d 15 76 ff
 	add XSP,0x0000001e                                   ; FF5619  ef c8 1e 00 00 00
 	pop XIX                                              ; FF561F  5c
 	ret                                                  ; FF5620  0e
@@ -159479,7 +159800,7 @@ sub_FF557A:
 	lda_24 xiy, (0xff5713)                               ; FF570B  f2 13 57 ff 35
 	push XIY                                             ; FF5710  3d
 	jp (xix)                                             ; FF5711  b4 d8
-	call sub_FF7615                                      ; FF5713  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF5713  1d 15 76 ff
 	add XSP,0x0000001e                                   ; FF5717  ef c8 1e 00 00 00
 	pop XIX                                              ; FF571D  5c
 	ret                                                  ; FF571E  0e
@@ -160013,7 +160334,7 @@ sub_FF5C3E:
 	lda_24 xwa, (0xf58786)                               ; FF5D11  f2 86 87 f5 30
 	push XWA                                             ; FF5D16  38
 	call sub_FF75EF                                      ; FF5D17  1d ef 75 ff
-	call sub_FF7615                                      ; FF5D1B  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF5D1B  1d 15 76 ff
 	add XSP,0x00000020                                   ; FF5D1F  ef c8 20 00 00 00
 	pop XHL                                              ; FF5D25  5b
 	ret                                                  ; FF5D26  0e
@@ -160078,7 +160399,7 @@ sub_FF5C3E:
 	lda_24 xwa, (0xf59915)                               ; FF5DD2  f2 15 99 f5 30
 	push XWA                                             ; FF5DD7  38
 	call 0xf42e04                                        ; FF5DD8  1d 04 2e f4
-	call sub_FF7615                                      ; FF5DDC  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF5DDC  1d 15 76 ff
 	add XSP,0x00000036                                   ; FF5DE0  ef c8 36 00 00 00
 	pop XIX                                              ; FF5DE6  5c
 	ret                                                  ; FF5DE7  0e
@@ -160111,7 +160432,7 @@ sub_FF5C3E:
 	lda_24 xiy, (0xff5e3f)                               ; FF5E37  f2 3f 5e ff 35
 	push XIY                                             ; FF5E3C  3d
 	jp (xix)                                             ; FF5E3D  b4 d8
-	call sub_FF7615                                      ; FF5E3F  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF5E3F  1d 15 76 ff
 	add XSP,0x0000001e                                   ; FF5E43  ef c8 1e 00 00 00
 	pop XIX                                              ; FF5E49  5c
 	ret                                                  ; FF5E4A  0e
@@ -160144,7 +160465,7 @@ sub_FF5C3E:
 	lda_24 xiy, (0xff5ea2)                               ; FF5E9A  f2 a2 5e ff 35
 	push XIY                                             ; FF5E9F  3d
 	jp (xix)                                             ; FF5EA0  b4 d8
-	call sub_FF7615                                      ; FF5EA2  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF5EA2  1d 15 76 ff
 	add XSP,0x0000001e                                   ; FF5EA6  ef c8 1e 00 00 00
 	pop XIX                                              ; FF5EAC  5c
 	ret                                                  ; FF5EAD  0e
@@ -160787,7 +161108,7 @@ sub_FF6512:
 	lda_24 xwa, (0xf58000)                               ; FF653A  f2 00 80 f5 30
 	push XWA                                             ; FF653F  38
 	call sub_FF75D3                                      ; FF6540  1d d3 75 ff
-	call sub_FF7615                                      ; FF6544  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF6544  1d 15 76 ff
 	add XSP,0x00000014                                   ; FF6548  ef c8 14 00 00 00
 	ret                                                  ; FF654E  0e
 sub_FF654F:
@@ -160916,7 +161237,7 @@ sub_FF6613:
 	lda_24 xiy, (0xff669f)                               ; FF6697  f2 9f 66 ff 35
 	push XIY                                             ; FF669C  3d
 	jp (xix)                                             ; FF669D  b4 d8
-	call sub_FF7615                                      ; FF669F  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF669F  1d 15 76 ff
 	inc 0,XSP                                            ; FF66A3  ef 60
 	inc 2,XSP                                            ; FF66A5  ef 62
 	pop XIX                                              ; FF66A7  5c
@@ -161059,7 +161380,7 @@ sub_FF672D:
 	push XBC                                             ; FF681E  39
 	call sub_FF763F                                      ; FF681F  1d 3f 76 ff
 	stdi8 (0x2540), 0x00                                 ; FF6823  f1 40 25 00 00
-	call sub_FF7615                                      ; FF6828  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF6828  1d 15 76 ff
 	add XSP,0x0000002c                                   ; FF682C  ef c8 2c 00 00 00
 	pop XIX                                              ; FF6832  5c
 	popw hl                                              ; FF6833  4b
@@ -161108,7 +161429,7 @@ sub_FF672D:
 	push XBC                                             ; FF68B4  39
 	call sub_FF763F                                      ; FF68B5  1d 3f 76 ff
 	stdi8 (0x2540), 0x00                                 ; FF68B9  f1 40 25 00 00
-	call sub_FF7615                                      ; FF68BE  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF68BE  1d 15 76 ff
 	add XSP,0x0000002c                                   ; FF68C2  ef c8 2c 00 00 00
 	pop XIX                                              ; FF68C8  5c
 	ret                                                  ; FF68C9  0e
@@ -161717,7 +162038,7 @@ sub_FF6DB7:
 	push XBC                                             ; FF6E7F  39
 	call sub_FF763F                                      ; FF6E80  1d 3f 76 ff
 	stdi8 (0x2540), 0x00                                 ; FF6E84  f1 40 25 00 00
-	call sub_FF7615                                      ; FF6E89  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF6E89  1d 15 76 ff
 	add XSP,0x0000002c                                   ; FF6E8D  ef c8 2c 00 00 00
 	pop XIX                                              ; FF6E93  5c
 	ret                                                  ; FF6E94  0e
@@ -161754,7 +162075,7 @@ sub_FF6DB7:
 	push XBC                                             ; FF6EFE  39
 	call sub_FF763F                                      ; FF6EFF  1d 3f 76 ff
 	stdi8 (0x2540), 0x00                                 ; FF6F03  f1 40 25 00 00
-	call sub_FF7615                                      ; FF6F08  1d 15 76 ff
+	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF6F08  1d 15 76 ff
 	add XSP,0x00000022                                   ; FF6F0C  ef c8 22 00 00 00
 	ret                                                  ; FF6F12  0e
 sub_FF6F13:
@@ -162545,7 +162866,31 @@ sub_FF7604:
 	pop XIX                                              ; FF7612  5c
 	pop XIZ                                              ; FF7613  5e
 	ret                                                  ; FF7614  0e
-sub_FF7615:
+; ---------------------------------------------------------------------
+; LCD_ShowAllThreeLayers_SaveRegs -- service 0x0C with C = 7, with four registers preserved
+;
+; Called from: prom_a sub_FF42CD (`call`) at 0xFF4312
+;          prom_a sub_FF4408 (`call`) at 0xFF4572
+;          prom_a sub_FF4786 (`call`) at 0xFF48EA
+;          prom_a sub_FF4995 (`call`) at 0xFF4A77
+;          prom_a sub_FF4A91 (`call`) at 0xFF4AC0
+;          prom_a sub_FF4ACB (`call`) at 0xFF4D54
+;          prom_a sub_FF4D5D (`call`) at 0xFF4FD6
+;          prom_a sub_FF4FFA (`call`) at 0xFF50DE
+;          prom_a sub_FF548A (`call`) at 0xFF553A
+;          prom_a sub_FF557A (`call`) at 0xFF55B3, 0xFF5615, 0xFF5713
+;          prom_a sub_FF5C3E (`call`) at 0xFF5D1B, 0xFF5DDC, 0xFF5E3F, 0xFF5EA2
+;          prom_a sub_FF6512 (`call`) at 0xFF6544
+;          prom_a sub_FF6613 (`call`) at 0xFF669F
+;          prom_a sub_FF672D (`call`) at 0xFF6828, 0xFF68BE
+;          prom_a sub_FF6DB7 (`call`) at 0xFF6E89, 0xFF6F08
+; Issues:  SWI7 service 0x0C at 0xFF761D -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
+; Evidence: `push XIZ/XIX/XHL/XDE`, `ld C,0x07`, service 0x0C, then the four pops.
+;           Same effect as LCD_ScreenRedraw_End; the pushes are what distinguish it.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_ShowAllThreeLayers_SaveRegs:
 	push XIZ                                             ; FF7615  3e
 	push XIX                                             ; FF7616  3c
 	push XHL                                             ; FF7617  3b
@@ -162660,25 +163005,37 @@ sub_FF76B5:
 	pushw hl                                             ; FF76CE  2b
 	xor HL,HL                                            ; FF76CF  db d3
 	ldw bc, 0x06                                         ; FF76D1  31 06 00
-	call sub_FF76FE                                      ; FF76D4  1d fe 76 ff
+	call LCD_DrawText8x14_Layer0_SaveRegs                                      ; FF76D4  1d fe 76 ff
 	popw hl                                              ; FF76D8  4b
 	push XIX                                             ; FF76D9  3c
 	ldw bc, 0x04                                         ; FF76DA  31 04 00
 	ld XIY,0x00f58625                                    ; FF76DD  45 25 86 f5 00
 	add IX,0x0006                                        ; FF76E2  dc c8 06 00
-	call sub_FF76FE                                      ; FF76E6  1d fe 76 ff
+	call LCD_DrawText8x14_Layer0_SaveRegs                                      ; FF76E6  1d fe 76 ff
 	pop XIX                                              ; FF76EA  5c
 	jr .LFF76FB                                          ; FF76EB  68 0e
 .LFF76ED:
 	xor HL,HL                                            ; FF76ED  db d3
 	ldw bc, 0x09                                         ; FF76EF  31 09 00
 	ld XIY,0x00f5864d                                    ; FF76F2  45 4d 86 f5 00
-	call sub_FF76FE                                      ; FF76F7  1d fe 76 ff
+	call LCD_DrawText8x14_Layer0_SaveRegs                                      ; FF76F7  1d fe 76 ff
 .LFF76FB:
 	popw wa                                              ; FF76FB  48
 	pop XIY                                              ; FF76FC  5d
 	ret                                                  ; FF76FD  0e
-sub_FF76FE:
+; ---------------------------------------------------------------------
+; LCD_DrawText8x14_Layer0_SaveRegs -- draw the caller's 8x14 string on layer 0, preserving four registers
+;
+; Called from: prom_a sub_FF76B5 (`call`) at 0xFF76D4, 0xFF76E6, 0xFF76F7
+; Issues:  SWI7 service 0x06 at 0xFF7709 -- LCD_Svc_06_DrawText8x14, draw 8x14 text
+; Evidence: `push WA/BC/XIY/XIX`, `ld (0x2540),0x00`, service 0x06, then the four pops.
+;           None of XIY, BC, HL or IX is loaded in the body, so every argument of the
+;           text service is the caller's; the routine contributes the layer and the
+;           register discipline.
+; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+LCD_DrawText8x14_Layer0_SaveRegs:
 	pushw wa                                             ; FF76FE  28
 	pushw bc                                             ; FF76FF  29
 	push XIY                                             ; FF7700  3d

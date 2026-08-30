@@ -18,7 +18,7 @@ THE RESULT THIS WAS WRITTEN FOR
     Voice_LevelPair_AttackCurve has 4 reference sites in 4 routines.
     Staging word 12 -- register 0x0800 + chan -- has 4 store sites in the SAME 4 routines.
     Nothing else reads that curve and nothing else writes that word.
-    Voice_EnvelopeLevel_Curve is read 6 times each by sub_FA842D and sub_FA93AF, which are
+    Voice_EnvelopeLevel_Curve is read 6 times each by Voice_StageRegs_0900_0940_0980_AB and Voice_StageRegs_09C0_0A00_0A40_AB, which are
     the only writers of words 16-18 and 19-21 respectively.
 
 ⚠ WHAT THIS IS.  A scan of the gate-certified listing `prom_c/wsa1_prom_c.s` for the
@@ -112,15 +112,15 @@ if "--selftest" in sys.argv:
         lvl[o] += 1
     ok = (len(curve_hits["Voice_LevelPair_AttackCurve"]) == 4
           and atk == w12
-          and atk == {"sub_FAA4C3", "sub_FAA96C", "sub_FAACEE", "sub_FAB0BD"}
-          and lvl["sub_FA842D"] == 6 and lvl["sub_FA93AF"] == 6
-          and {o for _, o in store_hits[16]} == {"sub_FA842D"}
-          and {o for _, o in store_hits[21]} == {"sub_FA93AF"})
+          and atk == {"Voice_StageRegs_0800_A", "Voice_StageRegs_0800_CD", "Voice_StageRegs_0800_B_ModeLt3", "Voice_StageRegs_0800_B_ModeGe3"}
+          and lvl["Voice_StageRegs_0900_0940_0980_AB"] == 6 and lvl["Voice_StageRegs_09C0_0A00_0A40_AB"] == 6
+          and {o for _, o in store_hits[16]} == {"Voice_StageRegs_0900_0940_0980_AB"}
+          and {o for _, o in store_hits[21]} == {"Voice_StageRegs_09C0_0A00_0A40_AB"})
     print()
     print(f"selftest: attack-curve readers {sorted(atk)}")
     print(f"selftest: word-12 writers      {sorted(w12)}")
-    print(f"selftest: EnvelopeLevel_Curve lookups -- sub_FA842D {lvl['sub_FA842D']}, "
-          f"sub_FA93AF {lvl['sub_FA93AF']}")
+    print(f"selftest: EnvelopeLevel_Curve lookups -- Voice_StageRegs_0900_0940_0980_AB {lvl['Voice_StageRegs_0900_0940_0980_AB']}, "
+          f"Voice_StageRegs_09C0_0A00_0A40_AB {lvl['Voice_StageRegs_09C0_0A00_0A40_AB']}")
     print(f"selftest: LAST word (21) writers {sorted({o for _, o in store_hits[21]})}")
     print("selftest: OK" if ok else "selftest: FAILED")
     sys.exit(0 if ok else 1)

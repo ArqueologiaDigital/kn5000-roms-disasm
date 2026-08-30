@@ -392,7 +392,7 @@ MIDDLE = [
  (0xFE12B5, 26, 'w', "Dev10C_GlobalRegs_ResetImage"),
  (0xFE12CF, 68, 'w', "Dev10C_StagingStruct_ResetImage"),
  (0xFE1313, 2, 'w', "Dev104_Reg0800_ResetValue"),
- (0xFE1315, 38, 'w', "unexplained_FE1315"),
+ (0xFE1315, 38, 'w', "Dev104_StagingStruct_StageBImage"),
  (0xFE133B, 38, 'w', "Dev104_StagingStruct_ResetImage"),
 ]
 
