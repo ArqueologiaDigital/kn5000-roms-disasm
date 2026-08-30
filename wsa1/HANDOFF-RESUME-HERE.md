@@ -120,6 +120,56 @@ differing count stated. Prefer `sub_XXXXXX` plus a stated gap over a plausible g
 
 ---
 
+## ⚠⚠ AN IMAGE IS NOT ONE FILE — read this before writing a probe
+
+`prom_c/wsa1_prom_c.s` is a **2,516-line master** that `.include`s 26 subject sources;
+`prom_d/wsa1_prom_d.s` is 494 lines plus three; prom_a and prom_b pull in `kernel/kernel.s` and two
+shared maincpu routines. **A probe that opens the primary by path scans 1.9% of prom_c and 0.9% of
+prom_d — and still prints its usual success.** The byte gate cannot see this: the lines a probe
+scans assemble to nothing it compares.
+
+**Always read an image through `notes/asm_source.py`:**
+
+```python
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines, image_text, image_path, image_text_at_rev
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")     # a file, for `open(SRC)` scans
+```
+
+| you want | use |
+|---|---|
+| the image's lines | `image_lines(ROOT, primary)` |
+| ...minus a shared source you count separately | `image_lines(ROOT, primary, skip=["kernel/kernel.s"])` |
+| a path, so an existing `open(SRC)` keeps working | `image_path(ROOT, primary)` |
+| the image **at a git revision** | `image_text_at_rev(ROOT, primary, "HEAD")` |
+| to WRITE one block | `locate(ROOT, primary, anchor)` then `write_part(path, text)` |
+| to rename a token image-wide | `edit_image(ROOT, primary, fn)` |
+
+★ **`git show HEAD:<primary>` is the trap `image_text_at_rev` exists for.** The split is committed,
+so it returns the header while the working-tree side returns the image — four prom_d review probes
+were reporting thousands of labels nobody added.
+
+★ **Never redirect a splicer's READ without moving its WRITE.** Overwriting the master with the
+expansion orphans 26 sources and **the byte gate stays green**. `write_part()` refuses both halves
+of that accident (an `.include` count that drops, and a part that explodes to image size).
+
+**The instrument:** `python3 notes/probe_health.py [--image prom_c]` runs every committed probe that
+names a listing in three trees that differ only in the primary's layout — as committed, fully
+expanded, and stubbed — and grades it by whether its ANSWER CHANGES:
+
+| grade | meaning |
+|---|---|
+| `VACUOUS` ★ | differs from the image and still reports success — **fix first** |
+| `LOUD` | differs and fails visibly |
+| `SPLIT-FRAGILE` | right today, would break the moment its image is split |
+| `WRITER` / `TIMEOUT` / `NONDET` / `BY-DESIGN` | not graded; see the docstring |
+
+Its `--selftest` runs the byte gate in both derived trees, so a difference is attributable to the
+file and not to the ROM. `python3 notes/migrate_listing_readers.py --list` is the ledger of every
+site that still spells a listing by path, with a verdict per site.
+
+---
+
 ## Where it stands
 
 Regenerate, never retype — `python3 scripts/analysis/source_coverage.py`:
