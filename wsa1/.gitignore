@@ -7,7 +7,10 @@ __pycache__/
 # stale copy would answer a question about a tree that no longer exists.
 notes/.reachability-cache.json
 
-# derived: prom_c/wsa1_prom_c.s with its 26 includes expanded, for probes that
-# still read the master directly.  Regenerate with notes/prom_c_image.py; never
-# commit it -- the sources are the source.
+# derived: an image's primary with every .include expanded, for probes whose scan
+# is `open(SRC)`.  Regenerate with asm_source.image_path(); never commit one --
+# the sources are the source, and a stale expansion would answer for a tree that
+# no longer exists.  (notes/.prom_c-image.s was the prom_c-only shim's spelling;
+# kept so an older checkout does not start tracking it.)
+notes/.image-*.s
 notes/.prom_c-image.s

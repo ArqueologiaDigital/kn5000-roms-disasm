@@ -144,6 +144,123 @@ def image_text(root, primary):
 
 
 # ---------------------------------------------------------------------------
+# A MATERIALISED PATH, for callers whose scan is `open(SRC)`
+# ---------------------------------------------------------------------------
+# ★ This absorbs notes/prom_c_image.py, the temporary prom_c-only shim written
+#   while this module's --selftest was still red.  That file's own docstring said
+#   it "should not survive"; what survives it are its two warnings:
+#
+#   ⚠ IT IS A READ PATH ONLY.  Several probes SPLICE a block back into the
+#     primary.  Pointing such a probe's READ here while its WRITE stays on the
+#     primary would overwrite a 2,517-line master with the whole 132,304-line
+#     image and undo a per-subject split silently -- and the BYTE GATE WOULD
+#     STILL PASS, because the bytes are the same.  Writers use locate() and
+#     write_part() below, which refuse exactly that.
+#
+#   ⚠ THE EXPANSION IS DERIVED AND IS NOT COMMITTED.  It is rebuilt whenever any
+#     source is newer than it, and written atomically, so two lanes running
+#     probes at once cannot read a half-written file.
+
+
+def image_path(root, primary):
+    """A file whose CONTENT is the whole image, so `open(image_path(...))` works.
+
+    Prefer image_lines() / image_text() in new code.  This exists so that an
+    existing scan can be migrated by changing ONE line instead of being
+    rewritten, which is the difference between converting 30 probes and
+    converting three.
+    """
+    files = image_files(root, primary)
+    if len(files) == 1:
+        return files[0]                    # not split; nothing to expand
+    cache = os.path.join(root, "notes", ".image-" + os.path.basename(primary))
+    newest = max([os.path.getmtime(p) for p in files]
+                 + [os.path.getmtime(os.path.abspath(__file__))])
+    if not os.path.exists(cache) or os.path.getmtime(cache) < newest:
+        tmp = "%s.%d" % (cache, os.getpid())
+        with open(tmp, "w", encoding="utf-8") as fh:
+            fh.write(image_text(root, primary))
+        os.replace(tmp, cache)             # atomic; concurrent lanes are safe
+    return cache
+
+
+# ---------------------------------------------------------------------------
+# THE WRITE PATH.  ★★ THIS IS THE HALF THAT CAN DESTROY THE TREE
+# ---------------------------------------------------------------------------
+# A probe that splices generated assembly back into the listing did its
+# read-modify-write on `prom_X/wsa1_prom_X.s` when that file WAS the image.  It
+# no longer is.  Redirecting only the READ to the expansion above, and leaving
+# the WRITE where it was, replaces the master with the entire image; 26 files
+# are orphaned, the split is gone, and every gate in this tree stays green.  So
+# a writer must write THE FILE THAT OWNS THE TEXT:
+#
+#     path = locate(ROOT, PRIMARY, "\nDev10C_SetChanReg:\n")
+#     text = open(path, encoding="utf-8").read()
+#     ...
+#     write_part(path, new_text)
+#
+# SHARED SOURCES ARE OPT-IN.  kernel/kernel.s and maincpu/shared/*.s are included
+# by TWO images, so a prom_c tool that rewrote one would silently edit prom_a.
+# They are excluded unless shared=True is passed.
+SHARED_PREFIXES = ("kernel/", "include/", "maincpu/")
+
+
+def _is_shared(root, path):
+    rel = os.path.relpath(path, root).replace(os.sep, "/")
+    return rel.startswith(SHARED_PREFIXES)
+
+
+def image_writable_files(root, primary, shared=False):
+    """The image's constituent files that a tool for THIS image may rewrite."""
+    return [f for f in image_files(root, primary)
+            if shared or not _is_shared(root, f)]
+
+
+def locate(root, primary, needle, shared=False):
+    """The ONE file of the image whose text contains `needle`.
+
+    ⚠ RAISES when the count is not exactly one.  Zero means the anchor is gone
+    (or lives in a shared source and shared=False); more than one means the
+    anchor does not identify a site.  Both used to be spelled "the regex
+    missed", which a caller could read -- and did read -- as "nothing to do".
+    """
+    hits = [f for f in image_writable_files(root, primary, shared)
+            if needle in open(f, encoding="utf-8").read()]
+    if len(hits) != 1:
+        raise LookupError(
+            "%r occurs in %d file(s) of %s%s -- a splice needs exactly one%s"
+            % (needle[:60], len(hits), primary,
+               "" if shared else " (shared sources excluded)",
+               (": " + ", ".join(os.path.relpath(h, root) for h in hits))
+               if hits else ""))
+    return hits[0]
+
+
+def write_part(path, text, root=ROOT):
+    """Write one constituent file back, refusing the accident described above.
+
+    ★ THE GUARD: a file that carries `.include` directives must still carry at
+    least as many afterwards.  Overwriting a split master with the expanded
+    image drops every one of them at once, which is exactly the mistake this
+    refuses, and no legitimate splice removes an include.
+    """
+    before = open(path, encoding="utf-8").read()
+    n_before = sum(1 for l in before.split("\n") if INCLUDE_RE.match(l))
+    n_after = sum(1 for l in text.split("\n") if INCLUDE_RE.match(l))
+    if n_after < n_before:
+        raise AssertionError(
+            "%s carries %d .include directive(s); the text about to replace it "
+            "carries %d.  Writing it would orphan the included sources and undo "
+            "the split -- splice into the file that owns the text (locate())."
+            % (os.path.relpath(path, root), n_before, n_after))
+    tmp = "%s.tmp%d" % (path, os.getpid())
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write(text)
+    os.replace(tmp, path)
+    return path
+
+
+# ---------------------------------------------------------------------------
 def _selftest():
     """INVARIANTS, not today's numbers.  Every check below is true of any
     correctly resolved image and would fail on a resolver that quietly skipped
@@ -211,6 +328,62 @@ def _selftest():
         check("a missing include RAISES", False)
     except FileNotFoundError:
         check("a missing include RAISES", True)
+
+    # ---- the materialised read path -------------------------------------
+    for tag, primary in IMAGES:
+        if not os.path.isfile(os.path.join(ROOT, primary)):
+            continue
+        pth = image_path(ROOT, primary)
+        check("%-7s image_path() holds exactly image_text()" % tag,
+              open(pth, encoding="utf-8").read() == image_text(ROOT, primary))
+        if len(image_files(ROOT, primary)) > 1:
+            check("%-7s image_path() does NOT hand back the primary while the "
+                  "image is split" % tag,
+                  os.path.realpath(pth) != os.path.realpath(
+                      os.path.join(ROOT, primary)))
+
+    # ---- the write path, and the accident it exists to refuse ------------
+    with tempfile.TemporaryDirectory() as td:
+        os.makedirs(os.path.join(td, "img"))
+        os.makedirs(os.path.join(td, "kernel"))
+        open(os.path.join(td, "img", "one.s"), "w").write("; part\nAnchor:\n")
+        open(os.path.join(td, "img", "two.s"), "w").write("; other\nBoth:\n")
+        open(os.path.join(td, "img", "three.s"), "w").write("; more\nBoth:\n")
+        open(os.path.join(td, "kernel", "kernel.s"), "w").write("Shared:\n")
+        master = os.path.join(td, "img", "main.s")
+        open(master, "w").write(
+            '\t.include "img/one.s"\n\t.include "img/two.s"\n'
+            '\t.include "img/three.s"\n\t.include "kernel/kernel.s"\n')
+        prim = "img/main.s"
+        check("locate() finds THE file that owns an anchor",
+              os.path.basename(locate(td, prim, "Anchor:")) == "one.s")
+        for needle, why in (("Nowhere:", "an anchor that is gone"),
+                            ("Both:", "an anchor in two files")):
+            try:
+                locate(td, prim, needle)
+                check("locate() RAISES on %s" % why, False)
+            except LookupError:
+                check("locate() RAISES on %s" % why, True)
+        try:
+            locate(td, prim, "Shared:")
+            check("locate() will not hand a tool a SHARED source by default", False)
+        except LookupError:
+            check("locate() will not hand a tool a SHARED source by default", True)
+        check("...but shared=True opts in",
+              os.path.basename(locate(td, prim, "Shared:", shared=True)) == "kernel.s")
+        # ★ THE GUARD.  Splicing the expanded image over the master is the one
+        #   mistake that leaves every gate in this tree green.
+        try:
+            write_part(master, image_text(td, prim), root=td)
+            check("write_part() REFUSES to overwrite a master with its own "
+                  "expansion", False)
+        except AssertionError:
+            check("write_part() REFUSES to overwrite a master with its own "
+                  "expansion", True)
+        part = os.path.join(td, "img", "one.s")
+        write_part(part, "; part\nAnchor:\n; spliced\n", root=td)
+        check("write_part() DOES write a part that carries no includes",
+              "spliced" in open(part).read())
 
     print("\nFAILURES: %d" % len(fails))
     return 1 if fails else 0
