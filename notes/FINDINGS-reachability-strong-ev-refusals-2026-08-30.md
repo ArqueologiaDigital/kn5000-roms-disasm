@@ -1,5 +1,15 @@
 # The 13 STRONG-with-evidence runs in the v10 maincpu are all DATA. All 13 refused.
 
+> ★★ **FOLLOW-UP, same day:** the misframes this note diagnosed were CORRECTED.
+> All 13 refusals still stand -- none of them was code -- but **10 of the 13 are
+> no longer in the work list at all**, because the instructions that named them
+> are data now. The list fell to **3 runs / 37 bytes**, all in
+> `control_menu_screens.s`. See
+> [`FINDINGS-misframe-corrections-2026-08-30.md`](FINDINGS-misframe-corrections-2026-08-30.md)
+> and `scripts/analysis/misframe_reframe_evidence.py`. Wherever this note says
+> the tree "frames" something over data, read it as "framed": the `jp` and
+> `calr` columns are kept because they are the evidence.
+
 **Date:** 2026-08-30
 **Question:** `notes/reachability_kn5000.py --targets` ends with a work list -- every
 run of reachable-but-unconverted `.incbin` bytes that the STRONG-seeded walk reached
@@ -143,7 +153,7 @@ fill, zero fill, tables of 32-bit pointers (`10 48 e1 00` = 0x00E14810, ...),
 (`"i70.bmp"`), style names (`"Modern Vibes"`, `"Jamaican Swing"`) and widget
 names (`"MainPanic"`, `"EtmenuTitleFunc"`). Not one is a routine.
 
-## What the next lane should consider
+## What the next lane should consider  (DONE -- see the follow-up note)
 
 **Nothing here was changed.** Correcting the misframes above means re-framing bytes
 the tree currently holds as CODE territory into `.word` / `.ascii` -- the opposite

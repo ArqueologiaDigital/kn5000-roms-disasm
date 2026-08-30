@@ -14,11 +14,24 @@ notes/FINDINGS-reachability-strong-ev-refusals-2026-08-30.md. It prints, for
 every run, the bytes, the ASCII, the instruction that named it, THAT
 instruction's own bytes, and the structural reading that settles it.
 
-★ IT IS ALSO A GATE. It asserts the tool's work list is EXACTLY the 13 runs
-  adjudicated below, and that every structural claim the note makes -- each
-  pointer landing on ASCII, each stride matching, each fill run -- still holds.
-  If a later edit moves any of them, this exits non-zero and the note must be
-  re-adjudicated rather than silently going stale.
+★ IT IS ALSO A GATE. It asserts the tool's work list is EXACTLY the runs
+  adjudicated below that the walk can STILL reach, and that every structural
+  claim the note makes -- each pointer landing on ASCII, each stride matching,
+  each fill run -- still holds. If a later edit moves any of them, this exits
+  non-zero and the note must be re-adjudicated rather than silently going stale.
+
+★★ UPDATED 2026-08-30 BY THE MISFRAME LANE. All 13 refusals below STAND --
+  not one of them was code. But 10 of the 13 are no longer in the work list,
+  because the lane that followed this one CORRECTED THE MISFRAMES THAT NAMED
+  THEM: the 0xED1BAA pointer table, the AccScreen_UIDataBlock ASCII, the
+  0xEED642 constant and the 0xF12B82 pointer are DATA in the tree now, so the
+  phantom `jp`, `calr` and fall-through seeds they produced are gone at source.
+  The work list fell from 13 runs / 176 bytes to 3 runs / 37 bytes, and the
+  STRONG-evidence-ignored column from 4,275 to 4,136. The three survivors live
+  in control_menu_screens.s, whose namers that lane did not touch. Its own gate
+  is scripts/analysis/misframe_reframe_evidence.py. RESOLVED below marks which
+  is which, and the past-tense wording in this file is deliberate: the `jp`
+  column is kept because it is the EVIDENCE, not because the tree still says it.
 
 WHY A REFUSAL NEEDS EVIDENCE AT ALL
 -----------------------------------
@@ -37,15 +50,15 @@ OVER DATA. Two demonstrations, both re-derived here:
 
   * 0xED1BAA is an 11-entry table of 32-bit pointers, descending by 2, naming
     the eleven 2-byte strings "0","0","0","1".."8" that sit immediately after
-    it. The tree frames it ONE BYTE LATE, from 0xED1BAB, which turns each entry
-    into `jp 0x??00ED` -- and the ?? steps 0xE8, 0xE6, 0xE4, 0xE2, 0xE0, 0xDE
+    it. The tree FRAMED it one byte late, from 0xED1BAB, which turned each
+    entry into `jp 0x??00ED` -- the ?? stepping 0xE8, 0xE6, 0xE4, 0xE2, 0xE0
     ... because it is reading the LOW byte of the NEXT pointer as the jump's
     high byte. Five of those land inside the ROM; four are runs 1-4.
     An arithmetic progression of entry points exactly 0x020000 apart is not a
     jump table. It is a pointer table read at the wrong phase.
 
   * 0xF6ACA0 is a 6 x 20-byte ASCII table, "CONTROL PITCH BEND =" ...
-    "CONTROL AFTER TOUCH=", which the tree frames as `ld xhl,0x52544e4f` and
+    "CONTROL AFTER TOUCH=", which the tree FRAMED as `ld xhl,0x52544e4f` and
     friends. The 15-byte `.incbin` immediately before it is the DESCRIPTOR that
     names the table: pointer 0x00F6ACA0, stride 0x0014 = 20. Runs 10-13 are
     those descriptors and the gaps between them.
@@ -163,6 +176,19 @@ REFUSALS = [
      "pointer 0x00F6AD9E stride 0x0002, and 0xF6AD9E is the stride-2 note-name "
      "table \" C\" \"C#\" \" D\" \"D#\" ... \" B\"."),
 ]
+
+# ★ Runs whose SEED was removed at source by the misframe lane, so the walk no
+# longer reaches them. The refusal above still stands -- the bytes are still
+# data -- but the tool has stopped asking about them.
+RESOLVED = {
+    (0xE200ED, 0xE2013F), (0xE400ED, 0xE400EE), (0xE600ED, 0xE600FE),
+    (0xE800ED, 0xE800EF),                       # the 0xED1BAA pointer table
+    (0xEEF445, 0xEEF451),                       # the 0xEED642 constant
+    (0xF12B86, 0xF12B8A),                       # the 0xF12B82 pointer's high byte
+    (0xF6AC91, 0xF6AC95), (0xF6AC9F, 0xF6ACA0),
+    (0xF6AD18, 0xF6AD1C), (0xF6AD2D, 0xF6AD39),  # AccScreen_UIDataBlock
+}
+SURVIVING = [r for r in REFUSALS if (r[0], r[1]) not in RESOLVED]
 
 # --------------------------------------------------------------------------
 # The structural claims, each CHECKED at run time so the note cannot go stale.
@@ -297,14 +323,21 @@ def main():
         print("  any seed                         %9s bytes"
               % format(r["reach_any_in_incbin"], ","))
         print("  CONVERTED by this adjudication   0 bytes")
-        print("  REFUSED  by this adjudication    %s bytes  (%d of %d runs)"
-              % (format(sum(b - a for a, b, *_ in REFUSALS), ","),
-                 len(REFUSALS), len(work)))
+        print("  REFUSED  by this adjudication    %s bytes  (%d runs)"
+              % (format(sum(b - a for a, b, *_ in REFUSALS), ","), len(REFUSALS)))
+        print("  of those, SEED REMOVED AT SOURCE %s bytes  (%d runs) by the"
+              " misframe lane" % (format(sum(b - a for a, b in RESOLVED), ","),
+                                  len(RESOLVED)))
+        print("  still in the tool's work list    %s bytes  (%d runs)"
+              % (format(sum(b - a for a, b, *_ in SURVIVING), ","),
+                 len(SURVIVING)))
 
         print("\n" + "=" * 78)
-        print("STRUCTURE 1 -- the pointer table at 0x%06X, and the tree's framing"
-              % PTR_TABLE[0])
-        print("  the tree reads it from 0x%06X, ONE BYTE LATE." % (PTR_TABLE[0] + 1))
+        print("STRUCTURE 1 -- the pointer table at 0x%06X" % PTR_TABLE[0])
+        print("  ★ the tree USED TO read it from 0x%06X, one byte late; it is"
+              % (PTR_TABLE[0] + 1))
+        print("    eleven `.long` now. The `jp` column below is what that")
+        print("    misframe produced, kept because it is the evidence.")
     for i in range(PTR_TABLE[1]):
         ad = PTR_TABLE[0] + 4 * i
         v = u32(d, ad)
@@ -397,11 +430,12 @@ def main():
 
     if not quiet:
         print("\n" + "=" * 78)
-        print("THE 13 RUNS, ONE BY ONE")
-        for (lo, hi, verdict, why), (a0, b0, ev, _i, src, line, namer) in \
-                zip(REFUSALS, work):
-            if (lo, hi) != (a0, b0):
+        print("THE %d REFUSALS THAT ARE STILL IN THE WORK LIST" % len(SURVIVING))
+        bykey = {(r[0], r[1]): r for r in REFUSALS}
+        for (a0, b0, ev, _i, src, line, namer) in work:
+            if (a0, b0) not in bykey:
                 continue
+            lo, hi, verdict, why = bykey[(a0, b0)]
             blob = rd(d, lo, hi - lo)
             print("\n  0x%06X-0x%06X  %4d B   named by: %s   %s:%d"
                   % (lo, hi, hi - lo, ev, src, line))
@@ -415,7 +449,7 @@ def main():
                 print("       %s" % chunk)
 
     got = [(x[0], x[1]) for x in work]
-    want = [(x[0], x[1]) for x in REFUSALS]
+    want = [(x[0], x[1]) for x in SURVIVING]
     if got != want:
         fails.append("the tool's work list no longer matches the adjudication")
         if not quiet:
