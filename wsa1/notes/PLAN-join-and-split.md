@@ -152,3 +152,70 @@ P0 is the risk. If one maincpu source cannot produce two byte-exact images, I re
 propose keeping the sources separate but the *directory* structure joined, which still gets the
 KN5000-style layout and the shared splitting. P1–P2 are mechanical. P3 is the bulk. P4 is
 open-ended and should stop when the evidence does.
+
+---
+
+## 8. AMENDMENT: the KN5000 tree is not finished either, and alignment runs BOTH ways
+
+The brief has been extended: KN5000's disassembly is itself incomplete, so where the two trees
+disagree the fix may belong on the **KN5000** side, and both trees may be edited.
+
+**This is safe to do, and I checked before proposing it.** `kn5000-roms-disasm` carries the same
+byte gate (`scripts/analysis/assert_byte_identical.py`), it currently prints
+`PASS: every rebuilt ROM is byte-identical.`, and its tree is clean at `46a916e`. So it can be
+edited under identical discipline: gate green at every commit, no exceptions.
+
+### The rule I propose for resolving a disagreement
+
+Not "the older tree wins" and not "the tree I am standing in wins". **The side with the
+reproducible measurement wins, and if neither has one, neither tree changes** — the disagreement
+gets written down in both instead.
+
+That matters because this project has twice shipped a cross-tree claim that was wrong in the
+plausible direction: the label transplant whose first version named the wrong object at every one
+of eight sites, and the SFR trap where 68 register names are shared and exactly one address is.
+
+### A worked example, already sitting in both trees
+
+WSA1 `prom_d` says, of the descriptor tag:
+
+    the element SIZE is the descriptor's own tag bit 7: 6 bytes when it is CLEAR
+    (161 records here) and 8 when it is SET (0)
+    ⚠ ../kn5000-roms-disasm's note on the same field states the OPPOSITE polarity.
+    It is measured here, not borrowed: with the polarity inverted JOIN 2 holds for
+    0 of 318 records at slot +0x30
+
+KN5000 `table_data/tone_database_aux.s:718` says:
+
+    bit 7  zone-record stride: set -> 6 bytes (143 records), clear -> 4 bytes
+
+⚠ **And these do not actually contradict cleanly, which is the point.** WSA1 reads
+clear→6 / set→8; KN5000 reads set→6 / clear→4. That is not an inversion — **the sizes differ too**
+(4 against 8). So there are two live possibilities and the comparison cannot settle which:
+
+1. one tree has the polarity backwards, or
+2. the two machines genuinely use different record formats, and the "same field" premise in the
+   WSA1 note is itself the error.
+
+**Neither tree should be edited until that is measured on both sides.** The WSA1 side already has
+its null (0 of 318 under inversion); the KN5000 side needs the equivalent — does its 143-record
+count survive the WSA1 polarity, and does its 4-byte stride appear at all in prom_d? This is a
+concrete, bounded first job, and it is a better opening move than any file rename because it tests
+the whole premise of aligning the two trees.
+
+### What this changes in the phases above
+
+* **P4 becomes bidirectional.** Every cross-tree name or boundary carries its byte diff and a
+  statement of which tree the evidence came from. Where WSA1's measurement is the stronger one, the
+  KN5000 file gets the correction and the WSA1 note stops being a lone dissent in a comment.
+* **A new P5: reconcile the disagreements both trees already record.** The WSA1 tree contains at
+  least one explicit "the sibling says the opposite" note; there may be more in both directions.
+  Enumerate them, measure each, and land the result in whichever tree is wrong — or in both, if the
+  answer is "different formats".
+* **Splitting boundaries may move KN5000 files too.** If the byte-identical runs suggest a cleaner
+  cut than KN5000's current `subcpu_data_tables.s`, proposing that cut on the KN5000 side is now in
+  scope rather than something to work around.
+
+⚠ **What does not change:** neither tree's gate may go red, neither tree's existing comments and
+semantic labels may be overwritten, and a name still does not transfer without a byte diff and a
+differing count.
