@@ -33,6 +33,7 @@ KN5000 role are named for what they contain, not for the KN5000 label.
 import collections
 import itertools
 import os
+import re
 import struct
 import sys
 
@@ -205,7 +206,37 @@ if _R6._octave_shape() != _R6.AUDITED_OCTAVE:
              "notes/prom_d_understanding_round6.py Q4."
              % (_R6._octave_shape(), _R6.AUDITED_OCTAVE))
 TWIN = {_s: _R6.wavesel_twins(_s) for _s in (0x18, 0x20)}
-TWIN_LABEL = {_s: _R6.wavesel_labels(_s) for _s in (0x18, 0x20)}
+# ---------------------------------------------------------------------------
+# ★ WAVE 7 ROUND 7.  notes/prom_d_finish_round7.py is the whole-image inventory:
+# every one of prom_d's labels gets one FINISHED verdict (witnessed, and how, or
+# nameless, and why) and one PROVENANCE grade.  It also refines round 6's twin
+# rule.  Round 6 accepted a shared stem when the candidate names differ only by a
+# trailing DIGIT; the same catalogue spells the same relation with a trailing
+# LETTER ('TimpaniA'..'TimpaniG'), which round 6's rule could not see.  Stated as
+# a CamelCase WORD-BOUNDARY rule with a bounded remainder it names 10 more records
+# and still refuses 60, including the truncations a looser rule would produce.
+# This emitter refuses to run if that shape moved.
+# ---------------------------------------------------------------------------
+_spec7 = _ilu.spec_from_file_location(
+    "prom_d_finish_round7",
+    os.path.join(ROOT, "notes", "prom_d_finish_round7.py"))
+_R7 = _ilu.module_from_spec(_spec7)
+_saved_argv, sys.argv = sys.argv, ["prom_d_finish_round7", "--quiet"]
+try:
+    _spec7.loader.exec_module(_R7)
+finally:
+    sys.argv = _saved_argv
+for _slot, _aud in _R7.AUDITED_R7.items():
+    _got = _R7._r7_shape(_slot)
+    if _got != _aud:
+        sys.exit("REFUSING TO EMIT: the round-7 twin-label shape at slot +0x%02X is "
+                 "now %s (round-6 names, round-7 names); audited as %s.  Re-audit "
+                 "with notes/prom_d_finish_round7.py Q4."
+                 % (_slot, _got, _aud))
+TWIN_LABEL = {_s: _R7.wavesel_labels_r7(_s) for _s in (0x18, 0x20)}
+ROUND7_LABELS = {_s: sorted(set(_R7.wavesel_labels_r7(_s)) - set(_R6.wavesel_labels(_s)))
+                 for _s in (0x18, 0x20)}
+ROUND7_CHECKS = _R7.NCHECK[0]
 OCTAVE_ROWS = _R6.octave_rows()
 ALIGN = _R6.catalogue_alignment()
 if ALIGN != _R6.AUDITED_ALIGNMENT:
@@ -533,7 +564,7 @@ def WAVESEL_GAP(slot):
         lines += [
             "",
             "  3. ★★ CORRECTED IN ROUND 6 -- %d OF THESE %d RECORDS DO HAVE A NAME,"
-            % (len(_lab), _n),
+            % (len(_lab) - len(ROUND7_LABELS[slot]), _n),
             "     and point 2 above is why it was missed.  That test asked whether a",
             "     record's 43 bytes occur ELSEWHERE IN THE IMAGE and compared all 43.",
             "     Round 5 had just proved that byte +0x0B is a preset number prom_c",
@@ -599,6 +630,97 @@ def WAVESEL_GAP(slot):
             "     known.  Where the twins disagree on the name, no label is given.",
             "  notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.",
         ]
+        # ★ ROUND 7.  Round 6's stem rule was stated as a CHARACTER CLASS (trailing
+        # digits) when the thing it was actually recognising is a WORD BOUNDARY.
+        # Saying it correctly names more records here and none at slot +0x18, and
+        # both halves of that are printed rather than only the half that gained.
+        _r7 = ROUND7_LABELS[slot]
+        _amb = sum(1 for _k, _v in _tw.items() if _v and _k not in _lab)
+        lines += [
+            "",
+            "  4. ★ ROUND 7 -- ROUND 6's RULE, STATED CORRECTLY, NAMES %d MORE." % len(_r7),
+            "     Round 6 took the shared stem when the candidate names differ only by",
+            "     a TRAILING DIGIT ('RoomBassDrm1'/'RoomBassDrm2').  This catalogue",
+            "     spells the same relation with a trailing LETTER as well, and that",
+            "     rule could not see it.  The rule round 7 uses instead: take the",
+            "     longest common prefix, accept it only if in EVERY candidate the next",
+            "     character starts a new CamelCase word (an upper-case letter or a",
+            "     digit) AND at most %d characters follow it." % _R7.MAX_REMAINDER,
+        ]
+        if _r7:
+            lines += ["     What that names here, in full:"]
+            for _k in _r7:
+                _who = sorted(set(x[2] for x in _tw[_k]))
+                lines.append("       record %3d  ->  _SameAs_%-13s  from %d names: %s%s"
+                             % (_k, _lab[_k], len(_who), ", ".join(_who[:3]),
+                                ", +%d more" % (len(_who) - 3) if len(_who) > 3 else ""))
+        else:
+            lines += ["     It names NOTHING in this array -- 0 of the %d ambiguous"
+                      % _amb,
+                      "     records -- and that zero is reported, not omitted."]
+        lines += [
+            "     ⚠ THE BOUND OF %d IS NOT DECORATION.  Without it the same prefix"
+            % _R7.MAX_REMAINDER,
+            "     rule takes 'HiHat' from twelve names that split into HiHatOpen and",
+            "     HiHatHfOpen, and 'Dance' from six that are a whole kit -- stems that",
+            "     drop a WORD rather than a variant.  notes/prom_d_finish_round7.py Q4",
+            "     prints what every bound from 1 to 8 would have named.",
+            "  notes/prom_d_finish_round7.py Q4, and %d checks in that file."
+            % _R7.AUDITED_CHECKS,
+        ]
+        if slot == 0x18:
+            # ★ ROUND 7's REFUSALS.  Three mechanisms that would each have named
+            # some of the records still numbered below, measured and rejected.
+            # They are written HERE, next to the records they would have touched,
+            # so the next round finds them before re-inventing them.
+            _ag, _dis, _nv, _brk, _nam = _R7.m1_calibration()
+            _gain, _wide = _R7.m2_reach()
+            _m18, _m20, _mt, _ntails = _R7.m3_reach()
+            lines += [
+                "",
+                "  4b. ★ AND THREE MECHANISMS ROUND 7 MEASURED AND REJECTED, recorded",
+                "     next to the records they would have named so they are not",
+                "     re-invented.  Each one WOULD have moved the number.",
+                "",
+                "     M1  THE MAP AT SLOT +0x0C AS A TIE-BREAKER.  Round 6 showed it",
+                "         lands on a twinned record far more often than chance, so it",
+                "         looks like the thing that could pick one of the several tone",
+                "         names an ambiguous record matches.  CALIBRATED on the %d"
+                % len(TWIN_LABEL[slot]),
+                "         records where the byte identity already gives ONE name, it",
+                "         agrees %d times, DISAGREES %d and has no vote %d times -- so"
+                % (_ag, _dis, _nv),
+                "         on a set where the answer is already known it is wrong in %d"
+                % _dis,
+                "         of the %d records it votes on." % (_ag + _dis),
+                "         REJECTED, though it would have broken %d of the %d ties."
+                % (_brk, _nam),
+                "",
+                "     M2  WIDENING THE ONE-BYTE MASK TO BYTES 3..10.  It would bring %d"
+                % _gain,
+                "         more records within reach, and the positions are structured,",
+                "         not scattered: %d records differ from their nearest tone block"
+                % _wide.get((3, 5, 7, 9, 11), 0),
+                "         at exactly {3,5,7,9,11} and %d at exactly {4,6,8,10,11} -- the"
+                % _wide.get((4, 6, 8, 10, 11), 0),
+                "         low and the high bytes of four 16-bit fields.  REJECTED by the",
+                "         SAME instruction that justified the one-byte mask: prom_c",
+                "         sub_FBC725 is the only writer of a wave-select record and it",
+                "         writes byte 11 (0xFBC7D6) and bytes 13..42 (0xFBC7D9 sets the",
+                "         index to 13, 0xFBC7E3 fetches the stride word as the bound).",
+                "         Bytes 3..10 are written by NOTHING, so a record that differs",
+                "         in them is a different record and not a rewritten copy.",
+                "",
+                "     M3  A RECORD'S 30-BYTE TAIL EQUALLING ONE OF THE %d STORED"
+                % _ntails,
+                "         PRESETS, which would have named a record `<tone> + preset N`.",
+                "         %d of %d here, %d of %d at slot +0x20, %d of %d tone blocks."
+                % (_m18[1], _m18[0], _m20[1], _m20[0], _mt[1], _mt[0]),
+                "         REJECTED at zero: the preset apply is a RUNTIME operation on",
+                "         a RAM copy (0xFBC738 computes the destination as",
+                "         0x000087d2 + 43*n) and leaves no stored relation at all.",
+                "  notes/prom_d_finish_round7.py Q5.",
+            ]
     if slot == 0x3C:
         lines += [
             "",
@@ -617,7 +739,9 @@ def WAVESEL_GAP(slot):
     else:
         lines += [
             "",
-            "  3. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of",
+            # ⚠ RENUMBERED IN ROUND 7.  This paragraph was "3." and so was the
+            # round-6 block above it; the list read 3, 3 for two rounds.
+            "  5. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of",
             "     THIS array with an index whose meaning is known -- exactly what",
             "     round 5 Q7 found for the array at slot +0x3C and did NOT find here.",
             "     Round 3's census of 99 directory reads found no reader for slot",
@@ -1030,8 +1154,57 @@ def emit_numbanks():
     W("ToneDB_ToneNumBanks:")
     for b in range(10):
         base = 0x180 + 0x100 * b
+        _t = [u16(base + 2 * i) for i in range(128)]
+        _nm = [NAME(PTRS[t]).strip() for t in _t]
         W("")
         W("; --- row %d (%s) ---" % (b, "melodic" if b < 8 else "drum kits"))
+        # ★ ROUND 7: EVERY ROW NOW CARRIES ITS OWN WITNESS OR ITS OWN GAP, in the
+        # file rather than only in a script.  Rows 8 and 9 were named by round 5
+        # from what they SELECT and the derivation lived only in the banner above,
+        # so the two labels that round 5 promoted were the only labels in this
+        # image with a semantic name and no evidence line of their own --
+        # notes/prom_d_finish_round7.py Q1 found them by looking for exactly that.
+        if b >= 8:
+            _kit = sum(1 for x in _nm if x.endswith("Kit"))
+            _uniq = sorted(set(_t))
+            W("; Evidence: this row's own 128 LE16 entries, at file 0x%05X..0x%05X,"
+              % (base, base + 0xFF))
+            W("; and the 16-byte ASCII name of every record they select.")
+            if _kit == 128:
+                W("; All 128 select a record whose own name ends in 'Kit' -- checked")
+                W("; at program 127 (%r) as well as program 0 (%r)."
+                  % (_nm[127], _nm[0]))
+            else:
+                _cnt = collections.Counter(_t)
+                _dom = _cnt.most_common(1)[0][0]
+                _rest = [i for i in range(128) if _t[i] != _dom]
+                _all = [u16(0x180 + 2 * i) for i in range(1280)]
+                W("; %d of the 128 hold tone 0x%03X %r.  The %s at"
+                  % (_cnt[_dom], _dom, _nm[_t.index(_dom)],
+                     "one that does not is" if len(_rest) == 1
+                     else "%d that do not are" % len(_rest)))
+                W("; program %s, holding tone 0x%03X %r -- which occurs %d time%s"
+                  % (", ".join(str(i) for i in _rest[:4]), _t[_rest[0]],
+                     _nm[_rest[0]], _all.count(_t[_rest[0]]),
+                     "" if _all.count(_t[_rest[0]]) == 1 else "s"))
+                W("; in all 1,280 entries of this table, so it is unique to this")
+                W("; row.  That %s the whole of what distinguishes this row, so it"
+                  % ("entry is" if len(_rest) == 1 else "handful of entries is"))
+                W("; is what names it.")
+            W("; %d distinct tone indices in the row.  round 5 Q2 row_names()."
+              % len(_uniq))
+        else:
+            _d = sum(1 for i in range(128) if u16(base + 2 * i) != u16(0x180 + 2 * i))
+            W("; ⚠ NO NAME, and the gap is measured rather than assumed: all 128")
+            W("; entries select a melodic tone (index < 0x100), which is what")
+            W("; `Melodic` states, and %d of the 128 differ from row 0's -- so the"
+              % _d)
+            W("; rows are NOT copies of one another either.  Nothing in this image")
+            W("; says what the variation between them means, and the BankMap at")
+            W("; 0x%05X maps bank-select value %d to this row, which is what the"
+              % (S(0x6C), b))
+            W("; suffix already says.  round 6 Q1, verdict")
+            W("; NAMELESS-UNDIFFERENTIATED; round 7 Q1.")
         W("ToneNumBank_%s:" % ROW_NAME[b])
         e_shorts(base, base + 0x100,
                  comment=lambda i, base=base: "prog %3d -> tone 0x%03X %r"
@@ -1668,11 +1841,26 @@ def mk_wavesel_array(slot):
                     # round 6 still refuses, is the POSITIONAL transfer from the
                     # +0x8C catalogue -- not the byte identity.
                     if TWIN_LABEL[slot].get(i):
-                        if len(set(perc_name(k) if k else "Silent" for k in ks)) > 1:
-                            W("; The %d names differ only by a trailing digit, so the"
-                              % len(ks))
-                            W("; label uses the shared stem `%s`."
-                              % TWIN_LABEL[slot][i])
+                        _nm = sorted(set(perc_name(k) if k else "Silent" for k in ks))
+                        if len(_nm) > 1:
+                            # ⚠ CORRECTED IN ROUND 7.  These two lines used to read
+                            # "differ only by a trailing digit", which was true of
+                            # every record round 6 named and FALSE of the ten round 7
+                            # adds -- TimpaniA..TimpaniG differ by a trailing LETTER.
+                            # The remainders are derived per record and printed, so
+                            # the sentence cannot go stale against its own labels.
+                            _st = TWIN_LABEL[slot][i]
+                            _rem = sorted(set(x[len(_st):] for x in _nm if x != _st))
+                            W("; The %d names share the stem `%s` and differ"
+                              % (len(_nm), _st))
+                            W("; only in what follows it: %s."
+                              % ", ".join("`%s`" % r for r in _rem[:8]))
+                            W("; Each remainder begins with an upper-case letter or a")
+                            W("; digit -- a CamelCase word boundary -- and is at most")
+                            W("; %d characters.  That is round 7's rule; round 6 stated"
+                              % _R7.MAX_REMAINDER)
+                            W("; the same thing as `differ by a trailing digit`, which")
+                            W("; the letter cases above do not satisfy.")
                         W("; ★ THE LABEL USES THIS, and it claims only what was")
                         W("; measured: `_SameAs_` means these bytes and that record's")
                         W("; bytes are the same, NOT that this record belongs to that")
@@ -2270,6 +2458,22 @@ def emit_tail():
     ])
     W("erased_tail:")
     W("\t.fill 0x%X, 1, 0xFF" % (0x7FFF0 - 0x50B09))
+    W("")
+    # ★ ROUND 7: this label had no evidence line of its own.  The banner above
+    # carries the argument, but the banner introduces `erased_tail`, and a reader
+    # arriving at `build_tag` from a cross-reference saw a semantic name with
+    # nothing under it.  notes/prom_d_finish_round7.py Q1 lists exactly that.
+    _A = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
+    _insn = _A[0xF82A5F - 0xF80000:0xF82A5F - 0xF80000 + 5]
+    W("; Evidence: the %d bytes at file 0x7FFF0 are the ASCII %r, followed by %d"
+      % (len(D[0x7FFF0:0x7FFFB]), D[0x7FFF0:0x7FFFB].decode("latin1"),
+         len(D[0x7FFFB:0x80000])))
+    W("; bytes of 0x00.  prom_a 0xF82A5F is `ld XWA,0x00F7FFF0` -- bytes %s,"
+      % _insn.hex(" "))
+    W("; read out of wsa1_prom_a.ic12 by this generator -- and 0x00F7FFF0 minus")
+    W("; this object's file offset 0x7FFF0 is 0x00F00000, the base prom_c installs")
+    W("; from its own immediate at 0xFB051E.  Two processors, one base.")
+    W("; notes/prom_d_base_checks.py checks 1-4.")
     W("build_tag:")
     W('\t.ascii "wsad_54.ssf"')
     W("\t.byte 0x00, 0x00, 0x00, 0x00, 0x00")
@@ -2483,7 +2687,87 @@ HEADER = '''\t.text
 wsa1_prom_d:
 '''
 
-W((HEADER % (CENSUS_CHECKS, CENSUS_CHECKS)).rstrip("\n"))
+# ---------------------------------------------------------------------------
+# ★ WAVE 7 ROUND 7.  The file's own top banner now carries the whole-image
+# inventory and, next to it, the two things a percentage hides: how many of these
+# names are the SIBLING MACHINE'S rather than this one's, and what the percentage
+# is not robust to.  Every number is read out of notes/prom_d_finish_round7.py at
+# generation time, so the banner cannot drift away from the census.
+# ---------------------------------------------------------------------------
+def _round7_header_lines():
+    fin, prov = _R7.inventory_summary()
+    n_content, n_glued, _fams = _R7.glued_digit_audit()
+    tot = sum(fin.values())
+    slots = sorted(set(_R7.region_slot(l.addr) for l in _R7.LABS
+                       if l.prov == "KN5000-TRANSPLANT") - set([None]))
+    lo_now = 100.0 * n_content / tot
+    lo_strict = 100.0 * (n_content - n_glued) / tot
+    L = [
+        "; " + "-" * 78,
+        "; ★ WAVE 7 ROUND 7 -- THE WHOLE-IMAGE INVENTORY, AND THE HONEST HALF OF IT",
+        "; " + "-" * 78,
+        "; Every label in this file carries either a WITNESS -- a route from the bytes",
+        "; to the name -- or a stated REASON for having none, and ONE command re-checks",
+        "; all %s of them:" % format(tot, ","),
+        ";",
+        ";     python3 notes/prom_d_finish_round7.py",
+        ";",
+        ";   witnessed  %5s   the name has a route: the object's own ASCII, an"
+        % format(fin.get("WITNESSED", 0), ","),
+        ";                      Evidence: line, or a witnessed object it is part of",
+        ";   nameless   %5s   NOT named -- and the reason is stated PER OBJECT, in"
+        % format(fin.get("NAMELESS", 0), ","),
+        ";                      this file, next to the object it is about",
+        ";   boundary   %5s   prom_d_end, a zero-length end marker, not an object"
+        % format(fin.get("BOUNDARY", 0), ","),
+        ";   ★ NO WITNESS AT ALL: %d" % fin.get("UNWITNESSED", 0),
+        ";",
+        "; ⚠ AND GRADED BY PROVENANCE, WHICH IS WHAT A PERCENTAGE HIDES.  A name can",
+        "; rest on very different things, and this image's rest mostly on two:",
+        ";   self-named        %5s  the object's own 13- or 16-byte ASCII field"
+        % format(prov.get("SELF-NAMED", 0), ","),
+        ";   KN5000 transplant %5s  ⚠ the name is the SIBLING MACHINE'S, and NO prom_c"
+        % format(prov.get("KN5000-TRANSPLANT", 0), ","),
+        ";                            instruction reads the directory slot the region",
+        ";                            it sits in hangs off.  The slots, in full:",
+        ";                            %s" % " ".join("+0x%02X" % x for x in slots[:6]),
+        ";                            %s" % " ".join("+0x%02X" % x for x in slots[6:]),
+        ";   image-internal    %5s  a relation measured inside this image"
+        % format(prov.get("IMAGE-INTERNAL", 0), ","),
+        ";   reader-backed     %5s  prom_c reads the slot and the read says what it is"
+        % format(prov.get("READER-BACKED", 0), ","),
+        ";   nameless          %5s  the %d above, kept in the same denominator"
+        % (format(prov.get("NAMELESS", 0), ","), fin.get("NAMELESS", 0)),
+        "; So a reader who wants only what THIS machine's firmware confirms should",
+        "; discount %s of the %s labels below.  That is the number, said once, here."
+        % (format(prov.get("KN5000-TRANSPLANT", 0), ","), format(tot, ",")),
+        ";",
+        "; ⚠ AND THE %.1f%%%% CONTENT FIGURE THIS FILE SCORES ON" % lo_now,
+        "; notes/wave7_documentation_metrics.py IS NOT ROBUST TO SPELLING.  %d of the"
+        % n_glued,
+        "; labels it grades CONTENT are <stem>_<Word><digits> whose digits run 0..n-1",
+        "; over three or more siblings with no self-named ancestor -- the same shape as",
+        "; `PercInst_17`, which the same metric grades FRAMED.  The difference is an",
+        "; underscore before the number.  Counting those as framed instead, this file",
+        "; reads %.1f%%%%.  Both are true of a stated rule and neither is quoted without"
+        % lo_strict,
+        "; the other.  notes/prom_d_finish_round7.py Q1, Q2, Q8; %d checks."
+        % _R7.AUDITED_CHECKS,
+        ";",
+    ]
+    return "\n".join(L)
+
+
+_HDR = HEADER
+_MARK = "; Reproduce every number quoted in this file:"
+assert _MARK in _HDR
+_HDR = _HDR.replace(_MARK, _round7_header_lines() + "\n" + _MARK, 1)
+_HDR = _HDR.replace(
+    ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks",
+    ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks\n"
+    ";     python3 notes/prom_d_finish_round7.py --selftest # the inventory, %d checks"
+    % _R7.AUDITED_CHECKS, 1)
+W((_HDR % (CENSUS_CHECKS, CENSUS_CHECKS)).rstrip("\n"))
 for a, b, fn in REGIONS:
     before = len(OUTBUF)
     fn()

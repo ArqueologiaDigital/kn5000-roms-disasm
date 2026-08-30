@@ -403,7 +403,15 @@ def framed_labels():
         spec.loader.exec_module(m)
     finally:
         sys.argv = saved
-    _n, framed, _u, _h, _e = m.scan(os.path.join("prom_d", "wsa1_prom_d.s"))
+    # ⚠ FIXED IN WAVE 7 ROUND 7.  This unpacked FIVE values; scan() has returned
+    # SIX since the metric started excluding internal branch targets, so round 5's
+    # main() had been raising ValueError before its first check ran -- an
+    # unrunnable verification script that nothing noticed because the GENERATOR
+    # only imports this module and never calls main().  Take the count from the
+    # function rather than from a fixed arity, so the next change to scan() cannot
+    # break it silently.
+    res = m.scan(os.path.join("prom_d", "wsa1_prom_d.s"))
+    framed = res[1]
     return [f[0] for f in framed]
 
 
@@ -427,7 +435,13 @@ def classify(name):
 
 
 def q1():
-    say("\n=== Q1.  THE 622 FRAMED LABELS: WHICH OBJECT CARRIES A NAME? ===\n")
+    # ⚠ FIXED IN WAVE 7 ROUND 7.  This heading said "THE 622 FRAMED LABELS" while
+    # the check three lines below printed the count it had actually read -- 614
+    # after round 6 and 303 after round 7.  A heading with a frozen number in it
+    # is a claim, and this one had been wrong for two rounds.  It is derived now.
+    _n_framed = len(framed_labels())
+    say("\n=== Q1.  THE %d LABELS STILL FRAMED TODAY: WHICH OBJECT CARRIES A NAME?"
+        " ===\n" % _n_framed)
     say("  Every framed label in prom_d is read out of the .s with the METRIC'S OWN")
     say("  rule, bucketed by family, and each family's object is then tested for an")
     say("  ASCII name field the way round 4 tested the tone and drum records: is")

@@ -3476,6 +3476,25 @@ sub_F81670:
 	call 0xf417f4                                        ; F8167F  1d f4 17 f4
 	call SongName_ResetToUnderscores                                      ; F81683  1d ea 18 f8
 	ret                                                  ; F81687  0e
+; ---------------------------------------------------------------------
+; sub_F81688 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_F81512 (`call`) at 0xF81546
+;          prom_a sub_F81574 (`call`) at 0xF815A8
+;          prom_a sub_F8178D (`call`) at 0xF817CE
+;          prom_a sub_F81812 (`call`) at 0xF81890
+;
+;     0xF816C0 loads 0xF81768, where the ROM reads:
+;        "_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_F81688:
 	ldb_d8 l, (0x222d)                                   ; F81688  c1 2d 22 27
 	cps l, 0x00                                          ; F8168C  cf d8
@@ -3538,6 +3557,23 @@ sub_F81700:
 	stb_d8 (0x21f9), a                                   ; F8170D  f1 f9 21 41
 	call sub_F81716                                      ; F81711  1d 16 17 f8
 	ret                                                  ; F81715  0e
+; ---------------------------------------------------------------------
+; sub_F81716 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_F816EA (`call`) at 0xF816FB
+;          prom_a sub_F81700 (`call`) at 0xF81711
+;
+;     0xF8171C loads 0xF81768, where the ROM reads:
+;        "_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_F81716:
 	ldb_d8 l, (0x21f9)                                   ; F81716  c1 f9 21 27
 	xor H,H                                              ; F8171A  ce d6
@@ -5542,6 +5578,23 @@ sub_F82882:
 .LF8288B:
 	st_dd8b a, 0xc4                                      ; F8288B  f0 c4 41
 	ret                                                  ; F8288E  0e
+; ---------------------------------------------------------------------
+; sub_F8288F -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_F827C8 (`calr`) at 0xF827EA
+;          prom_a sub_F827C8 (`calr`) at 0xF827F5
+;
+;     0xF828B3 loads 0xF828C7, where the ROM reads:
+;        "WSA1 EXTBD"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_F8288F:
 	ldio 0xc5, 0x00                                      ; F8288F  08 c5 00
 	ld XWA,0x00002640                                    ; F82892  40 40 26 00 00
@@ -5625,6 +5678,22 @@ sub_F828D1:
 	m_and_mi8 MB16, 0x7fc7, 0xef                         ; F82941  c1 c7 7f 3c ef
 	m_or_mi8 MB8, 0x97, 0x20                             ; F82946  c0 97 3e 20
 	jr .LF82940                                          ; F8294A  68 f4
+; ---------------------------------------------------------------------
+; sub_F8294C -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_F827C8 (`calr`) at 0xF8280E
+;
+;     0xF82974 loads 0xFFFFF0, where the ROM reads:
+;        "wsaa_822"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_F8294C:
 	m_cp_mi8 MB8, 0xc4, 0x01                             ; F8294C  c0 c4 3f 01
 	jr nz, .LF8295F                                      ; F82950  6e 0d
@@ -5738,6 +5807,23 @@ sub_F82A04:
 	calr sub_F82A28                                      ; F82A24  1e 01 00
 .LF82A27:
 	ret                                                  ; F82A27  0e
+; ---------------------------------------------------------------------
+; sub_F82A28 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_F82A04 (`calr`) at 0xF82A24
+;          prom_a sub_F82A28 (`jr`) at 0xF82A2D
+;
+;     0xF82A38 loads 0xFFFFF0, where the ROM reads:
+;        "wsaa_822"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_F82A28:
 	m_cp_mi16 MW8, 0x80, 0x03e8                          ; F82A28  d0 80 3f e8 03
 	jr c, sub_F82A28                                     ; F82A2D  67 f9
@@ -35586,10 +35672,10 @@ sub_F94C18:
 ; ---------------------------------------------------------------------
 ; LCD_BlankThenSetPanel2Layer -- blank the panel and re-issue SYSTEM SET for TWO layers
 ;
-; Called from: prom_a sub_F95734 (`call`) at 0xF95745
-;          prom_a sub_F95768 (`call`) at 0xF95772
-;          prom_a sub_F95798 (`call`) at 0xF957FF
-;          prom_a sub_F95990 (`call`) at 0xF9599A
+; Called from: prom_a Paint_GateArrayCheck (`call`) at 0xF95745
+;          prom_a Paint_PanelCpuCheck (`call`) at 0xF95772
+;          prom_a Paint_SineWaveCheckMode (`call`) at 0xF957FF
+;          prom_a Paint_PanelSwLedCheck (`call`) at 0xF9599A
 ;          prom_a sub_F959C8 (`call`) at 0xF959D1
 ; Issues:  SWI7 service 0x0C at 0xF94C33 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
 ; Issues:  SWI7 service 0x0F at 0xF94C36 -- service 0x0F, not in this file's table
@@ -35618,10 +35704,10 @@ LCD_BlankThenSetPanel2Layer:
 ; ---------------------------------------------------------------------
 ; LCD_ShowLayers1And2_StackFrame -- service 0x0C with C = 3, from inside a stack frame
 ;
-; Called from: prom_a sub_F95734 (`call`) at 0xF9575E
-;          prom_a sub_F95768 (`call`) at 0xF9578B
-;          prom_a sub_F95798 (`call`) at 0xF95884
-;          prom_a sub_F95990 (`call`) at 0xF959B3
+; Called from: prom_a Paint_GateArrayCheck (`call`) at 0xF9575E
+;          prom_a Paint_PanelCpuCheck (`call`) at 0xF9578B
+;          prom_a Paint_SineWaveCheckMode (`call`) at 0xF95884
+;          prom_a Paint_PanelSwLedCheck (`call`) at 0xF959B3
 ;          prom_a sub_F959C8 (`call`) at 0xF959DC
 ; Issues:  SWI7 service 0x0C at 0xF94C46 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
 ; Evidence: same three instructions as LCD_ShowLayers1And2_SaveRegs (`ld C,0x03`,
@@ -35645,7 +35731,33 @@ LCD_ShowLayers1And2_StackFrame:
 	pop XIX                                              ; F94C49  5c
 	pop XIZ                                              ; F94C4A  5e
 	ret                                                  ; F94C4B  0e
-sub_F94C4C:
+; ---------------------------------------------------------------------
+; Print_DebugMonitor -- prints the line ` --- DEBUG MONITOR BY (c)masa,toshi --- `
+;
+; Called from: prom_a sub_F95C2D (`call`) at 0xF95C46
+;
+;     0xF94C59 loads 0xF94C67, where the ROM reads:
+;        " --- DEBUG MONITOR BY (c)masa,toshi --- ><;:D"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+;          ★ THE LENGTH IS THE PROOF, not the reader's eye.  The routine first
+;            zeroes the row cursor (0x284F) and then calls
+;            LCD_PrintLine40_AdvanceRow, whose own header records BC = 0x28 = 40
+;            characters per line.  The printable run at 0xF94C67 is 45 bytes, and
+;            its first 40 are exactly ` --- DEBUG MONITOR BY (c)masa,toshi --- `;
+;            the five that follow (`><;:D`) are the next object, not this line.
+;            So this routine draws the FIRST line of a debug screen, and the
+;            machine's own firmware names that screen DEBUG MONITOR.
+;          ⚠ NOT CLAIMED: how the monitor is entered, what else it prints, or that
+;            `masa,toshi` are the authors of anything beyond this string.
+;          ⚠ 0xF94C67-0xF94C8E, the 40 bytes the printer draws, is TEXT that
+;            this listing still decodes as instructions (`ldb w,0x2d` ...).  The
+;            bytes are right and the gate is green either way; the decode is
+;            misleading and is left for a round that owns the data/code split.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
+Print_DebugMonitor:
 	push XIZ                                             ; F94C4C  3e
 	push XIX                                             ; F94C4D  3c
 	push XHL                                             ; F94C4E  3b
@@ -35800,7 +35912,7 @@ sub_F94D73:
 ; ---------------------------------------------------------------------
 ; LCD_PrintLine40_AdvanceRow -- draw a 40-character line at the cursor and advance the cursor one row
 ;
-; Called from: prom_a sub_F94C4C (`call`) at 0xF94C5E, 0xF94CB2
+; Called from: prom_a Print_DebugMonitor (`call`) at 0xF94C5E, 0xF94CB2
 ;          prom_a sub_F94CDE (`call`) at 0xF94D6E
 ; Issues:  SWI7 service 0x06 at 0xF94D91 -- LCD_Svc_06_DrawText8x14, draw 8x14 text
 ; Evidence: `ld HL,0x0000` + `ld BC,0x0028` + `ld IX,(0x284F)` + service 0x06, then
@@ -37072,7 +37184,34 @@ sub_F95732:
 	ret                                                  ; F95732  0e
 sub_F95733:
 	ret                                                  ; F95733  0e
-sub_F95734:
+; ---------------------------------------------------------------------
+; Paint_GateArrayCheck -- paints the service screen whose own text reads "GATE ARRAY CHECK"
+;
+; Called from: prom_b T_F400D0 (`jp`)
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9574E  list 0xF2C800-0xF2C84D (77 B, leaves by call)
+;        text: "GATE ARRAY CHECK"; "Please check with osciloscope"; ...
+; From the captions: "GATE ARRAY CHECK"; "Please check with osciloscope"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_GateArrayCheck:
 	call 0xf42e80                                        ; F95734  1d 80 2e f4
 	calr 0xff0b                                          ; F95738  1e 0b ff
 	ldb_d8 c, (0x207d)                                   ; F9573B  c1 7d 20 23
@@ -37095,7 +37234,34 @@ sub_F95766:
 	ret                                                  ; F95766  0e
 sub_F95767:
 	ret                                                  ; F95767  0e
-sub_F95768:
+; ---------------------------------------------------------------------
+; Paint_PanelCpuCheck -- paints the service screen whose own text reads "PANEL CPU CHECK"
+;
+; Called from: prom_b T_F400E0 (`jp`)
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9577B  list 0xF2C84D-0xF2C88B (62 B, leaves by call)
+;        text: "PANEL CPU CHECK"; "Please check the CPU port"; "LED flash."
+; From the captions: "PANEL CPU CHECK"; "Please check the CPU port"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_PanelCpuCheck:
 	ldb_d8 c, (0x207d)                                   ; F95768  c1 7d 20 23
 	m_cp_rm MB16, 0x207c, r3                             ; F9576C  c1 7c 20 f3
 	jr z, 0x22                                           ; F95770  66 22
@@ -37117,7 +37283,36 @@ sub_F95796:
 	ret                                                  ; F95796  0e
 sub_F95797:
 	ret                                                  ; F95797  0e
-sub_F95798:
+; ---------------------------------------------------------------------
+; Paint_SineWaveCheckMode -- paints the service screen whose own text reads "SINE WAVE CHECK" / "CHECK MODE"
+;
+; Called from: prom_b T_F400F0 (`jp`)
+;
+; It hands 2 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF95808  list 0xF2C88B-0xF2C9C2 (311 B, leaves by call)
+;        text: "SINE WAVE CHECK"; "CHECK MODE"; "(1) SINE WAVE & ROM CHECK"; ...
+;     site 0xF9581D  list 0xF2CA0D-0xF2CA15 (8 B, leaves by call)
+; From the captions: "SINE WAVE CHECK"; "(1) SINE WAVE & ROM CHECK";
+;          "CHECK MODE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_SineWaveCheckMode:
 	push XIX                                             ; F95798  3c
 	lda_d16 xix, (0x76a2)                                ; F95799  f1 a2 76 34
 	ldb_d8 c, (0x207b)                                   ; F9579D  c1 7b 20 23
@@ -37309,7 +37504,34 @@ sub_F95891:
 	ret                                                  ; F9598E  0e
 sub_F9598F:
 	ret                                                  ; F9598F  0e
-sub_F95990:
+; ---------------------------------------------------------------------
+; Paint_PanelSwLedCheck -- paints the service screen whose own text reads "PANEL SW&LED CHECK"
+;
+; Called from: prom_b T_F40100 (`jp`)
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF959A3  list 0xF2CA54-0xF2CAC3 (111 B, leaves by call)
+;        text: "PANEL SW&LED CHECK"; "Please push a any button."; ...
+; From the captions: "PANEL SW&LED CHECK"; "If LED near the button turn"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_PanelSwLedCheck:
 	ldb_d8 c, (0x207d)                                   ; F95990  c1 7d 20 23
 	m_cp_rm MB16, 0x207c, r3                             ; F95994  c1 7c 20 f3
 	jr z, 0x1f                                           ; F95998  66 1f
@@ -37587,7 +37809,7 @@ sub_F95C2D:
 	lda_24 xiy, (0xf95c46)                               ; F95C3E  f2 46 5c f9 35
 	push XIY                                             ; F95C43  3d
 	jp (xix)                                             ; F95C44  b4 d8
-	call sub_F94C4C                                      ; F95C46  1d 4c 4c f9
+	call Print_DebugMonitor                                      ; F95C46  1d 4c 4c f9
 	lda_24 xiy, (0xf95c52)                               ; F95C4A  f2 52 5c f9 35
 	push XIY                                             ; F95C4F  3d
 	jp (xix)                                             ; F95C50  b4 d8
@@ -38879,6 +39101,26 @@ sub_F99F1A:
 sub_F99F1F:
 	m_set 1, MD16, 0x2134                                ; F99F1F  f1 34 21 b9
 	ret                                                  ; F99F23  0e
+; ---------------------------------------------------------------------
+; sub_F99F24 -- a screen painter this round REFUSED to name.
+;
+; It hands 2 display list(s) to the interpreter ON THE STACK.
+;     site 0xF99F37  list 0xF0C81F-0xF0C917 (248 B, leaves by jr)
+;        text: "MIDI"; "T0TAL M0DE"; "C0NFIGURE"; "PR0G"; "CHANGE"; "MIDI 0UT"; ...
+;     site 0xF99F45  list 0xF0C800-0xF0C8D5 (213 B, leaves by call)
+;        text: "INPUT&0UTPUT"; "FILTER#"; "MIDI"; "T0TAL M0DE"; "C0NFIGURE"; "PR0G"; ...
+; Evidence: the two 24-bit immediates of the 12-byte push idiom at
+;          the cited site; the record walk from <start> lands exactly
+;          on <end>; the text is the `.ascii` the interpreter draws.
+; NOT NAMED because its list is the MIDI menu's INDEX of thirteen captions
+;          (T0TAL M0DE, C0NFIGURE, PR0G CHANGE, MIDI 0UT, SYSEX BULK DUMP,
+;          GENERAL MIDI, REALTIME MESSAGE, INPUT&0UTPUT FILTER); no one of
+;          them names the routine, and naming it after any would claim a
+;          screen that another routine paints.
+;          A wrong name passes the byte gate forever, so this keeps
+;          sub_XXXXXX and states the gap.
+; Recorded by notes/prom_a_understanding_round7.py --apply.
+; ---------------------------------------------------------------------
 sub_F99F24:
 	call 0xf42e80                                        ; F99F24  1d 80 2e f4
 	call 0xf42e10                                        ; F99F28  1d 10 2e f4
@@ -39162,7 +39404,39 @@ sub_F9A165:
 	popw hl                                              ; F9A1A4  4b
 	unlk XIZ                                             ; F9A1A5  ee 0d
 	ret                                                  ; F9A1A7  0e
-sub_F9A1A8:
+; ---------------------------------------------------------------------
+; Paint_MidiTotalMode -- paints the screen whose own text reads "MIDI" / "TOTAL" / "MODE"
+;
+; Called from: prom_b T_F4173C (`jp`)
+;
+; It hands 4 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9A202  list 0xF0C96E-0xF0CA2F (193 B, leaves by jr)
+;        text: "TOTAL"; "MODE"; "MIDI"; "MIDI INPUT MODE :"; "MIDI OUTPUT MODE:"; ...
+;     site 0xF9A210  list 0xF0C964-0xF0CA19 (181 B, leaves by call)
+;        text: "TOTAL"; "MODE"; "MIDI"; "MIDI INPUT MODE :"; "MIDI OUTPUT MODE:"; ...
+;     site 0xF9A220  list 0xF0C917-0xF0C964 (77 B, leaves by call)
+;        text: "ITEM"; "$ VALUE"
+;     site 0xF9A24B  list 0xF0CA89-0xF0CA9F (22 B, leaves by call)
+; From the captions: "MIDI"; "TOTAL"; "MODE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_MidiTotalMode:
 	link XIZ,0xfffc                                      ; F9A1A8  ee 0c fc ff
 	push XIX                                             ; F9A1AC  3c
 	lda_d16 xix, (0x2095)                                ; F9A1AD  f1 95 20 34
@@ -39707,7 +39981,35 @@ sub_F9A678:
 	popw hl                                              ; F9A6BC  4b
 	unlk XIZ                                             ; F9A6BD  ee 0d
 	ret                                                  ; F9A6BF  0e
-sub_F9A6C0:
+; ---------------------------------------------------------------------
+; Paint_MidiRealtimeMessages -- paints the screen whose own text reads "REALTIME MESSAGES" / "MIDI"
+;
+; Called from: prom_b T_F41690 (`jp`)
+;
+; It hands 2 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9A6EB  list 0xF0CBCF-0xF0CC75 (166 B, leaves by call)
+;        text: "REALTIME MESSAGES"; "MIDI"; "REALTIME COMMANDS :"; "CLOCK  :"
+;     site 0xF9A6FD  list 0xF0CC91-0xF0CCBA (41 B, leaves by call)
+; From the captions: "MIDI"; "REALTIME MESSAGES"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_MidiRealtimeMessages:
 	push XIX                                             ; F9A6C0  3c
 	lda_d16 xix, (0x2095)                                ; F9A6C1  f1 95 20 34
 	ldb_d8 c, (0x207a)                                   ; F9A6C5  c1 7a 20 23
@@ -39745,6 +40047,21 @@ sub_F9A6C0:
 	call 0xf42e14                                        ; F9A71E  1d 14 2e f4
 	pop XIX                                              ; F9A722  5c
 	ret                                                  ; F9A723  0e
+; ---------------------------------------------------------------------
+; sub_F9A724 -- a screen painter this round REFUSED to name.
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK.
+;     site 0xF9A729  list 0xF0CC83-0xF0CC91 (14 B, leaves by call)
+;        text: "ON"; "OFF"
+; Evidence: the two 24-bit immediates of the 12-byte push idiom at
+;          the cited site; the record walk from <start> lands exactly
+;          on <end>; the text is the `.ascii` the interpreter draws.
+; NOT NAMED because the only text it draws is `ON` / `OFF`, a two-state
+;          field and not a screen.
+;          A wrong name passes the byte gate forever, so this keeps
+;          sub_XXXXXX and states the gap.
+; Recorded by notes/prom_a_understanding_round7.py --apply.
+; ---------------------------------------------------------------------
 sub_F9A724:
 	stdi8 (0x2540), 0x02                                 ; F9A724  f1 40 25 00 02
 	lda_24 xbc, (0xf0cc91)                               ; F9A729  f2 91 cc f0 31
@@ -39978,7 +40295,37 @@ sub_F9A954:
 .LF9A995:
 	unlk XIZ                                             ; F9A995  ee 0d
 	ret                                                  ; F9A997  0e
-sub_F9A998:
+; ---------------------------------------------------------------------
+; Paint_MidiInputOutputFilter -- paints the screen whose own text reads "INPUT&OUTPUT" / "FILTER" / "MIDI"
+;
+; Called from: prom_b T_F4174C (`jp`)
+;
+; It hands 3 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9A9EC  list 0xF0CCEE-0xF0CDE7 (249 B, leaves by call)
+;        text: "INPUT&OUTPUT"; "FILTER"; "MIDI"; "PR0GRAM CHANGE   :"; ...
+;     site 0xF9A9FC  list 0xF0C917-0xF0C964 (77 B, leaves by call)
+;        text: "ITEM"; "$ VALUE"
+;     site 0xF9AA2D  list 0xF0CE5F-0xF0CE75 (22 B, leaves by call)
+; From the captions: "MIDI"; "INPUT&OUTPUT"; "FILTER"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_MidiInputOutputFilter:
 	link XIZ,0xfffc                                      ; F9A998  ee 0c fc ff
 	push XIX                                             ; F9A99C  3c
 	lda_d16 xix, (0x2095)                                ; F9A99D  f1 95 20 34
@@ -40594,7 +40941,37 @@ sub_F9AF19:
 	popw hl                                              ; F9AF5D  4b
 	unlk XIZ                                             ; F9AF5E  ee 0d
 	ret                                                  ; F9AF60  0e
-sub_F9AF61:
+; ---------------------------------------------------------------------
+; Paint_MidiOutProgramChange -- paints the screen whose own text reads "PROGRAM" / "CHANGE" / "MIDI" / "OUT"
+;
+; Called from: prom_b T_F4175C (`jp`)
+;
+; It hands 3 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9AFE6  list 0xF0CEBB-0xF0CFF6 (315 B, leaves by call)
+;        text: "PROGRAM"; "CHANGE"; "MIDI"; "OUT"; "MIDI"; "MIDI CH     :"; ...
+;     site 0xF9AFF6  list 0xF0C917-0xF0C964 (77 B, leaves by call)
+;        text: "ITEM"; "$ VALUE"
+;     site 0xF9B031  list 0xF0D04B-0xF0D061 (22 B, leaves by call)
+; From the captions: "MIDI"; "OUT"; "PROGRAM"; "CHANGE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_MidiOutProgramChange:
 	link XIZ,0xffe9                                      ; F9AF61  ee 0c e9 ff
 	push XIX                                             ; F9AF65  3c
 	lda_d16 xix, (0x2741)                                ; F9AF66  f1 41 27 34
@@ -40944,6 +41321,24 @@ sub_F9B2C2:
 	call 0xf42e04                                        ; F9B2DB  1d 04 2e f4
 	inc 0,XSP                                            ; F9B2DF  ef 60
 	ret                                                  ; F9B2E1  0e
+; ---------------------------------------------------------------------
+; sub_F9B2E2 -- a screen painter this round REFUSED to name.
+;
+; It hands 2 display list(s) to the interpreter ON THE STACK.
+;     site 0xF9B30B  list 0xF0D02D-0xF0D036 (9 B, leaves by call)
+;        text: ""
+;     site 0xF9B31B  list 0xF0D036-0xF0D04B (21 B, leaves by call)
+;        text: "---"; "OFF"; "OFF"
+; Evidence: the two 24-bit immediates of the 12-byte push idiom at
+;          the cited site; the record walk from <start> lands exactly
+;          on <end>; the text is the `.ascii` the interpreter draws.
+; NOT NAMED because the caption belongs to its SECOND list; its first
+;          draws `---`, so a name taken from the text would name the wrong
+;          list.
+;          A wrong name passes the byte gate forever, so this keeps
+;          sub_XXXXXX and states the gap.
+; Recorded by notes/prom_a_understanding_round7.py --apply.
+; ---------------------------------------------------------------------
 sub_F9B2E2:
 	link XIZ,0xffe9                                      ; F9B2E2  ee 0c e9 ff
 	pushw hl                                             ; F9B2E6  2b
@@ -41529,7 +41924,7 @@ sub_F9C087:
 	jr nz, .LF9C0BA                                      ; F9C0AC  6e 0c
 	m_or_mi8 MB16, 0x2900, 0x03                          ; F9C0AE  c1 00 29 3e 03
 	call 0xf42e80                                        ; F9C0B3  1d 80 2e f4
-	calr sub_F9C4FC                                      ; F9C0B7  1e 42 04
+	calr Paint_ReMapEdit                                      ; F9C0B7  1e 42 04
 .LF9C0BA:
 	calr sub_F9C52D                                      ; F9C0BA  1e 70 04
 	calr sub_F9C7BD                                      ; F9C0BD  1e fd 06
@@ -41956,7 +42351,34 @@ sub_F9C41F:
 	stdi8 (0x2070), 0x60                                 ; F9C4F6  f1 70 20 00 60
 .LF9C4FB:
 	ret                                                  ; F9C4FB  0e
-sub_F9C4FC:
+; ---------------------------------------------------------------------
+; Paint_ReMapEdit -- paints the screen whose own text reads "RE-MAP EDIT"
+;
+; Called from: prom_a sub_F9C087 (`calr`) at 0xF9C0B7
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9C514  list 0xFA30A6-0xFA3221 (379 B, leaves by call)
+;        text: "RE-MAP EDIT"; "SYSTEM"; "X BANK"; "] GROUP"; "m BANK"; "r GROUP"
+; From the captions: "RE-MAP EDIT"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_ReMapEdit:
 	call 0xf42e10                                        ; F9C4FC  1d 10 2e f4
 	stdi8 (0x2540), 0x00                                 ; F9C500  f1 40 25 00 00
 	lda_24 xbc, (0xfa3221)                               ; F9C505  f2 21 32 fa 31
@@ -42597,7 +43019,7 @@ sub_F9CB00:
 	and C,0x10                                           ; F9CB32  cb cc 10
 	jr nz, .LF9CB3E                                      ; F9CB35  6e 07
 	call 0xf42e80                                        ; F9CB37  1d 80 2e f4
-	calr sub_F9CDE4                                      ; F9CB3B  1e a6 02
+	calr Paint_SoundGroupNaming                                      ; F9CB3B  1e a6 02
 .LF9CB3E:
 	calr sub_F9CE33                                      ; F9CB3E  1e f2 02
 	calr sub_F9CE66                                      ; F9CB41  1e 22 03
@@ -42605,7 +43027,7 @@ sub_F9CB00:
 .LF9CB46:
 	pushw 0x10                                           ; F9CB46  0b 10 00
 	call 0xf42f80                                        ; F9CB49  1d 80 2f f4
-	calr sub_F9CE1B                                      ; F9CB4D  1e cb 02
+	calr Paint_SoundGroupNamingWrite                                      ; F9CB4D  1e cb 02
 	popw bc                                              ; F9CB50  49
 .LF9CB51:
 	ret                                                  ; F9CB51  0e
@@ -42919,7 +43341,36 @@ sub_F9CC9F:
 .LF9CDE2:
 	pop XIX                                              ; F9CDE2  5c
 	ret                                                  ; F9CDE3  0e
-sub_F9CDE4:
+; ---------------------------------------------------------------------
+; Paint_SoundGroupNaming -- paints the screen whose own text reads "SOUND GROUP NAMING"
+;
+; Called from: prom_a sub_F9CB00 (`calr`) at 0xF9CB3B
+;
+; It hands 2 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9CDED  list 0xFA3678-0xFA3690 (24 B, leaves by call)
+;        text: "SOUND GROUP NAMING"
+;     site 0xF9CE02  list 0xFA36E0-0xFA377A (154 B, leaves by call)
+;        text: "SYSTEM"; "NAMING"; "_ BANK"; "t GROUP"
+; From the captions: "SOUND GROUP NAMING"; "t GROUP"; "NAMING"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_SoundGroupNaming:
 	call 0xf42e10                                        ; F9CDE4  1d 10 2e f4
 	stdi8 (0x2540), 0x00                                 ; F9CDE8  f1 40 25 00 00
 	lda_24 xbc, (0xfa3690)                               ; F9CDED  f2 90 36 fa 31
@@ -42937,7 +43388,34 @@ sub_F9CDE4:
 	inc 0,XSP                                            ; F9CE16  ef 60
 	inc 0,XSP                                            ; F9CE18  ef 60
 	ret                                                  ; F9CE1A  0e
-sub_F9CE1B:
+; ---------------------------------------------------------------------
+; Paint_SoundGroupNamingWrite -- paints the "SOUND GROUP NAMING" screen's "WRITE" state
+;
+; Called from: prom_a sub_F9CB00 (`calr`) at 0xF9CB4D
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9CE20  list 0xFA3690-0xFA36E0 (80 B, leaves by call)
+;        text: "SOUND GROUP NAMING"; "SYSTEM"; "WRITE"
+; From the captions: "SOUND GROUP NAMING"; "WRITE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_SoundGroupNamingWrite:
 	stdi8 (0x2540), 0x00                                 ; F9CE1B  f1 40 25 00 00
 	lda_24 xbc, (0xfa36e0)                               ; F9CE20  f2 e0 36 fa 31
 	push XBC                                             ; F9CE25  39
@@ -43100,7 +43578,7 @@ sub_F9CF68:
 	and C,0x10                                           ; F9CF9A  cb cc 10
 	jr nz, .LF9CFA6                                      ; F9CF9D  6e 07
 	call 0xf42e80                                        ; F9CF9F  1d 80 2e f4
-	calr sub_F9D24C                                      ; F9CFA3  1e a6 02
+	calr Paint_CombinationGroupNaming                                      ; F9CFA3  1e a6 02
 .LF9CFA6:
 	calr sub_F9D29B                                      ; F9CFA6  1e f2 02
 	calr sub_F9D2CE                                      ; F9CFA9  1e 22 03
@@ -43108,7 +43586,7 @@ sub_F9CF68:
 .LF9CFAE:
 	pushw 0x10                                           ; F9CFAE  0b 10 00
 	call 0xf42f80                                        ; F9CFB1  1d 80 2f f4
-	calr sub_F9D283                                      ; F9CFB5  1e cb 02
+	calr Paint_CombinationGroupNamingWrite                                      ; F9CFB5  1e cb 02
 	popw bc                                              ; F9CFB8  49
 .LF9CFB9:
 	ret                                                  ; F9CFB9  0e
@@ -43420,7 +43898,36 @@ sub_F9D079:
 .LF9D24A:
 	pop XIX                                              ; F9D24A  5c
 	ret                                                  ; F9D24B  0e
-sub_F9D24C:
+; ---------------------------------------------------------------------
+; Paint_CombinationGroupNaming -- paints the screen whose own text reads "COMBINATION GROUP NAMING"
+;
+; Called from: prom_a sub_F9CF68 (`calr`) at 0xF9CFA3
+;
+; It hands 2 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9D255  list 0xFA39DE-0xFA39FC (30 B, leaves by call)
+;        text: "COMBINATION GROUP NAMING"
+;     site 0xF9D26A  list 0xFA36E0-0xFA377A (154 B, leaves by call)
+;        text: "SYSTEM"; "NAMING"; "_ BANK"; "t GROUP"
+; From the captions: "COMBINATION GROUP NAMING"; "t GROUP"; "NAMING"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_CombinationGroupNaming:
 	call 0xf42e10                                        ; F9D24C  1d 10 2e f4
 	stdi8 (0x2540), 0x00                                 ; F9D250  f1 40 25 00 00
 	lda_24 xbc, (0xfa39fc)                               ; F9D255  f2 fc 39 fa 31
@@ -43438,7 +43945,34 @@ sub_F9D24C:
 	inc 0,XSP                                            ; F9D27E  ef 60
 	inc 0,XSP                                            ; F9D280  ef 60
 	ret                                                  ; F9D282  0e
-sub_F9D283:
+; ---------------------------------------------------------------------
+; Paint_CombinationGroupNamingWrite -- paints the "COMBINATION GROUP NAMING" screen's "WRITE" state
+;
+; Called from: prom_a sub_F9CF68 (`calr`) at 0xF9CFB5
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9D288  list 0xFA39FC-0xFA3A52 (86 B, leaves by call)
+;        text: "COMBINATION GROUP NAMING"; "SYSTEM"; "WRITE"
+; From the captions: "COMBINATION GROUP NAMING"; "WRITE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_CombinationGroupNamingWrite:
 	stdi8 (0x2540), 0x00                                 ; F9D283  f1 40 25 00 00
 	lda_24 xbc, (0xfa3a52)                               ; F9D288  f2 52 3a fa 31
 	push XBC                                             ; F9D28D  39
@@ -45385,6 +45919,34 @@ sub_F9E25E:
 .LF9E517:
 	pop XIX                                              ; F9E517  5c
 	ret                                                  ; F9E518  0e
+; ---------------------------------------------------------------------
+; sub_F9E519 -- a screen painter this round REFUSED to name.
+;
+; It hands 7 display list(s) to the interpreter ON THE STACK.
+;     site 0xF9E543  list 0xFA3BA8-0xFA3BD1 (41 B, leaves by jp(XIX))
+;        text: "GROUP/SINGLE"
+;     site 0xF9E55C  list 0xFA3A9C-0xFA3B82 (230 B, leaves by jp(XIX))
+;        text: "SOUND COPY"; "SYSTEM"; "[ BANK"; "d GROUP"; "y GROUP"
+;     site 0xF9E587  list 0xFA3BA8-0xFA3BD1 (41 B, leaves by jp(XIX))
+;        text: "GROUP/SINGLE"
+;     site 0xF9E5A0  list 0xFA3ED3-0xFA401B (328 B, leaves by jp(XIX))
+;        text: "SOUND COPY"; "SYSTEM"; "X BANK"; "] GROUP"; "d SOUND"; "r GROUP"; ...
+;     site 0xF9E5B8  list 0xFA408D-0xFA40B5 (40 B, leaves by jr)
+;        text: "COMBINATION COPY"; "d COMBI"; "y COMBI"
+;     site 0xF9E5CB  list 0xFA40B5-0xFA4123 (110 B, leaves by jp(XIX))
+;        text: "COMBINATION COPY"; "SYSTEM"; "The memory to witch you"; ...
+;     site 0xF9E5E1  list 0xFA302F-0xFA30A6 (119 B, leaves by jp(XIX))
+;        text: "YES"; "NO"; "ATTENTI0N!"; "Are You Sure?"
+; Evidence: the two 24-bit immediates of the 12-byte push idiom at
+;          the cited site; the record walk from <start> lands exactly
+;          on <end>; the text is the `.ascii` the interpreter draws.
+; NOT NAMED because it draws seven lists spanning TWO screens -- SOUND
+;          COPY and COMBINATION COPY -- plus the shared ATTENTI0N!/Are You
+;          Sure? box. No single caption names the routine.
+;          A wrong name passes the byte gate forever, so this keeps
+;          sub_XXXXXX and states the gap.
+; Recorded by notes/prom_a_understanding_round7.py --apply.
+; ---------------------------------------------------------------------
 sub_F9E519:
 	push XIX                                             ; F9E519  3c
 	lda_24 xix, (0xf42e00)                               ; F9E51A  f2 00 2e f4 34
@@ -46473,7 +47035,7 @@ sub_F9EF85:
 	call 0xf42fac                                        ; F9EFCA  1d ac 2f f4
 	stdi8 (0x2806), 0x01                                 ; F9EFCE  f1 06 28 00 01
 	call 0xf42e80                                        ; F9EFD3  1d 80 2e f4
-	calr sub_F9F39C                                      ; F9EFD7  1e c2 03
+	calr Paint_DrumsMapNaming                                      ; F9EFD7  1e c2 03
 .LF9EFDA:
 	calr sub_F9F4B5                                      ; F9EFDA  1e d8 04
 	calr sub_F9F3F4                                      ; F9EFDD  1e 14 04
@@ -46482,11 +47044,11 @@ sub_F9EF85:
 .LF9EFE5:
 	pushw 0x10                                           ; F9EFE5  0b 10 00
 	call 0xf42f80                                        ; F9EFE8  1d 80 2f f4
-	calr sub_F9F3BC                                      ; F9EFEC  1e cd 03
+	calr Paint_DrumsMapWrite                                      ; F9EFEC  1e cd 03
 	popw bc                                              ; F9EFEF  49
 	jr .LF9EFF5                                          ; F9EFF0  68 03
 .LF9EFF2:
-	calr sub_F9F3D4                                      ; F9EFF2  1e df 03
+	calr Paint_ErrorImpossibleDrumMap                                      ; F9EFF2  1e df 03
 .LF9EFF5:
 	ret                                                  ; F9EFF5  0e
 sub_F9EFF6:
@@ -46925,7 +47487,34 @@ sub_F9F36B:
 	inc 0,XSP                                            ; F9F398  ef 60
 	pop XIX                                              ; F9F39A  5c
 	ret                                                  ; F9F39B  0e
-sub_F9F39C:
+; ---------------------------------------------------------------------
+; Paint_DrumsMapNaming -- paints the screen whose own text reads "DRUMS MAP" / "NAMING"
+;
+; Called from: prom_a sub_F9EF85 (`calr`) at 0xF9EFD7
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9F3A5  list 0xFA46C3-0xFA47B2 (239 B, leaves by call)
+;        text: "DRUMS MAP"; "SYSTEM"; "MAP"; "NAMING"; "X DRUMS MAP"; "g NOTE"; ...
+; From the captions: "DRUMS MAP"; "MAP"; "NAMING"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_DrumsMapNaming:
 	call 0xf42e10                                        ; F9F39C  1d 10 2e f4
 	stdi8 (0x2540), 0x00                                 ; F9F3A0  f1 40 25 00 00
 	lda_24 xbc, (0xfa47b2)                               ; F9F3A5  f2 b2 47 fa 31
@@ -46936,7 +47525,34 @@ sub_F9F39C:
 	call 0xf42e14                                        ; F9F3B5  1d 14 2e f4
 	inc 0,XSP                                            ; F9F3B9  ef 60
 	ret                                                  ; F9F3BB  0e
-sub_F9F3BC:
+; ---------------------------------------------------------------------
+; Paint_DrumsMapWrite -- paints the "DRUMS MAP" screen's "WRITE" state
+;
+; Called from: prom_a sub_F9EF85 (`calr`) at 0xF9EFEC
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9F3C1  list 0xFA47B2-0xFA47FE (76 B, leaves by call)
+;        text: "DRUMS MAP"; "SYSTEM"; "WRITE"
+; From the captions: "DRUMS MAP"; "WRITE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_DrumsMapWrite:
 	stdi8 (0x2540), 0x00                                 ; F9F3BC  f1 40 25 00 00
 	lda_24 xbc, (0xfa47fe)                               ; F9F3C1  f2 fe 47 fa 31
 	push XBC                                             ; F9F3C6  39
@@ -46945,7 +47561,35 @@ sub_F9F3BC:
 	call 0xf42e00                                        ; F9F3CD  1d 00 2e f4
 	inc 0,XSP                                            ; F9F3D1  ef 60
 	ret                                                  ; F9F3D3  0e
-sub_F9F3D4:
+; ---------------------------------------------------------------------
+; Paint_ErrorImpossibleDrumMap -- paints the error box "It is impossible to set a drum map for a Sound other than a Drum Kit."
+;
+; Called from: prom_a sub_F9EF85 (`calr`) at 0xF9EFF2
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xF9F3DD  list 0xFA47FE-0xFA4881 (131 B, leaves by call)
+;        text: "ERROR!"; "It is impossible to set a drum map for"; ...
+; From the captions: "ERROR!"; "It is impossible to set a drum map for";
+;          "a Sound other than a Drum Kit."
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_ErrorImpossibleDrumMap:
 	call 0xf42e10                                        ; F9F3D4  1d 10 2e f4
 	stdi8 (0x2540), 0x00                                 ; F9F3D8  f1 40 25 00 00
 	lda_24 xbc, (0xfa4881)                               ; F9F3DD  f2 81 48 fa 31
@@ -60682,6 +61326,25 @@ sub_FAAEE3:
 	popw hl                                              ; FAAF8D  4b
 	unlk XIZ                                             ; FAAF8E  ee 0d
 	ret                                                  ; FAAF90  0e
+; ---------------------------------------------------------------------
+; sub_FAAF91 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_b T_F43444 (`jp`)
+;          prom_a sub_FB3C34 (`call` through T_F43444) at 0xFB3DD7
+;
+;     0xFAAFCE loads 0xFAD38A, where the ROM reads:
+;        "x`abc"
+;     0xFAB031 loads 0xFAD38A, where the ROM reads:
+;        "x`abc"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FAAF91:
 	link XIZ,0xffe6                                      ; FAAF91  ee 0c e6 ff
 	pushw hl                                             ; FAAF95  2b
@@ -81167,6 +81830,25 @@ sub_FB9635:
 	pop XIX                                              ; FB9694  5c
 	popw hl                                              ; FB9695  4b
 	ret                                                  ; FB9696  0e
+; ---------------------------------------------------------------------
+; sub_FB9697 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_FB9E96 (`calr`) at 0xFB9EC9
+;          prom_a sub_FB9FE1 (`calr`) at 0xFBA004
+;
+;     0xFB96A3 loads 0xFBA169, where the ROM reads:
+;        "MThdMTrk~"
+;     0xFB96AB loads 0xFBA16D, where the ROM reads:
+;        "MTrk~"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FB9697:
 	link XIZ,0xfff0                                      ; FB9697  ee 0c f0 ff
 	pushw hl                                             ; FB969B  2b
@@ -88984,7 +89666,7 @@ sub_FBEF1C:
 	and C,0x10                                           ; FBEF65  cb cc 10
 	jr nz, .LFBEF71                                      ; FBEF68  6e 07
 	call 0xf42e80                                        ; FBEF6A  1d 80 2e f4
-	calr sub_FBF0EE                                      ; FBEF6E  1e 7d 01
+	calr Paint_CombinationNaming                                      ; FBEF6E  1e 7d 01
 .LFBEF71:
 	calr sub_FBF10A                                      ; FBEF71  1e 96 01
 .LFBEF74:
@@ -89135,7 +89817,34 @@ sub_FBF03A:
 	pop XIX                                              ; FBF0EA  5c
 	unlk XIZ                                             ; FBF0EB  ee 0d
 	ret                                                  ; FBF0ED  0e
-sub_FBF0EE:
+; ---------------------------------------------------------------------
+; Paint_CombinationNaming -- paints the screen whose own text reads "COMBINATION NAMING" / "MEM0RY WRITE"
+;
+; Called from: prom_a sub_FBEF1C (`calr`) at 0xFBEF6E
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xFBF0F7  list 0xF19ABF-0xF19BBD (254 B, leaves by call)
+;        text: "MEM0RY WRITE"; "COMBI.EDIT"; "NAME:"; "MEMORY BANK:U1-"; ...
+; From the captions: "COMBINATION NAMING"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_CombinationNaming:
 	call 0xf42e10                                        ; FBF0EE  1d 10 2e f4
 	stdi8 (0x2540), 0x02                                 ; FBF0F2  f1 40 25 00 02
 	lda_24 xbc, (0xf19bbd)                               ; FBF0F7  f2 bd 9b f1 31
@@ -89242,7 +89951,7 @@ sub_FBF18B:
 .LFBF1EF:
 	pushw 0x10                                           ; FBF1EF  0b 10 00
 	call 0xf42f80                                        ; FBF1F2  1d 80 2f f4
-	calr sub_FBF2C2                                      ; FBF1F6  1e c9 00
+	calr Paint_CombinationNamingWrite                                      ; FBF1F6  1e c9 00
 	popw bc                                              ; FBF1F9  49
 	pop XIX                                              ; FBF1FA  5c
 	popw hl                                              ; FBF1FB  4b
@@ -89332,7 +90041,34 @@ sub_FBF236:
 .LFBF2BF:
 	unlk XIZ                                             ; FBF2BF  ee 0d
 	ret                                                  ; FBF2C1  0e
-sub_FBF2C2:
+; ---------------------------------------------------------------------
+; Paint_CombinationNamingWrite -- paints the "COMBINATION NAMING" screen's "WRITE" state
+;
+; Called from: prom_a sub_FBF18B (`calr`) at 0xFBF1F6
+;
+; It hands 1 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xFBF2C7  list 0xF19BE5-0xF19C39 (84 B, leaves by call)
+;        text: "COMBI.EDIT"; "COMBINATION NAMING"; "WRITE"
+; From the captions: "COMBINATION NAMING"; "WRITE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_CombinationNamingWrite:
 	stdi8 (0x2540), 0x02                                 ; FBF2C2  f1 40 25 00 02
 	lda_24 xbc, (0xf19c39)                               ; FBF2C7  f2 39 9c f1 31
 	push XBC                                             ; FBF2CC  39
@@ -93796,6 +94532,26 @@ sub_FC1B6C:
 	ret                                                  ; FC1B76  0e
 	ldb_da w, (0x60a000)                                 ; FC1B77  c2 00 a0 60 20
 	ldb_da a, (0x60a001)                                 ; FC1B7C  c2 01 a0 60 21
+; ---------------------------------------------------------------------
+; sub_FC1B81 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_b T_F41010 (`jp`)
+;          prom_a sub_F90989 (`call` through T_F41010) at 0xF90A56
+;          prom_a sub_F90D58 (`call` through T_F41010) at 0xF90E62
+;          prom_a sub_F918E5 (`call` through T_F41010) at 0xF9190A
+;          ... and 2 more
+;
+;     0xFC1BAE loads 0xFC1C49, where the ROM reads:
+;        "Sound Name *****<()*+"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FC1B81:
 	push XIX                                             ; FC1B81  3c
 	pushw wa                                             ; FC1B82  28
@@ -93899,6 +94655,26 @@ sub_FC1C29:
 ; ---------------------------------------------------------------------
 Msg0716_Str_SoundName:
 	.byte 0x53, 0x6f, 0x75, 0x6e, 0x64, 0x20, 0x4e, 0x61, 0x6d, 0x65, 0x20, 0x2a, 0x2a, 0x2a, 0x2a, 0x2a  ; FC1C49
+; ---------------------------------------------------------------------
+; sub_FC1C59 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_b T_F4102C (`jp`)
+;          prom_a sub_F918E5 (`call` through T_F4102C) at 0xF91D01
+;          prom_a sub_F93ED4 (`call` through T_F4102C) at 0xF93F35
+;          prom_a sub_F9F6EC (`call` through T_F4102C) at 0xF9F727
+;          ... and 1 more
+;
+;     0xFC1C6C loads 0xFC1CC1, where the ROM reads:
+;        "Combi Name *****"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FC1C59:
 	push XIX                                             ; FC1C59  3c
 	pushw wa                                             ; FC1C5A  28
@@ -94353,6 +95129,31 @@ sub_FC200D:
 	ret                                                  ; FC2032  0e
 	normal                                               ; FC2033  01
 	normal                                               ; FC2034  01
+; ---------------------------------------------------------------------
+; sub_FC2035 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_b T_F41018 (`jp`)
+;          prom_a InstallPainter_SoundGroupMenu (`call` through T_F41018) at 0xF92872
+;          prom_a InstallPainter_GroupSoundDisplayHold (`call` through T_F41018) at 0xF92D91
+;          prom_a sub_F9F65B (`call` through T_F41018) at 0xF9F67F
+;
+;     0xFC2070 loads 0xF068B4, where the ROM reads:
+;        "PIANO           E.PIANO         HARPSI. & MALLET"
+;     0xFC2077 loads 0xF069B4, where the ROM reads:
+;        "BRASS           TRUMPET         DEEP BRASS      "
+;     0xFC207E loads 0xF06AB4, where the ROM reads:
+;        "DRUMS 1         DRUMS 2         ----------------"
+;     0xFC2085 loads 0xF06BB4, where the ROM reads:
+;        "DRUMS 1         --------------------------------"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FC2035:
 	cps w, 0x01                                          ; FC2035  c8 d9
 	jr z, .LFC2077                                       ; FC2037  66 3e
@@ -94475,6 +95276,27 @@ sub_FC2112:
 Msg0716_Str_GroupPair_A:
 	.byte 0x43, 0x6f, 0x6d, 0x62, 0x69, 0x20, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x20, 0x4e, 0x61, 0x6d, 0x65  ; FC2135
 	.byte 0x45, 0x58, 0x54, 0x20, 0x53, 0x69, 0x6c, 0x65, 0x6e, 0x74, 0x20, 0x47, 0x72, 0x6f, 0x75, 0x70  ; FC2145
+; ---------------------------------------------------------------------
+; sub_FC2155 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_b T_F41030 (`jp`)
+;          prom_a InstallPainter_CombinationGroupMenu (`call` through T_F41030) at 0xF936A1
+;          prom_a InstallPainter_GroupCombiDisplayHold (`call` through T_F41030) at 0xF93961
+;          prom_a sub_F9F75C (`call` through T_F41030) at 0xF9F785
+;
+;     0xFC2187 loads 0xFC2203, where the ROM reads:
+;        "EXT Silent Group"
+;     0xFC21A7 loads 0xFC21F3, where the ROM reads:
+;        "Combi Group NameEXT Silent Group"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FC2155:
 	cp W,0x08                                            ; FC2155  c8 cf 08
 	jr c, .LFC2173                                       ; FC2158  67 19
@@ -118055,6 +118877,22 @@ sub_FD7C2D:
 	pop XIX                                              ; FD7C56  5c
 	unlk XIZ                                             ; FD7C57  ee 0d
 	ret                                                  ; FD7C59  0e
+; ---------------------------------------------------------------------
+; sub_FD7C5A -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: nothing in either image names this address.
+;
+;     0xFD7C73 loads 0xFCF061, where the ROM reads:
+;        " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FD7C5A:
 	link XIZ,0x0000                                      ; FD7C5A  ee 0c 00 00
 	cp (XIZ+0x08),0x61                                   ; FD7C5E  8e 08 3f 61
@@ -133672,6 +134510,22 @@ sub_FE1CE4:
 	calr 0x1251                                          ; FE1CE4  1e 51 12
 	ret                                                  ; FE1CE7  0e
 	ret                                                  ; FE1CE8  0e
+; ---------------------------------------------------------------------
+; sub_FE1CE9 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_FE202F (`calr`) at 0xFE204F
+;
+;     0xFE1CFF loads 0xFE7027, where the ROM reads:
+;        "WSA SOUND RAM S0"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FE1CE9:
 	link XIZ,0xfffc                                      ; FE1CE9  ee 0c fc ff
 	pushw hl                                             ; FE1CED  2b
@@ -155005,6 +155859,22 @@ KitCategoryLegend_SelectBase:
 	xor W,W                                              ; FF03FD  c8 d0
 	sll wa, 0x02                                         ; FF03FF  d8 ee 02
 	mx8_ld_rm MXL, ra_IY, rb_A, r4                       ; FF0402  e3 03 f4 e0 24
+; ---------------------------------------------------------------------
+; sub_FF0407 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: nothing in either image names this address.
+;
+;     0xFF041E loads 0xFF047F, where the ROM reads:
+;        "      STANDR                                    "
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FF0407:
 	ld A,(XIX+0x01)                                      ; FF0407  8c 01 21
 	cp A,0x20                                            ; FF040A  c9 cf 20
@@ -157813,6 +158683,27 @@ sub_FF42C5:
 sub_FF42C9:
 	calr sub_FF42C0                                      ; FF42C9  1e f4 ff
 	ret                                                  ; FF42CC  0e
+; ---------------------------------------------------------------------
+; sub_FF42CD -- a screen painter this round REFUSED to name.
+;
+; It hands 3 display list(s) to the interpreter ON THE STACK.
+;     site 0xFF42D7  list 0xF58014-0xF580B0 (156 B, leaves by call)
+;        text: "DISK"; "DISK L0AD"; "DISK SAVE"; "MIDI FILE"; "DIRECT PLAY"; ...
+;     site 0xFF42F4  list 0xF580B0-0xF58127 (119 B, leaves by jr)
+;        text: "MIDI FILE LOAD"; "MIDI FILE SAVE"; "LOAD"; "SINGLE SOUND"; "LOAD"; ...
+;     site 0xFF4302  list 0xF58127-0xF58162 (59 B, leaves by call)
+;        text: "LOAD"; "SINGLE SOUND"; "LOAD"; "SINGLE COMBI.#"
+; Evidence: the two 24-bit immediates of the 12-byte push idiom at
+;          the cited site; the record walk from <start> lands exactly
+;          on <end>; the text is the `.ascii` the interpreter draws.
+; NOT NAMED because its list is the DISK menu's INDEX of seven captions
+;          (DISK L0AD, DISK SAVE, MIDI FILE DIRECT PLAY, FL0PPY DISK
+;          F0RMAT); naming it after one would claim a screen another
+;          routine paints.
+;          A wrong name passes the byte gate forever, so this keeps
+;          sub_XXXXXX and states the gap.
+; Recorded by notes/prom_a_understanding_round7.py --apply.
+; ---------------------------------------------------------------------
 sub_FF42CD:
 	calr sub_FF42B2                                      ; FF42CD  1e e2 ff
 	call sub_FF7604                                      ; FF42D0  1d 04 76 ff
@@ -157942,7 +158833,44 @@ sub_FF431C:
 	ret                                                  ; FF4406  0e
 sub_FF4407:
 	ret                                                  ; FF4407  0e
-sub_FF4408:
+; ---------------------------------------------------------------------
+; Paint_MidiFileDirectPlay -- paints the screen whose own text reads "MIDI FILE DIRECT PLAY"
+;
+; Called from: prom_b T_F42274 (`jp`)
+;
+; It hands 7 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xFF4473  list 0xF5950D-0xF59517 (10 B, leaves by jp(XIX))
+;     site 0xFF448A  list 0xF5944C-0xF594F9 (173 B, leaves by jp(XIX))
+;        text: "MIDI FILE DIRECT PLAY"; "PLAY AS GM   :"; "MIXER"
+;     site 0xFF44A1  list 0xF5933B-0xF59340 (5 B, leaves by jp(XIX))
+;     site 0xFF44B8  list 0xF58000-0xF58014 (20 B, leaves by jp(XIX))
+;        text: "DISK"
+;     site 0xFF44CF  list 0xF594F9-0xF59503 (10 B, leaves by jp(XIX))
+;        text: "PLAY"
+;     site 0xFF4550  list 0xF59503-0xF5950D (10 B, leaves by jr)
+;        text: "STOP"
+;     site 0xFF455E  list 0xF594F9-0xF59503 (10 B, leaves by jp(XIX))
+;        text: "PLAY"
+; From the captions: "MIDI FILE DIRECT PLAY"; "PLAY AS GM :"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_MidiFileDirectPlay:
 	push XIX                                             ; FF4408  3c
 	lda_24 xix, (0xff75d3)                               ; FF4409  f2 d3 75 ff 34
 	call 0xf42e80                                        ; FF440E  1d 80 2e f4
@@ -158276,7 +159204,45 @@ sub_FF475C:
 	inc 2,XSP                                            ; FF4781  ef 62
 	unlk XIZ                                             ; FF4783  ee 0d
 	ret                                                  ; FF4785  0e
-sub_FF4786:
+; ---------------------------------------------------------------------
+; Paint_DiskL0adFile -- paints the screen whose own text reads "L0AD FILE" / "L0AD 0PTI0N" over the FLOPPY DISK file list
+;
+; Called from: prom_b T_F423A0 (`jp`)
+;
+; It hands 8 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xFF47FF  list 0xF581B0-0xF581F8 (72 B, leaves by jp(XIX))
+;        text: "LOAD"; "L0AD FILE"; "LOAD"; "L0AD 0PTI0N"
+;     site 0xFF4816  list 0xF58288-0xF583AB (291 B, leaves by jp(XIX))
+;        text: "FLOPPY"; "DISK"; "01 :"; "02 :"; "03 :"; "04 :"; "1O :"; "11 :"; ...
+;     site 0xFF483B  list 0xF583E5-0xF5840A (37 B, leaves by call)
+;        text: "$'?"
+;     site 0xFF486A  list 0xF583D0-0xF583E5 (21 B, leaves by jp(XIX))
+;        text: "TO S0NG NUMBER  :"
+;     site 0xFF4881  list 0xF583AB-0xF583BA (15 B, leaves by jp(XIX))
+;     site 0xFF48A2  list 0xF5840A-0xF5841F (21 B, leaves by call)
+;     site 0xFF48B9  list 0xF583AB-0xF583BA (15 B, leaves by jp(XIX))
+;     site 0xFF48D0  list 0xF59C4B-0xF59C5B (16 B, leaves by jp(XIX))
+;        text: "1-10"
+; From the captions: "DISK"; "L0AD FILE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_DiskL0adFile:
 	push XIX                                             ; FF4786  3c
 	lda_24 xix, (0xff75d3)                               ; FF4787  f2 d3 75 ff 34
 	stdi8 (0x21fa), 0x00                                 ; FF478C  f1 fa 21 00 00
@@ -158607,6 +159573,42 @@ sub_FF4A91:
 .LFF4AC8:
 	unlk XIZ                                             ; FF4AC8  ee 0d
 	ret                                                  ; FF4ACA  0e
+; ---------------------------------------------------------------------
+; sub_FF4ACB -- a screen painter this round REFUSED to name.
+;
+; It hands 14 display list(s) to the interpreter ON THE STACK.
+;     site 0xFF4AEE  list 0xF5844A-0xF58455 (11 B, leaves by call)
+;        text: "$'?"
+;     site 0xFF4B48  list 0xF583BA-0xF583D0 (22 B, leaves by jr)
+;        text: "FROM S0NG NUMBER :"
+;     site 0xFF4B56  list 0xF583D0-0xF583E5 (21 B, leaves by call)
+;        text: "TO S0NG NUMBER  :"
+;     site 0xFF4B6D  list 0xF583AB-0xF583BA (15 B, leaves by jr)
+;     site 0xFF4BFB  list 0xF583BA-0xF583D0 (22 B, leaves by call)
+;        text: "FROM S0NG NUMBER :"
+;     site 0xFF4C0E  list 0xF583AB-0xF583BA (15 B, leaves by call)
+;     site 0xFF4C30  list 0xF583AB-0xF583BA (15 B, leaves by call)
+;     site 0xFF4C58  list 0xF583D0-0xF583E5 (21 B, leaves by jr)
+;        text: "TO S0NG NUMBER  :"
+;     site 0xFF4C70  list 0xF5840A-0xF5841F (21 B, leaves by call)
+;     site 0xFF4C9A  list 0xF583D0-0xF583E5 (21 B, leaves by call)
+;        text: "TO S0NG NUMBER  :"
+;     site 0xFF4CB1  list 0xF583AB-0xF583BA (15 B, leaves by call)
+;     site 0xFF4CC8  list 0xF59C4B-0xF59C5B (16 B, leaves by jr)
+;        text: "1-10"
+;     site 0xFF4CD9  list 0xF59952-0xF5995C (10 B, leaves by call)
+;     site 0xFF4CED  list 0xF583F0-0xF5840A (26 B, leaves by call)
+;        text: "$'?"
+; Evidence: the two 24-bit immediates of the 12-byte push idiom at
+;          the cited site; the record walk from <start> lands exactly
+;          on <end>; the text is the `.ascii` the interpreter draws.
+; NOT NAMED because it and sub_FF4D5D draw the SAME caption set (FROM S0NG
+;          NUMBER, TO S0NG NUMBER, 1-10) and nothing in their own lists
+;          tells the two apart.
+;          A wrong name passes the byte gate forever, so this keeps
+;          sub_XXXXXX and states the gap.
+; Recorded by notes/prom_a_understanding_round7.py --apply.
+; ---------------------------------------------------------------------
 sub_FF4ACB:
 	link XIZ,0x0000                                      ; FF4ACB  ee 0c 00 00
 	pushw hl                                             ; FF4ACF  2b
@@ -158867,6 +159869,42 @@ sub_FF4ACB:
 	popw hl                                              ; FF4D59  4b
 	unlk XIZ                                             ; FF4D5A  ee 0d
 	ret                                                  ; FF4D5C  0e
+; ---------------------------------------------------------------------
+; sub_FF4D5D -- a screen painter this round REFUSED to name.
+;
+; It hands 14 display list(s) to the interpreter ON THE STACK.
+;     site 0xFF4D7F  list 0xF5844A-0xF58455 (11 B, leaves by call)
+;        text: "$'?"
+;     site 0xFF4DDC  list 0xF583BA-0xF583D0 (22 B, leaves by jr)
+;        text: "FROM S0NG NUMBER :"
+;     site 0xFF4DEA  list 0xF583D0-0xF583E5 (21 B, leaves by call)
+;        text: "TO S0NG NUMBER  :"
+;     site 0xFF4E01  list 0xF583AB-0xF583BA (15 B, leaves by jr)
+;     site 0xFF4E97  list 0xF583BA-0xF583D0 (22 B, leaves by call)
+;        text: "FROM S0NG NUMBER :"
+;     site 0xFF4EAA  list 0xF583AB-0xF583BA (15 B, leaves by call)
+;     site 0xFF4ECC  list 0xF583AB-0xF583BA (15 B, leaves by call)
+;     site 0xFF4EF4  list 0xF583D0-0xF583E5 (21 B, leaves by jr)
+;        text: "TO S0NG NUMBER  :"
+;     site 0xFF4F0C  list 0xF5840A-0xF5841F (21 B, leaves by call)
+;     site 0xFF4F30  list 0xF583D0-0xF583E5 (21 B, leaves by call)
+;        text: "TO S0NG NUMBER  :"
+;     site 0xFF4F47  list 0xF583AB-0xF583BA (15 B, leaves by call)
+;     site 0xFF4F5E  list 0xF59C4B-0xF59C5B (16 B, leaves by jr)
+;        text: "1-10"
+;     site 0xFF4F6F  list 0xF59952-0xF5995C (10 B, leaves by call)
+;     site 0xFF4F8D  list 0xF583F0-0xF5840A (26 B, leaves by call)
+;        text: "$'?"
+; Evidence: the two 24-bit immediates of the 12-byte push idiom at
+;          the cited site; the record walk from <start> lands exactly
+;          on <end>; the text is the `.ascii` the interpreter draws.
+; NOT NAMED because it and sub_FF4ACB draw the SAME caption set (FROM S0NG
+;          NUMBER, TO S0NG NUMBER, 1-10) and nothing in their own lists
+;          tells the two apart.
+;          A wrong name passes the byte gate forever, so this keeps
+;          sub_XXXXXX and states the gap.
+; Recorded by notes/prom_a_understanding_round7.py --apply.
+; ---------------------------------------------------------------------
 sub_FF4D5D:
 	link XIZ,0x0000                                      ; FF4D5D  ee 0c 00 00
 	pushw hl                                             ; FF4D61  2b
@@ -159129,7 +160167,35 @@ sub_FF4D5D:
 	ret                                                  ; FF4FF8  0e
 sub_FF4FF9:
 	ret                                                  ; FF4FF9  0e
-sub_FF4FFA:
+; ---------------------------------------------------------------------
+; Paint_MidiFileL0ad -- paints the screen whose own text reads "MIDI FILE L0AD"
+;
+; Called from: prom_b T_F42400 (`jp`)
+;
+; It hands 2 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xFF506C  list 0xF5930B-0xF593E9 (222 B, leaves by call)
+;        text: "MIDI FILE L0AD"; "L0AD"; "TO S0NG NUMBER  :"; "L0AD AS GM   :"
+;     site 0xFF507F  list 0xF593E9-0xF593F3 (10 B, leaves by call)
+; From the captions: "MIDI FILE L0AD"; "L0AD"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_MidiFileL0ad:
 	push XIX                                             ; FF4FFA  3c
 	lda_d16 xix, (0x2229)                                ; FF4FFB  f1 29 22 34
 	call 0xf42e80                                        ; FF4FFF  1d 80 2e f4
@@ -159664,7 +160730,38 @@ sub_FF548A:
 	push XBC                                             ; FF5573  39
 	lda_24 xwa, (0xf58240)                               ; FF5574  f2 40 82 f5 30
 	push XWA                                             ; FF5579  38
-sub_FF557A:
+; ---------------------------------------------------------------------
+; Paint_DiskSaveFile -- paints the screen whose own text reads "SAVE FILE" / "SAVE 0PTI0N" over the FLOPPY DISK file list
+;
+; Called from: nothing in either image names this address.
+;
+; It hands 3 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xFF557C  list 0xF581F8-0xF58240 (72 B, leaves by call)
+;        text: "SAVE"; "SAVE FILE"; "SAVE"; "SAVE 0PTI0N"
+;     site 0xFF558F  list 0xF58288-0xF583AB (291 B, leaves by call)
+;        text: "FLOPPY"; "DISK"; "01 :"; "02 :"; "03 :"; "04 :"; "1O :"; "11 :"; ...
+;     site 0xFF55A3  list 0xF583E5-0xF5840A (37 B, leaves by call)
+;        text: "$'?"
+; From the captions: "DISK"; "SAVE"; "SAVE FILE"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_DiskSaveFile:
 	jr .LFF5588                                          ; FF557A  68 0c
 .LFF557C:
 	lda_24 xbc, (0xf58240)                               ; FF557C  f2 40 82 f5 31
@@ -161092,7 +162189,37 @@ sub_FF63FF:
 	ret                                                  ; FF6510  0e
 sub_FF6511:
 	ret                                                  ; FF6511  0e
-sub_FF6512:
+; ---------------------------------------------------------------------
+; Paint_FloppyDiskFormatSelectType -- paints the screen whose own text reads "FLOPPY DISK FORMAT" / "Select the F0RMAT type for your disk."
+;
+; Called from: prom_b T_F423D0 (`jp`)
+;
+; It hands 2 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xFF6521  list 0xF5985B-0xF59904 (169 B, leaves by call)
+;        text: "FLOPPY DISK FORMAT"; "Select the F0RMAT type for your disk."; ...
+;     site 0xFF6534  list 0xF58000-0xF58014 (20 B, leaves by call)
+;        text: "DISK"
+; From the captions: "FLOPPY DISK FORMAT"; "Select the F0RMAT type for
+;          your disk."; "2DD:720K Byte format for 2DD disk."
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_FloppyDiskFormatSelectType:
 	stdi8 (0x2730), 0x00                                 ; FF6512  f1 30 27 00 00
 	calr sub_FF42B2                                      ; FF6517  1e 98 dd
 	call sub_FF7604                                      ; FF651A  1d 04 76 ff
@@ -161188,7 +162315,43 @@ sub_FF6550:
 	ret                                                  ; FF6611  0e
 sub_FF6612:
 	ret                                                  ; FF6612  0e
-sub_FF6613:
+; ---------------------------------------------------------------------
+; Paint_FloppyDiskFormatAreYouSure -- paints the "FLOPPY DISK FORMAT" confirmation whose own text reads "ATTENTION!" / "Are You Sure?"
+;
+; Called from: prom_b T_F423F0 (`jp`)
+;
+; It hands 5 display list(s) to the interpreter ON THE STACK --
+;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
+;          then the stack veneer.  The lists, and the text each draws:
+;     site 0xFF6629  list 0xF59A35-0xF59A4B (22 B, leaves by jp(XIX))
+;        text: "FLOPPY DISK FORMAT"
+;     site 0xFF6640  list 0xF58162-0xF581B0 (78 B, leaves by jp(XIX))
+;        text: "YES"; "NO"
+;     site 0xFF6657  list 0xF59A4B-0xF59AB5 (106 B, leaves by jp(XIX))
+;        text: "ATTENTION!"; "Using DISK FORMAT will erase"; ...
+;     site 0xFF667D  list 0xF59205-0xF5920E (9 B, leaves by jr)
+;        text: "(2HD)"
+;     site 0xFF668B  list 0xF591FC-0xF59205 (9 B, leaves by jp(XIX))
+;        text: "(2DD)"
+; From the captions: "FLOPPY DISK FORMAT"; "Using DISK FORMAT will erase";
+;          "Are You Sure?"
+; Evidence: the list bounds are the two 24-bit IMMEDIATES of the
+;          12-byte push idiom at the cited site, and the record
+;          length bytes walked from <start> land EXACTLY on <end>
+;          (368 of 368 in both images do -- notes/prom_a_dl_stack_map.py).
+;          The quoted text is the `.ascii` the interpreter draws
+;          verbatim.  Every morpheme of this name occurs in it;
+;          notes/prom_a_understanding_round7.py --morphemes checks that.
+;          `Paint_` is a structural verb, not ROM text.
+; Unknown: whether this routine also handles input for the screen,
+;          and whether another routine paints it too.  Neither was
+;          searched.  ⚠ The register-form scan of rounds 5 and 6 does
+;          not see this call shape at all, which is why this routine
+;          was sub_XXXXXX until round 7.
+; Named by notes/prom_a_understanding_round7.py --apply; the byte gate
+;          is blind to this name, --verify reads it back.
+; ---------------------------------------------------------------------
+Paint_FloppyDiskFormatAreYouSure:
 	push XIX                                             ; FF6613  3c
 	lda_24 xix, (0xff75d3)                               ; FF6614  f2 d3 75 ff 34
 	stdi8 (0x2730), 0x00                                 ; FF6619  f1 30 27 00 00
@@ -162327,6 +163490,25 @@ sub_FF712A:
 	pop XIX                                              ; FF714F  5c
 	unlk XIZ                                             ; FF7150  ee 0d
 	ret                                                  ; FF7152  0e
+; ---------------------------------------------------------------------
+; sub_FF7153 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_FF672D (`calr`) at 0xFF688E
+;          prom_a sub_FF68D8 (`calr`) at 0xFF696C
+;          prom_a sub_FF68D8 (`calr`) at 0xFF6A63
+;          prom_a sub_FF68D8 (`calr`) at 0xFF6AD3
+;
+;     0xFF71A5 loads 0xFF4291, where the ROM reads:
+;        "                U1 -U2 -UD1-UD2-"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FF7153:
 	link XIZ,0xfffe                                      ; FF7153  ee 0c fe ff
 	pushw hl                                             ; FF7157  2b
@@ -162448,6 +163630,26 @@ sub_FF725D:
 	call sub_FF7895                                      ; FF728B  1d 95 78 ff
 	add XSP,0x00000012                                   ; FF728F  ef c8 12 00 00 00
 	ret                                                  ; FF7295  0e
+; ---------------------------------------------------------------------
+; sub_FF7296 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_FF672D (`calr`) at 0xFF67F9
+;          prom_a sub_FF68D8 (`calr`) at 0xFF6BBF
+;          prom_a sub_FF68D8 (`calr`) at 0xFF6C96
+;          prom_a sub_FF68D8 (`calr`) at 0xFF6CDE
+;          ... and 1 more
+;
+;     0xFF72D9 loads 0xFF4291, where the ROM reads:
+;        "                U1 -U2 -UD1-UD2-"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FF7296:
 	link XIZ,0xfffe                                      ; FF7296  ee 0c fe ff
 	pushw hl                                             ; FF729A  2b
@@ -162556,6 +163758,23 @@ sub_FF7333:
 	popw hl                                              ; FF7395  4b
 	unlk XIZ                                             ; FF7396  ee 0d
 	ret                                                  ; FF7398  0e
+; ---------------------------------------------------------------------
+; sub_FF7399 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_FF68D8 (`calr`) at 0xFF6CE6
+;          prom_a sub_FF6DB7 (`calr`) at 0xFF6E5A
+;
+;     0xFF73DC loads 0xFF4291, where the ROM reads:
+;        "                U1 -U2 -UD1-UD2-"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FF7399:
 	link XIZ,0xfffe                                      ; FF7399  ee 0c fe ff
 	pushw hl                                             ; FF739D  2b
@@ -162623,6 +163842,26 @@ sub_FF7399:
 	popw hl                                              ; FF7432  4b
 	unlk XIZ                                             ; FF7433  ee 0d
 	ret                                                  ; FF7435  0e
+; ---------------------------------------------------------------------
+; sub_FF7436 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_FF672D (`calr`) at 0xFF6802
+;          prom_a sub_FF68D8 (`calr`) at 0xFF6BC8
+;          prom_a sub_FF68D8 (`calr`) at 0xFF6C1A
+;          prom_a sub_FF6DB7 (`calr`) at 0xFF6E63
+;          ... and 1 more
+;
+;     0xFF744E loads 0xFF42A1, where the ROM reads:
+;        "U1 -U2 -UD1-UD2-"
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FF7436:
 	link XIZ,0xfff6                                      ; FF7436  ee 0c f6 ff
 	pushw hl                                             ; FF743A  2b
@@ -162870,18 +164109,18 @@ sub_FF7604:
 ; LCD_ShowAllThreeLayers_SaveRegs -- service 0x0C with C = 7, with four registers preserved
 ;
 ; Called from: prom_a sub_FF42CD (`call`) at 0xFF4312
-;          prom_a sub_FF4408 (`call`) at 0xFF4572
-;          prom_a sub_FF4786 (`call`) at 0xFF48EA
+;          prom_a Paint_MidiFileDirectPlay (`call`) at 0xFF4572
+;          prom_a Paint_DiskL0adFile (`call`) at 0xFF48EA
 ;          prom_a sub_FF4995 (`call`) at 0xFF4A77
 ;          prom_a sub_FF4A91 (`call`) at 0xFF4AC0
 ;          prom_a sub_FF4ACB (`call`) at 0xFF4D54
 ;          prom_a sub_FF4D5D (`call`) at 0xFF4FD6
-;          prom_a sub_FF4FFA (`call`) at 0xFF50DE
+;          prom_a Paint_MidiFileL0ad (`call`) at 0xFF50DE
 ;          prom_a sub_FF548A (`call`) at 0xFF553A
-;          prom_a sub_FF557A (`call`) at 0xFF55B3, 0xFF5615, 0xFF5713
+;          prom_a Paint_DiskSaveFile (`call`) at 0xFF55B3, 0xFF5615, 0xFF5713
 ;          prom_a sub_FF5C3E (`call`) at 0xFF5D1B, 0xFF5DDC, 0xFF5E3F, 0xFF5EA2
-;          prom_a sub_FF6512 (`call`) at 0xFF6544
-;          prom_a sub_FF6613 (`call`) at 0xFF669F
+;          prom_a Paint_FloppyDiskFormatSelectType (`call`) at 0xFF6544
+;          prom_a Paint_FloppyDiskFormatAreYouSure (`call`) at 0xFF669F
 ;          prom_a sub_FF672D (`call`) at 0xFF6828, 0xFF68BE
 ;          prom_a sub_FF6DB7 (`call`) at 0xFF6E89, 0xFF6F08
 ; Issues:  SWI7 service 0x0C at 0xFF761D -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
@@ -162988,6 +164227,22 @@ sub_FF767F:
 	pop XIX                                              ; FF76B2  5c
 	pop XIZ                                              ; FF76B3  5e
 	ret                                                  ; FF76B4  0e
+; ---------------------------------------------------------------------
+; sub_FF76B5 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+;
+; Called from: prom_a sub_FF767F (`call`) at 0xFF768F
+;
+;     0xFF76DD loads 0xF58625, where the ROM reads:
+;        ".ALL.SEQ.CMB.SND.PNL.MDS.SRM.CRM.DRM            "
+; Evidence: the immediate at the cited instruction, and the bytes
+;          at that address in original_ROMs/, read as printable
+;          ASCII until the first non-printable byte.
+; NOT NAMED because the text says what the routine READS, not what it DOES
+;          with it; a name taken from it would claim a role nothing here
+;          establishes. The string is recorded so the next round starts
+;          from evidence instead of a search.
+; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; ---------------------------------------------------------------------
 sub_FF76B5:
 	push XIY                                             ; FF76B5  3d
 	pushw wa                                             ; FF76B6  28

@@ -84,9 +84,44 @@ prom_a `0xF8BDC5` is the consumer, and it is what fixes the table shape:
 3. the highest of those is `0xF7E258 = 0xF7D2D8 + 31*0x80`, and
    `0xF7E258 + 0x80 = 0xF7E2D8`.
 
-⚠ **Not established:** what the 32 tables enumerate, what the index in `HL` is,
-and what `(0x207E)` and `(0x0C10)` select between the paired tables. The labels in
-the assembly are positional (`Table_F7D2D8` … `Table_F7E258`).
+### ★ ESTABLISHED IN ROUND 7: the tables enumerate PANEL BUTTONS
+
+The paragraph that used to stand here said "⚠ Not established: what the 32 tables
+enumerate, what the index in `HL` is". Two of the three are now answered, by
+`python3 notes/prom_b_entrypoints_round7.py --selftest` (17 checks):
+
+* **The 0xF7D000 stubs are the METHODS OF 25 PANEL-SCREEN OBJECTS.** prom_a's
+  `PanelScreen_VtableTable` (0xF86EC1, 256 LE32 pointers, documented in prom_a
+  since wave 6) holds **25** pointers that land inside this directory, in
+  **four-word runs** at 0xF43040-0xF431AF. Its readers take +0 Enter, +4 Leave,
+  +8 Button. Each run's four stubs occupy one contiguous byte extent of the
+  0xF7D000 block.
+* **Every `ld XIX,<table>` stub is a screen object's +8 Button word** — 18 of
+  them, and check R5 asserts the set inclusion. So a table is *a screen's button
+  map*.
+* **The index in `HL` is the panel button number.** prom_a's `PanelButton_Route`
+  is the only reader of +8 and masks it with `and L,0x1f` (0xF861AE); the stub's
+  callee `T_F41B08` → prom_a 0xF8BDC5 masks the *same* five bits. Two
+  independent 5-bit masks and a 128-byte table: 32 buttons.
+* **The runs have a fourth word, and it does nothing.** 23 runs have one; all 23
+  stubs are no-ops (18 a bare `ret`, 5 a `calr` to an address holding one `ret`,
+  then `ret`) and prom_a's four vtable readers apply only +0, +4 and +8 (check
+  R7 re-derives the offset set from prom_a's bytes). ⚠ 16 `ld BC,0x000C` /
+  `add XBC,0x0000000C` sites exist across the four images; none is a vtable
+  reader, which is why the check is scoped to the readers' extent.
+* **21 of the 25 screens are now NAMED from their own title text** — the leading
+  op-0x1C records of the display list the Enter method draws: `MEASURE C0PY`,
+  `TRACK MERGE`, `TRANSP0SE`, `AFTER T0UCH SETTING`, … The rule is calibrated,
+  not asserted: seven of those Enter methods call a routine prom_a named
+  independently from the same screens' text, and the derived title is a prefix of
+  all seven and exact on six (check R8/R8b).
+
+⚠ **Still not established:** what `(0x207E)` and `(0x0C10)` MEAN — which of a
+screen's two button maps each picks, and when. The same `(0x207E)` also picks
+between two *title* display lists inside several Enter methods, so it is a
+per-screen variant selector of some kind, and that is as far as the evidence
+goes. Four of the 25 screens have no titled list and keep `sub_XXXXXX`
+(0xF43040, 0xF43048, 0xF43160, 0xF431D0).
 
 ## And a fourth thing that is not a dispatch layer
 

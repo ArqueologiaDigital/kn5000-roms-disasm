@@ -13256,7 +13256,7 @@ Serial0_Init:
 
 
 ; --------------------------------------------------------------------------
-; sub_F991E9 -- a queue operation on the MIDI RECEIVE descriptor.  Which one is
+; MIDI_Rx_FreeSlots -- a queue operation on the MIDI RECEIVE descriptor.  Which one is
 ;             not established.
 ;
 ; Called from: not found -- no literal reference and no calr displacement in
@@ -13270,8 +13270,21 @@ Serial0_Init:
 ; Unknown:  what 0xF994D7 does.  A pair of wrappers over one descriptor is what
 ;          "peek" and "pop" look like, but neither callee has been converted, so
 ;          that is a shape and not a finding.
+; ★ NAMED (round 7 finish pass).  THE FREE-SLOT COUNT OF THE MIDI RECEIVE QUEUE.
+;          11 bytes, 2 of which differ from MIDI_Rx_Dequeue at 0xF991F4 (byte diff
+;          run by notes/prom_c_finish_round7.py --twins): the two differing bytes are
+;          the calr displacement at 0xF991F0-0xF991F1, E5 02 here against D7 01 there.
+;          Both wrappers push the SAME descriptor -- `lda XBC,0x00F2FB` at 0xF991E9,
+;          which is the descriptor INTRX0_HANDLER enqueues into -- and the only thing
+;          that differs is the callee: 0xF994D7 = Queue_FreeSlots here, 0xF993D4 =
+;          Queue_Get_IrqGuarded there.
+;          ⚠ THIS RETIRES A STALE 'Unknown'.  The previous header said "what 0xF994D7
+;          does" was unknown and refused the name for that reason; 0xF994D7 has since
+;          been named Queue_FreeSlots, so the reason is gone.
+; Called from: still NOT FOUND -- no literal reference and no calr displacement in
+;          prom_c reaches 0xF991E9.  Naming it does not make it reached.
 ; --------------------------------------------------------------------------
-sub_F991E9:
+MIDI_Rx_FreeSlots:
 	lda_24	xbc, 0x00F2FB
 	push	xbc
 	calr	(0xF994D7 - 0xF991F2)
@@ -13909,7 +13922,7 @@ Queue_Peek_Cursor2__F994D3:
 ; --------------------------------------------------------------------------
 ; Queue_FreeSlots -- return the descriptor's free-slot count.
 ;
-; Called from: 0xF991EF, the `calr 0xF994D7` inside sub_F991E9.  One site.
+; Called from: 0xF991EF, the `calr 0xF994D7` inside MIDI_Rx_FreeSlots.  One site.
 ; Inputs:  (XIZ+0x08) descriptor pointer -- that site passes the RECEIVE
 ;          descriptor 0x00F2FB.  ⚠ The address above is a VARIABLE, not a call site.  It is stated here rather than in `Called from:` because notes/prom_c_audit_callsites.py harvests every 0xXXXXXX in that paragraph and cannot tell prose from a citation.
 ;          Outputs: WA = the u16 at +0x14.
@@ -40559,7 +40572,7 @@ sub_FA78AB:
 	unlk32 xiz                                 ; FA78C3  unlk XIZ
 	ret                                        ; FA78C5  ret
 ; --------------------------------------------------------------------------
-; sub_FA78C6 -- 0xFA78C6..0xFA78E7 (34 bytes)
+; Clamp_ToRange_Word_b -- 0xFA78C6..0xFA78E7 (34 bytes)
 ;
 ; Called from: no site outside this module.
 ;          ⚠ NOT FOUND -- no literal call/calr/jp reaches this address anywhere
@@ -40572,10 +40585,16 @@ sub_FA78AB:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  ⚠ 34 bytes BYTE-IDENTICAL, zero differing, to
+;          Clamp_ToRange_Word at 0xFA7598 -- a second copy of one function, which is
+;          why it takes that name with the tree's `_b` suffix (the same convention as
+;          Dev10C_SetChanReg_0180_b at 0xFB7B9F).  Reproduce the diff with
+;          `python3 notes/prom_c_finish_round7.py --twins`.
+;          So: WA = min(max((XIZ+0x08), (XIZ+0x0C)), (XIZ+0x0A)), signed.
+; Called from: NOT FOUND -- no literal call/calr/jp and no 24- or 32-bit pointer in
+;          the image reaches 0xFA78C6.
 ; --------------------------------------------------------------------------
-sub_FA78C6:
+Clamp_ToRange_Word_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA78C6  link XIZ,0x0000
 	pushw	hl                                   ; FA78CA  push HL
 	ld	hl, (xiz+8)                             ; FA78CB  ld HL,(XIZ+0x08)
@@ -41256,7 +41275,7 @@ sub_FA7CC9:
 	unlk32 xiz                                 ; FA7D00  unlk XIZ
 	ret                                        ; FA7D02  ret
 ; --------------------------------------------------------------------------
-; sub_FA7D03 -- 0xFA7D03..0xFA7D48 (70 bytes)
+; ScaleClampedDelta_Shr5_b -- 0xFA7D03..0xFA7D48 (70 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAB642 in sub_FAB5A5__FAB61F
@@ -41267,10 +41286,13 @@ sub_FA7CC9:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  ⚠ 70 bytes BYTE-IDENTICAL, zero differing, to
+;          ScaleClampedDelta_Shr5 at 0xFA766C -- a second copy of one function.
+;          `python3 notes/prom_c_finish_round7.py --twins`.
+;          So: v = (arg0 >> 8) & 0x7F, clamped to [(XIZ+0x0C), (XIZ+0x0E)], minus the
+;          base at (XIZ+0x0A), times (XIZ+0x10), arithmetic-shifted right 5.
 ; --------------------------------------------------------------------------
-sub_FA7D03:
+ScaleClampedDelta_Shr5_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA7D03  link XIZ,0x0000
 	pushw	hl                                   ; FA7D07  push HL
 	pushw	de                                   ; FA7D08  push DE
@@ -49136,7 +49158,7 @@ sub_FAB517__FAB59F:
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x005A51, 0x00D7F1
-; Calls:   0xFA7CC9 = sub_FA7CC9, 0xFA7D03 = sub_FA7D03
+; Calls:   0xFA7CC9 = sub_FA7CC9, 0xFA7D03 = ScaleClampedDelta_Shr5_b
 ;          0xFAB48A = sub_FAB48A, 0xFAB517 = sub_FAB517
 ;          0xFC578C = sub_FC578C
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB5A5-0xFAB6D4
@@ -49481,7 +49503,7 @@ sub_FAB7E0__FAB80C:
 ;          0xFB3B44 in MidiNote_OnByPartMode__FB3B29
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D78A, 0x00D78C
-; Calls:   0xFB3CE0 = VoiceQuery_Tag00_Part, 0xFB73F0 = sub_FB73F0
+; Calls:   0xFB3CE0 = VoiceQuery_Tag00_Part, 0xFB73F0 = Dev10C_SetChanReg_0840_0800_b
 ; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
 ;          absolute stores below are the routine's only absolute-addressed output, and
 ;          the two words they write are read back by Dev10C_WriteSixChanRegs_FromD78A
@@ -50748,7 +50770,7 @@ sub_FAC026__FAC083:
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFAB79D = sub_FAB79D
-;          0xFB3D26 = Voice_Retire_Mode20, 0xFB7502 = sub_FB7502
+;          0xFB3D26 = Voice_Retire_Mode20, 0xFB7502 = Dev10C_SetChanReg_0180_FromArg
 ;          0xFB7521 = sub_FB7521, 0xFB762F = sub_FB762F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAC08D-0xFAC2AD
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -52701,8 +52723,14 @@ sub_FACE14__FACE61:
 ;
 ; 16 bits again.  So the device's shape, entirely from prom_c's own instructions,
 ; is {+0x00 select, +0x02 write data, +0x04 read data}.  That routine is not
-; converted here; it is quoted because it is the only evidence in this image that
-; the port can be read at all.
+; converted here; it is quoted because it was, when this block was written, the
+; only evidence in this image that the port can be read at all.
+; ⚠ CORRECTED, round 7 (finish pass): IT IS NO LONGER THE ONLY ONE.  0xFC7E57 --
+; now `Dev10C_ReadChanReg_0100` -- is a DEDICATED one-register read accessor with the
+; same three-step shape and nothing else in it: `add HL,0x0100` at 0xFC7E64,
+; `ld (XIX),HL` at 0xFC7E6D (select), `ld BC,(XIX+0x04)` at 0xFC7E6F (read).  Two
+; sites, in different modules, written by different hands, agree on +0x04, which is
+; a better standing for the read port than one quoted site.
 ;
 ; ⚠ WHAT ANY REGISTER MEANS IS NOT ESTABLISHED BY THIS BANK, and no name below claims one.
 ; ★ CORRECTED 2026-08-25 (round 7): four of the registers this bank writes DO have a meaning
@@ -53504,7 +53532,7 @@ sub_FAD142__FAD1EF:
 	unlk32 xiz                                 ; FAD200  unlk XIZ
 	ret                                        ; FAD202  ret
 ; --------------------------------------------------------------------------
-; sub_FAD203 -- 0xFAD203..0xFAD2D4 (210 bytes)
+; PartRec_SetOrClearParamBits_x4 -- 0xFAD203..0xFAD2D4 (210 bytes)
 ;
 ; Called from: no site outside this module.
 ;          9 site(s) inside this module:
@@ -53517,10 +53545,66 @@ sub_FAD142__FAD1EF:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  SETS OR CLEARS TWO MASKS IN EACH OF FOUR 41-BYTE
+;          SUB-RECORDS OF ONE PART RECORD.
+;          ⚠ THIS HEADER IS THE CORRECTED ONE.  Its first draft, written in this same
+;          round, said the routine only ORs, cited a third `or` at 0xFAD2AB that is
+;          not an `or` at all (0xFAD2AB is `ld (XIZ+0xF7),HL`), and missed the two
+;          `and` sites entirely.  The corrected reading below is what
+;          `python3 notes/prom_c_finish_round7.py --params` re-derives.
+;          THE BASE.  `mul BC,0x012C` at 0xFAD225 on argument (XIZ+0x08) forms the
+;          part-record base (RAM 0x001523, stride 0x012C, 33 parts) and keeps it in
+;          XIX.  A running offset starts at 0 (`ld HL,0x0000` at 0xFAD22B) and gains
+;          41 per pass (`add HL,0x0029` at 0xFAD2C1); the loop runs FOUR times
+;          (`cp (XIZ+0xF9),0x04` at 0xFAD2C8).  So the two words this touches are
+;          part_record + 41*i + 0xA2 and + 41*i + 0xA4, i = 0..3 -- FOUR SUB-RECORDS
+;          OF 41 BYTES starting at part_record+0xA0.
+;          ★ THAT STRIDE IS CONFIRMED FROM OUTSIDE THIS ROUTINE: sub_FB4A9F's four
+;          constant offsets into the same record are 0xA0, 0xC9, 0xF2 and 0x11B --
+;          three gaps of exactly 41.
+;          THE ARMS, AND WHAT THE SELECTOR ARGUMENT IS.  Two 4-byte tables are
+;          indexed by the loop counter -- `add XBC,0x00FE1286` at 0xFAD238 and
+;          `lda XBC,0xFE128A` at 0xFAD245 -- and each byte is ANDed with argument
+;          (XIZ+0x0A) at 0xFAD240 and 0xFAD24F.  ★ THE TWO TABLES ARE ALREADY NAMED
+;          OBJECTS IN THIS FILE: BitMasks_EvenBits (0xFE1286) = 1<<0, 1<<2, 1<<4,
+;          1<<6 and BitMasks_OddBits (0xFE128A) = 1<<1, 1<<3, 1<<5, 1<<7.  So on
+;          pass i the routine tests bit 2i and bit 2i+1 of the selector, and
+;          ARGUMENT (XIZ+0x0A) IS A BYTE CARRYING TWO BITS PER SUB-RECORD -- the
+;          even bit says whether that sub-record's +0xA2 word is set or cleared,
+;          the odd bit the same for its +0xA4 word.  Four sub-records, eight bits,
+;          one byte: the argument is exactly used up, which is what makes the
+;          reading a decode and not a shape.
+;            table0 byte fails      -> CLEAR both: `and (XBC+0x1523),DE` at 0xFAD2A6
+;                                      on +0xA2 and `and (XBC+0x1523),WA` at 0xFAD2BC
+;                                      on +0xA4.  DE and (XIZ+0xFE) are the arguments
+;                                      COMPLEMENTED, by `cpl IY` at 0xFAD221 and
+;                                      `cpl WA` at 0xFAD219.
+;            table0 ok, table1 ok   -> SET both: `or (XBC+0x1523),WA` at 0xFAD268 on
+;                                      +0xA2 with argument (XIZ+0x0C), and
+;                                      `or (XBC+0x1523),IY` at 0xFAD279 on +0xA4 with
+;                                      argument (XIZ+0x0E).
+;            table0 ok, table1 fails-> SET +0xA2 only (`or` at 0xFAD291) and CLEAR
+;                                      +0xA4 (the 0xFAD2AB arm).
+;          WHO CALLS IT names it: ALL NINE of its literal call sites are
+;          PartRec_ApplyParam_* routines -- the nine at part-record offsets +0x23,
+;          +0x25, +0x27, +0x29, +0x2B, +0x2D, +0x2F, +0x31 and +0x33 -- each of which
+;          stores one word of the part record's parameter block and then calls this
+;          with a mask constant of its own.  ★ THOSE NINE MASKS ARE 1<<5 .. 1<<13,
+;          one bit per word, in order, with no gap: nine consecutive words at stride
+;          two against nine consecutive bit positions.  The other three appliers
+;          (+0x1D, +0x1F, +0x21) do not call this routine at all.  Tabulated and
+;          asserted by `python3 notes/prom_c_finish_round7.py --params`.
+; Unknown:  what the four 41-byte sub-records ARE, and what reads +0xA2/+0xA4.  The
+;          name states the operation, the count and the two field offsets, all
+;          operands, and claims nothing about their role.
+;          ⚠ AND WHAT THE CALLERS PASS AS THE SELECTOR IS NOT TRACED HERE.  All nine
+;          callers push `ld A,(XBC)` -- byte +0 of the record at (XIZ+0x0C), the same
+;          record Scale7Bit_ByDepth_* reads its bit-7 selector and its depth byte
+;          from.  Checked on the FIRST and the LAST of the nine (0xFAED63 in
+;          PartRec_ApplyParam_0023 and 0xFAEFAF in PartRec_ApplyParam_0033).  What
+;          that record IS remains the open question the whole module hangs on.
 ; --------------------------------------------------------------------------
-sub_FAD203:
+PartRec_SetOrClearParamBits_x4:
 	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAD203  link XIZ,0xfff5
 	pushw	hl                                   ; FAD207  push HL
 	pushw	de                                   ; FAD208  push DE
@@ -53900,7 +53984,7 @@ sub_FAD43E__FAD4F4:
 	unlk32 xiz                                 ; FAD4FB  unlk XIZ
 	ret                                        ; FAD4FD  ret
 ; --------------------------------------------------------------------------
-; sub_FAD4FE -- 0xFAD4FE..0xFAD560 (99 bytes)
+; Scale7Bit_ByDepth_UniOrBipolar_Shl2 -- 0xFAD4FE..0xFAD560 (99 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFBF09D in sub_FBDCD3__FBF094, 0xFBFE43 in sub_FBF280__FBFE37
@@ -53913,10 +53997,18 @@ sub_FAD43E__FAD4F4:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  Scale7Bit_ByDepth_UniOrBipolar WITH A SHIFT OF 2.
+;          99 bytes, 3 of which differ from Scale7Bit_ByDepth_UniOrBipolar at 0xFAD5C2,
+;          and all three are the SAME PARAMETER expressed twice: the shift in the
+;          bipolar arm (`sll 0x02,IY` at 0xFAD515, count byte 0xFAD517), the shift in
+;          the unipolar arm (`sll 0x02,BC` at 0xFAD541, count byte 0xFAD543) and the
+;          bipolar mid-point (`sub IY,0x0100` at 0xFAD51A, high byte 0xFAD51D).
+;          0x0100 = 64 << 2, so the mid-point tracks the shift exactly.
+;          The output span therefore runs -4..+4 instead of the -32..+32 of the shl-5
+;          original: v<<N spans 0..127<<N, the bipolar arm subtracts 64<<N and divides
+;          the halves by 63 and 64, and the unipolar arm divides by 127.
 ; --------------------------------------------------------------------------
-sub_FAD4FE:
+Scale7Bit_ByDepth_UniOrBipolar_Shl2:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD4FE  link XIZ,0x0000
 	pushw	hl                                   ; FAD502  push HL
 	ld	xbc, (xiz+10)                           ; FAD503  ld XBC,(XIZ+0x0a)
@@ -54128,7 +54220,7 @@ Scale7Bit_ByDepth_UniOrBipolar__FAD612:
 	unlk32 xiz                                 ; FAD622  unlk XIZ
 	ret                                        ; FAD624  ret
 ; --------------------------------------------------------------------------
-; sub_FAD625 -- 0xFAD625..0xFAD687 (99 bytes)
+; Scale7Bit_ByDepth_UniOrBipolar_Shl6 -- 0xFAD625..0xFAD687 (99 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -54140,10 +54232,13 @@ Scale7Bit_ByDepth_UniOrBipolar__FAD612:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  Scale7Bit_ByDepth_UniOrBipolar WITH A SHIFT OF 6.
+;          99 bytes, 3 differing from 0xFAD5C2: `sll 0x06,IY` at 0xFAD63C (count byte
+;          0xFAD63E), `sll 0x06,BC` at 0xFAD668 (count byte 0xFAD66A) and
+;          `sub IY,0x1000` at 0xFAD641 (high byte 0xFAD644).
+;          0x1000 = 64 << 6.  Output span -64..+64.
 ; --------------------------------------------------------------------------
-sub_FAD625:
+Scale7Bit_ByDepth_UniOrBipolar_Shl6:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD625  link XIZ,0x0000
 	pushw	hl                                   ; FAD629  push HL
 	ld	xbc, (xiz+10)                           ; FAD62A  ld XBC,(XIZ+0x0a)
@@ -54189,7 +54284,7 @@ sub_FAD625__FAD675:
 	unlk32 xiz                                 ; FAD685  unlk XIZ
 	ret                                        ; FAD687  ret
 ; --------------------------------------------------------------------------
-; sub_FAD688 -- 0xFAD688..0xFAD6EA (99 bytes)
+; Scale7Bit_ByDepth_UniOrBipolar_Shl7 -- 0xFAD688..0xFAD6EA (99 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xFBEA5C in sub_FBDCD3__FBEA53, 0xFBF755 in sub_FBF280__FBF749
@@ -54202,10 +54297,18 @@ sub_FAD625__FAD675:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  Scale7Bit_ByDepth_UniOrBipolar WITH A SHIFT OF 7.
+;          99 bytes, 3 differing from 0xFAD5C2: `sll 0x07,IY` at 0xFAD69F (count byte
+;          0xFAD6A1), `sll 0x07,BC` at 0xFAD6CB (count byte 0xFAD6CD) and
+;          `sub IY,0x2000` at 0xFAD6A4 (high byte 0xFAD6A7).
+;          0x2000 = 64 << 7.  Output span -128..+128.
+;          ⚠ THE FAMILY IS FOUR AND ONLY FOUR: shifts 2, 5, 6 and 7.  Exactly three
+;          99-byte objects in prom_c are within 3 differing bytes of 0xFAD5C2, and
+;          they are these three -- `notes/prom_c_finish_round7.py --twins` sweeps
+;          every same-length pair in the image, not a shortlist, and --selftest
+;          asserts the count is 3.
 ; --------------------------------------------------------------------------
-sub_FAD688:
+Scale7Bit_ByDepth_UniOrBipolar_Shl7:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD688  link XIZ,0x0000
 	pushw	hl                                   ; FAD68C  push HL
 	ld	xbc, (xiz+10)                           ; FAD68D  ld XBC,(XIZ+0x0a)
@@ -54561,7 +54664,7 @@ MidiCtrl_CC93:
 	unlk32 xiz                                 ; FAD87D  unlk XIZ
 	ret                                        ; FAD87F  ret
 ; --------------------------------------------------------------------------
-; sub_FAD880 -- 0xFAD880..0xFAD8C8 (73 bytes)
+; PartRec_Flags09_Bit14_SetOrClear -- 0xFAD880..0xFAD8C8 (73 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -54573,10 +54676,21 @@ MidiCtrl_CC93:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  SETS OR CLEARS BIT 14 of the part record's flag word
+;          at +0x09.  `lda XIX,0x1523` at 0xFAD887 and `mul BC,0x012C` at 0xFAD890 form
+;          the part-record base (RAM 0x001523, stride 0x012C, 33 parts -- see
+;          notes/FINDINGS-prom_c-dev10c-register-meanings.md); `add BC,0x0009` at
+;          0xFAD896 selects the word.  `cp (XIZ+0x0A),0x00` at 0xFAD8A3 branches on the
+;          argument: non-zero takes `set 0x0e,WA` at 0xFAD8AB, zero takes
+;          `res 0x0e,BC` at 0xFAD8B8.  Both write the word back.
+;          73 bytes, 2 of which differ from MidiCtrl_Int95 at 0xFAD987 -- and both are
+;          the BIT NUMBER, 0x0E here against 0x02 there (0xFAD8AD/0xFAD9B4 and
+;          0xFAD8BA/0xFAD9C1).  So the two are one routine with one operand changed;
+;          MidiCtrl_Int95 is the SAME set-or-clear on bit 2 of the same word.
+; Unknown:  what bit 14 of that word MEANS.  The name states the operation and the
+;          field, which are operands, and claims nothing else.
 ; --------------------------------------------------------------------------
-sub_FAD880:
+PartRec_Flags09_Bit14_SetOrClear:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD880  link XIZ,0x0000
 	pushw	hl                                   ; FAD884  push HL
 	pushw	de                                   ; FAD885  push DE
@@ -54724,7 +54838,7 @@ MidiCtrl_Int82_Transpose:
 	unlk32 xiz                                 ; FAD93B  unlk XIZ
 	ret                                        ; FAD93D  ret
 ; --------------------------------------------------------------------------
-; sub_FAD93E -- 0xFAD93E..0xFAD986 (73 bytes)
+; PartRec_Flags09_Bit1_SetOrClear -- 0xFAD93E..0xFAD986 (73 bytes)
 ;
 ; Called from: no site outside this module.
 ;          ⚠ NOT FOUND -- no literal call/calr/jp reaches this address anywhere
@@ -54737,10 +54851,20 @@ MidiCtrl_Int82_Transpose:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  SETS OR CLEARS BIT 1 of the part record's flag word
+;          at +0x09 -- the same routine as PartRec_Flags09_Bit14_SetOrClear and
+;          MidiCtrl_Int95 with one operand changed.  `lda XIX,0x1523` at 0xFAD945,
+;          `mul BC,0x012C` at 0xFAD94E, `add BC,0x0009` at 0xFAD954; `set 0x01,WA` at
+;          0xFAD969 on the non-zero arm and `res 0x01,BC` at 0xFAD976 on the zero arm.
+;          73 bytes, 2 differing from MidiCtrl_Int95 at 0xFAD987, both the bit number
+;          (0xFAD96B and 0xFAD978 hold 01 where 0xFAD9B4/0xFAD9C1 hold 02).
+; Called from: NOT FOUND -- no literal call/calr/jp and no 24- or 32-bit pointer
+;          anywhere in the 512 KiB image reaches 0xFAD93E
+;          (notes/prom_c_finish_round7.py --noref).  A register-indirect call would be
+;          invisible to that census, so this is "not found", not "dead".
+; Unknown:  what bit 1 of that word MEANS.
 ; --------------------------------------------------------------------------
-sub_FAD93E:
+PartRec_Flags09_Bit1_SetOrClear:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD93E  link XIZ,0x0000
 	pushw	hl                                   ; FAD942  push HL
 	pushw	de                                   ; FAD943  push DE
@@ -56174,7 +56298,7 @@ sub_FAE0A1__FAE103:
 	unlk32 xiz                                 ; FAE106  unlk XIZ
 	ret                                        ; FAE108  ret
 ; --------------------------------------------------------------------------
-; sub_FAE109 -- 0xFAE109..0xFAE15E (86 bytes)
+; PartRec_ApplyParam_001D -- 0xFAE109..0xFAE15E (86 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -56188,10 +56312,23 @@ sub_FAE0A1__FAE103:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x1D and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x001D` at 0xFAE12A select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAE130 stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x1D is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 0 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF153, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 0 is RAW TARGET CODE 1.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
 ; --------------------------------------------------------------------------
-sub_FAE109:
+PartRec_ApplyParam_001D:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAE109  link XIZ,0x0000
 	pushw	hl                                   ; FAE10D  push HL
 	pushw	de                                   ; FAE10E  push DE
@@ -56228,7 +56365,7 @@ sub_FAE109:
 	unlk32 xiz                                 ; FAE15C  unlk XIZ
 	ret                                        ; FAE15E  ret
 ; --------------------------------------------------------------------------
-; sub_FAE15F -- 0xFAE15F..0xFAE1B1 (83 bytes)
+; PartRec_ApplyParam_0021 -- 0xFAE15F..0xFAE1B1 (83 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -56242,10 +56379,26 @@ sub_FAE109:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x21 and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x0021` at 0xFAE17D select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAE183 stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x21 is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 2 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF16B, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 2 is RAW TARGET CODE 3.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          ⚠ It does NOT call PartRec_SetOrClearParamBits_x4; its push of 0x0080
+;          goes to a different callee, and an earlier draft of this round's table
+;          read it as a change mask.  It is not.
 ; --------------------------------------------------------------------------
-sub_FAE15F:
+PartRec_ApplyParam_0021:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAE15F  link XIZ,0x0000
 	pushw	hl                                   ; FAE163  push HL
 	pushw	de                                   ; FAE164  push DE
@@ -56281,14 +56434,14 @@ sub_FAE15F:
 	unlk32 xiz                                 ; FAE1AF  unlk XIZ
 	ret                                        ; FAE1B1  ret
 ; --------------------------------------------------------------------------
-; sub_FAE1B2 -- 0xFAE1B2..0xFAE241 (144 bytes)
+; PartRec_ApplyParam_001F -- 0xFAE1B2..0xFAE241 (144 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF165
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD142 = sub_FAD142, 0xFAD625 = sub_FAD625
+; Calls:   0xFAD142 = sub_FAD142, 0xFAD625 = Scale7Bit_ByDepth_UniOrBipolar_Shl6
 ;          0xFAE013 = sub_FAE013, 0xFB3CB4 = VoiceQuery_Tag00_PartBit7
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE1B2-0xFAE241
@@ -56296,10 +56449,26 @@ sub_FAE15F:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x1F and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x001F` at 0xFAE1D4 select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAE1DA stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x1F is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 1 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF15F, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 1 is RAW TARGET CODE 2.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          ⚠ It does NOT call PartRec_SetOrClearParamBits_x4; its two pushes of
+;          0x0200 and 0x0100 go to a different callee, and an earlier draft of this
+;          round's table read them as change masks.  They are not.
 ; --------------------------------------------------------------------------
-sub_FAE1B2:
+PartRec_ApplyParam_001F:
 	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FAE1B2  link XIZ,0xfffe
 	pushw	hl                                   ; FAE1B6  push HL
 	pushw	de                                   ; FAE1B7  push DE
@@ -57560,7 +57729,7 @@ sub_FAEACE:
 ;          0xFAF24E
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD688 = sub_FAD688, 0xFB3CE0 = VoiceQuery_Tag00_Part
+; Calls:   0xFAD688 = Scale7Bit_ByDepth_UniOrBipolar_Shl7, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ;          0xFB7A73 = Dev104_SetChanRegs_00C0_0100_0240, 0xFC59EF = sub_FC59EF
 ;          0xFC5D5B = sub_FC5D5B
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEAF9-0xFAEB64
@@ -57958,23 +58127,37 @@ sub_FAECC7__FAED2E:
 	unlk32 xiz                                 ; FAED30  unlk XIZ
 	ret                                        ; FAED32  ret
 ; --------------------------------------------------------------------------
-; sub_FAED33 -- 0xFAED33..0xFAED75 (67 bytes)
+; PartRec_ApplyParam_0023 -- 0xFAED33..0xFAED75 (67 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF2B0
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD561 = sub_FAD561
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD561 = sub_FAD561
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAED33-0xFAED75
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x23 and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x0023` at 0xFAED4F select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAED55 stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x23 is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 37 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF2A8, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 37 is RAW TARGET CODE 38.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0020 / 0x0020 = 1<<5.
 ; --------------------------------------------------------------------------
-sub_FAED33:
+PartRec_ApplyParam_0023:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAED33  link XIZ,0x0000
 	pushw	hl                                   ; FAED37  push HL
 	ld	xbc, (xiz+12)                           ; FAED38  ld XBC,(XIZ+0x0c)
@@ -58003,24 +58186,38 @@ sub_FAED33:
 	unlk32 xiz                                 ; FAED73  unlk XIZ
 	ret                                        ; FAED75  ret
 ; --------------------------------------------------------------------------
-; sub_FAED76 -- 0xFAED76..0xFAEDC3 (78 bytes)
+; PartRec_ApplyParam_0025 -- 0xFAED76..0xFAEDC3 (78 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF2BD
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFB4D45 = sub_FB4D45
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAED76-0xFAEDC3
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x25 and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x0025` at 0xFAED95 select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAED9B stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x25 is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 38 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF2B5, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 38 is RAW TARGET CODE 39.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0040 / 0x0040 = 1<<6.
 ; --------------------------------------------------------------------------
-sub_FAED76:
+PartRec_ApplyParam_0025:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAED76  link XIZ,0x0000
 	pushw	hl                                   ; FAED7A  push HL
 	pushw	de                                   ; FAED7B  push DE
@@ -58055,23 +58252,37 @@ sub_FAED76:
 	unlk32 xiz                                 ; FAEDC1  unlk XIZ
 	ret                                        ; FAEDC3  ret
 ; --------------------------------------------------------------------------
-; sub_FAEDC4 -- 0xFAEDC4..0xFAEE06 (67 bytes)
+; PartRec_ApplyParam_0027 -- 0xFAEDC4..0xFAEE06 (67 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF2CA
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEDC4-0xFAEE06
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x27 and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x0027` at 0xFAEDE0 select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAEDE6 stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x27 is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 39 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF2C2, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 39 is RAW TARGET CODE 40.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0080 / 0x0080 = 1<<7.
 ; --------------------------------------------------------------------------
-sub_FAEDC4:
+PartRec_ApplyParam_0027:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEDC4  link XIZ,0x0000
 	pushw	hl                                   ; FAEDC8  push HL
 	ld	xbc, (xiz+12)                           ; FAEDC9  ld XBC,(XIZ+0x0c)
@@ -58100,23 +58311,37 @@ sub_FAEDC4:
 	unlk32 xiz                                 ; FAEE04  unlk XIZ
 	ret                                        ; FAEE06  ret
 ; --------------------------------------------------------------------------
-; sub_FAEE07 -- 0xFAEE07..0xFAEE49 (67 bytes)
+; PartRec_ApplyParam_0029 -- 0xFAEE07..0xFAEE49 (67 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF2D7
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEE07-0xFAEE49
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x29 and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x0029` at 0xFAEE23 select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAEE29 stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x29 is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 40 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF2CF, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 40 is RAW TARGET CODE 41.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0100 / 0x0100 = 1<<8.
 ; --------------------------------------------------------------------------
-sub_FAEE07:
+PartRec_ApplyParam_0029:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEE07  link XIZ,0x0000
 	pushw	hl                                   ; FAEE0B  push HL
 	ld	xbc, (xiz+12)                           ; FAEE0C  ld XBC,(XIZ+0x0c)
@@ -58145,23 +58370,37 @@ sub_FAEE07:
 	unlk32 xiz                                 ; FAEE47  unlk XIZ
 	ret                                        ; FAEE49  ret
 ; --------------------------------------------------------------------------
-; sub_FAEE4A -- 0xFAEE4A..0xFAEE8C (67 bytes)
+; PartRec_ApplyParam_002B -- 0xFAEE4A..0xFAEE8C (67 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF2E4
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEE4A-0xFAEE8C
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x2B and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x002B` at 0xFAEE66 select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAEE6C stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x2B is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 41 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF2DC, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 41 is RAW TARGET CODE 42.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0200 / 0x0200 = 1<<9.
 ; --------------------------------------------------------------------------
-sub_FAEE4A:
+PartRec_ApplyParam_002B:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEE4A  link XIZ,0x0000
 	pushw	hl                                   ; FAEE4E  push HL
 	ld	xbc, (xiz+12)                           ; FAEE4F  ld XBC,(XIZ+0x0c)
@@ -58190,23 +58429,37 @@ sub_FAEE4A:
 	unlk32 xiz                                 ; FAEE8A  unlk XIZ
 	ret                                        ; FAEE8C  ret
 ; --------------------------------------------------------------------------
-; sub_FAEE8D -- 0xFAEE8D..0xFAEECF (67 bytes)
+; PartRec_ApplyParam_002D -- 0xFAEE8D..0xFAEECF (67 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF2F1
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEE8D-0xFAEECF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x2D and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x002D` at 0xFAEEA9 select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAEEAF stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x2D is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 42 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF2E9, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 42 is RAW TARGET CODE 43.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0400 / 0x0400 = 1<<10.
 ; --------------------------------------------------------------------------
-sub_FAEE8D:
+PartRec_ApplyParam_002D:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEE8D  link XIZ,0x0000
 	pushw	hl                                   ; FAEE91  push HL
 	ld	xbc, (xiz+12)                           ; FAEE92  ld XBC,(XIZ+0x0c)
@@ -58235,24 +58488,38 @@ sub_FAEE8D:
 	unlk32 xiz                                 ; FAEECD  unlk XIZ
 	ret                                        ; FAEECF  ret
 ; --------------------------------------------------------------------------
-; sub_FAEED0 -- 0xFAEED0..0xFAEF23 (84 bytes)
+; PartRec_ApplyParam_002F -- 0xFAEED0..0xFAEF23 (84 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF2FE
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFADE2F = sub_FADE2F, 0xFB3C8B = VoiceQuery_Tag40_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEED0-0xFAEF23
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x2F and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x002F` at 0xFAEEEF select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAEEF5 stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x2F is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 43 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF2F6, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 43 is RAW TARGET CODE 44.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0800 / 0x0800 = 1<<11.
 ; --------------------------------------------------------------------------
-sub_FAEED0:
+PartRec_ApplyParam_002F:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEED0  link XIZ,0x0000
 	pushw	hl                                   ; FAEED4  push HL
 	pushw	de                                   ; FAEED5  push DE
@@ -58288,24 +58555,38 @@ sub_FAEED0:
 	unlk32 xiz                                 ; FAEF21  unlk XIZ
 	ret                                        ; FAEF23  ret
 ; --------------------------------------------------------------------------
-; sub_FAEF24 -- 0xFAEF24..0xFAEF7E (91 bytes)
+; PartRec_ApplyParam_0031 -- 0xFAEF24..0xFAEF7E (91 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF30B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFADEAC = sub_FADEAC, 0xFB3C8B = VoiceQuery_Tag40_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEF24-0xFAEF7E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x31 and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x0031` at 0xFAEF44 select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAEF4A stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x31 is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 44 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF303, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 44 is RAW TARGET CODE 45.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x1000 / 0x1000 = 1<<12.
 ; --------------------------------------------------------------------------
-sub_FAEF24:
+PartRec_ApplyParam_0031:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEF24  link XIZ,0x0000
 	pushw	hl                                   ; FAEF28  push HL
 	pushw	de                                   ; FAEF29  push DE
@@ -58345,23 +58626,37 @@ sub_FAEF24:
 	unlk32 xiz                                 ; FAEF7C  unlk XIZ
 	ret                                        ; FAEF7E  ret
 ; --------------------------------------------------------------------------
-; sub_FAEF7F -- 0xFAEF7F..0xFAEFC1 (67 bytes)
+; PartRec_ApplyParam_0033 -- 0xFAEF7F..0xFAEFC1 (67 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
 ;          0xFAF318
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD203 = sub_FAD203, 0xFAD4FE = sub_FAD4FE
+; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD4FE = Scale7Bit_ByDepth_UniOrBipolar_Shl2
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEF7F-0xFAEFC1
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  APPLIES ONE WORD OF THE PART RECORD'S 12-WORD
+;          PARAMETER BLOCK: it stores its normalised argument into part_record
+;          +0x33 and then marks that parameter.
+;          `mul BC,0x012C` (part-record stride) and `add BC,0x0033` at 0xFAEF9B select
+;          the word; `ld (XBC+0x1523),WA` at 0xFAEFA1 stores it.
+;          ⚠ THE NAME IS FRAMED, NOT CONTENT, AND DELIBERATELY SO: +0x33 is the
+;          field's OFFSET, which is an instruction operand.  What the parameter IS
+;          is NOT established -- see the block comment above PartRec_ApplyParam_001D.
+;          Reached through ENTRY 45 of Voice_ApplyParamChange_Dispatch's 49-entry
+;          table at 0xFAF08F, whose word holds 0xFAF310, and that arm calls here.
+;          ⚠ ENTRY NUMBER AND TARGET CODE ARE NOT THE SAME NUMBER: `dec 1,BC` at
+;          0xFAF079 runs before the index, so entry 45 is RAW TARGET CODE 46.
+;          An earlier draft of this header printed one number under both names and
+;          had the arm index off by one as well; the ROM table and the arm's own
+;          call are re-read by notes/prom_c_finish_round7.py --selftest.
+;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x2000 / 0x2000 = 1<<13.
 ; --------------------------------------------------------------------------
-sub_FAEF7F:
+PartRec_ApplyParam_0033:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEF7F  link XIZ,0x0000
 	pushw	hl                                   ; FAEF83  push HL
 	ld	xbc, (xiz+12)                           ; FAEF84  ld XBC,(XIZ+0x0c)
@@ -58526,19 +58821,19 @@ sub_FAF00C:
 ;          0xFAFB77 0xFAFBB1 0xFB0099 0xFB00FC 0xFB01B2 0xFB01D7
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAE109 = sub_FAE109, 0xFAE15F = sub_FAE15F
-;          0xFAE1B2 = sub_FAE1B2, 0xFAE34A = Voice_Restage_Reg0440_BaseCurve_ForPart
+; Calls:   0xFAE109 = PartRec_ApplyParam_001D, 0xFAE15F = PartRec_ApplyParam_0021
+;          0xFAE1B2 = PartRec_ApplyParam_001F, 0xFAE34A = Voice_Restage_Reg0440_BaseCurve_ForPart
 ;          0xFAE484 = Voice_Restage_Reg0440_ValueCurve_ForPart, 0xFAE5C7 = Voice_Restage_Reg0180_BaseCurve_ForPart
 ;          0xFAE703 = Voice_Restage_Reg0180_ValueCurve_ForPart, 0xFAE848 = Voice_Restage_Reg04C0_BaseCurve_ForPart
 ;          0xFAE986 = Voice_Restage_Reg04C0_ValueCurve_ForPart, 0xFAEACE = sub_FAEACE
 ;          0xFAEAF9 = sub_FAEAF9, 0xFAEB65 = sub_FAEB65
 ;          0xFAEBD1 = sub_FAEBD1, 0xFAEC21 = sub_FAEC21
 ;          0xFAEC71 = sub_FAEC71, 0xFAEC9C = sub_FAEC9C
-;          0xFAECC7 = sub_FAECC7, 0xFAED33 = sub_FAED33
-;          0xFAED76 = sub_FAED76, 0xFAEDC4 = sub_FAEDC4
-;          0xFAEE07 = sub_FAEE07, 0xFAEE4A = sub_FAEE4A
-;          0xFAEE8D = sub_FAEE8D, 0xFAEED0 = sub_FAEED0
-;          0xFAEF24 = sub_FAEF24, 0xFAEF7F = sub_FAEF7F
+;          0xFAECC7 = sub_FAECC7, 0xFAED33 = PartRec_ApplyParam_0023
+;          0xFAED76 = PartRec_ApplyParam_0025, 0xFAEDC4 = PartRec_ApplyParam_0027
+;          0xFAEE07 = PartRec_ApplyParam_0029, 0xFAEE4A = PartRec_ApplyParam_002B
+;          0xFAEE8D = PartRec_ApplyParam_002D, 0xFAEED0 = PartRec_ApplyParam_002F
+;          0xFAEF24 = PartRec_ApplyParam_0031, 0xFAEF7F = PartRec_ApplyParam_0033
 ;          0xFAEFC2 = sub_FAEFC2, 0xFAEFE7 = sub_FAEFE7
 ;          0xFAF00C = sub_FAF00C
 ; Arms:    48 computed-goto arm(s) inside this routine: 0xFAF153 0xFAF15F 0xFAF16B 0xFAF177 0xFAF17C 0xFAF181 0xFAF186 0xFAF19B 0xFAF1A0 0xFAF1A5 0xFAF1AA 0xFAF1BA 0xFAF1BF 0xFAF1C4 0xFAF1C9 0xFAF1D9 0xFAF1DE 0xFAF1E3 0xFAF1E8 0xFAF1F8 0xFAF1FD 0xFAF202 0xFAF207 0xFAF218 0xFAF21D 0xFAF222 0xFAF227 0xFAF238 0xFAF246 0xFAF254 0xFAF262 0xFAF270 0xFAF27E 0xFAF28C 0xFAF29A 0xFAF2A8 0xFAF2B5 0xFAF2C2 0xFAF2CF 0xFAF2DC 0xFAF2E9 0xFAF2F6 0xFAF303 0xFAF310 0xFAF31F 0xFAF328 0xFAF331 0xFAF33A
@@ -60051,7 +60346,7 @@ MidiCtrl_CC19__FAFBDD:
 ;          0xFAFF54
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD880 = sub_FAD880, 0xFB4A9F = sub_FB4A9F
+; Calls:   0xFAD880 = PartRec_Flags09_Bit14_SetOrClear, 0xFB4A9F = sub_FB4A9F
 ;          0xFB4D45 = sub_FB4D45, 0xFB5636 = sub_FB5636
 ;          0xFB5E00 = sub_FB5E00, 0xFB639A = sub_FB639A
 ;          0xFB6487 = sub_FB6487, 0xFBB765 = sub_FBB765
@@ -69678,7 +69973,7 @@ sub_FB4D21__FB4D3B:
 ; sub_FB4D45 -- 0xFB4D45..0xFB501E (730 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
-;          0xFAEDB7 in sub_FAED76, 0xFAFC49 in sub_FAFBEC__FAFC28
+;          0xFAEDB7 in PartRec_ApplyParam_0025, 0xFAFC49 in sub_FAFBEC__FAFC28
 ;          0xFAFEB2 in MidiCtrl_Dispatch__FAFEA3, 0xFBBACD in sub_FBB793__FBBABE
 ;          0xFBBC83 in sub_FBB793__FBBC74, 0xFBBCB0 in sub_FBB793__FBBC8B
 ;          0xFBC3F4 in sub_FBC39D__FBC3EF
@@ -74876,7 +75171,7 @@ Dev10C_WriteSixChanRegs_FromD78A:
 	unlk32 xiz                                 ; FB73ED  unlk XIZ
 	ret                                        ; FB73EF  ret
 ; --------------------------------------------------------------------------
-; sub_FB73F0 -- 0xFB73F0..0xFB742B (60 bytes)
+; Dev10C_SetChanReg_0840_0800_b -- 0xFB73F0..0xFB742B (60 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAB8BD in Dev10C_StageRegs_0800_0840_FAB818__FAB87E
@@ -74887,10 +75182,13 @@ Dev10C_WriteSixChanRegs_FromD78A:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  ⚠ 60 bytes BYTE-IDENTICAL, zero differing, to
+;          Dev10C_SetChanReg_0840_0800 at 0xFACEDE -- the bank-B copy, named with the
+;          `_b` suffix the tree already uses for the other bank-B accessors.
+;          So: register (chan+0x0840) = staging->0x2E and (chan+0x0800) = staging->0x30.
+;          `python3 notes/prom_c_finish_round7.py --twins`.
 ; --------------------------------------------------------------------------
-sub_FB73F0:
+Dev10C_SetChanReg_0840_0800_b:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB73F0  link XIZ,0xfffc
 	pushw	hl                                   ; FB73F4  push HL
 	push	xix                                   ; FB73F5  push XIX
@@ -74916,7 +75214,7 @@ sub_FB73F0:
 	unlk32 xiz                                 ; FB7429  unlk XIZ
 	ret                                        ; FB742B  ret
 ; --------------------------------------------------------------------------
-; sub_FB742C -- 0xFB742C..0xFB744D (34 bytes)
+; Dev10C_SetChanReg_0840_b -- 0xFB742C..0xFB744D (34 bytes)
 ;
 ; Called from: no site outside this module.
 ;          ⚠ NOT FOUND -- no literal call/calr/jp reaches this address anywhere
@@ -74929,10 +75227,12 @@ sub_FB73F0:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  ⚠ 34 bytes BYTE-IDENTICAL, zero differing, to
+;          Dev10C_SetChanReg_0840 at 0xFACF1A -- the bank-B copy.
+;          So: register (chan+0x0840) = staging->0x2E.
+;          `python3 notes/prom_c_finish_round7.py --twins`.
 ; --------------------------------------------------------------------------
-sub_FB742C:
+Dev10C_SetChanReg_0840_b:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB742C  link XIZ,0x0000
 	pushw	hl                                   ; FB7430  push HL
 	push	xix                                   ; FB7431  push XIX
@@ -74948,7 +75248,7 @@ sub_FB742C:
 	unlk32 xiz                                 ; FB744B  unlk XIZ
 	ret                                        ; FB744D  ret
 ; --------------------------------------------------------------------------
-; sub_FB744E -- 0xFB744E..0xFB7489 (60 bytes)
+; Dev10C_SetChanReg_0100_0140_b -- 0xFB744E..0xFB7489 (60 bytes)
 ;
 ; Called from: no site outside this module.
 ;          ⚠ NOT FOUND -- no literal call/calr/jp reaches this address anywhere
@@ -74961,10 +75261,12 @@ sub_FB742C:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  ⚠ 60 bytes BYTE-IDENTICAL, zero differing, to
+;          Dev10C_SetChanReg_0100_0140 at 0xFACF3C -- the bank-B copy.
+;          So: registers (chan+0x0100) = staging->0x08 and (chan+0x0140) = staging->0x0A.
+;          `python3 notes/prom_c_finish_round7.py --twins`.
 ; --------------------------------------------------------------------------
-sub_FB744E:
+Dev10C_SetChanReg_0100_0140_b:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB744E  link XIZ,0xfffc
 	pushw	hl                                   ; FB7452  push HL
 	push	xix                                   ; FB7453  push XIX
@@ -74990,7 +75292,7 @@ sub_FB744E:
 	unlk32 xiz                                 ; FB7487  unlk XIZ
 	ret                                        ; FB7489  ret
 ; --------------------------------------------------------------------------
-; sub_FB748A -- 0xFB748A..0xFB74C5 (60 bytes)
+; Dev10C_SetChanReg_0840_0880_b -- 0xFB748A..0xFB74C5 (60 bytes)
 ;
 ; Called from: no site outside this module.
 ;          ⚠ NOT FOUND -- no literal call/calr/jp reaches this address anywhere
@@ -75003,10 +75305,13 @@ sub_FB744E:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  ⚠ 60 bytes BYTE-IDENTICAL, zero differing, to
+;          Dev10C_SetChanReg_0840_0880 at 0xFACEA2 AND to Dev10C_SetChanReg_0840_0880_dup
+;          at 0xFACF78 -- so this function exists THREE times in prom_c, twice in bank A
+;          and once here.  `python3 notes/prom_c_finish_round7.py --twins`.
+;          So: registers (chan+0x0840) = staging->0x1A and (chan+0x0880) = staging->0x1C.
 ; --------------------------------------------------------------------------
-sub_FB748A:
+Dev10C_SetChanReg_0840_0880_b:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB748A  link XIZ,0xfffc
 	pushw	hl                                   ; FB748E  push HL
 	push	xix                                   ; FB748F  push XIX
@@ -75032,7 +75337,7 @@ sub_FB748A:
 	unlk32 xiz                                 ; FB74C3  unlk XIZ
 	ret                                        ; FB74C5  ret
 ; --------------------------------------------------------------------------
-; sub_FB74C6 -- 0xFB74C6..0xFB7501 (60 bytes)
+; Dev10C_SetChanReg_0840_0880_From2E -- 0xFB74C6..0xFB7501 (60 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB3D7C in Voice_Retire_Mode20__FB3D5A
@@ -75043,10 +75348,17 @@ sub_FB748A:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED (round 7 finish pass).  Registers (chan+0x0840) AND (chan+0x0880) both take
+;          staging->0x2E -- the SAME source word into both blocks.
+;          60 bytes, 2 of which differ from Dev10C_SetChanReg_0840_0880 at 0xFACEA2,
+;          and both differing bytes are the struct offset: 0xFB74DE holds 2E where
+;          0xFACEBA holds 1A, and 0xFB74F6 holds 2E where 0xFACED2 holds 1C.  Every
+;          other byte, the two `add`s 0x0840 and 0x0880 included, is the same.
+;          So the name is NOT a borrowed one: the register pair is the twin's, the
+;          source field is this routine's own operand, and the suffix says so.
+;          `python3 notes/prom_c_finish_round7.py --twins`.
 ; --------------------------------------------------------------------------
-sub_FB74C6:
+Dev10C_SetChanReg_0840_0880_From2E:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB74C6  link XIZ,0xfffc
 	pushw	hl                                   ; FB74CA  push HL
 	push	xix                                   ; FB74CB  push XIX
@@ -75072,7 +75384,7 @@ sub_FB74C6:
 	unlk32 xiz                                 ; FB74FF  unlk XIZ
 	ret                                        ; FB7501  ret
 ; --------------------------------------------------------------------------
-; sub_FB7502 -- 0xFB7502..0xFB7520 (31 bytes)
+; Dev10C_SetChanReg_0180_FromArg -- 0xFB7502..0xFB7520 (31 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFAC0E3 in sub_FAC08D__FAC0DC
@@ -75083,10 +75395,21 @@ sub_FB74C6:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FB7502:
+; ★ NAMED (round 7 finish pass).  Register (chan + 0x0180) = THE ARGUMENT, not a
+;          staging-struct field.  That is the whole difference from
+;          Dev10C_SetChanReg_0180 (0xFACFB4) and its bank-B copy _0180_b (0xFB7B9F),
+;          which both fetch staging->0x0C; this one writes what it is handed.
+; Inputs:  (XIZ+0x08) = chan, (XIZ+0x0A) = the 16-bit value.
+; Evidence: `add HL,0x0180` at 0xFB750B forms the register selector,
+;          `ld XIX,0x0010C000` at 0xFB750F is the port window, `ld (XIX),HL` at
+;          0xFB7514 selects, `ld BC,(XIZ+0x0A)` at 0xFB7516 fetches the argument and
+;          `ld (XIX+0x02),BC` at 0xFB7519 writes it.  Thirteen instructions, no other
+;          memory access; the routine is exactly its name.
+; Unknown:  what register 0x0180 + chan IS beyond what
+;          notes/FINDINGS-prom_c-voice-readback.md establishes about it -- a magnitude
+;          the firmware watches fall.  This accessor asserts nothing about that.
+Dev10C_SetChanReg_0180_FromArg:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7502  link XIZ,0x0000
 	pushw	hl                                   ; FB7506  push HL
 	push	xix                                   ; FB7507  push XIX
@@ -87282,9 +87605,9 @@ BitPair_TestAndEncode_Bits4to7__FBDCCF:
 ;          0xFC00A8 0xFC00E2
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x008829, 0x00882A, 0x00882D, 0x00882E, 0x008831, 0x008832, 0x008835, 0x008836, 0x008839, 0x00883A, 0x00883D, 0x00883E, 0x008841, 0x008842, 0x008845, 0x008846, 0x008849, 0x00884A, 0x00884D, 0x00884E, 0x008851, 0x008852, 0x008855, 0x008856
-; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = sub_FAD4FE
+; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = Scale7Bit_ByDepth_UniOrBipolar_Shl2
 ;          0xFAD561 = sub_FAD561, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
-;          0xFAD688 = sub_FAD688, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
+;          0xFAD688 = Scale7Bit_ByDepth_UniOrBipolar_Shl7, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
 ;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFBDA2C = sub_FBDA2C
 ;          0xFBDBCE = sub_FBDBCE, 0xFBDC6C = BitPair_TestAndEncode_Bits4to7
@@ -89457,9 +89780,9 @@ sub_FBDCD3__FBF27B:
 ;          0xFC0247 0xFC029B
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = sub_FAD4FE
+; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = Scale7Bit_ByDepth_UniOrBipolar_Shl2
 ;          0xFAD561 = sub_FAD561, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
-;          0xFAD688 = sub_FAD688, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
+;          0xFAD688 = Scale7Bit_ByDepth_UniOrBipolar_Shl7, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
 ;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFC7AB4 = sub_FC7AB4
 ;          0xFC7B64 = sub_FC7B64
@@ -106225,7 +106548,7 @@ sub_FC7E10:
 	unlk32 xiz                                 ; FC7E54  unlk XIZ
 	ret                                        ; FC7E56  ret
 ; --------------------------------------------------------------------------
-; sub_FC7E57 -- 0xFC7E57..0xFC7E78 (34 bytes)
+; Dev10C_ReadChanReg_0100 -- 0xFC7E57..0xFC7E78 (34 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -106237,10 +106560,23 @@ sub_FC7E10:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FC7E57:
+; ★ NAMED (round 7 finish pass).  ★ A DEDICATED READ ACCESSOR for register
+;          (chan + 0x0100) of the 0x0010C000 device -- the SECOND read site in the
+;          whole image, and the first one that does nothing else.
+; Inputs:  (XIZ+0x08) = chan, zero-extended at 0xFC7E60.
+; Outputs: WA = the 16 bits the device returns.  No write anywhere except the select.
+; Evidence: `add HL,0x0100` at 0xFC7E64 forms the register selector;
+;          `ld XIX,0x0010C000` at 0xFC7E68 is the port window; `ld (XIX),HL` at
+;          0xFC7E6D selects; `ld BC,(XIX+0x04)` at 0xFC7E6F READS, and `ld WA,BC` at
+;          0xFC7E72 returns it.  That is the {+0x00 select, +0x02 write, +0x04 read}
+;          shape the 0xFACE67 bank's block comment derives from 0xFA68FC, confirmed
+;          here by an independent site in another module -- see the correction in
+;          that block comment.
+; Called from: 0xFC7EBB, in sub_FC7E79.
+; Unknown:  what register 0x0100 + chan HOLDS.  Nothing here reads the value's
+;          meaning; the name says which register and which direction, both operands.
+Dev10C_ReadChanReg_0100:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC7E57  link XIZ,0x0000
 	pushw	hl                                   ; FC7E5B  push HL
 	push	xix                                   ; FC7E5C  push XIX
@@ -106263,7 +106599,7 @@ sub_FC7E57:
 ;          0xFADD50 in sub_FADD29__FADD3B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFC7E57 = sub_FC7E57
+; Calls:   0xFC7E57 = Dev10C_ReadChanReg_0100
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC7E79-0xFC7F02
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -126109,8 +126445,20 @@ BitMasks_1shl0_to_5:
 ; even/odd.  Census: prom_c_voice_module_check.py section 9.
 BitMasks_EvenBits:
 	.byte	0x01, 0x04, 0x10, 0x40               ; 0xFE1286  1<<0, 1<<2, 1<<4, 1<<6
-; Evidence: as above -- its own two citations, 0xFAD188 and 0xFAD245, are what
-; make 0xFE128A a base and not the second half of the table before it.
+; BitMasks_OddBits -- the ODD half of the eight bit masks, {1<<1, 1<<3, 1<<5, 1<<7},
+; read as the PARTNER of BitMasks_EvenBits above by both of its consumers.
+;
+; Evidence: its own two citations, 0xFAD188 and 0xFAD245, are what make 0xFE128A a
+;          base and not the second half of the table before it.
+; ★ ROUND 7 (finish pass) -- WHAT THE PAIR IS FOR, at 0xFAD245's consumer.
+;          PartRec_SetOrClearParamBits_x4 (0xFAD203) loops i = 0..3 and ANDs
+;          BitMasks_EvenBits[i] and BitMasks_OddBits[i] with one selector byte, so
+;          on pass i it is testing bit 2i and bit 2i+1.  The two tables are that
+;          routine's way of walking a byte two bits at a time -- one bit pair per
+;          41-byte sub-record of the part record.  Four passes x two bits = the
+;          whole byte, with nothing left over.
+;          Asserted by `python3 notes/prom_c_finish_round7.py --params`.
+; Unknown:  what 0xFAD188's consumer does with the same pair.
 BitMasks_OddBits:
 	.byte	0x02, 0x08, 0x20, 0x80               ; 0xFE128A  1<<1, 1<<3, 1<<5, 1<<7
 

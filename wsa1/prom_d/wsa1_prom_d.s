@@ -129,11 +129,51 @@
 ;   * Directory slot +0x88 holds 0x125.  In the KN5000 the same slot holds a
 ;     SCALAR, not an offset.  Nothing here decides which prom_d means.
 ;
+; ------------------------------------------------------------------------------
+; ★ WAVE 7 ROUND 7 -- THE WHOLE-IMAGE INVENTORY, AND THE HONEST HALF OF IT
+; ------------------------------------------------------------------------------
+; Every label in this file carries either a WITNESS -- a route from the bytes
+; to the name -- or a stated REASON for having none, and ONE command re-checks
+; all 3,665 of them:
+;
+;     python3 notes/prom_d_finish_round7.py
+;
+;   witnessed  3,361   the name has a route: the object's own ASCII, an
+;                      Evidence: line, or a witnessed object it is part of
+;   nameless     303   NOT named -- and the reason is stated PER OBJECT, in
+;                      this file, next to the object it is about
+;   boundary       1   prom_d_end, a zero-length end marker, not an object
+;   ★ NO WITNESS AT ALL: 0
+;
+; ⚠ AND GRADED BY PROVENANCE, WHICH IS WHAT A PERCENTAGE HIDES.  A name can
+; rest on very different things, and this image's rest mostly on two:
+;   self-named        1,708  the object's own 13- or 16-byte ASCII field
+;   KN5000 transplant 1,298  ⚠ the name is the SIBLING MACHINE'S, and NO prom_c
+;                            instruction reads the directory slot the region
+;                            it sits in hangs off.  The slots, in full:
+;                            +0x0C +0x10 +0x14 +0x18 +0x20 +0x24
+;                            +0x28 +0x2C +0x30 +0x38 +0x48 +0x5C
+;   image-internal      306  a relation measured inside this image
+;   reader-backed        49  prom_c reads the slot and the read says what it is
+;   nameless            303  the 303 above, kept in the same denominator
+; So a reader who wants only what THIS machine's firmware confirms should
+; discount 1,298 of the 3,665 labels below.  That is the number, said once, here.
+;
+; ⚠ AND THE 91.7% CONTENT FIGURE THIS FILE SCORES ON
+; notes/wave7_documentation_metrics.py IS NOT ROBUST TO SPELLING.  491 of the
+; labels it grades CONTENT are <stem>_<Word><digits> whose digits run 0..n-1
+; over three or more siblings with no self-named ancestor -- the same shape as
+; `PercInst_17`, which the same metric grades FRAMED.  The difference is an
+; underscore before the number.  Counting those as framed instead, this file
+; reads 78.3%.  Both are true of a stated rule and neither is quoted without
+; the other.  notes/prom_d_finish_round7.py Q1, Q2, Q8; 56 checks.
+;
 ; Reproduce every number quoted in this file:
 ;     python3 scripts/analysis/prom_d_tone_database.py
 ;     python3 notes/prom_d_structures_round2.py        # the record framing, 78 checks
 ;     python3 notes/prom_d_documentation_round3.py     # who READS it, 62 checks
 ;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
+;     python3 notes/prom_d_finish_round7.py --selftest # the inventory, 56 checks
 ; Regenerate this file:
 ;     python3 scripts/analysis/gen_prom_d_asm.py
 ; Then, always:
@@ -431,6 +471,14 @@ ToneDB_BankMap:
 ToneDB_ToneNumBanks:
 
 ; --- row 0 (melodic) ---
+; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
+; entries select a melodic tone (index < 0x100), which is what
+; `Melodic` states, and 0 of the 128 differ from row 0's -- so the
+; rows are NOT copies of one another either.  Nothing in this image
+; says what the variation between them means, and the BankMap at
+; 0x00100 maps bank-select value 0 to this row, which is what the
+; suffix already says.  round 6 Q1, verdict
+; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
 ToneNumBank_Melodic_0:
 	.short 0x0000	; 00180  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00182  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -562,6 +610,14 @@ ToneNumBank_Melodic_0:
 	.short 0x0023	; 0027E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 1 (melodic) ---
+; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
+; entries select a melodic tone (index < 0x100), which is what
+; `Melodic` states, and 36 of the 128 differ from row 0's -- so the
+; rows are NOT copies of one another either.  Nothing in this image
+; says what the variation between them means, and the BankMap at
+; 0x00100 maps bank-select value 1 to this row, which is what the
+; suffix already says.  round 6 Q1, verdict
+; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
 ToneNumBank_Melodic_1:
 	.short 0x0000	; 00280  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00282  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -693,6 +749,14 @@ ToneNumBank_Melodic_1:
 	.short 0x0023	; 0037E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 2 (melodic) ---
+; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
+; entries select a melodic tone (index < 0x100), which is what
+; `Melodic` states, and 37 of the 128 differ from row 0's -- so the
+; rows are NOT copies of one another either.  Nothing in this image
+; says what the variation between them means, and the BankMap at
+; 0x00100 maps bank-select value 2 to this row, which is what the
+; suffix already says.  round 6 Q1, verdict
+; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
 ToneNumBank_Melodic_2:
 	.short 0x0005	; 00380  [  0] prog   0 -> tone 0x005 '  Midi Grand 1  '
 	.short 0x0003	; 00382  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -824,6 +888,14 @@ ToneNumBank_Melodic_2:
 	.short 0x0024	; 0047E  [127] prog 127 -> tone 0x024 'Orchestra Hit 2 '
 
 ; --- row 3 (melodic) ---
+; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
+; entries select a melodic tone (index < 0x100), which is what
+; `Melodic` states, and 25 of the 128 differ from row 0's -- so the
+; rows are NOT copies of one another either.  Nothing in this image
+; says what the variation between them means, and the BankMap at
+; 0x00100 maps bank-select value 3 to this row, which is what the
+; suffix already says.  round 6 Q1, verdict
+; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
 ToneNumBank_Melodic_3:
 	.short 0x0000	; 00480  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0007	; 00482  [  1] prog   1 -> tone 0x007 '  Jangle Piano  '
@@ -955,6 +1027,14 @@ ToneNumBank_Melodic_3:
 	.short 0x0023	; 0057E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 4 (melodic) ---
+; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
+; entries select a melodic tone (index < 0x100), which is what
+; `Melodic` states, and 18 of the 128 differ from row 0's -- so the
+; rows are NOT copies of one another either.  Nothing in this image
+; says what the variation between them means, and the BankMap at
+; 0x00100 maps bank-select value 4 to this row, which is what the
+; suffix already says.  round 6 Q1, verdict
+; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
 ToneNumBank_Melodic_4:
 	.short 0x0006	; 00580  [  0] prog   0 -> tone 0x006 '  Midi Grand 2  '
 	.short 0x0003	; 00582  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -1086,6 +1166,14 @@ ToneNumBank_Melodic_4:
 	.short 0x0023	; 0067E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 5 (melodic) ---
+; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
+; entries select a melodic tone (index < 0x100), which is what
+; `Melodic` states, and 9 of the 128 differ from row 0's -- so the
+; rows are NOT copies of one another either.  Nothing in this image
+; says what the variation between them means, and the BankMap at
+; 0x00100 maps bank-select value 5 to this row, which is what the
+; suffix already says.  round 6 Q1, verdict
+; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
 ToneNumBank_Melodic_5:
 	.short 0x0000	; 00680  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00682  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -1217,6 +1305,14 @@ ToneNumBank_Melodic_5:
 	.short 0x0023	; 0077E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 6 (melodic) ---
+; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
+; entries select a melodic tone (index < 0x100), which is what
+; `Melodic` states, and 9 of the 128 differ from row 0's -- so the
+; rows are NOT copies of one another either.  Nothing in this image
+; says what the variation between them means, and the BankMap at
+; 0x00100 maps bank-select value 6 to this row, which is what the
+; suffix already says.  round 6 Q1, verdict
+; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
 ToneNumBank_Melodic_6:
 	.short 0x0000	; 00780  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00782  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -1348,6 +1444,14 @@ ToneNumBank_Melodic_6:
 	.short 0x0023	; 0087E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 7 (melodic) ---
+; ⚠ NO NAME, and the gap is measured rather than assumed: all 128
+; entries select a melodic tone (index < 0x100), which is what
+; `Melodic` states, and 6 of the 128 differ from row 0's -- so the
+; rows are NOT copies of one another either.  Nothing in this image
+; says what the variation between them means, and the BankMap at
+; 0x00100 maps bank-select value 7 to this row, which is what the
+; suffix already says.  round 6 Q1, verdict
+; NAMELESS-UNDIFFERENTIATED; round 7 Q1.
 ToneNumBank_Melodic_7:
 	.short 0x0000	; 00880  [  0] prog   0 -> tone 0x000 '     Piano      '
 	.short 0x0003	; 00882  [  1] prog   1 -> tone 0x003 'Honky-Tonk Piano'
@@ -1479,6 +1583,11 @@ ToneNumBank_Melodic_7:
 	.short 0x0023	; 0097E  [127] prog 127 -> tone 0x023 'Orchestra Hit 1 '
 
 ; --- row 8 (drum kits) ---
+; Evidence: this row's own 128 LE16 entries, at file 0x00980..0x00A7F,
+; and the 16-byte ASCII name of every record they select.
+; All 128 select a record whose own name ends in 'Kit' -- checked
+; at program 127 ('Jazz Kit') as well as program 0 ('Standard Kit').
+; 17 distinct tone indices in the row.  round 5 Q2 row_names().
 ToneNumBank_DrumKits:
 	.short 0x0103	; 00980  [  0] prog   0 -> tone 0x103 ' Standard Kit   '
 	.short 0x0103	; 00982  [  1] prog   1 -> tone 0x103 ' Standard Kit   '
@@ -1610,6 +1719,14 @@ ToneNumBank_DrumKits:
 	.short 0x0100	; 00A7E  [127] prog 127 -> tone 0x100 '   Jazz Kit     '
 
 ; --- row 9 (drum kits) ---
+; Evidence: this row's own 128 LE16 entries, at file 0x00A80..0x00B7F,
+; and the 16-byte ASCII name of every record they select.
+; 127 of the 128 hold tone 0x100 'Jazz Kit'.  The one that does not is at
+; program 127, holding tone 0x110 'Special sound' -- which occurs 1 time
+; in all 1,280 entries of this table, so it is unique to this
+; row.  That entry is the whole of what distinguishes this row, so it
+; is what names it.
+; 2 distinct tone indices in the row.  round 5 Q2 row_names().
 ToneNumBank_SpecialSound:
 	.short 0x0100	; 00A80  [  0] prog   0 -> tone 0x100 '   Jazz Kit     '
 	.short 0x0100	; 00A82  [  1] prog   1 -> tone 0x100 '   Jazz Kit     '
@@ -14284,7 +14401,58 @@ ToneDB_ToneIndexMapB:
 ;      known.  Where the twins disagree on the name, no label is given.
 ;   notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.
 ; 
-;   3. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
+;   4. ★ ROUND 7 -- ROUND 6's RULE, STATED CORRECTLY, NAMES 0 MORE.
+;      Round 6 took the shared stem when the candidate names differ only by
+;      a TRAILING DIGIT ('RoomBassDrm1'/'RoomBassDrm2').  This catalogue
+;      spells the same relation with a trailing LETTER as well, and that
+;      rule could not see it.  The rule round 7 uses instead: take the
+;      longest common prefix, accept it only if in EVERY candidate the next
+;      character starts a new CamelCase word (an upper-case letter or a
+;      digit) AND at most 4 characters follow it.
+;      It names NOTHING in this array -- 0 of the 15 ambiguous
+;      records -- and that zero is reported, not omitted.
+;      ⚠ THE BOUND OF 4 IS NOT DECORATION.  Without it the same prefix
+;      rule takes 'HiHat' from twelve names that split into HiHatOpen and
+;      HiHatHfOpen, and 'Dance' from six that are a whole kit -- stems that
+;      drop a WORD rather than a variant.  notes/prom_d_finish_round7.py Q4
+;      prints what every bound from 1 to 8 would have named.
+;   notes/prom_d_finish_round7.py Q4, and 56 checks in that file.
+; 
+;   4b. ★ AND THREE MECHANISMS ROUND 7 MEASURED AND REJECTED, recorded
+;      next to the records they would have named so they are not
+;      re-invented.  Each one WOULD have moved the number.
+; 
+;      M1  THE MAP AT SLOT +0x0C AS A TIE-BREAKER.  Round 6 showed it
+;          lands on a twinned record far more often than chance, so it
+;          looks like the thing that could pick one of the several tone
+;          names an ambiguous record matches.  CALIBRATED on the 152
+;          records where the byte identity already gives ONE name, it
+;          agrees 110 times, DISAGREES 30 and has no vote 12 times -- so
+;          on a set where the answer is already known it is wrong in 30
+;          of the 140 records it votes on.
+;          REJECTED, though it would have broken 3 of the 15 ties.
+; 
+;      M2  WIDENING THE ONE-BYTE MASK TO BYTES 3..10.  It would bring 65
+;          more records within reach, and the positions are structured,
+;          not scattered: 38 records differ from their nearest tone block
+;          at exactly {3,5,7,9,11} and 13 at exactly {4,6,8,10,11} -- the
+;          low and the high bytes of four 16-bit fields.  REJECTED by the
+;          SAME instruction that justified the one-byte mask: prom_c
+;          sub_FBC725 is the only writer of a wave-select record and it
+;          writes byte 11 (0xFBC7D6) and bytes 13..42 (0xFBC7D9 sets the
+;          index to 13, 0xFBC7E3 fetches the stride word as the bound).
+;          Bytes 3..10 are written by NOTHING, so a record that differs
+;          in them is a different record and not a rewritten copy.
+; 
+;      M3  A RECORD'S 30-BYTE TAIL EQUALLING ONE OF THE 64 STORED
+;          PRESETS, which would have named a record `<tone> + preset N`.
+;          0 of 322 here, 0 of 208 at slot +0x20, 0 of 451 tone blocks.
+;          REJECTED at zero: the preset apply is a RUNTIME operation on
+;          a RAM copy (0xFBC738 computes the destination as
+;          0x000087d2 + 43*n) and leaves no stored relation at all.
+;   notes/prom_d_finish_round7.py Q5.
+; 
+;   5. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what
 ;      round 5 Q7 found for the array at slot +0x3C and did NOT find here.
 ;      Round 3's census of 99 directory reads found no reader for slot
@@ -40053,7 +40221,33 @@ PercInst_503_SlapShot:
 ;      known.  Where the twins disagree on the name, no label is given.
 ;   notes/prom_d_understanding_round6.py Q1, Q2, Q2b, Q3, Q8.
 ; 
-;   3. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
+;   4. ★ ROUND 7 -- ROUND 6's RULE, STATED CORRECTLY, NAMES 10 MORE.
+;      Round 6 took the shared stem when the candidate names differ only by
+;      a TRAILING DIGIT ('RoomBassDrm1'/'RoomBassDrm2').  This catalogue
+;      spells the same relation with a trailing LETTER as well, and that
+;      rule could not see it.  The rule round 7 uses instead: take the
+;      longest common prefix, accept it only if in EVERY candidate the next
+;      character starts a new CamelCase word (an upper-case letter or a
+;      digit) AND at most 4 characters follow it.
+;      What that names here, in full:
+;        record  48  ->  _SameAs_RockBassTom    from 2 names: RockBassTomHi, RockBassTomLo
+;        record  53  ->  _SameAs_ModelingTom    from 4 names: ModelingTom1, ModelingTom2, ModelingTom3, +1 more
+;        record  55  ->  _SameAs_ModelBassTom   from 2 names: ModelBassTomH, ModelBassTomL
+;        record  94  ->  _SameAs_ModelAgogo     from 2 names: ModelAgogoHi, ModelAgogoLo
+;        record 108  ->  _SameAs_TublarBell     from 7 names: TublarBellA, TublarBellB, TublarBellC, +4 more
+;        record 124  ->  _SameAs_TimbalesOpen   from 2 names: TimbalesOpenH, TimbalesOpenL
+;        record 125  ->  _SameAs_ModelTimbOpn   from 2 names: ModelTimbOpnH, ModelTimbOpnL
+;        record 128  ->  _SameAs_SynTimbOpen    from 3 names: SynTimbOpenHi, SynTimbOpenLo, SynTimbOpenRm
+;        record 131  ->  _SameAs_Timpani        from 7 names: TimpaniA, TimpaniB, TimpaniC, +4 more
+;        record 196  ->  _SameAs_OrchHit        from 2 names: OrchHitHigh, OrchHitLow
+;      ⚠ THE BOUND OF 4 IS NOT DECORATION.  Without it the same prefix
+;      rule takes 'HiHat' from twelve names that split into HiHatOpen and
+;      HiHatHfOpen, and 'Dance' from six that are a whole kit -- stems that
+;      drop a WORD rather than a variant.  notes/prom_d_finish_round7.py Q4
+;      prints what every bound from 1 to 8 would have named.
+;   notes/prom_d_finish_round7.py Q4, and 56 checks in that file.
+; 
+;   5. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what
 ;      round 5 Q7 found for the array at slot +0x3C and did NOT find here.
 ;      Round 3's census of 99 directory reads found no reader for slot
@@ -40128,8 +40322,13 @@ ToneDB_PercMixerDefaultTable_002_SameAs_RockBassDrm:
 ; Evidence: drum-instrument record 3 at file 0x2F11E, its
 ; bytes +107..+149 (file 0x2F189..0x2F1B3), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `RoomBassDrm`.
+; The 2 names share the stem `RoomBassDrm` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40150,8 +40349,13 @@ ToneDB_PercMixerDefaultTable_003_SameAs_RoomBassDrm:
 ; Evidence: drum-instrument record 5 at file 0x2F24A, its
 ; bytes +107..+149 (file 0x2F2B5..0x2F2DF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `JazzBassDrm`.
+; The 2 names share the stem `JazzBassDrm` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40172,8 +40376,13 @@ ToneDB_PercMixerDefaultTable_004_SameAs_JazzBassDrm:
 ; Evidence: drum-instrument record 7 at file 0x2F376, its
 ; bytes +107..+149 (file 0x2F3E1..0x2F40B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `TradBassDrm`.
+; The 2 names share the stem `TradBassDrm` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40222,8 +40431,13 @@ ToneDB_PercMixerDefaultTable_007:
 ; Evidence: drum-instrument record 10 at file 0x2F538, its
 ; bytes +107..+149 (file 0x2F5A3..0x2F5CD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `PowerBassDrm`.
+; The 2 names share the stem `PowerBassDrm` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40332,8 +40546,13 @@ ToneDB_PercMixerDefaultTable_013_SameAs_DanceBassDrm:
 ; Evidence: drum-instrument record 16 at file 0x2F8BC, its
 ; bytes +107..+149 (file 0x2F927..0x2F951), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `ElectBassDrm`.
+; The 2 names share the stem `ElectBassDrm` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40394,8 +40613,13 @@ ToneDB_PercMixerDefaultTable_016_SameAs_FunkBassDrm:
 ; Evidence: drum-instrument record 20 at file 0x2FB14, its
 ; bytes +107..+149 (file 0x2FB7F..0x2FBA9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 3 names differ only by a trailing digit, so the
-; label uses the shared stem `OrchBassDrm`.
+; The 3 names share the stem `OrchBassDrm` and differ
+; only in what follows it: `1`, `2`, `3`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40516,8 +40740,13 @@ ToneDB_PercMixerDefaultTable_022_SameAs_TradSnare:
 ; Evidence: drum-instrument record 30 at file 0x300F0, its
 ; bytes +107..+149 (file 0x3015B..0x30185), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `LtRockSnare`.
+; The 2 names share the stem `LtRockSnare` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40546,8 +40775,13 @@ ToneDB_PercMixerDefaultTable_024:
 ; Evidence: drum-instrument record 32 at file 0x3021C, its
 ; bytes +107..+149 (file 0x30287..0x302B1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `PowerSnare`.
+; The 2 names share the stem `PowerSnare` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40576,8 +40810,13 @@ ToneDB_PercMixerDefaultTable_026:
 ; Evidence: drum-instrument record 34 at file 0x30348, its
 ; bytes +107..+149 (file 0x303B3..0x303DD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `ModelSnare`.
+; The 2 names share the stem `ModelSnare` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40598,8 +40837,13 @@ ToneDB_PercMixerDefaultTable_027_SameAs_ModelSnare:
 ; Evidence: drum-instrument record 36 at file 0x30474, its
 ; bytes +107..+149 (file 0x304DF..0x30509), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `HouseSnare`.
+; The 2 names share the stem `HouseSnare` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40620,8 +40864,13 @@ ToneDB_PercMixerDefaultTable_028_SameAs_HouseSnare:
 ; Evidence: drum-instrument record 38 at file 0x305A0, its
 ; bytes +107..+149 (file 0x3060B..0x30635), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `SoulSnare`.
+; The 2 names share the stem `SoulSnare` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40642,8 +40891,13 @@ ToneDB_PercMixerDefaultTable_029_SameAs_SoulSnare:
 ; Evidence: drum-instrument record 40 at file 0x306CC, its
 ; bytes +107..+149 (file 0x30737..0x30761), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `DanceSnare`.
+; The 2 names share the stem `DanceSnare` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40664,8 +40918,13 @@ ToneDB_PercMixerDefaultTable_030_SameAs_DanceSnare:
 ; Evidence: drum-instrument record 42 at file 0x307F8, its
 ; bytes +107..+149 (file 0x30863..0x3088D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `ElectSnare`.
+; The 2 names share the stem `ElectSnare` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40758,8 +41017,13 @@ ToneDB_PercMixerDefaultTable_035_SameAs_PiccoloSnare:
 ; Evidence: drum-instrument record 50 at file 0x30CA8, its
 ; bytes +107..+149 (file 0x30D13..0x30D3D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 3 names differ only by a trailing digit, so the
-; label uses the shared stem `OrchSnare`.
+; The 3 names share the stem `OrchSnare` and differ
+; only in what follows it: `1`, `2`, `3`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40780,8 +41044,13 @@ ToneDB_PercMixerDefaultTable_036_SameAs_OrchSnare:
 ; Evidence: drum-instrument record 53 at file 0x30E6A, its
 ; bytes +107..+149 (file 0x30ED5..0x30EFF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 3 names differ only by a trailing digit, so the
-; label uses the shared stem `ReverseSnare`.
+; The 3 names share the stem `ReverseSnare` and differ
+; only in what follows it: `1`, `2`, `3`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -40958,10 +41227,25 @@ ToneDB_PercMixerDefaultTable_047:
 ; Evidence: drum-instrument record 85 at file 0x3212A, its
 ; bytes +107..+149 (file 0x32195..0x321BF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_048:
+; The 2 names share the stem `RockBassTom` and differ
+; only in what follows it: `Hi`, `Lo`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_048_SameAs_RockBassTom:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFE, 0x01, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41EBC  |...#@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_049 -- file 0x41EE7..0x41F11
@@ -41010,10 +41294,25 @@ ToneDB_PercMixerDefaultTable_052:
 ; Evidence: drum-instrument record 102 at file 0x32B20, its
 ; bytes +107..+149 (file 0x32B8B..0x32BB5), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 4 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_053:
+; The 4 names share the stem `ModelingTom` and differ
+; only in what follows it: `1`, `2`, `3`, `Hi`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_053_SameAs_ModelingTom:
 	.byte 0x7F, 0x7F, 0x7F, 0x24, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x87, 0x8A, 0x54, 0xFA, 0x0A, 0x80, 0x5A, 0x64, 0xAC, 0x43, 0xD8, 0xE2, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D, 0xAC, 0x43, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 41F93  |...$A.@.@.@@...T...Zd.C.........Cd.........|
 
 ; ToneDB_PercMixerDefaultTable_054 -- file 0x41FBE..0x41FE8
@@ -41034,10 +41333,25 @@ ToneDB_PercMixerDefaultTable_054:
 ; Evidence: drum-instrument record 108 at file 0x32EA4, its
 ; bytes +107..+149 (file 0x32F0F..0x32F39), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_055:
+; The 2 names share the stem `ModelBassTom` and differ
+; only in what follows it: `H`, `L`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_055_SameAs_ModelBassTom:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x40, 0x07, 0x8C, 0x86, 0x54, 0xFA, 0x0A, 0x86, 0x5A, 0x64, 0xB2, 0x43, 0xD8, 0xE2, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5, 0xB2, 0x43, 0x64, 0xD8, 0xE2, 0x00, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5	; 41FE9  |...%@.@.@.@@...T...Zd.C.........Cd.........|
 
 ; ToneDB_PercMixerDefaultTable_056 -- file 0x42014..0x4203E
@@ -41126,8 +41440,13 @@ ToneDB_PercMixerDefaultTable_061_SameAs_HiHatClosed1:
 ; Evidence: drum-instrument record 164 at file 0x34F74, its
 ; bytes +107..+149 (file 0x34FDF..0x35009), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `ModelHHClose`.
+; The 2 names share the stem `ModelHHClose` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41148,8 +41467,13 @@ ToneDB_PercMixerDefaultTable_062_SameAs_ModelHHClose:
 ; Evidence: drum-instrument record 166 at file 0x350A0, its
 ; bytes +107..+149 (file 0x3510B..0x35135), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `DanceHHClose`.
+; The 2 names share the stem `DanceHHClose` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41238,8 +41562,13 @@ ToneDB_PercMixerDefaultTable_068:
 ; Evidence: drum-instrument record 189 at file 0x35E1A, its
 ; bytes +107..+149 (file 0x35E85..0x35EAF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 4 names differ only by a trailing digit, so the
-; label uses the shared stem `HiHatPedal`.
+; The 4 names share the stem `HiHatPedal` and differ
+; only in what follows it: `1`, `2`, `3`, `4`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41280,8 +41609,13 @@ ToneDB_PercMixerDefaultTable_070_SameAs_ModelHHPedal:
 ; Evidence: drum-instrument record 194 at file 0x36108, its
 ; bytes +107..+149 (file 0x36173..0x3619D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 6 names differ only by a trailing digit, so the
-; label uses the shared stem `HiHatAccent`.
+; The 6 names share the stem `HiHatAccent` and differ
+; only in what follows it: `1`, `2`, `3`, `4`, `5`, `6`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41342,8 +41676,13 @@ ToneDB_PercMixerDefaultTable_074:
 ; Evidence: drum-instrument record 210 at file 0x36A68, its
 ; bytes +107..+149 (file 0x36AD3..0x36AFD), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 6 names differ only by a trailing digit, so the
-; label uses the shared stem `CrashCymbal`.
+; The 6 names share the stem `CrashCymbal` and differ
+; only in what follows it: `10`, `5`, `6`, `7`, `8`, `9`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41392,8 +41731,13 @@ ToneDB_PercMixerDefaultTable_077_SameAs_MdlCrashCym2:
 ; Evidence: drum-instrument record 217 at file 0x36E82, its
 ; bytes +107..+149 (file 0x36EED..0x36F17), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 5 names differ only by a trailing digit, so the
-; label uses the shared stem `SplashCymbal`.
+; The 5 names share the stem `SplashCymbal` and differ
+; only in what follows it: `1`, `2`, `3`, `4`, `5`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41442,8 +41786,13 @@ ToneDB_PercMixerDefaultTable_080_SameAs_MdlSplashCym:
 ; Evidence: drum-instrument record 223 at file 0x37206, its
 ; bytes +107..+149 (file 0x37271..0x3729B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 5 names differ only by a trailing digit, so the
-; label uses the shared stem `ChinaCymbal`.
+; The 5 names share the stem `ChinaCymbal` and differ
+; only in what follows it: `1`, `2`, `3`, `4`, `5`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41492,8 +41841,13 @@ ToneDB_PercMixerDefaultTable_083_SameAs_ModelChinaCym:
 ; Evidence: drum-instrument record 229 at file 0x3758A, its
 ; bytes +107..+149 (file 0x375F5..0x3761F), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `OrchCymbal`.
+; The 2 names share the stem `OrchCymbal` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41566,8 +41920,13 @@ ToneDB_PercMixerDefaultTable_087_SameAs_ModelRideCym2:
 ; Evidence: drum-instrument record 243 at file 0x37DBE, its
 ; bytes +107..+149 (file 0x37E29..0x37E53), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 7 names differ only by a trailing digit, so the
-; label uses the shared stem `RideCymbal`.
+; The 7 names share the stem `RideCymbal` and differ
+; only in what follows it: `10`, `11`, `12`, `13`, `14`, `8`, `9`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41640,8 +41999,13 @@ ToneDB_PercMixerDefaultTable_091_SameAs_ModelRideBell:
 ; Evidence: drum-instrument record 263 at file 0x38976, its
 ; bytes +107..+149 (file 0x389E1..0x38A0B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 5 names differ only by a trailing digit, so the
-; label uses the shared stem `ReverseCymbl`.
+; The 5 names share the stem `ReverseCymbl` and differ
+; only in what follows it: `1`, `2`, `3`, `4`, `5`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41674,10 +42038,25 @@ ToneDB_PercMixerDefaultTable_093:
 ; Evidence: drum-instrument record 272 at file 0x38EBC, its
 ; bytes +107..+149 (file 0x38F27..0x38F51), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_094:
+; The 2 names share the stem `ModelAgogo` and differ
+; only in what follows it: `Hi`, `Lo`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_094_SameAs_ModelAgogo:
 	.byte 0x7F, 0x7F, 0x7F, 0x3B, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x64, 0x8A, 0x54, 0x14, 0x0A, 0x80, 0x7F, 0x64, 0xBC, 0x61, 0x1E, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14, 0xBC, 0x61, 0x64, 0x1E, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14	; 42676  |...;@.@.@.@..d.T....d.a.........ad.........|
 
 ; ToneDB_PercMixerDefaultTable_095 -- file 0x426A1..0x426CB
@@ -41726,8 +42105,13 @@ ToneDB_PercMixerDefaultTable_096_SameAs_MdlSleighBel:
 ; Evidence: drum-instrument record 276 at file 0x39114, its
 ; bytes +107..+149 (file 0x3917F..0x391A9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 4 names differ only by a trailing digit, so the
-; label uses the shared stem `Cowbell`.
+; The 4 names share the stem `Cowbell` and differ
+; only in what follows it: `1`, `2`, `3`, `4`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41748,8 +42132,13 @@ ToneDB_PercMixerDefaultTable_097_SameAs_Cowbell:
 ; Evidence: drum-instrument record 280 at file 0x3936C, its
 ; bytes +107..+149 (file 0x393D7..0x39401), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 4 names differ only by a trailing digit, so the
-; label uses the shared stem `ModelCowbell`.
+; The 4 names share the stem `ModelCowbell` and differ
+; only in what follows it: `1`, `2`, `3`, `4`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -41906,10 +42295,25 @@ ToneDB_PercMixerDefaultTable_107:
 ; Evidence: drum-instrument record 300 at file 0x39F24, its
 ; bytes +107..+149 (file 0x39F8F..0x39FB9), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 7 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_108:
+; The 7 names share the stem `TublarBell` and differ
+; only in what follows it: `A`, `B`, `C`, `D`, `E`, `F`, `G`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_108_SameAs_TublarBell:
 	.byte 0x7F, 0x7F, 0x7F, 0x41, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x1E, 0x01, 0x7F, 0x64, 0x00, 0x58, 0xD8, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58, 0x64, 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 428D0  |...A@.@.@.@..}.T....d.X.........Xd.........|
 
 ; ToneDB_PercMixerDefaultTable_109 -- file 0x428FB..0x42925
@@ -42186,10 +42590,25 @@ ToneDB_PercMixerDefaultTable_123_SameAs_CongaCrash:
 ; Evidence: drum-instrument record 350 at file 0x3BC70, its
 ; bytes +107..+149 (file 0x3BCDB..0x3BD05), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_124:
+; The 2 names share the stem `TimbalesOpen` and differ
+; only in what follows it: `H`, `L`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_124_SameAs_TimbalesOpen:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42B80  |...D@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_125 -- file 0x42BAB..0x42BD5
@@ -42198,10 +42617,25 @@ ToneDB_PercMixerDefaultTable_124:
 ; Evidence: drum-instrument record 352 at file 0x3BD9C, its
 ; bytes +107..+149 (file 0x3BE07..0x3BE31), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_125:
+; The 2 names share the stem `ModelTimbOpn` and differ
+; only in what follows it: `H`, `L`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_125_SameAs_ModelTimbOpn:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x03, 0xC8, 0x35, 0x54, 0xF1, 0x0A, 0x80, 0x7F, 0x64, 0x3C, 0x23, 0xE2, 0xCE, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8, 0x3C, 0x23, 0x64, 0xE2, 0xCE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8	; 42BAB  |...D@.@.@.@...5T....d<#........<#d.........|
 
 ; ToneDB_PercMixerDefaultTable_126 -- file 0x42BD6..0x42C00
@@ -42250,10 +42684,25 @@ ToneDB_PercMixerDefaultTable_127_SameAs_MdlTimbOpenRm:
 ; Evidence: drum-instrument record 356 at file 0x3BFF4, its
 ; bytes +107..+149 (file 0x3C05F..0x3C089), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 3 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_128:
+; The 3 names share the stem `SynTimbOpen` and differ
+; only in what follows it: `Hi`, `Lo`, `Rm`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_128_SameAs_SynTimbOpen:
 	.byte 0x7F, 0x7F, 0x7F, 0x45, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x07, 0x7D, 0x80, 0x54, 0xFD, 0x02, 0x86, 0x7F, 0x64, 0x00, 0x1B, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x1B, 0x64, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 42C2C  |...E@.@.@.@..}.T....d............d.........|
 
 ; ToneDB_PercMixerDefaultTable_129 -- file 0x42C57..0x42C81
@@ -42302,10 +42751,25 @@ ToneDB_PercMixerDefaultTable_130_SameAs_BataDrumOpen:
 ; Evidence: drum-instrument record 361 at file 0x3C2E2, its
 ; bytes +107..+149 (file 0x3C34D..0x3C377), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 7 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_131:
+; The 7 names share the stem `Timpani` and differ
+; only in what follows it: `A`, `B`, `C`, `D`, `E`, `F`, `G`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_131_SameAs_Timpani:
 	.byte 0x7F, 0x7F, 0x7F, 0x46, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0xF6, 0x0A, 0x06, 0x7F, 0x64, 0x37, 0x27, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0xDE, 0x37, 0x27, 0x64, 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 42CAD  |...F@.@.@.@..}.T....d7'........7'd.........|
 
 ; ToneDB_PercMixerDefaultTable_132 -- file 0x42CD8..0x42D02
@@ -42410,8 +42874,13 @@ ToneDB_PercMixerDefaultTable_137_SameAs_MdlGuiroLong:
 ; Evidence: drum-instrument record 395 at file 0x3D6CE, its
 ; bytes +107..+149 (file 0x3D739..0x3D763), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `GuiroShort`.
+; The 2 names share the stem `GuiroShort` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -42556,8 +43025,13 @@ ToneDB_PercMixerDefaultTable_145_SameAs_ShekeleOff:
 ; Evidence: drum-instrument record 408 at file 0x3DE6C, its
 ; bytes +107..+149 (file 0x3DED7..0x3DF01), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `Cabasa`.
+; The 2 names share the stem `Cabasa` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -42838,8 +43312,13 @@ ToneDB_PercMixerDefaultTable_161_SameAs_SurdoLeftHand:
 ; Evidence: drum-instrument record 438 at file 0x3F000, its
 ; bytes +107..+149 (file 0x3F06B..0x3F095), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `TambourinAcc`.
+; The 2 names share the stem `TambourinAcc` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -42880,8 +43359,13 @@ ToneDB_PercMixerDefaultTable_163_SameAs_MdlTamburnAcc:
 ; Evidence: drum-instrument record 441 at file 0x3F1C2, its
 ; bytes +107..+149 (file 0x3F22D..0x3F257), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `TambourineBt`.
+; The 2 names share the stem `TambourineBt` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -43130,8 +43614,13 @@ ToneDB_PercMixerDefaultTable_177_SameAs_ModelClaves:
 ; Evidence: drum-instrument record 464 at file 0x3FF3C, its
 ; bytes +107..+149 (file 0x3FFA7..0x3FFD1), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 3 names differ only by a trailing digit, so the
-; label uses the shared stem `Slap`.
+; The 3 names share the stem `Slap` and differ
+; only in what follows it: `1`, `2`, `3`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -43152,8 +43641,13 @@ ToneDB_PercMixerDefaultTable_178_SameAs_Slap:
 ; Evidence: drum-instrument record 467 at file 0x400FE, its
 ; bytes +107..+149 (file 0x40169..0x40193), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `Scratch`.
+; The 2 names share the stem `Scratch` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -43174,8 +43668,13 @@ ToneDB_PercMixerDefaultTable_179_SameAs_Scratch:
 ; Evidence: drum-instrument record 469 at file 0x4022A, its
 ; bytes +107..+149 (file 0x40295..0x402BF), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `Scratch`.
+; The 2 names share the stem `Scratch` and differ
+; only in what follows it: `3`, `4`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -43356,8 +43855,13 @@ ToneDB_PercMixerDefaultTable_188_SameAs_Wave2:
 ; Evidence: drum-instrument record 479 at file 0x40806, its
 ; bytes +107..+149 (file 0x40871..0x4089B), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; The 2 names differ only by a trailing digit, so the
-; label uses the shared stem `Applause`.
+; The 2 names share the stem `Applause` and differ
+; only in what follows it: `1`, `2`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
 ; ★ THE LABEL USES THIS, and it claims only what was
 ; measured: `_SameAs_` means these bytes and that record's
 ; bytes are the same, NOT that this record belongs to that
@@ -43482,10 +43986,25 @@ ToneDB_PercMixerDefaultTable_195:
 ; Evidence: drum-instrument record 490 at file 0x40E78, its
 ; bytes +107..+149 (file 0x40EE3..0x40F0D), compared byte for
 ; byte against this record.  round 5 perc_carriers().
-; ⚠ NO LABEL: 2 differently named drum-instrument records
-; carry these same bytes, so nothing here picks one of
-; them.  round 6 Q1, verdict NAMELESS-AMBIGUOUS.
-ToneDB_PercMixerDefaultTable_196:
+; The 2 names share the stem `OrchHit` and differ
+; only in what follows it: `High`, `Low`.
+; Each remainder begins with an upper-case letter or a
+; digit -- a CamelCase word boundary -- and is at most
+; 4 characters.  That is round 7's rule; round 6 stated
+; the same thing as `differ by a trailing digit`, which
+; the letter cases above do not satisfy.
+; ★ THE LABEL USES THIS, and it claims only what was
+; measured: `_SameAs_` means these bytes and that record's
+; bytes are the same, NOT that this record belongs to that
+; instrument.  ⚠ CORRECTED in round 6: these lines used to
+; say a carrier is not a name.  What is refused is the
+; POSITIONAL transfer from the 208-row catalogue at slot
+; +0x8C, which names the same thing at the same index in
+; only 61 of the 141 rows the byte identity resolves, names
+; it at a DIFFERENT index 62 times and names something no
+; drum record has 18 times -- because it is a DIFFERENT
+; LIST.  round 6 Q3e.
+ToneDB_PercMixerDefaultTable_196_SameAs_OrchHit:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x38, 0x55, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x38, 0x55, 0x64, 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 43798  |...^@.@.@.@..}.T....d8U........8Ud.........|
 
 ; ToneDB_PercMixerDefaultTable_197 -- file 0x437C3..0x437ED
@@ -51307,6 +51826,13 @@ ToneDB_PercList2_Footer:
 ; ==========================================================================
 erased_tail:
 	.fill 0x2F4E7, 1, 0xFF
+
+; Evidence: the 11 bytes at file 0x7FFF0 are the ASCII 'wsad_54.ssf', followed by 5
+; bytes of 0x00.  prom_a 0xF82A5F is `ld XWA,0x00F7FFF0` -- bytes 40 f0 ff f7 00,
+; read out of wsa1_prom_a.ic12 by this generator -- and 0x00F7FFF0 minus
+; this object's file offset 0x7FFF0 is 0x00F00000, the base prom_c installs
+; from its own immediate at 0xFB051E.  Two processors, one base.
+; notes/prom_d_base_checks.py checks 1-4.
 build_tag:
 	.ascii "wsad_54.ssf"
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00
