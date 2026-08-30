@@ -138,9 +138,9 @@
 ;
 ;     python3 notes/prom_d_finish_round7.py
 ;
-;   witnessed  3,392   the name has a route: the object's own ASCII, an
+;   witnessed  3,421   the name has a route: the object's own ASCII, an
 ;                      Evidence: line, or a witnessed object it is part of
-;   nameless     272   NOT named -- and the reason is stated PER OBJECT, in
+;   nameless     243   NOT named -- and the reason is stated PER OBJECT, in
 ;                      this file, next to the object it is about
 ;   boundary       1   prom_d_end, a zero-length end marker, not an object
 ;   ★ NO WITNESS AT ALL: 0
@@ -148,24 +148,24 @@
 ; ⚠ AND GRADED BY PROVENANCE, WHICH IS WHAT A PERCENTAGE HIDES.  A name can
 ; rest on very different things, and this image's rest mostly on two:
 ;   self-named        1,708  the object's own 13- or 16-byte ASCII field
-;   KN5000 transplant 1,298  ⚠ the name is the SIBLING MACHINE'S, and NO prom_c
+;   KN5000 transplant 1,327  ⚠ the name is the SIBLING MACHINE'S, and NO prom_c
 ;                            instruction reads the directory slot the region
 ;                            it sits in hangs off.  The slots, in full:
 ;                            +0x0C +0x10 +0x14 +0x18 +0x20 +0x24
 ;                            +0x28 +0x2C +0x30 +0x38 +0x48 +0x5C
 ;   image-internal      337  a relation measured inside this image
 ;   reader-backed        49  prom_c reads the slot and the read says what it is
-;   nameless            272  the 272 above, kept in the same denominator
+;   nameless            243  the 243 above, kept in the same denominator
 ; So a reader who wants only what THIS machine's firmware confirms should
-; discount 1,298 of the 3,665 labels below.  That is the number, said once, here.
+; discount 1,327 of the 3,665 labels below.  That is the number, said once, here.
 ;
-; ⚠ AND THE 92.6% CONTENT FIGURE THIS FILE SCORES ON
+; ⚠ AND THE 93.4% CONTENT FIGURE THIS FILE SCORES ON
 ; notes/wave7_documentation_metrics.py IS NOT ROBUST TO SPELLING.  491 of the
 ; labels it grades CONTENT are <stem>_<Word><digits> whose digits run 0..n-1
 ; over three or more siblings with no self-named ancestor -- the same shape as
 ; `PercInst_17`, which the same metric grades FRAMED.  The difference is an
 ; underscore before the number.  Counting those as framed instead, this file
-; reads 79.2%.  Both are true of a stated rule and neither is quoted without
+; reads 80.0%.  Both are true of a stated rule and neither is quoted without
 ; the other.  notes/prom_d_finish_round7.py Q1, Q2, Q8; 56 checks.
 ;
 ; ------------------------------------------------------------------------------
@@ -178,10 +178,10 @@
 ;     B  does a prom_c READER reach the region it is in?
 ;     C  does anything POINT AT it -- a stored index, one of this image's
 ;        own 1,281 pointer fields, or an address spelling?
-; 3,393 NAMED, 272 NAMELESS -- and every nameless object carries all three
+; 3,422 NAMED, 243 NAMELESS -- and every nameless object carries all three
 ; answers below, not one mechanism's failure.
 ;
-; ⚠ AND THE TABLE ADMITS ITS OWN GAP: 819 objects are NAMED while answering
+; ⚠ AND THE TABLE ADMITS ITS OWN GAP: 847 objects are NAMED while answering
 ; NO to all three.  They are named by round 6's fourth route -- the object
 ; CONTAINS A COPY of a named object's bytes -- which is why the three answers
 ; are printed as facts about routes and NOT as a verdict.
@@ -231,10 +231,10 @@
 ;
 ; ★★ AND IT PUBLISHES A HARSHER NUMBER THAN THE GOAL METRIC'S UPPER BOUND
 ; OF 100 PER CENT:
-;       2,857 of 3,665 labels have their NAME re-derived from this image's own
+;       2,886 of 3,665 labels have their NAME re-derived from this image's own
 ;       bytes -- a record's ASCII name field, a measured byte identity, a
 ;       curve's own run lengths, a descriptor's own 32-bit offsets;
-;       808 have only their ADDRESS derived.  Those names are structural
+;       779 have only their ADDRESS derived.  Those names are structural
 ;       or transplanted and this image does not spell them.
 ;     Framing is not naming, and that split is the honest reading of a
 ;     file with zero sub_XXXXXX.
@@ -283,7 +283,7 @@
 ;     python3 notes/prom_d_documentation_round3.py     # who READS it, 62 checks
 ;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
 ;     python3 notes/prom_d_finish_round7.py --selftest # the inventory, 56 checks
-;     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, 71 checks
+;     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, 97 checks
 ; Regenerate this file:
 ;     python3 scripts/analysis/gen_prom_d_asm.py
 ; Then, always:
@@ -14637,7 +14637,7 @@ ToneDB_ToneIndexMapB:
 ;          Measured, it leaves exactly one candidate 0 times: where the
 ;          order holds every candidate is inside the interval, and where it
 ;          does not, none is.  Refuted by its own measurement.
-;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 71 checks.
+;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 97 checks.
 ; 
 ;   4b. ★ AND THREE MECHANISMS ROUND 7 MEASURED AND REJECTED, recorded
 ;      next to the records they would have named so they are not
@@ -14673,6 +14673,52 @@ ToneDB_ToneIndexMapB:
 ;          0x000087d2 + 43*n) and leaves no stored relation at all.
 ;   notes/prom_d_finish_round7.py Q5.
 ; 
+;   6. ★★ ROUND 10 -- M9, THE SELECTOR, NAMES 29 MORE, WITH THE MAP M1
+;      REJECTED.  M1 above asked it to BREAK A TIE: to pick one of the
+;      several tone names a record's BYTES already match.  Calibrated
+;      where the answer was known it was wrong 30 times in 140, and it
+;      stays rejected for that job.  M9 asks it about the records the
+;      byte rule reaches NOT AT ALL -- the ones numbered below -- where
+;      there is no tie and nothing to pick between, and it asks for a
+;      DIFFERENT relation: not `whose block is this` but `what does the
+;      map put this record under`.
+; 
+;      THE INDEX.  A map entry sits at row*128 + program.  The PROGRAM
+;      half is pinned hard: the agreement with the byte rule is 637 of
+;      911 at the true reading, and mis-reading the program by one in
+;      either direction gives 84 or 62, by two 43 or 47.
+;      Shuffling the map gives a mean of 7.7 (max 13) over 20 draws.
+;      ⚠ THE ROW HALF IS NOT PINNED, and that is why the labels below
+;      read a whole COLUMN: the true row alignment beats the best wrong
+;      one by 29 of 911 positions, 69.9% against 66.7%, because the
+;      eight melodic rows are near-copies of one another.  A name over
+;      the column is invariant under all 8 row rotations; a name over
+;      one position would rest on that margin.
+; 
+;      THE CALIBRATION.  Where BOTH rules reach a record they agree 110
+;      of 120 against a shuffled null of 5.8 -- and 13 of those 110 are
+;      bought by the column being wider than M1's per-position vote,
+;      which notes/prom_d_inventory_round8.py Q17c prices rather than
+;      banks.  The 10 disagreements are printed there in full; M9 is
+;      applied to NONE of them, because it labels only records with no
+;      twin, so no label here contradicts another.
+; 
+;      ⚠ AND THE HOLE, said here and not left to a reviewer: the 99-read
+;      directory census finds 0 prom_c reads of slot +0x0C and 0 of
+;      slot +0x18.  M9 is a relation between two TABLES, derived from
+;      their contents; it is not evidence about what the machine does
+;      with either, and `_SelectedFor_` is worded to claim only that.
+; 
+;      WHAT IT LEAVES, and the four outcomes sum to the framed total:
+;      29 named, 111 selected by NO entry of the map (a census over all
+;      1,024 entries, not a rule failing to fire), 17 whose columns
+;      carry more than 3 tone names, and 2 that would have been named
+;      `161` -- tone record 0x05D's own `    16' & 1'    ` -- and are
+;      refused rather than spelled some other way.
+;      ★ AND THE SAME RULE ON THE PERCUSSION ARRAY IS REFUSED: see that
+;      array's own banner.
+;   notes/prom_d_inventory_round8.py Q16-Q20, and 97 checks in that file.
+; 
 ;   5. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what
 ;      round 5 Q7 found for the array at slot +0x3C and did NOT find here.
@@ -14687,6 +14733,10 @@ ToneDB_MixerDefaultTable:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 0.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_000:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x00, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x00, 0x7F, 0x00, 0x00, 0x40, 0x00, 0x00, 0x42, 0x0C, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x42, 0x0C, 0x7F, 0x00, 0x00, 0x00	; 1D965  |.............}.T......@..B......@....B.....|
 
@@ -14710,7 +14760,29 @@ ToneDB_MixerDefaultTable_001_SameAs_HappyEnsemble_Or_PopOrgan_Or_SynthGlocken:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_002:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 2 at program column 127
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: OrchestraHit1, OrchestraHit2.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 127; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_002_SelectedFor_OrchestraHit1_Or_OrchestraHit2:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1D9BB  |.............}.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_003 -- file 0x1D9E6..0x1DA10
@@ -14729,7 +14801,29 @@ ToneDB_MixerDefaultTable_003_SameAs_Piano_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_004:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 4 at program column 1
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: HonkyTonkPiano, JanglePiano.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 1; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_004_SelectedFor_HonkyTonkPiano_Or_JanglePiano:
 	.byte 0x7F, 0x7F, 0x7F, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1DA11  |.............}.T....d0...B.`...0.d...B.`...|
 
 ; ToneDB_MixerDefaultTable_005 -- file 0x1DA3C..0x1DA66
@@ -14891,6 +14985,14 @@ ToneDB_MixerDefaultTable_018_SameAs_PopOrgan_WaveSel2:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses for the
+; other reason: the map holds 19 at program column 91,
+; and the only tone name there is '161', which is what this
+; tree's CamelCase rule makes of tone record 0x05D's own
+; 16 bytes, "    16' & 1'    ".  A label ending in
+; digits reads as positional, so the name is refused
+; rather than spelled some other way -- inventing a
+; morpheme is round 3's `Home` failure.  round 10 Q19e.
 ToneDB_MixerDefaultTable_019:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x01, 0x5B, 0x01, 0x5B, 0x01, 0x5B, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1DC96  |...[.[.[.[...}.T....d0...B$`...0.d...B$`...|
 
@@ -14899,6 +15001,14 @@ ToneDB_MixerDefaultTable_019:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses for the
+; other reason: the map holds 20 at program column 91,
+; and the only tone name there is '161', which is what this
+; tree's CamelCase rule makes of tone record 0x05D's own
+; 16 bytes, "    16' & 1'    ".  A label ending in
+; digits reads as positional, so the name is refused
+; rather than spelled some other way -- inventing a
+; morpheme is round 3's `Home` failure.  round 10 Q19e.
 ToneDB_MixerDefaultTable_020:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x02, 0x5B, 0x02, 0x5B, 0x02, 0x5B, 0x02, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1DCC1  |...[.[.[.[...}.T....d0...B$`...0.d...B$`...|
 
@@ -14907,6 +15017,12 @@ ToneDB_MixerDefaultTable_020:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 21 at 3 program columns, and across the 8
+; melodic rows those columns carry 5 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_021:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1DCEC  |.............}.T....d0...B.`...0.d...B.`...|
 
@@ -14915,7 +15031,29 @@ ToneDB_MixerDefaultTable_021:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_022:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 22 at program column 1
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: HonkyTonkPiano, JanglePiano.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 1; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_022_SelectedFor_HonkyTonkPiano_Or_JanglePiano:
 	.byte 0x7F, 0x7F, 0x7F, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1DD17  |.............}.T....d0...B.`...0.d...B.`...|
 
 ; ToneDB_MixerDefaultTable_023 -- file 0x1DD42..0x1DD6C
@@ -14923,7 +15061,29 @@ ToneDB_MixerDefaultTable_022:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 11 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_023:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 23 at program column 5
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: EPiano1, EPiano2.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 5; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_023_SelectedFor_EPiano1_Or_EPiano2:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x03, 0x05, 0x03, 0x05, 0x03, 0x05, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC5, 0x00, 0x00, 0x42, 0x24, 0x58, 0x10, 0x00, 0x00, 0x30, 0xC5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x58, 0x10, 0x00, 0x00	; 1DD42  |.............}.T....d0...B$X...0.d...B$X...|
 
 ; ToneDB_MixerDefaultTable_024 -- file 0x1DD6D..0x1DD97
@@ -14964,6 +15124,12 @@ ToneDB_MixerDefaultTable_026_SameAs_BellPiano_WaveSel1:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 27 at 1 program column, and across the 8
+; melodic rows that column carries 4 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_027:
 	.byte 0x7F, 0x7F, 0x7F, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCE, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00, 0x30, 0xCE, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00	; 1DDEE  |...t.t.t.t...}.T....d0...B$`...0.d...B$`...|
 
@@ -15104,7 +15270,29 @@ ToneDB_MixerDefaultTable_039_SameAs_Gamelan1_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_040:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 40 at program column 112
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 1 tone
+; name: AfricanMallet.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 112; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_040_SelectedFor_AfricanMallet:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x01, 0x70, 0x01, 0x70, 0x01, 0x70, 0x01, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E01D  |...p.p.p.p...}.T.(..d<...Z0l...<.d...Z0l...|
 
 ; ToneDB_MixerDefaultTable_041 -- file 0x1E048..0x1E072
@@ -15112,6 +15300,12 @@ ToneDB_MixerDefaultTable_040:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 41 at 2 program columns, and across the 8
+; melodic rows those columns carry 5 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_041:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x02, 0x70, 0x02, 0x70, 0x02, 0x70, 0x02, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E048  |...p.p.p.p...}.T.(..d<...Z0l...<.d...Z0l...|
 
@@ -15120,7 +15314,29 @@ ToneDB_MixerDefaultTable_041:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_042:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 42 at program column 112
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 1 tone
+; name: AfricanMallet.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 112; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_042_SelectedFor_AfricanMallet:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x03, 0x70, 0x03, 0x70, 0x03, 0x70, 0x03, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD6, 0x00, 0x00, 0x4E, 0x24, 0x60, 0x18, 0x00, 0x00, 0x30, 0xD6, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x24, 0x60, 0x18, 0x00, 0x00	; 1E073  |...p.p.p.p...}.T....d0...N$`...0.d...N$`...|
 
 ; ToneDB_MixerDefaultTable_043 -- file 0x1E09E..0x1E0C8
@@ -15161,6 +15377,10 @@ ToneDB_MixerDefaultTable_045_SameAs_FretlessBass2_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 46.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_046:
 	.byte 0x7F, 0x7F, 0x7F, 0x25, 0x80, 0x25, 0x80, 0x25, 0x80, 0x25, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E11F  |...%.%.%.%...}.T....d....B.x.....d...B.x...|
 
@@ -15169,6 +15389,10 @@ ToneDB_MixerDefaultTable_046:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 47.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_047:
 	.byte 0x7F, 0x7F, 0x7F, 0x29, 0x80, 0x29, 0x80, 0x29, 0x80, 0x29, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E14A  |...).).).)...}.T....d....B.x.....d...B.x...|
 
@@ -15177,6 +15401,10 @@ ToneDB_MixerDefaultTable_047:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 48.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_048:
 	.byte 0x7F, 0x7F, 0x7F, 0x27, 0x82, 0x27, 0x82, 0x27, 0x82, 0x27, 0x82, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E175  |...'.'.'.'...}.T....d....B.x.....d...B.x...|
 
@@ -15185,6 +15413,10 @@ ToneDB_MixerDefaultTable_048:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 49.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_049:
 	.byte 0x7F, 0x7F, 0x7F, 0x27, 0x80, 0x27, 0x80, 0x27, 0x80, 0x27, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E1A0  |...'.'.'.'...}.T....d....B.x.....d...B.x...|
 
@@ -15193,6 +15425,10 @@ ToneDB_MixerDefaultTable_049:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 50.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_050:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x80, 0x28, 0x80, 0x28, 0x80, 0x28, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E1CB  |...(.(.(.(...}.T....d....B.x.....d...B.x...|
 
@@ -15201,6 +15437,10 @@ ToneDB_MixerDefaultTable_050:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 51.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_051:
 	.byte 0x7F, 0x7F, 0x7F, 0x28, 0x81, 0x28, 0x81, 0x28, 0x81, 0x28, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E1F6  |...(.(.(.(...}.T....d....B.x.....d...B.x...|
 
@@ -15297,6 +15537,12 @@ ToneDB_MixerDefaultTable_059_SameAs_Celesta_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 60 at 1 program column, and across the 8
+; melodic rows that column carries 5 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_060:
 	.byte 0x7F, 0x7F, 0x7F, 0x0E, 0x01, 0x0E, 0x01, 0x0E, 0x01, 0x0E, 0x01, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E379  |.............}.T.(..d<...Z0l...<.d...Z0l...|
 
@@ -15353,6 +15599,12 @@ ToneDB_MixerDefaultTable_064_SameAs_ClassicalStrings_Or_SlowStrings_Or_Symphonic
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 65 at 1 program column, and across the 8
+; melodic rows that column carries 4 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_065:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x02, 0x64, 0x02, 0x64, 0x02, 0x64, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E450  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
 
@@ -15387,6 +15639,12 @@ ToneDB_MixerDefaultTable_067:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 68 at 1 program column, and across the 8
+; melodic rows that column carries 4 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_068:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x05, 0x64, 0x05, 0x64, 0x05, 0x64, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E4D1  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
 
@@ -15583,6 +15841,10 @@ ToneDB_MixerDefaultTable_084_SameAs_PlasticBass_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 85.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_085:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E7AC  |.............}.T....d....B.x.....d...B.x...|
 
@@ -15591,6 +15853,10 @@ ToneDB_MixerDefaultTable_085:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 86.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_086:
 	.byte 0x7F, 0x7F, 0x7F, 0x02, 0x80, 0x02, 0x80, 0x02, 0x80, 0x02, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E7D7  |.............}.T....d....B.x.....d...B.x...|
 
@@ -15599,6 +15865,10 @@ ToneDB_MixerDefaultTable_086:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 87.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_087:
 	.byte 0x7F, 0x7F, 0x7F, 0x1F, 0x80, 0x1F, 0x80, 0x1F, 0x80, 0x1F, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xD8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00, 0x00, 0xD8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x04, 0x00, 0x00	; 1E802  |.............}.T....d....B$T.....d...B$T...|
 
@@ -15618,6 +15888,10 @@ ToneDB_MixerDefaultTable_088_SameAs_Clavi_WaveSel1:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 89.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_089:
 	.byte 0x7F, 0x7F, 0x7F, 0x19, 0x80, 0x19, 0x80, 0x19, 0x80, 0x19, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xBE, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00, 0x00, 0xBE, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00	; 1E858  |.............}.T....d....*.H.....d...*.H...|
 
@@ -15626,6 +15900,10 @@ ToneDB_MixerDefaultTable_089:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 90.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_090:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x80, 0x17, 0x80, 0x17, 0x80, 0x17, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E883  |.............}.T....d....B.x.....d...B.x...|
 
@@ -15634,6 +15912,10 @@ ToneDB_MixerDefaultTable_090:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 91.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_091:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x81, 0x17, 0x81, 0x17, 0x81, 0x17, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E8AE  |.............}.T....d....B.x.....d...B.x...|
 
@@ -15642,6 +15924,10 @@ ToneDB_MixerDefaultTable_091:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 92.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_092:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x80, 0x16, 0x80, 0x16, 0x80, 0x16, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E8D9  |.............}.T....d....B.x.....d...B.x...|
 
@@ -15650,6 +15936,10 @@ ToneDB_MixerDefaultTable_092:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 93.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_093:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x81, 0x16, 0x81, 0x16, 0x81, 0x16, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E904  |.............}.T....d....B.x.....d...B.x...|
 
@@ -15658,6 +15948,10 @@ ToneDB_MixerDefaultTable_093:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 94.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_094:
 	.byte 0x7F, 0x7F, 0x7F, 0x16, 0x82, 0x16, 0x82, 0x16, 0x82, 0x16, 0x82, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1E92F  |.............}.T....d....B.x.....d...B.x...|
 
@@ -15743,6 +16037,10 @@ ToneDB_MixerDefaultTable_101_SameAs_Applause:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 102.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_102:
 	.byte 0x7F, 0x7F, 0x7F, 0x20, 0x80, 0x20, 0x80, 0x20, 0x80, 0x20, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EA87  |... . . . ...}.T....d....B.x.....d...B.x...|
 
@@ -15751,6 +16049,10 @@ ToneDB_MixerDefaultTable_102:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 103.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_103:
 	.byte 0x7F, 0x7F, 0x7F, 0x23, 0x80, 0x23, 0x80, 0x23, 0x80, 0x23, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EAB2  |...#.#.#.#...}.T....d....B.x.....d...B.x...|
 
@@ -15759,6 +16061,10 @@ ToneDB_MixerDefaultTable_103:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 104.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_104:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x82, 0x22, 0x82, 0x22, 0x82, 0x22, 0x82, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EADD  |..."."."."...}.T....d....B.x.....d...B.x...|
 
@@ -15767,6 +16073,10 @@ ToneDB_MixerDefaultTable_104:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 105.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_105:
 	.byte 0x7F, 0x7F, 0x7F, 0x22, 0x81, 0x22, 0x81, 0x22, 0x81, 0x22, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EB08  |..."."."."...}.T....d....B.x.....d...B.x...|
 
@@ -15775,6 +16085,10 @@ ToneDB_MixerDefaultTable_105:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 106.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_106:
 	.byte 0x7F, 0x7F, 0x7F, 0x20, 0x81, 0x20, 0x81, 0x20, 0x81, 0x20, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EB33  |... . . . ...}.T....d....B.x.....d...B.x...|
 
@@ -15783,7 +16097,29 @@ ToneDB_MixerDefaultTable_106:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_107:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 107 at program column 94
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 1 tone
+; name: SineLead.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 94; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_107_SelectedFor_SineLead:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x04, 0x5E, 0x04, 0x5E, 0x04, 0x5E, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EB5E  |...^.^.^.^...}.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_108 -- file 0x1EB89..0x1EBB3
@@ -15938,7 +16274,29 @@ ToneDB_MixerDefaultTable_120_SameAs_StarTheme_WaveSel2:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_121:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 121 at program column 120
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: BowedGlass, StarTheme.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 120; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_121_SelectedFor_BowedGlass_Or_StarTheme:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x03, 0x78, 0x03, 0x78, 0x03, 0x78, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EDB8  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_122 -- file 0x1EDE3..0x1EE0D
@@ -15946,7 +16304,29 @@ ToneDB_MixerDefaultTable_121:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_122:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 122 at program column 120
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: BowedGlass, StarTheme.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 120; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_122_SelectedFor_BowedGlass_Or_StarTheme:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x04, 0x78, 0x04, 0x78, 0x04, 0x78, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EDE3  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_123 -- file 0x1EE0E..0x1EE38
@@ -15954,7 +16334,29 @@ ToneDB_MixerDefaultTable_122:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_123:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 123 at program column 120
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: BowedGlass, StarTheme.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 120; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_123_SelectedFor_BowedGlass_Or_StarTheme:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x05, 0x78, 0x05, 0x78, 0x05, 0x78, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE0E  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_124 -- file 0x1EE39..0x1EE63
@@ -15962,7 +16364,29 @@ ToneDB_MixerDefaultTable_123:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_124:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 124 at program column 120
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: BowedGlass, StarTheme.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 120; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_124_SelectedFor_BowedGlass_Or_StarTheme:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x06, 0x78, 0x06, 0x78, 0x06, 0x78, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE39  |...x.x.x.x...}.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_125 -- file 0x1EE64..0x1EE8E
@@ -15970,6 +16394,12 @@ ToneDB_MixerDefaultTable_124:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 125 at 1 program column, and across the 8
+; melodic rows that column carries 5 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_125:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x00, 0x7B, 0x00, 0x7B, 0x00, 0x7B, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE64  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
 
@@ -15978,6 +16408,12 @@ ToneDB_MixerDefaultTable_125:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 126 at 1 program column, and across the 8
+; melodic rows that column carries 5 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_126:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x01, 0x7B, 0x01, 0x7B, 0x01, 0x7B, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE8F  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
 
@@ -15986,6 +16422,12 @@ ToneDB_MixerDefaultTable_126:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 127 at 1 program column, and across the 8
+; melodic rows that column carries 5 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_127:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x02, 0x7B, 0x02, 0x7B, 0x02, 0x7B, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EEBA  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
 
@@ -16007,6 +16449,12 @@ ToneDB_MixerDefaultTable_128:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 129 at 1 program column, and across the 8
+; melodic rows that column carries 4 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_129:
 	.byte 0x7F, 0x7F, 0x7F, 0x76, 0x04, 0x76, 0x04, 0x76, 0x04, 0x76, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC6, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EF10  |...v.v.v.v...}.T....d0...B$`...0.d...B$`...|
 
@@ -16026,6 +16474,10 @@ ToneDB_MixerDefaultTable_130_SameAs_FusionEBass_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 131.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_131:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x80, 0x2A, 0x80, 0x2A, 0x80, 0x2A, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EF66  |...*.*.*.*...}.T....d....B.x.....d...B.x...|
 
@@ -16034,6 +16486,10 @@ ToneDB_MixerDefaultTable_131:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 132.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_132:
 	.byte 0x7F, 0x7F, 0x7F, 0x2E, 0x80, 0x2E, 0x80, 0x2E, 0x80, 0x2E, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EF91  |.............}.T....d....B.x.....d...B.x...|
 
@@ -16042,6 +16498,10 @@ ToneDB_MixerDefaultTable_132:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 4 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 133.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_133:
 	.byte 0x7F, 0x7F, 0x7F, 0x2C, 0x80, 0x2C, 0x80, 0x2C, 0x80, 0x2C, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EFBC  |...,.,.,.,...}.T....d....B.x.....d...B.x...|
 
@@ -16050,6 +16510,10 @@ ToneDB_MixerDefaultTable_133:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 134.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_134:
 	.byte 0x7F, 0x7F, 0x7F, 0x2D, 0x80, 0x2D, 0x80, 0x2D, 0x80, 0x2D, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EFE7  |...-.-.-.-...}.T....d....B.x.....d...B.x...|
 
@@ -16058,6 +16522,10 @@ ToneDB_MixerDefaultTable_134:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 135.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_135:
 	.byte 0x7F, 0x7F, 0x7F, 0x2C, 0x81, 0x2C, 0x81, 0x2C, 0x81, 0x2C, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F012  |...,.,.,.,...}.T....d....B.x.....d...B.x...|
 
@@ -16066,6 +16534,10 @@ ToneDB_MixerDefaultTable_135:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 136.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_136:
 	.byte 0x7F, 0x7F, 0x7F, 0x33, 0x80, 0x33, 0x80, 0x33, 0x80, 0x33, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F03D  |...3.3.3.3...}.T....d....B.x.....d...B.x...|
 
@@ -16074,6 +16546,10 @@ ToneDB_MixerDefaultTable_136:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 137.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_137:
 	.byte 0x7F, 0x7F, 0x7F, 0x34, 0x80, 0x34, 0x80, 0x34, 0x80, 0x34, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F068  |...4.4.4.4...}.T....d....B.x.....d...B.x...|
 
@@ -16082,6 +16558,10 @@ ToneDB_MixerDefaultTable_137:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 138.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_138:
 	.byte 0x7F, 0x7F, 0x7F, 0x35, 0x80, 0x35, 0x80, 0x35, 0x80, 0x35, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F093  |...5.5.5.5...}.T....d....B.x.....d...B.x...|
 
@@ -16090,6 +16570,10 @@ ToneDB_MixerDefaultTable_138:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 139.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_139:
 	.byte 0x7F, 0x7F, 0x7F, 0x30, 0x80, 0x30, 0x80, 0x30, 0x80, 0x30, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F0BE  |...0.0.0.0...}.T....d....B.x.....d...B.x...|
 
@@ -16098,6 +16582,10 @@ ToneDB_MixerDefaultTable_139:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 140.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_140:
 	.byte 0x7F, 0x7F, 0x7F, 0x2F, 0x80, 0x2F, 0x80, 0x2F, 0x80, 0x2F, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F0E9  |..././././...}.T....d....B.x.....d...B.x...|
 
@@ -16106,6 +16594,10 @@ ToneDB_MixerDefaultTable_140:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 141.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_141:
 	.byte 0x7F, 0x7F, 0x7F, 0x37, 0x80, 0x37, 0x80, 0x37, 0x80, 0x37, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F114  |...7.7.7.7...}.T....d....B.x.....d...B.x...|
 
@@ -16114,6 +16606,10 @@ ToneDB_MixerDefaultTable_141:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 142.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_142:
 	.byte 0x7F, 0x7F, 0x7F, 0x36, 0x81, 0x36, 0x81, 0x36, 0x81, 0x36, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F13F  |...6.6.6.6...}.T....d....B.x.....d...B.x...|
 
@@ -16122,6 +16618,10 @@ ToneDB_MixerDefaultTable_142:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 143.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_143:
 	.byte 0x7F, 0x7F, 0x7F, 0x39, 0x80, 0x39, 0x80, 0x39, 0x80, 0x39, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F16A  |...9.9.9.9...}.T....d....B.x.....d...B.x...|
 
@@ -16130,6 +16630,10 @@ ToneDB_MixerDefaultTable_143:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 144.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_144:
 	.byte 0x7F, 0x7F, 0x7F, 0x38, 0x81, 0x38, 0x81, 0x38, 0x81, 0x38, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F195  |...8.8.8.8...}.T....d....B.x.....d...B.x...|
 
@@ -16138,6 +16642,10 @@ ToneDB_MixerDefaultTable_144:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 145.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_145:
 	.byte 0x7F, 0x7F, 0x7F, 0x3C, 0x80, 0x3C, 0x80, 0x3C, 0x80, 0x3C, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F1C0  |...<.<.<.<...}.T....d....B.x.....d...B.x...|
 
@@ -16146,6 +16654,10 @@ ToneDB_MixerDefaultTable_145:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 146.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_146:
 	.byte 0x7F, 0x7F, 0x7F, 0x3D, 0x80, 0x3D, 0x80, 0x3D, 0x80, 0x3D, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F1EB  |...=.=.=.=...}.T....d....B.x.....d...B.x...|
 
@@ -16154,6 +16666,10 @@ ToneDB_MixerDefaultTable_146:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 147.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_147:
 	.byte 0x7F, 0x7F, 0x7F, 0x3E, 0x80, 0x3E, 0x80, 0x3E, 0x80, 0x3E, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F216  |...>.>.>.>...}.T....d....B.x.....d...B.x...|
 
@@ -16173,6 +16689,10 @@ ToneDB_MixerDefaultTable_148_SameAs_ReverseCymbal_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 149.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_149:
 	.byte 0x7F, 0x7F, 0x7F, 0x3F, 0x81, 0x3F, 0x81, 0x3F, 0x81, 0x3F, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F26C  |...?.?.?.?...}.T....d....B.x.....d...B.x...|
 
@@ -16181,6 +16701,10 @@ ToneDB_MixerDefaultTable_149:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 150.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_150:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x80, 0x3A, 0x80, 0x3A, 0x80, 0x3A, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F297  |...:.:.:.:...}.T....d....B.x.....d...B.x...|
 
@@ -16189,6 +16713,10 @@ ToneDB_MixerDefaultTable_150:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 151.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_151:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x81, 0x3A, 0x81, 0x3A, 0x81, 0x3A, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F2C2  |...:.:.:.:...}.T....d....B.x.....d...B.x...|
 
@@ -16197,6 +16725,10 @@ ToneDB_MixerDefaultTable_151:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 152.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_152:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x84, 0x3A, 0x84, 0x3A, 0x84, 0x3A, 0x84, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F2ED  |...:.:.:.:...}.T....d....B.x.....d...B.x...|
 
@@ -16205,6 +16737,10 @@ ToneDB_MixerDefaultTable_152:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 153.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_153:
 	.byte 0x7F, 0x7F, 0x7F, 0x3A, 0x85, 0x3A, 0x85, 0x3A, 0x85, 0x3A, 0x85, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F318  |...:.:.:.:...}.T....d....B.x.....d...B.x...|
 
@@ -16213,6 +16749,10 @@ ToneDB_MixerDefaultTable_153:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 154.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_154:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x80, 0x59, 0x80, 0x59, 0x80, 0x59, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F343  |...Y.Y.Y.Y...}.T....d....B.x.....d...B.x...|
 
@@ -16221,6 +16761,10 @@ ToneDB_MixerDefaultTable_154:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 155.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_155:
 	.byte 0x7F, 0x7F, 0x7F, 0x53, 0x80, 0x53, 0x80, 0x53, 0x80, 0x53, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F36E  |...S.S.S.S...}.T....d....B.x.....d...B.x...|
 
@@ -16229,6 +16773,10 @@ ToneDB_MixerDefaultTable_155:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 156.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_156:
 	.byte 0x7F, 0x7F, 0x7F, 0x5A, 0x80, 0x5A, 0x80, 0x5A, 0x80, 0x5A, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F399  |...Z.Z.Z.Z...}.T....d....B.x.....d...B.x...|
 
@@ -16237,6 +16785,10 @@ ToneDB_MixerDefaultTable_156:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 157.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_157:
 	.byte 0x7F, 0x7F, 0x7F, 0x5F, 0x80, 0x5F, 0x80, 0x5F, 0x80, 0x5F, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F3C4  |..._._._._...}.T....d....B.x.....d...B.x...|
 
@@ -16245,6 +16797,10 @@ ToneDB_MixerDefaultTable_157:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 158.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_158:
 	.byte 0x7F, 0x7F, 0x7F, 0x5F, 0x81, 0x5F, 0x81, 0x5F, 0x81, 0x5F, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F3EF  |..._._._._...}.T....d....B.x.....d...B.x...|
 
@@ -16253,6 +16809,10 @@ ToneDB_MixerDefaultTable_158:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 159.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_159:
 	.byte 0x7F, 0x7F, 0x7F, 0x43, 0x80, 0x43, 0x80, 0x43, 0x80, 0x43, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F41A  |...C.C.C.C...}.T....d....B.x.....d...B.x...|
 
@@ -16261,6 +16821,10 @@ ToneDB_MixerDefaultTable_159:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 160.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_160:
 	.byte 0x7F, 0x7F, 0x7F, 0x40, 0x80, 0x40, 0x80, 0x40, 0x80, 0x40, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F445  |...@.@.@.@...}.T....d....B.x.....d...B.x...|
 
@@ -16269,6 +16833,10 @@ ToneDB_MixerDefaultTable_160:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 161.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_161:
 	.byte 0x7F, 0x7F, 0x7F, 0x41, 0x80, 0x41, 0x80, 0x41, 0x80, 0x41, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F470  |...A.A.A.A...}.T....d....B.x.....d...B.x...|
 
@@ -16277,6 +16845,10 @@ ToneDB_MixerDefaultTable_161:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 162.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_162:
 	.byte 0x7F, 0x7F, 0x7F, 0x56, 0x80, 0x56, 0x80, 0x56, 0x80, 0x56, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F49B  |...V.V.V.V...}.T....d....B.x.....d...B.x...|
 
@@ -16285,6 +16857,10 @@ ToneDB_MixerDefaultTable_162:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 163.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_163:
 	.byte 0x7F, 0x7F, 0x7F, 0x56, 0x81, 0x56, 0x81, 0x56, 0x81, 0x56, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F4C6  |...V.V.V.V...}.T....d....B.x.....d...B.x...|
 
@@ -16293,6 +16869,10 @@ ToneDB_MixerDefaultTable_163:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 164.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_164:
 	.byte 0x7F, 0x7F, 0x7F, 0x55, 0x80, 0x55, 0x80, 0x55, 0x80, 0x55, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F4F1  |...U.U.U.U...}.T....d....B.x.....d...B.x...|
 
@@ -16301,6 +16881,10 @@ ToneDB_MixerDefaultTable_164:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 165.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_165:
 	.byte 0x7F, 0x7F, 0x7F, 0x54, 0x80, 0x54, 0x80, 0x54, 0x80, 0x54, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F51C  |...T.T.T.T...}.T....d....B.x.....d...B.x...|
 
@@ -16309,6 +16893,10 @@ ToneDB_MixerDefaultTable_165:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 166.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_166:
 	.byte 0x7F, 0x7F, 0x7F, 0x4F, 0x80, 0x4F, 0x80, 0x4F, 0x80, 0x4F, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F547  |...O.O.O.O...}.T....d....B.x.....d...B.x...|
 
@@ -16317,6 +16905,10 @@ ToneDB_MixerDefaultTable_166:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 167.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_167:
 	.byte 0x7F, 0x7F, 0x7F, 0x21, 0x81, 0x21, 0x81, 0x21, 0x81, 0x21, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F572  |...!.!.!.!...}.T....d....B.x.....d...B.x...|
 
@@ -16325,6 +16917,10 @@ ToneDB_MixerDefaultTable_167:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 168.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_168:
 	.byte 0x7F, 0x7F, 0x7F, 0x26, 0x81, 0x26, 0x81, 0x26, 0x81, 0x26, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F59D  |...&.&.&.&...}.T....d....B.x.....d...B.x...|
 
@@ -16333,6 +16929,10 @@ ToneDB_MixerDefaultTable_168:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 169.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_169:
 	.byte 0x7F, 0x7F, 0x7F, 0x3B, 0x80, 0x3B, 0x80, 0x3B, 0x80, 0x3B, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F5C8  |...;.;.;.;...}.T....d....B.x.....d...B.x...|
 
@@ -16341,6 +16941,10 @@ ToneDB_MixerDefaultTable_169:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 170.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_170:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x81, 0x5B, 0x81, 0x5B, 0x81, 0x5B, 0x81, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F5F3  |...[.[.[.[...}.T....d....B.x.....d...B.x...|
 
@@ -16349,6 +16953,10 @@ ToneDB_MixerDefaultTable_170:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 171.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_171:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x80, 0x52, 0x80, 0x52, 0x80, 0x52, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F61E  |...R.R.R.R...}.T....d....B.x.....d...B.x...|
 
@@ -16357,6 +16965,10 @@ ToneDB_MixerDefaultTable_171:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 172.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_172:
 	.byte 0x7F, 0x7F, 0x7F, 0x51, 0x80, 0x51, 0x80, 0x51, 0x80, 0x51, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F649  |...Q.Q.Q.Q...}.T....d....B.x.....d...B.x...|
 
@@ -16365,6 +16977,10 @@ ToneDB_MixerDefaultTable_172:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 173.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_173:
 	.byte 0x7F, 0x7F, 0x7F, 0x50, 0x80, 0x50, 0x80, 0x50, 0x80, 0x50, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F674  |...P.P.P.P...}.T....d....B.x.....d...B.x...|
 
@@ -16373,6 +16989,10 @@ ToneDB_MixerDefaultTable_173:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 174.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_174:
 	.byte 0x7F, 0x7F, 0x7F, 0x5E, 0x80, 0x5E, 0x80, 0x5E, 0x80, 0x5E, 0x80, 0x03, 0x03, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F69F  |...^.^.^.^...}.T....d....B.x.....d...B.x...|
 
@@ -16381,6 +17001,10 @@ ToneDB_MixerDefaultTable_174:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 175.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_175:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x80, 0x4E, 0x80, 0x4E, 0x80, 0x4E, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F6CA  |...N.N.N.N...}.T....d....B.x.....d...B.x...|
 
@@ -16389,6 +17013,10 @@ ToneDB_MixerDefaultTable_175:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 176.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_176:
 	.byte 0x7F, 0x7F, 0x7F, 0x45, 0x80, 0x45, 0x80, 0x45, 0x80, 0x45, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F6F5  |...E.E.E.E...}.T....d....B.x.....d...B.x...|
 
@@ -16397,6 +17025,10 @@ ToneDB_MixerDefaultTable_176:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 177.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_177:
 	.byte 0x7F, 0x7F, 0x7F, 0x46, 0x80, 0x46, 0x80, 0x46, 0x80, 0x46, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F720  |...F.F.F.F...}.T....d....B.x.....d...B.x...|
 
@@ -16405,6 +17037,10 @@ ToneDB_MixerDefaultTable_177:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 178.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_178:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x80, 0x48, 0x80, 0x48, 0x80, 0x48, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F74B  |...H.H.H.H...}.T....d....B.x.....d...B.x...|
 
@@ -16413,6 +17049,10 @@ ToneDB_MixerDefaultTable_178:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 179.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_179:
 	.byte 0x7F, 0x7F, 0x7F, 0x49, 0x80, 0x49, 0x80, 0x49, 0x80, 0x49, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F776  |...I.I.I.I...}.T....d....B.x.....d...B.x...|
 
@@ -16421,6 +17061,10 @@ ToneDB_MixerDefaultTable_179:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 180.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_180:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x80, 0x5B, 0x80, 0x5B, 0x80, 0x5B, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F7A1  |...[.[.[.[...}.T....d....B.x.....d...B.x...|
 
@@ -16429,6 +17073,10 @@ ToneDB_MixerDefaultTable_180:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 181.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_181:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x82, 0x5B, 0x82, 0x5B, 0x82, 0x5B, 0x82, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F7CC  |...[.[.[.[...}.T....d....B.x.....d...B.x...|
 
@@ -16437,6 +17085,10 @@ ToneDB_MixerDefaultTable_181:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 182.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_182:
 	.byte 0x7F, 0x7F, 0x7F, 0x58, 0x80, 0x58, 0x80, 0x58, 0x80, 0x58, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F7F7  |...X.X.X.X...}.T....d....B.x.....d...B.x...|
 
@@ -16445,6 +17097,10 @@ ToneDB_MixerDefaultTable_182:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 183.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_183:
 	.byte 0x7F, 0x7F, 0x7F, 0x57, 0x80, 0x57, 0x80, 0x57, 0x80, 0x57, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F822  |...W.W.W.W...}.T....d....B.x.....d...B.x...|
 
@@ -16453,6 +17109,10 @@ ToneDB_MixerDefaultTable_183:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 184.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_184:
 	.byte 0x7F, 0x7F, 0x7F, 0x5D, 0x80, 0x5D, 0x80, 0x5D, 0x80, 0x5D, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F84D  |...].].].]...}.T....d....B.x.....d...B.x...|
 
@@ -16461,6 +17121,10 @@ ToneDB_MixerDefaultTable_184:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 185.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_185:
 	.byte 0x7F, 0x7F, 0x7F, 0x4B, 0x80, 0x4B, 0x80, 0x4B, 0x80, 0x4B, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F878  |...K.K.K.K...}.T....d....B.x.....d...B.x...|
 
@@ -16469,6 +17133,10 @@ ToneDB_MixerDefaultTable_185:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 186.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_186:
 	.byte 0x7F, 0x7F, 0x7F, 0x4D, 0x80, 0x4D, 0x80, 0x4D, 0x80, 0x4D, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F8A3  |...M.M.M.M...}.T....d....B.x.....d...B.x...|
 
@@ -16477,6 +17145,10 @@ ToneDB_MixerDefaultTable_186:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 187.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_187:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x80, 0x4C, 0x80, 0x4C, 0x80, 0x4C, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F8CE  |...L.L.L.L...}.T....d....B.x.....d...B.x...|
 
@@ -16485,6 +17157,10 @@ ToneDB_MixerDefaultTable_187:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 188.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_188:
 	.byte 0x7F, 0x7F, 0x7F, 0x5C, 0x80, 0x5C, 0x80, 0x5C, 0x80, 0x5C, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F8F9  |...\.\.\.\...}.T....d....B.x.....d...B.x...|
 
@@ -16493,6 +17169,10 @@ ToneDB_MixerDefaultTable_188:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 189.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_189:
 	.byte 0x7F, 0x7F, 0x7F, 0x5C, 0x82, 0x5C, 0x82, 0x5C, 0x82, 0x5C, 0x82, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F924  |...\.\.\.\...}.T....d....B.x.....d...B.x...|
 
@@ -16501,6 +17181,10 @@ ToneDB_MixerDefaultTable_189:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 190.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_190:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x80, 0x44, 0x80, 0x44, 0x80, 0x44, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F94F  |...D.D.D.D...}.T....d....B.x.....d...B.x...|
 
@@ -16509,6 +17193,10 @@ ToneDB_MixerDefaultTable_190:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 191.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_191:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x81, 0x44, 0x81, 0x44, 0x81, 0x44, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F97A  |...D.D.D.D...}.T....d....B.x.....d...B.x...|
 
@@ -16517,6 +17205,10 @@ ToneDB_MixerDefaultTable_191:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 6 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 192.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_192:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x80, 0x47, 0x80, 0x47, 0x80, 0x47, 0x80, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F9A5  |...G.G.G.G...}.T....d....B.x.....d...B.x...|
 
@@ -16525,6 +17217,10 @@ ToneDB_MixerDefaultTable_192:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 193.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_193:
 	.byte 0x7F, 0x7F, 0x7F, 0x47, 0x81, 0x47, 0x81, 0x47, 0x81, 0x47, 0x81, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F9D0  |...G.G.G.G...}.T....d....B.x.....d...B.x...|
 
@@ -16533,6 +17229,10 @@ ToneDB_MixerDefaultTable_193:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 194.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_194:
 	.byte 0x7F, 0x7F, 0x7F, 0x48, 0x84, 0x48, 0x84, 0x48, 0x84, 0x48, 0x84, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1F9FB  |...H.H.H.H...}.T....d....B.x.....d...B.x...|
 
@@ -16541,6 +17241,10 @@ ToneDB_MixerDefaultTable_194:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 195.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_195:
 	.byte 0x7F, 0x7F, 0x7F, 0x50, 0x84, 0x50, 0x84, 0x50, 0x84, 0x50, 0x84, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FA26  |...P.P.P.P...}.T....d....B.x.....d...B.x...|
 
@@ -16549,6 +17253,10 @@ ToneDB_MixerDefaultTable_195:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 196.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_196:
 	.byte 0x7F, 0x7F, 0x7F, 0x52, 0x84, 0x52, 0x84, 0x52, 0x84, 0x52, 0x84, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FA51  |...R.R.R.R...}.T....d....B.x.....d...B.x...|
 
@@ -16557,6 +17265,10 @@ ToneDB_MixerDefaultTable_196:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 197.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_197:
 	.byte 0x7F, 0x7F, 0x7F, 0x21, 0x84, 0x21, 0x84, 0x21, 0x84, 0x21, 0x84, 0x07, 0x07, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FA7C  |...!.!.!.!...}.T....d....B.x.....d...B.x...|
 
@@ -16565,6 +17277,10 @@ ToneDB_MixerDefaultTable_197:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 198.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_198:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x84, 0x17, 0x84, 0x17, 0x84, 0x17, 0x84, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FAA7  |.............}.T....d....B.x.....d...B.x...|
 
@@ -16573,6 +17289,10 @@ ToneDB_MixerDefaultTable_198:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 199.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_199:
 	.byte 0x7F, 0x7F, 0x7F, 0x17, 0x85, 0x17, 0x85, 0x17, 0x85, 0x17, 0x85, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FAD2  |.............}.T....d....B.x.....d...B.x...|
 
@@ -16581,6 +17301,10 @@ ToneDB_MixerDefaultTable_199:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 200.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_200:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x80, 0x0A, 0x80, 0x0A, 0x80, 0x0A, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FAFD  |.............}.T....d....B.x.....d...B.x...|
 
@@ -16589,6 +17313,10 @@ ToneDB_MixerDefaultTable_200:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 201.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_201:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x84, 0x0A, 0x84, 0x0A, 0x84, 0x0A, 0x84, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FB28  |.............}.T....d....B.x.....d...B.x...|
 
@@ -16597,6 +17325,10 @@ ToneDB_MixerDefaultTable_201:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 202.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_202:
 	.byte 0x7F, 0x7F, 0x7F, 0x0A, 0x85, 0x0A, 0x85, 0x0A, 0x85, 0x0A, 0x85, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1FB53  |.............}.T....d....B.x.....d...B.x...|
 
@@ -16605,6 +17337,10 @@ ToneDB_MixerDefaultTable_202:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 203.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_203:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x84, 0x59, 0x84, 0x59, 0x84, 0x59, 0x84, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xDA, 0x00, 0x00, 0x5A, 0x24, 0x78, 0x03, 0x00, 0x00, 0x30, 0xDA, 0x64, 0x00, 0x00, 0x00, 0x5A, 0x24, 0x78, 0x03, 0x00, 0x00	; 1FB7E  |...Y.Y.Y.Y...}.T....d0...Z$x...0.d...Z$x...|
 
@@ -16613,6 +17349,10 @@ ToneDB_MixerDefaultTable_203:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 204.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_204:
 	.byte 0x7F, 0x7F, 0x7F, 0x59, 0x85, 0x59, 0x85, 0x59, 0x85, 0x59, 0x85, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xDA, 0x00, 0x00, 0x5A, 0x24, 0x78, 0x03, 0x00, 0x00, 0x30, 0xDA, 0x64, 0x00, 0x00, 0x00, 0x5A, 0x24, 0x78, 0x03, 0x00, 0x00	; 1FBA9  |...Y.Y.Y.Y...}.T....d0...Z$x...0.d...Z$x...|
 
@@ -16621,6 +17361,10 @@ ToneDB_MixerDefaultTable_204:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 205.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_205:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x80, 0x32, 0x80, 0x32, 0x80, 0x32, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x08, 0x00, 0x00	; 1FBD4  |...2.2.2.2...}.T....d0...*.T...0.d...*.T...|
 
@@ -16629,6 +17373,10 @@ ToneDB_MixerDefaultTable_205:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 12 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 206.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_206:
 	.byte 0x7F, 0x7F, 0x7F, 0x32, 0x81, 0x32, 0x81, 0x32, 0x81, 0x32, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x54, 0x08, 0x00, 0x00	; 1FBFF  |...2.2.2.2...}.T....d0...*.T...0.d...*.T...|
 
@@ -16648,7 +17396,29 @@ ToneDB_MixerDefaultTable_207_SameAs_ElectricGrand_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 12 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_208:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 208 at program column 5
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: EPiano1, EPiano2.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 5; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_208_SelectedFor_EPiano1_Or_EPiano2:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x02, 0x05, 0x02, 0x05, 0x02, 0x05, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00	; 1FC55  |.............}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_209 -- file 0x1FC80..0x1FCAA
@@ -16656,7 +17426,29 @@ ToneDB_MixerDefaultTable_208:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_209:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 209 at program column 5
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: EPiano1, EPiano2.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 5; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_209_SelectedFor_EPiano1_Or_EPiano2:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x04, 0x05, 0x04, 0x05, 0x04, 0x05, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00	; 1FC80  |.............}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_210 -- file 0x1FCAB..0x1FCD5
@@ -16675,7 +17467,29 @@ ToneDB_MixerDefaultTable_210_SameAs_EPiano1_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_211:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 211 at program column 5
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: EPiano1, EPiano2.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 5; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_211_SelectedFor_EPiano1_Or_EPiano2:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x06, 0x05, 0x06, 0x05, 0x06, 0x05, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00, 0x30, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x0C, 0x00, 0x00	; 1FCD6  |.............}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_212 -- file 0x1FD01..0x1FD2B
@@ -16694,7 +17508,29 @@ ToneDB_MixerDefaultTable_212_SameAs_SuitcaseEP_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 11 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_213:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 213 at program column 4
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 3 tone
+; names: ModernEP2, SuitcaseEP, TremoloEPiano.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 4; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_213_SelectedFor_ModernEP2_Or_SuitcaseEP_Or_TremoloEPiano:
 	.byte 0x7F, 0x7F, 0x7F, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC6, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00, 0x30, 0xC6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0D, 0x00, 0x00	; 1FD2C  |.............}.T....d0...B$T...0.d...B$T...|
 
 ; ToneDB_MixerDefaultTable_214 -- file 0x1FD57..0x1FD81
@@ -16702,7 +17538,29 @@ ToneDB_MixerDefaultTable_213:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_214:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 214 at program column 6
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: ModernEP1, ModernEP3.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 6; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_214_SelectedFor_ModernEP1_Or_ModernEP3:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x04, 0x06, 0x04, 0x06, 0x04, 0x06, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCB, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x30, 0xCB, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FD57  |.............}.T....d0...B$V...0.d...B$V...|
 
 ; ToneDB_MixerDefaultTable_215 -- file 0x1FD82..0x1FDAC
@@ -16710,7 +17568,29 @@ ToneDB_MixerDefaultTable_214:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_215:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 215 at program column 6
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: ModernEP1, ModernEP3.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 6; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_215_SelectedFor_ModernEP1_Or_ModernEP3:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x05, 0x06, 0x05, 0x06, 0x05, 0x06, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCB, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x30, 0xCB, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FD82  |.............}.T....d0...B$V...0.d...B$V...|
 
 ; ToneDB_MixerDefaultTable_216 -- file 0x1FDAD..0x1FDD7
@@ -16729,7 +17609,29 @@ ToneDB_MixerDefaultTable_216_SameAs_ModernEP1_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_217:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 217 at program column 6
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: ModernEP1, ModernEP3.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 6; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_217_SelectedFor_ModernEP1_Or_ModernEP3:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCB, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x30, 0xCB, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FDD8  |.............}.T....d0...B$V...0.d...B$V...|
 
 ; ToneDB_MixerDefaultTable_218 -- file 0x1FE03..0x1FE2D
@@ -16737,7 +17639,29 @@ ToneDB_MixerDefaultTable_217:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 8 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_218:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 218 at program column 6
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: ModernEP1, ModernEP3.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 6; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_218_SelectedFor_ModernEP1_Or_ModernEP3:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x07, 0x06, 0x07, 0x06, 0x07, 0x06, 0x07, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCB, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00, 0x30, 0xCB, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x56, 0x17, 0x00, 0x00	; 1FE03  |.............}.T....d0...B$V...0.d...B$V...|
 
 ; ToneDB_MixerDefaultTable_219 -- file 0x1FE2E..0x1FE58
@@ -16789,7 +17713,29 @@ ToneDB_MixerDefaultTable_222_SameAs_SpanishGuitar_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_223:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 223 at program column 20
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: ClassicalGuitar, SpanishGuitar.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 20; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_223_SelectedFor_ClassicalGuitar_Or_SpanishGuitar:
 	.byte 0x7F, 0x7F, 0x7F, 0x14, 0x02, 0x14, 0x02, 0x14, 0x02, 0x14, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x14, 0x00, 0x00	; 1FEDA  |.............}.T....d0...B$T...0.d...B$T...|
 
 ; ToneDB_MixerDefaultTable_224 -- file 0x1FF05..0x1FF2F
@@ -16819,6 +17765,10 @@ ToneDB_MixerDefaultTable_225_SameAs_GuitarHarmonics_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 226.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_226:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x80, 0x12, 0x80, 0x12, 0x80, 0x12, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x00, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FF5B  |.............}.T....d....B$T.....d...B$T...|
 
@@ -16827,6 +17777,10 @@ ToneDB_MixerDefaultTable_226:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 227.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_227:
 	.byte 0x7F, 0x7F, 0x7F, 0x12, 0x81, 0x12, 0x81, 0x12, 0x81, 0x12, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x00, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FF86  |.............}.T....d....B$T.....d...B$T...|
 
@@ -16835,6 +17789,10 @@ ToneDB_MixerDefaultTable_227:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 228.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_228:
 	.byte 0x7F, 0x7F, 0x7F, 0x13, 0x80, 0x13, 0x80, 0x13, 0x80, 0x13, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x00, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FFB1  |.............}.T....d....B$T.....d...B$T...|
 
@@ -16843,6 +17801,10 @@ ToneDB_MixerDefaultTable_228:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 229.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_229:
 	.byte 0x7F, 0x7F, 0x7F, 0x13, 0x81, 0x13, 0x81, 0x13, 0x81, 0x13, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC8, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00, 0x00, 0xC8, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x0F, 0x00, 0x00	; 1FFDC  |.............}.T....d....B$T.....d...B$T...|
 
@@ -16917,6 +17879,10 @@ ToneDB_MixerDefaultTable_235_SameAs_FretNoise_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 236.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_236:
 	.byte 0x7F, 0x7F, 0x7F, 0x10, 0x81, 0x10, 0x81, 0x10, 0x81, 0x10, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xD3, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00, 0x00, 0xD3, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x15, 0x00, 0x00	; 20109  |.............}.T....d....B$T.....d...B$T...|
 
@@ -17102,6 +18068,10 @@ ToneDB_MixerDefaultTable_251_SameAs_AltoSax_Or_SopranoSax:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 252.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_252:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x81, 0x07, 0x81, 0x07, 0x81, 0x07, 0x81, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 203B9  |.............}.T....d....B$`.....d...B$`...|
 
@@ -17110,6 +18080,10 @@ ToneDB_MixerDefaultTable_252:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 253.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_253:
 	.byte 0x7F, 0x7F, 0x7F, 0x07, 0x82, 0x07, 0x82, 0x07, 0x82, 0x07, 0x82, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 203E4  |.............}.T....d....B.x.....d...B.x...|
 
@@ -17131,6 +18105,10 @@ ToneDB_MixerDefaultTable_254:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 255.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_255:
 	.byte 0x7F, 0x7F, 0x7F, 0x05, 0x84, 0x05, 0x84, 0x05, 0x84, 0x05, 0x84, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 2043A  |.............}.T....d....N0`.....d...N0`...|
 
@@ -17139,6 +18117,10 @@ ToneDB_MixerDefaultTable_255:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 256.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_256:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x80, 0x06, 0x80, 0x06, 0x80, 0x06, 0x80, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 20465  |.............}.T....d....N0`.....d...N0`...|
 
@@ -17147,6 +18129,10 @@ ToneDB_MixerDefaultTable_256:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 9 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 257.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_257:
 	.byte 0x7F, 0x7F, 0x7F, 0x06, 0x81, 0x06, 0x81, 0x06, 0x81, 0x06, 0x81, 0x02, 0x02, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC4, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00, 0x00, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x4E, 0x30, 0x60, 0x08, 0x00, 0x00	; 20490  |.............}.T....d....N0`.....d...N0`...|
 
@@ -17155,6 +18141,10 @@ ToneDB_MixerDefaultTable_257:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 258.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_258:
 	.byte 0x7F, 0x7F, 0x7F, 0x0C, 0x81, 0x0C, 0x81, 0x0C, 0x81, 0x0C, 0x81, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 204BB  |.............}.T....d....B.x.....d...B.x...|
 
@@ -17163,6 +18153,10 @@ ToneDB_MixerDefaultTable_258:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 259.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_259:
 	.byte 0x7F, 0x7F, 0x7F, 0x0C, 0x80, 0x0C, 0x80, 0x0C, 0x80, 0x0C, 0x80, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 204E6  |.............}.T....d....B.x.....d...B.x...|
 
@@ -17171,6 +18165,10 @@ ToneDB_MixerDefaultTable_259:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 260.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_260:
 	.byte 0x7F, 0x7F, 0x7F, 0x79, 0x80, 0x79, 0x80, 0x79, 0x80, 0x79, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20511  |...y.y.y.y...}.T....d....B.x.....d...B.x...|
 
@@ -17194,7 +18192,29 @@ ToneDB_MixerDefaultTable_261_SameAs_MidiGrand2_Or_VocalDoo_Or_VocalOoh:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 2 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_262:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 262 at program column 105
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 1 tone
+; name: Humming.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 105; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_262_SelectedFor_Humming:
 	.byte 0x7F, 0x7F, 0x7F, 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x54, 0x08, 0x00, 0x00	; 20567  |...i.i.i.i...}.T....d0...B$T...0.d...B$T...|
 
 ; ToneDB_MixerDefaultTable_263 -- file 0x20592..0x205BC
@@ -17400,7 +18420,29 @@ ToneDB_MixerDefaultTable_280_SameAs_SynthBrass2_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 10 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_281:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 281 at program column 61
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 3 tone
+; names: SleighSynth, Voxmosphere, WideWindow.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 61; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_281_SelectedFor_SleighSynth_Or_Voxmosphere_Or_WideWindow:
 	.byte 0x7F, 0x7F, 0x7F, 0x3D, 0x03, 0x3D, 0x03, 0x3D, 0x03, 0x3D, 0x03, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 20898  |...=.=.=.=...}.T....d0...B.`...0.d...B.`...|
 
 ; ToneDB_MixerDefaultTable_282 -- file 0x208C3..0x208ED
@@ -17430,7 +18472,29 @@ ToneDB_MixerDefaultTable_283_SameAs_MellowAltoSax_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_284:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 284 at program column 76
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 1 tone
+; name: SopranoSax.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 76; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_284_SelectedFor_SopranoSax:
 	.byte 0x7F, 0x7F, 0x7F, 0x4C, 0x00, 0x4C, 0x00, 0x4C, 0x00, 0x4C, 0x00, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20919  |...L.L.L.L...}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_285 -- file 0x20944..0x2096E
@@ -17460,7 +18524,29 @@ ToneDB_MixerDefaultTable_286_SameAs_TenorSax_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_287:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 287 at program column 78
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 3 tone
+; names: BreathyTenor, DistortionSax, TenorSax.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 78; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_287_SelectedFor_BreathyTenor_Or_DistortionSax_Or_TenorSax:
 	.byte 0x7F, 0x7F, 0x7F, 0x4E, 0x02, 0x4E, 0x02, 0x4E, 0x02, 0x4E, 0x02, 0x03, 0x03, 0x7D, 0x00, 0x54, 0xF6, 0x0A, 0x86, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 2099A  |...N.N.N.N...}.T....dF...B$`...F.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_288 -- file 0x209C5..0x209EF
@@ -17512,7 +18598,29 @@ ToneDB_MixerDefaultTable_291_SameAs_JazzClarinet1_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 7 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_292:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 292 at program column 68
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 2 tone
+; names: JazzClarinet1, JazzClarinet2.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 68; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_292_SelectedFor_JazzClarinet1_Or_JazzClarinet2:
 	.byte 0x7F, 0x7F, 0x7F, 0x44, 0x01, 0x44, 0x01, 0x44, 0x01, 0x44, 0x01, 0x02, 0x02, 0xFA, 0xA0, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20A71  |...D.D.D.D.....T....dF...B$`...F.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_293 -- file 0x20A9C..0x20AC6
@@ -17542,7 +18650,29 @@ ToneDB_MixerDefaultTable_294_SameAs_ClassicClarinet_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 5 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_295:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 295 at program column 69
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 1 tone
+; name: ClassicClarinet.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 69; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_295_SelectedFor_ClassicClarinet:
 	.byte 0x7F, 0x7F, 0x7F, 0x45, 0x01, 0x45, 0x01, 0x45, 0x01, 0x45, 0x01, 0x02, 0x02, 0xFA, 0xA0, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x46, 0xC4, 0xE2, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x46, 0xC4, 0x64, 0xE2, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 20AF2  |...E.E.E.E.....T....dF...B$`...F.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_296 -- file 0x20B1D..0x20B47
@@ -17664,7 +18794,29 @@ ToneDB_MixerDefaultTable_305_SameAs_SlapBass1_WaveSel1:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 11 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_306:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 306 at program column 42
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 3 tone
+; names: MetallicBass, PickedEBass, SoulBass.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 42; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_306_SelectedFor_MetallicBass_Or_PickedEBass_Or_SoulBass:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x06, 0x2A, 0x06, 0x2A, 0x06, 0x2A, 0x06, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xBE, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00, 0x30, 0xBE, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x10, 0x00, 0x00	; 20CCB  |...*.*.*.*...}.T....d0...*.H...0.d...*.H...|
 
 ; ToneDB_MixerDefaultTable_307 -- file 0x20CF6..0x20D20
@@ -17694,7 +18846,29 @@ ToneDB_MixerDefaultTable_308_SameAs_SlapBass2_WaveSel1:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_309:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 309 at program column 42
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 3 tone
+; names: MetallicBass, PickedEBass, SoulBass.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 42; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_309_SelectedFor_MetallicBass_Or_PickedEBass_Or_SoulBass:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x04, 0x2A, 0x04, 0x2A, 0x04, 0x2A, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xBE, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00, 0x30, 0xBE, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x48, 0x0D, 0x00, 0x00	; 20D4C  |...*.*.*.*...}.T....d0...*.H...0.d...*.H...|
 
 ; ToneDB_MixerDefaultTable_310 -- file 0x20D77..0x20DA1
@@ -17724,7 +18898,29 @@ ToneDB_MixerDefaultTable_311_SameAs_SlapBass3_WaveSel1:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 11 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
-ToneDB_MixerDefaultTable_312:
+; ★ BUT SOMETHING SELECTS IT, and that is this label.
+; ToneDB_ToneIndexMapA holds 312 at program column 42
+; of its 8 x 128 grid, and across all 8 melodic rows
+; that column of ToneNumBank_Melodic carries 3 tone
+; names: MetallicBass, PickedEBass, SoulBass.
+; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no
+; more.  It does NOT say this record is that tone's
+; mixer setting: the 99-read directory census finds 0
+; prom_c reads of slot +0x0C and 0 of slot +0x18, so
+; this is a relation between two TABLES and not evidence
+; about what the machine does with either; the array's
+; role is still a transplanted KN5000 name.  The name is
+; taken over the whole COLUMN because the ROW half of the
+; index is not pinned -- the true row alignment beats the
+; best wrong one by only 29 of 911 positions (69.9% vs
+; 66.7%, round 10 Q16d), so a label that needed the row
+; to be right would rest on that margin.  Over the column
+; it is invariant under all 8 rotations.
+; Evidence: map entries at file 0x1C965 + 2*(row*128 + col)
+; for col in 42; the tone names are those tone records'
+; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py
+; Q16-Q19; the same map is round 6 Q2b's second witness.
+ToneDB_MixerDefaultTable_312_SelectedFor_MetallicBass_Or_PickedEBass_Or_SoulBass:
 	.byte 0x7F, 0x7F, 0x7F, 0x2A, 0x05, 0x2A, 0x05, 0x2A, 0x05, 0x2A, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x2A, 0x18, 0x3C, 0x20, 0x00, 0x00	; 20DCD  |...*.*.*.*...}.T....d0...*.< ..0.d...*.< ..|
 
 ; ToneDB_MixerDefaultTable_313 -- file 0x20DF8..0x20E22
@@ -17765,6 +18961,10 @@ ToneDB_MixerDefaultTable_315_SameAs_MetallicBass_WaveSel0:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 13 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of
+; ToneDB_ToneIndexMapA (slot +0x0C) were read and NONE
+; holds 316.  That is a census over the whole map, not a
+; rule failing to fire.  round 10 Q19.
 ToneDB_MixerDefaultTable_316:
 	.byte 0x7F, 0x7F, 0x7F, 0x4A, 0x80, 0x4A, 0x80, 0x4A, 0x80, 0x4A, 0x80, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC5, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00, 0x30, 0xC5, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00	; 20E79  |...J.J.J.J...}.T....d0...B$`...0.d...B$`...|
 
@@ -17784,6 +18984,12 @@ ToneDB_MixerDefaultTable_317_SameAs_Piano_WaveSel1:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 318 at 1 program column, and across the 8
+; melodic rows that column carries 4 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_318:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x96, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20ECF  |...x.x.x.x.....T....d....B.x.....d...B.x...|
 
@@ -17792,6 +18998,12 @@ ToneDB_MixerDefaultTable_318:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 319 at 1 program column, and across the 8
+; melodic rows that column carries 4 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_319:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x64, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20EFA  |...x.x.x.x...d.T....d....B.x.....d...B.x...|
 
@@ -17800,6 +19012,12 @@ ToneDB_MixerDefaultTable_319:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 320 at 1 program column, and across the 8
+; melodic rows that column carries 4 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_320:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x32, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20F25  |...x.x.x.x...2.T....d....B.x.....d...B.x...|
 
@@ -17808,6 +19026,12 @@ ToneDB_MixerDefaultTable_320:
 ; bytes -- one of the 155 records of this array with no twin,
 ; against 167 that have one.  The nearest tone block differs in
 ; 3 of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN.
+; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map
+; holds 321 at 1 program column, and across the 8
+; melodic rows that column carries 4 different tone
+; names -- more than round 8's bound of 3, so a
+; disjunction would enumerate a family rather than name
+; an object.  round 10 Q19.
 ToneDB_MixerDefaultTable_321:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x19, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20F50  |...x.x.x.x.....T....d....B.x.....d...B.x...|
 
@@ -40927,7 +42151,25 @@ PercInst_503_SlapShot:
 ;          Measured, it leaves exactly one candidate 0 times: where the
 ;          order holds every candidate is inside the interval, and where it
 ;          does not, none is.  Refuted by its own measurement.
-;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 71 checks.
+;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 97 checks.
+; 
+;   6. ★★ ROUND 10 -- THE MECHANISM THAT NAMED 29 RECORDS AT SLOT +0x18
+;      WAS RUN HERE AND IS REFUSED.  The shape is there: a 1,024-entry
+;      map at slot +0x14 whose range is exactly 0..207, and the
+;      2,048-entry drum note map at +0x74 to read names out of.  It
+;      would have named 37 records -- EVERY framed record of this array.
+; 
+;      WHY NOT.  The test that licenses the melodic version is `does the
+;      map's record equal that instrument's own bytes`.  Here it scores
+;      709 of 1024 -- against a SHUFFLED NULL OF 640 (max 655).  The drum
+;      records' 43-byte tails repeat so heavily that a shuffled map
+;      scores almost as well, so a hit is not evidence of anything.  And
+;      calibrated against the byte rule the way Q17 calibrates the
+;      melodic one, it agrees 1 time and differs 170.
+;      ⚠ THE MELODIC ARRAY IS THE OPPOSITE CASE (shuffled mean 7.7
+;      against 637), and that contrast is what makes the melodic number
+;      worth quoting and this one worthless.  37 names refused.
+;   notes/prom_d_inventory_round8.py Q18.
 ; 
 ;   5. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what

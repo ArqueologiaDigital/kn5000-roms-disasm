@@ -1359,13 +1359,682 @@ def selftest9():
           "Voice_StageRegs_00C0_AB and its interior labels occur 35 times in the "
           "source -- the count the rename refusal rests on")
 
+# ===========================================================================
+# ★★ ROUND 10 (2026-08-30) -- WHAT THE UNIT-1 BACK END TALKS TO
+# ===========================================================================
+# The question this round started from is the one bucket T4/T5/C1 were left in:
+# 164 routines that touch something NAMED, distinctively, and that no round had
+# mined.  Nineteen of them are in one place, and that place turned out to answer
+# a gap three committed headers record as open.
+#
+# ★★ THE FINDING, AND IT IS AN IDENTIFICATION, NOT A DECODE
+#   notes/FINDINGS-prom_a-fdc.md sec.6 established that Fdc_Request is a
+#   TWO-UNIT block-device layer and that the unit field selects the back end:
+#   unit 0 is the uPD765-family floppy controller at 0x7B0000, unit 1 is
+#   0xFE4CE0-0xFE544D, which talks only to the 16-bit port at 0x7E0000.  Round 9
+#   named that port's four accessors Dev7E_* and wrote, four times, `Unknown:
+#   what the two banks selected by bit 3 and bit 4 ARE`.
+#
+#   `--ata` reads every accessor call in 0xFE4C73-0xFE54B6 whose bank and
+#   register are LITERAL, resolves each `calr` to one of the four accessors, and
+#   prints the (bank, register, value) it writes.  41 calls survive that filter.
+#   What they spell is an ATA (IDE) task file:
+#
+#     bank 0 = the COMMAND BLOCK, registers 0..7 at 0x7E0008..0x7E000F
+#     bank 1 = the CONTROL BLOCK, register 6 at 0x7E0016
+#
+#     reg 7 <- 0x20 at 0xFE4F3A, in the routine that then reads 512 bytes
+#     reg 7 <- 0x30 at 0xFE4DCE, in the routine that then writes 512 bytes
+#     reg 7 <- 0xEC at 0xFE5073, in the routine that then reads 512 bytes into
+#              the caller's buffer and whose caller compares the result against
+#              a cylinders/heads/sectors triple
+#     reg 7 <- 0x91 at 0xFE5183, immediately after reg 2 <- 0x3C and
+#              reg 6 <- 0x0E
+#     reg 7 <- 0xEF at 0xFE511B, immediately after reg 1 <- 0x01
+#     reg 6 <- 0xA0 at 0xFE5067, 0xFE5423, 0xFE548C, and at 0xFE4DBA /
+#              0xFE4F26 it is `and WA,0x000F / or WA,0x00A0` on the head number
+#     bank 1 reg 6 <- 0x0C then 0x08 at 0xFE50E9 and 0xFE50F5, nothing between
+#              them but the two calls
+#
+#   Read against the ATA command set those are READ SECTOR(S), WRITE SECTOR(S),
+#   IDENTIFY DEVICE, INITIALIZE DEVICE PARAMETERS and SET FEATURES; 0xA0 is the
+#   Device/Head register's "master, CHS" pattern with the head in bits 3..0;
+#   0x0C then 0x08 in the Device Control register is SRST asserted and released.
+#   The status bits the module tests agree independently: bit 7 at 0xFE4D41 is
+#   polled UNTIL CLEAR with a 500-tick timeout (BSY), bit 3 at 0xFE4DE7 /
+#   0xFE4F5C / 0xFE5091 is required BEFORE each 512-byte transfer (DRQ), bit 0
+#   at 0xFE50DB / 0xFE4FA3 is checked AFTER one (ERR), and bit 6 at 0xFE5441 /
+#   0xFE54AA is required after a command that moves no data (DRDY).
+#
+#   ★ SEVEN AGREEMENTS, EACH FROM A DIFFERENT PART OF THE MODULE, is why this is
+#   written down as an identification rather than a guess: the command opcodes,
+#   the register ORDER (sector count, sector number, cylinder low, cylinder
+#   high, device/head, command -- 0xFE4D6C..0xFE4DCE), the 0xA0 pattern, the
+#   three status bits used for the three things ATA uses them for, the reset
+#   pair in a SEPARATE bank at register 6, the 512-byte transfer through
+#   register 0 only, and INITIALIZE DEVICE PARAMETERS' operands matching the
+#   geometry its caller compares at 0xFE31AA-0xFE31C3 (0x0239 cylinders,
+#   0x000F heads, 0x003C sectors, and 0x0E = heads - 1).
+#
+#   ⚠ WHAT IS NOT CLAIMED.  The ATA opcode names come from the ATA standard and
+#   not from this ROM -- nothing in either image spells them.  Nothing here says
+#   what the PART is (the same discipline the floppy module's header already
+#   applies to its uPD765).  And the two power-mode opcodes are the weakest
+#   link: 0x95 at 0xFE542F and 0x94 at 0xFE5498 are the unit-1 arms of
+#   operations 6 and 7, whose unit-0 arms clear and set PA bit 3, and no
+#   behaviour in either body corroborates which is which.  Those two routines
+#   are therefore named for what they DO -- write the whole task file and issue
+#   one command, then require DRDY -- and the opcode is left in the header.
+#
+# ★ AND ONE COMMITTED `Unknown:` IS ANSWERED, in four headers at once.  The
+#   round-8 NAMES entries for the four Dev7E accessors carried "what the two
+#   banks selected by bit 3 and bit 4 ARE".  --apply10 rewrites all four from
+#   the corrected table; --verify10 fails if the old sentence survives anywhere.
+ATA_LO, ATA_HI = 0xFE4C73, 0xFE54B6
+ATA_ACCESSORS = {0xFE4C73: "write byte", 0xFE4C99: "write word",
+                 0xFE4CBF: "read byte", 0xFE4CE0: "read word"}
+# The ATA task-file register names, printed as a legend by --ata.  They are the
+# STANDARD's names, quoted so the table can be argued with; the module itself
+# spells only the numbers.
+ATA_REGS = {0: "data (16-bit)", 1: "features / error", 2: "sector count",
+            3: "sector number", 4: "cylinder low", 5: "cylinder high",
+            6: "device / head", 7: "command / status"}
+ATA_CTRL = {6: "device control (bit 2 = SRST)"}
+ATA_CMDS = {0x20: "READ SECTOR(S)", 0x30: "WRITE SECTOR(S)",
+            0x91: "INITIALIZE DEVICE PARAMETERS", 0x94: "STANDBY IMMEDIATE",
+            0x95: "IDLE IMMEDIATE", 0xEC: "IDENTIFY DEVICE",
+            0xEF: "SET FEATURES"}
+_ATA_ADDR = re.compile(r";\s*([0-9A-F]{6})\s+((?:[0-9a-f]{2}(?: |$))+)")
+_ATA_PUSHW = re.compile(r"^\s*pushw (0x[0-9a-f]+)\s")
+_ATA_CALR = re.compile(r"^\s*calr\s+(?:0x([0-9a-f]{4})\b|([A-Za-z_][A-Za-z0-9_]*))")
+
+
+def ata_sites():
+    """Every call to a Dev7E accessor in 0xFE4C73-0xFE54B6 whose bank and
+    register are LITERAL, as (label, site, bank, reg, value_or_None, accessor).
+
+    ⚠ THE ACCESSOR GUARD IS THE WHOLE POINT.  A first draft matched "three
+    `pushw` then a `calr`" and reported two extra register writes at 0xFE5360
+    and 0xFE53C2 with register 9, which no 3-bit register field can hold: those
+    two sites are `push XDE / pushw 0x16 / pushw 0x09 / pushw 0x00 / calr` into
+    the SECTOR WRITER at 0xFE4D57, a four-argument call, not a register write.
+    Resolving the `calr` and requiring the target to be one of the four
+    accessors drops both.  The value is None for a read, which takes two pushes.
+    """
+    rows, cur, lab = [], [], None
+    for ln in open(S_A, encoding="utf-8", errors="replace"):
+        ln = ln.rstrip("\n")
+        m = LABEL.match(ln)
+        if m:
+            lab = m.group(1)
+        a = _ATA_ADDR.search(ln)
+        if not a:
+            continue
+        ad, nb = int(a.group(1), 16), len(a.group(2).split())
+        if not (ATA_LO <= ad <= ATA_HI):
+            continue
+        p = _ATA_PUSHW.match(ln)
+        if p:
+            cur.append((ad, int(p.group(1), 16)))
+            if len(cur) > 3:
+                cur.pop(0)
+            continue
+        c = _ATA_CALR.match(ln)
+        if c and c.group(1):
+            d = int(c.group(1), 16)
+            t = ad + nb + (d - 0x10000 if d >= 0x8000 else d)
+            if t in ATA_ACCESSORS:
+                kind = ATA_ACCESSORS[t]
+                if kind.startswith("write") and len(cur) == 3 and cur[2][0] + 3 == ad:
+                    rows.append((lab, cur[0][0], cur[2][1], cur[1][1], cur[0][1], kind))
+                elif kind.startswith("read") and len(cur) >= 2 and cur[-1][0] + 3 == ad:
+                    rows.append((lab, cur[-2][0], cur[-1][1], cur[-2][1], None, kind))
+            cur = []
+            continue
+        cur = []
+    return rows
+
+
+def mode_ata():
+    rows = ata_sites()
+    print("prom_a 0x%06X-0x%06X -- every Dev7E accessor call with a LITERAL "
+          "bank and register\n" % (ATA_LO, ATA_HI))
+    prev = None
+    for lab, site, blk, reg, val, kind in rows:
+        if lab != prev:
+            print("  --- %s" % lab)
+            prev = lab
+        name = (ATA_CTRL if blk else ATA_REGS).get(reg, "?")
+        v = "" if val is None else "<- 0x%02X" % val
+        cmd = ""
+        if blk == 0 and reg == 7 and val is not None:
+            cmd = "   %s" % ATA_CMDS.get(val, "not in this file's opcode list")
+        print("      0x%06X  %-10s bank %d reg %d  %-22s %-8s%s"
+              % (site, kind, blk, reg, name, v, cmd))
+    cmds = [(s, v) for _l, s, b, r, v, k in rows if b == 0 and r == 7 and v is not None]
+    print("\n  %d accessor calls; %d of them write the command register."
+          % (len(rows), len(cmds)))
+    print("  bank 0 = command block at 0x7E0008; bank 1 = control block at 0x7E0010")
+    print("  (Dev7E_WriteByte forms 0x7E0000 + ((n & 7) | 0x08) or | 0x10).")
+    print("\n  ⚠ The opcode names are the ATA standard's, not this ROM's.  The")
+    print("  argument for reading them that way is the seven independent")
+    print("  agreements listed in this file's round-10 section; the two power")
+    print("  commands 0x94/0x95 have no corroborating behaviour and the two")
+    print("  routines that issue them are named for what they do, not for them.")
+
+
+# ---------------------------------------------------------------------------
+# Round 10's names.  Same five fields as NAMES: old label, new label, what it
+# is, the Evidence line, the Unknown line.  Every address cited is the address
+# of the INSTRUCTION.
+# ---------------------------------------------------------------------------
+ATA_NAMES = [
+    ("sub_FE4D01", "Dev7E_ReadStatus",
+     "reads command-block register 7 and returns it zero-extended in HL",
+     "0xFE4D01 `pushw 0x07` and 0xFE4D04 `pushw 0x00` are the register index "
+     "and the bank flag Dev7E_ReadByte reads at (XSP+0x06) and (XSP+0x04); "
+     "0xFE4D07 `calr` resolves to 0xFE4CBF, Dev7E_ReadByte; 0xFE4D0C `extz HL`. "
+     "Ten callers, every wait and result check in the module, and the bits they "
+     "test are bit 7 (0xFE4D41, polled until clear), bit 3 (0xFE4DE7, 0xFE4F5C, "
+     "0xFE5091, required before a 512-byte transfer), bit 0 (0xFE50DB, "
+     "checked after one) and bit 6 (0xFE5441, 0xFE54AA) -- BSY, DRQ, "
+     "ERR and DRDY of an ATA status register",
+     "nothing in this body says what the device is; the identification is "
+     "argued once, in this module's header and in "
+     "`prom_a_census_round8.py --ata`, and not re-asserted per routine"),
+    ("sub_FE4D0F", "Dev7E_SpinDelay",
+     "counts (XSP+0x04) down to zero and returns 0 -- the module's busy-wait",
+     "the whole routine is 0xFE4D0F `ld WA,(XSP+0x04)`, 0xFE4D12/0xFE4D16 "
+     "`dec 1,WA`, 0xFE4D18 `cps wa,0x00` with 0xFE4D1A `jr nz` back to it, and "
+     "0xFE4D1C `lds hl,0x00`. It touches no memory and no register. Its one "
+     "caller is 0xFE50C8, inside IDENTIFY DEVICE's transfer loop, which passes "
+     "0x64",
+     "what one count is worth in time. It depends on the CPU clock and this "
+     "file measures no clock"),
+    ("sub_FE4D1F", "Dev7E_WaitNotBusy",
+     "polls the status register until bit 7 clears, giving up after 500 ticks",
+     "0xFE4D20 takes a copy of the tick word (0x605A00), 0xFE4D2A re-reads it "
+     "and 0xFE4D33 `cp BC,0x01f4` is the 500-tick bound that stores 0xFFFF at "
+     "0xFE4D39; 0xFE4D3E calls Dev7E_ReadStatus and 0xFE4D41 `bit 0x07,L` is "
+     "the loop condition, so the wait ends when bit 7 is CLEAR. It returns 0 on "
+     "ready and 0xFFFF on timeout, and nine sites call it -- after every reset "
+     "and before every command",
+     "the tick rate at (0x605A00), so 500 ticks is not converted to a time here"),
+    ("sub_FE4D57", "Dev7E_WriteOneSector",
+     "writes ONE 512-byte sector: task file, command 0x30, then 256 words out "
+     "through the data register",
+     "0xFE4D60 `pushw 0xff` reg 1, 0xFE4D6C `pushw 0x01` reg 2 (one sector), "
+     "then reg 3 from (XSP+0x16), reg 4 and reg 5 from the two halves of "
+     "(XSP+0x18) at 0xFE4D87/0xFE4D9C/0xFE4DB1, reg 6 as 0xFE4DBA `and "
+     "WA,0x000f` + 0xFE4DBE `or WA,0x00a0` on (XSP+0x08), and 0xFE4DCE `pushw "
+     "0x30` into reg 7. 0xFE4DDD waits not-busy, 0xFE4DE7 `bit 0x03,HL` "
+     "requires DRQ, and the loop at 0xFE4DF6-0xFE4E26 packs two buffer bytes "
+     "into a word and calls Dev7E_WriteWord on register 0 until 0xFE4E22 `cp "
+     "IZ,0x0200`. Eight callers, all in this module",
+     "what the far side does with the sector. The 0x0200 is a byte count in "
+     "THIS body and nothing here reads a sector-size field"),
+    ("sub_FE4EC1", "Dev7E_ReadOneSector",
+     "reads ONE 512-byte sector: task file, command 0x20, then 256 words in "
+     "through the data register",
+     "the same eight-step task file as Dev7E_WriteOneSector, with 0xFE4F3A "
+     "`pushw 0x20` in place of 0x30; 0xFE4F5C `bit 0x03,IZ` requires DRQ, the "
+     "loop at 0xFE4F6C-0xFE4F9E calls Dev7E_ReadWord on register 0 and stores "
+     "L then H, and 0xFE4F99 `cpw qiz,0x0200` bounds it; 0xFE4FA3 tests bit 0 "
+     "of the status afterwards. Its one caller is Unit1_Op3_ReadSectorRun",
+     "as for Dev7E_WriteOneSector"),
+    ("sub_FE4E4C", "Unit1_Op4_WriteSectorRun",
+     "the unit-1 arm of operation 4: Dev7E_WriteOneSector per sector, "
+     "advancing cylinder/head/sector and the buffer by 0x200",
+     "0xFE4E5D `calr` resolves to 0xFE4D57; the advance is 0xFE4E66 "
+     "`ld WA,(0x605d3c)` against the incremented sector, 0xFE4E7A `(0x605d3a)` "
+     "against the incremented head and 0xFE4E89 `(0x605d38)` against the "
+     "incremented cylinder, and 0xFE4E9D adds 0x200 to the buffer; 0xFE4EB1 "
+     "counts the request's sector count down. ★ It is byte-identical to "
+     "Unit1_Op3_ReadSectorRun over all 117 bytes EXCEPT the one `calr` "
+     "displacement (0xFEF7 here, 0xFEFB there), which is what makes the "
+     "read/write pair a fact and not a resemblance. "
+     "notes/prom_a_unit1_backend_check.py lists it as operation 4's arm",
+     "which of the three cells is which is read off the INITIALIZE DEVICE "
+     "PARAMETERS operands at 0xFE5144/0xFE5177 and the compare at "
+     "0xFE31AA-0xFE31C3; this body only orders them"),
+    ("sub_FE4FB2", "Unit1_Op3_ReadSectorRun",
+     "the unit-1 arm of operation 3: Dev7E_ReadOneSector per sector, same "
+     "advance",
+     "0xFE4FC3 `calr` resolves to 0xFE4EC1; every other byte of the routine is "
+     "identical to Unit1_Op4_WriteSectorRun's, cell for cell (0xFE4FCC, "
+     "0xFE4FE0, 0xFE4FEF and the 0x200 at 0xFE5003). "
+     "notes/prom_a_unit1_backend_check.py lists it as operation 3's arm",
+     "as above"),
+    ("sub_FE5027", "Dev7E_IdentifyDevice",
+     "issues command 0xEC and reads the 512-byte reply into the caller's buffer",
+     "0xFE5028-0xFE5061 write 0xFF to registers 1..5, 0xFE5067 writes 0xA0 to "
+     "register 6 and 0xFE5073 `pushw 0xec` is the command; 0xFE5082 waits "
+     "not-busy, 0xFE5091 `bit 0x03,HL` requires DRQ, and the loop at "
+     "0xFE50A0-0xFE50D3 reads register 0 as a word, stores the HIGH byte first "
+     "(0xFE50B2) and the low byte second (0xFE50C0), and ends on 0xFE50CF `cp "
+     "IZ,0x0200`. Its one caller, 0xFE3100, passes the buffer 0x00606F9B and "
+     "then compares three words it extracts against 0x0239, 0x000F and 0x003C "
+     "at 0xFE31AA, 0xFE31B3 and 0xFE31BC",
+     "which words of the reply the caller reads. This body copies all 512 bytes "
+     "and interprets none of them"),
+    ("sub_FE50E9", "Unit1_Op0_SoftResetAndSetFeatures",
+     "the unit-1 arm of operation 0: pulse the control block's reset bit, then "
+     "SET FEATURES 0x01",
+     "0xFE50E9 writes 0x0C to BANK 1 register 6 and 0xFE50F5 writes 0x08 to the "
+     "same place with nothing between but the two calls, so bit 2 is asserted "
+     "and released; 0xFE5104 waits not-busy and returns 0xFFFF if it times out; "
+     "0xFE510F writes 0x01 to register 1 and 0xFE511B writes 0xEF to register "
+     "7, then 0xFE512A waits again and returns 0xFFFE on failure. Bank 1 is "
+     "reached NOWHERE ELSE in prom_a -- these two writes are the only ones "
+     "`--ata` finds. notes/prom_a_unit1_backend_check.py lists it as operation "
+     "0's arm",
+     "why 0x08 rather than 0x00 is the released state. Both writes set bit 3 "
+     "and this body never explains it"),
+    ("sub_FE5138", "Dev7E_SetDeviceParams",
+     "issues command 0x91 with 0x3C in the sector-count register and 0x0E in "
+     "the device/head register",
+     "0xFE5144 `pushw 0x3c` reg 2 and 0xFE5177 `pushw 0x0e` reg 6, then "
+     "0xFE5183 `pushw 0x91` reg 7; 0xFE5192 waits not-busy. Its one caller is "
+     "0xFE31C5, reached only when the geometry compare at 0xFE31AA-0xFE31C3 "
+     "fails -- and that compare tests 0x0239 cylinders, 0x000F heads and 0x003C "
+     "sectors, so the 0x3C here IS that sector count and the 0x0E is one less "
+     "than that head count",
+     "why registers 1, 3, 4 and 5 are written 0xFF first. The command reads "
+     "only 2 and 6"),
+    ("sub_FE51AC", "Unit1_Op5_FormatAndWriteDirBlocks",
+     "the unit-1 arm of operation 5: after the transfer loop it builds two "
+     "512-byte blocks in RAM and writes each with Dev7E_WriteOneSector",
+     "the first block is zeroed at 0xFE5315, space-filled to +0x0B at 0xFE5323, "
+     "and then written byte by byte at 0xFE532C-0xFE5357 with 0x2D 0x2D 0x53 "
+     "0x55 0x42 0x44 0x49 0x52 0x2D 0x53 0x42 = `--SUBDIR-SB`, 0x10 at +0x0B "
+     "and 0x02 at +0x1A; the second, at 0xFE53AA-0xFE53BD, is `.` at +0 and "
+     "`..` at +0x20, each with 0x10 at its +0x0B. That is an 11-byte name, an "
+     "attribute byte and a first-cluster word -- the FAT directory-entry "
+     "layout, and the second block is the `.`/`..` pair a FAT subdirectory "
+     "begins with. Both blocks go out through 0xFE5369 and 0xFE53CB, which "
+     "`calr` to 0xFE4D57. notes/prom_a_unit1_backend_check.py lists it as "
+     "operation 5's arm",
+     "the geometry the two blocks land on. The four `pushw` before each write "
+     "are Dev7E_WriteOneSector's arguments and this file does not decode which "
+     "cylinder/head/sector they name"),
+    ("sub_FE53E4", "Unit1_Op6_IssueCommandAndWaitReady",
+     "the unit-1 arm of operation 6: write the whole task file, issue one "
+     "command, require DRDY",
+     "0xFE53E4-0xFE5423 write registers 1..6 with 0xFF, 0x00, 0xFF, 0xFF, 0xFF "
+     "and 0xA0, 0xFE542F `pushw 0x95` is the command, 0xFE543E reads the status "
+     "and 0xFE5441 `bit 0x06,HL` is the only thing tested -- no data moves. "
+     "The routine at 0xFE544D, inside this label's extent, is the same body "
+     "with 0x94 at 0xFE5498, and it is operation 7's arm "
+     "(notes/prom_a_unit1_backend_check.py, and Fdc_Op7_PortA3_On's header "
+     "already records the tail jump to 0xFE544D)",
+     "⚠ WHICH command 0x95 is. In the ATA opcode list it is IDLE IMMEDIATE and "
+     "0x94 is STANDBY IMMEDIATE, but unlike the module's other five commands "
+     "NOTHING in either body corroborates that -- no data phase, no operand, "
+     "no result read beyond DRDY -- and operations 6 and 7 clear and SET PA "
+     "bit 3 on unit 0, whose meaning is itself open. So this name says what "
+     "the routine does and not what the command means"),
+]
+
+OTHER_NAMES = [
+    ("sub_F8E02C", "Link_SendBlockIn32ByteChunks",
+     "splits a buffer into 0x20-byte pieces and sends each with "
+     "Link_SendCountedBlock",
+     "0xF8E032 `ld XIX,(XIZ+0x0c)` is the buffer and 0xF8E035 "
+     "`ld HL,(XIZ+0x0a)` the byte count, which is the frame "
+     "Link_SendCountedBlock itself reads (+0x08 selector, +0x0a count, +0x0c "
+     "buffer); the loop at 0xF8E03A pushes 0x20 as the count, adds 0x20 to the "
+     "buffer at 0xF8E046 and subtracts 0x20 from the remainder at 0xF8E04F "
+     "while 0xF8E053 `cp HL,0x0020` says more than a chunk is left, then "
+     "0xF8E059-0xF8E062 sends the remainder in one final call. The chunk size "
+     "is the five-bit length field Link_SendCountedBlock's own header derives "
+     "(`(count - 1)` in bits 4..0), and 0x20 is the largest count that fits it. "
+     "prom_b publishes it as T_F40ED4 with 46 references",
+     "what the selector at (XIZ+0x08) means to the far side -- the same gap "
+     "Link_SendCountedBlock's header states"),
+    ("sub_F8E1FE", "Link_SendCommand3_WaitTicks",
+     "sends command 3 with a 32-bit argument, then spins for 20 ticks",
+     "0xF8E207 `pushw 0x03` and 0xF8E20A `ld XBC,(XIZ+0x08)` are the command "
+     "byte and the longword Link_SendCommandAndLong reads at (XIZ+0x0c) and "
+     "(XIZ+0x08); 0xF8E202 copies the tick word (0x0080) into the frame and the "
+     "loop at 0xF8E213-0xF8E21D re-reads it, subtracts the copy and compares "
+     "with 0x0014. It is the same shape as Link_SendCommand5_WaitDone, which "
+     "waits on a FLAG instead of on the clock",
+     "why this one waits on time rather than on the far side. The byte on the "
+     "wire is 3 | 0xE0 = 0xE3, because Link_SendCommandAndLong ORs 0xE0 in; the "
+     "NAME carries the literal 3 that is in this body"),
+    ("sub_FB921C", "MidiInQueue_InjectAllNotesOff_AllChannels",
+     "appends `Bn 7B 00` to the MIDI INPUT queue for n = 0..0x0F",
+     "0xFB921E loads the thunk 0xF41DAC, which prom_b publishes as "
+     "T_Ring600C1E_Put, and 0x600C1E is the ring MIDI_RX_DeliverTwo appends "
+     "received bytes to (0xFA57B3 `ld XIX,0x00600c1e`), so this INJECTS into "
+     "the receive path rather than transmitting; 0xFB9227 `or H,0xb0` builds "
+     "the status byte from the loop counter, which runs 0x00..0x0F (0xFB9223 "
+     "`ldb l,0x00`, 0xFB9254 `cp L,0x0f`, 0xFB9257 `jr ule`); the three calls "
+     "at 0xFB9236, 0xFB9241 and 0xFB924C push 0x00/H, 0x7B and 0x00, and "
+     "0xFB924E `inc 6,XSP` reclaims exactly those three words. CC 0x7B with "
+     "value 0 is All Notes Off, which the tree already documents at "
+     "MIDI_AllNotesOffTemplate",
+     "who calls it and when: its two callers, 0xFB9187 and 0xFB91DA, are "
+     "themselves unnamed"),
+    ("sub_FB925C", "MidiInQueue_InjectController0_AllChannels",
+     "appends `Bn 00 40` to the MIDI INPUT queue for n = 0..0x0F",
+     "byte-for-byte MidiInQueue_InjectAllNotesOff_AllChannels except the two "
+     "data words: 0xFB9278 `pushw 0x00` and 0xFB9283 `pushw 0x40` where the "
+     "other routine has 0x7B and 0x00. Same ring (0xFB925E), same 0xB0 (0xFB9267), "
+     "same 0x00..0x0F bound (0xFB9294)",
+     "⚠ what controller 0 means to this machine. On the wire CC 0 is Bank "
+     "Select MSB and 0x40 would be bank 64, but the destination here is the "
+     "INPUT queue, not the wire, and nothing in this tree maps the receiver's "
+     "controller numbers. The name states the number and claims nothing about "
+     "it"),
+    ("sub_FB929C", "MidiInQueue_InjectHoldPedalOff_AllChannels",
+     "appends `Bn 40 00` to the MIDI INPUT queue for n = 0..0x0F",
+     "the same body again, with 0xFB92B8 `pushw 0x40` and 0xFB92C3 `pushw 0x00` "
+     "as the two data words. CC 0x40 with value 0 is Hold 1 (damper) OFF, and "
+     "that reading is corroborated by the sibling that emits CC 0x7B: two of "
+     "the three routines spell a standard controller reset in the standard "
+     "order, which is what fixes the argument order as status, data 1, data 2",
+     "as for the sibling -- the receiver's controller map is not established"),
+    ("sub_FC0D41", "ScaleTuning_PostAllTwelveSemitones",
+     "posts the twelve semitone offsets of the selected scale, from ROM or from "
+     "the user's RAM copy",
+     "prom_b's ScaleTuningOffsets header (0xF06800, 15 rows of 12 bytes, one "
+     "row per temperament) already names 0xFC0D78-0xFC0D9D as its reader: "
+     "0xFC0D7E `ldb w,0x0c` and 0xFC0D80 `mul8rr a,w` scale the row index and "
+     "0xFC0D84 `ld XHL,0x00f06800` is the base. The row index is the byte "
+     "(0x78A2) mapped through 0xF43420 (0xFC0D78), except that 0xFC0D41 sends "
+     "0x80 to the RAM-copy arm and 0xFC0D48/0xFC0D4F/0xFC0D56 send 0x40, 0x41 "
+     "and 0x42 to row 0; both loops are bounded `cp A,0x0c`, so twelve "
+     "semitones each",
+     "the UNIT of an offset -- the same gap prom_b's table header states"),
+    ("sub_FC0D9E", "ScaleTuning_PostSemitoneFromRomRow",
+     "posts semitone A's offset, read from the ROM row the caller passes in XHL",
+     "0xFC0D9E `ld (XIX+0x02),A` puts the semitone number in the message at "
+     "RAM 0x0716 and 0xFC0DA3 reads (XHL + WA) into W, which 0xFC0DA8 writes to "
+     "+0x03; 0xFC0DAB `calr` resolves to 0xFC17DF, the module's sender. XHL is "
+     "the row ScaleTuning_PostAllTwelveSemitones computed at 0xFC0D84",
+     "what field +2 and +3 of the 0x0716 message mean to CPU 2. "
+     "notes/FINDINGS-prom_a-msg0716-module.md states that no handler's message "
+     "layout is established"),
+    ("sub_FC0DAF", "ScaleTuning_PostSemitoneFromUserRam",
+     "the same, reading the twelve-byte USER copy at RAM 0x78A4 instead",
+     "identical to ScaleTuning_PostSemitoneFromRomRow except 0xFC0DB4 "
+     "`ld XHL,0x000078a4`, which hard-codes the base the ROM row would have "
+     "supplied; 0xFC0DC1 `calr` resolves to the SAME sender, 0xFC17DF. prom_b's "
+     "ScaleTuningOffsets header names 0x78A4 as the user copy and this address "
+     "as the arm that reads it, and row 14 (USER) of the ROM table is flat "
+     "because the editable copy is this one",
+     "as above"),
+    ("sub_FC114E", "Msg0716_GetRecordPtrByIndex",
+     "returns Msg0716_RecordPtrTable[W] in XIY",
+     "0xFC1153 `sla wa,0x02` scales the index by the table's four-byte entry, "
+     "0xFC1156 `ld XIY,0x00fc1162` is Msg0716_RecordPtrTable itself and "
+     "0xFC115B loads XIY from XIY+WA. That table's own header, already in this "
+     "listing, names this routine as one of its exactly two readers -- `the "
+     "helper at 0xFC114E that is calr-ed 15 times and takes its index "
+     "in W`",
+     "what a 0x40-byte record holds -- the gap the table's header states. This "
+     "routine bounds nothing; the bound is the 32 records that supply the index"),
+    ("sub_F8DD49", "AnalogValue_MaskOffLow3Bits",
+     "clears the low three bits of C and returns",
+     "the routine is one instruction, 0xF8DD49 `and C,0xf8`, and a `ret`. Its "
+     "one caller is AnalogScan_Hysteresis, so the value being coarsened is an "
+     "analog reading",
+     "why three bits. AnalogScan_Hysteresis's own threshold is not read here"),
+    ("sub_F95128", "Delay_SpinNestedLoops",
+     "a busy-wait: 0x1000 outer passes of 0x600 inner decrements, touching no "
+     "memory",
+     "the whole routine is 0xF95128 `ldw bc,0x1000`, 0xF9512B `ldw wa,0x0600`, "
+     "0xF9512E `dec 1,WA`, and the two `djnz16` at 0xF95130 and 0xF95133. It "
+     "reads and writes nothing. Its two callers include LCD_FlashWholePanel, "
+     "which is a panel test",
+     "how long that is. It depends on the CPU clock, which this file does not "
+     "measure"),
+    ("sub_FEFE59", "LCD_DrawVRule_LeftOrRight",
+     "draws the left or the right vertical rule according to bit 0 of "
+     "(0x601F70)",
+     "0xFEFE59 `bit 0,(0x601f70)` chooses between 0xFEFE61 `calr "
+     "LCD_DrawVRuleRight_Layer1` and 0xFEFE65 `calr LCD_DrawVRuleLeft_Layer1`, "
+     "both already named in this listing, and there is nothing else in the "
+     "routine. Seven callers",
+     "what bit 0 of (0x601F70) selects. Screen_DrawKitCategoryLegend reads the "
+     "same bit and its header records the same gap"),
+]
+
+NAMES10 = ATA_NAMES + OTHER_NAMES
+
+# ---------------------------------------------------------------------------
+# ★ AND THE REFUSALS, which are part of the result.
+# ---------------------------------------------------------------------------
+REFUSALS10 = [
+    ("sub_FC151B",
+     "It is one of a family of 0xFC0000-module handlers that write 0xB0 to "
+     "(XIX), a selector to (XIX+0x02) and (0x20B9) masked by C to (XIX+0x03), "
+     "then post four bytes: 0xFC151B/0xFC15E1/0xFC1679 use selectors 0x07, 0x97 "
+     "and 0x0B with masks 0x7F, 0x07 and 0xFF. 0xB0 invites reading the "
+     "selector as a MIDI controller number and the round REFUSES to, because "
+     "0x97 is 151 and no MIDI controller number exceeds 0x7F. So field +2 is "
+     "not a controller number, notes/FINDINGS-prom_a-msg0716-module.md states "
+     "that no handler's meaning is established, and a name here would claim "
+     "one. The measured fact -- three selectors, three masks, one shared sender "
+     "at 0xFC18CC -- is worth more than the name would be."),
+]
+
+# The four round-8 headers this round corrects, and the sentence that must go.
+STALE10 = "what the two banks selected by bit 3 and bit 4 ARE"
+DEV7E_FIXED = ("bank 0 is the ATA COMMAND BLOCK (registers 0..7) and bank 1 the "
+               "CONTROL BLOCK, whose register 6 takes 0x0C then 0x08 -- reset "
+               "asserted and released -- at 0xFE50E9/0xFE50F5, the only two "
+               "bank-1 writes in prom_a. See `--ata` and this module's header. "
+               "STILL open: what the far side of the port physically is")
+
+
+def apply10():
+    """Round 10: rename, write a header above each, correct the four Dev7E
+    `Unknown:` lines, and insert the module-header section. Comments and labels
+    only -- no byte of assembly is touched."""
+    lines = open(S_A).read().split("\n")
+    # 1. the four corrected round-8 headers, re-emitted from the (edited) table
+    fixed = 0
+    for _o, new, _w, _e, _u in NAMES:
+        if new.startswith("Dev7E_") and _rewrite_round8_header(lines, _o, new):
+            fixed += 1
+    print("  re-emitted %d Dev7E headers with the bank question answered" % fixed)
+    # 2. the module-header section
+    anchor = "; THE RAM BLOCK, 0x605A00-0x605B09."
+    if not any(ATA_SECTION[1] in ln for ln in lines):
+        for i, ln in enumerate(lines):
+            if ln.startswith(anchor):
+                lines[i:i] = ATA_SECTION
+                print("  inserted the round-10 module-header section (%d lines)"
+                      % len(ATA_SECTION))
+                break
+        else:
+            print("  ANCHOR MISSING -- the module header was not extended")
+    text = "\n".join(lines)
+    renamed = []
+    for old, new, _w, _e, _u in NAMES10:
+        if re.search(r'^' + new + r':', text, re.M):
+            continue
+        if not re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  MISSING  %s is not a label in the listing" % old)
+            continue
+        renamed.append((old, new))
+    if renamed:
+        table = dict(renamed)
+        pat = re.compile(r'\b(' + "|".join(re.escape(o) for o, _n in renamed) + r')\b')
+        lines = [pat.sub(lambda m: table[m.group(1)], ln) for ln in lines]
+    MINE = "named by notes/prom_a_census_round8.py (bucket round 10)"
+    keep, i = [], 0
+    while i < len(lines):
+        m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', lines[i])
+        if m and m.group(1) in set(n for _o, n, _w, _e, _u in NAMES10):
+            j = len(keep) - 1
+            while j >= 0 and keep[j].startswith(";"):
+                j -= 1
+            if any(MINE in b for b in keep[j + 1:]):
+                del keep[j + 1:]
+        keep.append(lines[i])
+        i += 1
+    lines = keep
+    out, done = [], set()
+    for ln in lines:
+        m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', ln)
+        if m:
+            for old, new, what, ev, unk in NAMES10:
+                if m.group(1) == new and new not in done and (out and out[-1] != RULE):
+                    done.add(new)
+                    out.extend(_header(old, new, what, ev, unk, "round 10"))
+            for old, why in REFUSALS10:
+                if m.group(1) == old and old not in done and (out and out[-1] != RULE):
+                    done.add(old)
+                    out.extend(_refusal_header(old, why))
+        out.append(ln)
+    open(S_A, "w").write("\n".join(out))
+    print("  round 10: renamed %d labels, wrote %d header blocks"
+          % (len(renamed), len(done)))
+
+
+def verify10():
+    text = open(S_A).read()
+    bad = 0
+    for old, new, _w, _e, _u in NAMES10:
+        if not re.search(r'^' + new + r':', text, re.M):
+            print("  MISSING  %s" % new)
+            bad += 1
+        if re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  STALE    %s still defined" % old)
+            bad += 1
+        m = re.search(r'((?:^;.*\n)+)' + new + r':', text, re.M)
+        if m and "NOT NAMED" in m.group(1):
+            print("  CONTRADICTION  a 'NOT NAMED' header sits above %s" % new)
+            bad += 1
+    for old, _why in REFUSALS10:
+        if not re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  REFUSAL LOST  %s" % old)
+            bad += 1
+    flat = re.sub(r'\s+', ' ', re.sub(r'(?m)^;\s*', ' ', text))
+    if re.sub(r'\s+', ' ', STALE10) in flat:
+        print("  CORRECTION STALE  the bank question is still asked as open")
+        bad += 1
+    if re.sub(r'\s+', ' ', DEV7E_FIXED)[:60] not in flat:
+        print("  CORRECTION MISSING  the answered bank sentence is not in the listing")
+        bad += 1
+    if ATA_SECTION[1] not in text:
+        print("  SECTION MISSING  the module header carries no round-10 section")
+        bad += 1
+    print("  round 10: %d names, %d refusals, %d problems"
+          % (len(NAMES10), len(REFUSALS10), bad))
+    return bad
+
+
+def mode_applied10():
+    print("round 10 -- %d names, %d refusal\n" % (len(NAMES10), len(REFUSALS10)))
+    for old, new, what, ev, unk in NAMES10:
+        print("  %-12s -> %s" % (old, new))
+        for c in _wrap(what, 66):
+            print("      %s" % c)
+        first = True
+        for c in _wrap(ev, 64):
+            print("      %s%s" % ("Evidence: " if first else "          ", c))
+            first = False
+        first = True
+        for c in _wrap(unk, 64):
+            print("      %s%s" % ("Unknown:  " if first else "          ", c))
+            first = False
+        print()
+    for old, why in REFUSALS10:
+        print("  %-12s -> REFUSED" % old)
+        for c in _wrap(why, 66):
+            print("      %s" % c)
+
+
+def selftest10():
+    """Round 10's checks. Every list is tested on its LAST element too."""
+    rows = ata_sites()
+    check("--ata finds accessor calls with a literal bank and register",
+          len(rows) == 41, len(rows))
+    # the register-9 trap: no row may name a register a 3-bit field cannot hold
+    check("no row names a register above 7 (the 0xFE5360/0xFE53C2 four-argument "
+          "calls into the sector writer are excluded by the accessor guard)",
+          all(r[3] <= 7 for r in rows), max(r[3] for r in rows))
+    cmds = {}
+    for _l, site, blk, reg, val, _k in rows:
+        if blk == 0 and reg == 7 and val is not None:
+            cmds.setdefault(val, []).append(site)
+    check("the command register takes exactly seven distinct opcodes",
+          sorted(cmds) == [0x20, 0x30, 0x91, 0x94, 0x95, 0xEC, 0xEF],
+          ["0x%02X" % c for c in sorted(cmds)])
+    check("0x30 is written at 0xFE4DCE, in Dev7E_WriteOneSector's body",
+          cmds.get(0x30) == [0xFE4DCE], ["0x%06X" % s for s in cmds.get(0x30, [])])
+    check("0x20 is written at 0xFE4F3A, in Dev7E_ReadOneSector's body",
+          cmds.get(0x20) == [0xFE4F3A])
+    check("0x94, the LAST opcode in address order, is written once, at 0xFE5498",
+          cmds.get(0x94) == [0xFE5498], ["0x%06X" % s for s in cmds.get(0x94, [])])
+    bank1 = [(s, r, v) for _l, s, b, r, v, _k in rows if b == 1]
+    check("bank 1 is written exactly twice in all of prom_a, both to register 6, "
+          "with 0x0C then 0x08",
+          bank1 == [(0xFE50E9, 6, 0x0C), (0xFE50F5, 6, 0x08)], bank1)
+    devhead = [(s, v) for _l, s, b, r, v, _k in rows if b == 0 and r == 6]
+    check("every literal device/head write is 0xA0 or the 0x0E of INITIALIZE "
+          "DEVICE PARAMETERS", sorted(set(v for _s, v in devhead)) == [0x0E, 0xA0],
+          ["0x%02X" % v for _s, v in devhead])
+    # the read/write twins differ in exactly one instruction
+    src = open(S_A).read().split("\n")
+    def _body(lo, hi):
+        out = []
+        for ln in src:
+            m = _ATA_ADDR.search(ln)
+            if m and lo <= int(m.group(1), 16) < hi:
+                out.append(re.sub(r';.*', '', ln).strip())
+        return out
+    w, r = _body(0xFE4E4C, 0xFE4EC1), _body(0xFE4FB2, 0xFE5027)
+    diff = [i for i in range(min(len(w), len(r))) if w[i] != r[i]]
+    check("the operation-3 and operation-4 arms are %d instructions long and "
+          "differ in exactly one" % len(w),
+          len(w) == len(r) and len(diff) == 1, (len(w), len(r), len(diff)))
+    check("and the one difference is the `calr` that picks the read or the write "
+          "primitive", diff and "calr" in w[diff[0]], (w[diff[0]] if diff else None,
+                                                       r[diff[0]] if diff else None))
+    # the geometry the module programmes and the geometry it compares agree
+    txt = "\n".join(src)
+    for lit, why in (("0x605d38, 0x0239", "cylinders"), ("0x605d3a, 0x000f", "heads"),
+                     ("0x605d3c, 0x003c", "sectors")):
+        check("the caller compares %s (%s)" % (lit, why), lit in txt)
+    check("INITIALIZE DEVICE PARAMETERS' sector operand 0x3C equals the compared "
+          "sector count 0x003C", (0xFE5144, 0x3C) in
+          [(s, v) for _l, s, b, r, v, _k in rows if b == 0 and r == 2])
+    check("and its device/head operand 0x0E is one less than the compared head "
+          "count 0x000F", 0x0E == 0x0F - 1)
+    # the ring the MIDI injectors write is the RECEIVE ring, not a transmit one
+    check("0x600C1E is the ring MIDI_RX_DeliverTwo appends to",
+          re.search(r'MIDI_RX_DeliverTwo:(?:.|\n){0,400}?0x00600c1e', txt) is not None)
+    # the three injectors differ only in their two data words
+    b1, b2, b3 = _body(0xFB921C, 0xFB925C), _body(0xFB925C, 0xFB929C), \
+        _body(0xFB929C, 0xFB92DC)
+    d12 = [i for i in range(min(len(b1), len(b2))) if b1[i] != b2[i]]
+    d13 = [i for i in range(min(len(b1), len(b3))) if b1[i] != b3[i]]
+    check("the three MIDI injectors are %d instructions and differ in exactly two"
+          % len(b1), len(b1) == len(b2) == len(b3) and len(d12) == 2 and len(d13) == 2,
+          (len(b1), len(b2), len(b3), len(d12), len(d13)))
+    check("and both differences are `pushw` of a data byte",
+          all("pushw" in b1[i] for i in d12 + d13),
+          [b1[i] for i in d12] + [b2[i] for i in d12])
+    # the refusal's arithmetic
+    check("the refused family's selector 0x97 is 151, which no MIDI controller "
+          "number can be", 0x97 > 0x7F, 0x97)
+    check("round 10 proposes %d names and %d refusal" % (len(NAMES10),
+                                                         len(REFUSALS10)),
+          len(NAMES10) == 24 and len(REFUSALS10) == 1)
+
 
 def main():
     args = sys.argv[1:]
     if "--selftest" in args:
         rc = selftest()
         selftest9()
-        print("\n%d checks, %d failures (rounds 8 and 9)" % (CHECKS[0], len(FAILS)))
+        selftest10()
+        print("\n%d checks, %d failures (rounds 8, 9 and 10)" % (CHECKS[0], len(FAILS)))
         sys.exit(1 if FAILS else rc)
     run_all = not args
     if run_all or "--dispatch" in args:

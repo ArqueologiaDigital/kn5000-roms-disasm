@@ -40553,6 +40553,7 @@ sub_FA7810__FA789F:
 ;          0xFA8C1E in VoiceParam_DispatchOn_17_36__FA8C1D, 0xFA904B in VoiceParam_DispatchOn_17_11__FA904A
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA78AB-0xFA78C5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -41372,6 +41373,7 @@ Clamp_0_to_00FF__FA7D66:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D762
 ; Calls:   0xFA7D49 = Clamp_0_to_00FF
+; Voice record: touches voice_record[+0x06(r), +0x0F(r), +0x23(r), +0x25(r), +0x2F(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA7D6A-0xFA7E2B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -42133,6 +42135,7 @@ sub_FA814C:
 ; Calls:   0xFA744F = KeyMap_LookupByPitch, 0xFA7467 = KeyZone_Stage_Reg0040_Stride8
 ;          0xFA74AB = KeyZone_Stage_Reg0040_Stride6A, 0xFA74ED = KeyZone_Stage_Reg0040_Stride6B
 ;          0xFA752F = KeyZone_Stage_Reg0040_Stride4
+; Voice record: touches voice_record[+0x06(r), +0x1F(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA819A-0xFA826B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -42278,6 +42281,7 @@ Voice_SelectKeyZone_Reg0040__FA8266:
 ;          reads 0x0014FF, 0x00D7ED
 ; Calls:   0xFC3407 = sub_FC3407, 0xFC3480 = sub_FC3480
 ;          0xFC355B = sub_FC355B, 0xFC3793 = sub_FC3793
+; Voice record: touches voice_record[+0x00(r), +0x01(rw), +0x03(r), +0x04(r), +0x0F(w), +0x1F(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA826C-0xFA8322
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -42389,6 +42393,7 @@ Voice_StageRegs_0040_B__FA831D:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x005A4F
 ; Calls:   0xFA7570 = Sat16_0_to_7FFF
+; Voice record: touches voice_record[+0x06(r), +0x0A(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8323-0xFA8346
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -42508,6 +42513,7 @@ Voice_StagePitch_Reg0400_AB__FA8398:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x005A4F
 ; Calls:   0xFA7570 = Sat16_0_to_7FFF
+; Voice record: touches voice_record[+0x06(r), +0x0A(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA83A8-0xFA83CB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -42609,6 +42615,7 @@ Voice_StagePitch_Reg0400_CD__FA841D:
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
 ;          0xFC7FCA = sub_FC7FCA
+; Voice record: touches voice_record[+0x01(r), +0x08(r), +0x0C(r), +0x17(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA842D-0xFA866A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -42887,6 +42894,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA8665:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = sub_FA77F3
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA866B-0xFA8758
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43013,6 +43021,7 @@ sub_FA866B__FA8747:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = sub_FA77F3
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8759-0xFA888B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43167,6 +43176,7 @@ sub_FA8759__FA8878:
 ; Outputs: writes 0x005A51
 ; Calls:   0xFA76D6 = sub_FA76D6, 0xFA77F3 = sub_FA77F3
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA888C-0xFA8996
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43300,6 +43310,7 @@ sub_FA888C__FA8991:
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
 ; Calls:   0xFA76D6 = sub_FA76D6, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8997-0xFA8A78
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43421,6 +43432,7 @@ sub_FA8997__FA8A45:
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
 ; Calls:   0xFA76D6 = sub_FA76D6, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8A79-0xFA8BDC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43609,6 +43621,7 @@ sub_FA8A79__FA8BAA:
 ; ⚠ INDEX 0 AND INDEX > 5 GO TO THE SAME PLACE.  Table entry 0 is 0xFA8C1D,
 ;  which is also the `jr UGT` target, so a zero field and an out-of-range field
 ;  are not distinguished.
+; Voice record: touches voice_record[+0x17(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8BDD-0xFA8C43
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43685,6 +43698,7 @@ VoiceParam_DispatchOn_17_36__FA8C3F:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA778E = sub_FA778E, 0xFA77F3 = sub_FA77F3
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8C44-0xFA8CEE
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43783,6 +43797,7 @@ sub_FA8C44__FA8CBB:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA778E = sub_FA778E, 0xFA77F3 = sub_FA77F3
 ;          0xFA7810 = sub_FA7810, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8CEF-0xFA8D9A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43880,6 +43895,7 @@ sub_FA8CEF__FA8D66:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
 ; Calls:   0xFA778E = sub_FA778E, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8D9B-0xFA8E46
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -43975,6 +43991,7 @@ sub_FA8D9B__FA8E15:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
 ; Calls:   0xFA778E = sub_FA778E, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8E47-0xFA8EF6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -44071,6 +44088,7 @@ sub_FA8E47__FA8EC1:
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x005A51
 ; Calls:   0xFA778E = sub_FA778E, 0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(w), +0x41(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA8EF7-0xFA9009
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -44214,6 +44232,7 @@ sub_FA8EF7__FA8FD7:
 ;  +0x17 of the argument, take the byte at +0x11 of the target, mask with 7, and
 ;  switch.  See that routine's header; the two differ in one semantic byte.
 ; ⚠ Table entry 0 is 0xFA904A, which is also the `jr UGT` target.
+; Voice record: touches voice_record[+0x17(r), +0x3F(r), +0x41(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA900A-0xFA9080
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -44293,6 +44312,7 @@ VoiceParam_DispatchOn_17_11__FA907C:
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA76B2 = Clamp_36_to_120
+; Voice record: touches voice_record[+0x23(r), +0x25(r), +0x3F(r), +0x41(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA9081-0xFA9104
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -44393,6 +44413,7 @@ Voice_StagePair_Reg0100_0140_First__FA90F7:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA76B2 = Clamp_36_to_120
+; Voice record: touches voice_record[+0x23(r), +0x25(r), +0x3F(r), +0x41(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA9105-0xFA919A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -44484,13 +44505,14 @@ Voice_StagePair_Reg0100_0140_Both__FA9195:
 ; Voice_StagePair_Reg0100_0140_AB -- 0xFA919B..0xFA92A4 (266 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFADFED in sub_FADFAD__FADFEC, 0xFB0B1B in VoiceRegs_Stage_A
+;          0xFADFED in Voice_RestageRegs0100_0140_ForList__FADFEC, 0xFB0B1B in VoiceRegs_Stage_A
 ;          0xFB1F09 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D766, 0x00D768
 ; Calls:   0xFA76B2 = Clamp_36_to_120, 0xFA9081 = Voice_StagePair_Reg0100_0140_First
 ;          0xFA9105 = Voice_StagePair_Reg0100_0140_Both
 ; Arms:    5 computed-goto arm(s) inside this routine: 0xFA91DE 0xFA91EE 0xFA91F4 0xFA91FC 0xFA928D
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(r), +0x41(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA919B-0xFA92A4
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -44525,7 +44547,7 @@ Voice_StagePair_Reg0100_0140_Both__FA9195:
 ;          byte by byte against original_ROMs/wsa1_prom_c.ic28 by
 ;          notes/prom_c_reg0100_0140_checks.py section 3, which prints all 23 positions.
 ; Called from: VoiceRegs_Stage_A (0xFB0B1B) and VoiceRegs_Stage_B (0xFB1F09) -- hence _AB --
-;          and from sub_FADFAD__FADFEC (0xFADFED).
+;          and from Voice_RestageRegs0100_0140_ForList__FADFEC (0xFADFED).
 ; ⚠ SIBLING: the KN5000 sub-CPU's `TVF_Emit_Registers` (0x024444) dispatches on the same
 ;          `(patch+54)&7` field with the same six cases in the same roles and emits the same
 ;          two registers.  NOT byte-identical.
@@ -44655,13 +44677,14 @@ Voice_StagePair_Reg0100_0140_AB__FA929F:
 ; Voice_StagePair_Reg0100_0140_CD -- 0xFA92A5..0xFA93AE (266 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFADFF4 in sub_FADFAD__FADFF3, 0xFB2834 in VoiceRegs_Stage_C
+;          0xFADFF4 in Voice_RestageRegs0100_0140_ForList__FADFF3, 0xFB2834 in VoiceRegs_Stage_C
 ;          0xFB2F09 in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D766, 0x00D768
 ; Calls:   0xFA76B2 = Clamp_36_to_120, 0xFA9081 = Voice_StagePair_Reg0100_0140_First
 ;          0xFA9105 = Voice_StagePair_Reg0100_0140_Both
 ; Arms:    5 computed-goto arm(s) inside this routine: 0xFA92E8 0xFA92F8 0xFA92FE 0xFA9306 0xFA9397
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x3F(r), +0x41(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA92A5-0xFA93AE
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -44676,7 +44699,7 @@ Voice_StagePair_Reg0100_0140_AB__FA929F:
 ; ★ WHAT IT STAGES: words 4 and 5 only -- registers 0x0100 + chan and 0x0140 + chan
 ;          (0xFA937B/0xFA938F and 0xFA939C/0xFA93A4).
 ; Called from: VoiceRegs_Stage_C (0xFB2834) and VoiceRegs_Stage_D (0xFB2F09) -- hence _CD --
-;          and from sub_FADFAD__FADFF3 (0xFADFF4).
+;          and from Voice_RestageRegs0100_0140_ForList__FADFF3 (0xFADFF4).
 ; ★ AND THE SAME FIELD, +0x11, IS WHAT VoiceParam_DispatchOn_17_11 (0xFA900A) SWITCHES ON,
 ;          which is the other producer of these two words on the C/D path.  The A/B side's
 ;          counterpart is VoiceParam_DispatchOn_17_36 (0xFA8BDD).
@@ -44811,6 +44834,7 @@ Voice_StagePair_Reg0100_0140_CD__FA93A9:
 ; Outputs: writes 0x00D784, 0x00D786, 0x00D788
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA766C = ScaleClampedDelta_Shr5
+; Voice record: touches voice_record[+0x08(r), +0x0C(r), +0x17(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA93AF-0xFA95D3
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -45077,6 +45101,7 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA9556:
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA7602 = DetuneCurve_LookupSigned, 0xFA7654 = DetuneCurve_LookupUnsigned
 ;          0xFC810C = sub_FC810C
+; Voice record: touches voice_record[+0x01(r), +0x0C(r), +0x17(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA95D4-0xFA96F6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -45242,6 +45267,7 @@ Voice_StageRegs_0500_08C0_AB__FA96F1:
 ; Outputs: writes 0x00D76A, 0x00D76E, 0x00D770, 0x00D772, 0x00D774, 0x00D77C, 0x00D77E, 0x00D780, 0x00D782, 0x00D784, 0x00D786, 0x00D788
 ; Calls:   0xFA7EE2 = Clamp_ToRange_LowByte, 0xFA7F04 = Rand_FromTickSquared
 ;          0xFC7FCA = sub_FC7FCA, 0xFC810C = sub_FC810C
+; Voice record: touches voice_record[+0x01(r), +0x17(r), +0x23(r), +0x25(r), +0x27(rw)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA96F7-0xFA981A
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -45514,6 +45540,7 @@ sub_FA981B__FA98E9:
 ;          0xFB7C27 = Dev10C_Slot2_WriteGateAndValue, 0xFB7C8F = Dev10C_SetChanReg_0600_b
 ;          0xFB7CB1 = Dev10C_Slot2_StrobeGate, 0xFB7CFF = Dev10C_Slot2_WriteGate8100
 ;          0xFB7D1D = Dev10C_Slot3_WriteGateAndValue
+; Voice record: touches voice_record[+0x00(r), +0x03(r), +0x04(r), +0x0C(r), +0x13(r), +0x23(r), +0x25(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA9915-0xFA9C5F
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -45919,6 +45946,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9C5A:
 ;          0xFB5F91 = sub_FB5F91, 0xFB7E13 = Dev10C_Slot1_WriteGateAndValue
 ;          0xFB7E7B = Dev10C_SetChanReg_01C0_b, 0xFB7E9D = Dev10C_Slot1_StrobeGate
 ;          0xFB7EEB = Dev10C_Slot1_WriteGate8100
+; Voice record: touches voice_record[+0x00(r), +0x03(r), +0x04(r), +0x0C(r), +0x13(r), +0x17(r), +0x23(r), +0x25(r), +0x27(rw), +0x38(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA9C60-0xFA9F18
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -46232,6 +46260,7 @@ Voice_StageRegs_0180_AB__FA9F06:
 ;          0xFA7C3A = EGEnv_Eval_ValueCurve_WithFreqWriteCurve, 0xFA981B = sub_FA981B
 ;          0xFB7FCE = Dev10C_SetChanReg_01C0_or_0600_b, 0xFB8012 = Dev10C_Slot1or3_StrobeGate
 ;          0xFB80A9 = Dev10C_Slot1or3_WriteGate8100
+; Voice record: touches voice_record[+0x00(r), +0x04(r), +0x0C(r), +0x13(r), +0x23(r), +0x25(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA9F19-0xFAA0BB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -46444,6 +46473,7 @@ Voice_StageChanSel_Reg04C0__FAA0B6:
 ;          0xFB0B39 in VoiceRegs_Stage_A, 0xFB1F27 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,-2`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D764
+; Voice record: touches voice_record[+0x23(r), +0x25(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA0BC-0xFAA1A4
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -46620,6 +46650,7 @@ Voice_StageRegs_00C0_AB__FAA196:
 ;          0xFB2839 in VoiceRegs_Stage_C, 0xFB2F0E in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D764
+; Voice record: touches voice_record[+0x13(r), +0x23(r), +0x25(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA1A5-0xFAA2B5
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -46774,6 +46805,7 @@ Voice_StageRegs_00C0_CD__FAA2A6:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA7EE2 = Clamp_ToRange_LowByte
+; Voice record: touches voice_record[+0x17(r), +0x23(r), +0x25(r), +0x29(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA2B6-0xFAA3B4
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -46957,6 +46989,7 @@ sub_FAA3B5__FAA3E7:
 ; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA7EE2 = Clamp_ToRange_LowByte, 0xFAA3B5 = sub_FAA3B5
+; Voice record: touches voice_record[+0x13(r), +0x17(r), +0x23(r), +0x25(r), +0x29(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA3EB-0xFAA4C2
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -47074,6 +47107,7 @@ sub_FAA3EB__FAA478:
 ;          reads 0x0014FF
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA766C = ScaleClampedDelta_Shr5
+; Voice record: touches voice_record[+0x01(rw), +0x08(r), +0x0C(r), +0x13(r), +0x17(r), +0x1F(r), +0x23(r), +0x25(r), +0x39(w), +0x3B(w), +0x3D(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA4C3-0xFAA87D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -47528,6 +47562,7 @@ Voice_StageRegs_0800_A__FAA831:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D778, 0x00D77A
 ; Calls:   0xFA7598 = Clamp_ToRange_Word
+; Voice record: touches voice_record[+0x23(r), +0x25(r), +0x3B(r), +0x3D(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA87E-0xFAA96B
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -47656,6 +47691,7 @@ Voice_StageRegs_0840_0880_AB__FAA966:
 ; Inputs:  frame `link XIZ,-11`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D776
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
+; Voice record: touches voice_record[+0x01(rw), +0x0C(r), +0x13(r), +0x17(r), +0x23(r), +0x25(r), +0x39(w), +0x3B(w), +0x3D(w), +0x43(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAA96C-0xFAABFF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -47975,6 +48011,7 @@ Voice_StageRegs_0800_CD__FAABFA:
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D778, 0x00D77A
 ; Calls:   0xFA7598 = Clamp_ToRange_Word
+; Voice record: touches voice_record[+0x23(r), +0x25(r), +0x3B(r), +0x3D(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAAC00-0xFAACED
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -48104,6 +48141,7 @@ Voice_StageRegs_0840_0880_CD__FAACE8:
 ;          reads 0xFDEF8E
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA75BA = ScaleCoeff_TimesAbsDepth_Shr
 ;          0xFA766C = ScaleClampedDelta_Shr5, 0xFC37E2 = sub_FC37E2
+; Voice record: touches voice_record[+0x01(rw), +0x08(r), +0x0C(r), +0x13(r), +0x17(r), +0x1F(r), +0x23(r), +0x25(r), +0x39(w), +0x3B(w), +0x3D(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAACEE-0xFAB0BC
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -49022,6 +49060,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB43D:
 ;          0xFAB68D
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x08(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB48A-0xFAB516
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -49106,6 +49145,7 @@ sub_FAB48A__FAB511:
 ;          0xFAB698
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x0C(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB517-0xFAB5A4
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -49195,6 +49235,7 @@ sub_FAB517__FAB59F:
 ; Calls:   0xFA7CC9 = sub_FA7CC9, 0xFA7D03 = ScaleClampedDelta_Shr5_b
 ;          0xFAB48A = sub_FAB48A, 0xFAB517 = sub_FAB517
 ;          0xFC578C = sub_FC578C
+; Voice record: touches voice_record[+0x01(rw), +0x08(r), +0x0C(r), +0x0D(w), +0x0F(r), +0x17(r), +0x23(r), +0x27(r), +0x2F(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB5A5-0xFAB6D4
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -49337,6 +49378,7 @@ sub_FAB5A5__FAB6BF:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x005A51, 0x00D7F1
 ; Calls:   0xFA7CC9 = sub_FA7CC9, 0xFC578C = sub_FC578C
+; Voice record: touches voice_record[+0x0C(r), +0x0D(w), +0x0F(r), +0x17(r), +0x27(r), +0x2F(w)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB6D5-0xFAB79C
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -49432,11 +49474,12 @@ sub_FAB6D5__FAB742:
 ; sub_FAB79D -- 0xFAB79D..0xFAB7DF (67 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
-;          0xFAC238 in sub_FAC08D__FAC232, 0xFADE08 in sub_FADDC8__FADE07
+;          0xFAC238 in sub_FAC08D__FAC232, 0xFADE08 in Voice_RestageReg0080_ForList__FADE07
 ;          0xFB0B7B in VoiceRegs_Stage_A, 0xFB1F96 in VoiceRegs_Stage_B__FB1F91
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA7D6A = Voice_StageLevel_Reg0080
+; Voice record: touches voice_record[+0x0D(r), +0x17(r), +0x25(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB79D-0xFAB7DF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -49484,11 +49527,12 @@ sub_FAB79D__FAB7C6:
 ; sub_FAB7E0 -- 0xFAB7E0..0xFAB817 (56 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
-;          0xFADE0F in sub_FADDC8__FADE0E, 0xFB2880 in VoiceRegs_Stage_C
+;          0xFADE0F in Voice_RestageReg0080_ForList__FADE0E, 0xFB2880 in VoiceRegs_Stage_C
 ;          0xFB2F5A in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA7D6A = Voice_StageLevel_Reg0080
+; Voice record: touches voice_record[+0x0D(r), +0x17(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAB7E0-0xFAB817
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -49810,6 +49854,7 @@ Dev10C_StageRegs_0800_0840_FAB8CC__FAB9BE:
 ; Outputs: writes 0x00D78A, 0x00D78C
 ; Calls:   0xFA7598 = Clamp_ToRange_Word, 0xFA766C = ScaleClampedDelta_Shr5
 ;          0xFC3806 = sub_FC3806
+; Voice record: touches voice_record[+0x08(r), +0x17(r), +0x23(r), +0x25(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: ★ THE NAME STATES WHERE THE TWO WORDS GO, NOT WHAT THEY MEAN.  The two
 ;          absolute stores below are the routine's only absolute-addressed output, and
 ;          the two words they write are read back by Dev10C_WriteSixChanRegs_FromD78A
@@ -50283,6 +50328,7 @@ Dev10C_StageRegs_09C0_0A00__FABCB9:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFC8129 = sub_FC8129
+; Voice record: touches voice_record[+0x01(r), +0x43(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFABCF9-0xFABD4F
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -50739,6 +50785,7 @@ Voice_RecomputeAllThreeBaseCurves__FAC00E:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFB3D26 = Voice_Retire_Mode20
 ;          0xFB732C = Dev10C_WriteReg_c
+; Voice record: touches voice_record[+0x00(r), +0x29(r), +0x2B(rw)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAC026-0xFAC08C
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -50806,6 +50853,7 @@ sub_FAC026__FAC083:
 ; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFAB79D = sub_FAB79D
 ;          0xFB3D26 = Voice_Retire_Mode20, 0xFB7502 = Dev10C_SetChanReg_0180_FromArg
 ;          0xFB7521 = sub_FB7521, 0xFB762F = sub_FB762F
+; Voice record: touches voice_record[+0x00(r), +0x27(r), +0x2D(r), +0x2F(rw), +0x31(r), +0x32(r), +0x34(r), +0x36(r), +0x38(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAC08D-0xFAC2AD
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -52053,6 +52101,7 @@ sub_FAC9A6__FAC9E6:
 ; Calls:   0xFA6EA5 = sub_FA6EA5, 0xFABE30 = Voice_RecomputeAllThreeBaseCurves
 ;          0xFAC026 = sub_FAC026, 0xFB3D09 = VoiceQuery_Tag00_All
 ;          0xFB3D26 = Voice_Retire_Mode20, 0xFB6F2C = sub_FB6F2C
+; Voice record: touches voice_record[+0x00(r), +0x23(r), +0x2B(rw)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFACA40-0xFACAB6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -52134,6 +52183,7 @@ sub_FACA40__FACAB3:
 ;          0xFB3D09 = VoiceQuery_Tag00_All, 0xFB3D26 = Voice_Retire_Mode20
 ;          0xFB7A73 = Dev104_SetChanRegs_00C0_0100_0240, 0xFB7AC9 = Dev104_SetChanRegs_00C0_0100
 ;          0xFC7C0D = sub_FC7C0D
+; Voice record: touches voice_record[+0x00(r), +0x23(r), +0x2B(rw), +0x2D(rw)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFACAB7-0xFACC3E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -55898,6 +55948,7 @@ Dev10C_SetReg0201_FromNibblePair__FADCAB:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA8347 = Voice_StagePitch_Reg0400_AB, 0xFA83CC = Voice_StagePitch_Reg0400_CD
 ;          0xFACE67 = Dev10C_SetChanPitch_Reg0400
+; Voice record: touches voice_record[+0x01(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADCC3-0xFADD28
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -56068,7 +56119,7 @@ sub_FADD29__FADDC2:
 	unlk32 xiz                                 ; FADDC5  unlk XIZ
 	ret                                        ; FADDC7  ret
 ; --------------------------------------------------------------------------
-; sub_FADDC8 -- 0xFADDC8..0xFADE2E (103 bytes)
+; Voice_RestageReg0080_ForList -- 0xFADDC8..0xFADE2E (103 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFBC4BA in sub_FBC39D__FBC4AC
@@ -56078,15 +56129,24 @@ sub_FADD29__FADDC2:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAB79D = sub_FAB79D, 0xFAB7E0 = sub_FAB7E0
 ;          0xFB7038 = Dev10C_SetChanReg_0080_ClrBit15
+; Voice record: touches voice_record[+0x01(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADDC8-0xFADE2E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; What it is:  re-sends device register 0x0080 for every voice in the list its
+;          first argument points at.  Same walk as the rest of the family;
+;          stages through sub_FAB79D or sub_FAB7E0 and pushes with
+;          Dev10C_SetChanReg_0080_ClrBit15.
+; Evidence: `call 0xfb7038` at 0xFADE1F IS Dev10C_SetChanReg_0080_ClrBit15, and
+;          the two stagers are `call 0xfab79d` (0xFADE08) and `call 0xfab7e0`
+;          (0xFADE0F).  No other member of the six-routine family
+;          (notes/prom_c_record68_round10.py --restage) touches register 0x0080.
+; Unknown:  what the two stagers do -- they are still sub_XXXXXX -- and what
+;          the class values select.  The name claims the register and no more.
 ; --------------------------------------------------------------------------
-sub_FADDC8:
+Voice_RestageReg0080_ForList:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADDC8  link XIZ,0x0000
 	push	xhl                                   ; FADDCC  push XHL
 	pushw	de                                   ; FADDCD  push DE
@@ -56094,10 +56154,10 @@ sub_FADDC8:
 	ldw	de, 0x3BCF                             ; FADDCF  ld DE,0x3bcf
 	ld	xix, (xiz+8)                            ; FADDD2  ld XIX,(XIZ+0x08)
 	inc	5, xix                                 ; FADDD5  inc 5,XIX
-sub_FADDC8__FADDD7:
+Voice_RestageReg0080_ForList__FADDD7:
 	ld	h, (xix)                                ; FADDD7  ld H,(XIX)
 	cp	h, 64                                   ; FADDD9  cp H,0x40
-	jr nc, sub_FADDC8__FADE29                  ; FADDDC  jr NC,0xfade29
+	jr nc, Voice_RestageReg0080_ForList__FADE29                  ; FADDDC  jr NC,0xfade29
 	ldb	c, 68                                  ; FADDDE  ld C,0x44
 	mul8rr	c, h                                ; FADDE0  mul BC,H
 	ld	hl, bc                                  ; FADDE2  ld HL,BC
@@ -56106,24 +56166,24 @@ sub_FADDC8__FADDD7:
 	ld	bc, (xhl+1)                             ; FADDE8  ld BC,(XHL+0x01)
 	and	bc, 60                                 ; FADDEB  and BC,0x003c
 	cps	bc, 4                                  ; FADDEF  cp BC,4
-	jr z, sub_FADDC8__FADE07                   ; FADDF1  jr Z,0xfade07
+	jr z, Voice_RestageReg0080_ForList__FADE07                   ; FADDF1  jr Z,0xfade07
 	cp	bc, 8                                   ; FADDF3  cp BC,0x0008
-	jr z, sub_FADDC8__FADE07                   ; FADDF7  jr Z,0xfade07
+	jr z, Voice_RestageReg0080_ForList__FADE07                   ; FADDF7  jr Z,0xfade07
 	cp	bc, 16                                  ; FADDF9  cp BC,0x0010
-	jr z, sub_FADDC8__FADE0E                   ; FADDFD  jr Z,0xfade0e
+	jr z, Voice_RestageReg0080_ForList__FADE0E                   ; FADDFD  jr Z,0xfade0e
 	cp	bc, 32                                  ; FADDFF  cp BC,0x0020
-	jr z, sub_FADDC8__FADE07                   ; FADE03  jr Z,0xfade07
-	jr sub_FADDC8__FADE14                      ; FADE05  jr T,0xfade14
-sub_FADDC8__FADE07:
+	jr z, Voice_RestageReg0080_ForList__FADE07                   ; FADE03  jr Z,0xfade07
+	jr Voice_RestageReg0080_ForList__FADE14                      ; FADE05  jr T,0xfade14
+Voice_RestageReg0080_ForList__FADE07:
 	pushw	hl                                   ; FADE07  push HL
 	call	0xFAB79D                              ; FADE08  call 0xfab79d
-	jr sub_FADDC8__FADE13                      ; FADE0C  jr T,0xfade13
-sub_FADDC8__FADE0E:
+	jr Voice_RestageReg0080_ForList__FADE13                      ; FADE0C  jr T,0xfade13
+Voice_RestageReg0080_ForList__FADE0E:
 	pushw	hl                                   ; FADE0E  push HL
 	call	0xFAB7E0                              ; FADE0F  call 0xfab7e0
-sub_FADDC8__FADE13:
+Voice_RestageReg0080_ForList__FADE13:
 	popw	bc                                    ; FADE13  pop BC
-sub_FADDC8__FADE14:
+Voice_RestageReg0080_ForList__FADE14:
 	lda_24	xbc, (0xD75E)                       ; FADE14  lda XBC,0x00d75e
 	push	xbc                                   ; FADE19  push XBC
 	ld	a, (xix)                                ; FADE1A  ld A,(XIX)
@@ -56132,8 +56192,8 @@ sub_FADDC8__FADE14:
 	call	0xFB7038                              ; FADE1F  call 0xfb7038
 	inc	1, xix                                 ; FADE23  inc 1,XIX
 	inc	6, xsp                                 ; FADE25  inc 6,XSP
-	jr sub_FADDC8__FADDD7                      ; FADE27  jr T,0xfaddd7
-sub_FADDC8__FADE29:
+	jr Voice_RestageReg0080_ForList__FADDD7                      ; FADE27  jr T,0xfaddd7
+Voice_RestageReg0080_ForList__FADE29:
 	pop	xix                                    ; FADE29  pop XIX
 	popw	de                                    ; FADE2A  pop DE
 	pop	xhl                                    ; FADE2B  pop XHL
@@ -56149,13 +56209,24 @@ sub_FADDC8__FADE29:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAA96C = Voice_StageRegs_0800_CD, 0xFAAC00 = Voice_StageRegs_0840_0880_CD
 ;          0xFACEA2 = Dev10C_SetChanReg_0840_0880
+; Voice record: touches voice_record[+0x01(r), +0x43(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADE2F-0xFADEAB
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; REFUSED (round 10): this is one of the six voice-list walkers
+;          notes/prom_c_record68_round10.py --restage selects, and THREE of the six
+;          end in the SAME register pair 0x0840/0x0880 --
+;          sub_FADE2F through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
+;          0xFADE9B), sub_FAE013 and sub_FAE0A1 through ..._dup (`calr 0xfacf78`,
+;          0xFAE092 and 0xFAE0F8), and the tree's own name for the second says it
+;          writes the same two registers.  So `Voice_RestageRegs0840_0880_ForList`
+;          would be true of all three and identify none.  The only discriminators
+;          are the class mask each accepts out of record[+0x01] & 0x3C (0xFADE53,
+;          0xFAE037, 0xFAE0C4) and a flag byte pushed to the CD stager, and
+;          neither has an established meaning in this tree.  So it keeps its
+;          address, and this is the reason rather than a shrug.
 ; --------------------------------------------------------------------------
 sub_FADE2F:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADE2F  link XIZ,0x0000
@@ -56356,7 +56427,7 @@ sub_FADEAC__FADFA7:
 	unlk32 xiz                                 ; FADFAA  unlk XIZ
 	ret                                        ; FADFAC  ret
 ; --------------------------------------------------------------------------
-; sub_FADFAD -- 0xFADFAD..0xFAE012 (102 bytes)
+; Voice_RestageRegs0100_0140_ForList -- 0xFADFAD..0xFAE012 (102 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -56365,15 +56436,26 @@ sub_FADEAC__FADFA7:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFA919B = Voice_StagePair_Reg0100_0140_AB, 0xFA92A5 = Voice_StagePair_Reg0100_0140_CD
 ;          0xFACF3C = Dev10C_SetChanReg_0100_0140
+; Voice record: touches voice_record[+0x01(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFADFAD-0xFAE012
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; What it is:  re-sends device registers 0x0100/0x0140 for every voice in the
+;          list its first argument points at.  Walks voice_record[] at the
+;          0x44 stride, switches on record[+0x01] & 0x3C, stages through
+;          Voice_StagePair_Reg0100_0140_AB or _CD and pushes the pair with
+;          Dev10C_SetChanReg_0100_0140.
+; Evidence: `calr 0xfacf3c` at 0xFAE004 IS Dev10C_SetChanReg_0100_0140, and the
+;          two stagers are `call 0xfa919b` (0xFADFED) and `call 0xfa92a5`
+;          (0xFADFF4).  Six routines in prom_c share this shape
+;          (notes/prom_c_record68_round10.py --restage) and no other one
+;          touches registers 0x0100/0x0140.
+; Unknown:  what the four class values 4/8/0x10/0x20 of record[+0x01] & 0x3C
+;          SELECT.  The name claims the register group and nothing else.
 ; --------------------------------------------------------------------------
-sub_FADFAD:
+Voice_RestageRegs0100_0140_ForList:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADFAD  link XIZ,0x0000
 	push	xhl                                   ; FADFB1  push XHL
 	pushw	de                                   ; FADFB2  push DE
@@ -56381,10 +56463,10 @@ sub_FADFAD:
 	ldw	de, 0x3BCF                             ; FADFB4  ld DE,0x3bcf
 	ld	xix, (xiz+8)                            ; FADFB7  ld XIX,(XIZ+0x08)
 	inc	5, xix                                 ; FADFBA  inc 5,XIX
-sub_FADFAD__FADFBC:
+Voice_RestageRegs0100_0140_ForList__FADFBC:
 	ld	h, (xix)                                ; FADFBC  ld H,(XIX)
 	cp	h, 64                                   ; FADFBE  cp H,0x40
-	jr nc, sub_FADFAD__FAE00D                  ; FADFC1  jr NC,0xfae00d
+	jr nc, Voice_RestageRegs0100_0140_ForList__FAE00D                  ; FADFC1  jr NC,0xfae00d
 	ldb	c, 68                                  ; FADFC3  ld C,0x44
 	mul8rr	c, h                                ; FADFC5  mul BC,H
 	ld	hl, bc                                  ; FADFC7  ld HL,BC
@@ -56393,22 +56475,22 @@ sub_FADFAD__FADFBC:
 	ld	bc, (xhl+1)                             ; FADFCD  ld BC,(XHL+0x01)
 	and	bc, 60                                 ; FADFD0  and BC,0x003c
 	cps	bc, 4                                  ; FADFD4  cp BC,4
-	jr z, sub_FADFAD__FADFEC                   ; FADFD6  jr Z,0xfadfec
+	jr z, Voice_RestageRegs0100_0140_ForList__FADFEC                   ; FADFD6  jr Z,0xfadfec
 	cp	bc, 8                                   ; FADFD8  cp BC,0x0008
-	jr z, sub_FADFAD__FADFEC                   ; FADFDC  jr Z,0xfadfec
+	jr z, Voice_RestageRegs0100_0140_ForList__FADFEC                   ; FADFDC  jr Z,0xfadfec
 	cp	bc, 16                                  ; FADFDE  cp BC,0x0010
-	jr z, sub_FADFAD__FADFF3                   ; FADFE2  jr Z,0xfadff3
+	jr z, Voice_RestageRegs0100_0140_ForList__FADFF3                   ; FADFE2  jr Z,0xfadff3
 	cp	bc, 32                                  ; FADFE4  cp BC,0x0020
-	jr z, sub_FADFAD__FADFEC                   ; FADFE8  jr Z,0xfadfec
-	jr sub_FADFAD__FAE009                      ; FADFEA  jr T,0xfae009
-sub_FADFAD__FADFEC:
+	jr z, Voice_RestageRegs0100_0140_ForList__FADFEC                   ; FADFE8  jr Z,0xfadfec
+	jr Voice_RestageRegs0100_0140_ForList__FAE009                      ; FADFEA  jr T,0xfae009
+Voice_RestageRegs0100_0140_ForList__FADFEC:
 	pushw	hl                                   ; FADFEC  push HL
 	call	0xFA919B                              ; FADFED  call 0xfa919b
-	jr sub_FADFAD__FADFF8                      ; FADFF1  jr T,0xfadff8
-sub_FADFAD__FADFF3:
+	jr Voice_RestageRegs0100_0140_ForList__FADFF8                      ; FADFF1  jr T,0xfadff8
+Voice_RestageRegs0100_0140_ForList__FADFF3:
 	pushw	hl                                   ; FADFF3  push HL
 	call	0xFA92A5                              ; FADFF4  call 0xfa92a5
-sub_FADFAD__FADFF8:
+Voice_RestageRegs0100_0140_ForList__FADFF8:
 	popw	bc                                    ; FADFF8  pop BC
 	lda_24	xbc, (0xD75E)                       ; FADFF9  lda XBC,0x00d75e
 	push	xbc                                   ; FADFFE  push XBC
@@ -56417,10 +56499,10 @@ sub_FADFAD__FADFF8:
 	pushw	wa                                   ; FAE003  push WA
 	calr (0xFACF3C - 0xFAE007)                 ; FAE004  calr 0xfacf3c
 	inc	6, xsp                                 ; FAE007  inc 6,XSP
-sub_FADFAD__FAE009:
+Voice_RestageRegs0100_0140_ForList__FAE009:
 	inc	1, xix                                 ; FAE009  inc 1,XIX
-	jr sub_FADFAD__FADFBC                      ; FAE00B  jr T,0xfadfbc
-sub_FADFAD__FAE00D:
+	jr Voice_RestageRegs0100_0140_ForList__FADFBC                      ; FAE00B  jr T,0xfadfbc
+Voice_RestageRegs0100_0140_ForList__FAE00D:
 	pop	xix                                    ; FAE00D  pop XIX
 	popw	de                                    ; FAE00E  pop DE
 	pop	xhl                                    ; FAE00F  pop XHL
@@ -56436,13 +56518,24 @@ sub_FADFAD__FAE00D:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAA87E = Voice_StageRegs_0840_0880_AB, 0xFAAC00 = Voice_StageRegs_0840_0880_CD
 ;          0xFACF78 = Dev10C_SetChanReg_0840_0880_dup
+; Voice record: touches voice_record[+0x01(r), +0x05(r), +0x13(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE013-0xFAE0A0
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; REFUSED (round 10): this is one of the six voice-list walkers
+;          notes/prom_c_record68_round10.py --restage selects, and THREE of the six
+;          end in the SAME register pair 0x0840/0x0880 --
+;          sub_FADE2F through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
+;          0xFADE9B), sub_FAE013 and sub_FAE0A1 through ..._dup (`calr 0xfacf78`,
+;          0xFAE092 and 0xFAE0F8), and the tree's own name for the second says it
+;          writes the same two registers.  So `Voice_RestageRegs0840_0880_ForList`
+;          would be true of all three and identify none.  The only discriminators
+;          are the class mask each accepts out of record[+0x01] & 0x3C (0xFADE53,
+;          0xFAE037, 0xFAE0C4) and a flag byte pushed to the CD stager, and
+;          neither has an established meaning in this tree.  So it keeps its
+;          address, and this is the reason rather than a shrug.
 ; --------------------------------------------------------------------------
 sub_FAE013:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAE013  link XIZ,0x0000
@@ -56522,13 +56615,24 @@ sub_FAE013__FAE09B:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAA96C = Voice_StageRegs_0800_CD, 0xFAAC00 = Voice_StageRegs_0840_0880_CD
 ;          0xFACF78 = Dev10C_SetChanReg_0840_0880_dup
+; Voice record: touches voice_record[+0x01(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE0A1-0xFAE108
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; REFUSED (round 10): this is one of the six voice-list walkers
+;          notes/prom_c_record68_round10.py --restage selects, and THREE of the six
+;          end in the SAME register pair 0x0840/0x0880 --
+;          sub_FADE2F through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
+;          0xFADE9B), sub_FAE013 and sub_FAE0A1 through ..._dup (`calr 0xfacf78`,
+;          0xFAE092 and 0xFAE0F8), and the tree's own name for the second says it
+;          writes the same two registers.  So `Voice_RestageRegs0840_0880_ForList`
+;          would be true of all three and identify none.  The only discriminators
+;          are the class mask each accepts out of record[+0x01] & 0x3C (0xFADE53,
+;          0xFAE037, 0xFAE0C4) and a flag byte pushed to the CD stager, and
+;          neither has an established meaning in this tree.  So it keeps its
+;          address, and this is the reason rather than a shrug.
 ; --------------------------------------------------------------------------
 sub_FAE0A1:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAE0A1  link XIZ,0x0000
@@ -56657,7 +56761,7 @@ PartRec_ApplyParam_001D:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD142 = sub_FAD142, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
-;          0xFADFAD = sub_FADFAD, 0xFB3CE0 = VoiceQuery_Tag00_Part
+;          0xFADFAD = Voice_RestageRegs0100_0140_ForList, 0xFB3CE0 = VoiceQuery_Tag00_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAE15F-0xFAE1B1
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -60940,7 +61044,7 @@ MidiCtrl_CC120__FAFDA0:
 ;          0xFAD987 = MidiCtrl_Int95, 0xFAD9D0 = MidiCtrl_Int97
 ;          0xFAD9EE = MidiCtrl_Int99, 0xFADA17 = MidiCtrl_Int9A
 ;          0xFADA40 = MidiCtrl_Int9B, 0xFADA5E = MidiCtrl_Int9C
-;          0xFADCC3 = Voice_RestagePitchReg0400_ForList, 0xFADDC8 = sub_FADDC8
+;          0xFADCC3 = Voice_RestagePitchReg0400_ForList, 0xFADDC8 = Voice_RestageReg0080_ForList
 ;          0xFADEAC = sub_FADEAC, 0xFAF3CC = MidiCtrl_CC01
 ;          0xFAF4DD = MidiCtrl_CC02, 0xFAF5EE = MidiCtrl_CC04
 ;          0xFAF6FC = MidiCtrl_CC16, 0xFAF873 = MidiCtrl_CC17
@@ -62854,6 +62958,7 @@ Dev10C_ChanReset:
 ; Inputs:  (XIZ+0x08) = the voice/channel number.
 ; Outputs: 66 bytes of stack temporaries (`add XSP,0x00000042` at 0xFB0B8A) and
 ;          two device writes.
+; Voice record: touches voice_record[+0x03(r), +0x06(r), +0x08(r), +0x0A(r), +0x0C(r), +0x1F(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: `ld C,0x44 / mul BC,(XIZ+0x08) / ld WA,0x3bcf / add DE,BC` -- the
 ;          voice record again -- then a run of `call` / `push DE` pairs (23
 ;          DISTINCT call targets in the routine, counted by
@@ -64762,6 +64867,7 @@ VoiceParams_Compute_A__FB1EA6:
 ; Outputs: as VoiceRegs_Stage_A -- the two staging structs and both device writes
 ;          (Dev104_WriteAllChanRegs at 0xFB1F51, Dev10C_WriteAllChanRegs at
 ;          0xFB1FA5; both writers' headers list those exact sites).
+; Voice record: touches voice_record[+0x03(r), +0x06(r), +0x08(r), +0x0A(r), +0x0C(r), +0x1F(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: same shape as VoiceRegs_Stage_A: 26 distinct call targets against that
 ;          routine's 23, of which 20 ARE SHARED.  Its own six are 0xFA826C,
 ;          0xFAACEE, 0xFAB0BD, 0xFC3595, 0xFC35DB and 0xFC571A; the three
@@ -65662,6 +65768,7 @@ VoiceParams_Compute_B__FB27DC:
 ; Inputs:  (XIZ+0x08) = the voice/channel number.
 ; Outputs: Dev104_WriteAllChanRegs at 0xFB2876, Dev10C_WriteAllChanRegs at
 ;          0xFB288B.
+; Voice record: touches voice_record[+0x03(r), +0x06(r), +0x08(r), +0x0A(r), +0x0C(r), +0x1F(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: ★ 18 distinct call targets, and ALL EIGHTEEN are also called by
 ;          VoiceRegs_Stage_D -- this routine's call set is a strict SUBSET of that
 ;          one's, which has exactly two more (0xFC35B8 and 0xFC369F).  Against
@@ -66355,6 +66462,7 @@ VoiceParams_Compute_C__FB2EA5:
 ;          at 0xFB3810 (inside MidiNote_OffTail).
 ; Outputs: Dev104_WriteAllChanRegs at 0xFB2F4B, Dev10C_WriteAllChanRegs at
 ;          0xFB2F65.
+; Voice record: touches voice_record[+0x03(r), +0x06(r), +0x08(r), +0x0A(r), +0x0C(r), +0x1F(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: 20 distinct call targets = VoiceRegs_Stage_C's eighteen plus exactly
 ;          0xFC35B8 and 0xFC369F (section 10 of the checker prints the difference
 ;          both ways, and the C-only direction is EMPTY).
@@ -67981,6 +68089,7 @@ VoiceQuery_Tag00_All:
 ; Inputs:  (XIZ+0x08) = the voice number.
 ; Outputs: `and (record+5),0x7f`; then either 0xFAB8CC + Dev10C_WriteReg (0xFB732C)
 ;          + 0xFA6EA5 and `and (record+1),0xfeff`, or 0xFABAE3 + 0xFABBFB + 0xFB7345.
+; Voice record: touches voice_record[+0x01(rw), +0x05(rw), +0x23(r), +0x29(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: `ld C,0x44 / mul BC,H / ld DE,0x3bcf / add DE,BC` is the voice record;
 ;          the branch is on bit 8 of (record+1), and on (record+0x23) being a
 ;          pointer whose +9 bit 0 is set.
@@ -68075,6 +68184,7 @@ Voice_Retire_Mode20__FB3DBB:
 ; Called from: TWO sites -- `call 0xFB3DC1` at 0xFADF9D, and `calr` at 0xFB3F0E
 ;          inside VoiceList_RetireByMode's mode-0x08 path.
 ; Inputs:  (XIZ+0x08) = the voice number.
+; Voice record: touches voice_record[+0x01(r), +0x03(r), +0x05(rw), +0x23(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: same `and (record+5),0x7f` and the same closing
 ;          `push &0x00D75E / push voice / call 0xFB7345`.  Its own middle: it
 ;          preserves (record+0x23)->+9 across the call, clears bit 0 of it when
@@ -68151,6 +68261,7 @@ Voice_Retire_Mode08__FB3E45:
 ; Called from: one site, `calr 0xFB3E50` at 0xFB3F17, inside
 ;          VoiceList_RetireByMode's mode-0x10 path.  Nothing outside the module.
 ; Inputs:  (XIZ+0x08) = the voice number.
+; Voice record: touches voice_record[+0x05(rw), +0x43(r)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the shortest of the three: `and (record+5),0x7f`, then if
 ;          (record+0x43) != 0 call 0xFABCF9 and 0xFB7345, else nothing.
 ;          0x43 is the LAST byte of the 0x44-byte record.
@@ -68379,6 +68490,83 @@ MidiNote_Dispatch__FB3F9C:
 	unlk32 xiz                                 ; FB3F9D  unlk XIZ
 	ret                                        ; FB3F9F  ret
 ; ------------------------------------------------------------------------------
+; ==============================================================================
+; ★ ROUND 10 -- THE 68-BYTE VOICE RECORD AT RAM 0x003BCF, FIELD BY FIELD
+; ==============================================================================
+; GENERATED by `python3 notes/prom_c_record68_round10.py --emit68`, which
+; re-derives every row below from this source on every run; --selftest asserts
+; the text is present verbatim, so the comment cannot drift from the tracker.
+;
+; THE ARRAY (wave 5, FINDINGS-prom_c-voice-module.md sec 4; re-derived here):
+;     base   0x3BCF  `ld DE,0x3bcf`             0xFADCCA
+;     stride   0x44  `ld C,0x44` / `mul BC,H`   0xFADCD9 / 0xFADCDB
+;     count    0x40  `cp H,0x40`                0xFADCD4, also the list terminator
+;     0x3BCF + 64 * 0x44 = 0x4CCF -- EXACTLY the base of the 27-byte envelope
+;     record array (notes/prom_c_understanding_round6.py sec 6).  They abut.
+;
+; THE FIELDS.  72 routines hold a pointer this round's rule proves is base +
+; 0x44*index; every displacement seen on one, below the stride, is a field.
+; `w` is the width, read off the other operand's register -- the only place the
+; size is stated.  `dir` is what the tracker SAW.  `ctor` marks the fields
+; VoiceRecords_InitFromAlloc writes.
+;
+;     field   w   dir     sites  rtns  ctor
+;     +0x00   1   r/w       42    16  yes
+;     +0x01   2   r/rw/w    29    21  yes
+;     +0x03   1   r         13    11  
+;     +0x04   1   r/w        9     7  yes
+;     +0x05   1   r/rw/w     6     5  yes
+;     +0x06   2   r/w        9     9  yes
+;     +0x08   2   r/w       16    12  yes
+;     +0x0A   2   r/w        6     6  
+;     +0x0C   1   r/w       26    17  yes
+;     +0x0D   2   r/rw/w     9     7  
+;     +0x0F   4   r/w        4     4  
+;     +0x13   4   r/w       10    10  yes
+;     +0x17   4   r/w       32    31  yes
+;     +0x1B   4   w          1     1  yes
+;     +0x1F   4   r/w        9     9  yes
+;     +0x23   2   r         67    34  
+;     +0x25   2   r/w       39    31  yes
+;     +0x27   2   r/w       11     5  
+;     +0x29   2   r/w        4     4  
+;     +0x2B   2   r/w       10     4  
+;     +0x2D   2   r/w        7     3  
+;     +0x2F   2   r/w        7     4  
+;     +0x31   1   r          1     1  
+;     +0x32   2   r          1     1  
+;     +0x34   2   r          1     1  
+;     +0x36   2   r          1     1  
+;     +0x38   1   r/w        2     2  
+;     +0x39   2   w          3     3  
+;     +0x3B   2   r/w        9     5  
+;     +0x3D   2   r/w       14     5  
+;     +0x3F   2   r/w       26    16  
+;     +0x41   2   r/w       24    16  
+;     +0x43   1   r/w        6     4  
+;
+; ★ THE 33 FIELDS TILE ALL 68 BYTES -- no gap, no overlap, widths summing to the
+; stride, and no offset carrying two different determinate widths.  That is the
+; map's own check: a tracker inventing offsets produces overlaps and one
+; mis-reading widths produces gaps.  VoiceRecords_InitFromAlloc writes the 12 fields marked
+; `ctor` at those same widths, without ever walking the array -- an independent
+; second reading of the same boundaries.
+;
+; MEANING: exactly ONE field has one.  +0x23 holds 0x1523 + 0x012C*part, the
+; address of this voice's part record (`ld BC,0x1523` 0xFB0C8A,
+; `ld (XHL+0x23),BC` 0xFB0CD6), which round 9's selftest already asserts.  The
+; other 32 fields have an offset, a width, a direction and a site list and NO
+; name, deliberately: reading a musical role out of a displacement is how this
+; tree acquired five labels built on a morpheme that occurs zero times in all
+; four ROM images.
+;
+; ⚠ THE TRACKER UNDER-REPORTS AND CANNOT SAY BY HOW MUCH.  It is blind to a
+; record pointer that arrives in a register it cannot prove, is stashed in a
+; stack slot, or is built by arithmetic it does not model -- `ld (XHL+0x23),BC`
+; at 0xFB0CD6 really does write +0x23 and this tracker does not see it.  So a
+; field's `dir` column is what the tracker SAW, never what the image does, and
+; `no writer found` is a searched negative of THIS rule and of nothing else.
+; ==============================================================================
 ; VoiceRecords_InitFromAlloc -- 0xFB3FA0..0xFB405E (191 bytes)
 ;
 ; Asks the allocator for voices and initialises each returned voice's record.
@@ -68389,6 +68577,7 @@ MidiNote_Dispatch__FB3F9C:
 ; Outputs: for every voice number the allocator returns, that voice's 68-byte
 ;          record at 0x00003BCF gets +6 and +8 = (0x151d), +1 = 1, and +0x13 and
 ;          +0x17 cleared.
+; Voice record: touches voice_record[+0x00(w), +0x01(w), +0x04(w), +0x05(w), +0x06(w), +0x08(w), +0x0C(w), +0x13(w), +0x17(w), +0x1B(w), +0x1F(w), +0x25(w)] -- pointer built in place.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: it writes the request as `((0x151d) >> 8) | 0x2080` at +0, 0x80 at +2
 ;          and zeroes at +3..+6, calls 0xFA6BB5, and then walks the result list
 ;          from request+0x0A with the SAME terminator test the retire walk uses:
@@ -85024,7 +85213,7 @@ sub_FBC31B__FBC398:
 ;          0xFC2677 0xFC2685 0xFC26C4 0xFC26D2
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFADCC3 = Voice_RestagePitchReg0400_ForList, 0xFADDC8 = sub_FADDC8
+; Calls:   0xFADCC3 = Voice_RestagePitchReg0400_ForList, 0xFADDC8 = Voice_RestageReg0080_ForList
 ;          0xFADEAC = sub_FADEAC, 0xFB3C8B = VoiceQuery_Tag40_Part
 ;          0xFB3CE0 = VoiceQuery_Tag00_Part, 0xFB4D45 = sub_FB4D45
 ;          0xFB501F = sub_FB501F, 0xFB5103 = sub_FB5103
@@ -97897,6 +98086,7 @@ sub_FC355B:
 ;          0xFB1F75 in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x00(r), +0x0D(rw)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3595-0xFC35B7
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -97927,6 +98117,7 @@ sub_FC3595:
 ;          0xFB2F55 in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x00(r), +0x0D(rw)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC35B8-0xFC35DA
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -97959,6 +98150,7 @@ sub_FC35B8:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00F2F3
 ; Calls:   0xFCB11B = Multiply32
+; Voice record: touches voice_record[+0x00(r), +0x0D(rw), +0x17(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC35DB-0xFC369E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -98230,6 +98422,7 @@ PartSlot_SetRecordPtr_DF05:
 ;          0xFA82CC in Voice_StageRegs_0040_B__FA82CB
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x00(r), +0x03(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3793-0xFC37BD
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -98324,6 +98517,7 @@ sub_FC37E2:
 ;          0xFAB9EB in Dev10C_StageRegs_0800_0840_FAB9D8
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x00(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC3806-0xFC3829
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -107208,6 +107402,7 @@ sub_FC7E79__FC7EFD:
 ;          0xFB0AFD in VoiceRegs_Stage_A, 0xFB1EEB in VoiceRegs_Stage_B
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x00(r), +0x01(rw), +0x03(r), +0x04(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC7F03-0xFC7F79
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -107275,6 +107470,7 @@ sub_FC7F03__FC7F74:
 ;          0xFB281B in VoiceRegs_Stage_C, 0xFB2EE4 in VoiceRegs_Stage_D
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
+; Voice record: touches voice_record[+0x00(r), +0x01(rw), +0x03(r), +0x04(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC7F7A-0xFC7FC9
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above

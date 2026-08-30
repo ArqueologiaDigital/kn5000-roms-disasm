@@ -18539,8 +18539,8 @@ sub_F0F2B2:
 	jr	z, 22	; F0F2C6  jr Z,0xf0f2de
 	calr	3927	; F0F2C8  calr 0xf10222
 	.byte 0xF1, 0x91, 0x27, 0xB8	; F0F2CB  set 0,(0x2791)   [llvm-mc cannot encode this]
-	stdi8	(8347), 128	; F0F2CF  ld (0x209b),0x80
-	stdi8	(8348), 0	; F0F2D4  ld (0x209c),0x00
+	stdi8	(8347), 128	; F0F2CF  ld (0x209b),0x80  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 0	; F0F2D4  ld (0x209c),0x00  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	jr	3	; F0F2D9  jr T,0xf0f2de
 
 ; --------------------------------------------------------------------------
@@ -18678,8 +18678,8 @@ sub_F0F315:
 	pushw	0	; F0F318  push 0x0000
 	calr	3892	; F0F31B  calr 0xf10252
 	.byte 0xF1, 0x91, 0x27, 0xB8	; F0F31E  set 0,(0x2791)   [llvm-mc cannot encode this]
-	stdi8	(8347), 129	; F0F322  ld (0x209b),0x81
-	stdi8	(8348), 1	; F0F327  ld (0x209c),0x01
+	stdi8	(8347), 129	; F0F322  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 1	; F0F327  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F32C  pop XIY
 
 ; --------------------------------------------------------------------------
@@ -18825,8 +18825,8 @@ sub_F0F37C:
 	calr	4134	; F0F382  calr 0xf103ab
 	pop	xiy	; F0F385  pop XIY
 	.byte 0xF1, 0x91, 0x27, 0xB8	; F0F386  set 0,(0x2791)   [llvm-mc cannot encode this]
-	stdi8	(8347), 130	; F0F38A  ld (0x209b),0x82
-	stdi8	(8348), 2	; F0F38F  ld (0x209c),0x02
+	stdi8	(8347), 130	; F0F38A  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 2	; F0F38F  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ret	; F0F394  ret
 
 ; --------------------------------------------------------------------------
@@ -18909,8 +18909,8 @@ sub_F0F3C6:
 	pushw	33	; F0F3D0  push 0x0021
 	call	15997136	; F0F3D3  call 0xf418d0
 	.byte 0xF1, 0x91, 0x27, 0xB8	; F0F3D7  set 0,(0x2791)   [llvm-mc cannot encode this]
-	stdi8	(8347), 131	; F0F3DB  ld (0x209b),0x83
-	stdi8	(8348), 3	; F0F3E0  ld (0x209c),0x03
+	stdi8	(8347), 131	; F0F3DB  ld (0x209b),0x83  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 3	; F0F3E0  ld (0x209c),0x03  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F3E5  pop XIY
 	jr	3	; F0F3E6  jr T,0xf0f3eb
 
@@ -19052,8 +19052,8 @@ sub_F0F42A:
 	pushw	1	; F0F42D  push 0x0001
 	calr	3615	; F0F430  calr 0xf10252
 	.byte 0x84, 0x3E, 0x01	; F0F433  or (XIX),0x01   [llvm-mc cannot encode this]
-	stdi8	(8347), 132	; F0F436  ld (0x209b),0x84
-	stdi8	(8348), 4	; F0F43B  ld (0x209c),0x04
+	stdi8	(8347), 132	; F0F436  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 4	; F0F43B  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F440  pop XIY
 
 ; --------------------------------------------------------------------------
@@ -19199,8 +19199,8 @@ sub_F0F48D:
 	calr	3861	; F0F493  calr 0xf103ab
 	pop	xiy	; F0F496  pop XIY
 	.byte 0x84, 0x3E, 0x01	; F0F497  or (XIX),0x01   [llvm-mc cannot encode this]
-	stdi8	(8347), 133	; F0F49A  ld (0x209b),0x85
-	stdi8	(8348), 5	; F0F49F  ld (0x209c),0x05
+	stdi8	(8347), 133	; F0F49A  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 5	; F0F49F  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xix	; F0F4A4  pop XIX
 	ret	; F0F4A5  ret
 
@@ -19284,8 +19284,8 @@ sub_F0F4DC:
 	jr	nz, 24	; F0F4E1  jr NZ,0xf0f4fb
 	calr	3329	; F0F4E3  calr 0xf101e7
 	.byte 0x84, 0x3E, 0x01	; F0F4E6  or (XIX),0x01   [llvm-mc cannot encode this]
-	stdi8	(8347), 134	; F0F4E9  ld (0x209b),0x86
-	stdi8	(8348), 6	; F0F4EE  ld (0x209c),0x06
+	stdi8	(8347), 134	; F0F4E9  ld (0x209b),0x86  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 6	; F0F4EE  ld (0x209c),0x06  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	jr	6	; F0F4F3  jr T,0xf0f4fb
 
 ; --------------------------------------------------------------------------
@@ -20226,8 +20226,8 @@ sub_F0F788:
 	jr	z, 17	; F0F794  jr Z,0xf0f7a7
 	call	16002688	; F0F796  call 0xf42e80
 	ld	(xix), 0	; F0F79A  ld (XIX),0x00
-	stdi8	(8347), 130	; F0F79D  ld (0x209b),0x82
-	stdi8	(8348), 2	; F0F7A2  ld (0x209c),0x02
+	stdi8	(8347), 130	; F0F79D  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 2	; F0F7A2  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	.byte 0xF1, 0x75, 0x20, 0xB8	; F0F7A7  set 0,(0x2075)   [llvm-mc cannot encode this]
 	ldb_d8	c, (8341)	; F0F7AB  ld C,(0x2095)
 	and	c, 16	; F0F7AF  and C,0x10
@@ -20773,8 +20773,8 @@ sub_F0FD5F:
 	jr	z, 17	; F0FD6B  jr Z,0xf0fd7e
 	call	16002688	; F0FD6D  call 0xf42e80
 	ld	(xix), 0	; F0FD71  ld (XIX),0x00
-	stdi8	(8347), 129	; F0FD74  ld (0x209b),0x81
-	stdi8	(8348), 1	; F0FD79  ld (0x209c),0x01
+	stdi8	(8347), 129	; F0FD74  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 1	; F0FD79  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	.byte 0xF1, 0x75, 0x20, 0xB8	; F0FD7E  set 0,(0x2075)   [llvm-mc cannot encode this]
 	ldb_d8	c, (10129)	; F0FD82  ld C,(0x2791)
 	and	c, 128	; F0FD86  and C,0x80
@@ -21091,8 +21091,8 @@ sub_F1008E:
 	stdi8	(10130), 0	; F100A9  ld (0x2792),0x00
 	stdi8	(10133), 1	; F100AE  ld (0x2795),0x01
 	stdi8	(10131), 1	; F100B3  ld (0x2793),0x01
-	stdi8	(8347), 133	; F100B8  ld (0x209b),0x85
-	stdi8	(8348), 5	; F100BD  ld (0x209c),0x05
+	stdi8	(8347), 133	; F100B8  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 5	; F100BD  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	.byte 0xF1, 0x75, 0x20, 0xB8	; F100C2  set 0,(0x2075)   [llvm-mc cannot encode this]
 	pushw	0	; F100C6  push 0x0000
 	ldw_d16	bc, (10135)	; F100C9  ld BC,(0x2797)
@@ -25238,8 +25238,8 @@ sub_F122C5:		; <- T_F42F68
 	jr	z, 17	; F122D2  jr Z,0xf122e5
 	call	16002688	; F122D4  call 0xf42e80
 	ld	(xix), 0	; F122D8  ld (XIX),0x00
-	stdi8	(8347), 129	; F122DB  ld (0x209b),0x81
-	stdi8	(8348), 1	; F122E0  ld (0x209c),0x01
+	stdi8	(8347), 129	; F122DB  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 1	; F122E0  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	.byte 0xF1, 0x75, 0x20, 0xB8	; F122E5  set 0,(0x2075)   [llvm-mc cannot encode this]
 	stdi8	(10135), 24	; F122E9  ld (0x2797),0x18
 	ldb_d8	c, (8316)	; F122EE  ld C,(0x207c)
@@ -25340,8 +25340,8 @@ sub_F1236E:
 	pushw	1	; F1236E  push 0x0001
 	pushw	0	; F12371  push 0x0000
 	calr	57051	; F12374  calr 0xf10252
-	stdi8	(8347), 129	; F12377  ld (0x209b),0x81
-	stdi8	(8348), 1	; F1237C  ld (0x209c),0x01
+	stdi8	(8347), 129	; F12377  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 1	; F1237C  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F12381  pop XBC
 	ret	; F12382  ret
 
@@ -25365,8 +25365,8 @@ sub_F12383:
 	pushw	1	; F12383  push 0x0001
 	pushw	0	; F12386  push 0x0000
 	calr	57375	; F12389  calr 0xf103ab
-	stdi8	(8347), 130	; F1238C  ld (0x209b),0x82
-	stdi8	(8348), 2	; F12391  ld (0x209c),0x02
+	stdi8	(8347), 130	; F1238C  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 2	; F12391  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F12396  pop XBC
 	ret	; F12397  ret
 
@@ -25390,8 +25390,8 @@ sub_F12398:
 	pushw	3	; F12398  push 0x0003
 	pushw	1	; F1239B  push 0x0001
 	calr	57009	; F1239E  calr 0xf10252
-	stdi8	(8347), 132	; F123A1  ld (0x209b),0x84
-	stdi8	(8348), 4	; F123A6  ld (0x209c),0x04
+	stdi8	(8347), 132	; F123A1  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 4	; F123A6  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F123AB  pop XBC
 	ret	; F123AC  ret
 
@@ -25416,8 +25416,8 @@ sub_F123AD:
 	pushw	3	; F123AD  push 0x0003
 	pushw	1	; F123B0  push 0x0001
 	calr	57333	; F123B3  calr 0xf103ab
-	stdi8	(8347), 133	; F123B6  ld (0x209b),0x85
-	stdi8	(8348), 5	; F123BB  ld (0x209c),0x05
+	stdi8	(8347), 133	; F123B6  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 5	; F123BB  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F123C0  pop XBC
 	ret	; F123C1  ret
 	.byte 0xF1, 0x99, 0x27, 0xB3	; F123C2  res 3,(0x2799)   [llvm-mc cannot encode this]
@@ -62948,7 +62948,9 @@ T_F40014:	jp 0xF82028  ; -> prom_a 0x02028
 ;           Queue2C00_DrainPassAB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Queue2C00_DrainPassAB:	jp 0xF823AC  ; F40018 (was T_F40018) -> prom_a 0x023AC   x16
 T_F4001C:	jp 0xF8262E  ; -> prom_a 0x0262E
-T_F40020:	jp 0xF825C7  ; -> prom_a 0x025C7
+; Evidence: slot 0xF40020 is `jp 0xF825C7`; prom_a 0xF825C7 carries the label
+;           Ring601850_ServiceIfNotEmpty (graded CONTENT).  DERIVATIVE name.
+T_Ring601850_ServiceIfNotEmpty:	jp 0xF825C7  ; F40020 (was T_F40020) -> prom_a 0x025C7
 T_F40024:	jp 0xF82557  ; -> prom_a 0x02557   x2
 T_F40028:	jp 0xF8262E  ; -> prom_a 0x0262E
 T_F4002C:	jp 0xF82630  ; -> prom_a 0x02630
@@ -63631,13 +63633,17 @@ T_F4100C:	jp 0xFC188F  ; -> prom_a 0x4188F   x1
 T_F41010:	jp 0xFC1B81  ; -> prom_a 0x41B81   x9
 T_F41014:	jp 0xFC1CD1  ; -> prom_a 0x41CD1
 T_F41018:	jp 0xFC2035  ; -> prom_a 0x42035   x3
-T_F4101C:	jp 0xFC2222  ; -> prom_a 0x42222   x14
+; Evidence: slot 0xF4101C is `jp 0xFC2222`; prom_a 0xFC2222 carries the label
+;           SoundGroup_MaxMemberIndex_Get (graded CONTENT).  DERIVATIVE name.
+T_SoundGroup_MaxMemberIndex_Get:	jp 0xFC2222  ; F4101C (was T_F4101C) -> prom_a 0x42222   x14
 T_F41020:	jp 0xFC18B2  ; -> prom_a 0x418B2   x3
 T_F41024:	jp 0xFC239B  ; -> prom_a 0x4239B   x2
 T_F41028:	jp 0xFC24E3  ; -> prom_a 0x424E3   x2
 T_F4102C:	jp 0xFC1C59  ; -> prom_a 0x41C59   x4
 T_F41030:	jp 0xFC2155  ; -> prom_a 0x42155   x3
-T_F41034:	jp 0xFC2282  ; -> prom_a 0x42282   x7
+; Evidence: slot 0xF41034 is `jp 0xFC2282`; prom_a 0xFC2282 carries the label
+;           SoundGroup_MaxMemberIndex_GetToneCopy (graded CONTENT).  DERIVATIVE name.
+T_SoundGroup_MaxMemberIndex_GetToneCopy:	jp 0xFC2282  ; F41034 (was T_F41034) -> prom_a 0x42282   x7
 T_F41038:	jp 0xFC1E68  ; -> prom_a 0x41E68   x4
 T_F4103C:	jp 0xFC1D92  ; -> prom_a 0x41D92   x1
 T_F41040:	jp 0xFC25A8  ; -> prom_a 0x425A8   x1
@@ -64746,7 +64752,9 @@ T_F42370:	jp 0xFDCFEB  ; -> prom_a 0x5CFEB
 T_F42374:	jp 0xFDE2DC  ; -> prom_a 0x5E2DC
 T_F42378:	jp 0xF0A9BF  ; -> prom_b 0x0A9BF
 T_F4237C:	jp 0xFDE2DD  ; -> prom_a 0x5E2DD
-T_F42380:	jp 0xFD2504  ; -> prom_a 0x52504   x2
+; Evidence: slot 0xF42380 is `jp 0xFD2504`; prom_a 0xFD2504 carries the label
+;           Ring608A0A_DrainAll (graded CONTENT).  DERIVATIVE name.
+T_Ring608A0A_DrainAll:	jp 0xFD2504  ; F42380 (was T_F42380) -> prom_a 0x52504   x2
 	.fill 0x1C, 1, 0x0E  ; 0xF42384: 28 x ret
 ; Evidence: slot 0xF423A0 is `jp 0xFF4786`; prom_a 0xFF4786 carries the label
 ;           Paint_DiskL0adFile (graded CONTENT).  DERIVATIVE name.
@@ -65240,9 +65248,13 @@ T_IndexedParam_SetFieldFromAsciiEntry:	jp 0xF5553F  ; F42CA8 (was T_F42CA8) -> p
 	.fill 0x74, 1, 0x0E  ; 0xF42CAC: 116 x ret
 T_F42D20:	jp 0xFE3000  ; -> prom_a 0x63000
 T_F42D24:	jp 0xFE3004  ; -> prom_a 0x63004
-T_F42D28:	jp 0xFE3008  ; -> prom_a 0x63008
+; Evidence: slot 0xF42D28 is `jp 0xFE3008`; prom_a 0xFE3008 carries the label
+;           INT5_Dev7B_Receive_Alias (graded CONTENT).  DERIVATIVE name.
+T_INT5_Dev7B_Receive_Alias:	jp 0xFE3008  ; F42D28 (was T_F42D28) -> prom_a 0x63008
 T_F42D2C:	jp 0xFE300C  ; -> prom_a 0x6300C
-T_F42D30:	jp 0xFE3010  ; -> prom_a 0x63010
+; Evidence: slot 0xF42D30 is `jp 0xFE3010`; prom_a 0xFE3010 carries the label
+;           INTTC0_uDMA0Done_Alias (graded CONTENT).  DERIVATIVE name.
+T_INTTC0_uDMA0Done_Alias:	jp 0xFE3010  ; F42D30 (was T_F42D30) -> prom_a 0x63010
 T_F42D34:	jp 0xFE3014  ; -> prom_a 0x63014   x23
 T_F42D38:	jp 0xFE3018  ; -> prom_a 0x63018   x17
 	.fill 0x24, 1, 0x0E  ; 0xF42D3C: 36 x ret
@@ -80909,7 +80921,7 @@ sub_F4EDC6:
 	stdi8	(3077), 228	; F4EE50  ld (0x0c05),0xe4
 	call	15993364	; F4EE55  call 0xf40a14
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F4EE59  or (0x2075),0x09   [llvm-mc cannot encode this]
-	stdi16	(8347), 34953	; F4EE5E  ld (0x209b),0x8889
+	stdi16	(8347), 34953	; F4EE5E  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	bit_dd8	2, 150	; F4EE64  bit 2,(0x96)
 	jr	z, 5	; F4EE67  jr Z,0xf4ee6e
 	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F4EE69  and (0x2075),0xf6   [llvm-mc cannot encode this]
@@ -83813,8 +83825,8 @@ sub_F53052:
 	.byte 0xF1, 0x75, 0x20, 0xB0	; F530D0  res 0,(0x2075)   [llvm-mc cannot encode this]
 	jr	14	; F530D4  jr T,0xf530e4
 	.byte 0xF1, 0x75, 0x20, 0xB8	; F530D6  set 0,(0x2075)   [llvm-mc cannot encode this]
-	stdi8	(8347), 12	; F530DA  ld (0x209b),0x0c
-	stdi8	(8348), 11	; F530DF  ld (0x209c),0x0b
+	stdi8	(8347), 12	; F530DA  ld (0x209b),0x0c  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	stdi8	(8348), 11	; F530DF  ld (0x209c),0x0b  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldb_d8	c, (8341)	; F530E4  ld C,(0x2095)
 	and	c, 16	; F530E8  and C,0x10
 	jr	nz, 52	; F530EB  jr NZ,0xf53121
@@ -91803,7 +91815,7 @@ sub_F56C57:
 	call	16002440	; F56CAA  call 0xf42d88
 	jr	37	; F56CAE  jr T,0xf56cd5
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F56CB0  or (0x2075),0x09   [llvm-mc cannot encode this]
-	stdi16	(8347), 34953	; F56CB5  ld (0x209b),0x8889
+	stdi16	(8347), 34953	; F56CB5  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	15994124	; F56CBB  call 0xf40d0c
 	call	16000772	; F56CBF  call 0xf42704
 	ld	xwa, 16080012	; F56CC3  ld XWA,0x00f55c8c
@@ -91837,7 +91849,7 @@ sub_F56CD6:
 	stdi16	(8304), 517	; F56CEF  ld (0x2070),0x0205
 	jr	37	; F56CF5  jr T,0xf56d1c
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F56CF7  or (0x2075),0x09   [llvm-mc cannot encode this]
-	stdi16	(8347), 34953	; F56CFC  ld (0x209b),0x8889
+	stdi16	(8347), 34953	; F56CFC  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	15994128	; F56D02  call 0xf40d10
 	call	16000772	; F56D06  call 0xf42704
 	ld	xwa, 16080012	; F56D0A  ld XWA,0x00f55c8c
@@ -97158,6 +97170,18 @@ DL_F59C53:
 ;   0x2B20      32 bytes: one previous value per group index.  The index is
 ;               `b & 0x4F`, less 0x30 when bit 6 is set, i.e. 0..0x1F, and
 ;               0x2B20 + 0x20 = 0x2B40 -- abuts.
+;               ★ WHAT A GROUP IS, established round 10: for the eleven panel
+;               wires 0xC0-0xCA the index is 0x10 + (wire & 0x0F), so this is
+;               the DEBOUNCED SWITCH-STATE SHADOW, one byte per switch-matrix
+;               column.  prom_a reads six of these cells DIRECTLY and by name:
+;               (0x2B30)(0x2B31)(0x2B32)(0x2B33) at 0xF8295F/0xF953D2/0xF82952/
+;               0xF82A18 and (0x2B38)(0x2B3A) at 0xF828DF/0xF82A0A -- the
+;               power-on service chords and the self-diagnostic screens.  The
+;               anchor that fixes the offset is prom_a 0xF953D2 reading
+;               (0x2B31) = index 0x11 = wire 0xC1 and dispatching its bits 2-5
+;               to the four self-diagnostic screens the service manual lists
+;               against number-pad keys 2,3,4,5
+;               (notes/wave7_panel_button_codes.py --physical).
 ;   0x2B40      inbound message queue, and 0x2BA0 the outbound one.  Each is a
 ;               ten-byte descriptor followed by its storage:
 ;                 +0 low index  +2 high index  +4 index A  +6 index B  +8 count
@@ -98449,9 +98473,34 @@ SC1_RxOpTable:
 ;          0x2B20-0x2B3F that abuts the next object.
 ; Notes:   emitting old XOR new alongside the new value is a CHANGE MASK: the
 ;          consumer is told which bits of this group moved.
-; Unknown: what the groups are.  A change mask over 32 groups of 8 bits is the
-;          shape of a scanner, and this module is half-duplex with a request
-;          line -- but nothing here names what is scanned, so nothing does.
+; ★ WHAT THE GROUPS ARE, AND WHO CONSUMES THE QUEUE -- answered round 10, and
+;          the header used to say "nothing here names what is scanned".  A GROUP
+;          is a COLUMN of the front panel's switch matrix, and the consumer is
+;          prom_a sub_F8A088.
+; Consumer: prom_a 0xF8A088 is `ld XIZ,0x00002B40` followed by
+;          `ld IX,(XIZ+0x06)` -- it takes the queue's read index and pulls the
+;          three bytes this routine appended, in this order: wire, new value,
+;          change mask.  It is the ONLY consumer: the 32-bit immediate
+;          0x00002B40 occurs twice in prom_a (here and prom_a 0xF94E20) and five
+;          times in prom_b, all five being this module's own descriptor inits.
+; Downstream: prom_a maps the wire byte to a GROUP id through
+;          PanelWireGroupMap_Variant1/2 (index `(w & 0x1F) | ((w & 0xC0) >> 1)`,
+;          so wires 0xC0-0xCA are groups 0x00-0x0A), appends {group, value,
+;          change mask} to the 7-record list at RAM 0x2000 (prom_a 0xF8A3B2),
+;          and prom_a 0xF8A824 turns each record into UI events through a
+;          per-group table of 4-byte templates {class, code, shift, bit mask}.
+;          ★ That template's byte +0 is why no `ld DE,0x00A9` exists anywhere in
+;          the four images: the event CLASS is copied out of a table, never
+;          written as an immediate.
+; Evidence: `python3 notes/prom_b_screens_round8.py --layer2` re-derives all of
+;          it from the ROM images -- both template pointer tables read out of
+;          the walker's own `ld XIX` immediates, and their 40 distinct record
+;          lists tiling 0xF8B51E-0xF8B749 with no gap and no overlap.
+;          `--selftest` pins it with 18 checks, including the LAST list.
+; ⚠ Still open: a CODE still does not name a SWITCH.  Variant 1's table gives
+;          groups 3 and 4 byte-identical template lists, and 5 and 6 likewise,
+;          so the same bit in either half of a pair produces the same four event
+;          bytes.  The refusal and its arithmetic are in the --layer2 output.
 ; ---------------------------------------------------------------------
 SC1_RxOp0_ThreeByte:
 	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x20	; F5B0D5  ld W,(XDE+IY)   [llvm-mc cannot encode this]
@@ -156366,6 +156415,49 @@ sub_F7D2D7:
 ; ==================================================================
 ; Reproduce all three counts with
 ;     python3 notes/prom_b_f7d_tables.py
+;
+; ★★ WHAT THE SLOT INDEX IS -- established round 10, and the slot occupancy of
+; these very tables is the check.
+;
+; The index is the CODE byte of a class-0xA9 UI event, and that code is not a
+; switch number: it is byte +1 of a 4-byte template {class, code, shift, bit
+; mask} in a per-group table in prom_a.  A panel switch closing travels
+;   CP1 -> prom_b SC1_RxOp0_ThreeByte (0xF5B0D5), which queues
+;          [wire][new value][change mask] at 0x2B40
+;       -> prom_a sub_F8A088, the queue's ONLY consumer, which maps the wire to
+;          a GROUP through PanelWireGroupMap_Variant1/2
+;       -> prom_a 0xF8A3B2, which appends {group, value, mask} to RAM 0x2000
+;       -> prom_a 0xF8A824, which reads the group's template list through one of
+;          two 27-entry pointer tables (0xF8B446 when the (0xC4) strap is 1,
+;          else 0xF8B4B2), copies the template's class and code straight into
+;          the 0x2030 event list, masks the value and the change mask with the
+;          template's +3 byte and shifts both by its +2 byte
+;       -> prom_a UiEvent_RouteByCode, which sends code < 0x20 to
+;          PanelButton_Accept -- and PanelButton_Route's `and L,0x1f` is the
+;          index into a table here.
+; ★ The template's +2 SHIFT is why 32 codes serve 58 switches: it slides the
+; masked bits down, so ONE code carries up to eight switches in its payload.
+;
+; ★ THE CHECK, on these tables' own bytes: all sixteen slots 0x00-0x0F are
+; filled by at least one screen, and fifteen of those sixteen codes are emitted
+; by a prom_a template.  Slot 0x0F is the only one all 32 screens handle.
+; ⚠ AND THE HOLE, not smoothed over: slots 0x0E and 0x11-0x19 are filled by a
+; screen and NO template emits them, and code 0x1E is emitted and no screen
+; handles it.  The obvious explanation -- PanelButton_Accept's substitution of
+; (0x209B)/(0x209C) for code 0x0D -- is REFUTED by census: every literal ever
+; written to that pair masks to 0x00-0x0C.  The producer of those nine codes is
+; unfound; class 0xA8 is where to look.
+; ⚠ AND WHY THE 124 BUTTON HANDLERS BELOW STILL HAVE NO NAME: a code does not
+; name a switch.  Variant 1's template table gives GROUPS 3 AND 4 byte-identical
+; record lists, and 5 and 6 likewise, so the same bit in either half of a pair
+; makes the same four event bytes -- 16 switch bits sharing 8 distinguishable
+; (code, payload bit) positions.  Round 9's physical map puts eight fitted
+; switches in each of segments 3, 4 and 5 with group == segment; 24 switches do
+; not fit in 16 positions, so one of those readings is wrong and this pass does
+; not choose between them.
+; Evidence: python3 notes/prom_b_screens_round8.py --layer2   (and --selftest,
+;           which pins every number above, including the LAST slot and the LAST
+;           template list).
 
 ; --- table  0 of 32: 10 distinct targets; named by the `ld XIX` at 0xF7D032
 ; ButtonTable_Edit_0C10Zero -- the 32 panel-button handlers of this screen
@@ -158060,7 +158152,7 @@ Paint_TrackAssign:
 	jr	nz, 33	; F7E458  jr NZ,0xf7e47b
 	call	16002020	; F7E45A  call 0xf42be4
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7E45E  or (0x2075),0x01   [llvm-mc cannot encode this]
-	stdi16	(8347), 35208	; F7E463  ld (0x209b),0x8988
+	stdi16	(8347), 35208	; F7E463  ld (0x209b),0x8988  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7E469  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7E46F  ld (0x266a),0xffff
 	.byte 0xF1, 0x95, 0x20, 0xCC	; F7E475  bit 4,(0x2095)   [llvm-mc cannot encode this]
@@ -158922,7 +159014,7 @@ Paint_SongClear:
 	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EAE9  cp (0x207e),0x00   [llvm-mc cannot encode this]
 	jrl	nz, 137	; F7EAEE  jrl NZ,0xf7eb7a
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EAF1  or (0x2075),0x09   [llvm-mc cannot encode this]
-	stdi16	(8347), 770	; F7EAF6  ld (0x209b),0x0302
+	stdi16	(8347), 770	; F7EAF6  ld (0x209b),0x0302  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7EAFC  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7EB02  ld (0x266a),0xffff
 	ld	xiy, 15964629	; F7EB08  ld XIY,0x00f399d5
@@ -159294,7 +159386,7 @@ Paint_TrackMerge:
 	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EE0C  cp (0x207e),0x00   [llvm-mc cannot encode this]
 	jr	nz, 35	; F7EE11  jr NZ,0xf7ee36
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EE13  or (0x2075),0x09   [llvm-mc cannot encode this]
-	stdi16	(8347), 1156	; F7EE18  ld (0x209b),0x0484
+	stdi16	(8347), 1156	; F7EE18  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7EE1E  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7EE24  ld (0x266a),0xffff
 	call	16001336	; F7EE2A  call 0xf42938
@@ -159485,7 +159577,7 @@ Paint_MeasureDelete:
 	jr	nz, 27	; F7EF85  jr NZ,0xf7efa2
 	call	16001372	; F7EF87  call 0xf4295c
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EF8B  or (0x2075),0x09   [llvm-mc cannot encode this]
-	stdi16	(8347), 1156	; F7EF90  ld (0x209b),0x0484
+	stdi16	(8347), 1156	; F7EF90  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7EF96  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7EF9C  ld (0x266a),0xffff
 	calr	62260	; F7EFA2  calr 0xf7e2d9
@@ -159847,7 +159939,7 @@ Paint_MeasureErase:
 	jr	nz, 27	; F7F25D  jr NZ,0xf7f27a
 	call	16001408	; F7F25F  call 0xf42980
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7F263  or (0x2075),0x09   [llvm-mc cannot encode this]
-	stdi16	(8347), 1156	; F7F268  ld (0x209b),0x0484
+	stdi16	(8347), 1156	; F7F268  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7F26E  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7F274  ld (0x266a),0xffff
 	calr	61532	; F7F27A  calr 0xf7e2d9
@@ -160267,7 +160359,7 @@ Paint_Quantize:
 	jr	nz, 27	; F7F58B  jr NZ,0xf7f5a8
 	call	16001288	; F7F58D  call 0xf42908
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7F591  or (0x2075),0x01   [llvm-mc cannot encode this]
-	stdi16	(8347), 1156	; F7F596  ld (0x209b),0x0484
+	stdi16	(8347), 1156	; F7F596  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7F59C  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7F5A2  ld (0x266a),0xffff
 	calr	60718	; F7F5A8  calr 0xf7e2d9
@@ -160646,7 +160738,7 @@ Paint_Vel0cityChange:
 	jr	nz, 27	; F7F8B2  jr NZ,0xf7f8cf
 	call	16001248	; F7F8B4  call 0xf428e0
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7F8B8  or (0x2075),0x01   [llvm-mc cannot encode this]
-	stdi16	(8347), 1156	; F7F8BD  ld (0x209b),0x0484
+	stdi16	(8347), 1156	; F7F8BD  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7F8C3  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7F8C9  ld (0x266a),0xffff
 	calr	59911	; F7F8CF  calr 0xf7e2d9
@@ -161044,7 +161136,7 @@ Paint_Transp0se:
 	jr	nz, 51	; F7FC01  jr NZ,0xf7fc36
 	call	16001592	; F7FC03  call 0xf42a38
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7FC07  or (0x2075),0x01   [llvm-mc cannot encode this]
-	stdi16	(8347), 1156	; F7FC0C  ld (0x209b),0x0484
+	stdi16	(8347), 1156	; F7FC0C  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7FC12  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7FC18  ld (0x266a),0xffff
 	ldb_d8	a, (3574)	; F7FC1E  ld A,(0x0df6)
@@ -161433,7 +161525,7 @@ Paint_AdvanceDelay:
 	jr	nz, 51	; F7FF30  jr NZ,0xf7ff65
 	call	16001632	; F7FF32  call 0xf42a60
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7FF36  or (0x2075),0x01   [llvm-mc cannot encode this]
-	stdi16	(8347), 1156	; F7FF3B  ld (0x209b),0x0484
+	stdi16	(8347), 1156	; F7FF3B  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7FF41  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7FF47  ld (0x266a),0xffff
 	ldb_d8	a, (3557)	; F7FF4D  ld A,(0x0de5)

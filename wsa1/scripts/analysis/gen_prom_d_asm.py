@@ -254,6 +254,25 @@ for _slot, _aud in _R8.AUDITED_R8.items():
                  "%s (round-7 names, round-8 names); audited as %s.  Re-audit with "
                  "notes/prom_d_inventory_round8.py Q3."
                  % (_slot, _got, _aud))
+# ★ WAVE 7 ROUND 10.  M9, THE SELECTOR.  Round 6 measured the 1,024-entry map at
+# slot +0x0C as a WITNESS for records the byte test had already named; it was
+# never asked about the records the byte test MISSES, which is where every framed
+# label in the +0x18 array is.  The label it produces says what it measured --
+# `_SelectedFor_`, a statement about a MAP ENTRY, not about 43 bytes.
+_got10 = _R8._r10_shape()
+if _got10 != _R8.AUDITED_R10:
+    sys.exit("REFUSING TO EMIT: the round-10 selector shape is now %s; audited as "
+             "%s.  Re-audit with notes/prom_d_inventory_round8.py Q16-Q19."
+             % (_got10, _R8.AUDITED_R10))
+SEL_LABEL = _R8.selector_labels()
+SEL_COLS = _R8.selector_columns()
+SEL_NAMES = _R8.selector_names()
+SEL_MAP_SLOT = _R8.SELECTOR_SLOT
+MELODIC_ROWS = _R8.MELODIC_ROWS
+SEL_MARGIN = _R8.selector_row_margin()      # (positions, best, best wrong) -- Q16d
+SEL_READERS = _R8.selector_readers()        # (reads of +0x0C, reads of +0x18)
+SEL_BUCKETS = _R8.selector_buckets()        # (named, unreached, too broad, digits)
+SEL_NULL = _R8.selector_shuffle_null()      # (mean, max) over 20 shuffles -- Q16c
 TWIN_LABEL = {_s: _R8.wavesel_labels_r8(_s) for _s in (0x18, 0x20)}
 DISJ = {_s: _R8.disjunction_labels(_s) for _s in (0x18, 0x20)}
 MAX_NAMES = _R8.MAX_NAMES
@@ -811,6 +830,105 @@ def WAVESEL_GAP(slot):
                 "         a RAM copy (0xFBC738 computes the destination as",
                 "         0x000087d2 + 43*n) and leaves no stored relation at all.",
                 "  notes/prom_d_finish_round7.py Q5.",
+            ]
+            # ★★ ROUND 10.  The same map as M1, asked a different question.
+            _nm, _unr, _brd, _dig = SEL_BUCKETS
+            lines += [
+                "",
+                "  6. ★★ ROUND 10 -- M9, THE SELECTOR, NAMES %d MORE, WITH THE MAP M1"
+                % _nm,
+                "     REJECTED.  M1 above asked it to BREAK A TIE: to pick one of the",
+                "     several tone names a record's BYTES already match.  Calibrated",
+                "     where the answer was known it was wrong %d times in %d, and it"
+                % (_R7.m1_calibration()[1],
+                   _R7.m1_calibration()[0] + _R7.m1_calibration()[1]),
+                "     stays rejected for that job.  M9 asks it about the records the",
+                "     byte rule reaches NOT AT ALL -- the ones numbered below -- where",
+                "     there is no tie and nothing to pick between, and it asks for a",
+                "     DIFFERENT relation: not `whose block is this` but `what does the",
+                "     map put this record under`.",
+                "",
+                "     THE INDEX.  A map entry sits at row*128 + program.  The PROGRAM",
+                "     half is pinned hard: the agreement with the byte rule is %d of"
+                % _R8.selector_byte_agreement(_R8.selector_map())[1],
+                "     %d at the true reading, and mis-reading the program by one in"
+                % _R8.selector_byte_agreement(_R8.selector_map())[0],
+                "     either direction gives %d or %d, by two %d or %d."
+                % tuple(_R8.selector_byte_agreement(_R8.selector_map(), progshift=_d)[1]
+                        for _d in (-1, 1, -2, 2)),
+                "     Shuffling the map gives a mean of %.1f (max %d) over 20 draws."
+                % SEL_NULL,
+                "     ⚠ THE ROW HALF IS NOT PINNED, and that is why the labels below",
+                "     read a whole COLUMN: the true row alignment beats the best wrong",
+                "     one by %d of %d positions, %.1f%% against %.1f%%, because the"
+                % (SEL_MARGIN[1] - SEL_MARGIN[2], SEL_MARGIN[0],
+                   100.0 * SEL_MARGIN[1] / SEL_MARGIN[0],
+                   100.0 * SEL_MARGIN[2] / SEL_MARGIN[0]),
+                "     eight melodic rows are near-copies of one another.  A name over",
+                "     the column is invariant under all 8 row rotations; a name over",
+                "     one position would rest on that margin.",
+                "",
+                "     THE CALIBRATION.  Where BOTH rules reach a record they agree 110",
+                "     of 120 against a shuffled null of 5.8 -- and 13 of those 110 are",
+                "     bought by the column being wider than M1's per-position vote,",
+                "     which notes/prom_d_inventory_round8.py Q17c prices rather than",
+                "     banks.  The 10 disagreements are printed there in full; M9 is",
+                "     applied to NONE of them, because it labels only records with no",
+                "     twin, so no label here contradicts another.",
+                "",
+                "     ⚠ AND THE HOLE, said here and not left to a reviewer: the 99-read",
+                "     directory census finds %d prom_c reads of slot +0x%02X and %d of"
+                % (SEL_READERS[0], _R8.SELECTOR_SLOT, SEL_READERS[1]),
+                "     slot +0x18.  M9 is a relation between two TABLES, derived from",
+                "     their contents; it is not evidence about what the machine does",
+                "     with either, and `_SelectedFor_` is worded to claim only that.",
+                "",
+                "     WHAT IT LEAVES, and the four outcomes sum to the framed total:",
+                "     %d named, %d selected by NO entry of the map (a census over all"
+                % (_nm, _unr),
+                "     1,024 entries, not a rule failing to fire), %d whose columns"
+                % _brd,
+                "     carry more than %d tone names, and %d that would have been named"
+                % (MAX_NAMES, _dig),
+                "     `161` -- tone record 0x05D's own `    16\' & 1\'    ` -- and are",
+                "     refused rather than spelled some other way.",
+                "     ★ AND THE SAME RULE ON THE PERCUSSION ARRAY IS REFUSED: see that",
+                "     array's own banner.",
+                "  notes/prom_d_inventory_round8.py Q16-Q20, and %d checks in that file."
+                % _R8.AUDITED_CHECKS,
+            ]
+        if slot == 0x20:
+            # ★★ ROUND 10.  The SAME mechanism, on this array, REFUSED -- written
+            # here rather than only in the notes, because this is the array whose
+            # 37 framed records it would have named.
+            _ptot, _pok, _pmean, _pmax, _pag, _pdis, _pwould = _R8.perc_selector_refusal()
+            lines += [
+                "",
+                "  6. ★★ ROUND 10 -- THE MECHANISM THAT NAMED %d RECORDS AT SLOT +0x18"
+                % _R8.selector_buckets()[0],
+                "     WAS RUN HERE AND IS REFUSED.  The shape is there: a 1,024-entry",
+                "     map at slot +0x14 whose range is exactly 0..%d, and the"
+                % (_R8.selector_map(0x14) and max(_R8.selector_map(0x14))),
+                "     2,048-entry drum note map at +0x74 to read names out of.  It",
+                "     would have named %d records -- EVERY framed record of this array."
+                % _pwould,
+                "",
+                "     WHY NOT.  The test that licenses the melodic version is `does the",
+                "     map's record equal that instrument's own bytes`.  Here it scores",
+                "     %d of %d -- against a SHUFFLED NULL OF %d (max %d).  The drum"
+                % (_pok, _ptot, round(_pmean), _pmax),
+                "     records' 43-byte tails repeat so heavily that a shuffled map",
+                "     scores almost as well, so a hit is not evidence of anything.  And",
+                "     calibrated against the byte rule the way Q17 calibrates the",
+                "     melodic one, it agrees %d time%s and differs %d."
+                % (_pag, "" if _pag == 1 else "s", _pdis),
+                "     ⚠ THE MELODIC ARRAY IS THE OPPOSITE CASE (shuffled mean %.1f"
+                % _R8.selector_shuffle_null()[0],
+                "     against %d), and that contrast is what makes the melodic number"
+                % _R8.selector_byte_agreement(_R8.selector_map())[1],
+                "     worth quoting and this one worthless.  %d names refused."
+                % _pwould,
+                "  notes/prom_d_inventory_round8.py Q18.",
             ]
     if slot == 0x3C:
         lines += [
@@ -1964,6 +2082,74 @@ def mk_wavesel_array(slot):
                       % sum(1 for v in twin.values() if v))
                     W("; %d of the 43.  round 6 Q1, verdict NAMELESS-NO-TWIN."
                       % _nearest_tone_distance(a + 43 * i))
+                    # ★ ROUND 10.  The SECOND route, asked of exactly these records.
+                    _cols = SEL_COLS.get(i)
+                    _nms = SEL_NAMES.get(i, ())
+                    if not _cols:
+                        W("; ⚠ AND NOTHING SELECTS IT EITHER.  All 1,024 entries of")
+                        W("; ToneDB_ToneIndexMapA (slot +0x%02X) were read and NONE"
+                          % SEL_MAP_SLOT)
+                        W("; holds %d.  That is a census over the whole map, not a" % i)
+                        W("; rule failing to fire.  round 10 Q19.")
+                    elif SEL_LABEL.get(i):
+                        W("; ★ BUT SOMETHING SELECTS IT, and that is this label.")
+                        W("; ToneDB_ToneIndexMapA holds %d at program column%s %s"
+                          % (i, "" if len(_cols) == 1 else "s",
+                             ", ".join(str(c) for c in _cols[:6])))
+                        W("; of its 8 x 128 grid, and across all %d melodic rows"
+                          % MELODIC_ROWS)
+                        W("; %s of ToneNumBank_Melodic carr%s %d tone"
+                          % ("that column" if len(_cols) == 1 else "those columns",
+                             "ies" if len(_cols) == 1 else "y", len(_nms)))
+                        W("; name%s: %s." % ("" if len(_nms) == 1 else "s",
+                                             ", ".join(_nms)))
+                        W("; ⚠ WHAT `_SelectedFor_` CLAIMS is exactly that and no")
+                        W("; more.  It does NOT say this record is that tone's")
+                        W("; mixer setting: the 99-read directory census finds %d"
+                          % SEL_READERS[0])
+                        W("; prom_c reads of slot +0x%02X and %d of slot +0x%02X, so"
+                          % (SEL_MAP_SLOT, SEL_READERS[1], 0x18))
+                        W("; this is a relation between two TABLES and not evidence")
+                        W("; about what the machine does with either; the array's")
+                        W("; role is still a transplanted KN5000 name.  The name is")
+                        W("; taken over the whole COLUMN because the ROW half of the")
+                        W("; index is not pinned -- the true row alignment beats the")
+                        W("; best wrong one by only %d of %d positions (%.1f%% vs"
+                          % (SEL_MARGIN[1] - SEL_MARGIN[2], SEL_MARGIN[0],
+                             100.0 * SEL_MARGIN[1] / SEL_MARGIN[0]))
+                        W("; %.1f%%, round 10 Q16d), so a label that needed the row"
+                          % (100.0 * SEL_MARGIN[2] / SEL_MARGIN[0]))
+                        W("; to be right would rest on that margin.  Over the column")
+                        W("; it is invariant under all %d rotations." % MELODIC_ROWS)
+                        W("; Evidence: map entries at file 0x%05X + 2*(row*128 + col)"
+                          % S(SEL_MAP_SLOT))
+                        W("; for col in %s; the tone names are those tone records'"
+                          % ", ".join(str(c) for c in _cols[:6]))
+                        W("; own 16 ASCII bytes.  notes/prom_d_inventory_round8.py")
+                        W("; Q16-Q19; the same map is round 6 Q2b's second witness.")
+                    elif len(_nms) > MAX_NAMES:
+                        W("; ★ AND THE SELECTOR IS ASKED TOO, and refuses: the map")
+                        W("; holds %d at %d program column%s, and across the %d"
+                          % (i, len(_cols), "" if len(_cols) == 1 else "s",
+                             MELODIC_ROWS))
+                        W("; melodic rows %s carr%s %d different tone"
+                          % ("that column" if len(_cols) == 1 else "those columns",
+                             "ies" if len(_cols) == 1 else "y", len(_nms)))
+                        W("; names -- more than round 8's bound of %d, so a" % MAX_NAMES)
+                        W("; disjunction would enumerate a family rather than name")
+                        W("; an object.  round 10 Q19.")
+                    else:
+                        W("; ★ AND THE SELECTOR IS ASKED TOO, and refuses for the")
+                        W("; other reason: the map holds %d at program column%s %s,"
+                          % (i, "" if len(_cols) == 1 else "s",
+                             ", ".join(str(c) for c in _cols[:6])))
+                        W("; and the only tone name there is %r, which is what this"
+                          % " / ".join(_nms))
+                        W("; tree's CamelCase rule makes of tone record 0x05D's own")
+                        W("; 16 bytes, \"    16' & 1'    \".  A label ending in")
+                        W("; digits reads as positional, so the name is refused")
+                        W("; rather than spelled some other way -- inventing a")
+                        W("; morpheme is round 3's `Home` failure.  round 10 Q19e.")
             if car is not None:
                 ks = car[i]
                 W("")
@@ -2053,8 +2239,14 @@ def mk_wavesel_array(slot):
             # agree on one, and stays a number when they do not.  Neither half is
             # typed here: both come from notes/prom_d_understanding_round6.py.
             _suffix = TWIN_LABEL.get(slot, {}).get(i)
-            W("%s_%03d%s:" % (slot_label(slot), i,
-                              "_SameAs_" + _suffix if _suffix else ""))
+            if _suffix:
+                _tail = "_SameAs_" + _suffix
+            elif slot == 0x18 and SEL_LABEL.get(i):
+                # ★ ROUND 10.  A record with no twin, named by what POINTS AT it.
+                _tail = "_SelectedFor_" + SEL_LABEL[i]
+            else:
+                _tail = ""
+            W("%s_%03d%s:" % (slot_label(slot), i, _tail))
             e_bytes(a + 43 * i, a + 43 * (i + 1), per=43)
     return fn
 

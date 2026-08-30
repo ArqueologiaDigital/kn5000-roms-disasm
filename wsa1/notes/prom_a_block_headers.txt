@@ -3730,3 +3730,57 @@
 ;           What clears bit 6 of (0x00008A) is not in this body either
 ; Was `sub_F8E222`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
+
+@@NAME 0xF8E02C Link_SendBlockIn32ByteChunks
+; ---------------------------------------------------------------------
+; Link_SendBlockIn32ByteChunks -- splits a buffer into 0x20-byte pieces and sends each with
+;                                 Link_SendCountedBlock
+;
+; Evidence: 0xF8E032 `ld XIX,(XIZ+0x0c)` is the buffer and 0xF8E035 `ld
+;           HL,(XIZ+0x0a)` the byte count, which is the frame
+;           Link_SendCountedBlock itself reads (+0x08 selector, +0x0a
+;           count, +0x0c buffer); the loop at 0xF8E03A pushes 0x20 as
+;           the count, adds 0x20 to the buffer at 0xF8E046 and subtracts
+;           0x20 from the remainder at 0xF8E04F while 0xF8E053 `cp
+;           HL,0x0020` says more than a chunk is left, then
+;           0xF8E059-0xF8E062 sends the remainder in one final call. The
+;           chunk size is the five-bit length field
+;           Link_SendCountedBlock's own header derives (`(count - 1)` in
+;           bits 4..0), and 0x20 is the largest count that fits it.
+;           prom_b publishes it as T_F40ED4 with 46 references
+; Unknown:  what the selector at (XIZ+0x08) means to the far side -- the
+;           same gap Link_SendCountedBlock's header states
+; Was `sub_F8E02C`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8E1FE Link_SendCommand3_WaitTicks
+; ---------------------------------------------------------------------
+; Link_SendCommand3_WaitTicks -- sends command 3 with a 32-bit argument, then spins for 20
+;                                ticks
+;
+; Evidence: 0xF8E207 `pushw 0x03` and 0xF8E20A `ld XBC,(XIZ+0x08)` are
+;           the command byte and the longword Link_SendCommandAndLong
+;           reads at (XIZ+0x0c) and (XIZ+0x08); 0xF8E202 copies the tick
+;           word (0x0080) into the frame and the loop at
+;           0xF8E213-0xF8E21D re-reads it, subtracts the copy and
+;           compares with 0x0014. It is the same shape as
+;           Link_SendCommand5_WaitDone, which waits on a FLAG instead of
+;           on the clock
+; Unknown:  why this one waits on time rather than on the far side. The
+;           byte on the wire is 3 | 0xE0 = 0xE3, because
+;           Link_SendCommandAndLong ORs 0xE0 in; the NAME carries the
+;           literal 3 that is in this body
+; Was `sub_F8E1FE`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+
+@@NAME 0xF8DD49 AnalogValue_MaskOffLow3Bits
+; ---------------------------------------------------------------------
+; AnalogValue_MaskOffLow3Bits -- clears the low three bits of C and returns
+;
+; Evidence: the routine is one instruction, 0xF8DD49 `and C,0xf8`, and a
+;           `ret`. Its one caller is AnalogScan_Hysteresis, so the value
+;           being coarsened is an analog reading
+; Unknown:  why three bits. AnalogScan_Hysteresis's own threshold is not
+;           read here
+; Was `sub_F8DD49`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------

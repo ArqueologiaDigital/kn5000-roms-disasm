@@ -255,6 +255,38 @@ WHAT IS IN THE SPAN
   many-to-one: 125 of its 256 slots point at the SAME empty list 0xF2D408, so
   125 different index names would each claim to name it.
 
+★★ ROUND 10 -- WHAT THIS FILE ANSWERS ON TOP OF ROUND 9
+  Round 10's brief asked this lane to convert 0xF7E2D8-0xF80000 and then apply
+  round 6's four mechanical shapes.  BOTH WERE ALREADY DONE, BY ROUND 8 -- the
+  brief was written from the wave-7 resume frontier table again, and round 9
+  had already recorded that it was stale.  prom_b carries no `.incbin` there;
+  `notes/wave7_frontier_table.py` lists 51,246 unconverted bytes in 117 spans,
+  not 159,459 in 124.  So round 10 went at THE WAVE'S OWN PRIZE instead, and:
+
+  ★ (1) SOLVED LAYER 2's MECHANISM AND FOUND THE PRODUCER round 9 could not.
+    The consumer of the SC1 inbound queue is prom_a sub_F8A088; the event is
+    built by prom_a 0xF8A824 out of 4-byte templates {class, code, shift, mask}
+    in two 27-entry per-group tables; the class byte is never an immediate,
+    which is exactly the negative round 9 measured and could not explain.
+    `--layer2`, 25 checks (`--selftest` prints them prefixed L2).  ⚠ Every byte
+    of the layer-2 machinery is prom_a's, and this lane read it READ-ONLY.
+
+  ★ (2) REFUSED code -> legend, WITH ARITHMETIC, and found a contradiction in
+    round 9's own physical map while doing it (three byte-identical template
+    pairs; 24 fitted switches would have to share 16 positions).
+
+  ★ (3) MEASURED A FIFTH NAMING SHAPE AND REFUSED IT: 3 of 722.  `--readers`,
+    2 checks (J2).
+
+  ★ (4) REPORTED A DEFECT IN prom_a's COMMITTED DECODE: 0xF8A44B-0xF8A498 is a
+    copy of assembled code whose `jr` lands mid-instruction.  Not fixed here --
+    prom_a is another lane's file.
+
+  ⚠ WHAT ROUND 10 DID **NOT** MOVE: sub_XXXXXX is unchanged, because no span was
+  converted, and the only framed->content it applied is the six DERIVATIVE thunk
+  promotions round 9 deliberately left for the round barrier.  The round's
+  output is MECHANISM and REFUSALS, and saying so is the point.
+
 RUN
     python3 notes/prom_b_screens_round8.py               # the summary
     python3 notes/prom_b_screens_round8.py --entries     # entry points + source
@@ -272,6 +304,9 @@ RUN
     python3 notes/prom_b_screens_round8.py --framed --naive
     python3 notes/prom_b_screens_round8.py --promote     # the 32 framed->content
     python3 notes/prom_b_screens_round8.py --promote --apply
+    python3 notes/prom_b_screens_round8.py --layer2      # ★ LAYER 2, round 10
+    python3 notes/prom_b_screens_round8.py --readers     # ★ the fifth shape, refused
+    python3 notes/prom_b_screens_round8.py --layer2 --all
     python3 notes/prom_b_screens_round8.py --selftest    # checks, incl. the LAST
 The emitter that turns this into assembly is notes/gen_prom_b_f7e2d8_module.py.
 """
@@ -1640,8 +1675,9 @@ def checks(verbose=True):
       % (len(labs["prom_b"]), len(labs["prom_a"])),
       (len(labs["prom_b"]), len(labs["prom_a"])), (122, 6), verbose)
     fc = framed_clusters()
-    c("FRM   prom_b's framed labels, after this round's 103 promotions",
-      sum(fc.values()), 2957, verbose)
+    c("FRM   prom_b's framed labels, after round 9's 103 promotions AND the 6"
+      " round 9 deliberately left for the barrier (2957 -> 2951)",
+      sum(fc.values()), 2951, verbose)
     c("FRM   the three biggest clusters are T_, DL_ and ScreenFieldList_",
       [k for k, _v in fc.most_common(3)], ["T", "DL", "ScreenFieldList"], verbose)
     slots, distinct, top_n, top_a = screenfieldlist_headroom()
@@ -1650,9 +1686,563 @@ def checks(verbose=True):
     c("FRM   ★ AND IT IS MANY-TO-ONE: %d of the %d slots point at ONE empty list"
       " 0x%06X, so a slot-index name would be false %d times over"
       % (top_n, slots, top_a, top_n), (top_n, top_a), (125, 0xF2D408), verbose)
+    # ---------------------------------------------------------- ROUND 10: LAYER 2
+    t1, t2, n = l2_table_bases()
+    c("L2    the SC1 inbound queue's ONLY consumer is prom_a 0x%06X, and it is an"
+      " `ld XIZ,0x00002B40`" % L2_CONSUMER, bs(L2_CONSUMER, 5),
+      bytes((0x46, 0x40, 0x2B, 0x00, 0x00)), verbose)
+    c("L2    ★ and it is the only one: 0x00002B40 as a 32-bit immediate appears"
+      " ONCE in prom_a and never in prom_b outside the SC1 module's own inits",
+      (rom("a").count(bytes((0x40, 0x2B, 0x00, 0x00))),
+       rom("b").count(bytes((0x40, 0x2B, 0x00, 0x00)))), (2, 5), verbose)
+    c("L2    the walker at 0x%06X reads the 0x2000 list with `ld XIY,0x00002000`"
+      " / `ld XIX,0x00002030`" % L2_WALKER, bs(L2_WALKER, 10),
+      bytes((0x45, 0x00, 0x20, 0x00, 0x00, 0x44, 0x30, 0x20, 0x00, 0x00)), verbose)
+    c("L2    the group bound is `cp A,0x18` + `jr UGT` at 0xF8A83B, so groups"
+      " 0x00-0x%02X" % (L2_GROUPS - 1), bs(0xF8A83B, 4),
+      bytes((0xC9, 0xCF, 0x18, 0x6B)), verbose)
+    c("L2    both pointer-table bases are IMMEDIATES in the walker, not assumed",
+      (byte(L2_TAB1_IMM), byte(L2_TAB2_IMM), t1, t2), (0x44, 0x44, 0xF8B446, 0xF8B4B2),
+      verbose)
+    c("L2    %d entries per table, and that covers every group the bound admits"
+      % n, (n, n >= L2_GROUPS), (27, True), verbose)
+    ok, gap, lo, hi, nl = l2_tiling()
+    c("L2    ★ the two variants' %d distinct template lists TILE 0x%06X-0x%06X"
+      " with no gap and no overlap" % (nl, lo, hi - 1), (ok, gap, lo, hi),
+      (True, None, 0xF8B51E, 0xF8B74A), verbose)
+    c("L2    ★ TESTED ON THE LAST LIST: variant 2 group 0x15 is the highest-"
+      "addressed one and it ends exactly where the SECOND per-group table begins",
+      (l2_records(t2, 0x15)[1], w32(0xF8A8CC + 1)), (0xF8B748, 0xF8B74A), verbose)
+    c("L2    ⚠ reading variant 1 ALONE reports a false gap -- variant 1's"
+      " highest-addressed list is the EMPTY group 0x18 at 0xF8B672, and what"
+      " follows it is variant 2's first list, not padding",
+      (w32(t1 + 4 * 0x18), l2_records(t1, 0x18)[1], w32(t2)),
+      (0xF8B672, 0xF8B673, 0xF8B673), verbose)
+    m1 = l2_code_map(t1, n)
+    c("L2    class 0xA9 code 0x21 -- prom_a's independently named"
+      " PanelEvent_Code21_Dial -- comes from group 0x0F alone, in BOTH variants",
+      ([g for g, _m, _f in m1[(0xA9, 0x21)]],
+       [g for g, _m, _f in l2_code_map(t2, n)[(0xA9, 0x21)]]), ([0x0F], [0x0F]), verbose)
+    c("L2    ★ and 0x0F is the group PanelWireGroupMap gives wire 0xD7 in BOTH"
+      " variants -- the only 'continuous' wire both keep",
+      (byte(0xF8A109 + ((0xD7 & 0x1F) | ((0xD7 & 0xC0) >> 1))),
+       byte(0xF8A189 + ((0xD7 & 0x1F) | ((0xD7 & 0xC0) >> 1)))), (0x0F, 0x0F), verbose)
+    c("L2    class 0xA9 code 0x20 -- PanelEvent_Code20_SetScreen -- is emitted by"
+      " group 0 bits 0-3 and group 7 bits 0-5, ten mode/menu switches",
+      sorted(set(g for g, _m, _f in m1[(0xA9, 0x20)])), [0, 7], verbose)
+    c("L2    group 9 spends bits 0-4 on FIVE distinct codes with shifts 0,1,2,3,4"
+      " -- five single-switch buttons, against round 9's LCD LEFT 1..5",
+      [(cd, fl & 7) for _cl, cd, fl, mk in l2_records(t1, 9)[0] if mk & 0x1F],
+      [(0x08, 0), (0x09, 1), (0x0A, 2), (0x0B, 3), (0x0C, 4)], verbose)
+    c("L2    ★ THE REFUSAL, part 1: variant 1 has THREE byte-identical template"
+      " pairs, so a bit in either half of a pair makes the same four event bytes",
+      l2_twins(t1, n), [[1, 2], [3, 4], [5, 6]], verbose)
+    c("L2    ★ CONTROL -- variant 2 has NONE, so the duplication is a property of"
+      " variant 1's table and not of the way this script compares lists",
+      l2_twins(t2, n), [], verbose)
+    c("L2    ★ THE REFUSAL, part 2: groups 3+4 offer 16 switch bits but only 8"
+      " distinguishable (code, payload bit) positions; 5+6 the same",
+      (l2_positions(t1, n, [3, 4]), l2_positions(t1, n, [5, 6])),
+      ((8, 16), (8, 16)), verbose)
+    c("L2    ★ CONTROL -- groups 9 and 0x0A are NOT twins and offer all 16",
+      l2_positions(t1, n, [9, 0x0A]), (16, 16), verbose)
+    occ, e1, e2 = l2_button_slot_occupancy()
+    both = e1 | e2
+    dd, tc, tr = l2_duplicate_walker()
+    c("L2    ⚠ prom_a 0xF8A44B is a 78-byte copy of the walker tail at 0xF8A84B"
+      " differing in 9 bytes and in NO branch displacement",
+      (len(dd), dd), (9, [2, 3, 6, 7, 8, 9, 10, 13, 14]), verbose)
+    c("L2    ⚠ so the copy's `jr T` lands on 0x%06X, the SECOND byte of the"
+      " five-byte `ld (XIX+HL),E` prom_a's own decode puts at 0xF8A42D" % tc,
+      (tc, tr, bs(0xF8A42D, 5)), (0xF8A42E, 0xF8A82E,
+                                  bytes((0xF3, 0x07, 0xF0, 0xEC, 0x45))), verbose)
+    rres, rhits = readers_lever()
+    c("J2    ★ THE FIFTH NAMING SHAPE, measured: of %d framed data labels, only"
+      " 3 have a sole CONTENT reader -- the shape is refused"
+      % sum(rres.values()),
+      (sum(rres.values()), len(rhits), rres["no direct base load"]),
+      (722, 3, 609), verbose)
+    c("J2    ★ TESTED ON THE LAST hit, sorted", sorted(rhits)[-1],
+      ("PtrTable_F09B7B", "RunDisplayListBFromPointerArray"), verbose)
+    c("L2    ★ THE PREDICTION TEST, on prom_b's OWN button tables and nothing"
+      " the derivation used: all 16 slots 0x00-0x0F are filled by at least one"
+      " screen, and 15 of those 16 codes are emitted by a prom_a template",
+      (len([k for k in range(16) if occ[k]]), len([k for k in range(16) if k in both])),
+      (16, 15), verbose)
+    c("L2    ★ TESTED ON THE LAST SLOT: 0x1F is filled by no screen and emitted"
+      " by no template", (occ[0x1F], 0x1F in both), (0, False), verbose)
+    c("L2    slot 0x0F is the only one all 32 screens handle", occ[0x0F], 32, verbose)
+    c("L2    ⚠ THE HOLE, stated rather than smoothed over: 0x0E and 0x11-0x19"
+      " are handled by a screen and emitted by no template",
+      [k for k in range(32) if occ[k] and k not in both],
+      [0x0E, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19], verbose)
+    sb, sc = l2_substituted_codes()
+    c("L2    ⚠ and the obvious explanation is REFUTED by census: every literal"
+      " written to (0x209B)/(0x209C) masks to 0x00-0x0C, never 0x11-0x19",
+      sorted(set(v & 0x1F for v in sb | sc)), list(range(0x0D)), verbose)
+    c("L2    ★ AND THE THING THAT EXPLAINS ROUND 9's NEGATIVE: the class byte is"
+      " NEVER an immediate -- 0x00A9 as an `ld DE` immediate occurs 0 times in"
+      " all four images, because 0xA9 is byte +0 of a template record",
+      sum(r.count(bytes((0x4A, 0xA9, 0x00, 0x00, 0x00))) for r in
+          (rom("a"), rom("b"))), 0, verbose)
     if verbose and FAIL:
         print("\n%d FAILED:\n%s" % (len(FAIL), "\n".join("  " + f for f in FAIL)))
     return not FAIL
+
+
+
+# ==============================================================================
+# ★★ ROUND 10 -- LAYER 2, THE CLASS-0xA9 EVENT CODE: THE PRODUCER IS FOUND, THE
+#    ENCODING IS DECODED, AND THE code->LEGEND STEP IS REFUSED WITH ARITHMETIC
+# ==============================================================================
+#
+# QUESTION IT ANSWERS
+#   Round 9 left this: "LAYER 2, THE EVENT -- the 5-bit index inside the
+#   class-0xA9 event ... NOT SOLVED.  prom_b SC1_RxOp0_ThreeByte queues
+#   [wire byte][new value][change mask].  Whatever CONSUMES that queue and posts
+#   the {0xA9, code, b2, b3} event holds the (segment,bit) -> 5-bit index table.
+#   Round 9 could not find the consumer."
+#
+#   THE CONSUMER IS prom_a sub_F8A088 (`ld XIZ,0x00002B40` at 0xF8A088, the only
+#   read of the inbound queue descriptor anywhere in either of CPU 1's ROMs),
+#   and the chain from a switch closing to a screen's button handler is FIVE
+#   stages, not two:
+#
+#     1  CP1 sends [wire][bitmask]; prom_b SC1_RxOp0_ThreeByte (0xF5B0D5)
+#        appends [wire][new value][change mask] to the queue at 0x2B40 and keeps
+#        the per-wire previous value in the 32-byte table at 0x2B20.
+#     2  prom_a sub_F8A088 pulls those three bytes, maps the wire through
+#        PanelWireGroupMap_Variant1/2 (index (w & 0x1F) | ((w & 0xC0) >> 1)) to a
+#        GROUP id, and ...
+#     3  ... prom_a 0xF8A3B2 appends the 3-byte record {group, value, mask} to
+#        the list at RAM 0x2000 (at most 7, count in (0x219A), 0xFF terminator).
+#     4  prom_a 0xF8A824 walks that list.  For each record it stores the group in
+#        (0x2251) and reads a PER-GROUP LIST OF 4-BYTE TEMPLATES through one of
+#        two 27-entry pointer tables; each template is
+#              +0 event CLASS   +1 event CODE   +2 shift/flags   +3 bit mask
+#        and the walker copies +0/+1 straight into the 0x2030 event list, masks
+#        the record's value and change mask with +3, shifts both by +2, and
+#        stores them as the event's two payload bytes.
+#     5  prom_a UiEventList_RunPassC dispatches class 0xA9 to UiEvent_RouteByCode,
+#        which sends code < 0x20 to PanelButton_Accept -- and it is that code the
+#        32-entry per-screen tables at prom_b 0xF7D2D8 index.
+#
+# ★★ WHY NO `ld DE,0x00A9` EXISTS, which is the fact round 9 measured and could
+#    not explain: THE CLASS BYTE IS NEVER AN IMMEDIATE.  It is byte +0 of a
+#    template record in a prom_a data table, copied into the event by
+#    `ld WA,(XHL+)` / `ld (XIX+),WA` at 0xF8A867-0xF8A86A.  An immediate search
+#    could not have found it in any of the four images.
+#
+# ★★ AND WHY 32 CODES SERVE 58 SWITCHES: the map is not one-to-one BY
+#    CONSTRUCTION.  A template's +2 byte is a SHIFT COUNT (bits 0-2, direction in
+#    bit 4, decoded at prom_a 0xF8A8A1-0xF8A8C6) that slides the masked bits down
+#    to the bottom of the payload, so ONE code carries up to eight switches in
+#    its payload bits.  Round 9's premise -- "32 codes cannot enumerate 58
+#    switches, so the mapping is not the identity" -- was right, and this is the
+#    mechanism.
+#
+# ⚠ WHAT IS **NOT** SOLVED, AND THE ARITHMETIC THAT SAYS SO (`--layer2`)
+#    A code still does not name a switch, because the tables give
+#    GROUPS 3 AND 4 BYTE-IDENTICAL RECORD LISTS, and GROUPS 5 AND 6 LIKEWISE.
+#    A bit in group 3 and the same bit in group 4 produce the SAME four event
+#    bytes.  Each of those lists spends its 8 bits on 4 codes with a 2-bit
+#    payload, so a twin PAIR offers 8 distinguishable positions in total -- and
+#    round 9's physical map puts EIGHT fitted switches in each of segments 3, 4
+#    and 5 (SW25-32, SW33-40, SW41-48) with group == segment.  24 switches do not
+#    fit in 16 positions.  So at least one of these is wrong:
+#       (i)   group == segment fails for some wires;
+#       (ii)  one of segments 3/4/5 is not populated after all;
+#       (iii) SW = 8*segment + bit + 1 fails away from the two MEASURED anchors
+#             (round 9 grades segments 4 and 5 "POSITION", its weakest grade).
+#    This pass does not choose.  Naming 124 button handlers on a guess here is
+#    exactly the failure this tree keeps paying for.
+#
+# ★ THREE INDEPENDENT AGREEMENTS the table DOES have with round 9's manual map,
+#   none of which either side knew about the other:
+#     * group 0 bits 0-3 and group 7 bits 0-5 emit code 0x20, and prom_a named
+#       0xF8681A `PanelEvent_Code20_SetScreen` months earlier from its body.
+#       Round 9 reads SW1-SW4 as PLAY/EDIT MODE SOUND/COMBI and SW57-SW60 as
+#       MENU PART/SYSTEM/MIDI/DISK -- ten mode-and-menu buttons, and every one
+#       of them asks for a screen.
+#     * wire 0xD7 is the only "continuous" wire BOTH variants keep, it maps to
+#       group 0x0F in both, and group 0x0F's single template is {0xA9, 0x21} --
+#       against prom_a's independently derived `PanelEvent_Code21_Dial`.
+#     * group 9 spends bits 0-4 on five DISTINCT codes 0x08-0x0C with shifts
+#       0,1,2,3,4, i.e. five single-switch buttons; round 9 reads segment 9 as
+#       LCD LEFT 1..5 (SW73-SW77), five buttons.
+#
+# RUN
+#     python3 notes/prom_b_screens_round8.py --layer2
+#     python3 notes/prom_b_screens_round8.py --layer2 --all   # every group, both
+#     python3 notes/prom_b_screens_round8.py --selftest
+# ==============================================================================
+
+# Every address below is an ANCHOR that the checks re-read from the ROM; the
+# tables themselves are never hard-coded -- they are read out of the two
+# `ld XIX,imm32` immediates in the walker.
+L2_CONSUMER   = 0xF8A088     # `ld XIZ,0x00002B40`  -- pulls the SC1 inbound queue
+L2_APPEND2000 = 0xF8A3B2     # appends {group, value, mask} to RAM 0x2000
+L2_WALKER     = 0xF8A824     # walks 0x2000 and posts the events
+L2_TAB1_IMM   = 0xF8A84C     # `ld XIX,imm32`, taken when (0xC4) == 1
+L2_TAB2_IMM   = 0xF8A857     # `ld XIX,imm32`, taken otherwise
+L2_SHIFTER    = 0xF8A8A1     # decodes the template's +2 byte
+L2_GROUPS     = 0x19         # `cp A,0x18` + `jr UGT` at 0xF8A83B: groups 0..0x18
+
+
+def l2_table_bases():
+    """The two template pointer tables, read out of the walker's own immediates.
+
+    Returns (variant1_base, variant2_base, entries_per_table).  The entry count
+    is not assumed: it is (variant2_base - variant1_base) / 4, and the check
+    below asserts that this covers the group bound the walker enforces."""
+    t1 = w32(L2_TAB1_IMM + 1)
+    t2 = w32(L2_TAB2_IMM + 1)
+    return t1, t2, (t2 - t1) // 4
+
+
+def l2_records(base, group):
+    """The 4-byte templates of one group: [(class, code, flags, mask)], and the
+    address one past the 0xFF terminator."""
+    p = w32(base + 4 * group)
+    out = []
+    while byte(p) != 0xFF:
+        out.append(tuple(bs(p, 4)))
+        p += 4
+    return out, p + 1
+
+
+def l2_all(base, n):
+    return [l2_records(base, g) for g in range(n)]
+
+
+def l2_tiling():
+    """★ THE BOUND ON EVERY LIST IS THE NEXT LIST'S BASE, not a guess -- and the
+    two variants' record blocks are CONTIGUOUS, so the check has to be JOINT.
+    Reading variant 1 alone reports a false gap at 0xF8B672, because what follows
+    variant 1's last list is variant 2's first one.  That is exactly the kind of
+    single-image reading this tree keeps getting caught by, so the tiling is
+    asserted over the UNION of both tables.
+    Returns (ok, first_gap, lo, hi, n_lists)."""
+    t1, t2, n = l2_table_bases()
+    ends = {}
+    for base in (t1, t2):
+        for g in range(n):
+            p = w32(base + 4 * g)
+            ends[p] = l2_records(base, g)[1]
+    order = sorted(ends)
+    for p, q in zip(order, order[1:]):
+        if ends[p] != q:
+            return False, (p, ends[p], q), order[0], ends[order[-1]], len(order)
+    return True, None, order[0], ends[order[-1]], len(order)
+
+
+def l2_code_map(base, n):
+    """code -> [(group, mask, flags)] over one variant."""
+    m = collections.defaultdict(list)
+    for g in range(n):
+        for cls, code, flags, mask in l2_records(base, g)[0]:
+            m[(cls, code)].append((g, mask, flags))
+    return m
+
+
+def l2_twins(base, n):
+    """Groups whose template list is BYTE-IDENTICAL to another group's."""
+    blob = {}
+    for g in range(n):
+        recs, end = l2_records(base, g)
+        if not recs:
+            continue
+        blob.setdefault(bytes(b for r in recs for b in r), []).append(g)
+    return [v for v in blob.values() if len(v) > 1]
+
+
+def l2_positions(base, n, groups):
+    """How many DISTINGUISHABLE switch positions a set of groups offers.
+    A position is a (code, payload bit) pair, and a template contributes
+    popcount(mask) of them -- but twins share theirs, so identical lists are
+    counted ONCE.  Returns (positions, fitted_bits)."""
+    seen = set()
+    bits = 0
+    for g in groups:
+        recs, _e = l2_records(base, g)
+        for cls, code, flags, mask in recs:
+            sh = flags & 0x07
+            up = bool(flags & 0x10)
+            for b in range(8):
+                if mask & (1 << b):
+                    pb = (b + sh) if up else (b - sh)
+                    seen.add((cls, code, pb))
+        bits += 8
+    return len(seen), bits
+
+
+def l2_button_slot_occupancy():
+    """★ THE PREDICTION TEST, and it runs on prom_b's OWN data.
+
+    If the class-0xA9 code really is the index of the 32-entry per-screen tables
+    at 0xF7D2D8, then the slots those tables actually fill should be the codes
+    the prom_a template tables actually emit -- and the ones they never emit
+    should be dead.  Nothing in the derivation used the button tables, and
+    nothing in the button tables knows about prom_a, so this is an independent
+    check and not a restatement.
+
+    Returns (occupancy, emitted_v1, emitted_v2) where occupancy[slot] is the
+    number of the 32 tables whose slot points at something that is not a bare
+    `ret` byte -- the unused-button convention this file measures in --buttons."""
+    occ = collections.Counter()
+    for i in range((BTN_HI - BTN_LO) // BTN_STRIDE):
+        t = BTN_LO + BTN_STRIDE * i
+        for k in range(32):
+            if byte(w32(t + 4 * k)) != 0x0E:
+                occ[k] += 1
+    t1, t2, n = l2_table_bases()
+    emitted = []
+    for base in (t1, t2):
+        e = set()
+        for g in range(n):
+            for cls, code, _fl, _mk in l2_records(base, g)[0]:
+                if cls == 0xA9 and code < 0x20:
+                    e.add(code)
+        emitted.append(e)
+    return occ, emitted[0], emitted[1]
+
+
+def l2_substituted_codes():
+    """Every literal the firmware ever writes to (0x209B)/(0x209C) -- the pair
+    prom_a's PanelButton_Accept substitutes for code 0x0D.
+
+    Scanned from the ROM BYTES, not from the .s text, so a lane editing either
+    source cannot move the number.  The encodings are
+        f1 9b 20 00 vv        ld (0x209b),imm8
+        f1 9b 20 02 lo hi     ld (0x209b),imm16   (hi lands in 0x209C)
+    and the same with 9c.  Returns (set written to 0x209B, set written to 0x209C)."""
+    b, c = set(), set()
+    for img in ("a", "b"):
+        d = rom(img)
+        for cell in (0x9B, 0x9C):
+            dst8 = b if cell == 0x9B else c
+            i = 0
+            while True:
+                i = d.find(bytes((0xF1, cell, 0x20)), i)
+                if i < 0:
+                    break
+                if d[i + 3] == 0x00:
+                    dst8.add(d[i + 4])
+                elif d[i + 3] == 0x02:
+                    dst8.add(d[i + 4])
+                    (c if cell == 0x9B else b).add(d[i + 5])
+                i += 3
+    return b, c
+
+
+# ------------------------------------------------------------------ round 10
+# ★ JOB 2, THE FIFTH SHAPE -- MEASURED AND REFUSED, WITH ITS ZERO
+#
+# Rounds 6 and 8 measured four MECHANICAL shapes (bare ret, one-line forwarder,
+# table-call stub, single-cell writer) and refused them because every name they
+# make is a KIND PLUS AN ADDRESS.  This round measured a fifth shape, which is
+# NOT mechanical and would produce real content names: the project's own stated
+# rule "NAME AN OBJECT FROM WHAT READS IT".
+#
+#   For every prom_b label of the form <Kind>_<its own address> whose Kind is a
+#   data kind, find every site in prom_b OR prom_a that loads that address as a
+#   32-bit immediate into a pointer register -- a DIRECT base load, not a walk
+#   through some other table.  If there is exactly ONE such site and the routine
+#   it sits in has a CONTENT name, rename <Kind>_<address> to <Kind>_<that name>.
+#
+# ★★ THE ANSWER IS THREE.  Of 722 such labels, 609 have NO direct base load at
+# all -- they are reached through a pointer table, which is exactly why they were
+# framed in the first place -- 62 have a sole reader that is itself sub_XXXXXX,
+# 15 a sole reader that is itself framed, 33 have two or more readers, and THREE
+# have a sole CONTENT reader:
+#     PtrTable_F09B7B      <- RunDisplayListBFromPointerArray
+#     DLTable_F3A58A       <- Paint_TrackMerge
+#     DispatchTable_F5B9F8 <- Dispatch_Code80
+# A shape that reaches 3 of 722 is not a lever.  ⚠ AND IT IS ALSO NOT FREE: two
+# of the three sole readers are themselves derived names (`Paint_TrackMerge` came
+# from the title rule, `Dispatch_Code80` is a kind plus a number that only the
+# metric's word-boundary rule grades as content), so the rename would launder one
+# lane's inference into another object.  Measured, refused, and reported with its
+# number so that no later round re-derives it.  `--readers`.
+
+
+def readers_lever():
+    """The fifth naming shape, measured.  Returns (Counter of outcomes, hits)."""
+    label = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
+    internal = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*__[0-9A-Fa-f]{4,6}$')
+    unnamed = re.compile(r'^sub_[0-9A-Fa-f]{6}$')
+    framed = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*_'
+                        r'(?:[0-9A-Fa-f]{2}x[0-9A-Fa-f]{2}_)?'
+                        r'(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$')
+    imm = re.compile(r'\bld\s+X?(?:HL|DE|BC|WA|IX|IY|IZ)\s*,\s*0x0*([0-9A-Fa-f]{4,8})\b',
+                     re.I)
+    kinds = ('Data', 'Record', 'PtrTable', 'DispatchTable', 'IndexMap', 'ByteMap',
+             'RamPtrTable', 'StringTable', 'RecordArray', 'DLTable', 'DLTab',
+             'DLBTable', 'DLB_Records', 'Bitmap', 'ScreenFieldList', 'DataPtrTable',
+             'BitTable', 'Pointer', 'Table', 'CallSelectorTable')
+
+    def owners_and_sites(path):
+        lines = open(path).read().split("\n")
+        own, cur, sites = [], None, collections.defaultdict(list)
+        for i, ln in enumerate(lines):
+            m = label.match(ln)
+            if m and not (m.group(1).startswith(".L") or internal.match(m.group(1))):
+                cur = m.group(1)
+            own.append(cur)
+            for mm in imm.finditer(ln):
+                sites[int(mm.group(1), 16)].append(i)
+        return lines, own, sites
+
+    lb, ob, sb = owners_and_sites(SRCB)
+    _la, oa, sa = owners_and_sites(SRCA)
+    grade = (lambda n: "sub" if unnamed.match(n) else
+             ("internal" if internal.match(n) else
+              ("framed" if framed.match(n) else "content")))
+    res, hits = collections.Counter(), []
+    for ln in lb:
+        m = label.match(ln)
+        if not m:
+            continue
+        n = m.group(1)
+        mm = re.search(r'_([0-9A-Fa-f]{6})$', n)
+        if not mm or n[:mm.start()] not in kinds:
+            continue
+        a = int(mm.group(1), 16)
+        rs = sorted(set([ob[i] for i in sb.get(a, [])] + [oa[i] for i in sa.get(a, [])])
+                    - {None})
+        if not rs:
+            res["no direct base load"] += 1
+        elif len(rs) == 1:
+            res["sole reader is " + grade(rs[0])] += 1
+            if grade(rs[0]) == "content":
+                hits.append((n, rs[0]))
+        else:
+            res["two or more readers"] += 1
+    return res, hits
+
+
+def print_readers():
+    res, hits = readers_lever()
+    print("★ JOB 2, the fifth shape -- name a framed data object from its SOLE"
+          " CONTENT reader.  Measured over %d prom_b labels:" % sum(res.values()))
+    for k, v in res.most_common():
+        print("    %5d  %s" % (v, k))
+    print("  ⇒ the shape reaches %d of %d.  REFUSED -- and not only for the"
+          " size: two of the three sole readers are themselves derived names, so"
+          " the rename would launder one lane's inference into another object."
+          % (len(hits), sum(res.values())))
+    for n, r in hits:
+        print("      %s  <-  %s" % (n, r))
+
+
+def l2_duplicate_walker():
+    """★ A DEFECT IN prom_a's COMMITTED DECODE, found on the way to layer 2 and
+    reported rather than fixed (prom_a is another lane's file).
+
+    prom_a 0xF8A44B-0xF8A498 and 0xF8A84B-0xF8A898 are 78 bytes that differ in
+    NINE positions: the two 32-bit table immediates and the four-byte strap test
+    (`bit 2,(0x7F37)` + JR NZ against `cp (0xC4),0x01` + JR Z).  Everything else,
+    the RELATIVE BRANCH DISPLACEMENTS INCLUDED, is byte-identical -- which is the
+    signature of a copy of already-assembled code, not of a re-assembly.
+
+    The consequence is visible in prom_a's own .s: the copy's `jr T` at 0xF8A486
+    carries the same displacement as the real one at 0xF8A886, so it targets
+    0xF8A42E -- and prom_a's committed decode renders 0xF8A42D as a five-byte
+    `ld (XIX+HL),E`, so that branch lands on the SECOND BYTE of an instruction.
+    The routine containing 0xF8A42D is self-consistent (its own seven pushes at
+    0xF8A40F balance seven pops ending at 0xF8A42C, and every internal branch
+    lands on a boundary), so it is the 0xF8A44B block whose status is unsettled:
+    dead code, or a linear-decode artefact.  prom_a presents it as executable
+    with no caveat.  Returns (n_differing, copy_jr_target, real_jr_target)."""
+    lo_c, lo_r, n = 0xF8A44B, 0xF8A84B, 0xF8A499 - 0xF8A44B
+    d = [i for i in range(n) if byte(lo_c + i) != byte(lo_r + i)]
+    return d, 0xF8A488 - 90, 0xF8A888 - 90
+
+
+def print_layer2():
+    t1, t2, n = l2_table_bases()
+    every = "--all" in sys.argv
+    print("★★ LAYER 2 -- the class-0xA9 event code, and where it is BUILT")
+    print("   consumer of the SC1 inbound queue : prom_a 0x%06X" % L2_CONSUMER)
+    print("   appends {group,value,mask}->0x2000: prom_a 0x%06X" % L2_APPEND2000)
+    print("   walks 0x2000 and posts the events : prom_a 0x%06X" % L2_WALKER)
+    print("   template pointer tables           : 0x%06X (strap (0xC4)==1) and"
+          " 0x%06X, %d entries each" % (t1, t2, n))
+    print("   group bound enforced by the walker: 0x00-0x%02X" % (L2_GROUPS - 1))
+    ok, gap, lo, hi, nl = l2_tiling()
+    print("   the two variants' record blocks are CONTIGUOUS: %d distinct lists"
+          " tile 0x%06X-0x%06X with no gap and no overlap: %s%s"
+          % (nl, lo, hi - 1, ok, "" if ok else "  GAP %r" % (gap,)))
+    for name, base in (("variant 1  (0xC4)==1", t1), ("variant 2  otherwise", t2)):
+        print("\n   === %s" % name)
+        for g in range(n):
+            recs, end = l2_records(base, g)
+            if not recs and not every:
+                continue
+            print("     grp %02X -> %06X..%06X  %s" %
+                  (g, w32(base + 4 * g), end,
+                   " | ".join("cls %02X code %02X shift %s%d mask %02X" %
+                              (c, cd, "<<" if fl & 0x10 else ">>", fl & 7, mk)
+                              for c, cd, fl, mk in recs)))
+        tw = l2_twins(base, n)
+        print("     ⚠ BYTE-IDENTICAL template lists (the same bit in either group"
+              " makes the SAME event): %s" %
+              ("; ".join("groups " + "/".join("%02X" % g for g in v) for v in tw) or "none"))
+    print("\n   ⚠ THE ARITHMETIC THAT REFUSES code->legend, on variant 1:")
+    for grp in ([3, 4], [5, 6], [9, 0x0A]):
+        pos, bits = l2_positions(t1, n, grp)
+        print("     groups %s: %d switch bits on the panel side, %d distinguishable"
+              " (code, payload bit) positions" %
+              ("/".join("%02X" % g for g in grp), bits, pos))
+    print("     round 9's physical map fits 8 fitted switches in each of segments"
+          " 3, 4 and 5 with group == segment: 24 switches, 16 positions.")
+    print("     ⇒ NOT RESOLVED HERE.  Next probe: prom_a 0xF8AE68 and 0xF8AEDB,"
+          " the two handlers groups 3-6 alternate between in the second per-group"
+          " table at 0x%06X." % w32(0xF8A8CC + 1))
+
+    occ, e1, e2 = l2_button_slot_occupancy()
+    both = e1 | e2
+    dd, tc, tr = l2_duplicate_walker()
+    print("\n   ⚠ A DEFECT IN prom_a's COMMITTED DECODE, found on the way here and"
+          " NOT fixed (prom_a is another lane's file):")
+    print("     prom_a 0xF8A44B-0xF8A498 is a 78-byte copy of the walker tail at"
+          " 0xF8A84B, differing in %d bytes -- the two table immediates and the"
+          " strap test -- and in NO branch displacement." % len(dd))
+    print("     So the copy's `jr T` at 0xF8A486 targets 0x%06X, while the real"
+          " one at 0xF8A886 targets 0x%06X; and prom_a's decode makes 0x%06X the"
+          " SECOND BYTE of the five-byte `ld (XIX+HL),E` at 0xF8A42D."
+          % (tc, tr, tc))
+    print("     The routine holding 0xF8A42D is self-consistent (seven pushes at"
+          " 0xF8A40F, seven pops ending at 0xF8A42C, every internal branch on a"
+          " boundary), so it is the 0xF8A44B block that is unsettled.")
+
+    print("\n   ★ THE PREDICTION TEST, on prom_b's OWN 32 button tables at"
+          " 0x%06X (nothing in the derivation used them):" % BTN_LO)
+    print("     slot  tables with a non-`ret` target   emitted by a class-0xA9 template")
+    for k in range(32):
+        print("     %02X    %3d/32                            %s"
+              % (k, occ[k], "v1 v2" if k in e1 and k in e2 else
+                 ("v2 only" if k in e2 else ("v1 only" if k in e1 else "--"))))
+    print("     ✓ all 16 slots 0x00-0x0F are filled by at least one screen, and"
+          " %d of those 16 codes are emitted by a template." % len([k for k in range(16) if k in both]))
+    print("     ✓ slot 0x0F is filled in %d of 32 tables -- the only slot every"
+          " screen handles." % occ[0x0F])
+    print("     ⚠ AND THE HOLE, STATED: slots %s are filled by a screen and NO"
+          " template emits them; %s is emitted and no screen handles it."
+          % ([hex(k) for k in range(32) if occ[k] and k not in both],
+             [hex(k) for k in sorted(both) if not occ[k]]))
+    sb, sc = l2_substituted_codes()
+    reach = sorted(set(v & 0x1F for v in sb | sc))
+    print("     The obvious candidate is the code SUBSTITUTION prom_a's"
+          " PanelButton_Accept performs on code 0x0D (0xF86615-0xF86629: the code"
+          " becomes (0x209C) or (0x209B)).")
+    print("     ⚠ IT DOES NOT FIT, and the refutation is a census not an"
+          " impression: every literal ever written to that pair, scanned from the"
+          " ROM bytes, masks under `and L,0x1f` to %s -- so the substitution"
+          " cannot reach 0x11-0x19." % [hex(v) for v in reach])
+    print("     The producer of those nine codes is UNFOUND.  Class 0xA8, whose"
+          " templates carry codes 0x05, 0x07, 0x08 and 0x11, is where to look:"
+          " prom_a UiEventClass_ListTable_A/B/C entry 0xA8.")
 
 
 def main():
@@ -1666,7 +2256,7 @@ def main():
                      ("--buttons", print_buttons), ("--refused", print_refused),
                      ("--shapes", print_shapes), ("--promote", print_promote),
                      ("--glyphs", print_glyphs), ("--framed", print_framed),
-                     ("--cost", print_cost)):
+                     ("--cost", print_cost), ("--layer2", print_layer2), ("--readers", print_readers)):
         if flag in a:
             fn()
             did = True

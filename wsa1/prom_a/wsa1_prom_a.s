@@ -5660,7 +5660,7 @@ Variant_SetFromPB0:
 ;           and 0xF828A8; 0xF828AC `ldb c, 0x0a`, 0xF828AE `ld
 ;           XIX,0x00002640` and 0xF828B3 `ld XIY,0x00f828c7` set up the
 ;           10-byte compare whose only success path is 0xF828C3 `ldio
-;           0xc5, 0x5a`. 0xF828C7 is ExtBoardMagic_F828C7, the ASCII
+;           0xc5, 0x5a`. 0xF828C7 is ExtBoardMagic_Wsa1Extbd, the ASCII
 ;           "WSA1 EXTBD", already labelled in this listing, and that
 ;           label's own header names (0x00C5) as this routine's output.
 ;           Called from prom_a 0xF827EA and 0xF827F5, both `calr`, in
@@ -5696,7 +5696,7 @@ ExtBoard_Identify:
 .LF828C6:
 	ret                                                  ; F828C6  0e
 ; ---------------------------------------------------------------------
-; ExtBoardMagic_F828C7 -- the 10 ASCII bytes "WSA1 EXTBD"
+; ExtBoardMagic_Wsa1Extbd -- the 10 ASCII bytes "WSA1 EXTBD"
 ;
 ; Read by: ONE site, the compare loop at 0xF828AC-0xF828C2 (`ld C,0x0A /
 ;          ld XIX,0x00002640 / ld XIY,0x00F828C7 / ld A,(XIX+) / cp A,(XIY+) /
@@ -5711,8 +5711,15 @@ ExtBoard_Identify:
 ;          inside an instruction -- it is the single offender
 ;          notes/prom_a_linear_decode_check.py reported for this span.
 ; Evidence: the bytes, asserted verbatim in notes/prom_a_boot_checks.py.
+; ★ Renamed from `ExtBoardMagic_F828C7` in round 10 (framed -> content) by notes/prom_a_census_round8.py:
+; the distinguishing part becomes the ROM's own bytes instead of an
+; address: 0x57 0x53 0x41 0x31 0x20 0x45 0x58 0x54 0x42 0x44 is `WSA1
+; EXTBD`, the ten bytes ExtBoard_Identify compares. ⚠ Round 9's framed
+; scan reads `.ascii` runs and this object is emitted as `.byte`,
+; which is why it measured zero promotable objects and why that
+; sentence is corrected above
 ; ---------------------------------------------------------------------
-ExtBoardMagic_F828C7:
+ExtBoardMagic_Wsa1Extbd:
 	.byte 0x57, 0x53, 0x41, 0x31, 0x20, 0x45, 0x58, 0x54, 0x42, 0x44          ; F828C7
 sub_F828D1:
 	m_cp_mi16 MW16, 0x7fca, 0x5aa5                       ; F828D1  d1 ca 7f 3f a5 5a
@@ -22004,7 +22011,7 @@ AnalogScan_Hysteresis:
 .LF8DD12:
 	sub A,W                                              ; F8DD12  c8 a1
 	cps a, 0x02                                          ; F8DD14  c9 da
-	jr ule, sub_F8DD49                                   ; F8DD16  63 31
+	jr ule, AnalogState_MaskOffLow3Bits                                   ; F8DD16  63 31
 	cps a, 0x06                                          ; F8DD18  c9 de
 	jr ule, .LF8DD35                                     ; F8DD1A  63 19
 	xor C,0x03                                           ; F8DD1C  cb cd 03
@@ -22028,7 +22035,21 @@ AnalogScan_Hysteresis:
 .LF8DD44:
 	or C,0x04                                            ; F8DD44  cb ce 04
 	jr .LF8DD4C                                          ; F8DD47  68 03
-sub_F8DD49:
+; ---------------------------------------------------------------------
+; AnalogState_MaskOffLow3Bits -- clears the low three bits of C and returns
+;
+; Evidence: the routine is one instruction, 0xF8DD49 `and C,0xf8`, and a
+;           `ret`. Its one caller is AnalogScan_Hysteresis.
+; ⚠ CORRECTED IN ROUND 10: this header used to conclude "so the value being
+;           coarsened is an analog reading". It is NOT. The register masked is
+;           C, and AnalogScan_Hysteresis's OWN header calls C the STATE byte --
+;           the reading is in A. The label's first line and its evidence line
+;           contradicted each other, and the name said the wrong one.
+; Unknown:  what the low three bits of the state byte mean, and why three.
+;           AnalogScan_Hysteresis's threshold is not read here
+; Was `sub_F8DD49`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+AnalogState_MaskOffLow3Bits:
 	and C,0xf8                                           ; F8DD49  cb cc f8
 .LF8DD4C:
 	ret                                                  ; F8DD4C  0e
@@ -22141,7 +22162,27 @@ Link_Init_DmaAndTimer:
 	inc 4,XSP                                            ; F8E028  ef 64
 	pop XIX                                              ; F8E02A  5c
 	ret                                                  ; F8E02B  0e
-sub_F8E02C:
+; ---------------------------------------------------------------------
+; Link_SendBlockIn32ByteChunks -- splits a buffer into 0x20-byte pieces and sends each with
+;                                 Link_SendCountedBlock
+;
+; Evidence: 0xF8E032 `ld XIX,(XIZ+0x0c)` is the buffer and 0xF8E035 `ld
+;           HL,(XIZ+0x0a)` the byte count, which is the frame
+;           Link_SendCountedBlock itself reads (+0x08 selector, +0x0a
+;           count, +0x0c buffer); the loop at 0xF8E03A pushes 0x20 as
+;           the count, adds 0x20 to the buffer at 0xF8E046 and subtracts
+;           0x20 from the remainder at 0xF8E04F while 0xF8E053 `cp
+;           HL,0x0020` says more than a chunk is left, then
+;           0xF8E059-0xF8E062 sends the remainder in one final call. The
+;           chunk size is the five-bit length field
+;           Link_SendCountedBlock's own header derives (`(count - 1)` in
+;           bits 4..0), and 0x20 is the largest count that fits it.
+;           prom_b publishes it as T_F40ED4 with 46 references
+; Unknown:  what the selector at (XIZ+0x08) means to the far side -- the
+;           same gap Link_SendCountedBlock's header states
+; Was `sub_F8E02C`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Link_SendBlockIn32ByteChunks:
 	link XIZ,0x0000                                      ; F8E02C  ee 0c 00 00
 	pushw hl                                             ; F8E030  2b
 	push XIX                                             ; F8E031  3c
@@ -22402,7 +22443,25 @@ Link_SendCommandAndLong:
 	popw hl                                              ; F8E1FA  4b
 	unlk XIZ                                             ; F8E1FB  ee 0d
 	ret                                                  ; F8E1FD  0e
-sub_F8E1FE:
+; ---------------------------------------------------------------------
+; Link_SendCommand3_WaitTicks -- sends command 3 with a 32-bit argument, then spins for 20
+;                                ticks
+;
+; Evidence: 0xF8E207 `pushw 0x03` and 0xF8E20A `ld XBC,(XIZ+0x08)` are
+;           the command byte and the longword Link_SendCommandAndLong
+;           reads at (XIZ+0x0c) and (XIZ+0x08); 0xF8E202 copies the tick
+;           word (0x0080) into the frame and the loop at
+;           0xF8E213-0xF8E21D re-reads it, subtracts the copy and
+;           compares with 0x0014. It is the same shape as
+;           Link_SendCommand5_WaitDone, which waits on a FLAG instead of
+;           on the clock
+; Unknown:  why this one waits on time rather than on the far side. The
+;           byte on the wire is 3 | 0xE0 = 0xE3, because
+;           Link_SendCommandAndLong ORs 0xE0 in; the NAME carries the
+;           literal 3 that is in this body
+; Was `sub_F8E1FE`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Link_SendCommand3_WaitTicks:
 	link XIZ,0xfffe                                      ; F8E1FE  ee 0c fe ff
 	m_ldw_mm16 MDD+r6, 0xfe, 0x0080                      ; F8E202  be fe 16 80 00
 	pushw 0x03                                           ; F8E207  0b 03 00
@@ -36217,7 +36276,7 @@ sub_F94D9D:
 ;           (0x2532)=0, (0x2534)=0x013F, (0x2536)=0x00EF -- which is exactly the
 ;           320x240 panel SYSTEM SET programs, so the service-0x05 fill covers all of
 ;           it.  It is bracketed by service 0x0C with C = 0, then C = 7, then C = 0,
-;           with sub_F95128 called after each of the last two.
+;           with Delay_SpinNestedLoops called after each of the last two.
 ; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
 ;          is blind to this name, --verify reads it back.
 ; ---------------------------------------------------------------------
@@ -36238,11 +36297,11 @@ LCD_FlashWholePanel:
 	ldb c, 0x07                                          ; F94DE1  23 07
 	ldb a, 0x0c                                          ; F94DE3  21 0c
 	swi 7                                                ; F94DE5  ff
-	call sub_F95128                                      ; F94DE6  1d 28 51 f9
+	call Delay_SpinNestedLoops                                      ; F94DE6  1d 28 51 f9
 	ldb c, 0x00                                          ; F94DEA  23 00
 	ldb a, 0x0c                                          ; F94DEC  21 0c
 	swi 7                                                ; F94DEE  ff
-	call sub_F95128                                      ; F94DEF  1d 28 51 f9
+	call Delay_SpinNestedLoops                                      ; F94DEF  1d 28 51 f9
 	pop XDE                                              ; F94DF3  5a
 	pop XHL                                              ; F94DF4  5b
 	pop XIX                                              ; F94DF5  5c
@@ -36742,7 +36801,19 @@ sub_F95118:
 	ld A,C                                               ; F95125  cb 89
 .LF95127:
 	ret                                                  ; F95127  0e
-sub_F95128:
+; ---------------------------------------------------------------------
+; Delay_SpinNestedLoops -- a busy-wait: 0x1000 outer passes of 0x600 inner
+;                          decrements, touching no memory
+;
+; Evidence: the whole routine is 0xF95128 `ldw bc,0x1000`, 0xF9512B `ldw
+;           wa,0x0600`, 0xF9512E `dec 1,WA`, and the two `djnz16` at
+;           0xF95130 and 0xF95133. It reads and writes nothing. Its two
+;           callers include LCD_FlashWholePanel, which is a panel test
+; Unknown:  how long that is. It depends on the CPU clock, which this
+;           file does not measure
+; Was `sub_F95128`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Delay_SpinNestedLoops:
 	ldw bc, 0x1000                                       ; F95128  31 00 10
 .LF9512B:
 	ldw wa, 0x0600                                       ; F9512B  30 00 06
@@ -42160,7 +42231,29 @@ sub_F9C058:
 	jr nz, .LF9C07D                                      ; F9C084  6e f7
 .LF9C086:
 	ret                                                  ; F9C086  0e
-sub_F9C087:
+; ---------------------------------------------------------------------
+; Screen_ReMapEdit_Enter -- the Enter method of the RE-MAP EDIT screen: sets the
+;                           screen's paint state and calls its painter
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 140 -- the .long
+;           at 0xF870F1, which this listing annotates `[108]` because
+;           the index comment restarts at PanelScreen_VtableTable_ViewB,
+;           32 entries in -- holds 0xF41968, and prom_b's three
+;           consecutive `jp` at 0xF41968, 0xF4196C and 0xF41970 reach
+;           0xF9C087, 0xF9C0C1 and 0xF9C0C2. The +0 Enter / +4 Leave /
+;           +8 Button reading is that table's own documented one,
+;           established in this listing from three different call sites
+;           (checks V1-V6). The SCREEN's name is not invented here: its
+;           Enter method calls 0xF9C0B7 `calr Paint_ReMapEdit`, and
+;           round 7 named that painter from the screen's own
+;           display-list text, "RE-MAP EDIT". This is the +0 slot.
+; Unknown:  what the state bytes it writes before painting mean.
+;           (0x2075), (0x209B), (0x209C) and the (0x2095) & 0x10 test
+;           guarding the painter call are shared by all five Enter
+;           methods and named by nothing in this tree
+; Was `sub_F9C087`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_ReMapEdit_Enter:
 	ldb_d8 c, (0x207a)                                   ; F9C087  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9C08B  c1 7b 20 f3
 	jr z, .LF9C0A0                                       ; F9C08F  66 0f
@@ -42179,9 +42272,54 @@ sub_F9C087:
 	calr sub_F9C52D                                      ; F9C0BA  1e 70 04
 	calr sub_F9C7BD                                      ; F9C0BD  1e fd 06
 	ret                                                  ; F9C0C0  0e
-sub_F9C0C1:
+; ---------------------------------------------------------------------
+; Screen_ReMapEdit_Leave -- the Leave method of the RE-MAP EDIT screen
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 140 -- the .long
+;           at 0xF870F1, which this listing annotates `[108]` because
+;           the index comment restarts at PanelScreen_VtableTable_ViewB,
+;           32 entries in -- holds 0xF41968, and prom_b's three
+;           consecutive `jp` at 0xF41968, 0xF4196C and 0xF41970 reach
+;           0xF9C087, 0xF9C0C1 and 0xF9C0C2. The +0 Enter / +4 Leave /
+;           +8 Button reading is that table's own documented one,
+;           established in this listing from three different call sites
+;           (checks V1-V6). The SCREEN's name is not invented here: its
+;           Enter method calls 0xF9C0B7 `calr Paint_ReMapEdit`, and
+;           round 7 named that painter from the screen's own
+;           display-list text, "RE-MAP EDIT". This is the +4 slot, and
+;           its body is a bare `ret`.
+; Unknown:  nothing here says why this screen needs no teardown
+; Was `sub_F9C0C1`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_ReMapEdit_Leave:
 	ret                                                  ; F9C0C1  0e
-sub_F9C0C2:
+; ---------------------------------------------------------------------
+; Screen_ReMapEdit_Button -- the Button method of the RE-MAP EDIT screen: dispatches
+;                            through a 23-entry table of handlers (NOT 32 -- see the note below)
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 140 -- the .long
+;           at 0xF870F1, which this listing annotates `[108]` because
+;           the index comment restarts at PanelScreen_VtableTable_ViewB,
+;           32 entries in -- holds 0xF41968, and prom_b's three
+;           consecutive `jp` at 0xF41968, 0xF4196C and 0xF41970 reach
+;           0xF9C087, 0xF9C0C1 and 0xF9C0C2. The +0 Enter / +4 Leave /
+;           +8 Button reading is that table's own documented one,
+;           established in this listing from three different call sites
+;           (checks V1-V6). The SCREEN's name is not invented here: its
+;           Enter method calls 0xF9C0B7 `calr Paint_ReMapEdit`, and
+;           round 7 named that painter from the screen's own
+;           display-list text, "RE-MAP EDIT". This is the +8 slot;
+;           0xF9C0D5 `add XWA,0x00FA1690` indexes its own handler table
+;           after `mul A,0x04`, which is the four-byte stride of a
+;           32-entry button table -- the shape
+;           notes/prom_b_entrypoints_round7.py establishes for every +8
+;           method.
+; Unknown:  which button is which. The index arrives from prom_b
+;           0xF42C74 and no reader in prom_a bounds it; round 7's two
+;           independent five-bit masks are what make it 32
+; Was `sub_F9C0C2`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_ReMapEdit_Button:
 	link XIZ,0x0000                                      ; F9C0C2  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9C0C6  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9C0C9  9e 08 04
@@ -42604,7 +42742,7 @@ sub_F9C41F:
 ; ---------------------------------------------------------------------
 ; Paint_ReMapEdit -- paints the screen whose own text reads "RE-MAP EDIT"
 ;
-; Called from: prom_a sub_F9C087 (`calr`) at 0xF9C0B7
+; Called from: prom_a Screen_ReMapEdit_Enter (`calr`) at 0xF9C0B7
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -43248,7 +43386,30 @@ sub_F9CA34:
 	call 0xf42e14                                        ; F9CAF9  1d 14 2e f4
 	inc 0,XSP                                            ; F9CAFD  ef 60
 	ret                                                  ; F9CAFF  0e
-sub_F9CB00:
+; ---------------------------------------------------------------------
+; Screen_SoundGroupNaming_Enter -- the Enter method of the SOUND GROUP NAMING screen: sets
+;                                  the screen's paint state and calls its painter
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 123 -- the .long
+;           at 0xF870AD, which this listing annotates `[91]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF42680, and prom_b's three consecutive
+;           `jp` at 0xF42680, 0xF42684 and 0xF42688 reach 0xF9CB00,
+;           0xF9CB52 and 0xF9CB53. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xF9CB3B `calr Paint_SoundGroupNaming` and 0xF9CB4D
+;           `calr Paint_SoundGroupNamingWrite`, and round 7 named that
+;           painter from the screen's own display-list text, "SOUND
+;           GROUP NAMING". This is the +0 slot.
+; Unknown:  what the state bytes it writes before painting mean.
+;           (0x2075), (0x209B), (0x209C) and the (0x2095) & 0x10 test
+;           guarding the painter call are shared by all five Enter
+;           methods and named by nothing in this tree
+; Was `sub_F9CB00`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_SoundGroupNaming_Enter:
 	ldb_d8 c, (0x207a)                                   ; F9CB00  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9CB04  c1 7b 20 f3
 	jr z, .LF9CB0F                                       ; F9CB08  66 05
@@ -43281,9 +43442,72 @@ sub_F9CB00:
 	popw bc                                              ; F9CB50  49
 .LF9CB51:
 	ret                                                  ; F9CB51  0e
-sub_F9CB52:
+; ---------------------------------------------------------------------
+; Screen_SoundGroupNaming_Leave -- the Leave method of the SOUND GROUP NAMING screen
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 123 -- the .long
+;           at 0xF870AD, which this listing annotates `[91]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF42680, and prom_b's three consecutive
+;           `jp` at 0xF42680, 0xF42684 and 0xF42688 reach 0xF9CB00,
+;           0xF9CB52 and 0xF9CB53. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xF9CB3B `calr Paint_SoundGroupNaming` and 0xF9CB4D
+;           `calr Paint_SoundGroupNamingWrite`, and round 7 named that
+;           painter from the screen's own display-list text, "SOUND
+;           GROUP NAMING". This is the +4 slot, and its body is a bare
+;           `ret`.
+; Unknown:  nothing here says why this screen needs no teardown
+; Was `sub_F9CB52`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_SoundGroupNaming_Leave:
 	ret                                                  ; F9CB52  0e
-sub_F9CB53:
+; ---------------------------------------------------------------------
+; Screen_SoundGroupNaming_Button -- the Button method of the SOUND GROUP NAMING screen:
+;                                   dispatches through a 23-entry table of handlers
+;                            ⚠ CORRECTED IN ROUND 10: this said 32. Each of the
+;                            five tables holds exactly 23 CONSECUTIVE ROM
+;                            pointers and its 24th longword is not a ROM
+;                            address; a 32-entry SoundGroupNaming table would
+;                            run 31 bytes INTO CombinationGroupNaming's, while
+;                            23 ends 5 bytes short of it. The bound is real, in
+;                            prom_b sub_F55019 (via T_F42C74): it rejects a raw
+;                            index above 0x1F, then remaps 0x11..0x19 to 0..8
+;                            and 0x1A..0x1F to 17..22, so what reaches
+;                            `mul A,0x04` is 0..22 = 23 slots. The count 32 was
+;                            transplanted from round 7's genuine 32-entry
+;                            objects (prom_b 0xF7D2D8.., spaced 0x80), a
+;                            different shape entirely.
+;                            ★ AND sub_F55019 IS A LAYER-2 RESULT: the
+;                            per-screen tables are NOT indexed by the raw event
+;                            code. It is why round 9's census saw 0x10-0x1F as
+;                            sparse -- 0x11..0x19 fold back onto 0..8.
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 123 -- the .long
+;           at 0xF870AD, which this listing annotates `[91]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF42680, and prom_b's three consecutive
+;           `jp` at 0xF42680, 0xF42684 and 0xF42688 reach 0xF9CB00,
+;           0xF9CB52 and 0xF9CB53. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xF9CB3B `calr Paint_SoundGroupNaming` and 0xF9CB4D
+;           `calr Paint_SoundGroupNamingWrite`, and round 7 named that
+;           painter from the screen's own display-list text, "SOUND
+;           GROUP NAMING". This is the +8 slot; 0xF9CB66 `add
+;           XWA,0x00FA176E` indexes its own handler table after `mul
+;           A,0x04`, which is the four-byte stride of a 32-entry button
+;           table -- the shape notes/prom_b_entrypoints_round7.py
+;           establishes for every +8 method.
+; Unknown:  which button is which. The index arrives from prom_b
+;           0xF42C74 and no reader in prom_a bounds it; round 7's two
+;           independent five-bit masks are what make it 32
+; Was `sub_F9CB53`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_SoundGroupNaming_Button:
 	link XIZ,0x0000                                      ; F9CB53  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9CB57  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9CB5A  9e 08 04
@@ -43594,7 +43818,7 @@ sub_F9CC9F:
 ; ---------------------------------------------------------------------
 ; Paint_SoundGroupNaming -- paints the screen whose own text reads "SOUND GROUP NAMING"
 ;
-; Called from: prom_a sub_F9CB00 (`calr`) at 0xF9CB3B
+; Called from: prom_a Screen_SoundGroupNaming_Enter (`calr`) at 0xF9CB3B
 ;
 ; It hands 2 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -43641,7 +43865,7 @@ Paint_SoundGroupNaming:
 ; ---------------------------------------------------------------------
 ; Paint_SoundGroupNamingWrite -- paints the "SOUND GROUP NAMING" screen's "WRITE" state
 ;
-; Called from: prom_a sub_F9CB00 (`calr`) at 0xF9CB4D
+; Called from: prom_a Screen_SoundGroupNaming_Enter (`calr`) at 0xF9CB4D
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -43807,7 +44031,30 @@ sub_F9CEC3:
 	popw hl                                              ; F9CF64  4b
 	unlk XIZ                                             ; F9CF65  ee 0d
 	ret                                                  ; F9CF67  0e
-sub_F9CF68:
+; ---------------------------------------------------------------------
+; Screen_CombinationGroupNaming_Enter -- the Enter method of the COMBINATION GROUP NAMING screen:
+;                                        sets the screen's paint state and calls its painter
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 124 -- the .long
+;           at 0xF870B1, which this listing annotates `[92]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF42690, and prom_b's three consecutive
+;           `jp` at 0xF42690, 0xF42694 and 0xF42698 reach 0xF9CF68,
+;           0xF9CFBA and 0xF9CFBB. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xF9CFA3 `calr Paint_CombinationGroupNaming` and
+;           0xF9CFB5 `calr Paint_CombinationGroupNamingWrite`, and round
+;           7 named that painter from the screen's own display-list
+;           text, "COMBINATION GROUP NAMING". This is the +0 slot.
+; Unknown:  what the state bytes it writes before painting mean.
+;           (0x2075), (0x209B), (0x209C) and the (0x2095) & 0x10 test
+;           guarding the painter call are shared by all five Enter
+;           methods and named by nothing in this tree
+; Was `sub_F9CF68`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_CombinationGroupNaming_Enter:
 	ldb_d8 c, (0x207a)                                   ; F9CF68  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9CF6C  c1 7b 20 f3
 	jr z, .LF9CF77                                       ; F9CF70  66 05
@@ -43840,9 +44087,56 @@ sub_F9CF68:
 	popw bc                                              ; F9CFB8  49
 .LF9CFB9:
 	ret                                                  ; F9CFB9  0e
-sub_F9CFBA:
+; ---------------------------------------------------------------------
+; Screen_CombinationGroupNaming_Leave -- the Leave method of the COMBINATION GROUP NAMING screen
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 124 -- the .long
+;           at 0xF870B1, which this listing annotates `[92]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF42690, and prom_b's three consecutive
+;           `jp` at 0xF42690, 0xF42694 and 0xF42698 reach 0xF9CF68,
+;           0xF9CFBA and 0xF9CFBB. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xF9CFA3 `calr Paint_CombinationGroupNaming` and
+;           0xF9CFB5 `calr Paint_CombinationGroupNamingWrite`, and round
+;           7 named that painter from the screen's own display-list
+;           text, "COMBINATION GROUP NAMING". This is the +4 slot, and
+;           its body is a bare `ret`.
+; Unknown:  nothing here says why this screen needs no teardown
+; Was `sub_F9CFBA`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_CombinationGroupNaming_Leave:
 	ret                                                  ; F9CFBA  0e
-sub_F9CFBB:
+; ---------------------------------------------------------------------
+; Screen_CombinationGroupNaming_Button -- the Button method of the COMBINATION GROUP NAMING screen:
+;                                         dispatches through a 23-entry table of handlers (NOT 32 -- see the note below)
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 124 -- the .long
+;           at 0xF870B1, which this listing annotates `[92]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF42690, and prom_b's three consecutive
+;           `jp` at 0xF42690, 0xF42694 and 0xF42698 reach 0xF9CF68,
+;           0xF9CFBA and 0xF9CFBB. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xF9CFA3 `calr Paint_CombinationGroupNaming` and
+;           0xF9CFB5 `calr Paint_CombinationGroupNamingWrite`, and round
+;           7 named that painter from the screen's own display-list
+;           text, "COMBINATION GROUP NAMING". This is the +8 slot;
+;           0xF9CFCE `add XWA,0x00FA17CF` indexes its own handler table
+;           after `mul A,0x04`, which is the four-byte stride of a
+;           32-entry button table -- the shape
+;           notes/prom_b_entrypoints_round7.py establishes for every +8
+;           method.
+; Unknown:  which button is which. The index arrives from prom_b
+;           0xF42C74 and no reader in prom_a bounds it; round 7's two
+;           independent five-bit masks are what make it 32
+; Was `sub_F9CFBB`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_CombinationGroupNaming_Button:
 	link XIZ,0x0000                                      ; F9CFBB  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9CFBF  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9CFC2  9e 08 04
@@ -44151,7 +44445,7 @@ sub_F9D079:
 ; ---------------------------------------------------------------------
 ; Paint_CombinationGroupNaming -- paints the screen whose own text reads "COMBINATION GROUP NAMING"
 ;
-; Called from: prom_a sub_F9CF68 (`calr`) at 0xF9CFA3
+; Called from: prom_a Screen_CombinationGroupNaming_Enter (`calr`) at 0xF9CFA3
 ;
 ; It hands 2 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -44198,7 +44492,7 @@ Paint_CombinationGroupNaming:
 ; ---------------------------------------------------------------------
 ; Paint_CombinationGroupNamingWrite -- paints the "COMBINATION GROUP NAMING" screen's "WRITE" state
 ;
-; Called from: prom_a sub_F9CF68 (`calr`) at 0xF9CFB5
+; Called from: prom_a Screen_CombinationGroupNaming_Enter (`calr`) at 0xF9CFB5
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -47258,7 +47552,31 @@ sub_F9EF72:
 	ret                                                  ; F9EF83  0e
 sub_F9EF84:
 	ret                                                  ; F9EF84  0e
-sub_F9EF85:
+; ---------------------------------------------------------------------
+; Screen_DrumsMapNaming_Enter -- the Enter method of the DRUMS MAP / NAMING screen: sets
+;                                the screen's paint state and calls its painter
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 135 -- the .long
+;           at 0xF870DD, which this listing annotates `[103]` because
+;           the index comment restarts at PanelScreen_VtableTable_ViewB,
+;           32 entries in -- holds 0xF419B8, and prom_b's three
+;           consecutive `jp` at 0xF419B8, 0xF419BC and 0xF419C0 reach
+;           0xF9EF85, 0xF9EFF6 and 0xF9F006. The +0 Enter / +4 Leave /
+;           +8 Button reading is that table's own documented one,
+;           established in this listing from three different call sites
+;           (checks V1-V6). The SCREEN's name is not invented here: its
+;           Enter method calls 0xF9EFD7 `calr Paint_DrumsMapNaming`,
+;           0xF9EFEC `calr Paint_DrumsMapWrite` and 0xF9EFF2 `calr
+;           Paint_ErrorImpossibleDrumMap`, and round 7 named that
+;           painter from the screen's own display-list text, "DRUMS MAP"
+;           and "NAMING". This is the +0 slot.
+; Unknown:  what the state bytes it writes before painting mean.
+;           (0x2075), (0x209B), (0x209C) and the (0x2095) & 0x10 test
+;           guarding the painter call are shared by all five Enter
+;           methods and named by nothing in this tree
+; Was `sub_F9EF85`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_DrumsMapNaming_Enter:
 	ldb_d8 c, (0x207a)                                   ; F9EF85  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9EF89  c1 7b 20 f3
 	jr z, .LF9EF9E                                       ; F9EF8D  66 0f
@@ -47301,14 +47619,66 @@ sub_F9EF85:
 	calr Paint_ErrorImpossibleDrumMap                                      ; F9EFF2  1e df 03
 .LF9EFF5:
 	ret                                                  ; F9EFF5  0e
-sub_F9EFF6:
+; ---------------------------------------------------------------------
+; Screen_DrumsMapNaming_Leave -- the Leave method of the DRUMS MAP / NAMING screen
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 135 -- the .long
+;           at 0xF870DD, which this listing annotates `[103]` because
+;           the index comment restarts at PanelScreen_VtableTable_ViewB,
+;           32 entries in -- holds 0xF419B8, and prom_b's three
+;           consecutive `jp` at 0xF419B8, 0xF419BC and 0xF419C0 reach
+;           0xF9EF85, 0xF9EFF6 and 0xF9F006. The +0 Enter / +4 Leave /
+;           +8 Button reading is that table's own documented one,
+;           established in this listing from three different call sites
+;           (checks V1-V6). The SCREEN's name is not invented here: its
+;           Enter method calls 0xF9EFD7 `calr Paint_DrumsMapNaming`,
+;           0xF9EFEC `calr Paint_DrumsMapWrite` and 0xF9EFF2 `calr
+;           Paint_ErrorImpossibleDrumMap`, and round 7 named that
+;           painter from the screen's own display-list text, "DRUMS MAP"
+;           and "NAMING". This is the +4 slot, and its body is the only
+;           Leave of the five that is not a bare `ret`: 0xF9EFF6
+;           compares (0x207A) with (0x207B) and, when they differ,
+;           clears (0x2806) at 0xF9F000 -- the same cell its Button
+;           method requires to be zero at 0xF9F00A.
+; Unknown:  what (0x2806) holds. Only that it is written on the way out
+;           and required to be zero on the way in
+; Was `sub_F9EFF6`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_DrumsMapNaming_Leave:
 	ldb_d8 c, (0x207a)                                   ; F9EFF6  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9EFFA  c1 7b 20 f3
 	jr Z,.LF9F005                                        ; F9EFFE  66 05
 	stdi8 (0x2806), 0x00                                 ; F9F000  f1 06 28 00 00
 .LF9F005:
 	ret                                                  ; F9F005  0e
-sub_F9F006:
+; ---------------------------------------------------------------------
+; Screen_DrumsMapNaming_Button -- the Button method of the DRUMS MAP / NAMING screen:
+;                                 dispatches through a 23-entry table of handlers (NOT 32 -- see the note below)
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 135 -- the .long
+;           at 0xF870DD, which this listing annotates `[103]` because
+;           the index comment restarts at PanelScreen_VtableTable_ViewB,
+;           32 entries in -- holds 0xF419B8, and prom_b's three
+;           consecutive `jp` at 0xF419B8, 0xF419BC and 0xF419C0 reach
+;           0xF9EF85, 0xF9EFF6 and 0xF9F006. The +0 Enter / +4 Leave /
+;           +8 Button reading is that table's own documented one,
+;           established in this listing from three different call sites
+;           (checks V1-V6). The SCREEN's name is not invented here: its
+;           Enter method calls 0xF9EFD7 `calr Paint_DrumsMapNaming`,
+;           0xF9EFEC `calr Paint_DrumsMapWrite` and 0xF9EFF2 `calr
+;           Paint_ErrorImpossibleDrumMap`, and round 7 named that
+;           painter from the screen's own display-list text, "DRUMS MAP"
+;           and "NAMING". This is the +8 slot; 0xF9F020 `add
+;           XWA,0x00FA1A02` indexes its own handler table after `mul
+;           A,0x04`, which is the four-byte stride of a 32-entry button
+;           table -- the shape notes/prom_b_entrypoints_round7.py
+;           establishes for every +8 method.
+; Unknown:  which button is which. The index arrives from prom_b
+;           0xF42C74 and no reader in prom_a bounds it; round 7's two
+;           independent five-bit masks are what make it 32
+; Was `sub_F9F006`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_DrumsMapNaming_Button:
 	link XIZ,0x0000                                      ; F9F006  ee 0c 00 00
 	m_cp_mi8 MB16, 0x2806, 0x00                          ; F9F00A  c1 06 28 3f 00
 	jr nz, .LF9F031                                      ; F9F00F  6e 20
@@ -47740,7 +48110,7 @@ sub_F9F36B:
 ; ---------------------------------------------------------------------
 ; Paint_DrumsMapNaming -- paints the screen whose own text reads "DRUMS MAP" / "NAMING"
 ;
-; Called from: prom_a sub_F9EF85 (`calr`) at 0xF9EFD7
+; Called from: prom_a Screen_DrumsMapNaming_Enter (`calr`) at 0xF9EFD7
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -47778,7 +48148,7 @@ Paint_DrumsMapNaming:
 ; ---------------------------------------------------------------------
 ; Paint_DrumsMapWrite -- paints the "DRUMS MAP" screen's "WRITE" state
 ;
-; Called from: prom_a sub_F9EF85 (`calr`) at 0xF9EFEC
+; Called from: prom_a Screen_DrumsMapNaming_Enter (`calr`) at 0xF9EFEC
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -47814,7 +48184,7 @@ Paint_DrumsMapWrite:
 ; ---------------------------------------------------------------------
 ; Paint_ErrorImpossibleDrumMap -- paints the error box "It is impossible to set a drum map for a Sound other than a Drum Kit."
 ;
-; Called from: prom_a sub_F9EF85 (`calr`) at 0xF9EFF2
+; Called from: prom_a Screen_DrumsMapNaming_Enter (`calr`) at 0xF9EFF2
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -63184,7 +63554,31 @@ sub_FABEF4:
 	popw hl                                              ; FABEF7  4b
 	unlk XIZ                                             ; FABEF8  ee 0d
 	ret                                                  ; FABEFA  0e
-sub_FABEFB:
+; ---------------------------------------------------------------------
+; MidiIn_ControlRecord_Dispatch -- dispatches a control record on its first byte: 0xB1 stages
+;                                  three of its fields and publishes them, 0xB2..0xBD index a
+;                                  twelve-entry jump table
+;
+; Evidence: 0xFABF01 `ld XBC,(XIZ+0x08)` takes the record pointer from
+;           the frame and 0xFABF04 `ld H,(XBC)` its first byte; 0xFABF06
+;           `cp H,0xb1` is the special case, whose arm copies (XBC+0x02)
+;           and (XBC+0x03) to (0x60F089) and (0x60F08A) at
+;           0xFABF18/0xFABF20 and calls 0xFABE6F, the routine that
+;           reaches Queue2C00_PublishStaged; every other value goes
+;           through 0xFABF32 `sub BC,0x00b2` and 0xFABF36 `cp BC,0x000b`
+;           into JumpTable_FABF4A, which this listing already documents
+;           as twelve entries with first case 0xB2. prom_b publishes it
+;           as T_F4080C with 21 references, and ELEVEN of its
+;           content-named callers are MIDI controller handlers --
+;           MidiIn_CC01, CC02, CC04, CC0B, CC10, CC11, CC12, CC13, CC40,
+;           MidiIn_ChannelPressure and MidiIn_PitchBend -- which is what
+;           the `MidiIn_` prefix claims and all it claims
+; Unknown:  what a record IS. Its first byte selects one of thirteen
+;           arms and the twelve jump-table arms are not decoded here;
+;           JumpTable_FABF4A's own header states the same gap
+; Was `sub_FABEFB`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+MidiIn_ControlRecord_Dispatch:
 	link XIZ,0x0000                                      ; FABEFB  ee 0c 00 00
 	pushw hl                                             ; FABEFF  2b
 	push XIX                                             ; FABF00  3c
@@ -63213,7 +63607,7 @@ sub_FABEFB:
 	ld XBC,(XBC)                                         ; FABF46  a1 21
 	jp (xbc)                                             ; FABF48  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_FABF4A -- 12 LE32 branch targets, first case 0xB2
+; MidiIn_ControlRecordHandlers -- 12 LE32 branch targets, first case 0xB2
 ;
 ; Read by: ONE site, the `add XBC,0x00FABF4A / ld XBC,(XBC) / jp T,XBC` at
 ;          0xFABF40-0xFABF48.
@@ -63225,8 +63619,14 @@ sub_FABEFB:
 ; Evidence: the fixed reader shape in the ten bytes before the base plus the
 ;          count from its own `cp BC,0x000B`; re-derived by
 ;          notes/prom_a_byte_checks.py and notes/prom_a_jumptables.py.
+; ★ Renamed from `JumpTable_FABF4A` in round 10 (framed -> content) by notes/prom_a_census_round8.py:
+; its one reader is now named: MidiIn_ControlRecord_Dispatch reaches
+; it at 0xFABF40 with (record byte - 0xB2) * 4, so the twelve entries
+; ARE the handlers of a control record and the name can say so instead
+; of naming the address. Entry count, first case and last-entry test
+; are unchanged and stay in the header above
 ; ---------------------------------------------------------------------
-JumpTable_FABF4A:
+MidiIn_ControlRecordHandlers:
 	.long 0x00fabf7a                                 ; FABF4A  [  0]
 	.long 0x00fabfb9                                 ; FABF4E  [  1]
 	.long 0x00fabfa4                                 ; FABF52  [  2]
@@ -81556,12 +81956,12 @@ sub_FB9176:
 	lda_24 xix, (0x60505e)                               ; FB9179  f2 5e 50 60 34
 	and (XIX),0xfe                                       ; FB917E  84 3c fe
 	stib_da (0x60504c), 0x00                             ; FB9181  f2 4c 50 60 00 00
-	calr sub_FB921C                                      ; FB9187  1e 92 00
+	calr MidiInQueue_InjectAllNotesOff_AllChannels                                      ; FB9187  1e 92 00
 	calr sub_FB991B                                      ; FB918A  1e 8e 07
 	calr sub_FB9E61                                      ; FB918D  1e d1 0c
 	calr sub_FB9E69                                      ; FB9190  1e d6 0c
 	call sub_FB9060                                      ; FB9193  1d 60 90 fb
-	calr sub_FB929C                                      ; FB9197  1e 02 01
+	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB9197  1e 02 01
 	call sub_FB9046                                      ; FB919A  1d 46 90 fb
 	ld_sd8b d, 0x96                                      ; FB919E  c0 96 24
 	and D,0x04                                           ; FB91A1  cc cc 04
@@ -81589,14 +81989,14 @@ sub_FB91C9:
 	lda_24 xix, (0x60505e)                               ; FB91CC  f2 5e 50 60 34
 	and (XIX),0xfe                                       ; FB91D1  84 3c fe
 	stib_da (0x60504c), 0x00                             ; FB91D4  f2 4c 50 60 00 00
-	calr sub_FB921C                                      ; FB91DA  1e 3f 00
+	calr MidiInQueue_InjectAllNotesOff_AllChannels                                      ; FB91DA  1e 3f 00
 	call 0xf413c0                                        ; FB91DD  1d c0 13 f4
 	calr sub_FB991B                                      ; FB91E1  1e 37 07
 	calr sub_FB9E61                                      ; FB91E4  1e 7a 0c
 	calr sub_FB9E69                                      ; FB91E7  1e 7f 0c
 	call sub_FB9060                                      ; FB91EA  1d 60 90 fb
 sub_FB91EE:
-	calr sub_FB929C                                      ; FB91EE  1e ab 00
+	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB91EE  1e ab 00
 	call sub_FB9046                                      ; FB91F1  1d 46 90 fb
 	ld_sd8b d, 0x96                                      ; FB91F5  c0 96 24
 	and D,0x04                                           ; FB91F8  cc cc 04
@@ -81616,7 +82016,26 @@ sub_FB91FE:
 	popw de                                              ; FB9219  4a
 	popw hl                                              ; FB921A  4b
 	ret                                                  ; FB921B  0e
-sub_FB921C:
+; ---------------------------------------------------------------------
+; MidiInQueue_InjectAllNotesOff_AllChannels -- appends `Bn 7B 00` to the MIDI INPUT queue for n = 0..0x0F
+;
+; Evidence: 0xFB921E loads the thunk 0xF41DAC, which prom_b publishes as
+;           T_Ring600C1E_Put, and 0x600C1E is the ring
+;           MIDI_RX_DeliverTwo appends received bytes to (0xFA57B3 `ld
+;           XIX,0x00600c1e`), so this INJECTS into the receive path
+;           rather than transmitting; 0xFB9227 `or H,0xb0` builds the
+;           status byte from the loop counter, which runs 0x00..0x0F
+;           (0xFB9223 `ldb l,0x00`, 0xFB9254 `cp L,0x0f`, 0xFB9257 `jr
+;           ule`); the three calls at 0xFB9236, 0xFB9241 and 0xFB924C
+;           push 0x00/H, 0x7B and 0x00, and 0xFB924E `inc 6,XSP`
+;           reclaims exactly those three words. CC 0x7B with value 0 is
+;           All Notes Off, which the tree already documents at
+;           MIDI_AllNotesOffTemplate
+; Unknown:  who calls it and when: its two callers, 0xFB9187 and
+;           0xFB91DA, are themselves unnamed
+; Was `sub_FB921C`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+MidiInQueue_InjectAllNotesOff_AllChannels:
 	pushw hl                                             ; FB921C  2b
 	push XIX                                             ; FB921D  3c
 	lda_24 xix, (0xf41dac)                               ; FB921E  f2 ac 1d f4 34
@@ -81646,7 +82065,25 @@ sub_FB921C:
 	pop XIX                                              ; FB9259  5c
 	popw hl                                              ; FB925A  4b
 	ret                                                  ; FB925B  0e
-sub_FB925C:
+; ---------------------------------------------------------------------
+; MidiInQueue_InjectController0_AllChannels -- appends `Bn 00 40` to the MIDI INPUT queue for n = 0..0x0F
+;
+; Evidence: the three injectors are 64 bytes each and EVERY byte that
+;           differs is either one of the two pushed data bytes -- offset
+;           29 and offset 40, 0x7B/0x00 in the sibling and 0x00/0x40
+;           here (0xFB9278 `pushw 0x00`, 0xFB9283 `pushw 0x40`) -- or
+;           the low byte of one of the three `lda_24 xiy` return-address
+;           literals at offsets 21, 32 and 43, which is position and not
+;           content. Same ring (0xFB925E), same 0xB0 (0xFB9267), same
+;           0x00..0x0F bound (0xFB9294)
+; Unknown:  ⚠ what controller 0 means to this machine. On the wire CC 0
+;           is Bank Select MSB and 0x40 would be bank 64, but the
+;           destination here is the INPUT queue, not the wire, and
+;           nothing in this tree maps the receiver's controller numbers.
+;           The name states the number and claims nothing about it
+; Was `sub_FB925C`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+MidiInQueue_InjectController0_AllChannels:
 	pushw hl                                             ; FB925C  2b
 	push XIX                                             ; FB925D  3c
 	lda_24 xix, (0xf41dac)                               ; FB925E  f2 ac 1d f4 34
@@ -81676,7 +82113,23 @@ sub_FB925C:
 	pop XIX                                              ; FB9299  5c
 	popw hl                                              ; FB929A  4b
 	ret                                                  ; FB929B  0e
-sub_FB929C:
+; ---------------------------------------------------------------------
+; MidiInQueue_InjectHoldPedalOff_AllChannels -- appends `Bn 40 00` to the MIDI INPUT queue for n = 0..0x0F
+;
+; Evidence: the same 64 bytes again, with 0xFB92B8 `pushw 0x40` as the
+;           first data byte; it differs from the CC 0x7B routine in FOUR
+;           bytes, the three position-dependent return-address literals
+;           and offset 29, because both routines push 0x00 as the second
+;           data byte. CC 0x40 with value 0 is Hold 1 (damper) OFF, and
+;           that reading is corroborated by the sibling that emits CC
+;           0x7B: two of the three routines spell a standard controller
+;           reset in the standard order, which is what fixes the
+;           argument order as status, data 1, data 2
+; Unknown:  as for the sibling -- the receiver's controller map is not
+;           established
+; Was `sub_FB929C`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+MidiInQueue_InjectHoldPedalOff_AllChannels:
 	pushw hl                                             ; FB929C  2b
 	push XIX                                             ; FB929D  3c
 	lda_24 xix, (0xf41dac)                               ; FB929E  f2 ac 1d f4 34
@@ -82905,7 +83358,7 @@ sub_FB9DFE:
 .LFB9E20:
 	m_set 1, MD24, 0x60505e                              ; FB9E20  f2 5e 50 60 b9
 	stib_da (0x605148), 0x00                             ; FB9E25  f2 48 51 60 00 00
-	calr sub_FB925C                                      ; FB9E2B  1e 2e f4
+	calr MidiInQueue_InjectController0_AllChannels                                      ; FB9E2B  1e 2e f4
 	calr sub_FB9D5A                                      ; FB9E2E  1e 29 ff
 	calr sub_FB9D88                                      ; FB9E31  1e 54 ff
 	jr .LFB9E3D                                          ; FB9E34  68 07
@@ -89942,7 +90395,29 @@ sub_FBEEEC:
 	ret                                                  ; FBEF1A  0e
 sub_FBEF1B:
 	ret                                                  ; FBEF1B  0e
-sub_FBEF1C:
+; ---------------------------------------------------------------------
+; Screen_CombinationNaming_Enter -- the Enter method of the COMBINATION NAMING screen: sets
+;                                   the screen's paint state and calls its painter
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 92 -- the .long
+;           at 0xF87031, which this listing annotates `[60]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF41A98, and prom_b's three consecutive
+;           `jp` at 0xF41A98, 0xF41A9C and 0xF41AA0 reach 0xFBEF1C,
+;           0xFBEF75 and 0xFBEF76. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xFBEF6E `calr Paint_CombinationNaming`, and round 7
+;           named that painter from the screen's own display-list text,
+;           "COMBINATION NAMING". This is the +0 slot.
+; Unknown:  what the state bytes it writes before painting mean.
+;           (0x2075), (0x209B), (0x209C) and the (0x2095) & 0x10 test
+;           guarding the painter call are shared by all five Enter
+;           methods and named by nothing in this tree
+; Was `sub_FBEF1C`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_CombinationNaming_Enter:
 	m_cp_mi8 MB16, 0x207e, 0x01                          ; FBEF1C  c1 7e 20 3f 01
 	jr nz, .LFBEF2E                                      ; FBEF21  6e 0b
 	m_set 1, MD16, 0x2071                                ; FBEF23  f1 71 20 b9
@@ -89973,9 +90448,53 @@ sub_FBEF1C:
 	calr sub_FBF10A                                      ; FBEF71  1e 96 01
 .LFBEF74:
 	ret                                                  ; FBEF74  0e
-sub_FBEF75:
+; ---------------------------------------------------------------------
+; Screen_CombinationNaming_Leave -- the Leave method of the COMBINATION NAMING screen
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 92 -- the .long
+;           at 0xF87031, which this listing annotates `[60]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF41A98, and prom_b's three consecutive
+;           `jp` at 0xF41A98, 0xF41A9C and 0xF41AA0 reach 0xFBEF1C,
+;           0xFBEF75 and 0xFBEF76. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xFBEF6E `calr Paint_CombinationNaming`, and round 7
+;           named that painter from the screen's own display-list text,
+;           "COMBINATION NAMING". This is the +4 slot, and its body is a
+;           bare `ret`.
+; Unknown:  nothing here says why this screen needs no teardown
+; Was `sub_FBEF75`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_CombinationNaming_Leave:
 	ret                                                  ; FBEF75  0e
-sub_FBEF76:
+; ---------------------------------------------------------------------
+; Screen_CombinationNaming_Button -- the Button method of the COMBINATION NAMING screen:
+;                                    dispatches through a 23-entry table of handlers (NOT 32 -- see the note below)
+;
+; Evidence: PanelScreen_VtableTable's entry for screen 92 -- the .long
+;           at 0xF87031, which this listing annotates `[60]` because the
+;           index comment restarts at PanelScreen_VtableTable_ViewB, 32
+;           entries in -- holds 0xF41A98, and prom_b's three consecutive
+;           `jp` at 0xF41A98, 0xF41A9C and 0xF41AA0 reach 0xFBEF1C,
+;           0xFBEF75 and 0xFBEF76. The +0 Enter / +4 Leave / +8 Button
+;           reading is that table's own documented one, established in
+;           this listing from three different call sites (checks V1-V6).
+;           The SCREEN's name is not invented here: its Enter method
+;           calls 0xFBEF6E `calr Paint_CombinationNaming`, and round 7
+;           named that painter from the screen's own display-list text,
+;           "COMBINATION NAMING". This is the +8 slot; 0xFBEF9C `add
+;           XWA,0x00F1B14B` indexes its own handler table after `mul
+;           A,0x04`, which is the four-byte stride of a 32-entry button
+;           table -- the shape notes/prom_b_entrypoints_round7.py
+;           establishes for every +8 method.
+; Unknown:  which button is which. The index arrives from prom_b
+;           0xF42C74 and no reader in prom_a bounds it; round 7's two
+;           independent five-bit masks are what make it 32
+; Was `sub_FBEF76`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Screen_CombinationNaming_Button:
 	link XIZ,0x0000                                      ; FBEF76  ee 0c 00 00
 	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEF7A  c1 7f 27 3f 01
 	jr nz, .LFBEF8D                                      ; FBEF7F  6e 0c
@@ -90122,7 +90641,7 @@ sub_FBF03A:
 ; ---------------------------------------------------------------------
 ; Paint_CombinationNaming -- paints the screen whose own text reads "COMBINATION NAMING" / "MEM0RY WRITE"
 ;
-; Called from: prom_a sub_FBEF1C (`calr`) at 0xFBEF6E
+; Called from: prom_a Screen_CombinationNaming_Enter (`calr`) at 0xFBEF6E
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -93130,7 +93649,7 @@ Msg0716_HandlerTables:
 	m_bit 3, MD16, 0x20ba                                ; FC0C50  f1 ba 20 cb
 	jr z, .LFC0C6F                                       ; FC0C54  66 19
 	ld W,(XIZ+0x06)                                      ; FC0C56  8e 06 20
-	calr sub_FC114E                                      ; FC0C59  1e f2 04
+	calr Msg0716_GetRecordPtrByIndex                                      ; FC0C59  1e f2 04
 	push XIY                                             ; FC0C5C  3d
 	add XIY,0x00000020                                   ; FC0C5D  ed c8 20 00 00 00
 	bit 0,(XIY+0x0c)                                     ; FC0C63  bd 0c c8
@@ -93219,13 +93738,13 @@ sub_FC0CEC:
 	ret                                                  ; FC0D10  0e
 	ret                                                  ; FC0D11  0e
 	calr 0x0ab8                                          ; FC0D12  1e b8 0a
-	calr sub_FC0D41                                      ; FC0D15  1e 29 00
+	calr ScaleTuning_PostAllTwelveSemitones                                      ; FC0D15  1e 29 00
 	ret                                                  ; FC0D18  0e
 	ldb_d8 a, (0x20ba)                                   ; FC0D19  c1 ba 20 21
 sub_FC0D1D:
 	and A,0x0f                                           ; FC0D1D  c9 cc 0f
 	jr z, .LFC0D25                                       ; FC0D20  66 03
-	calr sub_FC0D41                                      ; FC0D22  1e 1c 00
+	calr ScaleTuning_PostAllTwelveSemitones                                      ; FC0D22  1e 1c 00
 .LFC0D25:
 	m_bit 7, MD16, 0x20ba                                ; FC0D25  f1 ba 20 cf
 	jr z, .LFC0D2E                                       ; FC0D29  66 03
@@ -93236,10 +93755,28 @@ sub_FC0D1D:
 	jr nz, .LFC0D40                                      ; FC0D34  6e 0a
 	ldb_d8 a, (0x20b8)                                   ; FC0D36  c1 b8 20 21
 	sub A,0x02                                           ; FC0D3A  c9 ca 02
-	calr sub_FC0DAF                                      ; FC0D3D  1e 6f 00
+	calr ScaleTuning_PostSemitoneFromUserRam                                      ; FC0D3D  1e 6f 00
 .LFC0D40:
 	ret                                                  ; FC0D40  0e
-sub_FC0D41:
+; ---------------------------------------------------------------------
+; ScaleTuning_PostAllTwelveSemitones -- posts the twelve semitone offsets of the selected scale,
+;                                       from ROM or from the user's RAM copy
+;
+; Evidence: prom_b's ScaleTuningOffsets header (0xF06800, 15 rows of 12
+;           bytes, one row per temperament) already names
+;           0xFC0D78-0xFC0D9D as its reader: 0xFC0D7E `ldb w,0x0c` and
+;           0xFC0D80 `mul8rr a,w` scale the row index and 0xFC0D84 `ld
+;           XHL,0x00f06800` is the base. The row index is the byte
+;           (0x78A2) mapped through 0xF43420 (0xFC0D78), except that
+;           0xFC0D41 sends 0x80 to the RAM-copy arm and
+;           0xFC0D48/0xFC0D4F/0xFC0D56 send 0x40, 0x41 and 0x42 to row
+;           0; both loops are bounded `cp A,0x0c`, so twelve semitones
+;           each
+; Unknown:  the UNIT of an offset -- the same gap prom_b's table header
+;           states
+; Was `sub_FC0D41`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+ScaleTuning_PostAllTwelveSemitones:
 	m_cp_mi8 MB16, 0x78a2, 0x80                          ; FC0D41  c1 a2 78 3f 80
 	jr z, .LFC0D5F                                       ; FC0D46  66 17
 	m_cp_mi8 MB16, 0x78a2, 0x40                          ; FC0D48  c1 a2 78 3f 40
@@ -93255,7 +93792,7 @@ sub_FC0D41:
 	cp A,0x0c                                            ; FC0D61  c9 cf 0c
 	jr nc, .LFC0D9D                                      ; FC0D64  6f 37
 	pushw wa                                             ; FC0D66  28
-	calr sub_FC0DAF                                      ; FC0D67  1e 45 00
+	calr ScaleTuning_PostSemitoneFromUserRam                                      ; FC0D67  1e 45 00
 	popw wa                                              ; FC0D6A  48
 	inc 1,A                                              ; FC0D6B  c9 61
 	jr .LFC0D61                                          ; FC0D6D  68 f2
@@ -93279,21 +93816,49 @@ sub_FC0D41:
 	jr nc, .LFC0D9D                                      ; FC0D90  6f 0b
 	pushw wa                                             ; FC0D92  28
 	push XHL                                             ; FC0D93  3b
-	calr sub_FC0D9E                                      ; FC0D94  1e 07 00
+	calr ScaleTuning_PostSemitoneFromRomRow                                      ; FC0D94  1e 07 00
 	pop XHL                                              ; FC0D97  5b
 	popw wa                                              ; FC0D98  48
 	inc 1,A                                              ; FC0D99  c9 61
 	jr .LFC0D8D                                          ; FC0D9B  68 f0
 .LFC0D9D:
 	ret                                                  ; FC0D9D  0e
-sub_FC0D9E:
+; ---------------------------------------------------------------------
+; ScaleTuning_PostSemitoneFromRomRow -- posts semitone A's offset, read from the ROM row the
+;                                       caller passes in XHL
+;
+; Evidence: 0xFC0D9E `ld (XIX+0x02),A` puts the semitone number in the
+;           message at RAM 0x0716 and 0xFC0DA3 reads (XHL + WA) into W,
+;           which 0xFC0DA8 writes to +0x03; 0xFC0DAB `calr` resolves to
+;           0xFC17DF, the module's sender. XHL is the row
+;           ScaleTuning_PostAllTwelveSemitones computed at 0xFC0D84
+; Unknown:  what field +2 and +3 of the 0x0716 message mean to CPU 2.
+;           notes/FINDINGS-prom_a-msg0716-module.md states that no
+;           handler's message layout is established
+; Was `sub_FC0D9E`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+ScaleTuning_PostSemitoneFromRomRow:
 	ld (XIX+0x02),A                                      ; FC0D9E  bc 02 41
 	xor W,W                                              ; FC0DA1  c8 d0
 	mx_ld_rm MXB, ra_HL, ra_WA, r0                       ; FC0DA3  c3 07 ec e0 20
 	ld (XIX+0x03),W                                      ; FC0DA8  bc 03 40
 	calr 0x0a31                                          ; FC0DAB  1e 31 0a
 	ret                                                  ; FC0DAE  0e
-sub_FC0DAF:
+; ---------------------------------------------------------------------
+; ScaleTuning_PostSemitoneFromUserRam -- the same, reading the twelve-byte USER copy at RAM 0x78A4
+;                                        instead
+;
+; Evidence: identical to ScaleTuning_PostSemitoneFromRomRow except
+;           0xFC0DB4 `ld XHL,0x000078a4`, which hard-codes the base the
+;           ROM row would have supplied; 0xFC0DC1 `calr` resolves to the
+;           SAME sender, 0xFC17DF. prom_b's ScaleTuningOffsets header
+;           names 0x78A4 as the user copy and this address as the arm
+;           that reads it, and row 14 (USER) of the ROM table is flat
+;           because the editable copy is this one
+; Unknown:  as above
+; Was `sub_FC0DAF`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+ScaleTuning_PostSemitoneFromUserRam:
 	ld (XIX+0x02),A                                      ; FC0DAF  bc 02 41
 	xor W,W                                              ; FC0DB2  c8 d0
 	ld XHL,0x000078a4                                    ; FC0DB4  43 a4 78 00 00
@@ -93573,7 +94138,7 @@ sub_FC1042:
 	ldw de, 0x00                                         ; FC1055  32 00 00
 	ldb w, 0x00                                          ; FC1058  20 00
 .LFC105A:
-	calr sub_FC114E                                      ; FC105A  1e f1 00
+	calr Msg0716_GetRecordPtrByIndex                                      ; FC105A  1e f1 00
 	bit 5,(XIY+0x0d)                                     ; FC105D  bd 0d cd
 	jr nz, .LFC1065                                      ; FC1060  6e 03
 	or DE,(XIZ+0x04)                                     ; FC1062  9e 04 e2
@@ -93674,10 +94239,25 @@ sub_FC1119:
 .LFC1142:
 	ret                                                  ; FC1142  0e
 sub_FC1143:
-	call sub_FC114E                                      ; FC1143  1d 4e 11 fc
+	call Msg0716_GetRecordPtrByIndex                                      ; FC1143  1d 4e 11 fc
 	add XIY,0x00000000                                   ; FC1147  ed c8 00 00 00 00
 	ret                                                  ; FC114D  0e
-sub_FC114E:
+; ---------------------------------------------------------------------
+; Msg0716_GetRecordPtrByIndex -- returns Msg0716_RecordPtrTable[W] in XIY
+;
+; Evidence: 0xFC1153 `sla wa,0x02` scales the index by the table's
+;           four-byte entry, 0xFC1156 `ld XIY,0x00fc1162` is
+;           Msg0716_RecordPtrTable itself and 0xFC115B loads XIY from
+;           XIY+WA. That table's own header, already in this listing,
+;           names this routine as one of its exactly two readers -- `the
+;           helper at 0xFC114E that is calr-ed 15 times and takes its
+;           index in W`
+; Unknown:  what a 0x40-byte record holds -- the gap the table's header
+;           states. This routine bounds nothing; the bound is the 32
+;           records that supply the index
+; Was `sub_FC114E`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Msg0716_GetRecordPtrByIndex:
 	pushw wa                                             ; FC114E  28
 	ld A,W                                               ; FC114F  c8 89
 	xor W,W                                              ; FC1151  c8 d0
@@ -94082,6 +94662,23 @@ sub_FC14F8:
 	call 0xf40f3c                                        ; FC1516  1d 3c 0f f4
 .LFC151A:
 	ret                                                  ; FC151A  0e
+; ---------------------------------------------------------------------
+; sub_FC151B -- REFUSED A NAME, and this is the reason.
+;
+; It is one of a family of 0xFC0000-module handlers that write 0xB0 to
+; (XIX), a selector to (XIX+0x02) and (0x20B9) masked by C to
+; (XIX+0x03), then post four bytes: 0xFC151B/0xFC15E1/0xFC1679 use
+; selectors 0x07, 0x97 and 0x0B with masks 0x7F, 0x07 and 0xFF. 0xB0
+; invites reading the selector as a MIDI controller number and the round
+; REFUSES to, because 0x97 is 151 and no MIDI controller number exceeds
+; 0x7F. So field +2 is not a controller number,
+; notes/FINDINGS-prom_a-msg0716-module.md states that no handler's
+; meaning is established, and a name here would claim one. The measured
+; fact -- three selectors, three masks, one shared sender at 0xFC18CC --
+; is worth more than the name would be.
+; Refused by notes/prom_a_census_round8.py: `sub_XXXXXX` plus a
+; stated gap is worth more than a plausible guess.
+; ---------------------------------------------------------------------
 sub_FC151B:
 	ld (XIX),0xb0                                        ; FC151B  b4 00 b0
 	ld (XIX+0x02),0x07                                   ; FC151E  bc 02 00 07
@@ -137232,7 +137829,7 @@ sub_FE30DD:
 	jrl nz, 0x0291                                       ; FE30F7  7e 91 02
 	pushw 0x60                                           ; FE30FA  0b 60 00
 	pushw 0x6f9b                                         ; FE30FD  0b 9b 6f
-	call sub_FE5027                                      ; FE3100  1d 27 50 fe
+	call Dev7E_IdentifyDevice                                      ; FE3100  1d 27 50 fe
 	inc 4,XSP                                            ; FE3104  ef 64
 	cps hl, 0x00                                         ; FE3106  db d8
 	jr z, 0x09                                           ; FE3108  66 09
@@ -137304,7 +137901,7 @@ sub_FE30DD:
 	m_cp_mi16 MW24, 0x605d3c, 0x003c                     ; FE31BC  d2 3c 5d 60 3f 3c 00
 	jr z, 0x04                                           ; FE31C3  66 04
 .LFE31C5:
-	call sub_FE5138                                      ; FE31C5  1d 38 51 fe
+	call Dev7E_SetDeviceParams                                      ; FE31C5  1d 38 51 fe
 .LFE31C9:
 	lda_24 xwa, (0x605d3c)                               ; FE31C9  f2 3c 5d 60 30
 	ld (XSP+0x0c),XWA                                    ; FE31CE  bf 0c 60
@@ -139951,10 +140548,12 @@ sub_FE4BCC:
 ;           is 0xFE4C93 `ld A,(XSP+0x08)` into 0xFE4C96 `ld (XBC),A`.
 ;           FINDINGS-memory-map.md names 0x7E0008-0x7E0017 and this
 ;           routine as one of its four accessors
-; Unknown:  what the two banks selected by bit 3 and bit 4 ARE. The
-;           caller's flag at (XSP+0x04) chooses between them and nothing
-;           in prom_a says what either means; FINDINGS-memory-map.md
-;           records the same gap
+; Unknown:  what the far side of the port physically is. ★ ANSWERED
+;           since round 8: the two banks are the ATA COMMAND BLOCK
+;           (registers 0..7 at 0x7E0008) and the CONTROL BLOCK, whose
+;           register 6 takes 0x0C then 0x08 -- reset asserted and
+;           released -- at 0xFE50E9/0xFE50F5, the only two bank-1 writes
+;           in prom_a; see this module's header and `--ata`
 ; Was `sub_FE4C73`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
 Dev7E_WriteByte:
@@ -139981,7 +140580,9 @@ Dev7E_WriteByte:
 ; Evidence: the same five steps at
 ;           0xFE4C99/0xFE4C9C/0xFE4CA5/0xFE4CAA/0xFE4CB3; the word moved
 ;           is 0xFE4CB9 `ld WA,(XSP+0x08)` into 0xFE4CBC `ld (XBC),WA`
-; Unknown:  the bank meaning, as for Dev7E_WriteByte
+; Unknown:  the far side of the port, as for Dev7E_WriteByte, whose
+;           Unknown line records that the two banks are ATA's command
+;           and control blocks
 ; Was `sub_FE4C99`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
 Dev7E_WriteWord:
@@ -140009,7 +140610,7 @@ Dev7E_WriteWord:
 ;           A,0x07`, banked by 0xFE4CCB/0xFE4CD0 `set 0x03,A`/`set
 ;           0x04,A`, window 0xFE4CD7 `add XWA,0x007e0000`; the byte read
 ;           is 0xFE4CDD `ld L,(XWA)`
-; Unknown:  the bank meaning, as above
+; Unknown:  the far side of the port, as above
 ; Was `sub_FE4CBF`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
 Dev7E_ReadByte:
@@ -140035,7 +140636,7 @@ Dev7E_ReadByte:
 ; Evidence: the same steps at
 ;           0xFE4CE0/0xFE4CE3/0xFE4CEC/0xFE4CF1/0xFE4CF8; the word read
 ;           is 0xFE4CFE `ld HL,(XWA)`
-; Unknown:  the bank meaning, as above
+; Unknown:  the far side of the port, as above
 ; Was `sub_FE4CE0`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
 Dev7E_ReadWord:
@@ -140054,14 +140655,48 @@ Dev7E_ReadWord:
 	add XWA,0x007e0000                                   ; FE4CF8  e8 c8 00 00 7e 00
 	ld HL,(XWA)                                          ; FE4CFE  90 23
 	ret                                                  ; FE4D00  0e
-sub_FE4D01:
+; ---------------------------------------------------------------------
+; Dev7E_ReadStatus -- reads command-block register 7 and returns it
+;                     zero-extended in HL
+;
+; Evidence: 0xFE4D01 `pushw 0x07` and 0xFE4D04 `pushw 0x00` are the
+;           register index and the bank flag Dev7E_ReadByte reads at
+;           (XSP+0x06) and (XSP+0x04); 0xFE4D07 `calr` resolves to
+;           0xFE4CBF, Dev7E_ReadByte; 0xFE4D0C `extz HL`. Ten callers,
+;           every wait and result check in the module, and the bits they
+;           test are bit 7 (0xFE4D41, polled until clear), bit 3
+;           (0xFE4DE7, 0xFE4F5C, 0xFE5091, required before a 512-byte
+;           transfer), bit 0 (0xFE50DB, checked after one) and bit 6
+;           (0xFE5441, 0xFE54AA) -- BSY, DRQ, ERR and DRDY of an ATA
+;           status register
+; Unknown:  nothing in this body says what the device is; the
+;           identification is argued once, in this module's header and
+;           in `prom_a_census_round8.py --ata`, and not re-asserted per
+;           routine
+; Was `sub_FE4D01`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Dev7E_ReadStatus:
 	pushw 0x07                                           ; FE4D01  0b 07 00
 	pushw 0x00                                           ; FE4D04  0b 00 00
 	calr 0xffb5                                          ; FE4D07  1e b5 ff
 	inc 4,XSP                                            ; FE4D0A  ef 64
 	extz HL                                              ; FE4D0C  db 12
 	ret                                                  ; FE4D0E  0e
-sub_FE4D0F:
+; ---------------------------------------------------------------------
+; Dev7E_SpinDelay -- counts (XSP+0x04) down to zero and returns 0 -- the
+;                    module's busy-wait
+;
+; Evidence: the whole routine is 0xFE4D0F `ld WA,(XSP+0x04)`,
+;           0xFE4D12/0xFE4D16 `dec 1,WA`, 0xFE4D18 `cps wa,0x00` with
+;           0xFE4D1A `jr nz` back to it, and 0xFE4D1C `lds hl,0x00`. It
+;           touches no memory and no register. Its one caller is
+;           0xFE50C8, inside IDENTIFY DEVICE's transfer loop, which
+;           passes 0x64
+; Unknown:  what one count is worth in time. It depends on the CPU clock
+;           and this file measures no clock
+; Was `sub_FE4D0F`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Dev7E_SpinDelay:
 	ld WA,(XSP+0x04)                                     ; FE4D0F  9f 04 20
 	dec 1,WA                                             ; FE4D12  d8 69
 	jr 0x02                                              ; FE4D14  68 02
@@ -140072,7 +140707,22 @@ sub_FE4D0F:
 	jr nz, -6                                            ; FE4D1A  6e fa
 	lds hl, 0x00                                         ; FE4D1C  db a8
 	ret                                                  ; FE4D1E  0e
-sub_FE4D1F:
+; ---------------------------------------------------------------------
+; Dev7E_WaitNotBusy -- polls the status register until bit 7 clears, giving up
+;                      after 500 ticks
+;
+; Evidence: 0xFE4D20 takes a copy of the tick word (0x605A00), 0xFE4D2A
+;           re-reads it and 0xFE4D33 `cp BC,0x01f4` is the 500-tick
+;           bound that stores 0xFFFF at 0xFE4D39; 0xFE4D3E calls
+;           Dev7E_ReadStatus and 0xFE4D41 `bit 0x07,L` is the loop
+;           condition, so the wait ends when bit 7 is CLEAR. It returns
+;           0 on ready and 0xFFFF on timeout, and nine sites call it --
+;           after every reset and before every command
+; Unknown:  the tick rate at (0x605A00), so 500 ticks is not converted
+;           to a time here
+; Was `sub_FE4D1F`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Dev7E_WaitNotBusy:
 	push XIZ                                             ; FE4D1F  3e
 	ldw_da iz, (0x605a00)                                ; FE4D20  d2 00 5a 60 26
 	ldw qiz, 0x80                                        ; FE4D25  d7 fa 03 80 00
@@ -140096,7 +140746,27 @@ sub_FE4D1F:
 	ld HL,QIZ                                            ; FE4D52  d7 fa 8b
 	pop XIZ                                              ; FE4D55  5e
 	ret                                                  ; FE4D56  0e
-sub_FE4D57:
+; ---------------------------------------------------------------------
+; Dev7E_WriteOneSector -- writes ONE 512-byte sector: task file, command 0x30, then
+;                         256 words out through the data register
+;
+; Evidence: 0xFE4D60 `pushw 0xff` reg 1, 0xFE4D6C `pushw 0x01` reg 2
+;           (one sector), then reg 3 (0xFE4D81) from 0xFE4D78 `ld
+;           WA,(XSP+0x16)`, reg 4 and reg 5 (0xFE4D96, 0xFE4DAB) from
+;           the two halves of 0xFE4D8A `ld IZ,(XSP+0x18)` split by
+;           0xFE4D9F `sra iz,0x08`, reg 6 (0xFE4DC5) as 0xFE4DBA `and
+;           WA,0x000f` + 0xFE4DBE `or WA,0x00a0` on (XSP+0x08), and
+;           0xFE4DCE `pushw 0x30` into reg 7 (0xFE4DD1). 0xFE4DDD waits
+;           not-busy, 0xFE4DE7 `bit 0x03,HL` requires DRQ, and the loop
+;           at 0xFE4DF6-0xFE4E26 packs two buffer bytes into a word and
+;           calls Dev7E_WriteWord on register 0 until 0xFE4E22 `cp
+;           IZ,0x0200`. Eight callers, all in this module
+; Unknown:  what the far side does with the sector. The 0x0200 is a byte
+;           count in THIS body and nothing here reads a sector-size
+;           field
+; Was `sub_FE4D57`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Dev7E_WriteOneSector:
 	pushw iz                                             ; FE4D57  2e
 	calr 0xffc4                                          ; FE4D58  1e c4 ff
 	cps hl, 0x00                                         ; FE4D5B  db d8
@@ -140196,7 +140866,30 @@ sub_FE4D57:
 .LFE4E4A:
 	popw iz                                              ; FE4E4A  4e
 	ret                                                  ; FE4E4B  0e
-sub_FE4E4C:
+; ---------------------------------------------------------------------
+; Unit1_Op4_WriteSectorRun -- the unit-1 arm of operation 4: Dev7E_WriteOneSector per
+;                             sector, advancing cylinder/head/sector and the buffer by
+;                             0x200
+;
+; Evidence: 0xFE4E5D `calr` resolves to 0xFE4D57; the advance is
+;           0xFE4E66 `ldw_da wa,(0x605d3c)` against the incremented
+;           sector, 0xFE4E7A the same on (0x605d3a) against the
+;           incremented head and 0xFE4E89 on (0x605d38) against the
+;           incremented cylinder, and 0xFE4E9D adds 0x200 to the buffer;
+;           0xFE4EB1 counts the request's sector count down. ★ It and
+;           Unit1_Op3_ReadSectorRun are 117 bytes each and differ in
+;           EXACTLY ONE byte, at offset 18 of each body: 0xF7 against
+;           0xFB, the low half of the displacement of the `calr` at
+;           0xFE4E5D and at 0xFE4FC3 -- which is what makes the
+;           read/write pair a fact and not a resemblance.
+;           notes/prom_a_unit1_backend_check.py lists it as operation
+;           4's arm
+; Unknown:  which of the three cells is which is read off the INITIALIZE
+;           DEVICE PARAMETERS operands at 0xFE5144/0xFE5177 and the
+;           compare at 0xFE31AA-0xFE31C3; this body only orders them
+; Was `sub_FE4E4C`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Unit1_Op4_WriteSectorRun:
 	dec 2,XSP                                            ; FE4E4C  ef 6a
 	pushw iz                                             ; FE4E4E  2e
 	ld IZ,(XSP+0x0a)                                     ; FE4E4F  9f 0a 26
@@ -140244,7 +140937,21 @@ sub_FE4E4C:
 	popw iz                                              ; FE4EBD  4e
 	inc 2,XSP                                            ; FE4EBE  ef 62
 	ret                                                  ; FE4EC0  0e
-sub_FE4EC1:
+; ---------------------------------------------------------------------
+; Dev7E_ReadOneSector -- reads ONE 512-byte sector: task file, command 0x20, then
+;                        256 words in through the data register
+;
+; Evidence: the same seven-register task file as Dev7E_WriteOneSector,
+;           with 0xFE4F3A `pushw 0x20` in place of 0x30 and the
+;           device/head byte built the same way at 0xFE4F26/0xFE4F2A;
+;           0xFE4F5C `bit 0x03,IZ` requires DRQ and the loop at
+;           0xFE4F6C-0xFE4F9E calls Dev7E_ReadWord on register 0,
+;           storing L then H, until 0xFE4F99 `cpw qiz,0x0200`. Its one
+;           caller is Unit1_Op3_ReadSectorRun
+; Unknown:  as for Dev7E_WriteOneSector
+; Was `sub_FE4EC1`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Dev7E_ReadOneSector:
 	push XIZ                                             ; FE4EC1  3e
 	calr 0xfe5a                                          ; FE4EC2  1e 5a fe
 	ld IZ,HL                                             ; FE4EC5  db 8e
@@ -140340,7 +141047,19 @@ sub_FE4EC1:
 .LFE4FB0:
 	pop XIZ                                              ; FE4FB0  5e
 	ret                                                  ; FE4FB1  0e
-sub_FE4FB2:
+; ---------------------------------------------------------------------
+; Unit1_Op3_ReadSectorRun -- the unit-1 arm of operation 3: Dev7E_ReadOneSector per
+;                            sector, same advance
+;
+; Evidence: 0xFE4FC3 `calr` resolves to 0xFE4EC1; every other byte of
+;           the routine is identical to Unit1_Op4_WriteSectorRun's, cell
+;           for cell (0xFE4FCC, 0xFE4FE0, 0xFE4FEF and the 0x200 at
+;           0xFE5003). notes/prom_a_unit1_backend_check.py lists it as
+;           operation 3's arm
+; Unknown:  as above
+; Was `sub_FE4FB2`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Unit1_Op3_ReadSectorRun:
 	dec 2,XSP                                            ; FE4FB2  ef 6a
 	pushw iz                                             ; FE4FB4  2e
 	ld IZ,(XSP+0x0a)                                     ; FE4FB5  9f 0a 26
@@ -140388,7 +141107,24 @@ sub_FE4FB2:
 	popw iz                                              ; FE5023  4e
 	inc 2,XSP                                            ; FE5024  ef 62
 	ret                                                  ; FE5026  0e
-sub_FE5027:
+; ---------------------------------------------------------------------
+; Dev7E_IdentifyDevice -- issues command 0xEC and reads the 512-byte reply into the
+;                         caller's buffer
+;
+; Evidence: 0xFE5028-0xFE5061 write 0xFF to registers 1..5, 0xFE5067
+;           writes 0xA0 to register 6 and 0xFE5073 `pushw 0xec` is the
+;           command; 0xFE5082 waits not-busy, 0xFE5091 `bit 0x03,HL`
+;           requires DRQ, and the loop at 0xFE50A0-0xFE50D3 reads
+;           register 0 as a word, stores the HIGH byte first (0xFE50B2)
+;           and the low byte second (0xFE50C0), and ends on 0xFE50CF `cp
+;           IZ,0x0200`. Its one caller, 0xFE3100, passes the buffer
+;           0x00606F9B and then compares three words it extracts against
+;           0x0239, 0x000F and 0x003C at 0xFE31AA, 0xFE31B3 and 0xFE31BC
+; Unknown:  which words of the reply the caller reads. This body copies
+;           all 512 bytes and interprets none of them
+; Was `sub_FE5027`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Dev7E_IdentifyDevice:
 	pushw iz                                             ; FE5027  2e
 	pushw 0xff                                           ; FE5028  0b ff 00
 	pushw 0x01                                           ; FE502B  0b 01 00
@@ -140465,7 +141201,25 @@ sub_FE5027:
 .LFE50E7:
 	popw iz                                              ; FE50E7  4e
 	ret                                                  ; FE50E8  0e
-sub_FE50E9:
+; ---------------------------------------------------------------------
+; Unit1_Op0_SoftResetAndSetFeatures -- the unit-1 arm of operation 0: pulse the control block's
+;                                      reset bit, then SET FEATURES 0x01
+;
+; Evidence: 0xFE50E9 writes 0x0C to BANK 1 register 6 and 0xFE50F5
+;           writes 0x08 to the same place with nothing between but the
+;           two calls, so bit 2 is asserted and released; 0xFE5104 waits
+;           not-busy and returns 0xFFFF if it times out; 0xFE510F writes
+;           0x01 to register 1 and 0xFE511B writes 0xEF to register 7,
+;           then 0xFE512A waits again and returns 0xFFFE on failure.
+;           Bank 1 is reached NOWHERE ELSE in prom_a -- these two writes
+;           are the only ones `--ata` finds.
+;           notes/prom_a_unit1_backend_check.py lists it as operation
+;           0's arm
+; Unknown:  why 0x08 rather than 0x00 is the released state. Both writes
+;           set bit 3 and this body never explains it
+; Was `sub_FE50E9`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Unit1_Op0_SoftResetAndSetFeatures:
 	pushw 0x0c                                           ; FE50E9  0b 0c 00
 	pushw 0x06                                           ; FE50EC  0b 06 00
 	pushw 0x01                                           ; FE50EF  0b 01 00
@@ -140498,7 +141252,22 @@ sub_FE50E9:
 .LFE5135:
 	lds hl, 0x00                                         ; FE5135  db a8
 	ret                                                  ; FE5137  0e
-sub_FE5138:
+; ---------------------------------------------------------------------
+; Dev7E_SetDeviceParams -- issues command 0x91 with 0x3C in the sector-count register
+;                          and 0x0E in the device/head register
+;
+; Evidence: 0xFE5144 `pushw 0x3c` reg 2 and 0xFE5177 `pushw 0x0e` reg 6,
+;           then 0xFE5183 `pushw 0x91` reg 7; 0xFE5192 waits not-busy.
+;           Its one caller is 0xFE31C5, reached only when the geometry
+;           compare at 0xFE31AA-0xFE31C3 fails -- and that compare tests
+;           0x0239 cylinders, 0x000F heads and 0x003C sectors, so the
+;           0x3C here IS that sector count and the 0x0E is one less than
+;           that head count
+; Unknown:  why registers 1, 3, 4 and 5 are written 0xFF first. The
+;           command reads only 2 and 6
+; Was `sub_FE5138`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Dev7E_SetDeviceParams:
 	pushw 0xff                                           ; FE5138  0b ff 00
 	pushw 0x01                                           ; FE513B  0b 01 00
 	pushw 0x00                                           ; FE513E  0b 00 00
@@ -140543,7 +141312,29 @@ sub_FE5138:
 .LFE51A9:
 	lds hl, 0x00                                         ; FE51A9  db a8
 	ret                                                  ; FE51AB  0e
-sub_FE51AC:
+; ---------------------------------------------------------------------
+; Unit1_Op5_FormatAndWriteDirBlocks -- the unit-1 arm of operation 5: after the transfer loop it
+;                                      builds two 512-byte blocks in RAM and writes each with
+;                                      Dev7E_WriteOneSector
+;
+; Evidence: the first block is zeroed at 0xFE5315, space-filled to +0x0B
+;           at 0xFE5323, and then written byte by byte at
+;           0xFE532C-0xFE5357 with 0x2D 0x2D 0x53 0x55 0x42 0x44 0x49
+;           0x52 0x2D 0x53 0x42 = `--SUBDIR-SB`, 0x10 at +0x0B and 0x02
+;           at +0x1A; the second, at 0xFE53AA-0xFE53BD, is `.` at +0 and
+;           `..` at +0x20, each with 0x10 at its +0x0B. That is an
+;           11-byte name, an attribute byte and a first-cluster word --
+;           the FAT directory-entry layout, and the second block is the
+;           `.`/`..` pair a FAT subdirectory begins with. Both blocks go
+;           out through 0xFE5369 and 0xFE53CB, which `calr` to 0xFE4D57.
+;           notes/prom_a_unit1_backend_check.py lists it as operation
+;           5's arm
+; Unknown:  the geometry the two blocks land on. The four `pushw` before
+;           each write are Dev7E_WriteOneSector's arguments and this
+;           file does not decode which cylinder/head/sector they name
+; Was `sub_FE51AC`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Unit1_Op5_FormatAndWriteDirBlocks:
 	lda xsp, (xsp-14)                                    ; FE51AC  bf f2 37
 	push XIZ                                             ; FE51AF  3e
 	m_ld_mi16 MDD+r7, 0x04, 0x0000                       ; FE51B0  bf 04 02 00 00
@@ -140743,7 +141534,29 @@ sub_FE51AC:
 	pop XIZ                                              ; FE53DF  5e
 	lda xsp, (xsp+0x0e)                                  ; FE53E0  bf 0e 37
 	ret                                                  ; FE53E3  0e
-sub_FE53E4:
+; ---------------------------------------------------------------------
+; Unit1_Op6_IssueCommandAndWaitReady -- the unit-1 arm of operation 6: write the whole task file,
+;                                       issue one command, require DRDY
+;
+; Evidence: 0xFE53E4-0xFE5423 write registers 1..6 with 0xFF, 0x00,
+;           0xFF, 0xFF, 0xFF and 0xA0, 0xFE542F `pushw 0x95` is the
+;           command, 0xFE543E reads the status and 0xFE5441 `bit
+;           0x06,HL` is the only thing tested -- no data moves. The
+;           routine at 0xFE544D, inside this label's extent, is the same
+;           body with 0x94 at 0xFE5498, and it is operation 7's arm
+;           (notes/prom_a_unit1_backend_check.py, and
+;           Fdc_Op7_PortA3_On's header already records the tail jump to
+;           0xFE544D)
+; Unknown:  ⚠ WHICH command 0x95 is. In the ATA opcode list it is IDLE
+;           IMMEDIATE and 0x94 is STANDBY IMMEDIATE, but unlike the
+;           module's other five commands NOTHING in either body
+;           corroborates that -- no data phase, no operand, no result
+;           read beyond DRDY -- and operations 6 and 7 clear and SET PA
+;           bit 3 on unit 0, whose meaning is itself open. So this name
+;           says what the routine does and not what the command means
+; Was `sub_FE53E4`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+Unit1_Op6_IssueCommandAndWaitReady:
 	pushw 0xff                                           ; FE53E4  0b ff 00
 	pushw 0x01                                           ; FE53E7  0b 01 00
 	pushw 0x00                                           ; FE53EA  0b 00 00
@@ -140952,6 +141765,67 @@ Dev7B_WriteData:
 ;   phase, INTTC0 (0xFE6851) ends a micro-DMA burst, and Fdc_ServiceDataByte
 ;   (0xFE67F9) is the programmed-I/O alternative to that burst.
 ;
+;
+; ★★ THE UNIT-1 BACK END IS AN ATA (IDE) TASK FILE  (round 10, 2026-08-30)
+;   The unit-1 driver at 0xFE4CE0-0xFE544D reaches the 0x7E0000 port only
+;   through the four Dev7E accessors, which form the address
+;   0x7E0000 + ((n & 7) | 0x08) for bank 0 and | 0x10 for bank 1.  Read every
+;   accessor call whose bank and register are literal --
+;   `python3 notes/prom_a_census_round8.py --ata`, 41 of them -- and the two
+;   banks are an ATA command block and an ATA control block:
+;
+;     bank 0, registers 0..7 at 0x7E0008: data, features/error, sector count,
+;       sector number, cylinder low, cylinder high, device/head, command/status
+;     bank 1, register 6 at 0x7E0016: device control
+;
+;   SEVEN INDEPENDENT AGREEMENTS, each from a different part of the module:
+;     1. the command register takes exactly seven opcodes -- 0x20 at 0xFE4F3A
+;        and 0x30 at 0xFE4DCE, each followed by a 512-byte transfer in the
+;        matching direction; 0xEC at 0xFE5073, followed by a 512-byte read
+;        into the caller's buffer; 0x91 at 0xFE5183; 0xEF at 0xFE511B; and
+;        0x94/0x95 at 0xFE5498/0xFE542F, which move no data at all.  In the
+;        ATA command set those are READ SECTOR(S), WRITE SECTOR(S), IDENTIFY
+;        DEVICE, INITIALIZE DEVICE PARAMETERS, SET FEATURES and two power
+;        commands.
+;     2. the register ORDER a transfer writes -- sector count, sector number,
+;        cylinder low, cylinder high, device/head, command -- read off the
+;        register-number push of each call: 0xFE4D6F, 0xFE4D81, 0xFE4D96,
+;        0xFE4DAB, 0xFE4DC5, 0xFE4DD1.
+;     3. the device/head value: literal 0xA0 at 0xFE5067, 0xFE5423 and
+;        0xFE548C, and `and WA,0x000F / or WA,0x00A0` on the head number at
+;        0xFE4DBA/0xFE4DBE and 0xFE4F26/0xFE4F2A -- master, CHS, head in
+;        bits 3..0.
+;     4. the status bits, each used for what ATA uses it for: bit 7 polled
+;        UNTIL CLEAR with a 500-tick timeout (0xFE4D41, BSY), bit 3 required
+;        BEFORE each 512-byte transfer (0xFE4DE7, 0xFE4F5C, 0xFE5091, DRQ),
+;        bit 0 checked AFTER one (0xFE50DB, ERR), bit 6 required after a
+;        command that moves nothing (0xFE5441, 0xFE54AA, DRDY).
+;     5. the reset: 0x0C then 0x08 to bank 1 register 6 at 0xFE50E9 and
+;        0xFE50F5, with nothing between them -- SRST asserted and released.
+;        Those are the ONLY two bank-1 writes in prom_a.
+;     6. every data byte moves through register 0 and nothing else does
+;        (0xFE4E15, 0xFE4F6C, 0xFE50A0), 256 words per sector.
+;     7. INITIALIZE DEVICE PARAMETERS' operands match the geometry its own
+;        caller compares: 0x3C sectors at 0xFE5144 and 0x0E at 0xFE5177,
+;        against (0x605D3C) = 0x003C and (0x605D3A) = 0x000F at 0xFE31BC and
+;        0xFE31B3, with 0x0E = heads - 1.  The third cell (0x605D38) is
+;        compared with 0x0239 cylinders at 0xFE31AA.
+;
+;   So the geometry this firmware programmes is 569 cylinders, 15 heads,
+;   60 sectors of 512 bytes, and operation 5's unit-1 arm
+;   (Unit1_Op5_FormatAndWriteDirBlocks) writes FAT directory entries onto it:
+;   an 11-byte name `--SUBDIR-SB` with attribute 0x10 and first cluster 2 at
+;   0xFE532C-0xFE535B, then a `.`/`..` pair at 0xFE53AA-0xFE53BD.
+;
+;   ⚠ NOT CLAIMED.  The opcode and register NAMES above are the ATA
+;   standard's; nothing in either ROM image spells them, exactly as the
+;   floppy half of this module declines to name its uPD765 part.  Nothing
+;   here says what the drive physically is.  And the two power commands are
+;   the weakest link -- no data phase, no operand, nothing but DRDY -- so
+;   the two routines that issue them are named for what they DO, not for
+;   what 0x94 and 0x95 mean; see Unit1_Op6_IssueCommandAndWaitReady.
+;   Reproduce all of it with `--ata`; `--selftest` pins nineteen of these
+;   numbers, the LAST opcode in address order included.
 ; THE RAM BLOCK, 0x605A00-0x605B09.  Field-by-field layouts are in the headers
 ; of the routines that establish them: the 0x18-byte COMMAND BLOCK at 0x605A18
 ; (Fdc_SendSectorIdParams and Fdc_SelectFormatParameters), the 16-byte REQUEST
@@ -155776,7 +156650,21 @@ sub_FEFDE5:
 
 Glyph_FEFE58:
 	.byte 0xaf                                                                ; FEFE58
-sub_FEFE59:
+; ---------------------------------------------------------------------
+; LCD_DrawVRuleLeft_OrNothing -- draws the left or the right vertical rule according to bit
+;                              0 of (0x601F70)
+;
+; Evidence: 0xFEFE59 `bit 0,(0x601f70)` chooses between 0xFEFE61 `calr
+;           LCD_DrawVRuleRight_Layer1` and 0xFEFE65 `calr
+;           LCD_DrawVRuleLeft_Layer1`, both already named in this
+;           listing, and there is nothing else in the routine. Seven
+;           callers
+; Unknown:  what bit 0 of (0x601F70) selects.
+;           Screen_DrawKitCategoryLegend reads the same bit and its
+;           header records the same gap
+; Was `sub_FEFE59`, named by notes/prom_a_census_round8.py (bucket round 10).
+; ---------------------------------------------------------------------
+LCD_DrawVRuleLeft_OrNothing:
 	m_bit 0, MD24, 0x601f70                              ; FEFE59  f2 70 1f 60 c8
 	jr z, .LFEFE65                                       ; FEFE5E  66 05
 	ret                                                  ; FEFE60  0e
@@ -155788,7 +156676,7 @@ sub_FEFE59:
 ; ---------------------------------------------------------------------
 ; LCD_DrawVRuleLeft_Layer1 -- a vertical rule on layer 1 whose column tracks (0x601F54)
 ;
-; Called from: prom_a sub_FEFE59 (`calr`) at 0xFEFE65
+; Called from: prom_a LCD_DrawVRuleLeft_OrNothing (`calr`) at 0xFEFE65
 ; Issues:  SWI7 service 0x02 at 0xFEFE92 -- LCD_Svc_02_DrawVLine, a solid vertical run of pixels
 ; Evidence: `ld (0x2540),0x01`; (0x2532)=0x0029 and (0x2536)=0x00A8 fix the ends;
 ;           X0 and X1 are BOTH set to (0x601F54)/4 + 0x10, so the rectangle is one
@@ -155813,7 +156701,7 @@ LCD_DrawVRuleLeft_Layer1:
 ; ---------------------------------------------------------------------
 ; LCD_DrawVRuleRight_Layer1 -- the companion vertical rule, 73 pixels to the right
 ;
-; Called from: prom_a sub_FEFE59 (`calr`) at 0xFEFE61
+; Called from: prom_a LCD_DrawVRuleLeft_OrNothing (`calr`) at 0xFEFE61
 ; Issues:  SWI7 service 0x02 at 0xFEFEBD -- LCD_Svc_02_DrawVLine, a solid vertical run of pixels
 ; Evidence: the same nine instructions as LCD_DrawVRuleLeft_Layer1 with three
 ;           immediates changed: Y0 0x2A, Y1 0xA1, and X = (0x601F54)/4 + 0x59.  0x59 -

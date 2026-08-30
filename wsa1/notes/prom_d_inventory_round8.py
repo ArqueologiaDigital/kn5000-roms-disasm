@@ -143,6 +143,47 @@ ROUND 9 (Q10-Q15), in one line each
         rotated null 11/128.
     Q15 the base address: restated, not re-opened.  ORIGIN stays 0.
 
+ROUND 10 (Q16-Q20), and it is the first round since round 8 to PROMOTE anything
+    ★★ M9, THE SELECTOR -- the route round 6 measured and then used only as a
+        WITNESS.  Round 6 Q2b found that the 1,024-entry map at slot +0x0C is the
+        only map whose range reaches this array's last index, and that where a
+        record ALREADY had a byte-derived name the map's program-map tone agreed
+        637 times of 911.  It then wrote `THE MAP IS CORROBORATION, NOT THE NAME`
+        and stopped -- which was right for records the byte test names, and left
+        the map never asked about the records it does NOT name.  Every framed
+        label in this array is in that second set.  Q16-Q19 ask it there.
+    Q16 what pins the index, and ★ WHAT DOES NOT.  A map entry sits at
+        row*128 + program.  The PROGRAM half is pinned hard: shift it by one and
+        the agreement falls 637 -> 84, by two -> 43, and shuffling the map gives
+        a mean of 7.7.  ⚠ THE ROW HALF IS NOT PINNED: the eight melodic rows are
+        near-copies (52 of 128 programs hold the same tone in all eight), so
+        rotating them costs 637 -> 608, a 3-point margin.  A name resting on that
+        margin would be exactly the kind of name this tree has retracted before.
+    ★ SO M9 THROWS THE ROW AWAY AND KEEPS THE COLUMN.  A record's name is the set
+        of tone names its PROGRAM COLUMNS carry across all eight rows, which is
+        invariant under every row rotation by construction -- T17 checks all
+        eight.  That is a weaker claim than round 6's and it is the one the
+        measurement supports.
+    Q17 the calibration: where BOTH rules reach a record they agree 110 of 120,
+        against a shuffled null of 5.8.  The 10 disagreements are PRINTED IN
+        FULL, and neither side of them is wrong: `_SameAs_` is a statement about
+        43 bytes and `_SelectedFor_` about a map entry.  M9 is applied to NEITHER
+        -- only to records with no twin at all -- so no label contradicts another.
+    Q18 ★ THE SAME RULE ON THE PERCUSSION ARRAY, MEASURED AND REFUSED.  It would
+        have named 37 records -- every framed record of that array -- and it
+        scores 709 of 1,024 against a SHUFFLED NULL OF 640, because the drum
+        records' tails repeat.  Its calibration against the byte rule is 1 agree
+        to 170 differ.  The melodic array is the opposite case, and the contrast
+        is what makes the melodic number worth quoting.
+    Q19 what M9 leaves, in four buckets that reconcile with no residue: 29 named,
+        111 selected by NO entry of the map (a census over all 1,024, not a
+        mechanism failing), 17 whose columns carry more than three names, and 2
+        that would have been named `161` -- tone 0x05D's `    16' & 1'    ` --
+        and are refused for it.  First and last record both checked.
+    Q20 ToneIndexMapB (+0x10), whose range also fits this array: 0 of 156, at its
+        own null.  ⚠ Declared a WEAK negative in the text, because its
+        denominator is 156 against +0x0C's 911.
+
 HOW TO RUN
     python3 notes/prom_d_inventory_round8.py             # the whole inventory
     python3 notes/prom_d_inventory_round8.py --quiet     # failures only
@@ -155,6 +196,14 @@ HOW TO RUN
     the measurement that justifies it.
 
 WHAT IS *NOT* ESTABLISHED, said before the results
+    * NOT that `_SelectedFor_X` means the record BELONGS to X, or is X's mixer
+      setting.  It means: the entries of ToneDB_ToneIndexMapA that hold this
+      record's index sit in program columns whose tones are X.  The array's role
+      is still the KN5000's transplanted name and no prom_c instruction reads
+      slot +0x0C at all -- Q2's own reader census says so, and that is a hole in
+      this mechanism that no amount of agreement closes.
+    * NOT that the ROW of a map entry is known.  Q16d measures that it is not,
+      and M9's names are built so that it does not matter.
     * NOT that a disjunction label names an OWNER.  `_SameAs_A_Or_B` says these
       43 bytes and the wave-select blocks of A and of B are the same bytes.  It
       does not say the record belongs to A, or to B, or to either.
@@ -171,6 +220,7 @@ WHAT IS *NOT* ESTABLISHED, said before the results
 import collections
 import importlib.util as _ilu
 import os
+import random
 import re
 import struct
 import sys
@@ -284,7 +334,7 @@ def _r8_shape(slot):
 
 
 AUDITED_R8 = {0x18: (152, 163), 0x20: (151, 171)}
-AUDITED_CHECKS = 71          # rounds 8 and 9 together
+AUDITED_CHECKS = 97          # rounds 8, 9 and 10 together
 
 
 # ---------------------------------------------------------------------------
@@ -1294,7 +1344,10 @@ _AUDIT_GRADES = collections.Counter()
 # the live audit stops producing them.  A number in the assembly therefore cannot
 # outlive the measurement that justifies it -- which is the whole reason the
 # generator refuses to hard-code anything.
-AUDITED_R9 = {"DERIVED": 2857, "ADDRESS": 808, "REFUTED": 0, "RESIDUE": 0}
+# ⚠ MOVED IN ROUND 10, and the move is the round's whole result: M9 re-derives
+# 29 labels that were ADDRESS-only, so DERIVED goes 2857 -> 2886 and ADDRESS
+# 808 -> 779.  The pair still sums to 3,665.
+AUDITED_R9 = {"DERIVED": 2886, "ADDRESS": 779, "REFUTED": 0, "RESIDUE": 0}
 
 
 def boundary_stem(names, lim=4):
@@ -1471,7 +1524,7 @@ def audit_labels(rename=None):
             continue
 
         m = re.match(r"^(ToneDB_(?:Perc)?MixerDefaultTable|ToneDB_WaveSelTailPresets)"
-                     r"_(\d{3})(?:_SameAs_(.+))?$", n)
+                     r"_(\d{3})(?:_SameAs_(.+)|_SelectedFor_(.+))?$", n)
         if m:
             slot = arr_slot[m.group(1)]
             i = int(m.group(2))
@@ -1479,6 +1532,22 @@ def audit_labels(rename=None):
             ok = i < cnt and a == base + WAVESEL_STRIDE * i
             det = "0x%05X = 0x%05X + %d*%d" % (base + WAVESEL_STRIDE * i, base,
                                                WAVESEL_STRIDE, i)
+            if m.group(4):
+                # ★ ROUND 10.  M9's label, re-derived: the map's own entries, the
+                # program map's own words, and the tone records' own ASCII.  The
+                # relation is DIFFERENT from `_SameAs_`, so the audit also insists
+                # the record has NO twin -- one object, one claim.
+                want = selector_names().get(i, ())
+                cols = selector_columns().get(i, [])
+                ok = (ok and slot == SELECTOR_ARRAY
+                      and "_Or_".join(want) == m.group(4)
+                      and not twins.get(slot, {}).get(i))
+                put(l.name, "DERIVED" if ok else "REFUTED",
+                    "wave-select record, named by what SELECTS it",
+                    det + "; ToneDB_ToneIndexMapA holds %d at program column(s) %s, "
+                    "which carry %s across the %d melodic rows"
+                    % (i, cols, list(want), MELODIC_ROWS))
+                continue
             if not m.group(3):
                 put(l.name, "ADDRESS" if ok else "REFUTED", "wave-select record",
                     det + ", and nothing in the image names it")
@@ -2016,6 +2085,576 @@ def selftest_round9():
           "%s" % sorted(set(v[0] for v in r1.values())))
 
 
+# ===========================================================================
+# ROUND 10.  M9 -- THE SELECTOR.  The one route round 6 measured and then used
+# only as a WITNESS; this round asks it of the records the witness never
+# covered, which is where the framed labels actually are.
+# ===========================================================================
+SELECTOR_SLOT = 0x0C          # ToneDB_ToneIndexMapA
+SELECTOR_ARRAY = 0x18         # ToneDB_MixerDefaultTable
+MELODIC_ROWS = 8              # a 1,024-entry map spans 8 x 128, not the 10 rows
+
+
+def selector_map(slot=SELECTOR_SLOT):
+    """The 1,024 LE16 entries of one index map, straight out of the ROM."""
+    return [u16(S(slot) + 2 * i) for i in range(1024)]
+
+
+def program_tone(row, prog):
+    """The tone-record index the program map holds at (row, program)."""
+    return u16(R6.PROG_BASE + 0x100 * row + 2 * prog)
+
+
+def tone_name(i):
+    """A tone record's own 16 ASCII bytes, in this tree's CamelCase form."""
+    p = R6.TONE_PTRS[i]
+    return R6.camel(D[p:p + 16].decode("latin1"))
+
+
+def selector_columns(slot=SELECTOR_SLOT):
+    """{record index: sorted PROGRAM columns whose map entry names that record}.
+
+    ★ THE COLUMN, NOT THE POSITION, AND Q16d IS WHY.  A map entry sits at
+    row*128 + program.  The PROGRAM half of that reading is pinned hard -- shift
+    the index by one program and the byte agreement collapses from 637 to 84 --
+    but the ROW half is not, because the eight melodic rows are near-copies of
+    one another and rotating them costs only a few points.  So this function
+    throws the row away and keeps the column, and every name derived from it is
+    invariant under all eight row rotations by construction (T17 checks it).
+    """
+    out = collections.defaultdict(set)
+    for i, v in enumerate(selector_map(slot)):
+        out[v].add(i % R6.PROG_COLS)
+    return dict((k, sorted(v)) for k, v in out.items())
+
+
+def selector_names(slot=SELECTOR_SLOT):
+    """{record index: sorted tuple of the tone names in its columns, all rows}."""
+    out = {}
+    for k, cols in selector_columns(slot).items():
+        out[k] = tuple(sorted(set(tone_name(program_tone(r, c))
+                                  for c in cols for r in range(MELODIC_ROWS))))
+    return out
+
+
+def _has_letter(s):
+    return any(c.isalpha() for c in s)
+
+
+def selector_labels(bound=MAX_NAMES):
+    """{record index: label suffix} -- M9's names, for the FRAMED records only.
+
+    A record that round 6, 7 or 8 already named is never touched: `_SameAs_` and
+    `_SelectedFor_` are different relations and a record must not claim two.
+    A candidate set larger than `bound` is refused for round 8's reason -- it
+    enumerates a family instead of naming an object.  A candidate name with no
+    letter in it is refused too: tone record 0x05D's name field is
+    "    16' & 1'    ", which this tree's CamelCase rule turns into `161`, so a
+    label built on it would end in digits and read as positional (T14).
+    """
+    have = wavesel_labels_r8(SELECTOR_ARRAY)
+    _a, n, _r = R6.array_records(SELECTOR_ARRAY)
+    out = {}
+    for k, names in selector_names().items():
+        if k >= n or k in have or not 1 <= len(names) <= bound:
+            continue
+        if not all(_has_letter(x) for x in names):
+            continue
+        out[k] = "_Or_".join(names)
+    return out
+
+
+def _r10_shape():
+    """(records named by M9, first, last) -- the constant the generator refuses on."""
+    lab = selector_labels()
+    ks = sorted(lab)
+    return (len(lab), "%d:%s" % (ks[0], lab[ks[0]]), "%d:%s" % (ks[-1], lab[ks[-1]]))
+
+
+AUDITED_R10 = (29, "2:OrchestraHit1_Or_OrchestraHit2", "312:MetallicBass_Or_PickedEBass_Or_SoulBass")
+
+
+def _twin_tone_indices(slot=SELECTOR_ARRAY):
+    """{record index: set of tone indices whose block these bytes are}."""
+    return dict((k, set(t for t, _j, _nm in v))
+                for k, v in R6.wavesel_twins(slot).items())
+
+
+def selector_byte_agreement(vals, rowshift=0, progshift=0):
+    """(positions asked, positions where the map's record IS that tone's block).
+
+    This is round 6 Q2b2's measurement with the index deliberately mis-read, so
+    the same statistic can be run at a shift and become its own null.
+    """
+    tw = _twin_tone_indices()
+    matched = set(k for k, v in tw.items() if v)
+    tot = ok = 0
+    for r in range(MELODIC_ROWS):
+        for p in range(R6.PROG_COLS):
+            k = vals[r * R6.PROG_COLS + p]
+            if k not in matched:
+                continue
+            tot += 1
+            rr = (r + rowshift) % MELODIC_ROWS
+            pp = (p + progshift) % R6.PROG_COLS
+            if program_tone(rr, pp) in tw[k]:
+                ok += 1
+    return tot, ok
+
+
+def selector_shuffle_null(draws=20, seed=20260830):
+    """(mean, max) hits over `draws` shuffles of the +0x0C map -- Q16c, exported.
+
+    The generated banners quote this mean; deriving it here is what stops a
+    number in the assembly outliving the measurement behind it.
+    """
+    m = selector_map()
+    rnd = random.Random(seed)
+    out = []
+    for _t in range(draws):
+        perm = m[:]
+        rnd.shuffle(perm)
+        out.append(selector_byte_agreement(perm)[1])
+    return sum(out) / len(out), max(out)
+
+
+def perc_selector_refusal():
+    """(asked, hits, null mean, null max, agree, differ, names it would have made).
+
+    ★ M9 ON THE PERCUSSION ARRAY, packaged for the generator so that array's own
+    banner can state the refusal in the numbers that produced it.  Q18 prints the
+    same figures with the argument around them.
+    """
+    m14 = selector_map(0x14)
+    nmA = [u16(S(0x74) + 2 * i) for i in range(2048)]
+    _pa, n20, recs20 = R6.array_records(0x20)
+    tails, pname = {}, {}
+    for i, b, nm in R6.perc_wavesel_tails():
+        tails[i], pname[i] = b, nm
+
+    def hits(vals):
+        h = t = 0
+        for q in range(1024):
+            di = nmA[q]
+            if di not in tails:
+                continue
+            t += 1
+            if R6._mask(tails[di]) == R6._mask(recs20[vals[q]]):
+                h += 1
+        return t, h
+
+    tot, ok = hits(m14)
+    rnd = random.Random(20260831)
+    nl = []
+    for _t in range(20):
+        perm = m14[:]
+        rnd.shuffle(perm)
+        nl.append(hits(perm)[1])
+    lab8 = wavesel_labels_r8(0x20)
+    sel = collections.defaultdict(set)
+    for q in range(1024):
+        if nmA[q] in pname:
+            sel[m14[q]].add(pname[nmA[q]])
+    ag = dis = 0
+    for k, v in sel.items():
+        if k in lab8:
+            base = re.sub(r"_WaveSel\d+$", "", lab8[k])
+            if v & set(base.split("_Or_")):
+                ag += 1
+            else:
+                dis += 1
+    would = sum(1 for k in range(n20) if k not in lab8 and len(sel.get(k, ())) == 1)
+    return tot, ok, sum(nl) / len(nl), max(nl), ag, dis, would
+
+
+def selector_buckets():
+    """(named, unreached, too-broad, digit-only) over the FRAMED records of +0x18.
+
+    Exported so the array banner in the generated assembly states the four
+    outcomes as counts it did not type.  They sum to the framed total (Q19a).
+    """
+    lab8 = wavesel_labels_r8(SELECTOR_ARRAY)
+    names = selector_names()
+    m9 = selector_labels()
+    _a, n, _r = R6.array_records(SELECTOR_ARRAY)
+    framed = [k for k in range(n) if k not in lab8]
+    return (len(m9),
+            len([k for k in framed if k not in names]),
+            len([k for k in framed if k in names and len(names[k]) > MAX_NAMES]),
+            len([k for k in framed if k in names and 1 <= len(names[k]) <= MAX_NAMES
+                 and not all(_has_letter(x) for x in names[k])]))
+
+
+def selector_row_margin():
+    """(positions, best offset's hits, best WRONG offset's hits) -- Q16d, exported.
+
+    The generator prints the margin in the banner over every M9 label, so it has
+    to be derived here and not typed there.
+    """
+    m = selector_map()
+    tot, _ok = selector_byte_agreement(m)
+    hits = dict((d, selector_byte_agreement(m, rowshift=d)[1])
+                for d in range(MELODIC_ROWS))
+    return tot, hits[0], max(v for d, v in hits.items() if d)
+
+
+def selector_readers():
+    """(prom_c reads of the map's slot, of the array's slot) -- from R3's census."""
+    return len(R3.readers(SELECTOR_SLOT)), len(R3.readers(SELECTOR_ARRAY))
+
+
+def q16():
+    say("\n=== Q16.  ★★ M9 -- THE SELECTOR, AND WHAT PINS ITS INDEX ===\n")
+    say("  Round 6 Q2b found the 1,024-entry map at slot +0x0C and used it as a")
+    say("  SECOND WITNESS for records the byte test had already named.  It never")
+    say("  asked the map about a record the byte test MISSED -- and that is where")
+    say("  every framed label in this array is.  Q16 asks it.")
+    say("")
+    maps = [s for s in range(0, 0xB8, 4)
+            if S(s) != 0xFFFFFFFF and R6.next_bound(S(s)) - S(s) == 2048]
+    _a, n18, _r = R6.array_records(SELECTOR_ARRAY)
+    reach = []
+    for s in maps:
+        v = [x for x in selector_map(s) if x != 0xFFFF]
+        if max(v) == n18 - 1:
+            reach.append(s)
+    check("Q16a the map whose range reaches %d, this array's last index" % (n18 - 1),
+          reach == [SELECTOR_SLOT],
+          "slots %s of %d maps of 1,024 entries" % (["+0x%02X" % s for s in reach], len(maps)))
+    m = selector_map()
+    tot, ok = selector_byte_agreement(m)
+    shifts = dict((d, selector_byte_agreement(m, progshift=d)[1]) for d in (-2, -1, 1, 2))
+    check("Q16b ★ THE PROGRAM HALF OF THE INDEX IS PINNED HARD",
+          ok > 5 * max(shifts.values()),
+          "shift 0 -> %d of %d; +/-1 -> %d, %d; +/-2 -> %d, %d"
+          % (ok, tot, shifts[-1], shifts[1], shifts[-2], shifts[2]))
+    _mean, _max = selector_shuffle_null()
+    sh = [_mean, _max]
+    check("Q16c NULL: shuffling the map destroys it",
+          _max * 20 < ok, "shuffled max %d, mean %.1f, against %d"
+          % (_max, _mean, ok))
+    rows = dict((d, selector_byte_agreement(m, rowshift=d)[1]) for d in range(MELODIC_ROWS))
+    best_wrong = max(v for d, v in rows.items() if d)
+    check("Q16d ⚠ AND THE ROW HALF IS *NOT* PINNED -- the honest half of this result",
+          rows[0] == max(rows.values()) and rows[0] < 1.15 * best_wrong,
+          "offsets %s; the true reading wins by %d of %d, which is %.1f%% vs %.1f%%"
+          % ([rows[d] for d in range(MELODIC_ROWS)], rows[0] - best_wrong, tot,
+             100.0 * rows[0] / tot, 100.0 * best_wrong / tot))
+    say("       -> so M9 keeps the COLUMN and throws the row away.  A name that")
+    say("          needed the row to be right would be a name resting on a 3-point")
+    say("          margin, and this tree has paid for exactly that kind of name.")
+    disc = [j for j in range(R6.PROG_COLS)
+            if len(set(program_tone(r, j) for r in range(MELODIC_ROWS))) > 1]
+    rd_map, rd_arr = selector_readers()
+    check("Q16f ⚠ AND NEITHER SIDE HAS A prom_c READER -- stated, not hidden",
+          rd_map == 0 and rd_arr == 0,
+          "the 99-read directory census finds %d reads of slot +0x%02X and %d of "
+          "+0x%02X" % (rd_map, SELECTOR_SLOT, rd_arr, SELECTOR_ARRAY))
+    say("       -> so M9 is a relation between two TABLES, derived from their")
+    say("          contents.  It is not evidence about what the machine DOES with")
+    say("          either, and `_SelectedFor_` is worded to claim only the former.")
+    check("Q16e the rows really are near-copies -- that is WHY the row is loose",
+          len(disc) < R6.PROG_COLS,
+          "%d of %d programs hold the same tone in all %d melodic rows"
+          % (R6.PROG_COLS - len(disc), R6.PROG_COLS, MELODIC_ROWS))
+    return tot, ok, rows, sh
+
+
+def q17():
+    say("\n=== Q17.  THE CALIBRATION -- M9 against the rule that already names ===\n")
+    lab8 = wavesel_labels_r8(SELECTOR_ARRAY)
+    tw = _twin_tone_indices()
+    names = selector_names()
+    agree, differ = 0, []
+    for k, nm in sorted(names.items()):
+        if k not in lab8 or not 1 <= len(nm) <= MAX_NAMES:
+            continue
+        if not all(_has_letter(x) for x in nm):
+            continue
+        owners = set(tone_name(t) for t in tw.get(k, ()))
+        if set(nm) & owners:
+            agree += 1
+        else:
+            differ.append((k, nm, lab8[k]))
+    tot = agree + len(differ)
+    check("Q17a M9 and the byte rule agree wherever BOTH reach a record",
+          agree > 8 * len(differ), "%d agree, %d differ, of %d" % (agree, len(differ), tot))
+    rnd = random.Random(20261001)
+    flat = [program_tone(r, c) for r in range(MELODIC_ROWS) for c in range(R6.PROG_COLS)]
+    nl = []
+    for _t in range(50):
+        perm = flat[:]
+        rnd.shuffle(perm)
+        pn = {}
+        for k, cols in selector_columns().items():
+            pn[k] = set(tone_name(perm[r * R6.PROG_COLS + c])
+                        for c in cols for r in range(MELODIC_ROWS))
+        a = 0
+        for k, nm in names.items():
+            if k not in lab8 or not 1 <= len(nm) <= MAX_NAMES:
+                continue
+            if not all(_has_letter(x) for x in nm):
+                continue
+            if pn[k] & set(tone_name(t) for t in tw.get(k, ())):
+                a += 1
+        nl.append(a)
+    check("Q17b NULL: shuffle which tone the program map holds where",
+          max(nl) * 5 < agree, "null mean %.1f max %d, against %d of %d"
+          % (sum(nl) / len(nl), max(nl), agree, tot))
+    # ★ THE COMPARISON A REVIEWER WOULD DEMAND, made here instead.  The column
+    # set is WIDER than round 7's per-position vote, and a wider candidate set
+    # agrees more often for free.  Both rules are run on the SAME records so the
+    # width is priced rather than banked.
+    votes = R7._map_votes()
+    pos = 0
+    for k, nm in sorted(names.items()):
+        if k not in lab8 or not 1 <= len(nm) <= MAX_NAMES:
+            continue
+        if not all(_has_letter(x) for x in nm):
+            continue
+        owners = set(tone_name(t) for t in tw.get(k, ()))
+        if set(tone_name(t) for t in votes.get(k, set())) & owners:
+            pos += 1
+    check("Q17c ⚠ AND HOW MUCH OF THAT IS THE COLUMN BEING WIDER, priced",
+          pos < agree,
+          "same %d records: the column rule agrees %d, round 7's per-POSITION vote "
+          "agrees %d -- so %d of the agreements are bought by the wider set"
+          % (tot, agree, pos, agree - pos))
+    say("       -> round 7 M1 measured the per-position vote as a TIE-BREAKER and")
+    say("          rejected it at %d agree / %d disagree over round 6's labels.  M9"
+        % R7.m1_calibration()[:2])
+    say("          is not that mechanism re-run: M1 asked the map to PICK ONE of the")
+    say("          names the bytes already offered, and M9 asks it about records the")
+    say("          bytes name NOT AT ALL, where there is nothing to pick between.")
+    say("          The null above is computed at the same width, which is what makes")
+    say("          %d against %.1f a statement about this map rather than about set"
+        % (agree, sum(nl) / len(nl)))
+    say("          sizes.")
+    say("")
+    say("  ★ THE %d DISAGREEMENTS, IN FULL, because a derived name that contradicts"
+        % len(differ))
+    say("    another derived name has to be visible:")
+    for k, nm, l8 in differ:
+        say("      record %3d  M9 says %-38s  the bytes say %s"
+            % (k, "_Or_".join(nm), l8))
+    say("    Neither is wrong.  `_SameAs_` is a statement about 43 BYTES and")
+    say("    `_SelectedFor_` is a statement about a MAP ENTRY; a record can be a")
+    say("    copy of Gamelan1's block and be the record the map puts under")
+    say("    AfricanMallet.  ⚠ AND M9 IS APPLIED TO NEITHER OF THESE %d: it only"
+        % len(differ))
+    say("    labels records with no twin at all, so no label contradicts another.")
+    return agree, differ, nl
+
+
+def q18():
+    say("\n=== Q18.  ★ M9 ON THE PERCUSSION ARRAY -- MEASURED, AND REFUSED ===\n")
+    say("  The same shape exists at slot +0x20: a 208-record array, a 1,024-entry")
+    say("  map at +0x14 whose range is exactly 0..207, and a 2,048-entry drum note")
+    say("  map at +0x74 to read the names out of.  It would name 37 records -- ALL")
+    say("  of the framed ones.  It is refused, and here is the measurement that")
+    say("  refuses it.")
+    m14 = selector_map(0x14)
+    nmA = [u16(S(0x74) + 2 * i) for i in range(2048)]
+    _pa, n20, recs20 = R6.array_records(0x20)
+    tails, pname = {}, {}
+    for i, b, nm in R6.perc_wavesel_tails():
+        tails[i], pname[i] = b, nm
+
+    def hits(vals):
+        h = t = 0
+        for q in range(1024):
+            di = nmA[q]
+            if di not in tails:
+                continue
+            t += 1
+            if R6._mask(tails[di]) == R6._mask(recs20[vals[q]]):
+                h += 1
+        return t, h
+
+    tot, ok = hits(m14)
+    rnd = random.Random(20260831)
+    nl = []
+    for _t in range(20):
+        perm = m14[:]
+        rnd.shuffle(perm)
+        nl.append(hits(perm)[1])
+    check("Q18a ⚠ THE PERC TEST CANNOT DISCRIMINATE -- it scores at its own null",
+          ok < 1.3 * (sum(nl) / len(nl)),
+          "%d of %d, against a shuffled mean of %.1f (max %d)"
+          % (ok, tot, sum(nl) / len(nl), max(nl)))
+    say("       -> the drum records' 43-byte tails repeat: shuffling the map barely")
+    say("          moves the score, so a hit is not evidence of anything.  The")
+    say("          melodic array is the opposite case (Q16c), which is what makes")
+    say("          the melodic number worth quoting and this one worthless.")
+    lab8 = wavesel_labels_r8(0x20)
+    sel = collections.defaultdict(set)
+    for q in range(1024):
+        if nmA[q] in pname:
+            sel[m14[q]].add(pname[nmA[q]])
+    ag = dis = 0
+    for k, s in sel.items():
+        if k in lab8:
+            base = re.sub(r"_WaveSel\d+$", "", lab8[k])
+            if s & set(base.split("_Or_")):
+                ag += 1
+            else:
+                dis += 1
+    check("Q18b and its calibration against the byte rule is a rout",
+          dis > 20 * max(ag, 1), "%d agree, %d differ" % (ag, dis))
+    would = sum(1 for k in range(n20) if k not in lab8 and len(sel.get(k, ())) == 1)
+    check("Q18c ★ what is being refused is %d names, not a technicality" % would,
+          would > 0, "%d of the %d framed records of that array would have got one"
+          % (would, n20 - len(lab8)))
+    return ok, tot, nl, would
+
+
+def q19():
+    say("\n=== Q19.  WHAT M9 LEAVES, PER OBJECT AND FOR A DERIVED REASON ===\n")
+    lab8 = wavesel_labels_r8(SELECTOR_ARRAY)
+    m9 = selector_labels()
+    names = selector_names()
+    _a, n18, _r = R6.array_records(SELECTOR_ARRAY)
+    framed = [k for k in range(n18) if k not in lab8]
+    unreached = [k for k in framed if k not in names]
+    toobroad = [k for k in framed if k in names and len(names[k]) > MAX_NAMES]
+    digits = [k for k in framed if k in names and 1 <= len(names[k]) <= MAX_NAMES
+              and not all(_has_letter(x) for x in names[k])]
+    check("Q19a the four buckets account for every framed record, with no residue",
+          len(m9) + len(unreached) + len(toobroad) + len(digits) == len(framed),
+          "%d named + %d unreached + %d too broad + %d digit-only = %d framed"
+          % (len(m9), len(unreached), len(toobroad), len(digits), len(framed)))
+    check("Q19b ★ the biggest bucket is a CENSUS RESULT, not a mechanism failing",
+          len(unreached) > len(toobroad),
+          "%d records are named by NO entry of the map -- all 1,024 were read"
+          % len(unreached))
+    check("Q19c the FIRST record of the array is asked and answered",
+          0 in unreached, "record 0: no map entry holds 0 (the map's range is 1..%d)"
+          % max(selector_map()))
+    check("Q19d ★ and so is the LAST, which is where a rule that stops early shows",
+          n18 - 1 in framed and (n18 - 1 in unreached or n18 - 1 in toobroad
+                                 or n18 - 1 in digits),
+          "record %d is reached from %d program column(s) and they carry %d "
+          "different tone names -- more than the bound of %d, so it is REFUSED"
+          % (n18 - 1, len(selector_columns().get(n18 - 1, [])),
+             len(names.get(n18 - 1, ())), MAX_NAMES))
+    if digits:
+        check("Q19e the digit-only refusal fires on real records, not in theory",
+              True, "records %s would have been named `%s`"
+              % (digits, "_Or_".join(names[digits[0]])))
+    say("")
+    say("  ★ THE %d M9 NAMES, IN FULL:" % len(m9))
+    for k in sorted(m9):
+        say("      record %3d  <- programs %-22s  %s"
+            % (k, str(selector_columns()[k])[:22], m9[k]))
+    return m9, unreached, toobroad, digits
+
+
+def q20():
+    say("\n=== Q20.  THE SECOND MAP, and a negative worth having ===\n")
+    m = selector_map(0x10)
+    tot, ok = selector_byte_agreement(m)
+    rnd = random.Random(20260901)
+    nl = []
+    for _t in range(20):
+        perm = m[:]
+        rnd.shuffle(perm)
+        nl.append(selector_byte_agreement(perm)[1])
+    ref_tot, ref_ok = selector_byte_agreement(selector_map())
+    check("Q20a ToneIndexMapB (+0x10) does NOT corroborate the way +0x0C does",
+          ok <= sum(nl) / len(nl),
+          "%d of %d, at its own shuffled null (mean %.1f, min %d, max %d)"
+          % (ok, tot, sum(nl) / len(nl), min(nl), max(nl)))
+    say("       -> +0x10's range also fits this array (max %d < %d), so a lane that"
+        % (max(m), 322))
+    say("          ranked by range alone would have taken it for a second selector.")
+    say("       ⚠ AND THIS IS A WEAK NEGATIVE, SAID SO HERE RATHER THAN LEFT TO A")
+    say("          REVIEWER: only %d of its 1,024 entries land on a record the byte"
+        % tot)
+    say("          test named at all, against +0x0C's %d, so the null it is being"
+        % ref_tot)
+    say("          compared against is itself near zero.  What this licenses is `+0x10")
+    say("          does not corroborate`, NOT `+0x10 is disproved`.  M9 is not")
+    say("          extended to it either way.")
+    return ok, tot, nl
+
+
+def selftest_round10():
+    """★ THE NEGATIVE CONTROLS FOR M9.  A rule that cannot fail is not a rule."""
+    say("\n=== SELFTEST -- ROUND 10's SELECTOR, ATTACKED ===\n")
+    base = selector_labels()
+    m = selector_map()
+    cols = selector_columns()
+    # T13: rotate the map by one PROGRAM and the labels must move.
+    rot = [m[(i + 1) % 1024] for i in range(1024)]
+    saved = globals()["selector_map"]
+    globals()["selector_map"] = lambda slot=SELECTOR_SLOT: (rot if slot == SELECTOR_SLOT
+                                                            else saved(slot))
+    try:
+        moved = selector_labels()
+    finally:
+        globals()["selector_map"] = saved
+    check("T13 rotating the map by one program CHANGES the labels",
+          moved != base, "%d labels before, %d after, %d in common"
+          % (len(base), len(moved),
+             len(set(base.items()) & set(moved.items()))))
+    # T14: the digit-only filter fires on a real record.
+    names = selector_names()
+    dig = [k for k, v in names.items() if 1 <= len(v) <= MAX_NAMES
+           and not all(_has_letter(x) for x in v)]
+    dig = sorted(dig)
+    check("T14 the digit-only refusal fires on real records",
+          bool(dig) and all(k not in base for k in dig),
+          "records %s carry only tone 0x05D's `%s`"
+          % (dig, names[dig[0]][0] if dig else ""))
+    # T15: the LAST record of the array is reached by the rule's own code path.
+    _a, n18, _r = R6.array_records(SELECTOR_ARRAY)
+    check("T15 ★ the rule is evaluated on the LAST record, not only the first",
+          (n18 - 1) in names and (n18 - 1) not in base,
+          "record %d: %d columns, %d names -> refused (>%d)"
+          % (n18 - 1, len(cols.get(n18 - 1, [])), len(names.get(n18 - 1, ())), MAX_NAMES))
+    # T16: the rule on an array no map reaches must name nothing.
+    _b, n3c, _r3 = R6.array_records(0x3C)
+    reach3c = [s for s in range(0, 0xB8, 4)
+               if S(s) != 0xFFFFFFFF and R6.next_bound(S(s)) - S(s) == 2048
+               and max(x for x in selector_map(s) if x != 0xFFFF) == n3c - 1]
+    check("T16 CONTROL: no map's range reaches the %d-record preset array, so M9"
+          % n3c, not reach3c, "maps reaching index %d: %s" % (n3c - 1, reach3c))
+    # T17: the labels are invariant under all eight row rotations.
+    inv = True
+    for off in range(MELODIC_ROWS):
+        alt = {}
+        for k, cs in cols.items():
+            alt[k] = tuple(sorted(set(tone_name(program_tone((r + off) % MELODIC_ROWS, c))
+                                      for c in cs for r in range(MELODIC_ROWS))))
+        if any(alt.get(k) != names.get(k) for k in base):
+            inv = False
+    check("T17 ★★ every M9 label is invariant under all %d row rotations" % MELODIC_ROWS,
+          inv, "which is the whole reason Q16d's loose row does not reach the labels")
+    # T18: the generator's guard constant still describes the rule.
+    check("T18 the shape the generator refuses on still matches",
+          _r10_shape() == AUDITED_R10, "%s" % (_r10_shape(),))
+    # T19: ★ ROUND 6's REVIEW ASKED OF ROUND 10's LABELS.  The round-6 review
+    # script's R6z reads `_SameAs_` labels only, so it is BLIND to these -- said
+    # here rather than left to a reviewer, and the question is asked instead.
+    # Every morpheme is read back OUT of prom_d/wsa1_prom_d.s, not out of the
+    # function that wrote it, and matched against the image's own ASCII.
+    src = open(SRC).read()
+    got = re.findall(r"^ToneDB_MixerDefaultTable_(\d{3})_SelectedFor_([A-Za-z0-9_]+):",
+                     src, re.M)
+    field = set()
+    for p_ in R6.TONE_PTRS:
+        field.add(R6.camel(D[p_:p_ + 16].decode("latin1")))
+    words = sorted(set(w for _k, suf in got for w in suf.split("_Or_")))
+    missing = [w for w in words if w not in field]
+    check("T19 ★ every morpheme in an M9 label is a tone record's own ASCII field",
+          len(got) == len(selector_labels()) and not missing,
+          "%d labels in the .s, %d distinct names, %d not found in the image"
+          % (len(got), len(words), len(missing)))
+    check("T19' and the .s agrees with the rule record for record",
+          dict((int(k), v) for k, v in got) == selector_labels(),
+          "%d labels compared" % len(got))
+
+
 def nameless_report(nameless):
     say("\n  ★ THE NAMELESS, IN FULL -- %d objects, three answers each:" % len(nameless))
     for r in nameless:
@@ -2041,9 +2680,15 @@ def main():
     q13()
     q14()
     q15()
+    q16()
+    q17()
+    q18()
+    q19()
+    q20()
     if "--selftest" in _ARGV:
         selftest()
         selftest_round9()
+        selftest_round10()
     if "--nameless" in _ARGV:
         nameless_report(nameless)
     say("")
@@ -2053,11 +2698,16 @@ def main():
         % len(nameless))
     say("     routes to a name asked and answered NO.")
     say("")
-    say("  ★★ WHAT ROUND 9 PUBLISHES, and it promotes NOTHING: %d of the %d labels"
+    say("  ★★ THE WHOLE-IMAGE AUDIT, LIVE: %d of the %d labels have their NAME"
         % (_AUDIT_GRADES.get("DERIVED", 0), sum(_AUDIT_GRADES.values())))
-    say("     have their NAME re-derived from this image's own bytes and %d have"
+    say("     re-derived from this image's own bytes and %d have only their ADDRESS."
         % _AUDIT_GRADES.get("ADDRESS", 0))
-    say("     only their ADDRESS.  Every mechanism that could have moved that")
+    say("     ⚠ THOSE TWO NUMBERS ARE LIVE AND HAVE MOVED: round 9 published them as")
+    say("     2857 / 808 and promoted nothing; round 10's %d selector labels are the"
+        % selector_buckets()[0])
+    say("     whole of the difference, and AUDITED_R9 was updated with them.")
+    say("     ROUND 9's own result stands as it was: every mechanism that could have")
+    say("     moved that")
     say("     number this round was measured and refused: the twin rule on the")
     say("     +0x3C array (0 of 64, Q12), the monotone interpolation (0 of 12 and")
     say("     self-refuting on the other array, Q13), and General MIDI (18/128")
@@ -2067,6 +2717,23 @@ def main():
     say("     the population is 1,485.  Both fixed in the GENERATOR, which is the")
     say("     only place a fix survives, and both now have a check that re-derives")
     say("     them (Q10d, Q11d).")
+
+    _n10, _u10, _b10, _d10 = selector_buckets()
+    say("")
+    say("  ★★ WHAT ROUND 10 PUBLISHES: %d framed labels of ToneDB_MixerDefaultTable"
+        % _n10)
+    say("     promoted to `_SelectedFor_<tone>` -- named by WHAT POINTS AT THEM, the")
+    say("     one route this image had that round 6 measured and then used only as a")
+    say("     witness.  The other %d stay framed for a reason derived per object: %d"
+        % (_u10 + _b10 + _d10, _u10))
+    say("     are selected by no entry of the map at all, %d have columns carrying"
+        % _b10)
+    say("     more than %d tone names, %d would have been named `161`.  ★ AND THE"
+        % (MAX_NAMES, _d10))
+    say("     SAME MECHANISM ON THE PERCUSSION ARRAY IS REFUSED (Q18): it would have")
+    say("     named every one of that array's 37 framed records and it scores at its")
+    say("     own shuffled null.  The row half of the map's index is NOT pinned")
+    say("     (Q16d) and every label is built to be invariant under it (T17).")
     print("\n%d checks, %d failed.%s"
           % (NCHECK[0], len(FAILED),
              "" if not FAILED else "  " + "; ".join(FAILED)))
