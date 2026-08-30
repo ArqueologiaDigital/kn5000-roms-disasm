@@ -56,10 +56,18 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# `os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")` and the one-string spelling.
+# The three spellings this tree uses for "the image's listing":
+#   os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+#   os.path.join(ROOT, "prom_c/wsa1_prom_c.s")
+#   os.path.join(ROOT, "prom_%s" % tag, "wsa1_prom_%s.s" % tag)     <- computed
+# The computed form matters: it is how the census scripts loop over the images,
+# so ONE site of it can put four images through a stub.
 SITE = re.compile(
     r'os\.path\.join\(\s*ROOT\s*,\s*"(prom_[abcd])"\s*,\s*"(wsa1_prom_[abcd]\.s)"\s*\)'
     r'|os\.path\.join\(\s*ROOT\s*,\s*"(prom_[abcd])/(wsa1_prom_[abcd]\.s)"\s*\)')
+SITE_FMT = re.compile(
+    r'os\.path\.join\(\s*ROOT\s*,\s*"prom_%s"\s*%\s*([A-Za-z_][A-Za-z0-9_]*)\s*,\s*'
+    r'"wsa1_prom_%s\.s"\s*%\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)')
 
 # A name used as a write target.  Deliberately loose -- a false REFUSAL costs a
 # hand migration, a false rewrite costs the split.
@@ -96,6 +104,8 @@ def writer_names(text):
 
 
 def site_image(m):
+    if m.re is SITE_FMT:
+        return "prom_<%s>/wsa1_prom_<%s>.s" % (m.group(1), m.group(1))
     return "%s/%s" % (m.group(1) or m.group(3), m.group(2) or m.group(4))
 
 
@@ -114,13 +124,19 @@ def inline_write(text, m):
     return bool(re.match(r'\s*,\s*["\']w', tail))
 
 
+def fmt_sites(text):
+    """The computed-path sites, keeping only `prom_%s`/`wsa1_prom_%s.s` pairs
+    that use THE SAME variable -- anything else is not this idiom."""
+    return [m for m in SITE_FMT.finditer(text) if m.group(1) == m.group(2)]
+
+
 def survey(only=None):
     """(path, [(image, verdict, reason), ...]) for every file with a site."""
     out = []
     for rel in committed_py():
         text = open(os.path.join(ROOT, rel), encoding="utf-8",
                     errors="replace").read()
-        ms = list(SITE.finditer(text))
+        ms = list(SITE.finditer(text)) + fmt_sites(text)
         if not ms:
             continue
         wnames = writer_names(text)
@@ -152,6 +168,10 @@ def survey(only=None):
 def rewrite_text(text):
     """Rewrite every site and make sure the import is present."""
     new = SITE.sub(lambda m: 'image_path(ROOT, "%s")' % site_image(m), text)
+    new = SITE_FMT.sub(
+        lambda m: ('image_path(ROOT, "prom_%%s/wsa1_prom_%%s.s" %% (%s, %s))'
+                   % (m.group(1), m.group(2)))
+        if m.group(1) == m.group(2) else m.group(0), new)
     if new == text:
         return text
     if IMPORT_LINE not in new:
@@ -334,6 +354,18 @@ def selftest():
         check(not re.search(r'^import sys$', combo, re.M) and IMPORT_LINE in combo,
               "%r is recognised -- sys is not imported twice" % spell.strip())
         compile(combo, "<combo>", "exec")
+    fmt = ('import os\nimport sys\n'
+           'ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n'
+           'for tag in ("a", "d"):\n'
+           '    p = os.path.join(ROOT, "prom_%s" % tag, "wsa1_prom_%s.s" % tag)\n')
+    fout = rewrite_text(fmt)
+    check('image_path(ROOT, "prom_%s/wsa1_prom_%s.s" % (tag, tag))' in fout,
+          "the COMPUTED spelling used by the census loops is rewritten too")
+    compile(fout, "<fmt>", "exec")
+    mixed = fmt.replace('"wsa1_prom_%s.s" % tag', '"wsa1_prom_%s.s" % other')
+    check("image_path" not in rewrite_text(mixed),
+          "...but not when the two format variables differ -- that is not the idiom")
+
     solo = rewrite_text(reader)
     check(re.search(r'^import sys$', solo, re.M) is not None,
           "...and a file with no sys import gets one")
