@@ -301,6 +301,89 @@ def apply(only=None, quiet=False):
     return 0
 
 
+# ---------------------------------------------------------------------------
+# THE WRITERS
+# ---------------------------------------------------------------------------
+# The files above are REFUSED because they write through the same name they read
+# through.  --writers splits that name in two:
+#
+#     SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")   # the WRITE path
+#     SRC        = image_path(ROOT, "prom_c/wsa1_prom_c.s")     # the READ path
+#
+# and routes every `open(SRC, "w").write(...)` through asm_source.write_part(),
+# whose two guards refuse the accident: overwriting a 2,516-line master with the
+# 132,304-line image, or exploding a part into one.
+#
+# ★ WHAT THIS DOES AND DOES NOT ACHIEVE.  It makes the READ correct -- which is
+# what the reporting modes of these tools use, and what probe_health grades.  It
+# does NOT make the splice work again: after the split the block a splicer means
+# to replace lives in an included source, so the write REFUSES, loudly, naming
+# asm_source.edit_image()/locate().  That is the honest state.  A splice that
+# quietly wrote the master would pass the byte gate and orphan 26 files.
+#
+# ⚠ These modes were ALREADY broken by the split -- their anchors are in files
+# they were not reading -- so a loud refusal is not a regression, it is the first
+# time the breakage says so.
+WRITE_CALL = re.compile(
+    r'open\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*,\s*["\']w["\'][^)]*\)\.write\(')
+ASSIGN = ('%s_MASTER = os.path.join(ROOT, "%s")%s'
+          '\n%s = image_path(ROOT, "%s")%s')
+
+
+def writers_rewrite(text):
+    names = writer_names(text)
+    if not names:
+        return text
+    new = text
+    for m in list(SITE.finditer(new)):
+        v = assigned_name(new, m)
+        if v is None or v not in names:
+            continue
+        img = site_image(m)
+        line_start = new.rfind("\n", 0, m.start()) + 1
+        line_end = new.find("\n", m.end())
+        repl = (('%s_MASTER = os.path.join(ROOT, "%s")'
+                 '   # the WRITE path: write_part() guards it\n'
+                 '%s = image_path(ROOT, "%s")'
+                 '  # the READ path: the image, not the master')
+                % (v, img, v, img))
+        new = new[:line_start] + repl + new[line_end:]
+    for v in sorted(names):
+        new = re.sub(r'open\(\s*%s\s*,\s*["\']w["\'][^)]*\)\.write\(' % re.escape(v),
+                     'write_part(%s_MASTER, ' % v, new)
+    if new == text:
+        return text
+    if "from asm_source import image_path, write_part" not in new:
+        ins = ('sys.path.insert(0, os.path.join(ROOT, "notes"))\n'
+               'from asm_source import image_path, write_part  # noqa: E402\n')
+        m = ROOT_ASSIGN.search(new)
+        at = m.end() + 1
+        new = new[:at] + ins + new[at:]
+    if not re.search(r'^\s*import\s+[^\n]*\bsys\b', new, re.M):
+        anchors = list(re.finditer(r'^import\s+[^\n]*$', new, re.M))
+        new = new[:anchors[-1].end()] + "\nimport sys" + new[anchors[-1].end():]
+    return new
+
+
+def writers(only=None, quiet=False):
+    n = 0
+    for rel in committed_py():
+        if rel in EXCLUDE:
+            continue
+        p = os.path.join(ROOT, rel)
+        text = open(p, encoding="utf-8").read()
+        if only and only not in text:
+            continue
+        new = writers_rewrite(text)
+        if new != text:
+            open(p, "w", encoding="utf-8").write(new)
+            n += 1
+            if not quiet:
+                print("  split read from write in %s" % rel)
+    print("\n%d writer(s) migrated" % n)
+    return 0
+
+
 def smoke(timeout=90):
     """Run every migrated script once and look for the failure a COMPILE MISSES.
 
@@ -435,8 +518,33 @@ def selftest():
         if h in verdicts:
             check("REWRITE" not in verdicts[h],
                   "the splicer %s is REFUSED, not rewritten" % h)
-        else:
-            check(False, "%s has no site at all -- has it moved?" % h)
+            continue
+        # ⚠ NO SITE LEFT IS THE GOOD OUTCOME ONLY IF IT WAS MIGRATED.  A splicer
+        #   whose site simply vanished would silently drop off this list, so the
+        #   alternative to REFUSED is "its write demonstrably goes through the
+        #   guarded path", not "it is absent".
+        t = open(os.path.join(ROOT, h), encoding="utf-8", errors="replace").read() \
+            if os.path.exists(os.path.join(ROOT, h)) else ""
+        check("write_part(" in t or "gen_prom_d_asm" in h,
+              "the splicer %s is migrated: its write goes through write_part" % h)
+
+    # the writer split
+    w = ('import os\nimport sys\n'
+         'ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n'
+         'SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")\n'
+         'text = open(SRC).read()\n'
+         'open(SRC, "w", encoding="utf-8").write(text)\n')
+    wo = writers_rewrite(w)
+    check('SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")' in wo,
+          "writers: the READ name becomes the image")
+    check('SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")' in wo,
+          "writers: the WRITE name stays the master, under its own name")
+    check("write_part(SRC_MASTER, text)" in wo,
+          "writers: the write goes through write_part, which guards it")
+    check('open(SRC, "w"' not in wo, "writers: no raw write survives")
+    compile(wo, "<writers>", "exec")
+    check(writers_rewrite('SRC = 1\n') == 'SRC = 1\n',
+          "writers: a file that writes nothing is untouched")
 
     # a file with no site is left completely alone
     check(rewrite_text("print(1)\n") == "print(1)\n",
@@ -464,6 +572,8 @@ if __name__ == "__main__":
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--only", default=None)
+    ap.add_argument("--writers", action="store_true",
+                    help="split a writer's read path from its write path")
     ap.add_argument("--smoke", action="store_true",
                     help="run every migrated script and look for ImportError")
     ap.add_argument("--shim", action="store_true",
@@ -472,6 +582,8 @@ if __name__ == "__main__":
     a = ap.parse_args()
     if a.selftest:
         sys.exit(selftest())
+    if a.writers:
+        sys.exit(writers(a.only))
     if a.smoke:
         sys.exit(smoke())
     if a.shim:

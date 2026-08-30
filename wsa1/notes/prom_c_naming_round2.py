@@ -91,7 +91,10 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")   # the WRITE path: write_part() guards it
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")  # the READ path: the image, not the master
 ELF = os.path.join(ROOT, "rebuilt_ROMs", "wsa1_prom_c.llvm.elf")
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 SFR_INC = os.path.join(ROOT, "include", "tmp95c061_sfr.inc")
@@ -566,7 +569,7 @@ def do_apply(check_only=False):
             print("  REFUSE: occurrences survived the rewrite; nothing written.")
             return 1
     if todo:
-        open(SRC, "w", encoding="utf-8").write(text)
+        write_part(SRC_MASTER, text)
         print(f"\nwrote {SRC}: {len(todo)} rename(s).")
         print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")
     else:

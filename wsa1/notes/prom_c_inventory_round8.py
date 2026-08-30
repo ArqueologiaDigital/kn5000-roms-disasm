@@ -318,7 +318,10 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")   # the WRITE path: write_part() guards it
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")  # the READ path: the image, not the master
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 # ROUND 11 FIX: round 10 appended the prom_a ATA section (ata_sites, apply10,
 # verify10, selftest10) to this file but never defined the prom_a source path it
@@ -2139,7 +2142,7 @@ def apply10():
                     done.add(old)
                     out.extend(_refusal_header(old, why))
         out.append(ln)
-    open(S_A, "w").write("\n".join(out))
+    write_part(S_A_MASTER, "\n".join(out))
     print("  round 10: renamed %d labels, wrote %d header blocks"
           % (len(renamed), len(done)))
 
@@ -2654,7 +2657,7 @@ def apply11():
             if new != ln:
                 lines[i] = new
                 n_c += 1
-        open(path, "w").write("\n".join(lines))
+        write_part(path_MASTER, "\n".join(lines))
     print("  citations: %d defects, %d lines rewritten across the listing and the "
           "generator" % (len(cites), n_c))
 
@@ -2710,7 +2713,7 @@ def apply11():
                                    else "          ", c))
         lines[j - 1:j - 1] = blk
         ref += 1
-    open(SRC, "w").write("\n".join(lines))
+    write_part(SRC_MASTER, "\n".join(lines))
     print("  round 11: renamed %d labels, rewrote %d headers, recorded %d refusals"
           % (len(todo), tagged, ref))
 
@@ -3995,7 +3998,7 @@ def apply12():
                                    else "          ", cc))
         lines[j - 1:j - 1] = blk
         ref += 1
-    open(SRC, "w").write("\n".join(lines))
+    write_part(SRC_MASTER, "\n".join(lines))
     print("  round 12: renamed %d labels, rewrote %d headers, recorded %d refusals"
           % (len(todo), tagged, ref))
     supersede11()
@@ -4045,7 +4048,7 @@ def supersede11():
             blkout.append("; %s%s" % ("WasRefused: " if q == 0 else "          ", cc))
         lines[k:end] = blkout
         done += 1
-    open(SRC, "w").write("\n".join(lines))
+    write_part(SRC_MASTER, "\n".join(lines))
     print("  round 12: %d round-11 refusals superseded in place" % done)
 
 

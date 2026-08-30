@@ -116,12 +116,15 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import wave7_documentation_metrics as M                            # noqa: E402
 import prom_b_thunk_table as TT                                    # noqa: E402
 
 SRCA = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
-SRCB = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRCB_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
 ADDR = re.compile(r';\s*([0-9A-F]{6})\b')
@@ -452,7 +455,7 @@ def apply_():
         body = out[:j] + blk + [new + ":" + out[i][len(out[i].split(":")[0]) + 1:]] + out[i + 1:]
         out = [re.sub(r'\b%s\b' % old, new, ln) if old in ln else ln for ln in body]
         stub = 1
-    open(SRCB, "w").write("\n".join(out))
+    write_part(SRCB_MASTER, "\n".join(out))
     print("renamed %d slots (%d already renamed), rewrote %d references in %s"
           % (renamed, already, fixed, SRCB))
     print("plus %d non-derivative rename (%s -> %s)" % (stub, old, new))

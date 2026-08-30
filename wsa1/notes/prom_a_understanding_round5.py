@@ -117,7 +117,10 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-S_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+S_A_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path: write_part() guards it
+S_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")  # the READ path: the image, not the master
 S_B = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
 S_C = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
 R_A = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
@@ -766,7 +769,7 @@ def apply_gaps():
                 break
     for i, block in reversed(ins):
         src[i:i] = block
-    open(S_A, "w").write("\n".join(src))
+    write_part(S_A_MASTER, "\n".join(src))
     print("applied: %d gap headers (of %d gap painters; the rest already had one)"
           % (len(ins), len(rows)))
     print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")
@@ -948,7 +951,7 @@ def apply():
     # 2. rename every occurrence of the label as a whole word
     for old, new, _k, _r in rows:
         text = re.sub(r'\b%s\b' % re.escape(old), new, text)
-    open(S_A, "w").write(text)
+    write_part(S_A_MASTER, text)
     print("applied: %d renames, %d header blocks inserted into %s"
           % (len(rows), len(ins), S_A))
     print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")

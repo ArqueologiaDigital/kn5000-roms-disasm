@@ -186,6 +186,8 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
 ARGV = list(sys.argv)
 A_BASE, B_BASE = 0xF80000, 0xF00000
 SRC = {"a": os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"),
@@ -1987,7 +1989,7 @@ def apply():
         out.append(ln)
     if hdr:
         sys.exit("REFUSING TO APPLY: no label found for %s" % ", ".join(sorted(hdr)))
-    open(src_a, "w", encoding="utf-8").write("\n".join(out))
+    write_part(src_a_MASTER, "\n".join(out))
     print("%d prose corrections applied elsewhere in prom_a" % fixed)
     print("%d labels renamed (%d textual references), %d new labels inserted"
           % (len(ren), nref, len(ins)))

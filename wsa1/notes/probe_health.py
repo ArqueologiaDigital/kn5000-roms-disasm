@@ -86,6 +86,11 @@ RUN
   python3 notes/probe_health.py --only prom_c_head  substring filter on scripts
   python3 notes/probe_health.py --json out.json     machine-readable
   python3 notes/probe_health.py --selftest          ★ the instrument's controls
+
+⚠ IF A RUN IS KILLED, its scratch trees are left READ-ONLY (see FROZEN_DIRS) and
+`rm -rf` will refuse them.  Clear them with:
+
+    chmod -R u+w /tmp/probehealth-* && rm -rf /tmp/probehealth-*
 """
 import argparse
 import concurrent.futures
@@ -103,7 +108,7 @@ from asm_source import image_files, image_lines, IMAGES  # noqa: E402
 
 IMAGE_PRIMARY = dict(IMAGES)
 PARTS_DIRNAME = ".health_parts"
-TIMEOUT = 150
+TIMEOUT = 300
 HEADER_KEEP = 4          # lines of the primary the stub keeps before the first include
 
 # ⚠ NEVER RUN.  A mode that writes a source file back tells us nothing about

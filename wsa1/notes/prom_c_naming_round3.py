@@ -119,7 +119,10 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")   # the WRITE path: write_part() guards it
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")  # the READ path: the image, not the master
 ELF = os.path.join(ROOT, "rebuilt_ROMs", "wsa1_prom_c.llvm.elf")
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 NM = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
@@ -603,7 +606,7 @@ def do_localfix(apply=False):
         print("  %-12s -> %s   (%d occurrence(s))" % (n, new, before))
         done += 1
     if done:
-        open(SRC, "w", encoding="utf-8").write(text)
+        write_part(SRC_MASTER, text)
         print("\nwrote %s: %d local label(s) respelled." % (SRC, done))
         print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")
     else:
@@ -659,7 +662,7 @@ def do_apply(check_only=False):
             print("  REFUSE: occurrences survived; nothing written.")
             return 1
     if todo:
-        open(SRC, "w", encoding="utf-8").write(text)
+        write_part(SRC_MASTER, text)
         print("\nwrote %s: %d rename(s)." % (SRC, len(todo)))
         print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")
     else:
@@ -895,7 +898,7 @@ def do_headers(apply=False):
         lines[k:k] = body
         print("  inserted %d line(s) above %s" % (len(body), n))
     if todo:
-        open(SRC, "w", encoding="utf-8").write("\n".join(lines))
+        write_part(SRC_MASTER, "\n".join(lines))
         print("\nwrote %s: %d block(s) at %d anchor(s)."
               % (SRC, len(todo), len(grouped)))
         print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")
@@ -1096,7 +1099,7 @@ def do_renameheaders(apply=False):
         lines[hit:hit + 2] = body
         print("  %s: 2 boilerplate lines -> %d real ones" % (n, len(body)))
     if todo:
-        open(SRC, "w", encoding="utf-8").write("\n".join(lines))
+        write_part(SRC_MASTER, "\n".join(lines))
         print("\nwrote %s: %d header(s) rewritten." % (SRC, len(todo)))
         print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")
     else:
@@ -1247,7 +1250,7 @@ def do_closegap(apply=False):
     for _n, i, _r, _ev in sorted(rows, key=lambda t: -t[1]):
         assert lines[i - 1].strip() == ''
         del lines[i - 1]
-    open(SRC, "w", encoding="utf-8").write("\n".join(lines))
+    write_part(SRC_MASTER, "\n".join(lines))
     print("\nwrote %s: %d blank line(s) removed." % (SRC, len(rows)))
     print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")
     return 0
@@ -1358,7 +1361,7 @@ def do_corrections(apply=False):
         text = text.replace(o, n)
         print("  replaced %d line(s) with %d" % (a, b))
     if todo:
-        open(SRC, "w", encoding="utf-8").write(text)
+        write_part(SRC_MASTER, text)
         print("\nwrote %s." % SRC)
         print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")
     return 0

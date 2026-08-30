@@ -108,7 +108,10 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")   # the WRITE path: write_part() guards it
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")  # the READ path: the image, not the master
 BASE = 0xF80000
 
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
@@ -983,7 +986,7 @@ def apply():
             assert OLD_TAIL in blk, name
             src = src[:i] + blk.replace(OLD_TAIL, "\n".join(REFUSAL_TAIL)) + src[j:]
             n_tail += 1
-    open(SRC, "w").write(src)
+    write_part(SRC_MASTER, src)
     _C.clear()
     # 3. the field-map block comment, above the record's constructor
     src = open(SRC).read()
@@ -992,7 +995,7 @@ def apply():
         anchor = "; %s -- 0x" % CTOR
         i = src.index("\n" + anchor) + 1
         src = src[:i] + cm + "\n" + src[i:]
-        open(SRC, "w").write(src)
+        write_part(SRC_MASTER, src)
     _C.clear()
     # 4. the derived per-routine line, before each header's Evidence line.
     #    depth_lines() is recomputed ONCE here, AFTER the renames, so the keys are
@@ -1008,7 +1011,7 @@ def apply():
         k = blk.index("\n; Evidence:")
         src = src[:i] + blk[:k] + "\n" + line + blk[k:] + src[j:]
         n_line += 1
-    open(SRC, "w").write(src)
+    write_part(SRC_MASTER, src)
     _C.clear()
     print("applied: %d renames, %d rewritten header tails, %d derived record lines"
           % (n_ren, n_tail, n_line))

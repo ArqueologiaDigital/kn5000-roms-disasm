@@ -144,7 +144,10 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")   # the WRITE path: write_part() guards it
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")  # the READ path: the image, not the master
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 BASE = 0xF80000
 
@@ -1516,7 +1519,7 @@ def do_apply(check_only=False):
             print("  REFUSE: occurrences survived the rewrite; nothing written.")
             return 1
     if todo:
-        open(SRC, "w", encoding="utf-8").write(text)
+        write_part(SRC_MASTER, text)
         print("\nwrote %s: %d rename(s)." % (SRC, len(todo)))
     # ★ and the committed scripts that name these labels as literal strings
     moved = 0
@@ -1527,7 +1530,7 @@ def do_apply(check_only=False):
         for old, new, _ev in RENAMES:
             t = rename_token(t, old, new)
         if t != orig:
-            open(p, "w", encoding="utf-8").write(t)
+            write_part(p_MASTER, t)
             moved += 1
             print("  patched %s" % rel)
     if todo or moved:
@@ -1585,7 +1588,7 @@ def do_headers():
             block = block + add
         lines[top:idx] = block
         written += 1
-    open(SRC, "w", encoding="utf-8").write("\n".join(lines))
+    write_part(SRC_MASTER, "\n".join(lines))
     print("\n%d header(s) written (%d of them REPLACED an earlier round-6 paragraph), "
           "%d label(s) missing." % (written, skipped, missing))
     print("NOW RUN: python3 scripts/analysis/assert_byte_identical.py")

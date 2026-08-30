@@ -66,8 +66,11 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
 IMG = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
-SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
+SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")   # the WRITE path: write_part() guards it
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")  # the READ path: the image, not the master
 BASE = 0xF80000                 # prom_c/prom_c.ld ORIGIN
 
 HDR = 0x000000                  # 32-byte header
@@ -491,7 +494,7 @@ def apply():
     body = asm()
     # the image's first label must stay, the linker script places it
     body = body.replace("PresetBank:\n", "wsa1_prom_c:\nPresetBank:\n", 1)
-    open(SRC, "w").write(text[:m.start()] + body + text[m.end():])
+    write_part(SRC_MASTER, text[:m.start()] + body + text[m.end():])
     print(f"spliced {len(body.splitlines())} lines into {SRC}")
     return 0
 

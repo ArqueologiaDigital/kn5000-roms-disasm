@@ -137,12 +137,15 @@ import textwrap
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
 sys.path.insert(0, HERE)
 
 import wave7_panel_button_codes as L1        # noqa: E402
 import wave7_panel_names_round11 as R11      # noqa: E402
 
-SRC = os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")
+SRC_MASTER = os.path.join(ROOT, "prom_b/wsa1_prom_b.s")   # the WRITE path: write_part() guards it
+SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")  # the READ path: the image, not the master
 RULE = "; " + "-" * 69
 SPAN_LO, SPAN_HI = 0xF7E2D8, 0xF80000
 
@@ -681,7 +684,7 @@ def apply(dry=False):
 
     text = "\n".join(lines)
     if not dry:
-        open(SRC, "w", encoding="utf-8").write(text)
+        write_part(SRC_MASTER, text)
     return edits, renames, text
 
 
