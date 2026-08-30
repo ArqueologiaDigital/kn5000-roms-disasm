@@ -327,6 +327,30 @@ def locate(root, primary, needle, shared=False):
 GROWTH_FLOOR = 8192
 
 
+def edit_image(root, primary, fn, shared=False, allow_growth=False):
+    """Apply `fn(text, relpath) -> text` to EVERY writable file of the image.
+
+    ★ THIS IS WHAT A RENAME NEEDS.  A tool that renamed a label by rewriting
+    `prom_c/wsa1_prom_c.s` reached the whole image while that file WAS the
+    image.  It now reaches 1.9% of it, and would rename a label in the master's
+    prose while leaving the definition in prom_c/voice/note_engine.s untouched
+    -- a listing that no longer says the same thing in two places, with the byte
+    gate green either way.
+
+    Returns the ROOT-relative paths it changed.  Every write goes through
+    write_part(), so both of its guards apply per file.
+    """
+    changed = []
+    for f in image_writable_files(root, primary, shared):
+        rel = os.path.relpath(f, root).replace(os.sep, "/")
+        text = open(f, encoding="utf-8").read()
+        new = fn(text, rel)
+        if new != text:
+            write_part(f, new, root=root, allow_growth=allow_growth)
+            changed.append(rel)
+    return changed
+
+
 def write_part(path, text, root=ROOT, allow_growth=False):
     """Write one constituent file back, refusing the accident described above.
 
@@ -491,6 +515,7 @@ def _selftest():
         open(os.path.join(td, "kernel", "kernel.s"), "w").write("Shared:\n")
         master = os.path.join(td, "img", "main.s")
         open(master, "w").write(
+            '; master prose\n'
             '\t.include "img/one.s"\n\t.include "img/two.s"\n'
             '\t.include "img/three.s"\n\t.include "kernel/kernel.s"\n')
         prim = "img/main.s"
@@ -523,6 +548,21 @@ def _selftest():
         write_part(part, "; part\nAnchor:\n; spliced\n", root=td)
         check("write_part() DOES write a part that carries no includes",
               "spliced" in open(part).read())
+        # edit_image reaches every part, which is what a rename needs
+        # ⚠ check() here is check(NAME, COND) -- the first version of these three
+        #   passed them the other way round, so the CONDITION became the label
+        #   and the non-empty label became the condition.  All three printed
+        #   PASS unconditionally.  A vacuous check, in the module written to
+        #   stop vacuous checks.
+        n = edit_image(td, prim, lambda t, rel: t.replace("Anchor:", "Renamed:"))
+        check("edit_image touches exactly the file that held the token",
+              n == ["img/one.s"], "%s" % n)
+        n = edit_image(td, prim, lambda t, rel: t.replace("; ", ";; "))
+        check("...and a tree-wide edit reaches EVERY writable part, master included",
+              set(n) == {"img/main.s", "img/one.s", "img/two.s", "img/three.s"},
+              "%s" % sorted(n))
+        check("...but never a shared source unless shared=True",
+              "kernel/kernel.s" not in n)
         # ★ GUARD 2, both directions.  A part has no includes, so guard 1 is
         #   blind to the whole image being written INTO one.
         try:
