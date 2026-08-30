@@ -114,7 +114,21 @@ def rom(img):
 # of them.  Reading only prom_a/prom_c would drop 941 PROVEN instruction
 # addresses per image and quietly change every figure downstream.  The shared
 # file is appended to each image's lines with its own address column selected.
-SHARED_SOURCES = {"prom_a": ("kernel/kernel.s", 1), "prom_c": ("kernel/kernel.s", 2)}
+# ⚠⚠ AND THERE IS NOW MORE THAN ONE OF THEM PER IMAGE.  Since the maincpu join,
+# the three routines prom_a and prom_b carry TWICE are one source each, included
+# at both sites, and those sources carry both images' addresses in exactly the
+# same `; AAAAAA/BBBBBB` shape as the kernel.  This was a (rel, col) PAIR per
+# image; it is a LIST per image, because prom_a now has three and prom_b two.
+# ★ A shared source is reached through the image's own `.include` too, so
+#   source_lines() must skip it there or its lines arrive twice, once unusable.
+SHARED_SOURCES = {
+    "prom_a": [("kernel/kernel.s", 1),
+               ("maincpu/shared/indexed_table.s", 1),
+               ("maincpu/shared/lcd_screen_redraw.s", 1)],
+    "prom_b": [("maincpu/shared/indexed_table.s", 2),
+               ("maincpu/shared/lcd_screen_redraw.s", 2)],
+    "prom_c": [("kernel/kernel.s", 2)],
+}
 SHARED_ADDR = re.compile(r';\s*([0-9A-F]{6})/([0-9A-F]{6})\b')
 
 # ⚠⚠ A FIFTH PLACE THE LINES CAN BE, and it is the same trap one turn further
@@ -187,8 +201,8 @@ def _fingerprint(tag=None):
             # hashing only the master would let an edit to any of them validate a
             # stale entry -- the same failure the docstring above describes, one
             # indirection further out.
-            rels = [SHARED_SOURCES[t_][0]] if t_ in SHARED_SOURCES else []
-            for rel in rels + included_sources(s):
+            rels = [r for r, _c in SHARED_SOURCES.get(t_, [])]
+            for rel in dict.fromkeys(rels + included_sources(s)):
                 h.update(open(os.path.join(ROOT, rel), "rb").read())
     h.update(open(os.path.abspath(__file__), "rb").read())
     return h.hexdigest()
@@ -323,12 +337,12 @@ INCBIN = re.compile(r'^\t\.incbin "original_ROMs/(\S+?)", (0x[0-9A-Fa-f]+), (0x[
 def source_lines(tag):
     path = dict((t, s) for t, s, _f, _b in IMAGES)[tag]
     lines = open(os.path.join(ROOT, path)).read().split("\n")
+    shared = dict(SHARED_SOURCES.get(tag, []))
     for rel in included_sources(path):
-        if tag in SHARED_SOURCES and rel == SHARED_SOURCES[tag][0]:
+        if rel in shared:
             continue          # appended below, with its address column selected
         lines += open(os.path.join(ROOT, rel)).read().split("\n")
-    if tag in SHARED_SOURCES:
-        rel, col = SHARED_SOURCES[tag]
+    for rel, col in SHARED_SOURCES.get(tag, []):
         for ln in open(os.path.join(ROOT, rel)).read().split("\n"):
             m = SHARED_ADDR.search(ln)
             if m:
@@ -651,6 +665,33 @@ def selftest():
               % (tag, hit, len(sample)), hit == len(sample))
         check("%s: the sample includes the LAST proven instruction (0x%06X)"
               % (tag, pl[-1]), pl[-1] in proven)
+
+    # ★★ EVERY SHARED SOURCE REACHES EVERY IMAGE THAT INCLUDES IT.  A shared
+    # file's lines carry BOTH addresses -- `; FB77D8/F55321` -- a shape SRC_LINE
+    # matches for neither, so a file this table does not know about is read as
+    # zero instructions and the image looks less converted than it is, silently.
+    # The check is per (image, shared file): at least one address from that
+    # file's own column must be in that image's proven set.
+    for tag, rels in SHARED_SOURCES.items():
+        proven, _ = proven_and_incbin(tag)
+        for rel, col in rels:
+            # ⚠ ONLY THE INSTRUCTION LINES.  A shared source carries data rows
+            # too -- kernel/kernel.s has three `.short`/`.long` slots with dual
+            # addresses -- and proven_and_incbin excludes a data directive on
+            # purpose, so a flat count of dual-address lines fails for the right
+            # behaviour.  The filter here is the same DATA_DIRECTIVE.
+            addrs = []
+            for ln in open(os.path.join(ROOT, rel)).read().split("\n"):
+                m = SHARED_ADDR.search(ln)
+                if not m:
+                    continue
+                conv = ln[:m.start()] + "; " + m.group(col) + " " + ln[m.end():]
+                mm = SRC_LINE.match(conv)
+                if mm and not DATA_DIRECTIVE.match(mm.group(1)):
+                    addrs.append(int(m.group(col), 16))
+            got = sum(1 for a in addrs if a in proven)
+            check("%s reaches %s: %d of %d instruction addresses proven"
+                  % (tag, rel, got, len(addrs)), addrs and got == len(addrs))
 
     # indirection is actually being followed
     sd = seeds("prom_b", CPU1)

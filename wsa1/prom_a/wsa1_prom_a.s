@@ -41153,53 +41153,17 @@ DisplayListPtrs_F99870:
 	.long 0x00f99f01                                 ; F999E4  [ 93]
 	.long 0x00f99f02                                 ; F999E8  [ 94]
 	.long 0x00f99f03                                 ; F999EC  [ 95]
-; ---------------------------------------------------------------------
-; LCD_ScreenRedraw_Begin -- blank the panel, re-issue SYSTEM SET, select layer 0
+; ------------------------------------------------------------------------------
+; 0xF999F0-0xF99A03 -- LCD_ScreenRedraw_Begin and LCD_ScreenRedraw_End
 ;
-; Called from: prom_a Paint_SysexBulkDump (`calr`) at 0xF99A25
-;          prom_a Paint_Sending (`calr`) at 0xF99B89
-;          prom_a Paint_SystemExclusivePleaseWait (`calr`) at 0xF99CA8
-;          prom_a Paint_GeneralMidiMode (`calr`) at 0xF99D3F
-; Issues:  SWI7 service 0x0C at 0xF999F4 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
-; Issues:  SWI7 service 0x10 at 0xF999F7 -- LCD_Svc_10_SetPanel3Layer, re-issue SYSTEM SET for a three-layer panel
-; Evidence: its four instructions before the `ret` are `ld C,0x00` + service 0x0C, then
-;           service 0x10, then `ld (0x2540),0x00`.  Service 0x0C REBUILDS the DISP ON
-;           byte from C, so C = 0 turns all three layers off and sets bit 0 of (0xC6),
-;           the driver's do-not-poll-BUSY flag; 0x10 re-issues SYSTEM SET for a
-;           three-layer panel; (0x2540) is the current-layer number.  It is called
-;           FIRST by every one of its callers and LCD_ScreenRedraw_End LAST by the same
-;           callers -- checked at all ten sites by --services.
-; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
-;          is blind to this name, --verify reads it back.
-; ---------------------------------------------------------------------
-LCD_ScreenRedraw_Begin:
-	ldb c, 0x00                                          ; F999F0  23 00
-	ldb a, 0x0c                                          ; F999F2  21 0c
-	swi 7                                                ; F999F4  ff
-	ldb a, 0x10                                          ; F999F5  21 10
-	swi 7                                                ; F999F7  ff
-	stdi8 (0x2540), 0x00                                 ; F999F8  f1 40 25 00 00
-	ret                                                  ; F999FD  0e
-; ---------------------------------------------------------------------
-; LCD_ScreenRedraw_End -- make all three layers visible again
-;
-; Called from: prom_a Paint_SysexBulkDump (`calr`) at 0xF99A4A
-;          prom_a Paint_Sending (`calr`) at 0xF99BE9
-;          prom_a Paint_SystemExclusivePleaseWait (`calr`) at 0xF99D08
-;          prom_a Paint_GeneralMidiMode (`calr`) at 0xF99DC2
-; Issues:  SWI7 service 0x0C at 0xF99A02 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
-; Evidence: `ld C,0x07` + `ld A,0x0C` + `swi 7` + `ret`, six bytes.  In service 0x0C's
-;           own documented convention C bits 0/1/2 select layers 1/2/3, so 0x07 is all
-;           three steady on, and a non-zero DISP byte also clears (0xC6) bit 0.  It is
-;           the LAST call of each of its four callers.
-; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
-;          is blind to this name, --verify reads it back.
-; ---------------------------------------------------------------------
-LCD_ScreenRedraw_End:
-	ldb c, 0x07                                          ; F999FE  23 07
-	ldb a, 0x0c                                          ; F99A00  21 0c
-	swi 7                                                ; F99A02  ff
-	ret                                                  ; F99A03  0e
+; ★ MOVED to maincpu/shared/lcd_screen_redraw.s, ONE SOURCE included at BOTH of its
+; sites: here and prom_b 0xF7E2D9.  The two copies are byte-identical,
+; every reference binds to the nearer of them, and the header that used to sit
+; here is in that file, verbatim, under a banner saying it came from this one.
+; Why the duplication exists at all -- and why the obvious explanation is wrong
+; -- is measured by `python3 notes/maincpu_join_probe.py --callers --nearest`.
+; ------------------------------------------------------------------------------
+	.include "maincpu/shared/lcd_screen_redraw.s"
 ; ---------------------------------------------------------------------
 ; Paint_SysexBulkDump -- paint the SYSEX BULK DUMP menu
 ;
@@ -83704,34 +83668,17 @@ sub_FB77C7:
 	jr lt, .LFB77CB                                      ; FB77D4  61 f5
 	popw hl                                              ; FB77D6  4b
 	ret                                                  ; FB77D7  0e
-; ---------------------------------------------------------------------
-; IndexedTable_GetPtr -- pointer n of the table whose base is the 32-bit
-;                        word at RAM 0x60F018
+; ------------------------------------------------------------------------------
+; 0xFB77D8-0xFB77F2 -- IndexedTable_GetPtr
 ;
-; Called from: 3 proven sites in prom_a.
-; Inputs:  (XIZ+8) = a 16-bit index.  Outputs: XIY = base[index].
-; ★ BORROWED NAME, WITH THE DIFF: prom_b 0xF55321 carries this name
-;          already, and the two routines are the same 27 bytes with
-;          **0 differing** -- ROM_A[0xFB77D8..0xFB77F2] ==
-;          ROM_B[0xF55321..0xF5533B].  Check N4 recomputes both the length
-;          and the differing count; a borrowed name with no diff behind it
-;          is exactly what this tree's rules forbid.
-; Unknown:  what the table holds and who writes (0x60F018) -- prom_b's
-;          header says the same, and this rename does not change that.
-; ---------------------------------------------------------------------
-IndexedTable_GetPtr:
-	link XIZ,0x0000                                      ; FB77D8  ee 0c 00 00
-	push XIX                                             ; FB77DC  3c
-	ldl_da xix, (0x60f018)                               ; FB77DD  e2 18 f0 60 24
-	ldb c, 0x04                                          ; FB77E2  23 04
-	m_mul MBD+r6, 0x08, 3                                ; FB77E4  8e 08 43
-	extz XBC                                             ; FB77E7  e9 12
-	add XBC,XIX                                          ; FB77E9  ec 81
-	ld XWA,(XBC)                                         ; FB77EB  a1 20
-	ld XIY,XWA                                           ; FB77ED  e8 8d
-	pop XIX                                              ; FB77EF  5c
-	unlk XIZ                                             ; FB77F0  ee 0d
-	ret                                                  ; FB77F2  0e
+; ★ MOVED to maincpu/shared/indexed_table.s, ONE SOURCE included at BOTH of its
+; sites: here and prom_b 0xF55321.  The two copies are byte-identical,
+; every reference binds to the nearer of them, and the header that used to sit
+; here is in that file, verbatim, under a banner saying it came from this one.
+; Why the duplication exists at all -- and why the obvious explanation is wrong
+; -- is measured by `python3 notes/maincpu_join_probe.py --callers --nearest`.
+; ------------------------------------------------------------------------------
+	.include "maincpu/shared/indexed_table.s"
 sub_FB77F3:
 	link XIZ,0xfff8                                      ; FB77F3  ee 0c f8 ff
 	pushw hl                                             ; FB77F7  2b
@@ -172347,4 +172294,11 @@ BUILD_TAG:
 	.byte 0x02
 	.ascii "ssf"
 	.byte 0x00, 0x00, 0x00, 0x00
-end:
+; ★ RENAMED 2026-08-30 from `end`.  It is an end-of-image marker -- the
+; address one past the last byte -- and nothing in this tree references it,
+; but prom_a and prom_b both called it `end` and they are ONE program in one
+; address space, so the joined listing had two labels of that name for two
+; different addresses.  Checked, not assumed: notes/maincpu_join_probe.py
+; --selftest asserts nothing uses the symbol and that it is the last thing in
+; each file.  ⚠ prom_c still spells it `end`; that image is another lane's.
+prom_a_image_end:

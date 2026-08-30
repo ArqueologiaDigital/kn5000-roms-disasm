@@ -92317,29 +92317,17 @@ List2030_Append4:
 	unlk XIZ	; F5531E  unlk XIZ
 	ret	; F55320  ret
 
-; ---------------------------------------------------------------------
-; IndexedTable_GetPtr -- pointer n of the table whose base is the word at
-;                        0x60F018
-; Called from: thunk T_IndexedTable_GetPtr (0xF42C8C), 45 opcode-anchored references
-; Inputs:  (XIZ+8) = 16-bit index
-; Outputs: XIY = the 32-bit pointer at base + 4*index
-; Evidence: `ld XIX,(0x60F018)` loads the base from RAM, `ld C,4 / mul BC,(XIZ+8)
-;           / extz XBC / add XBC,XIX / ld XWA,(XBC) / ld XIY,XWA`.
-; Unknown:  what the table holds and who writes 0x60F018.
-; ---------------------------------------------------------------------
-IndexedTable_GetPtr:
-	link XIZ,0x0000	; F55321  link XIZ,0x0000
-	push	xix	; F55325  push XIX
-	ldl_da	xix, (6352920)	; F55326  ld XIX,(0x60f018)
-	ldb	c, 4	; F5532B  ld C,0x04
-	m_mul MBD+r6, 0x08, 3	; F5532D  mul BC,(XIZ+0x08)
-	extz	xbc	; F55330  extz XBC
-	add	xbc, xix	; F55332  add XBC,XIX
-	ld	xwa, (xbc)	; F55334  ld XWA,(XBC)
-	ld	xiy, xwa	; F55336  ld XIY,XWA
-	pop	xix	; F55338  pop XIX
-	unlk XIZ	; F55339  unlk XIZ
-	ret	; F5533B  ret
+; ------------------------------------------------------------------------------
+; 0xF55321-0xF5533B -- IndexedTable_GetPtr
+;
+; ★ MOVED to maincpu/shared/indexed_table.s, ONE SOURCE included at BOTH of its
+; sites: here and prom_a 0xFB77D8.  The two copies are byte-identical,
+; every reference binds to the nearer of them, and the header that used to sit
+; here is in that file, verbatim, under a banner saying it came from this one.
+; Why the duplication exists at all -- and why the obvious explanation is wrong
+; -- is measured by `python3 notes/maincpu_join_probe.py --callers --nearest`.
+; ------------------------------------------------------------------------------
+	.include "maincpu/shared/indexed_table.s"
 
 ; ---------------------------------------------------------------------
 ; IndexedTable_GetByte -- byte m of pointer n of the same table
@@ -162967,47 +162955,17 @@ ButtonTable_SequencerMedley:
 
 	ret	; F7E2D8  ret
 
-; ---------------------------------------------------------------------
-; LCD_ScreenRedraw_Begin -- blank the panel, re-issue SYSTEM SET for three
-;                           layers, select layer 0 -- prom_b's own copy of
-;                           the prom_a routine of this name
+; ------------------------------------------------------------------------------
+; 0xF7E2D9-0xF7E2EC -- LCD_ScreenRedraw_Begin and LCD_ScreenRedraw_End
 ;
-; Called from: call from prom_b 0xF7E3F9; call from prom_b 0xF7E619; call
-;              from prom_a 0xF80265; calr from prom_b 0xF7E47B; calr from
-;              prom_b 0xF7E997; calr from prom_b 0xF7EAE6; and 10 more
-; Evidence: byte-identical to prom_a's LCD_ScreenRedraw_Begin (0xF999F0)
-;           over BOTH whole extents: 14 bytes here, 14 bytes there,
-;           differing in 0 of 14 positions. Each ends at its own `ret`, so
-;           this is not a prefix match. --selftest re-reads both from the
-;           ROM images and re-compares them.
-; ---------------------------------------------------------------------
-LCD_ScreenRedraw_Begin:
-	ldb	c, 0	; F7E2D9  ld C,0x00
-	ldb	a, 12	; F7E2DB  ld A,0x0c
-	swi	7	; F7E2DD  swi 7
-	ldb	a, 16	; F7E2DE  ld A,0x10
-	swi	7	; F7E2E0  swi 7
-	stdi8	(9536), 0	; F7E2E1  ld (0x2540),0x00
-	ret	; F7E2E6  ret
-
-; ---------------------------------------------------------------------
-; LCD_ScreenRedraw_End -- make all three layers visible again -- prom_b's
-;                         own copy of the prom_a routine of this name
-;
-; Called from: call from prom_b 0xF7E41C; call from prom_b 0xF7E675; call
-;              from prom_a 0xF802E7; call from prom_a 0xF80E96; calr from
-;              prom_b 0xF7E4A7; calr from prom_b 0xF7E4F5; and 12 more
-; Evidence: byte-identical to prom_a's LCD_ScreenRedraw_End (0xF999FE) over
-;           BOTH whole extents: 6 bytes here, 6 bytes there, differing in 0
-;           of 6 positions. Each ends at its own `ret`, so this is not a
-;           prefix match. --selftest re-reads both from the ROM images and
-;           re-compares them.
-; ---------------------------------------------------------------------
-LCD_ScreenRedraw_End:
-	ldb	c, 7	; F7E2E7  ld C,0x07
-	ldb	a, 12	; F7E2E9  ld A,0x0c
-	swi	7	; F7E2EB  swi 7
-	ret	; F7E2EC  ret
+; ★ MOVED to maincpu/shared/lcd_screen_redraw.s, ONE SOURCE included at BOTH of its
+; sites: here and prom_a 0xF999F0.  The two copies are byte-identical,
+; every reference binds to the nearer of them, and the header that used to sit
+; here is in that file, verbatim, under a banner saying it came from this one.
+; Why the duplication exists at all -- and why the obvious explanation is wrong
+; -- is measured by `python3 notes/maincpu_join_probe.py --callers --nearest`.
+; ------------------------------------------------------------------------------
+	.include "maincpu/shared/lcd_screen_redraw.s"
 
 ; Evidence: reached from call from prom_b 0xF7EEF4, and from nothing else
 ;           the scans see.
@@ -170506,4 +170464,11 @@ LcdKeyRow1_AdvanceDelay_207EZero:
 	bit	7, w	; F7FFFB  bit 0x07,W
 	jr	z, 25	; F7FFFE  jr Z,0xf80019
 
-end:
+; ★ RENAMED 2026-08-30 from `end`.  It is an end-of-image marker -- the
+; address one past the last byte -- and nothing in this tree references it,
+; but prom_a and prom_b both called it `end` and they are ONE program in one
+; address space, so the joined listing had two labels of that name for two
+; different addresses.  Checked, not assumed: notes/maincpu_join_probe.py
+; --selftest asserts nothing uses the symbol and that it is the last thing in
+; each file.  ⚠ prom_c still spells it `end`; that image is another lane's.
+prom_b_image_end:

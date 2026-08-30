@@ -23,6 +23,12 @@ PROMS = a b c d
 KERNEL_SRC = kernel/kernel.s kernel/kernel_maincpu.inc kernel/kernel_subcpu.inc
 COMMON_INC = include/tmp95c061_sfr.inc include/tlcs900_mem_ops.inc
 
+# The three routines prom_a and prom_b carry TWICE are one source each, included
+# at both sites -- the same arrangement KERNEL_SRC has one level up, where one
+# source serves two processors.  Both images must list them, for the reason the
+# comment above gives.
+MAINCPU_SHARED = maincpu/shared/indexed_table.s maincpu/shared/lcd_screen_redraw.s
+
 # prom_c is no longer one file: since the per-subject split it is a master
 # listing that `.include`s 26 subject sources in address order (the split, its
 # rationale and its preservation proof are notes/prom_c_split.py).  A WILDCARD
@@ -37,7 +43,7 @@ PROM_C_SRC = prom_c/wsa1_prom_c.s \
 
 all: rebuilt_ROMs/wsa1_prom_a.llvm.rom rebuilt_ROMs/wsa1_prom_b.llvm.rom rebuilt_ROMs/wsa1_prom_c.llvm.rom rebuilt_ROMs/wsa1_prom_d.llvm.rom
 
-rebuilt_ROMs/wsa1_prom_a.llvm.o: prom_a/wsa1_prom_a.s $(COMMON_INC) $(KERNEL_SRC)
+rebuilt_ROMs/wsa1_prom_a.llvm.o: prom_a/wsa1_prom_a.s $(COMMON_INC) $(KERNEL_SRC) $(MAINCPU_SHARED)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_a -o $@ $<
 
@@ -47,7 +53,7 @@ rebuilt_ROMs/wsa1_prom_a.llvm.elf: rebuilt_ROMs/wsa1_prom_a.llvm.o prom_a/prom_a
 rebuilt_ROMs/wsa1_prom_a.llvm.rom: rebuilt_ROMs/wsa1_prom_a.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_b.llvm.o: prom_b/wsa1_prom_b.s $(COMMON_INC)
+rebuilt_ROMs/wsa1_prom_b.llvm.o: prom_b/wsa1_prom_b.s $(COMMON_INC) $(MAINCPU_SHARED)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_b -o $@ $<
 
