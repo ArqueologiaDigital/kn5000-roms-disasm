@@ -1,128 +1,88 @@
 # SX-WSA1R disassembly — resume here
 
-**Wave 7 ran twelve rounds on 2026-08-28/30 and STOPPED AT THE USER'S INSTRUCTION, not because it
-finished.** Read this before starting anything.
+## ★★ THE COVERAGE GOAL IS MET: every reachable code path with start evidence is converted
 
----
+    python3 notes/reachability.py --targets
+    TOTAL reachable-and-unconverted: STRONG 17 bytes, ANY 1,670, in 17 spans.
 
-## Where it actually stands
+    python3 notes/reachability.py --evidence
+    prom_a  runs with start evidence: 1,541 bytes; WITHOUT: 87
+    prom_b  runs with start evidence:     0 bytes; WITHOUT: 80
+    prom_c  0 / 0
 
-    python3 scripts/analysis/assert_byte_identical.py      -> PASS, from a make clean
-    python3 scripts/analysis/source_coverage.py            -> 1,555,395 substantive (74.2%)
-    python3 notes/wave7_documentation_metrics.py           -> the goal metric
+**The 17 remaining STRONG bytes are a walk artefact and are formally refused.** They are
+`0xFA369A-0xFA36AB`, and reading them straight out of the ROM gives
+`44 20 47 52 4f 55 50 20 4e 41 4d 49 4e 47 17 0c 07` = `"D GROUP NAMING"` — the tail of a UI
+string. No seed of any grade names that address and no converted instruction falls through into it;
+the walk decoded its way in. Framing it emits `ld XIX,0x4f524720` **and the byte gate passes**,
+because the bytes do not change. A coverage brief told a lane to convert it; the lane refused and
+was right.
 
-  image      content   framed  sub_XXXX    LOWER    UPPER   headers  evidence  internal
-  prom_a       1,499      225     2,786    33.2%    38.2%     1,309     1,398       138
-  prom_b       1,257    2,950     1,899    20.6%    68.9%     3,423     3,413         2
-  prom_c         703      500       367    44.8%    76.6%     1,097       873     4,851
-  prom_d       3,430      235         0    93.6%   100.0%     2,228     2,086         0
-  TOTAL        6,889    3,910     5,052    43.5%    68.1%     8,057     7,770     4,991
+**The walk has reached a FIXPOINT.** Each conversion turns its own contents into seeds and can
+reveal more — round 1 revealed 499 bytes, round 2 revealed 38, and converting those 38 revealed
+**nothing**. That is what finished looks like for this goal.
 
-**Byte-matching is perfect and was green at every one of the ~25 commits.** Cross-referencing is
-done. **Documentation is 43.5% at the lower bound and that is the open half of the goal.**
+    at goal start   STRONG 17,558 bytes unconverted
+    now             STRONG      17 bytes, all of them refused with a derived reason
 
-★ LOWER and UPPER BRACKET the truth; neither alone is the answer. LOWER counts only names that say
-what a thing IS; UPPER counts a kind-plus-address as understood. The tree's one hand-graded sample
-landed at 28% of its UPPER figure.
+| image | STRONG reachable & unconverted |
+|---|---:|
+| prom_a | 17 (the refused string) |
+| prom_b | **0** |
+| prom_c | **0** |
 
+## The tool
 
-## ★★ THE COVERAGE GOAL'S REMAINING WORK IS 17,558 BYTES, NOT 107,371
+`notes/reachability.py` — recursive descent over the three code images, following the INDIRECT
+edges, which is where this machine keeps its control flow: the CPU vector table, the 1,910-slot
+routine directory (each slot a `jp imm24`), the entries of every framed pointer table, branch
+targets in converted code, and 32-bit immediates that land in an image.
 
-`python3 notes/reachability.py` follows every control-flow edge the machine can take, **including
-the indirect ones** — the CPU vector table, the 1,910-slot routine directory (each slot a
-`jp imm24`), the 2,104 entries of the pointer tables the tree has already framed, branch targets in
-converted code, and 32-bit immediates that land in an image. Result:
+    --targets    the work list, ranked by REACHABLE bytes, with a cumulative column
+    --evidence   per-run START evidence: convert the runs with it, refuse the ones without
+    --spans      per-span reachable counts        --seeds  seed classes
+    --selftest   11 checks
 
-    prom_a   reached 361,094 B | still .incbin 56,125 | ★ REACHABLE AND UNCONVERTED 10,169 (18.1%)
-    prom_b   reached 192,063 B | still .incbin 51,246 | ★ REACHABLE AND UNCONVERTED  7,389 (14.4%)
-    prom_c   reached 180,270 B | still .incbin      0 | ★ REACHABLE AND UNCONVERTED      0 (0.0%)
-    TOTAL still .incbin 107,371, of which REACHABLE CODE 17,558 (16.4%)
+★ **Seeds are GRADED, and it is the difference between code and painted data.** STRONG = a
+directory slot, a branch in decoded code, a hardware vector. WEAK = a 32-bit immediate or a `.long`
+entry, which are POINTERS, and a pointer is as likely to name a table as a routine. Convert on
+STRONG. The gap between the columns (17 vs 1,670) is the weak-seed artefact, measured.
 
-★ **prom_c is already at 100 % reachable coverage.** Its territory is complete AND execution reaches
-nothing in it that is unconverted.
+★ **A run start needs POSITIVE EVIDENCE**: a graded seed names it, or converted code falls through
+into it. `0xF961BD` is named by no seed and IS code, because the instruction at `0xF961B8` is five
+bytes and ends exactly there. `0xFA369A` has neither.
 
-★ **Only 16.4 % of what is still `.incbin` is reachable code.** The other 83.6 % is data or
-unreached, and converting it adds territory without adding coverage — which this wave demonstrated
-the expensive way: round 7 converted 9,175 bytes with ZERO call/jp references at any byte offset in
-any of the four images, and round 8's own splice added 96 unnamed routines for 11 content names.
+⚠ **A refusal can expire.** `--evidence` answers a question about the TREE, not a property of an
+address: `0xFDE75D` was listed unevidenced by a run that predated the splice of `0xFDE729`, whose
+`jr z` at `0xFDE72D` targets it exactly. Re-run after every conversion.
 
-⚠ "Unreached" is not "dead". The walk is a lower bound on reachability: an entry point nobody has
-framed yet — a jump table still inside an `.incbin`, a computed address — will not be followed, and
-converting a span can therefore REVEAL new reachable bytes. Re-run the tool after every conversion.
+⚠ **Editing the tool invalidates its own cache**, by design — the fingerprint covers the tool's
+source, because a walk is only as good as the code that made it. `--evidence` always re-walks; it
+needs the per-byte set, which the cache does not persist.
 
-## What is left, in order of size
+## What this goal did NOT do, on purpose
 
-* **prom_b: 51,246 bytes still `.incbin`** across 117 spans, plus 1,899 `sub_XXXXXX` and 2,950
-  framed. It is the whole remaining territory frontier.
-* **prom_a: 2,786 `sub_XXXXXX`**, the largest block of unnamed routines. It moved ~0.7 points a
-  round for five rounds; that rate does not finish it, and THE CENSUS DELIVERABLE IS STILL OWED —
-  a complete mechanical classification of all 2,786 with the bucket sizes published INCLUDING the
-  last one ("N have no distinguishing evidence of any kind, and this script decides that").
-* **prom_c: 367 `sub_XXXXXX` + 500 framed, and it is INVENTORIED** —
-  `notes/prom_c_finish_round12.py` classifies all 867 non-content objects by which mechanism fires.
-  ★ All 367 remaining `sub_XXXXXX` carry a header AND an Evidence line, which no other image can
-  say. Its lower bound is now structurally capped: on 70 of the 192 objects a mechanism reaches,
-  what separates the object from a >=90%-identical sibling is an IMMEDIATE, and round 11's test
-  says such a number is not a name.
-* **prom_d: 235 framed, zero `sub_XXXXXX`, 93.6%.** Closest to done.
+**Semantics.** Every label this goal added is a bare `sub_XXXXXX` with a start-evidence line and no
+claim about what the routine does. The documentation metric
+(`python3 notes/wave7_documentation_metrics.py`) is the measure for that work, and it is a separate
+goal.
 
-## The mechanism that works, and the two rules around it
+**Existing prose was never touched, and it was verified rather than assumed.** Round 1's prom_a
+diff is 3,782 insertions and FIVE deletions, all five `.incbin` directives; round 2's is 190 and
+THREE. Both verified independently by a reviewer. The method is why: each span is cut into maximal
+runs of reachable bytes, runs become instructions, gaps stay `.incbin` narrowed — so a diff is
+proportional to coverage gained and cannot reach an already-converted line.
 
-    NAME AN OBJECT FROM WHAT IT CONTAINS, FROM WHAT READS IT, OR (for a pointer) FROM WHAT IT
-    POINTS AT -- and where none of those reaches, sub_XXXXXX or framed WITH A STATED GAP.
+## What is left, for a future goal
 
-* ★ **A number belongs in a name only when it has a referent OUTSIDE the code.** `SoftKeyCol1`
-  passes (the manual prints "SOFT KEY col 1 lower"); `Dispatch_F54248_Arm3` does not. The reasoning
-  is in `notes/wave7-round1/APPLIED.md`.
-* ★ **Converting data LOWERS understanding.** Round 7's splice added 122 labels, all framed, and
-  prom_b's LOWER fell. Convert where a span unlocks NAMES, not to move coverage.
-
-## The panel chain, solved end to end — the wave's main structural result
-
-* **Layer 1 (wire):** segment = switch-matrix COLUMN, bit = ROW, `SW = 8*segment + bit + 1`, all 58
-  fitted switches. Read off **page 32 of the service manual**, which has NO TEXT LAYER and must be
-  read as images. `notes/wave7_panel_button_codes.py --physical`, 31/31.
-* **Layer 2 (event):** ROM TABLES, not a computation — `PanelGroupEventLists_Variant1/2`, four-byte
-  `[class][code][shift][mask]` records. `notes/wave7_panel_event_index.py`, 70/70.
-* **The SX-WSA1R is VARIANT 2**, proved three independent ways. All three holes round 10 left open
-  were symptoms of reading variant 1 against it. `notes/wave7_panel_names_round11.py`, 93/93.
-* ⚠ **TWO TABLE FAMILIES, TWO INDEX RULES.** The 32-entry prom_b button tables index on the RAW
-  code via prom_a `sub_F8BDC5`. `sub_F55019`'s 23-slot remap belongs to prom_a's four 23-entry
-  tables. A round-11 briefing welded them into one chain and was wrong.
-
-## Still open, with the shortest path named
-
-* **Nobody produces code 0x0E**, and round 10's hypothesis (the seven appenders) is ELIMINATED.
-  What is not covered: an event record built byte by byte rather than by an immediate.
-* **The 374 P7Stream_* pool objects** need a payload decoder or an outside document — NOT the
-  directory, whose descriptor pair is a field LAYOUT, not a name.
-* **prom_d's base address.** `prom_d.ld` argues ORIGIN 0 is a decision, not an admission. ⚠ Do not
-  change it on an inference.
-* **PB.0 strap:** the variant identification is a contrapositive. Felipe owns real hardware;
-  measuring PB bit 0 on a WSA1R main board would turn four converging inferences into a
-  measurement.
-
-## ⚠ Process failures this wave, so they are not repeated
-
-* **I assigned two lanes to prom_c in round 12.** The file-disjointness rule exists because each
-  image is one multi-MB `.s`. The lane detected the collision and reported it; both survived by
-  luck. Check the lane list against the file list before launching.
-* **The documentation metric was wrong FIVE times** — it counted framing as understanding, counted
-  4,975 jump targets as debt, counted 168 descriptive branch labels as content, had a check pinned
-  to a number meant to move, and measured whitespace. Three of the five made the tree look better
-  than it is. `notes/wave7_documentation_metrics.py --selftest` is 37 checks.
-* **A hand-edit to `prom_d/wsa1_prom_d.s` is silently reverted** — it is GENERATED. Every prose
-  change goes in `scripts/analysis/gen_prom_d_asm.py`, and prefer DERIVING a claim over asserting
-  it.
-
-## The rule that has not changed
-
-**The gate is the only thing that certifies this tree, and it is blind to every name and header in
-it.** Every quantified claim needs a committed script, tested on the LAST element as well as the
-first. Every semantic name needs an `Evidence:` line. **Prefer `sub_XXXXXX` plus a stated gap over
-a plausible guess** — and a MEASURED REFUSAL is a first-class deliverable. Three of them paid off
-directly this wave: round 9's refusal to guess layer 2 is what let round 10 solve it, and round
-10's three written-down holes are what let round 11 see they were one error.
+* **167 bytes with no start evidence** (prom_a 87, prom_b 80) — refuse unless evidence appears.
+* **~1,670 bytes reachable only from WEAK seeds** — pointer-table and immediate artefacts. Each
+  would need a byte-level audit before conversion; round 1 framed 701 of them as instructions and
+  the gate passed.
+* **~105,000 bytes of `.incbin` that nothing reaches** — data. Converting it adds territory and
+  zero coverage.
+* **The documentation half**: 43.5% of the tree is understood at the lower bound, 5,052 routines
+  are still `sub_XXXXXX`. See the wave-7 sections below.
 
 ## The one rule that matters
 

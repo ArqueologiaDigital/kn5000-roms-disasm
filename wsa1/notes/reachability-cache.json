@@ -1,14 +1,6 @@
 [
  {
   "image": "prom_a",
-  "lo": 16639785,
-  "hi": 16646144,
-  "size": 6359,
-  "reachable_strong": 38,
-  "reachable_any": 38
- },
- {
-  "image": "prom_a",
   "lo": 16389580,
   "hi": 16405504,
   "size": 15924,
