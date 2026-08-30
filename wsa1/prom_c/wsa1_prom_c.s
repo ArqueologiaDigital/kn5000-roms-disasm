@@ -238,6 +238,31 @@
 ; one- and two-instruction vector stubs carrying a single Evidence line each.  The one
 ; that carried none, IRQ_INTTC2, has one as of this round.
 ; ==============================================================================
+; ★ THIS FILE IS NO LONGER THE WHOLE IMAGE -- READ THIS BEFORE GREPPING IT
+; ==============================================================================
+; Since 2026-08-30, 125,264 of these 127,731 lines live in 26 PER-SUBJECT
+; SOURCES under prom_c/, and this file `.include`s them IN ADDRESS ORDER.  The
+; include list below is therefore also the image's table of contents.
+;
+;   ⚠ prom_c has no `.org` and one section, so EMISSION ORDER IS ADDRESS ORDER.
+;     Every extracted file is a CONTIGUOUS RANGE included at the line it started
+;     on; reordering one would move code, and TLCS-900 `jr` has a short reach.
+;     The byte gate is what would catch it.
+;
+;   ⚠ A TOOL THAT OPENS THIS FILE AND SCANS IT NOW SEES 2% OF THE IMAGE.
+;     Follow the `.include`s -- notes/asm_source.py exists for exactly that, and
+;     notes/reachability.py and scripts/analysis/source_coverage.py do it.
+;
+;   The split, its per-file rationale and its preservation proof:
+;       python3 notes/prom_c_split.py --plan
+;       python3 notes/prom_c_split.py --verify    <- no line lost, moved or reworded
+;
+; ★ WHAT STAYED HERE, AND WHY.  This header, which is about the whole image; and
+;   0xFABE30-0xFACE66, 23 routines whose banner is a census with no title, 105 of
+;   whose 118 labels are sub_XXXXXX, and whose callers are a mix.  Nothing there
+;   names a subject, so nothing there was given one.  A smaller honest split
+;   beats a complete dishonest one.
+; ==============================================================================
 
 	.include "include/tmp95c061_sfr.inc"
 

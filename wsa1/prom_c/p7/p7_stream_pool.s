@@ -18,6 +18,17 @@
 ; Framing proved four ways; NO STREAM'S MEANING IS NAMED, and this move does
 ; not change that.  It sits under p7/ beside the code that plays it.
 ;
+; ★ SINCE THIS FILE WAS EXTRACTED, ONE THING HERE HAS BEEN NAMED.  A P7 unit's
+;   PROGRAM 0..127 is a DSP EFFECT NUMBER: prom_b's EffectNames_F147AC is its
+;   name table (127 of 128 slots agree, 56 names onto 56 distinct records), and
+;   program 5 -> PHASER -> record 9 -> the stream at 0xFD7764, which is
+;   byte-identical to the KN5000's DSP_Eff05_Coef_Bytecode.  So a "unit" is an
+;   EFFECT SLOT and a P7Stream is DSP effect data.
+;       python3 notes/prom_c_p7_program_is_effect.py
+;       notes/FINDINGS-prom_c-p7-is-dsp-effects.md
+;   ⚠ NO LABEL BELOW IS RENAMED.  572 P7* labels is a bulk rename and belongs in
+;     its own pass; the proposed mapping is in the note.
+;
 ; >>> END OF EXTRACTION HEADER -- everything below is verbatim from the master
 
 ; ==============================================================================
