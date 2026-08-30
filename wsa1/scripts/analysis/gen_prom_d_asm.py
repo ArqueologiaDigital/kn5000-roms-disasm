@@ -2598,6 +2598,13 @@ def chain_hdr(slot):
     n = len(rows)
     e6 = sum(1 for r in rows.values() if r["esize"] == 6)
     e8 = n - e6
+    # ⚠ P5.  The tag is TWO bits, not one -- prom_c tests bit 6 before bit 7.
+    # These counts are what makes the one-bit reading correct FOR THIS BLOCK, so
+    # they are derived here rather than asserted in the prose.
+    _tags = [r[0] for r in DESC[slot][2]]
+    _b6set = sum(1 for t in _tags if t & 0x40)
+    _b6clear = len(_tags) - _b6set
+    _odd = next(((i, t) for i, t in enumerate(_tags) if not t & 0x40), None)
     lines = [
         "",
         "★ THE INDEX CHAIN -- what the two pool objects per descriptor ARE.",
@@ -2644,12 +2651,73 @@ def chain_hdr(slot):
         "           scores %d of %d too.  A criterion that cannot fail is not a" % (n, n),
         "           pass.  Stated, not hidden." ] if _amax == 0 else []) + [
         "",
-        "and the element SIZE is the descriptor's own tag bit 7: 6 bytes when it is",
-        "clear (%d records here) and 8 when it is set (%d)." % (e6, e8),
-        "⚠ ../kn5000-roms-disasm's note on the same field states the OPPOSITE",
-        "polarity.  It is measured here, not borrowed: with the polarity inverted",
-        "JOIN 2 holds for 0 of 318 records at slot +0x30, and with the size forced",
-        "to a single value for 187 or 131 of 318.  Nulls in round 4 Q5.",
+        "and the element SIZE is read out of the descriptor's own tag.  In THIS",
+        "block that is bit 7 -- 6 bytes when it is clear (%d records here) and 8"
+        % e6,
+        "when it is set (%d).  ⚠ BUT THAT IS ONE ROW OF A TWO-BIT TABLE, and this"
+        % e8,
+        "block only ever shows the one row.",
+        "",
+        "★ WHAT prom_c ACTUALLY DOES -- ⚠ NEW, AND IT CORRECTS A SENTENCE THAT",
+        "STOOD HERE.  Voice_SelectKeyZone_Reg0040 loads the tag at 0xFA81F6",
+        "`ld H,(XBC)` and tests BIT 6 FIRST (0xFA81FA `and W,0x40`, 0xFA81FF",
+        "`jr Z`), and only then bit 7 -- once on each arm, 0xFA8203 and 0xFA821C,",
+        "both `and D,0x80`.  The four arms call four routines that are",
+        "byte-identical over their first 0x1C bytes except ONE operand, the",
+        "`ld C,#N` at +0x0A:",
+        "",
+        "      tag bit6  bit7    routine     element size",
+        "         1        1     0xFA7467          8",
+        "         1        0     0xFA74AB          6",
+        "         0        1     0xFA74ED          6",
+        "         0        0     0xFA752F          4",
+        "",
+        "and bit 6 is SET in %d of the %d descriptors here, which is the whole"
+        % (_b6set, n),
+        "reason bit 7 alone describes this block.",
+        "",
+        "⚠ SO THE KN5000'S NOTE IS NOT AN OPPOSITE POLARITY.  What stood here read",
+        "`⚠ ../kn5000-roms-disasm's note on the same field states the OPPOSITE",
+        "polarity.  It is measured here, not borrowed`, and it reported a MISSING",
+        "VARIABLE as a contradiction.  That tree says `bit 7 set -> 6, clear -> 4`",
+        "and GUARDS it with `bit 6 is clear in every record here` -- and it is: 0 of",
+        "its 487 descriptors have bit 6 set, against %d of %d here.  Its sub-CPU"
+        % (_b6set, n),
+        "routine WaveSel_StageB_Build_Reg040 (0x023893) tests bit 6, then bit 7,",
+        "then bit 5, and its bit-6-CLEAR arm is the WSA1's exactly.  Two",
+        "populations on opposite sides of bit 6; one table; neither measurement",
+        "wrong.  The KN5000 tree is NOT corrected, because it is not wrong.",
+        "",
+        "★ AND THE COUNTER-EXAMPLE WAS ALREADY IN THIS FILE.  Slot +0x70's banner",
+        "refuses the bit-7 rule because `tag 0x92 has bit 7 SET yet every object is",
+        "a multiple of 6`.  0x92 has bit 6 CLEAR, so the two-bit table predicts 6:",
+        "the refusal was right and what it refused was the incomplete rule.  Both",
+        "machines' +0x70 descriptors carry that same 0x92.",
+        "",
+    ] + ([
+        "⚠ THE SIZES EMITTED BELOW ARE STILL BIT 7's, and that is deliberate.  It",
+        "is what this block's part-B LENGTHS say: JOIN 2 holds %d of %d with them"
+        % (n, n),
+        "and %d of %d with the two-bit rule.  The one record that separates them is"
+        % (n - _b6clear, n),
+        "descriptor %d, tag 0x%02X -- the only one here with bit 6 clear.  Its pool"
+        % _odd,
+        "object is 8 bytes and part A gives ONE element, so a 6-byte element would",
+        "leave 2 bytes of slack, and a pool measured by DISTANCE TO THE NEXT OBJECT",
+        "cannot see slack.  With one element the stride is multiplied by zero, so",
+        "both readings address the SAME bytes at run time.  Nothing in this image",
+        "separates them and neither is asserted over the other.",
+    ] if _odd else [
+        "⚠ HERE THE TWO READINGS CANNOT DISAGREE: bit 6 is set in all %d records," % n,
+        "so the one-bit and the two-bit rule return the same size for every one of",
+        "them, and this block is no evidence either way.  Said so it is not read as",
+        "a confirmation.",
+    ]) + [
+        "",
+        "Evidence: every instruction quoted above re-decodes from prom_c's ROM at",
+        "the address cited; the four-way table, both machines' tag censuses and the",
+        "KN5000's own dispatch are re-derived by notes/prom_d_desc_tag_bit67.py",
+        "(13 checks, 7 controls).",
         "",
         "⚠ WHAT THIS DOES NOT SAY: what an element MEANS (no byte inside one is",
         "identified), and that the curve's index is a MIDI note -- %d entries is" % CURVE_STRIDE,

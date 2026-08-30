@@ -140,9 +140,32 @@ def elem_size(tag):
     are multiples of ONE of the two and not the other, so the split is real and
     not an artefact of 12 dividing both.  The 6-vs-8 refinement is Q1b: with 8,
     the element count equals max(part A)+1 in all 131.
-    ⚠ ../kn5000-roms-disasm's note on the same field states the OPPOSITE
-    polarity (bit7 set -> 6).  The polarity is therefore NOT transferable; this
-    one is measured here.
+    ⚠ CORRECTED.  This docstring used to end "../kn5000-roms-disasm's note on
+    the same field states the OPPOSITE polarity (bit7 set -> 6).  The polarity is
+    therefore NOT transferable; this one is measured here."  That reported a
+    MISSING VARIABLE as a contradiction and is withdrawn.
+
+    THE TAG IS TWO BITS.  prom_c's Voice_SelectKeyZone_Reg0040 tests BIT 6 first
+    (0xFA81FA `and W,0x40`) and bit 7 only afterwards, on both arms, and calls
+    four routines that differ in one operand byte:
+
+        bit6 bit7 -> size      1,1 -> 8    1,0 -> 6    0,1 -> 6    0,0 -> 4
+
+    Bit 6 is SET in 317 of the 318 descriptors at slot +0x30 and in all 161 at
+    +0x38, which is why bit 7 alone describes THIS image; it is CLEAR in all 487
+    of the KN5000's, which is why bit 7 alone describes that one, with the
+    opposite-looking polarity.  Two rows of one table, and the KN5000's note
+    already guards itself with "bit 6 is clear in every record here".
+
+    ⚠ AND THIS FUNCTION IS DELIBERATELY NOT CHANGED to the two-bit rule.  What it
+    returns is what this image's part-B LENGTHS say, and JOIN 2 holds 318/318
+    with bit 7 alone against 317/318 with the two bits.  The single record that
+    separates them is descriptor 238 (tag 0xBF, the only one here with bit 6
+    clear): one element in an 8-byte pool object, so a 6-byte element would leave
+    2 bytes of slack that a pool measured by distance-to-next cannot see, and
+    with one element the stride is multiplied by zero.  Nothing in the image
+    separates the two readings.  notes/prom_d_desc_tag_bit67.py has the whole
+    argument, both machines' censuses and the controls.
     """
     return 8 if (tag >> 7) & 1 else 6
 
