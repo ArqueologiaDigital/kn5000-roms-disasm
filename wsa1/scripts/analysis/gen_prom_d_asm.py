@@ -444,6 +444,48 @@ CENSUS_SLOTS = len({h[2] for h in _R3.ALL_HITS})
 CENSUS_CHECKS = _R3.NCHECK[0]
 
 
+# ---------------------------------------------------------------------------
+# ★ SLOTS THE CENSUS CANNOT SEE, AND WHERE THEIR READER ACTUALLY IS.
+#
+# ⚠ THIS TABLE CORRECTS A SENTENCE THAT STOOD ON TWELVE BANNERS.  They read
+# "⚠ Readers: NONE FOUND ... NOTHING in the WSA1 firmware confirms it", which
+# turned round 3's own stated LOWER BOUND into an absence.  prom_c parks the base
+# in a frame slot -- `ld (XIZ+0xF6),XWA` at 0xFB4616, three instructions after
+# `ld XWA,(0x00D7F1)` at 0xFB4611 -- and reads six directory slots back through
+# it.  Round 3's walk stops at the store, by design, so those six reads were
+# never in the census and never could be.
+#
+# ⚠ THE CENSUS IS NOT CHANGED and neither is the provenance grade that rests on
+# it: 99 reads over 33 slots is what THAT instrument measures, and re-scoping it
+# is a round of its own.  What is corrected here is the SENTENCE, which claimed
+# more than the instrument could support.  Every citation below re-decodes from
+# prom_c's ROM bytes and is re-derived by notes/prom_d_desc_tag_bit67.py Q3.
+PARKED_READER = {
+    0x24: ["★ BUT A READER EXISTS OUTSIDE IT.  prom_c parks the base with",
+           "`ld (XIZ+0xF6),XWA` at 0xFB4616 and reads this slot through the frame",
+           "slot: `ld XWA,(XBC+0x24)` at 0xFB4668, feeding the tone-index lookup",
+           "that produces a descriptor pointer.  The KN5000 name is no longer",
+           "unconfirmed-by-everything, though the FIELD meanings still are."],
+    0x28: ["★ BUT A READER EXISTS OUTSIDE IT: `ld XWA,(XBC+0x28)` at 0xFB46B3,",
+           "through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616."],
+    0x2C: ["★ BUT A READER EXISTS OUTSIDE IT: `ld XWA,(XBC+0x2C)` at 0xFB468C,",
+           "through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616."],
+    0x30: ["★ BUT A READER EXISTS OUTSIDE IT, and it is this block's: prom_c",
+           "reads the slot with `ld XIY,(XBC+0x30)` at 0xFB466E through the base",
+           "parked by `ld (XIZ+0xF6),XWA` at 0xFB4616, multiplies an index-map",
+           "entry by the stride word with `mul XWA,(XIZ+0xEC)` at 0xFB46EB, adds",
+           "the array and then the base, and hands the result to",
+           "Voice_SelectKeyZone_Reg0040, which dereferences the descriptor's tag",
+           "with `ld H,(XBC)` at 0xFA81F6.  So this block IS read, and the",
+           "KN5000 name is corroborated rather than merely transplanted."],
+    0x34: ["★ BUT A READER EXISTS OUTSIDE IT: `ld XIY,(XBC+0x34)` at 0xFB46B9,",
+           "through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616."],
+    0x38: ["★ BUT A READER EXISTS OUTSIDE IT: `ld XIY,(XBC+0x38)` at 0xFB4692,",
+           "through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616, with the",
+           "stride taken from +0xF2 by `ld WA,(XBC+0x00F2)` at 0xFB469D."],
+}
+
+
 def ev_slot(slot, extra=()):
     """Evidence: lines for a directory slot -- or an honest statement of none.
 
@@ -454,15 +496,16 @@ def ev_slot(slot, extra=()):
     sites = _R3.readers(slot)
     if not sites:
         return ["",
-                "⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks",
-                "every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)",
-                "in prom_c and every directory slot read through it -- %d reads over"
+                "⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py",
+                "walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /",
+                "0x00D7F1) in prom_c and every directory slot read through it -- %d"
                 % CENSUS_N,
-                "%d slots -- and directory slot +0x%02X is not among them.  So this"
+                "reads over %d slots -- and directory slot +0x%02X is not among them."
                 % (CENSUS_SLOTS, slot),
-                "region's NAME is still the KN5000 transplant and NOTHING in the WSA1",
-                "firmware confirms it.  (The census is a LOWER BOUND: it does not",
-                "follow a base parked in a frame slot.)"] + list(extra)
+                "The census is a LOWER BOUND: by its own rule it does not follow a",
+                "base parked in a frame slot."] + PARKED_READER.get(slot, [
+                "So this region's NAME is still the KN5000 transplant and NOTHING in",
+                "the WSA1 firmware confirms it."]) + list(extra)
     first = sites[0]
     breg = _R3.RSEQ[_R3.C[first[0] - _R3.PROM_C_BASE + 4] & 7]
     alias = [h for h in sites if h[2] != slot]

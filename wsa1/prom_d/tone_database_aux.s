@@ -261,13 +261,14 @@ PercInst_Template_Silent:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x0C is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x0C is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; So this region's NAME is still the KN5000 transplant and NOTHING in
+; the WSA1 firmware confirms it.
 ; ==========================================================================
 ToneDB_ToneIndexMapA:
 	.short 0x0015, 0x0016, 0x0015, 0x00CF, 0x00D4, 0x00D2, 0x00D8, 0x0021	; 1C965  [0]
@@ -417,13 +418,14 @@ ToneDB_ToneIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x10 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x10 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; So this region's NAME is still the KN5000 transplant and NOTHING in
+; the WSA1 firmware confirms it.
 ; ==========================================================================
 ToneDB_ToneIndexMapB:
 	.short 0x0055, 0x0055, 0x0056, 0x0055, 0x0056, 0x00FE, 0x0100, 0x00FB	; 1D165  [0]
@@ -577,13 +579,14 @@ ToneDB_ToneIndexMapB:
 ; count 322 is fixed at BOTH ends and is not a stride guess.  43 is the
 ; directory's own word at +0xEA, and prom_c reads that word at 11 sites.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x18 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x18 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; So this region's NAME is still the KN5000 transplant and NOTHING in
+; the WSA1 firmware confirms it.
 ; 
 ; ⚠ NO reader was found for THIS array.  What follows is about the
 ; array at slot +0x3C, which has the same record shape, and is quoted
@@ -6446,13 +6449,17 @@ ToneDB_WaveSelTailPresets_063:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x24 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x24 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; ★ BUT A READER EXISTS OUTSIDE IT.  prom_c parks the base with
+; `ld (XIZ+0xF6),XWA` at 0xFB4616 and reads this slot through the frame
+; slot: `ld XWA,(XBC+0x24)` at 0xFB4668, feeding the tone-index lookup
+; that produces a descriptor pointer.  The KN5000 name is no longer
+; unconfirmed-by-everything, though the FIELD meanings still are.
 ; ==========================================================================
 ToneDB_ToneIndexMapC:
 	.short 0x0005, 0x0017, 0x0005, 0x00D0, 0x00D5, 0x00D3, 0x00D9, 0x0022	; 21A3B  [0]
@@ -6608,13 +6615,14 @@ ToneDB_ToneIndexMapC:
 ; for the reason this header used to give.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x28 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x28 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; ★ BUT A READER EXISTS OUTSIDE IT: `ld XWA,(XBC+0x28)` at 0xFB46B3,
+; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616.
 ; ==========================================================================
 ToneDB_ToneIndexMapD:
 	.short 0x0056, 0x0056, 0x0057, 0x0056, 0x0057, 0x00FF, 0x0101, 0x00FC	; 2223B  [0]
@@ -7067,13 +7075,20 @@ ToneDB_DescCurve_Step1:
 ; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
 ; this emitter refuses to run without.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x30 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x30 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; ★ BUT A READER EXISTS OUTSIDE IT, and it is this block's: prom_c
+; reads the slot with `ld XIY,(XBC+0x30)` at 0xFB466E through the base
+; parked by `ld (XIZ+0xF6),XWA` at 0xFB4616, multiplies an index-map
+; entry by the stride word with `mul XWA,(XIZ+0xEC)` at 0xFB46EB, adds
+; the array and then the base, and hands the result to
+; Voice_SelectKeyZone_Reg0040, which dereferences the descriptor's tag
+; with `ld H,(XBC)` at 0xFA81F6.  So this block IS read, and the
+; KN5000 name is corroborated rather than merely transplanted.
 ; 
 ; ⚠ No reader was found for THIS block.  What round 3 adds is indirect and
 ; is stated as such: the stride word this block uses (directory +0xEC = 14)
@@ -18953,13 +18968,14 @@ DrumKit_NoteMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x14 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x14 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; So this region's NAME is still the KN5000 transplant and NOTHING in
+; the WSA1 firmware confirms it.
 ; ==========================================================================
 ToneDB_PercSourceIndexMapA:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x000B	; 2DF5C  [0]
@@ -19109,13 +19125,14 @@ ToneDB_PercSourceIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x2C is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x2C is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; ★ BUT A READER EXISTS OUTSIDE IT: `ld XWA,(XBC+0x2C)` at 0xFB468C,
+; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616.
 ; ==========================================================================
 ToneDB_DrumToneIndexMap:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 2E75C  [0]
@@ -28397,13 +28414,14 @@ PercInst_503_SlapShot:
 ; count 208 is fixed at BOTH ends and is not a stride guess.  43 is the
 ; directory's own word at +0xF0, and prom_c reads that word at 8 sites.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x20 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x20 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; So this region's NAME is still the KN5000 transplant and NOTHING in
+; the WSA1 firmware confirms it.
 ; 
 ; ⚠ NO reader was found for THIS array.  What follows is about the
 ; array at slot +0x3C, which has the same record shape, and is quoted
@@ -32853,13 +32871,15 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
 ; this emitter refuses to run without.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x38 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x38 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; ★ BUT A READER EXISTS OUTSIDE IT: `ld XIY,(XBC+0x38)` at 0xFB4692,
+; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616, with the
+; stride taken from +0xF2 by `ld WA,(XBC+0x00F2)` at 0xFB469D.
 ; 
 ; ⚠ No reader was found for THIS block.  What round 3 adds is indirect and
 ; is stated as such: the stride word this block uses (directory +0xF2 = 14)
@@ -36622,13 +36642,14 @@ ToneDB_SourceIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x48 is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x48 is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; So this region's NAME is still the KN5000 transplant and NOTHING in
+; the WSA1 firmware confirms it.
 ; ==========================================================================
 ToneDB_SourceIndexMapB:
 	.short 0x00B6, 0x00B6, 0x00B7, 0x00B7, 0x00B7, 0x00BB, 0x00BD, 0x00B8	; 4889A  [0]
@@ -37630,13 +37651,14 @@ ToneDB_SourceIndexMapC:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE FOUND.  notes/prom_d_documentation_round3.py walks
-; every load of prom_d's base (0x00F00000, RAM 0x00D7ED / 0x00D7F1)
-; in prom_c and every directory slot read through it -- 99 reads over
-; 33 slots -- and directory slot +0x5C is not among them.  So this
-; region's NAME is still the KN5000 transplant and NOTHING in the WSA1
-; firmware confirms it.  (The census is a LOWER BOUND: it does not
-; follow a base parked in a frame slot.)
+; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
+; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
+; 0x00D7F1) in prom_c and every directory slot read through it -- 99
+; reads over 33 slots -- and directory slot +0x5C is not among them.
+; The census is a LOWER BOUND: by its own rule it does not follow a
+; base parked in a frame slot.
+; So this region's NAME is still the KN5000 transplant and NOTHING in
+; the WSA1 firmware confirms it.
 ; ==========================================================================
 ToneDB_SourceIndexMapD:
 	.short 0x00BD, 0x00BD, 0x00BE, 0x00BE, 0x00BE, 0x00C2, 0x00C4, 0x00BF	; 4AC4C  [0]
