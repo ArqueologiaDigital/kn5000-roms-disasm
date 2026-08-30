@@ -15,6 +15,7 @@ python3 scripts/analysis/misframe_reframe_evidence.py --selftest
 python3 scripts/analysis/reachability_refusal_evidence.py   # updated: 3 surviving runs
 python3 scripts/analysis/address_line_map.py 0xED1BAA       # which line owns an address
 python3 scripts/analysis/emit_rom_data_lines.py --selftest  # the .s text generator
+python3 scripts/analysis/code_vs_data_delta.py 8b3d510 HEAD # the 1,753-byte figure
 ```
 
 ## The numbers
@@ -30,8 +31,17 @@ The three survivors are B2's runs 5, 6 and 7, all in
 `ui_widgets/control_menu_screens.s`. Their namers are in a file this lane did
 not touch; they remain correctly REFUSED.
 
-Bytes moved from CODE territory to DATA: **2,003**. Bytes moved the other way:
-**14** — see the correction below. Not one ROM byte changed.
+Bytes moved from CODE territory to DATA: **1,753 net** — 1,767 out, and 14 back
+the other way (see the correction at site 2). Measured, not counted by hand:
+
+```
+python3 scripts/analysis/code_vs_data_delta.py 8b3d510 HEAD
+  8b3d510  code 1,003,078  data 1,019,364  pad 74,710
+  HEAD     code 1,001,325  data 1,021,116  pad 74,711
+```
+
+code + data + pad closes on 2,097,152 at both revisions. **Not one ROM byte
+changed** — `assert_byte_identical.py` is green throughout.
 
 ## Site 1 -- `0xED1BA6..0xED1BEC`, `extensions/extension_data.s`
 
@@ -159,9 +169,12 @@ this lane did four times. The survey is the work list for whoever takes that on.
 * **The 43 `\.byte 0xNN / ldb w,0 / swi 7` triples in `extension_data.s`** are
   `aligned_string "X "` note-name strings misframed the same way -- the sibling
   `SplitNoteStr_F: aligned_string "F "` spells the identical four bytes
-  correctly. Converted the ones inside site 1's span; the rest are listed here
-  and left, because they seed nothing and the diff would be 120 lines of pure
-  churn in a file another lane may be reading.
+  correctly. **All 43 were left alone** -- they seed nothing, so they cost the
+  reachability metric nothing, and the diff is 120 lines of churn in a file
+  another lane may be reading. They are recorded here as the next cheap win:
+  each triple `.byte 0xNN / ldb w,0 / swi 7` is exactly `aligned_string "X "`,
+  four bytes `NN 20 00 ff`, under labels already named `NoteStr0_C`,
+  `TransposeNoteStr_B`, `SplitNoteStr_G`, `KeyScaleNoteStr_F` and friends.
 * **`NoteNameStr_Table_0` at 0xED02A0 is one entry late.** The table has 16
   entries starting at **0xED029C** (16 strings at 0xED02DC..0xED0325, one per
   entry; the tree frames entry 0 as `ldb b,3 / .byte 0xed / nop`). Nothing
