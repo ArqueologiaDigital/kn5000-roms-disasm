@@ -418,6 +418,44 @@ def measure(primary, argvs, jobs=6, base=None):
 
 
 # ---------------------------------------------------------------------------
+GREEN = ("UNAFFECTED", "BY-DESIGN")
+
+
+def regrade(path, want, jobs):
+    """Re-run ONLY the invocations a previous run graded non-green.
+
+    ★ THIS IS THE "did the answer come back" EVIDENCE, and it is the affordable
+    form of it.  A full sweep of prom_a is 412 subprocess runs and over an hour;
+    the work list after a migration is a few dozen.  A probe that was VACUOUS and
+    is now UNAFFECTED has been SHOWN to give the same answer over the image and
+    over a stub, which is the only thing that makes the fix a fix.
+    """
+    old = json.load(open(path))
+    out = {}
+    for tag in [t for t, _ in IMAGES]:
+        if tag not in old or (want and tag not in want):
+            continue
+        argvs = [r["argv"] for r in old[tag]["rows"] if r["grade"] not in GREEN]
+        if not argvs:
+            continue
+        was = {tuple(r["argv"]): r["grade"] for r in old[tag]["rows"]}
+        print("\n=== %s  REGRADE %d invocation(s) that were not green ==="
+              % (tag, len(argvs)))
+        rows = measure(IMAGE_PRIMARY[tag], argvs, jobs=jobs)
+        rows.sort(key=lambda r: (ORDER.index(r["grade"]), r["argv"]))
+        fixed = 0
+        for r in rows:
+            before = was[tuple(r["argv"])]
+            mark = "  "
+            if r["grade"] in GREEN and before not in GREEN:
+                mark, fixed = "✔ ", fixed + 1
+            print("  %s%-13s (was %-13s) %s"
+                  % (mark, r["grade"], before, " ".join(r["argv"])))
+        print("  %d of %d came back green" % (fixed, len(rows)))
+        out[tag] = {"rows": rows, "was": {" ".join(k): v for k, v in was.items()}}
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--image", action="append",
@@ -426,7 +464,16 @@ def main(argv=None):
     ap.add_argument("--per-script", type=int, default=2)
     ap.add_argument("--jobs", type=int, default=6)
     ap.add_argument("--json", default=None)
+    ap.add_argument("--regrade", default=None,
+                    help="a previous --json: re-run only its non-green rows")
     a = ap.parse_args(argv)
+    if a.regrade:
+        want = None if not a.image or "all" in a.image else set(a.image)
+        rep = regrade(a.regrade, want, a.jobs)
+        if a.json:
+            json.dump(rep, open(a.json, "w"), indent=1)
+            print("\nwrote %s" % a.json)
+        return 0
     want = [t for t, _ in IMAGES] if not a.image or "all" in a.image else a.image
 
     cites = citation_index()
