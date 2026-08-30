@@ -151,7 +151,34 @@ STRONG reachable-and-unconverted: **17 bytes**, and those 17 are `"D GROUP NAMIN
 
 ---
 
-## A2 LEAD (2026-08-30): the kernel appears to run on the KN5000 sub-CPU too
+## ★★ A2 ANSWERED (2026-08-30): YES -- ONE KERNEL, FOUR PROCESSORS, TWO PRODUCTS
+
+`notes/kernel_structural_match.py` (14 invariant selftests) + `notes/FINDINGS-kernel-in-the-kn5000.md`.
+The kernel that `kernel/kernel.s` builds into BOTH WSA1 TMP95C061s is also in the KN5000's TMP94C241
+**sub-CPU payload** AND, as a SEPARATE BUILD (not a copy -- checked adversarially), its **main
+program ROM**.
+- ★ The decisive control is the FOIL: 20 kernel routines score 0.742-1.000; 26 non-kernel prom_c
+  routines cut to the same length score max 0.333. **No overlap, a 0.41 gap.**
+- prom_b (same product, same compiler, no kernel) maxes 0.17-0.28 => not measuring the compiler.
+  Shuffling query token order collapses to 0.29-0.45 => measuring ORDER, not vocabulary.
+- Two threshold-free, name-free instruments agree: the 26 sites appear in ROM order as a **21-long
+  increasing run** (200,000 permutations never exceeded 14, p <= 5e-6), and the recovered RAM map is
+  **monotone** (0x90->0x1044, 0x91->0x1046, 0x0100->0x1048 ... same array order, sizes 3/4/5 tasks).
+- Calibration: shared source = 1.000; same protocol independently written = 0.333; the kernel sits
+  in the shared-source band.
+- NOT established: who wrote it; that the sources are identical (`Kernel_Dispatch` is only 0.742 --
+  no tick-drain loop, and lock depth moved out of control register 0x3C because the TMP94C241 has none).
+⚠ `notes/kernel_three_way.py`'s "0 matches" is RETRACTED as an answer: true about bytes, false about
+  the question. Banner added in place.
+
+### ⚠ AND IT CORRECTED THE LEAD BELOW -- names really were inadmissible
+The measured alignment does NOT match my name table: `MsgQueue_Send`'s site is labelled
+`TaskSched_Wait`; `Kernel_SemaSignal`'s is `TaskEvent_Wait`; on the KN5000 MAIN CPU the site matching
+`Kernel_StartTask` at 0.978 is labelled `Show_ScreenGroup_Entry`, with the semaphore-count image
+inside `TaskSched_ScreenGroupTable`. **Several KN5000 kernel labels are MISNAMED** -- a real lead for
+a KN5000 renaming lane, and a demonstration that the lead was right about WHERE and wrong about WHAT.
+
+## A2 LEAD (superseded, kept as the record of how the region was found)
 
 `kn5000-roms-disasm/v142/subcpu/kn5000_subprogram_v142.s` carries a task scheduler whose routines
 pair one-to-one with the WSA1 kernel -- 22 pairings, all verified present in both trees by

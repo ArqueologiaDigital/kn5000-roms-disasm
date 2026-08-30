@@ -127,6 +127,9 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines, image_text   # noqa: E402
 D = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_d.bin"), "rb").read()
 assert len(D) == 0x80000
 
@@ -706,7 +709,7 @@ def prom_c_literals():
     """
     hits = []
     n = 0
-    for ln in open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")):
+    for ln in image_lines(ROOT, "prom_c/wsa1_prom_c.s"):
         s = ln.strip()
         if not s or s.startswith(";"):
             continue
@@ -800,7 +803,7 @@ def q6():
     # the base search must be able to see an absolute reference
     n, _h = prom_c_literals()
     probe = 0
-    for ln in open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")):
+    for ln in image_lines(ROOT, "prom_c/wsa1_prom_c.s"):
         m = ADDR.search(ln)
         if not m or ln.strip().startswith(";"):
             continue

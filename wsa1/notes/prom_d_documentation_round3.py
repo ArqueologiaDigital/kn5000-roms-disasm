@@ -88,6 +88,9 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines            # noqa: E402
+
 ROMS = os.path.join(ROOT, "original_ROMs")
 
 D = open(os.path.join(ROMS, "wsa1_prom_d.bin"), "rb").read()
@@ -184,8 +187,12 @@ _WR = re.compile(r'^(?:ld|add|sub|and|or|xor|ex|pop|extz|exts|mul|div|inc|dec|ld
 
 
 def listing():
+    # ⚠ prom_c IS NOT ONE FILE any more -- it is a primary plus ~29 .include
+    # parts.  Opening the primary alone returned 0 of the 99 sites and then
+    # raised an IndexError two checks later; asm_source.image_lines resolves the
+    # includes the way llvm-mc does.  See notes/asm_source.py.
     out = []
-    for ln in open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")):
+    for ln in image_lines(ROOT, "prom_c/wsa1_prom_c.s"):
         m = _TXT.search(ln.rstrip("\n"))
         if m:
             out.append((int(m.group(1), 16), m.group(2).strip()))
@@ -323,7 +330,7 @@ check("...checked on the LAST site as well as the first",
 # and the same census, taken from the .s text, must name the same addresses
 TXT = re.compile(r';\s([0-9A-F]{6})\s\sld (X[A-Z]{2}),\(0x00d7(?:ed|f1)\)\s*$')
 txt_addrs = set()
-for ln in open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")):
+for ln in image_lines(ROOT, "prom_c/wsa1_prom_c.s"):
     m = TXT.search(ln.rstrip("\n"))
     if m:
         txt_addrs.add(int(m.group(1), 16))

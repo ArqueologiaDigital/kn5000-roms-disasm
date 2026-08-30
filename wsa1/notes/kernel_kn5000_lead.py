@@ -8,6 +8,22 @@ RUN:  python3 notes/kernel_kn5000_lead.py            # the correspondence table
       python3 notes/kernel_kn5000_lead.py --dispatch # the two dispatch bodies, side by side
       python3 notes/kernel_kn5000_lead.py --selftest
 
+★★ SUPERSEDED, AND PARTLY WRONG. notes/kernel_structural_match.py ANSWERED the question: YES, the
+  kernel is in the KN5000 -- in BOTH its processors (four processors, two products). See
+  notes/FINDINGS-kernel-in-the-kn5000.md. Keep this file only as the record of how the lead was
+  found and of how badly names can mislead.
+
+⚠ THE PAIRINGS BELOW ARE NOT THE MEASURED ALIGNMENT. The structural matcher found that:
+      MsgQueue_Send        -> the KN5000 site is labelled TaskSched_Wait   (NOT TaskMsgQ_Send)
+      Kernel_SemaSignal    -> the KN5000 site is labelled TaskEvent_Wait   (NOT TaskEvent_Signal)
+      Kernel_StartTask     -> on the KN5000 MAIN CPU the site scoring 0.978 is labelled
+                              Show_ScreenGroup_Entry, and the semaphore-count ROM image sits
+                              inside a label called TaskSched_ScreenGroupTable
+  So several KN5000 labels are themselves MISNAMED, and the name-based table below propagated that.
+  ★ This is exactly why names were declared inadmissible before the test was run. They pointed the
+  instrument at the right region and were wrong about the details -- which is all a lead should be
+  trusted to do. Use kernel_structural_match.py for any actual alignment.
+
 ★ THIS IS A LEAD, NOT EVIDENCE. It is built from LABEL NAMES, and both trees were named by agents
   on this project -- so the correspondence may reflect a shared naming habit rather than shared
   code. The admissible instrument is notes/kernel_structural_match.py (lane A2), which matches
@@ -39,11 +55,11 @@ PAIRS = [
     ("Kernel_BlockSelf",             "TaskSched_Block_Self_Consume"),
     ("Kernel_ReadyTask",             "TaskSched_Wake_Task"),
     ("Kernel_ReadyTask_NoDispatch",  "TaskSched_Wake_Task_NoResched"),
-    ("Kernel_SemaSignal",            "TaskEvent_Signal"),
+    ("Kernel_SemaSignal",            "TaskEvent_Signal"),   # ⚠ WRONG: measured site is TaskEvent_Wait
     ("Kernel_SemaSignal_NoDispatch", "TaskEvent_Signal_NoResched"),
     ("Kernel_SemaWait",              "TaskEvent_Wait"),
     ("Kernel_SemaTryWait__fail",     "TaskSem_TryDec_WouldBlock"),
-    ("MsgQueue_Send",                "TaskMsgQ_Send"),
+    ("MsgQueue_Send",                "TaskMsgQ_Send"),      # ⚠ WRONG: measured site is TaskSched_Wait
     ("Kernel_InitRam__tcbs",         "TaskSched_Init_TaskDescriptors"),
     ("Kernel_InitRam__free_nodes",   "TaskSched_Init_LinkFreeNodes"),
     ("Kernel_InitRam__ready_queues", "TaskSched_Init_QueueHeaders"),

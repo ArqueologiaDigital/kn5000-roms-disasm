@@ -37,6 +37,16 @@ import re
 import struct
 import sys
 
+# ⚠ THE notes MODULES LOADED BELOW PRINT THEIR CHECK RESULTS AT IMPORT TIME, and
+# that chatter used to land in whatever this script wrote to stdout: the first
+# `--monolithic` run put twelve lines of "all 78 checks held" at the top of what
+# was supposed to be a byte-exact baseline.  When a machine-readable rendering is
+# asked for, the chatter goes to stderr and the rendering goes to the real
+# stdout.  (`--check` had the same latent defect and is fixed by the same line.)
+_STDOUT = sys.stdout
+if "--monolithic" in sys.argv or "--check" in sys.argv:
+    sys.stdout = sys.stderr
+
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(ROOT, "original_ROMs", "wsa1_prom_d.bin")
 OUT = os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")
@@ -3811,17 +3821,253 @@ _HDR = _HDR.replace(
     "%d checks\n"
     ";     python3 notes/prom_d_finish_round12.py --selftest  # \u2605 THE FRAMED SET, "
     "%d checks" % (_R7.AUDITED_CHECKS, _R8.AUDITED_CHECKS, _R12.AUDITED_CHECKS), 1)
-W((_HDR % (CENSUS_CHECKS, CENSUS_CHECKS)).rstrip("\n"))
-for a, b, fn in REGIONS:
-    before = len(OUTBUF)
-    fn()
-    assert len(OUTBUF) > before, "region 0x%05X emitted nothing" % a
-W("")
-W("prom_d_end:")
+MAIN_TEXT = (_HDR % (CENSUS_CHECKS, CENSUS_CHECKS)).rstrip("\n")
 
-text = "\n".join(OUTBUF) + "\n"
+# ---------------------------------------------------------------------------
+# ★ THE THREE-WAY SPLIT -- ONE IMAGE, FOUR FILES
+# ---------------------------------------------------------------------------
+# ../kn5000-roms-disasm/table_data/ already cuts the SAME tone database into
+# three modules, and prom_d's regions fall into the same three groups.  This
+# generator writes that split instead of one 56,000-line file:
+#
+#     prom_d/wsa1_prom_d.s              the documentation header, and the three
+#                                       .include lines that build the image
+#     prom_d/tone_database_directory.s  directory, program maps, offset table
+#     prom_d/tone_database_records.s    the melodic tone records
+#     prom_d/tone_database_aux.s        everything from directory slot +0xAC on
+#
+# ⚠ BOTH CUT POINTS ARE READ OUT OF THE IMAGE'S OWN DIRECTORY, never typed in,
+# so a boundary cannot drift away from the structure it is meant to follow:
+#     MEL[0]   the smallest offset in the tone-record table at slot +0x08 --
+#              the first tone record, which is where the KN5000's directory
+#              module ends too (its 0x8324D4 is ToneRec_000).
+#     S(0xAC)  ToneDB_DefaultLayerParams -- which is ALSO the first object of
+#              the KN5000's aux module (its 0x855A48, dir +0xAC).  Two trees,
+#              same directory slot, arrived at independently.
+#
+# `--monolithic` still prints the single-file rendering, and that is not a
+# convenience: it is the BASELINE the split is proved against.  See
+# notes/prom_d_split_probe.py.
+SPLIT_AT_RECORDS = MEL[0]
+SPLIT_AT_AUX = S(0xAC)
+assert 0 < SPLIT_AT_RECORDS < SPLIT_AT_AUX < 0x80000
+
+_LABEL = re.compile(r"^[A-Za-z_][A-Za-z_0-9]*:")
+_RULE_EQ = "; " + "=" * 74
+_RULE_DA = "; " + "-" * 74
+
+
+def _structure_map(lines):
+    """(title, file-range) for every region banner in a part's OWN output.
+
+    Read back out of the emitted text rather than out of the region table, so
+    a part's contents listing cannot disagree with the part.
+    """
+    out = []
+    for i in range(len(lines) - 3):
+        if (lines[i] == _RULE_EQ and lines[i + 2].startswith("; file 0x")
+                and lines[i + 3] == _RULE_DA):
+            out.append((lines[i + 1][2:].strip(), lines[i + 2][2:].strip()))
+    return out
+
+
+def _part_header(title, body, lines, lo, hi):
+    """The header of one included part.  Every part says the same four things:
+    it is generated, it is not a translation unit, where its provenance lives,
+    and what it contains -- the last read back out of its own banners."""
+    h = ["; " + "=" * 78,
+         "; Technics SX-WSA1R -- prom_d -- THE TONE DATABASE",
+         "; %s" % title,
+         "; " + "=" * 78,
+         ";",
+         "; ⚠ GENERATED.  Edit scripts/analysis/gen_prom_d_asm.py, never this file;",
+         "; then run the gate:",
+         ";     python3 scripts/analysis/gen_prom_d_asm.py",
+         ";     python3 scripts/analysis/assert_byte_identical.py",
+         ";",
+         "; ⚠ NOT A TRANSLATION UNIT.  It is `.include`d by prom_d/wsa1_prom_d.s,",
+         "; which carries this image's whole provenance -- how the base 0x00F00000",
+         "; was established two independent ways, why prom_d/prom_d.ld's ORIGIN stays",
+         "; 0, the label census graded by provenance, and every standing caveat.",
+         "; READ THAT FILE FIRST.  None of it is repeated here, and none of it was",
+         "; reworded to make this split: the split MOVES lines, it does not edit them.",
+         ";",
+         "; file 0x%05X .. 0x%05X   (%s bytes)" % (lo, hi - 1, format(hi - lo, ",")),
+         ";"]
+    h.extend("; " + b if b else ";" for b in body)
+    sm = _structure_map(lines)
+    h.extend([";",
+              "; WHAT IS IN IT -- read back out of this file's own region banners:"])
+    for t, r in sm:
+        h.append(";   %-58s %s" % (t[:58], r.replace("file ", "")))
+    h.append("; " + "=" * 78)
+    return "\n".join(h)
+
+
+_DIR_BODY = [
+    "First of the three, mirroring",
+    "../kn5000-roms-disasm/table_data/tone_database_directory.s, which holds the",
+    "same three things for the KN5000: the slot directory, the program maps and",
+    "the tone-record offset table (its ROM 0x830000-0x8324D3).",
+    "",
+    "★ THE BOUNDARY IS THE IMAGE'S OWN.  This file ends at 0x%05X, the smallest"
+    % SPLIT_AT_RECORDS,
+    "offset in the tone-record table at directory slot +0x08 -- i.e. at the first",
+    "tone record.  That is the same rule the KN5000 module follows; over there the",
+    "first record is ToneRec_000 at 0x8324D4.",
+    "",
+    "⚠ ONE REGION HERE HAS NO KN5000 COUNTERPART.  Slot +0xA8 is UNUSED in the",
+    "KN5000, so ToneDB_OctaveShiftByProgram has no sibling region to mirror and no",
+    "name to transplant.  It is in this file because the boundary rule is `the head",
+    "of the database, up to the first tone record`, and because it is a",
+    "program-indexed map like the two tables above it -- not because the KN5000",
+    "puts anything there.  Its own banner below states what is established about it",
+    "and what is not.",
+]
+
+_REC_BODY = [
+    "Second of the three, mirroring",
+    "../kn5000-roms-disasm/table_data/tone_database_records.s -- there, 579 tone",
+    "records tiling ROM 0x8324D4-0x855A47; here, the melodic records of tone",
+    "indices 0x000-0x0FF.",
+    "",
+    "★ BOTH BOUNDARIES ARE THE DIRECTORY'S, not a stride sweep:",
+    "  * it starts at 0x%05X, the smallest offset in the tone-record table at slot"
+    % SPLIT_AT_RECORDS,
+    "    +0x08;",
+    "  * it ends at 0x%05X, directory slot +0xAC (ToneDB_DefaultLayerParams) -- and"
+    % SPLIT_AT_AUX,
+    "    the KN5000's aux module starts at exactly the same slot, its 0x855A48.",
+    "    The two trees put this boundary in the same place without either having",
+    "    been told, which is the strongest reason to think the cut is the design's",
+    "    and not this generator's.",
+    "",
+    "⚠ WHAT IS DELIBERATELY *NOT* HERE, and the KN5000 makes the same three cuts:",
+    "  * the DRUM-KIT records (tone indices 0x100-0x111, file 0x2B2AC) and the",
+    "    DRAWBAR records (0x058/0x059, file 0x446B4).  They ARE tone records and",
+    "    they ARE in the offset table, but they sit past slot +0xAC and so live in",
+    "    tone_database_aux.s -- exactly where the KN5000 keeps its DrumKit_* and",
+    "    DrawbarPreset_* records.",
+    "  * ToneRec_Template_Clear (slot +0xB0).  It is a tone record in the ordinary",
+    "    217 + N*124 layout, but it is NOT in the offset table, so it is not part of",
+    "    that table's payload and is not a selectable tone.",
+    "The rule that decides all three is the KN5000 module's own sentence: this file",
+    "is `the payload behind the offset table`, in address order.",
+]
+
+_AUX_BODY = [
+    "Third of the three, mirroring",
+    "../kn5000-roms-disasm/table_data/tone_database_aux.s (its ROM",
+    "0x855A48-0x87FFEF): everything after the melodic records -- templates, index",
+    "maps, wave-select arrays, the descriptor blocks and their pools, drum kits,",
+    "drum instruments, the name-list/index-map/footer groups, the drawbar records,",
+    "and the erased tail.",
+    "",
+    "★ IT STARTS AT DIRECTORY SLOT +0xAC, ToneDB_DefaultLayerParams, and so does",
+    "the KN5000's aux module -- both files' first object is the +0xAC record.  The",
+    "boundary is read from this image's directory, not copied across.",
+    "",
+    "⚠ THE ERASED TAIL IS IN THIS FILE.  0x50B09..0x7FFEF is one unbroken 0xFF run",
+    "and 0x7FFF0 is the build tag; the KN5000's aux module likewise ends on its own",
+    "unused 0xFF fill.  `prom_d_end` is NOT here -- it is in wsa1_prom_d.s, after",
+    "the last .include, so that the end marker stays with the file that defines the",
+    "image.",
+]
+
+PARTS = [
+    ("tone_database_directory.s", 0x00000, SPLIT_AT_RECORDS,
+     "DIRECTORY, PROGRAM MAPS AND THE TONE-RECORD OFFSET TABLE", _DIR_BODY),
+    ("tone_database_records.s", SPLIT_AT_RECORDS, SPLIT_AT_AUX,
+     "THE MELODIC TONE RECORDS", _REC_BODY),
+    ("tone_database_aux.s", SPLIT_AT_AUX, 0x80000,
+     "AUXILIARY TABLES", _AUX_BODY),
+]
+
+BUCKET = {name: [] for name, _lo, _hi, _t, _b in PARTS}
+for a, b, fn in REGIONS:
+    del OUTBUF[:]
+    fn()
+    assert OUTBUF, "region 0x%05X emitted nothing" % a
+    for name, lo, hi, _t, _b in PARTS:
+        if lo <= a < hi:
+            assert b <= hi, "region 0x%05X..0x%05X straddles a split boundary" % (a, b)
+            BUCKET[name].extend(OUTBUF)
+            break
+    else:
+        raise AssertionError("region 0x%05X is in no part" % a)
+
+SPLIT_BANNER = "\n".join([
+    "",
+    "; " + "=" * 78,
+    "; ★ THE IMAGE ITSELF IS IN THREE INCLUDED FILES",
+    "; " + "=" * 78,
+    ";",
+    "; Everything the header above says about `this file` -- the %s labels, the"
+    % format(sum(1 for name, _lo, _hi, _t, _b in PARTS for ln in BUCKET[name]
+                 if _LABEL.match(ln)), ","),
+    "; census graded by provenance, every `below` and every `banner` -- now means",
+    "; THESE FOUR FILES TOGETHER.  Not one sentence of it was reworded for the",
+    "; split; the split moves lines between files and adds each file a header.",
+    ";",
+    "; The three parts mirror ../kn5000-roms-disasm/table_data/, which cuts the",
+    "; SAME database the same way, and both cut points are read out of this image's",
+    "; own directory rather than typed in:",
+    ";",
+    ";   tone_database_directory.s  0x%05X..0x%05X  directory, program maps, the"
+    % (0, SPLIT_AT_RECORDS - 1),
+    ";                                               tone-record offset table",
+    ";   tone_database_records.s    0x%05X..0x%05X  the melodic tone records; ends"
+    % (SPLIT_AT_RECORDS, SPLIT_AT_AUX - 1),
+    ";                                               at directory slot +0xAC, where",
+    ";                                               the KN5000's aux module starts",
+    ";                                               too",
+    ";   tone_database_aux.s        0x%05X..0x%05X  everything else, ending in the"
+    % (SPLIT_AT_AUX, 0x7FFFF),
+    ";                                               erased tail and the build tag",
+    ";",
+    "; ⚠ ORDER IS LOAD-BEARING.  This image is 0 .align directives and 0 .org: the",
+    "; address of every byte is the sum of the lengths before it, so swapping two",
+    "; .include lines silently moves 512 KiB of data.  The byte gate is what",
+    "; catches that, and it is the only thing that would.",
+    "; " + "=" * 78,
+    "",
+    '\t.include "tone_database_directory.s"',
+    '\t.include "tone_database_records.s"',
+    '\t.include "tone_database_aux.s"',
+])
+
+END_LINES = ["", "prom_d_end:"]
+
+
+def _monolithic():
+    """The single-file rendering this split is proved against.
+
+    It is byte-for-byte what this generator emitted before the split, and
+    notes/prom_d_split_probe.py compares it with the four files line by line.
+    Keeping it is what makes `no comment and no label was lost` checkable
+    rather than asserted.
+    """
+    body = []
+    for name, _lo, _hi, _t, _b in PARTS:
+        body.extend(BUCKET[name])
+    return "\n".join([MAIN_TEXT] + body + END_LINES) + "\n"
+
+
+if "--monolithic" in sys.argv:
+    _STDOUT.write(_monolithic())
+    sys.exit(0)
+
+FILES = [(OUT, "\n".join([MAIN_TEXT, SPLIT_BANNER] + END_LINES) + "\n")]
+for name, lo, hi, title, body in PARTS:
+    lines = BUCKET[name]
+    FILES.append((os.path.join(ROOT, "prom_d", name),
+                  "\n".join([_part_header(title, body, lines, lo, hi)] + lines) + "\n"))
+
 if "--check" in sys.argv:
-    sys.stdout.write(text)
+    for path, text in FILES:
+        _STDOUT.write(text)
 else:
-    open(OUT, "w").write(text)
-    print("wrote %s  (%d lines, %.1f MB)" % (OUT, text.count("\n"), len(text) / 1e6))
+    for path, text in FILES:
+        open(path, "w").write(text)
+        print("wrote %-40s (%d lines, %.1f MB)"
+              % (os.path.relpath(path, ROOT), text.count("\n"), len(text) / 1e6))

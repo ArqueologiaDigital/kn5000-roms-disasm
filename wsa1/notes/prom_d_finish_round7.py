@@ -125,7 +125,25 @@ ROMS = collections.OrderedDict([("prom_a", "wsa1_prom_a.ic12"),
 IMG = collections.OrderedDict(
     (k, open(os.path.join(ROOT, "original_ROMs", v), "rb").read()) for k, v in ROMS.items())
 D = IMG["prom_d"]
+# ⚠ prom_d IS NOT ONE FILE any more.  wsa1_prom_d.s is the documentation header
+# plus three `.include` lines (tone_database_directory.s / _records.s / _aux.s,
+# mirroring ../kn5000-roms-disasm/table_data/).  Reading the primary alone would
+# see 0 labels and every census below would report a tree that had lost its
+# payload -- which is exactly how the split announced itself elsewhere.
+# asm_source.image_lines resolves the includes the way llvm-mc does.
 SRC = os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines, image_text   # noqa: E402
+
+
+def src_lines():
+    """Every line of the IMAGE, primary + includes, newline-stripped."""
+    return image_lines(ROOT, "prom_d/wsa1_prom_d.s")
+
+
+def src_text():
+    return "\n".join(src_lines())
+
 PROM_D_BASE = 0x00F00000        # notes/prom_d_base_checks.py, 12 checks
 PROM_C_BASE = 0x00F80000
 
@@ -318,7 +336,7 @@ def read_labels():
     exact everywhere and, better, it can be CHECKED: selftest T3 asserts the
     counter agrees with every one of the file's own address comments.
     """
-    lines = open(SRC).read().split("\n")
+    lines = src_lines()
     out = []
     run = blanks = 0
     ev = False
@@ -362,7 +380,7 @@ def read_labels():
 def address_comments():
     """[(line index, address)] -- the file's own `; 01CDD` markers, for T3."""
     out = []
-    for i, ln in enumerate(open(SRC).read().split("\n")):
+    for i, ln in enumerate(src_lines()):
         if ln.lstrip().startswith(";"):
             continue
         m = ADDR_RE.search(ln)
@@ -1287,7 +1305,7 @@ def q9():
     # ★ THE CHECK ROUND 1 FAILED 31 TIMES: a citation one byte past the instruction.
     # Every prom_c address this round quotes must be the START of an instruction in
     # the gate-verified listing, which prints one address per instruction.
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read()
+    src = image_text(ROOT, "prom_c/wsa1_prom_c.s")
     starts = set(int(m, 16) for m in re.findall(r";\s+([0-9A-F]{6})\s+\S", src))
     bad = [a for a in CITED_PROM_C if a not in starts]
     check("Q9z  every prom_c address this round cites is an INSTRUCTION START",
@@ -1334,13 +1352,13 @@ def selftest():
           all(l.end >= l.addr for l in LABS),
           "%d labels" % len(LABS))
     check("T3  the label count agrees with an independent grep of the .s",
-          len(LABS) == sum(1 for ln in open(SRC) if LABEL_RE.match(ln)),
+          len(LABS) == sum(1 for ln in src_lines() if LABEL_RE.match(ln)),
           "%d labels" % len(LABS))
     # ★ THE CHECK THAT MAKES EVERY ADDRESS IN THIS SCRIPT TRUSTWORTHY.
     ac = address_comments()
     pc = 0
     bad = 0
-    for i, ln in enumerate(open(SRC).read().split("\n")):
+    for i, ln in enumerate(src_lines()):
         if ln.startswith(";") or LABEL_RE.match(ln):
             continue
         sm = SIZE_RE.match(ln)

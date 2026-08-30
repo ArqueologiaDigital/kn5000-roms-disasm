@@ -144,6 +144,9 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines, image_text   # noqa: E402
 D = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_d.bin"), "rb").read()
 C = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28"), "rb").read()
 assert len(D) == 0x80000 and len(C) == 0x80000
@@ -436,8 +439,7 @@ def framed_labels():
     PROMOTED_ patterns map a promoted label back to the name it had.
     """
     out = []
-    path = os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")
-    for ln in open(path):
+    for ln in image_lines(ROOT, "prom_d/wsa1_prom_d.s"):
         if not ln or ln[0] in " \t;\n.":
             continue
         t = ln.strip()
@@ -849,9 +851,8 @@ def base_adds():
     assembly, which is byte-identical to the ROM by the gate.
     """
     out = []
-    path = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
     pat = re.compile(r"^\s*add\S*\s+\S+,\s*\(0x(D7ED|D7F1)\)", re.I)
-    for ln in open(path):
+    for ln in image_lines(ROOT, "prom_c/wsa1_prom_c.s"):
         if pat.match(ln):
             m = re.search(r";\s*([0-9A-F]{6})", ln)
             out.append((int(m.group(1), 16) if m else None, ln.strip()))
@@ -969,7 +970,7 @@ def q8():
     # it is round 6's OWN arithmetic over round 6's OWN classification, and the
     # live figure has since fallen much further.  Both are printed so neither can
     # be mistaken for the other.
-    _live = sum(1 for ln in open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s"))
+    _live = sum(1 for ln in image_lines(ROOT, "prom_d/wsa1_prom_d.s")
                 if ln and ln[0] not in " \t;\n." and not INTERNAL_RE.match(ln.strip())
                 and FRAMED_RE.match(ln.strip()))
     check("Q8d2 and what the metric read for prom_d after ROUND 6 is that minus "
@@ -1007,7 +1008,7 @@ def q9():
     # (b) a CITATION ONE BYTE PAST THE INSTRUCTION.  Round 1 shipped 31 of those.
     # Every prom_c address this round quotes must be the START of an instruction,
     # which the gate-verified listing settles: it prints the address of each.
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read()
+    src = image_text(ROOT, "prom_c/wsa1_prom_c.s")
     starts = set(int(m, 16) for m in re.findall(r";\s+([0-9A-F]{6})\s+\S", src))
     bad = [a for a in CITED_PROM_C if a not in starts]
     check("Q9b  every prom_c address this round cites is an INSTRUCTION START",

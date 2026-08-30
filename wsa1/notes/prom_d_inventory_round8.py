@@ -748,7 +748,25 @@ def pointer_fields():
 # ---------------------------------------------------------------------------
 # Q8.  THE PROSE SELF-CHECK -- the generated file, read back and re-derived.
 # ---------------------------------------------------------------------------
+# ⚠ prom_d IS NOT ONE FILE any more.  wsa1_prom_d.s is the documentation header
+# plus three `.include` lines (tone_database_directory.s / _records.s / _aux.s,
+# mirroring ../kn5000-roms-disasm/table_data/).  Reading the primary alone would
+# see 0 labels and every census below would report a tree that had lost its
+# payload -- which is exactly how the split announced itself elsewhere.
+# asm_source.image_lines resolves the includes the way llvm-mc does.
 SRC = os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines, image_text   # noqa: E402
+
+
+def src_lines():
+    """Every line of the IMAGE, primary + includes, newline-stripped."""
+    return image_lines(ROOT, "prom_d/wsa1_prom_d.s")
+
+
+def src_text():
+    return "\n".join(src_lines())
+
 _CONTRADICTIONS = (
     # (regex over one banner, predicate on the captured number) -- a sentence
     # whose own number refutes what it goes on to claim.  This is the shape a
@@ -1260,7 +1278,7 @@ CITED_PROM_C = (0xFB0523, 0xFB0528, 0xFB051E, 0xFBC744, 0xFBC7C3, 0xFBC7D6,
 
 def q8():
     say("\n=== Q8.  ★ THE PROSE SELF-CHECK -- the emitted file, re-derived ===\n")
-    text = open(SRC).read()
+    text = src_text()
     bad = banner_contradictions(text)
     say("  A generated banner can state a number and then draw a conclusion its own")
     say("  number refutes.  A round-3 reviewer found two of those in prom_a by hand.")
@@ -1287,7 +1305,7 @@ def q8():
 
 def q9():
     say("\n=== Q9.  THE CITATIONS ===\n")
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read()
+    src = image_text(ROOT, "prom_c/wsa1_prom_c.s")
     starts = set(int(m, 16) for m in re.findall(r";\s+([0-9A-F]{6})\s+\S", src))
     bad = [a for a in CITED_PROM_C if a not in starts]
     check("Q9a  every prom_c address this round cites is an INSTRUCTION START",
@@ -1772,7 +1790,7 @@ def q10():
     # the generator printed max(curve)+1 = 108 for an object that holds 128.  A
     # sentence refuted by its own object is the round-3 review's exact shape, and
     # nothing in four rounds of self-checks re-read it.
-    txt = open(SRC).read().split("\n")
+    txt = src_lines()
     hdr = re.compile(r"^; (\S+_CurveStepToElem) -- file 0x([0-9A-F]{5})"
                      r"\.\.0x[0-9A-F]{5} \((\d+) bytes\)$")
     ent = re.compile(r"^; descriptor \d+ stage 2: \S+ step -> element, (\d+) entries")
@@ -2684,7 +2702,7 @@ def selftest_round10():
     # here rather than left to a reviewer, and the question is asked instead.
     # Every morpheme is read back OUT of prom_d/wsa1_prom_d.s, not out of the
     # function that wrote it, and matched against the image's own ASCII.
-    src = open(SRC).read()
+    src = src_text()
     got = re.findall(r"^ToneDB_MixerDefaultTable_(\d{3})_SelectedFor_([A-Za-z0-9_]+):",
                      src, re.M)
     field = set()
@@ -3304,7 +3322,7 @@ def q25():
 
 def q26():
     say("\n=== Q26.  ★★ WHAT IS STILL FRAMED, PER OBJECT AND FOR A DERIVED REASON ===\n")
-    src = open(SRC).read()
+    src = src_text()
     fr = collections.Counter()
     for m in re.finditer(r"^([A-Za-z_][A-Za-z0-9_]*):", src, re.M):
         nm = m.group(1)
@@ -3434,7 +3452,7 @@ def selftest_round11():
     check("T22 ★ the citation guard fires one byte past the instruction",
           bad, "0xFC2071 is the first operand byte, and taking it as an opcode fails")
     # T23: every M10 label is read back OUT of the emitted assembly.
-    src = open(SRC).read()
+    src = src_text()
     got = re.findall(r"^ToneDB_MixerDefaultTable_(\d{3})_SelectedForGroup_"
                      r"([A-Za-z0-9_]+):", src, re.M)
     check("T23 ★ the .s agrees with the rule record for record",
