@@ -148,3 +148,24 @@ premise is itself wrong. WSA1 has its null (0 of 318 under inversion); KN5000 ne
 STRONG reachable-and-unconverted: **17 bytes**, and those 17 are `"D GROUP NAMING"` at
 `0xFA369A` — a walk artefact with no start evidence, formally refused. prom_b and prom_c are at 0.
 `notes/reachability.py --targets` / `--evidence` / `--selftest` (11 checks).
+
+---
+
+## A2 LEAD (2026-08-30): the kernel appears to run on the KN5000 sub-CPU too
+
+`kn5000-roms-disasm/v142/subcpu/kn5000_subprogram_v142.s` carries a task scheduler whose routines
+pair one-to-one with the WSA1 kernel -- 22 pairings, all verified present in both trees by
+`notes/kernel_kn5000_lead.py`. The dispatch bodies agree instruction for instruction, and every
+divergence is a CONSTANT, the same shape A1 measured across the WSA1's own two CPUs:
+current_task `0x91` vs `0x1046`, stack top `0x0000FA00` vs `0x40B1E`, ready levels 2 vs 3.
+★ The saved-XSP TCB offset `+4` is identical on both, and is selftested.
+
+⚠ **This is a lead, not evidence.** It was found through LABEL NAMES, and both trees were named by
+agents on this project, so it may reflect a shared naming habit rather than shared code. Lane A2
+matches instructions and computes a null over all ~3,874 named KN5000 v142 routines; only that
+separates "any two TLCS-900 schedulers look alike" from a real result.
+
+⚠ CORRECTION: this file previously implied KN5000's MAINCPU was monolithic. It is not -- the
+maincpu is split across 15 subject directories / 156 files. The monoliths are the SUB-CPUs:
+`v142/subcpu/kn5000_subprogram_v142.s` (1.43 MB) and `subcpu/boot/kn5000_subcpu_boot.s` (1.29 MB).
+That is A4's target, and both are territorially complete (0 .incbin), so they can be split now.
