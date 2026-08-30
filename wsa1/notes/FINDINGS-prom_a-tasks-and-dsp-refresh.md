@@ -125,24 +125,42 @@ both, and the `di` mnemonic should be removed from both trees.
 Round-2 audit F8: *the request above was carried out, and the note that asked
 for it was not updated* — which is the tree's own rule about correcting the old
 text in the same commit, broken by the note that states the rule's occasion.
-Measured now, in the working tree:
+Measured now, over the IMAGES:
 
 | | `di` instruction lines | `ei 0` instruction lines |
 |---|---:|---:|
-| `prom_a/wsa1_prom_a.s` | 0 | 11 (spelled `ei 0x00`) |
-| `prom_c/wsa1_prom_c.s` | 0 | 23 (spelled `ei 0`) |
+| prom_a | 0 | 75 (spelled `ei 0x00`) |
+| prom_c | 0 | 31 (spelled `ei 0`) |
+
+⚠ **A `grep` OVER `prom_c/wsa1_prom_c.s` NO LONGER ANSWERS THIS.** Since the
+per-subject split that file is a 2,516-line header and its body is in 26
+included sources, so the commands this section used to give — plain greps over
+the primary — return **0 rows for prom_c whatever the truth is**. Run them over
+the image:
 
 ```
-grep -cP '^\t(di|DI)\b'  prom_a/wsa1_prom_a.s prom_c/wsa1_prom_c.s
-grep -oP '^\s+ei[ \t]+\S+' prom_c/wsa1_prom_c.s | sort | uniq -c
+python3 - <<'EOF'
+import re, sys, collections; sys.path.insert(0, "notes")
+from asm_source import image_lines
+for t in "ac":
+    L = image_lines(".", "prom_%s/wsa1_prom_%s.s" % (t, t))
+    print("prom_%s  di:" % t, sum(1 for l in L if re.match(r"^\t(di|DI)\b", l)),
+          collections.Counter(m.group(0) for l in L
+                              for m in [re.match(r"^\s+ei[ \t]+\S+", l)] if m))
+EOF
 ```
+
+⚠ The `ei` column moved for TWO different reasons and only one of them is the
+split: prom_c's rows were invisible to the old command, and prom_a's figure
+(11 → 75) is later conversion rounds, which is not re-derived here. The `di`
+column, which is what the argument below rests on, is 0 either way.
 
 prom_a never had one; prom_c's eighteen (plus the five the same round added)
 are gone. **So the "should be removed from both trees" above is DONE, not
 pending, and nobody should act on it again.** What remains is prose, in prom_c
 only, and it belongs to that lane: `prom_c/wsa1_prom_c.s` still uses the word
-`di` in comment lines — ``grep -c '`di`' prom_c/wsa1_prom_c.s`` returns **13**
-as this is written, and that file is another lane's, so the figure moves. Each
+`di` in comment lines — **13** as this is written (the plain grep over the
+primary returns 0 since the split; count it over the image, as above), and that file is another lane's, so the figure moves. Each
 of those now sits next to its own correction: the audit's own example, the
 `EntryPoint_Records` header at what is now line 390, carries an explicit
 *CORRECTED 2026-08-25 (round-2 audit F8)* line.

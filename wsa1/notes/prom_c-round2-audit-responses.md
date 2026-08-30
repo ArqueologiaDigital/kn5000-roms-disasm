@@ -104,7 +104,10 @@ This is worth stating plainly because the round-1 audit's F11 flags *"Converted 
 numbers in that dispute are directive counts; the shared tool's column is a third,
 different quantity, and any report quoting it as "spans" is quoting prose mentions.
 
-The directive count is `grep -cP '^\s*\.incbin' prom_c/wsa1_prom_c.s`. The fix belongs in
+The directive count is a grep for `^\s*\.incbin` — ⚠ over the IMAGE, not over
+`prom_c/wsa1_prom_c.s`, which since the per-subject split is a 2,516-line header
+and would answer 0 to any question about the body:
+`python3 -c "import sys;sys.path.insert(0,'notes');from asm_source import image_lines;import re;print(sum(1 for l in image_lines('.','prom_c/wsa1_prom_c.s') if re.match(r'\s*\.incbin',l)))"`. The fix belongs in
 `scripts/analysis/`, which is another lane's directory; **the numbers in this lane's report
 are directive counts and say so.**
 
