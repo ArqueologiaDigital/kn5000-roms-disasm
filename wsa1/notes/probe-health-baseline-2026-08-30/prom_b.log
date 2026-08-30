@@ -1,0 +1,99 @@
+
+=== prom_b  (prom_b/wsa1_prom_b.s)  88 script(s), 88 invocation(s) ===
+    ... 25/352 runs
+    ... 50/352 runs
+    ... 75/352 runs
+    ... 100/352 runs
+    ... 125/352 runs
+    ... 150/352 runs
+    ... 175/352 runs
+    ... 200/352 runs
+    ... 225/352 runs
+    ... 250/352 runs
+    ... 275/352 runs
+    ... 300/352 runs
+    ... 325/352 runs
+    ... 350/352 runs
+    ... 352/352 runs
+  VACUOUS       notes/prom_b_audit_callsites.py
+  VACUOUS       notes/prom_b_evidence_audit.py --scopes
+  VACUOUS       notes/promb_macro_preservation.py
+  VACUOUS       notes/wave7_round6_review_wb_prom_b.py
+  LOUD          notes/wave7_round5_review_wb_prom_b.py
+  LOUD          notes/wave7_round9_review_wb_prom_b.py
+  SPLIT-FRAGILE notes/audit_wave6_round3_probes.py
+  SPLIT-FRAGILE notes/gen_prom_b_cover_round2.py
+  SPLIT-FRAGILE notes/gen_prom_b_f067a6_module.py
+  SPLIT-FRAGILE notes/gen_prom_b_f0ea9f_module.py --checks
+  SPLIT-FRAGILE notes/gen_prom_b_f17559_module.py
+  SPLIT-FRAGILE notes/gen_prom_b_f353ab_module.py
+  SPLIT-FRAGILE notes/gen_prom_b_f4f000_module.py
+  SPLIT-FRAGILE notes/gen_prom_b_f5553f_module.py
+  SPLIT-FRAGILE notes/gen_prom_b_f6d002_module.py --checks
+  SPLIT-FRAGILE notes/prom_a_understanding_round4.py
+  SPLIT-FRAGILE notes/prom_a_understanding_round6.py --callshape
+  SPLIT-FRAGILE notes/prom_b_call_graph.py
+  SPLIT-FRAGILE notes/prom_b_dl_call_shapes.py
+  SPLIT-FRAGILE notes/prom_b_dl_screens_round5.py
+  SPLIT-FRAGILE notes/prom_b_f067a6_layout.py
+  SPLIT-FRAGILE notes/prom_b_f0ea9f_header_audit.py
+  SPLIT-FRAGILE notes/prom_b_f17559_layout.py
+  SPLIT-FRAGILE notes/prom_b_f17559_reaudit.py
+  SPLIT-FRAGILE notes/prom_b_f5b800_checks.py
+  SPLIT-FRAGILE notes/prom_b_f65000_header_audit.py
+  SPLIT-FRAGILE notes/prom_b_f6d002_touches.py
+  SPLIT-FRAGILE notes/prom_b_panel_names_round11.py
+  SPLIT-FRAGILE notes/prom_b_panel_names_round12.py --0x0d
+  SPLIT-FRAGILE notes/prom_b_real_coverage.py
+  SPLIT-FRAGILE notes/prom_b_sc1_serial_regs.py
+  SPLIT-FRAGILE notes/prom_b_sc1_states.py
+  SPLIT-FRAGILE notes/prom_c_record68_round10.py
+  SPLIT-FRAGILE notes/prom_c_understanding_round4.py
+  SPLIT-FRAGILE notes/promb_macro_rewrite.py --unused
+  SPLIT-FRAGILE notes/vector_map.py
+  SPLIT-FRAGILE notes/wave7-verify-probes/wave7_pa_write_census.py --selftest
+  SPLIT-FRAGILE notes/wave7_panel_names_round11.py
+  SPLIT-FRAGILE notes/wave7_review_wa3_prom_a_names.py
+  SPLIT-FRAGILE notes/wave7_review_wb_dl_name_audit.py
+  WRITER        notes/prom_a_understanding_round7.py --apply-strings
+  TIMEOUT       notes/reachability.py --targets
+  NONDET        notes/prom_b_entrypoints_round7.py --runs --selftest
+  BY-DESIGN     notes/asm_source.py
+  VACUOUS 4   LOUD 2   SPLIT-FRAGILE 34   WRITER 1   TIMEOUT 1   NONDET 1   BY-DESIGN 1   UNAFFECTED 44
+  not run (write mode); the write path must move FIRST -- python3 notes/migrate_listing_readers.py --list:
+      notes/gen_prom_b_cover_round1.py --splice
+      notes/gen_prom_b_cover_round2.py --emit
+      notes/gen_prom_b_cover_round2.py --splice
+      notes/gen_prom_b_cover_round2.py --splice --anyway
+      notes/gen_prom_b_f067a6_module.py --dl-names --apply
+      notes/gen_prom_b_f067a6_module.py --splice
+      notes/gen_prom_b_f353ab_module.py --splice
+      notes/gen_prom_b_f5553f_module.py --splice
+      notes/gen_prom_b_f78029_module.py --splice
+      notes/prom_a_census_round8.py --apply
+      notes/prom_a_naming_round3.py --apply
+      notes/prom_a_understanding_round4.py --apply
+      notes/prom_a_understanding_round5.py --apply
+      notes/prom_a_understanding_round6.py --apply
+      notes/prom_a_understanding_round7.py --apply
+      notes/prom_b_dl_screens_round5.py --apply
+      notes/prom_b_dl_screens_round5.py --tables --apply
+      notes/prom_b_entrypoints_round7.py --apply
+      notes/prom_b_panel_names_round11.py --apply
+      notes/prom_b_panel_names_round11.py --rewrite
+      notes/prom_b_panel_names_round12.py --apply
+      notes/prom_b_screens_round8.py --promote --apply
+      notes/prom_b_thunks_round6.py --apply
+      notes/prom_c_naming_round3.py --apply
+      notes/prom_c_record68_round10.py --apply
+      notes/prom_c_record68_round10.py --emit68
+      notes/promb_macro_rewrite.py --apply --only
+  ★ GIT-BLIND -- reads the listing through `git show`, where the tree flip cannot reach it; classify by hand:
+      notes/prom_b_evidence_audit.py
+      notes/prom_b_f65000_layout.py
+      notes/promb_macro_rewrite.py
+      notes/wave7_round6_review_wb_prom_b.py
+
+wrote /tmp/health-b-BEFORE.json
+
+VACUOUS+LOUD across the images measured: 6

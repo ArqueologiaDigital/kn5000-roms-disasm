@@ -1,0 +1,131 @@
+
+=== prom_d  (prom_d/wsa1_prom_d.s)  27 script(s), 49 invocation(s) ===
+    ... 25/196 runs
+    ... 50/196 runs
+    ... 75/196 runs
+    ... 100/196 runs
+    ... 125/196 runs
+    ... 150/196 runs
+    ... 175/196 runs
+    ... 196/196 runs
+  VACUOUS       notes/asm_source.py
+  VACUOUS       notes/asm_source.py --selftest
+  VACUOUS       notes/prom_d_split_probe.py
+  VACUOUS       notes/wave7_frontier_table.py
+  LOUD          notes/wave7_round3_review_wd3_prom_d.py
+  LOUD          notes/wave7_round4_review_wd3_prom_d.py
+  LOUD          notes/wave7_round5_review_wd3_prom_d.py
+  LOUD          notes/wave7_round6_review_wd3_prom_d.py
+  LOUD          notes/wave7_round8_review_wd3_prom_d.py
+  WRITER        notes/probe_health.py
+  WRITER        scripts/analysis/gen_prom_d_asm.py
+  VACUOUS 4   LOUD 5   SPLIT-FRAGILE 0   WRITER 2   NONDET 0   UNAFFECTED 38
+  not run (write mode), migrate by hand -- see notes/listing_writers.md:
+      notes/prom_a_naming_round3.py --apply
+      notes/prom_a_understanding_round4.py --apply
+      notes/prom_b_panel_names_round12.py --apply
+      notes/prom_b_thunks_round6.py --apply
+      notes/prom_c_inventory_round8.py --emit68
+      notes/prom_c_naming_round3.py --apply
+  ★ GIT-BLIND -- reads the listing through `git show`, where the tree flip cannot reach it; classify by hand:
+      notes/probe_health.py
+      notes/wave7_round4_review_wd3_prom_d.py
+      notes/wave7_round8_review_wd3_prom_d.py
+
+=== prom_c  (prom_c/wsa1_prom_c.s)  74 script(s), 135 invocation(s) ===
+    ... 25/540 runs
+    ... 50/540 runs
+    ... 75/540 runs
+    ... 100/540 runs
+    ... 125/540 runs
+    ... 150/540 runs
+    ... 175/540 runs
+    ... 200/540 runs
+    ... 225/540 runs
+    ... 250/540 runs
+    ... 275/540 runs
+    ... 300/540 runs
+    ... 325/540 runs
+    ... 350/540 runs
+    ... 375/540 runs
+    ... 400/540 runs
+    ... 425/540 runs
+    ... 450/540 runs
+    ... 475/540 runs
+    ... 500/540 runs
+    ... 525/540 runs
+    ... 540/540 runs
+  VACUOUS       notes/asm_source.py
+  VACUOUS       notes/asm_source.py --selftest
+  VACUOUS       notes/gen_prom_c_f64_pool.py --table
+  VACUOUS       notes/prom_a_naming_round3.py
+  VACUOUS       notes/prom_c_fcd0f7_interpreter.py --consumer
+  VACUOUS       notes/prom_c_finish_round12.py --inventory
+  VACUOUS       notes/prom_c_finish_round7.py --twins
+  VACUOUS       notes/prom_c_frontier_src.py --clusters
+  VACUOUS       notes/prom_c_header_audit.py --all
+  VACUOUS       notes/prom_c_image.py --selftest
+  VACUOUS       notes/prom_c_inventory_round8.py --record
+  VACUOUS       notes/prom_c_naming_round2.py --census
+  VACUOUS       notes/prom_c_record68_round10.py
+  VACUOUS       notes/prom_c_record68_round10.py --claims10
+  VACUOUS       notes/prom_c_reg_bytepair_check.py
+  VACUOUS       notes/prom_c_split.py --verify
+  VACUOUS       notes/wave7_frontier_table.py
+  VACUOUS       notes/wave7_kn5000_transplant_residue.py
+  LOUD          notes/audit_round3_probes.py
+  LOUD          notes/audit_round3_probes.py --selftest
+  LOUD          notes/audit_wave6_round2_probes.py
+  LOUD          notes/audit_wave6_round2_probes.py --selftest
+  LOUD          notes/audit_wave6_round3_probes.py
+  LOUD          notes/audit_wave6_round3_probes.py --selftest
+  LOUD          notes/gen_prom_c_f64_pool.py --verify
+  LOUD          notes/gen_prom_c_tail_tables.py --verify
+  LOUD          notes/prom_c_finish_round12.py --names
+  LOUD          notes/prom_c_finish_round7.py --params
+  LOUD          notes/prom_c_frontier_src.py --range 0xFA7E2C
+  LOUD          notes/prom_c_probe_health.py --selftest
+  LOUD          notes/prom_c_reg_bytepair_check.py --selftest
+  LOUD          notes/prom_c_staging_producer_audit.py
+  LOUD          notes/prom_c_staging_producer_audit.py --selftest
+  LOUD          notes/prom_c_understanding_round4.py
+  LOUD          notes/prom_c_understanding_round4.py --names
+  LOUD          notes/prom_c_understanding_round5.py
+  LOUD          notes/prom_c_understanding_round5.py --fields
+  LOUD          notes/prom_c_understanding_round6.py --dispatch
+  LOUD          notes/prom_c_understanding_round6.py --staging
+  LOUD          notes/prom_c_voice_module_check.py
+  LOUD          notes/prom_c_voice_module_check.py --selftest
+  LOUD          notes/round2_audit_probes.py
+  LOUD          notes/verify_a1_independent_check.py
+  LOUD          notes/wave7_doc_audit.py
+  LOUD          notes/wave7_doc_audit.py --quiet
+  LOUD          notes/wave7_kn5000_transplant_residue.py --selftest
+  LOUD          notes/wave7_round3_review_wd3_prom_d.py
+  WRITER        notes/probe_health.py
+  VACUOUS 18   LOUD 29   SPLIT-FRAGILE 0   WRITER 1   NONDET 0   UNAFFECTED 87
+  not run (write mode), migrate by hand -- see notes/listing_writers.md:
+      notes/gen_prom_c_f64_pool.py --apply
+      notes/gen_prom_c_preset_bank.py --apply
+      notes/gen_prom_c_tail_tables.py --emit
+      notes/kernel_join_probe.py --emit
+      notes/prom_a_naming_round3.py --apply
+      notes/prom_a_understanding_round4.py --apply
+      notes/prom_a_understanding_round5.py --apply
+      notes/prom_b_panel_names_round12.py --apply
+      notes/prom_b_thunks_round6.py --apply
+      notes/prom_c_inventory_round8.py --emit68
+      notes/prom_c_naming_round2.py --apply
+      notes/prom_c_naming_round3.py --apply
+      notes/prom_c_record68_round10.py --apply
+      notes/prom_c_record68_round10.py --emit68
+      notes/prom_c_split.py --emit
+      notes/prom_c_understanding_round6.py --apply
+  ★ GIT-BLIND -- reads the listing through `git show`, where the tree flip cannot reach it; classify by hand:
+      notes/prom_c_inventory_round8.py
+      notes/prom_c_round3_frontier_delta.py
+      notes/wave7-verify-probes/wave7_r3_promc_refute.py
+
+wrote /tmp/health-cd.json
+
+VACUOUS+LOUD across the images measured: 56
