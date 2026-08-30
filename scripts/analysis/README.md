@@ -50,3 +50,24 @@ as `andmi8`, `bitm`, `ldcfm`. Fixed in `tlcs900_backend@970c4a75312e`; the scrip
 is still useful for finding forms a source cannot express, but read its caveats
 before believing a ranking — it tries both operand orders precisely because
 unidasm prints `sla 0x07,A` where llvm-mc wants `sla a, 7`.
+
+
+## Added 2026-08-30 (misframe correction lane)
+
+The byte gate proves the ROM was not CHANGED. It does not prove it was
+DISASSEMBLED CORRECTLY -- `.byte 0x4f,0x4e,0x54,0x52` and `ld xhl,0x52544e4f`
+emit the same four bytes. These are the tools for the other half.
+
+| script | question it answers |
+|---|---|
+| `address_line_map.py` | Which SOURCE LINE emits the byte at address X? (The sources carry no address comments, so this builds the map by linking a marker-labelled mirror and reading `llvm-nm`. `--selftest` proves the mirror is inert against the original ROM.) |
+| `emit_rom_data_lines.py` | What exactly do I write in the `.s` so that not one byte moves? (`.byte` with an ascii gutter, `.long` for pointer tables, `.ascii` for fixed-width cells. `--selftest` re-assembles what it printed and compares to the ROM slice.) |
+| `misframe_reframe_evidence.py` | Is each span this lane re-framed really DATA, and does anything point INTO it? (Four sites; the falsification test FIRED on one and found two real 7-byte subroutines inside a documented data block. `--survey` shows the descriptor shape is ROM-wide: 208 of 261 `02 0f` windows, against a 0.024% null.) |
+| `code_vs_data_delta.py` | How many bytes did a commit move between CODE and DATA territory? (Signed, so re-framing data AS code shows positive. `8b3d510 -> HEAD` is -1,753.) |
+
+    python3 scripts/analysis/address_line_map.py 0xED1BA0 0xED1BF0
+    python3 scripts/analysis/emit_rom_data_lines.py --bytes 0xF6A9D7 0xF6AC91
+    python3 scripts/analysis/misframe_reframe_evidence.py --survey
+    python3 scripts/analysis/code_vs_data_delta.py 8b3d510 HEAD
+
+Findings: `notes/FINDINGS-misframe-corrections-2026-08-30.md`.
