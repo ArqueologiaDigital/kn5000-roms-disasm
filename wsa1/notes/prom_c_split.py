@@ -556,11 +556,21 @@ def selftest():
         print("  FAIL  a deleted line went unnoticed -- the check is vacuous"); ok = False
 
     # the spec's own invariants
+    lines = base_lines()
     try:
-        check_spec(base_lines())
+        check_spec(lines)
         print(f"  ok    the {len(SPEC)} spec ranges are sorted, disjoint and in range")
     except AssertionError as e:
         print(f"  FAIL  {e}"); ok = False
+    # ★ EVERY CUT IS ONE THE LISTING ALREADY MADE.  A range that did not start on
+    #   a `; ====` block banner would be a boundary invented by this spec rather
+    #   than taken from the tree, which is the thing the split was told not to do.
+    off = [p_ for p_, a, _b, _t, _r in SPEC if not lines[a - 1].startswith("; ====")]
+    if off:
+        print(f"  FAIL  {len(off)} range(s) do not begin on a block banner: {off}")
+        ok = False
+    else:
+        print("  ok    every range begins on a `; ====` block banner of the listing")
     print("\nPASS" if ok else "\nFAIL")
     return 0 if ok else 1
 
