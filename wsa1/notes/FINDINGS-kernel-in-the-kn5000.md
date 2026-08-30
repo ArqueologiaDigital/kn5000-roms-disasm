@@ -338,6 +338,62 @@ RAM map. This table is what `kernel/kernel_maincpu.inc` and
 
 ---
 
+## 8b. What it looks like — `Kernel_ServiceSoftTimers`, instruction by instruction
+
+`python3 notes/kernel_structural_match.py --align Kernel_ServiceSoftTimers`
+(28 instructions, score 0.893, control flow 3/3):
+
+```
+WSA1 prom_c                                  KN5000 sub-CPU
+F982D4    inc 1,WA                           01FF7F    inc 1,WA
+--                                           01FF81    ld (0x10d2),WA   (extra)
+F982D6    ldc unknown,WA                     01FF85    ldc unknown,WA
+F982D9    ei 0x00                            01FF88    ei 0x00
+F982DB    ld IX,0x0174                       01FF8A    ld IX,0x10ca   <- operand
+F982DE    extz XIX                           01FF8D    extz XIX
+F982E0    ld B,0x02                          01FF8F    ld B,0x01   <- operand
+F982E2    ld XWA,(XIX+0x04)                  01FF91    ld XWA,(XIX+0x04)
+F982E5    cp XWA,0xffffffff                  01FF94    cp XWA,0xffffffff
+F982EB    jr Z,0xf982f9                      01FF9A    jr Z,0x01ffa8
+F982ED    ld WA,(XIX+0x00)                   01FF9C    ld WA,(XIX+0x00)
+F982F0    dec 1,WA                           01FF9F    dec 1,WA
+F982F2    ld (XIX+0x00),WA                   01FFA1    ld (XIX+0x00),WA
+F982F5    or WA,WA                           01FFA4    or WA,WA
+F982F7    jr Z,0xf9830b                      01FFA6    jr Z,0x01ffbf
+F982F9    add IX,0x0008                      01FFA8    add IX,0x0008
+F982FD    djnz B,0xf982e2                    01FFAC    djnz B,0x01ff91
+F98300    ei 0x06                            01FFAF    ei 0x06
+F98302    ldc WA,unknown                     --        (no counterpart)
+--                                           01FFB1    ld WA,(0x10d2)   (extra)
+F98305    dec 1,WA                           01FFB5    dec 1,WA
+--                                           01FFB7    ld (0x10d2),WA   (extra)
+F98307    ldc unknown,WA                     01FFBB    ldc unknown,WA
+F9830A    ret                                01FFBE    ret
+F9830B    ld WA,(XIX+0x02)                   01FFBF    ld WA,(XIX+0x02)
+F9830E    ld (XIX+0x00),WA                   01FFC2    ld (XIX+0x00),WA
+F98311    ld XWA,0x00f982f9                  --        (no counterpart)
+--                                           01FFC5    lda XWA,0x01ffa8   (extra)
+F98316    push XWA                           01FFCA    push XWA
+F98317    ld XWA,(XIX+0x04)                  01FFCB    ld XWA,(XIX+0x04)
+F9831A    jp T,XWA                           01FFCE    jp T,XWA
+```
+
+Read the differences, not the agreements:
+
+* the timer array base `0x0174` → `0x10CA` and its count `2` → `1`;
+* ★ `ldc WA,unknown` / `ldc unknown,WA` — the lock depth in **control register
+  0x3C** on the TMP95C061 — becomes `ld WA,(0x10d2)` / `ld (0x10d2),WA`, a RAM
+  word, because **the TMP94C241 has no such register**. That is a difference
+  the *hardware* forces, not one a different author would make;
+* `ld XWA,0x00f982f9` (push the loop's continuation, then jump to the callback)
+  becomes `lda XWA,0x01ffa8` — the same idiom, PC-relative instead of absolute.
+
+Everything else is the same instruction in the same order, including the
+`0xFFFFFFFF`-means-empty test, the decrement-and-store, and the `jp T,XWA` tail
+call into the callback.
+
+---
+
 ## 9. What this does NOT establish
 
 * **Who wrote it.** "One kernel in four processors across two Technics

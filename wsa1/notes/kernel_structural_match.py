@@ -356,6 +356,16 @@ def sym_id(t):
     return _SYM[t]
 
 
+def display_text(seq, i):
+    """seq.text[i], with a batched decode's blob-relative branch target rewritten
+    back to the real ROM address.  Display only -- tokens never see either."""
+    t = seq.text[i]
+    if cf_kind(t) and cf_target(t) is not None and seq.text_base is not None:
+        real = seq.base + (cf_target(t) - seq.text_base)
+        t = TARGET_RE.sub("0x%06x" % (real & 0xFFFFFF), t)
+    return t
+
+
 class Query(object):
     def __init__(self, name, key, addr, seq):
         self.name, self.key, self.addr, self.seq = name, key, addr, seq
@@ -1235,14 +1245,20 @@ def section_align(names=None, target=None):
             j = fwd.get(i)
             if j is None:
                 print("  %06X    %-34s %-9s %s"
-                      % (q.seq.addr[i], q.seq.text[i], "--", "(no counterpart)"))
+                      % (q.seq.addr[i], display_text(q.seq, i), "--",
+                         "(no counterpart)"))
                 continue
             for jj in range(j_prev + 1, j):
                 print("  %-9s %-34s %06X    %s   (extra)"
-                      % ("--", "", cseq.addr[jj], cseq.text[jj]))
-            mark = "" if q.seq.text[i] == cseq.text[j] else "   <- operand"
+                      % ("--", "", cseq.addr[jj], display_text(cseq, jj)))
+            # a branch operand is a relocation, not a per-CPU constant, so it
+            # is not flagged; everything else that differs textually is.
+            mark = ("" if (cf_kind(q.seq.text[i])
+                           or q.seq.text[i] == cseq.text[j])
+                    else "   <- operand")
             print("  %06X    %-34s %06X    %s%s"
-                  % (q.seq.addr[i], q.seq.text[i], cseq.addr[j], cseq.text[j], mark))
+                  % (q.seq.addr[i], display_text(q.seq, i), cseq.addr[j],
+                     display_text(cseq, j), mark))
             j_prev = j
     return
 
