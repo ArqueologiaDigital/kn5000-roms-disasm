@@ -52,10 +52,13 @@ import sys
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCES = [
-    os.path.join(ROOT, "prom_c", "wsa1_prom_c.s"),
-    os.path.join(ROOT, "prom_d", "wsa1_prom_d.s"),
-]
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines                # noqa: E402
+
+# ⚠ IMAGES, NOT FILES.  prom_c and prom_d are each a primary plus `.include`
+# parts now; opening the primaries alone found 6 citations in prom_c and 0 in
+# prom_d, and reported "OFF-BY citations: 0" over almost nothing.
+SOURCES = ["prom_c/wsa1_prom_c.s", "prom_d/wsa1_prom_d.s"]
 
 INSN = re.compile(r";\s([0-9A-F]{6})\s\s(.+?)\s*$")
 CITE = re.compile(r"`([^`]{2,140})`\s+at\s+0x([0-9A-Fa-f]{6})(?![0-9A-Fa-f])")
@@ -79,9 +82,9 @@ def norm(text):
 
 def load(path):
     insn, blocks, cur, cur_start = {}, [], [], None
-    with open(path, encoding="utf-8") as fh:
-        for lineno, raw in enumerate(fh, 1):
-            line = raw.rstrip("\n")
+    if True:
+        for lineno, raw in enumerate(image_lines(ROOT, path), 1):
+            line = raw
             stripped = line.lstrip()
             if stripped.startswith(";"):
                 if cur_start is None:
@@ -113,8 +116,30 @@ def run_matches(parts, start, insn, addrs, index):
     return True
 
 
+_MAP = {}
+
+
+def instruction_map():
+    """The instruction listing of EVERY source here, merged.
+
+    ⚠ A CITATION DOES NOT HAVE TO NAME ITS OWN FILE'S CODE.  prom_d is pure data
+    and cites prom_c's instructions -- that is the only kind of citation it can
+    make -- and while this tool built its listing from the file being scanned,
+    prom_d's citations were dropped before they were checked (`known` was empty,
+    so every quote read as `not an instruction quote`).  Sixteen unchecked
+    citations reported as `none`.  The images' address ranges are disjoint, so
+    one merged map costs nothing and prom_c's own tally is unchanged.
+    """
+    if not _MAP:
+        for src in SOURCES:
+            _MAP.update(load(src)[0])
+    return _MAP
+
+
 def classify(path, extra_blocks=()):
-    insn, addrs, blocks = load(path)
+    _own, _a, blocks = load(path)
+    insn = instruction_map()
+    addrs = sorted(insn)
     index = {a: i for i, a in enumerate(addrs)}
     known = {v.split()[0].lower() for v in insn.values() if v.split()}
     lo, hi = (addrs[0], addrs[-1]) if addrs else (0, -1)

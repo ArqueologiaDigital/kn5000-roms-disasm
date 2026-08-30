@@ -6998,12 +6998,13 @@ ToneDB_DescCurve_Step1:
 ; block only ever shows the one row.
 ; 
 ; ★ WHAT prom_c ACTUALLY DOES -- ⚠ NEW, AND IT CORRECTS A SENTENCE THAT
-; STOOD HERE.  Voice_SelectKeyZone_Reg0040 loads the tag at 0xFA81F6
-; `ld H,(XBC)` and tests BIT 6 FIRST (0xFA81FA `and W,0x40`, 0xFA81FF
-; `jr Z`), and only then bit 7 -- once on each arm, 0xFA8203 and 0xFA821C,
-; both `and D,0x80`.  The four arms call four routines that are
-; byte-identical over their first 0x1C bytes except ONE operand, the
-; `ld C,#N` at +0x0A:
+; STOOD HERE.  Voice_SelectKeyZone_Reg0040 fetches the tag with
+; `ld H,(XBC)` at 0xFA81F6 and tests BIT 6 FIRST -- `and W,0x40` at
+; 0xFA81FA -- and only then bit 7, once on each arm: `and D,0x80` at
+; 0xFA8203 and `and D,0x80` at 0xFA821C.  The four arms call four routines
+; that are byte-identical over their first 0x1C bytes except ONE operand,
+; the element size: `ld C,0x08` at 0xFA7470 against `ld C,0x06` at
+; 0xFA74B4, `ld C,0x06` at 0xFA74F6 and `ld C,0x04` at 0xFA7538.
 ; 
 ;       tag bit6  bit7    routine     element size
 ;          1        1     0xFA7467          8
@@ -32788,12 +32789,13 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ; block only ever shows the one row.
 ; 
 ; ★ WHAT prom_c ACTUALLY DOES -- ⚠ NEW, AND IT CORRECTS A SENTENCE THAT
-; STOOD HERE.  Voice_SelectKeyZone_Reg0040 loads the tag at 0xFA81F6
-; `ld H,(XBC)` and tests BIT 6 FIRST (0xFA81FA `and W,0x40`, 0xFA81FF
-; `jr Z`), and only then bit 7 -- once on each arm, 0xFA8203 and 0xFA821C,
-; both `and D,0x80`.  The four arms call four routines that are
-; byte-identical over their first 0x1C bytes except ONE operand, the
-; `ld C,#N` at +0x0A:
+; STOOD HERE.  Voice_SelectKeyZone_Reg0040 fetches the tag with
+; `ld H,(XBC)` at 0xFA81F6 and tests BIT 6 FIRST -- `and W,0x40` at
+; 0xFA81FA -- and only then bit 7, once on each arm: `and D,0x80` at
+; 0xFA8203 and `and D,0x80` at 0xFA821C.  The four arms call four routines
+; that are byte-identical over their first 0x1C bytes except ONE operand,
+; the element size: `ld C,0x08` at 0xFA7470 against `ld C,0x06` at
+; 0xFA74B4, `ld C,0x06` at 0xFA74F6 and `ld C,0x04` at 0xFA7538.
 ; 
 ;       tag bit6  bit7    routine     element size
 ;          1        1     0xFA7467          8
